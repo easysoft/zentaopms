@@ -10,7 +10,6 @@
 <?php if(!isset($branch)) $branch = 0;?>
 <?php if($config->global->flow == 'full'):?>
 <style>
-.btn-group a i.icon-plus {font-size: 16px;}
 .btn-group .icon-help {line-height: 30px;}
 .btn-group .popover {width:300px;}
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
@@ -21,7 +20,7 @@
 #byTypeTab li.split{border-top: 1px solid #eee;}
 </style>
 <div id='mainMenu' class='clearfix'>
-  <?php if(!in_array($this->app->rawMethod, array('groupcase', 'browseunits'))):?>
+  <?php if($this->app->rawMethod == 'browse'):?>
   <div id="sidebarHeader">
     <div class="title">
       <?php
@@ -79,7 +78,16 @@
     <?php echo html::a(inlink('browseUnits', "productID=$productID&browseType=$key&orderBy=$orderBy"), "<span class='text'>$label</span>", '', "id='{$key}UnitTab' class='btn btn-link' data-app='{$this->app->tab}'");?>
     <?php endforeach;?>
     <?php else:?>
-    <?php foreach(customModel::getFeatureMenu('testcase', 'browse') as $menuItem):?>
+    <?php
+    $rawModule = $this->app->rawModule;
+    $rawMethod = $this->app->rawMethod;
+    if(!isset($lang->{$rawModule}->featureBar[$rawMethod]))
+    {
+        $rawModule = $app->tab == 'project' ? 'project' : 'testcase';
+        $rawMethod = $rawModule == 'testcase' ? 'browse' : 'testcase';
+    }
+    ?>
+    <?php foreach(customModel::getFeatureMenu($rawModule, $rawMethod) as $menuItem):?>
     <?php
     if(isset($menuItem->hidden)) continue;
     $menuType = $menuItem->name;
@@ -175,13 +183,13 @@
         $active  = !empty($groupBy) ? 'btn-active-text' : '';
 
         echo "<div id='groupTab' class='btn-group'>";
-        echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID"), "<span class='text'>{$lang->testcase->groupByStories}</span>", '', "class='btn btn-link $active' data-app='{$this->app->tab}'");
+        echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link $active' data-app='{$this->app->tab}'");
         echo '</div>';
     }
     elseif($hasZeroPriv and $menuType == 'zerocase')
     {
         $projectID = $isProjectApp ? $this->session->project : 0;
-        echo html::a($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$projectID"), "<span class='text'>{$lang->testcase->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->tab}'");
+        echo html::a($this->createLink('testcase', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$projectID"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->tab}'");
     }
 
     ?>
@@ -191,12 +199,20 @@
     ?>
     <?php endif;?>
   </div>
+
+  <?php $isZeroCase = $this->app->rawMethod == 'zerocase';?>
   <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>
-    <?php if(!empty($productID)): ?>
+    <?php if(!$isZeroCase and common::hasPriv('testcase', 'createScene') || common::hasPriv('testcase', 'editScene') || common::hasPriv('testcase', 'deleteScene') || common::hasPriv('testcase', 'changeScene') || common::hasPriv('testcase', 'batchChangeScene') || common::hasPriv('testcase', 'updateOrder') || common::hasPriv('testcase', 'importXmind') || common::hasPriv('testcase', 'getXmindImport') || common::hasPriv('testcase', 'showXMindImport') || common::hasPriv('testcase', 'exportXmind')): ?>
+    <div class='btn-group btn btn-link'>
+      <?php echo html::checkbox('onlyScene', array('1' => $lang->testcase->onlyScene), '', $this->cookie->onlyScene ? 'checked=checked' : '');?>
+    </div>
+    <?php endif;?>
+    <?php $moduleID = isset($moduleID) ? (int)$moduleID : 0;?>
+    <?php if(!$isZeroCase and !empty($productID)): ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
-        <i class='icon icon-export muted'></i> 
+        <i class='icon icon-export muted'></i>
         <span class='caret'></span>
       </button>
       <ul class='dropdown-menu pull-right' id='exportActionMenu'>
@@ -210,12 +226,17 @@
       $misc  = common::hasPriv('testcase', 'exportTemplate') ? "class='export'" : "class=disabled";
       $link  = common::hasPriv('testcase', 'exportTemplate') ?  $this->createLink('testcase', 'exportTemplate', "productID=$productID") : '#';
       echo "<li $class>" . html::a($link, $lang->testcase->exportTemplate, '', $misc . "data-app={$this->app->tab} data-width='65%'") . "</li>";
+
+      $class = common::hasPriv('testcase', 'exportXmind') ? '' : "class=disabled";
+      $misc  = common::hasPriv('testcase', 'exportXmind') ? "class='export'" : "class=disabled";
+      $link  = common::hasPriv('testcase', 'exportXmind') ?  $this->createLink('testcase', 'exportXmind', "productID=$productID&moduleID=$moduleID&branch=$branch") : '#';
+      echo "<li $class>" . html::a($link, $lang->testcase->xmindExport, '', $misc . "data-app={$this->app->tab}") . "</li>";
       ?>
       </ul>
     </div>
     <?php endif;?>
     <?php if(empty($productID) or common::canModify('product', $product)):?>
-    <?php if(!empty($productID) and (common::hasPriv('testcase', 'import') or common::hasPriv('testcase', 'importFromLib'))): ?>
+    <?php if(!$isZeroCase and !empty($productID) and (common::hasPriv('testcase', 'import') or common::hasPriv('testcase', 'importFromLib'))): ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <span class='caret'></span></button>
       <ul class='dropdown-menu pull-right' id='importActionMenu'>
@@ -224,6 +245,11 @@
 
       $link  = $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=0&orderBy=id_desc&browseType=&queryID=10&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID");
       if(common::hasPriv('testcase', 'importFromLib')) echo "<li>" . html::a($link, $lang->testcase->importFromLib, '', "data-app={$app->tab}") . "</li>";
+
+      $class = common::hasPriv('testcase', 'importXmind') ? '' : "class=disabled";
+      $misc  = common::hasPriv('testcase', 'importXmind') ? "class='export'" : "class=disabled";
+      $link  = common::hasPriv('testcase', 'importXmind') ?  $this->createLink('testcase', 'importXmind', "productID=$productID&branch=$branch") : '#';
+      echo "<li $class>" . html::a($link, $lang->testcase->xmindImport, '', $misc . "data-app={$this->app->tab}") . "</li>";
       ?>
       </ul>
     </div>
@@ -234,14 +260,19 @@
     </div>
     <?php endif;?>
 
-    <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
     <div class='btn-group dropdown'>
       <?php
-      $createTestcaseLink = $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
-      $batchCreateLink    = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
+      $createTestcaseLink = $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID");
+      $batchCreateLink    = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID");
+      $createSceneLink    = $this->createLink('testcase', 'createScene', "productID=$productID&branch=$branch&moduleID=$moduleID");
 
       $buttonLink  = '';
       $buttonTitle = '';
+      if(common::hasPriv('testcase', 'createScene'))
+      {
+          $buttonLink  = $createSceneLink;
+          $buttonTitle = $lang->testcase->newScene;
+      }
       if(common::hasPriv('testcase', 'batchCreate'))
       {
           $buttonLink  = !empty($productID) ? $batchCreateLink : '';
@@ -261,6 +292,9 @@
       <ul class='dropdown-menu'>
         <li><?php echo html::a($createTestcaseLink, $lang->testcase->create);?></li>
         <li><?php echo html::a($batchCreateLink, $lang->testcase->batchCreate, '', "data-app='{$this->app->tab}'");?></li>
+        <?php if(common::hasPriv('testcase', 'createScene')){ ?>
+        <li><?php echo html::a($createSceneLink, $lang->testcase->newScene, '', "data-app='{$this->app->tab}'");?></li>
+        <?php } ?>
       </ul>
       <?php endif;?>
     </div>

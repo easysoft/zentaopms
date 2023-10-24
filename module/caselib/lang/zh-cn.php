@@ -2,7 +2,7 @@
 /**
  * The caselib module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     caselib
@@ -12,7 +12,6 @@
 $lang->caselib->common = '用例库';
 $lang->caselib->all    = '所有用例库';
 
-$lang->caselib->index           = "用例库首页";
 $lang->caselib->create          = "创建用例库";
 $lang->caselib->edit            = '编辑用例库';
 $lang->caselib->browse          = '浏览用例库';

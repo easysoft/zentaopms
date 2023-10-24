@@ -2,7 +2,7 @@
 /**
  * The create basic info view of doc module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Fangzhou Hu <hufangzhou@easycorp.ltd>
  * @package     doc
@@ -13,6 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('holders', $lang->doc->placeholder);?>
 <?php js::set('type', 'doc');?>
+<?php js::set('requiredFields', ',' . $config->doc->create->requiredFields . ',');?>
+<?php js::set('libNotEmpty', sprintf($lang->error->notempty, $lang->doc->lib));?>
+<?php js::set('titleNotEmpty', sprintf($lang->error->notempty, $lang->doc->title));?>
+<?php js::set('keywordsNotEmpty', sprintf($lang->error->notempty, $lang->doc->keywords));?>
 <div id="mainContent" class="main-content">
   <div class='center-block'>
     <div class='main-header'>
@@ -21,7 +25,7 @@
     <?php if($objectType == 'custom' and empty($libs)):?>
     <?php echo html::a(helper::createLink('doc', 'createLib', "type=custom&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->doc->createLib, '', 'class="iframe hidden createCustomLib"');?>
     <?php endif;?>
-    <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
+    <form class="load-indicator main-form form-ajax form-watched" id="dataform" method='post' enctype='multipart/form-data'>
       <table class='table table-form'>
         <tbody>
           <tr>
@@ -36,11 +40,12 @@
           </tr>
           <tr>
             <th><?php echo $lang->doc->title;?></th>
-            <td colspan='2'><?php echo html::input('title', '', "class='form-control'");?></td>
+            <td colspan='2' class='required'><?php echo html::input('title', '', "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->doc->keywords;?></th>
-            <td colspan='2'><?php echo html::input('keywords', '', "class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
+            <?php $required = strpos(",{$config->doc->create->requiredFields},", ',keywords,') !== false ? 'required' : '';?>
+            <td colspan='2' class="<?php echo $required;?>"><?php echo html::input('keywords', '', "class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
           </tr>
           <tr class='hidden'>
             <th><?php echo $lang->doc->type;?></th>

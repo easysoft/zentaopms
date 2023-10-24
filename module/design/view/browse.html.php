@@ -2,7 +2,7 @@
 /**
  * The browse view file of design module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
@@ -16,7 +16,6 @@
 <?php js::set('projectID', $projectID);?>
 <?php js::set('productID', $productID);?>
 <style>
-.btn-group a i.icon-plus {font-size: 16px;}
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.3);}
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 </style>
@@ -48,7 +47,7 @@
             <td calss="c-id">         <?php printf('%03d', $design->id);?></td>
             <td class="c-name" title="<?php echo $design->name;?>"><?php echo common::hasPriv('design', 'view') ? html::a($this->createLink('design', 'view', "id={$design->id}"), $design->name) : $design->name;?></td>
             <td class="c-product <?php echo $hiddenProduct ? 'hidden' : '';?>"><?php echo zget($products, $design->product);?></td>
-            <td class="c-type">       <?php echo zget($lang->design->typeList, $design->type);?></td>
+            <td class="c-type">       <?php echo zget($typeList, $design->type);?></td>
             <td class="c-assignedTo"> <?php echo $this->design->printAssignedHtml($design, $users);?></td>
             <td class="c-createdBy">  <?php echo zget($users, $design->createdBy);?></td>
             <td class="c-createdDate"><?php echo substr($design->createdDate, 0, 11);?></td>

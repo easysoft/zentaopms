@@ -1,5 +1,5 @@
 <?php
-$lang->ci->common       = 'CI';
+$lang->ci->common       = 'TA';
 $lang->ci->commitResult = 'Interface: Commit Test Result.';
 
 $lang->ci->job     = 'Job';

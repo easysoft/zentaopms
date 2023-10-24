@@ -2,7 +2,7 @@
 /**
  * The model file of extension module of ZenTaoCMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     extension
@@ -19,7 +19,7 @@ class extensionModel extends model
     /**
      * The api root.
      *
-     * @var string
+     * @var    string
      * @access public
      */
     public $apiRoot;
@@ -51,7 +51,7 @@ class extensionModel extends model
     /**
      * Fetch data from an api.
      *
-     * @param  string    $url
+     * @param  string $url
      * @access public
      * @return mixed
      */
@@ -60,7 +60,7 @@ class extensionModel extends model
         $version = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
         $version = str_replace('_', '.', $version);
 
-        $url .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $version;
+        $url .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $version . '&edition=' . $this->config->edition;
         $result = json_decode(common::http($url));
 
         if(!isset($result->status)) return false;
@@ -88,8 +88,11 @@ class extensionModel extends model
     /**
      * Get extensions by some condition.
      *
-     * @param  string    $type
-     * @param  mixed     $param
+     * @param  string     $type
+     * @param  string     $param
+     * @param  int        $recTotal
+     * @param  int        $recPerPage
+     * @param  int        $pageID
      * @access public
      * @return array|bool
      */
@@ -112,9 +115,9 @@ class extensionModel extends model
     /**
      * Get versions for some extensions.
      *
-     * @param  string    $extensions
+     * @param  string      $extensions
      * @access public
-     * @return array|bool
+     * @return array|false
      */
     public function getVersionsByAPI($extensions)
     {
@@ -128,7 +131,7 @@ class extensionModel extends model
     /**
      * Check incompatible extension
      *
-     * @param  array    $versions
+     * @param  array  $versions
      * @access public
      * @return array
      */
@@ -144,7 +147,7 @@ class extensionModel extends model
     /**
      * Get extensions by status.
      *
-     * @param  string    $status
+     * @param  string $status
      * @access public
      * @return array
      */
@@ -161,7 +164,7 @@ class extensionModel extends model
     /**
      * Get extension info from database.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return object
      */
@@ -173,7 +176,7 @@ class extensionModel extends model
     /**
      * Get info of an extension from the package file.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return object
      */
@@ -204,7 +207,7 @@ class extensionModel extends model
     /**
      * Parse extension's config file.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return object
      */
@@ -245,7 +248,7 @@ class extensionModel extends model
     /**
      * Get the full path of the zip file of a extension.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return string
      */
@@ -257,7 +260,7 @@ class extensionModel extends model
     /**
      * Get paths from an extension package.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return array
      */
@@ -290,7 +293,7 @@ class extensionModel extends model
     /**
      * Get all files from a package.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return array
      */
@@ -304,7 +307,7 @@ class extensionModel extends model
     /**
      * Get the extension's condition.
      *
-     * @param  string    $extenstion
+     * @param  string $extenstion
      * @access public
      * @return object
      */
@@ -330,7 +333,7 @@ class extensionModel extends model
     /**
      * Process license. If is opensource return the full text of it.
      *
-     * @param  string    $license
+     * @param  string $license
      * @access public
      * @return string
      */
@@ -347,10 +350,10 @@ class extensionModel extends model
     /**
      * Get hook file for install or uninstall.
      *
-     * @param  string    $extension
-     * @param  string    $hook      preinstall|postinstall|preuninstall|postuninstall
+     * @param  string       $extension
+     * @param  string       $hook      preinstall|postinstall|preuninstall|postuninstall
      * @access public
-     * @return string|bool
+     * @return string|false
      */
     public function getHookFile($extension, $hook)
     {
@@ -362,8 +365,8 @@ class extensionModel extends model
     /**
      * Get the install db file.
      *
-     * @param  string    $extension
-     * @param  string    $method
+     * @param  string $extension
+     * @param  string $method
      * @access public
      * @return string
      */
@@ -376,7 +379,7 @@ class extensionModel extends model
      * Check the download path.
      *
      * @access public
-     * @return object   the check result.
+     * @return object the check result.
      */
     public function checkDownloadPath()
     {
@@ -411,61 +414,65 @@ class extensionModel extends model
     /**
      * Check extension files.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
-     * @return object    the check result.
+     * @return object the check result.
      */
     public function checkExtensionPaths($extension)
     {
-        $return = new stdclass();
-        $return->result        = 'ok';
-        $return->errors        = '';
-        $return->mkdirCommands = '';
-        $return->chmodCommands = '';
-        $return->dirs2Created  = array();
+        $checkResult = new stdclass();
+        $checkResult->result        = 'ok';
+        $checkResult->errors        = '';
+        $checkResult->mkdirCommands = '';
+        $checkResult->chmodCommands = '';
+        $checkResult->dirs2Created  = array();
 
         $appRoot = $this->app->getAppRoot();
-        $paths  = $this->getPathsFromPackage($extension);
+        $paths   = $this->getPathsFromPackage($extension);
         foreach($paths as $path)
         {
             if($path == 'db' or $path == 'doc' or $path == 'hook') continue;
-            $path = $appRoot . $path;
+            $path = rtrim($appRoot . $path, '/');
             if(is_dir($path))
             {
                 if(!is_writable($path))
                 {
-                    $return->errors .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
-                    $return->chmodCommands .= "sudo chmod -R 777 $path<br />";
+                    $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
+                    $checkResult->chmodCommands .= "sudo chmod -R 777 $path<br />";
                 }
             }
             else
             {
                 $parentDir = mb_substr($path, 0, strripos($path, '/'));
-                if(!is_dir($path) and !mkdir($path, 0777, true))
+                if(is_dir($parentDir) and !is_writable($parentDir))
                 {
-                    $return->errors .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
-                    $return->mkdirCommands .= "sudo mkdir -p $path<br />";
+                    $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
+                    $checkResult->chmodCommands .= "sudo chmod -R 777 $path<br />";
+                    $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
+                    $checkResult->mkdirCommands .= "sudo mkdir -p $path<br />";
                 }
-                if(!is_writable($parentDir))
+                else if(!mkdir($path, 0777, true))
                 {
-                    $return->errors .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
-                    $return->chmodCommands .= "sudo chmod -R 777 $path<br />";
+                    $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
+                    $checkResult->mkdirCommands .= "sudo mkdir -p $path<br />";
                 }
-                $return->dirs2Created[] = $path;
+                if(file_exists($path) and realpath($path) != realpath($appRoot . 'module/extension') . 'ext') $checkResult->dirs2Created[] = $path;
             }
         }
 
-        if($return->errors) $return->result = 'fail';
-        $return->mkdirCommands = empty($return->mkdirCommands) ? '' : '<code>' . str_replace('/', DIRECTORY_SEPARATOR, $return->mkdirCommands) . '</code>';
-        $return->errors .= $this->lang->extension->executeCommands . $return->mkdirCommands;
-        if(PHP_OS == 'Linux') $return->errors .= empty($return->chmodCommands) ? '' : '<code>' . $return->chmodCommands . '</code>';
-        return $return;
+        if($checkResult->errors) $checkResult->result = 'fail';
+
+        $checkResult->mkdirCommands = empty($checkResult->mkdirCommands) ? '' : '<code>' . str_replace('/', DIRECTORY_SEPARATOR, $checkResult->mkdirCommands) . '</code>';
+        $checkResult->errors .= $this->lang->extension->executeCommands . $checkResult->mkdirCommands;
+        if(PHP_OS == 'Linux') $checkResult->errors .= empty($checkResult->chmodCommands) ? '' : '<code>' . $checkResult->chmodCommands . '</code>';
+
+        return $checkResult;
     }
 
     /**
      * Check the extension's version is compatibility for zentao version
      *
-     * @param  string    $version
+     * @param  string $version
      * @access public
      * @return bool
      */
@@ -480,9 +487,7 @@ class extensionModel extends model
     /**
      * Check files in the package conflicts with exists files or not.
      *
-     * @param  string    $extension
-     * @param  string    $type
-     * @param  bool      $isCheck
+     * @param  string $extension
      * @access public
      * @return object
      */
@@ -508,7 +513,7 @@ class extensionModel extends model
     /**
      * Extract an extension.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return object
      */
@@ -572,9 +577,9 @@ class extensionModel extends model
     /**
      * Remove an extension.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
-     * @return array     the remove commands need executed manually.
+     * @return array  the remove commands need executed manually.
      */
     public function removePackage($extension)
     {
@@ -583,7 +588,7 @@ class extensionModel extends model
         $dirs  = json_decode($extension->dirs);
         $files = json_decode($extension->files);
         $appRoot = $this->app->getAppRoot();
-        $removeCommands = array();
+        $commandTips = array();
 
         /* Remove files first. */
         if($files)
@@ -593,13 +598,18 @@ class extensionModel extends model
                 $file = $appRoot . $file;
                 if(!file_exists($file)) continue;
 
-                if(!is_writable($file) or @md5_file($file) != $savedMD5)
+                $parentDir = mb_substr($file, 0, strripos($file, '/'));
+                if(!is_writable($file) || !is_writable($parentDir))
                 {
-                    $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $file #changed" : "del $file :changed";
+                    $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $file" : "del $file";
                 }
-                elseif(!is_writable($file) or !@unlink($file))
+                elseif(@md5_file($file) != $savedMD5)
                 {
-                    $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $file" : "del $file";
+                    $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $file #changed" : "del $file :changed";
+                }
+                elseif(!@unlink($file))
+                {
+                    $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $file" : "del $file";
                 }
             }
         }
@@ -610,15 +620,25 @@ class extensionModel extends model
             rsort($dirs);    // remove from the lower level directory.
             foreach($dirs as $dir)
             {
-                if(!is_dir($appRoot . $dir)) continue;
-                if(!is_writable($appRoot . $dir) or !rmdir($appRoot . $dir)) $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
+                $path = rtrim($appRoot . $dir, '/');
+                if(!is_dir($path)) continue;
+
+                $parentDir = mb_substr($path, 0, strripos($path, '/'));
+                if(!is_writable($path) || !is_writable($parentDir))
+                {
+                    $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
+                }
+                elseif(!rmdir($path))
+                {
+                    $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
+                }
             }
         }
 
         /* Clean model cache files. */
         $this->cleanModelCache();
 
-        return $removeCommands;
+        return $commandTips;
     }
 
     /**
@@ -647,9 +667,9 @@ class extensionModel extends model
     /**
      * Erase an extension's package file.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
-     * @return array     the remove commands need executed manually.
+     * @return array  the remove commands need executed manually.
      */
     public function erasePackage($extension)
     {
@@ -678,8 +698,8 @@ class extensionModel extends model
     /**
      * Judge need execute db install or not.
      *
-     * @param  string    $extension
-     * @param  string    $method
+     * @param  string $extension
+     * @param  string $method
      * @access public
      * @return bool
      */
@@ -692,6 +712,7 @@ class extensionModel extends model
      * Install the db.
      *
      * @param  int    $extension
+     * @param  string $method
      * @access public
      * @return object
      */
@@ -732,9 +753,9 @@ class extensionModel extends model
     /**
      * Backup db when uninstall extension.
      *
-     * @param  string    $extension
+     * @param  string      $extension
      * @access public
-     * @return bool|string
+     * @return string|false
      */
     public function backupDB($extension)
     {
@@ -769,8 +790,8 @@ class extensionModel extends model
     /**
      * Save the extension to database.
      *
-     * @param  string    $extension     the extension code
-     * @param  string    $type          the extension type
+     * @param  string $extension the extension code
+     * @param  string $type      the extension type
      * @access public
      * @return void
      */
@@ -778,9 +799,11 @@ class extensionModel extends model
     {
         $code      = $extension;
         $extension = $this->getInfoFromPackage($extension);
-        $extension->status = 'available';
-        $extension->code   = $code;
-        $extension->type   = empty($type) ? $extension->type : $type;
+
+        $extension->status        = 'available';
+        $extension->code          = $code;
+        $extension->type          = empty($type) ? $extension->type : $type;
+        $extension->installedTime = helper::now();
 
         $this->dao->replace(TABLE_EXTENSION)->data($extension)->exec();
     }
@@ -788,8 +811,8 @@ class extensionModel extends model
     /**
      * Update an extension.
      *
-     * @param  string        $extension
-     * @param  array|object  $data
+     * @param  string       $extension
+     * @param  array|object $data
      * @access public
      * @return int
      */
@@ -826,7 +849,7 @@ class extensionModel extends model
     /**
      * Check depends extension.
      *
-     * @param  string    $extension
+     * @param  string $extension
      * @access public
      * @return array
      */
@@ -849,11 +872,11 @@ class extensionModel extends model
     /**
      * Compare for limit data.
      *
-     * @param  string $version
-     * @param  array  $limit
-     * @param  string $type
+     * @param  string       $version
+     * @param  array|string $limit
+     * @param  string       $type
      * @access public
-     * @return void
+     * @return bool
      */
     public function compare4Limit($version, $limit, $type = 'between')
     {
@@ -915,7 +938,7 @@ class extensionModel extends model
     /**
      * Get plugins that are about to expire or have expired.
      *
-     * @param  bool    $category
+     * @param  bool   $category
      * @access public
      * @return array
      */

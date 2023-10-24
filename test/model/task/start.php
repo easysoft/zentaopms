@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/task.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -29,4 +28,3 @@ r($task->startTest($taskIDList[0],$waitstart))   && p('0:field,old,new') && e('s
 r($task->startTest($taskIDList[0],$waitstart))   && p() && e('此任务已被启动，不能重复启动！');       // doing状态任务开始
 r($task->startTest($taskIDList[1],$pausestart))  && p('0:field,old,new') && e('status,pause,doing');  // pause状态任务开始
 r($task->startTest($taskIDList[2],$closedstart)) && p('0:field,old,new') && e('status,closed,doing'); // closed状态任务开始
-$db->restoreDB();

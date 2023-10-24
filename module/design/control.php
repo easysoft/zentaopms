@@ -2,7 +2,7 @@
 /**
  * The control file of design module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2020 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
@@ -71,6 +71,9 @@ class design extends control
     {
         $productID = $this->commonAction($projectID, $productID);
 
+        $project  = $this->loadModel('project')->getByID($projectID);
+        $typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
+
         /* Save session for design list and process product id. */
         $this->session->set('designList', $this->app->getURI(true), 'project');
         $this->session->set('reviewList', $this->app->getURI(true), 'project');
@@ -80,6 +83,7 @@ class design extends control
         $productIdList = $productID ? $productID : array_keys($products);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active', 'id_desc', 0, 'full', 'story', false);
         $this->config->design->search['params']['story']['values'] = $stories;
+        $this->config->design->search['params']['type']['values']  = $typeList;
 
         $queryID   = ($type == 'bySearch') ? (int)$param : 0;
         $actionURL = $this->createLink('design', 'browse', "projectID=$projectID&productID=$productID&type=bySearch&queryID=myQueryID");
@@ -87,7 +91,7 @@ class design extends control
 
         /* Print top and right actions. */
         $this->lang->TRActions  = '<div class="btn-toolbar pull-right">';
-        if($this->config->edition == 'max' and common::hasPriv('design', 'submit'))
+        if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and common::hasPriv('design', 'submit'))
         {
             $this->lang->TRActions .= '<div class="btn-group">';
             $this->lang->TRActions .= html::a($this->createLink('design', 'submit', "productID=$productID", '', true), "<i class='icon-plus'></i> {$this->lang->design->submit}", '', "class='btn btn-secondary iframe'");
@@ -120,7 +124,6 @@ class design extends control
         $pager   = pager::init(0, $recPerPage, $pageID);
         $designs = $this->design->getList($projectID, $productID, $type, $queryID, $orderBy, $pager);
 
-        $project = $this->loadModel('project')->getByID($projectID);
         $this->view->hiddenProduct = $project->hasProduct ? false : true;
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->browse;
@@ -134,6 +137,7 @@ class design extends control
         $this->view->projectID  = $projectID;
         $this->view->pager      = $pager;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->typeList   = $typeList;
 
         $this->display();
     }
@@ -173,6 +177,8 @@ class design extends control
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
 
+        $project = $this->loadModel('project')->getByID($projectID);
+
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->create;
         $this->view->position[] = $this->lang->design->create;
 
@@ -181,7 +187,7 @@ class design extends control
         $this->view->productID  = $productID;
         $this->view->projectID  = $projectID;
         $this->view->type       = $type;
-        $this->view->project    = $this->loadModel('project')->getByID($projectID);
+        $this->view->typeList   = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
 
         $this->display();
     }
@@ -220,12 +226,15 @@ class design extends control
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
 
+        $project = $this->loadModel('project')->getByID($projectID);
+
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->batchCreate;
         $this->view->position[] = $this->lang->design->batchCreate;
 
-        $this->view->stories = $this->loadModel('story')->getProductStoryPairs($productIdList);
-        $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->type    = $type;
+        $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList);
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->type     = $type;
+        $this->view->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
 
         $this->display();
     }
@@ -248,6 +257,8 @@ class design extends control
         $products      = $this->product->getProductPairsByProject($design->project);
         $productIdList = $design->product ? $design->product : array_keys($products);
 
+        $project = $this->loadModel('project')->getByID($design->project);
+
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->view;
         $this->view->position[] = $this->lang->design->view;
 
@@ -256,7 +267,8 @@ class design extends control
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions = $this->loadModel('action')->getList('design', $design->id);
         $this->view->repos   = $this->loadModel('repo')->getRepoPairs('project', $design->project);
-        $this->view->project = $this->loadModel('project')->getByID($design->project);
+        $this->view->project  = $project;
+        $this->view->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
 
         $this->display();
     }
@@ -300,13 +312,16 @@ class design extends control
         $products      = $this->product->getProductPairsByProject($design->project);
         $productIdList = $design->product ? $design->product : array_keys($products);
 
+        $project = $this->loadModel('project')->getByID($design->project);
+
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->edit;
         $this->view->position[] = $this->lang->design->edit;
 
         $this->view->design  = $design;
-        $this->view->project = $this->loadModel('project')->getByID($design->project);
+        $this->view->project = $project;
         $this->view->stories = $this->loadModel('story')->getProductStoryPairs($productIdList);
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->typeList = $project->model == 'waterfall' ? $this->lang->design->typeList : $this->lang->design->plusTypeList;
 
         $this->display();
     }
@@ -324,8 +339,17 @@ class design extends control
      * @access public
      * @return void
      */
-    public function linkCommit($designID = 0, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function linkCommit(int $designID = 0, int $repoID = 0, string $begin = '', string $end = '', int $recTotal = 0, int $recPerPage = 50, int $pageID = 1)
     {
+        if($_POST)
+        {
+            $this->design->linkCommit($designID, $repoID);
+
+            $result['result']  = 'success';
+            $result['message'] = $this->lang->saveSuccess;
+            $result['locate']  = 'parent';
+            return $this->send($result);
+        }
         $design    = $this->design->getById($designID);
         $productID = $this->commonAction($design->project, $design->product, $designID);
 
@@ -338,18 +362,9 @@ class design extends control
         $repos  = $this->loadModel('repo')->getRepoPairs('project', $design->project);
         $repoID = $repoID ? $repoID : key($repos);
 
-        $repo      = $this->loadModel('repo')->getRepoByID($repoID);
+        $repo      = $this->loadModel('repo')->getByID($repoID);
         $revisions = $this->repo->getCommits($repo, '', 'HEAD', '', '', $begin, date('Y-m-d 23:59:59', strtotime($end)));
-
-        if($_POST)
-        {
-            $this->design->linkCommit($designID, $repoID);
-
-            $result['result']  = 'success';
-            $result['message'] = $this->lang->saveSuccess;
-            $result['locate']  = 'parent';
-            return $this->send($result);
-        }
+        $this->session->set('designRevisions', $revisions);
 
         /* Linked submission. */
         $linkedRevisions = array();
@@ -420,14 +435,13 @@ class design extends control
      */
     public function viewCommit($designID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $design = $this->design->getByID($designID);
+        $design    = $this->design->getCommit($designID, $pager);
         $productID = $this->commonAction($design->project, $design->product, $designID);
 
         /* Init pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager   = pager::init(0, $recPerPage, $pageID);
+        $pager = pager::init(0, $recPerPage, $pageID);
 
-        $design = $this->design->getCommit($designID, $pager);
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->submission;
         $this->view->position[] = $this->lang->design->submission;
@@ -448,10 +462,10 @@ class design extends control
      * @access public
      * @return void
      */
-    public function revision($repoID = 0, $projectID = 0)
+    public function revision($revisionID = 0, $projectID = 0)
     {
-        $repo    = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($repoID)->fetch();
-        $repoURL = $this->createLink('repo', 'revision', "repoID=$repo->repo&objectID=$projectID&revistion=$repo->revision");
+        $revision = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($revisionID)->fetch();
+        $repoURL  = $this->createLink('repo', 'revision', "repoID=$revision->repo&objectID=$projectID&revistion=$revision->revision");
         header("location:" . $repoURL);
     }
 

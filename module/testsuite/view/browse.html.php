@@ -2,7 +2,7 @@
 /**
  * The browse view file of testsuite module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testsuite
@@ -73,7 +73,7 @@
         <div title='<?php echo $desc;?>'><?php echo nl2br($desc);?></div>
       </td>
       <td><?php echo zget($users, $suite->addedBy);?></td>
-      <td><?php echo $suite->addedDate;?></td>
+      <td><?php echo $suite->addedDate ? substr($suite->addedDate, 0, 10) : '';?></td>
       <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $suite) . "</td>";?>
       <td class='c-actions'>
         <?php echo $this->testsuite->buildOperateMenu($suite, 'browse');?>

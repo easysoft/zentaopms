@@ -1,0 +1,2 @@
+var e;ShadowRoot.prototype["createRange"]=document.createRange.bind(document);document.head.insertAdjacentHTML("beforeend",`<style> body > div.monaco-aria-container {display: none;} </style>`);const o="tiptap-component.esm.js";const n=(e=performance.getEntriesByType("resource").find((e=>e.name.includes(o))))===null||e===void 0?void 0:e.name;if(n){const e=n.substring(0,n.length-o.length);document.head.insertAdjacentHTML("beforeend",`<link href="${e}codicon.css?t=${Date.now()}" rel="stylesheet" />`)}
+//# sourceMappingURL=p-0ac27715.js.map

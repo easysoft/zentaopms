@@ -1,59 +1,56 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Components;
 
 use PhpMyAdmin\SqlParser\Components\ArrayObj;
-use PhpMyAdmin\SqlParser\Components\Expression;
 use PhpMyAdmin\SqlParser\Parser;
 use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class ArrayObjTest extends TestCase
 {
-    public function testBuildRaw(): void
+    public function testBuildRaw()
     {
-        $component = new ArrayObj(['a', 'b'], []);
+        $component = new ArrayObj(array('a', 'b'), array());
         $this->assertEquals('(a, b)', ArrayObj::build($component));
     }
 
-    public function testBuildValues(): void
+    public function testBuildValues()
     {
-        $component = new ArrayObj([], ['a', 'b']);
+        $component = new ArrayObj(array(), array('a', 'b'));
         $this->assertEquals('(a, b)', ArrayObj::build($component));
     }
 
-    public function testParseType(): void
+    public function testParseType()
     {
         $components = ArrayObj::parse(
             new Parser(),
             $this->getTokensList('(1 + 2, 3 + 4)'),
-            [
-                'type' => Expression::class,
-                'typeOptions' => ['breakOnParentheses' => true],
-            ]
+            array(
+                'type' => 'PhpMyAdmin\\SqlParser\\Components\\Expression',
+                'typeOptions' => array(
+                    'breakOnParentheses' => true,
+                )
+            )
         );
-        $this->assertInstanceOf(Expression::class, $components[0]);
-        $this->assertInstanceOf(Expression::class, $components[1]);
         $this->assertEquals($components[0]->expr, '1 + 2');
         $this->assertEquals($components[1]->expr, '3 + 4');
     }
 
     /**
-     * @param mixed $test
-     *
      * @dataProvider parseProvider
+     *
+     * @param mixed $test
      */
-    public function testParse($test): void
+    public function testParse($test)
     {
         $this->runParserTest($test);
     }
 
-    public function parseProvider(): array
+    public function parseProvider()
     {
-        return [
-            ['parser/parseArrayErr1'],
-            ['parser/parseArrayErr3'],
-        ];
+        return array(
+            array('parser/parseArrayErr1'),
+            array('parser/parseArrayErr3')
+        );
     }
 }

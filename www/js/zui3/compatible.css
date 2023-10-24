@@ -1,0 +1,12 @@
+#header {height: 50px;}
+#header + #main {min-height: calc(100vh - 50px);}
+#navbar > .nav > .nav-item > .active {background: rgba(0,0,0,.1);}
+#navbar > .nav > .nav-item > .active:after {display: none;}
+#navbar .nav-divider {width: 2px; height: 20px;}
+#quickAddMenu-toggle {width: 30px; height: 30px; border-radius: 50%;}
+#quickAddMenu-toggle .icon {font-size: 22px; position: relative; top: -1px}
+#toolbar > .toolbar {gap: 10px; padding-top: 2px;}
+#versionMenu-toggle {height: 30px; border-radius: 5px;}
+.theme-red #header .btn.secondary,
+.theme-default #header .btn.secondary {background-color: rgba(var(--color-canvas-rgb), .3);}
+.theme-default #quickAddMenu-toggle .icon {color: var(--color-primary-500);}

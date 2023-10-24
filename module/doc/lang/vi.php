@@ -2,7 +2,7 @@
 /**
  * The doc module english file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license  ZPL (http://zpl.pub/page/zplv12.html)
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  doc
@@ -57,6 +57,7 @@ $lang->doc->moduleDoc     = 'By Module';
 $lang->doc->searchDoc     = 'Tìm kiếm';
 $lang->doc->fast          = 'Quick Entry';
 $lang->doc->allDoc        = 'Tất cả tài liệu';
+$lang->doc->allVersion    = 'All Versions';
 $lang->doc->openedByMe    = 'Của bạn';
 $lang->doc->editedByMe    = 'Edited By Me';
 $lang->doc->orderByOpen   = 'Recent Added';
@@ -78,6 +79,7 @@ $lang->doc->createBook       = 'Create Book';
 $lang->doc->browse           = 'Document danh sách';
 $lang->doc->view             = 'Document Detail';
 $lang->doc->diff             = 'Diff';
+$lang->doc->cancelDiff       = 'Cancel diff';
 $lang->doc->diffAction       = 'Diff tài liệu';
 $lang->doc->sort             = 'Đánh giá tài liệu';
 $lang->doc->manageType       = 'Quản lý danh mục';

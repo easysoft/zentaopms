@@ -2,7 +2,7 @@
 /**
  * The control file of user module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
@@ -124,7 +124,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Modify story title. */
         $this->loadModel('story');
@@ -133,7 +134,7 @@ class user extends control
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
         $this->view->position[] = $this->lang->user->story;
-        $this->view->stories    = $this->story->getUserStories($account, $type, $orderBy, $pager, $storyType);
+        $this->view->stories    = $this->story->getUserStories($account, $type, $orderBy, $pager, $storyType, false, 'all');
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->storyType  = $storyType;
         $this->view->orderBy    = $orderBy;
@@ -167,7 +168,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Set the menu. */
         $this->view->userList = $this->user->setUserList($users, $userID);
@@ -208,7 +210,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Set menu. */
         $this->view->userList = $this->user->setUserList($users, $userID);
@@ -248,7 +251,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Set menu. */
         $this->view->userList = $this->user->setUserList($users, $userID);
@@ -299,7 +303,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
@@ -316,7 +321,6 @@ class user extends control
 
         /* Process case for check story changed. */
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
-        $cases = $this->testcase->appendData($cases);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'case2Him' ? false : true);
 
@@ -355,7 +359,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -395,7 +400,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -435,7 +441,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -468,7 +475,8 @@ class user extends control
 
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
         $this->view->position[]   = $this->lang->user->common;
@@ -978,6 +986,7 @@ class user extends control
         }
         else
         {
+            setcookie('tab', false, time(), $this->config->webRoot);
             $loginExpired = !(preg_match("/(m=|\/)(index)(&f=|-)(index)(&|-|\.)?/", strtolower($this->referer), $output) or $this->referer == $this->config->webRoot or empty($this->referer) or preg_match("/\/www\/$/", strtolower($this->referer), $output));
 
             $this->loadModel('misc');
@@ -1050,7 +1059,7 @@ class user extends control
         if(isset($this->app->user->id)) $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
         setcookie('za', false, time() - 3600, $this->config->webRoot);
         setcookie('zp', false, time() - 3600, $this->config->webRoot);
-        setcookie('tab', false, time() - 3600, $this->config->webRoot);        ;
+        setcookie('tab', false, time() - 3600, $this->config->webRoot);
         session_destroy();
 
         if($this->app->getViewType() == 'json') return print(json_encode(array('status' => 'success')));
@@ -1203,7 +1212,8 @@ class user extends control
     {
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
         /* set menus. */
         $this->view->userList = $this->user->setUserList($users, $userID);
@@ -1222,25 +1232,22 @@ class user extends control
         $this->session->set('caseList',        $uri, 'qa');
         $this->session->set('testtaskList',    $uri, 'qa');
 
-        /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage = 50, $pageID = 1);
-
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
         $date    = empty($date) ? '' : date('Y-m-d', $date);
 
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', 'all', 'all', $date, $direction);
+        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $period);
 
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
-        $this->view->position[] = $this->lang->user->dynamic;
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
 
         /* Assign. */
+        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
         $this->view->type       = $period;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager      = $pager;
+        $this->view->recTotal   = $recTotal;
         $this->view->user       = $user;
-        $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $period);
+        $this->view->dateGroups = $dateGroups;
         $this->view->direction  = $direction;
         $this->display();
     }
@@ -1379,17 +1386,16 @@ class user extends control
     {
         $params = base64_decode($this->get->params);
         parse_str($params, $parsedParams);
-        $users = $this->user->getPairs($parsedParams['params'], $parsedParams['usersToAppended']);
+        $users = $this->user->getPairs(zget($parsedParams, 'params', ''), zget($parsedParams, 'usersToAppended', ''));
 
         $search   = $this->get->search;
         $limit    = $this->get->limit;
         $index    = 0;
         $newUsers = array();
-        if(empty($search)) return array();
         foreach($users as $account => $realname)
         {
             if($index >= $limit) break;
-            if(stripos($account, $search) === false and stripos($realname, $search) === false) continue;
+            if($search && stripos($account, $search) === false and stripos($realname, $search) === false) continue;
             $index ++;
             $newUsers[$account] = $realname;
         }

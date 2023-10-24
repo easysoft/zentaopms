@@ -2,7 +2,7 @@
 /**
  * The control file of ZenAgent Node of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      liyuchun <liyuchun@easycorp.ltd>
  * @package     qa
@@ -67,12 +67,8 @@ class zanode extends control
     /**
      * Browse ZenAgent Node list in zahost view.
      *
-     * @param  string   $browseType
-     * @param  string   $param
-     * @param  string   $orderBy
-     * @param  int      $recTotal
-     * @param  int      $recPerPage
-     * @param  int      $pageID
+     * @param  int    $hostID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
@@ -80,12 +76,13 @@ class zanode extends control
     {
         if(!commonModel::hasPriv('zanode', 'browse'))
         {
-            $this->loadModel('common')->deny('zanode', 'browse');
+            $this->loadModel('common')->deny('zanode', 'browse', false);
         }
-        $this->view->title       = $this->lang->zanode->common;
-        $this->view->nodeList    = $this->loadModel("zanode")->getListByHost($hostID, $orderBy);
-        $this->view->orderBy     = $orderBy;
-        $this->view->hostID      = $hostID;
+
+        $this->view->title    = $this->lang->zanode->common;
+        $this->view->nodeList = $this->zanode->getListByHost($hostID, $orderBy);
+        $this->view->orderBy  = $orderBy;
+        $this->view->hostID   = $hostID;
 
         $this->display();
     }
@@ -107,7 +104,7 @@ class zanode extends control
         }
 
         $this->view->title     = $this->lang->zanode->create;
-        $this->view->hostPairs = array('' => '') + $this->loadModel('zahost')->getPairs('host');
+        $this->view->hostPairs = array('' => '') + $this->loadModel('zahost')->getPairs($this->session->product);
         $this->view->hostID    = $hostID;
 
         return $this->display();
@@ -116,7 +113,7 @@ class zanode extends control
     /**
      * Edit node.
      *
-     * @param  int    $hostID
+     * @param  int    $id
      * @access public
      * @return void
      */
@@ -137,10 +134,15 @@ class zanode extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title     = $this->lang->zanode->editAction;
-        $this->view->zanode    = $this->zanode->getNodeByID($id);
-        $this->view->host      = $this->zanode->getHostByID($this->view->zanode->parent);
-        $this->view->image     = $this->zanode->getImageByID($this->view->zanode->image);
+        $zanode = $this->zanode->getNodeByID($id);
+
+        $this->view->title  = $this->lang->zanode->editAction;
+        $this->view->zanode = $zanode;
+        if($zanode->type == 'node')
+        {
+            $this->view->host  = $this->zanode->getHostByID($this->view->zanode->parent);
+            $this->view->image = $this->zanode->getImageByID($this->view->zanode->image);
+        }
         $this->display();
     }
 
@@ -156,17 +158,16 @@ class zanode extends control
         $node = $this->zanode->getNodeByID($id);
         $vnc  = $this->zanode->getVncUrl($node);
 
-        /* Add action log. */
-        // if(!empty($vnc->token)) $this->loadModel('action')->create('zanode', $id, 'getVNC');
-
-        $this->view->url         = $node->ip . ":" . $node->hzap;
-        $this->view->host        = !empty($vnc->hostIP) ? $vnc->hostIP:'';
-        $this->view->token       = !empty($vnc->token) ? $vnc->token:'';
-        $this->view->title       = $this->lang->zanode->view;
-        $this->view->zanode      = $node;
+        $this->view->url          = $node->ip . ":" . $node->hzap;
+        $this->view->host         = !empty($vnc->hostIP) ? $vnc->hostIP:'';
+        $this->view->token        = !empty($vnc->token) ? $vnc->token:'';
+        $this->view->title        = $this->lang->zanode->view;
+        $this->view->zanode       = $node;
         $this->view->snapshotList = $this->zanode->getSnapshotList($id);
-        $this->view->actions     = $this->loadModel('action')->getList('zanode', $id);
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->initBash     = sprintf(zget($this->config->zanode->versionToOs, $node->osName, '') != '' ? $this->config->zanode->initPosh : $this->config->zanode->initBash, $node->secret, getWebRoot(true));
+        $this->view->actions      = $this->loadModel('action')->getList('zanode', $id);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+
         $this->display();
     }
 
@@ -243,9 +244,7 @@ class zanode extends control
 
         if($error)
         {
-             $response['result']  = 'fail';
-             $response['message'] = $error;
-             return $this->send($response);
+            return print(js::alert($error) . js::reload('parent'));
         }
         else
         {
@@ -256,7 +255,7 @@ class zanode extends control
     /**
      * Create custom image.
      *
-     * @param  int    $zanodeID
+     * @param  int    $nodeID
      * @access public
      * @return void
      */
@@ -373,7 +372,8 @@ class zanode extends control
     /**
      * Desctroy node.
      *
-     * @param  int  $nodeID
+     * @param  int    $nodeID
+     * @param  string $confirm
      * @return void
      */
     public function destroy($nodeID, $confirm = 'no')
@@ -391,8 +391,7 @@ class zanode extends control
         }
         else
         {
-            if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent.parent'));
-            return print(js::alert($this->lang->zanode->actionSuccess) . js::locate($this->createLink('zanode', 'browse'), 'parent'));
+            return print(js::alert($this->lang->zanode->actionSuccess) . js::locate($this->createLink('zanode', 'browse'), 'parent.parent'));
         }
     }
 
@@ -437,7 +436,7 @@ class zanode extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $snapshotList = $this->zanode->getSnapshotList($nodeID, $browseType, $param, $orderBy, $pager);
+        $snapshotList = $this->zanode->getSnapshotList($nodeID, $orderBy, $pager);
 
         $this->view->title        = $this->lang->zanode->browseSnapshot;
         $this->view->nodeID       = $nodeID;
@@ -455,7 +454,9 @@ class zanode extends control
     /**
      * Restore node.
      *
-     * @param  int  $nodeID
+     * @param  int    $nodeID
+     * @param  int    $snapshotID
+     * @param  string $confirm
      * @return void
      */
     public function restoreSnapshot($nodeID, $snapshotID, $confirm = 'no')
@@ -470,7 +471,7 @@ class zanode extends control
         if(dao::isError())
         {
             $errors = dao::getError();
-            if(is_array($errors)) $errors = implode($errors, ',');
+            if(is_array($errors)) $errors = implode(',', $errors);
             return print(js::alert($errors) . js::reload('parent'));
         }
         else
@@ -510,7 +511,7 @@ class zanode extends control
     /**
      * Ajax get task status.
      *
-     * @param  int    $extranet
+     * @param  int    $nodeID
      * @param  int    $taskID
      * @param  string $type
      * @param  string $status
@@ -538,13 +539,15 @@ class zanode extends control
             $data = fixer::input('post')->get();
             $this->dao->update(TABLE_IMAGE)->data($data)->where('id')->eq($imageID)->autoCheck()->exec();
 
+            $response = array();
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
             if(dao::isError())
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
-                return $this->send($response);
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+            return $this->send($response);
         }
     }
 
@@ -559,11 +562,12 @@ class zanode extends control
     {
         $node          = $this->zanode->getNodeById($hostID);
         $serviceStatus = $this->zanode->getServiceStatus($node);
-        if ($node->status != 'running' && $node->status != 'wait')
+        if ($node->status != 'running')
         {
-            $serviceStatus['ZenAgent'] = "unknown";
-            $serviceStatus['ZTF'] = "unknown";
+            $serviceStatus['ZenAgent'] = 'unknown';
+            $serviceStatus['ZTF']      = 'unknown';
         }
+        $node->status = $node->status == 'online' ? 'ready' : $node->status;
         $serviceStatus['node'] = $node->status;
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
@@ -573,6 +577,7 @@ class zanode extends control
      * Install service by ajax.
      *
      * @param  int    $nodeID
+     * @param  string $service
      * @access public
      * @return void
      */
@@ -587,6 +592,8 @@ class zanode extends control
     /**
      * Ajax: get ZTF script.
      *
+     * @param string $type
+     * @param int    $objectID
      * @access public
      * @return void
      */
@@ -602,26 +609,55 @@ class zanode extends control
      * Ajax: run ZTF script.
      *
      * @param  int    $scriptID
+     * @param  string $taskID
      * @access public
      * @return void
      */
-    public function ajaxRunZTFScript($scriptID = 0)
+    public function ajaxRunZTFScript($scriptID = 0, $taskID = 0)
     {
         if($_POST)
         {
             $caseIDList = $_POST['caseIDList'];
+            $runIDList  = empty($_POST['runIDList']) ? array() : $_POST['runIDList'];
             $script     = $this->zanode->getAutomationByID($scriptID);
-            $cases = $this->loadModel('testcase')->getByList($caseIDList);
+            $cases      = $this->loadModel('testcase')->getByList($caseIDList);
+
+            $runs = array();
+            if($taskID)
+            {
+                $runs = $this->dao->select('id, `case`')->from(TABLE_TESTRUN)
+                ->where('`case`')->in($caseIDList)
+                ->andWhere('task')->eq($taskID)->fi()
+                ->fetchPairs('case', 'id');
+            }
+
+            $caseIDListArray = explode(',', $caseIDList);
+            $runIDListArray  = explode(',', $runIDList);
+            $case2RunMap     = array();
+
+            foreach($caseIDListArray as $index => $caseID) $case2RunMap[$caseID] = empty($runIDListArray[$index]) ? 0 : $runIDListArray[$index];
 
             foreach($cases as $id => $case)
             {
                 if($case->auto != 'auto') continue;
-                $resultID = $this->loadModel('testtask')->initResult(0, $id, $case->version, $script->node);
+                $resultID = $this->loadModel('testtask')->initResult($case2RunMap[$id], $id, $case->version, $script->node);
                 if(!dao::isError()) $this->zanode->runZTFScript($script->id, $id, $resultID);
             }
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => 'success'));
         }
+    }
+
+    /**
+     * Ajax：get nodes.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetNodes()
+    {
+        $nodeList = $this->zanode->getPairs();
+        return print(html::select("node", $nodeList, '', "class='form-control picker-select'"));
     }
 }

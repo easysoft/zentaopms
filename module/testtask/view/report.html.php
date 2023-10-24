@@ -2,7 +2,7 @@
 /**
  * The report view file of testtask module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
@@ -27,7 +27,7 @@
         <div class='panel-title'><?php echo $lang->testtask->report->select;?></div>
       </div>
       <div class='panel-body'>
-        <form method='post' id='chartTypesForm'>
+        <form method='post' id='chartTypesForm' class='no-stash'>
           <div class='checkboxes'>
             <?php echo html::checkBox('charts', $lang->testtask->report->charts, $checkedCharts, '', 'block');?>
           </div>
@@ -47,7 +47,7 @@
         <?php endforeach;?>
       </div>
       <?php $this->app->loadLang('testcase');?>
-      <div class='text-muted' style='padding-top:5px'><?php echo str_replace('%tab%', $lang->testcase->featureBar['browse']['wait'] . $lang->testcase->common, $lang->report->notice->help);?></div>
+      <div class='text-muted' style='padding-top:5px'><?php echo str_replace('%tab%', $lang->testtask->wait . $lang->testcase->common, $lang->report->notice->help);?></div>
       <?php foreach($charts as $chartType => $chartOption):?>
       <div class='table-row chart-row'>
         <div class='main-col'>

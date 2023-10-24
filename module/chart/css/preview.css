@@ -1,0 +1,53 @@
+.m-chart-preview {color: rgb(49, 60, 82); background-color: rgb(244, 245, 247);}
+.main-col .btn-toolbar {margin-bottom: 10px;}
+.main-position {position: relative;}
+.child-position {position: absolute; right: 0;}
+.parent-position{padding-right: 180px;}
+.biz-version {padding-top: 10px;}
+.biz-version a {color: #81511C;}
+
+#chartGroups li {overflow: hidden; white-space: nowrap;}
+#chartGroups .checkbox-primary {margin-left: 8px; display: inline-block;}
+#chartGroups .checkbox-primary + a {display: inline-block;}
+#chartGroups .checkbox-primary > input[type=checkbox][name^=chart] + label {padding-left: 0px;}
+
+.chart-item + .chart-item {margin-top: 10px;}
+.chartbox {
+    height: 400px;
+    overflow: overlay;
+    border: 1px solid #ddd;
+}
+.ant-table-tbody>tr>td, .ant-table-thead>tr>th {
+    padding: 8px!important;
+}
+.table-title {
+    top: 10px;
+    right: auto;
+    bottom: auto;
+    left: 10px;
+    width: auto;
+    height: auto;
+    margin: 0px 0px 10px 10px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: left;
+}
+
+#subNavbar .nav li.active a {display: none;}
+
+#mainContent .cell {padding: 11px;}
+#mainContent .panel {border: 0;}
+#mainContent .chart-item.main-row x-vue-echarts {max-height: 460px;}
+#mainContent .chart-item.main-row .ant-table-wrapper {max-height: 398px; overflow-y: overlay !important;border: 1px solid #e8e8e8; border-right: 0;}
+#mainContent .chart-item.main-row .ant-table-bordered .ant-table-body>table {border: 0;}
+#mainContent .chart-item.main-row .ant-table-bordered .ant-table-body>table tr:last-child td {border-bottom: 0;}
+
+.echart-content {width: 100%; min-height: 500px;}
+
+.filterBox{display: flex; margin-bottom: 20px;}
+.filter-items{display: flex; flex: 1; flex-wrap: wrap;}
+.filter-item{padding: 0 16px 5px 0;}
+.filter-item-grow{flex-grow: 1;}
+.queryBtn{display: flex; align-items: center; padding-bottom: 5px; flex-basis: 60px;}
+
+.filterBox .picker-selections{width: 128px; height: 32px; overflow: hidden; text-overflow: clip; white-space: nowrap;}

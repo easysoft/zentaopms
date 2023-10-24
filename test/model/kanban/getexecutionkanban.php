@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -52,4 +51,3 @@ r($kanban->getExecutionKanbanTest($executionIDList[3], $browseTypeList[2], $grou
 r($kanban->getExecutionKanbanTest($executionIDList[4]))                                      && p() && e('columns:27, lanes:3, cards:10'); // 测试获取execution103的执行看板信息
 r($kanban->getExecutionKanbanTest($executionIDList[4], $browseTypeList[2], $groupByList[5])) && p() && e('columns:9, lanes:5, cards:4');   // 测试获取execution103 bug module的执行看板信息
 r($kanban->getExecutionKanbanTest($executionIDList[4], $browseTypeList[2], $groupByList[6])) && p() && e('columns:9, lanes:4, cards:4');   // 测试获取execution103 bug severity的执行看板信息
-$db->restoreDB();

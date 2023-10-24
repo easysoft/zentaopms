@@ -1,0 +1,7 @@
+.plug-container > div{margin-bottom: 20px;}
+.plug-container a {display: inline-block; width: 150px;}
+.plug-container a:hover { text-decoration: none; box-shadow: 0 1px 5px rgb(0 0 0 / 18%);}
+.logo { display: inline-block; padding: 10px;}
+.logo .icon {font-size: 100px; color: #70c0fb;}
+.logo img {width: 100px; height:100px;}
+.plug-title {display: inline-block; padding-top: 10px; text-align: center; font-size: 16px; font-weight: 500;}

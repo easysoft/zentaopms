@@ -1,39 +1,17 @@
 <?php include 'header.html.php';?>
+<?php js::set('tableTree', $tableTree);?>
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'>
-    <div class='cell'>
+    <div class='cell module-tree'>
       <div class="panel panel-sm with-list">
         <div class='panel-heading'><i class='icon-list'></i> <strong><?php echo $lang->dev->dbList?></strong></div>
-        <?php foreach($lang->dev->groupList as $group => $groupName):?>
-        <?php if(isset($tables[$group])):?>
-        <div class='modulegroup'><?php echo $groupName?></div>
-        <?php foreach($tables[$group] as $subTable => $table):?>
-        <?php
-        $active    = ($table == $selectedTable) ? 'active' : '';
-        $tableName = zget($lang->dev->tableList, $subTable, '');
-        ?>
-        <?php if(!empty($tableName)) echo html::a(inlink('db', "table=$table"), $tableName, '', "class='$active'");?>
-        <?php endforeach;?>
-        <?php endif;?>
-        <?php endforeach;?>
-        <?php foreach($lang->dev->endGroupList as $group => $groupName):?>
-        <?php if(isset($tables[$group])):?>
-        <div class='modulegroup'><?php echo $groupName?></div>
-        <?php foreach($tables[$group] as $subTable => $table):?>
-        <?php
-        $active    = ($table == $selectedTable) ? 'active' : '';
-        $tableName = zget($lang->dev->tableList, $subTable, '');
-        ?>
-        <?php if(!empty($tableName)) echo html::a(inlink('db', "table=$table"), $tableName, '', "class='$active'");?>
-        <?php endforeach;?>
-        <?php endif;?>
-        <?php endforeach;?>
+        <div id="tableTree" class="menu-active-primary menu-hover-primary"></div>
       </div>
     </div>
   </div>
-  <div class='main-col main-content'>
+  <div class='main-col main-content module-col'>
     <?php if($selectedTable):?>
-    <div class='detail'>
+    <div class='detail module-content'>
       <div class='detail-title'><?php echo $selectedTable?></div>
       <div class='detail-content'>
         <table class="table table-bordered">

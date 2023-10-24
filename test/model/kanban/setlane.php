@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -34,4 +33,3 @@ r($kanban->setLaneTest($idList[3], $nameList[3], $colorList[1])) && p('name,colo
 r($kanban->setLaneTest($idList[4], $nameList[4], $colorList[0])) && p('name,color') && e('修改泳道5,#333');         // 测试设置泳道5
 r($kanban->setLaneTest($idList[4], $nameList[5], $colorList[0])) && p('name:0')     && e('『泳道名称』不能为空。'); // 测试设置不填写名字
 r($kanban->setLaneTest($idList[4], $nameList[6], $colorList[0])) && p('name:0')     && e('『泳道名称』不能为空。'); // 测试设置填写空格
-$db->restoreDB();

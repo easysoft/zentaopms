@@ -2,7 +2,7 @@
 /**
  * The browse view file of sonarqube module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Zeng <liugang@cnezsoft.com>
  * @package     sonarqube
@@ -13,10 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class='pull-left'>
-    <?php echo html::a($this->createLink('sonarqube', 'browse'), "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-secondary'");?>
-  </div>
-  <div id="sidebarHeader">
-    <div class="title"><?php echo $this->lang->sonarqube->common . ':' . $sonarqube->name; ?></div>
+    <?php echo html::a($this->createLink('instance', 'view', "id={$sonarqube->instanceID}&type={$sonarqube->type}"), "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-secondary'");?>
   </div>
   <div class="btn-toolbar pull-left">
     <div>
@@ -27,15 +24,15 @@
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('sonarqube', 'createProject', "sonarqubeID=$sonarqubeID", "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-primary'");?>
+    <?php common::printLink('instance', 'manage', "sonarqubeID=$sonarqubeID", "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php if(empty($sonarqubeProjectList)):?>
 <div class="table-empty-tip">
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
-    <?php if(empty($keyword) and common::hasPriv('sonarqube', 'createProject')):?>
-    <?php echo html::a($this->createLink('sonarqube', 'createProject', "sonarqubeID=$sonarqubeID"), "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-info'");?>
+    <?php if(empty($keyword) and commonModel::hasPriv('space', 'browse')):?>
+    <?php echo html::a($this->createLink('instance', 'manage', "sonarqubeID=$sonarqubeID"), "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-info'");?>
     <?php endif;?>
   </p>
 </div>
@@ -43,7 +40,7 @@
 <div id='mainContent' class='main-row'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='sonarqubeProjectList' class='table has-sort-head table-fixed'>
-      <?php $vars = "sonarqubeID={$sonarqubeID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+      <?php $vars = "sonarqubeID={$sonarqubeID}&orderBy=%s&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
           <th class='c-key text-left'><?php common::printOrderLink('key', $orderBy, $vars, $lang->sonarqube->projectKey);?></th>

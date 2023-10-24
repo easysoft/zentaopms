@@ -2,7 +2,7 @@
 /**
  * The user module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license  ZPL (http://zpl.pub/page/zplv12.html)
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  user
@@ -59,6 +59,9 @@ $lang->user->type             = 'User Type';
 $lang->user->cropAvatar       = 'Crop Avatar';
 $lang->user->cropAvatarTip    = 'Drag and drop the box to select the image clipping range.';
 $lang->user->cropImageTip     = 'The image used is too small, the recommended image size is at least 48x48, the current image size is %s';
+
+$lang->user->abbr = new stdclass();
+$lang->user->abbr->id = 'ID';
 
 $lang->user->legendBasic        = 'Thông tin cơ bản';
 $lang->user->legendContribution = 'Đóng góp';

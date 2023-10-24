@@ -9,28 +9,28 @@
  * @version     $Id
  * @link        http://www.zentao.net
  */
-$lang->weekly->common   = '项目周报';
+$lang->weekly->common   = $lang->projectCommon . '周报';
 $lang->weekly->index    = '周报总览';
 $lang->weekly->progress = '完成百分比';
 $lang->weekly->workload = '工作量';
 $lang->weekly->total    = '合计';
 
-$lang->weekly->reportTtitle   = '项目: %s 周报（第 %s 周）';
-$lang->weekly->summary        = '项目进展状况';
+$lang->weekly->reportTtitle   = $lang->projectCommon . ': %s 周报（第 %s 周）';
+$lang->weekly->summary        = $lang->projectCommon . '进展状况';
 $lang->weekly->finished       = '本周工作完成情况（100%完成的工作）';
 $lang->weekly->postponed      = '本周未完成工作';
 $lang->weekly->nextWeek       = '下周工作计划';
 $lang->weekly->workloadByType = '工作量统计';
 
 $lang->weekly->term    = '报告周期';
-$lang->weekly->project = '项目名称';
+$lang->weekly->project = $lang->projectCommon . '名称';
 $lang->weekly->master  = '项目经理 ';
 $lang->weekly->staff   = '本周投入人数';
 
 $lang->weekly->weekDesc       = '第 %s 周( %s ~ %s)';
-$lang->weekly->progress       = '项目当前进展状况';
+$lang->weekly->progress       = $lang->projectCommon . '当前进展状况';
 $lang->weekly->analysisResult = '分析结果';
-$lang->weekly->cost           = '项目成本';
+$lang->weekly->cost           = $lang->projectCommon . '成本';
 
 $lang->weekly->pv = '计划完成的工作(PV)';
 $lang->weekly->ev = '实际完成的工作(EV)';

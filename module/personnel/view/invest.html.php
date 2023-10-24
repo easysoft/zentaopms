@@ -2,7 +2,7 @@
 /**
  * The html template file of invest method of personnel module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -29,7 +29,7 @@
             <th colspan="3"><?php echo $lang->personnel->task;?></th>
             <th colspan="3"><?php echo $lang->personnel->bug;?></th>
             <th <?php echo $config->URAndSR ? "colspan='2'" : "rowspan='2'";?> class="c-story"><?php echo $lang->personnel->createStories;?></th>
-            <?php if($this->config->edition == 'max'): ?>
+            <?php if($this->config->edition == 'max' or $this->config->edition == 'ipd'): ?>
             <th colspan="3"><?php echo $lang->personnel->issue;?></th>
             <th colspan="3"><?php echo $lang->personnel->risk;?></th>
             <?php endif;?>
@@ -47,7 +47,7 @@
             <th><?php echo $lang->personnel->UR;?></th>
             <th><?php echo $lang->personnel->SR;?></th>
             <?php endif;?>
-            <?php if($this->config->edition == 'max'): ?>
+            <?php if($this->config->edition == 'max' or $this->config->edition == 'ipd'): ?>
             <th><?php echo $lang->personnel->created;?></th>
             <th><?php echo $lang->personnel->resolved;?></th>
             <th><?php echo $lang->personnel->wait;?></th>
@@ -77,7 +77,7 @@
             <td><?php echo $personnel['UR'];?></td>
             <?php endif;?>
             <td><?php echo $personnel['SR'];?></td>
-            <?php if($this->config->edition == 'max'): ?>
+            <?php if($this->config->edition == 'max' or $this->config->edition == 'ipd'): ?>
             <td><?php echo $personnel['createdIssue'];?></td>
             <td><?php echo $personnel['resolvedIssue'];?></td>
             <td><?php echo $personnel['pendingIssue'];?></td>

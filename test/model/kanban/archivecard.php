@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -28,4 +27,3 @@ r($kanban->archiveCardTest($cardIDList[1])) && p('0:field,old,new') && e('archiv
 r($kanban->archiveCardTest($cardIDList[2])) && p('0:field,old,new') && e('archived,0,1'); // 测试归档卡片3
 r($kanban->archiveCardTest($cardIDList[3])) && p('0:field,old,new') && e('archived,0,1'); // 测试归档卡片4
 r($kanban->archiveCardTest($cardIDList[4])) && p('0:field,old,new') && e('archived,0,1'); // 测试归档卡片5
-$db->restoreDB();

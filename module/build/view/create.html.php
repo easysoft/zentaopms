@@ -2,7 +2,7 @@
 /**
  * The create view of build module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
@@ -60,7 +60,9 @@
         <tr class='hide'>
           <th class='w-120px'><?php echo $lang->build->builds;?></th>
           <td id='buildBox'><?php echo html::select('builds[]', array(), '', "class='form-control chosen' multiple data-placeholder='{$lang->build->placeholder->multipleSelect}'");?></td>
-          <td><?php echo $lang->build->notice->autoRelation;?></td>
+          <td>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->build->notice->autoRelation;?>"></icon>
+          </td>
         </tr>
         <tr>
           <th class='w-120px'><?php echo $lang->build->name;?></th>

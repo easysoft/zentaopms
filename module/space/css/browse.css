@@ -1,0 +1,20 @@
+#dropMenu .col-left {padding-bottom: 0;}
+input.search-input#search {padding:5px;}
+.q-card-title {padding-left: 15px; margin-left: -15px; line-height: 18px; font-size: 16px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
+#cardsContainer .row {min-height: calc(100vh - 160px);}
+#cardsContainer .panel{border-radius: 2px;}
+#cardsContainer .panel-heading {padding: 14px 14px 20px 14px;}
+#cardsContainer .panel-body {padding: 0 14px;}
+#cardsContainer .panel-footer .count-down{display: inline-block; margin: 0 10px;}
+#cardsContainer .instance-detail {height: 44px; margin-bottom: 6px;}
+#cardsContainer .instance-logo {float: left;}
+#cardsContainer .instance-logo img {width: 44px; height: 44px;}
+#cardsContainer .instance-intro {float: left; padding-left: 20px; margin-bottom: 0; line-height: 22px; width: calc(100% - 44px); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; vertical-align: middle;}
+#cardsContainer .instance-actions {padding: 14px 0 0 0;}
+#cardsContainer .instance-footer {height: 50px; padding: 14px; font-size: 13px; font-weight: 600;}
+#cardsContainer .instance-footer span {display: inline-block;}
+.input-group-btn {float: left;}
+#spaceSearchForm > div.btn-toolbar.pull-left > a {padding: 3px;}
+#spaceSearchForm button[type=submit] {height: 32px;}
+#spaceSearchForm a.btn {margin-top: 3px;}
+.solution-link {line-height: 18px; text-align: center; max-width: 140px; display: inline-block; float: right;}

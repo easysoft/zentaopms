@@ -2,7 +2,7 @@
 /**
  * The edit view of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
@@ -24,12 +24,12 @@
           <th><?php echo $lang->kanban->columnWidth;?></th>
           <td colspan='2'>
             <div class="width-radio-row">
-                <?php echo html::radio('fluidBoard', array(0 => $lang->kanbancolumn->fluidBoardList['0']), "class='inline-block'", $execution->fluidBoard);?>
+                <?php echo html::radio('fluidBoard', array(0 => $lang->kanbancolumn->fluidBoardList['0']), $execution->fluidBoard, "class='inline-block'");?>
                 <?php echo html::input('colWidth', !empty($execution->colWidth) ? $execution->colWidth : $this->config->colWidth, "class='form-control inline-block setting-input' placeholder='{$this->config->colWidth}' autocomplete='off'");?>px
                 <div class='fixedTip'><?php echo $lang->kanbancolumn->fixedTip;?></div>
             </div>
             <div class="width-radio-row mt10">
-                <?php echo html::radio('fluidBoard', array(1 => $lang->kanbancolumn->fluidBoardList['1']), "class='inline-block'", $execution->fluidBoard);?>
+                <?php echo html::radio('fluidBoard', array(1 => $lang->kanbancolumn->fluidBoardList['1']), $execution->fluidBoard, "class='inline-block'");?>
                 <?php echo html::input('minColWidth', !empty($execution->minColWidth) ? $execution->minColWidth: $this->config->minColWidth, "class='form-control inline-block setting-input' placeholder='{$this->config->minColWidth}' autocomplete='off'");?>px
                 <span class="input-divider">~</span>
                 <?php echo html::input('maxColWidth', !empty($execution->maxColWidth) ? $execution->maxColWidth: $this->config->maxColWidth, "class='form-control inline-block setting-input' placeholder='{$this->config->maxColWidth}' autocomplete='off'");?>px

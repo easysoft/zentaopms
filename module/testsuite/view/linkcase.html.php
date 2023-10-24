@@ -2,7 +2,7 @@
 /**
  * The linkcase view file of testsuite module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testsuite
@@ -26,6 +26,13 @@
 </div>
 <div class="cell show" id="queryBox" data-module='testsuite'></div>
 <div id='mainContent'>
+  <?php if(empty($cases)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
+    </p>
+  </div>
+  <?php else:?>
   <form class='main-table table-testcase' data-ride='table' method='post'>
     <div class="table-header">
       <i class="icon-unlink"></i> &nbsp;<strong><?php echo $lang->testsuite->unlinkedCases;?></strong> (<?php echo $pager->recTotal;?>)
@@ -87,5 +94,6 @@
     </div>
     <?php endif;?>
   </form>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

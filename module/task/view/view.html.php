@@ -2,7 +2,7 @@
 /**
  * The view file of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../ai/view/promptmenu.html.php';?>
 <?php $browseLink = $app->session->taskList != false ? $app->session->taskList : $this->createLink('execution', 'browse', "executionID=$task->execution");?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
@@ -74,7 +75,7 @@
         <div class='detail-content article-content'>
           <?php echo (!empty($task->storySpec) || !empty($task->storyFiles)) ? $task->storySpec : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
         </div>
-        <?php echo $this->fetch('file', 'printFiles', array('files' => $task->storyFiles, 'fieldset' => 'false'));?>
+        <?php echo $this->fetch('file', 'printFiles', array('files' => $task->storyFiles, 'fieldset' => 'false', 'object' => $task, 'method' => 'view', 'showDelete' => false));?>
       </div>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->task->storyVerify;?></div>
@@ -195,7 +196,7 @@
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th><?php echo $lang->task->module;?></th>
+                  <th class='task-basic-info'><?php echo $lang->task->module;?></th>
                   <?php
                   $moduleTitle = '';
                   ob_start();
@@ -234,7 +235,13 @@
                     <?php
                     if(!$task->storyTitle) echo $lang->noData;
                     $class = isonlybody() ? 'showinonlybody' : 'iframe';
-                    if($task->storyTitle and !common::printLink('execution', 'storyView', "storyID=$task->story", $task->storyTitle, '', "class=$class data-width='80%'", true, true)) echo $task->storyTitle;
+
+                    /* Fix bug #32710, link to story-view if no executions under project. */
+                    $project = $this->loadModel('project')->getByID($task->project);
+                    $moduleName = !$project->multiple ? 'story' : 'execution';
+                    $methodName = !$project->multiple ? 'view'  : 'storyView';
+
+                    if($task->storyTitle and !common::printLink($moduleName, $methodName, "storyID=$task->story", $task->storyTitle, '', "class=$class data-width='80%'", true, true)) echo $task->storyTitle;
                     if($task->needConfirm)
                     {
                         echo "(<span class='warning'>{$lang->story->changed}</span> ";
@@ -261,7 +268,7 @@
                     }
                     else
                     {
-                        echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : $lang->noData;
+                        echo $task->assignedTo ? $task->assignedToRealName . $lang->at . substr($task->assignedDate, 0, 19) : $lang->noData;
                     }
                     ?>
                   </td>
@@ -274,7 +281,7 @@
                 <?php endif;?>
                 <tr>
                   <th><?php echo $lang->task->type;?></th>
-                  <td><?php echo $lang->task->typeList[$task->type];?></td>
+                  <td><?php echo zget($this->lang->task->typeList, $task->type, $task->type);?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->task->status;?></th>
@@ -386,7 +393,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->task->realStarted;?></th>
-                <td><?php echo helper::isZeroDate($task->realStarted) ? '' : $task->realStarted; ?> </td>
+                <td><?php echo helper::isZeroDate($task->realStarted) ? '' : substr($task->realStarted, 0, 19); ?> </td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->deadline;?></th>

@@ -2,7 +2,7 @@
 /**
  * The html template file of index method of index module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -12,7 +12,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
+    <?php foreach($lang->product->featureBar['project'] as $key => $label):?>
     <?php echo html::a(inlink("project", "status=$key&productID=$productID"), "<span class='text'>{$label}</span>" . ($status == $key ? " <span class='label label-light label-badge'>" . count($projectStats) . "</span>" : ''), '', "class='btn btn-link" . ($status == $key ? ' btn-active-text' : '') . "' id='{$key}Tab'");?>
     <?php endforeach;?>
     <?php echo html::checkbox('involved', array('1' => $lang->project->mine), '', $this->cookie->involved ? 'checked=checked' : '');?>
@@ -37,7 +37,7 @@
       <thead>
         <tr>
           <th class='c-id'><?php echo $lang->idAB;?></th>
-          <?php if($config->systemMode == 'ALM'):?>
+          <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
           <th class='c-program'><?php echo $lang->program->common;?></th>
           <?php endif;?>
           <th><?php echo $lang->project->name;?></th>
@@ -68,7 +68,7 @@
         <?php if($project->status == 'closed')    $closedCount ++;?>
         <tr>
           <td><?php printf('%03d', $project->id);?></td>
-          <?php if($config->systemMode == 'ALM'):?>
+          <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
           <td title='<?php echo $project->programName;?>' class='text-ellipsis'><?php echo $project->programName;?></td>
           <?php endif;?>
           <td class='text-left'>
@@ -92,11 +92,11 @@
           <td title='<?php echo $budgetTitle;?>' class="text-ellipsis text-right"><?php echo $budgetTitle;?></td>
           <td class='padding-right text-left'><?php echo $project->begin;?></td>
           <td class='padding-right text-left'><?php echo $project->end;?></td>
-          <td class="text-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalEstimate . $lang->execution->workHourUnit;?></td>
-          <td class="text-right" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalConsumed . $lang->execution->workHourUnit;?></td>
+          <td class="text-right" title="<?php echo $project->estimate . ' ' . $lang->execution->workHour;?>"><?php echo $project->estimate . $lang->execution->workHourUnit;?></td>
+          <td class="text-right" title="<?php echo $project->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $project->consumed . $lang->execution->workHourUnit;?></td>
           <td>
-            <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($project->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-              <div class='progress-info'><?php echo round($project->hours->progress);?></div>
+            <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($project->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+              <div class='progress-info'><?php echo round($project->progress);?></div>
             </div>
           </td>
         </tr>

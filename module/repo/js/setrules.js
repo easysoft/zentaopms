@@ -158,7 +158,7 @@ function replaceExample()
         }
     }
 
-    var resolveBug  = $('[id*=bug][id*="resolve\]"]').val().split(';');
+    var resolveBug  = $('[id*=bug][id*="resolve"]').val().split(';');
     var bugModule   = $('[id*=module][id*=bug]').val().split(';');
     for(i in resolveBug)
     {

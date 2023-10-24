@@ -2,7 +2,7 @@
 /**
  * The create view of todo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
@@ -38,12 +38,14 @@
                   <label for='switchDate'><?php echo $lang->todo->periods['future'];?></label>
                 </div>
               </span>
+              <?php if(common::hasPriv('todo', 'createcycle')):?>
               <span class='input-group-addon'>
                 <div class='checkbox-primary'>
                   <input type='checkbox' id='cycle' name='cycle' value='1' onclick='switchDateTodo(this);' />
                   <label for='cycle'><?php echo $lang->todo->cycle;?></label>
                 </div>
               </span>
+              <?php endif;?>
             </div>
           </td><td></td>
         </tr>

@@ -2,7 +2,7 @@
 /**
 * The config file of zentaophp.  Don't modify this file directly, copy the item to my.php and change it.
 *
-* @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+* @copyright   Copyright 2009-2017 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
 * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
 * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
 * @package     config
@@ -197,6 +197,7 @@ $config->openMethods[] = 'misc.checkupdate';
 $config->openMethods[] = 'misc.ping';
 $config->openMethods[] = 'misc.captcha';
 $config->openMethods[] = 'misc.features';
+$config->openMethods[] = 'misc.getremind';
 $config->openMethods[] = 'sso.login';
 $config->openMethods[] = 'sso.logout';
 $config->openMethods[] = 'sso.bind';
@@ -227,7 +228,86 @@ $config->openMethods[] = 'doc.createbasicinfo';
 $config->openMethods[] = 'project.createguide';
 $config->openMethods[] = 'task.editteam';
 $config->openMethods[] = 'feedback.mergeproductmodule';
-$config->openMethods[] = 'zanode.nodeList';
+$config->openMethods[] = 'zanode.nodelist';
+$config->openMethods[] = 'action.restoreStages';
+$config->openMethods[] = 'execution.browse';
+$config->openMethods[] = 'testcase.showimport';
+$config->openMethods[] = 'testsuite.index';
+$config->openMethods[] = 'caselib.index';
+$config->openMethods[] = 'company.index';
+$config->openMethods[] = 'user.cropavatar';
+$config->openMethods[] = 'custom.index';
+$config->openMethods[] = 'testcase.getxmindimport';
+$config->openMethods[] = 'testcase.showxmindimport';
+$config->openMethods[] = 'testcase.savexmindimport';
+$config->openMethods[] = 'search.buildzinform';
+$config->openMethods[] = 'search.buildzinquery';
+$config->openMethods[] = 'search.savezinquery';
+$config->openMethods[] = 'space.createapplication';
+$config->openMethods[] = 'ai.adminindex';
+$config->openMethods[] = 'sonarqube.create';
+$config->openMethods[] = 'sonarqube.edit';
+$config->openMethods[] = 'sonarqube.browseproject';
+$config->openMethods[] = 'sonarqube.createproject';
+$config->openMethods[] = 'sonarqube.deleteproject';
+$config->openMethods[] = 'sonarqube.execjob';
+$config->openMethods[] = 'sonarqube.reportview';
+$config->openMethods[] = 'sonarqube.browseissue';
+$config->openMethods[] = 'gitlab.create';
+$config->openMethods[] = 'gitlab.edit';
+$config->openMethods[] = 'gitlab.importissue';
+$config->openMethods[] = 'gitlab.binduser';
+$config->openMethods[] = 'gitlab.browseproject';
+$config->openMethods[] = 'gitlab.createproject';
+$config->openMethods[] = 'gitlab.editproject';
+$config->openMethods[] = 'gitlab.deleteproject';
+$config->openMethods[] = 'gitlab.browsegroup';
+$config->openMethods[] = 'gitlab.creategroup';
+$config->openMethods[] = 'gitlab.editgroup';
+$config->openMethods[] = 'gitlab.deletegroup';
+$config->openMethods[] = 'gitlab.managegroupmembers';
+$config->openMethods[] = 'gitlab.browseuser';
+$config->openMethods[] = 'gitlab.createuser';
+$config->openMethods[] = 'gitlab.edituser';
+$config->openMethods[] = 'gitlab.deleteuser';
+$config->openMethods[] = 'gitlab.createbranch';
+$config->openMethods[] = 'gitlab.browsebranch';
+$config->openMethods[] = 'gitlab.webhook';
+$config->openMethods[] = 'gitlab.createwebhook';
+$config->openMethods[] = 'gitlab.manageprojectmembers';
+$config->openMethods[] = 'gitlab.managebranchpriv';
+$config->openMethods[] = 'gitlab.managetagpriv';
+$config->openMethods[] = 'gitlab.browsetag';
+$config->openMethods[] = 'gitlab.createtag';
+$config->openMethods[] = 'gitlab.deletetag';
+$config->openMethods[] = 'gogs.create';
+$config->openMethods[] = 'gogs.edit';
+$config->openMethods[] = 'gogs.binduser';
+$config->openMethods[] = 'gitea.create';
+$config->openMethods[] = 'gitea.edit';
+$config->openMethods[] = 'gitea.binduser';
+$config->openMethods[] = 'jenkins.create';
+$config->openMethods[] = 'jenkins.edit';
+$config->openMethods[] = 'instance.createexternalapp';
+$config->openMethods[] = 'instance.editexternalapp';
+$config->openMethods[] = 'instance.deleteexternalapp';
+$config->openMethods[] = 'instance.setting';
+$config->openMethods[] = 'instance.ajaxdbauthurl';
+$config->openMethods[] = 'instance.view';
+$config->openMethods[] = 'instance.install';
+$config->openMethods[] = 'instance.visit';
+$config->openMethods[] = 'instance.ajaxstatus';
+$config->openMethods[] = 'instance.ajaxstart';
+$config->openMethods[] = 'instance.ajaxstop';
+$config->openMethods[] = 'instance.upgrade';
+$config->openMethods[] = 'instance.ajaxuninstall';
+$config->openMethods[] = 'search.deletezinquery';
+$config->openMethods[] = 'space.edit';
+$config->openMethods[] = 'space.binduser';
+$config->openMethods[] = 'space.getstoreappinfo';
+$config->openMethods[] = 'store.browse';
+$config->openMethods[] = 'store.appview';
+$config->openMethods[] = 'system.editdomain';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
@@ -304,12 +384,14 @@ define('TABLE_API_LIB_RELEASE', '`' . $config->db->prefix . 'api_lib_release`');
 
 define('TABLE_MODULE',        '`' . $config->db->prefix . 'module`');
 define('TABLE_ACTION',        '`' . $config->db->prefix . 'action`');
+define('TABLE_ACTIONRECENT',  '`' . $config->db->prefix . 'actionrecent`');
 define('TABLE_FILE',          '`' . $config->db->prefix . 'file`');
 define('TABLE_HOLIDAY',       '`' . $config->db->prefix . 'holiday`');
 define('TABLE_HISTORY',       '`' . $config->db->prefix . 'history`');
 define('TABLE_EXTENSION',     '`' . $config->db->prefix . 'extension`');
 define('TABLE_CRON',          '`' . $config->db->prefix . 'cron`');
 define('TABLE_BLOCK',         '`' . $config->db->prefix . 'block`');
+define('TABLE_DOCACTION',     '`' . $config->db->prefix . 'docaction`');
 define('TABLE_DOCCONTENT',    '`' . $config->db->prefix . 'doccontent`');
 define('TABLE_TESTSUITE',     '`' . $config->db->prefix . 'testsuite`');
 define('TABLE_SUITECASE',     '`' . $config->db->prefix . 'suitecase`');
@@ -328,6 +410,9 @@ define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
 define('TABLE_MR',            '`' . $config->db->prefix . 'mr`');
 define('TABLE_MRAPPROVAL',    '`' . $config->db->prefix . 'mrapproval`');
 
+define('TABLE_SERVERROOM',   '`' . $config->db->prefix . 'serverroom`');
+define('TABLE_ACCOUNT',      '`' . $config->db->prefix . 'account`');
+define('TABLE_HOST',         '`' . $config->db->prefix . 'host`');
 define('TABLE_REPO',         '`' . $config->db->prefix . 'repo`');
 define('TABLE_RELATION',     '`' . $config->db->prefix . 'relation`');
 define('TABLE_REPOHISTORY',  '`' . $config->db->prefix . 'repohistory`');
@@ -350,10 +435,29 @@ if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefi
 
 define('TABLE_SCREEN',    '`' . $config->db->prefix . 'screen`');
 define('TABLE_CHART',     '`' . $config->db->prefix . 'chart`');
+define('TABLE_PIVOT',     '`' . $config->db->prefix . 'pivot`');
 define('TABLE_DASHBOARD', '`' . $config->db->prefix . 'dashboard`');
 define('TABLE_DATASET',   '`' . $config->db->prefix . 'dataset`');
 define('TABLE_DATAVIEW',  '`' . $config->db->prefix . 'dataview`');
 define('TABLE_DIMENSION', '`' . $config->db->prefix . 'dimension`');
+define('TABLE_SCENE',     '`' . $config->db->prefix . 'scene`');
+
+define('TABLE_PRIV',         '`' . $config->db->prefix . 'priv`');
+define('TABLE_PRIVLANG',     '`' . $config->db->prefix . 'privlang`');
+define('TABLE_PRIVMANAGER',  '`' . $config->db->prefix . 'privmanager`');
+define('TABLE_PRIVRELATION', '`' . $config->db->prefix . 'privrelation`');
+
+define('TABLE_SPACE',    '`' . $config->db->prefix . 'space`');
+define('TABLE_INSTANCE', '`' . $config->db->prefix . 'instance`');
+define('TABLE_SOLUTION', '`' . $config->db->prefix . 'solution`');
+define('TABLE_ARTIFACTREPO', '`' . $config->db->prefix . 'artifactrepo`');
+define('TABLE_PROMPT', '`' . $config->db->prefix . 'prompt`');
+define('TABLE_PROMPTROLE', '`' . $config->db->prefix . 'promptrole`');
+
+define('TABLE_METRIC', '' . $config->db->prefix . 'metric');
+define('TABLE_METRICLIB', '' . $config->db->prefix . 'metriclib');
+define('TABLE_METRICRECORDS', '' . $config->db->prefix . 'metricrecords');
+define('TABLE_BASICMEAS', '' . $config->db->prefix . 'basicmeas');
 
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
@@ -405,10 +509,25 @@ $config->objectTables['apistruct']    = TABLE_APISTRUCT;
 $config->objectTables['repo']         = TABLE_REPO;
 $config->objectTables['dataview']     = TABLE_DATAVIEW;
 $config->objectTables['zahost']       = TABLE_ZAHOST;
+$config->objectTables['zanode']       = TABLE_ZAHOST;
 $config->objectTables['automation']   = TABLE_AUTOMATION;
 $config->objectTables['stepResult']   = TABLE_TESTRUN;
+$config->objectTables['priv']         = TABLE_PRIV;
+$config->objectTables['privlang']     = TABLE_PRIVLANG;
+$config->objectTables['privmanager']  = TABLE_PRIVMANAGER;
+$config->objectTables['privrelation'] = TABLE_PRIVRELATION;
+$config->objectTables['scene']        = TABLE_SCENE;
+$config->objectTables['account']      = TABLE_ACCOUNT;
+$config->objectTables['serverroom']   = TABLE_SERVERROOM;
+$config->objectTables['host']         = TABLE_ZAHOST;
+$config->objectTables['instance']     = TABLE_INSTANCE;
+$config->objectTables['space']        = TABLE_SPACE;
+$config->objectTables['solution']     = TABLE_SOLUTION;
+$config->objectTables['artifactrepo'] = TABLE_ARTIFACTREPO;
+$config->objectTables['prompt']       = TABLE_PROMPT;
+$config->objectTables['metric']       = TABLE_METRIC;
 
-$config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
+$config->newFeatures      = array('aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';
 $config->closedFeatures   = '';
 
@@ -416,10 +535,14 @@ $config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqu
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->noSprint  = array('task', 'story', 'tree', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'requirement');
-$config->programPriv->scrum     = array('story', 'requirement', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
-$config->programPriv->waterfall = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
+$config->programPriv->noSprint      = array('task', 'story', 'tree', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'requirement');
+$config->programPriv->scrum         = array('story', 'requirement', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
+$config->programPriv->waterfall     = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
+$config->programPriv->agileplus     = $config->programPriv->scrum;
+$config->programPriv->waterfallplus = $config->programPriv->waterfall;
+$config->programPriv->ipd           = $config->programPriv->waterfall;
 
+$config->safeFileTimeout  = 3600;
 $config->waterfallModules = array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'opportunity', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport');
 
 $config->showMainMenu = true;
@@ -428,8 +551,20 @@ $config->maxPriValue  = '256';
 $config->importWhiteList = array('user', 'task', 'story', 'bug', 'testcase', 'feedback', 'ticket');
 
 $config->featureGroup = new stdclass();
-$config->featureGroup->product   = array('roadmap', 'track', 'UR');
-$config->featureGroup->scrum     = array();
-$config->featureGroup->waterfall = array();
-$config->featureGroup->assetlib  = array();
-$config->featureGroup->other     = array('devops', 'kanban');
+$config->featureGroup->my            = array('score');
+$config->featureGroup->product       = array('roadmap', 'track', 'UR');
+$config->featureGroup->scrum         = array();
+$config->featureGroup->waterfall     = array();
+$config->featureGroup->agileplus     = array();
+$config->featureGroup->waterfallplus = array();
+$config->featureGroup->assetlib      = array();
+$config->featureGroup->other         = array('devops', 'kanban');
+
+$config->bi = new stdclass();
+$config->bi->pickerHeight = 150;
+
+$config->hasDropmenuApps      = array('program', 'project', 'product', 'execution', 'qa', 'admin');
+$config->hasBranchMenuModules = array('product', 'story', 'release', 'bug', 'testcase');
+$config->excludeDropmenuList  = array('program-browse', 'product-all', 'product-index', 'execution-all', 'project-browse', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create', 'execution-batchedit');
+$config->hasSwitcherModules   = array('design');
+$config->excludeSwitcherList  = array();

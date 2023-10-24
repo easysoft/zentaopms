@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Components;
 
 use PhpMyAdmin\SqlParser\Components\JoinKeyword;
@@ -10,7 +8,7 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class JoinKeywordTest extends TestCase
 {
-    public function testParseIncomplete(): void
+    public function testParseIncomplete()
     {
         $component = JoinKeyword::parse(new Parser(), $this->getTokensList('JOIN a'));
         $this->assertCount(1, $component);
@@ -19,16 +17,16 @@ class JoinKeywordTest extends TestCase
         $this->assertNull($component[0]->using);
     }
 
-    public function testParseIncompleteUsing(): void
+    public function testParseIncompleteUsing()
     {
         $component = JoinKeyword::parse(new Parser(), $this->getTokensList('JOIN table2 USING (id)'));
         $this->assertCount(1, $component);
         $this->assertEquals('table2', $component[0]->expr->expr);
         $this->assertNull($component[0]->on);
-        $this->assertEquals(['id'], $component[0]->using->values);
+        $this->assertEquals(array('id'), $component[0]->using->values);
     }
 
-    public function testBuild(): void
+    public function testBuild()
     {
         $component = JoinKeyword::parse(
             new Parser(),

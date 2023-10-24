@@ -1,7 +1,6 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -25,4 +24,3 @@ r($tester->project->getWaterfallPVEVAC($projectIDList[0])) && p('PV,EV,AC') && e
 r($tester->project->getWaterfallPVEVAC($projectIDList[1])) && p('PV,EV,AC') && e('97.00,53.94,108.00');  //测试projectID值为11
 r($tester->project->getWaterfallPVEVAC($projectIDList[2])) && p('PV,EV,AC') && e('52.00,19.87,33.00');   //测试projectID值为41
 
-$db->restoreDB();

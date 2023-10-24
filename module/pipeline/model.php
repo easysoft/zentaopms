@@ -2,7 +2,7 @@
 /**
  * The model file of pipeline module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
@@ -22,11 +22,35 @@ class pipelineModel extends model
     public function getByID($id)
     {
         $pipeline = $this->dao->select('*')->from(TABLE_PIPELINE)->where('id')->eq($id)->fetch();
-        if($pipeline)
-        {
-            $pipeline->password = base64_decode($pipeline->password);
-        }
+        if($pipeline && !empty($pipeline->password)) $pipeline->password = base64_decode($pipeline->password);
         return $pipeline;
+    }
+
+    /**
+     * 根据名称及类型获取一条流水线记录
+     * Get a pipeline by name and type.
+     *
+     * @param  string $name
+     * @param  string $type
+     * @access public
+     * @return object
+     */
+    public function getByNameAndType(string $name, string $type)
+    {
+        return $this->dao->select('id')->from(TABLE_PIPELINE)->where('name')->eq($name)->andWhere('type')->eq($type)->fetch();
+    }
+
+    /**
+     * 根据url获取渠成创建的代码库。
+     * Get a pipeline by url which created by quickon.
+     *
+     * @param  string $url
+     * @access public
+     * @return object
+     */
+    public function getByUrl(string $url)
+    {
+        return $this->dao->select('id')->from(TABLE_PIPELINE)->where('url')->eq($url)->andWhere('createdBy')->eq('system')->fetch();
     }
 
     /**
@@ -42,7 +66,7 @@ class pipelineModel extends model
     {
         return $this->dao->select('*')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
-            ->AndWhere('type')->in($type)
+            ->beginIF($type)->AndWhere('type')->in($type)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -53,11 +77,11 @@ class pipelineModel extends model
      *
      * @return array
      */
-    public function getPairs($type)
+    public function getPairs($type = null)
     {
         $pipeline = $this->dao->select('id,name')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
-            ->AndWhere('type')->eq($type)
+            ->beginIF($type)->AndWhere('type')->eq($type)->fi()
             ->orderBy('id')->fetchPairs('id', 'name');
 
         return $pipeline;
@@ -69,16 +93,9 @@ class pipelineModel extends model
      * @access public
      * @return bool
      */
-    public function create($type)
+    public function create(object $pipeline): int|false
     {
-        $pipeline = fixer::input('post')
-            ->add('type', $type)
-            ->add('private',md5(rand(10,113450)))
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::now())
-            ->trim('url,token,account,password')
-            ->skipSpecial('url,token,account,password')
-            ->get();
+        $type = $pipeline->type;
         if($type == 'gitlab') $pipeline->url = rtrim($pipeline->url, '/');
 
         if(isset($pipeline->password)) $pipeline->password = base64_encode($pipeline->password);
@@ -160,7 +177,7 @@ class pipelineModel extends model
             if($job) return false;
         }
         $this->dao->update(TABLE_PIPELINE)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
-        $this->loadModel('action')->create($object, $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+        $this->loadModel('action')->create($object, $id, 'deleted', '');
 
         $actionID = $this->dao->lastInsertID();
         return $actionID;

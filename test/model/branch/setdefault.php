@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/branch.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -27,4 +26,3 @@ r($branch->setDefaultTest($productIdList[0], $branchIdList[0])) && p()          
 r($branch->setDefaultTest($productIdList[0], $branchIdList[1])) && p('name,default') && e('分支1,1');  // 测试将productID 0, branchID 1的分支设为默认分支
 r($branch->setDefaultTest($productIdList[1], $branchIdList[0])) && p()               && e('主干');  // 测试将productID 41, branchID 0的分支设为默认分支
 r($branch->setDefaultTest($productIdList[1], $branchIdList[1])) && p('name,default') && e('分支1,1');  // 测试将productID 41, branchID 0的分支设为默认分支
-$db->restoreDB();

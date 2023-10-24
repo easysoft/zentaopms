@@ -2,7 +2,7 @@
 /**
  * The create view of case module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     case
@@ -17,10 +17,10 @@
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter', $lang->testcase->insertAfter);?>
 <?php js::set('isonlybody', isonlybody());?>
-<?php js::set('executionID', $executionID);?>
 <?php js::set('tab', $this->app->tab);?>
 <?php if($this->app->tab == 'execution') js::set('objectID', $executionID);?>
 <?php if($this->app->tab == 'project') js::set('objectID', $projectID);?>
+<?php if($this->app->tab == 'qa') js::set('objectID', 0);?>
 <?php
 foreach(explode(',', $config->testcase->create->requiredFields) as $field)
 {
@@ -104,6 +104,14 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
                   <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID", '', true), $lang->preview, '', "class='btn $class' id='preview'");?>
                 <?php endif;?>
                 </span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->testcase->scene;?></th>
+            <td colspan='2'>
+              <div class='input-group' id='sceneIdBox'>
+                <?php echo html::select('scene', $sceneOptionMenu, $currentSceneID, "class='form-control chosen'");?>
               </div>
             </td>
           </tr>
@@ -300,4 +308,5 @@ $(":checkbox[name^='auto']").on('click', function(){
     checkScript();
 });
 </script>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

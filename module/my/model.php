@@ -2,7 +2,7 @@
 /**
  * The model file of dashboard module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
@@ -150,7 +150,7 @@ class myModel extends model
 
         /* Sort by storyCount, get 5 records */
         $products = json_decode(json_encode($products), true);
-        array_multisort(array_column($products, 'storyEstimateCount'), SORT_DESC, $products);
+        array_multisort(helper::arrayColumn($products, 'storyEstimateCount'), SORT_DESC, $products);
         $products = array_slice($products, 0, 5);
 
         $data = new stdClass();
@@ -286,10 +286,7 @@ class myModel extends model
      */
     public function getActions()
     {
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 50, 1);
-
-        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager);
+        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 50);
         $users   = $this->loadModel('user')->getList();
 
         $simplifyUsers = array();
@@ -416,12 +413,15 @@ class myModel extends model
             ->orderBy('order_asc')
             ->fetchPairs();
 
+        $scene = $this->loadModel('testcase')->getSceneMenu(0, 0);
+
         $queryName = $type == 'contribute' ? 'contributeTestcase' : 'workTestcase';
         $this->app->loadConfig('testcase');
         $this->config->testcase->search['module']                      = $queryName;
         $this->config->testcase->search['queryID']                     = $queryID;
         $this->config->testcase->search['actionURL']                   = $actionURL;
         $this->config->testcase->search['params']['product']['values'] = array('' => '') + $products;
+        $this->config->testcase->search['params']['scene']['values']   = array('' => '') + $scene;
         $this->config->testcase->search['params']['lib']['values']     = array('' => '') + $this->loadModel('caselib')->getLibraries();
 
         unset($this->config->testcase->search['fields']['module']);
@@ -508,6 +508,8 @@ class myModel extends model
             unset($this->config->execution->search['fields']['canceledBy']);
             unset($this->config->execution->search['fields']['closedDate']);
             unset($this->config->execution->search['fields']['canceledDate']);
+            unset($this->config->execution->search['params']['status']['values']['cancel']);
+            unset($this->config->execution->search['params']['status']['values']['closed']);
         }
 
         $projects = $this->loadModel('project')->getPairsByProgram();
@@ -571,8 +573,19 @@ class myModel extends model
         $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
         $query = str_replace('t1.`project`', 't2.`project`', $query);
 
+        $assignedToMatches   = array();
+        $assignedToCondition = '';
+        $operatorAndAccount  = '';
+        if(strpos($query, '`assignedTo`') !== false)
+        {
+            preg_match("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $query, $assignedToMatches);
+            $assignedToCondition = $assignedToMatches[0];
+            $operatorAndAccount  = $assignedToMatches[1];
+            $query = str_replace("t1.$assignedToMatches[0]", "(t1.$assignedToCondition or (t1.mode = 'multi' and t5.`account` $operatorAndAccount and t1.status != 'closed' and t5.status != 'done') )", $query);
+        }
+
         $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
-        $tasks   = $this->dao->select("t1.*, t4.id as project, t2.id as executionID, t2.name as executionName, t2.multiple as executionMultiple, t4.name as projectName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
+        $tasks   = $this->dao->select("t1.*, t4.id as projectID, t2.id as executionID, t2.name as executionName, t2.multiple as executionMultiple, t4.name as projectName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
@@ -582,7 +595,11 @@ class myModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('(t2.status')->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)
-            ->beginIF($moduleName == 'workTask')->andWhere("t1.assignedTo")->eq($account)
+            ->beginIF($moduleName == 'workTask')
+            ->beginIF(!empty($assignedToMatches))->andWhere("(t1.$assignedToCondition or (t1.mode = 'multi' and t5.`account` $operatorAndAccount and t1.status != 'closed' and t5.status != 'done') )")->fi()
+            ->beginIF(empty($assignedToMatches))->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
+            ->andWhere('t1.status')->notin('closed,cancel')
+            ->fi()
             ->beginIF($moduleName == 'contributeTask')
             ->andWhere('t1.openedBy', 1)->eq($account)
             ->orWhere('t1.closedBy')->eq($account)
@@ -597,7 +614,7 @@ class myModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
-            ->page($pager)
+            ->page($pager, 't1.id')
             ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
@@ -843,8 +860,9 @@ class myModel extends model
                 ->where($myStoryQuery)
                 ->andWhere('t1.type')->eq('story')
                 ->andWhere('t1.assignedTo',1)->eq($this->app->user->account)
-                ->orWhere('t5.reviewer')->eq($this->app->user->account)
+                ->orWhere("(t5.reviewer = '{$this->app->user->account}' and t1.status in('reviewing','changing'))")
                 ->markRight(1)
+                ->andWhere('t1.product')->ne('0')
                 ->andWhere('t1.deleted')->eq(0)
                 ->orderBy($orderBy)
                 ->page($pager, 't1.id')
@@ -1002,6 +1020,7 @@ class myModel extends model
     public function getReviewingTypeList()
     {
         $typeList = array();
+        if($this->config->edition == 'ipd' and $this->getReviewingDemands('id_desc', true))   $typeList[] = 'demand';
         if($this->getReviewingStories('id_desc', true))   $typeList[] = 'story';
         if($this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
         if($this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
@@ -1011,11 +1030,11 @@ class myModel extends model
 
         $flows = ($this->config->edition == 'open') ? array() : $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('module')->in($typeList)->andWhere('buildin')->eq(0)->fetchPairs('module', 'name');
         $menu  = new stdclass();
-        $menu->all = $this->lang->my->auditMenu->audit->all;
+        $menu->all = $this->lang->my->featureBar['audit']['all'];
         foreach($typeList as $type)
         {
             $this->app->loadLang($type);
-            $menu->$type = isset($this->lang->$type->common) ? $this->lang->$type->common : zget($flows, $type);
+            $menu->$type = isset($this->lang->my->featureBar['audit'][$type]) ? $this->lang->my->featureBar['audit'][$type] : zget($flows, $type);
         }
 
         return $menu;
@@ -1033,6 +1052,7 @@ class myModel extends model
     public function getReviewingList($browseType, $orderBy = 'time_desc', $pager = null)
     {
         $reviewList = array();
+        if($this->config->edition == 'ipd' and ($browseType == 'all' or $browseType == 'demand'))   $reviewList = array_merge($reviewList, $this->getReviewingDemands());
         if($browseType == 'all' or $browseType == 'story')    $reviewList = array_merge($reviewList, $this->getReviewingStories());
         if($browseType == 'all' or $browseType == 'testcase') $reviewList = array_merge($reviewList, $this->getReviewingCases());
         if($browseType == 'all' or $browseType == 'project')  $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
@@ -1070,6 +1090,47 @@ class myModel extends model
     }
 
     /**
+     * Get reviewing demands.
+     *
+     * @param  string $orderBy
+     * @param  bool   $checkExists
+     * @access public
+     * @return array
+     */
+    public function getReviewingDemands($orderBy = 'id_desc', $checkExists = false)
+    {
+        if(!common::hasPriv('demand', 'review')) return array();
+
+        $this->app->loadLang('demand');
+        $stmt = $this->dao->select("t1.*")->from(TABLE_DEMAND)->alias('t1')
+            ->leftJoin(TABLE_DEMANDREVIEW)->alias('t2')->on('t1.id = t2.demand and t1.version = t2.version')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.reviewer')->eq($this->app->user->account)
+            ->andWhere('t2.result')->eq('')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.status')->eq('reviewing')
+            ->orderBy($orderBy)
+            ->query();
+
+        $demands = array();
+        while($data = $stmt->fetch())
+        {
+            if($checkExists) return true;
+            $demand = new stdclass();
+            $demand->id      = $data->id;
+            $demand->title   = $data->title;
+            $demand->type    = 'demand';
+            $demand->time    = $data->createdDate;
+            $demand->status  = $data->status;
+            $demands[$demand->id] = $demand;
+        }
+
+        $actions = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('demand')->andWhere('objectID')->in(array_keys($demands))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
+        foreach($actions as $demandID => $date) $demands[$demandID]->time = $date;
+        return array_values($demands);
+    }
+
+    /**
      * Get reviewing stories.
      *
      * @param  string $orderBy
@@ -1098,11 +1159,12 @@ class myModel extends model
         {
             if($checkExists) return true;
             $story = new stdclass();
-            $story->id      = $data->id;
-            $story->title   = $data->title;
-            $story->type    = 'story';
-            $story->time    = $data->openedDate;
-            $story->status  = $data->status;
+            $story->id        = $data->id;
+            $story->title     = $data->title;
+            $story->type      = 'story';
+            $story->storyType = $data->type;
+            $story->time      = $data->openedDate;
+            $story->status    = $data->status;
             $stories[$story->id] = $story;
         }
 
@@ -1158,10 +1220,10 @@ class myModel extends model
     public function getReviewingApprovals($orderBy = 'id_desc', $checkExists = false)
     {
         if(!common::hasPriv('review', 'assess')) return array();
-        if($this->config->edition != 'max') return array();
+        if($this->config->edition != 'max' and $this->config->edition != 'ipd') return array();
 
         $pendingList    = $this->loadModel('approval')->getPendingReviews('review');
-        $projectReviews = $this->loadModel('review')->getByList($pendingList, $orderBy);
+        $projectReviews = $this->loadModel('review')->getByList(0, $pendingList, $orderBy);
 
         $this->app->loadLang('project');
         $this->session->set('reviewList', $this->app->getURI(true));
@@ -1364,24 +1426,26 @@ class myModel extends model
         if(empty($actionField)) $actionField = 'date';
         $orderBy = $actionField . '_' . $direction;
 
-        $condition = "(action = 'reviewed' or action = 'approvalreview')";
+        $condition = "(`action` = 'reviewed' or `action` = 'approvalreview')";
         if($browseType == 'createdbyme')
         {
             $condition  = "(objectType in('story','case','feedback') and action = 'submitreview') OR ";
             $condition .= "(objectType = 'review' and action = 'opened') OR ";
             $condition .= "(objectType = 'attend' and action = 'commited') OR ";
-            $condition .= "(action = 'approvalsubmit') OR ";
+            $condition .= "(`action` = 'approvalsubmit') OR ";
             $condition .= "(objectType in('leave','makeup','overtime','lieu') and action = 'created')";
             $condition  = "($condition)";
         }
-
-        $actions = $this->dao->select('objectType,objectID,actor,action,MAX(`date`) as `date`,extra')->from(TABLE_ACTION)
+        $actionIdList = $this->dao->select('MAX(`id`) as `id`')->from(TABLE_ACTION)
             ->where('actor')->eq($this->app->user->account)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere($condition)
             ->groupBy('objectType,objectID')
+            ->page($pager)
+            ->fetchPairs();
+        $actions = $this->dao->select('objectType,objectID,actor,action,`date`,extra')->from(TABLE_ACTION)
+            ->where('id')->in($actionIdList)
             ->orderBy($orderBy)
-            ->page($pager, 'objectType,objectID')
             ->fetchAll();
         $objectTypeList = array();
         foreach($actions as $action) $objectTypeList[$action->objectType][] = $action->objectID;
@@ -1416,11 +1480,12 @@ class myModel extends model
             $review = new stdclass();
             $review->id     = $object->id;
             $review->type   = $objectType;
-            $review->time   = $action->date;
+            $review->time   = substr($action->date, 0, 19);
             $review->result = strtolower($action->extra);
             $review->status = $objectType == 'attend' ? $object->reviewStatus : ((isset($object->status) and !isset($flows[$objectType])) ? $object->status : 'done');
             if(strpos($review->result, ',') !== false) list($review->result) = explode(',', $review->result);
 
+            if($objectType == 'story')    $review->storyType = $object->type;
             if($review->type == 'review') $review->type = 'projectreview';
             if($review->type == 'case')   $review->type = 'testcase';
             $review->title = '';

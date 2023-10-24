@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/holiday.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -41,4 +40,3 @@ r($holiday->updateTest($holidayIDList[0], $noBegin))      && p('begin:0') && e('
 r($holiday->updateTest($holidayIDList[0], $noEnd))        && p('end:0')   && e('『结束日期』应当为合法的日期。'); //测试将必填项结束日期置空
 r($holiday->updateTest($holidayIDList[0], $endltBegin))   && p('end:0')   && e('『结束日期』应当不小于'); //测试输入大于开始日期的结束日期
 
-$db->restoreDB();

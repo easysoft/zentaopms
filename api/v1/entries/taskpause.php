@@ -2,7 +2,7 @@
 /**
  * The task pause entry point of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
@@ -30,7 +30,7 @@ class taskPauseEntry extends entry
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $task = $this->loadModel('task')->getByID($taskID);
 

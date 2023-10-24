@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -96,4 +95,3 @@ r($kanban->createColumnTest($column5)) && p('name:0')                        && 
 r($kanban->createColumnTest($column6)) && p('limit')                         && e('在制品数量必须是正整数。');                   // 创建没有填写在制品限制的看板列
 r($kanban->createColumnTest($column7)) && p('limit')                         && e('在制品数量必须是正整数。');                   // 创建在制品数量为0的看板列
 r($kanban->createColumnTest($column8)) && p('limit:0')                       && e('父列的在制品数量不能小于子列在制品数量之和'); // 创建在制品数量超出限制的子看板列
-$db->restoreDB();

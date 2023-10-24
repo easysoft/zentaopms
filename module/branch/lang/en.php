@@ -27,7 +27,7 @@ $lang->branch->mergeBranch       = 'Merge branch';
 $lang->branch->mergeBranchAction = 'Merge branch';
 
 $lang->branch->id          = 'ID';
-$lang->branch->product     = 'Product';
+$lang->branch->product     = $lang->productCommon;
 $lang->branch->name        = 'Name';
 $lang->branch->status      = 'Status';
 $lang->branch->createdDate = 'Created Date';
@@ -51,7 +51,7 @@ $lang->branch->targetBranchTips  = 'You can merge it into an existing branch, me
 $lang->branch->confirmMerge      = 'The data of "mergedBranch" will be merged into "targetBranch", please confirm whether you want to perform the branch merge operation, the data will not be restored after the merge!';
 
 $lang->branch->noData     = 'No branches.';
-$lang->branch->mainBranch = 'The default main %s of the product.';
+$lang->branch->mainBranch = "The default main %s of the {$lang->productCommon}.";
 
 $lang->branch->statusList = array();
 $lang->branch->statusList['active'] = 'Active';

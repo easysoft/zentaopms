@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -48,4 +47,3 @@ r($kanban->splitColumnTest($columnIDList[1], $splits2)) && p()        && e('2');
 r($kanban->splitColumnTest($columnIDList[2], $splits3)) && p()        && e('2');                        // 测试拆分列3
 r($kanban->splitColumnTest($columnIDList[3], $splits4)) && p('limit') && e('在制品数量必须是正整数。'); // 测试拆分列4
 r($kanban->splitColumnTest($columnIDList[3], $splits5)) && p('name')  && e('『看板列名称』不能为空。'); // 测试拆分列4
-$db->restoreDB();

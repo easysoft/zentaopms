@@ -2,7 +2,7 @@
 /**
  * The table contents view file of doc module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Fangzhou Hu <hufangzhou@easycorp.ltd>
  * @package     doc
@@ -11,126 +11,93 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('moduleTree', $moduleTree);?>
+<?php js::set('treeData', $libTree);?>
+<?php js::set('linkParams', "objectID=$objectID&%s&browseType=&orderBy=$orderBy&param=0");?>
 <?php js::set('docLang', $lang->doc);?>
-<?php
-$sideLibs = array();
-foreach($lang->doclib->tabList as $libType => $typeName) $sideLibs[$libType] = $this->doc->getLimitLibs($libType);
-$allModules = $this->loadModel('tree')->getDocStructure();
+<?php js::set('libType', $libType);?>
+<div id="mainMenu" class="clearfix">
+  <div id="leftBar" class="btn-toolbar pull-left">
+    <?php echo $objectDropdown;?>
+    <?php if(!empty($libTree)):?>
+    <?php if($libType != 'api'):?>
+    <?php foreach($lang->doc->featureBar['tableContents'] as $barType => $barName):?>
+    <?php $active     = $barType == $browseType ? 'btn-active-text' : '';?>
+    <?php $linkParams = "objectID=$objectID&libID=$libID&moduleID=$moduleID&browseType=$barType";?>
+    <?php echo html::a($this->createLink($app->rawModule, $app->rawMethod, $linkParams), "<span class='text'>{$barName}</span>" . ($active ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link $active' id='{$barType}Tab'");?>
+    <?php endforeach;?>
+    <?php endif;?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->doc->searchDoc;?></a>
+    <?php endif;?>
+  </div>
+  <?php if(!isonlybody()):?>
+    <div class="btn-toolbar pull-right">
+    <?php
+    if($libType == 'api')
+    {
+        if(common::hasPriv('api', 'struct'))        echo html::a($this->createLink('api', 'struct',        "libID=$libID"), "<i class='icon-treemap muted'> </i>" . $lang->api->struct, '', "class='btn btn-link'");
+        if(common::hasPriv('api', 'releases'))      echo html::a($this->createLink('api', 'releases',      "libID=$libID", 'html', true), "<i class='icon-version muted'> </i>" . $lang->api->releases, '', "class='btn btn-link iframe' data-width='800px'");
+        if(common::hasPriv('api', 'createRelease')) echo html::a($this->createLink('api', 'createRelease', "libID=$libID"), "<i class='icon-publish muted'> </i>" . $lang->api->createRelease, '', "class='btn btn-link iframe' data-width='800px'");
+    }
 
-$sideSubLibs = array();
-$sideSubLibs['product']   = $this->doc->getSubLibGroups('product', array_keys($sideLibs['product']));
-$sideSubLibs['execution'] = $this->doc->getSubLibGroups('execution', array_keys($sideLibs['execution']));
-if($this->methodName != 'browse')
-{
-    $browseType = '';
-    $moduleID   = '';
-}
-if(empty($type)) $type = 'product';
-?>
-<div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
-<div class="main-content">
-  <div class="cell" id="<?php echo $type;?>">
-    <div class="detail">
-      <li class="detail-title"><?php echo $lang->doc->tableContents;?></li>
+    if($canExport)
+    {
+        $exportLink = $this->createLink('doc', $exportMethod, "libID=$libID&moduleID=$moduleID", 'html', true);
+        if($libType == 'api') $exportLink = $this->createLink('api', $exportMethod, "libID=$libID&version=0&release=$release&moduleID=$moduleID", 'html', true);
+        echo html::a($exportLink, "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' data-width='480px' id='{$exportMethod}'");
+    }
+
+    if(common::hasPriv('doc', 'createLib'))
+    {
+        echo html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
+    }
+
+    if($libType == 'api')
+    {
+        if(common::hasPriv('api', 'create')) echo html::a($this->createLink('api', 'create',    "libID=$libID&moduleID=$moduleID", '', true), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary iframe" data-width="95%"');
+    }
+    elseif($libID and common::hasPriv('doc', 'create'))
+    {
+        echo $this->doc->printCreateBtn($lib, $moduleID);
+    }
+    ?>
+    </div>
+  <?php endif;?>
+</div>
+<div id='mainContent'class="fade <?php if(!empty($libTree)) echo 'flex';?>">
+<?php if(empty($libTree)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->doc->noLib;?></span>
       <?php
-      $canEditLib    = common::hasPriv('doc', 'editLib');
-      $canManageBook = common::hasPriv('doc', 'manageBook');
-      $canManageMenu = common::hasPriv('tree', 'browse');
-      $canEditLib    = common::hasPriv('doc', 'editLib');
-      $canDeleteLib  = common::hasPriv('doc', 'deleteLib');
-      if($type != 'book' and ($canManageMenu or $canEditLib or $canDeleteLib) and !empty($libs))
+      if(common::hasPriv('doc', 'createLib'))
       {
-          echo "<div class='menu-actions'>";
-          echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
-          echo "<ul class='dropdown-menu pull-left'>";
-          if($canManageMenu)
-          {
-              echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=doc&currentModuleID=0&branch=0&from={$this->app->tab}", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->doc->manageType, '', "class='iframe'") . '</li>';
-              echo "<li class='divider'></li>";
-          }
-          if($canEditLib) echo '<li>' . html::a($this->createLink('doc', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->doc->editLib, '', "class='iframe'") . '</li>';
-          if($canDeleteLib) echo '<li>' . html::a($this->createLink('doc', 'deleteLib', "rootID=$libID&confirm=no&type=lib&from=tableContents"), '<i class="icon-trash"></i> ' . $lang->doc->deleteLib, 'hiddenwin') . '</li>';
-          echo '</ul></div>';
-      }
-
-      if($type == 'book' and ($canEditLib or $canManageBook) and !empty($libs))
-      {
-          echo "<div class='menu-actions'>";
-          echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
-          echo "<ul class='dropdown-menu pull-left'>";
-          if($canEditLib) echo '<li>' . html::a($this->createLink('doc', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->doc->editBook, '', "class='iframe'") . '</li>';
-          if($canManageBook) echo '<li>' . html::a($this->createLink('doc', 'manageBook', "bookID=$libID"), '<i class="icon-cog-outline"></i> ' . $lang->doc->manageBook) . '</li>';
-          echo '</ul></div>';
+          echo html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createLib, '', 'class="btn btn-info iframe"');
       }
       ?>
-    </div>
-    <div class="detail">
-      <?php if($moduleTree):?>
-      <?php if($type == 'book'):?>
-      <?php include './bookside.html.php';?>
-      <?php else:?>
-      <?php echo $moduleTree;?>
-      <?php endif;?>
-      <?php else:?>
-      <div class="no-content"><img src="<?php echo $config->webRoot . 'theme/default/images/main/no_content.png'?>"/></div>
-      <div class="notice text-muted"><?php echo (empty($libs) and $type == 'custom') ? $lang->doc->noLib : $lang->doc->noDoc;?></div>
-      <div class="no-content-button">
-        <?php
-        $html = '';
-        if($type == 'book' and common::hasPriv('doc', 'createLib'))
-        {
-            $html = html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->doc->createBook, '', 'class="btn btn-info btn-wide iframe"');
-        }
-        elseif(empty($libs) and $type == 'custom' and common::hasPriv('doc', 'createLib'))
-        {
-            $html = html::a(helper::createLink('doc', 'createLib', "type=$type&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->doc->createLib, '', 'class="btn btn-info btn-wide iframe"');
-        }
-        elseif($libID and common::hasPriv('doc', 'create'))
-        {
-            $html  = "<div class='dropdown' id='createDropdown'>";
-            $html .= "<button class='btn btn-info btn-wide' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> " . $lang->doc->createAB . " <span class='caret'></span></button>";
-            $html .= "<ul class='dropdown-menu' style='left:0px'>";
-            foreach($this->lang->doc->typeList as $typeKey => $typeName)
-            {
-                $icon   = zget($this->config->doc->iconList, $typeKey);
-                $class  = (strpos($this->config->doc->officeTypes, $typeKey) !== false or strpos($this->config->doc->textTypes, $typeKey) !== false) ? 'iframe' : '';
-                $method = strpos($this->config->doc->textTypes, $typeKey) !== false ? 'createBasicInfo' : 'create';
-                $html  .= "<li>";
-                $html  .= html::a(helper::createLink('doc', $method, "objectType=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon text-muted'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
-                $html  .= "</li>";
-                if($typeKey == 'url') $html .= '<li class="divider"></li>';
-            }
-            $html .= "</ul></div>";
-        }
-
-        echo $html;
-        ?>
-        <?php
-        if(!empty($libs))
-        {
-            if($type == 'book')
-            {
-                common::printLink('doc', 'manageBook', "bookID=$libID", $lang->doc->manageBook, '', "class='btn btn-info btn-wide'");
-            }
-            else
-            {
-                common::printLink('tree', 'browse', "rootID=$libID&view=doc&currentModuleID=0&branch=0&from={$this->app->tab}", $lang->doc->manageType, '', "class='btn btn-info btn-wide iframe'", '', true);
-            }
-        }
-        ?>
-      </div>
-      <?php endif;?>
-    </div>
+    </p>
   </div>
+<?php else:?>
+  <div id='sideBar' class="panel side side-col col overflow-auto">
+    <?php include 'lefttree.html.php';?>
+  </div>
+  <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
+  <div class="main-col flex-full overflow-visible flex-auto" data-min-width="500">
+    <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module=<?php echo $type . $libType . 'Doc';?>></div>
+    <?php
+    if($browseType == 'annex')
+    {
+        include 'showfiles.html.php';
+    }
+    elseif($libType == 'api')
+    {
+        include '../../api/view/apilist.html.php';
+    }
+    else
+    {
+        include 'doclist.html.php';
+    }
+    ;?>
+  </div>
+<?php endif;?>
 </div>
-<script>
-$('#pageNav .btn-group.angle-btn').click(function()
-{
-    if($(this).hasClass('opened')) return;
-    $(this).addClass('opened');
-
-    scrollToSelected();
-})
-</script>
 <?php include '../../common/view/footer.html.php';?>

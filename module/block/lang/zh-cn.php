@@ -2,7 +2,7 @@
 /**
  * The zh-cn file of block module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
@@ -10,8 +10,6 @@
  * @link        http://www.zentao.net
  */
 global $config;
-$lang->block = new stdclass();
-$lang->block->common     = '区块';
 $lang->block->id         = '编号';
 $lang->block->params     = '参数';
 $lang->block->name       = '区块名称';
@@ -78,7 +76,7 @@ $lang->block->consumedHours       = '已消耗';
 $lang->block->time                = '第';
 $lang->block->week                = '周';
 $lang->block->month               = '月';
-$lang->block->selectProduct       = '选择产品';
+$lang->block->selectProduct       = "选择{$lang->productCommon}";
 $lang->block->of                  = '的';
 $lang->block->remain              = '剩余工时';
 $lang->block->allStories          = '总需求';
@@ -115,15 +113,15 @@ $lang->block->left            = '剩余';
 
 $lang->block->titleList['flowchart']      = '流程图';
 $lang->block->titleList['guide']          = '使用帮助';
-$lang->block->titleList['statistic']      = '项目统计';
-$lang->block->titleList['recentproject']  = '我近期参与的项目';
+$lang->block->titleList['statistic']      = "{$lang->projectCommon}统计";
+$lang->block->titleList['recentproject']  = "我近期参与的{$lang->projectCommon}";
 $lang->block->titleList['assigntome']     = '待处理';
-$lang->block->titleList['projectteam']    = '项目人力投入';
-$lang->block->titleList['project']        = '项目列表';
+$lang->block->titleList['projectteam']    = "{$lang->projectCommon}人力投入";
+$lang->block->titleList['project']        = "{$lang->projectCommon}列表";
 $lang->block->titleList['dynamic']        = '最新动态';
 $lang->block->titleList['list']           = '我的待办';
 $lang->block->titleList['contribute']     = '我的贡献';
-$lang->block->titleList['scrumoverview']  = '项目概况';
+$lang->block->titleList['scrumoverview']  = "{$lang->projectCommon}概况";
 $lang->block->titleList['scrumtest']      = '待测版本';
 $lang->block->titleList['scrumlist']      = '迭代列表';
 $lang->block->titleList['sprint']         = '迭代总览';
@@ -132,7 +130,7 @@ $lang->block->titleList['bug']            = '指派给我的Bug';
 $lang->block->titleList['case']           = '指派给我的用例';
 $lang->block->titleList['testtask']       = '待测版本列表';
 
-$lang->block->default['waterfall']['project']['3']['title']  = "项目计划";
+$lang->block->default['waterfall']['project']['3']['title']  = "{$lang->projectCommon}计划";
 $lang->block->default['waterfall']['project']['3']['block']  = 'waterfallgantt';
 $lang->block->default['waterfall']['project']['3']['source'] = 'project';
 $lang->block->default['waterfall']['project']['3']['grid']   = 8;
@@ -142,7 +140,10 @@ $lang->block->default['waterfall']['project']['6']['block']  = 'projectdynamic';
 $lang->block->default['waterfall']['project']['6']['grid']   = 4;
 $lang->block->default['waterfall']['project']['6']['source'] = 'project';
 
-$lang->block->default['scrum']['project']['1']['title'] =  '项目概况';
+$lang->block->default['waterfallplus'] = $lang->block->default['waterfall'];
+$lang->block->default['ipd']           = $lang->block->default['waterfall'];
+
+$lang->block->default['scrum']['project']['1']['title'] = $lang->projectCommon . '概况';
 $lang->block->default['scrum']['project']['1']['block'] = 'scrumoverview';
 $lang->block->default['scrum']['project']['1']['grid']  = 8;
 
@@ -169,7 +170,8 @@ $lang->block->default['scrum']['project']['4']['grid']  = 4;
 $lang->block->default['scrum']['project']['5']['title'] = '最新动态';
 $lang->block->default['scrum']['project']['5']['block'] = 'projectdynamic';
 $lang->block->default['scrum']['project']['5']['grid']  = 4;
-$lang->block->default['kanban'] = $lang->block->default['scrum'];
+$lang->block->default['kanban']    = $lang->block->default['scrum'];
+$lang->block->default['agileplus'] = $lang->block->default['scrum'];
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . '统计';
 $lang->block->default['product']['1']['block'] = 'statistic';
@@ -287,7 +289,7 @@ $lang->block->default['full']['my']['4']['grid']            = 4;
 $lang->block->default['full']['my']['4']['source']          = 'todo';
 $lang->block->default['full']['my']['4']['params']['count'] = '20';
 
-$lang->block->default['full']['my']['5']['title']           = '项目统计';
+$lang->block->default['full']['my']['5']['title']           = "{$lang->projectCommon}统计";
 $lang->block->default['full']['my']['5']['block']           = 'statistic';
 $lang->block->default['full']['my']['5']['source']          = 'project';
 $lang->block->default['full']['my']['5']['grid']            = 8;
@@ -298,7 +300,7 @@ $lang->block->default['full']['my']['6']['block']  = 'contribute';
 $lang->block->default['full']['my']['6']['source'] = '';
 $lang->block->default['full']['my']['6']['grid']   = 4;
 
-$lang->block->default['full']['my']['7']['title']  = '我近期参与的项目';
+$lang->block->default['full']['my']['7']['title']  = "我近期参与的{$lang->projectCommon}";
 $lang->block->default['full']['my']['7']['block']  = 'recentproject';
 $lang->block->default['full']['my']['7']['source'] = 'project';
 $lang->block->default['full']['my']['7']['grid']   = 8;
@@ -318,18 +320,58 @@ $lang->block->default['full']['my']['8']['params']['reviewCount']   = '20';
 $lang->block->default['full']['my']['8']['params']['meetingCount']  = '20';
 $lang->block->default['full']['my']['8']['params']['feedbackCount'] = '20';
 
-$lang->block->default['full']['my']['9']['title']  = '项目人力投入';
+$lang->block->default['full']['my']['9']['title']  = "{$lang->projectCommon}人力投入";
 $lang->block->default['full']['my']['9']['block']  = 'projectteam';
 $lang->block->default['full']['my']['9']['source'] = 'project';
 $lang->block->default['full']['my']['9']['grid']   = 8;
 
-$lang->block->default['full']['my']['10']['title']  = '项目列表';
+$lang->block->default['full']['my']['10']['title']  = "{$lang->projectCommon}列表";
 $lang->block->default['full']['my']['10']['block']  = 'project';
 $lang->block->default['full']['my']['10']['source'] = 'project';
 $lang->block->default['full']['my']['10']['grid']   = 8;
 
 $lang->block->default['full']['my']['10']['params']['orderBy'] = 'id_desc';
 $lang->block->default['full']['my']['10']['params']['count']   = '15';
+
+/* Doc module block. */
+$lang->block->default['doc']['1']['title'] = '文档统计';
+$lang->block->default['doc']['1']['block'] = 'docstatistic';
+$lang->block->default['doc']['1']['grid']  = 8;
+
+$lang->block->default['doc']['2']['title'] = '文档动态';
+$lang->block->default['doc']['2']['block'] = 'docdynamic';
+$lang->block->default['doc']['2']['grid']  = 4;
+
+$lang->block->default['doc']['3']['title'] = '我收藏的文档';
+$lang->block->default['doc']['3']['block'] = 'docmycollection';
+$lang->block->default['doc']['3']['grid']  = 8;
+
+$lang->block->default['doc']['4']['title'] = '最近更新的文档';
+$lang->block->default['doc']['4']['block'] = 'docrecentupdate';
+$lang->block->default['doc']['4']['grid']  = 8;
+
+$lang->block->default['doc']['5']['title'] = '浏览排行榜';
+$lang->block->default['doc']['5']['block'] = 'docviewlist';
+$lang->block->default['doc']['5']['grid']  = 4;
+
+if($config->vision == 'rnd')
+{
+    $lang->block->default['doc']['6']['title'] = $lang->productCommon . '文档';
+    $lang->block->default['doc']['6']['block'] = 'productdoc';
+    $lang->block->default['doc']['6']['grid']  = 8;
+
+    $lang->block->default['doc']['6']['params']['count'] = '20';
+}
+
+$lang->block->default['doc']['7']['title'] = '收藏排行榜';
+$lang->block->default['doc']['7']['block'] = 'doccollectlist';
+$lang->block->default['doc']['7']['grid']  = 4;
+
+$lang->block->default['doc']['8']['title'] = $lang->projectCommon . '文档';
+$lang->block->default['doc']['8']['block'] = 'projectdoc';
+$lang->block->default['doc']['8']['grid']  = 8;
+
+$lang->block->default['doc']['8']['params']['count'] = '20';
 
 $lang->block->count   = '数量';
 $lang->block->type    = '类型';
@@ -355,39 +397,48 @@ $lang->block->availableBlocks->feedback    = '反馈';
 $lang->block->availableBlocks->ticket      = '工单';
 
 $lang->block->moduleList['product']   = $lang->productCommon;
-$lang->block->moduleList['project']   = '项目';
+$lang->block->moduleList['project']   = $lang->projectCommon;
 $lang->block->moduleList['execution'] = $lang->execution->common;
 $lang->block->moduleList['qa']        = '测试';
 $lang->block->moduleList['todo']      = '待办';
+$lang->block->moduleList['doc']       = '文档';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks = new stdclass();
-$lang->block->modules['project']->availableBlocks->project       = '项目列表';
-$lang->block->modules['project']->availableBlocks->recentproject = '近期项目';
-$lang->block->modules['project']->availableBlocks->statistic     = '项目统计';
-$lang->block->modules['project']->availableBlocks->projectteam   = '项目人力投入';
+$lang->block->modules['project']->availableBlocks->project       = "{$lang->projectCommon}列表";
+$lang->block->modules['project']->availableBlocks->recentproject = "近期{$lang->projectCommon}";
+$lang->block->modules['project']->availableBlocks->statistic     = "{$lang->projectCommon}统计";
+$lang->block->modules['project']->availableBlocks->projectteam   = "{$lang->projectCommon}人力投入";
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
-$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = '项目概况';
+$lang->block->modules['scrum']['index']->availableBlocks->scrumoverview  = "{$lang->projectCommon}概况";
 $lang->block->modules['scrum']['index']->availableBlocks->scrumlist      = $lang->executionCommon . '列表';
 $lang->block->modules['scrum']['index']->availableBlocks->sprint         = $lang->executionCommon . '总览';
 $lang->block->modules['scrum']['index']->availableBlocks->scrumtest      = '待测版本';
 $lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = '最新动态';
 
+$lang->block->modules['agileplus']['index'] = $lang->block->modules['scrum']['index'];
+
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt    = "项目计划";
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt    = "{$lang->projectCommon}计划";
 $lang->block->modules['waterfall']['index']->availableBlocks->projectdynamic    = '最新动态';
+
+$lang->block->modules['waterfallplus']['index'] = $lang->block->modules['waterfall']['index'];
+$lang->block->modules['ipd']['index']           = $lang->block->modules['waterfall']['index'];
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();
-$lang->block->modules['product']->availableBlocks->statistic = $lang->productCommon . '统计';
 $lang->block->modules['product']->availableBlocks->overview  = $lang->productCommon . '总览';
-$lang->block->modules['product']->availableBlocks->list      = $lang->productCommon . '列表';
-$lang->block->modules['product']->availableBlocks->story     = "{$lang->SRCommon}列表";
-$lang->block->modules['product']->availableBlocks->plan      = "计划列表";
-$lang->block->modules['product']->availableBlocks->release   = '发布列表';
+if($this->config->vision != 'or')
+{
+    $lang->block->modules['product']->availableBlocks->statistic = $lang->productCommon . '统计';
+    $lang->block->modules['product']->availableBlocks->list      = $lang->productCommon . '列表';
+    $lang->block->modules['product']->availableBlocks->story     = "{$lang->SRCommon}列表";
+    $lang->block->modules['product']->availableBlocks->plan      = "计划列表";
+    $lang->block->modules['product']->availableBlocks->release   = '发布列表';
+}
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks = new stdclass();
@@ -408,6 +459,17 @@ $lang->block->modules['qa']->availableBlocks->testtask  = '版本列表';
 $lang->block->modules['todo'] = new stdclass();
 $lang->block->modules['todo']->availableBlocks = new stdclass();
 $lang->block->modules['todo']->availableBlocks->list = '待办列表';
+
+$lang->block->modules['doc'] = new stdclass();
+$lang->block->modules['doc']->availableBlocks = new stdclass();
+$lang->block->modules['doc']->availableBlocks->docstatistic    = '文档统计';
+$lang->block->modules['doc']->availableBlocks->docdynamic      = '文档动态';
+$lang->block->modules['doc']->availableBlocks->docmycollection = '我的收藏';
+$lang->block->modules['doc']->availableBlocks->docrecentupdate = '最近更新';
+$lang->block->modules['doc']->availableBlocks->docviewlist     = '浏览排行榜';
+if($config->vision == 'rnd') $lang->block->modules['doc']->availableBlocks->productdoc      = $lang->productCommon . '文档';
+$lang->block->modules['doc']->availableBlocks->doccollectlist  = '收藏排行榜';
+$lang->block->modules['doc']->availableBlocks->projectdoc      = $lang->projectCommon . '文档';
 
 $lang->block->orderByList = new stdclass();
 
@@ -523,40 +585,6 @@ $lang->block->typeList->testtask['blocked'] = '阻塞版本';
 $lang->block->typeList->testtask['done']    = '已测版本';
 $lang->block->typeList->testtask['all']     = '全部';
 
-$lang->block->modules['project']->moreLinkList = new stdclass();
-$lang->block->modules['project']->moreLinkList->recentproject  = 'project|browse|';
-$lang->block->modules['project']->moreLinkList->statistic      = 'project|browse|';
-$lang->block->modules['project']->moreLinkList->project        = 'project|browse|';
-$lang->block->modules['project']->moreLinkList->cmmireport     = 'weekly|index|';
-$lang->block->modules['project']->moreLinkList->cmmiestimate   = 'workestimation|index|';
-$lang->block->modules['project']->moreLinkList->cmmiissue      = 'issue|browse|';
-$lang->block->modules['project']->moreLinkList->cmmirisk       = 'risk|browse|';
-$lang->block->modules['project']->moreLinkList->scrumlist      = 'project|execution|';
-$lang->block->modules['project']->moreLinkList->scrumtest      = 'project|testtask|';
-$lang->block->modules['project']->moreLinkList->scrumproduct   = 'product|all|';
-$lang->block->modules['project']->moreLinkList->sprint         = 'project|execution|';
-$lang->block->modules['project']->moreLinkList->projectdynamic = 'project|dynamic|';
-
-$lang->block->modules['product']->moreLinkList        = new stdclass();
-$lang->block->modules['product']->moreLinkList->list  = 'product|all|';
-$lang->block->modules['product']->moreLinkList->story = 'my|story|type=%s';
-
-$lang->block->modules['execution']->moreLinkList       = new stdclass();
-$lang->block->modules['execution']->moreLinkList->list = 'execution|all|status=%s&executionID=';
-$lang->block->modules['execution']->moreLinkList->task = 'my|task|type=%s';
-
-$lang->block->modules['qa']->moreLinkList           = new stdclass();
-$lang->block->modules['qa']->moreLinkList->bug      = 'my|bug|type=%s';
-$lang->block->modules['qa']->moreLinkList->case     = 'my|testcase|type=%s';
-$lang->block->modules['qa']->moreLinkList->testtask = 'testtask|browse|type=%s';
-
-$lang->block->modules['todo']->moreLinkList       = new stdclass();
-$lang->block->modules['todo']->moreLinkList->list = 'my|todo|type=all';
-
-$lang->block->modules['common']                        = new stdclass();
-$lang->block->modules['common']->moreLinkList          = new stdclass();
-$lang->block->modules['common']->moreLinkList->dynamic = 'company|dynamic|';
-
 $lang->block->welcomeList['06:00'] = '%s，早上好！';
 $lang->block->welcomeList['11:30'] = '%s，中午好！';
 $lang->block->welcomeList['13:30'] = '%s，下午好！';
@@ -567,9 +595,9 @@ $lang->block->gridOptions[4] = '右侧';
 
 $lang->block->flowchart            = array();
 $lang->block->flowchart['admin']   = array('管理员', '维护部门', '添加用户', '维护权限');
-if($config->systemMode == 'ALM') $lang->block->flowchart['program'] = array('项目集负责人', '创建项目集', '关联产品', "创建项目", "制定预算和规划", '添加干系人');
+if($config->systemMode == 'ALM') $lang->block->flowchart['program'] = array('项目集负责人', '创建项目集', "关联{$lang->productCommon}", "创建{$lang->projectCommon}", "制定预算和规划", '添加干系人');
 $lang->block->flowchart['product'] = array($lang->productCommon . '经理', '创建' . $lang->productCommon, '维护模块', "维护计划", "维护需求", '创建发布');
-$lang->block->flowchart['project'] = array('项目经理', '创建项目、' . $lang->execution->common, '维护团队', "关联需求", '分解任务', '跟踪进度');
+$lang->block->flowchart['project'] = array('项目经理', "创建{$lang->productCommon}、" . $lang->execution->common, '维护团队', "关联需求", '分解任务', '跟踪进度');
 $lang->block->flowchart['dev']     = array('研发人员', '领取任务和Bug', '设计实现方案', '更新状态', '完成任务和Bug', '提交代码');
 $lang->block->flowchart['tester']  = array('测试人员', '撰写用例', '执行用例', '提交Bug', '验证Bug', '关闭Bug');
 
@@ -582,8 +610,8 @@ $lang->block->zentaoapp->allStorySum          = '需求总数';
 $lang->block->zentaoapp->storyCompleteRate    = '需求完成率';
 $lang->block->zentaoapp->latestExecution      = '近期执行';
 $lang->block->zentaoapp->involvedExecution    = '我参与的执行';
-$lang->block->zentaoapp->mangedProduct        = '负责产品';
-$lang->block->zentaoapp->involvedProject      = '参与项目';
+$lang->block->zentaoapp->mangedProduct        = "负责{$lang->productCommon}";
+$lang->block->zentaoapp->involvedProject      = "参与{$lang->projectCommon}";
 $lang->block->zentaoapp->customIndexCard      = '定制首页卡片';
 $lang->block->zentaoapp->createStory          = '提需求';
 $lang->block->zentaoapp->createEffort         = '记日志';
@@ -594,7 +622,7 @@ $lang->block->zentaoapp->notSupportKanban     = '移动端暂不支持研发看�
 $lang->block->zentaoapp->notSupportVersion    = '移动端暂不支持该禅道版本';
 $lang->block->zentaoapp->incompatibleVersion  = '当前禅道版本较低，请升级至最新版本后再试';
 $lang->block->zentaoapp->canNotGetVersion     = '获取禅道版本失败，请确认网址是否正确';
-$lang->block->zentaoapp->desc                 = '禅道移动端为您提供移动办公的环境，方便随时管理个人待办事务，跟进项目进度，增强了项目管理的灵活性和敏捷性。';
+$lang->block->zentaoapp->desc                 = "禅道移动端为您提供移动办公的环境，方便随时管理个人待办事务，跟进{$lang->projectCommon}进度，增强了{$lang->projectCommon}管理的灵活性和敏捷性。";
 $lang->block->zentaoapp->downloadTip          = '扫描二维码下载';
 
 $lang->block->zentaoclient = new stdClass();
@@ -607,7 +635,7 @@ $lang->block->zentaoclient->edition->linux64 = 'Linux版';
 $lang->block->zentaoclient->edition->mac64   = 'Mac版';
 
 $lang->block->guideTabs['flowchart']      = '流程图';
-$lang->block->guideTabs['systemMode']     = '运行模式';
+//$lang->block->guideTabs['systemMode']     = '运行模式';
 $lang->block->guideTabs['visionSwitch']   = '界面切换';
 $lang->block->guideTabs['themeSwitch']    = '主题切换';
 $lang->block->guideTabs['preference']     = '个性化设置';
@@ -627,11 +655,23 @@ $lang->block->visionTitle            = '禅道使用界面分为【研发综合�
 $lang->block->visions['rnd']         = new stdclass();
 $lang->block->visions['rnd']->key    = 'rnd';
 $lang->block->visions['rnd']->title  = '研发综合界面';
-$lang->block->visions['rnd']->text   = '集项目集、产品、项目、执行、测试等多维度管理于一体，提供全过程项目管理解决方案。';
+$lang->block->visions['rnd']->text   = "集项目集、{$lang->productCommon}、{$lang->projectCommon}、执行、测试等多维度管理于一体，提供全过程{$lang->projectCommon}管理解决方案。";
 $lang->block->visions['lite']        = new stdclass();
 $lang->block->visions['lite']->key   = 'lite';
 $lang->block->visions['lite']->title = '运营管理界面';
-$lang->block->visions['lite']->text  = '专为非研发团队打造，主要以直观、可视化的看板项目管理模型为主。';
+$lang->block->visions['lite']->text  = "专为非研发团队打造，主要以直观、可视化的看板{$lang->projectCommon}管理模型为主。";
+if($config->edition == 'ipd')
+{
+    $lang->block->visionTitle = '禅道使用界面分为【需求与市场管理界面】【IPD研发管理界面】和【运营管理界面】。';
+
+    $lang->block->visions['rnd']->title = 'IPD研发管理界面';
+    $lang->block->visions['rnd']->text  = "正确的做事，集项目集、{$lang->productCommon}、{$lang->projectCommon}、执行、测试等多维度管理于一体，提供全过程{$lang->projectCommon}管理解决方案。";
+
+    $lang->block->visions['or']        = new stdclass();
+    $lang->block->visions['or']->key   = 'or';
+    $lang->block->visions['or']->title = '需求与市场管理界面';
+    $lang->block->visions['or']->text  = "做正确的事，融合了需求池、需求、{$lang->productCommon}、路标规划、立项等需求与市场管理功能。";
+}
 
 $lang->block->customModes['light'] = '轻量管理模式';
 $lang->block->customModes['ALM']   = '全生命周期管理模式';
@@ -639,4 +679,4 @@ $lang->block->customModes['ALM']   = '全生命周期管理模式';
 $lang->block->customModeTip = new stdClass();
 $lang->block->customModeTip->common = '禅道运行模式分为【轻量级管理模式】和【全生命周期管理模式】。';
 $lang->block->customModeTip->ALM    = '适用于中大型团队的管理模式，概念更加完整、严谨，功能更丰富。';
-$lang->block->customModeTip->light  = '适用于小型研发团队的管理模式，提供项目管理的核心功能。';
+$lang->block->customModeTip->light  = "适用于小型研发团队的管理模式，提供{$lang->projectCommon}管理的核心功能。";

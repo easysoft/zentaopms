@@ -34,4 +34,3 @@ r(count($stories3)) && p()                       && e('5');                     
 r($stories1)        && p('300:title,type,stage') && e('软件需求300,story,closed');     // 获取关联需求后的执行下的需求详情
 r($stories2)        && p('302:title,type,stage') && e('软件需求302,story,planned');    // 获取关联需求后的执行下的需求详情
 r($stories3)        && p('304:title,type,stage') && e('软件需求304,story,developing'); // 获取关联需求后的执行下的需求详情
-$db->restoreDB();

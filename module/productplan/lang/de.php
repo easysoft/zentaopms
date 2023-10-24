@@ -2,7 +2,7 @@
 /**
  * The productplan module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
@@ -27,13 +27,14 @@ $lang->productplan->view       = "Details";
 $lang->productplan->bugSummary = "<strong>%s</strong> Bugs auf dieser Seite";
 $lang->productplan->basicInfo  = 'Basis Info';
 $lang->productplan->batchEdit  = 'Mehrere bearbeiten';
-$lang->productplan->project    = 'Project';
+$lang->productplan->project    = $lang->projectCommon;
 $lang->productplan->plan       = 'Plan';
 $lang->productplan->allAB      = 'All';
 $lang->productplan->to         = 'To';
 $lang->productplan->more       = 'More';
 $lang->productplan->comment    = 'Comment';
 
+$lang->productplan->batchEditAction   = 'Batch Edit Plan';
 $lang->productplan->batchUnlink       = "Mehere Verknüpfungen aufheben";
 $lang->productplan->batchClose        = "Batch Close";
 $lang->productplan->batchChangeStatus = "Batch Change Status";
@@ -71,8 +72,8 @@ $lang->productplan->confirmClose       = "Do you want to close this plan?";
 $lang->productplan->confirmActivate    = "Do you want to activate this plan?";
 $lang->productplan->noPlan             = 'Kein Plan. ';
 $lang->productplan->cannotDeleteParent = 'Cannot delete parent plan';
-$lang->productplan->selectProjects     = "Please select the project";
-$lang->productplan->projectNotEmpty    = 'Project cannot be empty.';
+$lang->productplan->selectProjects     = "Please select the " . $lang->projectCommon;
+$lang->productplan->projectNotEmpty    = $lang->projectCommon . ' cannot be empty.';
 $lang->productplan->nextStep           = "Next step";
 $lang->productplan->summary            = "Total: <strong>%s</strong>, Parents: <strong>%s</strong>, Children: <strong>%s</strong>，Independent: <strong>%s</strong>.";
 $lang->productplan->checkedSummary     = "Seleted: <strong>%total%</strong>, Parents: <strong>%parent%</strong>, Children: <strong>%child%</strong>, Independent: <strong>%independent%</strong>.";
@@ -133,8 +134,8 @@ $lang->productplan->beginLetterParent    = "The start date of the parent plan: %
 $lang->productplan->endGreaterParent     = "The completion date of the parent plan: %s, the completion date cannot be greater than the completion date of the parent plan.";
 $lang->productplan->beginGreaterChild    = "The start date of the child plan: %s, the start date cannot be greater than the start date of the child plan.";
 $lang->productplan->endLetterChild       = "The completion date of the child plan: %s, the completion date cannot be less than the completion date of the child plan.";
-$lang->productplan->noLinkedProject      = "The current product has not been linked with a project. Please enter the list of the product to link or create a project.";
-$lang->productplan->enterProjectList     = "Enter the list of the product";
+$lang->productplan->noLinkedProject      = "The current {$lang->productCommon} has not been linked with a {$lang->projectCommon}. Please enter the list of the {$lang->productCommon} to link or create a {$lang->projectCommon}.";
+$lang->productplan->enterProjectList     = "Enter the list of the {$lang->productCommon}";
 $lang->productplan->beginGreaterChildTip = "The start date of the parent plan[%s]: %s, cannot be greater than the start date of the child plan: %s.";
 $lang->productplan->endLetterChildTip    = "The completion date of the parent plan[%s]: %s, cannot be less than the completion date of the child plan: %s.";
 $lang->productplan->beginLetterParentTip = "The start date of the child plan[%s]: %s, cannot be less than the start date of the parent plan: %s.";

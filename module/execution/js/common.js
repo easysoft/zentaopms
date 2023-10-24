@@ -177,9 +177,16 @@ function loadBranches(product)
             disableSelectedProduct();
         }
 
-        var branch = $('#branch' + index);
-        loadPlans(product, branch);
+        if(typeof isStage != 'undefined' && isStage == true)
+        {
+            $tableRow.find("select[name^='branch'] option").attr('selected', 'selected');
+            $tableRow.find("select[name^='branch']").trigger('chosen:updated');
+            $tableRow.find("div[id^='branch']").addClass('chosen-disabled');
+        }
     });
+
+    var branch = $('#branch' + index);
+    loadPlans(product, branch);
 }
 
 /**
@@ -210,15 +217,15 @@ function loadPlans(product, branch)
 
 /**
  * Add new line for link product.
- * 
- * @param  obj $obj 
+ *
+ * @param  obj $obj
  * @access public
  * @return void
  */
 function addNewLine(obj)
 {
     var newLine = $(obj).closest('tr').clone();
-    var index   = 0; 
+    var index   = 0;
     $(".productsBox select[name^='products']").each(function()
     {
         var id = $(this).attr('id').replace('products' , '');
@@ -239,6 +246,7 @@ function addNewLine(obj)
     newLine.find("select[name^='products']").attr('name', 'products[' + index + ']').attr('id', 'products' + index).val('').chosen();
     newLine.find("select[name^='plans']").attr('name', 'plans[' + index + '][' + 0 + '][]').chosen();
     newLine.find("div[id^='plan']").attr('id', 'plan' + index);
+    newLine.find('[name*=products]').removeAttr('data-last');
 
     $(obj).closest('tr').after(newLine);
     var product = newLine.find("select[name^='products']");
@@ -277,4 +285,33 @@ $(function()
 function setCardCount(heightType)
 {
     heightType != 'custom' ? $('#cardBox').addClass('hidden') : $('#cardBox').removeClass('hidden');
+}
+
+/**
+ * Hide plan box by stage's attribute.
+ *
+ * @param  string    attribute
+ * @access public
+ * @return void
+ */
+function hidePlanBox(attribute)
+{
+    if(attribute == 'request' || attribute == 'review')
+    {
+        $('.productsBox .planBox').addClass('hide');
+        $('.productsBox .planBox select').attr('disabled', 'disabled');
+        $('#productTitle').text(manageProductsLang);
+
+        $('#plansBox').closest('tr').addClass('hide');
+        $('#plansBox').attr('disabled', 'disabled');
+    }
+    else
+    {
+        $('.productsBox .planBox').removeClass('hide');
+        $('.productsBox .planBox select').removeAttr('disabled');
+        $('#productTitle').text(manageProductPlanLang);
+
+        $('#plansBox').closest('tr').removeClass('hide');
+        $('#plansBox').removeAttr('disabled');
+    }
 }

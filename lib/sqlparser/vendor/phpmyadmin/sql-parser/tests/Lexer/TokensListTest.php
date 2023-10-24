@@ -1,14 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Lexer;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
 use PhpMyAdmin\SqlParser\Token;
 use PhpMyAdmin\SqlParser\TokensList;
-
-use function count;
 
 class TokensListTest extends TestCase
 {
@@ -22,10 +18,9 @@ class TokensListTest extends TestCase
     /**
      * Test setup.
      */
-    public function setUp(): void
+    public function setUp()
     {
-        parent::setUp();
-        $this->tokens = [
+        $this->tokens = array(
             new Token('SELECT', Token::TYPE_KEYWORD),
             new Token(' ', Token::TYPE_WHITESPACE),
             new Token('*', Token::TYPE_OPERATOR),
@@ -33,27 +28,26 @@ class TokensListTest extends TestCase
             new Token('FROM', Token::TYPE_KEYWORD),
             new Token(' ', Token::TYPE_WHITESPACE),
             new Token('`test`', Token::TYPE_SYMBOL),
-            new Token(' ', Token::TYPE_WHITESPACE),
-        ];
+            new Token(' ', Token::TYPE_WHITESPACE)
+        );
     }
 
-    public function testBuild(): void
+    public function testBuild()
     {
         $list = new TokensList($this->tokens);
         $this->assertEquals('SELECT * FROM `test` ', TokensList::build($list));
     }
 
-    public function testAdd(): void
+    public function testAdd()
     {
         $list = new TokensList();
         foreach ($this->tokens as $token) {
             $list->add($token);
         }
-
         $this->assertEquals(new TokensList($this->tokens), $list);
     }
 
-    public function testGetNext(): void
+    public function testGetNext()
     {
         $list = new TokensList($this->tokens);
         $this->assertEquals($this->tokens[0], $list->getNext());
@@ -63,7 +57,7 @@ class TokensListTest extends TestCase
         $this->assertNull($list->getNext());
     }
 
-    public function testGetNextOfType(): void
+    public function testGetNextOfType()
     {
         $list = new TokensList($this->tokens);
         $this->assertEquals($this->tokens[0], $list->getNextOfType(Token::TYPE_KEYWORD));
@@ -71,14 +65,14 @@ class TokensListTest extends TestCase
         $this->assertNull($list->getNextOfType(Token::TYPE_KEYWORD));
     }
 
-    public function testGetNextOfTypeAndValue(): void
+    public function testGetNextOfTypeAndValue()
     {
         $list = new TokensList($this->tokens);
         $this->assertEquals($this->tokens[0], $list->getNextOfTypeAndValue(Token::TYPE_KEYWORD, 'SELECT'));
         $this->assertNull($list->getNextOfTypeAndValue(Token::TYPE_KEYWORD, 'SELECT'));
     }
 
-    public function testArrayAccess(): void
+    public function testArrayAccess()
     {
         $list = new TokensList();
 

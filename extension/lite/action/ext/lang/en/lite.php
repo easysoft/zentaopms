@@ -4,11 +4,11 @@ $lang->action->label->task      = 'Task|task|view|taskID=%s';
 $lang->action->label->module    = 'Catalog|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
 
 /* Object type. */
-$lang->action->objectTypes['execution'] = 'Project' . $lang->executionCommon;
+$lang->action->objectTypes['execution'] = $lang->projectCommon . $lang->executionCommon;
 
 $lang->action->search = new stdclass();
 $lang->action->search->objectTypeList['']            = '';
-$lang->action->search->objectTypeList['project']     = 'Project';
+$lang->action->search->objectTypeList['project']     = $lang->projectCommon;
 $lang->action->search->objectTypeList['execution']   = 'Kanban';
 $lang->action->search->objectTypeList['story']       = "$lang->SRCommon/$lang->URCommon";
 $lang->action->search->objectTypeList['task']        = 'Task';
@@ -109,4 +109,4 @@ $lang->action->desc->linkparentstory     = '$date, <strong>$actor</strong> Link 
 $lang->action->desc->unlinkparentstory   = '$date, <strong>$actor</strong> From parent story<strong>$extra</strong>CanceledLink。' . "\n";
 $lang->action->desc->deletechildrenstory = '$date, <strong>$actor</strong> Deleted child story<strong>$extra</strong>。' . "\n";
 
-$lang->action->executionNoProject = 'The execution does not belong to a project,please restore the project first';
+$lang->action->executionNoProject = "The execution does not belong to a {$lang->projectCommon},please restore the {$lang->projectCommon} first";

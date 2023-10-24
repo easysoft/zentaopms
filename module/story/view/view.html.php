@@ -2,7 +2,7 @@
 /**
  * The view file of story module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../ai/view/promptmenu.html.php';?>
 <?php $browseLink = $app->session->storyList ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product");?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php js::set('storyType', $story->type);?>
@@ -181,7 +182,7 @@
                   common::printIcon('story', 'close',      "storyID=$child->id&from=&storyType=$child->type", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('story', 'activate',   "storyID=$child->id&storyType=$child->type", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('story', 'edit',       "storyID=$child->id&kanbanGroup=default&storyType=$child->type", $child, 'list');
-                  common::printIcon('testcase', 'create', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&story={$child->id}", $child, 'list', 'sitemap');
+                  common::printIcon('testcase', 'create', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&story={$child->id}", $child, 'list', 'sitemap', '', 'iframe showinonlybody', true);
                   ?>
                 </td>
               </tr>
@@ -268,6 +269,26 @@
                   ?>
                   <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
                 </tr>
+                <?php if($config->edition == 'ipd' && $story->type == 'requirement'):?>
+                <tr>
+                  <th><?php echo $lang->story->roadmap;?></th>
+                  <td>
+                  <?php
+                  if($story->roadmap && isset($roadmaps[$story->roadmap]))
+                  {
+                      if(commonModel::hasPriv('roadmap', 'view'))
+                      {
+                          echo html::a($this->createLink('roadmap', 'view', "roadmapID={$story->roadmap}"), $roadmaps[$story->roadmap]);
+                      }
+                      else
+                      {
+                          echo $roadmaps[$story->roadmap];
+                      }
+                  }
+                  ?>
+                  </td>
+                </tr>
+                <?php endif;?>
                 <?php if($story->type != 'requirement' and $story->parent != -1 and !$hiddenPlan):?>
                 <tr class='plan-line'>
                   <th><?php echo $lang->story->plan;?></th>
@@ -321,7 +342,7 @@
                   </td>
                 </tr>
                 <?php endif;?>
-                <tr>
+                <tr class='categoryTR'>
                   <th><?php echo $lang->story->category;?></th>
                   <td><?php echo zget($lang->story->categoryList, $story->category, $story->category)?></td>
                 </tr>
@@ -430,13 +451,13 @@
           <?php if(!empty($twins)):?>
           <li class='active'><a href='#legendTwins' data-toggle='tab'><?php echo $lang->story->twins;?></a></li>
           <?php endif;?>
-          <?php if($this->config->URAndSR and !$hiddenURS):?>
+          <?php if($this->config->URAndSR and !$hiddenURS and $config->vision != 'or'):?>
           <li class='<?php if(empty($twins)) echo 'active';?>'><a href='#legendStories' data-toggle='tab'><?php echo $story->type == 'story' ? $lang->story->requirement : $lang->story->story;?></a></li>
           <?php endif;?>
-          <?php if($story->type == 'story'):?>
+          <?php if($story->type == 'story' && common::hasPriv('story', 'tasks')):?>
           <li class="<?php if((!$this->config->URAndSR || $hiddenURS) and empty($twins)) echo 'active';?>"><a href='#legendProjectAndTask' data-toggle='tab'><?php echo $lang->story->legendProjectAndTask;?></a></li>
           <?php endif;?>
-          <li><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
+          <li <?php if($config->vision == 'or') echo "class='active'";?>><a href='#legendRelated' data-toggle='tab'><?php echo $lang->story->legendRelated;?></a></li>
         </ul>
         <div class='tab-content'>
           <?php if(!empty($twins)):?>
@@ -446,7 +467,7 @@
             </ul>
           </div>
           <?php endif;?>
-          <?php if($this->config->URAndSR and !$hiddenURS):?>
+          <?php if($this->config->URAndSR and !$hiddenURS and $config->vision != 'or'):?>
           <div class='tab-pane <?php if(empty($twins)) echo 'active';?>' id='legendStories'>
             <ul class="list-unstyled">
               <?php
@@ -481,7 +502,7 @@
                       $taskInfo      = $task->id . '&nbsp<span class="label label-success label-outline">' . $this->lang->task->statusList[$task->status]  . '</span>&nbsp' . $task->name;
                       $class         = isonlybody() ? 'showinonlybody' : 'iframe';
                       $execName  = (isset($execution->type) and $execution->type == 'kanban' and isonlybody()) ? $executionName : html::a($executionLink, $executionName, '', "class='text-muted'");
-                      echo "<li title='$task->name'>" . $execName . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $taskInfo, '', "class=$class data-width='80%'") . '</li>';
+                      echo "<li title='$task->name'>" . $execName . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $taskInfo, '', "class=$class data-width='90%'") . '</li>';
                   }
               }
               foreach($story->executions as $executionID => $execution)
@@ -497,10 +518,11 @@
             </ul>
           </div>
           <?php endif;?>
-          <div class="tab-pane" id='legendRelated'>
+          <div class="tab-pane <?php if($config->vision == 'or') echo 'active';?>" id='legendRelated'>
             <table class="table table-data">
               <tbody>
                 <?php if($story->type == 'story'):?>
+                <?php if(common::hasPriv('story', 'bugs')):?>
                 <?php if(!empty($fromBug)):?>
                 <tr>
                   <th><?php echo $lang->story->legendFromBug;?></th>
@@ -525,6 +547,8 @@
                     </ul>
                   </td>
                 </tr>
+                <?php endif;?>
+                <?php if(common::hasPriv('story', 'cases')):?>
                 <tr>
                   <th><?php echo $lang->story->legendCases;?></th>
                   <td class='pd-0'>
@@ -540,6 +564,7 @@
                     </ul>
                   </td>
                 </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->story->legendBuilds;?></th>
                   <td class='pd-0'>
@@ -572,6 +597,7 @@
                   </td>
                 </tr>
                 <?php endif;?>
+                <?php if(common::hasPriv($story->type, 'relation')):?>
                 <tr class='text-top linkStoryTr'>
                   <th><?php echo $lang->story->linkStories;?></th>
                   <td>
@@ -579,11 +605,12 @@
                       <?php
                       if(isset($story->linkStoryTitles))
                       {
+                          $iframe = isonlybody() ? '' : 'iframe';
                           foreach($story->linkStoryTitles as $linkStoryID => $linkStoryTitle)
                           {
                               if($app->user->admin or strpos(",{$app->user->view->products},", ",{$storyProducts[$linkStoryID]},") !== false)
                               {
-                                  $storyLink = html::a($this->createLink('story', 'view', "storyID=$linkStoryID&version=0&param=0&storyType=$story->type", '', true), "#$linkStoryID $linkStoryTitle", '', "class='iframe' data-width='80%' title='$linkStoryTitle'") . '<br />';
+                                  $storyLink = html::a($this->createLink('story', 'view', "storyID=$linkStoryID&version=0&param=0&storyType=$story->type", '', true), "#$linkStoryID $linkStoryTitle", '', "class='{$iframe}' data-width='80%' title='$linkStoryTitle'") . '<br />';
                               }
                               else
                               {
@@ -596,6 +623,7 @@
                     </ul>
                   </td>
                 </tr>
+                <?php endif;?>
                 <?php if($story->type == 'story' and helper::hasFeature('devops')):?>
                 <tr>
                   <th><?php echo $lang->story->linkMR;?></th>

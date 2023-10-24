@@ -4,11 +4,11 @@ $lang->action->label->task      = '任务|task|view|taskID=%s';
 $lang->action->label->module    = '目录|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
 
 /* Object type. */
-$lang->action->objectTypes['execution'] = '项目' . $lang->executionCommon;
+$lang->action->objectTypes['execution'] = $lang->projectCommon . $lang->executionCommon;
 
 $lang->action->search = new stdclass();
 $lang->action->search->objectTypeList['']            = '';
-$lang->action->search->objectTypeList['project']     = '项目';
+$lang->action->search->objectTypeList['project']     = $lang->projectCommon;
 $lang->action->search->objectTypeList['execution']   = '看板';
 $lang->action->search->objectTypeList['story']       = "目标";
 $lang->action->search->objectTypeList['task']        = '任务';
@@ -109,4 +109,4 @@ $lang->action->desc->linkparentstory     = '$date, 由 <strong>$actor</strong> �
 $lang->action->desc->unlinkparentstory   = '$date, 由 <strong>$actor</strong> 从父目标<strong>$extra</strong>取消关联。' . "\n";
 $lang->action->desc->deletechildrenstory = '$date, 由 <strong>$actor</strong> 删除子目标<strong>$extra</strong>。' . "\n";
 
-$lang->action->executionNoProject = '该项目看板没有所属的项目，请先还原项目再还原项目看板';
+$lang->action->executionNoProject = "该{$lang->projectCommon}看板没有所属的{$lang->projectCommon}，请先还原{$lang->projectCommon}再还原{$lang->projectCommon}看板";

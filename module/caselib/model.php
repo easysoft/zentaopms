@@ -2,7 +2,7 @@
 /**
  * The model file of caselib module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     caselib
@@ -183,7 +183,7 @@ class caselibModel extends model
         $lib = fixer::input('post')
             ->stripTags($this->config->caselib->editor->create['id'], $this->config->allowedTags)
             ->setForce('type', 'library')
-            ->setIF($this->lang->navGroup->caselib != 'qa', 'project', $this->session->project)
+            ->setIF($this->lang->navGroup->caselib != 'qa', 'project', (int)$this->session->project)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
             ->remove('uid')
@@ -400,9 +400,10 @@ class caselibModel extends model
             $cases[$key] = $caseData;
             $line++;
         }
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) helper::end(js::error(dao::getError()));
 
         $forceNotReview = $this->testcase->forceNotReview();
+        $this->dao->begin();
         foreach($cases as $key => $caseData)
         {
             if(!empty($_POST['id'][$key]) and empty($_POST['insert']))
@@ -519,6 +520,7 @@ class caselibModel extends model
                 }
             }
         }
+        $this->dao->commit();
 
         if($this->post->isEndPage)
         {

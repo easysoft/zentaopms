@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testcase.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -33,4 +32,3 @@ r($testcase->batchChangeBranchTest($caseIDList[3], $branchList[3])) && p('167:br
 r($testcase->batchChangeBranchTest($caseIDList[4], $branchList[4])) && p('169:branch;170:branch') && e('5;5'); // 测试批量修改case 169 170 的branch为5
 r($testcase->batchChangeBranchTest($caseIDList[5], $branchList[5])) && p('171:branch;172:branch') && e('6;6'); // 测试批量修改case 171 172 的branch为6
 r($testcase->batchChangeBranchTest($caseIDList[6], $branchList[6])) && p('173:branch;174:branch') && e('7;7'); // 测试批量修改case 173 174 的branch为7
-$db->restoreDB();

@@ -1,0 +1,46 @@
+.m-repo-ajaxgeteditorcontent {overflow: hidden;}
+#log .tip-circular {background: #2e7fff; border-radius: 10px; padding: 0px 7px;}
+#log {margin-top: 8px; display: none; padding: 5px; justify-content: space-between; height: 25px; line-height: 20px; background: #efefef;}
+#log .history {margin-left: 5px; max-width: 90%;}
+#log .action-btn .btn {border: none; background: none;}
+#related {display: none; margin-top: 2px; background: #fff; height: 0px;}
+
+#relationTabs .nav > li > a {padding: 8px 1px; display: flex; white-space: pre;}
+#relationTabs .nav-tabs > li > a > span {margin-right: 5px;}
+#relationTabs .tab-pane {display: none;}
+#relationTabs {background: #FFFFFF;}
+#relationTabs .tab-pane.active {display: block;}
+#relationTabs .tab-nav-item {max-width: none !important;}
+#relationTabs .tab-nav-item .icon {line-height: inherit;}
+#relationTabs {overflow: hidden; padding-bottom: 10px; position: relative; height: 100%;}
+#relationTabs > .nav-tabs {position: absolute; display: flex;}
+#relationTabs .tab-nav-link .title {max-width: 300px; display: inline-block; white-space: nowrap; width: 100%; overflow: hidden; text-overflow: ellipsis; padding: 0 5px;}
+#relationTabs{width: 100%}
+#relationTabs .nav-tabs > li > a.active > span {background: #E6F0FF;color: #2e7fff;}
+#relationTabs .nav-tabs > li > a > i, #relationTabs .nav-tabs > li > a > span {background: #EDEEF2; font-weight: normal; padding: 1px 5px;}
+#relationTabs .nav-tabs > li > a > span > i {margin-right: 8px;}
+#relationTabs .nav-tabs > li > .unlinks {padding-left: 0;color: #169}
+#relationTabs .nav-tabs > li > .unlinks:hover {text-decoration: underline;color: #C61A1A;}
+#relationTabs .nav-tabs > li > .unlinks > i {background: none;padding: 0;}
+#relationTabs .nav-tabs>.nav-item>a.active:after{border: none;}
+#relationTabs .tab-content{margin-top: 30px;}
+#related .content, #related .btn {background-color: #F4F5F7; border: none;}
+#related .btn.pull-right {margin-right: 0;z-index: 1;}
+#related .btn.pull-left {z-index: 1;}
+#related .nav-tabs > li > a.active:before {background: none; height: 0;}
+#related .table-empty-tip {padding: 35px 10px;}
+.table-empty-tip {padding: 80px 10px;text-align: center;background: #fff;}
+.repoCode .binary a .icon-download {font-size: 50px;}
+.repoCode .binary, .repoCode .image {text-align: center;}
+.repoCode .binary a {margin: 100px 0px; display: block;}
+.repoCode .image {margin-top: 10px;}
+#codeContainer{height: 100%;}
+#related .nav-item {gap: 0;}
+.nav-tabs>li>a.active {font-weight: 700;color: #313c52!important}
+#relationTabs .tab-content{overflow: auto;}
+.repoCode .view-line-icon {position: absolute; right: 50px; top: 2px; font-weight: bold; cursor: pointer;background-color: white;padding: 1px 8px}
+.repoCode .view-line-icon.add-bug {left: 5px;}
+.repoCode .view-line-icon.add-bug .icon {font-weight: bold;}
+.repoCode .view-line-icon .bug-count {vertical-align: middle; padding-left: 5px;}
+.repoCode #bugForm {margin: 0; padding: 10px 20px 10px 0;}
+#bugContainer .panel-heading {padding-bottom: 0;}

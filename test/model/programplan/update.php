@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/programplan.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -44,4 +43,3 @@ r($programplan->updateTest($planID, $projectID, $changeName))             && p('
 r($programplan->updateTest($planID, $projectID, $changePercent))          && p('0:field,new') && e('percent,15');                   // 测试修改plan的 percent 值
 r($programplan->updateTest($planID, $projectID, $changeBegin))            && p('0:field,new') && e('begin,2022-04-01');             // 测试修改plan的 begin 值
 r($programplan->updateTest($planID, $projectID, $changeEnd))              && p('0:field,new') && e('end,2022-04-30');               // 测试修改plan的 end 值
-$db->restoreDB();

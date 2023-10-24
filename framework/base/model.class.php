@@ -150,6 +150,7 @@ class baseModel
 
         $this->loadDAO();
         $this->setSuperVars();
+        $this->loadCache();
 
         /**
          * 读取当前模块的tao类。
@@ -279,7 +280,7 @@ class baseModel
         if(isset($this->$extensionClass)) return $this->$extensionClass;
 
         /* 设置扩展的名字和相应的文件。Set extenson name and extension file. */
-        $moduleExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, $type);
+        $moduleExtPath = $this->app->getModuleExtPath($moduleName, $type);
         if(!empty($moduleExtPath['site'])) $extensionFile = $moduleExtPath['site'] . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['saas']   . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['custom'] . 'class/' . $extensionName . '.class.php';
@@ -308,7 +309,33 @@ class baseModel
      */
     public function loadDAO()
     {
-        $this->dao = $this->app->loadClass('dao');
+        global $config, $dao;
+        if(is_object($dao)) return $this->dao = $dao;
+
+        $driver = $config->db->driver;
+
+        if(!class_exists($driver))
+        {
+            $classFile = $this->app->coreLibRoot . 'dao' . DS . $driver . '.class.php';
+            include($classFile);
+        }
+
+        $dao = new $driver();
+        $this->dao = $dao;
+    }
+
+    /**
+     * 加载缓存类。
+     * Load cache class.
+     *
+     * @access public
+     * @return void
+     */
+    public function loadCache()
+    {
+        $this->app->loadClass('cache', $static = true);
+        $namespace   = isset($this->session->user->account) ? $this->session->user->account : 'guest';
+        $this->cache = cache::create($this->config->cache->driver, $namespace, $this->config->cache->lifetime);
     }
 
     /**

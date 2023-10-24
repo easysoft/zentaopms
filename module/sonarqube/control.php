@@ -2,7 +2,7 @@
 /**
  * The control file of sonarqube module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yanyi Cao <caoyanyi@easycorp.ltd>
  * @package     sonarqube
@@ -19,6 +19,16 @@ class sonarqube extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
+
+        if(stripos($this->methodName, 'ajax') === false)
+        {
+            if(!commonModel::hasPriv('space', 'browse')) $this->loadModel('common')->deny('space', 'browse', false);
+
+            if(!in_array(strtolower(strtolower($this->methodName)), array('browseproject', 'reportview', 'browseissue')))
+            {
+                if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
+            }
+        }
 
         /* This is essential when changing tab(menu) from gitlab to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
@@ -37,7 +47,7 @@ class sonarqube extends control
      */
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $sonarqubeList = $this->loadModel('pipeline')->getList('sonarqube', $orderBy, $pager);
@@ -86,6 +96,7 @@ class sonarqube extends control
         $this->view->measures    = $measures;
         $this->view->qualitygate = $qualitygate;
         $this->view->projectName = $projectName;
+        $this->view->projectKey  = $job->projectKey;
         $this->view->sonarqubeID = $job->sonarqubeServer;
 
         $this->display();
@@ -101,18 +112,14 @@ class sonarqube extends control
      */
     public function ajaxGetProjectList($sonarqubeID, $projectKey = '')
     {
-        $jobPairs      = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, array(), true, true);
-        $existsProject = array_diff(array_keys($jobPairs), array($projectKey));
+        $projectPairs = $this->sonarqube->getProjectPairs($sonarqubeID, $projectKey);
 
-        $projectList = $this->sonarqube->apiGetProjects($sonarqubeID);
-
-        $projectPairs = array('' => '');
-        foreach($projectList as $project)
+        $options = array();
+        foreach($projectPairs as $productKey => $projectName)
         {
-            if(!empty($project) and !in_array($project->key, $existsProject)) $projectPairs[$project->key] = $project->name;
+            $options[] = array('text' => $projectName, 'value' => $productKey);
         }
-
-        echo html::select('projectKey', $projectPairs, str_replace('*', '-', $projectKey), "class='form-control chosen'");
+        return print(json_encode($options));
     }
 
     /**
@@ -125,12 +132,21 @@ class sonarqube extends control
     {
         if($_POST)
         {
-            $this->checkToken();
-            $sonarqubeID = $this->loadModel('pipeline')->create('sonarqube');
+            $sonarqube = form::data($this->config->sonarqube->form->create)
+                ->add('type', 'sonarqube')
+                ->add('private',md5(rand(10,113450)))
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->trim('url,account,password')
+                ->skipSpecial('url,token,account,password')
+                ->remove('token,appType')
+                ->get();
+            $this->checkToken($sonarqube, 0);
+            $sonarqubeID = $this->loadModel('pipeline')->create($sonarqube);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $actionID = $this->loadModel('action')->create('sonarqube', $sonarqubeID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            $this->loadModel('action')->create('sonarqube', $sonarqubeID, 'created');
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
         $this->view->title = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->createServer;
@@ -141,13 +157,12 @@ class sonarqube extends control
     /**
      * Check post info.
      *
-     * @param  int    $sonarqubeID
+     * @param  int       $sonarqubeID
      * @access protected
      * @return void
      */
-    protected function checkToken($sonarqubeID = 0)
+    protected function checkToken(object $sonarqube, int $sonarqubeID = 0)
     {
-        $sonarqube = fixer::input('post')->trim('url,token,account,password')->get();
         $this->dao->update('sonarqube')->data($sonarqube)
             ->batchCheck(empty($sonarqubeID) ? $this->config->sonarqube->create->requiredFields : $this->config->sonarqube->edit->requiredFields, 'notempty')
             ->batchCheck("url", 'URL');
@@ -167,7 +182,7 @@ class sonarqube extends control
         $result = $this->sonarqube->apiValidate($sonarqube->url, $token);
 
         if(!empty($result)) return $this->send(array('result' => 'fail', 'message' => $result));
-        $this->post->set('token', $token);
+        $sonarqube->token = $token;
     }
 
     /**
@@ -183,7 +198,7 @@ class sonarqube extends control
 
         if($_POST)
         {
-            $this->checkToken($sonarqubeID);
+            $this->checkToken($oldSonarQube, $sonarqubeID);
             $this->pipeline->update($sonarqubeID);
             $sonarqube = $this->pipeline->getByID($sonarqubeID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -192,7 +207,7 @@ class sonarqube extends control
             $actionID = $this->action->create('sonarqube', $sonarqubeID, 'edited');
             $changes  = common::createChanges($oldSonarQube, $sonarqube);
             $this->action->logHistory($actionID, $changes);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->title     = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->editServer;
@@ -208,19 +223,27 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function delete($sonarqubeID, $confirm = 'no')
+    public function delete($sonarqubeID)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->sonarqube->confirmDelete, inlink('delete', "sonarqubeID=$sonarqubeID&confirm=yes")));
-
         $oldSonarQube = $this->loadModel('pipeline')->getByID($sonarqubeID);
         $this->loadModel('action');
         $actionID = $this->pipeline->delete($sonarqubeID, 'sonarqube');
-        if($actionID) return print(js::error($this->lang->sonarqube->delError));
+        if($actionID)
+        {
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->sonarqube->delError);
+
+            return $this->send($response);
+        }
 
         $sonarQube = $this->pipeline->getByID($sonarqubeID);
         $changes   = common::createChanges($oldSonarQube, $sonarQube);
         $this->action->logHistory($actionID, $changes);
-        echo js::reload('parent');
+
+        $response['load']   = $this->createLink('space', 'browse');
+        $response['result'] = 'success';
+
+        return $this->send($response);
     }
 
     /**
@@ -246,14 +269,14 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function browseProject($sonarqubeID, $orderBy = 'name_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function browseProject($sonarqubeID, $orderBy = 'name_desc', $recPerPage = 15, $pageID = 1)
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
 
         $sonarqubeProjectList = $this->sonarqube->apiGetProjects($sonarqubeID, $keyword);
         $projectKeyList       = array();
-        foreach($sonarqubeProjectList as $key => $sonarqubeProject)
+        foreach($sonarqubeProjectList as $sonarqubeProject)
         {
             if(!isset($sonarqubeProject->lastAnalysisDate)) $sonarqubeProject->lastAnalysisDate = '';
             $projectKeyList[] = $sonarqubeProject->key;
@@ -266,7 +289,7 @@ class sonarqube extends control
         array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $sonarqubeProjectList);
 
         /* Pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $recTotal = count($sonarqubeProjectList);
         $pager    = new pager($recTotal, $recPerPage, $pageID);
         $sonarqubeProjectList = array_chunk($sonarqubeProjectList, $pager->recPerPage);
@@ -274,13 +297,24 @@ class sonarqube extends control
         /* Get success jobs of sonarqube.*/
         $projectJobPairs = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, $projectKeyList);
         $successJobs     = $this->loadModel('compile')->getSuccessJobs($projectJobPairs);
+        $sonarqube       = $this->loadModel('pipeline')->getByID($sonarqubeID);
+        $instance        = $this->loadModel('instance')->getByUrl($sonarqube->url);
 
-        $this->view->sonarqube            = $this->loadModel('pipeline')->getByID($sonarqubeID);
+        $sonarqube->instanceID = $sonarqube->id;
+        $sonarqube->type       = 'external';
+        if(!empty($instance->id))
+        {
+            $sonarqube->instanceID = $instance->id;
+            $sonarqube->type       = 'store';
+        }
+
+        $this->view->sonarqube            = $sonarqube;
         $this->view->keyword              = urldecode(urldecode($keyword));
         $this->view->pager                = $pager;
         $this->view->title                = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseProject;
         $this->view->sonarqubeID          = $sonarqubeID;
         $this->view->sonarqubeProjectList = (empty($sonarqubeProjectList) or empty($sonarqubeProjectList[$pageID - 1])) ? array() : $sonarqubeProjectList[$pageID - 1];
+
         $this->view->projectJobPairs      = $projectJobPairs;
         $this->view->orderBy              = $orderBy;
         $this->view->successJobs          = $successJobs;
@@ -345,8 +379,9 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function browseIssue($sonarqubeID, $projectKey = '', $search = false, $orderBy = 'severity_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function browseIssue($sonarqubeID, $projectKey = '', $search = false, $orderBy = 'severity_desc', $recPerPage = 100, $pageID = 1)
     {
+        $projectKey = str_replace('*', '-', $projectKey);
         if(isset($_POST['keyword']))
         {
             $keyword = htmlspecialchars(trim($_POST['keyword']));
@@ -357,7 +392,7 @@ class sonarqube extends control
         else
         {
             $keyword = '';
-            if($search == true) $keyword = $this->session->sonarqubeIssueKeyword;
+            if($search) $keyword = $this->session->sonarqubeIssueKeyword;
         }
 
         ini_set('memory_limit', '1024M');
@@ -373,18 +408,15 @@ class sonarqube extends control
                 $sonarqubeIssue->message      = htmlspecialchars($sonarqubeIssue->message);
                 $sonarqubeIssue->creationDate = date('Y-m-d H:i:s', strtotime($sonarqubeIssue->creationDate));
 
-                list($project, $file) = explode(':', $sonarqubeIssue->component);
+                list(, $file) = explode(':', $sonarqubeIssue->component);
                 $sonarqubeIssue->file = $file;
             }
 
-            if($cacheFile)
+            if($cacheFile && !file_exists($cacheFile . '.lock'))
             {
-                if(!file_exists($cacheFile . '.lock'))
-                {
-                    touch($cacheFile . '.lock');
-                    file_put_contents($cacheFile, serialize($sonarqubeIssueList));
-                    unlink($cacheFile . '.lock');
-                }
+                touch($cacheFile . '.lock');
+                file_put_contents($cacheFile, serialize($sonarqubeIssueList));
+                unlink($cacheFile . '.lock');
             }
         }
         else
@@ -413,7 +445,7 @@ class sonarqube extends control
         $productID = current(explode(',', $products));
 
         /* Pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $recTotal = count($sonarqubeIssueList);
         $pager    = new pager($recTotal, $recPerPage, $pageID);
         $sonarqubeIssueList = array_chunk($sonarqubeIssueList, $pager->recPerPage);

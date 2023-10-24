@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/story.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -40,4 +39,3 @@ r($stories)        && p('3:status,stage,closedReason,duplicateStory') && e('clos
 r($stories)        && p('4:status,stage,closedReason,duplicateStory') && e('closed,closed,duplicate,8'); // 批量关闭需求，查看需求4被关闭后的字段
 r($stories)        && p('5:status,stage,closedReason,duplicateStory') && e('closed,closed,cancel,0');    // 批量关闭需求，查看需求5被关闭后的字段
 r($stories)        && p('6:status,stage,closedReason,duplicateStory') && e('closed,closed,bydesign,0');  // 批量关闭需求，查看需求6被关闭后的字段
-$db->restoreDB();

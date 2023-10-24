@@ -2,7 +2,7 @@
 /**
  * The group module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license  ZPL (http://zpl.pub/page/zplv12.html)
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  group
@@ -22,6 +22,7 @@ $lang->group->managePrivByModule = 'Quản lý Privileges by Module';
 $lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';
 $lang->group->manageMember       = 'Quản lý Members';
 $lang->group->manageProjectAdmin = 'Manage Program Admins';
+$lang->group->editManagePriv     = 'Permission Edit';
 $lang->group->confirmDelete      = 'Bạn có muốn xóa người dùng này group?';
 $lang->group->successSaved       = 'Đã lưu.';
 $lang->group->errorNotSaved      = 'Thất bại.  Vui lòng select actions and groups.';
@@ -35,6 +36,10 @@ $lang->group->noticeVisit        = 'Blank means no access limit.';
 $lang->group->noneProgram        = "No Program";
 $lang->group->noneProduct        = "Không có {$lang->productCommon}";
 $lang->group->noneProject        = "No Project";
+$lang->group->addPriv            = 'Add Priv';
+$lang->group->servicePrivPackage = 'Service Priv Package';
+$lang->group->batchSetDependency = 'Batch Set Dependency';
+$lang->group->add                = 'Add';
 
 $lang->group->id      = 'ID';
 $lang->group->name    = 'Nhóm';
@@ -48,8 +53,8 @@ $lang->group->priv    = 'Nhóm quyền';
 $lang->group->option  = 'Tùy chọn';
 $lang->group->inside  = 'Nhóm người dùng';
 $lang->group->outside = 'Other người dùng';
-$lang->group->limited  = 'Limited Users';
-$lang->group->other   = 'Khác';
+$lang->group->limited = 'Limited Users';
+$lang->group->general = 'General';
 $lang->group->all     = 'Tất cả Privileges';
 
 $lang->group->copyOptions['copyPriv'] = 'Copy Privileges';

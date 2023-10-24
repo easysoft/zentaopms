@@ -77,13 +77,12 @@ class cronTest
      * Change cron status to running test.
      *
      * @param int    $cronID
-     * @param string $lastTime
      * @access public
      * @return bool|int
      */
-    public function changeStatusRunningTest($cronID, $lastTime)
+    public function changeStatusRunningTest($cronID)
     {
-        $objects = $this->objectModel->changeStatusRunning($cronID, $lastTime);
+        $objects = $this->objectModel->changeStatusRunning($cronID);
 
         if(dao::isError()) return dao::getError();
 

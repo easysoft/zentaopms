@@ -2,7 +2,7 @@
 /**
  * The edit file of bug module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -24,7 +24,7 @@ js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);
 js::set('oldResolvedBuild'       , $bug->resolvedBuild);
-js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
+js::set('confirmUnlinkBuild'     , $lang->bug->confirmUnlinkBuild);
 js::set('tab'                    , $this->app->tab);
 js::set('bugID'                  , $bug->id);
 js::set('bugBranch'              , $bug->branch);
@@ -32,6 +32,7 @@ js::set('isClosedBug'            , $bug->status == 'closed');
 js::set('projectExecutionPairs'  , $projectExecutionPairs);
 js::set('productID'              , $product->id);
 js::set('released'               , $lang->build->released);
+js::set('bugTestTask'            , $bug->testtask);
 if($this->app->tab == 'execution') js::set('objectID', $bug->execution);
 if($this->app->tab == 'project')   js::set('objectID', $bug->project);
 ?>
@@ -125,10 +126,10 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                     </div>
                   </td>
                 </tr>
-                <tr class='<?php if(!($product->shadow and zget($project, 'model') == 'scrum' and $project->multiple)) echo 'hide'?>'>
+                <tr class='<?php if($product->shadow and isset($project) and empty($project->multiple)) echo 'hide'?>'>
                   <th><?php echo $lang->bug->productplan;?></th>
                   <td>
-                    <span id="planIdBox"><?php echo html::select('plan', $plans, $bug->plan, "class='form-control chosen'");?></span>
+                    <span id="planIdBox"><?php echo html::select('plan', $plans, $bug->plan, "class='form-control chosen' data-max_drop_width=100%");?></span>
                   </td>
                 </tr>
                 <tr>
@@ -220,12 +221,12 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->story;?></th>
-                  <td><div id='storyIdBox'><?php echo html::select('story', $stories, $bug->story, "class='form-control chosen'");?></div>
+                  <td><div id='storyIdBox'><?php echo html::select('story', array(), '', "class='form-control picker-select'");?></div>
                   </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->task;?></th>
-                  <td><div id='taskIdBox'><?php echo html::select('task', $tasks, $bug->task, "class='form-control chosen'");?></div></td>
+                  <td><div id='taskIdBox'><?php echo html::select('task', $tasks, $bug->task, "class='form-control chosen' data-max_drop_width=100%");?></div></td>
                 </tr>
               </tbody>
             </table>
@@ -242,7 +243,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th><?php echo $lang->bug->openedBuild;?></th>
                   <td>
                     <div id='openedBuildBox' class='input-group'>
-                      <?php echo html::select('openedBuild[]', $openedBuilds, $bug->openedBuild, 'size=4 multiple=multiple class="picker-select form-control"');?>
+                      <?php echo html::select('openedBuild[]', array(), '', 'size=4 multiple=multiple class="picker-select form-control"');?>
                       <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' onclick='loadAllBuilds(this)'")?></span>
                     </div>
                   </td>
@@ -259,7 +260,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th><?php echo $lang->bug->resolvedBuild;?></th>
                   <td>
                     <div id='resolvedBuildBox' class='input-group'>
-                      <?php echo html::select('resolvedBuild', $resolvedBuilds, $bug->resolvedBuild, "class='form-control picker-select'");?>
+                      <?php echo html::select('resolvedBuild', array(), '', "class='form-control picker-select'");?>
                       <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' onclick='loadAllBuilds(this)'")?></span>
                     </div>
                   </td>
@@ -313,7 +314,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->testtask;?></th>
-                  <td id='testtaskBox'><?php echo html::select('testtask', $testtasks, $bug->testtask, 'class="form-control chosen"');?></td>
+                  <td id='testtaskBox'><?php echo html::select('testtask', array('' => ''), $bug->testtask, 'class="form-control picker-select"');?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->fromCase;?></th>
@@ -328,4 +329,5 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
     </div>
   </form>
 </div>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

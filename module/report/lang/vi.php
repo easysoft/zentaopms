@@ -2,36 +2,33 @@
 /**
  * The report module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license  ZPL (http://zpl.pub/page/zplv12.html)
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  report
  * @version  $Id: vi.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link  http://www.zentao.net
  */
-$lang->report->index      = 'Trang báo cáo';
-$lang->report->list       = 'Báo cáo';
-$lang->report->preview    = 'View Pivot Table';
-$lang->report->item       = 'Hạng mục';
-$lang->report->value      = 'Giá trị';
-$lang->report->percent    = '%';
-$lang->report->undefined  = 'Chưa định nghĩa';
-$lang->report->query      = 'Truy vấn';
-$lang->report->annual     = 'Tóm tắt theo năm';
-$lang->report->project    = 'Project';
+$lang->report->index     = 'Trang báo cáo';
+$lang->report->list      = 'Báo cáo';
+$lang->report->item      = 'Hạng mục';
+$lang->report->value     = 'Giá trị';
+$lang->report->percent   = '%';
+$lang->report->undefined = 'Chưa định nghĩa';
+$lang->report->project   = 'Project';
 
-$lang->report->colors[]   = 'AFD8F8';
-$lang->report->colors[]   = 'F6BD0F';
-$lang->report->colors[]   = '8BBA00';
-$lang->report->colors[]   = 'FF8E46';
-$lang->report->colors[]   = '008E8E';
-$lang->report->colors[]   = 'D64646';
-$lang->report->colors[]   = '8E468E';
-$lang->report->colors[]   = '588526';
-$lang->report->colors[]   = 'B3AA00';
-$lang->report->colors[]   = '008ED6';
-$lang->report->colors[]   = '9D080D';
-$lang->report->colors[]   = 'A186BE';
+$lang->report->colors[] = 'AFD8F8';
+$lang->report->colors[] = 'F6BD0F';
+$lang->report->colors[] = '8BBA00';
+$lang->report->colors[] = 'FF8E46';
+$lang->report->colors[] = '008E8E';
+$lang->report->colors[] = 'D64646';
+$lang->report->colors[] = '8E468E';
+$lang->report->colors[] = '588526';
+$lang->report->colors[] = 'B3AA00';
+$lang->report->colors[] = '008ED6';
+$lang->report->colors[] = '9D080D';
+$lang->report->colors[] = 'A186BE';
 
 $lang->report->assign['noassign'] = 'Chưa giao';
 $lang->report->assign['assign']   = 'Đã giao';
@@ -50,18 +47,6 @@ $lang->report->begin            = 'Begin';
 $lang->report->end              = 'End';
 $lang->report->dept             = 'Phòng/Ban';
 $lang->report->deviationChart   = 'Biểu đồ chênh lệcthực hiệnh';
-
-$lang->reportList = new stdclass();
-$lang->reportList->product = new stdclass();
-$lang->reportList->project = new stdclass();
-$lang->reportList->test    = new stdclass();
-$lang->reportList->staff   = new stdclass();
-
-$lang->reportList->product->lists[10] = 'Tóm tắt '.$lang->productCommon . '|report|productsummary';
-$lang->reportList->project->lists[10] = 'Chênh lệchthực hiện|reportprojectdeviation';
-$lang->reportList->test->lists[10]    = 'Báo cáo Bug|report|bugcreate';
-$lang->reportList->test->lists[13]    = 'Bàn giao Bug|report|bugassign';
-$lang->reportList->staff->lists[10]   = 'Lượng công việc đội nhóm|report|workload';
 
 $lang->report->id            = 'ID';
 $lang->report->execution     = $lang->executionCommon;
@@ -107,10 +92,6 @@ $lang->report->mailTitle->bug      = " %s) Bug,";
 $lang->report->mailTitle->task     = " %s) nhiệm vụ,";
 $lang->report->mailTitle->todo     = " (%s) việc,";
 $lang->report->mailTitle->testTask = " (%s) yêu cầu,";
-
-$lang->report->deviationDesc = 'According to the Closed Execution Deviation Rate = ((Total Cost - Total Estimate) / Total Estimate), the Deviation Rate is n/a when the Total Estimate is 0.';
-$lang->report->proVersion    = '<a href="https://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Hãy thử ZenTao Pro để biết thêm!</a>';
-$lang->report->proVersionEn  = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Hãy thử ZenTao Pro để biết thêm!</a>';
 
 $lang->report->annualData = new stdclass();
 $lang->report->annualData->title            = "%s work summary in %s";
@@ -209,3 +190,20 @@ $lang->report->annualData->radarItems['execution'] = "Project";
 $lang->report->annualData->radarItems['devel']     = "Development";
 $lang->report->annualData->radarItems['qa']        = "QA";
 $lang->report->annualData->radarItems['other']     = "Other";
+
+$lang->report->companyRadar        = "公司能力雷达图";
+$lang->report->outputData          = "产出数据";
+$lang->report->outputTotal         = "产出总数";
+$lang->report->storyOutput         = "需求产出";
+$lang->report->planOutput          = "计划产出";
+$lang->report->releaseOutput       = "发布产出";
+$lang->report->executionOutput     = "执行产出";
+$lang->report->taskOutput          = "任务产出";
+$lang->report->bugOutput           = "Bug产出";
+$lang->report->caseOutput          = "用例产出";
+$lang->report->bugProgress         = "Bug进展";
+$lang->report->productProgress     = "{$lang->productCommon}进展";
+$lang->report->executionProgress   = "执行进展";
+$lang->report->projectProgress     = "{$lang->projectCommon}进展";
+$lang->report->yearProjectOverview = "年度{$lang->projectCommon}总览";
+$lang->report->projectOverview     = "截止目前{$lang->projectCommon}总览";

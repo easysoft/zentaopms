@@ -2,7 +2,7 @@
 /**
  * The createlib view of doc module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     doc
@@ -12,6 +12,11 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
+<?php js::set('libType', $type);?>
+<style> tr > td.form-actions {padding-bottom: 30px !important;}</style>
+<?php if($type == 'execution'):?>
+<style> tr > td.form-actions {padding-bottom: 60px !important;}</style>
+<?php endif;?>
 <div id="main">
   <div class="container">
     <div id='mainContent' class='main-content'>
@@ -19,49 +24,44 @@
         <div class='main-header'>
           <h2><?php echo $lang->doc->createLib;?></h2>
         </div>
-        <form method='post' target='hiddenwin'>
+        <form method='post' class='main-form form-ajax no-stash form-watched' enctype='multipart/form-data' >
           <table class='table table-form'>
-            <tr>
-              <th class='w-110px'><?php echo $lang->doc->libType?></th>
-              <?php if($this->app->tab != 'doc'):?>
-              <?php
-              foreach($libTypeList as $key => $libType)
-              {
-                  if($this->app->tab != $key) unset($libTypeList[$key]);
-              }
-              ?>
-              <?php endif;?>
-              <td><?php echo html::radio('type', $libTypeList, $type ? $type : key($libTypeList))?></td>
+            <?php if(in_array($type, array('product', 'project', 'execution'))):?>
+            <?php if(in_array($type, array('product', 'project'))):?>
+            <tr <?php if($config->vision == 'lite') echo 'class="hidden"'?>>
+              <th><?php echo $lang->doc->libType;?></th>
+              <td>
+                <span><?php echo html::radio('libType', $lang->doclib->type, 'wiki', "onchange='changeDoclibAcl(this.value)'")?></span>
+              </td>
             </tr>
-            <tr class='product'>
-              <th><?php echo $lang->doc->product?></th>
-              <td><?php echo html::select('product', $products, $type == 'product' ? $objectID : '', "class='form-control chosen' data-drop_direction='down'")?></td>
+            <?php endif;?>
+            <tr class='objectBox'>
+              <th><?php echo $lang->doc->{$type}?></th>
+              <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control picker-select' data-drop-direction='bottom'")?></td>
             </tr>
-            <tr class='project hidden'>
-              <th><?php echo $lang->doc->project?></th>
-              <td><?php echo html::select('project', $projects, $type == 'project' ? $objectID : '', "class='form-control chosen' data-drop_direction='down'")?></td>
-            </tr>
-            <tr class='execution hidden'>
+            <?php if($app->tab == 'doc' and $type == 'project'):?>
+            <tr class='executionBox'>
               <th><?php echo $lang->doc->execution?></th>
-              <td><?php echo html::select('execution', $executions, $type == 'execution' ? $objectID : '', "class='form-control chosen' data-drop_direction='down'")?></td>
+              <td>
+                <?php $disabled = $project->multiple ? '' : 'disabled';?>
+                <?php echo html::select('execution', $executionPairs, 0, "class='form-control chosen' data-drop-direction='down' $disabled")?>
+                <i class='icon icon-help' title='<?php echo $lang->doclib->tip->selectExecution;?>'></i>
+              </td>
             </tr>
+            <?php endif;?>
+            <?php endif;?>
             <tr class="normalLib">
               <th><?php echo $lang->doclib->name?></th>
-              <td><?php echo html::input('name', '', "class='form-control'")?></td>
-            </tr>
-            <tr class='apilib hidden'>
-              <th><?php echo $lang->api->name?></th>
               <td><?php echo html::input('name', '', "class='form-control'")?></td>
             </tr>
             <tr class="apilib hidden">
               <th><?php echo $lang->api->baseUrl?></th>
               <td><?php echo html::input('baseUrl', '', "class='form-control' placeholder='" . $lang->api->baseUrlDesc . "'");?></td>
             </tr>
-            <tr>
+            <tr id="aclBox">
               <th><?php echo $lang->doclib->control;?></th>
               <td>
-                <span><?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?></span>
-                <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib']['product']['default'];?></span>
+                <?php echo html::radio('acl', $lang->doclib->aclList, $acl, "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
               </td>
             </tr>
             <tr id='whiteListBox' class='hidden'>
@@ -74,17 +74,15 @@
                 <div class='input-group'>
                   <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
                   <?php echo html::select('users[]', $users, '', "class='form-control picker-select' multiple")?>
+                  <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=users&attr=data-drop_direction='up'");?>
                 </div>
               </td>
             </tr>
-            <tr class="apilib hidden">
-              <th><?php echo $lang->api->desc;?></th>
-              <td>
-                  <?php echo html::textarea('desc', '', "rows='8' class='form-control kindeditor' hidefocus='true' tabindex=''");?>
-              </td>
-            </tr>
             <tr>
-              <td class='text-center form-actions' colspan='2'><?php echo html::submitButton();?></td>
+              <td class='text-center form-actions' colspan='2'>
+                <?php echo html::submitButton();?>
+                <?php echo html::hidden('type', $type);?>
+              </td>
             </tr>
           </table>
         </form>
@@ -94,19 +92,18 @@
 </div>
 <div class='hidden'>
   <table>
-    <tr id='aclBoxA'>
+    <tr id='aclAPIBox'>
       <th><?php echo $lang->doclib->control;?></th>
       <td>
-        <?php echo html::radio('acl', $lang->doclib->aclListA, 'default', "onchange='toggleAcl(this.value, \"lib\")'")?>
+        <?php echo html::radio('acl', $lang->api->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
       </td>
     </tr>
-    <tr id='aclBoxB'>
+    <tr id='aclOtherBox'>
       <th><?php echo $lang->doclib->control;?></th>
       <td>
-        <?php echo html::radio('acl', $lang->doclib->aclListB, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?>
+        <?php echo html::radio('acl', $lang->doclib->aclList, 'default', "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
       </td>
     </tr>
   </table>
 </div>
-<?php js::set('noticeAcl', $lang->doc->noticeAcl['lib']);?>
 <?php include '../../common/view/footer.lite.html.php';?>

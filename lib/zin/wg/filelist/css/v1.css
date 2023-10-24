@@ -1,0 +1,12 @@
+.file {padding-top: 2px;}
+ul.files-list {margin-bottom: unset}
+.files-list>li>a {display: inline; word-wrap: break-word; color: #313c52; line-height: 24px}
+.files-list>li>.right-icon {opacity: 1;} 
+.fileAction {color: #0c64eb !important;}
+.renameFile {display: flex;}
+.renameFile .input-group {margin-left: 10px;}
+.renameFile .input-group-addon {width: 60px;}
+.renameFile > .icon { margin-top: 10px;}
+.backgroundColor {background: #eff5ff; }
+.icon.icon-file-text {padding-left: 7px}
+.right-icon .btn {padding: 0 6px; height: 20px}

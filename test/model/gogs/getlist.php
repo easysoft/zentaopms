@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/gogs.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -20,4 +19,3 @@ $gogs = new gogsTest();
 $orderBy = 'id_desc';
 r($gogs->getList($orderBy)) && p('id') && e('5');    // 获取Gogs列表
 
-$db->restoreDB();

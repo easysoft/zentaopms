@@ -1,0 +1,31 @@
+#sidebar .modulegroup {font-weight:bold; padding-top: 8px; border-top: 1px solid #ddd;}
+#sidebar .active {background-color: #e9f2fb; color: #006af1;}
+
+.side-col {width: 240px;}
+#sidebar> .cell {width: 220px;}
+
+#datas {overflow: scroll;}
+#data th, #data td, #schema td, #modules li > strong {overflow: hidden; text-overflow: unset; white-space: nowrap;}
+#dataContent {margin: 0px; padding: 0px;}
+#dataContent .detail {margin: 0px; padding: 0px;}
+#dataContent .detail .detail-title {padding: 16px; border-bottom: 1px solid #f4f5f7; line-height: 16px;}
+#dataContent .detail .detail-title .dataview-title {overflow: hidden; white-space: nowrap; max-width: calc(100% - 120px); display: inline-block;}
+#dataContent .detail .detail-title .create-action {display: inline-block;}
+#dataContent .detail .detail-content {margin-top: 0px;}
+#dataContent .detail .detail-content .tab-content {padding: 16px;}
+#dataContent .tabs .nav-tabs .actions {padding: 8px 15px;}
+#dataContent .tabs .nav-tabs .actions a {padding-left: 5px;}
+#dataContent .tabs table {margin-bottom: 0px;}
+#dataContent .tabs table .dataview-sql {white-space: unset;}
+
+.nav-tabs {padding:16px 16px 0px 16px;}
+.nav-tabs>li>a {padding: 5px 10px;}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {color: #2e7fff!important; background-color: #e6f0ff; padding: 5px 10px;}
+.nav-tabs>li.active>a:before {background: unset;}
+.nav-tabs {border: unset;}
+
+.cell> .panel> .panel-heading {padding: 5px 0px 10px;}
+.detail-title>.pull-right {position: unset;}
+.detail-title>.pull-right>a {margin: 0px 10px; font-weight: normal; font-size: 13px;}
+
+.table-code {margin-left: 12px;}

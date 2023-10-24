@@ -2,7 +2,7 @@
 /**
  * The todo view file of dashboard module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
@@ -15,7 +15,7 @@
 <?php js::set('confirmDelete', $lang->todo->confirmDelete)?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php foreach($lang->todo->periods as $period => $label):?>
+    <?php foreach($lang->my->featureBar['todo'] as $period => $label):?>
     <?php
     $vars = "date=$period";
     if($period == 'before') $vars .= "&userID={$app->user->id}&status=undone";
@@ -123,7 +123,7 @@ $doingCount = 0;
           </td>
           <td class="c-name" title="<?php echo $todo->name;?>"><?php echo html::a($this->createLink('todo', 'view', "id=$todo->id&from=my", '', true), $todo->name, '', "data-toggle='modal' data-width='80%' data-type='iframe' data-title='" . $lang->todo->view . "' data-icon='check'");?></td>
           <td class="c-pri"><span title="<?php echo zget($lang->todo->priList, $todo->pri);?>" class='label-pri <?php echo 'label-pri-' . $todo->pri;?>' title='<?php echo zget($lang->todo->priList, $todo->pri, $todo->pri);?>'><?php echo zget($lang->todo->priList, $todo->pri)?></span></td>
-          <td class="c-date text-center"><?php echo $todo->date == '2030-01-01' ? $lang->todo->periods['future'] : $todo->date;?></td>
+          <td class="c-date text-center"><?php echo $todo->date == '2030-01-01' ? $lang->todo->future : $todo->date;?></td>
           <td class="c-status"><span class="status-todo status-<?php echo $todo->status;?>"><?php echo $lang->todo->statusList[$todo->status];?></span></td>
           <td class="c-type"><?php echo zget($lang->todo->typeList, $todo->type, '');?></td>
           <?php if($type == 'assignedToOther'):?>

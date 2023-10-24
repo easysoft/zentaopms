@@ -60,8 +60,8 @@ $lang->program->browse                  = 'Programs';
 $lang->program->kanbanAction            = 'Kanban';
 $lang->program->view                    = 'Program Detail';
 $lang->program->copy                    = 'Copy Program';
-$lang->program->product                 = 'Products';
-$lang->program->project                 = 'Program Project List';
+$lang->program->product                 = "{$lang->productCommon}s";
+$lang->program->project                 = "Program {$lang->projectCommon} List";
 $lang->program->all                     = 'All Programs';
 $lang->program->start                   = 'Start';
 $lang->program->finish                  = 'Finish';
@@ -79,10 +79,10 @@ $lang->program->updateOrder             = 'Rank';
 $lang->program->unbindWhitelist         = 'Unbind Whitelist';
 $lang->program->importStakeholder       = 'Import from program';
 $lang->program->manageMembers           = 'Program Team';
-$lang->program->confirmChangePRJUint    = 'Synchronize the budget unit of the subprograms and the projects of the program? If yes, please the current exchange rate.';
+$lang->program->confirmChangePRJUint    = "Synchronize the budget unit of the subprograms and the {$lang->projectCommon}s of the program? If yes, please the current exchange rate.";
 $lang->program->exRateNotNegative       = 'The『exchange rate』should not be negative.';
-$lang->program->changePRJUnit           = 'Update the budget unit of the project';
-$lang->program->showNotCurrentProjects  = 'Display project information of non current program';
+$lang->program->changePRJUnit           = 'Update the budget unit of the ' . $lang->projectCommon;
+$lang->program->showNotCurrentProjects  = "Display {$lang->projectCommon} information of non current program";
 
 $lang->program->progress         = 'Progress';
 $lang->program->children         = 'Add Child';
@@ -93,24 +93,24 @@ $lang->program->moreProgram      = 'More program';
 $lang->program->stakeholderType  = 'Stakeholder type';
 $lang->program->parentBudget     = 'Parent program surplus budget：';
 $lang->program->isStakeholderKey = 'Key stakeholder';
-$lang->program->summary          = 'This page contains %d top programs and %d independent projects.';
+$lang->program->summary          = "This page contains %d top programs and %d independent {$lang->projectCommon}s.";
 
 $lang->program->stakeholderTypeList['inside']  = 'Inside';
 $lang->program->stakeholderTypeList['outside'] = 'Outside';
 
 $lang->program->noProgram          = 'No program.';
 $lang->program->showClosed         = 'Closed';
-$lang->program->tips               = 'If a parent program is selected, the products under the parent program can be associated. If no program is selected for the project, a product with the same name as the project is created and associated with the project by default.';
+$lang->program->tips               = "If a parent program is selected, the {$lang->productCommon}s under the parent program can be associated. If no program is selected for the {$lang->projectCommon}, a {$lang->productCommon} with the same name as the {$lang->projectCommon} is created and associated with the {$lang->projectCommon} by default.";
 $lang->program->confirmBatchUnlink = "Do you want to batch unlink these stakeholders?";
 $lang->program->beginLetterParent  = 'The start date of the program is less than the start date of the parent program:';
 $lang->program->endGreaterParent   = 'The finish date of the program is greater than the finish date of the parent program:';
 $lang->program->dateExceedParent   = 'The start and finish date of the program was greater than the start and finish date of the parent program:';
-$lang->program->beginGreateChild   = 'The start date of the program is greater than the minimum start date of the subprogram or project:';
-$lang->program->endLetterChild     = 'The finish date of the program is less than the maximum finish date of the subprogram or project:';
-$lang->program->dateExceedChild    = 'The start and finish date of the program no longer include the date scope of the subprogram or project:';
-$lang->program->closeErrorMessage  = 'There are subprograms or projects that are not closed';
-$lang->program->hasChildren        = 'The program has a child program or the project exists and can not be deleted.';
-$lang->program->hasProduct         = 'The program has products exist and can not be deleted.';
+$lang->program->beginGreateChild   = "The start date of the program is greater than the minimum start date of the subprogram or {$lang->projectCommon}:";
+$lang->program->endLetterChild     = "The finish date of the program is less than the maximum finish date of the subprogram or {$lang->projectCommon}:";
+$lang->program->dateExceedChild    = "The start and finish date of the program no longer include the date scope of the subprogram or {$lang->projectCommon}:";
+$lang->program->closeErrorMessage  = "There are subprograms or {$lang->projectCommon}s that are not closed";
+$lang->program->hasChildren        = "The program has a child program or the {$lang->projectCommon} exists and can not be deleted.";
+$lang->program->hasProduct         = "The program has {$lang->productCommon}s exist and can not be deleted.";
 $lang->program->confirmDelete      = 'Do you want to delete the \"%s\" Program?';
 $lang->program->confirmUnlink      = 'Do you want to remove the Stakeholder?';
 $lang->program->readjustTime       = 'Change the program begin&end date.';
@@ -125,7 +125,7 @@ $lang->program->endList[186] = 'Half year';
 $lang->program->endList[365] = 'One year';
 $lang->program->endList[999] = 'Longtime';
 
-$lang->program->aclList['private'] = "Private (accessible to project portfolio holders and stakeholders, stakeholders can follow up maintenance)";
+$lang->program->aclList['private'] = "Private (accessible to {$lang->projectCommon} portfolio holders and stakeholders, stakeholders can follow up maintenance)";
 $lang->program->aclList['open']    = "Default(user who can visit the program can access it)";
 
 $lang->program->subAclList['private'] = "Private (accessible to this program set leader and stakeholders, stakeholders can follow up maintenance)";
@@ -151,15 +151,26 @@ $lang->program->featureBar['browse']['doing']     = 'Doing';
 $lang->program->featureBar['browse']['suspended'] = 'Suspended';
 $lang->program->featureBar['browse']['closed']    = 'Closed';
 
+$lang->program->featureBar['product']['all']      = 'All';
+$lang->program->featureBar['product']['noclosed'] = 'Open';
+$lang->program->featureBar['product']['closed']   = 'Closed';
+
+$lang->program->featureBar['project']['all']       = 'All';
+$lang->program->featureBar['project']['unclosed']  = 'Unclosed';
+$lang->program->featureBar['project']['wait']      = 'Waiting';
+$lang->program->featureBar['project']['doing']     = 'Doing';
+$lang->program->featureBar['project']['suspended'] = 'Suspended';
+$lang->program->featureBar['project']['closed']    = 'Closed';
+
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = 'Program Kanban';
 $lang->program->kanban->typeList['my']     = 'My Programs';
 $lang->program->kanban->typeList['others'] = 'Others';
 
-$lang->program->kanban->openProducts    = 'Open Products';
+$lang->program->kanban->openProducts    = "Open {$lang->productCommon}s";
 $lang->program->kanban->unexpiredPlans  = 'Unexpired Plans';
-$lang->program->kanban->waitingProjects = 'Waiting Projects';
-$lang->program->kanban->doingProjects   = 'Ongoing Projects';
+$lang->program->kanban->waitingProjects = "Waiting {$lang->projectCommon}s";
+$lang->program->kanban->doingProjects   = "Ongoing {$lang->projectCommon}s";
 $lang->program->kanban->doingExecutions = 'Ongoing Executions';
 $lang->program->kanban->normalReleases  = 'Normal Releases';
 

@@ -2,7 +2,7 @@
 /**
  * The control file of mail module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     mail
@@ -174,14 +174,14 @@ class mail extends control
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $this->session->set('mailConfig', '');
-
-            $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->save;
-            $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
-            $this->view->position[] = $this->lang->mail->save;
-
-            $this->view->mailExist  = $this->mail->mailExist();
-            $this->display();
         }
+
+        $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->save;
+        $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
+        $this->view->position[] = $this->lang->mail->save;
+
+        $this->view->mailExist  = $this->mail->mailExist();
+        $this->display();
     }
 
     /**
@@ -275,10 +275,14 @@ class mail extends control
             return print(js::alert($this->lang->mail->successSended) . js::locate(inlink('test'), 'parent'));
         }
 
+        $users     = $this->dao->select('*')->from(TABLE_USER)->where('email')->ne('')->andWhere('deleted')->eq(0)->orderBy('account')->fetchAll();
+        $userPairs = array();
+        foreach($users as $user) $userPairs[$user->account] = $user->realname . ' ' . $user->email;
+
         $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->test;
         $this->view->position[] = html::a(inlink('index'), $this->lang->mail->common);
         $this->view->position[] = $this->lang->mail->test;
-        $this->view->users      = $this->dao->select('account,  CONCAT(realname, " ", email) AS email' )->from(TABLE_USER)->where('email')->ne('')->andWhere('deleted')->eq(0)->orderBy('account')->fetchPairs();
+        $this->view->users      = $userPairs;
         $this->display();
     }
 

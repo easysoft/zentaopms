@@ -1,14 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Lexer;
 
 use PhpMyAdmin\SqlParser\Exceptions\LexerException;
 use PhpMyAdmin\SqlParser\Lexer;
 use PhpMyAdmin\SqlParser\Tests\TestCase;
-
-use function sprintf;
 
 class LexerTest extends TestCase
 {
@@ -16,7 +12,7 @@ class LexerTest extends TestCase
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */
-    public function testError(): void
+    public function testError()
     {
         $lexer = new Lexer('');
 
@@ -30,18 +26,20 @@ class LexerTest extends TestCase
 
         $this->assertEquals(
             $lexer->errors,
-            [
+            array(
                 new LexerException('error #1', 'foo', 1, 2),
                 new LexerException('error #2', 'bar', 3, 4),
-            ]
+            )
         );
     }
 
-    public function testErrorStrict(): void
+    /**
+     * @expectedException \PhpMyAdmin\SqlParser\Exceptions\LexerException
+     * @expectedExceptionMessage strict error
+     * @expectedExceptionCode 4
+     */
+    public function testErrorStrict()
     {
-        $this->expectExceptionCode(4);
-        $this->expectExceptionMessage('strict error');
-        $this->expectException(LexerException::class);
         $lexer = new Lexer('');
         $lexer->strict = true;
 
@@ -50,44 +48,46 @@ class LexerTest extends TestCase
 
     /**
      * @dataProvider lexProvider
+     *
+     * @param mixed $test
      */
-    public function testLex(string $test): void
+    public function testLex($test)
     {
         $this->runParserTest($test);
     }
 
-    public function lexProvider(): array
+    public function lexProvider()
     {
-        return [
-            ['lexer/lex'],
-            ['lexer/lexUtf8'],
-            ['lexer/lexBool'],
-            ['lexer/lexComment'],
-            ['lexer/lexCommentEnd'],
-            ['lexer/lexDelimiter'],
-            ['lexer/lexDelimiter2'],
-            ['lexer/lexDelimiterErr1'],
-            ['lexer/lexDelimiterErr2'],
-            ['lexer/lexDelimiterErr3'],
-            ['lexer/lexDelimiterLen'],
-            ['lexer/lexKeyword'],
-            ['lexer/lexKeyword2'],
-            ['lexer/lexNumber'],
-            ['lexer/lexOperator'],
-            ['lexer/lexOperatorStarIsArithmetic'],
-            ['lexer/lexOperatorStarIsWildcard'],
-            ['lexer/lexString'],
-            ['lexer/lexStringErr1'],
-            ['lexer/lexSymbol'],
-            ['lexer/lexSymbolErr1'],
-            ['lexer/lexSymbolErr2'],
-            ['lexer/lexSymbolErr3'],
-            ['lexer/lexSymbolUser'],
-            ['lexer/lexWhitespace'],
-            ['lexer/lexLabel1'],
-            ['lexer/lexLabel2'],
-            ['lexer/lexNoLabel'],
-            ['lexer/lexWildcardThenComment'],
-        ];
+        return array(
+            array('lexer/lex'),
+            array('lexer/lexUtf8'),
+            array('lexer/lexBool'),
+            array('lexer/lexComment'),
+            array('lexer/lexCommentEnd'),
+            array('lexer/lexDelimiter'),
+            array('lexer/lexDelimiter2'),
+            array('lexer/lexDelimiterErr1'),
+            array('lexer/lexDelimiterErr2'),
+            array('lexer/lexDelimiterErr3'),
+            array('lexer/lexDelimiterLen'),
+            array('lexer/lexKeyword'),
+            array('lexer/lexKeyword2'),
+            array('lexer/lexNumber'),
+            array('lexer/lexOperator'),
+            array('lexer/lexOperatorStarIsArithmetic'),
+            array('lexer/lexOperatorStarIsWildcard'),
+            array('lexer/lexString'),
+            array('lexer/lexStringErr1'),
+            array('lexer/lexSymbol'),
+            array('lexer/lexSymbolErr1'),
+            array('lexer/lexSymbolErr2'),
+            array('lexer/lexSymbolErr3'),
+            array('lexer/lexSymbolUser'),
+            array('lexer/lexWhitespace'),
+            array('lexer/lexLabel1'),
+            array('lexer/lexLabel2'),
+            array('lexer/lexNoLabel'),
+            array('lexer/lexWildcardThenComment')
+        );
     }
 }

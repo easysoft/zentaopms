@@ -26,7 +26,6 @@ $(function()
         $.get(link, function(data)
         {
             data = JSON.parse(data);
-            console.log(data);
             $('#osName').val(data.osName);
             if(data.memory != 0)
             {

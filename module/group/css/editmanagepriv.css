@@ -1,0 +1,30 @@
+.mt-m {margin-top: 16px;}
+.flex-center {display: flex; justify-content: center; align-items: center;}
+.flex-space-center {display: flex; justify-content: space-between; align-items: center;}
+#mainContent {display: flex; gap: 16px; height: calc(100vh - 120px)}
+#mainContent > .main {flex: 1 1 75%; overflow-y: auto; min-height: 480px;}
+#mainContent > .side {flex: 1 1 25%;}
+
+.priv-panel {background: #fff; padding: 10px; box-shadow: 0 1px 1px rgb(0 0 0 / 5%), 0 2px 6px 0 rgb(0 0 0 / 5%);}
+.priv-panel > .panel-content {height: calc(50vh - 160px); overflow-y: auto; min-height: 140px;}
+.priv-panel > .panel-bottom {padding-top: 20px;}
+
+/* permission-table */
+.td-sm {width: 120px;}
+.td-md {width: 240px;}
+.sorter-group {display: flex; flex-wrap: wrap;}
+.sorter-group > .group-item {flex: 0 0 25%; overflow: hidden;}
+.checkbox-primary > input {width: 20px;}
+.permission-row label.active {background: #e6f0ff;}
+
+/* tree */
+.tree ul > li {display: inline-block; width: 50%;}
+.priv-item > .icon {padding-left: 5px;}
+.empty-tip {height: 100%;}
+
+#bysearchTab {border: none;}
+#privListTable .c-name {min-width: 100px;}
+#privListTable .c-view, #privListTable .c-module, #privListTable .c-package {width: 100px;}
+#privListTable .c-privs {min-width: 180px;}
+#privListTable .c-actions {width: 50px;}
+#privListTable tbody tr td  {overflow: hidden; white-space: nowrap;}

@@ -1,0 +1,9 @@
+.label.status-clarify, .label.status-draft {--tw-ring-color: #8166ee;}
+.label.status-cancel, .label.status-canceled, .label.status-investigate {--tw-ring-color: #838a9d;}
+.label.status-canceled, .label.status-closed, .label.status-testtask .label.status-done {--tw-ring-color: #9ea3b0;}
+.label.status-blocked, .label.status-hangup, .label.status-pause, .label.status-suspended {--tw-ring-color: #b89664;}
+.label.status-noreview, .label.status-reviewing, .label.status-wait .label.status-testcase {--tw-ring-color: #18a6fd;}
+.label.status-active .label.status-risk, .label.status-changed, .label.status-changing, .label.status-fail {--tw-ring-color: #fb2b2b;}
+.label.status-active, .label.status-asked, .label.status-normal, .label.status-unconfirmed, .label.status-wait {--tw-ring-color: #313c52;}
+.label.status-active .label.status-issue, .label.status-checking, .label.status-commenting, .label.status-confirmed, .label.status-doing {--tw-ring-color: #ff6f42;}
+.label.status-checked, .label.status-done, .label.status-pass, .label.status-replied, .label.status-resolved, .label.status-success {--tw-ring-color: #0dbb7d;}

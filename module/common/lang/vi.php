@@ -2,7 +2,7 @@
 /**
  * The common simplified chinese file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license  ZPL (http://zpl.pub/page/zplv12.html)
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  ZenTaoPMS
@@ -27,6 +27,7 @@ $lang->welcome         = "%s";
 $lang->logout          = 'Thoát';
 $lang->login           = 'Đăng nhập';
 $lang->help            = 'Trợ giúp';
+$lang->langItem        = 'Lang Item';
 $lang->aboutZenTao     = 'Giới thiệu';
 $lang->profile         = 'Hồ sơ';
 $lang->changePassword  = 'Mật khẩu';
@@ -68,6 +69,8 @@ $lang->whitelist    = 'Lista bianca';
 
 $lang->actions         = 'Hành động';
 $lang->restore         = 'Thiết lập lại';
+$lang->confirmDraft    = 'There are unsaved form of %name%. Do you want to restore them?';
+$lang->resume          = 'resume';
 $lang->comment         = 'Ghi chú';
 $lang->history         = 'Lịch sử';
 $lang->attatch         = 'Files';
@@ -113,6 +116,10 @@ $lang->selectedItems = 'Đã chọn <strong>{0}</strong> mục';
 
 $lang->future      = 'Đang đợi';
 $lang->year        = 'Năm';
+$lang->month       = 'Month';
+$lang->hour        = 'Hour';
+$lang->minute      = 'Minute';
+$lang->second      = 'Second';
 $lang->workingHour = 'giờ';
 
 $lang->idAB         = 'ID';
@@ -124,11 +131,14 @@ $lang->typeAB       = 'Loại';
 $lang->nameAB       = 'Name';
 
 $lang->common = new stdclass();
-$lang->common->common  = 'Module chung';
-$lang->devops->common  = 'DevOps';
-$lang->repo->codeRepo  = 'Code Repo';
-$lang->app->common     = 'APP';
-$lang->app->serverLink = 'Server Link';
+$lang->common->common   = 'Module chung';
+$lang->devops->common   = 'DevOps';
+$lang->repo->codeRepo   = 'Code Repo';
+$lang->app->common      = 'APP';
+$lang->app->serverLink  = 'Server Link';
+$lang->space->common    = 'Service';
+$lang->store->common    = 'Store';
+$lang->instance->common = 'Instance';
 
 global $config;
 list($programModule, $programMethod)     = explode('-', $config->programLink);
@@ -219,12 +229,29 @@ $lang->system->menu->calendar = array('link' => 'Calendar|my|calendar|', 'subMod
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
 
-$lang->devops->compile  = 'Pipelines';
-$lang->devops->mr       = 'Merge Request';
-$lang->devops->repo     = 'Repo';
-$lang->devops->rules    = 'Rule';
-$lang->devops->settings = 'Setting Merge Request';
-$lang->devops->set      = 'Set';
+$lang->devops->compile     = 'Pipelines';
+$lang->devops->mr          = 'Merge Request';
+$lang->devops->repo        = 'Repo';
+$lang->devops->rules       = 'Rule';
+$lang->devops->settings    = 'Setting Merge Request';
+$lang->devops->platform    = 'Platform';
+$lang->devops->set         = 'Set';
+$lang->devops->artifact    = 'Artifact';
+$lang->devops->environment = 'Environment';
+$lang->devops->resource    = 'Resource';
+$lang->devops->dblist      = 'Database';
+$lang->devops->domain      = 'Domain';
+$lang->devops->oss         = 'Oss';
+$lang->devops->host        = 'Host';
+$lang->devops->account     = 'Account';
+$lang->devops->serverroom  = 'IDC';
+$lang->devops->deploy      = 'Deploy';
+$lang->devops->provider    = 'IDC Provider';
+$lang->devops->cpuBrand    = 'CPU Brand';
+$lang->devops->city        = 'IDC Location';
+$lang->devops->os          = 'OS Version';
+$lang->devops->stage       = 'Stage';
+$lang->devops->service     = 'Service';
 
 $lang->searchTips = '';
 $lang->searchAB   = 'Tìm ki?m';

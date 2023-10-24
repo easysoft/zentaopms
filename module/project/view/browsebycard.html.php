@@ -2,7 +2,7 @@
 /**
  * The browsebycard view file of project module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     project
@@ -107,10 +107,12 @@
           <span class="label label-<?php echo $status;?>"><?php echo $lang->project->statusList[$status];?></span>
         </div>
         <div class='panel-heading'>
-          <?php if($project->model === 'waterfall'):?>
-          <span class='project-type-label label label-warning label-outline'><i class='icon icon-waterfall'></i></span>
+          <?php if(in_array($project->model, array('waterfall', 'waterfallplus'))):?>
+          <span class='project-type-label label label-warning label-outline'><i class='icon icon-<?php echo $project->model;?>'></i></span>
           <?php elseif($project->model === 'kanban'):?>
           <span class='project-type-label label label-info label-outline'><i class='icon icon-kanban'></i></span>
+          <?php elseif($project->model === 'agileplus'):?>
+          <span class='project-type-label label label-info label-outline'><i class='icon icon-agileplus'></i></span>
           <?php else:?>
           <span class='project-type-label label label-info label-outline'><i class='icon icon-sprint'></i></span>
           <?php endif;?>
@@ -132,7 +134,7 @@
             <div class='row'>
               <div class='col-xs-4'>
                 <div><span class='statistics-title'><?php echo $lang->project->progress;?></span></div>
-                <?php echo html::ring($project->hours->progress); ?>
+                <?php echo html::ring($project->progress); ?>
               </div>
               <div class='col-xs-4'>
                 <span class='statistics-title'><?php echo $lang->project->leftTasks;?></span>
@@ -140,7 +142,7 @@
               </div>
               <div class='col-xs-4'>
                 <span class='statistics-title'><?php echo $lang->project->leftHours;?></span>
-                <span class='totalLeft' title="<?php echo empty($project->hours->totalLeft) ? '—' : $project->hours->totalLeft . $lang->execution->workHour;?>"><?php echo empty($project->hours->totalLeft) ? '—' : $project->hours->totalLeft . $lang->execution->workHourUnit;?></span>
+                <span class='totalLeft' title="<?php echo empty($project->left) ? '—' : $project->left . $lang->execution->workHour;?>"><?php echo empty($project->left) ? '—' : $project->left . $lang->execution->workHourUnit;?></span>
               </div>
             </div>
           </div>

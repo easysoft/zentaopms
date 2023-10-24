@@ -330,7 +330,8 @@ class baseHTML
      */
     static public function hidden($name, $value = "", $attrib = "")
     {
-        return "<input type='hidden' name='$name' id='$name' value='$value' $attrib />\n";
+        $id = str_replace(array('[', ']'), "", $name);
+        return "<input type='hidden' name='$name' id='$id' value='$value' $attrib />\n";
     }
 
     /**
@@ -347,7 +348,8 @@ class baseHTML
     static public function password($name, $value = "", $attrib = "")
     {
         if(stripos($attrib, 'autocomplete') === false) $attrib .= " autocomplete='off'";
-        return "<input type='password' name='$name' id='$name' value='$value' $attrib />\n";
+        $id = str_replace(array('[', ']'), "", $name);
+        return "<input type='password' name='$name' id='$id' value='$value' $attrib />\n";
     }
 
     /**
@@ -364,6 +366,7 @@ class baseHTML
     static public function textarea($name, $value = "", $attrib = "")
     {
         $id = "id='$name'";
+        $id = str_replace(array('[', ']'), "", $id);
         if(strpos($attrib, 'id=') !== false) $id = '';
         return "<textarea name='$name' $id $attrib>$value</textarea>\n";
     }
@@ -397,8 +400,9 @@ class baseHTML
      */
     static public function date($name, $value = "", $options = '', $attrib = '')
     {
-        $html = "<div class='input-append date date-picker' {$options}>";
-        $html .= "<input type='text' name='{$name}' id='$name' value='$value' {$attrib} />\n";
+        $id    = str_replace(array('[', ']'), "", $name);
+        $html  = "<div class='input-append date date-picker' {$options}>";
+        $html .= "<input type='text' name='{$name}' id='$id' value='$value' {$attrib} />\n";
         $html .= "<span class='add-on'><button class='btn' type='button'><i class='icon-calendar'></i></button></span></div>";
         return $html;
     }
@@ -417,8 +421,9 @@ class baseHTML
      */
     static public function dateTime($name, $value = "", $options = '', $attrib = '')
     {
-        $html = "<div class='input-append date time-picker' {$options}>";
-        $html .= "<input type='text' name='{$name}' id='$name' value='$value' {$attrib} />\n";
+        $id    = str_replace(array('[', ']'), "", $name);
+        $html  = "<div class='input-append date time-picker' {$options}>";
+        $html .= "<input type='text' name='{$name}' id='$id' value='$value' {$attrib} />\n";
         $html .= "<span class='add-on'><button class='btn' type='button'><i class='icon-calendar'></i></button></span></div>";
         return $html;
     }
@@ -519,11 +524,18 @@ class baseHTML
         }
 
         /* If the link of the referer is not the link of the current page or the link of the index,  the cookie and gobackLink will be updated. */
-        if(!preg_match("/(m=|\/)(index|search|$currentModule)(&f=|-)(index|buildquery|$currentMethod)(&|-|\.)?/", strtolower($refererLink)))
+        if(preg_match("/(?:m=|\/)([a-zA-Z0-9]+)(?:(&f=)|(-?))([a-zA-Z0-9]+)?(?:&|-|\.)?/", strtolower($refererLink), $matches))
         {
-            $gobackList[$tab] = $referer;
-            $gobackLink       = $referer;
-            setcookie('goback', json_encode($gobackList), $config->cookieLife, $config->webRoot, '', $config->cookieSecure, false);
+            if(!isset($matches[4])) $matches[4] = $config->default->method;
+            if(!in_array($matches[1], array($config->default->module, 'search')) or !in_array($matches[4], array($config->default->method, 'buildquery')))
+            {
+                if($matches[1] != 'index' and ($matches[1] != $currentModule or $matches[4] != $currentMethod))
+                {
+                    $gobackList[$tab] = $referer;
+                    $gobackLink       = $referer;
+                    setcookie('goback', json_encode($gobackList), $config->cookieLife, $config->webRoot, '', $config->cookieSecure, false);
+                }
+            }
         }
 
         return "<a href='{$gobackLink}' class='btn btn-back $class' $misc>{$label}</a>";
@@ -1148,18 +1160,8 @@ EOT;
         return $js;
     }
 
-    /**
-     * 导出$config到js，因为js的createLink()方法需要获取config信息。
-     * Export the config vars for createLink() js version.
-     *
-     * @static
-     * @access public
-     * @return void
-     */
-    static public function exportConfigVars()
+    static function getJSConfigVars()
     {
-        if(!function_exists('json_encode')) return false;
-
         global $app, $config, $lang;
         $defaultViewType = $app->getViewType();
         $themeRoot       = $app->getWebRoot() . 'theme/';
@@ -1168,7 +1170,7 @@ EOT;
         $clientLang      = $app->getClientLang();
         $runMode         = defined('RUN_MODE') ? RUN_MODE : '';
         $requiredFields  = '';
-        if(isset($config->$moduleName->$methodName->requiredFields)) $requiredFields = str_replace(' ', '', $config->$moduleName->$methodName->requiredFields);
+        if(isset($config->$moduleName->$methodName->requiredFields)) $requiredFields = str_replace(' ', '', (string) $config->$moduleName->$methodName->requiredFields);
 
         $jsConfig = new stdclass();
         $jsConfig->webRoot        = $config->webRoot;
@@ -1187,19 +1189,56 @@ EOT;
         $jsConfig->clientLang     = $clientLang;
         $jsConfig->requiredFields = $requiredFields;
         $jsConfig->router         = $app->server->SCRIPT_NAME;
-        $jsConfig->save           = isset($lang->save) ? $lang->save : '';
+        $jsConfig->save           = $lang->save ?? '';
         $jsConfig->runMode        = $runMode;
-        $jsConfig->timeout        = isset($config->timeout) ? $config->timeout : '';
-        $jsConfig->pingInterval   = isset($config->pingInterval) ? $config->pingInterval : '';
+        $jsConfig->timeout        = $config->timeout ?? '';
+        $jsConfig->pingInterval   = $config->pingInterval ?? '';
         $jsConfig->onlybody       = zget($_GET, 'onlybody', 'no');
+        $jsConfig->version        = $config->version;
         $jsConfig->tabSession     = $config->tabSession;
         if($config->tabSession and helper::isWithTID()) $jsConfig->tid = zget($_GET, 'tid', '');
 
+        return $jsConfig;
+    }
+
+    /**
+     * 导出$config到js，因为js的createLink()方法需要获取config信息。
+     * Export the config vars for createLink() js version.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    static public function exportConfigVars()
+    {
+        if(!function_exists('json_encode')) return false;
+
+        global $lang;
+
+        $jsConfig = static::getJSConfigVars();
+
         $jsLang = new stdclass();
-        $jsLang->submitting = isset($lang->loading) ? $lang->loading : '';
-        $jsLang->save       = $jsConfig->save;
-        $jsLang->expand     = isset($lang->expand)  ? $lang->expand  : '';
-        $jsLang->timeout    = isset($lang->timeout) ? $lang->timeout : '';
+        $jsLang->submitting   = $lang->loading ?? '';
+        $jsLang->save         = $jsConfig->save;
+        $jsLang->expand       = $lang->expand ?? '';
+        $jsLang->timeout      = $lang->timeout ?? '';
+        $jsLang->confirmDraft = $lang->confirmDraft ?? '';
+        $jsLang->resume       = $lang->resume ?? '';
+        $jsLang->program      = zget($lang->program, 'common', '');
+        $jsLang->project      = zget($lang->project, 'common', '');
+        $jsLang->product      = zget($lang->product, 'common', '');
+        $jsLang->task         = zget($lang->task, 'common', '');
+        $jsLang->story        = zget($lang->story, 'common', '');
+        $jsLang->bug          = zget($lang->bug, 'common', '');
+        $jsLang->testcase     = zget($lang->testcase, 'common', '');
+        $jsLang->zahost       = zget($lang->zahost, 'common', '');
+        $jsLang->zanode       = zget($lang->zanode, 'common', '');
+        $jsLang->gitlab       = zget($lang->gitlab, 'common', '');
+        $jsLang->gogs         = zget($lang->gogs, 'common', '');
+        $jsLang->gitea        = zget($lang->gitea, 'common', '');
+        $jsLang->jenkins      = zget($lang->jenkins, 'common', '');
+        $jsLang->sonarqube    = zget($lang->sonarqube, 'common', '');
+        $jsLang->repo         = zget($lang->repo, 'common', '');
 
         $js  = static::start(false);
         $js .= 'window.config=' . json_encode($jsConfig) . ";\n";
@@ -1230,7 +1269,7 @@ EOT;
      * Set js value.
      *
      * @param  string   $key
-     * @param  mix      $value
+     * @param  mixed    $value
      * @static
      * @access public
      * @return string
@@ -1271,12 +1310,12 @@ EOT;
         elseif(is_bool($value))
         {
             $value = $value ? 'true' : 'false';
-            $js .= "{$prefix}{$key} = $value;";
+            $js   .= "{$prefix}{$key} = $value;";
         }
         else
         {
-            $value = addslashes($value);
-            $js .= "{$prefix}{$key} = '{$value}';";
+            $value = empty($value) ? '' : addslashes($value);
+            $js   .= "{$prefix}{$key} = '{$value}';";
         }
         $js .= static::end($newline = false);
         echo $js;

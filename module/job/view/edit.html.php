@@ -2,7 +2,7 @@
 /**
  * The edit view file of job module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2017 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     job
@@ -20,6 +20,7 @@
 <?php js::set('jkTask', $job->pipeline);?>
 <?php js::set('job', $job);?>
 <?php js::set('frameList', $lang->job->frameList);?>
+<?php js::set('jenkinsPipeline', $job->engine == 'jenkins' ? $job->pipeline : '');?>
 
 <div id='mainContent' class='main-row'>
   <div class='main-content'>
@@ -128,13 +129,17 @@
           <?php if($job->engine == 'jenkins'):?>
           <tr id="jenkinsServerTR">
             <th><?php echo $lang->job->server;?></th>
-            <td colspan='2' class='required'>
+            <td colspan='2'>
               <div class='table-row'>
-                <div class='table-col'><?php echo html::select('jkServer', $jenkinsServerList, $job->server, "class='form-control chosen'");?></div>
+                <div class='table-col'><?php echo html::select('jkServer', $jenkinsServerList, $job->server, "class='form-control chosen'"); ?></div>
                 <div class='table-col'>
                   <div class='input-group'>
                     <span class='input-group-addon'><?php echo $lang->job->pipeline;?></span>
-                    <?php echo html::select('jkTask', array('' => ''), $job->pipeline, "class='form-control chosen'");?>
+                    <div class='dropdown'>
+                    <?php echo html::hidden('jkTask');?>
+                    <button data-toggle='dropdown' type='button' class='btn jktask-label required text-right'  title=''><span class='text'><?php echo $job->pipeline;?></span> <span class='caret' style='margin-bottom: -1px'></span></button>
+                    <div id='dropMenuTasks' class='dropdown-menu search-list' data-ride='searchList' data-url=''></div>
+                    </div>
                   </div>
                 </div>
               </div>

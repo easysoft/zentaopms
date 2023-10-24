@@ -1,0 +1,3 @@
+.table-data th,
+.table-data .table-data-th {min-width: 60px; color: var(--color-slate-600);}
+

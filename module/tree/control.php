@@ -3,7 +3,7 @@
 /**
  * The control file of tree module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
@@ -302,6 +302,18 @@ class tree extends control
                 $this->view->root = $root;
             }
         }
+        elseif(strpos($viewType, 'host') !== false)
+        {
+            $position = array();
+            $title    = $this->lang->tree->groupMaintenance;
+            
+            $root = new stdclass();
+            $root->id   = 0;
+            $root->name = $this->lang->tree->groupMaintenance;
+            
+            $this->view->productID = 0;
+            $this->view->root      = $root;
+        }
 
         if($this->app->tab == 'project' and strpos($viewType, 'doc') === false)
         {
@@ -355,7 +367,7 @@ class tree extends control
         $parentModules = $this->tree->getParents($currentModuleID);
         $newModule     = (version_compare($execution->openedVersion, '4.1', '>') and $products) ? true : false;
 
-        $title      = $this->lang->tree->manageExecution;
+        $title      = $execution->multiple ? $this->lang->tree->manageExecution : $this->lang->tree->manageProject;
         $position[] = html::a($this->createLink('execution', 'task', "executionID=$rootID"), $execution->name);
         $position[] = $this->lang->tree->manageExecution;
 
@@ -363,6 +375,7 @@ class tree extends control
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
         $this->view->productID       = $productID;
+        $this->view->execution       = $execution;
         $this->view->allProject      = $executions;
         $this->view->newModule       = $newModule;
         $this->view->modules         = $this->tree->getTaskTreeMenu($rootID, $productID, $rooteModuleID = 0, array('treeModel', 'createTaskManageLink'), 'allModule');
@@ -386,8 +399,7 @@ class tree extends control
         if(!empty($_POST))
         {
             $this->tree->update($moduleID);
-            echo js::alert($this->lang->tree->successSave);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
         $module = $this->tree->getById($moduleID);
@@ -401,7 +413,12 @@ class tree extends control
             $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch, 'noMainBranch|nodeleted');
         }
 
-        if($type == 'doc') $this->view->libs = $this->loadModel('doc')->getLibs('all', $extra = 'withObject', '', 0, 'book');
+        if($type == 'doc')
+        {
+            $docLib   = $this->loadModel('doc')->getLibById($module->root);
+            $objectID = isset($docLib->{$docLib->type}) ? $docLib->{$docLib->type} : 0;
+            $this->view->libs = $this->doc->getLibs($docLib->type, '', '', $objectID, 'book');
+        }
 
         $this->view->module = $module;
         $this->view->type   = $type;
@@ -505,11 +522,11 @@ class tree extends control
         {
             $module      = $this->tree->getByID($moduleID);
             $confirmLang = $this->lang->tree->confirmDelete;
-            if($module->type == 'doc') $confirmLang = $this->lang->tree->confirmDeleteMenu;
+            if($module->type == 'doc' or $module->type == 'api') $confirmLang = $this->lang->tree->confirmDeleteMenu;
             if($module->type == 'line') $confirmLang = $this->lang->tree->confirmDeleteLine;
             if($module->type == 'host') $confirmLang = $this->lang->tree->confirmDeleteHost;
             if(strpos($this->config->tree->groupTypes, ",$module->type,") !== false) $confirmLang = $this->lang->tree->confirmDeleteGroup;
-            die(js::confirm($confirmLang, $this->createLink('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=yes")));
+            return print(js::confirm($confirmLang, $this->createLink($this->app->rawModule, $this->app->rawMethod, "rootID=$rootID&moduleID=$moduleID&confirm=yes")));
         }
         else
         {
@@ -687,5 +704,21 @@ class tree extends control
         $this->view->actions = $this->loadModel('action')->getList('module', $productID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
+    }
+
+    /**
+     * Create module by ajax.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxCreateModule()
+    {
+        if(!helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'message' => ''));;
+
+        $module = $this->tree->createModule();
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'module' => $module));
     }
 }

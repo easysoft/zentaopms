@@ -87,7 +87,7 @@ class programModel extends model
 
         $dao = $this->dao->select('id, name, program')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
             ->beginIF($shadow !== 'all')->andWhere('shadow')->eq((int)$shadow)->fi()
             ->beginIF($mode == 'assign')->andWhere('program')->eq($programID)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
@@ -191,10 +191,12 @@ class programModel extends model
             ->where('type')->in('program,project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
+            ->beginIF($status != 'all' and $status != 'unclosed')->andWhere('status')->in($status)->fi()
+            ->beginIF($status == 'unclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF($this->app->rawMethod == 'browse' and $type === 'top')->andWhere('parent')->eq(0)->fi()
             ->beginIF($this->app->rawMethod == 'browse' and ($type === 'child' or !$this->app->user->admin))->andWhere('id')->in($objectIdList)->fi()
             ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($userViewIdList)->fi()
+            ->beginIF(defined('RUN_MODE') && RUN_MODE == 'api' && !$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -301,7 +303,7 @@ class programModel extends model
             ->fetchGroup('product');
 
         /* Get all products linked projects. */
-        $projectGroup = $this->dao->select('t1.product,t2.id,t2.name,t2.status,t2.end,t2.parent,t2.path')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $projectGroup = $this->dao->select('t1.product,t2.id,t2.name,t2.status,t2.progress,t2.end,t2.parent,t2.path')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.product')->in($productPairs)
@@ -333,19 +335,6 @@ class programModel extends model
         $executionPairs = array();
         foreach($doingExecutions as $execution) $executionPairs[$execution->id] = $execution->id;
 
-        /* Compute executions and projects progress. */
-        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason, execution')
-            ->from(TABLE_TASK)
-            ->where('(execution')->in($executionPairs)
-            ->orWhere('project')->in($projectPairs)
-            ->markRight(1)
-            ->andWhere('parent')->lt(1)
-            ->andWhere('deleted')->eq(0)
-            ->fetchGroup('execution', 'id');
-
-        $hours        = $this->computeProgress($tasks);
-        $projectHours = $this->getProgressList();
-
         /* Group data by product. */
         foreach($productGroup as $programID => $products)
         {
@@ -373,12 +362,11 @@ class programModel extends model
 
                     if(!empty($execution))
                     {
-                        $execution->hours = zget($hours, $execution->id, array());
                         if(helper::diffDate(helper::today(), $execution->end) > 0) $execution->delay = 1;
                     }
 
                     $project->execution = $execution;
-                    $project->hours['progress']   = zget($projectHours, $project->id, array());
+                    $project->hours = array('progress' => $project->progress);
 
                     /* Convert predefined HTML entities to characters. */
                     $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
@@ -516,44 +504,6 @@ class programModel extends model
     }
 
     /**
-     * Compute progress for project or execution.
-     *
-     * @param  array $tasks
-     * @access public
-     * @return void
-     */
-    public function computeProgress($tasks)
-    {
-        $hours = array();
-        foreach($tasks as $projectID => $projectTasks)
-        {
-            $hour = new stdclass();
-            $hour->totalConsumed = 0;
-            $hour->totalEstimate = 0;
-            $hour->totalLeft     = 0;
-
-            foreach($projectTasks as $task)
-            {
-                $hour->totalConsumed += $task->consumed;
-                $hour->totalEstimate += $task->estimate;
-                if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
-            }
-            $hours[$projectID] = $hour;
-        }
-
-        foreach($hours as $hour)
-        {
-            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
-            $hour->totalConsumed = round($hour->totalConsumed, 1);
-            $hour->totalLeft     = round($hour->totalLeft, 1);
-            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
-            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0;
-        }
-
-        return $hours;
-    }
-
-    /**
      * Get project list data.
      *
      * @param  int       $programID
@@ -594,15 +544,13 @@ class programModel extends model
             if($browseType == 'bySearch' and $this->session->projectQuery == false) $this->session->set('projectQuery', ' 1 = 1');
         }
 
-        $query       = str_replace('`id`','t1.id', $this->session->projectQuery);
-        $projectList = $this->dao->select('distinct t1.*')->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
-            ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
-            ->where('t1.deleted')->eq('0')
+        $query = str_replace('`id`','t1.id', $this->session->projectQuery);
+        $stmt  = $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1');
+        if($this->cookie->involved || $involved) $stmt->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID');
+        $stmt->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF($browseType == 'bysearch' and $query)->andWhere($query)->fi()
             ->andWhere('t1.type')->eq('project')
-            ->beginIF($this->cookie->involved or $involved)->andWhere('t2.type')->eq('project')->fi()
             ->beginIF(!in_array($browseType, array('all', 'undone', 'bysearch', 'review', 'unclosed'), true))->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone' or $browseType == 'unclosed')->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF($browseType == 'review')
@@ -610,23 +558,23 @@ class programModel extends model
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
             ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($this->cookie->involved or $involved)
-            ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
-            ->orWhere('t1.PM')->eq($this->app->user->account)
-            ->orWhere('t2.account')->eq($this->app->user->account)
-            ->orWhere('(t3.user')->eq($this->app->user->account)
-            ->andWhere('t3.deleted')->eq(0)
-            ->markRight(1)
-            ->orWhere("CONCAT(',', t1.whitelist, ',')")->like("%,{$this->app->user->account},%")
-            ->markRight(1)
-            ->fi()
-            ->orderBy($orderBy)
-            ->page($pager, 't1.id')
-            ->fetchAll('id');
+            ->beginIF(!$queryAll and !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi();
+        if($this->cookie->involved || $involved)
+        {
+            $stmt->andWhere('t2.type')->eq('project')
+                ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
+                ->orWhere('t1.PM')->eq($this->app->user->account)
+                ->orWhere('t2.account')->eq($this->app->user->account)
+                ->orWhere('(t3.user')->eq($this->app->user->account)
+                ->andWhere('t3.deleted')->eq(0)
+                ->markRight(1)
+                ->orWhere("CONCAT(',', t1.whitelist, ',')")->like("%,{$this->app->user->account},%")
+                ->markRight(1);
+        }
+        $projectList = $stmt->orderBy($orderBy)->page($pager)->fetchAll('id');
 
         /* Determine how to display the name of the program. */
-        if($programTitle and $this->config->systemMode == 'ALM')
+        if($programTitle and in_array($this->config->systemMode, array('ALM', 'PLM')))
         {
             $programList = $this->getPairs();
             foreach($projectList as $id => $project)
@@ -681,58 +629,6 @@ class programModel extends model
     }
 
     /**
-     * Get program and project progress list.
-     *
-     * @access public
-     * @return array
-     */
-    public function getProgressList()
-    {
-        $totalProgress = array();
-        $projectCount  = array();
-        $userPRJCount  = array();
-        $progressList  = array();
-        $programPairs  = $this->getPairs();
-        $projectStats  = $this->getProjectStats(0, 'all', 0, 'id_desc', null, 0, 0, true);
-
-        /* Add program progress. */
-        foreach(array_keys($programPairs) as $programID)
-        {
-            $totalProgress[$programID] = 0;
-            $projectCount[$programID]  = 0;
-            $userPRJCount[$programID]  = 0;
-            $progressList[$programID]  = 0;
-
-            foreach($projectStats as $project)
-            {
-                if(strpos($project->path, ',' . $programID . ',') === false) continue;
-
-                /* The number of projects under this program that the user can view. */
-                if(strpos(',' . $this->app->user->view->projects . ',', ',' . $project->id . ',') !== false) $userPRJCount[$programID] ++;
-
-                $totalProgress[$programID] += $project->hours->progress;
-                $projectCount[$programID] ++;
-            }
-
-            if(empty($projectCount[$programID])) continue;
-
-            /* Program progress can't see when this user don't have all projects priv. */
-            if(!$this->app->user->admin and $userPRJCount[$programID] != $projectCount[$programID])
-            {
-                unset($progressList[$programID]);
-                continue;
-            }
-
-            $progressList[$programID] = round($totalProgress[$programID] / $projectCount[$programID]);
-        }
-
-        /* Add project progress. */
-        foreach($projectStats as $project) $progressList[$project->id] = $project->hours->progress;
-
-        return $progressList;
-    }
-
-    /**
      * Create a program.
      *
      * @access private
@@ -744,7 +640,9 @@ class programModel extends model
             ->setDefault('status', 'wait')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('parent', 0)
+            ->setDefault('code', '')
             ->setDefault('openedDate', helper::now())
+            ->cleanINT('parent')
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
@@ -752,7 +650,7 @@ class programModel extends model
             ->add('type', 'program')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->create['id'], $this->config->allowedTags)
-            ->remove('delta,future,contactListMenu')
+            ->remove('delta,future,contactListMenu,uid')
             ->get();
 
         /* Redefines the language entries for the fields in the project table. */
@@ -769,7 +667,7 @@ class programModel extends model
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program' and `parent` = $program->parent and `deleted` = '0'")
+            ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program' and `parent` = " . $this->dao->sqlobj->quote($program->parent) . " and `deleted` = '0'")
             ->checkFlow()
             ->exec();
 
@@ -809,6 +707,7 @@ class programModel extends model
             ->setDefault('end', '')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
+            ->cleanINT('parent')
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
@@ -819,7 +718,7 @@ class programModel extends model
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid,delta,future,syncPRJUnit,exchangeRate,contactListMenu')
+            ->remove('id,uid,delta,future,syncPRJUnit,exchangeRate,contactListMenu')
             ->get();
 
         $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);
@@ -849,7 +748,7 @@ class programModel extends model
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->checkIF(!empty($program->name), 'name', 'unique', "id!=$programID and `type`='program' and `parent` = $program->parent and `deleted` = '0'")
+            ->checkIF(!empty($program->name), 'name', 'unique', "id!=$programID and `type`='program' and `parent` = " . $this->dao->sqlobj->quote($program->parent) . " and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($programID)
             ->limit(1)
@@ -874,8 +773,8 @@ class programModel extends model
             $this->loadModel('user');
             if($program->acl != 'open') $this->user->updateUserView($programID, 'program');
 
-	    /* If the program changes, the authorities of programs and projects under the program should be refreshed. */
-	    $children = $this->dao->select('id, type')->from(TABLE_PROGRAM)->where('path')->like("%,{$programID},%")->andWhere('id')->ne($programID)->andWhere('acl')->eq('program')->fetchPairs('id', 'type');
+            /* If the program changes, the authorities of programs and projects under the program should be refreshed. */
+            $children = $this->dao->select('id, type')->from(TABLE_PROGRAM)->where('path')->like("%,{$programID},%")->andWhere('id')->ne($programID)->andWhere('acl')->eq('program')->fetchPairs('id', 'type');
             foreach($children as $id => $type) $this->user->updateUserView($id, $type);
             if(isset($program->PM) and $program->PM != $oldProgram->PM)
             {
@@ -888,11 +787,29 @@ class programModel extends model
                 $this->processNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
 
                 /* Move product to new top program. */
-                if($oldProgram->parent == 0)
+                $oldTopProgram = $this->getTopByPath($oldProgram->path);
+                $newTopProgram = $this->getTopByID($programID);
+
+                if($oldTopProgram != $newTopProgram)
                 {
-                    $oldTopProgram = $this->getTopByPath($oldProgram->path);
-                    $newTopProgram = $this->getTopByID($programID);
-                    if($oldTopProgram != $newTopProgram) $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopProgram)->where('program')->eq($oldTopProgram)->exec();
+                    if($oldProgram->parent == 0)
+                    {
+                        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopProgram)->where('program')->eq($oldTopProgram)->exec();
+                    }
+                    else
+                    {
+                        /* Get the shadow products that produced by the program's no product projects. */
+                        $shadowProducts = $this->dao->select('t1.id')->from(TABLE_PRODUCT)->alias('t1')
+                            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.product')
+                            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
+                            ->where('t3.path')->like("%,$programID,%")
+                            ->andWhere('t3.type')->eq('project')
+                            ->andWhere('t3.hasProduct')->eq('0')
+                            ->andWhere('t1.shadow')->eq('1')
+                            ->fetchPairs();
+                        $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopProgram)->where('id')->in($shadowProducts)->exec();
+                    }
+
                 }
             }
 
@@ -1111,7 +1028,7 @@ class programModel extends model
      */
     public function hasUnfinished($program)
     {
-        $unfinished = $this->dao->select("count(IF(id != {$program->id}, true, null)) as count")->from(TABLE_PROJECT)
+        $unfinished = $this->dao->select("count(IF(id != {$program->id}, 1, null)) as count")->from(TABLE_PROJECT)
             ->where('type')->in('program, project')
             ->andWhere('path')->like($program->path . '%')
             ->andWhere('status')->ne('closed')
@@ -1270,7 +1187,7 @@ class programModel extends model
         $treeMenu = array();
         foreach($modules as $module)
         {
-            if(strpos($mode, 'all') !== false and strpos(",{$this->app->user->view->programs},", ",{$module->id},") === false and (!$this->app->user->admin)) continue;
+            if(strpos($mode, 'all') === false and strpos(",{$this->app->user->view->programs},", ",{$module->id},") === false and (!$this->app->user->admin)) continue;
 
             $moduleName    = $showRoot ? '/' : '';
             $parentModules = explode(',', $module->path);
@@ -1379,6 +1296,155 @@ class programModel extends model
     }
 
     /**
+     * Refresh stats fields(estimate,consumed,left,progress) of program, project, execution.
+     *
+     * @param  bool $refreshAll
+     * @access public
+     * @return void
+     */
+    public function refreshStats($refreshAll = false)
+    {
+        $updateTime = zget($this->app->config->global, 'projectStatsTime', '');
+        $now        = helper::now();
+
+        /*
+         * If projectStatsTime is before two weeks ago, refresh all executions directly.
+         * Else only refresh the latest executions in action table.
+         */
+        $projects = array();
+        if($updateTime < date('Y-m-d', strtotime('-14 days')) or $refreshAll)
+        {
+            $projects = $this->dao->select('id,project,model,deleted')->from(TABLE_PROJECT)->fetchAll('id');
+        }
+        else
+        {
+            $projects = $this->dao->select('distinct t1.project,t2.model,t2.deleted')->from(TABLE_ACTION)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.`date`')->ge($updateTime)
+                ->fetchAll('project');
+            if(empty($projects)) return;
+        }
+
+        /* 1. Get summary and members of executions to be refreshed. */
+        $summary = $this->dao->select('execution, SUM(t1.estimate) AS totalEstimate, SUM(t1.consumed) AS totalConsumed, SUM(t1.`left`) AS totalLeft')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.parent')->le(0) // Ignore child task.
+            ->beginIF(!empty($projects))->andWhere('t1.project')->in(array_keys($projects))->fi()
+            ->groupBy('execution')
+            ->fetchAll();
+
+        $teamMembers = $this->dao->select('t1.root, COUNT(1) AS members')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
+            ->where('t1.type')->eq('project')
+            ->beginIF(!empty($projects))->andWhere('t1.root')->in(array_keys($projects))->fi()
+            ->andWhere('t2.deleted')->eq(0)
+            ->groupBy('t1.root')
+            ->fetchPairs('root');
+
+        $projectsPairs = $this->dao->select('id,deleted')->from(TABLE_PROJECT)->fetchPairs();
+
+        /* 2. Get all parents to be refreshed. */
+        $executions = array();
+        foreach($summary as $execution) $executions[$execution->execution] = $execution->execution;
+        $paths = $this->dao->select('id,path')->from(TABLE_PROJECT)->where('id')->in($executions)->fetchAll();
+        $executionPaths = array();
+        foreach($paths as $path) $executionPaths[$path->id] = explode(',', trim($path->path, ','));
+
+        /* 3. Compute stats of execution and parents. */
+        $stats = array();
+        foreach($summary as $execution)
+        {
+            $executionID = $execution->execution;
+            foreach($executionPaths[$executionID] as $nodeID)
+            {
+                if(!isset($stats[$nodeID])) $stats[$nodeID] = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'teamCount' => 0, 'totalLeftNotDel' => 0, 'totalConsumedNotDel' => 0);
+                $stats[$nodeID]['totalEstimate'] += $execution->totalEstimate;
+                $stats[$nodeID]['totalConsumed'] += $execution->totalConsumed;
+                $stats[$nodeID]['totalLeft']     += $execution->totalLeft;
+                if(empty($projectsPairs[$execution->execution]) && empty($projectsPairs[$nodeID]))
+                {
+                    $stats[$nodeID]['totalConsumedNotDel'] += $execution->totalConsumed;
+                    $stats[$nodeID]['totalLeftNotDel']     += $execution->totalLeft;
+                }
+            }
+        }
+
+        $this->loadModel('project');
+        foreach($projects as $projectID => $project)
+        {
+            if($project->model != 'waterfall') continue;
+
+            $projectStats = $this->project->getWaterfallPVEVAC($projectID);
+            $stats[$projectID]['totalEstimate'] = $projectStats['PV'];
+            $stats[$projectID]['totalConsumed'] = $projectStats['AC'];
+            $stats[$projectID]['totalLeft']     = $projectStats['left'];
+            if(empty($project->deleted))
+            {
+                $stats[$projectID]['totalConsumedNotDel'] = $projectStats['AC'];
+                $stats[$projectID]['totalLeftNotDel']     = $projectStats['left'];
+            }
+        }
+
+        foreach($teamMembers as $projectID => $teamCount)
+        {
+            if(!isset($stats[$projectID])) $stats[$projectID] = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'teamCount' => 0, 'totalConsumedNotDel' => 0, 'totalLeftNotDel' => 0);
+            $stats[$projectID]['teamCount'] = $teamCount;
+        }
+
+        /* 4. Refresh stats to db. */
+        foreach($stats as $projectID => $project)
+        {
+            $totalRealNotDel = $project['totalConsumedNotDel'] + $project['totalLeftNotDel'];
+            $progress        = $totalRealNotDel ? floor($project['totalConsumedNotDel'] / $totalRealNotDel * 1000) / 1000 * 100 : 0;
+            $this->dao->update(TABLE_PROJECT)
+                ->set('progress')->eq($progress)
+                ->set('teamCount')->eq($project['teamCount'])
+                ->set('estimate')->eq($project['totalEstimate'])
+                ->set('consumed')->eq($project['totalConsumed'])
+                ->set('left')->eq($project['totalLeft'])
+                ->where('id')->eq($projectID)
+                ->exec();
+        }
+
+        /* 5. Update programStatsTime. */
+        $projectList = $this->dao->select('id,progress,path')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('parent')->ne(0)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+        $programProgress = array();
+        foreach($projectList as $projectID => $project)
+        {
+            $path = explode(',', trim($project->path, ','));
+
+            foreach($path as $programID)
+            {
+                if($programID == $projectID) continue;
+                $programProgress[$programID][] = $project->progress;
+            }
+        }
+
+        foreach($programProgress as $programID => $progress)
+        {
+            $count = count($progress);
+            $sum = array_sum($progress);
+            $average = round($sum / $count, 2);
+            $this->dao->update(TABLE_PROJECT)
+                ->set('progress')->eq($average)
+                ->where('id')->eq($programID)
+                ->exec();
+        }
+
+        /* 6. Update projectStatsTime in config. */
+        $this->loadModel('setting')->setItem('system.common.global.projectStatsTime', $now);
+        $this->app->config->global->projectStatsTime = $now;
+
+        /* 7. Clear actions older than 30 days. */
+        $this->loadModel('action')->cleanActions();
+    }
+
+    /**
      * Get project stats.
      *
      * @param  int    $programID
@@ -1396,81 +1462,21 @@ class programModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStats($browseType);
 
-        /* Init vars. */
         $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
-
         if(empty($projects)) return array();
 
-        $projectKeys = array_keys($projects);
-        $stats       = array();
-        $hours       = array();
-        $emptyHour   = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
-        $leftTasks   = array();
-        $teamMembers = array();
-
-        $executions = $this->dao->select('id')->from(TABLE_EXECUTION)
-            ->where('deleted')->eq(0)
-            ->andWhere('project')->in($projectKeys)
-            ->andWhere('type')->in('sprint,stage,kanban')
-            ->fetchAll('id');
-
-        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason, execution')
-            ->from(TABLE_TASK)
-            ->where('project')->in($projectKeys)
-            ->andWhere('parent')->lt(1)
-            ->andWhere('deleted')->eq(0)
-            ->fetchGroup('project', 'id');
-
-        /* Compute totalEstimate, totalConsumed, totalLeft. */
-        foreach($tasks as $projectID => $projectTasks)
-        {
-            $hour = (object)$emptyHour;
-            foreach($projectTasks as $task)
-            {
-                if(isset($executions[$task->execution]))
-                {
-                    $hour->totalConsumed += $task->consumed;
-                    $hour->totalEstimate += $task->estimate;
-
-                    if(strpos('cancel,closed', $task->status) === false) $hour->totalLeft += $task->left;
-                }
-            }
-            $hours[$projectID] = $hour;
-        }
-
-        /* Compute totalReal and progress. */
-        $progressList = $this->loadModel('project')->getWaterfallProgress(array_keys($hours));
-        foreach($hours as $projectID => $hour)
-        {
-            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
-            $hour->totalConsumed = round($hour->totalConsumed, 1);
-            $hour->totalLeft     = round($hour->totalLeft, 1);
-            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
-            $hour->progress      = $projects[$projectID]->model == 'waterfall' ? $progressList[$projectID] : ($hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0);
-        }
-
-        /* Get the number of left tasks. */
-        if($this->cookie->projectType and $this->cookie->projectType == 'bycard')
-        {
-            $leftTasks = $this->dao->select('t2.parent as project, count(*) as tasks')->from(TABLE_TASK)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-                ->where('t1.execution')->in(array_keys($executions))
-                ->andWhere('t1.status')->notIn('cancel,closed')
-                ->groupBy('t2.parent')
-                ->fetchAll('project');
-        }
+        $leftTasks = ($this->cookie->projectType and $this->cookie->projectType == 'bycard') ? $this->loadModel('project')->getProjectLeftTasks(array_keys($projects)) : array();
 
         /* Get the members of project teams. */
         $teamMembers = $this->dao->select('t1.root,t1.account')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in($projectKeys)
+            ->where('t1.root')->in(array_keys($projects))
             ->andWhere('t1.type')->eq('project')
             ->andWhere('t2.deleted')->eq(0)
             ->fetchGroup('root', 'account');
 
         /* Process projects. */
-        foreach($projects as $key => $project)
+        foreach($projects as $projectID => $project)
         {
             if($project->end == '0000-00-00') $project->end = '';
 
@@ -1481,18 +1487,12 @@ class programModel extends model
                 if($delay > 0) $project->delay = $delay;
             }
 
-            /* Process the hours. */
-            $project->hours = isset($hours[$project->id]) ? $hours[$project->id] : (object)$emptyHour;
+            $project->teamMembers = isset($teamMembers[$projectID]) ? array_keys($teamMembers[$projectID]) : array();
+            $project->leftTasks   = isset($leftTasks[$projectID]) ? $leftTasks[$projectID]->tasks : '—';
 
-            $project->teamCount   = isset($teamMembers[$project->id]) ? count($teamMembers[$project->id]) : 0;
-            $project->leftTasks   = isset($leftTasks[$project->id]) ? $leftTasks[$project->id]->tasks : '—';
-            $project->teamMembers = isset($teamMembers[$project->id]) ? array_keys($teamMembers[$project->id]) : array();
-
-            /* Convert predefined HTML entities to characters. */
-            $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
-
-            $stats[$key] = $project;
+            $stats[$projectID] = $project;
         }
+
         return $stats;
     }
 
@@ -1649,7 +1649,7 @@ class programModel extends model
         if($program) return $program->id;
 
         $account  = isset($this->app->user->account) ? $this->app->user->account : '';
-        $minBegin = $this->dao->select('min(begin) as min')->from(TABLE_PROJECT)->where('deleted')->eq(0)->fetch('min');
+        $minBegin = $this->dao->select('min(`begin`) as min')->from(TABLE_PROJECT)->where('deleted')->eq(0)->fetch('min');
 
         $program = new stdclass();
         $program->name          = $this->lang->program->defaultProgram;
@@ -1679,5 +1679,17 @@ class programModel extends model
         $this->loadModel('action')->create('program', $programID, 'openedbysystem');
 
         return $programID;
+    }
+
+    /**
+     * Check the privilege.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return bool
+     */
+    public function checkPriv($programID)
+    {
+        return !empty($programID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->programs},", ",{$programID},") !== false));
     }
 }

@@ -1,13 +1,29 @@
-#int-dropdown {margin-left: -8px; border-radius: 4px; border: 1px solid #0c64eb;}
-#projectTaskForm table tbody tr td {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-.table td.c-estimate, .table td.c-consumed, .table td.c-left {padding-right: 12px;}
-.c-estimate {text-align: right;}
-.c-consumed {text-align: right;}
-.c-deadline {text-align: center;}
-.c-left {text-align: right;}
-.table-footer {z-index: 1;}
-.btn-toolbar > .btn {margin-right: 5px !important;}
-#taskList .c-progress{padding-right: 8px; text-align: right;}
-#datatable-taskList .c-progress{padding-right: 8px; text-align: right;}
-.c-finishedBy, .c-lastEditedBy {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-#executionTaskForm table tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}
+body {margin-bottom: 10px;}
+#heading .btn-group {display: inline-block !important;}
+#mainMenu .btn-group {gap: 0px;}
+.btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
+.btn-group button.dropdown-toggle.btn-primary {padding:6px;}
+
+#main {padding-bottom: 0;}
+#heading {display: flex;}
+#dtable .dtable-header, #executionTaskForm .dtable-rows {z-index: 4;}
+.table-header.fixed-right > .btn-toolbar {right: 0; background-color: #f1f5f9;}
+
+#dtable input[type=checkbox] {margin: 0px}
+
+.table-footer {border-top: 1px solid #fff4ea; padding-left: 12px;}
+.table-footer .pager{z-index: 10}
+#dtable .scrollbar, .table-header.fixed-right {z-index: 11}
+
+.dtable {--dtable-checked-bg: #fff4ea; --dtable-border-color: #f4f5f7}
+.dtable-row {border-bottom-style: solid;}
+.dtable-cell-html a{color: #2463c7}
+.dtable-cell[data-sort='up']   .dtable-sort:before {color: #000; opacity: 1}
+.dtable-cell[data-sort='down'] .dtable-sort:after  {color: #000; opacity: 1}
+.dtable .toggle-icon {border-radius: 50%; border-style: solid;}
+.dtable-nested-indent, .dtable-cell-html .icon-angle-double-right {display: none;}
+
+.dtable-row.is-normal .dtable-cell[data-col="name"] {padding-left: 20px;}
+.dtable-cell[data-col="actions"] > .dtable-cell-content .c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}
+
+span.delayed {display: inline-block; height: 20px; line-height: 18px; background: #FFEBEB; color: #FB2B2B; border-radius: 20px; padding: 2px 8px; margin-left: -8px;}

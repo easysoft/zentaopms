@@ -87,6 +87,7 @@ $config->dev->group['mail']            = 'admin';
 $config->dev->group['backup']          = 'admin';
 $config->dev->group['cron']            = 'admin';
 $config->dev->group['dev']             = 'admin';
+$config->dev->group['editor']          = 'admin';
 $config->dev->group['custom']          = 'admin';
 $config->dev->group['score']           = 'admin';
 $config->dev->group['config']          = 'admin';
@@ -241,5 +242,59 @@ $config->dev->postParams['testcase']['create']['expect']       = 'string';
 $config->dev->postParams['testcase']['create']['mailto']       = 'string';
 $config->dev->postParams['testcase']['create']['keywords']     = 'string';
 
+$config->dev->navTypes = array('second', 'third', 'tag');
+
 $config->disableFeature = array();
 if(!helper::hasFeature('waterfall')) $config->disableFeature = array('design', 'stage', 'programplan', 'weekly', 'researchplan', 'researchreport', 'gapanalysis');
+
+$config->dev->projectMenus    = array('project', 'scrum', 'waterfall', 'kanbanProject');
+$config->dev->hideMainMenu    = array('admin', 'kanban');
+if($config->vision == 'lite')
+{
+    $config->dev->projectMenus = array('project', 'kanbanProject');
+    $config->dev->hideMainMenu = array('execution', 'kanban', 'admin');
+}
+
+$config->dev->linkMethods['my']['my-calendar'] = array('my', 'todo');
+
+$config->dev->skipMenus['first']  = array('project', 'product');
+$config->dev->skipMenus['second'] = array('menu_storyGroup', 'menu_story', 'menu_other', 'menu_more');
+$config->dev->skipMenus['third']  = array('bysearch');
+if($config->vision == 'lite')
+{
+    $config->dev->skipMenus['first'][] = 'execution';
+    $config->dev->skipMenus['second']  = array('menu_other', 'menu_more');
+}
+
+$config->dev->skipMenus['scrum'] = array();
+if(!helper::hasFeature('scrum_issue')      and !helper::hasFeature('agileplus_issue'))      $config->dev->skipMenus['scrum']['issue']      = 'otherDropMenu_issue';
+if(!helper::hasFeature('scrum_risk')       and !helper::hasFeature('agileplus_risk'))       $config->dev->skipMenus['scrum']['risk']       = 'otherDropMenu_risk';
+if(!helper::hasFeature('scrum_meeting')    and !helper::hasFeature('agileplus_meeting'))    $config->dev->skipMenus['scrum']['meeting']    = 'otherDropMenu_meeting';
+if(!helper::hasFeature('scrum_measrecord') and !helper::hasFeature('agileplus_measrecord')) $config->dev->skipMenus['scrum']['measrecord'] = 'otherDropMenu_report';
+
+$config->dev->skipMenus['waterfall'] = array();
+if(!helper::hasFeature('waterfall_track')        and !helper::hasFeature('waterfallplus_track'))        $config->dev->skipMenus['waterfall']['track']        = 'menu_track';
+if(!helper::hasFeature('waterfall_researchplan') and !helper::hasFeature('waterfallplus_researchplan')) $config->dev->skipMenus['waterfall']['researchplan'] = 'otherDropMenu_research';
+if(!helper::hasFeature('waterfall_issue')        and !helper::hasFeature('waterfallplus_issue'))        $config->dev->skipMenus['waterfall']['issue']        = 'otherDropMenu_issue';
+if(!helper::hasFeature('waterfall_risk')         and !helper::hasFeature('waterfallplus_risk'))         $config->dev->skipMenus['waterfall']['risk']         = 'otherDropMenu_risk';
+if(!helper::hasFeature('waterfall_opportunity')  and !helper::hasFeature('waterfallplus_opportunity'))  $config->dev->skipMenus['waterfall']['opportunity']  = 'otherDropMenu_opportunity';
+if(!helper::hasFeature('waterfall_process')      and !helper::hasFeature('waterfallplus_process'))      $config->dev->skipMenus['waterfall']['process']      = 'otherDropMenu_pssp';
+if(!helper::hasFeature('waterfall_measrecord')   and !helper::hasFeature('waterfallplus_measrecord'))   $config->dev->skipMenus['waterfall']['measrecord']   = 'otherDropMenu_report';
+if(!helper::hasFeature('waterfall_auditplan')    and !helper::hasFeature('waterfallplus_auditplan'))    $config->dev->skipMenus['waterfall']['auditplan']    = 'otherDropMenu_auditplan';
+if(!helper::hasFeature('waterfall_meeting')      and !helper::hasFeature('waterfallplus_meeting'))      $config->dev->skipMenus['waterfall']['meeting']      = 'otherDropMenu_meeting';
+if(!helper::hasFeature('waterfall_gapanalysis')  and !helper::hasFeature('waterfallplus_gapanalysis'))  $config->dev->skipMenus['waterfall']['gapanalysis']  = 'otherDropMenu_gapanalysis';
+
+$config->dev->skipMenus['execution'] = array();
+if(!helper::hasFeature('issue'))        $config->dev->skipMenus['execution']['issue']        = 'otherDropMenu_issue';
+if(!helper::hasFeature('risk'))         $config->dev->skipMenus['execution']['risk']         = 'otherDropMenu_risk';
+if(!helper::hasFeature('opportunity'))  $config->dev->skipMenus['execution']['opportunity']  = 'otherDropMenu_opportunity';
+if(!helper::hasFeature('process'))      $config->dev->skipMenus['execution']['process']      = 'otherDropMenu_pssp';
+if(!helper::hasFeature('auditplan'))    $config->dev->skipMenus['execution']['auditplan']    = 'otherDropMenu_auditplan';
+if(!helper::hasFeature('meeting'))      $config->dev->skipMenus['execution']['meeting']      = 'otherDropMenu_meeting';
+
+$config->dev->liteTagMethod['my-contribute'] = 'contribute_task';
+
+$config->dev->onlyMainMenu = array('kanban');
+
+$config->dev->skipTags['project-testcase'] = array('suite', 'autocase');
+$config->dev->skipTags['testcase-browse']  = array('casetype', 'suite', 'autocase');

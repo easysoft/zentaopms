@@ -1,0 +1,16 @@
+.history .btn-mini {width: 14px; height: 14px; overflow: hidden; color: var(--color-slate-500); border-radius: 1px; border: 1px solid var(--color-slate-500); box-shadow: none;}
+.history .btn-comment {font-size: 12px; font-weight: 400; color: var(--color-slate-700);}
+.history .btn-edit-comment {position: absolute !important;}
+.history-list .marker {color: var(--color-slate-700); border-color: var(--color-gray-200); background: var(--color-slate-50);}
+.history-list .comment-content {background: var(--color-gray-100);}
+.history-list.sort-reverse {flex-direction: column-reverse;}
+.history-changes {display: none;}
+.history-changes.show {display: block; }
+
+.history-list > li strong {color: var(--color-slate-800);}
+.history-list > li {position: relative;}
+.history-list > li::before {display: block; content: ''; position: absolute; width: 1px; height: 100%; background: var(--color-gray-200); top: 12px; left: 10px;}
+.history-list.sort-reverse > li::before {display: block; content: ''; position: absolute; width: 1px; height: 100%; background: var(--color-gray-200); top: 12px; left: 10px;}
+.history-list.sort-reverse > li:last-child::before {display: block;}
+.history-list > li:last-child::before {display: none;}
+.history-list.sort-reverse > li:first-child::before {display: none;}

@@ -29,5 +29,8 @@ $config->transfer->dateMatch = '/[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3
 
 $config->transfer->hasChildDataFields = explode(',', 'task,story');
 
+$config->transfer->requiredFields = array('module', 'pri');
+$config->transfer->actionModule   = array('task');
+
 $config->transfer->lazyLoading     = false;
 $config->transfer->showImportCount = 20;

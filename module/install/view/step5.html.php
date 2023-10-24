@@ -2,7 +2,7 @@
 /**
  * The html template file of step4 method of install module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -67,7 +67,7 @@
             <th></th><td><?php echo html::checkBox('importDemoData', $lang->install->importDemoData);?></td>
           </tr>
           <tr class='text-center'>
-            <td colspan='2'><?php echo html::submitButton();?></td>
+            <td colspan='2'><?php echo html::submitButton($config->inQuickon ? $lang->install->next : $lang->save);?></td>
           </tr>
         </table>
       </form>

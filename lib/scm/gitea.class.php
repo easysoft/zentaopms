@@ -218,8 +218,8 @@ class Gitea
         $path  = ltrim($path, DIRECTORY_SEPARATOR);
         $count = $count == 0 ? '' : "-n $count";
         /* compatible with svn. */
-        if($fromRevision == 'HEAD' and $this->branch) $fromRevision = $this->branch;
-        if($toRevision   == 'HEAD' and $this->branch) $toRevision   = $this->branch;
+        if($fromRevision === 'HEAD' and $this->branch) $fromRevision = $this->branch;
+        if($toRevision   === 'HEAD' and $this->branch) $toRevision   = $this->branch;
         if($fromRevision === $toRevision)
         {
             $logs = array();
@@ -250,10 +250,11 @@ class Gitea
      *
      * @param  string $path
      * @param  string $revision
+     * @param  bool   $showComment
      * @access public
      * @return array
      */
-    public function blame($path, $revision)
+    public function blame($path, $revision, $showComment = true)
     {
         if(!scm::checkRevision($revision)) return array();
 
@@ -322,7 +323,9 @@ class Gitea
         if(strpos($fromRevision, '^') !== false)
         {
             $list = execCmd(escapeCmd("$this->client log -2 $toRevision --pretty=format:%H -- $path"), 'array');
-            if(isset($list[1])) $fromRevision = $list[1];
+            if(!isset($list[1])) return execCmd(escapeCmd("$this->client show HEAD"), 'array');
+
+            $fromRevision = $list[1];
         }
         $lines = execCmd(escapeCmd("$this->client diff $fromRevision $toRevision -- $path"), 'array');
         return $lines;
@@ -748,14 +751,12 @@ class Gitea
         $list = execCmd($cmd . ' 2>&1', 'array', $result);
         if($result) return array();
 
-        $infos   = array();
         foreach($list as $entry)
         {
             list($mod, $kind, $revision, $size, $name) = preg_split('/[\t ]+/', $entry);
 
             /* Get commit info. */
             $pathName = ltrim($path . DIRECTORY_SEPARATOR . $name, DIRECTORY_SEPARATOR);
-            $info->kind     = $kind == 'tree' ? 'dir' : 'file';
             if($kind == 'tree')
             {
                 $this->getAllFiles($pathName, $revision, $lists);

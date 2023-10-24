@@ -58,7 +58,6 @@ var app = new Vue({
     },
     methods: {
         changeAttr(val) {
-            // console.log('新的值', JSON.stringify(val))
             this.body = val
         },
         changeType(val) {

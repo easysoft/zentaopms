@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/product.class.php';
-$db->switchDB();
 
 /**
 
@@ -29,4 +28,3 @@ $product = new productTest('admin');
 r($product->batchUpdateTest($changeName, '1'))   && p('0:field,old,new') && e('name,正常产品1,批量修改产品1'); // 批量修改product名称
 r($product->batchUpdateTest($changeQDs, '2'))    && p('0:field,old,new') && e('QD,test2,test1');               // 批量修改produc测试负责人
 r($product->batchUpdateTest($changeStatus, '3')) && p('0:field,old,new') && e('status,normal,closed');         // 批量修改product状态
-$db->restoreDB();

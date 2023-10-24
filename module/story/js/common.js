@@ -20,38 +20,62 @@ $(function()
         $('#navbar .nav>li[data-id=story]>a').html($('#navbar .nav li.active [data-id=' + storyType + ']').text() + '<span class="caret"></span>');
     }
 
-    $('#saveButton').on('click', function()
+    var $saveButton      = $('#saveButton');
+    var $saveDraftButton = $('#saveDraftButton');
+    $saveButton.on('click', function(e)
     {
-        $('#saveButton').attr('type', 'submit').attr('disabled', true);
-        $('#saveDraftButton').attr('disabled', true);
+        $saveButton.attr('type', 'submit').attr('disabled', true);
+        $saveDraftButton.attr('disabled', true);
 
         var storyStatus = !$('#reviewer').val() || $('#needNotReview').is(':checked') ? 'active' : 'reviewing';
         $('<input />').attr('type', 'hidden').attr('name', 'status').attr('value', storyStatus).appendTo('#dataform');
         $('#dataform').submit();
+        e.preventDefault();
 
         setTimeout(function()
         {
-            $('#saveButton').attr('type', 'button').removeAttr('disabled');
-            $('#saveDraftButton').removeAttr('disabled');
-        }, 1000);
+            if($saveButton.attr('disabled') == 'disabled')
+            {
+                setTimeout(function()
+                {
+                    $saveButton.attr('type', 'button').removeAttr('disabled');
+                    $saveDraftButton.removeAttr('disabled');
+                }, 10000);
+            }
+            else
+            {
+                $saveDraftButton.removeAttr('disabled');
+            }
+        }, 100);
     });
 
-    $('#saveDraftButton').on('click', function()
+    $saveDraftButton.on('click', function(e)
     {
-        $('#saveButton').attr('disabled', true);
-        $('#saveDraftButton').attr('type', 'submit').attr('disabled', true);
+        $saveButton.attr('disabled', true);
+        $saveDraftButton.attr('type', 'submit').attr('disabled', true);
 
         storyStatus = 'draft';
         if(typeof(page) != 'undefined' && page == 'change') storyStatus = 'changing';
         if(typeof(page) !== 'undefined' && page == 'edit' && $('#status').val() == 'changing') storyStatus = 'changing';
         $('<input />').attr('type', 'hidden').attr('name', 'status').attr('value', storyStatus).appendTo('#dataform');
         $('#dataform').submit();
+        e.preventDefault();
 
         setTimeout(function()
         {
-            $('#saveButton').removeAttr('disabled');
-            $('#saveDraftButton').attr('type', 'button').removeAttr('disabled');
-        }, 1000);
+            if($saveDraftButton.attr('disabled') == 'disabled')
+            {
+                setTimeout(function()
+                {
+                    $saveButton.removeAttr('disabled');
+                    $saveDraftButton.attr('type', 'button').removeAttr('disabled');
+                }, 10000);
+            }
+            else
+            {
+                $saveButton.removeAttr('disabled');
+            }
+        }, 100);
     });
 })
 
@@ -72,26 +96,38 @@ function getStatus(method, params)
 }
 
 /**
- * Load URS.
+ * Load product user stories.
  *
  * @access public
  * @return void
  */
-function loadURS(allURS)
+function loadURS()
 {
+    var $URS = $('#URS');
+    if($URS.length == 0) return;
+
     var productID       = $('#product').val();
-    var branchID        = $('#branch').val();
-    var moduleID        = typeof(allURS) == 'undefined' ? $('#module').val() : 0;
-    var requirementList = $('#URS').val();
+    var branchID        = $('#branch').val() ? $('#branch').val() : 0;
+    var requirementList = $URS.val();
     requirementList     = requirementList ? requirementList.join(',') : '';
+    var $branches       = $('#dataform #branchBox [id^=branches]');
+    if($branches.length > 0)
+    {
+        branchIdList = [];
+        $branches.each(function()
+        {
+            var currentBranch = $(this).val();
+            if(currentBranch == '') currentBranch = 0;
+            if(!branchIdList.includes(currentBranch)) branchIdList.push(currentBranch);
+        })
+        branchID = branchIdList.join(',');
+    }
 
-    var link = createLink('story', 'ajaxGetURS', 'productID=' + productID + '&branchID=' + branchID + '&moduleID=' + moduleID + '&requirementList=' + requirementList);
-
+    var link = createLink('story', 'ajaxGetProductUserStories', 'productID=' + productID + '&branchID=' + branchID + '&requirementList=' + requirementList);
     $.post(link, function(data)
     {
-        $('#URS').replaceWith(data);
-        $('#URS_chosen').remove();
-        $('#URS').chosen();
+        $('.URSBox').html(data);
+        $('.URSBox #URS').picker();
     });
 }
 
@@ -150,4 +186,15 @@ function popoverCancel(index)
     if(page == 'edit') return;
 
     $('[data-id="' + index + '"]').addClass('hide');
+}
+
+/**
+ * Reload parent window When operating in a pop-up window.
+ *
+ * @access public
+ * @return void
+ */
+function reloadByAjaxForm()
+{
+    parent.location.reload();
 }

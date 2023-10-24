@@ -2,7 +2,7 @@
 /**
  * The view file for browse page of mr module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2009-2012 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Guodong Ding
  * @package     mr
  * @version     $Id: create.html.php $
@@ -11,20 +11,19 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolBar pull-left">
-    <?php foreach($lang->mr->statusList as $key => $label):?>
-    <?php $active = $param == $key ? 'btn-active-text' : '';?>
-    <?php $label = "<span class='text'>$label</span>";?>
-    <?php if($param == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('browse', "repoID=$repoID&mode=status&param=$key"), $label, '', "class='btn btn-link $active'");?>
-    <?php endforeach;?>
-    <?php $active = $mode == 'assignee' ? 'btn-active-text' : '';?>
-    <?php $label = "<span class='text'>{$lang->mr->assignedToMe}</span>";?>
-    <?php if($mode == 'assignee') $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('browse', "repoID=$repoID&mode=assignee&param={$this->app->user->account}"), $label, '', "class='btn btn-link $active'");?>
-    <?php $active = $mode == 'creator' ? 'btn-active-text' : '';?>
-    <?php $label = "<span class='text'>{$lang->mr->createdByMe}</span>";?>
-    <?php if($mode == 'creator') $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('browse', "repoID=$repoID&mode=creator&param={$this->app->user->account}"), $label, '', "class='btn btn-link $active'");?>
+    <?php
+    $menus = customModel::getFeatureMenu('mr', 'browse');
+    foreach($menus as $menuItem)
+    {
+        $label     = "<span class='text'>{$menuItem->text}</span>";
+        $active    = ($param == $menuItem->name or $mode == $menuItem->name) ? 'btn-active-text' : '';
+        $modeParam = in_array($menuItem->name, array('assignee', 'creator')) ? $menuItem->name : 'status';
+        $paramName = in_array($menuItem->name, array('assignee', 'creator')) ? $this->app->user->account : $menuItem->name;
+
+        if($param == $menuItem->name) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+        echo html::a(inlink('browse', "repoID=$repoID&mode=$modeParam&param=$paramName"), $label, '', "class='btn btn-link $active'");
+    }
+    ?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('mr', 'create', '', "<i class='icon icon-plus'></i> " . $lang->mr->create, '', "class='btn btn-primary'");?>

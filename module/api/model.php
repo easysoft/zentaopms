@@ -2,7 +2,7 @@
 /**
  * The model file of api module of ZenTaoCMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     api
@@ -168,6 +168,7 @@ class apiModel extends model
 
         $now  = helper::now();
         $data = fixer::input('post')
+            ->trim('name')
             ->skipSpecial('attribute')
             ->add('lib', $old->lib)
             ->add('editedBy', $this->app->user->account)
@@ -394,12 +395,13 @@ class apiModel extends model
     /**
      * Get api doc list by module id.
      *
-     * @param  int   $libID
-     * @param  int   $moduleID
-     * @param  int   $release
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  int    $release
+     * @param  object $pager
      * @return array $list
      */
-    public function getListByModuleId($libID = 0, $moduleID = 0, $release = 0)
+    public function getListByModuleId($libID = 0, $moduleID = 0, $release = 0, $pager = null)
     {
         /* Get release info. */
         if($release > 0)
@@ -413,10 +415,7 @@ class apiModel extends model
                 foreach($rel->snap['modules'] as $module)
                 {
                     $tmp = explode(',', $module['path']);
-                    if(in_array($moduleID, $tmp))
-                    {
-                        $sub[] = $module['id'];
-                    }
+                    if(in_array($moduleID, $tmp)) $sub[] = $module['id'];
                 }
                 if($sub) $where .= 'and module in (' . implode(',', $sub) . ')';
             }
@@ -433,10 +432,9 @@ class apiModel extends model
             {
                 $where = 'lib = ' . $libID;
             }
-            $list = $this->dao->select('*')
-                ->from(TABLE_API)
-                ->where($where)
+            $list = $this->dao->select('*')->from(TABLE_API)->where($where)
                 ->andWhere('deleted')->eq(0)
+                ->page($pager)
                 ->fetchAll();
         }
         array_map(function ($item) {
@@ -479,10 +477,10 @@ class apiModel extends model
      */
     public function getStructByQuery($libID, $pager = '', $orderBy = '')
     {
-        return $this->dao->select('s.*,user.realname as addedName')->from(TABLE_APISTRUCT)->alias('s')
-            ->leftJoin(TABLE_USER)->alias('user')->on('user.account = s.addedBy')
-            ->where('s.deleted')->eq(0)
-            ->andWhere('s.lib')->eq($libID)
+        return $this->dao->select('t1.*,t2.realname as addedName')->from(TABLE_APISTRUCT)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t2.account = t1.addedBy')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.lib')->eq($libID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -528,7 +526,7 @@ class apiModel extends model
     public function getReleaseByQuery($libID, $pager = '', $orderBy = '')
     {
         return $this->dao->select('*')->from(TABLE_API_LIB_RELEASE)
-            ->where('lib')->eq($libID)
+            ->where('lib')->in($libID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -778,11 +776,11 @@ class apiModel extends model
 
         /* Insert doclib. */
         $lib = new stdclass();
-        $lib->type    = 'api';
-        $lib->name    = $name;
-        $lib->baseUrl = $baseUrl;
-        $lib->acl     = 'open';
-        $lib->users   = ',' . $currentAccount . ',';
+        $lib->type      = 'api';
+        $lib->name      = $name;
+        $lib->baseUrl   = $baseUrl;
+        $lib->acl       = 'open';
+        $lib->users     = ',' . $currentAccount . ',';
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
             ->batchCheck($this->config->api->createlib->requiredFields, 'notempty')
             ->check('name', 'unique', "`type` = 'api'")
@@ -887,10 +885,10 @@ class apiModel extends model
      *
      * @param  string   $table
      * @param  stirng   $version
-     * @access private
+     * @access public
      * @return array
      */
-    private function getDemoData($table, $version)
+    public function getDemoData($table, $version)
     {
         $file = $this->app->getAppRoot() . 'db' . DS . 'api' . DS . $version . DS . $table;
         return unserialize(preg_replace_callback('#s:(\d+):"(.*?)";#s', function($match){return 's:'.strlen($match[2]).':"'.$match[2].'";';}, file_get_contents($file)));
@@ -902,15 +900,30 @@ class apiModel extends model
      * @param  object $lib
      * @param  string $queryID
      * @param  string $actionURL
+     * @param  array  $libs
+     * @param  string $type product|project
      * @access public
      * @return void
      */
-    public function buildSearchForm($lib, $queryID, $actionURL)
+    public function buildSearchForm($lib, $queryID, $actionURL, $libs = array(), $type = '')
     {
-        $this->config->api->search['module']                  = 'api';
+        if(empty($lib)) return;
+        $libPairs = array('' => '', $lib->id => $lib->name);
+        $this->config->api->search['module'] = 'api';
+        if(!empty($libs))
+        {
+            foreach($libs as $lib)
+            {
+                if(empty($lib)) continue;
+                if($lib->type != 'api') continue;
+                $libPairs[$lib->id] = $lib->name;
+            }
+            $this->config->api->search['module'] = !empty($type) ? $type . 'apiDoc' : 'api';
+        }
+
         $this->config->api->search['queryID']                 = $queryID;
         $this->config->api->search['actionURL']               = $actionURL;
-        $this->config->api->search['params']['lib']['values'] = (!empty($lib)) ? array($lib->id => $lib->name) + array('all' => $this->lang->api->allLibs) : array('all' => $this->lang->api->allLibs);
+        $this->config->api->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->api->allLibs);
 
         $this->loadModel('search')->setSearchParams($this->config->api->search);
     }
@@ -920,38 +933,126 @@ class apiModel extends model
      *
      * @param  string $libID
      * @param  int    $queryID
+     * @param  string $objectType product|project
+     * @param  array  $libs
      * @access public
      * @return array
      */
-    public function getApiListBySearch($libID, $queryID)
+    public function getApiListBySearch($libID, $queryID, $objectType = '', $libs = array())
     {
-       if($queryID)
-       {
-           $query = $this->loadModel('search')->getQuery($queryID);
-           if($query)
-           {
-               $this->session->set('apiQuery', $query->sql);
-               $this->session->set('apiForm', $query->form);
-           }
-           else
-           {
-               $this->session->set('apiQuery', ' 1 = 1');
-           }
-       }
-       else
-       {
-           if($this->session->apiQuery == false) $this->session->set('apiQuery', ' 1 = 1');
-       }
+        $queryName = $objectType ? $objectType . 'apiDocQuery' : 'apiQuery';
+        $queryForm = $objectType ? $objectType . 'apiDocForm' : 'apiForm';
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($queryForm, $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
+        }
 
-       $apiQuery = $this->session->apiQuery;
-       $apiQuery = strpos($apiQuery, "`lib` = 'all'") === false ? "$apiQuery and lib = $libID" : str_replace("`lib` = 'all'", '1', $apiQuery);
+        $apiQuery = $this->session->$queryName;
+        if(strpos($apiQuery, "`lib` = 'all'") !== false) $apiQuery = str_replace("`lib` = 'all'", '1', $apiQuery);
 
-       $list = $this->dao->select('*')
-           ->from(TABLE_API)
-           ->where('deleted')->eq(0)
-           ->andWhere($apiQuery)
-           ->fetchAll();
+        $list = $this->dao->select('*')
+            ->from(TABLE_API)
+            ->where('deleted')->eq(0)
+            ->andWhere($apiQuery)
+            ->beginIF(!empty($libs))->andWhere('`lib`')->in($libs)->fi()
+            ->fetchAll();
 
-       return $list;
+        return $list;
+    }
+
+    /**
+     * Get ordered objects for dic.
+     *
+     * @access public
+     * @return array
+     */
+    public function getOrderedObjects()
+    {
+        $normalObjects = $closedObjects = array();
+
+        $libs     = $this->loadModel('doc')->getApiLibs();
+        $products = $this->dao->select('t1.id, t1.order, t1.name, t1.status')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.product=t1.id')
+            ->where('t2.id')->gt(0)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.id')->in(array_keys($libs))
+            ->orderBy('order_asc')
+            ->fetchAll('id');
+
+        foreach($products as $id => $product)
+        {
+            if($product->status == 'normal')
+            {
+                $normalObjects['product'][$id] = $product->name;
+            }
+            elseif($product->status == 'closed')
+            {
+                $closedObjects['product'][$id] = $product->name;
+            }
+        }
+
+        $projects = $this->dao->select('t1.id, t1.order, t1.name, t1.status')->from(TABLE_PROJECT)->alias('t1')
+            ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
+            ->where('t2.id')->gt(0)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+            ->andWhere('t2.id')->in(array_keys($libs))
+            ->orderBy('t1.hasProduct_asc, order_asc')
+            ->fetchAll('id');
+
+        foreach($projects as $id => $project)
+        {
+            if($project->status != 'done' and $project->status != 'closed')
+            {
+                $normalObjects['project'][$id] = $project->name;
+            }
+            else if($project->status == 'done' or $project->status == 'closed')
+            {
+                $closedObjects['project'][$id] = $project->name;
+            }
+        }
+
+        return array($normalObjects, $closedObjects);
+    }
+
+    /**
+     * Get priv Apis..
+     *
+     * @param  string $mode all
+     * @access public
+     * @return array
+     */
+    public function getPrivApis($mode = '')
+    {
+        $libs = $this->dao->select('*')->from(TABLE_DOCLIB)
+            ->where('type')->eq('api')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetchAll('id');
+
+        $this->loadModel('doc');
+        foreach($libs as $libID => $lib)
+        {
+            if(!$this->doc->checkPrivLib($lib)) unset($libs[$libID]);
+        }
+
+        return $this->dao->select('id')->from(TABLE_API)
+            ->where('lib')->in(array_keys($libs))
+            ->beginIF($mode != 'all')->andWhere('deleted')->eq(0)->fi()
+            ->fetchAll('id');
     }
 }

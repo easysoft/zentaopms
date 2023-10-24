@@ -2,7 +2,7 @@
 /**
  * The html productlist file of productlist method of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -13,6 +13,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('productLines', $productLines); ?>
 <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
+<?php $canSort      = common::hasPriv('product', 'updateOrder');?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolBar pull-left">
     <?php common::sortFeatureMenu();?>
@@ -25,7 +26,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('product', 'export', "status=$browseType&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'", true, true)?>
-    <?php if($config->systemMode == 'ALM'):?>
+    <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
     <?php common::printLink('product', 'manageLine', '', "<i class='icon-edit'></i> &nbsp;" . $lang->product->line, '', 'class="btn btn-link iframe"', '', true);?>
     <?php endif;?>
     <?php common::printLink('product', 'create', '', '<i class="icon icon-plus"></i>' . $lang->product->create, '', 'class="btn btn-primary create-product-btn"');?>
@@ -51,7 +52,7 @@
             </th>
             <?php endif;?>
             <th class='table-nest-title text-left c-name' rowspan="2">
-              <?php if($config->systemMode == 'ALM'):?>
+              <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
               <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse; ?>'></a>
               <?php endif;?>
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
@@ -101,7 +102,7 @@
               }
           }
           ?>
-          <?php if(isset($program['programName']) and $config->systemMode == 'ALM'):?>
+          <?php if(isset($program['programName']) and in_array($config->systemMode, array('ALM', 'PLM'))):?>
           <tr class="row-program" <?php echo $trAttrs;?>>
             <?php if($canBatchEdit):?>
             <td class='c-checkbox'><div class='checkbox-primary program-checkbox'><label></label></div></td>
@@ -128,10 +129,10 @@
             <td><?php echo $program['activeStories'];?></td>
             <td><?php echo $program['changingStories'];?></td>
             <td><?php echo $program['reviewingStories'];?></td>
-            <?php $totalStories = $program['finishClosedStories'] + $program['unclosedStories'];?>
-            <td><?php echo $totalStories == 0 ? 0 : round($program['finishClosedStories'] / $totalStories, 3) * 100;?>%</td>
-            <td><?php echo $program['unResolvedBugs'];?></td>
-            <td><?php echo ($program['unResolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unResolvedBugs'] + $program['fixedBugs']), 3) * 100;?>%</td>
+            <?php $totalStories = ($program['totalStories'] - $program['closedStories']) + $program['finishClosedStories'];?>
+            <td><?php echo $totalStories == 0 ? 0 : round($program['finishedStories'] / $totalStories, 3) * 100;?>%</td>
+            <td><?php echo $program['unresolvedBugs'];?></td>
+            <td><?php echo ($program['unresolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unresolvedBugs'] + $program['fixedBugs']), 3) * 100;?>%</td>
             <td><?php echo $program['plans'];?></td>
             <td><?php echo $program['releases'];?></td>
             <?php foreach($extendFields as $extendField) echo "<td></td>";?>
@@ -141,10 +142,10 @@
           <?php endif;?>
 
           <?php foreach($program as $lineID => $line):?>
-          <?php if(isset($line['lineName']) and isset($line['products']) and is_array($line['products']) and $config->systemMode == 'ALM'):?>
+          <?php if(isset($line['lineName']) and isset($line['products']) and is_array($line['products']) and in_array($config->systemMode, array('ALM', 'PLM'))):?>
           <?php $lineNames[] = $line['lineName'];?>
           <?php
-          if($this->config->systemMode == 'ALM' and $programID)
+          if(in_array($config->systemMode, array('ALM', 'PLM')) and $programID)
           {
               $trAttrs  = "data-id='line.$lineID' data-parent='program.$programID'";
               $trAttrs .= " data-nest-parent='program.$programID' data-nest-path='program.$programID,line.$lineID'" . "class='text-center'";
@@ -169,10 +170,10 @@
             <td><?php echo isset($line['activeStories']) ? $line['activeStories'] : 0;?></td>
             <td><?php echo isset($line['changingStories']) ? $line['changingStories'] : 0;?></td>
             <td><?php echo isset($line['reviewingStories']) ? $line['reviewingStories'] : 0;?></td>
-            <?php $totalStories = (isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) + (isset($line['unclosedStories']) ? $line['unclosedStories'] : 0);?>
-            <td><?php echo $totalStories == 0 ? 0 : round((isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0) / $totalStories, 3) * 100;?>%</td>
-            <td><?php echo isset($line['unResolvedBugs']) ? $line['unResolvedBugs'] : 0;?></td>
-            <td><?php echo (isset($line['fixedBugs']) and ($line['unResolvedBugs'] + $line['fixedBugs'] != 0)) ? round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100 : 0;?>%</td>
+            <?php $totalStories = (isset($line['totalStories']) ? $line['totalStories'] : 0) - (isset($line['closedStories']) ? $line['closedStories'] : 0) + (isset($line['finishClosedStories']) ? $line['finishClosedStories'] : 0)?>
+            <td><?php echo $totalStories == 0 ? 0 : round((isset($line['finishedStories']) ? $line['finishedStories'] : 0) / $totalStories, 3) * 100;?>%</td>
+            <td><?php echo isset($line['unresolvedBugs']) ? $line['unresolvedBugs'] : 0;?></td>
+            <td><?php echo (isset($line['fixedBugs']) and ($line['unresolvedBugs'] + $line['fixedBugs'] != 0)) ? round($line['fixedBugs'] / ($line['unresolvedBugs'] + $line['fixedBugs']), 3) * 100 : 0;?>%</td>
             <td><?php echo isset($line['plans']) ? $line['plans'] : 0;?></td>
             <td><?php echo isset($line['releases']) ? $line['releases'] : 0;?></td>
             <?php foreach($extendFields as $extendField) echo "<td></td>";?>
@@ -184,18 +185,18 @@
           <?php if(isset($line['products']) and is_array($line['products'])):?>
           <?php foreach($line['products'] as $productID => $product):?>
           <?php
-          $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
+          $totalStories = ($product->totalStories - $product->closedStories) + $product->finishClosedStories;
 
           $trClass = '';
-          if($product->line and $this->config->systemMode == 'ALM')
+          if($product->line and in_array($config->systemMode, array('ALM', 'PLM')))
           {
               $path = "line.$product->line,$product->id";
-              if($this->config->systemMode == 'ALM' and $product->program) $path = "program.$product->program,$path";
+              if(in_array($config->systemMode, array('ALM', 'PLM')) and $product->program) $path = "program.$product->program,$path";
               $trAttrs  = "data-id='$product->id' data-parent='line.$product->line'";
               $trClass .= ' is-nest-child  table-nest';
               $trAttrs .= " data-nest-parent='line.$product->line' data-nest-path='$path'";
           }
-          elseif($product->program and $this->config->systemMode == 'ALM')
+          elseif($product->program and in_array($config->systemMode, array('ALM', 'PLM')))
           {
               $trAttrs  = "data-id='$product->id' data-parent='program.$product->program'";
               $trClass .= ' is-nest-child  table-nest';
@@ -212,7 +213,7 @@
             <?php if($canBatchEdit):?>
             <td class='c-checkbox'><?php echo html::checkbox('productIDList', array($product->id => ''));?></td>
             <?php endif;?>
-            <td class="c-name text-left sort-handler table-nest-title" title='<?php echo $product->name?>'>
+            <td class="c-name text-left <?php echo $canSort ? 'sort-handler' : '';?> table-nest-title" title='<?php echo $product->name?>'>
               <?php
               echo html::a($this->createLink('product', 'browse', 'productID=' . $product->id), $product->name);
               ?>
@@ -229,13 +230,13 @@
               }
               ?>
             </td>
-            <td><?php echo $product->stories['draft'];?></td>
-            <td><?php echo $product->stories['active'];?></td>
-            <td><?php echo $product->stories['changing'];?></td>
-            <td><?php echo $product->stories['reviewing'];?></td>
-            <td><?php echo $totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100;?>%</td>
-            <td><?php echo $product->unResolved;?></td>
-            <td><?php echo ($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100;?>%</td>
+            <td><?php echo $product->draftStories;?></td>
+            <td><?php echo $product->activeStories;?></td>
+            <td><?php echo $product->changingStories;?></td>
+            <td><?php echo $product->reviewingStories;?></td>
+            <td><?php echo $totalStories == 0 ? 0 : round($product->finishedStories / $totalStories, 3) * 100;?>%</td>
+            <td><?php echo $product->unresolvedBugs;?></td>
+            <td><?php echo ($product->unresolvedBugs + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unresolvedBugs + $product->fixedBugs), 3) * 100;?>%</td>
             <td><?php echo $product->plans;?></td>
             <td><?php echo $product->releases;?></td>
             <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $product) . "</td>";?>

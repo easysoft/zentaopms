@@ -487,7 +487,8 @@ function createKanban(kanbanID, data, options)
     var $kanban = $('#kanban-' + kanbanID);
     if($kanban.length) return updateKanban(kanbanID, data);
 
-    $kanban = $('<div id="kanban-' + kanbanID + '" data-id="' + kanbanID + '"></div>').appendTo('#kanbans');
+    $kanban = $('<div id="kanban-' + kanbanID + '" data-id="' + kanbanID + '"></div>');
+    $('#kanbans').append($kanban);
     $kanban.kanban($.extend({data: data, calcColHeight: calcColHeight, displayCards: typeof window.displayCards === 'number' ? window.displayCards : 2}, options));
 }
 
@@ -979,7 +980,7 @@ function createColumnCreateMenu(options)
     {
         if(priv.canCreateTask) items.push({label: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '80%'}});
         if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
-        if(priv.canImportBug) items.push({label: executionLang.importBug, url: $.createLink('execution', 'importBug', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
+        if(priv.canImportBug && canImportBug) items.push({label: executionLang.importBug, url: $.createLink('execution', 'importBug', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
     }
     return items;
 }
@@ -999,10 +1000,6 @@ function createLaneMenu(options)
 
     var items = [];
     if(priv.canSetLane)  items.push({label: kanbanLang.setLane, icon: 'edit', url: $.createLink('kanban', 'setLane', 'lane=' + lane.laneID + '&executionID=' + executionID + '&from=execution'), className: 'iframe'});
-    if(priv.canMoveLane) items.push(
-        {label: kanbanLang.moveUp, icon: 'arrow-up', url: $.createLink('kanban', 'laneMove', 'executionID=' + executionID + '&currentLane=' + lane.id + '&targetLane=' + upTargetKanban), className: 'iframe', disabled: !$kanban.prev('.kanban').length},
-        {label: kanbanLang.moveDown, icon: 'arrow-down', url: $.createLink('kanban', 'laneMove', 'executionID=' + executionID + '&currentLane=' + lane.id + '&targetLane=' + downTargetKanban), className: 'iframe', disabled: !$kanban.next('.kanban').length}
-    );
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
@@ -1177,13 +1174,9 @@ function handleSortCards(event)
     if(groupBy != 'default' || searchValue != '') return;
     var newLaneID = event.element.closest('.kanban-lane').data('id');
     var newColID  = event.element.closest('.kanban-col').data('id');
-    var cards     = event.element.closest('.kanban-lane-items').data('cards');
-    var orders    = cards.map(function(card){return card.id});
-    var fromID    = String(event.element.data('id'));
-    var toID      = String(event.target.data('id'));
-
-    orders.splice(orders.indexOf(fromID), 1);
-    orders.splice(orders.indexOf(toID) + (event.insert === 'before' ?  0 : 1), 0, fromID);
+    var cards     = event.element.closest('.kanban-lane-items').find('.kanban-item');
+    var orders    = [];
+    cards.each(function(){orders.push($(this).data('id'))});
 
     var url = createLink('kanban', 'sortCard', 'kanbanID=' + executionID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
     $.getJSON(url, function(response)

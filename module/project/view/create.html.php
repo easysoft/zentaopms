@@ -2,7 +2,7 @@
 /**
  * The create view file of project module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
@@ -48,7 +48,7 @@
       <h2><?php echo $createTitle;?></h2>
       <?php if(!commonModel::isTutorialMode()): ?>
       <div class="pull-right btn-toolbar">
-      <?php if($config->edition != 'max' || $model == 'kanban'):?>
+      <?php if(!in_array($config->edition, array('max', 'ipd')) or $model == 'kanban' or $model == 'ipd'):?>
         <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
       <?php else: ?>
         <button type='button' class='btn btn-link open-btn' data-toggle='modal' data-target='#maxCopyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
@@ -73,13 +73,13 @@
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
           <td></td>
         </tr>
-        <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+        <?php if(isset($config->setCode) and $config->setCode == 1):?>
         <tr>
           <th><?php echo $lang->project->code;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td>
         </tr>
         <?php endif;?>
-        <?php if($model != 'waterfall'):?>
+        <?php if($model == 'scrum' or $model == 'kanban'):?>
         <tr>
           <th><?php echo $lang->project->multiple;?></th>
           <td colspan='3'>
@@ -148,7 +148,7 @@
         <?php $i = 0;?>
         <?php foreach($products as $product):?>
         <tr>
-          <th><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
+          <th id='productTitle'><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
           <td class='text-left productsBox' colspan="3">
             <div class='row'>
               <div class="col-sm-6">
@@ -156,7 +156,7 @@
                   <div class='table-col'>
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                     <div class='input-group required <?php if($hasBranch) echo ' has-branch';?>'>
-                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
+                      <span class='input-group-addon'><?php echo $lang->productCommon;?></span>
                       <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                     </div>
                   </div>
@@ -193,7 +193,7 @@
                 <div class='table-row'>
                   <div class='table-col'>
                     <div class='input-group required'>
-                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
+                      <span class='input-group-addon'><?php echo $lang->productCommon;?></span>
                       <?php echo html::select("products[0]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                       <?php if(common::hasPriv('product', 'create')):?>
                       <span class='input-group-addon newProduct'>
@@ -229,7 +229,7 @@
           </td>
         </tr>
         <?php endif;?>
-        <?php if($model == 'waterfall'):?>
+        <?php if($model == 'waterfall' or $model == 'waterfallplus'):?>
         <tr class='hide division'>
           <th><?php echo $lang->project->division;?></th>
           <td>

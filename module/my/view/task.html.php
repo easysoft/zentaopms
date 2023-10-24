@@ -2,7 +2,7 @@
 /**
  * The task view file of dashboard module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
@@ -19,17 +19,9 @@
   <div class="btn-toolbar pull-left">
     <?php $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>"; ?>
     <?php
-    if($app->rawMethod == 'contribute')
+    foreach($lang->my->featureBar[$app->rawMethod]['task'] as $param => $name)
     {
-        echo html::a(inlink($app->rawMethod, "mode=$mode&type=openedBy"),   "<span class='text'>{$lang->my->taskMenu->openedByMe}</span>"   . ($type == 'openedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
-        echo html::a(inlink($app->rawMethod, "mode=$mode&type=finishedBy"), "<span class='text'>{$lang->my->taskMenu->finishedByMe}</span>" . ($type == 'finishedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'finishedBy' ? ' btn-active-text' : '') . "'");
-        echo html::a(inlink($app->rawMethod, "mode=$mode&type=closedBy"),   "<span class='text'>{$lang->my->taskMenu->closedByMe}</span>"   . ($type == 'closedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
-        echo html::a(inlink($app->rawMethod, "mode=$mode&type=canceledBy"), "<span class='text'>{$lang->my->taskMenu->canceledByMe}</span>" . ($type == 'canceledBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'canceledBy' ? ' btn-active-text' : '') . "'");
-        echo html::a(inlink($app->rawMethod, "mode=$mode&type=assignedBy"), "<span class='text'>{$lang->my->taskMenu->assignedByMe}</span>" . ($type == 'assignedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedBy' ? ' btn-active-text' : '') . "'");
-    }
-    else
-    {
-        echo html::a(inlink($app->rawMethod, "mode=$mode&type=assignedTo"), "<span class='text'>{$lang->my->taskMenu->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=$mode&type=$param"),   "<span class='text'>{$name}</span>"   . ($type == $param ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == $param   ? ' btn-active-text' : '') . "'");
     }
     ?>
   </div>
@@ -203,7 +195,7 @@
                 <?php echo ($task->projectName and $task->project) ? html::a($this->createLink('project', 'view', "projectID=$task->project"), $task->projectName) : '';?>
               </td>
               <td class='c-project' title="<?php if($child->executionMultiple) echo $child->projectName;?>">
-                <?php if($child->executionMultiple) echo html::a($this->createLink('execution', 'task', "executionID=$child->project"), $child->executionName, '');?>
+                <?php if($child->executionMultiple) echo html::a($this->createLink('execution', 'task', "executionID=$child->execution"), $child->executionName, '');?>
               </td>
               <?php if($type != 'assignedTo'): ?>
               <td class="c-assignedTo has-btn" title="<?php echo zget($users, $child->assignedTo);?>"> <?php $this->task->printAssignedHtml($child, $users);?></td>
@@ -324,7 +316,7 @@ $(function()
                 if(status === 'doing') checkedDoing++;
 
                 var canStatistics = false;
-                if(!$row.hasClass('table-children'))
+                if($row.find('.has-child').length == 0)
                 {
                     canStatistics = true;
                 }

@@ -2,7 +2,7 @@
 /**
  * The view file of view method of todo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
@@ -279,6 +279,7 @@
 <?php js::set('todoID', $todo->id);?>
 <?php js::set('selectExecution', $lang->execution->selectExecution);?>
 <?php js::set('selectProduct', $lang->todo->selectProduct);?>
+<?php js::set('currentVision', $config->vision);?>
 <script>
 $(function() {parent.$('body.hide-modal-close').removeClass('hide-modal-close'); })
 </script>

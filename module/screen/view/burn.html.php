@@ -1,10 +1,15 @@
 <?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
 <?php include $app->getModuleRoot() . 'common/view/chart.html.php';?>
 <?php js::import($jsRoot . 'echarts/echarts.common.min.js');?>
+<?php js::import($jsRoot . 'echarts/timeline.min.js');?>
 <?php js::set('executions', $executions);?>
+<?php js::set('burnXUnit', $lang->execution->burnXUnit);?>
+<?php js::set('burnYUnit', $lang->execution->burnYUnit);?>
+<?php js::set('workHour', $lang->execution->workHour);?>
+<?php js::set('workHourUnit', $lang->execution->workHourUnit);?>
 <div class='header'>
   <div class='img-header'>
-    <h2 class='title'>迭代燃尽图大屏</h2>
+    <h2 class='title'><?php echo $screen->name;?></h2>
     <span class='time'><?php echo '更新时间:' . $date;?></span>
   </div>
 </div>
@@ -34,13 +39,15 @@ function initBurnChar()
         var option = {
           title: {
             text: execution.name,
+            top: 10,
             textStyle: {
               color: '#a1c4e9',
               fontSize: 15
             }
           },
           tooltip: {
-            trigger: 'axis'
+              trigger: 'axis',
+              valueFormatter: (value) => (value == undefined ? 0 : value) + ' ' + workHour + '/' + workHourUnit
           },
           legend: {
             data: ["<?php echo $lang->execution->charts->burn->graph->actuality;?>","<?php echo $lang->execution->charts->burn->graph->reference;?>"],
@@ -48,12 +55,14 @@ function initBurnChar()
               color: '#dee0e4',
               fontSize: 14
             },
+            top: 10,
             right: 0
           },
           color: ['#42526a', '#2567cf', 'red'],
           grid: {
             left: '3%',
             right: '4%',
+            top: 65,
             bottom: '3%',
             containLabel: true
           },
@@ -64,6 +73,11 @@ function initBurnChar()
           },
           xAxis: {
             type: 'category',
+            name: burnXUnit,
+            nameTextStyle:{
+                padding: [20, 0, 0, -40],
+                verticalAlign: "top"
+            },
             boundaryGap: false,
             axisLabel: {
               show: true,
@@ -75,11 +89,18 @@ function initBurnChar()
           },
           yAxis: {
             type: 'value',
+            name: burnYUnit,
+            nameTextStyle:{
+                padding: [0, 0, -40, -45]
+            },
             axisLabel: {
               show: true,
               textStyle: {
                 color: '#dee0e4'
               }
+            },
+            axisLine: {
+                show: true
             },
             splitLine: {
               show: true,

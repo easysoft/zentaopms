@@ -2,7 +2,7 @@
 /**
  * The testcase module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
@@ -11,8 +11,8 @@
  */
 $lang->testcase->id               = '用例编号';
 $lang->testcase->product          = "所属{$lang->productCommon}";
-$lang->testcase->project          = '所属项目';
-$lang->testcase->execution        = '所属执行';
+$lang->testcase->project          = '所属' . $lang->projectCommon;
+$lang->testcase->execution        = '所属' . $lang->executionCommon;
 $lang->testcase->linkStory        = '关联需求';
 $lang->testcase->module           = '所属模块';
 $lang->testcase->auto             = '自动化测试用例';
@@ -110,7 +110,6 @@ $lang->testcase->stepDesc    = '步骤';
 $lang->testcase->stepExpect  = '预期';
 $lang->testcase->stepVersion = '版本';
 
-$lang->testcase->common                  = '用例';
 $lang->testcase->index                   = "用例管理首页";
 $lang->testcase->create                  = "建用例";
 $lang->testcase->batchCreate             = "批量建用例";
@@ -135,6 +134,7 @@ $lang->testcase->groupCase               = "分组浏览用例";
 $lang->testcase->zeroCase                = "零用例{$lang->common->story}";
 $lang->testcase->import                  = "导入";
 $lang->testcase->importAction            = "导入用例";
+$lang->testcase->importCaseAction        = "导入用例";
 $lang->testcase->fileImport              = "导入CSV";
 $lang->testcase->importFromLib           = "从用例库中导入";
 $lang->testcase->showImport              = "显示导入内容";
@@ -187,7 +187,7 @@ $lang->testcase->summary               = "本页共 <strong>%s</strong> 个用�
 $lang->testcase->confirmDelete         = '您确认要删除该测试用例吗？';
 $lang->testcase->confirmBatchDelete    = '您确认要批量删除这些测试用例吗？';
 $lang->testcase->ditto                 = '同上';
-$lang->testcase->dittoNotice           = '该用例与上一用例不属于同一产品！';
+$lang->testcase->dittoNotice           = "该用例与上一用例不属于同一{$lang->productCommon}！";
 $lang->testcase->confirmUnlinkTesttask = '用例[%s]已关联在之前所属平台/分支的测试单中，调整平台/分支后，将从之前所属平台/分支的测试单中移除，请确认是否继续修改。';
 
 $lang->testcase->reviewList[0] = '否';
@@ -254,8 +254,8 @@ $lang->testcase->selectLibAB   = '选择用例库';
 $lang->testcase->action = new stdclass();
 $lang->testcase->action->fromlib               = array('main' => '$date, 由 <strong>$actor</strong> 从用例库 <strong>$extra</strong>导入。');
 $lang->testcase->action->reviewed              = array('main' => '$date, 由 <strong>$actor</strong> 记录评审结果，结果为 <strong>$extra</strong>。', 'extra' => 'reviewResultList');
-$lang->testcase->action->linked2project        = array('main' => '$date, 由 <strong>$actor</strong> 关联到项目 <strong>$extra</strong>。');
-$lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <strong>$actor</strong> 从项目 <strong>$extra</strong> 移除。');
+$lang->testcase->action->linked2project        = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->projectCommon . ' <strong>$extra</strong>。');
+$lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->projectCommon . ' <strong>$extra</strong> 移除。');
 $lang->testcase->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
 $lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
 
@@ -267,4 +267,82 @@ $lang->testcase->featureBar['browse']['group']       = '分组查看';
 $lang->testcase->featureBar['browse']['zerocase']    = "零用例{$lang->SRCommon}";
 $lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
-$lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];
+
+$lang->testcase->importXmind     = "导入XMIND";
+$lang->testcase->exportXmind     = "导出XMIND";
+$lang->testcase->getXmindImport  = "获取导图";
+$lang->testcase->showXMindImport = "显示导图";
+$lang->testcase->saveXmindImport = "保存导图";
+
+$lang->testcase->xmindImport           = "导入XMIND";
+$lang->testcase->xmindExport           = "导出XMIND";
+$lang->testcase->xmindImportEdit       = "XMIND 编辑";
+$lang->testcase->errorFileNotEmpty     = '上传文件不能为空';
+$lang->testcase->errorXmindUpload      = '上传失败';
+$lang->testcase->errorFileFormat       = '文件格式错误';
+$lang->testcase->moduleSelector        = '模块选择';
+$lang->testcase->errorImportBadProduct = '产品不存在，导入错误';
+$lang->testcase->errorSceneNotExist    = '场景[%d]不存在';
+
+$lang->testcase->save  = '保存';
+$lang->testcase->close = '关闭';
+
+$lang->testcase->xmindImportSetting = '导入特征字符设置';
+$lang->testcase->xmindExportSetting = '导出特征字符设置';
+
+$lang->testcase->settingModule = '模&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;块';
+$lang->testcase->settingScene  = '场&nbsp;&nbsp;&nbsp;&nbsp;景';
+$lang->testcase->settingCase   = '测试用例';
+$lang->testcase->settingPri    = '优先级&nbsp;';
+$lang->testcase->settingGroup  = '步骤分组';
+
+$lang->testcase->caseNotExist =  '未识别导入数据中的用例，导入失败';
+$lang->testcase->saveFail     =  '保存失败';
+$lang->testcase->set2Scene    =  '设为场景';
+$lang->testcase->set2Testcase =  '设为测试用例';
+$lang->testcase->clearSetting =  '清除设置';
+$lang->testcase->setModule    =  '设置场景模块';
+$lang->testcase->pickModule   =  '请选择模块';
+$lang->testcase->clearBefore  =  '清除前面场景';
+$lang->testcase->clearAfter   =  '清除后面场景';
+$lang->testcase->clearCurrent =  '清除当前场景';
+$lang->testcase->removeGroup  =  '移除分组';
+$lang->testcase->set2Group    =  '设为分组';
+
+$lang->testcase->exportTemplet = '导出模板';
+
+$lang->testcase->createScene      = "建场景";
+$lang->testcase->changeScene      = "拖动改变所属场景";
+$lang->testcase->batchChangeScene = "批量改变所属场景";
+$lang->testcase->updateOrder      = "拖动排序";
+$lang->testcase->differentProduct = "所属产品不同";
+
+$lang->testcase->newScene           = "建场景";
+$lang->testcase->sceneTitle         = '场景标题';
+$lang->testcase->parentScene        = "父场景";
+$lang->testcase->scene              = "所属场景";
+$lang->testcase->summary            = '本页共 %d 个顶级场景，%d 个独立用例。';
+$lang->testcase->summaryScene       = '本页共 %d 个顶级场景。';
+$lang->testcase->deleteScene        = '删除场景';
+$lang->testcase->editScene          = '编辑场景';
+$lang->testcase->hasChildren        = '该场景有子场景或测试用例存在，要全部删除吗？';
+$lang->testcase->confirmDeleteScene = '您确定要删除场景：“%s”吗？';
+$lang->testcase->sceneb             = "场景";
+$lang->testcase->onlyScene          = '仅场景';
+$lang->testcase->iScene             = '所属场景';
+$lang->testcase->generalTitle       = '标题';
+$lang->testcase->noScene            = '暂时没有场景';
+$lang->testcase->rowIndex           = '行索引';
+$lang->testcase->nestTotal          = '嵌套总数';
+$lang->testcase->normal             = '正常';
+
+/* Translation for drag modal message box. */
+$lang->testcase->dragModalTitle       = '拖拽操作选择';
+$lang->testcase->dragModalMessage     = '<p>当前操作有两种可能的情况: </p><p>1) 调整排序<br/> 2) 更改所属场景，所属模块同时变更为目标场景的模块</p><p>请选择您要执行的操作</p>';
+$lang->testcase->dragModalChangeScene = '更改所属场景';
+$lang->testcase->dragModalChangeOrder = '调整排序';
+
+$lang->testcase->confirmBatchDeleteSceneCase = '您确认要批量删除这些场景或测试用例吗？';
+
+$lang->scene = new stdclass();
+$lang->scene->title = '场景标题';

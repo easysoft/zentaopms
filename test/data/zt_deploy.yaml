@@ -10,20 +10,6 @@ fields:
     loop: 0
     loopfix: ""
     format: ""
-  - field: begin
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
-  - field: end
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
   - field: name
     note: ""
     prefix: ""
@@ -74,13 +60,6 @@ fields:
     loopfix: ""
     format: ""
   - field: createdBy
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
-  - field: createdDate
     note: ""
     prefix: ""
     postfix: ""

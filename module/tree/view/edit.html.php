@@ -2,7 +2,7 @@
 /**
  * The edit view of tree module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
@@ -23,15 +23,21 @@ if(isset($pageCSS)) css::internal($pageCSS);
       <strong>
         <?php
         $lblEditTree = $lang->tree->edit;
-        if($type == 'doc') $lblEditTree = $lang->doc->editType;
+        $required    = '';
+        if($type == 'doc' or $type == 'api')
+        {
+            $lblEditTree = $lang->tree->editDir;
+            $required    = 'root,name';
+        }
         if($type == 'line') $lblEditTree = $lang->tree->manageLine;
+        if($type == 'host') $lblEditTree = $lang->tree->editHost;
         echo $lblEditTree;
         ?>
       </strong>
     </h4>
   </div>
   <div class='modal-body'>
-    <form action="<?php echo inlink('edit', 'module=' . $module->id .'&type=' .$type);?>" target='hiddenwin' method='post' class='mt-10px' id='dataform'>
+    <form action="<?php echo helper::createLink($app->rawModule, $app->rawMethod, 'module=' . $module->id .'&type=' .$type);?>" target='hiddenwin' method='post' class='mt-10px' id='dataform'>
       <table class='table table-form'>
         <?php if($showProduct):?>
         <tr class="<?php if($hiddenProduct) echo 'hidden';?>">
@@ -52,12 +58,17 @@ if(isset($pageCSS)) css::internal($pageCSS);
         <?php if($type == 'doc'):?>
         <tr>
           <th class='thWidth'><?php echo $lang->doc->lib;?></th>
-          <td><?php echo html::select('root', $libs, $module->root, "class='form-control chosen'");?></td>
+          <td class="<?php if(strpos($required, 'root') !== false) echo 'required';?>"><?php echo html::select('root', $libs, $module->root, "class='form-control chosen'");?></td>
         </tr>
         <?php endif;?>
         <?php if($module->type != 'line'):?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
-          <th class='thWidth'><?php echo ($type == 'doc') ? $lang->tree->parentCate : $lang->tree->parent;?></th>
+        <?php
+        $parentName = $lang->tree->parent;
+        if($type == 'doc' or $type == 'api') $parentName = $lang->tree->parentCate;
+        if($type == 'host') $parentName = $lang->tree->parentGroup;
+        ?>
+          <th class='thWidth'><?php echo $parentName;?></th>
           <td>
             <div class='input-group' id='moduleIdBox'>
               <?php echo html::select('parent', $optionMenu, $module->parent, "class='form-control chosen'");?>
@@ -69,12 +80,13 @@ if(isset($pageCSS)) css::internal($pageCSS);
           <th class='thWidth'>
             <?php
             $lblTreeName = $lang->tree->name;
-            if($type == 'doc') $lblTreeName = $lang->tree->cate;
+            if($type == 'doc' or $type == 'api') $lblTreeName = $lang->tree->dir;
             if($type == 'line') $lblTreeName = $lang->tree->line;
+            if($type == 'host') $lblTreeName = $lang->tree->groupName;
             echo $lblTreeName;
             ?>
           </th>
-          <td><?php echo html::input('name', $module->name, "class='form-control'");?></td>
+          <td class="<?php if(strpos($required, 'name') !== false) echo 'required';?>"><?php echo html::input('name', $module->name, "class='form-control'");?></td>
         </tr>
         <?php if($type == 'bug'):?>
         <tr>

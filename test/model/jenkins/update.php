@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/jenkins.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -37,4 +36,3 @@ r($jenkins->update($jenkinsID)) && p() && e('url');    // 服务器地址为空
 $_POST['url'] = 'http://10.0.7.242:9580';
 r($jenkins->update($jenkinsID)) && p('name') && e('Changed Jenkins');    // 正确Jenkins数据
 
-$db->restoreDB();

@@ -3,7 +3,7 @@ $(function()
     $('#type').change(function()
     {
         var type = $(this).val();
-        $('#sendTypeTR').toggle(type != 'dinggroup' && type != 'dinguser' && type != 'wechatuser' && type != 'wechatgroup' && type != 'feishuuser' && type != 'feishugroup');
+        //$('#sendTypeTR').toggle(type != 'dinggroup' && type != 'dinguser' && type != 'wechatuser' && type != 'wechatgroup' && type != 'feishuuser' && type != 'feishugroup');
         $('#secretTR').toggle(type == 'dinggroup' || type == 'feishugroup');
         $('#urlTR').toggle(type != 'dinguser' && type != 'wechatuser' && type != 'feishuuser');
         $('.dinguserTR').toggle(type == 'dinguser');

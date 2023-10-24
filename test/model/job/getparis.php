@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/job.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -20,4 +19,3 @@ $repoID = '1';
 $engine = 'jenkins';
 
 r($job->getPairsTest($repoID, $engine)) && p('1') && e('这是一个Job1'); // 获取repo为1且engine为jenkins的name
-$db->restoreDB();

@@ -2,7 +2,7 @@
 /**
  * The start file of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     task
@@ -41,7 +41,7 @@
         <?php endif;?>
       </h2>
     </div>
-    <form method='post' target='hiddenwin' <?php if($app->rawMethod == 'start') echo "onsubmit='return checkLeft();'"?>>
+    <form method='post' target='hiddenwin' <?php if($app->rawMethod == 'start' or $app->rawMethod == 'starttask') echo "onsubmit='return checkLeft();'"?>>
       <table class='table table-form'>
         <tr class='<?php if($task->mode == 'multi') echo 'hidden'?>'>
           <th class='w-90px'><?php echo $lang->task->assignedTo;?></th>

@@ -336,4 +336,139 @@ class programplanTest
 
         return implode(',', $objects);
     }
+
+    /**
+     * Test get parent stage's children types.
+     *
+     * @param  int    $parentID
+     * @access public
+     * @return string
+     */
+    public function getParentChildrenTypesTest($parentID)
+    {
+        $objects = $this->objectModel->getParentChildrenTypes($parentID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Test check code unique.
+     *
+     * @param array $codes
+     * @param array $planIDList
+     * @access public
+     * @return string
+     */
+    public function checkCodeUniqueTest($codes, $planIDList = array())
+    {
+        $objects = $this->objectModel->checkCodeUnique($codes, $planIDList);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Test check name unique.
+     *
+     * @param array $names
+     * @access public
+     * @return string
+     */
+    public function checkNameUniqueTest($names)
+    {
+        $objects = $this->objectModel->checkNameUnique($names);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Test check if the stage is a leaf stage.
+     *
+     * @param  int     $planID
+     * @access public
+     * @return string
+     */
+    public function checkLeafStageTest($planID)
+    {
+        $objects = $this->objectModel->checkLeafStage($planID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Test check whether it is the top stage.
+     *
+     * @param  int     $planID
+     * @access public
+     * @return string
+     */
+    public function checkTopStageTest($planID)
+    {
+        $objects = $this->objectModel->checkTopStage($planID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Test update sub-stage attribute.
+     *
+     * @param  int     $planID
+     * @param  string  $attribute
+     * @param  int     $subStageID
+     * @access public
+     * @return string
+     */
+    public function updateSubStageAttrTest($planID, $attribute, $subStageID)
+    {
+        global $tester;
+
+        $objects = $this->objectModel->updateSubStageAttr($planID, $attribute);
+
+        if(dao::isError()) return dao::getError();
+
+        $attribute = $tester->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($subStageID)->fetch('attribute');
+
+        return $attribute;
+    }
+
+    /**
+     * Test get plan and its children.
+     *
+     * @param  string|int|array  $executionIdList
+     * @access public
+     * @return string
+     */
+    public function getSelfAndChildrenListTest($executionIdList)
+    {
+        $objects = $this->objectModel->getSelfAndChildrenList($executionIdList);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Test get plan's siblings.
+     *
+     * @param  string|int|array  $executionIdList
+     * @access public
+     * @return string
+     */
+    public function getSiblingsTest($executionIdList)
+    {
+        $objects = $this->objectModel->getSiblings($executionIdList);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
 }

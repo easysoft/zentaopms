@@ -1,5 +1,4 @@
 <?php
-$config->task->customBatchCreateFields   .= ',lane,region';
 $config->task->custom->batchCreateFields .= ',lane,region';
 $config->task->datatable->defaultField = array('id', 'pri', 'name', 'status', 'assignedTo', 'lane', 'finishedBy', 'estimate', 'consumed', 'left', 'progress', 'deadline', 'actions');
 

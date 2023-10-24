@@ -2,7 +2,7 @@
 /**
  * The create view of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
@@ -21,10 +21,10 @@
     <div class="main-header">
       <h2><?php echo $lang->product->create;?></h2>
     </div>
-    <form class="load-indicator main-form form-ajax" id="createForm" method="post" target='hiddenwin'>
+    <form class="load-indicator main-form form-ajax<?php if(defined('TUTORIAL')) echo ' not-watch';?>" id="createForm" method="post" target='hiddenwin'>
       <table class="table table-form">
         <tbody>
-          <?php if($this->config->systemMode == 'ALM'):?>
+          <?php if(in_array($this->config->systemMode, array('ALM', 'PLM'))):?>
           <tr>
             <th class='w-140px'><?php echo $lang->program->common;?></th>
             <td><?php echo html::select('program', $programs, $programID, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td><td></td>
@@ -56,7 +56,7 @@
             <th><?php echo $lang->product->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control input-product-title' required");?></td><td></td>
           </tr>
-          <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+          <?php if(isset($config->setCode) and $config->setCode == 1):?>
           <tr>
             <th><?php echo $lang->product->code;?></th>
             <td><?php echo html::input('code', '', "class='form-control' required");?></td>

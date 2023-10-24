@@ -1,25 +1,3 @@
-/* Set the story priview link. */
-function setPreview()
-{
-    if($('#story').val() == 0)
-    {
-        $('#preview').addClass('hidden');
-    }
-    else
-    {
-        storyLink = createLink('story', 'view', "storyID=" + $('#story').val());
-        if(!isonlybody)
-        {
-            var concat = storyLink.indexOf('?') < 0 ? '?'  : '&';
-            storyLink  = storyLink + concat + 'onlybody=yes';
-        }
-
-        $('#preview').addClass('iframe');
-        $('#preview').removeClass('hidden');
-        $('#preview').attr('href', storyLink);
-    }
-}
-
 $(function()
 {
     var $searchStories = $('#searchStories');

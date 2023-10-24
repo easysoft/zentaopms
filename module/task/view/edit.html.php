@@ -2,7 +2,7 @@
 /**
  * The edit view of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
@@ -24,6 +24,7 @@
 <?php js::set('members', $members);?>
 <?php js::set('page', 'edit');?>
 <?php js::set('confirmChangeExecution', $lang->task->confirmChangeExecution);?>
+<?php js::set('confirmRecord', $lang->task->confirmRecord);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
 <?php js::set('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))?>
@@ -103,7 +104,9 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                 <td><?php echo html::select('execution', $executions, $task->execution, 'class="form-control chosen" onchange="loadAll(this.value)"');?></td>
               </tr>
               <?php else:?>
+              <tr class='hidden'>
               <?php echo html::hidden('execution', $task->execution);?>
+              </tr>
               <?php endif;?>
               <tr>
                 <th class='thWidth'><?php echo $lang->task->module;?></th>
@@ -118,7 +121,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                   </div>
                 </td>
               </tr>
-              <?php if($execution->lifetime != 'ops'):?>
+              <?php if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review'))):?>
               <tr>
                 <th><?php echo $lang->task->story;?></th>
                 <td><span id="storyIdBox"><?php echo html::select('story', $stories, $task->story, "class='form-control chosen' data-drop_direction='down' data-max_drop_width='0'");?></span></td>
@@ -127,14 +130,14 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
               <?php if($task->parent >= 0 and empty($task->team)):?>
               <tr>
                 <th><?php echo $lang->task->parent;?></th>
-                <td><?php echo html::select('parent', $tasks, $task->parent, "class='form-control chosen'");?></td>
+                <td><?php echo html::select('parent', $tasks, $task->parent, "class='form-control picker-select'");?></td>
               </tr>
               <?php endif;?>
               <tr class="modeBox">
                 <th><?php echo $lang->task->mode;?></th>
                 <td>
                   <?php
-                  if($task->status == 'wait')
+                  if($task->status == 'wait' and $task->parent == 0)
                   {
                       echo html::select('mode', $lang->task->editModeList, $task->mode, "class='form-control chosen'");
                   }
@@ -197,7 +200,7 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
                 <th><?php echo $lang->task->mailto;?></th>
                 <td>
                   <div class='input-group'>
-                    <?php echo html::select('mailto[]', $users, $task->mailto, 'class="form-control picker-select" multiple data-drop-direction="bottom"');?>
+                    <?php echo html::select('mailto[]', $users, $task->mailto, 'class="form-control picker-select" multiple data-drop-direction="bottom" data-drop-width="auto"');?>
                     <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>
@@ -285,14 +288,21 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
           </button>
           <h4 class="modal-title"><?php echo $lang->task->team?></h4>
         </div>
-        <div class="modal-content with-padding" id='taskTeamEditor'>
+	<div class="modal-content with-padding" id='taskTeamEditor'>
+	  <?php if(strpos('|closed|cancel|pause|', $task->status) !== false):?>
+	     <h2 class='label label-info'>
+               <?php echo $this->lang->task->error->teamCantOperate;?>
+             </h2>
+	  <?php endif;?>
           <table class='table table-form'>
             <tbody class="sortable">
               <?php include dirname(__FILE__) . DS . 'taskteam.html.php';?>
             </tbody>
-            <tfoot>
+	    <tfoot>
+	      <?php if(strpos('|closed|cancel|pause|', $task->status) === false):?>
               <tr><td colspan='3' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "id='confirmButton' class='btn btn-primary btn-wide'");?></td></tr>
-            </tfoot>
+	      <?php endif;?>
+	    </tfoot>
           </table>
         </div>
       </div>
@@ -300,4 +310,5 @@ foreach(explode(',', $config->task->edit->requiredFields) as $field)
   </form>
 </div>
 <?php js::set('executionID', $execution->id);?>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

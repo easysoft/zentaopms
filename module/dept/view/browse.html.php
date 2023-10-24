@@ -2,7 +2,7 @@
 /**
  * The browse view file of dept module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dept
@@ -12,11 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('repeatDepart', $lang->dept->repeatDepart);?>
-<div id='mainMenu' class='clearfix'>
-  <div class='btn-toolbar pull-left'>
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->dept->common;?></span></span>
-  </div>
-</div>
 <div id='mainContent' class='main-row'>
   <div class='side-col col-4'>
     <div class='panel'>
@@ -56,9 +51,9 @@
                 foreach($sons as $sonDept)
                 {
                     if($sonDept->order > $maxOrder) $maxOrder = $sonDept->order;
-                    echo html::input("depts[id$sonDept->id]", $sonDept->name, "class='form-control'");
+                    echo "<div class='div-depts'>" . html::input("depts[id$sonDept->id]", $sonDept->name, "class='form-control'") . "</div>";
                 }
-                for($i = 0; $i < DEPT::NEW_CHILD_COUNT ; $i ++) echo html::input("depts[]", '', "class='form-control'");
+                for($i = 0; $i < DEPT::NEW_CHILD_COUNT ; $i ++) echo "<div class='div-depts'>" . html::input("depts[]", '', "class='form-control'") . "</div>";
                ?>
               </td>
               <td></td>
@@ -175,25 +170,28 @@ $(function()
     });
 
 
-    $("input[name*='depts']").change(function ()
+    $("input[name*='depts']").on('input', function ()
     {
         var depts        = new Array();
         var modifyData   = $(this).val();
         var changedInput = $(this);
 
-        changedInput.wrap('<span>');
-        changedInput.closest('span').addClass('dataField');
+        changedInput.closest('div').addClass('dataField');
 
         $('input[name^="depts"]').not($(this)).each(function()
         {
             if($(this).val()) depts.push($(this).val());
         });
 
-        if(depts.indexOf(modifyData) > -1)
+        if(depts.includes(modifyData))
         {
-            $('.dataField #depts\\[\\]').addClass('intro');
-            $('.intro').css({"margin" : "5px 0px 5px 0px", "display" : "inline", "width" : "50%"});
-            changedInput.after('<span style="padding-left: 15px;color: #1183fb" class="tips">' + repeatDepart + '</span>');
+            changedInput.after('<span style="padding-left: 1px;color: #1183fb" class="tips">' + repeatDepart + '</span>');
+            changedInput.closest('div').addClass('clear-margin');
+        }
+        else
+        {
+            $('.div-depts').removeClass('clear-margin');
+            $('.tips').remove();
         }
     });
 
@@ -201,9 +199,7 @@ $(function()
     {
         if($('.dataField').length)
         {
-            $('.intro').removeAttr('style');
-            $('.intro').unwrap();
-            $('#depts\\[\\]').removeClass('intro');
+            $('.div-depts').removeClass('clear-margin');
             $('.tips').remove();
         }
     });

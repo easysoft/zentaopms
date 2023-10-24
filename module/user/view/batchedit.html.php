@@ -2,7 +2,7 @@
 /**
  * The batch create view of user module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     story
@@ -83,7 +83,7 @@
         <tr class='text-center'>
           <td><?php echo $user->id;?></td>
           <td class='text-left<?php echo zget($visibleFields, 'dept', ' hidden')?>' style='overflow:visible'><?php echo html::select("dept[$user->id]", $depts, $dept, "class='form-control chosen'");?></td>
-          <td><?php echo html::input("account[$user->id]",  $user->account, "class='form-control'");?></td>
+          <td><?php echo html::input("account[$user->id]",  $user->account, "class='form-control' readonly");?></td>
           <td><?php echo html::input("realname[$user->id]", $user->realname, "class='form-control'");?></td>
           <?php if($showVisionList):?>
             <td class='text-left'><?php echo html::select("visions[$user->id][]", $visionList, $user->visions, "class='form-control chosen' multiple");?></td>

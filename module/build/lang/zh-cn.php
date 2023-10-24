@@ -2,7 +2,7 @@
 /**
  * The build module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
@@ -20,6 +20,7 @@ $lang->build->view             = "版本详情";
 $lang->build->batchUnlink      = '批量移除';
 $lang->build->batchUnlinkStory = "批量移除{$lang->SRCommon}";
 $lang->build->batchUnlinkBug   = '批量移除Bug';
+$lang->build->linkArtifactRepo = '关联制品库';
 
 $lang->build->confirmDelete      = "您确认删除该版本吗？";
 $lang->build->confirmUnlinkStory = "您确认移除该{$lang->SRCommon}吗？";
@@ -29,7 +30,7 @@ $lang->build->basicInfo = '基本信息';
 
 $lang->build->id             = 'ID';
 $lang->build->product        = '所属' . $lang->productCommon;
-$lang->build->project        = '所属项目';
+$lang->build->project        = '所属' . $lang->projectCommon;
 $lang->build->branch         = '平台/分支';
 $lang->build->branchAll      = '所有关联%s';
 $lang->build->branchName     = '所属%s';
@@ -40,6 +41,7 @@ $lang->build->singled        = '单一版本';
 $lang->build->builds         = '包含版本';
 $lang->build->released       = '发布';
 $lang->build->name           = '名称编号';
+$lang->build->nameAB         = '名称';
 $lang->build->date           = '打包日期';
 $lang->build->builder        = '构建者';
 $lang->build->url            = '地址';
@@ -64,7 +66,7 @@ $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "已经关联{$lang->SRCommon}、Bug或提交测试单的版本，不能修改其所属{$lang->productCommon}";
 $lang->build->notice->changeExecution = "提交测试单的版本，不能修改其所属{$lang->executionCommon}";
 $lang->build->notice->changeBuilds    = "提交测试单的版本，不能修改关联版本";
-$lang->build->notice->autoRelation    = "相关版本下完成的需求、解决的Bug、产生的Bug将会自动关联到项目版本中";
+$lang->build->notice->autoRelation    = "相关版本下完成的需求、解决的Bug、产生的Bug将会自动关联到{$lang->projectCommon}版本中";
 $lang->build->notice->createTest      = "该版本所属执行已删除，不能提交测试";
 
 $lang->build->confirmChangeBuild = "%s『%s』解除关联后，%s下 %s个{$lang->SRCommon}和%s个Bug将同步从版本移除，是否解除？";

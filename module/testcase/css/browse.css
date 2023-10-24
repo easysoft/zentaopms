@@ -30,4 +30,19 @@ tbody > tr > td   .icon-share {font-size: 9px;}
 
 #mainMenu .pull-left .dividing-line {margin: 7px 5px 0 0;}
 .btn-toolbar>.btn, .btn-toolbar>.btn-group, .btn-toolbar>.dropdown {margin-right: 5px;}
-.checkbox-primary{float: left;}
+
+#mainMenu > .btn-toolbar > .checkbox-primary{float: left;}
+
+.table-nest-icon { cursor: pointer; }
+
+.tr-moving { opacity: 0.3; }
+
+.tr-acceptable { border: 2px solid rgba(255,0,0,0.5); }
+
+.none-select { -webkit-user-select: none; -moz-user-select: none; -moz-user-select: none; user-select: none; }
+
+.table-nest-toggle { vertical-align: middle; }
+
+.table-nest-title .icon-test { pointer-events: none; }
+
+.icon-test:after { border: 0px solid!important; }

@@ -2,7 +2,7 @@
 /**
  * The batch create view of testcase module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     testcase
@@ -57,6 +57,7 @@
             <th class='c-id'><?php echo $lang->idAB;?></th>
             <th class='c-branch<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo $lang->product->branch;?></th>
             <th class='c-module<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', '', ' required');?> moduleBox'><?php echo $lang->testcase->module;?></th>
+            <th class='c-scene<?php echo zget($visibleFields, 'scene', ' hidden') . zget($requiredFields, 'scene', '', ' required');?> sceneBox'><?php echo $lang->testcase->scene;?></th>
             <th class='c-story<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', '', ' required'); echo $hiddenStory;?> storyBox'> <?php echo $lang->testcase->story;?></th>
             <th class='text-left required has-btn c-title'><?php echo $lang->testcase->title;?></th>
             <th class='c-type text-left required'><?php echo $lang->testcase->type;?></th>
@@ -67,11 +68,11 @@
             <th class='c-review<?php  echo zget($visibleFields, 'review', ' hidden') . zget($requiredFields, 'review', '', ' required')?> reviewBox'><?php echo $lang->testcase->review;?></th>
             <?php
             $extendFields = $this->testcase->getFlowExtendFields();
-            foreach($extendFields as $extendField) 
-            {   
-                $required = strpos(",$extendField->rules,", ',1,') !== false ? 'required' : ''; 
+            foreach($extendFields as $extendField)
+            {
+                $required = strpos(",$extendField->rules,", ',1,') !== false ? 'required' : '';
                 echo "<th class='c-extend $required'>{$extendField->name}</th>";
-            }   
+            }
             ?>
             <th class='c-actions text-left'><?php echo $lang->actions;?></th>
           </tr>
@@ -81,6 +82,7 @@
           <?php for($i = 1; $i <= $config->testcase->batchCreate; $i++):?>
           <?php
           if($i != 1) $currentModuleID = 'ditto';
+          if($i != 1) $currentSceneID = 'ditto';
           if($i != 1) $lang->testcase->typeList['ditto'] = $lang->testcase->ditto;
           if($i != 1) $lang->testcase->priList['ditto']  = $lang->testcase->ditto;
           $type = $i == 1 ? 'feature' : 'ditto';
@@ -88,8 +90,9 @@
           ?>
           <tr>
             <td class="text-center"><?php echo $i;?></td>
-            <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModules(this.value, $productID, $i)'");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?> moduleBox' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='loadStories($productID, this.value, $i)' data-drop_direction='down'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModules($productID, this.value, $i)'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?> moduleBox' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='onModuleChanged($productID, this.value, $i)' data-drop_direction='down'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'scene', ' hidden')?>' style='overflow:visible;'><?php echo html::select("scene[$i]", $sceneOptionMenu, $currentSceneID, "class='form-control chosen' data-drop_direction='down'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?> storyBox' style='overflow:visible'> <?php echo html::select("story[$i]", $storyPairs, $story ? $story->id : '', 'class="form-control picker-select"');?></td>
             <td style='overflow:visible'>
               <div class="input-control has-icon-right">
@@ -125,7 +128,7 @@
         <tfoot>
           <tr>
             <td colspan='<?php echo $colspan?>' class='text-center form-actions'>
-              <?php echo html::submitButton();?>
+              <?php echo html::submitButton('', '', 'form-stash-clear btn btn-wide btn-primary');?>
               <?php echo html::backButton();?>
             </td>
           </tr>
@@ -139,8 +142,9 @@
   <tbody>
     <tr>
       <td class="text-center">%s</td>
-      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[%s]", $branches, $branch, "class='form-control chosen' onchange='setModules(this.value, $productID, \"%s\")'");?></td>
-      <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?> moduleBox' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='loadStories($productID, this.value, \"%s\")' data-drop_direction='down'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[%s]", $branches, $branch, "class='form-control chosen' onchange='setModules($productID, this.value, \"%s\")'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?> moduleBox' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='onModuleChanged($productID, this.value, \"%s\")' data-drop_direction='down'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'scene', ' hidden')?>' style='overflow:visible'><?php echo html::select("scene[%s]", $sceneOptionMenu, $currentSceneID, "class='form-control chosen' data-drop_direction='down'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?> storyBox' style='overflow:visible'> <?php echo html::select("story[%s]", $storyPairs, '', 'class="form-control picker-select"');?></td>
       <td style='overflow:visible'>
         <div class="input-control has-icon-right">
@@ -160,7 +164,7 @@
       <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?> keywordsBox'><?php echo html::input("keywords[%s]", '', "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?> stageBox' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
       <td class='<?php echo zget($visibleFields, 'review', 'hidden')?> reviewBox'><?php echo html::select("needReview[%s]", $lang->testcase->reviewList, $needReview, "class='form-control chosen'");?></td>
-      <?php 
+      <?php
       $this->loadModel('flow');
       foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[%s]") . "</td>";
       ?>
@@ -178,8 +182,9 @@
   <table class='hidden'>
     <tr id='addRow' class='hidden'>
       <td class="text-center"><?php echo $i;?></td>
-      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModules(this.value, $productID, $i)'");?></td>
-      <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?> moduleBox' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='loadStories($productID, this.value, $i)' data-drop_direction='down'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModules($productID, this.value, $i)'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?> moduleBox' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='onModuleChanged($productID, this.value, $i)' data-drop_direction='down'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'scene', ' hidden')?>' style='overflow:visible'><?php echo html::select("scene[$i]", $sceneOptionMenu, $currentSceneID, "class='form-control chosen' data-drop_direction='down'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?> storyBox' style='overflow:visible'> <?php echo html::select("story[$i]", $storyPairs, $story ? $story->id : '', 'class="form-control picker-select"');?></td>
       <td style='overflow:visible'>
         <div class="input-control has-icon-right">

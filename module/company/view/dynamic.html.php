@@ -2,7 +2,7 @@
 /**
  * The action->dynamic view file of dashboard module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
@@ -14,15 +14,14 @@
 <?php js::set('browseType', $browseType);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php foreach($lang->action->periods as $period => $label):?>
+    <?php foreach($lang->company->featureBar['dynamic'] as $period => $label):?>
     <?php
     $label  = "<span class='text'>$label</span>";
     $active = '';
     if($period == $browseType)
     {
         $active = 'btn-active-text';
-        $pager->recTotal = $recTotal ? $recTotal : $pager->recTotal;
-        $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+        $label .= " <span class='label label-light label-badge'>{$recTotal}</span>";
     }
     echo html::a(inlink('dynamic', "browseType=$period&param=&recTotal=0&date=&direction=next&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
@@ -52,7 +51,7 @@
     <?php foreach($dateGroups as $date => $actions):?>
     <?php $isToday = date(DT_DATE4) == $date;?>
     <div class="dynamic <?php if($isToday) echo 'active';?>">
-      <div class="dynamic-date <?php if($browseType == 'all') echo 'c-date';?>">
+      <div class="dynamic-date <?php if($browseType == 'all') echo 'c-dynamic-date';?>">
         <?php if($isToday):?>
         <span class="date-label"><?php echo $lang->action->dynamic->today;?></span>
         <?php endif;?>
@@ -63,7 +62,9 @@
         <?php foreach($actions as $i => $action):?>
         <?php if($action->action == 'adjusttasktowait') continue;?>
         <?php if(empty($firstAction)) $firstAction = $action;?>
-        <li <?php if($action->major) echo "class='active'";?>>
+        <?php $class = $action->major ? 'active' : '';?>
+        <?php if(in_array($action->action, array('releaseddoc', 'collected'))) $class .= " {$action->action}";?>
+        <li <?php if($action->major) echo "class='$class'";?>>
           <div>
             <span class="timeline-tag"><?php echo $action->time?></span>
             <span class="timeline-text">
@@ -114,8 +115,8 @@ $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
 $lastDate  = substr($action->originalDate, 0, 10);
 $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
 $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
-$preLink   = $hasPre ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . "&direction=pre&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy") : 'javascript:;';
-$nextLink  = $hasNext ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . "&direction=next&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy") : 'javascript:;';
+$preLink   = $hasPre ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal={$recTotal}&date=" . strtotime($firstDate) . "&direction=pre&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy") : 'javascript:;';
+$nextLink  = $hasNext ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal={$recTotal}&date=" . strtotime($lastDate) . "&direction=next&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy") : 'javascript:;';
 ?>
 <?php if($hasPre or $hasNext):?>
 <div id="mainActions" class='main-actions'>

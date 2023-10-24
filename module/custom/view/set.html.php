@@ -2,7 +2,7 @@
 /**
  * The set view file of custom module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     custom
@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include 'header.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php
 $itemRow = <<<EOT
   <tr class='text-center'>
@@ -28,15 +28,15 @@ $itemRow = <<<EOT
   </tr>
 EOT;
 ?>
+<style>
+.checkbox-primary {width: 170px; margin: 0 10px 10px 0; display: inline-block;}
+</style>
 <?php js::set('itemRow', $itemRow)?>
 <?php js::set('module',  $module)?>
 <?php js::set('field',   $field)?>
 <?php js::set('confirmReviewCase', $lang->custom->notice->confirmReviewCase)?>
 <?php js::set('stopSubmit', true)?>
-<style>
-.checkbox-primary {width: 170px; margin: 0 10px 10px 0; display: inline-block;}
-</style>
-<?php if($module == 'story' and $field == 'review'):?>
+<?php if(($module == 'story' or $module == 'demand') and $field == 'review'):?>
 <style>
 .table-form>tbody>tr>th {width: 120px !important}
 .checkbox-primary {margin-bottom: 0px; width: 82px !important;}
@@ -48,23 +48,12 @@ EOT;
 </style>
 <?php endif;?>
 <div id='mainContent' class='main-row'>
-  <div class='side-col' id='sidebar'>
-    <div class='cell'>
-      <div class='list-group'>
-        <?php
-        foreach($lang->custom->{$module}->fields as $key => $value)
-        {
-            echo html::a(inlink('set', "module=$module&field=$key"), $value, '', " id='{$key}Tab'");
-        }
-        ?>
-      </div>
-    </div>
-  </div>
+  <?php if(!in_array($module, array('block', 'baseline'))) include 'sidebar.html.php';?>
   <div class='main-col main-content'>
     <form class="load-indicator main-form form-ajax" method='post'>
       <div class='main-header'>
         <div class='heading'>
-          <strong><?php echo $lang->custom->object[$module] . $lang->arrow . $lang->custom->$module->fields[$field]?></strong>
+          <strong><?php echo $lang->custom->$module->fields[$field]?></strong>
         </div>
       </div>
       <?php if($module == 'project' and $field == 'unitList'):?>
@@ -83,7 +72,7 @@ EOT;
           <td colspan='4' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
       </table>
-      <?php elseif($module == 'story' and $field == 'reviewRules'):?>
+      <?php elseif(in_array($module, array('story', 'demand')) and $field == 'reviewRules'):?>
       <table class='table table-form mw-700px'>
         <tr>
           <th class='thWidth'><?php echo $lang->custom->reviewRule;?></th>
@@ -98,13 +87,13 @@ EOT;
           <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
       </table>
-      <?php elseif(($module == 'story' or $module == 'testcase') and $field == 'review'):?>
+      <?php elseif(in_array($module, array('story', 'testcase', 'demand')) and $field == 'review'):?>
       <table class='table table-form'>
         <tr class='reviewBox'>
           <th class='thWidth'><?php echo $lang->custom->storyReview;?></th>
           <td><?php echo html::radio('needReview', $lang->custom->reviewList, $needReview);?></td>
         </tr>
-        <?php if($module == 'story'):?>
+        <?php if($module == 'story' or $module == 'demand'):?>
         <tr>
           <?php $space = ($app->getClientLang() != 'zh-cn' and $app->getClientLang() != 'zh-tw') ? ' ': '';?>
           <td colspan='3' class='storyReviewTip<?php if($needReview) echo " hidden"?>'><div><?php echo sprintf($lang->custom->notice->forceReview, $lang->$module->common) . $lang->custom->notice->storyReviewTip;?></td>
@@ -148,21 +137,6 @@ EOT;
           <td style='width:300px'><?php printf($lang->custom->notice->forceNotReview, $lang->$module->common);?></td>
         </tr>
         <?php endif;?>
-        <tr>
-          <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
-        </tr>
-      </table>
-      <?php elseif($module == 'task' and $field == 'hours'):?>
-      <table class='table table-form mw-600px'>
-        <tr>
-          <th class='w-150px'><?php echo $lang->custom->workingHours;?></th>
-          <td><?php echo html::input('defaultWorkhours', $workhours, "class='form-control w-80px'");?></td>
-          <td></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->custom->weekend;?></th>
-          <td><?php echo html::radio('weekend', $lang->custom->weekendList, $weekend);?></td>
-        </tr>
         <tr>
           <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
@@ -216,7 +190,7 @@ EOT;
         </tr>
         <tr>
           <td></td>
-          <td>
+          <td class="form-actions">
             <?php echo html::submitButton();?>
             <?php if(common::hasPriv('custom', 'restore')) echo html::linkButton($lang->custom->restore, inlink('restore', "module=user&field=contactField"), 'hiddenwin', '', 'btn btn-wide');?>
           </td>
@@ -275,7 +249,7 @@ EOT;
     </form>
   </div>
 </div>
-<?php if($module == 'story' and $field == 'review'):?>
+<?php if(in_array($module, array('story', 'demand')) and $field == 'review'):?>
 <script>
 $(function()
 {

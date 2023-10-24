@@ -131,6 +131,10 @@ $lang->selectedItems = '已選擇 <strong>{0}</strong> 項';
 
 $lang->future      = '未來';
 $lang->year        = '年';
+$lang->month       = '月';
+$lang->hour        = '小时';
+$lang->minute      = '分';
+$lang->second      = '秒';
 $lang->workingHour = '工時';
 
 $lang->idAB         = 'ID';
@@ -151,9 +155,9 @@ $lang->kanban->common     = '看板';
 $lang->qa->common         = '測試';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = '文檔';
-$lang->repo->common       = '代碼';
+$lang->repo->common       = '代碼庫';
 $lang->repo->codeRepo     = '代碼庫';
-$lang->report->common     = '統計';
+$lang->report->common     = '统计';
 $lang->system->common     = '組織';
 $lang->admin->common      = '後台';
 $lang->task->common       = '任務';
@@ -185,6 +189,11 @@ $lang->execution->list    = "{$lang->executionCommon}列表";
 $lang->kanban->common     = '看板';
 $lang->app->common        = '應用';
 $lang->app->serverLink    = '服務器鏈接';
+$lang->space->common      = '服务管理';
+$lang->store->common      = '应用市场';
+$lang->instance->common   = '应用';
+$lang->codereview->common = '问题';
+$lang->repocode->common   = '代码';
 
 $lang->personnel->common     = '人員';
 $lang->personnel->invest     = '投入人員';
@@ -258,7 +267,6 @@ $lang->product->kanban = $lang->productCommon . '看板';
 $lang->project->report = '報告';
 
 $lang->report->weekly       = '周報';
-$lang->report->annual       = '年度總結';
 $lang->report->notice       = new stdclass();
 $lang->report->notice->help = '註：統計報表的數據來源於列表頁面的檢索結果，生成統計報表前請先在列表頁面進行檢索。比如列表頁面我們檢索的是%tab%，那麼報表就是基于之前檢索的%tab%的結果集進行統計。';
 
@@ -266,11 +274,29 @@ $lang->testcase->case      = '用例';
 $lang->testcase->testsuite = '套件';
 $lang->testcase->caselib   = '用例庫';
 
-$lang->devops->compile  = '流水線';
-$lang->devops->mr       = '合併請求';
-$lang->devops->repo     = '版本庫';
-$lang->devops->rules    = '指令';
-$lang->devops->settings = '合併請求設置';
+$lang->devops->compile     = '流水線';
+$lang->devops->mr          = '合併請求';
+$lang->devops->repo        = '版本庫';
+$lang->devops->rules       = '指令';
+$lang->devops->settings    = '合併請求設置';
+$lang->devops->platform    = '平臺';
+$lang->devops->set         = '設置';
+$lang->devops->artifact    = '製品庫';
+$lang->devops->environment = '環境';
+$lang->devops->resource    = '資源';
+$lang->devops->dblist      = '數據庫';
+$lang->devops->domain      = '域名';
+$lang->devops->oss         = '對象存儲';
+$lang->devops->host        = '主機';
+$lang->devops->account     = '賬號';
+$lang->devops->serverroom  = '機房';
+$lang->devops->deploy      = '上綫';
+$lang->devops->provider    = '服務商';
+$lang->devops->cpuBrand    = 'CPU品牌';
+$lang->devops->city        = '城市';
+$lang->devops->os          = '系統版本';
+$lang->devops->stage       = '階段';
+$lang->devops->service     = '服務';
 
 $lang->admin->system     = '系統';
 $lang->admin->entry      = '應用';

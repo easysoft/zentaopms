@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/jenkins.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -19,4 +18,3 @@ $jenkins = new jenkinsTest();
 
 r($jenkins->getPairs()) && p() && e('3');    // 获取Jenkins
 
-$db->restoreDB();

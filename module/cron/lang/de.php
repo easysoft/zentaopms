@@ -2,7 +2,7 @@
 $lang->cron->common       = 'Geplante Tasks';
 $lang->cron->id           = 'ID';
 $lang->cron->buildin      = 'Build In';
-$lang->cron->index        = 'Home';
+$lang->cron->index        = 'Geplante Tasks List';
 $lang->cron->list         = 'Tasks';
 $lang->cron->create       = 'Hinzufügen';
 $lang->cron->createAction = 'Add Cron';

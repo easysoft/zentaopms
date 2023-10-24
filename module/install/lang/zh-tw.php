@@ -24,6 +24,7 @@ $lang->install->keepInstalling   = '繼續安裝當前版本';
 $lang->install->seeLatestRelease = '看看最新的版本';
 $lang->install->welcome          = '歡迎使用禪道項目管理軟件！';
 $lang->install->license          = '禪道項目管理軟件使用 Z PUBLIC LICENSE(ZPL) 1.2 授權協議';
+$lang->install->devopsDesc       = 'DevOps平台底層基於Docker、K8s等雲端原生技術構建，內建應用市場，支援快速安裝程式碼庫、管線、製品庫等工具，輕鬆建構DevOps工具鏈。';
 $lang->install->desc             = <<<EOT
 禪道項目管理軟件(ZenTaoPMS)是一款國產的，基于<a href='http://zpl.pub' target='_blank'>ZPL</a>協議，開源免費的項目管理軟件，它集產品管理、項目管理、測試管理於一體，同時還包含了事務管理、組織管理等諸多功能，是中小型企業項目管理的首選。
 
@@ -283,3 +284,12 @@ $lang->install->meshiot->desc = <<<EOD
   <li>可配電池，對既有場地無任何要求</li>
 </ul>
 EOD;
+
+$lang->install->solution = new stdclass();
+$lang->install->solution->skip        = '跳過';
+$lang->install->solution->skipInstall = '暫不安裝';
+$lang->install->solution->log         = '安裝日志';
+$lang->install->solution->title       = 'DevOps平臺應用設置';
+$lang->install->solution->progress    = 'DevOps平臺應用安裝';
+$lang->install->solution->desc        = '歡迎使用DevOps平臺，我們將在您安裝平臺時同時安裝以下應用，幫助您快速上手!';
+$lang->install->solution->overMemory  = '内存不足，無法同時安裝，建議平臺啓動后手動安裝應用。';

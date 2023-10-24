@@ -1,0 +1,13 @@
+.flex-content #content {flex: auto; overflow-y: auto; height: calc(100vh - 125px);}
+.flex-content #history {flex: 0 0 302px; position: relative; overflow: auto;}
+.flex-content #history > #closeBtn {position: absolute; right: 10px; top: 10px;}
+
+#content .detail-content.article-content::-webkit-scrollbar,
+#outlineMenu::-webkit-scrollbar,
+#history::-webkit-scrollbar {height: 0px; width: 0px; background: transparent;}
+#content .detail-content.article-content::-moz-scrollbar,
+#outlineMenu::-moz-scrollbar,
+#hostory::-moz-scrollbar {height: 0px; width: 0px; background: transparent;}
+.main-col iframe {min-height: unset;}
+.bottom-btn-tree {display: none;}
+.main-col .doc-title .actions a > span {color: #9EA3B0;}

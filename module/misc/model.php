@@ -1,7 +1,7 @@
 <?php
 /**
  * The model file of misc module of ZenTaoPMS.
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
@@ -95,18 +95,10 @@ class miscModel extends model
     public function checkOneClickPackage()
     {
         $weakSites = array();
-        if(strpos('|/zentao/|/pro/|/biz/|', "|{$this->config->webRoot}|") !== false)
+        if(strpos('|/zentao/|/biz/|/max/|', "|{$this->config->webRoot}|") !== false)
         {
-            $databases = array('zentao' => 'zentao', 'zentaopro' => 'zentaopro', 'zentaobiz' => 'zentaobiz', 'zentaoep' => 'zentaoep');
-            if($this->config->webRoot == '/zentao/') unset($databases['zentao']);
-            if($this->config->webRoot == '/pro/') unset($databases['zentaopro']);
-            if($this->config->webRoot == '/biz/')
-            {
-                unset($databases['zentaobiz']);
-                unset($databases['zentaoep']);
-            }
-
-            $basePath = dirname($this->app->getBasePath());
+            $databases = array('zentao' => 'zentao', 'zentaobiz' => 'zentaobiz', 'zentaoep' => 'zentaoep', 'zentaomax' => 'zentaomax');
+            $basePath  = dirname($this->app->getBasePath());
             foreach($databases as $database)
             {
                 $zentaoDirName = $database;
@@ -114,19 +106,18 @@ class miscModel extends model
                 {
                     if($zentaoDirName == 'zentaobiz' and !is_dir($basePath . '/zentaoep')) continue;
                     if($zentaoDirName == 'zentaoep' and !is_dir($basePath . '/zentaobiz')) continue;
-                    if($zentaoDirName == 'zentao' or $zentaoDirName == 'zentaopro') continue;
+                    if($zentaoDirName == 'zentao' or $zentaoDirName == 'zentaomax') continue;
 
                     if($zentaoDirName == 'zentaobiz') $zentaoDirName = 'zentaoep';
-                    if($zentaoDirName == 'zentaoep')  $zentaoDirName = 'zentaobiz';
                 }
 
                 try
                 {
                     $webRoot = "/{$database}/";
                     if($database == 'zentao')    $webRoot = '/zentao/';
-                    if($database == 'zentaopro') $webRoot = '/pro/';
                     if($database == 'zentaobiz') $webRoot = '/biz/';
                     if($database == 'zentaoep')  $webRoot = '/biz/';
+                    if($database == 'zentaomax') $webRoot = '/max/';
 
                     $user = $this->dbh->query("select * from {$database}.`zt_user` where account = 'admin' and password='" . md5('123456') . "'")->fetch();
                     if($user)
@@ -145,17 +136,36 @@ class miscModel extends model
     }
 
     /**
-     * Get table and engine pairs.
+     * Get cache files.
      *
-     * @access public
-     * @return array
+     * @param string $directory
+     * @return void
      */
-    public function getTableEngines()
+    public function cleanCachaFiles($directory)
     {
-        $tableEngines = array();
-        $stmt = $this->dao->query("SHOW TABLE STATUS WHERE `Engine` is not null");
-        while($table = $stmt->fetch()) $tableEngines[$table->Name] = $table->Engine;
+        $files = glob($directory . DS . '*.cache');
 
-        return $tableEngines;
+        foreach($files as $file) $this->deleteExpiredFile($file);
+
+        $subdirectories = glob($directory . DS . '*', GLOB_ONLYDIR);
+
+        foreach($subdirectories as $subdirectory) $this->cleanCachaFiles($subdirectory);
+    }
+
+    /**
+     * Delete expired file.
+     *
+     * @param string $file
+     * @return bool
+     */
+    public function deleteExpiredFile($file)
+    {
+        $content = file_get_contents($file);
+        $content = unserialize($content);
+
+        if(is_null($content['time'])) return false;
+        if(time() > $content['time']) return unlink($file);
+
+        return false;
     }
 }

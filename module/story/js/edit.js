@@ -37,11 +37,11 @@ $(function()
         $('#reviewer').val($(this).is(':checked') ? '' : lastReviewer).attr('disabled', $(this).is(':checked') ? 'disabled' : null).trigger('chosen:updated');
         if($(this).is(':checked'))
         {
-            $('#reviewerBox').removeClass('required');
+            $('.needNotReviewBox').closest('.detail-content').removeClass('required');
         }
         else
         {
-            $('#reviewerBox').addClass('required');
+            $('.needNotReviewBox').closest('.detail-content').addClass('required');
         }
     });
     if(!$('#reviewer').val()) $('#needNotReview').change();
@@ -93,6 +93,11 @@ $(function()
 
     $('#planIdBox').click(function()
     {
-        $('#planIdBox .chosen-container').find('div').css('width', '280px')
+        $('#planIdBox .chosen-container').find('div').css('width', $('#planIdBox').width())
+    });
+
+    $('#parent_chosen').click(function()
+    {
+        $('#parent_chosen').find('div').css('width', $('#parent_chosen').width())
     });
 })

@@ -1,0 +1,24 @@
+---
+title: zt_story
+author: qixinzhi
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: product
+  range: 1-10{40}
+- field: openedDate
+  range: "20100101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: closedDate
+  range: "20110101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: estimate
+  range: 1-10{10}
+- field: type
+  range: requirement{10},story{10}
+- field: deleted
+  range: 0{20},1{20}
+...

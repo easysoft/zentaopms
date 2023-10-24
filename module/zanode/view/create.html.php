@@ -2,7 +2,7 @@
 /**
  * The create view file of vm module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      xiawenlong <xiawenlong@cnezsoft.com>
  * @package     host
@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include $app->getModuleRoot() . 'common/view/kindeditor.html.php';?>
 <?php js::set('hostID', $hostID);?>
+<?php js::set('linuxList', $config->zanode->linuxList);?>
+<?php js::set('windowsList', $config->zanode->windowsList);?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
@@ -23,13 +25,22 @@
       <form method='post' target='hiddenwin' id='ajaxForm' class="load-indicator main-form form-ajax">
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->zanode->hostName;?></th>
-            <td><?php echo html::select('parent', $hostPairs, $hostID, "class='form-control chosen'")?></td>
+            <th><?php echo $lang->zahost->type;?></th>
+            <td><?php echo html::select('hostType', $lang->zanode->typeList, 'virtual', "class='form-control chosen' onchange='zanodeType()'")?></td>
             <td></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->zanode->hostName;?></th>
+            <td id='hostIdBox'><?php echo html::select('parent', $hostPairs, $hostID, "class='form-control chosen'")?></td>
+            <td><?php echo html::a($this->createLink('zahost', 'create', array(), '', true), $lang->zahost->create, '', "class='text-primary iframe'");?></td>
           </tr>
           <tr>
             <th class='w-120px'><?php echo $lang->zanode->name;?></th>
             <td class='p-25f'><?php echo html::input('name', '', "class='form-control' placeholder=\"{$lang->zanode->nameValid}\"");?></td>
+          </tr>
+          <tr class='hidden'>
+            <th class='w-120px'><?php echo $lang->zahost->IP;?></th>
+            <td class='p-25f required'><?php echo html::input('extranet', '', "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->zanode->image;?></th>
@@ -61,7 +72,12 @@
           </tr>
           <tr>
             <th><?php echo $lang->zanode->osName;?></th>
-            <td><?php echo html::input('osName', '', "class='form-control' readonly='readonly'")?></td>
+            <td>
+              <?php echo html::input('osName', '', "class='form-control' readonly='readonly' onchange='zanodeOsChange()'")?>
+              <div id="osNamePhysicsContainer" class="hidden">
+                <?php echo html::select('', $config->zanode->osType, 'linux', "class='form-control' id='osNamePhysicsPre'") . html::select('osNamePhysics', $config->zanode->linuxList, '', "class='form-control chosen'"); ?>
+              </div>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->zanode->desc ?></th>

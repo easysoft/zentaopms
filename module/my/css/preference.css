@@ -18,7 +18,7 @@
 .picker-option.picker-option-selected.option-ursr {background: unset !important; color: unset;}
 .picker-option.picker-option-active > .border,
 .picker-single .picker-option.picker-option-selected.picker-option-active.option-ursr > .border,
-.picker-single .picker-option.picker-option-selected.picker-option-active.option-ursr > .border {background: rgba(230,240,255, 0.4) !important; border: 1px solid #2E7FFF;}
+.picker-single .picker-option.picker-option-selected.picker-option-active.option-ursr > .border {background: rgba(230,240,255, 0.4) !important;}
 #pickerDropMenu-pk_URSR > .picker-option-list {display: flex; flex-wrap: wrap;}
 .option-ursr {flex: 1 1 50%;}
 .option-ursr > .border  {height: 46px; display: flex; padding: 5px 16px; border: 1px solid #EDEEF2; align-items: center;}

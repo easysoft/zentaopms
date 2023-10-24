@@ -2,7 +2,7 @@
 /**
  * The ticket view file of my module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Xin Zhou <zhouxin@cnezsoft.com>
  * @package     my
@@ -11,15 +11,20 @@
  */
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
-<?php js::set('mode', 'ticket');?>
+<?php js::set('mode', $mode);?>
 <?php js::set('rawMethod', $app->rawMethod);?>
 <div id='mainMenu' class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    echo html::a(inlink($app->rawMethod, "mode=ticket&type=assignedtome"), "<span class='text'>{$lang->my->taskMenu->assignedToMe}</span>"   . ($browseType == 'assignedtome' ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($browseType == 'assignedtome' ? ' btn-active-text' : '') . "'");
+    foreach($lang->my->featureBar[$app->rawMethod]['ticket'] as $key => $name)
+    {
+        $label  = "<span class='text'>{$name}</span>";
+        $label .= $key == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
+        $active = $key == $browseType ? 'btn-active-text' : '';
+        echo html::a(inlink($app->rawMethod, "mode=$mode&type=$key"), $label, '', "class='btn btn-link $active'");
+    }
     ?>
-  <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
   </div>
 </div>
 <div id='mainContent' class="main-row fade">

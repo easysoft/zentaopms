@@ -51,6 +51,16 @@ $config->action->objectNameFields['repo']         = 'name';
 $config->action->objectNameFields['dataview']     = 'name';
 $config->action->objectNameFields['zahost']       = 'name';
 $config->action->objectNameFields['zanode']       = 'name';
+$config->action->objectNameFields['privlang']     = 'name';
+$config->action->objectNameFields['scene']        = 'title';
+$config->action->objectNameFields['serverroom']   = 'name';
+$config->action->objectNameFields['account']      = 'name';
+$config->action->objectNameFields['host']         = 'name';
+$config->action->objectNameFields['instance']     = 'name';
+$config->action->objectNameFields['space']        = 'name';
+$config->action->objectNameFields['solution']     = 'name';
+$config->action->objectNameFields['artifactrepo'] = 'name';
+$config->action->objectNameFields['prompt']       = 'name';
 
 $config->action->commonImgSize = 870;
 
@@ -63,11 +73,13 @@ $config->action->majorList['product']   = array('opened', 'edited');
 $config->action->majorList['program']   = array('opened', 'edited');
 $config->action->majorList['project']   = array('opened', 'edited');
 $config->action->majorList['execution'] = array('opened', 'edited');
+$config->action->majorList['doc']       = array('releaseddoc', 'collected');
 
 $config->action->needGetProjectType       = 'build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design,opportunity,trainplan,gapanalysis,researchplan,researchreport,';
-$config->action->needGetRelateField       = ',story,productplan,release,task,build,bug,testcase,case,testtask,testreport,doc,doclib,issue,risk,opportunity,trainplan,gapanalysis,team,whitelist,researchplan,researchreport,meeting,kanbanlane,kanbancolumn,module,review,';
-$config->action->noLinkModules            = ',doclib,module,webhook,gitlab,gitea,gogs,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,repo,';
+$config->action->needGetRelateField       = ',branch,story,productplan,release,task,build,bug,testcase,case,testtask,testreport,doc,doclib,issue,risk,opportunity,trainplan,gapanalysis,team,whitelist,researchplan,researchreport,meeting,kanbanlane,kanbancolumn,module,review,';
+$config->action->noLinkModules            = ',doclib,module,webhook,gitlab,instance,gitea,gogs,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,repo,';
 $config->action->ignoreObjectType4Dynamic = 'kanbanregion,kanbanlane,kanbancolumn';
+$config->action->ignoreActions4Dynamic    = 'disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr';
 
 $config->action->preferredTypeNum = 10;
 
@@ -89,3 +101,6 @@ $config->trash->search['params']['objectName'] = array('operator' => 'include', 
 $config->trash->search['params']['objectID']   = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->trash->search['params']['actor']      = array('operator' => '=', 'control' => 'select',  'values' => 'users');
 $config->trash->search['params']['date']       = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
+
+$config->action->newPageModule  = array('repo', 'mr', 'host', 'account', 'serverroom', 'instance', 'store', 'space', 'domain', 'service', 'gitlab', 'gitea', 'gogs', 'sonarqube', 'jenkins', 'nexus');
+$config->action->latestDateList = array('today', 'yesterday', 'thisWeek', 'lastWeek', 'thisMonth');

@@ -2,7 +2,7 @@
 /**
  * The zfile library of zentaopms.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     Zfile
@@ -13,11 +13,11 @@ class zfile
 {
     /**
      * Copy a directory from an directory to another directory.
-     * 
-     * @param  string    $from 
-     * @param  string    $to 
+     *
+     * @param  string    $from
+     * @param  string    $to
      * @param  bool      $logLevel
-     * @param  string    $logFile 
+     * @param  string    $logFile
      * @param  array     $excludeFiles
      * @param  bool      $toIsLink
      * @access public
@@ -110,9 +110,9 @@ class zfile
 
     /**
      * Get count.
-     * 
-     * @param  string $dir 
-     * @param  array  $excludeFiles 
+     *
+     * @param  string $dir
+     * @param  array  $excludeFiles
      * @access public
      * @return int
      */
@@ -136,8 +136,8 @@ class zfile
 
     /**
      * Remove a dir.
-     * 
-     * @param  string    $dir 
+     *
+     * @param  string    $dir
      * @access public
      * @return bool
      */
@@ -171,9 +171,9 @@ class zfile
 
     /**
      * Get files under a directory recursive.
-     * 
-     * @param  string    $dir 
-     * @param  array     $exceptions 
+     *
+     * @param  string    $dir
+     * @param  array     $exceptions
      * @access private
      * @return array
      */
@@ -207,8 +207,8 @@ class zfile
 
     /**
      * Make a dir.
-     * 
-     * @param  string    $dir 
+     *
+     * @param  string    $dir
      * @access public
      * @return bool
      */
@@ -219,8 +219,8 @@ class zfile
 
     /**
      * Remove a file
-     * 
-     * @param  string    $file 
+     *
+     * @param  string    $file
      * @access public
      * @return bool
      */
@@ -232,7 +232,7 @@ class zfile
 
    /**
     * Batch remove files. use glob function.
-    * 
+    *
     * @param  string    $patern
     * @access public
     * @return void
@@ -245,7 +245,7 @@ class zfile
 
     /**
      * Remove a file
-     * 
+     *
      * @param  string    from
      * @param  string    to
      * @access public
@@ -258,7 +258,7 @@ class zfile
 
     /**
      * Rename a file or directory.
-     * 
+     *
      * @param  string    from
      * @param  string    to
      * @access public
@@ -271,8 +271,8 @@ class zfile
 
     /**
      * Get file size.
-     * 
-     * @param  string    $file 
+     *
+     * @param  string    $file
      * @access public
      * @return int
      */
@@ -283,10 +283,10 @@ class zfile
 
     /**
      * Get directory size.
-     * 
+     *
      * @param  string    $dir
      * @access public
-     * @return int 
+     * @return int
      */
     public function getDirSize($dir)
     {

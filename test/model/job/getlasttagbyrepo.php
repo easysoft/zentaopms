@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/job.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -18,4 +17,3 @@ pid=1
 $jobID = 1;
 $job = new jobTest();
 r($job->getLastTagByRepoTest($jobID)) && p() && e('tag_test1');  // 查询id为1的job的last tag
-$db->restoreDB();

@@ -2,7 +2,7 @@
 /**
  * The upload view file of extension module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     extension
@@ -11,6 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<?php js::set('maxUploadSize', $maxUploadSize);?>
+<?php js::set('exceedLimitMsg', $exceedLimitMsg);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -34,3 +36,12 @@
   </div>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>
+<script>
+$(function()
+{
+    parent.$('#triggerModal .modal-content .modal-header .close').on('click', function()
+    {
+        parent.location.reload();
+    });
+});
+</script>

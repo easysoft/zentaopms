@@ -2,7 +2,7 @@
 /**
  * The task view file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
@@ -12,27 +12,33 @@
 ?>
 <?php
 include '../../common/view/header.html.php';
-include '../../common/view/chart.html.php';
-include '../../common/view/datepicker.html.php';
 include '../../common/view/datatable.fix.html.php';
+include '../../common/view/zui3dtable.html.php';
+$cols     = $this->task->generateCol($orderBy);
+$tasks    = $this->task->generateRow($tasks, $users, $executionID, $showBranch, $branchGroups, $modulePairs);
+$sortLink = helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}");
 js::set('moduleID', $moduleID);
 js::set('productID', $productID);
 js::set('executionID', $executionID);
 js::set('browseType', $browseType);
+js::set('extra', ($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))) ? 'unsetStory' : '');
 
+$task = reset($tasks);
+$canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
+$canBatchClose        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) and strtolower($browseType) != 'closed');
+$canBatchCancel       = (common::hasPriv('task', 'batchCancel', !empty($task) ? $task : null) and strtolower($browseType) != 'cancel');
+$canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty($task) ? $task : null);
+$canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
+
+$canBatchAction = ($canBatchEdit or $canBatchClose or $canBatchCancel or $canBatchChangeModule or $canBatchAssignTo);
+
+if(!$canBatchAction) unset($cols[0]->checkbox);
 /* Set unfold parent taskID. */
-$unfoldTasks = isset($config->execution->task->unfoldTasks) ? json_decode($config->execution->task->unfoldTasks, true) : array();
-$unfoldTasks = zget($unfoldTasks, $executionID, array());
-js::set('unfoldTasks', $unfoldTasks);
-js::set('unfoldAll',   $lang->execution->treeLevel['all']);
-js::set('foldAll',     $lang->execution->treeLevel['root']);
+js::set('orderBy', $orderBy);
+js::set('sortLink', $sortLink);
+js::set('cols', json_encode($cols));
+js::set('data', json_encode($tasks));
 ?>
-<style>
-body {margin-bottom: 25px;}
-.btn-group a i.icon-plus {font-size: 16px;}
-.btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
-.btn-group button.dropdown-toggle.btn-primary {padding:6px;}
-</style>
 <div id="mainMenu" class="clearfix">
   <?php
   if(!empty($productID))
@@ -62,7 +68,7 @@ body {margin-bottom: 25px;}
     common::sortFeatureMenu();
     foreach(customModel::getFeatureMenu('execution', 'task') as $menuItem)
     {
-        if($execution->lifetime == 'ops' && $menuItem->name == 'needconfirm') continue;
+        if(($execution->lifetime == 'ops' or in_array($execution->attribute, array('request', 'review'))) and $menuItem->name == 'needconfirm') continue;
         if(isset($menuItem->hidden)) continue;
         $menuType = $menuItem->name;
         if($menuType == 'QUERY')
@@ -85,14 +91,15 @@ body {margin-bottom: 25px;}
             $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';
             $current        = $menuItem->text;
             $active         = '';
-            if(isset($lang->execution->statusSelects[$taskBrowseType]))
+            $statusSelects  = isset($lang->execution->moreSelects['task']['status']) ? $lang->execution->moreSelects['task']['status'] : array();
+            if(isset($statusSelects[$taskBrowseType]))
             {
-                $current = "<span class='text'>{$lang->execution->statusSelects[$taskBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                $current = "<span class='text'>{$statusSelects[$taskBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
                 $active  = 'btn-active-text';
             }
             echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
             echo "<ul class='dropdown-menu'>";
-            foreach($lang->execution->statusSelects as $key => $value)
+            foreach($statusSelects as $key => $value)
             {
                 if($key == '') continue;
                 echo '<li' . ($key == $taskBrowseType ? " class='active'" : '') . '>';
@@ -138,7 +145,7 @@ body {margin-bottom: 25px;}
             echo "<li $class>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
         }
 
-        if($execution->lifetime != 'ops')
+        if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review')))
         {
             $class = common::hasPriv('execution', 'importBug') ? '' : "class=disabled";
             $misc  = common::hasPriv('execution', 'importBug') ? "class='import'" : "class=disabled";
@@ -203,109 +210,11 @@ body {margin-bottom: 25px;}
       </p>
     </div>
     <?php else:?>
-    <form class="main-table table-task skip-iframe-modal" method="post" id='executionTaskForm'>
+    <form class="main-table table-task skip-iframe-modal not-watch" method="post" id='executionTaskForm'>
       <div class="table-header fixed-right">
-        <nav class="btn-toolbar pull-right"></nav>
+        <nav class="btn-toolbar pull-right setting"></nav>
       </div>
-      <?php
-      $datatableId  = $this->moduleName . ucfirst($this->methodName);
-      $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-      $vars         = "executionID=$execution->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
-
-      if($useDatatable) include '../../common/view/datatable.html.php';
-
-      $customFields = $this->datatable->getSetting('execution');
-      if($execution->lifetime == 'ops')
-      {
-          foreach($customFields as $id => $customField)
-          {
-              if($customField->id == 'story') unset($customFields[$id]);
-          }
-      }
-      $widths  = $this->datatable->setFixedFieldWidth($customFields);
-      $columns = 0;
-
-      $task = reset($tasks);
-      $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
-      $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) and strtolower($browseType) != 'closed');
-      $canBatchCancel       = (common::hasPriv('task', 'batchCancel', !empty($task) ? $task : null) and strtolower($browseType) != 'cancel');
-      $canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty($task) ? $task : null);
-      $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
-
-      $canBatchAction = ($canBatchEdit or $canBatchClose or $canBatchCancel or $canBatchChangeModule or $canBatchAssignTo);
-      ?>
-      <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
-      <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='taskList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
-        <thead>
-          <tr>
-          <?php if($this->app->getViewType() == 'xhtml'):?>
-          <?php
-          foreach($customFields as $field)
-          {
-              if($field->id == 'name' || $field->id == 'id' || $field->id == 'pri' || $field->id == 'status')
-              {
-                  if($field->show)
-                  {
-                      $this->datatable->printHead($field, $orderBy, $vars, $canBatchAction);
-                      $columns++;
-                  }
-              }
-          }?>
-          <?php else:?>
-          <?php
-          foreach($customFields as $field)
-          {
-              if($field->show)
-              {
-                  $this->datatable->printHead($field, $orderBy, $vars, $canBatchAction);
-                  $columns++;
-              }
-          }
-          ?>
-          <?php endif;?>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach($tasks as $task):?>
-          <tr <?php if(!empty($task->children)) echo 'class="table-parent" '; ?>data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
-            <?php if($this->app->getViewType() == 'xhtml'):?>
-            <?php
-            foreach($customFields as $field)
-            {
-                if($field->id == 'name' || $field->id == 'id' || $field->id == 'pri' || $field->id == 'status')
-                {
-                  $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');
-                }
-            }?>
-            <?php else:?>
-            <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', false, $showBranch);?>
-            <?php endif;?>
-          </tr>
-          <?php if(!empty($task->children)):?>
-          <?php $i = 0;?>
-          <?php foreach($task->children as $key => $child):?>
-          <?php $class  = $i == 0 ? ' table-child-top' : '';?>
-          <?php $class .= ($i + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
-          <tr class='table-children<?php echo $class;?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-consumed='<?php echo $child->consumed?>' data-left='<?php echo $child->left?>'>
-            <?php if($this->app->getViewType() == 'xhtml'):?>
-            <?php
-            foreach($customFields as $field)
-            {
-                if($field->id == 'name' || $field->id == 'id' || $field->id == 'pri' || $field->id == 'status')
-                $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);
-            }?>
-            <?php else:?>
-            <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true, $showBranch);?>
-            <?php endif;?>
-          </tr>
-          <?php $i ++;?>
-          <?php endforeach;?>
-          <?php endif;?>
-          <?php endforeach;?>
-        </tbody>
-      </table>
-      <?php if(!$useDatatable) echo '</div>';?>
-
+      <div id="taskList" class="table"></div>
       <div class="table-footer">
         <?php if($canBatchAction):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -402,78 +311,11 @@ body {margin-bottom: 25px;}
   </div>
 </div>
 <?php js::set('replaceID', 'taskList')?>
+<?php js::set('pageSummary', $summary);?>
+<?php js::set('checkedSummary', $lang->execution->checkedSummary);?>
 <?php if(isonlybody()) js::set('modalWidthReset', 1200) ?>
-<script>
-$(function()
-{
-    /* Update table summary text. */
-    var checkedSummary = '<?php echo $lang->execution->checkedSummary?>';
-    var pageSummary    = '<?php echo $lang->execution->pageSummary?>';
-    $('#executionTaskForm').table(
-    {
-        statisticCreator: function(table)
-        {
-            var $table = table.getTable();
-            var $checkedRows = $table.find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
-            var $originTable = table.isDataTable ? table.$.find('.datatable-origin') : null;
-            var checkedTotal = $checkedRows.length;
-            var $rows = checkedTotal ? $checkedRows : $table.find(table.isDataTable ? '.datatable-rows .datatable-row-left' : 'tbody>tr');
-
-            var checkedWait     = 0;
-            var checkedDoing    = 0;
-            var checkedEstimate = 0;
-            var checkedConsumed = 0;
-            var checkedLeft     = 0;
-            var taskIdList      = [];
-            $rows.each(function()
-            {
-                var $row = $(this);
-                if($originTable)
-                {
-                    $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
-                }
-                var data = $row.data();
-                taskIdList.push(data.id);
-
-                var status = data.status;
-                if(status === 'wait') checkedWait++;
-                if(status === 'doing') checkedDoing++;
-
-                var canStatistics = false;
-                if(!$row.hasClass('table-children'))
-                {
-                    canStatistics = true;
-                }
-                else
-                {
-                    /* Fix bug #2579. When only child task is checked then statistics it. */
-                    var parentID = 0;
-                    var classes  = $row.attr('class').split(' ');
-                    for(i in classes)
-                    {
-                        if(classes[i].indexOf('parent-') >= 0) parentID = classes[i].replace('parent-', '');
-                    }
-
-                    if(parentID && taskIdList.indexOf(parseInt(parentID)) < 0) canStatistics = true;
-                }
-
-                if(canStatistics)
-                {
-                    checkedEstimate += Number(data.estimate);
-                    checkedConsumed += Number(data.consumed);
-                    if(status != 'cancel' && status != 'closed') checkedLeft += Number(data.left);
-                }
-            });
-            return (checkedTotal ? checkedSummary : pageSummary).replace('%total%', $rows.length).replace('%wait%', checkedWait)
-              .replace('%doing%', checkedDoing)
-              .replace('%estimate%', checkedEstimate.toFixed(1))
-              .replace('%consumed%', checkedConsumed.toFixed(1))
-              .replace('%left%', checkedLeft.toFixed(1));
-        }
-    })
-});
-
 <?php if($this->app->getViewType() == 'xhtml'):?>
+<script>
 $(function()
 {
     function handleClientReady()
@@ -484,6 +326,6 @@ $(function()
     if(window.xuanReady) handleClientReady();
     else $(window).on('xuan-ready', handleClientReady);
 });
-<?php endif; ?>
 </script>
+<?php endif; ?>
 <?php include '../../common/view/footer.html.php';?>

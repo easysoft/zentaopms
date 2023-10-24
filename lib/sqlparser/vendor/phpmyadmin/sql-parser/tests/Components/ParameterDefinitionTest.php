@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Components;
 
 use PhpMyAdmin\SqlParser\Components\ParameterDefinition;
@@ -10,7 +8,7 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class ParameterDefinitionTest extends TestCase
 {
-    public function testParse(): void
+    public function testParse()
     {
         $component = ParameterDefinition::parse(
             new Parser(),
@@ -20,7 +18,7 @@ class ParameterDefinitionTest extends TestCase
         $this->assertEquals('b', $component[1]->name);
     }
 
-    public function testParseComplex(): void
+    public function testParseComplex()
     {
         $parser = new Parser();
         $component = ParameterDefinition::parse(

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/group.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -26,4 +25,3 @@ $group = new groupTest();
 r($group->createObject($t_name))    && p('name') && e('我是一个分组'); // 测试正常创建分组的名称
 r($group->createObject($t_limited)) && p('role') && e('limited');      // 测试创建受限用户组分组
 
-$db->restoreDB();

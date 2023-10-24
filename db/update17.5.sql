@@ -260,5 +260,7 @@ INSERT IGNORE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `syst
 UPDATE `zt_grouppriv` SET `module` = 'testcase' WHERE `module` = 'story' and `method` = 'zeroCase';
 UPDATE `zt_grouppriv` SET `module` = 'product' WHERE `module` = 'story' and `method` = 'track';
 
+REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) SELECT `group`, 'product', 'requirement' FROM `zt_grouppriv` WHERE `module` = 'product' AND `method` = 'browse';
+
 ALTER TABLE `zt_job` ADD `lastSyncDate` datetime DEFAULT NULL AFTER `lastTag`;
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('*/5', '*', '*', '*', '*', 'moduleName=compile&methodName=syncCompile', '定时同步构建记录', 'zentao', 1, 'normal', '0000-00-00 00:00:00');

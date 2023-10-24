@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Parser;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
@@ -9,22 +7,22 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 class TransactionStatementTest extends TestCase
 {
     /**
-     * @param mixed $test
-     *
      * @dataProvider transactionProvider
+     *
+     * @param mixed $test
      */
-    public function testTransaction($test): void
+    public function testTransaction($test)
     {
         $this->runParserTest($test);
     }
 
-    public function transactionProvider(): array
+    public function transactionProvider()
     {
-        return [
-            ['parser/parseTransaction'],
-            ['parser/parseTransaction2'],
-            ['parser/parseTransaction3'],
-            ['parser/parseTransactionErr1'],
-        ];
+        return array(
+            array('parser/parseTransaction'),
+            array('parser/parseTransaction2'),
+            array('parser/parseTransaction3'),
+            array('parser/parseTransactionErr1')
+        );
     }
 }

@@ -1,14 +1,17 @@
 <?php
+
 /**
  * `SHOW` statement.
  */
-
-declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Statements;
 
 /**
  * `SHOW` statement.
+ *
+ * @category   Statements
+ *
+ * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class ShowStatement extends NotImplementedStatement
 {
@@ -17,7 +20,7 @@ class ShowStatement extends NotImplementedStatement
      *
      * @var array
      */
-    public static $OPTIONS = [
+    public static $OPTIONS = array(
         'CREATE' => 1,
         'AUTHORS' => 2,
         'BINARY' => 2,
@@ -58,6 +61,6 @@ class ShowStatement extends NotImplementedStatement
         'TRIGGERS' => 2,
         'VARIABLES' => 2,
         'VIEW' => 2,
-        'WARNINGS' => 2,
-    ];
+        'WARNINGS' => 2
+    );
 }

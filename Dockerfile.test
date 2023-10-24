@@ -1,0 +1,15 @@
+FROM hub.qucheng.com/ci/zentao-ztf:latest
+
+# Install zentao
+ARG VERSION
+ENV ZENTAO_VER=${VERSION}
+ENV EASYSOFT_APP_NAME="ZenTao $ZENTAO_VER"
+
+ARG MYSQL_HOST
+ARG MYSQL_PASSWORD
+ENV MYSQL_HOST=${MYSQL_HOST}
+ENV MYSQL_PASSWORD=${MYSQL_PASSWORD}
+
+SHELL ["/bin/bash", "-c"]
+# Copy ZenTao
+COPY --chown=33:33 . /apps/zentao/

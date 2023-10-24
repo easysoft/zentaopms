@@ -78,6 +78,7 @@ function checkDangerExtensions(file)
         {
             alert(<?php echo json_encode($this->lang->file->dangerFile);?>);
             $(file).val('');
+            $('.file-input-normal').last().remove()
             return false;
         }
 

@@ -2,7 +2,7 @@
 /**
  * The misc module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
@@ -21,7 +21,7 @@ $lang->misc->zentao->labels['about']   = 'About ZenTao';
 $lang->misc->zentao->labels['support'] = 'Tech Support';
 $lang->misc->zentao->labels['cowin']   = 'Help Us';
 $lang->misc->zentao->labels['service'] = 'Service';
-$lang->misc->zentao->labels['others']  = 'From EasyCorp';
+$lang->misc->zentao->labels['others']  = 'From ZenTao Software';
 
 $lang->misc->zentao->icons['about']   = 'group';
 $lang->misc->zentao->icons['support'] = 'question-sign';
@@ -59,7 +59,7 @@ $lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/def
 
 $lang->misc->mobile      = "Mobile Access";
 $lang->misc->noGDLib     = "Please visit <strong>%s</strong> in the browser of your phone.";
-$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://easycorp.ltd/' target='_blank'>EasyCorp</a> Email <a href='mailto:Renee@easycorp.ltd'>Renee@easycorp.ltd</a>";
+$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://easycorp.ltd/' target='_blank'>ZenTao Software</a> Email <a href='mailto:Renee@easycorp.ltd'>Renee@easycorp.ltd</a>";
 $lang->misc->checkTable  = "Check Data Table";
 $lang->misc->needRepair  = "Repair Table";
 $lang->misc->repairTable = "Database table might be damaged due to power outage. Please check and repair!";
@@ -87,22 +87,41 @@ $lang->misc->noticeRepair = "<h5>If you are not Administrator, contact your ZenT
     </ol>";
 
 $lang->misc->feature = new stdclass();
-$lang->misc->feature->lastest        = 'Latest Version';
-$lang->misc->feature->detailed       = 'Detail';
-$lang->misc->feature->introduction   = 'Features';
-$lang->misc->feature->tutorial       = 'Tutorial';
-$lang->misc->feature->tutorialImage  = 'theme/default/images/main/tutorial_en.png';
-$lang->misc->feature->youngBlueTheme = 'Young Blue Theme';
-$lang->misc->feature->youngBlueImage = 'theme/default/images/main/new_theme_en.png';
-$lang->misc->feature->visions        = "Interface switching";
-$lang->misc->feature->nextStep       = 'Next step';
-$lang->misc->feature->close          = 'Close';
-$lang->misc->feature->downloadFile   = 'Download introduction';
-$lang->misc->feature->tutorialDesc   = '<p>ZenTao 15.0 has new functions, and you know how to use it through the "<strong>Tutorial</strong>".</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
-$lang->misc->feature->themeDesc      = '<p>ZenTao 15.0+ a new "Youth Blue" theme, the pages are more beautiful and the experience is more friendly.</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
-$lang->misc->feature->visionsDesc    = "<p>The concept of interface has been added since 16.5. Users can deal with R&D affairs in <span style='color: #0c60e1'>[Full Feature Interface]</span> and daily office affairs in <span style='color: #0c60e1'>[Operation Management Interface]</span>.</p><p>You can view the current interface on the avatar, and click the name of the interface to view and switch other interfaces.</p>";
-$lang->misc->feature->visionsImage   = 'theme/default/images/main/visions_en.png';
+$lang->misc->feature->lastest           = 'Latest Version';
+$lang->misc->feature->detailed          = 'Detail';
+$lang->misc->feature->introduction      = 'Features';
+$lang->misc->feature->tutorial          = 'Tutorial';
+$lang->misc->feature->tutorialImage     = 'theme/default/images/main/tutorial_en.png';
+$lang->misc->feature->youngBlueTheme    = 'Young Blue Theme';
+$lang->misc->feature->youngBlueImage    = 'theme/default/images/main/new_theme_en.png';
+$lang->misc->feature->visions           = "Interface switching";
+$lang->misc->feature->nextStep          = 'Next step';
+$lang->misc->feature->prevStep          = 'Previous step';
+$lang->misc->feature->close             = 'Close';
+$lang->misc->feature->learnMore         = 'Learn More';
+$lang->misc->feature->downloadFile      = 'Download introduction';
+$lang->misc->feature->tutorialDesc      = '<p>ZenTao 15.0 has new functions, and you know how to use it through the "<strong>Tutorial</strong>".</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
+$lang->misc->feature->themeDesc         = '<p>ZenTao 15.0+ a new "Youth Blue" theme, the pages are more beautiful and the experience is more friendly.</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
+$lang->misc->feature->visionsDesc       = "<p>The concept of interface has been added since 16.5. Users can deal with R&D affairs in <span style='color: #0c60e1'>[Full Feature Interface]</span> and daily office affairs in <span style='color: #0c60e1'>[Operation Management Interface]</span>.</p><p>You can view the current interface on the avatar, and click the name of the interface to view and switch other interfaces.</p>";
+$lang->misc->feature->visionsImage      = 'theme/default/images/main/visions_en.png';
+$lang->misc->feature->aiPrompts         = 'AI prompts';
+$lang->misc->feature->aiPromptsImage    = 'theme/default/images/main/ai_prompts_en.svg';
+$lang->misc->feature->promptDesign      = 'Prompt Engineering';
+$lang->misc->feature->promptDesignImage = 'theme/default/images/main/prompt_design_en.svg';
+$lang->misc->feature->promptExec        = 'Prompt Execution';
+$lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec_en.svg';
+$lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
+/* Release Date. */
+$lang->misc->releaseDate['18.8']        = '2023-09-28';
+$lang->misc->releaseDate['18.7']        = '2023-08-29';
+$lang->misc->releaseDate['18.6']        = '2023-08-15';
+$lang->misc->releaseDate['18.5']        = '2023-07-05';
+$lang->misc->releaseDate['18.4']        = '2023-06-14';
+$lang->misc->releaseDate['18.4.beta1']  = '2023-05-31';
+$lang->misc->releaseDate['18.4.alpha1'] = '2023-04-21';
+$lang->misc->releaseDate['18.3']        = '2023-03-15';
+$lang->misc->releaseDate['18.2']        = '2023-02-27';
 $lang->misc->releaseDate['18.1']        = '2023-02-08';
 $lang->misc->releaseDate['18.0']        = '2023-01-03';
 $lang->misc->releaseDate['18.0.beta3']  = '2022-12-26';
@@ -197,39 +216,49 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
-$lang->misc->feature->all['18.1'][]       = array('title' => 'The automation testing solution interaction is optimized, while a new snapshot management function is newly added. ZenTao IM implemented online collaboration of PPT documents.Fix bugs.', 'desc' => '');
-$lang->misc->feature->all['18.0'][]       = array('title' => "Automated test solutions are proposed. Work order related functions are added to the Operation Management Interface. Approval workflow support for adding all types of notifications. And at the same time, we have further improved the earned value calculation rules.", 'desc' => '');
-$lang->misc->feature->all['18.0.beta3'][] = array('title' => "The module Statistic is upgraded to BI, with 5 built-in large screens of macro management dimensions.", 'desc' => '');
-$lang->misc->feature->all['18.0.beta2'][] = array('title' => "We have optimized the product with multi-branches/multi-platforms. It's supported to create siblings stories. It's possible for Plan, Build, and Release to link requirements or bugs beyond their parent branch. ZenTao Client has implemented the robot chatting mechanism.", 'desc' => '');
-$lang->misc->feature->all['18.0.beta1'][] = array('title' => "Multiple core processes in ZenTao are improved: A project without any product linked in is able to be created, as well as creating projects without sprints/iterations linked in; projects are able to link products beyond the father program; switch easily between ZenTao Lite mode and Full Lifecycle Management mode.", 'desc' => '');
-$lang->misc->feature->all['17.8'][]       = array('title' => "We have optimized the color of status in lists, as well as the dashboard color. At the same time, the page of the task effort has been improved.", 'desc' => '');
-$lang->misc->feature->all['17.7'][]       = array('title' => "The table is optimized in the transition version. At the same time, we have added the new feature of Work Order and get the Feedback features improved as well. Fix bugs.", 'desc' => '');
-$lang->misc->feature->all['17.6.2'][]     = array('title' => "3 themes in ZenTao including Green, ZenTao Blue, and Young Blue are updated. At the same time, the attachments could be uploaded in bulk in ZenTao. Fix bugs.", 'desc' => '');
-$lang->misc->feature->all['17.6.1'][]     = array('title' => "Optimized the processing logic of multi-member tasks. Fix bugs.", 'desc' => '');
-$lang->misc->feature->all['17.6'][]       = array('title' => "The processing logic of requirements is optimized, and the permissions of user requirements and soft requirements are split. Gantt chart supports manual drag and drop to manage task relationship. Fix bugs.", 'desc' => '');
-$lang->misc->feature->all['17.5'][]       = array('title' => "Provide efficient visual statistical tools. Optimize ZenTao performance, the database engine is adjusted from MyISAM to InnoDB. Gantt chart is optimized and upgraded, and the Copy items of the Max version can replicate more information. Fix bugs.", 'desc' => '');
-$lang->misc->feature->all['17.4'][]       = array('title' => "Optimization of details Page visualization and jumping page logic. Improvement of Kanban function. Optimization of document creating and editing pages. Fix bugs.", 'desc' => '');
-$lang->misc->feature->all['17.3'][]       = array('title' => "UI optimization of the modules such as statistics and background, the use case library will synchronize the function optimization information. Fix bugs.", 'desc' => '');
-$lang->misc->feature->all['17.2'][]       = array('title' => "Adjust the display of agile project block; optimize the UI of programs, projects and tests; optimize the detailed experience. Fix bugs.", 'desc' => '');
-$lang->misc->feature->all['17.1'][]       = array('title' => "Modify the interaction problem of execution, project module. Complete customer's high priority requirements. The detail experience is optimized, fix bugs.", 'desc' => '');
-$lang->misc->feature->all['17.0'][]       = array('title' => 'The detail experience is optimized, fix bugs.', 'desc' => '');
-$lang->misc->feature->all['17.0.beta2'][] = array('title' => 'The detail experience is optimized, fix bugs.', 'desc' => '');
-$lang->misc->feature->all['17.0.beta1'][] = array('title' => "Complete customer's high priority requirements", 'desc' => '');
-$lang->misc->feature->all['16.5'][]       = array('title' => 'Fix bug.', 'desc' => '');
-$lang->misc->feature->all['16.5.beta1'][] = array('title' => 'Fix bug, merge all code to one package', 'desc' => '');
-$lang->misc->feature->all['16.4'][]       = array('title' => 'Implement JIRA import function and improve plug-in extension mechanism.', 'desc' => '');
-$lang->misc->feature->all['16.3'][]       = array('title' => 'Kanban adds related plan/release/version/iteration functions, and the detail experience is optimized, fix bugs.', 'desc' => '');
-$lang->misc->feature->all['16.2'][]       = array('title' => 'Add kanban model project, fix bugs.', 'desc' => '');
-$lang->misc->feature->all['16.1'][]       = array('title' => 'Plan to add status management and Kanban view, upgrade process optimization, fix bugs.', 'desc' => '');
-$lang->misc->feature->all['16.0'][]       = array('title' => 'New general board, improve branch management, fix bugs.', 'desc' => '');
-$lang->misc->feature->all['16.0.beta1'][] = array('title' => 'Add waterfall model project, add task kanban, improved branch management, and fixed bugs.', 'desc' => '');
-$lang->misc->feature->all['15.7.1'][]     = array('title' => 'Fix bug.', 'desc' => '');
-$lang->misc->feature->all['15.7'][]       = array('title' => 'Add API Lib. Fix bug.', 'desc' => '');
-$lang->misc->feature->all['15.6'][]       = array('title' => 'Fix bug.', 'desc' => '');
-$lang->misc->feature->all['15.5'][]       = array('title' => 'Add Program / Product / Project Kanban, global addition function and novice guidance. Fix bug.', 'desc' => '');
-$lang->misc->feature->all['15.4'][]       = array('title' => 'Fix bug', 'desc' => '');
-$lang->misc->feature->all['15.3'][]       = array('title' => 'Adjust interface style and document, fix bug', 'desc' => '');
-$lang->misc->feature->all['15.2'][]       = array('title' => 'Optimize the new version upgrade process, add execution kanban.', 'desc' => '');
+/* Release Detail. */
+$lang->misc->feature->all['18.8'][]        = array('title' => 'In the BI section, we have introduced new features such as metric item functionality and an application inspection report dashboard. The DevOps platform edition now includes a configuration wizard. Additionally, we have enhanced the requitement and market management interface by adding a market management feature. New revision of client navigation and personal center.', 'desc' => '');
+$lang->misc->feature->all['18.7'][]        = array('title' => 'DevOps has introduced new features such as cloud-native platform, artifact repository, and application management, while also enhancing the navigation structure and improving the UI interactions. Additionally, a new AI suggestion designer has been added, which supports integration with large language models and allows for customization of AI applications.', 'desc' => '');
+$lang->misc->feature->all['18.6'][]        = array('title' => "We have made significant improvements to the performance of commonly used lists and the details of BI functionality, while also refining the functionality details of waterfall projects. Additionally, we have diligently addressed and resolved any identified bugs.", 'desc' => '');
+$lang->misc->feature->all['18.5'][]        = array('title' => "Our academy's curriculum now supports cloud-based importing and the previewing of PDF files within courses. Additionally, we've optimized the loading speed of commonly used lists and addressed multiple bugs.", 'desc' => '');
+$lang->misc->feature->all['18.4'][]        = array('title' => 'In this release, we have improved the performance of the core list, added compatibility with Dameng databases, and resolved multiple bugs.', 'desc' => '');
+$lang->misc->feature->all['18.4.beta1'][]  = array('title' => 'Fix bugs.', 'desc' => '');
+$lang->misc->feature->all['18.4.alpha1'][] = array('title' => 'We have enhanced the interaction experience of permissions and documents, while introducing the concept of test scenarios. Moreover, we now provide support for importing use cases with XMIND. Additionally, we have fully revamped the BI module by incorporating large screens, pivot tables, charts, and data capabilities.', 'desc' => '');
+$lang->misc->feature->all['18.3'][]        = array('title' => 'Language item customization is added in secondary development, which supports the definition of language items for menus and search tags; Editor functionality is added in the secondary development, which allows users to turn it on and off on demand; The forms could be saved temporarily when users exits unexpectedly, and the unsaved information will be filled automatically the next time you enter.', 'desc' => '');
+$lang->misc->feature->all['18.2'][]        = array('title' => 'Agile Plus and Waterfall Plus management models are newly added. Support for unlimited splitting of waterfall project stages. The UI of Admin is completely upgraded and redesigned. Fix bugs.', 'desc' => '');
+$lang->misc->feature->all['18.1'][]        = array('title' => 'The automation testing solution interaction is optimized, while a new snapshot management function is newly added. ZenTao IM implemented online collaboration of PPT documents.Fix bugs.', 'desc' => '');
+$lang->misc->feature->all['18.0'][]        = array('title' => "Automated test solutions are proposed. Work order related functions are added to the Operation Management Interface. Approval workflow support for adding all types of notifications. And at the same time, we have further improved the earned value calculation rules.", 'desc' => '');
+$lang->misc->feature->all['18.0.beta3'][]  = array('title' => "The module Statistic is upgraded to BI, with 5 built-in large screens of macro management dimensions.", 'desc' => '');
+$lang->misc->feature->all['18.0.beta2'][]  = array('title' => "We have optimized the product with multi-branches/multi-platforms. It's supported to create siblings stories. It's possible for Plan, Build, and Release to link requirements or bugs beyond their parent branch. ZenTao Client has implemented the robot chatting mechanism.", 'desc' => '');
+$lang->misc->feature->all['18.0.beta1'][]  = array('title' => "Multiple core processes in ZenTao are improved: A project without any product linked in is able to be created, as well as creating projects without sprints/iterations linked in; projects are able to link products beyond the father program; switch easily between ZenTao Lite mode and Full Lifecycle Management mode.", 'desc' => '');
+$lang->misc->feature->all['17.8'][]        = array('title' => "We have optimized the color of status in lists, as well as the dashboard color. At the same time, the page of the task effort has been improved.", 'desc' => '');
+$lang->misc->feature->all['17.7'][]        = array('title' => "The table is optimized in the transition version. At the same time, we have added the new feature of Work Order and get the Feedback features improved as well. Fix bugs.", 'desc' => '');
+$lang->misc->feature->all['17.6.2'][]      = array('title' => "3 themes in ZenTao including Green, ZenTao Blue, and Young Blue are updated. At the same time, the attachments could be uploaded in bulk in ZenTao. Fix bugs.", 'desc' => '');
+$lang->misc->feature->all['17.6.1'][]      = array('title' => "Optimized the processing logic of multi-member tasks. Fix bugs.", 'desc' => '');
+$lang->misc->feature->all['17.6'][]        = array('title' => "The processing logic of requirements is optimized, and the permissions of user requirements and soft requirements are split. Gantt chart supports manual drag and drop to manage task relationship. Fix bugs.", 'desc' => '');
+$lang->misc->feature->all['17.5'][]        = array('title' => "Provide efficient visual statistical tools. Optimize ZenTao performance, the database engine is adjusted from MyISAM to InnoDB. Gantt chart is optimized and upgraded, and the Copy items of the Max version can replicate more information. Fix bugs.", 'desc' => '');
+$lang->misc->feature->all['17.4'][]        = array('title' => "Optimization of details Page visualization and jumping page logic. Improvement of Kanban function. Optimization of document creating and editing pages. Fix bugs.", 'desc' => '');
+$lang->misc->feature->all['17.3'][]        = array('title' => "UI optimization of the modules such as statistics and background, the use case library will synchronize the function optimization information. Fix bugs.", 'desc' => '');
+$lang->misc->feature->all['17.2'][]        = array('title' => "Adjust the display of agile project block; optimize the UI of programs, projects and tests; optimize the detailed experience. Fix bugs.", 'desc' => '');
+$lang->misc->feature->all['17.1'][]        = array('title' => "Modify the interaction problem of execution, project module. Complete customer's high priority requirements. The detail experience is optimized, fix bugs.", 'desc' => '');
+$lang->misc->feature->all['17.0'][]        = array('title' => 'The detail experience is optimized, fix bugs.', 'desc' => '');
+$lang->misc->feature->all['17.0.beta2'][]  = array('title' => 'The detail experience is optimized, fix bugs.', 'desc' => '');
+$lang->misc->feature->all['17.0.beta1'][]  = array('title' => "Complete customer's high priority requirements", 'desc' => '');
+$lang->misc->feature->all['16.5'][]        = array('title' => 'Fix bug.', 'desc' => '');
+$lang->misc->feature->all['16.5.beta1'][]  = array('title' => 'Fix bug, merge all code to one package', 'desc' => '');
+$lang->misc->feature->all['16.4'][]        = array('title' => 'Implement JIRA import function and improve plug-in extension mechanism.', 'desc' => '');
+$lang->misc->feature->all['16.3'][]        = array('title' => 'Kanban adds related plan/release/version/iteration functions, and the detail experience is optimized, fix bugs.', 'desc' => '');
+$lang->misc->feature->all['16.2'][]        = array('title' => 'Add kanban model project, fix bugs.', 'desc' => '');
+$lang->misc->feature->all['16.1'][]        = array('title' => 'Plan to add status management and Kanban view, upgrade process optimization, fix bugs.', 'desc' => '');
+$lang->misc->feature->all['16.0'][]        = array('title' => 'New general board, improve branch management, fix bugs.', 'desc' => '');
+$lang->misc->feature->all['16.0.beta1'][]  = array('title' => 'Add waterfall model project, add task kanban, improved branch management, and fixed bugs.', 'desc' => '');
+$lang->misc->feature->all['15.7.1'][]      = array('title' => 'Fix bug.', 'desc' => '');
+$lang->misc->feature->all['15.7'][]        = array('title' => 'Add API Lib. Fix bug.', 'desc' => '');
+$lang->misc->feature->all['15.6'][]        = array('title' => 'Fix bug.', 'desc' => '');
+$lang->misc->feature->all['15.5'][]        = array('title' => 'Add Program / Product / Project Kanban, global addition function and novice guidance. Fix bug.', 'desc' => '');
+$lang->misc->feature->all['15.4'][]        = array('title' => 'Fix bug', 'desc' => '');
+$lang->misc->feature->all['15.3'][]        = array('title' => 'Adjust interface style and document, fix bug', 'desc' => '');
+$lang->misc->feature->all['15.2'][]        = array('title' => 'Optimize the new version upgrade process, add execution kanban.', 'desc' => '');
 
 $lang->misc->feature->all['15.0.3'][]      = array('title' => 'Fix Bug', 'desc' => '');
 $lang->misc->feature->all['15.0.2'][]      = array('title' => 'Fix Bug', 'desc' => '');

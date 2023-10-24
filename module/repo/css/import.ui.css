@@ -1,0 +1,3 @@
+.form-batch-row-actions>button:first-child {display: none;}
+#repoList tr td:last-child, #repoList tr th:last-child {text-align: right;}
+#repoList tr td:first-child {text-align: center;}

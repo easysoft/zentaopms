@@ -2,7 +2,7 @@
 /**
  * The edit view of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
@@ -31,7 +31,7 @@
     <form class="load-indicator main-form form-ajax" id="createForm" method="post" target='hiddenwin'>
       <table class="table table-form">
         <tbody>
-          <?php if($this->config->systemMode == 'ALM'):?>
+          <?php if(in_array($this->config->systemMode, array('ALM', 'PLM'))):?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->program;?></th>
             <?php $attr = ($product->program and strpos(",{$this->app->user->view->programs},", ",{$product->program},") === false) ? 'disabled' : '';?>
@@ -40,14 +40,14 @@
           </tr>
           <tr>
             <th class='w-140px'><?php echo $lang->product->line;?></th>
-            <td><?php echo html::select('line', $lines, $product->line, "class='form-control chosen'");?></td><td></td>
+            <td><?php echo html::select('line', $lines, $product->line, "class='form-control picker-select'");?></td><td></td>
           </tr>
           <?php endif;?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->name;?></th>
             <td class='w-p40-f'><?php echo html::input('name', $product->name, "class='form-control' required");?></td><td></td>
           </tr>
-          <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+          <?php if(isset($config->setCode) and $config->setCode == 1):?>
           <tr>
             <th><?php echo $lang->product->code;?></th>
             <td><?php echo html::input('code', $product->code, "class='form-control' required");?></td><td></td>

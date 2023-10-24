@@ -2,7 +2,7 @@
 /**
  * The submit review file of story module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Qiyu Xie <xieqiyu@cnezsoft.com>
  * @package     story
@@ -27,7 +27,7 @@
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <th class='w-80px'><?php echo $lang->story->reviewedBy;?></th>
+          <th class='w-80px'><?php echo $lang->story->reviewers;?></th>
           <td colspan='2' id='reviewerBox' <?php if($this->story->checkForceReview() or !empty($story->reviewer)) echo "class='required'";?>>
             <div class="table-row">
               <?php if(!$this->story->checkForceReview()):?>

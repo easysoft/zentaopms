@@ -1,5 +1,4 @@
 <?php
-$lang->mail->common        = '发信配置';
 $lang->mail->index         = '首页';
 $lang->mail->detect        = '检测';
 $lang->mail->detectAction  = '通过邮箱地址检测';

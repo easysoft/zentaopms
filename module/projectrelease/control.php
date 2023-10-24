@@ -2,7 +2,7 @@
 /**
  * The control file of release module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
@@ -271,8 +271,9 @@ class projectrelease extends control
             ->leftJoin(TABLE_BUILD)->alias('t2')->on("FIND_IN_SET(t1.id, t2.stories)")
             ->where('t1.id')->in($release->stories)
             ->andWhere('t1.deleted')->eq(0)
+            ->groupBy('t1.id')
             ->beginIF($type == 'story')->orderBy($sort)->fi()
-            ->page($storyPager)
+            ->page($storyPager, 't1.id')
             ->fetchAll('id');
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
@@ -325,7 +326,9 @@ class projectrelease extends control
         $this->view->storyPager   = $storyPager;
         $this->view->bugPager     = $bugPager;
         $this->view->leftBugPager = $leftBugPager;
-        $this->view->builds       = $this->loadModel('build')->getBuildPairs($release->product, 'all', 'withbranch|hasproject', 0, 'execution', '', false);
+        $this->view->builds       = $this->loadModel('build')->getBuildPairs($release->product, 'all', 'withbranch|hasproject|hasdeleted', 0, 'execution', '', true);
+        $this->view->summary      = $this->product->summary($stories);
+        $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts(array_keys($stories));
 
         if($this->app->getViewType() == 'json')
         {
@@ -430,103 +433,117 @@ class projectrelease extends control
     /**
      * Export the stories of release to HTML.
      *
+     * @param  int    $releaseID
      * @access public
      * @return void
      */
-    public function export()
+    public function export($releaseID)
     {
         if(!empty($_POST))
         {
-            $type = $this->post->type;
-            $html = '';
+            $release = $this->loadModel('release')->getByID($releaseID);
+            $type    = $this->post->type;
+            $html    = '';
 
             if($type == 'story' or $type == 'all')
             {
                 $html .= "<h3>{$this->lang->release->stories}</h3>";
-                $this->loadModel('story');
 
-                $stories = $this->dao->select('id, title')->from(TABLE_STORY)->where($this->session->storyQueryCondition)
-                    ->beginIF($this->session->storyOrderBy != false)->orderBy($this->session->storyOrderBy)->fi()
-                    ->fetchAll('id');
-
-                foreach($stories as $story) $story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>";
-
-                $fields = array('id' => $this->lang->story->id, 'title' => $this->lang->story->title);
-                $rows   = $stories;
-
-                $html .= '<table><tr>';
-                foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
-                $html .= '</tr>';
-                foreach($rows as $row)
+                if(!empty($release->stories))
                 {
-                    $html .= "<tr valign='top'>\n";
-                    foreach($fields as $fieldName => $fieldLabel)
+                    $this->loadModel('story');
+                    $stories = $this->dao->select('id, title')->from(TABLE_STORY)
+                        ->where('id')->in($release->stories)
+                        ->andWhere('deleted')->eq(0)
+                        ->fetchAll();
+
+                    foreach($stories as $story) $story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>";
+
+                    $fields = array('id' => $this->lang->story->id, 'title' => $this->lang->story->title);
+                    $rows   = $stories;
+
+                    $html .= '<table><tr>';
+                    foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+                    $html .= '</tr>';
+                    foreach($rows as $row)
                     {
-                        $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
-                        $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+                        $html .= "<tr valign='top'>\n";
+                        foreach($fields as $fieldName => $fieldLabel)
+                        {
+                            $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
+                            $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+                        }
+                        $html .= "</tr>\n";
                     }
-                    $html .= "</tr>\n";
+                    $html .= '</table>';
                 }
-                $html .= '</table>';
             }
 
             if($type == 'bug' or $type == 'all')
             {
                 $html .= "<h3>{$this->lang->release->bugs}</h3>";
-                $this->loadModel('bug');
 
-                $bugs = $this->dao->select('id, title')->from(TABLE_BUG)->where($this->session->linkedBugQueryCondition)
-                    ->beginIF($this->session->bugOrderBy != false)->orderBy($this->session->bugOrderBy)->fi()
-                    ->fetchAll('id');
-
-                foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
-
-                $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
-                $rows   = $bugs;
-
-                $html .= '<table><tr>';
-                foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
-                $html .= '</tr>';
-                foreach($rows as $row)
+                if(!empty($release->bugs))
                 {
-                    $html .= "<tr valign='top'>\n";
-                    foreach($fields as $fieldName => $fieldLabel)
+                    $this->loadModel('bug');
+                    $bugs = $this->dao->select('id, title')->from(TABLE_BUG)
+                        ->where('id')->in($release->bugs)
+                        ->andWhere('deleted')->eq(0)
+                        ->fetchAll('id');
+
+                    foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
+
+                    $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
+                    $rows   = $bugs;
+
+                    $html .= '<table><tr>';
+                    foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+                    $html .= '</tr>';
+                    foreach($rows as $row)
                     {
-                        $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
-                        $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+                        $html .= "<tr valign='top'>\n";
+                        foreach($fields as $fieldName => $fieldLabel)
+                        {
+                            $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
+                            $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+                        }
+                        $html .= "</tr>\n";
                     }
-                    $html .= "</tr>\n";
+                    $html .= '</table>';
                 }
-                $html .= '</table>';
             }
 
             if($type == 'leftbug' or $type == 'all')
             {
                 $html .= "<h3>{$this->lang->release->generatedBugs}</h3>";
 
-                $bugs = $this->dao->select('id, title')->from(TABLE_BUG)->where($this->session->leftBugsQueryCondition)
-                    ->beginIF($this->session->bugOrderBy != false)->orderBy($this->session->bugOrderBy)->fi()
-                    ->fetchAll('id');
-
-                foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
-
-                $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
-                $rows   = $bugs;
-
-                $html .= '<table><tr>';
-                foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
-                $html .= '</tr>';
-                foreach($rows as $row)
+                if(!empty($release->leftBugs))
                 {
-                    $html .= "<tr valign='top'>\n";
-                    foreach($fields as $fieldName => $fieldLabel)
+                    $bugs = $this->dao->select('id, title')->from(TABLE_BUG)
+                        ->where(id)->in($release->leftBugs)
+                        ->andWhere('deleted')->eq(0)
+                        ->fetchAll('id');
+
+                    foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
+
+                    $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
+                    $rows   = $bugs;
+
+                    $html .= '<table><tr>';
+                    foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+                    $html .= '</tr>';
+                    foreach($rows as $row)
                     {
-                        $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
-                        $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+                        $html .= "<tr valign='top'>\n";
+                        foreach($fields as $fieldName => $fieldLabel)
+                        {
+                            $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
+                            $html .= "<td><nobr>$fieldValue</nobr></td>\n";
+                        }
+                        $html .= "</tr>\n";
                     }
-                    $html .= "</tr>\n";
+                    $html .= '</table>';
                 }
-                $html .= '</table>';
             }
 
             $html = "<html><head><meta charset='utf-8'><title>{$this->post->fileName}</title><style>table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}</style></head><body>$html</body></html>";
@@ -614,11 +631,11 @@ class projectrelease extends control
         $allStories = array();
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($release->product, $release->branch, $queryID, 'id', $executionIdList, 'story', $release->stories, $pager);
+            $allStories = $this->story->getBySearch($release->product, $release->branch, $queryID, 'id', $executionIdList, 'story', $release->stories, 'draft,reviewing,changing', $pager);
         }
         else
         {
-            $allStories = $this->story->getExecutionStories($executionIdList, $release->product, 0, 't1.`order`_desc', 'byBranch', $release->branch, 'story', $release->stories, $pager);
+            $allStories = $this->story->getExecutionStories($executionIdList, $release->product, 0, 't1.`order`_desc', 'byBranch', $release->branch, 'story', $release->stories, 'draft,reviewing,changing', $pager);
         }
 
         $this->view->allStories     = $allStories;
@@ -639,26 +656,17 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function unlinkStory($releaseID, $storyID)
+    public function unlinkStory($releaseID, $storyID, $confirm = 'no')
     {
-        $this->projectrelease->unlinkStory($releaseID, $storyID);
-
-        /* if ajax request, send result. */
-        if($this->server->ajax)
+        if($confirm == 'no')
         {
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            else
-            {
-                $response['result']  = 'success';
-                $response['message'] = '';
-            }
-            return $this->send($response);
+            return print(js::confirm($this->lang->release->confirmUnlinkStory, inlink('unlinkstory', "releaseID=$releaseID&storyID=$storyID&confirm=yes")));
         }
-        return print(js::reload('parent'));
+        else
+        {
+            $this->projectrelease->unlinkStory($releaseID, $storyID);
+            return print(js::reload('parent'));
+        }
     }
 
     /**

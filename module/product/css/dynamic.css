@@ -25,8 +25,11 @@
 .timeline-text {margin-left: -18px;}
 .label-action {padding: 0 4px;}
 .label-id {margin-left: 4px;}
-.timeline >li.active:before {left: -30px;}
-.timeline >li > div:after {left: -27px;}
+.timeline > li.active:before {left: -30px;}
+.timeline > li.collected:before, .timeline > li.releaseddoc:before {background-color: #FFF;}
+.timeline > li.collected > div:after {background-color: #FFAF65;}
+.timeline > li.releaseddoc > div:after {background-color: #66A2FF;}
+.timeline > li > div:after {left: -27px;}
 .timeline .timeline-text {display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .timeline > li > div > .timeline-tag, .timeline > li > div > .timeline-text > .label-action {color: #838A9D;}
 .timeline > li > div > .timeline-text > a {color: #313C52;}

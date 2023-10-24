@@ -2,7 +2,7 @@
 /**
  * The reprot file of sonarqubemodule of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuchun Li <liyuchun@easycorp.ltd>
  * @package     sonarqube
@@ -14,13 +14,15 @@
 <div id='mainContent' class='main-content'>
   <?php unset($_GET['onlybody']);?>
   <?php if(empty($measures)): ?>
-    <div class='empty-tip'><?php echo $lang->sonarqube->noReport;?></div>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->sonarqube->noReport;?></span></p>
+  </div>
   <?php else:?>
   <div class="main-header">
     <div class="page-title">
       <span class='text' title="<?php echo $projectName;?>">
         <h4>
-          <?php echo common::hasPriv('sonarqube', 'browseIssue') ? html::a($this->createLink('sonarqube', 'browseIssue', "sonarqubeID={$sonarqubeID}&project={$projectName}"), $projectName, '_parent') : $projectName;?>
+          <?php echo common::hasPriv('sonarqube', 'browseIssue') ? html::a($this->createLink('sonarqube', 'browseIssue', "sonarqubeID={$sonarqubeID}&project=" . str_replace('-', '*', $projectKey)), $projectName, '_parent') : $projectName;?>
           <?php if(!empty($qualitygate->projectStatus->status) and $qualitygate->projectStatus->status != 'NONE'):?>
           <span class="label label-badge label-<?php echo zget($config->sonarqube->projectStatusClass, $qualitygate->projectStatus->status);?>">
             <?php echo zget($lang->sonarqube->qualitygateList, $qualitygate->projectStatus->status);?>

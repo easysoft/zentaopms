@@ -1,0 +1,54 @@
+#fileTabs .nav-tabs {overflow: hidden;position: absolute; height: 40px;background: #efefef;}
+#fileTabs .nav-tabs > li.nav-item > a {z-index: 1; background: none; padding: 1.7rem; cursor: pointer !important; margin-left: -25px; margin-top: 12px;}
+#fileTabs .nav-tabs > li > a::after {content: ''; position: absolute; top: 2px; left: 10px; width: 85%; right: 6px; bottom: 0; background: #f8f8f8; border: none; border-radius: 10px 10px 0 0; transform: perspective(0.5rem) rotateX(2deg); z-index: -1;}
+#fileTabs .nav-tabs > li > a.active span {font-weight: 700; color: #2b80ff!important;}
+#fileTabs .nav-tabs > li > a.active::after {background: #fff;}
+#fileTabs > .nav-tabs {overflow: hidden; padding-bottom: 10px; position: relative; height: 40px; background: #efefef;}
+#fileTabs > .nav-tabs {position: absolute; display: flex; padding-left: 25px;}
+#fileTabs .monaco-close{margin-right: 18px;}
+#fileTabs .nav-tabs > li > a > span{margin-left: 18px;font-weight: 700;color: #313c52!important;}
+#related .btn-right, #related .btn-left {padding-top: 6px;}
+#log .action-btn {margin-top: -7px;}
+.repoCode .btn.btn-right, .repoCode .btn.btn-left {margin-right: 0; padding: 6px 6px;}
+.btn-left, .btn-right {display: none;}
+#linkObject{display: none;}
+#monacoTree .tree-item-content span {cursor: pointer;}
+.directory {background-image:url('theme/default/images/repo/dir.png');}
+.file {background-image:url('theme/default/images/repo/txt.png');}
+.mini-icon {display: inline-block; height: 16px; width: 16px; background-color: transparent; background-position: 0 0; background-repeat: no-repeat; vertical-align: text-bottom; margin-right: 5px;}
+#monacoTree .tree-item-content {cursor: pointer;}
+.sync-content {margin: 10px}
+.sync-main-content {padding: 20px;background-color: #fff;border-radius: 4px;}
+.sync-line {border-top: 1px solid #e4e4e4; margin: 10px 0;}
+.sync-main-content div {width: 100%;}
+.sync-main-content h3 {font-size: 16px; font-weight: 700;}
+.sync-main-content p {color: #313c52;}
+.sync-main-content .alert > [class*="icon-"] {font-size: 42px;opacity: 0.8;}
+.repo-linkstory-title {background-color: #e6f0ff; color: #2e7fff; padding: 12px 6px 12px;}
+#repoBranchDropMenu .dropmenu-btn {justify-content: space-between; width: 100%;}
+#monacoTabs .nav > li > a {padding: 8px 10px; display: flex; white-space: pre;}
+#monacoTabs .nav-tabs > li > a > span {margin-right: 5px;}
+#monacoTabs .tab-pane {display: none;}
+#monacoTabs {background: #FFFFFF;}
+#monacoTabs .tab-pane.active {display: block;}
+#monacoTabs .tab-nav-item {max-width: none !important;}
+#monacoTabs .tab-nav-item .icon {line-height: inherit;}
+#monacoTabs {overflow: hidden; position: relative; height: 100%;}
+#monacoTabs > .nav-tabs {position: absolute; display: flex; padding-right: 20px;}
+#fileTabs .arrow-left, #fileTabs .arrow-right {line-height: 27px; padding: 6px; width: 26px; background: #efefef; cursor: pointer;}
+#fileTabs .arrow-right {right: 40px; cursor: pointer;}
+#monacoTabs ul {min-width: 100%; padding-left: 25px; z-index: 1;}
+#monacoTabs .tab-content {margin-top: 40px;}
+#monacoTabsContainer {background: #efefef;}
+.monaco-dropmenu{background: #efefef; height: 40px; line-height: 40px;}
+#fileTabs > .btn {background: #efefef; border: none; --tw-ring-shadow: none;}
+#fileTabs > .btn-right {padding-right: 40px;}
+#repoBranchDropMenu > .dropmenu-btn {background: white; --tw-ring-color: none; color: inherit; margin-bottom: 10px; background: white;}
+.repo-select #repoBranchDropMenu > .dropmenu-btn {background: inherit; --tw-ring-color: none; color: inherit; margin-bottom: 0;}
+#repoBranchDropMenu > .dropmenu-btn > .icon-angle-right {display: none;}
+#log .action-btn .caret {display: none;}
+#fileTabs .monaco-dropmenu .caret {display: none;}
+#monacoTabs .gap-x-5 {-moz-column-gap: 0; column-gap: 0;}
+#reviewBugContainer {position: fixed; right: 0; top: 0px; width: 25%; height: 100%; background: #fff; border-left: 5px solid #F4F5F7; overflow-y: auto; z-index: 9;}
+#log .action-btn .btn {padding-left: .25rem; padding-right: .25rem;}
+.dropmenu-btn>.text {max-width: 280px;}

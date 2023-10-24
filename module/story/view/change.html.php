@@ -2,7 +2,7 @@
 /**
  * The change view file of story module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
@@ -21,7 +21,7 @@
         <small><?php echo $lang->arrow . ' ' . $lang->story->change;?></small>
       </h2>
     </div>
-    <form class="main-form" method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
+    <form class="main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->story->reviewedBy;?></th>
@@ -83,10 +83,12 @@
           <?php echo $this->fetch('file', 'buildform');?>
           </td>
         </tr>
+        <?php if($this->config->vision != 'or'):?>
         <tr>
           <th><?php echo $lang->story->checkAffection;?></th>
           <td><?php include './affected.html.php';?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <td></td>
           <td class='text-center form-actions'>
@@ -114,4 +116,5 @@
 <?php js::set('storyType', $story->type);?>
 <?php js::set('rawModule', $this->app->rawModule);?>
 <?php js::set('page', $this->app->rawMethod);?>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

@@ -1,7 +1,7 @@
 <?php
 /**
  * The code view file of custom module of ZenTaoPMS.
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@cnezsoft.com>
  * @package     custom
@@ -16,7 +16,7 @@
       <tr>
         <th class='c-setCode'><?php echo $lang->custom->setCode;?></th>
         <td class='c-code text-left'>
-          <?php $checkedKey = isset($config->setCode) ? $config->setCode : 1;?>
+          <?php $checkedKey = isset($config->setCode) ? $config->setCode : 0;?>
           <?php foreach($lang->custom->conceptOptions->URAndSR as $key => $value):?>
           <label class="radio-inline"><input type="radio" name="code" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="code<?php echo $key;?>"><?php echo $value;?></label>
           <?php endforeach;?>

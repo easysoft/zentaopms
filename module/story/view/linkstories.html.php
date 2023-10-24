@@ -2,7 +2,7 @@
 /**
  * The link story view of story module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@cnezsoft.com>
  * @package     story
@@ -59,7 +59,7 @@
           <?php if(!empty($product->shadow)):?>
           <td class='nobr' title="<?php echo $products[$story2Link->product]?>"><?php echo html::a($this->createLink('product', 'browse', "productID=$story2Link->product&branch=$story2Link->branch"), $products[$story2Link->product], '_blank');?></td>
           <?php endif;?>
-          <td class='text-left nobr' title="<?php echo $story2Link->title?>"><?php echo html::a($storyLink, $story2Link->title);?></td>
+          <td class='text-left nobr' title="<?php echo $story2Link->title?>"><?php echo $story2Link->title;?></td>
           <td><?php echo $this->processStatus('story', $story2Link);?></td>
           <td><?php echo zget($users, $story2Link->openedBy);?></td>
           <td><?php echo zget($users, $story2Link->assignedTo);?></td>

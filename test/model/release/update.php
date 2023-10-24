@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/release.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -31,4 +30,3 @@ r($release->updateTest($releaseID[1], $terminateRelease)) && p('id,name,build') 
 r($release->updateTest($releaseID[2], $noReleaseID))      && p()                && e('0');                      //任务ID为空测试
 r($release->updateTest($releaseID[0], $noName))           && p('name:0')        && e('『发布名称』不能为空。'); //名称为空测试
 
-$db->restoreDB();

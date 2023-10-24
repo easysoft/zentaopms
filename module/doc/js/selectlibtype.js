@@ -1,8 +1,3 @@
-$(function()
-{
-    loadDocLibs(defaultType);
-})
-
 /**
  * Redirect the parent window.
  *
@@ -12,16 +7,18 @@ $(function()
  * @access public
  * @return void
  */
-function redirectParentWindow(objectType, libID, docType)
+function redirectParentWindow(objectType, libID, moduleID, docType)
 {
     config.onlybody = 'no';
-    if(objectType == 'api')
+
+    var link = '';
+    if(docType == 'api')
     {
-        var link = createLink('api', 'create', 'libID=' + libID) + '#app=doc';
+        link = createLink('api', 'create', 'libID=' + libID + '&moduleID=' + moduleID + '&space=' + objectType);
     }
     else
     {
-        var link = createLink('doc', 'create', 'objectType=' + objectType + '&objectID=0&libID=' + libID + '&moduleID=0&docType=' + docType + '&fromGlobal=true') + '#app=doc';
+        link = createLink('doc', 'create', 'objectType=' + objectType + '&objectID=0&libID=' + libID + '&moduleID=' + moduleID + '&docType=' + docType) + '#app=doc';
     }
     window.parent.$.apps.open(link);
 }
@@ -32,23 +29,8 @@ function redirectParentWindow(objectType, libID, docType)
  * @param  string  type
  * @return void
  */
-function loadDocLibs(type)
+function loadDocLibs(space, type)
 {
-    $.get(createLink('doc', 'ajaxGetLibsByType', "type=" + type), function(data)
-    {
-        $('#lib').replaceWith(data);
-        $('#lib_chosen').remove();
-        $('#lib').chosen();
-
-        if($('#lib').find('option').length == 0)
-        {
-            $('#submit').attr('disabled', 'disabled');
-        }
-        else
-        {
-            $('#submit').removeAttr('disabled');
-        }
-    })
-
-    $('#docType').toggleClass('hidden', type == 'api');
+    var link = createLink('doc', 'ajaxGetLibsByType', "space=" + space + "&type=" + type);
+    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').picker(); $('#moduleLabel').remove();});
 }

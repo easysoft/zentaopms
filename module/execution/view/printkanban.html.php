@@ -2,7 +2,7 @@
 /**
  * The kanban view file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2009-2012 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Wang Yidong, Zhu Jinyong
  * @package     execution
  * @version     $Id: kanban.html.php $
@@ -18,7 +18,7 @@
         <div class='main-header'>
           <h2><?php echo $lang->printKanban->common;?></h2>
         </div>
-        <form target='_blank' method='post'>
+        <form class="no-stash" target='_blank' method='post'>
           <table class='table table-form'>
             <tr>
               <td class='text-right w-100px'><?php echo $lang->printKanban->content?>:</td>

@@ -1,16 +1,19 @@
 <?php
+
 /**
  * `CHECKSUM` statement.
  */
-
-declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Statements;
 
 /**
  * `CHECKSUM` statement.
  *
- * CHECKSUM TABLE tbl_name [, tbl_name] ... [ QUICK | EXTENDED ]
+ * CHECKSUM TABLE tbl_name array(, tbl_name] ... array( QUICK | EXTENDED ]
+ *
+ * @category   Statements
+ *
+ * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class ChecksumStatement extends MaintenanceStatement
 {
@@ -19,10 +22,10 @@ class ChecksumStatement extends MaintenanceStatement
      *
      * @var array
      */
-    public static $OPTIONS = [
+    public static $OPTIONS = array(
         'TABLE' => 1,
 
         'QUICK' => 2,
-        'EXTENDED' => 3,
-    ];
+        'EXTENDED' => 3
+    );
 }

@@ -1,1 +1,0 @@
-import{aS as n,S as s}from"./index-5427279b.js";const g=()=>{if(window.chartData)return window.chartData;const a=document.location.hash.split("/"),r=a&&a[a.length-1],t=n(s.GO_CHART_STORAGE_LIST);if(t){for(let o=0;o<t.length;o++)if(r.toString()===t[o].id)return t[o]}};export{g};

@@ -1,0 +1,3 @@
+.show-search-form #featureBar .search-form-toggle {color: var(--color-primary-500); background-color: var(--color-primary-50);}
+#searchFormPanel {display: none;}
+.show-search-form #searchFormPanel {display: block;}

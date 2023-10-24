@@ -2,7 +2,7 @@
 /**
  * The html template file of step3 method of install module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -19,6 +19,7 @@ if(!isset($error))
 \$config->debug           = false;
 \$config->requestType     = '$requestType';
 \$config->timezone        = '$timezone';
+\$config->db->driver      = '$dbDriver';
 \$config->db->host        = '$dbHost';
 \$config->db->port        = '$dbPort';
 \$config->db->name        = '$dbName';

@@ -1,3 +1,5 @@
+<?php $oldMaxCount = $this->config->maxCount;?>
+<?php $this->config->maxCount = 500;?>
 <style>
 #taskTeamEditor button > i {color: #5e626d;}
 #taskTeamEditor .estimateBox span {background-color: #fff;}
@@ -26,7 +28,7 @@ $memberStatus   = $member->status;
 if($memberStatus == 'done') $memberDisabled = true;
 if($memberStatus != 'wait' and $task->mode == 'linear') $sortDisabled = true;
 if($memberStatus == 'done' and $task->mode == 'multi')  $sortDisabled = true;
-if($task->mode == 'linear' and strpos('|closed|cancel|pause|', $task->status) !== false and $app->rawMethod != 'activate')
+if(strpos('|closed|cancel|pause|', $task->status) !== false and $app->rawMethod != 'activate')
 {
     $memberStatus   = $task->status;
     $memberDisabled = true;
@@ -127,7 +129,6 @@ if($task->mode == 'multi' and $app->rawMethod == 'activate') $hourDisabled = fal
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php if(isset($task->status)):?>
 <?php js::set('taskStatus', $task->status);?>
-<?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
 <?php if($newRowCount == 0 and $app->rawMethod == 'edit' and $task->mode == 'linear'):?>
 <tr>
   <td colspan='4'>
@@ -246,14 +247,6 @@ $(document).ready(function()
             return false;
         }
 
-        <?php if($app->rawMethod == 'edit'):?>
-        if(totalLeft == 0 && (taskStatus == 'doing' || taskStatus == 'pause'))
-        {
-            bootbox.alert(totalLeftError);
-            return false;
-        }
-        <?php endif;?>
-
         if($taskTeamEditor.find('td > .btn-delete:enabled').length == 1) return false;
 
         return true;
@@ -359,3 +352,4 @@ function setLineNumber()
 
 }
 </script>
+<?php $this->config->maxCount = $oldMaxCount;?>

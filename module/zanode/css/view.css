@@ -7,13 +7,16 @@
 .zanode-mt-8{margin-top: 8px;}
 .zanode-status-text{margin-left: 10px;font:small-caption;color:#838a9d;}
 .zanode-status-text i{color:#18a6fd}
-.status-notice{margin-top: 8px;margin-left: 18px;line-height: 28px;}
+.status-notice{margin-top: 16px;line-height: 28px;}
 .status-notice a{color: #2463c7;}
 .service-status a{color: #2463c7;}
-.service-status{margin-top: 10px;}
+.service-status{margin-top: 5px;}
 .vnc-detail{height: 60vh;min-height: 550px;}
 .vnc-mask{width: 100%;height:100%;background-color: rgba(0,0,0,0);position: absolute;z-index: 1;}
 .checkStatus{color: #313c52;}
 .node-not-wrap{white-space: nowrap;}
 .btn-info {background-color: unset;}
 .btn.disabled i {color: #fff;}
+.btn-toolbar a img{margin-bottom: 2px;}
+.zanode-init{padding:15px;background: #f4f5f7;margin:10px 0;}
+.btn-snap-create{height: 30px;}

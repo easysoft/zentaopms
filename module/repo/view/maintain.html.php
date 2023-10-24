@@ -2,7 +2,7 @@
 /**
  * The browse view file of repo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2017 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     repo
@@ -16,7 +16,8 @@
     <?php echo html::a($this->createLink('repo', 'maintain'), "<span class='text'>{$lang->repo->maintain}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php if(common::hasPriv('repo', 'create')) echo html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->create, '', "class='btn btn-primary'");?>
+    <?php if(common::hasPriv('repo', 'import')) echo html::a(helper::createLink('repo', 'import'), "<i class='icon icon-import'></i> " . $this->lang->repo->importAction, '', "class='btn btn-link'");?>
+    <?php if(common::hasPriv('repo', 'create')) echo html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->createAction, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent'>

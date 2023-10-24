@@ -2,7 +2,7 @@
 /**
  * The browse view file of tree module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
@@ -39,11 +39,13 @@ if($viewType == 'line')   $name = $lang->tree->line;
 if($viewType == 'api')    $name = $lang->tree->dir;
 if($viewType == 'doc')    $name = $lang->doc->catalogName;
 if($viewType == 'report') $name = $lang->tree->reportGroup;
+if($viewType == 'host')   $name = $this->lang->tree->groupName;;
 if($viewType == 'trainskill' or $viewType == 'trainpost') $name = $lang->tree->cate;
 
 $childTitle = $lang->tree->child;
 if(strpos($viewType, 'doc') !== false or $viewType == 'api') $childTitle = $lang->doc->childType;
 if($viewType == 'line' or $viewType == 'trainskill' or $viewType == 'trainpost') $childTitle = '';
+if($viewType == 'host') $childTitle = $lang->tree->childGroup;
 
 $editTitle   = $lang->tree->edit;
 $deleteTitle = $lang->tree->delete;
@@ -51,6 +53,11 @@ if($viewType == 'doc' or $viewType == 'api')
 {
     $editTitle   = $lang->doc->editType;
     $deleteTitle = $lang->doc->deleteType;
+}
+if($viewType == 'host')
+{
+    $deleteTitle = $lang->tree->deleteHost;
+    $editTitle   = $lang->tree->editHost;
 }
 ?>
 <!--div id="mainMenu" class="clearfix">
@@ -118,9 +125,9 @@ if($viewType == 'doc' or $viewType == 'api')
         <?php if($viewType == 'story' and $allProduct and $canBeChanged):?>
         <div class="panel-actions btn-toolbar"><?php echo html::a('javascript:toggleCopy()', $lang->tree->syncFromProduct, '', "class='btn btn-sm btn-primary'")?></div>
         <?php elseif($viewType == 'feedback' and common::hasPriv('feedback', 'syncProduct') and !isset($syncConfig[$rootID])):?>
-        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('feedback', 'syncProduct', "productID=$rootID&module=feedback&parent=$parent", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='40%'");?></div>
+        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('feedback', 'syncProduct', "productID=$rootID&module=feedback&parent=$parent", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='60%'");?></div>
         <?php elseif($viewType == 'ticket' and common::hasPriv('ticket', 'syncProduct') and !isset($syncConfig[$rootID])):?>
-        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('ticket', 'syncProduct', "productID=$rootID&parent=$parent", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='40%'");?></div>
+        <div class="panel-actions btn-toolbar"><?php echo html::a($this->createLink('ticket', 'syncProduct', "productID=$rootID&parent=$parent", '', true), $lang->tree->syncProductModule, '', "class='btn btn-sm btn-primary iframe' data-width='60%'");?></div>
         <?php endif;?>
       </div>
       <div class="panel-body">
@@ -292,7 +299,7 @@ $(function()
             {
                 hiddenwin.location.href = action.linkTemplate.format(item.id);
             }
-            else if(action.type === 'sort' && event.item == null)
+            else if(action.type === 'sort')
             {
                 var orders = {};
                 $('#modulesTree').find('li:not(.tree-action-item)').each(function()
@@ -370,3 +377,4 @@ else
     include '../../common/view/footer.html.php';
 }
 ?>
+<?php include '../../ai/view/inputinject.html.php';?>

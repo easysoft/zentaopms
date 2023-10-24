@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/job.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -35,4 +34,3 @@ r($job->createObject($job_triggerType_blank)) && p('triggerType:0') && e('『触
 r($job->createObject($job_name))              && p('name')          && e('这是一个job007');         // 测试创建job name为《这是一个job007》的情况
 r($job->createObject($job_engine))            && p('engine')        && e('gitlab');                 // 测试创建job engine为gitlab的情况
 r($job->createObject($job_triggerType))       && p('triggerType')   && e('tag');                    // 测试创建job triggerType为tag的情况
-$db->restoreDB();

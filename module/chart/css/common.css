@@ -1,0 +1,8 @@
+.table-panel {overflow-x: auto;}
+.datatable {width: auto;}
+.datatable th.header {line-height: 32px !important;}
+.header-config {float: right; display: none;}
+.header:hover .header-config {display: inline-block;}
+.label-outline.label-info {border: unset; line-height: 14px;}
+.border-bottom {border-bottom: 1px solid #f4f5f7;}
+.visibility-hidden{visibility: hidden;}

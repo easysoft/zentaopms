@@ -2,7 +2,7 @@
 /**
  * The testtask module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
@@ -16,7 +16,7 @@ $lang->testtask->delete           = "Delete Request";
 $lang->testtask->importUnitResult = "Import Unit Result";
 $lang->testtask->importUnit       = "Import Unit Result"; //Fix bug custom required testtask.
 $lang->testtask->browseUnits      = "Unit Test List";
-$lang->testtask->unitCases        = "Unit Test Cases";
+$lang->testtask->unitCases        = "Browse Unit Cases List";
 $lang->testtask->view             = "Request Detail";
 $lang->testtask->edit             = "Edit Request";
 $lang->testtask->browse           = "Test Request";
@@ -60,7 +60,7 @@ $lang->testtask->compile          = 'Compile';
 $lang->testtask->duration         = 'Duration';
 
 $lang->testtask->viewAction     = "View Request";
-$lang->testtask->casesAction    = 'View Case';
+$lang->testtask->casesAction    = 'Browse Cases List';
 $lang->testtask->activateAction = "Activate Request";
 $lang->testtask->blockAction    = "Block Request";
 $lang->testtask->closeAction    = "Close Request";
@@ -71,7 +71,7 @@ $lang->testtask->reportAction   = 'Report';
 $lang->testtask->id                = 'ID';
 $lang->testtask->common            = 'Request';
 $lang->testtask->product           = $lang->productCommon;
-$lang->testtask->project           = 'Project';
+$lang->testtask->project           = $lang->projectCommon;;
 $lang->testtask->execution         = $lang->execution->common;
 $lang->testtask->type              = 'Type';
 $lang->testtask->build             = 'Build';
@@ -145,9 +145,9 @@ $lang->testtask->showFail      = 'Failed <span class="text-danger">%s</span> tim
 
 $lang->testtask->confirmDelete     = 'Do you want to delete this build?';
 $lang->testtask->confirmUnlinkCase = 'Do you want to unlink this case?';
-$lang->testtask->noticeNoOther     = 'No test builds for this product.';
+$lang->testtask->noticeNoOther     = "No test builds for this {$lang->productCommon}.";
 $lang->testtask->noTesttask        = 'No requests. ';
-$lang->testtask->checkLinked       = "Please check whether the product that the test request is linked to has been linked to a {$lang->executionCommon}.";
+$lang->testtask->checkLinked       = "Please check whether the {$lang->productCommon} that the test request is linked to has been linked to a {$lang->executionCommon}.";
 $lang->testtask->noImportData      = 'The imported XML does not parse the data.';
 $lang->testtask->unitXMLFormat     = 'Please select a file in JUnit XML format.';
 $lang->testtask->titleOfAuto       = "%s automated testing";

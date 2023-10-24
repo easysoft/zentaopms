@@ -2,7 +2,7 @@
 /**
  * The export view file of file module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     file
@@ -211,12 +211,25 @@ $(document).ready(function()
     });
 
     $('#fileType').change();
-    <?php if($this->cookie->checkedItem):?>
     setTimeout(function()
     {
-        $('#exportType').val('selected').trigger('chosen:updated');
+        if($.cookie('checkedItem') !== '') $('#exportType').val('selected').change().trigger('chosen:updated');
     }, 150);
-    <?php endif;?>
+
+    $('#exportType').change(function()
+    {
+        const $form = $(this).closest('form');
+        $form.find('input[name=checkedItem]').remove();
+
+        const exportType = $(this).val();
+        if(exportType == 'selected' && typeof window.parent.getCheckedItems === 'function')
+        {
+            const checkedItems = window.parent.getCheckedItems();
+            $form.append($('<input>').attr({name: 'checkedItem', type: 'hidden'}).val(checkedItems));
+        }
+    });
+
+    $('#exportType').change();
 
     if($('#customFields #exportFields').length > 0)
     {
@@ -279,7 +292,7 @@ if($isCustomExport)
             </tr>
             <tr>
               <th><?php echo $lang->file->extension;?></th>
-              <td><?php echo html::select('fileType', $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value) class="form-control chosen"');?></td>
+              <td><?php echo html::select('fileType', $lang->exportFileTypeList, '', 'onchange=switchEncode(this.value) class="form-control chosen" data-drop_direction="down"');?></td>
             </tr>
             <tr>
               <th><?php echo $lang->file->encoding;?></th>

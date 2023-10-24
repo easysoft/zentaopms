@@ -1,0 +1,62 @@
+:root
+{
+  /* generate from https://uicolors.app/create */
+  --color-primary-50: #edf9ff;
+  --color-primary-100: #d7f0ff;
+  --color-primary-200: #88d8ff;
+  --color-primary-300: #50c1ff;
+  --color-primary-400: #27a2ff;
+  --color-primary-500: #1084ff;
+  --color-primary-600: #096cec;
+  --color-primary-700: #0f56be;
+  --color-primary-800: #134b95;
+  --color-primary-900: #123262;
+  --color-primary-50-rgb: 237, 249, 255;
+  --color-primary-100-rgb: 215, 240, 255;
+  --color-primary-200-rgb: 136, 216, 255;
+  --color-primary-300-rgb: 80, 193, 255;
+  --color-primary-400-rgb: 39, 162, 255;
+  --color-primary-500-rgb: 16, 132, 255;
+  --color-primary-600-rgb: 9, 108, 236;
+  --color-primary-700-rgb: 15, 86, 190;
+  --color-primary-800-rgb: 19, 75, 149;
+  --color-primary-900-rgb: 18, 50, 98;
+
+  --color-secondary-50: #f3f6fc;
+  --color-secondary-100: #e6edf8;
+  --color-secondary-200: #97b8e2;
+  --color-secondary-300: #5f93d1;
+  --color-secondary-400: #3a75bd;
+  --color-secondary-500: #2a5b9f;
+  --color-secondary-600: #254e89;
+  --color-secondary-700: #203f6c;
+  --color-secondary-800: #20375a;
+  --color-secondary-900: #15233c;
+  --color-secondary-50-rgb: 243, 246, 252;
+  --color-secondary-100-rgb: 230, 237, 248;
+  --color-secondary-200-rgb: 151, 184, 226;
+  --color-secondary-300-rgb: 95, 147, 209;
+  --color-secondary-400-rgb: 58, 117, 189;
+  --color-secondary-500-rgb: 42, 91, 159;
+  --color-secondary-600-rgb: 37, 78, 137;
+  --color-secondary-700-rgb: 32, 63, 108;
+  --color-secondary-800-rgb: 32, 55, 90;
+  --color-secondary-900-rgb: 21, 35, 60;
+
+  --color-link: var(--color-primary-700);
+  --color-link-hover: var(--color-primary-600);
+  --color-link-visited: var(--color-primary-800);
+  --color-link-rgb: var(--color-primary-700-rgb);
+  --color-link-hover-rgb: var(--color-primary-600-rgb);
+  --color-link-visited-rgb: var(--color-primary-800-rgb);
+
+  --radius-sm: 0;
+  --radius: 1px;
+  --radius-md: 1px;
+  --radius-lg: 1px;
+  --radius-xl: 1px;
+  --radius-2xl: 1px;
+  --radius-3xl: 1px;
+
+  --zt-header-bg: var(--color-primary-800);
+}

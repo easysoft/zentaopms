@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/my.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -26,4 +25,3 @@ r($my->getAssignedByMeTest($task[0],  $task[1],  $task[2],  $task[3],  $task[4],
 r($my->getAssignedByMeTest($bug[0],   $bug[1],   $bug[2],   $bug[3],   $bug[4],   $bug[5]))   && p() && e('1'); // 当插入一条action为admin指派了bug的动态时，查询结果为1条数据
 r($my->getAssignedByMeTest($story[0], $story[1], $story[2], $story[3], $story[4], $story[5])) && p() && e('0'); // 当插入一条action为admin指派了需求的动态时，查询结果为0条数据
 
-$db->restoreDB();

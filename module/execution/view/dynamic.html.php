@@ -1,26 +1,26 @@
 <?php
 /**
- * The action->dynamic view file of dashboard module of ZenTaoPMS.
+ * The dynamic view file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
- * @package     dashboard
- * @version     $Id: action->dynamic.html.php 1477 2011-03-01 15:25:50Z wwccss $
+ * @package     execution
+ * @version     $Id: dynamic.html.php 1477 2011-03-01 15:25:50Z wwccss $
  * @link        http://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php foreach($lang->action->periods as $period => $label):?>
+    <?php foreach($lang->execution->featureBar['dynamic'] as $period => $label):?>
     <?php
     $label  = "<span class='text'>$label</span>";
     $active = '';
     if($period == $type)
     {
         $active = 'btn-active-text';
-        $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+        $label .= " <span class='label label-light label-badge'>{$recTotal}</span>";
     }
     echo html::a(inlink('dynamic', "executionID=$executionID&type=$period"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
@@ -80,7 +80,9 @@
         <?php foreach($actions as $i => $action):?>
         <?php if($action->action == 'adjusttasktowait') continue;?>
         <?php if(empty($firstAction)) $firstAction = $action;?>
-        <li <?php if($action->major) echo "class='active'";?>>
+        <?php $class = $action->major ? 'active' : '';?>
+        <?php if(in_array($action->action, array('releaseddoc', 'collected'))) $class .= " {$action->action}";?>
+        <li <?php if($action->major) echo "class='$class'";?>>
           <div>
             <span class="timeline-tag"><?php echo $action->time?></span>
             <span class="timeline-text">
@@ -105,8 +107,8 @@ $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
 $lastDate  = substr($action->originalDate, 0, 10);
 $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
 $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
-$preLink   = $hasPre ? inlink('dynamic', "executionID=$executionID&type=$type&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
-$nextLink  = $hasNext ? inlink('dynamic', "executionID=$executionID&type=$type&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
+$preLink   = $hasPre ? inlink('dynamic', "executionID=$executionID&type=$type&param=$param&recTotal={$recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
+$nextLink  = $hasNext ? inlink('dynamic', "executionID=$executionID&type=$type&param=$param&recTotal={$recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
 ?>
 <?php if($hasPre or $hasNext):?>
 <div id="mainActions" class='main-actions'>

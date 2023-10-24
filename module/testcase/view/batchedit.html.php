@@ -2,7 +2,7 @@
 /**
  * The batch edit view of testcase module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     testcase
@@ -57,10 +57,13 @@
             <th class='c-branch'><?php echo $lang->testcase->branch;?></th>
             <?php endif;?>
             <th class='c-module<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', '', ' required');?>'><?php echo $lang->testcase->module;?></th>
+            <?php if(!$isLibCase):?>
+            <th class='c-scene<?php echo zget($visibleFields, 'scene', ' hidden') . zget($requiredFields, 'scene', '', ' required');?>'><?php echo $lang->testcase->scene;?></th>
+            <?php endif;?>
             <th class='c-story<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', '', ' required');?>'><?php echo $lang->testcase->story;?></th>
             <th class='text-left c-title required'><?php echo $lang->testcase->title;?></th>
             <th class='c-type required'><?php echo $lang->testcase->type;?></th>
-            <th class='<?php echo zget($visibleFields, 'precondition', 'hidden') . zget($requiredFields, 'precondition', '', ' required');?>'><?php echo $lang->testcase->precondition;?></th>
+            <th class='c-precondition<?php echo zget($visibleFields, 'precondition', ' hidden') . zget($requiredFields, 'precondition', '', ' required');?>'><?php echo $lang->testcase->precondition;?></th>
             <th class='c-keywords<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->testcase->keywords;?></th>
             <th class='c-stage<?php echo zget($visibleFields, 'stage', ' hidden') . zget($requiredFields, 'stage', '', ' required');?>'><?php echo $lang->testcase->stage;?></th>
             <?php
@@ -96,7 +99,10 @@
               <?php echo html::select("branches[$caseID]", !empty($disabled) ? array() : $branchTagOption[$branchProductID], $productType != 'normal' ? $cases[$caseID]->branch : '', "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID, {$cases[$caseID]->branch})', $disabled");?>
             </td>
             <?php endif;?>
-            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]", zget($modulePairs, $caseID, array(0 => '/')), $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories($productID, this.value, $caseID)'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]", zget($modulePairs, $caseID, array(0 => '/')), $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories2($productID, this.value, $caseID)'");?></td>
+            <?php if(!$isLibCase):?>
+            <td class='text-left<?php echo zget($visibleFields, 'scene', ' hidden')?>' style='overflow:visible'><?php echo html::select("scene[$caseID]", zget($scenePairs, $caseID, array(0 => '/')), $cases[$caseID]->scene, "class='form-control chosen' data-drop_direction='down'");?></td>
+            <?php endif;?>
             <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'><?php echo html::select("story[$caseID]", $stories, $cases[$caseID]->story, "class='form-control picker-select'");?></td>
             <td style='overflow:visible' title='<?php echo $cases[$caseID]->title?>'>
               <div class='input-group'>

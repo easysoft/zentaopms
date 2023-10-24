@@ -1,0 +1,10 @@
+.progress-bar {
+  transition: width 0.1s; /* 将过渡时间设置为 0.5 秒 */
+  animation: progress-animation 0.1s; /* 将动画时间设置为 0.5 秒 */
+}
+
+@keyframes progress-animation {
+  0% { width: 0; }
+  100% { width: 100%; }
+}
+

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/webhook.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -57,4 +56,3 @@ $bind['userid']['user14']            = '';
 $result1 = $webhook->bindTest($post, $bind);
 
 r($result1) && p() && e('1'); //绑定admin账号给飞书账号的白袁李（创建了测试用户飞书管理端，然后通过create方法创建了一条数据，关联飞书里的一个用户，页面验证成功绑定）
-$db->restoreDB();

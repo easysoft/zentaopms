@@ -2,7 +2,7 @@
 /**
  * The story view file of dashboard module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     dashboard
@@ -68,7 +68,7 @@
           <td class='text-left nobr'><?php echo html::a($storyLink, $story->title, '', "class='iframe'");?></td>
           <td><span class='<?php echo "label-pri label-pri-{$story->pri} pri" . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
-          <td><?php echo $story->productTitle;?></td>
+          <td class="nobr"><?php echo $story->productTitle;?></td>
           <?php if($storyType != 'requirement' and $this->config->vision != 'lite'):?>
           <td class='nobr' title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
           <?php endif;?>

@@ -2,7 +2,7 @@
 /**
  * The control file of search module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
@@ -11,19 +11,6 @@
  */
 class search extends control
 {
-    /**
-     * Determine whether to display the effort object.
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct($module = '', $method = '')
-    {
-        parent::__construct($module, $method);
-        if($this->config->edition != 'max')      unset($this->lang->search->modules['effort']);
-        if($this->config->systemMode == 'light') unset($this->lang->search->modules['program']);
-    }
-
     /**
      * Build search form.
      *
@@ -49,7 +36,7 @@ class search extends control
         $_SESSION['searchParams']['module'] = $module;
         $this->search->initSession($module, $fields, $params);
 
-        if($module == 'trash' and $this->session->objectName)
+        if(in_array($module, $this->config->search->searchObject) and $this->session->objectName)
         {
             $space = common::checkNotCN() ? ' ' : '';
             $this->lang->search->common = $this->lang->search->common . $space . $this->session->objectName;
@@ -64,7 +51,67 @@ class search extends control
         $this->view->queryID      = $queryID;
         $this->view->style        = empty($style) ? 'full' : $style;
         $this->view->onMenuBar    = empty($onMenuBar) ? 'no' : $onMenuBar;
+
+        $this->app->loadModuleConfig('action');
         $this->display();
+    }
+
+    /**
+     * Build search form of 20 version.
+     *
+     * @param  string $module
+     * @param  array  $fields
+     * @param  array  $params
+     * @param  string $actionURL
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function buildZinForm($module = '', $fields = '', $params = '', $actionURL = '', $queryID = 0, $formName = '')
+    {
+        if(!commonModel::hasPriv('search', 'buildForm')) $this->loadModel('common')->deny('search', 'buildForm', false);
+
+        $module       = empty($module) ? $this->session->searchParams['module'] : $module;
+        $searchParams = $module . 'searchParams';
+        $searchForm   = $module . 'Form';
+        $queryID      = (empty($module) and empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
+        $fields       = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
+        $params       = empty($params) ?  json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
+        $actionURL    = empty($actionURL) ?    $_SESSION[$searchParams]['actionURL'] : $actionURL;
+        $style        = isset($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : '';
+        $onMenuBar    = isset($_SESSION[$searchParams]['onMenuBar']) ? $_SESSION[$searchParams]['onMenuBar'] : '';
+
+        $_SESSION['searchParams']['module'] = $module;
+        if(empty($_SESSION[$searchForm])) $this->search->initZinSession($module, $fields, $params);
+
+        if(in_array($module, $this->config->search->searchObject) and $this->session->objectName)
+        {
+            $space = common::checkNotCN() ? ' ' : '';
+            $this->lang->search->common = $this->lang->search->common . $space . $this->session->objectName;
+        }
+
+        $this->view->module       = $module;
+        $this->view->groupItems   = $this->config->search->groupItems;
+        $this->view->searchFields = $fields;
+        $this->view->actionURL    = $actionURL;
+        $this->view->fieldParams  = $this->search->setZinDefaultParams($fields, $params);
+        $this->view->queries      = $this->search->getQueryList($module);
+        $this->view->queryID      = $queryID;
+        $this->view->style        = empty($style) ? 'full' : $style;
+        $this->view->onMenuBar    = empty($onMenuBar) ? 'no' : $onMenuBar;
+        $this->view->formSession  = $this->search->convertFormFrom18To20($_SESSION[$module . 'Form']);
+        $this->view->fields       = $fields;
+        $this->view->formName     = $formName;
+
+        if($module == 'program')
+        {
+            $this->view->options = $this->search->setOptions($fields, $this->view->fieldParams, $this->view->queries);
+            $this->render();
+        }
+        else
+        {
+            $this->display();
+        }
     }
 
     /**
@@ -97,6 +144,37 @@ class search extends control
     }
 
     /**
+     * Build query
+     *
+     * @access public
+     * @return void
+     */
+    public function buildZinQuery()
+    {
+        if(!commonModel::hasPriv('search', 'buildQuery')) $this->loadModel('common')->deny('search', 'buildQuery', false);
+
+        $this->search->buildZinQuery();
+
+        $actionURL = $this->post->actionURL;
+        $parsedURL = parse_url($actionURL);
+        if(isset($parsedURL['host'])) return;
+        if($this->config->requestType != 'GET')
+        {
+            $path = $parsedURL['path'];
+            $path = str_replace($this->config->webRoot, '', $path);
+            if(strpos($path, '.') !== false) $path = substr($path, 0, strpos($path, '.'));
+            if(preg_match("/^\w+{$this->config->requestFix}\w+/", $path) == 0) return;
+        }
+        else
+        {
+            $query = $parsedURL['query'];
+            if(preg_match("/^{$this->config->moduleVar}=\w+\&{$this->config->methodVar}=\w+/", $query) == 0) return;
+        }
+
+        return print(json_encode(array('load' => $actionURL)));
+    }
+
+    /**
      * Save search query.
      *
      * @param  string  $module
@@ -123,6 +201,39 @@ class search extends control
     }
 
     /**
+     * Save search query of zin ui.
+     *
+     * @param  string  $module
+     * @param  string  $onMenuBar
+     * @access public
+     * @return void
+     */
+    public function saveZinQuery($module, $onMenuBar = 'no')
+    {
+        if(!commonModel::hasPriv('search', 'saveQuery')) $this->loadModel('common')->deny('search', 'saveQuery', false);
+
+        if($_POST)
+        {
+            $queryID = $this->search->saveZinQuery();
+            if(!$queryID) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $data     = fixer::input('post')->get();
+            $shortcut = empty($data->onMenuBar) ? 0 : 1;
+
+            if($this->viewType == 'json')
+            {
+                echo 'success';
+                return;
+            }
+            return $this->send(array('closeModal' => true, 'callback' => 'setTimeout(() => $(\'#searchFormPanel form button[type="submit"]\').trigger("click"), 300)'));
+        }
+
+        $this->view->module    = $module;
+        $this->view->onMenuBar = $onMenuBar;
+        $this->display();
+    }
+
+    /**
      * Delete current search query.
      *
      * @param  int    $queryID
@@ -134,6 +245,21 @@ class search extends control
         $this->search->deleteQuery($queryID);
         if(dao::isError()) return print(js::error(dao::getError()));
         echo 'success';
+    }
+
+    /**
+     * Delete current search query.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return void
+     */
+    public function deleteZinQuery($queryID)
+    {
+        if(!commonModel::hasPriv('search', 'deleteQuery')) $this->loadModel('common')->deny('search', 'deleteQuery', false);
+        $this->search->deleteQuery($queryID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        echo $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -169,6 +295,7 @@ class search extends control
     public function ajaxRemoveMenu($queryID)
     {
         $this->dao->update(TABLE_USERQUERY)->set('shortcut')->eq(0)->where('id')->eq($queryID)->exec();
+        echo $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -191,14 +318,12 @@ class search extends control
             }
             else
             {
-                $type = zget($this->lang->search->modules, ($result['type'] == 'case' ? 'testcase' : $result['type']), $result['type']);
+                $type = zget($this->lang->search->modules, ($result['type'] == 'testcase' ? 'case' : $result['type']), $result['type']);
                 return $this->send(array('result' => 'unfinished', 'message' => sprintf($this->lang->search->buildResult, $type, $type, $result['count']), 'type' => $type, 'count' => $result['count'], 'next' => inlink('buildIndex', "type={$result['type']}&lastID={$result['lastID']}") ));
             }
         }
 
         $this->lang->navGroup->search  = 'admin';
-        $this->lang->search->menu      = $this->lang->admin->menu;
-        $this->lang->search->menuOrder = $this->lang->admin->menuOrder;
 
         $this->view->title = $this->lang->search->buildIndex;
         $this->display();

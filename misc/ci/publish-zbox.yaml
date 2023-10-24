@@ -1,0 +1,36 @@
+metadata:
+  labels:
+    ci-cpu-level: high
+spec:
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+          - key: easycorp.io/cpu-spec
+            operator: Gt
+            values:
+            - "7"
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchExpressions:
+          - key: ci-cpu-level
+            operator: In
+            values:
+            - high
+        topologyKey: "kubernetes.io/hostname"
+  containers:
+  - name: docker
+    image: docker:23.0.6-dind-alpine3.17
+    command: ["sleep"]
+    args: ["99d"]
+    volumeMounts:
+    - mountPath: /var/run/docker.sock
+      name: docker-socket
+  volumes:
+  - name: docker-socket
+    hostPath:
+      path: /var/run/docker.sock
+      type: Socket

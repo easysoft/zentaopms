@@ -2,7 +2,7 @@
 /**
  * The importtask view file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
@@ -11,6 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php if(isonlybody()):?>
+<style>#importTaskForm .table-footer .pager {z-index: 105;}</style>
+<?php endif;?>
 <?php js::set('isonlybody', isonlybody());?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
@@ -44,7 +47,9 @@
           <th class='c-hour'><?php echo $lang->task->leftAB;?></th>
           <th class='c-date text-center'><?php echo $lang->task->deadlineAB;?></th>
           <th class='c-status'><?php echo $lang->statusAB;?></th>
+          <?php if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review'))):?>
           <th class='c-story'><?php echo $lang->task->story;?></th>
+          <?php endif;?>
         </tr>
       </thead>
       <tbody>
@@ -65,6 +70,7 @@
           <td title="<?php echo $task->left . ' ' . $lang->execution->workHour;?>"><?php echo $task->left . ' ' . $lang->execution->workHourUnit;?></td>
           <td class="text-center <?php if(isset($task->delay)) echo 'delayed';?>"><?php if(substr($task->deadline, 0, 4) > 0) echo '<span>' . $task->deadline . '</span>';?></td>
           <td><span class='status-task status-<?php echo $task->status;?>'><?php echo $this->processStatus('task', $task);?></span></td>
+          <?php if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review'))):?>
           <td class='text-left text-ellipsis' title="<?php echo $task->storyTitle;?>">
             <?php
             if($task->storyID)
@@ -80,6 +86,7 @@
             }
             ?>
           </td>
+          <?php endif;?>
         </tr>
         <?php endforeach;?>
       </tbody>

@@ -2,16 +2,15 @@
 /**
  * The testsuite module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     testsuite
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->testsuite->index            = "套件首页";
 $lang->testsuite->create           = "建套件";
-$lang->testsuite->delete           = "删除";
+$lang->testsuite->delete           = "删除套件";
 $lang->testsuite->view             = "概况";
 $lang->testsuite->edit             = "编辑套件";
 $lang->testsuite->browse           = "套件列表";
@@ -26,7 +25,7 @@ $lang->testsuite->successSaved     = '保存成功';
 $lang->testsuite->id             = '编号';
 $lang->testsuite->pri            = '优先级';
 $lang->testsuite->common         = '套件';
-$lang->testsuite->project        = '所属项目';
+$lang->testsuite->project        = '所属' . $lang->projectCommon;
 $lang->testsuite->product        = '所属' . $lang->productCommon;
 $lang->testsuite->name           = '名称';
 $lang->testsuite->type           = '类型';

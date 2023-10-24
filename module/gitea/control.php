@@ -2,7 +2,7 @@
 /**
  * The control file of gitea module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
@@ -20,9 +20,11 @@ class gitea extends control
     {
         parent::__construct($moduleName, $methodName);
 
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
+
         /* This is essential when changing tab(menu) from gitea to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
-        $this->loadModel('ci')->setMenu();
+        if($this->app->rawMethod != 'binduser') $this->loadModel('ci')->setMenu();
     }
 
     /**
@@ -68,12 +70,21 @@ class gitea extends control
     {
         if($_POST)
         {
-            $this->checkToken();
-            $giteaID = $this->gitea->create();
+            $gitea = form::data($this->config->gitea->form->create)
+                ->add('type', 'gitea')
+                ->add('private',md5(rand(10,113450)))
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->trim('url,token')
+                ->skipSpecial('url,token')
+                ->remove('account,password,appType')
+                ->get();
+            $this->checkToken($gitea);
+            $giteaID = $this->loadModel('pipeline')->create($gitea);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $actionID = $this->loadModel('action')->create('gitea', $giteaID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
         $this->view->title = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->lblCreate;
@@ -112,7 +123,8 @@ class gitea extends control
 
         if($_POST)
         {
-            $this->checkToken();
+            $gitea = fixer::input('post')->trim('url,token')->get();
+            $this->checkToken($gitea);
             $this->gitea->update($giteaID);
             $gitea = $this->gitea->getByID($giteaID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -121,7 +133,7 @@ class gitea extends control
             $actionID = $this->action->create('gitea', $giteaID, 'edited');
             $changes  = common::createChanges($oldGitea, $gitea);
             $this->action->logHistory($actionID, $changes);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->title = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->edit;
@@ -131,24 +143,33 @@ class gitea extends control
     }
 
     /**
+     * 删除一条gitea记录
      * Delete a gitea.
      *
      * @param  int    $giteaID
      * @access public
      * @return void
      */
-    public function delete($giteaID, $confirm = 'no')
+    public function delete($giteaID)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->gitea->confirmDelete, inlink('delete', "id=$giteaID&confirm=yes")));
-
         $oldGitea = $this->loadModel('pipeline')->getByID($giteaID);
         $actionID = $this->pipeline->delete($giteaID, 'gitea');
-        if(!$actionID) return print(js::error($this->lang->pipeline->delError));
+        if(!$actionID)
+        {
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->pipeline->delError);
+            return $this->send($response);
+        }
 
         $gitea   = $this->pipeline->getByID($giteaID);
         $changes = common::createChanges($oldGitea, $gitea);
         $this->loadModel('action')->logHistory($actionID, $changes);
-        return print(js::reload('parent'));
+
+        $response['load']    = $this->createLink('space', 'browse');
+        $response['message'] = zget($this->lang->instance->notices, 'uninstallSuccess');
+        $response['result']  = 'success';
+
+        return $this->send($response);
     }
 
     /**
@@ -157,9 +178,8 @@ class gitea extends control
      * @access protected
      * @return void
      */
-    protected function checkToken()
+    protected function checkToken(object $gitea)
     {
-        $gitea = fixer::input('post')->trim('url,token')->get();
         $this->dao->update('gitea')->data($gitea)->batchCheck($this->config->gitea->create->requiredFields, 'notempty');
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -174,11 +194,12 @@ class gitea extends control
     /**
      * Bind gitea user to zentao users.
      *
-     * @param  int     $giteaID
+     * @param  int    $giteaID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function bindUser($giteaID)
+    public function bindUser($giteaID, $type = 'all')
     {
         $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
         $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -186,15 +207,49 @@ class gitea extends control
         if($_POST)
         {
             $this->gitea->bindUser($giteaID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'load' => helper::createLink('space', 'browse')));
         }
 
-        $this->view->title         = $this->lang->gitea->bindUser;
-        $this->view->userPairs     = $userPairs;
-        $this->view->giteaUsers    = $this->gitea->apiGetUsers($giteaID);
-        $this->view->bindedUsers   = $this->gitea->getUserAccountIdPairs($giteaID);
-        $this->view->matchedResult = $this->gitea->getMatchedUsers($giteaID, $this->view->giteaUsers, $zentaoUsers);
+        $userList      = array();
+        $giteaUsers    = $this->gitea->apiGetUsers($giteaID);
+        $bindedUsers   = $this->gitea->getUserAccountIdPairs($giteaID);
+        $matchedResult = $this->gitea->getMatchedUsers($giteaID, $giteaUsers, $zentaoUsers);
+
+        foreach($giteaUsers as $giteaUserID => $giteaUser)
+        {
+            $user = new stdclass();
+            $user->email           = '';
+            $user->status          = 'notBind';
+            $user->giteaID         = $giteaUser->id;
+            $user->giteaEmail      = $giteaUser->email;
+            $user->giteaUser       = $giteaUser->realname . '@' . $giteaUser->account;
+            $user->giteaUserAvatar = $giteaUser->avatar;
+
+            $user->zentaoUsers = isset($matchedResult[$giteaUser->id]) ? $matchedResult[$giteaUser->id]->zentaoAccount : '';
+            if($user->zentaoUsers)
+            {
+                if(isset($zentaoUsers[$user->zentaoUsers])) $user->email = $zentaoUsers[$user->zentaoUsers]->email;
+
+                if(isset($bindedUsers[$user->zentaoUsers]) && $bindedUsers[$user->zentaoUsers] == $giteaUser->id)
+                {
+                    $user->status = 'binded';
+                    if(!isset($bindedUsers[$user->zentaoUsers])) $user->status = 'bindedError';
+                }
+            }
+
+            if($type != 'all' && $user->status != $type) continue;
+            $userList[] = $user;
+        }
+
+        $this->view->title       = $this->lang->gitea->bindUser;
+        $this->view->type        = $type;
+        $this->view->giteaID     = $giteaID;
+        $this->view->recTotal    = count($userList);
+        $this->view->userList    = $userList;
+        $this->view->userPairs   = $userPairs;
+
+        $this->view->zentaoUsers = $zentaoUsers;
         $this->display();
     }
 
@@ -212,11 +267,13 @@ class gitea extends control
 
         $project  = urldecode(base64_decode($project));
         $branches = $this->gitea->apiGetBranches($giteaID, $project);
-        $options  = "<option value=''></option>";
+
+        $options = array();
+        $options[] = array('text' => '', 'value' => '');;
         foreach($branches as $branch)
         {
-            $options .= "<option value='{$branch->name}'>{$branch->name}</option>";
+            $options[] = array('text' => $branch->name, 'value' => $branch->name);
         }
-        $this->send($options);
+        return print(json_encode($options));
     }
 }

@@ -2,7 +2,7 @@
 /**
  * The html template file of login method of user module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -12,6 +12,7 @@ include '../../common/view/header.lite.html.php';
 if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
 ?>
 <?php js::set('loginTimeoutTip', $lang->user->error->loginTimeoutTip);?>
+<?php $zentaodirName = basename($this->app->getBasePath());?>
 <main id="main" class="fade no-padding">
   <div class="container" id="login">
     <div id="loginPanel">
@@ -116,8 +117,8 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
     <div id="info" class="table-row">
       <div class="table-col text-middle text-center">
         <div id="poweredby">
-          <?php if($unsafeSites):?>
-          <div><a class='showNotice' href='javascript:showNotice()',><?php echo $lang->user->notice4Safe;?></a></div>
+          <?php if($unsafeSites and !empty($unsafeSites[$zentaodirName])):?>
+          <div><a class='showNotice' href='javascript:showNotice()'><?php echo $lang->user->notice4Safe;?></a></div>
           <?php endif;?>
           <?php if($config->checkVersion):?>
           <iframe id='updater' class='hidden' frameborder='0' width='100%' height='45' scrolling='no' allowtransparency='true' src="<?php echo $this->createLink('misc', 'checkUpdate', "sn=$s");?>"></iframe>
@@ -128,7 +129,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
   </div>
 </main>
 <?php
-if($unsafeSites)
+if($unsafeSites and !empty($unsafeSites[$zentaodirName]))
 {
     $paths     = array();
     $databases = array();

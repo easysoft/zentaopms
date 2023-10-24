@@ -28,7 +28,6 @@
 .block-guide .tab-pane .app-client .tree-menu li .avatar img {padding: 6px;}
 .block-guide .tab-pane .app-client .client-desc {padding-top: 12px;}
 .block-guide .tab-pane .app-client .client-desc img {height: 195px;}
-.block-guide .tab-pane .app-qrcode {padding: 10px 20px;}
 .block-guide .tab-pane .app-qrcode .col-md-12 {padding-left: 0; padding-top: 10px;}
 .block-guide .tab-pane .app-qrcode .qrcode-down img {padding-top: 16px;}
 .block-guide .tab-pane .app-qrcode .qrcode-down .text-primary {padding-top: 10px;}

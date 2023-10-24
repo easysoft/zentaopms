@@ -21,7 +21,7 @@
 #kanbanList .kanban-item.link-block {padding: 0;}
 #kanbanList .kanban-item.link-block a {padding: 10px; display: block;}
 #kanbanList .kanban-card {display: flex;}
-#kanbanList .kanban-card > .title {white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+#kanbanList .kanban-card > .title {white-space: nowrap; overflow: hidden;}
 #kanbanList .kanban-card.has-progress {padding-right: 40px; position: relative;}
 #kanbanList .kanban-card.has-progress > .progress-pie,
 #kanbanList .kanban-card.has-progress > .ring {position: absolute; right: 7px; top: 7px; width: 24px; height: 24px;}
@@ -48,7 +48,7 @@
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-card > .title {white-space: nowrap; line-height: 1;}
 
 #kanbanList .kanban-col[data-type="normalRelease"] .kanban-card > .title {display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center;}
-#kanbanList .kanban-col[data-type="normalRelease"] .kanban-card > .title > .text {display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+#kanbanList .kanban-col[data-type="normalRelease"] .kanban-card > .title > .text {display: block; white-space: nowrap; overflow: hidden;}
 #kanbanList .kanban-col[data-type="normalRelease"] .kanban-card > .title.has-icon > .text {margin-right: 5px; max-width: calc(100% - 20px);}
 #kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-card > .title {display: block; height: 38px;}
 #kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-card > .title > .text {display: inline-block;}
@@ -222,7 +222,7 @@ function renderExecutionItem(item, $item)
 
     if(!$title.length)
     {
-        if((item.type == 'kanban' && window.userPrivs.kanban) || (item.type != 'kanban' && window.userPrivs.execution))
+        if(!item.hasOwnProperty('children') && ((item.type == 'kanban' && window.userPrivs.kanban) || (item.type != 'kanban' && window.userPrivs.execution)))
         {
             var method = item.type == 'kanban' ? 'kanban' : 'task';
 

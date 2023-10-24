@@ -2,7 +2,7 @@
 /**
  * The model file of block module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
@@ -164,81 +164,67 @@ class blockModel extends model
      */
     public function getWelcomeBlockData()
     {
+        $today = date('Y-m-d');
+
         $data = array();
 
-        $tasks = $this->dao->select("count(t1.id) as tasks, count(if(t1.status = 'done', 1, null)) as doneTasks")->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
-            ->leftJoin(TABLE_EXECUTION)->alias('t3')->on("t1.execution = t3.id")
-            ->leftJoin(TABLE_TASKTEAM)->alias('t4')->on("t4.task = t1.id and t4.account = '{$this->app->user->account}'")
-            ->where("(t1.assignedTo = '{$this->app->user->account}' or (t1.mode = 'multi' and t4.`account` = '{$this->app->user->account}') )")
-            ->andWhere('(t2.status')->ne('suspended')
-            ->orWhere('t3.status')->ne('suspended')
-            ->markRight(1)
-            ->andWhere('t1.deleted')->eq('0')
-            ->andWhere('t3.deleted')->eq('0')
-            ->andWhere('t1.status')->notin('closed,cancel,pause')
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
-            ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
-            ->beginIF($this->config->vision)->andWhere('t3.vision')->eq($this->config->vision)->fi()
-            ->fetch();
-
-        $data['tasks']     = isset($tasks->tasks)     ? $tasks->tasks : 0;
-        $data['doneTasks'] = isset($tasks->doneTasks) ? $tasks->doneTasks : 0;
-
-        $data['bugs']       = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on("t1.product = t2.id")
-            ->where('t1.assignedTo')->eq($this->app->user->account)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.status')->ne('closed')
-            ->andWhere('t2.deleted')->eq(0)
-            ->fetch('count');
-        $data['stories']    = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->alias('t1')
+        /* Story. */
+        $data['stories'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.assignedTo')->eq($this->app->user->account)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('story')
             ->fetch('count');
-        $data['executions'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_EXECUTION)
-            ->where('status')->notIN('done,closed')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->fetch('count');
-        $data['products']   = (int)$this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)
-            ->where('status')->ne('closed')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
-            ->andWhere('deleted')->eq(0)
-            ->fetch('count');
 
-        $today = date('Y-m-d');
-        $data['delayTask'] = (int)$this->dao->select('count(t1.id) AS count')->from(TABLE_TASK)->alias('t1')
+        /* Task. */
+        $tasks = $this->dao->select("t1.id,t1.status,t1.deadline")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on("t1.execution = t3.id")
-            ->where('t1.assignedTo')->eq($this->app->user->account)
+            ->leftJoin(TABLE_TASKTEAM)->alias('t4')->on("t4.task = t1.id and t4.account = '{$this->app->user->account}'")
+            ->where("(t1.assignedTo = '{$this->app->user->account}' or (t1.mode = 'multi' and t4.`account` = '{$this->app->user->account}' and t1.status != 'closed' and t4.status != 'done') )")
             ->andWhere('(t2.status')->ne('suspended')
             ->orWhere('t3.status')->ne('suspended')
             ->markRight(1)
-            ->andWhere('t1.status')->in('wait,doing')
-            ->andWhere('t1.deadline')->ne('0000-00-00')
-            ->andWhere('t1.deadline')->lt($today)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t3.deleted')->eq(0)
-            ->fetch('count');
-        $data['delayBug'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t3.deleted')->eq('0')
+            ->andWhere('t1.status')->notin('closed,cancel')
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
+            ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
+            ->beginIF($this->config->vision)->andWhere('t3.vision')->eq($this->config->vision)->fi()
+            ->fetchAll();
+
+        $totalTasks = array();
+        $delayTasks = array();
+        $doneTasks  = array();
+        foreach($tasks as $task)
+        {
+            if($task->status == 'done') $doneTasks[$task->id] = true;
+            if(in_array($task->status, array('wait', 'doing')) && !helper::isZeroDate($task->deadline) && $task->deadline < $today) $delayTasks[$task->id] = true;
+            $totalTasks[$task->id] = true;
+        }
+        $data['tasks']     = count($totalTasks);
+        $data['doneTasks'] = count($doneTasks);
+        $data['delayTask'] = count($delayTasks);
+
+        /* Bug. */
+        $bugs = $this->dao->select('t1.id,t1.status,t1.deadline')->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on("t1.product = t2.id")
             ->where('t1.assignedTo')->eq($this->app->user->account)
-            ->andWhere('t1.status')->eq('active')
-            ->andWhere('t1.deadline')->ne('0000-00-00')
-            ->andWhere('t1.deadline')->lt($today)
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.status')->ne('closed')
             ->andWhere('t2.deleted')->eq(0)
-            ->fetch('count');
-        $data['delayProject'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
-            ->where('status')->in('wait,doing')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('end')->lt($today)
-            ->andWhere('deleted')->eq(0)
-            ->fetch('count');
+            ->fetchAll();
+
+        $totalBugs = array();
+        $delayBugs = array();
+        foreach($bugs as $bug)
+        {
+            if($bug->status == 'active' && !helper::isZeroDate($bug->deadline) && $bug->deadline < $today) $delayBugs[$bug->id] = true;
+            $totalBugs[$bug->id] = true;
+        }
+        $data['bugs']     = count($totalBugs);
+        $data['delayBug'] = count($delayBugs);
 
         return $data;
     }
@@ -264,14 +250,14 @@ class blockModel extends model
             $blocks = $this->lang->block->default[$type]['project'];
 
             /* Mark project block has init. */
-            $this->loadModel('setting')->setItem("$account.$module.{$type}common.blockInited@$vision", true);
+            $this->loadModel('setting')->setItem("$account.$module.{$type}common.blockInited@$vision", '1');
         }
         else
         {
             $blocks = $module == 'my' ? $this->lang->block->default[$flow][$module] : $this->lang->block->default[$module];
 
             /* Mark this app has init. */
-            $this->loadModel('setting')->setItem("$account.$module.common.blockInited@$vision", true);
+            $this->loadModel('setting')->setItem("$account.$module.common.blockInited@$vision", '1');
         }
 
         $this->loadModel('setting')->setItem("$account.$module.block.initVersion", $this->config->block->version);
@@ -558,6 +544,7 @@ class blockModel extends model
         if($module == 'project')   return $this->getProjectStatisticParams();
         if($module == 'execution') return $this->getExecutionStatisticParams();
         if($module == 'qa')        return $this->getQaStatisticParams();
+        if($module == 'doc')       return $this->getDocStatisticParams();
 
         $params = new stdclass();
         $params = $this->appendCountParams($params);
@@ -626,6 +613,17 @@ class blockModel extends model
         $params->type['control'] = 'select';
 
         return json_encode($params);
+    }
+
+    /**
+     * Get document statistic params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getDocStatisticParams()
+    {
+        return false;
     }
 
     /**
@@ -718,7 +716,7 @@ class blockModel extends model
 
         $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->issue->labelList;
+        $params->type['options'] = $this->lang->issue->featureBar['browse'];
         $params->type['control'] = 'select';
 
         $params->orderBy['name']    = $this->lang->block->orderBy;
@@ -763,7 +761,7 @@ class blockModel extends model
 
         $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
-        $params->type['options'] = $this->lang->issue->labelList;
+        $params->type['options'] = $this->lang->issue->typeList;
         $params->type['control'] = 'select';
 
         $params->orderBy['name']    = $this->lang->block->orderBy;
@@ -824,6 +822,10 @@ class blockModel extends model
         $params->todoCount['default'] = 20;
         $params->todoCount['control'] = 'input';
 
+        $params->reviewCount['name']    = $this->lang->block->reviewCount;
+        $params->reviewCount['default'] = 20;
+        $params->reviewCount['control'] = 'input';
+
         $params->taskCount['name']    = $this->lang->block->taskCount;
         $params->taskCount['default'] = 20;
         $params->taskCount['control'] = 'input';
@@ -832,7 +834,7 @@ class blockModel extends model
         $params->bugCount['default'] = 20;
         $params->bugCount['control'] = 'input';
 
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             if(helper::hasFeature('risk'))
             {
@@ -863,10 +865,6 @@ class blockModel extends model
         $params->storyCount['name']    = $this->lang->block->storyCount;
         $params->storyCount['default'] = 20;
         $params->storyCount['control'] = 'input';
-
-        $params->reviewCount['name']    = $this->lang->block->reviewCount;
-        $params->reviewCount['default'] = 20;
-        $params->reviewCount['control'] = 'input';
 
         return json_encode($params);
     }
@@ -1062,6 +1060,85 @@ class blockModel extends model
     }
 
     /**
+     * Get document dynamic params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getDocDynamicParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get my collection params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getDocMyCollectionParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get recent update params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getDocRecentUpdateParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get view list params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getDocViewlistParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get product document params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getProductDocParams()
+    {
+        $params = $this->appendCountParams();
+        return json_encode($params);
+    }
+
+    /**
+     * Get collect list params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getDocCollectListParams()
+    {
+        return false;
+    }
+
+    /**
+     * Get project document params.
+     *
+     * @access public
+     * @return bool
+     */
+    public function getProjectDocParams()
+    {
+        $params = $this->appendCountParams();
+        return json_encode($params);
+    }
+
+    /**
      * Get the total estimated man hours required.
      *
      * @param  array $storyID
@@ -1071,5 +1148,44 @@ class blockModel extends model
     public function getStorysEstimateHours($storyID)
     {
         return $this->dao->select('count(estimate) as estimate')->from(TABLE_STORY)->where('id')->in($storyID)->fetch('estimate');
+    }
+
+    /**
+     * Get zentao.net data.
+     *
+     * @param  string $minTime
+     * @access public
+     * @return array
+     */
+    public function getZentaoData($minTime = '')
+    {
+        return $this->dao->select('type,params')->from(TABLE_BLOCK)
+            ->where('account')->eq('system')
+            ->andWhere('vision')->eq('rnd')
+            ->andWhere('module')->eq('zentao')
+            ->beginIF($minTime)->andWhere('source')->ge($minTime)->fi()
+            ->andWhere('type')->in('plugin,patch,publicclass,news')
+            ->fetchPairs('type');
+    }
+
+    /**
+     * Set zentao data.
+     *
+     * @param  string $type
+     * @param  string $params
+     * @access public
+     * @return void
+     */
+    public function setZentaoData($type = 'patch', $params = '')
+    {
+        $data = new stdclass();
+        $data->account = 'system';
+        $data->vision  = 'rnd';
+        $data->module  = 'zentao';
+        $data->type    = $type;
+        $data->source  = date('Y-m-d');
+        $data->params  = json_encode($params);
+
+        $this->dao->replace(TABLE_BLOCK)->data($data)->exec();
     }
 }

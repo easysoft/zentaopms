@@ -1,18 +1,12 @@
 <?php
+
 /**
  * Buffered query utilities.
  */
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Utils;
 
 use PhpMyAdmin\SqlParser\Context;
-
-use function array_merge;
-use function strlen;
-use function substr;
-use function trim;
 
 /**
  * Buffer query utilities.
@@ -20,22 +14,26 @@ use function trim;
  * Implements a specialized lexer used to extract statements from large inputs
  * that are being buffered. After each statement has been extracted, a lexer or
  * a parser may be used.
+ *
+ * @category   Lexer
+ *
+ * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class BufferedQuery
 {
     // Constants that describe the current status of the parser.
 
     // A string is being parsed.
-    public const STATUS_STRING = 16; // 0001 0000
-    public const STATUS_STRING_SINGLE_QUOTES = 17; // 0001 0001
-    public const STATUS_STRING_DOUBLE_QUOTES = 18; // 0001 0010
-    public const STATUS_STRING_BACKTICK = 20; // 0001 0100
+    const STATUS_STRING = 16; // 0001 0000
+    const STATUS_STRING_SINGLE_QUOTES = 17; // 0001 0001
+    const STATUS_STRING_DOUBLE_QUOTES = 18; // 0001 0010
+    const STATUS_STRING_BACKTICK = 20; // 0001 0100
 
     // A comment is being parsed.
-    public const STATUS_COMMENT = 32; // 0010 0000
-    public const STATUS_COMMENT_BASH = 33; // 0010 0001
-    public const STATUS_COMMENT_C = 34; // 0010 0010
-    public const STATUS_COMMENT_SQL = 36; // 0010 0100
+    const STATUS_COMMENT = 32; // 0010 0000
+    const STATUS_COMMENT_BASH = 33; // 0010 0001
+    const STATUS_COMMENT_C = 34; // 0010 0010
+    const STATUS_COMMENT_SQL = 36; // 0010 0100
 
     /**
      * The query that is being processed.
@@ -51,7 +49,7 @@ class BufferedQuery
      *
      * @var array
      */
-    public $options = [];
+    public $options = array();
 
     /**
      * The last delimiter used.
@@ -82,14 +80,16 @@ class BufferedQuery
     public $current = '';
 
     /**
+     * Constructor.
+     *
      * @param string $query   the query to be parsed
      * @param array  $options the options of this parser
      */
-    public function __construct($query = '', array $options = [])
+    public function __construct($query = '', array $options = array())
     {
         // Merges specified options with defaults.
         $this->options = array_merge(
-            [
+            array(
                 /*
                  * The starting delimiter.
                  *
@@ -111,7 +111,7 @@ class BufferedQuery
                  * @var bool
                  */
                 'add_delimiter' => false,
-            ],
+            ),
             $options
         );
 
@@ -191,7 +191,7 @@ class BufferedQuery
              * treated differently, because of the preceding backslash, it will
              * be ignored.
              */
-            if ((($this->status & self::STATUS_COMMENT) === 0) && ($this->query[$i] === '\\')) {
+            if ((($this->status & static::STATUS_COMMENT) === 0) && ($this->query[$i] === '\\')) {
                 $this->current .= $this->query[$i] . ($i + 1 < $len ? $this->query[++$i] : '');
                 continue;
             }
@@ -199,43 +199,40 @@ class BufferedQuery
             /*
              * Handling special parses statuses.
              */
-            if ($this->status === self::STATUS_STRING_SINGLE_QUOTES) {
+            if ($this->status === static::STATUS_STRING_SINGLE_QUOTES) {
                 // Single-quoted strings like 'foo'.
                 if ($this->query[$i] === '\'') {
                     $this->status = 0;
                 }
-
                 $this->current .= $this->query[$i];
                 continue;
-            } elseif ($this->status === self::STATUS_STRING_DOUBLE_QUOTES) {
+            } elseif ($this->status === static::STATUS_STRING_DOUBLE_QUOTES) {
                 // Double-quoted strings like "bar".
                 if ($this->query[$i] === '"') {
                     $this->status = 0;
                 }
-
                 $this->current .= $this->query[$i];
                 continue;
-            } elseif ($this->status === self::STATUS_STRING_BACKTICK) {
+            } elseif ($this->status === static::STATUS_STRING_BACKTICK) {
                 if ($this->query[$i] === '`') {
                     $this->status = 0;
                 }
-
                 $this->current .= $this->query[$i];
                 continue;
-            } elseif (($this->status === self::STATUS_COMMENT_BASH) || ($this->status === self::STATUS_COMMENT_SQL)) {
+            } elseif (($this->status === static::STATUS_COMMENT_BASH)
+                || ($this->status === static::STATUS_COMMENT_SQL)
+            ) {
                 // Bash-like (#) or SQL-like (-- ) comments end in new line.
                 if ($this->query[$i] === "\n") {
                     $this->status = 0;
                 }
-
                 $this->current .= $this->query[$i];
                 continue;
-            } elseif ($this->status === self::STATUS_COMMENT_C) {
+            } elseif ($this->status === static::STATUS_COMMENT_C) {
                 // C-like comments end in */.
                 if (($this->query[$i - 1] === '*') && ($this->query[$i] === '/')) {
                     $this->status = 0;
                 }
-
                 $this->current .= $this->query[$i];
                 continue;
             }
@@ -244,19 +241,15 @@ class BufferedQuery
              * Checking if a string started.
              */
             if ($this->query[$i] === '\'') {
-                $this->status = self::STATUS_STRING_SINGLE_QUOTES;
+                $this->status = static::STATUS_STRING_SINGLE_QUOTES;
                 $this->current .= $this->query[$i];
                 continue;
-            }
-
-            if ($this->query[$i] === '"') {
-                $this->status = self::STATUS_STRING_DOUBLE_QUOTES;
+            } elseif ($this->query[$i] === '"') {
+                $this->status = static::STATUS_STRING_DOUBLE_QUOTES;
                 $this->current .= $this->query[$i];
                 continue;
-            }
-
-            if ($this->query[$i] === '`') {
-                $this->status = self::STATUS_STRING_BACKTICK;
+            } elseif ($this->query[$i] === '`') {
+                $this->status = static::STATUS_STRING_BACKTICK;
                 $this->current .= $this->query[$i];
                 continue;
             }
@@ -265,24 +258,20 @@ class BufferedQuery
              * Checking if a comment started.
              */
             if ($this->query[$i] === '#') {
-                $this->status = self::STATUS_COMMENT_BASH;
+                $this->status = static::STATUS_COMMENT_BASH;
                 $this->current .= $this->query[$i];
                 continue;
-            }
-
-            if ($i + 2 < $len) {
-                if (
-                    ($this->query[$i] === '-')
-                    && ($this->query[$i + 1] === '-')
-                    && Context::isWhitespace($this->query[$i + 2])
-                ) {
-                    $this->status = self::STATUS_COMMENT_SQL;
+            } elseif ($i + 2 < $len) {
+                if (($this->query[$i] === '-')
+                 && ($this->query[$i + 1] === '-')
+                 && Context::isWhitespace($this->query[$i + 2])) {
+                    $this->status = static::STATUS_COMMENT_SQL;
                     $this->current .= $this->query[$i];
                     continue;
-                }
-
-                if (($this->query[$i] === '/') && ($this->query[$i + 1] === '*') && ($this->query[$i + 2] !== '!')) {
-                    $this->status = self::STATUS_COMMENT_C;
+                } elseif (($this->query[$i] === '/')
+                 && ($this->query[$i + 1] === '*')
+                 && ($this->query[$i + 2] !== '!')) {
+                    $this->status = static::STATUS_COMMENT_C;
                     $this->current .= $this->query[$i];
                     continue;
                 }
@@ -300,8 +289,7 @@ class BufferedQuery
              * it has a special meaning is when it is the beginning of a
              * statement. This is the reason for the last condition.
              */
-            if (
-                ($i + 9 < $len)
+            if (($i + 9 < $len)
                 && (($this->query[$i] === 'D') || ($this->query[$i] === 'd'))
                 && (($this->query[$i + 1] === 'E') || ($this->query[$i + 1] === 'e'))
                 && (($this->query[$i + 2] === 'L') || ($this->query[$i + 2] === 'l'))
@@ -330,9 +318,8 @@ class BufferedQuery
                 }
 
                 // Checking if the delimiter definition ended.
-                if (
-                    ($delimiter !== '')
-                    && (($i < $len) && Context::isWhitespace($this->query[$i])
+                if (($delimiter !== '')
+                    && ((($i < $len) && Context::isWhitespace($this->query[$i]))
                     || (($i === $len) && $end))
                 ) {
                     // Saving the delimiter.
@@ -374,8 +361,7 @@ class BufferedQuery
              * There is no point in checking if two strings match if not even
              * the first letter matches.
              */
-            if (
-                ($this->query[$i] === $this->delimiter[0])
+            if (($this->query[$i] === $this->delimiter[0])
                 && (($this->delimiterLen === 1)
                 || (substr($this->query, $i, $this->delimiterLen) === $this->delimiter))
             ) {

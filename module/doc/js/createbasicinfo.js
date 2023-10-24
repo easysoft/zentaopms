@@ -8,6 +8,12 @@ $(function()
 
     $('#saveBtn').click(function()
     {
+        var requiredArr = ['lib', 'title', 'keywords'];
+        for(var i = 0; i < 3; i++)
+        {
+            if(requiredFields.indexOf(',' + requiredArr[i] + ',') != -1 && !$('#' + requiredArr[i]).val().trim()) return alert(eval(requiredArr[i] + 'NotEmpty'));
+        }
+
         var params = $('#dataform').serializeArray();
 
         sessionStorage.setItem('docBasicInfo', JSON.stringify(params));

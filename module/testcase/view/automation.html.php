@@ -2,7 +2,7 @@
 /**
  * The close file of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      chunsheng wang <chunsheng@cnezsoft.com>
  * @package     task
@@ -33,26 +33,31 @@
         <?php endif;?>
         <tr>
           <th class='w-100px'><?php echo $lang->zanode->common;?></th>
-          <td class='required'><?php echo html::select('node', $nodeList, !empty($automation->node) ? $automation->node : '', "class='form-control picker-select'");?></td>
-          <td></td>
+          <td class='required' id='nodeIdBox'><?php echo html::select('node', $nodeList, !empty($automation->node) ? $automation->node : '', "class='form-control picker-select'");?></td>
+          <td>
+            <?php echo html::a($this->createLink('zanode', 'create'), $lang->zanode->create, '', "class='text-primary' target='_blank'");?>
+            <?php echo html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$lang->refresh}' onclick='loadNodes()'");?>
+          </td>
           <td></td>
         </tr>
         <tr>
           <th>
             <?php echo $lang->zanode->scriptPath;?>
           </th>
-          <td class='required'><?php echo html::input('scriptPath', !empty($automation->scriptPath) ? $automation->scriptPath : '', "class='form-control'");?></td>
+          <td class='required'><?php echo html::input('scriptPath', !empty($automation->scriptPath) ? $automation->scriptPath : '', "class='form-control' placeholder='{$lang->zanode->scriptTips}'");?></td>
           <td>
-            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='left' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->zanode->scriptTips;?>"></icon>
           </td>
         </tr>
+        <!-- <tr>
+          <th></th>
+          <td><?php echo html::checkbox('syncToZentao', array(1 => $lang->zanode->syncToZentao), '');?></td>
+        </tr> -->
         <tr>
           <th>
             <?php echo $lang->zanode->shell;?>
           </th>
-          <td colspan='2'><?php echo html::textarea('shell', !empty($automation->shell) ? $automation->shell : '', "rows='6' class='form-control'");?></td>
+          <td colspan='2'><?php echo html::textarea('shell', !empty($automation->shell) ? $automation->shell : '', "rows='6' class='form-control' placeholder='{$lang->zanode->shellTips}'");?></td>
           <td>
-            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='left' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->zanode->shellTips;?>"></icon>
           </td>
         </tr>
         <tr>

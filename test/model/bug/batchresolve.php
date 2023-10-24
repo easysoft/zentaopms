@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -44,4 +43,3 @@ r($bug->batchResolveTest($bugIDList6, $resolutionList[5], $bugIDList6[0])) && p(
 r($bug->batchResolveTest($bugIDList7, $resolutionList[6], $bugIDList7[0])) && p('0:field,old,new;3:field,old,new') && e('resolution,,willnotfix;status,active,resolved'); // 解决bug19 20 21,解决方式为willnotfix
 r($bug->batchResolveTest($bugIDList8, $resolutionList[7], $bugIDList8[0])) && p('0:field,old,new;3:field,old,new') && e('resolution,,tostory;status,active,resolved');    // 解决bug22 23 24,解决方式为tostory
 r($bug->batchResolveTest($bugIDList8, $resolutionList[7], $bugIDList8[0])) && p('0:field,old,new;3:field,old,new') && e('0');                                             // 解决bug状态为resolve的bug
-$db->restoreDB();

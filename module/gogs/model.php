@@ -2,7 +2,7 @@
 /**
  * The model file of gogs module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
@@ -296,10 +296,10 @@ class gogsModel extends model
         $matchedUsers = array();
         foreach($gogsUsers as $gogsUser)
         {
-            if(isset($bindedUsers[$gogsUser->account]))
+            if(isset($bindedUsers[$gogsUser->id]))
             {
-                $gogsUser->zentaoAccount = $bindedUsers[$gogsUser->account];
-                $matchedUsers[]          = $gogsUser;
+                $gogsUser->zentaoAccount     = $bindedUsers[$gogsUser->id];
+                $matchedUsers[$gogsUser->id] = $gogsUser;
                 continue;
             }
 
@@ -311,8 +311,8 @@ class gogsModel extends model
             $matchedZentaoUsers = array_unique($matchedZentaoUsers);
             if(count($matchedZentaoUsers) == 1)
             {
-                $gogsUser->zentaoAccount = current($matchedZentaoUsers);
-                $matchedUsers[]          = $gogsUser;
+                $gogsUser->zentaoAccount     = current($matchedZentaoUsers);
+                $matchedUsers[$gogsUser->id] = $gogsUser;
             }
         }
 
@@ -343,7 +343,7 @@ class gogsModel extends model
 
             $gogs  = $this->getByID($gogsID);
             $oauth = "{$gogs->token}@";
-            $project->tokenCloneUrl = preg_replace('/(http(s)?:\/\/)/', "\$1$oauth", $project->html_url);
+            $project->tokenCloneUrl = preg_replace('/(http(s)?:\/\/)/', '${1}' . $gogs->token . '@', $project->html_url);
         }
 
         return $project;

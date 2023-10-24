@@ -2,38 +2,34 @@
 /**
  * The report module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
  * @version     $Id: zh-cn.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->report->index              = '统计首页';
-$lang->report->list               = '透视表';
-$lang->report->preview            = '查看透视表';
-$lang->report->item               = '条目';
-$lang->report->value              = '值';
-$lang->report->percent            = '百分比';
-$lang->report->undefined          = '未设定';
-$lang->report->query              = '查询';
-$lang->report->annual             = '年度总结';
-$lang->report->project            = '项目';
-$lang->report->PO                 = 'PO';
-$lang->report->viewEveryoneAnnual = '查看所有人年度总结';
+$lang->report->index     = '统计首页';
+$lang->report->list      = '透视表';
+$lang->report->item      = '条目';
+$lang->report->value     = '值';
+$lang->report->percent   = '百分比';
+$lang->report->undefined = '未设定';
+$lang->report->project   = $lang->projectCommon;
+$lang->report->PO        = 'PO';
 
-$lang->report->colors[]   = 'AFD8F8';
-$lang->report->colors[]   = 'F6BD0F';
-$lang->report->colors[]   = '8BBA00';
-$lang->report->colors[]   = 'FF8E46';
-$lang->report->colors[]   = '008E8E';
-$lang->report->colors[]   = 'D64646';
-$lang->report->colors[]   = '8E468E';
-$lang->report->colors[]   = '588526';
-$lang->report->colors[]   = 'B3AA00';
-$lang->report->colors[]   = '008ED6';
-$lang->report->colors[]   = '9D080D';
-$lang->report->colors[]   = 'A186BE';
+$lang->report->colors[] = 'AFD8F8';
+$lang->report->colors[] = 'F6BD0F';
+$lang->report->colors[] = '8BBA00';
+$lang->report->colors[] = 'FF8E46';
+$lang->report->colors[] = '008E8E';
+$lang->report->colors[] = 'D64646';
+$lang->report->colors[] = '8E468E';
+$lang->report->colors[] = '588526';
+$lang->report->colors[] = 'B3AA00';
+$lang->report->colors[] = '008ED6';
+$lang->report->colors[] = '9D080D';
+$lang->report->colors[] = 'A186BE';
 
 $lang->report->assign['noassign'] = '未指派';
 $lang->report->assign['assign']   = '已指派';
@@ -52,18 +48,6 @@ $lang->report->begin            = '起始日期';
 $lang->report->end              = '结束日期';
 $lang->report->dept             = '部门';
 $lang->report->deviationChart   = "{$lang->execution->common}偏差曲线";
-
-$lang->reportList = new stdclass();
-$lang->reportList->product = new stdclass();
-$lang->reportList->project = new stdclass();
-$lang->reportList->test    = new stdclass();
-$lang->reportList->staff   = new stdclass();
-
-$lang->reportList->product->lists[10] = $lang->productCommon . '汇总表|report|productsummary';
-$lang->reportList->project->lists[10] = "{$lang->execution->common}偏差报表|report|projectdeviation";
-$lang->reportList->test->lists[10]    = 'Bug创建表|report|bugcreate';
-$lang->reportList->test->lists[13]    = 'Bug指派表|report|bugassign';
-$lang->reportList->staff->lists[10]   = '员工负载表|report|workload';
 
 $lang->report->id            = '编号';
 $lang->report->execution     = $lang->execution->common;
@@ -109,12 +93,6 @@ $lang->report->mailTitle->bug      = " Bug(%s),";
 $lang->report->mailTitle->task     = " 任务(%s),";
 $lang->report->mailTitle->todo     = " 待办(%s),";
 $lang->report->mailTitle->testTask = " 测试版本(%s),";
-
-$lang->report->deviationDesc = '按照已关闭执行统计偏差率（偏差率 = (总消耗 - 总预计) / 总预计），总预计为0时偏差率为n/a。';
-$lang->report->proVersion    = '<a href="https://www.zentao.net/page/enterprise.html" target="_blank">更多精彩，尽在企业版！</a>';
-$lang->report->proVersionEn  = '<a href="https://www.zentao.pm/" target="_blank">Try ZenTao Biz for more!</a>';
-$lang->report->workloadDesc  = '工作负载=用户所有任务剩余工时之和/选择的时间天数*每天的工时。例如：起止时间设为1月1日~1月7日、工作日天数5天、每天工时8h，统计的是所有指派给该人员的未完成的任务，在5天内，每天8h的情况下的工作负载。';
-
 
 $lang->report->annualData = new stdclass();
 $lang->report->annualData->title            = "%s %s年工作汇总";
@@ -211,8 +189,8 @@ $lang->report->annualData->todoStatus['all']    = '所有待办';
 $lang->report->annualData->todoStatus['undone'] = '未完成';
 $lang->report->annualData->todoStatus['done']   = '已完成';
 
-$lang->report->annualData->radarItems['product']   = '产品管理';
-$lang->report->annualData->radarItems['execution'] = '项目管理';
+$lang->report->annualData->radarItems['product']   = "{$lang->productCommon}管理";
+$lang->report->annualData->radarItems['execution'] = "{$lang->projectCommon}管理";
 $lang->report->annualData->radarItems['devel']     = "研发";
 $lang->report->annualData->radarItems['qa']        = "测试";
 $lang->report->annualData->radarItems['other']     = "其他";
@@ -228,8 +206,8 @@ $lang->report->taskOutput          = "任务产出";
 $lang->report->bugOutput           = "Bug产出";
 $lang->report->caseOutput          = "用例产出";
 $lang->report->bugProgress         = "Bug进展";
-$lang->report->productProgress     = "产品进展";
+$lang->report->productProgress     = "{$lang->productCommon}进展";
 $lang->report->executionProgress   = "执行进展";
-$lang->report->projectProgress     = "项目进展";
-$lang->report->yearProjectOverview = "年度项目总览";
-$lang->report->projectOverview     = "截止目前项目总览";
+$lang->report->projectProgress     = "{$lang->projectCommon}进展";
+$lang->report->yearProjectOverview = "年度{$lang->projectCommon}总览";
+$lang->report->projectOverview     = "截止目前{$lang->projectCommon}总览";

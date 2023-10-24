@@ -1,7 +1,7 @@
 <?php
 /**
  * The model file of score module of ZenTaoPMS.
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Memory <lvtao@cnezsoft.com>
  * @package     score
  * @version     $Id: model.php $
@@ -294,7 +294,7 @@ class scoreModel extends model
      */
     public function getNotice()
     {
-        if(empty($this->config->global->scoreStatus)) return '';
+        if(empty($this->config->global->scoreStatus) or empty($this->app->user->lastTime)) return '';
         if(date('Y-m-d', $this->app->user->lastTime) == helper::today()) return '';
 
         $this->app->user->lastTime = time();

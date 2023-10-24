@@ -2,7 +2,7 @@
 /**
  * The editlib file of doc module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     doc
@@ -26,18 +26,12 @@
       <?php echo $lib->type != 'book' ? $lang->doc->editLib : $lang->doc->editBook;?>
     </h2>
   </div>
-  <form method='post' class='load-indicator main-form form-ajax'>
+  <form method='post' class='load-indicator main-form form-ajax form-watched'>
     <table class='table table-form'>
-      <?php if(!empty($lib->product)):?>
+      <?php if(in_array($lib->type, array('product', 'project', 'execution'))):?>
       <tr>
-        <th class='w-130px'><?php echo $lang->doc->product?></th>
-        <td><?php echo $product->name?></td>
-      </tr>
-      <?php endif;?>
-      <?php if(!empty($lib->execution)):?>
-      <tr>
-        <th class='w-130px'><?php echo $lang->doc->execution?></th>
-        <td><?php echo $execution->name?></td>
+        <th class='w-130px'><?php echo $lang->doc->{$lib->type};?></th>
+        <td><?php echo $object->name?></td>
       </tr>
       <?php endif;?>
       <tr>
@@ -47,19 +41,13 @@
           <span class='hidden'><?php echo html::radio('type', $lang->doc->libTypeList, $lib->type);?></span>
         </td>
       </tr>
-      <tr>
+      <tr id="aclBox">
         <th><?php echo $lang->doclib->control;?></th>
-        <?php if($lib->type == 'product' or $lib->type == 'execution'):?>
         <td>
-          <?php echo html::radio('acl', $lang->doclib->aclListA, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
-          <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>
+          <?php if($lib->type != 'api' and empty($lib->main)) echo html::radio('acl', $lang->doclib->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
+          <?php if($lib->type == 'api' and empty($lib->main)) echo html::radio('acl', $lang->api->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'", 'block')?>
+          <?php if(!empty($lib->main)) echo html::radio('acl', $lang->doclib->aclList, 'default', "onchange='toggleAcl(this.value, \"lib\")'", 'block');;?>
         </td>
-        <?php else:?>
-        <td>
-          <?php echo html::radio('acl', $lang->doclib->aclListB, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
-          <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>
-        </td>
-        <?php endif;?>
       </tr>
       <tr id='whiteListBox' class='hidden'>
         <th><?php echo $lang->doc->whiteList?></th>
@@ -71,6 +59,7 @@
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
             <?php echo html::select('users[]', $users, $lib->users, "class='form-control picker-select' multiple")?>
+            <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=users&attr=data-drop_direction='up'");?>
           </div>
         </td>
       </tr>

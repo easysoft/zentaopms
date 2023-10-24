@@ -1,0 +1,9 @@
+#accountCreateForm .form-row {max-width: 500px;}
+
+#mainNavbar>.container {padding-top: 8px}
+#mainNavbar .nav {justify-content: left; position: relative; left: 0px; top: -4px;}
+@media (min-width: 1400px){#mainNavbar .nav {left: -12px;}}
+#mainNavbar {background: none;}
+#mainNavbar .nav-item>a {padding-right: 0.5rem}
+#mainNavbar .nav-item>.active {color: unset; font-weight: 700;}
+#mainNavbar .nav-item>a.active:after {position: absolute; content: ''; border-bottom: 2px solid #2e7fff; inset: 0 6px 0 15px;}

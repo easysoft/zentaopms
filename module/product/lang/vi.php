@@ -2,7 +2,7 @@
 /**
  * The product module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license  ZPL (http://zpl.pub/page/zplv12.html)
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  product
@@ -19,6 +19,7 @@ $lang->product->create        = "Tạo {$lang->productCommon}";
 $lang->product->delete        = "Xóa {$lang->productCommon}";
 $lang->product->deleted       = 'Đã xóa';
 $lang->product->close         = "Đóng";
+$lang->product->activate      = 'Activate';
 $lang->product->closeAction   = "Đóng {$lang->productCommon}";
 $lang->product->select        = "Chọn {$lang->productCommon}";
 $lang->product->mine          = 'Của bạn';
@@ -48,7 +49,6 @@ $lang->product->builds      = 'Bản dựng';
 $lang->product->roadmap     = "Lộ trình {$lang->productCommon}";
 $lang->product->doc         = "Tài liệu {$lang->productCommon}";
 $lang->product->project     = 'Danh sách '.$lang->executionCommon;
-$lang->product->build       = 'Danh sách bản dựng';
 $lang->product->moreProduct = "More Product";
 $lang->product->projectInfo = "Projects đã liên kết tới {$lang->productCommon} này được liệt kê bên dưới.";
 

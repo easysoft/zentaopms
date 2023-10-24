@@ -1,21 +1,62 @@
 $(function()
 {
-    toggleAcl($('input[name="acl"]:checked').val(), 'doc');
-    setTimeout(function(){initPage(docType)}, 50);
-    $('input[name="type"]').change(function()
+    /* Set editor content height. */
+    var contentHeight = $(document).height() - 92;
+    setTimeout(function(){$('.ke-edit-iframe, .ke-edit, .ke-edit-textarea').height(contentHeight);}, 100);
+    setTimeout(function(){$('.CodeMirror').height($(document).height() - 112);}, 100);
+    $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
+
+    if(objectType == 'project') loadExecutions($('#project').val());
+
+    /* Change for show create error. */
+    $('#contentBox #content').attr('id', 'contentHTML');
+    /* Copy doc title to modal title. */
+    $('#modalBasicInfo').on('show.zui.modal', function()
     {
-        var type = $(this).val();
-        if(type == 'text')
-        {
-            $('#contentBox').removeClass('hidden');
-            $('#urlBox').addClass('hidden');
-        }
-        else if(type == 'url')
-        {
-            $('#contentBox').addClass('hidden');
-            $('#urlBox').removeClass('hidden');
-        }
+        $('#modalBasicInfo #copyTitle').html($('.doc-title #editorTitle').val().replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"));
     });
+
+    $('#saveDraft').click(function(event)
+    {
+        if($.trim($('#editorTitle').val()) == '')
+        {
+            bootbox.alert(titleNotEmpty);
+            return false;
+        }
+        $('#status').val('draft');
+        event.preventDefault();
+        submit(this);
+    });
+
+    $('#releaseBtn').click(function(event)
+    {
+        event.preventDefault();
+        submit(this);
+    });
+
+    $('#basicInfoLink').click(function()
+    {
+        if($('#editorTitle').val() == '')
+        {
+            bootbox.alert(titleNotEmpty);
+            return false;
+        }
+        if(requiredFields.indexOf('content') >= 0)
+        {
+            var contentType = $('#contentType').val();
+            var content     = '';
+            if(contentType == 'html')    content = $('#contentHTML').val();
+            if(contentType == 'markdown')content = $('#contentMarkdown').val();
+            if(content == '')
+            {
+                bootbox.alert(contentNotEmpty);
+                return false;
+            }
+        }
+        $('#status').val('normal');
+    });
+
+    setTimeout(function(){initPage(docType)}, 50);
     if(typeof(window.editor) != 'undefined')
     {
         $('.ke-toolbar .ke-outline:last').after("<span data-name='unlink' class='ke-outline' title='Markdown' onclick='toggleEditor(\"markdown\")' style='font-size: unset; line-height: unset;'>Markdown</span>");
@@ -61,68 +102,6 @@ $(function()
     });
 
     if($(".createCustomLib").length == 1) $(".createCustomLib").click(); // Fix bug #15139.
-
-    if(!fromGlobal && textType.indexOf(docType) != -1 && from == 'doc')
-    {
-        var basicInfo = JSON.parse(sessionStorage.getItem('docBasicInfo'));
-
-        var libID       = 0;
-        var moduleID    = 0;
-        var title       = '';
-        var keywords    = '';
-        var type        = '';
-        var acl         = '';
-        var contentType = '';
-        var fileNames   = [];
-        var mailto      = [];
-        var groups      = [];
-        var users       = [];
-
-        $.each(basicInfo, function(index, value)
-        {
-            switch(value.name)
-            {
-                case 'lib':
-                    libID = value.value;
-                    break;
-                case 'module':
-                    moduleID = value.value;
-                    break;
-                case 'title':
-                    title = value.value;
-                    break;
-                case 'keywords':
-                    keywords = value.value;
-                    break;
-                case 'type':
-                    type = value.value;
-                    break;
-                case 'acl':
-                    acl = value.value;
-                    break;
-                case 'contentType':
-                    contentType = value.value;
-                    break;
-                case 'mailto[]':
-                    mailto.push(value.value);
-                    break;
-                case 'groups[]':
-                    groups.push(value.value);
-                    break;
-                case 'users[]':
-                    users.push(value.value);
-                    break;
-            }
-        })
-
-        $('#title').val(title);
-        $('#modalBasicInfo #keywords').val(keywords);
-        $('#modalBasicInfo #mailto').data('zui.picker').setValue(mailto);
-        $('#modalBasicInfo input:radio[value='+ acl +']').attr('checked', 'checked');
-        toggleAcl($('input[name="acl"]:checked').val(), 'doc');
-        setTimeout(function(){$('#modalBasicInfo #groups').data('zui.picker').setValue(groups)}, 1000);
-        setTimeout(function(){$('#modalBasicInfo #users').data('zui.picker').setValue(users)}, 1000);
-    }
 })
 
 function toggleEditor(type)
@@ -187,25 +166,8 @@ function loadWhitelist(libID)
 
     $.post(userLink, function(users)
     {
-        if(users == 'private')
+        if(users != 'private')
         {
-            $('#aclopen').parent('.radio-inline').addClass('hidden');
-            $('#aclcustom').parent('.radio-inline').addClass('hidden');
-            $('#whiteListBox').addClass('hidden');
-            $('#aclprivate').prop('checked', true);
-        }
-        else if(users == 'project')
-        {
-            $('#aclprivate').parent('.radio-inline').addClass('hidden');
-            $('#aclcustom').parent('.radio-inline').addClass('hidden');
-            $('#whiteListBox').addClass('hidden');
-            $('#aclopen').prop('checked', true);
-        }
-        else
-        {
-            $('#aclopen').parent('.radio-inline').removeClass('hidden');
-            $('#aclcustom').parent('.radio-inline').removeClass('hidden');
-
             $('#users').replaceWith(users);
             $('#users').next('.picker').remove();
             $('#users').picker();

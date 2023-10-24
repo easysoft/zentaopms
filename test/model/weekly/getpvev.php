@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/weekly.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -31,4 +30,3 @@ r($weekly->getPVEVTest($projectIDList[1], $dateList[0])) && p() && e('0.00,0.00'
 r($weekly->getPVEVTest($projectIDList[1], $dateList[1])) && p() && e('6.00,1.98');    //测试projectID值为11，date值为空
 r($weekly->getPVEVTest($projectIDList[2], $dateList[0])) && p() && e('0.00,0.00');    //测试projectID值为41，date值为2022-05-01
 r($weekly->getPVEVTest($projectIDList[2], $dateList[1])) && p() && e('14.50,3.43');   //测试projectID值为41，date值为空
-$db->restoreDB();

@@ -1,0 +1,26 @@
+title: zt_pipeline
+author: qixinzhi
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: type
+    range: gitlab,sonarqube,jenkins,gitea,gogs,nexus
+  - field: name
+    range: GitLab服务器,SonarQube服务器,Jenkins服务器,Gitea服务器,Gogs服务器,Nexus服务器
+  - field: url
+    range: "[http://10.0.7.242:9980],[http://10.0.7.242:9990],[http://10.0.7.242:9580],[http://10.0.7.242:9020],[http://10.0.7.242:9021],[http://10.0.7.237:8083]"
+  - field: account
+    range: "[],[admin]{2},[]{2},admin"
+  - field: password
+    range: "[],[U2h3N0NldHlsc1ozYkVTVjBreXM=],[TThFbEJqcVZsNmJXcTdNSmJZN3U=],[]{2},123456"
+  - field: token
+    range: x88fZokrp5hShia2jyBN,YWRtaW46U2h3N0NldHlsc1ozYkVTVjBreXM=,1196c85ba525a268570df9da627e3a7b2d,c6769e6761a7d719129b2421dcb3112d936e2b1f,9ff43f9d1a369465bcf0781a3785f46bcef782d1,[]
+  - field: private
+    range: 08bcc98f75d7d40053dc80722bdc117b,228b25587479f2fc7570428e8bcbabdc,ec8e41481723685d9106c88be5967c41,a56af13f4c4a6a4ed77f24e59794cf39,4fabcbd31314365506ebc56c0c83c1ec,2bf0ccdbb4d3ebbcb990af74bd78c658
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: "[2022-08-01 09:09:37]"
+  - field: deleted
+    range: 0

@@ -11,20 +11,21 @@ class stageTest
      * Test create a stage.
      *
      * @param  object $stage
+     * @param  string $type
      * @access public
      * @return object
      */
-    public function createTest($stage)
+    public function createTest($stage, $type = 'waterfall')
     {
         foreach($stage as $key => $value) $_POST[$key] = $value;
 
-        $objectID = $this->objectModel->create();
+        $objectID = $this->objectModel->create($type);
 
         unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->objectModel->getByID($objectID);
+        $object = $this->objectModel->getByID($objectID, $type);
         return $object;
     }
 
@@ -32,20 +33,21 @@ class stageTest
      * Test batch create stages.
      *
      * @param  array  $param
+     * @param  string $type
      * @access public
      * @return int
      */
-    public function batchCreateTest($param)
+    public function batchCreateTest($param ,$type = 'waterfall')
     {
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        $this->objectModel->batchCreate();
+        $this->objectModel->batchCreate($type);
 
         unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        $objects = $this->objectModel->getStages();
+        $objects = $this->objectModel->getStages('id_desc', 0, $type);
         return count($objects);
     }
 
@@ -111,6 +113,22 @@ class stageTest
     public function getByIDTest($stageID)
     {
         $object = $this->objectModel->getByID($stageID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $object;
+    }
+
+    /**
+     * Test get a stage by id.
+     *
+     * @param  string $projectType
+     * @access public
+     * @return object
+     */
+    public function getTotalPercentTest($projectType)
+    {
+        $object = $this->objectModel->getTotalPercent($projectType);
 
         if(dao::isError()) return dao::getError();
 

@@ -2,7 +2,7 @@
 /**
  * The view file of release module's view method of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
@@ -12,8 +12,12 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php include '../../ai/view/promptmenu.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->release->confirmUnlinkStory)?>
 <?php js::set('confirmUnlinkBug', $lang->release->confirmUnlinkBug)?>
+<?php js::set('storySummary', $summary);?>
+<?php js::set('storyCommon', $lang->SRCommon);?>
+<?php js::set('checkedSummary', str_replace('%storyCommon%', $lang->SRCommon, $lang->product->checkedSummary));?>
 <?php $canBeChanged = common::canBeChanged('release', $release);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -38,14 +42,14 @@
   <div class='main-col'>
     <div class='main'>
       <div class='tabs' id='tabsNav'>
-        <?php $countStories = count($stories); $countBugs = count($bugs); $countLeftBugs = count($leftBugs);?>
+        <?php $countBugs = count($bugs); $countLeftBugs = count($leftBugs);?>
         <ul class='nav nav-tabs'>
           <li <?php if($type == 'story')   echo "class='active'"?>><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story'], 'text-green') . ' ' . $lang->release->stories;?></a></li>
           <li <?php if($type == 'bug')     echo "class='active'"?>><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'text-green') . ' ' . $lang->release->bugs;?></a></li>
           <li <?php if($type == 'leftBug') echo "class='active'"?>><a href='#leftBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'text-red') . ' ' . $lang->release->generatedBugs;?></a></li>
           <li <?php if($type == 'releaseInfo') echo "class='active'"?>><a href='#releaseInfo' data-toggle='tab'><?php echo html::icon($lang->icons['plan'], 'text-info') . ' ' . $lang->release->view;?></a></li>
-          <?php if($countStories or $countBugs or $countLeftBugs):?>
-          <li class='pull-right'><div><?php common::printIcon('release', 'export', '', '', 'button', '', '', "export btn-sm");?></div></li>
+          <?php if($summary or $countBugs or $countLeftBugs):?>
+          <li class='pull-right'><div><?php common::printIcon('release', 'export', "releaseID=$release->id", '', 'button', '', '', "export btn-sm");?></div></li>
           <?php endif;?>
         </ul>
         <div class='tab-content'>
@@ -54,7 +58,7 @@
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"story\")", '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
-            <form class='main-table table-story' method='post' id='linkedStoriesForm' data-ride="table">
+            <form class='main-table table-story no-stash<?php if($link === 'true' and $type == 'story') echo " hidden";?>' method='post' id='linkedStoriesForm' data-ride="">
               <table class='table has-sort-head' id='storyList'>
                 <?php
                 $canBatchUnlink = common::hasPriv('release', 'batchUnlinkStory');
@@ -84,7 +88,7 @@
                 <tbody class='text-center'>
                   <?php foreach($stories as $storyID => $story):?>
                   <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
-                  <tr>
+                  <tr data-id='<?php echo $story->id;?>' data-estimate='<?php echo $story->estimate?>' <?php if(!empty($story->children)) echo "data-children=" . count($story->children);?> data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
                     <td class='c-id text-left'>
                       <?php if(($canBatchUnlink or $canBatchClose) and $canBeChanged):?>
                       <div class="checkbox-primary">
@@ -113,7 +117,7 @@
                       if(common::hasPriv('release', 'unlinkStory') and $canBeChanged)
                       {
                           $unlinkURL = $this->createLink('release', 'unlinkStory', "releaseID=$release->id&story=$story->id");
-                          echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->release->unlinkStory}'");
+                          echo html::a($unlinkURL, '<i class="icon-unlink"></i>', 'hiddenwin', "class='btn' title='{$lang->release->unlinkStory}'");
                       }
                       ?>
                     </td>
@@ -122,7 +126,7 @@
                 </tbody>
               </table>
               <div class='table-footer'>
-                <?php if($countStories and ($canBatchUnlink or $canBatchClose) and $canBeChanged):?>
+                <?php if($summary and ($canBatchUnlink or $canBatchClose) and $canBeChanged):?>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
                   <?php
@@ -139,7 +143,9 @@
                   }
                   ?>
                 </div>
-                <div class='table-statistic'><?php echo sprintf($lang->release->finishStories, $countStories);?></div>
+                <?php endif;?>
+                <?php if($this->app->getViewType() != 'xhtml'):?>
+                <div class='table-statistic'><?php echo $summary;?></div>
                 <?php endif;?>
                 <?php
                 $this->app->rawParams['type'] = 'story';
@@ -154,7 +160,7 @@
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"bug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
-            <form class='main-table table-bug' method='post' target='hiddenwin' id='linkedBugsForm' data-ride="table">
+            <form class='main-table table-bug<?php if($link === 'true' and $type == 'bug') echo " hidden";?>' method='post' target='hiddenwin' id='linkedBugsForm' data-ride="table">
               <table class='table has-sort-head' id='bugList'>
                 <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkBug');?>
                 <?php $canBatchClose  = common::hasPriv('bug', 'batchClose');?>
@@ -247,7 +253,7 @@
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"leftBug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
-            <form class='main-table table-bug' method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkBug', "releaseID=$release->id&type=leftBug");?>" id='linkedBugsForm' data-ride="table">
+            <form class='main-table table-bug<?php if($link === 'true' and $type == 'leftBug') echo " hidden";?>' method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkBug', "releaseID=$release->id&type=leftBug");?>" id='linkedBugsForm' data-ride="table">
               <table class='table has-sort-head' id='leftBugList'>
                 <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkBug');?>
                 <?php $vars = "releaseID={$release->id}&type=leftBug&link=$link&param=$param&orderBy=%s";?>
@@ -436,7 +442,7 @@
   </div>
 </div>
 <style>
-.tabs .tab-content .tab-pane .action{position: absolute; right: <?php echo ($countStories or $countBugs or $countLeftBugs) ? '100px' : '-1px'?>; top: 0px;}
+.tabs .tab-content .tab-pane .action{position: absolute; right: <?php echo ($summary or $countBugs or $countLeftBugs) ? '100px' : '-1px'?>; top: 0px;}
 </style>
 <?php js::set('param', helper::safe64Decode($param))?>
 <?php js::set('link', $link)?>

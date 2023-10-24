@@ -2,7 +2,7 @@
 /**
  * The model file of dept module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dept
@@ -69,7 +69,7 @@ class deptModel extends model
     public function getOptionMenu($rootDeptID = 0)
     {
         $deptMenu = array();
-        $stmt = $this->dbh->query($this->buildMenuQuery($rootDeptID));
+        $stmt = $this->app->dbQuery($this->buildMenuQuery($rootDeptID));
         $depts = array();
         while($dept = $stmt->fetch()) $depts[$dept->id] = $dept;
 
@@ -137,7 +137,7 @@ class deptModel extends model
     public function getTreeMenu($rootDeptID = 0, $userFunc = '', $param = 0)
     {
         $deptMenu = array();
-        $stmt = $this->dbh->query($this->buildMenuQuery($rootDeptID));
+        $stmt = $this->app->dbQuery($this->buildMenuQuery($rootDeptID));
         while($dept = $stmt->fetch())
         {
             $linkHtml = call_user_func($userFunc, $dept, $param);

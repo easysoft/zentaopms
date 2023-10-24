@@ -300,3 +300,5 @@ $lang->project->confirmUnlinkMember = "您確定從該項目中移除該用戶�
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, 由 <strong>$actor</strong> 維護。$extra' . "\n";
+
+$lang->project->cannotManageProducts = "該項目為項目型項目，不能關聯產品。";

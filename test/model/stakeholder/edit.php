@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/stakeholder.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -33,4 +32,3 @@ r($stakeholder->editTest($stakeholderID[0], $updateAnalysis)) && p('0:field,old,
 r($stakeholder->editTest($stakeholderID[1], $updateStrategy)) && p()                  && e('0');                                    //修改strategy
 r($stakeholder->editTest($stakeholderID[0], $noKey))          && p('key:0')           && e('『key』不符合格式，应当为:『/0|1/』。');//不输入是否关键干系人
 
-$db->restoreDB();

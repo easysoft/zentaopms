@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/task.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -55,4 +54,3 @@ r($task->addTaskEstimateTest($record2)) && p('id,task,left,consumed') && e("602,
 r($task->addTaskEstimateTest($record3)) && p('id,task,left,consumed') && e("603,602,1,4"); // 插入task为601 left为1 consumed为4的任务
 r($task->addTaskEstimateTest($record4)) && p('id,task,left,consumed') && e("604,904,3,6"); // 插入task为904 left为3 consumed为6的任务
 r($task->addTaskEstimateTest($record5)) && p('id,task,left,consumed') && e("605,907,6,9"); // 插入task为907 left为6 consumed为9的任务
-$db->restoreDB();

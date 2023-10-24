@@ -2,7 +2,7 @@
 /**
  * The model file of install module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
@@ -294,20 +294,20 @@ class installModel extends model
             return $return;
         }
 
-        /* Get mysql version. */
-        $version = $this->getMysqlVersion();
+        /* Get database version. */
+        $version = $this->getDatabaseVersion();
 
         /* If database no exits, try create it. */
-        if(!$this->dbExists())
+        if(!$this->dbh->dbExists())
         {
-            if(!$this->createDB($version))
+            if(!$this->dbh->createDB($version))
             {
                 $return->result = 'fail';
                 $return->error  = $this->lang->install->errorCreateDB;
                 return $return;
             }
         }
-        elseif($this->tableExits() and $this->post->clearDB == false)
+        elseif($this->dbh->tableExits(TABLE_CONFIG) and $this->post->clearDB == false)
         {
             $return->result = 'fail';
             $return->error  = $this->lang->install->errorTableExists;
@@ -333,12 +333,24 @@ class installModel extends model
      */
     public function setDBParam()
     {
-        $this->config->db->host     = $this->post->dbHost;
+        $this->config->db->driver   = $this->post->dbDriver;
+        if($this->config->inQuickon)
+        {
+            $this->config->db->host     = getenv('ZT_MYSQL_HOST');
+            $this->config->db->user     = getenv('ZT_MYSQL_USER');
+            $this->config->db->encoding = 'UTF8';
+            $this->config->db->password = getenv('ZT_MYSQL_PASSWORD');
+            $this->config->db->port     = getenv('ZT_MYSQL_PORT');
+        }
+        else
+        {
+            $this->config->db->host     = $this->post->dbHost;
+            $this->config->db->user     = $this->post->dbUser;
+            $this->config->db->encoding = $this->post->dbEncoding;
+            $this->config->db->password = $this->post->dbPassword;
+            $this->config->db->port     = $this->post->dbPort;
+        }
         $this->config->db->name     = $this->post->dbName;
-        $this->config->db->user     = $this->post->dbUser;
-        $this->config->db->encoding = $this->post->dbEncoding;
-        $this->config->db->password = $this->post->dbPassword;
-        $this->config->db->port     = $this->post->dbPort;
         $this->config->db->prefix   = $this->post->dbPrefix;
     }
 
@@ -350,15 +362,9 @@ class installModel extends model
      */
     public function connectDB()
     {
-        $dsn = "mysql:host={$this->config->db->host}; port={$this->config->db->port}";
         try
         {
-            $dbh = new PDO($dsn, $this->config->db->user, $this->config->db->password);
-            $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-            $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $dbh->exec("SET NAMES {$this->config->db->encoding}");
-            if(isset($this->config->db->strictMode) and $this->config->db->strictMode == false) $dbh->exec("SET @@sql_mode= ''");
-            return $dbh;
+            return new dbh($this->config->db, false);
         }
         catch (PDOException $exception)
         {
@@ -367,55 +373,18 @@ class installModel extends model
     }
 
     /**
-     * Check db exits or not.
-     *
-     * @access public
-     * @return bool
-     */
-    public function dbExists()
-    {
-        $sql = "SHOW DATABASES like '{$this->config->db->name}'";
-        return $this->dbh->query($sql)->fetch();
-    }
-
-    /**
-     * Check table exits or not.
-     *
-     * @access public
-     * @return void
-     */
-    public function tableExits()
-    {
-        $configTable = str_replace('`', "'", TABLE_CONFIG);
-        $sql = "SHOW TABLES FROM {$this->config->db->name} like $configTable";
-        return $this->dbh->query($sql)->fetch();
-    }
-
-    /**
-     * Get mysql version.
+     * Get database version.
      *
      * @access public
      * @return string
      */
-    public function getMysqlVersion()
+    public function getDatabaseVersion()
     {
+        if($this->config->db->driver != 'mysql') return 8;
+
         $sql = "SELECT VERSION() AS version";
         $result = $this->dbh->query($sql)->fetch();
         return substr($result->version, 0, 3);
-    }
-
-    /**
-     * Create database.
-     *
-     * @param  string    $version
-     * @access public
-     * @return bool
-     */
-    public function createDB($version)
-    {
-        $sql = "CREATE DATABASE `{$this->config->db->name}`";
-        if($version > 4.1) $sql .= " DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-        return $this->dbh->query($sql);
     }
 
     /**
@@ -430,7 +399,7 @@ class installModel extends model
         /* Add exception handling to ensure that all SQL is executed successfully. */
         try
         {
-            $this->dbh->exec("USE {$this->config->db->name}");
+            $this->dbh->useDB($this->config->db->name);
 
             $dbFile = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
             $tables = explode(';', file_get_contents($dbFile));
@@ -452,8 +421,7 @@ class installModel extends model
                 $tableToLower = strtolower($table);
                 if(strpos($tableToLower, 'fulltext') !== false and strpos($tableToLower, 'innodb') !== false and $version < 5.6)
                 {
-                    $this->lang->install->errorCreateTable = $this->lang->install->errorEngineInnodb;
-                    return false;
+                    $table = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $table);
                 }
 
                 $table = str_replace('__DELIMITER__', ';', $table);
@@ -465,7 +433,8 @@ class installModel extends model
                 $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
                 $table = str_replace('`ztv_', $this->config->db->name . '.`ztv_', $table);
                 $table = str_replace('zt_', $this->config->db->prefix, $table);
-                if(!$this->dbh->query($table)) return false;
+
+                $this->dbh->exec($table);
             }
         }
         catch (PDOException $exception)
@@ -474,6 +443,20 @@ class installModel extends model
             helper::end();
         }
         return true;
+    }
+
+    /**
+    * Exec dm.sql.
+    *
+    * @access public
+    * @return bool
+    */
+    public function execDMSQL()
+    {
+        $dbFile = $this->app->getAppRoot() . 'db' . DS . 'dm.sql';
+        $tables = explode(';', file_get_contents($dbFile));
+
+        foreach($tables as $table) $this->dbh->exec($table);
     }
 
     /**
@@ -514,13 +497,14 @@ class installModel extends model
         $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->exec();
         if(!dao::isError())
         {
+            $visions = $this->config->edition == 'ipd' ? 'or,rnd,lite' : 'rnd,lite';
             /* Set admin. */
             $admin = new stdclass();
             $admin->account  = $this->post->account;
             $admin->realname = $this->post->account;
             $admin->password = md5($this->post->password);
             $admin->gender   = 'f';
-            $admin->visions  = 'rnd,lite';
+            $admin->visions  = $visions;
             $this->dao->replace(TABLE_USER)->data($admin)->exec();
         }
     }
@@ -575,7 +559,7 @@ class installModel extends model
             }
         }
 
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             /* Update process by lang. */
             foreach($this->lang->install->processList as $id => $name)
@@ -633,5 +617,90 @@ class installModel extends model
         $config->value   = '1';
         $this->dao->replace(TABLE_CONFIG)->data($config)->exec();
         return true;
+    }
+
+    /**
+     * Save config file when inQuickon is true.
+     * DevOps平台版将配置信息写入my.php。
+     *
+     * @access public
+     * @return void
+     */
+    public function saveConfigFile()
+    {
+        $configRoot   = $this->app->getConfigRoot();
+        $myConfigFile = $configRoot . 'my.php';
+        if(file_exists($myConfigFile) && trim(file_get_contents($myConfigFile))) return;
+
+        /* Set the session save path when the session save path is null. */
+        $customSession = $this->setSessionPath();
+
+        $dbHost      = getenv('MYSQL_HOST');
+        $dbPort      = getenv('MYSQL_PORT');
+        $dbName      = getenv('MYSQL_DB');
+        $dbUser      = getenv('MYSQL_USER');
+        $dbPassword  = getenv('MYSQL_PASSWORD');
+        $timezone    = getenv('ZT_TZ');
+        $defaultLang = getenv('ZT_LANG');
+        if(empty($timezone))    $timezone    = $this->config->timezone;
+        if(empty($defaultLang)) $defaultLang = $this->config->default->lang;
+        $configContent = <<<EOT
+        <?php
+        \$config->installed       = true;
+        \$config->debug           = false;
+        \$config->requestType     = '{$this->config->requestType}';
+        \$config->timezone        = '$timezone';
+        \$config->db->driver      = '{$this->config->db->driver}';
+        \$config->db->host        = '$dbHost';
+        \$config->db->port        = '$dbPort';
+        \$config->db->name        = '$dbName';
+        \$config->db->user        = '$dbUser';
+        \$config->db->encoding    = '{$this->config->db->encoding}';
+        \$config->db->password    = '$dbPassword';
+        \$config->db->prefix      = '{$this->config->db->prefix}';
+        \$config->webRoot         = getWebRoot();
+        \$config->default->lang   = '$defaultLang';
+        EOT;
+
+        if($customSession) $configContent .= "\n\$config->customSession = true;";
+
+        if(is_writable($configRoot)) @file_put_contents($myConfigFile, $configContent);
+        $this->config->installed = true;
+    }
+
+    /**
+     * Set session save path.
+     * DevOps平台版设置session path。
+     *
+     * @access public
+     * @return bool
+     */
+    public function setSessionPath()
+    {
+        $customSession = false;
+        $checkSession  = ini_get('session.save_handler') == 'files';
+        if($checkSession)
+        {
+            if(!session_save_path())
+            {
+                /* Restart the session because the session save path is null when start the session last time. */
+                session_write_close();
+
+                $tmpRootInfo     = $this->getTmpRoot();
+                $sessionSavePath = $tmpRootInfo['path'] . 'session';
+                if(!is_dir($sessionSavePath)) mkdir($sessionSavePath, 0777, true);
+
+                session_save_path($sessionSavePath);
+                $customSession = true;
+
+                $sessionResult = $this->checkSessionSavePath();
+                if($sessionResult == 'fail') chmod($sessionSavePath, 0777);
+
+                session_start();
+                $this->session->set('installing', true);
+            }
+        }
+
+        return $customSession;
     }
 }

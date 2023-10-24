@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testsuite.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -36,4 +35,3 @@ r($testsuite->linkCaseTest($suiteID[1], $cases[2])) && p('0:suite,case;1:suite,c
 r($testsuite->linkCaseTest($suiteID[2], $cases[0])) && p() && e('0');                                        //测试不存在的suiteID值为0,cases值为空
 r($testsuite->linkCaseTest($suiteID[2], $cases[1])) && p('0:suite,case') && e('0,1');                        //测试不存在的suiteID值为0,cases值为一个
 r($testsuite->linkCaseTest($suiteID[2], $cases[2])) && p('0:suite,case;1:suite,case') && e('0,2;0,3');       //测试不存在的suiteID值为0,cases值为多个
-$db->restoreDB();

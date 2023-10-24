@@ -68,26 +68,47 @@ $(function()
 
             infoShowed = true;
         }
-        if(href !== '')
+    });
+
+    $('.table-story').table(
+    {
+        statisticCreator: function(table)
         {
-            switch(href)
+            var $checkedRows = table.getTable().find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
+            var $originTable = table.isDataTable ? table.$.find('.datatable-origin') : null;
+            var checkedTotal = $checkedRows.length;
+            if(!checkedTotal) return;
+
+            var checkedEstimate = 0;
+            var checkedCase     = 0;
+            var rateCount       = checkedTotal;
+            $checkedRows.each(function()
             {
-                case '#stories':
-                  type = 'story';
-                  break;
-                case '#bugs':
-                  type = 'bug';
-                  break;
-                case '#leftBugs':
-                  type = 'leftBug';
-                  break;
-                case '#releaseInfo':
-                  type = 'releaseInfo';
-                  break;
-            }
-            var viewLink = createLink('release', 'view', 'releaseID=' + releaseID + '&type=' + type  + '&link=' + link  + (typeof(param) == 'undefined' ? '' : param) + (typeof(orderBy) == 'undefined' ? '' : "&orderBy=" + orderBy));
-            if(type == 'releaseInfo') viewLink = createLink('release', 'view', 'releaseID=' + releaseID + '&type=' + type);
-            self.location.href = viewLink;
+                var $row = $(this);
+                if($originTable)
+                {
+                    $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
+                }
+                var data = $row.data();
+                checkedEstimate += data.estimate;
+
+                if(data.cases > 0)
+                {
+                    checkedCase += 1;
+                }
+                else if(data.children != undefined && data.children > 0)
+                {
+                    rateCount -= 1;
+                }
+            });
+
+            var rate = '0%';
+            if(rateCount) rate = Math.round(checkedCase / rateCount * 100) + '%';
+
+            if(checkedTotal == 0) return storySummary;
+            return checkedSummary.replace('%total%', checkedTotal)
+                  .replace('%estimate%', checkedEstimate.toFixed(1))
+                  .replace('%rate%', rate);
         }
     });
 })

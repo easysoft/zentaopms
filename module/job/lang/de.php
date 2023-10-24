@@ -5,18 +5,19 @@ $lang->job->create        = 'Create Pipeline';
 $lang->job->edit          = 'Edit Pipeline';
 $lang->job->exec          = 'Execute Pipeline';
 $lang->job->runPipeline   = 'Run pipeline';
-$lang->job->view          = 'Execute Details';
+$lang->job->view          = 'Pipeline Details';
 $lang->job->delete        = 'Delete Pipeline';
 $lang->job->confirmDelete = 'Do you want to delete this job?';
 $lang->job->dirChange     = 'Directory Changed';
 $lang->job->buildTag      = 'Build Tag';
 $lang->job->execSuccess   = 'Build success';
 
-$lang->job->browseAction = 'Job List';
+$lang->job->browseAction = 'Pipeline List';
 
 $lang->job->id              = 'ID';
 $lang->job->name            = 'Name';
 $lang->job->repo            = 'Repo';
+$lang->job->branch          = 'Branch';
 $lang->job->product         = $lang->productCommon;
 $lang->job->svnDir          = 'SVN Tag Watch Path';
 $lang->job->jenkins         = 'Jenkins';
@@ -60,6 +61,7 @@ $lang->job->repoExists     = 'This repository has a build task associated with i
 $lang->job->projectExists  = 'This SonarQube Project has a build task associated with it『%s』';
 $lang->job->mustUseJenkins = 'SonarQube frame is only used if the build engine is JenKins.';
 $lang->job->jobIsDeleted   = 'This repository is associated with a build task, please view the data from the recycle bin';
+$lang->job->selectPipeline = 'Please select a pipeline';
 
 $lang->job->buildTypeList['build']          = 'Only Build';
 $lang->job->buildTypeList['buildAndDeploy'] = 'Build And Deploy';
@@ -83,7 +85,7 @@ $lang->job->frameList['sonarqube'] = 'SonarQube';
 $lang->job->paramValueList['']                 = '';
 $lang->job->paramValueList['$zentao_version']  = 'Current version';
 $lang->job->paramValueList['$zentao_account']  = 'Current user';
-$lang->job->paramValueList['$zentao_product']  = 'Current product ID';
+$lang->job->paramValueList['$zentao_product']  = "Current {$lang->productCommon} ID";
 $lang->job->paramValueList['$zentao_repopath'] = 'Current version library path';
 
 $lang->job->engineList = array();
@@ -100,3 +102,7 @@ $lang->job->pipelineVariables                 = "Variables";
 $lang->job->pipelineVariablesKeyPlaceHolder   = "Input variable key";
 $lang->job->pipelineVariablesValuePlaceHolder = "Input variable value";
 $lang->job->pipelineVariablesTips             = "Specify variable values to be used in this run. The values specified in CI/CD settings will be used by default.";
+$lang->job->setReferenceTips                  = "Before performing a build, please set up the branch information of the code base.";
+
+$lang->job->featureBar['browse']['job']     = 'List';
+$lang->job->featureBar['browse']['compile'] = 'History';

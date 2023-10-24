@@ -2,7 +2,7 @@
 /**
  * The host entry point of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Ke Zhao <zhaoke@easycorp.ltd>
  * @package     entries
@@ -64,6 +64,24 @@ class ztfSubmitEntry extends baseEntry
                     ->set('ZTFResult')->eq(json_encode($post))
                     ->where('id')->eq($post->task)
                     ->exec();
+
+                $result = $this->dao->select('*')->from(TABLE_TESTRESULT)
+                    ->where('id')->eq($post->task)
+                    ->fetch();
+
+                if($result->run)
+                {
+                    $runStatus = $result->caseResult == 'blocked' ? 'blocked' : 'normal';
+                    $this->dao->update(TABLE_TESTRUN)
+                        ->set('lastRunResult')->eq($result->caseResult)
+                        ->set('status')->eq($runStatus)
+                        ->set('lastRunner')->eq($result->lastRunner)
+                        ->set('lastRunDate')->eq($result->date)
+                        ->where('id')->eq($result->run)
+                        ->exec();
+                }
+                
+                $this->dao->update(TABLE_CASE)->set('lastRunner')->eq($result->lastRunner)->set('lastRunDate')->eq($result->date)->set('lastRunResult')->eq($result->caseResult)->where('id')->eq($result->case)->exec();
             }
             else
             {

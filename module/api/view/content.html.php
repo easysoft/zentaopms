@@ -1,5 +1,5 @@
 <div class="main-col" data-min-width="500">
-  <div id="mainContent" class="main-row in">
+  <div id="mainContent" class="main-row in flex-content">
     <div class="main-col col-8">
       <div class="cell" id="content">
         <div class="no-padding">
@@ -10,30 +10,27 @@
               <div class="version">
                 <div class='btn-group'>
                   <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;">
-                    #<?php echo $version ? $version : $api->version;?>
+                    V<?php echo $version ? $version : $api->version;?>
                     <span class="caret"></span>
                   </a>
-                  <ul class='dropdown-menu api-version-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
-                    <?php for($version = $api->version; $version > 0; $version--):?>
-                    <li><a href='javascript:void(0)' data-url='<?php echo $this->createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID=$apiID&version=$version&release=$release");?>'>#<?php echo $version;?></a></li>
+                  <ul class='dropdown-menu api-version-menu menu-active-primary menu-hover-primary' style='max-height:240px; max-width: 300px; overflow-y:auto'>
+                    <?php for($itemVersion = $api->version; $itemVersion > 0; $itemVersion--):?>
+                    <li <?php if($version == $itemVersion) echo 'class=active';?> ><a href='javascript:void(0)' data-url='<?php echo $this->createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID=$apiID&version=$itemVersion&release=$release");?>'>V<?php echo $itemVersion;?></a></li>
                     <?php endfor;?>
                   </ul>
                 </div>
               </div>
             </div>
             <div class="actions">
+              <?php echo html::a("javascript:fullScreen()", '<span class="icon-fullscreen"></span>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");?>
               <?php
-              echo html::a("javascript:fullScreen()", '<i class="icon-fullscreen"></i>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");
               if(!$isRelease)
               {
-                if(common::hasPriv('api', 'edit')) echo html::a(inlink('edit', "apiID=$api->id"), '<i class="icon-edit"></i>', '', "title='{$lang->api->edit}' class='btn btn-link' data-app='{$this->app->tab}'");
-                if(common::hasPriv('api', 'delete'))
-                {
-                  $deleteURL = $this->createLink('api', 'delete', "apiID=$api->id&confirm=yes");
-                  echo html::a("javascript:ajaxDeleteApi(\"$deleteURL\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->api->delete}' class='btn btn-link'");
-                }
+                  if(common::hasPriv('api', 'edit'))   echo html::a($this->createLink('api', 'edit', "apiID=$api->id"), '<i class="icon-edit"></i>', '', "title='{$lang->api->edit}' class='btn btn-link' data-app='{$this->app->tab}'");
+                  if(common::hasPriv('api', 'delete')) echo html::a($this->createLink('api', 'delete', "apiID=$api->id"), '<i class="icon-trash"></i>', '', "title='{$lang->api->delete}' class='btn btn-link' target='hiddenwin'");
               }
               ?>
+              <a id="hisTrigger" href="###" class="btn btn-link" title=<?php echo $lang->history?>><span class="icon icon-clock"></span></a>
             </div>
           </div>
         </div>
@@ -59,8 +56,7 @@
               <td><?php echo $lang->api->boolList[$param['required']];?></td>
               <td><?php echo $param['desc'];?></td>
             <tr>
-            <?php endforeach;
-            ;?>
+            <?php endforeach;?>
             </tbody>
           </table>
           <?php endif;?>
@@ -83,8 +79,7 @@
               <td><?php echo $lang->api->boolList[$param['required']];?></td>
               <td><?php echo $param['desc'];?></td>
             <tr>
-            <?php endforeach;
-            ;?>
+            <?php endforeach;?>
             </tbody>
           </table>
           <?php endif;?>
@@ -150,53 +145,12 @@
           <?php endif;?>
         </div>
       </div>
-      <!-- 历史记录 -->
-      <div class='cell'>
-        <?php
-        $canBeChanged = common::canBeChanged('api', $api);
-        if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=api&objectID=$api->id");?>
-        <?php include '../../common/view/action.html.php';?>
-      </div>
     </div>
-    <div class="side-col col-2" id="sidebar">
-      <div class="sidebar-toggle">
-        <i class="icon icon-angle-right"></i>
-      </div>
-      <div class="cell">
-        <details class="detail" open>
-          <summary class="detail-title"><?php echo $lang->api->basicInfo;?></summary>
-          <div class="detail-content">
-            <table class="table table-data">
-              <tbody>
-              <tr>
-                <th class='c-lib'><?php echo $lang->api->lib;?></th>
-                <td><?php echo $api->libName;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->module;?></th>
-                <td><?php echo $api->moduleName ? $api->moduleName : '/';?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->addedDate;?></th>
-                <td><?php echo $api->addedDate;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->api->owner;?></th>
-                <td><?php echo zget($users, $api->owner, '');?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->editedBy;?></th>
-                <td><?php echo zget($users, $api->editedBy, '');?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->editedDate;?></th>
-                <td><?php echo $api->editedDate;?></td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-        </details>
-      </div>
+    <div id="history" class='panel hidden' style="margin-left: 2px;">
+      <?php
+      $canBeChanged = common::canBeChanged('api', $api);
+      if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=api&objectID=$api->id");?>
+      <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
 </div>

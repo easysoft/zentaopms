@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/git.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -21,4 +20,3 @@ $git = new gitTest();
 $tester->dao->update(TABLE_REPO)->set('synced')->eq(1)->where('id')->eq(1)->exec();
 r($git->getRepos()) && p() && e('http://10.0.1.161:51080/api/v4/projects/42/repository/');     // 获取版本库
 
-$db->restoreDB();

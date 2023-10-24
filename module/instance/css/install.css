@@ -1,0 +1,5 @@
+#installForm .advanced {padding: 10px 0; border-bottom: solid 1px #e4e4e4;}
+#installForm .advanced a {font-weight: 700;}
+#installForm .advanced .icon {display: inline-block; margin-left: 10px;}
+#installForm .advanced a:hover, #installForm table td a:focus, #installForm table td a:hover {color: #61be68;}
+#installForm td {height: 46px;}

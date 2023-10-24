@@ -5,14 +5,11 @@ $('.ajaxCollect').click(function (event) {
     {
         if(response.status == 'yes')
         {
-            obj.children('i').removeClass().addClass('icon icon-star text-yellow');
-            obj.parent().prev().children('.file-name').children('i').remove('.icon');
-            obj.parent().prev().children('.file-name').prepend('<i class="icon icon-star text-yellow"></i> ');
+            obj.children('img').attr('src', 'static/svg/star.svg');
         }
         else
         {
-            obj.children('i').removeClass().addClass('icon icon-star-empty');
-            obj.parent().prev().children('.file-name').children('i').remove(".icon");
+            obj.children('img').attr('src', 'static/svg/star-empty.svg');
         }
     }, 'json');
     return false;

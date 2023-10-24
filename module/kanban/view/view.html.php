@@ -2,7 +2,7 @@
 /**
  * The view file of kanban module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Guangming Sun<sungangming@easycorp.ltd>
  * @package     kanban
@@ -47,7 +47,7 @@ js::set('maxColWidth',$kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->
 js::set('alignment', $kanban->alignment);
 js::set('defaultMinColWidth', $this->config->minColWidth);
 js::set('defaultMaxColWidth', $this->config->maxColWidth);
-js::set('priv', array('canAssignCard' => common::hasPriv('kanban', 'assigncard')));
+js::set('priv', array('canAssignCard' => common::hasPriv('kanban', 'assigncard'), 'canMoveCard' => common::hasPriv('kanban', 'moveCard')));
 
 $canSortRegion         = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
 $canEditRegion         = commonModel::hasPriv('kanban', 'editRegion');
@@ -82,8 +82,8 @@ $canViewArchivedColumn = commonModel::hasPriv('kanban', 'viewArchivedColumn');
         <?php if(($canEditRegion or $canCreateLane or $canDeleteRegion or $canCreateRegion or ($kanban->archived and ($canViewArchivedCard or $canViewArchivedColumn))) and !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed')):?>
         <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>
         <ul class="dropdown-menu pull-right">
-          <?php if($canCreateRegion) echo '<li>' . html::a(inlink('createRegion', "kanbanID={$kanban->id}", '', 1), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
-          <?php if($canEditRegion)   echo "<li class='editRegion'>" . html::a(inlink('editRegion', "regionID={$regionID}", '', 1), '<i class="icon icon-edit"></i>' . $this->lang->kanban->editRegion, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
+          <?php if($canCreateRegion) echo '<li>' . html::a(inlink('createRegion', "kanbanID={$kanban->id}", '', 1), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', 'class="iframe" data-toggle="modal" data-width="700px"') . '</li>';?>
+          <?php if($canEditRegion)   echo "<li class='editRegion'>" . html::a(inlink('editRegion', "regionID={$regionID}", '', 1), '<i class="icon icon-edit"></i>' . $this->lang->kanban->editRegion, '', 'class="iframe" data-toggle="modal" data-width="700px"') . '</li>';?>
           <?php if($canCreateLane)   echo "<li class='createLane'>" . html::a(inlink('createLane', "kanbanID={$kanban->id}&regionID={$regionID}", '', 1), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createLane, '', "class='iframe'") . '</li>';?>
           <?php if($canDeleteRegion and count($regions) > 1) echo "<li class='deleteRegion'>" . html::a(inlink('deleteRegion', "regionID={$regionID}"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->deleteRegion, "hiddenwin") . '</li>';?>
           <?php if(($canCreateRegion or $canEditRegion or $canCreateLane or ($canDeleteRegion and count($regions) > 1)) and ($kanban->archived and ($canViewArchivedCard or $canViewArchivedColumn)))echo "<li class='divider'></li>"?>
@@ -110,8 +110,8 @@ $canViewArchivedColumn = commonModel::hasPriv('kanban', 'viewArchivedColumn');
               <?php if(($canEditRegion or $canCreateLane or $canDeleteRegion or $canCreateRegion or ($kanban->archived and ($canViewArchivedCard or $canViewArchivedColumn))) and !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed')):?>
               <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>
               <ul class="dropdown-menu pull-right">
-                <?php if($canCreateRegion) echo '<li>' . html::a(inlink('createRegion', "kanbanID={$kanban->id}", '', 1), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
-                <?php if($canEditRegion)   echo '<li>' . html::a(inlink('editRegion', "regionID={$region->id}", '', 1), '<i class="icon icon-edit"></i>' . $this->lang->kanban->editRegion, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
+                <?php if($canCreateRegion) echo '<li>' . html::a(inlink('createRegion', "kanbanID={$kanban->id}", '', 1), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', 'class="iframe" data-toggle="modal" data-width="700px"') . '</li>';?>
+                <?php if($canEditRegion)   echo '<li>' . html::a(inlink('editRegion', "regionID={$region->id}", '', 1), '<i class="icon icon-edit"></i>' . $this->lang->kanban->editRegion, '', 'class="iframe" data-toggle="modal" data-width="700px"') . '</li>';?>
                 <?php if($canCreateLane)   echo '<li>' . html::a(inlink('createLane', "kanbanID={$kanban->id}&regionID={$region->id}", '', 1), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createLane, '', "class='iframe'") . '</li>';?>
                 <?php if($canDeleteRegion and count($regions) > 1) echo '<li>' . html::a(inlink('deleteRegion', "regionID={$region->id}"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->deleteRegion, "hiddenwin") . '</li>';?>
                 <?php if(($canCreateRegion or $canEditRegion or $canCreateLane or ($canDeleteRegion and count($regions) > 1)) and ($kanban->archived and ($canViewArchivedCard or $canViewArchivedColumn)))echo "<li class='divider'></li>"?>

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/jenkins.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -28,4 +27,3 @@ r($jenkins->getTasks($id)) && p() && e('0');    // 使用空的Jenkins
 $id = 111;
 r($jenkins->getTasks($id)) && p() && e('0');    // 使用不存在的Jenkins
 
-$db->restoreDB();

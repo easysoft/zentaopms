@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -45,4 +44,3 @@ r($kanban->setWIPTest($columnIDList[5], $limitList[3], $WIPCountList[2])) && p('
 r($kanban->setWIPTest($columnIDList[5], $limitList[4], $WIPCountList[3])) && p('name,limit') && e('测试,220');                                   // 测试设置看板列406的在制品限制
 r($kanban->setWIPTest($columnIDList[7], $limitList[4], $WIPCountList[3])) && p('limit')      && e('子列在制品数量之和不能大于父列的在制品数量'); // 测试设置看板列408的在制品限制 子列大于父列
 r($kanban->setWIPTest($columnIDList[0], $limitList[1], $WIPCountList[0])) && p('limit')      && e('在制品数量必须是正整数。');                   // 测试设置看板列401的在制品限制 非正整数
-$db->restoreDB();

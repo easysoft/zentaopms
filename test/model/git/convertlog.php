@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/git.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -26,4 +25,3 @@ r($git->convertLog($log)) && p('revision') && e('e7699d04f1586d337f34496da932dde
 $log = array();
 r($git->convertLog($log)) && p('revision') && e(0);     // 使用空的数据
 
-$db->restoreDB();

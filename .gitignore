@@ -5,6 +5,7 @@ www/install.php
 www/upgrade.php
 www/checklist.php
 www/ok.txt
+www/xhprof
 tools/*
 release/*
 tmp/*
@@ -32,3 +33,4 @@ CodeSniffer.conf
 test/runtime/*
 test/www
 !/**/.gitkeep
+build/*.gz

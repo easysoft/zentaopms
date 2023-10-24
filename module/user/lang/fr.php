@@ -2,7 +2,7 @@
 /**
  * The user module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
@@ -74,13 +74,16 @@ $lang->user->clientStatus     = 'Client Status';
 $lang->user->clientLang       = 'Client Language';
 $lang->user->programs         = 'Program';
 $lang->user->products         = $lang->productCommon;
-$lang->user->projects         = 'Project';
+$lang->user->projects         = $lang->projectCommon;
 $lang->user->sprints          = $lang->execution->common;
 $lang->user->identity         = 'Identity';
 $lang->user->switchVision     = 'Switch to %s';
 $lang->user->submit           = 'Submit';
 $lang->user->resetPWD         = 'Reset Password';
 $lang->user->resetTitle       = 'Admin reset the password';
+
+$lang->user->abbr = new stdclass();
+$lang->user->abbr->id = 'ID';
 
 $lang->user->legendBasic        = 'Informations de Base';
 $lang->user->legendContribution = 'Contribution';
@@ -319,3 +322,23 @@ $lang->user->mkdirLinux = <<<EOT
 EOT;
 
 $lang->user->jumping = "This page will redirect to the previous page in <span id='time'>3</span> seconds. <a href='%s' class='btn btn-primary btn-xs'>Redirect Now</a>";
+
+$lang->user->zentaoapp = new stdclass();
+$lang->user->zentaoapp->logout = 'Logout';
+
+$lang->user->featureBar['todo']['all']             = 'Assigned To Yourself';
+$lang->user->featureBar['todo']['before']          = 'Unfinished';
+$lang->user->featureBar['todo']['future']          = 'TBD';
+$lang->user->featureBar['todo']['thisWeek']        = 'This Week';
+$lang->user->featureBar['todo']['thisMonth']       = 'This Month';
+$lang->user->featureBar['todo']['thisYear']        = 'This Year';
+$lang->user->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
+$lang->user->featureBar['todo']['cycle']           = 'Recurrence';
+
+$lang->user->featureBar['dynamic']['all']       = 'All';
+$lang->user->featureBar['dynamic']['today']     = 'Today';
+$lang->user->featureBar['dynamic']['yesterday'] = 'Yesterday';
+$lang->user->featureBar['dynamic']['thisWeek']  = 'This Week';
+$lang->user->featureBar['dynamic']['lastWeek']  = 'Last Week';
+$lang->user->featureBar['dynamic']['thisMonth'] = 'This Month';
+$lang->user->featureBar['dynamic']['lastMonth'] = 'Last Month';

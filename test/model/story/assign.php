@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/story.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -29,4 +28,3 @@ r($story->assignTest(10, 'admin'))   && p('id,assignedTo') && e('10,admin');   /
 r($story->assignTest(100, 'user50')) && p('id,assignedTo') && e('100,user50'); //指派需求，查看返回的指派人信息
 r($story->assignTest(101, 'pm1'))    && p('id,assignedTo') && e('101,pm1');    //指派需求，查看返回的指派人信息
 
-$db->restoreDB();

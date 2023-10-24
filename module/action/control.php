@@ -2,7 +2,7 @@
 /**
  * The control file of action module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
@@ -143,6 +143,22 @@ class action extends control
             foreach($trashes as $trash) $executionIdList[] = $trash->execution;
             $this->view->executionList = $this->execution->getByIdList($executionIdList, 'all');
         }
+
+        /* Process pivot name. */
+        foreach($trashes as $trash)
+        {
+            if($trash->objectType == 'pivot')
+            {
+                $pivotNames = json_decode($trash->objectName, true);
+                $trash->objectName = zget($pivotNames, $this->app->getClientLang(), '');
+                if(empty($trash->objectName))
+                {
+                    $pivotNames = array_filter($pivotNames);
+                    $trash->objectName = reset($pivotNames);
+                }
+            }
+        }
+
         /* Title and position. */
         $this->view->title      = $this->lang->action->trash;
         $this->view->position[] = $this->lang->action->trash;
@@ -246,6 +262,12 @@ class action extends control
                     if($confirmChange == 'yes') $this->dao->update($table)->set('code')->eq($replaceCode)->where('id')->eq($oldAction->objectID)->exec();
                 }
             }
+
+            if($oldAction->objectType == 'execution')
+            {
+                $confirmLang = $this->restoreStages($oldAction, $browseType, $confirmChange);
+                if($confirmLang !== true) return print(js::confirm($confirmLang, $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes")));
+            }
         }
 
         $this->action->undelete($actionID);
@@ -325,6 +347,10 @@ class action extends control
         {
             return $this->send(array('status' => 'success', 'data' => $actionID));
         }
+        elseif(in_array($objectType, $this->config->action->newPageModule))
+        {
+            return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
+        }
         else
         {
             echo js::reload('parent');
@@ -344,11 +370,106 @@ class action extends control
         {
             $this->action->updateComment($actionID);
         }
+        elseif(in_array($objectType, $this->config->action->newPageModule))
+        {
+            return $this->send(array('status' => 'success', 'closeModal' => true, 'load' => true));
+        }
         else
         {
             dao::$errors['submit'][] = $this->lang->action->historyEdit;
             return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
-        return $this->send(array('result' => 'success', 'locate' => 'reload'));
+        return $this->send(array('result' => 'success', 'locate' => 'reload', 'load' => true, 'closeModal' => true));
+    }
+
+    /**
+     * Restore stages.
+     *
+     * @param  object $action
+     * @param  string $browseType
+     * @param  string $confirmChange
+     * @access public
+     * @return bool|string
+     */
+    public function restoreStages($action, $browseType, $confirmChange)
+    {
+        /* Check parent stage isCreateTask. */
+        $execution      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($action->objectID)->fetch();
+        $hasCreatedTask = $this->loadModel('programplan')->isCreateTask($execution->parent);
+        if(!$hasCreatedTask) die(js::alert($this->lang->action->hasCreatedTask));
+
+        /* Check type of siblings. */
+        $siblings = $this->dao->select('DISTINCT type')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('parent')->eq($execution->parent)->fetchPairs('type');
+        if($execution->type == 'stage' and (isset($siblings['sprint']) or isset($siblings['kanban']))) die(js::alert($this->lang->action->hasOtherType[$execution->type]));
+        if(($execution->type == 'sprint' or $execution->type == 'kanban') and isset($siblings['stage'])) die(js::alert($this->lang->action->hasOtherType[$execution->type]));
+
+        /* If parent stage is not exists, you should recover its parent stages, refresh status. */
+        $stagePathList    = explode(',', trim($execution->path, ','));
+        $deletedStageList = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($stagePathList)->andWhere('deleted')->eq(1)->andWhere('type')->eq('stage')->orderBy('id_asc')->fetchAll('id');
+        $deletedParents   = $deletedStageList;
+        array_pop($deletedParents);
+
+        $deletedTitle = '';
+        foreach($deletedParents as $deletedParent) $deletedTitle .= "'{$deletedParent->name}',";
+
+        /* If parent stage's attribute has changed, sub-stage's attribute need change. */
+        $deletedTopParent = current($deletedStageList);
+        $checkTopStage    = $this->loadModel('programplan')->checkTopStage($deletedTopParent->id);
+        $parentAttr       = $deletedTopParent->attribute;
+        if(!$checkTopStage) $parentAttr = $this->dao->select('attribute')->from(TABLE_EXECUTION)->where('id')->eq($deletedTopParent->parent)->fetch('attribute');
+
+        $needChangeAttr    = false;
+        $startChangedStage = $execution;
+        foreach($deletedStageList as $deletedStage)
+        {
+            if($parentAttr != 'mix' and $parentAttr != $deletedStage->attribute)
+            {
+                $startChangedStage = $deletedStage;
+                $needChangeAttr    = true;
+                break;
+            }
+            $parentAttr = $deletedStage->attribute;
+        }
+
+        /* Confirm. */
+        if(!empty($deletedTitle) or $needChangeAttr)
+        {
+            $this->app->loadLang('stage');
+
+            $deletedTitle = trim($deletedTitle, ',');
+            $confirmLang  = sprintf($this->lang->action->hasDeletedParent, $deletedTitle) . $this->lang->action->whetherToRestore;
+            if($needChangeAttr) $confirmLang = sprintf($this->lang->action->hasChangedAttr, zget($this->lang->stage->typeList, $parentAttr)) . $this->lang->action->whetherToRestore;
+            if(!empty($deletedTitle) and $needChangeAttr) $confirmLang = sprintf($this->lang->action->hasDeletedParent, $deletedTitle) . sprintf($this->lang->action->hasChangedAttr, zget($this->lang->stage->typeList, $parentAttr)) . $this->lang->action->whetherToRestore;
+
+            if($confirmChange == 'no')
+            {
+                return $confirmLang;
+            }
+            else
+            {
+                if(!empty($deletedTitle)) $this->action->restoreStages($deletedParents);
+                if($needChangeAttr)
+                {
+                    $needChangedStages = substr($execution->path, strpos($execution->path, ",{$startChangedStage->id},"));
+                    $needChangedStages = explode(',', trim($needChangedStages, ','));
+                    $this->dao->update(TABLE_EXECUTION)->set('attribute')->eq($parentAttr)->where('id')->in($needChangedStages)->exec();
+                }
+            }
+        }
+
+        $this->programplan->computeProgress($startChangedStage->parent);
+
+        return true;
+    }
+
+    /**
+     * Clear dynamic records older than one month.
+     *
+     * @access public
+     * @return void
+     */
+    public function cleanActions()
+    {
+        $this->action->cleanActions();
     }
 }

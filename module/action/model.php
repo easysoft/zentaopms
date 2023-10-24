@@ -2,7 +2,7 @@
 /**
  * The model file of action module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
@@ -53,6 +53,7 @@ class actionModel extends model
         if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,reviewreverted,synctwins,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
 
         /* Use purifier to process comment. Fix bug #2683. */
+        if(empty($comment)) $comment = '';
         $action->comment = fixer::stripDataTags($comment);
 
         /* Process action. */
@@ -70,6 +71,18 @@ class actionModel extends model
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dao->lastInsertID();
 
+        $hasRecentTable = true;
+        if(defined('IN_UPGRADE') and IN_UPGRADE)
+        {
+            $fromVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
+            if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.6', '<'))               $hasRecentTable = false;
+            if(strpos($fromVersion, 'pro') !== false) $hasRecentTable = false;
+            if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.6',   '<')) $hasRecentTable = false;
+            if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.6',   '<')) $hasRecentTable = false;
+            if(strpos($fromVersion, 'ipd') !== false and version_compare($fromVersion, 'ipd1.0.1', '<')) $hasRecentTable = false;
+        }
+        if($hasRecentTable) $this->dao->insert(TABLE_ACTIONRECENT)->data($action)->autoCheck()->exec();
+
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
 
         /* Call the message notification function. */
@@ -77,6 +90,9 @@ class actionModel extends model
 
         /* Add index for global search. */
         $this->saveIndex($objectType, $objectID, $actionType);
+
+        $changeFunc = 'after' . ucfirst($objectType);
+        if(method_exists($this, $changeFunc)) call_user_func_array(array($this, $changeFunc), array($action, $actionID));
 
         return $actionID;
     }
@@ -159,6 +175,8 @@ class actionModel extends model
                 return $emptyRecord;
             case 'product':
                 return array('product' => ",$objectID,", 'project' => 0, 'execution' => 0);
+            case 'marketresearch':
+                return array('product' => ',0,', 'project' => $objectID, 'execution' => 0);
             case 'project':
             case 'execution':
                 $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetchPairs('product');
@@ -248,7 +266,7 @@ class actionModel extends model
                 case 'release':
                     $result = $this->dao->select('product, build')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
                     $record['product'] = $result->product;
-                    $record['project'] = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($result->build)->fetch('project');
+                    $record['project'] = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->in($result->build)->fetch('project');
                     break;
                 case 'task':
                     $fields = 'project, execution, story';
@@ -355,7 +373,7 @@ class actionModel extends model
             ->andWhere('((action')->ne('deleted')->andWhere('objectID')->in($objectID)->markRight(1)
             ->orWhere('(action')->eq('deleted')->andWhere('objectID')->in($modules)->markRight(1)->markRight(1)
             ->fi()
-            ->beginIF(strpos('project,case,story,module', $objectType) === false)
+            ->beginIF(!in_array($objectType, array('project', 'case', 'story', 'module')))
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->in($objectID)
             ->fi()
@@ -405,12 +423,22 @@ class actionModel extends model
                 $productID = trim($action->product, ',');
                 $name      = $project->name;
                 $method    = $project->model == 'kanban' ? 'index' : 'view';
-                if($name) $action->extra = common::hasPriv('project', $method) ? html::a(helper::createLink('project', $method, "projectID=$action->project"), $name) : $name;
+                if($name) $action->extra = (common::hasPriv('project', $method) and $this->config->vision != 'or') ? html::a(helper::createLink('project', $method, "projectID=$action->project"), $name) : $name;
             }
             elseif($actionName == 'linked2plan')
             {
                 $title = $this->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($action->extra)->fetch('title');
                 if($title) $action->extra = common::hasPriv('productplan', 'view') ? html::a(helper::createLink('productplan', 'view', "planID=$action->extra"), $title) : $title;
+            }
+            elseif($actionName == 'changedbycharter')
+            {
+                $name = $this->dao->select('name')->from(TABLE_CHARTER)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = common::hasPriv('charter', 'view') ? html::a(helper::createLink('charter', 'view', "charterID=$action->extra"), $name) : $name;
+            }
+            elseif($actionName == 'linked2roadmap' and $action->objectType == 'story')
+            {
+                $name = $this->dao->select('name')->from(TABLE_ROADMAP)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = common::hasPriv('roadmap', 'view') ? html::a(helper::createLink('roadmap', 'view', "roadmapID=$action->extra"), $name) : $name;
             }
             elseif($actionName == 'linked2build')
             {
@@ -453,7 +481,7 @@ class actionModel extends model
             elseif($actionName == 'unlinkedfromexecution')
             {
                 $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = common::hasPriv('project', 'story') ? html::a(helper::createLink('project', 'story', "projectID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
+                if($name) $action->extra = common::hasPriv('execution', 'view') ? html::a(helper::createLink('execution', 'view', "executionID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
             }
             elseif($actionName == 'unlinkedfromproject')
             {
@@ -476,6 +504,11 @@ class actionModel extends model
                 $title = $this->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($action->extra)->fetch('title');
                 if($title) $action->extra = common::hasPriv('productplan', 'view') ? html::a(helper::createLink('productplan', 'view', "planID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
             }
+            elseif($actionName == 'unlinkedfromroadmap' and $action->objectType == 'story')
+            {
+                $name = $this->dao->select('name')->from(TABLE_ROADMAP)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = common::hasPriv('roadmap', 'view') ? html::a(helper::createLink('roadmap', 'view', "roadmapID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
+            }
             elseif($actionName == 'unlinkedfromtesttask')
             {
                 $name = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($action->extra)->fetch('name');
@@ -483,13 +516,23 @@ class actionModel extends model
             }
             elseif(strpos('feedback,ticket', $action->objectType) === false and $actionName == 'tostory')
             {
-                $title = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
-                if($title) $action->extra = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
+                $productShadow = $this->dao->select('shadow')->from(TABLE_PRODUCT)->where('id')->in(trim($action->product, ','))->fetch('shadow');
+                $title         = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
+                $defaultExtra  = "#$action->extra " . $title;
+                if($productShadow)
+                {
+                    $projectID = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($action->extra)->fetch('project');
+                    if($title) $action->extra = (common::hasPriv('projectstory', 'view') and $projectID) ? html::a(helper::createLink('projectstory', 'view', "storyID={$action->extra}&projectID=$projectID"), $defaultExtra) : $defaultExtra;
+                }
+                else
+                {
+                    if($title) $action->extra = common::hasPriv('story', 'view') ?  html::a(helper::createLink('story', 'view', "storyID=$action->extra"), $defaultExtra) : $defaultExtra;
+                }
             }
             elseif($actionName == 'importedcard')
             {
                 $title = $this->dao->select('name')->from(TABLE_KANBAN)->where('id')->eq($action->extra)->fetch('name');
-                if($title) $action->extra = common::hasPriv('kanban', 'view') ? html::a(helper::createLink('kanban', 'view', "kanbanID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
+                if($title) $action->extra = (common::hasPriv('kanban', 'view') and !isonlybody()) ? html::a(helper::createLink('kanban', 'view', "kanbanID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
             }
             elseif($actionName == 'createchildren')
             {
@@ -512,7 +555,7 @@ class actionModel extends model
                 }
                 $action->extra = trim(trim($action->extra), ',');
             }
-            elseif($action->objectType != 'feedback' and (strpos(',totask,linkchildtask,unlinkchildrentask,linkparenttask,unlinkparenttask,deletechildrentask,', ",$actionName,") !== false))
+            elseif($action->objectType != 'feedback' and (strpos(',totask,linkchildtask,unlinkchildrentask,linkparenttask,unlinkparenttask,deletechildrentask,converttotask,', ",$actionName,") !== false))
             {
                 $name = $this->dao->select('name')->from(TABLE_TASK)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
@@ -521,6 +564,11 @@ class actionModel extends model
             {
                 $name = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
                 if($name) $action->extra = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
+            }
+            elseif($actionName == 'deletechildrendemand')
+            {
+                $name = $this->dao->select('title')->from(TABLE_DEMAND)->where('id')->eq($action->extra)->fetch('title');
+                if($name) $action->extra = common::hasPriv('demand', 'view') ? html::a(helper::createLink('demand', 'view', "demandID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
             }
             elseif($actionName == 'buildopened')
             {
@@ -537,7 +585,7 @@ class actionModel extends model
                 $name = $this->dao->select('name')->from(TABLE_TESTSUITE)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('caselib', 'browse') ? html::a(helper::createLink('caselib', 'browse', "libID=$action->extra"), $name) : $name;
             }
-            elseif(strpos(',importfromstorylib,importfromrisklib,importfromissuelib,importfromopportunitylib,', ",{$actionName},") !== false and $this->config->edition == 'max')
+            elseif(strpos(',importfromstorylib,importfromrisklib,importfromissuelib,importfromopportunitylib,', ",{$actionName},") !== false and ($this->config->edition == 'max' or $this->config->edition == 'ipd'))
             {
                 $name = $this->dao->select('name')->from(TABLE_ASSETLIB)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('assetlib', $action->objectType) ? html::a(helper::createLink('assetlib', $action->objectType, "libID=$action->extra"), $name) : $name;
@@ -554,6 +602,21 @@ class actionModel extends model
                     {
                         $table = $action->objectType == 'story' ? TABLE_STORY : TABLE_BUG;
                         $name  = $this->dao->select('title')->from($table)->where('id')->eq($id)->fetch('title');
+                        if($name) $action->appendLink = html::a(helper::createLink($action->objectType, 'view', "id=$id"), "#$id " . $name);
+                    }
+                }
+            }
+            elseif($actionName == 'closed' and $action->objectType == 'demand')
+            {
+                $action->appendLink = '';
+                if(strpos($action->extra, '|') !== false) $action->extra = substr($action->extra, 0, strpos($action->extra, '|'));
+                if(strpos($action->extra, ':') !== false)
+                {
+                    list($extra, $id) = explode(':', $action->extra);
+                    $action->extra    = $extra;
+                    if($id)
+                    {
+                        $name  = $this->dao->select('title')->from(TABLE_DEMAND)->where('id')->eq($id)->fetch('title');
                         if($name) $action->appendLink = html::a(helper::createLink($action->objectType, 'view', "id=$id"), "#$id " . $name);
                     }
                 }
@@ -602,7 +665,7 @@ class actionModel extends model
                     if($history->field == 'git') $history->diff = str_replace('+', '%2B', $history->diff);
                 }
             }
-            elseif(strpos(',linkstory,unlinkstory,createchildrenstory,', ",$actionName,") !== false)
+            elseif(strpos(',linkstory,unlinkstory,createchildrenstory,linkur,unlinkur,', ",$actionName,") !== false)
             {
                 $extra = '';
                 foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id ") . ', ' : "#$id, ";
@@ -613,6 +676,10 @@ class actionModel extends model
                 $extra = '';
                 foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('bug', 'view') ? html::a(helper::createLink('bug', 'view', "bugID=$id"), "#$id ") . ', ' : "#$id, ";
                 $action->extra = trim(trim($extra), ',');
+            }
+            elseif($actionName == 'repocreated')
+            {
+                $action->extra = str_replace("class='iframe'", 'data-app="devops"', $action->extra);
             }
 
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
@@ -766,7 +833,7 @@ class actionModel extends model
         $trashQuery = $this->session->trashQuery;
         $trashQuery = str_replace(array('`objectID`', '`actor`', '`date`'), array('t1.`objectID`', 't1.`actor`', 't1.`date`'), $trashQuery);
         $table      = $this->config->objectTables[$objectType];
-        $nameField  = isset($this->config->action->objectNameFields[$objectType]) ? 't2.' . "`{$this->config->action->objectNameFields[$objectType]}`" : '';
+        $nameField  = isset($this->config->action->objectNameFields[$objectType]) ? 't2.' . '`' . $this->config->action->objectNameFields[$objectType] . '`' : '';
 
         if($nameField) $trashQuery = preg_replace("/`objectName`/", $nameField, $trashQuery);
 
@@ -850,6 +917,249 @@ class actionModel extends model
             }
             $this->dao->insert(TABLE_HISTORY)->data($change)->exec();
         }
+
+        if(isset($this->session->calllbackActionList[$actionID]))
+        {
+            $callbackMethod = $this->session->calllbackActionList[$actionID];
+            unset($this->session->calllbackActionList[$actionID]);
+            if(method_exists($this, $callbackMethod)) call_user_func_array(array($this, $callbackMethod), array($actionID));
+        }
+    }
+
+    /**
+     * Print actions of an object.
+     *
+     * @param  object    $action
+     * @param  string   $desc
+     * @access public
+     * @return void
+     */
+    public function renderAction($action, $desc = '')
+    {
+        if(!isset($action->objectType) || !isset($action->action)) return;
+
+        $objectType = $action->objectType;
+        $actionType = strtolower($action->action);
+
+        /**
+         * Set the desc string of this action.
+         *
+         * 1. If the module of this action has defined desc of this actionType, use it.
+         * 2. If no defined in the module language, search the common action define.
+         * 3. If not found in the lang->action->desc, use the $lang->action->desc->common or $lang->action->desc->extra as the default.
+         */
+        if(empty($desc))
+        {
+            if($action->objectType == 'story' && $action->action == 'reviewed' && strpos($action->extra, ',') !== false)
+            {
+                $desc = $this->lang->$objectType->action->rejectreviewed;
+            }
+            elseif($action->objectType == 'productplan' && in_array($action->action, array('startedbychild','finishedbychild','closedbychild','activatedbychild', 'createchild')))
+            {
+                $desc = $this->lang->$objectType->action->changebychild;
+            }
+            elseif($action->objectType == 'module' && in_array($action->action, array('created', 'moved', 'deleted')))
+            {
+                $desc = $this->lang->$objectType->action->{$action->action};
+            }
+            elseif(strpos('createmr,editmr,removemr', $action->action) !== false && strpos($action->extra, '::') !== false)
+            {
+                $mrAction = str_replace('mr', '', $action->action) . 'Action';
+                list($mrDate, $mrActor, $mrLink) = explode('::', $action->extra);
+
+                if(isonlybody()) $mrLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
+
+                $this->app->loadLang('mr');
+                $desc = sprintf($this->lang->mr->$mrAction, $mrDate, $mrActor, $mrLink);
+            }
+            elseif($this->config->edition == 'max' && strpos($this->config->action->assetType, ",{$action->objectType},") !== false && $action->action == 'approved')
+            {
+                $desc = empty($this->lang->action->approve->{$action->extra}) ? '' : $this->lang->action->approve->{$action->extra};
+            }
+            elseif(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
+            {
+                $desc = $this->lang->$objectType->action->$actionType;
+            }
+            elseif($action->objectType == 'instance' && isset($this->lang->action->desc->$actionType))
+            {
+                $desc  = $this->lang->action->desc->$actionType;
+                $extra = json_decode($action->extra);
+                if($actionType == 'adjustmemory')
+                {
+                    $action->newMemory = $action->comment;
+                    $action->comment = '';
+                }
+                if(!empty($extra))
+                {
+                    if(empty($extra->data)) $extra->data = new stdclass();
+                    $action->oldName    = zget($extra->data, 'oldName', '');
+                    $action->newName    = zget($extra->data, 'newName', '');
+                    $action->oldVersion = zget($extra->data, 'oldVersion', '');
+                    $action->newVersion = zget($extra->data, 'newVersion', '');
+                    $action->oldAppName = zget($extra->data, 'oldAppName', '');
+                    $action->newAppName = zget($extra->data, 'newAppName', '');
+                    $enableAutoBackup   = zget($extra->data, 'autoBackup', 0);
+
+                    if($actionType == 'saveautobackupsettings' && $enableAutoBackup) $desc = $this->lang->action->desc->closeautobackupsettings;
+                    $action->extra = '';
+
+                    if(!empty($extra->result->code) && $extra->result->code != 200 && !empty($extra->result->message)) $action->comment = $extra->result->message;
+                    if(is_string($extra->result) && $extra->result != 'fail' && !empty($extra->message))
+                    {
+                        $action->comment = "\n" . $extra->message;
+                    }
+                }
+            }
+            elseif(isset($this->lang->action->desc->$actionType))
+            {
+                $desc = $this->lang->action->desc->$actionType;
+            }
+            else
+            {
+                $desc = $action->extra ? $this->lang->action->desc->extra : $this->lang->action->desc->common;
+            }
+        }
+
+        $action->date = substr($action->date, 0, 19);
+        if($this->app->getViewType() == 'mhtml') $action->date = date('m-d H:i', strtotime($action->date));
+
+        /* Cycle actions, replace vars. */
+        foreach($action as $key => $value)
+        {
+            if($key == 'history') continue;
+
+            /* Desc can be an array or string. */
+            if(is_array($desc))
+            {
+                if($key == 'extra') continue;
+                if($action->objectType == 'story' && $action->action == 'reviewed' && strpos($action->extra, '|') !== false && $key == 'actor')
+                {
+                    $desc['main'] = str_replace('$actor', $this->lang->action->superReviewer . ' ' . $value, $desc['main']);
+                }
+                else
+                {
+                    $desc['main'] = str_replace('$' . $key, $value, $desc['main']);
+                }
+            }
+            else
+            {
+                if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->$objectType->snapshot->defaultSnapName;
+
+                $desc = str_replace('$' . $key, $value, $desc);
+            }
+        }
+
+        /* If the desc is an array, process extra. Please bug/lang. */
+        if(!is_array($desc)) return $desc;
+
+        $extra = strtolower($action->extra);
+
+        /* Fix bug #741. */
+        if(isset($desc['extra'])) $desc['extra'] = $this->lang->$objectType->{$desc['extra']};
+
+        $actionDesc = '';
+        if(isset($desc['extra'][$extra]))
+        {
+            $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
+        }
+        else
+        {
+            $actionDesc = str_replace('$extra', $action->extra, $desc['main']);
+        }
+
+        if($action->objectType == 'story' && $action->action == 'reviewed')
+        {
+            if(strpos($action->extra, ',') !== false)
+            {
+                list($extra, $reason) = explode(',', $extra);
+                $desc['reason'] = $this->lang->$objectType->{$desc['reason']};
+                $actionDesc = str_replace(array('$extra', '$reason'), array($desc['extra'][$extra], $desc['reason'][$reason]), $desc['main']);
+            }
+
+            if(strpos($action->extra, '|') !== false)
+            {
+                list($extra, $isSuperReviewer) = explode('|', $extra);
+                $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
+            }
+        }
+
+        if($action->objectType == 'story' && $action->action == 'synctwins')
+        {
+            if(!empty($extra) && strpos($extra, '|') !== false)
+            {
+                list($operate, $storyID) = explode('|', $extra);
+                $desc['operate'] = $this->lang->$objectType->{$desc['operate']};
+                $link = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$storyID"), "#$storyID ") : "#$storyID";
+                $actionDesc = str_replace(array('$extra', '$operate'), array($link, $desc['operate'][$operate]), $desc['main']);
+            }
+        }
+
+        if($action->objectType == 'module' && strpos(',created,moved,', $action->action) !== false)
+        {
+            $moduleNames = $this->loadModel('tree')->getOptionMenu($action->objectID, 'story', 0, 'all', '');
+            $modules     = explode(',', $action->extra);
+            $moduleNames = array_intersect_key($moduleNames, array_combine($modules, $modules));
+            $moduleNames = implode(', ', $moduleNames);
+            $actionDesc  = str_replace('$extra', $moduleNames, $desc['main']);
+        }
+        elseif($action->objectType == 'module' && $action->action == 'deleted')
+        {
+            $module      = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch();
+            $moduleNames = $this->loadModel('tree')->getOptionMenu($module->root, 'story', 0, 'all', '');
+            $actionDesc  = str_replace('$extra', zget($moduleNames, $action->objectID), $desc['main']);
+        }
+        return $actionDesc;
+    }
+
+    /**
+     * Print changes of every action.
+     *
+     * @param  string    $objectType
+     * @param  array     $histories
+     * @param  bool      $canChangeTag
+     * @access public
+     * @return void
+     */
+    public function renderChanges($objectType, $histories, $canChangeTag = true)
+    {
+        if(empty($histories)) return;
+
+        $maxLength            = 0;          // The max length of fields names.
+        $historiesWithDiff    = array();    // To save histories without diff info.
+        $historiesWithoutDiff = array();    // To save histories with diff info.
+
+        /* Diff histories by hasing diff info or not. Thus we can to make sure the field with diff show at last. */
+        foreach($histories as $history)
+        {
+            $fieldName = $history->field;
+            $history->fieldLabel = (isset($this->lang->$objectType) && isset($this->lang->$objectType->$fieldName)) ? $this->lang->$objectType->$fieldName : $fieldName;
+            if($objectType == 'module') $history->fieldLabel = $this->lang->tree->$fieldName;
+            if($fieldName == 'fileName') $history->fieldLabel = $this->lang->file->$fieldName;
+            if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
+            $history->diff ? $historiesWithDiff[] = $history : $historiesWithoutDiff[] = $history;
+        }
+        $histories = array_merge($historiesWithoutDiff, $historiesWithDiff);
+
+        $content = '';
+
+        foreach($histories as $history)
+        {
+            $history->fieldLabel = str_pad($history->fieldLabel, $maxLength, $this->lang->action->label->space);
+            if($history->diff != '')
+            {
+                $history->diff      = str_replace(array('<ins>', '</ins>', '<del>', '</del>'), array('[ins]', '[/ins]', '[del]', '[/del]'), $history->diff);
+                $history->diff      = ($history->field != 'subversion' && $history->field != 'git') ? htmlSpecialString($history->diff) : $history->diff;   // Keep the diff link.
+                $history->diff      = str_replace(array('[ins]', '[/ins]', '[del]', '[/del]'), array('<ins>', '</ins>', '<del>', '</del>'), $history->diff);
+                $history->diff      = nl2br($history->diff);
+                $history->noTagDiff = $canChangeTag ? preg_replace('/&lt;\/?([a-z][a-z0-9]*)[^\/]*\/?&gt;/Ui', '', $history->diff) : '';
+                $content .= sprintf($this->lang->action->desc->diff2, $history->fieldLabel, $history->noTagDiff, $history->diff);
+            }
+            else
+            {
+                $content .= sprintf($this->lang->action->desc->diff1, $history->fieldLabel, $history->old, $history->new);
+            }
+        }
+        return $content;
     }
 
     /**
@@ -876,7 +1186,7 @@ class actionModel extends model
          */
         if(empty($desc))
         {
-            if($action->objectType == 'story' and $action->action == 'reviewed' and strpos($action->extra, ',') !== false)
+            if(($action->objectType == 'story' or $action->objectType == 'demand') and $action->action == 'reviewed' and strpos($action->extra, ',') !== false)
             {
                 $desc = $this->lang->$objectType->action->rejectreviewed;
             }
@@ -898,7 +1208,7 @@ class actionModel extends model
                 $this->app->loadLang('mr');
                 $desc = sprintf($this->lang->mr->$mrAction, $mrDate, $mrActor, $mrLink);
             }
-            elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, ",{$action->objectType},") !== false and $action->action == 'approved')
+            elseif(($this->config->edition == 'max' or $this->config->edition == 'ipd') and strpos($this->config->action->assetType, ",{$action->objectType},") !== false and $action->action == 'approved')
             {
                 $desc = empty($this->lang->action->approve->{$action->extra}) ? '' : $this->lang->action->approve->{$action->extra};
             }
@@ -916,6 +1226,7 @@ class actionModel extends model
             }
         }
 
+        $action->date = substr($action->date, 0, 19);
         if($this->app->getViewType() == 'mhtml') $action->date = date('m-d H:i', strtotime($action->date));
 
         /* Cycle actions, replace vars. */
@@ -938,6 +1249,8 @@ class actionModel extends model
             }
             else
             {
+                if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->$objectType->snapshot->defaultSnapName;
+
                 $desc = str_replace('$' . $key, $value, $desc);
             }
         }
@@ -960,7 +1273,7 @@ class actionModel extends model
                 $actionDesc = str_replace('$extra', $action->extra, $desc['main']);
             }
 
-            if($action->objectType == 'story' and $action->action == 'reviewed')
+            if(($action->objectType == 'story' or $action->objectType == 'demand') and $action->action == 'reviewed')
             {
                 if(strpos($action->extra, ',') !== false)
                 {
@@ -1015,7 +1328,7 @@ class actionModel extends model
      * @param  string $account
      * @param  string $period
      * @param  string $orderBy
-     * @param  object $pager
+     * @param  int    $limit
      * @param  string|int $productID   all|int(like 123)|notzero   all => include zero, notzero, greater than 0
      * @param  string|int $projectID   same as productID
      * @param  string|int $executionID same as productID
@@ -1024,46 +1337,45 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $pager = null, $productID = 'all', $projectID = 'all', $executionID = 'all', $date = '', $direction = 'next')
+    public function getDynamic($account = 'all', $period = 'all', $orderBy = 'date_desc', $limit = 50, $productID = 'all', $projectID = 'all', $executionID = 'all', $date = '', $direction = 'next')
     {
         /* Computer the begin and end date of a period. */
         $beginAndEnd = $this->computeBeginAndEnd($period);
         extract($beginAndEnd);
 
         /* Build has priv condition. */
-        $condition  = 1;
+        $condition  = '1=1';
         $executions = array();
         if(!$this->app->user->admin)
         {
             $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-            if($productID == 'all')   $authedProducts   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['product'])))   ? $this->app->user->view->products : '0';
-            if($projectID == 'all')   $authedProjects   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['project'])))   ? $this->app->user->view->projects : '0';
-            if($executionID == 'all') $authedExecutions = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['execution']))) ? $this->app->user->view->sprints : '0';
-
-            if(empty($authedProducts)) $authedProducts = '0';
+            if($productID == 'all')   $grantedProducts   = empty($aclViews) || !empty($aclViews['product'])   ? $this->app->user->view->products : '0';
+            if($projectID == 'all')   $grantedProjects   = empty($aclViews) || !empty($aclViews['project'])   ? $this->app->user->view->projects : '0';
+            if($executionID == 'all') $grantedExecutions = empty($aclViews) || !empty($aclViews['execution']) ? $this->app->user->view->sprints  : '0';
+            if(empty($grantedProducts)) $grantedProducts = '0';
 
             if($productID == 'all' and $projectID == 'all')
             {
                 $productCondition = '';
-                foreach(explode(',', $authedProducts) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
+                foreach(explode(',', $grantedProducts) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
                 if(!empty($productCondition)) $productCondition .= '))';
 
-                $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($authedProjects) . ')';
-                $executionCondition = isset($authedExecutions) ? "(execution != 0 and execution " . helper::dbIN($authedExecutions) . ')' : "(execution != 0 and execution = '$executionID')";
+                $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($grantedProjects) . ')';
+                $executionCondition = isset($grantedExecutions) ? "(execution != 0 and execution " . helper::dbIN($grantedExecutions) . ')' : "(execution != 0 and execution = '$executionID')";
             }
             elseif($productID == 'all' and is_numeric($projectID))
             {
                 $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-                $executions = $this->loadModel('execution')->getPairs($projectID) + array(0 => 0);
+                $executions = $this->loadModel('execution')->fetchPairs($projectID) + array(0 => 0);
 
-                $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
+                $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), explode(',', $grantedExecutions)) : array_keys($executions);
 
                 $productCondition = '';
                 foreach(array_keys($products) as $product) $productCondition = empty($productCondition) ? "(execution = '0' and project = '0' and (product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
                 if(!empty($productCondition)) $productCondition .= '))';
 
                 $projectCondition   = "(execution = '0' and project = '$projectID')";
-                $executionCondition = "(execution != '0' and execution " . helper::dbIN($authedExecutions) . ')';
+                $executionCondition = "(execution != '0' and execution " . helper::dbIN($grantedExecutions) . ')';
             }
             elseif(is_numeric($productID) and $projectID == 'all')
             {
@@ -1071,12 +1383,12 @@ class actionModel extends model
                 $projects   = $this->product->getProjectPairsByProduct($productID);
                 $executions = $this->product->getExecutionPairsByProduct($productID) + array(0 => 0);
 
-                $authedProjects   = array_intersect(array_keys($projects), explode(',', $authedProjects));
-                $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
+                $grantedProjects   = array_intersect(array_keys($projects), explode(',', $grantedProjects));
+                $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), explode(',', $grantedExecutions)) : array_keys($executions);
 
                 $productCondition   = "(execution = '0' and project = '0' and product like '%,$productID,%')";
-                $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($authedProjects) . ')';
-                $executionCondition = "(execution != '0' and execution " . helper::dbIN($authedExecutions) . ')';
+                $projectCondition   = "(execution = '0' and project != '0' and project " . helper::dbIN($grantedProjects) . ')';
+                $executionCondition = "(execution != '0' and execution " . helper::dbIN($grantedExecutions) . ')';
             }
 
             $condition = "((product =',0,' or product = '0' or product=',,') AND project = '0' AND execution = '0')";
@@ -1099,45 +1411,59 @@ class actionModel extends model
             if($this->app->getMethodName() == 'dynamic') $beginDate = $year - 1 . '-01-01';
         }
 
-        $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
+        if(is_numeric($projectID))
+        {
+            $openedDate = $this->dao->select('openedDate')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('openedDate');
+            $beginDate  = $openedDate > $beginDate ? $openedDate : $beginDate;
+        }
 
-        $efforts = $this->dao->select('id')->from(TABLE_EFFORT)->where($condition)->fetchPairs();
-        $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
+        $condition = "(($condition) OR `objectType` IN ('doc', 'doclib'))";
 
         $noMultipleExecutions = $this->dao->select('id')->from(TABLE_PROJECT)->where('multiple')->eq(0)->andWhere('type')->in('sprint,kanban')->fetchPairs('id', 'id');
+        if($noMultipleExecutions) $condition .= " OR (`objectID` NOT " . helper::dbIN($noMultipleExecutions) . " AND `objectType` = 'execution')";
+
+        $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
+        $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
+
+        $efforts = $this->dao->select('id')->from(TABLE_EFFORT)
+            ->where($condition)
+            ->beginIF($period != 'all')
+            ->beginIF(isset($begin))->andWhere('date')->gt($begin)->fi()
+            ->beginIF(isset($end))->andWhere('date')->lt($end)->fi()
+            ->fi()
+            ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
+            ->fetchPairs();
+        $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
+        $condition .= " OR (`objectID` in ($efforts) AND `objectType` = 'effort')";
+        $condition  = "($condition)";
 
         /* Get actions. */
-        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+        $actionTable = in_array($period, $this->config->action->latestDateList) ? TABLE_ACTIONRECENT : TABLE_ACTION;
+
+        $actions = $this->dao->select('*')->from($actionTable)
             ->where('objectType')->notIN($this->config->action->ignoreObjectType4Dynamic)
+            ->andWhere('action')->notIN($this->config->action->ignoreActions4Dynamic)
+            ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
+            ->beginIF($this->config->systemMode == 'light')->andWhere('objectType')->notin('program')->fi()
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($period != 'all')->andWhere('date')->gt($begin)->fi()
-            ->beginIF($period != 'all')->andWhere('date')->lt($end)->fi()
+            ->beginIF($period != 'all')
+            ->andWhere('date')->gt($begin)
+            ->andWhere('date')->lt($end)
+            ->fi()
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
-            ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
+            ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
-            ->andWhere()
-            ->markLeft(1)
-            ->where(1)
             ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
             ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
-            ->markRight(1)
-            /* Types excluded from Lite. */
-            ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
-            ->beginIF($this->config->systemMode == 'light')->andWhere('objectType')->notin('program')->fi()
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
-            ->beginIF($productID == 'all' or $projectID == 'all' or $executionID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
-            ->beginIF($noMultipleExecutions)->andWhere("IF(`objectType` = 'execution', `objectID` NOT " . helper::dbIN($noMultipleExecutions) . ", '1=1')")->fi()
+            ->andWhere($condition)
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
-            /* Filter out client login/logout actions. */
-            ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editmr,removemr')
-            ->andWhere("IF((objectType = 'program'), (objectID in ($programCondition)), '1=1')")
-            ->andWhere("IF((objectType = 'effort'), (objectID in ($efforts)), '1=1')")
             ->orderBy($orderBy)
-            ->page($pager)
+            ->limit($limit)
             ->fetchAll();
 
         if(!$actions) return array();
@@ -1178,13 +1504,13 @@ class actionModel extends model
      * @param  array  $executions
      * @param  int    $queryID
      * @param  string $orderBy
-     * @param  object $pager
+     * @param  int    $limit
      * @param  string $date
      * @param  string $direction
      * @access public
      * @return array
      */
-    public function getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy = 'date_desc', $pager = null, $date = '', $direction = 'next')
+    public function getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy = 'date_desc', $limit = 50, $date = '', $direction = 'next')
     {
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
@@ -1233,7 +1559,7 @@ class actionModel extends model
         if($this->config->vision == 'lite') $actionQuery .= " AND objectType != 'product'";
 
         $actionQuery .= " AND vision = '" . $this->config->vision . "'";
-        $actions      = $this->getBySQL($actionQuery, $orderBy, $pager);
+        $actions      = $this->getBySQL($actionQuery, $orderBy, $limit);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
         if(!$actions) return array();
@@ -1245,11 +1571,11 @@ class actionModel extends model
      *
      * @param  string $sql
      * @param  string $orderBy
-     * @param  object $pager
+     * @param  int    $limit
      * @access public
      * @return array
      */
-    public function getBySQL($sql, $orderBy, $pager = null)
+    public function getBySQL($sql, $orderBy, $limit = 50)
     {
         $actionCondition = $this->getActionCondition();
         if(is_array($actionCondition)) return array();
@@ -1258,7 +1584,7 @@ class actionModel extends model
             ->where($sql)
             ->beginIF(!empty($actionCondition))->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
-            ->page($pager)
+            ->limit($limit)
             ->fetchAll();
     }
 
@@ -1289,11 +1615,28 @@ class actionModel extends model
         $projectIdList = array();
         foreach($relatedProjects as $objectType => $idList) $projectIdList += $idList;
 
+        /* If idList include ',*,' Format ',*,' to '*'. */
+        foreach($projectIdList as $key => $idList)
+        {
+            $idList = explode(',', $idList);
+
+            foreach($idList as $id) $projectIdList[] = $id;
+            unset($projectIdList[$key]);
+        }
+
+        if($projectIdList) $projectIdList = array_unique($projectIdList);
+
         $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
         $projectMultiples = $this->dao->select('id,type,multiple')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+        $docList          = $this->loadModel('doc')->getPrivDocs('', 0, 'all');
+        $apiList          = $this->loadModel('api')->getPrivApis();
+        $docLibList       = $this->doc->getLibs('hasApi');
 
         foreach($actions as $i => $action)
         {
+            if($action->objectType == 'doc' and !isset($docList[$action->objectID])) unset($actions[$i]);
+            if($action->objectType == 'api' and !isset($apiList[$action->objectID])) unset($actions[$i]);
+            if($action->objectType == 'doclib' and !isset($docLibList[$action->objectID])) unset($actions[$i]);
             if($action->objectType == 'product' AND isset($shadowProducts[$action->objectID]))
             {
                 unset($actions[$i]);
@@ -1332,6 +1675,16 @@ class actionModel extends model
             elseif($action->objectType == 'mr' and $action->action == 'deleted')
             {
                 $action->objectName = $action->extra;
+            }
+            elseif($action->objectType == 'pivot')
+            {
+                $pivotNames = json_decode($action->objectName, true);
+                $action->objectName = zget($pivotNames, $this->app->getClientLang(), '');
+                if(empty($action->objectName))
+                {
+                    $pivotNames = array_filter($pivotNames);
+                    $action->objectName = reset($pivotNames);
+                }
             }
 
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
@@ -1376,6 +1729,7 @@ class actionModel extends model
         $objectNames     = array();
         $relatedProjects = array();
         $requirements    = array();
+        $objectTypes     = array();
 
         foreach($actions as $object) $objectTypes[$object->objectType][$object->objectID] = $object->objectID;
         foreach($objectTypes as $objectType => $objectIdList)
@@ -1390,10 +1744,9 @@ class actionModel extends model
             {
                 $objectName     = array();
                 $relatedProject = array();
-
                 if(strpos(",{$this->config->action->needGetProjectType},", ",{$objectType},") !== false)
                 {
-                    $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
+                    $objectInfo = $this->dao->select("id, project, `$field` AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
                     if($objectType == 'gapanalysis') $users = $this->user->getPairs('noletter');
                     foreach($objectInfo as $object)
                     {
@@ -1403,7 +1756,7 @@ class actionModel extends model
                 }
                 elseif($objectType == 'project' or $objectType == 'execution')
                 {
-                    $objectInfo = $this->dao->select("id, project, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
+                    $objectInfo = $this->dao->select("id, project, `$field` AS name")->from($table)->where('id')->in($objectIdList)->fetchAll();
                     foreach($objectInfo as $object)
                     {
                         $objectName[$object->id]     = $object->name;
@@ -1436,7 +1789,7 @@ class actionModel extends model
                 elseif($objectType == 'stakeholder')
                 {
                     $objectName = $this->dao->select("t1.id, t2.realname")->from($table)->alias('t1')
-                        ->leftJoin(TABLE_USER)->alias('t2')->on("t1.{$field} = t2.account")
+                        ->leftJoin(TABLE_USER)->alias('t2')->on("t1.`$field` = t2.account")
                         ->where('t1.id')->in($objectIdList)
                         ->fetchPairs();
                 }
@@ -1446,9 +1799,13 @@ class actionModel extends model
                     $objectName = $this->dao->select("id,name")->from(TABLE_BRANCH)->where('id')->in($objectIdList)->fetchPairs();
                     if(in_array(BRANCH_MAIN, $objectIdList)) $objectName[BRANCH_MAIN] = $this->lang->branch->main;
                 }
+                elseif($objectType == 'privlang')
+                {
+                    $objectName = $this->dao->select("objectID AS id, `$field` AS name")->from($table)->where('objectID')->in($objectIdList)->andWhere('objectType')->eq('priv')->fetchPairs();
+                }
                 else
                 {
-                    $objectName = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
+                    $objectName = $this->dao->select("id, `$field` AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
                 }
 
                 $objectNames[$objectType]     = $objectName;
@@ -1509,7 +1866,7 @@ class actionModel extends model
             }
         }
 
-        if($this->config->edition == 'max' and $objectType == 'assetlib')
+        if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $objectType == 'assetlib')
         {
             $libType = $this->dao->select('type')->from(TABLE_ASSETLIB)->where('id')->eq($objectID)->fetch('type');
             if(strpos('story,issue,risk,opportunity,practice,component', $libType) !== false) $actionObjectLabel = $this->lang->action->label->{$libType . 'assetlib'};
@@ -1530,6 +1887,8 @@ class actionModel extends model
      */
     public function setObjectLink($action, $deptUsers, $shadowProducts, $project = null)
     {
+        $this->app->loadConfig('doc');
+
         $action->objectLink  = '';
         $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
 
@@ -1551,7 +1910,7 @@ class actionModel extends model
                 if($objectDeleted) return $action;
             }
 
-            if($this->config->edition == 'max'
+            if(($this->config->edition == 'max' or $this->config->edition == 'ipd')
                and strpos($this->config->action->assetType, ",{$action->objectType},") !== false
                and empty($action->project) and empty($action->product) and empty($action->execution))
             {
@@ -1587,7 +1946,7 @@ class actionModel extends model
                 elseif($action->objectType == 'api')
                 {
                     $api = $this->dao->select('id,lib,module')->from(TABLE_API)->where('id')->eq($action->objectID)->fetch();
-                    $params = sprintf($vars, $api->lib, $api->module, $api->id);
+                    $params = sprintf($vars, $api->lib, $api->id, $api->module);
                 }
                 elseif($action->objectType == 'branch')
                 {
@@ -1616,6 +1975,11 @@ class actionModel extends model
                 {
                     $execution = $this->loadModel('execution')->getById($action->objectID);
                     if(!empty($execution) and $execution->type == 'kanban') $action->objectLink = helper::createLink('execution', 'kanban', "executionID={$action->objectID}");
+                    if($execution->type == 'stage' and $execution->attribute == 'research' and $action->vision == 'or')
+                    {
+                        $action->objectLink  = '';
+                        $action->objectLabel = $this->lang->execution->stage;
+                    }
                 }
 
                 if($action->objectType == 'story')
@@ -1635,11 +1999,34 @@ class actionModel extends model
                     $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
                     if($docLib->type == 'api')
                     {
-                        $action->objectLink = helper::createLink('api', 'index', "libID={$action->objectID}&moduleID=0&apiID=0&version=0&release=0&appendLib={$appendLib}");
+                        $module = 'api';
+                        $method = 'index';
+                        $params = "libID={$action->objectID}&moduleID=0&apiID=0&version=0&release=0&appendLib={$appendLib}";
+                        if(!empty($docLib->project) or !empty($docLib->product))
+                        {
+                            $module = 'doc';
+                            if(!empty($docLib->product))
+                            {
+                                $objectID = $docLib->product;
+                                $method   = 'productspace';
+                            }
+
+                            if(!empty($docLib->project))
+                            {
+                                $objectID = $docLib->project;
+                                $method   = 'projectspace';
+                            }
+                            $params = "objectID={$objectID}&libID={$action->objectID}";
+                        }
+                        $action->objectLink = helper::createLink($module, $method, $params);
                     }
                     else
                     {
-                        $action->objectLink = helper::createLink('doc', 'objectLibs', sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib));
+                        $method = 'tablecontents';
+                        if(isset($this->config->doc->spaceMethod[$docLib->type])) $method = $this->config->doc->spaceMethod[$docLib->type];
+                        if($method == 'myspace') $params = "type=mine&libID={$action->objectID}";
+                        if(!in_array($method, array('myspace', 'tablecontents'))) $params = "objectID={$docLib->objectID}&libID={$action->objectID}";
+                        $action->objectLink = helper::createLink('doc', $method, $params);
                     }
                 }
                 elseif($action->objectType == 'user')
@@ -1653,6 +2040,14 @@ class actionModel extends model
         {
             if($action->project)   $action->objectLink = common::hasPriv('project', 'team')   ? helper::createLink('project',   'team', 'projectID=' . $action->project) : '';
             if($action->execution) $action->objectLink = common::hasPriv('execution', 'team') ? helper::createLink('execution', 'team', 'executionID=' . $action->execution) : '';
+        }
+        elseif($action->objectType == 'privpackage')
+        {
+            $action->objectLink = '';
+        }
+        elseif($action->objectType == 'privlang')
+        {
+            $action->objectLink = '';
         }
 
         if($action->objectType == 'stakeholder' and $action->project == 0) $action->objectLink = '';
@@ -1697,6 +2092,12 @@ class actionModel extends model
         if(!empty($action->objectLink) and !empty($project) and empty($project->multiple)) $action->objectLink .= '#app=project';
         if($this->config->vision == 'lite' and $action->objectType == 'module') $action->objectLink .= '#app=project';
 
+        if($action->objectType == 'task' and $this->config->vision == 'or')
+        {
+            $task = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($action->objectID)->fetch();
+            if($task->type == 'research') $action->objectLink = helper::createLink('marketresearch', 'viewTask', "objectID=$action->objectID");
+        }
+
         return $action;
     }
 
@@ -1718,22 +2119,16 @@ class actionModel extends model
 
         $period = strtolower($period);
 
-        if($period == 'all')        return array('begin' => '1970-1-1',  'end' => '2109-1-1');
-        if($period == 'today')      return array('begin' => $today,      'end' => $tomorrow);
-        if($period == 'yesterday')  return array('begin' => $yesterday,  'end' => $today);
-        if($period == 'twodaysago') return array('begin' => $twoDaysAgo, 'end' => $yesterday);
-        if($period == 'latest3days')return array('begin' => $twoDaysAgo, 'end' => $tomorrow);
+        if($period == 'all')         return array('begin' => '1970-1-1',  'end' => LONG_TIME);
+        if($period == 'today')       return array('begin' => $today,      'end' => $tomorrow);
+        if($period == 'yesterday')   return array('begin' => $yesterday,  'end' => $today);
+        if($period == 'twodaysago')  return array('begin' => $twoDaysAgo, 'end' => $yesterday);
+        if($period == 'latest3days') return array('begin' => $twoDaysAgo, 'end' => $tomorrow);
+        if($period == 'lastweek')    return date::getLastWeek();
+        if($period == 'thismonth')   return date::getThisMonth();
+        if($period == 'lastmonth')   return date::getLastMonth();
 
-        /* If the period is by week, add the end time to the end date. */
-        if($period == 'thisweek' or $period == 'lastweek')
-        {
-            $func = "get$period";
-            extract(date::$func());
-            return array('begin' => $begin, 'end' => $end . ' 23:59:59');
-        }
-
-        if($period == 'thismonth')  return date::getThisMonth();
-        if($period == 'lastmonth')  return date::getLastMonth();
+        return date::getThisWeek();
     }
 
     /**
@@ -1874,6 +2269,32 @@ class actionModel extends model
             if($release->shadow) $this->dao->update(TABLE_BUILD)->set('deleted')->eq(0)->where('id')->eq($release->shadow)->exec();
         }
 
+        if($action->objectType == 'case')
+        {
+            $caseScene = $this->dao->select('scene')->from(TABLE_CASE)->where('id')->eq($action->objectID)->fetch('scene');
+            if($caseScene)
+            {
+                $scene = $this->loadModel('testcase')->getSceneByID($caseScene);
+                if($scene->deleted) return print(js::error($this->lang->action->refusecase));
+            }
+        }
+
+        if($action->objectType == 'scene')
+        {
+            $scene = $this->loadModel('testcase')->getSceneByID($action->objectID);
+            if($scene->parent)
+            {
+                $parentScene = $this->testcase->getSceneByID($scene->parent);
+                if($parentScene->deleted) return print(js::error($this->lang->action->refusescene));
+            }
+        }
+
+        if($action->objectType == 'doc')
+        {
+            $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($action->objectID)->orderBy('version desc')->limit(1)->fetch();
+            if($docContent->files) $this->dao->update(TABLE_FILE)->set('deleted')->eq('0')->where('id')->in($docContent->files)->exec();
+        }
+
         /* Update deleted field in object table. */
         $table = $this->config->objectTables[$action->objectType];
         $this->dao->update($table)->set('deleted')->eq(0)->where('id')->eq($action->objectID)->exec();
@@ -1887,7 +2308,7 @@ class actionModel extends model
 
             if($action->objectType == 'execution')
             {
-                $execution = $this->dao->select('id, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($action->objectID)->fetch();
+                $execution = $this->dao->select('id, type, project, grade, parent, status, deleted')->from(TABLE_EXECUTION)->where('id')->eq($action->objectID)->fetch();
                 $this->loadModel('common')->syncExecutionByChild($execution);
             }
         }
@@ -1896,6 +2317,12 @@ class actionModel extends model
         if($action->objectType == 'execution' or $action->objectType == 'product')
         {
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where($action->objectType)->eq($action->objectID)->exec();
+        }
+
+        if($action->objectType == 'demand')
+        {
+            $demand = $this->dao->select('*')->from(TABLE_DEMAND)->where('id')->eq($action->objectID)->fetch();
+            if($demand->parent) $this->loadModel('demand')->updateParentStatus($action->objectID, $demand->parent);
         }
 
         /* Revert productplan parent status. */
@@ -1986,7 +2413,8 @@ class actionModel extends model
 
         if($dateGroup)
         {
-            $lastDateActions = $this->dao->select('*')->from(TABLE_ACTION)->where($this->session->actionQueryCondition)->andWhere("(LEFT(`date`, 10) = '" . substr($action->originalDate, 0, 10) . "')")->orderBy($this->session->actionOrderBy)->fetchAll('id');
+            $lastDate        = date(DT_DATE1, $timeStamp);
+            $lastDateActions = $this->dao->select('*')->from(TABLE_ACTION)->where('`date`')->ge($lastDate)->andWhere('`date`')->le("{$lastDate} 23:59:59")->andWhere($this->session->actionQueryCondition)->orderBy($this->session->actionOrderBy)->fetchAll('id');
             if(count($dateGroup[$date]) < count($lastDateActions))
             {
                 unset($dateGroup[$date]);
@@ -2030,11 +2458,13 @@ class actionModel extends model
         $condition = $this->session->actionQueryCondition;
 
         /* Remove date condition for direction. */
-        $condition = preg_replace("/AND +date[\<\>]'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
-        $count     = $this->dao->select('count(*) as count')->from(TABLE_ACTION)->where($condition)
-            ->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
-            ->fetch('count');
-        return $count > 0;
+        $condition = preg_replace("/AND +[`]?date[`]?[ ]*[\<\>][ |=]*'\d{4}\-\d{2}\-\d{2}'/", '', $condition);
+        $actions   = $this->dao->select('id')->from(TABLE_ACTION)
+            ->where('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")
+            ->andWhere($condition)
+            ->limit(1)
+            ->fetch('id');
+        return !empty($actions);
     }
 
     /**
@@ -2220,5 +2650,64 @@ class actionModel extends model
         $this->config->trash->search['queryID']   = $queryID;
 
         $this->loadModel('search')->setSearchParams($this->config->trash->search);
+    }
+
+    /**
+     * Restore stages.
+     *
+     * @param  array  $stageList
+     * @access public
+     * @return void
+     */
+    public function restoreStages($stageList)
+    {
+        $deletedActions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectID')->in(array_keys($stageList))
+            ->andWhere('objectType')->eq('execution')
+            ->andWhere('action')->eq('deleted')
+            ->orderBy('id_desc')
+            ->fetchGroup('objectID');
+
+        foreach($stageList as $stageID => $stage)
+        {
+            $deletedAction = $deletedActions[$stageID][0];
+            $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq('0')->where('id')->eq($stageID)->exec();
+            $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($deletedAction->id)->exec();
+            $this->create($deletedAction->objectType, $deletedAction->objectID, 'undeleted');
+        }
+    }
+
+    /**
+     * Clear dynamic records older than one month.
+     *
+     * @access public
+     * @return bool
+     */
+    public function cleanActions()
+    {
+        $cleanDate = zget($this->app->config->global, 'cleanActionsDate', '');
+        $today     = helper::today();
+        if($cleanDate == $today) return true;
+
+        $this->loadModel('setting')->setItem('system.common.global.cleanActionsDate', $today);
+
+        $lastMonth = date('Y-m-d', strtotime('-1 month'));
+        $this->dao->delete()->from(TABLE_ACTIONRECENT)->where('date')->lt($lastMonth)->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * Get dynamic count.
+     *
+     * @access public
+     * @return void
+     */
+    public function getDynamicCount()
+    {
+        $condition = $this->session->actionQueryCondition;
+        $count     = $this->dao->select('count(1) as count')->from(TABLE_ACTION)
+            ->where($condition)
+            ->fetch('count');
+        return $count;
     }
 }

@@ -1,0 +1,19 @@
+table td {padding: 0 10px; vertical-align: top;}
+table tr > td:first-child {padding-left: 0;}
+table tr > td:last-child {padding-right: 0;}
+.modulegroup {font-weight:bold; padding-top:8px; border-top:1px solid #ddd;}
+td.w-200px a:hover {font-weight:bold;}
+.w-350px {width:350px;}
+.with-list a {white-space: nowrap;}
+#mainContent .module-col{padding: 0px; padding-left: 10px;}
+#mainContent .module-content {padding: 0;}
+#sidebar .module-tree {overflow-y: auto;}
+#sidebar .module-tree .panel-heading {padding: 4px 10px; position: relative;}
+#sidebar .module-tree .panel-heading:after {content: ''; position: absolute; inset: 0 -10px; border-bottom: 1px solid #eee;}
+
+/* module-tree. */
+#moduleTree {padding-top: 10px;}
+#moduleTree.tree ul {margin-bottom: 0;}
+#moduleTree .active {background-color: #fff;}
+#menuTree > li.has-list > ul > li {padding-left: 10px;}
+#menuTree > li.has-list > ul > li.has-list {padding-left: 15px;}

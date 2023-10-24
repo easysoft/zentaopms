@@ -2,7 +2,7 @@
 /**
  * The model file of git module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     git
@@ -69,6 +69,8 @@ class gitModel extends model
         /* Get repos and load module. */
         $this->setRepos();
         $this->loadModel('job');
+        $this->loadModel('gitlab');
+        $this->loadModel('repo');
 
         if(empty($this->repos)) return false;
 
@@ -81,6 +83,12 @@ class gitModel extends model
         foreach($this->repos as $repoID => $repo)
         {
             $this->updateCommit($repo, $commentGroup, true);
+
+            if($repo->SCM == 'Gitlab')
+            {
+                $this->gitlab->updateCodePath((int)$repo->serviceHost, (int)$repo->serviceProject, (int)$repo->id);
+                $this->repo->updateCommitDate((int)$repo->id);
+            }
 
             /* Create compile by tag. */
             $jobs = zget($tagGroup, $repoID, array());
@@ -118,6 +126,8 @@ class gitModel extends model
      */
     public function updateCommit($repo, $commentGroup, $printLog = true)
     {
+        if($repo->SCM == 'Gitlab') return;
+
         /* Load module and print log. */
         $this->loadModel('repo');
         if($printLog) $this->printLog("begin repo $repo->id");
@@ -200,7 +210,7 @@ class gitModel extends model
                                 if(empty($objectIDs) or !isset($objectTypeMap[$objectType])) continue;
 
                                 $this->post->$objectType = $objectIDs;
-                                $this->repo->link($repo->id, $log->revision, $objectTypeMap[$objectType]);
+                                $this->repo->link($repo->id, $log->revision, $objectTypeMap[$objectType], 'commit');
                             }
                         }
                     }
@@ -215,7 +225,7 @@ class gitModel extends model
                     {
                         foreach(explode(',', $job->comment) as $comment)
                         {
-                            if(strpos($log->msg, $comment) !== false) $this->loadModel('compile')->createByJob($job->id);
+                            if(strpos($log->msg, $comment) !== false) $this->loadModel('job')->exec($job->id);
                         }
                     }
                     $commits += count($logs);
@@ -402,9 +412,9 @@ class gitModel extends model
     }
 
     /**
-     * Pring log.
+     * Print log.
      *
-     * @param  sting    $log
+     * @param  string $log
      * @access public
      * @return void
      */

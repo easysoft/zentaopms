@@ -2,7 +2,7 @@
 /**
  * The task module en file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@cnezsoft.com>
  * @package     task
@@ -27,6 +27,7 @@ $lang->task->copy                = 'Copy Task';
 $lang->task->waitTask            = 'Waiting Task';
 $lang->task->region              = 'Region';
 $lang->task->lane                = 'Lane';
+$lang->task->execution           = 'Execution';
 
 $lang->task->module       = 'Module';
 $lang->task->allModule    = 'All Module';
@@ -61,7 +62,7 @@ $lang->task->confirmRecord         = '"Left Hour" is 0. Do you want to set the t
 $lang->task->confirmTransfer       = '"Left Hour" is 0，Do you want to transfer task?';
 $lang->task->noTask                = 'No tasks yet. ';
 $lang->task->kanbanDenied          = 'Please create a Kanban first';
-$lang->task->createDenied          = 'Create Task is denied in this project';
+$lang->task->createDenied          = "Create Task is denied in this {$lang->projectCommon}";
 $lang->task->cannotDeleteParent    = 'Cannot delete parent task';
 $lang->task->addChildTask          = 'Because the task has cost hours, ZenTao will create a child task with the same name to record the cost housrs to ensure data consistency.';
 

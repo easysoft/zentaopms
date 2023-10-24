@@ -2,7 +2,7 @@
 /**
  * The model file of gitea module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
@@ -82,17 +82,6 @@ class giteaModel extends model
     }
 
     /**
-     * Create a gitea.
-     *
-     * @access public
-     * @return bool
-     */
-    public function create()
-    {
-        return $this->loadModel('pipeline')->create('gitea');
-    }
-
-    /**
      * Update a gitea.
      *
      * @param  int $id
@@ -127,7 +116,7 @@ class giteaModel extends model
 
         if(count($repeatUsers))
         {
-            dao::$errors[] = sprintf($this->lang->gitea->bindUserError, join(',', $repeatUsers));
+            dao::$errors = sprintf($this->lang->gitea->bindUserError, join(',', $repeatUsers));
             return false;
         }
 
@@ -258,8 +247,8 @@ class giteaModel extends model
     {
         $apiRoot  = rtrim($url, '/') . '/api/v1%s' . "?token={$token}";
         $url      = sprintf($apiRoot, "/admin/users") . "&limit=1";
-        $httpData = commonModel::httpWithHeader($url);
-        $users    = json_decode($httpData['body']);
+        $response = commonModel::http($url);
+        $users    = json_decode($response);
         if(empty($users)) return false;
         if(isset($users->message) or isset($users->error)) return null;
         return true;
@@ -340,10 +329,10 @@ class giteaModel extends model
         $matchedUsers = array();
         foreach($giteaUsers as $giteaUser)
         {
-            if(isset($bindedUsers[$giteaUser->account]))
+            if(isset($bindedUsers[$giteaUser->id]))
             {
-                $giteaUser->zentaoAccount = $bindedUsers[$giteaUser->account];
-                $matchedUsers[]           = $giteaUser;
+                $giteaUser->zentaoAccount     = $bindedUsers[$giteaUser->id];
+                $matchedUsers[$giteaUser->id] = $giteaUser;
                 continue;
             }
 
@@ -355,8 +344,8 @@ class giteaModel extends model
             $matchedZentaoUsers = array_unique($matchedZentaoUsers);
             if(count($matchedZentaoUsers) == 1)
             {
-                $giteaUser->zentaoAccount = current($matchedZentaoUsers);
-                $matchedUsers[]           = $giteaUser;
+                $giteaUser->zentaoAccount     = current($matchedZentaoUsers);
+                $matchedUsers[$giteaUser->id] = $giteaUser;
             }
         }
 
@@ -388,6 +377,7 @@ class giteaModel extends model
             $gitea = $this->getByID($giteaID);
             $oauth = "oauth2:{$gitea->token}@";
             $project->tokenCloneUrl = preg_replace('/(http(s)?:\/\/)/', "\$1$oauth", $project->html_url);
+            $project->tokenCloneUrl = str_replace(array('https://', 'http://'), strstr($url, ':', true) . '://', $project->tokenCloneUrl);
         }
 
         return $project;
@@ -411,8 +401,8 @@ class giteaModel extends model
         for($page = 1; true; $page++)
         {
             $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
-            if(!is_array($results->data)) break;
-            if(!empty($results->data)) $allResults = array_merge($allResults, $results->data);
+            if(empty($results) || empty($results->data) || !is_array($results->data)) break;
+            $allResults = array_merge($allResults, $results->data);
             if(count($results->data) < 50) break;
         }
 

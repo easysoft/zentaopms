@@ -1,6 +1,13 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * Context for MariaDB 10.2.
+ *
+ * This file was auto-generated from tools/contexts/*.txt.
+ * Use tools/run_generators.sh for update.
+ *
+ * @see https://mariadb.com/kb/en/the-mariadb-library/reserved-words/
+ */
 
 namespace PhpMyAdmin\SqlParser\Contexts;
 
@@ -10,10 +17,9 @@ use PhpMyAdmin\SqlParser\Token;
 /**
  * Context for MariaDB 10.2.
  *
- * This class was auto-generated from tools/contexts/*.txt.
- * Use tools/run_generators.sh for update.
+ * @category   Contexts
  *
- * @see https://mariadb.com/kb/en/reserved-words/
+ * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class ContextMariaDb100200 extends Context
 {
@@ -26,10 +32,9 @@ class ContextMariaDb100200 extends Context
      *      Token::FLAG_KEYWORD_DATA_TYPE Token::FLAG_KEYWORD_KEY
      *      Token::FLAG_KEYWORD_FUNCTION
      *
-     * @var array<string,int>
-     * @phpstan-var non-empty-array<non-empty-string,Token::FLAG_KEYWORD_*|int>
+     * @var array
      */
-    public static $KEYWORDS = [
+    public static $KEYWORDS = array(
         'AT' => 1, 'DO' => 1, 'IO' => 1, 'NO' => 1, 'XA' => 1,
         'ANY' => 1, 'CPU' => 1, 'END' => 1, 'IPC' => 1, 'NDB' => 1, 'NEW' => 1,
         'ONE' => 1, 'ROW' => 1, 'XID' => 1,
@@ -122,8 +127,8 @@ class ContextMariaDb100200 extends Context
         'EACH' => 3, 'ELSE' => 3, 'EXIT' => 3, 'FROM' => 3, 'INT1' => 3, 'INT2' => 3,
         'INT3' => 3, 'INT4' => 3, 'INT8' => 3, 'INTO' => 3, 'JOIN' => 3, 'KEYS' => 3,
         'KILL' => 3, 'LIKE' => 3, 'LOAD' => 3, 'LOCK' => 3, 'LONG' => 3, 'LOOP' => 3,
-        'NULL' => 3, 'OVER' => 3, 'READ' => 3, 'ROWS' => 3, 'SHOW' => 3, 'THEN' => 3,
-        'TRUE' => 3, 'UNDO' => 3, 'WHEN' => 3, 'WITH' => 3,
+        'NULL' => 3, 'READ' => 3, 'ROWS' => 3, 'SHOW' => 3, 'THEN' => 3, 'TRUE' => 3,
+        'UNDO' => 3, 'WHEN' => 3, 'WITH' => 3,
         'ALTER' => 3, 'CHECK' => 3, 'CROSS' => 3, 'FALSE' => 3, 'FETCH' => 3,
         'FORCE' => 3, 'GRANT' => 3, 'GROUP' => 3, 'INNER' => 3, 'INOUT' => 3,
         'LEAVE' => 3, 'LIMIT' => 3, 'LINES' => 3, 'ORDER' => 3, 'OUTER' => 3,
@@ -343,5 +348,5 @@ class ContextMariaDb100200 extends Context
         'CHAR' => 43,
         'BINARY' => 43,
         'INTERVAL' => 43,
-    ];
+    );
 }

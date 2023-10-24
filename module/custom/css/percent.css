@@ -1,0 +1,3 @@
+.table-form>tbody>tr>th.c-setPercent {width: 135px;}
+#readOnlyOfPercent {font-size: 13px; color: #5e626d; display: flex; width: 200%;}
+#readOnlyOfPercent i {font-size: 14px; color: #0075ff; margin-right: 3px;}

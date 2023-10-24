@@ -2,7 +2,7 @@
 /**
  * The browse view file of compile module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2017 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     compile
@@ -14,8 +14,12 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    echo html::a($this->createLink('job', 'browse', "repoID=$repoID"), "<span class='text'>{$lang->ci->list}</span>", '', "class='btn btn-link'");
-    echo html::a($this->createLink('compile', 'browse', "repoID=$repoID&jobID=$jobID"), "<span class='text'>" . ($jobID ? $job->name : '') . " {$lang->ci->history}</span>", '', "class='btn btn-link btn-active-text'");
+    $menus = customModel::getFeatureMenu('job', 'browse');
+    foreach($menus as $menuItem)
+    {
+        $active = $menuItem->name == 'compile' ? 'btn-active-text' : '';
+        echo html::a($this->createLink($menuItem->name, 'browse', "repoID=$repoID"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link $active'");
+    }
     ?>
   </div>
 </div>

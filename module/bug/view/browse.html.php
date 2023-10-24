@@ -2,7 +2,7 @@
 /**
  * The browse view file of bug module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -11,8 +11,19 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/datatable.fix.html.php';?>
+<?php include '../../common/view/zui3dtable.html.php';?>
 <?php
-include '../../common/view/datatable.fix.html.php';
+$cols     = $this->bug->generateCol($orderBy);
+$rows     = $this->bug->generateRow($bugs, $branchOption, $modulePairs, $projectPairs, $plans, $executions, $stories, $tasks, $users);
+$sortLink = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID");
+
+js::set('cols',          json_encode($cols));
+js::set('data',          json_encode($rows));
+js::set('orderBy',       $orderBy);
+js::set('sortLink',      $sortLink);
+js::set('pageSummary',   $summary);
+js::set('checkedSummary',$lang->selectedItems);
 js::set('browseType',    $browseType);
 js::set('moduleID',      $moduleID);
 js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrowseType == 'bysearch') ? 'all' : $this->session->bugBrowseType);
@@ -66,18 +77,19 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         }
         elseif($menuItem->name == 'more')
         {
-            if(!empty($lang->bug->moreSelects))
+            $moreSelects = isset($lang->bug->moreSelects[$app->rawMethod]['more']) ? $lang->bug->moreSelects[$app->rawMethod]['more'] : array();
+            if(!empty($moreSelects))
             {
                 $moreLabel       = $lang->more;
                 $moreLabelActive = '';
-                if(isset($lang->bug->moreSelects[$this->session->bugBrowseType]))
+                if(isset($moreSelects[$this->session->bugBrowseType]))
                 {
-                    $moreLabel       = "<span class='text'>{$lang->bug->moreSelects[$this->session->bugBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                    $moreLabel       = "<span class='text'>{$moreSelects[$this->session->bugBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
                     $moreLabelActive = 'btn-active-text';
                 }
                 echo "<div class='btn-group'><a href='javascript:;' data-toggle='dropdown' class='btn btn-link {$moreLabelActive}'>{$moreLabel} <span class='caret'></span></a>";
                 echo "<ul class='dropdown-menu'>";
-                foreach($lang->bug->moreSelects as $menuBrowseType => $label)
+                foreach($moreSelects as $menuBrowseType => $label)
                 {
                     $active = $menuBrowseType == $this->session->bugBrowseType ? 'btn-active-text' : '';
                     echo '<li>' . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType"), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'") . '</li>';
@@ -188,96 +200,26 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       </p>
     </div>
     <?php else:?>
-    <?php
-    $datatableId  = $this->moduleName . ucfirst($this->methodName);
-    $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-    ?>
-    <?php if($this->app->getViewType() == 'xhtml'):?>
     <form class='main-table table-bug' method='post' id='bugForm'>
-    <?php else:?>
-    <form class='main-table table-bug' method='post' id='bugForm' <?php if(!$useDatatable) echo "data-ride='table'";?>>
-    <?php endif;?>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right setting"></nav>
       </div>
-      <?php
-      $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-      if($useDatatable) include '../../common/view/datatable.html.php';
-
-      $setting = $this->datatable->getSetting('bug');
-      $widths  = $this->datatable->setFixedFieldWidth($setting);
-      $columns = 0;
-
-      $canBeChanged         = common::canModify('product', $product);
-      $canBatchEdit         = ($canBeChanged and common::hasPriv('bug', 'batchEdit'));
-      $canBatchConfirm      = ($canBeChanged and common::hasPriv('bug', 'batchConfirm'));
-      $canBatchClose        = common::hasPriv('bug', 'batchClose');
-      $canBatchActivate     = ($canBeChanged and common::hasPriv('bug', 'batchActivate'));
-      $canBatchChangeBranch = ($canBeChanged and common::hasPriv('bug', 'batchChangeBranch'));
-      $canBatchChangeModule = ($canBeChanged and common::hasPriv('bug', 'batchChangeModule'));
-      $canBatchResolve      = ($canBeChanged and common::hasPriv('bug', 'batchResolve'));
-      $canBatchAssignTo     = ($canBeChanged and common::hasPriv('bug', 'batchAssignTo'));
-
-      $canBatchAction       = ($canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchActivate or $canBatchChangeBranch or $canBatchChangeModule or $canBatchResolve or $canBatchAssignTo);
-      ?>
-      <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
-      <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='bugList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
-        <thead>
-          <tr>
-          <?php if($this->app->getViewType() == 'xhtml'):?>
-          <?php
-          foreach($setting as $value)
-          {
-              if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
-              {
-                  if($storyType == 'requirement' and (in_array($value->id, array('plan', 'stage')))) $value->show = false;
-
-                  $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
-                  $columns ++;
-              }
-          }
-          ?>
-          <?php else:?>
-          <?php
-          foreach($setting as $value)
-          {
-              if($value->show)
-              {
-                  if(common::checkNotCN() and $value->id == 'severity')  $value->name = $lang->bug->severity;
-                  if(common::checkNotCN() and $value->id == 'pri')       $value->name = $lang->bug->pri;
-                  if(common::checkNotCN() and $value->id == 'confirmed') $value->name = $lang->bug->confirmed;
-                  $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
-                  $columns ++;
-              }
-          }
-          ?>
-          <?php endif;?>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach($bugs as $bug):?>
-          <tr data-id='<?php echo $bug->id?>'>
-            <?php if($this->app->getViewType() == 'xhtml'):?>
-            <?php
-              foreach($setting as $value)
-              {
-                  if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
-                  {
-                    $this->bug->printCell($value, $bug, $users, $builds, $branchOption, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');
-                  }
-              }?>
-            <?php else:?>
-            <?php foreach($setting as $value) $this->bug->printCell($value, $bug, $users, $builds, $branchOption, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table', $projectPairs);?>
-            <?php endif;?>
-          </tr>
-          <?php endforeach;?>
-        </tbody>
-      </table>
-      <?php if(!$useDatatable) echo '</div>';?>
+      <div id='bugList' class='table'></div>
       <div class='table-footer'>
+        <?php
+        $canBeChanged         = common::canModify('product', $product);
+        $canBatchEdit         = ($canBeChanged and common::hasPriv('bug', 'batchEdit'));
+        $canBatchConfirm      = ($canBeChanged and common::hasPriv('bug', 'batchConfirm'));
+        $canBatchClose        = common::hasPriv('bug', 'batchClose');
+        $canBatchActivate     = ($canBeChanged and common::hasPriv('bug', 'batchActivate'));
+        $canBatchChangeBranch = ($canBeChanged and common::hasPriv('bug', 'batchChangeBranch'));
+        $canBatchChangeModule = ($canBeChanged and common::hasPriv('bug', 'batchChangeModule'));
+        $canBatchResolve      = ($canBeChanged and common::hasPriv('bug', 'batchResolve'));
+        $canBatchAssignTo     = ($canBeChanged and common::hasPriv('bug', 'batchAssignTo'));
+        $canBatchAction       = ($canBatchEdit || $canBatchConfirm || $canBatchClose || $canBatchActivate || $canBatchChangeBranch || $canBatchChangeModule || $canBatchResolve || $canBatchAssignTo);
+        ?>
         <?php if($canBatchAction):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-        <?php endif;?>
         <div class="table-actions btn-toolbar">
           <div class='btn-group dropup'>
             <?php
@@ -430,6 +372,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           </div>
           <?php endif;?>
         </div>
+        <?php endif;?>
         <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
@@ -443,9 +386,6 @@ var branchID = $.cookie('bugBranch');
 $('#branch' + branchID).closest('li').addClass('active');
 <?php if($browseType == 'bysearch'):?>
 if($('#query li.active').size() == 0) $.toggleQueryBox(true);
-<?php endif;?>
-<?php if(!empty($useDatatable)):?>
-$(function(){$('#bugForm').table();})
 <?php endif;?>
 <?php $this->app->loadConfig('qa', '', false);?>
 <?php if(isset($config->qa->homepage) and $config->qa->homepage != 'browse' and $config->global->flow == 'full'):?>

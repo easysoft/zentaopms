@@ -1,7 +1,7 @@
 <?php
 $lang->sonarqube = new stdclass;
 $lang->sonarqube->common            = 'SonarQube';
-$lang->sonarqube->browse            = '浏览SonarQube';
+$lang->sonarqube->browse            = 'SonarQube列表';
 $lang->sonarqube->search            = '搜索';
 $lang->sonarqube->create            = '添加SonarQube';
 $lang->sonarqube->edit              = '编辑SonarQube';
@@ -19,7 +19,7 @@ $lang->sonarqube->createBug         = "转bug";
 $lang->sonarqube->delError          = "该服务器下有绑定的构建，请删除关联之后操作";
 
 $lang->sonarqube->id             = 'ID';
-$lang->sonarqube->name           = "服务器名称";
+$lang->sonarqube->name           = "应用名称";
 $lang->sonarqube->url            = '服务器地址';
 $lang->sonarqube->account        = '用户名';
 $lang->sonarqube->password       = '密码';

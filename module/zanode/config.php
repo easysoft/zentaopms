@@ -2,16 +2,18 @@
 $config->zanode->create         = new stdClass();
 $config->zanode->edit           = new stdClass();
 $config->zanode->createimage    = new stdClass();
-$config->zanode->create->requiredFields = 'name,host,image,cpu,memory,disk,osName';
-$config->zanode->edit->requiredFields   = '';
-$config->zanode->createimage->requiredFields = 'name';
+$config->zanode->create->requiredFields        = 'name,host,image,cpu,memory,disk,osName';
+$config->zanode->create->physicsRequiredFields = 'name,extranet,cpu,memory,osNamePhysics';
+$config->zanode->edit->requiredFields          = '';
+$config->zanode->createimage->requiredFields   = 'name';
 
 $config->zanode->defaultPort       = '55001';
 $config->zanode->defaultAccount    = 'z';
 $config->zanode->defaultWinAccount = 'admin';
 $config->zanode->defaultPwd        = 'CQdliYQn6tKkoFhP';
 
-$config->zanode->initBash = 'curl -sSL https://pkg.qucheng.com/zenagent/zagent.sh | bash /dev/stdin -szvm -z%s';
+$config->zanode->initBash = 'curl -sSL https://pkg.qucheng.com/zenagent/zagent.sh | bash /dev/stdin -s zvm -k %s -z %s';
+$config->zanode->initPosh = 'Invoke-WebRequest -UseBasicParsing -Uri "https://pkg.qucheng.com/zenagent/zagent-vm.ps1" -OutFile "./install-zanget-vm.ps1"; &"./install-zanget-vm.ps1" -s %s -z %s';
 
 $config->zanode->os = new stdClass();
 
@@ -50,3 +52,33 @@ $config->zanode->editor->create      = array('id' => 'desc', 'tools' => 'simpleT
 $config->zanode->editor->edit        = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->zanode->editor->createimage = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->zanode->editor->view        = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
+
+$config->zanode->osType = array('linux' => 'Linux', 'windows' => 'Microsoft Windows');
+
+$config->zanode->linuxList['']   = '';
+$config->zanode->linuxList['centOS65'] = 'CentOS 6.5';
+$config->zanode->linuxList['centOS66'] = 'CentOS 6.6';
+$config->zanode->linuxList['centOS67'] = 'CentOS 6.7';
+$config->zanode->linuxList['centOS70'] = 'CentOS 7.0';
+$config->zanode->linuxList['centOS71'] = 'CentOS 7.1';
+$config->zanode->linuxList['centOS79'] = 'CentOS 7.9';
+
+$config->zanode->linuxList['ubuntu1404'] = 'Ubuntu 14.04';
+$config->zanode->linuxList['ubuntu1604'] = 'Ubuntu 16.04';
+$config->zanode->linuxList['ubuntu1804'] = 'Ubuntu 18.04';
+$config->zanode->linuxList['ubuntu2004'] = 'Ubuntu 20.04';
+
+$config->zanode->linuxList['debianBullseye'] = 'Debian Bullseye';
+$config->zanode->linuxList['debianBuster']   = 'Debian Buster';
+
+$config->zanode->windowsList[''] = '';
+$config->zanode->windowsList['win10']          = 'Windows 10';
+$config->zanode->windowsList['winserver08x64'] = 'Windows Server2008 x64';
+$config->zanode->windowsList['winserver12']    = 'Windows Server2012';
+$config->zanode->windowsList['winserver16']    = 'Windows Server2016';
+
+$config->zanode->versionToOs[''] = '';
+$config->zanode->versionToOs['win10']          = 'windows';
+$config->zanode->versionToOs['winserver08x64'] = 'windows';
+$config->zanode->versionToOs['winserver12']    = 'windows';
+$config->zanode->versionToOs['winserver16']    = 'windows';

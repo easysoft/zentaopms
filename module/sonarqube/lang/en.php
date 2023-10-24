@@ -1,7 +1,7 @@
 <?php
 $lang->sonarqube = new stdclass;
 $lang->sonarqube->common            = 'SonarQube';
-$lang->sonarqube->browse            = 'SonarQube Browse';
+$lang->sonarqube->browse            = 'SonarQube List';
 $lang->sonarqube->search            = 'Search';
 $lang->sonarqube->create            = 'Create SonarQube';
 $lang->sonarqube->edit              = 'Edit SonarQube';
@@ -19,7 +19,7 @@ $lang->sonarqube->createBug         = "Create Bug";
 $lang->sonarqube->delError          = "There are bound jobs under this server, please delete the association and then operate";
 
 $lang->sonarqube->id             = 'ID';
-$lang->sonarqube->name           = "Server Name";
+$lang->sonarqube->name           = "Application Name";
 $lang->sonarqube->url            = 'Server Address';
 $lang->sonarqube->account        = 'Username';
 $lang->sonarqube->password       = 'Password';

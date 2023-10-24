@@ -1,6 +1,13 @@
 <?php
 
-declare(strict_types=1);
+/**
+ * Context for MySQL 5.0.
+ *
+ * This file was auto-generated from tools/contexts/*.txt.
+ * Use tools/run_generators.sh for update.
+ *
+ * @see https://dev.mysql.com/doc/refman/5.0/en/keywords.html
+ */
 
 namespace PhpMyAdmin\SqlParser\Contexts;
 
@@ -10,10 +17,9 @@ use PhpMyAdmin\SqlParser\Token;
 /**
  * Context for MySQL 5.0.
  *
- * This class was auto-generated from tools/contexts/*.txt.
- * Use tools/run_generators.sh for update.
+ * @category   Contexts
  *
- * @see https://dev.mysql.com/doc/refman/5.0/en/keywords.html
+ * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class ContextMySql50000 extends Context
 {
@@ -26,10 +32,9 @@ class ContextMySql50000 extends Context
      *      Token::FLAG_KEYWORD_DATA_TYPE Token::FLAG_KEYWORD_KEY
      *      Token::FLAG_KEYWORD_FUNCTION
      *
-     * @var array<string,int>
-     * @phpstan-var non-empty-array<non-empty-string,Token::FLAG_KEYWORD_*|int>
+     * @var array
      */
-    public static $KEYWORDS = [
+    public static $KEYWORDS = array(
         'DO' => 1, 'IO' => 1, 'NO' => 1, 'XA' => 1,
         'ANY' => 1, 'BDB' => 1, 'CPU' => 1, 'END' => 1, 'IPC' => 1, 'NDB' => 1,
         'NEW' => 1, 'ONE' => 1, 'ROW' => 1,
@@ -270,5 +275,5 @@ class ContextMySql50000 extends Context
         'CHAR' => 43,
         'BINARY' => 43,
         'INTERVAL' => 43,
-    ];
+    );
 }

@@ -15,7 +15,7 @@ class scm
         $className = $repo->SCM;
         if($className == 'Git') $className = 'GitRepo';
         if(!class_exists($className)) require(strtolower($className) . '.class.php');
-        $this->engine = new $className($repo->client, $repo->path, $repo->account, $repo->password, $repo->encoding, $repo);
+        $this->engine = new $className($repo->client, $className == 'Gitlab' ? $repo->apiPath : $repo->path, $repo->account, $repo->password, $repo->encoding, $repo);
     }
 
     /**
@@ -81,13 +81,14 @@ class scm
      *
      * @param  string $path
      * @param  string $revision
+     * @param  bool   $showComment
      * @access public
      * @return array
      */
-    public function blame($path, $revision)
+    public function blame($path, $revision, $showComment = true)
     {
         if(!scm::checkRevision($revision)) return array();
-        return $this->engine->blame($path, $revision);
+        return $this->engine->blame($path, $revision, $showComment);
     }
 
     /**

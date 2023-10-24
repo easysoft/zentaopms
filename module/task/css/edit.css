@@ -6,3 +6,4 @@
 
 #modalTeam .modal-content {padding: 20px 13px 0; height: 340px;max-height: 296px!important; overflow-y: scroll!important;}
 #taskTeamEditor tr .input-control {display: inline-block; width: 130px;}
+#taskTeamEditor h2 {margin-top:0;}

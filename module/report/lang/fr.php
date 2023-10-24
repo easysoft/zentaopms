@@ -2,38 +2,34 @@
 /**
  * The report module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
  * @version     $Id: en.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->report->index              = 'Accueil Rapports';
-$lang->report->list               = 'Rapports';
-$lang->report->preview            = 'View Pivot Table';
-$lang->report->item               = 'Item';
-$lang->report->value              = 'Valeur';
-$lang->report->percent            = '%';
-$lang->report->undefined          = 'N/D';
-$lang->report->query              = 'Requête';
-$lang->report->annual             = 'Résumé Annuel';
-$lang->report->project            = 'Project';
-$lang->report->PO                 = 'PO';
-$lang->report->viewEveryoneAnnual = 'View everyone annual summary';
+$lang->report->index     = 'Accueil Rapports';
+$lang->report->list      = 'Rapports';
+$lang->report->item      = 'Item';
+$lang->report->value     = 'Valeur';
+$lang->report->percent   = '%';
+$lang->report->undefined = 'N/D';
+$lang->report->project   = $lang->projectCommon;
+$lang->report->PO        = 'PO';
 
-$lang->report->colors[]   = 'AFD8F8';
-$lang->report->colors[]   = 'AFD8F8';
-$lang->report->colors[]   = 'AFD8F8';
-$lang->report->colors[]   = 'AFD8F8';
-$lang->report->colors[]   = 'AFD8F8';
-$lang->report->colors[]   = 'AFD8F8';
-$lang->report->colors[]   = 'AFD8F8';
-$lang->report->colors[]   = 'AFD8F8';
-$lang->report->colors[]   = 'AFD8F8';
-$lang->report->colors[]   = 'AFD8F8';
-$lang->report->colors[]   = 'AFD8F8';
-$lang->report->colors[]   = 'AFD8F8';
+$lang->report->colors[] = 'AFD8F8';
+$lang->report->colors[] = 'AFD8F8';
+$lang->report->colors[] = 'AFD8F8';
+$lang->report->colors[] = 'AFD8F8';
+$lang->report->colors[] = 'AFD8F8';
+$lang->report->colors[] = 'AFD8F8';
+$lang->report->colors[] = 'AFD8F8';
+$lang->report->colors[] = 'AFD8F8';
+$lang->report->colors[] = 'AFD8F8';
+$lang->report->colors[] = 'AFD8F8';
+$lang->report->colors[] = 'AFD8F8';
+$lang->report->colors[] = 'AFD8F8';
 
 $lang->report->assign['noassign'] = 'Non affecté';
 $lang->report->assign['assign']   = 'Affecté';
@@ -51,19 +47,7 @@ $lang->report->beginAndEnd      = ' de';
 $lang->report->begin            = 'Begin';
 $lang->report->end              = 'End';
 $lang->report->dept             = 'Compartiment';
-$lang->report->deviationChart   = 'Courbe de déviation du projet';
-
-$lang->reportList = new stdclass();
-$lang->reportList->product = new stdclass();
-$lang->reportList->project = new stdclass();
-$lang->reportList->test    = new stdclass();
-$lang->reportList->staff   = new stdclass();
-
-$lang->reportList->product->lists[10] = 'Résumé ' . $lang->productCommon . '|report|productsummary';
-$lang->reportList->project->lists[10] = "Dérv {$lang->execution->common}|report|projectdeviation";
-$lang->reportList->test->lists[10]    = 'Résumé remontée Bugs|report|bugcreate';
-$lang->reportList->test->lists[13]    = 'Résumé affectation Bugs|report|bugassign';
-$lang->reportList->staff->lists[10]   = 'Résumé charge travail|report|workload';
+$lang->report->deviationChart   = "{$lang->projectCommon} Deviation Chart";
 
 $lang->report->id            = 'ID';
 $lang->report->execution     = $lang->executionCommon;
@@ -109,12 +93,6 @@ $lang->report->mailTitle->bug      = " Bug (%s),";
 $lang->report->mailTitle->task     = " Tâches (%s),";
 $lang->report->mailTitle->todo     = " Agenda (%s),";
 $lang->report->mailTitle->testTask = " Recettes (%s),";
-
-$lang->report->deviationDesc = 'According to the Closed Execution Deviation Rate = ((Total Cost - Total Estimate) / Total Estimate), the Deviation Rate is n/a when the Total Estimate is 0.';
-$lang->report->proVersion    = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Essayez ZenTao Pro pour en savoir plus !</a>';
-$lang->report->proVersionEn  = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Try ZenTao Pro for more!</a>';
-$lang->report->workloadDesc  = 'Workload = the total left hours of all tasks of the user / selected days * hours per day.
-For example: the begin and end date is January 1st to January 7th, and the total work days is 5 days, 8 hours per day. The Work load is all unfinished tasks assigned to this user to be finished in 5 days, 8 hours per day.';
 
 $lang->report->annualData = new stdclass();
 $lang->report->annualData->title            = "%s work summary in %s";
@@ -211,8 +189,25 @@ $lang->report->annualData->todoStatus['all']    = 'All';
 $lang->report->annualData->todoStatus['undone'] = 'Undone';
 $lang->report->annualData->todoStatus['done']   = 'Done';
 
-$lang->report->annualData->radarItems['product']   = "Product";
-$lang->report->annualData->radarItems['execution'] = "Project";
+$lang->report->annualData->radarItems['product']   = $lang->productCommon;
+$lang->report->annualData->radarItems['execution'] = $lang->projectCommon;
 $lang->report->annualData->radarItems['devel']     = "Development";
 $lang->report->annualData->radarItems['qa']        = "QA";
 $lang->report->annualData->radarItems['other']     = "Other";
+
+$lang->report->companyRadar        = "公司能力雷达图";
+$lang->report->outputData          = "产出数据";
+$lang->report->outputTotal         = "产出总数";
+$lang->report->storyOutput         = "需求产出";
+$lang->report->planOutput          = "计划产出";
+$lang->report->releaseOutput       = "发布产出";
+$lang->report->executionOutput     = "执行产出";
+$lang->report->taskOutput          = "任务产出";
+$lang->report->bugOutput           = "Bug产出";
+$lang->report->caseOutput          = "用例产出";
+$lang->report->bugProgress         = "Bug进展";
+$lang->report->productProgress     = "{$lang->productCommon}进展";
+$lang->report->executionProgress   = "执行进展";
+$lang->report->projectProgress     = "{$lang->projectCommon}进展";
+$lang->report->yearProjectOverview = "年度{$lang->projectCommon}总览";
+$lang->report->projectOverview     = "截止目前{$lang->projectCommon}总览";

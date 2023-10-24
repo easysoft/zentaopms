@@ -56,6 +56,7 @@ class html extends baseHTML
     static public function input($name, $value = "", $attrib = "", $autocomplete = false)
     {
         $id = "id='$name'";
+        $id = str_replace(array('[', ']'), "", $id);
         if(strpos($attrib, 'id=') !== false) $id = '';
         if(is_null($value)) $value = '';
         $value = str_replace("'", '&#039;', $value);
@@ -170,7 +171,12 @@ class html extends baseHTML
         $convertedPinYin = (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($options) : array();
         if(count($options) >= $config->maxCount or isset($config->moreLinks[$name]))
         {
-            if(strpos($attrib, 'chosen') !== false) $attrib = str_replace('chosen', 'picker-select', $attrib);
+            if(strpos($attrib, 'chosen') !== false)
+            {
+                $attrib = str_replace('chosen', 'picker-select', $attrib);
+                $attrib = preg_replace('/data-drop[-_]?direction=([\'"]?)down([\'"]?)/i', 'data-drop-direction=$1bottom$2', $attrib);
+                $attrib = preg_replace('/data-drop[-_]?direction=([\'"]?)up([\'"]?)/i', 'data-drop-direction=$1top$2', $attrib);
+            }
             if(isset($config->moreLinks[$name]))
             {
                 $link = $config->moreLinks[$name];
@@ -207,6 +213,7 @@ class html extends baseHTML
     static public function number($name, $value = '', $attrib = '')
     {
         $id = "id='$name'";
+        $id = str_replace(array('[', ']'), "", $id);
         if(strpos($attrib, 'id=') !== false) $id = '';
         $value = str_replace("'", '&#039;', $value);
         return "<input type='number' name='$name' {$id} value='$value' $attrib />\n";

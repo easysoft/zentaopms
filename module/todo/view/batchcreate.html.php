@@ -2,7 +2,7 @@
 /**
  * The batch create view of todo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     todo
@@ -83,7 +83,7 @@
           </td>
           <td class="visible <?php echo zget($visibleFields, 'beginAndEnd', 'hidden')?>">
             <div class='checkbox-primary'>
-              <input type='checkbox' name="switchTime[<?php echo $i?>]" id="switchTime<?php echo $i?>" class='control-time-switch' onclick='switchTimeList(<?php echo $i?>);' />
+              <input type='checkbox' name="switchTime[<?php echo $i?>]" id="switchTime<?php echo $i?>" class='control-time-switch' onchange='switchTimeList(<?php echo $i?>);' />
               <label for="switchTime<?php echo $i?>"> <?php echo $lang->todo->periods['future'];?></label>
             </div>
           </td>

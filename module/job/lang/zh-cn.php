@@ -5,18 +5,19 @@ $lang->job->create        = '添加流水线';
 $lang->job->edit          = '编辑流水线';
 $lang->job->exec          = '执行流水线';
 $lang->job->runPipeline   = '运行流水线';
-$lang->job->view          = '执行详情';
+$lang->job->view          = '流水线详情';
 $lang->job->delete        = '删除流水线';
 $lang->job->confirmDelete = '确认删除该流水线';
 $lang->job->dirChange     = '目录改动';
 $lang->job->buildTag      = '打标签';
 $lang->job->execSuccess   = '执行成功';
 
-$lang->job->browseAction = '构建任务列表';
+$lang->job->browseAction = '流水线列表';
 
 $lang->job->id              = 'ID';
-$lang->job->name            = '名称';
-$lang->job->repo            = '代码库';
+$lang->job->name            = '流水线名称';
+$lang->job->repo            = '关联代码库';
+$lang->job->branch          = '分支';
 $lang->job->product         = '关联' . $lang->productCommon;
 $lang->job->svnDir          = 'SVN监控路径';
 $lang->job->jenkins         = 'Jenkins';
@@ -60,6 +61,7 @@ $lang->job->repoExists     = '此版本库已关联构建任务『%s』';
 $lang->job->projectExists  = '此SonarQube项目已关联构建任务『%s』';
 $lang->job->mustUseJenkins = 'SonarQube工具/框架仅在构建引擎为JenKins的情况下使用';
 $lang->job->jobIsDeleted   = '此版本库已关联构建任务,请从回收站查看数据';
+$lang->job->selectPipeline = '请选择流水线';
 
 $lang->job->buildTypeList['build']          = '仅构建';
 $lang->job->buildTypeList['buildAndDeploy'] = '构建部署';
@@ -83,7 +85,7 @@ $lang->job->frameList['sonarqube'] = 'SonarQube';
 $lang->job->paramValueList['']                 = '';
 $lang->job->paramValueList['$zentao_version']  = '当前版本号';
 $lang->job->paramValueList['$zentao_account']  = '当前用户名';
-$lang->job->paramValueList['$zentao_product']  = '当前产品ID';
+$lang->job->paramValueList['$zentao_product']  = "当前{$lang->productCommon}ID";
 $lang->job->paramValueList['$zentao_repopath'] = '当前版本库路径';
 
 $lang->job->engineList = array();
@@ -101,3 +103,6 @@ $lang->job->pipelineVariablesKeyPlaceHolder   = "输入变量的名称";
 $lang->job->pipelineVariablesValuePlaceHolder = "输入变量的值";
 $lang->job->pipelineVariablesTips             = "指定要在此次运行中使用的变量值。CI/CD设置中指定的值将用作默认值。";
 $lang->job->setReferenceTips                  = "在执行构建前，请先设置代码库的分支信息。";
+
+$lang->job->featureBar['browse']['job']     = '列表';
+$lang->job->featureBar['browse']['compile'] = '执行历史';

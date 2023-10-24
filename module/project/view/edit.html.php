@@ -2,7 +2,7 @@
 /**
  * The prjedit view file of project module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
@@ -40,6 +40,7 @@
 <?php js::set('allProducts', $allProducts);?>
 <?php js::set('branchGroups', $branchGroups);?>
 <?php js::set('unLinkProductTip', $lang->project->unLinkProductTip);?>
+<?php js::set('model', $project->model);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -74,13 +75,13 @@
           <td class="col-main"><?php echo html::input('name', $project->name, "class='form-control' required");?></td>
           <td colspan='2'></td>
         </tr>
-        <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+        <?php if(isset($config->setCode) and $config->setCode == 1):?>
         <tr>
           <th><?php echo $lang->project->code;?></th>
           <td><?php echo html::input('code', $project->code, "class='form-control' required");?></td>
         </tr>
         <?php endif;?>
-        <?php if($model != 'waterfall'):?>
+        <?php if($model != 'waterfall' and $model != 'agileplus' and $model != 'waterfallplus'):?>
         <tr>
           <th><?php echo $lang->project->multiple;?></th>
           <td colspan='3'><?php echo nl2br(html::radio('multiple', $lang->project->multipleList, $project->multiple, 'disabled'));?></td>
@@ -129,7 +130,7 @@
           </td>
           <?php
           /* Remove LONG_TIME item when no multiple project. */
-          if(empty($project->multiple)) unset($lang->project->endList[999]);
+          if(empty($project->multiple) && $project->end != LONG_TIME) unset($lang->project->endList[999]);
           $deltaValue = $project->end == LONG_TIME ? 999 : (strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1;
           ?>
           <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->project->endList, $deltaValue, "onclick='computeEndDate(this.value)'");?></td>
@@ -157,7 +158,7 @@
                   <div class='table-col'>
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                     <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
-                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
+                      <span class='input-group-addon'><?php echo $lang->productCommon;?></span>
                       <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                     </div>
                   </div>
@@ -186,7 +187,7 @@
         <?php $i ++;?>
         <?php endforeach;?>
         <?php endif;?>
-        <?php if($project->model == 'waterfall'):?>
+        <?php if($project->model == 'waterfall' or $project->model == 'waterfallplus'):?>
         <?php $class    = (!$project->division and count($linkedProducts) < 2) ? 'hide' : '';?>
         <?php $disabled = !empty($executions) ? "disabled='disabled'" : '';?>
         <tr class='<?php echo $class;?> division'>

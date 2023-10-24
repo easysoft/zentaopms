@@ -1,0 +1,4 @@
+#planForm tr td {vertical-align: top;}
+#mainContent .methodTitle, #mainContent .methodTip {display: inline-block; vertical-align: middle;}
+.type-list-radio {display: inline-block; padding: 10px 5px;}
+#planForm .c-attribute {width: 110px;}

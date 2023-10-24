@@ -32,18 +32,27 @@ $(function()
 
     $('#source').on('change', function()
     {
-        if(storyType == 'requirement') return false;
+        if(storyType == 'requirement' && systemMode != 'PLM') return false;
 
-        var source = $(this).val();
+        var $sourceBox = $(this).closest('tr.sourceBox');
+        var source     = $(this).val();
         if($.inArray(source, feedbackSource) != -1)
         {
+            if($sourceBox.length > 0)
+            {
+                $(this).closest('td').attr('colspan', '1');
+                $sourceBox.find('.sourceTd').attr('colspan', '1');
+            }
             $('#feedbackBox').removeClass('hidden');
-            $('#source, #sourceNoteBox').closest('td').attr('colspan', 1);
         }
         else
         {
+            if($sourceBox.length > 0)
+            {
+                $(this).closest('td').attr('colspan', '2');
+                $sourceBox.find('.sourceTd').attr('colspan', '2');
+            }
             $('#feedbackBox').addClass('hidden');
-            $('#source, #sourceNoteBox').closest('td').attr('colspan', 2);
         }
     });
 
@@ -59,15 +68,8 @@ $(function()
         return false;
     });
 
-    $('#product').on('change', function(){
-        var productID      = $('#product').val();
-        var viewLink       = createLink('story', 'create', 'productID=' + productID + '&branch=all');
-        self.location.href = viewLink;
-    });
-
-    $('#module').on('change', function(){
-        loadURS();
-    });
+    $('#module').on('change', function(){ loadURS(); });
+    if($('form select[id^=branches]').length > 0) loadURS();
 
     if($(".table-form select[id^='branches']").length == $('.switchBranch #branchBox option').length)
     {
@@ -183,6 +185,7 @@ $(window).unload(function(){
     }
 
     if(requiredFields.indexOf('module') > 0) $('#modules' + itemIndex + '_chosen').addClass('required')
+    if(requiredFields.indexOf('plan') > 0) $('#plans' + itemIndex + '_chosen').addClass('required')
 
     itemIndex ++;
  }
@@ -232,6 +235,7 @@ function disableSelectedBranches()
     })
 
     $(".table-form select[id^=branches]").trigger('chosen:updated');
+    loadURS();
 }
 
  /**
@@ -250,6 +254,7 @@ function loadBranchRelation(branch, branchIndex)
     $.ajaxSettings.async = false;
     loadModuleForTwins(productID, branch, branchIndex)
     loadPlanForTwins(productID, branch, branchIndex)
+    loadURS()
     $.ajaxSettings.async = true;
 
     disableSelectedBranches()

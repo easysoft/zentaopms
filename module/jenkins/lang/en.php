@@ -10,7 +10,7 @@ $lang->jenkins->browseAction = 'Jenkins List';
 $lang->jenkins->deleteAction = 'Delete Jenkins';
 
 $lang->jenkins->id       = 'ID';
-$lang->jenkins->name     = 'Server Name';
+$lang->jenkins->name     = 'Application Name';
 $lang->jenkins->url      = 'Server URL';
 $lang->jenkins->token    = 'Token';
 $lang->jenkins->account  = 'Username';

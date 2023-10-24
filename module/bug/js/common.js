@@ -277,9 +277,10 @@ function loadAllProductBuilds(productID, buildBox)
             link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch + '&index=0&type=all');
             $('#resolvedBuildBox').load(link, function()
             {
-                $(this).find('select').picker({optionRender: markReleasedBuilds, dropWidth: 'auto'})
+                $(this).find('select').picker({optionRender: markReleasedBuilds})
                 var $pkResolvedBuild = $('#pk_resolvedBuild-search');
                 $pkResolvedBuild.closest('.picker').css('width', $pkResolvedBuild.closest('td').width());
+                $('#resolvedBuildBox .input-group-btn').remove();
             });
         }
     }
@@ -319,7 +320,7 @@ function loadProductStories(productID)
     if(typeof(branch) == 'undefined') branch = 0;
     if(typeof(oldStoryID) == 'undefined') oldStoryID = 0;
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleId=0&storyID=' + oldStoryID);
-    $('#storyIdBox').load(link, function(){$('#story').chosen();});
+    $('#storyIdBox').load(link, function(){$('#story').picker();});
 }
 
 /**
@@ -369,7 +370,7 @@ function loadProductExecutions(productID, projectID = 0)
         var execution = $('#execution').val();
     }
 
-    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&number=&executionID=' + execution);
+    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&number=&executionID=' + execution + '&from=&mode=stagefilter');
     $('#executionIdBox').load(link, function()
     {
         $(this).find('select').chosen();
@@ -379,6 +380,8 @@ function loadProductExecutions(productID, projectID = 0)
     });
 
     projectID != 0 ? loadProjectBuilds(projectID) : loadProductBuilds(productID);
+
+    loadExecutionRelated(execution);
 }
 
 /**
@@ -425,7 +428,7 @@ function changeAssignedTo(projectID)
 function loadProductExecutionsByProject(productID, projectID = 0, num = 0)
 {
     var branch = $('#branches' + num).val();
-    if(typeof(branch) == 'undefined') branch = 0;
+    if(typeof(branch) === undefined || branch == null) branch = 0;
 
     if(projectID == 'ditto')
     {
@@ -512,9 +515,8 @@ function loadExecutionRelated(executionID)
     if(executionID)
     {
         if(currentProjectID == 0) loadProjectByExecutionID(executionID);
-        loadExecutionTasks(executionID);
         loadExecutionStories(executionID);
-        loadExecutionBuilds(executionID);
+        if($('#openedBuildBox .input-group-btn').length == 1) loadExecutionBuilds(executionID);
         loadAssignedTo(executionID, $('#assignedTo').val());
         loadTestTasks($('#product').val(), executionID);
     }
@@ -536,6 +538,8 @@ function loadExecutionRelated(executionID)
 
         currentProjectID != 0 ? loadProjectBuilds(currentProjectID) : loadProductBuilds(currentProductID);
     }
+
+    loadExecutionTasks(executionID);
 }
 
 /**
@@ -632,6 +636,12 @@ function loadProjectBuilds(projectID)
     var oldOpenedBuild = $('#openedBuild').val() ? $('#openedBuild').val() : 0;
 
     $.get(createLink('bug', 'ajaxGetReleasedBuilds', 'productID=' + productID), function(data){releasedBuilds = data;}, 'json');
+
+    if($('#executionIdBox #execution').val() != 0)
+    {
+        $('#executionIdBox #execution').change();
+        return;
+    }
 
     if(page == 'create')
     {
@@ -764,7 +774,7 @@ function setStories(moduleID, productID, storyID)
         $('#story').replaceWith(stories);
         $('#story_chosen').remove();
         $('#story').next('.picker').remove();
-        $("#story").chosen();
+        $("#story").picker();
     });
 }
 

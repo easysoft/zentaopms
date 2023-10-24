@@ -1,6 +1,6 @@
 $(function()
 {
-    $('[name=hasProduct]').change(function()
+    $(document).on('change', '[name=hasProduct]', function()
     {
         const hasProduct = $('[name=hasProduct]:checked').val();
 
@@ -17,7 +17,7 @@ $(function()
             });
             if(chosenProducts > 1) $('.division').removeClass('hide');
         }
-    });
+    })
 
     $('[name=hasProduct]').change();
 
@@ -297,7 +297,7 @@ function loadBranches(product)
         }
     });
 
-    (chosenProducts.length > 1 && model == 'waterfall') ? $('.division').removeClass('hide') : $('.division').addClass('hide');
+    (chosenProducts.length > 1 && (model == 'waterfall' || model == 'waterfallplus')) ? $('.division').removeClass('hide') : $('.division').addClass('hide');
 
     var $tableRow = $(product).closest('.table-row');
     var index     = $tableRow.find('select:first').attr('id').replace('products' , '');
@@ -362,15 +362,15 @@ function loadPlans(product, branch)
 
 /**
  * Add new line for link product.
- * 
- * @param  obj $obj 
+ *
+ * @param  obj $obj
  * @access public
  * @return void
  */
 function addNewLine(obj)
 {
     var newLine = $(obj).closest('tr').clone();
-    var index   = 0; 
+    var index   = 0;
     $(".productsBox select[name^='products']").each(function()
     {
         var id = $(this).attr('id').replace('products' , '');
@@ -403,7 +403,7 @@ function removeLine(obj)
 {
     $(obj).closest('tr').remove();
     disableSelectedProduct();
-    if($("select[name^='products']").length < 2) $('.division').addClass('hide'); 
+    if($("select[name^='products']").length < 2) $('.division').addClass('hide');
 }
 
 /**

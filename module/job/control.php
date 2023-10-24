@@ -2,7 +2,7 @@
 /**
  * The control file of job of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     job
@@ -22,7 +22,17 @@ class job extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        if($this->app->methodName != 'browse') $this->loadModel('ci')->setMenu();
+        if($this->app->methodName != 'browse')
+        {
+            if(in_array($this->app->methodName, array('create', 'edit')))
+            {
+                if($this->session->repoID) $this->loadModel('ci')->setMenu();
+            }
+            else
+            {
+                $this->loadModel('ci')->setMenu();
+            }
+        }
         $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
     }
 
@@ -38,15 +48,26 @@ class job extends control
      */
     public function browse($repoID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $repos = $this->loadModel('repo')->getRepoPairs('devops');
-        if(empty($repos)) $this->locate($this->repo->createLink('create'));
-        $repoID = $this->repo->saveState($repoID);
+        $this->loadModel('ci');
 
-        /* Set session. */
-        $this->loadModel('ci')->setMenu($repoID);
+        if($repoID)
+        {
+            $repos = $this->loadModel('repo')->getRepoPairs('devops');
+            if(empty($repos)) $this->locate($this->repo->createLink('create'));
+            $repoID = $this->repo->saveState($repoID);
 
-        $this->app->loadClass('pager', $static = true);
+            /* Set session. */
+            $this->ci->setMenu($repoID);
+        }
+        else
+        {
+            $this->session->set('repoID', '');
+        }
+
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $products = $this->loadModel('product')->getPairs();
 
         $this->app->loadLang('compile');
         $jobList = $this->job->getList($repoID, $orderBy, $pager);
@@ -54,21 +75,34 @@ class job extends control
         foreach($jobList as $job)
         {
             $job->canExec = true;
+
             if($job->engine == 'gitlab')
             {
                 $pipeline = json_decode($job->pipeline);
                 $branch   = $this->gitlab->apiGetSingleBranch($job->server, $pipeline->project, $pipeline->reference);
                 if($branch and isset($branch->can_push) and !$branch->can_push) $job->canExec = false;
+                /* query buildSpec */
+                if(is_numeric($job->pipeline))  $job->pipeline = $this->loadModel('gitlab')->getProjectName($job->server, $job->pipeline);
+                if(isset($pipeline->reference)) $job->pipeline = $this->loadModel('gitlab')->getProjectName($job->server, $pipeline->project);
             }
+            elseif($job->engine == 'jenkins')
+            {
+                if(strpos($job->pipeline, '/job/') !== false) $job->pipeline = trim(str_replace('/job/', '/', $job->pipeline), '/');
+            }
+
+            $job->lastExec    = $job->lastExec ? $job->lastExec : '';
+            $job->triggerType = $this->job->getTriggerConfig($job);
+            $job->buildSpec   = urldecode($job->pipeline) . '@' . $job->jenkinsName;
+            $job->engine      = zget($this->lang->job->engineList, $job->engine);
+            $job->frame       = zget($this->lang->job->frameList, $job->frame);
+            $job->productName = zget($products, $job->product, '');
         }
 
-        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
-        $this->view->position[] = $this->lang->ci->job;
-        $this->view->position[] = $this->lang->job->browse;
-        $this->view->repoID     = $repoID;
-        $this->view->jobList    = $jobList;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
+        $this->view->title   = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
+        $this->view->repoID  = $repoID;
+        $this->view->jobList = $jobList;
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
 
         $this->display();
     }
@@ -110,39 +144,32 @@ class job extends control
             }
 
             $this->loadModel('action')->create('job', $jobID, 'created');
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jobID));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse', "repoID={$this->post->repo}")));
         }
 
+        $this->loadModel('ci');
         $this->app->loadLang('action');
-        $repoList    = $this->loadModel('repo')->getList($this->projectID);
+        $repoList    = $this->loadModel('repo')->getList($this->projectID, false);
         $repoPairs   = array(0 => '');
         $gitlabRepos = array(0 => '');
         $repoTypes   = array();
+        $gitlabs     = array();
 
         foreach($repoList as $repo)
         {
             if(empty($repo->synced)) continue;
-            $repoPairs[$repo->id] = $repo->name;
+            $repoPairs[$repo->id] = "[{$repo->SCM}] " . $repo->name;
             $repoTypes[$repo->id] = $repo->SCM;
-            if(strtolower($repo->SCM) == 'gitlab')
-            {
-                if(isset($repo->gitService)) $gitlab = $this->loadModel('gitlab')->getByID($repo->gitService);
-                if(!empty($gitlab)) $tokenUser = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
-                if(!isset($tokenUser->is_admin) or !$tokenUser->is_admin) continue;
-                $gitlabRepos[$repo->id] = $repo->name;
-            }
+            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = "[{$repo->SCM}] " . $repo->name;
         }
 
         $this->view->title       = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
-        $this->view->position[]  = html::a(inlink('browse'), $this->lang->ci->job);
-        $this->view->position[]  = $this->lang->job->create;
         $this->view->repoPairs   = $repoPairs;
         $this->view->gitlabRepos = $gitlabRepos;
         $this->view->repoTypes   = $repoTypes;
         $this->view->products    = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
 
-        $this->view->jenkinsServerList   = array('' => '') + $this->loadModel('jenkins')->getPairs();
+        $this->view->jenkinsServerList   = $this->loadModel('jenkins')->getPairs();
         $this->view->sonarqubeServerList = array('') + $this->loadModel('pipeline')->getPairs('sonarqube');
 
         $this->display();
@@ -190,10 +217,28 @@ class job extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse', "repoID={$job->repo}")));
         }
 
-        $repo = $this->loadModel('repo')->getRepoByID($job->repo);
-        $this->view->repo = $this->loadModel('repo')->getRepoByID($job->repo);
+        $this->loadModel('ci');
+        $repo = $this->loadModel('repo')->getByID($job->repo);
+        $this->view->repo = $this->loadModel('repo')->getByID($job->repo);
 
         if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
+        if($repo->SCM == 'Subversion' && $job->triggerType == 'tag')
+        {
+            $dirs = array();
+            $path = empty($repo->prefix) ? '/' : $this->repo->decodePath('');
+            $tags = $this->loadModel('svn')->getRepoTags($repo, $path);
+            if($tags)
+            {
+                $dirs['/'] = $path;
+                foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $dirPath;
+            }
+            $this->view->dirs = $dirs;
+
+            foreach($this->lang->job->triggerTypeList as $type => $name)
+            {
+                if($type == 'tag') $this->lang->job->triggerTypeList[$type] = $this->lang->job->dirChange;
+            }
+        }
 
         $repoList             = $this->repo->getList($this->projectID);
         $repoPairs            = array(0 => '', $repo->id => $repo->name);
@@ -204,7 +249,7 @@ class job extends control
             if(empty($repo->synced)) continue;
             $repoPairs[$repo->id] = "[{$repo->SCM}] {$repo->name}";
             $repoTypes[$repo->id] = $repo->SCM;
-            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = $repo->name;
+            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = "[{$repo->SCM}] {$repo->name}";
         }
 
         $products = $this->repo->getProductsByRepo($job->repo);
@@ -214,9 +259,12 @@ class job extends control
             if($jobProduct and $jobProduct->deleted == 0) $products += array($job->product => $jobProduct->name);
         }
 
+        if($job->frame == 'sonarqube' && $job->sonarqubeServer && $job->projectKey)
+        {
+            $this->view->sonarqubeProjectPairs = $this->loadModel('sonarqube')->getProjectPairs($job->sonarqubeServer, $job->projectKey);
+        }
+
         $this->view->title               = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
-        $this->view->position[]          = html::a(inlink('browse'), $this->lang->ci->job);
-        $this->view->position[]          = $this->lang->job->edit;
         $this->view->repoPairs           = $repoPairs;
         $this->view->gitlabRepos         = $gitlabRepos;
         $this->view->repoTypes           = $repoTypes;
@@ -237,12 +285,13 @@ class job extends control
      * @access public
      * @return void
      */
-    public function delete($jobID, $confirm = 'no')
+    public function delete($jobID)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->job->confirmDelete, inlink('delete', "jobID=$jobID&confirm=yes")));
-
         $this->job->delete(TABLE_JOB, $jobID);
-        echo js::reload('parent');
+
+        $response['load']   = true;
+        $response['result'] = 'success';
+        return $this->send($response);
     }
 
     /**
@@ -255,7 +304,7 @@ class job extends control
      */
     public function view($jobID, $compileID = 0)
     {
-        $job  = $this->job->getById($jobID);
+        $job = $this->job->getById($jobID);
 
         $this->loadModel('compile');
         if($compileID)
@@ -314,13 +363,11 @@ class job extends control
         }
 
         $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
-        $this->view->position[] = $this->lang->ci->job;
-        $this->view->position[] = $this->lang->job->browse;
 
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->job     = $job;
         $this->view->compile = $compile;
-        $this->view->repo    = $this->loadModel('repo')->getRepoByID($job->repo);
+        $this->view->repo    = $this->loadModel('repo')->getByID($job->repo);
         $this->view->jenkins = $this->loadModel('jenkins')->getById($job->server);
         $this->view->product = $this->loadModel('product')->getById($job->product);
         $this->display();
@@ -337,20 +384,34 @@ class job extends control
     public function exec($jobID)
     {
         $job = $this->job->getByID($jobID);
-        if(strtolower($job->engine) == 'gitlab')
-        {
-            if(!isset($job->reference) or !$job->reference)
-            {
-                return $this->send(array('result' => 'fail', 'message' => $this->lang->job->setReferenceTips, 'locate' => inlink('edit', "id=$jobID")));
-            }
-        }
+        //if(strtolower($job->engine) == 'gitlab' and (!isset($job->reference) or !$job->reference)) return $this->send(array('result' => 'fail', 'message' => $this->lang->job->setReferenceTips, 'locate' => inlink('edit', "id=$jobID")));
 
         $compile = $this->job->exec($jobID);
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(dao::isError())
+        {
+            $errors = '';
+            foreach(dao::getError() as $error)
+            {
+                if(is_array($error))
+                {
+                    foreach($error as $val)
+                    {
+                        $errors .= $val . '\n';
+                    }
+                }
+                else
+                {
+                    $errors .= $error . '\n';
+                }
+            }
+            return $this->sendError($errors);
+        }
 
         $this->app->loadLang('compile');
         $this->loadModel('action')->create('job', $jobID, 'executed');
-        return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->job->sendExec, zget($this->lang->compile->statusList, $compile->status))));
+
+        $message = sprintf($this->lang->job->sendExec, zget($this->lang->compile->statusList, $compile->status));
+        return $this->sendSuccess(array('message' => $message));
     }
 
     /**
@@ -362,7 +423,7 @@ class job extends control
      */
     public function ajaxGetProductByRepo($repoID)
     {
-        $repo = $this->loadModel('repo')->getRepoByID($repoID);
+        $repo = $this->loadModel('repo')->getByID($repoID);
         if(empty($repo)) return print(json_encode(array(""=>"")));
 
         $product = $repo->product;
@@ -395,10 +456,16 @@ class job extends control
      */
     public function ajaxGetRefList($repoID)
     {
-        $repo = $this->loadModel('repo')->getRepoByID($repoID);
+        $repo = $this->loadModel('repo')->getByID($repoID);
         if($repo->SCM == 'Gitlab') $refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
         if($repo->SCM != 'Gitlab') $refList = $this->repo->getBranches($repo, true);
-        $this->send(array('result' => 'success', 'refList' => $refList));
+
+        $options = array();
+        foreach($refList as $branch => $branchName)
+        {
+            $options[] = array('text' => $branchName, 'value' => $branch);
+        }
+        $this->send(array('result' => 'success', 'refList' => $options));
     }
 
     /**
@@ -436,7 +503,7 @@ class job extends control
      */
     public function ajaxGetRepoType($repoID)
     {
-        $repo = $this->loadModel('repo')->getRepoByID($repoID);
+        $repo = $this->loadModel('repo')->getByID($repoID);
         $this->send(array('result' => 'success', 'type' => strtolower($repo->SCM)));
     }
 

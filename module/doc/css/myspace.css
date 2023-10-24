@@ -1,0 +1,14 @@
+.flex {display: flex;}
+.flex-none {flex: none;}
+.flex-auto {flex: auto;}
+.flex-full > .panel {box-shadow: none;}
+.float-r {float: right;}
+.h-full {height: 100%;}
+.w-full {width: 100%;}
+.overflow-x-auto {overflow-x: auto;}
+.overflow-auto {overflow: auto;}
+.overflow-visible {overflow: visible;}
+.overflow-hidden {overflow: hidden;}
+#mainContent > .panel {margin-bottom: 0; height: calc(100vh - 130px); overflow-y: auto;}
+#bysearchTab::before {display: none;}
+#queryBox #groupAndOr {min-width: 60px;}

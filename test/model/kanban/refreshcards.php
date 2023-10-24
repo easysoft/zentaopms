@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -28,4 +27,3 @@ r($kanban->refreshCardsTest($laneIDList[1])) && p() && e('412; 413; 414; 415; 41
 r($kanban->refreshCardsTest($laneIDList[2])) && p() && e('421:781,61,; 422; 423:782,; 424:783,; 425; 426; 427:');             // 刷新泳道103的卡片
 r($kanban->refreshCardsTest($laneIDList[3])) && p() && e('428; 429; 430; 431; 432; 433; 434:246,; 435; 436:248,; 437; 438:'); // 刷新泳道104的卡片
 r($kanban->refreshCardsTest($laneIDList[4])) && p() && e('439; 440; 441; 442; 443; 444; 445; 446; 447:184,185,186,');         // 刷新泳道105的卡片
-$db->restoreDB();

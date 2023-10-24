@@ -78,7 +78,7 @@ class router extends baseRouter
     {
         if($this->dbh)
         {
-            $langs = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='common' AND `section`='global' AND `key`='langs'")->fetch();
+            $langs = $this->dbQuery('SELECT `value` FROM ' . TABLE_CONFIG . " WHERE `owner`='system' AND `module`='common' AND `section`='global' AND `key`='langs'")->fetch();
             $langs = empty($langs) ? array() : json_decode($langs->value, true);
             foreach($langs as $langKey => $langData) $this->config->langs[$langKey] = $langData['name'];
         }
@@ -101,41 +101,76 @@ class router extends baseRouter
         global $lang;
         if(!is_object($lang)) $lang = new language();
 
-        $appName = '';
-
         /* Set productCommon and projectCommon for flow. */
         if($moduleName == 'common') $this->setCommonLang();
 
         parent::loadLang($moduleName, $appName);
+
+        /* Replace main nav lang. */
+        if($moduleName == 'common' and $this->dbh and !empty($this->config->db->name))
+        {
+            $customMenus = array();
+            try
+            {
+                $customMenus = $this->dbQuery('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `section`='mainNav' AND `lang`='{$this->clientLang}' AND `vision`='{$this->config->vision}'")->fetchAll();
+            }
+            catch(PDOException $exception){}
+
+            foreach($customMenus as $menu)
+            {
+                $menuKey = $menu->key;
+                if(isset($lang->mainNav->$menuKey)) $lang->mainNav->$menuKey = zget($lang->navIcons, $menuKey, '') . " {$menu->value}" . substr($lang->mainNav->$menuKey, strpos($lang->mainNav->$menuKey, '|'));
+            }
+        }
 
         /* Merge from the db lang. */
         if($moduleName != 'common' and isset($lang->db->custom[$moduleName]))
         {
             foreach($lang->db->custom[$moduleName] as $section => $fields)
             {
-                if(isset($lang->{$moduleName}->{$section}['']))
+                if(in_array($section, array('featureBar', 'moreSelects')))
                 {
-                    $nullKey   = '';
-                    $nullValue = $lang->{$moduleName}->{$section}[$nullKey];
+                    foreach($fields as $featureBarMethod => $featureBarValues)
+                    {
+                        foreach($featureBarValues as $featureBarKey => $featureBarValue)
+                        {
+                            if(is_array($featureBarValue))
+                            {
+                                foreach($featureBarValue as $key => $value) $lang->{$moduleName}->{$section}[$featureBarMethod][$featureBarKey][$key] = $value;
+                            }
+                            else
+                            {
+                                $lang->{$moduleName}->{$section}[$featureBarMethod][$featureBarKey] = $featureBarValue;
+                            }
+                        }
+                    }
                 }
-                elseif(isset($lang->{$moduleName}->{$section}[0]))
+                else
                 {
-                    $nullKey   = 0;
-                    $nullValue = $lang->{$moduleName}->{$section}[0];
-                }
-                unset($lang->{$moduleName}->{$section});
+                    if(isset($lang->{$moduleName}->{$section}['']))
+                    {
+                        $nullKey   = '';
+                        $nullValue = $lang->{$moduleName}->{$section}[$nullKey];
+                    }
+                    elseif(isset($lang->{$moduleName}->{$section}[0]))
+                    {
+                        $nullKey   = 0;
+                        $nullValue = $lang->{$moduleName}->{$section}[0];
+                    }
+                    unset($lang->{$moduleName}->{$section});
 
-                if(isset($nullKey))$lang->{$moduleName}->{$section}[$nullKey] = $nullValue;
-                foreach($fields as $key => $value)
-                {
-                    if($section == 'priList' and $key > 0 and trim($value) === '') continue; // Fix bug #23538.
+                    if(isset($nullKey))$lang->{$moduleName}->{$section}[$nullKey] = $nullValue;
+                    foreach($fields as $key => $value)
+                    {
+                        if($section == 'priList' and $key > 0 and trim($value) === '') continue; // Fix bug #23538.
 
-                    if(!isset($lang->{$moduleName})) $lang->{$moduleName} = new stdclass();
-                    if(!isset($lang->{$moduleName}->{$section})) $lang->{$moduleName}->{$section} = array();
-                    $lang->{$moduleName}->{$section}[$key] = $value;
+                        if(!isset($lang->{$moduleName})) $lang->{$moduleName} = new stdclass();
+                        if(!isset($lang->{$moduleName}->{$section})) $lang->{$moduleName}->{$section} = array();
+                        $lang->{$moduleName}->{$section}[$key] = $value;
+                    }
+                    unset($nullKey);
+                    unset($nullValue);
                 }
-                unset($nullKey);
-                unset($nullValue);
             }
         }
 
@@ -171,7 +206,7 @@ class router extends baseRouter
 
             try
             {
-                $commonSettings = $this->dbh->query('SELECT section, `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'scoreStatus', 'disabledFeatures', 'closedFeatures')")->fetchAll();
+                $commonSettings = $this->dbQuery('SELECT `section`, `key`, `value` FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND (`module`='custom' or `module`='common') and `key` in ('sprintConcept', 'hourPoint', 'URSR', 'mode', 'URAndSR', 'scoreStatus', 'disabledFeatures', 'closedFeatures')")->fetchAll();
             }
             catch (PDOException $exception)
             {
@@ -239,7 +274,7 @@ class router extends baseRouter
         {
             $sql         = new sql();
             $account     = $sql->quote($account);
-            $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`= $account AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR')")->fetchAll();
+            $userSetting = $this->dbQuery('SELECT `key`, `value` FROM ' . TABLE_CONFIG . " WHERE `owner`= $account AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR')")->fetchAll();
         }
 
         foreach($userSetting as $setting)
@@ -255,20 +290,19 @@ class router extends baseRouter
         $lang->SRCommon = '';
         if($this->dbh and !empty($this->config->db->name))
         {
-            $productProject = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productProject'")->fetch();
+            $productProject = $this->dbQuery('SELECT `value` FROM ' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productProject'")->fetch();
             if($productProject)
             {
                 $productProject = $productProject->value;
                 list($productCommon, $projectCommon) = explode('_', $productProject);
                 $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][0];
-                $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectCommon]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectCommon] : $this->config->projectCommonList['en'][0];
             }
             if(!defined('IN_UPGRADE'))
             {
                 /* Get story concept in project and product. */
                 $clientLang = $this->clientLang == 'zh-tw' ? 'zh-cn' : $this->clientLang;
-                $URSRList   = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `lang` = \"{$clientLang}\"")->fetchAll();
-                if(empty($URSRList)) $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `key` = \"{$config->URSR}\"")->fetchAll();
+                $URSRList   = $this->dbQuery('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE `module` = 'custom' and `section` = 'URSRList' and `lang` = '{$clientLang}'")->fetchAll();
+                if(empty($URSRList)) $URSRList = $this->dbQuery('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and `section` = 'URSRList' and `key` = '{$config->URSR}'")->fetchAll();
 
                 /* Get UR pairs and SR pairs. */
                 $URPairs  = array();
@@ -284,6 +318,15 @@ class router extends baseRouter
                 $lang->URCommon = isset($URPairs[$config->URSR]) ? $URPairs[$config->URSR] : reset($URPairs);
                 $lang->SRCommon = isset($SRPairs[$config->URSR]) ? $SRPairs[$config->URSR] : reset($SRPairs);
             }
+
+            /* Replace common lang. */
+            $customMenus = array();
+            try
+            {
+                $customMenus = $this->dbQuery('SELECT * FROM' . TABLE_LANG . "WHERE `module`='common' AND `lang`='{$this->clientLang}' AND `section`='' AND `vision`='{$config->vision}'")->fetchAll();
+            }
+            catch(PDOException $exception){}
+            foreach($customMenus as $menu) if(isset($lang->{$menu->key})) $lang->{$menu->key} = $menu->value;
         }
     }
 
@@ -321,9 +364,6 @@ class router extends baseRouter
     public function loadModuleConfig($moduleName, $appName = '')
     {
         global $config;
-
-        $appName = '';
-
         if($config and (!isset($config->$moduleName) or !is_object($config->$moduleName))) $config->$moduleName = new stdclass();
 
         /* 初始化数组。Init the variables. */
@@ -335,8 +375,11 @@ class router extends baseRouter
         /* 先获得模块的主配置文件。Get the main config file for current module first. */
         $mainConfigFile = $this->getModulePath($appName, $moduleName) . 'config.php';
 
+        /* 获取 config 目录的配置文件。Get config files from config directory. */
+        $configDirFiles = helper::ls($this->getModulePath($appName, $moduleName) . DS . 'config', '.php');
+
         /* 查找扩展配置文件。Get extension config files. */
-        if($config->framework->extensionLevel > 0) $extConfigPath = $this->getModuleExtPath($appName, $moduleName, 'config');
+        if($config->framework->extensionLevel > 0) $extConfigPath = $this->getModuleExtPath($moduleName, 'config');
         if($config->framework->extensionLevel >= 1)
         {
             if(!empty($extConfigPath['common'])) $commonExtConfigFiles = helper::ls($extConfigPath['common'], '.php');
@@ -346,7 +389,7 @@ class router extends baseRouter
             if(!empty($extConfigPath['custom'])) $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['custom'], '.php'));
         }
         if($config->framework->extensionLevel == 2 and !empty($extConfigPath['site'])) $siteExtConfigFiles = helper::ls($extConfigPath['site'], '.php');
-        $extConfigFiles = array_merge($commonExtConfigFiles, $siteExtConfigFiles);
+        $extConfigFiles = array_merge($commonExtConfigFiles, $configDirFiles, $siteExtConfigFiles);
 
         /* 将主配置文件和扩展配置文件合并在一起。Put the main config file and extension config files together. */
         $configFiles = array_merge(array($mainConfigFile), $extConfigFiles);
@@ -438,10 +481,10 @@ class router extends baseRouter
         if(empty($this->rawMethod)) $this->rawMethod = $this->methodName;
 
         /* If is not a biz version or is in install mode or in in upgrade mode, call parent method. */
-        if(!isset($this->config->bizVersion) or defined('IN_INSTALL') or defined('IN_UPGRADE')) return parent::setControlFile($exitIfNone);
+        if($this->config->edition == 'open' or defined('IN_INSTALL') or defined('IN_UPGRADE')) return parent::setControlFile($exitIfNone);
 
         /* Check if the requested module is defined in workflow. */
-        $flow = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '$this->moduleName'")->fetch();
+        $flow = $this->dbQuery("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '$this->moduleName'")->fetch();
         if(!$flow) return parent::setControlFile($exitIfNone);
         if($flow->status != 'normal') die("<html><head><meta charset='utf-8'></head><body>{$this->lang->flowNotRelease}</body></html>");
 
@@ -466,7 +509,10 @@ class router extends baseRouter
         }
         else
         {
-            $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName' AND `vision` = '{$this->config->vision}'")->fetch();
+            $actionQuery = "SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName'";
+            if(isset($this->app->user) && $this->app->user->account != 'guest') $actionQuery .= " AND `vision` = '{$this->config->vision}'";
+
+            $action = $this->dbQuery($actionQuery)->fetch();
             if(zget($action, 'extensionType') == 'override')
             {
                 $this->rawModule = $this->moduleName;
@@ -648,5 +694,25 @@ class router extends baseRouter
 
         $this->rawParams = parent::mergeParams($defaultParams, $passedParams);
         return $this->rawParams;
+    }
+
+    /**
+     * 加载一个模块：
+     *
+     * Load a module.
+     *
+     * @access public
+     * @return bool|object  if the module object of die.
+     */
+    public function loadModule()
+    {
+        /* 不能直接请求基类的方法 Cannot call methods of base control class. */
+        if(method_exists('Control', $this->methodName))
+        {
+            echo 'Cannot call methods of base control class.';
+            return false;
+        }
+
+        return parent::loadModule();
     }
 }

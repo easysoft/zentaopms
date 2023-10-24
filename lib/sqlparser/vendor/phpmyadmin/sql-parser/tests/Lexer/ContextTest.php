@@ -1,18 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Lexer;
 
 use PhpMyAdmin\SqlParser\Context;
 use PhpMyAdmin\SqlParser\Tests\TestCase;
-use Throwable;
-
-use function class_exists;
 
 class ContextTest extends TestCase
 {
-    public function testLoad(): void
+    public function testLoad()
     {
         // Default context is 5.7.0.
         $this->assertEquals('\\PhpMyAdmin\\SqlParser\\Contexts\\ContextMySql50700', Context::$loadedContext);
@@ -29,12 +24,12 @@ class ContextTest extends TestCase
     /**
      * Test for loading closest SQL context
      *
-     * @dataProvider contextLoadingProvider
+     * @dataProvider contextLoading
      */
-    public function testLoadClosest(string $context, ?string $expected): void
+    public function testLoadClosest($context, $expected)
     {
         $this->assertEquals($expected, Context::loadClosest($context));
-        if ($expected !== null) {
+        if (! is_null($expected)) {
             $this->assertEquals('\\PhpMyAdmin\\SqlParser\\Contexts\\Context' . $expected, Context::$loadedContext);
             $this->assertTrue(class_exists(Context::$loadedContext));
         }
@@ -43,44 +38,46 @@ class ContextTest extends TestCase
         Context::load('');
     }
 
-    public function contextLoadingProvider(): array
+    public function contextLoading()
     {
-        return [
-            'MySQL match' => [
+        return array(
+            'MySQL match' => array(
                 'MySql50500',
                 'MySql50500',
-            ],
-            'MySQL strip' => [
+            ),
+            'MySQL strip' => array(
                 'MySql50712',
                 'MySql50700',
-            ],
-            'MySQL fallback' => [
+            ),
+            'MySQL fallback' => array(
                 'MySql99999',
                 'MySql50700',
-            ],
-            'MariaDB match' => [
+            ),
+            'MariaDB match' => array(
                 'MariaDb100000',
                 'MariaDb100000',
-            ],
-            'MariaDB stripg' => [
+            ),
+            'MariaDB stripg' => array(
                 'MariaDb109900',
                 'MariaDb100000',
-            ],
-            'MariaDB fallback' => [
+            ),
+            'MariaDB fallback' => array(
                 'MariaDb990000',
                 'MariaDb100300',
-            ],
-            'Invalid' => [
+            ),
+            'Invalid' => array(
                 'Sql',
                 null,
-            ],
-        ];
+            )
+        );
     }
 
     /**
-     * @dataProvider contextNamesProvider
+     * @dataProvider contextNames
+     *
+     * @param mixed $context
      */
-    public function testLoadAll(string $context): void
+    public function testLoadAll($context)
     {
         Context::load($context);
         $this->assertEquals('\\PhpMyAdmin\\SqlParser\\Contexts\\Context' . $context, Context::$loadedContext);
@@ -89,32 +86,32 @@ class ContextTest extends TestCase
         Context::load('');
     }
 
-    public function contextNamesProvider(): array
+    public function contextNames()
     {
-        return [
-            ['MySql50000'],
-            ['MySql50100'],
-            ['MySql50500'],
-            ['MySql50600'],
-            ['MySql50700'],
-            ['MySql80000'],
-            ['MariaDb100000'],
-            ['MariaDb100100'],
-            ['MariaDb100200'],
-            ['MariaDb100300'],
-        ];
+        return array(
+            array('MySql50000'),
+            array('MySql50100'),
+            array('MySql50500'),
+            array('MySql50600'),
+            array('MySql50700'),
+            array('MySql80000'),
+            array('MariaDb100000'),
+            array('MariaDb100100'),
+            array('MariaDb100200'),
+            array('MariaDb100300')
+        );
     }
 
-    public function testLoadError(): void
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage Specified context ("\PhpMyAdmin\SqlParser\Contexts\ContextFoo") does not exist.
+     */
+    public function testLoadError()
     {
-        $this->expectExceptionMessage(
-            'Specified context ("\PhpMyAdmin\SqlParser\Contexts\ContextFoo") does not exist.'
-        );
-        $this->expectException(Throwable::class);
         Context::load('Foo');
     }
 
-    public function testMode(): void
+    public function testMode()
     {
         Context::setMode('REAL_AS_FLOAT,ANSI_QUOTES,IGNORE_SPACE');
         $this->assertEquals(
@@ -122,12 +119,15 @@ class ContextTest extends TestCase
             Context::$MODE
         );
         Context::setMode('TRADITIONAL');
-        $this->assertEquals(Context::SQL_MODE_TRADITIONAL, Context::$MODE);
+        $this->assertEquals(
+            Context::SQL_MODE_TRADITIONAL,
+            Context::$MODE
+        );
         Context::setMode();
         $this->assertEquals(0, Context::$MODE);
     }
 
-    public function testEscape(): void
+    public function testEscape()
     {
         Context::setMode('NO_ENCLOSING_QUOTES');
         $this->assertEquals('test', Context::escape('test'));
@@ -139,11 +139,11 @@ class ContextTest extends TestCase
         $this->assertEquals('`test`', Context::escape('test'));
 
         $this->assertEquals(
-            [
+            array(
                 '`a`',
                 '`b`',
-            ],
-            Context::escape(['a', 'b'])
+            ),
+            Context::escape(array('a', 'b'))
         );
     }
 }

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/task.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -39,4 +38,3 @@ r($task->finishTest($taskIDList[4],$currencyTask))        && p('0:field,old,new'
 r($task->finishTest($taskIDList[5],$currencyTask))        && p('0:field,old,new') && e('status,closed,done'); //closed状态任务完成
 r($task->finishTest($taskIDList[6],$consumedTask))        && p() && e('"总计消耗"必须大于之前消耗');          //总计消耗异常验证
 r($task->finishTest($taskIDList[7],$currentConsumedTask)) && p() && e('"本次消耗"不能为0');                   //本次消耗不为0
-$db->restoreDB();

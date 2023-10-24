@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Builder;
 
 use PhpMyAdmin\SqlParser\Parser;
@@ -9,7 +7,7 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class TransactionStatementTest extends TestCase
 {
-    public function testBuilder(): void
+    public function testBuilder()
     {
         $query = 'START TRANSACTION;' .
             'SELECT @A:=SUM(salary) FROM table1 WHERE type=1;' .

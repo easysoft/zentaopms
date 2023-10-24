@@ -2,7 +2,7 @@
 /**
  * The control file of convert currentModule of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     convert
@@ -274,6 +274,7 @@ class convert extends control
             if($method == 'db')
             {
                 $dbName = $this->post->dbName;
+
                 if(!$dbName)
                 {
                     $response['result']  = 'fail';
@@ -375,6 +376,9 @@ class convert extends control
             $statusList     = $this->convert->getJiraDataFromFile('status');
         }
 
+        $dbh = $this->convert->connectDB($this->config->db->name);
+        $this->dao->dbh($dbh);
+
         $this->view->title          = $this->lang->convert->jira->mapJira2Zentao;
         $this->view->issueTypeList  = $issueTypeList;
         $this->view->linkTypeList   = $linkTypeList;
@@ -456,7 +460,7 @@ class convert extends control
             if(isset($result['finished']) and $result['finished'])
             {
                 return print $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
-            }   
+            }
             else
             {
                 $type = zget($this->lang->convert->jira->objectList, $result['type'], $result['type']);

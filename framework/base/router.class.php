@@ -348,6 +348,14 @@ class baseRouter
     public $sessionID;
 
     /**
+     * 请求开始时间。
+     * The start time of the request.
+     *
+     * @var float
+     */
+    public $startTime;
+
+    /**
      * 网站代号。
      * The code of current site.
      *
@@ -355,6 +363,14 @@ class baseRouter
      * @access public
      */
     public $siteCode;
+
+    /**
+     * zin 请求时发生的错误信息。
+     * The errors occurred when zin request.
+     *
+     * @var array
+     */
+    public $zinErrors = array();
 
     /**
      * 构造方法, 设置路径，类，超级变量等。注意：
@@ -391,6 +407,8 @@ class baseRouter
 
         $this->loadClass('front',  $static = true);
         $this->loadClass('filter', $static = true);
+        $this->loadClass('form',   $static = true);
+        $this->loadClass('dbh',    $static = true);
         $this->loadClass('dao',    $static = true);
         $this->loadClass('mobile', $static = true);
 
@@ -405,6 +423,8 @@ class baseRouter
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
         if($this->config->framework->autoConnectDB) $this->connectDB();
         if($this->config->framework->multiLanguage) $this->setClientLang();
+
+        $this->setupXhprof();
 
         $this->setEdition();
         $this->setVision();
@@ -431,6 +451,19 @@ class baseRouter
     {
         if(empty($className)) $className = __CLASS__;
         return new $className($appName, $appRoot);
+    }
+
+    /**
+     * 设置请求开始时间。
+     * The start time of the request.
+     *
+     * @param  float    $startTime
+     * @access public
+     * @return void
+     */
+    public function setStartTime(float $startTime)
+    {
+        $this->startTime = $startTime;
     }
 
     //-------------------- 路径相关方法(Path related methods)--------------------//
@@ -699,6 +732,47 @@ class baseRouter
     }
 
     /**
+     * 启用Xhprof。
+     * Setup xhprof.
+     *
+     * @return void
+     */
+    protected function setupXhprof()
+    {
+        if(!empty($this->config->debug) && $this->config->debug >= 4 && extension_loaded('xhprof')) xhprof_enable();
+    }
+
+    /**
+     * 输出Xhprof结果。
+     * Output xhprof.
+     *
+     * @return bool
+     */
+    public function outputXhprof()
+    {
+        if(empty($this->config->debug) || $this->config->debug < 4 || !extension_loaded('xhprof')) return false;
+
+        $log          = xhprof_disable();
+        $xhprofPath   = $this->getWwwRoot() . 'xhprof';
+        $libUtilsPath = $xhprofPath . DS . 'xhprof_lib' . DS . 'utils' . DS;
+        $outputDir    = ini_get('xhprof.output_dir');
+
+        if(!is_dir($xhprofPath) || !is_dir($libUtilsPath)) return false;
+        if(!$outputDir) $outputDir = $xhprofPath . DS . 'xhprof_runs';
+        if(!is_dir($outputDir)) mkdir($outputDir, 0777, true);
+
+        include_once $libUtilsPath . 'xhprof_lib.php';
+        include_once $libUtilsPath . 'xhprof_runs.php';
+
+        $xhprofRuns = new \XHProfRuns_Default($outputDir);
+        $type       = "{$this->moduleName}_{$this->methodName}";
+        $runID      = $xhprofRuns->save_run($log, $type);
+        if(!headers_sent()) header("Xhprof-RunID: {$runID}");
+
+        return true;
+    }
+
+    /**
      * 设置版本。
      * Set edition.
      *
@@ -726,16 +800,17 @@ class baseRouter
         $account = isset($_SESSION['user']) ? $_SESSION['user']->account : '';
         if(empty($account) and isset($_POST['account'])) $account = $_POST['account'];
         if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
+        if(empty($account))                              $account = $this->cookie->za;
 
         $vision = '';
         if($this->config->installed and validater::checkAccount($account))
         {
             $sql     = new sql();
             $account = $sql->quote($account);
-            $vision  = $this->dbh->query("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = $account AND `key` = 'vision' LIMIT 1")->fetch();
+            $vision  = $this->dbQuery("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = $account AND `key` = 'vision' LIMIT 1")->fetch();
             if($vision) $vision = $vision->value;
 
-            $user = $this->dbh->query("SELECT * FROM " . TABLE_USER . " WHERE account = $account AND deleted = '0' LIMIT 1")->fetch();
+            $user = $this->dbQuery("SELECT * FROM " . TABLE_USER . " WHERE account = $account AND deleted = '0' LIMIT 1")->fetch();
             if(!empty($user->visions))
             {
                 $userVisions = explode(',', $user->visions);
@@ -745,6 +820,8 @@ class baseRouter
         }
 
         list($defaultVision) = explode(',', trim($this->config->visions, ','));
+
+        if($defaultVision != 'lite' && $defaultVision != 'or') $defaultVision = 'rnd';
         if($vision and strpos($this->config->visions, ",{$vision},") === false) $vision = $defaultVision;
 
         $this->config->vision = $vision ? $vision : $defaultVision;
@@ -758,7 +835,7 @@ class baseRouter
      */
     public function getInstalledVersion()
     {
-        $version = $this->dbh->query("SELECT value FROM " . TABLE_CONFIG . " WHERE `owner` = 'system' AND `key` = 'version' AND `module` = 'common' AND `section` = 'global' LIMIT 1")->fetch();
+        $version = $this->dbQuery("SELECT `value` FROM " . TABLE_CONFIG . " WHERE `owner` = 'system' AND `key` = 'version' AND `module` = 'common' AND `section` = 'global' LIMIT 1")->fetch();
         $version = $version ? $version->value : '0.3.beta';                  // No version, set as 0.3.beta.
         if($version == '3.0.stable') $version = '3.0';    // convert 3.0.stable to 3.0.
         return $version;
@@ -1474,13 +1551,12 @@ class baseRouter
 
             /* Check file is encode by ioncube. */
             $isEncrypted = false;
-            if(strpos($file2Included, 'extension' . DS . $this->config->edition . DS) !== false)
+            if(strpos($file2Included, 'extension') !== false)
             {
                 $fp = fopen($file2Included, 'r');
                 $line1 = fgets($fp);
-                $line2 = fgets($fp);
                 fclose($fp);
-                if(strpos($line1, '<?php //') === 0 and strpos($line2, "if(!extension_loaded('ionCube Loader'))") === 0) $isEncrypted = true;
+                if(strpos($line1, '<?php //') === 0) $isEncrypted = true;
             }
 
             /*
@@ -1527,7 +1603,21 @@ class baseRouter
                     $default = $param->getDefaultValue();
                 }
 
-                $defaultParams[$name] = $default;
+                $type = 'string';
+                if(isset($paramDefaultType[$appName][$className][$methodName][$name]))
+                {
+                    $type = $paramDefaultType[$appName][$className][$methodName][$name];
+                }
+                elseif(isset($paramDefaultType[$className][$methodName][$name]))
+                {
+                    $type = $paramDefaultType[$className][$methodName][$name];
+                }
+                elseif(!$isEncrypted && method_exists($param, 'hasType') && $param->hasType())
+                {
+                    $type = $param->getType()->getName();
+                }
+
+                $defaultParams[$name] = array('default' => $default, 'type' => $type);
             }
 
             /**
@@ -1630,7 +1720,7 @@ class baseRouter
      * @access  public
      * @return  string the extension path.
      */
-    public function getModuleExtPath($appName, $moduleName, $ext)
+    public function getModuleExtPath($moduleName, $ext)
     {
         $saasExtPath = $this->getExtensionRoot() . 'saas' . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
 
@@ -1677,6 +1767,7 @@ class baseRouter
         }
         if($checkedModule[$var]) return true;
         if(!$exit) return false;
+        if(!$var) return false;
         $this->triggerError("'$var' illegal. ", __FILE__, __LINE__, $exit = true);
     }
 
@@ -1707,7 +1798,7 @@ class baseRouter
      */
     public function setActionExtFile()
     {
-        $moduleExtPaths = $this->getModuleExtPath('', $this->moduleName, 'control');
+        $moduleExtPaths = $this->getModuleExtPath($this->moduleName, 'control');
 
         /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
         if(empty($moduleExtPaths)) return false;
@@ -1751,7 +1842,7 @@ class baseRouter
      */
     public function checkAPIFile()
     {
-        $moduleExtPaths = $this->getModuleExtPath('', $this->moduleName, 'control');
+        $moduleExtPaths = $this->getModuleExtPath($this->moduleName, 'control');
 
         /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
         if(empty($moduleExtPaths)) return false;
@@ -1812,7 +1903,7 @@ class baseRouter
         $apiFiles      = array();
         $siteExtended  = false;
 
-        $targetExtPaths = $this->getModuleExtPath($appName, $moduleName, $class);
+        $targetExtPaths = $this->getModuleExtPath($moduleName, $class);
         foreach($targetExtPaths as $extType => $targetExtPath)
         {
             if(empty($targetExtPath)) continue;
@@ -2191,19 +2282,62 @@ class baseRouter
     public function loadModule()
     {
         try {
-            if(is_null($this->params) and !$this->setParams()) return false;
+            if(is_null($this->params) and !$this->setParams())
+            {
+                $this->outputXhprof();
+                return false;
+            }
 
             /* 调用该方法   Call the method. */
             $module = $this->control;
 
             call_user_func_array(array($module, $this->methodName), $this->params);
             $this->checkAPIFile();
+            $this->outputXhprof();
             return $module;
         } catch (EndResponseException $endResponseException) {
             echo $endResponseException->getContent();
+            return false;
         }
 
         return isset($module) ? $module : false;
+    }
+
+    /**
+     * 输出内容。
+     * Output the content.
+     *
+     * @return string
+     */
+    public function outputPage()
+    {
+        $cacheEnable = $this->config->cache->enableFullPage;
+        /* If caching is not turned on, pages that do not need to be cached, or when searching, they are not cached. */
+        if(!$cacheEnable || !in_array("{$this->moduleName}|{$this->methodName}", $this->config->cache->fullPages) || stripos($this->server->request_uri, 'search') !== false || isset($_GET['_nocache']) || $this->server->http_x_zt_refresh)
+        {
+            $this->loadModule();
+            return helper::removeUTF8Bom(ob_get_clean());
+        }
+
+        $this->loadClass('cache', $static = true);
+        $cacheKey  = md5($this->server->request_uri);
+        $namespace = isset($this->session->user->account) ? $this->session->user->account : 'guest';
+        $cache     = cache::create($this->config->cache->fullPageDriver, $namespace, $this->config->cache->fullPageLifetime);
+
+        if($cache->has($cacheKey))
+        {
+            if(!headers_sent()) header('X-Zt-Hit-Cache: 1');
+            $content = $cache->get($cacheKey);
+        }
+        else
+        {
+            ob_start();
+            $result  = $this->loadModule();
+            $content = helper::removeUTF8Bom(ob_get_clean());
+            /* If the module is loaded successfully, cache the content. */
+            if($result !== false) $cache->set($cacheKey, $content);
+        }
+        return $content;
     }
 
     /**
@@ -2355,15 +2489,17 @@ class baseRouter
 
         $passedParams = array_values($passedParams);
         $i = 0;
-        foreach($defaultParams as $key => $defaultValue)
+        foreach($defaultParams as $key => $defaultItem)
         {
             if(isset($passedParams[$i]))
             {
-                $defaultParams[$key] = strip_tags($passedParams[$i]);
+                $defaultParams[$key] = helper::convertType(strip_tags((string) $passedParams[$i]), $defaultItem['type']);
             }
             else
             {
-                if($defaultValue === '_NOT_SET') $this->triggerError("The param '$key' should pass value. ", __FILE__, __LINE__, $exit = true);
+                if($defaultItem['default'] === '_NOT_SET') $this->triggerError("The param '$key' should pass value. ", __FILE__, __LINE__, $exit = true);
+
+                $defaultParams[$key] = $defaultItem['default'];
             }
             $i ++;
         }
@@ -2506,29 +2642,9 @@ class baseRouter
 
         if($config and (!isset($config->$moduleName) or !is_object($config->$moduleName))) $config->$moduleName = new stdclass();
 
-        /* 初始化数组。Init the variables. */
-        $extConfigFiles       = array();
-        $commonExtConfigFiles = array();
-        $siteExtConfigFiles   = array();
-
-        /* 先获得模块的主配置文件。Get the main config file for current module first. */
-        $mainConfigFile = $this->getModulePath($appName, $moduleName) . 'config.php';
-
-        /* 查找扩展配置文件。Get extension config files. */
-        if($config->framework->extensionLevel > 0) $extConfigPath = $this->getModuleExtPath($appName, $moduleName, 'config');
-        if($config->framework->extensionLevel >= 1)
-        {
-            if(!empty($extConfigPath['common'])) $commonExtConfigFiles = helper::ls($extConfigPath['common'], '.php');
-            if(!empty($extConfigPath['xuan']))   $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['xuan'], '.php'));
-            if(!empty($extConfigPath['vision'])) $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['vision'], '.php'));
-            if(!empty($extConfigPath['saas']))   $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['saas'], '.php'));
-            if(!empty($extConfigPath['custom'])) $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['custom'], '.php'));
-        }
-        if($config->framework->extensionLevel == 2 and !empty($extConfigPath['site'])) $siteExtConfigFiles = helper::ls($extConfigPath['site'], '.php');
-        $extConfigFiles = array_merge($commonExtConfigFiles, $siteExtConfigFiles);
-
         /* 将主配置文件和扩展配置文件合并在一起。Put the main config file and extension config files together. */
-        $configFiles = array_merge(array($mainConfigFile), $extConfigFiles);
+        $configFiles = $this->getMainAndExtFiles($moduleName, $appName, 'config');
+        if(empty($configFiles)) return false;
 
         /* 加载每一个配置文件。Load every config file. */
         static $loadedConfigs = array();
@@ -2670,36 +2786,8 @@ class baseRouter
      */
     public function loadLang($moduleName, $appName = '')
     {
-        /* 初始化变量。Init vars. */
-        $modulePath      = $this->getModulePath($appName, $moduleName);
-        $extLangFiles    = array();
-        $langFilesToLoad = array();
-
-        /* 判断主语言文件是否存在。Whether the main lang file exists or not. */
-        $mainLangFile = $this->getMainLangFile($moduleName, $appName);
-        if($mainLangFile) $langFilesToLoad[] = $mainLangFile;
-
-        /* 获取扩展语言文件。If extensionLevel > 0, get extension lang files. */
-        if($this->config->framework->extensionLevel > 0)
-        {
-            $commonExtLangFiles = array();
-            $siteExtLangFiles   = array();
-
-            $extLangPath = $this->getModuleExtPath($appName, $moduleName, 'lang');
-            if($this->config->framework->extensionLevel >= 1)
-            {
-                if(!empty($extLangPath['common'])) $commonExtLangFiles = helper::ls($extLangPath['common'] . $this->clientLang, '.php');
-                if(!empty($extLangPath['xuan']))   $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['xuan'] . $this->clientLang, '.php'));
-                if(!empty($extLangPath['vision'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['vision'] . $this->clientLang, '.php'));
-                if(!empty($extLangPath['custom'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['custom'] . $this->clientLang, '.php'));
-                if(!empty($extLangPath['saas']))   $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['saas'] . $this->clientLang, '.php'));
-            }
-            if($this->config->framework->extensionLevel == 2 and !empty($extLangPath['site'])) $siteExtLangFiles = helper::ls($extLangPath['site'] . $this->clientLang, '.php');
-            $extLangFiles  = array_merge($commonExtLangFiles, $siteExtLangFiles);
-        }
-
         /* 计算最终要加载的语言文件。 Get the lang files to be loaded. */
-        $langFilesToLoad = array_merge($langFilesToLoad, $extLangFiles);
+        $langFilesToLoad = $this->getMainAndExtFiles($moduleName, $appName, 'lang');
         if(empty($langFilesToLoad)) return false;
 
         /* 加载语言文件。Load lang files. */
@@ -2731,31 +2819,70 @@ class baseRouter
         global $config, $dbh, $slaveDBH;
         if(!isset($config->installed) or !$config->installed) return;
 
-        if(isset($config->db->host))      $this->dbh      = $dbh      = $this->connectByPDO($config->db);
-        if(isset($config->slaveDB->host)) $this->slaveDBH = $slaveDBH = $this->connectByPDO($config->slaveDB);
+        /* Set master db. */
+        if(isset($config->db->host)) $this->dbh = $dbh = $this->connectByPDO($config->db, 'MASTER');
+
+        /* Set slave db. */
+        if(empty($config->slaveDBList)) return;
+
+        $biIndex   = 0;
+        $slaveList = array();
+        foreach($config->slaveDBList as $index => $db)
+        {
+            if(isset($db->type) && $db->type == 'bi')
+            {
+                $biIndex = $index;
+            }
+            else
+            {
+                $slaveList[] = $index;
+            }
+        }
+        $slaveIndex = empty($slaveList) ? $biIndex : $slaveList[array_rand($slaveList)];
+
+        $config->biDB   = $this->initSlaveDB($biIndex);
+        $this->slaveDBH = $slaveDBH = $this->connectByPDO($this->initSlaveDB($slaveIndex), 'SLAVE');
+    }
+
+    /**
+     * Init config of slave db.
+     *
+     * @param  int     $slaveIndex
+     * @access private
+     * @return object
+     */
+    private function initSlaveDB($slaveIndex = 0)
+    {
+        global $config;
+
+        $slaveDB             = $config->slaveDBList[$slaveIndex];
+        $slaveDB->persistant = $config->db->persistant;
+        $slaveDB->driver     = $config->db->driver;
+        $slaveDB->encoding   = $config->db->encoding;
+        $slaveDB->strictMode = $config->db->strictMode;
+        $slaveDB->prefix     = $config->db->prefix;
+
+        return $slaveDB;
     }
 
     /**
      * 使用PDO连接数据库。
      * Connect database by PDO.
      *
-     * @param  object    $params    the database params.
+     * @param  object $params    the database params.
+     * @param  string $flag      the database flag.
      * @access public
      * @return object|bool
      */
-    public function connectByPDO($params)
+    public function connectByPDO($params, $flag = 'MASTER')
     {
         if(!isset($params->driver)) self::triggerError('no pdo driver defined, it should be mysql or sqlite', __FILE__, __LINE__, $exit = true);
         if(!isset($params->user)) return false;
-        if($params->driver == 'mysql')
-        {
-            $dsn = "mysql:host={$params->host}; port={$params->port}; dbname={$params->name}";
-        }
         try
         {
             $dbPassword = helper::decryptPassword($params->password);
 
-            $dbh = new PDO($dsn, $params->user, $dbPassword, array(PDO::ATTR_PERSISTENT => $params->persistant));
+            $dbh = new dbh($params, true, $flag);
             $dbh->exec("SET NAMES {$params->encoding}");
 
             /*
@@ -2769,6 +2896,7 @@ class baseRouter
 
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $dbh->setAttribute(PDO::ATTR_ORACLE_NULLS, PDO::NULL_TO_STRING);
             if(isset($params->strictMode) and $params->strictMode == false) $dbh->exec("SET @@sql_mode= ''");
             if(isset($params->emulatePrepare)) $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, $params->emulatePrepare);
             if(isset($params->bufferQuery))    $dbh->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, $params->bufferQuery);
@@ -2786,6 +2914,21 @@ class baseRouter
             }
             self::triggerError($message, __FILE__, __LINE__, $exit = true);
         }
+    }
+
+    /**
+     * Query from database, use master or slave db.
+     *
+     * @param  string $query
+     * @access public
+     * @return mixed
+     */
+    public function dbQuery($query)
+    {
+        if(!$this->dbh) return false;
+        if($this->slaveDBH && strtolower(substr($query, 0, 6)) == 'select') return $this->slaveDBH->query($query);
+
+        return $this->dbh->query($query);
     }
 
     //-------------------- 错误处理方法(Error methods) ------------------//
@@ -2856,7 +2999,7 @@ class baseRouter
      * @access public
      * @return void
      */
-    public function saveError($level, $message, $file, $line)
+    public function saveError(int $level, string $message, string $file, int $line)
     {
         if(empty($this->config->debug))  return true;
         if(!is_dir($this->logRoot))      return true;
@@ -2868,7 +3011,7 @@ class baseRouter
          **/
         if(mt_rand(0, 10) == 1)
         {
-            $logDays = isset($this->config->framework->logDays) ? $this->config->framework->logDays : 14;
+            $logDays = $this->config->framework->logDays ?? 14;
             $dayTime = time() - $logDays * 24 * 3600;
             foreach(glob($this->getLogRoot() . '*') as $logFile)
             {
@@ -2880,7 +3023,7 @@ class baseRouter
          * 忽略该错误：Redefining already defined constructor。
          * Skip the error: Redefining already defined constructor.
          **/
-        if(strpos($message, 'Redefining') !== false) return true;
+        if(mb_strpos($message, 'Redefining') !== false) return true;
 
         /*
          * 设置错误信息。
@@ -2889,8 +3032,8 @@ class baseRouter
         if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
         $errorLog  = "\n" . date('H:i:s') . " $message in <strong>$file</strong> on line <strong>$line</strong> ";
 
-        $URI = $this->getURI();
-        $errorLog .= "when visiting <strong>" . (empty($URI) ? '' : htmlspecialchars($URI)) . "</strong>\n";
+        $uri = $this->getURI();
+        $errorLog .= "when visiting <strong>" . (empty($uri) ? '' : htmlspecialchars($uri)) . "</strong>\n";
 
         /*
          * 为了安全起见，对公网环境隐藏脚本路径。
@@ -2907,18 +3050,29 @@ class baseRouter
         if(!is_file($errorFile)) file_put_contents($errorFile, "<?php\n die();\n?" . ">\n");
 
         $fh = fopen($errorFile, 'a');
-        if($fh) fwrite($fh, strip_tags($errorLog)) and fclose($fh);
+        if($fh) fwrite($fh, strip_tags(htmlspecialchars_decode($errorLog))) and fclose($fh);
 
         /*
-         * 如果debug > 1，显示warning, notice级别的错误。
-         * If the debug > 1, show warning, notice error.
+         * 如果debug > 1，直接在页面显示非严重错误。
+         * If the debug > 1, show non-serious errors on page directly.
          **/
-        if($level == E_NOTICE or $level == E_WARNING or $level == E_STRICT or $level == 8192) // 8192: E_DEPRECATED
+        if(!empty($this->config->debug) && $this->config->debug > 1)
         {
-            if(!empty($this->config->debug) and $this->config->debug > 1)
+            /* Send non-serious errors to page in zin mode. */
+            $isZinRequest      = isset($this->config->zin) || isset($_SERVER['HTTP_X_ZIN_OPTIONS']);
+            $isNonSeriousError = $level !== E_ERROR && $level !== E_PARSE && $level !== E_CORE_ERROR && $level !== E_COMPILE_ERROR;
+            if($isZinRequest && $isNonSeriousError)
+            {
+                $this->zinErrors[] = array('file' => $file, 'line' => $line, 'message' => $message, 'level' => $level);
+                return;
+            }
+
+            /* Show non-serious errors to classic page. */
+            if($level == E_NOTICE or $level == E_WARNING or $level == E_STRICT or $level == 8192)
             {
                 $cmd  = "vim +$line $file";
                 $size = strlen($cmd);
+
                 echo "<pre class='alert alert-danger'>$message: ";
                 echo "<input type='text' value='$cmd' size='$size' style='border:none; background:none;' onclick='this.select();' /></pre>";
             }
@@ -2928,14 +3082,21 @@ class baseRouter
          * 如果是严重错误，停止程序。
          * If error level is serious, die.
          * */
-        if($level == E_ERROR or $level == E_PARSE or $level == E_CORE_ERROR or $level == E_COMPILE_ERROR or $level == E_USER_ERROR)
+        if(in_array($level, array(E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR, E_USER_ERROR)))
         {
-            if(empty($this->config->debug)) die();
-            if(PHP_SAPI == 'cli') die($errorLog);
+            if(empty($this->config->debug)) helper::end();
 
-            $htmlError  = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head>";
-            $htmlError .= "<body>" . nl2br($errorLog) . "</body></html>";
-            die($htmlError);
+            if(PHP_SAPI == 'cli')
+            {
+                echo $errorLog;
+            }
+            else
+            {
+                $htmlError  = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head>";
+                $htmlError .= "<body>" . nl2br($errorLog) . "</body></html>";
+                echo $htmlError;
+                helper::end();
+            }
         }
     }
 
@@ -2971,6 +3132,59 @@ class baseRouter
     public function isContainer()
     {
         return strtolower(getenv('IS_CONTAINER')) == 'true';
+    }
+
+    /**
+     * Get main file and ext files.
+     *
+     * @param  string $moduleName
+     * @param  string $appName
+     * @param  string $type        lang|config|control|model
+     * @access public
+     * @return array
+     */
+    public function getMainAndExtFiles($moduleName, $appName = '', $type = 'lang')
+    {
+        /* 初始化变量。Init vars. */
+        $modulePath  = $this->getModulePath($appName, $moduleName);
+        $extFiles    = array();
+        $filesToLoad = array();
+
+        /* 判断主文件是否存在。Whether the main file exists or not. */
+        if($type == 'lang')
+        {
+            $mainFile = $this->getMainLangFile($moduleName, $appName);
+        }
+        else
+        {
+            $mainFile = $modulePath . $type . '.php';
+        }
+        if($mainFile) $filesToLoad[] = $mainFile;
+
+        /* 获取扩展文件。If extensionLevel > 0, get extension files. */
+        if($this->config->framework->extensionLevel > 0)
+        {
+            $commonExtFiles = array();
+            $siteExtFiles   = array();
+
+            $extPath = $this->getModuleExtPath($moduleName, $type);
+            if($this->config->framework->extensionLevel >= 1)
+            {
+                $clientLang = $type == 'lang' ? $this->clientLang : '';
+                if(!empty($extPath['common'])) $commonExtFiles = helper::ls($extPath['common'] . $clientLang, '.php');
+                if(!empty($extPath['xuan']))   $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['xuan'] . $clientLang, '.php'));
+                if(!empty($extPath['vision'])) $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['vision'] . $clientLang, '.php'));
+                if(!empty($extPath['custom'])) $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['custom'] . $clientLang, '.php'));
+                if(!empty($extPath['saas']))   $commonExtFiles = array_merge($commonExtFiles, helper::ls($extPath['saas'] . $clientLang, '.php'));
+            }
+            if($this->config->framework->extensionLevel == 2 and !empty($extPath['site'])) $siteExtFiles = helper::ls($extPath['site'] . $clientLang, '.php');
+            $extFiles  = array_merge($commonExtFiles, $siteExtFiles);
+        }
+
+        /* 计算最终要加载的文件。 Get the files to be loaded. */
+        $filesToLoad = array_merge($filesToLoad, $extFiles);
+        if(empty($filesToLoad)) return false;
+        return $filesToLoad;
     }
 }
 
@@ -3266,7 +3480,8 @@ class ztSessionHandler
      */
     public function getSessionFile($id)
     {
-        if(!empty($this->sessionFile)) return $this->sessionFile;
+        if(!empty($this->sessionFile))  return $this->sessionFile;
+        if(!preg_match('/^\w+$/', $id)) return false;
 
         $sessionID = $id;
         if($this->tagID) $sessionID = md5($id . $this->tagID);
@@ -3318,6 +3533,7 @@ class ztSessionHandler
     public function read($id)
     {
         $sessFile = $this->getSessionFile($id);
+        if(!$sessFile) return false;
         if(!file_exists($sessFile))
         {
             ($this->tagID and file_exists($this->rawFile)) ? copy($this->rawFile, $sessFile) : touch($sessFile);
@@ -3338,6 +3554,8 @@ class ztSessionHandler
     public function write($id, $sessData)
     {
         $sessFile = $this->getSessionFile($id);
+        if(!$sessFile) return false;
+
         touch($sessFile);
         touch($this->rawFile);
         if(md5_file($sessFile) == md5($sessData)) return true;

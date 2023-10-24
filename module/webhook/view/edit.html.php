@@ -2,7 +2,7 @@
 /**
  * The edit view file of webhook module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2017 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     webhook
@@ -91,13 +91,11 @@
           <td><?php echo html::input('domain', $webhook->domain, "class='form-control'");?></td>
           <td></td>
         </tr>
-        <?php if(strpos("dinggroup|dinguser|wechatgroup|wechatuser|feishuuser|feishugroup", $webhook->type) === false):?>
         <tr>
           <th><?php echo $lang->webhook->sendType;?></th>
           <td><?php echo html::select('sendType', $lang->webhook->sendTypeList, $webhook->sendType, "class='form-control'");?></td>
           <td><?php echo $lang->webhook->note->async;?></td>
         </tr>
-        <?php endif;?>
         <tr>
           <th><?php echo $lang->webhook->product;?></th>
           <td><?php echo html::select('products[]', $products, $webhook->products, "class='form-control chosen' multiple");?></td>

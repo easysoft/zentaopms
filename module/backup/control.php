@@ -2,7 +2,7 @@
 /**
  * The control file of backup of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     backup
@@ -22,15 +22,19 @@ class backup extends control
         parent::__construct($moduleName, $methodName);
 
         $this->backupPath = $this->backup->getBackupPath();
-        if(!is_dir($this->backupPath))
+
+        if($this->app->methodName != 'setting')
         {
-            if(!mkdir($this->backupPath, 0777, true)) $this->view->error = sprintf($this->lang->backup->error->noWritable, dirname($this->backupPath));
+            if(!is_dir($this->backupPath))
+            {
+                if(!mkdir($this->backupPath, 0777, true)) $this->view->error = sprintf($this->lang->backup->error->noWritable, dirname($this->backupPath));
+            }
+            else
+            {
+                if(!is_writable($this->backupPath)) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->backupPath);
+            }
+            if(!is_writable($this->app->getTmpRoot())) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->app->getTmpRoot());
         }
-        else
-        {
-            if(!is_writable($this->backupPath)) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->backupPath);
-        }
-        if(!is_writable($this->app->getTmpRoot())) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->app->getTmpRoot());
     }
 
     /**
@@ -72,7 +76,29 @@ class backup extends control
         $this->view->title      = $this->lang->backup->common;
         $this->view->position[] = $this->lang->backup->common;
         $this->view->backups    = $backups;
+        if(!is_writable($this->backupPath))        $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->backupPath);
+        if(!is_writable($this->app->getTmpRoot())) $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->app->getTmpRoot());
         $this->display();
+    }
+
+    /**
+     * Ajax get disk space.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetkDiskSpace()
+    {
+        set_time_limit(0);
+        session_write_close();
+        $diskSapce = $this->backup->getkDiskSpace($this->backupPath);
+        $diskSapce = explode(',', $diskSapce);
+
+        $space = new stdclass();
+        $space->freeSpace = intval($diskSapce[0]);
+        $space->needSpace = intval($diskSapce[1]);
+
+        echo json_encode($space);
     }
 
     /**

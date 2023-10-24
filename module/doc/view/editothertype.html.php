@@ -2,7 +2,7 @@
 /**
  * The edit view of doc module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     doc
@@ -25,53 +25,36 @@
         <?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $doc->title, '', "title='$doc->title'");?>
         <small> <?php echo $lang->arrow . ' ' . $lang->doc->edit;?></small>
       </h2>
-      <div class='pull-right'><?php echo html::a('###', $lang->save, '', 'id="top-submit" class="btn btn-primary"');?></div>
     </div>
-    <form class='load-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
+    <form class='load-indicator main-form form-ajax form-watched' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
+        <?php if(strpos('product|project|execution', $type) !== false):?>
         <tr>
-          <th class='w-110px'><?php echo $lang->doc->lib;?></th>
-          <td> <?php echo html::select('lib', $libs, $doc->lib, "class='form-control chosen' onchange=loadDocModule(this.value)");?> </td><td></td>
+          <th><?php echo $lang->doc->{$type};?></th>
+          <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control chosen' onchange='loadObjectModules(\"{$type}\", this.value)'");?></td>
         </tr>
+        <?php endif;?>
         <tr>
-          <th><?php echo $lang->doc->module;?></th>
-          <td>
-            <span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $doc->module, "class='form-control chosen'");?></span>
-          </td><td></td>
+          <th class='w-110px'><?php echo $lang->doc->libAndModule?></th>
+          <td colspan='3' class='required'><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $doc->lib . '_' . $doc->module, "class='form-control chosen'");?></span></td>
         </tr>
         <tr>
           <th><?php echo $lang->doc->title;?></th>
-          <td colspan='2'><?php echo html::input('title', $doc->title, "class='form-control' required");?></td>
+          <td colspan='3'><?php echo html::input('title', $doc->title, "class='form-control' required");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->doc->keywords;?></th>
-          <td colspan='2'><?php echo html::input('keywords', $doc->keywords, "class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
+          <td colspan='3'><?php echo html::input('keywords', $doc->keywords, "class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
         </tr>
+        <?php if(strpos($config->doc->officeTypes, $doc->type) !== false):?>
         <tr>
-          <th><?php echo $lang->doc->type;?></th>
-          <td>
-            <?php
-            $typeList = $lang->doc->types;
-            if(!isset($lang->doc->types[$doc->type])) $typeList = $lang->doc->typeList;
-            echo html::radio('type', array($doc->type => zget($typeList, $doc->type)), $doc->type);
-            ?>
-          </td>
-        </tr>
-        <tr id='contentBox' <?php if($doc->type == 'url') echo "class='hidden'"?>>
-          <th><?php echo $lang->doc->content;?></th>
-          <td colspan='2'><?php echo html::textarea('content', $doc->type == 'url' ? '' : htmlSpecialString($doc->content), "style='width:100%; height:200px'") . html::hidden('contentType', $doc->contentType);?></td>
-        </tr>
-        <tr id='urlBox' <?php if($doc->type != 'url') echo "class='hidden'"?>>
-          <th><?php echo $lang->doc->url;?></th>
-          <td colspan='2'><?php echo html::input('url', $doc->type == 'url' ? $doc->content : '', "class='form-control'");?></td>
-        </tr>
-        <tr id='fileBox'>
           <th><?php echo $lang->doc->files;?></th>
-          <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+          <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->doc->mailto;?></th>
-          <td colspan="2">
+          <td colspan="3">
             <div class="input-group">
               <?php
               echo html::select('mailto[]', $users, $doc->mailto, "multiple class='form-control picker-select' data-drop-direction='top'");
@@ -81,16 +64,14 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->doclib->control;?></th>
-          <td colspan='2'>
-            <?php $acl = $lib->acl == 'private' ? 'private' : $doc->acl;?>
-            <?php echo html::radio('acl', $lang->doc->aclList, $acl, "onchange='toggleAcl(this.value, \"doc\")'")?>
-            <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$acl];?></span>
+          <th class="th-control text-top"><?php echo $lang->doclib->control;?></th>
+          <td colspan='3' class='aclBox'>
+            <?php echo html::radio('acl', $lang->doc->aclList, $doc->acl, "onchange='toggleAcl(this.value, \"doc\")'")?>
           </td>
         </tr>
-        <tr id='whiteListBox' class='hidden'>
+        <tr id='whiteListBox' class='<?php if($doc->acl == 'open') echo 'hidden';?>'>
           <th><?php echo $lang->doc->whiteList;?></th>
-          <td colspan='2'>
+          <td colspan='3'>
             <div class='input-group w-p100'>
               <span class='input-group-addon groups-addon'><?php echo $lang->doclib->group?></span>
               <?php echo html::select('groups[]', $groups, $doc->groups, "class='form-control picker-select' multiple data-drop-direction='top'")?>
@@ -98,15 +79,18 @@
             <div class='input-group w-p100'>
               <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
               <?php echo html::select('users[]', $users, $doc->users, "class='form-control picker-select' multiple data-drop-direction='top'")?>
+              <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=users");?>
             </div>
           </td>
         </tr>
         <tr>
-          <td colspan='3' class='text-center form-actions'>
+          <td colspan='4' class='text-center form-actions'>
             <?php
-            echo html::hidden('editedDate', $doc->editedDate);
+            echo html::hidden('contentType', $doc->contentType);
+            echo html::hidden('type', $doc->type);
+            echo html::hidden('status', $doc->status);
+            echo html::hidden('parent', $doc->parent);
             echo html::submitButton();
-            echo html::backButton($lang->goback, "data-app='{$app->tab}'");
             ?>
           </td>
         </tr>

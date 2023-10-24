@@ -196,12 +196,13 @@ $(function()
         exportAnnualImage();
     });
 
-    $('select#year, select#dept, select#userID').change(function()
+    $('select#year, select#dept, select#account').change(function()
     {
-        var dept   = $('select#dept').val();
-        var userID = $('select#userID').val();
-        if($(this).attr('id') == 'dept') userID = 0;
-        location.href = createLink('report', 'annualData', 'year=' + $('select#year').val() + '&dept=' + dept + '&userID=' + userID);
+        var year    = $('select#year').val();
+        var dept    = $('select#dept').val();
+        var account = $('select#account').val();
+        if($(this).attr('id') == 'dept') account = '';
+        location.href = createLink('screen', 'view', 'screenID=3&year=' + year + '&month=' + '&dept=' + dept + '&account=' + account);
     });
 
     $('#actionData > div > ul > li').mouseenter(function(e)

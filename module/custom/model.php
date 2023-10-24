@@ -2,7 +2,7 @@
 /**
  * The model file of custom module of ZenTaoCMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     custom
@@ -24,10 +24,18 @@ class customModel extends model
         try
         {
             $sql  = $this->dao->select('*')->from(TABLE_LANG)->where('`lang`')->in("$currentLang,all")->andWhere('vision')->eq($this->config->vision)->orderBy('lang,id')->get();
-            $stmt = $this->dbh->query($sql);
+            $stmt = $this->app->dbQuery($sql);
 
             $allCustomLang = array();
-            while($row = $stmt->fetch()) $allCustomLang[$row->id] = $row;
+            while($row = $stmt->fetch())
+            {
+                /* Replace common lang for menu. */
+                if(strpos($row->module, 'Menu') !== false or strpos($row->section, 'featureBar-') !== false or $row->section == 'mainNav' or strpos($row->section, 'moreSelects-') !== false)
+                {
+                    $row->value = strtr($row->value, $this->config->custom->commonLang);
+                }
+                $allCustomLang[$row->id] = $row;
+            }
         }
         catch(PDOException $e)
         {
@@ -43,8 +51,26 @@ class customModel extends model
         $processedLang = array();
         foreach($allCustomLang as $id => $customLang)
         {
-            if(isset($sectionLang[$customLang->module][$customLang->section]['all']) && isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) && $customLang->lang == 'all') continue;
-            $processedLang[$customLang->module][$customLang->section][$customLang->key] = $customLang->value;
+            if(isset($sectionLang[$customLang->module][$customLang->section]['all']) and isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) and $customLang->lang == 'all') continue;
+
+            if(strpos($customLang->section, 'featureBar-') !== false or strpos($customLang->section, 'moreSelects-') !== false)
+            {
+                $sections = explode('-', $customLang->section);
+                $sections = array_reverse($sections);
+                if(!isset($processedLang[$customLang->module])) $processedLang[$customLang->module] = array();
+                $sectionArr = array($customLang->key => $customLang->value);
+                foreach($sections as $section)
+                {
+                    $sectionKey = key($sectionArr);
+                    $sectionArr[$section] = $sectionArr;
+                    if($sectionKey != $section) unset($sectionArr[$sectionKey]);
+                }
+                if(!empty($sectionArr)) $processedLang[$customLang->module] = array_merge_recursive($processedLang[$customLang->module], $sectionArr);
+            }
+            else
+            {
+                $processedLang[$customLang->module][$customLang->section][$customLang->key] = $customLang->value;
+            }
         }
 
         return $processedLang;
@@ -204,6 +230,9 @@ class customModel extends model
                 ksort($menuOrder);
                 foreach($menuOrder as $name)
                 {
+                    /* If menu is removed, delete the menuOrder. */
+                    if(!isset($allMenu->$name)) continue;
+
                     $item = new stdclass();
                     $item->name   = $name;
                     $item->hidden = false;
@@ -233,6 +262,7 @@ class customModel extends model
             $dropMenu  = '';
             $alias     = '';
             $exclude   = '';
+            $divider   = false;
 
             $link = (is_array($item) and isset($item['link'])) ? $item['link'] : $item;
             /* The variable of item has not link and is not link then ignore it. */
@@ -255,6 +285,7 @@ class customModel extends model
                     foreach($item['subMenu'] as $subMenu)
                     {
                         if(!isset($subMenu['link']) or strpos($subMenu['link'], '|') === false) continue;
+                        if(strpos("|program|product|project|execution|qa|", "|{$app->tab}|") === false and strpos($subMenu['link'], '%s') !== false) continue;
                         list($subLabel, $module, $method) = explode('|', $subMenu['link']);
                         if(count(explode('|', $subMenu['link'])) > 3) list($subLabel, $module, $method, $vars) = explode('|', $subMenu['link']);
 
@@ -287,6 +318,7 @@ class customModel extends model
                     if(isset($item['dropMenu']))  $dropMenu  = $item['dropMenu'];
                     if(isset($item['alias']))     $alias     = $item['alias'];
                     if(isset($item['exclude']))   $exclude   = $item['exclude'];
+                    if(isset($item['divider']))   $divider   = $item['divider'];
                 }
 
                 $hidden = isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
@@ -327,6 +359,7 @@ class customModel extends model
                 if($dropMenu) $menuItem->dropMenu  = $dropMenu;
                 if($alias)    $menuItem->alias     = $alias;
                 if($exclude)  $menuItem->exclude   = $exclude;
+                if($divider)  $menuItem->divider   = $divider;
                 if($isTutorialMode) $menuItem->tutorial = true;
 
                 /* Hidden menu by config in mobile. */
@@ -363,7 +396,7 @@ class customModel extends model
             else
             {
                 $isFirst = false;
-                $menu[$item->order]->divider = false;
+                if(!isset($menu[$item->order]->divider))$menu[$item->order]->divider = false;
             }
         }
 
@@ -439,10 +472,10 @@ class customModel extends model
      */
     public static function mergeFeatureBar($module, $method)
     {
-        global $lang, $app, $dbh;
+        global $lang, $app;
         if(!isset($lang->$module->featureBar[$method])) return;
         $queryModule = $module == 'execution' ? 'task' : ($module == 'product' ? 'story' : $module);
-        $shortcuts   = $dbh->query('select id, title from ' . TABLE_USERQUERY . " where (`account` = '{$app->user->account}' or `common` = '1') AND `module` = '{$queryModule}' AND `shortcut` = '1' order by id")->fetchAll();
+        $shortcuts   = $app->dbQuery('select id, title from ' . TABLE_USERQUERY . " where (`account` = '{$app->user->account}' or `common` = '1') AND `module` = '{$queryModule}' AND `shortcut` = '1' order by id")->fetchAll();
 
         if($shortcuts)
         {
@@ -545,7 +578,6 @@ class customModel extends model
     public function getURSRPairs()
     {
         $lang = $this->app->getClientLang();
-        $lang = $lang == 'zh-tw' ? 'zh-cn' : $lang;
         $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
             ->where('lang')->eq($lang)
             ->andWhere('module')->eq('custom')
@@ -627,7 +659,6 @@ class customModel extends model
     {
         $this->app->loadLang('custom');
         $lang = $this->app->getClientLang();
-        $lang = $lang == 'zh-tw' ? 'zh-cn' : $lang;
 
         $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
             ->where('lang')->eq($lang)
@@ -700,7 +731,7 @@ class customModel extends model
                     if(strpos(",$fields,", ",$field,") === false) $fields = "$field,$fields";
                 }
 
-                $requiredFields[$method]['requiredFields'] = $fields;
+                $requiredFields[$method]['requiredFields'] = trim($fields, ',');
             }
         }
 
@@ -772,20 +803,26 @@ class customModel extends model
     /**
      * Edit UR and SR concept.
      *
-     * @param  int $key
+     * @param  int    $key
+     * @param  string $lang    zh-cn|zh-tw|en|fr|de
      * @access public
      * @return bool
      */
-    public function updateURAndSR($key = 0)
+    public function updateURAndSR($key = 0, $lang = '')
     {
-        $lang = $this->app->getClientLang();
+        if(empty($lang)) $lang = $this->app->getClientLang();
         $data = fixer::input('post')->get();
 
-        if(!$data->SRName || !$data->URName) return false;
+        if(empty($data->SRName) || empty($data->URName)) return false;
+
+        $oldValue = $this->dao->select('*')->from(TABLE_LANG)->where('`key`')->eq($key)->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($lang)->andWhere('module')->eq('custom')->fetch('value');
+        $oldValue = json_decode($oldValue);
 
         $URSRList = new stdclass();
-        $URSRList->SRName = $data->SRName;
-        $URSRList->URName = $data->URName;
+        $URSRList->defaultSRName = zget($oldValue, 'defaultSRName', $oldValue->SRName);
+        $URSRList->defaultURName = zget($oldValue, 'defaultURName', $oldValue->URName);
+        $URSRList->SRName        = empty($data->SRName) ? $URSRList->defaultSRName : $data->SRName;
+        $URSRList->URName        = empty($data->URName) ? $URSRList->defaultURName : $data->URName;
 
         $value = json_encode($URSRList);
         $this->dao->update(TABLE_LANG)->set('value')->eq($value)
@@ -837,7 +874,7 @@ class customModel extends model
                     if(!isset($disabledFeatures['scrum'])) $disabledFeatures['scrum'] = array();
                     $disabledFeatures['scrum'][] = $feature;
                 }
-                elseif($feature == 'waterfall')
+                elseif(in_array($feature, array('waterfall', 'waterfallplus')))
                 {
                     $disabledFeatures[] = 'project' . ucfirst($feature);
                 }
@@ -852,7 +889,7 @@ class customModel extends model
 
         $enabledScrumFeatures  = array();
         $disabledScrumFeatures = array();
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             foreach($this->config->custom->scrumFeatures as $scrumFeature)
             {
@@ -952,13 +989,20 @@ class customModel extends model
             foreach($this->config->custom->dataFeatures as $feature)
             {
                 $function = 'has' . ucfirst($feature) . 'Data';
-                if(!$this->$function()) $disabledFeatures .= "$feature,";
+                if(!$this->$function())
+                {
+                    $disabledFeatures .= "$feature,";
+                    if(strpos($feature, 'scrum') === 0) $disabledFeatures .= 'agileplus' . substr($feature, 5) . ',';
+                }
             }
-            $disabledFeatures .= 'scrumMeasrecord,productTrack,productRoadmap';
+            $disabledFeatures .= 'scrumMeasrecord,agileplusMeasrecord,productTrack,productRoadmap';
         }
 
         $disabledFeatures = rtrim($disabledFeatures, ',');
         $this->loadModel('setting')->setItem('system.common.disabledFeatures', $disabledFeatures);
+
+        $URAndSR = strpos(",$disabledFeatures,", ',productUR,') === false ? '1' : '0';
+        $this->setting->setItem('system.custom.URAndSR', $URAndSR);
 
         $this->processMeasrecordCron();
     }
@@ -986,6 +1030,17 @@ class customModel extends model
     }
 
     /**
+     * Check for waterfallplus project data.
+     *
+     * @access public
+     * @return int
+     */
+    public function hasWaterfallplusData()
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('waterfallplus')->andWhere('deleted')->eq('0')->count();
+    }
+
+    /**
      * Check for assetlib data.
      *
      * @access public
@@ -993,7 +1048,7 @@ class customModel extends model
      */
     public function hasAssetlibData()
     {
-        if($this->config->edition == 'max') return $this->dao->select('*')->from(TABLE_ASSETLIB)->where('deleted')->eq(0)->count();
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd') return $this->dao->select('*')->from(TABLE_ASSETLIB)->where('deleted')->eq(0)->count();
         return false;
     }
 
@@ -1005,7 +1060,7 @@ class customModel extends model
      */
     public function hasScrumIssueData()
     {
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             return $this->dao->select('t1.*')->from(TABLE_ISSUE)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -1025,7 +1080,7 @@ class customModel extends model
      */
     public function hasScrumRiskData()
     {
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             return $this->dao->select('t1.*')->from(TABLE_RISK)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -1045,7 +1100,7 @@ class customModel extends model
      */
     public function hasScrumOpportunityData()
     {
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             return $this->dao->select('id')->from(TABLE_OPPORTUNITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
         }
@@ -1060,7 +1115,7 @@ class customModel extends model
      */
     public function hasScrumMeetingData()
     {
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             return $this->dao->select('id')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_MEETING)->alias('t2')->on('t1.id = t2.project')
@@ -1080,7 +1135,7 @@ class customModel extends model
      */
     public function hasScrumAuditplanData()
     {
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             return $this->dao->select('id')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_AUDITPLAN)->alias('t2')->on('t1.id = t2.project')
@@ -1100,7 +1155,7 @@ class customModel extends model
      */
     public function hasScrumProcessData()
     {
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             return $this->dao->select('id')->from(TABLE_PROGRAMACTIVITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
         }
@@ -1120,12 +1175,15 @@ class customModel extends model
         $disabledFeatures = $this->setting->getItem('owner=system&module=common&section=&key=disabledFeatures');
         $disabledFeatures = $disabledFeatures . ',' . $closedFeatures;
 
-        $hasWaterfall           = strpos(",{$disabledFeatures},",  ',waterfall,')           === false;
-        $hasScrumMeasrecord     = strpos(",{$disabledFeatures},",  ',scrumMeasrecord,')     === false;
-        $hasWaterfallMeasrecord = (strpos(",{$disabledFeatures},", ',waterfallMeasrecord,') === false and $hasWaterfall);
+        $hasWaterfall               = strpos(",{$disabledFeatures},",  ',waterfall,')           === false;
+        $hasWaterfallPlus           = strpos(",{$disabledFeatures},",  ',waterfallplus,')       === false;
+        $hasScrumMeasrecord         = strpos(",{$disabledFeatures},",  ',scrumMeasrecord,')     === false;
+        $hasAgilePlusMeasrecord     = strpos(",{$disabledFeatures},",  ',agileMeasrecord,')     === false;
+        $hasWaterfallMeasrecord     = (strpos(",{$disabledFeatures},", ',waterfallMeasrecord,') === false and $hasWaterfall);
+        $hasWaterfallPlusMeasrecord = (strpos(",{$disabledFeatures},", ',waterfallplusMeasrecord,') === false and $hasWaterfallPlus);
 
         $cronStatus = 'normal';
-        if(!$hasScrumMeasrecord and !$hasWaterfallMeasrecord) $cronStatus = 'stop';
+        if(!$hasScrumMeasrecord and !$hasAgilePlusMeasrecord and !$hasWaterfallMeasrecord and $hasWaterfallPlusMeasrecord) $cronStatus = 'stop';
 
         $this->loadModel('cron');
         $cron = $this->dao->select('id,status')->from(TABLE_CRON)->where('command')->like('%methodName=initCrontabQueue')->fetch();

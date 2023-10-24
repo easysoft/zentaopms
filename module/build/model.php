@@ -2,7 +2,7 @@
 /**
  * The model file of build module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
@@ -112,6 +112,7 @@ class buildModel extends model
                 $buildQuery = str_replace($field, "t1." . $field, $buildQuery);
             }
         }
+        if(strpos($this->session->projectBuildQuery, 'execution') !== false) $buildQuery = str_replace('`execution`', 't2.`id`', $buildQuery);
 
         return $this->getProjectBuilds($projectID, 'bysearch', $buildQuery);
     }
@@ -247,11 +248,13 @@ class buildModel extends model
         $selectedBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => $this->lang->trunk);
+        $productIdList = is_array($products) ? array_keys($products) : $products;
         if($buildIdList)
         {
+            $buildIdList = str_replace('trunk', '0', $buildIdList);
             $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)
                 ->where('id')->in($buildIdList)
-                ->beginIF($products)->andWhere('product')->in($products)->fi()
+                ->beginIF($products and $products != 'all')->andWhere('product')->in($productIdList)->fi()
                 ->beginIF($objectType === 'execution' and $objectID)->andWhere('execution')->eq($objectID)->fi()
                 ->beginIF($objectType === 'project' and $objectID)->andWhere('project')->eq($objectID)->fi()
                 ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('deleted')->eq(0)->fi()
@@ -259,23 +262,21 @@ class buildModel extends model
         }
         $branchPairs = $this->dao->select('id,name')->from(TABLE_BRANCH)->fetchPairs();
 
-        $shadows = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($products)->fetchPairs('shadow', 'shadow');
-        $branchs = strpos($params, 'separate') === false ? "0,$branch" : $branch;
-        $allBuilds = $this->dao->select('t1.id, t1.name, t1.branch, t1.execution, t1.date, t1.deleted, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t5.type as productType')->from(TABLE_BUILD)->alias('t1')
+        $shadows   = $this->dao->select('shadow')->from(TABLE_RELEASE)->where('product')->in($productIdList)->fetchPairs('shadow', 'shadow');
+        $branchs   = strpos($params, 'separate') === false ? "0,$branch" : $branch;
+        $allBuilds = $this->dao->select('t1.id, t1.name, t1.branch, t1.execution, t1.date, t1.deleted, t2.status as objectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.type as productType')->from(TABLE_BUILD)->alias('t1')
             ->beginIF($objectType === 'execution')->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')->fi()
             ->beginIF($objectType === 'project')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->fi()
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on("FIND_IN_SET(t1.id,t3.build)")
-            ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
-            ->leftJoin(TABLE_PRODUCT)->alias('t5')->on('t1.product = t5.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
             ->where('1=1')
-            ->andWhere('t1.id')->notIN($shadows)
+            ->beginIf(!empty($shadows))->andWhere('t1.id')->notIN($shadows)->fi()
             ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF(strpos($params, 'hasproject') !== false)->andWhere('t1.project')->ne(0)->fi()
             ->beginIF(strpos($params, 'singled') !== false)->andWhere('t1.execution')->ne(0)->fi()
-            ->beginIF($products)->andWhere('t1.product')->in($products)->fi()
+            ->beginIF($products and $products != 'all')->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF($objectType === 'execution' and $objectID)->andWhere('t1.execution')->eq($objectID)->fi()
             ->beginIF($objectType === 'project' and $objectID)->andWhere('t1.project')->eq($objectID)->fi()
-            ->beginIF($branch !== 'all')->andWhere('t1.branch')->in("$branchs")->fi()
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
 
         $deletedExecutions = $this->dao->select('id, deleted')->from(TABLE_EXECUTION)->where('type')->eq('sprint')->andWhere('deleted')->eq('1')->fetchPairs();
@@ -286,9 +287,11 @@ class buildModel extends model
         $this->app->loadLang('branch');
         foreach($allBuilds as $id => $build)
         {
+            if($build->branch === '') $build->branch = 0;
             if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->objectStatus === 'done')) continue;
             if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
             if((strpos($params, 'withexecution') !== false) and $build->execution and isset($executions[$build->execution])) continue;
+            if($branch !== 'all' and strpos(",{$build->branch},", ",{$branch},") === false) continue;
 
             if($build->deleted == 1) $build->name .= ' (' . $this->lang->build->deleted . ')';
 
@@ -332,7 +335,7 @@ class buildModel extends model
                 ->leftJoin(TABLE_BRANCH)->alias('t3')->on('FIND_IN_SET(t3.id, t1.branch)')
                 ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product=t4.id')
                 ->where('t2.id')->in($buildIdList)
-                ->andWhere('t1.product')->in($products)
+                ->andWhere('t1.product')->in($productIdList)
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t1.shadow')->ne(0)
                 ->fetchAll('id');
@@ -413,18 +416,15 @@ class buildModel extends model
         $build->bugs    = '';
 
         $build = fixer::input('post')
-            ->setDefault('project', 0)
-            ->setDefault('execution', 0)
-            ->setDefault('product', 0)
-            ->setDefault('branch', 0)
-            ->setDefault('builds', '')
+            ->setDefault('project,execution,product,branch,artifactRepoID', 0)
+            ->setDefault('builds,stories,bugs', '')
             ->cleanInt('product')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->stripTags($this->config->build->editor->create['id'], $this->config->allowedTags)
             ->join('builds', ',')
             ->join('branch', ',')
-            ->remove('resolvedBy,allchecker,files,labels,isIntegrated,uid')
+            ->remove('resolvedBy,allchecker,files,labels,isIntegrated,uid,isArtifactRepo')
             ->get();
 
         if($this->post->isIntegrated == 'yes')
@@ -439,7 +439,7 @@ class buildModel extends model
                     if(!isset($relationBranch[$branch])) $relationBranch[$branch] = $branch;
                 }
             }
-            $build->branch = implode(',', $relationBranch);
+            if($relationBranch) $build->branch = implode(',', $relationBranch);
         }
 
         $product = $this->loadModel('product')->getByID($build->product);
@@ -478,11 +478,13 @@ class buildModel extends model
      */
     public function update($buildID)
     {
-        $buildID  = (int)$buildID;
-        $oldBuild = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
-        $build    = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
+        $buildID    = (int)$buildID;
+        $oldBuild   = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
+        $newProduct = $this->dao->select('id,type')->from(TABLE_PRODUCT)->where('id')->eq($_POST['product'])->fetchPairs();
+        $branch     = (!isset($_POST['branch']) or $newProduct == 'normal') ? 0 : $oldBuild->branch;
+        $build      = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
             ->add('id', $buildID)
-            ->setIF(!isset($_POST['branch']), 'branch', $oldBuild->branch)
+            ->setDefault('branch', $branch)
             ->setDefault('product', $oldBuild->product)
             ->setDefault('builds', '')
             ->cleanInt('product,execution')
@@ -792,7 +794,7 @@ class buildModel extends model
         global $app;
         $tab = $app->tab;
 
-        $module = $build->execution ? 'build' : 'projectbuild';
+        $module = $this->app->tab == 'project' ? 'projectbuild' : 'build';
         if($type == 'browse')
         {
             $executionID = $tab == 'execution' ? $extraParams['executionID'] : $build->execution;

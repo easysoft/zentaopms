@@ -6,8 +6,7 @@ $liteVersion = isset($argv[2]) ? $argv[2] : '';
 
 /* File pathes. */
 $basePath    = dirname(dirname(__FILE__));
-//$releasePath = getenv('ZENTAO_RELEASE_PATH');
-$releasePath = '/home/z/ci/pip_release/';
+$releasePath = getenv('ZENTAO_RELEASE_PATH');
 $releasePath = !empty($releasePath) ? $releasePath : $basePath;
 if(!file_exists($releasePath . '/zentaopms.zip')) die("Please give me encrypted packages.\n");
 
@@ -52,22 +51,21 @@ foreach(array('zh-cn', 'en') as $langType)
     $dirName    = $langType == 'zh-cn' ? 'zentaopms' : 'zentaoalm';
 
     /* Cycle the php versions. */
-    foreach(array('5.4_5.6', '7.0', '7.1', '7.2_7.4', '8.1') as $phpVersion)
+    foreach(array('5.4_5.6', '7.0', '7.1', '7.2_7.4', '8.0') as $phpVersion)
     {
         /* File name. */
         $workDir   = "tmp/$packPrefix.{$version}.{$phpVersion}/";
         $shellName = $workDir . "make.sh";
+        $encryptedPhpVersion = $phpVersion == '8.0' ? '7.2_7.4' : $phpVersion;
         echo "Creating $shellName\n";
 
         mkdir($workDir, 0777, true);
 
         /* The commands of the shell. */
         $command  = "cd $workDir\n";
-        //$command .= "if [ ! -d ../$dirName ]; then unzip ../../$packPrefix.{$version}.zip -d ../ ; fi\n";
         $command .= "unzip ../../$packPrefix.{$version}.zip\n";
-        //$command .= "cp -raf ../$dirName .\n";
-        $command .= "cp -rf ../../zentaobiz.php$phpVersion/* $dirName/\n";
-        $command .= "cp -rf ../../zentaomax.php$phpVersion/* $dirName/\n";
+        $command .= "cp -rf ../../zentaobiz.php$encryptedPhpVersion/* $dirName/\n";
+        $command .= "cp -rf ../../zentaomax.php$encryptedPhpVersion/* $dirName/\n";
         $command .= "zip -r ../../$packPrefix.{$version}.php{$phpVersion}.zip $dirName\n";
 
         $command .= "rm -rf $dirName/\n";

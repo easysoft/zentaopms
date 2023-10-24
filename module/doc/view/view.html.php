@@ -1,259 +1,79 @@
 <?php
 /**
- * The view of doc module of ZenTaoPMS.
+ * The view view file of doc module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Jia Fu <fujia@cnezsoft.com>
+ * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     doc
- * @version     $Id: view.html.php 975 2010-07-29 03:30:25Z jajacn@126.com $
+ * @version     $Id$
  * @link        http://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php echo css::internal($keTableCSS);?>
-<style>.detail-content .file-image {padding: 0 50px 0 10px;}</style>
-<?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse', 'browseType=byediteddate');?>
-<?php $sessionString = session_name() . '=' . session_id();?>
-<?php
-js::set('fullscreen', $lang->fullscreen);
-js::set('retrack', $lang->retrack);
-js::set('sysurl', common::getSysUrl());
-js::set('docID', $doc->id);
-?>
+<?php include '../../ai/view/promptmenu.html.php';?>
+<?php js::set('treeData', $libTree);?>
+<?php js::set('docID', $docID);?>
+<?php js::set('linkParams', "objectID=$objectID&%s");?>
+<?php js::set('docLang', $lang->doc);?>
+<?php js::set('exportMethod', $exportMethod);?>
+<?php js::set('libID', $libID);?>
+<?php if($app->tab == 'execution'):;?>
+<style>.panel-body{min-height: 180px}</style>
+<?php endif;?>
 <div id="mainMenu" class="clearfix">
-  <div class="btn-toolbar pull-left">
-    <?php if(!isonlybody()):?>
-    <?php echo html::a($browseLink, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-primary'");?>
-    <div class="divider"></div>
-    <?php endif;?>
-    <div class="page-title">
-      <span class="label label-id"><?php echo $doc->id;?></span><span class="text" title='<?php echo $doc->title;?>'><?php echo $doc->title;?></span>
-      <?php if($doc->deleted):?>
-      <span class='label label-danger'><?php echo $lang->doc->deleted;?></span>
-      <?php endif; ?>
-      <?php if($doc->version > 1):?>
-      <?php
-      $versions = array();
-      $i = 1;
-      foreach($actions as $action)
-      {
-          if($action->action == 'created' or $action->action == 'deletedfile' or $action->action == 'commented')
-          {
-              $versions[$i] =  "#$i " . zget($users, $action->actor) . ' ' . substr($action->date, 2, 14);
-              $i++;
-          }
-          elseif($action->action == 'edited')
-          {
-              foreach($action->history as $history)
-              {
-                  if($history->field == 'content')
-                  {
-                      $versions[$i] = "#$i " . zget($users, $action->actor) . ' ' . substr($action->date, 2, 14);
-                      $i++;
-                      break;
-                  }
-              }
-          }
-      }
-      krsort($versions);
-      ?>
-      <small class='dropdown'>
-        <a href='#' data-toggle='dropdown' class='text-muted'><?php echo '#' . $version;?> <span class='caret'></span></a>
-        <ul class='dropdown-menu'>
-          <?php
-          foreach($versions as $i => $versionTitle)
-          {
-              $class = $i == $version ? " class='active'" : '';
-              echo '<li' . $class .'>' . html::a(inlink('view', "docID=$doc->id&version=$i&from={$lang->navGroup->doc}"), $versionTitle) . '</li>';
-          }
-          ?>
-        </ul>
-      </small>
-      <?php endif; ?>
-    </div>
+  <div id="leftBar" class="btn-toolbar pull-left">
+    <?php echo $objectDropdown;?>
+    <?php $gobackLink = $this->session->docList ? $this->session->docList : inlink('teamSpace', "objectID=0&libID=$libID");?>
+    <?php echo html::a($gobackLink, "<i class='icon-back'></i> " . $lang->goback, '', "class='btn btn-link'");?>
   </div>
-  <?php if(!isonlybody()):?>
-  <div class='btn-toolbar pull-right'>
-    <button type='button' class='btn btn-secondary fullscreen-btn' title='<?php echo $lang->retrack;?>'><i class='icon icon-fullscreen'></i><?php echo ' ' . $lang->retrack;?></button>
+  <?php if(empty($object->deleted)):?>
+  <div class="btn-toolbar pull-right">
+    <?php
+    if($canExport) echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&moduleID=0&docID=$docID"), "<i class='icon-export muted'> </i>" . $lang->export, 'hiddenwin', "class='btn btn-link' id='docExport'");
+    if(common::hasPriv('doc', 'createLib')) echo html::a($this->createLink('doc', 'createLib', "type=" . ($objectType ? $objectType : 'nolink') . "&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
+    if(common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, $moduleID);
+    ?>
   </div>
   <?php endif;?>
 </div>
-<div id="mainContent" class="main-row">
-  <div class="main-col col-8">
-    <div class="cell">
-      <div class="detail no-padding">
-        <div class="detail-content article-content no-margin no-padding">
-          <?php
-          if($doc->type == 'url' and $autoloadPage)
-          {
-              $url = $doc->content;
-              if(!preg_match('/^https?:\/\//', $doc->content)) $url = 'http://' . $url;
-              $urlIsHttps = strpos($url, 'https://') === 0;
-              $serverIsHttps = ((isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') or (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https'));
-              if(($urlIsHttps and $serverIsHttps) or (!$urlIsHttps and !$serverIsHttps))
-              {
-                  echo "<iframe width='100%' id='urlIframe' src='$url'></iframe>";
-              }
-              else
-              {
-                  $parsedUrl = parse_url($url);
-                  $urlDomain = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
-
-                  $title    = '';
-                  $response = common::http($url);
-                  preg_match_all('/<title>(.*)<\/title>/Ui', $response, $out);
-                  if(isset($out[1][0])) $title = $out[1][0];
-
-                  echo "<div id='urlCard'>";
-                  echo "<div class='url-icon'><img src='{$urlDomain}/favicon.ico' width='45' height='45' /></div>";
-                  echo "<div class='url-content'>";
-                  echo "<div class='url-title'>{$title}</div>";
-                  echo "<div class='url-href'>" . html::a($url, $url, '_target') . "</div>";
-                  echo "</div></div>";
-              }
-          }
-          elseif($doc->contentType == 'markdown')
-          {
-              echo "<textarea id='markdownContent'></textarea>";
-          }
-          else
-          {
-              echo $doc->content;
-          }
-          ?>
-
-          <?php foreach($doc->files as $file):?>
-          <?php if(in_array($file->extension, $config->file->imageExtensions)):?>
-          <div class='file-image'>
-            <a href="<?php echo $file->webPath?>" target="_blank">
-              <img onload="setImageSize(this, 0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>" title="<?php echo $file->title;?>">
-            </a>
-            <span class='right-icon'>
-              <?php
-              if(common::hasPriv('file', 'download'))
-              {
-                  $downloadLink  = $this->createLink('file', 'download', 'fileID=' . $file->id);
-                  $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
-                  $downloadLink .= $sessionString;
-                  echo html::a($downloadLink, "<i class='icon icon-import'></i>", '', "class='btn-icon' style='margin-right: 10px;' title=\"{$lang->doc->download}\"");
-              }
-              ?>
-              <?php if(common::hasPriv('doc', 'deleteFile')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='btn-icon' title=\"{$lang->doc->deleteFile}\" onclick='deleteFile($file->id)'");?>
-            </span>
-          </div>
-          <?php unset($doc->files[$file->id]);?>
-          <?php endif;?>
-          <?php endforeach;?>
-        </div>
-      </div>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true', 'object' => $doc));?>
+<div id='mainContent'class="fade flex">
+  <?php if($libID):?>
+    <?php if(empty($object->deleted)):?>
+    <div id='sideBar' class="panel side side-col col overflow-auto h-full-adjust">
+      <?php include 'lefttree.html.php';?>
     </div>
-    <div class='main-actions'>
-      <div class="btn-toolbar">
-        <?php common::printBack($browseLink);?>
-        <div class='divider'></div>
-        <?php
-        if(!$doc->deleted)
-        {
-            common::printIcon('doc', 'edit', "docID=$doc->id", $doc);
-            common::printIcon('doc', 'delete', "docID=$doc->id&confirm=no", $doc, 'button', 'trash', 'hiddenwin');
-        }
-        ?>
-      </div>
-    </div>
-  </div>
-  <div class="side-col col-4 hidden">
-    <?php if(!empty($doc->digest)):?>
-    <div class="cell">
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->doc->digest;?></summary>
-        <div class="detail-content">
-          <?php echo !empty($doc->digest) ? $doc->digest : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
-        </div>
-      </details>
-    </div>
+    <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
     <?php endif;?>
-    <div class="cell">
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->doc->keywords;?></summary>
-        <div class="detail-content">
-          <?php echo !empty($doc->keywords) ? $doc->keywords : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
+    <div class="main-col h-full-adjust" data-min-width="400">
+      <?php if($docID):?>
+        <?php include './content.html.php';?>
+      <?php else:?>
+      <div class="cell">
+        <div class="detail empty text-center">
+        <?php echo $lang->doc->noDoc;?>
         </div>
-      </details>
+      </div>
+      <?php endif;?>
     </div>
+  <?php else:?>
     <div class="cell">
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->doc->basicInfo;?></summary>
-        <div class="detail-content">
-          <table class="table table-data">
-            <tbody>
-              <?php if($doc->productName):?>
-              <tr>
-                <th class='w-90px'><?php echo $lang->doc->product;?></th>
-                <td><?php echo $doc->productName;?></td>
-              </tr>
-              <?php endif;?>
-              <?php if($doc->executionName):?>
-              <tr>
-                <th class='w-80px'><?php echo $lang->doc->execution;?></th>
-                <td><?php echo $doc->executionName;?></td>
-              </tr>
-              <?php endif;?>
-              <tr>
-                <th class='w-80px'><?php echo $lang->doc->lib;?></th>
-                <td><?php echo $lib->name;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->module;?></th>
-                <td><?php echo $doc->moduleName ? $doc->moduleName : '/';?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->addedDate;?></th>
-                <td><?php echo $doc->addedDate;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->editedBy;?></th>
-                <td><?php echo zget($users, $doc->editedBy);?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->editedDate;?></th>
-                <td><?php echo $doc->editedDate;?></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </details>
+      <div class="detail empty text-center">
+        <?php echo $lang->doc->noLib;?>
+        <?php echo html::a($this->createLink('doc', 'createLib', "type={$objectType}&objectID=$object->id"), "<i class='icon icon-plus'></i> " . $lang->doc->createLib, '', "class='btn btn-info iframe'");?>
+      </div>
     </div>
-    <div class='cell'>
-      <?php
-      $canBeChanged = common::canBeChanged('doc', $doc);
-      if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=doc&objectID=$doc->id");
-      ?>
-      <?php include '../../common/view/action.html.php';?>
-    </div>
-  </div>
+  <?php endif;?>
 </div>
-
-<div id="mainActions" class='main-actions'>
-  <?php common::printPreAndNext($preAndNext);?>
-</div>
-<?php js::set('canDeleteFile', common::hasPriv('doc', 'deleteFile'));?>
-<?php include '../../common/view/syntaxhighlighter.html.php';?>
-<?php if($doc->contentType == 'markdown'):?>
-<?php css::import($jsRoot . "markdown/simplemde.min.css");?>
-<?php js::import($jsRoot . 'markdown/simplemde.min.js'); ?>
-<?php js::set('markdownText', htmlspecialchars($doc->content));?>
+<?php js::set('type', 'doc');?>
 <script>
-$(function()
+$('#pageNav .btn-group.angle-btn').click(function()
 {
-    var simplemde = new SimpleMDE({element: $("#markdownContent")[0],toolbar:false, status: false});
-    simplemde.value(String(markdownText));
-    simplemde.togglePreview();
+    if($(this).hasClass('opened')) return;
+    $(this).addClass('opened');
 
-    $('#content .CodeMirror .editor-preview a').attr('target', '_blank');
+    scrollToSelected();
 })
 </script>
-<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

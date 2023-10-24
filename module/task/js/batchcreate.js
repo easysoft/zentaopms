@@ -104,9 +104,9 @@ function copyStoryTitle(num)
     endPosition    = storyTitle.lastIndexOf('[');
     storyTitle     = storyTitle.substr(startPosition, endPosition - startPosition);
 
-    $('#name\\[' + num + '\\]').val(storyTitle);
-    $('#estimate\\[' + num + '\\]').val($('#storyEstimate' + num).val());
-    $('#desc\\[' + num + '\\]').val(($('#storyDesc' + num).val()).replace(/<[^>]+>/g,'').replace(/(\n)+\n/g, "\n").replace(/^\n/g, '').replace(/\t/g, ''));
+    $('#name' + num).val(storyTitle);
+    $('#estimate' + num).val($('#storyEstimate' + num).val());
+    $('#desc' + num).val(($('#storyDesc' + num).val()).replace(/<[^>]+>/g,'').replace(/(\n)+\n/g, "\n").replace(/^\n/g, '').replace(/\t/g, ''));
 
     var storyPri = $('#storyPri' + num).val();
     if(storyPri == 0) $('#pri' + num ).val('3');

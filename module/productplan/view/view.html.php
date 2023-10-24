@@ -2,7 +2,7 @@
 /**
  * The view of productplan module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
@@ -14,6 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php include '../../ai/view/promptmenu.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->productplan->confirmUnlinkStory)?>
 <?php js::set('confirmUnlinkBug', $lang->productplan->confirmUnlinkBug)?>
 <?php js::set('planID', $plan->id);?>
@@ -102,7 +103,7 @@
         <?php if(common::hasPriv('productplan', 'linkStory')):?>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
-        <form class='main-table table-story' data-ride="" method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");?>">
+        <form class='main-table table-story<?php if($link === 'true' and $type == 'story') echo " hidden";?>' data-ride="" method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");?>">
           <table class='table has-sort-head' id='storyList'>
             <?php
             $canBatchUnlink       = common::hasPriv('productPlan', 'batchUnlinkStory');
@@ -402,7 +403,7 @@
         </div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
-        <form class='main-table table-bug' data-ride='table' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy");?>">
+        <form class='main-table table-bug<?php if($link === 'true' and $type == 'bug') echo " hidden";?>' data-ride='table' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy");?>">
           <table class='table has-sort-head' id='bugList'>
             <?php
             $canBatchUnlink     = common::hasPriv('productplan', 'batchUnlinkBug');

@@ -1,0 +1,12 @@
+.has-prefix {position: relative; display: flex; align-items: center;}
+.c-name {min-width: 200px;}
+.c-desc {min-width: 200px;}
+.c-order {width: 50px;}
+
+#privPackageTableList.sortable-sorting > tr {opacity: 0.7}
+#privPackageTableList.sortable-sorting > tr.drag-row {opacity: 1;}
+#privPackageTableList > tr.drop-not-allowed {opacity: 0.1!important}
+tbody.sortable > tr > td.sort-handler .table-nest-toggle:before {cursor: pointer !important;}
+tbody.sortable > tr > td.sort-handler {color: #3c4353 !important;}
+.has-nest-child > td > .table-nest-toggle {opacity: unset;}
+.table-nest-toggle {opacity: 0;}

@@ -334,4 +334,25 @@ class customTest
 
         return $objects;
     }
+
+    /**
+     * Check for waterfallplus project data..
+     *
+     * @param  string $param deleteproject
+     * @access public
+     * @return int
+     */
+    public function hasWaterfallplusDataTest($param = '')
+    {
+        if($param == 'deleteproject')
+        {
+            global $tester;
+            $tester->dao->update(TABLE_PROJECT)
+                ->set('deleted')->eq(1)
+                ->where('type')->eq('project')
+                ->andWhere('model')->eq('waterfallplus')
+                ->exec();
+        }
+        return $this->objectModel->hasWaterfallplusData();
+    }
 }

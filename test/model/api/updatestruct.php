@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/api.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -42,4 +41,3 @@ $emptyNameEditStruct['name'] = '';
 $struct = $api->createStructTest($normalStruct, false);
 r($api->updateStructTest($struct->id, $normalEditStruct, false)) && p('0:new') && e('editStruct');                //正常的修改
 r($api->updateStructTest($struct->id, $emptyNameEditStruct)) && p('name:0') && e('『结构名』不能为空。'); //没有名称的修改
-$db->restoreDB();

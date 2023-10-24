@@ -2,7 +2,7 @@
 /**
  * The model file of webhook module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2017 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     webhook
@@ -20,34 +20,33 @@ class webhookModel extends model
      */
     public function getByID($id)
     {
-        $webhook = $this->dao->select('*')->from(TABLE_WEBHOOK)->where('id')->eq($id)->fetch();
-        return $webhook;
+        return $this->dao->select('*')->from(TABLE_WEBHOOK)->where('id')->eq($id)->fetch();
     }
 
     /**
      * Get a webhook by type.
      *
-     * @param  int    $type
+     * @param  string $type
      * @access public
      * @return object
      */
     public function getByType($type)
     {
-        $webhook = $this->dao->select('*')->from(TABLE_WEBHOOK)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetch();
-        return $webhook;
+        return $this->dao->select('*')->from(TABLE_WEBHOOK)->where('type')->eq($type)->andWhere('deleted')->eq('0')->fetch();
     }
 
     /**
      * Get a webhook by type.
      *
-     * @param  int    $type
+     * @param  int    $webhookID
+     * @param  string $webhookType
+     * @param  string $openID
      * @access public
      * @return object
      */
     public function getBindAccount($webhookID, $webhookType, $openID)
     {
-        $account = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerID')->eq($webhookID)->andWhere('providerType')->eq($webhookType)->andWhere('openID')->eq($openID)->fetch('account');
-        return $account;
+        return $this->dao->select('account')->from(TABLE_OAUTH)->where('providerID')->eq($webhookID)->andWhere('providerType')->eq($webhookType)->andWhere('openID')->eq($openID)->fetch('account');
     }
 
     /**
@@ -61,12 +60,11 @@ class webhookModel extends model
      */
     public function getList($orderBy = 'id_desc', $pager = null, $decode = true)
     {
-        $webhooks = $this->dao->select('*')->from(TABLE_WEBHOOK)
+        return $this->dao->select('*')->from(TABLE_WEBHOOK)
             ->where('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        return $webhooks;
     }
 
     /**
@@ -154,7 +152,7 @@ class webhookModel extends model
     public function getDataList()
     {
         $dataList  = $this->dao->select('*')->from(TABLE_NOTIFY)->where('status')->eq('wait')->andWhere('objectType')->eq('webhook')->orderBy('id')->fetchAll('id');
-        $dataList += $this->dao->select('*')->from(TABLE_NOTIFY)->where('status')->eq('senting')->andWhere('sendTime')->ge(date('Y-m-d H:i:s', time() - 3 * 3600))->andWhere('objectType')->eq('webhook')->orderBy('id')->fetchAll('id');
+        $dataList += $this->dao->select('*')->from(TABLE_NOTIFY)->where('status')->eq('senting')->andWhere('objectType')->eq('webhook')->orderBy('id')->fetchAll('id');
         return $dataList;
     }
 
@@ -354,6 +352,7 @@ class webhookModel extends model
      * @param  int    $objectID
      * @param  string $actionType
      * @param  int    $actionID
+     * @param  string $actor
      * @access public
      * @return bool
      */
@@ -609,8 +608,15 @@ class webhookModel extends model
     public function getFeishuData($title, $text)
     {
         $data = new stdclass();
-        $data->msg_type = 'text';
-        $data->content['text'] = $text;
+        $data->msg_type = 'interactive';
+
+        $data->card = array();
+        $data->card['header']   = array();
+        $data->card['elements'] = array();
+
+        $data->card['elements'][]         = array('tag' => 'markdown', 'content' => $text);
+        $data->card['header']['title']    = array('tag' => 'plain_text', 'content' => $title);
+        $data->card['header']['template'] = 'blue';
 
         return $data;
     }
@@ -618,12 +624,21 @@ class webhookModel extends model
     /**
      * Get openID list.
      *
+     * @param  int    $webhookID
      * @param  int    $actionID
+     * @param  string $toList
      * @access public
      * @return string
      */
-    public function getOpenIdList($webhookID, $actionID)
+    public function getOpenIdList($webhookID, $actionID, $toList = '')
     {
+        if($toList)
+        {
+            $openIdList = $this->getBoundUsers($webhookID, $toList);
+            $openIdList = join(',', $openIdList);
+            return $openIdList;
+        }
+
         if(empty($actionID)) return false;
 
         $action = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($actionID)->fetch();
@@ -655,10 +670,11 @@ class webhookModel extends model
      * @param  object $webhook
      * @param  string $sendData
      * @param  int    $actionID
+     * @param  string $appendUser
      * @access public
      * @return int
      */
-    public function fetchHook($webhook, $sendData, $actionID = 0)
+    public function fetchHook($webhook, $sendData, $actionID = 0, $appendUser = '')
     {
         if(!extension_loaded('curl')) return print(helper::jsonEncode($this->lang->webhook->error->curl));
 
@@ -666,7 +682,7 @@ class webhookModel extends model
         {
             if(is_string($webhook->secret)) $webhook->secret = json_decode($webhook->secret);
 
-            $openIdList = $this->getOpenIdList($webhook->id, $actionID);
+            $openIdList = $this->getOpenIdList($webhook->id, $actionID, $appendUser);
             if(empty($openIdList)) return false;
             if($webhook->type == 'dinguser')
             {
@@ -742,6 +758,7 @@ class webhookModel extends model
      * @param  int    $webhookID
      * @param  int    $actionID
      * @param  string $data
+     * @param  string $actor
      * @access public
      * @return bool
      */
@@ -781,7 +798,7 @@ class webhookModel extends model
         $log->url         = $webhook->url;
         $log->contentType = $webhook->contentType;
         $log->data        = $data;
-        $log->result      = $result;
+        $log->result      = (string)$result;
 
         $this->dao->insert(TABLE_LOG)->data($log)->exec();
         return !dao::isError();

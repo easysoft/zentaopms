@@ -2,7 +2,7 @@
 /**
  * The batch close view of story module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     story
@@ -42,11 +42,13 @@
         </td>
         <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
         <td class='reasons-td'>
-          <?php if($story->status == 'draft') unset($reasonList['cancel']);?>
           <table class='w-p100 table-form'>
             <tr>
               <td class='pd-0'>
-                <?php echo html::select("closedReasons[$storyID]", $reasonList, 'done', "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 80px'");?>
+                <?php
+                $closedReasonList = $story->status == 'draft' ? array_diff_key($reasonList, array('cancel' => '')) : $reasonList;
+                echo html::select("closedReasons[$storyID]", $closedReasonList, 'done', "class=form-control onchange=setDuplicateAndChild(this.value,$storyID) style='min-width: 80px'");
+                ?>
               </td>
               <td class='pd-0 w-p60 text-left' id='<?php echo 'duplicateStoryBox' . $storyID;?>' <?php if($story->closedReason != 'duplicate') echo "style='display:none'";?>>
                 <?php echo html::select("duplicateStoryIDList[$storyID]", '', '', "class='form-control' placeholder='{$lang->bug->duplicateTip}'");?>

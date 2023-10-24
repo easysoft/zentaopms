@@ -13,7 +13,9 @@ $lang->gitlab->delete            = '刪除GitLab';
 $lang->gitlab->confirmDelete     = '確認刪除該GitLab嗎？';
 $lang->gitlab->gitlabAccount     = 'GitLab用戶';
 $lang->gitlab->zentaoAccount     = '禪道用戶';
+$lang->gitlab->accountDesc       = '(系統會將相同郵箱地址的用戶自動匹配)';
 $lang->gitlab->bindingStatus     = '綁定狀態';
+$lang->gitlab->all               = '全部';
 $lang->gitlab->binded            = '已綁定';
 $lang->gitlab->bindedError       = '綁定的用戶已刪除或者已修改，請重新綁定';
 $lang->gitlab->serverFail        = '連接GitLab伺服器異常，請檢查GitLab伺服器。';
@@ -96,6 +98,10 @@ $lang->gitlab->apiError[2] = 'is too short (minimum is 8 characters)';
 $lang->gitlab->apiError[3] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
 $lang->gitlab->apiError[4] = 'Branch already exists';
 $lang->gitlab->apiError[5] = 'Failed to save group {:path=>["has already been taken"]}';
+$lang->gitlab->apiError[6] = 'Failed to save group {:path=>["已经被使用"]}';
+$lang->gitlab->apiError[7] = '403 Forbidden';
+$lang->gitlab->apiError[8] = 'is invalid';
+$lang->gitlab->apiError[9] = 'admin is a reserved name';
 
 $lang->gitlab->errorLang[0] = '私有分組的項目，可見性級別不能設為內部。';
 $lang->gitlab->errorLang[1] = '私有分組的項目，可見性級別不能設為公開。';
@@ -103,6 +109,13 @@ $lang->gitlab->errorLang[2] = '密碼太短（最少8個字元）';
 $lang->gitlab->errorLang[3] = "只能包含字母、數字、'.'-'和'.'。不能以'-'開頭、以'.git'結尾或以'.atom'結尾。";
 $lang->gitlab->errorLang[4] = '分支名已存在。';
 $lang->gitlab->errorLang[5] = '保存失敗，群組URL路徑已經被使用。';
+$lang->gitlab->errorLang[6] = '保存失敗，群組URL路徑已經被使用。';
+$lang->gitlab->errorLang[7] = $lang->gitlab->noAccess;
+$lang->gitlab->errorLang[8] = '格式错误';
+$lang->gitlab->errorLang[9] = 'admin是保留名';
+
+$lang->gitlab->errorResonse['Email has already been taken']    = '邮箱已存在';
+$lang->gitlab->errorResonse['Username has already been taken'] = '用户名已存在';
 
 $lang->gitlab->project = new stdclass;
 $lang->gitlab->project->id                         = "項目ID";
@@ -222,3 +235,7 @@ $lang->gitlab->tag->protected          = '受保護';
 $lang->gitlab->tag->accessLevel        = '允許創建';
 $lang->gitlab->tag->emptyPrivNameError = '標簽不能爲空';
 $lang->gitlab->tag->issetPrivNameError = '已存在該保護標簽';
+
+$lang->gitlab->featureBar['binduser']['all']     = $lang->gitlab->all;
+$lang->gitlab->featureBar['binduser']['notBind'] = $lang->gitlab->notBind;
+$lang->gitlab->featureBar['binduser']['binded']  = $lang->gitlab->binded;

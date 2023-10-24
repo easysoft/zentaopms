@@ -2,7 +2,7 @@
 /**
  * The html template file of PGMBrowse method of program module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -18,9 +18,6 @@
 <?php js::set('hasProject', $hasProject);?>
 <?php js::set('checkedProjects', $lang->program->checkedProjects);?>
 <?php js::set('cilentLang', $this->app->getClientLang());?>
-<?php if($programType == 'bygrid'):?>
-<style>#mainMenu{padding-left: 10px; padding-right: 10px;}</style>
-<?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolBar pull-left">
     <?php common::sortFeatureMenu();?>
@@ -29,7 +26,7 @@
     <?php $label = "<span class='text'>$label</span>";?>
     <?php echo html::a(inlink('browse', "status=$key&orderBy=$orderBy"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
-    <?php if(common::hasPriv('project', 'batchEdit') and $programType != 'bygrid' and $hasProject === true) echo html::checkbox('editProject', array('1' => $lang->project->edit), '', $this->cookie->editProject ? 'checked=checked' : '');?>
+    <?php if(common::hasPriv('project', 'batchEdit') and $hasProject === true) echo html::checkbox('editProject', array('1' => $lang->project->edit), '', $this->cookie->editProject ? 'checked=checked' : '');?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
   </div>
   <div class='pull-right'>
@@ -50,14 +47,7 @@
   <div class='main-col'>
     <div class="cell<?php if($status == 'bySearch') echo ' show';?>" id="queryBox" data-module='program'></div>
     <?php
-    if($programType == 'bygrid')
-    {
-        include 'browsebygrid.html.php';
-    }
-    else
-    {
-        include 'browsebylist.html.php';
-    }
+    include 'browsebylist.html.php';
     ?>
   </div>
   <?php endif;?>

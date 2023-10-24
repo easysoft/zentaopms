@@ -2,7 +2,7 @@
 /**
  * The control file of todo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
@@ -206,7 +206,7 @@ class todo extends control
             $account = $user->account;
 
             $reviews = array();
-            if($this->config->edition == 'max') $reviews = $this->loadModel('review')->getUserReviewPairs($account);
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd') $reviews = $this->loadModel('review')->getUserReviewPairs($account);
             $allTodos = $this->todo->getList($type, $account, $status);
             if($this->post->todoIDList) $todoIDList = $this->post->todoIDList;
 
@@ -228,7 +228,7 @@ class todo extends control
             $tasks  = $this->task->getUserTaskPairs($account, 'wait,doing', '', isset($objectIDList['task']) ? $objectIDList['task'] : '');
             $storys = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIDList['story']) ? $objectIDList['story'] : '');
             if($this->config->edition != 'open') $this->view->feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account, '', isset($objectIDList['feedback']) ? $objectIDList['feedback'] : '');
-            if($this->config->edition == 'max')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
                 $risks         = $this->loadmodel('risk')->getUserRiskPairs($account);
@@ -256,7 +256,7 @@ class todo extends control
             $this->view->bugs        = $bugs;
             $this->view->tasks       = $tasks;
             $this->view->storys      = $storys;
-            if($this->config->edition == 'max')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 $this->view->issues        = $issues;
                 $this->view->risks         = $risks;
@@ -389,7 +389,7 @@ class todo extends control
         $todo = $this->todo->getById($todoID, true);
         if(!$todo)
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            if((defined('RUN_MODE') && RUN_MODE == 'api') or $this->app->viewType == 'json') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate('back'));
         }
 
@@ -453,7 +453,13 @@ class todo extends control
         }
         else
         {
-            $this->todo->delete(TABLE_TODO, $todoID);
+            $result = $this->todo->delete(TABLE_TODO, $todoID);
+            if(!$result)
+            {
+                if(isonlybody()) return print(js::alert($this->lang->error->accessDenied));
+                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->error->accessDenied));
+                if(helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+            }
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -591,7 +597,7 @@ class todo extends control
 
             /* Get bugs. */
             $todos = $this->dao->select('*')->from(TABLE_TODO)->where($this->session->todoReportCondition)
-                ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->post->checkedItem)->fi()
                 ->orderBy($orderBy)->fetchAll('id');
 
             /* Get users, bugs, tasks and times. */
@@ -599,7 +605,7 @@ class todo extends control
             $bugs      = $this->loadModel('bug')->getUserBugPairs($account);
             $stories   = $this->loadModel('story')->getUserStoryPairs($account, 100, 'story');
             $tasks     = $this->loadModel('task')->getUserTaskPairs($account);
-            if($this->config->edition == 'max')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
                 $risks         = $this->loadModel('risk')->getUserRiskPairs($account);
@@ -615,13 +621,15 @@ class todo extends control
                 $todo->begin = $todo->begin == '2400' ? '' : (isset($times[$todo->begin]) ? $times[$todo->begin] : $todo->begin);
                 $todo->end   = $todo->end   == '2400' ? '' : (isset($times[$todo->end])   ? $times[$todo->end] : $todo->end);
 
+                $todo->assignedTo = zget($users, $todo->assignedTo);
+
                 $type = $todo->type;
                 if(isset($users[$todo->account])) $todo->account = $users[$todo->account];
                 if($type == 'bug')                $todo->name    = isset($bugs[$todo->idvalue])    ? $bugs[$todo->idvalue] . "(#$todo->idvalue)" : '';
                 if($type == 'story')              $todo->name    = isset($stories[$todo->idvalue]) ? $stories[$todo->idvalue] . "(#$todo->idvalue)" : '';
                 if($type == 'task')               $todo->name    = isset($tasks[$todo->idvalue])   ? $tasks[$todo->idvalue] . "(#$todo->idvalue)" : '';
 
-                if($this->config->edition == 'max')
+                if($this->config->edition == 'max' or $this->config->edition == 'ipd')
                 {
                     if($type == 'issue') $todo->name = isset($issues[$todo->idvalue]) ? $issues[$todo->idvalue] . "(#$todo->idvalue)" : '';
                     if($type == 'risk')  $todo->name = isset($risks[$todo->idvalue])  ? $risks[$todo->idvalue] . "(#$todo->idvalue)" : '';

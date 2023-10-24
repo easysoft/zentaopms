@@ -2,10 +2,10 @@
 /**
  * The suspend file of project module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang<wwccss@gmail.com>
- * @package     project 
+ * @package     project
  * @version     $Id: suspend.html.php 935 2013-01-16 07:49:24Z wwccss@gmail.com $
  * @link        http://www.zentao.net
  */
@@ -33,11 +33,11 @@
         <tr>
           <th><?php echo $lang->project->realEnd;?></th>
           <td>
-            <div class='w-150px'>       
-              <?php echo html::input('realEnd',(!empty($project->realEnd) && $project->realEnd != '0000-00-00' ? $project->realEnd : date('Y-m-d')), "class='form-control form-date' required");?>
-            </div>         
+            <div class='w-150px'>
+              <?php echo html::input('realEnd',(!helper::isZeroDate($project->realEnd) ? $project->realEnd : date('Y-m-d')), "class='form-control form-date' required");?>
+            </div>
           </td>
-        </tr>        
+        </tr>
         <tr>
           <th class='w-50px'><?php echo $lang->comment;?></th>
           <td><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>

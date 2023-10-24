@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/projectrelease.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -30,4 +29,3 @@ r($projectrelease->unlinkStoryTest($releaseID[0], $storyID[2])) && p('stories') 
 r($projectrelease->unlinkStoryTest($releaseID[1], $storyID[0])) && p('stories') && e('1');   //测试terminate状态的发布，正常存在的storyID值为2，可移除
 r($projectrelease->unlinkStoryTest($releaseID[1], $storyID[1])) && p('stories') && e('1,2'); //测试terminate状态的发布，不存在的storyID值为100，不可移除
 r($projectrelease->unlinkStoryTest($releaseID[1], $storyID[2])) && p('stories') && e('1,2'); //测试terminate状态的发布，不存在的storyID值为空，不可移除
-$db->restoreDB();

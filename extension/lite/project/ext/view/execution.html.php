@@ -2,7 +2,7 @@
 /**
  * The html template file of all method of execution module for lite vision of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Wenrui LI <liwenrui@easycorp.ltd>
  * @package     execution
@@ -14,7 +14,7 @@
 <div class='clearfix' id='mainMenu'>
   <div class='btn-toolbar pull-left'>
     <?php
-      foreach($lang->project->featureBar['browse'] as $label => $labelName)
+      foreach($lang->project->featureBar['execution'] as $label => $labelName)
       {
           $active = $status == $label ? 'btn-active-text' : '';
           echo html::a($this->createLink('project', 'execution', "status=$label&projectID=$projectID"), '<span class="text">' . $labelName . '</span> ' . ($status == $label ? "<span class='label label-light label-badge'>" . (int)count($kanbanList) . '</span>' : ''), '', "class='btn btn-link $active'");

@@ -1,13 +1,15 @@
 /**
 * The css file of ZenTaoPMS.
 *
-* @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+* @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
 * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
 * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
 * @package     front
 * @version     $Id: style.css 1454 2009-10-23 01:45:26Z wwccss $
 * @link        http://www.zentao.net
 */
+
+.mt-md {margin-top: 100px!important;}
 /* Finish task #5068*/
 .main-table .table{cursor:pointer;}
 .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th{background:none;}
@@ -68,7 +70,7 @@ th.c-confirmed, th.c-confirm {text-align: center;}
 .c-object-type {width: 130px;}
 .c-full-date, .c-mobile, .c-email, .c-text, .c-subject, .c-assigned-box, .c-user-box {width: 150px;}
 .c-module, .c-date-box {width: 180px;}
-.c-ip {width: 200px;}
+.c-ip, .c-time-limit {width: 200px;}
 .c-object {width: 250px;}
 .c-case-step {width: 300px;}
 .c-actions-8 {width: 240px;}
@@ -109,14 +111,13 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 .xxc-embed .fix-table-copy-wrapper {top: 50px!important;}
 .xxc-embed #headerActions {right: 310px!important;}
 .xxc-embed .modal-iframe .modal-header .close {font-size: 28px !important;}
-.xxc-embed .modal-body {min-height: 500px!important;}
+.xxc-embed .modal-body {min-height: 300px!important;}
+/* .xxc-embed #userDropDownMenu, .xxc-embed #visionSwitcher {display: none!important;} */
+.xxc-embed .book-search {transform: translateX(-112px);}
+
 
 #downloadMobile .dropdown-menu {top: -31px !important; min-width: 130px; padding: 0;}
-#downloadMobile .dropdown-menu .mobile-qrcode {padding: 15px 0px 0 10px;}
-#downloadMobile .dropdown-menu .mobile-qrcode.local-img {padding: 15px 5px 0 5px;}
-#downloadMobile .dropdown-menu .mobile-qrcode iframe {width: 110px; height: 120px; text-align: center;}
-#downloadMobile .dropdown-menu .mobile-version {text-align: center;}
-#downloadMobile .dropdown-menu .mobile-version span {color: #0c64eb; font-size: 12px; font-weight: 700;}
+#downloadMobile .dropdown-menu .mobile-qrcode {padding: 10px 0px;}
 
 .radio-text-divider {width: 1px; height: 13px; display: inline-block; margin: -2px 9px 0; background: #D9D9D9; vertical-align: middle;}
 .input-divider {margin: 0 4px;}
@@ -234,3 +235,11 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 
 /* Unset style for qa qa-automation-menu. */
 .qa-automation-menu > a:focus, .qa-automation-menu > a:hover {background: unset!important; cursor: default;}
+
+#adminMenu.dropdown-menu {min-width: max-content;}
+#adminMenu.dropdown-menu > li {padding: 0;}
+#adminMenu.dropdown-menu > li > a {padding: 6px 29px 6px 20px;}
+#adminMenu.dropdown-menu > li > a > img {padding-bottom: 4px; padding-right: 8px;}
+#adminMenu.dropdown-menu > li.disabled img {filter: grayscale(100%); opacity: .6;}
+
+#userNav .dropdown-menu > li > a:hover > .user-profile-role {color: #FFFFFF;}

@@ -2,7 +2,7 @@
 /**
  * The assigntome block view file of block module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
@@ -21,6 +21,7 @@
     <?php $i          = 0;?>
     <?php $maxItem    = common::checkNotCN() ? 6 : 8;?>
     <?php foreach($hasViewPriv as $type => $bool):?>
+    <?php if(!$bool) continue;?>
     <?php if($i <= $maxItem):?>
     <li<?php if($isFirstTab) {echo ' class="active"';}?>>
         <a data-tab href='#assigntomeTab-<?php echo $type;?>' onClick="changeLabel('<?php echo $type;?>')">
@@ -49,6 +50,7 @@
   <div class="tab-content">
     <?php $isFirstTab = true; ?>
     <?php foreach($hasViewPriv as $type => $bool):?>
+    <?php if(!$bool) continue;?>
     <div class="tab-pane<?php if($isFirstTab) {echo ' active'; $isFirstTab = false;}?>" id="assigntomeTab-<?php echo $type?>">
       <?php include "{$type}block.html.php";?>
     </div>

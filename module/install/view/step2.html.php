@@ -2,7 +2,7 @@
 /**
  * The html template file of step2 method of install module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -31,24 +31,32 @@
             <th><?php echo $lang->install->defaultLang;?></th>
             <td><?php echo html::select('defaultLang', $config->langs, $app->getClientLang(), "class='form-control'");?></td><td></td>
           </tr>
-          <tr>
+          <?php if($config->edition != 'open'):?>
+          <tr class='<?php if($config->inQuickon) echo 'hidden';?>'>
+            <th><?php echo $lang->install->dbDriver;?></th>
+            <td><?php echo html::select('dbDriver', $lang->install->dbDriverList, 'mysql', "class='form-control'");?></td><td></td>
+          </tr>
+          <?php else:?>
+            <?php echo html::hidden('dbDriver', 'mysql');?>
+          <?php endif;?>
+          <tr class='<?php if($config->inQuickon) echo 'hidden';?>'>
             <th><?php echo $lang->install->dbHost;?></th>
             <td><?php echo html::input('dbHost', $dbHost, "class='form-control'");?></td>
             <td><?php echo $lang->install->dbHostNote;?></td>
           </tr>
-          <tr>
+          <tr class='<?php if($config->inQuickon) echo 'hidden';?>'>
             <th><?php echo $lang->install->dbPort;?></th>
             <td><?php echo html::input('dbPort', $dbPort, "class='form-control'");?></td><td></td>
           </tr>
-          <tr>
+          <tr class='<?php if($config->inQuickon) echo 'hidden';?>'>
             <th><?php echo $lang->install->dbEncoding;?></th>
             <td><?php echo html::input('dbEncoding', $this->config->db->encoding, "class='form-control'");?></td><td></td>
           </tr>
-          <tr>
+          <tr class='<?php if($config->inQuickon) echo 'hidden';?>'>
             <th><?php echo $lang->install->dbUser;?></th>
             <td><?php echo html::input('dbUser', $dbUser, "class='form-control'");?></td><td></td>
           </tr>
-          <tr>
+          <tr class='<?php if($config->inQuickon) echo 'hidden';?>'>
             <th><?php echo $lang->install->dbPassword;?></th>
             <td><?php echo html::input('dbPassword', $dbPassword, "class='form-control'");?></td><td></td>
           </tr>

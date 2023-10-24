@@ -2,7 +2,7 @@
 /**
  * The resetpwdsetting view file of admin module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     admin
@@ -24,21 +24,19 @@
     <div class='cell'>
       <div class='list-group'>
         <?php
-        echo html::a($this->createLink('admin', 'safe'), $lang->admin->safe->set);
-        if(common::hasPriv('admin', 'checkWeak')) echo html::a($this->createLink('admin', 'checkWeak'), $lang->admin->safe->checkWeak);
-        echo html::a($this->createLink('admin', 'resetPWDSetting'), $lang->admin->resetPWDSetting, '', "class='active'");
+        if(common::hasPriv('admin', 'safe'))            echo html::a($this->createLink('admin', 'safe'), $lang->admin->safe->set);
+        if(common::hasPriv('admin', 'checkWeak'))       echo html::a($this->createLink('admin', 'checkWeak'), $lang->admin->safe->checkWeak);
+        if(common::hasPriv('admin', 'resetPWDSetting')) echo html::a($this->createLink('admin', 'resetPWDSetting'), $lang->admin->resetPWDSetting, '', "class='active'");
         ?>
       </div>
     </div>
   </div>
   <div id='mainContent' class='main-col main-content'>
+    <div class='main-header'>
+      <h2><?php echo $lang->admin->resetPWDSetting;?></h2>
+    </div>
     <div class='center-block'>
       <form class="load-indicator main-form form-ajax" method='post'>
-        <div class='main-header'>
-          <div class='heading'>
-            <strong><?php echo $lang->admin->resetPWDSetting;?></strong>
-          </div>
-        </div>
         <table class='table table-form'>
           <tr>
             <th class='mailBox'><?php echo $lang->admin->resetPWDByMail;?></th>

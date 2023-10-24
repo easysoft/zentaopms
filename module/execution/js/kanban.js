@@ -215,7 +215,7 @@ $('.c-group').change(function()
 {
     $('.c-group').show();
 
-    var type  = $('#type').val();
+    var type  = $('#type').val() ? $('#type').val() : browseType;
     var group = $('#group').val();
     var link  = createLink('execution', 'kanban', 'executionID=' + executionID + '&type=' + type + '&orderBy=id_asc' + '&groupBy=' + group);
     location.href = link;
@@ -566,7 +566,7 @@ function renderStoryItem(item, $item, col)
         if(!$title.length)
         {
             $title = $('<a class="title iframe">' + (scaleSize <= 1 ? '<i class="icon icon-lightbulb text-muted"></i> ' : '') + '<span class="text"></span></a>');
-            if(priv.canViewStory) $title = $title.attr('href', $.createLink('execution', 'storyView', 'storyID=' + item.id + '&version=0&param=' + execution.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '95%');
+            if(priv.canViewStory) $title = $title.attr('href', $.createLink('execution', 'storyView', 'storyID=' + item.id + '&executionID=' + execution.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '95%');
             $title.appendTo($item);
         }
         var title = rdSearchValue != '' ? "<span class='text'>" + item.title.replaceAll(rdSearchValue, "<span class='text-danger'>" + rdSearchValue + "</span>") + "</span>": "<span class='text'>" + item.title + "</span>";
@@ -1385,13 +1385,9 @@ function handleSortCards(event)
     if(window.sortableDisabled || groupBy != 'default' || rdSearchValue != '') return;
     var newLaneID = event.element.closest('.kanban-lane').data('id');
     var newColID  = event.element.closest('.kanban-col').data('id');
-    var cards     = event.element.closest('.kanban-lane-items').data('cards');
-    var orders    = cards.map(function(card){return card.id});
-    var fromID    = String(event.element.data('id'));
-    var toID      = String(event.target.data('id'));
-
-    orders.splice(orders.indexOf(fromID), 1);
-    orders.splice(orders.indexOf(toID) + (event.insert === 'before' ?  0 : 1), 0, fromID);
+    var cards     = event.element.closest('.kanban-lane-items').find('.kanban-item');
+    var orders    = [];
+    cards.each(function(){orders.push($(this).data('id'))});
 
     var url = createLink('kanban', 'sortCard', 'kanbanID=' + executionID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
     $.getJSON(url, function(response)

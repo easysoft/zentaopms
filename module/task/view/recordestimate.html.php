@@ -2,7 +2,7 @@
 /**
  * The record file of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang<wwccss@gmail.com>
  * @package     task
@@ -69,8 +69,8 @@ if(!empty($members) && $task->mode == 'linear')
           <th class="w-120px"><?php common::printOrderLink('date', !strpos($orderBy, ',') ? $orderBy : 'date_asc', $vars, $lang->task->date);?></th>
           <th class="w-120px text-center"><?php echo $lang->task->recordedBy;?></th>
           <th class='text-left'><?php echo $lang->task->work;?></th>
-          <th class="thWidth text-center"><?php echo $lang->task->consumed;?></th>
-          <th class="thWidth text-center"><?php echo $lang->task->left;?></th>
+          <th class="thWidth text-center"><?php echo $lang->task->consumedAB;?></th>
+          <th class="thWidth text-center"><?php echo $lang->task->leftAB;?></th>
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>

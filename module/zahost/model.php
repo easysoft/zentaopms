@@ -2,7 +2,7 @@
 /**
  * The model file of zahost module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Wang Jianhua <wangjiahua@easycorp.ltd>
  * @package     zahost
@@ -114,25 +114,18 @@ class zahostModel extends model
      */
     public function ping($address)
     {
-        if (strcasecmp(PHP_OS, 'WINNT') === 0)
+        if(!filter_var($address, FILTER_VALIDATE_IP) && !filter_var(gethostbyname($address), FILTER_VALIDATE_IP)) return false;
+
+        if(strcasecmp(PHP_OS, 'WINNT') === 0)
         {
             exec("ping -n 1 {$address}", $outcome, $status);
         }
-        elseif (strcasecmp(PHP_OS, 'Linux') === 0)
+        elseif(strcasecmp(PHP_OS, 'Linux') === 0)
         {
             exec("ping -c 1 {$address}", $outcome, $status);
         }
 
-        if (0 == $status)
-        {
-            $status = true;
-        }
-        else
-        {
-            $status = false;
-        }
-
-        return $status;
+        return 0 == $status;
     }
 
     /**
@@ -193,7 +186,8 @@ class zahostModel extends model
      */
     public function getImageList($hostID, $browseType = 'all', $param = 0, $orderBy = 'id', $pager = null)
     {
-        $imageList    = json_decode(file_get_contents($this->config->zahost->imageListUrl));
+        $imageList = json_decode(commonModel::http($this->config->zahost->imageListUrl, array(), array()));
+        if(empty($imageList)) return array();
 
         $downloadedImageList = $this->dao->select('*')->from(TABLE_IMAGE)
             ->where('host')->eq($hostID)
@@ -208,7 +202,6 @@ class zahostModel extends model
             if(empty($downloadedImage))
             {
                 $refreshPageData = true;
-                $remoteImage->id     = 0;
                 $remoteImage->status = 'notDownloaded';
                 $remoteImage->from   = 'zentao';
                 $remoteImage->osName = $remoteImage->os;
@@ -256,7 +249,7 @@ class zahostModel extends model
      */
     public function createImage($hostID, $imageName)
     {
-        $imageList = json_decode(file_get_contents($this->config->zahost->imageListUrl));
+        $imageList = json_decode(commonModel::http($this->config->zahost->imageListUrl, array(), array()));
 
         $imageData = new stdclass;
         foreach($imageList  as $item) if($item->name == $imageName) $imageData = $item;
@@ -434,6 +427,7 @@ class zahostModel extends model
         $host = $this->dao->select('*,id as hostID')->from(TABLE_ZAHOST)
             ->where('id')->eq($hostID)
             ->fetch();
+        $host->heartbeat = empty($host->heartbeat) ? '' : $host->heartbeat;
 
         if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online')
         {
@@ -505,6 +499,7 @@ class zahostModel extends model
 
         foreach($list as $host)
         {
+            $host->heartbeat = empty($host->heartbeat) ? '' : $host->heartbeat;
             if(time() - strtotime($host->heartbeat) > 60 && $host->status == 'online')
             {
                 $host->status = 'offline';
@@ -590,6 +585,7 @@ class zahostModel extends model
      */
     public function getServiceStatus($host)
     {
+        if(in_array($host->status, array('wait', 'offline'))) return $this->lang->zahost->init->serviceStatus;
         $result = json_decode(commonModel::http("http://{$host->extranet}:{$host->zap}/api/v1/service/check", json_encode(array("services" => "all")), array(), array("Authorization:$host->tokenSN")));
         if(empty($result) || $result->code != 'success')
         {

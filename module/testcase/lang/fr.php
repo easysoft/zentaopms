@@ -2,7 +2,7 @@
 /**
  * The testcase module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
@@ -11,8 +11,8 @@
  */
 $lang->testcase->id               = 'ID';
 $lang->testcase->product          = $lang->productCommon;
-$lang->testcase->project          = 'Project';
-$lang->testcase->execution        = 'Execution';
+$lang->testcase->project          = $lang->projectCommon;
+$lang->testcase->execution        = $lang->executionCommon;
 $lang->testcase->linkStory        = 'linkStory';
 $lang->testcase->module           = 'Module';
 $lang->testcase->auto             = 'Test Automation Cases';
@@ -110,7 +110,6 @@ $lang->testcase->stepDesc    = 'Etape';
 $lang->testcase->stepExpect  = 'Résultat Attendu';
 $lang->testcase->stepVersion = 'Version';
 
-$lang->testcase->common                  = 'CasTest';
 $lang->testcase->index                   = "Accueil CasTest";
 $lang->testcase->create                  = "Ajout CasTest";
 $lang->testcase->batchCreate             = "Ajouter par Lot";
@@ -135,6 +134,7 @@ $lang->testcase->groupCase               = "Vue par Groupe";
 $lang->testcase->zeroCase                = "Stories sans CasTests";
 $lang->testcase->import                  = "Importer";
 $lang->testcase->importAction            = "Importer CasTest";
+$lang->testcase->importCaseAction        = "Importer CasTest";
 $lang->testcase->fileImport              = "Importer CSV";
 $lang->testcase->importFromLib           = "Importer de la Library";
 $lang->testcase->showImport              = "Voir Import";
@@ -187,7 +187,7 @@ $lang->testcase->summary               = "Total <strong>%s</strong> CasTests sur
 $lang->testcase->confirmDelete         = 'Voulez-vous supprimer ce CasTest ?';
 $lang->testcase->confirmBatchDelete    = 'Voulez-vous supprimer des Castests par Lot ?';
 $lang->testcase->ditto                 = 'Idem';
-$lang->testcase->dittoNotice           = "Ce CasTest n'est pas associé au Product alors que le précédent l'était !";
+$lang->testcase->dittoNotice           = "This Case is not linked to the {$lang->productCommon} as the last one is!";
 $lang->testcase->confirmUnlinkTesttask = 'The case [%s] is already associated in the testtask order of the previous branch/platform, after adjusting the branch/platform, it will be removed from the test list of the previous branch/platform, please confirm whether to continue to modify.';
 
 $lang->testcase->reviewList[0] = 'NON';
@@ -254,10 +254,10 @@ $lang->testcase->selectLibAB   = 'Sélectionner Library';
 $lang->testcase->action = new stdclass();
 $lang->testcase->action->fromlib               = array('main' => '$date, importé par <strong>$actor</strong> depuis <strong>$extra</strong>.');
 $lang->testcase->action->reviewed              = array('main' => '$date, enregistré par <strong>$actor</strong> et le résultat de validation est <strong>$extra</strong>.', 'extra' => 'reviewResultList');
-$lang->testcase->action->linked2project        = array('main' => '$date, 由 <strong>$actor</strong> 关联到项目 <strong>$extra</strong>。');
-$lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <strong>$actor</strong> 从项目 <strong>$extra</strong> 移除。');
-$lang->testcase->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
-$lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
+$lang->testcase->action->linked2project        = array('main' => '$date, linked ' . $lang->projectCommon . ' by <strong>$actor</strong> to <strong>$extra</strong>.');
+$lang->testcase->action->unlinkedfromproject   = array('main' => '$date, removed by <strong>$actor</strong> from <strong>$extra</strong>.');
+$lang->testcase->action->linked2execution      = array('main' => '$date, linked ' . $lang->executionCommon . ' by  <strong>$actor</strong> to <strong>$extra</strong>.');
+$lang->testcase->action->unlinkedfromexecution = array('main' => '$date, removed by <strong>$actor</strong> from <strong>$extra</strong>.');
 
 $lang->testcase->featureBar['browse']['casetype']    = $lang->testcase->caseType;
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
@@ -267,4 +267,82 @@ $lang->testcase->featureBar['browse']['group']       = 'Group View';
 $lang->testcase->featureBar['browse']['zerocase']    = 'Zero Case Story';
 $lang->testcase->featureBar['browse']['suite']       = 'Suite';
 $lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
-$lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];
+
+$lang->testcase->importXmind     = "Import XMIND";
+$lang->testcase->exportXmind     = "Export XMIND";
+$lang->testcase->getXmindImport  = "Get Mindmap";
+$lang->testcase->showXMindImport = "Display Mindmap";
+$lang->testcase->saveXmindImport = "Save Mindmap";
+
+$lang->testcase->xmindImport           = "Imort XMIND";
+$lang->testcase->xmindExport           = "Export XMIND";
+$lang->testcase->xmindImportEdit       = "XMIND Edit";
+$lang->testcase->errorFileNotEmpty     = 'The uploaded file cannot be empty';
+$lang->testcase->errorXmindUpload      = 'Upload failed';
+$lang->testcase->errorFileFormat       = 'File format error';
+$lang->testcase->moduleSelector        = 'Module Selection';
+$lang->testcase->errorImportBadProduct = 'Product does not exist, import error';
+$lang->testcase->errorSceneNotExist    = 'Scene [%d] not exists';
+
+$lang->testcase->save  = 'Save';
+$lang->testcase->close = 'Close';
+
+$lang->testcase->xmindImportSetting = 'Import Characteristic Character Settings';
+$lang->testcase->xmindExportSetting = 'Export Characteristic Character Settings';
+
+$lang->testcase->settingModule = 'Module';
+$lang->testcase->settingScene  = 'Scene';
+$lang->testcase->settingCase   = 'Testcase';
+$lang->testcase->settingPri    = 'Priority';
+$lang->testcase->settingGroup  = 'Step Group';
+
+$lang->testcase->caseNotExist = 'The test case in the imported file was not recognized and the import failed';
+$lang->testcase->saveFail     = 'Save failed';
+$lang->testcase->set2Scene    = 'Set as Scene';
+$lang->testcase->set2Testcase = 'Set as Testcase';
+$lang->testcase->clearSetting = 'Clear Settings';
+$lang->testcase->setModule    = 'Set scene module';
+$lang->testcase->pickModule   = 'Please select a module';
+$lang->testcase->clearBefore  = 'Clear previous scenes';
+$lang->testcase->clearAfter   = 'Clear the following scenes';
+$lang->testcase->clearCurrent = 'Clear the current scene';
+$lang->testcase->removeGroup  = 'Remove Group';
+$lang->testcase->set2Group    = 'Set as Group';
+
+$lang->testcase->exportTemplet = 'Export Template';
+
+$lang->testcase->createScene      = "Add Scene";
+$lang->testcase->changeScene      = "Drag to change the scene which it belongs";
+$lang->testcase->batchChangeScene = "Batch change scene";
+$lang->testcase->updateOrder      = "Drag Sort";
+$lang->testcase->differentProduct = "Different product";
+
+$lang->testcase->newScene                    = "Add Scene";
+$lang->testcase->sceneTitle                  = 'Scene Title';
+$lang->testcase->parentScene                 = "Parent Scene";
+$lang->testcase->scene                       = "Scene";
+$lang->testcase->summary                     = 'Total %d Top Scene，%d Independent test case.';
+$lang->testcase->summaryScene                = 'Total %d Top Scene.';
+$lang->testcase->deleteScene                 = 'Delete Scene';
+$lang->testcase->editScene                   = 'Edit Scene';
+$lang->testcase->hasChildren                 = 'This scene has sub scene or test cases. Do you want to delete them all?';
+$lang->testcase->confirmDeleteScene          = 'Are you sure you want to delete the scene: \"%s\"?';
+$lang->testcase->sceneb                      = "Scene";
+$lang->testcase->onlyScene                   = 'Only Scene';
+$lang->testcase->iScene                      = 'Scene';
+$lang->testcase->generalTitle                = 'Title';
+$lang->testcase->noScene                     = 'No Scene';
+$lang->testcase->rowIndex                    = 'Row Index';
+$lang->testcase->nestTotal                   = 'nest total';
+$lang->testcase->normal                      = 'normal';
+
+/* Translation for drag modal message box. */
+$lang->testcase->dragModalTitle       = 'Drag and drop operation selection';
+$lang->testcase->dragModalMessage     = '<p>There are two possible situations for the current operation: </p><p>1) Adjust the sequence.<br/> 2) Change its scenario, meanwhile its module will be changed accordingly.</p><p>Please select the operation you want to perform.</p>';
+$lang->testcase->dragModalChangeScene = 'Change its scene';
+$lang->testcase->dragModalChangeOrder = 'Reorder';
+
+$lang->testcase->confirmBatchDeleteSceneCase = 'Are you sure you want to delete these scene or test cases in batch?';
+
+$lang->scene = new stdclass();
+$lang->scene->title = 'Scene Title';

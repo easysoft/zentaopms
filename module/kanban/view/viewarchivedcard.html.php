@@ -2,7 +2,7 @@
 /**
  * The viewarchivedcard file of kanban module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     kanban
@@ -87,6 +87,7 @@ js::set('systemMode', $this->config->systemMode);
         if($card->color == '#b10b0b') $color = 'has-color red';
         if($card->color == '#cfa227') $color = 'has-color yellow';
         if($card->color == '#2a5f29') $color = 'has-color green';
+        $card->deadline = isset($card->deadline) ? $card->deadline : '';
         ?>
         <?php
         $nameColor = '';
@@ -105,15 +106,16 @@ js::set('systemMode', $this->config->systemMode);
             <?php if($card->estimate and $card->estimate != 0) echo "<span class='text-gray'>{$card->estimate}h</span>";?>
         <?php else:?>
         <?php
-        $name = isset($card->title) ? $card->title : $card->name;
+        $name    = isset($card->name) ? $card->name : $card->title;
+        $title   = isset($card->title) ? $card->title : $name;
         $delayed = '';
         if($card->fromType == 'execution' or $card->fromType == 'ticket')
         {
             $delayed = (!empty($card->delay) or (!helper::isZeroDate($card->deadline) and helper::now() > $card->deadline)) ? "<span class='delayed label label-danger label-badge'>{$lang->execution->delayed}</span>" : '';
         }
 
-        if(common::hasPriv($card->fromType, 'view')) echo "<div class='cardName {$card->fromType}Name'>" . html::a($this->createLink($card->fromType, 'view', "id=$card->fromID"), $name, '', " title='$name'") . "$delayed</div>";
-        if(!common::hasPriv($card->fromType, 'view')) echo "<div class='cardName {$card->fromType}Name'><div title='$name'>$name</div>$delayed</div>";
+        if(common::hasPriv($card->fromType, 'view') and empty($card->children)) echo "<div class='cardName {$card->fromType}Name'>" . html::a($this->createLink($card->fromType, 'view', "id=$card->fromID"), $title, '', " title='$title'") . "$delayed</div>";
+        if(!common::hasPriv($card->fromType, 'view') or !empty($card->children)) echo "<div class='cardName {$card->fromType}Name'><div title='$title'>$name</div>$delayed</div>";
         if($card->fromType == 'productplan' or $card->fromType == 'build')
         {
             echo "<div class='desc' title='$card->desc'>$card->desc</div>";

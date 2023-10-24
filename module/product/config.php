@@ -12,7 +12,7 @@ $config->product->custom->batchEditFields = 'PO,QD,RD';
 if($config->systemMode == 'ALM') $config->product->custom->batchEditFields .= ',program,line';
 
 $config->product->list = new stdclass();
-$config->product->list->exportFields = 'id,program,line,name,manager,draftStories,activeStories,changedStories,reviewingStories,closedStories,storyCompleteRate,bugs,unResolvedBugs,assignToNullBugs,bugFixedRate,plans,releases';
+$config->product->list->exportFields = 'id,program,line,name,manager,draftStories,activeStories,changedStories,reviewingStories,closedStories,storyCompleteRate,unResolvedBugs,bugFixedRate,plans,releases';
 
 $config->product->showBranchMethod = 'browse,project';
 
@@ -96,7 +96,7 @@ $app->loadLang('product');
 $config->product->all = new stdclass();
 $config->product->all->search['module']                = 'product';
 $config->product->all->search['fields']['name']        = $lang->product->name;
-if(!isset($config->setCode) or $config->setCode == 1) $config->product->all->search['fields']['code'] = $lang->product->code;
+if(isset($config->setCode) and $config->setCode == 1) $config->product->all->search['fields']['code'] = $lang->product->code;
 $config->product->all->search['fields']['id']          = $lang->product->id;
 if($config->systemMode == 'ALM')
 {
@@ -113,7 +113,7 @@ $config->product->all->search['fields']['createdDate'] = $lang->product->created
 $config->product->all->search['fields']['createdBy']   = $lang->product->createdBy;
 
 $config->product->all->search['params']['name']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
-if(!isset($config->setCode) or $config->setCode == 1) $config->product->all->search['params']['code'] = array('operator' => 'include', 'control' => 'input',  'values' => '');
+if(isset($config->setCode) and $config->setCode == 1) $config->product->all->search['params']['code'] = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->product->all->search['params']['id']          = array('operator' => '=',       'control' => 'input',  'values' => '');
 if($config->systemMode == 'ALM')
 {
@@ -135,10 +135,11 @@ $config->product->create->requiredFields = 'name,code';
 $config->product->edit->requiredFields   = 'name,code';
 
 $config->product->editor = new stdclass();
-$config->product->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->product->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->product->editor->close  = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->product->editor->view   = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
+$config->product->editor->create   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->product->editor->edit     = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->product->editor->activate = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->product->editor->close    = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->product->editor->view     = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 
 $config->product->report = new stdclass();
 $config->product->report->stage = array();
@@ -156,10 +157,9 @@ $config->product->report->planLabels   = array();
 $config->product->report->planLabels[] = '';
 
 $config->product->statisticFields = array();
-$config->product->statisticFields['requirements'] = array('draftRequirements', 'activeRequirements', 'changingRequirements', 'reviewingRequirements', 'closedRequirements');
-$config->product->statisticFields['stories']      = array('draftStories', 'activeStories', 'changingStories', 'reviewingStories', 'closedStories', 'finishClosedStories', 'unclosedStories');
-$config->product->statisticFields['bugs']         = array('unResolvedBugs', 'closedBugs', 'fixedBugs');
-$config->product->statisticFields['plans']        = array('plans');
-$config->product->statisticFields['releases']     = array('releases');
+$config->product->statisticFields['stories']  = array('draftStories', 'activeStories', 'changingStories', 'reviewingStories', 'closedStories', 'finishedStories', 'finishClosedStories', 'totalStories');
+$config->product->statisticFields['bugs']     = array('unresolvedBugs', 'closedBugs', 'fixedBugs');
+$config->product->statisticFields['plans']    = array('plans');
+$config->product->statisticFields['releases'] = array('releases');
 
 $config->product->skipRedirectMethod = ',create,index,showerrornone,ajaxgetdropmenu,kanban,all,manageline,export,ajaxgetplans,';

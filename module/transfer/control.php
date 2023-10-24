@@ -67,6 +67,11 @@ class transfer extends control
             $this->config->transfer->sysDataList = $this->transfer->initSysDataFields();
 
             $fields = $this->config->$model->templateFields;
+            if($model == 'task')
+            {
+                $execution = $this->loadModel('execution')->getByID($executionID);
+                if(isset($execution) and $execution->type == 'ops' or in_array($execution->attribute, array('request', 'review'))) $fields = str_replace('story,', '', $fields);
+            }
 
             /* Init config fieldList. */
             $fieldList = $this->transfer->initFieldList($model, $fields);
@@ -101,9 +106,9 @@ class transfer extends control
         $locate = $locate ? $locate : $this->session->showImportURL;
         if($_FILES)
         {
-            $file      = $this->loadModel('file')->getUpload('file');
+            $file = $this->loadModel('file')->getUpload('file');
 
-            if(!empty($file['error'])) return print(js::confirm($this->lang->file->uploadError[$file['error']]));
+            if(!empty($file['error'])) return print(js::alert($this->lang->file->uploadError[$file['error']]));
 
             $file      = $file[0];
             $shortName = $this->file->getSaveName($file['pathname']);
@@ -203,7 +208,8 @@ class transfer extends control
 
         $fieldList = $this->transfer->initFieldList($model, $fields, false);
 
-        if(empty($fieldList[$field]['values'])) $fieldList[$field]['values'] = array();
+        if(empty($fieldList[$field]['values'])) $fieldList[$field]['values'] = array('' => '');
+        if(!in_array($field, $this->config->transfer->requiredFields)) $fieldList[$field]['values'][''] = '';
 
         $multiple = $fieldList[$field]['control'] == 'multiple' ? 'multiple' : '';
 

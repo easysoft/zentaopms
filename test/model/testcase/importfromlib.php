@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testcase.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -29,4 +28,3 @@ r($testcase->importFromLibTest($productID, $caseIdList[1])) && p('0:title;1:titl
 r($testcase->importFromLibTest($productID, $caseIdList[2])) && p('0:title;1:title') && e('用例库用例5;用例库用例6'); // 测试导入用例库用例 405 406
 r($testcase->importFromLibTest($productID, $caseIdList[3])) && p('0:title;1:title') && e('用例库用例7;用例库用例8'); // 测试导入用例库用例 407 408
 r($testcase->importFromLibTest($productID, $caseIdList[4])) && p('0:title;1:title') && e('用例库用例9;用例库用例10'); // 测试导入用例库用例 409 410
-$db->restoreDB();

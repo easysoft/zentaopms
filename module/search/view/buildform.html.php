@@ -2,7 +2,7 @@
 /**
  * The buildform view of search module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
@@ -69,13 +69,14 @@ html[lang^='zh-'] .operatorWidth {width: 90px !important;}
 #save-query {float: unset !important; position: absolute; right: 50px;}
 #save-query .text {top: 0px;}
 #save-query .text:after {border-bottom: 0px solid #0c64eb;}
+#<?php echo $formId;?> [id^='valueBox'] > div.picker span.picker-selection-text {padding-right: 10px;}
 </style>
 <?php if($style != 'simple'):?>
   <div id='toggle-queries'>
     <i class='icon icon-angle-left'></i>
   </div>
 <?php endif;?>
-<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='<?php echo $formId;?>' class='search-form<?php if($style == 'simple') echo ' search-form-simple';?>'>
+<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='<?php echo $formId;?>' class='search-form no-stash<?php if($style == 'simple') echo ' search-form-simple';?>'>
 <div class='hidden'>
 <?php
 /* Print every field as an html object, select or input. Thus when setFiled is called, copy it's html to build the search form. */
@@ -96,7 +97,7 @@ foreach($fieldParams as $fieldName => $param)
           <tbody>
             <?php
             $formSessionName = $module . 'Form';
-            $formSession     = $_SESSION[$formSessionName];
+            $formSession     = $this->search->convertFormFrom20To18($_SESSION[$formSessionName]);
 
             $fieldNO = 1;
             for($i = 1; $i <= $groupItems; $i ++)
@@ -123,7 +124,7 @@ foreach($fieldParams as $fieldName => $param)
                 echo '</td>';
 
                 /* Print field. */
-                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
+                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control picker-select'") . '</td>';
 
                 /* Print operator. */
                 echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
@@ -131,7 +132,7 @@ foreach($fieldParams as $fieldName => $param)
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO' style='overflow:visible'>";
                 if(isset($config->moreLinks["field{$currentField}"])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
-                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen' max_drop_width='400'");
+                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect picker-select' data-max_drop_width='0'");
                 if($param['control'] == 'input')
                 {
                     $fieldName  = $formSession["field$fieldNO"];
@@ -187,7 +188,7 @@ foreach($fieldParams as $fieldName => $param)
                 echo '</td>';
 
                 /* Print field. */
-                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
+                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control picker-select'") . '</td>';
 
                 /* Print operator. */
                 echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
@@ -199,7 +200,7 @@ foreach($fieldParams as $fieldName => $param)
                     $selected = $formSession["value$fieldNO"];
                     if(!isset($param['values'][$selected])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
                 }
-                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen'");
+                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect picker-select' data-max_drop_width='0'");
 
                 if($param['control'] == 'input')
                 {
@@ -217,7 +218,7 @@ foreach($fieldParams as $fieldName => $param)
                         $placeholder = "placeholder='{$lang->search->queryTips}'";;
                     }
 
-                    echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' $placeholder");
+                    echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' $placeholder data-max_drop_width='0'");
                 }
                 echo '</td>';
 
@@ -515,9 +516,7 @@ $(function()
                 $searchForm.find("#value" + fieldNO).picker(
                 {
                     chosenMode: true,
-                    dropWidth: 'auto',
-                    minAutoDropWidth: '100%',
-                    maxAutoDropWidth: 350
+                    dropWidth: '100%'
                 });
             }
         }

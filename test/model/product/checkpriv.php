@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/product.class.php';
-$db->switchDB();
 
 #su('admin');
 
@@ -45,4 +44,3 @@ r($productTest->checkPrivTest($productIDList[3])) && p() && e('1'); // 测试po1
 r($productTest->checkPrivTest($productIDList[4])) && p() && e('1'); // 测试po1能否看到产品5
 r($productTest->checkPrivTest($productIDList[5])) && p() && e('2'); // 测试po1能否看到不存在的产品
 
-$db->restoreDB();

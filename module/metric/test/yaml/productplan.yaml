@@ -1,0 +1,26 @@
+---
+title: zt_productplan
+author: qixinzhi
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: product
+  range: 1-10{2}
+- field: status
+  range: wait{2},doing{2},done{2},closed{2}
+- field: createdDate
+  range: "20100101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: closedDate
+  range: "20120101 000000-20230101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: finishedDate
+  range: "20110101 000000-20220101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: deleted
+  range: 0{1},1{1}
+...

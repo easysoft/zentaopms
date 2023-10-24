@@ -1,9 +1,8 @@
 <?php
+
 /**
  * Parses an alter operation.
  */
-
-declare(strict_types=1);
 
 namespace PhpMyAdmin\SqlParser\Components;
 
@@ -12,15 +11,12 @@ use PhpMyAdmin\SqlParser\Parser;
 use PhpMyAdmin\SqlParser\Token;
 use PhpMyAdmin\SqlParser\TokensList;
 
-use function array_key_exists;
-use function in_array;
-use function is_numeric;
-use function is_string;
-
 /**
  * Parses an alter operation.
  *
- * @final
+ * @category   Components
+ *
+ * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class AlterOperation extends Component
 {
@@ -29,67 +25,67 @@ class AlterOperation extends Component
      *
      * @var array
      */
-    public static $DB_OPTIONS = [
-        'CHARACTER SET' => [
+    public static $DB_OPTIONS = array(
+        'CHARACTER SET' => array(
             1,
-            'var',
-        ],
-        'CHARSET' => [
+            'var'
+        ),
+        'CHARSET' => array(
             1,
-            'var',
-        ],
-        'DEFAULT CHARACTER SET' => [
+            'var'
+        ),
+        'DEFAULT CHARACTER SET' => array(
             1,
-            'var',
-        ],
-        'DEFAULT CHARSET' => [
+            'var'
+        ),
+        'DEFAULT CHARSET' => array(
             1,
-            'var',
-        ],
-        'UPGRADE' => [
+            'var'
+        ),
+        'UPGRADE' => array(
             1,
-            'var',
-        ],
-        'COLLATE' => [
+            'var'
+        ),
+        'COLLATE' => array(
             2,
-            'var',
-        ],
-        'DEFAULT COLLATE' => [
+            'var'
+        ),
+        'DEFAULT COLLATE' => array(
             2,
-            'var',
-        ],
-    ];
+            'var'
+        )
+    );
 
     /**
      * All table options.
      *
      * @var array
      */
-    public static $TABLE_OPTIONS = [
-        'ENGINE' => [
+    public static $TABLE_OPTIONS = array(
+        'ENGINE' => array(
             1,
-            'var=',
-        ],
-        'AUTO_INCREMENT' => [
+            'var='
+        ),
+        'AUTO_INCREMENT' => array(
             1,
-            'var=',
-        ],
-        'AVG_ROW_LENGTH' => [
+            'var='
+        ),
+        'AVG_ROW_LENGTH' => array(
             1,
-            'var',
-        ],
-        'MAX_ROWS' => [
+            'var'
+        ),
+        'MAX_ROWS' => array(
             1,
-            'var',
-        ],
-        'ROW_FORMAT' => [
+            'var'
+        ),
+        'ROW_FORMAT' => array(
             1,
-            'var',
-        ],
-        'COMMENT' => [
+            'var'
+        ),
+        'COMMENT' => array(
             1,
-            'var',
-        ],
+            'var'
+        ),
         'ADD' => 1,
         'ALTER' => 1,
         'ANALYZE' => 1,
@@ -131,54 +127,56 @@ class AlterOperation extends Component
         'INDEX' => 2,
 
         'CHARACTER SET' => 3,
-    ];
+    );
 
     /**
      * All user options.
      *
      * @var array
      */
-    public static $USER_OPTIONS = [
-        'ATTRIBUTE' => [
+    public static $USER_OPTIONS = array(
+        'ATTRIBUTE' => array(
             1,
-            'var',
-        ],
-        'COMMENT' => [
+            'var'
+        ),
+        'COMMENT' => array(
             1,
-            'var',
-        ],
-        'REQUIRE' => [
+            'var'
+        ),
+        'REQUIRE' => array(
             1,
-            'var',
-        ],
-        'BY' => [
+            'var'
+        ),
+        'BY' => array(
             2,
-            'expr',
-        ],
-        'PASSWORD' => [
+            'expr'
+        ),
+        'PASSWORD' => array(
             2,
-            'var',
-        ],
-        'WITH' => [
+            'var'
+        ),
+        'WITH' => array(
             2,
-            'var',
-        ],
+            'var'
+        ),
 
         'ACCOUNT' => 1,
         'DEFAULT' => 1,
 
         'LOCK' => 2,
-        'UNLOCK' => 2,
-
+        'UNLOCK' => 2,  
+        
         'IDENTIFIED' => 3,
-    ];
+    );
 
     /**
      * All view options.
      *
      * @var array
      */
-    public static $VIEW_OPTIONS = ['AS' => 1];
+    public static $VIEW_OPTIONS = array(
+        'AS' => 1,
+    );
 
     /**
      * Options of this operation.
@@ -199,9 +197,11 @@ class AlterOperation extends Component
      *
      * @var Token[]|string
      */
-    public $unknown = [];
+    public $unknown = array();
 
     /**
+     * Constructor.
+     *
      * @param OptionsArray $options options of alter operation
      * @param Expression   $field   altered field
      * @param array        $unknown unparsed tokens found at the end of operation
@@ -209,7 +209,7 @@ class AlterOperation extends Component
     public function __construct(
         $options = null,
         $field = null,
-        $unknown = []
+        $unknown = array()
     ) {
         $this->options = $options;
         $this->field = $field;
@@ -223,9 +223,9 @@ class AlterOperation extends Component
      *
      * @return AlterOperation
      */
-    public static function parse(Parser $parser, TokensList $list, array $options = [])
+    public static function parse(Parser $parser, TokensList $list, array $options = array())
     {
-        $ret = new static();
+        $ret = new self();
 
         /**
          * Counts brackets.
@@ -274,7 +274,6 @@ class AlterOperation extends Component
                     // included to not break anything.
                     $ret->unknown[] = $token;
                 }
-
                 continue;
             }
 
@@ -286,10 +285,8 @@ class AlterOperation extends Component
                         if ($list->tokens[$list->idx]->type === Token::TYPE_DELIMITER) {
                             break;
                         }
-
                         $ret->unknown[] = $list->tokens[$list->idx];
                     }
-
                     break;
                 }
 
@@ -298,26 +295,24 @@ class AlterOperation extends Component
                 $ret->field = Expression::parse(
                     $parser,
                     $list,
-                    [
+                    array(
                         'breakOnAlias' => true,
-                        'parseField' => 'column',
-                    ]
+                        'parseField' => 'column'
+                    )
                 );
                 if ($ret->field === null) {
                     // No field was read. We go back one token so the next
                     // iteration will parse the same token, but in state 2.
                     --$list->idx;
                 }
-
                 $state = 2;
             } elseif ($state === 2) {
-                $arrayKey = '';
+                $array_key = '';
                 if (is_string($token->value) || is_numeric($token->value)) {
-                    $arrayKey = $token->value;
+                    $array_key = $token->value;
                 } else {
-                    $arrayKey = $token->token;
+                    $array_key = $token->token;
                 }
-
                 if ($token->type === Token::TYPE_OPERATOR) {
                     if ($token->value === '(') {
                         ++$brackets;
@@ -351,24 +346,27 @@ class AlterOperation extends Component
                             );
                             break;
                         }
-                    } elseif (
-                        (array_key_exists($arrayKey, self::$DB_OPTIONS)
-                        || array_key_exists($arrayKey, self::$TABLE_OPTIONS))
-                        && ! self::checkIfColumnDefinitionKeyword($arrayKey)
+                    } elseif ((array_key_exists($array_key, self::$DB_OPTIONS)
+                        || array_key_exists($array_key, self::$TABLE_OPTIONS))
+                        && ! self::checkIfColumnDefinitionKeyword($array_key)
                     ) {
-                        // This alter operation has finished, which means a comma
-                        // was missing before start of new alter operation
-                        $parser->error('Missing comma before start of a new alter operation.', $token);
+                        // This alter operation has finished, which means a comma was missing before start of new alter operation
+                        $parser->error(
+                            'Missing comma before start of a new alter operation.',
+                            $token
+                        );
                         break;
                     }
                 }
-
                 $ret->unknown[] = $token;
             }
         }
 
         if ($ret->options->isEmpty()) {
-            $parser->error('Unrecognized alter operation.', $list->tokens[$list->idx]);
+            $parser->error(
+                'Unrecognized alter operation.',
+                $list->tokens[$list->idx]
+            );
         }
 
         --$list->idx;
@@ -382,13 +380,12 @@ class AlterOperation extends Component
      *
      * @return string
      */
-    public static function build($component, array $options = [])
+    public static function build($component, array $options = array())
     {
         $ret = $component->options . ' ';
-        if (isset($component->field) && ($component->field !== '')) {
+        if ((isset($component->field)) && ($component->field !== '')) {
             $ret .= $component->field . ' ';
         }
-
         $ret .= TokensList::build($component->unknown);
 
         return $ret;
@@ -399,12 +396,11 @@ class AlterOperation extends Component
      * between column and table alteration
      *
      * @param string $tokenValue Value of current token
-     *
      * @return bool
      */
     private static function checkIfColumnDefinitionKeyword($tokenValue)
     {
-        $commonOptions = [
+        $common_options = array(
             'AUTO_INCREMENT',
             'COMMENT',
             'DEFAULT',
@@ -413,23 +409,20 @@ class AlterOperation extends Component
             'PRIMARY',
             'UNIQUE',
             'PRIMARY KEY',
-            'UNIQUE KEY',
-        ];
-
+            'UNIQUE KEY'
+        );
         // Since these options can be used for
         // both table as well as a specific column in the table
-        return in_array($tokenValue, $commonOptions);
+        return in_array($tokenValue, $common_options);
     }
 
     /**
      * Check if token is symbol and quoted with backtick
-     *
+     * 
      * @param Token $token token to check
-     *
      * @return bool
      */
-    private static function checkIfTokenQuotedSymbol($token)
-    {
+    private static function checkIfTokenQuotedSymbol($token) {
         return $token->type === Token::TYPE_SYMBOL && $token->flags === Token::FLAG_SYMBOL_BACKTICK;
     }
 }

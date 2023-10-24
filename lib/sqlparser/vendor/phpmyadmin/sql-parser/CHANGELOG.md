@@ -1,86 +1,5 @@
 # Change Log
 
-## [5.5.0] - 2021-12-08
-
-* Add WITH support (#165, #331)
-* Fixed BufferedQuery when it has an odd number of backslashes in the end (#340)
-* Fixed the issue that ignored the body tokens when creating views with union (#343)
-* Fixed parser errors on "ALTER TABLE" statements to add columns with SET type (#168)
-* Fixed PHP 8.1 fatal errors on classes that "implements ArrayAccess"
-* Add new contexts for MariaDB 10.4, 10.5, 10.6 (#328)
-* Fixed parser errors for "ALTER USER" with options (#342)
-* Fixed handling of the procedures and functions's options where part of the body (#339)
-* Fix PHP notice "Undefined index: name in src/Components/Key.php#206" for table keys using expressions (#347)
-* Added support for MySQL 8.0 table structure KEY expressions (#347)
-* Added support for KEY order (ASC/DESC) (#296)
-* Added missing KEY options for MySQL and MariaDB (#348)
-* Added support for ENFORCED and NOT ENFORCED on table create queries (#341)
-* Performance improvement to use less the "ord()" function (#352)
-* Added support for OVER() with an alias (AS) (#197)
-
-## [5.4.2] - 2021-02-05
-
-* Added check for quoted symbol to avoid parser error in case of keyword (#317)
-* Allow PHP 8
-
-## [5.4.1] - 2020-10-15
-
-* Fix array_key_exists warning when parsing a "DEFAULT FALSE" token (#299)
-
-## [5.4.0] - 2020-10-08
-
-* EXISTS is also a function. (#297)
-* Fix lexer to not allow numbers with letters (#300)
-* Add support for INVISIBLE keyword (#292)
-* Fix the "$" might be a character used in a name (#301)
-* Fix use stream_select instead of non-blocking STDIN (#309)
-* Add select validation to a create view statement (#310)
-
-## [5.3.1] - 2020-03-20
-
-* Revert some changes with the understanding of ANSI_QUOTES mode and identifiers
-* Suggest motranslator 5.0 in README
-
-## [5.3.0] - 2020-03-20
-
-* Stop instanciating an object to check its class name. (#290)
-* Replace sscanf by equivalent native PHP functions because sscanf can be disabled for security reasons. (#270)
-* Allow phpunit 9
-* Allow phpmyadmin/motranslator 5.0
-* Fix for php error when "INSERT INTO x SET a = 1" is "INSERT INTO x SET = 1" (#295)
-* Fixed lexer fails to detect "*" as a wildcard (#288)
-* Fixed ANSI_QUOTES support (#284)
-* Fixed parser mistakes with comments (#156)
-
-## [5.2.0] - 2020-01-07
-
-* Fix ALTER TABLE ... PRIMARY/UNIQUE KEY results in error (#267)
-* Prevent overwrite of offset in Limit clause by parenthesis (#275)
-* Allow SCHEMA to be used in CREATE Database statement (#231)
-* Add missing options in SET statement (#255)
-* Add support for DROP USER statement (#259)
-* Fix php error "undefined index" when replacing a non existing clause (#249)
-
-## [5.1.0] - 2019-11-12
-
-* Fix for PHP deprecations messages about implode for php 7.4+ (#258)
-* Parse CHECK keyword on table definition (#264)
-* Parse truncate statement (#221)
-* Fix wrong parsing of partitions (#265)
-
-## [5.0.0] - 2019-05-09
-
-* Drop support for PHP 5.3, PHP 5.4, PHP 5.5, PHP 5.6, PHP 7.0 and HHVM
-* Enable strict mode on PHP files
-* Fix redundant whitespaces in build() outputs (#228)
-* Fix incorrect error on DEFAULT keyword in ALTER operation (#229)
-* Fix incorrect outputs from Query::getClause (#233)
-* Add support for reading an SQL file from stdin
-* Fix for missing tokenize-query in Composer's vendor/bin/ directory
-* Fix for PHP warnings with an incomplete CASE expression (#241)
-* Fix for error message with multiple CALL statements (#223)
-* Recognize the question mark character as a parameter (#242)
-
 ## [4.7.3] - 2021-12-08
 
 - Fixed BufferedQuery when it has an odd number of backslashes in the end (#340)
@@ -106,6 +25,7 @@
 ## [4.7.0] - 2020-10-08
 
 * EXISTS is also a function. (#297)
+* Remove some useless dev-dependencies
 * Fix lexer to not allow numbers with letters (#300)
 * Add support for INVISIBLE keyword (#292)
 * Fix the "$" might be a character used in a name (#301)
@@ -144,8 +64,6 @@
 * Fix wrong parsing of partitions (#265)
 
 ## [4.3.2] - 2019-06-03
-
-Backport fixes from 5.0.0 to QA branch:
 
 * Fix redundant whitespaces in build() outputs (#228)
 * Fix incorrect error on DEFAULT keyword in ALTER operation (#229)

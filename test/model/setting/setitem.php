@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/setting.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -73,4 +72,3 @@ r($setting->setItemTest($pathList[15], 'test15')) && p() && e('0');      // 设�
 r($setting->setItemTest($pathList[16], 'test16')) && p() && e('test16'); // 设置有vision的project模块的admin配置数据
 r($setting->setItemTest($pathList[17], 'test17')) && p() && e('test17'); // 设置有vision的product模块的admin配置数据
 
-$db->restoreDB();

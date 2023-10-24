@@ -1,0 +1,11 @@
+.repo-downloadCode{margin: 8px 10px 8px 0;}
+.repo-select{margin-right: 10px;}
+.repo-select>div {display: inline-block;}
+.repo-comment{width: 100%; display: block; word-break: keep-all; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.dtable-cell-html{width: 100%;}
+.container .sidebar{width: 550px;}
+#actionBar .dropdown-menu {margin-top: 10px; padding: 10px; display: none;}
+#actionBar .dropdown-menu.show{display: block;}
+#actionBar>.dropdown {position: absolute!important;}
+
+#repoDropmenu .icon-angle-right {display: none;}

@@ -10,7 +10,7 @@
 
 .c-id {width: 50px;}
 .c-pri, .c-keywords {width: 100px;}
-.c-branch, .c-type {width: 120px;}
+.c-branch, .c-type, .c-scene {width: 120px;}
 .c-stage {width: 140px;}
 .c-precondition {width: 150px;}
 .c-story {width: 180px;}

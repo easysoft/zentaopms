@@ -2,7 +2,7 @@
 /**
  * The task kanban view file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2009-2012 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Wang Yidong, Zhu Jinyong
  * @package     execution
  * @version     $Id: taskkanban.html.php $
@@ -17,9 +17,11 @@
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+    <?php if($features['qa']):?>
     <div class="input-control space c-type">
       <?php echo html::select('type', $lang->kanban->type, $browseType, 'class="form-control chosen" data-max_drop_width="215"');?>
     </div>
+    <?php endif;?>
     <?php if($browseType != 'all'):?>
     <div class="input-control space c-group">
       <?php echo html::select('group',  $lang->kanban->group->$browseType, $groupBy, 'class="form-control chosen" data-max_drop_width="215"');?>
@@ -60,7 +62,7 @@
         $link = common::hasPriv('execution', 'importTask') ?  $this->createLink('execution', 'importTask', "execution=$execution->id") : '#';
         echo "<li $misc>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
 
-        if($execution->lifetime != 'ops')
+        if($features['qa'])
         {
             $misc = common::hasPriv('execution', 'importBug') ? '' : "class=disabled";
             $link = common::hasPriv('execution', 'importBug') ?  $this->createLink('execution', 'importBug', "execution=$execution->id") : '#';
@@ -100,12 +102,16 @@
     <div class='dropdown' id='createDropdown'>
       <button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> <?php echo $this->lang->create;?> <span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
-        <?php if($execution->lifetime != 'ops'):?>
+        <?php $showDivider = false;?>
+        <?php if($features['story'] and $hasStoryButton):?>
         <?php if($canCreateStory) echo '<li>' . html::a(helper::createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->createStory, '', "class='iframe' data-width='80%'") . '</li>';?>
         <?php if($canBatchCreateStory) echo '<li>' . html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStory, '', "class='iframe' data-width='90%'") . '</li>';?>
         <?php if($canLinkStory) echo '<li>' . html::a(helper::createLink('execution', 'linkStory', "execution=$execution->id", '', true), $lang->execution->linkStory, '', "class='iframe' data-width='90%'") . '</li>';?>
         <?php if($canLinkStoryByPlan) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . '</li>';?>
-        <?php if($hasStoryButton and $hasBugButton) echo '<li class="divider"></li>';?>
+        <?php $showDivider = true;?>
+        <?php endif;?>
+        <?php if($features['qa']):?>
+        <?php if($showDivider) echo '<li class="divider"></li>';?>
         <?php if($canCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id", '', true), $lang->bug->create, '', "class='iframe'") . '</li>';?>
         <?php if($canBatchCreateBug)
         {
@@ -113,9 +119,9 @@
             if($productNum > 1) $batchCreateBugLink = '<li>' . html::a('#batchCreateBug', $lang->bug->batchCreate, '', "data-toggle='modal'") . '</li>';
             echo $batchCreateBugLink;
         }?>
-        <?php if(($hasStoryButton or $hasBugButton) and $hasTaskButton) echo '<li class="divider"></li>';?>
         <?php if($canImportBug) echo '<li>' . html::a(helper::createLink('execution', 'importBug', "execution=$execution->id", '', true), $lang->execution->importBug, '', "class='iframe' data-width='90%'") . '</li>';?>
         <?php endif;?>
+        <?php if($showDivider) echo '<li class="divider"></li>';?>
         <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe' data-width='80%'") . '</li>';?>
         <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->execution->batchCreateTask, '', "class='iframe' data-width=90%") . '</li>';?>
       </ul>
@@ -183,7 +189,6 @@ js::set('priv',
         'canEditName'         => common::hasPriv('kanban', 'setColumn'),
         'canSetWIP'           => common::hasPriv('kanban', 'setWIP'),
         'canSetLane'          => common::hasPriv('kanban', 'setLane'),
-        'canMoveLane'         => common::hasPriv('kanban', 'laneMove'),
         'canSortCards'        => common::hasPriv('kanban', 'cardsSort'),
         'canCreateTask'       => $canCreateTask,
         'canBatchCreateTask'  => $canBatchCreateTask,
@@ -232,4 +237,6 @@ js::set('priv',
 <?php js::set('defaultMinColWidth', $this->config->minColWidth);?>
 <?php js::set('defaultMaxColWidth', $this->config->maxColWidth);?>
 <?php js::set('teamWords', $lang->execution->teamWords);?>
+<?php js::set('canImportBug', $features['qa']);?>
+
 <?php include '../../common/view/footer.html.php';?>

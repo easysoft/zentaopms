@@ -1,0 +1,12 @@
+#navigator > li {position: relative; display: inline-block;}
+#navigator > li > a {min-width: 100px;}
+#navigator > li:first-child > a {border-radius: 4px 0 0 4px;}
+#navigator > li:last-child > a {border-radius: 0 4px 4px 0;}
+#navigator > li + li:before,
+#navigator > li + li:after {content: ' '; width: 0; height: 0; border-style: solid; border-width: 15px 0 15px 15px; border-color: transparent transparent transparent #a6aab8; position: absolute; left: 0; top: 0;}
+#navigator > li + li:after {border-left-color: rgba(var(--color-canvas-rgb),var(--tw-bg-opacity)); left: -1px;}
+#navigator > li.active + li:after {border-left-color: rgba(var(--color-secondary-500-rgb),var(--tw-bg-opacity));}
+#navigator > li.active:hover + li:after {border-left-color: rgba(var(--color-secondary-500-rgb));}
+#navigator > li + li > a {padding-left: 35px;}
+#navigator > li:hover {background-color: var(--zt-page-bg);}
+#navigator > li:hover + li:after {border-left-color: var(--zt-page-bg);}

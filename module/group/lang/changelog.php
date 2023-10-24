@@ -539,5 +539,159 @@ $lang->changelog['16.3'][] = 'sonarqube-reportView';
 $lang->changelog['16.4'][] = 'sonarqube-createProject';
 $lang->changelog['16.4'][] = 'sonarqube-browseIssue';
 
-$lang->changelog['16.5_beta1'][] = 'productplan-batchChangeStatus';
-$lang->changelog['16.5_beta1'][] = 'custom-required';
+$lang->changelog['16.5.beta1'][] = 'productplan-batchChangeStatus';
+$lang->changelog['16.5.beta1'][] = 'custom-required';
+
+$lang->changelog['17.0.beta1'][] = 'doc-updateOrder';
+
+$lang->changelog['17.0.beta2'][] = 'kanban-activateSpace';
+$lang->changelog['17.0.beta2'][] = 'kanban-activate';
+$lang->changelog['17.0.beta2'][] = 'custom-kanban';
+
+$lang->changelog['17.1'][] = 'kanban-editLaneColor';
+$lang->changelog['17.1'][] = 'kanban-editLaneName';
+$lang->changelog['17.1'][] = 'kanban-editColumn';
+$lang->changelog['17.1'][] = 'testcase-linkBugs';
+
+$lang->changelog['17.2'][] = 'execution-storyView';
+$lang->changelog['17.2'][] = 'testcase-importToLib';
+$lang->changelog['17.2'][] = 'doc-sortLibs';
+$lang->changelog['17.2'][] = 'admin-resetPWDSetting';
+
+$lang->changelog['17.3'][] = 'execution-CFD';
+$lang->changelog['17.3'][] = 'execution-computeCFD';
+$lang->changelog['17.3'][] = 'repo-downloadCode';
+$lang->changelog['17.3'][] = 'gitea-browse';
+$lang->changelog['17.3'][] = 'gitea-create';
+$lang->changelog['17.3'][] = 'gitea-edit';
+$lang->changelog['17.3'][] = 'gitea-view';
+$lang->changelog['17.3'][] = 'gitea-delete';
+$lang->changelog['17.3'][] = 'app-serverLink';
+
+$lang->changelog['17.4'][] = 'execution-setKanban';
+$lang->changelog['17.4'][] = 'custom-code';
+$lang->changelog['17.4'][] = 'gitlab-browseBranchPriv';
+$lang->changelog['17.4'][] = 'gitlab-browseTagPriv';
+$lang->changelog['17.4'][] = 'gitea-bindUser';
+
+$lang->changelog['17.5'][] = 'story-linkStoriesAB';
+$lang->changelog['17.5'][] = 'kanban-setting';
+$lang->changelog['17.5'][] = 'testcase-exportTemplate';
+$lang->changelog['17.5'][] = 'caselib-exportTemplate';
+$lang->changelog['17.5'][] = 'admin-tableEngine';
+
+$lang->changelog['17.6'][] = 'product-track';
+$lang->changelog['17.6'][] = 'story-submitReview';
+$lang->changelog['17.6'][] = 'story-recallAction';
+$lang->changelog['17.6'][] = 'testcase-zeroCase';
+$lang->changelog['17.6'][] = 'compile-syncCompile';
+$lang->changelog['17.6'][] = 'gogs-browse';
+$lang->changelog['17.6'][] = 'gogs-create';
+$lang->changelog['17.6'][] = 'gogs-edit';
+$lang->changelog['17.6'][] = 'gogs-view';
+$lang->changelog['17.6'][] = 'gogs-delete';
+$lang->changelog['17.6'][] = 'gogs-bindUser';
+
+$lang->changelog['17.6.2'][] = 'report-viewEveryoneAnnual';
+
+$lang->changelog['18.0.beta1'][] = 'my-audit';
+$lang->changelog['18.0.beta1'][] = 'project-manageRepo';
+$lang->changelog['18.0.beta1'][] = 'projectplan-browse';
+$lang->changelog['18.0.beta1'][] = 'projectplan-create';
+$lang->changelog['18.0.beta1'][] = 'projectplan-edit';
+$lang->changelog['18.0.beta1'][] = 'projectplan-view';
+$lang->changelog['18.0.beta1'][] = 'execution-treeViewTask';
+$lang->changelog['18.0.beta1'][] = 'execution-treeViewStory';
+$lang->changelog['18.0.beta1'][] = 'execution-kanbanAction';
+
+$lang->changelog['18.0.beta2'][] = 'story-relievedTwins';
+
+$lang->changelog['18.0.beta3'][] = 'screen-browse';
+$lang->changelog['18.0.beta3'][] = 'screen-view';
+$lang->changelog['18.0.beta3'][] = 'report-preview';
+
+$lang->changelog['18.0'][] = 'testcase-showScript';
+$lang->changelog['18.0'][] = 'testcase-automation';
+$lang->changelog['18.0'][] = 'zahost-browse';
+$lang->changelog['18.0'][] = 'zahost-create';
+$lang->changelog['18.0'][] = 'zahost-editAction';
+$lang->changelog['18.0'][] = 'zahost-deleteAction';
+$lang->changelog['18.0'][] = 'zahost-view';
+$lang->changelog['18.0'][] = 'zahost-browseImage';
+$lang->changelog['18.0'][] = 'zahost-downloadImage';
+$lang->changelog['18.0'][] = 'zahost-cancel';
+$lang->changelog['18.0'][] = 'zanode-browse';
+$lang->changelog['18.0'][] = 'zanode-create';
+$lang->changelog['18.0'][] = 'zanode-edit';
+$lang->changelog['18.0'][] = 'zanode-destroy';
+$lang->changelog['18.0'][] = 'zanode-reboot';
+$lang->changelog['18.0'][] = 'zanode-suspend';
+$lang->changelog['18.0'][] = 'zanode-resume';
+$lang->changelog['18.0'][] = 'zanode-getVNC';
+$lang->changelog['18.0'][] = 'zanode-boot';
+$lang->changelog['18.0'][] = 'zanode-shutdown';
+$lang->changelog['18.0'][] = 'zanode-view';
+$lang->changelog['18.0'][] = 'zanode-createImage';
+$lang->changelog['18.0'][] = 'repo-linkStory';
+$lang->changelog['18.0'][] = 'repo-linkBug';
+$lang->changelog['18.0'][] = 'repo-linkTask';
+$lang->changelog['18.0'][] = 'repo-unlink';
+
+$lang->changelog['18.1'][] = 'zanode-browseSnapshot';
+$lang->changelog['18.1'][] = 'zanode-createSnapshot';
+$lang->changelog['18.1'][] = 'zanode-editSnapshot';
+$lang->changelog['18.1'][] = 'zanode-restoreSnapshot';
+$lang->changelog['18.1'][] = 'zanode-deleteSnapshot';
+
+$lang->changelog['18.2'][] = 'projectbuild-create';
+$lang->changelog['18.2'][] = 'stage-plusBrowse';
+$lang->changelog['18.2'][] = 'execution-batchChangeStatus';
+$lang->changelog['18.2'][] = 'custom-productName';
+$lang->changelog['18.2'][] = 'custom-executionCommon';
+$lang->changelog['18.2'][] = 'custom-hours';
+$lang->changelog['18.2'][] = 'holiday-createAction';
+$lang->changelog['18.2'][] = 'holiday-editAction';
+$lang->changelog['18.2'][] = 'holiday-deleteAction';
+$lang->changelog['18.2'][] = 'holiday-browse';
+$lang->changelog['18.2'][] = 'holiday-importAction';
+
+$lang->changelog['18.3'][] = 'custom-percent';
+$lang->changelog['18.3'][] = 'custom-beginAndEndDate';
+$lang->changelog['18.3'][] = 'editor-index';
+$lang->changelog['18.3'][] = 'editor-extend';
+$lang->changelog['18.3'][] = 'editor-edit';
+$lang->changelog['18.3'][] = 'editor-newPage';
+$lang->changelog['18.3'][] = 'editor-save';
+$lang->changelog['18.3'][] = 'editor-delete';
+
+$lang->changelog['18.4.alpha1'][] = 'doc-mySpace';
+$lang->changelog['18.4.alpha1'][] = 'doc-myView';
+$lang->changelog['18.4.alpha1'][] = 'doc-myCollection';
+$lang->changelog['18.4.alpha1'][] = 'doc-myCreation';
+$lang->changelog['18.4.alpha1'][] = 'doc-productSpace';
+$lang->changelog['18.4.alpha1'][] = 'doc-projectSpace';
+$lang->changelog['18.4.alpha1'][] = 'doc-teamSpace';
+$lang->changelog['18.4.alpha1'][] = 'doc-addCatalog';
+$lang->changelog['18.4.alpha1'][] = 'doc-editCatalog';
+$lang->changelog['18.4.alpha1'][] = 'doc-deleteCatalog';
+$lang->changelog['18.4.alpha1'][] = 'doc-displaySetting';
+$lang->changelog['18.4.alpha1'][] = 'group-batchChangePackage';
+$lang->changelog['18.4.alpha1'][] = 'screen-annualData';
+$lang->changelog['18.4.alpha1'][] = 'screen-allAnnualData';
+$lang->changelog['18.4.alpha1'][] = 'pivot-preview';
+$lang->changelog['18.4.alpha1'][] = 'pivot-productSummary';
+$lang->changelog['18.4.alpha1'][] = 'pivot-projectDeviation';
+$lang->changelog['18.4.alpha1'][] = 'pivot-bugCreate';
+$lang->changelog['18.4.alpha1'][] = 'pivot-bugAssign';
+$lang->changelog['18.4.alpha1'][] = 'pivot-workload';
+$lang->changelog['18.4.alpha1'][] = 'chart-preview';
+$lang->changelog['18.4.alpha1'][] = 'api-addCatalog';
+$lang->changelog['18.4.alpha1'][] = 'api-editCatalog';
+$lang->changelog['18.4.alpha1'][] = 'api-deleteCatalog';
+
+$lang->changelog['18.7'][] = 'ai-models';
+$lang->changelog['18.7'][] = 'ai-editmodel';
+$lang->changelog['18.7'][] = 'ai-testconnection';
+$lang->changelog['18.7'][] = 'ai-promptpublish';
+$lang->changelog['18.7'][] = 'ai-promptunpublish';
+$lang->changelog['18.7'][] = 'ai-promptexecute';

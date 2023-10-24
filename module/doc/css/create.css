@@ -1,2 +1,40 @@
-#whiteListBox .input-group:last-child {margin-top: 10px;}
+body {overflow: hidden;}
+.doc-title input {border: unset; font-size: 18px; font-weight: bold; color: #3c4353; padding-left: 16px;}
+.doc-title .form-control:focus {border: unset; box-shadow: unset;}
+.doc-title input::-webkit-input-placeholder {color: #D8DBDE;}
+.doc-title.required:after {top: 4px; right: 0; left: 12px; display: inline-table;}
+#headerBox {border-bottom: 1px solid #e3e3e3;}
+#headerBox td:last-child {padding-right: 24px;}
+.contentmarkdown.required:after, .contenthtml.required:after {right:3px;}
+#editorContent {padding: 0;}
+
+#contentBox {padding: 0; width: 100%;}
+#contentBox .ke-container {overflow: visible;}
+#contentBox .ke-container, #contentBox .contenthtml {border: unset; background: #efefef;}
+#contentBox .ke-container.focus {box-shadow: unset; border-color: unset;}
+#contentBox .ke-toolbar {padding-left: 20px; width: 100%; height: 30px;}
+#contentBox .ke-edit {border-top: 1px solid rgb(220, 220, 220)}
+#contentBox .ke-edit, #contentBox .CodeMirror {margin: 8px 200px 0 200px; background: #fff;}
+#contentBox .kindeditor-ph {padding: 20px 20px 0 20px !important;}
+#contentBox .editor-toolbar {background: #fff; padding-left: 20px; border-right: unset; border-top: unset; height: 30px;}
+#contentBox .CodeMirror {padding: 20px 20px 0 20px;}
+#contentBox .CodeMirror.CodeMirror-wrap {border-left: 0; border-right: 0; border-bottom: 0;}
+#contentBox .ke-statusbar {display: none;}
+#contentBox .contentmarkdown {background: #efefef;}
+
+.article-content {padding: 8px 20px;}
+
+#noticeAcl {margin-left: 10px; vertical-align: middle;}
+
+#basicInfoLink {border: unset;}
+
+#modalBasicInfo .modal-dialog {width:800px;}
+#modalBasicInfo .modal-content {padding:0px;}
+#modalBasicInfo .modal-body {padding:10px 30px 10px 10px; overflow-x: hidden !important;}
+#modalBasicInfo .modal-body .close {position:fixed; right:15px; top:15px}
+#basicInfoBox{margin-bottom: 10px;}
+#basicInfoBox tfoot td {padding-bottom: 0;}
+.aclBox .radio-inline{display:block; padding-bottom:5px;}
+.aclBox .radio-inline+.radio-inline {margin-left: 0px !important;}
+
 .fullscreen-save, .markdown-fullscreen-save {position: fixed; top: 10px; right: 30px; z-index: 999999;}

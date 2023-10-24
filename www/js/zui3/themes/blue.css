@@ -1,0 +1,56 @@
+:root
+{
+  --color-primary-50: #eaf5ff;
+  --color-primary-100: #cfe7fe;
+  --color-primary-200: #93cbff;
+  --color-primary-300: #59b0ff;
+  --color-primary-400: #2294fb;
+  --color-primary-500: #0d88f8;
+  --color-primary-600: #0080f9;
+  --color-primary-700: #0071db;
+  --color-primary-800: #005fb8;
+  --color-primary-900: #0d4c86;
+  --color-primary-50-rgb: 234,245,255;
+  --color-primary-100-rgb: 207,231,254;
+  --color-primary-200-rgb: 147,203,255;
+  --color-primary-300-rgb: 89,176,255;
+  --color-primary-400-rgb: 34,148,251;
+  --color-primary-500-rgb: 13,136,248;
+  --color-primary-600-rgb: 0,128,249;
+  --color-primary-700-rgb: 0,113,219;
+  --color-primary-800-rgb: 0,95,184;
+  --color-primary-900-rgb: 13,76,134;
+  --color-secondary-50: #edfcff;
+  --color-secondary-100: #d2f5fc;
+  --color-secondary-200: #97ecff;
+  --color-secondary-300: #53e0ff;
+  --color-secondary-400: #38d6f9;
+  --color-secondary-500: #23c8ec;
+  --color-secondary-600: #00c0e9;
+  --color-secondary-700: #02bae1;
+  --color-secondary-800: #00b2d8;
+  --color-secondary-900: #0e94b0;
+  --color-secondary-50-rgb: 237,252,255;
+  --color-secondary-100-rgb: 210,245,252;
+  --color-secondary-200-rgb: 151,236,255;
+  --color-secondary-300-rgb: 83,224,255;
+  --color-secondary-400-rgb: 56,214,249;
+  --color-secondary-500-rgb: 35,200,236;
+  --color-secondary-600-rgb: 0,192,233;
+  --color-secondary-700-rgb: 2,186,225;
+  --color-secondary-800-rgb: 0,178,216;
+  --color-secondary-900-rgb: 14,148,176;
+
+  --color-link: var(--color-primary-700);
+  --color-link-hover: var(--color-primary-600);
+  --color-link-visited: var(--color-primary-800);
+  --color-link-rgb: var(--color-primary-700-rgb);
+  --color-link-hover-rgb: var(--color-primary-600-rgb);
+  --color-link-visited-rgb: var(--color-primary-800-rgb);
+
+  --zt-menu-bg: linear-gradient(180deg, #3B9BF3 0%, #137AF2 100%), url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBmaWxsPSJub25lIiB2aWV3Qm94PSIwIDAgOTYgNzgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxtYXNrIGlkPSJhIiB4PSIwIiB5PSIwIiB3aWR0aD0iOTYiIGhlaWdodD0iNzgiIHN0eWxlPSJtYXNrLXR5cGU6YWxwaGEiIG1hc2tVbml0cz0idXNlclNwYWNlT25Vc2UiPgo8cmVjdCB3aWR0aD0iOTYiIGhlaWdodD0iNzgiIGZpbGw9IiNEOUQ5RDkiLz4KPC9tYXNrPgo8ZyBtYXNrPSJ1cmwoI2EpIj4KPGNpcmNsZSBjeD0iNzMuNSIgY3k9IjczLjUiIHI9IjczLjUiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii4wNCIvPgo8L2c+Cjwvc3ZnPg==") no-repeat bottom left;
+  --zt-header-bg: var(--color-canvas);
+  --zt-header-color: var(--color-fore);
+  --zt-header-border: var(--color-border-light);
+  --zt-navbar-active-color: var(--color-primary-500);
+}

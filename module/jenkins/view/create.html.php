@@ -2,7 +2,7 @@
 /**
  * The create view file of jenkins module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2017 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     jenkins
@@ -22,12 +22,10 @@
           <tr>
             <th><?php echo $lang->jenkins->name; ?></th>
             <td class='required'><?php echo html::input('name', '', "class='form-control'"); ?></td>
-            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->jenkins->url; ?></th>
             <td class='required'><?php echo html::input('url', '', "class='form-control'"); ?></td>
-            <td></td>
           </tr>
           <tr>
             <th><?php echo $lang->jenkins->account;?></th>
@@ -35,13 +33,11 @@
           </tr>
           <tr>
             <th><?php echo $lang->jenkins->token;?></th>
-            <td><?php echo html::input('token', '', "class='form-control'");?></td>
-            <td><?php echo $lang->jenkins->tokenFirst;?></td>
+            <td><?php echo html::input('token', '', "class='form-control' placeholder='{$lang->jenkins->tokenFirst}'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->jenkins->password;?></th>
-            <td><?php echo html::password('password', '', "class='form-control'");?></td>
-            <td><?php echo $lang->jenkins->tips;?></td>
+            <td><?php echo html::password('password', '', "class='form-control' placeholder='{$lang->jenkins->tips}'");?></td>
           </tr>
           <tr>
             <td colspan='2' class='text-center form-actions'>

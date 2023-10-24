@@ -2,7 +2,7 @@
 /**
  * The view file of bug module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../ai/view/promptmenu.html.php';?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php js::set('confrimToStory', $lang->bug->confirmToStory);?>
 <?php js::set('tab', $app->tab);?>
@@ -161,7 +162,7 @@
                   <th><?php echo $lang->bug->fromCase;?></th>
                   <td><?php if($bug->case) echo html::a(helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion", '', true), "<i class='icon icon-sitemap'></i> {$lang->bug->fromCase}$lang->colon$bug->case", '', isonlybody() ? '' : "data-toggle='modal' data-type='iframe' data-width='80%'");?></td>
                 </tr>
-                <tr valign='middle' class='<?php if(!($product->shadow and zget($project, 'model') == 'scrum' and $project->multiple)) echo 'hide'?>'>
+                <tr valign='middle' class='<?php if($product->shadow and isset($project) and empty($project->multiple)) echo 'hide'?>'>
                   <th><?php echo $lang->bug->productplan;?></th>
                   <td><?php if(!$bug->plan or !common::printLink('productplan', 'view', "planID=$bug->plan&type=bug", $bug->planName)) echo $bug->planName;?></td>
                 </tr>
@@ -192,7 +193,11 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->pri;?></th>
-                  <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
+                  <td>
+                    <?php if($bug->pri):?>
+                    <span class='label-pri <?php echo 'label-pri-' . $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span>
+                    <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->status;?></th>
@@ -251,7 +256,7 @@
                   <?php if($browserList):?>
                   <p class='browserContent'>
                     <?php foreach($browserList as $browser):?>
-                    <?php if($os) echo "<span class='label label-outline'>" .  zget($lang->bug->browserList, $browser) . "</span>";?>
+                    <?php if($browser) echo "<span class='label label-outline'>" .  zget($lang->bug->browserList, $browser) . "</span>";?>
                     <?php endforeach;?>
                   </p>
                   <?php endif;?>

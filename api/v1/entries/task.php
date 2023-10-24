@@ -2,7 +2,7 @@
 /**
  * The task entry point of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
@@ -108,6 +108,11 @@ class taskEntry extends entry
         $fields = 'name,type,desc,assignedTo,pri,estimate,left,consumed,story,parent,execution,module,closedReason,status,estStarted,deadline,team,teamEstimate,teamConsumed,teamLeft,multiple,mailto,uid';
         $this->batchSetPost($fields, $oldTask);
 
+        if($_POST['status'] == 'done')
+        {
+            if(!empty($oldTask->finishedBy)) $this->setPost('finishedBy', $oldTask->finishedBy);
+            if(!empty($oldTask->finishedDate)) $this->setPost('finishedDate', $oldTask->finishedDate);
+        }
         $control = $this->loadController('task', 'edit');
         $control->edit($taskID);
 

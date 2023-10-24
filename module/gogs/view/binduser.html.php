@@ -2,7 +2,7 @@
 /**
  * The bind user view of gogs module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuchun Li <liyuchun@easycorp.ltd>
  * @package     gogs
@@ -11,60 +11,66 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php $browseLink = $this->createLink('gogs', 'browse', ""); ?>
+<?php js::set('zentaoUsers', $zentaoUsers);?>
 <div id="mainContent" class="main-content">
-  <div class="main-header">
-    <h2><?php echo $lang->gogs->bindUser;?></h2>
+  <div class="main-header gogs-bind">
+    <?php
+    echo html::linkButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, $browseLink, 'self', "data-app='{$app->tab}'", 'btn btn-secondary');
+
+    $allLink     = $this->createLink('gogs', 'binduser', "gogsID={$gogsID}&type=all");
+    $bindedLink  = $this->createLink('gogs', 'binduser', "gogsID={$gogsID}&type=binded");
+    $notBindLink = $this->createLink('gogs', 'binduser', "gogsID={$gogsID}&type=notBind");
+    if($type == 'all')
+    {
+        echo html::linkButton('' . $lang->gogs->all . "<span class='gogs-bind-all'>" . count($gogsUsers) . "</span>", $allLink, 'self', "data-app='{$app->tab}'", 'btn btn-info active');
+        echo html::linkButton('' . $lang->gogs->notBind, $notBindLink, 'self', "data-app='{$app->tab}'", 'btn btn-info');
+        echo html::linkButton('' . $lang->gogs->binded, $bindedLink, 'self', "data-app='{$app->tab}'", 'btn btn-info');
+    }
+    else if($type == 'binded')
+    {
+        echo html::linkButton('' . $lang->gogs->all, $allLink, 'self', "data-app='{$app->tab}'", 'btn btn-info');
+        echo html::linkButton('' . $lang->gogs->notBind, $notBindLink, 'self', "data-app='{$app->tab}'", 'btn btn-info');
+        echo html::linkButton('' . $lang->gogs->binded . "<span class='gogs-bind-all'>" . count($gogsUsers) . "</span>", $bindedLink, 'self', "data-app='{$app->tab}'", 'btn btn-info active');
+    }
+    else
+    {
+        echo html::linkButton('' . $lang->gogs->all, $allLink, 'self', "data-app='{$app->tab}'", 'btn btn-info');
+        echo html::linkButton('' . $lang->gogs->notBind . "<span class='gogs-bind-all'>" . count($gogsUsers) . "</span>", $notBindLink, 'self', "data-app='{$app->tab}'", 'btn btn-info active');
+        echo html::linkButton('' . $lang->gogs->binded, $bindedLink, 'self', "data-app='{$app->tab}'", 'btn btn-info');
+    }
+    ?>
   </div>
   <form method='post' class='load-indicator main-form form-ajax' enctype='multipart/form-data'>
     <div class="table-responsive">
-      <table class="table table-borderless w-800px">
+      <table class="table table-borderless">
         <thead>
           <tr>
-            <th class='w-60px'><?php echo $lang->gogs->gogsAvatar;?></th>
             <th><?php echo $lang->gogs->gogsAccount;?></th>
             <th><?php echo $lang->gogs->gogsEmail;?></th>
-            <th class='w-150px'><?php echo $lang->gogs->zentaoAccount;?></th>
+            <th><?php echo $lang->gogs->zentaoEmail;?></th>
+            <th class="w-400px"><?php echo $lang->gogs->zentaoAccount;?> <span class="gogs-account-desc"><?php echo $lang->gogs->accountDesc;?></span></th>
             <th><?php echo $lang->gogs->bindingStatus;?></th>
           </tr>
         </thead>
         <tbody>
           <?php foreach($gogsUsers as $gogsUser):?>
-          <?php if(isset($gogsUser->zentaoAccount)) continue;?>
-          <?php echo html::hidden("gogsUserNames[$gogsUser->account]", $gogsUser->realname);?>
+          <?php echo html::hidden("gogsUserNames[$gogsUser->id]", $gogsUser->realname);?>
           <tr>
-            <td><?php echo html::image($gogsUser->avatar, "height=40");?></td>
-            <td class='text-left'>
-              <strong><?php echo $gogsUser->realname;?></strong>
-              <br>
-              <?php echo $gogsUser->account;?>
+            <td>
+              <?php echo html::image($gogsUser->avatar, "height=20 width=20 class='img-circle'");?>
+              <?php echo $gogsUser->realname . '@' . $gogsUser->account;?>
             </td>
             <td><?php echo $gogsUser->email;?></td>
-            <td><?php echo html::select("zentaoUsers[$gogsUser->account]", $userPairs, '', "class='form-control select chosen'" );?></td>
-            <td><?php echo $lang->gogs->notBind;?></td>
-          </tr>
-          <?php endforeach;?>
-          <?php foreach($gogsUsers as $gogsUser):?>
-          <?php if(!isset($gogsUser->zentaoAccount)) continue;?>
-          <?php echo html::hidden("gogsUserNames[$gogsUser->account]", $gogsUser->realname);?>
-          <tr>
-            <td><?php echo html::image($gogsUser->avatar, "height=40");?></td>
+            <td class="email"><?php echo !empty($gogsUser->zentaoAccount) ? $zentaoUsers[$gogsUser->zentaoAccount]->email : '';?></td>
+            <td class='zentao-users'><?php echo html::select("zentaoUsers[$gogsUser->id]", $gogsUser->zentaoUsers, $gogsUser->zentaoAccount, "class='form-control select chosen gogs-user-bind'" );?></td>
             <td>
-              <strong><?php echo $gogsUser->realname;?></strong>
-              <br>
-              <?php echo $gogsUser->account;?>
-            </td>
-            <td><?php echo $gogsUser->email;?></td>
-            <td><?php echo html::select("zentaoUsers[$gogsUser->account]", $userPairs, $gogsUser->zentaoAccount, "class='form-control select chosen'" );?></td>
-            <td>
-              <?php if(isset($bindedUsers[$gogsUser->zentaoAccount])):?>
-              <?php $zentaoAccount = zget($userPairs, $gogsUser->zentaoAccount, '');?>
-              <?php if(!empty($zentaoAccount)):?>
+              <?php if($gogsUser->binded === 1):?>
               <?php echo $lang->gogs->binded;?>
-              <?php else:?>
+              <?php elseif($gogsUser->binded === 2):?>
               <?php echo '<span class="text-red">' . $lang->gogs->bindedError . '</span>';?>
-              <?php endif;?>
               <?php else:?>
-              <?php echo $lang->gogs->notBind;?>
+              <?php echo '<span class="text-red">' . $lang->gogs->notBind . '</span>';?>
               <?php endif;?>
             </td>
           </tr>
@@ -74,12 +80,20 @@
           <tr>
             <td colspan="5" class="text-center form-actions">
               <?php echo html::submitButton();?>
-              <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
+              <?php if(!isonlybody()) echo html::a($this->createLink('space', 'browse'), $lang->goback, '', 'class="btn btn-wide"');?>
             </td>
           </tr>
         </tfoot>
       </table>
     </div>
   </form>
+</div>
+<div id="userList" class="hidden">
+<?php
+foreach($userPairs as $account => $realname)
+{
+    echo "<option value='$account' title='$realname'>$realname</option>";
+}
+?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

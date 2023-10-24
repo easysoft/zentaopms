@@ -30,7 +30,6 @@ $lang->project->moduleSetting       = 'List Settings';
 $lang->project->moduleOpen          = 'Program Name';
 $lang->project->dynamic             = 'Dynamic';
 $lang->project->execution           = 'Execution';
-$lang->project->qa                  = 'QA';
 $lang->project->bug                 = 'Bug List';
 $lang->project->testcase            = 'Case List';
 $lang->project->testtask            = 'Test Task';
@@ -373,3 +372,5 @@ $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
 
 $lang->project->multiple = "Multi {$lang->executionCommon}";
+
+$lang->project->cannotManageProducts = "This project is a project-type project and cannot be associated with products.";

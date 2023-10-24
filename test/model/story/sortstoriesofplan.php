@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/story.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -36,4 +35,3 @@ r($afterStories)  && p('1:order') && e('2');  //获取更新排序之后的需�
 r($afterStories)  && p('2:order') && e('4');  //获取更新排序之后的需求在计划下的排序
 r($afterStories)  && p('3:order') && e('1');  //获取更新排序之后的需求在计划下的排序
 r($afterStories)  && p('4:order') && e('3');  //获取更新排序之后的需求在计划下的排序
-$db->restoreDB();

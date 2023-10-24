@@ -2,7 +2,7 @@
 /**
  * The programplan module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     programplan
@@ -68,6 +68,7 @@ $lang->programplan->stageCustom->task = 'Show Task';
 $lang->programplan->error                  = new stdclass();
 $lang->programplan->error->percentNumber   = '"Workload %" must be digits.';
 $lang->programplan->error->planFinishSmall = 'The "End" date must be > the "Begin" date.';
-$lang->programplan->error->percentOver     = 'The sum of "Workload %" cannot exceed 100%.';
+$lang->programplan->error->percentOver     = 'The sum of "Workload %" cannot exceed 100% of one stage.';
 $lang->programplan->error->createdTask     = 'The task has been decomposed. Sub phases cannot be added.';
 $lang->programplan->error->parentWorkload  = 'The sum of the workload of the child phase cannot be greater than that of the parent phase: %s.';
+$lang->programplan->error->sameType        = 'Type of the stage must be as same as parent: "%s"';

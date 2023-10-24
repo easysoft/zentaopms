@@ -36,7 +36,14 @@ function checkServiceStatus(){
                 {
                     if(resultData.data[key] == 'unknown')
                     {
-                        $('.ztf-status').text(zanodeLang.init.unknown)
+                        if(hostType == 'physics')
+                        {
+                            $('.ztf-status').text(zanodeLang.init.not_install)
+                        }
+                        else
+                        {
+                            $('.ztf-status').text(zanodeLang.init.unknown)
+                        }
                     }
                     else
                     {
@@ -47,7 +54,7 @@ function checkServiceStatus(){
             }
             else if(key == "node")
             {
-                if(nodeStatus != resultData.data[key] && resultData.data[key])
+                if(resultData.data[key] && zanodeLang.statusList[nodeStatus] != zanodeLang.statusList[resultData.data[key]])
                 {
                     window.location.reload();
                 }
@@ -88,17 +95,18 @@ function checkServiceStatus(){
 
         if(!isSuccess)
         {
-            // $('.init-fail').show();
+            $('.init-fail').show();
             $('.init-success').hide();
         }
         else
         {
             clearInterval(checkInterval)
             $('.init-success').show();
-            // $('.init-fail').hide();
+            $('.init-fail').hide();
         }
         setTimeout(function() {
             $('#serviceContent').removeClass('loading');
+            $(".service-status, .status-notice").show()
         }, 500);
     });
     return
@@ -160,6 +168,28 @@ $('.btn-pwd-copy').live('click', function()
     }, 2000)
 })
 
+$('.btn-init-copy').live('click', function()
+{
+    var copyText = $('#initBash');
+    copyText.show();
+    copyText .select();
+    document.execCommand("Copy");
+    copyText.hide();
+    $('.btn-init-copy').tooltip({
+        trigger: 'click',
+        placement: 'top',
+        title: zanodeLang.copied,
+        tipClass: 'tooltip-success'
+    });
+
+    $(this).tooltip('show');
+    var that = this;
+    setTimeout(function()
+    {
+        $(that).tooltip('hide')
+    }, 2000)
+})
+
 $('.btn-pwd-show').live('click', function()
 {
     var pwd     = $('#pwd-copy').text();
@@ -180,21 +210,24 @@ $('.btn-pwd-show').live('click', function()
 $('#jumpManual').click(function()
 {
     var encodedHelpPageUrl = encodeURIComponent('https://www.zentao.net/book/zentaopms/974.html?fullScreen=zentao');
-    var urlForNewTab = window.location.origin + '#app=help&url=' + encodedHelpPageUrl;
+    var urlForNewTab = webRoot + '#app=help&url=' + encodedHelpPageUrl;
     window.open(urlForNewTab)
 })
 
 
 $(function(){
-    checkServiceStatus();
+    $('#checkServiceStatus').trigger("click")
+    if(hostType == 'physics'){
+        return;
+    }
     checkInterval = setInterval(() => {
         intervalTimes++;
-        if(intervalTimes > 300)
+        if(intervalTimes > 200)
         {
             clearInterval(checkInterval)
         }
         checkServiceStatus();
-    }, 2000);
+    }, 3000);
 })
 
 /**

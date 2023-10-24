@@ -1,14 +1,13 @@
 <?php
+
 /**
  * `INSERT` statement.
  */
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Statements;
 
-use PhpMyAdmin\SqlParser\Components\Array2d;
 use PhpMyAdmin\SqlParser\Components\ArrayObj;
+use PhpMyAdmin\SqlParser\Components\Array2d;
 use PhpMyAdmin\SqlParser\Components\IntoKeyword;
 use PhpMyAdmin\SqlParser\Components\OptionsArray;
 use PhpMyAdmin\SqlParser\Components\SetOperation;
@@ -16,10 +15,6 @@ use PhpMyAdmin\SqlParser\Parser;
 use PhpMyAdmin\SqlParser\Statement;
 use PhpMyAdmin\SqlParser\Token;
 use PhpMyAdmin\SqlParser\TokensList;
-
-use function count;
-use function strlen;
-use function trim;
 
 /**
  * `INSERT` statement.
@@ -53,6 +48,10 @@ use function trim;
  *     [ ON DUPLICATE KEY UPDATE
  *       col_name=expr
  *         [, col_name=expr] ... ]
+ *
+ * @category   Statements
+ *
+ * @license    https://www.gnu.org/licenses/gpl-2.0.txt GPL-2.0+
  */
 class InsertStatement extends Statement
 {
@@ -61,12 +60,12 @@ class InsertStatement extends Statement
      *
      * @var array
      */
-    public static $OPTIONS = [
+    public static $OPTIONS = array(
         'LOW_PRIORITY' => 1,
         'DELAYED' => 2,
         'HIGH_PRIORITY' => 3,
-        'IGNORE' => 4,
-    ];
+        'IGNORE' => 4
+    );
 
     /**
      * Tables used as target for this statement.
@@ -114,15 +113,15 @@ class InsertStatement extends Statement
         $ret = 'INSERT ' . $this->options;
         $ret = trim($ret) . ' INTO ' . $this->into;
 
-        if ($this->values !== null && count($this->values) > 0) {
+        if (! is_null($this->values) && count($this->values) > 0) {
             $ret .= ' VALUES ' . Array2d::build($this->values);
-        } elseif ($this->set !== null && count($this->set) > 0) {
+        } elseif (! is_null($this->set) && count($this->set) > 0) {
             $ret .= ' SET ' . SetOperation::build($this->set);
-        } elseif ($this->select !== null && strlen((string) $this->select) > 0) {
+        } elseif (! is_null($this->select) && strlen($this->select) > 0) {
             $ret .= ' ' . $this->select->build();
         }
 
-        if ($this->onDuplicateSet !== null && count($this->onDuplicateSet) > 0) {
+        if (! is_null($this->onDuplicateSet) && count($this->onDuplicateSet) > 0) {
             $ret .= ' ON DUPLICATE KEY UPDATE ' . SetOperation::build($this->onDuplicateSet);
         }
 
@@ -138,7 +137,11 @@ class InsertStatement extends Statement
         ++$list->idx; // Skipping `INSERT`.
 
         // parse any options if provided
-        $this->options = OptionsArray::parse($parser, $list, static::$OPTIONS);
+        $this->options = OptionsArray::parse(
+            $parser,
+            $list,
+            static::$OPTIONS
+        );
         ++$list->idx;
 
         /**
@@ -181,7 +184,9 @@ class InsertStatement extends Statement
             }
 
             if ($state === 0) {
-                if ($token->type === Token::TYPE_KEYWORD && $token->keyword !== 'INTO') {
+                if ($token->type === Token::TYPE_KEYWORD
+                    && $token->keyword !== 'INTO'
+                ) {
                     $parser->error('Unexpected keyword.', $token);
                     break;
                 }
@@ -190,33 +195,40 @@ class InsertStatement extends Statement
                 $this->into = IntoKeyword::parse(
                     $parser,
                     $list,
-                    ['fromInsert' => true]
+                    array('fromInsert' => true)
                 );
 
                 $state = 1;
             } elseif ($state === 1) {
-                if ($token->type !== Token::TYPE_KEYWORD) {
-                    $parser->error('Unexpected token.', $token);
-                    break;
-                }
+                if ($token->type === Token::TYPE_KEYWORD) {
+                    if ($token->keyword === 'VALUE'
+                        || $token->keyword === 'VALUES'
+                    ) {
+                        ++$list->idx; // skip VALUES
 
-                if ($token->keyword === 'VALUE' || $token->keyword === 'VALUES') {
-                    ++$list->idx; // skip VALUES
+                        $this->values = Array2d::parse($parser, $list);
+                    } elseif ($token->keyword === 'SET') {
+                        ++$list->idx; // skip SET
 
-                    $this->values = Array2d::parse($parser, $list);
-                } elseif ($token->keyword === 'SET') {
-                    ++$list->idx; // skip SET
-
-                    $this->set = SetOperation::parse($parser, $list);
-                } elseif ($token->keyword === 'SELECT') {
-                    $this->select = new SelectStatement($parser, $list);
+                        $this->set = SetOperation::parse($parser, $list);
+                    } elseif ($token->keyword === 'SELECT') {
+                        $this->select = new SelectStatement($parser, $list);
+                    } else {
+                        $parser->error(
+                            'Unexpected keyword.',
+                            $token
+                        );
+                        break;
+                    }
+                    $state = 2;
+                    $miniState = 1;
                 } else {
-                    $parser->error('Unexpected keyword.', $token);
+                    $parser->error(
+                        'Unexpected token.',
+                        $token
+                    );
                     break;
                 }
-
-                $state = 2;
-                $miniState = 1;
             } elseif ($state === 2) {
                 $lastCount = $miniState;
 
@@ -231,7 +243,10 @@ class InsertStatement extends Statement
                 }
 
                 if ($lastCount === $miniState) {
-                    $parser->error('Unexpected token.', $token);
+                    $parser->error(
+                        'Unexpected token.',
+                        $token
+                    );
                     break;
                 }
 

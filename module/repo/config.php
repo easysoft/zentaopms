@@ -1,4 +1,7 @@
 <?php
+global $lang, $app;
+$app->loadLang('repo');
+
 $config->program = new stdclass();
 $config->program->suffix['c']    = "cpp";
 $config->program->suffix['cpp']  = "cpp";
@@ -28,6 +31,19 @@ $config->repo->images    = '|png|gif|jpg|ico|jpeg|bmp|';
 $config->repo->binary    = '|pdf|';
 $config->repo->synced    = '';
 
+$config->repo->repoSyncLog = new stdclass();
+$config->repo->repoSyncLog->one            = 1;
+$config->repo->repoSyncLog->done           = array('done', '完成');
+$config->repo->repoSyncLog->total          = array('Total', '总数');
+$config->repo->repoSyncLog->fatal          = array('fatal', '致命');
+$config->repo->repoSyncLog->error          = array('error', '错误');
+$config->repo->repoSyncLog->failed         = array('failed', '失败');
+$config->repo->repoSyncLog->finish         = 'finish';
+$config->repo->repoSyncLog->emptyRepo      = array('empty repository', '空仓库');
+$config->repo->repoSyncLog->finishCount    = array('Counting objects: 100%');
+$config->repo->repoSyncLog->logFilePrefix  = '/log/clone.progress.';
+$config->repo->repoSyncLog->finishCompress = array('Compressing objects: 100%');
+
 $config->repo->editor = new stdclass();
 $config->repo->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->repo->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
@@ -53,8 +69,9 @@ $config->repo->gitlab->apiPath = "%s/api/v4/projects/%s/repository/";
 $config->repo->gitea = new stdclass;
 $config->repo->gitea->apiPath = "%s/api/v1/repos/%s/";
 
-$config->repo->gitServiceList = array('gitlab', 'gitea', 'gogs');
-$config->repo->gitTypeList    = array('Gitlab', 'Gitea', 'Gogs', 'Git');
+$config->repo->gitServiceList     = array('gitlab', 'gitea', 'gogs');
+$config->repo->gitServiceTypeList = array('Gitlab', 'Gitea', 'Gogs');
+$config->repo->gitTypeList        = array('Gitlab', 'Gitea', 'Gogs', 'Git');
 
 $config->repo->rules['module']['task']     = 'Task';
 $config->repo->rules['module']['bug']      = 'Bug';
@@ -138,3 +155,16 @@ $config->repo->fileExt["vb"]               = array('.vb');
 $config->repo->fileExt["verilog"]          = array('.v', '.vh');
 $config->repo->fileExt["xml"]              = array('.xml', '.dtd', '.ascx', '.csproj', '.config', '.wxi', '.wxl', '.wxs', '.xaml', '.svg', '.svgz', '.opf', '.xsl');
 $config->repo->fileExt["yaml"]             = array('.yaml', '.yml');
+
+$config->repo->search['module'] = 'repo';
+$config->repo->search['fields']['name']     = $lang->repo->name;
+$config->repo->search['fields']['id']       = $lang->repo->id;
+$config->repo->search['fields']['product']  = $lang->repo->product;
+$config->repo->search['fields']['projects'] = $lang->repo->projects;
+$config->repo->search['fields']['SCM']      = $lang->repo->SCM;
+$config->repo->search['fields']['desc']     = $lang->repo->desc;
+
+$config->repo->search['params']['name']     = array('operator' => 'include', 'control' => 'input', 'values' => '');
+$config->repo->search['params']['product']  = array('operator' => 'include', 'control' => 'select', 'values' => '');
+$config->repo->search['params']['projects'] = array('operator' => 'include', 'control' => 'select', 'values' => '');
+$config->repo->search['params']['SCM']      = array('operator' => '=', 'control' => 'select', 'values' => $lang->repo->scmList);

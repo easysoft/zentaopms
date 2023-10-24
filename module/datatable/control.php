@@ -2,7 +2,7 @@
 /**
  * The view file of datatable module of ZenTaoPMS.
  *
- * @copyright   Copyright 2014-2014 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2014-2014 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     business(商业软件)
  * @author      Hao sun <sunhao@cnezsoft.com>
  * @package     datatable
@@ -128,9 +128,11 @@ class datatable extends control
             if(!$execution->hasProduct and !$execution->multiple) unset($cols['plan']);
             if(!$execution->hasProduct) unset($cols['branch']);
         }
+        if($extra == 'unsetStory' and isset($cols['story'])) unset($cols['story']);
 
         $this->view->cols    = $cols;
         $this->view->setting = $setting;
+        $this->view->extra   = $extra;
         $this->display();
     }
 

@@ -2,7 +2,7 @@
 /**
  * The execution view file of my module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     my
@@ -16,8 +16,10 @@
   <div class="btn-toolbar pull-left">
     <?php
     $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    echo html::a(inlink('execution', "type=undone&orderBy=id_desc&recTotal=0&recPerPage={$pager->recPerPage}"),  "<span class='text'>{$lang->my->executionMenu->undone}</span>" . ($type == 'undone' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'undone' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('execution', "type=done&orderBy=id_desc&recTotal=0&recPerPage={$pager->recPerPage}"),  "<span class='text'>{$lang->my->executionMenu->done}</span>" . ($type == 'done' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'done' ? ' btn-active-text' : '') . "'");
+    foreach($lang->my->featureBar['execution'] as $key => $name)
+    {
+        echo html::a(inlink('execution', "type=$key&orderBy=id_desc&recTotal=0&recPerPage={$pager->recPerPage}"), "<span class='text'>{$name}</span>" . ($type == $key ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == $key ? ' btn-active-text' : '') . "'");
+    }
     ?>
   </div>
 </div>
@@ -46,9 +48,10 @@
     </thead>
     <tbody>
       <?php foreach($executions as $execution):?>
+      <?php $isParent = isset($parentGroup[$execution->id]);?>
       <?php $link = $this->createLink('execution', 'browse', "id=$execution->id", '', '', $execution->project);?>
       <tr class='text-left'>
-        <td><?php echo html::a($link, sprintf('%03d', $execution->id));?></td>
+        <td><?php echo $isParent ? sprintf('%03d', $execution->id) : html::a($link, sprintf('%03d', $execution->id));?></td>
         <td class='c-name text-left'>
           <?php if($config->systemMode == 'ALM'):?>
           <?php
@@ -57,7 +60,7 @@
           if($execution->type === 'kanban') echo "<span class='project-type-label label label-outline label-info'>{$lang->execution->kanban}</span> ";
           ?>
           <?php endif;?>
-          <?php echo html::a($link, $execution->name, '', "title='$execution->name'");?>
+          <?php echo $isParent ? $execution->name : html::a($link, $execution->name, '', "title='$execution->name'");?>
         </td>
         <td class="c-status">
           <?php if(isset($execution->delay)):?>

@@ -2,7 +2,7 @@
 /**
  * The control file of stage currentModule of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     stage
@@ -15,13 +15,19 @@ class stage extends control
      * Browse stages.
      *
      * @param  string $orderBy
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function browse($orderBy = "id_asc")
+    public function browse($orderBy = "id_asc", $type = 'waterfall')
     {
-        $this->view->stages      = $this->stage->getStages($orderBy);
+        if($type == 'waterfallplus') $this->locate($this->createLink('stage', 'plusBrowse', "orderBy=$orderBy&type=waterfallplus"));
+
+        $this->stage->setMenu($type);
+
+        $this->view->stages      = $this->stage->getStages($orderBy, 0, $type);
         $this->view->orderBy     = $orderBy;
+        $this->view->type        = $type;
         $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->browse;
         $this->view->position[]  = $this->lang->stage->common;
         $this->view->position[]  = $this->lang->stage->browse;
@@ -30,16 +36,41 @@ class stage extends control
     }
 
     /**
-     * Create a stage.
+     * Browse stages.
      *
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function create()
+    public function plusBrowse($orderBy = "id_asc", $type = 'waterfallplus')
     {
+        if($type == 'waterfall') $this->locate($this->createLink('stage', 'browse', "orderBy=$orderBy&type=waterfall"));
+
+        $this->stage->setMenu($type);
+
+        $this->view->stages      = $this->stage->getStages($orderBy, 0, $type);
+        $this->view->orderBy     = $orderBy;
+        $this->view->type        = $type;
+        $this->view->title       = $this->lang->stage->common . $this->lang->colon . $this->lang->stage->browse;
+        $this->view->position[]  = $this->lang->stage->common;
+        $this->view->position[]  = $this->lang->stage->browse;
+
+        $this->display('stage', 'browse');
+    }
+
+    /**
+     * Create a stage.
+     *
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function create($type = 'waterfall')
+    {
+        $this->stage->setMenu($type);
         if($_POST)
         {
-            $stageID = $this->stage->create();
+            $stageID = $this->stage->create($type);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $response['result']  = 'success';
@@ -52,7 +83,7 @@ class stage extends control
             }
 
             $this->loadModel('action')->create('stage', $stageID, 'Opened');
-            $response['locate']  = inlink('browse');
+            $response['locate']  = inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$type");
             return $this->send($response);
         }
 
@@ -66,14 +97,16 @@ class stage extends control
     /**
      * Batch create stages.
      *
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function batchCreate()
+    public function batchCreate($type = 'waterfall')
     {
+        $this->stage->setMenu($type);
         if($_POST)
         {
-            $this->stage->batchCreate();
+            $this->stage->batchCreate($type);
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
@@ -84,7 +117,7 @@ class stage extends control
                 return $this->send($response);
             }
 
-            $response['locate']  = inlink('browse');
+            $response['locate']  = inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$type");
             return $this->send($response);
         }
 
@@ -105,6 +138,7 @@ class stage extends control
     public function edit($stageID = 0)
     {
         $stage = $this->stage->getByID($stageID);
+        $this->stage->setMenu($stage->projectType);
         if($_POST)
         {
             $changes = $this->stage->update($stageID);
@@ -120,7 +154,7 @@ class stage extends control
 
             $actionID = $this->loadModel('action')->create('stage', $stageID, 'Edited');
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
-            $response['locate']  = inlink('browse');
+            $response['locate']  = inlink($type == 'waterfall' ? 'browse' : 'plusBrowse', "orderBy=id_asc&type=$stage->projectType");
             return $this->send($response);
         }
 

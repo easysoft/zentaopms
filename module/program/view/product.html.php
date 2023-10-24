@@ -2,7 +2,7 @@
 /**
  * The html product list file of product method of program module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -17,7 +17,7 @@
 <div id="mainMenu" class="clearfix">
   <?php if(!isonlybody()):?>
   <div class="btn-toolBar pull-left">
-    <?php foreach($lang->product->featureBar['all'] as $key => $label):?>
+    <?php foreach($lang->program->featureBar['product'] as $key => $label):?>
     <?php $active = $key == $browseType ? 'btn-active-text' : '';?>
     <?php if($key == $browseType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a(inlink("product", "programID=$programID&browseType=$key&orderBy=$orderBy"), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'");?>
@@ -70,7 +70,7 @@
         </thead>
         <tbody class="sortable" id="productTableList">
         <?php foreach($products as $product):?>
-          <?php $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];?>
+          <?php $totalStories = $product->finishedStories + ($product->totalStories - $product->closedStories);?>
           <tr class="text-center" data-id='<?php echo $product->id ?>' data-order='<?php echo $product->code;?>'>
             <td class='c-id text-left'>
               <?php if($canBatchEdit):?>
@@ -91,13 +91,13 @@
               }
               ?>
             </td>
-            <td><?php echo $product->stories['draft'];?></td>
-            <td><?php echo $product->stories['active'];?></td>
-            <td><?php echo $product->stories['changing'];?></td>
-            <td><?php echo $product->stories['reviewing'];?></td>
-            <td><?php echo $totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100;?>%</td>
-            <td><?php echo $product->unResolved;?></td>
-            <td><?php echo ($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100;?>%</td>
+            <td><?php echo $product->draftStories;?></td>
+            <td><?php echo $product->activeStories;?></td>
+            <td><?php echo $product->changingStories;?></td>
+            <td><?php echo $product->reviewingStories;?></td>
+            <td><?php echo $totalStories == 0 ? 0 : round($product->finishedStories / $totalStories, 3) * 100;?>%</td>
+            <td><?php echo $product->unresolvedBugs;?></td>
+            <td><?php echo ($product->unresolvedBugs + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unresolvedBugs + $product->fixedBugs), 3) * 100;?>%</td>
             <td><?php echo $product->plans;?></td>
             <td><?php echo $product->releases;?></td>
             <td class='c-actions'>
@@ -116,13 +116,13 @@
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
           <?php
-          $actionLink = $this->createLink('product', 'batchEdit');
+          $actionLink = $this->createLink('product', 'batchEdit', "programID=$programID");
           echo html::commonButton($lang->edit, "id='editBtn' data-form-action='$actionLink'");
           ?>
         </div>
         <?php
         $summary = sprintf($lang->product->pageSummary, count($products));
-        echo "<div id='productsCount' class='statistic'>$summary</div>";
+        echo "<div id='productsCount' class='table-statistic'>$summary</div>";
         ?>
         <?php endif;?>
         <?php $pager->show('right', 'pagerjs');?>

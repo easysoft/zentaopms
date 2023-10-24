@@ -2,7 +2,7 @@
 /**
  * The control file of testsuite module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testsuite
@@ -337,8 +337,15 @@ class testsuite extends control
         /* Build the search form. */
         $this->loadModel('testcase');
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case', 0, 'all');
+        $this->config->testcase->search['params']['lib']['values']    = $this->loadModel('caselib')->getLibraries();
+        $this->config->testcase->search['params']['story']['values']  = array('' => '') + $this->loadModel('testcase')->getStoriesByProduct($productID);
+
         $this->config->testcase->search['module']    = 'testsuite';
         $this->config->testcase->search['actionURL'] = inlink('linkCase', "suiteID=$suiteID&param=myQueryID");
+
+        $scene = $this->testcase->getSceneMenu($productID, 0, '', 0,  0,0);
+        $this->config->testcase->search['params']['scene']['values'] = array('' => '') + $scene;
+
         unset($this->config->testcase->search['fields']['product']);
         unset($this->config->testcase->search['params']['product']);
         unset($this->config->testcase->search['fields']['branch']);

@@ -2,7 +2,7 @@
 /**
  * The control file of testtask module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
@@ -161,7 +161,7 @@ class testtask extends control
             $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
             $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
 
-            if($this->config->edition == 'max')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 $this->lang->waterfall->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
                 $this->lang->waterfall->menu->qa['subMenu']->testtask['subModule'] = '';
@@ -172,8 +172,8 @@ class testtask extends control
         }
         else
         {
+            $this->lang->qa->menu->testcase['subModule'] .= ',testtask';
             $this->loadModel('qa')->setMenu($this->products, $productID);
-            $this->app->rawModule = 'testcase';
         }
 
         /* Load pager. */
@@ -540,6 +540,7 @@ class testtask extends control
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['params']['status']['values']  = array('' => '') + $this->lang->testcase->statusList;
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
+        $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, $moduleID, 'case', 0,  0);
 
         $this->config->testcase->search['queryID']              = $queryID;
         $this->config->testcase->search['fields']['assignedTo'] = $this->lang->testtask->assignedTo;
@@ -554,6 +555,9 @@ class testtask extends control
         /* Append bugs and results. */
         $runs = $this->testcase->appendData($runs, 'run');
 
+        $case2RunMap = array();
+        foreach($runs as $run) $case2RunMap[$run->case] = $run->id;
+
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->testtask->common;
@@ -563,6 +567,7 @@ class testtask extends control
         $this->view->productName    = $this->products[$productID];
         $this->view->task           = $task;
         $this->view->runs           = $runs;
+        $this->view->case2RunMap    = $case2RunMap;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst|noletter');
         $this->view->assignedToList = $assignedToList;
         $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($productID, 'case', 0, array('treeModel', 'createTestTaskLink'), $taskID, $task->branch);
@@ -1109,8 +1114,9 @@ class testtask extends control
         $this->loadModel('testcase');
         $this->config->testcase->search['params']['product']['values'] = array($productID => $this->products[$productID]);
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $task->branch);
-        $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID&type=$type&param=$param");
-        $this->config->testcase->search['style']     = 'simple';
+        $this->config->testcase->search['actionURL']                   = inlink('linkcase', "taskID=$taskID&type=$type&param=$param");
+        $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, 0, $viewType = 'case', $startSceneID = 0,  0);
+        $this->config->testcase->search['style']                       = 'simple';
 
         $build   = $this->loadModel('build')->getByID($task->build);
         $stories = array();
@@ -1354,7 +1360,7 @@ class testtask extends control
         }
 
         if(!$this->post->caseIDList) return print(js::locate($url, 'parent'));
-        $caseIDList = array_unique($this->post->caseIDList);
+        $caseIDList = array_filter($this->post->caseIDList);
 
         /* The case of tasks of qa. */
         if($productID or ($this->app->tab == 'project' and empty($productID)))

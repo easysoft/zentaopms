@@ -11,11 +11,11 @@ enterprises. It enables every department and every employee in the company to ma
 
 EOT;
 $lang->install->links    = <<<EOT
-ZenTao Lite is developed by <strong><a href='https://en.easysoft.ltd' target='_blank' class='text-danger'>EasyCorp</a></strong>.
+ZenTao Lite is developed by <strong><a href='https://en.easysoft.ltd' target='_blank' class='text-danger'>ZenTao Software</a></strong>.
 Official Website: <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
 Technical Support: <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
-LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>EasyCorp</a>
-Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>EasyCorp</a>
+LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>ZenTao Software</a>
+Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>ZenTao Software</a>
 Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao Lite</a>
 
 

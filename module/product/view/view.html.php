@@ -2,7 +2,7 @@
 /**
  * The view view of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../ai/view/promptmenu.html.php';?>
 <?php $style = isonlybody() ? 'style="margin-top: 0px;"' : '';?>
 <div id='mainContent' class="main-row" <?php echo $style;?>>
   <div class="col-8 main-col">
@@ -19,7 +20,7 @@
       <div class="col-sm-12">
         <div class="cell">
           <div class="detail">
-            <?php $hiddenCode = (isset($config->setCode) and $config->setCode == 0) ? 'hidden' : '';?>
+            <?php $hiddenCode = (!isset($config->setCode) or $config->setCode == 0) ? 'hidden' : '';?>
             <h2 class="detail-title"><span class="label-id"><?php echo $product->id;?></span> <span class="label label-light label-outline <?php echo $hiddenCode;?>"><?php echo $product->code;?></span> <?php echo $product->name;?></h2>
             <div class="detail-content article-content">
               <p><?php echo $product->desc;?></p>

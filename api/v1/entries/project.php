@@ -2,7 +2,7 @@
 /**
  * The project entry point of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
@@ -101,8 +101,10 @@ class projectEntry extends entry
         $oldProject     = $this->loadModel('project')->getByID($projectID);
         $linkedProducts = $this->loadModel('product')->getProducts($projectID);
 
+        $useCode = $this->checkCodeUsed();
         /* Set $_POST variables. */
-        $fields = 'name,code,begin,end,acl,parent,desc,PM,whitelist,model';
+        $fields = 'name,begin,end,acl,parent,desc,PM,whitelist,model';
+        if($useCode) $fields .= ',code';
         $this->batchSetPost($fields, $oldProject);
 
         $products = array();
@@ -119,7 +121,7 @@ class projectEntry extends entry
         $control->edit($projectID);
 
         $data = $this->getData();
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         if(!isset($data->result)) return $this->sendError(400, 'error');
 
         $project = $this->project->getByID($projectID);

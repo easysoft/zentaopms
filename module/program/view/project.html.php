@@ -2,7 +2,7 @@
 /**
  * The pgmproject view file of program module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     program
@@ -22,8 +22,8 @@ $closedCount    = 0;
 ?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolBar pull-left">
-    <?php common::sortFeatureMenu('program', 'browse');?>
-    <?php foreach($lang->program->featureBar['browse'] as $key => $label):?>
+    <?php common::sortFeatureMenu('program', 'project');?>
+    <?php foreach($lang->program->featureBar['project'] as $key => $label):?>
     <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>

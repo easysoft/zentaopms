@@ -97,13 +97,13 @@ $dataType = '';
               <td style='padding-left:15px;'>
                 <table class='table-1'>
                   <tr>
-                    <td><span><input type="checkbox" name="story<?php echo $content->id?>[]" value="developing" <?php echo $content->stage == 'developing' ? "checked" : ''?> id="story3developing"><label for="story3developing"> <?php echo $lang->story->stageList['developing']?></label></span></td>
-                    <td><span><input type="checkbox" name="story<?php echo $content->id?>[]" value="developed"  <?php echo $content->stage == 'developed' ? "checked" : ''?> id="story3developed"><label for="story3developed"> <?php echo $lang->story->stageList['developed']?></label></span></td>
-                    <td><span><input type="checkbox" name="story<?php echo $content->id?>[]" value="testing"    <?php echo $content->stage == 'testing' ? "checked" : ''?> id="story3testing"><label for="story3testing"> <?php echo $lang->story->stageList['testing']?></label></span><br /></td>
+                    <td><span><input type="checkbox" name="story<?php echo $content->id?>[]" value="developing" <?php echo $content->stage == 'developing' ? "checked" : ''?> id="story<?php echo $content->id;?>developing"><label for="story<?php echo $content->id;?>developing"> <?php echo $lang->story->stageList['developing']?></label></span></td>
+                    <td><span><input type="checkbox" name="story<?php echo $content->id?>[]" value="developed"  <?php echo $content->stage == 'developed' ? "checked" : ''?> id="story<?php echo $content->id;?>developed"><label for="story<?php echo $content->id;?>developed"> <?php echo $lang->story->stageList['developed']?></label></span></td>
+                    <td><span><input type="checkbox" name="story<?php echo $content->id?>[]" value="testing"    <?php echo $content->stage == 'testing' ? "checked" : ''?> id="story<?php echo $content->id;?>testing"><label for="story<?php echo $content->id;?>testing"> <?php echo $lang->story->stageList['testing']?></label></span><br /></td>
                   </tr>
                   <tr>
-                    <td><span><input type="checkbox" name="story<?php echo $content->id?>[]" value="tested"     <?php echo $content->stage == 'tested' ? "checked" : ''?> id="story3tested"><label for="story3tested"> <?php echo $lang->story->stageList['tested']?></label></span></td>
-                    <td><span><input type="checkbox" name="story<?php echo $content->id?>[]" value="verified"   <?php echo $content->stage == 'verified' ? "checked" : ''?> id="story3verified"><label for="story3verified"> <?php echo $lang->story->stageList['verified']?></label></span></td>
+                    <td><span><input type="checkbox" name="story<?php echo $content->id?>[]" value="tested"     <?php echo $content->stage == 'tested' ? "checked" : ''?> id="story<?php echo $content->id;?>tested"><label for="story<?php echo $content->id;?>tested"> <?php echo $lang->story->stageList['tested']?></label></span></td>
+                    <td><span><input type="checkbox" name="story<?php echo $content->id?>[]" value="verified"   <?php echo $content->stage == 'verified' ? "checked" : ''?> id="story<?php echo $content->id;?>verified"><label for="story<?php echo $content->id;?>verified"> <?php echo $lang->story->stageList['verified']?></label></span></td>
                     <td></td>
                   </tr>
                 </table>
@@ -171,13 +171,13 @@ $dataType = '';
           <td style='padding-left:15px;'>
             <table class='table-1'>
               <tr>
-                <td><span><input type="checkbox" name="story<?php echo $i?>[]" value="developing" id="story3developing"><label for="story3developing"> <?php echo $lang->story->stageList['developing']?></label></span></td>
-                <td><span><input type="checkbox" name="story<?php echo $i?>[]" value="developed"  id="story3developed"><label for="story3developed"> <?php echo $lang->story->stageList['developed']?></label></span></td>
-                <td><span><input type="checkbox" name="story<?php echo $i?>[]" value="testing"    id="story3testing"><label for="story3testing"> <?php echo $lang->story->stageList['testing']?></label></span><br /></td>
+                <td><span><input type="checkbox" name="story<?php echo $i?>[]" value="developing" id="story<?php echo $content->id;?>developing"><label for="story<?php echo $content->id;?>developing"> <?php echo $lang->story->stageList['developing']?></label></span></td>
+                <td><span><input type="checkbox" name="story<?php echo $i?>[]" value="developed"  id="story<?php echo $content->id;?>developed"><label for="story<?php echo $content->id;?>developed"> <?php echo $lang->story->stageList['developed']?></label></span></td>
+                <td><span><input type="checkbox" name="story<?php echo $i?>[]" value="testing"    id="story<?php echo $content->id;?>testing"><label for="story<?php echo $content->id;?>testing"> <?php echo $lang->story->stageList['testing']?></label></span><br /></td>
               </tr>
               <tr>
-                <td><span><input type="checkbox" name="story<?php echo $i?>[]" value="tested"     id="story3tested"><label for="story3tested"> <?php echo $lang->story->stageList['tested']?></label></span></td>
-                <td><span><input type="checkbox" name="story<?php echo $i?>[]" value="verified"   id="story3verified"><label for="story3verified"> <?php echo $lang->story->stageList['verified']?></label></span></td>
+                <td><span><input type="checkbox" name="story<?php echo $i?>[]" value="tested"     id="story<?php echo $content->id;?>tested"><label for="story<?php echo $content->id;?>tested"> <?php echo $lang->story->stageList['tested']?></label></span></td>
+                <td><span><input type="checkbox" name="story<?php echo $i?>[]" value="verified"   id="story<?php echo $content->id;?>verified"><label for="story<?php echo $content->id;?>verified"> <?php echo $lang->story->stageList['verified']?></label></span></td>
                 <td></td>
               </tr>
             </table>

@@ -2,14 +2,13 @@
 /**
  * The todo module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license  ZPL (http://zpl.pub/page/zplv12.html)
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  todo
  * @version  $Id: vi.php 4676 2020-04-06 06:08:23Z quocnho@gmail.com $
  * @link  http://www.zentao.net
  */
-$lang->todo->common       = 'Việc làm';
 $lang->todo->index        = "Home";
 $lang->todo->create       = "Thêm việc";
 $lang->todo->createCycle  = "Thêm việc lặp lại";
@@ -111,14 +110,14 @@ $lang->todo->noTodo         = 'Không có việc của loại này.';
 $lang->todo->noAssignedTo   = "Người được giao không nên trống.";
 $lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not close.';
 
-$lang->todo->periods['all']             = 'Tất cả việc';
-$lang->todo->periods['before']          = 'Chưa kết thúc';
-$lang->todo->periods['future']          = 'TBD';
-$lang->todo->periods['thisWeek']        = 'This Week';
-$lang->todo->periods['thisMonth']       = 'This Month';
-$lang->todo->periods['thisYear']        = 'Năm nay';
-$lang->todo->periods['assignedToOther'] = 'Assigned To Other';
-$lang->todo->periods['cycle']           = 'Lặp lại';
+$lang->my->featureBar['todo']['all']             = 'Tất cả việc';
+$lang->my->featureBar['todo']['before']          = 'Chưa kết thúc';
+$lang->my->featureBar['todo']['future']          = 'TBD';
+$lang->my->featureBar['todo']['thisWeek']        = 'This Week';
+$lang->my->featureBar['todo']['thisMonth']       = 'This Month';
+$lang->my->featureBar['todo']['thisYear']        = 'Năm nay';
+$lang->my->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
+$lang->my->featureBar['todo']['cycle']           = 'Lặp lại';
 
 $lang->todo->action = new stdclass();
 $lang->todo->action->finished = array('main' => '$date, là $extra bởi <strong>$actor</strong>.', 'extra' => 'reasonList');

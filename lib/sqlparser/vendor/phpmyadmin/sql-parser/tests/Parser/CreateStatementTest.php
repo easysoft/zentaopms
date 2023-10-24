@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Parser;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
@@ -9,61 +7,61 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 class CreateStatementTest extends TestCase
 {
     /**
-     * @param mixed $test
-     *
      * @dataProvider createProvider
+     *
+     * @param mixed $test
      */
-    public function testCreate($test): void
+    public function testCreate($test)
     {
         $this->runParserTest($test);
     }
 
-    public function createProvider(): array
+    public function createProvider()
     {
-        return [
-            ['parser/parseCreateDatabase'],
-            ['parser/parseCreateDatabaseErr'],
-            ['parser/parseCreateFunction'],
-            ['parser/parseCreateFunctionErr1'],
-            ['parser/parseCreateFunctionErr2'],
-            ['parser/parseCreateFunctionErr3'],
-            ['parser/parseCreateProcedure'],
-            ['parser/parseCreateProcedure1'],
-            ['parser/parseCreateProcedure2'],
-            ['parser/parseCreateSchema'],
-            ['parser/parseCreateSchemaErr'],
-            ['parser/parseCreateTable'],
-            ['parser/parseCreateTable2'],
-            ['parser/parseCreateTable3'],
-            ['parser/parseCreateTable4'],
-            ['parser/parseCreateTable5'],
-            ['parser/parseCreateTable6'],
-            ['parser/parseCreateTable7'],
-            ['parser/parseCreateTableErr1'],
-            ['parser/parseCreateTableErr2'],
-            ['parser/parseCreateTableErr3'],
-            ['parser/parseCreateTableErr4'],
-            ['parser/parseCreateTableErr5'],
-            ['parser/parseCreateTableSelect'],
-            ['parser/parseCreateTableAsSelect'],
-            ['parser/parseCreateTableLike'],
-            ['parser/parseCreateTableSpatial'],
-            ['parser/parseCreateTableTimestampWithPrecision'],
-            ['parser/parseCreateTableEnforcedCheck'],
-            ['parser/parseCreateTableNotEnforcedCheck'],
-            ['parser/parseCreateTableWithInvisibleKey'],
-            ['parser/parseCreateTrigger'],
-            ['parser/parseCreateUser'],
-            ['parser/parseCreateView'],
-            ['parser/parseCreateView2'],
-            ['parser/parseCreateView3'],
-            ['parser/parseCreateView4'],
-            ['parser/parseCreateViewMultiple'],
-            ['parser/parseCreateViewWithoutQuotes'],
-            ['parser/parseCreateViewWithQuotes'],
-            ['parser/parseCreateViewWithWrongSyntax'],
-            ['parser/parseCreateViewWithUnion'],
-            ['parser/parseCreateViewAsWithAs'],
-        ];
+        return array(
+            array('parser/parseCreateDatabase'),
+            array('parser/parseCreateDatabaseErr'),
+            array('parser/parseCreateFunction'),
+            array('parser/parseCreateFunctionErr1'),
+            array('parser/parseCreateFunctionErr2'),
+            array('parser/parseCreateFunctionErr3'),
+            array('parser/parseCreateProcedure'),
+            array('parser/parseCreateProcedure1'),
+            array('parser/parseCreateProcedure2'),
+            array('parser/parseCreateSchema'),
+            array('parser/parseCreateSchemaErr'),
+            array('parser/parseCreateTable'),
+            array('parser/parseCreateTable2'),
+            array('parser/parseCreateTable3'),
+            array('parser/parseCreateTable4'),
+            array('parser/parseCreateTable5'),
+            array('parser/parseCreateTable6'),
+            array('parser/parseCreateTable7'),
+            array('parser/parseCreateTableErr1'),
+            array('parser/parseCreateTableErr2'),
+            array('parser/parseCreateTableErr3'),
+            array('parser/parseCreateTableErr4'),
+            array('parser/parseCreateTableErr5'),
+            array('parser/parseCreateTableSelect'),
+            array('parser/parseCreateTableAsSelect'),
+            array('parser/parseCreateTableLike'),
+            array('parser/parseCreateTableSpatial'),
+            array('parser/parseCreateTableTimestampWithPrecision'),
+            array('parser/parseCreateTableEnforcedCheck'),
+            array('parser/parseCreateTableNotEnforcedCheck'),
+            array('parser/parseCreateTableWithInvisibleKey'),
+            array('parser/parseCreateTrigger'),
+            array('parser/parseCreateUser'),
+            array('parser/parseCreateView'),
+            array('parser/parseCreateView2'),
+            array('parser/parseCreateView3'),
+            array('parser/parseCreateView4'),
+            array('parser/parseCreateViewMultiple'),
+            array('parser/parseCreateViewWithoutQuotes'),
+            array('parser/parseCreateViewWithQuotes'),
+            array('parser/parseCreateViewWithWrongSyntax'),
+            array('parser/parseCreateViewWithUnion'),
+            array('parser/parseCreateViewAsWithAs'),
+        );
     }
 }

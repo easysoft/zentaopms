@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/job.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -20,4 +19,3 @@ $projectKeys = array('zentaopms');
 
 $job = new jobTest();
 r($job->getJobBySonarqubeProjectTest($sonarqubeID, $projectKeys)) && p('zentaopms') && e('1');  // 根据sonarqube project查询job
-$db->restoreDB();

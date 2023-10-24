@@ -2,7 +2,7 @@
 /**
  * The zdb library of zentaopms, can be used to bakup and restore a database.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     Zdb
@@ -43,7 +43,11 @@ class zdb
         global $config;
 
         $allTables = array();
-        $stmt      = $this->dbh->query("show full tables");
+        $sql       = 'show full tables';
+
+        if($config->db->driver == 'dm') $sql = "select OBJECT_NAME AS Tables_in_{$config->db->name}, OBJECT_TYPE as Table_type from all_objects where owner='{$config->db->name}' and OBJECT_TYPE in('TABLE','VIEW');";
+        $stmt      = $this->dbh->query($sql);
+
         while($table = $stmt->fetch(PDO::FETCH_ASSOC))
         {
             $tableType = strtolower($table['Table_type']);
@@ -253,7 +257,7 @@ class zdb
 
                 /* Create a value sql. */
                 $value = array_values($row);
-                $value = array_map('addslashes', $value);
+                $value = $this->addslashes($value);
                 $value = join("','", $value);
                 $value = "'" . $value . "'";
                 $sql   = "INSERT INTO `$table`($keys) VALUES (" . $value . ");\n";
@@ -362,5 +366,32 @@ class zdb
             $return->error  = $e->getMessage();
             return $return;
         }
+    }
+
+
+    /**
+     * Add slashes for string or string list.
+     *
+     * @param  string|string[] $data
+     * @return string|string[]
+     */
+    public function addslashes($data)
+    {
+        if(is_string($data)) return addslashes($data);
+        if((function_exists('array_is_list') && array_is_list($data)) || (is_array($data) && array_keys($data) === array_keys(array_keys($data))))
+        {
+            $result = array();
+            foreach($data as $item)
+            {
+                if(is_string($item))
+                    $result[] = addslashes($item);
+                elseif(is_null($item))
+                    $result[] = null;
+                else
+                    $result[] = $item;
+            }
+            return $result;
+        }
+        return $data;
     }
 }

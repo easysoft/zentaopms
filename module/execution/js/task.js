@@ -1,19 +1,6 @@
 $(function()
 {
-    if($('#taskList thead th.c-name').width() < 150) $('#taskList thead th.c-name').width(150);
-    $('#taskList td.has-child .task-toggle').each(function()
-    {
-        var $td = $(this).closest('td');
-        var labelWidth = 0;
-        if($td.find('.label').length > 0) labelWidth = $td.find('.label').width();
-        $td.find('a').eq(0).css('max-width', $td.width() - labelWidth - 60);
-    });
-
-    toggleFold('#executionTaskForm', unfoldTasks, executionID, 'execution');
-
     adjustTableFooter();
-    $('body').on('click', '#toggleFold', adjustTableFooter);
-    $('body').on('click', '.icon.icon-angle-right', adjustTableFooter);
 
     /* The display of the adjusting sidebarHeader is synchronized with the sidebar. */
     $(".sidebar-toggle").click(function()
@@ -21,6 +8,31 @@ $(function()
         $("#sidebarHeader").toggle("fast");
     });
     if($("main").is(".hide-sidebar")) $("#sidebarHeader").hide();
+
+    $('.table-footer .check-all').on('click', function()
+    {
+        var $dtable = zui.DTable.query('#taskList').$;
+        if($(this).hasClass('checked'))
+        {
+            $(this).removeClass('checked');
+            $('.has-checkbox').click().removeClass('is-checked');
+            $('.dtable-checkbox').removeClass('checked');
+            $dtable.toggleCheckRows(false);
+        }
+        else
+        {
+            $(this).addClass('checked');
+            $('.has-checkbox').click().addClass('is-checked');
+            $('.dtable-checkbox').addClass('checked');
+            $dtable.toggleCheckRows(true);
+        }
+
+        setStatistics();
+    })
+
+    $('#executionTaskForm').on('click', '[data-form-action]', function() {
+        $('#executionTaskForm').attr('action', $(this).data('formAction')).submit();
+    });
 });
 
 $('#module' + moduleID).closest('li').addClass('active');
@@ -42,28 +54,92 @@ function adjustTableFooter()
     }
 }
 
-/**
- * Ajax refresh.
- *
- * @access public
- * @return void
- */
-function ajaxRefresh()
+function createSortLink(col)
 {
-    var $table = $('#executionTaskForm').closest('[data-ride="table"]');
-    if($table.length)
-    {
-        var table = $table.data('zui.table');
-        if(table)
-        {
-            table.options.replaceId = 'executionTaskForm';
-            table.reload();
-        }
-    }
-    $.get(location.href, function(data)
-    {
-        var $data = $(data);
-        $('#mainMenu > div.btn-toolbar.pull-left').html($data.find('#mainMenu > div.btn-toolbar.pull-left').html());
-        if($data.find('#mainContent .main-col .table-empty-tip').length) $('#mainContent .main-col').html($data.find('#mainContent .main-col'));
-    });
+    var sort = col.name + '_asc';
+    if(sort == orderBy) sort = col.name + '_desc';
+    return sortLink.replace('{orderBy}', sort);
 }
+
+function setStatistics()
+{
+    $('input[name^=taskIDList]').remove();
+
+    var element = zui.DTable.query('#taskList').$;
+    var checkedIDList = element.getChecks();
+    if(checkedIDList.length > 0)
+    {
+        $('.table-footer .table-actions').show();
+        if(element.isAllRowChecked()) $('.table-footer .check-all').addClass('checked');
+    }
+    else
+    {
+        $('.table-footer .check-all').removeClass('checked');
+        $('.table-footer .table-actions').hide();
+    }
+
+    if(checkedIDList.length == 0) return $('.table-statistic').html(pageSummary);
+
+    let totalLeft     = 0;
+    let totalEstimate = 0;
+    let totalConsumed = 0;
+
+    let waitCount  = 0;
+    let doingCount = 0;
+    let totalCount = 0;
+    $.each(checkedIDList, function(index, id)
+    {
+        if(element.getRowInfo(id) == undefined) return true;
+
+        const task = element.getRowInfo(id).data;
+
+        totalEstimate += Number(task.estimateNum);
+        totalConsumed += Number(task.consumedNum);
+        if(task.statusCode != 'cancel' && task.statusCode != 'closed') totalLeft += Number(task.leftNum);
+
+        if(task.statusCode == 'wait')
+        {
+            waitCount ++;
+        }
+        else if(task.statusCode == 'doing')
+        {
+            doingCount ++;
+        }
+
+        totalCount ++;
+
+        $('#executionTaskForm').append('<input type="hidden" name="taskIDList[]" value="' + id + '">');
+    })
+
+    $('.table-statistic').html(checkedSummary.replace('%total%', totalCount)
+        .replace('%wait%', waitCount)
+        .replace('%doing%', doingCount)
+        .replace('%estimate%', totalEstimate.toFixed(1))
+        .replace('%consumed%', totalConsumed.toFixed(1))
+        .replace('%left%', totalLeft.toFixed(1))
+    );
+}
+
+cols = JSON.parse(cols);
+data = JSON.parse(data);
+const options =
+{
+    striped: true,
+    plugins: ['nested', 'checkable'],
+    checkOnClickRow: true,
+    sortLink: createSortLink,
+    cols: cols,
+    data: data,
+    footer: false,
+    responsive: true,
+    onCheckChange: setStatistics,
+    height: function(height)
+    {
+        return Math.min($(window).height() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - $('.table-footer').outerHeight() - 30, height);
+    },
+    checkInfo: function(checkedIDList)
+    {
+        return setStatistics(this, checkedIDList);
+    }
+};
+$('#taskList').dtable(options);

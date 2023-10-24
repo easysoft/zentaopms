@@ -2,19 +2,19 @@
 /**
  * The api module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     api
  * @version     $Id: English.php 824 2010-05-02 15:32:06Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->api = new stdclass();
 $lang->api->common   = 'API';
 $lang->api->getModel = 'Super Model API';
 $lang->api->sql      = 'SQL Query API';
+$lang->api->manage   = 'API management';
 
-$lang->api->index            = 'Home';
+$lang->api->index            = 'API Space';
 $lang->api->editLib          = 'Edit';
 $lang->api->releases         = 'Release';
 $lang->api->deleteRelease    = 'Delete Release';
@@ -40,7 +40,6 @@ $lang->api->noModule         = 'No directory in the API library. Please add the 
 $lang->api->post             = 'Auf Seiten Liste beziehen bei POST Debug';
 $lang->api->noUniqueName     = 'The API library name exists.';
 $lang->api->noUniqueVersion  = 'The version exists.';
-$lang->api->version          = 'Version';
 $lang->api->createStruct     = 'Create Data Structure';
 $lang->api->editStruct       = 'Edit Data Structure';
 $lang->api->deleteStruct     = 'Delete Data Structure';
@@ -62,12 +61,17 @@ $lang->api->defaultVersion   = "Current Version";
 $lang->api->zentaoAPI        = "Zentao API v1";
 $lang->api->search           = "Search";
 $lang->api->allLibs          = "AllLibs";
+$lang->api->noLinked         = "No Linked {$lang->productCommon} and {$lang->projectCommon}";
+$lang->api->addCatalog       = 'Add Catalog';
+$lang->api->editCatalog      = 'Edit Catalog';
+$lang->api->sortCatalog      = 'Catalog Sorting';
+$lang->api->deleteCatalog    = 'Delete Catalog';
 
 /* Common access control lang. */
 $lang->api->whiteList          = 'Whitelist';
-$lang->api->aclList['open']    = 'Open';
-$lang->api->aclList['private'] = 'Private';
-$lang->api->aclList['custom']  = 'Custom';
+$lang->api->aclList['open']    = "Public <span class='acl-tip'>(Users who can access doccan access it)</span>";
+$lang->api->aclList['default'] = "Default <span class='acl-tip'>(Users who can access the selected %s can access it)</span>";
+$lang->api->aclList['private'] = "Private <span class='acl-tip'> (Only the one who created it or users in the whiltelist can access it)</span>";
 $lang->api->group              = 'Group';
 $lang->api->user               = 'User';
 
@@ -88,6 +92,7 @@ $lang->struct->desc            = 'Description';
 $lang->struct->descPlaceholder = 'Parameter Description';
 $lang->struct->action          = 'Action';
 $lang->struct->addSubField     = 'Add Subfield';
+$lang->struct->list            = 'Data Structure List';
 
 $lang->struct->typeOptions = array(
     'formData' => 'FormData',
@@ -105,7 +110,7 @@ $lang->api->structAddedBy      = 'CreatedBy';
 $lang->api->structAddedDate    = 'Created';
 $lang->api->name               = 'API Library Name';
 $lang->api->baseUrl            = 'Base URL';
-$lang->api->baseUrlDesc        = 'Site or path, e.g., api.zentao.com or /v1.';
+$lang->api->baseUrlDesc        = 'Site or path, e.g., http://api.zentao.com or /v1.';
 $lang->api->desc               = 'Beschreibung';
 $lang->api->control            = 'Access Control';
 $lang->api->noLib              = 'No API library yet.';
@@ -149,6 +154,10 @@ $lang->api->default            = 'Default';
 $lang->api->desc               = 'Beschreibung';
 $lang->api->customType         = 'Custom Structure';
 $lang->api->format             = 'Format';
+$lang->api->libType            = 'Api Library Type';
+$lang->api->product            = $lang->productCommon;
+$lang->api->project            = $lang->projectCommon;
+
 $lang->api->methodOptions      = array(
     'GET'     => 'GET',
     'POST'    => 'POST',
@@ -169,6 +178,11 @@ $lang->api->requestTypeOptions = array();
 $lang->api->requestTypeOptions['application/json']                  = 'application/json';
 $lang->api->requestTypeOptions['application/x-www-form-urlencoded'] = 'application/x-www-form-urlencoded';
 $lang->api->requestTypeOptions['multipart/form-data']               = 'multipart/form-data';
+
+$lang->api->libTypeList = array();
+$lang->api->libTypeList['product'] = $lang->productCommon . ' Api Library';
+$lang->api->libTypeList['project'] = $lang->projectCommon . ' Api Library';
+$lang->api->libTypeList['nolink']  = 'Independent Api Library';
 
 $lang->api->statusOptions      = array(
     'done'   => 'Done',
@@ -216,3 +230,4 @@ $lang->api_lib_release->version = 'Version';
 $lang->api->error = new stdclass();
 $lang->api->error->onlySelect = 'Das SQL Interface erlaubt nur SELECT Abfragen.';
 $lang->api->error->disabled   = 'For security reasons, this feature is disabled. You can go to the config directory and modify the configuration item %s to open this function.';
+$lang->api->error->notInput   = 'Debugging is not supported temporarily due to field parameter type restrictions';

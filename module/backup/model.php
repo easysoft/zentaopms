@@ -2,7 +2,7 @@
 /**
  * The model file of backup module of ZenTaoCMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     backup
@@ -299,7 +299,7 @@ class backupModel extends model
         $summaryFile = dirname($backup) . DS . 'summary';
         if(!file_exists($summaryFile)) return array();
 
-        $summary = json_decode(file_get_contents(dirname($backup) . DS . 'summary'), 'true');
+        $summary = json_decode(file_get_contents(dirname($backup) . DS . 'summary'), true);
         return isset($summary[basename($backup)]) ? $summary[basename($backup)] : array();
     }
 
@@ -430,5 +430,61 @@ class backupModel extends model
 
         if(file_put_contents($summaryFile, json_encode($summary))) return true;
         return false;
+    }
+
+    /**
+     * Get disk space.
+     *
+     * @param  int    $backupPath
+     * @access public
+     * @return int
+     */
+    public function getkDiskSpace($backupPath)
+    {
+        $nofile        = strpos($this->config->backup->setting, 'nofile') !== false;
+        $diskFreeSpace = disk_free_space($backupPath);
+        $backFileSize  = 0;
+
+        $zfile = $this->app->loadClass('zfile');
+
+        if(!$nofile)
+        {
+            $appRoot      = $this->app->getAppRoot();
+            $appRootSize  = $this->getZentaoSize($appRoot);
+            $backFileSize = $appRootSize - $zfile->getDirSize($appRoot . 'tmp') - $zfile->getDirSize($appRoot . 'www/course');
+        }
+
+        $backSqlSize = $this->dao->select('sum(data_length+index_length) as size')
+            ->from('information_schema.tables')
+            ->where('TABLE_SCHEMA')->eq($this->config->db->name)
+            ->groupBy('TABLE_SCHEMA')
+            ->fetch('size');
+
+        return $diskFreeSpace . ',' . ($backFileSize + $backSqlSize);
+    }
+
+    /**
+     * Get zentao size.
+     *
+     * @param  string $appRoot
+     * @access public
+     * @return int
+     */
+    public function getZentaoSize($appRoot)
+    {
+        $totalSize = 0;
+        $tmpDir    = realPath($appRoot . 'tmp/');
+        $dataDir   = realPath($appRoot . 'www/data/');
+        $iterator  = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($appRoot, RecursiveDirectoryIterator::SKIP_DOTS));
+
+        foreach($iterator as $file)
+        {
+            $filePath = $file->getRealPath();
+            if(strpos($filePath, $tmpDir) !== 0 and strpos($filePath, $dataDir) !== 0)
+            {
+                $totalSize += $file->getSize();
+            }
+        }
+        return $totalSize;
     }
 }

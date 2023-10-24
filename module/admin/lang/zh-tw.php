@@ -51,6 +51,7 @@ $lang->admin->registerNotice->success    = "登記賬戶成功";
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = '關聯社區帳號';
 $lang->admin->bind->success = "關聯賬戶成功";
+$lang->admin->bind->submit  = "關聯";
 
 $lang->admin->safe = new stdclass();
 $lang->admin->safe->common       = '安全策略';
@@ -85,4 +86,4 @@ $lang->admin->safe->loginCaptchaList[0] = '否';
 $lang->admin->safe->noticeMode     = '系統會在創建和修改用戶、修改密碼的時候檢查用戶口令。';
 $lang->admin->safe->noticeWeakMode = '系統會在登錄、創建和修改用戶、修改密碼的時候檢查用戶口令。';
 $lang->admin->safe->noticeStrong   = '密碼長度越長，含有大寫字母或數字或特殊符號越多，密碼字母越不重複，安全度越強！';
-$lang->admin->safe->noticeGd       = '系統檢測到您的伺服器未安裝GD模組，無法使用驗證碼功能，請安裝後使用。';
+$lang->admin->safe->noticeGd       = '系統檢測到您的伺服器未安裝GD模組或未啟用FreeType支援，無法使用驗證碼功能，請安裝後使用。';

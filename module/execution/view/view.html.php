@@ -2,7 +2,7 @@
 /**
  * The view method view file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../ai/view/promptmenu.html.php';?>
 <?php js::import($this->config->webRoot . 'js/echarts/echarts.common.min.js'); ?>
 <?php js::set('type', $type);?>
 <?php js::set('chartData', $chartData);?>
@@ -31,7 +32,7 @@
               </div>
               <?php if(common::hasPriv('execution', 'burn')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'burn', "executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'burn', "executionID=$execution->id", mb_strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -60,7 +61,7 @@
               <div class="panel-title"><?php echo $lang->execution->latestDynamic;?></div>
               <?php if(common::hasPriv('execution', 'dynamic')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'dynamic', "executionID=$execution->id&type=all", strtoupper($lang->more), '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'dynamic', "executionID=$execution->id&type=all", mb_strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -84,7 +85,7 @@
               <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
               <?php if(common::hasPriv('execution', 'team')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", mb_strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -128,23 +129,31 @@
           <div class="panel block-docs" style="height: 240px">
             <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->execution->doclib;?></div>
-              <?php if(common::hasPriv('doc', 'objectLibs')):?>
+              <?php if(common::hasPriv('execution', 'doc')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('doc', 'objectLibs', "type=execution&executionID=$execution->id&from=execution", strtoupper($lang->more), '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'doc', "executionID=$execution->id", mb_strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
             <div class="panel-body">
               <div class="row row-grid">
-                <?php if(common::hasPriv('doc', 'objectLibs')):?>
+                <?php if(common::hasPriv('execution', 'doc')):?>
                 <?php $i = 0;?>
                 <?php foreach($docLibs as $libID => $docLib):?>
                 <?php if($i > 8) break;?>
                 <div class="col-xs-6 text-ellipsis">
                   <?php if($libID == 'files'):?>
-                  <?php echo html::a($this->createLink('doc', 'showFiles', "type=execution&objectID=$execution->id"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?>
+                    <?php if(isonlybody()):?>
+                    <?php echo "<i class='icon icon-folder text-yellow'></i> " . $docLib->name;?>
+                    <?php else:?>
+                    <?php echo html::a($this->createLink('doc', 'showFiles', "type=execution&objectID=$execution->id"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?>
+                    <?php endif;?>
                   <?php else:?>
-                  <?php echo html::a($this->createLink('doc', 'objectLibs', "type=execution&objectID={$execution->id}&libID=$libID"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name, '', "data-app='execution' title='$docLib->name'");?>
+                    <?php if(isonlybody()):?>
+                    <?php echo "<i class='icon icon-folder text-yellow'></i> " . $docLib->name;?>
+                    <?php else:?>
+                    <?php echo html::a($this->createLink('execution', 'doc', "objectID={$execution->id}&libID=$libID"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name, '', "data-app='execution' title='$docLib->name'");?>
+                    <?php endif;?>
                   <?php endif;?>
                 </div>
                 <?php $i++;?>
@@ -164,7 +173,7 @@
               <div class="panel-title"><?php echo $execution->name . $lang->execution->CFD;?></div>
               <?php if(common::hasPriv('execution', 'cfd')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'cfd', "executionID=$execution->id&type=task&withWeekend=false&begin=$begin&end=$end", strtoupper($lang->more), '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'cfd', "executionID=$execution->id&type=task&withWeekend=false&begin=$begin&end=$end", mb_strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -189,7 +198,7 @@
               <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
               <?php if(common::hasPriv('execution', 'team')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", mb_strtoupper($lang->more), '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -269,7 +278,7 @@
         <div class="col-sm-12">
           <div class="cell">
             <div class="detail">
-              <?php $hiddenCode = (isset($config->setCode) and $config->setCode == 0) ? 'hidden' : '';?>
+              <?php $hiddenCode = (!isset($config->setCode) or $config->setCode == 0) ? 'hidden' : '';?>
               <h2 class="detail-title"><span class="label-id"><?php echo $execution->id;?></span> <span class="label label-light label-outline <?php echo $hiddenCode;?>"><?php echo $execution->code;?></span> <?php echo $execution->name;?></h2>
               <div class="detail-content article-content">
                 <div><span class="text-limit hidden" data-limit-size="40"><?php echo $execution->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></div>
@@ -277,7 +286,7 @@
                   <?php if($execution->deleted):?>
                   <span class='label label-danger label-outline'><?php echo $lang->execution->deleted;?></span>
                   <?php endif;?>
-                  <?php if(!empty($execution->lifetime)):?>
+                  <?php if(!empty($execution->lifetime) and $execution->type != 'kanban' and $project->model != 'waterfall' and  $project->model != 'waterfallplus'):?>
                   <span class="label label-primary label-outline"><?php echo zget($lang->execution->lifeTimeList, $execution->lifetime);?></span>
                   <?php endif;?>
                   <?php if(isset($execution->delay)):?>
@@ -325,11 +334,11 @@
                 </div>
               </div>
             </div>
-            <?php if(!in_array($execution->attribute, array('request', 'design', 'review')) and $execution->projectInfo->hasProduct): ?>
+            <?php if($execution->projectInfo->hasProduct): ?>
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->execution->manageProducts;?></strong>
-                <?php if(common::hasPriv('execution', 'manageproducts') and $execution->type != 'stage') common::printLink('execution', 'manageproducts', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
+                <?php if(common::hasPriv('execution', 'manageproducts') and $execution->type != 'stage' and $project->model != 'waterfallplus') common::printLink('execution', 'manageproducts', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
               </div>
               <div class="detail-content">
                 <div class="row row-grid">
@@ -345,7 +354,7 @@
               </div>
             </div>
             <?php endif;?>
-            <?php if($execution->projectInfo->hasProduct or $execution->projectInfo->model == 'scrum'):?>
+            <?php if($features['plan']):?>
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->execution->linkPlan;?></strong></div>
               <div class="detail-content">
@@ -398,7 +407,7 @@
                       <th><?php echo $lang->execution->totalEstimate;?></th>
                       <td><?php echo (float)$execution->totalEstimate . $lang->execution->workHour;?></td>
                       <th><?php echo $lang->execution->totalDays;?></th>
-                      <td><?php echo $execution->days;?></td>
+                      <td><?php echo (float)$execution->days . $lang->execution->day;?></td>
                     </tr>
                     <tr>
                       <th><?php echo $lang->execution->totalConsumed;?></th>
@@ -420,14 +429,13 @@
                 <table class="table table-data data-basic">
                   <tbody>
                     <tr>
-                      <?php if($execution->lifetime == 'ops'):?>
-                      <th><?php echo $lang->task->common;?></th>
-                      <td><?php echo $statData->taskCount;?></td>
-                      <?php else:?>
+                      <?php if($features['story']):?>
                       <th><?php echo $lang->story->common;?></th>
                       <td><?php echo $statData->storyCount;?></td>
+                      <?php endif;?>
                       <th><?php echo $lang->task->common;?></th>
                       <td><?php echo $statData->taskCount;?></td>
+                      <?php if($features['qa']):?>
                       <th><?php echo $lang->bug->common;?></th>
                       <td><?php echo $statData->bugCount;?></td>
                       <?php endif;?>

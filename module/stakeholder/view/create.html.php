@@ -2,7 +2,7 @@
 /**
  * The view view of stakeholder module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
@@ -72,15 +72,15 @@
           </tr>
           <tr>
             <th><?php echo $lang->stakeholder->nature;?></th>
-            <td colspan='3'><?php echo html::textarea('nature', '', "class='form-control'");?></td>
+            <td colspan='3'><?php echo html::textarea('nature', '', "class='form-control kindeditor'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->stakeholder->analysis;?></th>
-            <td colspan='3'><?php echo html::textarea('analysis', '', "class='form-control'");?></td>
+            <td colspan='3'><?php echo html::textarea('analysis', '', "class='form-control kindeditor'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->stakeholder->strategy;?></th>
-            <td colspan='3'><?php echo html::textarea('strategy', '', "class='form-control'");?></td>
+            <td colspan='3'><?php echo html::textarea('strategy', '', "class='form-control kindeditor'");?></td>
           </tr>
           <tr>
             <td colspan='4' class='text-center form-actions'><?php echo html::submitButton() . html::backButton();?></td>

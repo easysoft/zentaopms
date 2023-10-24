@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -47,4 +46,3 @@ r($bug->resolveTest($bugIDList[4],$bug5))    && p('0:field,old,new;3:field,old,n
 r($bug->resolveTest($bugIDList[5],$bug6))    && p('0:field,old,new;3:field,old,new') && e('resolvedBuild,,trunk;resolution,,postponed');  // 解决原因为延期处理的bug
 r($bug->resolveTest($bugIDList[6],$bug7))    && p('0:field,old,new;3:field,old,new') && e('resolvedBuild,,trunk;resolution,,willnotfix'); // 解决原因为不予解决的bug
 r($bug->resolveTest($bugIDList[7],$bug51))   && p('0:field,old,new;3:field,old,new') && e('resolvedBuild,,trunk;confirmed,0,1');          // 解决已解决的bug
-$db->restoreDB();

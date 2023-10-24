@@ -238,16 +238,17 @@ class GitRepo
      *
      * @param  string $path
      * @param  string $revision
+     * @param  bool   $showComment
      * @access public
      * @return array
      */
-    public function blame($path, $revision)
+    public function blame($path, $revision, $showComment = true)
     {
         if(!scm::checkRevision($revision)) return array();
 
         $path = ltrim($path, DIRECTORY_SEPARATOR);
         chdir($this->root);
-        $list = execCmd(escapeCmd("$this->client blame -l $revision -- $path"), 'array');
+        $list = execCmd(escapeCmd("$this->client blame -c -l $revision -- $path"), 'array');
 
         $blames   = array();
         $revLine  = 0;
@@ -256,7 +257,7 @@ class GitRepo
         {
             if(empty($line)) continue;
             if($line[0] == '^') $line = substr($line, 1);
-            preg_match('/^([0-9a-f]{39,40})\s.*\((\S+)\s+([\d-]+)\s(.*)\s(\d+)\)(.*)$/U', $line, $matches);
+            preg_match('/^([0-9a-f]{39,40})\s.*\(\s*(\S+)\s+([\d-]+)\s(.*)\s(\d+)\)(.*)$/U', $line, $matches);
 
             if(isset($matches[1]) and $matches[1] != $revision)
             {
@@ -267,9 +268,13 @@ class GitRepo
                 $blame['line']      = $matches[5];
                 $blame['lines']     = 1;
                 $blame['content']   = strpos($matches[6], ' ') === false ? $matches[6] : substr($matches[6], 1);
+                $blame['message']   = '';
 
-                $log = $this->log('', '', '', 1);
-                $blame['message'] = $log[0]->comment;
+                if($showComment)
+                {
+                    $log = $this->log('', '', '', 1);
+                    $blame['message'] = $log[0]->comment;
+                }
 
                 $revision         = $matches[1];
                 $revLine          = $matches[5];
@@ -310,7 +315,9 @@ class GitRepo
         if(strpos($fromRevision, '^') !== false)
         {
             $list = execCmd(escapeCmd("$this->client log -2 $toRevision --pretty=format:%H -- $path"), 'array');
-            if(isset($list[1])) $fromRevision = $list[1];
+            if(!isset($list[1])) return execCmd(escapeCmd("$this->client show HEAD"), 'array');
+
+            $fromRevision = $list[1];
         }
         $lines = execCmd(escapeCmd("$this->client diff $fromRevision $toRevision -- $path"), 'array');
         return $lines;
@@ -745,14 +752,12 @@ class GitRepo
         $list = execCmd($cmd . ' 2>&1', 'array', $result);
         if($result) return array();
 
-        $infos   = array();
         foreach($list as $entry)
         {
             list($mod, $kind, $revision, $size, $name) = preg_split('/[\t ]+/', $entry);
 
             /* Get commit info. */
             $pathName = ltrim($path . DIRECTORY_SEPARATOR . $name, DIRECTORY_SEPARATOR);
-            $info->kind     = $kind == 'tree' ? 'dir' : 'file';
             if($kind == 'tree')
             {
                 $this->getAllFiles($pathName, $revision, $lists);

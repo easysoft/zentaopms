@@ -1,58 +1,61 @@
 <?php js::set('confirmDelete', $lang->doc->confirmDelete);?>
+<?php js::set('latestVersion', $doc->version);?>
 <?php $sessionString = session_name() . '=' . session_id();?>
-<div id="mainContent" class="main-row">
-  <div class="main-col col-8">
+<div style="height:100%" id="h-full">
+  <div class="main-col col-8 flex-content">
     <div class="cell" id="content">
       <div class="detail no-padding">
         <div class="detail-title no-padding doc-title">
+          <div class="flex-left">
           <div class="title" title="<?php echo $doc->title;?>">
             <?php echo $doc->title;?>
             <?php if($doc->deleted):?>
             <span class='label label-danger'><?php echo $lang->doc->deleted;?></span>
             <?php endif;?>
           </div>
+          <?php if($doc->status != 'draft'):?>
           <div class="info">
             <?php $version = $version ? $version : $doc->version;?>
             <div class="version" data-version='<?php echo $version;?>'>
-              <div class='btn-group'>
-                <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;">
-                  #<?php echo $version;?>
+              <div id="diffBtnGroup" class='btn-group exchangeDiffGroup'>
+                <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis left-dom' data-toggle='dropdown' style="max-width: 120px;">
+                  V<?php echo $version;?>
                   <span class="caret"></span>
                 </a>
-                <ul class='dropdown-menu doc-version-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
-                <?php for($version = $doc->version; $version > 0; $version--): ?>
-                  <li><a href='javascript:void(0)' data-url='<?php echo $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$object->id&libID=$libID&docID=$doc->id&version=$version"); ?>'>#<?php echo $version; ?></a></li>
-                <?php endfor; ?>
+                <i id="exchangeDiffBtn" class="icon icon-exchange right-dom"></i>
+                <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis right-dom' data-toggle='dropdown' style="max-width: 120px;">
+                  <span class="caret"></span>
+                </a>
+                <ul id="docVersionMenu" class='dropdown-menu doc-version-menu' style='width: 260px; overflow-y:auto'>
+                  <li class="drop-title flex-between dropdown-header not-clear-menu"><div><?php echo $lang->doc->allVersion?></div></li>
+                  <div class="drop-body menu-active-primary menu-hover-primary">
+                  <?php for($itemVersion = $doc->version; $itemVersion > 0; $itemVersion--):?>
+                    <li class="li-item <?php if($itemVersion == $version) echo 'active';?>"><div class="checkbox-primary"><input type="checkbox" <?php echo "data-id=".$doc->id." data-version=".$itemVersion;?> ></input><label for=""></label></div><a href='javascript:void(0)' data-url='<?php echo $this->createLink('doc', 'view', "docID=$doc->id&version=$itemVersion"); ?>' data-version='<?php echo $itemVersion;?>'>V<?php echo $itemVersion;?></a></li>
+                  <?php endfor;?>
+                  </div>
+                  <li class="drop-bottom"><button data-id="confirm" class="btn btn-primary"><?php echo $lang->confirm?></button><button data-id="cancel" class="btn"><?php echo $lang->doc->cancelDiff?></button></li>
                 </ul>
               </div>
             </div>
-            <div class="user"></div>
-            <div class="time"></div>
+          </div>
+          <?php endif;?>
           </div>
           <div class="actions">
-            <?php
-            echo html::a("javascript:fullScreen()", '<i class="icon-fullscreen"></i>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");
-            if(common::hasPriv('doc', 'edit')) echo html::a(inlink('edit', "docID=$doc->id&comment=false&objectType=$objectType&objectID=$object->id&libID=$libID"), '<i class="icon-edit"></i>', '', "title='{$lang->doc->edit}' class='btn btn-link' data-app='{$this->app->tab}'");
-            if(common::hasPriv('doc', 'delete'))
-            {
-                $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes&from=lib");
-                echo html::a("javascript:ajaxDeleteDoc(\"$deleteURL\", \"docList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->doc->delete}' class='btn btn-link'");
-            }
-            ?>
+            <?php echo html::a("javascript:fullScreen()", '<span class="icon-fullscreen"></span>', '', "title='{$lang->fullscreen}' class='btn btn-link fullscreen-btn'");?>
             <?php if(common::hasPriv('doc', 'collect')):?>
-            <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
-            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect btn btn-link'><i class='icon <?php echo $star;?>'></i></a>
+            <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'star' : 'star-empty';?>
+            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect btn btn-link'><?php echo html::image("static/svg/{$star}.svg", "class='$star'");?></a>
             <?php endif;?>
 
-            <?php if($this->config->edition == 'max' and $this->app->tab == 'project'):?>
+            <?php if($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition == 'ipd') and $app->tab == 'project'):?>
             <?php
             $canImportToPracticeLib  = (common::hasPriv('doc', 'importToPracticeLib')  and helper::hasFeature('practicelib'));
             $canImportToComponentLib = (common::hasPriv('doc', 'importToComponentLib') and helper::hasFeature('componentlib'));
 
             if($canImportToPracticeLib or $canImportToComponentLib)
             {
-                echo "<div class='btn-group' id='more' title='{$lang->import}'>";
-                echo html::a('javascript:;', "<i class='icon icon-diamond'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
+                echo "<div class='btn-group inline'>";
+                echo html::a('javascript:;', "<span class='icon icon-diamond'></span>", '', "data-toggle='dropdown' id='more' title='{$lang->import}' class='btn btn-link'");
                 echo "<ul class='dropdown-menu pull-right'>";
                 if($canImportToPracticeLib) echo '<li>' . html::a('#importToPracticeLib', $lang->doc->importToPracticeLib, '', 'data-toggle="modal"') . '</li>';
                 if($canImportToComponentLib) echo '<li>' . html::a('#importToComponentLib', $lang->doc->importToComponentLib, '', 'data-toggle="modal"') . '</li>';
@@ -60,17 +63,73 @@
             }
             ?>
             <?php endif;?>
+
+            <?php
+            if(common::hasPriv('doc', 'edit'))
+            {
+                $iframe   = '';
+                $onlybody = false;
+                if($doc->type != 'text' or isonlybody())
+                {
+                    $iframe   = 'iframe';
+                    $onlybody = 'true';
+                }
+                echo html::a(inlink('edit', "docID=$doc->id&comment=false&objectType=$objectType&objectID=$object->id&libID=$libID", '', $onlybody), '<span class="icon-edit"></span>', '', "title='{$lang->doc->edit}' class='btn btn-link $iframe' data-app='{$this->app->tab}'");
+            }
+            if(common::hasPriv('doc', 'delete'))
+            {
+                $deleteURL = $this->createLink('doc', 'delete', "docID=$doc->id&confirm=yes&from=lib");
+                echo html::a("javascript:ajaxDeleteDoc(\"$deleteURL\", \"docList\", confirmDelete)", '<span class="icon-trash"></span>', '', "title='{$lang->doc->delete}' class='btn btn-link'");
+            }?>
+            <a id="hisTrigger" href="###" class="btn btn-link" title=<?php echo $lang->history?>><span class="icon icon-clock"></span></a>
           </div>
+          <?php if(!empty($editors)):?>
+          <div id='editorBox'>
+            <?php $groupClass = count($editors) == 1 ? 'noDropdown' : '';?>
+            <div class="btn-group <?php echo $groupClass;?>">
+              <?php
+              $space       = common::checkNotCN() ? ' ' : '';
+              $firstEditor = current($editors);
+              $editorInfo  = zget($users, $firstEditor->account) . ' ' . substr($firstEditor->date, 0, 10) . $space . $lang->doc->update;
+
+              array_shift($editors);
+              ?>
+              <?php if(!empty($editors)):?>
+              <button class="btn btn-link dropdown-toggle" data-toggle="dropdown">
+                <span class="text" title='<?php echo $editorInfo;?>'><?php echo $editorInfo;?></span>
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" id='editorMenu'>
+              <?php
+              foreach($editors as $editor)
+              {
+                  $editorInfo = zget($users, $editor->account) . ' ' . substr($editor->date, 0, 10) . $space . $lang->doc->update;
+                  echo "<li title='$editorInfo'>$editorInfo</li>";
+              }
+              ?>
+              </ul>
+              <?php else:?>
+              <span class="text" title='<?php echo $editorInfo;?>'><?php echo $editorInfo;?></span>
+              <?php endif;?>
+            </div>
+          </div>
+          <?php endif;?>
         </div>
-        <div class="table-row">
+        <div id="diffContain">
           <div class="detail-content article-content table-col">
-            <?php if($doc->keywords):?>
-            <p class='keywords'>
-              <?php foreach($doc->keywords as $keywords):?>
-              <?php if($keywords) echo "<span class='label label-outline'>$keywords</span>";?>
-              <?php endforeach;?>
-            </p>
-            <?php endif;?>
+            <div class='info'>
+              <?php $createInfo = $doc->status == 'draft' ? zget($users, $doc->addedBy) . " {$lang->colon} " . substr($doc->addedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->createAB : zget($users, $doc->releasedBy) . " {$lang->colon} " . substr($doc->releasedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->release;?>
+              <span class='user-time text-muted'><i class='icon-contacts'></i> <?php echo $createInfo;?></span>
+              <span class='user-time text-muted'><i class='icon-star'></i> <?php echo $doc->collects;?></span>
+              <span class='user-time text-muted'><i class='icon-eye'></i> <?php echo $doc->views;?></span>
+              <?php if($doc->keywords):?>
+              <span class='keywords'>
+                <?php foreach($doc->keywords as $keywords):?>
+                <?php if($keywords) echo "<span class='label label-outline' title='{$keywords}'>{$keywords}</span>";?>
+                <?php endforeach;?>
+              </span>
+              <?php endif;?>
+            </div>
             <?php
             if($doc->type == 'url' and $autoloadPage)
             {
@@ -126,21 +185,13 @@
                     echo html::a($downloadLink, "<i class='icon icon-import'></i>", '', "class='btn-icon' style='margin-right: 10px;' title=\"{$lang->doc->download}\"");
                 }
                 ?>
-                <?php if(common::hasPriv('doc', 'deleteFile')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='btn-icon' title=\"{$lang->doc->deleteFile}\" onclick='deleteFile($file->id)'");?>
+                <?php if(common::hasPriv('doc', 'deleteFile') and $doc->version == $doc->contentVersion) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='btn-icon' title=\"{$lang->doc->deleteFile}\" onclick='deleteFile($file->id)'");?>
               </span>
             </div>
             <?php unset($doc->files[$file->id]);?>
             <?php endif;?>
             <?php endforeach;?>
           </div>
-          <?php if(!empty($outline) and strip_tags($outline)):?>
-          <div class="outline table-col">
-            <div class="outline-toggle"><i class="icon icon-angle-right"></i></div>
-            <div class="outline-content">
-              <?php echo $outline;?>
-            </div>
-          </div>
-          <?php endif;?>
         </div>
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true', 'object' => $doc));?>
@@ -148,7 +199,13 @@
         <?php common::printPreAndNext($preAndNext);?>
       </div>
     </div>
-    <div class='cell'>
+    <div id="outlineMenu" class="outline table-col">
+      <div class="outline-content">
+      <?php echo isset($outline) ? $outline : '';?>
+      </div>
+    </div>
+    <div class="outline-toggle"><i class="icon icon-menu-arrow-left"></i></div>
+    <div id="history" class='panel hidden' style="margin-left: 2px;">
       <?php
       $canBeChanged = common::canBeChanged('doc', $doc);
       if($canBeChanged) $actionFormLink = $this->createLink('action', 'comment', "objectType=doc&objectID=$doc->id");
@@ -156,65 +213,9 @@
       <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
-  <div class="side-col col-4" id="sidebar">
-    <div class="sidebar-toggle"><i class="icon icon-angle-right"></i></div>
-    <?php if(!empty($doc->digest)):?>
-    <div class="cell" id='sidebarContent'>
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->doc->digest;?></summary>
-        <div class="detail-content">
-          <?php echo !empty($doc->digest) ? $doc->digest : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
-        </div>
-      </details>
-    </div>
-    <?php endif;?>
-    <div class="cell">
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->doc->basicInfo;?></summary>
-        <div class="detail-content">
-          <table class="table table-data">
-            <tbody>
-              <?php if($doc->productName):?>
-              <tr>
-                <th class='c-product'><?php echo $lang->doc->product;?></th>
-                <td><?php echo $doc->productName;?></td>
-              </tr>
-              <?php endif;?>
-              <?php if($doc->executionName):?>
-              <tr>
-                <th class='c-execution'><?php echo $lang->doc->execution;?></th>
-                <td><?php echo $doc->executionName;?></td>
-              </tr>
-              <?php endif;?>
-              <tr>
-                <th class='c-lib'><?php echo $lang->doc->lib;?></th>
-                <td><?php echo $lib->name;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->module;?></th>
-                <td><?php echo $doc->moduleName ? $doc->moduleName : '/';?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->addedDate;?></th>
-                <td><?php echo $doc->addedDate;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->editedBy;?></th>
-                <td><?php echo zget($users, $doc->editedBy);?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->editedDate;?></th>
-                <td><?php echo $doc->editedDate;?></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </details>
-    </div>
-  </div>
 </div>
 
-<?php if($this->config->edition == 'max'):?>
+<?php if($config->edition == 'max' or $config->edition == 'ipd'):?>
 <div class="modal fade" id="importToPracticeLib">
   <div class="modal-dialog mw-500px">
     <div class="modal-content">

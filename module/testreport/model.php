@@ -2,7 +2,7 @@
 /**
  * The model file of testreport module of ZenTaoCMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     testreport
@@ -22,7 +22,7 @@ class testreportModel extends model
         $execution = $this->loadModel('execution')->getByID($this->post->execution);
         $data = fixer::input('post')
             ->stripTags($this->config->testreport->editor->create['id'], $this->config->allowedTags)
-            ->setDefault('project', $execution->type == 'project' ? $execution->id : $execution->project)
+            ->setDefault('project', empty($execution) ? 0 : ($execution->type == 'project' ? $execution->id : $execution->project))
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->join('stories', ',')
@@ -482,7 +482,7 @@ class testreportModel extends model
             ->andWhere('t1.`case`')->in($cases)
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
-            ->groupBy('name')
+            ->groupBy('t1.caseResult')
             ->orderBy('value DESC')
             ->fetchAll('name');
 
@@ -514,7 +514,7 @@ class testreportModel extends model
             ->andWhere('t1.`case`')->in($cases)
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
-            ->groupBy('name')
+            ->groupBy('t1.lastRunner')
             ->orderBy('value DESC')
             ->fetchAll('name');
 
@@ -544,13 +544,12 @@ class testreportModel extends model
         {
             foreach($builds as $build) $bugIdList .= $build->bugs . ',';
         }
+        $bugIdList = trim($bugIdList, ',');
+
         return $this->dao->select('*')->from(TABLE_BUG)->where('deleted')->eq(0)
             ->andWhere('product')->in($product)
             ->andWhere('openedDate')->lt("$begin 23:59:59")
-            ->beginIF(is_array($builds) and $type == 'build')->andWhere('id')->in(trim($bugIdList, ','))->fi()
-            ->beginIF(!is_array($builds) and $type == 'build')->andWhere("(resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59')")->fi()
-            ->beginIF($type == 'project')->andWhere("(id " . helper::dbIN(trim($bugIdList, ',')) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59'))")
-            ->beginIF($type == 'execution')->andWhere("(id " . helper::dbIN(trim($bugIdList, ',')) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59'))")
+            ->andWhere("id")->in($bugIdList)
             ->fetchAll('id');
     }
 

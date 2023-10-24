@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -30,4 +29,3 @@ r($kanban->setLaneHeightTest($laneIDList[1], $heightTypeList[1], $displayCardsLi
 r($kanban->setLaneHeightTest($laneIDList[2], $heightTypeList[1], $displayCardsList[2], 'execution')) && p('name,displayCards') && e('迭代2,4');                        // 测试设置看板1的泳道高度
 r($kanban->setLaneHeightTest($laneIDList[3], $heightTypeList[1], $displayCardsList[3]))              && p('displayCards')       && e('卡片数量必须是大于2的正整数。'); // 测试设置看板1的泳道高度
 r($kanban->setLaneHeightTest($laneIDList[4], $heightTypeList[1], $displayCardsList[4]))              && p('displayCards')       && e('卡片数量必须是大于2的正整数。'); // 测试设置看板1的泳道高度
-$db->restoreDB();

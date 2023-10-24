@@ -2,7 +2,7 @@
 /**
  * The misc module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
@@ -59,7 +59,7 @@ $lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/def
 
 $lang->misc->mobile      = "手机访问";
 $lang->misc->noGDLib     = "请用手机浏览器访问：<strong>%s</strong>";
-$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://www.easycorp.cn' target='_blank'>青岛易软天创网络科技有限公司</a> 电话：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
+$lang->misc->copyright   = "&copy; 2009 - " . date('Y') . " <a href='https://www.easycorp.cn' target='_blank'>禅道软件（青岛）有限公司</a> 电话：4006-8899-23 Email：<a href='mailto:co@zentao.net'>co@zentao.net</a>  QQ：1492153927";
 $lang->misc->checkTable  = "检查修复数据表";
 $lang->misc->needRepair  = "修复表";
 $lang->misc->repairTable = "数据库表可能因为断电原因损坏，需要检查修复！！";
@@ -87,23 +87,41 @@ $lang->misc->noticeRepair = "<h5>普通用户请联系管理员进行修复</h5>
     </ol>";
 
 $lang->misc->feature = new stdclass();
-$lang->misc->feature->lastest        = '最新版本';
-$lang->misc->feature->detailed       = '详情';
-$lang->misc->feature->introduction   = '新功能介绍';
-$lang->misc->feature->tutorial       = '新手引导教程';
-$lang->misc->feature->tutorialImage  = 'theme/default/images/main/tutorial.png';
-$lang->misc->feature->youngBlueTheme = '全新青春蓝主题';
-$lang->misc->feature->youngBlueImage = 'theme/default/images/main/new_theme.png';
-$lang->misc->feature->visions        = "不同场景界面切换";
-$lang->misc->feature->nextStep       = '下一步';
-$lang->misc->feature->close          = '关闭';
-$lang->misc->feature->downloadFile   = '下载新版本功能介绍文档';
-$lang->misc->feature->tutorialDesc   = "<p>禅道15系列新增了多项功能，您可以通过“<strong>新手引导教程</strong>”快速了解禅道的基本使用方法。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-新手引导</span>]，点击新手引导，即可进入新手引导教程。</p>";
-$lang->misc->feature->themeDesc      = "<p>禅道15系列上线了全新的“青春蓝”主题，页面呈现更加美观，体验更加友好。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-主题-青春蓝</span>]，点击青春蓝，即可设置成功。</p>";
-$lang->misc->feature->visionsDesc    = "<p>从16.5开始增加了界面概念，用户可以在<span style='color:#0c60e1'>[研发综合界面]</span>中处理研发事务、在<span style='color:#0c60e1'>[运营管理界面]</span>处理日常办公事务。</p><p>在头像右侧即可查看当前所处界面，点击当前界面名称可查看和切换其他的界面。</p>";
-$lang->misc->feature->visionsImage   = 'theme/default/images/main/visions.png';
+$lang->misc->feature->lastest           = '最新版本';
+$lang->misc->feature->detailed          = '详情';
+$lang->misc->feature->introduction      = '新功能介绍';
+$lang->misc->feature->tutorial          = '新手引导教程';
+$lang->misc->feature->tutorialImage     = 'theme/default/images/main/tutorial.png';
+$lang->misc->feature->youngBlueTheme    = '全新青春蓝主题';
+$lang->misc->feature->youngBlueImage    = 'theme/default/images/main/new_theme.png';
+$lang->misc->feature->visions           = "不同场景界面切换";
+$lang->misc->feature->nextStep          = '下一页';
+$lang->misc->feature->prevStep          = '上一页';
+$lang->misc->feature->close             = '开始体验';
+$lang->misc->feature->learnMore         = '了解更多';
+$lang->misc->feature->downloadFile      = '下载新版本功能介绍文档';
+$lang->misc->feature->tutorialDesc      = "<p>禅道15系列新增了多项功能，您可以通过“<strong>新手引导教程</strong>”快速了解禅道的基本使用方法。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-新手引导</span>]，点击新手引导，即可进入新手引导教程。</p>";
+$lang->misc->feature->themeDesc         = "<p>禅道15系列上线了全新的“青春蓝”主题，页面呈现更加美观，体验更加友好。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-主题-青春蓝</span>]，点击青春蓝，即可设置成功。</p>";
+$lang->misc->feature->visionsDesc       = "<p>从16.5开始增加了界面概念，用户可以在<span style='color:#0c60e1'>[研发综合界面]</span>中处理研发事务、在<span style='color:#0c60e1'>[运营管理界面]</span>处理日常办公事务。</p><p>在头像右侧即可查看当前所处界面，点击当前界面名称可查看和切换其他的界面。</p>";
+$lang->misc->feature->visionsImage      = 'theme/default/images/main/visions.png';
+$lang->misc->feature->aiPrompts         = 'AI提词功能';
+$lang->misc->feature->aiPromptsImage    = 'theme/default/images/main/ai_prompts.svg';
+$lang->misc->feature->promptDesign      = '设计AI提词';
+$lang->misc->feature->promptDesignImage = 'theme/default/images/main/prompt_design.svg';
+$lang->misc->feature->promptExec        = '执行AI提词';
+$lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec.svg';
+$lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['18.8']        = '2023-09-28';
+$lang->misc->releaseDate['18.7']        = '2023-08-29';
+$lang->misc->releaseDate['18.6']        = '2023-08-15';
+$lang->misc->releaseDate['18.5']        = '2023-07-05';
+$lang->misc->releaseDate['18.4']        = '2023-06-14';
+$lang->misc->releaseDate['18.4.beta1']  = '2023-05-31';
+$lang->misc->releaseDate['18.4.alpha1'] = '2023-04-21';
+$lang->misc->releaseDate['18.3']        = '2023-03-15';
+$lang->misc->releaseDate['18.2']        = '2023-02-27';
 $lang->misc->releaseDate['18.1']        = '2023-02-08';
 $lang->misc->releaseDate['18.0']        = '2023-01-03';
 $lang->misc->releaseDate['18.0.beta3']  = '2022-12-26';
@@ -199,39 +217,48 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
-$lang->misc->feature->all['18.1'][]       = array('title' => '自动化测试解决方案交互优化、新增快照管理功能。禅道客户端实现了 PPT文档在线协作。修复Bug。', 'desc' => '');
-$lang->misc->feature->all['18.0'][]       = array('title' => '推出自动化测试解决方案；运营管理界面增加工单功能；审批流支持增加所有类型的通知以及挣值计算规则完善。', 'desc' => '');
-$lang->misc->feature->all['18.0.beta3'][] = array('title' => '统计模块升级为BI，内置5张宏观管理维度大屏。', 'desc' => '');
-$lang->misc->feature->all['18.0.beta2'][] = array('title' => '优化多分支/多平台产品，支持创建孪生需求，计划、版本、发布支持跨分支关联需求和bug，并且禅道客户端实现了机器人会话机制。', 'desc' => '');
-$lang->misc->feature->all['18.0.beta1'][] = array('title' => '主要对禅道多项核心流程进行改进，新增项目型项目、无迭代项目；支持项目跨项目集关联产品；支持轻量管理模式和全生命周期管理模式进行切换。', 'desc' => '');
-$lang->misc->feature->all['17.8'][]       = array('title' => '列表状态颜色、仪表盘颜色的改版和任务日志页面的优化。', 'desc' => '');
-$lang->misc->feature->all['17.7'][]       = array('title' => '过渡版本表格优化完成。新增工单功能，优化了反馈功能。修复Bug。', 'desc' => '');
-$lang->misc->feature->all['17.6.2'][]     = array('title' => '禅道更新叶兰绿、禅道蓝、青春蓝三大主题。实现附件批量上传功能。修复Bug。', 'desc' => '');
-$lang->misc->feature->all['17.6.1'][]     = array('title' => '优化了多人任务的处理逻辑，修复Bug。', 'desc' => '');
-$lang->misc->feature->all['17.6'][]       = array('title' => '优化了需求的处理逻辑，拆分了用需和软需的权限。甘特图支持手动拖拽维护任务关系。修复Bug。', 'desc' => '');
-$lang->misc->feature->all['17.5'][]       = array('title' => '提供高效的可视化统计工具。优化禅道性能，数据库引擎从MyISAM调整为InnoDB。甘特图优化升级，旗舰版的复制项目可以复制任务等更多信息。修复Bug。', 'desc' => '');
-$lang->misc->feature->all['17.4'][]       = array('title' => '详情页面的视觉优化和部分页面跳转逻辑优化。看板功能完善。文档创建和编辑页面优化。修复Bug。', 'desc' => '');
-$lang->misc->feature->all['17.3'][]       = array('title' => '统计、后台等模块的UI优化，用例库同步用例信息功能优化。修复Bug。', 'desc' => '');
-$lang->misc->feature->all['17.2'][]       = array('title' => '调整敏捷项目区块的展示，项目集、项目和测试相关UI优化，细节体验优化。修复Bug。', 'desc' => '');
-$lang->misc->feature->all['17.1'][]       = array('title' => '修改执行、项目模块的交互问题，完成客户巴高优先级需求，细节体验优化。修复Bug。', 'desc' => '');
-$lang->misc->feature->all['17.0'][]       = array('title' => '细节体验优化。修复Bug。', 'desc' => '');
-$lang->misc->feature->all['17.0.beta2'][] = array('title' => '细节体验优化。修复Bug。', 'desc' => '');
-$lang->misc->feature->all['17.0.beta1'][] = array('title' => '完成客户巴高优先级需求。修复Bug。', 'desc' => '');
-$lang->misc->feature->all['16.5'][]       = array('title' => '修复Bug。', 'desc' => '');
-$lang->misc->feature->all['16.5.beta1'][] = array('title' => '将禅道收费版和开源版集成到一个包中，优化升级步骤。', 'desc' => '');
-$lang->misc->feature->all['16.4'][]       = array('title' => '实现JIRA导入功能，完善插件扩展机制。', 'desc' => '');
-$lang->misc->feature->all['16.3'][]       = array('title' => '看板增加关联计划/发布/版本/迭代功能，细节体验优化。', 'desc' => '');
-$lang->misc->feature->all['16.2'][]       = array('title' => '新增专业研发看板，可以创建看板模型项目，修复Bug。', 'desc' => '');
-$lang->misc->feature->all['16.1'][]       = array('title' => '计划增加状态管理和看板视图，升级流程优化，修复Bug。', 'desc' => '');
-$lang->misc->feature->all['16.0'][]       = array('title' => '新增通用看板，完善分支管理，修复Bug。', 'desc' => '');
-$lang->misc->feature->all['16.0.beta1'][] = array('title' => '新增瀑布模型项目，新增任务看板，完善分支管理和细节，修复Bug。', 'desc' => '');
-$lang->misc->feature->all['15.7.1'][]     = array('title' => '修复Bug。', 'desc' => '');
-$lang->misc->feature->all['15.7'][]       = array('title' => '新增接口库。修复Bug。', 'desc' => '');
-$lang->misc->feature->all['15.6'][]       = array('title' => '修复Bug。', 'desc' => '');
-$lang->misc->feature->all['15.5'][]       = array('title' => '增加项目集/产品/项目看板视图、全局添加功能、新手引导。 修复Bug。', 'desc' => '');
-$lang->misc->feature->all['15.4'][]       = array('title' => '修复Bug', 'desc' => '');
-$lang->misc->feature->all['15.3'][]       = array('title' => '实现界面风格改动和文档优化，修复Bug', 'desc' => '');
-$lang->misc->feature->all['15.2'][]       = array('title' => '优化新版本升级流程，增加执行看板。', 'desc' => '');
+$lang->misc->feature->all['18.8'][]        = array('title' => 'BI中新增了度量项功能和应用巡检报告大屏，DevOps平台版增加了配置向导，需求与市场管理界面中增加了市场管理功能，客户端导航及个人中心全新改版。', 'desc' => '');
+$lang->misc->feature->all['18.7'][]        = array('title' => 'DevOps新增了云原生平台、制品库和应用管理功能，优化了导航结构和相关UI交互。同时，新增了AI提词设计器功能，支持与大语言模型对接，支持自定义AI应用等。', 'desc' => '');
+$lang->misc->feature->all['18.6'][]        = array('title' => '优化了常用列表性能和BI功能的细节，并完善了瀑布项目的功能细节。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['18.5'][]        = array('title' => '学堂课程支持从云端导入，支持课程中PDF文件的预览，同时还优化了常用列表的加载速度，修复了多处Bug。', 'desc' => '');
+$lang->misc->feature->all['18.4'][]        = array('title' => '本次发布优化了核心列表的性能，兼容达梦数据库，修复了多处Bug。', 'desc' => '');
+$lang->misc->feature->all['18.4.beta1'][]  = array('title' => '解Bug。', 'desc' => '');
+$lang->misc->feature->all['18.4.alpha1'][] = array('title' => '优化权限、文档交互体验，测试新增场景概念，用例支持xmind导入，并对BI模块中的大屏、透视表、图表、数据表进行了全面升级。', 'desc' => '');
+$lang->misc->feature->all['18.3'][]        = array('title' => '二次开发增加语言项自定义,支持对菜单和检索标签的语言项进行定义；二次开发增加编辑器功能，支持用户按需开启和关闭；表单意外退出支持表单暂存，下次进入自动代入填写的未保存信息。', 'desc' => '');
+$lang->misc->feature->all['18.2'][]        = array('title' => '新增融合敏捷、融合瀑布管理模型，瀑布项目阶段支持无限级拆分，后台进行全新UI改版。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['18.1'][]        = array('title' => '自动化测试解决方案交互优化、新增快照管理功能。禅道客户端实现了 PPT文档在线协作。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['18.0'][]        = array('title' => '推出自动化测试解决方案；运营管理界面增加工单功能；审批流支持增加所有类型的通知以及挣值计算规则完善。', 'desc' => '');
+$lang->misc->feature->all['18.0.beta3'][]  = array('title' => '统计模块升级为BI，内置5张宏观管理维度大屏。', 'desc' => '');
+$lang->misc->feature->all['18.0.beta2'][]  = array('title' => '优化多分支/多平台产品，支持创建孪生需求，计划、版本、发布支持跨分支关联需求和bug，并且禅道客户端实现了机器人会话机制。', 'desc' => '');
+$lang->misc->feature->all['18.0.beta1'][]  = array('title' => '主要对禅道多项核心流程进行改进，新增项目型项目、无迭代项目；支持项目跨项目集关联产品；支持轻量管理模式和全生命周期管理模式进行切换。', 'desc' => '');
+$lang->misc->feature->all['17.8'][]        = array('title' => '列表状态颜色、仪表盘颜色的改版和任务日志页面的优化。', 'desc' => '');
+$lang->misc->feature->all['17.7'][]        = array('title' => '过渡版本表格优化完成。新增工单功能，优化了反馈功能。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.6.2'][]      = array('title' => '禅道更新叶兰绿、禅道蓝、青春蓝三大主题。实现附件批量上传功能。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.6.1'][]      = array('title' => '优化了多人任务的处理逻辑，修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.6'][]        = array('title' => '优化了需求的处理逻辑，拆分了用需和软需的权限。甘特图支持手动拖拽维护任务关系。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.5'][]        = array('title' => '提供高效的可视化统计工具。优化禅道性能，数据库引擎从MyISAM调整为InnoDB。甘特图优化升级，旗舰版的复制项目可以复制任务等更多信息。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.4'][]        = array('title' => '详情页面的视觉优化和部分页面跳转逻辑优化。看板功能完善。文档创建和编辑页面优化。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.3'][]        = array('title' => '统计、后台等模块的UI优化，用例库同步用例信息功能优化。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.2'][]        = array('title' => '调整敏捷项目区块的展示，项目集、项目和测试相关UI优化，细节体验优化。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.1'][]        = array('title' => '修改执行、项目模块的交互问题，完成客户巴高优先级需求，细节体验优化。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.0'][]        = array('title' => '细节体验优化。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.0.beta2'][]  = array('title' => '细节体验优化。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['17.0.beta1'][]  = array('title' => '完成客户巴高优先级需求。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['16.5'][]        = array('title' => '修复Bug。', 'desc' => '');
+$lang->misc->feature->all['16.5.beta1'][]  = array('title' => '将禅道收费版和开源版集成到一个包中，优化升级步骤。', 'desc' => '');
+$lang->misc->feature->all['16.4'][]        = array('title' => '实现JIRA导入功能，完善插件扩展机制。', 'desc' => '');
+$lang->misc->feature->all['16.3'][]        = array('title' => '看板增加关联计划/发布/版本/迭代功能，细节体验优化。', 'desc' => '');
+$lang->misc->feature->all['16.2'][]        = array('title' => '新增专业研发看板，可以创建看板模型项目，修复Bug。', 'desc' => '');
+$lang->misc->feature->all['16.1'][]        = array('title' => '计划增加状态管理和看板视图，升级流程优化，修复Bug。', 'desc' => '');
+$lang->misc->feature->all['16.0'][]        = array('title' => '新增通用看板，完善分支管理，修复Bug。', 'desc' => '');
+$lang->misc->feature->all['16.0.beta1'][]  = array('title' => '新增瀑布模型项目，新增任务看板，完善分支管理和细节，修复Bug。', 'desc' => '');
+$lang->misc->feature->all['15.7.1'][]      = array('title' => '修复Bug。', 'desc' => '');
+$lang->misc->feature->all['15.7'][]        = array('title' => '新增接口库。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['15.6'][]        = array('title' => '修复Bug。', 'desc' => '');
+$lang->misc->feature->all['15.5'][]        = array('title' => '增加项目集/产品/项目看板视图、全局添加功能、新手引导。 修复Bug。', 'desc' => '');
+$lang->misc->feature->all['15.4'][]        = array('title' => '修复Bug', 'desc' => '');
+$lang->misc->feature->all['15.3'][]        = array('title' => '实现界面风格改动和文档优化，修复Bug', 'desc' => '');
+$lang->misc->feature->all['15.2'][]        = array('title' => '优化新版本升级流程，增加执行看板。', 'desc' => '');
 
 $lang->misc->feature->all['15.0.3'][]      = array('title' => '修复Bug', 'desc' => '');
 $lang->misc->feature->all['15.0.2'][]      = array('title' => '修复Bug', 'desc' => '');

@@ -2,7 +2,7 @@
 /**
  * The bug module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -17,7 +17,7 @@ $lang->bug->branch           = '平台/分支';
 $lang->bug->productplan      = '所属' . '计划';
 $lang->bug->module           = '所属模块';
 $lang->bug->moduleAB         = '模块';
-$lang->bug->project          = '所属项目';
+$lang->bug->project          = '所属' . $lang->projectCommon;
 $lang->bug->execution        = '所属' . $lang->execution->common;
 $lang->bug->kanban           = '所属看板';
 $lang->bug->story            = "相关需求";
@@ -95,9 +95,9 @@ $lang->bug->toCase           = '生成用例';
 $lang->bug->colorTag         = '颜色标签';
 $lang->bug->fixedRate        = '修复率';
 $lang->bug->noticefeedbackBy = '通知反馈者';
-$lang->bug->selectProjects   = '选择项目';
+$lang->bug->selectProjects   = '选择' . $lang->projectCommon;
 $lang->bug->nextStep         = '下一步';
-$lang->bug->noProject        = '还没有选择项目！';
+$lang->bug->noProject        = "还没有选择{$lang->projectCommon}！";
 $lang->bug->noExecution      = "还没有选择{$lang->execution->common}！";
 
 /* 方法列表。*/
@@ -154,7 +154,7 @@ $lang->bug->overdueBugs        = '过期Bug';
 $lang->bug->allBugs            = '所有';
 $lang->bug->byQuery            = '搜索';
 $lang->bug->needConfirm        = "{$lang->SRCommon}变动";
-$lang->bug->allProject         = '所有项目';
+$lang->bug->allProject         = '所有' . $lang->projectCommon;
 $lang->bug->allProduct         = '所有' . $lang->productCommon;
 $lang->bug->my                 = '我的';
 $lang->bug->yesterdayResolved  = '昨天解决Bug数';
@@ -166,7 +166,7 @@ $lang->bug->openedByMeAB   = '由我创建';
 $lang->bug->resolvedByMeAB = '由我解决';
 
 $lang->bug->ditto          = '同上';
-$lang->bug->dittoNotice    = '该bug与上一bug不属于同一产品！';
+$lang->bug->dittoNotice    = "该bug与上一bug不属于同一{$lang->productCommon}！";
 $lang->bug->noAssigned     = '未指派';
 $lang->bug->noBug          = '暂时没有Bug。';
 $lang->bug->noModule       = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
@@ -192,8 +192,8 @@ global $config;
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';
 $lang->bug->legendAttatch               = '附件';
-$lang->bug->legendPRJExecStoryTask      = "项目/{$lang->executionCommon}/{$lang->SRCommon}/任务";
-$lang->bug->legendExecStoryTask         = "项目/{$lang->SRCommon}/任务";
+$lang->bug->legendPRJExecStoryTask      = "{$lang->projectCommon}/{$lang->executionCommon}/{$lang->SRCommon}/任务";
+$lang->bug->legendExecStoryTask         = "{$lang->projectCommon}/{$lang->SRCommon}/任务";
 $lang->bug->lblTypeAndSeverity          = '类型/严重程度';
 $lang->bug->lblSystemBrowserAndHardware = '系统/浏览器';
 $lang->bug->legendSteps                 = '重现步骤';
@@ -427,10 +427,10 @@ $lang->bug->featureBar['browse']['unresolved']   = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['more']         = $lang->more;
 
 
-$lang->bug->moreSelects['unconfirmed']   = $lang->bug->unconfirmed;
-$lang->bug->moreSelects['assigntonull']  = $lang->bug->assignToNull;
-$lang->bug->moreSelects['longlifebugs']  = $lang->bug->longLifeBugs;
-$lang->bug->moreSelects['toclosed']      = $lang->bug->toClosed;
-$lang->bug->moreSelects['postponedbugs'] = $lang->bug->postponedBugs;
-$lang->bug->moreSelects['overduebugs']   = $lang->bug->overdueBugs;
-$lang->bug->moreSelects['needconfirm']   = $lang->bug->needConfirm;
+$lang->bug->moreSelects['browse']['more']['unconfirmed']   = $lang->bug->unconfirmed;
+$lang->bug->moreSelects['browse']['more']['assigntonull']  = $lang->bug->assignToNull;
+$lang->bug->moreSelects['browse']['more']['longlifebugs']  = $lang->bug->longLifeBugs;
+$lang->bug->moreSelects['browse']['more']['toclosed']      = $lang->bug->toClosed;
+$lang->bug->moreSelects['browse']['more']['postponedbugs'] = $lang->bug->postponedBugs;
+$lang->bug->moreSelects['browse']['more']['overduebugs']   = $lang->bug->overdueBugs;
+$lang->bug->moreSelects['browse']['more']['needconfirm']   = $lang->bug->needConfirm;

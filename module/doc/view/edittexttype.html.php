@@ -2,7 +2,7 @@
 /**
  * The create view of doc module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     doc
@@ -13,59 +13,26 @@
 <?php include '../../common/view/header.html.php';?>
 <?php if($doc->contentType == 'html')     include '../../common/view/kindeditor.html.php';?>
 <?php if($doc->contentType == 'markdown') include '../../common/view/markdown.html.php';?>
-<?php js::set('needUpdateContent', $doc->content != $doc->draft);?>
-<?php js::set('confirmUpdateContent', $lang->doc->confirmUpdateContent);?>
-<?php js::set('docID', $doc->id);?>
-<?php js::set('draft', $doc->draft);?>
-<?php js::set('holders', $lang->doc->placeholder);?>
-<?php js::set('type', 'doc');?>
 <style>
 #main {padding: 0;}
 .container {padding: 0 !important;}
 #mainContent {padding: 0 !important;}
-.doc-title input {border: unset; font-size: 18px; font-weight: bold; color: #3c4353; padding-left: 16px;}
-.doc-title .form-control:focus {border: unset; box-shadow: unset;}
-.doc-title input::-webkit-input-placeholder {color: #D8DBDE;}
-.doc-title.required:after {top: 4px; right: 0; left: 12px; display: inline-table;}
-#submit {margin-right: 16px;}
-#headerBox {border-bottom: 1px solid #e3e3e3;}
-#headerBox td:last-child {padding-right: 24px;}
-#editorContent {padding: 0;}
-
-#contentBox {padding: 0; width: 100%;}
-.ke-container {overflow: visible;}
-.ke-container, .contenthtml {border: unset; background: #efefef;}
-.ke-container.focus {box-shadow: unset; border-color: unset;}
-.ke-toolbar {padding-left: 20px; width: 100%; height: 30px;}
-.ke-edit {border-top: 1px solid rgb(220, 220, 220)}
-.ke-edit, .CodeMirror {margin: 8px 200px 0 200px; background: #fff;}
-.kindeditor-ph {padding: 20px 20px 0 20px !important;}
-.editor-toolbar {background: #fff; padding-left: 20px; border-right: unset; border-top: unset; height: 30px;}
-.CodeMirror {padding: 20px 20px 0 20px;}
-.CodeMirror.CodeMirror-wrap {border-left: 0; border-right: 0; border-bottom: 0;}
-.ke-statusbar {display: none;}
-
-.article-content {padding: 8px 20px;}
-
-#noticeAcl {margin-left: 10px; vertical-align: middle;}
-
-#basicInfoLink {border: unset;}
-
-#modalBasicInfo .modal-content {overflow-x: hidden; overflow-y: scroll;}
-#modalBasicInfo .modal-body {padding-bottom: 10px;}
-.modal-title {font-size: 14px !important; font-weight: 700 !important;}
-#basicInfoBox tfoot td {padding-bottom: 0;}
 </style>
-<?php $backLink = $app->session->docList ? $app->session->docList : $this->createLink('doc', 'objectlibs', "type=$type&objectID=$objectID&libID={$lib->id}&docID={$doc->id}") . "#app={$this->app->tab}";?>
+<?php $backLink = $app->session->docList ? $app->session->docList : $this->createLink('doc', 'view', "docID={$doc->id}") . "#app={$this->app->tab}";?>
 <div id="mainContent" class="main-content">
-  <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
+  <form class="load-indicator main-form form-ajax form-watched" id="dataform" method='post' enctype='multipart/form-data'>
     <table class='table table-form'>
       <tbody>
         <tr id='headerBox'>
           <td width='90px'><?php echo html::a($backLink, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "id='backBtn' class='btn btn-secondary'");?></td>
-          <td class="doc-title" colspan='3'><?php echo html::input('title', $doc->title, "placeholder='{$lang->doc->titlePlaceholder}' class='form-control' required");?></td>
-          <td class="text-right">
-            <?php echo html::submitButton('', "data-placement='bottom'", 'btn btn-primary');?>
+          <td class="doc-title" colspan='3'><?php echo html::input('title', $doc->title, "placeholder='{$lang->doc->titlePlaceholder}'' id='editorTitle' class='form-control' required maxlength='100'");?></td>
+          <td class="text-right btn-tools">
+            <?php if($doc->status == 'draft'):?>
+            <?php echo html::commonButton($lang->doc->saveDraft, "id='saveDraft'", "btn btn-secondary");?>
+            <?php echo html::commonButton($lang->release->common, "id='saveRelease'", "btn btn-primary");?>
+            <?php else:?>
+            <?php echo html::submitButton($lang->release->common, "", "btn btn-primary");?>
+            <?php endif;?>
             <?php echo html::a('#modalBasicInfo', "<i class='icon icon-cog-outline'></i> " . $lang->settings, '', "data-toggle='modal' id='basicInfoLink' class='btn'");?>
           </td>
         </tr>
@@ -76,7 +43,7 @@
                 <div class='contenthtml'><?php echo html::textarea('content', htmlSpecialString($doc->content), "style='width:100%;'");?></div>
                 <?php echo html::hidden('contentType', $doc->contentType);?>
                 <?php echo html::hidden('type', 'text');?>
-                <?php echo html::hidden('editedDate', $doc->editedDate);?>
+                <?php echo html::hidden('status', $doc->status);?>
               </div>
             </div>
           </td>
@@ -84,67 +51,75 @@
       </tbody>
     </table>
 
-    <div class='modal fade modal-basic' id='modalBasicInfo' data-scroll-inside='true'>
+    <div class='modal fade modal-basic' id='modalBasicInfo'>
       <div class='modal-dialog'>
-        <div class='modal-content with-padding'>
+        <div class='modal-content'>
           <div class='modal-header'>
-            <h2 class='modal-title'><?php echo $lang->doc->basicInfo;?></h2>
+            <h2 class='modal-title'>
+              <?php echo $lang->doc->basicInfo;?>
+              <button type='button' class='close' data-dismiss='modal'>
+                <i class="icon icon-close"></i>
+              </button>
+            </h2>
           </div>
           <div class='modal-body'>
             <table class='table table-form' id="basicInfoBox">
-              <tr>
-                <th class='w-100px'><?php echo $lang->doc->lib;?></th>
-                <td colspan="2" class="required"><?php echo html::select('lib', $libs, $doc->lib, "class='form-control chosen' onchange=loadDocModule(this.value)");?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->module;?></th>
-                <td colspan="2">
-                  <span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $doc->module, "class='form-control chosen'");?></span>
-                </td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->keywords;?></th>
-                <td colspan='2'><?php echo html::input('keywords', $doc->keywords, "class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
-              </tr>
-              <tr id='fileBox'>
-                <th><?php echo $lang->doc->files;?></th>
-                <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->doc->mailto;?></th>
-                <td colspan="2">
-                  <div class="input-group">
-                    <?php
-                    echo html::select('mailto[]', $users, $doc->mailto, "multiple class='form-control picker-select' data-drop-direction='top'");
-                    echo $this->fetch('my', 'buildContactLists');
-                    ?>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <th class="th-control"><?php echo $lang->doclib->control;?></th>
-                <td colspan='2'>
-                  <?php $acl = $lib->acl == 'private' ? 'private' : $doc->acl;?>
-                  <?php echo html::radio('acl', $lang->doc->aclList, $acl, "onchange='toggleAcl(this.value, \"doc\")'")?>
-                  <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$acl];?></span>
-                </td>
-              </tr>
-              <tr id='whiteListBox' class='hidden'>
-                <th><?php echo $lang->doc->whiteList;?></th>
-                <td colspan='2'>
-                  <div class='input-group w-p100'>
-                    <span class='input-group-addon groups-addon'><?php echo $lang->doclib->group?></span>
-                    <?php echo html::select('groups[]', $groups, $doc->groups, "class='form-control picker-select' multiple data-drop-direction='top'")?>
-                  </div>
-                  <div class='input-group w-p100'>
-                    <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
-                    <?php echo html::select('users[]', $users, $doc->users, "class='form-control picker-select' multiple data-drop-direction='top'")?>
-                  </div>
-                </td>
-              </tr>
+              <tbody>
+                <?php if(strpos('product|project|execution', $type) !== false):?>
+                <tr>
+                  <th><?php echo $lang->doc->{$type};?></th>
+                  <td class='required'><?php echo html::select($type, $objects, $objectID, "class='form-control picker-select' onchange='loadObjectModules(\"{$type}\", this.value)'");?></td>
+                </tr>
+                <?php endif;?>
+                <tr>
+                  <th class='w-110px'><?php echo $lang->doc->libAndModule?></th>
+                  <td colspan='3' class='required'><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $doc->lib . '_' . $doc->module, "class='form-control picker-select'");?></span></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->doc->keywords;?></th>
+                  <td colspan='3' class='<?php if(strpos($config->doc->edit->requiredFields, 'keywords') !== false) echo 'required'?>'><?php echo html::input('keywords', $doc->keywords, "id='modalKeywords' class='form-control' placeholder='{$lang->doc->keywordsTips}'");?></td>
+                </tr>
+                <tr id='fileBox'>
+                  <th><?php echo $lang->doc->files;?></th>
+                  <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->doc->mailto;?></th>
+                  <td colspan="3">
+                    <div class="input-group">
+                      <?php
+                      echo html::select('mailto[]', $users, $doc->mailto, "multiple class='form-control picker-select' data-drop-direction='top'");
+                      echo $this->fetch('my', 'buildContactLists');
+                      ?>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="th-control text-top"><?php echo $lang->doclib->control;?></th>
+                  <td colspan='3' class='aclBox'>
+                    <?php echo html::radio('acl', $lang->doc->aclList, $doc->acl, "onchange='toggleAcl(this.value, \"doc\")'")?>
+                  </td>
+                </tr>
+                <?php if($lib->type != 'mine'):?>
+                <tr id='whiteListBox' class='<?php if($doc->acl == 'open') echo 'hidden';?>'>
+                  <th><?php echo $lang->doc->whiteList;?></th>
+                  <td colspan='3'>
+                    <div class='input-group'>
+                      <span class='input-group-addon groups-addon'><?php echo $lang->doclib->group?></span>
+                      <?php echo html::select('groups[]', $groups, $doc->groups, "class='form-control picker-select' multiple data-drop-direction='top'")?>
+                    </div>
+                    <div class='input-group'>
+                      <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
+                      <?php echo html::select('users[]', $users, $doc->users, "class='form-control picker-select' multiple data-drop-direction='top'")?>
+                      <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=users");?>
+                    </div>
+                  </td>
+                </tr>
+                <?php endif;?>
+              </tbody>
               <tfoot>
                 <tr>
-                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->doc->confirm, '', "class='btn btn-primary btn-wide'");?></td>
+                  <td colspan='4' class='text-center'><?php echo html::commonButton($lang->doc->confirm, "data-dismiss='modal'", "btn btn-primary btn-wide");?></td>
                 </tr>
               </tfoot>
             </table>
@@ -157,14 +132,22 @@
 <script>
 $(function()
 {
-    var contentHeight = $(document).height() - 100;
-    setTimeout(function(){$('.ke-edit-iframe, .ke-edit, .ke-edit-textarea, .CodeMirror').height(contentHeight);}, 100);
-    $('#modalBasicInfo .modal-content').css('max-height', contentHeight);
-
-    $(document).on('click', '#modalBasicInfo tfoot .btn', function() {$('#modalBasicInfo').modal('hide');});
-
-    $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
+    /* Automatically save document contents. */
+    setInterval("saveDraft()", <?php echo $config->doc->saveDraftInterval;?> * 1000);
+    <?php if($otherEditing):?>
+    bootbox.confirm(
+    {
+        message: '<?php echo $lang->doc->confirmOtherEditing;?>',
+        callback: function(result){if(!result) location.href='<?php echo $backLink;?>'}
+    });
+    <?php endif;?>
 })
 </script>
-<?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>
+<?php js::set('needUpdateContent', $doc->content != $doc->draft);?>
+<?php js::set('confirmUpdateContent', $lang->doc->confirmUpdateContent);?>
+<?php js::set('docID', $doc->id);?>
+<?php js::set('draft', $doc->draft);?>
+<?php js::set('type', 'doc');?>
+<?php js::set('titleNotEmpty', sprintf($lang->error->notempty, $lang->doc->title));?>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

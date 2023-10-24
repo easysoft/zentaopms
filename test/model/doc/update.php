@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/doc.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -45,4 +44,3 @@ r($doc->updateTest($docID[0], $noLib))              && p('0:field,old,new') && e
 r($doc->updateTest($docID[0], $noTitle))            && p('title:0')         && e('『文档标题』不能为空。');        //修改标题为空
 r($doc->updateTest($docID[0], $noType))             && p('2:field,old,new') && e('type,text,');                    //修改type为空
 
-$db->restoreDB();

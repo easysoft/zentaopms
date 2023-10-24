@@ -5,8 +5,8 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $rawMethod = $app->rawMethod;?>
-    <?php $menuKey   = $rawMethod . 'Menu';?>
-    <?php foreach($lang->my->$menuKey->audit as $key => $type):?>
+    <?php $menuLang  = $rawMethod == 'audit' ? $lang->my->featureBar['audit'] : $lang->my->featureBar[$rawMethod]['audit'];?>
+    <?php foreach($menuLang as $key => $type):?>
     <?php
     $active = $key == $browseType ? 'btn-active-text' : '';
 
@@ -57,14 +57,14 @@
 
       $typeName = '';
       if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
-      if($type == 'story') $typeName = $lang->my->auditMenu->audit->story;
+      if($type == 'story') $typeName = $review->storyType == 'story' ? $lang->SRCommon : $lang->URCommon;
       if($review->type == 'projectreview') $typeName = $lang->project->common;
       if(isset($flows[$review->type])) $typeName = $flows[$review->type];
 
       $statusList = array();
       if(isset($lang->$type->statusList)) $statusList = $lang->$type->statusList;
       if($type == 'attend') $statusList = $lang->attend->reviewStatusList;
-      if(!in_array($type, array('story', 'testcase', 'feedback', 'review')) and strpos(",{$config->my->oaObjectType},", ",$type,") === false)
+      if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review')) and strpos(",{$config->my->oaObjectType},", ",$type,") === false)
       {
           if($rawMethod == 'audit') $statusList = $lang->approval->nodeList;
           if(isset($flows[$review->type])) $statusList = $rawMethod == 'audit' ? $lang->approval->nodeList : $lang->approval->statusList;
@@ -89,7 +89,7 @@
           ?>
         </td>
         <td class='c-type'><?php echo $typeName;?></td>
-        <td class='c-time text-left'><?php echo $review->time?></td>
+        <td class='c-time text-left'><?php echo substr($review->time, 0, 19);?></td>
         <?php if($rawMethod == 'contribute' and $browseType == 'reviewedbyme'):?>
         <?php
         $reviewResultList = array();
@@ -98,7 +98,7 @@
         ?>
         <td class='c-status'><?php echo zget($reviewResultList, $review->result);?></td>
         <?php endif;?>
-        <td class='c-status'><?php echo zget($statusList, $review->status, '')?></td>
+        <td class='c-status'><?php echo zget($statusList, $review->status, '');?></td>
         <?php if($rawMethod == 'audit'):?>
         <td class='c-actions text-left'>
           <?php
@@ -124,7 +124,7 @@
           {
               common::printLink($module, 'view', $params, $reviewIcon, '', "class='btn' data-toggle='modal' title='{$lang->review->common}'", true, true);
           }
-          elseif(!in_array($module, array('story', 'testcase', 'feedback')))
+          elseif(!in_array($module, array('demand', 'story', 'testcase', 'feedback')))
           {
               common::printLink($module, 'approvalreview', $params, $reviewIcon, '', "class='btn' data-toggle='modal' title='{$lang->review->common}'", true, true);
           }

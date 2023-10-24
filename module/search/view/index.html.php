@@ -19,7 +19,7 @@ adjustMenuWidth();
 
 <div class='row'>
   <div class='col-md-12'>
-    <form method='post' action='<?php echo inlink('index')?>' style='margin-bottom:10px;'>
+    <form method='post' action='<?php echo inlink('index')?>' class='no-stash'>
       <div class='input-group col-md-8 col-md-offset-2'>
         <span class='input-group-btn w-auto'><?php echo html::input('words', $words, "class='form-control'")?></span>
         <span class='input-group-btn select'><?php echo html::select('type[]', $typeList, $type, "class='form-control chosen' multiple")?></span>
@@ -40,7 +40,18 @@ adjustMenuWidth();
             <h4>
               <?php
               $objectType = $object->objectType == 'case' ? 'testcase' : $object->objectType;
-              echo html::a($object->url, $object->title, '', 'title="' . strip_tags($object->title) . '"');
+              $html = html::a($object->url, $object->title, '', 'title="' . strip_tags($object->title) . '"');
+
+              if($objectType == 'task')
+              {
+                  $isMultiProject = $this->dao->select('multiple')->from(TABLE_PROJECT)->alias('t1')
+                      ->leftJoin(TABLE_TASK)->alias('t2')->on('t2.execution=t1.id')
+                      ->where('t2.id')->eq($object->objectID)
+                      ->fetch('multiple');
+                  if(!$isMultiProject) $html = html::a($object->url, $object->title, '', 'data-app="project" title="' . strip_tags($object->title) . '"');
+              }
+
+              echo $html;
               if(($objectType == 'story' || $objectType == 'requirement' || $objectType == 'execution' || $objectType == 'issue') and !empty($object->extraType))
               {
                   echo "<small class=''>[{$lang->search->objectTypeList[$object->extraType]} #{$object->objectID}]</small> ";

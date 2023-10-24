@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/job.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -25,4 +24,3 @@ $job = new jobTest();
 
 r($job->updateObject($jobID, $job_upName))   && p()    && e('Job更新成功');                                           //测试更新job名称
 r($job->updateObject($jobID, $job_upEngine)) && p() && e('SonarQube工具/框架仅在构建引擎为JenKins的情况下使用');   //测试更新job引擎异常
-$db->restoreDB();

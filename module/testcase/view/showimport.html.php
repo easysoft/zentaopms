@@ -97,7 +97,7 @@ $(function()
             if(isset($case->branch)) $branchID = $case->branch;
             if(!isset($branches[$branchID])) $branchID = $branch;
             ?>
-            <td><?php echo html::select("branch[$key]", $branches, $branchID, "class='form-control chosen' onchange='setModules(this.value, $productID, $key)'");?></td>
+            <td><?php echo html::select("branch[$key]", $branches, $branchID, "class='form-control chosen' onchange='setModules($productID, this.value, $key)'");?></td>
             <?php endif;?>
             <td><?php echo html::input("title[$key]", htmlSpecialString($case->title, ENT_QUOTES), "class='form-control'")?></td>
             <td style='overflow:visible'>

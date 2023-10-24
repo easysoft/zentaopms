@@ -2,7 +2,7 @@
 /**
  * The story module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
@@ -33,6 +33,7 @@ $lang->story->edit               = "编辑";
 $lang->story->editDraft          = "编辑草稿";
 $lang->story->batchEdit          = "批量编辑";
 $lang->story->subdivide          = '细分';
+$lang->story->subdivideSR        = $lang->SRCommon . '细分';
 $lang->story->link               = '关联';
 $lang->story->unlink             = '移除';
 $lang->story->track              = '跟踪矩阵';
@@ -102,21 +103,22 @@ $lang->story->float            = "『%s』应当是正数，可以是小数。";
 $lang->story->saveDraftSuccess = '存为草稿成功';
 
 $lang->story->changeSyncTip       = "该需求的修改会同步到如下的孪生需求";
-$lang->story->syncTip             = "孪生需求间除产品、分支 、模块、计划、阶段外均同步，孪生关系解除后不再同步";
+$lang->story->syncTip             = "孪生需求间除{$lang->productCommon}、分支 、模块、计划、阶段外均同步，孪生关系解除后不再同步";
 $lang->story->relievedTip         = "孪生关系解除后无法恢复，需求的内容不再同步，是否解除？";
 $lang->story->assignSyncTip       = "孪生需求均同步修改指派人";
 $lang->story->closeSyncTip        = "孪生需求均同步关闭";
 $lang->story->activateSyncTip     = "孪生需求均同步激活";
-$lang->story->relievedTwinsTip    = '产品调整后，本需求自动解除孪生关系，需求不再同步，是否保存？';
+$lang->story->relievedTwinsTip    = "{$lang->productCommon}调整后，本需求自动解除孪生关系，需求不再同步，是否保存？";
 $lang->story->batchEditTip        = "{$lang->SRCommon} %s为孪生需求，本次操作已被过滤。";
 
 $lang->story->id               = '编号';
 $lang->story->parent           = '父需求';
 $lang->story->product          = "所属{$lang->productCommon}";
-$lang->story->project          = "所属项目";
+$lang->story->project          = "所属{$lang->projectCommon}";
 $lang->story->branch           = "平台/分支";
 $lang->story->module           = '所属模块';
 $lang->story->moduleAB         = '模块';
+$lang->story->roadmap          = '所属路标';
 $lang->story->source           = "来源";
 $lang->story->sourceNote       = '来源备注';
 $lang->story->fromBug          = '来源Bug';
@@ -155,8 +157,8 @@ $lang->story->closedReason     = '关闭原因';
 $lang->story->rejectedReason   = '拒绝原因';
 $lang->story->changedBy        = '由谁变更';
 $lang->story->changedDate      = '变更时间';
-$lang->story->reviewedBy       = '评审者';
-$lang->story->reviewer         = $lang->story->reviewedBy;
+$lang->story->reviewedBy       = '由谁评审';
+$lang->story->reviewer         = '评审者';
 $lang->story->reviewers        = '评审人员';
 $lang->story->reviewedDate     = '评审时间';
 $lang->story->activatedDate    = '激活日期';
@@ -199,7 +201,7 @@ $lang->story->linkMR           = '相关合并请求';
 $lang->story->linkCommit       = '相关代码版本';
 
 $lang->story->ditto       = '同上';
-$lang->story->dittoNotice = "该{$lang->SRCommon}与上一{$lang->SRCommon}不属于同一产品！";
+$lang->story->dittoNotice = "该{$lang->SRCommon}与上一{$lang->SRCommon}不属于同一{$lang->productCommon}！";
 
 $lang->story->needNotReviewList[0] = '需要评审';
 $lang->story->needNotReviewList[1] = '不需要评审';
@@ -214,6 +216,13 @@ $lang->story->statusList['active']    = '激活';
 $lang->story->statusList['closed']    = '已关闭';
 $lang->story->statusList['changing']  = '变更中';
 
+if($config->systemMode == 'PLM')
+{
+    $lang->story->statusList['launched']   = '已立项';
+    $lang->story->statusList['developing'] = '研发中';
+}
+
+$lang->story->stageList = array();
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = '未开始';
 $lang->story->stageList['planned']    = "已计划";
@@ -315,7 +324,7 @@ $lang->story->noStory               = "暂时没有{$lang->SRCommon}。";
 $lang->story->noRequirement         = "暂时没有{$lang->URCommon}。";
 $lang->story->ignoreChangeStage     = "{$lang->SRCommon} %s 状态为草稿或已关闭，本次操作已被过滤。";
 $lang->story->cannotDeleteParent    = "不能删除父{$lang->SRCommon}";
-$lang->story->moveChildrenTips      = "修改父{$lang->SRCommon}的所属产品会将其下的子{$lang->SRCommon}也移动到所选产品下。";
+$lang->story->moveChildrenTips      = "修改父{$lang->SRCommon}的所属{$lang->productCommon}会将其下的子{$lang->SRCommon}也移动到所选{$lang->productCommon}下。";
 $lang->story->changeTips            = '该软件需求关联的用户需求有变更，点击“不变更”忽略此条变更，点击“变更”来进行该软件需求的变更。';
 $lang->story->estimateMustBeNumber  = '估算值必须是数字';
 $lang->story->estimateMustBePlus    = '估算值不能是负数';
@@ -348,8 +357,8 @@ $lang->story->action->unlinkedfromplan      = array('main' => '$date, 由 <stron
 $lang->story->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
 $lang->story->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
 $lang->story->action->linked2kanban         = array('main' => '$date, 由 <strong>$actor</strong> 关联到看板 <strong>$extra</strong>。');
-$lang->story->action->linked2project        = array('main' => '$date, 由 <strong>$actor</strong> 关联到项目 <strong>$extra</strong>。');
-$lang->story->action->unlinkedfromproject   = array('main' => '$date, 由 <strong>$actor</strong> 从项目 <strong>$extra</strong> 移除。');
+$lang->story->action->linked2project        = array('main' => '$date, 由 <strong>$actor</strong> ' . "关联到{$lang->projectCommon}" . ' <strong>$extra</strong>。');
+$lang->story->action->unlinkedfromproject   = array('main' => '$date, 由 <strong>$actor</strong> ' . "从{$lang->projectCommon}" . '<strong>$extra</strong> 移除。');
 $lang->story->action->linked2build          = array('main' => '$date, 由 <strong>$actor</strong> 关联到版本 <strong>$extra</strong>。');
 $lang->story->action->unlinkedfrombuild     = array('main' => '$date, 由 <strong>$actor</strong> 从版本 <strong>$extra</strong> 移除。');
 $lang->story->action->linked2release        = array('main' => '$date, 由 <strong>$actor</strong> 关联到发布 <strong>$extra</strong>。');
@@ -362,6 +371,9 @@ $lang->story->action->unlinkrelatedstory    = array('main' => "\$date, 由 <stro
 $lang->story->action->unlinkchildstory      = array('main' => "\$date, 由 <strong>\$actor</strong> 移除细分{$lang->SRCommon} <strong>\$extra</strong>。");
 $lang->story->action->recalledchange        = array('main' => "\$date, 由 <strong>\$actor</strong> 撤销变更。");
 $lang->story->action->synctwins             = array('main' => "\$date, 系统判断由于孪生需求 <strong>\$extra</strong> \$operate，本需求同步调整。", 'operate' => 'operateList');
+$lang->story->action->linked2roadmap        = array('main' => '$date, 由 <strong>$actor</strong> 关联到路标 <strong>$extra</strong>。');
+$lang->story->action->unlinkedfromroadmap   = array('main' => '$date, 由 <strong>$actor</strong> 从路标 <strong>$extra</strong> 移除。');
+$lang->story->action->changedbycharter      = array('main' => '$date, 由 <strong>$actor</strong> 通过立项申请 <strong>$extra</strong> ，需求状态同步调整为已立项。');
 
 /* 统计报表。*/
 $lang->story->report = new stdclass();
@@ -481,7 +493,7 @@ $lang->story->recallTip['actived'] = "该{$lang->SRCommon}未发起评审流程�
 $lang->story->subDivideTip = array();
 $lang->story->subDivideTip['subStory']   = "子{$lang->SRCommon}无法细分";
 $lang->story->subDivideTip['notWait']    = "该{$lang->SRCommon}%s，无法进行细分操作";
-$lang->story->subDivideTip['notActive']  = "{$lang->SRCommon}不是激活状态，无法进行细分操作";
+$lang->story->subDivideTip['notActive']  = "%s不是激活状态，无法进行细分操作";
 $lang->story->subDivideTip['twinsSplit'] = '孪生需求不可细分';
 
 $lang->story->featureBar['browse']['all']       = '全部';
@@ -513,7 +525,7 @@ $lang->requirement->activateAction     = "激活{$lang->URCommon}";
 $lang->requirement->deleteAction       = "删除{$lang->URCommon}";
 $lang->requirement->exportAction       = "导出{$lang->URCommon}";
 $lang->requirement->reportAction       = "统计报表";
-$lang->requirement->recall             = $lang->story->recallAction;
+$lang->requirement->recall             = $lang->story->recall;
 $lang->requirement->batchReview        = '批量评审';
 $lang->requirement->batchEdit          = "批量编辑";
 $lang->requirement->batchClose         = '批量关闭';
@@ -527,7 +539,7 @@ $lang->requirement->linkStory          = "关联{$lang->SRCommon}";
 
 $lang->story->addBranch      = '添加%s';
 $lang->story->deleteBranch   = '删除%s';
-$lang->story->notice->branch = '每个分支会建立一个需求，需求间互为孪生关系。孪生需求间除产品、分支、模块、计划、阶段字段外均保持同步，后期您可以手动解除孪生关系。';
+$lang->story->notice->branch = "每个分支会建立一个需求，需求间互为孪生关系。孪生需求间除{$lang->productCommon}、分支、模块、计划、阶段字段外均保持同步，后期您可以手动解除孪生关系。";
 
 $lang->story->relievedTwinsRelation     = '解除孪生关系';
 $lang->story->relievedTwinsRelationTips = '孪生关系解除后无法恢复，需求的关闭将不再同步。';

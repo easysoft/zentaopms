@@ -2,7 +2,7 @@
 /**
  * The model file of holiday module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     holiday
@@ -34,7 +34,7 @@ class holidayModel extends model
     public function getList($year = '', $type = 'all')
     {
         return $this->dao->select('*')->from(TABLE_HOLIDAY)
-            ->where('1')
+            ->where('1=1')
             ->beginIf(!empty($year))
             ->andWhere('year', true)->eq($year)
             ->orWhere('begin')->like("$year-%")
@@ -199,6 +199,7 @@ class holidayModel extends model
         if(empty($begin) or empty($end) or $begin == '0000-00-00' or $end == '0000-00-00') return array();
 
         $this->app->loadConfig('execution');
+
         $actualDays = array();
         $currentDay = $begin;
 
@@ -262,7 +263,7 @@ class holidayModel extends model
         $days      = ($endTime - $beginTime) / 86400;
 
         $dateList  = array();
-        for($i = 0; $i <= $days; $i ++) $dateList[] = date('Y-m-d', $beginTime + ($i *24 *3600));
+        for($i = 0; $i <= $days; $i ++) $dateList[] = date('Y-m-d', $beginTime + ($i * 24 * 3600));
 
         return $dateList;
     }
@@ -313,10 +314,13 @@ class holidayModel extends model
     {
         $updateProjectList = $this->dao->select('id, begin, end')
             ->from(TABLE_PROJECT)
-            ->where('begin')->between($beginDate, $endDate)
+            ->where('status')->ne('done')
+            ->andWhere('type')->ne('program')
+            ->andWhere('end')->ne(LONG_TIME)
+            ->andWhere('begin', true)->between($beginDate, $endDate)
             ->orWhere('end')->between($beginDate, $endDate)
             ->orWhere("(begin < '$beginDate' AND end > '$endDate')")
-            ->andWhere('status')->ne('done')
+            ->markRight(1)
             ->fetchAll();
 
         foreach($updateProjectList as $project)
@@ -340,10 +344,12 @@ class holidayModel extends model
     {
         $updateProjectList = $this->dao->select('id, realBegan, realEnd')
             ->from(TABLE_PROJECT)
-            ->where('realBegan')->between($beginDate, $endDate)
+            ->where('status')->ne('done')
+            ->andWhere('type')->ne('program')
+            ->andwhere('realBegan', true)->between($beginDate, $endDate)
             ->orWhere('realEnd')->between($beginDate, $endDate)
             ->orWhere("(realBegan < '$beginDate' AND realEnd > '$endDate')")
-            ->andWhere('status')->ne('done')
+            ->markRight(1)
             ->fetchAll();
 
         foreach($updateProjectList as $project)
@@ -407,5 +413,81 @@ class holidayModel extends model
 
             $this->dao->update(TABLE_TASK)->set('realDuration')->eq($realDuration)->where('id')->eq($task->id)->exec();
         }
+    }
+
+    /**
+     * Get holidays by api.
+     *
+     * @param  string $year
+     * @access public
+     * @return array
+     */
+    public function getHolidayByAPI($year = '')
+    {
+        if(empty($year)) $year = date('Y');
+        $apiRoot = sprintf($this->config->holiday->apiRoot, $year);
+        $data    = json_decode(common::http($apiRoot));
+        $days    = isset($data->days) ? (array)$data->days : array();
+
+        $holidays   = array();
+        $privDay    = 0;
+        $prevDayOff = true;
+        $daysIndex  = count($days) - 1;
+        foreach($days as $index => $day)
+        {
+            if($index < $daysIndex and (strtotime($day->date) - $privDay > 86400 or $day->isOffDay != $prevDayOff))
+            {
+                $holiday = new stdClass();
+                $holiday->type  = $day->isOffDay ? 'holiday' : 'working';
+                $holiday->name  = $day->name . zget($this->lang->holiday->typeList, $holiday->type);
+                $holiday->begin = $day->date;
+                $holiday->end   = '';
+                $holidays[] = $holiday;
+            }
+
+            if(isset($holiday) or $index == $daysIndex)
+            {
+                $holidayNum = count($holidays);
+                if($holidayNum > 1)
+                {
+                    if(isset($holiday))
+                    {
+                        $holidays[$holidayNum - 2]->end = date('Y-m-d', $privDay);
+                    }
+                    else
+                    {
+                        $holidays[$holidayNum - 1]->end = $day->date;
+                    }
+                }
+                if(isset($holiday)) unset($holiday);
+            }
+
+            $privDay    = strtotime($day->date);
+            $prevDayOff = $day->isOffDay;
+        }
+        return $holidays;
+    }
+
+    /**
+     * Batch create holiday.
+     *
+     * @param  array  $holidays
+     * @access public
+     * @return int|bool
+     */
+    public function batchCreate($holidays)
+    {
+        foreach($holidays as $holiday)
+        {
+            $this->dao->insert(TABLE_HOLIDAY)->data($holiday)
+                ->autoCheck()
+                ->batchCheck($this->config->holiday->require->create, 'notempty')
+                ->check('end', 'ge', $holiday->begin)
+                ->exec();
+        }
+        if(dao::isError()) return false;
+
+        $lastInsertID = $this->dao->lastInsertID();
+        return $lastInsertID;
     }
 }

@@ -2,7 +2,7 @@
 /**
  * The control file of company module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     company
@@ -201,10 +201,6 @@ class company extends control
         $this->session->set('meetingList',     $uri, 'project');
         $this->session->set('meetingroomList', $uri, 'admin');
 
-        /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
-
         /* Append id for secend sort. */
         if($direction == 'next') $orderBy = 'date_desc';
         if($direction == 'pre')  $orderBy = 'date_asc';
@@ -222,16 +218,13 @@ class company extends control
         $this->view->projects = array($this->lang->company->project) + $projects;;
 
         /* Get executions' list.*/
-        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode|multiple');
-        $executionsIDList = array_keys($executions);
-        $executionsList = $this->execution->getByIdList($executionsIDList);
-        foreach($executionsList as $executionsID => $executionObj)
+        $executions    = $this->loadModel('execution')->getPairs(0, 'all', 'nocode|multiple');
+        $executionList = $this->execution->getByIdList(array_keys($executions));
+        foreach($executionList as $id => $execution)
         {
-            foreach($projects as $projectsID => $projectsName)
-            {
-                if($executionObj->project == $projectsID) $executions[$executionObj->id] = $projectsName . '/' . $executionObj->name;
-            }
+            if(isset($projects[$execution->project])) $executions[$execution->id] = $projects[$execution->project] . $executions[$execution->id];
         }
+
         $executions = array($this->lang->execution->common) + $executions;
         $this->view->executions = $executions;
 
@@ -256,11 +249,11 @@ class company extends control
             if(!$productID)   $productID   = 'all';
             if(!$projectID)   $projectID   = 'all';
             if(!$executionID) $executionID = 'all';
-            $actions = $this->action->getDynamic($account, $browseType, $orderBy, $pager, $productID, $projectID, $executionID, $date, $direction);
+            $actions = $this->action->getDynamic($account, $browseType, $orderBy, 50, $productID, $projectID, $executionID, $date, $direction);
         }
         else
         {
-            $actions = $this->action->getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy, $pager, $date, $direction);
+            $actions = $this->action->getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy, 50, $date, $direction);
         }
 
         /* Build search form. */
@@ -288,6 +281,10 @@ class company extends control
         $this->config->company->dynamic->search['params']['actor']['values']     = $accountPairs;
         $this->loadModel('search')->setSearchParams($this->config->company->dynamic->search);
 
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $browseType, $orderBy);
+
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
+
         /* Assign. */
         $this->view->recTotal     = $recTotal;
         $this->view->browseType   = $browseType;
@@ -298,10 +295,9 @@ class company extends control
         $this->view->executionID  = $executionID;
         $this->view->queryID      = $queryID;
         $this->view->orderBy      = $orderBy;
-        $this->view->pager        = $pager;
         $this->view->userID       = $userID;
         $this->view->param        = $param;
-        $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction, $browseType, $orderBy);
+        $this->view->dateGroups   = $dateGroups;
         $this->view->direction    = $direction;
         $this->display();
     }

@@ -2,7 +2,7 @@
 /**
  * The model file of compile module of ZenTaoCMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     compile
@@ -47,7 +47,7 @@ class compileModel extends model
      */
     public function getList($repoID, $jobID, $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('t1.id, t1.name, t1.job, t1.status, DATE_FORMAT(t1.createdDate, "%m-%d %H:%i") AS createdDate, t1.testtask, t2.pipeline, t2.triggerType, t2.comment, t2.atDay, t2.atTime, t2.engine, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
+        return $this->dao->select('t1.id, t1.name, t1.job, t1.status, t1.createdDate, t1.testtask, t2.pipeline, t2.triggerType, t2.comment, t2.atDay, t2.atTime, t2.engine, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
             ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
             ->leftJoin(TABLE_REPO)->alias('t3')->on('t2.repo=t3.id')
             ->leftJoin(TABLE_PIPELINE)->alias('t4')->on('t2.server=t4.id')
@@ -129,7 +129,19 @@ class compileModel extends model
 
         $url = new stdclass();
         $url->userPWD = "$jenkinsUser:$jenkinsPassword";
-        $url->url     = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $jenkins->pipeline);
+
+        $detailUrl             = strpos($jenkins->pipeline, '/job/') !== false ? sprintf('%s%s/api/json', $jenkinsServer, $jenkins->pipeline) : sprintf('%s/job/%s/api/json', $jenkinsServer, $jenkins->pipeline);
+        $hasParameterizedBuild = $this->loadModel('job')->checkParameterizedBuild($detailUrl, $url->userPWD);
+        $buildInterface        = $hasParameterizedBuild ? 'buildWithParameters' : 'build';
+
+        if(strpos($jenkins->pipeline, '/job/') !== false)
+        {
+            $url->url = sprintf("%s%s{$buildInterface}/api/json", $jenkinsServer, $jenkins->pipeline);
+        }
+        else
+        {
+            $url->url = sprintf("%s/job/%s/{$buildInterface}/api/json", $jenkinsServer, $jenkins->pipeline);
+        }
 
         return $url;
     }
@@ -154,7 +166,10 @@ class compileModel extends model
             $userPWD         = "$jenkinsUser:$jenkinsPassword";
 
             $infoUrl  = sprintf('%s/job/%s/api/xml?tree=builds[id,number,queueId]&xpath=//build[queueId=%s]', $jenkins->url, $job->pipeline, $compile->queue);
-            $response = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD));
+            $result   = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD), array(), 'data', 'POST', 30, true);
+            $response = $result['body'];
+            $httpCode = $result[1];
+            if($httpCode == 404) return '';
             if($response)
             {
                 $buildInfo   = simplexml_load_string($response);
@@ -176,7 +191,9 @@ class compileModel extends model
             $this->loadModel('ci');
             foreach($jobs as $gitlabJob)
             {
-                if(empty($gitlabJob->duration) or $gitlabJob->duration == '') $gitlabJob->duration = '-';
+                if(!is_object($gitlabJob)) continue;
+
+                if(empty($gitlabJob->duration)) $gitlabJob->duration = '-';
                 $logs .= "<font style='font-weight:bold'>&gt;&gt;&gt; Job: $gitlabJob->name, Stage: $gitlabJob->stage, Status: $gitlabJob->status, Duration: $gitlabJob->duration Sec\r\n </font>";
                 $logs .= "Job URL: <a href=\"$gitlabJob->web_url\" target='_blank'>$gitlabJob->web_url</a> \r\n";
                 $logs .= $this->ci->transformAnsiToHtml($this->gitlab->apiGetJobLog($job->server, $projectID, $gitlabJob->id));
@@ -257,16 +274,27 @@ class compileModel extends model
      */
     public function syncJenkinsBuildList($jenkins, $job)
     {
+        if(empty($jenkins->account)) return;
+
         $jenkinsUser     = $jenkins->account;
         $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
 
         /* Get build list by API. */
-        $url      = sprintf('%s/job/%s/api/json?tree=builds[id,number,result,queueId,timestamp]', $jenkins->url, $job->pipeline);
+        if(strpos($job->pipeline, '/job/') !== false)
+        {
+            $url = sprintf('%s%sapi/json?tree=builds[id,number,result,queueId,timestamp]', $jenkins->url, $job->pipeline);
+        }
+        else
+        {
+            $url = sprintf('%s/job/%s/api/json?tree=builds[id,number,result,queueId,timestamp]', $jenkins->url, $job->pipeline);
+        }
         $response = common::http($url, '', array(CURLOPT_USERPWD => "$jenkinsUser:$jenkinsPassword"));
         if(!$response) return false;
 
         $compilePairs = $this->dao->select('queue,job')->from(TABLE_COMPILE)->where('job')->eq($job->id)->andWhere('queue')->gt(0)->fetchPairs();
         $jobInfo      = json_decode($response);
+        if(empty($jobInfo)) return;
+
         foreach($jobInfo->builds as $build)
         {
             $lastSyncTime = strtotime($job->lastSyncDate);
@@ -299,6 +327,8 @@ class compileModel extends model
      */
     public function syncGitlabBuildList($gitlab, $job)
     {
+        if(empty($gitlab->id)) return;
+
         $pipeline  = json_decode($job->pipeline);
         $projectID = isset($pipeline->project) ? $pipeline->project : '';
         $ref       = isset($pipeline->reference) ? $pipeline->reference : '';
@@ -359,7 +389,7 @@ class compileModel extends model
         if(!$job) return false;
 
         $compileID = $compile->id;
-        $repo      = $this->loadModel('repo')->getRepoById($job->repo);
+        $repo      = $this->loadModel('repo')->getByID($job->repo);
 
         if($job->triggerType == 'tag')
         {

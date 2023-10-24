@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testcase.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -32,4 +31,3 @@ r($testcase->batchChangeModuleTest($caseIDList[3], $moduleList[3])) && p('167:mo
 r($testcase->batchChangeModuleTest($caseIDList[4], $moduleList[4])) && p('169:module;170:module') && e('169;169'); // 测试批量修改case 169 170 的module为169
 r($testcase->batchChangeModuleTest($caseIDList[5], $moduleList[5])) && p('171:module;172:module') && e('171;171'); // 测试批量修改case 171 172 的module为171
 r($testcase->batchChangeModuleTest($caseIDList[6], $moduleList[6])) && p('173:module;174:module') && e('173;173'); // 测试批量修改case 173 174 的module为173
-$db->restoreDB();

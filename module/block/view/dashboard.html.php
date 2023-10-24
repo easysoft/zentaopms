@@ -2,7 +2,7 @@
 /**
  * The dashboard view file of block module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
@@ -39,7 +39,7 @@ $useGuest = $this->app->user->account == 'guest';
         <?php endif;?>
           <nav class='panel-actions nav nav-default'>
             <?php if($this->config->vision == 'rnd' and $block->block == 'guide' and !defined('TUTORIAL')) echo '<li>' . html::a($this->createLink('tutorial', 'start'), $lang->block->tutorial, '', "title='{$lang->block->tutorial}' class='iframe tutorialBtn'") . '</li>'; ?>
-            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, strtoupper($lang->more), '', "title='{$lang->more}'") . '</li>'; ?>
+            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, mb_strtoupper($lang->more), '', "title='{$lang->more}'") . '</li>'; ?>
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
@@ -74,7 +74,7 @@ $useGuest = $this->app->user->account == 'guest';
           <div class='panel-title'><?php echo $block->title;?></div>
         <?php endif;?>
           <nav class='panel-actions nav nav-default'>
-            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, strtoupper($lang->more), '', "title='{$lang->more}'") . '</li>';?>
+            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, mb_strtoupper($lang->more), '', "title='{$lang->more}'") . '</li>';?>
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>

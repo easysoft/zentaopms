@@ -2,7 +2,7 @@
 /**
  * The control file of program module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     program
  * @version     $Id
@@ -31,6 +31,10 @@ class program extends control
      *
      * @param  string  $status
      * @param  string  $orderBy
+     * @param  int     $recTotal
+     * @param  int     $recPerPage
+     * @param  int     $pageID
+     * @param  int     $param
      * @access public
      * @return void
      */
@@ -47,42 +51,39 @@ class program extends control
 
         $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 
-        if($programType === 'bygrid')
+        $this->program->refreshStats(); // Refresh stats fields of projects.
+
+        if(strtolower($status) == 'bysearch')
         {
-            $programs = $this->program->getProgramStats($status, 20, $orderBy);
+            $programs = $this->program->getListBySearch($orderBy, (int)$param);
         }
         else
         {
-            if(strtolower($status) == 'bysearch')
-            {
-                $queryID  = (int)$param;
-                $programs = $this->program->getListBySearch($orderBy, $queryID);
-            }
-            else
-            {
-                /* Get top programs and projects. */
-                $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, $pager, 'top');
-                if(!$topObjects) $topObjects = array(0);
-                $programs   = $this->program->getList($status == 'closed' ? 'closed' : 'all', $orderBy, NULL, 'child', array_keys($topObjects));
+            /* Get top programs and projects. */
+            $topObjects = $this->program->getList($status == 'unclosed' ? 'doing,suspended,wait' : $status, $orderBy, $pager, 'top');
+            if(!$topObjects) $topObjects = array(0);
+            $programs   = $this->program->getList($status, $orderBy, null, 'child', array_keys($topObjects));
 
-                /* Get summary. */
-                $topCount = $indCount = 0;
-                foreach($programs as $program)
-                {
-                    if($program->type == 'program' and $program->parent == 0) $topCount ++;
-                    if($program->type == 'project' and $program->parent == 0) $indCount ++;
-                }
-                $summary = sprintf($this->lang->program->summary, $topCount, $indCount);
+            /* Get summary. */
+            $topCount = $indCount = 0;
+            foreach($programs as $program)
+            {
+                if($program->type == 'program' and $program->parent == 0) $topCount ++;
+                if($program->type == 'project' and $program->parent == 0) $indCount ++;
             }
+            $summary = sprintf($this->lang->program->summary, $topCount, $indCount);
         }
 
         /* Get PM id list. */
-        $accounts = array();
+        $accounts   = array_unique(helper::arrayColumn($programs, 'PM'));
         $hasProject = false;
         foreach($programs as $program)
         {
-            if(!empty($program->PM) and !in_array($program->PM, $accounts)) $accounts[] = $program->PM;
-            if($hasProject === false and $program->type != 'program') $hasProject = true;
+            if($hasProject === false and $program->type != 'program')
+            {
+                $hasProject = true;
+                break;
+            }
         }
         $PMList = $this->loadModel('user')->getListByAccounts($accounts, 'account');
 
@@ -99,12 +100,8 @@ class program extends control
         $this->view->orderBy      = $orderBy;
         $this->view->summary      = isset($summary) ? $summary : '';
         $this->view->pager        = $pager;
-        $this->view->users        = $this->user->getPairs('noletter');
-        $this->view->userIdPairs  = $this->user->getPairs('noletter|showid');
-        $this->view->usersAvatar  = $this->user->getAvatarPairs('');
         $this->view->programType  = $programType;
         $this->view->PMList       = $PMList;
-        $this->view->progressList = $this->program->getProgressList();
         $this->view->hasProject   = $hasProject;
 
         $this->display();
@@ -145,9 +142,10 @@ class program extends control
     {
         $programPairs = $this->program->getPairs();
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api' && !isset($programPairs[$programID]))
+        if(!isset($programPairs[$programID]))
         {
-            return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            return print(js::error($this->lang->notFound) . js::locate($this->createLink('program', 'browse')));
         }
 
         $programID = $this->program->saveState($programID, $programPairs);
@@ -291,7 +289,7 @@ class program extends control
             $hasUnfinished = $this->program->hasUnfinished($program);
             if($hasUnfinished) return print(js::error($this->lang->program->closeErrorMessage));
 
-            $changes = $this->project->close($programID);
+            $changes = $this->project->close($programID, 'program');
             if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
@@ -362,7 +360,7 @@ class program extends control
 
         if(!empty($_POST))
         {
-            $changes = $this->project->activate($programID);
+            $changes = $this->project->activate($programID, 'program');
             if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
@@ -400,7 +398,7 @@ class program extends control
 
         if(!empty($_POST))
         {
-            $changes = $this->project->suspend($programID);
+            $changes = $this->project->suspend($programID, 'program');
             if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
@@ -658,7 +656,7 @@ class program extends control
 
                 if($this->post->exportType == 'selected')
                 {
-                    $checkedItem = $this->cookie->checkedItem;
+                    $checkedItem = $this->post->checkedItem;
                     if(strpos(",$checkedItem,", ",{$program->id},") === false) unset($programs[$i]);
                 }
             }

@@ -2,14 +2,13 @@
 /**
  * The release module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
  * @version     $Id: zh-cn.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->release->common           = '产品发布';
 $lang->release->create           = "创建发布";
 $lang->release->edit             = "编辑发布";
 $lang->release->linkStory        = "关联{$lang->SRCommon}";
@@ -17,7 +16,7 @@ $lang->release->linkBug          = "关联Bug";
 $lang->release->delete           = "删除发布";
 $lang->release->deleted          = '已删除';
 $lang->release->view             = "发布详情";
-$lang->release->browse           = "浏览发布";
+$lang->release->browse           = "发布列表";
 $lang->release->changeStatus     = "修改状态";
 $lang->release->batchUnlink      = "批量移除";
 $lang->release->batchUnlinkStory = "批量移除{$lang->SRCommon}";
@@ -34,12 +33,12 @@ $lang->release->errorDate          = '发布日期不能大于今天。';
 $lang->release->basicInfo = '基本信息';
 
 $lang->release->id             = 'ID';
-$lang->release->product        = '所属产品';
+$lang->release->product        = "所属{$lang->productCommon}";
 $lang->release->branch         = '平台/分支';
-$lang->release->project        = '所属项目';
+$lang->release->project        = '所属' . $lang->projectCommon;
 $lang->release->build          = '版本';
 $lang->release->includedBuild  = '包含版本';
-$lang->release->relatedProject = '对应项目';
+$lang->release->relatedProject = '对应' . $lang->projectCommon;
 $lang->release->name           = '发布名称';
 $lang->release->marker         = '里程碑';
 $lang->release->date           = '发布日期';
@@ -96,7 +95,7 @@ $lang->release->notifyList['PO'] = "{$lang->productCommon}负责人";
 $lang->release->notifyList['QD'] = '测试负责人';
 $lang->release->notifyList['SC'] = '需求提交人';
 $lang->release->notifyList['ET'] = "所在{$lang->execution->common}团队成员";
-$lang->release->notifyList['PT'] = "所在项目团队成员";
+$lang->release->notifyList['PT'] = "所在{$lang->projectCommon}团队成员";
 $lang->release->notifyList['CT'] = "抄送给";
 
 $lang->release->featureBar['browse']['all']       = '全部';

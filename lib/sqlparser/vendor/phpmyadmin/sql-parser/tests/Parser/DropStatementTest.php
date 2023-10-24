@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Parser;
 
 use PhpMyAdmin\SqlParser\Tests\TestCase;
@@ -9,20 +7,20 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 class DropStatementTest extends TestCase
 {
     /**
-     * @param mixed $test
-     *
      * @dataProvider dropProvider
+     *
+     * @param mixed $test
      */
-    public function testDrop($test): void
+    public function testDrop($test)
     {
         $this->runParserTest($test);
     }
 
-    public function dropProvider(): array
+    public function dropProvider()
     {
-        return [
-            ['parser/parseDrop'],
-            ['parser/parseDrop2'],
-        ];
+        return array(
+            array('parser/parseDrop'),
+            array('parser/parseDrop2'),
+        );
     }
 }

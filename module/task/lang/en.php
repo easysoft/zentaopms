@@ -2,7 +2,7 @@
 /**
  * The task module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
@@ -67,7 +67,7 @@ $lang->task->foldEffort          = 'Fold Effort';
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';
-$lang->task->project           = 'Project';
+$lang->task->project           = $lang->projectCommon;
 $lang->task->execution         = $lang->executionCommon;
 $lang->task->module            = 'Module';
 $lang->task->moduleAB          = 'Module';
@@ -250,7 +250,7 @@ $lang->task->confirmFinish             = '"Left Hour" is 0. Do you want to chang
 $lang->task->confirmRecord             = '"Left Hour" is 0. Do you want to set the task as "Finished"?';
 $lang->task->confirmTransfer           = '"Left Hour" is 0，Do you want to assign to <strong>%s</strong> task?';
 $lang->task->noticeTaskStart           = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
-$lang->task->noticeLinkStory           = "No story has been linked. You can %s for this project, then %s.";
+$lang->task->noticeLinkStory           = "No story has been linked. You can %s for this {$lang->projectCommon}, then %s.";
 $lang->task->noticeLinkStoryNoProduct  = "No story has been linked.";
 $lang->task->noticeSaveRecord          = 'Your Hour is not saved. Please save it first.';
 $lang->task->noticeManageTeam          = 'Task status is %s, can not manage team.';
@@ -259,7 +259,7 @@ $lang->task->deniedNotice              = 'Only the %s can %s the task.';
 $lang->task->deniedStatusNotice        = 'The task status is %s, the effort cannot be maintained.';
 $lang->task->transferNotice            = 'Linear task cannot be transferred.';
 $lang->task->noTask                    = 'No tasks yet. ';
-$lang->task->createDenied              = 'Create Task is denied in this project';
+$lang->task->createDenied              = 'Create Task is denied in this ' . $lang->projectCommon;
 $lang->task->cannotDeleteParent        = 'Cannot delete parent task';
 $lang->task->addChildTask              = 'Because the task has cost hours, ZenTao will create a child task with the same name to record the cost housrs to ensure data consistency.';
 
@@ -276,6 +276,7 @@ $lang->task->error->consumedThisTime  = 'Please enter "Hours Cost"';
 $lang->task->error->left              = 'Please enter "Hours Left"';
 $lang->task->error->work              = '"Comment" must be <  %d characters.';
 $lang->task->error->teamMember        = 'Team members must be at least 2 people';
+$lang->task->error->teamCantOperate   = 'Please activate the closed, suspended, and canceled tasks before setting the team.';
 $lang->task->error->skipClose         = 'Task: %s is not “Finished” or “Cancelled”. Do you want to close it?';
 $lang->task->error->closeParent       = 'Task: %s is the Parent Task, which is automatically closed after all subtasks under the Parent Task are closed and cannot be closed manually.';
 $lang->task->error->consumed          = 'Task: %s hour must be < 0. Ignore changes to this task.';
@@ -293,6 +294,11 @@ $lang->task->error->leftEmptyAB       = 'When the task status is %s, "Hours Left
 $lang->task->error->leftEmpty         = 'Task#%sWhen the task status is %s, "Left" cannot be 0';
 $lang->task->error->notempty          = '%s must be > 0.';
 $lang->task->error->teamLeftEmpty     = 'Please maintain team hours.';
+$lang->task->error->beginLtExecution  = "The 'StartDate' of the task must be greater than or equal the 'Planned Begin' of %s to %s.";
+$lang->task->error->beginGtExecution  = "The 'StartDate' of the task must be less than or equal the 'Planned End' of %s to %s.";
+$lang->task->error->endGtExecution    = "The 'Deadline' of the task must be less than or equal the 'Planned End' of %s to %s.";
+$lang->task->error->endLtExecution    = "The 'Deadline' of the task must be greater than or equal the 'Planned Begin' of %s to %s.";
+$lang->task->error->dateExceed        = "Because the scheduled date of task %s exceeds the scheduled date of {$lang->execution->common}, it is automatically changed to the scheduled date of {$lang->execution->common}";
 
 /* Report. */
 $lang->task->report = new stdclass();

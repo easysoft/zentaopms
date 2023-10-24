@@ -2,7 +2,7 @@
 /**
  * The configure xuanxuan view file of setting module of RanZhi.
  *
- * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2017 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     setting
@@ -136,8 +136,8 @@
               <?php echo html::a(helper::createLink('setting', 'xuanxuan'), $lang->goback, '', 'class="btn" style="min-width: 120px"');?>
             <?php else:?>
               <?php $disabled = $config->xuanxuan->turnon ? '' : 'disabled';?>
-              <?php if(common::hasPriv('im', 'downloadXxdPackage')) echo html::a(helper::createLink('setting', 'downloadXXD', 'type=package'), $lang->im->downloadXXD, 'hiddenwin', "class='btn btn-primary download download-package $disabled'");?>
-              <?php echo html::a(helper::createLink('setting', 'downloadXXD', 'type=config'), $lang->im->downloadConfig, 'hiddenwin', "class='btn btn-primary download $disabled'");?>
+              <?php if(common::hasPriv('im', 'downloadXxdPackage')) echo html::a(helper::createLink('setting', 'downloadXXD', 'type=package'), $lang->im->downloadXXD, 'hiddenwin', "class='btn btn-primary download download-package $disabled'" . " $disabled");?>
+              <?php echo html::a(helper::createLink('setting', 'downloadXXD', 'type=config'), $lang->im->downloadConfig, 'hiddenwin', "class='btn btn-primary download $disabled'" . " $disabled");?>
               <?php echo html::a(helper::createLink('setting', 'xuanxuan', 'type=edit'), $lang->im->changeSetting, '', "class='btn'");?>
               <?php if($debug and common::hasPriv('im', 'debug')) echo html::a(helper::createLink('im', 'debug', 'source=setting'), $lang->im->viewDebug, '', "class='btn viewDebug iframe' data-height=220");?>
               <?php echo html::a('http://www.zentao.net/book/zentaopmshelp/302.html', $lang->im->help, '_blank', "class='btn'");?>

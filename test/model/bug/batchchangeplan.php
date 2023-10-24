@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -46,4 +45,3 @@ r($bug->batchChangePlanTest($bugIDList3, $planList[2], $bugIDList3[2])) && p('0:
 r($bug->batchChangePlanTest($bugIDList4, $planList[0], $bugIDList4[0])) && p()                  && e('0');        // 修改计划为0 未发生变化
 r($bug->batchChangePlanTest($bugIDList4, $planList[1], $bugIDList4[1])) && p('0:field,old,new') && e('plan,0,1'); // 修改计划为计划1
 r($bug->batchChangePlanTest($bugIDList4, $planList[2], $bugIDList4[2])) && p('0:field,old,new') && e('plan,1,2'); // 修改计划为计划2
-$db->restoreDB();

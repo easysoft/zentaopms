@@ -2,7 +2,7 @@
 /**
  * The build module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
@@ -20,6 +20,7 @@ $lang->build->view             = "Build Details";
 $lang->build->batchUnlink      = 'Batch Unlink';
 $lang->build->batchUnlinkStory = "Batch {$lang->SRCommon} Unlink";
 $lang->build->batchUnlinkBug   = 'Batch Bug Unlink';
+$lang->build->linkArtifactRepo = 'Link Artifact Repo';
 
 $lang->build->confirmDelete      = "Möchten Sie dieses Build löschen?";
 $lang->build->confirmUnlinkStory = "Möchten Sie diese {$lang->SRCommon} löschen?";
@@ -29,7 +30,7 @@ $lang->build->basicInfo = 'Basis Info';
 
 $lang->build->id             = 'ID';
 $lang->build->product        = $lang->productCommon;
-$lang->build->project        = 'Project';
+$lang->build->project        = $lang->projectCommon;
 $lang->build->branch         = 'Platform/Branch';
 $lang->build->branchAll      = 'All associated %s';
 $lang->build->branchName     = '%s';
@@ -40,6 +41,7 @@ $lang->build->singled        = 'Singled';
 $lang->build->builds         = 'Included Builds';
 $lang->build->released       = 'Released';
 $lang->build->name           = 'Name';
+$lang->build->nameAB         = 'Name';
 $lang->build->date           = 'Datum';
 $lang->build->builder        = 'Builder';
 $lang->build->url            = 'URL';
@@ -64,7 +66,7 @@ $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";
 $lang->build->notice->changeExecution = "The version of the submitted test order cannot be modified {$lang->executionCommon}";
 $lang->build->notice->changeBuilds    = "The version of the submitted test order cannot be modified builds";
-$lang->build->notice->autoRelation    = "The completed requirements, resolved bugs, and generated bugs under the relevant version will be automatically associated with the project version";
+$lang->build->notice->autoRelation    = "The completed requirements, resolved bugs, and generated bugs under the relevant version will be automatically associated with the {$lang->projectCommon} version";
 $lang->build->notice->createTest      = "The execution of this version has been deleted, and the test cannot be submitted";
 
 $lang->build->confirmChangeBuild = "After branch『%s』disassociation,under the %s have %s {$lang->SRCommon} and %s Bug will remove synchronization from version, whether to cancel？";

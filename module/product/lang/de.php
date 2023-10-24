@@ -2,7 +2,7 @@
 /**
  * The product module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
@@ -20,15 +20,17 @@ $lang->product->create           = "Erstelle {$lang->productCommon}";
 $lang->product->delete           = "Lösche {$lang->productCommon}";
 $lang->product->deleted          = 'Gelöscht';
 $lang->product->close            = 'Schließen';
+$lang->product->activate         = 'Activate';
 $lang->product->select           = "Auswahl {$lang->productCommon}";
 $lang->product->mine             = 'Meine Zuständigkeiten';
 $lang->product->other            = 'Andere';
 $lang->product->closed           = 'Geschlossen';
-$lang->product->closedProduct    = 'Closed Product';
+$lang->product->closedProduct    = "Closed {$lang->productCommon}";
 $lang->product->updateOrder      = 'Ranking';
 $lang->product->all              = "{$lang->productCommon} List";
-$lang->product->manageLine       = "Manage {$lang->productCommon} Line";
-$lang->product->newLine          = "Create {$lang->productCommon} Line";
+$lang->product->involved         = "My Involved";
+$lang->product->manageLine       = "Manage Product Line";
+$lang->product->newLine          = "Create Product Line";
 $lang->product->export           = 'Exportiere Daten';
 $lang->product->dashboard        = 'Dashboard';
 $lang->product->changeProgram    = "{$lang->productCommon} confirmation of the scope of influence of adjustment of the program set";
@@ -36,15 +38,16 @@ $lang->product->changeProgramTip = "%s > Change Program";
 $lang->product->addWhitelist     = 'Add Whitelist';
 $lang->product->unbindWhitelist  = 'Remove Whitelist';
 $lang->product->track            = 'View Stories Matrix';
-$lang->product->checkedProducts  = '%s products selected';
-$lang->product->pageSummary      = 'Total products: %s.';
-$lang->product->lineSummary      = 'Total product lines: %s, Total products: %s.';
+$lang->product->checkedProducts  = "%s {$lang->productCommon}s selected";
+$lang->product->pageSummary      = "Total {$lang->productCommon}s: %s.";
+$lang->product->lineSummary      = "Total product lines: %s, Total {$lang->productCommon}s: %s.";
 
-$lang->product->indexAction  = "All {$lang->productCommon}";
-$lang->product->closeAction  = "Close {$lang->productCommon}";
-$lang->product->orderAction  = "Rank {$lang->productCommon}";
-$lang->product->exportAction = "Export {$lang->productCommon}";
-$lang->product->link2Project = "Link Project";
+$lang->product->indexAction    = "All {$lang->productCommon}";
+$lang->product->closeAction    = "Close {$lang->productCommon}";
+$lang->product->activateAction = "Activate {$lang->productCommon}";
+$lang->product->orderAction    = "Rank {$lang->productCommon}";
+$lang->product->exportAction   = "Export {$lang->productCommon}";
+$lang->product->link2Project   = "Link {$lang->projectCommon}";
 
 $lang->product->basicInfo = 'Basis Info';
 $lang->product->otherInfo = 'Andere Info';
@@ -53,16 +56,15 @@ $lang->product->plans       = 'Plan';
 $lang->product->releases    = 'Release';
 $lang->product->docs        = 'Dok';
 $lang->product->bugs        = 'Verknüpfte Bugs';
-$lang->product->projects    = "Linked Project";
+$lang->product->projects    = "Linked {$lang->projectCommon}";
 $lang->product->executions  = "Verknüpfte {$lang->execution->common}";
 $lang->product->cases       = 'Fälle';
 $lang->product->builds      = 'Builds';
 $lang->product->roadmap     = 'Roadmap';
 $lang->product->doc         = 'Dok';
-$lang->product->project     = $lang->executionCommon . 'Liste';
-$lang->product->build       = 'Build';
-$lang->product->moreProduct = "More Product";
-$lang->product->projectInfo = "Projects that are linked to this {$lang->productCommon} are listed below.";
+$lang->product->project     = $lang->projectCommon . 'Liste';
+$lang->product->moreProduct = "More {$lang->productCommon}";
+$lang->product->projectInfo = "My {$lang->projectCommon}s that are linked to this {$lang->productCommon} are listed below.";
 $lang->product->progress    = "Progress";
 
 $lang->product->currentExecution      = "Aktuelle Execution";
@@ -93,23 +95,24 @@ $lang->product->unfoldClosed          = 'Unfold Closed';
 $lang->product->confirmDelete        = " Möchten Sie {$lang->productCommon} löschen?";
 $lang->product->errorNoProduct       = "Kein {$lang->productCommon} erstellt!";
 $lang->product->accessDenied         = "Sie haben keinen Zugriff auf {$lang->productCommon}.";
-$lang->product->programChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
-$lang->product->notChangeProgramTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
-$lang->product->confirmChangeProgram = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
-$lang->product->changeProgramError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the project, please unlink it before proceeding";
-$lang->product->changeLineError      = "Products already exist under the product line, so the program within them cannot be modified.";
+$lang->product->notExists            = "{$lang->productCommon} is not exists!";
+$lang->product->programChangeTip     = "The {$lang->projectCommon}s linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
+$lang->product->notChangeProgramTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following {$lang->projectCommon}s, please cancel the link before proceeding";
+$lang->product->confirmChangeProgram = "The {$lang->projectCommon}s linked with this {$lang->productCommon}: %s is also linked with other {$lang->productCommon}s, whether to transfer {$lang->projectCommon}s to the modified program set.";
+$lang->product->changeProgramError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the {$lang->projectCommon}, please unlink it before proceeding";
+$lang->product->changeLineError      = "{$lang->productCommon}s already exist under the product line, so the program within them cannot be modified.";
 $lang->product->programEmpty         = 'Program should not be empty!';
 $lang->product->nameIsDuplicate      = "『%s』 product line already exists, please reset!";
 $lang->product->nameIsDuplicated     = "Product Line『%s』 exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
-$lang->product->reviewStory          = 'You are not a reviewer for needs " %s %s", and cannot review. This operation has been filtered';
+$lang->product->reviewStory          = 'You are not a reviewer for needs "%s" , and cannot review. This operation has been filtered';
 
 $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
 $lang->product->name           = 'Name';
 $lang->product->code           = 'Alias';
 $lang->product->shadow         = "Shadow {$lang->productCommon}";
-$lang->product->line           = "{$lang->productCommon} Line";
-$lang->product->lineName       = "{$lang->productCommon} Line Name";
+$lang->product->line           = "Product Line";
+$lang->product->lineName       = "Product Line Name";
 $lang->product->order          = 'Sortierung';
 $lang->product->bind           = 'In/Depedent';
 $lang->product->type           = 'Typ';
@@ -158,16 +161,16 @@ $lang->product->viewByUser     = 'By User';
 $lang->product->assignedByMe   = 'AssignedByMe';
 
 /* Product Kanban. */
-$lang->product->myProduct             = 'Products Ownedbyme';
-$lang->product->otherProduct          = 'Other Products';
-$lang->product->unclosedProduct       = 'Open Products';
+$lang->product->myProduct             = "{$lang->productCommon}s Ownedbyme";
+$lang->product->otherProduct          = "Other {$lang->productCommon}s";
+$lang->product->unclosedProduct       = "Open {$lang->productCommon}s";
 $lang->product->unexpiredPlan         = 'Unexpired Plans';
 $lang->product->doing                 = 'Doing';
-$lang->product->doingProject          = 'Ongoing Projects';
+$lang->product->doingProject          = "Ongoing {$lang->projectCommon}s";
 $lang->product->doingExecution        = 'Ongoing Executions';
 $lang->product->doingClassicExecution = 'Ongoing ' . $lang->executionCommon;
 $lang->product->normalRelease         = 'Normal Releases';
-$lang->product->emptyProgram          = 'Independent Products';
+$lang->product->emptyProgram          = "Independent {$lang->productCommon}s";
 
 $lang->product->allStory             = 'Alle';
 $lang->product->allProduct           = 'Alle' . $lang->productCommon;
@@ -192,11 +195,11 @@ $lang->product->statusList['closed'] = 'Geschlossen';
 global $config;
 if($config->systemMode == 'ALM')
 {
-    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated project can access)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated {$lang->projectCommon} can access)";
 }
 else
 {
-    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Team members and stakeholders of the associated project can access)";
+    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Team members and stakeholders of the associated {$lang->projectCommon} can access)";
 }
 $lang->product->aclList['open']    = "Standard (Benutzer mit Rechten für {$lang->productCommon} können zugreifen.)";
 //$lang->product->aclList['custom']  = 'Benutzerdefiniert (Teammitglieder und Whitelist Benutzer haben Zugriff.)';
@@ -225,12 +228,30 @@ $lang->product->featureBar['all']['all']      = $lang->product->allProduct;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 
-$lang->product->moreSelects['openedbyme']     = $lang->product->openedByMe;
-$lang->product->moreSelects['reviewedbyme']   = $lang->product->reviewedByMe;
-$lang->product->moreSelects['assignedbyme']   = $lang->product->assignedByMe;
-$lang->product->moreSelects['closedbyme']     = $lang->product->closedByMe;
-$lang->product->moreSelects['activestory']    = $lang->product->activeStory;
-$lang->product->moreSelects['changingstory']  = $lang->product->changingStory;
-$lang->product->moreSelects['reviewingstory'] = $lang->product->reviewingStory;
-$lang->product->moreSelects['willclose']      = $lang->product->willClose;
-$lang->product->moreSelects['closedstory']    = $lang->product->closedStory;
+$lang->product->featureBar['project']['all']       = 'Alle';
+$lang->product->featureBar['project']['undone']    = 'Geschlossen';
+$lang->product->featureBar['project']['wait']      = 'Wartend';
+$lang->product->featureBar['project']['doing']     = 'In Arbeit';
+$lang->product->featureBar['project']['suspended'] = 'Ausgesetzt';
+$lang->product->featureBar['project']['closed']    = 'Geschlossen';
+
+$lang->product->moreSelects['browse']['more']['openedbyme']     = $lang->product->openedByMe;
+$lang->product->moreSelects['browse']['more']['reviewedbyme']   = $lang->product->reviewedByMe;
+$lang->product->moreSelects['browse']['more']['assignedbyme']   = $lang->product->assignedByMe;
+$lang->product->moreSelects['browse']['more']['closedbyme']     = $lang->product->closedByMe;
+$lang->product->moreSelects['browse']['more']['activestory']    = $lang->product->activeStory;
+$lang->product->moreSelects['browse']['more']['changingstory']  = $lang->product->changingStory;
+$lang->product->moreSelects['browse']['more']['reviewingstory'] = $lang->product->reviewingStory;
+$lang->product->moreSelects['browse']['more']['willclose']      = $lang->product->willClose;
+$lang->product->moreSelects['browse']['more']['closedstory']    = $lang->product->closedStory;
+
+$lang->product->featureBar['dynamic']['all']       = 'All';
+$lang->product->featureBar['dynamic']['today']     = 'Today';
+$lang->product->featureBar['dynamic']['yesterday'] = 'Yesterday';
+$lang->product->featureBar['dynamic']['thisWeek']  = 'This Week';
+$lang->product->featureBar['dynamic']['lastWeek']  = 'Last Week';
+$lang->product->featureBar['dynamic']['thisMonth'] = 'This Month';
+$lang->product->featureBar['dynamic']['lastMonth'] = 'Last Month';
+
+$lang->product->action = new stdclass();
+$lang->product->action->activate = array('main' => '$date, activated by <strong>$actor</strong>.');

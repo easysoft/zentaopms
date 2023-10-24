@@ -134,7 +134,7 @@ $(function()
       <?php foreach($projects as $project):?>
       <div class="tab-pane fade<?php if($project->id == $selected) echo ' active in';?>" id='<?php echo "tab3{$blockNavId}Content{$project->id}";?>'>
         <div class="table-row">
-          <?php if($project->model == 'scrum' or $project->model == 'kanban'):?>
+          <?php if(in_array($project->model, array('scrum', 'kanban', 'agileplus'))):?>
           <div class='table-row'>
             <div class="col-4 text-center">
               <div><h4><?php echo $lang->block->storyCount;?></h4></div>
@@ -197,15 +197,15 @@ $(function()
               </div>
             </div>
           </div>
-          <?php if(!empty($project->executions) and $project->multiple):?>
+          <?php if(!empty($project->execution) and $project->multiple):?>
           <div class="table-row project-info">
             <div class="col-2 text-right"><h4><?php echo $lang->block->last;?></h4></div>
             <div class="table-row lastIteration">
-              <div class='col-5 text-center executionName'><?php echo html::a($this->createLink('execution', 'task', "executionID={$project->executions[0]->id}"), $project->executions[0]->name, '', "title='{$project->executions[0]->name}'");?></div>
+              <div class='col-5 text-center executionName'><?php echo html::a($this->createLink('execution', 'task', "executionID={$project->execution->id}"), $project->execution->name, '', "title='{$project->name}'");?></div>
               <div class='col-7'>
                 <div class='progress progress-text-left'>
-                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->executions[0]->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->executions[0]->hours->progress;?>%">
-                    <span class='progress-text'><?php echo $project->executions[0]->hours->progress . '%';?></span>
+                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->execution->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->execution->progress;?>%">
+                    <span class='progress-text'><?php echo !empty($project->execution->progress) ? $project->execution->progress . '%' : '0%';?></span>
                   </div>
                 </div>
               </div>

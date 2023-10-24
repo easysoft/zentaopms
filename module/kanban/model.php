@@ -2,7 +2,7 @@
 /**
  * The model file of kanban module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     kanban
@@ -64,14 +64,16 @@ class kanbanModel extends model
      *
      * @param  object $kanban
      * @param  int    $copyKanbanID
+     * @param  string $from kanban|execution
+     * @param  string $param
      * @access public
      * @return void
      */
-    public function copyRegions($kanban, $copyKanbanID)
+    public function copyRegions($kanban, $copyKanbanID, $from = 'kanban', $param = 'withArchived')
     {
         if(empty($kanban) or empty($copyKanbanID)) return;
 
-        $regions = $this->getRegionPairs($copyKanbanID);
+        $regions = $this->getRegionPairs($copyKanbanID, 0, $from);
         $order   = 1;
         foreach($regions as $copyID => $copyName)
         {
@@ -83,7 +85,7 @@ class kanbanModel extends model
             $region->createdDate = helper::now();
             $region->order       = $order;
 
-            $this->createRegion($kanban, $region, $copyID, 'kanban', 'withArchived');
+            $this->createRegion($kanban, $region, $copyID, $from, $param);
             $order ++;
         }
     }
@@ -150,14 +152,16 @@ class kanbanModel extends model
                 $copyLanes     = isset($copyLaneGroup[$copyGroupID]) ? $copyLaneGroup[$copyGroupID] : array();
                 $copyColumns   = isset($copyColumnGroup[$copyGroupID]) ? $copyColumnGroup[$copyGroupID] : array();
                 $parentColumns = array();
+                $lanePairs     = array();
                 foreach($copyLanes as $copyLane)
                 {
+                    $laneID = $copyLane->id;
                     unset($copyLane->id);
                     unset($copyLane->actions);
                     $copyLane->region         = $regionID;
                     $copyLane->group          = $newGroupID;
                     $copyLane->lastEditedTime = helper::now();
-                    $this->createLane($kanban->id, $regionID, $copyLane);
+                    $lanePairs[$laneID] = $this->createLane($kanban->id, $regionID, $copyLane);
                     if(dao::isError()) return false;
                 }
 
@@ -182,6 +186,22 @@ class kanbanModel extends model
                     if($copyColumn->parent < 0) $parentColumns[$copyColumnID] = $parentColumnID;
                     if(dao::isError()) return false;
                 }
+
+                if($param == 'updateTaskCell')
+                {
+                    foreach($lanePairs as $oldLaneID => $newLaneID)
+                    {
+                        $cards = $this->dao->select('id,cards')->from(TABLE_KANBANCELL)->where('lane')->eq($oldLaneID)->andWhere('type')->eq('task')->fetchPairs();
+                        $cards = implode(',', $cards);
+                        $cards = preg_replace('/[,]+/', ',',$cards);
+                        $cards = trim($cards, ',');
+
+                        $group      = $this->dao->select('`group`')->from(TABLE_KANBANLANE)->where('id')->eq($newLaneID)->fetch();
+                        $waitColumn = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)->where('type')->eq('wait')->andWhere('`group`')->eq($group->group)->fetch();
+
+                        if(!empty($waitColumn)) $this->addKanbanCell($kanban->id, $newLaneID, $waitColumn->id, 'task', $cards);
+                    }
+                }
             }
         }
         elseif($from == 'kanban')
@@ -195,7 +215,6 @@ class kanbanModel extends model
             $this->createDefaultColumns($kanban, $regionID, $groupID);
             if(dao::isError()) return false;
         }
-
 
         return $regionID;
     }
@@ -219,6 +238,8 @@ class kanbanModel extends model
         $lane->lastEditedTime = helper::now();
         $lane->color          = '#7ec5ff';
         $lane->order          = 1;
+        $lane->groupby        = '';
+        $lane->extra          = '';
 
         $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
         $laneID = $this->dao->lastInsertId();
@@ -247,6 +268,7 @@ class kanbanModel extends model
             $column->order  = $order;
             $column->limit  = -1;
             $column->color  = '#333';
+            $column->type   = '';
 
             $this->createColumn($regionID, $column);
             $order ++;
@@ -461,7 +483,8 @@ class kanbanModel extends model
             ->add('assignedDate', $now)
             ->add('color', '#fff')
             ->trim('name,estimate')
-            ->setDefault('estimate', 0)
+            ->setDefault('estimate,fromID', 0)
+            ->setDefault('fromType', '')
             ->stripTags($this->config->kanban->editor->createcard['id'], $this->config->allowedTags)
             ->join('assignedTo', ',')
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
@@ -481,6 +504,9 @@ class kanbanModel extends model
         }
 
         $card = $this->loadModel('file')->processImgURL($card, $this->config->kanban->editor->createcard['id'], $this->post->uid);
+
+        if(!$card->begin) unset($card->begin);
+        if(!$card->end)   unset($card->end);
 
         $this->dao->insert(TABLE_KANBANCARD)->data($card)->autoCheck()
             ->checkIF($card->estimate != '', 'estimate', 'float')
@@ -908,6 +934,7 @@ class kanbanModel extends model
         $laneGroup    = $this->getLaneGroupByRegions($regionIDList, $browseType);
         $columnGroup  = $this->getRDColumnGroupByRegions($regionIDList, array_keys($laneGroup));
         $cardGroup    = $this->getCardGroupByExecution($executionID, $browseType, $orderBy, $searchValue);
+        $execution    = $this->loadModel('execution')->getByID($executionID);
 
         foreach($regions as $regionID => $regionName)
         {
@@ -924,6 +951,8 @@ class kanbanModel extends model
 
                 foreach($lanes as $key => $lane)
                 {
+                    if(in_array($execution->attribute, array('request', 'design', 'review')) and $lane->type == 'bug') continue 2;
+                    if(in_array($execution->attribute, array('request', 'review')) and $lane->type == 'story') continue 2;
                     $this->refreshCards($lane);
                     $lane->items           = isset($cardGroup[$lane->id]) ? $cardGroup[$lane->id] : array();
                     $lane->defaultCardType = $lane->type;
@@ -1262,6 +1291,12 @@ class kanbanModel extends model
                         }
                         $objectCard->execType = $object->type;
                         $objectCard->progress = isset($executionProgress[$objectID]->progress) ? $executionProgress[$objectID]->progress : 0;
+
+                        $parentExecutions  = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($object->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
+                        $objectCard->title = implode('/', $parentExecutions);
+
+                        $children             = $this->dao->select('count(1) as children')->from(TABLE_EXECUTION)->where('parent')->eq($object->id)->andWhere('type')->in('stage,kanban,sprint')->andWhere('deleted')->eq(0)->fetch('children');
+                        $objectCard->children = !empty($children) ? $children : 0;
                     }
 
                     $objectCard->desc         = strip_tags(htmlspecialchars_decode($object->desc));
@@ -2460,6 +2495,10 @@ class kanbanModel extends model
         {
             $lane->type      = $type;
             $lane->execution = $executionID;
+            $lane->region    = 0;
+            $lane->group     = 0;
+            $lane->groupby   = '';
+            $lane->extra     = '';
             $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
             $laneID = $this->dao->lastInsertId();
@@ -2486,9 +2525,10 @@ class kanbanModel extends model
             foreach($this->lang->kanban->storyColumn as $colType => $name)
             {
                 $data = new stdClass();
-                $data->name  = $name;
-                $data->color = '#333';
-                $data->type  = $colType;
+                $data->name   = $name;
+                $data->color  = '#333';
+                $data->type   = $colType;
+                $data->region = 0;
 
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
                 if(strpos(',testing,tested,', $colType) !== false)       $data->parent = $testColumnID;
@@ -2515,9 +2555,10 @@ class kanbanModel extends model
             foreach($this->lang->kanban->bugColumn as $colType => $name)
             {
                 $data = new stdClass();
-                $data->name  = $name;
-                $data->color = '#333';
-                $data->type  = $colType;
+                $data->name   = $name;
+                $data->color  = '#333';
+                $data->type   = $colType;
+                $data->region = 0;
                 if(strpos(',fixing,fixed,', $colType) !== false)   $data->parent = $resolvingColumnID;
                 if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
                 if(strpos(',resolving,test,', $colType) !== false) $data->parent = -1;
@@ -2543,9 +2584,10 @@ class kanbanModel extends model
             foreach($this->lang->kanban->taskColumn as $colType => $name)
             {
                 $data = new stdClass();
-                $data->name  = $name;
-                $data->color = '#333';
-                $data->type  = $colType;
+                $data->name   = $name;
+                $data->color  = '#333';
+                $data->type   = $colType;
+                $data->region = 0;
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
                 if($colType == 'develop') $data->parent = -1;
 
@@ -3013,33 +3055,6 @@ class kanbanModel extends model
     }
 
     /**
-     * Change the order through the lane move up and down.
-     *
-     * @param  int     $executionID
-     * @param  string  $currentType
-     * @param  string  $targetType
-     * @access public
-     * @return void
-     */
-    public function updateLaneOrder($executionID, $currentType, $targetType)
-    {
-        $orderList = $this->dao->select('id,type,`order`')->from(TABLE_KANBANLANE)
-            ->where('execution')->eq($executionID)
-            ->andWhere('type')->in(array($currentType, $targetType))
-            ->andWhere('groupby')->eq('')
-            ->fetchAll('type');
-
-        $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($orderList[$targetType]->order)
-            ->where('id')->eq($orderList[$currentType]->id)
-            ->andWhere('groupby')->eq('')
-            ->exec();
-
-        $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($orderList[$currentType]->order)
-            ->where('id')->eq($orderList[$targetType]->id)
-            ->andWhere('groupby')->eq('')
-            ->exec();
-    }
-    /**
      * Activate a card.
      *
      * @param  int    $cardID
@@ -3053,7 +3068,7 @@ class kanbanModel extends model
             dao::$errors[] = $this->lang->kanbancard->error->progressIllegal;
             return false;
         }
-        $this->dao->update(TABLE_KANBANCARD)->set('progress')->eq($this->post->progress)->set('status')->eq('doing')->where('id')->eq($cardID)->exec();
+        $this->dao->update(TABLE_KANBANCARD)->set('progress')->eq($this->post->progress ? $this->post->progress : 0)->set('status')->eq('doing')->where('id')->eq($cardID)->exec();
     }
 
     /**
@@ -3091,8 +3106,8 @@ class kanbanModel extends model
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->trim('name')
-            ->setDefault('estimate', $oldCard->estimate)
             ->setIF(!empty($this->post->assignedTo) and $oldCard->assignedTo != $this->post->assignedTo, 'assignedDate', $now)
+            ->setIF(!isset($_POST['estimate']), 'estimate', $oldCard->estimate)
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
             ->stripTags($this->config->kanban->editor->editcard['id'], $this->config->allowedTags)
             ->join('assignedTo', ',')
@@ -3690,7 +3705,7 @@ class kanbanModel extends model
     public function getColumnsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = '0')
     {
         return $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
-            ->where(true)
+            ->where('1=1')
             ->beginIF($objectType)->andWhere($objectType)->eq($objectID)->fi()
             ->beginIF($archived != '')->andWhere('archived')->eq($archived)->fi()
             ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()
@@ -3802,7 +3817,7 @@ class kanbanModel extends model
     public function getCardsByObject($objectType = '', $objectID = 0, $archived = '0', $deleted = '0')
     {
         return $this->dao->select('*')->from(TABLE_KANBANCARD)
-            ->where(true)
+            ->where('1=1')
             ->beginIF($objectType)->andWhere($objectType)->eq($objectID)->fi()
             ->beginIF($archived != '')->andWhere('archived')->eq($archived)->fi()
             ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()

@@ -2,7 +2,7 @@
 /**
  * The control file of kanban module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuchun Li <liyuchun@easycorp.ltd>
  * @package     kanban
@@ -60,11 +60,11 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        unset($this->lang->kanbanspace->featureBar['involved']);
+        unset($this->lang->kanban->featureBar['space']['involved']);
 
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed|nodeleted');
         $this->view->type     = $type;
-        $this->view->typeList = $this->lang->kanbanspace->featureBar;
+        $this->view->typeList = $this->lang->kanban->featureBar['space'];
 
         $this->display();
     }
@@ -232,7 +232,7 @@ class kanban extends control
             $spaceID       = $copyKanban->space;
         }
 
-        unset($this->lang->kanbanspace->featureBar['involved']);
+        unset($this->lang->kanban->featureBar['space']['involved']);
 
         $space      = $this->kanban->getSpaceById($spaceID);
         $spaceUsers = $spaceID == 0 ? ',' : trim($space->owner) . ',' . trim($space->team);
@@ -245,7 +245,7 @@ class kanban extends control
         $this->view->spaceID       = $spaceID;
         $this->view->spacePairs    = $spacePairs;
         $this->view->type          = $type;
-        $this->view->typeList      = $this->lang->kanbanspace->featureBar;
+        $this->view->typeList      = $this->lang->kanban->featureBar['space'];
         $this->view->kanbans       = array('' => '') + $this->kanban->getPairs();
         $this->view->copyKanbanID  = $copyKanbanID;
         $this->view->copyKanban    = $copyKanbanID ? $copyKanban : '';
@@ -484,7 +484,12 @@ class kanban extends control
         $regionPairs = array();
         foreach($regions as $regionID => $region)
         {
-            $regionPairs[$regionID] = $this->lang->kanban->copy . $region . $this->lang->kanban->styleCommon;
+            $max_length = 20;
+            if (mb_strlen($region, 'UTF-8') > $max_length) {
+                $region = mb_substr($region, 0, $max_length, 'UTF-8') . '...';
+            }
+
+            $regionPairs[$regionID] = $this->lang->kanban->copy . '"' . $region . '"' . $this->lang->kanban->styleCommon;
         }
 
         $this->view->regions = array('custom' => $this->lang->kanban->custom) + $regionPairs;
@@ -1374,6 +1379,7 @@ class kanban extends control
 
         $this->loadModel('project');
         $this->loadModel('execution');
+        $this->loadModel('programplan');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1382,7 +1388,7 @@ class kanban extends control
         $this->view->projects            = array($this->lang->kanban->allProjects) + $this->project->getPairsByProgram('', 'all', false, '', '', '', 'multiple');
         $this->view->selectedProjectID   = $selectedProjectID;
         $this->view->lanePairs           = $this->kanban->getLanePairsByGroup($groupID);
-        $this->view->executions2Imported = $this->execution->getStatData($selectedProjectID, 'undone', 0, 0, false, '', 'id_asc', $pager);
+        $this->view->executions2Imported = $this->execution->getStatData($selectedProjectID, 'undone', 0, 0, false, 'hasParentName', 'id_asc', $pager);
         $this->view->users               = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->pager               = $pager;
         $this->view->kanbanID            = $kanbanID;
@@ -1920,30 +1926,6 @@ class kanban extends control
         $rdSearchValue   = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
         $kanbanGroup     = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $taskSearchValue) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy, $rdSearchValue);
         echo json_encode($kanbanGroup);
-    }
-
-    /**
-     * Change the order through the lane move up and down.
-     *
-     * @param  int     $executionID
-     * @param  string  $currentType
-     * @param  string  $targetType
-     * @access public
-     * @return void
-     */
-    public function laneMove($executionID, $currentType, $targetType)
-    {
-        if(empty($targetType)) return false;
-
-        $this->kanban->updateLaneOrder($executionID, $currentType, $targetType);
-
-        if(!dao::isError())
-        {
-            $laneID = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('execution')->eq($executionID)->andWhere('type')->eq($currentType)->fetch('id');
-            $this->loadModel('action')->create('kanbanlane', $laneID, 'Moved');
-        }
-
-        echo js::locate($this->createLink('execution', 'kanban', 'executionID=' . $executionID . '&type=all'), 'parent');
     }
 
     /**

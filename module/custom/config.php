@@ -22,8 +22,8 @@ $config->custom->requiredModules[35] = 'execution';
 $config->custom->requiredModules[40] = 'task';
 $config->custom->requiredModules[45] = 'build';
 
-$config->custom->allFeatures   = array('program', 'productRR', 'productUR', 'productLine', 'projectScrum', 'projectWaterfall', 'projectKanban', 'execution', 'qa', 'devops', 'kanban', 'doc', 'report', 'system', 'admin', 'vision');
-$config->custom->dataFeatures  = array('productUR', 'waterfall');
+$config->custom->allFeatures   = array('program', 'productRR', 'productUR', 'productLine', 'projectScrum', 'projectWaterfall', 'projectKanban', 'projectAgileplus', 'projectWaterfallplus', 'execution', 'qa', 'devops', 'kanban', 'doc', 'report', 'system', 'admin', 'vision');
+$config->custom->dataFeatures  = array('productUR', 'waterfall', 'waterfallplus');
 $config->custom->scrumFeatures = array();
 
 $config->custom->requiredModules[50] = 'bug';
@@ -43,8 +43,8 @@ $config->custom->fieldList['project']['create']      = 'budget,PM,desc';
 $config->custom->fieldList['project']['edit']        = 'budget,PM,desc';
 $config->custom->fieldList['product']['create']      = 'PO,QD,RD,type,desc';
 $config->custom->fieldList['product']['edit']        = 'PO,QD,RD,type,desc,status';
-$config->custom->fieldList['story']['create']        = 'module,plan,source,pri,estimate,keywords,spec';
-$config->custom->fieldList['story']['change']        = 'comment,spec';
+$config->custom->fieldList['story']['create']        = 'module,plan,source,pri,estimate,keywords,spec,verify';
+$config->custom->fieldList['story']['change']        = 'comment,spec,verify';
 $config->custom->fieldList['story']['close']         = 'comment';
 $config->custom->fieldList['story']['review']        = 'reviewedDate,comment';
 $config->custom->fieldList['productplan']            = 'begin,end,desc';
@@ -70,3 +70,8 @@ $config->custom->fieldList['testtask']               = 'owner,pri,desc';
 $config->custom->fieldList['doc']                    = 'keywords,content';
 $config->custom->fieldList['user']['create']         = 'dept,role,email,commiter';
 $config->custom->fieldList['user']['edit']           = 'dept,role,email,commiter,skype,qq,mobile,phone,address,zipcode,dingding,slack,whatsapp,weixin';
+
+$config->custom->notSetMethods = array('required', 'browsestoryconcept', 'product', 'role', 'execution', 'limitTaskDate');
+
+global $lang;
+$config->custom->commonLang = array('$URCOMMON' => $lang->URCommon, '$SRCOMMON' => $lang->SRCommon, '$PRODUCTCOMMON' => $lang->productCommon, '$PROJECTCOMMON' => $lang->projectCommon, '$EXECUTIONCOMMON' => $lang->executionCommon);

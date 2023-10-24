@@ -1,0 +1,32 @@
+---
+title: zt_project
+author: zhouxin
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: type
+  range: project
+- field: model
+  range: scrum{20},waterfall{20},kanban{20},agileplus{20},waterfallplus{20}
+- field: status
+  range: wait{5},doing{5},suspended{5},closed{5}
+- field: openedDate
+  range: "20100101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: closedDate
+  range: "20110101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: begin
+  range: "20100101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
+- field: end
+  range: "20110101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD
+- field: deleted
+  range: 0{100},1{100}
+---

@@ -38,3 +38,5 @@
 .productsBox .input-group-addon > div {display: inline-block !important;}
 .productsBox .required + .text-danger.help-text {position: relative; left: 10px;}
 .productsBox > #productNameLabel {padding-top: 8px;}
+.productsBox div[id^='branch'].chosen-disabled {pointer-events: none;}
+.methodTip icon:before {margin-bottom: 5px;}

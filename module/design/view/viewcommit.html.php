@@ -2,7 +2,7 @@
 /**
  * The viewCommit view of design module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2020 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
@@ -40,9 +40,16 @@
       </tr>
     </thead>
     <tbody>
+    <?php
+    if($_GET['onlybody'] == 'yes')
+    {
+        $_GET['onlybody'] = 'no';
+        $changeOnlyBody = true;
+    }
+    ?>
     <?php foreach($design->commit as $commit):?>
       <tr>
-        <td title="<?php echo $commit->id;?>"><?php echo html::a(helper::createLink('design', 'revision', "repoID=$commit->id"), "#$commit->id", '_blank');?></td>
+        <td title="<?php echo $commit->id;?>"><?php echo html::a(helper::createLink('design', 'revision', "repoID={$commit->id}&projectID={$design->project}"), "#$commit->id", '_blank');?></td>
         <td><?php echo zget($users, $commit->committer, $commit->committer);?></td>
         <td><?php echo substr($commit->time, 0, 11);?></td>
         <td title="<?php echo $commit->comment;?>"><?php echo $commit->comment;?></td>
@@ -51,6 +58,7 @@
         </td>
       </tr>
     <?php endforeach;?>
+    <?php if($changeOnlyBody) $_Get['onlybody'] = 'yes'?>
     </tbody>
   </table>
   <div class='table-footer table-statistic'>

@@ -1,0 +1,32 @@
+#mainContent > .side-col.col-lg {width: 240px;}
+.main-col .btn-toolbar {margin-bottom: 10px;}
+.main-position {position: relative;}
+.child-position {position: absolute; right: 0;}
+.parent-position {padding-right: 160px;}
+.datagrid {overflow: auto;}
+.heading-padding, .datagrid-padding {padding-left: 6px; padding-right: 6px;}
+.datagrid-padding {padding-top: 2px;}
+
+.filter-items > .table-row{display: table!important;}
+.filter-items .filter-item:first-child {padding-left: 0!important;}
+.filterBox {display: flex; margin-bottom: 5px; margin-left: 6px; margin-right: 6px; margin-top: 8px;}
+.filter-items {display: flex; flex: 1; flex-wrap: wrap;}
+.filter-item {padding: 0 16px 5px 0;}
+.filter-item-grow {flex-grow: 1;}
+.queryBtn {display: flex; align-items: center; padding-bottom: 5px; flex-basis: 60px;}
+.filter-item .picker-selections {width: 128px; overflow: hidden; text-overflow: clip; white-space: nowrap;}
+#filterItems .picker-selections {overflow: hidden; text-overflow: clip; white-space: nowrap;}
+
+#filterItems .picker .picker-selections {width: auto !important;}
+.content-border {padding-top: 16px; padding-bottom: 16px; border-bottom: 1px solid #F1F5F9;}
+.flex-between {display:flex; justify-content: space-between;}
+.flex-start   {display:flex; justify-content: flex-start;}
+
+.query-after {padding-right: 8px; padding-top: 1px;}
+.query-pseudo {position: relative; padding-right: 24px; padding-top: 1px;}
+.query-pseudo::after {content: ""; position: absolute; top: 0; right: 0; bottom: 0; width: 1px; background-color: #F1F5F9;}
+
+#filterMargin {padding-top: 8px; padding-bottom: 5px;}
+.pivot-design {padding-left: 24px; padding-right: 12px;}
+.pivot-edit {padding-left: 12px; padding-right: 12px;}
+.pivot-delete {padding-left: 12px; padding-right: 8px;}

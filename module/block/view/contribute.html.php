@@ -32,7 +32,7 @@
         <div class="tile-title"><?php echo $lang->block->createdCases;?></div>
         <div class="tile-amount"><?php echo empty($data['createdCases']) ? 0 : html::a($this->createLink('my', 'contribute', 'mode=testcase&type=openedbyme'), (int)$data['createdCases']);?></div>
       </div>
-      <?php if($this->config->edition == 'max'):?>
+      <?php if($this->config->edition == 'max' or $this->config->edition == 'ipd'):?>
       <?php if(helper::hasFeature('risk')):?>
       <div class="col-xs-4 tile">
         <div class="tile-title"><?php echo $lang->block->createdRisks;?></div>

@@ -1,0 +1,8 @@
+#repoList td.form-actions {padding: 7px;}
+#repoList td.form-actions a {line-height: 18px;}
+
+.main-table .table {cursor: default;}
+.main-table thead>tr {border-bottom: none; height: 45px;}
+.main-table tbody>tr {border-bottom: none; height: 42px;}
+.icon-close {cursor: pointer;}
+a.btn-active-text {line-height: 19px;}

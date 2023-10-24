@@ -1,0 +1,12 @@
+#mainNavbar .main-navbar-left {position: absolute; z-index: 2;}
+#mainNavbar .main-navbar-left #switcher {position: relative; top: 5px; left: 1rem;}
+#mainNavbar .main-navbar-left #switcher > .dropmenu-btn {background: #FFF;}
+#mainNavbar .main-navbar-left #switcher > .dropmenu-btn:before {background: unset;}
+#mainNavbar .main-navbar-left #switcher:after, #mainNavbar .main-navbar-left #switcher:before {position: absolute; display: block; width: 0; height: 0; content: ' '; border-style: solid; border-width: 17px 0 17px 8px; top: -1px;}
+#mainNavbar .main-navbar-left #switcher:before {border-color: transparent transparent transparent rgb(var(--color-primary-500-rgb)); right: -8px;}
+#mainNavbar .main-navbar-left #switcher:after {border-color: transparent transparent transparent #FFF; right: -7px; border-radius: 2px;}
+#mainNavbar .main-navbar-left #switcher .icon-angle-right {display: none;}
+#mainNavbar .main-navbar-left #switcher .caret {color: rgb(var(--color-link-hover-rgb));}
+#mainNavbar .main-navbar-left #switcher .text {color: rgb(var(--color-primary-500-rgb));}
+
+@media (min-width: 1400px) {#mainNavbar .main-navbar-left #switcher {left: 2.5rem;};}

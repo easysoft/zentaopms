@@ -1,10 +1,12 @@
 <?php
+global $config;
+
 $lang->repo->common          = 'Repo';
 $lang->repo->codeRepo        = 'Code Library';
 $lang->repo->browse          = 'View';
 $lang->repo->viewRevision    = 'View Revision';
-$lang->repo->product         = 'Product';
-$lang->repo->projects        = 'Project';
+$lang->repo->product         = $lang->productCommon;
+$lang->repo->projects        = $lang->projectCommon;
 $lang->repo->execution       = $lang->execution->common;
 $lang->repo->create          = 'Create';
 $lang->repo->maintain        = 'Repo List';
@@ -28,13 +30,16 @@ $lang->repo->branch          = 'Branch';
 $lang->repo->tag             = 'Tag';
 $lang->repo->addWebHook      = 'Add Webhook';
 $lang->repo->apiGetRepoByUrl = 'API: Get repo by URL';
-$lang->repo->blameTmpl       = 'Code for line <strong>%line</strong>, <span class="tip-circular"></span> %name commited at %time, %version %comment';
+$lang->repo->blameTmpl       = 'Code for line <strong>%line</strong>: %name commited at %time, %version %comment';
 $lang->repo->notRelated      = 'There is currently no related ZenTao object';
+$lang->repo->source          = 'Criterion';
+$lang->repo->target          = 'Contrast';
+$lang->repo->descPlaceholder = 'One sentence description';
 
 $lang->repo->browseAction    = 'Browse Repo';
 $lang->repo->createAction    = 'Create Repo';
 $lang->repo->editAction      = 'Edit Repo';
-$lang->repo->diffAction      = 'Diff Revision';
+$lang->repo->diffAction      = 'Compare Code';
 $lang->repo->downloadAction  = 'Download File';
 $lang->repo->revisionAction  = 'Revision Detail';
 $lang->repo->blameAction     = 'Blame';
@@ -46,11 +51,18 @@ $lang->repo->httpClone       = 'Clone with HTTP';
 $lang->repo->cloneUrl        = 'Clone URL';
 $lang->repo->linkTask        = 'Link Task';
 $lang->repo->unlinkedTasks   = 'Unlinked Tasks';
+$lang->repo->importAction    = 'Import Repo';
+$lang->repo->import          = 'Import';
+$lang->repo->importName      = 'Name after import';
+$lang->repo->importServer    = 'Please select a server';
+$lang->repo->gitlabList      = 'Gitlab Repo';
+$lang->repo->batchCreate     = 'Batch create repo';
 
 $lang->repo->submit     = 'Submit';
 $lang->repo->cancel     = 'Cancel';
 $lang->repo->addComment = 'Add Comment';
 $lang->repo->addIssue   = 'Add Issue';
+$lang->repo->compare    = 'Compare';
 
 $lang->repo->copy     = 'Click to copy';
 $lang->repo->copied   = 'Copy successful';
@@ -96,13 +108,13 @@ $lang->repo->diff               = 'Diff';
 $lang->repo->diffAB             = 'Diff';
 $lang->repo->diffAll            = 'Diff All';
 $lang->repo->viewDiff           = 'View diff';
-$lang->repo->allLog             = 'All Revisions';
+$lang->repo->allLog             = 'All Commits';
 $lang->repo->location           = 'Location';
 $lang->repo->file               = 'File';
 $lang->repo->action             = 'Action';
 $lang->repo->code               = 'Code';
 $lang->repo->review             = 'Repo Review';
-$lang->repo->acl                = 'Privilege';
+$lang->repo->acl                = 'ACL';
 $lang->repo->group              = 'Group';
 $lang->repo->user               = 'User';
 $lang->repo->info               = 'Version Info';
@@ -115,6 +127,7 @@ $lang->repo->linkBug            = 'Link Bug';
 $lang->repo->linkTask           = 'Link Task';
 $lang->repo->unlink             = 'Unlink';
 $lang->repo->viewBugs           = 'View Bugs';
+$lang->repo->lastSubmitTime     = 'Final submission time';
 
 $lang->repo->title      = 'Title';
 $lang->repo->status     = 'Status';
@@ -155,9 +168,13 @@ $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab']     = 'GitLab';
 $lang->repo->scmList['Gogs']       = 'Gogs';
-$lang->repo->scmList['Gitea']      = 'Gitea';
+if(!$config->inQuickon) $lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'SVN';
+
+$lang->repo->aclList['private'] = 'Private(The product and related project personnel can access it)';
+$lang->repo->aclList['open']    = 'Open(Users with privileges to DevOps can access it)';
+$lang->repo->aclList['custom']  = 'Custom';
 
 $lang->repo->gitlabHost    = 'GitLab Host';
 $lang->repo->gitlabToken   = 'GitLab Token';
@@ -172,6 +189,7 @@ $lang->repo->placeholder->gitlabHost = 'Input url of gitlab';
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = 'Synchronizing. Please wait ...';
 $lang->repo->notice->syncComplete   = 'Synchronized. Now redirecting ...';
+$lang->repo->notice->syncFailed     = 'Synchronized failed.';
 $lang->repo->notice->syncedCount    = 'The number of records synchronized is ';
 $lang->repo->notice->delete         = 'Do you want to delete this repo?';
 $lang->repo->notice->successDelete  = 'Repository is removed.';
@@ -195,7 +213,7 @@ $lang->repo->error->version       = 'Version 1.8+ of https and svn protocol is r
 $lang->repo->error->path          = 'Repo address is the file path, e.g. /home/test.';
 $lang->repo->error->cmd           = 'Client Error!';
 $lang->repo->error->diff          = 'Two versions must be selected.';
-$lang->repo->error->safe          = 'For security reasons, the client version needs to be detected. Please write the version to the file %s. <br /> Execute command: %s';
+$lang->repo->error->safe          = "For security reasons, the client version needs to be detected. Please write the version to the file %s. \n Execute command: %s";
 $lang->repo->error->product       = "Please select {$lang->productCommon}!";
 $lang->repo->error->commentText   = 'Please enter content for review!';
 $lang->repo->error->comment       = 'Please enter content!';
@@ -213,6 +231,11 @@ $lang->repo->error->clientPath    = "The client installation directory cannot ha
 $lang->repo->error->notFound      = "The repository %s’s URL %s does not exist. Please confirm if this repository has been deleted from the local server.";
 $lang->repo->error->noWritable    = '%s is not writable! Please check the privilege, or download will not be done.';
 $lang->repo->error->noCloneAddr   = 'The repository clone address was not found';
+$lang->repo->error->differentVersions = 'The criterion and contrast cannot be the same';
+$lang->repo->error->needTwoVersion    = 'Two branches or tags must be selected.';
+$lang->repo->error->emptyVersion      = 'Version cannot be empty';
+$lang->repo->error->versionError      = 'Wrong version format!';
+$lang->repo->error->projectUnique     = $lang->repo->serviceProject . " exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
 
 $lang->repo->syncTips          = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';
 $lang->repo->encodingsTips     = "The encodings of comments can be comma separated values, e.g. utf-8.";
@@ -233,3 +256,5 @@ $lang->repo->typeList['performance'] = 'Performance';
 $lang->repo->typeList['security']    = 'Security';
 $lang->repo->typeList['redundancy']  = 'Redundancy';
 $lang->repo->typeList['logicError']  = 'Logic Error';
+
+$lang->repo->featureBar['maintain']['all'] = 'All';

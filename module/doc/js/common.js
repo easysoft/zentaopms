@@ -1,14 +1,44 @@
 /**
- * Load modules by libID.
+ * Load modules by objectID and objectType.
  *
- * @param  int    $libID
+ * @param  string   $objectType
+ * @param  int      $objectID
  * @access public
  * @return void
  */
-function loadModules(libID)
+function loadObjectModules(objectType, objectID, docType)
 {
-    var link = createLink('doc', 'ajaxGetModules', 'libID=' + libID);
-    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').chosen()});
+    if(typeof docType == 'undefined') docType = 'doc';
+    if(objectType == 'execution' && objectID == 0)
+    {
+        objectType = 'project';
+        objectID   = $('#project').val();
+    }
+    if(objectID == undefined) objectID = 0;
+
+    var link     = createLink('doc', 'ajaxGetModules', 'objectType=' + objectType + '&objectID=' + objectID + '&type=' + docType);
+    var selected = $('#module').val();
+    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').val(selected).picker(); $('#moduleLabel').remove();});
+}
+
+/**
+ * Load executions.
+ *
+ * @param  int $projectID
+ * @access public
+ * @return void
+ */
+function loadExecutions(projectID)
+{
+    var executionID = $('#execution').val();
+    var link = createLink('project', 'ajaxGetExecutions', "projectID=" + projectID + "&executionID=" + executionID + "&mode=multiple,leaf,noprefix&type=sprint,stage");
+    $('#executionBox').load(link, function()
+    {
+        var $extension = $('#executionBox').find('select');
+        $extension.attr('onchange', "loadObjectModules('execution', this.value)").picker();
+        if($extension.hasClass('disabled')) $('#executionBox').find('.picker').addClass('disabled');
+    });
+    loadObjectModules('project', projectID);
 }
 
 /**
@@ -22,35 +52,25 @@ function loadModules(libID)
 function toggleAcl(acl, type)
 {
     var libID = $('#lib').val();
-    if(acl == 'custom')
+    if($('#lib').length == 0 && $('#module').length > 0)
+    {
+        var moduleID = $('#module').val();
+        if(moduleID.indexOf('_') >= 0) libID = moduleID.substr(0, moduleID.indexOf('_'));
+    }
+    if(acl == 'private')
     {
         $('#whiteListBox').removeClass('hidden');
         $('#groupBox').removeClass('hidden');
-        if(type == 'doc') loadWhitelist(libID);
-    }
-    else if(acl == 'private')
-    {
-        $('#whiteListBox').removeClass('hidden');
-        $('#groupBox').addClass('hidden');
-        if(type == 'doc')
-        {
-            loadWhitelist(libID);
-            $('#whiteListBox').addClass('hidden');
-        }
     }
     else
     {
         $('#whiteListBox').addClass('hidden');
-        if(type == 'doc') loadWhitelist(libID);
+        $('#groupBox').addClass('hidden');
     }
 
     if(type == 'lib')
     {
-        var libType = $('input[name="type"]:checked').val();
-        var notice  = typeof(noticeAcl[libType][acl]) != 'undefined' ? noticeAcl[libType][acl] : '';
-        $('#noticeAcl').html(notice);
-
-        if((libType == 'custom' || libType == 'api' || libType == 'book') && acl == 'private') $('#whiteListBox').addClass('hidden');
+        if(libType == 'book' && acl == 'private') $('#whiteListBox').addClass('hidden');
 
         if(libType == 'project' && typeof(doclibID) != 'undefined')
         {
@@ -63,10 +83,11 @@ function toggleAcl(acl, type)
             })
         }
     }
-    else
+    else if(type == 'doc')
     {
-        var notice  = typeof(noticeAcl[acl]) != 'undefined' ? noticeAcl[acl] : '';
-        $('#noticeAcl').html(notice);
+        $('#whiteListBox').toggleClass('hidden', acl == 'open');
+        $('#groupBox').toggleClass('hidden', acl == 'open');
+        loadWhitelist(libID);
     }
 }
 
@@ -82,9 +103,8 @@ function loadDocModule(libID)
     var link = createLink('doc', 'ajaxGetChild', 'libID=' + libID);
     $.post(link, function(data)
     {
-        $('#module').replaceWith(data);
-        $('#module_chosen').remove();
-        $('#module').chosen();
+        $('#moduleBox').html(data);
+        $('#module').picker();
     });
 
     loadWhitelist(libID);
@@ -279,23 +299,72 @@ $(document).ready(function()
         }).on('click', function(e){e.stopPropagation()});
     }
 
-    $(document).on('mousedown', '.ajaxCollect', function (event) {
+    $(document).on('mousedown', '.ajaxCollect', function (event)
+    {
+        if(event.button != 0) return;
+
         var obj = $(this);
         var url = obj.data('url');
         $.get(url, function(response)
         {
             if(response.status == 'yes')
             {
-                obj.children('i').removeClass().addClass('icon icon-star text-yellow');
+                obj.children('img').attr('src', 'static/svg/star.svg');
                 obj.parent().prev().children('.file-name').children('i').remove('.icon');
                 obj.parent().prev().children('.file-name').prepend('<i class="icon icon-star text-yellow"></i> ');
             }
             else
             {
-                obj.children('i').removeClass().addClass('icon icon-star-empty');
+                obj.children('img').attr('src', 'static/svg/star-empty.svg');
                 obj.parent().prev().children('.file-name').children('i').remove(".icon");
             }
         }, 'json');
         return false;
     });
 });
+
+/**
+ * locateNewLib
+ *
+ * @param  string $type product|project|execution|custom|mine
+ * @param  int    $objectID
+ * @param  int    $libID
+ * @access public
+ * @return void
+ */
+function locateNewLib(type, objectID, libID)
+{
+    var method = 'teamSpace';
+    var params = 'objectID=' + objectID + '&libID=' + libID;
+    var module = 'doc';
+    if(type == 'product' || type == 'project')
+    {
+        method = type + 'Space';
+    }
+    else if(type == 'execution')
+    {
+        module = 'execution';
+        method = 'doc';
+    }
+    else if(type == 'mine')
+    {
+        method = 'mySpace';
+        params = 'type=mine&libID=' + libID;
+    }
+
+    location.href = createLink(module, method, params);
+}
+
+/**
+ * Submit form.
+ *
+ * @param  object $object
+ * @access public
+ * @return void
+ */
+function submit(object)
+{
+    $(object).attr('type', 'submit');
+    $('#dataform').submit();
+    setTimeout(function(){$(object).attr('type', 'button').removeAttr('disabled')}, 2000);
+}

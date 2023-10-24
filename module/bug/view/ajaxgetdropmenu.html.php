@@ -21,12 +21,12 @@ $productsHtml   = (count($products) > 1 and strpos(',zeroCase,browseUnits,groupC
 
 foreach($products as $product)
 {
-    $selected     = $product->id == $productID ? 'selected' : '';
+    $selected     = $product->id == $productID ? 'selected' : 'text-primary';
     $productName  = ($product->program and $this->config->systemMode == 'ALM') ? zget($programs, $product->program, '') . '/' : '';
     $productName .= ($this->config->systemMode == 'ALM' and $product->line) ? zget($lines, $product->line, '') . '/' . $product->name : $product->name;
     $objectID = ($product->type != 'platform' && $module == 'branch' && $method == 'manage') ? $productID : $product->id;
     $linkHtml = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
-    $productsHtml .= html::a($linkHtml, $productName, '', "class='text-primary $selected' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='{$this->app->tab}'");
+    $productsHtml .= html::a($linkHtml, $productName, '', "class='$selected' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='{$this->app->tab}'");
 }
 ?>
 <div class="table-row">

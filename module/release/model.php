@@ -2,7 +2,7 @@
 /**
  * The model file of release module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
@@ -249,7 +249,11 @@ class releaseModel extends model
                 {
                     $build->stories = trim($build->stories, ',');
                     $build->bugs    = trim($build->bugs, ',');
-                    if($build->stories) $release->stories .= ',' . $build->stories;
+                    if($build->stories)
+                    {
+                        $release->stories .= ',' . $build->stories;
+                        $this->loadModel('story')->updateStoryReleasedDate($build->stories, $release->date);
+                    }
                     if($build->bugs)    $release->bugs    .= ',' . $build->bugs;
                 }
             }
@@ -325,7 +329,8 @@ class releaseModel extends model
         $oldRelease = $this->getById($releaseID);
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
-            ->setDefault('build',  '')
+            ->setDefault('build', '')
+            ->setIF($this->post->build == false, 'build', 0)
             ->setDefault('mailto', '')
             ->setDefault('deleteFiles', array())
             ->join('build', ',')
@@ -399,9 +404,9 @@ class releaseModel extends model
             }
             elseif($notify == 'SC' and !empty($release->build))
             {
-                $stories  = join(',', $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll());
-                $stories .= $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($release->id)->fetch('stories');
-                $stories  = trim($stories, ',');
+                $stories  = join(',', $this->dao->select('id,stories')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchPairs('id', 'stories'));
+                $stories .= ',' . $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($release->id)->fetch('stories');
+                $stories  = trim(str_replace(',,', ',', $stories), ',');
 
                 if(empty($stories)) continue;
 
@@ -459,6 +464,7 @@ class releaseModel extends model
             if(strpos(",{$release->stories},", ",{$storyID},") !== false) unset($_POST['stories'][$i]);
         }
 
+        $this->loadModel('story')->updateStoryReleasedDate($release->stories, $release->date);
         $release->stories .= ',' . join(',', $this->post->stories);
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
 
@@ -493,6 +499,8 @@ class releaseModel extends model
         $release->stories = trim(str_replace(",$storyID,", ',', ",$release->stories,"), ',');
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromrelease', '', $releaseID);
+
+        $this->loadModel('story')->setStage($storyID);
     }
 
     /**
@@ -514,7 +522,12 @@ class releaseModel extends model
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
 
         $this->loadModel('action');
-        foreach($this->post->storyIdList as $unlinkStoryID) $this->action->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
+        $this->loadModel('story');
+        foreach($this->post->storyIdList as $unlinkStoryID)
+        {
+            $this->action->create('story', $unlinkStoryID, 'unlinkedfromrelease', '', $releaseID);
+            $this->story->setStage($unlinkStoryID);
+        }
     }
 
     /**

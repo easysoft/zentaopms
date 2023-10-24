@@ -2,7 +2,7 @@
 /**
  * The preference view of user module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     user
@@ -19,7 +19,7 @@
   <div class='main-header'>
     <h2><i class='icon-key'></i> <?php echo $lang->my->preference;?></h2>
   </div>
-  <form method='post' target='hiddenwin'>
+  <form method='post' target='hiddenwin' class='no-stash'>
     <table align='center' class='table table-form w-320px'>
       <tr>
         <th class='w-140px'><?php echo $lang->my->storyConcept;?></th>

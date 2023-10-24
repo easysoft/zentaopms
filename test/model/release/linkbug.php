@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/release.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -28,4 +27,3 @@ r($release->linkBugTest($releaseID[0], $type[1], $bugs)) && p('id,bugs,leftBugs'
 r($release->linkBugTest($releaseID[1], $type[0], $bugs)) && p('id,bugs,leftBugs') && e('6,,311,312'); //停止维护任务关联解决Bug
 r($release->linkBugTest($releaseID[1], $type[1], $bugs)) && p('id,bugs,leftBugs') && e('6,,311,312,,311,312'); //停止维护任务关联遗留Bug
 
-$db->restoreDB();

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/setting.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -29,4 +28,3 @@ r($setting->updateVersionTest($versionList[2])) && p('1:value') && e('max2.0'); 
 r($setting->updateVersionTest($versionList[3])) && p('1:value') && e('biz6.5'); //测试version值为biz6.5，更新数据
 r($setting->updateVersionTest($versionList[4])) && p('1:value') && e('0');      //测试version值为0，更新数据
 
-$db->restoreDB();

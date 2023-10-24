@@ -2,7 +2,7 @@
 /**
  * The install module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license  ZPL (http://zpl.pub/page/zplv12.html)
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  install
@@ -24,20 +24,21 @@ $lang->install->keepInstalling   = 'Tiếp tục cài đặt với phiên bản 
 $lang->install->seeLatestRelease = 'Xem the latest version';
 $lang->install->welcome          = 'Thanks for choosing ZenTao!';
 $lang->install->license          = 'ZenTao is under Z PUBLIC LICENSE(ZPL) 1.2';
+$lang->install->devopsDesc       = 'The underlying foundation of the DevOps platform is built upon cloud-native technologies such as Docker and Kubernetes (K8s). It incorporates an integrated application marketplace, allowing seamless installation of essential tools like code repositories, pipelines, and artifact libraries.';
 $lang->install->desc = <<<EOT
 ZenTao ALM is an open source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>Z Public License</a>. It integrates with Product Management, Project Management, Test Management, Document Management, CI Management, etc. ZenTao is a perfect choice for managing software development projects.
 
-ZenTao ALM is built on PHP + MySQL + zentaoPHP which is an independent framework developed by EasyCorp. Third-party developers/organizations can develop extensions or customize ZenTao accordingly.
+ZenTao ALM is built on PHP + MySQL + zentaoPHP which is an independent framework developed by ZenTao Software. Third-party developers/organizations can develop extensions or customize ZenTao accordingly.
 EOT;
 $lang->install->links = <<<EOT
-ZenTao ALM is developed by <strong><a href='https://en.easysoft.ltd' target='_blank' class='text-danger'>EasyCorp</a></strong>.
+ZenTao ALM is developed by <strong><a href='https://en.easysoft.ltd' target='_blank' class='text-danger'>ZenTao Software</a></strong>.
 Official Website: <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
 Technical Support: <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
-LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>EasyCorp</a>
-Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>EasyCorp</a>
+LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>ZenTao Software</a>
+Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>ZenTao Software</a>
 Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 
-You are installing ZenTao <strong class='text-danger'>%s</strong>.
+You are installing <strong class='text-danger'>ZenTao %s</strong>.
 EOT;
 
 $lang->install->newReleased = "<strong class='text-danger'>Thông báo</strong>: Official Website has the latest version<strong class='text-danger'>%s</strong>, released on %s.";
@@ -91,6 +92,7 @@ $lang->install->chmodLinux   = ' "%s" permison has to be changed.<br /> Run <cod
 
 $lang->install->timezone       = 'Thiết lập Timezone';
 $lang->install->defaultLang    = 'Ngôn ngữ mặc định';
+$lang->install->dbDriver       = 'Database Driver';
 $lang->install->dbHost         = 'Database Host';
 $lang->install->dbHostNote     = 'If 127.0.0.1 không là accessible, try localhost.';
 $lang->install->dbPort         = 'Host Port';
@@ -102,6 +104,10 @@ $lang->install->dbPrefix       = 'Tiền tố bảng';
 $lang->install->clearDB        = 'Clean up existing data';
 $lang->install->importDemoData = 'Nhập Demo dữ liệu';
 $lang->install->working        = 'Operation chế độ';
+
+$lang->install->dbDriverList = array();
+$lang->install->dbDriverList['mysql'] = 'MySQL';
+$lang->install->dbDriverList['dm']    = 'DM8';
 
 $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
@@ -170,6 +176,11 @@ $lang->install->cronList['moduleName=ci&methodName=initQueue']          = 'Tạo
 $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = 'Đồng bộ Jenkins tình trạng';
 $lang->install->cronList['moduleName=ci&methodName=exec']               = 'Xử lý Jenkins';
 
+$lang->install->groupList['IPDPRODUCTPLAN']['name'] = 'PRODUCT PLANING';
+$lang->install->groupList['IPDDEMAND']['name']      = 'DEMAND ANALYSIS';
+$lang->install->groupList['IPDPMT']['name']         = 'IPDPMT';
+$lang->install->groupList['IPDADMIN']['name']       = 'IPDADMIN';
+
 $lang->install->success  = "Đã được cài đặt!";
 $lang->install->login    = 'Đăng nhập ZenTao';
 $lang->install->register = 'Đăng ký cộng đồng ZenTao';
@@ -182,7 +193,7 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'ydisk', 'meshiot');
 
-$lang->install->promotion = "Sản phẩm từ EasyCorp:";
+$lang->install->promotion = "Sản phẩm từ ZenTao Software:";
 
 $lang->install->chanzhi  = new stdclass();
 $lang->install->chanzhi->name = 'ZSITE';
@@ -248,3 +259,12 @@ $lang->install->meshiot->desc = <<<EOD
   <li>Battery Khả dụng: no changes required to any equipment on your site</li>
 </ul>
 EOD;
+
+$lang->install->solution = new stdclass();
+$lang->install->solution->skip        = 'Skip';
+$lang->install->solution->skipInstall = 'Skip';
+$lang->install->solution->log         = 'Log';
+$lang->install->solution->title       = 'DevOps platform application settings';
+$lang->install->solution->progress    = 'Installing of DevOps platform';
+$lang->install->solution->desc        = 'Welcome to the DevOps platform. We will install the following applications simultaneously when you install the platform to help you get started quickly!';
+$lang->install->solution->overMemory  = 'Insufficient memory prevents simultaneous installation. It is recommended to install applications manually after the platform is started.';

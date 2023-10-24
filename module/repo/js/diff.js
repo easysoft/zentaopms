@@ -48,20 +48,23 @@ function getDiffs(fileName)
         {
             if(!diff.contents || typeof diff.contents[0].lines != 'object') return result;
 
-            var lines = diff.contents[0].lines;
-            $.each(lines, function(l, code)
+            $.each(diff.contents, function(k, content)
             {
-                if(code.type == 'all' || code.type == 'new')
+                var lines = content.lines;
+                $.each(lines, function(l, code)
                 {
-                    result.code.new += htmlspecialchars_decode(code.line.substring(2)) + "\n";
-                    result.line.new.push(parseInt(code.newlc));
-                }
+                    if(code.type == 'all' || code.type == 'new')
+                    {
+                        result.code.new += htmlspecialchars_decode(code.line.substring(1)) + "\n";
+                        result.line.new.push(parseInt(code.newlc));
+                    }
 
-                if(code.type == 'all' || code.type == 'old')
-                {
-                    result.code.old += htmlspecialchars_decode(code.line.substring(2)) + "\n";
-                    result.line.old.push(parseInt(code.oldlc));
-                }
+                    if(code.type == 'all' || code.type == 'old')
+                    {
+                        result.code.old += htmlspecialchars_decode(code.line.substring(1)) + "\n";
+                        result.line.old.push(parseInt(code.oldlc));
+                    }
+                })
             })
             return result;
         }
@@ -81,7 +84,7 @@ function getDiffs(fileName)
 function createTab(filename, filepath)
 {
     $('[data-path="' + decodeURIComponent(filepath) + '"]').closest('li').addClass('selected');
-    var tabID = Base64.encode(filepath).replaceAll('=', '-');
+    var tabID = Base64.encode(filepath).replace(/=/g, '-');
     return {
         id:          tabID,
         url:         createLink('repo', 'ajaxGetDiffEditorContent', urlParams.replace('%s', Base64.encode(encodeURIComponent(filepath)))),
@@ -138,7 +141,7 @@ $(document).ready(function()
 
     /* Remove file path for opened files. */
     $('#fileTabs').on('onClose', function(event, tab) {
-        var filepath = decodeURIComponent(Base64.decode(tab.id.replaceAll('-', '=')));
+        var filepath = decodeURIComponent(Base64.decode(tab.id.replace(/-/g, '=')));
         var index    = openedFiles.indexOf(filepath);
         if(index > -1)
         {
@@ -151,7 +154,7 @@ $(document).ready(function()
 
     /* Append file path into the title. */
     $('#fileTabs').on('onLoad', function(event, tab) {
-        var filepath = decodeURIComponent(Base64.decode(tab.id.replaceAll('-', '=')));
+        var filepath = decodeURIComponent(Base64.decode(tab.id.replace(/-/g, '=')));
         $('#tab-nav-item-' + tab.id).attr('title', filepath);
         document.getElementById('tab-iframe-' + tab.id).contentWindow.updateEditorInline(diffAppose);
 
@@ -159,7 +162,7 @@ $(document).ready(function()
     });
 
     $('#fileTabs').on('onOpen', function(event, tab) {
-        var filepath = decodeURIComponent(Base64.decode(tab.id.replaceAll('-', '=')));
+        var filepath = decodeURIComponent(Base64.decode(tab.id.replace(/-/g, '=')));
         var index    = openedFiles.indexOf(filepath);
         if(index > -1) document.getElementById('tab-iframe-' + tab.id).contentWindow.updateEditorInline(diffAppose);
     });

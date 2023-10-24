@@ -1,0 +1,26 @@
+---
+title: zt_bug
+author: qixinzhi
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: product
+  range: 1-10{8}
+- field: openedDate
+  range: "20100101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: resolvedDate
+  range: "20110101 000000-20210101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: closedDate
+  range: "20120101 000000-20220101 230000:10D"
+  type: timestamp
+  format: YYYY-MM-DD hh:mm:ss
+- field: severity
+  range: 1{10},2{10},3{5},4{3}
+- field: deleted
+  range: 0{4},1{4}
+...

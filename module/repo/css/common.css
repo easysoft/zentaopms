@@ -237,7 +237,7 @@ h3 {font-size: 16px;}
 #fileTabs > .tabs-navbar > .nav-tabs {position: absolute; display: flex; padding-left: 25px;}
 .repoCode .content, .repoCode .btn:not(.btn-primary) {background-color: #efefef; border: none;}
 .repoCode .btn.btn-right, .repoCode .btn.btn-left {margin-right: 0; padding: 6px 6px;}
-#related .btn-right, #related .btn-left {padding-top: 9px;}
+#related .btn-right, #related .btn-left {padding-top: 6px;}
 #log .action-btn {margin-top: -7px;}
 
 #relationTabs .nav-tabs >li > a .tab-nav-close {display: none;}
@@ -251,3 +251,4 @@ h3 {font-size: 16px;}
 li.selected .doc-title .icon, li.selected .doc-title a {color: #438EFF !important;}
 
 .btn-left, .btn-right {display: none;}
+.m-repo-ajaxgetrelationinfo{padding-bottom: 0;}

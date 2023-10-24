@@ -370,14 +370,14 @@ function renderKanbanItem(item, $item)
         $item.data('card', item);
 
         $info.children('.estimate').text(item.estimate + kanbancardLang.lblHour);
-        if(item.estimate == 0) $info.children('.estimate').hide();
+        item.estimate > 0 ? $info.children('.estimate').show() : $info.children('.estimate').hide();
 
         $info.children('.pri')
             .attr('class', 'pri' + (item.pri ? ' label-pri label-pri-' + item.pri : ''))
             .text(item.pri);
 
         var $time = $info.children('.time');
-        if(item.end == '0000-00-00' && item.begin == '0000-00-00')
+        if((item.end == '0000-00-00' && item.begin == '0000-00-00') || (item.end == '' && item.begin == ''))
         {
             $time.hide();
         }
@@ -480,19 +480,20 @@ function renderExecutionItem(item, $item)
 
     /* Print execution name. */
     var $title = $titleBox.children('.title');
-    var name   = item.title ? item.title : item.name;
+    var name   = item.name ? item.name : item.title;
+    var title  = item.title ? item.title : name;
     if(!$title.length)
     {
         var icon = mode == 'ALM' ? 'run' : 'project';
         var viewMethod = item.execType == 'kanban' ? 'kanban' : 'view';
-        if(privs.includes('viewExecution') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-' + icon + '"></i>' + name + '</a>').appendTo($titleBox).attr('href', createLink('execution', viewMethod, 'executionID=' + item.fromID));
-        if(!privs.includes('viewExecution') || item.deleted == '1') $title = $('<div class="title"><i class="icon icon-' + icon + '"></i>' + name + '</div>').appendTo($titleBox);
+        if(privs.includes('viewExecution') && item.deleted == '0' && item.children == '0') $title = $('<a class="title"><i class="icon icon-' + icon + '"></i>' + name + '</a>').appendTo($titleBox).attr('href', createLink('execution', viewMethod, 'executionID=' + item.fromID));
+        if(!privs.includes('viewExecution') || item.deleted == '1' || item.children != '0') $title = $('<div class="title"><i class="icon icon-' + icon + '"></i>' + name + '</div>').appendTo($titleBox);
     }
     if(!$title.children('i').length)
     {
         $title.append('<i class="icon icon-run"></i>' + item.title);
     }
-    $title.attr('title', name);
+    $title.attr('title', title);
 
     if(item.delay)
     {
@@ -1444,9 +1445,6 @@ function handleSortCards(event)
     var fromID    = String(event.element.data('id'));
     var toID      = String(event.target.data('id'));
 
-    orders.splice(orders.indexOf(fromID), 1);
-    orders.splice(orders.indexOf(toID) + (event.insert === 'before' ?  0 : 1), 0, fromID);
-
     var url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
     $.getJSON(url, function(response)
     {
@@ -1478,6 +1476,7 @@ function initKanban($kanban)
     var id         = $kanban.data('id');
     var region     = regions[id];
     var cardHeight = kanbanInfo.performable == 1 ? 87 : 60;
+    var droppable  = priv['canMoveCard'] ? {target: findDropColumns, finish: handleFinishDrop} : false;
 
     $kanban.kanban(
     {
@@ -1502,11 +1501,7 @@ function initKanban($kanban)
         virtualize:            true,
         virtualRenderOptions:  {container: $(window).add($('#kanbanContainer'))},
         virtualCardList:       true,
-        droppable:
-        {
-            target:       findDropColumns,
-            finish:       handleFinishDrop
-        },
+        droppable:             droppable,
     });
 
     $kanban.on('click', '.action-cancel', hideKanbanAction);
@@ -1604,7 +1599,7 @@ $(function()
         initRegionTabs();
     });
 
-    resetLaneHeight();
+    if(displayCards == 0) resetLaneHeight();
 
     /* Hide contextmenu when page scroll */
     $(window).on('scroll', function()

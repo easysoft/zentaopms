@@ -2,7 +2,7 @@
 /**
  * The story module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
@@ -33,6 +33,7 @@ $lang->story->edit               = "Editer Story";
 $lang->story->editDraft          = "Modifier le projet";
 $lang->story->batchEdit          = "Editer par Lot";
 $lang->story->subdivide          = 'Décomposer';
+$lang->story->subdivideSR        = $lang->SRCommon . 'Dé composer';
 $lang->story->link               = 'Link';
 $lang->story->unlink             = 'Unlink';
 $lang->story->track              = 'Track';
@@ -102,21 +103,22 @@ $lang->story->float            = "『 %s 』doit avoir des nombres positifs ou d
 $lang->story->saveDraftSuccess = 'Save as draft succeeded.';
 
 $lang->story->changeSyncTip       = "The modification of this story will be synchronized to the following twin requirements";
-$lang->story->syncTip             = "The twin story are synchronized except for product, branch, module, plan, and stage. After the twin relationship is dissolved, they are no longer synchronized.";
+$lang->story->syncTip             = "The twin story are synchronized except for {$lang->productCommon}, branch, module, plan, and stage. After the twin relationship is dissolved, they are no longer synchronized.";
 $lang->story->relievedTip         = "The twin relationship cannot be restored after dissolving, the content of the demand is no longer synchronized, whether to dissolving?";
 $lang->story->assignSyncTip       = "Both twin stories modify the assignor synchronously";
 $lang->story->closeSyncTip        = "Twin stories are closed synchronously";
 $lang->story->activateSyncTip     = "Twin stories are activated synchronously";
-$lang->story->relievedTwinsTip    = "After product adjustment, the twin relationship of this story will be automatically removed, and the story will no longer be synchronized. Do you want to save?";
+$lang->story->relievedTwinsTip    = "After {$lang->productCommon} adjustment, the twin relationship of this story will be automatically removed, and the story will no longer be synchronized. Do you want to save?";
 $lang->story->batchEditTip        = "{$lang->SRCommon} %sis twin stories, and this operation has been filtered.";
 
 $lang->story->id               = 'ID';
 $lang->story->parent           = 'Parent';
 $lang->story->product          = $lang->productCommon;
-$lang->story->project          = 'Project';
+$lang->story->project          = $lang->projectCommon;
 $lang->story->branch           = "Branche/Plateforme";
 $lang->story->module           = 'Module';
 $lang->story->moduleAB         = 'Module';
+$lang->story->roadmap          = 'Roadmap';
 $lang->story->source           = 'De';
 $lang->story->sourceNote       = 'Note';
 $lang->story->fromBug          = 'Depuis Bug';
@@ -156,7 +158,7 @@ $lang->story->rejectedReason   = 'Raison du Rejet';
 $lang->story->changedBy        = 'ChangedBy';
 $lang->story->changedDate      = 'ChangedDate';
 $lang->story->reviewedBy       = 'Validée par';
-$lang->story->reviewer         = $lang->story->reviewedBy;
+$lang->story->reviewer         = 'Reviewers';
 $lang->story->reviewers        = 'Reviewers';
 $lang->story->reviewedDate     = 'Date Validation';
 $lang->story->activatedDate    = 'Activated Date';
@@ -199,7 +201,7 @@ $lang->story->linkMR           = 'Related MRs';
 $lang->story->linkCommit       = 'Related Commits';
 
 $lang->story->ditto       = 'Idem';
-$lang->story->dittoNotice = "La story n'est pas associée au même product que la précédente !";
+$lang->story->dittoNotice = "This story is not linked to the same {$lang->productCommon} as the last one is!";
 
 $lang->story->needNotReviewList[0] = 'Need Review';
 $lang->story->needNotReviewList[1] = 'Need Not Review';
@@ -214,6 +216,13 @@ $lang->story->statusList['active']    = 'Active';
 $lang->story->statusList['closed']    = 'Fermée';
 $lang->story->statusList['changing']  = 'Changée';
 
+if($config->systemMode == 'PLM')
+{
+    $lang->story->statusList['launched']   = 'Launched';
+    $lang->story->statusList['developing'] = 'Developing';
+}
+
+$lang->story->stageList = array();
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = 'En Attente';
 $lang->story->stageList['planned']    = 'Plannifée';
@@ -315,7 +324,7 @@ $lang->story->noStory              = "Aucune story pour l'instant. ";
 $lang->story->noRequirement        = 'No Requirements';
 $lang->story->ignoreChangeStage    = 'The status of %s is Draft or Closed. This operation has been filtered.';
 $lang->story->cannotDeleteParent   = "Impossible de supprimer {$lang->SRCommon} parent";
-$lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->SRCommon}.";
+$lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved to the selected {$lang->productCommon} when editing the linked {$lang->productCommon} of Parent {$lang->SRCommon}.";
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
 $lang->story->estimateMustBeNumber = 'Estimate value must be number.';
 $lang->story->estimateMustBePlus   = 'Estimated value cannot be negative';
@@ -348,8 +357,8 @@ $lang->story->action->unlinkedfromplan      = array('main' => '$date, déplanifi
 $lang->story->action->linked2execution      = array('main' => '$date, associée au ' . $lang->executionCommon . ' <strong>$extra</strong> par <strong>$actor</strong>.');
 $lang->story->action->unlinkedfromexecution = array('main' => '$date, dissociée du ' . $lang->executionCommon . ' <strong>$extra</strong> par <strong>$actor</strong>.');
 $lang->story->action->linked2kanban         = array('main' => '$date, linked by <strong>$actor</strong> to Kanban <strong>$extra</strong>.');
-$lang->story->action->linked2project        = array('main' => '$date, associée au project <strong>$extra</strong> par <strong>$actor</strong>.');
-$lang->story->action->unlinkedfromproject   = array('main' => '$date, dissociée d uproject <strong>$extra</strong> par <strong>$actor</strong>.');
+$lang->story->action->linked2project        = array('main' => '$date, linked by <strong>$actor</strong> ' . "to {$lang->projectCommon}" . ' <strong>$extra</strong>.');
+$lang->story->action->unlinkedfromproject   = array('main' => '$date, unlinked by <strong>$actor</strong> ' . "from {$lang->projectCommon}" . ' <strong>$extra</strong>.');
 $lang->story->action->linked2build          = array('main' => '$date, intégrée par <strong>$actor</strong> au Build <strong>$extra</strong>');
 $lang->story->action->unlinkedfrombuild     = array('main' => '$date, retirée par <strong>$actor</strong> du Build <strong>$extra</strong>.');
 $lang->story->action->linked2release        = array('main' => '$date, ajoutée par <strong>$actor</strong> à la Release <strong>$extra</strong>');
@@ -362,6 +371,9 @@ $lang->story->action->unlinkrelatedstory    = array('main' => '$date, dissociée
 $lang->story->action->unlinkchildstory      = array('main' => '$date, dissociée par <strong>$actor</strong> de la sous-Story <strong>$extra</strong>.');
 $lang->story->action->recalledchange        = array('main' => '$date, Undo changes by <strong>\$actor</strong>.');
 $lang->story->action->synctwins             = array('main' => "\$date, the system judges that this story is adjusted synchronously due to the \$operate of twin story <strong>\$extra</strong>.", 'operate' => 'operateList');
+$lang->story->action->linked2roadmap        = array('main' => '$date, linked by <strong>$actor</strong> to Roadmap <strong>$extra</strong>');
+$lang->story->action->unlinkedfromroadmap   = array('main' => '$date, unlinked by <strong>$actor</strong> from Roadmap <strong>$extra</strong>.');
+$lang->story->action->changedbycharter      = array('main' => '$date, launched by <strong>$actor</strong> for charter <strong>$extra</strong>, Synchronously adjust the story status to launched.');
 
 /* Statistical statement. */
 $lang->story->report = new stdclass();
@@ -481,7 +493,7 @@ $lang->story->recallTip['actived'] = "Aucun processus de révision n'a été lan
 $lang->story->subDivideTip = array();
 $lang->story->subDivideTip['subStory']   = 'Les sous-stories ne peuvent pas être décomposées.';
 $lang->story->subDivideTip['notWait']    = "L'exigence %s ne peut pas être subdivisée.";
-$lang->story->subDivideTip['notActive']  = "Cette Story n'est pas active et ne peut être subdivisée.";
+$lang->story->subDivideTip['notActive']  = "The %s is not active and cannot be subdivided.";
 $lang->story->subDivideTip['twinsSplit'] = 'The Twins Story cannot be subdivided.';
 
 $lang->story->featureBar['browse']['all']       = $lang->all;

@@ -13,7 +13,12 @@
     </div>
   </div>
   <div class="btn-toolbar pull-left">
-    <?php echo html::a(inlink('testcase', "executionID=$executionID&productID=$productID&branchID=$branchID&type=$type&moduleID=$moduleID&orderBy=$orderBy"), "<span class='text'>{$lang->execution->featureBar['all']['all']}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php
+     foreach($this->lang->execution->featureBar['testcase'] as $label)
+     {
+         echo html::a(inlink('testcase', "executionID=$executionID&productID=$productID&branchID=$branchID&type=$type&moduleID=$moduleID&orderBy=$orderBy"), "<span class='text'>{$label}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>", '', "class='btn btn-link btn-active-text'");
+     }
+    ?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('execution', $execution)) echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&moduleID=0&from=execution&param=$execution->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary' data-app='{$this->app->tab}'");?>
@@ -72,7 +77,7 @@
             </td>
             <?php $params = "testcaseID=$caseID&version=$case->version";?>
             <?php if($type == 'assigntome') $params .= "&from=testtask&taskID=$case->task";?>
-            <?php $autoIcon = $case->auto == 'auto' ? " <i class='icon icon-draft-edit'></i>" : '';?>
+            <?php $autoIcon = $case->auto == 'auto' ? " <i class='icon icon-ztf'></i>" : '';?>
             <td class='c-title text-left' title="<?php echo $case->title?>"><?php echo html::a($this->createLink('testcase', 'view', $params, '', '', $case->project), $case->title . $autoIcon, null, "style='color: $case->color' data-app='{$this->app->tab}'");?></td>
             <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
             <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>

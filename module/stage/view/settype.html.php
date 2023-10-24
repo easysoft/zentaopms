@@ -2,7 +2,7 @@
 /**
  * The setType view of stage module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     stage
@@ -29,16 +29,6 @@ EOT;
 ?>
 <?php js::set('itemRow', $itemRow)?>
 <div id='mainContent' class='main-row'>
-  <div class='side-col'>
-    <div class='panel'>
-      <div class='panel-body'>
-        <div class="list-group">
-          <?php echo html::a(inlink('setType'), $lang->stage->setType, '', "class='selected'");?>
-          <?php echo html::a(inlink('browse'), $lang->stage->browse);?>
-        </div>
-      </div>
-    </div>
-  </div>
   <div class='main-col main-content'>
     <form class="load-indicator main-form form-ajax" method='post'>
       <table class='table table-form active-disabled table-condensed mw-600px'>

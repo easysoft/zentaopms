@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/project.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -57,4 +56,3 @@ r($project->create($emptyEndProject))   && p('message[end]:0')            && e('
 r($project->create($beginGtEndProject)) && p('message[end]:0')            && e('『计划完成』应当大于『2022-02-07』。'); // 项目的计划完成时间大于计划开始时间
 r($project->create($emptyBeginProject)) && p('message[begin]:0')          && e('『计划开始』不能为空。');               // 项目的开始时间为空
 
-$db->restoreDB();

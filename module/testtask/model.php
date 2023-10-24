@@ -2,7 +2,7 @@
 /**
  * The model file of test task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
@@ -76,17 +76,15 @@ class testtaskModel extends model
         $products = $scopeAndStatus[0] == 'all' ? $this->app->user->view->products : array();
         $branch   = $scopeAndStatus[0] == 'all' ? 'all' : $branch;
 
-        $executionNameField = "IF(t5.id IS NOT NULL && t5.multiple = '1', CONCAT(t5.name, ' / ', t3.name), IF(t5.id IS NOT NULL, t5.name, t3.name))";
-        return $this->dao->select("t1.*, t5.multiple, IF(t2.shadow = 1, t5.name, t2.name) AS productName, $executionNameField AS executionName, t4.name AS buildName, t4.branch AS branch")
+        $tasks = $this->dao->select("t1.*, t5.multiple, IF(t2.shadow = 1, t5.name, t2.name) AS productName, t3.name as executionName, t4.name AS buildName, t4.branch AS branch, t5.name AS projectName")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t3.project = t5.id')
-
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.auto')->ne('unit')
-            ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in("0,{$this->app->user->view->sprints}")->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in("0,{$this->app->user->view->sprints}")->fi()
             ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
             ->beginIF(strtolower($scopeAndStatus[1]) == 'totalstatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
@@ -96,6 +94,7 @@ class testtaskModel extends model
             ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
             ->beginIF($branch == BRANCH_MAIN)
             ->orWhere('(t1.build')->eq('trunk')
+            ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.product')->eq((int)$productID)
             ->markRight(1)
             ->fi()
@@ -106,6 +105,22 @@ class testtaskModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+        foreach($tasks as $taskID => $task)
+        {
+            if($task->multiple)
+            {
+                if($task->projectName and $task->executionName)
+                {
+                    $tasks[$taskID]->executionName = $task->projectName . '/' . $task->executionName;
+                }
+                elseif(!$task->executionName)
+                {
+                    $tasks[$taskID]->executionName = $task->projectName;
+                }
+            }
+        }
+
+        return $tasks;
     }
 
     /**
@@ -374,7 +389,7 @@ class testtaskModel extends model
     public function getAllLinkableCases($task, $query, $linkedCases, $pager)
     {
         return $this->dao->select('*')->from(TABLE_CASE)->where($query)
-                ->andWhere('id')->notIN($linkedCases)
+                ->beginIF(!empty($linkedCases))->andWhere('id')->notIN($linkedCases)->fi()
                 ->andWhere('status')->ne('wait')
                 ->andWhere('type')->ne('unit')
                 ->beginIF($task->branch !== '')->andWhere('branch')->in("0,$task->branch")->fi()
@@ -408,7 +423,7 @@ class testtaskModel extends model
                 ->beginIF($this->lang->navGroup->testtask != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
                 ->andWhere('t1.product')->eq($productID)
                 ->andWhere('t1.status')->ne('wait')
-                ->beginIF($linkedCases)->andWhere('t1.id')->notIN($linkedCases)->fi()
+                ->beginIF(!empty($linkedCases))->andWhere('t1.id')->notIN($linkedCases)->fi()
                 ->beginIF($task->branch !== '')->andWhere('t1.branch')->in("0,$task->branch")->fi()
                 ->andWhere('t1.story')->in(trim($stories, ','))
                 ->andWhere('t1.deleted')->eq(0)
@@ -548,7 +563,7 @@ class testtaskModel extends model
             ->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('name')
+            ->groupBy('t1.lastRunResult')
             ->orderBy('value DESC')
             ->fetchAll('name');
 
@@ -573,7 +588,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('name')
+            ->groupBy('t2.type')
             ->orderBy('value desc')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -596,7 +611,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('name')
+            ->groupBy('t2.module')
             ->orderBy('value desc')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -620,7 +635,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq(0)
-            ->groupBy('name')
+            ->groupBy('t1.lastRunner')
             ->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -763,6 +778,11 @@ class testtaskModel extends model
             ->join('type', ',')
             ->remove('files,labels,uid,comment,contactListMenu')
             ->get();
+
+        /* Fix bug #35419. */
+        $execution     = $this->loadModel('execution')->getByID($task->execution);
+        $task->project = $execution->project;
+
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
 
         $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles')
@@ -1091,7 +1111,7 @@ class testtaskModel extends model
             $fieldToSort   = substr($sort, 0, strpos($sort, '_'));
             $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $sort) : ('t2.' . $sort);
 
-            $runs = $this->dao->select('t2.*,t1.*, t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+            $runs = $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
                 ->where($caseQuery)
@@ -1322,7 +1342,7 @@ class testtaskModel extends model
             $postReals   = $postData->reals[$caseID];
 
             $caseResult  = $result ? $result : 'pass';
-            if($postData->node) $caseResult = '';
+            if(!empty($postData->node)) $caseResult = '';
             $stepResults = array();
             if($dbSteps)
             {
@@ -1888,11 +1908,13 @@ class testtaskModel extends model
 
                     $caseID  = $case->id;
                     $oldCase = $this->dao->select('*')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
-                    $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
+                    $case->version    = $oldCase->version;
+                    $case->openedDate = $oldCase->openedDate;
 
                     $changes = common::createChanges($oldCase, $case);
                     if($changes)
                     {
+                        $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
                         $actionID = $this->action->create('case', $caseID, 'Edited');
                         $this->action->logHistory($actionID, $changes);
                     }
@@ -2223,17 +2245,21 @@ class testtaskModel extends model
 
             $case = new stdclass();
             if(!empty($caseResult->id)) $case->id = $caseResult->id;
-            $case->product    = $productID;
-            if(empty($caseResult->id)) $case->title = $caseResult->title;
-            $case->pri        = 3;
-            $case->type       = 'unit';
-            $case->stage      = 'unittest';
-            $case->status     = 'normal';
-            $case->openedBy   = $this->app->user->account;
-            $case->openedDate = $now;
-            $case->version    = 1;
-            if(empty($caseResult->id)) $case->auto = 'unit';
-            $case->frame      = $frame;
+            $case->status = 'normal';
+            $case->frame  = $frame;
+
+            if(empty($caseResult->id))
+            {
+                $case->type       = 'unit';
+                $case->stage      = 'unittest';
+                $case->product    = $productID;
+                $case->title      = $caseResult->title;
+                $case->pri        = 3;
+                $case->openedBy   = $this->app->user->account;
+                $case->openedDate = $now;
+                $case->version    = 1;
+                $case->auto       = 'unit';
+            }
 
             $result = new stdclass();
             $result->case       = 0;
@@ -2291,19 +2317,22 @@ class testtaskModel extends model
             if(!isset($suites[$suiteIndex])) $suites[$suiteIndex] = $suite;
 
             $case = new stdclass();
-            if(isset($caseResult->id)) $case->id = $caseResult->id;
-            if(!isset($caseResult->id)) $case->product = $productID;
-            $case->title      = $caseResult->title;
-            $case->pri        = 3;
-            $case->type       = 'feature';
-            $case->stage      = 'feature';
-            $case->status     = 'normal';
-            $case->openedBy   = $this->app->user->account;
-            $case->openedDate = $now;
-            $case->version    = 1;
-            $case->auto       = 'func';
-            $case->frame      = $frame;
-            $case->steps      = array();
+            if(!empty($caseResult->id)) $case->id = $caseResult->id;
+            $case->title  = $caseResult->title;
+            $case->frame  = $frame;
+            $case->status = 'normal';
+            $case->steps  = array();
+            $case->auto   = 'func';
+            if(empty($caseResult->id))
+            {
+                $case->product    = $productID;
+                $case->pri        = 3;
+                $case->type       = 'feature';
+                $case->stage      = 'feature';
+                $case->openedBy   = $this->app->user->account;
+                $case->openedDate = $now;
+                $case->version    = 1;
+            }
 
             $result = new stdclass();
             $result->case       = 0;
@@ -2329,7 +2358,7 @@ class testtaskModel extends model
 
                     $caseStep = new stdclass();
                     $caseStep->type   = 'step';
-                    $caseStep->desc   = '';
+                    $caseStep->desc   = $step->name;
                     $caseStep->expect = $step->checkPoints[0]->expect;
 
                     $case->steps[] = $caseStep;

@@ -1,0 +1,7 @@
+.border-bottom {border-bottom: solid 1px var(--color-slate-300);}
+.border-bottom span {padding: 4px 12px; background-color: var(--color-slate-100);}
+.tab-margin {margin-top: 8px; margin-bottom: 8px;}
+.verify-content {height: 300px; border: solid 1px var(--color-slate-300);}
+
+.clear-shadow {border: none; box-shadow: none;}
+.panel-body .relative {position: relative;}

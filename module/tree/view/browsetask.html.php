@@ -2,7 +2,7 @@
 /**
  * The browse view file of tree module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
@@ -16,6 +16,7 @@
 li.story-item > .tree-actions .tree-action[data-type=sort] {display: none;}
 li.story-item > .tree-actions .tree-action[data-type=edit] {display: none;}
 li.story-item > .tree-actions .tree-action[data-type=delete] {display: none;}
+#modulesTree li.dragging {opacity: .3;}
 </style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -44,7 +45,7 @@ li.story-item > .tree-actions .tree-action[data-type=delete] {display: none;}
     <form id='childrenForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root={$root->id}&viewType=task");?>'>
       <div class='panel'>
         <div class='panel-heading'>
-          <div class='panel-title'><?php echo $lang->tree->manageTaskChild;?></div>
+          <div class='panel-title'><?php echo $execution->multiple ? $lang->tree->manageTaskChild : $lang->tree->manageProjectChild;?></div>
         </div>
         <div class='panel-body'>
           <table class='table table-form table-auto'>
@@ -229,11 +230,10 @@ $(function()
 
     var tree = $tree.data('zui.tree');
     if(!tree.store.time) tree.expand($tree.find('li:not(.tree-action-item)').first());
-    if(<?php echo $currentModuleID ?>)
-    {
-        var $currentLi = $tree.find('.module-name[data-id=' + <?php echo $currentModuleID ?> + ']').closest('li');
-        if($currentLi.length) tree.show($currentLi);
-    }
+    <?php if($currentModuleID): ?>
+    var $currentLi = $tree.find('.module-name[data-id=' + <?php echo $currentModuleID ?> + ']').closest('li');
+    if($currentLi.length) tree.show($currentLi);
+    <?php endif; ?>
 
     $tree.on('mouseenter', 'li:not(.tree-action-item)', function(e)
     {

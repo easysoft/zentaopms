@@ -88,7 +88,6 @@ class model extends baseModel
      * @access public
      * @return string
      */
-
     public function buildMenu($moduleName, $methodName, $params, $data, $type = 'view', $icon = '', $target = '', $class = '', $onlyBody = false, $misc = '' , $title = '', $returnHtml = true)
     {
         if(strpos($moduleName, '.') !== false) list($appName, $moduleName) = explode('.', $moduleName);
@@ -98,10 +97,12 @@ class model extends baseModel
         if(empty($module)) $module = $moduleName;
         if(empty($method)) $method = $methodName;
 
-        static $actions = array();
-        if(isset($this->config->bizVersion))
+        static $actions   = array();
+        static $hasAction = array();
+        if(!isset($hasAction[$moduleName])) $hasAction[$moduleName] = true;
+        if($this->config->edition != 'open')
         {
-            if(empty($actions[$moduleName]))
+            if($hasAction[$moduleName] and empty($actions[$moduleName]))
             {
                 $actions[$moduleName] = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)
                     ->where('module')->eq($moduleName)
@@ -109,6 +110,8 @@ class model extends baseModel
                     ->andWhere('status')->eq('enable')
                     ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
                     ->fetchAll('action');
+
+                if(empty($actions[$moduleName])) $hasAction[$moduleName] = false;
             }
         }
 
@@ -119,7 +122,7 @@ class model extends baseModel
 
             if($action->extensionType == 'override') return $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
 
-            $conditions = json_decode($action->conditions);
+            $conditions = empty($action->conditions) ? array() : json_decode($action->conditions);
             if($conditions and $action->extensionType == 'extend')
             {
                 if($icon != 'copy' and $methodName != 'create') $title = $action->name;
@@ -129,6 +132,10 @@ class model extends baseModel
             {
                 if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);
             }
+        }
+        elseif(strpos($misc, 'disabled') !== false)
+        {
+            $enabled = false;
         }
         else
         {
@@ -155,7 +162,7 @@ class model extends baseModel
      */
     public function buildFlowMenu($module, $data, $type = 'browse', $show = '')
     {
-        if(!isset($this->config->bizVersion)) return '';
+        if($this->config->edition == 'open') return '';
 
         $moduleName = $module;
         if(strpos($module, '.') !== false) list($appName, $moduleName) = explode('.', $module);
@@ -233,7 +240,7 @@ class model extends baseModel
      */
     public function processStatus($module, $record)
     {
-        if(!isset($this->config->bizVersion) or empty($record->subStatus)) return zget($this->lang->$module->statusList, $record->status);
+        if($this->config->edition == 'open' or empty($record->subStatus)) return zget($this->lang->$module->statusList, $record->status);
 
         return $this->loadModel('workflowfield')->processSubStatus($module, $record);
     }
@@ -247,7 +254,7 @@ class model extends baseModel
      */
     public function processExportData($data)
     {
-        if(!isset($this->config->bizVersion)) return $data;
+        if($this->config->edition == 'open') return $data;
 
         return $this->loadModel('workflowfield')->processExportData($data);
     }
@@ -261,7 +268,7 @@ class model extends baseModel
      */
     public function processExportOptions($data)
     {
-        if(!isset($this->config->bizVersion)) return $data;
+        if($this->config->edition == 'open') return $data;
 
         return $this->loadModel('workflowfield')->processExportOptions($data);
     }
@@ -275,7 +282,7 @@ class model extends baseModel
      */
     public function processImportData($data)
     {
-        if(!isset($this->config->bizVersion)) return $data;
+        if($this->config->edition == 'open') return $data;
 
         return $this->loadModel('workflowfield')->processImportData($data);
     }
@@ -288,7 +295,7 @@ class model extends baseModel
      */
     public function getFlowExtendFields()
     {
-        if(!isset($this->config->bizVersion)) return array();
+        if($this->config->edition == 'open') return array();
 
         return $this->loadModel('flow')->getExtendFields($this->app->getModuleName(), $this->app->getMethodName());
     }
@@ -301,7 +308,7 @@ class model extends baseModel
      */
     public function getFlowExportFields()
     {
-        if(!isset($this->config->bizVersion)) return array();
+        if($this->config->edition == 'open') return array();
 
         return $this->loadModel('workflowfield')->getExportFields($this->app->getModuleName());
     }
@@ -315,7 +322,7 @@ class model extends baseModel
      */
     public function executeHooks($objectID)
     {
-        if(!isset($this->config->bizVersion)) return false;
+        if($this->config->edition == 'open') return false;
 
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
@@ -391,5 +398,25 @@ class model extends baseModel
         if(method_exists($taoClass, $method)) return call_user_func_array("{$taoClass}::{$method}", $arguments);
 
         $app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, $exit = true);
+    }
+
+    /**
+     * Load dao of bi.
+     *
+     * @access public
+     * @return void
+     */
+    public function loadBIDAO()
+    {
+        global $config, $biDAO;
+        if(is_object($biDAO)) return $this->dao = $biDAO;
+
+        if(!isset($config->biDB)) return;
+
+        $driver = $config->db->driver;
+        $biDAO = new $driver();
+        $biDAO->slaveDBH = $this->app->connectByPDO($config->biDB, 'BI');
+
+        $this->dao = $biDAO;
     }
 }

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php'; su('admin');
 include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
-$db->switchDB();
 
 /**
 
@@ -28,4 +27,3 @@ r($bug->activateObject($bugIDList[2])) && p('field,old,new') && e('activatedCoun
 r($bug->activateObject($bugIDList[3])) && p('field,old,new') && e('activatedCount,0,1'); // 测试激活状态为resolved的bug52
 r($bug->activateObject($bugIDList[4])) && p('field,old,new') && e('activatedCount,0,1'); // 测试激活状态为closed的bug81
 r($bug->activateObject($bugIDList[5])) && p('field,old,new') && e('activatedCount,0,1'); // 测试激活状态为closed的bug82
-$db->restoreDB();

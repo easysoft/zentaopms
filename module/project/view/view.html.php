@@ -2,7 +2,7 @@
 /**
  * The view method view file of project module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../ai/view/promptmenu.html.php';?>
 <?php if(!common::checkNotCN()):?>
 <style> table.data-stats > tbody > tr.statsTr > td:first-child {width: 60px;}</style>
 <?php endif;?>
@@ -24,7 +25,7 @@
             <div class="panel-title"><?php echo $lang->execution->latestDynamic;?></div>
             <?php if($project->model != 'kanban' and common::hasPriv('project', 'dynamic')):?>
             <nav class="panel-actions nav nav-default">
-              <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", strtoupper($lang->more), '', "title=$lang->more");?></li>
+              <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", mb_strtoupper($lang->more), '', "title=$lang->more");?></li>
             </nav>
             <?php endif;?>
           </div>
@@ -48,7 +49,7 @@
             <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
             <?php if(common::hasPriv('project', 'team')):?>
             <nav class="panel-actions nav nav-default">
-              <li><?php common::printLink('project', 'team', "projectID=$project->id", strtoupper($lang->more), '', "title=$lang->more");?></li>
+              <li><?php common::printLink('project', 'team', "projectID=$project->id", mb_strtoupper($lang->more), '', "title=$lang->more");?></li>
             </nav>
             <?php endif;?>
           </div>
@@ -114,12 +115,14 @@
       <div class="col-sm-12">
         <div class="cell">
           <div class="detail">
-            <?php $hiddenCode = (isset($config->setCode) and $config->setCode == 0) ? 'hidden' : '';?>
+            <?php $hiddenCode = (!isset($config->setCode) or $config->setCode == 0) ? 'hidden' : '';?>
             <h2 class="detail-title"><span class="label-id"><?php echo $project->id;?></span> <span class="label label-light label-outline <?php echo $hiddenCode;?>"><?php echo $project->code;?></span> <?php echo $project->name;?></h2>
             <div class="detail-content article-content">
               <div><span class="text-limit hidden" data-limit-size="40"><?php echo $project->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></div>
               <p>
+                <?php if($config->vision == 'rnd'):?>
                 <span class="label label-primary label-outline"><?php echo zget($lang->project->projectTypeList, $project->hasProduct);?></span>
+                <?php endif; ?>
                 <?php if($project->deleted):?>
                 <span class='label label-danger label-outline'><?php echo $lang->project->deleted;?></span>
                 <?php endif; ?>
@@ -160,7 +163,7 @@
           <div class="detail">
             <div class="detail-title">
               <strong><?php echo $lang->project->manageProducts;?></strong>
-              <?php common::printLink('project', 'manageproducts', "projectID=$project->id", strtoupper($lang->more), '', "class='btn btn-link pull-right muted'");?>
+              <?php common::printLink('project', 'manageproducts', "projectID=$project->id", mb_strtoupper($lang->more), '', "class='btn btn-link pull-right muted'");?>
             </div>
             <div class="detail-content">
               <div class="row row-grid">
@@ -201,7 +204,7 @@
                   <tr class='statsTr'><td></td><td></td><td></td><td></td></tr>
                   <tr>
                     <td colspan="4">
-                      <?php $progress = $project->model == 'waterfall' ? $this->project->getWaterfallProgress($project->id) : (($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0);?>
+                      <?php $progress = $project->model == 'waterfall' ? $this->project->getWaterfallProgress($project->id) : (((float)$workhour->totalConsumed + (float)$workhour->totalLeft) ? floor($workhour->totalConsumed / ((float)$workhour->totalConsumed + (float)$workhour->totalLeft) * 1000) / 1000 * 100 : 0);?>
                       <?php echo $lang->project->progress;?> <?php echo $progress . $lang->percent;?> &nbsp;
                       <div class="progress inline-block">
                         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress . $lang->percent;?>"></div>
@@ -224,7 +227,7 @@
                     <th><?php echo $lang->execution->totalEstimate;?></th>
                     <td><?php echo (float)$workhour->totalEstimate . $lang->execution->workHour;?></td>
                     <th><?php echo $lang->execution->totalDays;?></th>
-                    <td><?php echo $project->days;?></td>
+                    <td><?php echo (float)$project->days . $lang->execution->day;?></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->execution->totalConsumed;?></th>

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/kanban.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -41,4 +40,3 @@ r($kanban->createRDKanbanTest($execution2)) && p() && e('1,3,0'); // 测试创�
 r($kanban->createRDKanbanTest($execution3)) && p() && e('1,3,0'); // 测试创建执行10003的执行看板
 r($kanban->createRDKanbanTest($execution4)) && p() && e('1,3,0'); // 测试创建执行10004的执行看板
 r($kanban->createRDKanbanTest($execution5)) && p() && e('1,3,0'); // 测试创建执行10005的执行看板
-$db->restoreDB();

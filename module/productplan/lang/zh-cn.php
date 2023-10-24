@@ -2,7 +2,7 @@
 /**
  * The productplan module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->productplan->common     = $lang->productCommon . '计划';
-$lang->productplan->browse     = "浏览计划";
+$lang->productplan->browse     = "计划列表";
 $lang->productplan->index      = "计划列表";
 $lang->productplan->create     = "创建计划";
 $lang->productplan->edit       = "编辑计划";
@@ -27,13 +27,14 @@ $lang->productplan->view       = "计划详情";
 $lang->productplan->bugSummary = "本页共 <strong>%s</strong> 个Bug";
 $lang->productplan->basicInfo  = '基本信息';
 $lang->productplan->batchEdit  = '批量编辑';
-$lang->productplan->project    = '项目';
+$lang->productplan->project    = $lang->projectCommon;
 $lang->productplan->plan       = '计划';
 $lang->productplan->allAB      = '所有';
 $lang->productplan->to         = '至';
 $lang->productplan->more       = '更多操作';
 $lang->productplan->comment    = '备注';
 
+$lang->productplan->batchEditAction   = '批量编辑计划';
 $lang->productplan->batchUnlink       = "批量移除";
 $lang->productplan->batchClose        = "批量关闭";
 $lang->productplan->batchChangeStatus = "批量修改状态";
@@ -71,8 +72,8 @@ $lang->productplan->confirmClose       = "您确认关闭该计划吗？";
 $lang->productplan->confirmActivate    = "您确认激活该计划吗？";
 $lang->productplan->noPlan             = "暂时没有计划。";
 $lang->productplan->cannotDeleteParent = "不能删除父计划";
-$lang->productplan->selectProjects     = "请选择所属项目";
-$lang->productplan->projectNotEmpty    = '所属项目不能为空。';
+$lang->productplan->selectProjects     = "请选择所属" . $lang->projectCommon;
+$lang->productplan->projectNotEmpty    = "所属{$lang->projectCommon}不能为空。";
 $lang->productplan->nextStep           = "下一步";
 $lang->productplan->summary            = "本页共 <strong>%s</strong> 个计划，父计划 <strong>%s</strong>，子计划 <strong>%s</strong>，独立计划 <strong>%s</strong>。";
 $lang->productplan->checkedSummary     = "共选中 <strong>%total%</strong> 个计划，父计划 <strong>%parent%</strong>，子计划 <strong>%child%</strong>，独立计划 <strong>%independent%</strong>。";
@@ -133,8 +134,8 @@ $lang->productplan->beginLetterParent    = "父计划的开始日期：%s，开�
 $lang->productplan->endGreaterParent     = "父计划的完成日期：%s，完成日期不能大于父计划的完成日期";
 $lang->productplan->beginGreaterChild    = "子计划的开始日期：%s，开始日期不能大于子计划的开始日期";
 $lang->productplan->endLetterChild       = "子计划的完成日期：%s，完成日期不能小于子计划的完成日期";
-$lang->productplan->noLinkedProject      = "当前产品还未关联项目，请进入产品的项目列表关联或创建一个项目";
-$lang->productplan->enterProjectList     = "进入产品的项目列表";
+$lang->productplan->noLinkedProject      = "当前{$lang->productCommon}还未关联{$lang->projectCommon}，请进入{$lang->productCommon}的{$lang->projectCommon}列表关联或创建一个{$lang->projectCommon}";
+$lang->productplan->enterProjectList     = "进入{$lang->productCommon}的{$lang->projectCommon}列表";
 $lang->productplan->beginGreaterChildTip = "父计划[%s]的开始日期：%s，不能大于子计划的开始日期: %s";
 $lang->productplan->endLetterChildTip    = "父计划[%s]的完成日期：%s，不能小于子计划的完成日期: %s";
 $lang->productplan->beginLetterParentTip = "子计划[%s]的开始日期：%s，不能小于父计划的开始日期: %s";

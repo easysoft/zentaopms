@@ -2,7 +2,7 @@
 /**
  * The task group view file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
@@ -33,7 +33,7 @@
     <?php echo html::a(inlink('grouptask', "executionID=$executionID&groupBy=$groupBy&filter=$filterKey"), $name, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
     <?php else:?>
-    <?php echo html::a(inlink('grouptask', "executionID=$executionID&groupBy=$groupBy"), "<span class='text'>{$lang->execution->featureBar['task']['all']}</span> <span class='label label-light label-badge'>{$allCount}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php echo html::a(inlink('grouptask', "executionID=$executionID&groupBy=$groupBy"), "<span class='text'>{$lang->all}</span> <span class='label label-light label-badge'>{$allCount}</span>", '', "class='btn btn-link btn-active-text'");?>
     <?php endif;?>
   </div>
   <div class="btn-toolbar pull-right">
@@ -63,10 +63,13 @@
         $link  = common::hasPriv('execution', 'importTask') ? $this->createLink('execution', 'importTask', "execution=$execution->id") : '#';
         echo "<li $class>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
 
-        $class = common::hasPriv('execution', 'importBug') ? '' : "class=disabled";
-        $misc  = common::hasPriv('execution', 'importBug') ? "class='import'" : "class=disabled";
-        $link  = common::hasPriv('execution', 'importBug') ? $this->createLink('execution', 'importBug', "execution=$execution->id") : '#';
-        echo "<li $class id='importBug'>" . html::a($link, $lang->execution->importBug, '', $misc) . "</li>";
+        if($features['qa'])
+        {
+            $class = common::hasPriv('execution', 'importBug') ? '' : "class=disabled";
+            $misc  = common::hasPriv('execution', 'importBug') ? "class='import'" : "class=disabled";
+            $link  = common::hasPriv('execution', 'importBug') ? $this->createLink('execution', 'importBug', "execution=$execution->id") : '#';
+            echo "<li $class id='importBug'>" . html::a($link, $lang->execution->importBug, '', $misc) . "</li>";
+        }
         ?>
       </ul>
     </div>

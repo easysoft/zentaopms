@@ -567,4 +567,24 @@ class actionTest
         foreach($objects as $object) $count += count($object);
         return $count;
     }
+
+    /**
+     * Test restore stages.
+     *
+     * @param  array    $stageList
+     * @param  array    $actionIdList
+     * @access public
+     * @return object
+     */
+    public function restoreStagesTest($stageList, $actionIdList)
+    {
+        $this->objectModel->restoreStages($stageList);
+
+        if(dao::isError()) return dao::getError();
+
+        $actionList = array();
+        foreach($actionIdList as $actionID) $actionList[$actionID] = $this->objectModel->getByID($actionID);
+
+        return $actionList;
+    }
 }

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/holiday.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -36,4 +35,3 @@ r($holiday->createTest($createNoEnd))     && p('end:0')        && e('『结束�
 r($holiday->createTest($createNoName))    && p('name:0')       && e('『名称』不能为空。'); //测试不传入必填项名称
 r($holiday->createTest($createErrorDate)) && p('end:0')        && e('『结束日期』应当不小于『2022-01-10』。'); //测试传入小于开始日期的结束日期
 
-$db->restoreDB();

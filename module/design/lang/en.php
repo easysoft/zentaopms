@@ -2,7 +2,7 @@
 /**
  * The English file of design module.
  *
- * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2020 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
@@ -20,12 +20,12 @@ $lang->design->version       = 'Revision';
 $lang->design->assignedTo    = 'AssignedTo';
 $lang->design->actions       = 'Actions';
 $lang->design->byQuery       = 'Search';
-$lang->design->products      = 'Linked Product';
+$lang->design->products      = "Linked {$lang->productCommon}";
 $lang->design->story         = 'Linked Story';
 $lang->design->file          = 'File';
 $lang->design->desc          = 'Description';
 $lang->design->range          = 'Impact';
-$lang->design->product       = 'Linked Product';
+$lang->design->product       = "Linked {$lang->productCommon}";
 $lang->design->basicInfo     = 'Basic Information';
 $lang->design->commitBy      = 'Commit By';
 $lang->design->commitDate    = 'Committed Date';
@@ -47,7 +47,7 @@ $lang->design->batchCreate  = 'Batch Create';
 $lang->design->edit         = 'Change';
 $lang->design->delete       = 'Delete';
 $lang->design->view         = 'View';
-$lang->design->browse       = 'List';
+$lang->design->browse       = 'Design List';
 $lang->design->viewCommit   = 'View Commit';
 $lang->design->linkCommit   = 'Link Commit';
 $lang->design->unlinkCommit = 'Unlink Commit';
@@ -64,6 +64,8 @@ $lang->design->typeList['HLDS'] = 'High-Level';
 $lang->design->typeList['DDS']  = 'Detailed';
 $lang->design->typeList['DBDS'] = 'Database';
 $lang->design->typeList['ADS']  = 'API';
+
+$lang->design->plusTypeList = $lang->design->typeList;
 
 $lang->design->rangeList           = array();
 $lang->design->rangeList['all']    = 'All';

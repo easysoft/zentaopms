@@ -2,7 +2,7 @@
 /**
  * The testcase module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license  ZPL (http://zpl.pub/page/zplv12.html)
  * @author   Nguyễn Quốc Nho <quocnho@gmail.com>
  * @package  testcase
@@ -11,7 +11,15 @@
  */
 $lang->testcase->id               = 'ID';
 $lang->testcase->product          = $lang->productCommon;
+$lang->testcase->project          = $lang->projectCommon;
+$lang->testcase->execution        = $lang->executionCommon;
+$lang->testcase->linkStory        = 'linkStory';
 $lang->testcase->module           = 'Module';
+$lang->testcase->auto             = 'Test Automation Cases';
+$lang->testcase->frame            = 'Test Automation Cramework';
+$lang->testcase->howRun           = 'Testing Method';
+$lang->testcase->frequency        = 'Frequency';
+$lang->testcase->path             = 'Path';
 $lang->testcase->lib              = "Thư viện tình huống";
 $lang->testcase->branch           = "Branch/Platform";
 $lang->testcase->moduleAB         = 'Module';
@@ -24,9 +32,11 @@ $lang->testcase->precondition     = 'Điều kiện bắt buộc';
 $lang->testcase->pri              = 'Ưu tiên';
 $lang->testcase->type             = 'Loại';
 $lang->testcase->status           = 'Tình trạng';
+$lang->testcase->statusAB         = 'Status';
 $lang->testcase->subStatus        = 'Tình trạng con';
 $lang->testcase->steps            = 'Các bước';
 $lang->testcase->openedBy         = 'Người tạo';
+$lang->testcase->openedByAB       = 'Reporter';
 $lang->testcase->openedDate       = 'Ngày tạo';
 $lang->testcase->lastEditedBy     = 'Người sửa';
 $lang->testcase->result           = 'Kết quả';
@@ -36,7 +46,14 @@ $lang->testcase->files            = 'Files';
 $lang->testcase->linkCase         = 'Tình huống liên kết';
 $lang->testcase->linkCases        = 'Liên kết tình huống';
 $lang->testcase->unlinkCase       = 'Hủy liên kết tình huống';
+$lang->testcase->linkBug          = 'Linked Bugs';
+$lang->testcase->linkBugs         = 'Link Bug';
+$lang->testcase->unlinkBug        = 'Unlink Bugs';
 $lang->testcase->stage            = 'Giai đoạn';
+$lang->testcase->scriptedBy       = 'ScriptedBy';
+$lang->testcase->scriptedDate     = 'ScriptedDate';
+$lang->testcase->scriptStatus     = 'Script Status';
+$lang->testcase->scriptLocation   = 'Script Location';
 $lang->testcase->reviewedBy       = 'Người duyệt';
 $lang->testcase->reviewedDate     = 'Ngày duyệt';
 $lang->testcase->reviewResult     = 'Duyệt kết quả';
@@ -54,6 +71,7 @@ $lang->testcase->assignedTo       = 'Giao cho';
 $lang->testcase->colorTag         = 'Màu';
 $lang->testcase->lastRunResult    = 'Kết quả';
 $lang->testcase->desc             = 'Các bước';
+$lang->testcase->parent           = 'Parent';
 $lang->testcase->xml              = 'XML';
 $lang->testcase->expect           = 'Kỳ vọng';
 $lang->testcase->allProduct       = "Tất cả {$lang->productCommon}";
@@ -73,11 +91,17 @@ $lang->testcase->sync             = 'Đồng bộ tình huống';
 $lang->testcase->ignore           = 'Bỏ qua';
 $lang->testcase->fromTesttask     = 'Từ Yêu cầu Test';
 $lang->testcase->fromCaselib      = 'Từ thư viện tình huống';
+$lang->testcase->fromCaseID       = 'From Case ID';
+$lang->testcase->fromCaseVersion  = 'From Case Version';
+$lang->testcase->mailto           = 'Mailto';
 $lang->testcase->deleted          = 'Đã xóa';
 $lang->testcase->browseUnits      = 'Unit Test';
+$lang->testcase->suite            = 'Test Suite';
+$lang->testcase->executionStatus  = 'executionStatus';
 $lang->testcase->caseType         = 'Case Type';
 $lang->testcase->allType          = 'All Types';
-$lang->testcase->showAutoCase     = 'Automated Test Cases';
+$lang->testcase->showAutoCase     = 'Automated';
+$lang->testcase->automation       = 'Automation Test';
 
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
@@ -86,7 +110,6 @@ $lang->testcase->stepDesc    = 'Bước';
 $lang->testcase->stepExpect  = 'Kỳ vọng';
 $lang->testcase->stepVersion = 'Phiên bản';
 
-$lang->testcase->common                  = 'Tình huống';
 $lang->testcase->index                   = "Trang tình huống";
 $lang->testcase->create                  = "Thêm tình huống";
 $lang->testcase->batchCreate             = "Thêm hàng loạt";
@@ -108,6 +131,7 @@ $lang->testcase->batchConfirmStoryChange = "Xác nhận hàng loạt";
 $lang->testcase->batchCaseTypeChange     = "Thay đổi Loại hàng loạt";
 $lang->testcase->browse                  = "Danh sách tình huống";
 $lang->testcase->groupCase               = "Xem theo Nhóm";
+$lang->testcase->zeroCase                = "Stories without cases";
 $lang->testcase->import                  = "Nhập";
 $lang->testcase->importAction            = "Nhập tình huống";
 $lang->testcase->fileImport              = "Nhập CSV";
@@ -126,7 +150,9 @@ $lang->testcase->groupName               = 'Tên nhóm';
 $lang->testcase->step                    = 'Các bước';
 $lang->testcase->stepChild               = 'Các bước con';
 $lang->testcase->viewAll                 = 'Tất cả tình huống';
+$lang->testcase->importToLib             = "Import To Library";
 $lang->testcase->showScript              = 'Show Script';
+$lang->testcase->autoScript              = 'Script';
 
 $lang->testcase->new = 'Mới';
 
@@ -156,11 +182,12 @@ $lang->testcase->legendLinkBugs    = 'Bugs';
 $lang->testcase->legendOpenAndEdit = 'Tạo/Sửa';
 $lang->testcase->legendComment     = 'Nhận xét';
 
-$lang->testcase->summary            = "Tổng <strong>%s</strong> tình huống, và <strong>%s</strong> tình huống đang chạy.";
-$lang->testcase->confirmDelete      = 'Bạn có muốn xóa tình huống này?';
-$lang->testcase->confirmBatchDelete = 'Bạn có muốn xóa tình huống hàng loạt?';
-$lang->testcase->ditto              = 'Như trên';
-$lang->testcase->dittoNotice        = 'Tình huống này không liên kết tới sản phẩm bởi vì nó là cuối cùng!';
+$lang->testcase->summary               = "Tổng <strong>%s</strong> tình huống, và <strong>%s</strong> tình huống đang chạy.";
+$lang->testcase->confirmDelete         = 'Bạn có muốn xóa tình huống này?';
+$lang->testcase->confirmBatchDelete    = 'Bạn có muốn xóa tình huống hàng loạt?';
+$lang->testcase->ditto                 = 'Như trên';
+$lang->testcase->dittoNotice           = 'Tình huống này không liên kết tới sản phẩm bởi vì nó là cuối cùng!';
+$lang->testcase->confirmUnlinkTesttask = 'The case [%s] is already associated in the testtask order of the previous branch/platform, after adjusting the branch/platform, it will be removed from the test list of the previous branch/platform, please confirm whether to continue to modify.';
 
 $lang->testcase->reviewList[0] = 'KHÔNG';
 $lang->testcase->reviewList[1] = 'CÓ';
@@ -207,16 +234,21 @@ $lang->testcase->resultList['blocked'] = 'Bị khóa';
 
 $lang->testcase->buttonToList = 'Trở lại';
 
+$lang->testcase->whichLine        = 'Line No.%s : ';
+$lang->testcase->stepsEmpty       = 'Step %s cannot be empty.';
 $lang->testcase->errorEncode      = 'Không có dữ liệu. Vui lòng chọn giải mã đúng và tải lên lại!';
 $lang->testcase->noFunction       = 'Iconv và mb_convert_encoding không được tìm thấy. Bạn không thể chuyển dữ liệu này thành mã hóa bạn muốn!';
 $lang->testcase->noRequire        = "Dòng %s có “%s ” là trường bắt buộc và nó nên để trống.";
+$lang->testcase->noRequireTip     = "“%s”is a required field and it should not be blank.";
 $lang->testcase->noLibrary        = "Không có thư viện tồn tại. Vui lòng tạo một trước.";
 $lang->testcase->mustChooseResult = 'Kết quả xét duyệt là bắt buộc.';
 $lang->testcase->noModule         = '<div>Chưa có Module.</div><div>Quản lý ngay.</div>';
 $lang->testcase->noCase           = 'Không có tình huống nào';
+$lang->testcase->importedCases    = 'The case with ID%s has been imported in the same module and has been ignored.';
 
 $lang->testcase->searchStories = 'Nhập nội dung cần tìm cho câu chuyện';
 $lang->testcase->selectLib     = 'Chọn thư viện';
+$lang->testcase->selectLibAB   = 'Select Library';
 
 $lang->testcase->action = new stdclass();
 $lang->testcase->action->fromlib               = array('main' => '$date, nhập bởi <strong>$actor</strong> từ <strong>$extra</strong>.');
@@ -231,8 +263,85 @@ $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases
 $lang->testcase->featureBar['browse']['wait']        = 'Đang đợi';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = 'Group View';
-$lang->testcase->featureBar['browse']['suite']       = 'Suite';
 $lang->testcase->featureBar['browse']['zerocase']    = 'Zero Case Story';
-$lang->testcase->featureBar['browse']['browseunits'] = 'Unit Test';
+$lang->testcase->featureBar['browse']['suite']       = 'Suite';
 $lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
-$lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];
+
+$lang->testcase->importXmind     = "Import XMIND";
+$lang->testcase->exportXmind     = "Export XMIND";
+$lang->testcase->getXmindImport  = "Get Mindmap";
+$lang->testcase->showXMindImport = "Display Mindmap";
+$lang->testcase->saveXmindImport = "Save Mindmap";
+
+$lang->testcase->xmindImport           = "Imort XMIND";
+$lang->testcase->xmindExport           = "Export XMIND";
+$lang->testcase->xmindImportEdit       = "XMIND Edit";
+$lang->testcase->errorFileNotEmpty     = 'The uploaded file cannot be empty';
+$lang->testcase->errorXmindUpload      = 'Upload failed';
+$lang->testcase->errorFileFormat       = 'File format error';
+$lang->testcase->moduleSelector        = 'Module Selection';
+$lang->testcase->errorImportBadProduct = 'Product does not exist, import error';
+$lang->testcase->errorSceneNotExist    = 'Scene [%d] not exists';
+
+$lang->testcase->save  = 'Save';
+$lang->testcase->close = 'Close';
+
+$lang->testcase->xmindImportSetting = 'Import Characteristic Character Settings';
+$lang->testcase->xmindExportSetting = 'Export Characteristic Character Settings';
+
+$lang->testcase->settingModule = 'Module';
+$lang->testcase->settingScene  = 'Scene';
+$lang->testcase->settingCase   = 'Testcase';
+$lang->testcase->settingPri    = 'Priority';
+$lang->testcase->settingGroup  = 'Step Group';
+
+$lang->testcase->caseNotExist = 'The test case in the imported file was not recognized and the import failed';
+$lang->testcase->saveFail     = 'Save failed';
+$lang->testcase->set2Scene    = 'Set as Scene';
+$lang->testcase->set2Testcase = 'Set as Testcase';
+$lang->testcase->clearSetting = 'Clear Settings';
+$lang->testcase->setModule    = 'Set scene module';
+$lang->testcase->pickModule   = 'Please select a module';
+$lang->testcase->clearBefore  = 'Clear previous scenes';
+$lang->testcase->clearAfter   = 'Clear the following scenes';
+$lang->testcase->clearCurrent = 'Clear the current scene';
+$lang->testcase->removeGroup  = 'Remove Group';
+$lang->testcase->set2Group    = 'Set as Group';
+
+$lang->testcase->exportTemplet = 'Export Template';
+
+$lang->testcase->createScene      = "Add Scene";
+$lang->testcase->changeScene      = "Drag to change the scene which it belongs";
+$lang->testcase->batchChangeScene = "Batch change scene";
+$lang->testcase->updateOrder      = "Drag Sort";
+$lang->testcase->differentProduct = "Different product";
+
+$lang->testcase->newScene                    = "Add Scene";
+$lang->testcase->sceneTitle                  = 'Scene Title';
+$lang->testcase->parentScene                 = "Parent Scene";
+$lang->testcase->scene                       = "Scene";
+$lang->testcase->summary                     = 'Total %d Top Scene，%d Independent test case.';
+$lang->testcase->summaryScene                = 'Total %d Top Scene.';
+$lang->testcase->deleteScene                 = 'Delete Scene';
+$lang->testcase->editScene                   = 'Edit Scene';
+$lang->testcase->hasChildren                 = 'This scene has sub scene or test cases. Do you want to delete them all?';
+$lang->testcase->confirmDeleteScene          = 'Are you sure you want to delete the scene: \"%s\"?';
+$lang->testcase->sceneb                      = "Scene";
+$lang->testcase->onlyScene                   = 'Only Scene';
+$lang->testcase->iScene                      = 'Scene';
+$lang->testcase->generalTitle                = 'Title';
+$lang->testcase->noScene                     = 'No Scene';
+$lang->testcase->rowIndex                    = 'Row Index';
+$lang->testcase->nestTotal                   = 'nest total';
+$lang->testcase->normal                      = 'normal';
+
+/* Translation for drag modal message box. */
+$lang->testcase->dragModalTitle       = 'Drag and drop operation selection';
+$lang->testcase->dragModalMessage     = '<p>There are two possible situations for the current operation: </p><p>1) Adjust the sequence.<br/> 2) Change its scenario, meanwhile its module will be changed accordingly.</p><p>Please select the operation you want to perform.</p>';
+$lang->testcase->dragModalChangeScene = 'Change its scene';
+$lang->testcase->dragModalChangeOrder = 'Reorder';
+
+$lang->testcase->confirmBatchDeleteSceneCase = 'Are you sure you want to delete these scene or test cases in batch?';
+
+$lang->scene = new stdclass();
+$lang->scene->title = 'Scene Title';

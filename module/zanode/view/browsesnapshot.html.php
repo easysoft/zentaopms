@@ -2,7 +2,7 @@
 /**
  * The snapshot browse view file of zahost module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      xiawenlong <liyuchun@easycorp.ltd>
  * @package     zahost
@@ -44,10 +44,20 @@
 
         $deleteAttr  = "title='{$lang->zanode->deleteSnapshot}' target='hiddenwin'";
         $deleteAttr .= ($snapshot->status == 'restoring' or $snapshot->status == 'creating') ? ' class="btn disabled"' :  'class="btn"';
+
+        $isDefalut = $snapshot->name == 'defaultSnap' && $snapshot->createdBy == 'system';
+        if($isDefalut) $editAttr = $deleteAttr = 'class="btn disabled"';
+        $name  = $snapshot->localName ? $snapshot->localName : $snapshot->name;
+        $title = $snapshot->name;
+        if($snapshot->name == 'defaultSnap' && $snapshot->createdBy == 'system')
+        {
+            $name  = $lang->zanode->snapshot->defaultSnapName;
+            $title = $name;
+        }
         ?>
-        <td title="<?php echo $snapshot->name;?>"><?php echo $snapshot->localName ? $snapshot->localName : $snapshot->name;?></td>
+        <td title="<?php echo $title;?>"><?php echo $name;?></td>
         <td class='<?php echo $snapshot->status;?>'><?php echo zget($lang->zanode->snapshot->statusList, $snapshot->status, '');?></td>
-        <td class="c-createdBy"><?php echo zget($users, $snapshot->createdBy, '')?></td>
+        <td class="c-createdBy"><?php echo $snapshot->name == 'defaultSnap' && $snapshot->createdBy == 'system' ? $lang->zanode->snapshot->defaultSnapUser : zget($users, $snapshot->createdBy, '')?></td>
         <td class='c-datetime'><?php echo $snapshot->createdDate;?></td>
         <td class='c-actions'>
           <?php if(common::hasPriv('zanode', 'editSnapshot')) echo html::a('###', '<i class="icon-edit"></i>', 'hiddenwin', $editAttr);?>
@@ -63,4 +73,3 @@
   </div>
   <?php endif;?>
 </div>
-<?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>

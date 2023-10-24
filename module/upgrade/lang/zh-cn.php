@@ -2,13 +2,14 @@
 /**
  * The upgrade module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
  * @version     $Id: zh-cn.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
+global $config;
 $lang->upgrade->common          = '升级';
 $lang->upgrade->start           = '开始';
 $lang->upgrade->result          = '升级结果';
@@ -32,6 +33,22 @@ $lang->upgrade->warnningContent = <<<EOT
 </pre>
 EOT;
 
+if($config->db->driver == 'dm')
+{
+    $lang->upgrade->warnningContent = <<<EOT
+<p>升级对数据库权限要求较高，请使用管理员用户。<br>
+   升级有危险，请先备份数据库，以防万一。</p>
+<pre>
+1. 可以通过图形化客户端工具进行备份。
+2. 使用DIsql工具进行备份。
+   $> BACKUP DATABASE BACKUPSET  <span class='text-danger'>'filename'</span>;
+   语句执行完后会在默认的备份路径下生成名为“filename”的备份集目录。
+   默认的备份路径为 dm.ini 中 BAK_PATH 配置的路径，若未配置 BAK_PATH，则默认使用 SYSTEM_PATH 下的 bak 目录。
+   这是最简单的数据库备份语句，如果要设置其他的备份选项需了解联机备份数据库的语法。
+</pre>
+EOT;
+}
+
 $lang->upgrade->createFileWinCMD   = '打开命令行，执行<strong style="color:#ed980f">echo > %s</strong>';
 $lang->upgrade->createFileLinuxCMD = '在命令行执行: <strong style="color:#ed980f">touch %s</strong>';
 $lang->upgrade->setStatusFile      = '<h4>升级之前请先完成下面的操作：</h4>
@@ -53,6 +70,7 @@ $lang->upgrade->forbiddenExt  = '以下插件与新版本不兼容，已经自�
 $lang->upgrade->updateFile    = '需要更新附件信息。';
 $lang->upgrade->noticeSQL     = '检查到你的数据库跟标准不一致，尝试修复失败。请执行以下SQL语句，再刷新页面检查。';
 $lang->upgrade->afterDeleted  = '请执行上面命令删除文件， 删除后刷新！';
+$lang->upgrade->afterExec     = '请根据以上报错信息手动修改数据库，修改后刷新！';
 $lang->upgrade->mergeProgram  = '数据迁移';
 $lang->upgrade->mergeTips     = '数据迁移提示';
 $lang->upgrade->toPMS15Guide  = '禅道开源版15版本升级';
@@ -61,11 +79,11 @@ $lang->upgrade->toBIZ5Guide   = '禅道企业版5版本升级';
 $lang->upgrade->toMAXGuide    = '禅道旗舰版版本升级';
 
 $lang->upgrade->line            = '产品线';
-$lang->upgrade->allLines        = "所有{$lang->productCommon}线";
+$lang->upgrade->allLines        = "所有产品线";
 $lang->upgrade->program         = '目标项目集和项目';
 $lang->upgrade->existProgram    = '已有项目集';
 $lang->upgrade->existProject    = '已有项目';
-$lang->upgrade->existLine       = '已有' . $lang->productCommon . '线';
+$lang->upgrade->existLine       = '已有产品线';
 $lang->upgrade->product         = $lang->productCommon;
 $lang->upgrade->project         = '迭代';
 $lang->upgrade->repo            = '版本库';
@@ -94,8 +112,8 @@ $lang->upgrade->productCount      = "%s个{$lang->productCommon}";
 $lang->upgrade->projectCount      = "%s个{$lang->projectCommon}";
 $lang->upgrade->mergeByProject    = "当前提供如下2种数据迁移方式，如果历史的{$lang->projectCommon}都是长周期的，那么我们建议把历史的{$lang->projectCommon}作为项目升级。</br>如果历史的{$lang->projectCommon}都是短周期的，那么我们建议把历史的{$lang->projectCommon}作为{$lang->executionCommon}升级。";
 $lang->upgrade->mergeRepoTips     = "将选中的版本库归并到所选产品下。";
-$lang->upgrade->needBuild4Add     = '本次升级需要创建索引。请到 [后台->系统->重建索引] 页面，重新创建索引。';
-$lang->upgrade->needChangeEngine  = '本次升级需要更换表引擎， [后台->系统->表引擎] 页面更换引擎。';
+$lang->upgrade->needBuild4Add     = '本次升级需要创建索引。请到 [后台->系统设置->重建索引] 页面，重新创建索引。';
+$lang->upgrade->needChangeEngine  = '本次升级需要更换表引擎， [后台->系统设置->表引擎] 页面更换引擎。';
 $lang->upgrade->errorEngineInnodb = '您当前的数据库不支持使用InnoDB数据表引擎，请修改为MyISAM后重试。';
 $lang->upgrade->duplicateProject  = "同一个项目集内项目名称不能重复，请调整重名的项目名称";
 $lang->upgrade->upgradeTips       = "历史删除数据不参与升级，升级后将不支持还原，请知悉";
@@ -131,6 +149,8 @@ $lang->upgrade->mergeExecutionTip = "系统将自动按年创建项目，将历�
 $lang->upgrade->createProgramTip  = "同时系统将自动创建一个默认的项目集，将所有的{$lang->projectCommon}都放在默认的项目集下。";
 $lang->upgrade->mergeManuallyTip  = '可以手工选择数据归并的方式。';
 
+$lang->upgrade->defaultGroup = '默认分组';
+
 include dirname(__FILE__) . '/version.php';
 
 $lang->upgrade->recoveryActions = new stdclass();
@@ -138,4 +158,6 @@ $lang->upgrade->recoveryActions->cancel = '取消';
 $lang->upgrade->recoveryActions->review = '评审';
 
 $lang->upgrade->remark     = '备注';
-$lang->upgrade->remarkDesc = '后续您还可以在禅道的后台-系统-模式中进行切换。';
+$lang->upgrade->remarkDesc = '后续您还可以在禅道的后台-系统设置-模式中进行切换。';
+
+$lang->upgrade->upgradingTip = '系统正在升级中，请耐心等待...';

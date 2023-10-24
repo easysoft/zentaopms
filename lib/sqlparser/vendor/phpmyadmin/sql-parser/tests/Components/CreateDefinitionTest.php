@@ -1,17 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Components;
 
 use PhpMyAdmin\SqlParser\Components\CreateDefinition;
 use PhpMyAdmin\SqlParser\Parser;
-use PhpMyAdmin\SqlParser\Statements\CreateStatement;
 use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class CreateDefinitionTest extends TestCase
 {
-    public function testParse(): void
+    public function testParse()
     {
         $component = CreateDefinition::parse(
             new Parser(),
@@ -23,7 +20,7 @@ class CreateDefinitionTest extends TestCase
         $this->assertEquals('FULLTEXT INDEX `indx` (`str`)', (string) $component[1]);
     }
 
-    public function testParse2(): void
+    public function testParse2()
     {
         $component = CreateDefinition::parse(
             new Parser(),
@@ -35,7 +32,7 @@ class CreateDefinitionTest extends TestCase
         $this->assertTrue($component[0]->options->has('NOT NULL'));
     }
 
-    public function testParseErr1(): void
+    public function testParseErr1()
     {
         $parser = new Parser();
         $component = CreateDefinition::parse(
@@ -50,7 +47,7 @@ class CreateDefinitionTest extends TestCase
         );
     }
 
-    public function testParseErr2(): void
+    public function testParseErr2()
     {
         $parser = new Parser();
         CreateDefinition::parse(
@@ -64,44 +61,38 @@ class CreateDefinitionTest extends TestCase
         );
     }
 
-    public function testBuild(): void
+    public function testBuild()
     {
         $parser = new Parser(
             'CREATE TABLE `payment` (' .
             '-- snippet' . "\n" .
             '`customer_id` smallint(5) unsigned NOT NULL,' .
-            'CONSTRAINT `fk_payment_customer` FOREIGN KEY (`customer_id`) ' .
-            'REFERENCES `customer` (`customer_id`) ON UPDATE CASCADE' .
+            'CONSTRAINT `fk_payment_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON UPDATE CASCADE' .
             ') ENGINE=InnoDB"'
         );
-        $this->assertInstanceOf(CreateStatement::class, $parser->statements[0]);
         $this->assertEquals(
-            'CONSTRAINT `fk_payment_customer` FOREIGN KEY (`customer_id`) ' .
-            'REFERENCES `customer` (`customer_id`) ON UPDATE CASCADE',
+            'CONSTRAINT `fk_payment_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON UPDATE CASCADE',
             CreateDefinition::build($parser->statements[0]->fields[1])
         );
     }
 
-    public function testBuild2(): void
+    public function testBuild2()
     {
         $parser = new Parser(
             'CREATE TABLE `payment` (' .
             '-- snippet' . "\n" .
             '`customer_id` smallint(5) unsigned NOT NULL,' .
-            '`customer_data` longtext CHARACTER SET utf8mb4 CHARSET utf8mb4_bin NOT NULL ' .
-            'CHECK (json_valid(customer_data)),CONSTRAINT `fk_payment_customer` FOREIGN KEY ' .
-            '(`customer_id`) REFERENCES `customer` (`customer_id`) ON UPDATE CASCADE' .
+            '`customer_data` longtext CHARACTER SET utf8mb4 CHARSET utf8mb4_bin NOT NULL CHECK (json_valid(customer_data)),' .
+            'CONSTRAINT `fk_payment_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON UPDATE CASCADE' .
             ') ENGINE=InnoDB"'
         );
-        $this->assertInstanceOf(CreateStatement::class, $parser->statements[0]);
         $this->assertEquals(
-            'CONSTRAINT `fk_payment_customer` FOREIGN KEY (`customer_id`) ' .
-            'REFERENCES `customer` (`customer_id`) ON UPDATE CASCADE',
+            'CONSTRAINT `fk_payment_customer` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`) ON UPDATE CASCADE',
             CreateDefinition::build($parser->statements[0]->fields[2])
         );
     }
 
-    public function testBuild3(): void
+    public function testBuild3()
     {
         $parser = new Parser(
             'DROP TABLE IF EXISTS `searches`;'
@@ -119,7 +110,6 @@ class CreateDefinitionTest extends TestCase
             . ''
             . 'ALTER TABLE `searches` ADD `admins_only` BOOLEAN NOT NULL DEFAULT FALSE AFTER `show_separators`;'
         );
-        $this->assertInstanceOf(CreateStatement::class, $parser->statements[1]);
         $this->assertEquals(
             '`public_name` varchar(120) COLLATE utf8_unicode_ci NOT NULL',
             CreateDefinition::build($parser->statements[1]->fields[2])
@@ -134,7 +124,7 @@ class CreateDefinitionTest extends TestCase
         );
     }
 
-    public function testBuildWithInvisibleKeyword(): void
+    public function testBuildWithInvisibleKeyword()
     {
         $parser = new Parser(
             'CREATE TABLE `payment` (' .
@@ -145,7 +135,8 @@ class CreateDefinitionTest extends TestCase
             '(`customer_id`) REFERENCES `customer` (`customer_id`) ON UPDATE CASCADE' .
             ') ENGINE=InnoDB"'
         );
-        $this->assertInstanceOf(CreateStatement::class, $parser->statements[0]);
+        // TODO: when not supporting PHP 5.3 anymore, replace this by CreateStatement::class.
+        $this->assertInstanceOf('PhpMyAdmin\\SqlParser\\Statements\\CreateStatement', $parser->statements[0]);
         $this->assertEquals(
             '`customer_id` smallint(5) UNSIGNED NOT NULL INVISIBLE',
             CreateDefinition::build($parser->statements[0]->fields[0])

@@ -2,7 +2,7 @@
 /**
  * The model file of file module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     file
@@ -123,14 +123,14 @@ class fileModel extends model
      * Save upload.
      *
      * @param  string $objectType
-     * @param  string $objectID
+     * @param  int    $objectID
      * @param  string $extra
      * @param  string $filesName
      * @param  string $labelsName
      * @access public
      * @return array
      */
-    public function saveUpload($objectType = '', $objectID = '', $extra = '', $filesName = 'files', $labelsName = 'labels')
+    public function saveUpload($objectType = '', $objectID = 0, $extra = '', $filesName = 'files', $labelsName = 'labels')
     {
         $fileTitles = array();
         $now        = helper::today();
@@ -733,7 +733,7 @@ class fileModel extends model
             $line = str_replace('""', '"', $line);
 
             /* if only one column then line is the data. */
-            if(strpos($line, ',') === false and $line[0] != '"' and $col == -1)
+            if(strpos($line, ',') === false and isset($line[0]) and $line[0] != '"' and $col == -1)
             {
                 $data[$row][0] = trim($line, '"');
             }
@@ -1082,7 +1082,7 @@ class fileModel extends model
         if($type == 'file' and stripos($content, $this->savePath) !== 0) helper::end();
 
         /* Append the extension name auto. */
-        $extension = '.' . $fileType;
+        $extension = $fileType ? '.' . $fileType : '';
         if(strpos($fileName, $extension) === false) $fileName .= $extension;
 
         /* urlencode the filename for ie. */
@@ -1172,13 +1172,16 @@ class fileModel extends model
     /**
      * Process file info for object.
      *
-     * @param  string    $objectType
-     * @param  object    $oldObject
-     * @param  object    $newObject
+     * @param  string $objectType
+     * @param  object $oldObject
+     * @param  object $newObject
+     * @param  string $extra
+     * @param  string $filesName
+     * @param  string $labelsName
      * @access public
      * @return void
      */
-    public function processFile4Object($objectType, $oldObject, $newObject)
+    public function processFile4Object($objectType, $oldObject, $newObject, $extra = '', $filesName = 'files', $labelsName = 'labels')
     {
         $oldFiles    = empty($oldObject->files) ? '' : join(',', array_keys($oldObject->files));
         $deleteFiles = $newObject->deleteFiles;
@@ -1193,7 +1196,7 @@ class fileModel extends model
         }
 
         $this->updateObjectID($this->post->uid, $oldObject->id, $objectType);
-        $addedFiles = $this->saveUpload($objectType, $oldObject->id);
+        $addedFiles = $this->saveUpload($objectType, $oldObject->id, $extra, $filesName, $labelsName);
         $addedFiles = empty($addedFiles) ? '' : ',' . join(',', array_keys($addedFiles));
 
         $newObject->files = trim($oldFiles . $addedFiles, ',');

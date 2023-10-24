@@ -2,7 +2,7 @@
 /**
  * The trash view file of action module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
@@ -14,7 +14,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php $activeClass = $currentObjectType == 'all' ? 'btn-active-text' : '';?>
-    <?php echo html::a($this->createLink('action', 'trash', "objectType=all&type=$type"), "<span class='text'>" . $lang->action->periods['all'] . "</span>", '', "class='btn btn-link $activeClass'");?>
+    <?php echo html::a($this->createLink('action', 'trash', "objectType=all&type=$type"), "<span class='text'>" . $lang->all . "</span>", '', "class='btn btn-link $activeClass'");?>
     <?php
     /* Output the objectType order by preferredTypeConfig. */
     foreach($preferredTypeConfig as $objectType)
@@ -102,6 +102,11 @@
         <tr>
           <td><?php echo zget($lang->action->objectTypes, $action->objectType, '');?></td>
           <td><?php echo $action->objectID;?></td>
+          <?php if($action->objectType == 'scene'): ?>
+          <td class='text-left'>
+            <?php echo $action->objectName;?>
+          </td>
+          <?php else: ?>
           <td class='text-left'>
             <?php
             $params     = $action->objectType == 'user' ? "account={$action->objectName}" : "id={$action->objectID}";
@@ -116,6 +121,11 @@
                 $module     = 'measurement';
                 $methodName = 'setSQL';
                 $params     = "id={$action->objectID}";
+            }
+            if($module == 'deploystep')
+            {
+                $module     = 'deploy';
+                $methodName = 'viewStep';
             }
             if($action->objectType == 'api')
             {
@@ -146,6 +156,7 @@
             }
             ?>
           </td>
+        <?php endif ?>
           <?php if($currentObjectType == 'execution'):?>
           <td class="c-name flex" title="<?php echo $projectList[$action->project]->name;?>">
             <span class="text-ellipsis"><?php echo $projectList[$action->project]->name;?></span>

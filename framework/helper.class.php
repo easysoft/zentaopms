@@ -96,7 +96,7 @@ class helper extends baseHelper
         }
         else
         {
-            if($feature == 'scrum' or $feature == 'waterfall') return strpos(",$config->disabledFeatures,", ",{$feature},") === false;
+            if(in_array($feature, array('scrum', 'waterfall', 'agileplus', 'waterfallplus'))) return strpos(",$config->disabledFeatures,", ",{$feature},") === false;
 
             $hasFeature       = false;
             $canConfigFeature = false;
@@ -107,7 +107,7 @@ class helper extends baseHelper
                     if($feature == $group or $feature == $module)
                     {
                         $canConfigFeature = true;
-                        if($group == 'scrum' or $group == 'waterfall')
+                        if(in_array($group, array('scrum', 'waterfall', 'agileplus', 'waterfallplus')))
                         {
                             if(helper::hasFeature("{$group}") and helper::hasFeature("{$group}_{$module}")) $hasFeature = true;
                         }
@@ -237,6 +237,23 @@ class helper extends baseHelper
         );
     }
 
+    /**
+     * Process traffic.
+     *
+     * @param  float  $traffic
+     * @param  int    $precision
+     * @access public
+     * @return float
+     */
+    public static function formatKB($traffic, $precision = 2)
+    {
+        if(!$traffic) return 0;
+        $base     = log($traffic, 1024);
+        $suffixes = array('', 'KB', 'MB', 'GB', 'TB');
+
+        return round(pow(1024, $base - floor($base)), $precision) . $suffixes[floor($base)];
+    }
+
 	/**
 	 * Trim version to xuanxuan version format.
 	 *
@@ -305,6 +322,93 @@ class helper extends baseHelper
     {
         throw EndResponseException::create($content);
     }
+
+    /**
+     * Get date interval.
+     *
+     * @param  string|int $begin
+     * @param  string|int $end
+     * @param  string     $format  %Y-%m-%d %H:%i:%s
+     * @static
+     * @access public
+     * @return object|string
+     */
+    public static function getDateInterval($begin, $end = '', $format = '')
+    {
+        if(empty($end))    $end   = time();
+        if(is_int($begin)) $begin = date('Y-m-d H:i:s', $begin);
+        if(is_int($end))   $end   = date('Y-m-d H:i:s', $end);
+
+        $begin    = date_create($begin);
+        $end      = date_create($end);
+        $interval = date_diff($begin, $end);
+
+        if($format)
+        {
+            $dateInterval = $interval->format($format);
+        }
+        else
+        {
+            $dateInterval = new stdClass();
+            $dateInterval->year    = $interval->format('%y');
+            $dateInterval->month   = $interval->format('%m');
+            $dateInterval->day     = $interval->format('%d');
+            $dateInterval->hour    = $interval->format('%H');
+            $dateInterval->minute  = $interval->format('%i');
+            $dateInterval->secound = $interval->format('%s');
+            $dateInterval->year    = $dateInterval->year == '00' ? 0 : ltrim($dateInterval->year, '0');
+            $dateInterval->month   = $dateInterval->month == '00' ? 0 : ltrim($dateInterval->month, '0');
+            $dateInterval->day     = $dateInterval->day == '00' ? 0 : ltrim($dateInterval->day, '0');
+            $dateInterval->hour    = $dateInterval->hour == '00' ? 0 : ltrim($dateInterval->hour, '0');
+            $dateInterval->minute  = $dateInterval->minute == '00' ? 0 : ltrim($dateInterval->minute, '0');
+            $dateInterval->secound = $dateInterval->secound == '00' ? 0 : ltrim($dateInterval->secound, '0');
+        }
+        return $dateInterval;
+    }
+
+    /**
+     * 是否是内网。
+     * Check is intranet.
+     *
+     * @return bool
+     */
+    public static function isIntranet()
+    {
+        return !defined('USE_INTRANET') ? false : USE_INTRANET;
+    }
+
+    /**
+     * 转换类型。
+     * Convert the type.
+     *
+     * @param mixed  $value
+     * @param string $type
+     * @static
+     * @access public
+     * @return array|bool|float|int|object|string
+     */
+    public static function convertType($value, $type)
+    {
+        switch($type)
+        {
+            case 'int':
+                return (int)$value;
+            case 'float':
+                return (float)$value;
+            case 'bool':
+                return (bool)$value;
+            case 'array':
+                return (array)$value;
+            case 'object':
+                return (object)$value;
+            case 'datetime':
+            case 'date':
+                return $value ? (string)$value : null;
+            case 'string':
+            default:
+                return (string)$value;
+        }
+    }
 }
 
 /**
@@ -320,6 +424,18 @@ function isonlybody()
 }
 
 /**
+ * 检查页面是否是弹窗中。
+ * Check page is modal.
+ *
+ * @access public
+ * @return bool
+ */
+function isInModal(): bool
+{
+    return helper::isAjaxRequest('modal');
+}
+
+/**
  * Format time.
  *
  * @param  int    $time
@@ -329,6 +445,7 @@ function isonlybody()
  */
 function formatTime($time, $format = '')
 {
+    if(empty($time)) return '';
     $time = str_replace('0000-00-00', '', $time);
     $time = str_replace('00:00:00', '', $time);
     if(trim($time) == '') return '';
@@ -352,3 +469,263 @@ function autoloader($class)
 }
 
 spl_autoload_register('autoloader');
+
+/**
+ * Init page title based on the module name and the method name.
+ *
+ * @access public
+ * @return string
+ */
+function initPageTitle(): string
+{
+    global $app, $lang;
+    $module = $app->rawModule;
+    $method = $app->rawMethod;
+
+    if(empty($lang->$module)) $app->loadLang($module);
+
+    if(!empty($lang->$module->{$method . 'Action'})) return $lang->$module->{$method . 'Action'};
+    if(!empty($lang->$module->$method)) return $lang->$module->$method;
+    return zget($lang, $method);
+}
+
+/**
+ * Init page entity based on configuration of objectNameFields.
+ *
+ * @param  object $object
+ * @access public
+ * @return array
+ */
+function initPageEntity(object $object): array
+{
+    if(empty($object)) return array();
+
+    global $app, $config;
+    $app->loadModuleConfig('action');
+
+    $module     = $app->getModuleName();
+    $idField    = isset($config->action->objectIdFields[$module])   ? $config->action->objectIdFields[$module]   : 'id';
+    $titleField = isset($config->action->objectNameFields[$module]) ? $config->action->objectNameFields[$module] : 'title';
+
+    return array(zget($object, $titleField, ''), zget($object, $idField, 0));
+}
+
+/**
+ * Init table data of zin.
+ *
+ * @param  array  $items
+ * @param  array  $fieldList
+ * @param  object $model
+ * @access public
+ * @return array
+ */
+function initTableData(array $items, array &$fieldList, object $model = null): array
+{
+    if(!empty($_GET['orderBy'])) list($orderField, $orderVaule) = explode('_', $_GET['orderBy']);
+    if(!empty($orderField) && !empty($orderVaule) && !empty($fieldList[$orderField]))
+    {
+        $sortType = false;
+        $col      = $fieldList[$orderField];
+        if(empty($col['sortType']) && !empty($col['type']) && in_array($col['type'], array('id', 'title'))) $sortType = true;
+        if(!empty($col['sortType'])) $sortType = $col['sortType'];
+        if(is_bool($sortType)) $fieldList[$orderField]['sortType'] = $orderVaule;
+    }
+
+    $items = setParent($items);
+    if(empty($fieldList['actions'])) return $items;
+
+    foreach($fieldList['actions']['menu'] as $actionMenu)
+    {
+        if(is_array($actionMenu))
+        {
+            foreach($actionMenu as $actionMenuKey => $actionName)
+            {
+                if($actionMenuKey == 'other')
+                {
+                    foreach($actionName as $otherActionName) initTableActions($fieldList, $otherActionName);
+                }
+                else
+                {
+                    initTableActions($fieldList, $actionName);
+                }
+            }
+        }
+        else
+        {
+            initTableActions($fieldList, $actionMenu);
+        }
+    }
+
+    global $app;
+    if(empty($model))
+    {
+        $module = $app->getModuleName();
+        $model  = $app->control->loadModel($module);
+    }
+
+    $maxActionCount = 0;
+    foreach($items as $item)
+    {
+        $item->actions = array();
+        foreach($fieldList['actions']['menu'] as $actionKey => $actionMenu)
+        {
+            if(isset($actionMenu['other']))
+            {
+                $currentActionMenu = $actionMenu[0];
+                initItemActions($item, $currentActionMenu, $fieldList['actions']['list'], $model);
+
+                $otherActionMenus = $actionMenu['other'];
+                $otherAction      = '';
+                foreach($otherActionMenus as $otherActionMenu)
+                {
+                    $otherActions = explode('|', $otherActionMenu);
+                    foreach($otherActions as $otherActionName)
+                    {
+                        if(in_array($otherActionName, array_column($item->actions, 'name'))) continue;
+
+                        if(method_exists($model, 'isClickable') && !$model->isClickable($item, $otherActionName)) $otherAction .= '-';
+                        $otherAction .= $otherActionName . ',';
+                    }
+                }
+                $item->actions[] = 'other:' . $otherAction;
+            }
+            elseif($actionKey === 'more')
+            {
+                $moreAction = '';
+                foreach($actionMenu as $moreActionName)
+                {
+                    if(method_exists($model, 'isClickable') && !$model->isClickable($item, $moreActionName)) $moreAction .= '-';
+                    $moreAction .= $moreActionName . ',';
+                }
+
+                $item->actions[] = 'more:' . $moreAction;
+            }
+            elseif(is_array($actionMenu))       // Two or more grups.
+            {
+                /*
+                 * Menu可能会有多套，如果只有一套可以直接用一维数组。
+                 * There are maybe two or more groups of action menus.
+                 */
+                $item->actions = array();
+                $isClickable   = false;
+                foreach($actionMenu as $actionName) $isClickable |= initItemActions($item, $actionName, $fieldList['actions']['list'], $model);
+
+                if($isClickable) break;     // If the action is clickable, use this group.
+            }
+            else // Only one group of action menus.
+            {
+                initItemActions($item, $actionMenu, $fieldList['actions']['list'], $model);
+            }
+        }
+
+        if(count($item->actions) > $maxActionCount) $maxActionCount = count($item->actions);
+    }
+    if(isset($fieldList['actions'])) $fieldList['actions']['minWidth'] = $maxActionCount * 24 + 24;
+    if($fieldList['actions']['minWidth'] < 48) $fieldList['actions']['minWidth'] = 48;
+
+    return array_values($items);
+}
+
+/**
+ * Set the parent property of the data.
+ *
+ * @param  array  $items
+ * @access public
+ * @return array
+ */
+function setParent(array $items)
+{
+    foreach($items as $item)
+    {
+        /* Set parent attribute. */
+        $item->isParent = false;
+        if(isset($item->parent) && $item->parent == -1)
+        {
+            /* When the parent is -1, the hierarchical structure is displayed incorrectly. */
+            $item->parent   = 0;
+            $item->isParent = true;
+        }
+
+        if(!empty($item->parent) && isset($items[$item->parent])) $items[$item->parent]->isParent = true;
+    }
+    return $items;
+}
+
+/**
+ * Init column actions of a table.
+ *
+ * @param  array  $fieldList
+ * @param  string $actionMenu
+ * @access public
+ * @return void
+ */
+function initTableActions(array &$fieldList, string $actionMenu): void
+{
+    $actions = explode('|', $actionMenu);
+    foreach($actions as $action)
+    {
+        if(!isset($fieldList['actions']['list'][$action])) continue;
+
+        $actionConfig = $fieldList['actions']['list'][$action];
+        $actionConfig['text'] = '';
+
+        if(!empty($actionConfig['url']['module']) && !empty($actionConfig['url']['method']))
+        {
+            $module = $actionConfig['url']['module'];
+            $method = $actionConfig['url']['method'];
+            $params = !empty($actionConfig['url']['params']) ? $actionConfig['url']['params'] : array();
+
+            $actionConfig['url'] = helper::createLink($module, $method, $params);
+        }
+
+        $fieldList['actions']['actionsMap'][$action] = $actionConfig;
+    }
+}
+
+/**
+ * Init row actions of a item.
+ *
+ * @param  object $item
+ * @param  string $actionMenu
+ * @param  array  $actionList
+ * @param  object $model
+ * @access public
+ * @return bool
+ */
+function initItemActions(object &$item, string $actionMenu, array $actionList, object $model): bool
+{
+    global $app;
+    $module = $app->getModuleName();
+    $method = '';
+
+    $isClickable = false;
+    $actions     = explode('|', $actionMenu);
+    foreach($actions as $action)
+    {
+        if(!isset($actionList[$action])) continue;
+
+        $actionConfig = $actionList[$action];
+        if(!empty($actionConfig['url']['module']) && $module != $actionConfig['url']['module'])
+        {
+            $module = $actionConfig['url']['module'];
+            $model  = $app->control->loadModel($module);
+        }
+
+        $method = $action;
+        if(!empty($actionConfig['url']['method']) && $method != $actionConfig['url']['method']) $method = $actionConfig['url']['method'];
+
+        if(!method_exists($model, 'isClickable') || $model->isClickable($item, $method))
+        {
+            $isClickable = true;
+            break;
+        }
+    }
+
+    if(method_exists($model, 'isDisplay') && !$model->isDisplay($item, $method)) return $isClickable;
+
+    if(!$method || !common::hasPriv($module, $method)) return $isClickable;
+
+    $item->actions[] = array('name' => $action, 'disabled' => !$isClickable);
+
+    return $isClickable;
+}

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/pipeline.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -42,4 +41,3 @@ r($result2) && p('account') && e('JenkinsAccount');                //获取添�
 r($result3) && p('url:0')   && e('『服务地址』应当为合法的URL。'); //添加错误的url信息
 r($result4) && p('name:0')  && e('『名称』不能为空');              //添加名称为空时
 
-$db->restoreDB();

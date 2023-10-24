@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/stakeholder.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -30,4 +29,3 @@ r(count($stakeholder->batchCreateTest($projectIDList[1], $normalStakeholder))) &
 r(count($stakeholder->batchCreateTest($projectIDList[2], $normalStakeholder))) && p() && e('6');
 r(count($stakeholder->batchCreateTest($projectIDList[0], $noRealnames)))       && p() && e('6');
 
-$db->restoreDB();

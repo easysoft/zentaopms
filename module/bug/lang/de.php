@@ -2,7 +2,7 @@
 /**
  * The bug module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -17,7 +17,7 @@ $lang->bug->branch           = 'Branch/Platform';
 $lang->bug->productplan      = 'Plan';
 $lang->bug->module           = 'Modul';
 $lang->bug->moduleAB         = 'Modul';
-$lang->bug->project          = 'Project';
+$lang->bug->project          = $lang->projectCommon;
 $lang->bug->execution        = $lang->execution->common;
 $lang->bug->kanban           = 'Kanban';
 $lang->bug->story            = 'Story';
@@ -95,9 +95,9 @@ $lang->bug->toCase           = 'Zu Fall';
 $lang->bug->colorTag         = 'Farb Tag';
 $lang->bug->fixedRate        = 'Fixed Rate';
 $lang->bug->noticefeedbackBy = 'NoticeFeedbackBy';
-$lang->bug->selectProjects   = 'Select Projects';
+$lang->bug->selectProjects   = "Select {$lang->projectCommon}s";
 $lang->bug->nextStep         = 'Next Step';
-$lang->bug->noProject        = 'Haven’t chosen a project yet.';
+$lang->bug->noProject        = "Haven’t chosen a {$lang->projectCommon} yet.";
 $lang->bug->noExecution      = 'Haven’t chosen a ' . strtolower($lang->execution->common) . ' yet.';
 
 /* Method list. */
@@ -154,7 +154,7 @@ $lang->bug->overdueBugs        = 'Überfällig';
 $lang->bug->allBugs            = 'Alle';
 $lang->bug->byQuery            = 'Suche';
 $lang->bug->needConfirm        = 'Story geändert';
-$lang->bug->allProject         = 'All Projects';
+$lang->bug->allProject         = "All {$lang->projectCommon}s";
 $lang->bug->allProduct         = 'Alle' . $lang->productCommon;
 $lang->bug->my                 = 'Meine';
 $lang->bug->yesterdayResolved  = 'Gestern gelöst ';
@@ -166,7 +166,7 @@ $lang->bug->openedByMeAB   = 'Von mir erstellt';
 $lang->bug->resolvedByMeAB = 'Von mir gelöst';
 
 $lang->bug->ditto          = 'Dito';
-$lang->bug->dittoNotice    = 'This bug is not linked to the same product as the last one!';
+$lang->bug->dittoNotice    = "This bug is not linked to the same {$lang->productCommon} as the last one is!";
 $lang->bug->noAssigned     = 'Zuweisen';
 $lang->bug->noBug          = 'Keine Bugs. ';
 $lang->bug->noModule       = '<div>Sie haben keine Module</div><div>Jetzt verwalten</div>';
@@ -192,8 +192,8 @@ global $config;
 /* Legend list. */
 $lang->bug->legendBasicInfo             = 'Basis Info';
 $lang->bug->legendAttatch               = 'Anlagen';
-$lang->bug->legendPRJExecStoryTask      = 'Project/' . $lang->executionCommon . '/Story/Task';
-$lang->bug->legendExecStoryTask         = 'Porject/Story/Task';
+$lang->bug->legendPRJExecStoryTask      = "{$lang->SRCommon}/{$lang->executionCommon}/Story/Task";
+$lang->bug->legendExecStoryTask         = "{$lang->SRCommon}/Story/Task";
 $lang->bug->lblTypeAndSeverity          = 'Typ/Schwere';
 $lang->bug->lblSystemBrowserAndHardware = 'System/Browser';
 $lang->bug->legendSteps                 = 'Reproduktionsschritte';
@@ -426,11 +426,11 @@ $lang->bug->featureBar['browse']['resolvedbyme'] = $lang->bug->resolvedByMe;
 $lang->bug->featureBar['browse']['unresolved']   = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['more']         = $lang->more;
 
-$lang->bug->moreSelects['assignedbyme']  = $lang->bug->assignedByMe;
-$lang->bug->moreSelects['unconfirmed']   = $lang->bug->unconfirmed;
-$lang->bug->moreSelects['assigntonull']  = $lang->bug->assignToNull;
-$lang->bug->moreSelects['longlifebugs']  = $lang->bug->longLifeBugs;
-$lang->bug->moreSelects['toclosed']      = $lang->bug->toClosed;
-$lang->bug->moreSelects['postponedbugs'] = $lang->bug->postponedBugs;
-$lang->bug->moreSelects['overduebugs']   = $lang->bug->overdueBugs;
-$lang->bug->moreSelects['needconfirm']   = $lang->bug->needConfirm;
+$lang->bug->moreSelects['browse']['more']['assignedbyme']  = $lang->bug->assignedByMe;
+$lang->bug->moreSelects['browse']['more']['unconfirmed']   = $lang->bug->unconfirmed;
+$lang->bug->moreSelects['browse']['more']['assigntonull']  = $lang->bug->assignToNull;
+$lang->bug->moreSelects['browse']['more']['longlifebugs']  = $lang->bug->longLifeBugs;
+$lang->bug->moreSelects['browse']['more']['toclosed']      = $lang->bug->toClosed;
+$lang->bug->moreSelects['browse']['more']['postponedbugs'] = $lang->bug->postponedBugs;
+$lang->bug->moreSelects['browse']['more']['overduebugs']   = $lang->bug->overdueBugs;
+$lang->bug->moreSelects['browse']['more']['needconfirm']   = $lang->bug->needConfirm;

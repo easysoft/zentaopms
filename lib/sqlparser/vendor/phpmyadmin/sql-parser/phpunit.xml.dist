@@ -11,9 +11,7 @@
          processIsolation="false"
          stopOnFailure="false">
     <logging>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
-        <log type="coverage-xml" target="build/logs/coverage-xml"/>
-        <log type="junit" target="build/logs/junit.xml"/>
+        <log type="coverage-clover" target="build/logs/clover.xml" />
     </logging>
     <testsuites>
         <testsuite name="Builder">

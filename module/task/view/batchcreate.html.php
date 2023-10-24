@@ -2,7 +2,7 @@
 /**
  * The batch create view of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     task
@@ -75,7 +75,7 @@ $colspan = count($visibleFields) + 3;
             <th class='c-module'><?php echo $lang->kanbancard->region;?></th>
             <th class='c-module'><?php echo $lang->kanbancard->lane;?></th>
             <?php endif;?>
-            <th class='c-type required'><?php echo $lang->typeAB;?></span></th>
+            <th class='c-type required'><?php echo $lang->task->type;?></span></th>
             <th class='c-assigned<?php echo zget($visibleFields, 'assignedTo', ' hidden') . zget($requiredFields, 'assignedTo', '', ' required');?> assignedToBox'><?php echo $lang->task->assignedTo;?></th>
             <th class='c-estimate<?php  echo zget($visibleFields, 'estimate', ' hidden') . zget($requiredFields, 'estimate', '', ' required');?> estimateBox'><?php echo $lang->task->estimateAB;?></th>
             <th class='c-date<?php echo zget($visibleFields, 'estStarted', ' hidden') . zget($requiredFields, 'estStarted', '', ' required');?> estStartedBox'><?php echo $lang->task->estStarted;?></th>
@@ -186,8 +186,8 @@ $colspan = count($visibleFields) + 3;
         <tfoot>
           <tr>
             <td colspan='<?php echo $colspan?>' class='text-center form-actions'>
-              <?php echo html::submitButton();?>
-              <?php echo html::backButton();?>
+              <?php echo html::submitButton(); ?>
+              <?php echo html::backButton(); ?>
             </td>
           </tr>
         </tfoot>
@@ -344,4 +344,5 @@ $(function()
 </script>
 <?php endif;?>
 <?php include '../../common/view/pastetext.html.php';?>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

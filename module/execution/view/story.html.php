@@ -2,7 +2,7 @@
 /**
  * The story view file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
@@ -30,7 +30,6 @@
 <?php js::set('linkedTaskStories', $linkedTaskStories);?>
 <?php js::set('confirmStoryToTask', $lang->execution->confirmStoryToTask);?>
 <style>
-.btn-group a i.icon-plus, .btn-group a i.icon-link {font-size: 16px;}
 .btn-group a.btn-secondary, .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 .export {margin-left: 0px !important;}
@@ -62,7 +61,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-left">
-    <?php foreach($lang->story->featureBar['browse'] as $featureType => $label):?>
+    <?php foreach($lang->execution->featureBar['story'] as $featureType => $label):?>
     <?php $active = $type == $featureType ? 'btn-active-text' : '';?>
     <?php $label  = "<span class='text'>$label</span>";?>
     <?php if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
@@ -239,10 +238,10 @@
 
       $totalEstimate       = 0;
       $canBatchEdit        = common::hasPriv('story', 'batchEdit');
-      $canBatchClose       = common::hasPriv('story', 'batchClose');
-      $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage');
+      $canBatchClose       = (common::hasPriv('story', 'batchClose') and $storyType != 'requirement');
+      $canBatchChangeStage = (common::hasPriv('story', 'batchChangeStage') and $storyType != 'requirement');
       $canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
-      $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject);
+      $canBatchToTask      = (common::hasPriv('story', 'batchToTask', $checkObject) and $storyType != 'requirement');
       $canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
 
       $canBatchAction      = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask or $canBatchAssignTo));
@@ -271,6 +270,7 @@
           <?php foreach($stories as $key => $story):?>
           <?php
           $totalEstimate += $story->estimate;
+          $story->from    = $this->app->tab;
           ?>
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
           <?php foreach($setting as $key => $value)
@@ -286,7 +286,7 @@
           <?php if(!empty($story->children)):?>
           <?php $i = 0;?>
           <?php foreach($story->children as $key => $child):?>
-          <?php $child->from = 'execution';?>
+          <?php $child->from = $this->app->tab;?>
           <?php $class  = $i == 0 ? ' table-child-top' : '';?>
           <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
           <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
@@ -364,7 +364,7 @@
               echo html::commonButton($lang->close, "data-form-action='$actionLink'");
           }
           ?>
-          <?php if(common::hasPriv('story', 'batchChangeStage')):?>
+          <?php if($canBatchChangeStage):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->stageAB;?> <span class="caret"></span></button>
             <ul class='dropdown-menu <?php echo count($stories) == 1 ? 'stageBox' : '';?>'>
@@ -404,14 +404,15 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
         <?php
         $linkStoryByPlanTips = $multiBranch ? sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->project->branch) : $lang->execution->linkNormalStoryByPlanTips;
-        $linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->executionCommon, $lang->projectCommon, $linkStoryByPlanTips);
+        $linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
         ?>
         <h4 class="modal-title"><?php echo $lang->execution->linkStoryByPlan;?></h4><?php echo '(' . $linkStoryByPlanTips . ')';?>
       </div>
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('plan', $allPlans, '', "class='form-control chosen' id='plan'");?>
-          <?php $disabled = empty(array_filter($allPlans)) ? 'disabled' : ''?>
+          <?php $allPlans = array_filter($allPlans);?>
+          <?php $disabled = empty($allPlans) ? 'disabled' : ''?>
           <span class='input-group-btn'><?php echo html::commonButton($lang->execution->linkStory, "id='toTaskButton'", 'btn btn-primary ' . $disabled);?></span>
         </div>
       </div>

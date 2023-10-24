@@ -2,7 +2,7 @@
 /**
  * The model file of personnel of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     personnel
@@ -130,7 +130,7 @@ class personnelModel extends model
         $executionPairs    = $this->getInvolvedExecutions($projects);
         $taskInvest        = $this->getProjectTaskInvest($projects, $accountPairs);
         $bugAndStoryInvest = $this->getBugAndStoryInvest($accountPairs, $programID);
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             $issueInvest = $this->getIssueInvest($accountPairs, $projects);
             $riskInvest  = $this->getRiskInvest($accountPairs, $projects);
@@ -142,6 +142,7 @@ class personnelModel extends model
         {
             $user = zget($users, $account, '');
 
+            if(empty($user)) continue;
             if(!empty($user) and !isset($personnelList[$user->role])) $personnelList[$user->role] = array();
 
             $personnelList[$user->role][$account]['realname']   = $user ? $user->realname : $account;
@@ -152,7 +153,7 @@ class personnelModel extends model
 
             $personnelList[$user->role][$account] += $taskInvest[$account];
             $personnelList[$user->role][$account] += $bugAndStoryInvest[$account];
-            if($this->config->edition == 'max')
+            if($this->config->edition == 'max' or $this->config->edition == 'ipd')
             {
                 $personnelList[$user->role][$account] += $issueInvest[$account];
                 $personnelList[$user->role][$account] += $riskInvest[$account];
@@ -376,15 +377,7 @@ class personnelModel extends model
         }
 
         /* The number of hours per person. */
-        $userHours = array();
-        if($this->config->edition != 'open')
-        {
-            $userHours = $this->getUserEffortHours($userTasks);
-        }
-        else
-        {
-            $userHours = $this->getUserHours($userTasks);
-        }
+        $userHours = $this->getUserHours($userTasks);
 
         foreach($userHours as $account => $hours)
         {
@@ -393,33 +386,6 @@ class personnelModel extends model
         }
 
         return $invest;
-    }
-
-    /**
-     * Get user hours.
-     *
-     * @param  object    $userTasks
-     * @access public
-     * @return object
-     */
-    public function getUserEffortHours($userTasks)
-    {
-        $accounts   = array();
-        $taskIDList = array();
-        foreach($userTasks as $account => $taskID)
-        {
-            $accounts[] = $account;
-            $taskIDList = array_merge($taskIDList, $taskID);
-        }
-
-        $userHours = $this->dao->select('account, sum(`left`) as `left`, sum(consumed) as consumed')->from(TABLE_EFFORT)
-            ->where('account')->in($accounts)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('objectType')->eq('task')
-            ->andWhere('objectID')->in($taskIDList)
-            ->groupBy('account')
-            ->fetchAll('account');
-        return $userHours;
     }
 
     /**
@@ -439,12 +405,31 @@ class personnelModel extends model
             $taskIDList = array_merge($taskIDList, $taskID);
         }
 
-        $userHours = $this->dao->select('account, sum(`left`) as `left`, sum(consumed) as consumed')->from(TABLE_EFFORT)
+        $effortList = $this->dao->select('id, account, objectID , `left`, consumed')->from(TABLE_EFFORT)
             ->where('account')->in($accounts)
+            ->andWhere('deleted')->eq(0)
             ->andWhere('objectID')->in($taskIDList)
             ->andWhere('objectType')->eq('task')
-            ->groupBy('account')
-            ->fetchAll('account');
+            ->orderBy('id_asc')
+            ->fetchGroup('account', 'id');
+
+        $userHours = array();
+        foreach($effortList as $account => $efforts)
+        {
+            $latestLeft = array();
+
+            $userHours[$account] = new stdclass();
+            $userHours[$account]->left     = 0;
+            $userHours[$account]->consumed = 0;
+
+            foreach($efforts as $effort)
+            {
+                $latestLeft[$effort->objectID]  = $effort->left;
+                $userHours[$account]->consumed += $effort->consumed;
+            }
+            $userHours[$account]->left = array_sum($latestLeft);
+        }
+
         return $userHours;
     }
 

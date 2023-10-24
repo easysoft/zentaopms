@@ -19,6 +19,8 @@ pid=1
 
 */
 
+zdTable('stage')->gen(10);
+
 $stage = new stageTest();
 
 r($stage->getStagesTest()) && p('1:name,percent,type') && e('需求,10,request');   // 测试获取阶段 1

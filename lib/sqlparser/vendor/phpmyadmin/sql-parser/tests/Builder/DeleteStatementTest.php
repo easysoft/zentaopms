@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Builder;
 
 use PhpMyAdmin\SqlParser\Parser;
@@ -9,7 +7,7 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class DeleteStatementTest extends TestCase
 {
-    public function testBuilderSingleTable(): void
+    public function testBuilderSingleTable()
     {
         /* Assertion 1 */
         $query = 'DELETE IGNORE FROM t1';
@@ -61,7 +59,7 @@ class DeleteStatementTest extends TestCase
         $this->assertEquals($query, $stmt->build());
     }
 
-    public function testBuilderMultiTable(): void
+    public function testBuilderMultiTable()
     {
         /* Assertion 1 */
         $query = 'DELETE QUICK table1, table2.* FROM table1 AS `t1`, table2 AS `t2`';

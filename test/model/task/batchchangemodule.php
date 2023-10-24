@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/task.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -20,4 +19,3 @@ $taskIDList  = array('1','2','3');
 
 $task = new taskTest();
 r($task->batchChangeModuleTest($taskIDList,$moduleID))  && p('0:field,old,new') && e('module,21,22');   // 返回批量修改的第一个值
-$db->restoreDB();

@@ -2,13 +2,14 @@
 /**
  * The upgrade module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
  * @version     $Id: en.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
+global $config;
 $lang->upgrade->common          = 'Mise à jour';
 $lang->upgrade->start           = 'Start';
 $lang->upgrade->result          = 'Résultat';
@@ -32,6 +33,22 @@ $lang->upgrade->warnningContent = <<<EOT
 </pre>
 EOT;
 
+if($config->db->driver == 'dm')
+{
+    $lang->upgrade->warnningContent = <<<EOT
+<p>The upgrade requires high database privileges, please use the root user.<br>
+   Please backup your database before updating ZenTao!</p>
+<pre>
+1. It can be backed up by graphical client tools.
+2. Use DIsql tool to back up data.
+   $> BACKUP DATABASE BACKUPSET  <span class='text-danger'>'filename'</span>;
+   After the statement is executed, a backup set directory named "filename" is generated in the default backup path.
+   The default backup path is the path configured with BAK_PATH in dm.ini. If BAK_PATH is not configured, bak in SYSTEM_PATH is used by default.
+   This is the simplest database backup statement,To set additional backup options, you need to understand the syntax of the online backup database.
+</pre>
+EOT;
+}
+
 $lang->upgrade->createFileWinCMD   = 'Ouvrez la fenêtre Ligne de commandes de windows et exécutez <strong style="color:#ed980f">echo > %s</strong>';
 $lang->upgrade->createFileLinuxCMD = 'Executez la ligne de commande suivante: <strong style="color:#ed980f">touch %s</strong>';
 $lang->upgrade->setStatusFile      = '<h4>Please complete the following actions</h4>
@@ -53,6 +70,7 @@ $lang->upgrade->forbiddenExt   = 'Cette extension est incompatible avec la versi
 $lang->upgrade->updateFile     = "Le fichier information a besoin d'une mise à jour.";
 $lang->upgrade->noticeSQL      = 'Votre base de donnée est inconsistente avec le standard et il y a eu un échec pour la corriger. Exécutez la commande SQL suivante et rafraichissez.';
 $lang->upgrade->afterDeleted   = "Le fichier n'est pas supprimé. Recommencez après l'avoir supprimé.";
+$lang->upgrade->afterExec      = 'Please modify the database manually according to the above error information, and refresh after the modification!';
 $lang->upgrade->mergeProgram   = 'Data Merge';
 $lang->upgrade->mergeTips      = 'Data Migration Tips';
 $lang->upgrade->toPMS15Guide   = 'ZenTao open source version 15 upgrade';
@@ -65,7 +83,7 @@ $lang->upgrade->allLines        = "All Product Lines";
 $lang->upgrade->program         = 'Merge Project';
 $lang->upgrade->existProgram    = 'Existing programs';
 $lang->upgrade->existProject    = 'Existing projects';
-$lang->upgrade->existLine       = 'Existing' . $lang->productCommon . ' lines';
+$lang->upgrade->existLine       = 'Existing product lines';
 $lang->upgrade->product         = $lang->productCommon;
 $lang->upgrade->project         = 'Iteration';
 $lang->upgrade->repo            = 'Repo';
@@ -131,6 +149,8 @@ $lang->upgrade->mergeExecutionTip = 'The system will automatically create projec
 $lang->upgrade->createProgramTip  = 'At the same time, the system will automatically create a default project set and place all projects under the default project set.';
 $lang->upgrade->mergeManuallyTip  = 'You can manually select the data merging method.';
 
+$lang->upgrade->defaultGroup = 'Default';
+
 include dirname(__FILE__) . '/version.php';
 
 $lang->upgrade->recoveryActions = new stdclass();
@@ -139,3 +159,5 @@ $lang->upgrade->recoveryActions->review = 'Review';
 
 $lang->upgrade->remark     = 'Remark';
 $lang->upgrade->remarkDesc = 'You can also switch the mode in the Admin-System-Mode page of the system.';
+
+$lang->upgrade->upgradingTip = 'The system is being upgraded, please wait patiently...';

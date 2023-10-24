@@ -2,7 +2,7 @@
 /**
  * The edit view of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
@@ -14,6 +14,10 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
+<?php js::set('isWaterfall', (isset($project) and ($project->model == 'waterfall' or $project->model == 'waterfallplus')));?>
+<?php js::set('executionAttr', $execution->attribute);?>
+<?php js::set('manageProductsLang', $lang->project->manageProducts);?>
+<?php js::set('manageProductPlanLang', $lang->project->manageProductPlan);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -29,18 +33,28 @@
         <?php if(isset($project)):?>
         <?php if($project->model == 'scrum'):?>
         <tr>
-          <th class='w-120px'><?php echo $lang->execution->projectName;?></th>
+          <th class='c-projectName'><?php echo $lang->execution->projectName;?></th>
           <td><?php echo html::select('project', $allProjects, $execution->project, "class='form-control chosen' onchange='changeProject(this.value)' required");?></td><td></td>
         </tr>
         <?php elseif($project->model == 'kanban'):?>
         <?php echo html::hidden('project', $project->id);?>
+        <?php elseif($project->model == 'agileplus'):?>
+        <tr>
+          <th class='c-method'><?php echo $lang->execution->method;?></th>
+          <td><?php echo zget($lang->execution->typeList, $execution->type);?></td><td></td>
+        </tr>
+        <?php elseif($app->tab == 'project' and $project->model == 'waterfallplus'):?>
+        <tr>
+          <th class='c-name'><?php echo $lang->programplan->parent;?></th>
+          <td><?php echo html::select('parent', $parentStageList, $execution->parent, "class='form-control chosen '");?></td><td></td>
+        </tr>
         <?php endif;?>
         <?php endif;?>
         <tr>
-          <th class='w-120px'><?php echo $lang->execution->name;?></th>
+          <th class='c-name'><?php echo $lang->execution->name;?></th>
           <td><?php echo html::input('name', $execution->name, "class='form-control' required");?></td><td></td>
         </tr>
-        <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+        <?php if(isset($config->setCode) and $config->setCode == 1):?>
         <tr>
           <th><?php echo $lang->execution->code;?></th>
           <td><?php echo html::input('code', $execution->code, "class='form-control' required");?></td>
@@ -73,20 +87,21 @@
             </div>
           </td>
         </tr>
-        <?php if($execution->type != 'kanban'):?>
+        <?php if(in_array($project->model, array('waterfall', 'waterfallplus'))):?>
+        <tr>
+          <th><?php echo $lang->stage->type;?></th>
+          <td>
+          <?php echo $enableOptionalAttr ? html::select('attribute', $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList, $execution->attribute, "class='form-control chosen'") : zget($lang->stage->typeList, $execution->attribute); ?>
+          </td>
+          <td>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->typeTip;?>"></icon>
+          </td>
+        </tr>
+        <?php elseif($execution->type != 'kanban' and $project->model != 'ipd'):?>
         <tr>
           <th><?php echo $lang->execution->type;?></th>
           <td>
-          <?php
-          if($execution->type != 'stage')
-          {
-              echo html::select('lifetime', $lang->execution->lifeTimeList, $execution->lifetime, "class='form-control' onchange='showLifeTimeTips()'");
-          }
-          else
-          {
-              echo html::select('attribute', $lang->stage->typeList, $execution->attribute, "class='chosen form-control'");
-          }
-          ?>
+          <?php echo html::select('lifetime', $lang->execution->lifeTimeList, $execution->lifetime, "class='form-control' onchange='showLifeTimeTips()'"); ?>
           </td>
         </tr>
         <?php endif;?>
@@ -94,10 +109,12 @@
           <th><?php echo $lang->execution->teamname;?></th>
           <td><?php echo html::input('team', $execution->team, "class='form-control'");?></td>
         </tr>
+        <?php if($project->model != 'ipd'):?>
         <tr>
           <th><?php echo $lang->execution->status;?></th>
           <td><?php echo html::select('status', $lang->execution->statusList, $execution->status, "class='form-control chosen'");?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th rowspan='2'><?php echo $lang->execution->owner;?></th>
           <td>
@@ -127,7 +144,7 @@
             </div>
           </td>
         </tr>
-        <?php if($execution->type == 'stage'):?>
+        <?php if($execution->type == 'stage' and isset($config->setPercent) and $config->setPercent == 1):?>
         <tr>
           <th><?php echo $lang->stage->percent;?></th>
           <td>
@@ -138,22 +155,22 @@
           </td>
         </tr>
         <?php endif;?>
-        <?php if(!in_array($execution->attribute, array('request', 'design', 'review'))): ?>
+        <?php if($project->model != 'waterfall' and $project->model != 'waterfallplus'): ?>
         <?php $hidden = 'hide'?>
         <?php if(!empty($project->hasProduct)) $hidden = ''?>
-        <?php if($linkedProducts):?>
+        <?php if(!empty($project) and !empty($project->hasProduct) and $linkedProducts):?>
         <?php $i = 0;?>
         <?php foreach($linkedProducts as $product):?>
         <tr class="<?php echo $hidden;?>">
-          <th><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
+          <th id='productTitle'><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
           <td class='text-left productsBox' colspan="3">
             <div class='row'>
-              <div class="col-sm-6">
+              <div class="col-sm-6 productBox">
                 <div class='table-row'>
                   <div class='table-col'>
                     <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                     <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
-                      <span class='input-group-addon'><?php echo $lang->product->common;?></span> 
+                      <span class='input-group-addon'><?php echo $lang->productCommon;?></span>
                       <?php $disabled = ($execution->type == 'stage' and !$execution->division) ? "disabled='disabled'" : '';?>
                       <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $disabled onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                       <?php if($execution->type == 'stage' and !$execution->division) echo html::hidden("products[$i]", $product->id);?>
@@ -168,7 +185,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-6 planBox">
                 <div class='input-group' <?php echo "id='plan$i'";?>>
                   <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
                   <?php echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), $product->plans, "class='form-control chosen' multiple");?>
@@ -185,16 +202,26 @@
         </tr>
         <?php $i ++;?>
         <?php endforeach;?>
+        <?php elseif(!empty($project) and empty($project->hasProduct)):?>
+        <tr>
+          <th><?php echo $lang->execution->linkPlan;?></th>
+          <td id="plansBox">
+            <?php $planProductID = current(array_keys($linkedProducts));?>
+            <?php echo html::select("plans[$planProductID][]", isset($productPlans[$planProductID]) ? $productPlans[$planProductID] : array(), isset($linkedProducts[$planProductID]) ? $linkedProducts[$planProductID]->plans : '', "class='form-control chosen' multiple");?>
+            <?php echo html::hidden("products[]", $planProductID);?>
+            <?php echo html::hidden("branch[0][0]", '0');?>
+          </td>
+        </tr>
         <?php else:?>
         <tr class='<?php echo $hidden;?>'>
           <th id='productTitle'><?php echo $lang->project->manageProductPlan;?></th>
           <td class='text-left productsBox' colspan='3'>
             <div class='row'>
-              <div class="col-sm-6">
+              <div class="col-sm-6 productBox">
                 <div class='table-row'>
                   <div class='table-col'>
                     <div class='input-group'>
-                      <span class='input-group-addon'><?php echo $lang->product->common;?></span>
+                      <span class='input-group-addon'><?php echo $lang->productCommon;?></span>
                       <?php echo html::select("products[0]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                     </div>
                   </div>
@@ -206,7 +233,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6">
+              <div class="col-sm-6 planBox">
                 <div class='input-group' id='plan0'>
                   <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
                   <?php echo html::select("plans[][]", '', '', "class='form-control chosen' multiple");?>
@@ -220,9 +247,50 @@
           </td>
         </tr>
         <?php endif; ?>
-        <?php else: ?>
+        <?php elseif(!empty($project) and !empty($project->hasProduct)):?>
         <?php echo html::hidden("products[]", key($linkedProducts));?>
-        <?php endif; ?>
+        <?php echo html::hidden("branch", json_encode(array_values($linkedBranches)));?>
+        <?php $i = 0;?>
+        <?php foreach($linkedProducts as $product):?>
+        <tr>
+          <th id="productTitle"><?php if($i == 0) echo $lang->project->manageProductPlan;?></th>
+          <td class='text-left productsBox' colspan="3">
+            <div class='row'>
+              <div class="col-sm-6 productBox">
+                <div class='table-row'>
+                  <div class='table-col'>
+                    <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
+                    <div class='input-group <?php if($hasBranch) echo ' has-branch';?>'>
+                      <span class='input-group-addon'><?php echo $lang->productCommon;?></span>
+                      <?php $disabled = ($project->model == 'waterfall' or $project->model == 'waterfallplus') ? "disabled='disabled'" : '';?>
+                      <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' $disabled onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
+                      <?php if($execution->type == 'stage' and !$project->division) echo html::hidden("products[$i]", $product->id);?>
+                    </div>
+                  </div>
+                  <div class='table-col <?php if(!$hasBranch) echo 'hidden'; if($disabled) echo ' disabledBranch'?>'>
+                    <div class='input-group required'>
+                      <span class='input-group-addon fix-border'><?php echo $lang->project->branch;?></span>
+                      <?php $branchIdList = isset($product->branches) ? join(',', $product->branches) : '';?>
+                      <?php echo html::select("branch[$i][]", isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(), $branchIdList, "class='form-control chosen' multiple onchange=\"loadPlans('#products{$i}', this)\"");?>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 planBox">
+                <div class='input-group' <?php echo "id='plan$i'";?>>
+                  <span class='input-group-addon'><?php echo $lang->product->plan;?></span>
+                  <?php echo html::select("plans[$product->id][]", isset($productPlans[$product->id]) ? $productPlans[$product->id] : array(), isset($product->plans) ? $product->plans : '', "class='form-control chosen' multiple");?>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <?php $i ++;?>
+        <?php endforeach;?>
+        <?php else:?>
+        <?php echo html::hidden("products[]", key($linkedProducts));?>
+        <?php echo html::hidden("branch", json_encode(array_values($linkedBranches)));?>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>
           <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control picker-select' multiple"); ?></td>

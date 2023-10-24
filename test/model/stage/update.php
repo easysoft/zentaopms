@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/stage.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -28,4 +27,3 @@ $stage = new stageTest();
 r($stage->updateTest($stageID, $changeName))    && p('0:field,old,new') && e('name,需求,修改后的需求'); // 测试修改名称
 r($stage->updateTest($stageID, $changePercent)) && p('0:field,old,new') && e('percent,10,15');          // 测试修改工作量占比
 r($stage->updateTest($stageID, $changeType))    && p('0:field,old,new') && e('type,request,other');     // 测试修改阶段分类
-$db->restoreDB();

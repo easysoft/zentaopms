@@ -19,7 +19,7 @@ function loadDocModule(libID)
  */
 function toggleAcl(acl, type)
 {
-    if(acl == 'custom')
+    if(acl == 'private')
     {
         $('#whiteListBox').removeClass('hidden');
     }
@@ -27,15 +27,39 @@ function toggleAcl(acl, type)
     {
         $('#whiteListBox').addClass('hidden');
     }
-    if(type == 'lib')
+}
+
+/**
+ * Toggle lib type.
+ *
+ * @param  string $libType
+ * @access public
+ * @return void
+ */
+function toggleLibType(libType)
+{
+    if(libType == 'project')
     {
-        var notice  = typeof(noticeAcl[acl]) != 'undefined' ? noticeAcl[acl] : '';
-        $('#noticeAcl').html(notice);
+        $('#projectBox').removeClass('hidden');
+        $('#productBox').addClass('hidden');
+        $('#acldefault').closest('.radio').show();
+        $('#acldefault').next('.acl-tip').html($('#acldefault').next('.acl-tip').html().replace(productLang, projectLang));
+    }
+    else if(libType == 'product')
+    {
+        $('#projectBox').addClass('hidden');
+        $('#productBox').removeClass('hidden');
+        $('#acldefault').closest('.radio').show();
+        $('#acldefault').next('.acl-tip').html($('#acldefault').next('.acl-tip').html().replace(projectLang, productLang));
     }
     else
     {
-        var notice  = typeof(noticeAcl[acl]) != 'undefined' ? noticeAcl[acl] : '';
-        $('#noticeAcl').html(notice);
+        var acl = $("input[name='acl']:checked").val();
+        if(acl == 'default') $("input[id='aclopen']").prop('checked', true);
+
+        $('#projectBox').addClass('hidden');
+        $('#productBox').addClass('hidden');
+        $('#acldefault').closest('.radio').hide();
     }
 }
 
@@ -176,8 +200,7 @@ $(document).ready(function()
  */
 function redirectParentWindow(libID)
 {
-    var link = createLink('api', 'index', 'libID=' + libID);
-    parent.location.href = link;
+    parent.location.reload();
 }
 
 try {

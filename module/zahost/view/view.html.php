@@ -2,7 +2,7 @@
 /**
  * The view file of zahost module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Ke Zhao <zhaoke@cnezsoft.com>
  * @package     zahost
@@ -33,7 +33,7 @@
   <div class="col-8 main-col">
     <div class="cell">
       <div class="detail zahost-detail">
-        <div class="detail-title"><?php echo $lang->zahost->view;?></div>
+        <div class="detail-title"><?php echo $lang->zahost->baseInfo;?></div>
         <div class="detail-content article-content">
           <div class="main-row zanode-mt-8">
             <div class="col-4">
@@ -95,6 +95,10 @@
           </div>
         </div>
       </div>
+      <div class="detail zahost-detail">
+        <div class="detail-title"><?php echo $lang->zahost->desc;?></div>
+        <div class="detail-content article-content"><?php echo !empty($zahost->desc) ? htmlspecialchars_decode($zahost->desc) : $lang->noData;?></div>
+      </div>
     </div>
     <div class="cell">
       <div class="detail zahost-detail">
@@ -105,10 +109,7 @@
         <div class="detail-content article-content load-indicator" id='serviceContent'>
           <div class="main-row">
             <div id="statusContainer">
-              <div class="text-kvm"><span class="dot-symbol fail"> ●</span><span>KVM</span></div>
-              <div class="text-kvm"><span class="dot-symbol fail"> ●</span><span>Nginx</span></div>
-              <div class="text-kvm"><span class="dot-symbol fail"> ●</span><span>noVNC</span></div>
-              <div class="text-kvm"><span class="dot-symbol fail"> ●</span><span>Websockify</span></div>
+              
             </div>
             <div class='result'>
               <?php $imageLink  = html::a($this->createLink('zahost', 'browseImage', "hostID=$zahost->id", '', true), $lang->zahost->image->downloadImage, '', "class='iframe'");?>
@@ -124,12 +125,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="cell">
-      <div class="detail zahost-detail">
-        <div class="detail-title"><?php echo $lang->zahost->desc;?></div>
-        <div class="detail-content article-content"><?php echo !empty($zahost->desc) ? htmlspecialchars_decode($zahost->desc) : $lang->noData;?></div>
       </div>
     </div>
     <?php if(commonModel::hasPriv('zanode', 'browse')):?>

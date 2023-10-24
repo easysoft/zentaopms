@@ -2,7 +2,7 @@
 /**
  * Utils for ZenTaoPMS testing.
  *
- * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2017 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Guanxing <guanxiying@easycorp.ltd>
  * @package     ZenTaoPMS
@@ -46,6 +46,15 @@ function ztfRun($dir)
     global $config;
 
     $ztfPath = RUNTIME_ROOT . 'ztf';
+    $modelPath = TEST_BASEHPATH . '/model';
+
+    $runTestPath = '';
+    if(is_array($dir))
+    {
+        foreach($dir as $model) $runTestPath .= " $modelPath/$model";
+    }
+
+    if($runTestPath) $dir = $runTestPath;
     $command = "$ztfPath $dir";
     system($command);
 }
@@ -62,7 +71,8 @@ function ztfExtract($dir)
     global $config;
 
     $ztfPath = RUNTIME_ROOT . 'ztf';
-    $command = "$ztfPath extract $dir";
+    $testPath = TEST_BASEHPATH;
+    $command = "$ztfPath extract $testPath/$dir";
     system($command);
 }
 

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/group.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -21,4 +20,3 @@ $groupID = 10;
 $group = new groupTest();
 r($group->deleteTest($groupID)) && p() && e('1'); // 删除id为10的组
 r($group->deleteTest(0))        && p() && e('1'); // 删除id为0的组
-$db->restoreDB();

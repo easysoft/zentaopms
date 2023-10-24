@@ -1,0 +1,47 @@
+.choose-date span, .dp-choose-date {display: block; float: left; margin: 0 10px;}
+.dp-applied {float: left;}
+.choose-date span {line-height: 20px;}
+.date {width: 80px;}
+ul li {list-style: none;}
+
+.side-col {padding-right: 20px; width: 15%;}
+#sidebar>.cell {width: 100%;}
+#productList p {margin: 2px 0;}
+.table-bordered, .outer.with-side .main, .outer.with-side > form > .table, .outer.with-side > .table {border: none;}
+
+#report-list.list-group {margin-bottom: 0;}
+#report-list .list-group-item {padding: 8px 15px; border-left: none; border-right: none;}
+#report-list .list-group-item:first-child {border-top: 1px;}
+#report-list .list-group-item:last-child {border-bottom: 1px;}
+#report-list .list-group-item.active {background: none; color: #333;}
+
+.main > .input-group {margin-bottom: 10px;}
+.main > .input-group > .datepicker-wrapper {display: table-cell;}
+.main > .input-group > .datepicker-wrapper > .form-control {padding: 5px 10px; height: 30px;}
+.main > .input-group > .datepicker-wrapper:before {top: 4px;}
+.main > .input-group > .datepicker-wrapper + .input-group-addon {border-left: none; border-right: none;}
+
+td .deviation {padding-left: 20px; text-align: left;}
+.up {color: red; padding-right: 2px;}
+.down {color: green; padding-right: 2px;}
+.zero {color: #66CD00;}
+.u50 {color: #ED1C24;}
+.u30 {color: #F37021;}
+.u10 {color: #FAA61A;}
+.u0 {color: #FFCB05;}
+.d0 {color: #76B043;}
+.d20 {color: #33A52E;}
+
+.checkboxes {margin-bottom: 10px;}
+.checkboxes .checkbox-primary {margin-bottom: 5px;}
+.fixed-header-copy thead tr th {color: #fff !important;}
+
+.table-panel {overflow-x: auto;}
+.datatable {width: auto;}
+.datatable th.header {line-height: 32px !important;}
+.header-config {float: right; display: none;}
+.header:hover .header-config {display: inline-block;}
+.label-outline.label-info {border: unset; line-height: 14px;}
+.border-bottom {border-bottom: 1px solid #f4f5f7;}
+.text-center {text-align: center;}
+.visibility-hidden{visibility: hidden;}

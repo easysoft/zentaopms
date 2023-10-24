@@ -2,7 +2,7 @@
 /**
  * The build view file of project module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
@@ -15,6 +15,8 @@
 <?php js::set('noDevStage', $lang->project->noDevStage)?>
 <?php js::set('createExecution', $lang->project->createExecution)?>
 <?php js::set('confirmDelete', $lang->build->confirmDelete)?>
+<?php js::set('fromModule', $fromModule)?>
+<?php js::set('fromMethod', $fromMethod)?>
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
     <?php
@@ -24,7 +26,7 @@
         $activeClass = $type == $featureType ? 'btn-active-text' : '';
         $label       = "<span class='text'>$label</span>";
         if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$buildsTotal}</span>";
-        echo html::a(inlink('build', "projectID=$projectID&type=$featureType"), $label, '',"class='btn btn-link $activeClass' data-app={$app->tab} id=" . $featureType .'Tab');
+        echo html::a($this->createLink($fromModule, $fromMethod, "projectID=$projectID&type=$featureType"), $label, '',"class='btn btn-link $activeClass' data-app={$app->tab} id=" . $featureType .'Tab');
     }
     ?>
     <?php if($project->hasProduct):?>
@@ -33,7 +35,7 @@
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::canModify('project', $project)) common::printLink('build', 'create', "executionID=&productID=&projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-primary' id='createBuild'");?>
+    <?php if(common::canModify('project', $project)) common::printLink('projectbuild', 'create', "projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-primary' id='createBuild'");?>
   </div>
 </div>
 <div id="mainContent">
@@ -67,12 +69,11 @@
       <tbody>
         <?php foreach($projectBuilds as $productID => $builds):?>
         <?php foreach($builds as $index => $build):?>
-        <?php $module = $build->execution ? 'build' : 'projectbuild';?>
         <tr data-id="<?php echo $productID;?>">
-          <td class="c-id-sm text-muted"><?php echo html::a(helper::createLink($module, 'view', "buildID=$build->id"), sprintf('%03d', $build->id), '', "data-app='project'");?></td>
+          <td class="c-id-sm text-muted"><?php echo html::a(helper::createLink($fromModule, 'view', "buildID=$build->id"), sprintf('%03d', $build->id), '', "data-app='project'");?></td>
           <td class="c-name" title='<?php echo $build->name;?>'>
             <span class='build'>
-              <?php echo html::a($this->createLink($module, 'view', "buildID=$build->id"), $build->name, '', "data-app='project' class='buildName'");?>
+              <?php echo html::a($this->createLink($fromModule, 'view', "buildID=$build->id"), $build->name, '', "data-app='project' class='buildName'");?>
               <?php if(!$build->execution):?>
                 <span class='icon icon-code-fork text-muted' title='<?php echo $lang->build->integrated;?>'></span>
               <?php endif;?>

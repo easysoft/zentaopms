@@ -146,3 +146,19 @@ function updateStatistic()
 {
     debounce(addStatistic(), 200)
 }
+
+/**
+ * Get checked items.
+ *
+ * @access public
+ * @return array
+ */
+function getCheckedItems()
+{
+    var checkedItems = [];
+    $('#projectForm [name^=projectIdList]:checked').each(function(index, ele)
+    {
+        checkedItems.push($(ele).val());
+    });
+    return checkedItems;
+};

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Components;
 
 use PhpMyAdmin\SqlParser\Components\PartitionDefinition;
@@ -10,7 +8,7 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class PartitionDefinitionTest extends TestCase
 {
-    public function testParse(): void
+    public function testParse()
     {
         $component = PartitionDefinition::parse(
             new Parser(),
@@ -22,7 +20,7 @@ class PartitionDefinitionTest extends TestCase
         $this->assertEquals('(1990)', $component->expr->expr);
     }
 
-    public function testParseNameWithUnderscore(): void
+    public function testParseNameWithUnderscore()
     {
         $component = PartitionDefinition::parse(
             new Parser(),

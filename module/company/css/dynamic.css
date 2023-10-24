@@ -20,6 +20,7 @@
 
 .c-project, .c-product, .c-execution {width: 110px !important; overflow: unset;}
 .c-user, .c-order {width: 96px !important; overflow: unset;}
+.c-dynamic-date {width: 200px;}
 #mainMenu .picker .picker-selections{white-space:nowrap;}
 .picker-drop-menu{width:auto !important; max-width:350px !important;}
 
@@ -29,6 +30,9 @@
 .label-action {padding: 0 4px;}
 .label-id {margin-left: 4px;}
 .timeline > li.active:before {left: -30px;}
+.timeline > li.collected:before, .timeline > li.releaseddoc:before {background-color: #FFF;}
+.timeline > li.collected > div:after {background-color: #FFAF65;}
+.timeline > li.releaseddoc > div:after {background-color: #66A2FF;}
 .timeline > li > div:after {left: -27px;}
 .timeline .timeline-text {display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .timeline > li > div > .timeline-tag, .timeline > li > div > .timeline-text > .label-action {color: #838A9D;}

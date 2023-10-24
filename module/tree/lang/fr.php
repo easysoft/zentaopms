@@ -2,7 +2,7 @@
 /**
  * The tree module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
@@ -18,7 +18,8 @@ $lang->tree->browseTask           = 'Gérer les Modules Tâche';
 $lang->tree->manage               = 'Gérer les Modules';
 $lang->tree->fix                  = 'Corrigez Module';
 $lang->tree->manageProduct        = "Gérer les Modules {$lang->productCommon}";
-$lang->tree->manageExecution      = "Gérer les Modules {$lang->executionCommon}";
+$lang->tree->manageProject        = "Gérer les Modules {$lang->projectCommon}";
+$lang->tree->manageExecution      = "Gérer les Modules {$lang->execution->common}";
 $lang->tree->manageLine           = 'Gérer Ligne Produit';
 $lang->tree->manageBug            = 'Gérer Bugs';
 $lang->tree->manageCase           = 'Gérer CasTests';
@@ -34,7 +35,8 @@ $lang->tree->manageCaseChild      = 'Gérer Sous-CasTests';
 $lang->tree->manageCaselibChild   = 'Gérer Sous-Librairies';
 $lang->tree->manageDashboard      = 'Manage Dashboard Module';
 $lang->tree->manageDashboardChild = 'Manage Dashboard Child Module';
-$lang->tree->manageTaskChild      = "Gérer Sous-Modules {$lang->executionCommon}";
+$lang->tree->manageProjectChild   = "Gérer Sous-Modules {$lang->projectCommon}";
+$lang->tree->manageTaskChild      = "Gérer Sous-Modules {$lang->execution->common}";
 $lang->tree->syncFromProduct      = "Copier d'un autre {$lang->productCommon}";
 $lang->tree->dragAndSort          = "Faites glisser pour ordonner";
 $lang->tree->sort                 = "Ordonnez";
@@ -50,8 +52,18 @@ $lang->tree->noSubmodule          = "There are no copyable submodules under the 
 $lang->tree->successSave          = 'Sauvé.';
 $lang->tree->successFixed         = 'Corrigé.';
 $lang->tree->repeatName           = 'Le nom "%s" existe déjà !';
+$lang->tree->repeatDirName        = 'The name "%s" exists!';
 $lang->tree->shouldNotBlank       = 'Module name should not be blank!';
 $lang->tree->syncProductModule    = 'Sync Module';
+$lang->tree->host                 = 'Host';
+$lang->tree->editHost             = 'Edit host group';
+$lang->tree->deleteHost           = 'Delete host group';
+$lang->tree->manageHostChild      = 'Manage child host';
+$lang->tree->groupMaintenance     = 'Manage host group';
+$lang->tree->groupName            = 'Group Name';
+$lang->tree->parentGroup          = 'Parent grpup';
+$lang->tree->childGroup           = 'Child';
+$lang->tree->confirmDeleteHost    = 'Do you want to delete this host and its child hosts?';
 
 $lang->tree->module       = 'Module';
 $lang->tree->name         = 'Nom';
@@ -64,7 +76,7 @@ $lang->tree->branch       = 'Plateforme/Branche';
 $lang->tree->path         = 'Chemin';
 $lang->tree->type         = 'Type';
 $lang->tree->parent       = 'Module Parent';
-$lang->tree->parentCate   = 'Catégorie Parente';
+$lang->tree->parentCate   = 'Parent Directory';
 $lang->tree->child        = 'Enfants';
 $lang->tree->subCategory  = 'SubCategory';
 $lang->tree->editCategory = 'Modifier la catégorie';
@@ -76,6 +88,7 @@ $lang->tree->short        = 'Abbr.';
 $lang->tree->all          = 'Tous les Modules';
 $lang->tree->executionDoc = "Document {$lang->executionCommon}";
 $lang->tree->product      = $lang->productCommon;
+$lang->tree->editDir      = "Edit Directory";
 
 $lang->tree->emptyHistory = "Pas Historique";
 

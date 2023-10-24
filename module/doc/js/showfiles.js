@@ -1,7 +1,16 @@
 $(function()
 {
-    if(tab != 'doc') return;
+    $('#leftBar .searchBox #title').keypress(function(e)
+    {
+        if(e.which == 13)
+        {
+            $(this).closest('form').attr('action', searchLink.replace('%s', $(this).val()));
+        }
+    });
 
-    $('#navbar .nav li').removeClass('active');
-    $("#navbar .nav li[data-id=" + type + ']').addClass('active');
-});
+    $('#leftBar .searchBox #submit').click(function(e)
+    {
+        var searchTitle = $(this).prev('#title').val();
+        $(this).closest('form').attr('action', searchLink.replace('%s', searchTitle));
+    });
+})

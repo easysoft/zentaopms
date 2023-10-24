@@ -4,7 +4,7 @@
  *
  * All request should be routed by this router.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -14,6 +14,7 @@
 /* Set the error reporting. */
 error_reporting(E_ALL);
 define('IN_USE', true);
+define('USE_INTRANET', false);
 
 /* Start output buffer. */
 ob_start();
@@ -41,6 +42,7 @@ $config->installedVersion = $app->getInstalledVersion();
 if($config->version != $config->installedVersion) die(header('location: upgrade.php'));
 
 /* Run the app. */
+$app->setStartTime($startTime);
 $common = $app->loadCommon();
 
 /* Check the request is getconfig or not. */
@@ -71,7 +73,5 @@ $app->parseRequest();
 if(!$app->setParams()) return;
 $common->checkPriv();
 $common->checkIframe();
-$app->loadModule();
 
-/* Flush the buffer. */
-echo helper::removeUTF8Bom(ob_get_clean());
+echo $app->outputPage();

@@ -2,7 +2,7 @@
 /**
  * The control file of custom of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     custom
@@ -69,19 +69,19 @@ class custom extends control
             $this->view->unitList        = explode(',', $unitList);
             $this->view->defaultCurrency = zget($this->config->$module, 'defaultCurrency', 'CNY');
         }
-        if($module == 'story' and $field == 'reviewRules')
+        if(($module == 'story' or $module == 'demand') and $field == 'reviewRules')
         {
             $this->app->loadConfig($module);
             $this->view->reviewRule     = zget($this->config->$module, 'reviewRules', '1');
             $this->view->users          = $this->loadModel('user')->getPairs('noclosed|nodeleted');
             $this->view->superReviewers = zget($this->config->$module, 'superReviewers', '');
         }
-        if(($module == 'story' or $module == 'testcase') and $field == 'review')
+        if(($module == 'story' or $module == 'testcase' or $module == 'demand') and $field == 'review')
         {
             $this->app->loadConfig($module);
             $this->loadModel('user');
 
-            if($module == 'story')
+            if($module == 'story' or $module == 'demand')
             {
                 $this->view->depts            = $this->loadModel('dept')->getDeptPairs();
 
@@ -98,12 +98,6 @@ class custom extends control
             $this->view->needReview     = zget($this->config->$module, 'needReview', 1);
             $this->view->forceReview    = zget($this->config->$module, 'forceReview', '');
             $this->view->forceNotReview = zget($this->config->$module, 'forceNotReview', '');
-        }
-        if($module == 'task' and $field == 'hours')
-        {
-            $this->app->loadConfig('execution');
-            $this->view->weekend   = $this->config->execution->weekend;
-            $this->view->workhours = $this->config->execution->defaultWorkhours;
         }
         if($module == 'bug' and $field == 'longlife')
         {
@@ -145,7 +139,7 @@ class custom extends control
                 if(empty($data->defaultCurrency)) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->defaultNotEmpty));
                 $this->loadModel('setting')->setItems("system.$module", $data);
             }
-            elseif($module == 'story' and $field == 'review')
+            elseif(($module == 'story' or $module == 'demand') and $field == 'review')
             {
                 $data = fixer::input('post')
                     ->setDefault('forceReview', '')
@@ -171,7 +165,7 @@ class custom extends control
 
                 $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
             }
-            elseif($module == 'story' and $field == 'reviewRules')
+            elseif(($module == 'story' or $module == 'demand') and $field == 'reviewRules')
             {
                 $data = fixer::input('post')->setDefault('superReviewers', '')->join('superReviewers', ',')->get();
                 $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
@@ -189,10 +183,6 @@ class custom extends control
                     $waitCases = $this->loadModel('testcase')->getByStatus(0, 0, 'all', 'wait');
                     $this->testcase->batchReview(array_keys($waitCases), 'pass');
                 }
-            }
-            elseif($module == 'task' and $field == 'hours')
-            {
-                $this->loadModel('setting')->setItems('system.execution', fixer::input('post')->get());
             }
             elseif($module == 'bug' and $field == 'longlife')
             {
@@ -326,6 +316,8 @@ class custom extends control
         {
             $this->custom->deleteItems("module=$module&section=$field");
         }
+
+        if(in_array($module, array('serverroom', 'host'))) return $this->send(array('result' => 'success', 'load' => true));
         return print(js::reload('parent'));
     }
 
@@ -382,7 +374,7 @@ class custom extends control
         $this->view->position[] = $this->lang->custom->required;
 
         $this->view->requiredFields = $requiredFields;
-        $this->view->moduleName     = $moduleName;
+        $this->view->module         = $moduleName;
         $this->display();
     }
 
@@ -439,6 +431,7 @@ class custom extends control
         $this->view->title      = $this->lang->custom->browseStoryConcept;
         $this->view->position[] = $this->lang->custom->browseStoryConcept;
         $this->view->URSRList   = $this->custom->getURSRList();
+        $this->view->module     = 'product';
 
         $this->display();
     }
@@ -555,9 +548,8 @@ class custom extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
-        $this->view->title      = $this->lang->custom->execution;
-        $this->view->position[] = $this->lang->custom->common;
-        $this->view->position[] = $this->view->title;
+        $this->view->title  = $this->lang->custom->executionCommon;
+        $this->view->module = 'execution';
 
         $this->display();
     }
@@ -576,9 +568,10 @@ class custom extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
-        $this->view->title      = $this->lang->custom->product;
+        $this->view->title      = $this->lang->custom->productName;
         $this->view->position[] = $this->lang->custom->common;
         $this->view->position[] = $this->view->title;
+        $this->view->module     = 'product';
 
         $this->display();
     }
@@ -615,7 +608,6 @@ class custom extends control
         if($_POST)
         {
             $this->custom->setConcept();
-            $this->loadModel('setting')->setItem('system.custom.URAndSR', $this->post->URAndSR);
             if($this->config->edition != 'max') $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
 
             $this->app->loadLang('common');
@@ -868,6 +860,81 @@ class custom extends control
         }
 
         $this->view->title = $this->lang->custom->code;
+
+        $this->display();
+    }
+
+    /**
+     * Set stage percent.
+     *
+     * @access public
+     * @return void
+     */
+    public function percent()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.setPercent', $this->post->percent);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title = $this->lang->stage->percent;
+
+        $this->display();
+    }
+
+    /**
+     * Set hours and weekend
+     *
+     * @access public
+     * @return void
+     */
+    public function hours($type = 'hours')
+    {
+        if($_POST)
+        {
+            $data = fixer::input('post')->get();
+            $type = $data->type;
+
+            unset($data->type);
+            if($data->weekend != 1) unset($data->restDay);
+
+            $this->loadModel('setting')->setItems('system.execution', $data);
+
+            $response = new stdclass();
+            $response->result  = 'success';
+            $response->locate  = inLink('hours', "type=$type");
+            $response->message = $this->lang->saveSuccess;
+            return $this->send($response);
+        }
+
+        $this->app->loadConfig('execution');
+        $this->view->title     = $this->lang->workingHour;
+        $this->view->type      = $type;
+        $this->view->weekend   = $this->config->execution->weekend;
+        $this->view->workhours = $this->config->execution->defaultWorkhours;
+        $this->view->restDay   = zget($this->config->execution, 'restDay', 0);
+        $this->display();
+    }
+
+    /**
+     * Set whether the task begin and end date is limited to the execution begin and end date.
+     *
+     * @access public
+     * @return void
+     */
+    public function limitTaskDate()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.limitTaskDate', $this->post->limitTaskDate);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title      = $this->lang->custom->beginAndEndDate;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->view->title;
+        $this->view->module     = 'task';
 
         $this->display();
     }

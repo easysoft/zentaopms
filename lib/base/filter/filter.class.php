@@ -661,7 +661,7 @@ class baseValidater
         global $config;
         if(empty($config->framework->filterXSS)) return $var;
 
-        if(stripos($var, '&lt;script') !== false or stripos($var, '<script') !== false)
+        if(stripos($var, '&lt;script') !== false || stripos($var, '<script') !== false)
         {
             $var      = (string)$var;
             $evils    = array('appendchild(', 'createElement(', 'xss.re', 'onfocus', 'onclick', 'innerHTML', 'replaceChild(', 'html(', 'append(', 'appendTo(', 'prepend(', 'prependTo(', 'after(', 'insertBefore', 'before(', 'replaceWith(', 'alert(', 'confirm(');

@@ -51,6 +51,7 @@ body.menu-hide {padding-left: 0;}
 .app-container.loading:before, .app-container.loading::after {transition-delay: 3s;}
 .app-container.loading.open-from-hidden {transition-delay: 0s;}
 .app-container.loading.open-from-hidden > iframe {opacity: 0;}
+.app-container.loading.no-delay:before, .app-container.loading.no-delay::after {transition-delay: 0s !important;}
 
 #appsBar {position: fixed; left: 96px; bottom: 0; right: 0; height: 40px; z-index: 1012; background: #fff; border-top: 1px solid #eff1f7;}
 .menu-hide #appsBar {left: 40px;}
@@ -114,7 +115,6 @@ body.menu-hide {padding-left: 0;}
 .version-detail {color: #8a8a8a;}
 .upgrade-now {float: right;}
 .color-primary {color: #3280fc;}
-.showFeatures .modal-body{max-height: 550px !important;}
 
 @media screen and (max-height: 768px)
 {

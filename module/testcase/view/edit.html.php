@@ -2,7 +2,7 @@
 /**
  * The edit file of case module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     case
@@ -17,7 +17,7 @@
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter',  $lang->testcase->insertAfter);?>
 <?php js::set('caseID', $case->id);?>
-<?php js::set('executionID', $case->execution);?>
+<?php js::set('sceneID', $case->scene);?>
 <?php js::set('tab', $this->app->tab);?>
 <?php js::set('isLibCase', $isLibCase);?>
 <?php js::set('testtasks', $testtasks);?>
@@ -25,6 +25,7 @@
 <?php js::set('confirmUnlinkTesttask', $lang->testcase->confirmUnlinkTesttask);?>
 <?php if($this->app->tab == 'execution') js::set('objectID', $case->execution);?>
 <?php if($this->app->tab == 'project') js::set('objectID', $case->project);?>
+<?php if($this->app->tab == 'qa') js::set('objectID', 0);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
@@ -48,6 +49,14 @@
                   </ul>
                   <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $case->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title"  data-provide="colorpicker">
                 </div>
+              </div>
+            </div>
+          </div>
+          <div class='detail'>
+            <div class='detail-title'><?php echo $lang->testcase->scene;?></div>
+            <div class="detail-content">
+              <div class="input-control" id='sceneIdBox'>
+                <?php echo html::select('scene', $sceneOptionMenu, $currentSceneID, "class='form-control chosen'");?>
               </div>
             </div>
           </div>
@@ -345,4 +354,5 @@ $(":checkbox[name^='auto']").on('click', function(){
     checkScript();
 });
 </script>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

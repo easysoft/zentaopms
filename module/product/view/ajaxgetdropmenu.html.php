@@ -4,26 +4,27 @@
 <?php js::set('extra', $extra);?>
 <style>
 #navTabs {position: sticky; top: 0; background: #fff; z-index: 950;}
-#navTabs>li {padding: 0px 10px; display: inline-block}
-#navTabs>li>span {display: inline-block;}
-#navTabs>li>a {margin: 0!important; padding: 8px 0px; display: inline-block}
+#navTabs > li {padding: 0px 10px; display: inline-block}
+#navTabs > li > span {display: inline-block;}
+#navTabs > li > a {margin: 0!important; padding: 8px 0px; display: inline-block}
 
 #tabContent {margin-top: 5px; z-index: 900; max-width: 220px}
 .productTree ul {list-style: none; margin: 0}
 .productTree .products>ul {padding-left: 7px;}
-.productTree .products>ul>li>div {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
-.productTree .products>ul>li label {background: rgba(255,255,255,0.5); line-height: unset; color: #838a9d; border: 1px solid #d8d8d8; border-radius: 2px; padding: 1px 4px;}
+.productTree .products>ul > li > div {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
+.productTree .products>ul > li label {background: rgba(255,255,255,0.5); line-height: unset; color: #838a9d; border: 1px solid #d8d8d8; border-radius: 2px; padding: 1px 4px;}
 .productTree li a i.icon {font-size: 15px !important;}
 .productTree li a i.icon:before {min-width: 16px !important;}
 .productTree li .label {position: unset; margin-bottom: 0;}
-.productTree li>a, div.hide-in-search>a {display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
-.productTree .tree li>.list-toggle {line-height: 24px;}
+.productTree li > a, div.hide-in-search>a {display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
+.productTree .tree li > .list-toggle {line-height: 24px;}
 .productTree .tree li.has-list.open:before {content: unset;}
+.tree.noProgram li {padding-left: 0;}
 
-#swapper li>div.hide-in-search>a:focus, #swapper li>div.hide-in-search>a:hover {color: #838a9d; cursor: default;}
+#swapper li > div.hide-in-search>a:focus, #swapper li > div.hide-in-search>a:hover {color: #838a9d; cursor: default;}
 #swapper li > a {margin-top: 4px; margin-bottom: 4px;}
 #swapper li {padding-top: 0; padding-bottom: 0;}
-#swapper .tree li>.list-toggle {top: -1px;}
+#swapper .tree li > .list-toggle {top: -1px;}
 
 #subHeader .tree ul {display: block;}
 div#closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
@@ -56,14 +57,14 @@ foreach($products as $programID => $programProducts)
 }
 $productsPinYin = common::convert2Pinyin($productNames);
 
-$myProductsHtml     = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '';
-$normalProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '';
-$closedProductsHtml = $config->systemMode == 'ALM' ? '<ul class="tree tree-angles" data-ride="tree">' : '';
+$myProductsHtml     = in_array($config->systemMode, array('ALM', 'PLM')) ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
+$normalProductsHtml = in_array($config->systemMode, array('ALM', 'PLM')) ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
+$closedProductsHtml = in_array($config->systemMode, array('ALM', 'PLM')) ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="tree noProgram">';
 
 foreach($products as $programID => $programProducts)
 {
     /* Add the program name before project. */
-    if($programID and $config->systemMode == 'ALM')
+    if($programID and in_array($config->systemMode, array('ALM', 'PLM')))
     {
         $programName = zget($programs, $programID);
 
@@ -76,7 +77,7 @@ foreach($products as $programID => $programProducts)
     {
         if($product->id == $productID) $currentProduct = $product;
         $selected    = $product->id == $productID ? 'selected' : '';
-        $productName = ($config->systemMode == 'ALM' and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
+        $productName = (in_array($config->systemMode, array('ALM', 'PLM')) and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
         $linkHtml    = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
         $locateTab   = ($module == 'testtask' and $method == 'browseUnits' and $app->tab == 'project') ? '' : "data-app='$app->tab'";
 
@@ -168,7 +169,7 @@ $(function()
     $('.nav-tabs li span').hide();
     $('.nav-tabs li.active').find('span').show();
 
-    $('.nav-tabs>li a').click(function()
+    $('.nav-tabs > li a').click(function()
     {
         if($('#swapper input[type="search"]').val() == '')
         {

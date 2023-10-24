@@ -2,7 +2,7 @@
 /**
  * The create view file of repo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Yanyi Cao
  * @package     repo
  * @version     $Id: create.html.php $
@@ -32,7 +32,7 @@ js::set('revision', $revision);
 js::set('sourceRevision', $oldRevision);
 js::set('encodePath', $this->repo->encodePath($entry));
 if($showEditor) js::set('codeContent', $content);
-js::import($jsRoot  . '/zui/tabs/tabs.min.js');
+js::import($jsRoot  . 'zui/tabs/tabs.min.js');
 js::import($jsRoot  . 'monaco-editor/min/vs/loader.js');
 ?>
 <div id="monacoEditor" class='repoCode'>
@@ -338,7 +338,7 @@ $(function()
         parent.loadLinkPage(link);
     });
 
-    $('#relationTabs').on('click', '.unlinks',function()
+    $('#relationTabs').on('click', '.unlinks', function()
     {
         var link = $(this).attr('data-link');
         $.post(link, function(data)

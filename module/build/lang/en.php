@@ -2,7 +2,7 @@
 /**
  * The build module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
@@ -20,6 +20,7 @@ $lang->build->view             = "Build Detail";
 $lang->build->batchUnlink      = 'Batch Unlink';
 $lang->build->batchUnlinkStory = "Batch Unlink {$lang->SRCommon}";
 $lang->build->batchUnlinkBug   = 'Batch Unlink Bugs';
+$lang->build->linkArtifactRepo = 'Link Artifact Repo';
 
 $lang->build->confirmDelete      = "Do you want to delete this build?";
 $lang->build->confirmUnlinkStory = "Do you want to unlink this {$lang->SRCommon}?";
@@ -29,7 +30,7 @@ $lang->build->basicInfo = 'Basic Info';
 
 $lang->build->id             = 'ID';
 $lang->build->product        = $lang->productCommon;
-$lang->build->project        = 'Project';
+$lang->build->project        = $lang->projectCommon;
 $lang->build->branch         = 'Platform/Branch';
 $lang->build->branchAll      = 'All associated %s';
 $lang->build->branchName     = '%s';
@@ -40,6 +41,7 @@ $lang->build->singled        = 'Singled';
 $lang->build->builds         = 'Included Builds';
 $lang->build->released       = 'Released';
 $lang->build->name           = 'Name';
+$lang->build->nameAB         = 'Name';
 $lang->build->date           = 'Date';
 $lang->build->builder        = 'Builder';
 $lang->build->url            = 'URL';

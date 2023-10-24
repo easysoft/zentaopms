@@ -2,14 +2,13 @@
 /**
  * The testsuite module en file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     testsuite
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->testsuite->index            = "Accueil Cahier Recette";
 $lang->testsuite->create           = "Créer un Cahier";
 $lang->testsuite->delete           = "Supprimer un Cahier";
 $lang->testsuite->view             = "Détail du Cahier";
@@ -26,7 +25,7 @@ $lang->testsuite->successSaved     = 'Sauvé';
 $lang->testsuite->id             = 'ID';
 $lang->testsuite->pri            = 'Priority';
 $lang->testsuite->common         = 'Cahier de Recette';
-$lang->testsuite->project        = 'Project';
+$lang->testsuite->project        = $lang->projectCommon;
 $lang->testsuite->product        = $lang->productCommon;
 $lang->testsuite->name           = 'Nom';
 $lang->testsuite->type           = 'Type';

@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/task.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -29,4 +28,3 @@ $task = new taskTest();
 r($task->batchCreateObject($normal_create, $executionID))    && p('name')      && e('批量任务三');             // 测试正常的创建开发任务
 r($task->batchCreateObject($Exception_create, $executionID)) && p('message:0') && e('『任务类型』不能为空。'); // 测试正常的创建开发任务
 
-$db->restoreDB();

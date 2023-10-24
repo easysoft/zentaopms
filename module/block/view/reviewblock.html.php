@@ -2,7 +2,7 @@
 /**
  * The task block view file of block module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
@@ -33,7 +33,7 @@
 
       $typeName = '';
       if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
-      if($type == 'story') $typeName = $lang->my->auditMenu->audit->story;
+      if($type == 'story') $typeName = $lang->SRCommon;
       if($review->type == 'projectreview') $typeName = $lang->project->common;
       if(isset($flows[$review->type])) $typeName = $flows[$review->type];
 
@@ -56,8 +56,7 @@
           }
           else
           {
-              $class = "class='iframe' data-width='90%'";
-              if(strpos(",{$config->my->oaObjectType},", ",{$type},") !== false) $class = "data-toggle='modal'";
+              $class = "class='iframe' data-width='90%' data-toggle='modal'";
               $titleHtml = html::a($this->createLink($type, 'view', "objectID=$review->id", 'html', true), $review->title, '', $class);
           }
           echo $titleHtml;

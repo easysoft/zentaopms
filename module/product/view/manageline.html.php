@@ -2,7 +2,7 @@
 /**
  * The html productlist file of productlist method of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -33,7 +33,7 @@
                   <div id='son'>
                     <div class="table-row row-module row-module-new">
                       <div class="table-col text-center"><strong><?php echo $lang->product->lineName;?></strong></div>
-                      <?php if($this->config->systemMode == 'ALM'):?>
+                      <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
                       <div class="table-col text-center"><strong><?php echo $lang->product->program;?></strong></div>
                       <?php endif;?>
                       <div class="table-col col-actions"> </div>
@@ -42,7 +42,7 @@
                     <?php foreach($lines as $line):?>
                     <div class="table-row row-module">
                       <div class="table-col col-module"><?php echo html::input("modules[id$line->id]", $line->name, 'class="form-control"');?></div>
-                      <?php if($this->config->systemMode == 'ALM'):?>
+                      <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
                       <div class="table-col col-programs"><?php echo html::select("programs[id$line->id]", $programs, $line->root, "class='form-control chosen' required");?></div>
                       <?php endif;?>
                       <div class="table-col col-actions"> </div>
@@ -51,7 +51,7 @@
                     <?php for($i = 0; $i <= 5 ; $i ++):?>
                     <div class="table-row row-module row-module-new">
                       <div class="table-col col-module"><?php echo html::input("modules[]", '', "class='form-control'");?></div>
-                      <?php if($this->config->systemMode == 'ALM'):?>
+                      <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
                       <div class="table-col col-programs"><?php echo html::select("programs[]", $programs, '', "class='form-control chosen' required");?></div>
                       <?php endif;?>
                       <div class="table-col col-actions">
@@ -64,7 +64,7 @@
                   <div id="insertItemBox" class="template">
                     <div class="table-row row-module row-module-new">
                       <div class="table-col col-module"><?php echo html::input("modules[]", '', "class='form-control'");?></div>
-                      <?php if($this->config->systemMode == 'ALM'):?>
+                      <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
                       <div class="table-col col-programs"><?php echo html::select("programs[]", $programs, '', "class='form-control chosen' required");?></div>
                       <?php endif;?>
                       <div class="table-col col-actions">

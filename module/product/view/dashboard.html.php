@@ -2,7 +2,7 @@
 /**
  * The view view of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
@@ -54,7 +54,7 @@
           <div class="panel-heading">
           <div class="panel-title"><?php echo $lang->product->latestDynamic;?></div>
             <nav class="panel-actions nav nav-default">
-              <li><a href="<?php echo $this->createLink('product', 'dynamic', "productID={$product->id}&type=all");?>" title="<?php echo $lang->more;?>"><?php echo strtoupper($lang->more);?></i></i></a></li>
+              <li><a href="<?php echo $this->createLink('product', 'dynamic', "productID={$product->id}&type=all");?>" title="<?php echo $lang->more;?>"><?php echo mb_strtoupper($lang->more);?></i></i></a></li>
             </nav>
           </div>
           <div class="panel-body scrollbar-hover">

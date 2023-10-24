@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/design.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -46,4 +45,3 @@ r(empty($result[0]->story))                                                     
 $result = $design->batchCreateTest($projectIDList[6], $productIDList[0], $noDescDesign);
 r(empty($result[0]->desc))                                                              && p('0:desc')    && e(1);                      //不输入详情
 
-$db->restoreDB();

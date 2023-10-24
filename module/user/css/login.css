@@ -15,7 +15,8 @@ html[lang='en'] #loginPanel .table-form > tbody > tr > th {width: 80px;}
 #langs > .btn,
 #langs > .dropdown-menu {min-width: 0; width: 85px;}
 
-#logo-box img {margin-left: 40px; width: 100px;}
+#logo-box {padding-top: 7px;}
+#logo-box img {margin-left: 40px; width: 130px;}
 .captchaBox .input-group .input-group-addon {width: 110px; padding: 0px;}
 
 .showNotice {color: yellow;}

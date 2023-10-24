@@ -2,7 +2,7 @@
 /**
  * The tasks entry point of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
@@ -54,6 +54,21 @@ class tasksEntry extends entry
         }
         else
         {
+            /* If $executionID is a project that have no execution, get real executionID. */
+            $project = $this->loadModel('project')->getByID($executionID);
+            if($project and $project->type == 'project' and !$project->multiple)
+            {
+                $executions = $this->loadModel('execution')->getList($project->id);
+                foreach($executions as $execution)
+                {
+                    if(!$execution->multiple)
+                    {
+                        $executionID = $execution->id;
+                        break;
+                    }
+                }
+            }
+
             /* Get tasks by execution. */
             $control = $this->loadController('execution', 'task');
             $control->task($executionID, $this->param('status', 'all'), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 100), $this->param('page', 1));
@@ -89,8 +104,16 @@ class tasksEntry extends entry
         $fields = 'name,type,assignedTo,estimate,story,execution,project,module,pri,desc,estStarted,deadline,mailto,team,teamEstimate,multiple,uid';
         $this->batchSetPost($fields);
 
-        $assignedTo = $this->request('assignedTo');
-        if($assignedTo and !is_array($assignedTo)) $this->setPost('assignedTo', array($assignedTo));
+        $assignedTo = $this->request('assignedTo', array(0 => ''));
+        if($assignedTo and !is_array($assignedTo)) $assignedTo = array($assignedTo);
+        $this->setPost('assignedTo', $assignedTo);
+        if($this->request('multiple'))
+        {
+            if(count($this->request('team')) != count($this->request('teamEstimate'))) return $this->sendError(400, 'Arrays team and teamEstimate should be the same length');
+            $this->setPost('mode', $this->request('mode', 'linear'));
+            $this->setPost('teamSource', array_fill(0, count($this->request('team')), ''));
+        }
+
         $this->setPost('execution', $executionID);
 
         $control = $this->loadController('task', 'create');

@@ -1,3 +1,7 @@
 .c-id {width: 50px;}
 .c-team-name {width: 120px;}
 .c-project, .c-user, .c-code, .c-desc, .c-days {width: 150px;}
+.c-method {width: 70px;}
+.c-type > .icon-help {vertical-align: text-top;}
+.c-type > .popover .popover-content {font-weight: 400;}
+#executionForm tbody td {vertical-align: top;}

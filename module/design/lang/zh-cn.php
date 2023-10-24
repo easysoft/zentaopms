@@ -2,7 +2,7 @@
 /**
  * The zh-cn file of design module.
  *
- * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2020 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
@@ -20,12 +20,12 @@ $lang->design->version       = '版本号';
 $lang->design->assignedTo    = '指派给';
 $lang->design->actions       = '操作';
 $lang->design->byQuery       = '搜索';
-$lang->design->products      = '所属产品';
+$lang->design->products      = "所属{$lang->productCommon}";
 $lang->design->story         = '相关需求';
 $lang->design->file          = '附件';
 $lang->design->desc          = '设计描述';
 $lang->design->range         = '影响范围';
-$lang->design->product       = '所属产品';
+$lang->design->product       = "所属{$lang->productCommon}";
 $lang->design->basicInfo     = '基础信息';
 $lang->design->commitBy      = '由谁提交';
 $lang->design->commitDate    = '提交时间';
@@ -46,8 +46,8 @@ $lang->design->create       = '创建设计';
 $lang->design->batchCreate  = '批量创建';
 $lang->design->edit         = '变更';
 $lang->design->delete       = '删除';
-$lang->design->view         = '设计概况';
-$lang->design->browse       = '浏览列表';
+$lang->design->view         = '设计详情';
+$lang->design->browse       = '设计列表';
 $lang->design->viewCommit   = '查看提交';
 $lang->design->linkCommit   = '关联提交';
 $lang->design->unlinkCommit = '取消关联';
@@ -64,6 +64,8 @@ $lang->design->typeList['HLDS'] = '概要设计';
 $lang->design->typeList['DDS']  = '详细设计';
 $lang->design->typeList['DBDS'] = '数据库设计';
 $lang->design->typeList['ADS']  = '接口设计';
+
+$lang->design->plusTypeList = $lang->design->typeList;
 
 $lang->design->rangeList           = array();
 $lang->design->rangeList['all']    = '全部记录';

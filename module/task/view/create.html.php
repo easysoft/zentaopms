@@ -2,7 +2,7 @@
 /**
  * The create view of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
@@ -22,7 +22,9 @@
 <?php js::set('requiredFields', $config->task->create->requiredFields);?>
 <?php js::set('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'))?>
 <?php js::set('lifetime', $execution->lifetime);?>
+<?php js::set('attribute', $execution->attribute);?>
 <?php js::set('lifetimeList', $lifetimeList);?>
+<?php js::set('attributeList', $attributeList);?>
 <?php js::set('hasProduct', $execution->hasProduct);?>
 <?php
 $requiredFields = array();
@@ -108,7 +110,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
           <td><?php echo html::hidden('status', 'wait');?></td>
         </tr>
         <?php $this->printExtendFields('', 'table', 'columns=3');?>
-        <?php $hiddenStory = (strpos(",$showFields,", ',story,') !== false and $execution->lifetime != 'ops') ? '' : 'hidden'?>
+        <?php $hiddenStory = (strpos(",$showFields,", ',story,') !== false and $features['story']) ? '' : 'hidden'?>
         <tr class="<?php echo $hiddenStory?> storyBox">
           <th><?php echo $lang->task->story;?></th>
           <td colspan='3'>
@@ -127,7 +129,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
             </div>
           </td>
         </tr>
-        <?php if($execution->lifetime != 'ops'):?>
+        <?php if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review'))):?>
         <tr id='testStoryBox' class='hidden'>
           <th><?php echo $lang->task->selectTestStory;?></th>
           <td colspan='3'>
@@ -352,4 +354,5 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
 </script>
+<?php include '../../ai/view/inputinject.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

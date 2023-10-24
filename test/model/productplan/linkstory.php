@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/productplan.class.php';
-$db->switchDB();
 
 /**
 
@@ -44,4 +43,3 @@ r($plan->linkStory($planID[2], $storyID[2])) && p() && e('0'); //传入不存在
 r($plan->unlinkStory($unstoryID[0], $planID[0])) && p() && e('0'); //解除id为100关联需求4
 r($plan->unlinkStory($unstoryID[1], $planID[1])) && p() && e('0'); //解除id为101关联需求8
 ?>
-$db->restoreDB();

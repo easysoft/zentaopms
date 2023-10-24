@@ -2,7 +2,7 @@
 /**
  * The view file of build module's view method of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
@@ -58,7 +58,7 @@ tbody tr td:first-child input {display: none;}
   </div>
   <?php endif;?>
 </div>
-<?php $module = $build->execution ? 'build' : 'projectbuild';?>
+<?php $module = $this->app->tab == 'project' ? 'projectbuild' : 'build';?>
 <div id='mainContent' class='main-content'>
   <div class='tabs' id='tabsNav'>
   <?php $countStories = count($stories); $countBugs = count($bugs); $countGeneratedBugs = count($generatedBugs);?>
@@ -74,7 +74,7 @@ tbody tr td:first-child input {display: none;}
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"story\")", '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
-        <form class='main-table table-story' data-ride='table' method='post' target='hiddenwin' action='<?php echo $this->createLink($module, 'batchUnlinkStory', "buildID={$build->id}")?>' id='linkedStoriesForm'>
+        <form class='main-table table-story<?php if($link === 'true' and $type == 'story') echo " hidden";?>' data-ride='table' method='post' target='hiddenwin' action='<?php echo $this->createLink($module, 'batchUnlinkStory', "buildID={$build->id}")?>' id='linkedStoriesForm'>
           <table class='table has-sort-head' id='storyList'>
             <?php $canBatchUnlink = ($canBeChanged and common::hasPriv($module, 'batchUnlinkStory'));?>
             <?php $vars = "buildID={$build->id}&type=story&link=$link&param=$param&orderBy=%s";?>
@@ -192,7 +192,7 @@ tbody tr td:first-child input {display: none;}
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
-        <form class='main-table table-bug' data-ride='table' method='post' target='hiddenwin' action="<?php echo $this->createLink($module, 'batchUnlinkBug', "build=$build->id");?>" id='linkedBugsForm'>
+        <form class='main-table table-bug<?php if($link === 'true' and $type == 'bug') echo " hidden";?>' data-ride='table' method='post' target='hiddenwin' action="<?php echo $this->createLink($module, 'batchUnlinkBug', "build=$build->id");?>" id='linkedBugsForm'>
           <table class='table has-sort-head' id='bugList'>
             <?php $canBatchUnlink = $canBeChanged and common::hasPriv($module, 'batchUnlinkBug');?>
             <?php $vars = "buildID={$build->id}&type=bug&link=$link&param=$param&orderBy=%s";?>
@@ -385,7 +385,10 @@ tbody tr td:first-child input {display: none;}
                 <?php if($build->execution):?>
                 <tr>
                   <th><?php echo empty($multipleProject) ? $lang->build->project :($executionType ? $lang->build->executionAB : $lang->build->execution);?></th>
-                  <td><?php echo zget($executions, $build->execution);?></td>
+                  <td>
+                    <?php $executionName = zget($executions, $build->execution);?>
+                    <?php echo ltrim($executionName, '/');?>
+                  </td>
                 </tr>
                 <?php else:?>
                 <tr>

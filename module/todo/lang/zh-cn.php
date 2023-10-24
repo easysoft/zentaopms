@@ -2,14 +2,13 @@
 /**
  * The todo module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
  * @version     $Id: zh-cn.php 5022 2013-07-05 06:50:39Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->todo->common       = '待办';
 $lang->todo->index        = "待办一览";
 $lang->todo->create       = "添加待办";
 $lang->todo->createCycle  = "创建周期待办";
@@ -28,15 +27,16 @@ $lang->todo->finish       = "完成待办";
 $lang->todo->batchFinish  = "批量完成";
 $lang->todo->export       = "导出待办";
 $lang->todo->delete       = "删除待办";
-$lang->todo->import2Today = "导入到今天";
+$lang->todo->import2Today = "修改日期";
 $lang->todo->import       = "导入";
 $lang->todo->legendBasic  = "基本信息";
 $lang->todo->cycle        = "周期";
 $lang->todo->cycleConfig  = "周期设置";
-$lang->todo->project      = "所属项目";
-$lang->todo->product      = "所属产品";
+$lang->todo->project      = "所属{$lang->projectCommon}";
+$lang->todo->product      = "所属{$lang->productCommon}";
 $lang->todo->execution    = "所属{$lang->execution->common}";
 $lang->todo->changeDate   = "修改日期";
+$lang->todo->future       = '待定';
 
 $lang->todo->reasonList['story'] = "转{$lang->SRCommon}";
 $lang->todo->reasonList['task']  = "转任务";
@@ -118,7 +118,7 @@ $lang->todo->noTodo         = '该类型没有待办事务';
 $lang->todo->noAssignedTo   = '被指派人不能为空';
 $lang->todo->unfinishedTodo = '待办ID %s 不是完成状态，不能关闭。';
 $lang->todo->today          = '今日待办';
-$lang->todo->selectProduct  = "请选择产品";
+$lang->todo->selectProduct  = "请选择{$lang->productCommon}";
 
 $lang->todo->periods['all']             = '指派自己';
 $lang->todo->periods['before']          = '未完';

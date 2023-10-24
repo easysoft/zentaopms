@@ -154,6 +154,7 @@ $lang->repo->placeholder->gitlabHost = '請填寫GitLab訪問地址';
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = '正在同步中, 請稍等...';
 $lang->repo->notice->syncComplete   = '同步完成，正在跳轉...';
+$lang->repo->notice->syncFailed     = '同步失敗.';
 $lang->repo->notice->syncedCount    = '已經同步記錄條數';
 $lang->repo->notice->delete         = '是否要刪除該版本庫？';
 $lang->repo->notice->successDelete  = '已經成功刪除版本庫。';
@@ -213,3 +214,5 @@ $lang->repo->typeList['performance'] = '性能';
 $lang->repo->typeList['security']    = '安全';
 $lang->repo->typeList['redundancy']  = '冗餘';
 $lang->repo->typeList['logicError']  = '邏輯錯誤';
+
+$lang->repo->featureBar['maintain']['all'] = '全部';

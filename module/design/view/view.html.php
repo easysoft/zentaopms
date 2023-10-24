@@ -2,7 +2,7 @@
 /**
  * The view of design module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
@@ -66,7 +66,7 @@
           <table class='table table-data'>
             <tr>
               <th><?php echo $lang->design->type;?></th>
-              <td><?php echo zget($lang->design->typeList, $design->type);?></td>
+              <td><?php echo zget($typeList, $design->type);?></td>
             </tr>
             <tr <?php if(empty($project->hasProduct)) echo "class='hide'";?>>
               <th><?php echo $lang->design->product;?></th>

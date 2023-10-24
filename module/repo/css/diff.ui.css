@@ -1,0 +1,21 @@
+.diff-back-btn {border: none; --tw-ring-shadow: none}
+.diff-back-btn::after {border: none;}
+.diff-back-btn::before {border: none;}
+.label-info {background-color: #37b2fe}
+.label-info[href]:focus,.label-info[href]:hover {color: #fff; background-color: #049efe}
+.label-info.label-outline {color: #37b2fe; background: 0 0; border: 1px solid #37b2fe}
+.label {padding: .2em .6em .2em; color: #fff;text-align: center; white-space: nowrap; vertical-align: middle; border-radius: .25em;}
+.diff-label {border: none; --tw-ring-shadow: none; margin-left: 5px; margin-right: 10px}
+.label-exchange {background-color: #566F7C; cursor: pointer;}
+
+#fileTabs .tab-pane {display: none;}
+#fileTabs .tab-pane.active {display: block;}
+#fileTabs .nav-item {max-width: none !important;}
+.sidebar .tree{background-color: white;}
+.container .sidebar{width: 240px;}
+.tree li.tree-item.selected{color: #438EFF !important;}
+#monacoTree{overflow: auto;}
+.monaco-dropmenu{background: #efefef;}
+
+#featureBar .dropmenu-btn .icon-angle-right {display: none;}
+#featureBar .dropmenu-btn {padding-left: 0.3rem;}

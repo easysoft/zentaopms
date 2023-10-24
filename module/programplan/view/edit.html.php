@@ -2,7 +2,7 @@
 /**
  * The edit of programplan module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     programplan
@@ -12,6 +12,18 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('plan', $plan);?>
+<?php js::set('stageTypeList', $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList);?>
+<?php js::set('changeAttrLang', $lang->programplan->confirmChangeAttr);?>
+<?php js::set('isTopStage', $isTopStage);?>
+<?php js::set('isLeafStage', $isLeafStage);?>
+<?php js::set('projectModel', $project->model);?>
+<?php if($project->model == 'research'):?>
+<style>
+.body-modal #mainContent {padding-top: 90px;}
+.table-form>tbody>tr>td {padding: 9px;}
+</style>
+<?php endif;?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
@@ -23,15 +35,15 @@
     <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class="table table-form">
         <tbody>
-          <tr>
+          <tr class="<?php echo $project->model == 'ipd' ? 'hidden' : '';?>">
             <th class="w-100px"><?php echo $lang->programplan->parent;?></th>
-            <td colspan='2'><?php echo html::select('parent', $parentStage, $plan->parent, "class='form-control chosen '");?></td>
+            <td colspan='2'><?php echo html::select('parent', $parentStageList, $plan->parent, "class='form-control chosen '");?></td>
           </tr>
           <tr>
             <th class='w-100px'><?php echo $lang->programplan->name;?> </th>
             <td colspan='2'><?php echo html::input('name', $plan->name, "class='form-control'");?></td>
           </tr>
-          <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+          <?php if(isset($config->setCode) and $config->setCode == 1):?>
           <tr>
             <th class='w-100px'><?php echo $lang->execution->code;?> </th>
             <td class='required' colspan='2'><?php echo html::input('code', $plan->code, "class='form-control'");?></td>
@@ -39,8 +51,10 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->programplan->PM;?> </th>
-            <td colspan='2'><?php echo html::select('PM', $PMUsers, '', "class='form-control picker-select'");?></td>
+            <td colspan='2'><?php echo html::select('PM', $PMUsers, $plan->PM, "class='form-control picker-select'");?></td>
           </tr>
+          <?php if($project->model != 'research'):?>
+          <?php if(isset($config->setPercent) and $config->setPercent == 1):?>
           <tr>
             <th><?php echo $lang->programplan->percent;?> </th>
             <td colspan='2'>
@@ -50,9 +64,31 @@
               </div>
             </td>
           </tr>
-          <tr class="<?php if($plan->grade == 2) echo "hidden";?>" id="attributeType">
-            <th><?php echo $lang->programplan->attribute;?> </th>
-            <td colspan='2'><?php echo html::select('attribute', $lang->stage->typeList, $plan->attribute, "class='form-control'");?></td>
+          <?php endif;?>
+          <tr id="attributeType">
+            <th><?php echo $lang->programplan->attribute;?></th>
+            <td colspan='2'>
+              <?php
+              if($project->model == 'ipd')
+              {
+                  echo zget($lang->stage->ipdTypeList, $plan->attribute);
+                  echo html::hidden('attribute', $plan->attribute);
+              }
+              elseif($enableOptionalAttr)
+              {
+                  echo html::select('attribute', $lang->stage->typeList, $plan->attribute, "class='form-control'");
+              }
+              else
+              {
+                  echo zget($lang->stage->typeList, $plan->attribute);
+              }
+            ?>
+            </td>
+            <td>
+              <?php if($project->model != 'ipd'):?>
+              <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->typeTip;?>"></icon>
+              <?php endif;?>
+            </td>
           </tr>
           <?php if($plan->setMilestone):?>
           <tr>
@@ -67,6 +103,7 @@
             <?php $class = $plan->grade == 2 ? "disabled='disabled'" : '';?>
             <td colspan='2'><?php echo html::select('acl', $lang->execution->aclList, $plan->acl, "class='form-control' $class");?></td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->programplan->planDateRange;?> </th>
             <td colspan='2'>
@@ -101,20 +138,4 @@
     </form>
   </div>
 </div>
-<script>
-$("#parent").change(function()
-{
-    var parent = $(this).children("option:selected").val();
-    if(parent == 0)
-    {
-        $("#attributeType").removeClass('hidden');
-        $("#acl").attr('disabled', false);
-    }
-    else
-    {
-        $("#attributeType").addClass('hidden');
-        $("#acl").attr('disabled', true);
-    }
-});
-</script>
 <?php include '../../common/view/footer.html.php';?>

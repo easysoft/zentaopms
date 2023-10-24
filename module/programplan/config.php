@@ -5,7 +5,14 @@ $config->programplan->create->requiredFields = 'name,begin,end';
 $config->programplan->edit->requiredFields   = 'name,begin,end';
 
 $config->programplan->datatable = new stdclass();
-$config->programplan->datatable->defaultField = array('id', 'name', 'percent', 'attribute', 'begin', 'end', 'realBegan', 'realEnd', 'actions');
+if(isset($config->setPercent) and $config->setPercent == 1)
+{
+    $config->programplan->datatable->defaultField = array('id', 'name', 'percent', 'attribute', 'begin', 'end', 'realBegan', 'realEnd', 'actions');
+}
+else
+{
+    $config->programplan->datatable->defaultField = array('id', 'name', 'attribute', 'begin', 'end', 'realBegan', 'realEnd', 'actions');
+}
 
 $config->programplan->datatable->fieldList['id']['title']    = 'idAB';
 $config->programplan->datatable->fieldList['id']['fixed']    = 'left';
@@ -17,10 +24,13 @@ $config->programplan->datatable->fieldList['name']['fixed']    = 'left';
 $config->programplan->datatable->fieldList['name']['width']    = 'auto';
 $config->programplan->datatable->fieldList['name']['required'] = 'yes';
 
-$config->programplan->datatable->fieldList['percent']['title']    = 'percent';
-$config->programplan->datatable->fieldList['percent']['fixed']    = 'no';
-$config->programplan->datatable->fieldList['percent']['width']    = '100';
-$config->programplan->datatable->fieldList['percent']['required'] = 'no';
+if(isset($config->setPercent) and $config->setPercent == 1)
+{
+    $config->programplan->datatable->fieldList['percent']['title']    = 'percent';
+    $config->programplan->datatable->fieldList['percent']['fixed']    = 'no';
+    $config->programplan->datatable->fieldList['percent']['width']    = '100';
+    $config->programplan->datatable->fieldList['percent']['required'] = 'no';
+}
 
 $config->programplan->datatable->fieldList['attribute']['title']    = 'attribute';
 $config->programplan->datatable->fieldList['attribute']['fixed']    = 'no';
@@ -53,10 +63,23 @@ $config->programplan->datatable->fieldList['actions']['width']    = '150';
 $config->programplan->datatable->fieldList['actions']['required'] = 'yes';
 $config->programplan->datatable->fieldList['actions']['sort']     = 'no';
 
-$config->programplan->customCreateFields = 'PM,percent,attribute,acl,milestone,realBegan,realEnd';
-
 $config->programplan->custom = new stdclass();
-$config->programplan->custom->createFields = 'PM,percent,attribute,acl,milestone';
+
+if(isset($config->setPercent) and $config->setPercent == 1)
+{
+    $config->programplan->custom->createFields = 'PM,percent,attribute,acl,milestone';
+    $config->programplan->customCreateFields   = 'PM,percent,attribute,acl,milestone,realBegan,realEnd';
+}
+else
+{
+    $config->programplan->custom->createFields = 'PM,attribute,acl,milestone';
+    $config->programplan->customCreateFields   = 'PM,attribute,acl,milestone,realBegan,realEnd';
+}
+
+$config->programplan->customAgilePlusCreateFields = 'PM,milestone,acl,desc,attribute';
+
+$config->programplan->customAgilePlus = new stdclass();
+$config->programplan->customAgilePlus->createFields = 'PM,milestone,acl,desc,attribute';
 
 $config->programplan->custom->customGanttFields = 'PM,deadline,status,realBegan,realEnd,progress,taskProgress,estimate,consumed,delay,delayDays';
 $config->programplan->ganttCustom = new stdclass();

@@ -2,7 +2,7 @@
 /**
  * The log view file of repo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
+ * @copyright   Copyright 2009-2012 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Wang Yidong, Zhu Jinyong
  * @package     repo
  * @version     $Id: log.html.php $
@@ -10,6 +10,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('repoID', $repoID);?>
+<?php js::set('paramsBase', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($entry) . "&revision=$revision&type=$type");?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolbar pull-left">
     <?php echo html::backButton("<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', 'btn btn-link');?>
@@ -81,7 +82,15 @@
     </table>
     <div class='table-footer'>
       <?php if(common::hasPriv('repo', 'diff')) echo html::submitButton($lang->repo->diff, '', count($logs) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
+      <?php if($repo->SCM == 'Gitlab'):?>
+      <?php
+      $params = "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($entry) . "&revision=$revision&type=$type&recTotal={$pager->recTotal}";
+      $total  = count($logs) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1)
+      ?>
+      <ul id="repoPageSize" data-page-cookie='pagerRepoLog' class="pager" data-ride="pager" data-elements="size_menu,prev_icon,next_icon" data-rec-total="<?php echo $total;?>" data-rec-per-page="<?php echo $pager->recPerPage;?>" data-page="<?php echo $pager->pageID;?>" data-link-creator="<?php echo $this->repo->createLink('log', $params . '&recPerPage={recPerPage}&pageID={page}');?>"></ul>
+      <?php else:?>
       <?php $pager->show('right', 'pagerjs');?>
+      <?php endif;?>
     </div>
   </form>
 </div>

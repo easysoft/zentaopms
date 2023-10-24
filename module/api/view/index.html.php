@@ -2,7 +2,7 @@
 /**
  * The index view file of doc module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     doc
@@ -12,89 +12,80 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->api->confirmDelete);?>
-<div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo 'api';?>></div>
-<div class="fade main-row split-row" id="mainRow">
-  <?php if($libID):?>
-  <?php $sideWidth = common::checkNotCN() ? '270' : '238';?>
-  <div class="side-col" style="width:<?php echo $sideWidth;?>px" data-min-width="<?php echo $sideWidth;?>">
-    <div class="cell" style="min-height: 286px">
-      <div id='title'>
-        <li class='menu-title'><?php echo $this->lang->api->module;?></li>
-        <?php
-        $canTreeBrowse   = common::hasPriv('tree', 'browse');
-        $canViewReleases = common::hasPriv('api', 'releases');
-        $canEditLib      = common::hasPriv('api', 'editLib');
-        $canDeleteLib    = common::hasPriv('api', 'deleteLib');
-        $haveMoreButton  = ($canTreeBrowse or $canViewReleases or $canEditLib or $canDeleteLib);
-
-        if(!$isRelease and $haveMoreButton)
-        {
-            echo "<div class='menu-actions'>";
-            echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
-            echo "<ul class='dropdown-menu pull-right'>";
-            if($canTreeBrowse) echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=api", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->manageType, '', "class='iframe' data-width='1200px'") . '</li>';
-            if($canViewReleases) echo '<li>' . html::a($this->createLink('api', 'releases', "libID=$libID", '', true), '<i class="icon-version"></i> ' . $this->lang->api->managePublish, '', "class='iframe'") . '</li>';
-            echo "<li class='divider'></li>";
-            if($canEditLib) echo '<li>' . html::a($this->createLink('api', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->api->editLib, '', "class='iframe'") . '</li>';
-            if($canDeleteLib) echo '<li>' . html::a($this->createLink('api', 'deleteLib', "rootID=$libID"), '<i class="icon-trash"></i> ' . $lang->api->deleteLib, 'hiddenwin') . '</li>';
-            echo '</ul></div>';
-        }
-        ?>
-      </div>
-      <?php if(!$moduleTree):?>
-      <hr class="space">
-      <?php if(!$isRelease):?>
-      <div class="text-center text-muted tips"><?php echo $lang->api->noModule;?></div>
-      <?php endif;?>
-      <?php endif;?>
-      <?php echo $moduleTree;?>
-    </div>
+<?php js::set('treeData', $libTree);?>
+<div id="mainMenu" class="clearfix">
+  <div id="leftBar" class="btn-toolbar pull-left">
+    <?php echo $objectDropdown;?>
+    <?php if(!empty($libTree)):?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->doc->searchDoc;?></a>
+    <?php endif;?>
   </div>
-  <?php endif;?>
-
-  <?php if($apiID):?>
-    <?php include './content.html.php';?>
-  <?php else:?>
-  <?php if(empty($libs) || empty($apiList)):?>
-  <div class="cell">
-    <div class="detail">
-      <li class="detail-title"><?php echo intval($libID) > 0 ? $lang->api->apiList : $lang->api->pageTitle;?></li>
-    </div>
-    <div class="detail">
-      <div class="no-content"><img src="<?php echo $config->webRoot . 'theme/default/images/main/no_content.png'?>"/></div>
-      <div class="notice text-muted"><?php echo (empty($libs)) ? $lang->api->noLib : $lang->api->noApi;?></div>
-      <div class="no-content-button">
-        <?php
-        if($libID && common::hasPriv('api', 'create'))
-        {
-            echo html::a(helper::createLink('api', 'create', "libID={$libID}"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-info btn-wide"');
-        }
-        ?>
-      </div>
-    </div>
+  <div class="btn-toolbar pull-right">
+  <?php
+    if($libTree and common::hasPriv('api', 'struct'))        echo html::a($this->createLink('api', 'struct',        "libID=$libID"), "<i class='icon-treemap muted'> </i>" . $lang->api->struct, '', "class='btn btn-link'");
+    if($libTree and common::hasPriv('api', 'releases'))      echo html::a($this->createLink('api', 'releases',      "libID=$libID", 'html', true), "<i class='icon-version muted'> </i>" . $lang->api->releases, '', "class='btn btn-link iframe' data-width='800px'");
+    if($libTree and common::hasPriv('api', 'createRelease')) echo html::a($this->createLink('api', 'createRelease', "libID=$libID"), "<i class='icon-publish muted'> </i>" . $lang->api->createRelease, '', "class='btn btn-link iframe' data-width='800px'");
+    if($libTree and common::hasPriv('api', 'export') and $config->edition != 'open') echo html::a($this->createLink('api', 'export', "libID=$libID&version=$version&release=$release&moduleID=$moduleID", 'html', true), "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export' data-width='480px' id='export'");
+    if(common::hasPriv('api', 'createLib')) echo html::a($this->createLink('api', 'createLib',     "type=" . ($objectType ? $objectType : 'nolink') . "&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
+    if($libTree and common::hasPriv('api', 'create')) echo html::a($this->createLink('api', 'create',        "libID=$libID&moduleID=$moduleID"), '<i class="icon icon-plus"></i> ' . $lang->api->createApi, '', 'class="btn btn-primary"');
+  ?>
   </div>
-  <?php else:?>
-  <div class="cell main-col" data-min-width="400">
-    <div class="detail base-url">
-      <p><?php echo $lang->api->baseUrl . ': ' . $lib->baseUrl;?></p>
-    </div>
-    <div class="detail">
-      <ul class="list-group">
-        <?php foreach($apiList as $api):?>
-        <li class="list-group-item">
-          <div class="heading <?php echo $api->method;?>">
-            <a href="<?php echo helper::createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID={$api->id}&version=0&release=$release");?>">
-              <span class="label label-primary"><?php echo $api->method;?></span>
-              <span class="path" title="<?php echo $api->path;?>"><?php echo $api->path;?></span>
-              <span class="desc" title="<?php echo $api->title;?>"><?php echo $api->title;?></span>
-            </a>
-          </div>
-        </li>
-        <?php endforeach;?>
-      </ul>
-    </div>
+</div>
+<div id='mainContent' class="fade <?php if(!empty($libTree)) echo 'flex';?>">
+<?php if(empty($libTree)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->doc->noLib;?></span>
+      <?php
+      if(common::hasPriv('api', 'createLib')) echo html::a(helper::createLink('api', 'createLib', "type=" . ($objectType ? $objectType : 'nolink')), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-info iframe" data-width="800px"');
+      ?>
+    </p>
   </div>
-  <?php endif;?>
-  <?php endif;?>
+<?php else:?>
+  <div id='sideBar' class="panel side side-col col overflow-auto" data-min-width="150">
+    <?php include '../../doc/view/lefttree.html.php';?>
+  </div>
+  <div class="sidebar-toggle flex-center"><i class="icon icon-angle-left"></i></div>
+  <div class="main-col flex-full overflow-visible flex-auto overflow-visible" data-min-width="500">
+    <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" style="min-width: 400px" id="queryBox" data-module='api'></div>
+    <?php include 'apilist.html.php';?>
+  </div>
+<?php endif;?>
+</div>
+<div class='hidden' id='dropDownData'>
+  <ul class='libDorpdown'>
+    <?php if(common::hasPriv('tree', 'browse')):?>
+    <li data-method="addCataLib" data-has-children='%hasChildren%'  data-libid='%libID%' data-moduleid="%moduleID%" data-type="add"><a><i class="icon icon-add-directory"></i><?php echo $lang->doc->libDropdown['addModule'];?></a></li>
+    <?php endif;?>
+    <?php if(common::hasPriv('api', 'editLib')):?>
+    <li data-method="editLib"><a href='<?php echo inlink('editLib', 'libID=%libID%');?>' data-toggle='modal' data-type='iframe'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editLib'];?></a></li>
+    <?php endif;?>
+    <?php if(common::hasPriv('api', 'deleteLib')):?>
+    <li data-method="deleteLib"><a href='<?php echo inlink('deleteLib', 'libID=%libID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['deleteLib'];?></a></li>
+    <?php endif;?>
+  </ul>
+  <ul class='moduleDorpdown'>
+    <?php if(common::hasPriv('tree', 'browse')):?>
+    <li data-method="addCataBro" data-type="add" data-id="%moduleID%"><a><i class="icon icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSameModule'];?></a></li>
+    <li data-method="addCataChild" data-type="add" data-id="%moduleID%" data-has-children='%hasChildren%'><a><i class="icon icon-add-directory"></i><?php echo $lang->doc->libDropdown['addSubModule'];?></a></li>
+    <li data-method="editCata" class='edit-module'><a data-href='<?php echo helper::createLink('tree', 'edit', 'moduleID=%moduleID%&type=doc');?>'><i class="icon icon-edit"></i><?php echo $lang->doc->libDropdown['editModule'];?></a></li>
+    <li data-method="deleteCata"><a href='<?php echo helper::createLink('tree', 'delete', 'rootID=%libID%&moduleID=%moduleID%');?>' target='hiddenwin'><i class="icon icon-trash"></i><?php echo $lang->doc->libDropdown['delModule'];?></a></li>
+    <?php endif;?>
+  </ul>
+</div>
+<div class='hidden' data-id="ulTreeModal">
+  <ul data-id="liTreeModal" class="menu-active-primary menu-hover-primary has-input">
+    <li data-id="insert" class="has-input">
+      <input data-target="%target%" class="form-control input-tree"></input>
+    </li>
+  </ul>
+</div>
+<div class="hidden" data-id="aTreeModal">
+  <a href="###" data-has-children="false" title="%name%" data-id="%id%">
+    <div class="text h-full w-full flex-between overflow-hidden" style="position: relative;">
+      <div>%name%</div>
+      <i class="icon icon-drop icon-ellipsis-v hidden file-drop-icon" data-iscatalogue="true"></i>
+    </div>
+  </a>
 </div>
 <?php include '../../common/view/footer.html.php';?>

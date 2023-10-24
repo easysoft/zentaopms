@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testreport.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -34,4 +33,3 @@ r($testreport->updateTest($reportID, $noOwner))      && p('owner:0')          &&
 r($testreport->updateTest($reportID, $noMembers))    && p('id,title,members') && e('1,参与人员为空测试,');  //参与人员为空测试
 r($testreport->updateTest($reportID, $noTitle))      && p('title:0')          && e('『标题』不能为空。');   //标题为空测试
 
-$db->restoreDB();

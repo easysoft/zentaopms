@@ -2,7 +2,7 @@
 /**
  * The task module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
@@ -67,7 +67,7 @@ $lang->task->foldEffort          = '收起日志';
 
 $lang->task->common            = '任务';
 $lang->task->id                = '编号';
-$lang->task->project           = '所属项目';
+$lang->task->project           = '所属' . $lang->projectCommon;
 $lang->task->execution         = '所属' . $lang->execution->common;
 $lang->task->module            = '所属模块';
 $lang->task->moduleAB          = '模块';
@@ -250,7 +250,7 @@ $lang->task->confirmFinish             = '"预计剩余"为0，确认将任务�
 $lang->task->confirmRecord             = '"剩余"为0，任务将标记为"已完成"，您确定吗？';
 $lang->task->confirmTransfer           = '剩余工时为0，当前成员已完成任务，任务指派给：<strong>%s</strong>。';
 $lang->task->noticeTaskStart           = '"总计消耗"和"预计剩余"不能同时为0';
-$lang->task->noticeLinkStory           = "没有可关联的相关{$lang->SRCommon}，您可以为当前项目%s，然后%s";
+$lang->task->noticeLinkStory           = "没有可关联的相关{$lang->SRCommon}，您可以为当前{$lang->projectCommon}%s，然后%s";
 $lang->task->noticeLinkStoryNoProduct  = "没有可关联的相关{$lang->SRCommon}";
 $lang->task->noticeSaveRecord          = '您有尚未保存的工时记录，请先将其保存。';
 $lang->task->noticeManageTeam          = '任务状态是%s，不能维护团队';
@@ -259,7 +259,7 @@ $lang->task->deniedNotice              = '当前任务只有%s才可以%s。';
 $lang->task->deniedStatusNotice        = '当前任务状态是%s，不能维护日志。';
 $lang->task->transferNotice            = '串行多人任务不能转交。';
 $lang->task->noTask                    = '暂时没有任务。';
-$lang->task->createDenied              = '你不能在该项目添加任务';
+$lang->task->createDenied              = "你不能在该{$lang->projectCommon}添加任务";
 $lang->task->cannotDeleteParent        = '不能删除父任务。';
 $lang->task->addChildTask              = '因该任务已经产生消耗，为保证数据一致性，我们会帮您创建一条同名子任务记录该消耗。';
 
@@ -276,6 +276,7 @@ $lang->task->error->consumedThisTime  = '请填写"消耗"';
 $lang->task->error->left              = '请填写"剩余"';
 $lang->task->error->work              = '"备注"必须小于%d个字符';
 $lang->task->error->teamMember        = '团队成员必须大于1人';
+$lang->task->error->teamCantOperate   = '已关闭、已暂停、已取消的任务请激活后再维护团队。';
 $lang->task->error->skipClose         = '任务：%s 不是“已完成”或“已取消”状态，确定要关闭吗？';
 $lang->task->error->closeParent       = '任务：%s 是父任务，父任务在所有子任务关闭后会自动关闭，无法手动关闭。';
 $lang->task->error->consumed          = '任务：%s工时不能小于0，忽略该任务工时的改动';
@@ -293,6 +294,11 @@ $lang->task->error->leftEmptyAB       = '任务状态为%s时，预计剩余不�
 $lang->task->error->leftEmpty         = 'Task#%s任务状态为%s时，剩余不能为0';
 $lang->task->error->notempty          = '%s必须大于0。';
 $lang->task->error->teamLeftEmpty     = '请维护团队工时。';
+$lang->task->error->beginLtExecution  = "任务开始日期应大于等于%s的开始日期：%s。";
+$lang->task->error->beginGtExecution  = "任务开始日期应小于等于%s的结束日期：%s。";
+$lang->task->error->endGtExecution    = "任务截止日期应小于等于%s的结束日期：%s。";
+$lang->task->error->endLtExecution    = "任务截止日期应大于等于%s的开始日期：%s。";
+$lang->task->error->dateExceed        = "任务%s的计划日期超过该{$lang->execution->common}计划日期，将自动改为{$lang->execution->common}的计划日期。";
 
 /* Report. */
 $lang->task->report         = new stdclass();

@@ -12,7 +12,7 @@
         </tr>
         <?php else:?>
         <tr class='text-top'>
-          <td class='w-p70'>
+          <td class='w-p60'>
             <div class='chart-wrapper text-center'>
               <h5><?php echo $lang->testtask->report->charts[$chartType];?></h5>
               <div class='chart-canvas'><canvas id='chart-<?php echo $chartType ?>' width='<?php echo $chartOption->width;?>' height='<?php echo $chartOption->height;?>' data-responsive='true'></canvas></div>
@@ -58,11 +58,11 @@
         </tr>
         <?php elseif($infoKey == 'bugStageGroups'):?>
         <tr class='text-top'>
-          <td class='w-p70'>
+          <td class='w-p60'>
             <div class='chart-wrapper text-center'>
               <h5><?php echo $lang->testreport->$infoKey?></h5>
               <div class='chart-canvas'>
-                <?php if(isset($_POST["chart-{$infoKey}"])):?>
+                <?php if(isset($_POST["chart-{$infoKey}"]) and strpos($_POST["chart-{$infoKey}"], 'data:image/png;base64,') === 0):?>
                 <img src='<?php echo strip_tags($_POST["chart-{$infoKey}"])?>' />
                 <?php else:?>
                 <canvas id='chart-<?php echo $infoKey?>' width='90' height='20' data-responsive='true'></canvas>
@@ -74,7 +74,7 @@
             <div class='table-wrapper' style='overflow:auto'>
               <table class='table table-condensed table-hover table-striped table-bordered' data-chart='bar' data-target='#chart-<?php echo $infoKey?>' data-animation='false'>
                 <thead>
-                  <tr>
+                  <tr class='text-center'>
                     <th class='c-status'><?php echo $lang->bug->pri;?></th>
                     <th class='c-id'><?php echo $lang->testreport->bugStageList['generated'];?></th>
                     <th class='c-id'><?php echo $lang->testreport->bugStageList['legacy'];?></th>
@@ -95,11 +95,11 @@
         </tr>
         <?php elseif($infoKey == 'bugHandleGroups'):?>
         <tr class='text-top'>
-          <td class='w-p70'>
+          <td class='w-p60'>
             <div class='chart-wrapper text-center'>
               <h5><?php echo $lang->testreport->$infoKey?></h5>
               <div class='chart-canvas'>
-                <?php if(isset($_POST["chart-{$infoKey}"])):?>
+                <?php if(isset($_POST["chart-{$infoKey}"]) and strpos($_POST["chart-{$infoKey}"], 'data:image/png;base64,') === 0):?>
                 <img src='<?php echo strip_tags($_POST["chart-{$infoKey}"])?>' />
                 <?php else:?>
                 <canvas id='chart-<?php echo $infoKey?>' width='90' height='20' data-responsive='true'></canvas>
@@ -111,7 +111,7 @@
             <div class='table-wrapper' style='overflow:auto'>
               <table class='table table-condensed table-hover table-striped table-bordered' data-chart='line' data-target='#chart-<?php echo $infoKey?>' data-animation='false'>
                 <thead>
-                  <tr>
+                  <tr class='text-center'>
                     <th class='c-date'><?php echo $lang->testreport->date;?></th>
                     <th class='c-id'><i class='chart-color-dot generated'></i> <?php echo $lang->testreport->bugStageList['generated'];?></th>
                     <th class='c-id'><i class='chart-color-dot legacy'></i> <?php echo $lang->testreport->bugStageList['legacy'];?></th>
@@ -138,11 +138,11 @@
         <?php else:?>
         <?php $sum = 0; foreach($infoValue as $value) $sum += $value->value;?>
         <tr class='text-top'>
-          <td class='w-p70'>
+          <td class='w-p60'>
             <div class='chart-wrapper text-center'>
               <h5><?php echo $lang->testreport->$infoKey?></h5>
               <div class='chart-canvas'>
-                <?php if(isset($_POST["chart-{$infoKey}"])):?>
+                <?php if(isset($_POST["chart-{$infoKey}"]) and strpos($_POST["chart-{$infoKey}"], 'data:image/png;base64,') === 0):?>
                 <img src='<?php echo strip_tags($_POST["chart-{$infoKey}"])?>' />
                 <?php else:?>
                 <canvas id='chart-<?php echo $infoKey?>' width='500' height='140' data-responsive='true'></canvas>

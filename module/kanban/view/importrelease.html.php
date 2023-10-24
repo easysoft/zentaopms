@@ -2,7 +2,7 @@
 /**
  * The import release view of kanban module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Qiyu Xie<xieqiyu@cnezsoft.com>
  * @package     kanban
@@ -51,7 +51,7 @@
       <tbody>
         <?php foreach($releases2Imported as $release):?>
         <?php $i = 1;?>
-        <?php $rowspan = empty(count($release->builds)) ? 1 : count($release->builds);?>
+        <?php $rowspan = !count($release->builds) ? 1 : count($release->builds);?>
         <tr>
           <td rowspan="<?php echo $rowspan;?>" class='c-id'>
             <div class="checkbox-primary">

@@ -2,7 +2,7 @@
 /**
  * The install module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
@@ -24,13 +24,14 @@ $lang->install->keepInstalling   = '继续安装当前版本';
 $lang->install->seeLatestRelease = '看看最新的版本';
 $lang->install->welcome          = '欢迎使用禅道项目管理软件！';
 $lang->install->license          = '禅道项目管理软件授权协议';
+$lang->install->devopsDesc       = 'DevOps平台底层基于Docker、K8s等云原生技术构建，内置应用市场，支持快速安装代码库、流水线、制品库等工具，轻松构建DevOps工具链。';
 $lang->install->desc             = <<<EOT
 禅道项目管理软件(ZenTaoPMS)是一款国产的，基于<a href='http://zpl.pub/page/zplv12.html' target='_blank'>ZPL</a>或<a href='https://www.gnu.org/licenses/agpl-3.0.en.html' target='_blank'>AGPL</a>双授权协议，开源免费的项目管理软件，它集产品管理、项目管理、测试管理于一体，同时还包含了事务管理、组织管理等诸多功能，是中小型企业项目管理的首选。
 
 禅道项目管理软件使用PHP + MySQL开发，基于自主的PHP开发框架──ZenTaoPHP而成。第三方开发者或者企业可以非常方便的开发插件或者进行定制。
 EOT;
 $lang->install->links = <<<EOT
-禅道项目管理软件由<strong><a href='https://www.cnezsoft.com' target='_blank' class='text-danger'>青岛易软天创网络科技有限公司</a>开发</strong>。
+禅道项目管理软件由<strong><a href='https://www.cnezsoft.com' target='_blank' class='text-danger'>禅道软件（青岛）有限公司</a>开发</strong>。
 官方网站：<a href='https://www.zentao.net' target='_blank'>https://www.zentao.net</a>
 技术支持：<a href='https://www.zentao.net/ask/' target='_blank'>https://www.zentao.net/ask/</a>
 新浪微博：<a href='https://weibo.com/easysoft' target='_blank'>https://weibo.com/easysoft</a>
@@ -121,6 +122,7 @@ $lang->install->chmodLinux   = '需要修改目录 "%s" 的权限。<br />命令
 
 $lang->install->timezone       = '时区设置';
 $lang->install->defaultLang    = '默认语言';
+$lang->install->dbDriver       = '数据库类型';
 $lang->install->dbHost         = '数据库服务器';
 $lang->install->dbHostNote     = '如果127.0.0.1无法访问，尝试使用localhost';
 $lang->install->dbPort         = '服务器端口';
@@ -132,6 +134,10 @@ $lang->install->dbPrefix       = '建表使用的前缀';
 $lang->install->clearDB        = '清空现有数据';
 $lang->install->importDemoData = '导入demo数据';
 $lang->install->working        = '工作方式';
+
+$lang->install->dbDriverList = array();
+$lang->install->dbDriverList['mysql'] = 'MySQL';
+$lang->install->dbDriverList['dm']    = '达梦';
 
 $lang->install->requestTypes['GET']       = '普通方式';
 $lang->install->requestTypes['PATH_INFO'] = '静态友好方式';
@@ -266,6 +272,11 @@ $lang->install->groupList['LITEPROJECT']['desc']  = '运营管理界面用户分
 $lang->install->groupList['LITETEAM']['name']     = '团队成员';
 $lang->install->groupList['LITETEAM']['desc']     = '运营管理界面用户分组';
 
+$lang->install->groupList['IPDPRODUCTPLAN']['name'] = '产品规划人员';
+$lang->install->groupList['IPDDEMAND']['name']      = '需求分析人员';
+$lang->install->groupList['IPDPMT']['name']         = 'PMT团队人员';
+$lang->install->groupList['IPDADMIN']['name']       = '管理人员';
+
 $lang->install->cronList[''] = '监控定时任务';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = '更新燃尽图';
 $lang->install->cronList['moduleName=report&methodName=remind']         = '每日任务提醒';
@@ -293,7 +304,7 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo', 'xuanxuan', 'ydisk', 'meshiot');
 
-$lang->install->promotion = "为您推荐易软天创旗下其他产品：";
+$lang->install->promotion = "为您推荐禅道软件旗下其他产品：";
 
 $lang->install->chanzhi       = new stdclass();
 $lang->install->chanzhi->name = '蝉知门户';
@@ -359,3 +370,12 @@ $lang->install->meshiot->desc = <<<EOD
   <li>可配电池，对既有场地无任何要求</li>
 </ul>
 EOD;
+
+$lang->install->solution = new stdclass();
+$lang->install->solution->skip        = '跳过';
+$lang->install->solution->skipInstall = '暂不安装';
+$lang->install->solution->log         = '安装日志';
+$lang->install->solution->title       = 'DevOps平台应用设置';
+$lang->install->solution->progress    = 'DevOps平台应用安装';
+$lang->install->solution->desc        = '欢迎使用DevOps平台，我们将在您安装平台时同步安装以下应用，帮助您快速上手!';
+$lang->install->solution->overMemory  = '内存不足，无法同时安装，建议平台启动后手动安装应用。';

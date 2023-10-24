@@ -2,7 +2,7 @@
 /**
  * The control file of gogs module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Liyuchun <liyuchun@easycorp.ltd>
  * @package     product
@@ -20,9 +20,10 @@ class gogs extends control
     {
         parent::__construct($moduleName, $methodName);
 
+        if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
         /* This is essential when changing tab(menu) from gogs to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
-        $this->loadModel('ci')->setMenu();
+        if($this->app->rawMethod != 'binduser') $this->loadModel('ci')->setMenu();
     }
 
     /**
@@ -37,7 +38,6 @@ class gogs extends control
      */
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -68,12 +68,21 @@ class gogs extends control
     {
         if($_POST)
         {
-            $this->checkToken();
-            $gogsID = $this->gogs->create();
+            $gogs = form::data($this->config->gogs->form->create)
+                ->add('type', 'gogs')
+                ->add('private',md5(rand(10,113450)))
+                ->add('createdBy', $this->app->user->account)
+                ->add('createdDate', helper::now())
+                ->trim('url,token')
+                ->skipSpecial('url,token')
+                ->remove('account,password,appType')
+                ->get();
+            $this->checkToken($gogs);
+            $gogsID = $this->loadModel('pipeline')->create($gogs);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $actionID = $this->loadModel('action')->create('gogs', $gogsID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('space', 'browse')));
         }
 
         $this->view->title = $this->lang->gogs->common . $this->lang->colon . $this->lang->gogs->lblCreate;
@@ -112,7 +121,8 @@ class gogs extends control
 
         if($_POST)
         {
-            $this->checkToken();
+            $gogs = fixer::input('post')->trim('url,token')->get();
+            $this->checkToken($gogs);
             $this->gogs->update($gogsID);
             $gogs = $this->gogs->getByID($gogsID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -121,7 +131,7 @@ class gogs extends control
             $actionID = $this->action->create('gogs', $gogsID, 'edited');
             $changes  = common::createChanges($oldGogs, $gogs);
             $this->action->logHistory($actionID, $changes);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->title = $this->lang->gogs->common . $this->lang->colon . $this->lang->gogs->edit;
@@ -131,24 +141,32 @@ class gogs extends control
     }
 
     /**
+     * 删除一条gogs数据。
      * Delete a gogs.
      *
      * @param  int    $gogsID
      * @access public
      * @return void
      */
-    public function delete($gogsID, $confirm = 'no')
+    public function delete($gogsID)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->gogs->confirmDelete, inlink('delete', "id=$gogsID&confirm=yes")));
-
         $oldGogs  = $this->loadModel('pipeline')->getByID($gogsID);
         $actionID = $this->pipeline->delete($gogsID, 'gogs');
-        if(!$actionID) return print(js::error($this->lang->pipeline->delError));
+        if(!$actionID)
+        {
+            $response['result']   = 'fail';
+            $response['callback'] = sprintf('zui.Modal.alert("%s");', $this->lang->pipeline->delError);
+
+            return $this->send($response);
+        }
 
         $gogs    = $this->pipeline->getByID($gogsID);
         $changes = common::createChanges($oldGogs, $gogs);
         $this->loadModel('action')->logHistory($actionID, $changes);
-        return print(js::reload('parent'));
+
+        $response['load']   = $this->createLink('space', 'browse');
+        $response['result'] = 'success';
+        return $this->send($response);
     }
 
     /**
@@ -157,9 +175,8 @@ class gogs extends control
      * @access protected
      * @return void
      */
-    protected function checkToken()
+    protected function checkToken(object $gogs)
     {
-        $gogs = fixer::input('post')->trim('url,token')->get();
         $this->dao->update('gogs')->data($gogs)->batchCheck($this->config->gogs->create->requiredFields, 'notempty');
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -174,11 +191,12 @@ class gogs extends control
     /**
      * Bind gogs user to zentao users.
      *
-     * @param  int     $gogsID
+     * @param  int    $gogsID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function bindUser($gogsID)
+    public function bindUser($gogsID, $type = 'all')
     {
         $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
         $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -186,15 +204,48 @@ class gogs extends control
         if($_POST)
         {
             $this->gogs->bindUser($gogsID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'load' => helper::createLink('space', 'browse')));
         }
 
-        $this->view->title         = $this->lang->gogs->bindUser;
-        $this->view->userPairs     = $userPairs;
-        $this->view->gogsUsers     = $this->gogs->apiGetUsers($gogsID);
-        $this->view->bindedUsers   = $this->gogs->getUserAccountIdPairs($gogsID);
-        $this->view->matchedResult = $this->gogs->getMatchedUsers($gogsID, $this->view->gogsUsers, $zentaoUsers);
+        $userList      = array();
+        $gogsUsers     = $this->gogs->apiGetUsers($gogsID);
+        $bindedUsers   = $this->gogs->getUserAccountIdPairs($gogsID);
+        $matchedResult = $this->gogs->getMatchedUsers($gogsID, $gogsUsers, $zentaoUsers);
+
+        foreach($gogsUsers as $gogsUserID => $gogsUser)
+        {
+            $user = new stdclass();
+            $user->email          = '';
+            $user->status         = 'notBind';
+            $user->gogsID         = $gogsUser->id;
+            $user->gogsEmail      = $gogsUser->email;
+            $user->gogsUser       = $gogsUser->realname . '@' . $gogsUser->account;
+            $user->gogsUserAvatar = $gogsUser->avatar;
+
+            $user->zentaoUsers = isset($matchedResult[$gogsUser->id]) ? $matchedResult[$gogsUser->id]->zentaoAccount : '';
+            if($user->zentaoUsers)
+            {
+                if(isset($zentaoUsers[$user->zentaoUsers])) $user->email = $zentaoUsers[$user->zentaoUsers]->email;
+
+                if(isset($bindedUsers[$user->zentaoUsers]) && $bindedUsers[$user->zentaoUsers] == $gogsUser->id)
+                {
+                    $user->status = 'binded';
+                    if(!isset($bindedUsers[$user->zentaoUsers])) $user->status = 'bindedError';
+                }
+            }
+
+            if($type != 'all' && $user->status != $type) continue;
+            $userList[] = $user;
+        }
+
+        $this->view->title       = $this->lang->gogs->bindUser;
+        $this->view->type        = $type;
+        $this->view->gogsID      = $gogsID;
+        $this->view->recTotal    = count($userList);
+        $this->view->userList    = $userList;
+        $this->view->userPairs   = $userPairs;
+        $this->view->zentaoUsers = $zentaoUsers;
         $this->display();
     }
 
@@ -212,11 +263,13 @@ class gogs extends control
 
         $project  = urldecode(base64_decode($project));
         $branches = $this->gogs->apiGetBranches($gogsID, $project);
-        $options  = "<option value=''></option>";
+
+        $options = array();
+        $options[] = array('text' => '', 'value' => '');;
         foreach($branches as $branch)
         {
-            $options .= "<option value='{$branch->name}'>{$branch->name}</option>";
+            $options[] = array('text' => $branch->name, 'value' => $branch->name);
         }
-        $this->send($options);
+        return print(json_encode($options));
     }
 }

@@ -2,7 +2,7 @@
 /**
  * The testtask module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
@@ -16,7 +16,7 @@ $lang->testtask->delete           = "Supprimer Campagne";
 $lang->testtask->importUnitResult = "Import T.U. Résult";
 $lang->testtask->importUnit       = "Import Unit Result"; //Fix bug custom required testtask.
 $lang->testtask->browseUnits      = "Liste des tests unitaires";
-$lang->testtask->unitCases        = "Cas de test unitaires";
+$lang->testtask->unitCases        = "Browse Unit Cases List";
 $lang->testtask->view             = "Détail Campagne";
 $lang->testtask->edit             = "Editer Campagne";
 $lang->testtask->browse           = "Tester Campagne";
@@ -60,7 +60,7 @@ $lang->testtask->compile          = 'Compile';
 $lang->testtask->duration         = 'Duration';
 
 $lang->testtask->viewAction     = "View Request";
-$lang->testtask->casesAction    = 'View Case';
+$lang->testtask->casesAction    = 'Browse Cases List';
 $lang->testtask->activateAction = "Activer Campagne";
 $lang->testtask->blockAction    = "Bloquer Campagne";
 $lang->testtask->closeAction    = "Clôturer Campagne";
@@ -71,7 +71,7 @@ $lang->testtask->reportAction   = 'Rapport CasTests';
 $lang->testtask->id                = 'ID';
 $lang->testtask->common            = 'Recette';
 $lang->testtask->product           = $lang->productCommon;
-$lang->testtask->project           = 'Project';
+$lang->testtask->project           = $lang->projectCommon;;
 $lang->testtask->execution         = $lang->execution->common;
 $lang->testtask->type              = 'Type';
 $lang->testtask->build             = 'Build';
@@ -145,9 +145,9 @@ $lang->testtask->showFail      = 'Echouée <span class="text-danger">%s</span> f
 
 $lang->testtask->confirmDelete     = 'Voulez-vous supprimer ce build ?';
 $lang->testtask->confirmUnlinkCase = 'Voulez-vous détacher ce CasTest ?';
-$lang->testtask->noticeNoOther     = "Il n'y a pas de Campagnes de Recette pour ce product.";
+$lang->testtask->noticeNoOther     = "No test builds for this {$lang->productCommon}.";
 $lang->testtask->noTesttask        = 'Pas de campagne. ';
-$lang->testtask->checkLinked       = "Vérifiez si le product auquel la campagne de recette est associée est bien lié à un projet.";
+$lang->testtask->checkLinked       = "Please check whether the {$lang->productCommon} that the test request is linked to has been linked to a {$lang->executionCommon}.";
 $lang->testtask->noImportData      = "Le XML importé ne parse pas les données.";
 $lang->testtask->unitXMLFormat     = 'Veuillez sélectionner un fichier au format XML JUnit.';
 $lang->testtask->titleOfAuto       = "%s tests automatisés";

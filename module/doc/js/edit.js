@@ -1,5 +1,28 @@
 $(function()
 {
+    /* Set editor content height. */
+    var contentHeight = $(document).height() - 92;
+    setTimeout(function(){$('.ke-edit-iframe, .ke-edit, .ke-edit-textarea').height(contentHeight);}, 100);
+    setTimeout(function(){$('.CodeMirror').height($(document).height() - 112);}, 100);
+    $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
+
+    $('#saveDraft').click(function()
+    {
+        if($.trim($('#editorTitle').val()) == '')
+        {
+            bootbox.alert(titleNotEmpty);
+            return false;
+        }
+
+        $('#status').val('draft');
+        submit(this);
+    });
+    $('#saveRelease').click(function()
+    {
+        $('#status').val('normal');
+        submit(this);
+    });
+
     setTimeout(function()
     {
         if(needUpdateContent && confirm(confirmUpdateContent))
@@ -11,31 +34,7 @@ $(function()
         }
     }, 100)
 
-    $('#top-submit').click(function()
-    {
-        $(this).addClass('disabled');
-        $('form').submit();
-    })
-    toggleAcl($('input[name="acl"]:checked').val(), 'doc');
-    $('input[name="type"]').change(function()
-    {
-        var type = $(this).val();
-        if(type == 'text')
-        {
-            $('#contentBox').removeClass('hidden');
-            $('#urlBox').addClass('hidden');
-        }
-        else if(type == 'url')
-        {
-            $('#contentBox').addClass('hidden');
-            $('#urlBox').removeClass('hidden');
-        }
-    });
-
     $('#subNavbar li[data-id="doc"]').addClass('active');
-
-    /* Automatically save document contents. */
-    setInterval("saveDraft()", 60 * 1000);
 
     $(document).on("mouseup", 'span[data-name="fullscreen"]', function()
     {
@@ -149,25 +148,8 @@ function loadWhitelist(libID)
 
     $.post(userLink, function(users)
     {
-        if(users == 'private')
+        if(users != 'private')
         {
-            $('#aclopen').parent('.radio-inline').addClass('hidden');
-            $('#aclcustom').parent('.radio-inline').addClass('hidden');
-            $('#whiteListBox').addClass('hidden');
-            $('#aclprivate').prop('checked', true);
-        }
-        else if(users == 'project')
-        {
-            $('#aclprivate').parent('.radio-inline').addClass('hidden');
-            $('#aclcustom').parent('.radio-inline').addClass('hidden');
-            $('#whiteListBox').addClass('hidden');
-            $('#aclopen').prop('checked', true);
-        }
-        else
-        {
-            $('#aclopen').parent('.radio-inline').removeClass('hidden');
-            $('#aclcustom').parent('.radio-inline').removeClass('hidden');
-
             $('#users').replaceWith(users);
             $('#users').next('.picker').remove();
             $('#users').picker();

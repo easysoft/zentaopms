@@ -1,6 +1,6 @@
 $(document).ready(function()
 {
-    var options = 
+    var options =
     {
         target : null,
         timeout : 30000,

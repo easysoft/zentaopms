@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace PhpMyAdmin\SqlParser\Tests\Parser;
 
 use PhpMyAdmin\SqlParser\Parser;
@@ -9,7 +7,7 @@ use PhpMyAdmin\SqlParser\Tests\TestCase;
 
 class LoadStatementTest extends TestCase
 {
-    public function testLoadOptions(): void
+    public function testLoadOptions()
     {
         $data = $this->getData('parser/parseLoad1');
         $parser = new Parser($data['query']);
@@ -18,30 +16,30 @@ class LoadStatementTest extends TestCase
     }
 
     /**
-     * @param mixed $test
-     *
      * @dataProvider loadProvider
+     *
+     * @param mixed $test
      */
-    public function testLoad($test): void
+    public function testLoad($test)
     {
         $this->runParserTest($test);
     }
 
-    public function loadProvider(): array
+    public function loadProvider()
     {
-        return [
-            ['parser/parseLoad1'],
-            ['parser/parseLoad2'],
-            ['parser/parseLoad3'],
-            ['parser/parseLoad4'],
-            ['parser/parseLoad5'],
-            ['parser/parseLoad6'],
-            ['parser/parseLoadErr1'],
-            ['parser/parseLoadErr2'],
-            ['parser/parseLoadErr3'],
-            ['parser/parseLoadErr4'],
-            ['parser/parseLoadErr5'],
-            ['parser/parseLoadErr6'],
-        ];
+        return array(
+            array('parser/parseLoad1'),
+            array('parser/parseLoad2'),
+            array('parser/parseLoad3'),
+            array('parser/parseLoad4'),
+            array('parser/parseLoad5'),
+            array('parser/parseLoad6'),
+            array('parser/parseLoadErr1'),
+            array('parser/parseLoadErr2'),
+            array('parser/parseLoadErr3'),
+            array('parser/parseLoadErr4'),
+            array('parser/parseLoadErr5'),
+            array('parser/parseLoadErr6')
+        );
     }
 }

@@ -2,7 +2,7 @@
 /**
  * The control file of dashboard module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
@@ -155,12 +155,12 @@ class my extends control
         $qaCount      = 0;
         $meetingCount = 0;
         $ticketCount  = 0;
-        $isMax        = $this->config->edition == 'max' ? 1 : 0;
+        $isMax        = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? 1 : 0;
 
         $feedbackCount = 0;
         $isBiz         = $this->config->edition == 'biz' ? 1 : 0;
 
-        if($isBiz or $isMax)
+        if($this->config->edition != 'open')
         {
             $feedbacks     = $this->loadModel('feedback')->getList('assigntome', 'id_desc', $pager);
             $feedbackCount = $pager->recTotal;
@@ -198,6 +198,8 @@ class my extends control
             $meetingCount = $pager->recTotal;
         }
 
+        if($this->app->viewType != 'json')
+        {
 echo <<<EOF
 <script>
 var taskCount     = $taskCount;
@@ -227,6 +229,7 @@ if(isMax !== 0)
 }
 </script>
 EOF;
+        }
     }
 
     /**
@@ -834,13 +837,20 @@ EOF;
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
-        $this->view->position[] = $this->lang->my->execution;
-        $this->view->tabID      = 'project';
-        $this->view->executions = $this->user->getObjects($this->app->user->account, 'execution', $type, $orderBy, $pager);
-        $this->view->type       = $type;
-        $this->view->pager      = $pager;
-        $this->view->mode       = 'execution';
+        $executions  = $this->user->getObjects($this->app->user->account, 'execution', $type, $orderBy, $pager);
+        $parentGroup = $this->dao->select('parent, id')->from(TABLE_PROJECT)
+            ->where('parent')->in(array_keys($executions))
+            ->andWhere('type')->in('stage,kanban,sprint')
+            ->fetchGroup('parent', 'id');
+
+        $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
+        $this->view->position[]  = $this->lang->my->execution;
+        $this->view->tabID       = 'project';
+        $this->view->executions  = $executions;
+        $this->view->parentGroup = $parentGroup;
+        $this->view->type        = $type;
+        $this->view->pager       = $pager;
+        $this->view->mode        = 'execution';
 
         $this->display();
     }
@@ -965,12 +975,12 @@ EOF;
             $typeList = $this->my->getReviewingTypeList();
             if(!isset($typeList->$browseType)) $browseType = 'all';
 
-            $this->lang->my->auditMenu->audit = $typeList;
+            $this->lang->my->featureBar['audit'] = (array)$typeList;
             $reviewList = $this->my->getReviewingList($browseType, $orderBy, $pager);
         }
 
         $this->view->flows = array();
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             $this->app->loadLang('approval');
             $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');
@@ -1253,6 +1263,7 @@ EOF;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->browseType = $browseType;
+        $this->view->mode       = 'ticket';
         $this->display();
     }
 
@@ -1438,7 +1449,8 @@ EOF;
             $this->view->list       = $this->user->getContactListByID($listID);
         }
 
-        $users = $this->user->getPairs('noletter|noempty|noclosed|noclosed', $mode == 'new' ? '' : $this->view->list->userList, $this->config->maxCount);
+        $userParams = empty($this->config->user->showDeleted) ? 'noletter|noempty|noclosed|noclosed|nodeleted' : 'noletter|noempty|noclosed|noclosed';
+        $users      = $this->user->getPairs($userParams, $mode == 'new' ? '' : $this->view->list->userList, $this->config->maxCount);
         if(isset($this->config->user->moreLink)) $this->config->moreLinks['users[]'] = $this->config->user->moreLink;
 
         $this->view->mode           = $mode;
@@ -1555,7 +1567,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function dynamic($type = 'today', $recTotal = 0, $date = '', $direction = 'next', $originTotal = 0)
+    public function dynamic($type = 'today', $recTotal = 0, $date = '', $direction = 'next')
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -1590,10 +1602,6 @@ EOF;
         $this->session->set('componentLibList',   $uri, 'assetlib');
         $this->session->set('opportunityList',    $uri, 'project');
 
-        /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
-
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
 
@@ -1602,16 +1610,17 @@ EOF;
         $this->view->position[] = $this->lang->my->dynamic;
 
         $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, $pager, 'all', 'all', 'all', $date, $direction);
-        if(empty($recTotal)) $originTotal = $pager->recTotal;
+        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
+
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
 
         /* Assign. */
-        $this->view->type        = $type;
-        $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
-        $this->view->dateGroups  = $this->action->buildDateGroup($actions, $direction, $type);
-        $this->view->direction   = $direction;
-        $this->view->originTotal = $originTotal;
+        $this->view->type       = $type;
+        $this->view->orderBy    = $orderBy;
+        $this->view->dateGroups = $dateGroups;
+        $this->view->direction  = $direction;
+        $this->view->recTotal   = $recTotal;
         $this->display();
     }
 

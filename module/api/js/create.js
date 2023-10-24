@@ -41,7 +41,6 @@ var app = new Vue({
     },
     methods: {
         changeAttr(val) {
-            // console.log('更新之前', JSON.stringify(val))
             this.body = val;
         },
         changeType(val) {
@@ -85,3 +84,19 @@ var app = new Vue({
         }
     }
 })
+
+/**
+ * locate link in parent.
+ *
+ * @param  int $apiID
+ * @access public
+ * @return void
+ */
+function parentLocate(apiID, libID, moduelID)
+{
+    libID    = libID ? libID : 0;
+    moduelID = moduelID ? moduelID : 0;
+    config.onlybody = 'no';
+    var link = createLink('api', 'index', 'libID=' + libID + '&moduleID=' + moduelID + '&apiID=' + apiID) + '#app=doc';
+    window.parent.$.apps.open(link);
+}

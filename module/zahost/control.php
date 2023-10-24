@@ -2,7 +2,7 @@
 /**
  * The control file of zahost of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jianhua Wang <wangjianhua@easycorp.ltd>
  * @package     zahost
@@ -44,7 +44,7 @@ class zahost extends control
 
         $showFeature = false;
         $accounts = !empty($this->config->global->skipAutomation) ? $this->config->global->skipAutomation : '';
-        if(strpos(",$accounts,", $this->app->user->account) === false) 
+        if(strpos(",$accounts,", $this->app->user->account) === false)
         {
             $showFeature = true;
             $accounts .= ',' . $this->app->user->account;
@@ -109,6 +109,7 @@ class zahost extends control
             }
 
             $viewLink = $this->createLink('zahost', 'view', "hostID=$hostID");
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.loadHosts()'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $viewLink));
         }
 
@@ -367,5 +368,17 @@ class zahost extends control
         $serviceStatus = $this->zahost->getServiceStatus($host);
 
         return $this->send(array('result' => 'success', 'message' => '', 'data' => $serviceStatus));
+    }
+
+    /**
+     * Ajax：get hosts.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetHosts()
+    {
+        $hostList = $this->zahost->getPairs();
+        return print(html::select("parent", $hostList, '', "class='form-control chosen'"));
     }
 }

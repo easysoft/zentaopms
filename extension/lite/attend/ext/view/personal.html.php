@@ -2,7 +2,7 @@
 /**
  * The personal view file of attend module of Ranzhi.
  *
- * @copyright   Copyright 2009-2018 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2018 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      liyuchun <liyuchun@cnezsoft.com>
  * @package     attend
@@ -20,15 +20,10 @@
   <ul class='nav'>
   <?php
   $methodName = strtolower($this->app->getMethodName());
-  foreach($lang->attend->featurebar as $key => $menu)
+  foreach($lang->attend->featureBar['personal'] as $type => $name)
   {
-      if(is_string($menu)) $link = $menu;
-      if(is_array($menu)) $link = $menu['link'];
-
-      list($name, $currentModule, $currentMethod, $params) = explode('|', $link);
-      $class = strtolower($key) == $methodName ? "class='active'" : '';
-      if(isset($menu['alias'])) $class = strpos(strtolower($menu['alias']), strtolower($key)) !== false ? "class='active'" : $class;
-      if(common::hasPriv($currentModule, $currentMethod)) echo "<li id='$key' $class>" . html::a($this->createLink($currentModule, $currentMethod, $params), $name) . '</li>';
+      $class = strtolower($type) == $methodName ? "class='active'" : '';
+      if(common::hasPriv('attend', $type)) echo "<li id='$type' $class>" . html::a($this->createLink('attend', $type), $name) . '</li>';
   }
   ?>
   </ul>

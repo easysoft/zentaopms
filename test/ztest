@@ -2,6 +2,14 @@
 <?php
 include 'lib/utils.php';
 
+$P1 = array('action', 'admin', 'api', 'block', 'branch', 'bug', 'build', 'caselib', 'ci', 'company', 'compile', 'cron', 'custom', 'datatable','holiday');
+$P2 = array('dev', 'doc', 'entry', 'execution', 'extension', 'file');
+$P3 = array('kanban', 'mail', 'message', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan');
+$P4 = array('project', 'projectrelease', 'projectstory', 'release', 'report', 'score', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder');
+$P5 = array('story', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'program', 'programplan');
+$P6 = array('tree', 'tutorial', 'user', 'webhook', 'weekly', 'dept', 'design', 'group', 'repo', 'job');
+$P7 = array('git', 'gitea', 'gitlab', 'jenkins', 'gogs');
+
 if(count($argv) <= 1) die(printUsage());
 
 switch($argv[1])
@@ -204,6 +212,27 @@ switch($argv[1])
         break;
     case 'repo':
         ztfRun('model/repo');
+        break;
+    case 'P1':
+        ztfRun($P1);
+        break;
+    case 'P2':
+        ztfRun($P2);
+        break;
+    case 'P3':
+        ztfRun($P3);
+        break;
+    case 'P4':
+        ztfRun($P4);
+        break;
+    case 'P5':
+        ztfRun($P5);
+        break;
+    case 'P6':
+        ztfRun($P6);
+        break;
+    case 'P7':
+        ztfRun($P7);
         break;
 
     default:

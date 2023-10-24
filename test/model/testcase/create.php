@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/testcase.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -35,4 +34,3 @@ r($testcase->createTest($testcase3)) && p('status') && e('created');            
 r($testcase->createTest($testcase1)) && p('status') && e('exists');                 // 测试创建重名用例1
 r($testcase->createTest($no_title))  && p()         && e('『用例标题』不能为空。'); // 测试创建没有填写名字的用例
 r($testcase->createTest($no_type))   && p()         && e('『用例类型』不能为空。'); // 测试创建没有填写类型的用例
-$db->restoreDB();

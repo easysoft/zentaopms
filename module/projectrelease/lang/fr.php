@@ -2,7 +2,7 @@
 /**
  * The release module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2020 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuchun Li <liyuchun@cnezsoft.com>
  * @package     release
@@ -27,7 +27,7 @@ $lang->projectrelease->unlinkBug        = 'Unlink Bug';
 $lang->projectrelease->export           = 'Export HTML';
 $lang->projectrelease->browseAction     = "Release List";
 $lang->projectrelease->notify           = 'notify';
-$lang->projectrelease->product          = "Product";
+$lang->projectrelease->product          = $lang->productCommon;
 
 $lang->projectrelease->featureBar['browse']['all']       = 'All';
 $lang->projectrelease->featureBar['browse']['normal']    = 'Active';

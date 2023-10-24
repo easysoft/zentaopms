@@ -146,7 +146,7 @@ class gitlab
         {
             $params['page'] = $page;
             $list = $this->fetch($api, $params);
-            if(empty($list)) break;
+            if(empty($list) || !is_array($list)) break;
 
             foreach($list as $tag) $tags[] = $tag->name;
             if(count($list) < $params['per_page']) break;
@@ -173,7 +173,7 @@ class gitlab
         {
             $params['page'] = $page;
             $branchList = $this->fetch("branches", $params);
-            if(empty($branchList)) break;
+            if(empty($branchList) || !is_array($branchList)) break;
 
             foreach($branchList as $branch)
             {
@@ -244,10 +244,11 @@ class gitlab
      *
      * @param  string $path
      * @param  string $revision
+     * @param  bool   $showComment
      * @access public
      * @return array
      */
-    public function blame($path, $revision)
+    public function blame($path, $revision, $showComment = true)
     {
         if(!scm::checkRevision($revision)) return array();
 
@@ -260,7 +261,6 @@ class gitlab
         if(empty($results) or isset($results->message)) return array();
 
         $blames   = array();
-        $revLine  = 0;
         $revision = '';
 
         $lineNumber = 1;
@@ -305,22 +305,23 @@ class gitlab
         if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
         if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
 
-        $api    = "compare";
-        $params = array('from' => $fromRevision, 'to' => $toRevision);
+        $sameVersion = $fromRevision == '^' || strpos($fromRevision, $toRevision) === 0;
+        $api    = $sameVersion ? "commits/$toRevision/diff" : "compare";
+        $params = array('from' => $fromRevision, 'to' => $toRevision, 'straight' => true);
         if($fromProject) $params['from_project_id'] = $fromProject;
 
         if($toRevision == 'HEAD' and $this->branch) $params['to'] = $this->branch;
-        $results = $this->fetch($api, $params);
-        if(!isset($results->diffs)) return array();
+        $results = $this->fetch($api, $sameVersion ? array() : $params);
 
-        foreach($results->diffs as $key => $diff)
-        {
-            if($path != '' and strpos($diff->new_path, $path) === false) unset($results->diffs[$key]);
-        }
-        $diffs = $results->diffs;
+        $diffs = isset($results->diffs) ? $results->diffs : array();
+        if($sameVersion && is_array($results)) $diffs = $results;
+        if(!$diffs) return array();
+
         $lines = array();
         foreach($diffs as $diff)
         {
+            if($path != '' && strpos($diff->new_path, $path) === false) continue;
+
             $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
             $lines[] = sprintf("index %s ... %s %s ", $fromRevision, $toRevision, $diff->b_mode);
             $lines[] = sprintf("--a/%s", $diff->old_path);
@@ -374,7 +375,7 @@ class gitlab
             $list = $this->tree($parent, 0);
             $file = new stdclass();
 
-            foreach($list as $node) if($node->path == $entry) $file = $node;
+            if(!empty($list)) foreach($list as $node) if($node->path == $entry) $file = $node;
 
             $commits = $this->getCommitsByPath($entry);
 
@@ -549,10 +550,11 @@ class gitlab
      * @param  string $version
      * @param  int    $count
      * @param  string $branch
+     * @param  bool   $getFile
      * @access public
      * @return array
      */
-    public function getCommits($version = '', $count = 0, $branch = '')
+    public function getCommits($version = '', $count = 0, $branch = '', $getFile = false)
     {
         if(!scm::checkRevision($version)) return array();
         $api     = "commits";
@@ -574,7 +576,7 @@ class gitlab
                 $log->time      = date('Y-m-d H:i:s', strtotime($commit->created_at));
 
                 $commits[$commit->id] = $log;
-                $files[$commit->id]   = $this->getFilesByCommit($log->revision);
+                if($getFile) $files[$commit->id] = $this->getFilesByCommit($log->revision);
 
                 return array('commits' => $commits, 'files' => $files);
             }
@@ -620,7 +622,7 @@ class gitlab
             $log->time      = date('Y-m-d H:i:s', strtotime($commit->created_at));
 
             $commits[$commit->id] = $log;
-            $files[$commit->id]   = $this->getFilesByCommit($log->revision);
+            if($getFile) $files[$commit->id] = $this->getFilesByCommit($log->revision);
         }
 
         return array('commits' => $commits, 'files' => $files);
@@ -653,10 +655,12 @@ class gitlab
      * @param  string    $fromRevision
      * @param  string    $toRevision
      * @param  int       $perPage
+     * @param  int       $page
+     * @param  bool      $getUrl
      * @access public
      * @return array
      */
-    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '', $perPage = 0)
+    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '', $perPage = 0, $page = 1, $getUrl = false, $beginDate = '', $endDate = '')
     {
         $path = ltrim($path, DIRECTORY_SEPARATOR);
         $api = "commits";
@@ -665,17 +669,17 @@ class gitlab
         $param->path     = urldecode($path);
         $param->ref_name = ($toRevision != 'HEAD' and $toRevision) ? $toRevision : $this->branch;
 
-        $fromDate = $this->getCommittedDate($fromRevision);
-        $toDate   = $this->getCommittedDate($toRevision);
+        $fromDate = $beginDate ? $beginDate : $this->getCommittedDate($fromRevision);
+        $toDate   = $endDate ? $endDate : $this->getCommittedDate($toRevision);
 
         $since = '';
         $until = '';
-        if($fromRevision and $toRevision)
+        if(($fromRevision && $toRevision) || ($beginDate && $endDate))
         {
             $since = min($fromDate, $toDate);
             $until = max($fromDate, $toDate);
         }
-        elseif($fromRevision)
+        elseif($fromRevision || $beginDate)
         {
             $since = $fromDate;
         }
@@ -683,6 +687,18 @@ class gitlab
         if($until) $param->until = $until;
 
         if($perPage) $param->per_page = $perPage;
+        if($page)    $param->page = $page;
+
+        if($getUrl)
+        {
+            $params = (array) $param;
+            $params['private_token'] = $this->token;
+            $params['per_page']      = isset($params['per_page']) ? $params['per_page'] : 100;
+
+            $api = ltrim($api, '/');
+            $api = $this->root . $api . '?' . http_build_query($params);
+            return $api;
+        }
 
         return $this->fetch($api, $param);
     }
@@ -736,10 +752,11 @@ class gitlab
      *
      * @param  string    $path
      * @param  bool      $recursive
+     * @param  bool      $loop
      * @access public
      * @return mixed
      */
-    public function tree($path, $recursive = 1)
+    public function tree($path, $recursive = 1, $loop = false)
     {
         $api = "tree";
 
@@ -747,17 +764,20 @@ class gitlab
         $params['path']      = ltrim($path, '/');
         $params['ref']       = $this->branch;
         $params['recursive'] = (int) $recursive;
-        return $this->fetch($api, $params);
+        return $this->fetch($api, $params, $loop, $loop ? true : false);
     }
 
     /**
      * Fetch data from gitlab api.
      *
      * @param  string    $api
+     * @param  array     $params
+     * @param  bool      $needToLoop
+     * @param  bool      $multi
      * @access public
      * @return mixed
      */
-    public function fetch($api, $params = array(), $needToLoop = false)
+    public function fetch($api, $params = array(), $needToLoop = false, $multi = false)
     {
         $params = (array) $params;
         $params['private_token'] = $this->token;
@@ -768,27 +788,57 @@ class gitlab
         if($needToLoop)
         {
             $allResults = array();
-            for($page = 1; true; $page++)
+            if($multi)
             {
-                $results = json_decode(commonModel::http($api . "&page={$page}"));
-                if(!is_array($results)) break;
-                if(!empty($results)) $allResults = array_merge($allResults, $results);
-                if(count($results) < 100) break;
+                $results = commonModel::http($api . "&page=1", null, array(), array(), 'data', 'GET', 30, true, false);
+                if(empty($results['header']['X-Total-Pages'])) return array();
+
+                $totalPages = $results['header']['X-Total-Pages'];
+                if($totalPages == 1)
+                {
+                    $allResults = json_decode($results['body']);
+                }
+                else
+                {
+                    $requests = array();
+                    for($page = 1; $page <= $totalPages; $page++)
+                    {
+                        $requests[$page]['url'] = $api . "&page={$page}";
+                    }
+
+                    $results = requests::request_multiple($requests, array('timeout' => 60));
+                    foreach($results as $result)
+                    {
+                        if(empty($result->body)) continue;
+                        $data       = json_decode($result->body);
+                        $allResults = array_merge($allResults, $data);
+                    }
+                }
+            }
+            else
+            {
+                for($page = 1; true; $page++)
+                {
+                    $results = json_decode(commonModel::http($api . "&page={$page}", null, array(), array(), 'data', 'POST', 30, true, false));
+                    if(!is_array($results)) break;
+                    if(!empty($results)) $allResults = array_merge($allResults, $results);
+                    if(count($results) < 100) break;
+                }
             }
 
             return $allResults;
         }
         else
         {
-            list($response, $httpCode) = commonModel::http($api, null, array(), array(), 'data', 'Post', 30, true);
+            $response = commonModel::http($api, null, array(), array(), 'data', 'POST', 30, true, false);
             if(!empty(commonModel::$requestErrors))
             {
                 commonModel::$requestErrors = array();
                 return array();
             }
 
-            if($httpCode == 500) return array();
-            return json_decode($response);
+            if(in_array($response[1], array(500, 404, 401))) return array();
+            return json_decode($response['body']);
         }
     }
 
@@ -818,7 +868,6 @@ class gitlab
     public function parseLog($logs)
     {
         $parsedLogs = array();
-        $i          = 0;
         foreach($logs as $commit)
         {
             if(!isset($commit->id)) continue;
@@ -828,12 +877,15 @@ class gitlab
             $parsedLog->time      = date('Y-m-d H:i:s', strtotime($commit->committed_date));
             $parsedLog->comment   = $commit->message;
             $parsedLog->change    = array();
-            foreach($commit->diffs as $diff)
+            if(!empty($commit->diffs))
             {
-                $parsedLog->change[$diff->path] = array();
-                $parsedLog->change[$diff->path]['action']  = $diff->action;
-                $parsedLog->change[$diff->path]['kind']    = $diff->type;
-                $parsedLog->change[$diff->path]['oldPath'] = $diff->oldPath;
+                foreach($commit->diffs as $diff)
+                {
+                    $parsedLog->change[$diff->path] = array();
+                    $parsedLog->change[$diff->path]['action']  = $diff->action;
+                    $parsedLog->change[$diff->path]['kind']    = $diff->type;
+                    $parsedLog->change[$diff->path]['oldPath'] = $diff->oldPath;
+                }
             }
             $parsedLogs[] = $parsedLog;
         }
@@ -897,5 +949,28 @@ class gitlab
             }
         }
         return $lists;
+    }
+
+    /**
+     * 获取特定对象的api。
+     * Get api url for target.
+     *
+     * @param  string $target
+     * @access public
+     * @return string
+     */
+    public function getApiUrl(string $target): string
+    {
+        if($target == 'project')
+        {
+            return str_replace('repository/', '', $this->root). "?private_token={$this->token}";
+        }
+        $params = array();
+        $params['private_token'] = $this->token;
+        $params['page']          = 1;
+        $params['per_page']      = isset($params['per_page']) ? $params['per_page'] : 100;
+
+        $api = $this->root . $target . '?' . http_build_query($params);
+        return $api;
     }
 }

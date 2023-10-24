@@ -1,46 +1,23 @@
-body {margin-bottom: 25px;}
-.main-table tbody>tr>td {border-bottom: 0px solid #eee;}
-.table-responsive {overflow-y: hidden !important;}
-#product_chosen .chosen-single {width: 180px;}
+#main {padding-bottom: 0;}
+#dtable .dtable-header, #executionsForm .dtable-rows {z-index: 4;}
+.table-header.fixed-right > .btn-toolbar {right: 0; background-color: #f1f5f9;}
 
-.table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
-.table td.has-child > a:not(.plan-toggle) {max-width: 90%; max-width: calc(100% - 30px); display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-.table td.has-child > .plan-toggle {color: #838a9d; position: relative; top: 1px;overflow: initial !important;}
-.table td.has-child > .plan-toggle:hover {color: #006af1; cursor: pointer;}
-.table td.has-child > .plan-toggle > .icon {font-size: 16px; display: inline-block; transition: transform .2s; -ms-transform:rotate(-90deg); -moz-transform:rotate(-90deg); -o-transform:rotate(-90deg); -webkit-transform:rotate(-90deg); transform: rotate(-90deg);}
-.table td.has-child > .plan-toggle > .icon:before {text-align: left;}
-.table td.has-child > .plan-toggle.collapsed > .icon {-ms-transform:rotate(90deg); -moz-transform:rotate(90deg); -o-transform:rotate(90deg); -webkit-transform:rotate(90deg); transform: rotate(90deg);}
-.table th.hours {padding-right: 8px !important;}
-.main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
-td.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-td.flex {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center; margin-bottom: 0px;}
-td.datatable-cell.flex {margin-bottom: -2px;}
-td.flex span.label-badge {margin-left: 5px; min-width: 50px;}
-td.flex span.label-badge.label-light {min-width: 22px;}
-td.flex span.project-type-label {margin-left: 5px; min-width: 36px;}
-@-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
+#dtable {overflow-x: auto;}
+#dtable input[type=checkbox] {margin: 0px}
+#dtable .dtable-body {z-index: 3;}
 
-.c-name > span {margin-right: 2px;}
-td.flex span.project-type-label {min-width: 40px;}
+#dtable .dtable-block {overflow: visible;}
+#dtable .scrollbar.is-vert {display: none;}
+.table-footer {border-top: 1px solid #fff4ea}
+.table-footer .pager{z-index: 10}
+#dtable .scrollbar {z-index: 11}
 
-.label-children {min-width:22px !important;}
-.c-name > a, .table-children .text-left > a {padding-left: 5px;}
-.has-child > span {margin-right: 5px;}
-.c-name > .text-ellipsis {text-overflow: clip;}
-.c-code, .c-project {overflow: hidden; white-space: nowrap; padding: 0 8px;}
-th.c-status, .c-begin, .c-end, .c-realBegan, .c-realEnd {text-align: center;}
+.dtable {--dtable-checked-bg: #fff4ea; --dtable-border-color: #f4f5f7}
+.dtable-row {border-bottom-style: solid;}
+.dtable-cell-html a{color: #2463c7}
+.dtable-cell[data-sort='up']   .dtable-sort:before {color: #000; opacity: 1}
+.dtable-cell[data-sort='down'] .dtable-sort:after  {color: #000; opacity: 1}
+.dtable .toggle-icon {border-radius: 50%; border-style: solid;}
+.dtable-nested-toggle.is-no-child {display: block; opacity: 0; pointer-events: none;}
 
-.c-project{text-overflow: unset !important;}
-canvas {height: 28px;}
-.parent.has-child.c-name.flex, .table-child-bottom > .c-name.flex {border-bottom: 0px solid #cbd0db !important;}
-#tableCustomBtn {padding-bottom: 5px;}
-#datatable-executionList .table-child-bottom > .c-name.flex {border-bottom: 1px solid #cbd0db !important;}
-#datatable-executionList .table-child-bottom.table-child-top > .c-name.flex {border-bottom: 2px solid #cbd0db !important;}
-#datatable-executionList .parent.has-child.c-name.flex {border-bottom: 1px solid #cbd0db !important;}
-#datatable-executionList tr:last-child .c-name.flex {margin-top: 1px !important;}
-
-.table thead .c-estimate.text-right,
-.table thead .c-consumed.text-right,
-.table thead .c-left.text-right {padding-right: 8px;}
-#executionsForm td.c-name {padding-right: 5px;}
-#executionsForm td.c-name.delay {padding-right: 55px;}
+.dtable-row.is-normal .dtable-cell[data-col="name"] {padding-left: 20px;}

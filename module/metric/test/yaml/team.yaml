@@ -1,0 +1,18 @@
+---
+title: zt_team
+author: qixinzhi
+version: "1.0"
+fields:
+- field: id
+  range: 1-10000
+- field: root
+  range: 11-210{10}
+- field: type
+  range: execution
+- field: account
+  fields:
+  - field: account1
+    range: admin,user{5},test{3},dev{10},pm{10},po{8}
+  - field: account2
+    range: "[],1-5,1-3,1-10,1-10,1-8"
+...

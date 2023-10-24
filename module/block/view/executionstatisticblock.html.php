@@ -7,17 +7,17 @@
 .types-line > li > div:after {content: ''; display: block; background: #FFFFFF; box-shadow: 0 2px 4px 0 rgba(170,170,170,0.50), 0 0 5px 0 rgba(0,0,0,0.1); width: 10px; height: 10px; position: absolute; border-radius: 50%; top: 0; left: 50%; margin-left: -2px;}
 .types-line > li > div > small {display: block; color: #A6AAB8;}
 .types-line > li > div > span {display: block; color: #CBD0DB; font-size: 16px;}
-.product-info {position: relative; height: 65px;}
-.product-info + .product-info {margin-top: 10px;}
-.product-info .progress {position: absolute; left: 10px; top: 35px; right: 100px;}
-.product-info .progress-info {position: absolute; left: 8px; top: 10px; width: 180px; font-size: 12px;}
-.product-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 100px;}
-html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 110px;}
-.product-info .type-value,
-.product-info .type-label {font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-.product-info .type-value {font-size: 14px;}
-.product-info .type-value > strong {font-size: 20px; color: #3C4353;}
-.product-info .actions {position: absolute; left: 10px; top: 14px;}
+.execution-info {position: relative; height: 65px;}
+.execution-info + .execution-info {margin-top: 10px;}
+.execution-info .progress {position: absolute; left: 10px; top: 35px; right: 100px;}
+.execution-info .progress-info {position: absolute; left: 8px; top: 10px; width: 180px; font-size: 12px;}
+.execution-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 100px;}
+html[lang="en"] .execution-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 110px;}
+.execution-info .type-value,
+.execution-info .type-label {font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.execution-info .type-value {font-size: 14px;}
+.execution-info .type-value > strong {font-size: 20px; color: #3C4353;}
+.execution-info .actions {position: absolute; left: 10px; top: 14px;}
 .block-statistic .panel-body {padding-top: 0}
 .block-statistic .tile {margin-bottom: 30px;}
 .block-statistic .tile-title {font-size: 18px; color: #A6AAB8;}
@@ -58,6 +58,7 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 
 .status-count{margin:auto}
 .status-count tr:first-child td:last-child{color:#000;font-weight:bold}
+.block-statistic .execution-progress {vertical-align: middle;}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -96,7 +97,7 @@ $(function()
         <?php $selected = !isset($executions[$selected]) ? key($executions) : $selected;?>
         <?php foreach($executions as $execution):?>
         <li <?php if($execution->id == $selected) echo "class='active' id='activeExecution'";?> executionID='<?php echo $execution->id;?>'>
-          <a href="###" data-target="#tab3Content<?php echo $execution->id;?>" data-toggle="tab" title='<?php echo $execution->name;?>'><?php echo $execution->name;?></a>
+          <a href="###" data-target="#tab3Content<?php echo $blockNavId . $execution->id;?>" data-toggle="tab" title='<?php echo $execution->name;?>'><?php echo $execution->name;?></a>
           <?php echo html::a(helper::createLink('execution', 'task', "executionID=$execution->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->execution->task}");?>
         </li>
         <?php endforeach;?>
@@ -105,7 +106,7 @@ $(function()
     </div>
     <div class="col tab-content">
       <?php foreach($executions as $execution):?>
-      <div class="tab-pane fade<?php if($execution->id == $selected) echo ' active in';?>" id="tab3Content<?php echo $execution->id;?>">
+      <div class="tab-pane fade<?php if($execution->id == $selected) echo ' active in';?>" id="tab3Content<?php echo $blockNavId . $execution->id;?>">
         <div class="table-row">
           <div class="col-5 text-middle text-center">
             <div class="progress-pie inline-block space" data-value="<?php echo $execution->progress;?>" data-doughnut-size="84">
@@ -132,8 +133,8 @@ $(function()
               </div>
             </div>
           </div>
-          <div class="col-7">
-            <div class="product-info">
+          <div class="col-7 execution-progress">
+            <div class="execution-info">
               <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->task->yesterdayFinished;?></span> <strong><?php echo $execution->yesterdayFinished;?></strong></div>
               <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $execution->taskProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->taskProgress;?>%">
@@ -154,7 +155,8 @@ $(function()
                 </div>
               </div>
             </div>
-            <div class="product-info">
+            <?php if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review'))):?>
+            <div class="execution-info">
               <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->story->released;?></span> <strong><?php echo $execution->releasedStories;?></strong></div>
               <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $execution->storyProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->storyProgress;?>%"></div>
@@ -174,7 +176,8 @@ $(function()
                 </div>
               </div>
             </div>
-            <div class="product-info">
+            <?php if($execution->attribute != 'design'):?>
+            <div class="execution-info">
               <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->bug->yesterdayResolved;?></span> <strong><?php echo $execution->yesterdayResolved;?></strong></div>
               <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $execution->bugProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $execution->bugProgress;?>%">
@@ -195,6 +198,8 @@ $(function()
                 </div>
               </div>
             </div>
+            <?php endif;?>
+            <?php endif;?>
           </div>
         </div>
       </div>

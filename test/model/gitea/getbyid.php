@@ -2,7 +2,6 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/gitea.class.php';
-$db->switchDB();
 su('admin');
 
 /**
@@ -28,4 +27,3 @@ r($gitea->getById($giteaID)) && p() && e(0);     // 使用空的ID
 $giteaID = 111;
 r($gitea->getById($giteaID)) && p() && e(0);     // 使用不存在的ID
 
-$db->restoreDB();

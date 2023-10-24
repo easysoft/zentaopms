@@ -2,7 +2,7 @@
 /**
  * The company module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     company
@@ -30,8 +30,10 @@ $lang->company->guest    = '匿名登录';
 $lang->company->admins   = '管理员';
 $lang->company->deleted  = '已删除';
 
+$lang->company->manageRole = '维护职位';
+
 $lang->company->product   = $lang->productCommon;
-$lang->company->project   = '项目';
+$lang->company->project   = $lang->projectCommon;
 $lang->company->execution = $lang->executionCommon;
 $lang->company->user      = '用户';
 $lang->company->empty     = '暂时没有动态';
@@ -41,3 +43,11 @@ $lang->company->guestOptions[1] = '允许';
 
 $lang->company->order['date_desc'] = '倒序排列';
 $lang->company->order['date_asc']  = '正序排列';
+
+$lang->company->featureBar['dynamic']['all']       = '全部';
+$lang->company->featureBar['dynamic']['today']     = '今天';
+$lang->company->featureBar['dynamic']['yesterday'] = '昨天';
+$lang->company->featureBar['dynamic']['thisWeek']  = '本周';
+$lang->company->featureBar['dynamic']['lastWeek']  = '上周';
+$lang->company->featureBar['dynamic']['thisMonth'] = '本月';
+$lang->company->featureBar['dynamic']['lastMonth'] = '上月';
