@@ -45,7 +45,7 @@ $generateData = function() use ($module, $method, $lang, $users, $products)
         if(!isset($product->plans)) continue;
 
         foreach($product->plans as $plan)
-       {
+        {
             $product->planTitle      = $plan->title;
             $product->planBegin      = $plan->begin == '2030-01-01' ? $lang->productplan->future : $plan->begin;
             $product->planEnd        = $plan->end   == '2030-01-01' ? $lang->productplan->future : $plan->end;
@@ -58,9 +58,8 @@ $generateData = function() use ($module, $method, $lang, $users, $products)
         }
     }
 
-    return div
+    return array
     (
-        setClass('w-full'),
         div
         (
             setID('conditions'),
@@ -74,6 +73,8 @@ $generateData = function() use ($module, $method, $lang, $users, $products)
         ),
         dtable
         (
+            set::striped(true),
+            set::bordered(true),
             set::cols($cols),
             set::data($products),
             set::fixedLeftWidth('0.25'),
