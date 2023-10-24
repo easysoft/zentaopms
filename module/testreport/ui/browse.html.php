@@ -33,9 +33,10 @@ featureBar
     set::linkParams("objectID={$objectID}&objectType={$objectType}&extra={$extra}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
 );
 
+
 toolbar
 (
-    btngroup
+    $app->rawModule != 'project' ? btngroup
     (
         btn
         (
@@ -44,7 +45,7 @@ toolbar
             set::url(helper::createLink('testreport', 'create', "objectID=0&objectType=testtask&productID={$objectID}")),
             $lang->testreport->create
         )
-    )
+    ) : null
 );
 
 dtable
