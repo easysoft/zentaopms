@@ -24,9 +24,8 @@ jsVar('manualUrl',   ((!empty($config->isINT)) ? $config->manualUrl['int'] : $co
 jsVar('lang',        array_merge(array('search' => $lang->index->search, 'searchAB' => $lang->searchAB), (array)$lang->index->dock));
 jsVar('browserMessage', $browserMessage);
 jsVar('pollTime',    (!empty($config->message->browser->turnon) && isset($config->message->browser->pollTime)) ? $config->message->browser->pollTime : 600);
-
-h::js(empty($config->message->browser->turnon) ? 'ping()' : 'browserNotify()');
-if($this->loadModel('cron')->runnable()) h::js('startCron()');
+jsVar('turnon',      empty($config->message->browser->turnon) ? 0 : 1);
+jsVar('runnable',    $this->loadModel('cron')->runnable());
 
 set::zui(true);
 set::bodyClass($this->cookie->hideMenu ? 'hide-menu' : 'show-menu');

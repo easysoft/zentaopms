@@ -830,14 +830,15 @@ window.notifyMessage = function(data)
 window.browserNotify = function()
 {
     let windowBlur = false;
-    if(window.Notification && Notification.permission == 'granted')
-    {
-        window.onblur  = function(){windowBlur = true;}
-        window.onfocus = function(){windowBlur = false;}
-    }
 
     setInterval(function()
     {
+        if(window.Notification && Notification.permission == 'granted')
+        {
+            window.onblur  = function(){windowBlur = true;}
+            window.onfocus = function(){windowBlur = false;}
+        }
+
         $.get($.createLink('message', 'ajaxGetMessage', "windowBlur=" + (windowBlur ? '1' : '0')), function(data)
         {
             if(!windowBlur)
@@ -855,7 +856,7 @@ window.browserNotify = function()
             else
             {
                 if(!data) return;
-                if(typeof data == 'string') data = $.parseJSON(data);
+                if(typeof data == 'string') data = JSON.parse(data);
                 if(typeof data.message == 'string') notifyMessage(data);
             }
         });
@@ -872,3 +873,6 @@ window.startCron = function(restart)
     if(typeof(restart) == 'undefined') restart = 0;
     $.ajax({type:"GET", timeout:100, url:$.createLink('cron', 'ajaxExec', 'restart=' + restart)});
 }
+
+turnon ? browserNotify() : ping();
+if(runnable) startCron();
