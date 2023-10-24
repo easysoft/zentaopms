@@ -1544,4 +1544,21 @@ class project extends control
             return print(html::select('project', $projectPairs, $execution->project, "class='form-control' onchange='loadProductExecutions({$execution->project}, this.value)'"));
         }
     }
+
+    /**
+     * Ajax get product drop menu.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function ajaxSwitcherMenu(int $projectID, int $productID, string $currentMethod = '')
+    {
+        $this->view->link      = helper::createLink('project', $currentMethod, "projectID=$projectID&productID={id}");
+        $this->view->productID = $productID;
+        $this->view->products  = $this->loadModel('product')->getProducts($projectID);
+        $this->view->projectID = $projectID;
+        $this->display();
+    }
 }

@@ -15,7 +15,7 @@ featureBar
 (
     set::current($type),
     set::linkParams($linkParams),
-    li(searchToggle())
+    li(searchToggle(set::module('projectBug'), set::open($type == 'bysearch')))
 );
 
 toolbar
