@@ -507,6 +507,13 @@
         $page.addClass('in hidden');
     }
 
+    function getLoadSelector(selector)
+    {
+        if(!selector) return $('#main').length ? '#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,#configJS,title>*,#heading>*,#navbar>*' : 'body>*,title>*,#configJS';
+        if(selector[0] === '+') return getLoadSelector() + ',' + selector.substring(1);
+        return selector;
+    }
+
     /**
      * Load page with zin way.
      *
@@ -540,19 +547,7 @@
             options.selector = parts[1];
         }
 
-        options  = $.extend({url: currentAppUrl, id: options.selector || options.target || 'page'}, options);
-        if(!options.selector)
-        {
-            if($('#main').length)
-            {
-                options.selector = '#main>*,pageCSS/.zin-page-css>*,pageJS/.zin-page-js,#configJS,title>*,#heading>*,#navbar>*';
-            }
-            else
-            {
-                options.selector = 'body>*,title>*,#configJS';
-            }
-            $.share = {};
-        }
+        options  = $.extend({url: currentAppUrl, id: options.selector || options.target || 'page'}, options, {selector: getLoadSelector(options.selector)});
 
         if(DEBUG) console.log('[APP] ', 'load:', options.url);
         fetchContent(options.url, options.selector, options);
