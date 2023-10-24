@@ -466,10 +466,9 @@ formPanel
                     set::name('end'),
                     set::type('date'),
                     set('id', 'end'),
-                    set::value(($execution->end),
+                    set::value($execution->end),
                     set::placeholder($lang->execution->end),
                     on::change('computeWorkDays')
-                    ),
                 )
             ),
         ),
