@@ -140,24 +140,16 @@ class header extends wg
             $noRole = empty($user->role) || !isset($lang->user->roleList[$user->role]);
             $items[] = array
             (
-                'type'      => 'custom',
-                'tag'       => 'a',
-                'href'      => createLink('my', 'profile', '', '', true),
-                'className' => 'items-center gap-2 px-2 py-1 row text-inherit',
-                'style'     => array('padding-left' => 0),
+                'url'       => createLink('my', 'profile', '', '', true),
+                'leadingClass' => 'row items-center gap-2 px-2 py-1 text-inherit',
+                'icon' => ' hidden',
+                'title'     => empty($user->realname) ? $user->account : $user->realname,
+                'titleClass' => 'text-lg',
+                'subtitle'  => $noRole ? null : $lang->user->roleList[$user->role],
                 'data-toggle' => 'iframeModal',
                 'data-size' => 700,
                 'data-id'   => 'profile',
-                'renders'   => array(array('__html' => implode('', array
-                (
-                    userAvatar(set::user($user), setClass('flex-none'))->render(),
-                    div
-                    (
-                        setClass('flex-auto'),
-                        div(setClass('text-lg'), empty($user->realname) ? $user->account : $user->realname),
-                        $noRole ? null : div(setClass('text-gray text-sm'), $lang->user->roleList[$user->role])
-                    )->render()
-                )))),
+                'leading'   => array('html' => userAvatar(set::user($user))->render(), 'className' => 'center mr-1')
             );
 
             $items[] = array('type' => 'divider');
