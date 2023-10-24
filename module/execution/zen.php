@@ -850,7 +850,7 @@ class executionZen extends execution
         }
 
         $_POST['products'] = array_filter($_POST['products']);
-        if($_POST['products'])
+        if(!empty($_POST['products']))
         {
             $this->app->loadLang('project');
             $multipleProducts  = $this->loadModel('product')->getMultiBranchPairs();
