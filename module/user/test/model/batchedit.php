@@ -24,7 +24,7 @@ $normalUser['realname'] = array(8 => '新测试用户1', 9 => '新测试用户2'
 $normalUser['commiter'] = array(8 => 'user1', 9 => 'user2', 10 => 'user3');
 $normalUser['email']    = array(8 => 'testasd@163.com', 9 => '', 10 => '11773@qq.com');
 $normalUser['type']     = array(8 => 'inside', 9 => 'inside', 10 => 'outside');
-$normalUser['join']     = array(8 => '0000-00-00', 9 => '0000-00-00', 10 => '0000-00-00');
+$normalUser['join']     = array(8 => '2023-10-01', 9 => '2023-10-01', 10 => '2023-10-01');
 $normalUser['skype']    = array(8 => '', 9 => '', 10 => '');
 $normalUser['qq']       = array(8 => '', 9 => '', 10 => '');
 $normalUser['dingding'] = array(8 => '', 9 => '', 10 => '');
