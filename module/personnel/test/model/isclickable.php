@@ -9,11 +9,13 @@ title=测试 personnelModel->isClickable();
 cid=1
 pid=1
 
+测试 unbindWhitelist 方法是否可以点击 >> 1
+
 */
 
 $object     = new stdclass();
 $actionList = array('unbindWhitelist');
 
-$personnel = new personnelTest();
+$personnel = new personnelTest('admin');
 
 r($personnel->isClickableTest($object, $actionList[0])) && p() && e('1'); // 测试 unbindWhitelist 方法是否可以点击
