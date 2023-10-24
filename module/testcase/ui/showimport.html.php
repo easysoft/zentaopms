@@ -170,7 +170,7 @@ else
         input(set::className('hidden'), set::name('isEndPage'), set::value($isEndPage ? '1' : '0')),
         input(set::className('hidden'), set::name('pagerID'), set::value($pagerID)),
         input(set::className('hidden'), set::name('insert'), set::value($dataInsert)),
-        (!$insert && $dataInsert === '') ? set::actions(array(array('text' => $submitText, 'data-toggle' => 'modal', 'data-target' => '#importNoticeModal', 'class' => 'primary showNotice'), 'cancel')) : null
+        (!$insert && $dataInsert === '') ? set::actions(array(array('text' => $submitText, 'data-toggle' => 'modal', 'data-target' => '#importNoticeModal', 'class' => 'primary showNotice'), 'cancel')) : set::submitBtnText($submitText)
     );
 
     if(!$insert && $dataInsert === '') include '../../common/ui/noticeimport.html.php';

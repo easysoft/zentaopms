@@ -1120,7 +1120,9 @@ class testcaseZen extends testcase
                 $this->view->maxImport = $maxImport;
                 $this->view->productID = $productID;
                 $this->view->branch    = $branch;
-                return print($this->display());
+
+                $this->display();
+                exit;
             }
 
             $allPager = ceil($allCount / $maxImport);
