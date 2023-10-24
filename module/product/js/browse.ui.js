@@ -19,7 +19,7 @@ $(document).off('click', '[data-formaction]').on('click', '[data-formaction]', f
     }
 });
 
-$(document).off('click', '#batchUnlinkStory').on('click', '#batchUnlinkStory', function(e)
+$(document).off('click', '.batchUnlinkStory').on('click', '.batchUnlinkStory', function(e)
 {
     const $this       = $(this);
     const dtable      = zui.DTable.query($('#stories'));

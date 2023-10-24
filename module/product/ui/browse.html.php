@@ -254,8 +254,7 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
         !$canBatchUnlink ? null : array
         (
             'text' => $lang->story->unlink,
-            'className' => 'secondary',
-            'id' => 'batchUnlinkStory'
+            'className' => 'secondary batchUnlinkStory',
         ),
         /* Module button. */
         array('caret' => 'up', 'text' => $lang->story->moduleAB, 'className' => $canBatchChangeModule ? 'secondary' : 'hidden', 'items' => $moduleItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),

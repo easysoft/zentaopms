@@ -37,8 +37,8 @@ h::table
     $tableTR,
     h::tr
     (
-        setClass('text-center'),
-        h::td(set::colspan(3), setStyle(array('text-align' => 'center')), btn(setClass('primary confirmBtn'), set('data-dismiss', 'modal'), $lang->projectstory->confirm))
+        setClass('text-center border-b-0'),
+        h::td(set::colspan(3), setStyle(array('text-align' => 'center')), btn(setClass('primary confirmBtn mt-4'), set('data-dismiss', 'modal'), $lang->projectstory->confirm))
     )
 );
 
