@@ -67,7 +67,6 @@ $lang->job->buildTypeList['build']          = '仅构建';
 $lang->job->buildTypeList['buildAndDeploy'] = '构建部署';
 $lang->job->buildTypeList['buildAndTest']   = '构建测试';
 
-$lang->job->triggerTypeList['auto']     = '自动';
 $lang->job->triggerTypeList['tag']      = '打标签';
 $lang->job->triggerTypeList['commit']   = '提交注释包含关键字';
 $lang->job->triggerTypeList['schedule'] = '定时计划';

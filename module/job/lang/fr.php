@@ -67,7 +67,6 @@ $lang->job->buildTypeList['build']          = 'Seulement Build';
 $lang->job->buildTypeList['buildAndDeploy'] = 'Build et D閜loiement';
 $lang->job->buildTypeList['buildAndTest']   = 'Build et Test';
 
-$lang->job->triggerTypeList['auto']     = 'Auto';
 $lang->job->triggerTypeList['tag']      = 'Tag';
 $lang->job->triggerTypeList['commit']   = 'Code Commit';
 $lang->job->triggerTypeList['schedule'] = 'Plannif';
