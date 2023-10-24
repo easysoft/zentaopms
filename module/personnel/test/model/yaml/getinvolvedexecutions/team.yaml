@@ -1,0 +1,12 @@
+title: table zt_team
+desc: "团队"
+author: automated export
+version: "1.0"
+fields:
+  - field: type
+    note: "项目类型"
+    range: execution{200}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

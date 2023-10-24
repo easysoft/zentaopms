@@ -1,0 +1,10 @@
+title: table zt_execution
+author: Zhu Jinyong
+version: "1.0"
+fields:
+  - field: id
+    range: 11-700
+  - field: type
+    range: stage{30},kanban{30}
+  - field: project
+    range: 11-700
