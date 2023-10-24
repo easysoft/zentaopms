@@ -67,20 +67,14 @@ if(!$canBatchAssignTo) $config->bug->dtable->fieldList['id']['type'] = 'id';
 
 foreach($bugs as $bug) $bug->canBeChanged = common::canBeChanged('bug', $bug);
 
-$assignedToItems = array();
-foreach ($memberPairs as $key => $value) $assignedToItems[] = array('text' => $value, 'class' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('bug', 'batchAssignTo', "assignedTo=$key&projectID={$project->id}&type=project"));
+$footToolbar = array();
+if($canBatchAssignTo)
+{
+    $assignedToItems = array();
+    foreach ($memberPairs as $key => $value) $assignedToItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('bug', 'batchAssignTo', "assignedTo=$key&projectID={$project->id}&type=project"));
 
-menu
-(
-    set::id('navAssignedTo'),
-    set::className('dropdown-menu'),
-    set::items($assignedToItems)
-);
-
-$footToolbar = $canBatchAssignTo ? array('items' => array
-(
-    array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'btnType' => 'secondary', 'url' => '#navAssignedTo','data-toggle' => 'dropdown', 'data-placement' => 'top'),
-)) : null;
+    $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'className' => 'btn btn-caret size-sm secondary', 'items' => $assignedToItems, 'type' => 'dropdown', 'data-placement' => 'top');
+}
 
 $cols = $this->loadModel('datatable')->getSetting('project');
 $bugs = initTableData($bugs, $cols, $this->bug);
@@ -91,7 +85,6 @@ dtable
     set::data(array_values($bugs)),
     set::userMap($users),
     set::customCols(true),
-    set::footToolbar($footToolbar),
     set::checkable($canBatchAssignTo),
     set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),
     set::orderBy($orderBy),
