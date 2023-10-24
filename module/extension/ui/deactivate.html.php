@@ -51,7 +51,8 @@ div
             setClass('mr-4'),
             set::type('primary'),
             set('data-dismiss', 'modal'),
-            set::url(createLink('extension', 'browse', 'status=deactivated'))
+            set('load-url', createLink('extension', 'browse', 'status=deactivated')),
+            set::onclick('window.loadParentUrl(this)')
         ),
         btn
         (

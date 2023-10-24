@@ -25,7 +25,9 @@ if(isset($confirm) && $confirm == 'no')
         $lang->extension->confirmUninstall,
         a
         (
-            set('href', createLink('extension', 'uninstall', "extension=$code&confirm=yes")),
+            set('href', '#'),
+            set('load-url', createLink('extension', 'uninstall', "extension=$code&confirm=yes")),
+            set::onclick('window.loadUrl(this)'),
             $lang->extension->uninstall
         )
     );
@@ -107,8 +109,8 @@ else
             (
                 setClass('mr-4'),
                 set::type('primary'),
-                set::url(createLink('extension', 'browse', "status=available")),
-                set('data-dismiss', 'modal'),
+                set('load-url', createLink('extension', 'browse', "status=available")),
+                set::onclick('window.loadParentUrl(this)'),
                 $lang->extension->viewAvailable
             ),
             btn

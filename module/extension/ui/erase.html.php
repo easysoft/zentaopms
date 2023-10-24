@@ -47,8 +47,8 @@ div
         (
             setClass('mr-4'),
             set::type('primary'),
-            set::url(createLink('extension', 'browse', "status=available")),
-            set('data-dismiss', 'modal'),
+            set('load-url', createLink('extension', 'browse', "status=available")),
+            set::onclick('window.loadParentUrl(this)'),
             $lang->extension->viewAvailable
         ),
         btn

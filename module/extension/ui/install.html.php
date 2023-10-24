@@ -41,7 +41,7 @@ foreach($files as $fileName => $md5)
     btn
     (
         set::type('primary'),
-        set('data-load', 'modal'),
+        set::onclick('window.reloadPage(this)'),
         $lang->extension->refreshPage,
     )
 ) : null;

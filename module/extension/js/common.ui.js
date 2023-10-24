@@ -11,6 +11,16 @@ window.loadParentUrl = function($obj)
     loadPage(link);
 }
 
+window.reloadPage = function()
+{
+    const modal = window.getCurrentModal();
+    if(!modal) return;
+
+    let link = $('#' + modal.id).attr('load-url');
+    if(!link) return;
+    modal.render({url: link});
+}
+
 window.getCurrentModal = function()
 {
     target = zui.Modal.query().id;
