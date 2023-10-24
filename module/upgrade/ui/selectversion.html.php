@@ -31,6 +31,7 @@ div
                     picker
                     ( 
                         set::name('fromVersion'),
+                        set::required(true),
                         set::items($lang->upgrade->fromVersions),
                         set::value($version)
                     )
