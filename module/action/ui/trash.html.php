@@ -71,6 +71,8 @@ dtable
 (
     set::cols(array_values($config->action->dtable->fieldList)),
     set::data(array_values($trashes)),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('action', 'trash', "browseType={$currentObjectType}&type={$type}&byQuery={$byQuery}&queryID={$queryID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::fixedLeftWidth('0.44'),
     set::userMap($users),
     set::footPager(usePager())
