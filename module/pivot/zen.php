@@ -343,11 +343,69 @@ class pivotZen extends pivot
         $this->app->loadLang('productplan');
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
+        $products = $this->pivot->getProducts($conditions);
+
         $this->view->title      = $this->lang->pivot->productSummary;
-        $this->view->products   = $this->pivot->getProducts($conditions);
+        $this->view->products   = $this->processProductsForProductSummary($products);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->submenu    = 'product';
         $this->view->conditions = $conditions;
+    }
+
+    /**
+     * 把计划数组展开为独立的产品对象并添加跨行合并属性。
+     * Expand the plans property to single product objects and add rowspan property.
+     *
+     * @params array  $products
+     * @access public
+     * @return array
+     */
+    public function processProductsForProductSummary(array $products): array
+    {
+        $productList = array();
+
+        foreach($products as $product)
+        {
+            if(!isset($product->plans))
+            {
+                $product->planTitle      = '';
+                $product->planBegin      = '';
+                $product->planEnd        = '';
+                $product->storyDraft     = 0;
+                $product->storyReviewing = 0;
+                $product->storyActive    = 0;
+                $product->storyChanging  = 0;
+                $product->storyClosed    = 0;
+                $product->storyTotal     = 0;
+
+                $productList[] = $product;
+
+                continue;
+            }
+
+            $first = true;
+            foreach($product->plans as $plan)
+            {
+                $newProduct = clone $product;
+                $newProduct->planTitle      = $plan->title;
+                $newProduct->planBegin      = $plan->begin == '2030-01-01' ? $this->lang->productplan->future : $plan->begin;
+                $newProduct->planEnd        = $plan->end   == '2030-01-01' ? $this->lang->productplan->future : $plan->end;
+                $newProduct->storyDraft     = isset($plan->status['draft'])     ? $plan->status['draft']     : 0;
+                $newProduct->storyReviewing = isset($plan->status['reviewing']) ? $plan->status['reviewing'] : 0;
+                $newProduct->storyActive    = isset($plan->status['active'])    ? $plan->status['active']    : 0;
+                $newProduct->storyChanging  = isset($plan->status['changing'])  ? $plan->status['changing']  : 0;
+                $newProduct->storyClosed    = isset($plan->status['closed'])    ? $plan->status['closed']    : 0;
+                $newProduct->storyTotal     = $newProduct->storyDraft + $newProduct->storyReviewing + $newProduct->storyActive + $newProduct->storyChanging + $newProduct->storyClosed;
+
+                if($first) $newProduct->rowspan = count($newProduct->plans);
+
+                $productList[] = $newProduct;
+
+                $first = false;
+            }
+        }
+
+        return $productList;
     }
 
     /**
