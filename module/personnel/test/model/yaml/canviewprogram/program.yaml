@@ -1,0 +1,13 @@
+title: program
+author: Zhu Jinyong
+version: "1.0"
+fields:
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: "项目集"
+    - field: name2
+      range: 1-10000
+  - field: type
+    range: program

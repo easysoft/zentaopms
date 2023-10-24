@@ -1,0 +1,19 @@
+title: table zt_user
+desc: "用户信息"
+author: sgm
+version: "1.0"
+fields:
+  - field: account
+    note: "用户名"
+    fields:
+    - field: account1
+      range: admin,dev{2},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
+    - field: account2
+      range: "[],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}"
+  - field: role
+    note: "职位"
+    range: qa,dev,pm{10},po{10},td{2},pd{2},qd{2},top{5},others{14}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

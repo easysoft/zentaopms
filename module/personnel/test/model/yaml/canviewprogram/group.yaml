@@ -1,0 +1,10 @@
+title: table zt_group
+desc: "用户组"
+author: automated export
+version: "1.0"
+fields:
+  - field: acl
+    note: "权限"
+    range: '`{"program": [1000]}`'
+    loop: 0
+    format: ""
