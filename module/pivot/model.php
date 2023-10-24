@@ -299,37 +299,35 @@ class pivotModel extends model
     public function getExecutions($begin = 0, $end = 0)
     {
         $permission = common::hasPriv('pivot', 'showProject') or $this->app->user->admin;
-        $tasks      = $this->dao->select("t1.*, IF(t3.multiple = '1', t2.name, '') as executionName, t3.name as projectName, t2.multiple")->from(TABLE_TASK)->alias('t1')
+        $executions = $this->dao->select("t1.project AS projectID, t1.execution AS executionID, t2.multiple, IF(t3.multiple = '1', t2.name, '') AS executionName, t3.name AS projectName, ROUND(SUM(t1.estimate), 2) AS estimate, ROUND(SUM(t1.consumed), 2) AS consumed")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->where('t1.status')->ne('cancel')
-            ->andWhere('t1.deleted')->eq(0)
-            ->beginIF(!$permission)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.parent')->lt(1)
+            ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t2.status')->eq('closed')
             ->beginIF($begin)->andWhere('t2.begin')->ge($begin)->fi()
             ->beginIF($end)->andWhere('t2.end')->le($end)->fi()
+            ->beginIF(!$permission)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
+            ->groupBy('t1.project, t1.execution, t2.multiple')
             ->orderBy('t2.end_desc')
             ->fetchAll();
 
-        $executions = array();
-        foreach($tasks as $task)
+        $canView = common::hasPriv('execution', 'view');
+
+        foreach($executions as $execution)
         {
-            $executionID = $task->execution;
-            if(!isset($executions[$executionID]))
+            $execution->deviation     = round($execution->consumed - $execution->estimate, 2);
+            $execution->deviationRate = $execution->estimate ? round($execution->deviationRate / $execution->estimate * 100, 2) : 'n/a';
+
+            if(!$execution->multiple)
             {
-                $executions[$executionID] = new stdclass();
-                $executions[$executionID]->estimate = 0;
-                $executions[$executionID]->consumed = 0;
+                $execution->executionName = $this->lang->null;
+                continue;
             }
 
-            $executions[$executionID]->projectID   = $task->project;
-            $executions[$executionID]->projectName = $task->projectName;
-            $executions[$executionID]->multiple    = $task->multiple;
-            $executions[$executionID]->name        = $task->executionName;
-            $executions[$executionID]->estimate   += $task->estimate;
-            $executions[$executionID]->consumed   += $task->consumed;
+            if($canView) $execution->executionName = html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName);
         }
 
         return $executions;
