@@ -950,7 +950,7 @@
         if(!$link.length || $link.hasClass('ajax-submit') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_') return;
 
         const options = $link.dataset();
-        const url = options.url || $link.attr('href');
+        let url = options.url || $link.attr('href');
         if(url && (url.indexOf('javascript:') === 0 || url[0] === '#')) return;
         if(options.toggle)
         {
