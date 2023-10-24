@@ -343,19 +343,21 @@ class pivotModel extends model
      */
     public function getProducts(string $conditions, string $storyType = 'story'): array
     {
-        $permission = common::hasPriv('pivot', 'showProduct') or $this->app->user->admin;
-        $products   = $this->dao->select('t1.id as id, t1.code, t1.name, t1.PO')->from(TABLE_PRODUCT)->alias('t1')
+        $permission = common::hasPriv('pivot', 'showProduct') || $this->app->user->admin;
+        $products   = $this->dao->select('t1.id, t1.code, t1.name, t1.PO')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.shadow')->eq(0)
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.shadow')->eq('0')
             ->beginIF(strpos($conditions, 'closedProduct') === false)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF(!$permission)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->fetchAll('id');
 
-        $plans = $this->dao->select('id, product, branch, parent, title, begin, end')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->in(array_keys($products))
+        $plans = $this->dao->select('id, product, branch, parent, title, begin, end')->from(TABLE_PRODUCTPLAN)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->in(array_keys($products))
             ->beginIF(strpos($conditions, 'overduePlan') === false)->andWhere('end')->gt(date('Y-m-d'))->fi()
-            ->orderBy('product,parent_desc,begin')
+            ->orderBy('product, parent_desc, begin')
             ->fetchAll('id');
         foreach($plans as $plan)
         {
@@ -374,9 +376,8 @@ class pivotModel extends model
 
         $planStories      = array();
         $unplannedStories = array();
-        $stmt = $this->dao->select('id,plan,product,status')
-            ->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
+        $stmt = $this->dao->select('id, plan, product, status')->from(TABLE_STORY)
+            ->where('deleted')->eq('0')
             ->andWhere('parent')->ge(0)
             ->beginIF($storyType)->andWhere('type')->eq($storyType)->fi()
             ->query();
