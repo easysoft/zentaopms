@@ -27,7 +27,7 @@ function loadProductSummary()
  * @access public
  * @return object|void
  */
-function getCellSpanOfProductSummary(cell)
+getCellSpanOfProductSummary = function(cell)
 {
     if((cell.col.name == 'name' || cell.col.name == 'PO') && cell.row.data.rowspan)
     {
