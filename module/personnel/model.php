@@ -660,7 +660,7 @@ class personnelModel extends model
     {
         $users = $this->post->account;
         if(empty($users)) $users = array();
-        $this->updateWhitelist($users, $objectType, $objectID);
+        $this->updateWhitelist($users, $objectType, (int)$objectID);
     }
 
     /**
