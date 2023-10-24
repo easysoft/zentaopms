@@ -35,20 +35,13 @@ if($canBatchAction)
 
     if($canBatchChangeStatus)
     {
-        $statusList = array();
+        $statusItems = array();
         foreach($lang->execution->statusList as $key => $value)
         {
-            $statusList[] = array('text' => $value, 'class' => 'batch-btn ajax-btn', 'data-url' => createLink('execution', 'batchChangeStatus', "status=$key"));
+            $statusItems[] = array('text' => $value, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink('execution', 'batchChangeStatus', "status=$key"));
         }
 
-        menu
-        (
-            set::id('navStatus'),
-            set::className('dropdown-menu'),
-            set::items($statusList)
-        );
-
-        $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->statusAB,   'className' => 'btn btn-caret size-sm secondary', 'url' => '#navStatus', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start');
+        $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->statusAB,   'className' => 'btn btn-caret size-sm secondary', 'items' => $statusItems, 'type' => 'dropdown', 'data-placement' => 'top-start');
     }
 }
 
@@ -73,7 +66,6 @@ $fnGenerateCols = function() use ($config, $project)
 };
 
 /* zin: Define the feature bar on main menu. */
-$checked = $this->cookie->showTask ? 'checked' : '';
 $productMenuLink = createLink(
     $this->app->rawModule,
     $this->app->rawMethod,
@@ -108,10 +100,9 @@ featureBar
         (
             set::id('showTask'),
             set::name('showTask'),
-            set::checked($checked),
+            set::checked($this->cookie->showTask ? 'checked' : ''),
             set::text($lang->programplan->stageCustom->task),
             set::rootClass('ml-4'),
-            on::change('showTask')
         )
     )
 );

@@ -1,11 +1,10 @@
-function showTask()
+$(document).off('click', '#showTask').on('click', '#showTask', function()
 {
-    var show = $('#showTask').is(':checked') ? 1 : 0;
+    const show = $(this).is(':checked') ? 1 : 0;
     $.cookie.set('showTask', show, {expires:config.cookieLife, path:config.webRoot});
 
-    const link = $.createLink('project', 'execution', 'status=' + status + '&projectID=' + projectID + '&orderBy=' + orderBy + '&productID=' + productID);
-    loadPage(link);
-}
+    loadCurrentPage();
+});
 
 $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 {

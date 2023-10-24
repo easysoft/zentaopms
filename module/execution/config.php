@@ -197,6 +197,7 @@ $config->execution->actionList['edit']['icon']        = 'edit';
 $config->execution->actionList['edit']['text']        = $lang->execution->edit;
 $config->execution->actionList['edit']['hint']        = $lang->execution->edit;
 $config->execution->actionList['edit']['url']         = helper::createLink('execution', 'edit', "executionID={rawID}");
+$config->execution->actionList['edit']['data-size']   = 'lg';
 $config->execution->actionList['edit']['data-toggle'] = 'modal';
 
 $config->execution->actionList['close']['icon']        = 'off';
