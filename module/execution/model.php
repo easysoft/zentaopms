@@ -2302,7 +2302,7 @@ class executionModel extends model
             if(!isset($existedProducts[$productID])) $existedProducts[$productID] = array();
 
             $oldPlan = 0;
-            $branch  = isset($branches[$i]) ? (array)$branches[$i] : array();
+            $branch  = isset($branches[$i]) ? (array)$branches[$i] : array(0);
             foreach($branch as $branchID)
             {
                 if(isset($existedProducts[$productID][$branchID])) continue;
@@ -2319,6 +2319,7 @@ class executionModel extends model
                 $data->plan    = isset($plans[$productID]) ? implode(',', $plans[$productID]) : $oldPlan;
                 $data->plan    = trim($data->plan, ',');
                 $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
+
                 $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
                 $existedProducts[$productID][$branchID] = true;
             }
