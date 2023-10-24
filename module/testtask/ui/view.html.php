@@ -43,7 +43,7 @@ detailBody
             set::content($task->desc ? $task->desc : $lang->noData),
             set::useHtml(true)
         ),
-        history(),
+        history(set::commentUrl(helper::createLink('action', 'comment', "objectType=testtask&objectID=$task->id"))),
         center
         (
             floatToolbar
