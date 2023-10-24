@@ -60,11 +60,11 @@ class message extends control
                 return $this->send($response);
             }
 
-            $response['load'] = true;
+            $response['callback'] = "top.window.location.href = $.createLink('message', 'browser')";
             return $this->send($response);
         }
 
-        $this->view->title      = $this->lang->message->browser;
+        $this->view->title = $this->lang->message->browser;
 
         $this->view->browserConfig = $browserConfig;
         $this->display();
