@@ -954,7 +954,7 @@
         if(url && (url.indexOf('javascript:') === 0 || url[0] === '#')) return;
         if(options.toggle)
         {
-            if(options.toggle === 'iframeModal')
+            if(options.toggle === 'iframeModal' || (options.toggle === 'modal' && $link.hasClass('open-in-parent')) )
             {
                 var modalTrigger = $link.data('zui.modaltrigger');
                 if(!modalTrigger)
