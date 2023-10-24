@@ -38,3 +38,9 @@ $lang->block->modules['execution']->availableBlocks['task']      = 'Task List';
 
 unset($lang->block->moduleList['product']);
 unset($lang->block->moduleList['qa']);
+
+$lang->block->welcome->reviewList = array();
+$lang->block->welcome->assignList = array();
+$lang->block->welcome->assignList['task'] = 'Task';
+
+$lang->block->summary->welcome = 'Zentao has been with you for %s days. <strong>Yesterday</strong>, you has finished <a href="' . helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a> tasks.';

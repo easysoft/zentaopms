@@ -1,5 +1,5 @@
 <?php
-public function getExecutionStoryPairs($executionID = 0, $productID = 0, $branch = 'all', $moduleIdList = 0, $type = 'full', $status = 'all')
+public function getExecutionStoryPairs(int $executionID = 0, int $productID = 0, string|int $branch = 'all', array|string|int $moduleIdList = 0, string $type = 'full', string $status = 'all'): array
 {
     if($this->config->vision == 'lite')
     {

@@ -3,21 +3,29 @@
  * Get field list.
  *
  * @param  string $module
+ * @param  string $method
  * @access public
  * @return array
  */
-public function getFieldList($module)
+public function getFieldList($module, $method = '')
 {
     if(!isset($this->config->$module)) $this->loadModel($module);
-    if($this->session->currentProductType === 'normal') unset($this->config->$module->datatable->fieldList['branch']);
-    foreach($this->config->$module->datatable->fieldList as $field => $items)
+
+    $config = $this->config->$module;
+    if(!empty($method) && isset($config->$method) && isset($config->$method->dtable)) $config = $config->$method;
+
+    $fieldList = $config->dtable->fieldList;
+    if($this->session->currentProductType === 'normal') unset($fieldList['branch']);
+    foreach($fieldList as $field => $items)
     {
         if($field === 'branch')
         {
-            if($this->session->currentProductType === 'branch')   $this->config->$module->datatable->fieldList[$field]['title'] = $this->lang->datatable->branch;                if($this->session->currentProductType === 'platform') $this->config->$module->datatable->fieldList[$field]['title'] = $this->lang->datatable->platform;
-            continue;            }
+            if($this->session->currentProductType === 'branch')   $fieldList[$field]['title'] = $this->lang->dtable->branch;
+            if($this->session->currentProductType === 'platform') $fieldList[$field]['title'] = $this->lang->dtable->platform;
+            continue;
+        }
         $title = zget($this->lang->$module, $items['title'], zget($this->lang, $items['title'], $items['title']));
-        $this->config->$module->datatable->fieldList[$field]['title'] = $title;
+        $fieldList[$field]['title'] = $title;
     }
 
     if($this->config->edition != 'open' and $module != 'story')
@@ -26,11 +34,11 @@ public function getFieldList($module)
         foreach($fields as $field)
         {
             if($field->buildin) continue;
-            $this->config->$module->datatable->fieldList[$field->field]['title']    = $field->name;
-            $this->config->$module->datatable->fieldList[$field->field]['width']    = '120';
-            $this->config->$module->datatable->fieldList[$field->field]['fixed']    = 'no';
-            $this->config->$module->datatable->fieldList[$field->field]['required'] = 'no';
+            $fieldList[$field->field]['title']    = $field->name;
+            $fieldList[$field->field]['width']    = '120';
+            $fieldList[$field->field]['fixed']    = 'no';
+            $fieldList[$field->field]['required'] = 'no';
         }
     }
-    return $this->config->$module->datatable->fieldList;
+    return $fieldList;
 }

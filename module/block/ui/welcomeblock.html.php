@@ -100,7 +100,7 @@ panel
             set::className('px-8'),
             tabs
             (
-                tabPane
+                empty($lang->block->welcome->reviewList) ? null : tabPane
                 (
                     set::key("reviewByMe_$blockNavCode"),
                     set::title($lang->block->welcome->reviewByMe),

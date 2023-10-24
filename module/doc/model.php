@@ -206,6 +206,7 @@ class docModel extends model
             ->setForce('execution', ($this->post->libType != 'api' and !empty($_POST['execution'])) ? $this->post->execution : 0)
             ->join('groups', ',')
             ->join('users', ',')
+            ->add('vision', $this->config->vision)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
             ->remove('uid,contactListMenu,libType')
