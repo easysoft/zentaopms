@@ -13,7 +13,6 @@ $config->project->form->manageProducts = array();
 
 $config->project->form->create['parent']     = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->project->form->create['name']       = array('type' => 'string', 'required' => true,  'filter'  => 'trim');
-$config->project->form->create['code']       = array('type' => 'string', 'required' => true,  'filter'  => 'trim');
 $config->project->form->create['multiple']   = array('type' => 'int',    'required' => false, 'default' => 1);
 $config->project->form->create['hasProduct'] = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['PM']         = array('type' => 'string', 'required' => false, 'default' => '');
@@ -27,6 +26,7 @@ $config->project->form->create['acl']        = array('type' => 'string', 'requir
 $config->project->form->create['whitelist']  = array('type' => 'array',  'required' => false, 'default' => '');
 $config->project->form->create['auth']       = array('type' => 'array',  'required' => false, 'default' => '');
 $config->project->form->create['model']      = array('type' => 'string', 'required' => false, 'default' => '');
+if(isset($this->config->setCode) && $this->config->setCode == 1) $config->project->form->create['code'] = array('type' => 'string', 'required' => true,  'filter'  => 'trim');
 
 $config->project->form->edit = $config->project->form->create;
 $config->project->form->edit['products'] = array('type' => 'array', 'required' => false, 'default' => array());
