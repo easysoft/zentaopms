@@ -1116,8 +1116,7 @@ class story extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($storyID);
-
+            $message = $this->executeHooks($storyID);
             $response = $this->storyZen->getResponseInModal($message);
             if($response) return $this->send($response);
 
