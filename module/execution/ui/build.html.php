@@ -15,10 +15,12 @@ featureBar
 (
     set::current($type),
     set::linkParams("executionID={$execution->id}&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
+    set::module('execution'),
+    set::method('build'),
     div
     (
         set::className('select-product-box'),
-        picker
+        select
         (
             set::name('product'),
             set::value($product),
