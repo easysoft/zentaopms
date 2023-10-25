@@ -617,4 +617,89 @@ class installModel extends model
         $this->dao->replace(TABLE_CONFIG)->data($config)->exec();
         return true;
     }
+
+    /**
+     * DevOps平台版将配置信息写入my.php。
+     * Save config file when inQuickon is true.
+     *
+     * @access public
+     * @return void
+     */
+    public function saveConfigFile()
+    {
+        $configRoot   = $this->app->getConfigRoot();
+        $myConfigFile = $configRoot . 'my.php';
+        if(file_exists($myConfigFile) && trim(file_get_contents($myConfigFile))) return;
+
+        /* Set the session save path when the session save path is null. */
+        $customSession = $this->setSessionPath();
+
+        $dbHost      = getenv('MYSQL_HOST');
+        $dbPort      = getenv('MYSQL_PORT');
+        $dbName      = getenv('MYSQL_DB');
+        $dbUser      = getenv('MYSQL_USER');
+        $dbPassword  = getenv('MYSQL_PASSWORD');
+        $timezone    = getenv('ZT_TZ');
+        $defaultLang = getenv('ZT_LANG');
+        if(empty($timezone))    $timezone    = $this->config->timezone;
+        if(empty($defaultLang)) $defaultLang = $this->config->default->lang;
+        $configContent = <<<EOT
+        <?php
+        \$config->installed       = true;
+        \$config->debug           = false;
+        \$config->requestType     = '{$this->config->requestType}';
+        \$config->timezone        = '$timezone';
+        \$config->db->driver      = '{$this->config->db->driver}';
+        \$config->db->host        = '$dbHost';
+        \$config->db->port        = '$dbPort';
+        \$config->db->name        = '$dbName';
+        \$config->db->user        = '$dbUser';
+        \$config->db->encoding    = '{$this->config->db->encoding}';
+        \$config->db->password    = '$dbPassword';
+        \$config->db->prefix      = '{$this->config->db->prefix}';
+        \$config->webRoot         = getWebRoot();
+        \$config->default->lang   = '$defaultLang';
+        EOT;
+
+        if($customSession) $configContent .= "\n\$config->customSession = true;";
+
+        if(is_writable($configRoot)) @file_put_contents($myConfigFile, $configContent);
+        $this->config->installed = true;
+    }
+
+    /**
+     * DevOps平台版设置session path。
+     * Set session save path.
+     *
+     * @access public
+     * @return bool
+     */
+    public function setSessionPath()
+    {
+        $customSession = false;
+        $checkSession  = ini_get('session.save_handler') == 'files';
+        if($checkSession)
+        {
+            if(!session_save_path())
+            {
+                /* Restart the session because the session save path is null when start the session last time. */
+                session_write_close();
+
+                $tmpRootInfo     = $this->getTmpRoot();
+                $sessionSavePath = $tmpRootInfo['path'] . 'session';
+                if(!is_dir($sessionSavePath)) mkdir($sessionSavePath, 0777, true);
+
+                session_save_path($sessionSavePath);
+                $customSession = true;
+
+                $sessionResult = $this->checkSessionSavePath();
+                if($sessionResult == 'fail') chmod($sessionSavePath, 0777);
+
+                session_start();
+                $this->session->set('installing', true);
+            }
+        }
+
+        return $customSession;
+    }
 }

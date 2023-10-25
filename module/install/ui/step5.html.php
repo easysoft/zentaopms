@@ -38,6 +38,7 @@ div
             setClass('bg-canvas m-auto mw-auto'),
             set::title($lang->install->getPriv),
             set::formClass('w-96 m-auto'),
+            set::submitBtnText(!empty($config->inQuickon) ? $lang->install->next : $lang->save),
             formRow
             (
                 formGroup
