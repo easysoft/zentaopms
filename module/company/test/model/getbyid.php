@@ -4,6 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/company.class.php';
 su('admin');
 
+zdTable('company')->gen(1);
+
 /**
 
 title=测试companyModel->getByIDTest();
