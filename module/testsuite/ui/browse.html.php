@@ -24,7 +24,7 @@ featureBar
     set::module('testsuite'),
     set::method('browse'),
     set::current('all'),
-    set::linkParams("productID={$product->id}&type=all"),
+    set::linkParams("productID={$product->id}&type=all")
 );
 
 toolbar
