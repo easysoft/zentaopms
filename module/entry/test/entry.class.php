@@ -83,7 +83,7 @@ class entryTest
      */
     public function getLogsTest($id, $orderBy = 'date_desc', $pager = null)
     {
-        $object = $this->objectModel->getLogs($id, $orderBy, $paper);
+        $object = $this->objectModel->getLogs($id, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 
