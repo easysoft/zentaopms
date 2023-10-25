@@ -1269,8 +1269,10 @@ class gitlabModel extends model
      */
     public function addPushWebhook($repo, $token = '')
     {
+        $systemURL = dirname(common::getSysURL() . $_SERVER['REQUEST_URI']);
+
         $hook = new stdClass;
-        $hook->url = common::getSysURL() . '/api.php/v1/gitlab/webhook?repoID='. $repo->id;
+        $hook->url = $systemURL . '/api.php/v1/gitlab/webhook?repoID='. $repo->id;
         $hook->push_events           = true;
         $hook->merge_requests_events = true;
         if($token) $hook->token = $token;
