@@ -21,7 +21,7 @@ class install extends control
     {
         parent::__construct();
 
-        if(!$this->app->installing) helper::end();
+        if(!$this->app->installing && $this->app->tab != 'devops') helper::end();
 
         $this->app->loadLang('user');
         $this->app->loadLang('admin');
@@ -553,7 +553,7 @@ class install extends control
         $this->loadModel('solution')->uninstall($solutionID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $this->send(array('result' => 'success', 'message' => '', 'locate' => $this->inLink('index')));
+        $this->send(array('result' => 'success', 'message' => '', 'load' => $this->inLink('index')));
     }
 
     /**
