@@ -165,7 +165,6 @@ class product extends control
         $this->view->moduleID   = $moduleID;
         $this->view->pager      = $pager;
         $this->view->orderBy    = $orderBy;
-        $this->view->moduleID   = $moduleID;
         $this->view->param      = $param;
         $this->view->moduleTree = $this->productZen->getModuleTree($projectID, $productID, $branch, $param, $storyType, $browseType);
 
