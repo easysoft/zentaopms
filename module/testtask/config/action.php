@@ -27,20 +27,23 @@ $config->testtask->actionList['activate']['hint']        = $lang->testtask->acti
 $config->testtask->actionList['activate']['url']         = array('module' => 'testtask', 'method' => 'activate', 'params' => 'taskID={id}');
 $config->testtask->actionList['activate']['data-toggle'] = 'modal';
 
-$config->testtask->actionList['cases']['icon'] = 'sitemap';
-$config->testtask->actionList['cases']['text'] = $lang->testtask->cases;
-$config->testtask->actionList['cases']['hint'] = $lang->testtask->cases;
-$config->testtask->actionList['cases']['url']  = array('module' => 'testtask', 'method' => 'cases', 'params' => 'taskID={id}');
+$config->testtask->actionList['cases']['icon']     = 'sitemap';
+$config->testtask->actionList['cases']['text']     = $lang->testtask->cases;
+$config->testtask->actionList['cases']['hint']     = $lang->testtask->cases;
+$config->testtask->actionList['cases']['url']      = array('module' => 'testtask', 'method' => 'cases', 'params' => 'taskID={id}');
+$config->testtask->actionList['cases']['data-app'] = $app->tab;
 
-$config->testtask->actionList['linkCase']['icon'] = 'link';
-$config->testtask->actionList['linkCase']['text'] = $lang->testtask->linkCase;
-$config->testtask->actionList['linkCase']['hint'] = $lang->testtask->linkCase;
-$config->testtask->actionList['linkCase']['url']  = array('module' => 'testtask', 'method' => 'linkCase', 'params' => 'taskID={id}&type=all&param=myQueryID');
+$config->testtask->actionList['linkCase']['icon']     = 'link';
+$config->testtask->actionList['linkCase']['text']     = $lang->testtask->linkCase;
+$config->testtask->actionList['linkCase']['hint']     = $lang->testtask->linkCase;
+$config->testtask->actionList['linkCase']['url']      = array('module' => 'testtask', 'method' => 'linkCase', 'params' => 'taskID={id}&type=all&param=myQueryID');
+$config->testtask->actionList['linkCase']['data-app'] = $app->tab;
 
-$config->testtask->actionList['report']['icon'] = 'summary';
-$config->testtask->actionList['report']['text'] = $lang->testtask->testreport;
-$config->testtask->actionList['report']['hint'] = $lang->testtask->testreport;
-$config->testtask->actionList['report']['url']  = array('module' => 'testreport', 'method' => 'browse', 'params' => 'objectID={product}&objectType=product&extra={id}');
+$config->testtask->actionList['report']['icon']     = 'summary';
+$config->testtask->actionList['report']['text']     = $lang->testtask->testreport;
+$config->testtask->actionList['report']['hint']     = $lang->testtask->testreport;
+$config->testtask->actionList['report']['url']      = array('module' => 'testreport', 'method' => 'browse', 'params' => 'objectID={product}&objectType=product&extra={id}');
+$config->testtask->actionList['report']['data-app'] = $app->tab;
 
 $config->testtask->actionList['view']['icon']        = 'list-alt';
 $config->testtask->actionList['view']['text']        = $lang->testtask->view;
@@ -54,10 +57,11 @@ $config->testtask->actionList['unitCases']['text'] = $lang->testtask->unitCases;
 $config->testtask->actionList['unitCases']['hint'] = $lang->testtask->unitCases;
 $config->testtask->actionList['unitCases']['url']  = array('module' => 'testtask', 'method' => 'unitcases', 'params' => 'taskID={id}');
 
-$config->testtask->actionList['edit']['icon'] = 'edit';
-$config->testtask->actionList['edit']['text'] = $lang->testtask->edit;
-$config->testtask->actionList['edit']['hint'] = $lang->testtask->edit;
-$config->testtask->actionList['edit']['url']  = array('module' => 'testtask', 'method' => 'edit', 'params' => 'taskID={id}');
+$config->testtask->actionList['edit']['icon']     = 'edit';
+$config->testtask->actionList['edit']['text']     = $lang->testtask->edit;
+$config->testtask->actionList['edit']['hint']     = $lang->testtask->edit;
+$config->testtask->actionList['edit']['url']      = array('module' => 'testtask', 'method' => 'edit', 'params' => 'taskID={id}');
+$config->testtask->actionList['edit']['data-app'] = $app->tab;
 
 $config->testtask->actionList['delete']['icon']         = 'trash';
 $config->testtask->actionList['delete']['text']         = $lang->testtask->delete;

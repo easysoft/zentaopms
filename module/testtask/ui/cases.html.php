@@ -34,7 +34,8 @@ sidebar
     (
         'modules'   => $moduleTree,
         'activeKey' => $moduleID,
-        'closeLink' => $closeLink
+        'closeLink' => $closeLink,
+        'app'       => $app->tab
     )))
 );
 
@@ -44,14 +45,14 @@ if(empty($suites))
 {
     if($canCreateSuite && (empty($productID) || common::canModify('product', $product)))
     {
-        $suiteItems[] = array('text' => $lang->testsuite->create, 'url' => $this->createLink('testsuite', 'create', "productID=$productID"));
+        $suiteItems[] = array('text' => $lang->testsuite->create, 'url' => $this->createLink('testsuite', 'create', "productID=$productID"), 'data-app' => $app->tab);
     }
 }
 else
 {
     foreach($suites as $id => $name)
     {
-        $suiteItems[] = array('text' => $name, 'url' => inlink('cases', "taskID=$task->id&browseType=bySuite&param=$id"), 'active' => $name == $suiteName);
+        $suiteItems[] = array('text' => $name, 'url' => inlink('cases', "taskID=$task->id&browseType=bySuite&param=$id"), 'active' => $name == $suiteName, 'data-app' => $app->tab);
     }
 }
 
@@ -71,8 +72,8 @@ featureBar
 );
 
 $viewItems   = array();
-$viewItems[] = array('text' => $lang->testcase->listView,  'url' => inlink('cases',     "taskID={$task->id}"),               'active' => true);
-$viewItems[] = array('text' => $lang->testcase->groupView, 'url' => inlink('groupCase', "taskID={$task->id}&groupBy=story"), 'active' => false);
+$viewItems[] = array('text' => $lang->testcase->listView,  'url' => inlink('cases',     "taskID={$task->id}"),               'active' => true, 'data-app' => $app->tab);
+$viewItems[] = array('text' => $lang->testcase->groupView, 'url' => inlink('groupCase', "taskID={$task->id}&groupBy=story"), 'active' => false, 'data-app' => $app->tab);
 toolbar
 (
     dropdown

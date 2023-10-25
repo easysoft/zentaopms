@@ -15,7 +15,8 @@ class moduleMenu extends wg
         'closeLink: string',
         'showDisplay?: bool=true',
         'allText?: string',
-        'title?: string'
+        'title?: string',
+        'app?: string=""'
     );
 
     public static function getPageCSS(): string|false
@@ -32,13 +33,15 @@ class moduleMenu extends wg
 
         $activeKey = $this->prop('activeKey');
         $treeItems = array();
+        $tab       = $this->prop('app');
 
         foreach($children as $child)
         {
             $item = array(
-                'key' => $child->id,
-                'text' => $child->name,
-                'url' => $child->url
+                'key'      => $child->id,
+                'text'     => $child->name,
+                'url'      => $child->url,
+                'data-app' => $tab
             );
             $items = $this->buildMenuTree($child->id);
             if(count($items) !== 0)      $item['items'] = $items;
