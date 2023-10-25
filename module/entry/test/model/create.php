@@ -12,10 +12,10 @@ title=entryModel->create();
 cid=1
 pid=1
 
-测试创建应用name为空报错 >> 『名称』不能为空
-测试创建应用code为空报错 >> 『代号』不能为空
-测试创建应用name为name_test >> name_test
-测试创建应用code为code_test >> code_test
+测试name为空,code为空,account为空,freePasswd为空报错 >> 『名称』不能为空。
+测试name为测试应用,code为空,account为空,freePasswd为1报错 >> 『代号』不能为空。,『代号』应当为字母或数字的组合。
+测试name为测试应用,code为code_11111,account为空,freePasswd为1报错 >> code_11111
+测试name为测试应用,code为code_22222,account为空,freePasswd为1报错 >> code_22222
 
 */
 
