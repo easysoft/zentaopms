@@ -430,4 +430,4 @@ $config->project->dtable->testtask->fieldList['actions']['type']     = 'actions'
 $config->project->dtable->testtask->fieldList['actions']['sortType'] = false;
 $config->project->dtable->testtask->fieldList['actions']['fixed']    = false;
 $config->project->dtable->testtask->fieldList['actions']['list']     = $config->testtask->actionList;
-$config->project->dtable->testtask->fieldList['actions']['menu']     = array('cases', 'linkCase', 'report', 'view', 'edit', 'delete');
+$config->project->dtable->testtask->fieldList['actions']['menu']     = array('cases', 'linkCase', 'report', 'edit', 'delete');

@@ -14,8 +14,16 @@ class testtaskZen extends testtask
      */
     protected function setMenu(int $productID, int $branch, int $projectID, int $executionID)
     {
-        if($this->app->tab == 'project') return $this->loadModel('project')->setMenu($projectID);
-        if($this->app->tab == 'execution') return $this->loadModel('execution')->setMenu($executionID);
+        if($this->app->tab == 'project')
+        {
+            $this->view->projectID = $this->loadModel('project')->setMenu($projectID);
+            return $this->view->projectID;
+        }
+        if($this->app->tab == 'execution')
+        {
+            $this->view->executionID = $this->loadModel('execution')->setMenu($executionID);
+            return $this->view->executionID;
+        }
         return $this->loadModel('qa')->setMenu($productID, $branch);
     }
 

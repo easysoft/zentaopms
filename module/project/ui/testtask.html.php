@@ -36,9 +36,7 @@ toolbar
     ) : null
 );
 
-unset($config->testtask->dtable->fieldList['product']);
-unset($config->testtask->dtable->fieldList['execution']);
-
+$config->project->dtable->testtask->fieldList['actions']['list']['report']['url']['params'] = "objectID={project}&objectType=project&extra={id}";
 $tasks   = initTableData($tasks, $config->project->dtable->testtask->fieldList);
 $summary = sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount);
 dtable

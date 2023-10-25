@@ -876,6 +876,8 @@ class project extends control
      */
     public function testtask(int $projectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $this->session->set('testtaskList', $this->app->getURI(true), 'project');
+
         $this->project->setMenu($projectID);
 
         /* Load pager. */

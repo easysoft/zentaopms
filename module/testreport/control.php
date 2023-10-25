@@ -260,12 +260,13 @@ class testreport extends control
         $this->session->project = $report->project;
 
         /* Check object type. */
-        if($this->app->tab == 'qa' && !empty($oldReport->product)) $objectType = 'product';
+        if($this->app->tab == 'qa' && !empty($report->product)) $objectType = 'product';
         if($this->app->tab == 'execution' || $this->app->tab == 'project') $objectType = $this->app->tab;
+
         if(isset($objectType))
         {
-            $objectID = $this->testreportZen->commonAction($oldReport->{$objectType}, $objectType);
-            if($objectID != $oldReport->{$objectType}) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'load' => array('alter' => $this->lang->error->accessDenied, 'back' => true))); ;
+            $objectID = $this->testreportZen->commonAction($report->{$objectType}, $objectType);
+            if($objectID != $report->{$objectType}) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'load' => array('alter' => $this->lang->error->accessDenied, 'back' => true))); ;
         }
 
         /* Get report data. */
