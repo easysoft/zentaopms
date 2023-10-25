@@ -13,8 +13,8 @@ title=测试companyModel->getCompanyUserPairsTest();
 cid=1
 pid=1
 
-公司用户键值组合 >> 易软天创网络科技有限公司/研发主管1
-公司用户键值数量统计 >> 1000
+公司用户键值组合 >> 易软天创网络科技有限公司/admin
+公司用户键值数量统计 >> 100
 
 */
 

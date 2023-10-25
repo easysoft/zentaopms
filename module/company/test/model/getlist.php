@@ -11,8 +11,8 @@ title=测试companyModel->getListTest();
 cid=1
 pid=1
 
-公司信息列表查询 >> 易软天创网络科技有限公司,,admin,
-公司信息统计 >> 2
+公司信息列表查询 >> 易软天创网络科技有限公司,|,admin,
+公司信息统计 >> 1
 
 */
 
