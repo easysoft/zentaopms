@@ -663,5 +663,5 @@ $config->hasDropmenuApps      = array('program', 'project', 'product', 'executio
 $config->hasBranchMenuModules = array('product', 'story', 'release', 'bug', 'testcase', 'testtask');
 $config->excludeDropmenuList  = array('program-browse', 'program-productview', 'product-all', 'product-index', 'execution-all', 'project-browse', 'project-batchedit', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create', 'execution-batchedit');
 $config->hasSwitcherModules   = array('design');
-$config->hasSwitcherMethods   = array('project-bug', 'project-testcase');
+$config->hasSwitcherMethods   = array('project-bug', 'project-testcase', 'execution-bug');
 $config->excludeSwitcherList  = array();

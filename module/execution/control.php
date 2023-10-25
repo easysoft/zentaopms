@@ -518,9 +518,11 @@ class execution extends control
         $bugs = $this->bug->processBuildForBugs($bugs);
         $this->executionZen->assignBugVars($execution, $project, $productID, $branch, $products, $orderBy, $type, $param, $build, $bugs, $pager);
 
-        $this->view->showBranch    = $showBranch;
-        $this->view->productOption = $productOption;
-        $this->view->branchOption  = $branchOption;
+        $this->view->showBranch     = $showBranch;
+        $this->view->productOption  = $productOption;
+        $this->view->branchOption   = $branchOption;
+        $this->view->switcherParams = "executionID={$executionID}&productID={$productID}&currentMethod=bug";
+        $this->view->switcherText   = isset($products[$productID]) ? $products[$productID]->name : $this->lang->product->all;
         $this->display();
     }
 
@@ -3099,6 +3101,23 @@ class execution extends control
         $this->view->end       = helper::safe64Encode(urlencode($end));
         $this->view->chartData = $chartData;
 
+        $this->display();
+    }
+
+    /**
+     * Ajax get product drop menu.
+     *
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function ajaxSwitcherMenu(int $executionID, int $productID, string $currentMethod = '')
+    {
+        $this->view->link        = helper::createLink('execution', $currentMethod, "executionID=$executionID&productID={id}");
+        $this->view->productID   = $productID;
+        $this->view->products    = $this->loadModel('product')->getProducts($executionID);
+        $this->view->executionID = $executionID;
         $this->display();
     }
 }
