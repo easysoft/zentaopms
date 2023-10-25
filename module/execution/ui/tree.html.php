@@ -14,6 +14,7 @@ namespace zin;
 featureBar
 (
     set::current('all'),
+    set::linkParams("executionID={$execution->id}&status={key}"),
     checkbox
     (
         set::rootClass('ml-2'),
