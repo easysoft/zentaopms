@@ -258,7 +258,7 @@ class bugTao extends bugModel
 
         /* 如果搜索项目下的 bug 列表，在 bug 的查询中加上产品的限制。*/
         /* If search bug under project, append product condition in bug query. */
-        if($object == 'project') return $this->appendProductConditionForProject($bugQuery, $productIdList, $branch);
+        if($object == 'project' || $object == 'execution') return $this->appendProductConditionForProject($bugQuery, $productIdList, $branch);
 
         return $this->appendProductConditionForBug($bugQuery, (array)$productIdList, (string)$branch);
     }
