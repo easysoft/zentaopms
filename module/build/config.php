@@ -35,9 +35,10 @@ $config->build->actionList['linkStory']['url']  = helper::createLink('build', 'v
 $config->build->actionList['linkProjectStory'] = $config->build->actionList['linkStory'];
 $config->build->actionList['linkProjectStory']['url'] = helper::createLink('projectbuild', 'view', 'buildID={id}&type=story&link=true');
 
-$config->build->actionList['createTest']['icon'] = 'bullhorn';
-$config->build->actionList['createTest']['hint'] = $lang->build->createTest;
-$config->build->actionList['createTest']['url']  = helper::createLink('testtask', 'create', 'product={product}&execution={execution}&build={id}&projectID={project}');
+$config->build->actionList['createTest']['icon']     = 'bullhorn';
+$config->build->actionList['createTest']['hint']     = $lang->build->createTest;
+$config->build->actionList['createTest']['url']      = helper::createLink('testtask', 'create', 'product={product}&execution={execution}&build={id}&projectID={project}');
+$config->build->actionList['createTest']['data-app'] = $app->tab;
 
 $config->build->actionList['viewBug']['icon'] = 'bug';
 $config->build->actionList['viewBug']['hint'] = $lang->build->viewBug;

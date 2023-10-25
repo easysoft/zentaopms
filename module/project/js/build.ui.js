@@ -52,9 +52,9 @@ window.renderCell = function(result, {col, row})
  * @access public
  * @return void
  */
-window.changeProduct = function()
+window.changeProduct = function(e)
 {
-    const link = changeProductLink.replace('{productID}', $(this).val());
+    const link = changeProductLink.replace('{productID}', $(e.target).val());
     loadPage(link);
 }
 

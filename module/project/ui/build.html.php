@@ -14,8 +14,8 @@ $changeProductBox = '';
 if($project->hasProduct)
 {
     $changeProductBox = div(
-        set::className('select-product-box'),
-        select
+        setClass('select-product-box mx-2'),
+        picker
         (
             set::name('product'),
             set::value($productID),
@@ -43,9 +43,7 @@ toolbar
     !empty($createItem) ? item(set($createItem)) : null,
 );
 
-jsVar('orderBy', $orderBy);
 jsVar('projectID', $project->id);
-jsVar('sortLink', helper::createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type={$type}&param={$param}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('changeProductLink', helper::createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type=product&param={productID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('scmPathTip', $lang->build->scmPath);
 jsVar('filePathTip', $lang->build->filePath);
@@ -57,7 +55,8 @@ dtable
     set::cols($config->build->dtable->fieldList),
     set::data($builds),
     set::plugins(array('cellspan')),
-    set::sortLink(jsRaw('createSortLink')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::getCellSpan(jsRaw('window.getCellSpan')),
     set::footPager(
