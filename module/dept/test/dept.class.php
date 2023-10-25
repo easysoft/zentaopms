@@ -338,7 +338,7 @@ class deptTest
     {
         global $tester;
 
-        $this->objectModel->delete($deptID);
+        $this->objectModel->deleteDept($deptID);
 
         $objects = $tester->dao->select('*')->from(TABLE_DEPT)->fetchAll();
 
