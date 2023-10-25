@@ -14,3 +14,5 @@
 .history-list.sort-reverse > li:last-child::before {display: block;}
 .history-list > li:last-child::before {display: none;}
 .history-list.sort-reverse > li:first-child::before {display: none;}
+.history-changes blockquote { padding: 5px 5px 5px 10px; margin: 5px 0 0; font-size: 12px; background-color: rgba(0,0,0,.05); border-left: 3px solid #eee; }
+.history-changes blockquote.original {display: none;}
