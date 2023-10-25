@@ -6,6 +6,7 @@ su('admin');
 
 zdTable('project')->gen(20);
 zdTable('project')->config('execution')->gen(50);
+zdTable('product')->gen(30);
 
 /**
 
