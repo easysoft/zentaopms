@@ -12,8 +12,8 @@ namespace zin;
 
 formPanel
 (
-    set::target('_self'),
     set::title($lang->release->export),
+    set::ajax(array('closeModal' => true)),
     formGroup
     (
         set::label($lang->release->fileName),

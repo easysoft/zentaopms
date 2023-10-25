@@ -309,7 +309,7 @@ class release extends control
         {
             $type     = $this->post->type;
             $fileName = $this->post->fileName;
-            if(empty($fileName)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->release->fileName));
+            if(empty($fileName)) return $this->sendError(array('fileName' => sprintf($this->lang->error->notempty, $this->lang->release->fileName)));
 
             $html = '';
             if($type == 'story' or $type == 'all')   $html .= $this->releaseZen->buildStoryDataForExport();
