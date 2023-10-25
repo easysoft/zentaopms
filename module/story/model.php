@@ -2297,7 +2297,7 @@ class storyModel extends model
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
             ->beginIF(strpos($sql, 'result') !== false)->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story and t1.version = t3.version')->fi()
             ->where($sql)
-            ->beginIF($productID != 'all' and $productID != '')->andWhere('t1.`product`')->eq((int)$productID)->fi()
+            ->beginIF($productID != 'all' && $productID != '' && $productID != 0)->andWhere('t1.`product`')->eq((int)$productID)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.type')->eq($type)
