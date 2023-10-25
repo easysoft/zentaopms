@@ -371,7 +371,7 @@ class projectTao extends projectModel
         $product->name           = $project->hasProduct && !empty($postData->rawdata->productName) ? $postData->rawdata->productName : zget($project, 'name', '');
         $product->shadow         = zget($project, 'vision', 'rnd') == 'rnd' ? (int)empty($project->hasProduct) : 1;
         $product->bind           = $postData->rawdata->parent ? 0 : 1;
-        $product->program        = $project->parent ? current(array_filter(explode(',', $program->path))) : 0;
+        $product->program        = $project->parent ? current(array_filter(explode(',', zget($program, 'path', '')))) : 0;
         $product->acl            = $project->acl == 'open' ? 'open' : 'private';
         $product->PO             = $project->PM;
         $product->QD             = '';

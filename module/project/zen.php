@@ -128,7 +128,7 @@ class projectZen extends project
     {
         $linkedProductsCount = $this->project->getLinkedProductsCount($project, $rawdata);
 
-        if($rawdata->products)
+        if(!empty($rawdata->products))
         {
             $topProgramID     = (int)$this->loadModel('program')->getTopByID($project->parent);
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs($topProgramID);
