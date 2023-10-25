@@ -10,11 +10,13 @@ title=测试 deptModel->createMemberLink();
 cid=1
 pid=1
 
- >> >开发部<
+获取创建的用户链接 >> 1
 
 */
 
 $deptID = '2';
 
 $dept = new deptTest();
-r($dept->createMemberLinkTest($deptID)) && p() && e('>开发部<');
+$result = $dept->createMemberLinkTest($deptID);
+$expect = 'creatememberlink.php?m=company&f=browse&browseType=inside&dept=2';
+r(strpos($result, $expect) !== false) && p() && e('1');  //获取创建的用户链接
