@@ -37,7 +37,7 @@ $lang->repo->target          = '对比';
 $lang->repo->descPlaceholder = '一句话描述';
 
 $lang->repo->browseAction    = '浏览代码库';
-$lang->repo->createAction    = '添加代码库';
+$lang->repo->createAction    = '关联代码库';
 $lang->repo->editAction      = '编辑代码库';
 $lang->repo->diffAction      = '代码对比';
 $lang->repo->downloadAction  = '下载代码库文件';
@@ -56,7 +56,7 @@ $lang->repo->import          = '导入';
 $lang->repo->importName      = '导入后的名称';
 $lang->repo->importServer    = '请选择服务器';
 $lang->repo->gitlabList      = 'Gitlab代码库';
-$lang->repo->batchCreate     = '批量添加代码库';
+$lang->repo->batchCreate     = '批量关联代码库';
 
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';

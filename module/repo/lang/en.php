@@ -37,7 +37,7 @@ $lang->repo->target          = 'Contrast';
 $lang->repo->descPlaceholder = 'One sentence description';
 
 $lang->repo->browseAction    = 'Browse Repo';
-$lang->repo->createAction    = 'Create Repo';
+$lang->repo->createAction    = 'Link Repo';
 $lang->repo->editAction      = 'Edit Repo';
 $lang->repo->diffAction      = 'Compare Code';
 $lang->repo->downloadAction  = 'Download File';
@@ -56,7 +56,7 @@ $lang->repo->import          = 'Import';
 $lang->repo->importName      = 'Name after import';
 $lang->repo->importServer    = 'Please select a server';
 $lang->repo->gitlabList      = 'Gitlab Repo';
-$lang->repo->batchCreate     = 'Batch create repo';
+$lang->repo->batchCreate     = 'Batch link repo';
 
 $lang->repo->submit     = 'Submit';
 $lang->repo->cancel     = 'Cancel';
