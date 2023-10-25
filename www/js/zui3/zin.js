@@ -341,7 +341,7 @@
             success(data)
             {
                 const response = this.response;
-                if(response && response.redirected && currentCode !== $.apps.getAppCode(response.url))
+                if(isInAppTab && response && response.redirected && currentCode !== $.apps.getAppCode(response.url))
                 {
                     $.apps.openApp(response.url, response.url.includes('#app=') ? null : currentCode);
                     return;
@@ -369,7 +369,7 @@
                 }
                 if(Array.isArray(data))
                 {
-                    if(!options.partial && !hasFatal) currentAppUrl = url;
+                    if(!options.partial && !hasFatal) currentAppUrl = (response && response.url) ? response.url : url;
                     data.forEach((item, idx) => item.selector = selectors[idx]);
                     updatePerfInfo(options, 'renderBegin');
                     renderPage(data, options);
