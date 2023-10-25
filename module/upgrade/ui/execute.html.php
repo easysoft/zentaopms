@@ -49,7 +49,7 @@ div
                 $result == 'sqlFail' ? $lang->upgrade->afterExec : $lang->upgrade->afterDeleted,
                 btn
                 (
-                    on::click('loadCurrentPage'),
+                    on::click('location.reload();'),
                     $lang->refresh
                 )
             ) : null
