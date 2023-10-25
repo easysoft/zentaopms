@@ -13,6 +13,9 @@ namespace zin;
 jsVar('orderBy',  $orderBy);
 jsVar('sortLink', $sortLink);
 
+h::importCss($app->getWebRoot() . 'js/xterm/xterm.css');
+h::importJs($app->getWebRoot() . 'js/xterm/xterm.js');
+
 $statusMap  = array();
 $canInstall = hasPriv('instance', 'manage');
 
@@ -28,16 +31,19 @@ featureBar
     set::linkParams("spaceID=&browseType={key}"),
 );
 
+$solutionID = 1;
+$app->loadLang('solution');
 toolBar
 (
     $config->inQuickon && $solutionID && hasPriv('install', 'progress') ? item(set(array
     (
-        'text'        => $lang->solution->progress,
-        'icon'        => 'spinner-indicator',
-        'class'       => 'btn ghost',
-        'url'         => createLink('install', 'progress', "solutionID=$solutionID&install=true", '', true),
-        'data-size'   => 800,
-        'data-toggle' => 'modal',
+        'text'            => $lang->solution->progress,
+        'icon'            => 'spinner-indicator',
+        'class'           => 'ghost',
+        'url'             => createLink('install', 'progress', "solutionID=$solutionID&install=true"),
+        'data-size'       => 'md',
+        'data-class-name' => 'install-progress',
+        'data-toggle'     => 'modal',
     ))) : null,
     $config->inQuickon && $canInstall ? item(set(array
     (
@@ -66,6 +72,3 @@ dtable
 );
 
 a(setStyle('display', 'none'), setID('editLinkContainer'), setData('toggle', 'modal'));
-
-render();
-
