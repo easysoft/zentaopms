@@ -798,11 +798,14 @@ class searchModel extends model
         if(empty($results)) return $results;
 
         /* Reset pager total and get this page data. */
-        $pager->setRecTotal(count($results));
-        $pager->setPageTotal();
-        $pager->setPageID($pager->pageID);
-        $results = array_chunk($results, $pager->recPerPage, true);
-        $results = $results[$pager->pageID - 1];
+        if($pager)
+        {
+            $pager->setRecTotal(count($results));
+            $pager->setPageTotal();
+            $pager->setPageID($pager->pageID);
+            $results = array_chunk($results, $pager->recPerPage, true);
+            $results = $results[$pager->pageID - 1];
+        }
 
         $idListGroup = array();
         foreach($results as $record)
