@@ -96,16 +96,12 @@ window.changeProjectType = function()
     {
         $('[name=projectAcl]').attr('disabled', 'disabled');
         $('[name=programAcl]').removeAttr('disabled');
-        $(".projectName input").attr('disabled' ,'disabled');
-        $(".projectName .picker-field").zui('picker').render({disabled: true});
     }
 
     if(projectType == 'execution')
     {
         $('[name=programAcl]').attr('disabled', 'disabled');
         $('[name=projectAcl]').removeAttr('disabled');
-        $(".projectName input").removeAttr('disabled');
-        $(".projectName .picker-field").zui('picker').render({disabled: false});
     }
 }
 
@@ -187,7 +183,7 @@ window.clickSubmit = function()
         var checkedProductCount = $("input[name^='products']:checked").length;
         if(checkedProductCount <= 0)
         {
-            alert(errorNoProduct);
+            zui.Modal.alert(errorNoProduct);
             return false;
         }
     }
@@ -196,7 +192,7 @@ window.clickSubmit = function()
         var checkedProductCount = $("input[name^='products']:checked").length;
         if(checkedProductCount <= 0)
         {
-            alert(errorNoProduct);
+            zui.Modal.alert(errorNoProduct);
             return false;
         }
 
@@ -212,7 +208,7 @@ window.clickSubmit = function()
 
         if(executionCount !== 0 && checkedExecutionCount === 0)
         {
-            alert(errorNoExecution);
+            zui.Modal.alert(errorNoExecution);
             return false;
         }
     }
@@ -221,7 +217,7 @@ window.clickSubmit = function()
         var checkedExecutionCount = $("input[name^='sprints']:checked").length;
         if(checkedExecutionCount === 0)
         {
-            alert(errorNoExecution);
+            zui.Modal.alert(errorNoExecution);
             return false;
         }
     }
