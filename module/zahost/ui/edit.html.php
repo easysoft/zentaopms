@@ -15,7 +15,7 @@ formPanel
     to::heading(div
     (
         setClass('panel-title text-lg'),
-        $lang->zahost->create,
+        $lang->zahost->editAction,
         icon
         (
             'help',

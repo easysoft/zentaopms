@@ -608,7 +608,7 @@ class zahostModel extends model
     public static function isClickable(object $host, string $action): bool
     {
         if($action == 'browseImage') return $host->status != 'wait';
-        if($action == 'delete') return $host->canDelete;
+//        if($action == 'delete') return $host->canDelete;
 
         return true;
     }

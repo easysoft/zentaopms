@@ -59,3 +59,6 @@ $config->zahost->automation->kvmURL        = 'https://www.linux-kvm.org/page/Doc
 $config->zahost->automation->nginxURL      = 'http://nginx.org/en/docs/';
 $config->zahost->automation->novncURL      = 'https://novnc.com/info.html';
 $config->zahost->automation->websockifyURL = 'https://github.com/novnc/websockify';
+
+$config->zahost->view = new stdclass();
+$config->zahost->view->operateList = array('browseImage', 'edit', 'delete');

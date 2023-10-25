@@ -109,7 +109,7 @@
         <div class="detail-content article-content load-indicator" id='serviceContent'>
           <div class="main-row">
             <div id="statusContainer">
-              
+
             </div>
             <div class='result'>
               <?php $imageLink  = html::a($this->createLink('zahost', 'browseImage', "hostID=$zahost->id", '', true), $lang->zahost->image->downloadImage, '', "class='iframe'");?>

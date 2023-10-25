@@ -41,15 +41,18 @@ $config->zahost->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->zahost->dtable->fieldList['actions']['type']  = 'actions';
 $config->zahost->dtable->fieldList['actions']['menu']  = array('browseImage', 'edit', 'delete');
 
-$config->zahost->dtable->fieldList['actions']['list']['browseImage']['icon'] = 'mirror';
-$config->zahost->dtable->fieldList['actions']['list']['browseImage']['hint'] = $lang->zahost->image->browseImage;
-$config->zahost->dtable->fieldList['actions']['list']['browseImage']['className'] = 'browseImage';
+$config->zahost->dtable->fieldList['actions']['list']['browseImage']['icon']        = 'mirror';
+$config->zahost->dtable->fieldList['actions']['list']['browseImage']['hint']        = $lang->zahost->image->browseImage;
+$config->zahost->dtable->fieldList['actions']['list']['browseImage']['text']        = $lang->zahost->image->browseImage;
+$config->zahost->dtable->fieldList['actions']['list']['browseImage']['className']   = 'browseImage';
+$config->zahost->dtable->fieldList['actions']['list']['browseImage']['data-toggle'] = 'modal';
+$config->zahost->dtable->fieldList['actions']['list']['browseImage']['url']         = helper::createLink('zahost', 'browseImage', 'hostID={hostID}');
 
 $config->zahost->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->zahost->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->zahost->edit;
-$config->zahost->dtable->fieldList['actions']['list']['edit']['url']  = array('module' => 'zahost', 'method' => 'edit', 'params' => 'hostID={hostID}');
+$config->zahost->dtable->fieldList['actions']['list']['edit']['url']  = helper::createLink('zahost', 'edit', 'hostID={hostID}');
 
 $config->zahost->dtable->fieldList['actions']['list']['delete']['icon']      = 'trash';
 $config->zahost->dtable->fieldList['actions']['list']['delete']['hint']      = $lang->zahost->delete;
-$config->zahost->dtable->fieldList['actions']['list']['delete']['url']       = array('module' => 'zahost', 'method' => 'delete', 'params' => 'hostID={hostID}');
+$config->zahost->dtable->fieldList['actions']['list']['delete']['url']       = helper::createLink('zahost', 'delete', 'hostID={hostID}');
 $config->zahost->dtable->fieldList['actions']['list']['delete']['className'] = 'ajax-submit';
