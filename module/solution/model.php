@@ -529,4 +529,18 @@ class solutionModel extends model
 
         file_put_contents($errorFile, $message . "\n", FILE_APPEND);
     }
+
+    /**
+     * Get last solution.
+     *
+     * @access public
+     * @return object
+     */
+    public function getLastSolution()
+    {
+        return $this->dao->select('*')->from(TABLE_SOLUTION)
+            ->where('deleted')->eq(0)
+            ->orderBy('id_desc')
+            ->fetch();
+    }
 }
