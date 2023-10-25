@@ -160,6 +160,8 @@ $config->testsuite->linkcase->dtable->fieldList['pri']    = $config->testcase->d
 $config->testsuite->linkcase->dtable->fieldList['type']   = $config->testcase->dtable->fieldList['type'];
 $config->testsuite->linkcase->dtable->fieldList['status'] = $config->testcase->dtable->fieldList['status'];
 
+$config->testsuite->linkcase->dtable->fieldList['id']['name'] = 'id';
+
 $config->testsuite->linkcase->dtable->fieldList['version']['name']  = 'version';
 $config->testsuite->linkcase->dtable->fieldList['version']['title'] = $lang->testsuite->linkVersion;
 $config->testsuite->linkcase->dtable->fieldList['version']['type']  = 'text';
