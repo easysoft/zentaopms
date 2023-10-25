@@ -990,7 +990,32 @@
         });
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk});
+    function waitDom(selector, func, times, interval)
+    {
+        var _times    = times || 100;   //100次
+        var _interval = interval || 50; //50毫秒每次
+        var _self     = $(selector);
+        var _iIntervalID;
+        if(_self.length)
+        {
+            func && func.call(_self);
+            return;
+        }
+
+        _iIntervalID = setInterval(function()
+        {
+            if(!_times) clearInterval(_iIntervalID);
+            _times <= 0 || _times--;
+            _self = $(selector);
+            if(_self.length)
+            {
+                func && func.call(_self);
+                clearInterval(_iIntervalID);
+            }
+        }, _interval);
+    }
+
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk, waitDom: waitDom});
     $.extend($.apps, {openUrl: openUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 
