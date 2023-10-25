@@ -44,7 +44,6 @@ div
         (
             set::actions(''),
             set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
-            set::target('_self'),
             div
             (
                 div
