@@ -204,6 +204,10 @@ $lang->group->versions['1_1']         = 'ZenTao1.1';
 $lang->group->versions['1_0_1']       = 'ZenTao1.0.1';
 
 $lang->group->package = new stdclass();
+$lang->group->package->browse                = 'Browse';
+$lang->group->package->manage                = 'Manage';
+$lang->group->package->delete                = 'Delete';
+$lang->group->package->other                 = 'Other';
 $lang->group->package->browseTodo            = 'Browse Todo';
 $lang->group->package->manageTodo            = 'Manage Todo';
 $lang->group->package->deleteTodo            = 'Delete Todo';
@@ -583,6 +587,5 @@ $lang->group->package->deleteArtifactrepo    = 'Delete Artifact Repo';
 $lang->group->package->browseApplication     = 'Application List';
 $lang->group->package->mangeApplication      = 'Manage Application';
 $lang->group->package->trainPracticeLib      = 'Practice Library';
-$lang->group->package->other                 = 'Other';
 
 include (dirname(__FILE__) . '/resource.php');

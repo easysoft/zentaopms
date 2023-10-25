@@ -204,6 +204,10 @@ $lang->group->versions['1_1']         = '禅道1.1';
 $lang->group->versions['1_0_1']       = '禅道1.0.1';
 
 $lang->group->package = new stdclass();
+$lang->group->package->browse                = '浏览';
+$lang->group->package->manage                = '创建维护';
+$lang->group->package->delete                = '删除';
+$lang->group->package->other                 = '其他';
 $lang->group->package->browseTodo            = '浏览待办';
 $lang->group->package->manageTodo            = '创建维护待办';
 $lang->group->package->deleteTodo            = '删除待办';
@@ -583,6 +587,5 @@ $lang->group->package->deleteArtifactrepo    = '删除制品库';
 $lang->group->package->browseApplication     = '浏览应用';
 $lang->group->package->mangeApplication      = '管理应用';
 $lang->group->package->trainPracticeLib      = '实践库';
-$lang->group->package->other                 = '其他';
 
 include (dirname(__FILE__) . '/resource.php');
