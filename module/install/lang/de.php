@@ -367,3 +367,12 @@ $lang->install->meshiot->desc = <<<EOD
   <li>Battery Available: no changes required to any equipment on your site</li>
 </ul>
 EOD;
+
+$lang->install->solution = new stdclass();
+$lang->install->solution->skip        = 'Skip';
+$lang->install->solution->skipInstall = 'Skip';
+$lang->install->solution->log         = 'Log';
+$lang->install->solution->title       = 'DevOps platform application settings';
+$lang->install->solution->progress    = 'Installing of DevOps platform';
+$lang->install->solution->desc        = 'Welcome to the DevOps platform. We will install the following applications simultaneously when you install the platform to help you get started quickly!';
+$lang->install->solution->overMemory  = 'Insufficient memory prevents simultaneous installation. It is recommended to install applications manually after the platform is started.';

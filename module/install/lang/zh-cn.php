@@ -367,3 +367,12 @@ $lang->install->meshiot->desc = <<<EOD
   <li>可配电池，对既有场地无任何要求</li>
 </ul>
 EOD;
+
+$lang->install->solution = new stdclass();
+$lang->install->solution->skip        = '跳过';
+$lang->install->solution->skipInstall = '暂不安装';
+$lang->install->solution->log         = '安装日志';
+$lang->install->solution->title       = 'DevOps平台应用设置';
+$lang->install->solution->progress    = 'DevOps平台应用安装';
+$lang->install->solution->desc        = '欢迎使用DevOps平台，我们将在您安装平台时同步安装以下应用，帮助您快速上手!';
+$lang->install->solution->overMemory  = '内存不足，无法同时安装，建议平台启动后手动安装应用。';
