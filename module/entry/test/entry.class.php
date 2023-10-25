@@ -132,15 +132,15 @@ class entryTest
         {
             if(in_array($field, array_keys($params)))
             {
-                $_POST[$field] = $params[$field];
+                $object->$field = $params[$field];
             }
             else
             {
-                $_POST[$field] = $value;
+                $object->$field = $value;
             }
         }
 
-        $change = $this->objectModel->update($entryID);
+        $change = $this->objectModel->update($entryID, $object);
         if($change == array()) $change = '没有数据更新';
         unset($_POST);
 
