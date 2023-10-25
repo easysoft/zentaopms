@@ -1782,35 +1782,26 @@ class groupModel extends model
                 /* If version is selected, only show privs before the version. */
                 if(!empty($version) and strpos($versionPrivs, ",$privCode,") === false) continue;
 
-                /* Remove privs unused in the edition. */
-                if(!isset($this->lang->resource->$moduleName) || !isset($this->lang->resource->$moduleName->$methodName)) continue;
-                $methodLang = $this->lang->resource->$moduleName->$methodName;
-                if(!isset($this->lang->$moduleName->$methodLang))
+                /* Add methods in workflow menus, remove privs unused in the edition. */
+                if(isset($this->lang->$moduleName->menus) && isset($this->lang->$moduleName->menus[$methodName]))
                 {
-                    $this->app->loadLang($moduleName);
-                    if($moduleName == 'requirement') $this->app->loadLang('story');
+                    $privName = $this->lang->group->package->browse . '(' . $this->lang->$moduleName->menus[$methodName] . ')';
                 }
-                $priv = (object)array('subset' => $packageData->subset, 'package' => $packageCode, 'module' => $moduleName, 'method' => $methodName, 'selected' => false, 'name' => $this->lang->$moduleName->$methodLang);
+                else
+                {
+                    if(!isset($this->lang->resource->$moduleName) || !isset($this->lang->resource->$moduleName->$methodName)) continue;
+                    $methodLang = $this->lang->resource->$moduleName->$methodName;
+                    if(!isset($this->lang->$moduleName->$methodLang))
+                    {
+                        $this->app->loadLang($moduleName);
+                        if($moduleName == 'requirement') $this->app->loadLang('story');
+                    }
+                    $privName = $this->lang->$moduleName->$methodLang;
+                }
+
+                $priv = (object)array('subset' => $packageData->subset, 'package' => $packageCode, 'module' => $moduleName, 'method' => $methodName, 'selected' => false, 'name' => $privName);
 
                 $privList[$privCode] = $priv;
-            }
-        }
-
-        if($version) return $privList;
-
-        /* Privs in resource but not in package. */
-        foreach($this->lang->resource as $module => $methodList)
-        {
-            foreach($methodList as $method => $methodLang)
-            {
-                if(isset($allPrivs["$module-$method"])) continue;
-
-                if(!$this->checkNavModule($nav, $module)) continue;
-
-                if(!isset($this->lang->$module->$methodLang)) $this->app->loadLang($module);
-                $priv = (object)array('subset' => $module, 'package' => 'other', 'module' => $module, 'method' => $method, 'selected' => false, 'name' => $this->lang->$module->$methodLang);
-
-                $privList["$module-$method"] = $priv;
             }
         }
 
@@ -2468,7 +2459,7 @@ class groupModel extends model
                     if ($relatedPriv1['order'] > $relatedPriv2['order'])
                     {
                         return 1;
-                    } 
+                    }
                     elseif ($relatedPriv1['order'] < $relatedPriv2['order'])
                     {
                         return -1;
@@ -2533,7 +2524,21 @@ class groupModel extends model
                 list($moduleName, $methodName) = explode('-', $privCode);
 
                 /* Remove privs unused in the edition. */
-                if(!isset($this->lang->resource->$moduleName) || !isset($this->lang->resource->$moduleName->$methodName)) continue;
+                if(isset($this->lang->$moduleName->menus) && isset($this->lang->$moduleName->menus[$methodName]))
+                {
+                    $privName = $this->lang->$moduleName->menus[$methodName];
+                }
+                else
+                {
+                    if(!isset($this->lang->resource->$moduleName) || !isset($this->lang->resource->$moduleName->$methodName)) continue;
+                    $methodLang = $this->lang->resource->$moduleName->$methodName;
+                    if(!isset($this->lang->$moduleName->$methodLang))
+                    {
+                        $this->app->loadLang($moduleName);
+                        if($moduleName == 'requirement') $this->app->loadLang('story');
+                    }
+                    $privName = $this->lang->$moduleName->$methodLang;
+                }
 
                 $allPrivs[$privCode] = $privCode;
 
@@ -2542,28 +2547,7 @@ class groupModel extends model
 
                 if($selectedPackages && strpos($selectedPackages, ",$packageCode,") === false) continue;
 
-                $methodLang = $this->lang->resource->$moduleName->$methodName;
-                if(!isset($this->lang->$moduleName->$methodLang)) $this->app->loadLang($moduleName);
-
-                $privs[$privCode] = $this->lang->$moduleName->$methodLang;
-            }
-        }
-
-        if(empty($selectedPackages) || strpos($selectedPackages, ',other,') !== false)
-        {
-            /* Privs in resource but not in package. */
-            $this->sortResource();
-            foreach($this->lang->resource as $module => $methodList)
-            {
-                foreach($methodList as $method => $methodLang)
-                {
-                    if($module != $selectedSubset) continue;
-
-                    if(isset($allPrivs["$module-$method"])) continue;
-
-                    if(!isset($this->lang->$module->$methodLang)) $this->app->loadLang($module);
-                    $privs["$module-$method"] = $this->lang->$module->$methodLang;
-                }
+                $privs[$privCode] = $privName;
             }
         }
 
