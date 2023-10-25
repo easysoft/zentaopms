@@ -37,7 +37,6 @@ ALTER TABLE `zt_doclib` CHANGE `project` `execution` mediumint(8) unsigned NOT N
 ALTER TABLE `zt_task` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_testreport` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_testtask` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
-ALTER TABLE `zt_webhook` CHANGE `projects` `executions` text NOT NULL;
 
 ALTER TABLE `zt_action` ADD `project` mediumint(8) unsigned NOT NULL AFTER `product`;
 ALTER TABLE `zt_task` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
@@ -65,7 +64,6 @@ ALTER TABLE `zt_userview` ADD `programs` mediumtext NOT NULL AFTER `account`;
 ALTER TABLE `zt_userview` ADD `projects` mediumtext NOT NULL AFTER `programs`;
 
 ALTER TABLE `zt_user` ADD `company` mediumint unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_user` ADD `type` char(30) NOT NULL default 'inside' AFTER `account`;
 ALTER TABLE `zt_user` ADD `nature` text NOT NULL AFTER `zipcode`;
 ALTER TABLE `zt_user` ADD `analysis` text NOT NULL AFTER `nature`;
 ALTER TABLE `zt_user` ADD `strategy` text NOT NULL AFTER `analysis`;
@@ -137,8 +135,6 @@ ALTER TABLE `zt_task` ADD `designVersion` smallint(6) unsigned NOT NULL AFTER `s
 
 ALTER TABLE `zt_burn` ADD `storyPoint` float NOT NULL AFTER `consumed`;
 ALTER TABLE `zt_burn` ADD `product` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `execution`;
-
-ALTER TABLE `zt_projectcase` ADD `count` mediumint(8) unsigned NOT NULL DEFAULT '1' AFTER `case`;
 
 -- DROP TABLE IF EXISTS `zt_taskspec`;
 CREATE TABLE IF NOT EXISTS `zt_taskspec` (
@@ -353,6 +349,9 @@ update zt_action set objectType='execution' where objectType='project';
 update zt_file set objectType='execution' where objectType='project';
 
 ALTER TABLE `zt_todo` ADD `deleted` ENUM( "0", "1" ) NOT NULL DEFAULT '0';
+
+ALTER TABLE `zt_project` ADD `storyConcept` smallint(5) unsigned NOT NULL AFTER `days`;
+ALTER TABLE `zt_product` ADD `storyConcept` smallint(5) NOT NULL AFTER `RD`;
 
 TRUNCATE `zt_block`;
 DELETE FROM `zt_config` WHERE `key` = 'blockInited';
