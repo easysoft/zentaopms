@@ -125,7 +125,7 @@ function loadArtifactrepo(event)
 {
     const productID = $(event.target).val();
 
-    var data = Object.values(productArtifactRepos[productID]);
+    var data = Object.values(artifactRepos[productID]);
     if(data.length > 0)
     {
         $('.artifactrepo').removeClass('hidden');
@@ -155,14 +155,14 @@ function onShowArtifactRepo()
     {
         var productID = $('[name=product]').val();
 
-        var data = Object.values(productArtifactRepos[productID]);
+        var data = Object.values(artifactRepos[productID]);
         if(data.length > 0)
         {
             $('.artifactrepo-id').removeClass('hidden');
             var items = [];
-            for(i in productArtifactRepos[productID])
+            for(i in artifactRepos[productID])
             {
-                items.push({'text': productArtifactRepos[productID][i].name, 'value': productArtifactRepos[productID][i].id});
+                items.push({'text': artifactRepos[productID][i].name, 'value': artifactRepos[productID][i].id});
             }
             $artifactRepo = $('#artifactRepoID').zui('picker');
             $artifactRepo.render({items: items});
@@ -192,7 +192,7 @@ function onChangeArtifactRepo(event)
     const datePicker = $('#date').datePicker().zui();
 
     var productID  = $('[name=product]').val();
-    var data       = Object.values(productArtifactRepos[productID]);
+    var data       = Object.values(artifactRepos[productID]);
     if(data.length == 0 || !repoID)
     {
         $('#filePath').val('');
@@ -200,12 +200,12 @@ function onChangeArtifactRepo(event)
         return;
     }
 
-    for(i in productArtifactRepos[productID])
+    for(i in artifactRepos[productID])
     {
-        if(productArtifactRepos[productID][i].id == repoID)
+        if(artifactRepos[productID][i].id == repoID)
         {
-            $('#filePath').val(productArtifactRepos[productID][i].url);
-            datePicker.$.setValue(productArtifactRepos[productID][i].createdDate.substr(0, 10));
+            $('#filePath').val(artifactRepos[productID][i].url);
+            datePicker.$.setValue(artifactRepos[productID][i].createdDate.substr(0, 10));
         }
     }
 }

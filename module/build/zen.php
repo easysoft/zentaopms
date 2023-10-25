@@ -26,11 +26,11 @@ class buildZen extends build
     {
         $productGroups = $branchGroups = array();
         $executions    = $this->loadModel('execution')->getPairs($projectID, 'all', 'stagefilter|leaf|order_asc');
-        $executionID   = empty($executionID) ? (int)key($executions) : $executionID;
-        if($executionID)
+        $executionID   = empty($executionID) && !empty($executions) ? (int)key($executions) : $executionID;
+        if($executionID || $projectID)
         {
-            $productGroups = $this->loadModel('product')->getProducts($executionID, $status);
-            $branchGroups  = $this->loadModel('project')->getBranchesByProject($executionID);
+            $productGroups = $this->loadModel('product')->getProducts($executionID ? $executionID : $projectID, $status);
+            $branchGroups  = $this->loadModel('project')->getBranchesByProject($executionID ? $executionID : $projectID);
         }
 
         $this->commonActions($projectID);
