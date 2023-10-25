@@ -60,12 +60,11 @@ dtable
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.onRenderLinkStoryCell')),
-    set::footPager(
-        usePager(),
-        set::recPerPage("{recPerPage}"),
-        set::recTotal("{recTotal}"),
-        set::linkCreator(helper::createLink($object->type, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&recPerPage={recPerPage}&page={page}&extra=$extra"))
-    )
+    set::footPager(usePager(array(
+        'recPerpage'  => "{recPerPage}",
+        'recTotal'    => "{recTotal}",
+        'linkCreator' => helper::createLink($object->type, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&recPerPage={recPerPage}&page={page}&extra=$extra")
+    ))),
 );
 
 render();
