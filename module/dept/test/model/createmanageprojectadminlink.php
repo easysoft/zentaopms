@@ -10,7 +10,7 @@ title=测试 deptModel->createManageProjectAdminLink();
 cid=1
 pid=1
 
-权限分组2开发部链接组成 >> dept2
+权限分组2开发部链接组成 >> 1
 
 */
 
@@ -18,4 +18,7 @@ $deptIDList  = array('2', '5');
 $groupIDList = array('2', '12');
 
 $dept = new deptTest();
-r($dept->createManageProjectAdminLinkTest($deptIDList[0], $groupIDList[0])) && p() && e('dept2');  //权限分组2开发部链接组成
+$result = $dept->createManageProjectAdminLinkTest($deptIDList[0], $groupIDList[0]);
+$expect = 'createmanageprojectadminlink.php?m=group&f=manageProjectAdmin&groupID=2&deptID=2';
+
+r(strpos($result, $expect) !== false) && p() && e('1'); //权限分组2开发部链接组成

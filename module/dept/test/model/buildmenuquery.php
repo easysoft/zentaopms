@@ -11,7 +11,7 @@ cid=1
 pid=1
 
 不输入部门id >> SELECT * FROM `zt_dept` ORDER BY `grade` desc,`order` 
-输入部门id >> ,2,
+输入部门id >> 1
 
 */
 
