@@ -67,9 +67,9 @@ $footToolbar = array('items' => array(
     array('type' => 'btn-group', 'items' => array
     (
         array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => createLink('testcase', 'batchEdit', "productID={$productID}")),
-        array('caret' => 'up',       'className' => 'btn btn-caret size-sm primary not-open-url', 'data-placement' => 'top-start', 'items' => $batchItems),
+        array('caret' => 'up',       'className' => 'btn btn-caret size-sm not-open-url', 'data-placement' => 'top-start', 'items' => $batchItems),
     )),
-), 'btnProps' => array('size' => 'sm', 'btnType' => 'primary'));
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 $config->testsuite->testcase->dtable->fieldList['module']['map'] = $modules;
 
