@@ -13,7 +13,7 @@ namespace zin;
 formPanel
 (
     set::title($lang->release->export),
-    set::ajax(array('closeModal' => true)),
+    set::ajax(array('closeModal' => 'onlySuccess')),
     formGroup
     (
         set::label($lang->release->fileName),

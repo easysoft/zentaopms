@@ -334,7 +334,7 @@ $config->projectGroup->dtable->fieldList['actions']['list']['copy']['data-size']
 $config->projectGroup->dtable->fieldList['actions']['list']['delete']['icon'] = 'trash';
 $config->projectGroup->dtable->fieldList['actions']['list']['delete']['text'] = $lang->group->delete;
 $config->projectGroup->dtable->fieldList['actions']['list']['delete']['hint'] = $lang->group->delete;
-$config->projectGroup->dtable->fieldList['actions']['list']['delete']['url']  = helper::createLink('group', 'delete', "groupID={id}");
+$config->projectGroup->dtable->fieldList['actions']['list']['delete']['url']  = 'javascript:confirmDelete("{id}", "{name}")';
 
 $app->loadLang('execution');
 $config->project->dtable->team->fieldList['account']['title']    = $lang->team->realname;

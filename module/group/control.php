@@ -354,6 +354,7 @@ class group extends control
      */
     public function delete(int $groupID)
     {
+        $group = $this->group->getByID($groupID);
         $this->group->delete($groupID);
 
         /* if ajax request, send result. */
@@ -366,7 +367,7 @@ class group extends control
         {
             $response['result']  = 'success';
             $response['message'] = '';
-            $response['load']   = inLink('browse');
+            $response['load']    = $this->app->tab == 'project' ? $this->createLink('project', 'group', "projectID={$group->project}"): inLink('browse');
         }
         return $this->send($response);
     }

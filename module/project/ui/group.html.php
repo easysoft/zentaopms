@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('confirmDelete', $lang->group->confirmDelete);
+
 /* zin: Define the feature bar on main menu. */
 featureBar
 (
