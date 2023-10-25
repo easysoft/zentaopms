@@ -53,7 +53,7 @@ dtable
     set::footPager(usePager()),
     set::emptyTip($lang->testsuite->noTestsuite),
     set::createTip($lang->testsuite->create),
-    set::createLink(createLink('testsuite', 'create', "productID={$product->id}")), 
+    set::createLink(createLink('testsuite', 'create', "productID={$product->id}"))
 );
 
 render();
