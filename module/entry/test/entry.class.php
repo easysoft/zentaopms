@@ -95,22 +95,18 @@ class entryTest
      *
      * @param  array  $params
      * @access public
-     * @return object
+     * @return object|array|string
      */
-    public function createObject($params = array())
+    public function createObject(string $name, string $code, string $account, int $freePasswd = 0): object|array|string
     {
-        $createFields = array();
-        $createFields['name']    = '这是应用名称';
-        $createFields['code']    = 'code';
-        $createFields['account'] = 'admin';
-        $createFields['key']     = md5(time());
+        $createFields = new stdclass();
+        $createFields->name       = $name;
+        $createFields->code       = $code;
+        $createFields->freePasswd = $freePasswd;
+        $createFields->key        = md5(time());
 
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-
-        foreach($params as $key => $value) $_POST[$key] = $value;
-
-        $objectID = $this->objectModel->create();
-        unset($_POST);
+        if($account) $createFields->account = $account;
+        $objectID = $this->objectModel->create($createFields);
 
         if(dao::isError()) return dao::getError();
 

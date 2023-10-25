@@ -4,6 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/entry.class.php';
 su('admin');
 
+zdTable('entry')->gen(0);
+
 /**
 
 title=entryModel->create();
@@ -17,16 +19,15 @@ pid=1
 
 */
 
-$e_name       = array('name' => 'name_test');
-$e_code       = array('code' => 'code_test');
-$e_name_blank = array('name' => '');
-$e_code_blank = array('code' => '');
+$nameList       = array('', '测试应用');
+$codeList       = array('', 'code_11111', 'code_22222');
+$accountList    = array('admin', '');
+$freePasswdList = array(0, 1);
 
 $entry = new entryTest();
 
-$result_name = $entry->createObject($e_name_blank);
-$result_code = $entry->createObject($e_code_blank);
-r($result_name['name'][0]) && p() && e('『名称』不能为空');       // 测试创建应用name为空报错
-r($result_code['code'][0]) && p() && e('『代号』不能为空');       // 测试创建应用code为空报错
-r($entry->createObject($e_name)) && p('name') && e('name_test');  // 测试创建应用name为name_test
-r($entry->createObject($e_code)) && p('code') && e('code_test');  // 测试创建应用code为code_test
+r($entry->createObject($nameList[0], $codeList[0], $accountList[0], $freePasswdList[0])) && p('name:0') && e('『名称』不能为空。');                                     // 测试name为空,code为空,account为空,freePasswd为空报错
+r($entry->createObject($nameList[1], $codeList[0], $accountList[0], $freePasswdList[1])) && p('code:0,1') && e('『代号』不能为空。,『代号』应当为字母或数字的组合。');  // 测试name为测试应用,code为空,account为空,freePasswd为1报错
+r($entry->createObject($nameList[1], $codeList[1], $accountList[1], $freePasswdList[1])) && p('code') && e('code_11111');                                               // 测试name为测试应用,code为code_11111,account为空,freePasswd为1报错
+r($entry->createObject($nameList[1], $codeList[2], $accountList[1], $freePasswdList[1])) && p('code') && e('code_22222');                                               // 测试name为测试应用,code为code_22222,account为空,freePasswd为1报错
+
