@@ -4983,7 +4983,17 @@ class upgradeModel extends model
                 ->checkIF($program->end != '', 'end', 'gt', $program->begin)
                 ->check('name', 'unique', "deleted='0' and type= 'program'")
                 ->exec();
-            if(dao::isError()) return false;
+            if(dao::isError())
+            {
+                $errors = dao::getError();
+                if(isset($errors['name']))
+                {
+                    $errors['programName'] = $errors['name'];
+                    unset($errors['name']);
+                }
+                dao::$errors = $errors;
+                return false;
+            }
 
             $programID = $this->dao->lastInsertId();
             $this->dao->update(TABLE_PROGRAM)
@@ -5058,6 +5068,7 @@ class upgradeModel extends model
             {
                 /* Use historical projects as project upgrades. */
                 $projects = $this->dao->select('id,name,begin,end,status,PM,acl,team')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+
 
                 $projectPairs = $this->dao->select('name,id')->from(TABLE_PROJECT)
                     ->where('deleted')->eq('0')
