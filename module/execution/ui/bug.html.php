@@ -10,34 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
-/* zin: Define the productMenu on main menu. */
-$productDropdown = '';
-if($execution->hasProduct)
-{
-    $productDropdown = productMenu(
-        set::title($product ? $product->name : $productOption[$productID]),
-        set::items($productOption),
-        set::activeKey($productID),
-        set::link(helper::createLink('execution', 'bug', "executionID={$execution->id}&productID={key}")),
-    );
-}
-
-$branchDropdown = '';
-if($showBranch)
-{
-    $branchDropdown = productMenu(
-        set::title($branchOption[$branch]),
-        set::items($branchOption),
-        set::activeKey($branch),
-        set::link(helper::createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch=%s")),
-    );
-}
-
 /* zin: Define the set::module('bug') feature bar on main menu. */
 featureBar
 (
-    to::before($productDropdown),
-    to::before($branchDropdown),
     set::current($type),
     set::linkParams("executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={$orderBy}&build={$buildID}&type={key}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     li(searchToggle(set::module('executionBug'), set::open($type == 'bysearch')))
