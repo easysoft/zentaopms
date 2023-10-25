@@ -1619,7 +1619,16 @@ class testcaseZen extends testcase
         $expects = $case->expects;
         foreach($expects as $key => $value)
         {
-            if(!empty($value) and empty($steps[$key])) dao::$errors['message']["steps$key"] = sprintf($this->lang->testcase->stepsEmpty, $key);
+            if(!empty($value) && empty($steps[$key])) dao::$errors["steps[$key]"] = sprintf($this->lang->testcase->stepsEmpty, $key);
+        }
+        foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
+        {
+            $field = trim($field);
+            if($field && empty($case->{$field}))
+            {
+                $fieldName = $this->config->testcase->form->create[$field]['type'] != 'array' ? "{$field}" : "{$field}[]";
+                dao::$errors[$fieldName] = sprintf($this->lang->error->notempty, $this->lang->testcase->{$field});
+            }
         }
         if(dao::isError()) return false;
 
@@ -1628,9 +1637,9 @@ class testcaseZen extends testcase
         if(!empty($case->product)) $param = "product={$case->product}";
 
         $result = $this->loadModel('common')->removeDuplicate('case', $case, $param);
-        if($result and $result['stop'])
+        if($result && $result['stop'])
         {
-            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->testcase->common), 'locate' => $this->createLink('testcase', 'view', "caseID={$result['duplicate']}")));
+            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->testcase->common), 'load' => $this->createLink('testcase', 'view', "caseID={$result['duplicate']}")));
         }
         return true;
     }
