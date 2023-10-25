@@ -24,7 +24,7 @@ class personnelTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return array_filter($objects, function($item){return $item->account !== 'admin';});
     }
 
     /**

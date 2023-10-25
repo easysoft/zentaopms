@@ -1,0 +1,13 @@
+title: table zt_dept
+desc: "部门"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: name
+    fields:
+      - field: name1
+        range: 产品部,开发部,测试部,运营部,开发部1,开发部2,其他部门{10000}
+      - field: name2
+        range: []{7},1-10,1-10,1-10,1-10000

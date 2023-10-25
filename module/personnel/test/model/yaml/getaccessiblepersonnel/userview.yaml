@@ -1,0 +1,18 @@
+title: table zt_userview
+desc: "可访问权限"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: account
+    note: "用户名"
+    fields:
+      - field: account1
+        range: user{100}
+      - field: account2
+        range: 1-1000
+  - field: programs
+    note: "项目集"
+    range: 1{100}
+    prefix: ","
+    postfix: ""
+    format: ""
