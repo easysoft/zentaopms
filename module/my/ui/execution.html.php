@@ -30,11 +30,11 @@ dtable
     set::onRenderCell(jsRaw('window.onRenderExecutionCell')),
     set::orderBy($orderBy),
     set::sortLink(createLink('my', 'execution', "type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    set::footPager
-    (
-        usePager(),
-        set::linkCreator(createLink('my', 'execution', "type={$type}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPaga={recPerPage}&page={page}")),
-    ),
+    set::footPager(usePager(array(
+        'recPerPage'  => $pager->recPerPage,
+        'recTotal'    => $pager->recTotal,
+        'linkCreator' => createLink('my', 'execution', "type={$type}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPaga={recPerPage}&page={page}"),
+    )))
 );
 
 render();
