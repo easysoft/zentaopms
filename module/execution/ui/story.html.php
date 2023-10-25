@@ -347,12 +347,11 @@ $setting = $this->loadModel('datatable')->getSetting('execution');
 $cols    = array();
 foreach($setting as $col)
 {
-    if(!$execution->hasProduct and $col['id'] == 'branch') continue;
-    if(!$execution->hasProduct and !$execution->multiple and $value['id'] == 'plan') continue;
-    if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value['id'] == 'stage') continue;
+    if(!$execution->hasProduct and $col['name'] == 'branch') continue;
+    if(!$execution->hasProduct and !$execution->multiple and $value['name'] == 'plan') continue;
+    if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value['name'] == 'stage') continue;
 
-    $col['name'] = $col['id'];
-    if($col['id'] == 'title') $col['link'] = sprintf($col['link'], createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id)));
+    if($col['name'] == 'title') $col['link'] = sprintf($col['link'], createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id)));
 
     $cols[] = $col;
 }
