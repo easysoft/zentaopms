@@ -52,9 +52,8 @@ window.setStatistics = function(element, checkedIdList)
     let checkedEstimate = 0;
     let checkedCase     = 0;
 
-    const dtable = zui.DTable.query($(this).target);
     checkedIdList.forEach((rowID) => {
-        const task = dtable.$.getRowInfo(rowID);
+        const task = element.getRowInfo(rowID);
         if(task)
         {
             checkedEstimate += parseFloat(task.data.estimate);
