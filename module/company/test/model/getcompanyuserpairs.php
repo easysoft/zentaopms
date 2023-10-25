@@ -4,6 +4,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/company.class.php';
 su('admin');
 
+zdTable('company')->gen(1);
+zdTable('user')->gen(100);
+
 /**
 
 title=测试companyModel->getCompanyUserPairsTest();
@@ -18,5 +21,5 @@ pid=1
 $count = array('0','1');
 
 $company = new companyTest();
-r($company->getCompanyUserPairsTest($count[0])) && p('td1')  && e('易软天创网络科技有限公司/研发主管1'); // 公司用户键值组合
-r($company->getCompanyUserPairsTest($count[1])) && p()       && e('1000');                               // 公司用户键值数量统计
+r($company->getCompanyUserPairsTest($count[0])) && p('admin')  && e('易软天创网络科技有限公司/admin'); // 公司用户键值组合
+r($company->getCompanyUserPairsTest($count[1])) && p()         && e('100');                               // 公司用户键值数量统计
