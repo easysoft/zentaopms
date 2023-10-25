@@ -1,0 +1,12 @@
+title: table zt_userquery
+desc: "用户查询"
+author: automated export
+version: "1.0"
+fields:
+  - field: module
+    note: "模块"
+    range: task,executionStory,user,projectBuild,executionBuild,design
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
