@@ -4,6 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/search.class.php';
 su('admin');
 
+zdTable('userquery')->gen(6);
+
 /**
 
 title=测试 searchModel->deleteQuery();
