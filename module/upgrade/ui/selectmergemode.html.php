@@ -52,6 +52,7 @@ div
             width('1000px'),
             set::title($lang->upgrade->selectMergeMode),
             set::actions(array()),
+            set::target('_self'),
             cell
             (
                 setClass('flex flex-wrap'),
