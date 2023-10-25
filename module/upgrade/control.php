@@ -273,7 +273,7 @@ class upgrade extends control
 
             }
 
-            return $this->send(array('result' => 'success', 'load' => inlink('selectMergeMode', "fromVersion={$fromVersion}&mode={$mode}")));
+            $this->locate(inlink('selectMergeMode', "fromVersion={$fromVersion}&mode={$mode}"));
         }
 
         $this->app->loadLang('install');
@@ -708,7 +708,7 @@ class upgrade extends control
         if($_POST)
         {
             $mergeMode = $this->post->projectType;
-            if($mergeMode == 'manually') return $this->send(array('result' => 'success', 'load' => inlink('mergeProgram')));
+            if($mergeMode == 'manually') $this->locate(inlink('mergeProgram'));
 
             if($mode == 'light') $programID = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=defaultProgram');
             if($mode == 'ALM')   $programID = $this->loadModel('program')->createDefaultProgram();
@@ -730,7 +730,7 @@ class upgrade extends control
             $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->andWhere('objectType')->eq('project')->exec();
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'load' => inlink('afterExec', "fromVersion={$fromVersion}")));
+            $this->locate(inlink('afterExec', "fromVersion={$fromVersion}"));
         }
         $this->view->title       = $this->lang->upgrade->selectMergeMode;
         $this->view->fromVersion = $fromVersion;
