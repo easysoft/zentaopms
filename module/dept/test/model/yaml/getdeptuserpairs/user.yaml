@@ -1,0 +1,12 @@
+title: table zt_user
+desc: "用户信息"
+author: sgm
+version: "1.0"
+fields:
+  - field: type
+    note: "内外部人员"
+    range: inside{100},outside{100},inside{10000}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
