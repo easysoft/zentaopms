@@ -433,9 +433,9 @@ class buildModel extends model
      *
      * @param  object $build
      * @access public
-     * @return bool
+     * @return int|false
      */
-    public function create(object $build): bool
+    public function create(object $build): int|false
     {
         /* Integrated version merging branch. */
         if($this->post->isIntegrated == 'yes')

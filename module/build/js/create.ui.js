@@ -62,6 +62,7 @@ $().ready(function()
         }
     });
     loadBranches();
+    loadProducts();
 });
 
 /**
@@ -74,20 +75,19 @@ $().ready(function()
 function loadProducts(executionID)
 {
     executionID = parseInt(executionID);
-    if(!executionID) executionID = $('input[name=execution]').val();
-    $.get($.createLink('product', 'ajaxGetProducts', 'executionID=' + executionID), function(data)
+    if(!executionID) executionID = $(document).find('[name=execution]').val();
+
+    $.getJSON($.createLink('product', 'ajaxGetProducts', 'executionID=' + executionID), function(data)
     {
+        const $product       = $('input[name=product]');
+        const $productPicker = $product.zui('picker');
+        const productID      = data.length ? data[0].value : 0;
+        $productPicker.render({items: data});
+        $productPicker.$.setValue(productID);
+
         if(data)
         {
-            data = JSON.parse(data);
-            const $product       = $('input[name=product]');
-            const $productPicker = $product.zui('picker');
-            const productID      = data[0].value;
-            $productPicker.render({items: data});
-            $productPicker.$.setValue(productID);
-
             $('#builds').attr('data-placeholder', multipleSelect);
-
             loadBranches(productID);
         }
     });

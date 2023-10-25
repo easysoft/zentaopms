@@ -68,8 +68,8 @@ if(!$hidden)
             set::value(empty($product) ? '' : $product->id),
             set::items($products),
             set::required(true),
-            on::change('loadBranches'),
-            on::change('loadArtifactrepo'),
+            on::change('loadBranches')
+    //        on::change('loadArtifactrepo'),
         );
 
         $artifactRepoRow[] = formRow
@@ -106,9 +106,9 @@ if(!$hidden)
     {
         $productBox = formGroup(
             set::width('1/2'),
+            setClass('items-center'),
             set::id('productBox'),
             set::label($lang->build->product),
-            setClass('items-center'),
             html(sprintf($lang->build->noProduct, helper::createLink('execution', 'manageproducts', "executionID={$executionID}", '', true), $app->tab)),
         );
     }

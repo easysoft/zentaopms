@@ -57,7 +57,7 @@ class build extends control
 
             $message = $this->executeHooks($buildID);
             if($message) $this->lang->saveSuccess = $message;
-            return $this->sendSuccess(array('locate' => $this->createLink('build', 'view', "buildID=$buildID") . "#app={$this->app->tab}", 'id' => $buildID));
+            return $this->sendSuccess(array('load' => $this->createLink('build', 'view', "buildID=$buildID"), 'id' => $buildID));
         }
 
         $status = empty($this->config->CRProduct) ? 'noclosed' : '';
