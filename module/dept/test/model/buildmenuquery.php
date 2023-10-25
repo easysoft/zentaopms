@@ -19,4 +19,5 @@ $deptIDList = array('', '2');
 
 $dept = new deptTest();
 r($dept->buildMenuQueryTest($deptIDList[0])) && p() && e('SELECT * FROM `zt_dept` ORDER BY `grade` desc,`order` '); //不输入部门id
-r($dept->buildMenuQueryTest($deptIDList[1])) && p() && e(',2,');                                                    //输入部门id
+$sql2 = "SELECT * FROM `zt_dept` WHERE `path`  LIKE ',2,%' ORDER BY `grade` desc,`order` ";
+r($dept->buildMenuQueryTest($deptIDList[1]) == $sql2) && p() && e('1');                                             //输入部门id
