@@ -79,6 +79,14 @@ if($app->isContainer())
     $app->post->set('fromVersion', str_replace( '.', '_', strtolower($config->installedVersion)));
 }
 
-/* Run it. */
-$app->parseRequest();
-if($common->checkUpgradeStatus()) $app->loadModule();
+
+try
+{
+    /* Run it. */
+    $app->parseRequest();
+    if($common->checkUpgradeStatus()) $app->loadModule();
+}
+catch (EndResponseException $endResponseException)
+{
+    echo $endResponseException->getContent();
+}
