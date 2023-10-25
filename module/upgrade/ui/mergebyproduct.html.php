@@ -39,7 +39,7 @@ $getMergeData = function($data)
             (
                 set::width('1/2'),
                 set::className('productList px-4 flex items-center overflow-hidden'),
-                checkbox(set::id("products{$productID}"), set::name('products[]'), set::text($product->name), set::value($product->id), set('data-on', 'change'), set('data-call', 'changeProducts'), set('data-params', 'event'), set('data-begin', $sprint->begin), set('data-programid', $product->program), set('data-productid', $productID))
+                checkbox(set::id("products{$productID}"), set::name('products[]'), set::text($product->name), set::value($product->id), set('data-on', 'change'), set('data-call', 'changeProducts'), set('data-params', 'event'), set('data-begin', $product->createdDate), set('data-programid', $product->program), set('data-productid', $productID))
             ),
             cell
             (
