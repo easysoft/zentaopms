@@ -409,6 +409,7 @@ $lang->ai->models->common         = 'Language Model';
 $lang->ai->models->type           = 'Model';
 $lang->ai->models->vendor         = 'Vendor';
 $lang->ai->models->key            = 'API Key';
+$lang->ai->models->secret         = 'Secret Key';
 $lang->ai->models->resource       = 'Resource';
 $lang->ai->models->deployment     = 'Deployment';
 $lang->ai->models->proxyType      = 'Proxy Type';
