@@ -31,7 +31,6 @@ featureBar
     set::linkParams("spaceID=&browseType={key}"),
 );
 
-$solutionID = 1;
 $app->loadLang('solution');
 toolBar
 (
