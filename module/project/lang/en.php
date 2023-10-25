@@ -326,8 +326,6 @@ $lang->project->featureBar['bug']['unresolved'] = 'Unresolved';
 $app->loadLang('testcase');
 $lang->project->featureBar['testcase'] = $lang->testcase->featureBar['browse'];
 
-$lang->project->featureBar['testtask']['all'] = 'All';
-
 $lang->project->featureBar['build']['all'] = 'Build List';
 
 $lang->project->featureBar['group']['all'] = 'All Groups';

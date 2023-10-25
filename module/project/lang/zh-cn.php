@@ -326,8 +326,6 @@ $lang->project->featureBar['bug']['unresolved'] = '未解决';
 $app->loadLang('testcase');
 $lang->project->featureBar['testcase'] = $lang->testcase->featureBar['browse'];
 
-$lang->project->featureBar['testtask']['all'] = '全部';
-
 $lang->project->featureBar['build']['all'] = '全部版本';
 
 $lang->project->featureBar['group']['all'] = '浏览分组';

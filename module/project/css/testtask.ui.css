@@ -1,0 +1,2 @@
+#taskTable .toggle-icon.is-collapsed:before,.toggle-icon.is-expanded:before,.toggle-icon.is-collapsed:after {background-color: var(--color-current); content: " "; display: block; height: 1px; left: 2px; position: absolute; right: 2px; top: calc((var(--toggle-icon-size) - 3px)/2);}
+#taskTable .toggle-icon.is-collapsed:after {--tw-rotate: 90deg; transform: translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skew(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));}

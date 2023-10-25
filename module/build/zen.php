@@ -26,7 +26,7 @@ class buildZen extends build
     {
         $productGroups = $branchGroups = array();
         $executions    = $this->loadModel('execution')->getPairs($projectID, 'all', 'stagefilter|leaf|order_asc');
-        $executionID   = empty($executionID) ? key($executions) : $executionID;
+        $executionID   = empty($executionID) ? (int)key($executions) : $executionID;
         if($executionID)
         {
             $productGroups = $this->loadModel('product')->getProducts($executionID, $status);

@@ -1519,4 +1519,48 @@ class projectZen extends project
 
         return $executionIdList;
     }
+
+    /**
+     * 展示测试单的相关变量。
+     * Show the testtask related variables.
+     *
+     * @param  array     $tasks
+     * @access protected
+     * @return void
+     */
+    protected function assignTesttaskVars(array $tasks): void
+    {
+        /* Compute rowspan. */
+        $productGroup = array();
+        $waitCount    = 0;
+        $testingCount = 0;
+        $blockedCount = 0;
+        $doneCount    = 0;
+        foreach($tasks as $task)
+        {
+            $productGroup[$task->product][] = $task;
+            if($task->status == 'wait')    $waitCount ++;
+            if($task->status == 'doing')   $testingCount ++;
+            if($task->status == 'blocked') $blockedCount ++;
+            if($task->status == 'done')    $doneCount ++;
+            if($task->build == 'trunk' || empty($task->buildName)) $task->buildName = $this->lang->trunk;
+        }
+
+        $lastProduct = '';
+        foreach($tasks as $taskID => $task)
+        {
+            $task->rowspan = 0;
+            if($lastProduct !== $task->product)
+            {
+                $lastProduct = $task->product;
+                if(!empty($productGroup[$task->product])) $task->rowspan = count($productGroup[$task->product]);
+            }
+        }
+
+        $this->view->waitCount    = $waitCount;
+        $this->view->testingCount = $testingCount;
+        $this->view->blockedCount = $blockedCount;
+        $this->view->doneCount    = $doneCount;
+        $this->view->tasks        = $tasks;
+    }
 }

@@ -885,11 +885,12 @@ class project extends control
         $project = $this->project->getByID($projectID);
         $tasks   = $this->loadModel('testtask')->getProjectTasks($projectID, $orderBy, $pager);
 
+        $this->projectZen->assignTesttaskVars($tasks);
+
         $this->view->title    = $project->name . $this->lang->colon . $this->lang->project->common;
         $this->view->project  = $project;
         $this->view->pager    = $pager;
         $this->view->orderBy  = $orderBy;
-        $this->view->tasks    = $tasks;
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->products = $this->loadModel('product')->getPairs('', 0);
         $this->view->actions  = $this->loadModel('action')->getList('testtask', $projectID);

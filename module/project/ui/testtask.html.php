@@ -10,24 +10,18 @@ declare(strict_types=1);
  */
 namespace zin;
 
-/* Compute summary. */
-$waitCount    = 0;
-$testingCount = 0;
-$blockedCount = 0;
-$doneCount    = 0;
-foreach($tasks as $task)
-{
-    if($task->status == 'wait')    $waitCount ++;
-    if($task->status == 'doing')   $testingCount ++;
-    if($task->status == 'blocked') $blockedCount ++;
-    if($task->status == 'done')    $doneCount ++;
-    if($task->build == 'trunk' || empty($task->buildName)) $task->buildName = $this->lang->trunk;
-}
-
+jsVar('allTasks', $lang->testtask->allTasks);
 featureBar
 (
-    set::current('all'),
-    set::linkParams("projectID={$project->id}")
+    li
+    (
+        setClass('nav-item'),
+        a
+        (
+            set('class', 'active'),
+            $lang->testtask->browse
+        )
+    )
 );
 
 toolbar
@@ -45,19 +39,21 @@ toolbar
 unset($config->testtask->dtable->fieldList['product']);
 unset($config->testtask->dtable->fieldList['execution']);
 
-$tasks      = initTableData($tasks, $config->testtask->dtable->fieldList, $this->testtask);
-$cols       = array_values($config->testtask->dtable->fieldList);
-$data       = array_values($tasks);
-$footerHTML = sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount);
+$tasks   = initTableData($tasks, $config->project->dtable->testtask->fieldList);
+$summary = sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount);
 dtable
 (
-    set::cols($cols),
-    set::data($data),
+    set::id('taskTable'),
+    set::cols($config->project->dtable->testtask->fieldList),
+    set::data($tasks),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
     set::userMap($users),
-    set::fixedLeftWidth('20%'),
     set::orderBy($orderBy),
     set::sortLink(createLink('project', 'testtask', "projectID={$project->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    set::footer(array(array('html' => $footerHTML), 'flex', 'pager')),
+    set::plugins(array('cellspan')),
+    set::getCellSpan(jsRaw('window.getCellSpan')),
+    set::fixedLeftWidth('20%'),
+    set::footer(array(array('html' => $summary), 'flex', 'pager')),
     set::footPager(usePager()),
 );
 
