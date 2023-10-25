@@ -5,15 +5,15 @@ namespace zin;
 class dtable extends wg
 {
     protected static array $defineProps = array(
-        'className?:string="shadow rounded"', // 表格样式。
+        'className?:string="shadow-sm rounded"', // 表格样式。
         'id?:string',                         // ID。
         'customCols?: bool|array',            // 是否支持自定义列。
         'cols?:array',                        // 表格列配置
         'data?:array',                        // 表格数据源
         'module?:string',                     // 模块信息，主要是获取语言项
         'emptyTip?:string',                   // 表格数据源为空时显示的文本
+        'createTip?:string',                  // 表格数据源为空时的创建文本
         'createLink?:array|string',           // 表格数据源为空时的创建链接
-        'createTip?:string',                  // 表格数据源为空时显示的文本
     );
 
     static $dtableID = 0;
@@ -22,16 +22,18 @@ class dtable extends wg
     {
         global $app;
 
-        $defaultID = "table-$app->rawModule-$app->rawMethod";
+        $defaultID = "table-{$app->rawModule}-{$app->rawMethod}";
         $this->setDefaultProps(array('id' => static::$dtableID ? ($defaultID . static::$dtableID) : $defaultID));
         static::$dtableID++;
 
-        if($this->prop('customCols') === true)
+        $customColsProp = $this->prop('customCols');
+        if($customColsProp)
         {
             $app->loadLang('datatable');
+            $customUrl = is_bool($customColsProp) || empty($customColsProp['url']) ? null : $customColsProp['url'];
             $this->setProp('customCols', array(
                 'custom' => array(
-                    'url' => createLink('datatable', 'ajaxcustom', "module=$app->moduleName&method=$app->methodName"),
+                    'url' => $customUrl ? $customUrl : createLink('datatable', 'ajaxcustom', "module=$app->moduleName&method=$app->methodName"),
                     'text' => $app->lang->datatable->custom
                 ),
                 'setGlobal' => array(
@@ -80,6 +82,8 @@ class dtable extends wg
                     }
                     $config['control']['props']['items'] = $newItems;
                     unset($config['controlItems']);
+
+                    if(isset($config['defaultValue'])) $config['control']['props']['defaultValue'] = $config['defaultValue'];
                 }
             }
 
@@ -121,6 +125,32 @@ class dtable extends wg
                 }
             }
             $this->setProp('footPager', $pager);
+        }
+
+        $orderBy = $this->prop('orderBy');
+        if(is_string($orderBy))
+        {
+            list($orderByName, $orderByType) = explode('_', $orderBy);
+            $this->setProp('orderBy', array($orderByName => $orderByType));
+        }
+
+        /* Support to set footToolbar with items array. */
+        $footToolbar = $this->prop('footToolbar');
+        if(!empty($footToolbar))
+        {
+            if(!is_array($footToolbar))     $footToolbar = array('items' => array($footToolbar));
+            if(array_is_list($footToolbar)) $footToolbar = array('items' => $footToolbar);
+            $footToolbarItems = array();
+            if(isset($footToolbar['items']))
+            {
+                foreach($footToolbar['items'] as $item)
+                {
+                    if($item instanceof item) $item = $item->props->toJSON();
+                    $footToolbarItems[] = $item;
+                }
+                $footToolbar['items'] = $footToolbarItems;
+            }
+            $this->setProp('footToolbar', $footToolbar);
         }
     }
 
@@ -165,29 +195,22 @@ class dtable extends wg
         if(empty($this->prop('data')))
         {
             global $lang;
-            $createLink = !empty($this->prop('createLink')) ? $this->getLink($this->prop('createLink')) : '';
-            return div
-            (
-                setClass('canvas text-center py-8'),
-                p
-                (
-                    setClass('py-8 my-8'),
-                    span
-                    (
-                        setClass('text-gray'),
-                        !empty($this->prop('emptyTip')) ? $this->prop('emptyTip') : $lang->noData,
-                    ),
-                    !empty($createLink)
-                        ? a
-                        (
-                            setClass('btn primary-pale bd-primary ml-0.5'),
-                            set::href($createLink),
-                            icon('plus'),
-                            !empty($this->prop('createTip')) ? $this->prop('createTip') : $lang->create,
-                        )
-                        : '',
-                )
-            );
+            $emptyTip   = $this->prop('emptyTip', $lang->noData);
+            $createLink = !empty($this->prop('createLink')) ? $this->prop('createLink') : '';
+            if(is_string($emptyTip))
+            {
+                if(!empty($createLink))
+                {
+                    $createTip = $this->prop('createTip', $lang->create);
+                    $emptyTip  = array('html' => "<div class='text-gray'>$emptyTip</div><a class='btn primary-pale border-primary' href='$createLink'><i class='icon icon-plus'></i> $createTip</a>", 'className' => 'row gap-4 items-center');
+                }
+                else
+                {
+                    $emptyTip = array('html' => "$emptyTip", 'className' => 'text-gray');
+                }
+            }
+            $this->setProp('emptyTip', $emptyTip);
+            $this->setProp('customCols', false);
         }
         return zui::dtable(inherit($this));
     }
