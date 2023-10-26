@@ -45,6 +45,7 @@ $config->execution->form->create['desc']          = array('type' => 'string', 'r
 $config->execution->form->create['acl']           = array('type' => 'string', 'required' => false, 'control' => 'radio',  'default' => '');
 $config->execution->form->create['whitelist']     = array('type' => 'array',  'required' => false, 'control' => 'select', 'default' => array(), 'filter' => 'join');
 $config->execution->form->create['openedVersion'] = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => $config->version);
+$config->execution->form->create['vision']        = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => $config->vision);
 
 $config->execution->form->edit['products'] = array('type' => 'array', 'required' => false, 'default' => array());
 $config->execution->form->edit['branch']   = array('type' => 'array', 'required' => false, 'default' => array());
