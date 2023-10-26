@@ -454,7 +454,7 @@ $lang->qa->menu->index         = array('link' => "$lang->dashboard|qa|index");
 $lang->qa->menu->bug           = array('link' => "{$lang->bug->common}|bug|browse|productID=%s", 'subModule' => 'bug');
 $lang->qa->menu->testcase      = array('link' => "{$lang->testcase->shortCommon}|testcase|browse|productID=%s", 'subModule' => 'testcase,story');
 $lang->qa->menu->testsuite     = array('link' => "{$lang->testcase->testsuite}|testsuite|browse|productID=%s", 'subModule' => 'testsuite');
-$lang->qa->menu->testtask      = array('link' => "{$lang->testtask->common}|testtask|browse|productID=%s", 'subModule' => 'testtask', 'alias' => 'view,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult');
+$lang->qa->menu->testtask      = array('link' => "{$lang->testtask->common}|testtask|browse|productID=%s", 'subModule' => 'testtask', 'alias' => 'view,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult', 'exclude' => 'testtask-browseunits');
 $lang->qa->menu->report        = array('link' => "{$lang->testreport->common}|testreport|browse|productID=%s", 'subModule' => 'testreport');
 $lang->qa->menu->caselib       = array('link' => "{$lang->testcase->caselib}|caselib|browse|libID=0", 'subModule' => 'caselib');
 $lang->qa->menu->zahost        = array('link' => "{$lang->zahost->common}|zahost|browse", 'subModule' => 'zahost');

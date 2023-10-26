@@ -150,7 +150,7 @@ class testtask extends control
 
         /* 确保二级导航高亮的是测试用例。*/
         /* Make sure the secondary navigation highlights test cases. */
-        $this->app->rawModule = 'testcase';
+        $this->lang->qa->menu->testcase['subModule'] .= ',testtask';
 
         /* 预处理部分变量供查询使用。*/
         /* Prepare variables for query. */
