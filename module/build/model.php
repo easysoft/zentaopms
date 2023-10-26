@@ -557,6 +557,7 @@ class buildModel extends model
             $bug->lastEditedDate = $now;
             $bug->resolution     = 'fixed';
             $bug->resolvedBuild  = $build->id;
+            $bug->deadline       = !empty($bug->deadline) ? $bug->deadline : null;
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bug->id)->exec();
             $this->action->create('bug', $bug->id, 'Resolved', '', 'fixed', $bug->resolvedBy);
         }
