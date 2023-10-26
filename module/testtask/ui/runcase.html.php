@@ -106,7 +106,7 @@ if($confirm != 'yes')
                             btn
                             (
                                 setClass('ml-2 text-primary'),
-                                $step->type != 'group' ? set::url("#fileModal{$step->id}") : '',
+                                $step->type != 'group' ? set::target("#fileModal{$step->id}") : '',
                                 $step->type != 'group' ? set('data-toggle', 'modal') : '',
                                 set('title', $lang->testtask->files),
                                 set::icon('paper-clip'),
