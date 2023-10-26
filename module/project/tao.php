@@ -855,12 +855,12 @@ class projectTao extends projectModel
      * Delete Members.
      *
      * @param  int       $projectID
-     * @param  int       $openedBy
+     * @param  string    $openedBy
      * @param  array     $deleteMembers
      * @access protected
      * @return bool
      */
-    protected function deleteMembers(int $projectID, int $openedBy, array $deleteMembers): bool
+    protected function deleteMembers(int $projectID, string $openedBy, array $deleteMembers): bool
     {
         $this->dao->delete()->from(TABLE_TEAM)
             ->where('root')->eq($projectID)

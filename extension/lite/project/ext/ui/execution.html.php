@@ -58,7 +58,7 @@ $fnBuildSingleCard = function($kanban) use ($executionActions, $lang, $kanbanvie
     $canActions  = (common::hasPriv('execution','edit') or (!empty($executionActions) and isset($executionActions[$kanban->id])));
     $teams       = zget($memberGroup, $kanban->id, array());
     $actionItems = array();
-    if(common::hasPriv('execution','edit')) $actionItems[] = array('url' => createLink('execution', 'edit', "executionID={$kanban->id}"), 'text' => $lang->kanban->edit, 'icon' => 'edit', 'data-toggle' => 'modal', 'data-width' => '75%');
+    if(common::hasPriv('execution','edit')) $actionItems[] = array('url' => createLink('execution', 'edit', "executionID={$kanban->id}"), 'text' => $lang->kanban->edit, 'icon' => 'edit', 'data-toggle' => 'modal', 'data-size' => 'lg');
     if(!empty($executionActions[$kanban->id]))
     {
         if(in_array('start', $executionActions[$kanban->id]))    $actionItems[] = array('url'      => createLink('execution', 'start',    "executionID={$kanban->id}"), 'text' => $lang->execution->start,    'icon' => 'play',     'data-toggle' => 'modal', 'data-size' => 'lg');

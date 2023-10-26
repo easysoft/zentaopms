@@ -1185,7 +1185,7 @@ class projectModel extends model
         array_push($newMembers, $project->PM);
         $newMembers = array_unique($newMembers);
         $roles      = $this->user->getUserRoles(array_values($newMembers));
-        $projectID  = $oldProject->id;
+        $projectID  = (int)$oldProject->id;
         $oldMembers = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
 
         /* Delete members while old model is kanban. */
