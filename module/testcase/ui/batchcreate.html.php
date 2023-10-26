@@ -40,17 +40,20 @@ $items[] = array
 );
 
 /* Field of branch. */
-$items[] = array
-(
-    'name'    => 'branch',
-    'label'   => $lang->product->branchName[$product->type],
-    'hidden'  => zget($visibleFields, $product->type, true, false),
-    'control' => 'picker',
-    'items'   => $branches,
-    'value'   => $branch,
-    'width'   => '200px',
-    'ditto'   => true,
-);
+if($product->type != 'normal')
+{
+    $items[] = array
+    (
+        'name'    => 'branch',
+        'label'   => $lang->product->branchName[$product->type],
+        'hidden'  => zget($visibleFields, $product->type, true, false),
+        'control' => 'picker',
+        'items'   => $branches,
+        'value'   => $branch,
+        'width'   => '200px',
+        'ditto'   => true,
+    );
+}
 
 /* Field of module. */
 $items[] = array
