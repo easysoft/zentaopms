@@ -15,26 +15,18 @@ $status         = !empty($scopeAndStatus[1]) ? $scopeAndStatus[1] : '';
 $viewName       = $scope == 'local'? \zget($products, $product->id) : $lang->testtask->all;
 jsVar('condition', "productID=$product->id&branch=$branch&type=$type&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1");
 
-$testMenuLink = createLink(
-    $this->app->rawModule,
-    $this->app->rawMethod,
-    array(
-        'productID'  => $product->id,
-        'branch'     => '{branch}',
-        'type'       => '{type}',
-    )
-);
+$testMenuLink = createLink($this->app->rawModule, $this->app->rawMethod, array('productID' => $product->id, 'branch' => '{branch}', 'type' => '{type}'));
 
-$productDropdown = productMenu
+$productDropdown = dropdown
 (
-    set::title($viewName),
+    to('trigger', btn($viewName, setClass('ghost'))),
     set::items(array
     (
-        array('text' => $lang->testtask->all, 'branch' => 0, 'type' => "all,$status"),
-        array('text' => \zget($products, $product->id), 'branch' => $branch, 'type' => "local,$status")
-    )),
-    set::link($testMenuLink),
+        array('text' => $lang->testtask->all, 'url' => createLink($this->app->rawModule, $this->app->rawMethod, array('productID' => $product->id, 'branch' => '0', 'type' => "all,{$status}"))),
+        array('text' => \zget($products, $product->id), 'url' => createLink($this->app->rawModule, $this->app->rawMethod, array('productID' => $product->id, 'branch' => $branch, 'type' => "local,{$status}")))
+    ))
 );
+
 featureBar
 (
     set::current($status),
