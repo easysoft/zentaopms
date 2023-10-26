@@ -536,7 +536,7 @@ class storyTao extends storyModel
         $browseType     = $this->session->executionStoryBrowseType;
         $unclosedStatus = $this->getUnclosedStatusKeys();
         return $storyDAO->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
-            ->beginIF(strpos('draft|reviewing|changing|closed', $browseType) !== false)->andWhere('t2.status')->eq($browseType)->fi()
+            ->beginIF(!empty($browseType) && strpos('draft|reviewing|changing|closed', $browseType) !== false)->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'unclosed')->andWhere('t2.status')->in($unclosedStatus)->fi()
             ->orderBy($orderBy)
             ->page($pager, 't2.id')
