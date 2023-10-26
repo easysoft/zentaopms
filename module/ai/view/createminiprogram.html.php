@@ -44,7 +44,13 @@
         <tr>
           <th><?php echo $lang->ai->miniPrograms->desc; ?></th>
           <td colspan="2">
-            <?php echo html::input('desc', $introduction, "class='form-control' placeholder='" . $lang->ai->miniPrograms->placeholder->desc . "'"); ?>
+            <?php echo html::input('desc', $desc, "class='form-control' required placeholder='" . $lang->ai->miniPrograms->placeholder->desc . "'"); ?>
+          </td>
+        </tr>
+        <tr class="hidden">
+          <th></th>
+          <td colspan="2">
+            <input type="text" name="toNext" />
           </td>
         </tr>
         <tr>
@@ -67,8 +73,8 @@
         </tr>
         <div style="position: fixed; left: 0; right: 0; bottom: 32px; display: flex; justify-content: center; gap: 24px;">
           <?php echo html::a($this->createLink('ai', 'miniPrograms'), $lang->goback, '', "class='btn btn-back btn-wide'"); ?>
-          <button class="btn btn-wide btn-secondary"><?php echo $lang->save; ?></button>
-          <button class="btn btn-wide btn-primary" type="submit"><?php echo $lang->ai->nextStep; ?></button>
+          <button class="btn btn-wide btn-secondary" type="submit" id="save-miniprogram"><?php echo $lang->save; ?></button>
+          <button class="btn btn-wide btn-primary" type="submit" id="next-step"><?php echo $lang->ai->nextStep; ?></button>
         </div>
       </table>
     </form>

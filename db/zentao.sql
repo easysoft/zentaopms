@@ -15941,8 +15941,9 @@ CREATE TABLE IF NOT EXISTS `zt_miniprogram` (
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
-  `tmp` enum('0','1') NOT NULL DEFAULT '1',
+  `publish` enum('0','1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `prompt` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -15950,9 +15951,9 @@ CREATE TABLE IF NOT EXISTS `zt_miniprogramfields` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `appid` mediumint(8) unsigned NOT NULL,
   `name` varchar(30) NOT NULL,
-  `type` enum('radio', 'checkbox', 'input', 'template') DEFAULT 'input',
-  `value` text NOT NULL,
-  `optional` varchar(30) DEFAULT NULL,
+  `type` enum('radio', 'checkbox', 'text', 'textarea') DEFAULT 'text',
+  `placeholder` text DEFAULT NULL,
+  `options` text DEFAULT NULL,
   `required` enum('0', '1') DEFAULT '1',
   PRIMARY KEY (`id`),
   FOREIGN KEY (`appid`) REFERENCES `zt_miniprogram`(`id`)

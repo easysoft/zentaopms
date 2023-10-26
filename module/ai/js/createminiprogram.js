@@ -36,6 +36,21 @@ function handleSaveButtonClick()
     $('input[name="iconName"]').prop('value', selectedIcon);
 }
 
-$('#theme-buttons button').on('click', handleThemeButtonClick);
-$('#icon-buttons svg').on('click', handleIconButtonClick);
-$('#save-icon-button').on('click', handleSaveButtonClick);
+function handleSaveMiniProgramClick()
+{
+    $('[name="toNext"]').prop('value', '0');
+}
+
+function handleNextStepClick()
+{
+    $('[name="toNext"]').prop('value', '1');
+}
+
+$(function()
+{
+    $('#theme-buttons button').on('click', handleThemeButtonClick);
+    $('#icon-buttons svg').on('click', handleIconButtonClick);
+    $('#save-icon-button').on('click', handleSaveButtonClick);
+    $('#save-miniprogram').on('click', handleSaveMiniProgramClick);
+    $('#next-step').on('click', handleNextStepClick);
+});

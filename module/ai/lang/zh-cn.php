@@ -418,6 +418,8 @@ $lang->ai->miniPrograms->modelList         = array('openai-gpt35' => 'OpenAI / G
 $lang->ai->miniPrograms->iconModification  = '图标修改';
 $lang->ai->miniPrograms->customBackground  = '自定义背景色';
 $lang->ai->miniPrograms->customIcon        = '自定义icon';
+$lang->ai->miniPrograms->backToListPage    = '返回列表页';
+$lang->ai->miniPrograms->lastStep          = '上一步';
 
 $lang->ai->miniPrograms->placeholder          = new stdClass();
 $lang->ai->miniPrograms->placeholder->name    = '请输入小程序名称';
@@ -444,7 +446,17 @@ $lang->ai->miniPrograms->field->configuration     = '字段配置区';
 $lang->ai->miniPrograms->field->debug             = '调试区';
 $lang->ai->miniPrograms->field->preview           = '预览区';
 $lang->ai->miniPrograms->field->option            = '选项';
-$lang->ai->miniPrograms->field->emptyNameWarning  = '『名称』不能为空。';
+$lang->ai->miniPrograms->field->contentDebugging  = '内容调试';
+$lang->ai->miniPrograms->field->contentDebuggingTip = '请在此处输入字段进行调试。';
+$lang->ai->miniPrograms->field->prompterDesign    = '提词设计';
+$lang->ai->miniPrograms->field->prompterDesignTip = '输入“<>”符号可引用已配置的字段，“<>”前后采用空格进行间隔。';
+$lang->ai->miniPrograms->field->prompterPreview   = '提词预览';
+$lang->ai->miniPrograms->field->generateResult    = '生成结果';
+$lang->ai->miniPrograms->field->resultPreview     = '结果预览';
+
+$lang->ai->miniPrograms->field->emptyNameWarning       = '『字段名称』不能为空';
+$lang->ai->miniPrograms->field->duplicatedNameWarning  = '『字段名称』重复';
+$lang->ai->miniPrograms->field->emptyOptionWarning     = '请至少配置一个选项';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = '语言模型配置';

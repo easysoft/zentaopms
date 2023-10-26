@@ -155,13 +155,17 @@ class ai extends control
     {
         if(!empty($_POST))
         {
-            $requiredFields = array('category' => $this->lang->ai->miniPrograms->category, 'model' => $this->lang->prompt->model, 'name' => $this->lang->prompt->name);
+            $toNext = $_POST['toNext'];
+            unset($_POST['toNext']);
+            $requiredFields = array('category' => $this->lang->ai->miniPrograms->category, 'model' => $this->lang->prompt->model, 'name' => $this->lang->prompt->name, 'desc' => $this->lang->ai->miniPrograms->desc);
             $errors = $this->ai->verifyRequiredFields($requiredFields);
             if($errors !== false) return $this->sendError($errors);
             $isDuplicated = $this->ai->checkDuplicatedAppName($_POST['name']);
             if($isDuplicated) return $this->sendError(array('name' => $this->lang->ai->miniPrograms->field->duplicatedNameTip));
             $id = $this->ai->createTmpMiniProgram();
-            if($id !== false) return  $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'configuredMiniProgram', "appID=$id")));
+            if($id === false) return $this->sendError(array('message' => $this->lang->fail));
+            if($toNext === '1') return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'configuredMiniProgram', "appID=$id")));
+            return $this->sendSuccess(array('message' => $this->lang->saveSuccess));
         }
         $this->view->iconName = 'writinghand';
         $this->view->iconTheme = 7;
@@ -179,7 +183,12 @@ class ai extends control
     public function configuredMiniProgram($appID)
     {
         if(!is_numeric($appID)) return $this->locate('ai', 'createMiniProgram');
+        if(!empty($_POST))
+        {
+            $this->ai->saveMiniProgramFields($appID);
+        }
         $this->view->title = $this->lang->ai->miniPrograms->common;
+        $this->view->appid = $appID;
         $this->display();
     }
 

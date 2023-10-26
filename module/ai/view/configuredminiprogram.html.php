@@ -13,14 +13,13 @@
 <?php include '../../common/view/header.html.php'; ?>
 
 <?php
-  js::set('pleaseInput', $lang->ai->miniPrograms->placeholder->input);
-  js::set('deleteTip', $lang->ai->miniPrograms->deleteTip);
+js::set('pleaseInput', $lang->ai->miniPrograms->placeholder->input);
+js::set('deleteTip', $lang->ai->miniPrograms->deleteTip);
+js::set('emptyWarning', $lang->ai->miniPrograms->field->emptyNameWarning);
+js::set('duplicatedWarning', $lang->ai->miniPrograms->field->duplicatedNameWarning);
+js::set('emptyOptionWarning', $lang->ai->miniPrograms->field->emptyOptionWarning);
+js::set('appid', $appid);
 ?>
-
-
-<template id="text-danger-template">
-  <div id="nameLabel" class="text-danger help-text"><?php echo $lang->ai->miniPrograms->field->emptyNameWarning; ?></div>
-</template>
 
 <template id="option-template">
   <div class="input-group">
@@ -87,7 +86,7 @@
       </div>
       <div class="modal-body" style="display: flex; gap: 42px; padding-right: 36px;"></div>
       <div class="modal-footer" style="display: flex; justify-content: center; border-top: none;">
-        <button type="button" class="btn btn-wide btn-primary" id="save-add-field-button" onclick="handleSaveFieldClick()"><?php echo $lang->save; ?></button>
+        <button type="button" class="btn btn-wide btn-primary" onclick="handleSaveFieldClick()"><?php echo $lang->save; ?></button>
       </div>
     </div>
   </div>
@@ -101,7 +100,7 @@
       </div>
       <div class="modal-body" style="display: flex; gap: 42px; padding-right: 36px;"></div>
       <div class="modal-footer" style="display: flex; justify-content: center; border-top: none;">
-        <button type="button" class="btn btn-wide btn-primary" id="save-add-field-button" onclick="handleSaveEditedFieldClick()"><?php echo $lang->save; ?></button>
+        <button type="button" class="btn btn-wide btn-primary" onclick="handleSaveEditedFieldClick()"><?php echo $lang->save; ?></button>
       </div>
     </div>
   </div>
@@ -113,7 +112,7 @@
     </header>
     <main class="field-configuration-main">
       <div>
-        <a onclick="handleAddFieldClick()" style="border: 1px dashed #D8DBDE; border-radius: 2px; margin: 25px 72px; display: flex; align-items: center; flex-direction: column; padding: 12px; gap: 4px;">
+        <a onclick="handleAddFieldClick()" style="border: 1px dashed #D8DBDE; border-radius: 2px; display: flex; align-items: center; flex-direction: column; padding: 12px; gap: 4px;">
           <div style="color: #2E7FFF; display: flex; align-items: center; gap: 4px;"><i class="icon icon-plus"></i><span><?php echo $lang->ai->miniPrograms->field->addTitle; ?></span></div>
           <div style="color: #9EA3B0; font-size: 12divx;"><?php echo $lang->ai->miniPrograms->field->addTip; ?></div>
         </a>
@@ -128,7 +127,25 @@
       <strong><?php echo $lang->ai->miniPrograms->field->debug; ?></strong>
     </header>
     <main>
-
+      <div class="content-debug-area" style="min-height: 50%;">
+        <div class="area-title">
+          <strong><?php echo $lang->ai->miniPrograms->field->contentDebugging; ?></strong>
+          <i title="帮助" class="icon icon-help text-warning"></i>
+          <span class="text-muted"><?php echo $lang->ai->miniPrograms->field->contentDebuggingTip; ?></span>
+        </div>
+        <table class="table table-form">
+          <tbody class="field-content"></tbody>
+        </table>
+      </div>
+      <div class="prompt-design-area" style="height: 50%; position: relative; padding-top: 0;">
+        <div class="area-title">
+          <strong><?php echo $lang->ai->miniPrograms->field->prompterDesign; ?></strong>
+          <i title="帮助" class="icon icon-help text-warning"></i>
+          <span class="text-muted"><?php echo $lang->ai->miniPrograms->field->prompterDesignTip; ?></span>
+        </div>
+        <div class="form-control" id="autocomplete-textarea" contenteditable="true" style="overflow-y: auto; position: absolute; top: 32px; left: 24px; right: 24px; bottom: 24px; height: auto; width: auto;"></div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.textcomplete/1.8.5/jquery.textcomplete.min.js"></script>
+      </div>
     </main>
   </div>
   <div style="flex-basis: 30%;">
@@ -136,8 +153,39 @@
       <strong><?php echo $lang->ai->miniPrograms->field->preview; ?></strong>
     </header>
     <main>
-
+      <div class="prompt-preview-area" style="height: 50%; position: relative;">
+        <div class="area-title" style="display: flex; justify-content: space-between;">
+          <strong><?php echo $lang->ai->miniPrograms->field->prompterPreview; ?></strong>
+          <button class="btn btn-link" style="display: flex; align-items: center; gap: 4px; color: #2E7FFF;">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_669_15822)">
+                <path d="M12.5418 1.45837L8.66266 12.5417L6.446 7.55421L1.4585 5.33754L12.5418 1.45837Z" stroke="#2E7FFF" stroke-linejoin="round" />
+                <path d="M12.5416 1.45837L6.4458 7.55421" stroke="#2E7FFF" stroke-linecap="round" stroke-linejoin="round" />
+              </g>
+              <defs>
+                <clipPath id="clip0_669_15822">
+                  <rect width="14" height="14" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+            <?php echo $lang->ai->miniPrograms->field->generateResult; ?>
+          </button>
+        </div>
+        <div class="preview-container"></div>
+      </div>
+      <div class="prompt-result-area" style="height: 50%; position: relative; padding-top: 0;">
+        <div class="area-title">
+          <strong><?php echo $lang->ai->miniPrograms->field->resultPreview; ?></strong>
+        </div>
+        <div class="preview-container"></div>
+      </div>
     </main>
   </div>
 </div>
+<footer style="display: flex; justify-content: center; align-items: center; height: 56px; background: #fff; border-top: 1px solid #eff1f7; position: fixed; bottom: 0; left: 20px; right: 20px; gap: 24px;">
+  <a href="<?php echo $this->createLink('ai', 'miniPrograms'); ?>" class="btn btn-wide"><?php echo $lang->ai->miniPrograms->backToListPage; ?></a>
+  <a href="<?php echo $this->createLink('ai', 'createMiniProgram'); ?>" class="btn btn-wide"><?php echo $lang->ai->miniPrograms->lastStep; ?></a>
+  <a class="btn btn-wide btn-secondary" onclick="saveMiniProgram('0')"><?php echo $lang->save; ?></a>
+  <a class="btn btn-wide btn-primary" onclick="saveMiniProgram('1')"><?php echo $lang->ai->prompts->action->publish; ?></a>
+</footer>
 <?php include '../../common/view/footer.html.php'; ?>

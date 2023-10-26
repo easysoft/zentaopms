@@ -327,6 +327,24 @@ class aiModel extends model
         return $this->dao->lastInsertID();
     }
 
+    public function saveMiniProgramFields($appID)
+    {
+        $data = fixer::input('post')->get();
+        $this->dao->update(TABLE_MINIPROGRAM)
+            ->set('prompt')->eq($data->prompt)
+            ->set('publish')->eq($data->toPublish)
+            ->where('id')->eq($appID)
+            ->exec();
+
+        $fields = $data->fields;
+        foreach ($fields as $field)
+        {
+            $this->dao->insert(TABLE_MINIPROGRAMFIELDS)
+                ->data($field)
+                ->exec();
+        }
+    }
+
     /**
      * Check for duplicate names of Mini programs.
      *
