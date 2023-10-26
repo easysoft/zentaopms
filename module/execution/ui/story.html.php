@@ -299,18 +299,11 @@ if($canBatchAction)
         foreach($lang->story->stageList as $stageID => $stage)
         {
             $stageItems[] = array(
-                'text'      => $stage,
-                'className' => 'batch-btn ajax-btn',
-                'data-url'  => createLink('story', 'batchChangeStage', "stageID=$stageID")
+                'text'       => $stage,
+                'innerClass' => 'batch-btn ajax-btn',
+                'data-url'   => createLink('story', 'batchChangeStage', "stageID=$stageID")
             );
         }
-
-        menu
-        (
-            set::id('navStage'),
-            set::className('dropdown-menu'),
-            set::items($stageItems)
-        );
     }
 
     if($canBatchChangeStage)
@@ -319,8 +312,8 @@ if($canBatchAction)
             'caret'          => 'up',
             'text'           => $lang->story->stageAB,
             'className'      => 'btn btn-caret size-sm secondary',
-            'url'            => '#navStage',
-            'data-toggle'    => 'dropdown',
+            'type'           => 'dropdown',
+            'items'          => $stageItems,
             'data-placement' => 'top-start'
         );
     }
