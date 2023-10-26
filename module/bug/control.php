@@ -214,7 +214,7 @@ class bug extends control
 
             $this->bugZen->checkExistBug($bug);
 
-            $bugID  = $this->bug->create($bug, $from);
+            $bugID = $this->bug->create($bug, $from);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $bug->id = $bugID;
