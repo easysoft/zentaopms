@@ -90,6 +90,7 @@ class datatable extends control
             foreach($postFields as $index => $field)
             {
                 $id = $field->id;
+                if($module == 'testcase' && $id == 'caseID') $id = 'id';
                 if(!isset($fieldList[$id])) continue;
 
                 $fields[$id]['order'] = $field->order;
