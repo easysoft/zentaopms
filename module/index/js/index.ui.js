@@ -782,7 +782,7 @@ $.get($.createLink('index', 'app'), html =>
     const parts = defaultOpenUrl.split(' ');
     const url = parts[0];
     let code = parts[1];
-    if(!code)
+    if(!code && defaultOpen)
     {
         const lastOpenApp = zui.store.session.get('lastOpenApp');
         if(lastOpenApp) code = lastOpenApp.code;
