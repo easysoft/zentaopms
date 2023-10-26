@@ -46,7 +46,8 @@ class chart extends control
 
         foreach($charts as $id => $chart)
         {
-            $charts[$id]->echartOption = $this->chart->getEchartOptions($chart->id);
+            $charts[$id]->echartOptions = $this->chart->getEchartOptions($chart->id);
+            $charts[$id]->filterOptions = $this->chart->getFilterOptions($chart->id);
         }
 
         $this->view->title         = $this->lang->chart->preview;

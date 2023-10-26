@@ -17,6 +17,12 @@ $chartItems = function() use($charts, $lang)
     $chartDoms = array();
     foreach($charts as $chart)
     {
+        $filterItems = array();
+        foreach($chart->filterOptions as $filterOption)
+        {
+            //$filterItems[] = div(setClass('filter-item'), input(1));
+        }
+
         $chartDoms[] = div
         (
             setClass('p-2 panel bg-white'),
@@ -32,6 +38,16 @@ $chartItems = function() use($charts, $lang)
                 (
                     setID('filterItems' . $chart->group . '_' . $chart->id),
                     setClass('filterBox'),
+                    div
+                    (
+                        setClass('left-section'),
+                        $filterItems,
+                    ),
+                    div
+                    (
+                        setClass('right-section')
+
+                    ),
                 ),
                 div
                 (
@@ -39,7 +55,7 @@ $chartItems = function() use($charts, $lang)
                     setClass('echart-content'),
                     echarts
                     (
-                        set($chart->echartOption),
+                        set($chart->echartOptions),
                     )->size('100%', 400),
                 )
             )

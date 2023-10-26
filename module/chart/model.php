@@ -192,41 +192,101 @@ class chartModel extends model
         return array($chartTree, $charts);
     }
 
+    public function getFilterOptions($chartID)
+    {
+        $chart = $this->getByID($chartID);
+
+        $fieldList     = array();
+        $sql           = str_replace(';', '', "$chart->sql");
+        $fieldSettings = (array)$chart->fieldSettings;
+        $langs         = $chart->langs;
+        $filters       = $chart->filters;
+        $clientLang    = $this->app->getClientLang();
+
+        foreach($fieldSettings as $key => $field) 
+        {
+            $fieldSettings[$key] = (array)$field;
+            $fieldList[$key]     = $field->name;
+        }
+        if(is_string($langs)) $langs = json_decode($langs, true);
+
+        $fieldPairs = array();
+        foreach($fieldList as $field => $fieldName)
+        {
+            $fieldObject  = $fieldSettings[$field]['object'];
+            $relatedField = $fieldSettings[$field]['field'];
+
+            $this->app->loadLang($fieldObject);
+            $fieldPairs[$field] = isset($this->lang->$fieldObject->$relatedField) ? $this->lang->$fieldObject->$relatedField : $field;
+
+            if(!isset($langs[$field])) continue;
+            if(!empty($langs[$field][$clientLang])) $fieldPairs[$field] = $langs[$field][$clientLang];
+        }
+
+        $filterOptions = array();
+        foreach($filters as $filter)
+        {
+            $field   = $filter['field'];
+            $type    = $filter['type'];
+            $default = isset($filter['default']) ? $filter['default'] : '';
+
+            $filterOption = $filter;
+            $filterOption['default'] = $default;
+            $filterOption['option']  = '';
+
+            $options = array();
+            if($type == 'select')
+            {
+                $fieldSetting           = $fieldSettings[$field];
+                $filterOption['option'] = $this->getSysOptions(zget($fieldSetting, 'type', ''), zget($fieldSetting, 'object', ''), zget($fieldSetting, 'field', ''), $sql);
+            }
+            elseif($type == 'date' or $type == 'datetime')
+            {
+                if(empty($default)) $filterOption['default'] = array('begin' => '', 'end' => '');
+                $filterOption['type'] = $type == 'date' ? 'form-date' : 'form-datetime';
+            }
+
+            $filterOptions[] = $filterOption;
+        }
+
+        return $filterOptions;
+    }
+
     public function getEchartOptions($chartID)
     {
         $chart = $this->getByID($chartID);
 
-        $sql      = str_replace(';', '', "$chart->sql");
-        $fields   = (array)$chart->fieldSettings;
-        $langs    = $chart->langs;
-        $settings = current($chart->settings);
-        $type     = $settings['type'];
+        $sql           = str_replace(';', '', "$chart->sql");
+        $fieldSettings = (array)$chart->fieldSettings;
+        $langs         = $chart->langs;
+        $settings      = current($chart->settings);
+        $type          = $settings['type'];
 
-        foreach($fields as $key => $field) $fields[$key] = (array)$field;
+        foreach($fieldSettings as $key => $field) $fieldSettings[$key] = (array)$field;
         if(is_string($langs)) $langs = json_decode($langs, true);
 
         switch($type)
         {
             case 'line':
-                $data = $this->genLineChart($fields, $settings, $sql, array(), $langs);
+                $data = $this->genLineChart($fieldSettings, $settings, $sql, array(), $langs);
                 break;
             case 'cluBarX':
-                $data = $this->genCluBar($fields, $settings, $sql, array(), '', $langs);
+                $data = $this->genCluBar($fieldSettings, $settings, $sql, array(), '', $langs);
                 break;
             case 'cluBarY':
-                $data = $this->genCluBar($fields, $settings, $sql, array(), '', $langs);
+                $data = $this->genCluBar($fieldSettings, $settings, $sql, array(), '', $langs);
                 break;
             case 'pie':
-                $data = $this->genPie($fields, $settings, $sql, array());
+                $data = $this->genPie($fieldSettings, $settings, $sql, array());
                 break;
             case 'radar':
-                $data = $this->genRadar($fields, $settings, $sql, array(), $langs);
+                $data = $this->genRadar($fieldSettings, $settings, $sql, array(), $langs);
                 break;
             case 'stackedBar':
-                $data = $this->genCluBar($fields, $settings, $sql, array(), 'total', $langs);
+                $data = $this->genCluBar($fieldSettings, $settings, $sql, array(), 'total', $langs);
                 break;
             case 'stackedBarY':
-                $data = $this->genCluBar($fields, $settings, $sql, array(), 'total', $langs);
+                $data = $this->genCluBar($fieldSettings, $settings, $sql, array(), 'total', $langs);
                 break;
         }
 
