@@ -83,7 +83,7 @@ foreach($projects as $projectID => $project)
 
 blockPanel
 (
-    set::bodyClass('row flex-wrap justify-between p-1.5 pt-1'),
+    set::bodyClass('row flex-wrap justify-start p-1.5 pt-1'),
     set::headingClass('pb-0 border-b-0'),
     $cards
 );
