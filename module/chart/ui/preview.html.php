@@ -10,24 +10,11 @@ declare(strict_types = 1);
  */
 namespace zin;
 
+include 'echarts.html.php';
+
 jsVar('groupID', isset($group->id) ? $group->id : 0);
 jsVar('charts', $charts);
 jsVar('noChartSelected', $lang->chart->noChartSelected);
-
-$chartItems = $charts ?
-div
-(
-    setClass('panel'),
-    div
-    (
-        setClass('panel-body'),
-        div
-        (
-            setClass('panel-title'),
-
-        )
-    )
-) : div(setClass('bg-white'), div(setClass('empty-tip text-gray'), $lang->chart->noChart));
 
 featureBar
 (
@@ -57,7 +44,7 @@ div
     div
     (
         setClass('w-full'),
-        $chartItems
+        $chartItems()
     )
 );
 

@@ -44,11 +44,16 @@ class chart extends control
             }
         }
 
-        $this->view->title       = $this->lang->chart->preview;
-        $this->view->dimensionID = $dimensionID;
-        $this->view->group       = $this->loadModel('tree')->getByID($groupID);
-        $this->view->chartTree   = $chartTree;
-        $this->view->charts      = $charts;
+        foreach($charts as $id => $chart)
+        {
+            $charts[$id]->echartOption = $this->chart->getEchartOptions($chart->id);
+        }
+
+        $this->view->title         = $this->lang->chart->preview;
+        $this->view->dimensionID   = $dimensionID;
+        $this->view->group         = $this->loadModel('tree')->getByID($groupID);
+        $this->view->chartTree     = $chartTree;
+        $this->view->charts        = $charts;
         $this->display();
     }
 
