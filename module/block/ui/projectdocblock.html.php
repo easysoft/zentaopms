@@ -17,12 +17,12 @@ $project = null;
 $items = array();
 foreach($projects as $projectItem)
 {
-    $params  = helper::safe64Encode("module={$block->module}&active={$projectItem->id}");
+    $params  = helper::safe64Encode("active={$projectItem->id}&type={$type}");
     $items[] = array
     (
         'id'        => $projectItem->id,
         'text'      => $projectItem->name,
-        'url'       => createLink('project', 'index', "projectID={$projectItem->id}"),
+        'url'       => createLink('doc', 'projectspace', "projectID={$projectItem->id}"),
         'activeUrl' => createLink('block', 'printBlock', "blockID={$block->id}&params={$params}")
     );
     if($projectItem->id == $active) $project = $projectItem;
