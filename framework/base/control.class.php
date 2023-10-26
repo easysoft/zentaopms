@@ -563,18 +563,9 @@ class baseControl
             }
 
             /* Method extension css file. like module/story/ext/css/create/effort.zh-cn.css. */
-            if(isset($filePairs["{$code}.{$clientLang}{$suffix}.css"]))
-            {
-                $css .= file_get_contents($filePairs["{$code}.{$clientLang}{$suffix}.css"]);
-            }
-            elseif($notCNLang and isset($filePairs["{$code}.en{$suffix}.css"]))
-            {
-                $css .= file_get_contents($filePairs["{$code}.en{$suffix}.css"]);
-            }
-            elseif($notCNLang and isset($filePairs["{$code}{$suffix}.css"]))
-            {
-                $css .= file_get_contents($filePairs["{$code}{$suffix}.css"]);
-            }
+            if(isset($filePairs["{$code}{$suffix}.css"]))                   $css .= file_get_contents($filePairs["{$code}{$suffix}.css"]);
+            if(isset($filePairs["{$code}.{$clientLang}{$suffix}.css"]))     $css .= file_get_contents($filePairs["{$code}.{$clientLang}{$suffix}.css"]);
+            if($notCNLang and isset($filePairs["{$code}.en{$suffix}.css"])) $css .= file_get_contents($filePairs["{$code}.en{$suffix}.css"]);
             $usedCodes[$code] = $code;
         }
 

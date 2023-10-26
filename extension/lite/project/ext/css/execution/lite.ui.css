@@ -1,0 +1,24 @@
+.kanban-cards {padding-top: 12px; width: 100%; padding-left: 5px;}
+.kanban-card {padding-right: 5px;}
+.kanban-card .panel {margin: 0 0; border: 1px solid #DCDCDC; border-radius: 4px; box-shadow: none; cursor: pointer; height: 160px; margin-bottom: 5px;}
+.kanban-card .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
+.kanban-card .panel:hover .kanban-actions {visibility: unset;}
+.kanban-card .kanban-actions {position: absolute; top: 4px; right: 4px;}
+.kanban-card .kanban-actions .dropdown-menu.pull-right {top:31px; right: -84px; left: auto;}
+.kanban-card .kanban-actions .dropdown-menu.pull-left {top:31px; right:-1px; left: auto;}
+.kanban-card .kanban-desc {color: #838a9d; word-break:break-all; height: 85px; overflow: hidden; display: -webkit-box;}
+.kanban-card .kanban-members {float: left; height: 24px; line-height: 24px;}
+.kanban-card .kanban-members > div {display: inline-block; height: 24px;}
+.kanban-card .kanban-members > div + div {margin-left: -5px;}
+.kanban-card .kanban-members > div > .avatar {display: inline-block; width: 24px !important; height: 24px !important; line-height: 24px; margin-right: 1px;}
+.kanban-card .kanban-members > span {display: inline-block; color: transparent; width: 2px; height: 2px; background-color: #8990a2; position: relative; border-radius: 50%; top: 3px; margin: 0 3px;}
+.kanban-card .kanban-members > span:before,
+.kanban-card .kanban-members > span:after {content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0; border-radius: 50%}
+.kanban-card .kanban-members > span:before {left: -4px;}
+.kanban-card .kanban-members > span:after {right: -4px;}
+.kanban-card .kanban-members-count {display: inline-block; margin-left: 6px; position: relative; top: 3px}
+.kanban-card .kanban-acl {position: absolute; right: 0px; bottom: 2px; color: #838a9d;}
+.kanban-card .label.kanban-status-wait {background-color: #E5E5E5; color: #808080;}
+.kanban-card .label.kanban-status-doing {background-color: #DDF4DF; color: #38B03F;}
+.kanban-card .label.kanban-status-suspended {background-color: #FFF0D5; color: #F1A325;}
+.kanban-card .label.kanban-status-closed {background-color: #808080; color: #FFF;}
