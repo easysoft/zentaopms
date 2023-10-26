@@ -30,7 +30,7 @@ class testtaskTao extends testtaskModel
             ->where('t1.deleted')->eq(0)
             ->beginIF($unit == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
             ->beginIF($unit != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in("0,{$this->app->user->view->sprints}")->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in("0,{$this->app->user->view->sprints}")->fi()
             ->beginIF($scope == 'local')->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF($scope == 'all')->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
