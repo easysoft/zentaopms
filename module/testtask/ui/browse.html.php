@@ -30,7 +30,7 @@ $productDropdown = dropdown
 featureBar
 (
     set::current($status),
-    set::linkParams("productID={$product->id}&branch={$branch}&type={$scope},{key}"),
+    set::linkParams("productID={$product->id}&branch={$branch}&type={$scope},{key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     to::before($productDropdown),
     inputGroup
     (
