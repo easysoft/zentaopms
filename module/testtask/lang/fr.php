@@ -82,6 +82,7 @@ $lang->testtask->pri               = 'Priorité';
 $lang->testtask->name              = 'Nom Campagne';
 $lang->testtask->begin             = 'Début';
 $lang->testtask->end               = 'Fin';
+$lang->testtask->realBegan         = 'Actual Started Date';
 $lang->testtask->realFinishedDate  = 'Actual Finished Date';
 $lang->testtask->desc              = 'Description';
 $lang->testtask->mailto            = 'Mailto';

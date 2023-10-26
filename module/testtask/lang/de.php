@@ -82,6 +82,7 @@ $lang->testtask->pri               = 'Priorität';
 $lang->testtask->name              = 'Name';
 $lang->testtask->begin             = 'Start';
 $lang->testtask->end               = 'Ende';
+$lang->testtask->realBegan         = 'Actual Started Date';
 $lang->testtask->realFinishedDate  = 'Actual Finished Date';
 $lang->testtask->desc              = 'Beschreibung';
 $lang->testtask->mailto            = 'Mail an';

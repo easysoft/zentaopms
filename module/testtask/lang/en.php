@@ -81,6 +81,7 @@ $lang->testtask->name              = 'Request Name';
 $lang->testtask->unitName          = 'Name Of Unit Test';
 $lang->testtask->begin             = 'Begin';
 $lang->testtask->end               = 'End';
+$lang->testtask->realBegan         = 'Actual Started Date';
 $lang->testtask->realFinishedDate  = 'Actual Finished Date';
 $lang->testtask->desc              = 'Description';
 $lang->testtask->mailto            = 'Mailto';

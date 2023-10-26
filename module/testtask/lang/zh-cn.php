@@ -81,6 +81,7 @@ $lang->testtask->name              = '测试单名称';
 $lang->testtask->unitName          = '单测名称';
 $lang->testtask->begin             = '开始日期';
 $lang->testtask->end               = '结束日期';
+$lang->testtask->realBegan         = '实际开始日期';
 $lang->testtask->realFinishedDate  = '实际完成日期';
 $lang->testtask->desc              = '描述';
 $lang->testtask->mailto            = '抄送给';
