@@ -66,8 +66,10 @@ class heading extends wg
 
         if(in_array($app->tab, is_array($config->hasDropmenuApps) ? $config->hasDropmenuApps : array()))
         {
-            $module = $app->tab == 'qa' ? 'product' : $app->tab;
-            $module = $app->tab == 'bi' ? 'dimension' : $app->tab;
+            $module = $app->tab;
+            if($app->tab == 'qa') $module = 'product';
+            if($app->tab == 'bi') $module = 'dimension';
+
             if($app->tab == 'qa' && $moduleName == 'caselib') $module = 'caselib';
             return new dropmenu(set::tab($module));
         }
