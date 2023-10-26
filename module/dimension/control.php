@@ -21,13 +21,13 @@ class dimension extends control
      * @param  string type          screen|pivot|chart
      * @return void
      */
-    public function ajaxGetDropMenu($currentModule, $currentMethod, $dimensionID, $type = '')
+    public function ajaxGetDropMenu(int $dimensionID, string $module, string $method)
     {
-        $this->view->currentModule = $currentModule;
-        $this->view->currentMethod = $currentMethod;
         $this->view->dimensionID   = $dimensionID;
-        $this->view->type          = $type;
-        $this->view->dimensions    = $this->dimension->getList();
+
+        $dimensions = $this->dimension->getList();
+        $this->view->dimensionTree = $this->dimensionZen->buildTree($dimensions);
+        $this->view->link          = $this->dimensionZen->getLink($module, $method, '{id}', '', 'dimension');
         $this->display();
     }
 }

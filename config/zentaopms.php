@@ -659,9 +659,9 @@ $config->bi = new stdclass();
 $config->bi->pickerHeight = 150;
 
 $config->db->sqliteBlacklist  = array('sqlite_queue', 'cron');
-$config->hasDropmenuApps      = array('program', 'project', 'product', 'execution', 'qa', 'admin');
+$config->hasDropmenuApps      = array('program', 'project', 'product', 'execution', 'qa', 'admin', 'bi');
 $config->hasBranchMenuModules = array('product', 'story', 'release', 'bug', 'testcase', 'testtask');
-$config->excludeDropmenuList  = array('program-browse', 'program-productview', 'product-all', 'product-index', 'execution-all', 'project-browse', 'project-batchedit', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create', 'execution-batchedit');
+$config->excludeDropmenuList  = array('program-browse', 'program-productview', 'product-all', 'product-index', 'execution-all', 'project-browse', 'project-batchedit', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create', 'execution-batchedit', 'metric-preview');
 $config->hasSwitcherModules   = array('design');
 $config->hasSwitcherMethods   = array('project-bug', 'project-testcase', 'execution-bug', 'execution-testcase');
 $config->excludeSwitcherList  = array();
