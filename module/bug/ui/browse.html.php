@@ -192,7 +192,7 @@ dtable
     set::modules($modulePairs),
     set::emptyTip($lang->bug->notice->noBug),
     set::createTip($lang->bug->create),
-    set::createLink($canBeChanged && hasPriv('bug', 'create') ? array('module' => 'bug', 'method' => 'create', 'params' => "productID={$product->id}&branch={$branch}&extra=moduleID=$currentModuleID") : '')
+    set::createLink($canBeChanged && hasPriv('bug', 'create') ? createLink('bug', 'create', "productID={$product->id}&branch={$branch}&extra=moduleID=$currentModuleID") : ''),
 );
 
 render();
