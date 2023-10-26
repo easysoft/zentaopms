@@ -17,8 +17,7 @@ foreach($reports as $report)
     $report->tasks = $taskName;
 }
 
-$config->testreport->dtable->fieldList['execution']['map']     = $executions;
-$config->testreport->dtable->fieldList['createdBy']['userMap'] = $users;
+$config->testreport->dtable->fieldList['execution']['map'] = $executions;
 
 $tableData = initTableData($reports, $config->testreport->dtable->fieldList, $this->testreport);
 
@@ -32,7 +31,6 @@ featureBar
     set::current('all'),
     set::linkParams("objectID={$objectID}&objectType={$objectType}&extra={$extra}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
 );
-
 
 toolbar
 (
@@ -52,6 +50,7 @@ dtable
 (
     set::cols($cols),
     set::data($data),
+    set::userMap($users),
     set::orderBy($orderBy),
     set::sortLink(createLink('testreport', 'browse', "objectID={$objectID}&objectType={$objectType}&extra={$extra}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::fixedLeftWidth('0.33'),
