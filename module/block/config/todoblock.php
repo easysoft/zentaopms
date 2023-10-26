@@ -30,8 +30,8 @@ $config->block->todo->dtable->fieldList['end']    = $config->my->todo->dtable->f
 $config->block->todo->dtable->fieldList['status']['sort'] = true;
 $config->block->todo->dtable->fieldList['type']['sort']   = true;
 $config->block->todo->dtable->fieldList['date']['sort']   = 'date';
-$config->block->todo->dtable->fieldList['begin']['sort']  = 'date';
-$config->block->todo->dtable->fieldList['end']['sort']    = 'date';
+$config->block->todo->dtable->fieldList['begin']['sort']  = true;
+$config->block->todo->dtable->fieldList['end']['sort']    = true;
 
 unset($config->block->todo->dtable->fieldList['pri']['group']);
 unset($config->block->todo->dtable->fieldList['status']['group']);

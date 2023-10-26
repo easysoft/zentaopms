@@ -13,18 +13,29 @@ $config->block->case->dtable->fieldList['status']        = $config->testcase->dt
 $config->block->case->dtable->fieldList['lastRunDate']   = $config->testcase->dtable->fieldList['lastRunDate'];
 $config->block->case->dtable->fieldList['lastRunResult'] = $config->testcase->dtable->fieldList['lastRunResult'];
 
-$config->block->case->dtable->fieldList['pri']['name']           = 'pri';
-$config->block->case->dtable->fieldList['pri']['title']          = $lang->priAB;
-$config->block->case->dtable->fieldList['status']['name']        = 'status';
-$config->block->case->dtable->fieldList['status']['title']       = $lang->statusAB;
-$config->block->case->dtable->fieldList['lastRunDate']['name']   = 'lastRunDate';
-$config->block->case->dtable->fieldList['lastRunDate']['type']   = 'date';
+$config->block->case->dtable->fieldList['pri']['name']  = 'pri';
+$config->block->case->dtable->fieldList['pri']['title'] = $lang->priAB;
+$config->block->case->dtable->fieldList['pri']['sort']  = true;
+
+$config->block->case->dtable->fieldList['status']['name']  = 'status';
+$config->block->case->dtable->fieldList['status']['title'] = $lang->statusAB;
+$config->block->case->dtable->fieldList['status']['sort']  = true;
+
+$config->block->case->dtable->fieldList['lastRunDate']['name'] = 'lastRunDate';
+$config->block->case->dtable->fieldList['lastRunDate']['type'] = 'date';
+$config->block->case->dtable->fieldList['lastRunDate']['sort'] = 'date';
+
 $config->block->case->dtable->fieldList['lastRunResult']['name'] = 'lastRunResult';
+$config->block->case->dtable->fieldList['lastRunResult']['sort'] = true;
 
 unset($config->block->case->dtable->fieldList['pri']['group']);
 unset($config->block->case->dtable->fieldList['status']['group']);
 unset($config->block->case->dtable->fieldList['lastRunDate']['group']);
 unset($config->block->case->dtable->fieldList['lastRunResult']['group']);
+unset($config->block->case->dtable->fieldList['pri']['sortType']);
+unset($config->block->case->dtable->fieldList['status']['sortType']);
+unset($config->block->case->dtable->fieldList['lastRunDate']['sortType']);
+unset($config->block->case->dtable->fieldList['lastRunResult']['sortType']);
 
 $config->block->case->dtable->short = new stdclass();
 $config->block->case->dtable->short->fieldList['id']            = $config->block->case->dtable->fieldList['id'];
