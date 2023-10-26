@@ -6,6 +6,7 @@
 .history-list.sort-reverse {flex-direction: column-reverse;}
 .history-changes {display: none;}
 .history-changes.show {display: block; }
+.history-changes blockquote.original {display: none;}
 
 .history-list > li strong {color: var(--color-slate-800);}
 .history-list > li {position: relative;}
