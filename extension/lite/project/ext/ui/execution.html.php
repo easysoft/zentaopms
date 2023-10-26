@@ -61,12 +61,12 @@ $fnBuildSingleCard = function($kanban) use ($executionActions, $lang, $kanbanvie
     if(common::hasPriv('execution','edit')) $actionItems[] = array('url' => createLink('execution', 'edit', "executionID={$kanban->id}"), 'text' => $lang->kanban->edit, 'icon' => 'edit', 'data-toggle' => 'modal', 'data-width' => '75%');
     if(!empty($executionActions[$kanban->id]))
     {
-        if(in_array('start', $executionActions[$kanban->id]))    $actionItems[] = array('url' => createLink('execution', 'start',    "executionID={$kanban->id}"), 'text' => $lang->execution->start,    'icon' => 'play',     'data-toggle' => 'modal', 'data-width' => '75%');
-        if(in_array('putoff', $executionActions[$kanban->id]))   $actionItems[] = array('url' => createLink('execution', 'putoff',   "executionID={$kanban->id}"), 'text' => $lang->execution->putoff,   'icon' => 'calendar', 'data-toggle' => 'modal', 'data-width' => '75%');
-        if(in_array('suspend', $executionActions[$kanban->id]))  $actionItems[] = array('url' => createLink('execution', 'suspend',  "executionID={$kanban->id}"), 'text' => $lang->execution->suspend,  'icon' => 'pause',    'data-toggle' => 'modal', 'data-width' => '75%');
-        if(in_array('close', $executionActions[$kanban->id]))    $actionItems[] = array('url' => createLink('execution', 'close',    "executionID={$kanban->id}"), 'text' => $lang->execution->close,    'icon' => 'off',      'data-toggle' => 'modal', 'data-width' => '75%');
-        if(in_array('activate', $executionActions[$kanban->id])) $actionItems[] = array('url' => createLink('execution', 'activate', "executionID={$kanban->id}"), 'text' => $lang->execution->activate, 'icon' => 'magic',    'data-toggle' => 'modal', 'data-width' => '75%');
-        if(in_array('delete', $executionActions[$kanban->id]))   $actionItems[] = array('url' => createLink('execution', 'delete',   "executionID={$kanban->id}"), 'text' => $lang->execution->delete,   'icon' => 'trash');
+        if(in_array('start', $executionActions[$kanban->id]))    $actionItems[] = array('url'      => createLink('execution', 'start',    "executionID={$kanban->id}"), 'text' => $lang->execution->start,    'icon' => 'play',     'data-toggle' => 'modal', 'data-size' => 'lg');
+        if(in_array('putoff', $executionActions[$kanban->id]))   $actionItems[] = array('url'      => createLink('execution', 'putoff',   "executionID={$kanban->id}"), 'text' => $lang->execution->putoff,   'icon' => 'calendar', 'data-toggle' => 'modal', 'data-size' => 'lg');
+        if(in_array('suspend', $executionActions[$kanban->id]))  $actionItems[] = array('url'      => createLink('execution', 'suspend',  "executionID={$kanban->id}"), 'text' => $lang->execution->suspend,  'icon' => 'pause',    'data-toggle' => 'modal', 'data-size' => 'lg');
+        if(in_array('close', $executionActions[$kanban->id]))    $actionItems[] = array('url'      => createLink('execution', 'close',    "executionID={$kanban->id}"), 'text' => $lang->execution->close,    'icon' => 'off',      'data-toggle' => 'modal', 'data-size' => 'lg');
+        if(in_array('activate', $executionActions[$kanban->id])) $actionItems[] = array('url'      => createLink('execution', 'activate', "executionID={$kanban->id}"), 'text' => $lang->execution->activate, 'icon' => 'magic',    'data-toggle' => 'modal', 'data-size' => 'lg');
+        if(in_array('delete', $executionActions[$kanban->id]))   $actionItems[] = array('data-url' => createLink('execution', 'delete',   "executionID={$kanban->id}"), 'text' => $lang->execution->delete,   'icon' => 'trash',    'data-request' => 'ajax-submit');
     }
 
     return cell

@@ -2092,8 +2092,8 @@ class execution extends control
         /* Use the projectID of Kanban as objectID if vision is lite. */
         if($this->config->vision == 'lite')
         {
-            $kanban  = $this->project->getByID($objectID, 'kanban');
-            $objectID = $kanban->project;
+            $kanban = $this->project->getByID($objectID, 'kanban');
+            if($kanban) $objectID = $kanban->project;
         }
 
         $products = $this->product->getProducts($objectID);

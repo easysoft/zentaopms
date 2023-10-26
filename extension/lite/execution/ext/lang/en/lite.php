@@ -7,7 +7,7 @@ $lang->execution->createKanban    = 'Create Kanban';
 $lang->execution->noExecution     = "No Executions.";
 $lang->execution->importTask      = 'Import Tsak';
 $lang->execution->batchCreateTask = 'Batch Create Task';
-$lang->execution->linkStory       = "Create {$lang->SRCommon}";
+$lang->execution->linkStory       = "Link {$lang->SRCommon}";
 
 $lang->execution->kanbanGroup['default']    = 'Default';
 $lang->execution->kanbanGroup['story']      = 'Target';
