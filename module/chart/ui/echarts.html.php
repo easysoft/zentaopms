@@ -10,6 +10,8 @@ declare(strict_types = 1);
  */
 namespace zin;
 
+include_once 'common.html.php';
+
 $chartItems = function() use($charts, $lang)
 {
     if(empty($charts)) return div(setClass('bg-white'), div(setClass('empty-tip text-gray'), $lang->chart->noChart));
@@ -20,7 +22,7 @@ $chartItems = function() use($charts, $lang)
         $filterItems = array();
         foreach($chart->filterOptions as $filterOption)
         {
-            //$filterItems[] = div(setClass('filter-item'), input(1));
+            $filterItems[] = initFilter($filterOption, $lang);
         }
 
         $chartDoms[] = div
@@ -53,10 +55,7 @@ $chartItems = function() use($charts, $lang)
                 (
                     setID('chartDraw' . $chart->group . '_' . $chart->id),
                     setClass('echart-content'),
-                    echarts
-                    (
-                        set($chart->echartOptions),
-                    )->size('100%', 400),
+                    initEchart($chart->echartOptions),
                 )
             )
         );
