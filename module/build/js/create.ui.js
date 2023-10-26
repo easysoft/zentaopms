@@ -62,7 +62,10 @@ $().ready(function()
         }
     });
     loadBranches();
-    loadProducts();
+    window.waitDom('[name=execution]', function()
+    {
+        loadProducts();
+    })
 });
 
 /**
