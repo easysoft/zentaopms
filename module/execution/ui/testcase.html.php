@@ -14,7 +14,7 @@ namespace zin;
 featureBar
 (
     set::current($type),
-    set::linkParams("executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={key}&moduleID={$moduleID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
+    set::linkParams("executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={key}&param=0&moduleID={$moduleID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     li(searchToggle(set::module('executionCase')))
 );
 
