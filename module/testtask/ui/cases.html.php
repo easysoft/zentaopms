@@ -137,7 +137,7 @@ if($canBatchAction)
         $userItems = array();
         foreach($assignedToList as $account => $realname) $userItems[] = array('text' => $realname, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => inlink('batchAssign', "taskID=$task->id&account=$account"));
 
-        $footToolbar['items'][] = array('text' => $lang->testtask->assign, 'caret' => 'up', 'btnType' => 'secondary', 'type' => 'dropdown', 'items' => $userItems, 'data-placement' => 'top-start');
+        $footToolbar['items'][] = array('text' => $lang->testtask->assign, 'caret' => 'up', 'btnType' => 'secondary', 'type' => 'dropdown', 'items' => $userItems, 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true));
     }
     if($canBatchRun) $footToolbar['items'][] = array('text' => $lang->testtask->runCase, 'className' => 'batch-btn batch-run not-open-url', 'btnType' => 'secondary', 'data-url' => inlink('batchRun', "productID=$productID&orderBy=id_desc&from=testtask&taskID=$task->id&confirm=yes"));
 }
