@@ -151,7 +151,7 @@ function loadScenesForBatch(productID, moduleID, $currentRow)
             $scene.$.setValue($scene.$.value);
 
             $row = $row.next('tr');
-            if(!$row.find('td[data-name="scene"][data-ditto="on"]').length || !$row.find('td[data-name="module"][data-ditto="on"]').length) break;
+            if(!$row.find('td[data-name="module"][data-ditto="on"]').length) break;
         }
     });
 }
