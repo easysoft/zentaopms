@@ -63,14 +63,15 @@ jsVar('buildID',        $build->id);
 jsVar('sortLink',       helper::createLink($buildModule, 'view', "buildID={$build->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
 jsVar('confirmDelete',  $lang->build->confirmDelete);
 jsVar('currentAccount', $app->user->account);
+jsVar('buildProduct',   $build->product);
 
 /* Story's batch btn. */
 $canBatchUnlinkStory = $canBeChanged && common::hasPriv($buildModule, 'batchUnlinkStory');
 $canBatchCloseStory  = $canBeChanged && common::hasPriv('story', 'batchClose');
 
 $storyFootToolbar = array();
-if($canBatchUnlinkStory) $storyFootToolbar['items'][] = array('className' => 'btn secondary size-sm batch-btn', 'text' => $lang->build->batchUnlink, 'btnType' => 'primary', 'data-type' => 'story', 'data-url' => inlink('batchUnlinkStory', "build={$build->id}"));
-if($canBatchCloseStory)  $storyFootToolbar['items'][] = array('className' => 'btn secondary size-sm batch-btn', 'text' => $lang->story->batchClose,    'btnType' => 'primary', 'data-type' => 'story', 'data-url' => createLink('story', 'batchClose', "productID={$build->product}"));
+if($canBatchUnlinkStory) $storyFootToolbar['items'][] = array('className' => 'btn secondary size-sm batch-btn ajax-btn', 'text' => $lang->build->batchUnlink, 'btnType' => 'primary', 'data-type' => 'story', 'data-url' => inlink('batchUnlinkStory', "build={$build->id}"));
+if($canBatchCloseStory)  $storyFootToolbar['items'][] = array('className' => 'btn secondary size-sm batch-btn',          'text' => $lang->story->batchClose,  'btnType' => 'primary', 'data-type' => 'story', 'data-url' => createLink('story', 'batchClose', "productID={$build->product}"));
 
 /* Bug's batch btn. */
 $canBatchUnlinkBug = $canBeChanged && common::hasPriv($buildModule, 'batchUnlinkBug');

@@ -8,10 +8,19 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
     const form = new FormData();
     checkedList.forEach((id) => form.append(`${tabType}IdList[]`, id));
 
-    $.ajaxSubmit({
-        url:  $(this).data('url'),
-        data: form
-    });
+    const url = $(this).data('url')
+
+    if($(this).hasClass('ajax-btn'))
+    {
+        $.ajaxSubmit({
+            url:  url,
+            data: form
+        });
+    }
+    else
+    {
+        postAndLoadPage(url, form);
+    }
 }).on('click', '.nav-tabs .nav-item a', function()
 {
     if($(this).hasClass('active')) return;
