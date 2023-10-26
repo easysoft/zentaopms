@@ -266,6 +266,14 @@ else
     );
 
     $actions = $this->loadModel('common')->buildOperateMenu($case);
+    foreach($actions as $actionType => $typeActions)
+    {
+        foreach($typeActions as $index => $action)
+        {
+            if(!isset($action['url'])) continue;
+            $actions[$actionType][$index]['url'] = str_replace('%executionID%', (string)$executionID, $action['url']);
+        }
+    }
 }
 
 if($case->stage)
