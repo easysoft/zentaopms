@@ -167,7 +167,7 @@ function loadScenesForBatch(productID, moduleID, $currentRow)
  */
 function loadStoriesForBatch(productID, moduleID, num, $currentRow = null)
 {
-    const branchID = $currentRow.find('.form-batch-control[data-name="branch"] .pick-value').val();
+    const branchID = $currentRow.find('.form-batch-control[data-name="branch"]').length ? $currentRow.find('.form-batch-control[data-name="branch"] .pick-value').val() : 0;
     var storyLink  = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=0&number=' + num);
     $.getJSON(storyLink, function(stories)
     {
@@ -182,7 +182,7 @@ function loadStoriesForBatch(productID, moduleID, num, $currentRow = null)
 
             $row = $row.next('tr');
 
-            if(!$row.find('td[data-name="story"][data-ditto="on"]').length || !$row.find('td[data-name="branch"][data-ditto="on"]').length || !$row.find('td[data-name="module"][data-ditto="on"]').length) break;
+            if(($row.find('td[data-name="branch"]').length && !$row.find('td[data-name="branch"][data-ditto="on"]').length) || !$row.find('td[data-name="module"][data-ditto="on"]').length) break;
         }
     });
 }
