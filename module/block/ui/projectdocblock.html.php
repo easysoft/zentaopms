@@ -11,159 +11,55 @@ declare(strict_types=1);
 
 namespace zin;
 
-/**
- * 获取区块左侧的项目列表。
- * Get project tabs on the left side.
- *
- * @param  array  $projects
- * @param  string $blockNavCode
- * @param  bool   $longBlock
- * @return array
- */
-$getProjectTabs = function(array $projects, string $blockNavCode, bool $longBlock): array
+$active  = isset($params['active']) ? $params['active'] : key($projects);
+$project = null;
+
+$items = array();
+foreach($projects as $projectItem)
 {
-    $navTabs  = array();
-    $selected = key($projects);
-    $navTabs[] = li
+    $params  = helper::safe64Encode("module={$block->module}&active={$projectItem->id}");
+    $items[] = array
     (
-        set('class', 'nav-item overflow-hidden nav-prev rounded-full bg-white shadow-md h-6 w-6'),
-        a(icon(set('size', '24'), 'angle-left'))
+        'id'        => $projectItem->id,
+        'text'      => $projectItem->name,
+        'url'       => createLink('project', 'index', "projectID={$projectItem->id}"),
+        'activeUrl' => createLink('block', 'printBlock', "blockID={$block->id}&params={$params}")
     );
-    foreach($projects as $project)
-    {
-        $navTabs[] = li
-        (
-            set('class', 'nav-item nav-switch w-full'),
-            a
-            (
-                set('class', 'ellipsis text-dark title ' . ($longBlock && $project->id == $selected ? ' active' : '')),
-                $longBlock ? set('data-toggle', 'tab') : null,
-                set('data-name', "tab3{$blockNavCode}Content{$project->id}"),
-                set('href', $longBlock ? "#tab3{$blockNavCode}Content{$project->id}" : helper::createLink('project', 'browse', "projectID=$project->id")),
-                $project->name
+    if($projectItem->id == $active) $project = $projectItem;
+}
 
-            ),
-            !$longBlock ? a
-            (
-                set('class', 'hidden' . ($project->id == $selected ? ' active' : '')),
-                set('data-toggle', 'tab'),
-                set('data-name', "tab3{$blockNavCode}Content{$project->id}"),
-                set('href', "#tab3{$blockNavCode}Content{$project->id}"),
-            ) : null,
-            a
-            (
-                set('class', 'link flex-1 text-right hidden'),
-                set('href', helper::createLink('project', 'browse', "projectID=$project->id")),
-                icon
-                (
-                    set('class', 'rotate-90 text-primary'),
-                    setStyle(array('--tw-rotate' => '270deg')),
-                    'import'
-                )
-            )
-        );
-    }
-    $navTabs[] = li
-    (
-        set('class', 'nav-item overflow-hidden nav-next rounded-full bg-white shadow-md h-6 w-6'),
-        a(icon(set('size', '24'), 'angle-right'))
-    );
-    return $navTabs;
-};
-
-/**
- * 获取区块右侧显示的项目文档列表。
- * Get project doc list.
- *
- * @param  array  $projects
- * @param  array  $users
- * @param  array  $docGroup
- * @param  string $blockNavID
- * @param  bool   $longBlock
- * @return array
- */
-$getProjectInfo = function(array $projects, array $users, array $docGroup, string $blockNavID, bool $longBlock): array
-{
-    global $lang, $config;
-    $tabItems = array();
-    $selected = key($projects);
-    foreach($projects as $project)
-    {
-        $tabItems[] = div
-        (
-            set('class', 'tab-pane h-full' . ($project->id == $selected ? ' active' : '')),
-            set('id', "tab3{$blockNavID}Content{$project->id}"),
-            dtable
-            (
-                set::height(318),
-                set::bordered(false),
-                set::horzScrollbarPos('inside'),
-                set::cols(array_values($config->block->doc->dtable->fieldList)),
-                set::data(array_values($docGroup[$project->id])),
-                set::userMap($users),
-            )
-        );
-    }
-    return $tabItems;
-};
-
-$blockNavCode = 'nav-' . uniqid();
-panel
+statisticBlock
 (
-    set('id', "projectdoc-block-{$block->id}"),
-    on::click('.nav-prev,.nav-next', 'switchNav'),
-    set('class', 'projectdoc-block ' . ($longBlock ? 'block-long' : 'block-sm')),
-    set('headingClass', 'border-b'),
-    to::heading
+    to::titleSuffix
     (
-        div
+        dropdown
         (
-            set('class', 'panel-title'),
-            span(span($block->title)),
-            dropdown
+            a
             (
-                a
-                (
-                    setClass('text-gray ml-4'),
-                    $type == 'involved' ? $lang->project->involved : $lang->project->all,
-                    span(setClass('caret align-middle ml-1'))
-                ),
-                set::items(array(
-                    array('text' => $lang->project->involved, 'url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("type=involved")), 'data-load' => 'target', 'data-selector' => "#projectdoc-block-{$block->id}", 'data-partial' => true),
-                    array('text' => $lang->project->all, 'url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("type=all")), 'data-load' => 'target', 'data-selector' => "#projectdoc-block-{$block->id}", 'data-partial' => true))
-                )
+                setClass('text-gray ml-4'),
+                $type == 'involved' ? $lang->project->involved : $lang->project->all,
+                span(setClass('caret align-middle ml-1'))
             ),
-        )
-    ),
-    to::headingActions
-    (
-        a
-        (
-            set('class', 'text-gray'),
-            set('href', createLink('doc', 'projectspace')),
-            $lang->more,
-            icon('caret-right')
-        )
-    ),
-    div
-    (
-        set('class', "flex h-full overflow-hidden " . ($longBlock ? '' : 'col')),
-        cell
-        (
-            $longBlock ? set('width', '22%') : null,
-            set('class', $longBlock ? 'bg-secondary-pale overflow-y-auto overflow-x-hidden' : ''),
-            ul
-            (
-                set('class', 'nav nav-tabs ' .  ($longBlock ? 'nav-stacked' : 'pt-4 px-4')),
-                $getProjectTabs($projects, $blockNavCode, $longBlock)
-            ),
+            set::items(array(
+                array('text' => $lang->project->involved, 'url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("type=involved")), 'data-load' => 'target', 'data-selector' => "#doc-projectdoc-{$block->id}", 'data-partial' => true),
+                array('text' => $lang->project->all, 'url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("type=all")), 'data-load' => 'target', 'data-selector' => "#doc-projectdoc-{$block->id}", 'data-partial' => true))
+            )
         ),
-        cell
-        (
-            set('class', 'tab-content'),
-            set('width', '78%'),
-            $getProjectInfo($projects, $users, $docGroup, $blockNavCode, $longBlock)
-        )
+    ),
+    set::block($block),
+    set::active($active),
+    set::moreLink(createLink('doc', 'projectspace')),
+    set::items($items),
+    set::className('projectdoc-block'),
+    dtable
+    (
+        set::height(318),
+        set::bordered(false),
+        set::horzScrollbarPos('inside'),
+        set::cols(array_values($config->block->doc->dtable->fieldList)),
+        set::data(array_values($docGroup[$project->id])),
+        set::userMap($users),
     )
 );
+
 render();
