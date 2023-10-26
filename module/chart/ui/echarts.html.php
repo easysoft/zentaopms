@@ -35,6 +35,7 @@ $chartItems = function() use($charts, $lang)
                 ),
                 div
                 (
+                    setID('chartDraw' . $chart->group . '_' . $chart->id),
                     setClass('echart-content'),
                     echarts
                     (
