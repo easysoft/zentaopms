@@ -167,6 +167,7 @@ form
 (
     set::id('caseStepForm'),
     set::actions(array()),
+    set::grid(false),
     h::table
     (
         setClass('table'),
