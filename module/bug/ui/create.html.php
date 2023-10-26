@@ -410,6 +410,34 @@ formPanel
             set::label($lang->bug->files),
             upload()
         )
+    ),
+    formRow
+    (
+        setClass('hidden'),
+        input
+        (
+            setClass('hidden'),
+            set::name('case'),
+            set::value($bug->caseID),
+        ),
+        input
+        (
+            setClass('hidden'),
+            set::name('caseVersion'),
+            set::value($bug->version),
+        ),
+        input
+        (
+            setClass('hidden'),
+            set::name('result'),
+            set::value($bug->runID),
+        ),
+        input
+        (
+            setClass('hidden'),
+            set::name('testtask'),
+            set::value($bug->testtask),
+        ),
     )
 );
 
