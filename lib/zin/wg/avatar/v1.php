@@ -108,25 +108,32 @@ class avatar extends wg
 
     private function getAvatarText()
     {
-        $maxTextLen    = intval($this->prop('maxTextLength'));
-        $text          = strtoupper($this->prop('text', ''));
-        $this->textLen = strlen($text);
+        $maxTextLen = intval($this->prop('maxTextLength', 2));
+        $text       = strtoupper($this->prop('text', ''));
+        $mbLength   = mb_strlen($text, 'utf-8');
+        $strLength  = strlen($text);
 
-        if(preg_match('/[\x{4e00}-\x{9fa5}\s]+$/u', $text))
+        $displayText = '';
+        if($strLength === $mbLength)
         {
-            $this->textLen        = mb_strlen($text);
-            $text                 = $this->textLen <= $maxTextLen ? $text : mb_substr($text, $this->textLen - $maxTextLen);
-            $this->displayTextLen = mb_strlen($text);
-            return $text;
+            /* Pure alphabet or numbers 纯英文情况 */
+            $displayText = strtoupper($text[0]);
+        }
+        else if($strLength % $mbLength == 0 && $strLength % 3 == 0)
+        {
+            /* Pure chinese characters 纯中文的情况 */
+            $displayText = $mbLength <= $maxTextLen ? $text : mb_substr($text, $mbLength - $maxTextLen, $mbLength, 'utf-8');
+        }
+        else
+        {
+            /* Mix of Chinese and English 中英文混合的情况 */
+            $displayText = $mbLength <= $maxTextLen ? $text : mb_substr($text, 0, $maxTextLen, 'utf-8');
         }
 
-        if(preg_match('/[A-Za-z\d\s]+$/', $text))
-        {
-            $this->displayTextLen = 1;
-            return substr($text, 0, 1);
-        }
+        $this->textLen = mb_strlen($displayText, 'utf-8');
+        $this->displayTextLen = strlen($displayText);
 
-        return $this->textLen <= $maxTextLen ? $text : substr($text, 0, $maxTextLen);
+        return $displayText;
     }
 
     /**
