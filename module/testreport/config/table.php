@@ -57,7 +57,6 @@ $config->testreport->dtable->fieldList['createdDate']['sortType'] = true;
 $config->testreport->dtable->fieldList['actions']['name']  = 'actions';
 $config->testreport->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->testreport->dtable->fieldList['actions']['type']  = 'actions';
-$config->testreport->dtable->fieldList['actions']['width'] = '140';
 $config->testreport->dtable->fieldList['actions']['fixed'] = 'right';
 $config->testreport->dtable->fieldList['actions']['list']  = $config->testreport->actionList;
 $config->testreport->dtable->fieldList['actions']['menu']  = array('create', 'edit', 'delete');
