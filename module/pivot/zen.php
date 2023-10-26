@@ -12,28 +12,27 @@ class pivotZen extends pivot
      * @access protected
      * @return void
      */
-    protected function prepare4Preview($dimension, $groupID, $module, $method, $params)
+    protected function prepare4Preview($dimensionID, $groupID, $module, $method, $params)
     {
         $params = helper::safe64Decode($params);
 
-        if(!$groupID) $groupID = $this->getDefaultGroup($dimension);
-        if(!$module || !$method) list($module, $method, $params) = $this->getDefaultPivotParams($dimension, $groupID);
+        if(!$groupID) $groupID = $this->getDefaultGroup($dimensionID);
+        if(!$module || !$method) list($module, $method, $params) = $this->getDefaultPivotParams($dimensionID, $groupID);
 
         if(!empty($module) && !empty($method) && $method != 'show' && !common::hasPriv($module, $method)) $this->loadModel('common')->deny('pivot', $method);
 
-        $this->setFeatureBar($dimension);
+        $this->setFeatureBar($dimensionID);
 
         $group = $this->loadModel('tree')->getByID($groupID);;
 
         parse_str($params, $result);
         call_user_func_array(array($this, $method), $result);
-
-        $this->view->menus     = $this->getSidebarMenus($dimension, $group, $module, $method, $params);
-        $this->view->dimension = $dimension;
-        $this->view->group     = $group;
-        $this->view->module    = $module;
-        $this->view->method    = $method;
-        $this->view->params    = $params;
+        $this->view->menus       = $this->getSidebarMenus($dimensionID, $group, $module, $method, $params); 
+        $this->view->dimensionID = $dimensionID;
+        $this->view->group       = $group;
+        $this->view->module      = $module;
+        $this->view->method      = $method;
+        $this->view->params      = $params;
 
         if(empty($this->view->title)) $this->view->title = $this->lang->pivot->list;
     }

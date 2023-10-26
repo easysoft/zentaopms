@@ -12,13 +12,13 @@ namespace zin;
 
 include strtolower($method) . '.html.php';
 
-jsVar('dimension', $dimension);
+jsVar('dimension', $dimensionID);
 jsVar('groupID', $group->id);
 
 featureBar
 (
     set::current($group->id),
-    set::linkParams("dimension={$dimension}&group={key}")
+    set::linkParams("dimensionID={$dimensionID}&group={key}")
 );
 
 if($config->edition == 'biz' || $config->edition == 'max')
