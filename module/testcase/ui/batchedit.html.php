@@ -65,7 +65,7 @@ else
         'name'     => 'pri',
         'label'    => $lang->priAB,
         'width'    => '120px',
-        'control'  => 'picker',
+        'control'  => array('type' => 'picker', 'required' => true),
         'items'    => $lang->testcase->priList,
         'ditto'    => true,
         'hidden'   => !isset($visibleFields['pri']),
@@ -73,11 +73,11 @@ else
     );
     $items[] = array
     (
-        'name'    => 'status',
-        'label'   => $lang->statusAB,
-        'width'   => '120px',
-        'control' => 'picker',
-        'items'   => $lang->testcase->statusList,
+        'name'     => 'status',
+        'label'    => $lang->statusAB,
+        'width'    => '120px',
+        'control'  => array('type' => 'picker', 'required' => true),
+        'items'    => $lang->testcase->statusList,
         'hidden'   => !isset($visibleFields['status']),
         'required' => isset($requiredFields['status']),
     );
@@ -95,7 +95,7 @@ else
         'name'     => 'module',
         'label'    => $lang->testcase->module,
         'width'    => '180px',
-        'control'  => 'picker',
+        'control'  => array('type' => 'picker', 'required' => true),
         'items'    => array(),
         'hidden'   => !isset($visibleFields['module']),
         'required' => isset($requiredFields['module']),
@@ -105,7 +105,7 @@ else
         'name'     => 'scene',
         'label'    => $lang->testcase->scene,
         'width'    => '180px',
-        'control'  => 'picker',
+        'control'  => array('type' => 'picker', 'required' => true),
         'items'    => array(),
         'hidden'   => ($isLibCase || !isset($visibleFields['scene'])),
         'required' => isset($requiredFields['scene']),
