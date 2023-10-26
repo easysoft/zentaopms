@@ -51,6 +51,7 @@ foreach($repoList as $repo)
         }
         $repo->projectNames = trim($repo->projectNames, '，');
     }
+    if(is_object($repo->lastSubmitTime)) $repo->lastSubmitTime = $repo->lastSubmitTime->time;
 }
 
 $config->repo->dtable->fieldList['name']['link']                     = $this->createLink('repo', 'browse', "repoID={id}&branchID=&objectID={$objectID}");
@@ -97,8 +98,7 @@ dtable
     set::cols($config->repo->dtable->fieldList),
     set::data($repos),
     set::sortLink(jsRaw('createSortLink')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();
-
