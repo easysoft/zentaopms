@@ -5,12 +5,12 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
     if(!checkedList.length) return;
 
     const tabType  = $(this).data('type');
-    const postData = [];
-    postData[`${tabType}IdList[]`] = checkedList;
+    const form = new FormData();
+    checkedList.forEach((id) => form.append(`${tabType}IdList[]`, id));
 
     $.ajaxSubmit({
         url:  $(this).data('url'),
-        data: postData
+        data: form
     });
 }).on('click', '.nav-tabs .nav-item a', function()
 {
