@@ -60,6 +60,7 @@ formPanel
         (
             set::width('1/3'),
             set::label($lang->testcase->module),
+            set::required(strpos(",{$config->testcase->create->requiredFields},", ',module,') !== false),
             inputGroup
             (
                 set('id', 'moduleBox'),
@@ -222,6 +223,7 @@ formPanel
         (
             setClass('grow-0'),
             set::label($lang->testcase->pri),
+            set::required(strpos(",{$config->testcase->create->requiredFields},", ',pri,') !== false),
             priPicker
             (
                 width('80px'),
