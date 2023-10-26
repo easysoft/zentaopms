@@ -986,7 +986,7 @@
     {
         $.get($.createLink('my', 'ajaxSwitchVision', 'vision=' + vision), function()
         {
-            window.top.location.href = $.createLink('index', 'index');
+            window.top.location.href = $.createLink('my', 'index');
         });
     }
 
