@@ -109,6 +109,7 @@ $items[] = array
     'value'    => '',
     'multiple' => true,
     'width'    => '160px',
+    'required' => isset($requiredFields['stage']),
 );
 
 /* Field of story. */

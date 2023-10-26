@@ -145,6 +145,7 @@ formPanel
         (
             set::width('1/3'),
             set::label($lang->testcase->stage),
+            set::required(strpos(",{$config->testcase->create->requiredFields},", ',stage,') !== false),
             inputGroup
             (
                 set('id', 'stageBox'),
