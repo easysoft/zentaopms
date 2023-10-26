@@ -26,17 +26,15 @@ formPanel
             set::label($lang->testreport->startEnd),
             inputGroup
             (
-                input
+                datePicker
                 (
                     set::name('begin'),
-                    set::type('date'),
                     set::value($begin),
                 ),
                 $lang->testtask->to,
-                input
+                datePicker
                 (
                     set::name('end'),
-                    set::type('date'),
                     set::value($end),
                 )
             ),
