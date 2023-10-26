@@ -24,7 +24,7 @@ $config->testcase->actions->view['mainActions']   = array('runResult', 'runCase'
 $config->testcase->actions->view['suffixActions'] = array('edit', 'create', 'delete');
 
 $config->testcase->exportFields = '
-    id, product, branch, module, story,
+    id, product, branch, module, story, scene,
     title, precondition, stepDesc, stepExpect, real, keywords,
     pri, type, stage, status, bugsAB, resultsAB, stepNumberAB, lastRunner, lastRunDate, lastRunResult, openedBy, openedDate,
     lastEditedBy, lastEditedDate, version, linkCase, files';
@@ -106,6 +106,11 @@ $config->testcase->datatable->fieldList['module']['title']      = 'module';
 $config->testcase->datatable->fieldList['module']['control']    = 'select';
 $config->testcase->datatable->fieldList['module']['dataSource'] = array('module' => 'testcase', 'method' => 'getDatatableModules', 'params' => '$productID');
 $config->testcase->datatable->fieldList['module']['sort']       = 'no';
+
+$config->testcase->datatable->fieldList['scene']['title']      = 'scene';
+$config->testcase->datatable->fieldList['scene']['control']    = 'select';
+$config->testcase->datatable->fieldList['scene']['dataSource'] = array('module' => 'testcase', 'method' => 'getSceneMenu', 'params' => '$productID&0');
+$config->testcase->datatable->fieldList['scene']['sort']       = 'no';
 
 $config->testcase->datatable->fieldList['title']['title']    = 'title';
 $config->testcase->datatable->fieldList['title']['fixed']    = 'left';

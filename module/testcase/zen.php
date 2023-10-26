@@ -2637,6 +2637,7 @@ class testcaseZen extends testcase
         $relatedCases   = $this->testcase->getRelatedCases($cases);
         $relatedSteps   = $this->testcase->getRelatedSteps(array_keys($cases));
         $relatedFiles   = $this->testcase->getRelatedFiles(array_keys($cases));
+        $relatedScenes  = $this->testcase->getSceneMenu($productID, 0);
 
         if($taskID)
         {
@@ -2645,7 +2646,7 @@ class testcaseZen extends testcase
         }
 
         $cases = $this->testcase->appendData($cases);
-        foreach($cases as $case) $this->processCaseForExport($case, $products, $branches, $users, $results, $relatedModules, $relatedStories, $relatedCases, $relatedSteps, $relatedFiles);
+        foreach($cases as $case) $this->processCaseForExport($case, $products, $branches, $users, $results, $relatedModules, $relatedStories, $relatedCases, $relatedSteps, $relatedFiles, $relatedScenes);
 
         return $cases;
     }
@@ -2664,10 +2665,11 @@ class testcaseZen extends testcase
      * @param  array     $relatedCases
      * @param  array     $relatedSteps
      * @param  array     $relatedFiles
+     * @param  array     $relatedScenes
      * @access protected
      * @return void
      */
-    protected function processCaseForExport(object $case, array $products, array $branches, array $users, array $results, array $relatedModules, array $relatedStories,  array $relatedCases, array $relatedSteps, array $relatedFiles): void
+    protected function processCaseForExport(object $case, array $products, array $branches, array $users, array $results, array $relatedModules, array $relatedStories,  array $relatedCases, array $relatedSteps, array $relatedFiles, array $relatedScenes): void
     {
         $case->stepDesc       = '';
         $case->stepExpect     = '';
@@ -2680,6 +2682,7 @@ class testcaseZen extends testcase
         $case->branch  = isset($branches[$case->branch])      ? $branches[$case->branch] . "(#$case->branch)"       : '';
         $case->module  = isset($relatedModules[$case->module])? $relatedModules[$case->module] . "(#$case->module)" : '';
         $case->story   = isset($relatedStories[$case->story]) ? $relatedStories[$case->story] . "(#$case->story)"   : '';
+        $case->scene   = isset($relatedScenes[$case->scene])  ? $relatedScenes[$case->scene] . "(#$case->scene)"    : '';
 
         $case->pri           = zget($this->lang->testcase->priList, $case->pri);
         $case->type          = zget($this->lang->testcase->typeList, $case->type);

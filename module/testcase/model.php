@@ -521,12 +521,13 @@ class testcaseModel extends model
             $orderBy = '`' . $field . '`_' . $sort;
         }
 
+        $queryCondition = preg_replace("/AND\s+t[0-9]\.scene\s+=\s+'0'/i", '', $this->session->testcaseQueryCondition);
         if($this->session->testcaseOnlyCondition)
         {
             $caseIdList = array();
             if($taskID) $caseIdList = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
 
-            return $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)
+            return $this->dao->select('*')->from(TABLE_CASE)->where($queryCondition)
                 ->beginIF($taskID)->andWhere('id')->in($caseIdList)->fi()
                 ->beginIF($exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
                 ->orderBy($orderBy)
@@ -536,7 +537,7 @@ class testcaseModel extends model
 
         $cases   = array();
         $orderBy = " ORDER BY " . str_replace(array('|', '^A', '_'), ' ', $orderBy);
-        $stmt    = $this->dao->query($this->session->testcaseQueryCondition . $orderBy . ($limit ? ' LIMIT ' . $limit : ''));
+        $stmt    = $this->dao->query($queryCondition . $orderBy . ($limit ? ' LIMIT ' . $limit : ''));
         while($row = $stmt->fetch())
         {
             $caseID = isset($row->case) ? $row->case : $row->id;
