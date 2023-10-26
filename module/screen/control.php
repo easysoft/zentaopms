@@ -20,7 +20,7 @@ class screen extends control
      */
     public function browse($dimensionID = 0)
     {
-        $dimensionID = $this->loadModel('dimension')->setSwitcherMenu($dimensionID);
+        $dimensionID = $this->loadModel('dimension')->getDimension($dimensionID);
         $this->checkShowGuide();
 
         $this->view->title       = $this->lang->screen->common;

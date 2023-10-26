@@ -21,7 +21,7 @@ class chart extends control
      */
     public function preview($dimensionID = 0, $groupID = 0)
     {
-        $dimensionID = $this->loadModel('dimension')->setSwitcherMenu($dimensionID);
+        $dimensionID = $this->loadModel('dimension')->getDimension($dimensionID);
 
         if(!$groupID) $groupID = $this->chart->getFirstChartGroupID($dimensionID);
 
