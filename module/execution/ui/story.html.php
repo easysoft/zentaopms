@@ -266,18 +266,11 @@ if($canBatchAction)
         foreach ($users as $account => $name)
         {
             $assignedToItems[] = array(
-                'text'      => $name,
-                'className' => 'batch-btn ajax-btn',
-                'data-url'  => createLink('story', 'batchAssignTo', "toryType={$storyType}&assignedTo={$account}")
+                'text'       => $name,
+                'innerClass' => 'batch-btn ajax-btn',
+                'data-url'   => createLink('story', 'batchAssignTo', "toryType={$storyType}&assignedTo={$account}")
             );
         }
-
-        menu
-        (
-            set::id('navAssignedTo'),
-            set::className('dropdown-menu'),
-            set::items($assignedToItems)
-        );
     }
 
     if($canBatchAssignTo)
@@ -286,8 +279,8 @@ if($canBatchAction)
             'caret'       => 'up',
             'text'        => $lang->story->assignedTo,
             'className'   => 'btn btn-caret size-sm secondary',
-            'url'         => '#navAssignedTo',
-            'data-toggle' => 'dropdown'
+            'type'        => 'dropdown',
+            'items'       => $assignedToItems,
         );
     }
 
