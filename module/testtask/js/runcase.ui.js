@@ -25,7 +25,7 @@ function loadResult()
 function realChange(event)
 {
     var $target    = $(event.target);
-    var $preSelect = $(event.target).closest('table').closest('tr').find('[name^="steps"]');
+    var $preSelect = $(event.target).closest('table').closest('tr').find('[name^="result"]');
     if($target.val() == '' && $preSelect.val() == 'fail' && !custom)
     {
         $preSelect.zui('picker').$.changeState({value: 'pass'});
