@@ -968,6 +968,7 @@
                         options.url = url;
                     }
                     options.type = 'iframe';
+                    options.context = window;
                     modalTrigger = new window.parent.$.zui.ModalTrigger(options);
                     $link.data('zui.modaltrigger', modalTrigger);
                 }
