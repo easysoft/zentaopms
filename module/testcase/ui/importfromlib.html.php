@@ -51,7 +51,6 @@ div
 
 $config->testcase->importfromlib->dtable->fieldList['fromModule']['map'] = $libModules;
 $config->testcase->importfromlib->dtable->fieldList['branch']['controlItems'] = array();
-$config->testcase->importfromlib->dtable->fieldList['module']['controlItems'] = array();
 if($product->type == 'normal') unset($config->testcase->importfromlib->dtable->fieldList['branch']);
 
 foreach($cases as $case)
@@ -70,7 +69,6 @@ foreach($cases as $case)
         $caseBranches[] = array('text' => $branchName, 'value' => $branchID);
     }
 
-    $case->moduleItems = $canImportModules[$caseBranch][$case->id];
     $case->branchItems = $caseBranches;
     $case->branch      = $caseBranch;
     if($case->id != key($cases)) $case->module = 'ditto';
@@ -83,7 +81,6 @@ formBase
     setID('importFromLibForm'),
     set::action(createLink('testcase', 'importFromLib', "product={$productID}&branch={$branch}&libID={$libID}")),
     set::actions(array()),
-    on::change('[name*=branch]', 'updateModules'),
     dtable
     (
         set::cols($config->testcase->importfromlib->dtable->fieldList),
@@ -93,29 +90,7 @@ formBase
         set::footToolbar($footToolbar),
         set::footPager(usePager()),
         set::plugins(array('form')),
-    )
-);
-
-div
-(
-    setID('branchSelect'),
-    setClass('hidden'),
-    picker
-    (
-        zui::width('176px'),
-        set::name('branch[]'),
-        set::items($branches),
-    )
-);
-
-div
-(
-    setID('moduleSelect'),
-    setClass('hidden'),
-    picker
-    (
-        zui::width('176px'),
-        set::name('module[]'),
+        set::onFormChange(jsRaw('window.updateTable'))
     )
 );
 

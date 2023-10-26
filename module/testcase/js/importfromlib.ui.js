@@ -1,9 +1,26 @@
 window.renderModuleItem = function(result, info)
 {
-    if(info.col.name == 'module') info.col.setting.control.props.items = info.row.data.moduleItems;
     if(info.col.name == 'branch') info.col.setting.control.props.items = info.row.data.branchItems;
 
     return result;
+}
+
+window.updateTable = function(name, value, formData)
+{
+    if (name.startsWith('branch['))
+    {
+        this.setFormData(name.replace('branch[', 'module['), '', true);
+
+        this.update();
+    }
+}
+
+window.getModuleCellProps = function(cell)
+{
+    const caseID   = cell.row.data.id;
+    const branchID = this.getFormData(`branch[${cell.row.data.id}]`);
+    const modules  = canImportModules[branchID][caseID];
+    return {items: modules};
 }
 
 window.toggleLib = function(event)

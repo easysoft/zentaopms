@@ -259,7 +259,7 @@ $config->testcase->importfromlib->dtable->fieldList['fromModule']['type']  = 'ca
 $config->testcase->importfromlib->dtable->fieldList['module']['name']    = 'module';
 $config->testcase->importfromlib->dtable->fieldList['module']['title']   = $lang->testcase->module;
 $config->testcase->importfromlib->dtable->fieldList['module']['type']    = 'control';
-$config->testcase->importfromlib->dtable->fieldList['module']['control'] = 'picker';
+$config->testcase->importfromlib->dtable->fieldList['module']['control'] = array('type' => 'picker', 'props' => "RAWJS<window.getModuleCellProps>RAWJS");
 $config->testcase->importfromlib->dtable->fieldList['module']['width']   = '200px';
 
 $config->testcase->importfromlib->dtable->fieldList['type']['name']  = 'type';
