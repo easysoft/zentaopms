@@ -20,4 +20,29 @@ featureBar
     set::linkParams("dimension={$dimension}&group={key}")
 );
 
-render();                  ;
+div
+(
+    setClass('flex gap-4'),
+    sidebar
+    (
+        set::width('60'),
+        moduleMenu
+        (
+            set::title($group->name),
+            set::modules($charts),
+            set::closeLink(''),
+            set::showDisplay(false)
+        ),
+        $config->edition == 'open' ? div
+        (
+            setClass('bg-white p-4'),
+            html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
+        ) : null
+    ),
+    div
+    (
+        setClass('w-full'),
+    )
+);
+
+render();
