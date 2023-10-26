@@ -26,7 +26,7 @@ foreach($allProducts as $productID => $productName)
     {
         $linkedList[] = btn
         (
-            setClass('product-block modal-content center-row justify-start items-center'),
+            setClass('product-block modal-content center-row justify-start items-center text-left'),
             checkbox
             (
                 set::name("products[{$index}]"),
@@ -63,7 +63,7 @@ if($execution->grade == 1 || $execution->grade == 2)
 
         $unlinkList[] = btn
             (
-                setClass('product-block modal-content center-row justify-start items-center'),
+                setClass('product-block modal-content center-row justify-start items-center text-left'),
                 checkbox
                 (
                     set::name("products[{$index}]"),
