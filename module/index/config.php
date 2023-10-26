@@ -36,7 +36,6 @@ $config->index->oldPages[] = 'kanban-close';
 $config->index->oldPages[] = 'kanban-setting';
 $config->index->oldPages[] = 'webhook-browse';
 $config->index->oldPages[] = 'webhook-create';
-$config->index->oldPages[] = 'dept-browse';
 $config->index->oldPages[] = 'repo-setrules';
 $config->index->oldPages[] = 'host-treemap';
 $config->index->oldPages[] = 'gogs-binduser';
