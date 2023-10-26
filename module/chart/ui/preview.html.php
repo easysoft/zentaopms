@@ -17,7 +17,7 @@ jsVar('noChartSelected', $lang->chart->noChartSelected);
 featureBar
 (
     set::current($group->id),
-    set::linkParams("dimension={$dimension}&group={key}")
+    set::linkParams("dimension={$dimensionID}&group={key}")
 );
 
 div
