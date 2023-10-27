@@ -1214,6 +1214,7 @@ CREATE TABLE IF NOT EXISTS `zt_mr` (
   `needCI` enum('0','1') NOT NULL DEFAULT '0',
   `repoID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `jobID` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `executionID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `compileID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `compileStatus` char(30) NOT NULL DEFAULT '',
   `removeSourceBranch` enum('0','1') NOT NULL DEFAULT '0',

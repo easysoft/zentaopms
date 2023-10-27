@@ -67,3 +67,4 @@ UPDATE `zt_privrelation` SET `priv` = 'testcase-batchChangeType' WHERE `priv` = 
 
 ALTER TABLE `zt_action` MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
 ALTER TABLE `zt_actionrecent` MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
+ALTER TABLE `zt_mr` ADD executionID mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `jobID`;
