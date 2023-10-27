@@ -26,7 +26,8 @@ $stepTrs    = array();
 $fileModals = array();
 if($confirm != 'yes')
 {
-    if(empty($run->case->steps))
+    $steps = $run->case->steps;
+    if(empty($steps))
     {
         $step = new stdclass();
         $step->id     = 0;
@@ -35,9 +36,9 @@ if($confirm != 'yes')
         $step->type   = 'step';
         $step->desc   = '';
         $step->expect = '';
-        $run->case->steps[] = $step;
+        $steps[] = $step;
     }
-    foreach($run->case->steps as $key => $step)
+    foreach($steps as $key => $step)
     {
         $stepClass = "step-{$step->type}";
         $stepTrs[] = h::tr
@@ -212,22 +213,24 @@ form
                         setClass('text-center'),
                         $preLink ? a
                         (
-                            setClass('btn btn-wide w-24'),
+                            setClass('btn btn-wide w-24 m-3'),
                             set::id('pre'),
                             set::href($preLink),
+                            set('data-load', 'modal'),
                             $lang->testtask->pre,
                         ) : '',
-                        $run->case->status != 'wait' && $confirm != 'yes' ? btn
+                        $run->case->status != 'wait' && $confirm != 'yes' && !empty($run->case->steps) ? btn
                         (
-                            setClass('primary btn-wide w-24 m-6'),
+                            setClass('primary btn-wide w-24 m-3'),
                             set::btnType('submit'),
                             $lang->save,
                         ) : '',
                         $nextLink ? a
                         (
-                            setClass('btn btn-wide w-24'),
+                            setClass('btn btn-wide w-24 m-3'),
                             set::id('next'),
                             set::href($nextLink),
+                            set('data-load', 'modal'),
                             $lang->testtask->next,
                         ) : '',
                         input
