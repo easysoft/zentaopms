@@ -145,9 +145,9 @@ $footToolbar = $canBatchAction ? array('items' => array
     array('type' => 'btn-group', 'items' => array
     (
         $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchEdit', "libID=$libID&branch=0&type=lib")) : null,
-        !empty($navActions) ? array('caret' => 'up', 'btnType' => 'primary', 'items' => $navActions, 'data-placement' => 'top-start') : null
+        !empty($navActions) ? array('caret' => 'up', 'btnType' => 'secondary', 'items' => $navActions, 'data-placement' => 'top-start') : null
     )),
-)) : null;
+), 'btnProps' => array('btnType' => 'secondary')) : null;
 
 dtable
 (
