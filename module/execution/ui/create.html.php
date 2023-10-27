@@ -213,7 +213,7 @@ else
         (
             set::width('1/2'),
             setClass('linkProduct'),
-            set::required(in_array($project->model, array('waterfall', 'waterfallplus'))),
+            set::required($project && in_array($project->model, array('waterfall', 'waterfallplus'))),
             set::label($lang->project->manageProducts),
             picker
             (
