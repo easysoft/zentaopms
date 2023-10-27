@@ -7,8 +7,9 @@ $config->task->form->testTask = new stdclass();
 
 global $app;
 $config->task->form->create = common::formConfig('task', 'create');
-$config->task->form->create['execution']    = array('type' => 'int',      'required' => true, 'default' => 0);
+$config->task->form->create['execution']    = array('type' => 'int',      'required' => true,  'default' => 0);
 $config->task->form->create['type']         = array('type' => 'string',   'required' => true,  'default' => '');
+$config->task->form->create['assignedTo']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->create['module']       = array('type' => 'int',      'required' => false);
 $config->task->form->create['story']        = array('type' => 'int',      'required' => false);
 $config->task->form->create['mode']         = array('type' => 'string',   'required' => false, 'default' => '');

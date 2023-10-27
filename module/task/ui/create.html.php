@@ -296,7 +296,7 @@ formPanel
             picker
             (
                 set::id('assignedTo'),
-                set::name('assignedTo[]'),
+                set::name('assignedTo'),
                 set::value($task->assignedTo),
                 set::items($members),
             ),
