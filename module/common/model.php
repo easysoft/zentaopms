@@ -3208,7 +3208,9 @@ EOF;
                 return;
             }
 
-            if(isset($menu['alias']) and in_array($currentMethod, explode(',', strtolower($menu['alias']))))
+            $alias   = isset($menu['alias'])   ? explode(',', strtolower($menu['alias']))   : array();
+            $exclude = isset($menu['exclude']) ? explode(',', strtolower($menu['exclude'])) : array();
+            if(in_array($currentMethod, $alias) && !in_array("{$currentModule}-{$currentMethod}", $exclude))
             {
                 $lang->menu = $lang->$tab->homeMenu;
                 return;
