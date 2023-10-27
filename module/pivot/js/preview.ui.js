@@ -159,7 +159,5 @@ getHeight = function(height)
     const panelBodyPaddingY  = $('#pivotPanel .panel-body').innerHeight() - $('#pivotPanel .panel-body').height();
     const parentGapHeight    = parentHeight - conditionHeight - panelHeight;
 
-    console.log(windowHeight, headerHeight, menuHeight, conditionHeight, panelHeadingHeight, panelBodyPaddingY, height);
-
     return Math.min(windowHeight - headerHeight - menuHeight - conditionHeight - parentGapHeight - panelHeadingHeight - panelBodyPaddingY, height);
 }

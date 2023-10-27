@@ -314,21 +314,10 @@ class pivotModel extends model
             ->orderBy('t2.end_desc')
             ->fetchAll();
 
-        $canViewExecution = common::hasPriv('execution', 'view');
-
         foreach($executions as $execution)
         {
             $execution->deviation     = round($execution->consumed - $execution->estimate, 2);
             $execution->deviationRate = $execution->estimate ? round($execution->deviation / $execution->estimate * 100, 2) : 'n/a';
-
-            if($execution->multiple)
-            {
-                if($canViewExecution) $execution->executionName = html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName);
-            }
-            else
-            {
-                $execution->executionName = $this->lang->null;
-            }
         }
 
         return $executions;
