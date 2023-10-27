@@ -166,7 +166,7 @@ if($canBatchAction)
     {
         $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->bug->assignedTo, 'type' => 'dropdown', 'data-placement' => 'top-start', 'items' => $assignedToItems, 'data-menu' => array('searchBox' => true));
     }
-    $footToolbar['btnProps'] = array('size' => 'sm', 'btnType' => 'primary');
+    $footToolbar['btnProps'] = array('size' => 'sm', 'btnType' => 'secondary');
 }
 
 $cols = $this->loadModel('datatable')->getSetting('bug');
