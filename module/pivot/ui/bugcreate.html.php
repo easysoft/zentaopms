@@ -15,7 +15,7 @@ $cols['openedBy']['map'] = $users;
 
 $generateData = function() use ($module, $method, $lang, $title, $cols, $bugs, $products, $executions, $begin, $end, $product, $execution)
 {
-    if(empty($module) || empty($method)) return div(setClass('bg-white center text-gray w-full h-40'), $lang->error->noData);
+    if(empty($module) || empty($method)) return div(setClass('bg-white center text-gray w-full h-40'), $lang->pivot->noPivot);
 
     return array
     (

@@ -54,7 +54,7 @@ $cols = $config->pivot->dtable->projectDeviation->fieldList;
 
 $generateData = function() use ($module, $method, $lang, $title, $cols, $executions, $chartData, $begin, $end)
 {
-    if(empty($module) || empty($method)) return div(setClass('bg-white center text-gray w-full h-40'), $lang->error->noData);
+    if(empty($module) || empty($method)) return div(setClass('bg-white center text-gray w-full h-40'), $lang->pivot->noPivot);
 
     return array
     (
