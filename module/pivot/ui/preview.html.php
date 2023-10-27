@@ -17,6 +17,7 @@ jsVar('groupID', $group->id);
 
 featureBar
 (
+    set::load(false),
     set::current($group->id),
     set::linkParams("dimensionID={$dimensionID}&group={key}")
 );
