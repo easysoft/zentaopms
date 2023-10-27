@@ -499,144 +499,167 @@ class pivotModel extends model
     /**
      * Get workload.
      *
-     * @param int    $dept
-     * @param string $assign
-     *
+     * @param  int    $dept
+     * @param  string $assign   assign|noassign
+     * @param  array  $users
+     * @param  float  $allHour
      * @access public
      * @return array
      */
-    public function getWorkload($dept = 0, $assign = 'assign')
+    public function getWorkload(int $dept, string $assign, array $users, float $allHour): array
     {
         $deptUsers = array();
-        if($dept) $deptUsers = $this->loadModel('dept')->getDeptUserPairs($dept);
+        if($dept)
+        {
+            $deptUsers = $this->loadModel('dept')->getDeptUserPairs($dept);
+            if(!$deptUsers) return array();
+        }
+
+        $canViewExecution = common::hasPriv('execution', 'view');
 
         if($assign == 'noassign')
         {
-            $members = $this->dao->select('t1.account,t2.name,t2.multiple,t1.root,t3.id as project,t3.name as projectname')->from(TABLE_TEAM)->alias('t1')
+            $executions = $this->dao->select('t1.account AS user, t2.multiple, t2.id AS executionID, t2.name AS executionName, t3.id AS projectID, t3.name AS projectName')->from(TABLE_TEAM)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t2.id = t1.root')
                 ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id = t2.project')
-                ->where('t2.status')->notin('cancel, closed, done, suspended')
-                ->beginIF($dept)->andWhere('t1.account')->in(array_keys($deptUsers))->fi()
-                ->andWhere('t1.type')->eq('execution')
-                ->andWhere("t1.account NOT IN(SELECT `assignedTo` FROM " . TABLE_TASK . " WHERE `execution` = t1.`root` AND `status` NOT IN('cancel, closed, done, pause') AND assignedTo != '' GROUP BY assignedTo)")
+                ->where('t1.type')->eq('execution')
+                ->andWhere('t1.account NOT IN (SELECT DISTINCT `assignedTo` FROM ' . TABLE_TASK . " WHERE `execution` = t1.`root` AND `status` NOT IN ('cancel', 'closed', 'done', 'pause') AND assignedTo != '')")
                 ->andWhere('t2.deleted')->eq('0')
-                ->fetchGroup('account', 'name');
+                ->andWhere('t2.status')->notin('cancel, closed, done, suspended')
+                ->beginIF($deptUsers)->andWhere('t1.account')->in(array_keys($deptUsers))->fi()
+                ->fetchAll();
+            if(empty($executions)) return array();
+
+            $executionGroups = array();
+            foreach($executions as $execution)
+            {
+                if(!isset($users[$execution->user])) continue;
+                $executionGroups[$execution->user][$execution->projectID][$execution->executionID] = $execution;
+            }
 
             $workload = array();
-            if(!empty($members))
+            foreach($executionGroups as $account => $projects)
             {
-                foreach($members as $member => $executions)
-                {
-                    $project = array();
-                    if(!empty($executions))
-                    {
-                        foreach($executions as $name => $execution)
-                        {
-                            $project[$execution->projectname]['projectID'] = $execution->project;
-                            $project[$execution->projectname]['execution'][$name]['executionID'] = $execution->root;
-                            $project[$execution->projectname]['execution'][$name]['multiple']    = $execution->multiple;
-                            $project[$execution->projectname]['execution'][$name]['count']       = 0;
-                            $project[$execution->projectname]['execution'][$name]['manhour']     = 0;
+                if(!isset($users[$account])) continue;
 
-                            $workload[$member]['total']['count']   = 0;
-                            $workload[$member]['total']['manhour'] = 0;
+                $totalExecutions = 0;
+                foreach($projects as $executions) $totalExecutions += count($executions);
+
+                $userFirstRow = true;
+                foreach($projects as $executions)
+                {
+                    $projectFirstRow = true;
+                    foreach($executions as $execution)
+                    {
+                        $execution->executionTasks = 0;
+                        $execution->executionHours = 0;
+                        $execution->totalTasks     = 0;
+                        $execution->totalHours     = 0;
+                        $execution->workload       = '0%';
+
+                        if($execution->multiple)
+                        {
+                            $execution->executionName = $canViewExecution ? html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName) : $execution->executionName;
                         }
+                        else
+                        {
+                            $execution->executionName = $this->lang->null;
+                        }
+
+                        if($userFirstRow)    $execution->userRowspan    = $totalExecutions;
+                        if($projectFirstRow) $execution->projectRowspan = count($executions);
+
+                        $workload[] = $execution;
+
+                        $userFirstRow    = false;
+                        $projectFirstRow = false;
                     }
-                    $workload[$member]['task']['project'] = $project;
                 }
             }
             return $workload;
         }
 
-        $stmt = $this->dao->select('t1.*, t2.name as executionName, t3.name as projectname, t2.multiple')->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('t1.id, t1.assignedTo AS user, t1.left, t2.multiple, t2.id AS executionID, t2.name AS executionName, t3.id AS projectID, t3.name AS projectName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id = t2.project')
-            ->where('t1.deleted')->eq(0)
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.parent')->ge(0)
             ->andWhere('t1.status')->in('wait,pause,doing')
-            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.assignedTo')->ne('')
+            ->beginIF($deptUsers)->andWhere('t1.assignedTo')->in(array_keys($deptUsers))->fi()
+            ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t2.status')->in('wait,suspended,doing')
-            ->andWhere('assignedTo')->ne('');
+            ->fetchAll();
+        if(empty($tasks)) return array();
 
-        $allTasks = $stmt->fetchAll('id');
-        if(empty($allTasks)) return array();
-
-        $tasks = array();
-        if(empty($dept))
-        {
-            $tasks = $allTasks;
-        }
-        else
-        {
-            foreach($allTasks as $taskID => $task)
-            {
-                if(isset($deptUsers[$task->assignedTo])) $tasks[$taskID] = $task;
-            }
-        }
-
-        /* Fix bug for children. */
-        $parents    = array();
         $taskGroups = array();
         foreach($tasks as $task)
         {
-            if($task->parent > 0) $parents[$task->parent] = $task->parent;
-            $taskGroups[$task->assignedTo][$task->id] = $task;
+            if(!isset($users[$task->user])) continue;
+            $taskGroups[$task->user][$task->projectID][$task->executionID][$task->id] = $task;
         }
 
-        $stmt = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($allTasks))
-            ->beginIF($dept)->andWhere('account')->in(array_keys($deptUsers))->fi()
-            ->query();
-        $multiTaskTeams = array();
-        while($taskTeam = $stmt->fetch())
-        {
-            $account = $taskTeam->account;
-            if(!isset($multiTaskTeams[$account][$taskTeam->task]))
-            {
-                $multiTaskTeams[$account][$taskTeam->task] = $taskTeam;
-            }
-            else
-            {
-                $multiTaskTeams[$account][$taskTeam->task]->estimate += $taskTeam->estimate;
-                $multiTaskTeams[$account][$taskTeam->task]->consumed += $taskTeam->consumed;
-                $multiTaskTeams[$account][$taskTeam->task]->left     += $taskTeam->left;
-            }
-        }
-        foreach($multiTaskTeams as $assignedTo => $taskTeams)
-        {
-            foreach($taskTeams as $taskTeam)
-            {
-                $userTask = clone $allTasks[$taskTeam->task];
-                $userTask->estimate = $taskTeam->estimate;
-                $userTask->consumed = $taskTeam->consumed;
-                $userTask->left     = $taskTeam->left;
-                $taskGroups[$assignedTo][$taskTeam->task] = $userTask;
-            }
-        }
+        $teamTasks = $this->dao->select('task, SUM(`left`) AS `left`')->from(TABLE_TASKTEAM)
+            ->where('task')->in(array_keys($tasks))
+            ->groupBy('task')
+            ->fetchPairs('task');
 
         $workload = array();
-        foreach($taskGroups as $user => $userTasks)
+        foreach($taskGroups as $projects)
         {
-            if($user)
+            $totalTasks      = 0;
+            $totalHours      = 0;
+            $totalExecutions = 0;
+            foreach($projects as $executions)
             {
-                $project = array();
-                foreach($userTasks as $task)
+                $totalExecutions += count($executions);
+
+                foreach($executions as $tasks)
                 {
-                    if(isset($parents[$task->id])) continue;
+                    $totalTasks += count($tasks);
+                    foreach($tasks as $task)
+                    {
+                        if(isset($teamTasks[$task->id])) $task->left = $teamTasks[$task->id]->left;
 
-                    $project[$task->projectname]['projectID'] = isset($project[$task->projectname]['projectID']) ? $project[$task->projectname]['projectID'] : $task->project;
-                    $project[$task->projectname]['execution'][$task->executionName]['executionID'] = isset($project[$task->projectname]['execution'][$task->executionName]['executionID']) ? $project[$task->projectname]['execution'][$task->executionName]['executionID']           : $task->execution;
-                    $project[$task->projectname]['execution'][$task->executionName]['multiple']    = isset($project[$task->projectname]['execution'][$task->executionName]['multiple'])    ? $project[$task->projectname]['execution'][$task->executionName]['multiple']              : $task->multiple;
-                    $project[$task->projectname]['execution'][$task->executionName]['count']       = isset($project[$task->projectname]['execution'][$task->executionName]['count'])       ? $project[$task->projectname]['execution'][$task->executionName]['count'] + 1             : 1;
-                    $project[$task->projectname]['execution'][$task->executionName]['manhour']     = isset($project[$task->projectname]['execution'][$task->executionName]['manhour'])     ? $project[$task->projectname]['execution'][$task->executionName]['manhour'] + $task->left : $task->left;
-
-                    $workload[$user]['total']['count']   = isset($workload[$user]['total']['count'])   ? $workload[$user]['total']['count']  + 1 : 1;
-                    $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
+                        $totalHours += $task->left;
+                    }
                 }
+            }
 
-                if(empty($project)) continue;
-                $workload[$user]['task']['project'] = $project;
+            $userWorkload = $allHour ? round($totalHours / $allHour * 100, 2) . '%' : '0%';
+
+            $userFirstRow = true;
+            foreach($projects as $executions)
+            {
+                $projectFirstRow = true;
+                foreach($executions as $tasks)
+                {
+                    $execution = current($tasks);
+                    $execution->executionTasks = count($tasks);
+                    $execution->executionHours = array_sum(array_map(function($task){return $task->left;}, $tasks));
+                    $execution->totalTasks     = $totalTasks;
+                    $execution->totalHours     = $totalHours;
+                    $execution->workload       = $userWorkload;
+
+                    if($execution->multiple)
+                    {
+                        $execution->executionName = $canViewExecution ? html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName) : $execution->executionName;
+                    }
+                    else
+                    {
+                        $execution->executionName = $this->lang->null;
+                    }
+
+                    if($userFirstRow)    $execution->userRowspan    = $totalExecutions;
+                    if($projectFirstRow) $execution->projectRowspan = count($executions);
+
+                    $workload[] = $execution;
+
+                    $userFirstRow    = false;
+                    $projectFirstRow = false;
+                }
             }
         }
-        unset($workload['closed']);
         return $workload;
     }
 
