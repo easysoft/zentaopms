@@ -27,6 +27,8 @@ class groupModel extends model
             unset($group->limited);
             $group->role = 'limited';
         }
+        if(!isset($group->vision)) $group->vision = $this->config->vision;
+
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
             ->check('name', 'unique', "vision = '{$this->config->vision}'")
