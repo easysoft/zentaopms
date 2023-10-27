@@ -22,8 +22,23 @@ featureBar
 $canExportBug = hasPriv('bug', 'export');
 $canCreateBug = hasPriv('bug', 'create') && common::canModify('execution', $execution);
 
-if($canExportBug) $exportItem = array('icon' => 'export', 'class' => 'ghost', 'text' => $lang->bug->export, 'url' => $this->createLink('bug', 'export', "productID={$productID}&browseType=&executionID={$execution->id}"), 'data-toggle' => 'modal');
-if($canCreateBug) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->bug->create, 'url' => $this->createLink('bug', 'create', "productID={$defaultProduct}&branch=0&extras=executionID={$execution->id}"), 'data-app' => 'execution');
+if($canExportBug) $exportItem = array
+(
+    'icon' => 'export',
+    'class' => 'ghost',
+    'text' => $lang->bug->export,
+    'data-toggle' => 'modal',
+    'url' => $this->createLink('bug', 'export', "productID={$productID}&browseType=&executionID={$execution->id}")
+);
+if($canCreateBug) $createItem = array
+(
+    'icon' => 'plus',
+    'class' => 'primary',
+    'text' => $lang->bug->create,
+    'data-app' => 'execution',
+    'url' => $this->createLink('bug', 'create', "productID={$defaultProduct}&branch=0&extras=executionID={$execution->id}")
+);
+
 toolbar
 (
     !empty($canExportBug) ? item(set($exportItem)) : null,
