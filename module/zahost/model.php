@@ -600,15 +600,18 @@ class zahostModel extends model
      * 判断按钮是否可点击。
      * Judge an action is clickable or not.
      *
-     * @param  object $host
+     * @param  object $object
      * @param  string $action
      * @access public
      * @return bool
      */
-    public static function isClickable(object $host, string $action): bool
+    public static function isClickable(object $object, string $action): bool
     {
-        if($action == 'browseImage') return $host->status != 'wait';
-//        if($action == 'delete') return $host->canDelete;
+        if($action == 'browseImage') return $object->status != 'wait';
+        if($action == 'delete') return $object->canDelete;
+
+        if($action == 'cancelDownload') return $object->status == 'notDownloaded' || !in_array($object->status, array('inprogress', 'created')) ? false : true;
+        if($action == 'downloadImage') return in_array($object->status, array("completed", "inprogress", "created"))  || $object->from == 'user' ? false : true;
 
         return true;
     }

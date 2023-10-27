@@ -56,3 +56,31 @@ $config->zahost->dtable->fieldList['actions']['list']['delete']['icon']      = '
 $config->zahost->dtable->fieldList['actions']['list']['delete']['hint']      = $lang->zahost->delete;
 $config->zahost->dtable->fieldList['actions']['list']['delete']['url']       = helper::createLink('zahost', 'delete', 'hostID={hostID}');
 $config->zahost->dtable->fieldList['actions']['list']['delete']['className'] = 'ajax-submit';
+
+$config->zahost->imageDtable = new stdclass();
+
+$config->zahost->imageDtable->fieldList['name']['title'] = $lang->zahost->image->name;
+
+$config->zahost->imageDtable->fieldList['osName']['title'] = $lang->zahost->image->os;
+
+$config->zahost->imageDtable->fieldList['status']['title'] = $lang->zahost->status;
+$config->zahost->imageDtable->fieldList['status']['map']   = $lang->zahost->image->statusList;
+
+$config->zahost->imageDtable->fieldList['path']['title'] = $lang->zahost->image->path;
+
+$config->zahost->imageDtable->fieldList['progress']['title'] = $lang->zahost->image->progress;
+
+$config->zahost->imageDtable->fieldList['actions']['name']  = 'actions';
+$config->zahost->imageDtable->fieldList['actions']['title'] = $lang->actions;
+$config->zahost->imageDtable->fieldList['actions']['type']  = 'actions';
+$config->zahost->imageDtable->fieldList['actions']['menu']  = array('downloadImage', 'cancelDownload');
+
+$config->zahost->imageDtable->fieldList['actions']['list']['downloadImage']['icon']      = 'download';
+$config->zahost->imageDtable->fieldList['actions']['list']['downloadImage']['hint']      = $lang->zahost->image->downloadImage;
+$config->zahost->imageDtable->fieldList['actions']['list']['downloadImage']['url']       = array('module' => 'zahost', 'method' => 'downloadImage', 'params' => 'hostID={hostID}&imageID={id}');
+$config->zahost->imageDtable->fieldList['actions']['list']['downloadImage']['className'] = 'ajax-submit';
+
+$config->zahost->imageDtable->fieldList['actions']['list']['cancelDownload']['icon']      = 'ban-circle';
+$config->zahost->imageDtable->fieldList['actions']['list']['cancelDownload']['hint']      = $lang->zahost->cancel;
+$config->zahost->imageDtable->fieldList['actions']['list']['cancelDownload']['url']       = array('module' => 'zahost', 'method' => 'cancelDownload', 'params' => 'imageID={id}');
+$config->zahost->imageDtable->fieldList['actions']['list']['cancelDownload']['className'] = 'ajax-submit';
