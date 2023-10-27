@@ -631,33 +631,58 @@ class pivotModel extends model
      */
     public function getBugAssign()
     {
-        $bugs = $this->dao->select('t1.*, t2.name AS productName')->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.status')->eq('active')
-            ->andWhere('t2.deleted')->eq(0)
+        $bugGroups = $this->dao->select('product, assignedTo, COUNT(*) AS bugCount')->from(TABLE_BUG)
+            ->where('deleted')->eq('0')
+            ->andWhere('status')->eq('active')
+            ->andWhere('assignedTo')->ne('')
+            ->andWhere('assignedTo')->ne('closed')
+            ->groupBy('product, assignedTo')
             ->fetchGroup('assignedTo');
+
+        $products = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs();
+
         $productProjects = $this->dao->select('t2.product, t2.project')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->where('t1.type')->eq('project')
             ->andWhere('t1.hasProduct')->eq(0)
             ->fetchPairs();
-        $assign = array();
-        foreach($bugs as $user => $userBugs)
+
+        $canViewProduct = common::hasPriv('product', 'view');
+        $canViewProject = common::hasPriv('project', 'view');
+
+        $bugs = array();
+        foreach($bugGroups as $userBugs)
         {
-            if($user)
+            $totalBugs = array_sum(array_map(function($bug){return $bug->bugCount;}, $userBugs));
+
+            $first = true;
+            foreach($userBugs as $bug)
             {
-                foreach($userBugs as $bug)
+                if(!isset($products[$bug->product])) continue;
+
+                $bug->productName = $products[$bug->product];
+                if($bug->productName)
                 {
-                    $assign[$user]['bug'][$bug->productName]['count']     = isset($assign[$user]['bug'][$bug->productName]['count']) ? $assign[$user]['bug'][$bug->productName]['count'] + 1 : 1;
-                    $assign[$user]['bug'][$bug->productName]['productID'] = $bug->product;
-                    $assign[$user]['bug'][$bug->productName]['projectID'] = zget($productProjects, $bug->product, 0);
-                    $assign[$user]['total']['count']   = isset($assign[$user]['total']['count']) ? $assign[$user]['total']['count'] + 1 : 1;
+                    if($canViewProject && !empty($productProjects[$bug->product]))
+                    {
+                        $bug->productName = html::a(helper::createLink('project', 'view', "projectID={$productProjects[$bug->product]}"), $bug->productName);
+                    }
+                    elseif($canViewProduct)
+                    {
+                        $bug->productName = html::a(helper::createLink('product', 'view', "product={$bug->product}"), $bug->productName);
+                    }
                 }
+
+                $bug->total = $totalBugs;
+
+                if($first) $bug->rowspan = count($userBugs);
+
+                $bugs[] = $bug;
+
+                $first = false;
             }
         }
-        unset($assign['closed']);
-        return $assign;
+        return $bugs;
     }
 
     /**
