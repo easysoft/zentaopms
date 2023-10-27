@@ -186,7 +186,7 @@ class buildZen extends build
         $this->view->bugPager          = $bugPager;
         $this->view->generatedBugPager = $generatedBugPager;
         $this->view->bugs              = $this->build->getBugList($build->allBugs, $type == 'bug' ? $sort : '', $bugPager);
-        $this->view->generatedBugs     = $this->loadModel('bug')->getExecutionBugs($build->execution, $build->product, 'all', "$build->id,{$build->builds}", $type, (int)$param, $type == 'generatedBug' ? $sort : 'status_desc,id_desc', '', $generatedBugPager);
+        $this->view->generatedBugs     = $this->loadModel('bug')->getExecutionBugs((int)$build->execution, $build->product, 'all', "$build->id,{$build->builds}", $type, (int)$param, $type == 'generatedBug' ? $sort : 'status_desc,id_desc', '', $generatedBugPager);
 
         if($this->app->getViewType() == 'json')
         {
@@ -217,14 +217,14 @@ class buildZen extends build
         }
         elseif($this->app->tab == 'execution')
         {
-            $this->loadModel('execution')->setMenu($build->execution);
+            $this->loadModel('execution')->setMenu((int)$build->execution);
         }
 
         $executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty');
 
         $this->view->title      = "BUILD #$build->id $build->name" . (isset($executions[$build->execution]) ? " - " . $executions[$build->execution] : '');
         $this->view->executions = $executions;
-        $this->view->buildPairs = $this->build->getBuildPairs(array(0), 'all', 'noempty,notrunk', $objectID, $objectType);
+        $this->view->buildPairs = $this->build->getBuildPairs(array(0), 'all', 'noempty,notrunk', (int)$objectID, $objectType);
         $this->view->builds     = $this->build->getByList(array_keys($this->view->buildPairs));
     }
 
