@@ -27,7 +27,7 @@ $tableData = initTableData($cases, $cols, $this->testcase);
 
 featureBar
 (
-    set::current($browseType),
+    set::current($this->session->libBrowseType),
     set::linkParams("libID=$libID&browseType={key}&param=$param&orderBy=$orderBy&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID"),
     li(searchToggle())
 );
