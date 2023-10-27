@@ -10,7 +10,8 @@ declare(strict_types = 1);
  */
 namespace zin;
 
-include strtolower($method) . '.html.php';
+$viewFile = strtolower($method) . '.html.php';
+if(file_exists($viewFile)) include_once $viewFile;
 
 jsVar('dimension', $dimensionID);
 jsVar('groupID', $group->id);
