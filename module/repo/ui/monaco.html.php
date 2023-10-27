@@ -88,9 +88,10 @@ div(
     )
 );
 
-sidebar
+helper::isAjaxRequest('modal') ? null : sidebar
 (
     set::side('left'),
+    setClass('repo-sidebar'),
     dropmenu
     (
         setID('repoBranchDropMenu'),
@@ -100,7 +101,7 @@ sidebar
         set::text($dropMenus['selected']),
         set::data(array('data' => $menuData, 'tabs' => $tabs)),
     ),
-    tree
+    treeEditor
     (
         set::id('monacoTree'),
         set::items($tree),
