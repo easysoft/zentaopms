@@ -140,10 +140,10 @@ $items[] = array
     'name'     => 'pri',
     'label'    => $lang->testcase->pri,
     'hidden'   => zget($visibleFields, 'pri', true, false),
-    'control'  => 'picker',
+    'control'  => 'priPicker',
     'items'    => $lang->testcase->priList,
     'value'    => 3,
-    'width'    => '80px',
+    'width'    => '100px',
     'required' => isset($requiredFields['pri']),
     'ditto'   => true,
 );
