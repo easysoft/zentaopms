@@ -29,6 +29,7 @@ class pivotZen extends pivot
 
         if(method_exists($this, $method)) call_user_func_array(array($this, $method), $result);
 
+        $this->view->currentMenu = '';
         $this->view->menus       = $this->getSidebarMenus($dimensionID, $group, $module, $method, $params);
         $this->view->dimensionID = $dimensionID;
         $this->view->group       = $group;
