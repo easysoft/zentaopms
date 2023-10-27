@@ -173,7 +173,7 @@ class caselibZen extends caselib
         foreach($testcases as $i => $testcase)
         {
             /* Check required fields. */
-            foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
+            foreach(explode(',', $this->config->caselib->createcase->requiredFields) as $field)
             {
                 $field = trim($field);
                 if($field && empty($testcase->{$field}))
