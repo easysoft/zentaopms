@@ -101,7 +101,7 @@ class project extends control
             if($this->config->edition != 'open') list($fields, $projects) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $projects);
             $this->post->set('fields', $fields);
             $this->post->set('rows', $projects);
-            $this->post->set('kind', $this->lang->project->common);
+            $this->post->set('kind', 'project');
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 

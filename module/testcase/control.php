@@ -226,7 +226,7 @@ class testcase extends control
         $this->config->testcase->search['onMenuBar'] = 'yes';
 
         $searchProducts = $this->product->getPairs('', 0, '', 'all');
-        $this->testcase->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $projectID);
+        $this->testcase->buildSearchForm($productID, $searchProducts, $queryID, $actionURL, $projectID, 0, $branch);
 
         $showModule = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
 

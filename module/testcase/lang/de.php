@@ -246,6 +246,7 @@ $lang->testcase->mustChooseResult = 'Prüfungsergebnis wird benötigt.';
 $lang->testcase->noModule         = '<div>Es existieren keine Module</div><div>Jetzt verwalten</div>';
 $lang->testcase->noCase           = 'Keine Fälle. ';
 $lang->testcase->importedCases    = 'The case with ID%s has been imported in the same module and has been ignored.';
+$lang->testcase->importedFromLib  = '%s items imported successfully: %s.';
 
 $lang->testcase->searchStories = 'Story suchen';
 $lang->testcase->selectLib     = 'Bibliothek wählen';

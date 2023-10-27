@@ -58,6 +58,7 @@ $lang->testtask->run              = '执行编号';
 $lang->testtask->job              = '构建任务';
 $lang->testtask->compile          = '构建';
 $lang->testtask->duration         = '持续时间';
+$lang->testtask->myInvolved       = '由我参与';
 
 $lang->testtask->viewAction     = "测试单概况";
 $lang->testtask->casesAction    = '浏览用例列表';
@@ -76,6 +77,7 @@ $lang->testtask->execution         = '所属' . $lang->execution->common;
 $lang->testtask->type              = '测试类型';
 $lang->testtask->build             = '版本';
 $lang->testtask->owner             = '负责人';
+$lang->testtask->members           = '参与人';
 $lang->testtask->executor          = '执行人';
 $lang->testtask->execTime          = '执行时间';
 $lang->testtask->pri               = '优先级';
@@ -202,6 +204,7 @@ $lang->testtask->report->options->width  = 500;
 $lang->testtask->report->options->height = 140;
 
 $lang->testtask->featureBar['browse']['totalStatus'] = $lang->testtask->totalStatus;
+$lang->testtask->featureBar['browse']['myinvolved']  = $lang->testtask->myInvolved;
 $lang->testtask->featureBar['browse']['wait']        = $lang->testtask->wait;
 $lang->testtask->featureBar['browse']['doing']       = $lang->testtask->testing;
 $lang->testtask->featureBar['browse']['blocked']     = $lang->testtask->blocked;

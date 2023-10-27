@@ -74,6 +74,10 @@
           </td>
         </tr>
         <tr>
+          <th><?php echo $lang->testtask->members;?></th>
+          <td><?php echo html::select('members[]', $users, '', "class='form-control picker-select' multiple")?></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->testtask->begin;?></th>
           <td>
             <div class='input-group'>

@@ -29,13 +29,14 @@ $(function()
       <thead>
         <tr>
           <th class='c-number'><?php echo $lang->testcase->id?></th>
-          <th class='c-title'        id='title'>       <?php echo $lang->testcase->title?></th>
-          <th class='c-module'       id='module'>      <?php echo $lang->testcase->module?></th>
-          <th class='c-pri'          id='pri'>         <?php echo $lang->testcase->pri?></th>
-          <th class='c-type'         id='type'>        <?php echo $lang->testcase->type?></th>
-          <th class='c-stage'        id='stage'>       <?php echo $lang->testcase->stage?></th>
-          <th class='c-text'         id='keywords'>    <?php echo $lang->testcase->keywords?></th>
-          <th class='c-precondition' id='precondition'><?php echo $lang->testcase->precondition?></th>
+          <th class='c-title       <?php if(strpos(",$requiredFields,", ',title,')        !== false) echo 'required';?>' id='title'>       <?php echo $lang->testcase->title?></th>
+          <th class='c-module      <?php if(strpos(",$requiredFields,", ',module,')       !== false) echo 'required';?>' id='module'>      <?php echo $lang->testcase->module?></th>
+          <th class='c-pri         <?php if(strpos(",$requiredFields,", ',pri,')          !== false) echo 'required';?>' id='pri'>         <?php echo $lang->testcase->pri?></th>
+          <th class='c-type        <?php if(strpos(",$requiredFields,", ',type,')         !== false) echo 'required';?>' id='type'>        <?php echo $lang->testcase->type?></th>
+          <th class='c-stage       <?php if(strpos(",$requiredFields,", ',stage,')        !== false) echo 'required';?>' id='stage'>       <?php echo $lang->testcase->stage?></th>
+          <th class='c-text        <?php if(strpos(",$requiredFields,", ',text,')         !== false) echo 'required';?>' id='keywords'>    <?php echo $lang->testcase->keywords?></th>
+          <th class='c-precondition <?php if(strpos(",$requiredFields,", ',precondition,') !== false) echo 'required';?>' id='precondition'><?php echo $lang->testcase->precondition?></th>
+          <th class='c-case-step    <?php if(strpos(",$requiredFields,", ',step,')         !== false) echo 'required';?> col-content'>
           <th class='c-case-step col-content'>
             <table class='w-p100 table-borderless'>
               <tr>

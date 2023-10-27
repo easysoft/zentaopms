@@ -101,7 +101,7 @@
               <div class='col-xs-5 execution-name' title="<?php echo $project->name;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID={$project->id}"), $project->name);?></div>
               <div class='col-xs-7'>
                 <div class="progress progress-text-left">
-                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
+                  <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->progress;?>%">
                   <span class="progress-text"><?php echo $project->progress;?>%</span>
                 </div>
               </div>

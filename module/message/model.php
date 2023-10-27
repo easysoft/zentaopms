@@ -219,6 +219,15 @@ class messageModel extends model
             $toList = $toList . $ccList;
         }
 
+        if($objectType == 'testtask')
+        {
+            $members = explode(',', $object->members);
+            $toList  = explode(',', $toList);
+            $toList  = array_merge($toList, $members);
+            $toList  = array_filter(array_unique($toList));
+            $toList  = implode(',', $toList);
+        }
+
         return $toList;
     }
 

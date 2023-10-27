@@ -338,7 +338,7 @@ class programplanModel extends model
             if(($today > $end) and $plan->status != 'closed')
             {
                 $data->delay     = $this->lang->programplan->delayList[1];
-                $data->delayDays = helper::diffDate($today, substr($end, 0, 10));
+                $data->delayDays = helper::diffDate(($task->status == 'done' || $task->status == 'closed') ? substr($task->finishedDate, 0, 10) : $today, substr($end, 0, 10));
             }
 
             /* If multi task then show the teams. */
@@ -361,14 +361,14 @@ class programplanModel extends model
                 {
                     $stageIndex[$index]['progress']['totalEstimate'] += $task->estimate;
                     $stageIndex[$index]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
-                    $stageIndex[$index]['progress']['totalReal']     += ($task->left + $task->consumed);
+                    $stageIndex[$index]['progress']['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
 
                     $parent = $stage['parent'];
                     if(isset($stageIndex[$parent]))
                     {
                         $stageIndex[$parent]['progress']['totalEstimate'] += $task->estimate;
                         $stageIndex[$parent]['progress']['totalConsumed'] += $task->parent == '-1' ? 0 : $task->consumed;
-                        $stageIndex[$parent]['progress']['totalReal']     += ($task->left + $task->consumed);
+                        $stageIndex[$parent]['progress']['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
                     }
                 }
             }

@@ -529,16 +529,16 @@ class caselib extends control
                 $columnKey[] = $fields[$title];
             }
 
-            if(count($columnKey) != count($header) or $this->post->encode != 'utf-8')
+            if(count($columnKey) <= 3 or $this->post->encode != 'utf-8')
             {
-                $fc     = file_get_contents($fileName);
                 $encode = $this->post->encode != "utf-8" ? $this->post->encode : 'gbk';
+                $fc     = file_get_contents($fileName);
                 $fc     = helper::convertEncoding($fc, $encode, 'utf-8');
                 file_put_contents($fileName, $fc);
 
                 $rows      = $this->file->parseCSV($fileName);
                 $columnKey = array();
-                $header   = array();
+                $header    = array();
                 foreach($rows[0] as $i => $rowValue)
                 {
                     if(empty($rowValue)) break;
@@ -550,7 +550,7 @@ class caselib extends control
                     if(!isset($fields[$title])) continue;
                     $columnKey[] = $fields[$title];
                 }
-                if(count($columnKey) != count($header)) return print(js::alert($this->lang->testcase->errorEncode));
+                if(count($columnKey) == 0) return print(js::alert($this->lang->testcase->errorEncode));
             }
 
             $this->session->set('fileImport', $fileName);

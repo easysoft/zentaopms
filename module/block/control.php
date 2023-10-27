@@ -980,12 +980,14 @@ class block extends control
         $this->app->loadLang('story');
         $this->app->loadLang('bug');
 
+        $this->loadModel('program')->refreshStats();
+
         /* Set project status and count. */
         $status = isset($this->params->type)  ? $this->params->type       : 'all';
         $count  = isset($this->params->count) ? (int)$this->params->count : 15;
 
         /* Get projects. */
-        $projects      = $this->project->getOverviewList('byStatus', $status, 'order_asc', $count, '');
+        $projects = $this->project->getOverviewList('byStatus', $status, 'order_asc', $count, '');
         if(empty($projects))
         {
             $this->view->projects = $projects;
@@ -1031,7 +1033,6 @@ class block extends control
                     $project->cv = $this->weekly->getCV($project->ev, $project->ac);
 
                     $left              = (float)$this->weekly->getLeft($project->id, $today);
-                    $project->progress = ($project->ac + $left) ? floor($project->ac / ($project->ac + $left) * 1000) / 1000 * 100 : 0;
                     $project->progress = $project->progress > 100 ? 100 : $project->progress;
                     $project->current  = $current;
                 }
@@ -1282,6 +1283,9 @@ class block extends control
     public function printWaterfallReportBlock()
     {
         $this->app->loadLang('programplan');
+
+        $this->loadModel('program')->refreshStats();
+
         $project = $this->loadModel('project')->getByID($this->session->project);
         $today   = helper::today();
         $date    = date('Ymd', strtotime('this week Monday'));
@@ -1298,9 +1302,8 @@ class block extends control
         $this->view->sv = $this->weekly->getSV($this->view->ev, $this->view->pv);
         $this->view->cv = $this->weekly->getCV($this->view->ev, $this->view->ac);
 
-        $left     = (float)$this->weekly->getLeft($this->session->project, $today);
-        $progress = ($this->view->ac + $left) ? floor($this->view->ac / ($this->view->ac + $left) * 1000) / 1000 * 100 : 0;
-        $this->view->progress = $progress > 100 ? 100 : $progress;
+        $left = (float)$this->weekly->getLeft($this->session->project, $today);
+        $this->view->progress = $project->progress > 100 ? 100 : $project->progress;
         $this->view->current  = $current;
     }
 

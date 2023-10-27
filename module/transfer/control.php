@@ -152,6 +152,11 @@ class transfer extends control
     {
         $filter = '';
         if($model == 'task') $filter = 'estimate';
+        if($model == 'bug')
+        {
+            $this->loadModel('bug');
+            $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'product', 'method' =>'getAllExecutionPairsByProduct', 'params' => '$productID&$branch');
+        }
         if($model == 'story' and $this->session->storyType == 'requirement') $this->loadModel('story')->replaceUserRequirementLang();
 
         $this->loadModel($model);
@@ -198,6 +203,7 @@ class transfer extends control
     {
         $this->loadModel($model);
         $fields = $this->config->$model->templateFields;
+        if($model == 'bug') $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'product', 'method' =>'getAllExecutionPairsByProduct', 'params' => '$productID&$branch');
 
         if($this->config->edition != 'open')
         {

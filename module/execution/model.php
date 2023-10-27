@@ -2666,6 +2666,19 @@ class executionModel extends model
     }
 
     /**
+     * Get execution by build id. 
+     * 
+     * @param  int    $buildID 
+     * @access public
+     * @return object
+     */
+    public function getByBuild($buildID)
+    {
+        $build = $this->loadModel('build')->getById($buildID);
+        return $this->getById($build->execution);
+    }
+
+    /**
      * Get the default managers for a execution from it's related products.
      *
      * @param  int    $executionID

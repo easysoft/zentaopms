@@ -246,6 +246,7 @@ $lang->testcase->mustChooseResult = '必须选择评审结果';
 $lang->testcase->noModule         = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
 $lang->testcase->noCase           = '暂时没有用例。';
 $lang->testcase->importedCases    = 'ID为 %s 的用例在相同模块已经导入，已忽略。';
+$lang->testcase->importedFromLib  = '导入成功%s项：%s。';
 
 $lang->testcase->searchStories = "键入来搜索{$lang->SRCommon}";
 $lang->testcase->selectLib     = '请选择库';

@@ -2974,6 +2974,7 @@ $config->group->package->reviewcl->privs['reviewcl-view']                      =
 $config->group->package->reviewcl->privs['reviewcl-waterfallplusBrowse']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewsetting-version']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewsetting-waterfallplusVersion'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array());
+$config->group->package->reviewcl->privs['reviewcl-setCategory']               = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->process = new stdclass();
 $config->group->package->process->order  = 25;

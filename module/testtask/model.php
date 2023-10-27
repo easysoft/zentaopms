@@ -20,7 +20,7 @@ class testtaskModel extends model
      * @access public
      * @return void
      */
-    function create($projectID = 0)
+    public function create($projectID = 0)
     {
         if($this->post->execution)
         {
@@ -28,16 +28,25 @@ class testtaskModel extends model
             $projectID = $execution->project;
         }
 
+        if($this->post->build && empty($projectID))
+        {
+            $build     = $this->loadModel('build')->getById($this->post->build);
+            $projectID = $build->project;
+        }
+
         $task = fixer::input('post')
             ->setDefault('build', '')
             ->setDefault('project', $projectID)
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
+            ->setDefault('members', '')
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->join('type', ',')
+            ->join('members', ',')
             ->remove('files,labels,uid,contactListMenu')
             ->get();
+        $task->members = trim($task->members, ',');
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TESTTASK)->data($task)
@@ -87,8 +96,9 @@ class testtaskModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in("0,{$this->app->user->view->sprints}")->fi()
             ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
+            ->beginIF(strtolower($scopeAndStatus[1]) == 'myinvolved')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.members)")->fi()
             ->beginIF(strtolower($scopeAndStatus[1]) == 'totalstatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
-            ->beginIF(!in_array(strtolower($scopeAndStatus[1]), array('totalstatus', 'review'), true))->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
+            ->beginIF(!in_array(strtolower($scopeAndStatus[1]), array('totalstatus', 'review', 'myinvolved'), true))->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
             ->beginIF($branch !== 'all')->andWhere("CONCAT(',', t4.branch, ',')")->like("%,$branch,%")->fi()
             ->beginIF($beginTime)->andWhere('t1.begin')->ge($beginTime)->fi()
             ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
@@ -105,6 +115,7 @@ class testtaskModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+
         foreach($tasks as $taskID => $task)
         {
             if($task->multiple)
@@ -773,15 +784,26 @@ class testtaskModel extends model
             ->setDefault('type', '')
             ->setDefault('mailto', '')
             ->setDefault('deleteFiles', array())
+            ->setDefault('members', '')
             ->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->join('type', ',')
+            ->join('members', ',')
             ->remove('files,labels,uid,comment,contactListMenu')
             ->get();
+        $task->members = trim($task->members, ',');
 
         /* Fix bug #35419. */
-        $execution     = $this->loadModel('execution')->getByID($task->execution);
-        $task->project = $execution->project;
+        $execution = $this->loadModel('execution')->getByID($task->execution);
+        if(!$execution)
+        {
+            $build         = $this->loadModel('build')->getById($task->build);
+            $task->project = $build->project;
+        }
+        else
+        {
+            $task->project = $execution->project;
+        }
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
 
@@ -1777,7 +1799,7 @@ class testtaskModel extends model
     public function getToAndCcList($testtask)
     {
         /* Set toList and ccList. */
-        $toList   = $testtask->owner;
+        $toList   = $testtask->owner . ',' . $testtask->members . ',';
         $ccList   = str_replace(' ', '', trim($testtask->mailto, ','));
 
         if(empty($toList))
@@ -1795,6 +1817,7 @@ class testtaskModel extends model
                 $ccList   = substr($ccList, $commaPos + 1);
             }
         }
+
         return array($toList, $ccList);
     }
 

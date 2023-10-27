@@ -69,7 +69,7 @@ function deleteFile(fileID, obj)
 function downloadFile(fileID, extension, imageWidth, fileTitle, type = 'download')
 {
     if(!fileID) return;
-    var fileTypes      = 'txt,jpg,jpeg,gif,png,bmp';
+    var fileTypes      = 'txt,jpg,jpeg,gif,png,bmp,mp4';
     var windowWidth    = $(window).width();
     var width          = (windowWidth > imageWidth) ? ((imageWidth < windowWidth * 0.5) ? windowWidth * 0.5 : imageWidth) : windowWidth;
     var checkExtension = fileTitle.lastIndexOf('.' + extension) == (fileTitle.length - extension.length - 1);
@@ -203,7 +203,7 @@ function setFileName(fileID)
               }
 
               /* For the open source version of the file judgment. */
-              if(stripos('txt|jpg|jpeg|gif|png|bmp', $file->extension) !== false and common::hasPriv('file', 'preview'))
+              if(stripos('txt|jpg|jpeg|gif|png|bmp|mp4', $file->extension) !== false and common::hasPriv('file', 'preview'))
               {
                   echo html::a($previewLink, "<i class='icon icon-eye'></i>", '_blank', "class='fileAction btn btn-link text-primary' title='{$lang->file->preview}' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title', 'preview')\"");
               }

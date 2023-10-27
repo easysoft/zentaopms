@@ -1579,6 +1579,24 @@ class baseSQL
     public $conditionIsTrue = false;
 
     /**
+     * 条件层级。
+     * The condition level.
+     *
+     * @var bool
+     * @access public;
+     */
+    public $conditionLevel = 0;
+
+    /**
+     * 条件结果，beginIF 中表达式的结果会存储到这个数组中。
+     * Store the result of the expression.
+     *
+     * @var bool
+     * @access public;
+     */
+    public $conditionResults = array();
+
+    /**
      * WHERE条件嵌套小括号标记。
      * If in mark or not.
      *
@@ -1889,7 +1907,9 @@ class baseSQL
     public function beginIF($condition)
     {
         $this->inCondition = true;
-        $this->conditionIsTrue = $condition;
+        $this->conditionLevel += 1;
+        $this->conditionResults[$this->conditionLevel] = $condition;
+        $this->conditionIsTrue = !in_array(false, $this->conditionResults);
         return $this;
     }
 
@@ -1902,6 +1922,14 @@ class baseSQL
      */
     public function fi()
     {
+        unset($this->conditionResults[$this->conditionLevel]);
+        $this->conditionLevel -= 1;
+        if($this->conditionLevel > 0)
+        {
+            $this->conditionIsTrue = !in_array(false, $this->conditionResults);
+            return $this;
+        }
+
         $this->inCondition = false;
         $this->conditionIsTrue = false;
         return $this;

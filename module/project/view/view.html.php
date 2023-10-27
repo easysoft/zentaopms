@@ -204,10 +204,9 @@
                   <tr class='statsTr'><td></td><td></td><td></td><td></td></tr>
                   <tr>
                     <td colspan="4">
-                      <?php $progress = $project->model == 'waterfall' ? $this->project->getWaterfallProgress($project->id) : (((float)$workhour->totalConsumed + (float)$workhour->totalLeft) ? floor($workhour->totalConsumed / ((float)$workhour->totalConsumed + (float)$workhour->totalLeft) * 1000) / 1000 * 100 : 0);?>
-                      <?php echo $lang->project->progress;?> <?php echo $progress . $lang->percent;?> &nbsp;
+                      <?php echo $lang->project->progress;?> <?php echo $project->progress . $lang->percent;?> &nbsp;
                       <div class="progress inline-block">
-                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress . $lang->percent;?>"></div>
+                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->progress . $lang->percent;?>"></div>
                       </div>
                     </td>
                   </tr>

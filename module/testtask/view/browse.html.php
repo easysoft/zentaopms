@@ -78,6 +78,7 @@ $status = strtolower($status);
         <th class='text-left'>         <?php common::printOrderLink('execution', $orderBy, $vars, $lang->testtask->execution);?></th>
         <th class='c-status text-left'><?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
         <th class='c-user text-left'>  <?php common::printOrderLink('owner',     $orderBy, $vars, $lang->testtask->owner);?></th>
+        <th class='c-user text-left'>  <?php common::printOrderLink('members',   $orderBy, $vars, $lang->testtask->members);?></th>
         <th class='c-date text-left'>  <?php common::printOrderLink('begin',     $orderBy, $vars, $lang->testtask->begin);?></th>
         <th class='c-date text-left'>  <?php common::printOrderLink('end',       $orderBy, $vars, $lang->testtask->end);?></th>
         <?php
@@ -114,6 +115,10 @@ $status = strtolower($status);
         </span>
       </td>
       <td title="<?php echo zget($users, $task->owner);?>"><?php echo zget($users, $task->owner);?></td>
+      <?php $members = array()?>
+      <?php foreach(explode(',', $task->members) as $member) $members[] = zget($users, $member);?>
+      <?php $members = implode(',', $members)?>
+      <td title="<?php echo $members;?>"><?php echo $members;?></td>
       <td><?php echo $task->begin?></td>
       <td><?php echo $task->end?></td>
       <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $task) . "</td>";?>

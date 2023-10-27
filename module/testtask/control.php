@@ -1660,4 +1660,17 @@ class testtask extends control
         $result = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('id')->eq((int)$resultID)->fetch();
         $this->send(array('result' => 'success', 'message' => '', 'data' => $result));
     }
+
+    /**
+     * AJAX: Get executionID by buildID. 
+     * 
+     * @param  int    $buildID 
+     * @access public
+     * @return int
+     */
+    public function ajaxGetExecutionByBuild($buildID)
+    {
+        $execution = $this->loadModel('execution')->getByBuild($buildID);
+        return print($execution ? $execution->id : 0);
+    }
 }
