@@ -44,6 +44,7 @@ if(!empty($list->userList))
 
 panel
 (
+    set::shadow(false),
     setClass('panel-form px-4 mx-auto size-lg'),
     on::click('#createContact', 'createContact'),
     on::click('.contact', 'getContact'),

@@ -333,31 +333,41 @@ detailBody
                     (
                         set('id', 'contactBox'),
                         set('class', 'input-group-addon'),
+                        $contactList ? setStyle(array('width' => '100px', 'padding' => '0')) : null,
                         $contactList ? picker
                         (
                             set::className('width', 'w-20'),
                             set::name('contactListMenu'),
                             set::items($contactList),
-                            set::value()
-                        ) : a
+                            set::value(),
+                            set::placeholder($lang->contact->common)
+                        ) :
+                        inputGroup
                         (
-                            set('href', createLink('my', 'managecontacts', 'listID=0&mode=new')),
-                            set('title', $lang->user->contacts->manage),
-                            set('data-toggle', 'modal'),
-                            icon('cog'),
+                            span
+                            (
+                                set('class', 'input-group-addon'),
+                                a
+                                (
+                                    set('href', createLink('my', 'managecontacts', 'listID=0&mode=new')),
+                                    set('title', $lang->user->contacts->manage),
+                                    set('data-toggle', 'modal'),
+                                    icon('cog'),
+                                )
+                            ),
+                            span
+                            (
+                                set('class', 'input-group-addon'),
+                                a
+                                (
+                                    set('id', 'refreshMailto'),
+                                    set('class', 'text-black'),
+                                    set('href', 'javascript:void(0)'),
+                                    icon('refresh')
+                                )
+                            )
                         )
                     ),
-                    span
-                    (
-                        set('class', 'input-group-addon'),
-                        a
-                        (
-                            set('id', 'refreshMailto'),
-                            set('class', 'text-black'),
-                            set('href', 'javascript:void(0)'),
-                            icon('refresh')
-                        )
-                    )
                 )
             )
         ),
