@@ -35,6 +35,7 @@ $lang->repo->notRelated      = '暂时没有关联禅道对象';
 $lang->repo->source          = '基准';
 $lang->repo->target          = '对比';
 $lang->repo->descPlaceholder = '一句话描述';
+$lang->repo->namespace       = '命名空间';
 
 $lang->repo->browseAction    = '浏览代码库';
 $lang->repo->createAction    = '关联代码库';
@@ -57,6 +58,8 @@ $lang->repo->importName      = '导入后的名称';
 $lang->repo->importServer    = '请选择服务器';
 $lang->repo->gitlabList      = 'Gitlab代码库';
 $lang->repo->batchCreate     = '批量关联代码库';
+
+$lang->repo->createRepoAction = '创建代码库';
 
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
@@ -236,6 +239,7 @@ $lang->repo->error->needTwoVersion    = '必须选择两个分支/标签';
 $lang->repo->error->emptyVersion      = '版本不能为空';
 $lang->repo->error->versionError      = '版本格式错误！';
 $lang->repo->error->projectUnique     = $lang->repo->serviceProject . '已经有这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。';
+$lang->repo->error->repoNameInvalid   = '名称应该只包含字母数字，破折号，下划线和点。';
 
 $lang->repo->syncTips          = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置代码库定时同步。';
 $lang->repo->encodingsTips     = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";

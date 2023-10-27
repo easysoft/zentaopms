@@ -79,7 +79,7 @@ class repoModel extends model
             if(!in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
         }
 
-        if(!in_array($this->app->methodName, array('maintain', 'create', 'edit','import'))) common::setMenuVars('devops', $repoID);
+        if(!in_array($this->app->methodName, array('maintain', 'create', 'createrepo', 'edit','import'))) common::setMenuVars('devops', $repoID);
         if(!session_id()) session_start();
         $this->session->set('repoID', $repoID);
         session_write_close();
@@ -208,6 +208,76 @@ class repoModel extends model
         $this->rmClientVersionFile();
 
         return $repoID;
+    }
+
+    /**
+     * 创建远程版本库。
+     * Create a repo.
+     *
+     * @param  object $repo
+     * @param  int   $namespace
+     * @access public
+     * @return int|false
+     */
+    public function createRepo(object $repo, int $namespace): int|false
+    {
+        $check = $this->repoTao->checkName($repo);
+        if(!$check)
+        {
+            dao::$errors['name'] = $this->lang->repo->error->repoNameInvalid;
+            return false;
+        }
+
+        $createRepoFunc = "create{$repo->SCM}Repo";
+        $response = $this->$createRepoFunc($repo, $namespace);
+
+        if(!empty($response))
+        {
+            $this->loadModel('action')->create('gitlabproject', $response->id, 'created', '', $response->name);
+            $repo->path           = $response->path;
+            $repo->serviceProject = $response->id;
+            $repo->extra          = $response->id;
+
+            $repoID = $this->create($repo, false);
+            if(dao::isError())
+            {
+                $this->gitlab->apiDeleteProject($repo->serviceHost, $response->id);
+                return false;
+            }
+            return $repoID;
+        }
+
+        return $this->gitlab->apiErrorHandling($response);
+    }
+
+    /**
+     * 创建gitlab远程版本库。
+     * Create gitlab repo.
+     *
+     * @param  object $repo
+     * @param  int    $namespace
+     * @access public
+     * @return object|false
+     */
+    public function createGitlabRepo(object $repo, int $namespace): object|false
+    {
+        $project = new stdclass();
+        $project->name                   = $repo->name;
+        $project->path                   = $repo->name;
+        $project->description            = $repo->desc;
+        $project->namespace_id           = $namespace;
+        $project->initialize_with_readme = true;
+
+        $response = $this->loadModel('gitlab')->apiCreateProject($repo->serviceHost, $project);
+
+        if(empty($response->id)) return false;
+
+        $result = new stdclass();
+        $result->id        = $response->id;
+        $result->path      = $response->web_url;
+        $result->namespace = $response->namespace->id;
+
+        return $result;
     }
 
     /**
@@ -2948,6 +3018,69 @@ class repoModel extends model
         }
 
         return $projects;
+    }
+
+    /**
+     * Get repo groups.
+     *
+     * @param  int    $serverID
+     * @param  int    $groupID
+     * @access public
+     * @return string|array|false
+     */
+    public function getGroups(int $serverID, int $groupID = 0): string|array|false
+    {
+        $server       = $this->loadModel('pipeline')->getByID($serverID);
+        $getGroupFunc = 'get' . $server->type . 'Groups';
+
+        $groups = $this->$getGroupFunc($serverID);
+
+        if($groupID !== 0)
+        {
+            foreach($groups as $group)
+            {
+                if($group['value'] == $groupID) return $group['text'];
+            }
+            return false;
+        }
+
+        return $groups;
+    }
+
+    /**
+     * Get gitlab groups.
+     *
+     * @param  int    $gitlabID
+     * @access public
+     * @return void
+     */
+    public function getGitlabGroups(int $gitlabID): array
+    {
+        $groups = $this->loadModel('gitlab')->apiGetGroups($gitlabID, 'name_asc');
+        $options = array();
+        foreach($groups as $group)
+        {
+            $options[] = array('text' => $group->name, 'value' => $group->id);
+        }
+        return $options;
+    }
+
+    /**
+     * Get gitea groups.
+     *
+     * @param  int $giteaID
+     * @access public
+     * @return array
+     */
+    public function getGiteaGroups(int $giteaID): array
+    {
+        $groups = $this->loadModel('gitea')->apiGetGroups($giteaID);
+        $options = array();
+        foreach($groups as $group)
+        {
+            $options[] = array('text' => $group->username, 'value' => $group->id);
+        }
+        return $options;
     }
 
     /**

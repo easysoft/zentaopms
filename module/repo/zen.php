@@ -78,6 +78,81 @@ class repoZen extends repo
     }
 
     /**
+     * 准备创建版本库的数据。
+     * Prepare create repo data.
+     *
+     * @param  form      $formData
+     * @param  bool      $isPipelineServer
+     * @access protected
+     * @return object|false
+     */
+    protected function prepareCreateRepo(form $formData, bool $isPipelineServer): object|false
+    {
+        $serviceHost = $_POST['serviceHost'];
+        $namespace   = $_POST['namespace'];
+
+        $group  = $this->repo->getGroups($serviceHost, $namespace);
+        $server = $this->loadModel('pipeline')->getByID($serviceHost);
+
+        $_POST['path']     = "{$server->url}/{$group}/{$_POST['name']}";
+        $_POST['encoding'] = 'utf-8';
+        $_POST['encrypt']  = 'plain';
+        $_POST['SCM']      = $this->getSCM($serviceHost);
+
+        if($this->config->inContainer || $this->config->inQuickon)
+        {
+            $formData->data->client = $_POST['client'] = $this->post->SCM == 'Subversion' ? 'svn' : 'git';
+        }
+        else
+        {
+            if(!$this->checkClient()) return false;
+        }
+        if(!$this->checkConnection()) return false;
+
+        $repo = $formData
+            ->setIf($isPipelineServer, 'password', $this->post->serviceToken)
+            ->setIf($isPipelineServer, 'prefix', '')
+            ->skipSpecial('path,client,account,password,desc')
+            ->setDefault('path', $this->post->path)
+            ->setDefault('encoding', $this->post->encoding)
+            ->setDefault('encrypt', $this->post->encrypt)
+            ->setDefault('SCM', $this->post->SCM)
+            ->setDefault('product', '')->join('product', ',')
+            ->setDefault('projects', '')->join('projects', ',')
+            ->remove('namespace')
+            ->get();
+
+        $acl = $this->checkACL();
+        if(!$acl) return false;
+        $repo->acl = json_encode($acl);
+
+        if($repo->SCM == 'Subversion')
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            $info     = $scm->info('');
+            $infoRoot = urldecode($info->root);
+            $repo->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', str_replace('\\', '/', $repo->path)), '/');
+            if($repo->prefix) $repo->prefix = '/' . $repo->prefix;
+        }
+
+        if($isPipelineServer)
+        {
+            $serviceProject = $this->dao->select('*')->from(TABLE_REPO)
+                ->where('`SCM`')->eq($repo->SCM)
+                ->andWhere('`serviceHost`')->eq($repo->serviceHost)
+                ->andWhere('`serviceProject`')->eq($repo->serviceProject)
+                ->fetch();
+            if($serviceProject)
+            {
+                dao::$errors['serviceProject'][] = $this->lang->repo->error->projectUnique;
+                return false;
+            }
+        }
+        return $repo;
+    }
+
+    /**
      * 准备编辑版本库的数据。
      * Prepare edit repo data.
      *
@@ -365,6 +440,51 @@ class repoZen extends repo
         $this->view->projects        = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
         $this->view->relatedProjects = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? array($objectID) : array();
         $this->view->serviceHosts    = $this->loadModel('gitlab')->getPairs();
+        $this->view->objectID        = $objectID;
+
+        $this->display();
+    }
+
+    /**
+     * 构建创建版本库页面数据。
+     * Build form fields for create repo.
+     *
+     * @param  int       $objectID
+     * @access protected
+     * @return void
+     */
+    protected function buildCreateRepoForm(int $objectID): void
+    {
+        $repoID = $this->repo->saveState(0, $objectID);
+
+        $this->app->loadLang('action');
+
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
+        {
+            $products = $this->loadModel('product')->getProductPairsByProject($objectID);
+        }
+        else
+        {
+            $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        }
+
+        $serviceHosts = $this->loadModel('gitlab')->getPairs();
+        $repoGroups   = array();
+
+        if(!empty($serviceHosts))
+        {
+            $serverID = array_keys($serviceHosts)[0];
+            $repoGroups = $this->repo->getGroups($serverID);
+        }
+
+        $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
+        $this->view->groups          = $this->loadModel('group')->getPairs();
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->view->products        = $products;
+        $this->view->projects        = $this->loadModel('product')->getProjectPairsByProductIDList(array_keys($products));
+        $this->view->relatedProjects = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? array($objectID) : array();
+        $this->view->serviceHosts    = $serviceHosts;
+        $this->view->repoGroups      = $repoGroups;
         $this->view->objectID        = $objectID;
 
         $this->display();
@@ -1039,6 +1159,25 @@ class repoZen extends repo
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         return array('result' => 'success', 'callback' => "$('.tab-content .active iframe')[0].contentWindow.getRelation('$revision')", 'closeModal' => true);
+    }
+
+    /**
+     * Get SCM by service host.
+     *
+     * @param  int    $serviceHost
+     * @access protected
+     * @return string
+     */
+    protected function getSCM(int $serviceHost)
+    {
+        $server = $this->loadModel('pipeline')->getByID($serviceHost);
+
+        foreach($this->lang->repo->scmList as $scmKey => $scmLang)
+        {
+            if($server->type == strtolower($scmKey)) return $scmKey;
+        }
+
+        return '';
     }
 
     /**

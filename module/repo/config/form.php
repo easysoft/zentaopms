@@ -17,3 +17,11 @@ $config->repo->form->create['account']        = array('required' => false, 'type
 $config->repo->form->create['password']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->create['encrypt']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->create['desc']           = array('required' => false, 'type' => 'string', 'default' => '');
+
+$config->repo->form->createRepo = array();
+$config->repo->form->createRepo['product']        = array('required' => true,  'type' => 'array');
+$config->repo->form->createRepo['projects']       = array('required' => false, 'type' => 'array', 'default' => array());
+$config->repo->form->createRepo['serviceHost']    = array('required' => false, 'type' => 'int');
+$config->repo->form->createRepo['namespace']      = array('required' => true,  'type' => 'string');
+$config->repo->form->createRepo['name']           = array('required' => true,  'type' => 'string', 'filter' => 'trim');
+$config->repo->form->createRepo['desc']           = array('required' => false, 'type' => 'string', 'default' => '');

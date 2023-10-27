@@ -35,6 +35,7 @@ $lang->repo->notRelated      = 'There is currently no related ZenTao object';
 $lang->repo->source          = 'Criterion';
 $lang->repo->target          = 'Contrast';
 $lang->repo->descPlaceholder = 'One sentence description';
+$lang->repo->namespace       = 'Namespace';
 
 $lang->repo->browseAction    = 'Browse Repo';
 $lang->repo->createAction    = 'Link Repo';
@@ -57,6 +58,8 @@ $lang->repo->importName      = 'Name after import';
 $lang->repo->importServer    = 'Please select a server';
 $lang->repo->gitlabList      = 'Gitlab Repo';
 $lang->repo->batchCreate     = 'Batch link repo';
+
+$lang->repo->createRepoAction = 'Create repository';
 
 $lang->repo->submit     = 'Submit';
 $lang->repo->cancel     = 'Cancel';
@@ -236,6 +239,7 @@ $lang->repo->error->needTwoVersion    = 'Two branches or tags must be selected.'
 $lang->repo->error->emptyVersion      = 'Version cannot be empty';
 $lang->repo->error->versionError      = 'Wrong version format!';
 $lang->repo->error->projectUnique     = $lang->repo->serviceProject . " exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
+$lang->repo->error->repoNameInvalid   = 'The name should contain only alphanumeric numbers, dashes, underscores, and dots.';
 
 $lang->repo->syncTips          = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';
 $lang->repo->encodingsTips     = "The encodings of comments can be comma separated values, e.g. utf-8.";

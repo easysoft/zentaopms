@@ -14,6 +14,7 @@ jsVar('orderBy',  $orderBy);
 jsVar('sortLink', createLink('repo', 'maintain', "objectID=$objectID&orderBy={orderBy}&recTotal={$pager->recTotal}&pageID={$pager->pageID}"));
 
 $createItem      = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create'));
+$createRepoItem  = array('text' => $lang->repo->createRepoAction, 'url' => createLink('repo', 'createRepo'));
 $batchCreateItem = array('text' => $lang->repo->batchCreate, 'url' => createLink('repo', 'import'));
 
 foreach($repoList as $repo)
@@ -70,6 +71,11 @@ $queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&orderBy=&rec
 
 toolBar
 (
+    hasPriv('repo', 'createRepo') ? item(set($createRepoItem + array
+    (
+        'icon'  => 'plus',
+        'class' => 'btn primary',
+    ))) : null,
     !hasPriv('repo', 'create') && hasPriv('repo', 'import') ? item(set($batchCreateItem + array
     (
         'icon'  => 'plus',
