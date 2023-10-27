@@ -161,6 +161,19 @@ class executionModel extends model
 
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
+        if($moduleName == 'repo' && $methodName == 'browse')
+        {
+            $repoPairs = $this->loadModel('repo')->getRepoPairs('execution', $executionID);
+
+            $showMR = false;
+            foreach($repoPairs as $repoName)
+            {
+                preg_match('/^\[(\w+)\]/', $repoName, $matches);
+                if(isset($matches[1]) && in_array($matches[1], $this->config->repo->gitServiceList)) $showMR = true;
+            }
+            if(!$showMR) unset($this->lang->execution->menu->devops['subMenu']->mr);
+            if(!$showMR && $this->config->edition == 'open') unset($this->lang->execution->menu->devops['subMenu']);
+        }
 
         if($this->cookie->executionMode == 'noclosed' and $execution and ($execution->status == 'done' or $execution->status == 'closed'))
         {
