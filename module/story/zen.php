@@ -466,7 +466,7 @@ class storyZen extends story
         list($products, $branches) = $this->getProductsAndBranchesForCreate($productID, $objectID);
         if($objectID)
         {
-            $branch    = is_array($branches) && !empty($branches) ? key($branches) : $branch;
+            $branch    = is_array($branches) && !empty($branches) ? (string)key($branches) : $branch;
             $productID = (!empty($productID) && isset($products[$productID])) ? $productID : key($products);
         }
         $branch = str_contains($branch, ',') ? current(explode(',', $branch)) : $branch;
