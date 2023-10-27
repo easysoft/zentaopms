@@ -433,35 +433,38 @@ function createFieldButtons()
  */
 function formatContent(content)
 {
-    content = content.replace(/ /g, '&nbsp;');
-    if(!content.includes('&nbsp;&lt;')) return false;
+    if(!/\s</.test(content)) return false;
 
-    Array.from(words.keys()).forEach(word => {content = content.replace(new RegExp(`&nbsp;&lt;${word}&gt;&nbsp;`, 'g'), `&nbsp;<strong class="text-primary">&lt;${word}&gt;</strong>&nbsp;`);});
+    Array.from(words.keys()).forEach(word => {content = content.replace(new RegExp(`\\s<${word}>\\s`, 'g'), `&nbsp;<strong class="text-primary">&lt;${word}&gt;</strong>&nbsp;`);});
     return content;
 }
 
+/**
+ * Update prompt preview.
+ *
+ * @returns {string} result
+ */
 function updatePromptPreview()
 {
-    const regex = /<strong class="text-primary">&lt;([^>]+)&gt;<\/strong>&nbsp;/g;
-    let $clone = $('#autocomplete-textarea').clone();
-    let innerHTML = $clone.html();
-    const fmtStr = formatContent(innerHTML);
-    if(typeof fmtStr === 'string')
+    const regex = /<strong\sclass="text-primary">&lt;([^>]+)&gt;<\/strong>&nbsp;/g;
+    const innerText = $('#autocomplete-textarea').text();
+    let innerHTML = formatContent(innerText);
+    if(typeof innerHTML === 'string')
     {
-        $('#autocomplete-textarea').html(fmtStr);
-        $clone = $('#autocomplete-textarea').clone();
-        innerHTML = $clone.html();
+        $('#autocomplete-textarea').html(innerHTML);
     }
     if(!innerHTML)
     {
-        $('.prompt-preview-area .preview-container').html(innerHTML);
+        $('.prompt-preview-area .preview-container').html('');
         return;
     }
-    const matches = $clone.html().match(regex);
+
+    const matches = innerHTML.match(regex);
     if(!matches) return;
-    for (let i = 0; i < matches.length; i++)
+
+    for(let i = 0; i < matches.length; i++)
     {
-        const result = regex.exec($clone.html())[1];
+        const result = regex.exec(innerHTML)[1];
         const fieldIndex = words.get(result);
         const fieldValue = $(`.field-content [data-id="${fieldIndex}"] .field-type`).prop('value');
         if(!fieldValue) continue;
@@ -469,9 +472,8 @@ function updatePromptPreview()
     }
 
     innerHTML = innerHTML.replace(/&nbsp;/g, ' ')
-        .replace(/ <strong class="text-primary">/g, '<strong class="text-primary">')
-        .replace(/<\/strong> /g, '</strong>');
-
+        .replace(/\s<strong\sclass="text-primary">/g, '<strong class="text-primary">')
+        .replace(/<\/strong>\s/g, '</strong>');
     $('.prompt-preview-area .preview-container').html(innerHTML);
 }
 
