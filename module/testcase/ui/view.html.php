@@ -271,7 +271,7 @@ else
         foreach($typeActions as $index => $action)
         {
             if(!isset($action['url'])) continue;
-            $actions[$actionType][$index]['url'] = str_replace('%executionID%', (string)$executionID, $action['url']);
+            $actions[$actionType][$index]['url'] = str_replace('%executionID%', (string)$this->session->execution, $action['url']);
         }
     }
 }
