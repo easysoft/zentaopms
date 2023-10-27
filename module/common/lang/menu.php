@@ -396,7 +396,7 @@ $lang->execution->menu->qa['menuOrder'][15] = 'testcase';
 $lang->execution->menu->qa['menuOrder'][20] = 'testtask';
 
 $lang->execution->menu->devops['subMenu']       = new stdclass();
-$lang->execution->menu->devops['subMenu']->repo = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
+$lang->execution->menu->devops['subMenu']->repo = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s");
 $lang->execution->menu->devops['subMenu']->mr   = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
 
 $lang->execution->menu->devops['menuOrder'][5]  = 'repo';
