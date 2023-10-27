@@ -578,7 +578,7 @@ class testcaseZen extends testcase
 
         if($projectID)
         {
-            $productPairs = $this->project->getMultiLinkedProducts($projectID);
+            $productPairs = $this->product->getProductPairsByProject($projectID);
 
             $this->view->switcherParams = "projectID={$projectID}&productID={$productID}&currentMethod=testcase";
             $this->view->switcherText   = zget($productPairs, $productID, $this->lang->product->all);
