@@ -508,7 +508,7 @@ $lang->error->passwordsame    = "Les mots de passe doivent être cohérents.";
 $lang->error->passwordrule    = "Le mot de passe doit être conforme aux règles. Il devrait être >= 6 caractères.";
 $lang->error->accessDenied    = 'Accès refusé.';
 $lang->error->pasteImg        = 'Les images ne peuvent pas être collées dans votre navigateur !';
-$lang->error->noData          = 'No data.';
+$lang->error->noData          = 'No data yet.';
 $lang->error->editedByOther   = 'Cet enregistrement a peut-être été modifié. Veuillez actualiser et réessayer !';
 $lang->error->tutorialData    = "Aucune donnée ne peut être importée en mode tutoriel. Veuillez d'abord quitter le didacticiel !";
 $lang->error->noCurlExt       = 'Aucun module Curl installé';
