@@ -135,6 +135,20 @@ class executionModel extends model
         $this->session->set('execution', $executionID, $this->app->tab);
         common::setMenuVars('execution', $executionID);
 
+        if($this->app->getModuleName() == 'repo' && $this->app->getMethodName() == 'browse')
+        {
+            $repoPairs = $this->loadModel('repo')->getRepoPairs('execution', $executionID);
+
+            $showMR = false;
+            foreach($repoPairs as $repoName)
+            {
+                preg_match('/^\[(\w+)\]/', $repoName, $matches);
+                if(isset($matches[1]) && in_array($matches[1], $this->config->repo->gitServiceList)) $showMR = true;
+            }
+            if(!$showMR) unset($this->lang->execution->menu->devops['subMenu']->mr);
+            if(!$showMR && $this->config->edition == 'open') unset($this->lang->execution->menu->devops['subMenu']);
+        }
+
         /* Set stroy navigation for no-product project. */
         $this->loadModel('project')->setNoMultipleMenu($executionID);
         if(isset($this->lang->execution->menu->storyGroup)) unset($this->lang->execution->menu->storyGroup);
