@@ -250,10 +250,13 @@ function showFieldNameErrorIfExist($required, form)
 
     if(checkDuplicatedFieldName(name))
     {
-        $required
-            .addClass('has-error')
-            .append(`<div class="text-danger help-text">${duplicatedWarning}</div>`);
-        return true;
+        if(!$editingField || $editingField.find('.field-name').html() !== name)
+        {
+            $required
+                .addClass('has-error')
+                .append(`<div class="text-danger help-text">${duplicatedWarning}</div>`);
+            return true;
+        }
     }
 
     if(['radio', 'checkbox'].includes(formData.get('field-type')) && formData.getAll('option[]').filter(x => !!x).length === 0)
@@ -336,6 +339,7 @@ function handleSaveEditedFieldClick()
 
     words.delete(oldName);
     words.set(name, $fieldView.attr('data-id'));
+    $editingField = null;
 }
 
 /**
