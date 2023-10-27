@@ -72,8 +72,9 @@ class mainNavbar extends nav
                 if(empty($item['exclude'])) $item['exclude'] = '';
 
                 $link = $item['link'];
-                $items[$key]['url']     = commonModel::createMenuLink((object)$item, $app->tab);
-                $items[$key]['data-id'] = $item['name'];
+                $items[$key]['url']      = commonModel::createMenuLink((object)$item, $app->tab);
+                $items[$key]['data-id']  = $item['name'];
+                $items[$key]['data-app'] = $app->tab;
 
                 $active    = '';
                 $subModule = isset($item['subModule']) ? explode(',', $item['subModule']) : array();
