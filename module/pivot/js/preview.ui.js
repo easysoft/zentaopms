@@ -138,3 +138,23 @@ getCellSpan = function(cell)
         }
     }
 }
+
+/**
+ * 计算数据表格的高度。
+ * Calculate height of data table.
+ *
+ * @param  int    height
+ * @access public
+ * @return int
+ */
+getHeight = function(height)
+{
+    const windowHeight       = $(window).height();
+    const headerHeight       = $('#header').outerHeight();
+    const menuHeight         = $('#mainMenu').outerHeight();
+    const conditionHeight    = $('#conditions').length == 1 ? $('#conditions').outerHeight(true) : 0;
+    const panelHeadingHeight = $('#pivotPanel .panel-heading').outerHeight();
+    const panelBodyPaddingY  = $('#pivotPanel .panel-body').innerHeight() - $('#pivotPanel .panel-body').height();
+
+    return Math.min(windowHeight - headerHeight - menuHeight - conditionHeight - panelHeadingHeight - panelBodyPaddingY, height);
+}
