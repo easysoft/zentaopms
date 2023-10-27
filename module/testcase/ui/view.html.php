@@ -51,6 +51,8 @@ $app->loadLang('product');
 $productLink = $case->product && hasPriv('product', 'view') ? $this->createLink('product', 'view', "productID={$case->product}") : '';
 $branchLink  = $case->branch  && hasPriv('testcase', 'browse') ? $this->createLink('testcase', 'browse', "productID={$case->product}&branch={$case->branch}") : '';
 
+\a();
+
 $fromCaseItem      = array();
 $libItem           = array();
 $productItem       = array();
@@ -96,7 +98,7 @@ if($isLibCase)
     }
     else
     {
-        if(($this->config->testcase->needReview || !empty($this->config->testcase->forceReview)) && hasPriv('testcase', 'review')) $mainActions[] = array('icon' => 'glasses', 'text' => $lang->testcase->reviewAB, 'hint' => $lang->testcase->reviewAB, 'url' => createLink('testcase', 'review', "caseID={$case->id}"), 'className' => 'ajax-submit');
+        if(($this->config->testcase->needReview || !empty($this->config->testcase->forceReview)) && hasPriv('testcase', 'review') && $case->status == 'wait') $mainActions[] = array('icon' => 'glasses', 'text' => $lang->testcase->reviewAB, 'hint' => $lang->testcase->reviewAB, 'url' => createLink('testcase', 'review', "caseID={$case->id}"), 'data-toggle' => 'modal');
         if(!isAjaxRequest('modal'))
         {
             if(hasPriv('testcase', 'edit'))
