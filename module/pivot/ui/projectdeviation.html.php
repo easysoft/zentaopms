@@ -37,13 +37,12 @@ foreach($executions as $execution)
 
 $cols = $config->pivot->dtable->projectDeviation->fieldList;
 
-$generateData = function() use ($module, $method, $lang, $cols, $executions, $begin, $end)
+$generateData = function() use ($module, $method, $lang, $title, $cols, $executions, $begin, $end)
 {
     if(empty($module) || empty($method)) return div(setClass('bg-white center text-gray w-full h-40'), $lang->error->noData);
 
-    return div
+    return array
     (
-        setClass('w-full'),
         div
         (
             setID('conditions'),
@@ -62,12 +61,29 @@ $generateData = function() use ($module, $method, $lang, $cols, $executions, $be
                 input(set(array('name' => 'end', 'type' => 'date', 'value' => $end)))
             )
         ),
-        dtable
+        panel
         (
-            set::cols($cols),
-            set::data($executions),
-            set::fixedLeftWidth('0.25'),
-            set::emptyTip($lang->error->noData)
+            setID('pivotPanel'),
+            set::title($title),
+            set::shadow(false),
+            set::bodyClass('pt-0'),
+            to::titleSuffix(
+                icon
+                (
+                    setClass('cursor-pointer'),
+                    setData(array('toggle' => 'tooltip', 'title' => $lang->pivot->deviationDesc, 'placement' => 'right', 'className' => 'text-gray border border-light', 'type' => 'white')),
+                    'help'
+                )
+            ),
+            dtable
+            (
+                set::striped(true),
+                set::bordered(true),
+                set::cols($cols),
+                set::data($executions),
+                set::emptyTip($lang->error->noData),
+                set::height(jsRaw('getHeight')),
+            )
         ),
         echarts
         (
