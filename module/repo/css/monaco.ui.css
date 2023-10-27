@@ -5,3 +5,5 @@
 .container .sidebar{width: 240px;}
 .tree li.tree-item.selected{color: #438EFF !important;}
 #monacoTree{overflow: auto;}
+
+#mainMenu + #mainContent > .repo-sidebar {margin-top: 0;}
