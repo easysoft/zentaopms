@@ -296,7 +296,7 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getExecutions($begin = 0, $end = 0)
+    public function getExecutions(string $begin = '', string $end = ''): array
     {
         $permission = common::hasPriv('pivot', 'showProject') or $this->app->user->admin;
         $executions = $this->dao->select("t1.project AS projectID, t1.execution AS executionID, t2.multiple, IF(t3.multiple = '1', t2.name, '') AS executionName, t3.name AS projectName, ROUND(SUM(t1.estimate), 2) AS estimate, ROUND(SUM(t1.consumed), 2) AS consumed")->from(TABLE_TASK)->alias('t1')
@@ -314,20 +314,21 @@ class pivotModel extends model
             ->orderBy('t2.end_desc')
             ->fetchAll();
 
-        $canView = common::hasPriv('execution', 'view');
+        $canViewExecution = common::hasPriv('execution', 'view');
 
         foreach($executions as $execution)
         {
             $execution->deviation     = round($execution->consumed - $execution->estimate, 2);
-            $execution->deviationRate = $execution->estimate ? round($execution->deviationRate / $execution->estimate * 100, 2) : 'n/a';
+            $execution->deviationRate = $execution->estimate ? round($execution->deviation / $execution->estimate * 100, 2) : 'n/a';
 
-            if(!$execution->multiple)
+            if($execution->multiple)
+            {
+                if($canViewExecution) $execution->executionName = html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName);
+            }
+            else
             {
                 $execution->executionName = $this->lang->null;
-                continue;
             }
-
-            if($canView) $execution->executionName = html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName);
         }
 
         return $executions;
