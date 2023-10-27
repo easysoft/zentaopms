@@ -335,6 +335,55 @@ class pivotZen extends pivot
     }
 
     /**
+     * 把自定义透视表的数据转换为数据表格可以使用的格式。
+     * Convert the data of custom pivot to the format that can be used by data table.
+     *
+     * @param  object $data
+     * @param  array  $configs
+     * @access public
+     * @return array
+     */
+    public function convertDataForDtable(object $data, array $configs): array
+    {
+        $columns  = array();
+        $rows     = array();
+        $cellSpan = array();
+
+        foreach($data->cols as $lineColumns)
+        {
+            foreach($lineColumns as $key => $column)
+            {
+                $field = 'field' . $key;
+                $columns[$field]['name']     = $field;
+                $columns[$field]['title']    = $column->label;
+                $columns[$field]['width']    = 16 * mb_strlen($column->label);
+                $columns[$field]['minWidth'] = 128;
+                $columns[$field]['align']    = 'center';
+            }
+
+            break;
+        }
+
+        foreach($data->array as $rowKey => $rowData)
+        {
+            $rowData = array_values($rowData);
+            foreach($rowData as $key => $value)
+            {
+                $field = 'field' . $key;
+
+                $rows[$rowKey][$field] = $value;
+                if(isset($configs[$rowKey][$key]) && $configs[$rowKey][$key] > 1)
+                {
+                    $rows[$rowKey][$field . 'Rowspan'] = $configs[$rowKey][$key];
+                    $cellSpan[] = array('cols' => array($field), 'rowspan' => $field . 'Rowspan');
+                }
+            }
+        }
+
+        return array($columns, $rows, $cellSpan);
+    }
+
+    /**
      * Bug create pivot.
      *
      * @param  int    $begin
