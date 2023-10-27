@@ -450,7 +450,6 @@ function formatContent(content)
  */
 function updatePromptPreview()
 {
-    const regex = /<strong\sclass="text-primary">&lt;([^>]+)&gt;<\/strong>&nbsp;/g;
     const innerText = $('#autocomplete-textarea').text();
     let innerHTML = formatContent(innerText);
     if(typeof innerHTML === 'string')
@@ -463,18 +462,18 @@ function updatePromptPreview()
         return;
     }
 
+    const regex = /<strong\sclass="text-primary">&lt;([^>]+)&gt;<\/strong>&nbsp;/g;
     const matches = innerHTML.match(regex);
     if(!matches) return;
 
-    for(let i = 0; i < matches.length; i++)
+    matches.forEach((match) =>
     {
-        const execArr = regex.exec(innerHTML);
-        const result = execArr[1];
+        const result = match.match(/<strong\sclass="text-primary">&lt;([^>]+)&gt;<\/strong>&nbsp;/)[1];
         const fieldIndex = words.get(result);
         const fieldValue = $(`.field-content [data-id="${fieldIndex}"] .field-type`).prop('value');
-        if(!fieldValue) continue;
+        if(!fieldValue) return;
         innerHTML = innerHTML.replace(new RegExp(`&lt;${result}&gt;`, 'g'), fieldValue);
-    }
+    });
 
     innerHTML = innerHTML.replace(/&nbsp;/g, ' ')
         .replace(/\s<strong\sclass="text-primary">/g, '<strong class="text-primary">')
