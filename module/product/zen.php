@@ -593,6 +593,7 @@ class productZen extends product
         $productData  = form::data($this->config->product->form->create)
             ->setIF($this->config->systemMode == 'light', 'program', (int)zget($this->config->global, 'defaultProgram', 0))
             ->setIF($this->post->acl == 'open', 'whitelist', '')
+            ->setDefault('vision', $this->config->vision)
             ->get();
 
         return $this->loadModel('file')->processImgURL($productData, $editorFields, $this->post->uid);
