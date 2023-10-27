@@ -117,17 +117,24 @@ function diffDate(date1, date2)
 }
 
 /**
- * 跨行跨列合并单元格。
+ * 合并单元格。
  * Merge cell.
  *
  * @param  object cell
  * @access public
  * @return object|void
  */
-getCellSpanOfProductSummary = function(cell)
+getCellSpan = function(cell)
 {
-    if((cell.col.name == 'name' || cell.col.name == 'PO') && cell.row.data.rowspan)
+    if(this.options.cellSpanOptions)
     {
-        return {rowSpan: cell.row.data.rowspan};
+        for(let index in this.options.cellSpanOptions)
+        {
+            const {cols, rowspan} = this.options.cellSpanOptions[index];
+            if(cols.indexOf(cell.col.name) !== -1 && cell.row.data[rowspan])
+            {
+                return {rowSpan: cell.row.data[rowspan]};
+            }
+        }
     }
 }
