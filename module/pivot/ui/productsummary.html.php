@@ -10,25 +10,12 @@ declare(strict_types = 1);
  */
 namespace zin;
 
-$generateData = function() use ($module, $method, $lang, $users, $products)
+$cols = $config->pivot->dtable->productSummary->fieldList;
+$cols['PO']['map'] = $users;
+
+$generateData = function() use ($module, $method, $lang, $title, $cols, $products)
 {
     if(empty($module) || empty($method)) return div(setClass('bg-white center text-gray w-full h-40'), $lang->error->noData);
-
-    $canView = hasPriv('product', 'view');
-
-    $cols = array(
-        'name'           => array('title' => $lang->product->name,                  'width' => '200', 'link' => $canView ? createLink('product', 'view', "id={id}") : '', 'fixed' => 'left'),
-        'PO'             => array('title' => $lang->pivot->PO,                      'width' => '80',  'userMap' => $users),
-        'planTitle'      => array('title' => $lang->productplan->common,            'width' => '140'),
-        'planBegin'      => array('title' => $lang->productplan->begin,             'width' => '70'),
-        'planEnd'        => array('title' => $lang->productplan->end,               'width' => '70'),
-        'storyDraft'     => array('title' => $lang->story->statusList['draft'],     'width' => '60', 'align' => 'center'),
-        'storyReviewing' => array('title' => $lang->story->statusList['reviewing'], 'width' => '60', 'align' => 'center'),
-        'storyActive'    => array('title' => $lang->story->statusList['active'],    'width' => '60', 'align' => 'center'),
-        'storyChanging'  => array('title' => $lang->story->statusList['changing'],  'width' => '60', 'align' => 'center'),
-        'storyClosed'    => array('title' => $lang->story->statusList['closed'],    'width' => '60', 'align' => 'center'),
-        'storyTotal'     => array('title' => $lang->pivot->total,                   'width' => '60', 'align' => 'center')
-    );
 
     return array
     (
