@@ -74,12 +74,15 @@ class repo extends control
     }
 
     /**
+     * 版本库列表。
      * List all repo.
      *
      * @param  int    $objectID
      * @param  string $orderBy
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  string $type
+     * @param  int    $param
      * @access public
      * @return void
      */
@@ -180,7 +183,7 @@ class repo extends control
             $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
             $editData         = $this->repoZen->prepareEdit($formData, $repo, $isPipelineServer);
 
-            $noNeedSync = $this->repo->update($editData, $repoID, $isPipelineServer);
+            if($editData) $noNeedSync = $this->repo->update($editData, $repoID, $isPipelineServer);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $newRepo  = $this->repo->getByID($repoID);

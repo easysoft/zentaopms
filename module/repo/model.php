@@ -451,6 +451,7 @@ class repoModel extends model
      *
      * @param  string $type  project|execution|repo
      * @param  int    $projectID
+     * @param  bool   $showScm
      * @access public
      * @return array
      */
