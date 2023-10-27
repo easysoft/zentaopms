@@ -1136,6 +1136,16 @@ function tree(): Tree
 }
 
 /**
+ * Zentao tree editor widget.
+ *
+ * ?array items
+ */
+function treeEditor(): TreeEditor
+{
+    return createWg('treeEditor', func_get_args());
+}
+
+/**
  * Zentao file list widget.
  *
  * ?array  files
