@@ -110,7 +110,7 @@ if($isLibCase)
             }
         }
         if(hasPriv('caselib', 'createCase')) $mainActions[] = array('icon' => 'copy', 'text' => '', 'hint' => $lang->testcase->copy, 'url' => createLink('caselib', 'createCase', "libID={$case->lib}&moduleID={$case->module}&param={$case->id}"));
-        $suffixActions[] = array('icon' => 'trash', 'text' => '', 'hint' => $lang->testcase->delete, 'url' => createLink('testcase', 'delete', "caseID={$case->id}"), 'className' => 'ajax-submit');
+        $suffixActions[] = array('icon' => 'trash', 'text' => '', 'hint' => $lang->testcase->delete, 'url' => createLink('testcase', 'delete', "caseID={$case->id}"), 'className' => 'ajax-submit', 'data-confirm' => $lang->testcase->confirmDelete);
     }
     $actions = array('mainActions' => $mainActions, 'suffixActions' => $suffixActions);
 }
