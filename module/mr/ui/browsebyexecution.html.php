@@ -64,7 +64,7 @@ $MRs = initTableData($MRList, $config->mr->dtable->fieldList, $this->mr);
 featureBar
 (
     set::current($mode != 'status' ? $mode : $param),
-    set::linkParams("repoID={$repoID}&mode=status&param={key}"),
+    set::linkParams("repoID=0&mode=status&param={key}&objectID={$objectID}"),
 );
 
 toolBar
