@@ -468,7 +468,8 @@ function updatePromptPreview()
 
     for(let i = 0; i < matches.length; i++)
     {
-        const result = regex.exec(innerHTML)[1];
+        const execArr = regex.exec(innerHTML);
+        const result = execArr[1];
         const fieldIndex = words.get(result);
         const fieldValue = $(`.field-content [data-id="${fieldIndex}"] .field-type`).prop('value');
         if(!fieldValue) continue;
