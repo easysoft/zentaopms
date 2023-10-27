@@ -36,6 +36,21 @@ function loadProductSummary()
     const link   = $.createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + groupID + '&module=pivot&method=productSummary&params=' + params);
     loadPage(link, '#table-pivot-preview');
 }
+/**
+ * 查询条件改变时重新加载执行偏差表。
+ * Reload execution deviation table when query conditions changed.
+ *
+ * @access public
+ * @return void
+ */
+function loadProjectDeviation()
+{
+    const begin  = $('#conditions').find('#begin').val().replaceAll('-', '');
+    const end    = $('#conditions').find('#end').val().replaceAll('-', '');
+    const params = window.btoa('begin=' + begin + '&end=' + end);
+    const link   = $.createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + groupID + '&module=pivot&method=projectdeviation&params=' + params);
+    loadPage(link, '#table-pivot-preview');
+}
 
 /**
  * 跨行跨列合并单元格。
