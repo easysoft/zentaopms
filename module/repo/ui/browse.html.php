@@ -77,7 +77,7 @@ if($fileName) $breadcrumbItems[] = h::span($fileName);
     (
         set::className('repo-select'),
         set::required(true),
-        $app->tab == 'project' ? dropmenu
+        (in_array($app->tab, array('project', 'execution')) && count($repoPairs) > 1) ? dropmenu
         (
             set::id('repoDropmenu'),
             set::text($repo->name),
@@ -208,7 +208,7 @@ toolbar
         set::className('last-sync-time'),
         $lang->repo->notice->lastSyncTime . $cacheTime
     ),
-    item(set($refreshItem)),
+    $repo->SCM != 'Gitlab' ? item(set($refreshItem)) : null,
     dropdown
     (
         set::staticMenu(true),

@@ -451,10 +451,11 @@ class repoModel extends model
      *
      * @param  string $type  project|execution|repo
      * @param  int    $projectID
+     * @param  bool   $showScm
      * @access public
      * @return array
      */
-    public function getRepoPairs($type, $projectID = 0)
+    public function getRepoPairs($type, $projectID = 0, $showScm = true)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
@@ -467,19 +468,20 @@ class repoModel extends model
         foreach($repos as $repo)
         {
             $repo->acl = json_decode($repo->acl);
-            $scm = $repo->SCM == 'Subversion' ? 'svn' : strtolower($repo->SCM);
+            $scm = '';
+            if($showScm) $scm = $repo->SCM == 'Subversion' ? '[svn] ' : '[' . strtolower($repo->SCM) . '] ';
             if($this->checkPriv($repo))
             {
                 if(($type == 'project' or $type == 'execution') and $projectID)
                 {
                     foreach($productIdList as $productID)
                     {
-                        if(strpos(",$repo->product,", ",$productID,") !== false) $repoPairs[$repo->id] = "[{$scm}] " . $repo->name;
+                        if(strpos(",$repo->product,", ",$productID,") !== false) $repoPairs[$repo->id] = $scm . $repo->name;
                     }
                 }
                 else
                 {
-                    $repoPairs[$repo->id] = "[{$scm}] " . $repo->name;
+                    $repoPairs[$repo->id] = $scm . $repo->name;
                 }
             }
         }
