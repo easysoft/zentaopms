@@ -1,0 +1,106 @@
+<?php
+declare(strict_types = 1);
+/**
+ * The workload view file of pivot module of ZenTaoPMS.
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Gang Liu <liugang@easycorp.ltd>
+ * @package     pivot
+ * @link        https://www.zentao.net
+ */
+namespace zin;
+
+jsVar('weekend', $config->execution->weekend);
+
+$cols = $config->pivot->dtable->workload->fieldList;
+$cols['user']['map'] = $users;
+
+$generateData = function() use ($module, $method, $lang, $title, $cols, $workload, $depts, $dept, $begin, $end, $days, $workhour, $assign)
+{
+    if(empty($module) || empty($method)) return div(setClass('bg-white center text-gray w-full h-40'), $lang->error->noData);
+
+    return array
+    (
+        div
+        (
+            setID('conditions'),
+            setClass('flex gap-4 bg-white p-2'),
+            on::change('loadWorkload'),
+            inputGroup
+            (
+                setClass('w-1/6'),
+                $lang->pivot->dept,
+                picker
+                (
+                    setClass('w-full'),
+                    set(array('name' => 'dept', 'items' => $depts, 'value' => $dept, 'required' => true))
+                )
+            ),
+            inputGroup
+            (
+                setClass('w-1/3'),
+                $lang->pivot->beginAndEnd,
+                input(set(array('name' => 'begin', 'type' => 'date', 'value' => $begin))),
+                $lang->pivot->to,
+                input(set(array('name' => 'end', 'type' => 'date', 'value' => $end))),
+            ),
+            inputGroup
+            (
+                setClass('w-1/6'),
+                $lang->pivot->diffDays,
+                input(set(array('name' => 'days', 'value' => $days, 'class' => 'text-right')))
+            ),
+            div
+            (
+                setClass('flex gap-4 w-1/3'),
+                inputGroup
+                (
+                    setClass('w-5/12'),
+                    $lang->pivot->workhour,
+                    input(set(array('name' => 'workhour', 'value' => $workhour, 'class' => 'text-right'))),
+                ),
+                picker
+                (
+                    setClass('w-1/3'),
+                    set(array('name' => 'assign', 'items' => $lang->pivot->assign, 'value' => $assign, 'required' => true))
+                ),
+                button(setClass('btn primary w-1/4'), on::click('loadWorkload'), $lang->pivot->query)
+            )
+        ),
+        panel
+        (
+            setID('pivotPanel'),
+            set::title($title),
+            set::shadow(false),
+            to::titleSuffix
+            (
+                icon
+                (
+                    setClass('cursor-pointer'),
+                    setData(array('toggle' => 'tooltip', 'title' => $lang->pivot->workloadDesc, 'placement' => 'right', 'className' => 'text-gray border border-light', 'type' => 'white')),
+                    'help'
+                )
+            ),
+            dtable
+            (
+                set::striped(true),
+                set::bordered(true),
+                set::cols($cols),
+                set::data($workload),
+                set::emptyTip($lang->error->noData),
+                set::plugins(array('cellspan')),
+                set::getCellSpan(jsRaw('getCellSpan')),
+                set::cellSpanOptions(array(
+                    array(
+                        'cols' => array('user', 'totalTasks', 'totalHours', 'workload'),
+                        'rowspan' => 'userRowspan'
+                    ),
+                    array(
+                        'cols' => array('projectName'),
+                        'rowspan' => 'projectRowspan'
+                    )
+                ))
+            )
+        )
+    );
+};
