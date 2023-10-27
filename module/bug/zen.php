@@ -817,7 +817,7 @@ class bugZen extends bug
 
         if($this->app->tab == 'execution')
         {
-            if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);
+            if(isset($output['executionID'])) $this->loadModel('execution')->setMenu((int)$output['executionID']);
             $execution = $this->dao->findById($this->session->execution)->from(TABLE_EXECUTION)->fetch();
             if($execution->type == 'kanban') $this->assignKanbanVars($execution, $output);
         }
