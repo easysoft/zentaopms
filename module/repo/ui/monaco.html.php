@@ -87,7 +87,8 @@ div(
         div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right')),
     )
 );
-sidebar
+
+helper::isAjaxRequest('modal') ? null : sidebar
 (
     set::side('left'),
     setClass('repo-sidebar'),
