@@ -72,6 +72,7 @@ $generateData = function() use ($module, $method, $lang, $title, $cols, $workloa
             setID('pivotPanel'),
             set::title($title),
             set::shadow(false),
+            set::bodyClass('pt-0'),
             to::titleSuffix
             (
                 icon

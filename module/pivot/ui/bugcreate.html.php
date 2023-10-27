@@ -58,6 +58,7 @@ $generateData = function() use ($module, $method, $lang, $title, $cols, $bugs, $
             setID('pivotPanel'),
             set::title($title),
             set::shadow(false),
+            set::bodyClass('pt-0'),
             dtable
             (
                 set::striped(true),
