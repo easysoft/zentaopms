@@ -429,14 +429,14 @@ class pivotZen extends pivot
      * @param string $begin
      * @param string $end
      * @param int    $days
-     * @param int    $workday
+     * @param int    $workhour
      * @param int    $dept
      * @param int    $assign
      *
      * @access public
      * @return void
      */
-    public function workload($begin = '', $end = '', $days = 0, $workday = 0, $dept = 0, $assign = 'assign')
+    public function workload($begin = '', $end = '', $days = 0, $workhour = 0, $dept = 0, $assign = 'assign')
     {
         if($_POST)
         {
@@ -446,7 +446,7 @@ class pivotZen extends pivot
             $dept    = $data->dept;
             $days    = $data->days;
             $assign  = $data->assign;
-            $workday = $data->workday;
+            $workhour = $data->workhour;
         }
 
         $this->app->loadConfig('execution');
@@ -459,7 +459,7 @@ class pivotZen extends pivot
         $begin  = date('Y-m-d', $begin);
         $end    = date('Y-m-d', $end);
 
-        if(empty($workday))$workday = $this->config->execution->defaultWorkhours;
+        if(empty($workhour))$workhour = $this->config->execution->defaultWorkhours;
         $diffDays = helper::diffDate($end, $begin);
         if($days > $diffDays) $days = $diffDays;
         if(empty($days))
@@ -481,9 +481,9 @@ class pivotZen extends pivot
         $this->view->begin    = $begin;
         $this->view->end      = date('Y-m-d', strtotime($end) - 24 * 3600);
         $this->view->days     = $days;
-        $this->view->workday  = $workday;
+        $this->view->workhour  = $workhour;
         $this->view->dept     = $dept;
         $this->view->assign   = $assign;
-        $this->view->allHour  = $days * $workday;
+        $this->view->allHour  = $days * $workhour;
     }
 }
