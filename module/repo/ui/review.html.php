@@ -10,7 +10,15 @@ declare(strict_types=1);
  */
 namespace zin;
 
-dropmenu(set::tab('repo'));
+$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createLink($module, $app->tab == 'devops' ? 'ajaxGetDropMenu' : 'ajaxGetDropMenuData', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+);
+
+jsVar('appTab', $app->tab);
 jsVar('orderBy', $orderBy);
 jsVar('sortLink', createLink('repo', 'review', "repoID=$repoID&browseType=$browseType&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
@@ -40,7 +48,7 @@ $bugs = initTableData($bugs, $config->repo->reviewDtable->fieldList);
 
 \zin\featureBar
 (
-    set::linkParams("repoID=$repoID&browseType={key}"),
+    set::linkParams("repoID={$repoID}&browseType={key}&objectID={$objectID}"),
 );
 
 dtable
@@ -54,4 +62,3 @@ dtable
 );
 
 render();
-
