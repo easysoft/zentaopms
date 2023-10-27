@@ -18,7 +18,7 @@ function loadBugCreate()
 
 /**
  * 查询条件改变时重新加载产品汇总表。
- * Load product summary page when query condition changed.
+ * Reload product summary table when query conditions changed.
  *
  * @access public
  * @return void
