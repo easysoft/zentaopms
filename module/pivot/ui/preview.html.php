@@ -10,6 +10,8 @@ declare(strict_types = 1);
  */
 namespace zin;
 
+$generateData = function() use ($lang) {return div(setClass('bg-white center text-gray w-full h-40'), $lang->error->noData);};
+
 $viewFile = strtolower($method) . '.html.php';
 if(file_exists($viewFile)) include_once $viewFile;
 
