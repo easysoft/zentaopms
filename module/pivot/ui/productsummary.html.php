@@ -23,6 +23,7 @@ $generateData = function() use ($module, $method, $lang, $title, $cols, $product
         (
             setID('conditions'),
             setClass('bg-white mb-4 p-2'),
+            setClass('bg-white p-2'),
             checkList
             (
                 on::change('loadProductSummary'),
@@ -36,10 +37,11 @@ $generateData = function() use ($module, $method, $lang, $title, $cols, $product
             set::bordered(true),
             set::cols($cols),
             set::data($products),
-            set::fixedLeftWidth('0.25'),
+            set::emptyTip($lang->error->noData),
+            set::height(jsRaw('getHeight')),
             set::plugins(array('cellspan')),
-            set::getCellSpan(jsRaw('getCellSpanOfProductSummary')),
-            set::emptyTip($lang->error->noData)
+            set::getCellSpan(jsRaw('getCellSpan')),
+            set::cellSpanOptions(array(array('cols' => array('name', 'PO'), 'rowspan' => 'rowspan')))
         )
     );
 };
