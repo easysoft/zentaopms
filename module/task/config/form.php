@@ -106,7 +106,7 @@ $config->task->form->batchedit['lastEditedDate'] = array('type' => 'datetime', '
 $config->task->form->batchcreate = common::formConfig('task', 'batchCreate');
 $config->task->form->batchcreate['module']        = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->batchcreate['parent']        = array('type' => 'int',      'required' => false, 'default' => 0);
-$config->task->form->batchcreate['story']         = array('type' => 'int',      'required' => false,  'default' => 0);
+$config->task->form->batchcreate['story']         = array('type' => 'int',      'required' => false, 'default' => 0);
 $config->task->form->batchcreate['name']          = array('type' => 'string',   'required' => false, 'default' => '', 'base' => true);
 $config->task->form->batchcreate['color']         = array('type' => 'string',   'required' => false, 'default' => '');
 $config->task->form->batchcreate['type']          = array('type' => 'string',   'required' => false, 'default' => '');
@@ -176,7 +176,7 @@ $config->task->form->close['lastEditedBy']   = array('type' => 'string',   'requ
 $config->task->form->close['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 
 $config->task->form->testTask->create = array();
-$config->task->form->testTask->create['selectTestStory'] = array('type' => 'int', 'required' => false, 'default' => 0);
+$config->task->form->testTask->create['selectTestStory'] = array('type' => 'int',   'required' => false, 'default' => 0);
 $config->task->form->testTask->create['testStory']       = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->testTask->create['testEstStarted']  = array('type' => 'array', 'required' => false, 'default' => array());
 $config->task->form->testTask->create['testDeadline']    = array('type' => 'array', 'required' => false, 'default' => array());
@@ -187,9 +187,9 @@ $config->task->form->testTask->create['estStartedDitto'] = array('type' => 'arra
 $config->task->form->testTask->create['deadlineDitto']   = array('type' => 'array', 'required' => false, 'default' => array());
 
 $config->task->form->recordWorkhour = array();
-$config->task->form->recordWorkhour['date']     = array('type' => 'date',   'required' => true, 'default' => array());
-$config->task->form->recordWorkhour['work']     = array('type' => 'string', 'required' => true, 'default' => array(), 'base' => true);
-$config->task->form->recordWorkhour['consumed'] = array('type' => 'float',  'required' => true, 'default' => array());
+$config->task->form->recordWorkhour['date']     = array('type' => 'date',   'required' => true,  'default' => array());
+$config->task->form->recordWorkhour['work']     = array('type' => 'string', 'required' => true,  'default' => array(), 'base' => true);
+$config->task->form->recordWorkhour['consumed'] = array('type' => 'float',  'required' => true,  'default' => array());
 $config->task->form->recordWorkhour['left']     = array('type' => 'float',  'required' => false, 'default' => array()); /* Set required to false as the required field can NOT be 0. */
 
 $config->task->form->editEffort = array();
