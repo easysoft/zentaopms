@@ -27,7 +27,7 @@ class pivotZen extends pivot
 
         parse_str($params, $result);
         call_user_func_array(array($this, $method), $result);
-        $this->view->menus       = $this->getSidebarMenus($dimensionID, $group, $module, $method, $params); 
+        $this->view->menus       = $this->getSidebarMenus($dimensionID, $group, $module, $method, $params);
         $this->view->dimensionID = $dimensionID;
         $this->view->group       = $group;
         $this->view->module      = $module;
@@ -307,8 +307,6 @@ class pivotZen extends pivot
         $this->view->products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $this->view->execution  = $execution;
         $this->view->product    = $product;
-        $this->view->submenu    = 'test';
-        $this->display();
     }
 
     /**
@@ -322,10 +320,8 @@ class pivotZen extends pivot
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
         $this->view->title      = $this->lang->pivot->bugAssign;
-        $this->view->submenu    = 'test';
         $this->view->assigns    = $this->pivot->getBugAssign();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->display();
     }
 
     /**
@@ -347,7 +343,6 @@ class pivotZen extends pivot
         $this->view->title      = $this->lang->pivot->productSummary;
         $this->view->products   = $this->processProductsForProductSummary($products);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->submenu    = 'product';
         $this->view->conditions = $conditions;
     }
 
@@ -426,7 +421,6 @@ class pivotZen extends pivot
         $this->view->executions = $this->pivot->getExecutions($begin, $end);
         $this->view->begin      = $begin;
         $this->view->end        = $end;
-        $this->view->submenu    = 'project';
     }
 
     /**
@@ -491,7 +485,5 @@ class pivotZen extends pivot
         $this->view->dept     = $dept;
         $this->view->assign   = $assign;
         $this->view->allHour  = $days * $workday;
-        $this->view->submenu  = 'staff';
-        $this->display();
     }
 }
