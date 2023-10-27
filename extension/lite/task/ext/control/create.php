@@ -2,16 +2,26 @@
 helper::importControl('task');
 class myTask extends task
 {
-    public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0, $extra = '', $bugID = 0)
+    /**
+     * 创建一个任务。
+     * Create a task.
+     *
+     * @param  int    $executionID
+     * @param  int    $storyID
+     * @param  int    $moduleID
+     * @param  int    $taskID
+     * @param  int    $todoID
+     * @param  string $extra
+     * @param  int    $bugID
+     * @access public
+     * @return void
+     */
+    public function create(int $executionID = 0, int $storyID = 0, int $moduleID = 0, int $taskID = 0, int $todoID = 0, string $extra = '', int $bugID = 0)
     {
         $executions = $this->execution->getPairs();
-        if(empty($executions))
-        {
-            echo(js::alert($this->lang->task->kanbanDenied));
-            die(js::locate(helper::createLink('execution', 'create')));
-        }
+        if(empty($executions)) $this->sendError($this->lang->task->kanbanDenied, helper::createLink('execution', 'create'));
 
-        $executionID = $this->execution->saveState($executionID, $executions);
+        $executionID = $this->execution->checkAccess($executionID, $executions);
         $regionList  = $this->loadModel('kanban')->getRegionPairs($executionID, 0, 'execution');
 
         /* Filter Kanban without Lane. */
