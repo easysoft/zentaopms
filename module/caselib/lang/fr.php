@@ -33,6 +33,7 @@ $lang->caselib->linkVersion     = "Version";
 
 $lang->caselib->id             = 'ID';
 $lang->caselib->name           = 'Nom';
+$lang->caselib->title          = 'Title';
 $lang->caselib->desc           = 'Description';
 $lang->caselib->addedBy        = 'Créé Par';
 $lang->caselib->addedDate      = 'Date Création';

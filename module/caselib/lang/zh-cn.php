@@ -33,6 +33,7 @@ $lang->caselib->linkVersion     = "版本";
 
 $lang->caselib->id             = '编号';
 $lang->caselib->name           = '名称';
+$lang->caselib->title          = '名称';
 $lang->caselib->desc           = '描述';
 $lang->caselib->addedBy        = '由谁创建';
 $lang->caselib->addedDate      = '创建时间';

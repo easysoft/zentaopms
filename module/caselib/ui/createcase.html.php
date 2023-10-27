@@ -69,11 +69,13 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->testcase->type),
+            set::required(true),
             picker
             (
                 set::name('type'),
                 set::items($lang->testcase->typeList),
-                set::value($type)
+                set::value($type),
+                set::required(true)
             ),
         ),
         formGroup
@@ -100,12 +102,14 @@ formPanel
         (
             setClass('grow'),
             set::label($lang->testcase->title),
+            set::required(true),
             inputControl
             (
                 input
                 (
                     set::name('title'),
-                    set::value($caseTitle)
+                    set::value($caseTitle),
+                    set::required(true)
                 ),
                 set::suffixWidth('icon'),
                 to::suffix
