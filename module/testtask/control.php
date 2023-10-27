@@ -1096,6 +1096,8 @@ class testtask extends control
         $namePairs = array();
         foreach($testtasks as $testtaskID => $testtask) $namePairs[$testtaskID] = $testtask->name;
 
+        $params = $method == 'report' ? "productID={$productID}&taskID=%s&browseType=all&branch={$branch}" : "taskID=%s";
+
         $this->view->currentTaskID   = $taskID;
         $this->view->testtasks       = $testtasks;
         $this->view->module          = $module;
@@ -1105,6 +1107,7 @@ class testtask extends control
         $this->view->objectType      = $objectType;
         $this->view->objectID        = $objectID;
         $this->view->testtasksPinyin = common::convert2Pinyin($namePairs);
+        $this->view->link            = $this->createLink($module, $method, $params);
 
         $this->display();
     }

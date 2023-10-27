@@ -136,15 +136,17 @@ class mainNavbar extends nav
 
         if(in_array($moduleName, is_array($config->hasSwitcherModules) ? $config->hasSwitcherModules : array()) || in_array("$moduleName-$methodName", is_array($config->hasSwitcherMethods) ? $config->hasSwitcherMethods : array()))
         {
+            $ajaxMethod = 'ajaxSwitcherMenu';
             if($moduleName == 'testcase' && $app->tab == 'project') $moduleName = 'project';
-            $fetcher = createLink($moduleName, 'ajaxSwitcherMenu', data('switcherParams'));
+            if($moduleName == 'testtask' && $methodName == 'cases') $ajaxMethod = 'ajaxGetDropMenu';
+            $fetcher = createLink($moduleName, $ajaxMethod, data('switcherParams'));
             return array(zui::dropmenu
                 (
                     setID("{$moduleName}-menu"),
                     set('_id', 'switcher'),
                     set('data', data('data')),
                     set('_props', array('data-fetcher' => $fetcher)),
-                    set(array('fetcher' => createLink($moduleName, 'ajaxSwitcherMenu', data('switcherParams')), 'text' => data('switcherText'), 'defaultValue' => data('switcherObjectID'))),
+                    set(array('fetcher' => createLink($moduleName, $ajaxMethod, data('switcherParams')), 'text' => data('switcherText'), 'defaultValue' => data('switcherObjectID'))),
                     set($this->getRestProps())
                 ));
         }

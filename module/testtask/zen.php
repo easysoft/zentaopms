@@ -294,6 +294,13 @@ class testtaskZen extends testtask
         $this->view->orderBy        = $orderBy;
         $this->view->pager          = $pager;
         $this->view->setModule      = false;
+
+        if($this->app->tab == 'project' || $this->app->tab == 'execution')
+        {
+            $this->view->switcherParams   = "productID={$product->id}&branch=&taskID={$testtask->id}&module=testtask&method=cases&objectType={$this->app->tab}&objectID={$testtask->{$this->app->tab}}";
+            $this->view->switcherText     = $testtask->name;
+            $this->view->switcherObjectID = $testtask->id;
+        }
     }
 
     /**

@@ -388,18 +388,19 @@ $config->project->dtable->testtask->fieldList['id']['type']  = 'id';
 $config->project->dtable->testtask->fieldList['id']['group'] = '2';
 $config->project->dtable->testtask->fieldList['id']['fixed'] = false;
 
-$config->project->dtable->testtask->fieldList['title']['name']  = 'name';
-$config->project->dtable->testtask->fieldList['title']['title'] = $lang->testtask->name;
-$config->project->dtable->testtask->fieldList['title']['type']  = 'title';
-$config->project->dtable->testtask->fieldList['title']['link']  = array('module' => 'testtask', 'method' => 'cases', 'params' => 'taskID={id}');
-$config->project->dtable->testtask->fieldList['title']['group'] = '2';
-$config->project->dtable->testtask->fieldList['title']['fixed'] = false;
-$config->project->dtable->testtask->fieldList['title']['width'] = '356';
+$config->project->dtable->testtask->fieldList['title']['name']     = 'name';
+$config->project->dtable->testtask->fieldList['title']['title']    = $lang->testtask->name;
+$config->project->dtable->testtask->fieldList['title']['type']     = 'title';
+$config->project->dtable->testtask->fieldList['title']['link']     = array('module' => 'testtask', 'method' => 'cases', 'params' => 'taskID={id}');
+$config->project->dtable->testtask->fieldList['title']['group']    = '2';
+$config->project->dtable->testtask->fieldList['title']['fixed']    = false;
+$config->project->dtable->testtask->fieldList['title']['width']    = '356';
+$config->project->dtable->testtask->fieldList['title']['data-app'] = 'project';
 
 $config->project->dtable->testtask->fieldList['build']['name']  = 'buildName';
 $config->project->dtable->testtask->fieldList['build']['title'] = $lang->testtask->build;
 $config->project->dtable->testtask->fieldList['build']['type']  = 'text';
-$config->project->dtable->testtask->fieldList['build']['link']  = array('module' => 'build', 'method' => 'view', 'params' => 'buildID={build}');
+$config->project->dtable->testtask->fieldList['build']['link']  = array('module' => 'projectbuild', 'method' => 'view', 'params' => 'buildID={build}');
 $config->project->dtable->testtask->fieldList['build']['group'] = 'text';
 $config->project->dtable->testtask->fieldList['build']['group'] = '3';
 
