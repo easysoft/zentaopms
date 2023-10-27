@@ -10,21 +10,11 @@ declare(strict_types = 1);
  */
 namespace zin;
 
-$generateData = function() use ($module, $method, $lang, $executions)
+$cols = $config->pivot->dtable->projectDeviation->fieldList;
+
+$generateData = function() use ($module, $method, $lang, $cols, $executions)
 {
     if(empty($module) || empty($method)) return div(setClass('bg-white center text-gray w-full h-40'), $lang->error->noData);
-
-    $canViewProject = hasPriv('product', 'index');
-
-    $cols = array(
-        'executionID'   => array('title' => $lang->pivot->id,            'width' => '70',   'fixed' => 'left'),
-        'projectName'   => array('title' => $lang->pivot->project,       'fixed' => 'left', 'link' => $canViewProject ? createLink('project', 'index', "id={projectID}") : ''),
-        'executionName' => array('title' => $lang->pivot->execution,     'type'  => 'html', 'fixed' => 'left'),
-        'estimate'      => array('title' => $lang->pivot->estimate,      'width' => '100',  'align' => 'center'),
-        'consumed'      => array('title' => $lang->pivot->consumed,      'width' => '100',  'align' => 'center'),
-        'deviation'     => array('title' => $lang->pivot->deviation,     'width' => '100',  'align' => 'center'),
-        'deviationRate' => array('title' => $lang->pivot->deviationRate, 'width' => '100',  'align' => 'center')
-    );
 
     return div
     (
