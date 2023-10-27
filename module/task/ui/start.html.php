@@ -83,7 +83,7 @@ else
             set::width('1/3'),
             set::label($lang->task->realStarted),
             set::name('realStarted'),
-            set::control('datetime'),
+            set::control('datetime-local'),
             set::value(helper::isZeroDate($task->realStarted) ? helper::now() : $task->realStarted)
         ),
         formRow
