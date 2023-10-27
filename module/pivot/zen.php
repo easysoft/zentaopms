@@ -319,9 +319,9 @@ class pivotZen extends pivot
     {
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
-        $this->view->title      = $this->lang->pivot->bugAssign;
-        $this->view->assigns    = $this->pivot->getBugAssign();
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->title = $this->lang->pivot->bugAssign;
+        $this->view->bugs  = $this->pivot->getBugAssign();
+        $this->view->users = $this->loadModel('user')->getPairs('noletter|noclosed');
     }
 
     /**
