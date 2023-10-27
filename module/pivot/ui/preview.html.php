@@ -66,7 +66,7 @@ div
     ),
     div
     (
-        setClass('w-full'),
+        setClass('flex col gap-4 w-full'),
         $generateData()
     )
 );
