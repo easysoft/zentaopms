@@ -352,7 +352,7 @@ if($config->edition != 'open') $lang->execution->menu->view = array('link' => "$
 $lang->execution->menu->storyGroup = array('link' => "{$lang->common->story}|execution|story|executionID=%s",'class' => 'dropdown dropdown-hover', 'subModule' => 'story', 'alias' => 'batchcreate,storykanban');
 $lang->execution->menu->story      = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'storykanban,linkstory');
 $lang->execution->menu->qa         = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport');
-$lang->execution->menu->devops     = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr', 'alias' => 'create');
+$lang->execution->menu->devops     = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr');
 $lang->execution->menu->doc        = array('link' => "{$lang->doc->common}|execution|doc|objectID=%s", 'subModule' => 'doc');
 $lang->execution->menu->build      = array('link' => "{$lang->build->common}|execution|build|executionID=%s", 'subModule' => 'build');
 $lang->execution->menu->action     = array('link' => "$lang->dynamic|execution|dynamic|executionID=%s");
@@ -396,7 +396,7 @@ $lang->execution->menu->qa['menuOrder'][15] = 'testcase';
 $lang->execution->menu->qa['menuOrder'][20] = 'testtask';
 
 $lang->execution->menu->devops['subMenu']       = new stdclass();
-$lang->execution->menu->devops['subMenu']->repo = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
+$lang->execution->menu->devops['subMenu']->repo = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo', 'exclude' => 'repo-review');
 $lang->execution->menu->devops['subMenu']->mr   = array('link' => "{$lang->devops->mr}|mr|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'mr', 'alias' => 'create');
 
 $lang->execution->menu->devops['menuOrder'][5]  = 'repo';
