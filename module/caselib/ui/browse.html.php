@@ -25,8 +25,6 @@ $canBatchAction       = ($canBatchEdit or $canBatchDelete or $canBatchReview or 
 $cols = $this->loadModel('datatable')->getSetting('caselib');
 $tableData = initTableData($cases, $cols, $this->testcase);
 
-$config->caselib->dtable->fieldList['openedBy']['map'] = $users;
-
 featureBar
 (
     set::current($browseType),
@@ -34,6 +32,8 @@ featureBar
     li(searchToggle())
 );
 
+$createCaseItem      = array('text' => $lang->testcase->create, 'url' => helper::createLink('caselib', 'createCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)));
+$batchCreateCaseItem = array('text' => $lang->testcase->batchCreate, 'url' => helper::createLink('caselib', 'batchCreateCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)));
 toolbar
 (
     $canView ? a
@@ -45,7 +45,7 @@ toolbar
         icon('list-alt'),
         $lang->caselib->view,
     ) : '',
-    $canExport && $canImport ? btngroup
+    $canExport || $canImport ? btngroup
     (
         $canExport ? a
         (
@@ -76,28 +76,23 @@ toolbar
     ) : '',
     $canCreateCase && $canBatchCreateCase ? btngroup
     (
-        $canCreateCase ? btn
+        btn
         (
             setClass('btn primary'),
             set::icon('plus'),
             set::url(helper::createLink('caselib', 'createCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0))),
             $lang->testcase->create,
-        ) : '',
+        ),
         dropdown
         (
             btn(setClass('btn primary dropdown-toggle'),
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
-            set::items
-            (
-                array
-                (
-                    $canCreateCase ? array('text' => $lang->testcase->create, 'url' => helper::createLink('caselib', 'createCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0))) : '',
-                    $canBatchCreateCase ? array('text' => $lang->testcase->batchCreate, 'url' => helper::createLink('caselib', 'batchCreateCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0))) : '',
-                )
-            ),
-            set::placement('bottom-end'),
+            set::items(array($createCaseItem, $batchCreateCaseItem)),
+            set::placement('bottom-end')
         ),
-    ) : '',
+    ) : null,
+    $canCreateCase && !$canBatchCreateCase ? item(set($createCaseItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canBatchCreateCase && !$canCreateCase ? item(set($batchCreateCaseItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
 );
 
 $settingLink = $this->createLink('tree', 'browse', "libID={$libID}&view=caselib&currentModuleID=0&branch=0&from={$lang->navGroup->caselib}");
