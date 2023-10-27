@@ -123,7 +123,7 @@ class datatableModel extends model
 
                 if(!isset($set['name'])) $setting[$field]['name'] = $field;
                 if($module == 'testcase' && $field == 'id') $setting[$field]['name'] = 'caseID';
-                if($field == 'actions') $setting[$field]['width'] = $fieldList[$field]['width'];
+                if($field == 'actions' && empty($setting[$field]['width'])) $setting[$field]['width'] = $fieldList[$field]['width'];
             }
         }
 
