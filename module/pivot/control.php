@@ -41,55 +41,6 @@ class pivot extends control
     }
 
     /**
-     * Preview pivots of a group.
-     *
-     * @param  int    $dimensionID
-     * @param  int    $groupID
-     * @access public
-     * @return void
-     */
-    public function show($dimensionID = 0, $groupID = 0, $pivotID = 0)
-    {
-        $dimensionID = $this->loadModel('dimension')->getDimension($dimensionID);
-
-        if(!$groupID)
-        {
-            $groupID = $this->dao->select('id')->from(TABLE_MODULE)
-                ->where('deleted')->eq('0')
-                ->andWhere('type')->eq('pivot')
-                ->andWhere('root')->eq($dimensionID)
-                ->andWhere('grade')->eq(1)
-                ->orderBy('`order`')
-                ->limit(1)
-                ->fetch('id');
-        }
-
-        list($pivotTree, $pivot, $groupID) = $this->pivot->getPreviewPivots($dimensionID, $groupID, $pivotID);
-        if($pivot)
-        {
-            list($sql, $filterFormat) = $this->pivot->getFilterFormat($pivot->sql, $pivot->filters);
-
-            $processSqlData = $this->loadModel('chart')->getTables($sql);
-            $sql = $processSqlData['sql'];
-
-            list($data, $configs) = $this->pivot->genSheet(json_decode(json_encode($pivot->fieldSettings), true), $pivot->settings, $sql, $filterFormat, json_decode($pivot->langs, true));
-            $this->view->data     = $data;
-            $this->view->configs  = $configs;
-        }
-
-        $group = $this->loadModel('tree')->getByID($groupID);
-
-        $this->view->title       = $this->lang->pivot->preview;
-        $this->view->dimensionID = $dimensionID;
-        $this->view->pivotTree   = $pivotTree;
-        $this->view->pivot       = $pivot;
-        $this->view->group       = $group;
-        $this->view->parentGroup = $group->grade == 2 ? $this->tree->getByID($group->parent) : $group;
-        $this->view->groups      = $this->tree->getGroupPairs($dimensionID, 0, 1, 'pivot');
-        $this->display();
-    }
-
-    /**
      * Ajax get sys options.
      *
      * @param  string $type
