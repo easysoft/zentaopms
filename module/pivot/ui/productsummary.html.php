@@ -22,7 +22,6 @@ $generateData = function() use ($module, $method, $lang, $title, $cols, $product
         div
         (
             setID('conditions'),
-            setClass('bg-white mb-4 p-2'),
             setClass('bg-white p-2'),
             checkList
             (
@@ -31,17 +30,24 @@ $generateData = function() use ($module, $method, $lang, $title, $cols, $product
                 set::items(array(array('text' => $lang->pivot->closedProduct, 'value' => 'closedProduct'), array('text' => $lang->pivot->overduePlan, 'value' => 'overduePlan')))
             )
         ),
-        dtable
+        panel
         (
-            set::striped(true),
-            set::bordered(true),
-            set::cols($cols),
-            set::data($products),
-            set::emptyTip($lang->error->noData),
-            set::height(jsRaw('getHeight')),
-            set::plugins(array('cellspan')),
-            set::getCellSpan(jsRaw('getCellSpan')),
-            set::cellSpanOptions(array(array('cols' => array('name', 'PO'), 'rowspan' => 'rowspan')))
+            setID('pivotPanel'),
+            set::title($title),
+            set::shadow(false),
+            set::bodyClass('pt-0'),
+            dtable
+            (
+                set::striped(true),
+                set::bordered(true),
+                set::cols($cols),
+                set::data($products),
+                set::emptyTip($lang->error->noData),
+                set::height(jsRaw('getHeight')),
+                set::plugins(array('cellspan')),
+                set::getCellSpan(jsRaw('getCellSpan')),
+                set::cellSpanOptions(array(array('cols' => array('name', 'PO'), 'rowspan' => 'rowspan')))
+            )
         )
     );
 };
