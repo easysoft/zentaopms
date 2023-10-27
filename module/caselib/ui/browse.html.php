@@ -146,9 +146,9 @@ $footToolbar = $canBatchAction ? array('items' => array
 
 dtable
 (
-    set::userMap($users),
     set::cols($cols),
     set::data(array_values($tableData)),
+    set::userMap($users),
     set::checkable($canBatchAction),
     set::customCols(true),
     set::emptyTip($lang->testcase->noCase),
@@ -159,7 +159,6 @@ dtable
     set::footToolbar($footToolbar),
     set::footPager(usePager())
 );
-
 
 render();
 
