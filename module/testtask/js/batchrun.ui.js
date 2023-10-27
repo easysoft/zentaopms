@@ -53,16 +53,17 @@ $(function()
     }
 })
 
-function toggleStep()
+function toggleStep(event)
 {
-    var stepSelect = $(this).parent().prev().find('select');
+    var $target    = $(event.target);
+    var $preSelect = $(event.target).closest('tr').find('[name^="steps"]');
 
-    if($(this).val() == '' && stepSelect.val() == 'fail')
+    if($target.val() == '' && $preSelect.val() == 'fail')
     {
-        stepSelect.val('pass');
+        $preSelect.zui('picker').$.changeState({value: 'pass'});
     }
-    else if($(this).val() != '' && stepSelect.val() == 'pass')
+    else if($target.val() != '' && $preSelect.val() == 'pass')
     {
-        stepSelect.val('fail');
+        $preSelect.zui('picker').$.changeState({value: 'fail'});
     }
 }
