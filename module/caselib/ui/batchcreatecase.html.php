@@ -71,14 +71,15 @@ $items[] = array
 );
 
 /* Field of pri. */
+$priList = array_filter($lang->testcase->priList);
 $items[] = array
 (
     'name'     => 'pri',
     'label'    => $lang->testcase->pri,
     'control'  => 'priPicker',
-    'items'    => $lang->testcase->priList,
+    'items'    => $priList,
     'value'    => 3,
-    'width'    => '80px',
+    'width'    => '90px',
     'required' => strpos($config->testcase->create->requiredFields, 'pri') !== false,
     'ditto'    => true,
 );
