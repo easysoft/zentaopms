@@ -334,7 +334,7 @@ formPanel
                 picker
                 (
                     set::name('story'),
-                    set::items((empty($bug->stories) ? '' : $bug->stories)),
+                    set::items(empty($bug->stories) ? array() : $bug->stories),
                     set::value($bug->storyID)
                 )
             )
@@ -344,7 +344,7 @@ formPanel
             set::width('1/2'),
             set::label($lang->bug->task),
             set::control('picker'),
-            set::items(''),
+            set::items(array()),
             set::name('task'),
             set::value($bug->taskID)
         )
