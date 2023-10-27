@@ -1217,8 +1217,11 @@ class testcaseModel extends model
                     unlink($filePath);
                 }
             }
-            $this->testcaseTao->importSteps($caseID, zget($steps, $case->fromCaseID, array()));
-            $this->testcaseTao->importFiles($caseID, zget($files, $case->fromCaseID, array()));
+            if(isset($caseID))
+            {
+                $this->testcaseTao->importSteps($caseID, zget($steps, $case->fromCaseID, array()));
+                $this->testcaseTao->importFiles($caseID, zget($files, $case->fromCaseID, array()));
+            }
         }
         return !dao::isError();
     }
