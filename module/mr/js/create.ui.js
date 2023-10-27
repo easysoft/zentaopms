@@ -101,6 +101,12 @@ function onNeedCiChange(event)
     }
 }
 
+function changeRepo()
+{
+    const repoID = $('input[name=changeRepo]').val();
+    loadPage($.createLink('mr', 'create', `repoID=${repoID}&objectID=${objectID}`));
+}
+
 $(function()
 {
     if(repo.gitService)

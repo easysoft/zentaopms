@@ -31,6 +31,11 @@ class mr extends control
      */
     public function browse($repoID = 0, $mode = 'status', $param = 'opened', $objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* Save current URI to session. */
+        $this->session->set('mrList', $this->app->getURI(true), 'repo');
+
+        if($this->app->tab == 'execution' && $objectID) return print($this->fetch('mr', 'browseByExecution', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}"));
+
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -56,7 +61,7 @@ class mr extends control
             $param = $this->app->user->account;
         }
         $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => array($repo->serviceProject => $repo->serviceProject));
-        $MRList         = $this->mr->getList($mode, $param, $orderBy, $pager, $filterProjects, $repoID);
+        $MRList         = $this->mr->getList($mode, $param, $orderBy, $filterProjects, $repoID, 0, $pager);
 
         if($repo->SCM == 'Gitlab')
         {
@@ -73,11 +78,8 @@ class mr extends control
             $projects = $this->mr->getAllProjects($repoID, $repo->SCM);
         }
 
-        /* Save current URI to session. */
-        $this->session->set('mrList', $this->app->getURI(true), 'repo');
-
         /* Sync GitLab MR to ZenTao Database. */
-        $MRList = $this->mr->batchSyncMR($MRList, $repo->SCM);
+        $MRList = $this->mr->batchSyncMR($MRList, array($repoID => $repo));
 
         /* Check whether Mr is linked with the product. */
         foreach($MRList as $MR)
@@ -123,12 +125,87 @@ class mr extends control
     }
 
     /**
-     * Create MR function.
+     * Browse mr for execution.
      *
+     * @param  int    $repoID
+     * @param  string $mode
+     * @param  string $param
+     * @param  int    $executionID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function create(int $repoID = 0)
+    public function browseByExecution($repoID = 0, $mode = 'status', $param = 'opened', $executionID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        if($param == 'assignee' || $param == 'creator')
+        {
+            $mode  = $param;
+            $param = $this->app->user->account;
+        }
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $MRList   = $this->mr->getList($mode, $param, $orderBy, array(), 0, $executionID, $pager);
+        $repoList = $this->loadModel('repo')->getList($executionID);
+        $MRList   = $this->mr->batchSyncMR($MRList, $repoList);
+
+        $projects = array();
+        foreach($repoList as $repo)
+        {
+            if($repo->SCM == 'Gitlab')
+            {
+                $projectIds = array();
+                foreach($MRList as $MR)
+                {
+                    $projectIds[$MR->sourceProject] = $MR->sourceProject;
+                    $projectIds[$MR->targetProject] = $MR->targetProject;
+                }
+                $projects += $this->mr->getGitlabProjects($repo->serviceHost, $projectIds);
+            }
+            else
+            {
+                $projects += $this->mr->getAllProjects($repoID, $repo->SCM);
+            }
+        }
+
+        $openIDList = array();
+        if($this->app->user->admin)
+        {
+            $openIDList += $this->loadModel('gitlab')->getGitLabListByAccount('caoyanyi');//, $this->app->user->account);
+            $openIDList += $this->loadModel('gitea')->getGiteaListByAccount($this->app->user->account);
+            $openIDList += $this->loadModel('gogs')->getGogsListByAccount($this->app->user->account);
+        }
+
+
+        $this->view->title       = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
+        $this->view->MRList      = $MRList;
+        $this->view->projects    = $projects;
+        $this->view->pager       = $pager;
+        $this->view->mode        = $mode;
+        $this->view->param       = $param;
+        $this->view->objectID    = $executionID;
+        $this->view->executionID = $executionID;
+        $this->view->repoList    = $repoList;
+        $this->view->orderBy     = $orderBy;
+        $this->view->openIDList  = $openIDList;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->sortLink    = $this->createLink('mr', 'browse', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$executionID}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}");
+        $this->display();
+    }
+
+    /**
+     * Create MR function.
+     *
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function create(int $repoID = 0, int $objectID = 0)
     {
         if($_POST)
         {
@@ -146,11 +223,14 @@ class mr extends control
         foreach($jobs as $job) $jobPairs[$job->id] = "[{$job->id}]{$job->name}";
 
         $this->app->loadLang('compile');
-        $this->view->title     = $this->lang->mr->create;
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->repo      = $repo;
-        $this->view->project   = $project;
-        $this->view->jobPairs  = $jobPairs;
+        $this->view->title       = $this->lang->mr->create;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->repo        = $repo;
+        $this->view->repoPairs   = $objectID ? $this->repo->getRepoPairs('execution', $objectID, false) : array();
+        $this->view->project     = $project;
+        $this->view->executionID = $objectID;
+        $this->view->objectID    = $objectID;
+        $this->view->jobPairs    = $jobPairs;
         $this->display();
     }
 
@@ -243,12 +323,9 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function delete($MRID, $confirm = 'no')
+    public function delete($MRID)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->mr->confirmDelete, inlink('delete', "MRID=$MRID&confirm=yes")));
-
         $MR = $this->mr->getByID($MRID);
-
         if($MR->synced)
         {
            $res = $this->mr->apiDeleteMR($MR->hostID, $MR->targetProject, $MR->mriid);
