@@ -82,3 +82,6 @@ $config->zanode->versionToOs['win10']          = 'windows';
 $config->zanode->versionToOs['winserver08x64'] = 'windows';
 $config->zanode->versionToOs['winserver12']    = 'windows';
 $config->zanode->versionToOs['winserver16']    = 'windows';
+
+$config->zanode->view = new stdclass();
+$config->zanode->view->operateList = array('getVNC', 'resume|suspend', 'start|close', 'reboot', 'createSnapshot', 'edit', 'destroy');
