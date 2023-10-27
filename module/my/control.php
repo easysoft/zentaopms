@@ -783,6 +783,7 @@ EOF;
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
+        $this->view->param      = $param;
 
         $this->display();
 
