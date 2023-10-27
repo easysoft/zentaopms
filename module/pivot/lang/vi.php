@@ -123,7 +123,7 @@ $lang->pivot->manhourTotal  = "Summe Stunden";
 $lang->pivot->validRate     = "Gültigkeitsrate";
 $lang->pivot->validRateTips = "Lösung ist gelöst/verschoben oder der Status ist gelöst/geschlossen.";
 $lang->pivot->unplanned     = 'Ungeplant';
-$lang->pivot->workday       = 'Stunden/Tag';
+$lang->pivot->workhour      = 'Stunden/Tag';
 $lang->pivot->diffDays      = 'Manntage';
 
 $lang->pivot->typeList['default'] = 'Standard';

@@ -81,7 +81,7 @@ $lang->pivot->manhourTotal  = "總工時";
 $lang->pivot->validRate     = "有效率";
 $lang->pivot->validRateTips = "方案為已解決或延期/狀態為已解決或已關閉";
 $lang->pivot->unplanned     = "未計劃";
-$lang->pivot->workday       = '每天工時';
+$lang->pivot->workhour      = '每天工時';
 $lang->pivot->diffDays      = '工作日天數';
 
 $lang->pivot->typeList['default'] = '預設';
