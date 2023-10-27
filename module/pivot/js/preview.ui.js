@@ -50,7 +50,7 @@ function loadProjectDeviation()
     const end    = $('#conditions').find('#end').val().replaceAll('-', '');
     const params = window.btoa('begin=' + begin + '&end=' + end);
     const link   = $.createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + groupID + '&module=pivot&method=projectdeviation&params=' + params);
-    loadPage(link, '#table-pivot-preview');
+    loadPage(link, '#table-pivot-preview,#pivotChart');
 }
 
 /**

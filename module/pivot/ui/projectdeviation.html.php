@@ -17,27 +17,42 @@ $getDeviationHtml = function(float $deviation): string
     return "<span class='zero'>0</span>";
 };
 
-$getDeviationRateHtml = function(float $deviationRate): string
+$getDeviationRateHtml = function(float|string $deviationRate): string
 {
+    if($deviationRate == 'n/a') return "<span class='zero'>" . $deviationRate . '</span>';
+    if($deviationRate == 0)     return "<span class='zero'>" . $deviationRate . '%</span>';
     if($deviationRate >= 50)    return "<span class='u50'>" . $deviationRate . '%</span>';
     if($deviationRate >= 30)    return "<span class='u30'>" . $deviationRate . '%</span>';
     if($deviationRate >= 10)    return "<span class='u10'>" . $deviationRate . '%</span>';
-    if($deviationRate > 0)      return "<span class='u0'>" . abs($deviationRate) . '%</span>';
+    if($deviationRate > 0)      return "<span class='u0'>" . $deviationRate . '%</span>';
     if($deviationRate <= -20)   return "<span class='d20'>" . abs($deviationRate) . '%</span>';
-    if($deviationRate < 0)      return "<span class='d0'>" . abs($deviationRate) . '%</span>';
-    if($deviationRate == 'n/a') return "<span class='zero'>" . $deviationRate . '</span>';
-    return "<span class='zero'>" . abs($deviationRate) . '%</span>';
+    return "<span class='d0'>" . abs($deviationRate) . '%</span>';
 };
 
+$canView = hasPriv('execution', 'view');
+
+$chartData = array();
 foreach($executions as $execution)
 {
+    $chartData['labels'][] = $execution->executionName;
+    $chartData['data'][]   = $execution->deviation;
+
+    if($execution->multiple)
+    {
+        if($canView) $execution->executionName = html::a(helper::createLink('execution', 'view', "executionID={$execution->executionID}"), $execution->executionName);
+    }
+    else
+    {
+        $execution->executionName = $this->lang->null;
+    }
+
     $execution->deviation     = $getDeviationHtml($execution->deviation);
     $execution->deviationRate = $getDeviationRateHtml($execution->deviationRate);
 }
 
 $cols = $config->pivot->dtable->projectDeviation->fieldList;
 
-$generateData = function() use ($module, $method, $lang, $title, $cols, $executions, $begin, $end)
+$generateData = function() use ($module, $method, $lang, $title, $cols, $executions, $chartData, $begin, $end)
 {
     if(empty($module) || empty($method)) return div(setClass('bg-white center text-gray w-full h-40'), $lang->error->noData);
 
@@ -85,8 +100,55 @@ $generateData = function() use ($module, $method, $lang, $title, $cols, $executi
                 set::height(jsRaw('getHeight')),
             )
         ),
-        echarts
+        panel
         (
+            setID('pivotChart'),
+            set::title($lang->pivot->deviationChart),
+            set::shadow(false),
+            $chartData ? null : setClass('hidden'),
+            $chartData ? echarts
+            (
+                set::xAxis
+                (
+                    array
+                    (
+                        'type' => 'category',
+                        'boundaryGap' => false,
+                        'axisLine' => array('onZero' => false),
+                        'axisLabel' => array('interval' => 0),
+                        'splitLine' => array('show' => true, 'interval' => 0),
+                        'data' => $chartData['labels']
+                    )
+                ),
+                set::yAxis
+                (
+                    array
+                    (
+                        'type'     => 'value',
+                        'axisLine' => array('show' => true)
+                    )
+                ),
+                set::tooltip
+                (
+                    array
+                    (
+                        'trigger' => 'axis',
+                        'formatter' => '{b}: {c}h'
+                    )
+                ),
+                set::series
+                (
+                    array
+                    (
+                        array
+                        (
+                            'data' => $chartData['data'],
+                            'type' => 'line',
+                            'lineStyle' => array('color' => '#0033CC')
+                        )
+                    )
+                )
+            )->size('100%', 300) : null
         )
     );
 };
