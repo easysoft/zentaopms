@@ -36,51 +36,61 @@ $config->mrapproval->create->requiredFields = 'mrID,account,date,action';
 
 $config->mr->gitServiceList = array('gitlab', 'gitea', 'gogs');
 
-$config->mr->actionList['view']['icon'] = 'eye';
-$config->mr->actionList['view']['hint'] = $lang->mr->view;
-$config->mr->actionList['view']['url']  = helper::createLink('mr', 'view', "MRID={id}");
+$config->mr->actionList['view']['icon']     = 'eye';
+$config->mr->actionList['view']['hint']     = $lang->mr->view;
+$config->mr->actionList['view']['url']      = helper::createLink('mr', 'view', "MRID={id}");
+$config->mr->actionList['view']['data-app'] = $app->tab;
 
-$config->mr->actionList['edit']['icon'] = 'edit';
-$config->mr->actionList['edit']['hint'] = $lang->mr->edit;
-$config->mr->actionList['edit']['url']  = helper::createLink('mr', 'edit', "MRID={id}");
+$config->mr->actionList['edit']['icon']     = 'edit';
+$config->mr->actionList['edit']['hint']     = $lang->mr->edit;
+$config->mr->actionList['edit']['url']      = helper::createLink('mr', 'edit', "MRID={id}");
+$config->mr->actionList['edit']['data-app'] = $app->tab;
 
-$config->mr->actionList['diff']['icon'] = 'diff';
-$config->mr->actionList['diff']['hint'] = $lang->mr->diff;
-$config->mr->actionList['diff']['url']  = helper::createLink('mr', 'diff', "MRID={id}");
+$config->mr->actionList['diff']['icon']     = 'diff';
+$config->mr->actionList['diff']['hint']     = $lang->mr->diff;
+$config->mr->actionList['diff']['url']      = helper::createLink('mr', 'diff', "MRID={id}");
+$config->mr->actionList['diff']['data-app'] = $app->tab;
 
-$config->mr->actionList['link']['icon'] = 'link';
-$config->mr->actionList['link']['hint'] = $lang->mr->link;
-$config->mr->actionList['link']['url']  = helper::createLink('mr', 'link', "MRID={id}");
+$config->mr->actionList['link']['icon']     = 'link';
+$config->mr->actionList['link']['hint']     = $lang->mr->link;
+$config->mr->actionList['link']['url']      = helper::createLink('mr', 'link', "MRID={id}");
+$config->mr->actionList['link']['data-app'] = $app->tab;
 
 $config->mr->actionList['delete']['icon']         = 'trash';
 $config->mr->actionList['delete']['hint']         = $lang->mr->delete;
-$config->mr->actionList['delete']['url']          = helper::createLink('mr', 'delete', "MRID={id}&confirm=yes");
+$config->mr->actionList['delete']['url']          = helper::createLink('mr', 'delete', "MRID={id}");
 $config->mr->actionList['delete']['data-confirm'] = $lang->mr->confirmDelete;
 $config->mr->actionList['delete']['className']    = 'ajax-submit';
+$config->mr->actionList['delete']['data-app']     = $app->tab;
 
-$config->mr->actionList['accept']['icon']        = 'flow';
-$config->mr->actionList['accept']['text']        = $lang->mr->acceptMR;
-$config->mr->actionList['accept']['url']         = helper::createLink('mr', 'accept', "MRID={id}");
+$config->mr->actionList['accept']['icon']     = 'flow';
+$config->mr->actionList['accept']['text']     = $lang->mr->acceptMR;
+$config->mr->actionList['accept']['url']      = helper::createLink('mr', 'accept', "MRID={id}");
+$config->mr->actionList['accept']['data-app'] = $app->tab;
 
 $config->mr->actionList['approval']['icon']        = 'ok';
 $config->mr->actionList['approval']['text']        = $lang->mr->approve;
 $config->mr->actionList['approval']['url']         = helper::createLink('mr', 'approval', "MRID={id}&action=approve");
 $config->mr->actionList['approval']['data-toggle'] = 'modal';
+$config->mr->actionList['approval']['data-app']    = $app->tab;
 
 $config->mr->actionList['reject']['icon']        = 'bug';
 $config->mr->actionList['reject']['text']        = $lang->mr->reject;
 $config->mr->actionList['reject']['url']         = helper::createLink('mr', 'approval', "MRID={id}&action=reject");
 $config->mr->actionList['reject']['data-toggle'] = 'modal';
+$config->mr->actionList['reject']['data-app']    = $app->tab;
 
 $config->mr->actionList['close']['icon']      = 'off';
 $config->mr->actionList['close']['text']      = $lang->mr->close;
 $config->mr->actionList['close']['url']       = helper::createLink('mr', 'close', "MRID={id}");
 $config->mr->actionList['close']['className'] = 'ajax-submit';
+$config->mr->actionList['close']['data-app']  = $app->tab;
 
 $config->mr->actionList['reopen']['icon']      = 'restart';
 $config->mr->actionList['reopen']['text']      = $lang->mr->reopen;
 $config->mr->actionList['reopen']['url']       = helper::createLink('mr', 'reopen', "MRID={id}");
 $config->mr->actionList['reopen']['className'] = 'ajax-submit';
+$config->mr->actionList['reopen']['data-app']  = $app->tab;
 
 $app->loadLang('release');
 $app->loadLang('story');
