@@ -17,7 +17,7 @@ $createProgram = function($data)
 
     return div
     (
-        formRowGroup(set::className('programParams hidden'), set::title($lang->upgrade->dataMethod), set::items('')),
+        formRowGroup(set::className('programParams hidden'), set::title($lang->upgrade->dataMethod), set::items(array())),
         div
         (
             set::className('programParams hidden py-4'),
@@ -25,7 +25,7 @@ $createProgram = function($data)
             div(set::className('createProjectTip text-gray ' . ($data->projectType == 'project' ? '' : 'hidden')), html($lang->upgrade->createProjectTip)),
             div(set::className('createExecutionTip text-gray ' . ($data->projectType == 'execution' ? '' : 'hidden')), html($lang->upgrade->createExecutionTip))
         ),
-        formRowGroup(set::title($data->systemMode == 'light' ? $lang->upgrade->setProject : $lang->upgrade->setProgram), set::items('')),
+        formRowGroup(set::title($data->systemMode == 'light' ? $lang->upgrade->setProject : $lang->upgrade->setProgram), set::items(array())),
         div
         (
             set::className('programForm mt-4 form-grid'),
