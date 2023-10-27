@@ -2268,6 +2268,10 @@ class executionModel extends model
         {
             $link = helper::createLink('execution', $module, "executionID=%s");
         }
+        elseif($module == 'repo' && $method == 'review')
+        {
+            $link = helper::createLink('repo', 'review', "repoID=0&browseType=all&executionID=%s") . '#app=execution';
+        }
         elseif($module == 'repo')
         {
             $link = helper::createLink('repo', 'browse', "repoID=0&branchID=&executionID=%s") . '#app=execution';
