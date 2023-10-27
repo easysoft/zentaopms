@@ -127,6 +127,7 @@ dtable
     set::customCols(!$isOnlyScene),
     set::userMap($users),
     set::cols($cols),
+    set::nested(true),
     set::data(array_values($cases)),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::checkable($canBatchAction),
