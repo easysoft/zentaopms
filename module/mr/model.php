@@ -41,13 +41,14 @@ class mrModel extends model
      * @param  string     $mode
      * @param  string     $param
      * @param  string     $orderBy
-     * @param  object     $pager
      * @param  array|bool $filterProjects
      * @param  int        $repoID
+     * @param  int        $objectID
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $pager = null, $filterProjects = array(), $repoID = 0)
+    public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $filterProjects = array(), $repoID = 0, $objectID = 0, $pager = null)
     {
         /* If filterProjects equals false,it means no permission. */
         if($filterProjects === false) return array();
@@ -72,6 +73,7 @@ class mrModel extends model
             ->beginIF($mode == 'creator' and $param != 'all')->andWhere('createdBy')->eq($param)->fi()
             ->beginIF($filterProjectSql)->andWhere($filterProjectSql)->fi()
             ->beginIF($repoID)->andWhere('repoID')->eq($repoID)->fi()
+            ->beginIF($objectID)->andWhere('executionID')->eq($objectID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -518,11 +520,11 @@ class mrModel extends model
      * Batch Sync GitLab MR Database.
      *
      * @param  object $MRList
-     * @param  string $scm
+     * @param  array  $repoList
      * @access public
      * @return array
      */
-    public function batchSyncMR($MRList, $scm = 'Gitlab')
+    public function batchSyncMR($MRList, $repoList = array())
     {
         if(empty($MRList)) return array();
 
@@ -532,6 +534,8 @@ class mrModel extends model
         foreach($MRList as $key => $MR)
         {
             if($MR->status != 'opened') continue;
+
+            $scm = empty($repoList[$MR->repoID]) ? 'Gitlab' : $repoList[$MR->repoID]->SCM;
 
             if(!isset($rawMRList[$MR->hostID][$MR->targetProject])) $rawMRList[$MR->hostID][$MR->targetProject] = $this->apiGetMRList($MR->hostID, $MR->targetProject, $scm);
             $rawMR = new stdClass();

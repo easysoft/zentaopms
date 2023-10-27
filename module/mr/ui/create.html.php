@@ -14,12 +14,13 @@ h::importJs('js/misc/base64.js');
 jsVar('hostType', strtolower($repo->SCM));
 jsVar('hostID', $repo->gitService);
 jsVar('repo', $repo);
+jsVar('objectID', $objectID);
 jsVar('projectID', $project->id);
 jsVar('mrLang', $lang->mr);
 jsVar('branchPrivs', array());
 jsVar('projectNamespace', in_array($repo->SCM, array('Gitea', 'Gogs')) ? $project->name_with_namespace : '');
 
-dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
+if($app->tab == 'devops') dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
 
 if(in_array($repo->SCM, array('Gitea', 'Gogs')))
 {
@@ -34,6 +35,15 @@ formPanel
 (
     set::title($lang->mr->create),
     set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '10em'),
+    count($repoPairs) > 1 ? to::titleSuffix(
+        picker
+        (
+            set::name('changeRepo'),
+            set::items($repoPairs),
+            set::value($repo->id),
+            on::change('changeRepo')
+        )
+    ) : null,
     formGroup
     (
         setClass('hidden'),
@@ -145,6 +155,16 @@ formPanel
             set::name('repoID'),
             set::label($lang->devops->repo),
             set::value($repo->id),
+        ),
+    ),
+    formRow
+    (
+        setClass('hidden'),
+        formGroup
+        (
+            set::name('executionID'),
+            set::label(''),
+            set::value($executionID),
         ),
     ),
 );
