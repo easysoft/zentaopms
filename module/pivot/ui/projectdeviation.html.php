@@ -37,7 +37,7 @@ foreach($executions as $execution)
 
 $cols = $config->pivot->dtable->projectDeviation->fieldList;
 
-$generateData = function() use ($module, $method, $lang, $cols, $executions)
+$generateData = function() use ($module, $method, $lang, $cols, $executions, $begin, $end)
 {
     if(empty($module) || empty($method)) return div(setClass('bg-white center text-gray w-full h-40'), $lang->error->noData);
 
@@ -47,7 +47,20 @@ $generateData = function() use ($module, $method, $lang, $cols, $executions)
         div
         (
             setID('conditions'),
-            setClass('bg-white mb-4 p-2'),
+            setClass('flex gap-4 bg-white p-2'),
+            on::change('loadProjectDeviation'),
+            inputGroup
+            (
+                setClass('w-1/4'),
+                $lang->pivot->execution . $lang->pivot->begin,
+                input(set(array('name' => 'begin', 'type' => 'date', 'value' => $begin)))
+            ),
+            inputGroup
+            (
+                setClass('w-1/4'),
+                $lang->pivot->execution . $lang->pivot->end,
+                input(set(array('name' => 'end', 'type' => 'date', 'value' => $end)))
+            )
         ),
         dtable
         (
