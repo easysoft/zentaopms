@@ -374,7 +374,7 @@ detailBody
             $story->status == 'closed' ? item
             (
                 set::name($lang->story->closedReason),
-                picker(setID('closedReason'), set::name('closedReason'), set::items($fields['closedReason']['options']), set::value($$fields['closedReason']['default']), on::change('setStory'))
+                picker(setID('closedReason'), set::name('closedReason'), set::items($fields['closedReason']['options']), set::value($fields['closedReason']['default']), on::change('setStory'))
             ) : null,
         ),
         tableData
