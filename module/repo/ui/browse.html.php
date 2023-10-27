@@ -77,7 +77,7 @@ if($fileName) $breadcrumbItems[] = h::span($fileName);
     (
         set::className('repo-select'),
         set::required(true),
-        $app->tab == 'project' ? dropmenu
+        (in_array($app->tab, array('project', 'execution')) && count($repoPairs) > 1) ? dropmenu
         (
             set::id('repoDropmenu'),
             set::text($repo->name),
