@@ -34,7 +34,6 @@ class ciModel extends model
 
             $tab   = $this->app->tab;
             $repos = $this->repo->getRepoPairs($tab);
-            if(count($repos) > 1) $this->lang->switcherMenu = $this->loadModel('repo')->getSwitcher($this->session->repoID);
         }
     }
 
