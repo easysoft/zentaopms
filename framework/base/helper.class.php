@@ -1123,6 +1123,8 @@ function a(): int
  */
 function isLocalIP()
 {
+    if(PHP_SAPI == 'cli' || php_sapi_name() == 'cli') return true;
+
     global $config;
     if(isset($config->isLocalIP)) return $config->isLocalIP;
     $serverIP = $_SERVER['SERVER_ADDR'];
