@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('branchProduct', $branchProduct);
-jsVar('branchOption',  $branchTagOption[$productID]);
+jsVar('branchOption',  zget($branchTagOption, $productID, array()));
 jsVar('modulePairs',   $modulePairs);
 jsVar('scenePairs',    $scenePairs);
 jsVar('productID',     $productID);
@@ -64,8 +64,8 @@ else
     (
         'name'     => 'pri',
         'label'    => $lang->priAB,
-        'width'    => '120px',
-        'control'  => array('type' => 'picker', 'required' => true),
+        'width'    => '100px',
+        'control'  => array('type' => 'priPicker', 'required' => true),
         'items'    => $lang->testcase->priList,
         'ditto'    => true,
         'hidden'   => !isset($visibleFields['pri']),
@@ -87,7 +87,7 @@ else
         'label'   => $lang->testcase->branch,
         'width'   => '180px',
         'control' => 'picker',
-        'items'   => $branchTagOption[$productID],
+        'items'   => zget($branchTagOption, $productID, array()),
         'hidden'  => !$branchProduct,
     );
     $items[] = array
