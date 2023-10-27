@@ -276,6 +276,21 @@ class testtaskZen extends testtask
             $assignedToList = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted|qafirst');
         }
 
+        /* Set drop menu. */
+        $objectType = $objectID = '';
+        if(in_array($this->app->tab, array('project', 'execution')))
+        {
+            $objectType = $this->app->tab;
+            $idField    = $objectType . 'ID';
+            $objectID   = $testtask->{$this->app->tab};
+            $object     = $this->loadModel($objectType)->getByID($objectID);
+            $this->view->{$idField}    = $objectID;
+            $this->view->{$objectType} = $object;
+        }
+        $this->view->switcherParams   = "productID={$product->id}&branch=&taskID={$testtask->id}&module=testtask&method=cases&objectType={$objectType}&objectID={$objectID}";
+        $this->view->switcherText     = $testtask->name;
+        $this->view->switcherObjectID = $testtask->id;
+
         $this->view->title          = $product->name . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->runs           = $this->loadModel('testcase')->appendData($runs, 'run');
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst|noletter');
@@ -294,13 +309,6 @@ class testtaskZen extends testtask
         $this->view->orderBy        = $orderBy;
         $this->view->pager          = $pager;
         $this->view->setModule      = false;
-
-        if($this->app->tab == 'project' || $this->app->tab == 'execution')
-        {
-            $this->view->switcherParams   = "productID={$product->id}&branch=&taskID={$testtask->id}&module=testtask&method=cases&objectType={$this->app->tab}&objectID={$testtask->{$this->app->tab}}";
-            $this->view->switcherText     = $testtask->name;
-            $this->view->switcherObjectID = $testtask->id;
-        }
     }
 
     /**
