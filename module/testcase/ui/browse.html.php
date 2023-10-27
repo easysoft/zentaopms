@@ -134,6 +134,7 @@ dtable
     set::checkInfo(jsRaw('function(checks){return window.setStatistics(this, checks);}')),
     set::orderBy($orderBy),
     set::sortLink(createLink('testcase', 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&param={$param}&caseType={$caseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID={$projectID}")),
+    set::nested(true),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::customData(array('isOnlyScene' => $isOnlyScene, 'pageSummary' => $summary, 'modules' => $modulePairs))
