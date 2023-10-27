@@ -1,9 +1,4 @@
 $(function()
 {
-    if($('tr').length == 0) return false;
-
-    if($('tr').first().data('status') == 'ready')
-    {
-        $('tr').first().trigger('click');
-    }
+    window.waitDom('#casesResults .result-item', function(){ $('#casesResults .result-item').first().trigger('click');})
 });
