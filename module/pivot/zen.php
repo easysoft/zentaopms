@@ -426,26 +426,25 @@ class pivotZen extends pivot
     /**
      * Workload pivot.
      *
-     * @param string $begin
-     * @param string $end
-     * @param int    $days
-     * @param int    $workhour
-     * @param int    $dept
-     * @param int    $assign
-     *
+     * @param  string $begin
+     * @param  string $end
+     * @param  int    $days
+     * @param  float  $workhour
+     * @param  int    $dept
+     * @param  string $assign
      * @access public
      * @return void
      */
-    public function workload($begin = '', $end = '', $days = 0, $workhour = 0, $dept = 0, $assign = 'assign')
+    public function workload(string $begin = '', string $end = '', int $days = 0, float $workhour= 0, int $dept = 0, string $assign = 'assign'): void
     {
         if($_POST)
         {
-            $data    = fixer::input('post')->get();
-            $begin   = $data->begin;
-            $end     = $data->end;
-            $dept    = $data->dept;
-            $days    = $data->days;
-            $assign  = $data->assign;
+            $data     = fixer::input('post')->get();
+            $begin    = $data->begin;
+            $end      = $data->end;
+            $dept     = $data->dept;
+            $days     = $data->days;
+            $assign   = $data->assign;
             $workhour = $data->workhour;
         }
 
@@ -459,31 +458,32 @@ class pivotZen extends pivot
         $begin  = date('Y-m-d', $begin);
         $end    = date('Y-m-d', $end);
 
-        if(empty($workhour))$workhour = $this->config->execution->defaultWorkhours;
+        if(empty($workhour)) $workhour = $this->config->execution->defaultWorkhours;
         $diffDays = helper::diffDate($end, $begin);
         if($days > $diffDays) $days = $diffDays;
         if(empty($days))
         {
             $weekDay = $beginWeekDay;
             $days    = $diffDays;
-            for($i = 0; $i < $diffDays; $i++,$weekDay++)
+            for($i = 0; $i < $diffDays; $i++, $weekDay++)
             {
                 $weekDay = $weekDay % 7;
-                if(($this->config->execution->weekend == 2 and $weekDay == 6) or $weekDay == 0) $days --;
+                if(($this->config->execution->weekend == 2 && $weekDay == 6) || $weekDay == 0) $days--;
             }
         }
 
-        $this->view->title      = $this->lang->pivot->workload;
+        $allHour = $workhour * $days;
+        $users   = $this->loadModel('user')->getPairs('noletter|noclosed');
 
-        $this->view->workload = $this->pivot->getWorkload($dept, $assign);
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->title    = $this->lang->pivot->workload;
+        $this->view->workload = $this->pivot->getWorkload($dept, $assign, $users, $allHour);
         $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
+        $this->view->users    = $users;
+        $this->view->dept     = $dept;
         $this->view->begin    = $begin;
         $this->view->end      = date('Y-m-d', strtotime($end) - 24 * 3600);
         $this->view->days     = $days;
-        $this->view->workhour  = $workhour;
-        $this->view->dept     = $dept;
+        $this->view->workhour = $workhour;
         $this->view->assign   = $assign;
-        $this->view->allHour  = $days * $workhour;
     }
 }
