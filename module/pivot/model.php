@@ -448,35 +448,52 @@ class pivotModel extends model
      */
     public function getBugs($begin, $end, $product, $execution)
     {
-        $end = date('Ymd', strtotime("$end +1 day"));
-        $bugs = $this->dao->select('id, resolution, openedBy, status')->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
+        $end       = date('Y-m-d', strtotime("{$end} +1 day"));
+        $bugGroups = $this->dao->select("IF(resolution = '', 'unResolved', resolution) AS resolution, openedBy, status")->from(TABLE_BUG)
+            ->where('deleted')->eq('0')
             ->andWhere('openedDate')->ge($begin)
             ->andWhere('openedDate')->le($end)
             ->beginIF($product)->andWhere('product')->eq($product)->fi()
             ->beginIF($execution)->andWhere('execution')->eq($execution)->fi()
-            ->fetchAll();
+            ->fetchGroup('openedBy');
 
-        $bugCreate = array();
-        foreach($bugs as $bug)
+        $bugs = array();
+        foreach($bugGroups as $account => $userBugs)
         {
-            $bugCreate[$bug->openedBy][$bug->resolution] = empty($bugCreate[$bug->openedBy][$bug->resolution]) ? 1 : $bugCreate[$bug->openedBy][$bug->resolution] + 1;
-            $bugCreate[$bug->openedBy]['all']            = empty($bugCreate[$bug->openedBy]['all']) ? 1 : $bugCreate[$bug->openedBy]['all'] + 1;
-            if($bug->status == 'resolved' or $bug->status == 'closed')
+            $bug = array();
+            $bug['openedBy']   = $account;
+            $bug['unResolved'] = 0;
+            $bug['validRate']  = 0;
+            $bug['total']      = 0;
+
+            foreach(array_keys($this->lang->bug->resolutionList) as $resolution)
             {
-                $bugCreate[$bug->openedBy]['resolved'] = empty($bugCreate[$bug->openedBy]['resolved']) ? 1 : $bugCreate[$bug->openedBy]['resolved'] + 1;
+                if($resolution) $bug[$resolution] = 0;
             }
+
+            $resolvedCount = 0;
+            $validCount    = 0;
+            foreach($userBugs as $userBug)
+            {
+                if(!isset($bug[$userBug->resolution])) continue;
+
+                $bug[$userBug->resolution]++;
+                $bug['total']++;
+
+                if($userBug->status == 'resolved' || $userBug->status == 'closed') $resolvedCount++;
+                if($userBug->resolution == 'fixed' || $userBug->resolution == 'postponed') $validCount++;
+            }
+
+            if(!$bug['total']) continue;
+
+            $bug['validRate'] = $resolvedCount ? round($validCount / $resolvedCount * 100, 2) . '%' : '0%';
+
+            $bugs[] = $bug;
         }
 
-        foreach($bugCreate as $account => $bug)
-        {
-            $validRate = 0;
-            if(isset($bug['fixed']))     $validRate += $bug['fixed'];
-            if(isset($bug['postponed'])) $validRate += $bug['postponed'];
-            $bugCreate[$account]['validRate'] = (isset($bug['resolved']) and $bug['resolved']) ? ($validRate / $bug['resolved']) : "0";
-        }
-        uasort($bugCreate, 'sortSummary');
-        return $bugCreate;
+        uasort($bugs, 'sortSummary');
+
+        return $bugs;
     }
 
     /**
