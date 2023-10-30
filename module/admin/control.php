@@ -386,7 +386,7 @@ class admin extends control
 
             $this->loadModel('setting')->setItem('system.admin.log.saveDays', $this->post->days);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->app->loadLang('webhook');
