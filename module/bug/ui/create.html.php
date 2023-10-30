@@ -62,6 +62,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->bug->project),
+            set::required(strpos(",{$config->bug->create->requiredFields},", ',project,') !== false),
             inputGroup
             (
                 set('id', 'projectBox'),
@@ -80,6 +81,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->bug->module),
+            set::required(strpos(",{$config->bug->create->requiredFields},", ',module,') !== false),
             inputGroup
             (
                 set('id', 'moduleBox'),
@@ -116,6 +118,7 @@ formPanel
             set::width('1/2'),
             set('id', 'executionBox'),
             set::label($bug->projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution),
+            set::required(strpos(",{$config->bug->create->requiredFields},", ',execution,') !== false),
             picker
             (
                 set::name('execution'),
@@ -211,6 +214,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->bug->deadline),
+            set::required(strpos(",{$config->bug->create->requiredFields},", ',deadline,') !== false),
             datePicker
             (
                 set::id('deadline'),
@@ -251,6 +255,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->bug->os),
+            set::required(strpos(",{$config->bug->create->requiredFields},", ',deadline,') !== false),
             set::control('picker'),
             set::items($lang->bug->osList),
             set::name('os[]'),
@@ -261,10 +266,12 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->bug->browser),
+            set::required(strpos(",{$config->bug->create->requiredFields},", ',deadline,') !== false),
             set::control('picker'),
             set::items($lang->bug->browserList),
-            set::name('browser'),
-            set::value($bug->browser)
+            set::name('browser[]'),
+            set::value($bug->browser),
+            set::multiple(true)
         )
     ),
     formRow
