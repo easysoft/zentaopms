@@ -1984,16 +1984,17 @@ class blockZen extends block
      */
     protected function printAssignToMeBlock(object $block): void
     {
-        $hasIssue   = helper::hasFeature('issue');
-        $hasRisk    = helper::hasFeature('risk');
-        $hasMeeting = helper::hasFeature('meeting');
-
+        $hasIssue    = helper::hasFeature('issue');
+        $hasRisk     = helper::hasFeature('risk');
+        $hasMeeting  = helper::hasFeature('meeting');
         $hasViewPriv = array();
-        if(common::hasPriv('todo',  'view')) $hasViewPriv['todo'] = true;
 
-        $limitCount = !empty($params->reviewCount) ? $params->reviewCount : 20;
+        $count      = array();
+        $params     = $block->params;
+        $limitCount = zget($params, 'count', $this->config->block->params['assigntome']->count['default']);
+
         $this->app->loadClass('pager', true);
-        $pager = new pager(0, $limitCount, 1);
+        $pager   = new pager(0, $limitCount, 1);
         $reviews = $this->loadModel('my')->getReviewingList('all', 'time_desc', $pager);
         if($reviews)
         {
@@ -2007,6 +2008,7 @@ class blockZen extends block
             }
         }
 
+        if(common::hasPriv('todo',  'view'))                                                                                        $hasViewPriv['todo']        = true;
         if(common::hasPriv('task',  'view'))                                                                                        $hasViewPriv['task']        = true;
         if(common::hasPriv('story', 'view') && $this->config->vision != 'lite')                                                     $hasViewPriv['story']       = true;
         if($this->config->URAndSR && common::hasPriv('story', 'view') && $this->config->vision != 'lite')                           $hasViewPriv['requirement'] = true;
@@ -2019,42 +2021,23 @@ class blockZen extends block
         if(common::hasPriv('feedback', 'view') && in_array($this->config->edition, array('max', 'biz')))                            $hasViewPriv['feedback']    = true;
         if(common::hasPriv('ticket', 'view') && in_array($this->config->edition, array('max', 'biz')))                              $hasViewPriv['ticket']      = true;
 
-        $params          = $block->params;
-        $count           = array();
-        $objectList      = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories', 'requirement' => 'requirements');
-        $objectCountList = array('todo' => 'todoCount', 'task' => 'taskCount', 'bug' => 'bugCount', 'story' => 'storyCount', 'requirement' => 'requirementCount');
+        $objectList = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories', 'requirement' => 'requirements');
         if($this->config->edition == 'max')
         {
-            if($hasRisk)
-            {
-                $objectList      += array('risk' => 'risks');
-                $objectCountList += array('risk' => 'riskCount');
-            }
-
-            if($hasIssue)
-            {
-                $objectList      += array('issue' => 'issues');
-                $objectCountList += array('issue' => 'issueCount');
-            }
-
-            $objectList      += array('feedback' => 'feedbacks', 'ticket' => 'tickets');
-            $objectCountList += array('feedback' => 'feedbackCount', 'ticket' => 'ticketCount');
+            if($hasRisk) $objectList += array('risk' => 'risks');
+            if($hasIssue) $objectList += array('issue' => 'issues');
+            $objectList += array('feedback' => 'feedbacks', 'ticket' => 'tickets');
         }
 
-        if($this->config->edition == 'biz')
-        {
-            $objectList      += array('feedback' => 'feedbacks', 'ticket' => 'tickets');
-            $objectCountList += array('feedback' => 'feedbackCount', 'ticket' => 'ticketCount');
-        }
+        if($this->config->edition == 'biz') $objectList += array('feedback' => 'feedbacks', 'ticket' => 'tickets');
 
         $tasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
-        foreach($objectCountList as $objectType => $objectCount)
+        foreach(array_keys($objectList) as $objectType)
         {
             if(!isset($hasViewPriv[$objectType])) continue;
 
             $table      = $objectType == 'requirement' ? TABLE_STORY : $this->config->objectTables[$objectType];
             $orderBy    = $objectType == 'todo' ? '`date` desc' : 'id_desc';
-            $limitCount = isset($params->{$objectCount}) ? $params->{$objectCount} : 0;
             $objects    = $this->dao->select('t1.*')->from($table)->alias('t1')
                 ->beginIF($objectType == 'story' || $objectType == 'requirement')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'bug')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
@@ -2135,7 +2118,6 @@ class blockZen extends block
             $this->app->loadLang('meeting');
             $today        = helper::today();
             $now          = date('H:i:s', strtotime(helper::now()));
-            $meetingCount = isset($params->meetingCount) ? isset($params->meetingCount) : 0;
 
             $meetings = $this->dao->select('*')->from(TABLE_MEETING)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -2149,7 +2131,7 @@ class blockZen extends block
                 ->orWhere('t1.participant')->in($this->app->user->account)
                 ->markRight(1)
                 ->orderBy('t1.id_desc')
-                ->beginIF($meetingCount)->limit($meetingCount)->fi()
+                ->beginIF($limitCount)->limit($limitCount)->fi()
                 ->fetchAll();
 
             $count['meeting'] = count($meetings);

@@ -187,49 +187,7 @@ $config->block->params['execution']->type['control'] = 'picker';
 $config->block->params['execution']->count = $config->block->params['default']->count;
 
 $config->block->params['assigntome'] = new stdclass();
-$config->block->params['assigntome']->todoCount['name']    = $this->lang->block->todoCount;
-$config->block->params['assigntome']->todoCount['default'] = 20;
-$config->block->params['assigntome']->todoCount['control'] = 'input';
-$config->block->params['assigntome']->taskCount['name']    = $this->lang->block->taskCount;
-$config->block->params['assigntome']->taskCount['default'] = 20;
-$config->block->params['assigntome']->taskCount['control'] = 'input';
-$config->block->params['assigntome']->bugCount['name']     = $this->lang->block->bugCount;
-$config->block->params['assigntome']->bugCount['default']  = 20;
-$config->block->params['assigntome']->bugCount['control']  = 'input';
-if($config->edition == 'max')
-{
-    if(helper::hasFeature('risk'))
-    {
-        $config->block->params['assigntome']->riskCount['name']    = $this->lang->block->riskCount;
-        $config->block->params['assigntome']->riskCount['default'] = 20;
-        $config->block->params['assigntome']->riskCount['control'] = 'input';
-    }
-
-    if(helper::hasFeature('issue'))
-    {
-        $config->block->params['assigntome']->issueCount['name']    = $this->lang->block->issueCount;
-        $config->block->params['assigntome']->issueCount['default'] = 20;
-        $config->block->params['assigntome']->issueCount['control'] = 'input';
-    }
-
-    if(helper::hasFeature('meeting'))
-    {
-        $config->block->params['assigntome']->meetingCount['name']    = $this->lang->block->meetingCount;
-        $config->block->params['assigntome']->meetingCount['default'] = 20;
-        $config->block->params['assigntome']->meetingCount['control'] = 'input';
-    }
-
-    $config->block->params['assigntome']->feedbackCount['name']    = $this->lang->block->feedbackCount;
-    $config->block->params['assigntome']->feedbackCount['default'] = 20;
-    $config->block->params['assigntome']->feedbackCount['control'] = 'input';
-}
-
-$config->block->params['assigntome']->storyCount['name']     = $this->lang->block->storyCount;
-$config->block->params['assigntome']->storyCount['default']  = 20;
-$config->block->params['assigntome']->storyCount['control']  = 'input';
-$config->block->params['assigntome']->reviewCount['name']    = $this->lang->block->reviewCount;
-$config->block->params['assigntome']->reviewCount['default'] = 20;
-$config->block->params['assigntome']->reviewCount['control'] = 'input';
+$config->block->params['assigntome']->count = $config->block->params['default']->count;
 
 $config->block->params['scrumtest'] = new stdclass();
 $config->block->params['scrumtest']->type['name']    = $lang->block->type;
