@@ -138,12 +138,12 @@ foreach($parentModules as $module)
 div
 (
     setClass('flex gap-x-4 mb-3'),
-    backBtn
+    !isInModal() ? backBtn
     (
         set::icon('back'),
         set::type('secondary'),
         $lang->goback,
-    ),
+    ) : null,
     div
     (
         setClass('entity-label flex items-center gap-x-2 article-h1'),
@@ -190,6 +190,7 @@ div
         setClass('basis-4/6'),
         panel
         (
+            set::shadow(false),
             set::title($manageTitle),
             div
             (
@@ -204,9 +205,8 @@ div
                     setClass('flex-1 form-grid'),
                     set::url(helper::createLink('tree', 'manageChild', "root=$root->id&viewType=$viewType")),
                     $moduleRows,
-                    set::actions(array('submit', 'cancel')),
-                    set::back('execution-task'),
                     set::actionsClass('justify-start'),
+                    set::submitBtnText($lang->save),
                     formGroup
                     (
                         setClass('hidden'),
