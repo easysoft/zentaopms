@@ -37,6 +37,9 @@
             $.apps.updateUrl(appCode, location.href, document.title);
         }
     }
+
+    /* Compatiable with jQuery. */
+    $.fn.triggerHandler = $.fn.trigger;
 }());
 
 (function()
