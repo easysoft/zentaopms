@@ -193,3 +193,8 @@ $(function()
 {
     $('.create-snapshot i').replaceWith("<img src='static/svg/snapshot.svg' />");
 });
+
+window.editSnapshot = function(url)
+{
+    openUrl(url, {load: 'modal'});
+}

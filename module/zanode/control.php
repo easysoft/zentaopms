@@ -355,7 +355,7 @@ class zanode extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->zanode->confirmDeleteSnapshot, inlink('deleteSnapshot', "snapshotID={$snapshotID}&confirm=yes")));
+            return $this->send(array('load' => array('confirm' => $this->lang->zanode->confirmDeleteSnapshot, 'confirmed' => array('url' => inlink('deleteSnapshot', "snapshotID={$snapshotID}&confirm=yes")))));
         }
 
         $result = $this->zanode->deleteSnapshot($snapshotID);
@@ -366,8 +366,7 @@ class zanode extends control
         }
         else
         {
-            if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent.parent'));
-            return print(js::alert($this->lang->zanode->actionSuccess) . js::locate($this->createLink('zanode', 'browse'), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->zanode->actionSuccess, 'load' => true));
         }
     }
 
@@ -465,7 +464,7 @@ class zanode extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->zanode->confirmRestore, inlink('restoreSnapshot', "nodeID={$nodeID}&snapshotID={$snapshotID}&confirm=yes")));
+            return $this->send(array('load' => array('confirm' => $this->lang->zanode->confirmRestore, 'confirmed' => array('url' => inlink('restoreSnapshot', "nodeID={$nodeID}&snapshotID={$snapshotID}&confirm=yes")))));
         }
 
         $this->zanode->restoreSnapshot($nodeID, $snapshotID);
@@ -474,12 +473,11 @@ class zanode extends control
         {
             $errors = dao::getError();
             if(is_array($errors)) $errors = implode(',', $errors);
-            return print(js::alert($errors) . js::reload('parent'));
+            return $this->send(array('result' => 'fail', 'message' => $errors));
         }
         else
         {
-            if(isonlybody()) return print(js::alert($this->lang->zanode->actionSuccess) . js::reload('parent.parent'));
-            return print(js::alert($this->lang->zanode->actionSuccess) . js::locate($this->createLink('zanode', 'browse'), 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->zanode->actionSuccess, 'load' => true));
         }
     }
 

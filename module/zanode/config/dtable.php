@@ -97,3 +97,39 @@ $config->zanode->dtable->fieldList['actions']['list']['destroy']['icon']      = 
 $config->zanode->dtable->fieldList['actions']['list']['destroy']['hint']      = $lang->zanode->destroy;
 $config->zanode->dtable->fieldList['actions']['list']['destroy']['url']       = array('module' => 'zanode', 'method' => 'destory', 'params' => 'zanodeID={id}');
 $config->zanode->dtable->fieldList['actions']['list']['destroy']['className'] = 'ajax-submit';
+
+$config->zanode->snapshotDtable = new stdclass();
+
+$config->zanode->snapshotDtable->fieldList['name']['title'] = $lang->zahost->image->name;
+$config->zanode->snapshotDtable->fieldList['name']['sort']  = true;
+
+$config->zanode->snapshotDtable->fieldList['status']['title'] = $lang->zahost->status;
+$config->zanode->snapshotDtable->fieldList['status']['map']   = $lang->zanode->snapshot->statusList;
+$config->zanode->snapshotDtable->fieldList['status']['sort']  = true;
+
+$config->zanode->snapshotDtable->fieldList['createdBy']['title'] = $lang->zahost->createdBy;
+$config->zanode->snapshotDtable->fieldList['createdBy']['sort']  = true;
+
+$config->zanode->snapshotDtable->fieldList['createdDate']['title'] = $lang->zahost->createdDate;
+$config->zanode->snapshotDtable->fieldList['createdDate']['type']  = 'datetime';
+$config->zanode->snapshotDtable->fieldList['createdDate']['sort']  = true;
+
+$config->zanode->snapshotDtable->fieldList['actions']['name']  = 'actions';
+$config->zanode->snapshotDtable->fieldList['actions']['title'] = $lang->actions;
+$config->zanode->snapshotDtable->fieldList['actions']['type']  = 'actions';
+$config->zanode->snapshotDtable->fieldList['actions']['menu']  = array('editSnapshot', 'restoreSnapshot', 'deleteSnapshot');
+
+$config->zanode->snapshotDtable->fieldList['actions']['list']['editSnapshot']['icon']        = 'edit';
+$config->zanode->snapshotDtable->fieldList['actions']['list']['editSnapshot']['hint']        = $lang->zanode->editSnapshot;
+$config->zanode->snapshotDtable->fieldList['actions']['list']['editSnapshot']['className']   = 'editSnapshot';
+$config->zanode->snapshotDtable->fieldList['actions']['list']['editSnapshot']['url']         = array('module' => 'zanode', 'method' => 'editSnapshot', 'params' => 'snapshotID={id}');
+
+$config->zanode->snapshotDtable->fieldList['actions']['list']['restoreSnapshot']['icon']      = 'restart';
+$config->zanode->snapshotDtable->fieldList['actions']['list']['restoreSnapshot']['hint']      = $lang->zanode->restoreSnapshot;
+$config->zanode->snapshotDtable->fieldList['actions']['list']['restoreSnapshot']['className'] = 'ajax-submit';
+$config->zanode->snapshotDtable->fieldList['actions']['list']['restoreSnapshot']['url']       = array('module' => 'zanode', 'method' => 'restoreSnapshot', 'params' => 'nodeID={nodeID}&snapshotID={id}');
+
+$config->zanode->snapshotDtable->fieldList['actions']['list']['deleteSnapshot']['icon']      = 'trash';
+$config->zanode->snapshotDtable->fieldList['actions']['list']['deleteSnapshot']['hint']      = $lang->zanode->deleteSnapshot;
+$config->zanode->snapshotDtable->fieldList['actions']['list']['deleteSnapshot']['className'] = 'ajax-submit';
+$config->zanode->snapshotDtable->fieldList['actions']['list']['deleteSnapshot']['url']       = array('module' => 'zanode', 'method' => 'deleteSnapshot', 'params' => 'snapshotID={id}');
