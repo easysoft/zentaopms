@@ -182,6 +182,7 @@ class execution extends control
         $this->view->modulePairs = $this->tree->getModulePairs($executionID, 'task', $showModule);
         $this->view->moduleTree  = $this->tree->getTaskTreeMenu($executionID, $productID, 0, array('treeModel', 'createTaskLink'), $showModule);
         $this->view->memberPairs = $memberPairs;
+        $this->view->execution   = $execution;
         $this->display();
     }
 
@@ -3120,6 +3121,25 @@ class execution extends control
         $this->view->productID   = $productID;
         $this->view->products    = $this->loadModel('product')->getProducts($executionID);
         $this->view->executionID = $executionID;
+        $this->display();
+    }
+
+    /**
+     * Ajax get execution drop menu.
+     * 通过Ajax获取执行下拉菜单。
+     *
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @param  string $method
+     * @access public
+     * @return void
+     */
+    public function ajaxGetExecutionSwitcherMenu(int $projectID, int $executionID, string $method = '')
+    {
+        $this->view->link        = helper::createLink('execution', $method, 'executionID={id}');
+        $this->view->executionID = $executionID;
+        $this->view->executions  = $this->execution->getList($projectID, 'kanban');
+
         $this->display();
     }
 }

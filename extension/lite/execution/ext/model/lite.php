@@ -13,11 +13,7 @@ public function setMenu(int $executionID, int $buildID = 0, string $extra = '')
 
     $kanbanList    = $this->getList($execution->project, 'kanban', 'all');
     $currentKanban = zget($kanbanList, $execution->id, '');
-    if(empty($currentKanban))
-    {
-        echo(js::alert($this->lang->execution->accessDenied));
-        die(js::locate(helper::createLink('project', 'execution', "status=all&projectID={$execution->project}")));
-    }
+    if(empty($currentKanban)) $this->accessDenied();
 
     $lowerModule = strtolower($this->app->rawModule);
     $lowerMethod = strtolower($this->app->rawMethod);

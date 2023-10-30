@@ -99,7 +99,12 @@ class mainNavbar extends nav
      */
     protected function build(): wg
     {
-        if(!$this->prop('items')) return wg();
+        global $app, $config;
+
+        $moduleName = $app->rawModule;
+        $methodName = $app->rawMethod;
+
+        if(!$this->prop('items') && !in_array("$moduleName-$methodName", $config->hasMainNavBar)) return wg();
 
         $leftBlock  = $this->block('left');
         $rightBlock = $this->block('right');

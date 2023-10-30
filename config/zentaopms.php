@@ -666,3 +666,4 @@ $config->excludeDropmenuList  = array('program-browse', 'program-productview', '
 $config->hasSwitcherModules   = array('design');
 $config->hasSwitcherMethods   = array('project-bug', 'project-testcase', 'execution-bug', 'execution-testcase', 'testtask-cases');
 $config->excludeSwitcherList  = array();
+$config->hasMainNavBar        = array();
