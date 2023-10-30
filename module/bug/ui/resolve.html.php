@@ -44,7 +44,6 @@ formPanel
         set::label($lang->bug->resolution),
         set::value(''),
         set::items($lang->bug->resolutionList),
-        set::required(false),
         on::change('setDuplicate'),
     ),
     formRow
@@ -70,6 +69,7 @@ formPanel
             set::id('newBuildExecutionBox'),
             setClass('hidden'),
             set::label(!empty($execution) && $execution->type == 'kanban' ? $lang->bug->kanban : $lang->build->execution),
+            set::required(true),
             picker
             (
                 set::name('buildExecution'),
@@ -82,22 +82,16 @@ formPanel
             set::width('1/3'),
             set::id('resolvedBuildBox'),
             set::label($lang->bug->resolvedBuild),
-            inputGroup
-            (
-                picker
-                (
-                    set::name('resolvedBuild'),
-                    set::value(''),
-                    set::items($builds),
-                    set::required(false),
-                ),
-            ),
+            set::name('resolvedBuild'),
+            set::value(''),
+            set::items($builds),
         ),
         formGroup
         (
             set::width('1/3'),
             setClass('hidden'),
             set::id('newBuildBox'),
+            set::required(true),
             inputGroup
             (
                 formGroup
@@ -118,11 +112,9 @@ formPanel
     (
         set::width('1/3'),
         set::label($lang->bug->resolvedDate),
-        datePicker
-        (
-            set::name('resolvedDate'),
-            set::value(helper::now())
-        ),
+        set::control('datePicker'),
+        set::name('resolvedDate'),
+        set::value(helper::now())
     ),
     formGroup
     (
