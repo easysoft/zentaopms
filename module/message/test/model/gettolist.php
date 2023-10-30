@@ -4,6 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/message.class.php';
 su('admin');
 
+zdTable('user')->gen(50);
 zdTable('todo')->gen(1);
 zdTable('testtask')->gen(1);
 zdTable('meeting')->config('meeting')->gen(1);
@@ -33,5 +34,5 @@ r($message->getToListTest('todo'))     && p() && e('admin');        //通过一�
 r($message->getToListTest('testtask')) && p() && e('user3');        //通过一条testtask数据展示$toList
 r($message->getToListTest('meeting'))  && p() && e('admin,admin,'); //通过一条meeting数据展示$toList
 r($message->getToListTest('mr'))       && p() && e('admin,admin');  //通过一条mr数据展示$toList
-r($message->getToListTest('release'))  && p() && e('admin');          //通过一条release数据展示$toList
+r($message->getToListTest('release'))  && p() && e('po1');          //通过一条release数据展示$toList
 r($message->getToListTest('task'))     && p() && e('0');            //通过一条task数据展示$toList
