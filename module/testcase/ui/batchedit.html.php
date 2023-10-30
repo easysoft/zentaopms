@@ -144,6 +144,7 @@ else
     (
         'name'     => 'precondition',
         'label'    => $lang->testcase->precondition,
+        'width'    => '180px',
         'control'  => 'textarea',
         'hidden'   => !isset($visibleFields['precondition']),
         'required' => isset($requiredFields['precondition']),
@@ -153,6 +154,7 @@ else
         'name'     => 'keywords',
         'label'    => $lang->testcase->keywords,
         'control'  => 'input',
+        'width'    => '180px',
         'hidden'   => !isset($visibleFields['keywords']),
         'required' => isset($requiredFields['keywords']),
     );
