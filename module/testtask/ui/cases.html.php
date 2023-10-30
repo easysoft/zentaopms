@@ -52,7 +52,7 @@ else
 {
     foreach($suites as $id => $name)
     {
-        $suiteItems[] = array('text' => $name, 'url' => inlink('cases', "taskID=$task->id&browseType=bySuite&param=$id"), 'active' => $name == $suiteName, 'data-app' => $app->tab);
+        $suiteItems[] = array('text' => $name, 'url' => inlink('cases', "taskID=$task->id&browseType=bySuite&param=$id"), 'active' => $id == $param, 'data-app' => $app->tab);
     }
 }
 
