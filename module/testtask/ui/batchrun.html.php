@@ -63,6 +63,7 @@ foreach($cases as $caseID => $case)
                     (
                         set::name("steps[$caseID][$stepID]"),
                         set::items($lang->testcase->resultList),
+                        set::required(true),
                         set::value('pass'),
                     )
                 ) : null,
