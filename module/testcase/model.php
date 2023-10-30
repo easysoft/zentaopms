@@ -2503,4 +2503,111 @@ class testcaseModel extends model
         }
         return $steps;
     }
+
+    /**
+     * 获取可以导入的测试用例。
+     * Get can import cases.
+     *
+     * @param  int    $productID
+     * @param  int    $libID
+     * @param  int    $branch
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function getCanImportCases(int $productID, int $libID, int|string $branch, string $orderBy = 'id_desc', object $pager = null, string $browseType = '', int $queryID = 0): array
+    {
+        $query = '';
+        if($browseType == 'bysearch')
+        {
+            if($queryID)
+            {
+                $this->session->set('testsuiteQuery', ' 1 = 1');
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('testsuiteQuery', $query->sql);
+                    $this->session->set('testsuiteForm', $query->form);
+                }
+            }
+            else
+            {
+                if($this->session->testsuiteQuery === false) $this->session->set('testsuiteQuery', ' 1 = 1');
+            }
+
+            $query  = $this->session->testsuiteQuery;
+            $allLib = "`lib` = 'all'";
+            $query  = strpos($query, $allLib) !== false ? str_replace($allLib, '1 = 1', $query) : "{$query} AND `lib` = '{$libID}'";
+        }
+
+        $this->loadModel('branch');
+        $product   = $this->loadModel('product')->getById($productID);
+        $branches  = $branch === 'all' && $product->type != 'normal' ? array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active') : array($product->type == 'normal' ? 0 : $branch => '');
+        $canImport = array();
+        foreach($branches as $branchID => $branchName) $canImport += $this->getCanImportedModules($productID, $libID, $branchID);
+
+        return $this->dao->select('*')->from(TABLE_CASE)
+            ->where('deleted')->eq('0')
+            ->beginIF($browseType != 'bysearch')->andWhere('lib')->eq($libID)->fi()
+            ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
+            ->andWhere('id')->in(array_keys($canImport))
+            ->andWhere('product')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
+     * 获取已经导入的用例模块。
+     * Get imported case modules.
+     *
+     * @param  int        $productID
+     * @param  int        $libID
+     * @param  int|string $branch
+     * @param  string     $returnType
+     * @access public
+     * @return array
+     */
+    public function getCanImportedModules(int $productID, int $libID, int|string $branch, string $returnType = 'pairs'): array
+    {
+        $importedModules = $this->dao->select('fromCaseID,module')->from(TABLE_CASE)
+            ->where('product')->eq($productID)
+            ->andWhere('lib')->eq($libID)
+            ->beginIF($branch != 'all')->andWhere('branch')->eq($branch)->fi()
+            ->andWhere('fromCaseID')->ne('')
+            ->andWhere('deleted')->eq('0')
+            ->fetchGroup('fromCaseID', 'module');
+        foreach($importedModules as $fromCaseID => $modules) $importedModules[$fromCaseID] = array_combine(array_keys($modules), array_keys($modules));
+
+        $libCases = $this->loadModel('caselib')->getLibCases($libID, 'all');
+        $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+        if($returnType == 'items')
+        {
+            $moduleItems = array();
+            foreach($modules as $moduleID => $moduleName) $moduleItems[$moduleID] = array('text' => $moduleName, 'value' => $moduleID);
+        }
+
+        $canImportModules = array();
+        foreach($libCases as $caseID => $case){
+            $caseModules = !empty($importedModules[$caseID]) ? $importedModules[$caseID] : array();
+            $canImportModules[$caseID] = $returnType == 'pairs' ? array_diff_key($modules, $caseModules) : array_diff_key($moduleItems, $caseModules);
+            if(!empty($canImportModules[$caseID]))
+            {
+                if($returnType == 'pairs')
+                {
+                    $canImportModules[$caseID]['ditto'] = $this->lang->testcase->ditto;
+                }
+                else
+                {
+                    $canImportModules[$caseID]['ditto'] = array('text' => $this->lang->testcase->ditto, 'value' => 'ditto');
+                    $canImportModules[$caseID] = array_values($canImportModules[$caseID]);
+                }
+            }
+            if(empty($canImportModules[$caseID])) unset($canImportModules[$caseID]);
+        }
+
+        return $canImportModules;
+    }
 }
