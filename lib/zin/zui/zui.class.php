@@ -75,11 +75,11 @@ class zui extends wg
             return h
             (
                 $tagName,
-                set($targetProps),
                 setClass($class),
                 setID($id),
                 setStyle('width', $width),
                 setStyle('height', $height),
+                set($targetProps),
                 $children,
             );
         }
