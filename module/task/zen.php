@@ -1683,7 +1683,7 @@ class taskZen extends task
         $response['result']  = 'success';
         $response['message'] = $this->lang->saveSuccess;
 
-        if(helper::isAjaxRequest('modal') && $this->app->tab == 'execution' || $this->config->vision == 'lite')
+        if(helper::isAjaxRequest('modal') && ($this->app->tab == 'execution' || $this->config->vision == 'lite'))
         {
             $response['closeModal'] = true;
             $kanbanData = $this->getKanbanData($execution);
