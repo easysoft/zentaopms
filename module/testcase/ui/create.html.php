@@ -119,7 +119,7 @@ formPanel
         (
             set::width('1/3'),
             set::label($lang->testcase->type),
-            set::required(true),
+            set::required(strpos(",{$config->testcase->create->requiredFields},", ',type,') !== false),
             picker
             (
                 set::id('type'),
@@ -167,6 +167,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->testcase->lblStory),
+            set::required(strpos(",{$config->testcase->create->requiredFields},", ',story,') !== false),
             inputGroup
             (
                 set('id', 'storyBox'),
