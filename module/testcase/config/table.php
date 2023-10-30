@@ -17,6 +17,7 @@ $config->testcase->dtable->fieldList['title']['nestedToggle'] = true;
 $config->testcase->dtable->fieldList['title']['link']         = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={caseID}");
 $config->testcase->dtable->fieldList['title']['required']     = true;
 $config->testcase->dtable->fieldList['title']['group']        = 1;
+$config->testcase->dtable->fieldList['title']['data-app']     = $app->tab;
 
 $config->testcase->dtable->fieldList['branch']['title'] = $lang->testcase->branch;
 $config->testcase->dtable->fieldList['branch']['type']  = 'text';

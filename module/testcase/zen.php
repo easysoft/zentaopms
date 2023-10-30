@@ -113,6 +113,9 @@ class testcaseZen extends testcase
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($projectID);
         if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($executionID);
         if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $productID, $branch);
+
+        $this->view->projectID   = $projectID;
+        $this->view->executionID = $executionID;
     }
 
     /**
