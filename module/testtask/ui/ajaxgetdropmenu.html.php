@@ -17,15 +17,16 @@ foreach($testtasks as $testtask)
     if($objectType == 'execution' && $testtask->execution != $objectID) continue;
 
     $item = array();
-    $item['id']       = $testtask->id;
-    $item['name']     = $testtask->name;
-    $item['text']     = $testtask->name;
-    $item['title']    = $testtask->name;
-    $item['active']   = $currentTaskID == $testtask->id;
-    $item['keys']     = zget($testtasksPinyin, $testtask->id, '');
-    $item['url']      = sprintf($link, $testtask->id);
-    $item['type']     = 'testtask';
-    $item['data-app'] = $app->tab;
+    $item['id']        = $testtask->id;
+    $item['name']      = $testtask->name;
+    $item['text']      = $testtask->name;
+    $item['title']     = $testtask->name;
+    $item['active']    = $currentTaskID == $testtask->id;
+    $item['keys']      = zget($testtasksPinyin, $testtask->id, '');
+    $item['url']       = sprintf($link, $testtask->id);
+    $item['type']      = 'item';
+    $item['data-app']  = $app->tab;
+    $item['data-load'] = '#main, #testtask-dropmenu';
     $data[] = $item;
 }
 

@@ -283,9 +283,8 @@ class testtaskZen extends testtask
             $objectType = $this->app->tab;
             $idField    = $objectType . 'ID';
             $objectID   = $testtask->{$this->app->tab};
-            $object     = $this->loadModel($objectType)->getByID($objectID);
             $this->view->{$idField}    = $objectID;
-            $this->view->{$objectType} = $object;
+            $this->view->{$objectType} = $this->loadModel($objectType)->getByID($objectID);
         }
         $this->view->switcherParams   = "productID={$product->id}&branch=&taskID={$testtask->id}&module=testtask&method=cases&objectType={$objectType}&objectID={$objectID}";
         $this->view->switcherText     = $testtask->name;
