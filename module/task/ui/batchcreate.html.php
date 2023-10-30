@@ -100,6 +100,7 @@ if($execution->type == 'kanban')
         set::width('160px'),
         set::ditto(true),
         set::required(true),
+        set::hidden($config->vision == 'lite'),
     );
     $laneItem = formBatchItem(
         set::name('lane'),
@@ -110,6 +111,7 @@ if($execution->type == 'kanban')
         set::width('160px'),
         set::ditto(true),
         set::required(true),
+        set::hidden($config->vision == 'lite'),
     );
 }
 
