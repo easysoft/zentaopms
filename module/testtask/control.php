@@ -884,7 +884,7 @@ class testtask extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $url));
         }
 
-        if(!$this->post->caseIdList) return $this->send(array('result' => 'fail', 'load' => $url));
+        if(!$this->post->caseIdList) $this->locate($url);
 
         /* 根据不同情况获取要批量执行的用例。*/
         /* Get cases to run according to different situations. */
