@@ -165,6 +165,28 @@ function pwdShow()
         $('#pwd-text').text(pwd)
         $('.btn-pwd-show').html("<i class='icon-common-eye icon-eye-off' title='" + zanodeLang.hidePwd +  "'></i>")
     }
+
+}
+
+function onCopy()
+{
+    $('#initBash').removeClass('hidden');
+    document.getElementById('initBash').select();
+    document.execCommand("Copy");
+    $('#initBash').addClass('hidden');
+    $('.btn-init-copy').tooltip({
+        trigger: 'click',
+        placement: 'bottom',
+        title: zanodeLang.copied,
+        tipClass: 'tooltip-success'
+    });
+
+    $(this).tooltip('show');
+    var that = this;
+    setTimeout(function()
+    {
+        $(that).tooltip('hide')
+    }, 2000)
 }
 
 $(function()

@@ -84,6 +84,7 @@ class zanode extends control
         $this->view->nodeList = $this->zanode->getListByHost($hostID, $orderBy);
         $this->view->orderBy  = $orderBy;
         $this->view->hostID   = $hostID;
+        $this->view->sortLink = $this->createLink('zanode', 'nodeList', "hostID={$hostID}&orderBy={orderBy}");
 
         $this->display();
     }
