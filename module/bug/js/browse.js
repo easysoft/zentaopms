@@ -85,6 +85,7 @@ function createSortLink(col)
 
 cols = JSON.parse(cols);
 data = JSON.parse(data);
+
 const options =
 {
     striped: true,
@@ -96,7 +97,7 @@ const options =
     footer: false,
     responsive: true,
     onCheckChange: setStatistics,
-    fixedLeftWidth: 550,
+    fixedLeftWidth: $('#bugList').width() * 0.44,
     fixedRightWidth: 150,
     height: function(height)
     {
