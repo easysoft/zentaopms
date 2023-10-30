@@ -81,7 +81,7 @@ class testsuite extends control
 
         /* 初始化分页。 */
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* 生成排序规则。 */
@@ -187,7 +187,7 @@ class testsuite extends control
 
         /* 初始化该套件关联用例的分页器。 */
         /* Initalizes the paginator for this suites's associated use case. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $this->executeHooks($suiteID);
@@ -369,7 +369,6 @@ class testsuite extends control
     {
         $formData = form::data($this->config->testsuite->form->batchUnlinkCases)->get();
         $this->testsuite->deleteCaseBySuiteID($formData->caseIdList, $suiteID);
-
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'load' => true));
