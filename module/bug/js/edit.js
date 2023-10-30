@@ -18,6 +18,7 @@ $(function()
     renderBuilds();
     renderTestTasks();
     renderStories();
+    renderTasks();
 
     $('#duplicateBug').picker(
     {
@@ -43,6 +44,21 @@ $(function()
     var $pkResolvedBuild = $('#pk_resolvedBuild-search');
     $pkResolvedBuild.closest('.picker').css('width', $pkResolvedBuild.closest('td').width() - $pkResolvedBuild.closest('td').find('.input-group-btn').width());
 });
+
+/**
+ * Render tasks.
+ *
+ * @access public
+ * @return void
+ */
+function renderTasks()
+{
+    executionID = $('#execution').val();
+    if(executionID)
+    {
+        loadExecutionTasks(executionID);
+    }
+}
 
 /**
  * Get all builds and set confirm string.

@@ -226,7 +226,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->task;?></th>
-                  <td><div id='taskIdBox'><?php echo html::select('task', $tasks, $bug->task, "class='form-control chosen' data-max_drop_width=100%");?></div></td>
+                  <td><div id='taskIdBox'><?php echo html::select('task', array(), '', "class='form-control picker-select' data-max_drop_width=100%");?></div></td>
                 </tr>
               </tbody>
             </table>
