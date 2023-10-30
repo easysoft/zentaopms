@@ -715,6 +715,7 @@ class taskZen extends task
             $task->estimate   = (float)$postData->testEstimate[$key];
             $task->left       = (float)$postData->testEstimate[$key];
             $task->type       = 'test'; /* Setting the task type to test to prevent duplicate tasks from being created. */
+            $task->vision     = $this->config->vision;
 
             $testTasks[$storyID] = $task;
         }
