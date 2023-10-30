@@ -2622,7 +2622,7 @@ class storyModel extends model
     public function formatStories(array $stories, string $type = 'full', int $limit = 0): array
     {
         /* Format these stories. */
-        $storyPairs = array(0 => '');
+        $storyPairs = array();
         foreach($stories as $story)
         {
             $property = '';

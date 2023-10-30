@@ -313,7 +313,7 @@ class bugZen extends bug
         else
         {
             $builds   = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased');
-            $stories  = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'all','id_desc', 0, 'full', 'story', false);
+            $stories  = $this->story->getProductStoryPairs($productID, $branch, $moduleID, 'all', 'id_desc', 0, 'full', 'story', false);
         }
 
         return $this->updateBug($bug, array('stories' => $stories, 'builds' => $builds, 'projectID' => $projectID));
