@@ -1,12 +1,15 @@
 VERSION        = $(shell head -n 1 VERSION)
-XUANVERSION    = $(shell head -n 1 extension/xuanxuan/XUANVERSION)
-XVERSION       = $(shell head -n 1 extension/xuanxuan/XVERSION)
+XUANVERSION    = $(shell jq -r .pkg.xuanxuan.gitVersion < ci.json)
+XVERSION       = $(shell jq -r .pkg.xuanxuan.version < ci.json)
 XHPROF_VERSION = 2.3.9
 
 XUANPATH      := $(XUANXUAN_SRC_PATH)
 BUILD_PATH    := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
 RELEASE_PATH  := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
 XUAN_WEB_PATH := $(ZENTAO_BUILD_PATH)/web
+
+DOWNGRADE_ENABLED := $(or $(DOWNGRADE_ENABLED),$(shell jq -r .downgrade.enabled < ci.json))
+DOWNGRADE_VERSIONS := $(or $(DOWNGRADE_VERSIONS),$(shell jq -r .downgrade.versions < ci.json))
 
 all:
 	make clean
@@ -97,6 +100,8 @@ zentaoxx:
 	cp -r $(XUAN_WEB_PATH) zentaoxx/www/data/xuanxuan/
 	mv zentaoxx/db/ zentaoxx/db_bak
 	mkdir zentaoxx/db/
+	sed -i "s/datetime NOT NULL DEFAULT '0000-00-00 00:00:00'/datetime NULL/" zentaoxx/db_bak/*.sql
+	sed -i "/`xxb_user` ADD `clientStatus`/d; /`xxb_user` ADD `clientLang`/d; /`xxb_file` CHANGE `pathname`/d" zentaoxx/db_bak/xuanxuan.sql
 	cp zentaoxx/db_bak/upgradexuanxuan*.sql zentaoxx/db_bak/xuanxuan.sql zentaoxx/db/
 	rm -rf zentaoxx/db_bak/
 	sed -i "s/\$$accountAdmin = \$$this->dao->select('account, admin')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch();/\$$accountAdmin = \$$this->dao->select('account')->from(TABLE_USER)->where('id')->eq(\$$userID)->fetch();\n\$$sysAdmins = \$$this->dao->select('admins')->from(TABLE_COMPANY)->where('id')->eq(\$$this->app->company->id)->fetch('admins');\n\$$sysAdminArray = explode(',', \$$sysAdmins);\n\$$accountAdmin->admin = in_array(\$$accountAdmin->account, \$$sysAdminArray) ? 'super' : '';\n/" zentaoxx/extension/xuan/im/model/chat.php
@@ -131,6 +136,7 @@ zentaoxx:
 	sed -i '/xxb_entry/d' zentaoxx/db/*.sql
 	sed -i '/deviceToken/d' zentaoxx/db/*.sql
 	sed -i '/deviceType/d' zentaoxx/db/*.sql
+	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
 	sed -i "/fetch('push', 'pushMessage');/d" zentaoxx/extension/xuan/im/control.php
 	#sed -i "s/marked\.html\.php';?>/marked\.html\.php';?>\n<div id='mainMenu' class='clearfix'><div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('xuanxuan');?><\/div><\/div>/g" zentaoxx/extension/xuan/client/view/checkupgrade.html.php
 	sed -i '/var serverVersions/d' zentaoxx/extension/xuan/client/js/checkupgrade.js
@@ -146,14 +152,20 @@ zentaoxx:
 	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/extension/xuan/im/control.php
 	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/extension/xuan/im/model/conference.php
 	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
+	sed -i 's/commonModel::isLicensedMethod([^\)]*)/false/g' zentaoxx/extension/xuan/conference/model.php
 	sed -i "s#\$this->app->getModuleRoot() . 'im/apischeme.json'#\$this->app->getExtensionRoot() . 'xuan/im/apischeme.json'#g" zentaoxx/extension/xuan/im/model.php
 	sed -i "s/'..\/..\/common\/view\/header.html.php'/\$$app->getModuleRoot() . 'common\/view\/header.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
 	sed -i "s/'..\/..\/common\/view\/footer.html.php'/\$$app->getModuleRoot() . 'common\/view\/footer.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
 	sed -i "s/\$$this->im->userGetChangedPassword()/array()/" zentaoxx/extension/xuan/im/control.php
+	sed -i "s/->app->getModuleExtPath('', /->app->getModuleExtPath(/g" zentaoxx/extension/xuan/im/model/bot.php
+	sed -i "s/\$$this->getModuleExtPath('', /\$$this->getModuleExtPath(/g" zentaoxx/framework/xuanxuan.class.php
+	sed -i "s/, \$$version)\$$/, \$$version = '')/g" zentaoxx/extension/xuan/im/model.php
+	sed -i "s/, \$$version)\$$/, \$$version = '')/g" zentaoxx/extension/xuan/im/model/conference.php
 	sed -i "/.*->getAllDepts();/d" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	sed -i "s/lang->user->status/lang->user->clientStatus/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	sed -i "s/.*->getRoleList();/\$$depts = \$$this->im->loadModel('dept')->getDeptPairs();\n\$$deptList = array_map(function(\$$k, \$$v) {return (object)array('id' => \$$k, 'name' => \$$v);}, array_keys(\$$depts), \$$depts);\n\$$roleList = \$$this->im->lang->user->roleList;/" zentaoxx/extension/xuan/im/ext/bot/default.bot.php
 	echo "ALTER TABLE \`zt_user\` ADD \`pinyin\` varchar(255) NOT NULL DEFAULT '' AFTER \`realname\`;" >> zentaoxx/db/xuanxuan.sql
+	find zentaoxx/extension/xuan/ -name '*.php' -exec sed -i -r 's|->ne(["'\'']0000-00-00 00:00:00["'\''])|->notZeroDatetime()|g; s|["'\'']\)->eq\(["'\'']0000-00-00( 00:00:00)?| is null|g; s|([=!]=) ?["'\'']0000-00-00( 00:00:00)?["'\'']|\1 null|g; s|([^!=]=) ?["'\'']0000-00-00( 00:00:00)?["'\'']|\1 null|g; s|(["'\''])(,.*)\)->eq\(["'\'']0000-00-00( 00:00:00)?["'\'']| is null\1\2|g; s|["'\'']0000-00-00 00:00:00["'\'']|null|g' {} +
 	mkdir zentaoxx/misc; cp misc/cn2tw.php zentaoxx/misc; cd zentaoxx/misc; php cn2tw.php
 	cp misc/en2other.php zentaoxx/misc; cd zentaoxx/misc; php en2other.php ../
 	rm -rf zentaoxx/misc
@@ -253,8 +265,9 @@ enrpm:
 	rpmbuild -ba ~/rpmbuild/SPECS/zentaopms.spec
 	cp ~/rpmbuild/RPMS/noarch/zentaoalm-${VERSION}-1.noarch.rpm ./
 	rm -rf ~/rpmbuild
+cleanAssets:
+	find zentaopms/ -type f \( -name "*.js.map" -o -name "*.gz" \) -delete
 ciCommon:
-	make clean
 	make common
 
         ifneq ($(XUANPATH), )
@@ -264,14 +277,20 @@ ciCommon:
         endif
 
 	make package
+	make cleanAssets
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	# en
-	cd zentaopms/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
-	cd zentaopms/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
-	cd zentaopms/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
-	mv zentaopms zentaoalm
+	cp -a zentaopms zentaoalm
+	cd zentaoalm/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
+	cd zentaoalm/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
+	cd zentaoalm/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
 	zip -rq -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
-	rm -fr zentaoalm
+
+	# downgrade
+	@test "$(DOWNGRADE_ENABLED)" != "true" && echo "skip downgrade" || ./misc/downgrade.sh -p "$(DOWNGRADE_VERSIONS)" -i -r zentaopms -o "$(RELEASE_PATH)" framework/ lib/ module/*
+
+	rm -fr zentaopms zentaoalm
+
 	# move pms zip to build and release path.
 	rm -f $(BUILD_PATH)/ZenTao*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION).int.zip
 	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH)

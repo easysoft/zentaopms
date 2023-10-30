@@ -1,0 +1,15 @@
+{
+    "require-dev": {
+        "rector/rector": "0.15.*"
+    },
+    "scripts": {
+        "rector": [
+            "Composer\\Config::disableProcessTimeout",
+            "rector process --no-diffs --no-progress-bar"
+        ],
+        "rector-nocache": [
+            "Composer\\Config::disableProcessTimeout",
+            "rector process --no-diffs --no-progress-bar --clear-cache"
+        ]
+    }
+}

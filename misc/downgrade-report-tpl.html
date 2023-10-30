@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PHP Syntax Errors</title>
+  <style>
+    /* Custom styles */
+    .container {
+      padding: 20px;
+    }
+    .page-content {
+      margin-top: 20px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    .active {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>PHP Syntax Errors</h1>
+    <div id="navMenu"></div>
+    <div class="page-content">
+      <div id="tableContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    const jsonData =
+;
+
+    const navMenu = document.getElementById("navMenu");
+    const tableContainer = document.getElementById("tableContainer");
+
+    // Create navigation buttons
+    for (const version in jsonData.versions) {
+      const button = document.createElement("button");
+      button.textContent = version;
+      button.addEventListener("click", () => renderTable(version));
+      navMenu.appendChild(button);
+    }
+
+    // Render table based on version
+    const renderTable = (version) => {
+      const data = jsonData.versions[version];
+      const tableData = [];
+
+      for (let i = 0; i < data.length; i += 2) {
+        const fileName = data[i];
+        const errorDetails = data[i + 1];
+        tableData.push({ fileName, errorDetails });
+      }
+
+      const table = document.createElement("table");
+      const thead = document.createElement("thead");
+      const tbody = document.createElement("tbody");
+
+      const headerRow = document.createElement("tr");
+      const fileNameHeader = document.createElement("th");
+      fileNameHeader.textContent = "File Name";
+      const errorDetailsHeader = document.createElement("th");
+      errorDetailsHeader.textContent = "Error Details";
+
+      headerRow.appendChild(fileNameHeader);
+      headerRow.appendChild(errorDetailsHeader);
+      thead.appendChild(headerRow);
+
+      tableData.forEach((item) => {
+        const row = document.createElement("tr");
+        const fileNameCell = document.createElement("td");
+        fileNameCell.textContent = item.fileName;
+        const errorDetailsCell = document.createElement("td");
+        errorDetailsCell.textContent = item.errorDetails;
+
+        row.appendChild(fileNameCell);
+        row.appendChild(errorDetailsCell);
+        tbody.appendChild(row);
+      });
+
+      table.appendChild(thead);
+      table.appendChild(tbody);
+
+      // Clear previous table
+      tableContainer.innerHTML = "";
+      // Append new table
+      tableContainer.appendChild(table);
+
+      // Update active button
+      const buttons = navMenu.getElementsByTagName("button");
+      for (const button of buttons) {
+        button.classList.remove("active");
+      }
+      Array.from(buttons).forEach((button) => {
+        if (button.textContent === version) {
+          button.classList.add("active");
+        }
+      });
+    };
+
+    // Initialize the page
+    const initialVersion = Object.keys(jsonData.versions)[0];
+    renderTable(initialVersion);
+  </script>
+</body>
+</html>

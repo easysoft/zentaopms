@@ -1,0 +1,606 @@
+library 'z-common@feat-231024'
+library 'z-zentaopms@feat-231019'
+
+pipeline {
+  agent {
+    kubernetes {
+      inheritFrom "xuanim"
+      yamlFile 'misc/ci/normal.yaml'
+    }
+  }
+
+  options {
+    skipDefaultCheckout()
+    parallelsAlwaysFailFast()
+    overrideIndexTriggers(false)
+    quietPeriod 900
+  }
+
+  parameters {
+    choice choices: ['auto', 'snapshot', 'release'], description: '构建包类型（快照或发版）', name: 'build_kind'
+    booleanParam defaultValue: true, description: '制作源码包', name: 'publish_zip'
+    booleanParam defaultValue: true, description: '制作镜像', name: 'publish_image'
+    booleanParam defaultValue: true, description: '制作一键安装包', name: 'publish_zbox'
+    // booleanParam defaultValue: true, description: '开启代码降级', name: 'DOWNGRADE_ENABLED'
+    string description: '指定一个构建Id用于回放，适用于tag类型的job', name: 'REPLAY_ID', trim: true
+  }
+
+  environment {
+    TZ="Asia/Shanghai"
+
+    ZENTAO_RELEASE_PATH = "${WORKSPACE}/release"
+    XUANXUAN_SRC_PATH = "${WORKSPACE}/xuansrc"
+    SRC_ZDOO_PATH = "${WORKSPACE}/zdoo"
+    SRC_ZDOOEXT_PATH = "${WORKSPACE}/zdooext"
+    SRC_ZENTAOEXT_PATH = "${WORKSPACE}/zentaoext"
+
+    MIDDLE_IMAGE_REPO = "hub.qc.oop.cc/zentao-package-ext"
+    MIDDLE_IMAGE_TAG = """${sh(
+                        returnStdout: true,
+                        script: 'date +%Y%m%d%H%M-${BUILD_ID}'
+    ).trim()}"""
+
+    MIRROR = "true"
+
+    // 默认从job参数里读取，打开后覆盖
+    PUBLISH_ZIP = "${params.publish_zip}"
+    PUBLISH_IMAGE = "${params.publish_image}"
+    PUBLISH_ZBOX = "${params.publish_zbox}"
+
+    // set to blank for auto-detect from ci.json
+    DOWNGRADE_ENABLED = ""
+    DOWNGRADE_VERSIONS = ""
+  }
+
+  stages {
+
+    stage("Basic Build") {
+      when {
+        anyOf {
+          buildingTag()
+          not {
+            triggeredBy 'BranchEventCause'
+          }
+        }
+      }
+
+      agent {
+        kubernetes {
+          inheritFrom "zentao-package build-docker xuanim"
+          yamlFile 'misc/ci/basic-build.yaml'
+        }
+      }
+
+      stages {
+        stage("Pull") {
+          steps {
+            checkout scm
+            script {
+              def triggeredBy = currentBuild.getBuildCauses()
+              println "Build triggered by: ${triggeredBy}"              
+
+              job.DetectTrigger()
+              env.XUANVERSION = sh(returnStdout: true,script: 'jq -r .pkg.xuanxuan.gitVersion < ci.json').trim()
+              env.ZENTAOEXT_VERSION = sh(returnStdout: true,script: 'jq -r .pkg.zentaoext.gitVersion < ci.json').trim()
+              env.ZENTAOEXT_GIT_REPO = sh(returnStdout: true,script: 'jq -r .pkg.zentaoext.gitRepo < ci.json').trim()
+              env.ZDOO_VERSION = sh(returnStdout: true,script: 'jq -r .pkg.zdoo.gitVersion < ci.json').trim()
+              env.ZDOOEXT_VERSION = sh(returnStdout: true,script: 'jq -r .pkg.zdooext.gitVersion < ci.json').trim()
+              
+              if (params.build_kind=='auto') {
+                env.BUILD_KIND = "snapshot"
+                if (env.TAG_NAME) {
+                  def testStr = env.TAG_NAME
+                  def count = testStr.count(/_/)
+                  if (count==1) {
+                    env.BUILD_KIND = "release"
+                  }
+                }
+              } else {
+                env.BUILD_KIND = params.build_kind
+              }
+              
+            }
+
+            replayCheckout([
+              [name: "xuansrc", subDir: true, url: "https://git.zcorp.cc/easycorp/xuanxuan.git", credentialsId: "git-zcorp-cc-jenkins-bot-http", branch: "${env.XUANVERSION}", depth: 0],
+              [name: "zdoo", subDir: true, url: "https://git.zcorp.cc/easycorp/zdoo.git", credentialsId: "git-zcorp-cc-jenkins-bot-http", branch: "${env.ZDOO_VERSION}", depth: 2],
+              [name: "zdooext", subDir: true, url: "https://git.zcorp.cc/easycorp/zdooext.git", credentialsId: "git-zcorp-cc-jenkins-bot-http", branch: "${env.ZDOOEXT_VERSION}", depth: 2],
+              [name: "zentaoext", subDir: true, url: "${env.ZENTAOEXT_GIT_REPO}", credentialsId: "git-zcorp-cc-jenkins-bot-http", branch: "${env.ZENTAOEXT_VERSION}", depth: 2]
+            ])
+          
+          }
+        }
+
+        stage("Setup Global Env") {
+          steps {
+            sh 'env'
+            script {
+              // GIT_URL GIT_COMMIT isn't export to env by jenkins. fetch by self
+              env.GIT_URL = sh(returnStdout: true, script: 'git config --get remote.origin.url').trim()
+              env.GIT_COMMIT = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
+
+              job.BuildHeader()
+              // env.GIT_TAGGER_NAME = sh(returnStdout: true, script: 'git for-each-ref --format="%(taggername)" refs/tags/$(git tag --points-at HEAD)').trim()
+
+              env.CI_PUBLIC_IMAGE_NAMESPACE = sh(returnStdout: true,script: 'jq -r .image.public.namespace.' + env.BUILD_KIND + ' < ci.json').trim()
+              env.CI_INTERNAL_IMAGE_NAMESPACE = sh(returnStdout: true,script: 'jq -r .image.internal.namespace.' + env.BUILD_KIND + ' < ci.json').trim()
+
+              def ximUsers = sh(returnStdout: true,script: 'jq -r .notice.users < ci.json').trim()
+              env.XIM_USERS = ximUsers + ',' + env.GIT_TAGGER_NAME
+              if (env.BUILD_KIND=='release') {
+                env.XIM_GROUPS = sh(returnStdout: true,script: 'jq -r .notice.groups2 < ci.json').trim()
+              } else {
+                env.XIM_GROUPS = sh(returnStdout: true,script: 'jq -r .notice.groups < ci.json').trim()
+              }
+
+              env.PMS_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/VERSION').trim()
+              env.BIZ_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/BIZVERSION').trim()
+              env.MAX_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/MAXVERSION').trim()
+              env.IPD_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/IPDVERSION').trim()
+
+              env.DOCKER_CREDENTIALS_ID = 'hub-qucheng-push'
+              
+              env.CI_DOWNGRADE_ENABLED = sh(returnStdout: true, script: 'test -n "${DOWNGRADE_ENABLED}" && echo ${DOWNGRADE_ENABLED} || (jq -r .downgrade.enabled < ci.json)').trim()
+              env.QINIU_BUCKET = sh(returnStdout: true, script: 'jq -r .upload.bucket < ci.json').trim()
+              
+              if (env.BUILD_KIND=='release') {
+                env.ARTIFACT_SUBGROUP='release'
+              } else {
+                currentDate = sh(returnStdout: true, script: 'date +%Y%m%d').trim()
+                env.ARTIFACT_SUBGROUP = currentDate + '.' + env.GIT_COMMIT[0..6]
+              }
+              env.ARTIFACT_REPOSITORY = sh(returnStdout: true,script: 'jq -r .upload.nexus.' + env.BUILD_KIND + ' < ci.json').trim()
+              env.ARTIFACT_HOST = "nexus.qc.oop.cc"
+              env.ARTIFACT_PROTOCOL = "https"
+              env.ARTIFACT_CRED_ID = "nexus-jenkins"
+
+              def mdPath = "start.md"
+              job.BuildChangeSetMd(mdPath)
+              job.unStashMsgHeader()
+              ximNotify(title: "开始构建禅道", contentFile: mdPath, contentHeaderFile: job.headerFileName())
+            }
+
+          }
+        }
+
+        stage("Build") {
+          when {
+            environment name:'PUBLISH_ZIP', value:'true'
+          }
+          stages {
+            stage("make ciCommon") {
+              steps {
+                withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http',gitToolName: 'git-tool')]) {
+                  container('package') {
+                    sh 'mkdir ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
+                    sh 'git config --global pull.ff only'
+                    sh 'cp -av ${ZENTAO_BUILD_PATH}/adminer www/'
+                    sh 'pwd && ls -l && make ciCommon'
+                    sh 'ls -l ${ZENTAO_RELEASE_PATH}'
+                  }
+                }
+              }
+            }
+
+            stage("zentaoext") {
+              steps {
+                container('package') {
+                  sh 'cd $SRC_ZENTAOEXT_PATH && make'
+                  sh 'cp ${ZENTAO_BUILD_PATH}/zentao*.zip ./'
+                  sh 'cp ${ZENTAO_BUILD_PATH}/docker/Dockerfile.release.ext ./Dockerfile.release.ext'
+                }
+                container('docker') {
+                  sh 'docker build --pull -t ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG} -f Dockerfile.release.ext ${ZENTAO_RELEASE_PATH}'
+                  sh 'docker push ${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}'
+                }
+                script {
+                  buildPkg.uploadSource()
+                }
+
+              }
+            }
+
+          }
+        } // End Build
+      }
+    }
+
+    stage("Publish") {
+      environment {
+        OUTPUT_PKG_PATH = "${ZENTAO_RELEASE_PATH}/output"
+      }
+
+      stages {
+        stage("Merge and Upload") {
+          when {
+            environment name:'PUBLISH_ZIP', value:'true'
+          }
+          matrix {
+            agent {
+              kubernetes {
+                containerTemplate {
+                    name "package"
+                    image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
+                    command "sleep"
+                    args "99d"
+                }
+                yamlFile 'misc/ci/publish-zip.yaml'
+              }
+            }
+            options {
+              skipDefaultCheckout()
+            }
+
+            axes {
+              axis {
+                name "ZLANG"
+                values "cn", "en"
+              }
+              axis {
+                name "PHPVERSION"
+                values "php5.4_5.6", "php7.0", "php7.1",  "php7.2_7.4", "k8s.php7.2_7.4", "php8.1", "k8s.php8.1"
+              }
+            }
+            excludes {
+              exclude {
+                axis {
+                  name 'ZLANG'
+                  values 'en'
+                }
+                axis {
+                  name "PHPVERSION"
+                  values "k8s.php7.2_7.4", "k8s.php8.1"
+                }
+              }
+            }
+
+            stages {
+              
+              stage("ZIP") {
+                environment {
+                  ARTIFACT_NAME = """${sh(
+                            returnStdout: true,
+                            script: 'test ${ZLANG} = cn && echo -n ZenTaoPMS || echo -n ZenTaoALM'
+                  ).trim()}"""
+                  INT_FLAG = """${sh(
+                            returnStdout: true,
+                            script: 'test ${ZLANG} = cn && echo -n "int." || echo -n ""'
+                  ).trim()}"""
+                }
+
+                stages {
+                  stage("package zip") {
+                    steps{
+                        echo "${env.ZLANG} <=> ${env.PHPVERSION}"
+                        container('package') {
+                          sh 'mkdir $ZENTAO_RELEASE_PATH'
+                          sh '${ZENTAO_BUILD_PATH}/package.sh zip'
+                          sh 'mkdir $OUTPUT_PKG_PATH'
+                        }
+                    }
+                  }
+
+                  stage("upload zip") {
+                    steps {
+                      sh 'mkdir ${OUTPUT_PKG_PATH}/${PMS_VERSION}'
+                      sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-${PHPVERSION}.zip'
+
+                      script {
+                        buildPkg.uploadPMS(env.PHPVERSION)
+                        // copy php7.2 as php8.0
+                        if (env.PHPVERSION=="php7.2_7.4") {
+                          buildPkg.uploadPMS('php8.0')
+                          sh 'cp ${ZENTAO_RELEASE_PATH}/base.zip ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}-${PMS_VERSION}-php8.0.zip'
+                        }
+                        buildPkg.uploadExt()
+                      }
+
+                      
+                    }
+                  } // End upload zip
+
+                  stage("syspack") {
+                    when {
+                      environment name: 'BUILD_KIND', value: 'release'
+                    }
+                    steps{
+                      script {
+                        buildPkg.buildRpmAndDeb()
+                      }
+                    }
+                  }
+
+                  stage("Upload Qiniu") {
+                    when {
+                      environment name: 'BUILD_KIND', value: 'release'
+                    }
+
+                    environment {
+                      OBJECT_KEY_PREFIX = "zentao/"
+                      QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
+                      QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
+                    }
+
+                    steps {
+                      sh 'ls -l ${OUTPUT_PKG_PATH}'
+                      container('jnlp') {
+                        sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
+                        sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir $OUTPUT_PKG_PATH --key-prefix $OBJECT_KEY_PREFIX'
+                      }    
+                    }
+                  }
+
+                } // end stages
+              } // end stage frame
+
+            } // End matrix stages
+          } // End matrix
+
+        } // End Merge and Upload Max
+
+        stage("Notice ZIP") {
+          when { environment name:'PUBLISH_ZIP', value:'true' }
+          steps {
+            checkout scmGit(branches: [[name: "master"]],
+              extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
+              userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/devops/zentao-package.git']]
+            )
+            container('xuanimbot') {
+              sh './gen_build_report.sh > success.md'
+            }
+            script {
+              job.unStashMsgHeader()
+              ximNotify(title: "禅道源码包构建成功", contentFile: "success.md", contentHeaderFile: job.headerFileName())
+            }
+          }
+        }
+
+        stage("Zbox") {
+          when { environment name:'PUBLISH_ZBOX', value:'true' }
+
+          environment {
+            // printf "$PKG_URL_FORMATTER" pmsPack ZenTaoPMS 18.5 ZenTaoPMS-18.5-php8.1.zip
+            PKG_URL_FORMATTER = """${sh(
+                        returnStdout: true,
+                        script: "echo ${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/repository/${ARTIFACT_REPOSITORY}/zentao/%s/`echo ${ARTIFACT_SUBGROUP} | tr . /`/%s/%s/%s"
+              ).trim()}"""
+            OBJECT_KEY_PREFIX = "zentao/"
+            QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
+            QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
+          }
+
+          stages {
+            stage("Package") {
+              parallel {
+                stage("Zbox win") {
+                  agent {
+                    kubernetes {
+                      yamlFile 'misc/ci/publish-zbox.yaml'
+                    }
+                  }
+
+                  stages() {
+                    stage("Prepare") {
+                      steps {
+                        checkout scmGit(branches: [[name: "main"]],
+                          extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
+                          userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/devops/zbox-builder.git']]
+                        )
+                      }
+                    }
+
+                    stage("Build") {
+                      steps {
+                        script {
+                          buildZboxWin.doBuild()
+                          buildZboxWin.uploadInternal()
+                        }
+                      }
+                    }
+
+                    stage("Upload Qiniu") {
+                      when {
+                        environment name: 'BUILD_KIND', value: 'release'
+                      }
+
+                      steps {
+                        container('docker') {
+                          sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $PMS_VERSION $BIZ_VERSION $MAX_VERSION $IPD_VERSION'
+                          sh "mv `find release/zh-cn/$PMS_VERSION release/en/$PMS_VERSION -type f -name 'ZenTao*.exe'` release/upload/$PMS_VERSION"
+                          sh "mv `find release/zh-cn/$BIZ_VERSION release/en/$BIZ_VERSION -type f -name 'ZenTao*.exe'` release/upload/$BIZ_VERSION"
+                          sh "mv `find release/zh-cn/$MAX_VERSION release/en/$MAX_VERSION -type f -name 'ZenTao*.exe'` release/upload/$MAX_VERSION"
+                          sh "mv `find release/zh-cn/$IPD_VERSION release/en/$IPD_VERSION -type f -name 'ZenTao*.exe'` release/upload/$IPD_VERSION"
+                        }
+                        container('jnlp') {
+                          sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
+                          sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir ./release/upload --key-prefix $OBJECT_KEY_PREFIX'
+                        }
+                      }
+                    } // End Upload Qiniu
+                  }
+                } // End Zbox win
+
+                stage("Zbox linux") {
+                  agent {
+                    kubernetes {
+                      yamlFile 'misc/ci/publish-zbox.yaml'
+                    }
+                  }
+
+                  stages() {
+                    stage("Prepare") {
+                      steps {
+                        checkout scmGit(branches: [[name: "main"]],
+                          extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
+                          userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/devops/zbox-builder.git']]
+                        )
+                      }
+                    }
+
+                    stage("Build") {
+                      steps {
+                        script {
+                          buildZboxLinux.doBuild()
+                          buildZboxLinux.uploadInternal()
+                        }
+                      }
+                    }
+
+                    stage("Upload Qiniu") {
+                      when {
+                        environment name: 'BUILD_KIND', value: 'release'
+                      }
+
+                      steps {
+                        container('docker') {
+                          sh 'mkdir -pv ./release/upload && cd ./release/upload && mkdir $PMS_VERSION $BIZ_VERSION $MAX_VERSION $IPD_VERSION'
+                          sh "mv `find release/zh-cn/$PMS_VERSION release/en/$PMS_VERSION -type f -name 'ZenTao*'` release/upload/$PMS_VERSION"
+                          sh "mv `find release/zh-cn/$BIZ_VERSION release/en/$BIZ_VERSION -type f -name 'ZenTao*'` release/upload/$BIZ_VERSION"
+                          sh "mv `find release/zh-cn/$MAX_VERSION release/en/$MAX_VERSION -type f -name 'ZenTao*'` release/upload/$MAX_VERSION"
+                          sh "mv `find release/zh-cn/$IPD_VERSION release/en/$IPD_VERSION -type f -name 'ZenTao*'` release/upload/$IPD_VERSION"
+                        }
+                        container('jnlp') {
+                          sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
+                          sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir ./release/upload --key-prefix $OBJECT_KEY_PREFIX'
+                        }
+                      }
+                    } // End Upload Qiniu
+                  }
+                } // End Zbox linux
+
+              } // End parallel
+            }
+
+            stage("Notice zbox") {
+              steps {
+                checkout scmGit(branches: [[name: "main"]],
+                  extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
+                  userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/devops/zbox-builder.git']]
+                )
+                sh 'script/lib/gen_report.sh > zbox-success.md'
+                script {
+                  job.unStashMsgHeader()
+                  ximNotify(title: "禅道一键安装包构建成功", contentFile: "zbox-success.md", contentHeaderFile: job.headerFileName())
+                }
+              }
+            }
+          }
+
+        } // End Zbox
+
+        stage("Docker Image") {
+          when {
+            environment name:'PUBLISH_IMAGE', value:'true'
+          }
+
+          agent {
+            kubernetes {
+              inheritFrom "dind xuanim"
+              yamlFile 'misc/ci/publish-image.yaml'
+            }
+          }
+
+          environment {
+            REGISTRY_HOST="hub.zentao.net"
+            CI_BUILD_PUBLIC_IMAGE="true"
+            PKG_URL_FORMATTER = """${sh(
+                        returnStdout: true,
+                        script: "echo ${ARTIFACT_PROTOCOL}://${ARTIFACT_HOST}/repository/${ARTIFACT_REPOSITORY}/zentao/%s/`echo ${ARTIFACT_SUBGROUP} | tr . /`/%s/%s/%s"
+              ).trim()}"""
+          }
+
+          steps {
+            checkout scmGit(branches: [[name: "master"]],
+                  extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
+                  userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/app/zentao.git']]
+                )
+            script {
+              dockerBuildx(host=env.REGISTRY_HOST, credentialsId=env.DOCKER_CREDENTIALS_ID) {
+                stage("prepare") {
+                  sh "apk --no-cache add make bash jq git tzdata"
+                  sh "make markdown-init"
+                }
+                stage("docker pms") {
+                  sh 'make build'
+                }
+                stage("docker biz") {
+                  sh 'make build-biz'
+                  sh 'make build-biz-k8s'
+                }
+                stage("docker max") {
+                  sh 'make build-max'
+                  sh 'make build-max-k8s'
+                }
+                stage("docker ipd") {
+                  sh 'make build-ipd'
+                  sh 'make build-ipd-k8s'
+                }
+                sh 'make markdown-render > ./report.md'
+              }
+            }
+            script {
+              job.unStashMsgHeader()
+              ximNotify(title: "禅道镜像构建成功", contentFile: "report.md", contentHeaderFile: job.headerFileName())
+            }
+          }
+
+        } // End Docker Image
+
+        stage("Upload rongpm") {
+          agent {
+            kubernetes {
+              inheritFrom "zentao-package xuanim"
+              yamlFile 'misc/ci/normal.yaml'
+            }
+          }
+          when {
+            allOf {
+              environment name:'PUBLISH_ZIP', value:'true'
+              environment name:'BUILD_KIND', value:'release'
+            }
+            
+            beforeAgent true
+          }
+
+          environment {
+            OBJECT_KEY_PREFIX = "zentao/"
+            QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
+            QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
+          }
+
+          steps {
+            script {
+              checkout scmGit(branches: [[name: "master"]],
+                extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
+                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/web/rongpm.git']]
+              )
+
+              container('package') {
+                sh 'mkdir -p output/rongpm/${PMS_VERSION}'
+                sh 'cd output/rongpm/${PMS_VERSION} && php7.2 $WORKSPACE/system/bin/buildpractice.php && rm -rf rongpm'
+              }
+
+              container('jnlp') {
+                sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
+                sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir ./output --key-prefix $OBJECT_KEY_PREFIX'
+              }
+            }
+          }
+        } // End Upload rongpm
+
+      }
+
+      
+    } // end publish
+
+  }
+
+  post {
+    failure {
+      ximNotify(title: "禅道构建失败", content: "请点击查看详情")
+    }
+  }
+
+}
+
+
