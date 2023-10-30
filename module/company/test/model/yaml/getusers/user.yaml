@@ -1,0 +1,12 @@
+title: table zt_user
+desc: "用户信息"
+author: Wang XuePeng
+version: "1.0"
+fields:
+  - field: visions
+    note: "版本"
+    range: rnd
+    prefix: ",ipd,"
+    postfix: ",lite"
+    loop: 0
+    format: ""
