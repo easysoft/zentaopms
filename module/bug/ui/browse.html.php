@@ -105,7 +105,7 @@ sidebar
 $resolveItems = array();
 foreach($lang->bug->resolutionList as $key => $resolution)
 {
-    if($key == 'duplicate' || $key == 'tostory') continue;
+    if(empty($key) || $key == 'duplicate' || $key == 'tostory') continue;
     if($key == 'fixed')
     {
         $buildItems = array();
