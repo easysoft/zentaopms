@@ -31,8 +31,8 @@ class qa extends control
         $branch    = (int)$this->cookie->preBranch;
         $this->qa->setMenu($productID, $branch);
 
-        $this->view->title     = $this->lang->qa->index;
-        $this->view->products  = $products;
+        $this->view->title    = $this->lang->qa->index;
+        $this->view->products = $products;
         echo $this->fetch('block', 'dashboard', 'dashboard=qa');
     }
 }
