@@ -50,7 +50,7 @@ class myTask extends task
         if(isset($_POST['region']))
         {
             $regionID = $_POST['region'];
-            $laneID   = $_POST['otherLane'];
+            $laneID   = $_POST['lane'];
             $columnID =  $this->dao->select("t1.id")->from(TABLE_KANBANCOLUMN)->alias('t1')
                 ->leftJoin(TABLE_KANBANLANE)->alias('t2')
                 ->on("t2.group = t1.group")
