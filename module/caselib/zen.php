@@ -307,67 +307,50 @@ class caselibZen extends caselib
         if(strpos($cellValue, "\n")) $steps = explode("\n", $cellValue);
         if(strpos($cellValue, "\r")) $steps = explode("\r", $cellValue);
 
-        $caseStep = array();
+        $caseSteps = array();
         foreach($steps as $step)
         {
             $step = trim($step);
             if(empty($step)) continue;
 
-            if(preg_match('/^(([0-9]+)\.[0-9]+)([.、]{1})/U', $step, $out))
+            preg_match('/^((([0-9]+)[.]([0-9]+))[.]([0-9]+))[.、](.*)$/U', $step, $out);
+            if(!$out) preg_match('/^(([0-9]+)[.]([0-9]+))[.、](.*)$/U', $step, $out);
+            if(!$out) preg_match('/^([0-9]+)[.、](.*)$/U', $step, $out);
+            if($out)
             {
-                $num    = $out[1];
-                $parent = $out[2];
-                $sign   = $out[3] == '.' ? 1 : 3;
-                $step   = trim(substr($step, strlen($num) + $sign));
-                if(!empty($step))
-                {
-                    $caseStep[$num]['content'] = $step;
-                    $caseStep[$num]['number']  = $num;
-                }
-                $caseStep[$num]['type']    = 'item';
-                $caseStep[$parent]['type'] = 'group';
-            }
-            elseif(preg_match('/^([0-9]+)([.、]{1})/U', $step, $out))
-            {
-                $num  = $out[1];
-                $sign = $out[2] == '.' ? 1 : 3;
-                $step = trim(substr($step, strlen($num) + $sign));
-                if(!empty($step))
-                {
-                    $caseStep[$num]['content'] = $step;
-                    $caseStep[$num]['number']  = $num;
-                }
-                $caseStep[$num]['type'] = 'step';
+                $count   = count($out);
+                $num     = $out[1];
+                $parent  = $count > 4 ? $out[2] : '0';
+                $grand   = $count > 6 ? $out[3] : '0';
+                $step    = trim($out[2]);
+                if($count > 4) $step = $count > 6 ? trim($out[6]) : trim($out[4]);
+
+                $caseSteps[$num]['content'] = $step;
+                $caseSteps[$num]['number']  = $num;
+                $caseSteps[$num]['type']    = $count > 4 ? 'item' : 'step';
+                if(!empty($parent)) $caseSteps[$parent]['type'] = 'group';
+                if(!empty($grand)) $caseSteps[$grand]['type']   = 'group';
             }
             elseif(isset($num))
             {
-                if(!isset($caseStep[$num]['content'])) $caseStep[$num]['content'] = '';
-                $caseStep[$num]['content'] .= "\n" . $step;
+                $caseSteps[$num]['content'] = isset($caseSteps[$num]['content']) ? "{$caseSteps[$num]['content']}\n{$step}" : "\n{$step}";
             }
-            else
+            elseif($field == 'stepDesc')
             {
-                if($field == 'stepDesc')
-                {
-                    $num = 1;
-                    $caseStep[$num]['content'] = $step;
-                    $caseStep[$num]['type']    = 'step';
-                    $caseStep[$num]['number']  = $num;
-                }
-                if($field == 'stepExpect' && isset($stepData[$row]['desc']))
-                {
-                    end($stepData[$row]['desc']);
-
-                    $num = key($stepData[$row]['desc']);
-                    $caseStep[$num]['content'] = $step;
-                    $caseStep[$num]['number']  = $num;
-                }
+                $num = 1;
+                $caseSteps[$num]['content'] = $step;
+                $caseSteps[$num]['type']    = 'step';
+                $caseSteps[$num]['number']  = $num;
+            }
+            elseif($field == 'stepExpect' && isset($stepData[$row]['desc']))
+            {
+                end($stepData[$row]['desc']);
+                $num = key($stepData[$row]['desc']);
+                $caseSteps[$num]['content'] = $step;
+                $caseSteps[$num]['number']  = $num;
             }
         }
-
-        unset($num);
-        unset($sign);
-
-        return $caseStep;
+        return $caseSteps;
     }
 
     /**
