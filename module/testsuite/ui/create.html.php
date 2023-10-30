@@ -29,6 +29,7 @@ formPanel
         formGroup
         (
             set::label($lang->testsuite->desc),
+            set::required(strpos(",{$config->testsuite->create->requiredFields},", ',desc,') !== false),
             editor
             (
                 set::name('desc'),
