@@ -51,6 +51,7 @@ formPanel
                 ),
                 $product->type != 'normal' && isset($products[$bug->productID]) ? picker
                 (
+                    set::boxClass('flex-none'),
                     set::width('100px'),
                     set::name('branch'),
                     set::items($branches),
