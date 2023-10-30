@@ -2,7 +2,19 @@
 helper::importControl('task');
 class myTask extends task
 {
-    public function batchCreate($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $iframe = 0, $extra = '')
+    /**
+     * 批量创建任务。
+     * Batch create tasks.
+     *
+     * @param  int    $executionID
+     * @param  int    $storyID
+     * @param  int    $moduleID
+     * @param  int    $taskID
+     * @param  string $extra
+     * @access public
+     * @return void
+     */
+    public function batchCreate(int $executionID = 0, int $storyID = 0, int $moduleID = 0, int $taskID = 0, string $extra = '')
     {
         $executions = $this->execution->getPairs();
         if(empty($executions))
@@ -50,6 +62,6 @@ class myTask extends task
                     ->fetch('id');
             }
         }
-        return parent::batchCreate($executionID, $storyID, $moduleID, $taskID, $iframe, $extra);
+        return parent::batchCreate($executionID, $storyID, $moduleID, $taskID, $extra);
     }
 }
