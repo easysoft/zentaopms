@@ -377,29 +377,23 @@ formPanel
                         set::value(),
                         set::placeholder($lang->contact->common)
                     ) :
-                    inputGroup
+                    span
                     (
-                        span
+                        set('class', 'input-group-addon'),
+                        a
                         (
-                            set('class', 'input-group-addon'),
-                            a
-                            (
-                                set('href', createLink('my', 'managecontacts', 'listID=0&mode=new')),
-                                set('title', $lang->user->contacts->manage),
-                                set('data-toggle', 'modal'),
-                                icon('cog')
-                            )
+                            set('class', 'mr-2'),
+                            set('href', createLink('my', 'managecontacts', 'listID=0&mode=new')),
+                            set('title', $lang->user->contacts->manage),
+                            set('data-toggle', 'modal'),
+                            icon('cog')
                         ),
-                        span
+                        a
                         (
-                            set('class', 'input-group-addon'),
-                            a
-                            (
-                                set('id', 'refreshMailto'),
-                                set('class', 'text-black'),
-                                set('href', 'javascript:void(0)'),
-                                icon('refresh')
-                            )
+                            set('id', 'refreshMailto'),
+                            set('class', 'text-black'),
+                            set('href', 'javascript:void(0)'),
+                            icon('refresh')
                         )
                     )
                 ),
