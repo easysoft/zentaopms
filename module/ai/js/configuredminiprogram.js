@@ -205,9 +205,11 @@ function handleEditFieldClick(event)
 function handleRemoveFieldClick(event)
 {
     const result = window.confirm(deleteTip);
+    if(!result) return;
+
     const $tr = $(event.target).closest('tr');
     const fieldID = $tr.attr('data-id');
-    if(result) $tr.remove();
+    $tr.remove();
     $('.field-content').find(`[data-id="${fieldID}"]`).remove();
 
     if($('.field-configuration').children().length === 0) $('.field-configuration').parent().addClass('hidden').prev().removeClass('hidden');
