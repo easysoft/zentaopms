@@ -10,6 +10,7 @@ $config->product->form->create['PO']             = array('type' => 'account', 'c
 $config->product->form->create['QD']             = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',       'options' => array());
 $config->product->form->create['RD']             = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',       'options' => array());
 $config->product->form->create['reviewer']       = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '',       'filter'  => 'join', 'options' => 'users');
+$config->product->form->create['PMT']            = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '',       'filter'  => 'join', 'options' => 'users');
 $config->product->form->create['type']           = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => 'normal', 'options' => $lang->product->typeList);
 $config->product->form->create['status']         = array('type' => 'string',  'control' => 'hidden',       'required' => false, 'default' => 'normal');
 $config->product->form->create['desc']           = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '',        'width'  => 'full');
@@ -29,6 +30,7 @@ $config->product->form->edit['code']      = array('type' => 'string',  'control'
 $config->product->form->edit['PO']        = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',        'options' => array());
 $config->product->form->edit['QD']        = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',        'options' => array());
 $config->product->form->edit['RD']        = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',        'options' => array());
+$config->product->form->edit['PMT']       = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '',        'filter'  => 'join', 'options' => 'users');
 $config->product->form->edit['reviewer']  = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '',        'filter'  => 'join', 'options' => 'users');
 $config->product->form->edit['type']      = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => 'normal',  'options' => $lang->product->typeList);
 $config->product->form->edit['status']    = array('type' => 'string',  'control' => 'select',       'required' => false, 'default' => 'normal',  'options' => $lang->product->statusList);
