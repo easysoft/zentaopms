@@ -258,6 +258,7 @@ $lang->action->desc->deletesnapshot       = '$date, <strong>$actor</strong> dele
 $lang->action->desc->online               = '$date, set online by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->offline              = '$date, set offline by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->linkhost             = '$date, the host is linked by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->createrepobranch     = '$date, <strong>$actor</strong> created code branch <strong>$extra</strong>。' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
@@ -498,6 +499,7 @@ $lang->action->label->uncollected             = 'uncollected';
 $lang->action->label->online                  = 'online';
 $lang->action->label->offline                 = 'offline';
 $lang->action->label->linkhost                = 'link hosts to';
+$lang->action->label->createrepobranch        = 'Created branch from';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();
