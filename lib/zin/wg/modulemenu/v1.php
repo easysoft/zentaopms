@@ -18,7 +18,7 @@ class moduleMenu extends wg
         'title?: string',
         'app?: string=""',
         'checkbox?: bool',
-        'checkOnClick?: bool',
+        'checkOnClick?: bool|string',
         'onCheck?: function',
     );
 
