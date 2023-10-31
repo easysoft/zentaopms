@@ -166,7 +166,7 @@ class moduleMenu extends wg
                 setClass('h-10 flex items-center pl-4 flex-none gap-3'),
                 span
                 (
-                    setClass('module-title text-lg font-semibold'),
+                    setClass('module-title text-lg font-semibold clip'),
                     $title
                 ),
                 $this->buildCloseBtn(),

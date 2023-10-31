@@ -160,6 +160,7 @@ div
         panel
         (
             set::title($title),
+            setStyle('max-width', '400px'),
             ($app->tab == 'product' and $viewType == 'story') ? to::headingActions
             (
                 btn
@@ -198,6 +199,7 @@ div
                 div
                 (
                     setClass('p-1 tree-item-content'),
+                    setStyle('max-width', '400px'),
                     $parentPath,
                 ),
                 form
