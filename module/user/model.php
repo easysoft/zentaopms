@@ -2698,9 +2698,9 @@ class userModel extends model
     {
         $users = array();
 
-        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin]   = $admin;
-        foreach(explode(',', trim($product->reviewer, ',')) as $account)        $users[$account] = $account;
-        foreach(explode(',', trim($product->PMT, ',')) as $account)             $users[$account] = $account;
+        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin)      $users[$admin]   = $admin;
+        foreach(explode(',', trim(zget($product, 'reviewer', ''), ',')) as $account) $users[$account] = $account;
+        foreach(explode(',', trim(zget($product, 'PMT', ''), ',')) as $account)      $users[$account] = $account;
 
         $users[$product->PO]        = $product->PO;
         $users[$product->QD]        = $product->QD;

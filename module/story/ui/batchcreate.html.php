@@ -27,6 +27,7 @@ $fnGenerateFields = function() use ($lang, $fields)
         if(!empty($field['options'])) $field['items'] = $field['options'];
         if(!empty($field['default'])) $field['value'] = $field['default'];
         if($field['control'] == 'select') $field['control'] = 'picker';
+        if($field['control'] == 'picker' and !isset($field['items'])) $field['items'] = array();
         unset($field['options']);
 
         return $field;

@@ -93,8 +93,8 @@ function toggleSelectTestStory(executionID)
         $('#multipleBox').closest('.form-group').addClass('hidden');
         $('#story').closest('.form-row').addClass('hidden');
         $('#estStarted').closest('.form-row').addClass('hidden');
-        $('#estimate').parent().prev().addClass('hidden');
-        $('#estimate').parent().addClass('hidden');
+        if(!$('#estimate').hasClass('hidden')) $('#estimate').parent().prev().addClass('hidden');
+        if(!$('#estimate').hasClass('hidden')) $('#estimate').parent().addClass('hidden');
         $('#testStoryBox').removeClass('hidden');
 
         $('[name^=multiple]').prop('checked', false);
@@ -106,8 +106,8 @@ function toggleSelectTestStory(executionID)
         $('#multipleBox').closest('.form-group').removeClass('hidden');
         if(showFields.indexOf('story') != -1) $('#story').closest('.form-row').removeClass('hidden');
         $('#estStarted').closest('.form-row').removeClass('hidden');
-        $('#estimate').parent().prev().removeClass('hidden');
-        $('#estimate').parent().removeClass('hidden');
+        if(!$('#estimate').hasClass('hidden')) $('#estimate').parent().prev().removeClass('hidden');
+        if(!$('#estimate').hasClass('hidden')) $('#estimate').parent().removeClass('hidden');
         $('#testStoryBox').addClass('hidden');
     }
 }
