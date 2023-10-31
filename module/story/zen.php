@@ -1186,7 +1186,7 @@ class storyZen extends story
         if(strpos($this->config->story->change->requiredFields, 'comment') !== false and !$this->post->comment) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
 
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
-        if(!$this->post->needNotReview and empty($_POST['reviewer'])) dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+        if(!$this->post->needNotReview and empty($_POST['reviewer'])) dao::$errors['reviewer[]'] = $this->lang->story->errorEmptyReviewedBy;
         if(dao::isError()) return false;
 
         $now          = helper::now();
@@ -1622,7 +1622,7 @@ class storyZen extends story
                 $module  = 'story';
                 $params .= "&version=0&param={$this->session->project}&storyType=$storyType";
             }
-            return helper::createLink($module, $module, $params);
+            return helper::createLink($module, $method, $params);
         }
     }
 
