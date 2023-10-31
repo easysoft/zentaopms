@@ -71,7 +71,7 @@ formPanel
                 (
                     set::name('project'),
                     set::items($projects),
-                    set::value($defaultProject)
+                    set::value($projectID)
                 )
             )
         )
@@ -124,7 +124,7 @@ formPanel
             (
                 set::name('execution'),
                 set::items($executions),
-                set::value($defaultExecution)
+                set::value($executionID)
             )
         )
     ),
