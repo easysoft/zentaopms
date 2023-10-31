@@ -130,6 +130,7 @@ class doc extends control
         $this->view->pager          = $pager;
         $this->view->type           = $type;
         $this->view->objectID       = 0;
+        $this->view->canUploadDoc   = common::hasPriv('doc', 'create');
         $this->view->canExport      = ($this->config->edition != 'open' and common::hasPriv('doc', 'mine2export') and $type == 'mine');
         $this->view->libType        = 'lib';
         $this->view->objectDropdown = $objectDropdown;
@@ -1363,6 +1364,7 @@ class doc extends control
         $this->view->orderBy        = $orderBy;
         $this->view->release        = $browseType == 'byrelease' ? $param : 0;
         $this->view->canExport      = $canExport;
+        $this->view->canUploadDoc   = common::hasPriv('doc', 'create');
         $this->view->exportMethod   = $libType == 'api' ? 'export' : $type . '2export';
         $this->view->apiLibID       = key($apiLibs);
 

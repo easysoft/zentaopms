@@ -167,6 +167,7 @@ $lang->doc->collectCount  = '%s次收藏';
 $lang->doc->index            = '仪表盘';
 $lang->doc->createAB         = '创建';
 $lang->doc->create           = '创建文档';
+$lang->doc->createOrUpload   = '创建/上传文档';
 $lang->doc->edit             = '编辑文档';
 $lang->doc->delete           = '删除文档';
 $lang->doc->createBook       = '创建手册';
@@ -212,6 +213,7 @@ $lang->doc->confirm           = '确认';
 $lang->doc->docSummary        = '本页共 <strong>%s</strong> 个文档。';
 $lang->doc->docCheckedSummary = '共选中 <strong>%total%</strong> 个文档。';
 $lang->doc->showDoc           = '是否显示文档';
+$lang->doc->uploadDoc         = '上传文档';
 
 $lang->doc->fileType = new stdclass();
 $lang->doc->fileType->stepResult = '测试结果';

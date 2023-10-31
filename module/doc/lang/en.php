@@ -167,6 +167,7 @@ $lang->doc->collectCount  = '%s Collections';
 $lang->doc->index            = 'Dashboard';
 $lang->doc->createAB         = 'Create';
 $lang->doc->create           = 'Create Document';
+$lang->doc->createOrUpload   = 'Create/Upload Document';
 $lang->doc->edit             = 'Edit Document';
 $lang->doc->delete           = 'Delete Document';
 $lang->doc->createBook       = 'Create Book';
@@ -212,6 +213,7 @@ $lang->doc->confirm           = 'Confirm';
 $lang->doc->docSummary        = 'Total: <strong>%s</strong>.';
 $lang->doc->docCheckedSummary = 'Seleted: <strong>%total%</strong>.';
 $lang->doc->showDoc           = 'Whether to display documents';
+$lang->doc->uploadDoc         = 'Upload Document';
 
 $lang->doc->fileType = new stdclass();
 $lang->doc->fileType->stepResult = 'Case Result';

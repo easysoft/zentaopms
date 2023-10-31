@@ -31,6 +31,11 @@
   </div>
   <div class="btn-toolbar pull-right">
   <?php
+  if($canUploadDoc)
+  {
+      $uploadLink = $this->createLink('doc', 'uploadDocs', "libID=$libID&moduleID=$moduleID", 'html', true);
+      echo html::a($uploadLink, "<i class='icon-import muted'> </i>" . $lang->doc->uploadDoc, '', "class='btn btn-link' data-width='480px'");
+  }
   if($canExport)
   {
       $exportLink = $this->createLink('doc', 'mine2export', "libID=$libID&moduleID=$moduleID", 'html', true);
