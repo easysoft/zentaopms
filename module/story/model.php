@@ -301,7 +301,7 @@ class storyModel extends model
         $mainStoryID = 0;
         foreach($this->post->branches as $key => $branch)
         {
-            $story->branch = $branch;
+            $story->branch = $branch ? $branch : 0;
             $story->module = $this->post->modules[$key];
             $story->plan   = $this->post->plans[$key];
 
