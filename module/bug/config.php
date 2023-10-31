@@ -138,12 +138,13 @@ $config->bug->actionList['createCase']['text'] = $lang->bug->createCase;
 $config->bug->actionList['createCase']['hint'] = $lang->bug->createCase;
 $config->bug->actionList['createCase']['url']  = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&moduleID=0&from=bug&bugID={id}');
 
-$config->bug->actionList['edit']['icon'] = 'edit';
-$config->bug->actionList['edit']['text'] = $lang->bug->edit;
-$config->bug->actionList['edit']['hint'] = $lang->bug->edit;
-$config->bug->actionList['edit']['url']  = array('module' => 'bug', 'method' => 'edit', 'params' => 'bugID={id}');
-
 global $app;
+$config->bug->actionList['edit']['icon']     = 'edit';
+$config->bug->actionList['edit']['text']     = $lang->bug->edit;
+$config->bug->actionList['edit']['hint']     = $lang->bug->edit;
+$config->bug->actionList['edit']['url']      = array('module' => 'bug', 'method' => 'edit', 'params' => 'bugID={id}');
+$config->bug->actionList['edit']['data-app'] = $app->tab;
+
 $config->bug->actionList['copy']['icon']     = 'copy';
 $config->bug->actionList['copy']['text']     = $lang->bug->copy;
 $config->bug->actionList['copy']['hint']     = $lang->bug->copy;
