@@ -1706,7 +1706,7 @@ class storyTao extends storyModel
             $actions[] = array('name' => 'dropdown', 'type' => 'dropdown', 'items' => array($actRecall));
         }
 
-        $actions[] = array('name' => 'close', 'url' => $canClose ? $closeLink : null, 'data-toggle' => 'modal', 'disabled' => !$canClose);
+        if($this->config->vision != 'lite') $actions[] = array('name' => 'close', 'url' => $canClose ? $closeLink : null, 'data-toggle' => 'modal', 'disabled' => !$canClose);
 
         /* Render divider line. */
         $actions[] = array('name' => 'divider', 'type'=>'divider');
@@ -1752,7 +1752,7 @@ class storyTao extends storyModel
                 $actions[] = array('name' => 'storyEstimate',   'url' => $canStoryEstimate   ? $storyEstimateLink   : null, 'disabled' => !$canStoryEstimate);
             }
 
-            if($execution->hasProduct)
+            if($this->config->vision != 'lite' && $execution->hasProduct)
             {
                 $unlinkModule    = 'execution';
                 $canUnlinkStory  = common::hasPriv($unlinkModule, 'unlinkStory');
