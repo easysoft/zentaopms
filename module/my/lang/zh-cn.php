@@ -151,6 +151,7 @@ $lang->my->moreSelects['todo']['more']['assignedToOther'] = '指派他人';
 $lang->my->moreSelects['todo']['more']['cycle']           = '周期';
 
 $lang->my->featureBar['audit']['all']      = '全部';
+$lang->my->featureBar['audit']['demand']   = '需求池需求';
 $lang->my->featureBar['audit']['story']    = '需求';
 $lang->my->featureBar['audit']['testcase'] = '用例';
 if($config->edition == 'max' and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->featureBar['audit']['project'] = $lang->projectCommon;

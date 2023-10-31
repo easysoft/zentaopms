@@ -64,7 +64,7 @@
       $statusList = array();
       if(isset($lang->$type->statusList)) $statusList = $lang->$type->statusList;
       if($type == 'attend') $statusList = $lang->attend->reviewStatusList;
-      if(!in_array($type, array('story', 'testcase', 'feedback', 'review')) and strpos(",{$config->my->oaObjectType},", ",$type,") === false)
+      if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review')) and strpos(",{$config->my->oaObjectType},", ",$type,") === false)
       {
           if($rawMethod == 'audit') $statusList = $lang->approval->nodeList;
           if(isset($flows[$review->type])) $statusList = $rawMethod == 'audit' ? $lang->approval->nodeList : $lang->approval->statusList;
@@ -124,7 +124,7 @@
           {
               common::printLink($module, 'view', $params, $reviewIcon, '', "class='btn' data-toggle='modal' title='{$lang->review->common}'", true, true);
           }
-          elseif(!in_array($module, array('story', 'testcase', 'feedback')))
+          elseif(!in_array($module, array('demand', 'story', 'testcase', 'feedback')))
           {
               common::printLink($module, 'approvalreview', $params, $reviewIcon, '', "class='btn' data-toggle='modal' title='{$lang->review->common}'", true, true);
           }

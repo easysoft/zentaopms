@@ -151,6 +151,7 @@ $lang->my->moreSelects['todo']['more']['assignedToOther'] = 'Assigned To Other';
 $lang->my->moreSelects['todo']['more']['cycle']           = 'Recurrence';
 
 $lang->my->featureBar['audit']['all']      = 'All';
+$lang->my->featureBar['audit']['demand']   = 'Demand';
 $lang->my->featureBar['audit']['story']    = 'Story';
 $lang->my->featureBar['audit']['testcase'] = 'Test case';
 if($config->edition == 'max' and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->featureBar['audit']['project'] = $lang->projectCommon;
