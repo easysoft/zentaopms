@@ -343,6 +343,7 @@ class baseValidater
      */
     public static function checkEmpty($var)
     {
+        if(is_null($var)) return true;
         return strlen(trim($var)) == 0;
     }
 
