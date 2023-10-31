@@ -16,7 +16,10 @@ class moduleMenu extends wg
         'showDisplay?: bool=true',
         'allText?: string',
         'title?: string',
-        'app?: string=""'
+        'app?: string=""',
+        'checkbox?: bool',
+        'checkOnClick?: bool',
+        'onCheck?: function',
     );
 
     public static function getPageCSS(): string|false
@@ -154,7 +157,7 @@ class moduleMenu extends wg
         $this->setMenuTreeProps();
 
         $title     = $this->getTitle();
-        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu'));
+        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'checkbox', 'checkOnClick', 'onCheck'));
         $preserve  = $app->getModuleName() . '-' . $app->getMethodName();
 
         return div
@@ -178,7 +181,6 @@ class moduleMenu extends wg
                 set::defaultNestedShow(true),
                 set::hover(true),
                 set::preserve($preserve),
-                set::onClickItem(jsRaw('console.log')),
                 set($treeProps)
             ),
             $this->buildActions(),
