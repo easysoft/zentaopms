@@ -205,7 +205,7 @@ class giteaModel extends model
         $errorKey = array_search($message, $this->lang->gitea->apiError);
         if($errorKey === false)
         {
-            $dao::$errors[] = $message;
+            dao::$errors[] = $message;
         }
         else
         {
@@ -653,7 +653,6 @@ class giteaModel extends model
         $data = new stdclass();
         $data->name        = $name;
         $data->description = $desc;
-        $data->readme      = $desc;
         $data->auto_init   = true;
         $data->template    = false;
 
