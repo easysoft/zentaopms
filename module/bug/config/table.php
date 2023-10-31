@@ -1,5 +1,5 @@
 <?php
-global $lang;
+global $lang, $app;
 $config->bug->dtable = new stdclass();
 $config->bug->dtable->defaultField = array('id', 'title', 'severity', 'pri', 'status', 'openedBy', 'openedDate', 'confirmed', 'assignedTo', 'resolution', 'actions');
 
@@ -16,6 +16,7 @@ $config->bug->dtable->fieldList['title']['fixed']    = 'left';
 $config->bug->dtable->fieldList['title']['link']     = array('module' => 'bug', 'method' => 'view', 'params' => "bugID={id}");
 $config->bug->dtable->fieldList['title']['required'] = true;
 $config->bug->dtable->fieldList['title']['group']    = 1;
+$config->bug->dtable->fieldList['title']['data-app'] = $app->tab;
 
 $config->bug->dtable->fieldList['severity']['title'] = $lang->bug->severity;
 $config->bug->dtable->fieldList['severity']['type']  = 'severity';

@@ -143,10 +143,11 @@ $config->bug->actionList['edit']['text'] = $lang->bug->edit;
 $config->bug->actionList['edit']['hint'] = $lang->bug->edit;
 $config->bug->actionList['edit']['url']  = array('module' => 'bug', 'method' => 'edit', 'params' => 'bugID={id}');
 
-$config->bug->actionList['copy']['icon'] = 'copy';
-$config->bug->actionList['copy']['text'] = $lang->bug->copy;
-$config->bug->actionList['copy']['hint'] = $lang->bug->copy;
-$config->bug->actionList['copy']['url']  = array('module' => 'bug', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&extra=bugID={id}');
+$config->bug->actionList['copy']['icon']     = 'copy';
+$config->bug->actionList['copy']['text']     = $lang->bug->copy;
+$config->bug->actionList['copy']['hint']     = $lang->bug->copy;
+$config->bug->actionList['copy']['url']      = array('module' => 'bug', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&extra=bugID={id}');
+$config->bug->actionList['copy']['data-app'] = $app->tab;
 
 $config->bug->actionList['delete']['icon']         = 'trash';
 $config->bug->actionList['delete']['text']         = $lang->bug->delete;
