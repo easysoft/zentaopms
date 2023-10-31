@@ -228,9 +228,9 @@ class pivotZen extends pivot
             }
         }
 
-        $menus += $this->getBuiltinMenus($dimension, $currentGroup, $module, $method);
+        $builtinMenus = $this->getBuiltinMenus($dimension, $currentGroup, $module, $method);
 
-        return $menus;
+        return array_merge($menus, $builtinMenus);
     }
 
     /**
