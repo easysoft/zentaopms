@@ -1846,7 +1846,7 @@ class pivotModel extends model
             {
                 if(in_array($field, $groups))
                 {
-                    $colTotalRow->$field = '$togalGroup$';
+                    $colTotalRow->$field = $this->lang->pivot->step2->total;
                 }
                 else
                 {
