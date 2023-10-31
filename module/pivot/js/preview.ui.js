@@ -147,16 +147,12 @@ renderCell = function(result, {row, col})
  */
 getCellSpan = function(cell)
 {
-    if(this.options.cellSpanOptions)
+    const options = this.options.cellSpanOptions[cell.col.name];
+    if(options)
     {
-        for(let index in this.options.cellSpanOptions)
-        {
-            const {cols, rowspan} = this.options.cellSpanOptions[index];
-            if(cols.indexOf(cell.col.name) !== -1 && cell.row.data[rowspan])
-            {
-                return {rowSpan: cell.row.data[rowspan]};
-            }
-        }
+        const rowSpan = cell.row.data[options.rowspan ?? 'rowspan'] ?? 1;
+        const colSpan = cell.row.data[options.colspan ?? 'colspan'] ?? 1;
+        return {rowSpan, colSpan};
     }
 }
 

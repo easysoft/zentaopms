@@ -46,7 +46,7 @@ $generateData = function() use ($module, $method, $lang, $title, $cols, $product
                 set::height(jsRaw('getHeight')),
                 set::plugins(array('cellspan')),
                 set::getCellSpan(jsRaw('getCellSpan')),
-                set::cellSpanOptions(array(array('cols' => array('name', 'PO'), 'rowspan' => 'rowspan')))
+                set::cellSpanOptions(array('name' => array(), 'PO' => array()))
             )
         )
     );

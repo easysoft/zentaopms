@@ -33,7 +33,7 @@ $generateData = function() use ($module, $method, $lang, $title, $cols, $bugs)
             set::height(jsRaw('getHeight')),
             set::plugins(array('cellspan')),
             set::getCellSpan(jsRaw('getCellSpan')),
-            set::cellSpanOptions(array(array('cols' => array('assignedTo', 'total'), 'rowspan' => 'rowspan')))
+            set::cellSpanOptions(array('assignedTo' => array(), 'total' => array()))
         )
     );
 };

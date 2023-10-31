@@ -92,14 +92,11 @@ $generateData = function() use ($module, $method, $lang, $title, $cols, $workloa
                 set::plugins(array('cellspan')),
                 set::getCellSpan(jsRaw('getCellSpan')),
                 set::cellSpanOptions(array(
-                    array(
-                        'cols' => array('user', 'totalTasks', 'totalHours', 'workload'),
-                        'rowspan' => 'userRowspan'
-                    ),
-                    array(
-                        'cols' => array('projectName'),
-                        'rowspan' => 'projectRowspan'
-                    )
+                    'user'        => array('rowspan' => 'userRowspan'),
+                    'totalTasks'  => array('rowspan' => 'userRowspan'),
+                    'totalHours'  => array('rowspan' => 'userRowspan'),
+                    'workload'    => array('rowspan' => 'userRowspan'),
+                    'projectName' => array('rowspan' => 'projectRowspan')
                 ))
             )
         )
