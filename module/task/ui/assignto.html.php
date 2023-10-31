@@ -34,22 +34,22 @@ formPanel
     (
         set::width("1/3"),
         set::label($lang->task->left),
-        inputGroup
+        inputControl
         (
-            control(set(array
+            input
             (
-                'name' => "left",
-                'id' => "left",
-                'value' => $task->left,
-                'disabled' => false,
-                'type' => "text"
-            ))),
-            $lang->task->hour
+                set::name('left'),
+                set::id('left'),
+                set::value($task->left),
+                set::type('text'),
+                set::disabled(false)
+            ),
+            to::suffix($lang->task->suffixHour),
+            set::suffixWidth(20)
         )
     ),
     formGroup
     (
-        set::width("2/3"),
         set::name("comment"),
         set::label($lang->comment),
         set::control("editor")
