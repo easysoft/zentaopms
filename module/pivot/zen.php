@@ -349,34 +349,97 @@ class pivotZen extends pivot
         $rows     = array();
         $cellSpan = array();
 
-        foreach($data->cols as $lineColumns)
+        $headerRow1 = !empty($data->cols[0]) ? $data->cols[0] : array();
+        $headerRow2 = !empty($data->cols[1]) ? $data->cols[1] : array();
+
+        /* 定义数据表格的列配置。*/
+        /* Define the column configuration of the data table. */
+        $index = 0;
+        foreach($headerRow1 as $column)
         {
-            foreach($lineColumns as $key => $column)
+            /* 如果 colspan 属性不为空则表示该列包含切片字段。*/
+            /* If the colspan attribute is not empty, it means that the column contains slice fields. */
+            if(!empty($column->colspan) && $column->colspan > 1)
             {
-                $field = 'field' . $key;
-                $columns[$field]['name']     = $field;
-                $columns[$field]['title']    = $column->label;
-                $columns[$field]['width']    = 16 * mb_strlen($column->label);
-                $columns[$field]['minWidth'] = 128;
-                $columns[$field]['align']    = 'center';
+                /* 找到实际切片的字段。*/
+                /* Find the actual sliced field. */
+                $colspan = 0;
+                while($colspan < $column->colspan)
+                {
+                    $subColumn = array_shift($headerRow2);
+
+                    $field = 'field' . $index;
+                    $columns[$field]['name']     = $field;
+                    $columns[$field]['title']    = $subColumn->label;
+                    $columns[$field]['width']    = 16 * mb_strlen($subColumn->label);
+                    $columns[$field]['minWidth'] = 128;
+                    $columns[$field]['align']    = 'center';
+
+                    /* 把被切片的字段名设置为数据表格的列配置的 headerGroup 属性。*/
+                    /* Set the sliced field name as the headerGroup attribute of the column configuration of the data table. */
+                    $columns[$field]['headerGroup'] = $column->label;
+
+                    /* 数据表格不支持表头第二行合并单元格，如果有这种情况把被合并的所有列视为一列，记录 colspan 属性并跳过其它列。*/
+                    /* The data table does not support merging cells in the second row of the header. If this is the case, all the merged columns are regarded as one column, the colspan attribute is recorded and other columns are skipped. */
+                    if(!empty($subColumn->colspan) && $subColumn->colspan > 1) $columns[$field]['colspan'] = $subColumn->colspan;
+
+                    $colspan += $subColumn->colspan ?: 1;
+                    $index++;
+                }
+
+                continue;
             }
 
-            break;
+            $field = 'field' . $index;
+            $columns[$field]['name']     = $field;
+            $columns[$field]['title']    = $column->label;
+            $columns[$field]['width']    = 16 * mb_strlen($column->label);
+            $columns[$field]['minWidth'] = 128;
+            $columns[$field]['align']    = 'center';
+
+            if(isset($data->groups[$index])) $columns[$field]['fixed'] = 'left';
+
+            $index++;
         }
 
+        $lastRow = count($data->array) - 1;
         foreach($data->array as $rowKey => $rowData)
         {
+            $index   = 0;
             $rowData = array_values($rowData);
-            foreach($rowData as $key => $value)
-            {
-                $field = 'field' . $key;
 
-                $rows[$rowKey][$field] = $value;
-                if(isset($configs[$rowKey][$key]) && $configs[$rowKey][$key] > 1)
+            for($i = 0; $i < count($rowData); $i++)
+            {
+                $field = 'field' . $index;
+                $value = $rowData[$i];
+
+                if(!empty($columns[$field]['colspan']))
                 {
-                    $rows[$rowKey][$field . 'Rowspan'] = $configs[$rowKey][$key];
-                    $cellSpan[] = array('cols' => array($field), 'rowspan' => $field . 'Rowspan');
+                    $colspan = $columns[$field]['colspan'];
+                    $value   = array_slice($rowData, $i, $colspan);
+
+                    $i += $colspan - 1;
                 }
+
+                /* 定义数据表格的行数据。*/
+                /* Defind row data of the data table. */
+                $rows[$rowKey][$field] = $value;
+
+                /* 定义数据表格合并单元格的配置。*/
+                /* Define configuration to merge cell of the data table. */
+                if(isset($configs[$rowKey][$index]) && $configs[$rowKey][$index] > 1)
+                {
+                    $rows[$rowKey][$field . '_rowspan'] = $configs[$rowKey][$index];
+                    $cellSpan[$field]['rowspan'] = $field . '_rowspan';
+                }
+
+                if($i == 0 && !empty($data->groups) && !empty($data->columnTotal) && $rowKey == $lastRow)
+                {
+                    $rows[$rowKey][$field . '_colspan'] = count($data->groups);
+                    $cellSpan[$field]['colspan'] = $field . '_colspan';
+                }
+
+                $index++;
             }
         }
 
