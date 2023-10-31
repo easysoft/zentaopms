@@ -14,11 +14,10 @@ jsVar('batchCreateCount', $config->user->batchCreate);
 jsVar('passwordStrengthList', $lang->user->passwordStrengthList);
 h::jsCall('$.getLib', 'md5.js', array('root' => $this->app->getWebRoot() . 'js/'));
 
-$visibleFields  = array();
+$visibleFields = array();
 foreach(explode(',', $showFields) as $field)
 {
-    if(strpos(",{$config->user->availableBatchCreateFields},", ",{$field},") === false) continue;
-    if($field) $visibleFields[$field] = '';
+    if($field && strpos(",{$config->user->availableBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
 }
 
 foreach(explode(',', $config->user->create->requiredFields) as $field)
@@ -41,14 +40,14 @@ formBatchPanel
             set::value('inside'),
             set::inline(true),
             set::items($lang->user->typeList),
-        ),
+        )
     ),
     formBatchItem
     (
         set::name('id'),
         set::label($lang->user->abbr->id),
         set::control('index'),
-        set::width('38px'),
+        set::width('38px')
     ),
     formBatchItem
     (
@@ -100,6 +99,7 @@ formBatchPanel
         set::label($lang->user->account),
         set::control('input'),
         set::width('160px'),
+        set::required(true)
     ),
     formBatchItem
     (
@@ -108,6 +108,7 @@ formBatchPanel
         set::control('input'),
         set::value(''),
         set::width('96px'),
+        set::required(true)
     ),
     count($visionList) > 1 ? formBatchItem
     (
@@ -118,6 +119,7 @@ formBatchPanel
         set::width('200px'),
         set::value(isset($visionList[$this->config->vision]) ? $this->config->vision : key($visionList)),
         set::ditto(true),
+        set::required(true)
     ) : '',
     formBatchItem
     (
@@ -176,6 +178,7 @@ formBatchPanel
             ),
         ),
         set::width('200px'),
+        set::required(true)
     ),
     formBatchItem
     (
