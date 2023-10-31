@@ -59,6 +59,21 @@ class scm
     }
 
     /**
+     * Create a branch.
+     *
+     * @param  string $branchName
+     * @param  string $ref
+     * @access public
+     * @return bool
+     */
+    public function createBranch($branchName = '', $ref = 'master')
+    {
+        if(get_class($this->engine) == 'subversion') return false;
+
+        return $this->engine->createBranch($branchName, $ref);
+    }
+
+    /**
      * Get log.
      *
      * @param  string $path

@@ -200,6 +200,25 @@ class gitlab
     }
 
     /**
+     * Create a branch.
+     *
+     * @param  string $branchName
+     * @param  string $ref
+     * @access public
+     * @return bool
+     */
+    public function createBranch($branchName = '', $ref = 'master')
+    {
+        $param = new stdclass();
+        $param->ref    = $ref;
+        $param->branch = $branchName;
+
+        $api    = $this->root . 'branches?private_token=' . $this->token;
+        $result = json_decode(commonModel::http($api, $param));
+        return array('result' => empty($result->name) ? 'fail' : 'success', 'message' => $result->message);
+    }
+
+    /**
      * Get last log.
      *
      * @param  string $path

@@ -167,6 +167,24 @@ class GitRepo
     }
 
     /**
+     * Create a branch.
+     *
+     * @param  string $branchName
+     * @param  string $ref
+     * @access public
+     * @return bool
+     */
+    public function createBranch($branchName = '', $ref = 'master')
+    {
+        chdir($this->root);
+        $res = execCmd(escapeCmd("{$this->client} checkout -b {$branchName} origin/{$ref}"), 'array');
+        if(empty($res[0])) return array('result' => 'fail', 'message' => 'Branch is exists.');
+
+        execCmd(escapeCmd("{$this->client} push origin {$branchName}"), 'array');
+        return array('result' => 'success', 'message' => '');
+    }
+
+    /**
      * Get last log.
      *
      * @param  string $path
