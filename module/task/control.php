@@ -995,6 +995,7 @@ class task extends control
             $task->storyFiles  = zget($story, 'files', array());
         }
 
+        $task->linkedBranch = $this->task->getLinkedBranch($taskID);
         if($task->team) $this->lang->task->assign = $this->lang->task->transfer;
 
         /* Update action. */

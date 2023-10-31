@@ -408,6 +408,12 @@
           </div>
           <div class='tab-pane' id='legendMisc'>
             <table class="table table-data">
+              <?php if($task->linkedBranch):?>
+              <tr>
+                <th class='MRThWidth'><?php echo $lang->task->relatedBranch;?></th>
+                <td><?php echo current($task->linkedBranch);?></td>
+              </tr>
+              <?php endif;?>
               <tr>
                 <th class='MRThWidth'><?php echo $lang->task->linkMR;?></th>
                 <td>

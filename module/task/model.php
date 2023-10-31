@@ -4267,7 +4267,13 @@ class taskModel extends model
         $plmCanStart = !($isPLMMode and empty($execution['canStart']));
         if($plmCanStart) $menu .= $this->buildMenu('task', 'start',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
         if($plmCanStart) $menu .= $this->buildMenu('task', 'restart',        $params, $task, 'view', '', '', 'iframe showinonlybody', true);
+        if(empty($task->linkedBranch))
+        {
+            $hasRepo = $this->loadModel('repo')->getRepoPairs('execution', $task->execution, false);
+            if($hasRepo) $menu .= $this->buildMenu('repo', 'createBranch', $params . "&execution={$task->execution}", $task, '', 'treemap', '', 'iframe showinonlybody', true, '', $this->lang->repo->createBranchAction);
+        }
         if($plmCanStart) $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'view', '', '', 'iframe showinonlybody', true);
+
         $menu .= $this->buildMenu('task', 'pause',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
         if($plmCanStart) $menu .= $this->buildMenu('task', 'finish',         $params, $task, 'view', '', '', 'iframe showinonlybody text-success', true);
         $menu .= $this->buildMenu('task', 'activate',       $params, $task, 'view', '', '', 'iframe showinonlybody text-success', true);
@@ -4744,5 +4750,22 @@ class taskModel extends model
             }
         }
         return $rows;
+    }
+
+    /**
+     * Get linked Branch.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return array
+     */
+    public function getLinkedBranch($taskID)
+    {
+        return $this->dao->select('BID,extra')->from(TABLE_RELATION)
+            ->where('AType')->eq('task')
+            ->andWhere('BType')->eq('repobranch')
+            ->andWhere('relation')->eq('linkrepobranch')
+            ->andWhere('AID')->eq($taskID)
+            ->fetchPairs();
     }
 }
