@@ -3,12 +3,13 @@ $config->testreport->dtable = new stdclass();
 
 global $lang, $app;
 
-$config->testreport->actionList['edit']['icon']        = 'edit';
-$config->testreport->actionList['edit']['hint']        = $lang->testreport->edit;
-$config->testreport->actionList['edit']['text']        = $lang->testreport->edit;
-$config->testreport->actionList['edit']['url']         = array('module' => 'testreport', 'method' => 'edit', 'params' => 'reportID={id}');
-$config->testreport->actionList['edit']['order']       = 5;
-$config->testreport->actionList['edit']['show']        = 'clickable';
+$config->testreport->actionList['edit']['icon']     = 'edit';
+$config->testreport->actionList['edit']['hint']     = $lang->testreport->edit;
+$config->testreport->actionList['edit']['text']     = $lang->testreport->edit;
+$config->testreport->actionList['edit']['url']      = array('module' => 'testreport', 'method' => 'edit', 'params' => 'reportID={id}');
+$config->testreport->actionList['edit']['order']    = 5;
+$config->testreport->actionList['edit']['show']     = 'clickable';
+$config->testreport->actionList['edit']['data-app'] = $app->tab;
 
 $config->testreport->actionList['delete']['icon']         = 'trash';
 $config->testreport->actionList['delete']['hint']         = $lang->testreport->delete;
