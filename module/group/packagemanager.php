@@ -3868,11 +3868,12 @@ $config->group->package->manageRepo = new stdclass();
 $config->group->package->manageRepo->order  = 2440;
 $config->group->package->manageRepo->subset = 'repo';
 $config->group->package->manageRepo->privs  = array();
-$config->group->package->manageRepo->privs['repo-createRepo']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array('repo-edit', 'repo-import'));
+$config->group->package->manageRepo->privs['repo-createRepo']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-maintain'), 'recommend' => array('repo-edit', 'repo-import'));
 $config->group->package->manageRepo->privs['repo-create']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-maintain'), 'recommend' => array('repo-edit', 'repo-import'));
 $config->group->package->manageRepo->privs['repo-edit']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-maintain'), 'recommend' => array('repo-create'));
 $config->group->package->manageRepo->privs['repo-apiGetRepoByUrl'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-maintain'), 'recommend' => array());
 $config->group->package->manageRepo->privs['repo-import']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-maintain'), 'recommend' => array('repo-create'));
+$config->group->package->manageRepo->privs['repo-createBranch']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-maintain'), 'recommend' => array());
 
 $config->group->package->deleteRepo = new stdclass();
 $config->group->package->deleteRepo->order  = 2500;
