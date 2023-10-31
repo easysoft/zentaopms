@@ -119,7 +119,7 @@ function handleAddFieldClick()
 function getEditingField($fieldTr)
 {
     const name = $fieldTr.find('.field-name').html();
-    const isTextType = $fieldTr.find('.field-type').length;
+    const isTextType = !$fieldTr.find('.picker').length;
     if(isTextType)
     {
         const type = $fieldTr.find('input.field-type').length ? 'text' : 'textarea';
