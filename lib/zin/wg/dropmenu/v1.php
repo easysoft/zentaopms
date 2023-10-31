@@ -87,7 +87,8 @@ class dropmenu extends wg
                 $product = $app->control->loadModel('product')->getByID((int)$objectID);
                 if($product->type != 'normal')
                 {
-                    $branchID = data('branchID');
+                    if(data('branch'))   $branchID = data('branch');
+                    if(data('branchID')) $branchID = data('branchID');
                     $app->control->loadModel('branch');
 
                     /* Get current branch name. */
@@ -103,7 +104,7 @@ class dropmenu extends wg
                     }
                     elseif($branchID > 0)
                     {
-                        $branchName = $app->control->branch->getByID($branchID);
+                        $branchName = $app->control->branch->getByID((string)$branchID);
                     }
 
                     $branchURL  = createLink('branch', 'ajaxGetDropMenu', "objectID=$objectID&branch=$branchID&module=$module&method=$method&extra=$extra");

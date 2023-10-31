@@ -16,10 +16,12 @@ $data = array('active' => array(), 'closed' => array());
 foreach($branches as $branchID => $branchName)
 {
     $item = array();
-    $item['id']   = $branchID;
-    $item['text'] = $branchName;
-    $item['type'] = 'branch';
-    $item['keys'] = zget($branchesPinyin, $branchName, '');
+    $item['id']        = $branchID;
+    $item['text']      = $branchName;
+    $item['type']      = 'branch';
+    $item['keys']      = zget($branchesPinyin, $branchName, '');
+    $item['active']    = $branchID == $currentBranchID || (empty($branchID) && empty($currentBranchID));
+    $item['data-load'] = '#main, #branch-dropmenu';
 
     if($branchID == 'all' || empty($branchID) || $statusList[$branchID] == 'active')
     {
