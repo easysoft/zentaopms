@@ -48,6 +48,7 @@ class pasteDialog extends wg
             textarea
             (
                 setID($name),
+                setClass('mt-2'),
                 set::name($name),
                 set::placeholder($lang->pasteTextInfo)
             )
