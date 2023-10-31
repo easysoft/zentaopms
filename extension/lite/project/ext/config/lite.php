@@ -9,3 +9,10 @@ unset($config->project->datatable->fieldList['budget']);
 unset($config->project->search['fields']['hasProduct']);
 unset($config->project->search['fields']['parent']);
 unset($config->project->search['fields']['model']);
+
+$config->project->dtable->team->fieldList['role']['align'] = 'left';
+unset($config->project->dtable->team->fieldList['join']);
+unset($config->project->dtable->team->fieldList['days']);
+unset($config->project->dtable->team->fieldList['hours']);
+unset($config->project->dtable->team->fieldList['total']);
+unset($config->project->dtable->team->fieldList['limited']);

@@ -97,7 +97,7 @@ div
         (
             setClass('ghost btn-zentao'),
             set::icon('zentao text-2xl'),
-            set::url('$lang->website'),
+            set::url($lang->website),
             set::target('_blank'),
             set::hint($version),
             set::text($versionName)
