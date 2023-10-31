@@ -1971,6 +1971,7 @@ class productModel extends model
 
         if($module == 'project'    && $method == 'bug')         return helper::createLink($module, $method,       "projectID={$params[0]}&productID=%s{$branchParam}");
         if($module == 'bug'        && $method == 'view')        return helper::createLink('bug',   'browse',      "productID=%s&branch={$branchID}&extra=$extra");
+        if($module == 'bug'        && $method == 'report')      return helper::createLink('bug',   'browse',      "productID=%s{$branchParam}");
         if($module == 'testreport' && $method == 'edit')        return helper::createLink($module, 'browse',      "objectID=%s");
         if($module == 'qa'         && $method == 'index')       return helper::createLink('bug',   'browse',      "productID=%s{$branchParam}");
         if($module == 'story'      && $method == 'report')      return helper::createLink($module, $method,       "productID=%s&branch={$branchID}&extra=$extra");
