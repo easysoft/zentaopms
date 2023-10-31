@@ -8,3 +8,6 @@ $config->task->dtable->fieldList['lane']['title']    = 'lane';
 $config->task->dtable->fieldList['lane']['fixed']    = 'no';
 $config->task->dtable->fieldList['lane']['width']    = '120';
 $config->task->dtable->fieldList['lane']['sortType'] = false;
+
+$config->task->dtable->fieldList['name']['data-toggle'] = 'modal';
+$config->task->dtable->fieldList['name']['data-size']   = 'lg';
