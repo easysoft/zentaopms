@@ -3108,4 +3108,22 @@ class taskModel extends model
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
+
+    /**
+     * 获取任务关联的代码分支。
+     * Get linked branch of task.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return array
+     */
+    public function getLinkedBranch(int $taskID): array
+    {
+        return $this->dao->select('BID,extra')->from(TABLE_RELATION)
+            ->where('AType')->eq('task')
+            ->andWhere('BType')->eq('repobranch')
+            ->andWhere('relation')->eq('linkrepobranch')
+            ->andWhere('AID')->eq($taskID)
+            ->fetchPairs();
+    }
 }

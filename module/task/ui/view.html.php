@@ -50,10 +50,17 @@ detailHeader
 $operateMenus = array();
 foreach($config->task->view->operateList['main'] as $operate)
 {
-    if(!common::hasPriv('task', $operate)) continue;
-    if(!$this->task->isClickable($task, $operate)) continue;
+    if($operate == 'createBranch')
+    {
+        if(!common::hasPriv('repo', $operate) || !empty($task->linkedBranch)) continue;
+    }
+    else
+    {
+        if(!common::hasPriv('task', $operate)) continue;
+        if(!$this->task->isClickable($task, $operate)) continue;
 
-    if($operate == 'batchCreate') $config->task->actionList['batchCreate']['text'] = $lang->task->children;
+        if($operate == 'batchCreate') $config->task->actionList['batchCreate']['text'] = $lang->task->children;
+    }
 
     $operateMenus[] = $config->task->actionList[$operate];
 }
@@ -414,6 +421,11 @@ detailBody
                 set::title($lang->task->legendMisc),
                 tableData
                 (
+                    empty($task->linkedBranch) ? null : item
+                    (
+                        set::name($lang->task->relatedBranch),
+                        $task->linkedBranch
+                    ),
                     item
                     (
                         set::name($lang->task->linkMR),

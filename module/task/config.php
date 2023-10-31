@@ -175,5 +175,11 @@ $config->task->actionList['assignTo']['text']        = $lang->task->assign;
 $config->task->actionList['assignTo']['url']         = helper::createLink('task', 'assignTo', 'execution={execution}&taskID={id}');
 $config->task->actionList['assignTo']['data-toggle'] = 'modal';
 
-$config->task->view->operateList['main']   = array('batchCreate', 'assignTo', 'start', 'restart', 'recordWorkhour', 'pause', 'finish', 'activate', 'close', 'cancel');
+$config->task->actionList['createBranch']['icon']        = 'treemap';
+$config->task->actionList['createBranch']['hint']        = $lang->task->createBranch;
+$config->task->actionList['createBranch']['text']        = $lang->task->createBranch;
+$config->task->actionList['createBranch']['url']         = helper::createLink('repo', 'createBranch', 'taskID={id}&execution={execution}');
+$config->task->actionList['createBranch']['data-toggle'] = 'modal';
+
+$config->task->view->operateList['main']   = array('batchCreate', 'assignTo', 'start', 'restart', 'createBranch', 'recordWorkhour', 'pause', 'finish', 'activate', 'close', 'cancel');
 $config->task->view->operateList['common'] = array('edit', 'create', 'delete', 'view');
