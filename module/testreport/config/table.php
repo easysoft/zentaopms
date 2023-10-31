@@ -33,6 +33,7 @@ $config->testreport->dtable->fieldList['title']['minWidth'] = '200';
 $config->testreport->dtable->fieldList['title']['fixed']    = 'left';
 $config->testreport->dtable->fieldList['title']['link']     = array('module' => 'testreport', 'method' => 'view', 'params' => 'testreportID={id}');
 $config->testreport->dtable->fieldList['title']['sortType'] = true;
+$config->testreport->dtable->fieldList['title']['data-app'] = $app->tab;
 
 $config->testreport->dtable->fieldList['execution']['name']     = 'execution';
 $config->testreport->dtable->fieldList['execution']['title']    = $lang->testreport->execution;
