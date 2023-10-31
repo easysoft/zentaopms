@@ -20,6 +20,7 @@ class floatPreNextBtn extends wg
     }
     protected function build(): wg|array
     {
+        global $app;
         $preLink  = $this->prop('preLink');
         $nextLink = $this->prop('nextLink');
 
@@ -30,14 +31,16 @@ class floatPreNextBtn extends wg
                 setID('preButton'),
                 set::url($preLink),
                 setClass('float-btn fixed left-0 z-10'),
-                set::icon('angle-left')
+                set::icon('angle-left'),
+                set('data-app', $app->tab)
             ) : null,
             !empty($nextLink) ? btn
             (
                 setID('nextButton'),
                 set::url($nextLink),
                 setClass('float-btn fixed right-0 z-10'),
-                set::icon('angle-right')
+                set::icon('angle-right'),
+                set('data-app', $app->tab)
             ) : null,
         );
     }
