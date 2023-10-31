@@ -728,7 +728,8 @@ class userModel extends model
                 if(!isset($users[$id][$field])) continue;
                 if(!empty($users[$id][$field])) continue;
 
-                helper::end(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
+                dao::$errors["{$field}[{$id}]"][] = sprintf($this->lang->error->notempty, $this->lang->user->$field);
+                return false;
             }
 
             if(!empty($this->config->user->batchAppendFields))
@@ -743,11 +744,11 @@ class userModel extends model
                 }
             }
 
-            if(isset($accountGroup[$account]) and count($accountGroup[$account]) > 1) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
-            if(in_array($account, $accounts)) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
-            if(!validater::checkAccount($users[$id]['account'])) helper::end(js::error(sprintf($this->lang->user->error->account, $id)));
-            if($users[$id]['realname'] == '') helper::end(js::error(sprintf($this->lang->user->error->realname, $id)));
-            if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) helper::end(js::error(sprintf($this->lang->user->error->mail, $id)));
+            if(isset($accountGroup[$account]) and count($accountGroup[$account]) > 1) return dao::$errors["account[{$id}]"][] = sprintf($this->lang->ser->error->accountDupl, $id);
+            if(in_array($account, $accounts)) return dao::$errors["account[{$id}]"][] = sprintf($this->lang->user->error->accountDupl, $id);
+            if(!validater::checkAccount($users[$id]['account'])) return dao::$errors["account[{$id}]"][] = sprintf($this->lang->user->error->account, $id);
+            if($users[$id]['realname'] == '') return dao::$errors["realname[{$id}]"][] = sprintf($this->lang->user->error->realname, $id);
+            if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) return dao::$errors["email[{$id}]"][] = sprintf($this->lang->user->error->mail, $id);
 
             $accounts[$id] = $account;
             $prev['dept']  = $users[$id]['dept'];
@@ -764,22 +765,16 @@ class userModel extends model
                 ->checkIF($user['mobile'] != '', 'mobile', 'mobile')
                 ->where('id')->eq((int)$id)
                 ->exec();
-            $oldUser = $oldUsers[$id];
-            if(dao::isError())
-            {
-                echo js::error(dao::getError());
-                helper::end(js::reload('parent'));
-            }
-            else
-            {
-                if($this->config->mail->mta == 'sendcloud' and $user['email'] != $oldUser->email)
-                {
-                    $this->mail->syncSendCloud('delete', $oldUser->email);
-                    $this->mail->syncSendCloud('sync', $user['email'], $user['realname']);
-                }
+            if(dao::isError()) return false;
 
-                if($this->app->user->account == $user['account'] and !empty($user['realname'])) $this->app->user->realname = $user['realname'];
+            $oldUser = $oldUsers[$id];
+            if($this->config->mail->mta == 'sendcloud' and $user['email'] != $oldUser->email)
+            {
+                $this->mail->syncSendCloud('delete', $oldUser->email);
+                $this->mail->syncSendCloud('sync', $user['email'], $user['realname']);
             }
+
+            if($this->app->user->account == $user['account'] and !empty($user['realname'])) $this->app->user->realname = $user['realname'];
 
             if($user['account'] != $oldUser->account)
             {
