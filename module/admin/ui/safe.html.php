@@ -74,7 +74,7 @@ div
         (
             formGroup
             (
-                on::click('showModeRule'),
+                on::change('showModeRule'),
                 set::label($lang->admin->safe->password),
                 inputGroup
                 (
