@@ -1,3 +1,0 @@
-<script>
-$('#subHeader').remove();
-</script>
