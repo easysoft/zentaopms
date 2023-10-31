@@ -100,7 +100,16 @@ panel
         (
             set('class', 'panel-title w-full justify-between'),
             $block->title,
-            a(set('href', createLink('tutorial', 'start')), set('class', 'btn warning'), $lang->block->tutorial)
+            a(
+                set(
+                    array(
+                        'href' => createLink('tutorial', 'start'),
+                        'class' => 'btn btn-primary warning',
+                        'data-toggle' => 'modal',
+                    )
+                ),
+                $lang->block->tutorial
+            )
         )
     ),
     div

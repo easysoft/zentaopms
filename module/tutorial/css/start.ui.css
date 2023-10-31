@@ -1,0 +1,10 @@
+#start {padding: 40px; text-align: center; color: #fff;}
+.start-icon {position: relative; width: 140px; height: 140px; margin: 0 auto; line-height: 140px;}
+.start-icon .icon1{font-size: 140px; color: rgba(0,0,0,.1); text-shadow: 0 1px 7px rgb(0,0,0,.1); animation: -spin 15s linear infinite}
+.start-icon .icon2{font-size: 56px; position: absolute; top: 35px; left: 42px; color: #EBF2F9; z-index: 10; width: 70px; height: 70px; text-align: center; line-height: 70px; text-shadow: 0 1px 3px rgb(0,0,0,.15);}
+#start > h1, #start > p {margin-bottom: 30px;}
+h1{font-size: 24px;}
+.btn-start-now{min-width: 120px; height: 42px;}
+.btn-lg{padding: 11px 16px; font-size: 14px; line-height: 18px; border-radius: 4px;}
+.btn-info{color: #2e7fff; background-color: #e6f0ff; border-color: transparent;}
+.modal-dialog .modal-content .modal-body{padding: 0;}
