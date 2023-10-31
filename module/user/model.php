@@ -2579,6 +2579,8 @@ class userModel extends model
     public function checkProductPriv(object $product, string $account, string $groups, array $teams, array $stakeholders, array $whiteList, array $admins = array()): bool
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
+        if(strpos(",{$product->reviewer},", ',' . $account . ',') !== false)    return true;
+        if(strpos(",{$product->PMT},", ',' . $account . ',') !== false)         return true;
         if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR (isset($product->feedback) && $product->feedback == $account)) return true;
         if($product->acl == 'open') return true;
 
@@ -2701,7 +2703,9 @@ class userModel extends model
     {
         $users = array();
 
-        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin] = $admin;
+        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin]   = $admin;
+        foreach(explode(',', trim($product->reviewer, ',')) as $account)        $users[$account] = $account;
+        foreach(explode(',', trim($product->PMT, ',')) as $account)             $users[$account] = $account;
 
         $users[$product->PO]        = $product->PO;
         $users[$product->QD]        = $product->QD;
