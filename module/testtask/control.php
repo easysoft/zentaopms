@@ -374,6 +374,7 @@ class testtask extends control
         $queryID  = ($browseType == 'bysearch' or $browseType == 'bysuite') ? $param : 0;
         $moduleID = ($browseType == 'bymodule') ? $param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ?: 0));
         $sort     = common::appendOrder($orderBy, 't2.id');
+        $sort     = str_replace('case_', 'id_', $sort);
 
         /* 从数据库中查询一个测试单下关联的测试用例。*/
         /* Query the cases associated with a testtask from the database. */

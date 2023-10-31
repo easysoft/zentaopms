@@ -154,6 +154,8 @@ dtable
     set::userMap($users),
     set::cols($cols),
     set::data($runs),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('testtask', 'cases', "taskID={$task->id}&browseType={$browseType}&param={$param}&order={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::checkable($canBatchAction),
     set::fixedLeftWidth('44%'),
     set::footToolbar($footToolbar),
