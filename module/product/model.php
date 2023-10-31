@@ -511,19 +511,31 @@ class productModel extends model
      * 激活产品。
      * Activate a product.
      *
-     * @param  int    $productID.
+     * @param  int          $productID
+     * @param  object       $product    must have status field.
+     * @param  string|false $comment
      * @access public
      * @return array|false
      */
-    public function activate(int $productID): array|false
+    public function activate(int $productID, object $product, string|false $comment = ''): array|false
     {
         $oldProduct = $this->getByID($productID);
-        $product    = (object)array('status' => 'normal');
+        if(empty($product)) return false;
 
-        $this->dao->update(TABLE_PRODUCT)->data($product)->where('id')->eq($productID)->exec();
+        $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
+            ->checkFlow()
+            ->where('id')->eq($productID)
+            ->exec();
+
         if(dao::isError()) return false;
 
-        return common::createChanges($oldProduct, $product);
+        $changes = common::createChanges($oldProduct, $product);
+        if(!empty($comment) or !empty($changes))
+        {
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Activated', $comment);
+            $this->action->logHistory($actionID, $changes);
+        }
+        return $changes;
     }
 
     /**
@@ -1267,6 +1279,7 @@ class productModel extends model
         $params = "product=$product->id";
 
         if($product->status != 'closed' && common::hasPriv('product', 'close')) $menuList['main'][] = $this->config->product->actionList['close'];
+        if($product->status == 'closed' && common::hasPriv('product', 'activate')) $menuList['main'][] = $this->config->product->actionList['activate'];
 
         if(common::hasPriv('product', 'edit'))
         {

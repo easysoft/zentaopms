@@ -22,10 +22,11 @@ $config->product->actionsMap['normal'] = array('edit');
 
 /* Editor configurations. */
 $config->product->editor = new stdclass();
-$config->product->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->product->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->product->editor->close  = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->product->editor->view   = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
+$config->product->editor->create   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->product->editor->edit     = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->product->editor->activate = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->product->editor->close    = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->product->editor->view     = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 
 /* Configurations for product report. */
 $config->product->report = new stdclass();
@@ -64,6 +65,12 @@ $config->product->actionList['close']['text']        = $lang->product->close;
 $config->product->actionList['close']['hint']        = $lang->product->close;
 $config->product->actionList['close']['url']         = helper::createLink('product', 'close', 'productID={id}');
 $config->product->actionList['close']['data-toggle'] = 'modal';
+
+$config->product->actionList['activate']['icon']        = 'off';
+$config->product->actionList['activate']['text']        = $lang->product->activate;
+$config->product->actionList['activate']['hint']        = $lang->product->activate;
+$config->product->actionList['activate']['url']         = helper::createLink('product', 'activate', 'productID={id}');
+$config->product->actionList['activate']['data-toggle'] = 'modal';
 
 $config->product->actionList['delete']['icon']         = 'trash';
 $config->product->actionList['delete']['hint']         = $lang->product->delete;

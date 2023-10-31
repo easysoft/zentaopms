@@ -54,6 +54,9 @@ $config->product->form->close = array();
 $config->product->form->close['status']     = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => 'close');
 $config->product->form->close['closedDate'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => date('Y-m-d'));
 
+$config->product->form->activate = array();
+$config->product->form->activate['status'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => 'normal');
+
 $config->product->form->manageLine = array();
 $config->product->form->manageLine['products'] = array('type' => 'array', 'control' => 'text', 'required' => false, 'default' => '');
 $config->product->form->manageLine['programs'] = array('type' => 'array', 'control' => 'text', 'required' => false, 'default' => '');

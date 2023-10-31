@@ -20,6 +20,7 @@ $lang->product->create           = "添加{$lang->productCommon}";
 $lang->product->delete           = "删除{$lang->productCommon}";
 $lang->product->deleted          = '已删除';
 $lang->product->close            = '关闭';
+$lang->product->activate         = '激活';
 $lang->product->select           = "请选择{$lang->productCommon}";
 $lang->product->mine             = '我负责';
 $lang->product->other            = '其他';
@@ -42,11 +43,12 @@ $lang->product->checkedProducts  = "已选择%s项{$lang->productCommon}";
 $lang->product->pageSummary      = "本页共%s个{$lang->productCommon}。";
 $lang->product->lineSummary      = "本页共%s个产品线，%s个{$lang->productCommon}。";
 
-$lang->product->indexAction  = "所有{$lang->productCommon}仪表盘";
-$lang->product->closeAction  = "关闭{$lang->productCommon}";
-$lang->product->orderAction  = "{$lang->productCommon}排序";
-$lang->product->exportAction = "导出{$lang->productCommon}";
-$lang->product->link2Project = "关联{$lang->projectCommon}";
+$lang->product->indexAction    = "所有{$lang->productCommon}仪表盘";
+$lang->product->closeAction    = "关闭{$lang->productCommon}";
+$lang->product->activateAction = "激活{$lang->productCommon}";
+$lang->product->orderAction    = "{$lang->productCommon}排序";
+$lang->product->exportAction   = "导出{$lang->productCommon}";
+$lang->product->link2Project   = "关联{$lang->projectCommon}";
 
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';

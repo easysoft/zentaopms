@@ -274,6 +274,39 @@ class product extends control
     }
 
     /**
+     * 激活产品。
+     * Activate product.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function activate(int $productID)
+    {
+        if(!empty($_POST))
+        {
+            $productData = $this->productZen->buildProductForActivate();
+
+            $this->product->activate($productID, $productData, $this->post->comment);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->executeHooks($productID);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+        }
+
+        $this->product->setMenu($productID);
+
+        $product = $this->product->getByID($productID);
+
+        $this->view->title   = $product->name . $this->lang->colon .$this->lang->close;
+        $this->view->product = $product;
+        $this->view->actions = $this->loadModel('action')->getList('product', $productID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->fields  = $this->productZen->getFormFields4Activate();
+        $this->display();
+    }
+
+    /**
      * 关闭产品。
      * Close product.
      *

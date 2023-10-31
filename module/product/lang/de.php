@@ -20,6 +20,7 @@ $lang->product->create           = "Erstelle {$lang->productCommon}";
 $lang->product->delete           = "Lösche {$lang->productCommon}";
 $lang->product->deleted          = 'Gelöscht';
 $lang->product->close            = 'Schließen';
+$lang->product->activate         = 'Activate';
 $lang->product->select           = "Auswahl {$lang->productCommon}";
 $lang->product->mine             = 'Meine Zuständigkeiten';
 $lang->product->other            = 'Andere';
@@ -42,11 +43,12 @@ $lang->product->checkedProducts  = "%s {$lang->productCommon}s selected";
 $lang->product->pageSummary      = "Total {$lang->productCommon}s: %s.";
 $lang->product->lineSummary      = "Total product lines: %s, Total {$lang->productCommon}s: %s.";
 
-$lang->product->indexAction  = "All {$lang->productCommon}";
-$lang->product->closeAction  = "Close {$lang->productCommon}";
-$lang->product->orderAction  = "Rank {$lang->productCommon}";
-$lang->product->exportAction = "Export {$lang->productCommon}";
-$lang->product->link2Project = "Link {$lang->projectCommon}";
+$lang->product->indexAction    = "All {$lang->productCommon}";
+$lang->product->closeAction    = "Close {$lang->productCommon}";
+$lang->product->activateAction = "Activate {$lang->productCommon}";
+$lang->product->orderAction    = "Rank {$lang->productCommon}";
+$lang->product->exportAction   = "Export {$lang->productCommon}";
+$lang->product->link2Project   = "Link {$lang->projectCommon}";
 
 $lang->product->basicInfo = 'Basis Info';
 $lang->product->otherInfo = 'Andere Info';

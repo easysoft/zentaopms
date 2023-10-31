@@ -344,6 +344,22 @@ class productZen extends product
     }
 
     /**
+     * 获取激活产品页面的表单配置。
+     * Get form fields for activate product page.
+     *
+     * @access private
+     * @return array
+     */
+    protected function getFormFields4Activate(): array
+    {
+        /* Init fields. */
+        $fields = $this->config->product->form->activate;
+        $fields['comment'] = array('type' => 'string',  'control' => 'editor', 'required' => false, 'default' => '', 'width' => 'full');
+
+        return $fields;
+    }
+
+    /**
      * Get product lines and product lines of program.
      *
      * @param  array     $programIdList
@@ -614,6 +630,20 @@ class productZen extends product
             ->get();
 
         return $this->loadModel('file')->processImgURL($productData, $editorFields, $this->post->uid);
+    }
+
+    /**
+     * 构建激活产品数据。
+     * Build product data for activate.
+     *
+     * @access protected
+     * @return object
+     */
+    protected function buildProductForActivate(): object
+    {
+        $productData = form::data($this->config->product->form->activate)->get();
+
+        return $this->loadModel('file')->processImgURL($productData, $this->config->product->editor->activate['id'], $this->post->uid);
     }
 
     /**
