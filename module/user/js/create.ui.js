@@ -24,20 +24,11 @@ function changePassword(event)
 function changeType(event)
 {
     const type = $(event.target).val();
-    if(type == 'inside')
-    {
-        $('#companyBox').addClass('hidden');
-        $('[name="dept"]').closest('.form-row').removeClass('hidden');
-        $('[name="join"]').closest('.form-row').removeClass('hidden');
-        $('#commiter').closest('.form-row').removeClass('hidden');
-    }
-    else
-    {
-        $('#companyBox').removeClass('hidden');
-        $('[name="dept"]').closest('.form-row').addClass('hidden');
-        $('[name="join"]').closest('.form-row').addClass('hidden');
-        $('#commiter').closest('.form-row').addClass('hidden');
-    }
+
+    $('#companyBox').toggleClass('hidden', type == 'inside');
+    $('[name="dept"]').closest('.form-row').toggleClass('hidden', type != 'inside');
+    $('[name="join"]').closest('.form-row').toggleClass('hidden', type != 'inside');
+    $('#commiter').closest('.form-row').toggleClass('hidden', type != 'inside');
 }
 
 function changeAddCompany(event)

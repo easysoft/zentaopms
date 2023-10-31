@@ -59,32 +59,17 @@ function changeType(event)
 {
     let $typeGroup = event != undefined ? $(event.target).closest('.form-group') : $('input[name="type"]').closest('.form-group');
     let type       = $typeGroup.find('input[type="radio"]:checked').val();
-    if(type == 'inside')
-    {
-        $('[name="company"]').closest('.form-group').addClass('hidden');
-        $('[name="dept"]').closest('.form-row').removeClass('hidden');
-        $('#commiter').closest('.form-row').removeClass('hidden');
-    }
-    else
-    {
-        $('[name="company"]').closest('.form-group').removeClass('hidden');
-        $('[name="dept"]').closest('.form-row').addClass('hidden');
-        $('#commiter').closest('.form-row').addClass('hidden');
-    }
+
+    $('[name=company]').closest('.form-group').toggleClass('hidden', type == 'inside');
+    $('[name=dept]').closest('.form-row').toggleClass('hidden', type != 'inside');
+    $('#commiter').closest('.form-row').toggleClass('hidden', type != 'inside');
 }
 
 function toggleNew(event)
 {
     const $company    = $('[name="company"]').closest('.picker-box');
     const $newCompany = $('#newCompany');
-    if($(event.target).prop('checked'))
-    {
-        $company.addClass('hidden');
-        $newCompany.removeClass('hidden');
-    }
-    else
-    {
-        $company.removeClass('hidden');
-        $newCompany.addClass('hidden');
-    }
+
+    $company.toggleClass('hidden', $(event.target).prop('checked'));
+    $newCompany.toggleClass('hidden', !$(event.target).prop('checked'));
 }
