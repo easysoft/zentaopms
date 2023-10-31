@@ -24,10 +24,11 @@ $config->testcase->actionList['runResult']['url']         = array('module' => 't
 $config->testcase->actionList['runResult']['data-toggle'] = 'modal';
 $config->testcase->actionList['runResult']['data-size']   = 'lg';
 
-$config->testcase->actionList['edit']['icon'] = 'edit';
-$config->testcase->actionList['edit']['text'] = $lang->testcase->edit;
-$config->testcase->actionList['edit']['hint'] = $lang->testcase->edit;
-$config->testcase->actionList['edit']['url']  = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={caseID}&comment=false&executionID=%executionID%');
+$config->testcase->actionList['edit']['icon']     = 'edit';
+$config->testcase->actionList['edit']['text']     = $lang->testcase->edit;
+$config->testcase->actionList['edit']['hint']     = $lang->testcase->edit;
+$config->testcase->actionList['edit']['url']      = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={caseID}&comment=false&executionID=%executionID%');
+$config->testcase->actionList['edit']['data-app'] = $app->tab;
 
 $config->testcase->actionList['review']['icon']        = 'glasses';
 $config->testcase->actionList['review']['text']        = $lang->testcase->review;
@@ -48,10 +49,11 @@ $config->testcase->actionList['createBug']['url']         = array('module' => 't
 $config->testcase->actionList['createBug']['data-toggle'] = 'modal';
 $config->testcase->actionList['createBug']['data-size']   = 'lg';
 
-$config->testcase->actionList['create']['icon'] = 'copy';
-$config->testcase->actionList['create']['text'] = $lang->testcase->copy;
-$config->testcase->actionList['create']['hint'] = $lang->testcase->copy;
-$config->testcase->actionList['create']['url']  = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&moduleID={module}&from=testcase&param={caseID}');
+$config->testcase->actionList['create']['icon']     = 'copy';
+$config->testcase->actionList['create']['text']     = $lang->testcase->copy;
+$config->testcase->actionList['create']['hint']     = $lang->testcase->copy;
+$config->testcase->actionList['create']['url']      = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&moduleID={module}&from=testcase&param={caseID}');
+$config->testcase->actionList['create']['data-app'] = $app->tab;
 
 $config->testcase->actionList['unlinkCase']['icon'] = 'unlink';
 $config->testcase->actionList['unlinkCase']['text'] = $lang->testtask->unlinkCase;
