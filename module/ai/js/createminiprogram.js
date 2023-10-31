@@ -8,8 +8,8 @@ function handleThemeButtonClick(event)
     const $prev = $('.theme-checked');
     $prev.removeClass('theme-checked');
     $button.addClass('theme-checked');
-    $button.html($prev.html());
     $prev.empty();
+    $button.append(iconCheck);
     $icon.css('background-color', $button.css('background-color'));
     $icon.css('border', $button.css('border'));
     selectedTheme = $button.index();
@@ -46,6 +46,19 @@ function handleNextStepClick()
     $('[name="toNext"]').prop('value', '1');
 }
 
+function handleOpenModal()
+{
+    const $button = $('#ai-edit-icon');
+    const iconName = $button.find('svg').prop('id');
+    const iconTheme = $button.css('background-color');
+    const $container = $('.icon-setting-container');
+    $container.find(`#${iconName}`).click();
+    $container.find('.btn-icon').each(function()
+    {
+        if($(this).css('background-color') === iconTheme) $(this).click();
+    });
+}
+
 $(function()
 {
     $('#theme-buttons button').on('click', handleThemeButtonClick);
@@ -53,4 +66,5 @@ $(function()
     $('#save-icon-button').on('click', handleSaveButtonClick);
     $('#save-miniprogram').on('click', handleSaveMiniProgramClick);
     $('#next-step').on('click', handleNextStepClick);
+    $('#ai-edit-icon').on('click', handleOpenModal);
 });

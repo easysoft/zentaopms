@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The create ai mini program file of ai module of ZenTaoPMS.
  *
@@ -11,6 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php'; ?>
+<?php js::set('iconCheck', $config->ai->miniPrograms->iconCheck); ?>
 <div id="mainContent" class="main-content" style="position: fixed; top: 66px; right: 16px; bottom: 16px; left: 16px;">
   <div style="width: 660px; margin: 0 auto;">
     <div style="display: flex; align-items: center; justify-content: flex-start; margin-bottom: 20px;">
@@ -107,7 +107,6 @@
                   echo "<button type='button' class='btn btn-icon' style='width: 32px; height: 32px; border-radius: 50%; background-color: $theme[0]; border: 1px solid $theme[1];'></button>";
                 }
               ?>
-
             </div>
           </div>
           <div style="margin-top: 32px;">
