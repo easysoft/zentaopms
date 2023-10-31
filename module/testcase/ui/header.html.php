@@ -223,8 +223,9 @@ if(!empty($productID))
 $createItems = array();
 if($canCreateCase)
 {
-    $link = createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
-    $createItems[] = array('text' => $lang->testcase->create, 'url' => $link, 'data-app' => $app->tab);
+    $params = "productID={$productID}&branch={$branch}&moduleID={$initModule}";
+    if($app->tab == 'project') $params .= "&from=project&param={$projectID}";
+    $createItems[] = array('text' => $lang->testcase->create, 'url' => createLink('testcase', 'create', $params), 'data-app' => $app->tab);
 }
 
 if($canBatchCreateCase)
