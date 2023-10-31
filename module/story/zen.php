@@ -153,6 +153,7 @@ class storyZen extends story
         if($this->app->tab == 'execution')
         {
             $this->execution->setMenu($executionID);
+            $this->view->executionID = $this->session->execution;
             return;
         }
 
@@ -177,11 +178,13 @@ class storyZen extends story
             {
                 if(!($project->model == 'scrum' and !$project->hasProduct and $project->multiple)) $this->view->hiddenPlan = true;
                 $this->project->setMenu($executionID);
+                $this->view->projectID = $this->session->project;
             }
             else
             {
                 if(!$project->hasProduct and !$project->multiple) $this->view->hiddenPlan = true;
                 $this->execution->setMenu($executionID);
+                $this->view->projectID = $this->session->execution;
             }
         }
     }
