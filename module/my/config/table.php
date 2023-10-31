@@ -194,13 +194,16 @@ $config->my->task->actionList['edit']['data-toggle']   = 'modal';
 $config->my->task->actionList['edit']['data-size']     = 'lg';
 $config->my->task->actionList['edit']['data-position'] = 'center';
 
-$config->my->task->actionList['batchCreate']['icon']          = 'split';
-$config->my->task->actionList['batchCreate']['text']          = $lang->task->batchCreate;
-$config->my->task->actionList['batchCreate']['hint']          = $lang->task->batchCreate;
-$config->my->task->actionList['batchCreate']['url']           = array('module' => 'task', 'method' => 'batchCreate', 'params' => 'executionID={execution}&storyID={story}&moduleID={module}&taskID={id}iframe=true');
-$config->my->task->actionList['batchCreate']['data-toggle']   = 'modal';
-$config->my->task->actionList['batchCreate']['data-size']     = 'lg';
-$config->my->task->actionList['batchCreate']['data-position'] = 'center';
+if($config->vision != 'lite')
+{
+    $config->my->task->actionList['batchCreate']['icon']          = 'split';
+    $config->my->task->actionList['batchCreate']['text']          = $lang->task->batchCreate;
+    $config->my->task->actionList['batchCreate']['hint']          = $lang->task->batchCreate;
+    $config->my->task->actionList['batchCreate']['url']           = array('module' => 'task', 'method' => 'batchCreate', 'params' => 'executionID={execution}&storyID={story}&moduleID={module}&taskID={id}iframe=true');
+    $config->my->task->actionList['batchCreate']['data-toggle']   = 'modal';
+    $config->my->task->actionList['batchCreate']['data-size']     = 'lg';
+    $config->my->task->actionList['batchCreate']['data-position'] = 'center';
+}
 
 $config->my->task->dtable = new stdclass();
 $config->my->task->dtable->fieldList['id']['name']     = 'id';
