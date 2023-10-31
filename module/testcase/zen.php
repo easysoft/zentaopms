@@ -436,10 +436,9 @@ class testcaseZen extends testcase
                 {
                     /* 重置 $pager 属性，只获取需要的用例条数。*/
                     $pager->recTotal   = 0;
-                    $pager->pageID     = 1; // 查询用例时的分页起始偏移量单独计算，每次查询的页码都设为 1 即可，后面会重新设置页码。
-                    $pager->recPerPage = $recPerPage - $sceneCount; // 可能存在场景没排满一页，需要用例补全的情况。这里只查询需要补全的记录数。
-
-                    if($sceneCount == 0) $pager->offset = $recPerPage * ($pageID - 1) - $sceneTotal;   // 场景数为 0 表示本页查询只显示用例，需要计算用例分页的起始偏移量。
+                    $pager->recPerPage = $recPerPage - $sceneCount;
+                    if($sceneCount > 0) $pager->pageID = 1; // 查询用例时的分页起始偏移量单独计算，每次查询的页码都设为 1 即可，后面会重新设置页码。
+                    if($sceneCount == 0) $pager->offset = - $sceneTotal;   // 场景数为 0 表示本页查询只显示用例，需要计算用例分页的起始偏移量。
 
                     $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType, $auto = 'no', $sort, $pager);
                     $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
