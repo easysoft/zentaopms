@@ -18,6 +18,8 @@ $config->repo->form->create['password']       = array('required' => false, 'type
 $config->repo->form->create['encrypt']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->create['desc']           = array('required' => false, 'type' => 'string', 'default' => '');
 
+$config->repo->form->edit = $config->repo->form->create;
+
 $config->repo->form->createRepo = array();
 $config->repo->form->createRepo['product']        = array('required' => true,  'type' => 'array');
 $config->repo->form->createRepo['projects']       = array('required' => false, 'type' => 'array', 'default' => array());
@@ -26,3 +28,8 @@ $config->repo->form->createRepo['namespace']      = array('required' => true,  '
 $config->repo->form->createRepo['name']           = array('required' => true,  'type' => 'string', 'filter' => 'trim');
 $config->repo->form->createRepo['desc']           = array('required' => false, 'type' => 'string', 'default' => '');
 $config->repo->form->createRepo['client']         = array('required' => false, 'type' => 'string', 'default' => '');
+
+$config->repo->form->createBranch = array();
+$config->repo->form->createBranch['repoID'] = array('required' => true, 'type' => 'int');
+$config->repo->form->createBranch['from']   = array('required' => true, 'type' => 'string', 'filter' => 'trim');
+$config->repo->form->createBranch['name']   = array('required' => true, 'type' => 'string', 'filter' => 'trim');

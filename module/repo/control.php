@@ -203,6 +203,47 @@ class repo extends control
     }
 
     /**
+     * 根据任务和执行创建分支。
+     * Create a branch by task and execution.
+     *
+     * @param  int    $taskID
+     * @param  int    $executionID
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function createBranch(int $taskID, int $executionID, int $repoID = 0)
+    {
+        $repoList = $this->repo->getList($executionID);
+        if(!$repoList) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->noRepo));
+
+        if(!$repoID) $repoID = $this->post->repoID;
+        if(!$repoID || !isset($repoList[$repoID])) $repoID = key($repoList);
+        $this->scm->setEngine($repoList[$repoID]);
+
+        if(!empty($_POST))
+        {
+            $branch = form::data($this->config->repo->form->createBranch)->get();
+            $result = $this->scm->createBranch($branch->name, $branch->from);
+            if($result['result'] == 'fail') return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->createdFail . ': ' . $result['message']));
+
+            $this->repo->saveTaskRelation($repoID, $taskID, $branch->name);
+            $this->loadModel('action')->create('task', $taskID, 'createRepoBranch', '', $branch->name);
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'parent.location.reload()'));
+        }
+
+        $repoPairs = array();
+        foreach($repoList as $repo) $repoPairs[$repo->id] = $repo->name;
+
+        $this->view->repoPairs   = $repoPairs;
+        $this->view->repoID      = $repoID;
+        $this->view->taskID      = $taskID;
+        $this->view->branches    = $this->scm->branch();
+        $this->view->executionID = $executionID;
+        $this->display();
+    }
+
+    /**
      * Edit a repo.
      *
      * @param  int    $repoID

@@ -3198,4 +3198,28 @@ class repoModel extends model
             }
         }
     }
+
+    /*
+     * 保存任务和分支的关联关系。
+     * Save task and branch relation.
+     *
+     * @param  int    $repoID
+     * @param  int    $taskID
+     * @param  string $branch
+     * @access public
+     * @return bool
+     */
+    public function saveTaskRelation(int $repoID, int $taskID, string $branch): bool
+    {
+        $relation = new stdclass();
+        $relation->AType    = 'task';
+        $relation->AID      = $taskID;
+        $relation->BType    = 'repobranch';
+        $relation->BID      = $repoID;
+        $relation->relation = 'linkrepobranch';
+        $relation->extra    = $branch;
+        $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+
+        return !dao::isError();
+    }
 }
