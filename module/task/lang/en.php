@@ -66,6 +66,8 @@ $lang->task->manageTeam          = 'Manage Team';
 $lang->task->unfoldEffort        = 'Unfold Effort';
 $lang->task->foldEffort          = 'Fold Effort';
 $lang->task->addEffort           = 'Add Effort';
+$lang->task->createBranch        = 'Create Branch';
+$lang->task->relatedBranch       = 'Related Branch';
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';
