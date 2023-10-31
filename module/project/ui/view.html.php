@@ -202,10 +202,10 @@ div
     setClass('main'),
     div
     (
-        setClass('flex-auto canvas flex p-4'),
+        setClass('flex-auto canvas flex p-4 basic'),
         div
         (
-            setClass('text-center w-1/3 flex flex-col justify-center items-center'),
+            setClass('text-center w-1/3 flex flex-col justify-center items-center progressBox'),
             div
             (
                 set('class', 'chart pie-chart'),
@@ -253,10 +253,10 @@ div
             ),
             div
             (
-                setClass('border w-3/4 flex justify-center items-center pl-4 py-2'),
+                setClass('border w-3/4 flex justify-center items-center pl-4 py-2 statistics'),
                 div
                 (
-                    setClass('w-1/3'),
+                    setClass('w-1/3 storyCount'),
                     div
                     (
                         setClass('article-h1'),
@@ -270,7 +270,7 @@ div
                 ),
                 div
                 (
-                    setClass('w-1/3'),
+                    setClass('w-1/3 taskCount'),
                     div
                     (
                         setClass('article-h1'),
@@ -284,7 +284,7 @@ div
                 ),
                 div
                 (
-                    setClass('w-1/3'),
+                    setClass('w-1/3 bugCount'),
                     div
                     (
                         setClass('article-h1'),
@@ -322,7 +322,7 @@ div
                 ) : null,
                 label
                 (
-                    setClass('label warning-pale ring-warning rounded-full ml-2 flex-none'),
+                    setClass('label warning-pale ring-warning rounded-full ml-2 flex-none projectType'),
                     $lang->project->projectTypeList[$project->hasProduct]
                 ),
                 $project->deleted ? label
@@ -336,12 +336,12 @@ div
                     $lang->execution->delayed
                 ) : label
                 (
-                    setClass("ml-2 flex-none status-{$project->status}"),
+                    setClass("ml-2 flex-none status status-{$project->status}"),
                     $status
                 ),
                 span
                 (
-                    setClass('ml-2 text-gray flex-none'),
+                    setClass('ml-2 text-gray flex-none acl'),
                     $lang->project->shortAclList[$project->acl],
                     icon
                     (
@@ -360,7 +360,7 @@ div
                 setClass('flex mt-4'),
                 div
                 (
-                    setClass('clip text-secondary'),
+                    setClass('clip text-secondary programBox'),
                     $programDom
                 ),
             ),
@@ -380,7 +380,7 @@ div
             /* Linked product and plan.  */
             h::table
             (
-                setClass('table condensed bordered'),
+                setClass('table condensed bordered productsBox'),
                 h::thead
                 (
                     h::tr
@@ -422,7 +422,7 @@ div
             /* Project team. */
             h::table
             (
-                setClass('table condensed bordered mt-4'),
+                setClass('table condensed bordered mt-4 teams'),
                 h::thead
                 (
                     h::tr
@@ -462,7 +462,7 @@ div
             /* Estimate statistics. */
             h::table
             (
-                setClass('table condensed bordered mt-4'),
+                setClass('table condensed bordered mt-4 duration'),
                 h::thead
                 (
                     h::tr
@@ -549,7 +549,7 @@ div
             ),
             h::table
             (
-                setClass('table condensed bordered mt-4'),
+                setClass('table condensed bordered mt-4 estimate'),
                 h::thead
                 (
                     h::tr
