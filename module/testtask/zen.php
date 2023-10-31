@@ -276,19 +276,7 @@ class testtaskZen extends testtask
             $assignedToList = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted|qafirst');
         }
 
-        /* Set drop menu. */
-        $objectType = $objectID = '';
-        if(in_array($this->app->tab, array('project', 'execution')))
-        {
-            $objectType = $this->app->tab;
-            $idField    = $objectType . 'ID';
-            $objectID   = $testtask->{$this->app->tab};
-            $this->view->{$idField}    = $objectID;
-            $this->view->{$objectType} = $this->loadModel($objectType)->getByID($objectID);
-        }
-        $this->view->switcherParams   = "productID={$product->id}&branch=&taskID={$testtask->id}&module=testtask&method=cases&objectType={$objectType}&objectID={$objectID}";
-        $this->view->switcherText     = $testtask->name;
-        $this->view->switcherObjectID = $testtask->id;
+        $this->setDropMenu($product->id, $testtask);
 
         $this->view->title          = $product->name . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->runs           = $this->loadModel('testcase')->appendData($runs, 'run');
@@ -308,6 +296,7 @@ class testtaskZen extends testtask
         $this->view->orderBy        = $orderBy;
         $this->view->pager          = $pager;
         $this->view->setModule      = false;
+        $this->view->branch         = $testtask->branch;
     }
 
     /**
@@ -668,5 +657,34 @@ class testtaskZen extends testtask
         }
 
         return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+    }
+
+    /**
+     * 设置测试单下拉。
+     * Set testtask drop menu.
+     *
+     * @param  string    $caseResult
+     * @param  object    $preAndNext
+     * @param  int       $runID
+     * @param  int       $caseID
+     * @param  int       $version
+     * @access protected
+     * @return void
+     */
+    protected function setDropMenu(int $productID, object $task)
+    {
+        /* Set drop menu. */
+        $objectType = $objectID = '';
+        if(in_array($this->app->tab, array('project', 'execution')))
+        {
+            $objectType = $this->app->tab;
+            $idField    = $objectType . 'ID';
+            $objectID   = $task->{$this->app->tab};
+            $this->view->{$idField}    = $objectID;
+            $this->view->{$objectType} = $this->loadModel($objectType)->getByID($objectID);
+        }
+        $this->view->switcherParams   = "productID={$productID}&branch=&taskID={$task->id}&module=testtask&method={$this->app->rawMethod}&objectType={$objectType}&objectID={$objectID}";
+        $this->view->switcherText     = $task->name;
+        $this->view->switcherObjectID = $task->id;
     }
 }

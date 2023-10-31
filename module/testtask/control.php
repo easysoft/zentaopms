@@ -76,7 +76,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $branch = '', string $type = 'local,totalStatus', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $beginTime = '', string $endTime = '')
+    public function browse(int $productID = 0, string $branch = '0', string $type = 'local,totalStatus', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $beginTime = '', string $endTime = '')
     {
         /* 检查是否有权限访问测试单所属产品。*/
         /* Check if user have permission to access the product to which the testtask belongs. */
@@ -242,8 +242,6 @@ class testtask extends control
         $testtask = $this->testtask->getByID($testtaskID, true);
         if(!$testtask) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
 
-        $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution);
-
         /* session 改变时重新查询关联的产品。*/
         /* When the session changes, query the related products again. */
         $products = $this->products;
@@ -259,6 +257,9 @@ class testtask extends control
             $products[$productID] = $product->name;
         }
 
+        $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution);
+        $this->testtaskZen->setDropMenu($productID, $testtask);
+
         /* 执行工作流配置的扩展动作。*/
         /* Execute extended actions configured in the workflow. */
         $this->executeHooks($testtaskID);
@@ -271,6 +272,7 @@ class testtask extends control
         $this->view->testreport = $this->loadModel('testreport')->getById($testtask->testreport);
         $this->view->buildName  = $testtask->build == 'trunk' ? $this->lang->trunk : $testtask->buildName;
         $this->view->task       = $testtask;
+        $this->view->productID  = $productID;
         $this->display();
     }
 
@@ -402,6 +404,7 @@ class testtask extends control
     public function report(int $productID, int $taskID, string $browseType, int $branchID, int $moduleID = 0, string $chartType = 'pie')
     {
         $this->loadModel('report');
+        $charts = $datas = array();
         if(!empty($_POST))
         {
             $this->app->loadLang('testcase');
@@ -413,16 +416,17 @@ class testtask extends control
                 if(!empty($chartType))
                 {
                     $chartOption->type           = $chartType;
-                    $chartOption->graph->caption = $this->lang->testtask->report->charts[$chartType];
+                    $chartOption->graph->caption = $this->lang->testtask->report->charts[$chart];
                 }
 
-                $this->view->charts[$chart] = $chartOption;
-                $this->view->datas[$chart]  = $this->report->computePercent($chartData);
+                $charts[$chart] = $chartOption;
+                $datas[$chart]  = $this->report->computePercent($chartData);
             }
         }
 
         $task = $this->testtask->getByID($taskID);
         $this->testtaskZen->setMenu($productID, $branchID, $task->project, $task->execution);
+        $this->testtaskZen->setDropMenu($productID, $task);
 
         /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
         /* Prepare the product key-value pairs. */
@@ -439,7 +443,8 @@ class testtask extends control
         $this->view->moduleID   = $moduleID;
         $this->view->branchID   = $branchID;
         $this->view->chartType  = $chartType;
-
+        $this->view->charts     = $charts;
+        $this->view->datas      = $datas;
         $this->display();
     }
 
@@ -462,8 +467,8 @@ class testtask extends control
         /* 检查是否有权限访问测试单所属产品。*/
         /* Check if user have permission to access the product to which the testtask belongs. */
         $productID = $this->loadModel('product')->checkAccess($task->product, $this->products);
-
         $this->testtaskZen->setMenu($productID, $task->branch, $task->project, $task->execution);
+        $this->testtaskZen->setDropMenu($productID, $task);
 
         /* 保存部分内容到 session 和 cookie 中供后面使用。*/
         /* Save session and cookie. */
@@ -745,26 +750,22 @@ class testtask extends control
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('cases', "taskID={$taskID}")));
         }
-
-        /* 获取测试单信息。*/
         /* Get testtask info. */
         $task = $this->testtask->getByID($taskID);
         if(!$task) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->checkLinked, 'locate' => array('back' => true))));
 
-        /* 检查是否有权限访问测试单所属产品。*/
         /* Check if user have permission to access the product to which the testtask belongs. */
         $productID = $this->loadModel('product')->checkAccess($task->product, $this->products);
 
-        /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
         /* Prepare the product key-value pairs. */
         $product = $this->product->getByID($productID);
         if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
 
-        /* 保存部分内容到 session 中供后面使用。*/
         /* Save session. */
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         $this->testtaskZen->setMenu($productID, $task->branch, $task->project, $task->execution);
+        $this->testtaskZen->setDropMenu($productID, $task);
         $this->testtaskZen->setSearchParamsForLinkCase($product, $task, $type, $param);
 
         /* 从数据库中查询一个测试单下可以关联的测试用例。*/
@@ -782,6 +783,8 @@ class testtask extends control
         $this->view->type         = $type;
         $this->view->param        = $param;
         $this->view->pager        = $pager;
+        $this->view->product      = $product;
+        $this->view->branch       = $task->branch;
         $this->display();
     }
 
