@@ -163,6 +163,87 @@ class repo extends control
     }
 
     /**
+     * 创建版本库，同步创建远程版本库。
+     * Create a repo.
+     *
+     * @param  int    $objectID  projectID|executionID
+     * @access public
+     * @return void
+     */
+    public function createRepo(int $objectID = 0)
+    {
+        if($_POST)
+        {
+            /* Prepare data. */
+            $formData         = form::data($this->config->repo->form->createRepo);
+            $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
+            $repo             = $this->repoZen->prepareCreateRepo($formData, $isPipelineServer);
+
+            /* Create a repo. */
+            if($repo) $repoID = $this->repo->createRepo($repo, $_POST['namespace']);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if($this->post->SCM == 'Gitlab')
+            {
+                /* Add webhook. */
+                $repo = $this->repo->getByID($repoID);
+                $this->loadModel('gitlab')->updateCodePath($repo->serviceHost, $repo->serviceProject, $repo->id);
+                $this->repo->updateCommitDate($repoID);
+            }
+
+            $this->loadModel('action')->create('repo', $repoID, 'created');
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
+            $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false) . '#app=' . $this->app->tab;
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+        }
+
+        $this->commonAction(0, $objectID);
+        $this->repoZen->buildCreateRepoForm($objectID);
+    }
+
+    /**
+     * 根据任务和执行创建分支。
+     * Create a branch by task and execution.
+     *
+     * @param  int    $taskID
+     * @param  int    $executionID
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function createBranch(int $taskID, int $executionID, int $repoID = 0)
+    {
+        $repoList = $this->repo->getList($executionID);
+        if(!$repoList) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->noRepo));
+
+        if(!$repoID) $repoID = $this->post->repoID;
+        if(!$repoID || !isset($repoList[$repoID])) $repoID = key($repoList);
+        $this->scm->setEngine($repoList[$repoID]);
+
+        if(!empty($_POST))
+        {
+            $branch = form::data($this->config->repo->form->createBranch)->get();
+            $result = $this->scm->createBranch($branch->name, $branch->from);
+            if($result['result'] == 'fail') return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->createdFail . ': ' . $result['message']));
+
+            $this->repo->saveTaskRelation($repoID, $taskID, $branch->name);
+            $this->loadModel('action')->create('task', $taskID, 'createRepoBranch', '', $branch->name);
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+        }
+
+        $repoPairs = array();
+        foreach($repoList as $repo) $repoPairs[$repo->id] = $repo->name;
+
+        $this->view->repoPairs   = $repoPairs;
+        $this->view->repoID      = $repoID;
+        $this->view->taskID      = $taskID;
+        $this->view->branches    = $this->scm->branch();
+        $this->view->executionID = $executionID;
+        $this->display();
+    }
+
+    /**
      * Edit a repo.
      *
      * @param  int    $repoID
@@ -1634,6 +1715,25 @@ class repo extends control
             $options[] = array('text' => $project->name_with_namespace, 'value' => $project->id);
         }
         return print(json_encode($options));
+    }
+
+    /**
+     * Ajax get groups by server.
+     *
+     * @param  int    $serverID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetGroups(int $serverID)
+    {
+        $options = $this->repo->getGroups($serverID);
+        $server  = $this->loadModel('pipeline')->getByID($serverID);
+
+        $result = new stdclass();
+        $result->options = $options;
+        $result->server  = $server;
+
+        return print(json_encode($result));
     }
 
     /**

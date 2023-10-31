@@ -79,7 +79,7 @@ class repoModel extends model
             if(!in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
         }
 
-        if(!in_array($this->app->methodName, array('maintain', 'create', 'edit','import'))) common::setMenuVars('devops', $repoID);
+        if(!in_array($this->app->methodName, array('maintain', 'create', 'createrepo', 'edit','import'))) common::setMenuVars('devops', $repoID);
         if(!session_id()) session_start();
         $this->session->set('repoID', $repoID);
         session_write_close();
@@ -208,6 +208,113 @@ class repoModel extends model
         $this->rmClientVersionFile();
 
         return $repoID;
+    }
+
+    /**
+     * 创建远程版本库。
+     * Create a repo.
+     *
+     * @param  object $repo
+     * @param  int   $namespace
+     * @access public
+     * @return int|false
+     */
+    public function createRepo(object $repo, int $namespace): int|false
+    {
+        $check = $this->repoTao->checkName($repo);
+        if(!$check)
+        {
+            dao::$errors['name'] = $this->lang->repo->error->repoNameInvalid;
+            return false;
+        }
+
+        $createRepoFunc = "create{$repo->SCM}Repo";
+        $response = $this->$createRepoFunc($repo, $namespace);
+
+        $this->loadModel($repo->SCM);
+
+        if(!empty($response->id))
+        {
+            $this->loadModel('action')->create($repo->SCM . 'project', $response->id, 'created', '', $response->name);
+            $repo->path           = $response->path;
+            $repo->serviceProject = $response->serviceProject;
+            $repo->extra          = $response->extra;
+
+            if(in_array($repo->SCM, array('Gitea', 'Gogs')))
+            {
+                $path = $this->checkGiteaConnection($repo->SCM, $repo->name, $repo->serviceHost, $repo->serviceProject);
+
+                if($path === false) return false;
+                $repo->path = $path;
+            }
+
+            $repoID = $this->create($repo, false);
+            if(dao::isError())
+            {
+                $this->{$repo->SCM}->apiDeleteProject($repo->serviceHost, $response->id);
+                return false;
+            }
+            return $repoID;
+        }
+
+        return $this->{$repo->SCM}->apiErrorHandling($response);
+    }
+
+    /**
+     * 创建gitlab远程版本库。
+     * Create gitlab repo.
+     *
+     * @param  object $repo
+     * @param  int    $namespace
+     * @access public
+     * @return object|false
+     */
+    public function createGitlabRepo(object $repo, int $namespace): object|false
+    {
+        $project = new stdclass();
+        $project->name                   = $repo->name;
+        $project->path                   = $repo->name;
+        $project->description            = $repo->desc;
+        $project->namespace_id           = $namespace;
+        $project->initialize_with_readme = true;
+
+        $response = $this->loadModel('gitlab')->apiCreateProject($repo->serviceHost, $project);
+
+        if(empty($response->id)) return $response;
+
+        $result = new stdclass();
+        $result->id             = $response->id;
+        $result->path           = $response->web_url;
+        $result->serviceProject = $response->id;
+        $result->extra          = $response->id;
+
+        return $result;
+    }
+
+    /**
+     * 创建gitea远程版本库。
+     * Create gitlab repo.
+     *
+     * @param  object $repo
+     * @param  int    $namespace
+     * @access public
+     * @return object|false
+     */
+    public function createGiteaRepo(object $repo, int $namespaceID): object|false
+    {
+        $namespace = $this->getGroups($repo->serviceHost, $namespaceID);
+
+        $response = $this->loadModel('gitea')->apiCreateRepository($repo->serviceHost, $repo->name, $namespace, $repo->desc);
+
+        if(empty($response->id)) return $response;
+
+        $result = new stdclass();
+        $result->id             = $response->id;
+        $result->path           = $response->html_url;
+        $result->serviceProject = $response->full_name;
+        $result->extra          = '';
+
+        return $result;
     }
 
     /**
@@ -2951,6 +3058,69 @@ class repoModel extends model
     }
 
     /**
+     * Get repo groups.
+     *
+     * @param  int    $serverID
+     * @param  int    $groupID
+     * @access public
+     * @return string|array|false
+     */
+    public function getGroups(int|string $serverID, int|string $groupID = 0): string|array|false
+    {
+        $server       = $this->loadModel('pipeline')->getByID($serverID);
+        $getGroupFunc = 'get' . $server->type . 'Groups';
+
+        $groups = $this->$getGroupFunc($serverID);
+
+        if($groupID !== 0)
+        {
+            foreach($groups as $group)
+            {
+                if($group['value'] == $groupID) return $group['text'];
+            }
+            return false;
+        }
+
+        return $groups;
+    }
+
+    /**
+     * Get gitlab groups.
+     *
+     * @param  int    $gitlabID
+     * @access public
+     * @return void
+     */
+    public function getGitlabGroups(int $gitlabID): array
+    {
+        $groups = $this->loadModel('gitlab')->apiGetGroups($gitlabID, 'name_asc');
+        $options = array();
+        foreach($groups as $group)
+        {
+            $options[] = array('text' => $group->name, 'value' => $group->id);
+        }
+        return $options;
+    }
+
+    /**
+     * Get gitea groups.
+     *
+     * @param  int $giteaID
+     * @access public
+     * @return array
+     */
+    public function getGiteaGroups(int $giteaID): array
+    {
+        $groups = $this->loadModel('gitea')->apiGetGroups($giteaID);
+        $options = array();
+        foreach($groups as $group)
+        {
+            $options[] = array('text' => $group->username, 'value' => $group->id);
+        }
+        return $options;
+    }
+
+    /**
      * Check str in array.
      *
      * @param  string $str
@@ -2991,5 +3161,65 @@ class repoModel extends model
                 $this->dao->update(TABLE_REPO)->set('lastCommit')->eq($lastCommitDate)->where('id')->eq($repoID)->exec();
             }
         }
+    }
+
+    /**
+     * 检查gitea连接。
+     * Check gitea connection.
+     *
+     * @param  string      $scm
+     * @param  string      $name
+     * @param  int|string  $serviceHost
+     * @param  int|string  $serviceProject
+     * @access public
+     * @return string|false
+     */
+    public function checkGiteaConnection(string $scm, string $name, int|string $serviceHost, int|string $serviceProject): string|false
+    {
+        if($name != '' and $serviceProject != '')
+        {
+            $module  = strtolower($scm);
+            $project = $this->loadModel($module)->apiGetSingleProject($serviceHost, $serviceProject);
+            if(isset($project->tokenCloneUrl))
+            {
+                $path = $this->app->getAppRoot() . 'www/data/repo/' . $name . '_' . $module;
+                if(!realpath($path))
+                {
+                    $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $path . '"  > "' . $this->app->getTmpRoot() . "log/clone.progress.$module.{$name}.log\" 2>&1 &";
+                    if(PHP_OS == 'WINNT') $cmd = "start /b $cmd";
+                    exec($cmd);
+                }
+                return $path;
+            }
+            else
+            {
+                dao::$errors['serviceProject'] = $this->lang->repo->error->noCloneAddr;
+                return false;
+            }
+        }
+    }
+
+    /*
+     * 保存任务和分支的关联关系。
+     * Save task and branch relation.
+     *
+     * @param  int    $repoID
+     * @param  int    $taskID
+     * @param  string $branch
+     * @access public
+     * @return bool
+     */
+    public function saveTaskRelation(int $repoID, int $taskID, string $branch): bool
+    {
+        $relation = new stdclass();
+        $relation->AType    = 'task';
+        $relation->AID      = $taskID;
+        $relation->BType    = 'repobranch';
+        $relation->BID      = $repoID;
+        $relation->relation = 'linkrepobranch';
+        $relation->extra    = $branch;
+        $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+
+        return !dao::isError();
     }
 }
