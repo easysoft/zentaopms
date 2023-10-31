@@ -14,6 +14,7 @@ $cacheDir = $cacheDir ?: '/tmp/rector_cached_files';
 return static function (RectorConfig $rectorConfig) use ($version,$cacheDir): void {
     $rectorConfig->skip([
         'test/*',
+        'roadrunner-cli/src/*',
     ]);
     $rectorConfig->phpVersion(constant(PhpVersion::class . '::PHP_' . $version));
     $rectorConfig->sets([constant(DowngradeLevelSetList::class . '::DOWN_TO_PHP_' . $version)]);

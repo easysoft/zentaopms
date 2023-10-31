@@ -360,6 +360,7 @@ process() {
 }
 
 postProcess() {
+  set -x
   if [[ "$statisticSyntax" == "true" ]];then
     foundSyntaxErr="false"
     for ver in $(jq -r '.versions | keys[]' "$statisticDataFile")
