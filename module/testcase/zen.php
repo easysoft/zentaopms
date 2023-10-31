@@ -215,6 +215,7 @@ class testcaseZen extends testcase
         $product = $this->product->getById($productID);
         if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
 
+        $projectID   = $from == 'project'   ? $param : $this->session->project;
         $executionID = $from == 'execution' ? $param : 0;
         $testcaseID  = $from && strpos('testcase|work|contribute', $from) !== false ? $param : 0;
 
@@ -749,17 +750,23 @@ class testcaseZen extends testcase
      * Set menu for editing case.
      *
      * @param  object    $case
+     * @param  int       $executionID
      * @access protected
      * @return void
      */
-    protected function setMenuForCaseEdit(object $case): void
+    protected function setMenuForCaseEdit(object $case, int $executionID): void
     {
-        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($case->project);
+        if($this->app->tab == 'project')
+        {
+            $this->loadModel('project')->setMenu($case->project);
+            $this->view->projectID = $case->project;
+        }
 
         if($this->app->tab == 'execution')
         {
             if(!$executionID) $executionID = $case->execution;
             $this->loadModel('execution')->setMenu($executionID);
+            $this->view->executionID = $executionID;
         }
 
         if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $case->product, $case->branch);
@@ -787,10 +794,11 @@ class testcaseZen extends testcase
      * Assign for editing case.
      *
      * @param  object    $case
+     * @param  int       $executionID
      * @access protected
      * @return void
      */
-    protected function assignForEditCase(object $case): void
+    protected function assignForEditCase(object $case, int $executionID): void
     {
         $product = $this->product->getByID($case->product);
         if(!isset($this->products[$case->product])) $this->products[$case->product] = $product->name;
@@ -800,7 +808,7 @@ class testcaseZen extends testcase
         $this->view->product   = $product;
         $this->view->products  = $this->products;
 
-        $this->assignBranchForEdit($case);
+        $this->assignBranchForEdit($case, $executionID);
         $this->assignStoriesForEdit($case);
         $this->assignModuleOptionMenuForEdit($case);
     }
@@ -810,10 +818,11 @@ class testcaseZen extends testcase
      * Assign branch data for editing case.
      *
      * @param  object  $case
+     * @param  int     $executionID
      * @access private
      * @return void
      */
-    private function assignBranchForEdit(object $case): void
+    private function assignBranchForEdit(object $case, int $executionID): void
     {
         $objectID = 0;
         if($this->app->tab == 'execution') $objectID = $executionID;

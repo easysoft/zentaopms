@@ -503,8 +503,8 @@ class testcase extends control
         {
             $productID = $case->product;
 
-            $this->testcaseZen->setMenuForCaseEdit($case);
-            $this->testcaseZen->assignForEditCase($case);
+            $this->testcaseZen->setMenuForCaseEdit($case, $executionID);
+            $this->testcaseZen->assignForEditCase($case, $executionID);
         }
 
         $this->testcaseZen->assignForEdit($productID, $case, $testtasks);
