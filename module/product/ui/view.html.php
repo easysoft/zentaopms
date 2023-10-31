@@ -38,88 +38,6 @@ foreach($config->product->memberFields as $field)
     );
 }
 
-if($product->status != 'wait') $otherInfoDom = div
-(
-    setClass('flex flex-wrap'),
-    div
-    (
-        setClass('w-1/4 item mb-3'),
-        span(setClass('text-gray'), $lang->product->plans),
-        span(setClass('ml-2'), $product->plans)
-    ),
-    div
-    (
-        setClass('w-1/4 item mb-3'),
-        span(setClass('text-gray'), $lang->product->releases),
-        span(setClass('ml-2'), $product->releases)
-    ),
-    div
-    (
-        setClass('w-1/4 item mb-3'),
-        span(setClass('text-gray'), $lang->product->bugs),
-        span(setClass('ml-2'), $product->bugs)
-    ),
-    div
-    (
-        setClass('w-1/4 item mb-3'),
-        span(setClass('text-gray'), $lang->product->projects),
-        span(setClass('ml-2'), $product->projects)
-    ),
-    div
-    (
-        setClass('w-1/4 item mb-3'),
-        span(setClass('text-gray'), $lang->product->builds),
-        span(setClass('ml-2'), $product->builds)
-    ),
-    div
-    (
-        setClass('w-1/4 item mb-3'),
-        span(setClass('text-gray'), $lang->product->docs),
-        span(setClass('ml-2'), $product->docs)
-    ),
-    div
-    (
-        setClass('w-1/4 item mb-3'),
-        span(setClass('text-gray'), $lang->product->cases),
-        span(setClass('ml-2'), $product->cases)
-    ),
-    div
-    (
-        setClass('w-1/4 item mb-3'),
-        span(setClass('text-gray'), $lang->product->executions),
-        span(setClass('ml-2'), $product->executions)
-    ),
-);
-
-if($product->status == 'wait') $otherInfoDom = div
-(
-    setClass('flex flex-wrap'),
-    div
-    (
-        setClass('w-1/4 item mb-3'),
-        span(setClass('text-gray'), $lang->story->statusList['draft']  . $lang->URCommon),
-        span(setClass('ml-2'), $product->stories['draft'])
-    ),
-    div
-    (
-        setClass('w-1/4 item mb-3'),
-        span(setClass('text-gray'), $lang->story->statusList['active']  . $lang->URCommon),
-        span(setClass('ml-2'), $product->stories['active'])
-    ),
-    div
-    (
-        setClass('w-1/4 item mb-3'),
-        span(setClass('text-gray'), $lang->story->statusList['reviewing']  . $lang->URCommon),
-        span(setClass('ml-2'), $product->stories['reviewing'])
-    ),
-    div
-    (
-        setClass('w-1/4 item mb-3'),
-        span(setClass('text-gray'), $lang->story->statusList['changing']  . $lang->URCommon),
-        span(setClass('ml-2'), $product->stories['changing'])
-    ),
-);
-
 div
 (
     setClass('flex w-full'),
@@ -291,7 +209,58 @@ div
             (
                 setClass('otherInfoBox'),
                 set::title($lang->product->otherInfo),
-                $otherInfoDom,
+                div
+                (
+                    setClass('flex flex-wrap'),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->plans),
+                        span(setClass('ml-2'), $product->plans)
+                    ),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->releases),
+                        span(setClass('ml-2'), $product->releases)
+                    ),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->bugs),
+                        span(setClass('ml-2'), $product->bugs)
+                    ),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->projects),
+                        span(setClass('ml-2'), $product->projects)
+                    ),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->builds),
+                        span(setClass('ml-2'), $product->builds)
+                    ),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->docs),
+                        span(setClass('ml-2'), $product->docs)
+                    ),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->cases),
+                        span(setClass('ml-2'), $product->cases)
+                    ),
+                    div
+                    (
+                        setClass('w-1/4 item mb-3'),
+                        span(setClass('text-gray'), $lang->product->executions),
+                        span(setClass('ml-2'), $product->executions)
+                    ),
+                )
             ),
         ),
     ),
