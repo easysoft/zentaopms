@@ -91,6 +91,7 @@ toolbar
         set::className('ghost'),
         set::icon('link'),
         set::url(inlink('linkCase', "taskID=$task->id")),
+        set('data-app', $app->tab),
         $lang->testtask->linkCase,
     ) : null,
     $canExport ? btn
@@ -106,6 +107,7 @@ toolbar
         set::className('ghost'),
         set::icon('bar-chart'),
         set::url(inlink('report', "productID=$productID&taskID=$task->id&browseType=$browseType&branchID=$task->branch&moduleID=" . (empty($moduleID) ? '' : $moduleID))),
+        set('data-app', $app->tab),
         $lang->testtask->report->common
     ) : null,
     $canView ? btn
@@ -113,6 +115,7 @@ toolbar
         set::className('ghost'),
         set::icon('list-alt'),
         set::url(inlink('view', "taskID=$task->id")),
+        set('data-app', $app->tab),
         $lang->testtask->view
     ) : null,
     btn(set::icon('back'), set::className('ghost'), set::url($this->session->testtaskList), $lang->goback)
