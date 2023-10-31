@@ -213,6 +213,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->user->visions),
+            set::required(true),
             checkList
             (
                 set::name('visions[]'),
