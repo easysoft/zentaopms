@@ -1686,8 +1686,13 @@ class repo extends control
     public function ajaxGetGroups(int $serverID)
     {
         $options = $this->repo->getGroups($serverID);
+        $server  = $this->loadModel('pipeline')->getByID($serverID);
 
-        return print(json_encode($options));
+        $result = new stdclass();
+        $result->options = $options;
+        $result->server  = $server;
+
+        return print(json_encode($result));
     }
 
     /**

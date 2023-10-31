@@ -468,13 +468,14 @@ class repoZen extends repo
             $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
         }
 
-        $serviceHosts = $this->loadModel('gitlab')->getPairs();
+        $serviceHosts = $this->loadModel('gitlab')->getPairs() + $this->loadModel('gitea')->getPairs();
         $repoGroups   = array();
 
         if(!empty($serviceHosts))
         {
-            $serverID = array_keys($serviceHosts)[0];
+            $serverID   = array_keys($serviceHosts)[0];
             $repoGroups = $this->repo->getGroups($serverID);
+            $server     = $this->loadModel('pipeline')->getByID($serverID);
         }
 
         $this->view->title           = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
@@ -486,6 +487,7 @@ class repoZen extends repo
         $this->view->serviceHosts    = $serviceHosts;
         $this->view->repoGroups      = $repoGroups;
         $this->view->objectID        = $objectID;
+        $this->view->server          = $server;
 
         $this->display();
     }
@@ -1168,7 +1170,7 @@ class repoZen extends repo
      * @access protected
      * @return string
      */
-    protected function getSCM(int $serviceHost)
+    protected function getSCM(int|string $serviceHost)
     {
         $server = $this->loadModel('pipeline')->getByID($serviceHost);
 

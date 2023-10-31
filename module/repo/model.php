@@ -231,23 +231,33 @@ class repoModel extends model
         $createRepoFunc = "create{$repo->SCM}Repo";
         $response = $this->$createRepoFunc($repo, $namespace);
 
-        if(!empty($response))
+        $this->loadModel($repo->SCM);
+
+        if(!empty($response->id))
         {
-            $this->loadModel('action')->create('gitlabproject', $response->id, 'created', '', $response->name);
+            $this->loadModel('action')->create($repo->SCM . 'project', $response->id, 'created', '', $response->name);
             $repo->path           = $response->path;
-            $repo->serviceProject = $response->id;
-            $repo->extra          = $response->id;
+            $repo->serviceProject = $response->serviceProject;
+            $repo->extra          = $response->extra;
+
+            if(in_array($repo->SCM, array('Gitea', 'Gogs')))
+            {
+                $path = $this->checkGiteaConnection($repo->SCM, $repo->name, $repo->serviceHost, $repo->serviceProject);
+
+                if($path === false) return false;
+                $repo->path = $path;
+            }
 
             $repoID = $this->create($repo, false);
             if(dao::isError())
             {
-                $this->gitlab->apiDeleteProject($repo->serviceHost, $response->id);
+                $this->{$repo->SCM}->apiDeleteProject($repo->serviceHost, $response->id);
                 return false;
             }
             return $repoID;
         }
 
-        return $this->gitlab->apiErrorHandling($response);
+        return $this->{$repo->SCM}->apiErrorHandling($response);
     }
 
     /**
@@ -270,12 +280,39 @@ class repoModel extends model
 
         $response = $this->loadModel('gitlab')->apiCreateProject($repo->serviceHost, $project);
 
-        if(empty($response->id)) return false;
+        if(empty($response->id)) return $response;
 
         $result = new stdclass();
-        $result->id        = $response->id;
-        $result->path      = $response->web_url;
-        $result->namespace = $response->namespace->id;
+        $result->id             = $response->id;
+        $result->path           = $response->web_url;
+        $result->serviceProject = $response->id;
+        $result->extra          = $response->id;
+
+        return $result;
+    }
+
+    /**
+     * 创建gitea远程版本库。
+     * Create gitlab repo.
+     *
+     * @param  object $repo
+     * @param  int    $namespace
+     * @access public
+     * @return object|false
+     */
+    public function createGiteaRepo(object $repo, int $namespaceID): object|false
+    {
+        $namespace = $this->getGroups($repo->serviceHost, $namespaceID);
+
+        $response = $this->loadModel('gitea')->apiCreateRepository($repo->serviceHost, $repo->name, $namespace, $repo->desc);
+
+        if(empty($response->id)) return $response;
+
+        $result = new stdclass();
+        $result->id             = $response->id;
+        $result->path           = $response->html_url;
+        $result->serviceProject = $response->full_name;
+        $result->extra          = '';
 
         return $result;
     }
@@ -3028,7 +3065,7 @@ class repoModel extends model
      * @access public
      * @return string|array|false
      */
-    public function getGroups(int $serverID, int $groupID = 0): string|array|false
+    public function getGroups(int|string $serverID, int|string $groupID = 0): string|array|false
     {
         $server       = $this->loadModel('pipeline')->getByID($serverID);
         $getGroupFunc = 'get' . $server->type . 'Groups';
@@ -3122,6 +3159,42 @@ class repoModel extends model
             {
                 $lastCommitDate = date('Y-m-d H:i:s', strtotime($commit->committed_date));
                 $this->dao->update(TABLE_REPO)->set('lastCommit')->eq($lastCommitDate)->where('id')->eq($repoID)->exec();
+            }
+        }
+    }
+
+    /**
+     * 检查gitea连接。
+     * Check gitea connection.
+     *
+     * @param  string      $scm
+     * @param  string      $name
+     * @param  int|string  $serviceHost
+     * @param  int|string  $serviceProject
+     * @access public
+     * @return string|false
+     */
+    public function checkGiteaConnection(string $scm, string $name, int|string $serviceHost, int|string $serviceProject): string|false
+    {
+        if($name != '' and $serviceProject != '')
+        {
+            $module  = strtolower($scm);
+            $project = $this->loadModel($module)->apiGetSingleProject($serviceHost, $serviceProject);
+            if(isset($project->tokenCloneUrl))
+            {
+                $path = $this->app->getAppRoot() . 'www/data/repo/' . $name . '_' . $module;
+                if(!realpath($path))
+                {
+                    $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $path . '"  > "' . $this->app->getTmpRoot() . "log/clone.progress.$module.{$name}.log\" 2>&1 &";
+                    if(PHP_OS == 'WINNT') $cmd = "start /b $cmd";
+                    exec($cmd);
+                }
+                return $path;
+            }
+            else
+            {
+                dao::$errors['serviceProject'] = $this->lang->repo->error->noCloneAddr;
+                return false;
             }
         }
     }

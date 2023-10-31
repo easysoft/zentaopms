@@ -27,9 +27,10 @@ function onHostChange()
     $.get($.createLink('repo', 'ajaxGetGroups', "host=" + host), function(resp)
     {
         resp = JSON.parse(resp);
-        $groups.render({items: resp});
+        $groups.render({items: resp.options});
         $groups.$.clear();
         toggleLoading('#namespace', false);
+        $('.hide-service').toggle(resp.server.type == 'gitea');
     });
 }
 
