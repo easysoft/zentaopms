@@ -77,8 +77,9 @@ foreach($lang->report->typeList as $type => $typeName)
 div
 (
     setClass('flex flex-nowrap'),
-    sidebar
+    cell
     (
+        set::width('240'),
         formPanel
         (
             setID('chartForm'),
