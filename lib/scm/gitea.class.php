@@ -179,6 +179,24 @@ class Gitea
     }
 
     /**
+     * Create a branch.
+     *
+     * @param  string $branchName
+     * @param  string $ref
+     * @access public
+     * @return bool
+     */
+    public function createBranch($branchName = '', $ref = 'master')
+    {
+        chdir($this->root);
+        $res = execCmd(escapeCmd("{$this->client} checkout -b {$branchName} origin/{$ref}"), 'array');
+        if(empty($res[0])) return array('result' => 'fail', 'message' => 'Branch is exists.');
+
+        execCmd(escapeCmd("{$this->client} push origin {$branchName}"), 'array');
+        return array('result' => 'success', 'message' => '');
+    }
+
+    /**
      * Get last log.
      *
      * @param  string $path
@@ -250,10 +268,11 @@ class Gitea
      *
      * @param  string $path
      * @param  string $revision
+     * @param  bool   $showComment
      * @access public
      * @return array
      */
-    public function blame($path, $revision)
+    public function blame($path, $revision, $showComment = true)
     {
         if(!scm::checkRevision($revision)) return array();
 
