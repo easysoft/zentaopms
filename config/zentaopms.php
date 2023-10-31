@@ -308,6 +308,7 @@ $config->openMethods[] = 'space.getstoreappinfo';
 $config->openMethods[] = 'store.browse';
 $config->openMethods[] = 'store.appview';
 $config->openMethods[] = 'system.editdomain';
+$config->openMethods[] = 'doc.uploaddocs';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
