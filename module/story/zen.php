@@ -618,7 +618,7 @@ class storyZen extends story
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = empty($branches) ? '' : key($branches);
 
-            if($this->view->execution->type == 'kanban')
+            if(isset($this->view->execution->type) && $this->view->execution->type == 'kanban')
             {
                 $fields['region']['options'] = zget($this->view, 'regionPairs', array());
                 $fields['lane']['options']   = zget($this->view, 'lanePairs', array());
