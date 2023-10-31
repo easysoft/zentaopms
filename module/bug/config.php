@@ -143,6 +143,7 @@ $config->bug->actionList['edit']['text'] = $lang->bug->edit;
 $config->bug->actionList['edit']['hint'] = $lang->bug->edit;
 $config->bug->actionList['edit']['url']  = array('module' => 'bug', 'method' => 'edit', 'params' => 'bugID={id}');
 
+global $app;
 $config->bug->actionList['copy']['icon']     = 'copy';
 $config->bug->actionList['copy']['text']     = $lang->bug->copy;
 $config->bug->actionList['copy']['hint']     = $lang->bug->copy;
