@@ -117,6 +117,27 @@ function diffDate(date1, date2)
 }
 
 /**
+ * 如果列包含切片字段，重新渲染单元格。
+ * If column contains slice field, re-render cell.
+ *
+ * @param  array  result
+ * @param  object cell
+ * @access public
+ * @return array
+ */
+renderCell = function(result, {row, col})
+{
+    if(result && col.setting.colspan)
+    {
+        const values = result.shift();
+        result.push({className: 'gap-0 px-0'});
+        values.forEach((value, index) => result.push({html: value ? value : '&nbsp;', className: 'flex justify-center items-center h-full w-1/2' + (index == 0 ? ' border-r': ''), style: 'border-color: var(--dtable-border-color)'}));
+    }
+
+    return result;
+}
+
+/**
  * 合并单元格。
  * Merge cell.
  *
