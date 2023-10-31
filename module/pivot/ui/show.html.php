@@ -40,7 +40,7 @@ $generateData = function() use ($module, $method, $lang, $title, $pivot, $data, 
                 set::data($rows),
                 set::emptyTip($lang->error->noData),
                 set::onRenderCell(jsRaw('renderCell')),
-                $cellSpan ? set::plugins(array('cellspan')) : null,
+                set::plugins(array('header-group', $cellSpan ? 'cellspan' : null)),
                 $cellSpan ? set::getCellSpan(jsRaw('getCellSpan')) : null,
                 $cellSpan ? set::cellSpanOptions($cellSpan) : null
             )
