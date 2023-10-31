@@ -143,7 +143,7 @@ class mainNavbar extends nav
         {
             $ajaxMethod = 'ajaxSwitcherMenu';
             if($moduleName == 'testcase' && $app->tab == 'project') $moduleName = 'project';
-            if($moduleName == 'testtask' && $methodName == 'cases') $ajaxMethod = 'ajaxGetDropMenu';
+            if($moduleName == 'testtask') $ajaxMethod = 'ajaxGetDropMenu';
             $fetcher = createLink($moduleName, $ajaxMethod, data('switcherParams'));
             return array(zui::dropmenu
                 (

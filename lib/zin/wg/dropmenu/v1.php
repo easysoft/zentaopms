@@ -87,8 +87,8 @@ class dropmenu extends wg
                 $product = $app->control->loadModel('product')->getByID((int)$objectID);
                 if($product->type != 'normal')
                 {
-                    if(data('branch'))   $branchID = data('branch');
-                    if(data('branchID')) $branchID = data('branchID');
+                    if(!is_null(data('branch'))) $branchID = data('branch');
+                    if(!is_null(data('branchID')) && !isset($branchID)) $branchID = data('branchID');
                     $app->control->loadModel('branch');
 
                     /* Get current branch name. */
@@ -106,7 +106,7 @@ class dropmenu extends wg
                     {
                         $branchName = $app->control->branch->getByID((string)$branchID);
                     }
-
+                    if($module == 'testtask' && $method == 'browse') $extra = data('type');
                     $branchURL  = createLink('branch', 'ajaxGetDropMenu', "objectID=$objectID&branch=$branchID&module=$module&method=$method&extra=$extra");
                     $branchMenu = zui::dropmenu
                         (
@@ -121,7 +121,7 @@ class dropmenu extends wg
             }
         }
 
-        if($module == 'testtask' && $method == 'cases' && $app->tab == 'qa')
+        if($module == 'testtask' && in_array($method, array('cases', 'view', 'report', 'groupcase', 'linkcase')) && $app->tab == 'qa')
         {
             $testtaskUrl  = createLink('testtask', 'ajaxGetDropMenu', data('switcherParams'));
             $testtaskMenu = zui::dropmenu
