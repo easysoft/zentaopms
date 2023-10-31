@@ -40,6 +40,12 @@ if(isset($config->testcase->dtable->fieldList['branch'])) $config->testcase->dta
 if(isset($config->testcase->dtable->fieldList['story']))  $config->testcase->dtable->fieldList['story']['map']  = $stories;
 $config->testcase->dtable->fieldList['actions']['list']['edit']['url'] = str_replace('%executionID%', (string)$executionID, $config->testcase->dtable->fieldList['actions']['list']['edit']['url']);
 $config->testcase->dtable->fieldList['actions']['menu'] =  array(array('confirmStoryChange'), array('runCase', 'runResult', 'edit', 'createBug', 'create'));
+$this->config->testcase->dtable->fieldList['title']['link'] = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
+foreach($config->testcase->dtable->fieldList['actions']['list'] as $method => $action)
+{
+    if(isset($action['url']) && isset($action['url']['params'])) $config->testcase->dtable->fieldList['actions']['list'][$method]['url']['params'] = str_replace('{caseID}', '{id}', $action['url']['params']);
+}
+
 $this->loadModel('testcase');
 foreach($cases as $case)
 {

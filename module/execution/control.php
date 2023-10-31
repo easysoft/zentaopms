@@ -584,8 +584,6 @@ class execution extends control
 
         $this->executionZen->assignTestcaseVars($executionID, $productID, $branchID, $moduleID, $orderBy, $type, $pager);
 
-        $this->config->testcase->dtable->fieldList['title']['link'] = array('module' => 'testcase', 'method' => 'view', 'params' => "caseID={id}");
-
         $this->view->execution      = $execution;
         $this->view->productOption  = $productOption;
         $this->view->branchOption   = $branchOption;
