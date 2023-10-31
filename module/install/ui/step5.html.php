@@ -80,6 +80,7 @@ div
             ),
             formRow
             (
+                setClass('importDemoDataRow'),
                 formGroup
                 (
                     set::label(' '),
