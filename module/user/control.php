@@ -673,7 +673,10 @@ class user extends control
         {
             if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $customFields[$field] = $this->lang->user->$field;
         }
-        foreach(explode(',', $this->config->user->custom->batchEditFields) as $field)
+
+        $batchEditFields = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=user&section=custom&key=batchEditFields");
+        if(!$batchEditFields) $batchEditFields = $this->config->user->custom->batchEditFields;
+        foreach(explode(',', $batchEditFields) as $field)
         {
             if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $showFields[$field] = $field;
         }
