@@ -118,6 +118,9 @@ class execution extends control
     {
         if(!isset($_SESSION['limitedExecutions'])) $this->execution->getLimitedExecution();
 
+        /* Save to session. */
+        $this->session->set('taskList', $this->app->getURI(true), 'execution');
+
         /* Set browse type. */
         $browseType = strtolower($status);
         $execution  = $this->commonAction($executionID, $status);
