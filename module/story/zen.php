@@ -196,45 +196,43 @@ class storyZen extends story
      * @param  int       $productID
      * @param  int       $executionID
      * @param  string    $from        work|contribute
-     * @param  string    $storyType   story|requirement
      * @access protected
      * @return void
      */
-    protected function setMenuForBatchClose(int $productID, int $executionID = 0, string $from = '', string $storyType = 'story')
+    protected function setMenuForBatchClose(int $productID, int $executionID = 0, string $from = '')
     {
         /* The stories of a product. */
-        if($this->app->tab == 'product' and !empty($productID))
+        if($this->app->tab == 'product' && $productID)
         {
             $this->product->setMenu($productID);
             $product = $this->product->getByID($productID);
             $this->view->title = $product->name . $this->lang->colon . $this->lang->story->batchClose;
         }
         /* The stories of a execution. */
-        elseif($executionID)
+        elseif($this->app->tab == 'execution' && $executionID)
         {
             $this->lang->story->menu      = $this->lang->execution->menu;
             $this->lang->story->menuOrder = $this->lang->execution->menuOrder;
             $this->execution->setMenu($executionID);
             $execution = $this->execution->getByID($executionID);
-            $this->view->title = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
+            $this->view->title       = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
+            $this->view->executionID = $executionID;
+        }
+        elseif($this->app->tab == 'project')
+        {
+            $this->project->setMenu(!empty($this->session->project) ? $this->session->project : $executionID);
+            $this->view->title     = $this->lang->story->batchClose;
+            $this->view->projectID = $this->session->project;
         }
         else
         {
-            if($this->app->tab == 'project')
-            {
-                $this->project->setMenu(!empty($this->session->project) ? $this->session->project : $executionID);
-                $this->view->title = $this->lang->story->batchClose;
-            }
-            else
-            {
-                $this->lang->story->menu      = $this->lang->my->menu;
-                $this->lang->story->menuOrder = $this->lang->my->menuOrder;
+            $this->lang->story->menu      = $this->lang->my->menu;
+            $this->lang->story->menuOrder = $this->lang->my->menuOrder;
 
-                if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
-                if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
+            if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
+            if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
 
-                $this->view->title = $this->lang->story->batchClose;
-            }
+            $this->view->title = $this->lang->story->batchClose;
         }
     }
 
