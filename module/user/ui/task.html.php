@@ -35,7 +35,6 @@ $cols['name']['data-size']    = 'lg';
 $cols = array_map(function($col)
 {
     unset($col['fixed'], $col['group']);
-    $col['sortType'] = false;
     return $col;
 }, $cols);
 
@@ -58,6 +57,8 @@ panel
         set::bordered(true),
         set::cols($cols),
         set::data(array_values($tasks)),
+        set::orderBy($orderBy),
+        set::sortLink(inlink('task', "userID={$user->id}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
         set::onRenderCell(jsRaw('window.renderCell')),
         set::footPager(usePager()),
     )
