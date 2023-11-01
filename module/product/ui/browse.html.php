@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-data('storyType', $storyType);
+data('activeMenuID', $storyType);
 
 $storyCommon       = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;
 $isProjectStory    = $this->app->rawModule == 'projectstory';
