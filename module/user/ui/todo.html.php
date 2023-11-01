@@ -12,8 +12,8 @@ namespace zin;
 include './featurebar.html.php';
 
 $todoNavs = array();
-foreach($lang->user->featureBar['todo'] as $navKey => $navName) $todoNavs[$navKey] = array('text' => $navName, 'url' => inlink('todo', "userID={$user->id}&type={$navKey}"));
-$todoNavs['before']['url'] = inlink('todo', "userID={$user->id}&type=before&status=undone");
+foreach($lang->user->featureBar['todo'] as $navKey => $navName) $todoNavs[$navKey] = array('text' => $navName, 'url' => inlink('todo', "userID={$user->id}&type={$navKey}&status=all&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+$todoNavs['before']['url'] = inlink('todo', "userID={$user->id}&type=before&status=undone&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}");
 if(isset($todoNavs[$type])) $todoNavs[$type]['active'] = true;
 
 $this->loadModel('my');

@@ -12,10 +12,10 @@ namespace zin;
 include './featurebar.html.php';
 
 $that = zget($lang->user->thirdPerson, $user->gender);
-$bugNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('bug', "userID={$user->id}&type=assignedTo"));
-$bugNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('bug', "userID={$user->id}&type=openedBy"));
-$bugNavs['resolvedBy'] = array('text' => sprintf($lang->user->resolvedBy, $that), 'url' => inlink('bug', "userID={$user->id}&type=resolvedBy"));
-$bugNavs['closedBy']   = array('text' => sprintf($lang->user->closedBy,   $that), 'url' => inlink('bug', "userID={$user->id}&type=closedBy"));
+$bugNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('bug', "userID={$user->id}&type=assignedTo&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+$bugNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('bug', "userID={$user->id}&type=openedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+$bugNavs['resolvedBy'] = array('text' => sprintf($lang->user->resolvedBy, $that), 'url' => inlink('bug', "userID={$user->id}&type=resolvedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+$bugNavs['closedBy']   = array('text' => sprintf($lang->user->closedBy,   $that), 'url' => inlink('bug', "userID={$user->id}&type=closedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
 if(isset($bugNavs[$type])) $bugNavs[$type]['active'] = true;
 
 $cols = array();

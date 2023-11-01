@@ -13,8 +13,8 @@ include './featurebar.html.php';
 
 
 $that = zget($lang->user->thirdPerson, $user->gender);
-$testcaseNavs['case2Him']  = array('text' => sprintf($lang->user->case2Him, $that),  'url' => inlink('testcase', "userID={$user->id}&type=case2Him"));
-$testcaseNavs['caseByHim'] = array('text' => sprintf($lang->user->caseByHim, $that), 'url' => inlink('testcase', "userID={$user->id}&type=caseByHim"));
+$testcaseNavs['case2Him']  = array('text' => sprintf($lang->user->case2Him, $that),  'url' => inlink('testcase', "userID={$user->id}&type=case2Him&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+$testcaseNavs['caseByHim'] = array('text' => sprintf($lang->user->caseByHim, $that), 'url' => inlink('testcase', "userID={$user->id}&type=caseByHim&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
 if(isset($testcaseNavs[$type])) $testcaseNavs[$type]['active'] = true;
 
 $cols = array();

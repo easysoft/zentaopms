@@ -14,7 +14,7 @@ include './featurebar.html.php';
 jsVar('trunkLang', $lang->trunk);
 
 $that = zget($lang->user->thirdPerson, $user->gender);
-$testtaskNavs['assignedTo'] = array('text' => sprintf($lang->user->testTask2Him, $that), 'url' => inlink('testtask', "userID={$user->id}"), 'active' => true);
+$testtaskNavs['assignedTo'] = array('text' => sprintf($lang->user->testTask2Him, $that), 'url' => inlink('testtask', "userID={$user->id}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'active' => true);
 
 $cols = array();
 foreach($config->user->defaultFields['testtask'] as $field) $cols[$field] = $config->testtask->dtable->fieldList[$field];

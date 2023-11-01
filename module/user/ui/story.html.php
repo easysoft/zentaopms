@@ -12,10 +12,10 @@ namespace zin;
 include './featurebar.html.php';
 
 $that = zget($lang->user->thirdPerson, $user->gender);
-$storyNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=assignedTo"));
-$storyNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=openedBy"));
-$storyNavs['reviewedBy'] = array('text' => sprintf($lang->user->reviewedBy, $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=reviewedBy"));
-$storyNavs['closedBy']   = array('text' => sprintf($lang->user->closedBy,   $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=closedBy"));
+$storyNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=assignedTo&orderType={$orderType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+$storyNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=openedBy&orderType={$orderType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+$storyNavs['reviewedBy'] = array('text' => sprintf($lang->user->reviewedBy, $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=reviewedBy&orderType={$orderType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+$storyNavs['closedBy']   = array('text' => sprintf($lang->user->closedBy,   $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=closedBy&orderType={$orderType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
 if(isset($storyNavs[$type])) $storyNavs[$type]['active'] = true;
 
 $this->loadModel('my');
