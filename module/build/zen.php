@@ -79,14 +79,14 @@ class buildZen extends build
     {
         $builds        = array();
         $status        = empty($this->config->CRProduct) ? 'noclosed' : '';
-        $projectID     = $build->execution ? $build->execution : $build->project;
+        $projectID     = $build->execution ? (int)$build->execution : (int)$build->project;
         $productGroups = $this->loadModel('product')->getProducts($projectID, $status);
         $branches      = $this->loadModel('branch')->getList($build->product, $projectID, 'all');
         if(!$build->execution) $builds = $this->build->getBuildPairs(array($build->product), 'all', 'noempty,notrunk,singled,separate', $build->project, 'project', $build->builds, false);
 
         /* Get execution info. */
         $executions = $this->product->getExecutionPairsByProduct($build->product, $build->branch, (int)$this->session->project, 'stagefilter');
-        $execution  = $build->execution ? $this->loadModel('execution')->getByID($build->execution) : '';
+        $execution  = $build->execution ? $this->loadModel('execution')->getByID((int)$build->execution) : '';
         if($build->execution && !isset($executions[$build->execution]))
         {
             $execution = $this->loadModel('execution')->getByID($build->execution);
