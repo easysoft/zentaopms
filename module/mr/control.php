@@ -12,9 +12,16 @@ class mr extends control
 
         /* This is essential when changing tab(menu) from gitlab to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
-        if($this->app->getMethodName() != 'browse') $this->loadModel('ci')->setMenu();
-        $this->view->objectID = $this->app->tab == 'execution' ? $this->session->execution : 0;
-        if($this->app->tab == 'execution') $this->view->executionID = $this->session->execution;
+        if($this->app->getMethodName() != 'browse')
+        {
+            $this->loadModel('ci')->setMenu();
+            $this->view->objectID = $this->app->tab == 'execution' ? $this->session->execution : 0;
+            if($this->app->tab == 'execution')
+            {
+                $this->view->executionID = $this->session->execution;
+                $this->loadModel('execution')->setMenu($this->session->execution);
+            }
+        }
     }
 
     /**
@@ -33,6 +40,16 @@ class mr extends control
      */
     public function browse($repoID = 0, $mode = 'status', $param = 'opened', $objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        if($this->app->tab == 'execution')
+        {
+            $this->session->set('execution', $objectID);
+            $execution = $this->loadModel('execution')->getByID($objectID);
+            $features = $this->execution->getExecutionFeatures($execution);
+            if(!$features['devops']) return print($this->locate($this->createLink('execution', 'task', "objectID=$executionID")));
+
+            $this->loadModel('execution')->setMenu($objectID);
+        }
+
         /* Save current URI to session. */
         $this->session->set('mrList', $this->app->getURI(true), 'repo');
 

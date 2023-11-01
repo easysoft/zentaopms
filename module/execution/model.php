@@ -161,7 +161,7 @@ class executionModel extends model
 
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
-        if($moduleName == 'repo' && $moduleName == 'mr')
+        if($moduleName == 'repo' || $moduleName == 'mr')
         {
             $repoPairs = $this->loadModel('repo')->getRepoPairs('execution', $executionID);
 
