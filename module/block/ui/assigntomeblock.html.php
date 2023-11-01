@@ -58,7 +58,7 @@ if(($longBlock && $count > 9) || (!$longBlock && $count > 4))
         ),
         menu
         (
-            set::id("#assigntomeMenuMore{$blockNavCode}"),
+            set::id("assigntomeMenuMore{$blockNavCode}"),
             set::className('dropdown-menu'),
             set::items($moreMenus)
         )
