@@ -7,7 +7,9 @@
 function toStory()
 {
     const productID = $('#productModal input[name=product]').val();
-    loadModal($.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID=' + todoID, config.defaultView), '.m-my-todo');
+
+    zui.Modal.hide('.m-my-todo');
+    openPage($.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID=' + todoID, config.defaultView), 'product');
 }
 
 /**
@@ -25,7 +27,8 @@ function toTask()
         return false;
     }
 
-    loadModal($.createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID), '.m-my-todo');
+    zui.Modal.hide('.m-my-todo');
+    openPage($.createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID), 'execution');
 }
 
 /**
@@ -36,14 +39,15 @@ function toTask()
  */
 function toBug()
 {
-    var productID = $('#bugProduct').val();
+    const productID = $('#projectProductModal input[name=bugProduct]').val();
     if(!productID)
     {
-        alert(selectProduct);
-        return;
+        zui.Modal.alert(selectProduct);
+        return false;
     }
 
-    $('#toBugButton').attr('href', $.createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID));
+    zui.Modal.hide('.m-my-todo');
+    openPage($.createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID), 'qa');
 }
 
 /**
@@ -99,12 +103,16 @@ function getExecutionByProject(e)
  * @param  int  projectID
  * @return void
  */
-function getProductByProject(projectID)
+function getProductByProject(e)
 {
+    const projectID = $(e.target).val();
     var link = $.createLink('todo', 'ajaxGetProductPairs', "projectID=" + projectID);
-    $('#productIdBox').load(link, function()
+    $.getJSON(link, function(data)
     {
-        $(this).find('select').chosen();
+        const productID      = data.length ? data[0].value : 0;
+        const $productPicker = $('#projectProductModal input[name=bugProduct]').zui('picker');
+        $productPicker.render({items: data});
+        $productPicker.$.setValue(productID);
     })
 }
 

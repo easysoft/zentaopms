@@ -574,7 +574,9 @@ class todo extends control
         $this->session->set('project', $projectID);
 
         $products = $this->loadModel('product')->getProductPairsByProject($projectID);
-        echo html::select('bugProduct', $products, '', "class='form-control chosen'");
+        $items    = array();
+        foreach($products as $id => $name) $items[] = array('value' => $id, 'text' => $name, 'keys' => $name);
+        return print(json_encode($items));
     }
 
     /**

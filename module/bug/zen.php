@@ -1921,7 +1921,7 @@ class bugZen extends bug
         $this->updateKanbanAfterCreate($bug, $laneID, $columnID, $from);
 
         $todoID = isset($params['todoID']) ? $params['todoID'] : 0;
-        if($todoID) $this->updateTodoAfterCreate($bug->id, $todoID);
+        if($todoID) $this->updateTodoAfterCreate($bug->id, (int)$todoID);
 
         return !dao::isError();
     }
@@ -2122,7 +2122,7 @@ class bugZen extends bug
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $bug->id));
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bug->id));
 
-        if(isonlybody()) return $this->send($this->responseInModal($executionID));
+        if(isInModal()) return $this->send($this->responseInModal($executionID));
 
         if($this->app->tab == 'execution')
         {
@@ -2146,7 +2146,7 @@ class bugZen extends bug
         }
         if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID={$bug->id}", 'html');
 
-        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
+        return $this->send(array('result' => 'success', 'message' => $message));
     }
 
     /**

@@ -127,58 +127,40 @@ $fnRenderCreateBugModal = function() use ($lang, $projects, $projectProducts)
     (
         setID('projectProductModal'),
         set::modalProps(array('title' => $lang->product->select)),
+        to::footer
+        (
+            div
+            (
+                set::className('toolbar gap-4 w-full justify-center'),
+                btn($lang->todo->reasonList['bug'], set::id('toBugButton'), setClass('primary')),
+                on::click('toBug')
+            )
+        ),
         form
         (
-            setClass('text-center', 'pb-4'),
+            setClass('mt-2'),
             set::actions(array()),
             formGroup
             (
                 set::label($lang->todo->project),
-                select
+                picker
                 (
-                    on::change('getProductByProject(this)'),
-                    set
-                    (
-                        array(
-                            'id'       => 'bugProject',
-                            'name'     => 'bugProject',
-                            'items'    => $projects,
-                            'required' => true
-                        )
-                    )
+                    set::name('bugProject'),
+                    set::items($projects),
+                    set::required(true),
+                    on::change('getProductByProject')
                 )
             ),
             formGroup
             (
                 set::label($lang->todo->product),
-                select
+                picker
                 (
-                    set
-                    (
-                        array(
-                            'id'       => 'bugProduct',
-                            'name'     => 'bugProduct',
-                            'items'    => $projectProducts,
-                            'required' => true
-                        )
-                    )
+                    set::name('bugProduct'),
+                    set::items($projectProducts),
+                    set::required(true),
                 )
             ),
-            btn
-            (
-                $lang->todo->reasonList['bug'],
-                on::click('toBug'),
-                set
-                (
-                    array(
-                        'id'    => 'toBugButton',
-                        'class' => array('primary', 'text-center'),
-                        // 'data-backdrop' => false,
-                        'data-toggle' => 'modal',
-                        // 'data-type' => 'html',
-                    )
-                )
-            )
         )
     );
 };
