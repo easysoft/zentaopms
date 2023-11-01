@@ -50,6 +50,7 @@ $fnRenderCreateStoryModal = function() use ($lang, $products)
             )
         ) : form
         (
+            setClass('mt-2'),
             formGroup
             (
                 inputGroup
@@ -101,53 +102,38 @@ $fnRenderCreateTaskModal = function() use ($lang, $projects, $executions)
     (
         setID('executionModal'),
         set::modalProps(array('title' => $lang->execution->selectExecution)),
+        to::footer
+        (
+            div
+            (
+                set::className('toolbar gap-4 w-full justify-center'),
+                btn($lang->todo->reasonList['task'], set::id('toTaskButton'), setClass('primary')),
+                on::click('toTask')
+            )
+        ),
         form
         (
-            setClass('text-center', 'pb-4'),
+            setClass('pb-4 mt-2'),
             set::actions(array()),
             formGroup
             (
                 set::label($lang->todo->project),
-                select
+                picker
                 (
-                    on::change('getExecutionByProject(this)'),
-                    set
-                    (
-                        array(
-                            'id'       => 'project',
-                            'name'     => 'project',
-                            'items'    => $projects,
-                            'required' => true
-                        )
-                    )
+                    on::change('getExecutionByProject'),
+                    set::name('project'),
+                    set::items($projects),
+                    set::required(true)
                 )
             ),
             formGroup
             (
                 set::label($lang->todo->execution),
-                select
+                picker
                 (
-                    set
-                    (
-                        array(
-                            'id'       => 'execution',
-                            'name'     => 'execution',
-                            'items'    => $executions,
-                            'required' => true
-                        )
-                    )
-                )
-            ),
-            btn
-            (
-                $lang->todo->reasonList['task'],
-                on::click('toTask'),
-                set
-                (
-                    array(
-                        'id'    => 'toTaskButton',
-                        'class' => array('primary', 'text-center')
-                    )
+                    set::name('execution'),
+                    set::items($executions),
+                    set::required(true)
                 )
             )
         )
@@ -271,8 +257,8 @@ $fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects, 
 
     $canCreateStory = hasPriv('story', 'create');
     $canCreateTask  = hasPriv('task',  'create');
-    $canCreateBug   = hasPriv('bug',   'create');
-    $printBtn       = $config->vision == 'lite' && empty($projects);
+    $canCreateBug   = hasPriv('bug',   'create') && $config->vision != 'lite';
+    $printBtn       = $config->vision == 'lite' && empty($projects) ? false : true;
 
     /* Render more button. */
     if($printBtn && ($canCreateStory || $canCreateTask || $canCreateBug))
@@ -288,9 +274,9 @@ $fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects, 
         setClass('menu dropdown-menu'),
         set::items(array
         (
-            $canCreateStory ? array('text' => $lang->todo->reasonList['story'], 'id' => 'toStoryLink', 'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => $storyTarget,           'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center') : null,
-            $canCreateTask  ? array('text' => $lang->todo->reasonList['task'],  'id' => 'toTaskLink',  'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => '#executionModal',      'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center') : null,
-            $canCreateBug   ? array('text' => $lang->todo->reasonList['bug'],   'id' => 'toBugLink',   'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => '#projectProductModal', 'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center') : null,
+            $canCreateStory ? array('text' => $lang->todo->reasonList['story'], 'id' => 'toStoryLink', 'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => $storyTarget,           'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center', 'data-size' => 'sm') : null,
+            $canCreateTask  ? array('text' => $lang->todo->reasonList['task'],  'id' => 'toTaskLink',  'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => '#executionModal',      'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center', 'data-size' => 'sm') : null,
+            $canCreateBug   ? array('text' => $lang->todo->reasonList['bug'],   'id' => 'toBugLink',   'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => '#projectProductModal', 'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center', 'data-size' => 'sm') : null,
         ))
     );
 

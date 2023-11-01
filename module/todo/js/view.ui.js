@@ -17,14 +17,14 @@ function toStory()
  */
 function toTask()
 {
-    var executionID = $('#execution').val();
+    const executionID = $('#executionModal input[name=execution]').val();
     if(!executionID)
     {
-        alert(selectExecution);
-        return;
+        zui.Modal.alert(selectExecution);
+        return false;
     }
 
-    loadPage($.createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID, config.defaultView));
+    loadModal($.createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID), '.m-my-todo');
 }
 
 /**
@@ -78,14 +78,16 @@ function createExecution()
  * @param  int  projectID
  * @return void
  */
-function getExecutionByProject(projectID)
+function getExecutionByProject(e)
 {
-
-    var link = $.createLink('todo', 'ajaxGetExecutionPairs', "projectID=" + projectID);
-
-    $('#executionIdBox').load(link, function()
+    const projectID = $(e.target).val();
+    const link      = $.createLink('todo', 'ajaxGetExecutionPairs', "projectID=" + projectID);
+    $.getJSON(link, function(data)
     {
-        $(this).find('select').chosen();
+        const executionID      = data.length ? data[0].value : 0;
+        const $executionPicker = $('#executionModal input[name=execution]').zui('picker');
+        $executionPicker.render({items: data});
+        $executionPicker.$.setValue(executionID);
     })
 }
 

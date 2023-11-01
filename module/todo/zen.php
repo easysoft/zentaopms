@@ -633,6 +633,9 @@ class todoZen extends todo
     {
         $this->loadModel('user');
         $this->loadModel('product');
+        $executionPairs = array();
+        $executions     = $projects ? $this->loadModel('execution')->getByProject(key($projects), 'undone') : array();
+        foreach($executions as $execution) $executionPairs[$execution->id] = $execution->name;
 
         $this->view->title           = $account == $todo->account ? "{$this->lang->todo->common} #$todo->id $todo->name" : $this->lang->todo->common;
         $this->view->user            = $this->user->getByID((string)$todo->account);
@@ -642,7 +645,7 @@ class todoZen extends todo
         $this->view->times           = date::buildTimeList((int)$this->config->todo->times->begin, (int)$this->config->todo->times->end, 5);
         $this->view->from            = $from;
         $this->view->projects        = $projects;
-        $this->view->executions      = $this->loadModel('execution')->getPairs();
+        $this->view->executions      = $executionPairs;
         $this->view->products        = $todo->type == 'opportunity' ? $this->product->getPairsByProjectModel('waterfall') : $this->product->getPairs();
         $this->view->projectProducts = $this->product->getProductPairsByProject($projectID);
 
