@@ -27,7 +27,6 @@ $cols['title']['data-size']   = 'lg';
 $cols = array_map(function($col)
 {
     unset($col['fixed'], $col['group']);
-    $col['sortType'] = false;
     return $col;
 }, $cols);
 
@@ -42,6 +41,8 @@ panel
         set::bordered(true),
         set::cols($cols),
         set::data(array_values($bugs)),
+        set::orderBy($orderBy),
+        set::sortLink(inlink('bug', "userID={$user->id}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
         set::footPager(usePager()),
     )
 );
