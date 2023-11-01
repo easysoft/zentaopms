@@ -44,7 +44,7 @@ class resultFilter extends filter
 
         if($type == 'date' || $type == 'datetime') return inputGroup
         (
-            setClass('pr-4 mb-2 ' . $this->prop('class', $type == 'datetime' ? 'w-1/3' : 'w-1/4')),
+            setClass('pr-4 mb-2 ' . $this->prop('class', 'w-1/2')),
             $this->prop('title'),
             $this->buildDateControl($type)
         );
