@@ -327,6 +327,7 @@ class repo extends control
         $entry    = urldecode($entry);
         $pathInfo = helper::mbPathinfo($entry);
 
+        if($this->app->tab == 'execution') $this->view->executionID = $objectID;
         $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
         $this->view->dropMenus   = $this->repoZen->getBranchAndTagItems($repo, $this->cookie->repoBranch);
         $this->view->type        = 'view';

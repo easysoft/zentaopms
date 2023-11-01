@@ -24,6 +24,7 @@ jsVar('sortLink', createLink('repo', 'review', "repoID=$repoID&browseType=$brows
 
 foreach($bugs as $bug)
 {
+    $objectID = $app->tab == 'execution' ? $bug->execution : 0;
     $bug->revisionA = $repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2;
 
     $lines = explode(',', trim($bug->lines, ','));
@@ -31,7 +32,7 @@ foreach($bugs as $bug)
     {
         $bug->v2   = $repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2;
         $revision  = $repo->SCM != 'Subversion' ? $this->repo->getGitRevisionName($bug->v2, zget($historys, $bug->v2)) : $bug->v2;
-        $bug->link = $this->repo->createLink('view', "repoID=$repoID&objectID=0&entry={$bug->entry}&revision={$bug->v2}") . "#L$lines[0]";
+        $bug->link = $this->repo->createLink('view', "repoID=$repoID&objectID={$objectID}&entry={$bug->entry}&revision={$bug->v2}") . "#L$lines[0]";
     }
     else
     {
@@ -39,7 +40,7 @@ foreach($bugs as $bug)
         $revision .= ' : ';
         $revision .= $repo->SCM != 'Subversion' ? substr($bug->v2, 0, 10) : $bug->v2;
         if($repo->SCM != 'Subversion') $revision .= ' (' . zget($historys, $bug->v1) . ' : ' . zget($historys, $bug->v2) . ')';
-        $bug->link = $this->repo->createLink('diff', "repoID=$repoID&objectID=0&entry={$bug->entry}&oldRevision={$bug->v1}&newRevision={$bug->v2}") . "#L$lines[0]";
+        $bug->link = $this->repo->createLink('diff', "repoID=$repoID&objectID={$objectID}&entry={$bug->entry}&oldRevision={$bug->v1}&newRevision={$bug->v2}") . "#L$lines[0]";
     }
 
     $bug->entry = $repo->name . '/' . $this->repo->decodePath($bug->entry);
