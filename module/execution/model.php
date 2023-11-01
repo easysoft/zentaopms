@@ -145,8 +145,16 @@ class executionModel extends model
                 preg_match('/^\[(\w+)\]/', $repoName, $matches);
                 if(isset($matches[1]) && in_array($matches[1], $this->config->repo->gitServiceList)) $showMR = true;
             }
-            if(!$showMR) unset($this->lang->execution->menu->devops['subMenu']->mr);
-            if(!$showMR && $this->config->edition == 'open') unset($this->lang->execution->menu->devops['subMenu']);
+
+            if(!$showMR && $this->config->edition == 'open')
+            {
+                unset($this->lang->execution->menu->devops['subMenu']->mr);
+                if($this->config->edition == 'open' || !common::hasPriv('repo', 'review'))
+                {
+                    unset($this->lang->execution->menu->devops['subMenu']);
+                    $this->lang->execution->menu->devops['link'] = str_replace($this->lang->devops->common, $this->lang->repo->common, $this->lang->execution->menu->devops['link']);
+                }
+            }
         }
 
         /* Set stroy navigation for no-product project. */
