@@ -12,7 +12,7 @@ namespace zin;
 include './featurebar.html.php';
 
 $todoNavs = array();
-foreach($lang->user->featureBar['todo'] as $navKey => $navName) $todoNavs[$navKey] = array('text' => $navName, 'url' => inlink('todo', "userID={$user->id}&type={$navKey}&status=all&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+foreach($lang->user->featureBar['todo'] as $navKey => $navName) $todoNavs[$navKey] = array('text' => $navName, 'url' => inlink('todo', "userID={$user->id}&type={$navKey}&status=all&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
 $todoNavs['before']['url'] = inlink('todo', "userID={$user->id}&type=before&status=undone&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}");
 if(isset($todoNavs[$type])) $todoNavs[$type]['active'] = true;
 
@@ -41,13 +41,18 @@ foreach($todos as $todo)
 }
 $summary = sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount);
 
-panel
+div
 (
-    setClass('list'),
-    set::title(null),
-    set::headingActions(array(nav(set::items($todoNavs)))),
+    setClass('shadow-sm rounded canvas'),
+    nav
+    (
+        setClass('dtable-sub-nav py-1'),
+        set::items($todoNavs)
+    ),
     dtable
     (
+        set::_className('shadow-none'),
+        set::extraHeight('+.dtable-sub-nav'),
         set::bordered(true),
         set::cols($cols),
         set::data(array_values($todos)),

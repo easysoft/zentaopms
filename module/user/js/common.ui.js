@@ -96,3 +96,8 @@ function computePasswordStrength(password)
 
     return strength;
 }
+
+window.beforePageLoad = function(options)
+{
+    if(options.load === 'table') options.selector += ',.dtable-sub-nav';
+}
