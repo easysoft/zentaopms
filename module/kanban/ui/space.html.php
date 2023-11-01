@@ -50,14 +50,65 @@ foreach($spaceList as $space)
     if($space->status != 'closed' and $browseType != 'involved') $headingActions[] = array('type' => 'ghost', 'icon' => 'plus', 'url' => createLink('kanban', 'create', "spaceID={$space->id}&type={$space->type}"), 'text' => $lang->kanban->create, 'data-toggle' => 'modal', 'data-size' => 'lg');
     $headingActions[] = array('type' => 'dropdown', 'btnType' => 'dropdown', 'icon' => 'cog-outline', 'text' => $lang->kanban->setting, 'caret' => true, 'items' => $childActions);
 
+    $kanbans = array();
+    if(!empty($space->kanbans))
+    {
+        foreach($space->kanbans as $kanbanID => $kanban)
+        {
+            $kanbanDescTitle = str_replace("\n", '', strip_tags($kanban->desc));
+            $kanbanDesc      = str_replace("\n", '', preg_replace($pattern, '', $kanban->desc));
+
+            $teamPairs   = array_filter(explode(',', ",$kanban->createdBy,$kanban->owner,$kanban->team"));
+            $teamPairs   = array_unique($teamPairs);
+
+            $count       = 0;
+            $userAvatars = array();
+            $teamCount   = count($teamPairs);
+            foreach($teamPairs as $member)
+            {
+                if($count > 3) break;
+                if(empty($users[$member])) continue;
+
+                $userAvatars[] = userAvatar(set::account($users[$member]), set::avatar($usersAvatar[$member]), set::realname($users[$member]), set::size('sm'));
+                $count ++;
+            }
+
+            $teamCountLang = ($teamCount > 1) ? $lang->kanban->teamSumCount : str_replace("Pers", "Person", $lang->kanban->teamSumCount);
+            $kanbans[] = cell
+            (
+                set::width('1/4'),
+                set::className('px-2 pb-4 overflow-hidden'),
+                div
+                (
+                    set::className('border px-4 py-2'),
+                    div
+                    (
+                        set::className('flex mr-6'),
+                        cell(set::className('ellipsis font-bold mr-1'), set::title($kanban->name), $kanban->name),
+                        $kanban->status == 'closed' ? cell(set::className('label gray mx-1'), setStyle(array('min-width' => '44px')), $lang->kanban->closed) : null,
+                        $space->type == 'cooperation' && $kanban->owner == $this->app->user->account ? cell(set::className('label text-important ring-important mx-1'), setStyle(array('min-width' => '44px')), $lang->kanban->mine) : null
+                    ),
+                    div(set::className('h-16 my-2 overflow-hidden'), set::title($kanbanDescTitle), html($kanbanDesc)),
+                    div
+                    (
+                        set::className('flex items-center'),
+                        cell(set::className('flex items-center mr-2'), $userAvatars),
+                        cell(sprintf($teamCountLang, $teamCount)),
+                        cell(set::className('flex-1 text-right'), empty($kanban->cardsCount) ? $lang->kanban->noCard : sprintf($cardsCount, $kanban->cardsCount)),
+                    )
+                )
+            );
+        }
+    }
+
     $blocks[] = blockPanel
     (
         set::className('mb-4'),
         set::title($space->name),
         set::titleIcon('cube'),
         set::headingActions($headingActions),
-        div(html($spaceDesc)),
-        !empty($space->kanbans) ? div('123') : div(set::className('dtable'), div(set::className('dtable-empty-tip'), span(set::className('text-gray'),  $lang->kanban->empty)))
+        div(set::className('p-2'), html($spaceDesc)),
+        !empty($space->kanbans) ? div(set::className('flex flex-wrap'), $kanbans) : div(set::className('dtable'), div(set::className('dtable-empty-tip'), span(set::className('text-gray'),  $lang->kanban->empty)))
     );
 }
 
