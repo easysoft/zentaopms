@@ -23,7 +23,6 @@ $cols['id']['checkbox'] = false;
 $cols = array_map(function($col)
 {
     unset($col['fixed'], $col['group']);
-    $col['sortType'] = false;
     return $col;
 }, $cols);
 
@@ -51,6 +50,8 @@ panel
         set::bordered(true),
         set::cols($cols),
         set::data(array_values($tasks)),
+        set::orderBy($orderBy),
+        set::sortLink(inlink('testtask', "userID={$user->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
         set::footPager(usePager()),
         set::onRenderCell(jsRaw('window.renderCell')),
         set::footer(array(array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
