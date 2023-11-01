@@ -28,7 +28,6 @@ $cols['status']['statusMap']['changed'] = $lang->story->changed;
 $cols = array_map(function($col)
 {
     unset($col['fixed'], $col['group']);
-    $col['sortType'] = false;
     return $col;
 }, $cols);
 
@@ -51,6 +50,8 @@ panel
         set::bordered(true),
         set::cols($cols),
         set::data(array_values($cases)),
+        set::orderBy($orderBy),
+        set::sortLink(inlink('testcase', "userID={$user->id}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
         set::onRenderCell(jsRaw('window.renderCell')),
         set::footPager(usePager()),
     )

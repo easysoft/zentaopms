@@ -299,6 +299,7 @@ class user extends control
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'caseID') !== false) $sort = str_replace('caseID', 'id', $sort);
 
         $cases = array();
         if($type == 'case2Him')
