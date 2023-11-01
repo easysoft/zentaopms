@@ -1454,7 +1454,7 @@ $lang->doc->methodOrder[105] = 'editCatalog';
 $lang->doc->methodOrder[110] = 'sortCatalog';
 $lang->doc->methodOrder[115] = 'deleteCatalog';
 $lang->doc->methodOrder[120] = 'displaySetting';
-$lang->doc->exportFiles[125] = 'exportFiles';
+$lang->doc->methodOrder[125] = 'exportFiles';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
