@@ -10,9 +10,37 @@ declare(strict_types = 1);
  */
 namespace zin;
 
-$generateData = function() use ($module, $method, $lang, $title, $pivot, $data, $configs)
+$filters = array();
+$options = array();
+foreach($pivot->filters as $filter)
 {
-    if(empty($module) || empty($method)) return div(setClass('bg-white center text-gray w-full h-40'), $lang->pivot->noPivot);
+    $type  = $filter['type'];
+    $name  = $filter['name'];
+    $field = $filter['field'];
+    $value = zget($filter, 'default', '');
+    $from  = zget($filter, 'from');
+    if($from == 'query')
+    {
+        $typeOption = $filter['typeOption'];
+        if($type == 'select' && !isset($options[$typeOption])) $options[$typeOption] = $this->getFilterOptions($typeOption);
+
+        $filters[] = filter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $typeOption, array()))));
+    }
+    else
+    {
+        if($type == 'select' && !isset($options[$field]))
+        {
+            $fieldSetting = $pivot->fieldSettings->$field;
+            $options[$field] = $this->getFilterOptions($fieldSetting->type, $fieldSetting->object, $fieldSetting->field, $pivot->sql);
+        }
+
+        $filters[] = resultFilter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $field, array()))));
+    }
+}
+
+$generateData = function() use ($module, $method, $lang, $title, $pivot, $filters, $data, $configs)
+{
+    if(empty($module) || empty($method)) return div(setClass('bg-canvas center text-gray w-full h-40'), $lang->pivot->noPivot);
 
     list($cols, $rows, $cellSpan) = $this->convertDataForDtable($data, $configs);
 
@@ -31,6 +59,17 @@ $generateData = function() use ($module, $method, $lang, $title, $pivot, $data, 
                     setData(array('toggle' => 'tooltip', 'title' => $pivot->desc, 'placement' => 'right', 'className' => 'text-gray border border-light', 'type' => 'white')),
                     'help'
                 )
+            ) : null,
+            $filters ? div
+            (
+                setID('conditions'),
+                setClass('flex justify-between bg-canvas'),
+                div
+                (
+                    setClass('flex flex-wrap w-full'),
+                    $filters
+                ),
+                button(setClass('btn primary'), on::click('loadCustomPivot'), $lang->pivot->query)
             ) : null,
             dtable
             (
