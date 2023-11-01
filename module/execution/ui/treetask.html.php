@@ -168,7 +168,7 @@ div
             set::disabled(!$this->task->isClickable($task, 'edit')),
             set('data-app', $app->tab),
         ) : null,
-        ((empty($task->team) || empty($task->children)) && hasPriv('task', 'batchCreate')) ? btn
+        ((empty($task->team) || empty($task->children)) && hasPriv('task', 'batchCreate') && $config->vision != 'lite') ? btn
         (
             setClass('text-primary ml-2'),
             set::icon('split'),
