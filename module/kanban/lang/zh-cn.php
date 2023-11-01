@@ -356,8 +356,8 @@ $lang->kanbanlane->modeList['independent'] = '采用独立的看板列';
 $lang->kanbanlane->heightTypeList['auto']   = "自适应<span class='tip'>（根据卡片高度和泳道名称高度自适应）</span>";
 $lang->kanbanlane->heightTypeList['custom'] = "自定义<span class='tip'>（根据卡片数量自定义泳道高度）</span>";
 
-$lang->kanbancolumn->fluidBoardList['0'] = "固定列宽<i class='radio-text-divider'></i>宽度";
-$lang->kanbancolumn->fluidBoardList['1'] = "自适应列宽<i class='radio-text-divider'></i>列宽范围";
+$lang->kanbancolumn->fluidBoardList['0'] = "固定列宽";
+$lang->kanbancolumn->fluidBoardList['1'] = "自适应列宽";
 
 $lang->kanbanlane->error = new stdclass();
 $lang->kanbanlane->error->mustBeInt = '卡片数量必须是 3~100 的正整数。';
