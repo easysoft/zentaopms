@@ -13,6 +13,7 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php js::import($jsRoot . 'moment/moment.min.js');?>
 <?php js::import($jsRoot . 'echarts/echarts.common.min.js');?>
+<?php js::import($jsRoot . 'echarts/echarts-liquidfill.min.js');?>
 <?php js::set('groupID', isset($group->id) ? $group->id : 0);?>
 <?php js::set('charts', $charts);?>
 <?php js::set('noChartSelected', $lang->chart->noChartSelected);?>
