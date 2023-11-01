@@ -65,10 +65,11 @@ $config->bug->dtable->fieldList['openedBy']['type']  = 'user';
 $config->bug->dtable->fieldList['openedBy']['show']  = true;
 $config->bug->dtable->fieldList['openedBy']['group'] = 4;
 
-$config->bug->dtable->fieldList['openedDate']['title'] = $lang->bug->abbr->openedDate;
-$config->bug->dtable->fieldList['openedDate']['type']  = 'date';
-$config->bug->dtable->fieldList['openedDate']['show']  = true;
+$config->bug->dtable->fieldList['openedDate']['title']    = $lang->bug->abbr->openedDate;
+$config->bug->dtable->fieldList['openedDate']['type']     = 'date';
+$config->bug->dtable->fieldList['openedDate']['show']     = true;
 $config->bug->dtable->fieldList['openedDate']['group'] = 4;
+$config->bug->dtable->fieldList['openedDate']['sortType'] = 'date';
 
 $config->bug->dtable->fieldList['confirmed']['title'] = $lang->bug->confirmed;
 $config->bug->dtable->fieldList['confirmed']['type']  = 'category';
@@ -83,9 +84,10 @@ $config->bug->dtable->fieldList['assignedTo']['assignLink'] = array('module' => 
 $config->bug->dtable->fieldList['assignedTo']['show']       = true;
 $config->bug->dtable->fieldList['assignedTo']['group']      = 5;
 
-$config->bug->dtable->fieldList['assignedDate']['title'] = $lang->bug->assignedDate;
-$config->bug->dtable->fieldList['assignedDate']['type']  = 'date';
-$config->bug->dtable->fieldList['assignedDate']['group'] = 5;
+$config->bug->dtable->fieldList['assignedDate']['title']    = $lang->bug->assignedDate;
+$config->bug->dtable->fieldList['assignedDate']['type']     = 'date';
+$config->bug->dtable->fieldList['assignedDate']['group']    = 5;
+$config->bug->dtable->fieldList['assignedDate']['sortType'] = 'date';
 
 $config->bug->dtable->fieldList['deadline']['title'] = $lang->bug->deadline;
 $config->bug->dtable->fieldList['deadline']['type']  = 'date';
@@ -106,9 +108,10 @@ $config->bug->dtable->fieldList['toTaskName']['type']  = 'text';
 $config->bug->dtable->fieldList['toTaskName']['link']  = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={toTask}');
 $config->bug->dtable->fieldList['toTaskName']['group'] = 6;
 
-$config->bug->dtable->fieldList['resolvedDate']['title'] = $lang->bug->abbr->resolvedDate;
-$config->bug->dtable->fieldList['resolvedDate']['type']  = 'date';
-$config->bug->dtable->fieldList['resolvedDate']['group'] = 6;
+$config->bug->dtable->fieldList['resolvedDate']['title']    = $lang->bug->abbr->resolvedDate;
+$config->bug->dtable->fieldList['resolvedDate']['type']     = 'date';
+$config->bug->dtable->fieldList['resolvedDate']['group']    = 6;
+$config->bug->dtable->fieldList['resolvedDate']['sortType'] = 'date';
 
 $config->bug->dtable->fieldList['resolvedBuild']['title'] = $lang->bug->resolvedBuild;
 $config->bug->dtable->fieldList['resolvedBuild']['type']  = 'text';
@@ -128,9 +131,10 @@ $config->bug->dtable->fieldList['activatedCount']['title'] = $lang->bug->abbr->a
 $config->bug->dtable->fieldList['activatedCount']['type']  = 'count';
 $config->bug->dtable->fieldList['activatedCount']['group'] = 8;
 
-$config->bug->dtable->fieldList['activatedDate']['title'] = $lang->bug->activatedDate;
-$config->bug->dtable->fieldList['activatedDate']['type']  = 'date';
-$config->bug->dtable->fieldList['activatedDate']['group'] = 8;
+$config->bug->dtable->fieldList['activatedDate']['title']    = $lang->bug->activatedDate;
+$config->bug->dtable->fieldList['activatedDate']['type']     = 'date';
+$config->bug->dtable->fieldList['activatedDate']['group']    = 8;
+$config->bug->dtable->fieldList['activatedDate']['sortType'] = 'date';
 
 $config->bug->dtable->fieldList['storyName']['title'] = $lang->bug->story;
 $config->bug->dtable->fieldList['storyName']['type']  = 'text';
@@ -154,17 +158,19 @@ $config->bug->dtable->fieldList['lastEditedBy']['title'] = $lang->bug->lastEdite
 $config->bug->dtable->fieldList['lastEditedBy']['type']  = 'user';
 $config->bug->dtable->fieldList['lastEditedBy']['group'] = 10;
 
-$config->bug->dtable->fieldList['lastEditedDate']['title'] = $lang->bug->abbr->lastEditedDate;
-$config->bug->dtable->fieldList['lastEditedDate']['type']  = 'date';
-$config->bug->dtable->fieldList['lastEditedDate']['group'] = 10;
+$config->bug->dtable->fieldList['lastEditedDate']['title']    = $lang->bug->abbr->lastEditedDate;
+$config->bug->dtable->fieldList['lastEditedDate']['type']     = 'date';
+$config->bug->dtable->fieldList['lastEditedDate']['group']    = 10;
+$config->bug->dtable->fieldList['lastEditedDate']['sortType'] = 'date';
 
 $config->bug->dtable->fieldList['closedBy']['title'] = $lang->bug->closedBy;
 $config->bug->dtable->fieldList['closedBy']['type']  = 'user';
 $config->bug->dtable->fieldList['closedBy']['group'] = 10;
 
-$config->bug->dtable->fieldList['closedDate']['title'] = $lang->bug->closedDate;
-$config->bug->dtable->fieldList['closedDate']['type']  = 'date';
-$config->bug->dtable->fieldList['closedDate']['group'] = 10;
+$config->bug->dtable->fieldList['closedDate']['title']    = $lang->bug->closedDate;
+$config->bug->dtable->fieldList['closedDate']['type']     = 'date';
+$config->bug->dtable->fieldList['closedDate']['group']    = 10;
+$config->bug->dtable->fieldList['closedDate']['sortType'] = 'date';
 
 $config->bug->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->bug->dtable->fieldList['actions']['type']     = 'actions';

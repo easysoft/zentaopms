@@ -173,9 +173,11 @@ $cols = $this->loadModel('datatable')->getSetting('bug');
 if(isset($cols['branch']))    $cols['branch']['map']    = $branchTagOption;
 if(isset($cols['project']))   $cols['project']['map']   = $projectPairs;
 if(isset($cols['execution'])) $cols['execution']['map'] = $executions;
-foreach($cols as $colName => $col) $cols[$colName]['sortType'] = true;
-
 if($product->type == 'normal') unset($cols['branch']);
+foreach($cols as $colName => $col)
+{
+    if(!isset($col['sortType'])) $cols[$colName]['sortType'] = true;
+}
 
 $bugs = initTableData($bugs, $cols, $this->bug);
 
