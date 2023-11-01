@@ -587,6 +587,48 @@ class chartModel extends model
         return array($group, $metrics, $aggs, $xLabels, $yStats);
     }
 
+    public function genWaterpolo($fields, $settings, $sql, $filters)
+    {
+        $operate = "{$settings['calc']}({$settings['goal']})";
+        $sql = "select $operate count from ($sql) tt ";
+
+        $moleculeSQL    = $sql;
+        $denominatorSQL = $sql;
+
+        $moleculeWheres    = array();
+        $denominatorWheres = array();
+        foreach($settings['conditions'] as $condition)
+        {
+            $where = "{$condition['field']} {$this->lang->chart->conditionList[$condition['condition']]} '{$condition['value']}'";
+            $moleculeWheres[]    = $where;
+        }
+
+        if(!empty($filters))
+        {
+            $wheres = array();
+            foreach($filters as $field => $filter)
+            {
+                $wheres[] = "$field {$filter['operator']} {$filter['value']}";
+            }
+            $moleculeWheres    = array_merge($moleculeWheres, $wheres);
+            $denominatorWheres = $wheres;
+        }
+
+        if($moleculeWheres)    $moleculeSQL    .= 'where ' . implode(' and ', $moleculeWheres);
+        if($denominatorWheres) $denominatorSQL .= 'where ' . implode(' and ', $denominatorWheres);
+
+        $molecule    = $this->dao->query($moleculeSQL)->fetch();
+        $denominator = $this->dao->query($denominatorSQL)->fetch();
+
+        $percent = round($molecule->count / $denominator->count, 4);
+
+        $series  = array(array('type' => 'liquidFill', 'data' => array($percent), 'outline' => array('show' => false), 'label' => array('fontSize' => 30)));
+        $tooltip = array('show' => true);
+        $options = array('series' => $series, 'tooltip' => $tooltip);
+
+        return $options;
+    }
+
     /**
      * Adjust the action is clickable.
      *
