@@ -46,10 +46,10 @@ dtable
             'btnType'   => 'primary',
             'className' => 'size-sm linkObjectBtn',
             'data-type' => 'bug',
-            'data-url'  => inlink('linkBug', "buildID=$build->id&browseType=$browseType&param=$param"),
+            'data-url'  => createLink($buildModule, 'linkBug', "buildID=$build->id&browseType=$browseType&param=$param"),
         ))
     )),
-    set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('view', "buildID=$build->id&type=bug"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
+    set::footer(array('checkbox', 'toolbar', array('html' => html::a(createLink($buildModule, 'view', "buildID=$build->id&type=bug"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
     set::footPager(usePager(array
     (
         'recPerPage'  => $pager->recPerPage,

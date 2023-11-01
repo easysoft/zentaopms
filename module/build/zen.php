@@ -205,6 +205,8 @@ class buildZen extends build
      */
     protected function setMenuForView(object $build): void
     {
+        $this->session->set('storyList', $this->app->getURI(true), $this->app->tab);
+
         $this->session->project = $build->project;
 
         $objectType = 'execution';
@@ -226,6 +228,7 @@ class buildZen extends build
         $this->view->executions = $executions;
         $this->view->buildPairs = $this->build->getBuildPairs(array(0), 'all', 'noempty,notrunk', (int)$objectID, $objectType);
         $this->view->builds     = $this->build->getByList(array_keys($this->view->buildPairs));
+        $this->view->objectID   = $objectID;
     }
 
     /**
@@ -243,7 +246,7 @@ class buildZen extends build
         unset($this->config->product->search['fields']['product']);
         unset($this->config->product->search['fields']['project']);
 
-        $this->config->product->search['actionURL'] = $this->createLink('build', 'view', "buildID={$build->id}&type=story&link=true&param=" . helper::safe64Encode("&browseType=bySearch&queryID=myQueryID"));
+        $this->config->product->search['actionURL'] = $this->createLink($this->app->rawModule, 'view', "buildID={$build->id}&type=story&link=true&param=" . helper::safe64Encode("&browseType=bySearch&queryID=myQueryID"));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['style']     = 'simple';
         $this->config->product->search['params']['plan']['values']   = $this->loadModel('productplan')->getPairs($build->product, $build->branch, '', true);
@@ -301,7 +304,7 @@ class buildZen extends build
     protected function buildLinkBugSearchForm(object $build, int $queryID, string $productType)
     {
         $this->loadModel('bug');
-        $this->config->bug->search['actionURL'] = $this->createLink('build', 'view', "buildID={$build->id}&type=bug&link=true&param=" . helper::safe64Encode("&browseType=bySearch&queryID=myQueryID"));
+        $this->config->bug->search['actionURL'] = $this->createLink($this->app->rawModule, 'view', "buildID={$build->id}&type=bug&link=true&param=" . helper::safe64Encode("&browseType=bySearch&queryID=myQueryID"));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
 

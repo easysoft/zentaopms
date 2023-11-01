@@ -57,7 +57,7 @@ class build extends control
 
             $message = $this->executeHooks($buildID);
             if($message) $this->lang->saveSuccess = $message;
-            return $this->sendSuccess(array('load' => $this->createLink('build', 'view', "buildID=$buildID"), 'id' => $buildID));
+            return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "buildID=$buildID"), 'id' => $buildID));
         }
 
         $status = empty($this->config->CRProduct) ? 'noclosed' : '';
@@ -111,7 +111,7 @@ class build extends control
             $message = $this->executeHooks($buildID);
             if($message) $this->lang->saveSuccess = $message;
 
-            return $this->sendSuccess(array('locate' => $this->createLink('build', 'view', "buildID=$buildID") . "#app={$this->app->tab}"));
+            return $this->sendSuccess(array('locate' => $this->createLink($this->app->rawModule, 'view', "buildID=$buildID") . "#app={$this->app->tab}"));
         }
 
         $this->loadModel('execution');
@@ -408,14 +408,18 @@ class build extends control
         if(!empty($_POST['stories']))
         {
             if($this->post->stories) $this->build->linkStory($buildID, $this->post->stories);
-            return $this->send(array('result' => 'success', 'load' =>inlink('view', "buildID=$buildID&type=story")));
+            return $this->send(array('result' => 'success', 'load' => $this->createLink($this->app->rawModule, 'view', "buildID=$buildID&type=story")));
         }
 
-        $this->session->set('storyList', inlink('view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), $this->app->tab);
+        $this->session->set('storyList', $this->createLink($this->app->rawModule, 'view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), $this->app->tab);
 
         $build   = $this->build->getById($buildID);
         $product = $this->loadModel('product')->getById($build->product);
-
+        if($this->app->tab == 'project')
+        {
+            $this->loadModel('project')->setMenu($build->project);
+            $this->view->projectID = $build->project;
+        }
         if($build->execution) $this->loadModel('execution')->setMenu($build->execution);
 
         /* Load pager. */
@@ -459,8 +463,8 @@ class build extends control
     {
         $this->build->unlinkStory($buildID, $storyID);
 
-        $this->loadModel('action')->create('build', $buildID, 'unlinkstory', '', $storyID);
-        return $this->sendSuccess(array('load' => $this->createLink('build', 'view', "buildID=$buildID&type=story")));
+        $this->loadModel('action')->create($this->app->rawModule, $buildID, 'unlinkstory', '', $storyID);
+        return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "buildID=$buildID&type=story")));
     }
 
     /**
@@ -528,7 +532,7 @@ class build extends control
     public function batchUnlinkStory(int $buildID)
     {
         if($this->post->storyIdList) $this->build->batchUnlinkStory($buildID, $this->post->storyIdList);
-        return $this->sendSuccess(array('load' => $this->createLink('build', 'view', "buildID=$buildID&type=story")));
+        return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "buildID=$buildID&type=story")));
     }
 
     /**
@@ -590,14 +594,19 @@ class build extends control
         if(!empty($_POST['bugs']))
         {
             $this->build->linkBug($buildID, $this->post->bugs, (array)$this->post->resolvedBy);
-            return $this->send(array('result' => 'success', 'load' => inlink('view', "buildID=$buildID&type=bug")));
+            return $this->send(array('result' => 'success', 'load' => $this->createLink($this->app->rawModule, 'view', "buildID=$buildID&type=bug")));
         }
 
-        $this->session->set('bugList', inlink('view', "buildID=$buildID&type=bug&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
+        $this->session->set('bugList', $this->createLink($this->app->rawModule, 'view', "buildID=$buildID&type=bug&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
 
         /* Set menu. */
         $build   = $this->build->getByID($buildID);
         $product = $this->loadModel('product')->getByID($build->product);
+        if($this->app->tab == 'project')
+        {
+            $this->loadModel('project')->setMenu($build->project);
+            $this->view->projectID = $build->project;
+        }
         if($build->execution) $this->loadModel('execution')->setMenu($build->execution);
 
         /* Build the search form. */
@@ -640,7 +649,7 @@ class build extends control
     public function unlinkBug(int $buildID, int $bugID)
     {
         $this->build->unlinkBug($buildID, $bugID);
-        return $this->sendSuccess(array('load' => $this->createLink('build', 'view', "buildID=$buildID&type=bug")));
+        return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "buildID=$buildID&type=bug")));
     }
 
     /**
@@ -654,6 +663,6 @@ class build extends control
     public function batchUnlinkBug(int $buildID)
     {
         if($this->post->bugIdList) $this->build->batchUnlinkBug($buildID, $this->post->bugIdList);
-        return $this->sendSuccess(array('load' => $this->createLink('build', 'view', "buildID=$buildID&type=bug")));
+        return $this->sendSuccess(array('load' => $this->createLink($this->app->rawModule, 'view', "buildID=$buildID&type=bug")));
     }
 }

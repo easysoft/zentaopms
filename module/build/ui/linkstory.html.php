@@ -38,7 +38,7 @@ dtable
         'btnType'   => 'primary',
         'className' => 'size-sm linkObjectBtn',
         'data-type' => 'story',
-        'data-url'  => inlink('linkStory', "buildID={$build->id}&browseType=$browseType&param=$param"),
+        'data-url'  => createLink($buildModule, 'linkStory', "buildID={$build->id}&browseType=$browseType&param=$param"),
     )))),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(helper::createLink($buildModule, 'view', "buildID=$build->id&type=story"). "#app={$app->tab}", $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
     set::footPager(usePager(array
