@@ -269,6 +269,7 @@ formPanel
                 set::name('type'),
                 set::items($lang->task->typeList),
                 set::value($task->type),
+                set::required(true)
             ),
             on::change('typeChange')
         ),
