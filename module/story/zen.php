@@ -1503,13 +1503,12 @@ class storyZen extends story
      *
      * @param  string    $message
      * @param  int       $executionID
-     * @param  int       $todoID
      * @access protected
      * @return array|false
      */
-    protected function getResponseInModal(string $message = '', int $executionID = 0, int $todoID = 0): array|false
+    protected function getResponseInModal(string $message = '', int $executionID = 0): array|false
     {
-        if(!isInModal() && !$todoID) return false;
+        if(!isInModal()) return false;
         if($this->app->tab != 'execution') return array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true);
 
         $executionID       = $executionID ? $executionID : $this->session->execution;
