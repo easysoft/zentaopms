@@ -195,6 +195,7 @@ $lang->admin->noPriv           = 'You have no permission to visit this block.';
 $lang->admin->openTag = 'ZenTao Opensource ';
 $lang->admin->bizTag  = 'ZenTao Biz ';
 $lang->admin->maxTag  = 'ZenTao Max ';
+$lang->admin->ipdTag  = 'ZenTao IPD';
 
 $lang->admin->bizInfoURL    = 'https://www.zentao.net/page/enterprise.html';
 $lang->admin->maxInfoURL    = 'https://www.zentao.net/page/max.html';

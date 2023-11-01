@@ -195,6 +195,7 @@ $lang->admin->noPriv           = '您没有访问该区块的权限。';
 $lang->admin->openTag = '禅道';
 $lang->admin->bizTag  = '禅道企业版';
 $lang->admin->maxTag  = '禅道旗舰版';
+$lang->admin->ipdTag  = '禅道IPD版';
 
 $lang->admin->bizInfoURL    = 'https://www.zentao.net/page/enterprise.html';
 $lang->admin->maxInfoURL    = 'https://www.zentao.net/page/max.html';
