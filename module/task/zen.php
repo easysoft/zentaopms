@@ -1629,8 +1629,9 @@ class taskZen extends task
         /* If there is a database error, return the error message. */
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
-        $response['result']  = 'success';
-        $response['message'] = $this->lang->saveSuccess;
+        $response['result']     = 'success';
+        $response['message']    = $this->lang->saveSuccess;
+        $response['closeModal'] = true;
 
         $message = $this->executeHooks($task->id);
         if($message) $response['message'] = $message;
