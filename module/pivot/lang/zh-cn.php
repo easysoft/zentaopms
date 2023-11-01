@@ -75,6 +75,8 @@ $lang->pivot->PO          = 'PO';
 $lang->pivot->showPivot   = '查看透视表';
 $lang->pivot->showOrigin  = '查看原始数据';
 
+$lang->pivot->showOriginItem = '展示原始条目';
+
 $lang->pivot->colors[] = 'AFD8F8';
 $lang->pivot->colors[] = 'F6BD0F';
 $lang->pivot->colors[] = '8BBA00';

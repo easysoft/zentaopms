@@ -75,6 +75,8 @@ $lang->pivot->PO          = 'PO';
 $lang->pivot->showPivot   = 'Show Pivot';
 $lang->pivot->showOrigin  = 'Show Origin Data';
 
+$lang->pivot->showOriginItem = 'Show origin item';
+
 $lang->pivot->colors[] = 'AFD8F8';
 $lang->pivot->colors[] = 'AFD8F8';
 $lang->pivot->colors[] = 'AFD8F8';
