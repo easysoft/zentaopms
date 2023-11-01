@@ -1428,6 +1428,7 @@ $lang->resource->doc->editCatalog    = 'editCatalog';
 $lang->resource->doc->sortCatalog    = 'sortCatalog';
 $lang->resource->doc->deleteCatalog  = 'deleteCatalog';
 $lang->resource->doc->displaySetting = 'displaySetting';
+$lang->resource->doc->exportFiles    = 'exportFiles';
 
 $lang->doc->methodOrder[5]   = 'index';
 $lang->doc->methodOrder[10]  = 'mySpace';
@@ -1453,6 +1454,7 @@ $lang->doc->methodOrder[105] = 'editCatalog';
 $lang->doc->methodOrder[110] = 'sortCatalog';
 $lang->doc->methodOrder[115] = 'deleteCatalog';
 $lang->doc->methodOrder[120] = 'displaySetting';
+$lang->doc->exportFiles[125] = 'exportFiles';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
