@@ -13,6 +13,7 @@
 <?php
 $currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->vendorList->{empty($modelConfig->type) ? key($lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
 $requiredFields = $config->ai->vendorList[$currentVendor]['requiredFields'];
+if(empty($requiredFields)) $requiredFields = array();
 js::set('vendorList', $config->ai->vendorList);
 js::set('vendorListLang', $lang->ai->models->vendorList);
 ?>

@@ -1,0 +1,35 @@
+body {background-color: #fff; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" style="opacity: 0.05; filter: grayscale(0.05);"><text x="0em" y="1em" font-size="60">🐚</text><text x="1.25em" y="2em" font-size="60">🐚</text></svg>'); background-size: 140px 140px; background-repeat: repeat;}
+
+.chat {width: calc(100% - 8px); height: calc(100vh - 8px); display: flex; flex-direction: column; margin: 4px;}
+.messages {height: 100%; padding: 8px; margin-bottom: 48px; display: flex; flex-direction: column-reverse; overflow: auto;}
+
+.message-container-user, .message-container-assistant, .message-container-error {display: flex; margin: 8px 0;}
+.message-container-user {justify-content: flex-end;}
+.message-container-assistant {justify-content: flex-start;}
+.message-container-error {justify-content: center;}
+.message-content {white-space: pre-wrap;}
+.message-container-user .message-content {background: #d5ecff; padding: 8px; border-radius: 8px 8px 0 8px;}
+.message-container-assistant .message-content {background: #f1f1f1; padding: 8px; border-radius: 8px 8px 8px 0;}
+.message-container-error .message-content {background: #ffdddd; padding: 2px 8px; border-radius: 8px;}
+
+.chat-input {display: flex; justify-content: space-between; position: fixed; bottom: 0; width: calc(100% - 24px); margin: 8px;}
+.chat-input textarea {flex: 1; margin-right: 4px; padding: 4px; border: 1px solid #ccc; border-radius: 4px; outline: none; -webkit-appearance: none; -moz-appearance: none; appearance: none; resize: none;}
+.chat-input input[type=submit] {flex: 0; padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; outline: none; -webkit-appearance: none; -moz-appearance: none; appearance: none; color: #333; background: #fff; cursor: pointer; background: -webkit-linear-gradient(45deg, #1183fb 10%, #0a48d1 20%, #a828f0 50%); background-size: 200% 200%; background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+.chat-input textarea.busy, .chat-input input[type=submit].busy {cursor: wait; opacity: 0.5;}
+
+@keyframes gradient
+{
+  0% {background-position: 0% 0%;}
+  25% {background-position: 100% 50%;}
+  50% {background-position: 0% 100%;}
+  75% {background-position: -100% 50%;}
+  100% {background-position: 0% 0%;}
+}
+.chat-input input[type=submit]:hover {animation: gradient 3s ease infinite;}
+#retry.busy {cursor: wait; opacity: 0.5;}
+
+::-webkit-scrollbar-thumb {border-radius: 5px;}
+::-webkit-scrollbar {width: 10px; height: 10px;}
+::-webkit-scrollbar-thumb:vertical {box-shadow: inset 1px 1px 0 rgb(0 0 0 / 10%), inset 0 -1px 0 rgb(0 0 0 / 7%); background-color: rgba(0, 0, 0, 0.2); border-radius: 10px; opacity: 0; transition: opacity 0.1s;}
+::-webkit-scrollbar, ::-webkit-scrollbar-button, ::-webkit-scrollbar-track, ::-webkit-scrollbar-thumb {visibility: hidden;opacity: 0;}
+:hover ::-webkit-scrollbar, :hover ::-webkit-scrollbar-button, :hover ::-webkit-scrollbar-track, :hover ::-webkit-scrollbar-thumb {visibility: visible;opacity: 1;}

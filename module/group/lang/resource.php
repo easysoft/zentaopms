@@ -1860,6 +1860,7 @@ $lang->resource->ai->prompts                = 'promptBrowse';
 $lang->resource->ai->promptView             = 'promptView';
 $lang->resource->ai->promptExecute          = 'promptExecute';
 $lang->resource->ai->promptExecutionReset   = 'promptExecutionReset';
+$lang->resource->ai->chat                   = 'chat';
 
 $lang->api->methodOrder[0]   = 'index';
 $lang->api->methodOrder[5]   = 'createLib';

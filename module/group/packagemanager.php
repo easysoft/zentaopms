@@ -3774,6 +3774,12 @@ $config->group->package->exportDatatable->subset = 'dataview';
 $config->group->package->exportDatatable->privs  = array();
 $config->group->package->exportDatatable->privs['dataview-export'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('dataview-browse', 'dataview-query'), 'recommend' => array());
 
+$config->group->package->aiChatting = new stdclass();
+$config->group->package->aiChatting->order  = 2020;
+$config->group->package->aiChatting->subset = 'ai';
+$config->group->package->aiChatting->privs  = array();
+$config->group->package->aiChatting->privs['ai-chat'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array(), 'recommend' => array());
+
 $config->group->package->executePrompt = new stdclass();
 $config->group->package->executePrompt->order  = 2040;
 $config->group->package->executePrompt->subset = 'ai';
