@@ -24,6 +24,7 @@ class panel extends wg
     protected static array $defineBlocks = array(
         'heading'        => array(),
         'headingActions' => array('map' => 'toolbar'),
+        'titleSuffix'    => array(),
         'footer'         => array('map' => 'nav')
     );
 
@@ -59,7 +60,8 @@ class panel extends wg
                 setClass('panel-title', $this->prop('titleClass', empty($size) ? null : "text-$size")),
                 $this->prop('titleIcon') ? icon($this->prop('titleIcon')) : null,
                 set($this->prop('titleProps')),
-                $title
+                $title,
+                $this->block('titleSuffix')
             ) : null,
             $headingBlock,
             $actions
