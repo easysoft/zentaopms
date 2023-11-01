@@ -161,7 +161,7 @@ class executionModel extends model
 
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
-        if($moduleName == 'repo' && $methodName == 'browse')
+        if($moduleName == 'repo' && $moduleName == 'mr')
         {
             $repoPairs = $this->loadModel('repo')->getRepoPairs('execution', $executionID);
 
@@ -175,7 +175,7 @@ class executionModel extends model
                 }
             }
             if(!$showMR) unset($this->lang->execution->menu->devops['subMenu']->mr);
-            if(!common::hasPriv('repo', 'review')) unset($this->lang->execution->menu->devops['subMenu']->review);
+            if(!$repoPairs || !common::hasPriv('repo', 'review')) unset($this->lang->execution->menu->devops['subMenu']->review);
 
 
             if(empty($this->lang->execution->menu->devops['subMenu']->mr) && empty($this->lang->execution->menu->devops['subMenu']->review))
