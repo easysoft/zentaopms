@@ -15,7 +15,7 @@ window.renderGitlabUser = function(result, {row})
     return result;
 }
 
-window.bindUser = function()
+window.bindUser = function(e)
 {
     const myDTable = $('#table-gitea-binduser').zui('dtable');
     const formData = myDTable.$.getFormData();
@@ -25,10 +25,12 @@ window.bindUser = function()
     postData['giteaUserNames[]'] = [];
     for(i in bindData)
     {
-        postData['giteaUserNames[]'].push(bindData[i].giteaID);
+        postData['giteaUserNames[' + bindData[i].giteaID + ']'] = bindData[i].giteaUser;
         postData['zentaoUsers[' + bindData[i].giteaID + ']'] = formData['zentaoUsers[' + bindData[i].giteaID + ']'];
     }
 
+    e.preventDefault();
+    e.stopPropagation();
     $.ajaxSubmit({
         url: $.createLink('gitea', 'bindUser', 'giteaID=' + giteaID + '&type=' + type),
         data: postData

@@ -15,7 +15,7 @@ window.renderGitlabUser = function(result, {row})
     return result;
 }
 
-window.bindUser = function()
+window.bindUser = function(e)
 {
     const myDTable = $('#table-gitlab-binduser').zui('dtable');
     const formData = myDTable.$.getFormData();
@@ -25,10 +25,12 @@ window.bindUser = function()
     postData['gitlabUserNames[]'] = [];
     for(i in bindData)
     {
-        postData['gitlabUserNames[]'].push(bindData[i].gitlabID);
+        postData['gitlabUserNames[' + bindData[i].gitlabID + ']'] = bindData[i].gitlabUser;
         postData['zentaoUsers[' + bindData[i].gitlabID + ']'] = formData['zentaoUsers[' + bindData[i].gitlabID + ']'];
     }
 
+    e.preventDefault();
+    e.stopPropagation();
     $.ajaxSubmit({
         url: $.createLink('gitlab', 'bindUser', 'gitlabID=' + gitlabID + '&type=' + type),
         data: postData
