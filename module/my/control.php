@@ -1293,7 +1293,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function team($orderBy = 'id', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function team($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->lang->navGroup->my = 'system';
 
