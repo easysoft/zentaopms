@@ -6,7 +6,8 @@
  */
 function toStory()
 {
-    loadPage($.createLink('story', 'create', 'productID=' + $('#product').val() + '&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID=' + todoID, config.defaultView));
+    const productID = $('#productModal input[name=product]').val();
+    loadModal($.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID=' + todoID, config.defaultView), '.m-my-todo');
 }
 
 /**
@@ -108,22 +109,6 @@ function getProductByProject(projectID)
 }
 
 /**
- * 获取产品项目集。
- * Get programs by productID.
- *
- * @param  int  productID
- * @return void
- */
-function getProgramByProduct(productID)
-{
-    var link = $.createLink('todo', 'ajaxGetProgramID', "productID=" + productID + '&type=product');
-    $.post(link, function(data)
-    {
-        $('#productProgram').val(data);
-    })
-}
-
-/**
  * 展开收起执行下拉菜单。
  * Toggle show execution.
  *
@@ -135,4 +120,9 @@ function getProgramByProduct(productID)
 function toggleExecution(multiple)
 {
     $('#executionIdBox').closest('tr').toggleClass('hidden', !multiple);
+}
+
+function createProduct()
+{
+    loadModal($.createLink('product', 'create'), '.m-my-todo');
 }

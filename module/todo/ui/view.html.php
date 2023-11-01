@@ -33,7 +33,7 @@ $fnRenderCreateStoryModal = function() use ($lang, $products)
         set::modalProps(array('title' => $lang->product->select)),
         empty($products) ? div
         (
-            setClass('text-center', 'pb-8'),
+            setClass('text-center pb-8 mt-2'),
             span($lang->product->noProduct),
             btn
             (
@@ -41,56 +41,36 @@ $fnRenderCreateStoryModal = function() use ($lang, $products)
                 set
                 (
                     array(
-                        'url'   => createLink('product', 'create'),
-                        'id'    => 'createProduct',
+                        'id'    => 'createProductBtn',
                         'class' => 'secondary-pale',
                         'icon'  => 'plus'
                     )
-                )
+                ),
+                on::click('createProduct')
             )
         ) : form
         (
-            setClass('mt-2'),
+            setClass('pb-6 mt-2'),
+            set::actions(array()),
             formGroup
             (
                 inputGroup
                 (
-                    select
+                    picker
                     (
-                        on::change('getProgramByProduct(this)'),
-                        set
-                        (
-                            array(
-                                'id'       => 'product',
-                                'class'    => 'form-control',
-                                'name'     => 'product',
-                                'items'    => $products,
-                                'required' => true
-                            )
-                        )
-                    ),
-                    input
-                    (
-                        set::type('hidden'),
-                        set::name('productProgram'),
-                        set::value(0)
+                        set::name('product'),
+                        set::items($products),
+                        set::required(true),
                     ),
                     btn
                     (
-                        on::click('toStory'),
-                        set
-                        (
-                            array(
-                                'id'    => 'toStoryButton',
-                                'class' => 'primary',
-                                'text'  => $lang->todo->reasonList['story']
-                            )
-                        )
+                        setID('toStoryButton'),
+                        setClass('primary'),
+                        $lang->todo->reasonList['story'],
+                        on::click('toStory')
                     )
                 )
             ),
-            set::actions(array()),
-            setClass('pb-6')
         ),
     );
 };

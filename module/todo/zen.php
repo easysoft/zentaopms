@@ -633,6 +633,7 @@ class todoZen extends todo
     {
         $this->loadModel('user');
         $this->loadModel('product');
+
         $executionPairs = array();
         $executions     = $projects ? $this->loadModel('execution')->getByProject(key($projects), 'undone') : array();
         foreach($executions as $execution) $executionPairs[$execution->id] = $execution->name;
