@@ -1414,8 +1414,8 @@ class productModel extends model
         if(commonModel::isTutorialMode()) return true;
 
         $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        $link      = helper::createLink('product', 'index');
-        if($this->server->http_referer && strpos($this->server->http_referer, $loginLink) !== false) $link = helper::createLink('product', 'index');
+        $link      = helper::createLink('product', 'all');
+        if($this->server->http_referer && strpos($this->server->http_referer, $loginLink) !== false) $link = helper::createLink('product', 'all');
 
         return $this->app->control->sendError($tips, $link);
     }
