@@ -1082,7 +1082,10 @@ class productZen extends product
         $uri = $this->app->getURI(true);
 
         /* For setMenu. */
-        if($this->app->tab == 'project') $this->session->set('storyList', $uri, 'project');
+        if($this->app->tab == 'project')
+        {
+            $this->session->set('storyList', $uri, 'project');
+        }
         else
         {
             $this->session->set('productList', $uri, 'product');
