@@ -192,7 +192,7 @@ function validate(showError = false)
             }
         }
 
-        if(!value.stat || value.stat.length == 0 || value.stat === '')
+        if(value.showOrigin != '1' && (!value.stat || value.stat.length == 0 || value.stat === ''))
         {
             isReady = false;
             if(showError)
