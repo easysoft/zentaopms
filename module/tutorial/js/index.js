@@ -39,13 +39,13 @@ $(function()
     var getApp = function(code)
     {
         if(!code) return appsWindow.$.apps.getLastApp();
-        return $.extend({}, appsWindow.$.apps.appsMap[code], appsWindow.$.apps.openedApps[code]);
+        return $.extend({}, appsWindow.$.apps.map[code], appsWindow.$.apps.openedMap[code]);
     };
 
     var getAppWindow = function()
     {
         var app = appsWindow.$.apps.getLastApp();
-        return appsWindow.frames['app-' + app.code];
+        return app ? appsWindow.frames['app-' + app.code] : null;
     };
 
     var getAppIframe = function()
@@ -238,6 +238,7 @@ $(function()
     {
         clearTips();
 
+        console.log('checkTask trigger');
         var iWindow = getAppWindow();
         if(!iWindow || !iWindow.$) return tryCheckTask();
         var task = tasks[current];
@@ -522,8 +523,9 @@ $(function()
         var appsIframe = $('#iframePage').get(0);
         appsIframe.onload = appsIframe.onreadystatechange = function()
         {
-            appsWindow.$(appsWindow.document).on('reloadapp loadapp showapp closeapp hideapp', function()
+            appsWindow.$(appsWindow.document).on('reloadapp openapp showapp closeapp hideapp', function()
             {
+                console.log('document trigger');
                 tryCheckTutorialState(1000);
             });
 
