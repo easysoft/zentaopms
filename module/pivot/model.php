@@ -1591,6 +1591,13 @@ class pivotModel extends model
         $number       = 0;
         $groupsRow    = array();
         $showColTotal = zget($settings, 'columnTotal', 'noShow');
+        $showOrigin   = false;
+
+        foreach($settings['columns'] as $column)
+        {
+            if(isset($column['showOrigin']) and $column['showOrigin']) $showOrigin = true;
+        }
+
         if(isset($settings['columns']))
         {
             foreach($settings['columns'] as $column)
@@ -1601,36 +1608,57 @@ class pivotModel extends model
                 $uuName = $field . $number;
                 $number ++;
 
-                if($stat == 'distinct')
+                if($column['showOrigin'])
                 {
-                    $columnSQL = "count(distinct tt.`$field`) as `$uuName`";
+                    $columnSQL = "select $groupList, tt.`$field` from ($sql) tt" . $connectSQL . $orderSQL;
                 }
                 else
                 {
-                    if($fields[$field]['type'] != 'number' and in_array($stat, array('avg', 'sum')))
+                    if($stat == 'distinct')
                     {
-                        $convertSql = $this->config->db->driver == 'mysql' ? "CAST(tt.`$field` AS DECIMAL(32, 2))" : "TO_DECIMAL(tt.`$field`)";
-                        $columnSQL  = "$stat($convertSql) as `$uuName`";
+                        $columnSQL = "count(distinct tt.`$field`) as `$uuName`";
                     }
                     else
                     {
-                        $columnSQL = "$stat(tt.`$field`) as `$uuName`";
+                        if($fields[$field]['type'] != 'number' and in_array($stat, array('avg', 'sum')))
+                        {
+                            $convertSql = $this->config->db->driver == 'mysql' ? "CAST(tt.`$field` AS DECIMAL(32, 2))" : "TO_DECIMAL(tt.`$field`)";
+                            $columnSQL  = "$stat($convertSql) as `$uuName`";
+                        }
+                        else
+                        {
+                            $columnSQL = "$stat(tt.`$field`) as `$uuName`";
+                        }
                     }
-                }
 
-                if($slice != 'noSlice') $columnSQL = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $orderSQL . ",tt.`$slice`";
-                if($slice == 'noSlice') $columnSQL = "select $groupList,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
+                    if($slice != 'noSlice') $columnSQL = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $orderSQL . ",tt.`$slice`";
+                    if($slice == 'noSlice') $columnSQL = "select $groupList,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
+                }
 
                 $columnRows = $this->dao->query($columnSQL)->fetchAll();
 
-                $cols = $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs);
+                $rowcount = array_fill(0, count($columnRows), 1);
+                if($showOrigin && !$column['showOrigin'])
+                {
+                    $countSQL = "select $groupList, count(tt.`$field`) as rowCount from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
+                    $countRows = $this->dao->query($countSQL)->fetchAll();
+                    foreach($countRows as $key => $countRow) $rowcount[$key] = $countRow->rowCount;
+                }
+
+                $cols = $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs, $column['showOrigin']);
                 if($slice != 'noSlice') $columnRows = $this->processSliceData($columnRows, $groups, $slice, $uuName);
                 $columnRows = $this->processShowData($columnRows, $groups, $column, $showColTotal, $uuName);
 
+                $rowIndex = 0;
                 foreach($columnRows as $key => $row)
                 {
-                    if(!isset($groupsRow[$key])) $groupsRow[$key] = new stdclass();
-                    $groupsRow[$key] = (object)array_merge((array)$groupsRow[$key], (array)$row);
+                    $count = $rowcount[$key];
+                    for($i = 0; $i < $count; $i++)
+                    {
+                        if(!isset($groupsRow[$rowIndex])) $groupsRow[$rowIndex] = new stdclass();
+                        $groupsRow[$rowIndex] = (object)array_merge((array)$groupsRow[$rowIndex], (array)$row);
+                        $rowIndex += 1;
+                    }
                 }
             }
         }
@@ -1756,15 +1784,16 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs = array())
+    public function getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs = array(), $showOrigin = false)
     {
         $stat       = zget($column, 'stat', '');
         $showMode   = zget($column, 'showMode', 'default');
         $monopolize = $showMode == 'default' ? '' : zget($column, 'monopolize', '');
 
         $col = new stdclass();
-        $col->name    = $column['field'];
-        $col->isGroup = false;
+        $col->name       = $column['field'];
+        $col->isGroup    = false;
+        $col->showOrigin = $showOrigin;
 
         $fieldObject  = $fields[$column['field']]['object'];
         $relatedField = $fields[$column['field']]['field'];
@@ -2237,6 +2266,15 @@ class pivotModel extends model
         /* Init table. */
         $table  = "<table class='reportData table table-condensed table-striped table-bordered table-fixed datatable' style='width: auto; min-width: 100%' data-fixed-left-width='400'>";
 
+        $showOrigins = array();
+
+        foreach($data->cols[0] as $col)
+        {
+            $colspan = zget($col, 'colspan', 1);
+            $colShowOrigin = array_fill(0, $colspan, $col->showOrigin);
+            $showOrigins = array_merge($showOrigins, $colShowOrigin);
+        }
+
         /* Init table thead. */
         $table .= "<thead>";
         foreach($data->cols as $lineCols)
@@ -2273,6 +2311,13 @@ class pivotModel extends model
                 $isGroup = !empty($data->cols[0][$j]) ? $data->cols[0][$j]->isGroup : false;
                 $rowspan = isset($configs[$i][$j]) ? $configs[$i][$j] : 1;
                 $hidden  = isset($configs[$i][$j]) ? false : (!$isGroup ? false : true);
+
+                $showOrigin = $showOrigins[$j];
+                if(!$isGroup && !$showOrigin)
+                {
+                    $rowspan = isset($configs[$i]) ? end($configs[$i]) : 1;
+                    $hidden  = isset($configs[$i]) ? false : true;
+                }
 
                 $lineValue = $line[$j];
                 if($isGroup)
