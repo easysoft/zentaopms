@@ -287,7 +287,7 @@ class company extends control
         $this->loadModel('search')->setSearchParams($this->config->company->dynamic->search);
 
         $dateGroups = $this->action->buildDateGroup($actions, $direction, $orderBy);
-        if(empty($recTotal)) $recTotal = array_reduce($dateGroups, function($result, $item){return $result + count($item);}, 0);
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count(reset($dateGroups)) : $this->action->getDynamicCount();
 
         /* Assign. */
         $this->view->recTotal     = $recTotal;
