@@ -52,16 +52,17 @@ class kanban extends control
     {
         if(!empty($_POST))
         {
-            $spaceID = $this->kanban->createSpace($type);
+            $spaceID = $this->kanban->createSpace();
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('kanbanSpace', $spaceID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         unset($this->lang->kanban->featureBar['space']['involved']);
 
+        $this->view->title    = $this->lang->kanban->createSpace;
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed|nodeleted');
         $this->view->type     = $type;
         $this->view->typeList = $this->lang->kanban->featureBar['space'];
