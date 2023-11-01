@@ -435,8 +435,8 @@ class storyZen extends story
 
         foreach($products as $product)
         {
-            if($product->status == 'normal' and $product->PO == $account) $myProducts[$product->id]     = $product->name;
-            if($product->status == 'normal' and $product->PO != $account) $othersProducts[$product->id] = $product->name;
+            if($product->status != 'closed' and $product->PO == $account) $myProducts[$product->id]     = $product->name;
+            if($product->status != 'closed' and $product->PO != $account) $othersProducts[$product->id] = $product->name;
         }
         $products = $myProducts + $othersProducts;
 
