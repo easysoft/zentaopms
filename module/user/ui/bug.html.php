@@ -12,10 +12,10 @@ namespace zin;
 include './featurebar.html.php';
 
 $that = zget($lang->user->thirdPerson, $user->gender);
-$bugNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('bug', "userID={$user->id}&type=assignedTo&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
-$bugNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('bug', "userID={$user->id}&type=openedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
-$bugNavs['resolvedBy'] = array('text' => sprintf($lang->user->resolvedBy, $that), 'url' => inlink('bug', "userID={$user->id}&type=resolvedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
-$bugNavs['closedBy']   = array('text' => sprintf($lang->user->closedBy,   $that), 'url' => inlink('bug', "userID={$user->id}&type=closedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+$bugNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('bug', "userID={$user->id}&type=assignedTo&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
+$bugNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('bug', "userID={$user->id}&type=openedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
+$bugNavs['resolvedBy'] = array('text' => sprintf($lang->user->resolvedBy, $that), 'url' => inlink('bug', "userID={$user->id}&type=resolvedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
+$bugNavs['closedBy']   = array('text' => sprintf($lang->user->closedBy,   $that), 'url' => inlink('bug', "userID={$user->id}&type=closedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
 if(isset($bugNavs[$type])) $bugNavs[$type]['active'] = true;
 
 $cols = array();
@@ -30,13 +30,18 @@ $cols = array_map(function($col)
     return $col;
 }, $cols);
 
-panel
+div
 (
-    setClass('list'),
-    set::title(null),
-    set::headingActions(array(nav(set::items($bugNavs)))),
+    setClass('shadow-sm rounded canvas'),
+    nav
+    (
+        setClass('dtable-sub-nav py-1'),
+        set::items($bugNavs)
+    ),
     dtable
     (
+        set::_className('shadow-none'),
+        set::extraHeight('+.dtable-sub-nav'),
         set::userMap($users),
         set::bordered(true),
         set::cols($cols),

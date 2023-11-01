@@ -12,10 +12,10 @@ namespace zin;
 include './featurebar.html.php';
 
 $that = zget($lang->user->thirdPerson, $user->gender);
-$storyNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=assignedTo&orderType={$orderType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
-$storyNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=openedBy&orderType={$orderType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
-$storyNavs['reviewedBy'] = array('text' => sprintf($lang->user->reviewedBy, $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=reviewedBy&orderType={$orderType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
-$storyNavs['closedBy']   = array('text' => sprintf($lang->user->closedBy,   $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=closedBy&orderType={$orderType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+$storyNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=assignedTo&orderType={$orderType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
+$storyNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=openedBy&orderType={$orderType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
+$storyNavs['reviewedBy'] = array('text' => sprintf($lang->user->reviewedBy, $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=reviewedBy&orderType={$orderType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
+$storyNavs['closedBy']   = array('text' => sprintf($lang->user->closedBy,   $that), 'url' => inlink('story', "userID={$user->id}&storyType={$storyType}&type=closedBy&orderType={$orderType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
 if(isset($storyNavs[$type])) $storyNavs[$type]['active'] = true;
 
 $this->loadModel('my');
@@ -39,13 +39,18 @@ $cols = array_map(function($col)
 
 foreach($stories as $story) $story->estimate .= $config->hourUnit;
 
-panel
+div
 (
-    setClass('list'),
-    set::title(null),
-    set::headingActions(array(nav(set::items($storyNavs)))),
+    setClass('shadow-sm rounded canvas'),
+    nav
+    (
+        setClass('dtable-sub-nav py-1'),
+        set::items($storyNavs)
+    ),
     dtable
     (
+        set::_className('shadow-none'),
+        set::extraHeight('+.dtable-sub-nav'),
         set::userMap($users),
         set::bordered(true),
         set::cols($cols),

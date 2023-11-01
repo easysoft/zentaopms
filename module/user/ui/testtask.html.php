@@ -14,7 +14,7 @@ include './featurebar.html.php';
 jsVar('trunkLang', $lang->trunk);
 
 $that = zget($lang->user->thirdPerson, $user->gender);
-$testtaskNavs['assignedTo'] = array('text' => sprintf($lang->user->testTask2Him, $that), 'url' => inlink('testtask', "userID={$user->id}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'active' => true);
+$testtaskNavs['assignedTo'] = array('text' => sprintf($lang->user->testTask2Him, $that), 'url' => inlink('testtask', "userID={$user->id}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table', 'active' => true); 
 
 $cols = array();
 foreach($config->user->defaultFields['testtask'] as $field) $cols[$field] = $config->testtask->dtable->fieldList[$field];
@@ -39,13 +39,18 @@ foreach($tasks as $task)
 }
 $summary = sprintf($lang->testtask->allSummary, count($tasks), $waitCount, $testingCount, $blockedCount, $doneCount);
 
-panel
+div
 (
-    setClass('list'),
-    set::title(null),
-    set::headingActions(array(nav(set::items($testtaskNavs)))),
+    setClass('shadow-sm rounded canvas'),
+    nav
+    (
+        setClass('dtable-sub-nav py-1'),
+        set::items($testtaskNavs)
+    ),
     dtable
     (
+        set::_className('shadown-none'),
+        set::extraHeight('+.dtable-sub-nav'),
         set::userMap($users),
         set::bordered(true),
         set::cols($cols),

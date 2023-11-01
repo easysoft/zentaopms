@@ -13,8 +13,8 @@ include './featurebar.html.php';
 
 
 $that = zget($lang->user->thirdPerson, $user->gender);
-$testcaseNavs['case2Him']  = array('text' => sprintf($lang->user->case2Him, $that),  'url' => inlink('testcase', "userID={$user->id}&type=case2Him&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
-$testcaseNavs['caseByHim'] = array('text' => sprintf($lang->user->caseByHim, $that), 'url' => inlink('testcase', "userID={$user->id}&type=caseByHim&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+$testcaseNavs['case2Him']  = array('text' => sprintf($lang->user->case2Him, $that),  'url' => inlink('testcase', "userID={$user->id}&type=case2Him&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
+$testcaseNavs['caseByHim'] = array('text' => sprintf($lang->user->caseByHim, $that), 'url' => inlink('testcase', "userID={$user->id}&type=caseByHim&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
 if(isset($testcaseNavs[$type])) $testcaseNavs[$type]['active'] = true;
 
 $cols = array();
@@ -39,13 +39,18 @@ foreach($cases as $case)
     if((isset($case->fromCaseVersion) && $case->fromCaseVersion > $case->version) || $case->needconfirm) $case->status = 'changed';
 }
 
-panel
+div
 (
-    setClass('list'),
-    set::title(null),
-    set::headingActions(array(nav(set::items($testcaseNavs)))),
+    setClass('shadow-sm rounded canvas'),
+    nav
+    (
+        setClass('dtable-sub-nav'),
+        set::items($testcaseNavs)
+    ),
     dtable
     (
+        set::_className('shadow-none'),
+        set::extraHeight('+.dtable-sub-nav'),
         set::userMap($users),
         set::bordered(true),
         set::cols($cols),

@@ -17,11 +17,11 @@ jsVar('childrenAB', $lang->task->childrenAB);
 jsVar('multipleAB', $lang->task->multipleAB);
 
 $that = zget($lang->user->thirdPerson, $user->gender);
-$taskNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('task', "userID={$user->id}&type=assignedTo&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
-$taskNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('task', "userID={$user->id}&type=openedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
-$taskNavs['finishedBy'] = array('text' => sprintf($lang->user->finishedBy, $that), 'url' => inlink('task', "userID={$user->id}&type=finishedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
-$taskNavs['closedBy']   = array('text' => sprintf($lang->user->closedBy,   $that), 'url' => inlink('task', "userID={$user->id}&type=closedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
-$taskNavs['canceledBy'] = array('text' => sprintf($lang->user->canceledBy, $that), 'url' => inlink('task', "userID={$user->id}&type=canceledBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+$taskNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('task', "userID={$user->id}&type=assignedTo&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
+$taskNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('task', "userID={$user->id}&type=openedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
+$taskNavs['finishedBy'] = array('text' => sprintf($lang->user->finishedBy, $that), 'url' => inlink('task', "userID={$user->id}&type=finishedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
+$taskNavs['closedBy']   = array('text' => sprintf($lang->user->closedBy,   $that), 'url' => inlink('task', "userID={$user->id}&type=closedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
+$taskNavs['canceledBy'] = array('text' => sprintf($lang->user->canceledBy, $that), 'url' => inlink('task', "userID={$user->id}&type=canceledBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
 if(isset($taskNavs[$type])) $taskNavs[$type]['active'] = true;
 
 $this->loadModel('my');
@@ -46,13 +46,18 @@ foreach($tasks as $task)
     $task->leftLabel     = $task->left     . $lang->execution->workHourUnit;
 }
 
-panel
+div
 (
-    setClass('list'),
-    set::title(null),
-    set::headingActions(array(nav(set::items($taskNavs)))),
+    setClass('shadow-sm rounded canvas'),
+    nav
+    (
+        setClass('dtable-sub-nav py-1'),
+        set::items($taskNavs)
+    ),
     dtable
     (
+        set::_className('shadow-none'),
+        set::extraHeight('+.dtable-sub-nav'),
         set::userMap($users),
         set::bordered(true),
         set::cols($cols),
