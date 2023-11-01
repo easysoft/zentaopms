@@ -271,7 +271,7 @@ class todoZen extends todo
             ->cleanInt('pri, begin, end, private')
             ->setIF(in_array($objectType, array('bug', 'task', 'story')), 'name', '')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
-            ->setIF(empty($postData->date), 'date', '2030-01-01')
+            ->setIF(empty($postData->date) || $this->post->switchDate || $this->post->cycle, 'date', FUTURE_TIME)
             ->setIF(empty($postData->begin) || $this->post->dateSwitcher, 'begin', '2400')
             ->setIF(empty($postData->end) || $this->post->dateSwitcher, 'end', '2400')
             ->setDefault('assignedBy', $oldTodo->assignedTo != $this->post->assignedTo ? $this->app->user->account : $oldTodo->assignedBy)
