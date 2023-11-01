@@ -1,0 +1,7 @@
+.table-footer {
+    position: relative;
+    min-height: 40px;
+    padding: 6px 15px;
+    background: #fff;
+    border-radius: 0 0 4px 4px;
+}
