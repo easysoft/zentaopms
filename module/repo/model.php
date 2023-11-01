@@ -648,9 +648,10 @@ class repoModel extends model
             if($this->checkPriv($repo))
             {
                 $repoItem = array();
-                $repoItem['id']   = $repo->id;
-                $repoItem['text'] = $repo->name;
-                $repoItem['keys'] = zget(common::convert2Pinyin(array($repo->name)), $repo->name, '');
+                $repoItem['id']       = $repo->id;
+                $repoItem['text']     = $repo->name;
+                $repoItem['keys']     = zget(common::convert2Pinyin(array($repo->name)), $repo->name, '');
+                $repoItem['data-app'] = $this->app->tab;
 
                 $repoProducts = explode(',', $repo->product);
                 $repoProducts = array_filter($repoProducts);

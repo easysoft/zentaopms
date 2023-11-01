@@ -878,7 +878,7 @@ class repoZen extends repo
         foreach($revisions as $item)
         {
             $item->link     = $this->repo->createLink('revision', "repoID={$repo->id}&objectID=$objectID&revision={$item->revision}" . $pathInfo);
-            $item->revision = $repo->SCM != 'Subversion' ? substr($item->revision, 0, 10) : $item->revision;
+            $item->revision = ($repo->SCM != 'Subversion' && $item->revision) ? substr($item->revision, 0, 10) : $item->revision;
         }
 
         return $revisions;
