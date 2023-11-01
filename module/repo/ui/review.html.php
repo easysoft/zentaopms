@@ -20,7 +20,7 @@ dropmenu
 
 jsVar('appTab', $app->tab);
 jsVar('orderBy', $orderBy);
-jsVar('sortLink', createLink('repo', 'review', "repoID=$repoID&browseType=$browseType&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('sortLink', createLink('repo', 'review', "repoID=$repoID&browseType=$browseType&objectID={$objectID}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
 foreach($bugs as $bug)
 {
