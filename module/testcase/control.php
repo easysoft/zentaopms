@@ -203,6 +203,7 @@ class testcase extends control
         /* 追加二次排序条件。*/
         /* Append id for second sort. */
         $sort = common::appendOrder(empty($orderBy) ? 'id_desc' : $orderBy);
+        if(strpos($sort, 'planTitle') !== false) $sort = str_replace('planTitle', 'plan', $sort);
 
         $this->lang->testcase->featureBar['zerocase'] = $this->lang->testcase->featureBar['browse'];
 

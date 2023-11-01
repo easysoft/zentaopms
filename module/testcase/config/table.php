@@ -228,6 +228,7 @@ $config->testcase->zerocase->dtable->fieldList['actions']['list']     = $config-
 $config->testcase->zerocase->dtable->fieldList['actions']['menu']     = array('change', 'review', 'close', 'edit', 'createcase');
 $config->testcase->zerocase->dtable->fieldList['actions']['required'] = true;
 $config->testcase->zerocase->dtable->fieldList['actions']['group']    = '7';
+$config->testcase->zerocase->dtable->fieldList['actions']['sortType'] = false;
 
 $config->testcase->importfromlib = new stdclass();
 $config->testcase->importfromlib->dtable = new stdclass();

@@ -62,11 +62,21 @@ menu
 
 $stories = initTableData($stories, $config->testcase->zerocase->dtable->fieldList, $this->story);
 
+foreach($config->testcase->zerocase->dtable->fieldList as $colName => $col)
+{
+    if(!isset($col['sortType'])) $config->testcase->zerocase->dtable->fieldList[$colName]['sortType'] = true;
+}
+
+$linkParams = '';
+foreach($app->rawParams as $key => $value) $linkParams = $key != 'orderBy' ? "{$linkParams}&{$key}={$value}" : "{$linkParams}&orderBy={name}_{sortType}";
+
 dtable
 (
     set::cols($config->testcase->zerocase->dtable->fieldList),
     set::data(array_values($stories)),
     set::userMap($users),
+    set::orderBy($orderBy),
+    set::sortLink(createLink($app->rawModule, $app->rawMethod, $linkParams)),
     set::footPager(usePager()),
     set::footToolbar($footToolbar),
     set::checkable($canBatchAction),
