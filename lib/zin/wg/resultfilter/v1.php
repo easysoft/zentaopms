@@ -15,11 +15,11 @@ requireWg('filter');
 
 class resultFilter extends filter
 {
-    protected function buildDate(string $type): array
+    protected function buildDateControl(): array
     {
         global $lang;
 
-        list($name, $value) = $this->prop(array('name', 'value'));
+        list($type, $name, $value) = $this->prop(array('type', 'name', 'value'));
 
         return array(
             input
@@ -41,11 +41,12 @@ class resultFilter extends filter
     protected function build(): wg|array
     {
         $type = $this->prop('type');
+
         if($type == 'date' || $type == 'datetime') return inputGroup
         (
             setClass('pr-4 mb-2 ' . $this->prop('class', $type == 'datetime' ? 'w-1/3' : 'w-1/4')),
             $this->prop('title'),
-            $this->buildDate($type)
+            $this->buildDateControl($type)
         );
 
         return parent::build();
