@@ -104,3 +104,17 @@ public function getObjects($account, $type = 'execution', $status = 'all', $orde
     return $myObjects;
 }
 
+public function getFeatureBarMenus(object $user): array
+{
+    $featureBarMenus = parent::getFeatureBarMenus($user);
+
+    $liteBarMenus = array();
+    $liteBarMenus['todo']      = $featureBarMenus['todo'];
+    $liteBarMenus['task']      = $featureBarMenus['task'];
+    $liteBarMenus['story']     = $featureBarMenus['story'];
+    $liteBarMenus['execution'] = $featureBarMenus['execution'];
+    $liteBarMenus['dynamic']   = $featureBarMenus['dynamic'];
+    $liteBarMenus['profile']   = $featureBarMenus['profile'];
+
+    return $liteBarMenus;
+}

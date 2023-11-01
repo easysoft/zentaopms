@@ -19,7 +19,7 @@ $cols = array();
 foreach($config->user->defaultFields['execution'] as $field) $cols[$field] = zget($config->execution->dtable->fieldList, $field, array());
 $cols['name']['nestedToggle'] = false;
 $cols['name']['type']         = 'text';
-$cols['name']['link']         = array('module' => 'execution', 'method' => 'view', 'params' => 'executionID={id}');
+$cols['name']['link']         = $config->user->execution->dtable->name['link'];
 
 $cols['id']    = array('type' => 'checkID', 'title' => $lang->idAB, 'checkbox' => false);
 $cols['role']  = array('type' => 'user',    'title' => $lang->team->role);
