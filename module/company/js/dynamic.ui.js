@@ -13,7 +13,7 @@ function changeItem()
     var orderBy     = $('[name="orderBy"]').val();
 
     var type = browseType == 'bysearch' ? 'all' : browseType;
-    link = $.createLink('company', 'dynamic', 'browseType=' + type + '&param=&recTotal=0&date=&direction=no&userID=' + userID + '&productID=' + productID + '&projectID=' + projectID + '&executionID=' + executionID + '&orderBy=' + orderBy);
+    link = $.createLink('company', 'dynamic', 'browseType=' + type + '&param=&recTotal=0&date=&direction=' + direction + '&userID=' + userID + '&productID=' + productID + '&projectID=' + projectID + '&executionID=' + executionID + '&orderBy=' + orderBy);
     loadPage(link);
 }
 
