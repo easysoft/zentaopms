@@ -1482,9 +1482,10 @@ class storyZen extends story
         $result = $this->loadModel('common')->removeDuplicate('story', $story, "product={$story->product}");
         if(empty($result['stop'])) return array();
 
-        $response['result']  = 'success';
-        $response['message'] = sprintf($this->lang->duplicate, $this->lang->story->common);
-        $response['locate']  = $this->createLink('story', 'view', "storyID={$result['duplicate']}&version=0&param=0&storyType=$storyType");
+        $response['result']     = 'success';
+        $response['message']    = sprintf($this->lang->duplicate, $this->lang->story->common);
+        $response['locate']     = $this->createLink('story', 'view', "storyID={$result['duplicate']}&version=0&param=0&storyType=$storyType");
+        $response['closeModal'] = true;
         if($objectID)
         {
             $execution          = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
@@ -1502,12 +1503,13 @@ class storyZen extends story
      *
      * @param  string    $message
      * @param  int       $executionID
+     * @param  int       $todoID
      * @access protected
      * @return array|false
      */
-    protected function getResponseInModal(string $message = '', int $executionID = 0): array|false
+    protected function getResponseInModal(string $message = '', int $executionID = 0, int $todoID = 0): array|false
     {
-        if(!isonlybody()) return false;
+        if(!isInModal() && !$todoID) return false;
         if($this->app->tab != 'execution') return array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true);
 
         $executionID       = $executionID ? $executionID : $this->session->execution;

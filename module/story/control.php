@@ -81,7 +81,7 @@ class story extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $storyID));
 
             /* Get response when create in modal. */
-            $response = $this->storyZen->getResponseInModal($message);
+            $response = $this->storyZen->getResponseInModal($message, 0, $todoID);
             if($response) return $this->send($response);
 
             $response = array('result' => 'success', 'message' => $message);
