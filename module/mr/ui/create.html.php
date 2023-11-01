@@ -44,6 +44,7 @@ formPanel
     count($repoPairs) > 1 ? to::titleSuffix(
         picker
         (
+            setClass('font-normal w-36'),
             set::name('changeRepo'),
             set::items($repoPairs),
             set::value($repo->id),

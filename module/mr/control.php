@@ -244,11 +244,21 @@ class mr extends control
         $jobs     = $this->loadModel('job')->getListByRepoID($repoID);
         foreach($jobs as $job) $jobPairs[$job->id] = "[{$job->id}]{$job->name}";
 
+        $repoPairs = array();
+        if($this->app->tab == 'execution' && $objectID)
+        {
+            $repoList = $this->loadModel('repo')->getList($objectID);
+            foreach($repoList as $repoInfo)
+            {
+                if($repoInfo->SCM != 'Subversion') $repoPairs[$repoInfo->id] = $repoInfo->name;
+            }
+        }
+
         $this->app->loadLang('compile');
         $this->view->title       = $this->lang->mr->create;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->repo        = $repo;
-        $this->view->repoPairs   = $objectID ? $this->repo->getRepoPairs('execution', $objectID, false) : array();
+        $this->view->repoPairs   = $repoPairs;
         $this->view->project     = $project;
         $this->view->executionID = $objectID;
         $this->view->objectID    = $objectID;
