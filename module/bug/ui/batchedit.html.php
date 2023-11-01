@@ -123,6 +123,18 @@ formBatchPanel
         set::ditto(true),
         set::defaultDitto('off')
     ),
+    /* Field of module. */
+    formBatchItem
+    (
+        set::name('plan'),
+        set::label($lang->bug->plan),
+        set::control(array('type' => 'picker', 'required' => false)),
+        set::items(array()),
+        set::width('200px'),
+        set::required(isset($requiredFields['plan'])),
+        set::ditto(true),
+        set::defaultDitto('off')
+    ),
     /* Field of assignedTo. */
     formBatchItem
     (

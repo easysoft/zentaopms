@@ -34,6 +34,16 @@ window.renderRowData = function($row, index, row)
         });
     }
 
+    /* Show the plans of current bug's product. */
+    if(row.plans != undefined)
+    {
+        $row.find('[data-name="plan"]').find('.picker-box').on('inited', function(e, info)
+        {
+            let $plan    = info[0];
+            $plan.render({items: row.plans});
+        });
+    }
+
     /* Show the bugs of current bug's product. */
     if(productBugOptions[row.product] != undefined && productBugOptions[row.product][row.branch] != undefined)
     {

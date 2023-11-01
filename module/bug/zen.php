@@ -152,10 +152,11 @@ class bugZen extends bug
             /* Check required fields. */
             foreach($requiredFields as $requiredField)
             {
-                if(!isset($bug->{$requiredField}) or strlen(trim($bug->{$requiredField})) == 0)
+                if(isset($this->config->bug->form->batchEdit[$requiredField])
+                 && (!isset($bug->{$requiredField}) || (isset($bug->{$requiredField}) && strlen(trim((string)$bug->{$requiredField})) == 0)))
                 {
-                    $fieldName = isset($this->lang->bug->$requiredField) ? $this->lang->bug->$requiredField : $requiredField;
-                    dao::$errors["{$requiredField}[{$bug->id}]"] = sprintf($this->lang->error->notempty, $fieldName);
+                    $fieldName = isset($this->config->bug->form->batchEdit[$requiredField]) && $this->config->bug->form->batchEdit[$requiredField]['type'] != 'array' ? "{$requiredField}[{$bug->id}]" : "{$requiredField}[{$bug->id}][]";
+                    dao::$errors[$fieldName] = sprintf($this->lang->error->notempty, zget($this->lang->bug, $requiredField));
                 }
             }
 
@@ -1640,12 +1641,26 @@ class bugZen extends bug
             $modules[$product->id] = $product->type != 'normal' ? $modulePairs : array(0 => $modulePairs);
         }
 
+        $productPlanOptions = array();
+        foreach($productPlanList as $productID => $productPlans)
+        {
+            $productPlanOptions[$productID] = array();
+            foreach($productPlans as $branchID => $branchPlans)
+            {
+                $productPlanOptions[$productID][$branchID] = array();
+                foreach($branchPlans as $bugID => $bugTitle)
+                {
+                    $productPlanOptions[$productID][$branchID][] = array('text' => $bugTitle, 'value' => $bugID);
+                }
+            }
+        }
+
         /* Get module of the bugs, and set bug plans. */
         foreach($bugs as $bug)
         {
             if(!isset($modules[$bug->product][0])) $modules[$bug->product][0] = array();
             if(!isset($modules[$bug->product][$bug->branch]) && isset($modules[$bug->product])) $modules[$bug->product][$bug->branch] = $modules[$bug->product][0] + $this->tree->getModulesName($bug->module);
-            $bug->plans = isset($productPlanList[$bug->product]) && isset($productPlanList[$bug->product][$bug->branch]) ? $productPlanList[$bug->product][$bug->branch] : array();
+            $bug->plans = isset($productPlanOptions[$bug->product]) && isset($productPlanOptions[$bug->product][$bug->branch]) ? $productPlanOptions[$bug->product][$bug->branch] : array();
         }
 
         $bugModules = array();
@@ -2280,8 +2295,8 @@ class bugZen extends bug
         /* Get plan list that has been changed. */
         if($bug->plan != $oldBug->plan)
         {
-            if(!empty($oldBug->plan)) $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},{$oldBug->id}";
-            if(!empty($bug->plan))    $link2Plans[$bug->plan]     = empty($link2Plans[$bug->plan])     ? $bugID : "{$link2Plans[$bug->plan]},{$oldBug->id}";
+            if(!empty($oldBug->plan)) $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bug->id : "{$unlinkPlans[$oldBug->plan]},{$oldBug->id}";
+            if(!empty($bug->plan))    $link2Plans[$bug->plan]     = empty($link2Plans[$bug->plan])     ? $bug->id : "{$link2Plans[$bug->plan]},{$oldBug->id}";
         }
 
         return array($toTaskIdList, $unlinkPlans, $link2Plans);
