@@ -416,11 +416,15 @@ class storyModel extends model
      * Create a story.
      *
      * @param  object $story
+     * @param  int    $executionID
      * @param  int    $bugID
+     * @param  string $extra
+     * @param  int    $todoID
+     *
      * @access public
      * @return int|false the id of the created story or false when error.
      */
-    public function create(object $story, int $executionID = 0, int $bugID = 0, string $extra = ''): int|false
+    public function create(object $story, int $executionID = 0, int $bugID = 0, string $extra = '', int $todoID = 0): int|false
     {
         if(commonModel::isTutorialMode()) return false;
 
@@ -457,6 +461,19 @@ class storyModel extends model
         /* Record submit review action. */
         if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
 
+        if($todoID > 0)
+        {
+            $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
+            $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
+
+            if($this->config->edition == 'biz' || $this->config->edition == 'max')
+            {
+                $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+                if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+            }
+        }
+
+
         return $storyID;
     }
 
@@ -468,12 +485,14 @@ class storyModel extends model
      * @param  int    $objectID
      * @param  int    $bugID
      * @param  string $extra
+     * @param  int    $todoID
+     *
      * @access public
      * @return int|false
      */
-    public function createTwins(object $storyData, int $objectID, int $bugID, string $extra = ''): int|false
+    public function createTwins(object $storyData, int $objectID, int $bugID, string $extra = '', int $todoID = 0): int|false
     {
-        if(empty($storyData->branches)) return $this->create($storyData, $objectID, $bugID, $extra);
+        if(empty($storyData->branches)) return $this->create($storyData, $objectID, $bugID, $extra, $todoID);
 
         $storyIdList = array();
         $mainStoryID = 0;
@@ -483,7 +502,7 @@ class storyModel extends model
             $storyData->module = $storyData->modules[$key];
             $storyData->plan   = $storyData->plans[$key];
 
-            $storyID = $this->create($storyData, $objectID, $bugID, $extra);
+            $storyID = $this->create($storyData, $objectID, $bugID, $extra, $todoID);
             $storyIdList[$storyID] = $storyID;
             if(empty($mainStoryID)) $mainStoryID = $storyID;
         }

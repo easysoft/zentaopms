@@ -30,7 +30,7 @@ $config->story->form->create['keywords']    = array('type' => 'string',  'contro
 $config->story->form->create['type']        = array('type' => 'string',  'control' => 'hidden',       'required' => false, 'default' => 'story');
 $config->story->form->create['mailto']      = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '', 'filter' => 'join', 'options' => 'users');
 $config->story->form->create['status']      = array('type' => 'string',  'control' => 'hidden',       'required' => false, 'default' => 'active');
-$config->story->form->create['branches']    = array('type' => 'array',   'control' => 'select',       'required' => false, 'default' => 0, 'options' => array());
+$config->story->form->create['branches']    = array('type' => 'array',   'control' => 'select',       'required' => false, 'default' => array(), 'options' => array());
 $config->story->form->create['modules']     = array('type' => 'array',   'control' => 'select',       'required' => false, 'default' => 0, 'options' => array());
 $config->story->form->create['plans']       = array('type' => 'array',   'control' => 'select',       'required' => false, 'default' => 0, 'options' => array());
 $config->story->form->create['vision']      = array('type' => 'string',  'control' => '',             'required' => false, 'default' => $config->vision);

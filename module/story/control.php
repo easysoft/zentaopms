@@ -72,7 +72,7 @@ class story extends control
 
             /* Insert story data. */
             $createFunction = empty($storyData->branches) ? 'create' : 'createTwins';
-            $storyID        = $this->story->{$createFunction}($storyData, $objectID, $bugID, $extra);
+            $storyID        = $this->story->{$createFunction}($storyData, $objectID, $bugID, $extra, $todoID);
             if(empty($storyID) || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $productID = $this->post->product ? $this->post->product : $productID;
