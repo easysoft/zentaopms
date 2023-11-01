@@ -173,6 +173,7 @@ $cols = $this->loadModel('datatable')->getSetting('bug');
 if(isset($cols['branch']))    $cols['branch']['map']    = $branchTagOption;
 if(isset($cols['project']))   $cols['project']['map']   = $projectPairs;
 if(isset($cols['execution'])) $cols['execution']['map'] = $executions;
+foreach($cols as $colName => $col) $cols[$colName]['sortType'] = true;
 
 if($product->type == 'normal') unset($cols['branch']);
 
@@ -186,6 +187,8 @@ dtable
     set::userMap($users),
     set::customCols(true),
     set::checkable($canBatchAction),
+    set::orderBy($orderBy),
+    set::sortLink(inlink('browse', "product={$product->id}&branch={$branch}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::onRenderCell(jsRaw('window.onRenderCell')),

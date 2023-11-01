@@ -114,8 +114,7 @@ class bug extends control
 
         /* 设置排序字段。*/
         /* Set the order field. */
-        if(!$orderBy) $orderBy = 'id_desc';
-        if($this->cookie->qaBugOrder) $orderBy = $this->cookie->qaBugOrder;
+        if(!$orderBy) $orderBy =  $this->cookie->qaBugOrder ? $this->cookie->qaBugOrder : 'id_desc';
 
         $this->bugZen->setBrowseCookie($product, $branch, $browseType, $param, $orderBy);
 
