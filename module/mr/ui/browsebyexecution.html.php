@@ -13,6 +13,11 @@ namespace zin;
 jsVar('orderBy',  $orderBy);
 jsVar('sortLink', $sortLink);
 
+dropmenu
+(
+    set::url(createLink('execution', 'ajaxGetDropMenuData', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+);
+
 foreach($MRList as $index => $MR)
 {
     if(!isset($repoList[$MR->repoID]))

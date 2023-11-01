@@ -11,7 +11,14 @@ declare(strict_types=1);
 namespace zin;
 
 $repoName = $this->dao->select('name')->from(TABLE_REPO)->where('id')->eq($MR->repoID)->fetch('name');
-dropmenu(set::objectID($MR->repoID), set::text($repoName), set::tab('repo'));
+
+$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createLink($module, $app->tab == 'devops' ? 'ajaxGetDropMenu' : 'ajaxGetDropMenuData', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+);
 
 jsVar('type', $type);
 jsVar('orderBy', $orderBy);

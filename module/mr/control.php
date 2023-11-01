@@ -216,7 +216,7 @@ class mr extends control
         $repoID = $this->loadModel('repo')->saveState($repoID);
         $repo   = $this->repo->getByID($repoID);
 
-        $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject);
+        $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject, false);
 
         $jobPairs = array();
         $jobs     = $this->loadModel('job')->getListByRepoID($repoID);
