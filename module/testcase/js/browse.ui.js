@@ -31,7 +31,7 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
  * @access public
  * @return void
  */
-function toggleOnlyAutoCase(event)
+window.toggleOnlyAutoCase = function(event)
 {
     const onlyAutoCase = $(event.target).prop('checked') ? 1 : 0;
     $.cookie.set('onlyAutoCase', onlyAutoCase, {expires:config.cookieLife, path:config.webRoot});
