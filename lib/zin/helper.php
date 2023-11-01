@@ -50,6 +50,15 @@ function createWg($name, $args): wg
     return class_exists($wgName) ? (new $wgName($args)) : $wgName($args);
 }
 
+function requireWg(string $name, string $wgVer = '')
+{
+    $name = strtolower($name);
+
+    if(!$wgVer) $wgVer = getWgVer($name);
+
+    require_once __DIR__ . DS . 'wg' . DS . $name . DS . "v$wgVer.php";
+}
+
 if(!function_exists('str_contains'))
 {
     /**
