@@ -165,18 +165,19 @@ class user extends control
         $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
         $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
-        /* Set the menu. */
-        $this->view->userList = $this->user->setUserList($users, $userID);
+        /* Append id for second sort. */
+        $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'Label') !== false) $sort = str_replace('Label', '', $sort);
 
         /* Assign. */
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
-        $this->view->tabID      = 'task';
-        $this->view->tasks      = $this->loadModel('task')->getUserTasks($account, $type, 0, $pager, $orderBy);
-        $this->view->type       = $type;
-        $this->view->orderBy    = $orderBy;
-        $this->view->user       = $user;
-        $this->view->pager      = $pager;
-
+        $this->view->userList = $this->user->setUserList($users, $userID);
+        $this->view->title    = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
+        $this->view->tabID    = 'task';
+        $this->view->tasks    = $this->loadModel('task')->getUserTasks($account, $type, 0, $pager, $sort);
+        $this->view->type     = $type;
+        $this->view->orderBy  = $orderBy;
+        $this->view->user     = $user;
+        $this->view->pager    = $pager;
         $this->display();
     }
 
