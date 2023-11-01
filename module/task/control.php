@@ -104,7 +104,7 @@ class task extends control
             helper::setcookie('lastTaskModule', $this->post->module);
 
             /* Get the information returned after a task is created. */
-            $response = $this->taskZen->responseAfterCreate($taskData, $execution, $this->post->after);
+            $response = $this->taskZen->responseAfterCreate($taskData, $execution, $this->post->after ? $this->post->after : '');
             return $this->send($response);
         }
 
