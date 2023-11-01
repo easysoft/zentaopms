@@ -67,7 +67,7 @@ div
         h::tr
         (
             h::th($lang->user->dept),
-            h::td($deptName),
+            h::td(html($deptName)),
             h::th($lang->user->role),
             h::td(zget($lang->user->roleList, $user->role, '')),
         ),
