@@ -126,6 +126,7 @@
     {
         if(window.onPageUnmount) window.onPageUnmount();
 
+        window.beforePageLoad = null;
         window.onPageUnmount = null;
         window.beforePageUpdate = null;
         window.afterPageUpdate = null;
@@ -549,6 +550,11 @@
 
         options  = $.extend({url: currentAppUrl, id: options.selector || options.target || 'page'}, options, {selector: getLoadSelector(options.selector)});
 
+        if(window.beforePageLoad)
+        {
+            const newOptions = window.beforePageLoad(options);
+            if(newOptions) $.extend(options, newOptions);
+        }
         if(DEBUG) console.log('[APP] ', 'load:', options.url);
         fetchContent(options.url, options.selector, options);
     }
