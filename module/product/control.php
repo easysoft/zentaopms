@@ -465,9 +465,7 @@ class product extends control
 
         /* Get actions. */
         list($actions, $dateGroups) = $this->productZen->getActionsForDynamic($account, $orderBy, $productID, $type, $recTotal, $date, $direction);
-        if(empty($recTotal)) $recTotal = count($actions);
-
-        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($actions) : $this->action->getDynamicCount();
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count(reset($dateGroups)) : $this->action->getDynamicCount();
 
         /* Assign. */
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
