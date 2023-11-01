@@ -22,15 +22,14 @@ $cols['name']['type']         = 'text';
 $cols['name']['link']         = $config->user->execution->dtable->name['link'];
 
 $cols['id']    = array('type' => 'checkID', 'title' => $lang->idAB, 'checkbox' => false);
-$cols['role']  = array('type' => 'user',    'title' => $lang->team->role);
-$cols['join']  = array('type' => 'date',    'title' => $lang->team->join);
-$cols['hours'] = array('type' => 'number',  'width' => 100, 'title' => $lang->team->hours);
+$cols['role']  = array('type' => 'user',    'title' => $lang->team->role, 'sortType' => false);
+$cols['join']  = array('type' => 'date',    'title' => $lang->team->join, 'sortType' => false);
+$cols['hours'] = array('type' => 'number',  'width' => 100, 'title' => $lang->team->hours, 'sortType' => false);
 $cols['name']['name'] = 'name';
 
 $cols = array_map(function($col)
 {
     unset($col['fixed'], $col['group']);
-    $col['sortType'] = false;
     return $col;
 }, $cols);
 
@@ -43,6 +42,8 @@ panel
         set::bordered(true),
         set::cols($cols),
         set::data(array_values($executions)),
+        set::orderBy($orderBy),
+        set::sortLink(inlink('execution', "userID={$user->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
         set::onRenderCell(jsRaw('window.renderCell')),
         set::footPager(usePager()),
     )
