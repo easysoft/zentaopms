@@ -166,19 +166,22 @@ class executionModel extends model
             $repoPairs = $this->loadModel('repo')->getRepoPairs('execution', $executionID);
 
             $showMR = false;
-            foreach($repoPairs as $repoName)
+            if(common::hasPriv('mr', 'browse'))
             {
-                preg_match('/^\[(\w+)\]/', $repoName, $matches);
-                if(isset($matches[1]) && in_array($matches[1], $this->config->repo->gitServiceList)) $showMR = true;
-            }
-            if(!$showMR && $this->config->edition == 'open')
-            {
-                unset($this->lang->execution->menu->devops['subMenu']->mr);
-                if($this->config->edition == 'open' || !common::hasPriv('repo', 'review'))
+                foreach($repoPairs as $repoName)
                 {
-                    unset($this->lang->execution->menu->devops['subMenu']);
-                    $this->lang->execution->menu->devops['link'] = str_replace($this->lang->devops->common, $this->lang->repo->common, $this->lang->execution->menu->devops['link']);
+                    preg_match('/^\[(\w+)\]/', $repoName, $matches);
+                    if(isset($matches[1]) && in_array($matches[1], $this->config->repo->gitServiceList)) $showMR = true;
                 }
+            }
+            if(!$showMR) unset($this->lang->execution->menu->devops['subMenu']->mr);
+            if(!common::hasPriv('repo', 'review')) unset($this->lang->execution->menu->devops['subMenu']->review);
+
+
+            if(empty($this->lang->execution->menu->devops['subMenu']->mr) && empty($this->lang->execution->menu->devops['subMenu']->review))
+            {
+                unset($this->lang->execution->menu->devops['subMenu']);
+                $this->lang->execution->menu->devops['link'] = str_replace($this->lang->devops->common, $this->lang->repo->common, $this->lang->execution->menu->devops['link']);
             }
         }
 
