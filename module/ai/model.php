@@ -96,7 +96,7 @@ class aiModel extends model
         {
             if($modelVendor == 'azure')
             {
-                $url = sprintf($this->config->ai->openai->api->azure->format, $this->config->ai->openai->api->azure->resource, $this->config->ai->openai->api->azure->deployment, $this->config->ai->openai->api->methods[$type], $this->config->ai->openai->api->azure->apiVersion);
+                $url = sprintf($this->config->ai->openai->api->azure->format, $this->modelConfig->resource, $this->modelConfig->deployment, $this->config->ai->openai->api->methods[$type], $this->config->ai->openai->api->azure->apiVersion);
             }
             else
             {
