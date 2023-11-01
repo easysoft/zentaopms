@@ -1783,3 +1783,19 @@ function progressCircle(): progressCircle
 {
     return createWg('progressCircle', func_get_args());
 }
+
+/**
+ * Filter widget.
+ */
+function filter(): filter
+{
+    return createWg('filter', func_get_args());
+}
+
+/**
+ * Result filter widget.
+ */
+function resultFilter(): resultFilter
+{
+    return createWg('resultFilter', func_get_args());
+}
