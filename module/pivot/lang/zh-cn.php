@@ -72,6 +72,8 @@ $lang->pivot->undefined   = '未设定';
 $lang->pivot->project     = $lang->projectCommon;
 $lang->pivot->PO          = 'PO';
 
+$lang->pivot->showOriginItem = '展示原始条目';
+
 $lang->pivot->colors[] = 'AFD8F8';
 $lang->pivot->colors[] = 'F6BD0F';
 $lang->pivot->colors[] = '8BBA00';
