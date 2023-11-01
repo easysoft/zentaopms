@@ -1564,6 +1564,10 @@ class executionZen extends execution
         {
             $link = helper::createLink('repo', 'browse', "repoID=0&branchID=&executionID=%s");
         }
+        elseif($module == 'mr')
+        {
+            $link = helper::createLink('mr', 'browse', "repoID=0&mode=status&param=opened&objectID=%s") . '#app=execution';
+        }
         elseif($module == 'doc')
         {
             $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
