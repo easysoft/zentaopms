@@ -4,6 +4,7 @@ namespace zin;
 
 require_once dirname(__DIR__) . DS . 'btn' . DS . 'v1.php';
 require_once dirname(__DIR__) . DS . 'backbtn' . DS . 'v1.php';
+require_once dirname(__DIR__) . DS . 'actionitem' . DS . 'v1.php';
 
 class toolbar extends wg
 {
@@ -24,8 +25,9 @@ class toolbar extends wg
         }
 
         $type = $item->prop('type');
-        if($type === 'divider') return div(setClass('toolbar-divider'));
-        if($type === 'btnGroup') return new btnGroup(inherit($item));
+        if($type === 'divider')                        return div(setClass('divider toolbar-divider'));
+        if($type === 'btnGroup')                       return new btnGroup(inherit($item));
+        if($type == 'dropdown' || $type == 'checkbox') return new actionItem(inherit($item));
 
         list($btnClass, $btnProps) = $this->prop(array('btnClass', 'btnProps'));
         $btn = empty($item->prop('back')) ? '\zin\btn' : '\zin\backBtn';
