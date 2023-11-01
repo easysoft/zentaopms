@@ -469,6 +469,15 @@ class aiModel extends model
      */
     public function converse($messages, $options = array())
     {
+        /* Filter system message out for ERNIE. */
+        if($this->config->ai->models[$this->modelConfig->type] == 'ernie')
+        {
+            $systemMessage = current(array_filter($messages, function($message) { return $message->role == 'system'; }));
+            if(!empty($systemMessage)) $options['system'] = $systemMessage->content;
+
+            $messages = array_values(array_filter($messages, function($message) { return $message->role == 'assistant' || $message->role == 'user'; }));
+        }
+
         $data = compact('messages');
 
         if(!empty($options))

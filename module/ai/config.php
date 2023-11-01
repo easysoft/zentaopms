@@ -57,9 +57,9 @@ $config->ai->ernie->params = new stdclass();
 $config->ai->ernie->params->chat     = new stdclass();
 $config->ai->ernie->params->function = new stdclass();
 $config->ai->ernie->params->chat->required     = array('messages');
-$config->ai->ernie->params->chat->optional     = array('temperature', 'top_p', 'penalty_score', 'stream', 'user_id');
+$config->ai->ernie->params->chat->optional     = array('temperature', 'top_p', 'penalty_score', 'stream', 'system', 'user_id');
 $config->ai->ernie->params->function->required = array('messages', 'functions');
-$config->ai->ernie->params->function->optional = array('temperature', 'top_p', 'penalty_score', 'stream', 'user_id');
+$config->ai->ernie->params->function->optional = array('temperature', 'top_p', 'penalty_score', 'stream', 'system', 'user_id');
 
 $config->ai->ernie->model = new stdclass();
 $config->ai->ernie->model->chat     = 'ernie-bot-turbo';
