@@ -45,48 +45,48 @@ $config->zanode->dtable->fieldList['actions']['list']['getVNC']['icon']   = 'rem
 $config->zanode->dtable->fieldList['actions']['list']['getVNC']['hint']   = $lang->zanode->getVNC;
 $config->zanode->dtable->fieldList['actions']['list']['getVNC']['text']   = $lang->zanode->getVNC;
 $config->zanode->dtable->fieldList['actions']['list']['getVNC']['target'] = '_blank';
-$config->zanode->dtable->fieldList['actions']['list']['getVNC']['url']    = array('module' => 'zanode', 'method' => 'getVNC', 'params' => 'id={id}');
+$config->zanode->dtable->fieldList['actions']['list']['getVNC']['url']    = helper::createLink('zanode', 'getVNC', 'id={id}');
 
 $config->zanode->dtable->fieldList['actions']['list']['resume']['icon']      = 'resume';
 $config->zanode->dtable->fieldList['actions']['list']['resume']['hint']      = $lang->zanode->resume;
 $config->zanode->dtable->fieldList['actions']['list']['resume']['text']      = $lang->zanode->resumeNode;
-$config->zanode->dtable->fieldList['actions']['list']['resume']['url']       = array('module' => 'zanode', 'method' => 'resume', 'params' => 'zanodeID={id}');
+$config->zanode->dtable->fieldList['actions']['list']['resume']['url']       = helper::createLink('zanode', 'resume', 'zanodeID={id}');
 $config->zanode->dtable->fieldList['actions']['list']['resume']['className'] = 'ajax-submit';
 
 $config->zanode->dtable->fieldList['actions']['list']['suspend']['icon']      = 'moon';
 $config->zanode->dtable->fieldList['actions']['list']['suspend']['hint']      = $lang->zanode->suspend;
 $config->zanode->dtable->fieldList['actions']['list']['suspend']['text']      = $lang->zanode->suspendNode;
-$config->zanode->dtable->fieldList['actions']['list']['suspend']['url']       = array('module' => 'zanode', 'method' => 'suspend', 'params' => 'zanodeID={id}');
+$config->zanode->dtable->fieldList['actions']['list']['suspend']['url']       = helper::createLink('zanode', 'suspend', 'zanodeID={id}');
 $config->zanode->dtable->fieldList['actions']['list']['suspend']['className'] = 'ajax-submit';
 
 $config->zanode->dtable->fieldList['actions']['list']['start']['icon']      = 'play';
 $config->zanode->dtable->fieldList['actions']['list']['start']['hint']      = $lang->zanode->boot;
 $config->zanode->dtable->fieldList['actions']['list']['start']['text']      = $lang->zanode->bootNode;
-$config->zanode->dtable->fieldList['actions']['list']['start']['url']       = array('module' => 'zanode', 'method' => 'start', 'params' => 'zanodeID={id}');
+$config->zanode->dtable->fieldList['actions']['list']['start']['url']       = helper::createLink('zanode', 'start', 'zanodeID={id}');
 $config->zanode->dtable->fieldList['actions']['list']['start']['className'] = 'ajax-submit';
 
 $config->zanode->dtable->fieldList['actions']['list']['close']['icon']      = 'off';
 $config->zanode->dtable->fieldList['actions']['list']['close']['hint']      = $lang->zanode->shutdown;
 $config->zanode->dtable->fieldList['actions']['list']['close']['text']      = $lang->zanode->shutdownNode;
-$config->zanode->dtable->fieldList['actions']['list']['close']['url']       = array('module' => 'zanode', 'method' => 'close', 'params' => 'zanodeID={id}');
+$config->zanode->dtable->fieldList['actions']['list']['close']['url']       = helper::createLink('zanode', 'close', 'zanodeID={id}');
 $config->zanode->dtable->fieldList['actions']['list']['close']['className'] = 'ajax-submit';
 
 $config->zanode->dtable->fieldList['actions']['list']['reboot']['icon']      = 'restart';
 $config->zanode->dtable->fieldList['actions']['list']['reboot']['hint']      = $lang->zanode->reboot;
 $config->zanode->dtable->fieldList['actions']['list']['reboot']['text']      = $lang->zanode->rebootNode;
-$config->zanode->dtable->fieldList['actions']['list']['reboot']['url']       = array('module' => 'zanode', 'method' => 'reboot', 'params' => 'zanodeID={id}');
+$config->zanode->dtable->fieldList['actions']['list']['reboot']['url']       = helper::createLink('zanode', 'reboot', 'zanodeID={id}');
 $config->zanode->dtable->fieldList['actions']['list']['reboot']['className'] = 'ajax-submit';
 
 $config->zanode->dtable->fieldList['actions']['list']['createSnapshot']['icon']        = "plus";
 $config->zanode->dtable->fieldList['actions']['list']['createSnapshot']['hint']        = $lang->zanode->createSnapshot;
 $config->zanode->dtable->fieldList['actions']['list']['createSnapshot']['text']        = $lang->zanode->createSnapshot;
-$config->zanode->dtable->fieldList['actions']['list']['createSnapshot']['url']         = array('module' => 'zanode', 'method' => 'createSnapshot', 'params' => 'zanodeID={id}');
+$config->zanode->dtable->fieldList['actions']['list']['createSnapshot']['url']         = helper::createLink('zanode', 'createSnapshot', 'zanodeID={id}');
 $config->zanode->dtable->fieldList['actions']['list']['createSnapshot']['data-toggle'] = 'modal';
 $config->zanode->dtable->fieldList['actions']['list']['createSnapshot']['className']   = 'create-snapshot';
 
 $config->zanode->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->zanode->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->zanode->edit;
-$config->zanode->dtable->fieldList['actions']['list']['edit']['url']  = array('module' => 'zanode', 'method' => 'edit', 'params' => 'zanodeID={id}');
+$config->zanode->dtable->fieldList['actions']['list']['edit']['url']  = helper::createLink('zanode', 'edit', 'zanodeID={id}');
 
 $config->zanode->dtable->fieldList['actions']['list']['createImage']['icon']        = 'export';
 $config->zanode->dtable->fieldList['actions']['list']['createImage']['hint']        = $lang->zanode->createImage;

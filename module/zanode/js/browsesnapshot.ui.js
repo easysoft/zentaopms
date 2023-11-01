@@ -1,5 +1,8 @@
 window.afterRender = function()
 {
-    $('.editSnapshot').attr('onclick', "window.parent.editSnapshot('" + $('.editSnapshot').attr('href') + "')");
-    $('.editSnapshot').attr('href', '###');
+    $('.editSnapshot').each(function()
+    {
+        $(this).attr('onclick', "window.parent.editSnapshot('" + $(this).attr('href') + "')");
+        $(this).attr('href', '###');
+    });
 }
