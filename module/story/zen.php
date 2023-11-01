@@ -208,7 +208,6 @@ class storyZen extends story
             $this->product->setMenu($productID);
             $product = $this->product->getByID($productID);
             $this->view->title = $product->name . $this->lang->colon . $this->lang->story->batchClose;
-            $this->session->set('storyList',  $this->createLink('product', 'browse', "productID={$productID}"), $this->app->tab);
         }
         /* The stories of a execution. */
         elseif($executionID)
@@ -218,7 +217,6 @@ class storyZen extends story
             $this->execution->setMenu($executionID);
             $execution = $this->execution->getByID($executionID);
             $this->view->title = $execution->name . $this->lang->colon . $this->lang->story->batchClose;
-            $this->session->set('storyList', $this->createLink('execution', 'story', "executionID={$executionID}"), $this->app->tab);
         }
         else
         {
@@ -226,7 +224,6 @@ class storyZen extends story
             {
                 $this->project->setMenu(!empty($this->session->project) ? $this->session->project : $executionID);
                 $this->view->title = $this->lang->story->batchClose;
-                $this->session->set('storyList', $this->createLink('projectstory', 'story', "projectID={$executionID}"), $this->app->tab);
             }
             else
             {
@@ -237,7 +234,6 @@ class storyZen extends story
                 if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
 
                 $this->view->title = $this->lang->story->batchClose;
-                if(!empty($form)) $this->session->set('storyList', $this->createLink('my', $from, "mode=$storyType"), $this->app->tab);
             }
         }
     }

@@ -888,6 +888,7 @@ class story extends control
         if(isset($closedStory))  $errorTips .= sprintf($this->lang->story->closedStory, implode(',', $closedStory));
         if(isset($skippedStory)) $errorTips .= sprintf($this->lang->story->skipStory,   implode(',', $skippedStory));
 
+        if($this->app->tab == 'project') $this->view->projectID = $this->session->project;
         $this->view->productID  = $productID;
         $this->view->stories    = $stories;
         $this->view->storyType  = $storyType;
