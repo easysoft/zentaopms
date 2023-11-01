@@ -27,7 +27,6 @@ $cols['type']['align']  = 'center';
 $cols = array_map(function($col)
 {
     unset($col['fixed'], $col['group']);
-    $col['sortType'] = false;
     return $col;
 }, $cols);
 
@@ -52,6 +51,8 @@ panel
         set::bordered(true),
         set::cols($cols),
         set::data(array_values($todos)),
+        set::orderBy($orderBy),
+        set::sortLink(inlink('todo', "userID={$user->id}&type={$type}&status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
         set::footer(array(array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
         set::footPager(usePager()),
     )
