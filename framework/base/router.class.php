@@ -1609,110 +1609,103 @@ class baseRouter
      */
     public function getDefaultParams()
     {
-        try
+        $appName    = $this->appName;
+        $moduleName = $this->moduleName;
+        $methodName = $this->methodName;
+
+        /**
+         * 引入该模块的control文件。
+         * Include the control file of the module.
+         */
+        $isExt = $this->setActionExtFile();
+        if($isExt)
         {
-            $appName    = $this->appName;
-            $moduleName = $this->moduleName;
-            $methodName = $this->methodName;
-
-            /**
-             * 引入该模块的control文件。
-             * Include the control file of the module.
-             */
-            $isExt = $this->setActionExtFile();
-            if($isExt)
+            $controlFile = $this->controlFile;
+            spl_autoload_register(function($class) use ($moduleName, $controlFile)
             {
-                $controlFile = $this->controlFile;
-                spl_autoload_register(function($class) use ($moduleName, $controlFile)
-                {
-                    if($class == $moduleName) include $controlFile;
-                });
-            }
-
-            $file2Included = $isExt ? $this->extActionFile : $this->controlFile;
-            chdir(dirname($file2Included));
-            helper::import($file2Included);
-
-            /* Check file is encode by ioncube. */
-            $isEncrypted = false;
-            if(str_contains($file2Included, 'extension' . DS . $this->config->edition . DS))
-            {
-                $fp = fopen($file2Included, 'r');
-                $line1 = fgets($fp);
-                $line2 = fgets($fp);
-                fclose($fp);
-                if(str_starts_with($line1, '<?php //') and str_starts_with($line2, "if(!extension_loaded('ionCube Loader'))")) $isEncrypted = true;
-            }
-
-            /**
-             * 设置control的类名。
-             * Set the class name of the control.
-             */
-            $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
-            if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, true);
-
-            /**
-             * 创建control类的实例。
-             * Create an instance of the control.
-             */
-            $module = new $className();
-            if(!method_exists($module, $methodName)) $this->triggerError("the module $moduleName has no $methodName method", __FILE__, __LINE__, true);
-            $this->control = $module;
-
-            /* include default value for module. */
-            $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");
-            if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
-            /* include default type for module. */
-            $defaultTypeFiles = glob($this->getTmpRoot() . "defaulttype/*.php");
-            if($defaultTypeFiles) foreach($defaultTypeFiles as $typeFile) include $typeFile;
-
-            /**
-             * 使用反射机制获取函数参数的默认值。
-             * Get the default settings of the method to be called using the reflecting.
-             */
-            $defaultParams = array();
-            $methodReflect = new reflectionMethod($className, $methodName);
-            foreach($methodReflect->getParameters() as $param)
-            {
-                $name = $param->getName();
-
-                $default = '_NOT_SET';
-                if(isset($paramDefaultValue[$appName][$className][$methodName][$name]))
-                {
-                    $default = $paramDefaultValue[$appName][$className][$methodName][$name];
-                }
-                elseif(isset($paramDefaultValue[$className][$methodName][$name]))
-                {
-                    $default = $paramDefaultValue[$className][$methodName][$name];
-                }
-                elseif(!$isEncrypted && $param->isDefaultValueAvailable())
-                {
-                    $default = $param->getDefaultValue();
-                }
-
-                $type = 'string';
-                if(isset($paramDefaultType[$appName][$className][$methodName][$name]))
-                {
-                    $type = $paramDefaultType[$appName][$className][$methodName][$name];
-                }
-                elseif(isset($paramDefaultType[$className][$methodName][$name]))
-                {
-                    $type = $paramDefaultType[$className][$methodName][$name];
-                }
-                elseif(!$isEncrypted && method_exists($param, 'hasType') && $param->hasType())
-                {
-                    $paramType = $param->getType();
-                    if(method_exists($paramType, 'getName')) $type = $paramType->getName();
-                }
-
-                $defaultParams[$name] = array('default' => $default, 'type' => $type);
-            }
-            return $defaultParams;
+                if($class == $moduleName) include $controlFile;
+            });
         }
-        catch(EndResponseException $endResponseException)
+
+        $file2Included = $isExt ? $this->extActionFile : $this->controlFile;
+        chdir(dirname($file2Included));
+        helper::import($file2Included);
+
+        /* Check file is encode by ioncube. */
+        $isEncrypted = false;
+        if(str_contains($file2Included, 'extension' . DS . $this->config->edition . DS))
         {
-            return array();
+            $fp = fopen($file2Included, 'r');
+            $line1 = fgets($fp);
+            $line2 = fgets($fp);
+            fclose($fp);
+            if(str_starts_with($line1, '<?php //') and str_starts_with($line2, "if(!extension_loaded('ionCube Loader'))")) $isEncrypted = true;
         }
+
+        /**
+         * 设置control的类名。
+         * Set the class name of the control.
+         */
+        $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
+        if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, true);
+
+        /**
+         * 创建control类的实例。
+         * Create an instance of the control.
+         */
+        $module = new $className();
+        if(!method_exists($module, $methodName)) $this->triggerError("the module $moduleName has no $methodName method", __FILE__, __LINE__, true);
+        $this->control = $module;
+
+        /* include default value for module. */
+        $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");
+        if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
+        /* include default type for module. */
+        $defaultTypeFiles = glob($this->getTmpRoot() . "defaulttype/*.php");
+        if($defaultTypeFiles) foreach($defaultTypeFiles as $typeFile) include $typeFile;
+
+        /**
+         * 使用反射机制获取函数参数的默认值。
+         * Get the default settings of the method to be called using the reflecting.
+         */
+        $defaultParams = array();
+        $methodReflect = new reflectionMethod($className, $methodName);
+        foreach($methodReflect->getParameters() as $param)
+        {
+            $name = $param->getName();
+
+            $default = '_NOT_SET';
+            if(isset($paramDefaultValue[$appName][$className][$methodName][$name]))
+            {
+                $default = $paramDefaultValue[$appName][$className][$methodName][$name];
+            }
+            elseif(isset($paramDefaultValue[$className][$methodName][$name]))
+            {
+                $default = $paramDefaultValue[$className][$methodName][$name];
+            }
+            elseif(!$isEncrypted && $param->isDefaultValueAvailable())
+            {
+                $default = $param->getDefaultValue();
+            }
+
+            $type = 'string';
+            if(isset($paramDefaultType[$appName][$className][$methodName][$name]))
+            {
+                $type = $paramDefaultType[$appName][$className][$methodName][$name];
+            }
+            elseif(isset($paramDefaultType[$className][$methodName][$name]))
+            {
+                $type = $paramDefaultType[$className][$methodName][$name];
+            }
+            elseif(!$isEncrypted && method_exists($param, 'hasType') && $param->hasType())
+            {
+                $paramType = $param->getType();
+                if(method_exists($paramType, 'getName')) $type = $paramType->getName();
+            }
+
+            $defaultParams[$name] = array('default' => $default, 'type' => $type);
+        }
+        return $defaultParams;
     }
 
     /**
