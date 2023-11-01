@@ -68,27 +68,55 @@ panel
             li
             (
                 setClass('nav-item'),
-                a($lang->mr->view, set::href(inlink('view', "MRID={$MR->id}")))
+                a
+                (
+                    $lang->mr->view,
+                    set::href(inlink('view', "MRID={$MR->id}")),
+                    set('data-app', $app->tab)
+                )
             ),
             li
             (
                 setClass('nav-item'),
-                a($lang->mr->viewDiff, setClass('active'))
+                a
+                (
+                    $lang->mr->viewDiff,
+                    setClass('active'),
+                    set('data-app', $app->tab)
+                )
             ),
             li
             (
                 setClass('nav-item story'),
-                a(icon($lang->icons['story']), $lang->productplan->linkedStories, set::href(inlink('link', "MRID={$MR->id}&type=story")))
+                a
+                (
+                    icon($lang->icons['story']),
+                    $lang->productplan->linkedStories,
+                    set::href(inlink('link', "MRID={$MR->id}&type=story")),
+                    set('data-app', $app->tab)
+                )
             ),
             li
             (
                 setClass('nav-item bug'),
-                a(icon($lang->icons['bug']), $lang->productplan->linkedBugs, set::href(inlink('link', "MRID={$MR->id}&type=bug")))
+                a
+                (
+                    icon($lang->icons['bug']),
+                    $lang->productplan->linkedBugs,
+                    set::href(inlink('link', "MRID={$MR->id}&type=bug")),
+                    set('data-app', $app->tab)
+                )
             ),
             li
             (
                 setClass('nav-item task'),
-                a(icon('todo'), $lang->mr->linkedTasks, set::href(inlink('link', "MRID={$MR->id}&type=task")))
+                a
+                (
+                    icon('todo'),
+                    $lang->mr->linkedTasks,
+                    set::href(inlink('link', "MRID={$MR->id}&type=task")),
+                    set('data-app', $app->tab)
+                )
             ),
         )
     ),

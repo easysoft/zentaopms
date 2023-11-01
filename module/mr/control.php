@@ -13,6 +13,8 @@ class mr extends control
         /* This is essential when changing tab(menu) from gitlab to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
         if($this->app->getMethodName() != 'browse') $this->loadModel('ci')->setMenu();
+        $this->view->objectID = $this->app->tab == 'execution' ? $this->session->execution : 0;
+        if($this->app->tab == 'execution') $this->view->executionID = $this->session->execution;
     }
 
     /**
@@ -108,6 +110,7 @@ class mr extends control
             }
         }
 
+        if($this->app->tab == 'execution') $this->view->executionID = $objectID;
         $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
         $this->view->MRList     = $MRList;
         $this->view->projects   = $projects;
@@ -413,6 +416,7 @@ class mr extends control
         $this->view->MR      = $MR;
         $this->view->rawMR   = isset($rawMR) ? $rawMR : false;
         $this->view->product = $product;
+        $this->view->repoID  = $MR->repoID;
         $this->view->stories = $this->mr->getLinkList($MR->id, $product->id, 'story');
         $this->view->bugs    = $this->mr->getLinkList($MR->id, $product->id, 'bug');
         $this->view->tasks   = $this->mr->getLinkList($MR->id, $product->id, 'task');
@@ -660,6 +664,7 @@ class mr extends control
 
         $this->view->title        = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->link;
         $this->view->MR           = $MR;
+        $this->view->repoID       = $MR->repoID;
         $this->view->canBeChanged = true;
         $this->view->modulePairs  = $this->loadModel('tree')->getOptionMenu($product->id, 'story');
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
