@@ -122,13 +122,17 @@ class user extends control
         $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
         $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
 
+        /* Append id for second sort. */
+        $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'Title') !== false) $sort = str_replace('Title', '', $sort);
+
         /* Modify story title. */
         $this->loadModel('story');
         if($storyType == 'requirement') $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
 
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
-        $this->view->stories    = $this->story->getUserStories($account, $type, $orderBy, $pager, $storyType, false, 'all');
+        $this->view->stories    = $this->story->getUserStories($account, $type, $sort, $pager, $storyType, false, 'all');
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->storyType  = $storyType;
         $this->view->orderBy    = $orderBy;
