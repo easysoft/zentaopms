@@ -18,6 +18,8 @@ jsVar('noOptions', $lang->todo->noOptions);
 jsVar('moduleList', $config->todo->moduleList);
 jsVar('objectsMethod', $config->todo->getUserObjectsMethod);
 jsVar('nameBoxLabel', array('custom' => $lang->todo->name, 'objectID' => $lang->todo->objectID));
+jsVar('batchCreateNum', $config->todo->batchCreate);
+jsVar('beginTime', date('Y-m-d') != $date ? $timesKeys[0] : $time);
 
 div
 (
@@ -136,14 +138,16 @@ formBatchPanel
                 setClass('time-input'),
                 set::type('picker'),
                 set::name('begin'),
-                set::items($times)
+                set::items($times),
+                set::required(true)
             ),
             control
             (
                 setClass('time-input'),
                 set::type('picker'),
                 set::name('end'),
-                set::items($times)
+                set::items($times),
+                set::required(true)
             ),
             span
             (

@@ -1,3 +1,9 @@
+window.waitDom("input[name='begin\[1\]']", function()
+{
+    const $beginPicker = $("input[name='begin\[1\]']").zui('picker');
+    $beginPicker.$.setValue(beginTime);
+})
+
 const timeIndex = times.findIndex(key => `${key}` === `${time}`);
 
 window.changeType = function(e)
