@@ -30,6 +30,9 @@ class picker extends wg
         'formID?: string',                  // 组件隐藏的表单元素 ID。
         'className?: string|array',         // 类名。
         'style?: array',                    // 样式。
+        'width?: string|number',            // 宽度。
+        'boxClass?: string|array',          // 根节点类名。
+        'boxStyle?: string|array',          // 根节点样式。
         'tagName?: string',                 // 组件根元素的标签名。
         'attrs?: array',                    // 附加到组件根元素上的属性。
         'clickType?: "toggle"|"open"',      // 点击类型，`toggle` 表示点击按钮时切换显示隐藏，`open` 表示点击按钮时只打。
@@ -44,7 +47,7 @@ class picker extends wg
         'required?: boolean',               // 是否必选（不允许空值，不可以被清除）。
         'placeholder?: string',             // 选择框上的占位文本。
         'valueSplitter?: string',           // 多个值的分隔字符串，默认为 `,`。
-        'items: array|function',            // 列表项或表项获取方法。
+        'items: string|array|function',     // 列表项或表项获取方法。
         'menu?: array',                     // 附加的菜单选项。
         'hotkey?: boolean',                 // 是否启用快捷键。
         'search?: boolean|number',          // 是否启用搜索。
@@ -54,8 +57,8 @@ class picker extends wg
         'onSelect?: function',              // 当选择值时的回调函数。
         'onClear?: function',               // 当清空值时的回调函数。
         'popContainer?: string',            // 下拉面板容器元素。
-        'popWidth?: number|"auto"|"100%"',   // 菜单宽度，如果设置为 `'100%'` 则与选择框宽度一致，默认 `'100%'`。
-        'popHeight?: number|"auto"',         // 菜单高度，默认 `'auto'`。
+        'popWidth?: number|"auto"|"100%"',  // 菜单宽度，如果设置为 `'100%'` 则与选择框宽度一致，默认 `'100%'`。
+        'popHeight?: number|"auto"',        // 菜单高度，默认 `'auto'`。
         'popMaxHeight?: number',            // 菜单最大高度，默认 `300`。
         'popMinHeight?: number',            // 菜单最小高度，默认 `32`。
         'popMaxWidth?: number',             // 菜单最大宽度，当宽度设置为 `'auto'` 时生效。
@@ -79,10 +82,11 @@ class picker extends wg
     {
         list($pickerProps, $restProps) = $this->props->split(array_keys(static::definedPropsList()));
         $items = $pickerProps['items'];
-        $pickerItems  = array();
+        $pickerItems  = is_array($items) ? array() : $items;
         $hasZeroValue = false;
         $defaultValue = isset($pickerProps['value']) ? $pickerProps['value'] : (isset($pickerProps['defaultValue']) ? $pickerProps['defaultValue'] : '');
-        if(!empty($items))
+        if(is_array($defaultValue)) $defaultValue = implode($this->prop('valueSplitter', ','), $defaultValue);
+        if(!empty($items) && is_array($items))
         {
             foreach($items as $key => $item)
             {
@@ -93,10 +97,6 @@ class picker extends wg
                 $pickerItems[] = $item;
             }
         }
-
-        $pickerProps['_props']        = $restProps;
-        $pickerProps['items']         = $pickerItems;
-        $pickerProps['defaultValue']  = $defaultValue;
 
         if(!isset($pickerProps['emptyValue'])) $pickerProps['emptyValue'] = ($hasZeroValue || "$defaultValue" !== '0') ? '' : '0,';
 
@@ -109,6 +109,33 @@ class picker extends wg
         {
             $pickerProps['_id'] = $this->gid;
         }
+
+        if(!isset($pickerProps['style'])) $pickerProps['style'] = array();
+        if(!isset($pickerProps['class'])) $pickerProps['class'] = array();
+        if(isset($pickerProps['width']))
+        {
+            $width = $pickerProps['width'];
+            unset($pickerProps['width']);
+
+            if(is_numeric($width))               $restProps['style']['width'] = "{$width}px";
+            elseif(str_ends_with($width, 'px'))  $restProps['style']['width'] = $width;
+            else                                 $restProps['class'][]        = "w-$width";
+        }
+        if(isset($pickerProps['boxStyle']))
+        {
+            $restProps['style'] = array_merge($restProps['style'], $pickerProps['boxStyle']);
+            unset($pickerProps['boxStyle']);
+        }
+        if(isset($pickerProps['boxClass']))
+        {
+            $restProps['class'][] = $pickerProps['boxClass'];
+            unset($pickerProps['class']);
+        }
+
+        $pickerProps['_props']        = $restProps;
+        $pickerProps['items']         = $pickerItems;
+        $pickerProps['defaultValue']  = $defaultValue;
+
         return $pickerProps;
     }
 
@@ -124,7 +151,8 @@ class picker extends wg
         (
             set::_class('form-group-wrapper picker-box'),
             set::_map(array('value' => 'defaultValue', 'formID' => 'id')),
-            set($this->getPickerProps())
+            set($this->getPickerProps()),
+            $this->children()
         );
     }
 }
