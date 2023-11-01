@@ -27,19 +27,23 @@ foreach(explode(',', $config->user->create->requiredFields) as $field)
 
 formBatchPanel
 (
-    set::headingClass('user-batchcreate-heading'),
+    set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),
     set::title($lang->user->batchCreate),
     on::change('[data-name="new"]', 'toggleNew'),
     on::keyup('[data-name="password"]', 'togglePasswordStrength'),
-    to::headingActions
+    to::titleSuffix
     (
-        radioList
+        div
         (
-            on::change('changeType'),
-            set::name('type'),
-            set::value('inside'),
-            set::inline(true),
-            set::items($lang->user->typeList),
+            setClass('text-base font-medium'),
+            radioList
+            (
+                on::change('changeType'),
+                set::name('type'),
+                set::value('inside'),
+                set::inline(true),
+                set::items($lang->user->typeList),
+            )
         )
     ),
     formBatchItem
