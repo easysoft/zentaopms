@@ -7,3 +7,5 @@
 #monacoTree{overflow: auto;}
 
 #mainMenu + #mainContent > .repo-sidebar {margin-top: 0;}
+
+#monacoTabs .dropdown-menu {--menu-min-width: 1rem;}
