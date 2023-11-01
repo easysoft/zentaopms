@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 include './featurebar.html.php';
 
+
 $that = zget($lang->user->thirdPerson, $user->gender);
 $testcaseNavs['case2Him']  = array('text' => sprintf($lang->user->case2Him, $that),  'url' => inlink('testcase', "userID={$user->id}&type=case2Him"));
 $testcaseNavs['caseByHim'] = array('text' => sprintf($lang->user->caseByHim, $that), 'url' => inlink('testcase', "userID={$user->id}&type=caseByHim"));
@@ -34,6 +35,8 @@ $cols = array_map(function($col)
 foreach($cases as $case)
 {
     if($type == 'case2Him') $case->id = $case->case;
+    $case->caseID = $case->id;
+
     if((isset($case->fromCaseVersion) && $case->fromCaseVersion > $case->version) || $case->needconfirm) $case->status = 'changed';
 }
 
