@@ -259,6 +259,7 @@ detailBody
                         (
                             set::type('checkbox'),
                             set::name('auto'),
+                            set::value('auto'),
                             set::text($lang->testcase->automated),
                             set::checked($case->auto == 'auto' ? true : false)
                         )
@@ -267,7 +268,7 @@ detailBody
             ),
             item
             (
-                set::trClass('hidden autoScript'),
+                $case->auto == 'auto' ? set::trClass('autoScript') : set::trClass('hidden autoScript'),
                 set::name($lang->testcase->autoScript),
                 upload
                 (

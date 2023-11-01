@@ -50,7 +50,6 @@ $config->testcase->form->edit['branch']       = array('required' => false, 'type
 $config->testcase->form->edit['module']       = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->edit['story']        = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->testcase->form->edit['type']         = array('required' => true,  'type' => 'string', 'default' => '');
-$config->testcase->form->edit['auto']         = array('required' => false, 'type' => 'string', 'default' => '0');
 $config->testcase->form->edit['stage']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->testcase->form->edit['pri']          = array('required' => false, 'type' => 'int',    'default' => 3);
 $config->testcase->form->edit['status']       = array('required' => false, 'type' => 'string', 'default' => 'wait');

@@ -43,3 +43,31 @@ function changeStory(event)
         $('#preview').parent().addClass('hidden');
     }
 }
+
+function checkScript()
+{
+    $('.autoScript').toggleClass('hidden', !$('#auto').prop('checked'));
+    if(!$('#auto').prop('checked')) $('#script').val('');
+}
+
+function showUploadScriptBtn()
+{
+    $('#scriptFile').next().show();
+    $('#script').val('');
+}
+
+function hideUploadScriptBtn()
+{
+    $('#scriptFile').next().hide();
+}
+
+function readScriptContent()
+{
+    $uploadBtnLabel = $('#scriptFile').next();
+
+    $uploadBtnLabel.toggle($('#scriptFile').parents('td').find('.file-list').length < 1);
+
+    var reader = new FileReader();
+    reader.readAsText($('#scriptFile')[0].files[0], 'UTF-8');
+    reader.onload = function(evt){$('#script').val(evt.target.result);}
+}

@@ -60,4 +60,5 @@ function readScriptContent()
 function showUploadScriptBtn()
 {
     $('#scriptFile').next().show();
+    $('#script').val('');
 }

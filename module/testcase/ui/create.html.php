@@ -24,7 +24,11 @@ formPanel
     on::change('#branch',  'changeBranch'),
     on::change('#module',  'changeModule'),
     on::change('#story',   'changeStory'),
+    on::change('#scriptFile', 'readScriptContent'),
+    on::change('#scriptFile', 'hideUploadScriptBtn'),
     on::click('#refresh',  'clickRefresh'),
+    on::click('#auto', 'checkScript'),
+    on::click('.autoScript .file-delete', 'showUploadScriptBtn'),
     to::headingActions(icon('cog-outline')),
     set::title($lang->testcase->create),
     !empty($gobackLink) ? set::backUrl($gobackLink) : null,
@@ -134,9 +138,30 @@ formPanel
             setClass('ml-2 items-center'),
             checkbox
             (
+                set::id('auto'),
                 set::name('auto'),
-                set::text($lang->testcase->automated),
-                set::checked($case->auto == 'auto'),
+                set::value('auto'),
+                set::text($lang->testcase->automated)
+            )
+        ),
+    ),
+    formRow
+    (
+        setClass('hidden autoScript'),
+        formGroup
+        (
+            set::width('1/3'),
+            set::label($lang->testcase->autoScript),
+            upload
+            (
+                set::name('scriptFile'),
+                set::accept($config->testcase->scriptAcceptFileTypes),
+                set::limitCount(1)
+            ),
+            input
+            (
+                set::type('hidden'),
+                set::name('script')
             )
         )
     ),
