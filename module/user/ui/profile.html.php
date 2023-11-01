@@ -27,7 +27,7 @@ if($deptPath)
 div
 (
     set::style(array('width' => '60%')),
-    setClass('bg-white m-auto p-5'),
+    setClass('bg-white m-auto p-5 mb-4'),
     div
     (
         setClass('flex items-center pb-5'),
