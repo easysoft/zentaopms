@@ -176,6 +176,8 @@ class mr extends control
         $projects = array();
         foreach($repoList as $repo)
         {
+            if($repo->SCM == 'Subversion') continue;
+
             if($repo->SCM == 'Gitlab')
             {
                 $projectIds = array();
