@@ -173,9 +173,9 @@ class mr extends control
         }
 
         $openIDList = array();
-        if($this->app->user->admin)
+        if(!$this->app->user->admin)
         {
-            $openIDList += $this->loadModel('gitlab')->getGitLabListByAccount('caoyanyi');//, $this->app->user->account);
+            $openIDList += $this->loadModel('gitlab')->getGitLabListByAccount($this->app->user->account);
             $openIDList += $this->loadModel('gitea')->getGiteaListByAccount($this->app->user->account);
             $openIDList += $this->loadModel('gogs')->getGogsListByAccount($this->app->user->account);
         }
