@@ -10,11 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$fields = $config->webhook->form->create;
-$fields['domain']['default']     = common::getSysURL();
-$fields['products']['options']   = $products;
-$fields['executions']['options'] = $executions;
-
+$fields       = $config->webhook->form->create;
 $defaultWidth = '1/2';
 $formItems    = array();
 foreach($fields as $field => $attr)
@@ -27,6 +23,10 @@ foreach($fields as $field => $attr)
     $rowClass  = '';
     $title     = $field;
     $control   = array();
+
+    if($field == 'domain')     $attr['default'] = common::getSysURL();
+    if($field == 'products')   $attr['options'] = $products;
+    if($field == 'executions') $attr['options'] = $executions;
 
     $control['type'] = $attr['control'];
     if(!empty($attr['options'])) $control['items']  = $attr['options'];
