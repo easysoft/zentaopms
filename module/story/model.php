@@ -121,6 +121,7 @@ class storyModel extends model
             ->where('t1.version=t2.version')
             ->andWhere('t1.id')->in($storyIdList)
             ->beginIF($mode != 'all')->andWhere('t1.deleted')->eq('0')->fi()
+            ->beginIF($this->config->vision == 'or')->andWhere('t1.vision')->eq('or')->fi()
             ->fetchAll('id');
     }
 
