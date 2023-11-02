@@ -20,7 +20,7 @@ featureBar
         checkbox
         (
             setID('showClosed'),
-            on::change('toggleOnlyAutoCase'),
+            on::change('changeShowClosed'),
             set::checked($this->cookie->showClosed),
             $lang->kanban->showClosed
         )
