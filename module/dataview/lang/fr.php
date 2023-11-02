@@ -58,6 +58,7 @@ $lang->dataview->relatedTable   = 'Table';
 $lang->dataview->relatedField   = 'Field';
 $lang->dataview->multilingual   = 'After switching the system language, the corresponding name will be displayed';
 $lang->dataview->duplicateField = 'Duplicate field names exist: <strong>%s</strong>. You are advised to: (1) Modify the <strong>*</strong> query to a specific field. (2) Use <strong>as</strong> to alias the field.';
+$lang->dataview->errorField     = 'The current field %s is an invalid character. Please [as] it in English or English underscore format.';
 
 $lang->dataview->varFilter = new stdclass();
 $lang->dataview->varFilter->varCode     = 'Var Code';
