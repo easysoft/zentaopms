@@ -16,7 +16,7 @@ $testcaseLink = createLink('testcase', 'view', "caseID={case}&version={caseVersi
 jsVar('testcaseTitle', $testcaseTitle);
 jsVar('testcaseLink', $testcaseLink);
 
-$linkParam = 'mode=bug&type={key}';
+$linkParam = "mode=bug&type={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 if($app->rawMethod == 'contribute') $linkParam = "mode=$mode&$linkParam";
 featurebar
 (
