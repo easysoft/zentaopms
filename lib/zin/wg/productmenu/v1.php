@@ -8,7 +8,8 @@ class productMenu extends wg
         'title?:string',
         'items?:array',
         'activeKey?:string',
-        'link?:string'
+        'link?:string',
+        'leading?:bool=true',
     );
 
     public static function getPageCSS(): string|false
@@ -38,7 +39,8 @@ class productMenu extends wg
     {
         global $lang;
         $activeKey = $this->prop('activeKey');
-        if(empty($activeKey)) return $lang->product->all;
+        $title     = $this->prop('title');
+        if(empty($activeKey) && empty($title)) return $lang->product->all;
 
         $items = $this->prop('items');
 
@@ -47,7 +49,7 @@ class productMenu extends wg
             if($itemID == $activeKey) return $itemName;
         }
 
-        return $lang->product->all;
+        return $title;
     }
 
     protected function build(): zui
@@ -56,17 +58,18 @@ class productMenu extends wg
 
         $activeKey = $this->prop('activeKey');
         $link      = $this->prop('link');
-        $title     = $this->prop('title') ? $this->prop('title') : $this->getTitle();
+        $leading   = $this->prop('leading');
+        $title     = $this->getTitle();
         $closeLink = str_replace('{key}', '', $link);
 
         return zui::dropmenu
         (
             set('_id', 'productMenu'),
-            set::className('product-menu btn'),
+            set::_className('product-menu btn'),
             set::defaultValue($activeKey),
             set::text($title),
             set::caret(true),
-            set::leadingAngle(false),
+            set::leadingAngle($leading),
             set::popWidth(200),
             set::popClass('popup text-md'),
             set::onClick(jsRaw("(event) => {if(!event.target.closest('.is-caret')) return; openUrl('$closeLink'); return false}")),
