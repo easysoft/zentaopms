@@ -61,10 +61,7 @@ div
         div
         (
             setClass('cell p-2.5 bg-white'),
-            menu
-            (
-                $menuItems
-            )
+            menu($menuItems)
         )
     ) : null,
     dtable

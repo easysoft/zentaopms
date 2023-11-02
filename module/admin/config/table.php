@@ -32,7 +32,7 @@ $config->admin->checkWeak->dtable->fieldList['weakReason']['group'] = '2';
 
 $config->admin->checkWeak->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->admin->checkWeak->dtable->fieldList['actions']['type']     = 'actions';
-$config->admin->checkWeak->dtable->fieldList['actions']['width']    = '140';
+$config->admin->checkWeak->dtable->fieldList['actions']['width']    = '60';
 $config->admin->checkWeak->dtable->fieldList['actions']['sortType'] = false;
 $config->admin->checkWeak->dtable->fieldList['actions']['fixed']    = 'right';
 $config->admin->checkWeak->dtable->fieldList['actions']['list']     = $config->admin->checkWeak->actionList;
