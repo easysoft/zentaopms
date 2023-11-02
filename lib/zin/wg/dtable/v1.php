@@ -130,7 +130,7 @@ class dtable extends wg
         $orderBy = $this->prop('orderBy');
         if(is_string($orderBy))
         {
-            list($orderByName, $orderByType) = explode('_', $orderBy);
+            list($orderByName, $orderByType) = explode('_', strpos($orderBy, '_') === false ? $orderBy . '_desc' : $orderBy);
             $this->setProp('orderBy', array($orderByName => $orderByType));
         }
 
