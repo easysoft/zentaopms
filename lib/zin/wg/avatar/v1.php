@@ -112,7 +112,7 @@ class avatar extends wg
         $maxTextLen = intval($this->prop('maxTextLength', 2));
         $text       = strtoupper($this->prop('text', ''));
         $mbLength   = mb_strlen($text, 'utf-8');
-        $strLength   = strlen($text);
+        $strLength  = strlen($text);
 
         $displayText = '';
         if($strLength === $mbLength)
@@ -131,7 +131,7 @@ class avatar extends wg
             $displayText = $mbLength <= $maxTextLen ? $text : mb_substr($text, 0, $maxTextLen, 'utf-8');
         }
 
-        $this->textLen = mb_strlen($displayText, 'utf-8');
+        $this->textLen        = mb_strlen($displayText, 'utf-8');
         $this->displayTextLen = $this->textLen + ((strlen($displayText) - $this->textLen) / 2);
 
         return $displayText;
