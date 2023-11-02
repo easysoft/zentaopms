@@ -418,7 +418,7 @@ formPanel
                         set::name('copyButton'),
                         set::value(1),
                         set::text($lang->task->copyStoryTitle),
-                        set::rootClass('ml-2 border-l border-gray pl-2'),
+                        set::rootClass('ml-8 border-l border-gray pl-2'),
                         on::change('copyStoryTitle')
                     ),
                 ),
