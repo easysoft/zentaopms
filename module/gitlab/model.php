@@ -3000,14 +3000,25 @@ class gitlabModel extends model
      * 判断按钮是否可点击。
      * Adjust the action clickable.
      *
-     * @param  object $instance
+     * @param  object $object
      * @param  string $action
      * @access public
      * @return bool
      */
-    public function isClickable(object $gitlab, string $action): bool
+    public function isClickable(object $object, string $action): bool
     {
-        return commonModel::hasPriv('space', 'browse');
+        if(!commonModel::hasPriv('space', 'browse')) return false;
+
+        if($action == 'browseBranch') return $object->isDeveloper;
+        if($action == 'browseTag') return $object->isDeveloper;
+        if($action == 'manageProjectMembers') return $object->hasRepo;
+        if($action == 'createWebhook') return $object->hasRepo;
+        if($action == 'manageBranchPriv') return $object->defaultBranch;
+        if($action == 'manageTagPriv') return $object->defaultBranch;
+        if($action == 'editProject') return $object->defaultBranch;
+        if($action == 'deleteProject') return $object->defaultBranch;
+
+        return true;
     }
 
     /**

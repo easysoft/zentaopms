@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('hostID', $hostID);
 jsVar('orderBy', $orderBy);
 jsVar('sortLink', $sortLink);
 
