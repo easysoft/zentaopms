@@ -83,7 +83,7 @@ div
         set::className('py-2'),
         $getItems(array($lang->user->realname => $user->realname,         $lang->user->gender => zget($lang->user->genderList, $user->gender))),
         $getItems(array($lang->user->account  => $user->account,          $lang->user->email  => $user->email ? a(set::href("mailto:{$user->email}"), $user->email) : '')),
-        $getItems(array($lang->user->dept     => $deptName,               $lang->user->role   => zget($lang->user->roleList, $user->role, ''))),
+        $getItems(array($lang->user->dept     => html($deptName),         $lang->user->role   => zget($lang->user->roleList, $user->role, ''))),
         $getItems(array($lang->user->joinAB   => formatTime($user->join), $lang->user->priv   => trim($groupName))),
     ),
     formRowGroup(set::title($lang->my->form->lblContact)),
