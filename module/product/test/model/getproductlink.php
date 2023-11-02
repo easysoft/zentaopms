@@ -66,6 +66,7 @@ r($productModel->getProductLink('api',         'browse'))      && p() && e('/doc
 r($productModel->getProductLink('doc',         'browse'))      && p() && e('/doc-productSpace-%s.html');                          //当前页面是doc-browse，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('productplan', 'browse'))      && p() && e('/productplan-browse-%s.html');                        //当前页面是productplan-browse，切换1.5级导航时跳转链接。
 r($productModel->getProductLink('release',     'browse'))      && p() && e('/release-browse-%s.html');                            //当前页面是release-browse，切换1.5级导航时跳转链接。
+r($productModel->getProductLink('roadmap',     'browse'))      && p() && e('/roadmap-browse-%s.html');                            //当前页面是release-browse，切换1.5级导航时跳转链接。
 
 $productModel->config->vision = 'lite';
 r($productModel->getProductLink('feedback', 'view')) && p() && e('/feedback-browse-byProduct-%s.html'); //当前页面是feedback-view，在运营管理界面，切换1.5级导航时跳转链接。
