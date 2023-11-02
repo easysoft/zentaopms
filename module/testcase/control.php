@@ -1112,9 +1112,16 @@ class testcase extends control
             list($cases, $steps, $files, $imported) = $this->testcaseZen->buildDataForImportFromLib($productID, $branch, $libID);
 
             $this->loadModel('action');
+            $errors = '';
             foreach($cases as $oldCaseID => $case)
             {
+                $this->config->testcase->create->requiredFields = strpos(",{$this->config->testcase->create->requiredFields},", ',module,') !== false ? ',module,' : '';
                 $this->testcase->doCreate($case);
+                if(dao::isError())
+                {
+                    $errors .= "{$oldCaseID}:";
+                    foreach(dao::getError() as $fieldErrors) $errors .= implode(',', $fieldErrors);
+                }
                 $caseID = $this->dao->lastInsertID();
                 $this->executeHooks($caseID);
                 $this->testcase->syncCase2Project($case, $caseID);
@@ -1124,7 +1131,7 @@ class testcase extends control
                 $this->action->create('case', $caseID, 'fromlib', '', $case->lib);
             }
 
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(!empty($errors)) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$errors}');"));
             if(!empty($imported) && is_string($imported)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->testcase->importedCases, trim($imported, ','))));
             return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => true));
         }
