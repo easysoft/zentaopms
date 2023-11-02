@@ -88,8 +88,8 @@ class dropmenu extends wg
                 if($product->type != 'normal')
                 {
                     $branchID = '';
-                    if(data('branch'))   $branchID = data('branch');
-                    if(data('branchID')) $branchID = data('branchID');
+                    if(!is_null(data('branch')))   $branchID = data('branch');
+                    if(!is_null(data('branchID'))) $branchID = data('branchID');
                     $app->control->loadModel('branch');
 
                     /* Get current branch name. */
