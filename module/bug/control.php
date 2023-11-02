@@ -59,7 +59,7 @@ class bug extends control
 
         /* Get product data. */
         $products = array();
-        if(!isonlybody())
+        if(!isInModal())
         {
             $tab      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? $this->app->tab : 'qa';
             $mode     = (strpos(',create,edit,', ",{$this->app->methodName},") !== false and empty($this->config->CRProduct)) ? 'noclosed' : '';
@@ -156,7 +156,7 @@ class bug extends control
         /* Update action. */
         if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
 
-        if(!isonlybody()) $this->bugZen->setViewMenu($bug);
+        if(!isInModal()) $this->bugZen->setViewMenu($bug);
 
         $product   = $this->product->getByID($bug->product);
         $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);

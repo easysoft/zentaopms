@@ -2067,7 +2067,7 @@ class bugZen extends bug
 
         /* 在弹窗里编辑 bug 时的返回。*/
         /* Respond after updating in modal. */
-        if(isonlybody()) return $this->responseInModal($bug->execution, $kanbanGroup, $regionID, $message);
+        if(isInModal()) return $this->responseInModal($bug->execution, $kanbanGroup, $regionID, $message);
 
         return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('bug', 'view', "bugID=$bugID")));
     }
@@ -2195,7 +2195,7 @@ class bugZen extends bug
 
         /* 在弹窗中删除 bug 时的返回。*/
         /* Respond when delete bug in modal.。*/
-        if(isonlybody()) return $this->send(array('result' => 'success', 'load' => true));
+        if(isInModal()) return $this->send(array('result' => 'success', 'load' => true));
 
         /* 在任务看板中删除 bug 时的返回。*/
         /* Respond when delete in task kanban. */
@@ -2245,10 +2245,10 @@ class bugZen extends bug
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'idList' => $bugIdList));
 
         /* Respond after updating in modal. */
-        if(isonlybody() && $executionID) return $this->responseInModal($executionID);
+        if(isInModal() && $executionID) return $this->responseInModal($executionID);
 
         /* If link from no head then reload. */
-        if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
+        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
 
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('bug', 'browse', "productID={$productID}&branch={$branch}&browseType=unclosed&param=0&orderBy=id_desc")));
     }
