@@ -2000,6 +2000,12 @@ class story extends control
         $story   = $this->story->getByID($storyID);
         $stories = $this->story->getProductStoryPairs($story->product, $story->branch, 0, 'all', 'id_desc', 0, '', $story->type);
 
-        return print html::select("duplicateStory[$storyID]", $stories, '', "class='form-control' placeholder='{$this->lang->searchAB}'");
+        $items = array();
+        foreach($stories as $storyID => $storyTitle)
+        {
+            if(empty($storyID)) continue;
+            $items[] = array('text' => $storyTitle, 'value' => $storyID, 'keys' => $storyTitle);
+        }
+        return print(json_encode($items));
     }
 }

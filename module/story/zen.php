@@ -1433,13 +1433,9 @@ class storyZen extends story
      */
     protected function buildStoriesForBatchClose(): array
     {
-        $fields  = $this->config->story->form->batchClose;
-        $account = $this->app->user->account;
-        $now     = helper::now();
-
-        $fields['duplicateStory'] = array('type' => 'int', 'required' => false, 'default' => 0);
-
-        $data       = form::batchData($fields)->get();
+        $account    = $this->app->user->account;
+        $now        = helper::now();
+        $data       = form::batchData()->get();
         $oldStories = $this->story->getByList(array_keys($data));
         $stories    = array();
         foreach($data as $storyID => $story)
@@ -1458,7 +1454,7 @@ class storyZen extends story
             $story->stage          = 'closed';
 
             if($story->closedReason != 'done') $story->plan  = '';
-            if($story->closedReason == 'duplicate' && empty($story->duplicateStory)) dao::$errors['duplicateStory'] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
+            if($story->closedReason == 'duplicate' && empty($story->duplicateStory)) dao::$errors["duplicateStory[{$storyID}]"] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
 
             $stories[$storyID] = $story;
         }

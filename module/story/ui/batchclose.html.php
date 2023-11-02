@@ -15,38 +15,102 @@ jsVar('langTwins', $lang->story->twins . ': ');
 if(!empty($errorTips)) js("zui.Modal.alert({message: '{$errorTips}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'});\n");
 
 unset($lang->story->reasonList['subdivided']);
-$fields = $config->story->form->batchClose;
-$fields['closedReason']['options'] = array_filter($lang->story->reasonList);
-
-$items = array();
-$items['storyIdList'] = array('name' => 'storyIdList', 'label' => '', 'control' => 'hidden', 'hidden' => true);
-$items['id']          = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '60px');
-foreach($fields as $fieldName => $field)
+foreach($lang->story->reasonList as $key => $value)
 {
-    $items[$fieldName] = array('name' => $fieldName, 'label' => zget($lang->story, $fieldName), 'control' => $field['control'], 'width' => $field['width'], 'required' => $field['required'], 'items' => zget($field, 'options', array()));
+    if($key == 'cancel') continue;
+    $reasonList[] = array('text' => $value, 'value' => $key);
 }
-$items['comment']['label'] = $lang->comment;
+jsVar('reasonList', $reasonList);
 
 /* Build form field value for batch edit. */
-$fieldNameList = array_keys($items);
-$data          = array();
+$data = array();
 foreach($stories as $storyID => $story)
 {
     $data[$storyID] = $story;
-    foreach($fieldNameList as $fieldName)
-    {
-        if($fieldName == 'storyIdList') $data[$storyID]->storyIdList = $story->id;
-        if(!isset($story->$fieldName)) $story->$fieldName = '';
-    }
+    $data[$storyID]->storyIdList = $story->id;
+    $data[$storyID]->statusName  = zget($lang->story->statusList, $story->status);
 }
 
 formBatchPanel
 (
     set::title($lang->story->batchClose),
     set::mode('edit'),
-    set::items($items),
     set::data(array_values($data)),
     set::onRenderRow(jsRaw('renderRowData')),
+    on::change('[data-name="closedReason"]', 'toggleDuplicateBox'),
+    /* Field of id. */
+    formBatchItem
+    (
+        set::name('id'),
+        set::label($lang->idAB),
+        set::control('hidden'),
+        set::hidden(true),
+    ),
+    /* Field of storyIdList. */
+    formBatchItem
+    (
+        set::name('storyIdList'),
+        set::label($lang->idAB),
+        set::control('hidden'),
+        set::hidden(true),
+    ),
+    /* Field of id index. */
+    formBatchItem
+    (
+        set::name('id'),
+        set::label($lang->idAB),
+        set::control('index'),
+        set::width('60px'),
+    ),
+    /* Field of title. */
+    formBatchItem
+    (
+        set::name('title'),
+        set::label($lang->story->title),
+        set::control('static'),
+        set::width('300px'),
+    ),
+    /* Field of status. */
+    formBatchItem
+    (
+        set::name('statusName'),
+        set::label($lang->story->status),
+        set::control('static'),
+        set::width('60px'),
+    ),
+    /* Field of closeReason. */
+    formBatchItem
+    (
+        set::label($lang->story->closedReason),
+        set::width('220px'),
+        set::name('closedReasonBox'),
+        set::control('inputGroup'),
+        inputGroup
+        (
+            picker
+            (
+                setClass('closedReason-select'),
+                set::name('closedReason'),
+                set::items($lang->story->reasonList),
+                set::required(true),
+            ),
+            picker
+            (
+                setClass('duplicate-select hidden'),
+                set::name('duplicateStory'),
+                set::items(array()),
+                set::required(true),
+            ),
+        ),
+    ),
+    /* Field of comment. */
+    formBatchItem
+    (
+        set::name('comment'),
+        set::label($lang->comment),
+        set::control('text'),
+        set::width('300px'),
+    )
 );
 
 render();

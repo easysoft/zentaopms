@@ -104,11 +104,10 @@ $config->story->form->batchEdit['closedBy']     = array('type' => 'string', 'wid
 $config->story->form->batchEdit['closedReason'] = array('type' => 'string', 'width' => '200px', 'control' => 'picker', 'required' => false, 'default' => '', 'options' => array_filter($lang->story->reasonList));
 $config->story->form->batchEdit['keywords']     = array('type' => 'string', 'width' => '200px', 'control' => 'text',   'required' => false, 'default' => '', 'filter'  => 'trim');
 
-$config->story->form->batchClose = array();
-$config->story->form->batchClose['title']        = array('type' => 'string', 'width' => '300px', 'control' => 'text',   'required' => false, 'filter'  => 'trim', 'base' => true);
-$config->story->form->batchClose['status']       = array('type' => 'string', 'width' => '90px',  'control' => 'select', 'required' => false, 'default' => 0,  'options' => array_filter($lang->story->statusList));
-$config->story->form->batchClose['closedReason'] = array('type' => 'string', 'width' => '300px', 'control' => 'picker', 'required' => true,  'default' => '');
-$config->story->form->batchClose['comment']      = array('type' => 'string', 'width' => 'auto',  'control' => 'text',   'required' => false, 'default' => '', 'filter' => 'trim');
+$config->story->form->batchclose = array();
+$config->story->form->batchclose['id']             = array('type' => 'int',    'required' => true,  'default' => '', 'base' => true);
+$config->story->form->batchclose['closedReason']   = array('type' => 'string', 'required' => true,  'default' => '');
+$config->story->form->batchclose['duplicateStory'] = array('type' => 'int',    'required' => false, 'default' => 0);
 
 $config->story->form->change = array();
 $config->story->form->change['reviewer']       = array('type' => 'array',   'control' => 'multi-select', 'required' => true,  'default' => '', 'options' => '');

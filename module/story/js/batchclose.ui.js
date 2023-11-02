@@ -1,33 +1,40 @@
 window.renderRowData = function($row, index, story)
 {
-    var $title  = $row.find('.form-batch-input[data-name="title"]');
-    var $status = $row.find('.form-batch-input[data-name="status"]');
-
-    $title.attr('disabled', 'disabled').attr('title', story.title).after("<input type='hidden' name='title[" + story.id + "]' value='" + story.title + "' />");
-    $status.attr('disabled', 'disabled');
-
+    let $title  = $row.find('.form-batch-input[data-name="title"]');
     if(story.twins)
     {
         $title.wrap("<div class='input-group'></div>");
         $title.after("<span class='input-group-addon'>" + langTwins + "<span class='text-secondary'>" + twinsCount[story.id] + "</span></span>");
     }
 
-    var $closedReason = $row.find('.form-batch-input[data-name="closedReason"]');
-    $closedReason.attr('onchange', 'setDuplicateAndChild(this)').wrap("<div class='input-group'></div>");
+    if(story.status == 'draft')
+    {
+        $row.find('[data-name="closedReasonBox"]').find('.closedReason-select').on('inited', function(e, info)
+        {
+            let $closedReason = info[0];
+            $closedReason.render({items: reasonList});
+        });
+    }
 
-    var appendStoryHtml = "<span class='duplicateStoryBox" + (story.closedReason != 'duplicate' ? " hidden" : '') + "'>";
-    appendStoryHtml += "<select class='form-control form-batch-input' name='duplicateStory[" + story.id + "]' id='duplicateStory_" + index + "' data-name='duplicateStory' data-id='" + story.id + "' onmouseenter='getDuplicateStories(this)'>";
-    appendStoryHtml += "<option value=''></option>";
-    appendStoryHtml += '</select></span>';
-    $closedReason.after(appendStoryHtml);
-
-    if(story.status == 'draft') $closedReason.find('option[value="cancel"]').remove();
+    $row.find('[data-name="closedReasonBox"]').find('.duplicate-select').on('inited', function(e, info)
+    {
+        let $duplicateStory = info[0];
+        let link            = $.createLink('story', 'ajaxGetDuplicatedStory', 'storyID=' + story.id);
+        $.getJSON(link, function(duplicateStoryList)
+        {
+            if(duplicateStoryList)
+            {
+                $duplicateStory.render({items: duplicateStoryList});
+            }
+        })
+    });
 };
 
-window.setDuplicateAndChild = function(obj)
+window.toggleDuplicateBox = function(e)
 {
-    var $this = $(obj);
-    $this.closest('.input-group').find('.duplicateStoryBox').toggleClass('hidden', $this.val() != 'duplicate');
+    const $target     = $(e.target);
+    const $currentRow = $target.closest('tr');
+    $currentRow.find('[data-name="duplicateStory"]').toggleClass('hidden', $target.val() != 'duplicate');
 };
 
 window.getDuplicateStories = function(obj)
