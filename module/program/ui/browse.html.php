@@ -174,7 +174,7 @@ toolbar
     ([
         'text' => $lang->program->create,
         'icon' => 'plus',
-        'class'=> 'btn primary',
+        'class'=> 'btn primary create-program-btn',
         'url'  => $this->createLink('program', 'create')
     ])),
 );

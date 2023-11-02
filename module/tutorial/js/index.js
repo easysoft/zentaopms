@@ -256,9 +256,9 @@ $(function()
             $submitTarget = $task.find('[data-target="submit"]').removeClass('active');
         targetStatus.nav = task.nav['module'].toLowerCase() === currentModule && task.nav['method'].toLowerCase() === currentMethod && (!task.nav.app || task.nav.app === appCode);
 
-        //console.log('$navTarget', $navTarget, '$formTarget', $formTarget, '$submitTarget', $submitTarget);
-        //console.log('targetStatus.nav', targetStatus.nav);
-        //console.log(task)
+        console.log('$navTarget', $navTarget, '$formTarget', $formTarget, '$submitTarget', $submitTarget);
+        console.log('targetStatus.nav', targetStatus.nav);
+        console.log(task)
 
         if(targetStatus.nav)
         {
@@ -287,9 +287,10 @@ $(function()
                 {
                     fieldSelector += ',' + '#' + requiredId;
                     var $required = $$('#' + requiredId);
-                    if($required.length)
+                    var $authBlock = !$required.is('input') ? $required.find('input[type="hidden"]') : $required;
+                    if($authBlock.length)
                     {
-                        var val = $required.val();
+                        var val = $authBlock.val();
                         if(val === undefined || val === null || val === '' || val === '0')
                         {
                             targetStatus.form = false;
@@ -316,8 +317,10 @@ $(function()
                             if(status.waitField.hasClass("chosen-controled")) status.waitField = status.waitField.next();
                             var fieldName = status.waitField.siblings('label').text();
                             console.log(status.waitField, status.waitField.siblings('label'));
-                            console.log(fieldName)
-                            if(!fieldName) fieldName = status.waitField.closest('.input-group').find('.input-group-addon:first').text();
+                            console.log('first fieldName is ', fieldName)
+                            if(!fieldName) fieldName = status.waitField.parent().siblings('label').text();
+                            console.log('second fieldName div is', status.waitField.parent().siblings('label'));
+                            console.log('second fieldName is', fieldName)
                             if(fieldName) showToolTip(status.waitField, lang.requiredTip.replace('%s', fieldName));
                             highlight(status.waitField, function()
                             {
@@ -339,6 +342,7 @@ $(function()
                     e.stopPropagation();
                     return false;
                 }
+                console.log('task.nav.submit', task.nav.submit)
                 if(task.nav.submit) $form.on('click.tutorial', task.nav.submit, onSubmit);
                 else $form.submit(onSubmit);
             }
@@ -360,6 +364,7 @@ $(function()
 
             /* Highlight app button in left menu */
             var $appNav = appsWindow.$('#menuMainNav > li[data-app="' + appCode + '"]');
+            console.log('current app is ', $appNav);
             if(!app.opened)
             {
                 var targetAppTip = lang.targetAppTip.replace('%s', app.text || lang.target);
@@ -373,6 +378,7 @@ $(function()
                 if(task.nav.app == 'admin') $navbar = $$('#settings');
                 var $navbarItem = $navbar.find('[data-id="' + menuModule + '"]');
                 var targetPageTip = lang.targetPageTip.replace('%s', task.nav.targetPageName || lang.target);
+                console.log($navbarItem, $navbarItem.hasClass('active'));
                 if($navbarItem.length && !$navbarItem.hasClass('active'))
                 {
                     highlight($navbarItem);
