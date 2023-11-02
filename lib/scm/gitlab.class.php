@@ -22,6 +22,7 @@ class gitlab
         $this->root   = rtrim($root, '/') . '/';
         $this->token  = $password;
         $this->branch = isset($_COOKIE['repoBranch']) ? $_COOKIE['repoBranch'] : 'HEAD';
+        $this->repo   = $repo;
     }
 
     /**
@@ -209,12 +210,13 @@ class gitlab
      */
     public function createBranch($branchName = '', $ref = 'master')
     {
+        global $app;
+
         $param = new stdclass();
         $param->ref    = $ref;
         $param->branch = $branchName;
+        $result = $app->control->loadModel('gitlab')->apiCreateBranch($this->repo->serviceHost, $this->repo->serviceProject, $param);
 
-        $api    = $this->root . 'branches?private_token=' . $this->token;
-        $result = json_decode(commonModel::http($api, $param));
         return array('result' => empty($result->name) ? 'fail' : 'success', 'message' => $result->message);
     }
 

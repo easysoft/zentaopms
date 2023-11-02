@@ -188,12 +188,16 @@ class Gitea
      */
     public function createBranch($branchName = '', $ref = 'master')
     {
-        chdir($this->root);
-        $res = execCmd(escapeCmd("{$this->client} checkout -b {$branchName} origin/{$ref}"), 'array');
-        if(empty($res[0])) return array('result' => 'fail', 'message' => 'Branch is exists.');
+        global $app;
+        $project = $app->control->loadModel('gitea')->getApiRoot($this->repo->serviceHost);
 
-        execCmd(escapeCmd("{$this->client} push origin {$branchName}"), 'array');
-        return array('result' => 'success', 'message' => '');
+        $url   = sprintf($apiRoot, "/repos/{$this->repo->serviceProject}/branches");
+        $param = new stdclass();
+        $param->old_branch_name = $ref;
+        $param->new_branch_name = $branchName;
+        $result = json_decode(commonModel::http($url), $param);
+
+        return array('result' => empty($result->name) ? 'fail' : 'success', 'message' => zget($result, 'message', 'Error'));
     }
 
     /**
