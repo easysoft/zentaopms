@@ -15,7 +15,7 @@
 
 .table {background: #fff}
 .table thead{background: #fff}
-.table .divider {border-bottom: 10px solid #efefef;}
+.table .border-divider {border-bottom: 10px solid #efefef;}
 .table .c-side {border-right: 10px solid #efefef !important;}
 .table .divider-top {border-top: 10px solid #efefef;}
 
