@@ -497,7 +497,7 @@ class programplanTao extends programplanModel
         return $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->where('1 = 1')
-            ->beginIF($projectModel != 'waterfallplus')->andWhere('t1.type')->eq('stage')->fi()
+            ->beginIF(!in_array($projectModel, array('waterfallplus', 'ipd')))->andWhere('t1.type')->eq('stage')->fi()
             ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF($browseType == 'all')->andWhere('t1.project')->eq($executionID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('t1.parent')->eq($executionID)->fi()
