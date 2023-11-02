@@ -194,7 +194,7 @@ $(function()
             title: text,
             placement: placement,
             container: container,
-            tipClass: 'tooltip-warning tooltip-max',
+            className: 'warning',
             html: true
         }, options);
         $e = $e.first();
@@ -224,6 +224,7 @@ $(function()
         if(checkTaskId) clearTimeout(checkTaskId);
 
         var iWindow = getAppWindow();
+        console.log('1111', iWindow, iWindow.config, iWindow.$)
         if(!(iWindow && iWindow.config && iWindow.$))
         {
             checkTaskId = setTimeout(tryCheckTask, 1000);
@@ -238,7 +239,6 @@ $(function()
     {
         clearTips();
 
-        console.log('checkTask trigger');
         var iWindow = getAppWindow();
         if(!iWindow || !iWindow.$) return tryCheckTask();
         var task = tasks[current];
@@ -255,6 +255,10 @@ $(function()
             $formTarget = $task.find('[data-target="form"]').removeClass('active'),
             $submitTarget = $task.find('[data-target="submit"]').removeClass('active');
         targetStatus.nav = task.nav['module'].toLowerCase() === currentModule && task.nav['method'].toLowerCase() === currentMethod && (!task.nav.app || task.nav.app === appCode);
+
+        //console.log('$navTarget', $navTarget, '$formTarget', $formTarget, '$submitTarget', $submitTarget);
+        //console.log('targetStatus.nav', targetStatus.nav);
+        //console.log(task)
 
         if(targetStatus.nav)
         {
@@ -296,6 +300,7 @@ $(function()
                 if(fieldSelector.length > 1) fieldSelector = fieldSelector.substring(1);
             }
 
+            console.log($form, $form.data('bindCheckTaskEvent'), fieldSelector)
             if(!$form.data('bindCheckTaskEvent'))
             {
                 $form.off('.tutorial').off('submit');
@@ -303,12 +308,15 @@ $(function()
                 var onSubmit = function(e)
                 {
                     var status = checkTask();
+                    console.log('checkTaskStatus', status)
                     if(!status.submitOK)
                     {
                         if(status.waitField)
                         {
                             if(status.waitField.hasClass("chosen-controled")) status.waitField = status.waitField.next();
-                            var fieldName = status.waitField.closest('td').prev('th').text();
+                            var fieldName = status.waitField.siblings('label').text();
+                            console.log(status.waitField, status.waitField.siblings('label'));
+                            console.log(fieldName)
                             if(!fieldName) fieldName = status.waitField.closest('.input-group').find('.input-group-addon:first').text();
                             if(fieldName) showToolTip(status.waitField, lang.requiredTip.replace('%s', fieldName));
                             highlight(status.waitField, function()
@@ -352,7 +360,7 @@ $(function()
 
             /* Highlight app button in left menu */
             var $appNav = appsWindow.$('#menuMainNav > li[data-app="' + appCode + '"]');
-            if(!app.show)
+            if(!app.opened)
             {
                 var targetAppTip = lang.targetAppTip.replace('%s', app.text || lang.target);
                 highlight($appNav);
@@ -362,7 +370,7 @@ $(function()
             {
                 var menuModule = task.nav.menuModule || task.nav['module'];
                 var $navbar    = $$('#navbar');
-                if(task.nav.app == 'admin') $navbar = $$('.settings-list');
+                if(task.nav.app == 'admin') $navbar = $$('#settings');
                 var $navbarItem = $navbar.find('[data-id="' + menuModule + '"]');
                 var targetPageTip = lang.targetPageTip.replace('%s', task.nav.targetPageName || lang.target);
                 if($navbarItem.length && !$navbarItem.hasClass('active'))
@@ -523,14 +531,13 @@ $(function()
         var appsIframe = $('#iframePage').get(0);
         appsIframe.onload = appsIframe.onreadystatechange = function()
         {
-            appsWindow.$(appsWindow.document).on('reloadapp openapp showapp closeapp hideapp', function()
+            appsWindow.$(appsWindow.document).on('reloadapp.apps openapp.apps showapp.apps closeapp.apps hideapp.apps', function()
             {
-                console.log('document trigger');
                 tryCheckTutorialState(1000);
             });
 
             /* Open referer page in app tab */
-            if(tutorialReferer) appsWindow.$.apps.open(tutorialReferer);
+            if(tutorialReferer) appsWindow.$.apps.openApp(tutorialReferer);
 
             updateUI();
         };

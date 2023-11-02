@@ -36,7 +36,7 @@ $lang->tutorial->dataNotSave      = "教程任务中，数据不会保存。";
 $lang->tutorial->tasks = array();
 
 $lang->tutorial->tasks['createAccount']         = array('title' => '创建帐号');
-$lang->tutorial->tasks['createAccount']['nav']  = array('app' => 'admin', 'module' => 'user', 'method' => 'create', 'menuModule' => 'company', 'menu' => 'browseUser', 'form' => '#createForm', 'requiredFields' => 'account,realname,verifyPassword,password1,password2', 'submit' => '#submit', 'target' => '.create-user-btn', 'targetPageName' => '添加用户');
+$lang->tutorial->tasks['createAccount']['nav']  = array('app' => 'admin', 'module' => 'user', 'method' => 'create', 'menuModule' => 'company', 'menu' => 'browseUser', 'form' => '#mainContent', 'requiredFields' => 'account,realname,verifyPassword,password1,password2', 'submit' => 'button[type=submit]', 'target' => '.create-user-btn', 'targetPageName' => '添加用户');
 $lang->tutorial->tasks['createAccount']['desc'] = "<p>在系统创建一个新的用户帐号：</p><ul><li data-target='nav'>打开 <span class='task-nav'>后台 <i class='icon icon-angle-right'></i> 人员管理 <i class='icon icon-angle-right'></i> 用户 <i class='icon icon-angle-right'></i> 添加用户</span> 页面；</li><li data-target='form'>在添加用户表单中填写新用户信息；</li><li data-target='submit'>保存用户信息。</li></ul>";
 
 $lang->tutorial->tasks['createProgram']         = array('title' => '创建项目集');
