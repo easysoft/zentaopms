@@ -17,6 +17,19 @@ formPanel
 (
     on::change('[name=type]', 'changeKanbanType'),
     on::click('#allUsers', 'loadAllUsers'),
+    set::headingClass('headingActions'),
+    to::headingActions
+    (
+        btn
+        (
+            setClass('primary-pale'),
+            set::icon('copy'),
+            set::url('#copyKanbanModal'),
+            set('data-destoryOnHide', true),
+            set('data-toggle', 'modal'),
+            $lang->kanban->copy . $lang->kanban->common
+        )
+    ),
     formRow
     (
         formGroup
@@ -257,6 +270,69 @@ formPanel
         ),
         input(set::className('hidden'), set::name('copyKanbanID'), set::value($copyKanbanID)),
         input(set::className('hidden'), set::name('copyRegion'), set::value($copyRegion))
+    )
+);
+
+$kanbanList = array();
+if($copyKanbanID != 0)
+{
+    $kanbanList[] = cell
+    (
+        set::width('1/3'),
+        set::className('p-2'),
+        div
+        (
+            set::className('copy-card p-2 border rounded-md text-danger'),
+            icon('cancel', set::className('pr-2')),
+            $lang->kanban->cancelCopy
+        )
+    );
+}
+foreach ($kanbans as $id => $name)
+{
+    $kanbanList[] = cell
+    (
+        set::width('1/3'),
+        set::className('p-2'),
+        div
+        (
+            set::className('copy-card p-2 border rounded-md'),
+            icon('kanban', set::className('pr-2')),
+            $name
+        )
+    );
+}
+
+modalTrigger
+(
+    modal
+    (
+        set::id('copyKanbanModal'),
+        to::header
+        (
+            span
+            (
+                set::className('copy-title article-h1'),
+                $lang->kanban->copyTitle,
+            ),
+            span
+            (
+                $lang->kanban->copyContent,
+            ),
+            checkList
+            (
+                set::name('copyContent[]'),
+                set::items($lang->kanban->copyContentList),
+                set::inline(true),
+                set::value('basicInfo')
+            )
+        ),
+        div
+        (
+            set::id('copyKanbans'),
+            setClass('flex flex-wrap'),
+            $kanbanList
+        )
     )
 );
 

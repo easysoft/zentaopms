@@ -29,7 +29,7 @@ featureBar
 
 toolbar
 (
-    !empty($unclosedSpace) && $browseType != 'involved' ? item(set::icon('plus'), set::text($lang->kanban->create), set::className('secondary'), set::url(createLink('kanban', 'create', "spaceID=0&type={$browseType}")), set('data-toggle', 'modal')) : null,
+    !empty($unclosedSpace) && $browseType != 'involved' ? item(set::icon('plus'), set::text($lang->kanban->create), set::className('secondary'), set::url(createLink('kanban', 'create', "spaceID=0&type={$browseType}")), set('data-toggle', 'modal'), set('data-size', 'lg')) : null,
     $browseType != 'involved' ? item(set::icon('plus'), set::text($lang->kanban->createSpace), set::className('primary'), set::url(createLink('kanban', 'createSpace', "type={$browseType}")), set('data-toggle', 'modal')) : null
 );
 
