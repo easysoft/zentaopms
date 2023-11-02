@@ -479,6 +479,8 @@ EOF;
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        if(strpos($orderBy, 'estimateLabel') !== false || strpos($orderBy, 'consumedLabel') !== false) $orderBy = str_replace('Label', '', $orderBy);
+
         /* append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
