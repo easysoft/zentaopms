@@ -129,7 +129,7 @@ class dropmenu extends wg
         if(empty($text) && !empty($tab) && !empty($objectID))
         {
             $object = $app->control->loadModel($tab)->getByID((int)$objectID);
-            $text   = $object->name;
+            $text   = $object ? $object->name : '';
         }
 
         return array(zui::dropmenu
