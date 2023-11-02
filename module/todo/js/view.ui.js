@@ -28,7 +28,7 @@ function toTask()
     }
 
     zui.Modal.hide('.m-my-todo');
-    openPage($.createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID), 'execution');
+    openPage($.createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=' + todoID), vision == 'lite' ? 'project' : 'execution');
 }
 
 /**

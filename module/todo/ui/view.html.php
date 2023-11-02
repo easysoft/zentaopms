@@ -13,6 +13,7 @@ namespace zin;
 jsVar('selectProduct',   $lang->todo->selectProduct);
 jsVar('selectExecution', $lang->execution->selectExecution);
 jsVar('todoID',          $todo->id);
+jsVar('vision',          $config->vision);
 
 $isInModal = isAjaxRequest('modal');
 
@@ -25,7 +26,7 @@ $fnGenerateTitleSuffix = function() use($todo)
 };
 
 /* Render modal for creating story. */
-$fnRenderCreateStoryModal = function() use ($lang, $products)
+if(hasPriv('story', 'create'))
 {
     modal
     (
@@ -50,7 +51,7 @@ $fnRenderCreateStoryModal = function() use ($lang, $products)
             )
         ) : form
         (
-            setClass('pb-6 mt-2'),
+            setClass('mt-2'),
             set::actions(array()),
             formGroup
             (
@@ -73,10 +74,10 @@ $fnRenderCreateStoryModal = function() use ($lang, $products)
             ),
         ),
     );
-};
+}
 
 /* Render modal for creating task. */
-$fnRenderCreateTaskModal = function() use ($lang, $projects, $executions)
+if(hasPriv('task', 'create'))
 {
     modal
     (
@@ -93,7 +94,7 @@ $fnRenderCreateTaskModal = function() use ($lang, $projects, $executions)
         ),
         form
         (
-            setClass('pb-4 mt-2'),
+            setClass('mt-2'),
             set::actions(array()),
             formGroup
             (
@@ -118,10 +119,10 @@ $fnRenderCreateTaskModal = function() use ($lang, $projects, $executions)
             )
         )
     );
-};
+}
 
 /* Render modal for creating bug. */
-$fnRenderCreateBugModal = function() use ($lang, $projects, $projectProducts)
+if(hasPriv('bug', 'create'))
 {
     modal
     (
@@ -163,7 +164,7 @@ $fnRenderCreateBugModal = function() use ($lang, $projects, $projectProducts)
             ),
         )
     );
-};
+}
 
 /* Generate goback url. */
 $fnGenerateGoBackUrl = function() use ($app, $todo, $user)
@@ -185,7 +186,7 @@ $fnGenerateGoBackUrl = function() use ($app, $todo, $user)
 };
 
 /* Generate action buttons and related menus within float toolbar. */
-$fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects, $isInModal, $fnGenerateGoBackUrl, $fnRenderCreateStoryModal, $fnRenderCreateTaskModal, $fnRenderCreateBugModal)
+$fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects, $isInModal, $fnGenerateGoBackUrl)
 {
     /* Deleted item without action buttons. */
     if($todo->deleted) return array();
@@ -230,22 +231,16 @@ $fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects, 
 
     /* Popup menu of more button. */
     $storyTarget = $canCreateStory && $config->vision == 'lite' ? '#projectModal' : '#productModal';
+    $suffixItems = array();
+    if($canCreateStory) $suffixItems[] =  array('text' => $lang->todo->reasonList['story'], 'id' => 'toStoryLink', 'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => $storyTarget,           'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center', 'data-size' => 'sm');
+    if($canCreateTask)  $suffixItems[] =  array('text' => $lang->todo->reasonList['task'],  'id' => 'toTaskLink',  'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => '#executionModal',      'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center', 'data-size' => 'sm');
+    if($canCreateBug)   $suffixItems[] =  array('text' => $lang->todo->reasonList['bug'],   'id' => 'toBugLink',   'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => '#projectProductModal', 'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center', 'data-size' => 'sm');
     menu
     (
-        set::id('navActions'),
+        setID('navActions'),
         setClass('menu dropdown-menu'),
-        set::items(array
-        (
-            $canCreateStory ? array('text' => $lang->todo->reasonList['story'], 'id' => 'toStoryLink', 'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => $storyTarget,           'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center', 'data-size' => 'sm') : null,
-            $canCreateTask  ? array('text' => $lang->todo->reasonList['task'],  'id' => 'toTaskLink',  'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => '#executionModal',      'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center', 'data-size' => 'sm') : null,
-            $canCreateBug   ? array('text' => $lang->todo->reasonList['bug'],   'id' => 'toBugLink',   'data-url' => '###', 'data-toggle' => 'modal', 'data-target' => '#projectProductModal', 'data-backdrop' => false, 'data-moveable' => true, 'data-position' => 'center', 'data-size' => 'sm') : null,
-        ))
+        set::items($suffixItems),
     );
-
-    /* Render popup modal for each more buttons. */
-    $canCreateStory && $fnRenderCreateStoryModal();
-    $canCreateTask  && $fnRenderCreateTaskModal();
-    $canCreateBug   && $fnRenderCreateBugModal();
 
     return $actionList;
 };
