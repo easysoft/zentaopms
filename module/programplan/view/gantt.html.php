@@ -12,6 +12,7 @@
 ?>
 <?php chdir(__DIR__);?>
 <?php include '../../common/view/gantt.html.php';?>
+<?php if(isset($project) and $project->model == 'ipd') js::set('reviewPoints', json_encode($reviewPoints));?>
 <style>
 #ganttView {height: 600px;}
 #mainContent:before {background: #fff;}
