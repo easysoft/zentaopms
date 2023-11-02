@@ -66,31 +66,20 @@ $fnGenerateCols = function() use ($config, $project)
 };
 
 /* zin: Define the feature bar on main menu. */
-$productMenuLink = createLink(
-    $this->app->rawModule,
-    $this->app->rawMethod,
-    array(
-        'status'     => $status,
-        'projectID'  => $projectID,
-        'orderBy'    => $orderBy,
-        'productID'  => '{key}'
-    )
-);
-
 $productItems = array();
-foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'id' => $key);
+foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'active' => $key == $productID, 'url' => createLink($this->app->rawModule, $this->app->rawMethod, "status={$status}&projectID={$projectID}&orderBy={$orderBy}&productID={$key}"));
 
 $productName = !empty($product) ? $product->name : '';
 featureBar
 (
-    to::before(productMenu(set
-    ([
-        'title' => $productName,
-        'items' => $productItems,
-        'activeKey' => $productID,
-        'closeLink' => '#',
-        'link' => $productMenuLink
-    ]))),
+    to::leading
+    (
+        dropdown
+        (
+            to('trigger', btn($productName ? $productName : $lang->product->all, setClass('ghost'))),
+            set::items($productItems)
+        )
+    ),
     set::current($status),
     set::linkParams("status={key}&projectID={$projectID}&orderBy={$orderBy}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     li(searchToggle()),
