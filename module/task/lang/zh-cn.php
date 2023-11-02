@@ -95,6 +95,7 @@ $lang->task->consumed          = '总计消耗';
 $lang->task->currentConsumed   = '本次消耗';
 $lang->task->myConsumed        = '我的总消耗';
 $lang->task->consumedAB        = '消耗';
+$lang->task->consumedHours     = '耗时';
 $lang->task->hour              = '小时';
 $lang->task->consumedThisTime  = '工时';
 $lang->task->leftThisTime      = '剩余';

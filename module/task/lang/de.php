@@ -95,6 +95,7 @@ $lang->task->consumed          = 'Genutzt';
 $lang->task->currentConsumed   = 'Current Cost';
 $lang->task->myConsumed        = 'Von mir';
 $lang->task->consumedAB        = 'Genutzt';
+$lang->task->consumedHours     = 'Genutzt';
 $lang->task->hour              = 'Stunden';
 $lang->task->consumedThisTime  = 'Stunden';
 $lang->task->leftThisTime      = 'Rest';

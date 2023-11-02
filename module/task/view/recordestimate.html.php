@@ -69,7 +69,7 @@ if(!empty($members) && $task->mode == 'linear')
           <th class="w-120px"><?php common::printOrderLink('date', !strpos($orderBy, ',') ? $orderBy : 'date_asc', $vars, $lang->task->date);?></th>
           <th class="w-120px text-center"><?php echo $lang->task->recordedBy;?></th>
           <th class='text-left'><?php echo $lang->task->work;?></th>
-          <th class="thWidth text-center"><?php echo $lang->task->consumedAB;?></th>
+          <th class="thWidth text-center"><?php echo $lang->task->consumedHours;?></th>
           <th class="thWidth text-center"><?php echo $lang->task->leftAB;?></th>
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
@@ -138,7 +138,7 @@ if(!empty($members) && $task->mode == 'linear')
             <th class="w-60px <?php if(count($reverseOrders) == 1) echo "hidden"?>"><?php echo $lang->task->teamOrder;?></th>
             <?php endif;?>
             <th><?php echo $lang->task->work;?></th>
-            <th class="w-100px required"><?php echo $lang->task->consumedAB;?></th>
+            <th class="w-100px required"><?php echo $lang->task->consumedHours;?></th>
             <th class="w-100px <?php if(empty($readonly)) echo 'required'?>"><?php echo $lang->task->leftAB;?></th>
           </tr>
         </thead>
