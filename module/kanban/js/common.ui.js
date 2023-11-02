@@ -15,10 +15,10 @@ window.changeKanbanType = function()
 
 window.loadAllUsers = function()
 {
-    const link = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID=0&field=owner&selectedUser=' + $('[name=owner]').val() + "&type=all");
+    const link = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID=0&field=owner&selectedUser=' + $('#owner').val() + "&type=all");
     $.getJSON(link, function(data)
     {
-        $('[name=owner]').zui('picker').render({items: data});
+        $('#owner').zui('picker').render({items: data});
     });
 }
 
@@ -27,22 +27,16 @@ window.changeKanbanSpace = function()
     const spaceID = $('[name=space]').val();
     if(spaceType == 'private')
     {
-        const url = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID='+ spaceID + '&field=whitelist&selectedUser=' + $('[name^=whitelist]').val());
-        $.get(url, function(data)
+        const url = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID=' + spaceID + '&field=whitelist&selectedUser=' + $('[name^=whitelist]').val());
+        $.getJSON(url, function(data)
         {
             $('[name^=whitelist]').zui('picker').render({items: data});
         });
     }
     else
     {
-        let url = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID='+ spaceID + '&field=team&selectedUser=' + $('[name^=team]').val());
-        $.get(url, function(data)
-        {
-            $('[name^=team]').zui('picker').render({items: data});
-        });
-
-        url = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID='+ spaceID + '&field=owner&selectedUser=' + $('[name=owner]').val());
-        $.get(url, function(data)
+        url = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID=' + spaceID + '&field=owner&selectedUser=' + $('[name=owner]').val());
+        $.getJSON(url, function(data)
         {
             $('[name=owner]').zui('picker').render({items: data});
         });
