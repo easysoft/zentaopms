@@ -132,7 +132,7 @@ class avatar extends wg
         }
 
         $this->textLen = mb_strlen($displayText, 'utf-8');
-        $this->displayTextLen = strlen($displayText);
+        $this->displayTextLen = $this->textLen + ((strlen($displayText) - $this->textLen) / 2);
 
         return $displayText;
     }
@@ -300,6 +300,8 @@ class avatar extends wg
         (
             setClass('avatar-text'),
             set('data-actualSize', $this->actualSize),
+            set('data-displayTextLen', $this->displayTextLen),
+            set('data-textLen', $this->textLen),
             $textStyle ? setStyle($textStyle) : null,
             $displayText
         );
