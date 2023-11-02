@@ -44,7 +44,7 @@ foreach($spaceList as $space)
     $childActions[] = array('icon' => 'cog-outline', 'url' => createLink('kanban', 'editSpace', "spaceID={$space->id}"), 'text' => $lang->kanban->settingSpace, 'data-toggle' => 'modal');
     if($space->status != 'closed') $childActions[] = array('icon' => 'off',   'url' => createLink('kanban', 'closeSpace',    "spaceID={$space->id}"), 'text' => $lang->kanban->closeSpace,    'data-toggle' => 'modal');
     if($space->status == 'closed') $childActions[] = array('icon' => 'magic', 'url' => createLink('kanban', 'activateSpace', "spaceID={$space->id}"), 'text' => $lang->kanban->activateSpace, 'data-toggle' => 'modal');
-    $childActions[] = array('icon' => 'trash', 'url' => createLink('kanban', 'editSpace', "spaceID={$space->id}"), 'text' => $lang->kanban->deleteSpace, 'data-toggle' => 'modal');
+    $childActions[] = array('icon' => 'trash', 'url' => createLink('kanban', 'deleteSpace', "spaceID={$space->id}"), 'text' => $lang->kanban->deleteSpace, 'innterClass' => 'ajax-btn', 'data-confirm' => $lang->kanban->confirmDeleteSpace);
 
     $headingActions = array();
     if($space->status != 'closed' and $browseType != 'involved') $headingActions[] = array('type' => 'ghost', 'icon' => 'plus', 'url' => createLink('kanban', 'create', "spaceID={$space->id}&type={$space->type}"), 'text' => $lang->kanban->create, 'data-toggle' => 'modal', 'data-size' => 'lg');
@@ -73,6 +73,16 @@ foreach($spaceList as $space)
                 $count ++;
             }
 
+            $cardActions = array();
+            $canEdit     = common::hasPriv('kanban','edit');
+            $canDelete   = common::hasPriv('kanban','delete');
+            $canClose    = (common::hasPriv('kanban', 'close') and $kanban->status == 'active');
+            $canActivate = (common::hasPriv('kanban', 'activate') and $kanban->status == 'closed'); 
+            if($canEdit)     $cardActions[] = array('icon' => 'edit',  'text' => $lang->kanban->edit,     'url' => createLink('kanban', 'edit',     "kanbanID={$kanban->id}"), 'data-toggle' => 'modal');
+            if($canClose)    $cardActions[] = array('icon' => 'off',   'text' => $lang->kanban->close,    'url' => createLink('kanban', 'close',    "kanbanID={$kanban->id}"), 'data-toggle' => 'modal');
+            if($canActivate) $cardActions[] = array('icon' => 'magic', 'text' => $lang->kanban->activate, 'url' => createLink('kanban', 'activate', "kanbanID={$kanban->id}"), 'data-toggle' => 'modal');
+            if($canDelete)   $cardActions[] = array('icon' => 'trash', 'text' => $lang->kanban->delete,   'url' => createLink('kanban', 'delete',   "kanbanID={$kanban->id}"), 'innerClass' => 'ajax-btn');
+
             $teamCountLang = ($teamCount > 1) ? $lang->kanban->teamSumCount : str_replace("Pers", "Person", $lang->kanban->teamSumCount);
             $kanbans[] = cell
             (
@@ -80,21 +90,31 @@ foreach($spaceList as $space)
                 set::className('px-2 pb-4 overflow-hidden'),
                 div
                 (
-                    set::className('border px-4 py-2'),
+                    set::className('kanban-card border px-4 pb-2 pt-1'),
+                    set('data-url', createLink('kanban', 'view', "kanbanID=$kanbanID")),
                     div
                     (
-                        set::className('flex mr-6'),
+                        set::className('flex items-center'),
                         cell(set::className('ellipsis font-bold mr-1'), set::title($kanban->name), $kanban->name),
                         $kanban->status == 'closed' ? cell(set::className('label gray mx-1'), setStyle(array('min-width' => '44px')), $lang->kanban->closed) : null,
-                        $space->type == 'cooperation' && $kanban->owner == $this->app->user->account ? cell(set::className('label text-important ring-important mx-1'), setStyle(array('min-width' => '44px')), $lang->kanban->mine) : null
+                        $space->type == 'cooperation' && $kanban->owner == $this->app->user->account ? cell(set::className('label text-important ring-important mx-1'), setStyle(array('min-width' => '44px')), $lang->kanban->mine) : null,
+                        cell
+                        (
+                            set::className('flex-1 text-right'),
+                            dropdown
+                            (
+                                btn(setClass('btn dropdown-toggle ghost'), set::icon('ellipsis-v'), set::caret(false)),
+                                set::items($cardActions)
+                            )
+                        )
                     ),
-                    div(set::className('h-16 my-2 overflow-hidden'), set::title($kanbanDescTitle), html($kanbanDesc)),
+                    div(set::className('h-16 mb-2 overflow-hidden'), set::title($kanbanDescTitle), html($kanbanDesc)),
                     div
                     (
                         set::className('flex items-center'),
                         cell(set::className('flex items-center mr-2'), $userAvatars),
                         cell(sprintf($teamCountLang, $teamCount)),
-                        cell(set::className('flex-1 text-right'), empty($kanban->cardsCount) ? $lang->kanban->noCard : sprintf($cardsCount, $kanban->cardsCount)),
+                        cell(set::className('flex-1 text-right'), empty($kanban->cardsCount) ? $lang->kanban->noCard : sprintf($cardsCount, $kanban->cardsCount))
                     )
                 )
             );

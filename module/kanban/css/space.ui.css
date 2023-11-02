@@ -1,7 +1,3 @@
-.table-footer {
-    position: relative;
-    min-height: 40px;
-    padding: 6px 15px;
-    background: #fff;
-    border-radius: 0 0 4px 4px;
-}
+.table-footer {position: relative; min-height: 40px; padding: 6px 15px; background: #fff; border-radius: 0 0 4px 4px;}
+.kanban-card:hover {border-color: rgba(var(--color-primary-500-rgb),var(--tw-border-opacity)); cursor: pointer;}
+
