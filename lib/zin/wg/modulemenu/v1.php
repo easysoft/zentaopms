@@ -41,13 +41,15 @@ class moduleMenu extends wg
         foreach($children as $child)
         {
             $item = array(
-                'key'      => $child->id,
-                'text'     => $child->name,
-                'url'      => $child->url,
-                'data-app' => $tab
+                'key'          => $child->id,
+                'text'         => $child->name,
+                'hint'         => $child->name,
+                'url'          => $child->url,
+                'data-app'     => $tab,
+                'contentClass' => 'overflow-x-hidden'
             );
             $items = $this->buildMenuTree($child->id);
-            if(count($items) !== 0)      $item['items'] = $items;
+            if(count($items) !== 0)      $item['items']  = $items;
             if($child->id == $activeKey) $item['active'] = true;
             $treeItems[] = $item;
         }
@@ -177,7 +179,7 @@ class moduleMenu extends wg
             zui::tree
             (
                 set::_tag('ul'),
-                set::_class('col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden pl-4 pr-1'),
+                set::_class('col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden px-4'),
                 set::defaultNestedShow(true),
                 set::hover(true),
                 set::preserve($preserve),
