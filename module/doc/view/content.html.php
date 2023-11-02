@@ -169,6 +169,7 @@
                 echo $doc->content;
             }
             ?>
+            <?php if($doc->type != 'attachment'):?>
             <?php foreach($doc->files as $file):?>
             <?php if(in_array($file->extension, $config->file->imageExtensions)):?>
             <div class='file-image'>
@@ -191,6 +192,7 @@
             <?php unset($doc->files[$file->id]);?>
             <?php endif;?>
             <?php endforeach;?>
+            <?php endif;?>
           </div>
         </div>
       </div>
