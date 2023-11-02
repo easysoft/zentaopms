@@ -13,7 +13,7 @@ modalHeader(set::title($lang->kanban->createSpace), set::titleClass('article-h1'
 
 formPanel
 (
-    on::change('[name="type"]', 'changeType'),
+    on::change('[name="type"]', 'changeSpaceType'),
     formRow
     (
         formGroup

@@ -2005,11 +2005,12 @@ class kanban extends control
 
         if(!empty($space) and $field == 'owner' and $type != 'all') $accounts = trim($space->owner) . ',' . trim($space->team);
 
-        $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $accounts);
-        $multiple  = in_array($field, array('team', 'whitelist')) ? 'multiple' : '';
-        $fieldName = $multiple ? $field . '[]' : $field;
+        $users = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $accounts);
 
-        return print(html::select($fieldName, $users, $selectedUser, "class='form-control' $multiple"));
+        $userList = array();
+        foreach($users as $account => $user) $userList[] = array('text' => $user, 'value' => $account, 'key' => $user . $account);
+
+        return print(json_encode($userList));
     }
 
     /**

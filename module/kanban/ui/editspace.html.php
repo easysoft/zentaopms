@@ -13,7 +13,7 @@ modalHeader(set::title($lang->kanban->editSpace), set::entityText($space->name),
 
 formPanel
 (
-    on::change('[name="type"]', 'changeType'),
+    on::change('[name="type"]', 'changeSpaceType'),
     formRow
     (
         formGroup

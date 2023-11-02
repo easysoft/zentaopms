@@ -9,10 +9,14 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('spaceID', $spaceID);
+
 modalHeader(set::title($lang->kanban->create), set::titleClass('article-h1'));
 
 formPanel
 (
+    on::change('[name=type]', 'changeKanbanType'),
+    on::click('#allUsers', 'loadAllUsers'),
     formRow
     (
         formGroup
@@ -65,22 +69,37 @@ formPanel
             set::value(isset($copyKanban->name) ? $copyKanban->name : '')
         )
     ),
-    $type != 'private' ? formRow
+    formRow
     (
+        set::className('params ' . ($type == 'private' ? 'hidden' : '')),
         formGroup
         (
             set::width('1/2'),
             set::label($lang->kanban->owner),
-            picker
+            inputGroup
             (
-                set::name('owner'),
-                set::items($ownerPairs),
-                set::value(isset($copyKanban->owner) ? $copyKanban->owner : '')
+                picker
+                (
+                    set::name('owner'),
+                    set::items($ownerPairs),
+                    set::value(isset($copyKanban->owner) ? $copyKanban->owner : '')
+                ),
+                span
+                (
+                    set('class', 'input-group-addon'),
+                    a
+                    (
+                        set('id', 'allUsers'),
+                        set('href', 'javascript:;'),
+                        $lang->kanban->allUsers
+                    )
+                )
             )
         )
-    ) : null,
-    $type != 'private' ? formRow
+    ),
+    formRow
     (
+        set::className('params ' . ($type == 'private' ? 'hidden' : '')),
         formGroup
         (
             set::label($lang->kanban->team),
@@ -92,7 +111,7 @@ formPanel
                 set::value(isset($copyKanban->team) ? $copyKanban->team : '')
             )
         )
-    ) : null,
+    ),
     formRow
     (
         formGroup
@@ -222,8 +241,9 @@ formPanel
             )
         )
     ),
-    $type == 'private' ? formRow
+    formRow
     (
+        set::className('whitelistBox ' . ($type != 'private' ? 'hidden' : '')),
         formGroup
         (
             set::label($lang->whitelist),
@@ -237,7 +257,7 @@ formPanel
         ),
         input(set::className('hidden'), set::name('copyKanbanID'), set::value($copyKanbanID)),
         input(set::className('hidden'), set::name('copyRegion'), set::value($copyRegion))
-    ) : null
+    )
 );
 
 render();
