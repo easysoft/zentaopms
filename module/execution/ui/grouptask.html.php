@@ -307,6 +307,8 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                 ),
                 h::td
                 (
+                    setClass('c-name'),
+                    set('title', $task->name),
                     !empty($task->team) ? span(setClass('label gray-pale rounded-xl'), $lang->task->multipleAB) : null,
                     $task->parent > 0  ? span(setClass('label gray-pale rounded-xl'), $lang->task->childrenAB) : null,
                     (isset($task->children) && $task->children == true) ? span(setClass('label gray-pale rounded-xl'), $lang->task->parentAB) : null,
