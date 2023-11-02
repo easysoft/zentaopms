@@ -129,7 +129,7 @@ $thead = function() use($lang, $groupList, $groupBy, $allCount)
 {
     return h::tr
     (
-        $allCount ? setClass('divider') : null,
+        $allCount ? setClass('border-divider') : null,
         h::th
         (
             setClass('c-side text-left has-btn group-menu'),
