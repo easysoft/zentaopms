@@ -16,7 +16,7 @@ jsVar('reviewLink', createLink('{module}', 'review', 'id={id}'));
 $rawMethod = $this->app->rawMethod;
 if($rawMethod != 'audit') $lang->my->featureBar[$rawMethod] = $lang->my->featureBar[$rawMethod]['audit'];
 
-$linkParam = "browseType={key}&param=&orderBy=time_desc";
+$linkParam = "browseType={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 if($rawMethod == 'contribute') $linkParam = "mode=$mode&$linkParam";
 
 featurebar
