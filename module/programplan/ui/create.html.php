@@ -28,7 +28,7 @@ $fnGenerateStageByProductList = function() use ($productID, $productList, $proje
     $items = array();
     foreach($productList as $key => $product)
     {
-        $items[] = array('text' => $product, 'active' => $productID == $key, 'data-url' => createLink('programplan', 'create', "projectID=$project->id&productID=$key"));
+        $items[] = array('text' => $product, 'active' => $productID == $key, 'url' => createLink('programplan', 'create', "projectID=$project->id&productID=$key"));
     }
 
     return dropdown
