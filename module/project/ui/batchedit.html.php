@@ -74,14 +74,14 @@ formBatchPanel
         set::name('begin'),
         set::label($lang->project->begin),
         set::control('date'),
-        set::width('76px'),
+        set::width('84px'),
     ),
     formBatchItem
     (
         set::name('end'),
         set::label($lang->project->end),
         set::control('date'),
-        set::width('76px'),
+        set::width('84px'),
     ),
     formBatchItem
     (
@@ -89,7 +89,7 @@ formBatchPanel
         set::label($lang->project->acl),
         set::control('picker'),
         set::items(array()),
-        set::width('128px'),
+        set::width('76px'),
     ),
 );
 
