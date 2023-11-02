@@ -374,6 +374,13 @@ class productTao extends productModel
         $lib->addedDate = helper::now();
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
+        $productSettingList = isset($this->config->global->productSettingList) ? json_decode($this->config->global->productSettingList, true) : array();
+        if($productSettingList)
+        {
+            $productSettingList[] = $productID;
+            $this->loadModel('setting')->setItem('system.common.global.productSettingList', json_encode($productSettingList));
+        }
+
         if(dao::isError())return false;
         return $this->dao->lastInsertID();
     }
