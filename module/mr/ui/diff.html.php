@@ -10,7 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
-dropmenu(set::objectID($MR->repoID), set::tab('repo'));
+$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+);
 
 detailHeader
 (
@@ -27,7 +33,7 @@ detailHeader
             setClass('label danger'),
             $lang->product->deleted,
         ) : null,
-    )
+    ),
 );
 
 $entry        = count($diffs) ? $diffs[0]->fileName : '';
@@ -62,27 +68,55 @@ panel
             li
             (
                 setClass('nav-item'),
-                a($lang->mr->view, set::href(inlink('view', "MRID={$MR->id}")))
+                a
+                (
+                    $lang->mr->view,
+                    set::href(inlink('view', "MRID={$MR->id}")),
+                    set('data-app', $app->tab)
+                )
             ),
             li
             (
                 setClass('nav-item'),
-                a($lang->mr->viewDiff, setClass('active'))
+                a
+                (
+                    $lang->mr->viewDiff,
+                    setClass('active'),
+                    set('data-app', $app->tab)
+                )
             ),
             li
             (
                 setClass('nav-item story'),
-                a(icon($lang->icons['story']), $lang->productplan->linkedStories, set::href(inlink('link', "MRID={$MR->id}&type=story")))
+                a
+                (
+                    icon($lang->icons['story']),
+                    $lang->productplan->linkedStories,
+                    set::href(inlink('link', "MRID={$MR->id}&type=story")),
+                    set('data-app', $app->tab)
+                )
             ),
             li
             (
                 setClass('nav-item bug'),
-                a(icon($lang->icons['bug']), $lang->productplan->linkedBugs, set::href(inlink('link', "MRID={$MR->id}&type=bug")))
+                a
+                (
+                    icon($lang->icons['bug']),
+                    $lang->productplan->linkedBugs,
+                    set::href(inlink('link', "MRID={$MR->id}&type=bug")),
+                    set('data-app', $app->tab)
+                )
             ),
             li
             (
                 setClass('nav-item task'),
-                a(icon('todo'), $lang->mr->linkedTasks, set::href(inlink('link', "MRID={$MR->id}&type=task")))
+                a
+                (
+                    icon('todo'),
+                    $lang->mr->linkedTasks,
+                    set::href(inlink('link', "MRID={$MR->id}&type=task")),
+                    set('data-app', $app->tab)
+                )
             ),
         )
     ),
@@ -134,11 +168,11 @@ panel
         sidebar
         (
             set::side('left'),
-            tree
+            treeEditor
             (
                 set::id('monacoTree'),
-                set::canSplit(false),
                 set::items($tree),
+                set::canSplit(false),
                 set::collapsedIcon('folder'),
                 set::expandedIcon('folder-open'),
                 set::normalIcon('file-text-alt'),

@@ -10,7 +10,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
-dropmenu(set::objectID($MR->repoID), set::tab('repo'));
+$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+);
 
 $hasNoConflict     = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->hasNoConflict;
 $sourceDisabled    = ($MR->status == 'merged' && $MR->removeSourceBranch == '1') ? 'disabled' : '';
@@ -141,22 +147,45 @@ panel
             li
             (
                 setClass('nav-item'),
-                a($lang->mr->viewDiff, set::href(inlink('diff', "MRID={$MR->id}")))
+                a
+                (
+                    $lang->mr->viewDiff,
+                    set::href(inlink('diff', "MRID={$MR->id}")),
+                    set('data-app', $app->tab)
+                )
             ),
             li
             (
                 setClass('nav-item'),
-                a(icon($lang->icons['story']), $lang->productplan->linkedStories, set::href(inlink('link', "MRID={$MR->id}&type=story")))
+                a
+                (
+                    icon($lang->icons['story']),
+                    $lang->productplan->linkedStories,
+                    set::href(inlink('link', "MRID={$MR->id}&type=story")),
+                    set('data-app', $app->tab)
+                )
             ),
             li
             (
                 setClass('nav-item'),
-                a(icon($lang->icons['bug']), $lang->productplan->linkedBugs, set::href(inlink('link', "MRID={$MR->id}&type=bug")))
+                a
+                (
+                    icon($lang->icons['bug']),
+                    $lang->productplan->linkedBugs,
+                    set::href(inlink('link', "MRID={$MR->id}&type=bug")),
+                    set('data-app', $app->tab)
+                )
             ),
             li
             (
                 setClass('nav-item'),
-                a(icon('todo'), $lang->mr->linkedTasks, set::href(inlink('link', "MRID={$MR->id}&type=task")))
+                a
+                (
+                    icon('todo'),
+                    $lang->mr->linkedTasks,
+                    set::href(inlink('link', "MRID={$MR->id}&type=task")),
+                    set('data-app', $app->tab)
+                )
             ),
         )
     ),

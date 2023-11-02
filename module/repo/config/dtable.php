@@ -231,8 +231,9 @@ $config->repo->reviewDtable = new stdclass();
 $config->repo->reviewDtable->fieldList['id']['title'] = $lang->idAB;
 $config->repo->reviewDtable->fieldList['id']['type']  = 'id';
 
-$config->repo->reviewDtable->fieldList['title']['type'] = 'title';
-$config->repo->reviewDtable->fieldList['title']['link'] = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}&from=repo');
+$config->repo->reviewDtable->fieldList['title']['type']     = 'title';
+$config->repo->reviewDtable->fieldList['title']['data-app'] = $app->tab;
+$config->repo->reviewDtable->fieldList['title']['link']     = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}&from=repo');
 
 $config->repo->reviewDtable->fieldList['fileLocation']['title'] = $lang->repo->file . '/' . $lang->repo->location;
 $config->repo->reviewDtable->fieldList['fileLocation']['name']  = 'entry';

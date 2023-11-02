@@ -15,7 +15,7 @@ dropmenu
 (
     set::module($module),
     set::tab($module),
-    set::url(createLink($module, $app->tab == 'devops' ? 'ajaxGetDropMenu' : 'ajaxGetDropMenuData', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+    set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
 $diffLink = $this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($entry) . "&oldrevision={oldRevision}&newRevision={newRevision}");

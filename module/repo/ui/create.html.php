@@ -16,7 +16,7 @@ if($this->app->tab != 'devops')
     (
         set::module($app->tab),
         set::tab($app->tab),
-        set::url(createLink($app->tab, 'ajaxGetDropMenuData', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+        set::url(createLink($app->tab, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
     );
 }
 

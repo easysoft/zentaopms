@@ -1,5 +1,5 @@
 <?php
-global $lang;
+global $lang, $app;
 
 $config->mr->dtable = new stdclass();
 
@@ -10,6 +10,7 @@ $config->mr->dtable->fieldList['id']['type']  = 'id';
 $config->mr->dtable->fieldList['title']['name']     = 'title';
 $config->mr->dtable->fieldList['title']['title']    = $lang->mr->title;
 $config->mr->dtable->fieldList['title']['type']     = 'text';
+$config->mr->dtable->fieldList['title']['data-app'] = $app->tab;
 $config->mr->dtable->fieldList['title']['link']     = helper::createLink('mr', 'view', "MRID={id}");
 $config->mr->dtable->fieldList['title']['sortType'] = true;
 

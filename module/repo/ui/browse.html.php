@@ -19,7 +19,7 @@ dropmenu
 (
     set::module($module),
     set::tab($module),
-    set::url(createLink($module, $app->tab == 'devops' ? 'ajaxGetDropMenu' : 'ajaxGetDropMenuData', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+    set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
 /* Prepare repo select data. */
@@ -274,7 +274,7 @@ sidebar
         set::data($commentsTableData),
         set::onRenderCell(jsRaw('window.renderCommentCell')),
         set::onCheckChange(jsRaw('window.checkedChange')),
-        set::canRowCheckable(jsRaw('function(rowID){return canRowCheckable(rowID);}')),
+        set::canRowCheckable(jsRaw('window.canRowCheckable')),
         set::footToolbar($footToolbar),
         set::footer(array('toolbar', 'flex', 'pager')),
         set::footPager(usePager('pager', 'noTotalCount')),

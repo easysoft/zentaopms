@@ -17,7 +17,7 @@ dropmenu
 (
     set::module($module),
     set::tab($module),
-    set::url(createLink($module, $app->tab == 'devops' ? 'ajaxGetDropMenu' : 'ajaxGetDropMenuData', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+    set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
 $tree = $this->repo->getFileTree($repo);
@@ -91,7 +91,7 @@ div(
 helper::isAjaxRequest('modal') ? null : sidebar
 (
     set::side('left'),
-    setClass('repo-sidebar'),
+    setClass('repo-sidebar canvas'),
     dropmenu
     (
         setID('repoBranchDropMenu'),

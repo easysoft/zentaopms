@@ -1148,6 +1148,8 @@ class mrModel extends model
         $scm  = $host->type;
 
         $repo = $this->loadModel('repo')->getByID($MR->repoID);
+        if(!$repo) return array();
+
         $repo->gitService = $host->id;
         $repo->project    = $MR->targetProject;
         $repo->password   = $host->token;
@@ -1977,8 +1979,10 @@ class mrModel extends model
      */
     public function getMRProduct($MR)
     {
-        $product = array();
+        $product = new stdclass();
+        $product->id = 0;
 
+        $productID = 0;
         if(is_object($MR) && $MR->repoID)
         {
             $productID = $this->dao->select('product')->from(TABLE_REPO)->where('id')->eq($MR->repoID)->fetch('product');

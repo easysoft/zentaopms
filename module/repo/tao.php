@@ -66,5 +66,18 @@ class repoTao extends repoModel
 
             return  $this->session->$queryName;
     }
+
+    /**
+     * Check repo name.
+     *
+     * @param  object $repo
+     * @access protected
+     * @return bool
+     */
+    protected function checkName(object $repo)
+    {
+        $pattern = "/^[a-zA-Z0-9_\-\.]+$/";
+        return preg_match($pattern, $repo->name);
+    }
 }
 

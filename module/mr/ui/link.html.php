@@ -11,13 +11,18 @@ declare(strict_types=1);
 namespace zin;
 
 $repoName = $this->dao->select('name')->from(TABLE_REPO)->where('id')->eq($MR->repoID)->fetch('name');
-dropmenu(set::objectID($MR->repoID), set::text($repoName), set::tab('repo'));
+
+$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+);
 
 jsVar('type', $type);
 jsVar('orderBy', $orderBy);
 jsVar('sortLink', createLink('mr', 'link', "MRID={$MR->id}&type={type}&orderBy={orderBy}&recTotal=&recPerPage=&pageID="));
-
-dropmenu(set::objectID($MR->repoID), set::tab('repo'));
 
 $actionMenu = array();
 $actionMenu['title'] = $lang->actions;
@@ -121,27 +126,58 @@ panel
             li
             (
                 setClass('nav-item' . ($type == 'view' ? ' active' : '')),
-                a($lang->mr->view, set::href(inlink('view', "MRID={$MR->id}")))
+                a
+                (
+                    $lang->mr->view,
+                    set::href(inlink('view', "MRID={$MR->id}")),
+                    set('data-app', $app->tab)
+                )
             ),
             li
             (
                 setClass('nav-item' . ($type == 'diff' ? ' active' : '')),
-                a($lang->mr->viewDiff, set::href(inlink('diff', "MRID={$MR->id}")))
+                a
+                (
+                    $lang->mr->viewDiff,
+                    set::href(inlink('diff', "MRID={$MR->id}")),
+                    set('data-app', $app->tab)
+                )
             ),
             li
             (
                 setClass('nav-item story' . ($type == 'story' ? ' active' : '')),
-                a(icon($lang->icons['story']), $lang->productplan->linkedStories, set::href('#mr-story'), set('data-toggle', 'tab'))
+                a
+                (
+                    icon($lang->icons['story']),
+                    $lang->productplan->linkedStories,
+                    set::href('#mr-story'),
+                    set('data-toggle', 'tab'),
+                    set('data-app', $app->tab)
+                )
             ),
             li
             (
                 setClass('nav-item bug' . ($type == 'bug' ? ' active' : '')),
-                a(icon($lang->icons['bug']), $lang->productplan->linkedBugs, set::href('#mr-bug'), set('data-toggle', 'tab'))
+                a
+                (
+                    icon($lang->icons['bug']),
+                    $lang->productplan->linkedBugs,
+                    set::href('#mr-bug'),
+                    set('data-toggle', 'tab'),
+                    set('data-app', $app->tab)
+                )
             ),
             li
             (
                 setClass('nav-item task' . ($type == 'task' ? ' active' : '')),
-                a(icon('todo'), $lang->mr->linkedTasks, set::href('#mr-task'), set('data-toggle', 'tab'))
+                a
+                (
+                    icon('todo'),
+                    $lang->mr->linkedTasks,
+                    set::href('#mr-task'),
+                    set('data-toggle', 'tab'),
+                    set('data-app', $app->tab)
+                )
             ),
         )
     ),

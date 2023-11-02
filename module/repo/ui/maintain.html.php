@@ -14,6 +14,7 @@ jsVar('orderBy',  $orderBy);
 jsVar('sortLink', createLink('repo', 'maintain', "objectID=$objectID&orderBy={orderBy}&recTotal={$pager->recTotal}&pageID={$pager->pageID}"));
 
 $createItem      = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create'));
+$createRepoItem  = array('text' => $lang->repo->createRepoAction, 'url' => createLink('repo', 'createRepo'));
 $batchCreateItem = array('text' => $lang->repo->batchCreate, 'url' => createLink('repo', 'import'));
 
 foreach($repoList as $repo)
@@ -51,6 +52,7 @@ foreach($repoList as $repo)
         }
         $repo->projectNames = trim($repo->projectNames, '，');
     }
+    if(is_object($repo->lastSubmitTime)) $repo->lastSubmitTime = $repo->lastSubmitTime->time;
 }
 
 $config->repo->dtable->fieldList['name']['link']                     = $this->createLink('repo', 'browse', "repoID={id}&branchID=&objectID={$objectID}");
@@ -69,6 +71,11 @@ $queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&orderBy=&rec
 
 toolBar
 (
+    hasPriv('repo', 'createRepo') ? item(set($createRepoItem + array
+    (
+        'icon'  => 'plus',
+        'class' => 'btn primary',
+    ))) : null,
     !hasPriv('repo', 'create') && hasPriv('repo', 'import') ? item(set($batchCreateItem + array
     (
         'icon'  => 'plus',
@@ -97,8 +104,7 @@ dtable
     set::cols($config->repo->dtable->fieldList),
     set::data($repos),
     set::sortLink(jsRaw('createSortLink')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();
-

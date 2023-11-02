@@ -12,7 +12,16 @@ class mr extends control
 
         /* This is essential when changing tab(menu) from gitlab to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
-        if($this->app->getMethodName() != 'browse') $this->loadModel('ci')->setMenu();
+        if($this->app->getMethodName() != 'browse')
+        {
+            $this->loadModel('ci')->setMenu();
+            $this->view->objectID = $this->app->tab == 'execution' ? $this->session->execution : 0;
+            if($this->app->tab == 'execution')
+            {
+                $this->view->executionID = $this->session->execution;
+                $this->loadModel('execution')->setMenu($this->session->execution);
+            }
+        }
     }
 
     /**
@@ -31,6 +40,16 @@ class mr extends control
      */
     public function browse($repoID = 0, $mode = 'status', $param = 'opened', $objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        if($this->app->tab == 'execution')
+        {
+            $this->session->set('execution', $objectID);
+            $execution = $this->loadModel('execution')->getByID($objectID);
+            $features = $this->execution->getExecutionFeatures($execution);
+            if(!$features['devops']) return print($this->locate($this->createLink('execution', 'task', "objectID=$executionID")));
+
+            $this->loadModel('execution')->setMenu($objectID);
+        }
+
         /* Save current URI to session. */
         $this->session->set('mrList', $this->app->getURI(true), 'repo');
 
@@ -108,6 +127,7 @@ class mr extends control
             }
         }
 
+        if($this->app->tab == 'execution') $this->view->executionID = $objectID;
         $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
         $this->view->MRList     = $MRList;
         $this->view->projects   = $projects;
@@ -149,13 +169,19 @@ class mr extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $MRList   = $this->mr->getList($mode, $param, $orderBy, array(), 0, $executionID, $pager);
+        $MRList   = $this->mr->getList($mode, $param, $orderBy, array(), $repoID, $executionID, $pager);
         $repoList = $this->loadModel('repo')->getList($executionID);
         $MRList   = $this->mr->batchSyncMR($MRList, $repoList);
 
-        $projects = array();
+        $projects  = array();
+        $repoPairs = array($this->lang->repo->common);
         foreach($repoList as $repo)
         {
+            if($repo->SCM == 'Subversion') continue;
+
+            $repoPairs[$repo->id] = $repo->name;
+            if($repoID && $repoID != $repo->id) continue;
+
             if($repo->SCM == 'Gitlab')
             {
                 $projectIds = array();
@@ -173,23 +199,24 @@ class mr extends control
         }
 
         $openIDList = array();
-        if($this->app->user->admin)
+        if(!$this->app->user->admin)
         {
-            $openIDList += $this->loadModel('gitlab')->getGitLabListByAccount('caoyanyi');//, $this->app->user->account);
+            $openIDList += $this->loadModel('gitlab')->getGitLabListByAccount($this->app->user->account);
             $openIDList += $this->loadModel('gitea')->getGiteaListByAccount($this->app->user->account);
             $openIDList += $this->loadModel('gogs')->getGogsListByAccount($this->app->user->account);
         }
-
 
         $this->view->title       = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
         $this->view->MRList      = $MRList;
         $this->view->projects    = $projects;
         $this->view->pager       = $pager;
         $this->view->mode        = $mode;
+        $this->view->repoID      = $repoID;
         $this->view->param       = $param;
         $this->view->objectID    = $executionID;
         $this->view->executionID = $executionID;
         $this->view->repoList    = $repoList;
+        $this->view->repoPairs   = $repoPairs;
         $this->view->orderBy     = $orderBy;
         $this->view->openIDList  = $openIDList;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
@@ -216,17 +243,27 @@ class mr extends control
         $repoID = $this->loadModel('repo')->saveState($repoID);
         $repo   = $this->repo->getByID($repoID);
 
-        $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject);
+        $project = $this->loadModel(strtolower($repo->SCM))->apiGetSingleProject($repo->gitService, $repo->serviceProject, false);
 
         $jobPairs = array();
         $jobs     = $this->loadModel('job')->getListByRepoID($repoID);
         foreach($jobs as $job) $jobPairs[$job->id] = "[{$job->id}]{$job->name}";
 
+        $repoPairs = array();
+        if($this->app->tab == 'execution' && $objectID)
+        {
+            $repoList = $this->loadModel('repo')->getList($objectID);
+            foreach($repoList as $repoInfo)
+            {
+                if($repoInfo->SCM != 'Subversion') $repoPairs[$repoInfo->id] = $repoInfo->name;
+            }
+        }
+
         $this->app->loadLang('compile');
         $this->view->title       = $this->lang->mr->create;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->repo        = $repo;
-        $this->view->repoPairs   = $objectID ? $this->repo->getRepoPairs('execution', $objectID, false) : array();
+        $this->view->repoPairs   = $repoPairs;
         $this->view->project     = $project;
         $this->view->executionID = $objectID;
         $this->view->objectID    = $objectID;
@@ -413,9 +450,10 @@ class mr extends control
         $this->view->MR      = $MR;
         $this->view->rawMR   = isset($rawMR) ? $rawMR : false;
         $this->view->product = $product;
-        $this->view->stories = $this->mr->getLinkList($MR->id, $product->id, 'story');
-        $this->view->bugs    = $this->mr->getLinkList($MR->id, $product->id, 'bug');
-        $this->view->tasks   = $this->mr->getLinkList($MR->id, $product->id, 'task');
+        $this->view->repoID  = $MR->repoID;
+        $this->view->stories = $this->mr->getLinkList($MR->id, zget($product, 'id', 0), 'story');
+        $this->view->bugs    = $this->mr->getLinkList($MR->id, zget($product, 'id', 0), 'bug');
+        $this->view->tasks   = $this->mr->getLinkList($MR->id, zget($product, 'id', 0), 'task');
         $this->view->actions = $this->loadModel('action')->getList('mr', $MRID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed');
 
@@ -660,6 +698,7 @@ class mr extends control
 
         $this->view->title        = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->link;
         $this->view->MR           = $MR;
+        $this->view->repoID       = $MR->repoID;
         $this->view->canBeChanged = true;
         $this->view->modulePairs  = $this->loadModel('tree')->getOptionMenu($product->id, 'story');
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');

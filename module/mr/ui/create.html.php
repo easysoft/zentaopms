@@ -20,7 +20,13 @@ jsVar('mrLang', $lang->mr);
 jsVar('branchPrivs', array());
 jsVar('projectNamespace', in_array($repo->SCM, array('Gitea', 'Gogs')) ? $project->name_with_namespace : '');
 
-if($app->tab == 'devops') dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
+$module = $app->tab == 'devops' ? 'repo' : $app->tab;
+dropmenu
+(
+    set::module($module),
+    set::tab($module),
+    set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
+);
 
 if(in_array($repo->SCM, array('Gitea', 'Gogs')))
 {
@@ -38,6 +44,7 @@ formPanel
     count($repoPairs) > 1 ? to::titleSuffix(
         picker
         (
+            setClass('font-normal w-36'),
             set::name('changeRepo'),
             set::items($repoPairs),
             set::value($repo->id),

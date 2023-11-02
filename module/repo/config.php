@@ -56,6 +56,9 @@ $config->repo->switcherMethodList = array('browse', 'review', 'view', 'diff', 'l
 $config->repo->create = new stdclass();
 $config->repo->create->requiredFields = 'product,SCM,name,encoding';
 
+$config->repo->createRepo = new stdclass();
+$config->repo->createRepo->requiredFields = 'product,name';
+
 $config->repo->edit = new stdclass();
 $config->repo->edit->requiredFields = 'product,SCM,name,encoding';
 
