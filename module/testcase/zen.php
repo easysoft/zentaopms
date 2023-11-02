@@ -168,7 +168,6 @@ class testcaseZen extends testcase
         foreach($branches as $branchID => $branchName) $canImportModules[$branchID] = $this->testcase->getCanImportedModules($productID, $libID, $branchID, 'items');
         if(empty($branches)) $canImportModules[0] = $this->testcase->getCanImportedModules($productID, $libID, 0, 'items');
 
-
         /* Build the search form. */
         $actionURL = $this->createLink('testcase', 'importFromLib', "productID={$productID}&branch={$branch}&libID={$libID}&orderBy={$orderBy}&browseType=bySearch&queryID=myQueryID");
 
