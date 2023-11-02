@@ -1555,7 +1555,6 @@ class bugZen extends bug
 
         /* Set menu and get product id list. */
         if($this->app->tab == 'product') $this->product->setMenu($productID);
-
         if($productID)
         {
             $this->qa->setMenu($productID, $branch);
@@ -1591,6 +1590,8 @@ class bugZen extends bug
 
         /* Assign product related variables. */
         $branchTagOption = $this->assignProductRelatedVars($bugs, $products);
+        $this->view->productID = $productID;
+        $this->view->branch    = $branch;
 
         /* Assign users. */
         $this->assignUsersForBatchEdit($bugs, $productIdList, $branchTagOption);
