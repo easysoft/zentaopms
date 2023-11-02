@@ -44,6 +44,18 @@
             <th class='w-100px'><?php echo $lang->doc->libAndModule?></th>
             <td colspan='3' class='required'><span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control picker-select'");?></span></td>
           </tr>
+          <tr id='file-upload'>
+            <th><?php echo $lang->doc->uploadFile;?></th>
+            <td colspan='4'><?php echo $this->fetch('file', 'buildform');?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->doc->uploadFormat;?></th>
+            <td colspan='4'><?php echo html::radio('uploadFormat', $lang->doc->uploadFormatList, 'separateDocs', "onchange='toggleDocTitle(this.value)'");?></td>
+          </tr>
+          <tr id='docTitle' style='display: none'>
+            <th><?php echo $lang->doc->title;?></th>
+            <td colspan='3'><?php echo html::input('title', '', "class='form-control' required oninput='titleChanged()'"
+);?></td>
           <tr>
             <th><?php echo $lang->doclib->control;?></th>
             <td colspan='3' <?php if($objectType != 'mine') echo "class='aclBox'";?>>
@@ -63,19 +75,6 @@
                 <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=users");?>
               </div>
             </td>
-          </tr>
-          </tr>
-          <tr>
-            <th><?php echo $lang->doc->uploadFormat;?></th>
-            <td colspan='4'><?php echo html::radio('uploadFormat', $lang->doc->uploadFormatList, 'separateDocs', "onchange='toggleDocTitle(this.value)'");?></td>
-          </tr>
-          <tr id='docTitle' style='display: none'>
-            <th><?php echo $lang->doc->title;?></th>
-            <td colspan='3'><?php echo html::input('title', '', "class='form-control' required oninput='titleChanged()'"
-);?></td>
-          <tr id='file-upload'>
-            <th><?php echo $lang->files;?></th>
-            <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
           </tr>
           <tr>
             <td colspan='4' class='text-center form-actions'>

@@ -103,6 +103,8 @@ $(function()
 
     if($(".createCustomLib").length == 1) $(".createCustomLib").click(); // Fix bug #15139.
     addFileUploadMutationObserver();
+
+    $('#file-upload .file-input-list button').addClass('required');
 })
 
 function toggleEditor(type)
