@@ -971,7 +971,7 @@ class blockZen extends block
                 $project->resolvedDate = isset($closedBugGroup[$projectID]['value'])     ? $closedBugGroup[$projectID]['value']     : 0;
                 $project->active       = isset($activatedBugGroup[$projectID]['value'])  ? $activatedBugGroup[$projectID]['value']  : 0;
             }
-            elseif(in_array($project->model, array('waterfall', 'waterfallplus')))
+            elseif(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
             {
                 $project->pv = isset($PVGroup[$projectID]['value']) ? $PVGroup[$projectID]['value'] * 100 : 0;
                 $project->ev = isset($EVGroup[$projectID]['value']) ? $EVGroup[$projectID]['value'] * 100 : 0;
