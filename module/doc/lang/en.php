@@ -216,7 +216,7 @@ $lang->doc->showDoc           = 'Whether to display documents';
 $lang->doc->uploadDoc         = 'Upload Document';
 $lang->doc->uploadFormat      = 'Upload Format';
 $lang->doc->uploadDoc         = 'Upload File';
-$lang->doc->editList          = 'File editor';
+$lang->doc->editedList        = 'File editor';
 
 $lang->doc->fileType = new stdclass();
 $lang->doc->fileType->stepResult = 'Case Result';

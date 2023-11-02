@@ -216,7 +216,7 @@ $lang->doc->showDoc           = '是否显示文档';
 $lang->doc->uploadDoc         = '上传文档';
 $lang->doc->uploadFormat      = '上传格式';
 $lang->doc->uploadFile        = '上传文件';
-$lang->doc->editList          = '文档编辑者';
+$lang->doc->editedList        = '文档编辑者';
 
 $lang->doc->fileType = new stdclass();
 $lang->doc->fileType->stepResult = '测试结果';
