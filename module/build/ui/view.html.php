@@ -70,16 +70,16 @@ $canBatchUnlinkStory = $canBeChanged && common::hasPriv($buildModule, 'batchUnli
 $canBatchCloseStory  = $canBeChanged && common::hasPriv('story', 'batchClose');
 
 $storyFootToolbar = array();
-if($canBatchUnlinkStory) $storyFootToolbar['items'][] = array('className' => 'btn secondary size-sm batch-btn ajax-btn', 'text' => $lang->build->batchUnlink, 'btnType' => 'primary', 'data-type' => 'story', 'data-url' => createLink($buildModule, 'batchUnlinkStory', "build={$build->id}"));
-if($canBatchCloseStory)  $storyFootToolbar['items'][] = array('className' => 'btn secondary size-sm batch-btn',          'text' => $lang->story->batchClose,  'btnType' => 'primary', 'data-type' => 'story', 'data-url' => createLink('story', 'batchClose', "productID={$build->product}&executionID={$objectID}"));
+if($canBatchUnlinkStory) $storyFootToolbar['items'][] = array('className' => 'btn size-sm batch-btn ajax-btn', 'text' => $lang->build->batchUnlink, 'btnType' => 'secondary', 'data-type' => 'story', 'data-url' => createLink($buildModule, 'batchUnlinkStory', "build={$build->id}"));
+if($canBatchCloseStory)  $storyFootToolbar['items'][] = array('className' => 'btn size-sm batch-btn',          'text' => $lang->story->batchClose,  'btnType' => 'secondary', 'data-type' => 'story', 'data-url' => createLink('story', 'batchClose', "productID={$build->product}&executionID={$objectID}"));
 
 /* Bug's batch btn. */
 $canBatchUnlinkBug = $canBeChanged && common::hasPriv($buildModule, 'batchUnlinkBug');
 $canBatchCloseBug  = $canBeChanged && common::hasPriv('bug', 'batchClose');
 
 $bugFootToolbar = array();
-if($canBatchUnlinkBug) $bugFootToolbar['items'][] = array('className' => 'btn secondary size-sm batch-btn', 'text' => $lang->build->batchUnlink, 'btnType' => 'primary', 'data-type' => 'bug', 'data-url' => createLink($buildModule, 'batchUnlinkBug', "build={$build->id}"));
-if($canBatchCloseBug)  $bugFootToolbar['items'][] = array('className' => 'btn secondary size-sm batch-btn', 'text' => $lang->bug->batchClose, 'btnType' => 'primary', 'data-type' => 'bug', 'data-url' => createLink('bug', 'batchClose'));
+if($canBatchUnlinkBug) $bugFootToolbar['items'][] = array('className' => 'btn size-sm batch-btn', 'text' => $lang->build->batchUnlink, 'btnType' => 'secondary', 'data-type' => 'bug', 'data-url' => createLink($buildModule, 'batchUnlinkBug', "build={$build->id}"));
+if($canBatchCloseBug)  $bugFootToolbar['items'][] = array('className' => 'btn size-sm batch-btn', 'text' => $lang->bug->batchClose, 'btnType' => 'secondary', 'data-type' => 'bug', 'data-url' => createLink('bug', 'batchClose'));
 
 /* Integrated builds or single build. */
 if($build->execution)
