@@ -15,7 +15,7 @@ jsVar('delayInfo', $lang->project->delayInfo);
 featurebar
 (
     set::current($status),
-    set::linkParams("status={key}"),
+    set::linkParams("status={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
 );
 
 $this->loadModel('project');
@@ -67,9 +67,9 @@ dtable
     set::data($projects),
     set::onRenderCell(jsRaw('window.onRenderProjectNameCell')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', 'project', "status={$status}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&orderBy={name}_{sortType}")),
+    set::sortLink(createLink('my', 'project', "status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer(array(array('html' => $footerHtml), 'flex', 'pager')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

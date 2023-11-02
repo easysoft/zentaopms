@@ -57,6 +57,7 @@ $config->project->dtable->fieldList['storyCount']['title']  = $lang->project->st
 $config->project->dtable->fieldList['storyCount']['type']   = 'number';
 $config->project->dtable->fieldList['storyCount']['group']  = 4;
 $config->project->dtable->fieldList['storyCount']['show']   = true;
+$config->project->dtable->fieldList['storyCount']['width']  = '120px';
 
 $config->project->dtable->fieldList['executionCount']['title']  = $lang->project->executionCount;
 $config->project->dtable->fieldList['executionCount']['type']   = 'count';
@@ -66,7 +67,6 @@ $config->project->dtable->fieldList['executionCount']['show']   = 4;
 $config->project->dtable->fieldList['budget']['title']    = $lang->project->budget;
 $config->project->dtable->fieldList['budget']['name']     = 'budget';
 $config->project->dtable->fieldList['budget']['type']     = 'money';
-$config->project->dtable->fieldList['budget']['sortType'] = true;
 $config->project->dtable->fieldList['budget']['group']    = 5;
 $config->project->dtable->fieldList['budget']['show']     = true;
 $config->project->dtable->fieldList['budget']['sortType'] = true;
@@ -110,11 +110,10 @@ $config->project->dtable->fieldList['estimate']['type']     = 'number';
 $config->project->dtable->fieldList['estimate']['sortType'] = true;
 $config->project->dtable->fieldList['estimate']['group']    = 7;
 
-$config->project->dtable->fieldList['consume']['title']    = $lang->project->consume;
-$config->project->dtable->fieldList['consume']['name']     = 'consume';
-$config->project->dtable->fieldList['consume']['type']     = 'number';
-$config->project->dtable->fieldList['consume']['sortType'] = true;
-$config->project->dtable->fieldList['consume']['group']    = 7;
+$config->project->dtable->fieldList['consume']['title'] = $lang->project->consume;
+$config->project->dtable->fieldList['consume']['name']  = 'consume';
+$config->project->dtable->fieldList['consume']['type']  = 'number';
+$config->project->dtable->fieldList['consume']['group'] = 7;
 
 $config->project->dtable->fieldList['progress']['title'] = $lang->project->progress;
 $config->project->dtable->fieldList['progress']['name']  = 'progress';

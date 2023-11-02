@@ -800,7 +800,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function project($status = 'doing', $recTotal = 0, $recPerPage = 15, $pageID = 1, $orderBy = 'id_desc')
+    public function project($status = 'doing', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->loadModel('program');
         $this->app->loadLang('project');
@@ -1337,7 +1337,7 @@ EOF;
 
             $this->user->update($this->app->user->id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('my', 'profile')));
         }
 
