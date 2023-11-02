@@ -63,7 +63,7 @@ div
         ),
         $config->edition == 'open' ? div
         (
-            setClass('bg-white p-4'),
+            setClass('bg-white px-4 pb-4'),
             html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
         ) : null
     ),
