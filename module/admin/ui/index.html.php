@@ -99,11 +99,13 @@ foreach($lang->admin->menuList as $menuKey => $menu)
         }
     }
 
-    $params = explode('|', $link);
+    $linkParams = '';
+    $params     = explode('|', $link);
     if(count($params) == 2) list($module, $method) = $params;
-    if(count($params) > 2)  list($label, $module, $method) = $params;
+    if(count($params) == 3) list($label, $module, $method) = $params;
+    if(count($params) > 3)  list($label, $module, $method, $linkParams) = $params;
 
-    $url = $module && $method ? createLink($module, $method) : '';
+    $url = $module && $method ? createLink($module, $method, $linkParams) : '';
 
     $settingItems[] = div
     (
