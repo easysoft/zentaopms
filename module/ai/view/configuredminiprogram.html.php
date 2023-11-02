@@ -105,6 +105,24 @@ js::set('appid', $appid);
     </div>
   </div>
 </div>
+<div class="modal fade" id="back-to-list-modal">
+  <div class="modal-dialog" style="width: 480px;">
+    <div class="modal-content">
+      <div class="modal-header" style="border-bottom: none; padding-left: 12px; display: flex; align-items: center; gap: 16px; margin: 0;">
+        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12.0159" cy="12.0163" r="12" transform="rotate(0.0777774 12.0159 12.0163)" fill="#FFA34D" />
+          <path d="M12.4516 14.621C12.8867 14.6215 13.3224 14.1498 13.3231 13.6775L13.6588 7.42006C13.6595 6.94777 13.661 6.00319 12.3559 6.0016C11.1595 6.00013 11.0495 6.8265 11.0486 7.41686L11.3655 13.6751C11.5823 14.1476 12.0166 14.6204 12.4516 14.621ZM12.4499 15.8017C11.7973 15.8009 11.1439 16.3905 11.1426 17.217C11.1416 17.9254 11.6843 18.6345 12.4456 18.6354C13.2069 18.6363 13.7516 18.0467 13.7528 17.2202C13.7541 16.3936 13.1024 15.8025 12.4499 15.8017Z" fill="white" />
+        </svg>
+        <strong style="font-size: 16px;"><?php echo $lang->ai->miniPrograms->backToListPageTip; ?></strong>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: center; border-top: none; gap: 10px;">
+        <a href="<?php echo $this->createLink('ai', 'miniPrograms'); ?>" class="btn btn-wide btn-primary" onclick="backWithoutSave()"><?php echo $lang->ai->miniPrograms->saveAndBack; ?></a>
+        <a href="<?php echo $this->createLink('ai', 'miniPrograms'); ?>" class="btn btn-wide btn-secondary" onclick="backWithSave()"><?php echo $lang->save; ?></a>
+        <a class="btn btn-wide" data-dismiss="modal"><?php echo $lang->cancel; ?></a>
+      </div>
+    </div>
+  </div>
+</div>
 <div id="mainContent" class="main-content">
   <div style="flex-basis: 30%; margin-right: 16px;">
     <header>
@@ -183,7 +201,7 @@ js::set('appid', $appid);
   </div>
 </div>
 <footer style="display: flex; justify-content: center; align-items: center; height: 56px; background: #fff; border-top: 1px solid #eff1f7; position: fixed; bottom: 0; left: 20px; right: 20px; gap: 24px;">
-  <a href="<?php echo $this->createLink('ai', 'miniPrograms'); ?>" class="btn btn-wide"><?php echo $lang->ai->miniPrograms->backToListPage; ?></a>
+  <a onclick="backToList()" class="btn btn-wide"><?php echo $lang->ai->miniPrograms->backToListPage; ?></a>
   <a href="<?php echo $this->createLink('ai', 'createMiniProgram'); ?>" class="btn btn-wide"><?php echo $lang->ai->miniPrograms->lastStep; ?></a>
   <a class="btn btn-wide btn-secondary" onclick="saveMiniProgram('0')"><?php echo $lang->save; ?></a>
   <a class="btn btn-wide btn-primary" onclick="saveMiniProgram('1')"><?php echo $lang->ai->prompts->action->publish; ?></a>

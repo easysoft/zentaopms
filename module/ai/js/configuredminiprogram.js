@@ -483,13 +483,7 @@ function updatePromptPreview()
     $('.prompt-preview-area .preview-container').html(innerHTML);
 }
 
-/**
- * Save mini program fields.
- *
- * @param {'0'|'1'} toPublish
- * @returns {void}
- */
-function saveMiniProgram(toPublish)
+function getRequiredFields()
 {
     const fields = [];
     $('.field-content').children().each(function()
@@ -504,7 +498,44 @@ function saveMiniProgram(toPublish)
         fields.push(field);
     });
     const prompt = $('#autocomplete-textarea').html();
-    $.post(createLink('ai', 'configuredMiniProgram', `appID=${appid}`), {fields, prompt, toPublish}).done(console.log);
+    return [fields, prompt];
+}
+
+/**
+ * Save mini program fields.
+ *
+ * @param {'0'|'1'} toPublish
+ * @returns {void}
+ */
+function saveMiniProgram(toPublish)
+{
+    const [fields, prompt] = getRequiredFields();
+    if(fields.length && prompt) $.post(createLink('ai', 'configuredMiniProgram', `appID=${appid}`), {fields, prompt, toPublish}).done(console.log);
+}
+
+function backToList()
+{
+    const [fields, prompt] = getRequiredFields();
+    if(fields.length && prompt)
+    {
+        $modal = $('#back-to-list-modal');
+        $modal.modal('show', 'fit');
+        return;
+    }
+    window.location.href = createLink('ai', 'miniPrograms');
+}
+
+function backWithoutSave()
+{
+    $modal = $('#back-to-list-modal');
+    $modal.modal('hide');
+}
+
+function backWithSave()
+{
+    $modal = $('#back-to-list-modal');
+    $modal.modal('hide');
+    saveMiniProgram('0');
 }
 
 $(function()

@@ -420,6 +420,8 @@ $lang->ai->miniPrograms->customBackground  = '自定义背景色';
 $lang->ai->miniPrograms->customIcon        = '自定义icon';
 $lang->ai->miniPrograms->backToListPage    = '返回列表页';
 $lang->ai->miniPrograms->lastStep          = '上一步';
+$lang->ai->miniPrograms->backToListPageTip = '表单有数据变动，是否保存并返回';
+$lang->ai->miniPrograms->saveAndBack       = '保存并返回';
 
 $lang->ai->miniPrograms->placeholder          = new stdClass();
 $lang->ai->miniPrograms->placeholder->name    = '请输入小程序名称';
