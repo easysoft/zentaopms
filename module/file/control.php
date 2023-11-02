@@ -500,8 +500,15 @@ class file extends control
      */
     public function read($fileID)
     {
-        if(!($this->app->company->guest and $this->app->user->account == 'guest') and !$this->loadModel('user')->isLogon()) return print(js::locate($this->createLink('user', 'login')));
         $file = $this->file->getById($fileID);
+
+        if(!$this->file->checkPriv($file))
+        {
+            echo(js::alert($this->lang->file->accessDenied));
+            if(isonlybody()) return print(js::reload('parent.parent'));
+            return print(js::locate(helper::createLink('my', 'index'), 'parent.parent'));
+        }
+
         if(empty($file) or !$this->file->fileExists($file)) return false;
 
         $obLevel = ob_get_level();
