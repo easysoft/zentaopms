@@ -114,7 +114,7 @@ class webhook extends control
         $this->webhook->delete(TABLE_WEBHOOK, $id);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $this->send(array('result' => 'success'));
+        return $this->sendSuccess(array('load' => $this->createLink('webhook', 'true')));
     }
 
     /**

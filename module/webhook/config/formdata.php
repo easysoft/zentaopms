@@ -1,0 +1,43 @@
+<?php
+global $app, $lang;
+$config->webhook->form = new stdclass();
+$config->webhook->form->create = array();
+$config->webhook->form->create['type']             = array('type' => 'string', 'control' => 'picker',    'required' => false, 'default' => '', 'options' => $lang->webhook->typeList);
+$config->webhook->form->create['name']             = array('type' => 'string', 'control' => 'text',      'required' => true,  'default' => '', 'filter'  => 'trim');
+$config->webhook->form->create['url']              = array('type' => 'string', 'control' => 'text',      'required' => true,  'default' => '', 'filter'  => 'trim');
+$config->webhook->form->create['secret']           = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->create['agentId']          = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->create['appKey']           = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->create['appSecret']        = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->create['wechatCorpId']     = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->create['wechatCorpSecret'] = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->create['wechatAgentId']    = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->create['feishuAppId']      = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->create['feishuAppSecret']  = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->create['domain']           = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->create['sendType']         = array('type' => 'string', 'control' => 'picker',    'required' => false, 'default' => 'sync', 'options'  => $lang->webhook->sendTypeList);
+$config->webhook->form->create['products']         = array('type' => 'array',  'control' => 'picker',    'required' => false, 'default' => '', 'options'  => array(), 'multiple' => true);
+$config->webhook->form->create['executions']       = array('type' => 'array',  'control' => 'picker',    'required' => false, 'default' => '', 'options'  => array(), 'multiple' => true);
+$config->webhook->form->create['params']           = array('type' => 'array',  'control' => 'checkList', 'required' => false, 'default' => '', 'options'  => $lang->webhook->paramsList, 'width' => 'full', 'inline' => true);
+$config->webhook->form->create['desc']             = array('type' => 'string', 'control' => 'editor',    'required' => false, 'default' => '', 'width' => 'full');
+
+$config->webhook->form->edit = array();
+$config->webhook->form->edit['type']             = array('type' => 'string', 'control' => 'hidden',    'required' => false, 'default' => '');
+$config->webhook->form->edit['name']             = array('type' => 'string', 'control' => 'text',      'required' => true,  'default' => '', 'filter'  => 'trim');
+$config->webhook->form->edit['url']              = array('type' => 'string', 'control' => 'text',      'required' => true,  'default' => '', 'filter'  => 'trim');
+$config->webhook->form->edit['secret']           = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->edit['agentId']          = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->edit['appKey']           = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->edit['appSecret']        = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->edit['wechatCorpId']     = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->edit['wechatCorpSecret'] = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->edit['wechatAgentId']    = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->edit['feishuAppId']      = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->edit['feishuAppSecret']  = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->edit['domain']           = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
+$config->webhook->form->edit['sendType']         = array('type' => 'string', 'control' => 'picker',    'required' => false, 'default' => '', 'options'  => $lang->webhook->sendTypeList);
+$config->webhook->form->edit['products']         = array('type' => 'array',  'control' => 'picker',    'required' => false, 'default' => '', 'options'  => array(), 'multiple' => true);
+$config->webhook->form->edit['executions']       = array('type' => 'array',  'control' => 'picker',    'required' => false, 'default' => '', 'options'  => array(), 'multiple' => true);
+$config->webhook->form->edit['params']           = array('type' => 'array',  'control' => 'checkList', 'required' => false, 'default' => '', 'options'  => $lang->webhook->paramsList, 'width' => 'full', 'inline' => true);
+$config->webhook->form->edit['desc']             = array('type' => 'string', 'control' => 'editor',    'required' => false, 'default' => '', 'width' => 'full');
+

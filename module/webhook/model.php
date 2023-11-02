@@ -264,7 +264,8 @@ class webhookModel extends model
             ->remove('allParams, allActions')
             ->get();
         $webhook->domain = trim($webhook->domain, '/');
-        $webhook->params = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
+        $webhook->params = $this->post->params ? implode(',', $this->post->params) : 'text';
+        if(!str_contains($webhook->params, 'text')) $webhook->params .= ',text';
 
         if($webhook->type == 'dinguser')
         {
