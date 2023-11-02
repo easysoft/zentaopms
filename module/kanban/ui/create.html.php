@@ -9,7 +9,8 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('spaceID', $spaceID);
+jsVar('spaceID',   $spaceID);
+jsVar('spaceType', $type);
 
 modalHeader(set::title($lang->kanban->create), set::titleClass('article-h1'));
 
@@ -46,6 +47,7 @@ formPanel
     ),
     formRow
     (
+        set::id('WIPCountBox'),
         formGroup
         (
             set::label($lang->kanban->WIPCount),
@@ -60,6 +62,7 @@ formPanel
     ),
     formRow
     (
+        set::id('spaceBox'),
         formGroup
         (
             set::width('1/2'),
@@ -74,6 +77,7 @@ formPanel
     ),
     formRow
     (
+        set::id('nameBox'),
         formGroup
         (
             set::width('1/2'),
@@ -84,6 +88,7 @@ formPanel
     ),
     formRow
     (
+        set::id('ownerBox'),
         set::className('params ' . ($type == 'private' ? 'hidden' : '')),
         formGroup
         (
@@ -112,6 +117,7 @@ formPanel
     ),
     formRow
     (
+        set::id('teamBox'),
         set::className('params ' . ($type == 'private' ? 'hidden' : '')),
         formGroup
         (
@@ -127,6 +133,7 @@ formPanel
     ),
     formRow
     (
+        set::id('fixedColBox'),
         formGroup
         (
             set::label($lang->kanban->columnWidth),
@@ -149,6 +156,7 @@ formPanel
     ),
     formRow
     (
+        set::id('autoColBox'),
         set::style(array('margin-top' => '0px')),
         formGroup
         (
@@ -163,10 +171,10 @@ formPanel
             (
                 set::className('flex items-center ml-5 py-1'),
                 span($lang->kanban->colWidth),
-                input(set::type('number'), set::min('240'), set::name('minColWidth'), set::className('w-16 size-sm mx-1'), set::value($kanban->minColWidth ? $kanban->minColWidth : 240)),
+                input(set::type('number'), set::min('264'), set::name('minColWidth'), set::className('w-16 size-sm mx-1'), set::value($kanban->minColWidth ? $kanban->minColWidth : 264)),
                 span('px'),
                 span('~', set::className('mx-1')),
-                input(set::type('number'), set::min('240'), set::name('maxColWidth'), set::className('w-16 size-sm mx-1'), set::value($kanban->maxColWidth ? $kanban->maxColWidth : 240)),
+                input(set::type('number'), set::min('240'), set::name('maxColWidth'), set::className('w-16 size-sm mx-1'), set::value($kanban->maxColWidth ? $kanban->maxColWidth : 384)),
                 span('px')
             )
         )
@@ -202,6 +210,7 @@ formPanel
     ),
     formRow
     (
+        set::id('archiveBox'),
         formGroup
         (
             set::label($lang->kanban->archive),
@@ -216,6 +225,7 @@ formPanel
     ),
     formRow
     (
+        set::id('manageProgressBox'),
         formGroup
         (
             set::label($lang->kanban->manageProgress),
@@ -230,6 +240,7 @@ formPanel
     ),
     formRow
     (
+        set::id('alignmentBox'),
         formGroup
         (
             set::label($lang->kanban->alignment),
@@ -244,6 +255,7 @@ formPanel
     ),
     formRow
     (
+        set::id('descBox'),
         formGroup
         (
             set::label($lang->kanban->desc),
@@ -256,6 +268,7 @@ formPanel
     ),
     formRow
     (
+        set::id('whitelistBox'),
         set::className('whitelistBox ' . ($type != 'private' ? 'hidden' : '')),
         formGroup
         (
@@ -296,6 +309,10 @@ foreach ($kanbans as $id => $name)
         set::className('p-2'),
         div
         (
+            set('data-on', 'click'),
+            set('data-call', 'clickCopyCard'),
+            set('data-params', 'event'),
+            set('data-id', $id),
             set::className('copy-card p-2 border rounded-md'),
             icon('kanban', set::className('pr-2')),
             $name
