@@ -10,7 +10,7 @@ declare(strict_types = 1);
  */
 namespace zin;
 
-$generateData = function() use ($lang) {return div(setClass('bg-white center text-gray w-full h-40'), $lang->pivot->noPivot);};
+$generateData = function() use ($lang) {return div(setClass('bg-canvas center text-gray w-full h-40'), $lang->pivot->noPivot);};
 
 $viewFile = strtolower($method) . '.html.php';
 if(file_exists($viewFile)) include_once $viewFile;
@@ -63,7 +63,7 @@ div
         ),
         $config->edition == 'open' ? div
         (
-            setClass('bg-white px-4 pb-4'),
+            setClass('bg-canvas px-4 pb-4'),
             html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
         ) : null
     ),

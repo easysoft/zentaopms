@@ -54,14 +54,14 @@ $cols = $config->pivot->dtable->projectDeviation->fieldList;
 
 $generateData = function() use ($module, $method, $lang, $title, $cols, $executions, $chartData, $begin, $end)
 {
-    if(empty($module) || empty($method)) return div(setClass('bg-white center text-gray w-full h-40'), $lang->pivot->noPivot);
+    if(empty($module) || empty($method)) return div(setClass('bg-canvas center text-gray w-full h-40'), $lang->pivot->noPivot);
 
     return array
     (
         div
         (
             setID('conditions'),
-            setClass('flex gap-4 bg-white p-2'),
+            setClass('flex gap-4 bg-canvas p-2'),
             on::change('loadProjectDeviation'),
             inputGroup
             (

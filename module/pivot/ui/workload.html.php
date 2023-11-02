@@ -17,14 +17,14 @@ $cols['user']['map'] = $users;
 
 $generateData = function() use ($module, $method, $lang, $title, $cols, $workload, $depts, $dept, $begin, $end, $days, $workhour, $assign)
 {
-    if(empty($module) || empty($method)) return div(setClass('bg-white center text-gray w-full h-40'), $lang->pivot->noPivot);
+    if(empty($module) || empty($method)) return div(setClass('bg-canvas center text-gray w-full h-40'), $lang->pivot->noPivot);
 
     return array
     (
         div
         (
             setID('conditions'),
-            setClass('flex gap-4 bg-white p-2'),
+            setClass('flex gap-4 bg-canvas p-2'),
             on::change('loadWorkload'),
             inputGroup
             (
