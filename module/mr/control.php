@@ -451,9 +451,9 @@ class mr extends control
         $this->view->rawMR   = isset($rawMR) ? $rawMR : false;
         $this->view->product = $product;
         $this->view->repoID  = $MR->repoID;
-        $this->view->stories = $this->mr->getLinkList($MR->id, $product->id, 'story');
-        $this->view->bugs    = $this->mr->getLinkList($MR->id, $product->id, 'bug');
-        $this->view->tasks   = $this->mr->getLinkList($MR->id, $product->id, 'task');
+        $this->view->stories = $this->mr->getLinkList($MR->id, zget($product, 'id', 0), 'story');
+        $this->view->bugs    = $this->mr->getLinkList($MR->id, zget($product, 'id', 0), 'bug');
+        $this->view->tasks   = $this->mr->getLinkList($MR->id, zget($product, 'id', 0), 'task');
         $this->view->actions = $this->loadModel('action')->getList('mr', $MRID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed');
 

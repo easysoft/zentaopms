@@ -80,7 +80,8 @@ div(
 sidebar
 (
     set::side('left'),
-    tree
+    setClass('repo-sidebar canvas'),
+    treeEditor
     (
         set::id('monacoTree'),
         set::items($tree),

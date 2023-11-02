@@ -33,7 +33,7 @@ detailHeader
             setClass('label danger'),
             $lang->product->deleted,
         ) : null,
-    )
+    ),
 );
 
 $entry        = count($diffs) ? $diffs[0]->fileName : '';
@@ -168,11 +168,11 @@ panel
         sidebar
         (
             set::side('left'),
-            tree
+            treeEditor
             (
                 set::id('monacoTree'),
-                set::canSplit(false),
                 set::items($tree),
+                set::canSplit(false),
                 set::collapsedIcon('folder'),
                 set::expandedIcon('folder-open'),
                 set::normalIcon('file-text-alt'),
