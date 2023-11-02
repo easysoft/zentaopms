@@ -570,7 +570,7 @@ class doc extends control
                 $link   = $this->createLink($moduleName, $methodName, $params);
             }
 
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
