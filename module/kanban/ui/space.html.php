@@ -84,6 +84,8 @@ foreach($spaceList as $space)
             if($canDelete)   $cardActions[] = array('icon' => 'trash', 'text' => $lang->kanban->delete,   'url' => createLink('kanban', 'delete',   "kanbanID={$kanban->id}"), 'innerClass' => 'ajax-btn');
 
             $teamCountLang = ($teamCount > 1) ? $lang->kanban->teamSumCount : str_replace("Pers", "Person", $lang->kanban->teamSumCount);
+            $cardsCount    = ($kanban->cardsCount > 1) ? str_replace("Card", "Cards", $lang->kanban->cardsCount) : $lang->kanban->cardsCount;
+
             $kanbans[] = cell
             (
                 set::width('1/4'),
