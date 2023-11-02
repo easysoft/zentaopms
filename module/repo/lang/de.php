@@ -62,6 +62,8 @@ $lang->repo->importServer       = 'Please select a server';
 $lang->repo->gitlabList         = 'Gitlab Repo';
 $lang->repo->batchCreate        = 'Batch link repo';
 
+$lang->repo->createRepoAction = 'Create repository';
+
 $lang->repo->submit     = 'Submit';
 $lang->repo->cancel     = 'Cancel';
 $lang->repo->addComment = 'Add Comment';
