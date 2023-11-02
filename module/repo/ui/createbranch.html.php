@@ -21,22 +21,28 @@ formPanel
     formGroup
     (
         setID('repoID'),
-        set::name('repoID'),
         set::label($lang->repo->codeRepo),
-        set::control('picker'),
-        set::required(true),
-        set::items($repoPairs),
-        set::value($repoID),
-        set::disabled(count($repoPairs) == 1)
+        set::disabled(count($repoPairs) == 1),
+        picker
+        (
+            set::name('repoID'),
+            set::required(true),
+            set::items($repoPairs),
+            set::value($repoID),
+            set::popPlacement('bottom')
+        )
     ),
     formGroup
     (
         set::id('from'),
-        set::name('from'),
         set::label($lang->repo->branchFrom),
-        set::required(true),
-        set::control('picker'),
-        set::items($branches)
+        picker
+        (
+            set::name('from'),
+            set::required(true),
+            set::popPlacement('bottom'),
+            set::items($branches)
+        )
     ),
     formGroup
     (
