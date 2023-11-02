@@ -52,3 +52,43 @@ $config->webhook->dtable->fieldList['actions']['actionsMap']['log']['hint'] = $l
 
 $config->webhook->dtable->fieldList['actions']['actionsMap']['edit']['icon'] = 'edit';
 $config->webhook->dtable->fieldList['actions']['actionsMap']['edit']['hint'] = $lang->webhook->edit;
+
+$config->webhook->dtable->log = new stdclass();
+$config->webhook->dtable->log->fieldList['id']['name']     = 'id';
+$config->webhook->dtable->log->fieldList['id']['title']    = $lang->idAB;
+$config->webhook->dtable->log->fieldList['id']['fixed']    = 'left';
+$config->webhook->dtable->log->fieldList['id']['required'] = 'yes';
+$config->webhook->dtable->log->fieldList['id']['type']     = 'checkID';
+$config->webhook->dtable->log->fieldList['id']['checkbox'] = false;
+$config->webhook->dtable->log->fieldList['id']['show']     = true;
+$config->webhook->dtable->log->fieldList['id']['sortType'] = false;
+$config->webhook->dtable->log->fieldList['id']['group']    = 1;
+
+$config->webhook->dtable->log->fieldList['date']['name']     = 'date';
+$config->webhook->dtable->log->fieldList['date']['title']    = $lang->webhook->date;
+$config->webhook->dtable->log->fieldList['date']['width']    = 136;
+$config->webhook->dtable->log->fieldList['date']['type']     = 'html';
+$config->webhook->dtable->log->fieldList['date']['align']    = 'left';
+$config->webhook->dtable->log->fieldList['date']['sortType'] = false;
+
+$config->webhook->dtable->log->fieldList['url']['name']     = 'url';
+$config->webhook->dtable->log->fieldList['url']['title']    = $lang->webhook->url;
+$config->webhook->dtable->log->fieldList['url']['minWidth'] = 150;
+$config->webhook->dtable->log->fieldList['url']['type']     = 'html';
+$config->webhook->dtable->log->fieldList['url']['align']    = 'left';
+
+$config->webhook->dtable->log->fieldList['action']['name']     = 'action';
+$config->webhook->dtable->log->fieldList['action']['title']    = $lang->webhook->action;
+$config->webhook->dtable->log->fieldList['action']['minWidth'] = 300;
+$config->webhook->dtable->log->fieldList['action']['type']     = 'html';
+$config->webhook->dtable->log->fieldList['action']['align']    = 'left';
+
+$config->webhook->dtable->log->fieldList['contentType']['name']     = 'contentType';
+$config->webhook->dtable->log->fieldList['contentType']['title']    = $lang->webhook->contentType;
+$config->webhook->dtable->log->fieldList['contentType']['minWidth'] = 200;
+$config->webhook->dtable->log->fieldList['contentType']['type']     = 'html';
+
+$config->webhook->dtable->log->fieldList['result']['name']     = 'result';
+$config->webhook->dtable->log->fieldList['result']['title']    = $lang->webhook->result;
+$config->webhook->dtable->log->fieldList['result']['minWidth'] = 200;
+$config->webhook->dtable->log->fieldList['result']['type']     = 'html';

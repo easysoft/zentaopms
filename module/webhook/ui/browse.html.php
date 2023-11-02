@@ -42,6 +42,7 @@ foreach($webhooks as $webhook)
     $webhook->type = zget($lang->webhook->typeList, $webhook->type);
     $data[] = $webhook;
 }
+
 dtable
 (
     set::id('webhookList'),
