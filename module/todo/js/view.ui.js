@@ -6,10 +6,11 @@
  */
 function toStory()
 {
-    const productID = $('#productModal input[name=product]').val();
+    const objectID = vision != 'lite' ? $('#productModal input[name=product]').val() : $('#projectModal input[name=projectToStory]').val();
+    const link     = vision != 'lite' ? $.createLink('story', 'create', 'productID=' + objectID + '&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID=' + todoID, config.defaultView) : $.createLink('story', 'create', 'productID=0&branch=0&moduleID=0&storyID=0&projectID=' + objectID + '&bugID=0&planID=0&todoID=' + todoID, config.defaultView);
 
     zui.Modal.hide('.m-my-todo');
-    openPage($.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&projectID=0&bugID=0&planID=0&todoID=' + todoID, config.defaultView), 'product');
+    openPage(link,  vision != 'lite' ? 'product' : 'project');
 }
 
 /**

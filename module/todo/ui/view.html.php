@@ -26,7 +26,7 @@ $fnGenerateTitleSuffix = function() use($todo)
 };
 
 /* Render modal for creating story. */
-if(hasPriv('story', 'create'))
+if(hasPriv('story', 'create') && $config->vision != 'lite')
 {
     modal
     (
@@ -61,6 +61,39 @@ if(hasPriv('story', 'create'))
                     (
                         set::name('product'),
                         set::items($products),
+                        set::required(true),
+                    ),
+                    btn
+                    (
+                        setID('toStoryButton'),
+                        setClass('primary'),
+                        $lang->todo->reasonList['story'],
+                        on::click('toStory')
+                    )
+                )
+            ),
+        ),
+    );
+}
+
+if(hasPriv('story', 'create') && $config->vision == 'lite')
+{
+    modal
+    (
+        setID('projectModal'),
+        set::modalProps(array('title' => $lang->project->select)),
+        form
+        (
+            setClass('mt-2'),
+            set::actions(array()),
+            formGroup
+            (
+                inputGroup
+                (
+                    picker
+                    (
+                        set::name('projectToStory'),
+                        set::items($projects),
                         set::required(true),
                     ),
                     btn
