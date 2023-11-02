@@ -109,13 +109,13 @@ class chartModel extends model
      */
     public function getPreviewCharts($groupID, $orderBy = 'id_desc')
     {
-        if(!$groupID) return array('', array());
+        if(!$groupID) return array(array(), array());
 
         $currentGroup = $this->loadModel('tree')->getByID($groupID);
-        if(empty($currentGroup) || $currentGroup->grade != 1) return array('', array());
+        if(empty($currentGroup) || $currentGroup->grade != 1) return array(array(), array());
 
         $groups = $this->dao->select('id, grade, name')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('path')->like("{$currentGroup->path}%")->orderBy('`order`')->fetchAll();
-        if(!$groups) return array('', array());
+        if(!$groups) return array(array(), array());
 
         $chartGroups = array();
         $this->loadModel('screen');
@@ -132,7 +132,7 @@ class chartModel extends model
                 ->fetchAll();
         }
 
-        if(!$chartGroups) return array('', array());
+        if(!$chartGroups) return array(array(), array());
 
         $readyCharts = array();
         foreach($chartGroups as $groupID => $chartGroup)
@@ -148,7 +148,7 @@ class chartModel extends model
         }
 
         $index      = 1;
-        $chartTree  = '';
+        $chartTree  = array();
         $firstChart = null;
         foreach($groups as $group)
         {
@@ -156,8 +156,7 @@ class chartModel extends model
 
             if($group->grade == 2)
             {
-                $class = $index == 1 ? 'open' : 'closed';
-                $chartTree .= "<li class='$class'><div class='checkbox-primary'><input type='checkbox' data-type='parent' name='groups[]' id='group{$group->id}' value='{$group->id}' title='{$group->name}'><label>{$group->name}</label></div><ul>";
+                $chartTree[] = (object)array('id' => $group->id, 'parent' => 0, 'name' => $group->name);
             }
 
             $charts = $readyCharts[$group->id];
@@ -166,14 +165,11 @@ class chartModel extends model
                 $chart->currentGroup = $group->id;
                 if(!$firstChart) $firstChart = $chart;
 
-                $chartTree .= "<li title='{$chart->name}'><div class='checkbox-primary checkbox-inline'><input type='checkbox' data-type='child' name='charts[]' id='chart_{$group->id}_{$chart->id}' value='{$group->id}_{$chart->id}' title='{$chart->name}' data-group='{$group->id}'><label for='chart_{$group->id}_{$chart->id}'></label></div><a>{$chart->name}</a></li>";
+                $chartTree[] = (object)array('id' => "{$group->id}_{$chart->id}", 'parent' => $group->id, 'name' => $chart->name);
             }
-            if($group->grade == 2) $chartTree .= '</ul></li>';
 
             $index++;
         }
-
-        if($chartTree) $chartTree = "<ul id='chartGroups' class='tree' data-ride='tree'>" . $chartTree . '</ul>';
 
         $charts = array();
         if($firstChart)

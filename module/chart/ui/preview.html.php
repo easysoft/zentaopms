@@ -12,9 +12,7 @@ namespace zin;
 
 include 'echarts.html.php';
 
-jsVar('groupID', isset($group->id) ? $group->id : 0);
-jsVar('charts', $charts);
-jsVar('noChartSelected', $lang->chart->noChartSelected);
+jsVar('previewUrl', inlink('preview', "dimension={$dimensionID}&group={$group->id}"));
 
 featureBar
 (
@@ -31,13 +29,21 @@ div
         moduleMenu
         (
             set::title($group->name),
-            set::modules($charts),
+            set::modules($chartTree),
             set::closeLink(''),
-            set::showDisplay(false)
+            set::showDisplay(false),
+            set::checkbox(true),
+            set::checkOnClick('any')
+        ),
+        div
+        (
+            setClass('flex bg-canvas gap-4 px-4 pb-4'),
+            btn($lang->selectAll, on::click("$('#moduleMenu ul').zui('tree').$.toggleAllChecked()")),
+            btn($lang->chart->preview, setClass('primary'), on::click('previewCharts'))
         ),
         $config->edition == 'open' ? div
         (
-            setClass('bg-white p-4'),
+            setClass('bg-canvas px-4 pb-4'),
             html(empty($config->isINT) ? $lang->bizVersion : $lang->bizVersionINT)
         ) : null
     ),
