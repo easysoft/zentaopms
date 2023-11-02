@@ -28,6 +28,7 @@ dtable
 (
     set::cols($this->config->my->team->dtable->fieldList),
     set::data($users),
+    set::checkable(false),
     set::orderBy($orderBy),
     set::sortLink(inlink('team', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::fixedLeftWidth('0.2'),
