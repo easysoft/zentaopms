@@ -39,42 +39,4 @@ class pivot extends control
         $this->prepare4Preview($dimension, $group, $module, $method, $params);
         $this->display();
     }
-
-    /**
-     * Ajax get pivot table.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxGetPivot()
-    {
-        $post = fixer::input('post')
-            ->skipSpecial('settings,filters,sql,langs')
-            ->get();
-
-        $postFilters = isset($_POST['filters']) ? $post->filters : array();
-        $filters     = isset($_POST['searchFilters']) ? $post->searchFilters : $postFilters;
-
-        $pivotID    = $post->id;
-        $settings   = $post->settings;
-        $filterType = 'result';
-
-        list($sql, $filterFormat) = $this->pivot->getFilterFormat($post->sql, $filters);
-        $post->sql = $sql;
-
-        $settings['filterType'] = $filterType;
-
-        $sql    = str_replace(';', '', "$post->sql");
-        $fields = $post->fieldSettings;
-        $langs  = isset($_POST['langs']) ? $post->langs : array();
-        $langs  = is_array($langs) ? $langs : json_decode($langs, true);
-
-        $processSqlData = $this->loadModel('chart')->getTables($sql);
-        $sql = $processSqlData['sql'];
-
-        list($data, $configs) = $this->pivot->genSheet($fields, $settings, $sql, $filterFormat, $langs);
-
-        $this->pivot->buildPivotTable($data, $configs, $fields, $sql);
-    }
-
 }
