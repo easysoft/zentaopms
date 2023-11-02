@@ -41,9 +41,19 @@ formPanel
 (
     set::title($lang->mr->create),
     set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '10em'),
-    count($repoPairs) > 1 ? to::titleSuffix(
+    formGroup
+    (
+        setClass('hidden'),
+        set::name('hostID'),
+        set::value($repo->gitService),
+    ),
+    count($repoPairs) > 1 ? formGroup(
+        set::width('1/2'),
+        set::label($lang->repo->common),
+        set::required(true),
         picker
         (
+            set::required(true),
             setClass('font-normal w-36'),
             set::name('changeRepo'),
             set::items($repoPairs),
@@ -51,12 +61,6 @@ formPanel
             on::change('changeRepo')
         )
     ) : null,
-    formGroup
-    (
-        setClass('hidden'),
-        set::name('hostID'),
-        set::value($repo->gitService),
-    ),
     formRow
     (
         formGroup

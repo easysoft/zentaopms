@@ -65,22 +65,36 @@ foreach($MRList as $index => $MR)
 }
 
 $MRs = initTableData($MRList, $config->mr->dtable->fieldList, $this->mr);
+$repoData = array(array(
+    'text'     => $lang->mr->statusList['all'],
+    'data-app' => $app->tab,
+    'url'      => createLink('mr', 'browse', "repoID=0&mode={$mode}&param={$param}&objectID={$objectID}"),
+    'active'   => !$repoID
+));
+foreach($repoList as $repo)
+{
+    if($repo->SCM == 'Subversion') continue;
+
+    $repoData[] = array(
+        'text'     => $repo->name,
+        'data-app' => $app->tab,
+        'url'      => createLink('mr', 'browse', "repoID={$repo->id}&mode={$mode}&param={$param}&objectID={$objectID}"),
+        'active'   => $repo->id == $repoID
+    );
+}
 
 featureBar
 (
     set::current($mode != 'status' ? $mode : $param),
     set::linkParams("repoID={$repoID}&mode=status&param={key}&objectID={$objectID}"),
-    empty($repoPairs) ? null : to::leading(
-        productMenu
+    count($repoPairs) > 1 ? to::leading(
+        dropdown
         (
-            setClass('w-36'),
-            set::title($lang->repo->common),
-            set::items($repoPairs),
-            set::activeKey($repoID),
-            set::closeLink(createLink('mr', 'browse', "repoID=0&mode={$mode}&param={$param}&objectID={$objectID}")),
-            set::link(createLink('mr', 'browse', "repoID={key}&mode={$mode}&param={$param}&objectID={$objectID}") . "#app={$app->tab}")
+            btn(setClass('dropdown-toggle ghost btn square btn-default'), zget($repoPairs, $repoID, $lang->mr->statusList['all'])),
+            set::items($repoData),
+            set::placement('bottom-end'),
         )
-    )
+    ) : null
 );
 
 toolBar
