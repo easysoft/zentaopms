@@ -641,7 +641,9 @@ class productZen extends product
      */
     protected function buildProductForActivate(): object
     {
-        $productData = form::data($this->config->product->form->activate)->get();
+        $productData = form::data($this->config->product->form->activate)
+            ->setIF($this->config->vision == 'or', 'wait', 'normal')
+            ->get();
 
         return $this->loadModel('file')->processImgURL($productData, $this->config->product->editor->activate['id'], $this->post->uid);
     }
