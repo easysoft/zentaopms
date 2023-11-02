@@ -93,7 +93,8 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->account),
             set::name('account'),
-            set::value($user->account)
+            set::value($user->account),
+            set::disabled(true)
         ),
         formGroup
         (
