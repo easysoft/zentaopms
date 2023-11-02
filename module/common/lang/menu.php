@@ -108,7 +108,7 @@ $lang->my->menu->work['subMenu']              = new stdclass();
 $lang->my->menu->work['subMenu']->task        = array('link' => "{$lang->task->common}|my|work|mode=task", 'subModule' => 'task', 'alias' => 'task');
 $lang->my->menu->work['subMenu']->story       = array('link' => "$lang->SRCommon|my|work|mode=story", 'alias' => 'story');
 $lang->my->menu->work['subMenu']->requirement = array('link' => "$lang->URCommon|my|work|mode=requirement", 'alias' => 'requirement');
-$lang->my->menu->work['subMenu']->bug         = array('link' => "{$lang->bug->common}|my|work|mode=bug", 'alias' => 'bug');
+$lang->my->menu->work['subMenu']->bug         = array('link' => "{$lang->bug->common}|my|work|mode=bug", 'subModule' => 'bug', 'alias' => 'bug');
 $lang->my->menu->work['subMenu']->testcase    = array('link' => "{$lang->testcase->common}|my|work|mode=testcase", 'subModule' => 'testtask,testcase', 'alias' => 'testcase');
 $lang->my->menu->work['subMenu']->testtask    = array('link' => "{$lang->testtask->common}|my|work|mode=testtask", 'alias' => 'testtask');
 

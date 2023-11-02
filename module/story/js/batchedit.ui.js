@@ -1,3 +1,8 @@
+$(function()
+{
+    $('#mainNavbar .nav .nav-item').find("[href$='" + storyType + "']").addClass('active');
+});
+
 window.renderRowData = function($row, index, story)
 {
     $row.find('[data-name="closedBy"]').find('.picker-box').on('inited', function(e, info)
