@@ -529,7 +529,7 @@ $lang->doc->menu->my        = array('link' => "{$lang->doc->mySpace}|doc|mySpace
 $lang->doc->menu->product   = array('link' => "{$lang->doc->productSpace}|doc|productSpace|", 'alias' => 'productspace');
 $lang->doc->menu->project   = array('link' => "{$lang->doc->projectSpace}|doc|projectSpace|", 'alias' => 'projectspace');
 $lang->doc->menu->api       = array('link' => "{$lang->doc->apiSpace}|api|index", 'alias' => '', 'exclude' => 'index');
-$lang->doc->menu->custom    = array('link' => "{$lang->doc->teamSpace}|doc|teamSpace|", 'alias' => 'teamspace');
+$lang->doc->menu->team      = array('link' => "{$lang->doc->teamSpace}|doc|teamSpace|", 'alias' => 'teamspace');
 
 $lang->doc->dividerMenu = ',product,';
 
@@ -539,7 +539,7 @@ $lang->doc->menuOrder[10] = 'my';
 $lang->doc->menuOrder[15] = 'product';
 $lang->doc->menuOrder[20] = 'project';
 $lang->doc->menuOrder[25] = 'api';
-$lang->doc->menuOrder[30] = 'custom';
+$lang->doc->menuOrder[30] = 'team';
 
 /* BI menu.*/
 $lang->bi->menu         = new stdclass();
