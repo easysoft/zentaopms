@@ -1009,6 +1009,7 @@ class testtask extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
         $this->view->executions = $executions;
         $this->view->builds     = $builds;
+        $this->view->productID  = $productID;
         $this->display();
     }
 
