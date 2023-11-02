@@ -33,7 +33,7 @@ dtable
     set::footToolbar(array('items' => array(array
         (
             'text'      => $lang->productplan->linkStory,
-            'btnType'   => 'primary',
+            'btnType'   => 'secondary',
             'className' => 'size-sm linkObjectBtn',
             'data-type' => 'story',
             'data-url'  => inlink('linkStory', "planID={$plan->id}&browseType=$browseType&param=$param&orderBy=$orderBy"),

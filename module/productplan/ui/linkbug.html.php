@@ -28,7 +28,7 @@ dtable
         'items' => array(array
         (
             'text'      => $lang->productplan->linkBug,
-            'btnType'   => 'primary',
+            'btnType'   => 'secondary',
             'className' => 'size-sm linkObjectBtn',
             'data-type' => 'bug',
             'data-url'  => inlink('linkBug', "planID=$plan->id&browseType=$browseType&param=$param&orderBy=$orderBy"),
