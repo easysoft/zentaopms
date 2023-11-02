@@ -21,6 +21,7 @@ pipeline {
 
     // set to blank for auto-detect from ci.json
     DOWNGRADE_ENABLED = "false"
+    // DOWNGRADE_VERSIONS = "7.2"
     DOWNGRADE_VERSIONS = "7.2,7.1,7.0,5.4"
   }
 
@@ -119,15 +120,14 @@ pipeline {
                 }
                 
                 container('package') {
-                  sh 'mkdir /tmp/publishHtml'
-                  sh 'test -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html && cp ${ZENTAO_RELEASE_PATH}/downgradeReport.html /tmp/publishHtml/ || echo "No syntax error"'
+                  sh 'test -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html && mkdir ./report && cp ${ZENTAO_RELEASE_PATH}/downgradeReport.html ./report && cat ./report/downgradeReport.html || echo "No syntax error"'
                 }
 
                 publishHTML([
                   allowMissing: true,
                   alwaysLinkToLastBuild: false,
                   keepAll: true,
-                  reportDir: '/tmp/publishHtml',
+                  reportDir: './report',
                   reportFiles: 'downgradeReport.html',
                   reportName: 'DowngradeReport'
                 ])
