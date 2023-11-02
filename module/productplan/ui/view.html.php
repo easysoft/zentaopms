@@ -101,8 +101,8 @@ if($canBatchActionStory)
     (
         array('type' => 'btn-group', 'items' => array
         (
-            array('text' => $lang->productplan->unlinkStoryAB, 'className' => 'batch-btn size-sm secondary', 'disabled' => ($canBatchUnlinkStory ? '' : 'disabled'), 'btnType' => 'primary', 'data-type' => 'story', 'data-url' => helper::createLink('productplan', 'batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy")),
-            array('caret' => 'up', 'className' => 'size-sm secondary', 'btnType' => 'primary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'items' => $navStoryActionItems),
+            array('text' => $lang->productplan->unlinkStoryAB, 'className' => 'batch-btn size-sm', 'disabled' => ($canBatchUnlinkStory ? '' : 'disabled'), 'btnType' => 'secondary', 'data-type' => 'story', 'data-url' => helper::createLink('productplan', 'batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy")),
+            array('caret' => 'up', 'className' => 'size-sm', 'btnType' => 'secondary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'items' => $navStoryActionItems),
         )),
     ));
 }
@@ -122,8 +122,8 @@ if($canBatchActionBug)
     (
         array('type' => 'btn-group', 'items' => array
         (
-            $canBatchUnlinkBug ? array('text' => $lang->productplan->unlinkAB, 'className' => 'batch-btn size-sm secondary', 'btnType' => 'primary', 'data-type' => 'bug', 'data-url' => helper::createLink('productplan', 'batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy")) : null,
-            array('caret' => 'up', 'className' => 'size-sm secondary', 'btnType' => 'primary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'items' => $navBugActionItems),
+            $canBatchUnlinkBug ? array('text' => $lang->productplan->unlinkAB, 'className' => 'batch-btn size-sm', 'btnType' => 'secondary', 'data-type' => 'bug', 'data-url' => helper::createLink('productplan', 'batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy")) : null,
+            array('caret' => 'up', 'className' => 'size-sm', 'btnType' => 'secondary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'items' => $navBugActionItems),
         )),
     ));
 }
