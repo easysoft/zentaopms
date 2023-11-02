@@ -336,6 +336,11 @@ class aiModel extends model
             ->where('id')->eq($appID)
             ->exec();
 
+        $this->dao->delete()
+            ->from(TABLE_MINIPROGRAMFIELDS)
+            ->where('id')->eq($appID)
+            ->exec();
+
         $fields = $data->fields;
         foreach ($fields as $field)
         {

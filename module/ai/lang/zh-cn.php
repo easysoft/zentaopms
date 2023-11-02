@@ -422,6 +422,8 @@ $lang->ai->miniPrograms->backToListPage    = '返回列表页';
 $lang->ai->miniPrograms->lastStep          = '上一步';
 $lang->ai->miniPrograms->backToListPageTip = '表单有数据变动，是否保存并返回';
 $lang->ai->miniPrograms->saveAndBack       = '保存并返回';
+$lang->ai->miniPrograms->publishConfirm    = array('您确定要发布吗？', '发布后将在客户端前台小程序广场显示。');
+$lang->ai->miniPrograms->emptyPrompterTip  = '小程序提词为空，请编辑后再进行发布';
 
 $lang->ai->miniPrograms->placeholder          = new stdClass();
 $lang->ai->miniPrograms->placeholder->name    = '请输入小程序名称';

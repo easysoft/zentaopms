@@ -439,8 +439,7 @@ function createFieldButtons()
  */
 function formatContent(content)
 {
-    if(!/\s</.test(content)) return false;
-
+    if(words.size === 0) return content;
     Array.from(words.keys()).forEach(word => {content = content.replace(new RegExp(`\\s<${word}>\\s`, 'g'), `&nbsp;<strong class="text-primary">&lt;${word}&gt;</strong>&nbsp;`);});
     return content;
 }
@@ -454,13 +453,10 @@ function updatePromptPreview()
 {
     const innerText = $('#autocomplete-textarea').text();
     let innerHTML = formatContent(innerText);
-    if(typeof innerHTML === 'string')
+    $('#autocomplete-textarea').html(innerHTML);
+    if(!innerHTML || words.size === 0)
     {
-        $('#autocomplete-textarea').html(innerHTML);
-    }
-    if(!innerHTML)
-    {
-        $('.prompt-preview-area .preview-container').html('');
+        $('.prompt-preview-area .preview-container').html(innerHTML);
         return;
     }
 
@@ -509,14 +505,36 @@ function getRequiredFields()
  */
 function saveMiniProgram(toPublish)
 {
+    const prompt = $('#autocomplete-textarea').html();
+    if(!prompt)
+    {
+        alert(emptyPrompterTip);
+        return;
+    }
+    if(toPublish === '1')
+    {
+        const $modal = $('#publish-confirm-modal');
+        $modal.modal('show', 'fit');
+        return;
+    }
+    postMiniProgramData('0', console.log);
+}
+
+$('#publish-confirm-modal .btn-primary').on('click', function()
+{
+    postMiniProgramData('1', () => {window.location.href = createLink('ai', 'miniPrograms');});
+});
+
+function postMiniProgramData(toPublish, callback)
+{
     const [fields, prompt] = getRequiredFields();
-    if(fields.length && prompt) $.post(createLink('ai', 'configuredMiniProgram', `appID=${appid}`), {fields, prompt, toPublish}).done(console.log);
+    $.post(createLink('ai', 'configuredMiniProgram', `appID=${appid}`), {fields, prompt, toPublish}).done(callback);
 }
 
 function backToList()
 {
-    const [fields, prompt] = getRequiredFields();
-    if(fields.length && prompt)
+    const [prompt] = getRequiredFields();
+    if(prompt)
     {
         $modal = $('#back-to-list-modal');
         $modal.modal('show', 'fit');

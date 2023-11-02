@@ -422,6 +422,8 @@ $lang->ai->miniPrograms->backToListPage    = 'Return to list page';
 $lang->ai->miniPrograms->lastStep          = 'Previous step';
 $lang->ai->miniPrograms->backToListPageTip = 'There are data changes in the form. Do you want to save and go back?';
 $lang->ai->miniPrograms->saveAndBack       = 'Save and Go Back';
+$lang->ai->miniPrograms->publishConfirm    = array('Are you sure you want to publish?', 'It will be displayed on the front-end mini program plaza in the client.');
+$lang->ai->miniPrograms->emptyPrompterTip  = 'The prompter of the mini program is empty. Please edit it before publishing.';
 
 $lang->ai->miniPrograms->placeholder          = new stdClass();
 $lang->ai->miniPrograms->placeholder->name    = 'Please enter a small program name';
