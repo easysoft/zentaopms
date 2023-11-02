@@ -497,7 +497,7 @@ class doc extends control
         $moduleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
         $moduleID = $libID . '_' . $moduleID;
 
-        $this->view->title            = empty($lib) ? '' : zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->create;
+        $this->view->title            = empty($lib) ? '' : zget($lib, 'name', '', $lib->name . $this->lang->colon) . $this->lang->doc->uploadDoc;
         $this->view->linkType         = $linkType;
         $this->view->objectType       = $objectType;
         $this->view->objectID         = empty($lib) ? 0 : zget($lib, $lib->type, 0);

@@ -18,7 +18,7 @@
 <div id="mainContent" class="main-content">
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->doc->create;?></h2>
+      <h2><?php echo $lang->doc->uploadDoc;?></h2>
     </div>
     <form class="load-indicator main-form form-ajax" id="dataform" method='post'>
       <table class='table table-form'>
