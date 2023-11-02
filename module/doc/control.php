@@ -1069,7 +1069,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function view($docID = 0, $version = 0, $appendLib = 0)
+    public function view(int $docID = 0, int $version = 0, int $appendLib = 0)
     {
         $doc = $this->doc->getById($docID, $version, true);
         if(!$this->doc->checkPrivDoc($doc))
@@ -1182,12 +1182,12 @@ class doc extends control
         $this->view->type           = $type;
         $this->view->libID          = $libID;
         $this->view->lib            = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
-        $this->view->libs           = $this->doc->getLibsByObject($type, $objectID);
+        $this->view->libs           = $this->doc->getLibsByObject($type, (int)$objectID);
         $this->view->canBeChanged   = common::canModify($type, $object); // Determines whether an object is editable.
         $this->view->actions        = $docID ? $this->action->getList('doc', $docID) : array();
         $this->view->users          = $this->user->getPairs('noclosed,noletter');
         $this->view->autoloadPage   = $this->doc->checkAutoloadPage($doc);
-        $this->view->libTree        = $this->doc->getLibTree($libID, $libs, $type, $doc->module, $objectID, '', 0, $docID);
+        $this->view->libTree        = $this->doc->getLibTree((int)$libID, (array)$libs, $type, $doc->module, (int)$objectID, '', 0, $docID);
         $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
         $this->view->moduleID       = $doc->module;
         $this->view->objectDropdown = $objectDropdown;

@@ -1613,7 +1613,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getLibsByObject($type, $objectID, $mode = '', $appendLib = 0)
+    public function getLibsByObject(string $type, int $objectID, string $mode = '', int $appendLib = 0)
     {
         if($type == 'custom' or $type == 'mine')
         {
@@ -2847,7 +2847,7 @@ class docModel extends model
             $object->id = 0;
         }
 
-        $tab  = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
+        $tab = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
         if($type == 'mine')   $type = 'my';
         if($type == 'custom') $type = 'team';
         if($tab == 'doc' and !common::hasPriv('doc', $type . 'Space')) return helper::createLink('user', 'deny', "module=doc&method={$type}Space");
@@ -3010,13 +3010,13 @@ class docModel extends model
      * @param  string $type product|project|api|custom
      * @param  int    $moduleID
      * @param  int    $objectID
-     * @param  int    $executionID
      * @param  string $browseType bySearch
      * @param  int    $param
+     * @param  int    $docID
      * @access public
      * @return array
      */
-    public function getLibTree($libID, $libs, $type, $moduleID, $objectID = 0, $browseType = '', $param = 0, $docID = 0)
+    public function getLibTree(int $libID, array $libs, string $type, int $moduleID, int $objectID = 0, string $browseType = '', int $param = 0, int $docID = 0)
     {
         if($type == 'project')
         {
