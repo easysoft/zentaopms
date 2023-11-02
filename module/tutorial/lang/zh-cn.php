@@ -44,7 +44,7 @@ $lang->tutorial->tasks['createProgram']['nav']  = array('app' => 'program', 'mod
 $lang->tutorial->tasks['createProgram']['desc'] = "<p>在系统创建一个新的项目集：</p><ul><li data-target='nav'>打开 <span class='task-nav'>项目集 <i class='icon icon-angle-right'></i> 项目集列表 <i class='icon icon-angle-right'></i> 添加项目集</span> 页面；</li><li data-target='form'>在添加项目集表单中填写项目集信息；</li><li data-target='submit'>保存项目集信息。</li></ul>";
 
 $lang->tutorial->tasks['createProduct']         = array('title' => '创建' . $lang->productCommon);
-$lang->tutorial->tasks['createProduct']['nav']  = array('app' => 'product', 'module' => 'product', 'method' => 'create', 'menuModule' => 'product', 'menu' => 'all', 'form' => '#createForm', 'submit' => '#submit', 'target' => '.create-product-btn', 'targetPageName' => '添加' . $lang->productCommon);
+$lang->tutorial->tasks['createProduct']['nav']  = array('app' => 'product', 'module' => 'product', 'method' => 'create', 'menuModule' => 'product', 'menu' => 'all', 'form' => '#mainContent', 'submit' => 'button[type=submit]', 'target' => '.create-product-btn', 'targetPageName' => '添加' . $lang->productCommon);
 $lang->tutorial->tasks['createProduct']['desc'] = "<p>在系统创建一个新的{$lang->productCommon}：</p><ul><li data-target='nav'>打开 <span class='task-nav'>{$lang->productCommon} <i class='icon icon-angle-right'></i> {$lang->productCommon}列表 <i class='icon icon-angle-right'></i> 添加{$lang->productCommon}</span> 页面；</li><li data-target='form'>在添加{$lang->productCommon}表单中填写要创建的{$lang->productCommon}信息；</li><li data-target='submit'>保存{$lang->productCommon}信息。</li></ul>";
 
 $lang->tutorial->tasks['createStory']         = array('title' => "创建{$lang->SRCommon}");

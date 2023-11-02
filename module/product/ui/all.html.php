@@ -113,7 +113,8 @@ toolbar
         set::text($lang->product->create),
         set::icon('plus'),
         set::type('primary'),
-        set::url(createLink('product', 'create'))
+        set::url(createLink('product', 'create')),
+        set::className('create-product-btn')
     )
 );
 

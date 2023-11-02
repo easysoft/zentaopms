@@ -270,6 +270,7 @@ $(function()
             var fieldSelector = '';
             var requiredFields = task.nav.requiredFields || pageConfig.requiredFields;
 
+            console.log('requiredFields ------', requiredFields);
             if(task.nav.formType === 'table')
             {
                 fieldSelector = 'input[type="checkbox"]';
@@ -287,7 +288,9 @@ $(function()
                 {
                     fieldSelector += ',' + '#' + requiredId;
                     var $required = $$('#' + requiredId);
-                    var $authBlock = !$required.is('input') ? $required.find('input[type="hidden"]') : $required;
+                    console.log('current required is', $required);
+                    var $authBlock = !$required.is('input') ? $required.find('input').last() : $required;
+                    console.log('current authBLock is', $authBlock)
                     if($authBlock.length)
                     {
                         var val = $authBlock.val();
@@ -301,7 +304,7 @@ $(function()
                 if(fieldSelector.length > 1) fieldSelector = fieldSelector.substring(1);
             }
 
-            console.log($form, $form.data('bindCheckTaskEvent'), fieldSelector)
+            console.log(targetStatus);
             if(!$form.data('bindCheckTaskEvent'))
             {
                 $form.off('.tutorial').off('submit');
@@ -316,8 +319,8 @@ $(function()
                         {
                             if(status.waitField.hasClass("chosen-controled")) status.waitField = status.waitField.next();
                             var fieldName = status.waitField.siblings('label').text();
-                            console.log(status.waitField, status.waitField.siblings('label'));
                             console.log('first fieldName is ', fieldName)
+                            if(!fieldName) fieldName = status.waitField.find('label').text();
                             if(!fieldName) fieldName = status.waitField.parent().siblings('label').text();
                             console.log('second fieldName div is', status.waitField.parent().siblings('label'));
                             console.log('second fieldName is', fieldName)
