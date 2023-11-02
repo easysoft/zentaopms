@@ -38,7 +38,7 @@ function printPreference()
                     'items' => $config->URSRList
                 ))
             ),
-            $config->systemMode == 'ALM' ? formGroup
+            in_array($config->systemMode, array('ALM', 'PLM')) ? formGroup
             (
                 set::value($config->programLink),
                 set::label($lang->my->programLink),

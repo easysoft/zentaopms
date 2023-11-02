@@ -87,7 +87,7 @@
         <th class='w-120px'><?php echo $lang->my->storyConcept;?></th>
         <td><?php echo html::select('URSR', $URSRList, $URSR, "class='form-control picker URSR'");?></td>
       </tr>
-      <?php if($this->config->systemMode == 'ALM'):?>
+      <?php if(in_array($config->systemMode, array('ALM', 'PLM'))):?>
       <tr>
         <th><?php echo $lang->my->programLink;?></th>
         <td><?php echo html::select('programLink', $lang->my->programLinkList, $programLink, "class='form-control picker programLink'");?></td>
