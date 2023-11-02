@@ -5,25 +5,24 @@ namespace zin;
 class avatar extends wg
 {
     protected static array $defineProps = array(
-        'className?:string',
-        'style?:array',
-        'size?:int=32',
-        'circle?:bool=true',
-        'rounded?:string|int',
-        'background?:string',
-        'foreColor?:string',
-        'text?:string',
-        'code?:string',
-        'maxTextLength?:int=2',
-        'hueDistance?:int=43',
-        'saturation?:int=0.4',
-        'lightness?:int=0.6',
-        'src?:string'
+        'className?: string',
+        'style?: array',
+        'size?: int=32',
+        'circle?: bool=true',
+        'rounded?: string|int',
+        'background?: string',
+        'foreColor?: string',
+        'text?: string',
+        'code?: string',
+        'maxTextLength?: int=2',
+        'hueDistance?: int=43',
+        'saturation?: int=0.4',
+        'lightness?: int=0.6',
+        'src?: string'
     );
 
     private $textLen        = 0;
     private $displayTextLen = 0;
-    private $sizeMap        = array('xs' => 20, 'sm' => 24, 'lg' => 48, 'xl' => 80);
     private $actualSize     = 32;
     private $finalClass     = array('avatar');
     private $finalStyle;
@@ -85,8 +84,10 @@ class avatar extends wg
             return;
         }
 
+        $sizeMap = array('xs' => 20, 'sm' => 24, 'lg' => 48, 'xl' => 80);
+
         $this->finalClass[] = "size-{$size}";
-        $this->actualSize   = isset($this->sizeMap[$size]) ? $this->sizeMap[$size] : 20;
+        $this->actualSize   = isset($sizeMap[$size]) ? $sizeMap[$size] : 20;
     }
 
     private function initShape()
@@ -111,7 +112,7 @@ class avatar extends wg
         $maxTextLen = intval($this->prop('maxTextLength', 2));
         $text       = strtoupper($this->prop('text', ''));
         $mbLength   = mb_strlen($text, 'utf-8');
-        $strLength  = strlen($text);
+        $strLength   = strlen($text);
 
         $displayText = '';
         if($strLength === $mbLength)
@@ -131,7 +132,7 @@ class avatar extends wg
         }
 
         $this->textLen = mb_strlen($displayText, 'utf-8');
-        $this->displayTextLen = strlen($displayText);
+        $this->displayTextLen = $this->textLen + ((strlen($displayText) - $this->textLen) / 2);
 
         return $displayText;
     }
@@ -255,10 +256,10 @@ class avatar extends wg
         }
 
         $textStyle = array();
-        if($this->actualSize and $this->actualSize < (14 * $this->displayTextLen))
+        if($this->actualSize and $this->actualSize < (10 * $this->displayTextLen))
         {
             $textStyle = array(
-                'transform' => 'scale(' . $this->actualSize / (14 * $this->displayTextLen) . ')',
+                'transform' => 'scale(' . $this->actualSize / (10 * $this->displayTextLen) . ')',
                 'white-space' => 'nowrap'
             );
         }
@@ -299,6 +300,8 @@ class avatar extends wg
         (
             setClass('avatar-text'),
             set('data-actualSize', $this->actualSize),
+            set('data-displayTextLen', $this->displayTextLen),
+            set('data-textLen', $this->textLen),
             $textStyle ? setStyle($textStyle) : null,
             $displayText
         );
