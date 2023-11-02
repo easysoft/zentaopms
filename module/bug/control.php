@@ -162,6 +162,11 @@ class bug extends control
         $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
         $projects  = $this->product->getProjectPairsByProduct($bug->product, (string)$bug->branch);
         $projectID = key($projects);
+        if(in_array($this->app->tab, array('project', 'execution')))
+        {
+            $objectType = $this->app->tab == 'project' ? 'projectID' : 'executionID';
+            $this->view->{$objectType} = $this->session->{$this->app->tab};
+        }
 
         $this->session->set("project", $projectID, 'project');
         $this->session->set('storyList', '', 'product');
