@@ -24,6 +24,7 @@ if(!empty($cols['actions']['list']))
         $cols['actions']['list'][$method]['url'] = str_replace('%executionID%', (string)$executionID, $methodParams['url']);
     }
 }
+foreach($cols as $colName => $col) $cols[$colName]['sortType'] = false;
 
 $cases = initTableData(array_values($cases), $cols);
 
