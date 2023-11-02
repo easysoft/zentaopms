@@ -116,7 +116,7 @@
           <?php endif;?>
         </div>
         <div id="diffContain">
-        <div class="detail-content article-content table-col" <?php if(strpos('word,ppt,excel,attachment', $doc->type) !== false) echo 'style="max-height: 60px"';?>>
+        <div class="detail-content article-content table-col" <?php if('attachment' == $doc->type) echo 'style="max-height: 60px"';?>>
             <div class='info'>
               <?php $createInfo = $doc->status == 'draft' ? zget($users, $doc->addedBy) . " {$lang->colon} " . substr($doc->addedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->createAB : zget($users, $doc->releasedBy) . " {$lang->colon} " . substr($doc->releasedDate, 0, 10) . (common::checkNotCN() ? ' ' : '') . $lang->doc->release;?>
               <span class='user-time text-muted'><i class='icon-contacts'></i> <?php echo $createInfo;?></span>
