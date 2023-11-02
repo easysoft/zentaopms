@@ -756,6 +756,7 @@ class userModel extends model
         }
 
         $this->loadModel('mail');
+        $this->loadModel('action');
         foreach($users as $id => $user)
         {
             $this->dao->update(TABLE_USER)->data($user)
@@ -766,6 +767,8 @@ class userModel extends model
                 ->where('id')->eq((int)$id)
                 ->exec();
             if(dao::isError()) return false;
+
+            $this->action->create('user', $id, 'edited');
 
             $oldUser = $oldUsers[$id];
             if($this->config->mail->mta == 'sendcloud' and $user['email'] != $oldUser->email)
