@@ -10,6 +10,8 @@ declare(strict_types = 1);
  */
 namespace zin;
 
+jsVar('pivotID', $pivot->id);
+
 $filters = array();
 $options = array();
 foreach($pivot->filters as $filter)

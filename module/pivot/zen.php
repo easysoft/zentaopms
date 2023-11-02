@@ -332,12 +332,20 @@ class pivotZen extends pivot
         list($pivotTree, $pivot, $groupID) = $this->pivot->getPreviewPivots($dimensionID, $groupID, $pivotID);
         if($pivot)
         {
+            if($this->post->filterValues)
+            {
+                $filterValues = json_decode($this->post->filterValues, true);
+                foreach($filterValues as $key => $value) $pivot->filters[$key]['default'] = $value;
+            }
+
             list($sql, $filterFormat) = $this->pivot->getFilterFormat($pivot->sql, $pivot->filters);
 
-            $processSqlData = $this->loadModel('chart')->getTables($sql);
-            $sql = $processSqlData['sql'];
+            $tables = $this->loadModel('chart')->getTables($sql);
+            $sql    = $tables['sql'];
+            $fields = json_decode(json_encode($pivot->fieldSettings), true);
+            $langs  = json_decode($pivot->langs, true);
 
-            list($data, $configs) = $this->pivot->genSheet(json_decode(json_encode($pivot->fieldSettings), true), $pivot->settings, $sql, $filterFormat, json_decode($pivot->langs, true));
+            list($data, $configs) = $this->pivot->genSheet($fields, $pivot->settings, $sql, $filterFormat, $langs);
             $this->view->data     = $data;
             $this->view->configs  = $configs;
         }

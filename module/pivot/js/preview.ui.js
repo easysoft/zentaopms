@@ -77,6 +77,47 @@ function loadWorkload()
 }
 
 /**
+ * 查询条件改变时重新加载自定义透视表。
+ * Reload custom pivot table when query conditions changed.
+ *
+ * @access public
+ * @return void
+ */
+function loadCustomPivot()
+{
+    let filterValues = [];
+    $('#conditions .filter').each(function()
+    {
+        const $filter = $(this);
+        if ($filter.hasClass('filter-input'))
+        {
+            filterValues.push($filter.find('input').val());
+        }
+        else if($filter.hasClass('filter-select'))
+        {
+            filterValues.push($filter.find('.pick-value').val().filter(Boolean));
+        }
+        else if($filter.hasClass('filter-date') || $filter.hasClass('filter-datetime'))
+        {
+            const $pickValue = $filter.find('.pick-value');
+            if($pickValue.length == 1)
+            {
+                filterValues.push($pickValue.val());
+            }
+            else if($pickValue.length == 2)
+            {
+                filterValues.push({begin: $pickValue.eq(0).val(), end: $pickValue.eq(1).val()});
+            }
+        }
+    });
+
+    const data   = {'filterValues': JSON.stringify(filterValues)};
+    const params = window.btoa('dimensionID=' + dimension + '&groupID=' + groupID + '&pivotID=' + pivotID);
+    const link   = $.createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + groupID + '&module=pivot&method=show&params=' + params);
+    postAndLoadPage(link, data, '#table-pivot-preview');
+}
+
+/**
  * 把日期字符串转换成日期对象。
  * Convert date string to date object.
  *
