@@ -1,3 +1,3 @@
-.panel-form .headingActions {position: absolute; top: 0; right: 40px;}
-.copy-card:hover {border-color: rgba(var(--color-secondary-500-rgb),var(--tw-bg-opacity)); background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity)); cursor: pointer;}
+.panel-form .headingActions {position: absolute; top: 0px; right: 40px;}
+.copy-card:hover {border-color: rgba(var(--color-secondary-499-rgb),var(--tw-bg-opacity)); background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity)); cursor: pointer;}
 #copyKanbanModal .modal-body {margin-left: -8px; margin-right: -8px;}

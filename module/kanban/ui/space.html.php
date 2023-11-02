@@ -78,7 +78,7 @@ foreach($spaceList as $space)
             $canDelete   = common::hasPriv('kanban','delete');
             $canClose    = (common::hasPriv('kanban', 'close') and $kanban->status == 'active');
             $canActivate = (common::hasPriv('kanban', 'activate') and $kanban->status == 'closed');
-            if($canEdit)     $cardActions[] = array('icon' => 'edit',  'text' => $lang->kanban->edit,     'url' => createLink('kanban', 'edit',     "kanbanID={$kanban->id}"), 'data-toggle' => 'modal');
+            if($canEdit)     $cardActions[] = array('icon' => 'edit',  'text' => $lang->kanban->edit,     'url' => createLink('kanban', 'edit',     "kanbanID={$kanban->id}"), 'data-toggle' => 'modal', 'data-size' => 'lg');
             if($canClose)    $cardActions[] = array('icon' => 'off',   'text' => $lang->kanban->close,    'url' => createLink('kanban', 'close',    "kanbanID={$kanban->id}"), 'data-toggle' => 'modal');
             if($canActivate) $cardActions[] = array('icon' => 'magic', 'text' => $lang->kanban->activate, 'url' => createLink('kanban', 'activate', "kanbanID={$kanban->id}"), 'data-toggle' => 'modal');
             if($canDelete)   $cardActions[] = array('icon' => 'trash', 'text' => $lang->kanban->delete,   'url' => createLink('kanban', 'delete',   "kanbanID={$kanban->id}"), 'innerClass' => 'ajax-btn');

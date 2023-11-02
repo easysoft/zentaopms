@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('spaceID',   $spaceID);
 jsVar('spaceType', $type);
 
 modalHeader(set::title($lang->kanban->create), set::titleClass('article-h1'));
@@ -17,6 +16,7 @@ modalHeader(set::title($lang->kanban->create), set::titleClass('article-h1'));
 formPanel
 (
     on::change('[name=type]', 'changeKanbanType'),
+    on::change('[name=space]', 'changeKanbanSpace'),
     on::click('#allUsers', 'loadAllUsers'),
     set::headingClass('headingActions'),
     to::headingActions
