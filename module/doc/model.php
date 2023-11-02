@@ -867,6 +867,98 @@ class docModel extends model
     }
 
     /**
+     * Create a seperate docs.
+     *
+     * @access public
+     * @return void
+     */
+    public function createSeperateDocs()
+    {
+        if(!isset($_POST['lib']) and strpos($_POST['module'], '_') !== false) list($_POST['lib'], $_POST['module']) = explode('_', $_POST['module']);
+        $now = helper::now();
+        $doc = fixer::input('post')
+            ->setDefault('content,template,templateType,chapterType', '')
+            ->add('addedBy', $this->app->user->account)
+            ->add('addedDate', $now)
+            ->add('editedBy', $this->app->user->account)
+            ->add('editedDate', $now)
+            ->add('version', 1)
+            ->setDefault('product,execution,module', 0)
+            ->stripTags($this->config->doc->editor->create['id'], $this->config->allowedTags)
+            ->cleanInt('product,execution,module,lib')
+            ->join('groups', ',')
+            ->join('users', ',')
+            ->join('mailto', ',')
+            ->remove('files,labels,uid,contactListMenu,uploadFormat')
+            ->get();
+
+        if($doc->acl == 'open') $doc->users = $doc->groups = '';
+        if(empty($doc->lib) and strpos($doc->module, '_') !== false) list($doc->lib, $doc->module) = explode('_', $doc->module);
+        if(empty($doc->lib)) return dao::$errors['lib'] = sprintf($this->lang->error->notempty, $this->lang->doc->lib);
+        $files = $this->loadModel('file')->getUpload();
+        if(empty($files)) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->files);
+
+        /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
+        $lib = $this->getLibByID($doc->lib);
+        $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->create['id'], $this->post->uid);
+
+        $doc->product   = $lib->product;
+        $doc->project   = $lib->project;
+        $doc->execution = $lib->execution;
+
+        $docContent          = new stdclass();
+        $docContent->title   = $doc->title;
+        $docContent->content = '';
+        $docContent->type    = $doc->contentType;
+        $docContent->digest  = '';
+        $docContent->version = 1;
+        unset($doc->contentType, $doc->url);
+
+        $requiredFields = $this->config->doc->create->requiredFields;
+
+        $doc->draft  = '';
+        $doc->vision = $this->config->vision;
+
+        $docsAction = array();
+        foreach($files as $file)
+        {
+            $title    = $file['title'];
+            $position = strrpos($title, '.');
+            if($position !== 'false') $title = substr($title, 0, $position);
+
+            $doc->title = $title;
+            $this->dao->insert(TABLE_DOC)->data($doc, 'content')->autoCheck()
+                ->batchCheck($requiredFields, 'notempty')
+                ->exec();
+            if(!dao::isError())
+            {
+                $docID = $this->dao->lastInsertID();
+                $this->file->updateObjectID($this->post->uid, $docID, 'doc');
+                $fileTitle = $this->file->saveAFile($file, 'doc', $docID);
+                $docsAction[$docID] = $fileTitle;
+                if(empty($fileTitle)) continue;
+                if(dao::isError())
+                {
+                    dao::$errors['message'][] = 'doc#' . ($file->title) . dao::getError(true);
+                    continue;
+                }
+
+                $docContent->doc     = $docID;
+                $docContent->files   = ',' . $fileTitle->id;
+                $docContent->title   = $title;
+                $docContent->content = '';
+                $docContent->type    = 'attachment';
+                $docContent->digest  = '';
+                $docContent->version = 1;
+                $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+                $this->loadModel('score')->create('doc', 'create', $docID);
+            }
+        }
+
+        return dao::isError() ? false : array('status' => 'new', 'docsAction' => $docsAction, 'docType' => 'attachment', 'libID' => $doc->lib);
+    }
+
+    /**
      * Create a doc.
      *
      * @access public

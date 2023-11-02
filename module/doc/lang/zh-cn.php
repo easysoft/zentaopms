@@ -214,9 +214,14 @@ $lang->doc->docSummary        = '本页共 <strong>%s</strong> 个文档。';
 $lang->doc->docCheckedSummary = '共选中 <strong>%total%</strong> 个文档。';
 $lang->doc->showDoc           = '是否显示文档';
 $lang->doc->uploadDoc         = '上传文档';
+$lang->doc->uploadFormat      = '上传格式';
 
 $lang->doc->fileType = new stdclass();
 $lang->doc->fileType->stepResult = '测试结果';
+
+$lang->doc->uploadFormatList = array();
+$lang->doc->uploadFormatList['separateDocs'] = '每个文件存为不同文档';
+$lang->doc->uploadFormatList['combinedDocs'] = '所有文件存为一个文档';
 
 global $config;
 /* 查询条件列表 */

@@ -156,6 +156,41 @@ class fileModel extends model
     }
 
     /**
+     * Save a file.
+     *
+     * @param  object $file
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $extra
+     * @param  string $filesName
+     * @param  string $labelsName
+     * @access public
+     * @return array
+     */
+    public function saveAFile($file, $objectType = '', $objectID = 0, $extra = '', $filesName = 'files', $labelsName = 'labels')
+    {
+        $fileTitle  = new stdclass();
+        $now        = helper::today();
+
+        if($file['size'] == 0) return array();
+        if(!move_uploaded_file($file['tmpname'], $this->savePath . $this->getSaveName($file['pathname']))) return false;
+
+        $file = $this->compressImage($file);
+
+        $file['objectType'] = $objectType;
+        $file['objectID']   = $objectID;
+        $file['addedBy']    = $this->app->user->account;
+        $file['addedDate']  = $now;
+        $file['extra']      = $extra;
+        unset($file['tmpname']);
+        $this->dao->insert(TABLE_FILE)->data($file)->exec();
+        $fileTitle->id    = $this->dao->lastInsertId();
+        $fileTitle->title = $file['title'];
+
+        return $fileTitle;
+    }
+
+    /**
      * Get counts of uploaded files.
      *
      * @access public
