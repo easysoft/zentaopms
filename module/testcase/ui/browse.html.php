@@ -79,15 +79,15 @@ $footToolbar = $canBatchAction ? array('items' => array
 (
     $canGroupBatch ? array('type' => 'btn-group', 'items' => array
     (
-        $canBatchRun ? array('text' => $lang->testtask->runCase, 'className' => 'batch-btn primary not-open-url', 'data-url' => helper::createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy")) : null,
-        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn primary not-open-url', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch")) : null,
-        !empty($navActions) ? array('caret' => 'up', 'className' => 'primary', 'items' => $navActions, 'data-placement' => 'top-start') : null,
+        $canBatchRun ? array('text' => $lang->testtask->runCase, 'className' => 'batch-btn secondary not-open-url', 'data-url' => helper::createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy")) : null,
+        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn secondary not-open-url', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch")) : null,
+        !empty($navActions) ? array('caret' => 'up', 'className' => 'secondary', 'items' => $navActions, 'data-placement' => 'top-start') : null,
     )) : null,
     $canBatchChangeBranch ? array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'type' => 'dropdown', 'items' => $branchItems, 'data-placement' => 'top-start') : null,
     $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'type' => 'dropdown', 'items' => $moduleItems, 'data-placement' => 'top-start') : null,
     $canBatchChangeScene ? array('caret' => 'up', 'text' => $lang->testcase->scene, 'type' => 'dropdown', 'items' => $sceneItems, 'data-placement' => 'top-start') : null,
     $canImportToLib ? array('text' => $lang->testcase->importToLib, 'data-toggle' => 'modal', 'data-target' => '#importToLib', 'data-size' => 'sm') : null,
-), 'btnProps' => array('size' => 'sm', 'btnType' => 'primary')) : null;
+), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
 $footToolbar['items'] = array_values(array_filter($footToolbar['items']));
 
