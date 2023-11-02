@@ -24,8 +24,6 @@ jsVar('type', $type);
 jsVar('orderBy', $orderBy);
 jsVar('sortLink', createLink('mr', 'link', "MRID={$MR->id}&type={type}&orderBy={orderBy}&recTotal=&recPerPage=&pageID="));
 
-dropmenu(set::objectID($MR->repoID), set::tab('repo'));
-
 $actionMenu = array();
 $actionMenu['title'] = $lang->actions;
 $actionMenu['type']  = 'actions';
