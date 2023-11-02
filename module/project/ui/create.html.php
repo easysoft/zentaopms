@@ -140,11 +140,6 @@ formPanel
     )),
     to::headingActions
     (
-        div
-        (
-            setClass('flex mr-5'),
-            icon('cog-outline')
-        ),
         btn
         (
             setClass('primary-pale'),
