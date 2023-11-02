@@ -1564,7 +1564,7 @@ EOF;
         $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
 
-        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count(reset($dateGroups)) : $this->action->getDynamicCount();
+        if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, true) - count($dateGroups) : $this->action->getDynamicCount();
 
         /* Assign. */
         $this->view->type       = $type;
