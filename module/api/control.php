@@ -197,7 +197,8 @@ class api extends control
 
         $spaceType = 'api';
         $objectID  = $this->objectID;
-        if($this->cookie->docSpaceParam)
+        if($this->cookie->docSpaceParam) $docParam = json_decode($this->cookie->docSpaceParam);
+        if(isset($docParam) and !(in_array($docParam->type, array('product', 'project')) and $docParam->objectID == 0))
         {
             $docParam   = json_decode($this->cookie->docSpaceParam);
             $type       = $docParam->type;
