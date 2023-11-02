@@ -95,7 +95,8 @@ function loadCustomPivot()
         }
         else if($filter.hasClass('filter-select'))
         {
-            filterValues.push($filter.find('.pick-value').val().filter(Boolean));
+            const value = $filter.find('.pick-value').val();
+            filterValues.push(typeof value == 'array' ? value.filter(Boolean) : value);
         }
         else if($filter.hasClass('filter-date') || $filter.hasClass('filter-datetime'))
         {
