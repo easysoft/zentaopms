@@ -32,7 +32,7 @@ featureBar
             set::name('fromlib'),
             set::items($libraries),
             set::value($libID),
-            set::placeholder($lang->testcase->placeholder->selectLib),
+            set::required(true),
             bind::change("window.toggleLib(event)")
         )
     ),

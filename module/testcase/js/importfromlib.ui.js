@@ -20,7 +20,7 @@ window.getModuleCellProps = function(cell)
     const caseID   = cell.row.data.id;
     const branchID = this.getFormData(`branch[${cell.row.data.id}]`) != undefined ? this.getFormData(`branch[${cell.row.data.id}]`) : cell.row.data.branch;
     const modules  = canImportModules[branchID] != undefined && canImportModules[branchID][caseID] != undefined ? canImportModules[branchID][caseID] : {};
-    return {items: modules};
+    return {items: modules, required: true};
 }
 
 window.toggleLib = function(event)

@@ -240,7 +240,7 @@ $config->testcase->importfromlib->dtable->fieldList['id']['fixed'] = false;
 $config->testcase->importfromlib->dtable->fieldList['branch']['name']    = 'branch';
 $config->testcase->importfromlib->dtable->fieldList['branch']['title']   = $lang->testcase->branch;
 $config->testcase->importfromlib->dtable->fieldList['branch']['type']    = 'control';
-$config->testcase->importfromlib->dtable->fieldList['branch']['control'] = 'picker';
+$config->testcase->importfromlib->dtable->fieldList['branch']['control'] = array('type' => 'picker', 'props' => array('required' => true));
 $config->testcase->importfromlib->dtable->fieldList['branch']['width']   = '200px';
 
 $config->testcase->importfromlib->dtable->fieldList['pri']['name']  = 'pri';
