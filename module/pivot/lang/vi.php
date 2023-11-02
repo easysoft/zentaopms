@@ -64,6 +64,11 @@ $lang->pivot->PO          = 'PO';
 
 $lang->pivot->showOriginItem = 'Show origin item';
 
+$lang->pivot->showOriginPlaceholder = new stdclass();
+$lang->pivot->showOriginPlaceholder->slice    = 'No need to configure';
+$lang->pivot->showOriginPlaceholder->calcMode = 'No need to configure';
+$lang->pivot->showOriginPlaceholder->showMode = 'No need to configure';
+
 $lang->pivot->colors[] = 'AFD8F8';
 $lang->pivot->colors[] = 'AFD8F8';
 $lang->pivot->colors[] = 'AFD8F8';

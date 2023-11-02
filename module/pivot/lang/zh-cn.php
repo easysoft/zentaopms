@@ -74,6 +74,11 @@ $lang->pivot->PO          = 'PO';
 
 $lang->pivot->showOriginItem = '展示原始条目';
 
+$lang->pivot->showOriginPlaceholder = new stdclass();
+$lang->pivot->showOriginPlaceholder->slice    = '展示原始条目后无需配置切片';
+$lang->pivot->showOriginPlaceholder->calcMode = '展示原始条目后无需配置计算方式';
+$lang->pivot->showOriginPlaceholder->showMode = '展示原始条目后无需配置显示方式';
+
 $lang->pivot->colors[] = 'AFD8F8';
 $lang->pivot->colors[] = 'F6BD0F';
 $lang->pivot->colors[] = '8BBA00';
