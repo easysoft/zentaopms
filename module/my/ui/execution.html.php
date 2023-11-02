@@ -16,7 +16,7 @@ jsVar('typeList', $lang->execution->typeList);
 featurebar
 (
     set::current($type),
-    set::linkParams("type={key}&orderBy=id_desc&recPerPage={$pager->recPerPage}"),
+    set::linkParams("type={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")
 );
 
 foreach($executions as $execution) $execution->isParent = isset($parentGroup[$execution->id]);
