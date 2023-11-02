@@ -17,7 +17,7 @@ jsVar('objectIconList', $config->doc->objectIconList);
 featureBar
 (
     set::current($type),
-    set::linkParams("mode=doc&type={key}&param={$param}"),
+    set::linkParams("mode=doc&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     li(searchToggle(set::module('contributeDoc')))
 );
 
