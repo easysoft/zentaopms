@@ -169,14 +169,18 @@ class mr extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $MRList   = $this->mr->getList($mode, $param, $orderBy, array(), 0, $executionID, $pager);
+        $MRList   = $this->mr->getList($mode, $param, $orderBy, array(), $repoID, $executionID, $pager);
         $repoList = $this->loadModel('repo')->getList($executionID);
         $MRList   = $this->mr->batchSyncMR($MRList, $repoList);
 
-        $projects = array();
+        $projects  = array();
+        $repoPairs = array($this->lang->repo->common);
         foreach($repoList as $repo)
         {
             if($repo->SCM == 'Subversion') continue;
+
+            $repoPairs[$repo->id] = $repo->name;
+            if($repoID && $repoID != $repo->id) continue;
 
             if($repo->SCM == 'Gitlab')
             {
@@ -202,16 +206,17 @@ class mr extends control
             $openIDList += $this->loadModel('gogs')->getGogsListByAccount($this->app->user->account);
         }
 
-
         $this->view->title       = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
         $this->view->MRList      = $MRList;
         $this->view->projects    = $projects;
         $this->view->pager       = $pager;
         $this->view->mode        = $mode;
+        $this->view->repoID      = $repoID;
         $this->view->param       = $param;
         $this->view->objectID    = $executionID;
         $this->view->executionID = $executionID;
         $this->view->repoList    = $repoList;
+        $this->view->repoPairs   = $repoPairs;
         $this->view->orderBy     = $orderBy;
         $this->view->openIDList  = $openIDList;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');

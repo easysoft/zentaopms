@@ -69,7 +69,18 @@ $MRs = initTableData($MRList, $config->mr->dtable->fieldList, $this->mr);
 featureBar
 (
     set::current($mode != 'status' ? $mode : $param),
-    set::linkParams("repoID=0&mode=status&param={key}&objectID={$objectID}"),
+    set::linkParams("repoID={$repoID}&mode=status&param={key}&objectID={$objectID}"),
+    empty($repoPairs) ? null : to::leading(
+        productMenu
+        (
+            setClass('w-36'),
+            set::title($lang->repo->common),
+            set::items($repoPairs),
+            set::activeKey($repoID),
+            set::closeLink(createLink('mr', 'browse', "repoID=0&mode={$mode}&param={$param}&objectID={$objectID}")),
+            set::link(createLink('mr', 'browse', "repoID={key}&mode={$mode}&param={$param}&objectID={$objectID}") . "#app={$app->tab}")
+        )
+    )
 );
 
 toolBar
@@ -78,7 +89,7 @@ toolBar
         set::text($lang->mr->create),
         set::icon('plus'),
         set::className('btn primary'),
-        set::url(createLink('mr', 'create', "repoID=" . key($repoList) . "&objectID={$objectID}")),
+        set::url(createLink('mr', 'create', "repoID=" . ($repoID ? $repoID : key($repoList)) . "&objectID={$objectID}")),
         set('data-app', $app->tab)
     ) : null,
 );
