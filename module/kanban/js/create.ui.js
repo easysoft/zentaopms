@@ -1,6 +1,6 @@
 window.clickCopyCard = function(event)
 {
-    setCopyKanban($(event.target).data('id'));
+    setCopyKanban($(event.target).closest('.copy-card').data('id'));
     $('#copyKanbanModal').modal('hide');
 }
 

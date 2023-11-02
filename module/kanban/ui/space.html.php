@@ -77,7 +77,7 @@ foreach($spaceList as $space)
             $canEdit     = common::hasPriv('kanban','edit');
             $canDelete   = common::hasPriv('kanban','delete');
             $canClose    = (common::hasPriv('kanban', 'close') and $kanban->status == 'active');
-            $canActivate = (common::hasPriv('kanban', 'activate') and $kanban->status == 'closed'); 
+            $canActivate = (common::hasPriv('kanban', 'activate') and $kanban->status == 'closed');
             if($canEdit)     $cardActions[] = array('icon' => 'edit',  'text' => $lang->kanban->edit,     'url' => createLink('kanban', 'edit',     "kanbanID={$kanban->id}"), 'data-toggle' => 'modal');
             if($canClose)    $cardActions[] = array('icon' => 'off',   'text' => $lang->kanban->close,    'url' => createLink('kanban', 'close',    "kanbanID={$kanban->id}"), 'data-toggle' => 'modal');
             if($canActivate) $cardActions[] = array('icon' => 'magic', 'text' => $lang->kanban->activate, 'url' => createLink('kanban', 'activate', "kanbanID={$kanban->id}"), 'data-toggle' => 'modal');
@@ -90,7 +90,7 @@ foreach($spaceList as $space)
                 set::className('px-2 pb-4 overflow-hidden'),
                 div
                 (
-                    set::className('kanban-card border px-4 pb-2 pt-1'),
+                    set::className('kanban-card border px-4 pb-2 pt-1 open-url'),
                     set('data-url', createLink('kanban', 'view', "kanbanID=$kanbanID")),
                     div
                     (
