@@ -113,7 +113,9 @@ foreach($lang->admin->menuList as $menuKey => $menu)
         col
         (
             setClass('setting-box cursor-pointer border border-hover rounded-md px-2 py-1 h-full'),
-            set(array('data-id' => $menuKey, 'data-url' => $url)),
+            set('data-id', $menuKey),
+            empty($menu['disabled']) ? set('data-url', $url) : null,
+            !empty($menu['disabled']) ? setClass('disabled') : null,
             !empty($menu['disabled']) ? set::title($lang->admin->noPriv) : null,
             h4
             (

@@ -50,6 +50,7 @@ class admin extends control
             $this->view->account = $community;
             $this->view->ignore  = false;
         }
+        $this->admin->setMenu();
 
         $this->view->title       = $this->lang->admin->common;
         $this->view->zentaoData  = $this->admin->getZentaoData();

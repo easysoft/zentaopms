@@ -6,7 +6,7 @@ function redirectSetting(event)
     const $box = $target.closest('.setting-box');
     if($box.length == 0) return false;
 
-    openUrl($box.data('url'));
+    if(!$box.hasClass('disabled') && $box.data('url') != undefined) openUrl($box.data('url'));
 }
 
 $(function()
