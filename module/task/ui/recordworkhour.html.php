@@ -118,7 +118,7 @@ if($efforts)
                 h::th
                 (
                     width('60px'),
-                    $lang->task->consumedAB
+                    $lang->task->consumedHours
                 ),
                 h::th
                 (
@@ -192,7 +192,7 @@ else
         formBatchItem
         (
             set::name('consumed'),
-            set::label($lang->task->consumed),
+            set::label($lang->task->consumedHours),
             set::width('80px'),
             set::control
             (
@@ -206,7 +206,7 @@ else
         formBatchItem
         (
             set::name('left'),
-            set::label($lang->task->left),
+            set::label($lang->task->leftAB),
             set::width('80px'),
             set::control
             (
