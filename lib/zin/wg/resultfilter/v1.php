@@ -15,24 +15,54 @@ requireWg('filter');
 
 class resultFilter extends filter
 {
-    protected function buildDateControl(): array
+    protected static array $defaultProps = array(
+        'menu' => array('checkbox' => true),
+        'multiple' => true
+    );
+
+    protected function buildDatePicker(): array
     {
         global $lang;
 
-        list($type, $name, $value) = $this->prop(array('type', 'name', 'value'));
+        list($name, $value) = $this->prop(array('name', 'value'));
 
-        return array(
-            input
+        return array
+        (
+            datePicker
             (
-                set::name($name),
-                set::type($type == 'datetime' ? 'datetime-local' : $type),
+                setClass('w-full'),
+                set::name($name . '_begin'),
                 set::value(zget($value, 'begin', ''))
             ),
             $lang->to,
-            input
+            datePicker
             (
-                set::name($name),
-                set::type($type == 'datetime' ? 'datetime-local' : $type),
+                setClass('w-full'),
+                set::name($name . '_begin'),
+                set::value(zget($value, 'end', ''))
+            ),
+        );
+    }
+
+    protected function buildDatetimePicker(): array
+    {
+        global $lang;
+
+        list($name, $value) = $this->prop(array('name', 'value'));
+
+        return array
+        (
+            datetimePicker
+            (
+                setClass('w-full'),
+                set::name($name . '_begin'),
+                set::value(zget($value, 'begin', ''))
+            ),
+            $lang->to,
+            datetimePicker
+            (
+                setClass('w-full'),
+                set::name($name . '_begin'),
                 set::value(zget($value, 'end', ''))
             ),
         );
@@ -40,14 +70,9 @@ class resultFilter extends filter
 
     protected function build(): wg|array
     {
-        $type = $this->prop('type');
-
-        if($type == 'date' || $type == 'datetime') return inputGroup
-        (
-            setClass('pr-4 mb-2 ' . $this->prop('class', 'w-1/2')),
-            $this->prop('title'),
-            $this->buildDateControl($type)
-        );
+        $type  = $this->prop('type');
+        $class = $this->prop('class');
+        if(($type == 'date' || $type == 'datetime') && empty($class)) $this->setProp('class', 'w-1/2');
 
         return parent::build();
     }
