@@ -62,14 +62,15 @@ else
     );
     $items[] = array
     (
-        'name'     => 'pri',
-        'label'    => $lang->priAB,
-        'width'    => '100px',
-        'control'  => array('type' => 'priPicker', 'required' => true),
-        'items'    => $lang->testcase->priList,
-        'ditto'    => true,
-        'hidden'   => !isset($visibleFields['pri']),
-        'required' => isset($requiredFields['pri']),
+        'name'         => 'pri',
+        'label'        => $lang->priAB,
+        'width'        => '100px',
+        'control'      => array('type' => 'priPicker', 'required' => true),
+        'items'        => $lang->testcase->priList,
+        'ditto'        => true,
+        'hidden'       => !isset($visibleFields['pri']),
+        'required'     => isset($requiredFields['pri']),
+        'defaultDitto' => 'off',
     );
     $items[] = array
     (
@@ -132,13 +133,14 @@ else
     unset($lang->testcase->typeList['unit']);
     $items[] = array
     (
-        'name'     => 'type',
-        'label'    => $lang->testcase->type,
-        'width'    => '140px',
-        'control'  => 'picker',
-        'items'    => $lang->testcase->typeList,
-        'ditto'    => true,
-        'required' => true,
+        'name'         => 'type',
+        'label'        => $lang->testcase->type,
+        'width'        => '140px',
+        'control'      => array('type' => 'picker', 'required' => true),
+        'items'        => $lang->testcase->typeList,
+        'ditto'        => true,
+        'required'     => isset($requiredFields['type']),
+        'defaultDitto' => 'off',
     );
     $items[] = array
     (
