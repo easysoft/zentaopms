@@ -15,10 +15,10 @@ window.changeKanbanType = function()
 
 window.loadAllUsers = function()
 {
-    const link = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID=0&field=owner&selectedUser=' + $('#owner').val() + "&type=all");
+    const link = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID=0&field=owner&selectedUser=' + $('[name=owner]').val() + "&type=all");
     $.getJSON(link, function(data)
     {
-        $('#owner').zui('picker').render({items: data});
+        $('[name=owner]').zui('picker').render({items: data});
     });
 }
 

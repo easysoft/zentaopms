@@ -132,12 +132,12 @@ class kanban extends control
         {
             $changes = $this->kanban->activateSpace($spaceID);
 
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $actionID = $this->action->create('kanbanSpace', $spaceID, 'activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
-            return print(js::reload('parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->space   = $this->kanban->getSpaceById($spaceID);
@@ -162,12 +162,12 @@ class kanban extends control
         {
             $changes = $this->kanban->closeSpace($spaceID);
 
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $actionID = $this->action->create('kanbanSpace', $spaceID, 'closed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
-            return print(js::reload('parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->space   = $this->kanban->getSpaceById($spaceID);
@@ -269,7 +269,7 @@ class kanban extends control
             $actionID = $this->action->create('kanban', $kanbanID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $kanban = $this->kanban->getByID($kanbanID);
@@ -306,7 +306,7 @@ class kanban extends control
             $actionID = $this->loadModel('action')->create('kanban', $kanbanID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $kanban = $this->kanban->getByID($kanbanID);
@@ -336,12 +336,12 @@ class kanban extends control
         {
             $changes = $this->kanban->activate($kanbanID);
 
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $actionID = $this->action->create('kanban', $kanbanID, 'activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
-            return print(js::reload('parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->kanban  = $this->kanban->getByID($kanbanID);
@@ -366,12 +366,12 @@ class kanban extends control
         {
             $changes = $this->kanban->close($kanbanID);
 
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $actionID = $this->action->create('kanban', $kanbanID, 'closed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
-            return print(js::reload('parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->kanban  = $this->kanban->getByID($kanbanID);
@@ -438,15 +438,8 @@ class kanban extends control
      */
     public function delete($kanbanID, $confirm = 'no', $browseType = 'involved')
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->kanban->confirmDeleteKanban, $this->createLink('kanban', 'delete', "kanbanID=$kanbanID&confirm=yes&browseType=$browseType")));
-        }
-        else
-        {
-            $this->kanban->delete(TABLE_KANBAN, $kanbanID);
-            return print(js::locate($this->createLink('kanban', 'space', "browseType=$browseType"), 'parent'));
-        }
+        $this->kanban->delete(TABLE_KANBAN, $kanbanID);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
