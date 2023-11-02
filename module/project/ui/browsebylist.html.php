@@ -80,7 +80,7 @@ if($canBatchEdit)
     $footToolbar['items'][] = array(
         'type'  => 'btn-group',
         'items' => array(
-            array('text' => $lang->edit, 'className' => 'btn secondary size-sm batch-btn', 'btnType' => 'primary', 'data-url' => createLink('project', 'batchEdit')),
+            array('text' => $lang->edit, 'className' => 'btn size-sm batch-btn', 'btnType' => 'secondary', 'data-url' => createLink('project', 'batchEdit')),
         )
     );
 }
