@@ -109,10 +109,12 @@
           <th><?php echo $lang->execution->teamName;?></th>
           <td><?php echo html::input('team', $execution->team, "class='form-control'");?></td>
         </tr>
+        <?php if($project->model != 'ipd'):?>
         <tr>
           <th><?php echo $lang->execution->status;?></th>
           <td><?php echo html::select('status', $lang->execution->statusList, $execution->status, "class='form-control chosen'");?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th rowspan='2'><?php echo $lang->execution->owner;?></th>
           <td>

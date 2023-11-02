@@ -512,7 +512,7 @@ formPanel
         set::value($execution->percent),
         set::required(true),
     ) : null,
-    formGroup
+    $project->model != 'ipd' ? formGroup
     (
         set::width('1/2'),
         set::label($lang->execution->status),
@@ -523,7 +523,7 @@ formPanel
             set::value($execution->status),
             set::required(true),
         )
-    ),
+    ) : null,
     $productsBox,
     formRowGroup(set::title($lang->execution->teamSetting)),
     formGroup
