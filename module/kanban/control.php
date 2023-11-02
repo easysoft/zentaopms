@@ -89,7 +89,7 @@ class kanban extends control
             $actionID = $this->action->create('kanbanSpace', $spaceID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $space = $this->kanban->getSpaceById($spaceID);
@@ -187,15 +187,8 @@ class kanban extends control
      */
     public function deleteSpace($spaceID, $confirm = 'no')
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->kanban->confirmDeleteSpace, $this->createLink('kanban', 'deleteSpace', "spaceID=$spaceID&confirm=yes")));
-        }
-        else
-        {
-            $this->kanban->delete(TABLE_KANBANSPACE, $spaceID);
-            return print(js::reload('parent'));
-        }
+        $this->kanban->delete(TABLE_KANBANSPACE, $spaceID);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
