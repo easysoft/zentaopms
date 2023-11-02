@@ -1057,6 +1057,9 @@ class productModel extends model
      */
     public function getStats(array $productIdList, string $orderBy = 'order_asc', object|null $pager = null, string $storyType = 'story', int $programID = 0): array
     {
+        /* Call the getProductStats method of the tutorial module if you are in tutorial mode.*/
+        if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProductStats();
+
         if(empty($productIdList)) return array();
 
         /* Get stats data. */

@@ -123,8 +123,14 @@ class tutorialModel extends model
         $product->closedBugs              = 0;
         $product->fixedBugs               = 0;
         $product->assignToNull            = 0;
+        $product->lineName                = 0;
+        $product->executions              = 0;
+        $product->coverage                = 0;
+        $product->activeBugs              = 0;
+        $product->latestReleaseDate       = 0;
+        $product->latestRelease           = 0;
 
-        $productStat[$product->program][$product->line]['products'][$product->id] = $product;
+        $productStat[$product->id] = $product;
         return $productStat;
     }
 
