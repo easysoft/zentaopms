@@ -11,9 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<?php if($objectType == 'custom' and empty($libs)):?>
-<?php echo html::a(helper::createLink('doc', 'createLib', "type=custom&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->doc->createLib, '', 'class="iframe hidden createCustomLib"');?>
-<?php endif;?>
 <?php $this->app->loadConfig('file');?>
 <div id="mainContent" class="main-content">
   <div class='center-block'>
