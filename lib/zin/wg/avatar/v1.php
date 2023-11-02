@@ -300,8 +300,6 @@ class avatar extends wg
         (
             setClass('avatar-text'),
             set('data-actualSize', $this->actualSize),
-            set('data-displayTextLen', $this->displayTextLen),
-            set('data-textLen', $this->textLen),
             $textStyle ? setStyle($textStyle) : null,
             $displayText
         );
