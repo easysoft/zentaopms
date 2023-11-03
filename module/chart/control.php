@@ -19,23 +19,21 @@ class chart extends control
      * @access public
      * @return void
      */
-    public function preview($dimensionID = 0, $groupID = 0)
+    public function preview(int $dimensionID = 0, int $groupID = 0)
     {
         $dimensionID = $this->loadModel('dimension')->getDimension($dimensionID);
 
-        if(!$groupID) $groupID = $this->chart->getFirstChartGroupID($dimensionID);
+        if(!$groupID) $groupID = $this->chart->getFirstGroup($dimensionID);
 
-        list($chartTree, $charts) = $this->chart->getPreviewCharts($groupID);
-        $this->setFeatureBar($dimensionID);
-
-        if(!empty($_POST))
+        $charts = array();
+        if($this->post->charts)
         {
-            $charts = array();
-            foreach($this->post->charts as $value)
+            foreach($this->post->charts as $chartID)
             {
-                $chartID = explode('_', $value);
-                $group   = $chartID[0];
-                $chartID = $chartID[1];
+                $idList = explode('_', $chartID);
+                if(count($idList) != 2) continue;
+
+                list($group, $chartID) = $idList;
 
                 $chart = $this->chart->getByID($chartID);
                 $chart->currentGroup = $group;
@@ -44,17 +42,14 @@ class chart extends control
             }
         }
 
-        foreach($charts as $id => $chart)
-        {
-            $charts[$id]->echartOptions = $this->chart->getEchartOptions($chart->id);
-            $charts[$id]->filterOptions = $this->chart->getFilterOptions($chart->id);
-        }
+        if(!$charts) $charts = $this->chart->getDefaultCharts($groupID);
 
-        $this->view->title         = $this->lang->chart->preview;
-        $this->view->dimensionID   = $dimensionID;
-        $this->view->group         = $this->loadModel('tree')->getByID($groupID);
-        $this->view->chartTree     = $chartTree;
-        $this->view->charts        = $charts;
+        $this->view->title       = $this->lang->chart->preview;
+        $this->view->groups      = $this->loadModel('tree')->getGroupPairs($dimensionID, 0, 1);
+        $this->view->treeMenu    = $this->chart->getTreeMenu($groupID);
+        $this->view->charts      = $charts;
+        $this->view->dimensionID = $dimensionID;
+        $this->view->groupID     = $groupID;
         $this->display();
     }
 
