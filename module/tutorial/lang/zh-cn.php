@@ -56,7 +56,19 @@ $lang->tutorial->tasks['createProject']['nav']  = array('app' => 'project', 'mod
 $lang->tutorial->tasks['createProject']['desc'] = "<p>在系统创建一个新的{$lang->projectCommon}：</p><ul><li data-target='nav'>打开 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> {$lang->projectCommon}列表 <i class='icon icon-angle-right'></i> 创建{$lang->projectCommon}</span> 页面；</li><li data-target='form'>在{$lang->projectCommon}表单中填写要创建的{$lang->projectCommon}信息；</li><li data-target='submit'>保存{$lang->projectCommon}信息。</li></ul>";
 
 $lang->tutorial->tasks['manageTeam']         = array('title' => "管理{$lang->projectCommon}团队");
-$lang->tutorial->tasks['manageTeam']['nav']  = array('app' => 'project', 'module' => 'project', 'method' => 'managemembers', 'menuModule' => '', 'menu' => '#navbar>.nav>li[data-id="browse"],#cards>.col>.panel:first .project-name,#projectForm td.c-name:first a,#navbar>.nav>li[data-id="settings"],#subNavbar>.nav>li[data-id="members"],.manage-team-btn', 'target' => '.manage-team-btn', 'vars' => 'projectID=0', 'form' => '#teamForm', 'requiredFields' => 'accounts1', 'submit' => '#submit', 'targetPageName' => '团队管理');
+$lang->tutorial->tasks['manageTeam']['nav']  = array(
+    'app' => 'project',
+    'module' => 'project',
+    'method' => 'managemembers',
+    'menuModule' => '',
+    'menu' => '#table-tutorial-wizard > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="name"] > .dtable-cell-content > a, #mainNavbar > .container > .nav > .nav-item > a[data-id="settings"], #mainNavbar > .container > .nav > .nav-item > a[data-id="members"], #actionBar',
+    'target' => '.manage-team-btn',
+    'vars' => 'projectID=0',
+    'form' => '#teamForm',
+    'requiredFields' => 'accounts1',
+    'submit' => '#submit',
+    'targetPageName' => '团队管理'
+);
 $lang->tutorial->tasks['manageTeam']['desc'] = "<p>管理{$lang->projectCommon}团队成员：</p><ul><li data-target='nav'>打开 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> 设置 <i class='icon icon-angle-right'></i> 团队 <i class='icon icon-angle-right'></i> 团队管理</span> 页面；</li><li data-target='form'>选择要加入{$lang->projectCommon}团队的成员；</li><li data-target='submit'>保存团队成员信息。</li></ul>";
 
 $lang->tutorial->tasks['createProjectExecution']         = array('title' => '添加' . $lang->executionCommon);
