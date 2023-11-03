@@ -126,7 +126,15 @@ class statisticBlock extends blockPanel
      */
     protected function buildPanes($id, $items, $active, $longBlock): wg|null
     {
-        if(empty($items)) return null;
+        if(empty($items))
+        {
+            global $lang;
+            return center
+                (
+                    setClass('text-gray flex-auto'),
+                    $lang->noData,
+                );
+        }
 
         $panes = array();
         foreach($items as $item)
