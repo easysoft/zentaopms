@@ -124,6 +124,7 @@ th.table-nest-title > .table-nest-toggle-global:before {width: 100%; left: 0 !im
 #programTableList .icon-kanban:before {content: '\e983';}
 #programTableList .icon-waterfallplus:before {content: '\e9ed';}
 #programTableList .icon-agileplus:before {content: '\e9ee';}
+#programTableList .icon-ipd:before {content: "\e9f9";}
 #programTableList > tr[data-type="program"] > .c-name > a {color: #0b0f18;}
 #programTableList > tr[data-nest-parent] {background: #f8f8f8;}
 </style>
