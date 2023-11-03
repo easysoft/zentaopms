@@ -91,26 +91,34 @@ div(
 helper::isAjaxRequest('modal') ? null : sidebar
 (
     set::side('left'),
-    setClass('repo-sidebar px-2'),
-    dropmenu
+    setClass('repo-sidebar canvas'),
+    div
     (
-        setID('repoBranchDropMenu'),
-        on::click('window.changeBranch'),
-        on::change('window.changeBranch'),
-        set::objectID($dropMenus['selected']),
-        set::text($dropMenus['selected']),
-        set::data(array('data' => $menuData, 'tabs' => $tabs)),
+        setClass('surface'),
+        dropmenu
+        (
+            setID('repoBranchDropMenu'),
+            setClass('px-2'),
+            on::click('window.changeBranch'),
+            on::change('window.changeBranch'),
+            set::objectID($dropMenus['selected']),
+            set::text($dropMenus['selected']),
+            set::data(array('data' => $menuData, 'tabs' => $tabs))
+        )
     ),
-    treeEditor
-    (
-        set::id('monacoTree'),
-        set::items($tree),
-        set::canSplit(false),
-        set::collapsedIcon('folder'),
-        set::expandedIcon('folder-open'),
-        set::normalIcon('file-text-alt'),
-        set::activeKey($entry),
-        set::onClickItem(jsRaw('window.treeClick')),
+    div(
+        setClass('px-2'),
+        treeEditor
+        (
+            set::id('monacoTree'),
+            set::items($tree),
+            set::canSplit(false),
+            set::collapsedIcon('folder'),
+            set::expandedIcon('folder-open'),
+            set::normalIcon('file-text-alt'),
+            set::activeKey($entry),
+            set::onClickItem(jsRaw('window.treeClick'))
+        )
     )
 );
 
