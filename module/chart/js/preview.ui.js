@@ -7,12 +7,14 @@
  */
 function previewCharts()
 {
-    const form   = new FormData();
     const checks = $('#moduleMenu ul').zui('tree').$.getChecks();
+    if(checks.length > 0)
+    {
+        const form = new FormData();
+        checks.forEach((id) => {
+            if(id.includes(':')) form.append('charts[]', id.split(':')[1]);
+        });
 
-    checks.forEach((id) => {
-        if(id.includes(':')) form.append('charts[]', id.split(':')[1]);
-    });
-
-    postAndLoadPage(previewUrl, form);
+        postAndLoadPage(previewUrl, form, '#chartPanel');
+    }
 }
