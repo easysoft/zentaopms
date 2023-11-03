@@ -52,8 +52,8 @@ foreach($product->monthCreated as $date => $count)
     $openedData[] = $count;
 }
 
-$monthFinish  = $product->monthFinish;
-$monthCreated = $product->monthCreated;
+$monthFinish  = !empty($product) ? $product->monthFinish : array();
+$monthCreated = !empty($product) ? $product->monthFieated : array();
 
 statisticBlock
 (

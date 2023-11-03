@@ -1120,6 +1120,15 @@ class blockZen extends block
         $projectID = $block->dashboard == 'my' ? 0 : (int)$this->session->project;
         if(isset($params['project'])) $projectID = (int)$params['project'];
         $executions  = $this->loadModel('execution')->getOrderedExecutions($projectID, $status, $count, 'skipparent');
+        if(empty($executions))
+        {
+            $this->view->chartData        = array();
+            $this->view->executions       = array();
+            $this->view->projects         = array();
+            $this->view->currentProjectID = 9;
+            return;
+        }
+
         $executionID = isset($params['active']) && isset($executions[$params['active']]) ? $params['active'] : key($executions);
         $execution   = $executions[$executionID];
 

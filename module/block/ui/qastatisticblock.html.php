@@ -144,7 +144,7 @@ $buildTesttasks = function(object $product, bool $longBlock): wg|null
     );
 };
 
-$testTasksView = $buildTesttasks($product, $longBlock);
+$testTasksView = !empty($product) ? $buildTesttasks($product, $longBlock) : null;
 
 statisticBlock
 (
@@ -210,7 +210,7 @@ statisticBlock
             (
                 setClass('flex-1 gap-1.5 px-3 py-2'),
                 div($lang->block->qastatistic->bugStatistics),
-                $buildProgressBars($product, $longBlock)
+                !empty($product) ? $buildProgressBars($product, $longBlock) : null,
             ),
             $testTasksView
         )

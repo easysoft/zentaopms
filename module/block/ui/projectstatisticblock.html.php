@@ -28,7 +28,7 @@ foreach($projects as $projectItem)
     if($projectItem->id == $active) $project = $projectItem;
 }
 
-$remainingDays   = zget($project, 'remainingDays' , 0);
+$remainingDays   = !empty($project->remainingDays) ? $project->remainingDays : 0;
 $projectOverview = array();
 $projectOverview[] = cell
 (
@@ -216,7 +216,7 @@ else
                         span
                         (
                             setClass('font-bold text-black mr-1'),
-                            zget($project, 'sv', 0) . $lang->percent,
+                            (!empty($project->sv) ? $project->sv : 0) . $lang->percent,
                         ),
                     ),
                 ),
@@ -239,7 +239,7 @@ else
                         span
                         (
                             setClass('font-bold text-black mr-1'),
-                            zget($project, 'pv', 0) . $lang->percent,
+                            (!empty($project->pv) ? $project->pv : 0) . $lang->percent,
                         ),
                     ),
                 ),
@@ -262,7 +262,7 @@ else
                         span
                         (
                             setClass('font-bold text-black mr-1'),
-                            zget($project, 'ev', 0) . $lang->percent,
+                            (!empty($project->ev) ? $project->ev : 0) . $lang->percent,
                         ),
                     ),
                 ),
@@ -306,7 +306,7 @@ else
                         span
                         (
                             setClass('font-bold text-black mr-1'),
-                            zget($project, 'cv', 0) . $lang->percent,
+                            (!empty($project->cv) ? $project->cv : 0) . $lang->percent,
                         ),
                     ),
                 ),
@@ -329,7 +329,7 @@ else
                         span
                         (
                             setClass('font-bold text-black mr-1'),
-                            zget($project, 'ev', 0) . $lang->percent,
+                            (!empty($project->ev) ? $project->ev : 0) . $lang->percent,
                         ),
                     ),
                 ),
@@ -352,7 +352,7 @@ else
                         span
                         (
                             setClass('font-bold text-black mr-1'),
-                            zget($project, 'ac', 0) . $lang->percent,
+                            (!empty($project->ac) ? $project->ac : 0) . $lang->percent,
                         ),
                     ),
                 ),
