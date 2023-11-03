@@ -52,6 +52,7 @@ $breadcrumbItems   = array();
 $breadcrumbItems[] = h::a
 (
     set::href($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID")),
+    set('data-app', $app->tab),
     $repo->name,
 );
 $breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
@@ -65,6 +66,7 @@ foreach($paths as $index => $pathName)
     $breadcrumbItems[] = h::a
     (
         set::href($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath))),
+        set('data-app', $app->tab),
         trim($pathName, '/'),
     );
     $breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
