@@ -288,6 +288,8 @@ function getFieldSettings()
                 fieldSettings[index].type   = 'string';
             }
 
+            if(!fieldSettings[index].name) fieldSettings[index].name = fields[index];
+
             var type = fieldSettings[index].type;
             if(object == defaultObject && type != defaultType) fieldSettings[index].type = defaultType;
 
