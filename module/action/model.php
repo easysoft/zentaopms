@@ -483,7 +483,7 @@ class actionModel extends model
                 $mrAction = str_replace('mr', '', $action->action) . 'Action';
                 list($mrDate, $mrActor, $mrLink) = explode('::', $action->extra);
 
-                if(isonlybody()) $mrLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
+                if(isInModal()) $mrLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
 
                 $this->app->loadLang('mr');
                 $desc = sprintf($this->lang->mr->{$mrAction}, $mrDate, $mrActor, $mrLink);

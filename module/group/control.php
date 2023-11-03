@@ -195,7 +195,7 @@ class group extends control
             $this->group->updateView($groupID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $link = isonlybody() ? 'parent' : $this->createLink('group', 'browse');
+            $link = isInModal() ? 'parent' : $this->createLink('group', 'browse');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 

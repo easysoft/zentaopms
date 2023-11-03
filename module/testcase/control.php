@@ -45,7 +45,7 @@ class testcase extends control
         $products = array();
         $objectID = 0;
         $tab      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? $this->app->tab : 'qa';
-        if(!isonlybody())
+        if(!isInModal())
         {
             if($this->app->tab == 'project')
             {

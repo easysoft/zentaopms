@@ -48,7 +48,7 @@ class testtask extends control
 
             /* 如果没有获取到产品键值对、并且即不是弹窗页面也不是 ajax 请求，那么跳转到错误提示页面。*/
             /* If the product key-value pair is not obtained and it is not a pop-up page or an ajax request, then jump to the error page. */
-            if(empty($products) && !isonlybody() && !helper::isAjaxRequest())
+            if(empty($products) && !isInModal() && !helper::isAjaxRequest())
             {
                 $tab      = ($this->app->tab == 'project' || $this->app->tab == 'execution') ? $this->app->tab : 'qa';
                 $objectID = ($tab == 'project' || $tab == 'execution') ? $this->session->$tab : 0;

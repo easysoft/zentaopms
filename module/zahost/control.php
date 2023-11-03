@@ -110,7 +110,7 @@ class zahost extends control
             }
 
             $viewLink = $this->createLink('zahost', 'view', "hostID=$hostID");
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.loadHosts()'));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.loadHosts()'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $viewLink));
         }
 
@@ -145,7 +145,7 @@ class zahost extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -189,7 +189,7 @@ class zahost extends control
             $this->send($response);
         }
 
-        if(isonlybody()) return print(js::reload('parent.parent'));
+        if(isInModal()) return print(js::reload('parent.parent'));
         return print(js::locate($this->createLink('zahost', 'browse'), 'parent'));
     }
 
@@ -262,7 +262,7 @@ class zahost extends control
         $this->zahost->downloadImage($image);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
 
-        if(isonlybody()) return print(js::reload('parent'));
+        if(isInModal()) return print(js::reload('parent'));
         return print(js::locate($this->createLink('zahost', 'browseImage', array("hostID" => $hostID)), 'parent'));
     }
 
@@ -321,7 +321,7 @@ class zahost extends control
         $this->zahost->cancelDownload($image);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->zahost->image->downloadImageFail));
 
-        if(isonlybody()) return print(js::reload('parent'));
+        if(isInModal()) return print(js::reload('parent'));
         return print(js::locate($this->createLink('zahost', 'browseImage', array("hostID" => $image->host)), 'parent'));
     }
 

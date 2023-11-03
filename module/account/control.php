@@ -67,7 +67,7 @@ class account extends control
 
             $this->loadModel('action')->create('account', $id, 'created');
 
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadCurrentPage()', 'closeModal' => true));
         }
 
@@ -187,7 +187,7 @@ class account extends control
             $this->account->updateStatus($accountID, $accountStatus);
 
             $this->loadModel('action')->create('account', $id, $accountStatus, $postData->reason);
-            if(isonlybody()) return print(js::reload('parent.parent'));
+            if(isInModal()) return print(js::reload('parent.parent'));
             return print(js::reload('parent'));
         }
 

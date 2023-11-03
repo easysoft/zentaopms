@@ -151,7 +151,7 @@ class messageModel extends model
         $this->app->loadConfig('mail');
         $sysURL = zget($this->config->mail, 'domain', common::getSysURL());
 
-        $isonlybody = isonlybody();
+        $isonlybody = isInModal();
         if($isonlybody) unset($_GET['onlybody']);
 
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;

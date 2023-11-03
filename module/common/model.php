@@ -1675,10 +1675,10 @@ EOF;
      */
     public static function buildIconButton($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '', $programID = 0, $extraEnabled = '')
     {
-        if(isonlybody() and strpos($extraClass, 'showinonlybody') === false) return false;
+        if(isInModal() and strpos($extraClass, 'showinonlybody') === false) return false;
 
         /* Remove iframe for operation button in modal. Prevent pop up in modal. */
-        if(isonlybody() and strpos($extraClass, 'showinonlybody') !== false) $extraClass = str_replace('iframe', '', $extraClass);
+        if(isInModal() and strpos($extraClass, 'showinonlybody') !== false) $extraClass = str_replace('iframe', '', $extraClass);
 
         global $app, $lang, $config;
 
@@ -1903,7 +1903,7 @@ EOF;
     public static function printRPN($backLink, $preAndNext = '', $linkTemplate = '')
     {
         global $lang, $app;
-        if(isonlybody()) return false;
+        if(isInModal()) return false;
 
         $title = $lang->goback . $lang->backShortcutKey;
         echo html::a($backLink, '<i class="icon-goback icon-back icon-large"></i>', '', "id='back' class='btn' title={$title}");
@@ -1939,7 +1939,7 @@ EOF;
     public static function printBack($backLink, $class = '', $misc = '')
     {
         global $lang, $app;
-        if(isonlybody()) return false;
+        if(isInModal()) return false;
 
         if(empty($class)) $class = 'btn';
         $title = $lang->goback . $lang->backShortcutKey;
@@ -1958,7 +1958,7 @@ EOF;
     public static function printPreAndNext($preAndNext = '', $linkTemplate = '')
     {
         global $lang, $app;
-        if(isonlybody()) return false;
+        if(isInModal()) return false;
 
         $moduleName = ($app->getModuleName() == 'story' and $app->tab == 'project') ? 'projectstory' : $app->getModuleName();
         echo "<nav class='container'>";

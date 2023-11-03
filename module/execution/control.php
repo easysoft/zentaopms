@@ -2123,7 +2123,7 @@ class execution extends control
             if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project, $this->post->stories ? $this->post->stories : array());
             $this->execution->linkStory($objectID, $this->post->stories ? $this->post->stories : array(), $extra);
 
-            if(!isonlybody()) return $this->sendSuccess(array('load' => $browseLink));
+            if(!isInModal()) return $this->sendSuccess(array('load' => $browseLink));
             if(!$this->app->tab !== 'execution') return $this->sendSuccess(array('closeModal' => true, 'locate' => $browseLink));
 
             $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';

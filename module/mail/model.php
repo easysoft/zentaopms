@@ -318,7 +318,7 @@ class mailModel extends model
         /* Replace full webPath image for mail. */
         $sysURL      = zget($this->config->mail, 'domain', common::getSysURL());
         $readLinkReg = str_replace(array('%fileID%', '/', '.', '?'), array('[0-9]+', '\/', '\.', '\?'), helper::createLink('file', 'read', 'fileID=(%fileID%)', '\w+'));
-        if(isonlybody()) $readLinkReg = str_replace(array('\?onlybody=yes', '&onlybody=yes'), '', $readLinkReg);
+        if(isInModal()) $readLinkReg = str_replace(array('\?onlybody=yes', '&onlybody=yes'), '', $readLinkReg);
 
         $body = preg_replace('/ src="(' . $readLinkReg . ')" /', ' src="' . $sysURL . '$1" ', $body);
         $body = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . $sysURL . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $body);

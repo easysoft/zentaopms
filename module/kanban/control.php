@@ -1008,7 +1008,7 @@ class kanban extends control
         $actionID = $this->action->create('kanbanCard', $cardID, 'finished');
         $this->action->logHistory($actionID, $changes);
 
-        if(isonlybody()) return print(js::reload('parent.parent'));
+        if(isInModal()) return print(js::reload('parent.parent'));
 
         $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
         return print(json_encode($kanbanGroup));
@@ -1492,7 +1492,7 @@ class kanban extends control
             $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'archived');
             $this->action->logHistory($actionID, $changes);
 
-            if(isonlybody()) return print(js::reload('parent.parent'));
+            if(isInModal()) return print(js::reload('parent.parent'));
             $card        = $this->kanban->getCardByID($cardID);
             $kanbanGroup = $this->kanban->getKanbanData($card->kanban, $card->region);
             $kanbanGroupParam = json_encode($kanbanGroup);
@@ -1582,7 +1582,7 @@ class kanban extends control
             if($card->fromType == '') $this->kanban->delete(TABLE_KANBANCARD, $cardID);
             if($card->fromType != '') $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
 
-            if(isonlybody()) return print(js::reload('parent.parent'));
+            if(isInModal()) return print(js::reload('parent.parent'));
 
             $kanbanGroup      = $this->kanban->getKanbanData($card->kanban, $card->region);
             $kanbanGroupParam = json_encode($kanbanGroup);

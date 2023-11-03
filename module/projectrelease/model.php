@@ -136,7 +136,7 @@ class projectreleaseModel extends model
     public function buildOperateViewMenu($release)
     {
         $canBeChanged = common::canBeChanged('projectrelease', $release);
-        if($release->deleted || !$canBeChanged || isonlybody()) return '';
+        if($release->deleted || !$canBeChanged || isInModal()) return '';
 
         $menu   = '';
         $params = "releaseID=$release->id";

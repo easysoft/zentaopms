@@ -159,7 +159,7 @@ class story extends control
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));
-            if(isonlybody()) return $this->send($this->storyZen->getResponseInModal($this->lang->saveSuccess, $executionID));
+            if(isInModal()) return $this->send($this->storyZen->getResponseInModal($this->lang->saveSuccess, $executionID));
 
             $locateLink = $this->storyZen->getAfterBatchCreateLocation($productID, $branch, $executionID, $storyID, $storyType);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
@@ -431,7 +431,7 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(isonlybody())
+            if(isInModal())
             {
                 $execution = $this->execution->getByID($this->session->execution);
                 if($this->app->tab == 'execution' and $execution->type == 'kanban')
@@ -572,7 +572,7 @@ class story extends control
             $message = $this->executeHooks($storyID);
             if(empty($message)) $message = $this->lang->saveSuccess;
 
-            if(isonlybody())
+            if(isInModal())
             {
                 if($this->app->tab == 'execution') $this->loadModel('kanban')->updateLane($this->session->execution, 'story', $storyID);
                 return $this->send($this->storyZen->getResponseInModal($message));
@@ -698,7 +698,7 @@ class story extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'loadCurrentPage()'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$storyType")));
         }
 
@@ -767,7 +767,7 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(isonlybody())
+            if(isInModal())
             {
                 $execution    = $this->execution->getByID($this->session->execution);
                 $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';

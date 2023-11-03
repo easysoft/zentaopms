@@ -989,7 +989,7 @@ class fileModel extends model
     {
         if(is_string($fields)) $fields = explode(',', str_replace(' ', '', $fields));
 
-        $isonlybody = isonlybody();
+        $isonlybody = isInModal();
         unset($_GET['onlybody']);
 
         foreach($fields as $field)
