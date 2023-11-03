@@ -2101,11 +2101,7 @@ class execution extends control
         }
 
         $products = $this->product->getProducts($objectID);
-        if(empty($products))
-        {
-            echo js::alert($this->lang->execution->errorNoLinkedProducts);
-            return print(js::locate($this->createLink('execution', 'manageproducts', "executionID=$objectID")));
-        }
+        if(empty($products)) return $this->sendError($this->lang->execution->errorNoLinkedProducts, $this->createLink('execution', 'manageproducts', "executionID=$objectID"));
 
         /* 通过objectID获取符合项目、执行、阶段和看板类型的对象。*/
         $object = $this->project->getByID($objectID, 'project,sprint,stage,kanban');
