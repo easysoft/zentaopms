@@ -125,22 +125,28 @@ class chartModel extends model
     }
 
     /**
-     * Process sql and correct type.
+     * 处理图表的数据以供后续使用。
+     * Process the data of the chart for subsequent use.
      *
      * @param  object $chart
      * @access public
      * @return object
      */
-    public function processChart($chart)
+    public function processChart(object $chart): object
     {
-        if(!empty($chart->sql))      $chart->sql      = trim(str_replace(';', '', $chart->sql));
-        if(!empty($chart->settings)) $chart->settings = json_decode($chart->settings, true);
+        if($chart->sql == null) $chart->sql = '';
+        if($chart->sql) $chart->sql = trim(str_replace(';', '', $chart->sql));
 
-        if(empty($chart->type) and !empty($chart->settings) and is_array($chart->settings))
-        {
-            $firstSetting = current($chart->settings);
-            if(isset($firstSetting['type'])) $chart->type = $firstSetting['type'];
-        }
+        $chart->filters = json_decode($chart->filters, true);
+        if($chart->filters === null) $chart->filters = array();
+
+        $chart->settings = json_decode($chart->settings, true);
+        if($chart->settings === null) $chart->settings = array();
+        if(!empty($chart->settings[0]['type']) && empty($chart->type)) $chart->type = $chart->settings[0]['type'];
+
+        $chart->fieldSettings = json_decode($chart->fields, true);
+        if($chart->fieldSettings === null) $chart->fieldSettings = array();
+        $chart->fields = array_keys($chart->fieldSettings);
 
         return $chart;
     }
