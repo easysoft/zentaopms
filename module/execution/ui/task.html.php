@@ -103,11 +103,11 @@ sidebar
 );
 
 $firstTask            = reset($tasks);
-$canBatchEdit         = common::hasPriv('firstTask', 'batchEdit', !empty($firstTask) ? $firstTask : null);
-$canBatchClose        = common::hasPriv('firstTask', 'batchClose', !empty($firstTask) ? $firstTask : null) && strtolower($browseType) != 'closed';
-$canBatchCancel       = common::hasPriv('firstTask', 'batchCancel', !empty($firstTask) ? $firstTask : null) && strtolower($browseType) != 'cancel';
-$canBatchAssignTo     = common::hasPriv('firstTask', 'batchAssignTo', !empty($firstTask) ? $firstTask : null);
-$canBatchChangeModule = common::hasPriv('firstTask', 'batchChangeModule', !empty($firstTask) ? $firstTask : null);
+$canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($firstTask) ? $firstTask : null);
+$canBatchClose        = common::hasPriv('task', 'batchClose', !empty($firstTask) ? $firstTask : null) && strtolower($browseType) != 'closed';
+$canBatchCancel       = common::hasPriv('task', 'batchCancel', !empty($firstTask) ? $firstTask : null) && strtolower($browseType) != 'cancel';
+$canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($firstTask) ? $firstTask : null);
+$canBatchChangeModule = common::hasPriv('task', 'batchChangeModule', !empty($firstTask) ? $firstTask : null);
 $canBatchAction       = in_array(true, array($canBatchEdit, $canBatchClose, $canBatchCancel, $canBatchChangeModule, $canBatchAssignTo));
 
 $footToolbar = array();
