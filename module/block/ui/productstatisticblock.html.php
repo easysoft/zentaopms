@@ -53,7 +53,7 @@ foreach($product->monthCreated as $date => $count)
 }
 
 $monthFinish  = !empty($product) ? $product->monthFinish : array();
-$monthCreated = !empty($product) ? $product->monthFieated : array();
+$monthCreated = !empty($product) ? $product->monthCreated : array();
 
 statisticBlock
 (
