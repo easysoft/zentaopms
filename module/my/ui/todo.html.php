@@ -25,7 +25,7 @@ featureBar
 
 toolbar
 (
-    common::hasPriv('todo', 'export') ? item
+    hasPriv('todo', 'export') ? item
     (
         set(array(
             'text'  => $lang->todo->export,
@@ -35,9 +35,9 @@ toolbar
             'data-toggle' => 'modal'
         ))
     ) : null,
-    common::hasPriv('todo', 'create') || common::hasPriv('todo', 'batchCreate') ? btngroup
+    hasPriv('todo', 'create') || hasPriv('todo', 'batchCreate') ? btngroup
     (
-        common::hasPriv('todo', 'create') ? btn
+        hasPriv('todo', 'create') ? btn
         (
             setClass('btn primary'),
             set::icon('plus'),
@@ -51,7 +51,7 @@ toolbar
             set::url(helper::createLink('todo', 'batchCreate')),
             $lang->todo->batchCreate
         ),
-        common::hasPriv('todo', 'create') && common::hasPriv('todo', 'batchCreate') ? dropdown
+        hasPriv('todo', 'create') && hasPriv('todo', 'batchCreate') ? dropdown
         (
             btn(setClass('btn primary dropdown-toggle'), setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
             set::items(array
@@ -64,9 +64,9 @@ toolbar
     ) : null
 );
 
-$batchEdit   = common::hasPriv('todo', 'batchEdit');
-$batchFinish = common::hasPriv('todo', 'batchFinish');
-$batchClose  = common::hasPriv('todo', 'batchClose');
+$batchEdit   = hasPriv('todo', 'batchEdit');
+$batchFinish = hasPriv('todo', 'batchFinish');
+$batchClose  = hasPriv('todo', 'batchClose');
 $footToolbar = array('items' => array
 (
     $batchEdit   ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('todo', 'batchEdit', "from=myTodo&type=$type&userID={$user->id}&status=$status")) : null,
@@ -93,9 +93,10 @@ dtable
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::orderBy($orderBy),
     set::sortLink(createLink('my', 'todo', "type={$type}&userID={$user->id}&status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::emptyTip($lang->my->noTodo),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    set::footer(array('checkbox', 'toolbar', common::hasPriv('todo', 'import2Today') && $importFuture ? jsRaw('window.generateHtml') : '', 'checkedInfo', 'flex', 'pager')),
+    set::footer(array('checkbox', 'toolbar', hasPriv('todo', 'import2Today') && $importFuture ? jsRaw('window.generateHtml') : '', 'checkedInfo', 'flex', 'pager')),
 );
 
 render();
