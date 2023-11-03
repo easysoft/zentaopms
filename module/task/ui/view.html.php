@@ -47,12 +47,14 @@ detailHeader
 );
 
 /* Construct suitable actions for the current task. */
+if(common::hasPriv('repo', 'createBranch') && empty($task->linkedBranch)) $hasRepo = $this->loadModel('repo')->getRepoPairs('execution', $task->execution, false);
+
 $operateMenus = array();
 foreach($config->task->view->operateList['main'] as $operate)
 {
     if($operate == 'createBranch')
     {
-        if(!common::hasPriv('repo', $operate) || !empty($task->linkedBranch)) continue;
+        if(empty($hasRepo) || !common::hasPriv('repo', $operate) || !empty($task->linkedBranch)) continue;
     }
     else
     {

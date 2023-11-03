@@ -49,6 +49,7 @@ foreach($projectExecutions as $projectID => $executions)
         $item['id']    = $execution->id;
         $item['text']  = $execution->name;
         $item['keys']  = zget(common::convert2Pinyin(array($execution->name)), $execution->name, '');
+        $item['data-app'] = $app->tab;
 
         if(!isset($data[$group][$projectID])) $data[$group][$projectID] = $projectItem;
         $data[$group][$projectID]['items'][] = $item;

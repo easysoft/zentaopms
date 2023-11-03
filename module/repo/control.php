@@ -215,7 +215,7 @@ class repo extends control
     public function createBranch(int $taskID, int $executionID, int $repoID = 0)
     {
         $repoList = $this->repo->getList($executionID);
-        if(!$repoList) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->noRepo));
+        if(!$repoList) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->noFound));
 
         if(!$repoID) $repoID = $this->post->repoID;
         if(!$repoID || !isset($repoList[$repoID])) $repoID = key($repoList);
