@@ -22,7 +22,7 @@ if($group->role == 'limited')
         setID('featureBar'),
         menu
         (
-            setClass('nav nav-feature'),
+            setClass('nav nav-feature w-full'),
             li
             (
                 setclass('nav-item'),
@@ -291,7 +291,7 @@ else
         setID('featureBar'),
         menu
         (
-            setClass('nav nav-feature'),
+            setClass('nav nav-feature w-full'),
             li
             (
                 span
