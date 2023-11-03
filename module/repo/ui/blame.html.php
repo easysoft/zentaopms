@@ -18,6 +18,7 @@ $breadcrumbItems   = array();
 $breadcrumbItems[] = h::a
 (
     set::href($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID")),
+    set('data-app', $app->tab),
     $repo->name,
 );
 $breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
@@ -31,6 +32,7 @@ foreach($paths as $pathName)
     $breadcrumbItems[] = h::a
     (
         set::href($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath))),
+        set('data-app', $app->tab),
         trim($pathName, '/'),
     );
     $breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
@@ -65,7 +67,7 @@ $encodePath = $this->repo->encodePath($entry);
 $encodes    = array();
 foreach($lang->repo->encodingList as $key => $val)
 {
-    $encodes[] = array('text' => $val, 'url' => inlink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$key"));
+    $encodes[] = array('text' => $val, 'url' => inlink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$key"), 'data-app' => $app->tab);
 }
 $defaultEncode = $lang->repo->encodingList[$encoding];
 
