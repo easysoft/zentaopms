@@ -129,7 +129,7 @@ $lang->my->menu->contribute['subMenu']->requirement = array('link' => "$lang->UR
 $lang->my->menu->contribute['subMenu']->bug         = array('link' => "{$lang->bug->common}|my|contribute|mode=bug", 'alias' => 'bug');
 $lang->my->menu->contribute['subMenu']->testcase    = array('link' => "{$lang->testcase->shortCommon}|my|contribute|mode=testcase", 'alias' => 'testcase');
 $lang->my->menu->contribute['subMenu']->testtask    = array('link' => "{$lang->testtask->common}|my|contribute|mode=testtask", 'alias' => 'testtask');
-$lang->my->menu->contribute['subMenu']->audit       = array('link' => "{$lang->review->common}|my|contribute|mode=audit", 'subModule' => 'review', 'alias' => 'audit');
+$lang->my->menu->contribute['subMenu']->audit       = array('link' => "{$lang->review->common}|my|contribute|mode=audit&type=reviewedbyme", 'subModule' => 'review', 'alias' => 'audit');
 $lang->my->menu->contribute['subMenu']->doc         = array('link' => "{$lang->doc->common}|my|contribute|mode=doc", 'alias' => 'doc');
 
 $lang->my->menu->contribute['menuOrder'][5]  = 'task';
