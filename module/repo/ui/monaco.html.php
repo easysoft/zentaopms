@@ -91,7 +91,7 @@ div(
 helper::isAjaxRequest('modal') ? null : sidebar
 (
     set::side('left'),
-    setClass('repo-sidebar canvas'),
+    setClass('repo-sidebar px-2'),
     dropmenu
     (
         setID('repoBranchDropMenu'),

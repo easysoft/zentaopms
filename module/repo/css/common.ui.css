@@ -43,7 +43,7 @@
 .monaco-dropmenu{background: #efefef; height: 40px; line-height: 40px;}
 #fileTabs > .btn {background: #efefef; border: none; --tw-ring-shadow: none;}
 #fileTabs > .btn-right {padding-right: 40px;}
-#repoBranchDropMenu > .dropmenu-btn {background: white; --tw-ring-color: none; color: inherit; margin-bottom: 10px; background: white;}
+#repoBranchDropMenu > .dropmenu-btn {background: white; --tw-ring-color: none; color: inherit; margin-bottom: 10px;}
 .repo-select #repoBranchDropMenu > .dropmenu-btn {background: inherit; --tw-ring-color: none; color: inherit; margin-bottom: 0;}
 #repoBranchDropMenu > .dropmenu-btn > .icon-angle-right {display: none;}
 #log .action-btn .caret {display: none;}
