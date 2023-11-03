@@ -67,7 +67,7 @@ class mr extends control
 
         $repoID = $this->loadModel('repo')->saveState($repoID, $objectID);
         $repo   = $this->repo->getByID($repoID);
-        if(!in_array(strtolower($repo->SCM), $this->config->mr->gitServiceList))
+        if(!in_array($repo->SCM, $this->config->mr->gitServiceTypeList))
         {
             $repoID = $this->dao->select('id')->from(TABLE_REPO)->where('deleted')->eq('0')->andWhere('SCM')->in(array('Gitlab', 'Gitea', 'Gogs'))->andWhere('synced')->eq(1)->orderBy('id')->fetch('id');
             $repo   = $this->repo->getByID($repoID);
@@ -177,7 +177,7 @@ class mr extends control
         $repoPairs = array($this->lang->repo->common);
         foreach($repoList as $repo)
         {
-            if(!in_array($repo->SCM, $this->config->repo->gitServiceList)) continue;
+            if(!in_array($repo->SCM, $this->config->repo->gitServiceTypeList)) continue;
 
             $repoPairs[$repo->id] = $repo->name;
             if($repoID && $repoID != $repo->id) continue;
@@ -255,7 +255,7 @@ class mr extends control
             $repoList = $this->loadModel('repo')->getList($objectID);
             foreach($repoList as $repoInfo)
             {
-                if(in_array($repo->SCM, $this->config->repo->gitServiceList)) $repoPairs[$repoInfo->id] = $repoInfo->name;
+                if(in_array($repo->SCM, $this->config->repo->gitServiceTypeList)) $repoPairs[$repoInfo->id] = $repoInfo->name;
             }
         }
 

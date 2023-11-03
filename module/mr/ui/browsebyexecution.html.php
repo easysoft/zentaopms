@@ -73,7 +73,7 @@ $repoData = array(array(
 ));
 foreach($repoList as $repo)
 {
-    if(!in_array($repo->SCM, $this->config->repo->gitServiceList)) continue;
+    if(!in_array($repo->SCM, $this->config->repo->gitServiceTypeList)) continue;
 
     $repoData[] = array(
         'text'     => $repo->name,
