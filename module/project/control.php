@@ -765,7 +765,7 @@ class project extends control
         $this->view->orderBy        = $orderBy;
         $this->view->status         = $status;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
-        $this->view->isStage        = isset($project->model) && (in_array($project->model, array('waterfall', 'waterfallplus')));
+        $this->view->isStage        = isset($project->model) && (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')));
         $this->view->avatarList     = $this->user->getAvatarPairs('');
 
         $this->display();
