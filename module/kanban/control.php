@@ -918,12 +918,11 @@ class kanban extends control
      * @param  int    $kanbanID
      * @param  int    $regionID
      * @param  int    $groupID
-     * @param  int    $laneID
      * @param  int    $columnID
      * @access public
      * @return void
      */
-    public function batchCreateCard($kanbanID = 0, $regionID = 0, $groupID = 0, $laneID = 0, $columnID = 0)
+    public function batchCreateCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0)
     {
         $kanban   = $this->kanban->getById($kanbanID);
         $backLink = $this->createLink('kanban', 'view', "kanbanID=$kanbanID");

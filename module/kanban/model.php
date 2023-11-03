@@ -1116,50 +1116,29 @@ class kanbanModel extends model
         $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'batchCreateCard', 'splitColumn', 'sortColumn');
 
         /* Group by parent. */
-        $parentColumnGroup = array();
-        $columnGroup       = array();
+        $columnGroup = array();
         foreach($columns as $column)
         {
             $item = array();
-            $item['title'] = htmlspecialchars_decode($column->name);
-            $item['name']  = $column->id;
-            $item['id']    = $column->id;
-            $item['type']  = $column->type;
-            $item['color'] = $column->color;
-            $item['limit'] = $column->limit;
+            $item['title']  = htmlspecialchars_decode($column->name);
+            $item['name']   = $column->id;
+            $item['id']     = $column->id;
+            $item['type']   = $column->type;
+            $item['color']  = $column->color;
+            $item['limit']  = $column->limit;
+            $item['region'] = $column->region;
+            $item['group']  = $column->group;
+            $item['parent'] = $column->parent;
+            if($column->parent > 0) $item['parentName'] = $column->parent;
 
             /* Judge column action priv. */
             foreach($actions as $action)
             {
-                if($this->isClickable($column, $action)) $item['actions'][] = $action;
+                if($this->isClickable($column, $action)) $item['actionList'][] = $action;
             }
 
             $columnGroup[$column->group][] = $item;
-
-            if($column->parent > 0) continue;
-
-            $parentColumnGroup[$column->group][] = $column;
         }
-
-        //$columnData = array();
-        //foreach($parentColumnGroup as $group => $parentColumns)
-        //{
-        //    foreach($parentColumns as $parentColumn)
-        //    {
-        //        $columnData[$group][] = $parentColumn;
-        //        foreach($columnGroup[$group] as $column)
-        //        {
-        //            if($column->parent == $parentColumn->id)
-        //            {
-        //                $parentColumn->asParent = true;
-
-        //                $column->parentType = 'column' . $column->parent;
-
-        //                $columnData[$group][] = $column;
-        //            }
-        //        }
-        //    }
-        //}
 
         return $columnGroup;
     }
@@ -1207,7 +1186,7 @@ class kanbanModel extends model
                 $item = array();
                 $item['column'] = $cell->column;
                 $item['lane']   = $cell->lane;
-                $item['title']  = htmlspecialchars_decode($card->title);
+                $item['title']  = htmlspecialchars_decode($card->name);
                 $item['name']   = $card->id;
 
                 foreach($actions as $action)
@@ -1228,7 +1207,7 @@ class kanbanModel extends model
                     if(common::hasPriv('kanban', $action)) $item['actions'][] = $action;
                 }
 
-                $cardGroup[$cell->group][$cell->lane]['column' . $cell->column][] = $item;
+                $cardGroup[$card->group][$cell->lane][$cell->column][] = $item;
             }
         }
 
