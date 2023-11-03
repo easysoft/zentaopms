@@ -23,7 +23,7 @@ class storyModel extends model
      */
     public function getByID(int $storyID, int $version = 0, bool $setImgSize = false): object|false
     {
-        $story = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->andWhere('vision')->eq($this->config->vision)->fetch();
+        $story = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")->fetch();
         if(!$story) return false;
 
         $story->children = array();
@@ -1924,7 +1924,7 @@ class storyModel extends model
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF(!empty($excludeStories))->andWhere('id')->notIN($excludeStories)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
-            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
             ->andWhere('type')->eq($type)
             ->orderBy($orderBy)
             ->page($pager)
@@ -2137,7 +2137,7 @@ class storyModel extends model
 
         $stories = $sql->where('t1.product')->in($productID)
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->andWhere('t1.type')->eq($type)
             ->beginIF($branch != 'all')->andWhere("t1.branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("t1.module")->in($modules)->fi()
@@ -2175,7 +2175,7 @@ class storyModel extends model
             ->beginIF($branch)->andWhere("branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("module")->in($modules)->fi()
             ->andWhere('deleted')->eq(0)
-            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
             ->andWhere('stage')->in('developed,released')
             ->andWhere('status')->ne('closed')
             ->orderBy($orderBy)
@@ -2323,7 +2323,7 @@ class storyModel extends model
             ->where($sql)
             ->beginIF($productID != 'all' && $productID != '' && $productID != 0)->andWhere('t1.`product`')->eq((int)$productID)->fi()
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->andWhere('t1.type')->eq($type)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
@@ -2414,7 +2414,7 @@ class storyModel extends model
         $stories = $sql->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t1.type')->eq($storyType)
-            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all')
             ->beginIF($type == 'assignedTo')->andWhere('t1.assignedTo')->eq($account)->fi()
@@ -2455,7 +2455,7 @@ class storyModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq($type)
             ->andWhere('assignedTo')->eq($account)
-            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
             ->andWhere('status')->ne('closed')
             ->andWhere('product')->ne(0)
             ->beginIF(!empty($skipProductIDList))->andWhere('product')->notin($skipProductIDList)->fi()
