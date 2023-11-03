@@ -16,16 +16,29 @@ $productModel = $this->product;
 
 $fnPrintSingleRoadmap = function($branchKey = 0) use ($roadmaps, $product, $productModel)
 {
-    $data = $productModel->buildRoadmapForUI($roadmaps, $branchKey);
-    $hasRoadmaps = !empty($data) ;
+    global $lang;
 
+    $data        = $productModel->buildRoadmapForUI($roadmaps, $branchKey);
+    $hasRoadmaps = !empty($data) ;
     if(!$hasRoadmaps)
     {
         return div
         (
-            setClass('table-empty-tip'),
+            setClass('empty-tip text-center'),
             span(setClass('text-gray'), $lang->release->noRelease),
-            common::canModify('product', $product) && common::hasPriv('release', 'create') ? btn(setClass('secondary'), set::url(createLink('release', 'create', "productID=$product->id&branch=$branchKey")), icon(setClass('pr-1'), 'plus'), $lang->release->create) : null,
+            common::canModify('product', $product) && common::hasPriv('release', 'create') ? btn
+            (
+                setClass('ml-2'),
+                setStyle('background', 'rgb(var(--color-primary-50-rgb))'),
+                setStyle('box-shadow', 'none'),
+                set::url(createLink('release', 'create', "productID=$product->id&branch=$branchKey")),
+                span
+                (
+                    icon('plus'),
+                    setClass('text-primary'),
+                    $lang->release->create,
+                )
+            ) : null
         );
     }
     else
@@ -53,11 +66,11 @@ $fnPrintBranchRoadmap = function() use ($branches, $roadmaps, $product, $product
 panel
 (
     set::title($lang->product->iteration),
-    set::titleClass("text-lg"),
+    set::titleClass('text-xl'),
     set::headingClass('justify-start'),
     to::heading
     (
-        span(setClass('label rounded-full'), sprintf($lang->product->iterationInfo, $roadmaps['total'])),
+        span(setClass('label light rounded-full text-dark'), sprintf($lang->product->iterationInfo, $roadmaps['total'])),
     ),
     $product->type == 'normal' ? $fnPrintSingleRoadmap() : $fnPrintBranchRoadmap(),
 );
