@@ -620,9 +620,9 @@ class chartModel extends model
         $molecule    = $this->dao->query($moleculeSQL)->fetch();
         $denominator = $this->dao->query($denominatorSQL)->fetch();
 
-        $percent = round($molecule->count / $denominator->count, 2);
+        $percent = round($molecule->count / $denominator->count, 4);
 
-        $series  = array(array('type' => 'liquidFill', 'data' => array($percent), 'outline' => array('show' => false), 'label' => array('fontSize' => 30)));
+        $series  = array(array('type' => 'liquidFill', 'data' => array($percent), 'outline' => array('show' => false), 'label' => array('fontSize' => 26)));
         $tooltip = array('show' => true);
         $options = array('series' => $series, 'tooltip' => $tooltip);
 

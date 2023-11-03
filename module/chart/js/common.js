@@ -17,6 +17,12 @@ function ajaxGetChart(check = true, chart = DataStorage.chart, echart = window.e
         var data = JSON.parse(resp);
         if(echart)
         {
+            if(chartParams.settings[0].type == 'waterpolo')
+            {
+                data.series[0].label.formatter = function(params) { return (params.value * 100).toFixed(2) + '%';};
+                data.tooltip.formatter         = function(params) { return (params.value * 100).toFixed(2) + '%';};
+            }
+
             echart.resize();
             echart.clear();
             echart.setOption(data, true);
