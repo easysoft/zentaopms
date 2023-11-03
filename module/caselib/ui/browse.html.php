@@ -153,7 +153,7 @@ dtable
     set::customCols(true),
     set::emptyTip($lang->testcase->noCase),
     set::createTip($lang->testcase->create),
-    set::createLink(array('module' => 'caselib', 'method' => 'createCase', 'params' => "libID={$libID}&moduleID={$moduleID}")),
+    set::createLink($canCreateCase ? createLink('caselib', 'createCase', "libID={$libID}&moduleID={$moduleID}") : ''),
     set::orderBy($orderBy),
     set::sortLink(createLink('caselib', 'browse', "libID={$libID}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),

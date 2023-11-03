@@ -112,7 +112,7 @@ class caselib extends control
         $message = $this->executeHooks($libID);
         if(!$message) $message = $this->lang->saveSuccess;
 
-        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('caselib', 'browse')));
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->createLink('caselib', 'browse'), 'closeModal' => true));
     }
 
     /**
