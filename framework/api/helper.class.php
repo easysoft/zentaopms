@@ -188,8 +188,8 @@ class helper extends baseHelper
     /**
      * Create url of issue.
      *
-     * @param  string       $module
-     * @param  string       $method
+     * @param  string       $moduleName
+     * @param  string       $methodName
      * @param  string|array $vars
      * @param  string       $viewType
      * @param  bool         $onlyBody
@@ -197,7 +197,7 @@ class helper extends baseHelper
      * @access public
      * @return string
      */
-    static public function createLink(string $moduleName, string $methodName = 'index', string|array $vars = '', string $viewType = 'json', bool $onlyBody = false)
+    public static function createLink(string $moduleName, string $methodName = 'index', string|array $vars = '', string $viewType = 'json', bool $onlyBody = false)
     {
         global $config;
         $link = parent::createLink($moduleName, $methodName, $vars, $viewType);
@@ -214,6 +214,50 @@ class helper extends baseHelper
         }
         return common::getSysURL() . $link;
     }
+
+    /**
+     * 是否是内网。
+     * Check is intranet.
+     *
+     * @return bool
+     */
+    public static function isIntranet()
+    {
+        return !defined('USE_INTRANET') ? false : USE_INTRANET;
+    }
+
+    /**
+     * 转换类型。
+     * Convert the type.
+     *
+     * @param mixed  $value
+     * @param string $type
+     * @static
+     * @access public
+     * @return array|bool|float|int|object|string
+     */
+    public static function convertType($value, $type)
+    {
+        switch($type)
+        {
+            case 'int':
+                return (int)$value;
+            case 'float':
+                return (float)$value;
+            case 'bool':
+                return (bool)$value;
+            case 'array':
+                return (array)$value;
+            case 'object':
+                return (object)$value;
+            case 'datetime':
+            case 'date':
+                return $value ? (string)$value : null;
+            case 'string':
+            default:
+                return (string)$value;
+        }
+    }
 }
 
 /**
@@ -226,6 +270,18 @@ class helper extends baseHelper
 function isonlybody(): bool
 {
     return helper::inOnlyBodyMode();
+}
+
+/**
+ * 检查页面是否是弹窗中。
+ * Check page is modal.
+ *
+ * @access public
+ * @return bool
+ */
+function isInModal(): bool
+{
+    return helper::isAjaxRequest('modal');
 }
 
 /**
