@@ -2,8 +2,8 @@ window.onRenderCell = function(result, {row, col})
 {
     if(result && col.name == 'title')
     {
-        result.pop();
-        result.push({html: '<a href=\'' + viewLink.replace('{module}', row.data.module).replace('{id}', row.data.id)  + '\' data-toggle="modal" data-size="lg">'+ row.data.title + '</a>'});
+        result = [];
+        result.push({html: '<a href=\'' + viewLink.replace('{module}', row.data.module).replace('{id}', row.data.id)  + '\' data-toggle="modal" data-size="lg" title="' + row.data.title + '">'+ row.data.title + '</a>'});
     }
 
     if(result && col.name == 'actions')
