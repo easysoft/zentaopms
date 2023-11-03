@@ -44,7 +44,7 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $exec
 {
     if(empty($planID) || $project->model != 'waterfallplus') return div();
 
-    $typeList = $lang->programplan->typeList;
+    $typeList = $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->programplan->typeList;
 
     $items = array();
     if(count($typeList) > 1)
