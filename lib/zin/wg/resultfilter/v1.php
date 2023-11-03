@@ -62,7 +62,7 @@ class resultFilter extends filter
             datetimePicker
             (
                 setClass('w-full'),
-                set::name($name . '_begin'),
+                set::name($name . '_end'),
                 set::value(zget($value, 'end', ''))
             ),
         );
