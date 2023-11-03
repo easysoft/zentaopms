@@ -76,7 +76,8 @@ toolbar
 $noData = null;
 if(empty($tree))
 {
-
+    $checkObject = new stdclass();
+    $checkObject->execution = $executionID;
     $noData = div(
         setClass('table-empty-tip h-60 flex items-center justify-center'),
         span
