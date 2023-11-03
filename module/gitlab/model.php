@@ -3008,7 +3008,21 @@ class gitlabModel extends model
      */
     public function isClickable(object $gitlab, string $action): bool
     {
-        return commonModel::hasPriv('space', 'browse');
+        if(!commonModel::hasPriv('space', 'browse')) return false;
+
+        if($action == 'browseBranch') return $object->isDeveloper;
+        if($action == 'browseTag') return $object->isDeveloper;
+        if($action == 'manageProjectMembers') return $object->hasRepo;
+        if($action == 'createWebhook') return $object->hasRepo;
+        if($action == 'manageBranchPriv') return $object->defaultBranch;
+        if($action == 'manageTagPriv') return $object->defaultBranch;
+        if($action == 'editProject') return $object->defaultBranch;
+        if($action == 'deleteProject') return $object->defaultBranch;
+
+        if($action == 'editGroup') return $object->isAdmin;
+        if($action == 'deleteGroup') return $object->isAdmin;
+
+        return true;
     }
 
     /**

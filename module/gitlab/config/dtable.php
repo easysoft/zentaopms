@@ -74,3 +74,95 @@ $config->gitlab->dtable->bindUser->fieldList['status']['title'] = $lang->gitlab-
 $config->gitlab->dtable->bindUser->fieldList['status']['type']  = 'html';
 $config->gitlab->dtable->bindUser->fieldList['status']['width'] = 100;
 $config->gitlab->dtable->bindUser->fieldList['status']['map']   = $lang->gitlab->bindStatus;
+
+$config->gitlab->dtable->project = new stdclass();
+
+$config->gitlab->dtable->project->fieldList['id']['title']    = $lang->gitlab->id;
+$config->gitlab->dtable->project->fieldList['id']['sortType'] = true;
+
+$config->gitlab->dtable->project->fieldList['name']['title']    = $lang->gitlab->project->name;
+$config->gitlab->dtable->project->fieldList['name']['name']     = 'name_with_namespace';
+$config->gitlab->dtable->project->fieldList['name']['sortType'] = true;
+
+$config->gitlab->dtable->project->fieldList['star']['title'] = '';
+
+$config->gitlab->dtable->project->fieldList['lastUpdate']['title']    = $lang->gitlab->lastUpdate;
+$config->gitlab->dtable->project->fieldList['lastUpdate']['type']     = 'date';
+$config->gitlab->dtable->project->fieldList['lastUpdate']['sortType'] = false;
+
+$config->gitlab->dtable->project->fieldList['actions']['name']  = 'actions';
+$config->gitlab->dtable->project->fieldList['actions']['title'] = $lang->actions;
+$config->gitlab->dtable->project->fieldList['actions']['type']  = 'actions';
+$config->gitlab->dtable->project->fieldList['actions']['menu']  = array('browseBranch', 'browseTag', 'manageBranchPriv', 'manageTagPriv', 'manageProjectMembers', 'createWebhook', 'importIssue', 'editProject', 'deleteProject');
+
+$config->gitlab->dtable->project->fieldList['actions']['list']['browseBranch']['icon'] = 'treemap';
+$config->gitlab->dtable->project->fieldList['actions']['list']['browseBranch']['hint'] = $lang->gitlab->browseBranch;
+$config->gitlab->dtable->project->fieldList['actions']['list']['browseBranch']['url']  = helper::createLink('gitlab', 'browseBranch', 'gitlabID={gitlabID}&projectID={id}');
+
+$config->gitlab->dtable->project->fieldList['actions']['list']['browseTag']['icon'] = 'tag';
+$config->gitlab->dtable->project->fieldList['actions']['list']['browseTag']['hint'] = $lang->gitlab->browseTag;
+$config->gitlab->dtable->project->fieldList['actions']['list']['browseTag']['url']  = helper::createLink('gitlab', 'browseTag', 'gitlabID={gitlabID}&projectID={id}');
+
+$config->gitlab->dtable->project->fieldList['actions']['list']['manageBranchPriv']['icon'] = 'tag';
+$config->gitlab->dtable->project->fieldList['actions']['list']['manageBranchPriv']['hint'] = $lang->gitlab->browseBranchPriv;
+$config->gitlab->dtable->project->fieldList['actions']['list']['manageBranchPriv']['url']  = helper::createLink('gitlab', 'manageBranchPriv', 'gitlabID={gitlabID}&projectID={id}');
+
+$config->gitlab->dtable->project->fieldList['actions']['list']['manageTagPriv']['icon'] = 'tag-lock';
+$config->gitlab->dtable->project->fieldList['actions']['list']['manageTagPriv']['hint'] = $lang->gitlab->browseTagPriv;
+$config->gitlab->dtable->project->fieldList['actions']['list']['manageTagPriv']['url']  = helper::createLink('gitlab', 'manageTagPriv', 'gitlabID={gitlabID}&projectID={id}');
+
+$config->gitlab->dtable->project->fieldList['actions']['list']['manageProjectMembers']['icon'] = 'team';
+$config->gitlab->dtable->project->fieldList['actions']['list']['manageProjectMembers']['hint'] = $lang->gitlab->manageProjectMembers;
+$config->gitlab->dtable->project->fieldList['actions']['list']['manageProjectMembers']['url']  = helper::createLink('gitlab', 'manageProjectMembers', 'repoID={repoID}');
+
+$config->gitlab->dtable->project->fieldList['actions']['list']['createWebhook']['icon']      = 'change';
+$config->gitlab->dtable->project->fieldList['actions']['list']['createWebhook']['hint']      = $lang->gitlab->createWebhook;
+$config->gitlab->dtable->project->fieldList['actions']['list']['createWebhook']['url']       = helper::createLink('gitlab', 'createWebhook', 'repoID={repoID}');
+$config->gitlab->dtable->project->fieldList['actions']['list']['createWebhook']['className'] = 'ajax-submit';
+
+$config->gitlab->dtable->project->fieldList['actions']['list']['importIssue']['icon'] = 'link';
+$config->gitlab->dtable->project->fieldList['actions']['list']['importIssue']['hint'] = $lang->gitlab->importIssue;
+$config->gitlab->dtable->project->fieldList['actions']['list']['importIssue']['url']  = helper::createLink('gitlab', 'importIssue', 'gitlabID={gitlabID}&projectID={id}');
+
+$config->gitlab->dtable->project->fieldList['actions']['list']['editProject']['icon'] = 'edit';
+$config->gitlab->dtable->project->fieldList['actions']['list']['editProject']['hint'] = $lang->gitlab->editProject;
+$config->gitlab->dtable->project->fieldList['actions']['list']['editProject']['url']  = helper::createLink('gitlab', 'editProject', 'gitlabID={gitlabID}&projectID={id}');
+
+$config->gitlab->dtable->project->fieldList['actions']['list']['deleteProject']['icon']      = 'trash';
+$config->gitlab->dtable->project->fieldList['actions']['list']['deleteProject']['hint']      = $lang->gitlab->deleteProject;
+$config->gitlab->dtable->project->fieldList['actions']['list']['deleteProject']['url']       = helper::createLink('gitlab', 'deleteProject', 'gitlabID={gitlabID}&projectID={id}');
+$config->gitlab->dtable->project->fieldList['actions']['list']['deleteProject']['className'] = 'ajax-submit';
+
+$config->gitlab->dtable->group = new stdclass();
+
+$config->gitlab->dtable->group->fieldList['id']['title']    = $lang->gitlab->group->id;
+$config->gitlab->dtable->group->fieldList['id']['sortType'] = true;
+
+$config->gitlab->dtable->group->fieldList['fullName']['title'] = $lang->gitlab->group->name;
+$config->gitlab->dtable->group->fieldList['fullName']['name']  = 'fullName';
+$config->gitlab->dtable->group->fieldList['fullName']['type']  = 'avatarBtn';
+$config->gitlab->dtable->group->fieldList['fullName']['sortType'] = true;
+
+$config->gitlab->dtable->group->fieldList['path']['title'] = $lang->gitlab->group->path;
+$config->gitlab->dtable->group->fieldList['path']['name']  = 'full_path';
+$config->gitlab->dtable->group->fieldList['path']['sortType'] = true;
+
+$config->gitlab->dtable->group->fieldList['createOn']['title'] = $lang->gitlab->group->createOn;
+
+$config->gitlab->dtable->group->fieldList['actions']['name']  = 'actions';
+$config->gitlab->dtable->group->fieldList['actions']['title'] = $lang->actions;
+$config->gitlab->dtable->group->fieldList['actions']['type']  = 'actions';
+$config->gitlab->dtable->group->fieldList['actions']['menu']  = array('manageGroupMembers', 'editGroup', 'deleteGroup');
+
+$config->gitlab->dtable->group->fieldList['actions']['list']['manageGroupMembers']['icon'] = 'team';
+$config->gitlab->dtable->group->fieldList['actions']['list']['manageGroupMembers']['hint'] = $lang->gitlab->group->manageMembers;
+$config->gitlab->dtable->group->fieldList['actions']['list']['manageGroupMembers']['url']  = helper::createLink('gitlab', 'manageGroupMembers', 'gitlabID={gitlabID}&groupID={id}');
+
+$config->gitlab->dtable->group->fieldList['actions']['list']['editGroup']['icon'] = 'edit';
+$config->gitlab->dtable->group->fieldList['actions']['list']['editGroup']['hint'] = $lang->gitlab->editGroup;
+$config->gitlab->dtable->group->fieldList['actions']['list']['editGroup']['url']  = helper::createLink('gitlab', 'editGroup', 'gitlabID={gitlabID}&groupID={id}');
+
+$config->gitlab->dtable->group->fieldList['actions']['list']['deleteGroup']['icon']      = 'trash';
+$config->gitlab->dtable->group->fieldList['actions']['list']['deleteGroup']['hint']      = $lang->gitlab->deleteGroup;
+$config->gitlab->dtable->group->fieldList['actions']['list']['deleteGroup']['url']       = helper::createLink('gitlab', 'deleteGroup', 'gitlabID={gitlabID}&groupID={id}');
+$config->gitlab->dtable->group->fieldList['actions']['list']['deleteGroup']['className'] = 'ajax-submit';

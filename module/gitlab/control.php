@@ -362,9 +362,10 @@ class gitlab extends control
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
         }
 
+        $fixOrderBy  = str_replace('fullName', 'name', $orderBy);
         $keyword     = fixer::input('post')->setDefault('keyword', '')->get('keyword');
-        $groups      = $this->gitlab->apiGetGroups($gitlabID, $orderBy, '', $keyword);
-        $adminGroups = $this->gitlab->apiGetGroups($gitlabID, $orderBy, 'owner', $keyword);
+        $groups      = $this->gitlab->apiGetGroups($gitlabID, $fixOrderBy, '', $keyword);
+        $adminGroups = $this->gitlab->apiGetGroups($gitlabID, $fixOrderBy, 'owner', $keyword);
 
         $adminGroupIDList = array();
         foreach($adminGroups as $group) $adminGroupIDList[] = $group->id;

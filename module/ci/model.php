@@ -24,8 +24,9 @@ class ciModel extends model
             $this->session->set('repoID', $repoID);
             session_write_close();
         }
-        $homeMenuMethod = array('gitlab-browse', 'gitlab-create', 'gitlab-edit', 'gitlab-binduser', 'gogs-browse', 'gogs-create', 'gogs-edit', 'gitea-browse', 'gitea-create', 'gitea-edit', 'jenkins-browse', 'jenkins-create', 'jenkins-edit', 'sonarqube-browse', 'sonarqube-create', 'sonarqube-edit');
-        if(!in_array("{$this->app->moduleName}-{$this->app->methodName}", $homeMenuMethod)) common::setMenuVars('devops', $this->session->repoID);
+
+        $homeMenuModule = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
+        if(!in_array("{$this->app->moduleName}", $homeMenuModule)) common::setMenuVars('devops', $this->session->repoID);
 
         if($this->session->repoID)
         {
