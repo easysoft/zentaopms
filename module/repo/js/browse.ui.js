@@ -103,7 +103,7 @@ window.diffClick = function()
 
     $.cookie.set('sideRepoSelected', checkedIds.join(','))
 
-    openUrl(newDiffLink);
+    openUrl(newDiffLink, {app: appTab});
 }
 
 /**
