@@ -200,11 +200,13 @@ class chartModel extends model
         $settings = current($chart->settings);
         $type     = $settings['type'];
 
-        if($type == 'pie')   return $this->genPie($chart->fieldSettings, $settings, $chart->sql, array());
-        if($type == 'radar') return $this->genRadar($chart->fieldSettings, $settings, $chart->sql, array(), $chart->langs);
-        if($type == 'line')  return $this->genLineChart($chart->fieldSettings, $settings, $chart->sql, array(), $chart->langs);
-        if($type == 'cluBarX'    || $type == 'cluBarY')     return $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, array(), '', $chart->langs);
-        if($type == 'stackedBar' || $type == 'stackedBarY') return $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, array(), 'total', $chart->langs);
+        $filterFormat = $this->getFilterFormat($chart->filters);
+
+        if($type == 'pie')   return $this->genPie($chart->fieldSettings, $settings, $chart->sql, $filterFormat);
+        if($type == 'radar') return $this->genRadar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $chart->langs);
+        if($type == 'line')  return $this->genLineChart($chart->fieldSettings, $settings, $chart->sql, $filterFormat, $chart->langs);
+        if($type == 'cluBarX'    || $type == 'cluBarY')     return $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, '', $chart->langs);
+        if($type == 'stackedBar' || $type == 'stackedBarY') return $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, $filterFormat, 'total', $chart->langs);
 
         return array();
     }
