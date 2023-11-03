@@ -1201,7 +1201,7 @@ class storyModel extends model
             $story = new stdclass();
             $story->title   = $titleList[$twinID]->title;
             $story->version = $oldStory->version - 1;
-            $story->status  = ($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement') ? 'launched' : 'active';
+            $story->status  = ($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $this->config->vision == 'rnd') ? 'launched' : 'active';
             $this->dao->update(TABLE_STORY)->set('title')->eq($story->title)->set('version')->eq($story->version)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
         }
 
@@ -1240,7 +1240,7 @@ class storyModel extends model
         }
 
         $story->reviewer = implode(',', $story->reviewer);
-        $story->status   = ($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active') ? 'launched' : 'reviewing';
+        $story->status   = ($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') ? 'launched' : 'reviewing';
 
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer')->where('id')->in($twinsIdList)->exec();
 
@@ -1783,7 +1783,7 @@ class storyModel extends model
         $story->status = $this->getActivateStatus($storyID);
 
         /* If in ipd mode, set requirement status = 'launched'. */
-        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active') $story->status = 'launched';
+        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
 
         $this->dao->update(TABLE_STORY)->data($story, 'comment')->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
 
@@ -3837,7 +3837,7 @@ class storyModel extends model
         $story->finalResult = $result;
 
         /* If in ipd mode, set requirement status = 'launched'. */
-        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active') $story->status = 'launched';
+        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
 
         return $story;
     }

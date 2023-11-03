@@ -1099,7 +1099,7 @@ class storyZen extends story
         if($storyData->status != 'draft' and $this->story->checkForceReview() and !$this->post->needNotReview) $storyData->status = 'reviewing';
 
         /* If in ipd mode, set requirement status = 'launched'. */
-        if($this->config->systemMode == 'PLM' and $story->type == 'requirement' and $story->status == 'active') $story->status = 'launched';
+        if($this->config->systemMode == 'PLM' and $story->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') $story->status = 'launched';
         return $this->loadModel('file')->processImgURL($storyData, $editorFields, $this->post->uid);
     }
 
@@ -1198,7 +1198,7 @@ class storyZen extends story
             ->get();
 
         /* If in ipd mode, set requirement status = 'launched'. */
-        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active') $story->status = 'launched';
+        if($this->config->systemMode == 'PLM' and $this->config->vision == 'rnd' and $oldStory->type == 'requirement' and $story->status == 'active') $story->status = 'launched';
 
         $specChanged        = false;
         $oldStoryReviewers  = array_keys($this->story->getReviewerPairs($storyID, $oldStory->version));
@@ -1386,7 +1386,7 @@ class storyZen extends story
             if($this->post->uploadImage && $this->post->uploadImage[$i]) $story->uploadImage = $this->post->uploadImage[$i];
 
             /* If in ipd mode, set requirement status = 'launched'. */
-            if($this->config->systemMode == 'PLM' and $storyType == 'requirement' and $story->status == 'active') $story->status = 'launched';
+            if($this->config->systemMode == 'PLM' and $this->config->vision == 'rnd' and $storyType == 'requirement' and $story->status == 'active') $story->status = 'launched';
         }
 
         return $stories;
