@@ -177,7 +177,7 @@ class mr extends control
         $repoPairs = array($this->lang->repo->common);
         foreach($repoList as $repo)
         {
-            if($repo->SCM == 'Subversion') continue;
+            if(!in_array($repo->SCM, $this->config->repo->gitServiceTypeList)) continue;
 
             $repoPairs[$repo->id] = $repo->name;
             if($repoID && $repoID != $repo->id) continue;
@@ -255,7 +255,7 @@ class mr extends control
             $repoList = $this->loadModel('repo')->getList($objectID);
             foreach($repoList as $repoInfo)
             {
-                if($repoInfo->SCM != 'Subversion') $repoPairs[$repoInfo->id] = $repoInfo->name;
+                if(in_array($repo->SCM, $this->config->repo->gitServiceTypeList)) $repoPairs[$repoInfo->id] = $repoInfo->name;
             }
         }
 
