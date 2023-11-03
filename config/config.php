@@ -180,7 +180,7 @@ $config->CNE->app->domain = 'dev.haogs.cn';
 
 $config->cloud = new stdclass;
 $config->cloud->api = new stdclass;
-$config->cloud->api->host          = 'https://api.qucheng.com';
+$config->cloud->api->host          = getenv('CLOUD_API_HOST');
 $config->cloud->api->auth          = 'X-Auth-Token';
 $config->cloud->api->token         = getenv('CLOUD_API_TOKEN'); // Please set token in my.php.
 $config->cloud->api->headers       = array('Content-Type: application/json');
