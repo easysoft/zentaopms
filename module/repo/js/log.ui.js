@@ -80,7 +80,7 @@ window.diffClick = function()
     var newDiffLink = diffLink.replace('{oldRevision}', revisionMap[checkedIds[1]]);
     newDiffLink     = newDiffLink.replace('{newRevision}', revisionMap[checkedIds[0]]);
 
-    openUrl(newDiffLink);
+    openUrl(newDiffLink, {app: appTab});
 }
 
 /**

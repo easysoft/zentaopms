@@ -60,7 +60,7 @@ $('#repo-select').on('change', function()
     var index = $('#repo-select').prop('selectedIndex');
     if(menus[index - 1].url != undefined)
     {
-        openUrl(menus[index - 1].url);
+        openUrl(menus[index - 1].url, {app: appTab});
     }
 })
 

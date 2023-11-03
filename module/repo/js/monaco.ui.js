@@ -57,7 +57,7 @@ window.afterPageUpdate = function()
 
             if(branchOrTag != $.cookie.get('repoBranch')) $.cookie.set('repoBranch', branchOrTag);
 
-            openUrl(currentLink);
+            openUrl(currentLink, {app: appTab});
         })
 
         $('.repoDropDownMenu').on('click', function()
@@ -66,7 +66,7 @@ window.afterPageUpdate = function()
             var activeFilePath = $('#monacoTabs .nav-item .active').attr('href').substring(5).replace(/-/g, '=');
             if(url.indexOf('blame') >=0 && url.indexOf('download') == -1)
             {
-                openUrl(url.replace('{path}', activeFilePath));
+                openUrl(url.replace('{path}', activeFilePath), {app: appTab});
             }
             else
             {

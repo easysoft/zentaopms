@@ -141,10 +141,11 @@ $config->repo->logDtable = new stdclass();
 
 $config->repo->logDtable->fieldList['id']['hidden'] = true;
 
-$config->repo->logDtable->fieldList['revision']['type']  = 'revision';
-$config->repo->logDtable->fieldList['revision']['width'] = '100';
-$config->repo->logDtable->fieldList['revision']['checkbox'] = true;
+$config->repo->logDtable->fieldList['revision']['type']         = 'revision';
+$config->repo->logDtable->fieldList['revision']['width']        = '100';
+$config->repo->logDtable->fieldList['revision']['checkbox']     = true;
 $config->repo->logDtable->fieldList['revision']['nestedToggle'] = false;
+$config->repo->logDtable->fieldList['revision']['data-app']     = $app->tab;
 
 $config->repo->logDtable->fieldList['commit']['type']     = 'number';
 $config->repo->logDtable->fieldList['commit']['width']    = '50';

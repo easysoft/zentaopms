@@ -21,6 +21,7 @@ dropmenu
 $diffLink = $this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($entry) . "&oldrevision={oldRevision}&newRevision={newRevision}");
 
 jsVar('diffLink', $diffLink);
+jsVar('appTab', $app->tab);
 
 /* Prepare breadcrumb navigation data. */
 $base64BranchID    = helper::safe64Encode(base64_encode($branchID));
