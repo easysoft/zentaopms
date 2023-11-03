@@ -1093,7 +1093,7 @@ class execution extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if($project->model == 'waterfall' or $project->model == 'waterfallplus') $this->programplan->computeProgress($executionID, 'edit');
+            if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->programplan->computeProgress($executionID, 'edit');
 
             /* Redirect to confirm page if the execution can link plan stories. */
             $this->executionZen->checkLinkPlan($executionID, $oldPlans);
@@ -1119,7 +1119,7 @@ class execution extends control
 
         if(!$project->hasProduct) $this->lang->execution->PO = $this->lang->common->story . $this->lang->execution->owner;
 
-        if($project->model == 'waterfall' or $project->model == 'waterfallplus')
+        if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
         {
             $parentStage = $this->project->getByID($execution->parent, 'stage');
             $this->view->enableOptionalAttr = (empty($parentStage) or (!empty($parentStage) and $parentStage->attribute == 'mix'));

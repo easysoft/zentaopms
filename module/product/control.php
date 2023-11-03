@@ -146,7 +146,11 @@ class product extends control
         /* ATTENTION: be careful to change the order of follow sentences. */
         $this->productZen->setMenu4Browse($projectID, $productID, $branch, $storyType);
         $this->productZen->saveAndModifyCookie4Browse($productID, $branch, $param, $browseType, $orderBy);
-        if($browseType == '') $browseType = 'unclosed';
+        if($browseType == '')
+        {
+            $browseType = 'unclosed';
+            if($this->config->vision == 'or') $browseType = 'assignedtome';
+        }
 
         /* Generate data. */
         $moduleID = $this->productZen->getModuleId($param, $browseType);

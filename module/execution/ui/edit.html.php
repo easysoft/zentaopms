@@ -68,9 +68,10 @@ if(isset($project))
 }
 
 $typeBox = null;
-if($project->model == 'waterfall' || $project->model == 'waterfallplus')
+if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
 {
-    $typeBox = formRow
+    $typeList = $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList;
+    $typeBox  = formRow
         (
             formGroup
             (
@@ -80,10 +81,10 @@ if($project->model == 'waterfall' || $project->model == 'waterfallplus')
                 $enableOptionalAttr ? picker
                 (
                     set::name('attribute'),
-                    set::items($lang->stage->typeList),
+                    set::items($typeList),
                     set::value($execution->attribute),
                     set::required(true),
-                ) : span(zget($lang->stage->typeList, $execution->attribute)),
+                ) : span(zget($typeList, $execution->attribute)),
             ),
             formGroup
             (

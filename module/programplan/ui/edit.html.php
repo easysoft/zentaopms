@@ -11,9 +11,9 @@ declare(strict_types=1);
  */
 
 namespace zin;
-
+$typeList = $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList;
 jsVar('plan',           $plan);
-jsVar('stageTypeList',  $lang->stage->typeList);
+jsVar('stageTypeList',  $typeList);
 jsVar('changeAttrLang', $lang->programplan->confirmChangeAttr);
 jsVar('isTopStage',     $isTopStage);
 jsVar('isLeafStage',    $isLeafStage);
@@ -95,10 +95,10 @@ formPanel
                 select(set(array(
                     'id'       => 'attribute',
                     'name'     => 'attribute',
-                    'items'    => $lang->stage->typeList,
+                    'items'    => $typeList,
                     'value'    => $plan->attribute,
                     'required' => true
-                ))) : zget($lang->stage->typeList, $plan->attribute)
+                ))) : zget($typeList, $plan->attribute)
             )
         ),
         formGroup

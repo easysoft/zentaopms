@@ -87,11 +87,11 @@
             </div>
           </td>
         </tr>
-        <?php if($project->model == 'waterfall' or $project->model == 'waterfallplus'):?>
+        <?php if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))):?>
         <tr>
           <th><?php echo $lang->stage->type;?></th>
           <td>
-          <?php echo $enableOptionalAttr ? html::select('attribute', $lang->stage->typeList, $execution->attribute, "class='form-control chosen'") : zget($lang->stage->typeList, $execution->attribute); ?>
+          <?php echo $enableOptionalAttr ? html::select('attribute', $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList, $execution->attribute, "class='form-control chosen'") : zget($lang->stage->typeList, $execution->attribute); ?>
           </td>
           <td>
             <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->execution->typeTip;?>"></icon>
