@@ -429,7 +429,7 @@ class extensionModel extends model
         foreach($paths as $path)
         {
             if($path == 'db' or $path == 'doc' or $path == 'hook') continue;
-            $path = $appRoot . $path;
+            $path = rtrim($appRoot . $path, '/');
             if(is_dir($path))
             {
                 if(!is_writable($path))
@@ -453,7 +453,7 @@ class extensionModel extends model
                     $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
                     $checkResult->mkdirCommands .= "sudo mkdir -p $path<br />";
                 }
-                $checkResult->dirs2Created[] = $path;
+                if(file_exists($path) and realpath($path) != realpath($appRoot . 'module/extension') . 'ext') $checkResult->dirs2Created[] = $path;
             }
         }
 
@@ -615,7 +615,7 @@ class extensionModel extends model
             rsort($dirs);    // remove from the lower level directory.
             foreach($dirs as $dir)
             {
-                $path = $appRoot . $dir;
+                $path = rtrim($appRoot . $dir, '/');
                 if(!is_dir($path)) continue;
 
                 $parentDir = mb_substr($path, 0, strripos($path, '/'));
@@ -623,7 +623,7 @@ class extensionModel extends model
                 {
                     $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
                 }
-                elseif(!rmdir($appRoot . $dir))
+                elseif(!rmdir($path))
                 {
                     $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
                 }
