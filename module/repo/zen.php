@@ -687,12 +687,26 @@ class repoZen extends repo
         foreach($branches as $branchName)
         {
             $selected = ($branchName == $branchID) ? $branchName : $selected;
-            $branchMenus[]  = array('text' => $branchName, 'id' => $branchName, 'keys' => zget(common::convert2Pinyin(array($branchName)), $branchName, ''), 'url' => 'javascript:;');
+            $branchMenus[]  = array(
+                'text'       => $branchName,
+                'id'         => $branchName,
+                'keys'       => zget(common::convert2Pinyin(array($branchName)), $branchName, ''),
+                'url'        => 'javascript:;',
+                'data-type'  => 'branch',
+                'data-value' => $branchName,
+            );
         }
         foreach($tags as $tagName)
         {
             $selected = ($tagName == $branchID) ? $tagName : $selected;
-            $tagMenus[]  = array('text' => $tagName, 'id' => $tagName, 'keys' => zget(common::convert2Pinyin(array($tagName)), $tagName, ''), 'url' => 'javascript:;');
+            $tagMenus[]  = array(
+                'text'       => $tagName,
+                'id'         => $tagName,
+                'keys'       => zget(common::convert2Pinyin(array($tagName)), $tagName, ''),
+                'url'        => 'javascript:;',
+                'data-type'  => 'tag',
+                'data-value' => $tagName,
+            );
         }
 
         return array('branchMenus' => $branchMenus, 'tagMenus' => $tagMenus, 'selected' => $selected);

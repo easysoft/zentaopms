@@ -66,7 +66,7 @@ foreach($paths as $pathName)
 
 if($fileName) $breadcrumbItems[] = h::span($fileName);
 
-if(strpos($repo->SCM, 'Subversion') === false)
+if($repo->SCM != 'Subversion')
 {
     $oldRevision = $oldRevision == '^' ? "$newRevision" : $oldRevision;
 
@@ -75,29 +75,29 @@ if(strpos($repo->SCM, 'Subversion') === false)
     $breadcrumbItems[] = input(set::type('hidden'), set::name('isBranchOrTag'), set::value($isBranchOrTag));
     $breadcrumbItems[] = span($lang->repo->source . ':', setClass('ml-3'));
     $breadcrumbItems[] = dropmenu
-        (
-            setID('source'),
-            set::objectID($objectID),
-            set::text($oldRevision),
-            set::data(array('data' => $menuData, 'tabs' => $tabs)),
-        );
+    (
+        setID('source'),
+        set::objectID($objectID),
+        set::text($oldRevision),
+        set::data(array('data' => $menuData, 'tabs' => $tabs))
+    );
     $breadcrumbItems[] = span(setClass('label label-exchange mr-2'), icon('exchange'));
     $breadcrumbItems[] = span($lang->repo->target . ':');
     $breadcrumbItems[] = dropmenu
-        (
-            setID('target'),
-            set::objectID($objectID),
-            set::text($newRevision),
-            set::data(array('data' => $menuData, 'tabs' => $tabs)),
-        );
+    (
+        setID('target'),
+        set::objectID($objectID),
+        set::text($newRevision),
+        set::data(array('data' => $menuData, 'tabs' => $tabs))
+    );
     $breadcrumbItems[] = btn
-        (
-            set::id('diffForm'),
-            set::type('primary'),
-            set::size('md'),
-            $lang->repo->compare,
-            on::click('goDiff')
-        );
+    (
+        set::id('diffForm'),
+        set::type('primary'),
+        set::size('md'),
+        $lang->repo->compare,
+        on::click('goDiff')
+    );
 }
 else
 {
@@ -105,30 +105,30 @@ else
 
     $breadcrumbItems[] = input(set::type('hidden'), set::name('isBranchOrTag'), set::value($isBranchOrTag));
     $breadcrumbItems[] = input
-        (
-            setClass('svn-version mr-2'),
-            setStyle('width', '160px'),
-            set::name('oldRevision'),
-            set::value($oldRevision),
-            set::placeholder($lang->repo->source),
-        );
+    (
+        setClass('svn-version mr-2'),
+        setStyle('width', '160px'),
+        set::name('oldRevision'),
+        set::value($oldRevision),
+        set::placeholder($lang->repo->source),
+    );
     $breadcrumbItems[] = span(setClass('label label-exchange mr-2'), icon('exchange'));
     $breadcrumbItems[] = input
-        (
-            setClass('svn-version mr-2'),
-            setStyle('width', '160px'),
-            set::name('newRevision'),
-            set::value($newRevision),
-            set::placeholder($lang->repo->target),
-        );
+    (
+        setClass('svn-version mr-2'),
+        setStyle('width', '160px'),
+        set::name('newRevision'),
+        set::value($newRevision),
+        set::placeholder($lang->repo->target),
+    );
     $breadcrumbItems[] = btn
-        (
-            set::id('diffForm'),
-            set::type('primary'),
-            set::size('md'),
-            $lang->repo->compare,
-            on::click('goDiff')
-        );
+    (
+        set::id('diffForm'),
+        set::type('primary'),
+        set::size('md'),
+        $lang->repo->compare,
+        on::click('goDiff')
+    );
 }
 
 \zin\featureBar
