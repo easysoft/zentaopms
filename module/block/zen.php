@@ -2611,6 +2611,7 @@ class blockZen extends block
         $count      = isset($block->params->count) ? $block->params->count : '';
         $products   = $this->loadModel('product')->getOrderedProducts($status, (int)$count);
         $productID  = !empty($params['active']) ? $params['active'] : key($products);
+        if(empty($productID)) $productID = 0;
 
         $this->loadModel('metric');
         $bugFixedRate      = $this->metric->getResultByCode('rate_of_fixed_bug_in_product',      array('product' => $productID)); // 从度量项获取各个产品的Bug修复率。

@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-$annualMaxReleases   = max($releases);
+$annualMaxReleases   = !empty($release) ? max($releases) : 0;
 $releaseProgressData = array();
 $i = 1;
 foreach($releases as $productName => $releaseCount)
