@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-modalHeader(set::title($lang->kanban->editLaneName), set::titleClass('article-h1'));
+modalHeader(set::title($lang->kanban->editLaneColor), set::entityText($lane->name), set::entityID($lane->id));
 
 formPanel
 (
