@@ -488,21 +488,45 @@ class story extends control
         $story   = $this->story->mergeReviewer($story, true);
 
         $this->app->loadLang('bug');
-        $this->commonAction($storyID, $param);
         $this->storyZen->getLinkedObjects($story);
         $this->storyZen->setHiddenFieldsForView($product);
 
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
-        $this->view->title         = "STORY #$story->id $story->title - $product->name";
-        $this->view->branches      = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-        $this->view->users         = $this->user->getPairs('noletter');
-        $this->view->executions    = $this->execution->getPairs(0, 'all', 'nocode');
-        $this->view->project       = $this->project->fetchByID($param);
-        $this->view->version       = $version;
-        $this->view->preAndNext    = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
-        $this->view->builds        = $this->loadModel('build')->getStoryBuilds($storyID);
-        $this->view->releases      = $this->loadModel('release')->getStoryReleases($storyID);
+        /* Set menu. */
+        if($this->app->tab == 'project')
+        {
+            $projectID = $param ? $param : $this->session->project;
+            $this->loadModel('project')->setMenu($projectID);
+            $this->view->projectID = $projectID;
+        }
+        elseif($this->app->tab == 'execution')
+        {
+            $executionID = $param ? $param : $this->session->execution;
+            $this->loadModel('execution')->setMenu($executionID);
+            $this->view->executionID = $executionID;
+        }
+        elseif($this->app->tab == 'qa')
+        {
+            $this->loadModel('qa')->setMenu($story->product);
+        }
+        else
+        {
+            $this->product->setMenu($story->product, $story->branch);
+        }
+
+        $this->view->title      = "STORY #$story->id $story->title - $product->name";
+        $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->executions = $this->execution->getPairs(0, 'all', 'nocode');
+        $this->view->project    = $this->project->fetchByID($param);
+        $this->view->version    = $version;
+        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
+        $this->view->builds     = $this->loadModel('build')->getStoryBuilds($storyID);
+        $this->view->releases   = $this->loadModel('release')->getStoryReleases($storyID);
+        $this->view->story      = $story;
+        $this->view->product    = $product;
+        $this->view->actions    = $this->action->getList('story', $storyID);
 
         $this->display();
     }
