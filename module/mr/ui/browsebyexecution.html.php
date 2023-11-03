@@ -73,7 +73,7 @@ $repoData = array(array(
 ));
 foreach($repoList as $repo)
 {
-    if($repo->SCM == 'Subversion') continue;
+    if(!in_array($repo->SCM, $this->config->repo->gitServiceList)) continue;
 
     $repoData[] = array(
         'text'     => $repo->name,
