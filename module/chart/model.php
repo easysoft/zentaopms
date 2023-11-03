@@ -132,92 +132,56 @@ class chartModel extends model
     }
 
     /**
-     * Get tree of charts and groups.
+     * 生成分组和图表混排的菜单树。
+     * Generate a menu tree that mixes groups and charts.
      *
      * @param  int    $groupID
      * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getPreviewCharts($groupID, $orderBy = 'id_desc')
+    public function getTreeMenu(int $groupID, string $orderBy = 'id_desc'): array
     {
-        if(!$groupID) return array(array(), array());
+        if(!$groupID) return array();
 
-        $currentGroup = $this->loadModel('tree')->getByID($groupID);
-        if(empty($currentGroup) || $currentGroup->grade != 1) return array(array(), array());
+        $group = $this->loadModel('tree')->getByID($groupID);
+        if(empty($group) || $group->grade != 1) return array();
 
-        $groups = $this->dao->select('id, grade, name')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('path')->like("{$currentGroup->path}%")->orderBy('`order`')->fetchAll();
-        if(!$groups) return array(array(), array());
+        $groups = $this->dao->select('id, grade, name')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('path')->like("{$group->path}%")->orderBy('`order`')->fetchAll();
+        if(!$groups) return array();
 
+        $this->app->loadModuleConfig('screen');
+
+        /* 获取每个分组下的图表以供生成菜单树。*/
+        /* Get the charts under each group for generating the menu tree. */
         $chartGroups = array();
-        $this->loadModel('screen');
         foreach($groups as $group)
         {
-            $chartGroups[$group->id] = $this->dao->select('*')->from(TABLE_CHART)
-                ->where('deleted')->eq(0)
+            $chartGroups[$group->id] = $this->dao->select('id, name')->from(TABLE_CHART)
+                ->where('deleted')->eq('0')
                 ->andWhere('builtin', true)->eq('0')
                 ->orWhere('id')->in($this->config->screen->builtinChart)
                 ->markRight(1)
-                ->andWhere("FIND_IN_SET($group->id, `group`)")
-                ->andWhere('stage')->ne('draft')
+                ->andWhere("FIND_IN_SET({$group->id}, `group`)")
+                ->andWhere('stage')->eq('published')
                 ->orderBy($orderBy)
                 ->fetchAll();
         }
+        if(!$chartGroups) return array();
 
-        if(!$chartGroups) return array(array(), array());
-
-        $readyCharts = array();
-        foreach($chartGroups as $groupID => $chartGroup)
-        {
-            $charts = array();
-            foreach($chartGroup as $chart)
-            {
-                if($chart->stage != 'published') continue;
-                $charts[] = $chart;
-            }
-
-            if(!empty($charts)) $readyCharts[$groupID] = $charts;
-        }
-
-        $index      = 1;
-        $chartTree  = array();
-        $firstChart = null;
+        $treeMenu = array();
         foreach($groups as $group)
         {
-            if(!isset($readyCharts[$group->id])) continue;
+            if(empty($chartGroups[$group->id])) continue;
 
-            if($group->grade == 2)
-            {
-                $chartTree[] = (object)array('id' => $group->id, 'parent' => 0, 'name' => $group->name);
-            }
+            /* 菜单树中只显示二级分组名称。*/
+            /* Only the name of the second-level group is displayed in the menu tree. */
+            if($group->grade == 2) $treeMenu[] = (object)array('id' => $group->id, 'parent' => 0, 'name' => $group->name);
 
-            $charts = $readyCharts[$group->id];
-            foreach($charts as $chart)
-            {
-                $chart->currentGroup = $group->id;
-                if(!$firstChart) $firstChart = $chart;
-
-                $chartTree[] = (object)array('id' => "{$group->id}_{$chart->id}", 'parent' => $group->id, 'name' => $chart->name);
-            }
-
-            $index++;
+            foreach($chartGroups[$group->id] as $chart) $treeMenu[] = (object)array('id' => $group->id . '_' . $chart->id, 'parent' => $group->id, 'name' => $chart->name);
         }
 
-        $charts = array();
-        if($firstChart)
-        {
-            if(!empty($firstChart->settings)) $firstChart->settings = json_decode($firstChart->settings, true);
-            if(!empty($firstChart->filters))  $firstChart->filters  = json_decode($firstChart->filters, true);
-            if(!empty($firstChart->fields) and $firstChart->fields != 'null')
-            {
-                $firstChart->fieldSettings = json_decode($firstChart->fields);
-                $firstChart->fields        = array_keys(json_decode($firstChart->fields, true));
-            }
-
-            $charts[] = $firstChart;
-        }
-
-        return array($chartTree, $charts);
+        return $treeMenu;
     }
 
     public function getFilterOptions($chartID)
