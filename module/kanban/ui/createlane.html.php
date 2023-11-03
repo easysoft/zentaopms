@@ -19,20 +19,7 @@ formPanel
         formGroup
         (
             set::label($lang->kanbanlane->name),
-            inputControl
-            (
-                input(set::name('name')),
-                set::suffixWidth('icon'),
-                to::suffix
-                (
-                    colorPicker
-                    (
-                        set::name('color'),
-                        set::items($config->kanban->laneColorList),
-                        set::value('#3C4353')
-                    )
-                )
-            )
+            set::name('name')
         )
     ),
     formRow
@@ -59,6 +46,19 @@ formPanel
             (
                 set::name('otherLane'),
                 set::items($lanes)
+            )
+        )
+    ),
+    formRow
+    (
+        formGroup
+        (
+            set::label($lang->kanbanlane->color),
+            colorPicker
+            (
+                set::name('color'),
+                set::items($config->kanban->laneColorList),
+                set::value('#3C4353')
             )
         )
     )
