@@ -50,7 +50,7 @@ form
                 array(
                     'text'    => $lang->save,
                     'btnType' => 'primary',
-                    'onClick' => jsRaw("() => {bindUser()}")
+                    'onClick' => jsRaw("bindUser")
                 ),
                 array(
                     'text'    => $lang->goback,

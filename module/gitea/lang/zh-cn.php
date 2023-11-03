@@ -41,3 +41,12 @@ $lang->gitea->server        = "服务器列表";
 $lang->gitea->lblCreate     = '添加Gitea服务器';
 $lang->gitea->emptyError    = "不能为空";
 $lang->gitea->createSuccess = "创建成功";
+
+$lang->gitea->apiError = array();
+$lang->gitea->apiError[0] = 'The repository with the same name already exists.';
+
+$lang->gitea->errorLang = array();
+$lang->gitea->errorLang[0] = '名称已存在。';
+
+$lang->gitea->errorKey = array();
+$lang->gitea->errorKey[0] = 'name';

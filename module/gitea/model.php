@@ -168,8 +168,7 @@ class giteaModel extends model
         {
             if(is_string($response->message))
             {
-                $errorKey = array_search($response->message, $this->lang->gitea->apiError);
-                dao::$errors[] = $errorKey === false ? $response->message : zget($this->lang->gitea->errorLang, $errorKey);
+                $this->parseApiError($response->message);
             }
             else
             {
@@ -177,15 +176,13 @@ class giteaModel extends model
                 {
                     if(is_string($fieldErrors))
                     {
-                        $errorKey = array_search($fieldErrors, $this->lang->gitea->apiError);
-                        if($fieldErrors) dao::$errors[$field][] = $errorKey === false ? $fieldErrors : zget($this->lang->gitea->errorLang, $errorKey);
+                        $this->parseApiError($response->message);
                     }
                     else
                     {
                         foreach($fieldErrors as $error)
                         {
-                            $errorKey = array_search($error, $this->lang->gitea->apiError);
-                            if($error) dao::$errors[$field][] = $errorKey === false ? $error : zget($this->lang->gitea->errorLang, $errorKey);
+                            $this->parseApiError($response->message);
                         }
                     }
                 }
@@ -194,6 +191,27 @@ class giteaModel extends model
 
         if(!$response) dao::$errors[] = false;
         return false;
+    }
+
+    /**
+     * 解析api返回的错误信息。
+     *
+     * @param  string $message
+     * @access public
+     * @return void
+     */
+    public function parseApiError($message)
+    {
+        $errorKey = array_search($message, $this->lang->gitea->apiError);
+        if($errorKey === false)
+        {
+            dao::$errors[] = $message;
+        }
+        else
+        {
+            $field = $this->lang->gitea->errorKey[$errorKey];
+            dao::$errors[$field] = zget($this->lang->gitea->errorLang, $errorKey);
+        }
     }
 
     /**
@@ -410,6 +428,31 @@ class giteaModel extends model
     }
 
     /**
+     * Get groups by api.
+     *
+     * @param  int    $giteaID
+     * @param  int    $sudo
+     * @access public
+     * @return array
+     */
+    public function apiGetGroups($giteaID, $sudo = true)
+    {
+         $apiRoot = $this->getApiRoot($giteaID, $sudo);
+         if(!$apiRoot) return array();
+
+         $url        = sprintf($apiRoot, "/orgs");
+         $allResults = array();
+         for($page = 1; true; $page++)
+         {
+             $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
+             if(empty($results)) break;
+             $allResults = array_merge($allResults, $results);
+             if(count($results) < 50) break;
+         }
+         return $allResults;
+    }
+
+    /**
      * Get gitea user list.
      *
      * @param  int    $giteaID
@@ -593,5 +636,29 @@ class giteaModel extends model
         }
 
         return $newBranches;
+    }
+
+    /**
+     * 创建代码库。
+     *
+     * @param  int    $giteaID
+     * @param  string $name
+     * @param  string $org
+     * @param  string $desc
+     * @access public
+     * @return void
+     */
+    public function apiCreateRepository($giteaID, $name, $org, $desc)
+    {
+        $data = new stdclass();
+        $data->name        = $name;
+        $data->description = $desc;
+        $data->auto_init   = true;
+        $data->template    = false;
+
+        $url    = sprintf($this->getApiRoot($giteaID), "/orgs/{$org}/repos");
+        $result = json_decode(commonModel::http($url, $data));
+
+        return $result;
     }
 }

@@ -15,7 +15,7 @@ window.renderGitlabUser = function(result, {row})
     return result;
 }
 
-window.bindUser = function()
+window.bindUser = function(e)
 {
     const myDTable = $('#table-gogs-binduser').zui('dtable');
     const formData = myDTable.$.getFormData();
@@ -25,10 +25,12 @@ window.bindUser = function()
     postData['gogsUserNames[]'] = [];
     for(i in bindData)
     {
-        postData['gogsUserNames[]'].push(bindData[i].gogsID);
+        postData['gogsUserNames[' + bindData[i].gogsID + ']'] = bindData[i].gogsUser;
         postData['zentaoUsers[' + bindData[i].gogsID + ']'] = formData['zentaoUsers[' + bindData[i].gogsID + ']'];
     }
 
+    e.preventDefault();
+    e.stopPropagation();
     $.ajaxSubmit({
         url: $.createLink('gogs', 'bindUser', 'gogsID=' + gogsID + '&type=' + type),
         data: postData

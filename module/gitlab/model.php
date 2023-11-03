@@ -675,7 +675,8 @@ class gitlabModel extends model
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $results = json_decode(commonModel::http($url . "&statistics=true&order_by={$order}&sort={$sort}&page={$page}&per_page=100&all_available=true"));
+            $pageUrl = $url . "&statistics=true&order_by={$order}&sort={$sort}&page={$page}&per_page=100&all_available=true";
+            $results = json_decode(commonModel::http($pageUrl));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
             if(count($results) < 100) break;
@@ -3000,25 +3001,14 @@ class gitlabModel extends model
      * 判断按钮是否可点击。
      * Adjust the action clickable.
      *
-     * @param  object $object
+     * @param  object $instance
      * @param  string $action
      * @access public
      * @return bool
      */
-    public function isClickable(object $object, string $action): bool
+    public function isClickable(object $gitlab, string $action): bool
     {
-        if(!commonModel::hasPriv('space', 'browse')) return false;
-
-        if($action == 'browseBranch') return $object->isDeveloper;
-        if($action == 'browseTag') return $object->isDeveloper;
-        if($action == 'manageProjectMembers') return $object->hasRepo;
-        if($action == 'createWebhook') return $object->hasRepo;
-        if($action == 'manageBranchPriv') return $object->defaultBranch;
-        if($action == 'manageTagPriv') return $object->defaultBranch;
-        if($action == 'editProject') return $object->defaultBranch;
-        if($action == 'deleteProject') return $object->defaultBranch;
-
-        return true;
+        return commonModel::hasPriv('space', 'browse');
     }
 
     /**
