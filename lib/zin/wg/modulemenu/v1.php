@@ -44,7 +44,7 @@ class moduleMenu extends wg
                 'key'          => $child->id,
                 'text'         => $child->name,
                 'hint'         => $child->name,
-                'url'          => $child->url,
+                'url'          => zget($child, 'url', ''),
                 'data-app'     => $tab,
                 'contentClass' => 'overflow-x-hidden'
             );
