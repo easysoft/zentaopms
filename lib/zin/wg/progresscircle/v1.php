@@ -29,8 +29,8 @@ class progressCircle extends wg
         'percent?: int',           // 百分比。
         'size?: int',              // 大小。
         'circleWidth?: int',       // 环形宽度。
-        'circleBg: string',        // 环形背景色。
-        'circleColor: string',     // 环形颜色。
+        'circleBg: string="var(--color-surface)"',        // 环形背景色。
+        'circleColor: string="var(--color-primary-500)"',     // 环形颜色。
         'text?: string|boolean',   // 文本。
         'textStyle?: string|array',// 文本样式。
         'textX?: int',             // 文本 X 坐标。
