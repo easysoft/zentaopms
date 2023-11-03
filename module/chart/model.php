@@ -690,6 +690,7 @@ class chartModel extends model
                 }
                 break;
             case 'string':
+            case 'number':
                 if($field and $sql)
                 {
                     $cols = $this->dbh->query($sql)->fetchAll();
