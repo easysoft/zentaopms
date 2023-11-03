@@ -10,7 +10,11 @@ $getAffectedTabs = function($story, $users)
     foreach($story->executions as $executionID => $execution)
     {
         $teams = '';
-        foreach($story->teams[$executionID] as $member) $teams .= zget($users, $member) . ' ';
+        if(isset($story->teams[$executionID]))
+        {
+            foreach($story->teams[$executionID] as $member) $teams .= zget($users, $member) . ' ';
+        }
+
         $affectedTaskCount += count(zget($story->tasks, $executionID, array()));
         $affectedProjects[] = h6
         (

@@ -1133,7 +1133,7 @@ class storyModel extends model
             }
 
             $this->dao->update(TABLE_STORY)->data($story, 'finalResult')->autoCheck()->where('id')->eq($storyID)->exec();
-            $this->setStage($storyID);
+            $this->setStage((int)$storyID);
 
             $story->id = $storyID;
             $this->recordReviewAction($story, $result, $reason);
