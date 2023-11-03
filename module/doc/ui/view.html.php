@@ -127,7 +127,7 @@ panel
             $doc->title
         ),
         $doc->deleted ? span(setClass('label danger'), $lang->doc->deleted) : null,
-        dropdown
+        $doc->status != 'draft' ? dropdown
         (
             btn
             (
@@ -135,7 +135,7 @@ panel
                 'V' . ($version ? $version : $doc->version)
             ),
             set::items($versionList)
-        ),
+        ) : null,
         div
         (
             setClass('panel-actions flex'),
