@@ -55,19 +55,6 @@ class moduleMenu extends wg
                 $itemKey = $this->prop('checkbox') ? 'checked' : 'active';
                 $item[$itemKey] = true;
             }
-            if($this->prop('checkbox') && empty($item['checked']) && $items)
-            {
-                $checked = true;
-                foreach($items as $child)
-                {
-                    if(empty($child['checked']))
-                    {
-                        $checked = false;
-                        break;
-                    }
-                }
-                if($checked) $item['checked'] = true;
-            }
             $treeItems[] = $item;
         }
 
