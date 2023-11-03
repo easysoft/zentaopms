@@ -10,7 +10,7 @@ class moduleMenu extends wg
 
     protected static array $defineProps = array(
         'modules: array',
-        'activeKey?: int',
+        'activeKey?: int|string',
         'settingLink?: string',
         'closeLink: string',
         'showDisplay?: bool=true',
@@ -49,8 +49,25 @@ class moduleMenu extends wg
                 'contentClass' => 'overflow-x-hidden'
             );
             $items = $this->buildMenuTree($child->id);
-            if(count($items) !== 0)      $item['items']  = $items;
-            if($child->id == $activeKey) $item['active'] = true;
+            if($items) $item['items'] = $items;
+            if($child->id == $activeKey)
+            {
+                $itemKey = $this->prop('checkbox') ? 'checked' : 'active';
+                $item[$itemKey] = true;
+            }
+            if($this->prop('checkbox') && empty($item['checked']) && $items)
+            {
+                $checked = true;
+                foreach($items as $child)
+                {
+                    if(empty($child['checked']))
+                    {
+                        $checked = false;
+                        break;
+                    }
+                }
+                if($checked) $item['checked'] = true;
+            }
             $treeItems[] = $item;
         }
 
