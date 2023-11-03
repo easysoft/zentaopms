@@ -4,6 +4,26 @@ $(function()
     initialOptions = $.extend(true, {}, options);
 });
 
+$(document).off('click','.batch-btn').on('click', '.batch-btn', function()
+{
+    const dtable = zui.DTable.query($(this).target);
+    const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
+
+    const url  = $(this).data('url');
+    const form = new FormData();
+    checkedList.forEach((id) => form.append('taskIdList[]', id));
+
+    if($(this).hasClass('ajax-btn'))
+    {
+        $.ajaxSubmit({url, data: form});
+    }
+    else
+    {
+        postAndLoadPage(url, form);
+    }
+})
+
 /**
  * 产品列合并单元格。
  * Merge cell in the product column.
@@ -103,4 +123,58 @@ window.deformation = function(event)
         $(event.target).closest('a').find('span').removeClass('is-expanded').addClass('is-collapsed');
         $('#taskTable').zui('dtable').render();
     }
+}
+
+/**
+ * 计算测试单表格信息的统计。
+ * Set task summary for table footer.
+ *
+ * @param  element element
+ * @param  array   checkedIDList
+ * @access public
+ * @return object
+ */
+window.setStatistics = function(element, checkedIDList)
+{
+    let waitCount    = 0;
+    let doingCount   = 0;
+    let doneCount    = 0;
+    let blockedCount = 0;
+    let totalCount   = 0;
+
+    const rows = element.layout.allRows;
+    rows.forEach((row) => {
+        if(checkedIDList.length == 0 || checkedIDList.includes(row.id))
+        {
+            const task = row.data;
+
+            if(task.status == 'wait')
+            {
+                waitCount ++;
+            }
+            else if(task.status == 'doing')
+            {
+                doingCount ++;
+            }
+            else if(task.status == 'done')
+            {
+                doneCount ++;
+            }
+            else if(task.status == 'blocked')
+            {
+                blockedCount ++;
+            }
+
+            totalCount ++;
+        }
+    })
+
+    const summary = checkedIDList.length > 0 ? checkedAllSummary : pageSummary;
+    return {
+        html: summary.replace('%total%', totalCount)
+        .replace('%wait%', waitCount)
+        .replace('%testing%', doingCount)
+        .replace('%blocked%', blockedCount)
+        .replace('%done%', doneCount)
+    };
 }

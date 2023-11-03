@@ -387,11 +387,12 @@ $config->project->dtable->testtask->fieldList['product']['title'] = $lang->testt
 $config->project->dtable->testtask->fieldList['product']['type']  = 'text';
 $config->project->dtable->testtask->fieldList['product']['group'] = '1';
 
-$config->project->dtable->testtask->fieldList['id']['name']  = 'id';
-$config->project->dtable->testtask->fieldList['id']['title'] = $lang->idAB;
-$config->project->dtable->testtask->fieldList['id']['type']  = 'id';
-$config->project->dtable->testtask->fieldList['id']['group'] = '2';
-$config->project->dtable->testtask->fieldList['id']['fixed'] = false;
+$config->project->dtable->testtask->fieldList['id']['name']     = 'id';
+$config->project->dtable->testtask->fieldList['id']['title']    = $lang->idAB;
+$config->project->dtable->testtask->fieldList['id']['type']     = 'id';
+$config->project->dtable->testtask->fieldList['id']['checkbox'] = true;
+$config->project->dtable->testtask->fieldList['id']['group']    = '2';
+$config->project->dtable->testtask->fieldList['id']['fixed']    = false;
 
 $config->project->dtable->testtask->fieldList['title']['name']     = 'name';
 $config->project->dtable->testtask->fieldList['title']['title']    = $lang->testtask->name;
