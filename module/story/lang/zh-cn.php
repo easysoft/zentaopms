@@ -217,6 +217,12 @@ $lang->story->statusList['active']    = '激活';
 $lang->story->statusList['closed']    = '已关闭';
 $lang->story->statusList['changing']  = '变更中';
 
+if($config->systemMode == 'PLM')
+{
+    $lang->story->statusList['launched']   = '已立项';
+    $lang->story->statusList['developing'] = '研发中';
+}
+
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = '未开始';
 $lang->story->stageList['planned']    = "已计划";

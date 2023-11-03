@@ -838,7 +838,7 @@ class storyModel extends model
             if(dao::isError()) return false;
             if(!$createAction) return $story;
 
-            if(strpos('active,draft,changing', $status) !== false) $action = 'Activated';
+            if(strpos('launched,active,draft,changing', $status) !== false) $action = 'Activated';
             if($status == 'closed')
             {
                 /* Record the status before closed. */
@@ -1201,7 +1201,7 @@ class storyModel extends model
             $story = new stdclass();
             $story->title   = $titleList[$twinID]->title;
             $story->version = $oldStory->version - 1;
-            $story->status  = 'active';
+            $story->status  = ($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement') ? 'launched' : 'active';
             $this->dao->update(TABLE_STORY)->set('title')->eq($story->title)->set('version')->eq($story->version)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
         }
 
@@ -1240,7 +1240,8 @@ class storyModel extends model
         }
 
         $story->reviewer = implode(',', $story->reviewer);
-        $story->status   = 'reviewing';
+        $story->status   = ($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active') ? 'launched' : 'reviewing';
+
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer')->where('id')->in($twinsIdList)->exec();
 
         $changes = common::createChanges($oldStory, $story);
@@ -1780,6 +1781,9 @@ class storyModel extends model
         /* Get status after activation. */
         $story = $postData;
         $story->status = $this->getActivateStatus($storyID);
+
+        /* If in ipd mode, set requirement status = 'launched'. */
+        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active') $story->status = 'launched';
 
         $this->dao->update(TABLE_STORY)->data($story, 'comment')->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
 
@@ -3097,7 +3101,7 @@ class storyModel extends model
 
         $isSuperReviewer = str_contains(',' . zget($config->story, 'superReviewers', '') . ',', ",{$app->user->account},");
 
-        if($action == 'change')       return (($isSuperReviewer or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
+        if($action == 'change')       return (($isSuperReviewer or count($story->reviewer) == 0 or count($story->notReview) == 0) and ($story->status == 'active' or $story->status == 'launched'));
         if($action == 'submitreview') return strpos('draft,changing', $story->status) !== false;
         if($action == 'review')       return (($isSuperReviewer or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
         if($action == 'recall')       return strpos('reviewing,changing', $story->status) !== false;
@@ -3831,6 +3835,10 @@ class storyModel extends model
         }
 
         $story->finalResult = $result;
+
+        /* If in ipd mode, set requirement status = 'launched'. */
+        if($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active') $story->status = 'launched';
+
         return $story;
     }
 

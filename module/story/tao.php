@@ -1818,7 +1818,7 @@ class storyTao extends storyModel
         $story = new stdclass();
         $story->status = $status;
         $story->stage  = 'wait';
-        if(strpos('active,changing,draft', $status) !== false)
+        if(strpos('launched,active,changing,draft', $status) !== false)
         {
             $story->assignedTo   = $oldParentStory->openedBy;
             $story->assignedDate = $now;

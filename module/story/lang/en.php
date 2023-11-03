@@ -217,6 +217,12 @@ $lang->story->statusList['active']    = 'Active';
 $lang->story->statusList['closed']    = 'Closed';
 $lang->story->statusList['changing']  = 'Changing';
 
+if($config->systemMode == 'PLM')
+{
+    $lang->story->statusList['launched']   = 'Launched';
+    $lang->story->statusList['developing'] = 'Developing';
+}
+
 $lang->story->stageList['']           = '';
 $lang->story->stageList['wait']       = 'Waiting';
 $lang->story->stageList['planned']    = 'Planned';
