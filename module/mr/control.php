@@ -67,7 +67,7 @@ class mr extends control
 
         $repoID = $this->loadModel('repo')->saveState($repoID, $objectID);
         $repo   = $this->repo->getByID($repoID);
-        if(!in_array($repo->SCM, $this->config->mr->gitServiceTypeList))
+        if(!in_array(strtolower($repo->SCM), $this->config->mr->gitServiceList))
         {
             $repoID = $this->dao->select('id')->from(TABLE_REPO)->where('deleted')->eq('0')->andWhere('SCM')->in(array('Gitlab', 'Gitea', 'Gogs'))->andWhere('synced')->eq(1)->orderBy('id')->fetch('id');
             $repo   = $this->repo->getByID($repoID);
