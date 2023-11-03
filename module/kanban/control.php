@@ -245,7 +245,7 @@ class kanban extends control
         $this->view->copyKanban    = $copyKanbanID ? $copyKanban : '';
         $this->view->enableImport  = $enableImport;
         $this->view->importObjects = $importObjects;
-        $this->view->copyRegion    = isset($output['copyRegion']) ? true : false;
+        $this->view->copyRegion    = isset($output['copyRegion']) ? 1 : 0;
 
         $this->display();
     }
