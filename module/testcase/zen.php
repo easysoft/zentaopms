@@ -1539,7 +1539,6 @@ class testcaseZen extends testcase
         $fromCases      = $this->testcase->getByList($caseIdList);
         $fromSteps      = $this->testcase->fetchStepsByList($caseIdList);
         $fromFiles      = $this->testcase->getRelatedFiles($caseIdList);
-        $libCases       = $this->loadModel('caselib')->getLibCases($libID, 'all');
         $libCases       = $this->dao->select('*')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('product')->eq(0)->andWhere('deleted')->eq('0')->fetchGroup('fromCaseID', 'id');
         $maxOrder       = $this->dao->select('max(`order`) as maxOrder')->from(TABLE_CASE)->where('deleted')->eq(0)->fetch('maxOrder');
         $maxModuleOrder = $this->dao->select('max(`order`) as maxOrder')->from(TABLE_MODULE)->where('deleted')->eq(0)->fetch('maxOrder');
@@ -1900,7 +1899,7 @@ class testcaseZen extends testcase
      * @param  int       $libID
      * @param  int       $maxOrder
      * @param  int       $maxModuleOrder
-     * @param  bool      $isImported
+     * @param  array     $libCases
      * @access protected
      * @return object
      */
