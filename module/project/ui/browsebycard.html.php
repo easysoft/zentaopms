@@ -83,7 +83,6 @@ if(!empty($projectStats))
         $budgetTitle   = $project->budget != $lang->project->future && $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $lang->project->budget . $lang->project->future;
         $project->end  = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
         $project->date = str_replace('-', '.', $project->begin) . ' - ' . str_replace('-', '.', $project->end);
-        $titleClass    = ($project->teamCount == 0 and !$canActions) ? 'teamTitle' : '';
 
         $count         = 0;
         $memberAvatars = null;
