@@ -89,37 +89,17 @@ class chartModel extends model
     }
 
     /**
-     * Get chart.
+     * 根据 id 获取一个图表。
+     * Get a chart by id.
      *
      * @param  int    $chartID
      * @access public
      * @return object
      */
-    public function getByID($chartID)
+    public function getByID(int $chartID): object|false
     {
         $chart = $this->dao->select('*')->from(TABLE_CHART)->where('id')->eq($chartID)->fetch();
         if(!$chart) return false;
-
-        if(!empty($chart->fields) and $chart->fields != 'null')
-        {
-            $chart->fieldSettings = json_decode($chart->fields);
-            $chart->fields        = array();
-
-            foreach($chart->fieldSettings as $field => $settings) $chart->fields[] = $field;
-        }
-        else
-        {
-            $chart->fieldSettings = array();
-        }
-
-        if(!empty($chart->settings) and $chart->settings != 'null')
-        {
-            $settings = json_decode($chart->settings, true);
-            if(isset($settings[0]) and isset($settings[0]['type'])) $chart->type = $settings[0]['type'];
-        }
-
-        if($chart->sql == null)     $chart->sql     = '';
-        if(!empty($chart->filters)) $chart->filters = json_decode($chart->filters, true);
 
         return $this->processChart($chart);
     }
