@@ -1,5 +1,6 @@
 <?php
 global $app;
+global $config;
 
 /* Actions. */
 $lang->project->createGuide         = 'Select Template';
@@ -292,6 +293,7 @@ $lang->project->currencySymbol['THB'] = '฿';
 $lang->project->currencySymbol['SGD'] = 'S$';
 
 $lang->project->modelList['']          = '';
+if($config->edition == 'ipd') $lang->project->modelList['ipd'] = "IPD";
 $lang->project->modelList['scrum']     = "Scrum";
 if(helper::hasFeature('waterfall')) $lang->project->modelList['waterfall'] = "CMMI";
 $lang->project->modelList['kanban']    = "Kanban";
@@ -354,7 +356,6 @@ $lang->project->kanbanSubAclList['private'] = "Private (Only the {$lang->project
 $lang->project->kanbanSubAclList['open']    = "Open (accessible with {$lang->projectCommon} view permissions)";
 $lang->project->kanbanSubAclList['program'] = "Open in the program (all upper-level program team leaders and stakeholders, the {$lang->projectCommon} leader, team members can access)";
 
-global $config;
 if($config->systemMode == 'light')
 {
     unset($lang->project->subAclList['program']);
@@ -377,6 +378,7 @@ $lang->project->endList[186] = 'Half year';
 $lang->project->endList[365] = 'One year';
 $lang->project->endList[999] = 'Longtime';
 
+$lang->project->ipdTitle           = "Integrated Product Development";
 $lang->project->scrumTitle         = 'Agile Development Management';
 $lang->project->waterfallTitle     = "Waterfall {$lang->projectCommon} Management";
 $lang->project->kanbanTitle        = "Kanban {$lang->projectCommon} Management";
@@ -392,6 +394,7 @@ $lang->project->membersUnit            = '%s men';
 $lang->project->lastIteration          = "Recent {$lang->executionCommon}";
 $lang->project->lastKanban             = 'Recent Kanban';
 $lang->project->ongoingStage           = 'Ongoing stage';
+$lang->project->ipd                    = 'IPD';
 $lang->project->scrum                  = 'Scrum';
 $lang->project->waterfall              = 'Waterfall';
 $lang->project->agileplus              = 'Agile +';

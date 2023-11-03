@@ -1,5 +1,6 @@
 <?php
 global $app;
+global $config;
 
 /* Actions. */
 $lang->project->createGuide         = "选择{$lang->projectCommon}模板";
@@ -292,6 +293,7 @@ $lang->project->currencySymbol['THB'] = '฿';
 $lang->project->currencySymbol['SGD'] = 'S$';
 
 $lang->project->modelList['']            = "";
+if($config->edition == 'ipd') $lang->project->modelList['ipd'] = "IPD";
 $lang->project->modelList['scrum']       = "Scrum";
 if(helper::hasFeature('waterfall')) $lang->project->modelList['waterfall'] = "瀑布";
 $lang->project->modelList['kanban']      = "看板";
@@ -354,7 +356,6 @@ $lang->project->kanbanSubAclList['private'] = "私有 (只有{$lang->projectComm
 $lang->project->kanbanSubAclList['open']    = "公开 (有{$lang->projectCommon}视图权限即可访问)";
 $lang->project->kanbanSubAclList['program'] = "项目集内公开（所有上级项目集负责人和干系人、{$lang->projectCommon}负责人、团队成员可访问）";
 
-global $config;
 if($config->systemMode == 'light')
 {
     unset($lang->project->subAclList['program']);
@@ -377,6 +378,7 @@ $lang->project->endList[186] = '半年';
 $lang->project->endList[365] = '一年';
 $lang->project->endList[999] = '长期';
 
+$lang->project->ipdTitle           = "集成产品开发";
 $lang->project->scrumTitle         = "敏捷开发全流程{$lang->projectCommon}管理";
 $lang->project->waterfallTitle     = "瀑布式{$lang->projectCommon}管理";
 $lang->project->kanbanTitle        = "专业研发看板{$lang->projectCommon}管理";
@@ -392,6 +394,7 @@ $lang->project->membersUnit            = '%s人';
 $lang->project->lastIteration          = "近期{$lang->executionCommon}";
 $lang->project->lastKanban             = '近期看板';
 $lang->project->ongoingStage           = '进行中的阶段';
+$lang->project->ipd                    = 'IPD';
 $lang->project->scrum                  = 'Scrum';
 $lang->project->waterfall              = '瀑布';
 $lang->project->agileplus              = '融合敏捷';
