@@ -1752,9 +1752,12 @@ class pivotModel extends model
         $clientLang = $this->app->getClientLang();
         if(isset($langs[$column['field']]) and !empty($langs[$column['field']][$clientLang])) $colLabel = $langs[$column['field']][$clientLang];
 
-        $colLabel = str_replace('{$field}', $colLabel, $this->lang->pivot->colLabel);
-        $colLabel = str_replace('{$stat}', zget($this->lang->pivot->step2->statList, $stat), $colLabel);
-        if($showMode != 'default') $colLabel .= sprintf($this->lang->pivot->colShowMode, zget($this->lang->pivot->step2->showModeList, $showMode));
+        if(!$showOrigin)
+        {
+            $colLabel = str_replace('{$field}', $colLabel, $this->lang->pivot->colLabel);
+            $colLabel = str_replace('{$stat}', zget($this->lang->pivot->step2->statList, $stat), $colLabel);
+            if($showMode != 'default') $colLabel .= sprintf($this->lang->pivot->colShowMode, zget($this->lang->pivot->step2->showModeList, $showMode));
+        }
         $col->label = $colLabel;
 
         $slice = zget($column, 'slice', 'noSlice');
