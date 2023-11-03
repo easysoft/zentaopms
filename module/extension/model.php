@@ -417,12 +417,12 @@ class extensionModel extends model
      */
     public function checkExtensionPaths($extension)
     {
-        $return = new stdclass();
-        $return->result        = 'ok';
-        $return->errors        = '';
-        $return->mkdirCommands = '';
-        $return->chmodCommands = '';
-        $return->dirs2Created  = array();
+        $checkResult = new stdclass();
+        $checkResult->result        = 'ok';
+        $checkResult->errors        = '';
+        $checkResult->mkdirCommands = '';
+        $checkResult->chmodCommands = '';
+        $checkResult->dirs2Created  = array();
 
         $appRoot = $this->app->getAppRoot();
         $paths  = $this->getPathsFromPackage($extension);
@@ -434,32 +434,36 @@ class extensionModel extends model
             {
                 if(!is_writable($path))
                 {
-                    $return->errors .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
-                    $return->chmodCommands .= "sudo chmod -R 777 $path<br />";
+                    $checkResult->errors .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
+                    $checkResult->chmodCommands .= "sudo chmod -R 777 $path<br />";
                 }
             }
             else
             {
                 $parentDir = mb_substr($path, 0, strripos($path, '/'));
-                if(!is_dir($path) and !mkdir($path, 0777, true))
-                {
-                    $return->errors .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
-                    $return->mkdirCommands .= "sudo mkdir -p $path<br />";
-                }
                 if(!is_writable($parentDir))
                 {
-                    $return->errors .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
-                    $return->chmodCommands .= "sudo chmod -R 777 $path<br />";
+                    $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
+                    $checkResult->chmodCommands .= "sudo chmod -R 777 $path<br />";
+                    $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
+                    $checkResult->mkdirCommands .= "sudo mkdir -p $path<br />";
                 }
-                $return->dirs2Created[] = $path;
+                else if(!mkdir($path, 0777, true))
+                {
+                    $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
+                    $checkResult->mkdirCommands .= "sudo mkdir -p $path<br />";
+                }
+                $checkResult->dirs2Created[] = $path;
             }
         }
 
-        if($return->errors) $return->result = 'fail';
-        $return->mkdirCommands = empty($return->mkdirCommands) ? '' : '<code>' . str_replace('/', DIRECTORY_SEPARATOR, $return->mkdirCommands) . '</code>';
-        $return->errors .= $this->lang->extension->executeCommands . $return->mkdirCommands;
-        if(PHP_OS == 'Linux') $return->errors .= empty($return->chmodCommands) ? '' : '<code>' . $return->chmodCommands . '</code>';
-        return $return;
+        if($checkResult->errors) $checkResult->result = 'fail';
+
+        $checkResult->mkdirCommands = empty($checkResult->mkdirCommands) ? '' : '<code>' . str_replace('/', DIRECTORY_SEPARATOR, $checkResult->mkdirCommands) . '</code>';
+        $checkResult->errors .= $this->lang->extension->executeCommands . $checkResult->mkdirCommands;
+        if(PHP_OS == 'Linux') $checkResult->errors .= empty($checkResult->chmodCommands) ? '' : '<code>' . $checkResult->chmodCommands . '</code>';
+
+        return $checkResult;
     }
 
     /**
@@ -583,7 +587,7 @@ class extensionModel extends model
         $dirs  = json_decode($extension->dirs);
         $files = json_decode($extension->files);
         $appRoot = $this->app->getAppRoot();
-        $removeCommands = array();
+        $commandTips = array();
 
         /* Remove files first. */
         if($files)
@@ -593,13 +597,14 @@ class extensionModel extends model
                 $file = $appRoot . $file;
                 if(!file_exists($file)) continue;
 
-                if(!is_writable($file) or @md5_file($file) != $savedMD5)
+                $parentDir = mb_substr($file, 0, strripos($file, '/'));
+                if(!is_writable($file) || !is_writable($parentDir))
                 {
-                    $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $file #changed" : "del $file :changed";
+                    $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $file" : "del $file";
                 }
-                elseif(!is_writable($file) or !@unlink($file))
+                elseif(@md5_file($file) != $savedMD5)
                 {
-                    $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $file" : "del $file";
+                    $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $file" : "del $file";
                 }
             }
         }
@@ -610,15 +615,25 @@ class extensionModel extends model
             rsort($dirs);    // remove from the lower level directory.
             foreach($dirs as $dir)
             {
-                if(!is_dir($appRoot . $dir)) continue;
-                if(!is_writable($appRoot . $dir) or !rmdir($appRoot . $dir)) $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
+                $path = $appRoot . $dir;
+                if(!is_dir($path)) continue;
+
+                $parentDir = mb_substr($path, 0, strripos($path, '/'));
+                if(!is_writable($path) || !is_writable($parentDir))
+                {
+                    $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
+                }
+                elseif(!rmdir($appRoot . $dir))
+                {
+                    $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
+                }
             }
         }
 
         /* Clean model cache files. */
         $this->cleanModelCache();
 
-        return $removeCommands;
+        return $commandTips;
     }
 
     /**
