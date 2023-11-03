@@ -57,7 +57,7 @@ formBatchPanel
     (
         set::name('dept'),
         set::label($lang->user->dept),
-        set::control('select'),
+        set::control('picker'),
         set::width('200px'),
         set::items($depts),
         set::value($deptID),
@@ -74,7 +74,7 @@ formBatchPanel
         inputGroup
         (
             set::id('companyBox'),
-            select
+            picker
             (
                 set::name('company'),
                 set::items($companies),
@@ -129,7 +129,7 @@ formBatchPanel
     (
         set::name('role'),
         set::label($lang->user->role),
-        set::control('select'),
+        set::control('picker'),
         set::width('200px'),
         set::items($lang->user->roleList),
         set::value(''),
