@@ -142,8 +142,9 @@ detailBody
                             a
                             (
                                 set('class', 'mr-2'),
-                                set('href', $this->createLink('tree', 'browse', "rootID={$product->ID}&view=bug&currentModuleID=0&branch={$bug->branch}")),
+                                set('href', $this->createLink('tree', 'browse', "rootID={$product->id}&view=bug&currentModuleID=0&branch={$bug->branch}")),
                                 set('data-toggle', 'modal'),
+                                set('data-size', 'lg'),
                                 $lang->tree->manage
                             ),
                             a

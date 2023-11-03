@@ -82,8 +82,9 @@ formPanel
                     a
                     (
                         set('class', 'mr-2'),
-                        set('href', $this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch={$branch}")),
+                        set('href', $this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch={$branch}")),
                         set('data-toggle', 'modal'),
+                        set('data-size', 'lg'),
                         $lang->tree->manage
                     ),
                     a

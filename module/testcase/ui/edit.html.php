@@ -18,7 +18,7 @@ jsVar('executionID', $case->execution);
 set::title($lang->testcase->edit);
 
 $rootID   = $isLibCase ? $case->lib : $case->product;
-$viewType = $isLibCase ? 'caselib' : 'product';
+$viewType = $isLibCase ? 'caselib' : 'case';
 $createModuleLink = createLink('tree', 'browse', "rootID={$rootID}&view={$viewType}&currentModuleID=0&branch={$case->branch}");
 
 if($case->type != 'unit') unset($lang->testcase->typeList['unit']);
@@ -206,22 +206,24 @@ detailBody
                         set::value($case->module),
                         set::required(true),
                     ),
-                    count($moduleOptionMenu) == 1 ? span
+                    span
                     (
-                        set::className('input-group-btn flex'),
+                        set('class', 'input-group-addon' . (count($moduleOptionMenu) > 1 ? ' hidden' : '')),
                         a
                         (
-                            set::className('btn'),
-                            set::url($createModuleLink),
+                            set('class', 'mr-2'),
+                            set('href', $createModuleLink),
                             set('data-toggle', 'modal'),
-                            $lang->tree->manage,
+                            set('data-size', 'lg'),
+                            $lang->tree->manage
                         ),
-                        btn
+                        a
                         (
-                            set::className('refresh'),
-                            set::icon('refresh'),
+                            set('id', 'refresh'),
+                            set('class', 'text-black'),
+                            icon('refresh')
                         )
-                    ) : null,
+                    ),
                 ),
             ),
             !$isLibCase ? item

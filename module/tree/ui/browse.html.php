@@ -199,7 +199,7 @@ div
                 div
                 (
                     setClass('p-1 tree-item-content'),
-                    setStyle('max-width', '400px'),
+                    setStyle('max-width', '380px'),
                     $parentPath,
                 ),
                 form
