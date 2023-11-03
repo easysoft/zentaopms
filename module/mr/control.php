@@ -174,7 +174,7 @@ class mr extends control
         $MRList   = $this->mr->batchSyncMR($MRList, $repoList);
 
         $projects  = array();
-        $repoPairs = array($this->lang->repo->common);
+        $repoPairs = array();
         foreach($repoList as $repo)
         {
             if(!in_array($repo->SCM, $this->config->repo->gitServiceTypeList)) continue;

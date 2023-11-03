@@ -21,6 +21,8 @@ window.afterPageUpdate = function()
 {
     setTimeout(function()
     {
+        if(typeof file == 'undefined') return;
+
         var fileAsId = file.replace(/=/g, '-');
         /* Resize moaco height. */
         $('#monacoTree').css('height', getSidebarHeight() - 8 + 'px');
@@ -252,14 +254,28 @@ window.loadLinkPage = function(link)
     $('#linkObject').trigger('click');
 }
 
-$(document).on('click', '.dropmenu-list li.tree-item', function()
+$('body').on('click', '.dropmenu-tree .dropmenu-item', function()
 {
-    var selectedSource = $('#source button.dropmenu-btn').data('value');
-    var selectedTarget = $('#target button.dropmenu-btn').data('value');
-    if(selectedSource) $('#oldRevision').val(selectedSource);
-    if(selectedTarget) $('#newRevision').val(selectedTarget);
+    var branchOrTag = $(this).find('.item-content').attr('title');
+    var url         = $(this).find('.listitem').data('url');
+    if(url != 'javascript:;') return;
+
+    var domID = $('#source button.dropmenu-btn').hasClass('focus') ? 'oldRevision' : 'newRevision';
+    $('#' + domID).val(branchOrTag);
     $('#isBranchOrTag').val('1');
-});
+
+    $('.pick-container').empty();
+    if(domID == 'oldRevision')
+    {
+        $('#source button.dropmenu-btn').removeClass('focus');
+        $('#source button.dropmenu-btn .text').text(branchOrTag);
+    }
+    else
+    {
+        $('#target button.dropmenu-btn').removeClass('focus');
+        $('#target button.dropmenu-btn .text').text(branchOrTag);
+    }
+})
 
 /**
  * 触发diff检查。
