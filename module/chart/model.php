@@ -45,6 +45,50 @@ class chartModel extends model
     }
 
     /**
+     * 获取指定分组下默认显示的图表。
+     * Get the charts displayed by default under the specified group.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return array
+     */
+    public function getDefaultCharts(int $groupID): array
+    {
+        $group = $this->loadModel('tree')->getByID($groupID);
+        if(empty($group) || $group->grade != 1) return array();
+
+        $groups = $this->dao->select('id, grade, name')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('path')->like("{$group->path}%")->orderBy('`order`')->fetchAll();
+        if(!$groups) return array();
+
+        $this->app->loadModuleConfig('screen');
+
+        /* 获取分组下的第一个图表。*/
+        /* Get the first chart under the group. */
+        foreach($groups as $group)
+        {
+            $chart = $this->dao->select('*')->from(TABLE_CHART)
+                ->where('deleted')->eq('0')
+                ->andWhere('builtin', true)->eq('0')
+                ->orWhere('id')->in($this->config->screen->builtinChart)
+                ->markRight(1)
+                ->andWhere("FIND_IN_SET({$group->id}, `group`)")
+                ->andWhere('stage')->eq('published')
+                ->orderBy('id_desc')
+                ->limit(1)
+                ->fetch();
+            if($chart)
+            {
+                $chart = $this->processChart($chart);
+                $chart->currentGroup = $group->id;
+
+                return array($chart);
+            }
+        }
+
+        return array();
+    }
+
+    /**
      * Get chart.
      *
      * @param  int    $chartID
