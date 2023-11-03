@@ -619,6 +619,7 @@ $config->group->package->my->privs['my-dynamic']    = array('edition' => 'open,b
 $config->group->package->my->privs['my-score']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 70, 'depend' => array('my-index'), 'recommend' => array());
 $config->group->package->my->privs['my-execution']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('my-index'), 'recommend' => array());
 $config->group->package->my->privs['my-audit']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 7, 'depend' => array('my-index'), 'recommend' => array());
+$config->group->package->my->privs['my-doc']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 7, 'depend' => array('my-index'), 'recommend' => array());
 $config->group->package->my->privs['my-meeting']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 8, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->browseProduct = new stdclass();
