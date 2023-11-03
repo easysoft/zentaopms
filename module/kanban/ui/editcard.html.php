@@ -50,7 +50,7 @@ formPanel
                 ),
                 input(set::name('estimate'), set::placeholder($lang->kanbancard->lblHour))
             )
-        )
+        ),
         formGroup
         (
             set::width('120px'),
@@ -61,7 +61,8 @@ formPanel
                     set('class', 'input-group-addon'),
                     $lang->kanbancard->progress
                 ),
-                input(set::name('progress'), set::value($card->4progress))
+                input(set::name('progress'), set::value($card->progress)),
+                span(set('class', 'input-group-addon'), '%')
             )
         )
     ),
