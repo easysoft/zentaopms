@@ -1596,7 +1596,7 @@ class pivotModel extends model
                 $rowIndex = 0;
                 foreach($columnRows as $key => $row)
                 {
-                    $count = $rowcount[$key];
+                    $count = isset($rowcount[$key]) ? $rowcount[$key] : 1;
                     for($i = 0; $i < $count; $i++)
                     {
                         if(!isset($groupsRow[$rowIndex])) $groupsRow[$rowIndex] = new stdclass();
@@ -2210,13 +2210,16 @@ class pivotModel extends model
         $table  = "<table class='reportData table table-condensed table-striped table-bordered table-fixed datatable' style='width: auto; min-width: 100%' data-fixed-left-width='400'>";
 
         $showOrigins = array();
+        $hasShowOrigin = false;
 
         foreach($data->cols[0] as $col)
         {
             $colspan = zget($col, 'colspan', 1);
             $colShowOrigin = array_fill(0, $colspan, $col->showOrigin);
             $showOrigins = array_merge($showOrigins, $colShowOrigin);
+            if($col->showOrigin) $hasShowOrigin = true;
         }
+
 
         /* Init table thead. */
         $table .= "<thead>";
@@ -2256,7 +2259,7 @@ class pivotModel extends model
                 $hidden  = isset($configs[$i][$j]) ? false : (!$isGroup ? false : true);
 
                 $showOrigin = $showOrigins[$j];
-                if(!$isGroup && !$showOrigin)
+                if($hasShowOrigin && !$isGroup && !$showOrigin)
                 {
                     $rowspan = isset($configs[$i]) ? end($configs[$i]) : 1;
                     $hidden  = isset($configs[$i]) ? false : true;
