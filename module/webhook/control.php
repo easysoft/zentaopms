@@ -63,7 +63,7 @@ class webhook extends control
             $webhookID = $this->webhook->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $webhookID));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse')));
         }
 
         unset($this->lang->webhook->typeList['']);
@@ -88,7 +88,7 @@ class webhook extends control
         {
             $this->webhook->update($id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse')));
         }
 
         $webhook = $this->webhook->getByID($id);
@@ -172,17 +172,13 @@ class webhook extends control
         if($_POST)
         {
             $this->webhook->bind($id);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return print(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $webhook = $this->webhook->getById($id);
-        if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser' && $webhook->type != 'feishuuser')
-        {
-            echo js::alert($this->lang->webhook->note->bind);
-            return print(js::locate($this->createLink('webhook', 'browse')));
-        }
+        if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser' && $webhook->type != 'feishuuser') return $this->send(array('result' => 'success', 'message' => $this->lang->webhook->note->bind, 'load' => $this->createLink('webhook', 'browse')));
         $webhook->secret = json_decode($webhook->secret);
 
         /* Get selected depts. */
@@ -214,14 +210,8 @@ class webhook extends control
 
         if($response['result'] == 'fail')
         {
-            if($response['message'] == 'nodept')
-            {
-                echo js::error($this->lang->webhook->error->noDept);
-                return print(js::locate($this->createLink('webhook', 'chooseDept', "id=$id")));
-            }
-
-            echo js::error($response['message']);
-            return print(js::locate($this->createLink('webhook', 'browse')));
+            if($response['message'] == 'nodept') return $this->send(array('result' => 'success', 'message' => $this->lang->webhook->error->noDept, 'load' => $this->createLink('webhook', 'chooseDept', "id={$id}")));
+            return $this->send(array('result' => 'success', 'message' => $response['message'], 'load' => $this->createLink('webhook', 'browse')));
         }
 
         $oauthUsers  = $response['data'];
@@ -264,11 +254,7 @@ class webhook extends control
     public function chooseDept($id)
     {
         $webhook = $this->webhook->getById($id);
-        if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser' && $webhook->type != 'feishuuser')
-        {
-            echo js::alert($this->lang->webhook->note->bind);
-            return print(js::locate($this->createLink('webhook', 'browse')));
-        }
+        if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser' && $webhook->type != 'feishuuser') return $this->send(array('result' => 'success', 'message' => $this->lang->webhook->note->bind, 'load' => $this->createLink('webhook', 'browse')));
         $webhook->secret = json_decode($webhook->secret);
 
         if($webhook->type == 'dinguser')
@@ -280,18 +266,13 @@ class webhook extends control
 
         if($webhook->type == 'feishuuser') $response = array('result' => 'success', 'data' => array());
 
-        if($response['result'] == 'fail')
-        {
-            echo js::error($response['message']);
-            return print(js::locate($this->createLink('webhook', 'browse')));
-        }
-
+        if($response['result'] == 'fail') return $this->send(array('result' => 'success', 'message' => $response['message'], 'load' => $this->createLink('webhook', 'browse')));
         if($response['result'] == 'selected')
         {
             $locateLink  = $this->createLink('webhook', 'bind', "id={$id}");
             $locateLink .= strpos($locateLink, '?') !== false ? '&' : '?';
             $locateLink .= 'selectedDepts=' . join(',', $response['data']);
-            return print(js::locate($locateLink));
+            return $this->send(array('result' => 'success', 'load' => $locateLink));
         }
 
         $this->view->title      = $this->lang->webhook->chooseDept;
