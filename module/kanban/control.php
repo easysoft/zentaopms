@@ -749,6 +749,7 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($column->region, $kanbanGroup))));
         }
 
+        $this->view->column = $this->kanban->getColumnByID($columnID);
         $this->display();
     }
 
