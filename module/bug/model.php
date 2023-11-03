@@ -4029,7 +4029,7 @@ class bugModel extends model
             {
                 if(empty($bug->$field)) continue;
 
-                $class = ($field == 'deadline' && isset($bug->delay) && $status == 'active') ? "class='delayed'" : '';
+                $class = ($field == 'deadline' && isset($bug->delay) && $status == 'active') ? "class='delayed'" : "class='deadline-padding'";
                 $bug->$field = "<span $class title='{$bug->$field}'>{$bug->$field}</span>";
             }
 

@@ -62,3 +62,4 @@ body {margin-bottom: 10px;}
 .dtable-cell[data-col="actions"] > .dtable-cell-content .c-actions .dividing-line {width: 1px; height: 16px; display: inline-block; vertical-align: middle; background: #F4F5F7; margin: 0 4px 0 0;}
 
 span.delayed {display: inline-block; height: 20px; line-height: 18px; background: #FFEBEB; color: #FB2B2B; border-radius: 20px; padding: 2px 8px;}
+.deadline-padding {padding-left: 8px}
