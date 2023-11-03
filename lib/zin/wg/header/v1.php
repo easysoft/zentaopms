@@ -166,7 +166,6 @@ class header extends wg
                 'url' => createLink('my', 'profile', '', '', true),
                 'icon' => 'account',
                 'text' => $lang->profile,
-                'class' => 'iframe',
                 'data-toggle' => 'modal',
                 'data-size' => 700,
                 'data-id'   => 'profile',
@@ -187,7 +186,8 @@ class header extends wg
                         'data-class-name' => 'modal-inverse',
                         'data-headerless' => true,
                         'data-backdrop' => true,
-                        'data-keyboard' => true
+                        'data-keyboard' => true,
+                        'data-toggle' => 'modal'
                     );
                 }
 
@@ -196,7 +196,6 @@ class header extends wg
                     'url' => createLink('my', 'preference', 'showTip=false', '', true),
                     'icon' => 'controls',
                     'text' => $lang->preference,
-                    'class' => 'iframe',
                     'data-width' => 700,
                     'data-toggle' => 'modal'
                 );
@@ -409,14 +408,14 @@ class header extends wg
                     $params = "parentProgramID=0&extra=from=global";
                     break;
                 case 'kanbanspace':
-                    $isOnlyBody         = true;
-                    $item['class']      = 'iframe';
-                    $item['data-width'] = '75%';
+                    $isOnlyBody          = true;
+                    $item['data-toggle'] = 'modal';
+                    $item['data-width']  = '75%';
                     break;
                 case 'kanban':
-                    $isOnlyBody         = true;
-                    $item['class']      = 'iframe';
-                    $item['data-width'] = '75%';
+                    $isOnlyBody          = true;
+                    $item['data-toggle'] = 'modal';
+                    $item['data-width']  = '75%';
                     break;
             }
 
