@@ -2162,7 +2162,7 @@ class bugZen extends bug
         }
         if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID={$bug->id}", 'html');
 
-        return $this->send(array('result' => 'success', 'message' => $message));
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
     }
 
     /**
