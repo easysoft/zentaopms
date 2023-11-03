@@ -2589,9 +2589,9 @@ class blockZen extends block
         $this->view->resolvedBugCount  = $resolvedBugCount;
 
         /* 获取各个分组中最大的值， 用来计算各个值所占的比例。 */
-        $this->view->maxStoryEstimate  = max($doneStoryEstimate);
-        $this->view->maxStoryCount     = max($doneStoryCount);
-        $this->view->maxBugCount       = max($resolvedBugCount);
+        $this->view->maxStoryEstimate  = !empty($doneStoryEstimate) ? max($doneStoryEstimate) : 0;
+        $this->view->maxStoryCount     = !empty($doneStoryCount) ? max($doneStoryCount) : 0;
+        $this->view->maxBugCount       = !empty($dosolvedBugCount) ? max($dosolvedBugCount) : 0;
     }
 
     /**
