@@ -1018,7 +1018,7 @@ class docModel extends model
         }
 
         $files = $this->loadModel('file')->getUpload();
-        if(empty($_POST['labels'])) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
+        if($_POST['type'] == 'attachment' && empty($_POST['labels'])) return dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->doc->uploadFile);
 
         $doc->draft  = $docContent->content;
         $doc->vision = $this->config->vision;
