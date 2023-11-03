@@ -310,7 +310,25 @@ formPanel
             set::width('3/5'),
             set::label($lang->story->title),
             set::required($fields['title']['required']),
-            input(set::name('title'), set::value($fields['title']['default'])),
+            inputControl
+            (
+                setClass('titleBox'),
+                input
+                (
+                    set::name('title'),
+                    set::value($fields['title']['default']),
+                ),
+                to::suffix
+                (
+                    colorPicker
+                    (
+                        set::heading($lang->story->colorTag),
+                        set::name('color'),
+                        set::value(''),
+                        set::syncColor('#title')
+                    ),
+                ),
+            ),
         ),
         formGroup
         (
