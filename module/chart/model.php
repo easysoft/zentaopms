@@ -622,7 +622,7 @@ class chartModel extends model
 
         $percent = round($molecule->count / $denominator->count, 4);
 
-        $series  = array(array('type' => 'liquidFill', 'data' => array($percent), 'outline' => array('show' => false), 'label' => array('fontSize' => 26)));
+        $series  = array(array('type' => 'liquidFill', 'data' => array($percent), 'color' => array('#2e7fff'), 'outline' => array('show' => false), 'label' => array('fontSize' => 26)));
         $tooltip = array('show' => true);
         $options = array('series' => $series, 'tooltip' => $tooltip);
 
