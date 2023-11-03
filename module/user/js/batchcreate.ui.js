@@ -23,7 +23,7 @@ function toggleNew(event)
 {
     const $target     = $(event.target);
     const $currentRow = $target.closest('tr');
-    const $company    = $currentRow.find('select[data-name="company"]');
+    const $company    = $currentRow.find('div[data-name="company"]').closest('.picker-box');
     const $newCompany = $currentRow.find('input[data-name="newCompany"]');
     $target.toggleClass('checked');
     if($target.hasClass('checked'))
