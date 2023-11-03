@@ -121,13 +121,13 @@ detailBody
         section
         (
             set::title($lang->story->legendSpec),
-            $canEditContent ? formGroup(editor(set::name('spec'), htmlSpecialString($story->spec))) : set::content($story->spec),
+            $canEditContent ? formGroup(editor(set::name('spec'), html($story->spec))) : set::content($story->spec),
             $canEditContent ? null : set::useHtml(true)
         ),
         section
         (
             set::title($lang->story->verify),
-            $canEditContent ? formGroup(editor(set::name('verify'), htmlSpecialString($story->verify))) : set::content($story->verify),
+            $canEditContent ? formGroup(editor(set::name('verify'), html($story->verify))) : set::content($story->verify),
             $canEditContent ? null : set::useHtml(true)
         ),
         empty($twins) ? null : section
