@@ -104,7 +104,7 @@ $(function()
     if($(".createCustomLib").length == 1) $(".createCustomLib").click(); // Fix bug #15139.
     addFileUploadMutationObserver();
 
-    $('#file-upload .file-input-list button').addClass('required');
+    $('#file-upload .file-input-list small').after('<span class="required" style="position: absolute"></span>');
 })
 
 function toggleEditor(type)
