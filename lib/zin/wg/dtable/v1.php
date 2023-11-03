@@ -93,9 +93,10 @@ class dtable extends wg
                 {
                     if(isset($action['data-toggle']) && !isset($action['data-position'])) $action['data-position'] = 'center';
 
+                    $action['className'] = 'text-primary';
                     if(!empty($action['ajaxSubmit']))
                     {
-                        if(empty($action['className']))     $action['className']    = 'ajax-submit';
+                        if(empty($action['className']))     $action['className']   .= ' ajax-submit';
                         if(!isset($action['data-confirm'])) $action['data-confirm'] = zget($app->lang->$module, 'confirmDelete');
                     }
                 }
