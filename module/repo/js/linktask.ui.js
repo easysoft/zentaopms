@@ -13,8 +13,8 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
     if(!checkedList.length) return;
 
     const tabType  = $(this).data('type');
-    const postData = [];
-    postData[`${tabType}[]`] = checkedList;
+    const postData = new FormData();
+    checkedList.forEach((id) => postData.append(`${tabType}[]`, id));
 
     $.ajaxSubmit({
         url:  $(this).data('url'),
