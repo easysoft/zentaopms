@@ -123,6 +123,7 @@ if($confirm != 'yes')
         (
             set::id("fileModal{$step->id}"),
             set::title($lang->testtask->files),
+            setData('position', 'center'),
             upload
             (
                 set::name("files{$step->id}[]"),
