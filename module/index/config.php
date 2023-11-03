@@ -23,7 +23,6 @@ $config->index->appGroup['effort']      = 'my';
 $config->index->appGroup['user']        = 'admin';
 
 $config->index->oldPages = array();
-$config->index->oldPages[] = 'product-roadmap';
 $config->index->oldPages[] = 'product-kanban';
 $config->index->oldPages[] = 'program-kanban';
 $config->index->oldPages[] = 'project-kanban';
