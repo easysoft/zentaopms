@@ -385,7 +385,7 @@ class testcaseZen extends testcase
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
             $stories   = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules);
         }
-        if($storyID && !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $storyID)) + $stories;
+        if($storyID && !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;
 
         $this->view->stories          = $stories;
         $this->view->currentModuleID  = $currentModuleID;
