@@ -34,7 +34,7 @@
   if($canUploadDoc)
   {
       $uploadLink = $this->createLink('doc', 'uploadDocs', "objectType=mine&objectID=&libID=$libID&moduleID=$moduleID&docType=attachment", 'html', true);
-      echo html::a($uploadLink, "<i class='icon-import muted'> </i>" . $lang->doc->uploadDoc, '', "class='btn btn-link iframe'");
+      echo html::a($uploadLink, "<i class='icon-doc-attachment muted'> </i>" . $lang->doc->uploadDoc, '', "class='btn btn-link iframe'");
   }
   if($canExport)
   {
