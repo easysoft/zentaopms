@@ -18,8 +18,20 @@ formPanel
         formGroup
         (
             set::label($lang->kanbanlane->name),
-            set::name('name'),
-            set::value($lane->name)
+            inputControl
+            (
+                input(set::name('name'), set::value($lane->name)),
+                set::suffixWidth('icon'),
+                to::suffix
+                (
+                    colorPicker
+                    (
+                        set::name('color'),
+                        set::items($config->kanban->laneColorList),
+                        set::value($lane->color)
+                    )
+                )
+            )
         )
     ),
     $from != 'kanban' ? formRow
