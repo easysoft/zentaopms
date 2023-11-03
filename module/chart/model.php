@@ -117,6 +117,9 @@ class chartModel extends model
         if($chart->sql == null) $chart->sql = '';
         if($chart->sql) $chart->sql = trim(str_replace(';', '', $chart->sql));
 
+        $chart->langs = json_decode($chart->langs, true);
+        if($chart->langs === null) $chart->langs = array();
+
         $chart->filters = json_decode($chart->filters, true);
         if($chart->filters === null) $chart->filters = array();
 
