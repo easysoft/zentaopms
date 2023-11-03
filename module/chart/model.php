@@ -187,45 +187,26 @@ class chartModel extends model
         return $treeMenu;
     }
 
-    public function getEchartOptions($chartID)
+    /**
+     * 获取图表的 echarts 配置。
+     * Get the echarts configuration of the chart.
+     *
+     * @param  object $chart
+     * @access public
+     * @return array
+     */
+    public function getEchartOptions(object $chart): array
     {
-        $chart = $this->getByID($chartID);
+        $settings = current($chart->settings);
+        $type     = $settings['type'];
 
-        $sql           = str_replace(';', '', "$chart->sql");
-        $fieldSettings = (array)$chart->fieldSettings;
-        $langs         = $chart->langs;
-        $settings      = current($chart->settings);
-        $type          = $settings['type'];
+        if($type == 'pie')   return $this->genPie($chart->fieldSettings, $settings, $chart->sql, array());
+        if($type == 'radar') return $this->genRadar($chart->fieldSettings, $settings, $chart->sql, array(), $chart->langs);
+        if($type == 'line')  return $this->genLineChart($chart->fieldSettings, $settings, $chart->sql, array(), $chart->langs);
+        if($type == 'cluBarX'    || $type == 'cluBarY')     return $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, array(), '', $chart->langs);
+        if($type == 'stackedBar' || $type == 'stackedBarY') return $this->genCluBar($chart->fieldSettings, $settings, $chart->sql, array(), 'total', $chart->langs);
 
-        foreach($fieldSettings as $key => $field) $fieldSettings[$key] = (array)$field;
-        if(is_string($langs)) $langs = json_decode($langs, true);
-
-        switch($type)
-        {
-            case 'line':
-                $data = $this->genLineChart($fieldSettings, $settings, $sql, array(), $langs);
-                break;
-            case 'cluBarX':
-                $data = $this->genCluBar($fieldSettings, $settings, $sql, array(), '', $langs);
-                break;
-            case 'cluBarY':
-                $data = $this->genCluBar($fieldSettings, $settings, $sql, array(), '', $langs);
-                break;
-            case 'pie':
-                $data = $this->genPie($fieldSettings, $settings, $sql, array());
-                break;
-            case 'radar':
-                $data = $this->genRadar($fieldSettings, $settings, $sql, array(), $langs);
-                break;
-            case 'stackedBar':
-                $data = $this->genCluBar($fieldSettings, $settings, $sql, array(), 'total', $langs);
-                break;
-            case 'stackedBarY':
-                $data = $this->genCluBar($fieldSettings, $settings, $sql, array(), 'total', $langs);
-                break;
-        }
-
-        return $data;
+        return array();
     }
 
     /**
