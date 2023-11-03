@@ -338,6 +338,7 @@ class metricModel extends model
         $this->dao->begin();
         foreach($records as $record)
         {
+            if(empty($record)) continue;
             $this->dao->insert(TABLE_METRICLIB)
                 ->data($record)
                 ->exec();
