@@ -12,13 +12,17 @@ namespace zin;
 
 include 'echarts.html.php';
 
-jsVar('previewUrl', inlink('preview', "dimension={$dimensionID}&group={$group->id}"));
+jsVar('previewUrl', inlink('preview', "dimension={$dimensionID}&group={$groupID}"));
 
-featureBar
-(
-    set::current($group->id),
-    set::linkParams("dimension={$dimensionID}&group={key}")
-);
+$items = array();
+foreach($groups as $id => $name)
+{
+    $items[] = array('text' => $name, 'url' => inlink('preview', "dimension={$dimensionID}&group={$id}"), 'active' => $id == $groupID);
+}
+
+featureBar(set::items($items));
+
+$chart = zget($charts, 0, null);
 
 div
 (
@@ -28,19 +32,20 @@ div
         set::width('60'),
         moduleMenu
         (
-            set::title($group->name),
-            set::modules($chartTree),
+            set::title($groups[$groupID]),
+            set::modules($treeMenu),
+            $charts ? set::activeKey($charts[0]->currentGroup . '_' . $charts[0]->id) : null,
             set::closeLink(''),
             set::showDisplay(false),
             set::checkbox(true),
             set::checkOnClick('any')
         ),
-        div
+        $treeMenu ? div
         (
             setClass('flex bg-canvas gap-4 px-4 pb-4'),
             btn($lang->selectAll, on::click("$('#moduleMenu ul').zui('tree').$.toggleAllChecked()")),
             btn($lang->chart->preview, setClass('primary'), on::click('previewCharts'))
-        ),
+        ) : null,
         $config->edition == 'open' ? div
         (
             setClass('bg-canvas px-4 pb-4'),
@@ -49,8 +54,9 @@ div
     ),
     div
     (
+        setID('chartPanel'),
         setClass('w-full'),
-        $chartItems()
+        $generateCharts()
     )
 );
 

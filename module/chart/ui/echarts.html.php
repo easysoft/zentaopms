@@ -10,56 +10,62 @@ declare(strict_types = 1);
  */
 namespace zin;
 
-include_once 'common.html.php';
-
-$chartItems = function() use($charts, $lang)
+$generateCharts = function() use($charts, $lang)
 {
-    if(empty($charts)) return div(setClass('bg-white'), div(setClass('empty-tip text-gray'), $lang->chart->noChart));
+    if(empty($charts)) return div(setClass('bg-canvas center text-gray w-full h-40'), $lang->chart->noChart);
 
-    $chartDoms = array();
+    $chartList = array();
     foreach($charts as $chart)
     {
-        $filterItems = array();
-        foreach($chart->filterOptions as $filterOption)
+        $options = array();
+        $filters = array();
+        foreach($chart->filters as $filter)
         {
-            $filterItems[] = initFilter($filterOption, $lang);
+            $name  = $filter['name'];
+            $type  = $filter['type'];
+            $field = $filter['field'];
+            $value = zget($filter, 'default', '');
+
+            if($type == 'select' && !isset($options[$field]))
+            {
+                $fieldSetting = $chart->fieldSettings[$field];
+                $options[$field] = $this->chart->getSysOptions($fieldSetting['type'], $fieldSetting['object'], $fieldSetting['field'], $chart->sql);
+            }
+            $filters[] = resultFilter(set(array('title' => $name, 'type' => $type, 'name' => $field, 'value' => $value, 'items' => zget($options, $field, array()))));
         }
 
-        $chartDoms[] = div
+        $chartID      = $chart->currentGroup . '_' . $chart->id;
+        $chartOptions = $this->chart->getEchartOptions($chart);
+
+        $chartList[] = panel
         (
-            setClass('p-2 panel bg-white'),
+            setID('chartPanel_' . $chartID),
+            set::title($chart->name),
+            set::shadow(false),
+            set::bodyClass('pt-0'),
+            $filters ? div
+            (
+                setID('filter_' . $chartID),
+                setClass('flex justify-between bg-canvas'),
+                div
+                (
+                    setClass('flex flex-wrap w-full'),
+                    $filters
+                ),
+                button
+                (
+                    setClass('btn primary'),
+                    on::click("loadChart('chart_{$chartID}')"),
+                    $lang->chart->query
+                )
+            ) : null,
             div
             (
-                setClass('panel-body'),
-                div
-                (
-                    setClass('panel-title'),
-                    $chart->name,
-                ),
-                div
-                (
-                    setID('filterItems' . $chart->group . '_' . $chart->id),
-                    setClass('filterBox'),
-                    div
-                    (
-                        setClass('left-section'),
-                        $filterItems,
-                    ),
-                    div
-                    (
-                        setClass('right-section')
-
-                    ),
-                ),
-                div
-                (
-                    setID('chartDraw' . $chart->group . '_' . $chart->id),
-                    setClass('echart-content'),
-                    initEchart($chart->echartOptions),
-                )
+                setID('chart_' . $chartID),
+                echarts(set($chartOptions))->size('100%', 400)
             )
         );
     }
 
-    return $chartDoms;
+    return $chartList;
 };
