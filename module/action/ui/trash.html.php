@@ -33,13 +33,8 @@ if(!empty($moreType))
 featureBar
 (
     set::current($currentObjectType),
-    set::linkParams("objectType={key}&type={$type}"),
-    $currentObjectType != 'all' ? li(
-        searchToggle
-        (
-            set::module('trash'),
-        )
-    ) : null
+    set::linkParams("objectType={key}&type={$type}&byQuery=&queryID=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    $currentObjectType != 'all' ? li(searchToggle(set::module('trash'))) : null
 );
 
 toolbar
@@ -60,13 +55,19 @@ toolbar
     ))) : null,
 );
 
+if($currentObjectType != 'task')                                    unset($config->action->dtable->fieldList['execution']);
 if($currentObjectType != 'execution')                               unset($config->action->dtable->fieldList['project']);
 if(strpos(',story,requirement,', ",$currentObjectType,") === false) unset($config->action->dtable->fieldList['product']);
-if($currentObjectType != 'task')                                    unset($config->action->dtable->fieldList['execution']);
 
 if($type == 'all') $config->action->dtable->fieldList['actions']['menu'][] = 'hideone';
 
 $trashes = initTableData($trashes, $config->action->dtable->fieldList, $this->action);
+
+foreach($trashes as $trash)
+{
+    if(strpos(',story,requirement,', ",$trash->objectType,") !== false) $trash->product = isset($productList[$trash->objectID]) ? $productList[$trash->objectID]->productTitle : '';
+}
+
 dtable
 (
     set::cols(array_values($config->action->dtable->fieldList)),

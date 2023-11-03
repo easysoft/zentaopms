@@ -91,7 +91,12 @@ class action extends control
 
         /* 获取用户故事所属的产品名称。 */
         /* Get the products name of story. */
-        if(in_array($browseType, array('story', 'requirement'))) $this->view->productList = $productList = $this->loadModel('product')->getByIdList(array_column($trashes, 'objectID'), 'all');
+        if(in_array($browseType, array('story', 'requirement')))
+        {
+            $storyIdList = array();
+            foreach($trashes as $trash) $storyIdList[] = $trash->objectID;
+            $this->view->productList = $this->loadModel('story')->getByList($storyIdList, 'all');
+        }
 
         /* 获取任务的执行名称。 */
         /* Get the executions name of task. */
@@ -101,16 +106,16 @@ class action extends control
         /* Supplement the information recorded by the operation. */
         foreach($trashes as $trash) $this->actionZen->processTrash($trash, $projectList, $productList, $executionList);
 
-        $this->view->title               = $this->lang->action->trash;
-        $this->view->trashes             = $trashes;
-        $this->view->type                = $type;
-        $this->view->currentObjectType   = $browseType;
-        $this->view->orderBy             = $orderBy;
-        $this->view->pager               = $pager;
-        $this->view->users               = $this->loadModel('user')->getPairs('noletter');
-        $this->view->preferredType       = $preferredType;
-        $this->view->byQuery             = $byQuery;
-        $this->view->queryID             = $queryID;
+        $this->view->title             = $this->lang->action->trash;
+        $this->view->trashes           = $trashes;
+        $this->view->type              = $type;
+        $this->view->currentObjectType = $browseType;
+        $this->view->orderBy           = $orderBy;
+        $this->view->pager             = $pager;
+        $this->view->users             = $this->loadModel('user')->getPairs('noletter');
+        $this->view->preferredType     = $preferredType;
+        $this->view->byQuery           = $byQuery;
+        $this->view->queryID           = $queryID;
         $this->display();
     }
 
