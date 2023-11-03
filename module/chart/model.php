@@ -184,66 +184,6 @@ class chartModel extends model
         return $treeMenu;
     }
 
-    public function getFilterOptions($chartID)
-    {
-        $chart = $this->getByID($chartID);
-
-        $fieldList     = array();
-        $sql           = str_replace(';', '', "$chart->sql");
-        $fieldSettings = (array)$chart->fieldSettings;
-        $langs         = $chart->langs;
-        $filters       = $chart->filters;
-        $clientLang    = $this->app->getClientLang();
-
-        foreach($fieldSettings as $key => $field)
-        {
-            $fieldSettings[$key] = (array)$field;
-            $fieldList[$key]     = $field->name;
-        }
-        if(is_string($langs)) $langs = json_decode($langs, true);
-
-        $fieldPairs = array();
-        foreach($fieldList as $field => $fieldName)
-        {
-            $fieldObject  = $fieldSettings[$field]['object'];
-            $relatedField = $fieldSettings[$field]['field'];
-
-            $this->app->loadLang($fieldObject);
-            $fieldPairs[$field] = isset($this->lang->$fieldObject->$relatedField) ? $this->lang->$fieldObject->$relatedField : $field;
-
-            if(!isset($langs[$field])) continue;
-            if(!empty($langs[$field][$clientLang])) $fieldPairs[$field] = $langs[$field][$clientLang];
-        }
-
-        $filterOptions = array();
-        foreach($filters as $filter)
-        {
-            $field   = $filter['field'];
-            $type    = $filter['type'];
-            $default = isset($filter['default']) ? $filter['default'] : '';
-
-            $filterOption = $filter;
-            $filterOption['default'] = $default;
-            $filterOption['option']  = '';
-
-            $options = array();
-            if($type == 'select')
-            {
-                $fieldSetting           = $fieldSettings[$field];
-                $filterOption['option'] = $this->getSysOptions(zget($fieldSetting, 'type', ''), zget($fieldSetting, 'object', ''), zget($fieldSetting, 'field', ''), $sql);
-            }
-            elseif($type == 'date' or $type == 'datetime')
-            {
-                if(empty($default)) $filterOption['default'] = array('begin' => '', 'end' => '');
-                $filterOption['type'] = $type == 'date' ? 'form-date' : 'form-datetime';
-            }
-
-            $filterOptions[] = $filterOption;
-        }
-
-        return $filterOptions;
-    }
-
     public function getEchartOptions($chartID)
     {
         $chart = $this->getByID($chartID);
