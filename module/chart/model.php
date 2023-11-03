@@ -24,13 +24,14 @@ class chartModel extends model
     }
 
     /**
-     * Get first chart group id.
+     * 获取指定维度下的第一个分组 id。
+     * Get the first group id under the specified dimension.
      *
      * @param  int    $dimensionID
      * @access public
      * @return int
      */
-    public function getFirstChartGroupID($dimensionID)
+    public function getFirstGroup(int $dimensionID): int
     {
         return $this->dao->select('id')->from(TABLE_MODULE)
             ->where('deleted')->eq('0')
@@ -199,7 +200,7 @@ class chartModel extends model
         $filters       = $chart->filters;
         $clientLang    = $this->app->getClientLang();
 
-        foreach($fieldSettings as $key => $field) 
+        foreach($fieldSettings as $key => $field)
         {
             $fieldSettings[$key] = (array)$field;
             $fieldList[$key]     = $field->name;
