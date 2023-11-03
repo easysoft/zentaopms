@@ -85,5 +85,9 @@ blockPanel
 (
     set::bodyClass('row flex-wrap justify-start p-1.5 pt-1'),
     set::headingClass('pb-0 border-b-0'),
-    $cards
+    !empty($cards) ? $cards : center
+    (
+        setClass('text-gray flex-auto'),
+        $lang->noData,
+    ),
 );
