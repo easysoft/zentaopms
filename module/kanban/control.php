@@ -414,15 +414,15 @@ class kanban extends control
             $userList[$account]['avatar'] = $avatar;
         }
 
-        $regions = $this->kanban->getKanbanData($kanbanID);
+        $regions = $this->kanban->getRegionPairs($kanbanID);
         if(!isset($regions[$regionID])) $this->session->set('regionID', 'all', 'kanban');
 
-        $this->view->users    = $users;
-        $this->view->title    = $this->lang->kanban->view;
-        $this->view->userList = $userList;
-        $this->view->kanban   = $kanban;
-        $this->view->regions  = $regions;
-        $this->view->regionID = isset($regions[$regionID]) ? $regionID : 'all';
+        $this->view->users      = $users;
+        $this->view->title      = $this->lang->kanban->view;
+        $this->view->userList   = $userList;
+        $this->view->kanban     = $kanban;
+        $this->view->kanbanList = $this->kanban->getKanbanData($kanbanID);
+        $this->view->regionID   = isset($regions[$regionID]) ? $regionID : 'all';
 
         $this->display();
     }

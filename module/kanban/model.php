@@ -748,16 +748,14 @@ class kanbanModel extends model
     /**
      * Get kanban data.
      *
-     * @param  int    $kanbanID
+     * @param  int          $kanbanID
+     * @param  array|string $regionIDList
      * @access public
      * @return array
      */
     public function getKanbanData($kanbanID, $regionIDList = '')
     {
-        $kanbanData   = array();
-        $actions      = array('sortGroup');
-        $regions      = $this->getRegionPairs($kanbanID);
-        $singleRegion = false;
+        $regions = $this->getRegionPairs($kanbanID);
 
         if(empty($regionIDList))
         {
@@ -765,7 +763,6 @@ class kanbanModel extends model
         }
         elseif(!is_array($regionIDList))
         {
-            $singleRegion = $regionIDList;
             $regionIDList = array($regionIDList);
         }
 
@@ -774,12 +771,18 @@ class kanbanModel extends model
         $columnGroup = $this->getColumnGroupByRegions($regionIDList);
         $cardGroup   = $this->getCardGroupByKanban($kanbanID);
 
+        $kanbanList = array();
         foreach($regionIDList as $regionID)
         {
-            $region = new stdclass();
-            $region->id        = $regionID;
-            $region->name      = $regions[$regionID];
-            $region->laneCount = 0;
+            $laneCount  = 0;
+            $regionData = array();
+            $groupData  = array();
+
+            $heading = new stdclass();
+            $heading->title = zget($regions, $regionID, '');
+
+            $regionData['key']     = "region{$regionID}";
+            $regionData['heading'] = $heading;
 
             $groups = zget($groupGroup, $regionID, array());
             foreach($groups as $group)
@@ -787,25 +790,21 @@ class kanbanModel extends model
                 $lanes = zget($laneGroup, $group->id, array());
                 if(!$lanes) continue;
 
-                foreach($lanes as $lane) $lane->items = isset($cardGroup[$lane->id]) ? $cardGroup[$lane->id] : array();
+                $laneCount += count($lanes);
 
-                $group->columns = zget($columnGroup, $group->id, array());
-                $group->lanes   = $lanes;
-                $group->actions = array();
+                $groupData['key']           = "group{$group->id}";
+                $groupData['data']['lanes'] = $lanes;
+                $groupData['data']['cols']  = zget($columnGroup, $group->id, array());
+                $groupData['data']['items'] = zget($cardGroup, $group->id, array());
 
-                foreach($actions as $action)
-                {
-                    if(commonModel::hasPriv('kanban', $action)) $group->actions[] = $action;
-                }
-
-                $region->groups[]   = $group;
-                $region->laneCount += count($lanes);
+                $regionData['items'][] = $groupData;
             }
 
-            $kanbanData[$regionID] = $region;
+            $regionData['laneCount']  = $laneCount;
+            $kanbanList[] = $regionData;
         }
 
-        return $singleRegion ? $kanbanData[$singleRegion] : $kanbanData;
+        return $kanbanList;
     }
 
     /**
@@ -1050,25 +1049,30 @@ class kanbanModel extends model
      */
     public function getLaneGroupByRegions($regions, $browseType = 'all')
     {
-        $laneGroup = $this->dao->select('*')->from(TABLE_KANBANLANE)
+        $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('deleted')->eq('0')
             ->andWhere('region')->in($regions)
             ->beginIf($browseType != 'all')->andWhere('type')->eq($browseType)->fi()
             ->orderBy('order')
-            ->fetchGroup('group');
+            ->fetchAll();
 
         $actions = array('sortLane', 'deleteLane', 'editLaneName', 'editLaneColor');
-        foreach($laneGroup as $lanes)
+        $laneGroup = array();
+        foreach($lanes as $lane)
         {
-            foreach($lanes as $lane)
+            $item = array();
+            $item['id']    = $lane->id;
+            $item['type']  = $lane->type;
+            $item['name']  = $lane->id;
+            $item['title'] = htmlspecialchars_decode($lane->name);
+            $item['color'] = $lane->color;
+
+            foreach($actions as $action)
             {
-                $lane->actions = array();
-                $lane->name    = htmlspecialchars_decode($lane->name);
-                foreach($actions as $action)
-                {
-                    if($this->isClickable($lane, $action)) $lane->actions[] = $action;
-                }
+                if($this->isClickable($lane, $action)) $item['actions'][] = $action;
             }
+
+            $laneGroup[$lane->group][] = $item;
         }
 
         return $laneGroup;
@@ -1102,57 +1106,62 @@ class kanbanModel extends model
      */
     public function getColumnGroupByRegions($regions, $order = 'order', $param = '')
     {
-        $columnGroup = $this->dao->select("*")->from(TABLE_KANBANCOLUMN)
+        $columns = $this->dao->select("*")->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq('0')
             ->andWhere('region')->in($regions)
             ->beginIF(strpos(",$param,", ',withArchived,') === false)->andWhere('archived')->eq('0')->fi()
             ->orderBy($order)
-            ->fetchGroup('group');
+            ->fetchAll();
 
         $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'batchCreateCard', 'splitColumn', 'sortColumn');
 
         /* Group by parent. */
         $parentColumnGroup = array();
-        foreach($columnGroup as $group => $columns)
+        $columnGroup       = array();
+        foreach($columns as $column)
         {
-            foreach($columns as $column)
+            $item = array();
+            $item['title'] = htmlspecialchars_decode($column->name);
+            $item['name']  = $column->id;
+            $item['id']    = $column->id;
+            $item['type']  = $column->type;
+            $item['color'] = $column->color;
+            $item['limit'] = $column->limit;
+
+            /* Judge column action priv. */
+            foreach($actions as $action)
             {
-                $column->name    = htmlspecialchars_decode($column->name);
-                $column->actions = array();
-
-                /* Judge column action priv. */
-                foreach($actions as $action)
-                {
-                    if($this->isClickable($column, $action)) $column->actions[] = $action;
-                }
-
-                if($column->parent > 0) continue;
-
-                $parentColumnGroup[$group][] = $column;
+                if($this->isClickable($column, $action)) $item['actions'][] = $action;
             }
+
+            $columnGroup[$column->group][] = $item;
+
+            if($column->parent > 0) continue;
+
+            $parentColumnGroup[$column->group][] = $column;
         }
 
-        $columnData = array();
-        foreach($parentColumnGroup as $group => $parentColumns)
-        {
-            foreach($parentColumns as $parentColumn)
-            {
-                $columnData[$group][] = $parentColumn;
-                foreach($columnGroup[$group] as $column)
-                {
-                    if($column->parent == $parentColumn->id)
-                    {
-                        $parentColumn->asParent = true;
+        //$columnData = array();
+        //foreach($parentColumnGroup as $group => $parentColumns)
+        //{
+        //    foreach($parentColumns as $parentColumn)
+        //    {
+        //        $columnData[$group][] = $parentColumn;
+        //        foreach($columnGroup[$group] as $column)
+        //        {
+        //            if($column->parent == $parentColumn->id)
+        //            {
+        //                $parentColumn->asParent = true;
 
-                        $column->parentType = 'column' . $column->parent;
+        //                $column->parentType = 'column' . $column->parent;
 
-                        $columnData[$group][] = $column;
-                    }
-                }
-            }
-        }
+        //                $columnData[$group][] = $column;
+        //            }
+        //        }
+        //    }
+        //}
 
-        return $columnData;
+        return $columnGroup;
     }
 
     /**
@@ -1193,31 +1202,33 @@ class kanbanModel extends model
             {
                 if(!isset($cards[$cardID])) continue;
 
-                $card         = zget($cards, $cardID);
-                $card->column = $cell->column;
-                $card->lane   = $cell->lane;
-                $card->name   = htmlspecialchars_decode($card->name);
+                $card = zget($cards, $cardID);
 
-                $card->actions = array();
+                $item = array();
+                $item['column'] = $cell->column;
+                $item['lane']   = $cell->lane;
+                $item['title']  = htmlspecialchars_decode($card->title);
+                $item['name']   = $card->id;
+
                 foreach($actions as $action)
                 {
                     if(in_array($action, array('viewExecution', 'viewPlan', 'viewRelease', 'viewBuild', 'viewTicket')))
                     {
                         if($card->fromType == 'execution')
                         {
-                            if($card->execType == 'kanban' and common::hasPriv('execution', 'kanban')) $card->actions[] = $action;
-                            if($card->execType != 'kanban' and common::hasPriv('execution', 'view')) $card->actions[] = $action;
+                            if($card->execType == 'kanban' and common::hasPriv('execution', 'kanban')) $item['actions'][] = $action;
+                            if($card->execType != 'kanban' and common::hasPriv('execution', 'view')) $item['actions'][] = $action;
                         }
                         else
                         {
-                            if(common::hasPriv($fromType, 'view')) $card->actions[] = $action;
+                            if(common::hasPriv($fromType, 'view')) $item['actions'][] = $action;
                         }
                         continue;
                     }
-                    if(common::hasPriv('kanban', $action)) $card->actions[] = $action;
+                    if(common::hasPriv('kanban', $action)) $item['actions'][] = $action;
                 }
 
-                $cardGroup[$cell->lane]['column' . $cell->column][] = $card;
+                $cardGroup[$cell->group][$cell->lane]['column' . $cell->column][] = $item;
             }
         }
 
