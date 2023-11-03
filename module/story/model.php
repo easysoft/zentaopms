@@ -3083,7 +3083,7 @@ class storyModel extends model
     public static function isClickable(object $story, string $action): bool
     {
         static $shadowProducts = array();
-        if(empty($shadowProducts[$story->product]))
+        if(isset($story->product) && empty($shadowProducts[$story->product]))
         {
             global $app;
             $stmt = $app->dbQuery('SELECT id FROM ' . TABLE_PRODUCT . " WHERE shadow = 1")->fetchAll();
@@ -3094,7 +3094,7 @@ class storyModel extends model
 
         global $app, $config;
 
-        if($story->parent < 0 and strpos($config->story->list->actionsOperatedParentStory, ",$action,") === false) return false;
+        if(isset($story->parent) && $story->parent < 0 && strpos($config->story->list->actionsOperatedParentStory, ",$action,") === false) return false;
 
         $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
         $story->notReview = isset($story->notReview) ? $story->notReview : array();

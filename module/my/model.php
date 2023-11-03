@@ -1168,6 +1168,8 @@ class myModel extends model
             $story->storyType = $data->type;
             $story->time      = $data->openedDate;
             $story->status    = $data->status;
+            $story->product   = $data->product;
+            $story->parent    = $data->parent;
             $stories[$story->id] = $story;
         }
 
@@ -1477,7 +1479,7 @@ class myModel extends model
         foreach($actions as $action)
         {
             $objectType = $action->objectType;
-            if(!isset($objectGroup[$objectType])) continue;
+            if(!isset($objectGroup[$objectType]) || !$action->objectID) continue;
 
             $object = $objectGroup[$objectType][$action->objectID];
             $review = new stdclass();

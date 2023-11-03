@@ -13,8 +13,8 @@ namespace zin;
 jsVar('viewLink',   createLink('{module}', 'view',   'id={id}'));
 jsVar('reviewLink', createLink('{module}', 'review', 'id={id}'));
 
-$rawMethod = $this->app->rawMethod;
-if($rawMethod != 'audit') $lang->my->featureBar[$rawMethod] = $lang->my->featureBar[$rawMethod]['audit'];
+$rawMethod = $app->rawMethod;
+if($rawMethod != 'audit' && isset($lang->my->featureBar[$rawMethod]['audit'])) $lang->my->featureBar[$rawMethod] = $lang->my->featureBar[$rawMethod]['audit'];
 
 $linkParam = "browseType={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 if($rawMethod == 'contribute') $linkParam = "mode=$mode&$linkParam";
@@ -83,7 +83,7 @@ foreach($reviewList as $review)
 }
 
 $reviewList = initTableData($reviewList, $config->my->audit->dtable->fieldList, $this->my);
-$sortLink   = $app->rawMethod == 'audit' ? createLink('my', 'audit', "browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}") : createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+$sortLink   = $app->rawMethod == 'audit' ? createLink('my', 'audit', "browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}") : createLink('my', $app->rawMethod, "mode={$mode}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 
 $cols = array_values($config->my->audit->dtable->fieldList);
 $data = array_values($reviewList);
