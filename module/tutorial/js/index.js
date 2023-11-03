@@ -198,6 +198,8 @@ $(function()
             html: true
         }, options);
         $e = $e.first();
+
+        console.log('showToolTip', $e, text, options);
         if($e.css('display') !== 'none')
         {
             if(!$e.data('zui.tooltip')) $e.addClass('tooltip-tutorial').attr('data-toggle', 'tooltip').tooltip(options);
@@ -341,11 +343,15 @@ $(function()
                     {
                         finishTask();
                     }
+                    console.log('阻止表单提交');
                     e.preventDefault();
                     e.stopPropagation();
                     return false;
                 }
                 console.log('task.nav.submit', task.nav.submit)
+                console.log('is a form ?', $form,$form.is('form'), $form.find('form'))
+                $form = $form.is('form') ? $form : $form.find('form').last();
+                console.log('is a form ?', $form)
                 if(task.nav.submit) $form.on('click.tutorial', task.nav.submit, onSubmit);
                 else $form.submit(onSubmit);
             }

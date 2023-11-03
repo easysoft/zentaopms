@@ -35,7 +35,7 @@ panel
     ),
     dtable
     (
-        set::id('bug'),
+        set::id('bug-list'),
         set::height(318),
         set::bordered(false),
         set::horzScrollbarPos('inside'),

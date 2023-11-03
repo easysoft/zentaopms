@@ -22,7 +22,7 @@ jsVar('branchCount', isset($fields['branches']['options']) ? count($fields['bran
 
 formPanel
 (
-    on::click('#saveButton', 'customSubmit'),
+    commonModel::isTutorialMode() ? '' : on::click('#saveButton', 'customSubmit'),
     on::click('#saveDraftButton', 'customSubmit'),
     set::id('dataform'),
     to::heading(div

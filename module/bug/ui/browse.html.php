@@ -76,7 +76,7 @@ if(!isonlybody())
         ))) : null,
         $canCreate && $canBatchCreate ? btngroup
         (
-            btn(setClass('btn primary'), set::icon('plus'), set::url($createLink), $lang->bug->create),
+            btn(setClass('btn primary create-bug-btn'), set::icon('plus'), set::url($createLink), $lang->bug->create),
             dropdown
             (
                 btn(setClass('btn primary dropdown-toggle'), setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
