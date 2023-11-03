@@ -1316,6 +1316,7 @@ $lang->resource->repo->linkTask        = 'linkTask';
 $lang->resource->repo->unlink          = 'unlink';
 $lang->resource->repo->import          = 'importAction';
 $lang->resource->repo->createBranch    = 'createBranchAction';
+$lang->resource->repo->createRepo      = 'createRepoAction';
 
 $lang->repo->methodOrder[5]   = 'create';
 $lang->repo->methodOrder[10]  = 'edit';
@@ -1338,6 +1339,7 @@ $lang->repo->methodOrder[90]  = 'linkTask';
 $lang->repo->methodOrder[95]  = 'unlink';
 $lang->repo->methodOrder[100] = 'import';
 $lang->repo->methodOrder[105] = 'createBranch';
+$lang->repo->methodOrder[110] = 'createRepo';
 
 $lang->resource->ci = new stdclass();
 $lang->resource->ci->commitResult       = 'commitResult';
