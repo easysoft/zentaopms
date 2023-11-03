@@ -157,7 +157,7 @@ featureBar
 (
     set::current($status),
     set::linkParams("status={key}&orderBy=$orderBy"),
-    li(searchToggle(set::module('program')))
+    li(searchToggle(set::module('program'), set::open($status == 'bySearch')))
 );
 
 toolbar
