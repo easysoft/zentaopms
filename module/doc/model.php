@@ -3361,15 +3361,15 @@ class docModel extends model
             $docType  = zget($this->config->doc->iconList, $typeKey);
             $icon     = html::image("static/svg/{$docType}.svg", "class='file-icon'");
             $attr     = "data-app='{$this->app->tab}'";
-            $class    = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
+            $class    = strpos($this->config->doc->officeTypes, $typeKey) !== false || $typeKey == 'attachment' ? 'iframe' : '';
             $params   = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
             if($typeKey == 'template' and ($this->config->edition == 'max' or $this->config->edition == 'ipd')) $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
 
             $html .= "<li>";
-            $html .= html::a(helper::createLink('doc', 'create', $params, '', $class ? true : false), $icon . ' ' . $typeName, '', "class='$class' $attr");
+            $html .= html::a(helper::createLink('doc', $typeKey == 'attachment' ? 'uploadDocs' : 'create', $params, '', $class ? true : false), $icon . ' ' . $typeName, '', "class='$class' $attr");
             $html .= "</li>";
 
-            if($typeKey == 'template') $html .= '<li class="divider"></li>';
+            if($typeKey == 'template' || $typeKey == 'excel') $html .= '<li class="divider"></li>';
         }
 
         $html .= '</ul></div>';

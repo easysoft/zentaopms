@@ -272,10 +272,11 @@ $lang->doc->typeList['word']     = 'Word';
 $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
 
-$lang->doc->createList['template'] = 'Wiki';
-$lang->doc->createList['word']     = 'Word';
-$lang->doc->createList['ppt']      = 'PPT';
-$lang->doc->createList['excel']    = 'Excel';
+$lang->doc->createList['template']   = 'Wiki';
+$lang->doc->createList['word']       = 'Word';
+$lang->doc->createList['ppt']        = 'PPT';
+$lang->doc->createList['excel']      = 'Excel';
+$lang->doc->createList['attachment'] = $lang->doc->uploadDoc;
 
 $lang->doc->types['doc'] = 'Wiki';
 $lang->doc->types['api'] = 'API';

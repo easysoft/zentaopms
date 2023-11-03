@@ -39,12 +39,6 @@
         if(common::hasPriv('api', 'createRelease')) echo html::a($this->createLink('api', 'createRelease', "libID=$libID"), "<i class='icon-publish muted'> </i>" . $lang->api->createRelease, '', "class='btn btn-link iframe' data-width='800px'");
     }
 
-    if($canUploadDoc)
-    {
-        $uploadLink = $this->createLink('doc', 'uploadDocs', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=$moduleID&docType=attachment", 'html', true);
-        echo html::a($uploadLink, "<i class='icon-doc-attachment muted'> </i>" . $lang->doc->uploadDoc, '', "class='btn btn-link iframe'");
-    }
-
     if($canExport)
     {
         $exportLink = $this->createLink('doc', $exportMethod, "libID=$libID&moduleID=$moduleID", 'html', true);

@@ -31,11 +31,6 @@
   <?php if(empty($object->deleted)):?>
   <div class="btn-toolbar pull-right">
     <?php
-    if($canUploadDoc)
-    {
-        $uploadLink = $this->createLink('doc', 'uploadDocs', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=$moduleID&docType=attachment", 'html', true);
-        echo html::a($uploadLink, "<i class='icon-import muted'> </i>" . $lang->doc->uploadDoc, '', "class='btn btn-link iframe'");
-    }
     if($canExport) echo html::a($this->createLink('doc', $exportMethod, "libID=$libID&moduleID=0&docID=$docID"), "<i class='icon-export muted'> </i>" . $lang->export, 'hiddenwin', "class='btn btn-link' id='docExport'");
     if(common::hasPriv('doc', 'createLib')) echo html::a($this->createLink('doc', 'createLib', "type=" . ($objectType ? $objectType : 'nolink') . "&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->api->createLib, '', 'class="btn btn-secondary iframe" data-width="800px"');
     if(common::hasPriv('doc', 'create')) echo $this->doc->printCreateBtn($lib, $moduleID);

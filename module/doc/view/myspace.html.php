@@ -31,11 +31,6 @@
   </div>
   <div class="btn-toolbar pull-right">
   <?php
-  if($canUploadDoc)
-  {
-      $uploadLink = $this->createLink('doc', 'uploadDocs', "objectType=mine&objectID=&libID=$libID&moduleID=$moduleID&docType=attachment", 'html', true);
-      echo html::a($uploadLink, "<i class='icon-doc-attachment muted'> </i>" . $lang->doc->uploadDoc, '', "class='btn btn-link iframe'");
-  }
   if($canExport)
   {
       $exportLink = $this->createLink('doc', 'mine2export', "libID=$libID&moduleID=$moduleID", 'html', true);
