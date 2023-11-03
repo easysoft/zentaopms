@@ -96,7 +96,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
         (
             btn
             (
-                setClass($app->tab != 'product' ? 'secondary' : 'primary'),
+                setClass(($app->tab != 'product' ? 'secondary' : 'primary') . ' create-story-btn'),
                 set::icon('plus'),
                 set::text($createBtnTitle),
                 set::url($createBtnLink)
