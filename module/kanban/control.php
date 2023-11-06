@@ -552,21 +552,13 @@ class kanban extends control
      * Delete a region
      *
      * @param  int    $regionID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function deleteRegion($regionID, $confirm = 'no')
+    public function deleteRegion($regionID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->kanbanregion->confirmDelete, $this->createLink('kanban', 'deleteRegion', "regionID=$regionID&confirm=yes")));
-        }
-        else
-        {
-            $this->kanban->delete(TABLE_KANBANREGION, $regionID);
-            return print(js::reload('parent'));
-        }
+        $this->kanban->delete(TABLE_KANBANREGION, $regionID);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
@@ -598,8 +590,9 @@ class kanban extends control
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
             }
 
-            $kanbanGroup = $this->kanban->getKanbanData($kanbanID, $regionID);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($regionID, $kanbanGroup))));
+            $kanbanData = $this->kanban->getKanbanData($kanbanID, $regionID);
+            $kanbanData = reset($kanbanData);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $regionID, $kanbanData))));
         }
 
         $this->view->lanes    = $this->kanban->getLanePairsByRegion($regionID, $from == 'kanban' ? 'all' : 'story');
