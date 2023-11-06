@@ -2081,7 +2081,7 @@ class userModel extends model
         /* View management has the highest priority, so there is a substitution. */
         if(!empty($acls['programs']) and !$isAdmin)
         {
-            $userView->programs = implode(',', $acls['program']);
+            $userView->programs = implode(',', $acls['programs']);
         }
         if(!empty($acls['projects']) and !$isAdmin)
         {
