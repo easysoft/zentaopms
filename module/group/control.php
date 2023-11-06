@@ -327,9 +327,7 @@ class group extends control
         $group      = $this->group->getById($groupID);
         $groupUsers = $this->dao->select('t1.account, t2.realname')->from(TABLE_PROJECTADMIN)->alias('t1')->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')->fetchPairs();
 
-
         $this->view->title         = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
-        $this->view->position      = $position;
         $this->view->allUsers      = $groupUsers + $this->loadModel('dept')->getDeptUserPairs($deptID);
         $this->view->groupID       = $groupID;
         $this->view->deptID        = $deptID;
