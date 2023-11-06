@@ -12,7 +12,6 @@ namespace zin;
 
 jsVar('orderBy', $orderBy);
 jsVar('sortLink', helper::createLink('gitlab', 'browseUser', "gitlabID={$gitlabID}&orderBy={orderBy}"));
-jsVar('gitlabUrl', $gitlab->url);
 
 $canCreate = hasPriv('instance', 'manage');
 

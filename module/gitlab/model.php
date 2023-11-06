@@ -3022,6 +3022,9 @@ class gitlabModel extends model
         if($action == 'editGroup') return $object->isAdmin;
         if($action == 'deleteGroup') return $object->isAdmin;
 
+        if($action == 'editUser') return $object->isAdmin;
+        if($action == 'deleteUser') return $object->isAdmin;
+
         return true;
     }
 
