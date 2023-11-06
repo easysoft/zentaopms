@@ -15,15 +15,14 @@ $opts->submitText      = $lang->search->common;
 $opts->resetText       = $lang->search->reset;
 $opts->onSubmit        = jsRaw("window.onSearchFormResult.bind(null, '$formName')");
 
-
 if(empty($opts->savedQuery)) unset($opts->savedQuery);
 
 zui::searchform(set((array)$opts), set::_to($formName), set::className('shadow'));
 
-jsVar('options',          isset($options) ? $options : null);
-jsVar('canSaveQuery',     !empty($_SESSION[$module . 'Query']));
-jsVar('formSession',      $_SESSION[$module . 'Form']);
-jsVar('onMenuBar',        $onMenuBar);
+jsVar('options',      isset($options) ? $options : null);
+jsVar('canSaveQuery', !empty($_SESSION[$module . 'Query']));
+jsVar('formSession',  $_SESSION[$module . 'Form']);
+jsVar('onMenuBar',    $onMenuBar);
 
 js($pageJS);
 

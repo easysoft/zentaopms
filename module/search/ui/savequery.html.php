@@ -6,43 +6,50 @@ form
     set::actions(array()),
     set::action($_SERVER['REQUEST_URI']),
     set::method('post'),
-    div
+    inputGroup
     (
-        setClass('flex flex-row justify-between items-center mr-2'),
         input
         (
             set::id('title'),
             set::name('title'),
             set::type('text'),
-            set::className('form-control w-5/12'),
             set::placeholder($lang->search->setCondName)
         ),
-        checkbox
+        span
         (
-            set::id('common'),
-            set::name('common'),
-            set::value(1),
-            set::className('w-3/12'),
-            $lang->search->setCommon
+            setClass('input-group-addon'),
+            checkbox
+            (
+                set::name('common'),
+                set::value(1),
+                $lang->search->setCommon
+            )
         ),
-        checkbox
+        $onMenuBar == 'yes' ? span
         (
-            set::id('onMenuBar'),
-            set::name('onMenuBar'),
-            set::className('w-3/12'),
-            $lang->search->onMenuBar
-        ),
-        btn(
-            setClass('w-1/12 primary'),
-            set::btnType('submit'),
-            set('data-type', 'submit'),
-            $lang->save
-        ),
+            setClass('input-group-addon'),
+            checkbox
+            (
+                set::name('onMenuBar'),
+                $lang->search->onMenuBar
+            )
+        ) : null,
         input
         (
             set::type('hidden'),
             set::name('module'),
-            set::value($module)
+            set::value($module),
+        ),
+        span
+        (
+            setClass('input-group-btn'),
+            btn
+            (
+                setClass('primary'),
+                set::btnType('submit'),
+                set('data-type', 'submit'),
+                $lang->save
+            )
         )
     )
 );
