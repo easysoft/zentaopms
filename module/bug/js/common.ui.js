@@ -223,21 +223,14 @@ function loadExecutions(productID, projectID = 0)
     let branch = $('[name="branch"]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
-    if(projectID != 0 && projectExecutionPairs[projectID] !== undefined)
-    {
-        $('#executionBox').hide();
-        var executionID = projectExecutionPairs[projectID];
-    }
-    else
-    {
-        $('#executionBox').show();
-        var executionID = 0;
-    }
+    const isMultipleProject = projectID != 0 && projectExecutionPairs[projectID] !== undefined;
 
-    const link = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&pageType=&executionID=' + executionID + '&from=&mode=stagefilter');
+    $('#executionBox').toggle(!isMultipleProject);
+
+    const link = $.createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&pageType=&executionID=&from=&mode=stagefilter');
     $.getJSON(link, function(data)
     {
-        let executionID      = $('[name="execution"]').val();
+        let executionID      = isMultipleProject ? projectExecutionPairs[projectID] : $('[name=execution]').val();
         let $executionPicker = $('[name="execution"]').zui('picker');
         $executionPicker.render({items: data});
         $executionPicker.$.setValue(executionID != '0' ? executionID : '');
