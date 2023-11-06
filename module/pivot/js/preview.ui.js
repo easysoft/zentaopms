@@ -12,7 +12,7 @@ function loadBugCreate()
     const product   = $('#conditions').find('[name=product]').val();
     const execution = $('#conditions').find('[name=execution]').val();
     const params    = window.btoa('begin=' + begin + '&end=' + end + '&product=' + product + '&execution=' + execution);
-    const link      = $.createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + groupID + '&module=pivot&method=bugCreate&params=' + params);
+    const link      = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=bugCreate&params=' + params);
     loadPage(link, '#table-pivot-preview');
 }
 
@@ -33,7 +33,7 @@ function loadProductSummary()
     conditions = conditions.substring(0, conditions.length - 1);
 
     const params = window.btoa('conditions=' + conditions);
-    const link   = $.createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + groupID + '&module=pivot&method=productSummary&params=' + params);
+    const link   = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=productSummary&params=' + params);
     loadPage(link, '#table-pivot-preview');
 }
 
@@ -49,7 +49,7 @@ function loadProjectDeviation()
     const begin  = $('#conditions').find('#begin').val().replaceAll('-', '');
     const end    = $('#conditions').find('#end').val().replaceAll('-', '');
     const params = window.btoa('begin=' + begin + '&end=' + end);
-    const link   = $.createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + groupID + '&module=pivot&method=projectdeviation&params=' + params);
+    const link   = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=projectdeviation&params=' + params);
     loadPage(link, '#table-pivot-preview,#pivotChart');
 }
 
@@ -72,7 +72,7 @@ function loadWorkload()
     $('#days').val(days);
 
     const params = window.btoa('begin=' + begin.replaceAll('-', '') + '&end=' + end.replaceAll('-', '') + '&days=' + days + '&workhour=' + workhour + '&dept=' + dept + '&assign=' + assign);
-    const link   = $.createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + groupID + '&module=pivot&method=workload&params=' + params);
+    const link   = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=workload&params=' + params);
     loadPage(link, '#table-pivot-preview');
 }
 
@@ -114,7 +114,7 @@ function loadCustomPivot()
 
     const data   = {'filterValues': JSON.stringify(filterValues)};
     const params = window.btoa('dimensionID=' + dimension + '&groupID=' + groupID + '&pivotID=' + pivotID);
-    const link   = $.createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + groupID + '&module=pivot&method=show&params=' + params);
+    const link   = $.createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + groupID + '&method=show&params=' + params);
     postAndLoadPage(link, data, '#table-pivot-preview');
 }
 
