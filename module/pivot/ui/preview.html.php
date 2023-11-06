@@ -15,15 +15,16 @@ $generateData = function() use ($lang) {return div(setClass('bg-canvas center te
 $viewFile = strtolower($method) . '.html.php';
 if(file_exists($viewFile)) include_once $viewFile;
 
-jsVar('dimension', $dimensionID);
-jsVar('groupID', $group->id);
+jsVar('dimensionID', $dimensionID);
+jsVar('groupID', $groupID);
 
-featureBar
-(
-    set::load(false),
-    set::current($group->id),
-    set::linkParams("dimensionID={$dimensionID}&group={key}")
-);
+$items = array();
+foreach($groups as $id => $name)
+{
+    $items[] = array('text' => $name, 'url' => inlink('preview', "dimension={$dimensionID}&group={$id}"), 'active' => $id == $groupID);
+}
+
+featureBar(set::items($items));
 
 if($config->edition == 'biz' || $config->edition == 'max')
 {
@@ -55,7 +56,7 @@ div
         set::width('60'),
         moduleMenu
         (
-            set::title($group->name),
+            set::title($groups[$groupID]),
             set::activeKey($currentMenu),
             set::modules($menus),
             set::closeLink(''),
