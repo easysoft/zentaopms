@@ -158,7 +158,7 @@ panel
             set::items($pagerItems),
             set::_className('justify-end mt-2')
         )
-    ): null
+    ) : null
 );
 
 render();
