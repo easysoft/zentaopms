@@ -4,6 +4,10 @@ window.getLane = function(lane)
     if(laneCount < 2) lane.minHeight = window.innerHeight - 235;
 }
 
+window.getLaneActions = function(lane)
+{
+}
+
 window.getCol = function(col)
 {
     /* 计算WIP。*/
