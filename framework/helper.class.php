@@ -667,7 +667,7 @@ function initTableActions(array &$fieldList, string $actionMenu): void
 function initItemActions(object &$item, string $actionMenu, array $actionList, object $model): bool
 {
     global $app;
-    $module = $app->getModuleName();
+    $module = $model->getModuleName();
     $method = '';
 
     $isClickable = false;
