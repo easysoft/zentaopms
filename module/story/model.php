@@ -3911,7 +3911,7 @@ class storyModel extends model
      * @access protected
      * @return void
      */
-    public function doUpdateReviewer(int $storyID, array $reviewers = array(), object $story): void
+    public function doUpdateReviewer(int $storyID, array $reviewers = array(), object $story = null): void
     {
         $oldStory = $this->fetchByID($storyID);
         if(empty($oldStory)) return;
