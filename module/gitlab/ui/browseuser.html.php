@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('gitlabUrl', $gitlab->url);
-
 $canCreate = hasPriv('instance', 'manage');
 
 $menus   = $items = array();
