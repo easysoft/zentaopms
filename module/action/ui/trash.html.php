@@ -34,7 +34,7 @@ featureBar
 (
     set::current($currentObjectType),
     set::linkParams("objectType={key}&type={$type}&byQuery=&queryID=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
-    $currentObjectType != 'all' ? li(searchToggle(set::module('trash'))) : null
+    li(searchToggle(set::module('trash')), setClass($currentObjectType != 'all' ? '' : 'hidden'))
 );
 
 toolbar
