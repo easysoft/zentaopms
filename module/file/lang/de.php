@@ -69,6 +69,7 @@ $lang->file->errorFileMove    = " Upload fehlgeschlagen, die Datei konnte nicht 
 $lang->file->dangerFile       = " Die Datei wurde aus Sicherheitsgründen abgelehnt.";
 $lang->file->errorSuffix      = 'Format ist falsch. Nur .zip Dateien!';
 $lang->file->errorExtract     = 'Entpacken fehlgeschlagen. Die Datei ist vermutlich defekt.';
+$lang->file->errorUploadEmpty = 'No upload file.';
 $lang->file->fileNotFound     = 'The file was not found. The physical file might have been deleted!';
 $lang->file->fileContentEmpty = 'The file is empty. Check the file and upload it again.';
 

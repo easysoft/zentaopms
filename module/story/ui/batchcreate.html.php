@@ -15,11 +15,12 @@ namespace zin;
 !isAjaxRequest() && dropmenu();
 
 /* Generate fields for the batch create form. */
-$fnGenerateFields = function() use ($lang, $fields)
+$fnGenerateFields = function() use ($lang, $fields, $stories)
 {
     /* Generate fields with the appropriate properties. */
     $items   = array();
     $items[] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
+    if($stories) $items[] = array('name' => 'uploadImage', 'label' => '', 'control' => 'hidden', 'hidden' => true);
 
     return array_merge($items, array_map(function($name, $field)
     {
@@ -39,6 +40,7 @@ formBatchPanel
     on::click('#saveButton', 'customSubmit'),
     on::click('#saveDraftButton', 'customSubmit'),
     set::id('dataform'),
+    $stories ? set::data($stories) : null,
     set::title($storyID ? $storyTitle . $lang->colon . $this->lang->story->subdivide : $this->lang->story->batchCreate),
     set::uploadParams('module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan=&type=$type")),
     set::pasteField('title'),

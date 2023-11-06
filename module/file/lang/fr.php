@@ -69,6 +69,7 @@ $lang->file->errorFileMove    = " Echec du chargement. Une erreur est survenue l
 $lang->file->dangerFile       = " Le fichier n'a pas pu être chargé pour des raisons de sécurité.";
 $lang->file->errorSuffix      = 'Format incorrect. Fichiers .zip SEULEMENT !';
 $lang->file->errorExtract     = "Echec de l'extraction des fichiers. Les fichiers peuvent être endommagé ou il y a un fichier invalide dans le zip.";
+$lang->file->errorUploadEmpty = 'No upload file.';
 $lang->file->fileNotFound     = 'Fichier non trouvé. Le fichier physique a peut-être été supprimé par innadvertance !';
 $lang->file->fileContentEmpty = 'The file is empty. Check the file and upload it again.';
 

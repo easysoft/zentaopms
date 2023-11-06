@@ -224,111 +224,57 @@ class fileModel extends model
     /**
      * get uploaded file from zui.uploader.
      *
-     * @param  string $htmlTagName
      * @access public
      * @return array
      */
-    public function getUploadFile($htmlTagName = 'file')
+    public function getChunkedFile(): array
     {
-        if(!isset($_FILES[$htmlTagName]) || empty($_FILES[$htmlTagName]['name'])) return;
-
         $this->app->loadClass('purifier', true);
         $config   = HTMLPurifier_Config::createDefault();
         $config->set('Cache.DefinitionImpl', null);
         $purifier = new HTMLPurifier($config);
 
-        extract($_FILES[$htmlTagName]);
-        if(!validater::checkFileName($name)) return array();
-        if($this->post->name) $name = $this->post->name;
+        $name = urldecode(zget($_SERVER, 'HTTP_X_FILENAME', ''));
+        if(!validater::checkFileName($name) or empty($name)) return array();
 
         $file = array();
         $file['id'] = 0;
-        $file['extension'] = $this->getExtension($name);
-        $file['title']     = !empty($_POST['label']) ? htmlSpecialString($_POST['label']) : substr($name, 0, strpos($name, $file['extension']) - 1);
-        $file['title']     = $purifier->purify($file['title']);
-        $file['size']      = $_POST['size'];
-        $file['tmpname']   = $tmp_name;
-        $file['uuid']      = $_POST['uuid'];
-        $file['pathname']  = $this->setPathName(0, $file['extension']);
-        $file['chunkpath'] = 'chunks' . DS .'f_' . $file['uuid'] . '.' . $file['extension'] . '.part';
-        $file['chunks']    = isset($_POST['chunks']) ? intval($_POST['chunks']) : 0;
-        $file['chunk']     = isset($_POST['chunk'])  ? intval($_POST['chunk'])  : 0;
+        $file['extension']  = $this->getExtension($name);
+        $file['title']      = $purifier->purify(substr($name, 0, strpos($name, $file['extension']) - 1));
+        $file['size']       = zget($_SERVER, 'HTTP_X_FILESIZE', 0);
+        $file['pathname']   = md5($file['title']);
+        $file['chunks']     = zget($_SERVER, 'HTTP_X_TOTAL_CHUNKS', 0);
+        $file['chunkIndex'] = zget($_SERVER, 'HTTP_X_CHUNK_INDEX', 0);
 
-        /* Fix for build uuid like '../../'. */
-        if(!preg_match('/[a-z0-9_]/i', $file['uuid'])) return false;
-
-        if(stripos($this->config->file->allowed, ',' . $file['extension'] . ',') === false)
-        {
-            $file['pathname'] = $file['pathname'] . '.notAllowed';
-        }
-
+        if(stripos($this->config->file->allowed, ",{$file['extension']},") === false) $file['pathname'] = $file['pathname'] . '.notAllowed';
         return $file;
     }
 
     /**
-     * Save uploaded file from zui.uploader.
+     * Save uploaded file by chunk.
      *
-     * @param  int    $file
+     * @param  array  $file
      * @param  int    $uid
      * @access public
-     * @return array|bool
+     * @return array
      */
-    public function saveUploadFile($file, $uid)
+    public function saveChunkedFile(array $file, string $uid): array
     {
-        $uploadFile = array();
+        if($file['chunks'] == 0) return array();
 
         $tmpFilePath = $this->app->getTmpRoot() . 'uploadfiles/';
-        if(!is_dir($tmpFilePath)) mkdir($tmpFilePath, 0777, true);
-
         $tmpFileSavePath = $tmpFilePath . $uid . '/';
-        if(!is_dir($tmpFileSavePath)) mkdir($tmpFileSavePath);
+        if(!is_dir($tmpFileSavePath)) mkdir($tmpFileSavePath, 0777, true);
 
-        $fileName = basename($file['pathname']);
-        $fileName = strpos($fileName, '.') === false ? $fileName : substr($fileName, 0, strpos($fileName, '.'));
-        $file['realpath'] = $tmpFileSavePath . $fileName;
+        $file['realpath'] = $tmpFileSavePath . basename($this->getSaveName($file['pathname']));
+        file_put_contents($file['realpath'], file_get_contents('php://input'), $file['chunkIndex'] == 0 ? 0 : FILE_APPEND);
 
-        if($file['chunks'] > 1)
-        {
-            $tmpFileChunkPath = $tmpFilePath . $file['chunkpath'];
-            if(!file_exists($tmpFileChunkPath)) mkdir(dirname($tmpFileChunkPath));
-
-            if($file['chunk'] > 0)
-            {
-                $fileChunk    = fopen($tmpFileChunkPath, 'a+b');
-                $tmpChunkFile = fopen($file['tmpname'], 'rb');
-                while($buff = fread($tmpChunkFile, 4069))
-                {
-                    fwrite($fileChunk, $buff);
-                }
-                fclose($fileChunk);
-                fclose($tmpChunkFile);
-            }
-            else
-            {
-                if(!move_uploaded_file($file['tmpname'], $tmpFileChunkPath)) return false;
-            }
-
-            if($file['chunk'] == ($file['chunks'] - 1))
-            {
-                rename($tmpFileChunkPath, $file['realpath']);
-
-                $uploadFile['extension'] = $file['extension'];
-                $uploadFile['pathname']  = $file['pathname'];
-                $uploadFile['title']     = $file['title'];
-                $uploadFile['realpath']  = $file['realpath'];
-                $uploadFile['size']      = $file['size'];
-            }
-        }
-        else
-        {
-            if(!move_uploaded_file($file['tmpname'], $file['realpath'])) return false;
-
-            $uploadFile['extension'] = $file['extension'];
-            $uploadFile['pathname']  = $file['pathname'];
-            $uploadFile['title']     = $file['title'];
-            $uploadFile['realpath']  = $file['realpath'];
-            $uploadFile['size']      = $file['size'];
-        }
+        $uploadFile = array();
+        $uploadFile['extension'] = $file['extension'];
+        $uploadFile['pathname']  = $file['pathname'];
+        $uploadFile['title']     = $file['title'];
+        $uploadFile['realpath']  = $file['realpath'];
+        $uploadFile['size']      = $file['size'];
 
         return $uploadFile;
     }

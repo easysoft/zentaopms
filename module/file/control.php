@@ -483,35 +483,27 @@ class file extends control
             $imageFiles  = $this->session->$sessionName;
             $this->session->set($module . 'ImagesFile', $imageFiles);
             unset($_SESSION[$sessionName]);
-            return print(js::locate($this->createLink($module, 'batchCreate', helper::safe64Decode($params)), 'parent'));
+            return $this->send(array('result' => 'success', 'load' => $this->createLink($module, 'batchCreate', helper::safe64Decode($params))));
         }
 
-        if($_FILES)
+        if(strtolower($this->server->request_method) == 'post')
         {
-            $file = $this->file->getUploadFile('file');
+            $file = $this->file->getChunkedFile();
             if(!$file) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->error->noData)));
-            if(empty($file['extension']) or !in_array($file['extension'], $this->config->file->imageExtensions))
-            {
-                return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormate)));
-            }
+            if(empty($file['extension']) or !in_array($file['extension'], $this->config->file->imageExtensions)) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormate)));
 
-            $imageFile = $this->file->saveUploadFile($file, $uid);
-            if($imageFile === false)
+            $imageFile = $this->file->saveChunkedFile($file, $uid);
+            if(!empty($imageFile))
             {
-                return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileMove)));
+                $sessionName = $uid . 'ImagesFile';
+                $imageFiles  = $this->session->$sessionName;
+                $fileName    = basename($imageFile['pathname']);
+
+                if(empty($imageFiles)) $imageFiles = array();
+                $imageFiles[$fileName] = $imageFile;
+                $this->session->set($sessionName, $imageFiles);
             }
-            else
-            {
-                if(!empty($imageFile))
-                {
-                    $sessionName = $uid . 'ImagesFile';
-                    $imageFiles  = $this->session->$sessionName;
-                    $fileName    = basename($imageFile['pathname']);
-                    $imageFiles[$fileName] = $imageFile;
-                    $this->session->set($sessionName, $imageFiles);
-                }
-                return print(json_encode(array('result' => 'success', 'file' => $file, 'message' => $this->lang->file->uploadSuccess)));
-            }
+            return print(json_encode(array('result' => 'success', 'file' => $file, 'message' => $this->lang->file->uploadSuccess)));
         }
 
         $this->view->uid    = empty($uid) ? uniqid() : $uid;

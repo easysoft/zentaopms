@@ -69,6 +69,7 @@ $lang->file->errorFileMove    = " 文件上传失败，移动文件时出错";
 $lang->file->dangerFile       = " 您选择的文件存在安全风险，系统将不予上传。";
 $lang->file->errorSuffix      = '压缩包格式错误，只能上传zip压缩包！';
 $lang->file->errorExtract     = '解压缩失败！可能文件已经损坏，或压缩包里含有非法上传文件。';
+$lang->file->errorUploadEmpty = '没有等待上传的文件';
 $lang->file->fileNotFound     = '未找到该文件，可能物理文件已被删除！';
 $lang->file->fileContentEmpty = '上传文件内容为空，请检查后重新上传。';
 

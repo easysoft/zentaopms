@@ -706,7 +706,7 @@ class storyTao extends storyModel
         $spec->verify  = $story->verify;
         $spec->files   = is_string($files) ? $files : implode(',', array_keys($files));
 
-        if(isset($story->uploadImage)) $spec = $this->doSaveUploadImage($storyID, $fileName, $spec);
+        if(isset($story->uploadImage)) $spec = $this->doSaveUploadImage($storyID, $story->uploadImage, $spec);
 
         $this->dao->insert(TABLE_STORYSPEC)->data($spec)->exec();
     }
