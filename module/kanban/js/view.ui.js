@@ -109,3 +109,47 @@ window.buildColActions = function(col)
 
     return actions;
 }
+
+/**
+ * 渲染卡片内容。
+ * Render card content.
+ */
+window.getItem = function(info)
+{
+    let begin = info.item.begin;
+    let end   = info.item.end;
+    let beginAndEnd = '';
+
+    if(begin < '1970-01-01' && end > '1970-01-01')
+    {
+        beginAndEnd = formatDate(end) + cardLang.deadlineAB;
+    }
+    else if(end < '1970-01-01' && begin > '1970-01-01')
+    {
+        beginAndEnd = formatDate(begin) + cardLang.beginAB;
+    }
+    else if(begin > '1970-01-01' && end > '1970-01-01')
+    {
+        beginAndEnd = formatDate(begin) + ' ~ ' + formatDate(end);
+    }
+
+    let avatar = "<span class='avatar rounded-full size-xs ml-1 " + (info.item.uavatar ? 'primary' : 'bg-lighter text-canvas') + "'>" + (info.item.uavatar ? info.item.uavatar : "<i class='icon icon-person'></i>");
+
+    const content = `
+      <div class='flex items-center'>
+        <span class='pri-${info.item.pri}'>${info.item.pri}</span>
+        <span class='date ml-1'>${beginAndEnd}</span>
+        <div class='flex-1 flex justify-end'>${avatar}</div>
+      </div>
+    `;
+
+    info.item.content = {html: content};
+}
+
+function formatDate(inputDate)
+{
+    const date = new Date(inputDate);
+    const formattedDate = `${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
+
+    return formattedDate;
+}

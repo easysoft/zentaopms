@@ -1209,8 +1209,9 @@ class kanbanModel extends model
             ->andWhere('type')->eq('common')
             ->fetchAll();
 
-        $actions   = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild', 'viewTicket');
-        $cardGroup = array();
+        $actions     = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild', 'viewTicket');
+        $userAvatars = $this->loadModel('user')->getAvatarPairs();
+        $cardGroup   = array();
         foreach($cellList as $cell)
         {
             $cardIdList = array_filter(explode(',', $cell->cards));
@@ -1227,6 +1228,13 @@ class kanbanModel extends model
                 $item['lane']   = $cell->lane;
                 $item['title']  = htmlspecialchars_decode($card->name);
                 $item['name']   = $card->id;
+                $item['pri']    = $card->pri;
+                $item['begin']  = $card->begin;
+                $item['end']    = $card->end;
+
+                $userAvatar = zget($userAvatars, $card->assignedTo, '');
+                $userAvatar = $userAvatar ? "<img src='$userAvatar'/>" : strtoupper(mb_substr($card->assignedTo, 0, 1, 'utf-8'));
+                $item['uavatar'] = $userAvatar;
 
                 foreach($actions as $action)
                 {

@@ -42,6 +42,7 @@ jsVar('laneCount',  $laneCount);
 jsVar('kanbanLang', $lang->kanban);
 jsVar('columnLang', $lang->kanbancolumn);
 jsVar('laneLang', $lang->kanbanlane);
+jsVar('cardLang', $lang->kanbancard);
 jsVar('kanbanID', $kanban->id);
 jsVar('kanban', $kanban);
 jsVar('columnCount', $columnCount);
