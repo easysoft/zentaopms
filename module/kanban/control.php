@@ -404,7 +404,6 @@ class kanban extends control
         if(!$this->app->user->admin and !in_array($kanbanID, $kanbanIdList)) return print(js::error($this->lang->kanban->accessDenied) . js::locate('back'));
 
         $this->kanban->setSwitcher($kanban);
-        $this->kanban->setHeaderActions($kanban);
 
         $userList    = array();
         $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
@@ -417,12 +416,13 @@ class kanban extends control
         $regions = $this->kanban->getRegionPairs($kanbanID);
         if(!isset($regions[$regionID])) $this->session->set('regionID', 'all', 'kanban');
 
-        $this->view->users      = $users;
-        $this->view->title      = $this->lang->kanban->view;
-        $this->view->userList   = $userList;
-        $this->view->kanban     = $kanban;
-        $this->view->kanbanList = $this->kanban->getKanbanData($kanbanID);
-        $this->view->regionID   = isset($regions[$regionID]) ? $regionID : 'all';
+        $this->view->users         = $users;
+        $this->view->title         = $this->lang->kanban->view;
+        $this->view->userList      = $userList;
+        $this->view->kanban        = $kanban;
+        $this->view->kanbanList    = $this->kanban->getKanbanData($kanbanID);
+        $this->view->regionID      = isset($regions[$regionID]) ? $regionID : 'all';
+        $this->view->appendToolbar = $this->kanban->getHeaderActions($kanban);
 
         $this->display();
     }

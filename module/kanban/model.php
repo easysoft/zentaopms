@@ -3252,34 +3252,29 @@ class kanbanModel extends model
     }
 
     /**
-     * Set kanban headerActions.
+     * Get kanban headerActions.
      *
      * @param  object $kanban
      * @access public
      * @return void
      */
-    public function setHeaderActions($kanban)
+    public function getHeaderActions($kanban)
     {
-        $btnColor = '';
-        if($this->app->cookie->theme == 'blue') $btnColor = 'style="color:#000000"';
-
         $actions  = '';
-        $actions .= "<div class='btn-group'>";
-        $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' $btnColor class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
+        $actions .= "<div class='btn-group' id='appendToolbar'>";
+        $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='toolbar-item ghost btn btn-default'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
-        $CRKanban       = !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed');
         $printKanbanBtn = (common::hasPriv('kanban', 'edit') or ($kanban->status == 'active' and common::hasPriv('kanban', 'close')) or common::hasPriv('kanban', 'delete') or ($kanban->status == 'closed' and common::hasPriv('kanban', 'activate')));
 
         if($printKanbanBtn)
         {
-            $actions .= "<a data-toggle='dropdown' $btnColor class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-edit"></i> ' . $this->lang->edit . '</a>';
-            $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
+            $actions .= "<a class='toolbar-item ghost btn btn-default setting' type='button' data-toggle='dropdown' data-target='#kanbanActionMenu'>" . '<i class="icon icon-edit"></i> ' . $this->lang->edit . '</a>';
+            $actions .= "<menu id='kanbanActionMenu' class='dropdown-menu text-left'>";
 
             $columnActions = '';
             $actions .= $columnActions;
 
             $commonActions = '';
-            $importWidth   = $this->app->getClientLang() == 'en' ? '700' : '550';
 
             if($columnActions and $commonActions)
             {
@@ -3288,10 +3283,10 @@ class kanbanModel extends model
             $actions .= $commonActions;
 
             $kanbanActions = '';
-            if(common::hasPriv('kanban', 'edit')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link' data-width='75%'") . '</li>';
-            if(common::hasPriv('kanban', 'close') and $kanban->status == 'active') $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'close', "kanbanID=$kanban->id", '', true), '<i class="icon icon-off"></i>' . $this->lang->kanban->close, '', "class='iframe btn btn-link'") . '</li>';
-            if(common::hasPriv('kanban', 'activate') and $kanban->status == 'closed') $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'activate', "kanbanID=$kanban->id", '', true), '<i class="icon icon-magic"></i>' . $this->lang->kanban->activate, '', "class='iframe btn btn-link'") . '</li>';
-            if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
+            if(common::hasPriv('kanban', 'edit')) $kanbanActions .= '<li class="menu-item item">' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='listitem item-inner menu-item-inner state' data-toggle='modal'") . '</li>';
+            if(common::hasPriv('kanban', 'close') and $kanban->status == 'active') $kanbanActions .= '<li class="menu-item item">' . html::a(helper::createLink('kanban', 'close', "kanbanID=$kanban->id", '', true), '<i class="icon icon-off"></i>' . $this->lang->kanban->close, '', "class='listitem item-inner menu-item-inner state' data-toggle='modal'") . '</li>';
+            if(common::hasPriv('kanban', 'activate') and $kanban->status == 'closed') $kanbanActions .= '<li class="menu-item item">' . html::a(helper::createLink('kanban', 'activate', "kanbanID=$kanban->id", '', true), '<i class="icon icon-magic"></i>' . $this->lang->kanban->activate, '', "class='listitem item-inner menu-item-inner state' data-toggle='modal'") . '</li>';
+            if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li class="menu-item item">' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='listitem item-inner menu-item-inner state ajax-submit' data-confirm={$this->lang->kanban->confirmDeleteKanban}") . '</li>';
 
             if($commonActions and $kanbanActions)
             {
@@ -3299,18 +3294,17 @@ class kanbanModel extends model
             }
             $actions .= $kanbanActions;
 
-            $actions .= "</ul>";
+            $actions .= "</menu>";
         }
 
         if(common::hasPriv('kanban', 'setting'))
         {
-            $width    = common::checkNotCN() ? '65%' : '60%';
-            $actions .= html::a(helper::createLink('kanban', 'setting', "kanbanID=$kanban->id", '', true), '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting, '', "class='iframe btn btn-link' data-width='$width'");
+            $actions .= html::a(helper::createLink('kanban', 'setting', "kanbanID=$kanban->id", '', true), '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting, '', "class='toolbar-item ghost btn btn-default' data-toggle='modal'");
         }
 
         $actions .= "</div>";
 
-        $this->lang->headerActions = $actions;
+        return $actions;
     }
 
     /**

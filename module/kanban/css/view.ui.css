@@ -1,1 +1,3 @@
 .as-subtitle {color: rgb(139, 145, 162); opacity: 0.5; text-wrap: nowrap}
+#toolbar .btn-group .btn{border:none}
+#kanbanActionMenu {color: #333; padding: 8px}
