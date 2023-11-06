@@ -72,7 +72,7 @@ class custom extends control
         if(($module == 'story' or $module == 'demand') and $field == 'reviewRules')
         {
             $this->app->loadConfig($module);
-            $this->view->reviewRule     = zget($this->config->$module, 'reviewRules', '1');
+            $this->view->reviewRule     = zget($this->config->$module, 'reviewRules', 'allpass');
             $this->view->users          = $this->loadModel('user')->getPairs('noclosed|nodeleted');
             $this->view->superReviewers = zget($this->config->$module, 'superReviewers', '');
         }
@@ -85,11 +85,9 @@ class custom extends control
             {
                 $this->view->depts            = $this->loadModel('dept')->getDeptPairs();
 
-                $this->view->forceReview      = zget($this->config->$module, 'forceReview', '');
                 $this->view->forceReviewRoles = zget($this->config->$module, 'forceReviewRoles', '');
                 $this->view->forceReviewDepts = zget($this->config->$module, 'forceReviewDepts', '');
 
-                $this->view->forceNotReview      = zget($this->config->$module, 'forceNotReview', '');
                 $this->view->forceNotReviewRoles = zget($this->config->$module, 'forceNotReviewRoles', '');
                 $this->view->forceNotReviewDepts = zget($this->config->$module, 'forceNotReviewDepts', '');
             }

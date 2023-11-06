@@ -56,7 +56,7 @@ elseif($module == 'story' && $field == 'reviewRules')
         set::width('1/2'),
         set::label($lang->custom->reviewRule),
         set::name('reviewRules'),
-        set::value($needReview),
+        set::value($reviewRule),
         set::control('radioListInline'),
         set::items($lang->custom->reviewRules),
     );
@@ -67,7 +67,7 @@ elseif($module == 'story' && $field == 'reviewRules')
         set::label($lang->custom->superReviewers),
         set::name('superReviewers'),
         set::value($superReviewers),
-        set::control(array('type' => 'select', 'multiple' => true)),
+        set::control(array('type' => 'picker', 'multiple' => true)),
         set::items($users),
     );
 }
@@ -121,28 +121,32 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
             (
                 set::width('1/2'),
                 set::label($lang->custom->forceReview . $space . $lang->custom->account),
-                set::name('forceNotReview'),
-                set::value($forceNotReview),
+                set::name('forceReview'),
+                set::value($forceReview),
                 set::items($users),
-                set::control(array('type' => 'select', 'multiple' => true)),
+                set::control(array('type' => 'picker', 'multiple' => true))
             ),
-            formGroup
+            formRow
             (
-                set::width('1/2'),
-                set::label($lang->custom->forceReview . $space . $lang->custom->role),
-                set::name('forceNotReviewRoles'),
-                set::value($forceNotReviewRoles),
-                set::items($lang->user->roleList),
-                set::control(array('type' => 'select', 'multiple' => true)),
+                setClass('my-2'),
+                formGroup
+                (
+                    set::width('1/2'),
+                    set::label($lang->custom->forceReview . $space . $lang->custom->role),
+                    set::name('forceReviewRoles'),
+                    set::value($forceReviewRoles),
+                    set::items($lang->user->roleList),
+                    set::control(array('type' => 'picker', 'multiple' => true))
+                )
             ),
             formGroup
             (
                 set::width('1/2'),
                 set::label($lang->custom->forceReview . $space . $lang->custom->dept),
-                set::name('forceNotReviewDepts'),
-                set::value($forceNotReviewDepts),
+                set::name('forceReviewDepts'),
+                set::value($forceReviewDepts),
                 set::items($depts),
-                set::control(array('type' => 'select', 'multiple' => true)),
+                set::control(array('type' => 'picker', 'multiple' => true))
             ),
         );
         $formItems[] = div
@@ -156,16 +160,20 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 set::name('forceNotReview'),
                 set::value($forceNotReview),
                 set::items($users),
-                set::control(array('type' => 'select', 'multiple' => true)),
+                set::control(array('type' => 'picker', 'multiple' => true)),
             ),
-            formGroup
+            formRow
             (
-                set::width('1/2'),
-                set::label($lang->custom->forceNotReview . $space . $lang->custom->role),
-                set::name('forceNotReviewRoles'),
-                set::value($forceNotReviewRoles),
-                set::items($lang->user->roleList),
-                set::control(array('type' => 'select', 'multiple' => true)),
+                setClass('my-2'),
+                formGroup
+                (
+                    set::width('1/2'),
+                    set::label($lang->custom->forceNotReview . $space . $lang->custom->role),
+                    set::name('forceNotReviewRoles'),
+                    set::value($forceNotReviewRoles),
+                    set::items($lang->user->roleList),
+                    set::control(array('type' => 'picker', 'multiple' => true)),
+                )
             ),
             formGroup
             (
@@ -174,7 +182,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 set::name('forceNotReviewDepts'),
                 set::value($forceNotReviewDepts),
                 set::items($depts),
-                set::control(array('type' => 'select', 'multiple' => true)),
+                set::control(array('type' => 'picker', 'multiple' => true)),
             )
         );
     }
@@ -197,7 +205,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                     set::name('forceNotReview'),
                     set::value($forceNotReview),
                     set::items($users),
-                    set::control(array('type' => 'select', 'multiple' => true)),
+                    set::control(array('type' => 'picker', 'multiple' => true)),
                 ),
                 icon
                 (
@@ -221,7 +229,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                     set::name('forceReview'),
                     set::value($forceReview),
                     set::items($users),
-                    set::control(array('type' => 'select', 'multiple' => true)),
+                    set::control(array('type' => 'picker', 'multiple' => true)),
                 ),
                 icon
                 (
@@ -288,7 +296,7 @@ elseif($module == 'block' && $field == 'closed')
             set::name('closed'),
             set::value($closedBlock),
             set::control(array(
-                'type'     => 'select',
+                'type'     => 'picker',
                 'multiple' => true,
             )),
             set::items($blockPairs)
