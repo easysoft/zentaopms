@@ -48,8 +48,8 @@ pipeline {
     PUBLISH_ZBOX = "${params.publish_zbox}"
 
     // set to blank for auto-detect from ci.json
-    DOWNGRADE_ENABLED = ""
-    DOWNGRADE_VERSIONS = ""
+    DOWNGRADE_ENABLED = "false"
+    DOWNGRADE_VERSIONS = "7.2,7.1,7.0"
   }
 
   stages {
@@ -85,6 +85,7 @@ pipeline {
               env.ZENTAOEXT_GIT_REPO = sh(returnStdout: true,script: 'jq -r .pkg.zentaoext.gitRepo < ci.json').trim()
               env.ZDOO_VERSION = sh(returnStdout: true,script: 'jq -r .pkg.zdoo.gitVersion < ci.json').trim()
               env.ZDOOEXT_VERSION = sh(returnStdout: true,script: 'jq -r .pkg.zdooext.gitVersion < ci.json').trim()
+              env.DOWNGRADE_GIT_REPO = sh(returnStdout: true,script: 'jq -r .pkg.downgrade.gitRepo < ci.json').trim()
               
               if (params.build_kind=='auto') {
                 env.BUILD_KIND = "snapshot"
@@ -120,6 +121,7 @@ pipeline {
               env.GIT_COMMIT = sh(returnStdout: true, script: 'git rev-parse HEAD').trim()
 
               job.BuildHeader()
+              env.GIT_BRANCH = job.getBranchById(env.GIT_COMMIT)
               // env.GIT_TAGGER_NAME = sh(returnStdout: true, script: 'git for-each-ref --format="%(taggername)" refs/tags/$(git tag --points-at HEAD)').trim()
 
               env.CI_PUBLIC_IMAGE_NAMESPACE = sh(returnStdout: true,script: 'jq -r .image.public.namespace.' + env.BUILD_KIND + ' < ci.json').trim()
@@ -168,11 +170,41 @@ pipeline {
             environment name:'PUBLISH_ZIP', value:'true'
           }
           stages {
+            stage("increase downgrade") {
+              steps {
+                replayCheckout([
+                  [name: "downRepo", subDir: true, url: "${env.DOWNGRADE_GIT_REPO}", credentialsId: "git-zcorp-cc-jenkins-bot-http", branch: "downgrade/${env.GIT_BRANCH}/src"]
+                ])
+                container('package') {
+                  sh '${ZENTAO_BUILD_PATH}/script/downgrade/increaseDowngrade.sh -r $PWD -d downRepo -i -s -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" framework lib module'
+                  sh 'test ! -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html'
+                }
+              }
+
+              post {
+                failure {
+                  container('package') {
+                    sh 'mkdir ./report && cp ${ZENTAO_RELEASE_PATH}/downgradeReport.html ./report'
+                  }
+
+                  publishHTML([
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: false,
+                    keepAll: true,
+                    reportDir: './report',
+                    reportFiles: 'downgradeReport.html',
+                    reportName: 'DowngradeReport'
+                  ])
+
+                  ximNotify(title: "禅道增量降级失败", content: "[PHP语法错误报告]($BUILD_URL/DowngradeReport/)", contentHeaderFile: job.headerFileName())
+                }
+              }
+            }
             stage("make ciCommon") {
               steps {
                 withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http',gitToolName: 'git-tool')]) {
                   container('package') {
-                    sh 'mkdir ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
+                    sh 'mkdir -pv ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
                     sh 'git config --global pull.ff only'
                     sh 'cp -av ${ZENTAO_BUILD_PATH}/adminer www/'
                     sh 'pwd && ls -l && make ciCommon'

@@ -13,6 +13,9 @@
     },
     "zdooext": {
       "gitVersion": "master"
+    },
+    "downgrade": {
+      "gitRepo": "https://git.zcorp.cc/devops/zentaopms-downgrade.git"
     }
   },
   "image": {
@@ -30,7 +33,7 @@
     }
   },
   "downgrade": {
-    "enabled": true,
+    "enabled": false,
     "versions": "7.2,7.1,7.0"
   },
   "upload": {

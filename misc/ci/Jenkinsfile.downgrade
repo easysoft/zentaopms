@@ -1,3 +1,5 @@
+library 'z-common@feat-231024'
+
 pipeline {
   agent {
     kubernetes {
@@ -14,24 +16,18 @@ pipeline {
     TZ="Asia/Shanghai"
 
     ZENTAO_RELEASE_PATH = "${WORKSPACE}/release"
-    XUANXUAN_SRC_PATH = "${WORKSPACE}/xuansrc"
-    SRC_ZDOO_PATH = "${WORKSPACE}/zdoo"
-    SRC_ZDOOEXT_PATH = "${WORKSPACE}/zdooext"
-    SRC_ZENTAOEXT_PATH = "${WORKSPACE}/zentaoext"
 
-    // set to blank for auto-detect from ci.json
-    DOWNGRADE_ENABLED = "false"
     // DOWNGRADE_VERSIONS = "7.2"
-    DOWNGRADE_VERSIONS = "7.2,7.1,7.0,5.4"
+    DOWNGRADE_VERSIONS = "7.2,7.1,7.0"
   }
 
   stages {
 
-    stage("Test Code") {
+    stage("全量降级") {
 
       agent {
         kubernetes {
-          inheritFrom "zentao-package build-docker xuanim"
+          inheritFrom "zentao-package dind xuanim"
           yamlFile 'misc/ci/basic-build.yaml'
         }
       }
@@ -40,56 +36,18 @@ pipeline {
         stage("Pull") {
           steps {
             checkout scm
-            script {
-              env.XUANVERSION = sh(returnStdout: true,script: 'jq -r .pkg.xuanxuan.gitVersion < ci.json').trim()
-              env.ZENTAOEXT_VERSION = sh(returnStdout: true,script: 'jq -r .pkg.zentaoext.gitVersion < ci.json').trim()
-              env.ZENTAOEXT_GIT_REPO = sh(returnStdout: true,script: 'jq -r .pkg.zentaoext.gitRepo < ci.json').trim()
-              env.ZDOO_VERSION = sh(returnStdout: true,script: 'jq -r .pkg.zdoo.gitVersion < ci.json').trim()
-              env.ZDOOEXT_VERSION = sh(returnStdout: true,script: 'jq -r .pkg.zdooext.gitVersion < ci.json').trim()
-            }
-
-            dir('xuansrc') {
-              checkout scmGit(branches: [[name: "${env.XUANVERSION}"]],
-                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/xuanxuan.git']]
-              )
-            }
-
-            dir('zdoo') {
-              checkout scmGit(branches: [[name: "${env.ZDOO_VERSION}"]],
-                extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/zdoo.git']]
-              )
-            }
-
-            dir('zdooext') {
-              checkout scmGit(branches: [[name: "${env.ZDOOEXT_VERSION}"]],
-                extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/zdooext.git']]
-              )
-            }
-
-            dir('zentaoext') {
-              checkout scmGit(branches: [[name: "${env.ZENTAOEXT_VERSION}"]],
-                extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: "${env.ZENTAOEXT_GIT_REPO}"]]
-              )
-            }
-          
           }
         }
 
         stage("Setup Global Env") {
           steps {
             script {
-              def ximUsers = sh(returnStdout: true,script: 'jq -r .notice.users < ci.json').trim()
+            //   def ximUsers = sh(returnStdout: true,script: 'jq -r .notice.users < ci.json').trim()
               env.XIM_USERS = "qishiyao"
-              env.XIM_GROUPS = "31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4"
-
-              env.PMS_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/VERSION').trim()
-              env.BIZ_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/BIZVERSION').trim()
-              env.MAX_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/MAXVERSION').trim()
-              env.IPD_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/IPDVERSION').trim()
+            //   env.XIM_GROUPS = "31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4"
               
+              env.GIT_BRANCH = "master"
+              env.DOWNGRADE_GIT_REPO = sh(returnStdout: true,script: 'jq -r .pkg.downgrade.gitRepo < ci.json').trim()
             }
             
           }
@@ -97,44 +55,42 @@ pipeline {
 
         stage("Downgrade") {
           stages {
-            stage("make Package") {
-              steps {
-                withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http',gitToolName: 'git-tool')]) {
-                  container('package') {
-                    sh 'mkdir ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
-                    sh 'git config --global pull.ff only'
-                    sh 'pwd && ls -l && make ciCommon'
-                    sh 'ls -l ${ZENTAO_RELEASE_PATH}'
-                  }
-                }
-
-              }
-            }
 
             stage("test downgrade") {
               steps {
-                container('package') {
-                  sh 'unzip -q ZenTaoPMS.${PMS_VERSION}.zip'
-                  sh 'ls -l zentaopms'
-                  sh './misc/downgrade.sh -p "$DOWNGRADE_VERSIONS" -r zentaopms -i -s -o "$ZENTAO_RELEASE_PATH" framework lib module/*'
-                }
-                
-                container('package') {
-                  sh 'test -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html && mkdir ./report && cp ${ZENTAO_RELEASE_PATH}/downgradeReport.html ./report && cat ./report/downgradeReport.html || echo "No syntax error"'
-                }
-
-                publishHTML([
-                  allowMissing: true,
-                  alwaysLinkToLastBuild: false,
-                  keepAll: true,
-                  reportDir: './report',
-                  reportFiles: 'downgradeReport.html',
-                  reportName: 'DowngradeReport'
+                sh 'env'
+                replayCheckout([
+                  [name: "downRepo", subDir: true, url: "${env.DOWNGRADE_GIT_REPO}", credentialsId: "git-zcorp-cc-jenkins-bot-http", branch: "downgrade/${env.GIT_BRANCH}/src"]
                 ])
 
-                container('xuanimbot') {
-                  sh 'git config --global --add safe.directory $(pwd)'
-                  sh 'test -f $ZENTAO_RELEASE_PATH/downgradeReport.html && /usr/local/bin/xuanimbot --title "`echo -n 6ZmN57qn5aSx6LSl | base64 --decode`" --url "${RUN_DISPLAY_URL}" --content "[PHP Syntax Report]($BUILD_URL/DowngradeReport/)" --debug --custom || echo "No syntax found"'
+                container('package') {
+                  sh 'echo ${GIT_BRANCH}'
+                  sh '''find module -type d -name 'test' -maxdepth 2 -exec rm -rf {} +'''
+                  
+                  withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http', gitToolName: 'Default')]) {
+                    sh '${ZENTAO_BUILD_PATH}/script/downgrade/fullDowngrade.sh -r $PWD -d downRepo -i -s -o "$ZENTAO_RELEASE_PATH" -p "$DOWNGRADE_VERSIONS" framework lib module/*'
+                  }
+                  sh 'ls -l $ZENTAO_RELEASE_PATH'
+                  sh 'test ! -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html'
+                }
+                
+                post {
+                  failure {
+                    container('package') {
+                      sh 'mkdir ./report && cp ${ZENTAO_RELEASE_PATH}/downgradeReport.html ./report'
+                    }
+
+                    publishHTML([
+                      allowMissing: true,
+                      alwaysLinkToLastBuild: false,
+                      keepAll: true,
+                      reportDir: './report',
+                      reportFiles: 'downgradeReport.html',
+                      reportName: 'DowngradeReport'
+                    ])
+
+                    ximNotify(title: "禅道增量降级失败", content: "[PHP语法错误报告]($BUILD_URL/DowngradeReport/)", contentHeaderFile: job.headerFileName())
+                  }
                 }
 
               }
