@@ -14203,9 +14203,9 @@ CREATE TABLE `zt_artifactrepo` (
   `type` char(7) CHARACTER SET utf8 NOT NULL,
   `status` varchar(10) CHARACTER SET utf8 NOT NULL,
   `createdBy` varchar(30) CHARACTER SET utf8 NOT NULL,
-  `createdDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `createdDate` datetime NULL,
   `editedBy` varchar(30) CHARACTER SET utf8 NOT NULL,
-  `editedDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `editedDate` datetime NULL,
   `deleted` tinyint(4) UNSIGNED NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -15350,7 +15350,7 @@ CREATE TABLE IF NOT EXISTS `zt_solution` (
   `deleted` tinyint(1) NOT NULL DEFAULT 0,
   `createdBy` char(30) NOT NULL,
   `createdAt` datetime NOT NULL,
-  `updatedDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updatedDate` datetime NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
