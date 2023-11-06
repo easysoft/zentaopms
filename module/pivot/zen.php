@@ -151,35 +151,23 @@ class pivotZen extends pivot
     /**
      * Get sidebar menus of pivot.
      *
-     * @param  int    $dimension
-     * @param  object $currentGroup
-     * @param  string $module
-     * @param  string $method
-     * @param  string $params
+     * @param  int    $dimensionID
+     * @param  object $groupID
      * @access protected
-     * @return string
+     * @return array
      */
-    protected function getSidebarMenus(int $dimension, object $currentGroup, string $module, string $method, string $params): array
+    protected function getSidebarMenus(int $dimensionID, int $groupID): array
     {
+        $currentGroup = $this->loadModel('tree')->getByID($groupID);
         if(empty($currentGroup) || $currentGroup->grade != 1) return array();
 
         $groups = $this->dao->select('id, grade, name, collector')->from(TABLE_MODULE)
             ->where('deleted')->eq('0')
-            ->andWhere('root')->eq($dimension)
+            ->andWhere('root')->eq($dimensionID)
             ->andWhere('path')->like("{$currentGroup->path}%")
             ->orderBy('`order`')
             ->fetchAll();
         if(!$groups) return array();
-
-        $pivotID = 0;
-        if($module == 'pivot' && $method == 'show')
-        {
-            parse_str($params, $params);
-            if(isset($params['pivotID'])) $pivotID = $params['pivotID'];
-        }
-
-        $clientLang = $this->app->getClientLang();
-        if(!isset($this->config->langs[$clientLang])) $clientLang = 'zh-cn';
 
         $menus = array();
         foreach($groups as $group)
@@ -187,46 +175,30 @@ class pivotZen extends pivot
             if($this->config->edition == 'open' && $group->grade == 1) continue;
 
             $pivots = $this->dao->select('*')->from(TABLE_PIVOT)
-                ->where("FIND_IN_SET($group->id, `group`)")
+                ->where("FIND_IN_SET({$group->id}, `group`)")
                 ->andWhere('stage')->ne('draft')
-                ->andWhere('deleted')->eq(0)
+                ->andWhere('deleted')->eq('0')
                 ->orderBy('id_desc')
                 ->fetchAll();
 
             if(empty($group->collector) && empty($pivots)) continue;
 
-            $groupMenu = new stdclass();
-            $groupMenu->id     = 'group_' . $group->id;
-            $groupMenu->parent = '0';
-            $groupMenu->name   = $group->name;
-            $groupMenu->url    = '';
-
-            $menus[] = $groupMenu;
+            $menus[] = (object)array('id' => $group->id, 'parent' => 0, 'name' => $group->name);
 
             if($pivots) $pivots = $this->pivot->processPivot($pivots, false);
 
             foreach($pivots as $pivot)
             {
-                $params = helper::safe64Encode("dimensionID={$pivot->dimension}&groupID={$pivot->group}&pivotID={$pivot->id}");
-
-                $pivotMenu = new stdclass();
-                $pivotMenu->id     = 'pivot_' . $pivot->id;
-                $pivotMenu->parent = $groupMenu->id;
-                $pivotMenu->name   = $pivot->name;
-                $pivotMenu->url    = inlink('preview', "dimension={$dimension}&group={$currentGroup->id}&module=pivot&method=show&params={$params}");
-
-                $menus[] = $pivotMenu;
-
-                if($module == 'pivot' && $method == 'show' && $pivotID == $pivot->id)
-                {
-                    $this->view->title       = $pivotMenu->name;
-                    $this->view->currentMenu = $pivotMenu->id;
-                }
+                $params  = helper::safe64Encode("groupID={$group->id}&pivotID={$pivot->id}");
+                $url     = inlink('preview', "dimension={$dimensionID}&group={$currentGroup->id}&method=show&params={$params}");
+                $menus[] = (object)array('id' => $group->id . '_' . $pivot->id, 'parent' => $group->id, 'name' => $pivot->name, 'url' => $url);
             }
         }
 
-        $builtinMenus = $this->getBuiltinMenus($dimension, $currentGroup, $module, $method);
+        $firstDimension = $this->loadModel('dimension')->getFirst();
+        if($dimensionID != $firstDimension->id) return $menus;
 
+        $builtinMenus = $this->getBuiltinMenus($dimensionID, $currentGroup);
         return array_merge($menus, $builtinMenus);
     }
 
