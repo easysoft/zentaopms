@@ -80,7 +80,7 @@ foreach($config->message->objectTypes as $objectType => $actions)
                 {
                     $listKey = $condition . 'List';
                     $list = isset($this->lang->{$moduleName}->{$listKey}) ? $this->lang->{$moduleName}->{$listKey} : $users;
-                    $cell[] = select
+                    $cell[] = picker
                     (
                         set::name("messageSetting[{$type}][condition][{$objectType}][{$condition}][]"),
                         set::items($list),
@@ -109,7 +109,7 @@ $bodyTrs[] = h::tr
     ),
     h::td
     (
-        select
+        picker
         (
             set::name("blockUser"),
             set::items($users),
