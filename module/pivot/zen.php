@@ -58,21 +58,20 @@ class pivotZen extends pivot
     /**
      * Get first group of a dimension.
      *
-     * @param  int    $dimension
+     * @param  int       $dimensionID
      * @access protected
      * @return int
      */
-    protected function getFirstGroup($dimension)
+    protected function getFirstGroup(int $dimensionID): int
     {
-        if(empty($dimension)) return 0;
-
-        return $this->dao->select('*')->from(TABLE_MODULE)
+        return $this->dao->select('id')->from(TABLE_MODULE)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('pivot')
-            ->andWhere('root')->eq($dimension)
-            ->orderBy('grade, `order`')
+            ->andWhere('root')->eq($dimensionID)
+            ->andWhere('grade')->eq(1)
+            ->orderBy('`order`')
             ->limit(1)
-            ->fetch();
+            ->fetch('id');
     }
 
     /**
