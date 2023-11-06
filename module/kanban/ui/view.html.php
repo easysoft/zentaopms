@@ -8,12 +8,14 @@ foreach($kanbanList as $regionID => $region)
 {
     foreach($region['items'] as $groupID => $group)
     {
-        $group['getLane']   = jsRaw('window.getLane');
-        $group['getCol']    = jsRaw('window.getCol');
-        $group['getItem']   = jsRaw('window.getItem');
-        $group['colProps']  = array('actions' => jsRaw('window.getColActions'));
-        $group['laneProps'] = array('actions' => jsRaw('window.getLaneActions'));
-        $group['itemProps'] = array('actions' => jsRaw('window.getItemActions'));
+        $group['getLane']     = jsRaw('window.getLane');
+        $group['getCol']      = jsRaw('window.getCol');
+        $group['getItem']     = jsRaw('window.getItem');
+        $group['minColWidth'] = $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->minColWidth;
+        $group['maxColWidth'] = $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->maxColWidth;
+        $group['colProps']    = array('actions' => jsRaw('window.getColActions'));
+        $group['laneProps']   = array('actions' => jsRaw('window.getLaneActions'));
+        $group['itemProps']   = array('actions' => jsRaw('window.getItemActions'));
 
         /* 计算各个列上的卡片数量。 */
         foreach($group['data']['cols'] as $col) $parentCols[$col['id']] = $col['parent'];

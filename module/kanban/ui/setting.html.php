@@ -60,7 +60,7 @@ formPanel
             (
                 set::name('fluidBoard'),
                 set::items(array(1 => $lang->kanbancolumn->fluidBoardList[1])),
-                set::value(isset($copyKanban->fluidBoard) ? $copyKanban->fluidBoard : 0)
+                set::value($kanban->fluidBoard)
             ),
             div
             (
