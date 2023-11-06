@@ -68,7 +68,17 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $exec
     }
 
     /* Append method tip. */
-    $items[] = icon(setClass('icon-help'), setID('methodTip'));
+    $items[] = icon(
+                'help',
+                setID('methodTip'),
+                setClass('ml-2 text-gray'),
+                set('data-toggle', 'tooltip'),
+                set('data-title', $lang->programplan->methodTip),
+                set('data-placement', 'right'),
+                set('data-type', 'white'),
+                set('data-class-name', 'text-gray border border-light')
+            );
+
     $items[] = tooltip(
         set::_to('#methodTip'),
         set::title($lang->programplan->methodTip),
