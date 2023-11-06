@@ -14,7 +14,7 @@ jsVar('changeDateLabel', $lang->todo->changeDate);
 featureBar
 (
     set::current($type),
-    set::linkParams("type={key}&userID={$userID}&status={$status}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    set::linkParams("type={key}&userID={$user->id}&status={$status}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     datePicker
     (
         set::_class('w-32'),
