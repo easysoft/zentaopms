@@ -103,7 +103,7 @@ $config->gitlab->dtable->project->fieldList['actions']['list']['browseTag']['ico
 $config->gitlab->dtable->project->fieldList['actions']['list']['browseTag']['hint'] = $lang->gitlab->browseTag;
 $config->gitlab->dtable->project->fieldList['actions']['list']['browseTag']['url']  = helper::createLink('gitlab', 'browseTag', 'gitlabID={gitlabID}&projectID={id}');
 
-$config->gitlab->dtable->project->fieldList['actions']['list']['manageBranchPriv']['icon'] = 'tag';
+$config->gitlab->dtable->project->fieldList['actions']['list']['manageBranchPriv']['icon'] = 'branch-lock';
 $config->gitlab->dtable->project->fieldList['actions']['list']['manageBranchPriv']['hint'] = $lang->gitlab->browseBranchPriv;
 $config->gitlab->dtable->project->fieldList['actions']['list']['manageBranchPriv']['url']  = helper::createLink('gitlab', 'manageBranchPriv', 'gitlabID={gitlabID}&projectID={id}');
 
@@ -195,3 +195,23 @@ $config->gitlab->dtable->user->fieldList['actions']['list']['deleteUser']['icon'
 $config->gitlab->dtable->user->fieldList['actions']['list']['deleteUser']['hint']      = $lang->gitlab->deleteUser;
 $config->gitlab->dtable->user->fieldList['actions']['list']['deleteUser']['url']       = helper::createLink('gitlab', 'deleteUser', 'gitlabID={gitlabID}&userID={id}');
 $config->gitlab->dtable->user->fieldList['actions']['list']['deleteUser']['className'] = 'ajax-submit';
+
+$config->gitlab->dtable->branch = new stdclass();
+$config->gitlab->dtable->branch->fieldList['name']['title'] = $lang->gitlab->branch->name;
+$config->gitlab->dtable->branch->fieldList['name']['type']  = 'title';
+
+$config->gitlab->dtable->branch->fieldList['lastCommitter']['title'] = $lang->gitlab->branch->lastCommitter;
+$config->gitlab->dtable->branch->fieldList['lastCommitter']['type']  = 'text';
+
+$config->gitlab->dtable->branch->fieldList['lastCommittedDate']['title'] = $lang->gitlab->branch->lastCommittedDate;
+$config->gitlab->dtable->branch->fieldList['lastCommittedDate']['type']  = 'text';
+
+$config->gitlab->dtable->tag = new stdclass();
+$config->gitlab->dtable->tag->fieldList['name']['title'] = $lang->gitlab->branch->name;
+$config->gitlab->dtable->tag->fieldList['name']['type']  = 'title';
+
+$config->gitlab->dtable->tag->fieldList['lastCommitter']['title'] = $lang->gitlab->branch->lastCommitter;
+$config->gitlab->dtable->tag->fieldList['lastCommitter']['type']  = 'text';
+
+$config->gitlab->dtable->tag->fieldList['updated']['title'] = $lang->gitlab->branch->lastCommittedDate;
+$config->gitlab->dtable->tag->fieldList['updated']['type']  = 'text';
