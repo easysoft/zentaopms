@@ -29,8 +29,8 @@ formPanel
     on::click('#refresh',  'clickRefresh'),
     on::click('#auto', 'checkScript'),
     on::click('.autoScript .file-delete', 'showUploadScriptBtn'),
-    to::headingActions(icon('cog-outline')),
     set::title($lang->testcase->create),
+    set::customFields(true),
     !empty($gobackLink) ? set::backUrl($gobackLink) : null,
     formRow
     (
