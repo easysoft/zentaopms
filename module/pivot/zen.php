@@ -258,58 +258,34 @@ class pivotZen extends pivot
     /**
      * Preview pivots of a group.
      *
-     * @param  int    $dimensionID
      * @param  int    $groupID
      * @param  int    $pivotID
      * @access public
      * @return void
      */
-    public function show(int $dimensionID = 0, int $groupID = 0, int $pivotID = 0): void
+    public function show(int $groupID, int $pivotID): void
     {
-        $dimensionID = $this->loadModel('dimension')->getDimension($dimensionID);
-
-        if(!$groupID)
+        $pivot = $this->pivot->getByID($pivotID);
+        if($this->post->filterValues)
         {
-            $groupID = $this->dao->select('id')->from(TABLE_MODULE)
-                ->where('deleted')->eq('0')
-                ->andWhere('type')->eq('pivot')
-                ->andWhere('root')->eq($dimensionID)
-                ->andWhere('grade')->eq(1)
-                ->orderBy('`order`')
-                ->limit(1)
-                ->fetch('id');
+            foreach($this->post->filterValues as $key => $value) $pivot->filters[$key]['default'] = $value;
         }
 
-        list($pivotTree, $pivot, $groupID) = $this->pivot->getPreviewPivots($dimensionID, $groupID, $pivotID);
-        if($pivot)
-        {
-            if($this->post->filterValues)
-            {
-                $filterValues = json_decode($this->post->filterValues, true);
-                foreach($filterValues as $key => $value) $pivot->filters[$key]['default'] = $value;
-            }
+        list($sql, $filterFormat) = $this->pivot->getFilterFormat($pivot->sql, $pivot->filters);
 
-            list($sql, $filterFormat) = $this->pivot->getFilterFormat($pivot->sql, $pivot->filters);
+        $tables = $this->loadModel('chart')->getTables($sql);
+        $sql    = $tables['sql'];
+        $fields = json_decode(json_encode($pivot->fieldSettings), true);
+        $langs  = json_decode($pivot->langs, true);
 
-            $tables = $this->loadModel('chart')->getTables($sql);
-            $sql    = $tables['sql'];
-            $fields = json_decode(json_encode($pivot->fieldSettings), true);
-            $langs  = json_decode($pivot->langs, true);
+        list($data, $configs) = $this->pivot->genSheet($fields, $pivot->settings, $sql, $filterFormat, $langs);
 
-            list($data, $configs) = $this->pivot->genSheet($fields, $pivot->settings, $sql, $filterFormat, $langs);
-            $this->view->data     = $data;
-            $this->view->configs  = $configs;
-        }
-
-        $group = $this->loadModel('tree')->getByID($groupID);
-
-        $this->view->title       = $this->lang->pivot->preview;
-        $this->view->dimensionID = $dimensionID;
-        $this->view->pivotTree   = $pivotTree;
-        $this->view->pivot       = $pivot;
-        $this->view->group       = $group;
-        $this->view->parentGroup = $group->grade == 2 ? $this->tree->getByID($group->parent) : $group;
-        $this->view->groups      = $this->tree->getGroupPairs($dimensionID, 0, 1, 'pivot');
+        $this->view->title        = $pivot->name;
+        $this->view->currentMenu  = $groupID . '_' . $pivot->id;
+        $this->view->currentGroup = $groupID;
+        $this->view->pivot        = $pivot;
+        $this->view->data         = $data;
+        $this->view->configs      = $configs;
     }
 
     /**
