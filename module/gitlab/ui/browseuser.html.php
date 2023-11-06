@@ -10,8 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('orderBy', $orderBy);
-jsVar('sortLink', helper::createLink('gitlab', 'browseUser', "gitlabID={$gitlabID}&orderBy={orderBy}"));
+jsVar('gitlabUrl', $gitlab->url);
 
 $canCreate = hasPriv('instance', 'manage');
 
@@ -94,9 +93,7 @@ dtable
 (
     set::cols($config->gitlab->dtable->user->fieldList),
     set::data($gitlabUserList),
-    set::sortLink(jsRaw('createSortLink')),
+    set::sortLink(createLink('gitlab', 'browseUser', "gitlabID={$gitlabID}&orderBy={name}_{sortType}")),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::orderBy($orderBy),
 );
-
-render();

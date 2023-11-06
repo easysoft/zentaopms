@@ -27,17 +27,14 @@ toolbar
 );
 
 jsVar('confirmDelete',    $lang->gitlab->confirmDelete);
-jsVar('orderBy',          $orderBy);
 jsVar('canBrowseProject', common::hasPriv('gitlab', 'browseProject'));
-jsVar('sortLink',         helper::createLink('gitlab', 'browse', "orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
 dtable
 (
     set::cols(array_values($config->gitlab->dtable->fieldList)),
     set::data($tableData),
-    set::sortLink(jsRaw('createSortLink')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('gitlab', 'browse', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager()),
 );
-
-render();

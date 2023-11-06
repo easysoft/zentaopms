@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('orderBy', $orderBy);
-jsVar('sortLink', helper::createLink('gitlab', 'browseProject', "gitlabID={$gitlabID}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('projectStar', $lang->gitlab->project->star);
 jsVar('projectFork', $lang->gitlab->project->fork);
 
@@ -100,7 +98,8 @@ dtable
 (
     set::cols($config->gitlab->dtable->project->fieldList),
     set::data($gitlabProjectList),
-    set::sortLink(jsRaw('createSortLink')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('gitlab', 'browseProject', "gitlabID={$gitlabID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager())
 );
