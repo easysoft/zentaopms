@@ -3001,12 +3001,12 @@ class gitlabModel extends model
      * 判断按钮是否可点击。
      * Adjust the action clickable.
      *
-     * @param  object $instance
+     * @param  object $object
      * @param  string $action
      * @access public
      * @return bool
      */
-    public function isClickable(object $gitlab, string $action): bool
+    public function isClickable(object $object, string $action): bool
     {
         if(!commonModel::hasPriv('space', 'browse')) return false;
 
