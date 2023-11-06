@@ -294,7 +294,7 @@ div
                     )
                 )
             ),
-            div
+            !$bind && !$ignore && $hasInternet && common::hasPriv('admin', 'register') ? div
             (
                 setClass('px-4 pb-4'),
                 substr($lang->admin->notice->register, 0, strpos($lang->admin->notice->register, '%s')),
@@ -304,7 +304,7 @@ div
                     $lang->admin->registerNotice->submitHere
                 ),
                 substr($lang->admin->notice->register, strpos($lang->admin->notice->register, '%s') + 2),
-            )
+            ) : null
         ),
         div
         (
