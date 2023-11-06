@@ -531,8 +531,7 @@ class storyZen extends story
      */
     protected function getFormFieldsForEdit(int $storyID): array
     {
-        $account = $this->app->user->account;
-        $fields  = $this->config->story->form->edit;
+        $fields = $this->config->story->form->edit;
 
         /* 准备数据。*/
         $story        = $this->view->story;
@@ -586,7 +585,7 @@ class storyZen extends story
         $fields['assignedTo']['options']    += array('closed' => 'Closed');
 
         /* 设置默认值。 */
-        if(empty($fields['reviewer']['default'])) $fields['reviewer']['default'] = $reviewers;
+        if(empty($fields['reviewer']['default'])) $fields['reviewer']['default'] = implode(',', array_keys($reviewerList));
 
         $this->view->users     = $users;
         $this->view->reviewers = $reviewers;
@@ -1298,7 +1297,7 @@ class storyZen extends story
         if(isset($_POST['plan']) and is_array($_POST['plan'])) $story->plan   = trim(implode(',', $_POST['plan']), ',');
         if(isset($_POST['branch']) and $_POST['branch'] == 0)  $story->branch = 0;
         if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
-        if(isset($_POST['reviewer']) or isset($_POST['needNotReview'])) $this->story->doUpdateReviewer($storyID, isset($_POST['needNotReview']) ? array() : array_filter($_POST['reviewer']));
+        if(isset($_POST['reviewer']) or isset($_POST['needNotReview'])) $this->story->doUpdateReviewer($storyID, isset($_POST['needNotReview']) ? array() : array_filter($_POST['reviewer']), $story);
     }
 
     /**

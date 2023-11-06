@@ -707,7 +707,7 @@ class storyModel extends model
             $oldStory->twins = '';
         }
 
-        $this->dao->update(TABLE_STORY)->data($story, 'reviewer,spec,verify,deleteFiles')
+        $this->dao->update(TABLE_STORY)->data($story, 'reviewer,spec,verify,deleteFiles,finalResult')
             ->autoCheck()
             ->checkIF(!empty($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
@@ -3900,6 +3900,67 @@ class storyModel extends model
         }
 
         return $story;
+    }
+
+    /**
+     * Do update reviewer.
+     *
+     * @param  int       $storyID
+     * @param  array     $reviewers
+     * @param  object    $story
+     * @access protected
+     * @return void
+     */
+    public function doUpdateReviewer(int $storyID, array $reviewers = array(), object $story): void
+    {
+        $oldStory = $this->fetchByID($storyID);
+        if(empty($oldStory)) return;
+
+        $oldReviewer  = $this->getReviewerPairs($storyID, $oldStory->version);
+        $twins        = explode(',', trim($oldStory->twins, ','));
+        $reviewerList = implode(',', $reviewers);
+
+        /* Update story reviewer. */
+        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)
+            ->andWhere('version')->eq($oldStory->version)
+            ->beginIF($oldStory->status == 'reviewing')->andWhere('reviewer')->notIN($reviewerList)
+            ->exec();
+
+        /* Sync twins. */
+        if(!empty($twins))
+        {
+            foreach($twins as $twinID)
+            {
+                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($twinID)
+                    ->andWhere('version')->eq($oldStory->version)
+                    ->beginIF($oldStory->status == 'reviewing')->andWhere('reviewer')->notin($reviewerList)
+                    ->exec();
+            }
+        }
+
+        foreach($reviewers as $reviewer)
+        {
+            if($oldStory->status == 'reviewing' and isset($oldReviewer[$reviewer])) continue;
+
+            $reviewData = new stdclass();
+            $reviewData->story    = $storyID;
+            $reviewData->version  = $oldStory->version;
+            $reviewData->reviewer = $reviewer;
+            $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+
+            /* Sync twins. */
+            if(!empty($twins))
+            {
+                foreach($twins as $twinID)
+                {
+                    $reviewData->story = $twinID;
+                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                }
+            }
+        }
+
+        if($oldStory->status == 'reviewing') $story = $this->updateStoryByReview($storyID, $oldStory, $story);
+        if(strpos('draft,changing', $oldStory->status) != false) $story->reviewedBy = '';
     }
 
     /**

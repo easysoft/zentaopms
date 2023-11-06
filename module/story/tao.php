@@ -782,66 +782,6 @@ class storyTao extends storyModel
     }
 
     /**
-     * Do update reviewer.
-     *
-     * @param  int       $storyID
-     * @param  array     $reviewers
-     * @access protected
-     * @return void
-     */
-    protected function doUpdateReviewer(int $storyID, array $reviewers = array()): void
-    {
-        $oldStory = $this->fetchByID($storyID);
-        if(empty($oldStory)) return;
-
-        $oldReviewer  = $this->getReviewerPairs($storyID, $oldStory->version);
-        $twins        = explode(',', trim($oldStory->twins, ','));
-        $reviewerList = implode(',', $reviewers);
-
-        /* Update story reviewer. */
-        $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)
-            ->andWhere('version')->eq($oldStory->version)
-            ->beginIF($oldStory->status == 'reviewing')->andWhere('reviewer')->notIN($reviewerList)
-            ->exec();
-
-        /* Sync twins. */
-        if(!empty($twins))
-        {
-            foreach($twins as $twinID)
-            {
-                $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($twinID)
-                    ->andWhere('version')->eq($oldStory->version)
-                    ->beginIF($oldStory->status == 'reviewing')->andWhere('reviewer')->notin($reviewerList)
-                    ->exec();
-            }
-        }
-
-        foreach($reviewers as $reviewer)
-        {
-            if($oldStory->status == 'reviewing' and isset($oldReviewer[$reviewer])) continue;
-
-            $reviewData = new stdclass();
-            $reviewData->story    = $storyID;
-            $reviewData->version  = $oldStory->version;
-            $reviewData->reviewer = $reviewer;
-            $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-
-            /* Sync twins. */
-            if(!empty($twins))
-            {
-                foreach($twins as $twinID)
-                {
-                    $reviewData->story = $twinID;
-                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
-                }
-            }
-        }
-
-        if($oldStory->status == 'reviewing') $story = $this->updateStoryByReview($storyID, $oldStory, $story);
-        if(strpos('draft,changing', $oldStory->status) != false) $story->reviewedBy = '';
-    }
-
-    /**
      * 更新需求描述。
      * Do update story spec.
      *

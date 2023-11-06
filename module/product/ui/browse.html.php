@@ -37,13 +37,13 @@ $fnGenerateSideBar = function() use ($moduleTree, $moduleID, $productID, $branch
 
     sidebar
     (
-        moduleMenu(set(array
+        moduleMenu
         (
-            'modules'     => $moduleTree,
-            'activeKey'   => $moduleID,
-            'settingLink' => helper::createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branchID"),
-            'closeLink'   => helper::createLink($app->rawModule, $app->rawMethod, http_build_query($params)),
-        )))
+            set::modules($moduleTree),
+            set::activeKey($moduleID),
+            set::closeLink(helper::createLink($app->rawModule, $app->rawMethod, http_build_query($params))),
+            $productID ? set::settingLink(helper::createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branchID")) : null
+        )
     );
 };
 
