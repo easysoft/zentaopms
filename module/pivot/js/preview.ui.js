@@ -85,37 +85,44 @@ function loadWorkload()
  */
 function loadCustomPivot()
 {
-    let filterValues = [];
-    $('#conditions .filter').each(function()
+    const form = new FormData();
+    $('#conditions .filter').each(function(index)
     {
         const $filter = $(this);
         if ($filter.hasClass('filter-input'))
         {
-            filterValues.push($filter.find('input').val());
+            form.append('filterValues[' + index + ']', $filter.find('input').val());
         }
         else if($filter.hasClass('filter-select'))
         {
             const value = $filter.find('.pick-value').val();
-            filterValues.push(typeof value == 'array' ? value.filter(Boolean) : value);
+            if(Array.isArray(value))
+            {
+                value.filter(Boolean).forEach((item) => form.append('filterValues[' + index + '][]', item));
+            }
+            else
+            {
+                form.append('filterValues[' + index + ']', value);
+            }
         }
         else if($filter.hasClass('filter-date') || $filter.hasClass('filter-datetime'))
         {
             const $pickValue = $filter.find('.pick-value');
             if($pickValue.length == 1)
             {
-                filterValues.push($pickValue.val());
+                form.append('filterValues[' + index + ']', $pickValue.val());
             }
             else if($pickValue.length == 2)
             {
-                filterValues.push({begin: $pickValue.eq(0).val(), end: $pickValue.eq(1).val()});
+                form.append('filterValues[' + index + '][begin]', $pickValue.eq(0).val());
+                form.append('filterValues[' + index + '][end]', $pickValue.eq(1).val());
             }
         }
     });
 
-    const data   = {'filterValues': JSON.stringify(filterValues)};
-    const params = window.btoa('dimensionID=' + dimension + '&groupID=' + groupID + '&pivotID=' + pivotID);
-    const link   = $.createLink('pivot', 'preview', 'dimension=' + dimension + '&group=' + groupID + '&method=show&params=' + params);
-    postAndLoadPage(link, data, '#table-pivot-preview');
+    const params = window.btoa('groupID=' + currentGroup + '&pivotID=' + pivotID);
+    const link   = $.createLink('pivot', 'preview', 'dimensionID=' + dimensionID + '&groupID=' + groupID + '&method=show&params=' + params);
+    postAndLoadPage(link, form, '#table-pivot-preview');
 }
 
 /**
