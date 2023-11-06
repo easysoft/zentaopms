@@ -2,60 +2,6 @@
 class pivotZen extends pivot
 {
     /**
-     * Prepare for preview a pivot.
-     *
-     * @param  int    $dimension
-     * @param  string $groupID
-     * @param  string $module
-     * @param  string $method
-     * @param  string $params
-     * @access protected
-     * @return void
-     */
-    protected function prepare4Preview($dimensionID, $groupID, $module, $method, $params)
-    {
-        $params = helper::safe64Decode($params);
-
-        if(!$groupID) $groupID = $this->getDefaultGroup($dimensionID);
-        if(!$module || !$method) list($module, $method, $params) = $this->getDefaultPivotParams($dimensionID, $groupID);
-
-        if(!empty($module) && !empty($method) && $method != 'show' && !common::hasPriv($module, $method)) $this->loadModel('common')->deny('pivot', $method);
-
-        $this->setFeatureBar($dimensionID);
-
-        $group = $this->loadModel('tree')->getByID($groupID);;
-
-        parse_str($params, $result);
-
-        if(method_exists($this, $method)) call_user_func_array(array($this, $method), $result);
-
-        $this->view->currentMenu = '';
-        $this->view->menus       = $this->getSidebarMenus($dimensionID, $group, $module, $method, $params);
-        $this->view->dimensionID = $dimensionID;
-        $this->view->group       = $group;
-        $this->view->module      = $module;
-        $this->view->method      = $method;
-        $this->view->params      = $params;
-
-        if(empty($this->view->title)) $this->view->title = $this->lang->pivot->list;
-    }
-
-    /**
-     * Get default group of a dimension.
-     *
-     * @param  int    $dimension
-     * @access protected
-     * @return string
-     */
-    protected function getDefaultGroup($dimension)
-    {
-        $group = $this->getFirstGroup($dimension);
-        if(!$group) return 0;
-
-        return $group->id;
-    }
-
-    /**
      * Get first group of a dimension.
      *
      * @param  int       $dimensionID
@@ -124,28 +70,6 @@ class pivotZen extends pivot
         }
 
         return array('', '');
-    }
-
-    /**
-     * Set pivot Menu of a dimension.
-     *
-     * @param  int    $dimension
-     * @access protected
-     * @return void
-     */
-    protected function setFeatureBar($dimension)
-    {
-        if(!$dimension) return false;
-
-        $groups = $this->loadModel('tree')->getGroupPairs($dimension, 0, 1, 'pivot');
-        if(!$groups) return false;
-
-        $this->lang->pivot->featureBar['preview'] = array();
-        foreach($groups as $groupID => $groupName)
-        {
-            if(empty($groupID) || empty($groupName)) continue;
-            $this->lang->pivot->featureBar['preview'][$groupID] = $groupName;
-        }
     }
 
     /**
