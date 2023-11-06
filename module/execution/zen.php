@@ -708,8 +708,6 @@ class executionZen extends execution
             $task->openedBy     = $this->app->user->account;
 
             if($task->estimate !== '') $task->left = $task->estimate;
-            if(strpos($requiredFields, 'estStarted') !== false && helper::isZeroDate($task->estStarted)) $task->estStarted = '';
-            if(strpos($requiredFields, 'deadline') !== false && helper::isZeroDate($task->deadline)) $task->deadline = '';
             if(!empty($task->assignedTo)) $task->assignedDate = $now;
 
             /* Check task required fields. */
@@ -721,13 +719,13 @@ class executionZen extends execution
 
                 if($field == 'estimate' and strlen(trim($task->estimate)) != 0) continue;
 
-                dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
+                dao::$errors["{$field}[{$bugID}]"] = 'ID: ' . $bugID . sprintf($this->lang->error->notempty, $this->lang->task->$field);
                 return false;
             }
 
             if(!preg_match("/^[0-9]+(.[0-9]{1,3})?$/", (string)$task->estimate) and !empty($task->estimate))
             {
-                dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
+                dao::$errors["{$field}[{$bugID}]"] = 'ID: ' . $bugID . $this->lang->task->error->estimateNumber;
                 return false;
             }
 

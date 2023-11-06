@@ -340,6 +340,8 @@ class execution extends control
         {
             $postData = form::batchData($this->config->execution->form->importBug)->get();
             $tasks    = $this->executionZen->buildTasksForImportBug($execution, $postData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
             $this->execution->importBug($tasks);
             if(dao::isError()) return $this->sendError(dao::getError());
 
