@@ -10,6 +10,7 @@ declare(strict_types = 1);
  */
 namespace zin;
 
+jsVar('currentGroup', $currentGroup);
 jsVar('pivotID', $pivot->id);
 
 $filters = array();
