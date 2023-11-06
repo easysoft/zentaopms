@@ -85,35 +85,6 @@ foreach($lang->admin->menuList as $menuKey => $menu)
 {
     if($config->vision == 'lite' and !in_array($menuKey, $config->admin->liteMenuList)) continue;
 
-    $link = '';
-    if(!empty($menu['link'])) $link = $menu['link'];
-    if(!empty($menu['subMenu']))
-    {
-        foreach($menu['subMenu'] as $subMenu)
-        {
-            if(!empty($subMenu['link']))
-            {
-                $link = $subMenu['link'];
-                break;
-            }
-        }
-    }
-
-    if(strpos($link, '|') !== false)
-    {
-        $linkParams = '';
-        $params     = explode('|', $link);
-        if(count($params) == 2) list($module, $method) = $params;
-        if(count($params) == 3) list($label, $module, $method) = $params;
-        if(count($params) > 3)  list($label, $module, $method, $linkParams) = $params;
-
-        $url = $module && $method ? createLink($module, $method, $linkParams) : '';
-    }
-    else
-    {
-        $url = $link;
-    }
-
     $settingItems[] = div
     (
         setClass('pb-4 pr-4 w-1/5 h-32'),
@@ -121,7 +92,7 @@ foreach($lang->admin->menuList as $menuKey => $menu)
         (
             setClass('setting-box cursor-pointer border border-hover rounded-md px-2 py-1 h-full'),
             set('data-id', $menuKey),
-            empty($menu['disabled']) ? set('data-url', $url) : null,
+            empty($menu['disabled']) ? set('data-url', zget($menu, 'link', '')) : null,
             !empty($menu['disabled']) ? setClass('disabled') : null,
             !empty($menu['disabled']) ? set::title($lang->admin->noPriv) : null,
             h4
