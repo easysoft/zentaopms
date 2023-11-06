@@ -44,7 +44,7 @@ $config->story->list->customCreateFields      = 'source,verify,pri,estimate,mail
 $config->story->list->customBatchCreateFields = 'plan,assignedTo,spec,source,verify,pri,estimate,URS,parent,keywords,mailto';
 $config->story->list->customBatchEditFields   = 'branch,plan,estimate,pri,assignedTo,source,stage,closedBy,closedReason,keywords';
 
-$config->story->list->actionsOperatedParentStory = ',edit,batchcreate,change,review,recall,submitreview,';
+$config->story->list->actionsOperatedParentStory = ',edit,batchcreate,change,review,recall,submitreview,processstorychange,';
 
 $config->story->custom = new stdclass();
 $config->story->custom->createFields      = $config->story->list->customCreateFields;
