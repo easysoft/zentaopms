@@ -51,9 +51,11 @@ class header extends wg
                 static::visionSwitcher()
             );
         }
+        $appendToolbar = data('appendToolbar');
         return h::div
         (
             set::id('toolbar'),
+            $appendToolbar ? html($appendToolbar) : null,
             $toolbar
         );
     }
