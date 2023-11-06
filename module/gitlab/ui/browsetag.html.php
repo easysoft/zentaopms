@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('protectedTag', $lang->gitlab->tag->protected);
 
 featureBar
 (
@@ -36,4 +37,5 @@ dtable
     set::data($tagList),
     set::sortLink(createLink('gitlab', 'browseTag', "gitlabID={$gitlabID}&projectID={$projectID}&orderBy={name}_{sortType}")),
     set::orderBy($orderBy),
+    set::onRenderCell(jsRaw('window.renderCell'))
 );

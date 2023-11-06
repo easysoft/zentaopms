@@ -993,6 +993,9 @@ class gitlab extends control
             $tag->lastCommitter = $gitlabTag->commit->committer_name;
             $tag->updated       = date('Y-m-d H:i:s', strtotime($gitlabTag->commit->committed_date));
             $tag->protected     = $gitlabTag->protected;
+            $tag->gitlabID      = $gitlabID;
+            $tag->projectID     = $projectID;
+            $tag->tagName       = helper::safe64Encode(urlencode($tag->name));
 
             $tagList[] = $tag;
         }
@@ -1395,26 +1398,24 @@ class gitlab extends control
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  string $tagName
-     * @param  string $confirm yes|no
      * @access public
      * @return void
      */
-    public function deleteTag($gitlabID, $projectID, $tagName = '', $confirm = 'no')
+    public function deleteTag($gitlabID, $projectID, $tagName = '')
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->tag->confirmDelete , inlink('deleteTag', "gitlabID=$gitlabID&projectID=$projectID&tagName=$tagName&confirm=yes")));
-
         /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
         $tagName = urldecode(helper::safe64Decode($tagName));
         $reponse = $this->gitlab->apiDeleteTag($gitlabID, $projectID, $tagName);
+        a($response); die;
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
         if(!$reponse or substr($reponse->message, 0, 2) == '20')
         {
             $this->loadModel('action')->create('gitlabtag', $projectID, 'deleted', '', $projectID);
-            return print(js::reload('parent'));
+            return $this->sendSuccess(array('load' => true));
         }
 
-        echo js::alert($reponse->message);
+        return $this->sendError($reponse->message);
     }
 
     /**

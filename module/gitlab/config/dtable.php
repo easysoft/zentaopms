@@ -215,3 +215,14 @@ $config->gitlab->dtable->tag->fieldList['lastCommitter']['type']  = 'text';
 
 $config->gitlab->dtable->tag->fieldList['updated']['title'] = $lang->gitlab->branch->lastCommittedDate;
 $config->gitlab->dtable->tag->fieldList['updated']['type']  = 'text';
+
+$config->gitlab->dtable->tag->fieldList['actions']['name']  = 'actions';
+$config->gitlab->dtable->tag->fieldList['actions']['title'] = $lang->actions;
+$config->gitlab->dtable->tag->fieldList['actions']['type']  = 'actions';
+$config->gitlab->dtable->tag->fieldList['actions']['menu']  = array('delete');
+
+$config->gitlab->dtable->tag->fieldList['actions']['list']['delete']['icon']      = 'trash';
+$config->gitlab->dtable->tag->fieldList['actions']['list']['delete']['hint']      = $lang->gitlab->deleteTag;
+$config->gitlab->dtable->tag->fieldList['actions']['list']['delete']['url']       = helper::createLink('gitlab', 'deleteTag', 'gitlabID={gitlabID}&projectID={projectID}&tag_name={tagName}');
+$config->gitlab->dtable->tag->fieldList['actions']['list']['delete']['data-confirm'] = $lang->gitlab->tag->confirmDelete;
+$config->gitlab->dtable->tag->fieldList['actions']['list']['delete']['className'] = 'ajax-submit';
