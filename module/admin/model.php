@@ -320,7 +320,11 @@ class adminModel extends model
                 $subMenuList   = array();
                 $subMenuOrders = $menu['menuOrder'];
                 ksort($subMenuOrders);
-                foreach($subMenuOrders as $value) $subMenuList[$value] = $menu['subMenu'][$value];
+                foreach($subMenuOrders as $value)
+                {
+                    if(!isset($menu['subMenu'][$value])) continue;
+                    $subMenuList[$value] = $menu['subMenu'][$value];
+                }
 
                 /* Check sub menu priv. */
                 foreach($subMenuList as $subMenuKey => $subMenu)
