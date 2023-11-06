@@ -191,6 +191,7 @@ form
         h::hr()
     ),
 
+    formHidden('post', 'post'),
     set::actions(array('submit'))
 );
 

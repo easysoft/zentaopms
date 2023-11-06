@@ -1463,7 +1463,7 @@ class project extends control
             /* If no product is selected, prompt error. */
             $postProducts     = $this->post->products;
             $postOtherProduct = $this->post->otherProducts;
-            if(!isset($postProducts) && !isset($postOtherProduct))
+            if(empty($postProducts) && empty($postOtherProduct))
             {
                 return $this->send(array('result' => 'fail', 'message' => $this->lang->project->errorNoProducts));
             }
