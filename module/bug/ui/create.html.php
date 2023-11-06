@@ -11,11 +11,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('bug',           $bug);
-jsVar('moduleID',      $bug->moduleID);
-jsVar('tab',           $this->app->tab);
-jsVar('createRelease', $lang->release->create);
-jsVar('refresh',       $lang->refreshIcon);
+jsVar('bug',                   $bug);
+jsVar('moduleID',              $bug->moduleID);
+jsVar('tab',                   $this->app->tab);
+jsVar('createRelease',         $lang->release->create);
+jsVar('refresh',               $lang->refreshIcon);
+jsVar('projectExecutionPairs', $projectExecutionPairs);
 
 formPanel
 (
