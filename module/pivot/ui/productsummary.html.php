@@ -13,10 +13,8 @@ namespace zin;
 $cols = $config->pivot->dtable->productSummary->fieldList;
 $cols['PO']['map'] = $users;
 
-$generateData = function() use ($module, $method, $lang, $title, $cols, $products)
+$generateData = function() use ($lang, $title, $cols, $products)
 {
-    if(empty($module) || empty($method)) return div(setClass('bg-canvas center text-gray w-full h-40'), $lang->pivot->noPivot);
-
     return array
     (
         div

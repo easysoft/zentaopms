@@ -13,10 +13,8 @@ namespace zin;
 $cols = $config->pivot->dtable->bugCreate->fieldList;
 $cols['openedBy']['map'] = $users;
 
-$generateData = function() use ($module, $method, $lang, $title, $cols, $bugs, $products, $executions, $begin, $end, $product, $execution)
+$generateData = function() use ($lang, $title, $cols, $bugs, $products, $executions, $begin, $end, $product, $execution)
 {
-    if(empty($module) || empty($method)) return div(setClass('bg-canvas center text-gray w-full h-40'), $lang->pivot->noPivot);
-
     return array
     (
         div

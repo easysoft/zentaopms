@@ -15,10 +15,8 @@ jsVar('weekend', $config->execution->weekend);
 $cols = $config->pivot->dtable->workload->fieldList;
 $cols['user']['map'] = $users;
 
-$generateData = function() use ($module, $method, $lang, $title, $cols, $workload, $depts, $dept, $begin, $end, $days, $workhour, $assign)
+$generateData = function() use ($lang, $title, $cols, $workload, $depts, $dept, $begin, $end, $days, $workhour, $assign)
 {
-    if(empty($module) || empty($method)) return div(setClass('bg-canvas center text-gray w-full h-40'), $lang->pivot->noPivot);
-
     return array
     (
         div

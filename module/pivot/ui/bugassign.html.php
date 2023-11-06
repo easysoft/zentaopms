@@ -13,10 +13,8 @@ namespace zin;
 $cols = $config->pivot->dtable->bugAssign->fieldList;
 $cols['assignedTo']['map'] = $users;
 
-$generateData = function() use ($module, $method, $lang, $title, $cols, $bugs)
+$generateData = function() use ($lang, $title, $cols, $bugs)
 {
-    if(empty($module) || empty($method)) return div(setClass('bg-canvas center text-gray w-full h-40'), $lang->pivot->noPivot);
-
     return panel
     (
         setID('pivotPanel'),

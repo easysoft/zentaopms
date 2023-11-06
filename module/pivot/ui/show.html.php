@@ -40,10 +40,8 @@ foreach($pivot->filters as $filter)
     }
 }
 
-$generateData = function() use ($module, $method, $lang, $title, $pivot, $filters, $data, $configs)
+$generateData = function() use ($lang, $title, $pivot, $filters, $data, $configs)
 {
-    if(empty($module) || empty($method)) return div(setClass('bg-canvas center text-gray w-full h-40'), $lang->pivot->noPivot);
-
     list($cols, $rows, $cellSpan) = $this->convertDataForDtable($data, $configs);
 
     return array
