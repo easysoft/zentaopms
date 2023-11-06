@@ -54,6 +54,7 @@ $lang->file->extra     = 'Comment';
 $lang->file->dragFile            = 'Drag images here.';
 $lang->file->childTaskTips       = 'It\'s a child task if there is a \'>\' before the name.';
 $lang->file->uploadImagesExplain = 'Note: upload .jpg, .jpeg, .gif, or .png images. The image name will be the name of the story and the image will be the description.';
+$lang->file->uploadingImages     = 'There are <strong>%s</strong> files being uploaded.';
 $lang->file->saveAndNext         = 'Save and Next';
 $lang->file->importPager         = 'Total: <strong>%s</strong>. Page <strong>%s</strong> of <strong>%s</strong>';
 $lang->file->importSummary       = "Import <strong id='totalAmount'>%s</strong> items  You can <strong>%s</strong> items/page, so you have to import <strong id='times'>%s</strong> times.";

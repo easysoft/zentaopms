@@ -15,8 +15,9 @@ namespace zin;
 jsVar('uploadUrl',   createLink('file', 'uploadImages', "module=$module&params=$params&uid=$uid"));
 jsVar('locateUrl',   createLink('file', 'uploadImages', "module=$module&params=$params&uid=$uid&locate=true"));
 jsVar('uploadEmpty', $lang->file->errorUploadEmpty);
+jsVar('uploadingImages', $lang->file->uploadingImages);
 
-set::title(array('html' => div(span($lang->uploadImages), span(set::className('text-gray text-sm font-normal'), $lang->uploadImagesTip))));
+set::title(array('html' => div(setClass('uploadTitle'), span($lang->uploadImages), span(set::className('text-gray text-sm font-normal'), $lang->uploadImagesTip))));
 uploadImgs(set::name('uploader'));
 div(btn(setClass('primary uploadBtn'), set('onclick', 'uploadImages()'), $lang->file->beginUpload));
 
