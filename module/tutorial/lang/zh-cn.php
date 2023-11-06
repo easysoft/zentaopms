@@ -119,18 +119,39 @@ $lang->tutorial->tasks['createProjectExecution']['nav']  = array(
     'menuModule' => '',
     'menu' => '#table-tutorial-wizard > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="name"] > .dtable-cell-content >a',
     'form' => '#mainContent',
-    'submit' => '#button[type=submit]',
+    'submit' => 'button[type=submit]',
     'target' => '.create-execution-btn',
     'targetPageName' => '添加' . $lang->executionCommon
 );
 $lang->tutorial->tasks['createProjectExecution']['desc'] = "<p>在系统创建一个新的{$lang->executionCommon}：</p><ul><li data-target='nav'>打开 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> {$lang->executionCommon} <i class='icon icon-angle-right'></i> 添加{$lang->executionCommon}</span> 页面；</li><li data-target='form'>在{$lang->executionCommon}表单中填写要创建的{$lang->executionCommon}信息；</li><li data-target='submit'>保存{$lang->executionCommon}信息。</li></ul>";
 
 $lang->tutorial->tasks['linkStory']         = array('title' => "关联{$lang->SRCommon}");
-$lang->tutorial->tasks['linkStory']['nav']  = array('app' => 'execution', 'module' => 'execution', 'method' => 'linkStory', 'menuModule' => 'story', 'menu' => '#heading>.header-btn:first,#navbar>.nav>li[data-id="all"],#navbar>.nav>li[data-id="story"],#executionTableList>tr:first>.c-name>a,.link-story-btn', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => "关联{$lang->SRCommon}");
+$lang->tutorial->tasks['linkStory']['nav']  = array(
+    'app' => 'execution',
+    'module' => 'execution',
+    'method' => 'linkStory',
+    'menuModule' => 'story',
+    'menu' => '#heading > .toolbar > a[title="执行"], #table-execution-all > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="name"], .link-story-btn',
+    'target' => '',
+    'form' => '#table-tutorial-wizard',
+    'formType' => 'table',
+    'submit' => '#saveButton',
+    'targetPageName' => "关联{$lang->SRCommon}"
+);
 $lang->tutorial->tasks['linkStory']['desc'] = "<p>将{$lang->SRCommon}关联到执行：</p><ul><li data-target='nav'>打开 <span class='task-nav'> 执行 <i class='icon icon-angle-right'></i> {$lang->SRCommon} <i class='icon icon-angle-right'></i> 关联{$lang->SRCommon}</span> 页面；</li><li data-target='form'>在{$lang->SRCommon}列表中勾选要关联的{$lang->SRCommon}；</li><li data-target='submit'>保存关联的{$lang->SRCommon}信息。</li></ul>";
 
 $lang->tutorial->tasks['createTask']         = array('title' => '分解任务');
-$lang->tutorial->tasks['createTask']['nav']  = array('app' => 'execution', 'module' => 'task', 'method' => 'create', 'menuModule' => 'story', 'menu' => '', 'target' => '.btn-task-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => '建任务');
+$lang->tutorial->tasks['createTask']['nav']  = array(
+    'app' => 'execution', 
+    'module' => 'task', 
+    'method' => 'create', 
+    'menuModule' => 'story', 
+    'menu' => '', 
+    'target' => '.create-task-btn', 
+    'form' => '#mainContent', 
+    'submit' => 'button[type=submit]', 
+    'targetPageName' => '建任务'
+);
 $lang->tutorial->tasks['createTask']['desc'] = "<p>将执行{$lang->SRCommon}分解为任务：</p><ul><li data-target='nav'>打开 <span class='task-nav'> 执行 <i class='icon icon-angle-right'></i> {$lang->SRCommon} <i class='icon icon-angle-right'></i> 分解任务</span> 页面；</li><li data-target='form'>在表单中填写任务信息；</li><li data-target='submit'>保存任务信息。</li></ul>";
 
 $lang->tutorial->tasks['createBug']         = array('title' => '提Bug');
@@ -142,8 +163,8 @@ $lang->tutorial->tasks['createBug']['nav']  = array(
     'menu' => 'bug',
     'target' => '.create-bug-btn',
     'vars' => 'productID=0',
-    'form' => '#dataform',
-    'submit' => '#submit',
+    'form' => '#mainContent',
+    'submit' => 'button[type=submit]',
     'targetPageName' => '提Bug'
 );
 $lang->tutorial->tasks['createBug']['desc'] = "<p>在系统中提交一个Bug：</p><ul><li data-target='nav'>打开 <span class='task-nav'> 测试 <i class='icon icon-angle-right'></i> Bug <i class='icon icon-angle-right'></i> 提Bug</span>；</li><li data-target='form'>在表单中填写Bug信息；</li><li data-target='submit'>保存Bug信息。</li></ul>";

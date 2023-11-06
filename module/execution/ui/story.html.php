@@ -76,7 +76,7 @@ $linkStoryUrl     = createLink('execution', 'linkStory', "project={$execution->i
 if(commonModel::isTutorialMode())
 {
     $wizardParams     = helper::safe64Encode("project={$execution->id}");
-    $linkStoryUrl     = createLink('tutorial', 'wizard', "module=project&method=linkStory&params=$wizardParams");
+    $linkStoryUrl     = createLink('tutorial', 'wizard', "module=execution&method=linkStory&params=$wizardParams");
     $canlinkPlanStory = false;
 }
 
@@ -137,7 +137,7 @@ $product ? toolbar
             set::placement('bottom-end'),
         )
     ) : null,
-    $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'plus'))) : null,
     $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
 ) : null;
 

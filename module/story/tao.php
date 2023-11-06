@@ -1577,6 +1577,8 @@ class storyTao extends storyModel
     {
         global $lang;
 
+        $tutorialMode = commonModel::isTutorialMode();
+
         $actSubmitreview = array();
         $actReview       = array();
         $actRecall       = array();
@@ -1679,7 +1681,7 @@ class storyTao extends storyModel
         {
             if($execution->type != 'project')
             {
-                $createTaskLink      = helper::createLink('task', 'create', "executionID={$execution->id}&storyID={$story->id}");
+                $createTaskLink      = $tutorialMode ? helper::createLink('tutorial', 'wizard', "module=task&method=create&params=" . helper::safe64Encode("executionID={$execution->id}")) : helper::createLink('task', 'create', "executionID={$execution->id}&storyID={$story->id}");
                 $batchCreateTaskLink = helper::createLink('task', 'batchCreate', "executionID={$execution->id}&storyID={$story->id}");
                 $storyEstimateLink   = helper::createLink('execution', 'storyEstimate', "executionID={$execution->id}&storyID={$story->id}");
 
@@ -1687,7 +1689,7 @@ class storyTao extends storyModel
                 $canBatchCreateTask = common::hasPriv('task', 'batchCreate') && $story->status == 'active';
                 $canStoryEstimate   = common::hasPriv('execution', 'storyEstimate');
 
-                $actions[] = array('name' => 'createTask',      'url' => $canCreateTask      ? $createTaskLink      : null, 'disabled' => !$canCreateTask);
+                $actions[] = array('name' => 'createTask',      'url' => $canCreateTask      ? $createTaskLink      : null, 'disabled' => !$canCreateTask, 'className' => 'create-task-btn');
                 $actions[] = array('name' => 'batchCreateTask', 'url' => $canBatchCreateTask ? $batchCreateTaskLink : null, 'disabled' => !$canBatchCreateTask);
                 $actions[] = array('name' => 'storyEstimate',   'url' => $canStoryEstimate   ? $storyEstimateLink   : null, 'disabled' => !$canStoryEstimate);
             }
