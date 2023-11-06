@@ -10,7 +10,7 @@ declare(strict_types = 1);
  */
 namespace zin;
 
-include 'echarts.html.php';
+include 'charts.html.php';
 
 jsVar('previewUrl', inlink('preview', "dimension={$dimensionID}&group={$groupID}"));
 
