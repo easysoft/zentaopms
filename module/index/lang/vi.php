@@ -15,3 +15,7 @@ $lang->index->upgrade        = 'Upgrade';
 $lang->index->log            = 'Log';
 $lang->index->detailed       = 'Details';
 $lang->index->website        = 'Please visit the official website';
+
+$lang->index->chat = new stdclass();
+$lang->index->chat->chat = 'Chat';
+$lang->index->chat->ai   = 'AI';

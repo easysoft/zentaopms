@@ -152,6 +152,7 @@ js::set('showFeatures',  $showFeatures);
     </div>
   </div>
 </div>
+<?php include './chatview.html.php';?>
 <?php js::set('searchAB', $lang->searchAB);?>
 <?php js::set('searchObjectList', ',' . implode(',', array_keys($lang->searchObjects)) . ',');?>
 <?php js::set('searchCommon', $lang->index->search);?>

@@ -15,3 +15,7 @@ $lang->index->upgrade        = '升級';
 $lang->index->log            = '查看版本更新日誌 >';
 $lang->index->detailed       = '詳情';
 $lang->index->website        = '請訪問官網';
+
+$lang->index->chat = new stdclass();
+$lang->index->chat->chat = '聊天';
+$lang->index->chat->ai   = 'AI 對話';
