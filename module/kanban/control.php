@@ -899,7 +899,7 @@ class kanban extends control
             $this->loadModel('action')->create('kanbancard', $cardID, 'created');
 
             $kanbanGroup = $this->kanban->getKanbanData($kanbanID, $regionID);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 1, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($regionID, $kanbanGroup))));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($regionID, $kanbanGroup))));
         }
 
         $kanban      = $this->kanban->getById($kanbanID);
@@ -924,15 +924,14 @@ class kanban extends control
      */
     public function batchCreateCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0)
     {
-        $kanban   = $this->kanban->getById($kanbanID);
-        $backLink = $this->createLink('kanban', 'view', "kanbanID=$kanbanID");
+        $kanban = $this->kanban->getById($kanbanID);
         $this->kanban->setSwitcher($kanban);
 
         if($_POST)
         {
             $this->kanban->batchCreateCard($kanbanID, $regionID, $groupID, $columnID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $backLink));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => 'back'));
         }
 
         $kanbanUsers = $kanbanID == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team);
@@ -967,7 +966,7 @@ class kanban extends control
 
             $card        = $this->kanban->getCardByID($cardID);
             $kanbanGroup = $this->kanban->getKanbanData($card->kanban, $card->region);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 1, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($card->region, $kanbanGroup))));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($card->region, $kanbanGroup))));
         }
 
         $card        = $this->kanban->getCardByID($cardID);
@@ -1037,7 +1036,7 @@ class kanban extends control
             $actionID = $this->action->create('kanbanCard', $cardID, 'activated');
             $this->action->logHistory($actionID, $changes);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->card    = $this->kanban->getCardByID($cardID);
