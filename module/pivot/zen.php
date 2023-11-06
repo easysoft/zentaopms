@@ -75,57 +75,55 @@ class pivotZen extends pivot
     }
 
     /**
-     * Get default module name and method name of a pivot in a group.
+     * Get default method name and parameters of a pivot in a group.
      *
      * @param  int    $dimension
      * @param  int    $group
      * @access protected
      * @return array
      */
-    protected function getDefaultPivotParams($dimension, $group)
+    protected function getDefaultMethodAndParams(int $dimensionID, int $groupID): array
     {
-        $currentGroup = $this->loadModel('tree')->getByID($group);
-        if(empty($currentGroup) || $currentGroup->grade != 1) return array('', '', '');
+        $currentGroup = $this->loadModel('tree')->getByID($groupID);
+        if(empty($currentGroup) || $currentGroup->grade != 1) return array('', '');
 
         $groups = $this->dao->select('id, grade, name, collector')->from(TABLE_MODULE)
             ->where('deleted')->eq('0')
-            ->andWhere('root')->eq($dimension)
-            ->andWhere('path')->like("$currentGroup->path%")
+            ->andWhere('root')->eq($dimensionID)
+            ->andWhere('path')->like("{$currentGroup->path}%")
             ->orderBy('`order`')
             ->fetchAll();
-        if(!$groups) return array('', '', '');
+        if(!$groups) return array('', '');
 
         foreach($groups as $group)
         {
             if($this->config->edition == 'open' && $group->grade == 1) continue;
 
-            $pivots = $this->dao->select('*')->from(TABLE_PIVOT)
-                ->where("FIND_IN_SET($group->id, `group`)")
+            $pivotID = $this->dao->select('id')->from(TABLE_PIVOT)
+                ->where("FIND_IN_SET({$group->id}, `group`)")
                 ->andWhere('stage')->ne('draft')
                 ->orderBy('id_desc')
-                ->fetchAll();
-            if($pivots)
-            {
-                foreach($pivots as $pivot) return array('pivot', 'show', "dimensionID=$dimension&groupID={$group->id}&pivotID={$pivot->id}");
-            }
+                ->limit(1)
+                ->fetch('id');
+            if($pivotID) return array('show', "groupID={$group->id}&pivotID={$pivotID}");
         }
 
-        if(empty($this->lang->pivotList->{$currentGroup->collector}->lists)) return array('', '', '');
-
         $firstDimension = $this->loadModel('dimension')->getFirst();
-        if($dimension != $firstDimension->id) return array('', '', '');
+        if($dimensionID != $firstDimension->id) return array('', '');
+
+        if(empty($this->lang->pivotList->{$currentGroup->collector}->lists)) return array('', '');
 
         foreach($this->lang->pivotList->{$currentGroup->collector}->lists as $item)
         {
-            $items = explode('|', $item . '|');
-            if(count($items) < 4) continue;
+            $items = explode('|', $item);
+            if(count($items) != 3) continue;
 
-            list($label, $module, $method, $params) = $items;
+            $method = $items[2];
 
-            if(common::hasPriv($module, $method)) return array($module, $method, $params);
+            if(common::hasPriv('pivot', $method)) return array($method, '');
         }
 
-        return array('', '', '');
+        return array('', '');
     }
 
     /**
