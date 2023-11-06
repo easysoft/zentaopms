@@ -323,7 +323,7 @@ EOF;
         $this->view->doingCount   = $doingCount;
         $this->view->importFuture = ($type != 'today');
         $this->view->pager        = $pager;
-        $this->view->orderBy      = $sort;
+        $this->view->orderBy      = $orderBy;
         $this->display();
     }
 
