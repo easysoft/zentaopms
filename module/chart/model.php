@@ -811,7 +811,7 @@ class chartModel extends model
                     {
                         $fieldName = str_replace('.', '', $field);
 
-                        $sql = preg_replace(array("/$field/", "/`$field`/"), array("$field AS $fieldName", "`$field` AS $fieldName"), $sql, 1);
+                        //$sql = preg_replace(array("/$field/", "/`$field`/"), array("$field AS $fieldName", "`$field` AS $fieldName"), $sql, 1);
 
                         $field = $tableFieldName;
                     }
