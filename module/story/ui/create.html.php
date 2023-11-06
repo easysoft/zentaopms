@@ -29,7 +29,7 @@ formPanel
     (
         setClass('panel-title text-lg'),
         $lang->story->create,
-        $forceReview ? checkbox(set::id('needNotReview'), set::rootClass('text-base font-medium'), set::value(1), set::text($lang->story->needNotReview), set::checked($needReview), on::change('toggleReviewer(e.target)')) : null,
+        !$forceReview ? checkbox(set::id('needNotReview'), set::rootClass('text-base font-medium'), set::value(1), set::text($lang->story->needNotReview), set::checked($needReview), on::change('toggleReviewer(e.target)')) : null,
     )),
     set::actions(array
     (
@@ -227,7 +227,7 @@ formPanel
     ) : null,
     formRow
     (
-        set::hidden($forceReview && $needReview),
+        set::hidden(!$forceReview && !$needReview),
         formGroup
         (
             set::width('1/2'),

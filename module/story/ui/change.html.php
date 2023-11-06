@@ -50,7 +50,7 @@ $formItems['reviewer'] = formGroup
             set::items($fields['reviewer']['options']),
             set::value($fields['reviewer']['default']),
         ),
-        $forceReview ? span
+        !$forceReview ? span
         (
             setClass('input-group-addon'),
             checkbox

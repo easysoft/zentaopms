@@ -59,7 +59,7 @@ function showMessage(message)
 
             $('#' + id + 'Tip').remove();
             $this.addClass('has-error');
-            $this.after("<div class='form-tip ajax-form-tip text-danger' id='" + id + "Tip'>" + message[id] + '</div>');
+            $this.parent().after("<div class='form-tip ajax-form-tip text-danger' id='" + id + "Tip'>" + message[id] + '</div>');
             document.getElementById(id).focus();
         }
     }
