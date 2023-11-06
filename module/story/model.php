@@ -1093,6 +1093,7 @@ class storyModel extends model
 
         foreach($storyIdList as $storyID)
         {
+            $storyID  = (int)$storyID;
             $oldStory = zget($oldStories, $storyID, '');
             if(empty($oldStory)) continue;
 
