@@ -26,19 +26,20 @@ class chart extends control
         if(!$groupID) $groupID = $this->chart->getFirstGroup($dimensionID);
 
         $charts = array();
-        if($this->post->charts)
+        if($_POST)
         {
-            foreach($this->post->charts as $chartID)
+            if($this->post->charts)
             {
-                $idList = explode('_', $chartID);
-                if(count($idList) != 2) continue;
-
-                list($group, $chartID) = $idList;
-
-                $chart = $this->chart->getByID($chartID);
-                $chart->currentGroup = $group;
-
-                $charts[] = $chart;
+                /* 选中多个图表查看。*/
+                /* Select multiple charts to view. */
+                $charts = $this->getChartsToView($this->post->charts);
+            }
+            else if($this->post->groupID && $this->post->chartID && $this->post->filterValues)
+            {
+                /* 更改一个图表的过滤条件。*/
+                /* Change filter conditions of a chart. */
+                $chart = $this->getChartToFilter((int)$this->post->groupID, (int)$this->post->chartID, $this->post->filterValues);
+                if($chart) $charts[] = $chart;
             }
         }
 
