@@ -935,10 +935,10 @@ class gitlab extends control
         if($_POST)
         {
             $this->gitlab->createBranch($gitlabID, $projectID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $locate = $this->session->gitlabBranchList ? $this->session->gitlabBranchList : inlink('browseBranch', "gitlibID=$gitlabID&projectID=$projectID");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->gitlab->createSuccess, 'locate' => $locate));
+            return $this->sendSuccess(array('message' => $this->lang->gitlab->createSuccess, 'load' => $locate));
         }
 
         /* Get branches by api. */
@@ -1374,8 +1374,8 @@ class gitlab extends control
         {
             $this->gitlab->createTag($gitlabID, $projectID);
 
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseTag', "gitlabID=$gitlabID&projectID=$projectID")));
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('load' => inlink('browseTag', "gitlabID=$gitlabID&projectID=$projectID")));
         }
 
         $gitlabBranches = $this->gitlab->apiGetBranches($gitlabID, $projectID);

@@ -2829,6 +2829,7 @@ class gitlabModel extends model
         $tag = fixer::input('post')->get();
         if(empty($tag->tag_name)) dao::$errors['tag_name'][] = $this->lang->gitlab->tag->emptyNameError;
         if(empty($tag->ref))  dao::$errors['ref'][] = $this->lang->gitlab->tag->emptyRefError;
+        if(dao::isError()) return false;
 
         $singleBranch = $this->apiGetSingleTag($gitlabID, $projectID, $tag->tag_name);
         if(!empty($singleBranch->name)) dao::$errors['tag_name'][] = $this->lang->gitlab->tag->issetNameError;
