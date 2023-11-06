@@ -5,7 +5,6 @@ $config->datatable->moduleAlias['execution-task']  = 'task';
 $config->datatable->moduleAlias['program-project'] = 'project';
 $config->datatable->moduleAlias['project-bug']     = 'bug';
 $config->datatable->moduleAlias['execution-bug']   = 'bug';
-$config->datatable->moduleAlias['my-bug']          = 'bug';
 
 $config->datatable->noProductModule = ',review,';
 

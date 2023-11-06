@@ -59,19 +59,13 @@ $footToolbar = $canBatchAction ? array('items' => array
     array('text' => $lang->bug->assignedTo, 'className' => ($canBatchAssignTo ? '' : 'hidden'), 'type' => 'dropdown', 'items' => $assignedToItems, 'caret' => 'up', 'data-placement' => 'top-start'),
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')) : null;
 
-$cols = $this->loadModel('datatable')->getSetting('my');
-$cols['actions']['list']['edit']['data-toggle'] = 'modal';
-$cols['actions']['list']['edit']['data-size']   = 'lg';
-$cols['actions']['list']['copy']['data-toggle'] = 'modal';
-$cols['actions']['list']['copy']['data-size']   = 'lg';
-
+$cols = $config->my->bug->dtable->fieldList;
 $bugs = initTableData($bugs, $cols, $this->bug);
 
 dtable
 (
     set::cols($cols),
     set::data(array_values($bugs)),
-    set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module=my&method=bug"), 'hint' => $app->lang->datatable->custom)),
     set::userMap($users),
     set::onRenderCell(jsRaw('window.onRenderBugNameCell')),
     set::checkable($canBatchAction),
