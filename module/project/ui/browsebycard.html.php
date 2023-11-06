@@ -11,19 +11,8 @@ declare(strict_types=1);
 namespace zin;
 
 /* zin: Define the feature bar on main menu. */
-$programDropdown = '';
-if(empty($globalDisableProgram))
-{
-    $programDropdown = productMenu(
-        set::title($programs[$programID]),
-        set::items($programs),
-        set::activeKey($programID),
-        set::link(createLink('project', 'browse', "programID={key}&browseType={$browseType}&param={$param}&orderBy=order_asc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    );
-}
 featureBar
 (
-    to::before($programDropdown),
     set::current($browseType),
     set::linkParams("programID={$programID}&status={key}"),
     checkbox
@@ -121,8 +110,17 @@ if(!empty($projectStats))
         {
             if(!common::hasPriv('project', $action)) continue;
             $actionItem = $config->project->actionList[$action];
-            $actionItem['url']      = createLink('project', $action, $actionParams);
-            $actionItem['disabled'] = !$this->project->isClickable($project, $action);
+            if($this->project->isClickable($project, $action))
+            {
+                $actionItem['url']       = createLink('project', $action, $actionParams);
+                $actionItem['className'] = 'text-primary';
+            }
+            else
+            {
+                unset($actionItem['url']);
+                $actionItem['disabled'] = true;
+
+            }
 
             $actionItems[] = $actionItem;
         }

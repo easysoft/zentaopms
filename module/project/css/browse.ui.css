@@ -25,5 +25,6 @@ input[name="realEnd"] {width: 150px;}
 
 .m-project-browse .project-menu-actions {display: flex;}
 .m-project-browse .project-menu-actions > .menu-item > a:hover {background: none; color: var(--menu-hover-bg);}
+.m-project-browse .project-menu-actions > .menu-item > a > .item-icon {opacity: 1;}
 
 #cards #cardsFooter {width: 100%; display: flex; justify-content: end;}
