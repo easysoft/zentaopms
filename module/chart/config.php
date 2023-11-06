@@ -2,6 +2,8 @@
 $config->chart->widthInput = 128;
 $config->chart->widthDate  = 248;
 
+$config->chart->canLabelRotate = array('line', 'cluBarX', 'cluBarY', 'stackedBar', 'stackedBarY');
+
 $config->chart->dateConvert = array();
 $config->chart->dateConvert['year']  = 'YEAR';
 $config->chart->dateConvert['month'] = 'MONTH';
