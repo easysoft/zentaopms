@@ -137,6 +137,8 @@ class tree extends control
             $title      = $this->lang->tree->manageBug;
             $position[] = html::a($this->createLink('bug', 'browse', "product=$rootID"), $product->name);
             $position[] = $this->lang->tree->manageBug;
+
+            $this->view->productID = $rootID;
         }
         elseif($viewType == 'feedback' or $viewType == 'ticket')
         {
@@ -161,6 +163,8 @@ class tree extends control
             $title      = $this->lang->tree->manageCase;
             $position[] = html::a($this->createLink('testcase', 'browse', "product=$rootID"), $product->name);
             $position[] = $this->lang->tree->manageCase;
+
+            $this->view->productID = $rootID;
         }
         elseif($viewType == 'caselib')
         {
