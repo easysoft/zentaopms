@@ -25,18 +25,33 @@ class pivot extends control
     /**
      * Preview a pivot.
      *
-     * @param  int    $dimension
-     * @param  string $group
-     * @param  string $module
+     * @param  int    $dimensionID
+     * @param  int    $groupID
      * @param  string $method
      * @param  string $params
      * @access public
      * @return void
      */
-    public function preview($dimension = 0, $group = '', $module = 'pivot', $method = '', $params = '')
+    public function preview(int $dimensionID = 0, int $groupID = 0, string $method = '', string $params = '')
     {
-        $dimension = $this->loadModel('dimension')->getDimension($dimension);
-        $this->prepare4Preview($dimension, $group, $module, $method, $params);
+        $dimensionID = $this->loadModel('dimension')->getDimension($dimensionID);
+        if(!$groupID) $groupID = $this->getFirstGroup($dimensionID);
+        $params = helper::safe64Decode($params);
+
+        if(!$method) list($method, $params) = $this->getDefaultMethodAndParams($dimensionID, $groupID);
+
+        if($method && $method != 'show' && !common::hasPriv('pivot', $method)) $this->loadModel('common')->deny('pivot', $method);
+
+        parse_str($params, $result);
+
+        if(method_exists($this->pivotZen, $method)) call_user_func_array(array($this->pivotZen, $method), $result);
+
+        $this->view->groups      = $this->loadModel('tree')->getGroupPairs($dimensionID, 0, 1, 'pivot');
+        $this->view->menus       = $this->getSidebarMenus($dimensionID, $groupID, $method, $params);
+        $this->view->dimensionID = $dimensionID;
+        $this->view->groupID     = $groupID;
+        $this->view->method      = $method;
+        $this->view->params      = $params;
         $this->display();
     }
 }
