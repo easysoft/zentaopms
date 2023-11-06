@@ -98,6 +98,8 @@ $lang->dataview->objects['testrun']     = '测试执行';
 $lang->dataview->objects['testcase']    = '测试用例';
 $lang->dataview->objects['testresult']  = '执行结果';
 $lang->dataview->objects['casemodule']  = '用例模块';
+$lang->dataview->objects['action']      = '动态';
+$lang->dataview->objects['effort']      = '日志';
 
 $lang->dataview->tables = array();
 $lang->dataview->tables['build']       = array('name' => '版本数据', 'desc' => '包括版本名称、所属产品、所属项目、所属执行、创建人等');
