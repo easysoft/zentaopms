@@ -1006,6 +1006,7 @@ class screenModel extends model
             case 'stackedBarY':
             case 'cluBarX':
             case 'stackedBar':
+                $chart->sql = $this->setFilterSQL($chart);
                 return $this->getBarChartOption($component, $chart);
                 break;
         }
