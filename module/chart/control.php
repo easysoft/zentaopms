@@ -152,6 +152,13 @@ class chart extends control
                 break;
         }
 
+        // 对于能进行旋转的图表，判断有没有设置旋转
+        if(in_array($type, $this->config->chart->canLabelRotate))
+        {
+            if(isset($settings['rotateX']) and $settings['rotateX'] == 'use') $data['xAxis']['axisLabel'] = array('rotate' => 30);
+            if(isset($settings['rotateY']) and $settings['rotateY'] == 'use') $data['yAxis']['axisLabel'] = array('rotate' => 30);
+        }
+
         echo json_encode($data);
     }
 }
