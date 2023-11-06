@@ -1045,6 +1045,8 @@ class bugModel extends model
             ->join('mailto', ',')
             ->get();
 
+        if($this->app->rawMethod == 'batchassignto') unset($bug->mailto);
+
         $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->assignto['id'], $this->post->uid);
         $this->dao->update(TABLE_BUG)
             ->data($bug)
