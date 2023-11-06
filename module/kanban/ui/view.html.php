@@ -15,6 +15,7 @@ foreach($kanbanList as $regionID => $region)
         $group['laneProps'] = array('actions' => jsRaw('window.getLaneActions'));
         $group['itemProps'] = array('actions' => jsRaw('window.getItemActions'));
 
+        /* 计算各个列上的卡片数量。 */
         foreach($group['data']['cols'] as $col) $parentCols[$col['id']] = $col['parent'];
         foreach($group['data']['items'] as $colGroup)
         {
@@ -39,8 +40,11 @@ foreach($kanbanList as $regionID => $region)
 
 jsVar('laneCount',  $laneCount);
 jsVar('kanbanLang', $lang->kanban);
-jsVar('kanbanID', $kanbanID);
+jsVar('columnLang', $lang->kanbancolumn);
+jsVar('kanbanID', $kanban->id);
+jsVar('kanban', $kanban);
 jsVar('columnCount', $columnCount);
+jsVar('vision', $config->vision);
 
 zui::kanbanList
 (
