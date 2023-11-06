@@ -36,7 +36,18 @@ $lang->tutorial->dataNotSave      = "教程任务中，数据不会保存。";
 $lang->tutorial->tasks = array();
 
 $lang->tutorial->tasks['createAccount']         = array('title' => '创建帐号');
-$lang->tutorial->tasks['createAccount']['nav']  = array('app' => 'admin', 'module' => 'user', 'method' => 'create', 'menuModule' => 'company', 'menu' => 'browseUser', 'form' => '#mainContent', 'requiredFields' => 'account,realname,verifyPassword,password1,password2', 'submit' => 'button[type=submit]', 'target' => '.create-user-btn', 'targetPageName' => '添加用户');
+$lang->tutorial->tasks['createAccount']['nav']  = array(
+    'app' => 'admin', 
+    'module' => 'user', 
+    'method' => 'create', 
+    'menuModule' => 'company', 
+    'menu' => 'browseUser', 
+    'form' => '#mainContent', 
+    'requiredFields' => 'account,realname,verifyPassword,password1,password2', 
+    'submit' => 'button[type=submit]', 
+    'target' => '.create-user-btn', 
+    'targetPageName' => '添加用户'
+);
 $lang->tutorial->tasks['createAccount']['desc'] = "<p>在系统创建一个新的用户帐号：</p><ul><li data-target='nav'>打开 <span class='task-nav'>后台 <i class='icon icon-angle-right'></i> 人员管理 <i class='icon icon-angle-right'></i> 用户 <i class='icon icon-angle-right'></i> 添加用户</span> 页面；</li><li data-target='form'>在添加用户表单中填写新用户信息；</li><li data-target='submit'>保存用户信息。</li></ul>";
 
 $lang->tutorial->tasks['createProgram']         = array('title' => '创建项目集');
@@ -44,15 +55,44 @@ $lang->tutorial->tasks['createProgram']['nav']  = array('app' => 'program', 'mod
 $lang->tutorial->tasks['createProgram']['desc'] = "<p>在系统创建一个新的项目集：</p><ul><li data-target='nav'>打开 <span class='task-nav'>项目集 <i class='icon icon-angle-right'></i> 项目集列表 <i class='icon icon-angle-right'></i> 添加项目集</span> 页面；</li><li data-target='form'>在添加项目集表单中填写项目集信息；</li><li data-target='submit'>保存项目集信息。</li></ul>";
 
 $lang->tutorial->tasks['createProduct']         = array('title' => '创建' . $lang->productCommon);
-$lang->tutorial->tasks['createProduct']['nav']  = array('app' => 'product', 'module' => 'product', 'method' => 'create', 'menuModule' => 'product', 'menu' => 'all', 'form' => '#mainContent', 'submit' => 'button[type=submit]', 'target' => '.create-product-btn', 'targetPageName' => '添加' . $lang->productCommon);
+$lang->tutorial->tasks['createProduct']['nav']  = array(
+    'app' => 'product',
+    'module' => 'product',
+    'method' => 'create',
+    'menuModule' => 'product',
+    'menu' => '#heading > .toolbar > .toolbar-item, .create-product-btn',
+    'form' => '#mainContent',
+    'submit' => 'button[type=submit]',
+    'target' => '',
+    'targetPageName' => '添加' . $lang->productCommon);
 $lang->tutorial->tasks['createProduct']['desc'] = "<p>在系统创建一个新的{$lang->productCommon}：</p><ul><li data-target='nav'>打开 <span class='task-nav'>{$lang->productCommon} <i class='icon icon-angle-right'></i> {$lang->productCommon}列表 <i class='icon icon-angle-right'></i> 添加{$lang->productCommon}</span> 页面；</li><li data-target='form'>在添加{$lang->productCommon}表单中填写要创建的{$lang->productCommon}信息；</li><li data-target='submit'>保存{$lang->productCommon}信息。</li></ul>";
 
 $lang->tutorial->tasks['createStory']         = array('title' => "创建{$lang->SRCommon}");
-$lang->tutorial->tasks['createStory']['nav']  = array('app' => 'product', 'module' => 'story', 'method' => 'create', 'menuModule' => 'story', 'menu' => '#products > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell > .dtable-cell-content > a, #products', 'target' => '.create-story-btn', 'form' => '#mainContent', 'submit' => 'button[type=button]', 'targetPageName' => "提{$lang->SRCommon}");
+$lang->tutorial->tasks['createStory']['nav']  = array(
+    'app' => 'product',
+    'module' => 'story',
+    'method' => 'create',
+    'menuModule' => 'story',
+    'menu' => '#products > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell > .dtable-cell-content > a, #heading > .toolbar > .toolbar-item, .create-story-btn',
+    'target' => '.create-story-btn',
+    'form' => '#mainContent',
+    'submit' => '#saveButton',
+    'targetPageName' => "提{$lang->SRCommon}"
+);
 $lang->tutorial->tasks['createStory']['desc'] = "<p>在系统创建一个新的{$lang->SRCommon}：</p><ul><li data-target='nav'>打开 <span class='task-nav'>{$lang->productCommon} <i class='icon icon-angle-right'></i> {$lang->SRCommon} <i class='icon icon-angle-right'></i> 提{$lang->SRCommon}</span> 页面；</li><li data-target='form'>在{$lang->productCommon}表单中填写要创建的{$lang->SRCommon}信息；</li><li data-target='submit'>保存{$lang->SRCommon}信息。</li></ul>";
 
 $lang->tutorial->tasks['createProject']         = array('title' => '创建' . $lang->projectCommon);
-$lang->tutorial->tasks['createProject']['nav']  = array('app' => 'project', 'module' => 'project', 'method' => 'create', 'menuModule' => '', 'menu' => '', 'form' => '#mainContent', 'submit' => 'button[type=submit]', 'target' => '.create-project-btn', 'targetPageName' => '添加' . $lang->projectCommon);
+$lang->tutorial->tasks['createProject']['nav']  = array(
+    'app' => 'project',
+    'module' => 'project',
+    'method' => 'create',
+    'menuModule' => '',
+    'menu' => '#header > .container > #heading > .toolbar, .create-project-btn',
+    'form' => '#mainContent',
+    'submit' => 'button[type=submit]',
+    'target' => '',
+    'targetPageName' => '添加' . $lang->projectCommon
+);
 $lang->tutorial->tasks['createProject']['desc'] = "<p>在系统创建一个新的{$lang->projectCommon}：</p><ul><li data-target='nav'>打开 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> {$lang->projectCommon}列表 <i class='icon icon-angle-right'></i> 创建{$lang->projectCommon}</span> 页面；</li><li data-target='form'>在{$lang->projectCommon}表单中填写要创建的{$lang->projectCommon}信息；</li><li data-target='submit'>保存{$lang->projectCommon}信息。</li></ul>";
 
 $lang->tutorial->tasks['manageTeam']         = array('title' => "管理{$lang->projectCommon}团队");
@@ -61,18 +101,28 @@ $lang->tutorial->tasks['manageTeam']['nav']  = array(
     'module' => 'project',
     'method' => 'managemembers',
     'menuModule' => '',
-    'menu' => '#table-tutorial-wizard > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="name"] > .dtable-cell-content > a, #mainNavbar > .container > .nav > .nav-item > a[data-id="settings"], #mainNavbar > .container > .nav > .nav-item > a[data-id="members"], #actionBar',
+    'menu' => '#actionBar, #header > .container > #heading > .toolbar, #table-tutorial-wizard > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="name"] > .dtable-cell-content > a, #table-project-browse > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="name"] > .dtable-cell-content > a , #mainNavbar > .container > .nav > .nav-item > a[data-id="settings"], #mainNavbar > .container > .nav > .nav-item > a[data-id="members"]',
     'target' => '.manage-team-btn',
     'vars' => 'projectID=0',
     'form' => '#teamForm',
     'requiredFields' => 'accounts1',
-    'submit' => '#submit',
+    'submit' => '.form-row > .form-actions > button:first-child',
     'targetPageName' => '团队管理'
 );
 $lang->tutorial->tasks['manageTeam']['desc'] = "<p>管理{$lang->projectCommon}团队成员：</p><ul><li data-target='nav'>打开 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> 设置 <i class='icon icon-angle-right'></i> 团队 <i class='icon icon-angle-right'></i> 团队管理</span> 页面；</li><li data-target='form'>选择要加入{$lang->projectCommon}团队的成员；</li><li data-target='submit'>保存团队成员信息。</li></ul>";
 
 $lang->tutorial->tasks['createProjectExecution']         = array('title' => '添加' . $lang->executionCommon);
-$lang->tutorial->tasks['createProjectExecution']['nav']  = array('app' => 'project', 'module' => 'execution', 'method' => 'create', 'menuModule' => 'browse', 'menu' => '#navbar>.nav>li[data-id="browse"],#cards>.col>.panel:first .project-name,#projectForm td.c-name:first a,#navbar>.nav>li[data-id="execution"],.create-execution-btn', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-execution-btn', 'targetPageName' => '添加' . $lang->executionCommon);
+$lang->tutorial->tasks['createProjectExecution']['nav']  = array(
+    'app' => 'project',
+    'module' => 'execution',
+    'method' => 'create',
+    'menuModule' => '',
+    'menu' => '#table-tutorial-wizard > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="name"] > .dtable-cell-content >a',
+    'form' => '#mainContent',
+    'submit' => '#button[type=submit]',
+    'target' => '.create-execution-btn',
+    'targetPageName' => '添加' . $lang->executionCommon
+);
 $lang->tutorial->tasks['createProjectExecution']['desc'] = "<p>在系统创建一个新的{$lang->executionCommon}：</p><ul><li data-target='nav'>打开 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> {$lang->executionCommon} <i class='icon icon-angle-right'></i> 添加{$lang->executionCommon}</span> 页面；</li><li data-target='form'>在{$lang->executionCommon}表单中填写要创建的{$lang->executionCommon}信息；</li><li data-target='submit'>保存{$lang->executionCommon}信息。</li></ul>";
 
 $lang->tutorial->tasks['linkStory']         = array('title' => "关联{$lang->SRCommon}");

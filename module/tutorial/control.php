@@ -101,8 +101,8 @@ class tutorial extends control
     public function wizard($module, $method, $params = '')
     {
         if(!commonModel::isTutorialMode()) $_SESSION['tutorialMode'] = true;
-        $_SESSION['wizardModule'] = $module;
-        $_SESSION['wizardMethod'] = $method;
+        define('WIZARD_MODULE', $module);
+        define('WIZARD_METHOD', $method);
 
         /* Check priv for tutorial. */
         $hasPriv = false;

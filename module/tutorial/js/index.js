@@ -199,7 +199,7 @@ $(function()
         }, options);
         $e = $e.first();
 
-        console.log('showToolTip', $e, text, options);
+        console.log($e.css('display'), $e.parent().is('#menuMainNav'))
         if($e.css('display') !== 'none')
         {
             if(!$e.data('zui.tooltip')) $e.addClass('tooltip-tutorial').attr('data-toggle', 'tooltip').tooltip(options);
@@ -208,9 +208,10 @@ $(function()
         }
         else if($e.parent().is('#menuMainNav'))
         {
-            var $menuMoreItem = appsWindow.$('#menuMoreNav>li.dropdown');
+            var $menuMoreItem = appsWindow.$('#menuMoreNav>li').last();
+            console.log('menuMoreItem', $menuMoreItem);
             highlight($menuMoreItem);
-            showToolTip($menuMoreItem, text, $.extend({}, options, {tipClass: 'tooltip-warning tooltip-max tooltip-menu-more text-nowrap', container: false}));
+            showToolTip($menuMoreItem, text, $.extend({}, options, {tipClass: 'warning', container: false}));
             var appCode = $e.data('app');
             appsWindow.$('#menuMoreList>li').removeClass('active').attr('data-tip', '');
             appsWindow.$('#menuMoreList>li[data-app="' + appCode + '"]').addClass('active hl-tutorial hl-in').attr('data-tip', text);
@@ -226,7 +227,7 @@ $(function()
         if(checkTaskId) clearTimeout(checkTaskId);
 
         var iWindow = getAppWindow();
-        console.log('1111', iWindow, iWindow.config, iWindow.$)
+        console.log(iWindow, iWindow.config, iWindow.$)
         if(!(iWindow && iWindow.config && iWindow.$))
         {
             checkTaskId = setTimeout(tryCheckTask, 1000);
@@ -244,8 +245,12 @@ $(function()
         var iWindow = getAppWindow();
         if(!iWindow || !iWindow.$) return tryCheckTask();
         var task = tasks[current];
+        console.log('current is', current)
+        console.log('module is ', task.nav.app)
         var appCode = task.nav.app || task.nav.menuModule || task.nav['module'];
+        console.log('appCode is ', appCode);
         var app = getApp(appCode);
+        console.log('app is', app);
         if(!app) return;
 
         var $$ = iWindow.$;
@@ -258,10 +263,6 @@ $(function()
             $submitTarget = $task.find('[data-target="submit"]').removeClass('active');
         targetStatus.nav = task.nav['module'].toLowerCase() === currentModule && task.nav['method'].toLowerCase() === currentMethod && (!task.nav.app || task.nav.app === appCode);
 
-        console.log('$navTarget', $navTarget, '$formTarget', $formTarget, '$submitTarget', $submitTarget);
-        console.log('targetStatus.nav', targetStatus.nav);
-        console.log(task)
-
         if(targetStatus.nav)
         {
             var $form = $$(task.nav.form);
@@ -272,7 +273,6 @@ $(function()
             var fieldSelector = '';
             var requiredFields = task.nav.requiredFields || pageConfig.requiredFields;
 
-            console.log('requiredFields ------', requiredFields);
             if(task.nav.formType === 'table')
             {
                 fieldSelector = 'input[type="checkbox"]';
@@ -290,9 +290,7 @@ $(function()
                 {
                     fieldSelector += ',' + '#' + requiredId;
                     var $required = $$('#' + requiredId);
-                    console.log('current required is', $required);
                     var $authBlock = !$required.is('input') ? $required.find('input').last() : $required;
-                    console.log('current authBLock is', $authBlock)
                     if($authBlock.length)
                     {
                         var val = $authBlock.val();
@@ -306,7 +304,6 @@ $(function()
                 if(fieldSelector.length > 1) fieldSelector = fieldSelector.substring(1);
             }
 
-            console.log(targetStatus);
             if(!$form.data('bindCheckTaskEvent'))
             {
                 $form.off('.tutorial').off('submit');
@@ -314,18 +311,14 @@ $(function()
                 var onSubmit = function(e)
                 {
                     var status = checkTask();
-                    console.log('checkTaskStatus', status)
                     if(!status.submitOK)
                     {
                         if(status.waitField)
                         {
                             if(status.waitField.hasClass("chosen-controled")) status.waitField = status.waitField.next();
                             var fieldName = status.waitField.siblings('label').text();
-                            console.log('first fieldName is ', fieldName)
                             if(!fieldName) fieldName = status.waitField.find('label').text();
                             if(!fieldName) fieldName = status.waitField.parent().siblings('label').text();
-                            console.log('second fieldName div is', status.waitField.parent().siblings('label'));
-                            console.log('second fieldName is', fieldName)
                             if(fieldName) showToolTip(status.waitField, lang.requiredTip.replace('%s', fieldName));
                             highlight(status.waitField, function()
                             {
@@ -343,15 +336,11 @@ $(function()
                     {
                         finishTask();
                     }
-                    console.log('阻止表单提交');
                     e.preventDefault();
                     e.stopPropagation();
                     return false;
                 }
-                console.log('task.nav.submit', task.nav.submit)
-                console.log('is a form ?', $form,$form.is('form'), $form.find('form'))
                 $form = $form.is('form') ? $form : $form.find('form').last();
-                console.log('is a form ?', $form)
                 if(task.nav.submit) $form.on('click.tutorial', task.nav.submit, onSubmit);
                 else $form.submit(onSubmit);
             }
@@ -373,8 +362,11 @@ $(function()
 
             /* Highlight app button in left menu */
             var $appNav = appsWindow.$('#menuMainNav > li[data-app="' + appCode + '"]');
-            console.log('current app is ', $appNav);
-            if(!app.opened)
+            var lastApp = appsWindow.$.apps.getLastApp();
+            console.log('左侧菜单栏元素', $appNav)
+            console.log('左侧菜单栏是否打开', app, app.opened)
+            console.log('是否打开当前菜单', appsWindow.$.apps.getLastApp());
+            if(appCode !== lastApp.code)
             {
                 var targetAppTip = lang.targetAppTip.replace('%s', app.text || lang.target);
                 highlight($appNav);
@@ -383,11 +375,13 @@ $(function()
             else
             {
                 var menuModule = task.nav.menuModule || task.nav['module'];
+                console.log('当前的menu菜单为', menuModule, task.nav.menuModule, task.nav['module'])
                 var $navbar    = $$('#navbar');
                 if(task.nav.app == 'admin') $navbar = $$('#settings');
                 var $navbarItem = $navbar.find('[data-id="' + menuModule + '"]');
                 var targetPageTip = lang.targetPageTip.replace('%s', task.nav.targetPageName || lang.target);
-                console.log($navbarItem, $navbarItem.hasClass('active'));
+                console.log('激活的菜单栏元素', $navbarItem);
+                console.log('当前激活的任务', task);
                 if($navbarItem.length && !$navbarItem.hasClass('active'))
                 {
                     highlight($navbarItem);
@@ -400,6 +394,7 @@ $(function()
                         var $pageNav = $$('#pageNav');
                         var $targetBtn = $pageNav.find(task.nav.target);
                         var $targetBtnGroup = $targetBtn.closest('.btn-group');
+
                         if($targetBtnGroup.hasClass('open'))
                         {
                             highlight($targetBtn);
@@ -418,6 +413,9 @@ $(function()
                     else if(task.nav.menu[0] === '#')
                     {
                         var $customMenu = $$(task.nav.menu).last();
+                        console.log('custom菜单', $customMenu, $$(task.nav.menu) ,task.nav.menu);
+                        console.log('高亮元素', $customMenu);
+                        console.log('custom菜单组', $$(task.nav.menu))
                         if($customMenu.length)
                         {
                             highlight($customMenu);
