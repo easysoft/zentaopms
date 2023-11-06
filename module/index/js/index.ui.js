@@ -358,7 +358,12 @@ function getAppCode(urlOrModuleName)
     /* Handling special situations */
     var moduleName      = link.moduleName;
     var methodName      = link.methodName;
-    if (moduleName === 'index' && methodName === 'index') return 'my';
+    if(moduleName === 'index' && methodName === 'index') return 'my';
+    if(moduleName === 'tutorial' && methodName === 'wizard')
+    {
+        moduleName = link.vars[0][1];
+        methodName = link.vars[1][1];
+    }
 
     var methodLowerCase = methodName.toLowerCase();
     if(moduleName === 'doc')
