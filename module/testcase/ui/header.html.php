@@ -256,11 +256,12 @@ toolbar
     ) : null,
     $canAutomation ? btn
     (
-        set
-        (
-            array('icon' => 'wrench', 'hint' => $lang->testcase->automation, 'url' => inlink('automation', "productID=$productID"), 'class' => 'btn ghost square', 'data-toggle' => 'modal', 'data-width' => '50%')
-        ),
-        $lang->testcase->automation
+        setClass('ghost square'),
+        set::icon('wrench'),
+        set::hint($lang->testcase->automation),
+        set::url(inlink('automation', "productID={$productID}")),
+        set('data-toggle', 'modal'),
+        set('data-width', '50%'),
     ) : null,
     $exportItems ? dropdown
     (
@@ -268,7 +269,6 @@ toolbar
         (
             setClass('btn ghost square'),
             set::icon('export'),
-            $lang->export
         ),
         set::items($exportItems),
         set::placement('bottom-end'),
@@ -279,7 +279,6 @@ toolbar
         (
             setClass('btn ghost square'),
             set::icon('import'),
-            $lang->import
         ),
         set::items($importItems),
         set::placement('bottom-end'),
