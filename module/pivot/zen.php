@@ -416,15 +416,16 @@ class pivotZen extends pivot
         $begin = $begin == 0 ? date('Y-m-d', strtotime('last month', strtotime(date('Y-m',time()) . '-01 00:00:01'))) : date('Y-m-d', strtotime($begin));
         $end   = $end == 0   ? date('Y-m-d', strtotime('now')) : $end = date('Y-m-d', strtotime($end));
 
-        $this->view->title      = $this->lang->pivot->bugCreate;
-        $this->view->bugs       = $this->pivot->getBugs($begin, $end, $product, $execution);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->executions = $this->pivot->getProjectExecutions();
-        $this->view->products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        $this->view->begin      = $begin;
-        $this->view->end        = $end;
-        $this->view->execution  = $execution;
-        $this->view->product    = $product;
+        $this->view->title       = $this->lang->pivot->bugCreate;
+        $this->view->bugs        = $this->pivot->getBugs($begin, $end, $product, $execution);
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->executions  = $this->pivot->getProjectExecutions();
+        $this->view->products    = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $this->view->begin       = $begin;
+        $this->view->end         = $end;
+        $this->view->execution   = $execution;
+        $this->view->product     = $product;
+        $this->view->currentMenu = 'bugcreate';
     }
 
     /**
@@ -437,9 +438,10 @@ class pivotZen extends pivot
     {
         $this->session->set('productList', $this->app->getURI(true), 'product');
 
-        $this->view->title = $this->lang->pivot->bugAssign;
-        $this->view->bugs  = $this->pivot->getBugAssign();
-        $this->view->users = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->title       = $this->lang->pivot->bugAssign;
+        $this->view->bugs        = $this->pivot->getBugAssign();
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->currentMenu = 'bugassign';
     }
 
     /**
@@ -458,10 +460,11 @@ class pivotZen extends pivot
 
         $products = $this->pivot->getProducts($conditions);
 
-        $this->view->title      = $this->lang->pivot->productSummary;
-        $this->view->products   = $this->processProductsForProductSummary($products);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->conditions = $conditions;
+        $this->view->title       = $this->lang->pivot->productSummary;
+        $this->view->products    = $this->processProductsForProductSummary($products);
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->conditions  = $conditions;
+        $this->view->currentMenu = 'productsummary';
     }
 
     /**
@@ -535,10 +538,11 @@ class pivotZen extends pivot
         $begin = date('Y-m-d', ($begin ? strtotime($begin) : time() - (date('j') - 1) * 24 * 3600));
         $end   = date('Y-m-d', ($end   ? strtotime($end)   : time() + (date('t') - date('j')) * 24 * 3600));
 
-        $this->view->title      = $this->lang->pivot->projectDeviation;
-        $this->view->executions = $this->pivot->getExecutions($begin, $end);
-        $this->view->begin      = $begin;
-        $this->view->end        = $end;
+        $this->view->title       = $this->lang->pivot->projectDeviation;
+        $this->view->executions  = $this->pivot->getExecutions($begin, $end);
+        $this->view->begin       = $begin;
+        $this->view->end         = $end;
+        $this->view->currentMenu = 'projectdeviation';
     }
 
     /**
@@ -593,15 +597,16 @@ class pivotZen extends pivot
         $allHour = $workhour * $days;
         $users   = $this->loadModel('user')->getPairs('noletter|noclosed');
 
-        $this->view->title    = $this->lang->pivot->workload;
-        $this->view->workload = $this->pivot->getWorkload($dept, $assign, $users, $allHour);
-        $this->view->depts    = $this->loadModel('dept')->getOptionMenu();
-        $this->view->users    = $users;
-        $this->view->dept     = $dept;
-        $this->view->begin    = $begin;
-        $this->view->end      = date('Y-m-d', strtotime($end) - 24 * 3600);
-        $this->view->days     = $days;
-        $this->view->workhour = $workhour;
-        $this->view->assign   = $assign;
+        $this->view->title       = $this->lang->pivot->workload;
+        $this->view->workload    = $this->pivot->getWorkload($dept, $assign, $users, $allHour);
+        $this->view->depts       = $this->loadModel('dept')->getOptionMenu();
+        $this->view->users       = $users;
+        $this->view->dept        = $dept;
+        $this->view->begin       = $begin;
+        $this->view->end         = date('Y-m-d', strtotime($end) - 24 * 3600);
+        $this->view->days        = $days;
+        $this->view->workhour    = $workhour;
+        $this->view->assign      = $assign;
+        $this->view->currentMenu = 'workload';
     }
 }
