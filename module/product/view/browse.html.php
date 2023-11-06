@@ -42,7 +42,7 @@ $cols = $this->story->generateCol($orderBy, $storyType, $hasChildren);
 $rows = $this->story->generateRow($stories, $cols, $options, $project, $storyType);
 $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 if($from == 'project' and !empty($projectID)) $vars = "projectID=$projectID&productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-$sortLink = helper::createLink('product', 'browse', $vars);
+$sortLink = helper::createLink($this->app->rawModule, $this->app->rawMethod, $vars);
 $projectHasProduct = $isProjectStory && !empty($project->hasProduct);
 
 $canBeChanged          = common::canModify('product', $product);
