@@ -1221,7 +1221,8 @@ class taskZen extends task
         /* 处理任务看板。 Handling task kanban. */
         $kanbanData = $this->kanban->getExecutionKanban($execution->id, $executionLaneType, $executionGroupBy, $taskSearchValue);
         $kanbanType = $executionLaneType == 'all' ? 'task' : key($kanbanData);
-        return json_encode($kanbanData[$kanbanType]);
+        $data       = isset($kanbanData[$kanbanType]) ? $kanbanData[$kanbanType] : array();
+        return json_encode($data);
     }
 
     /**
