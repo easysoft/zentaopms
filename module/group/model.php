@@ -898,8 +898,9 @@ class groupModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'manageview' and $group->role == 'limited') return false;
-        if($action == 'copy' and $group->role == 'limited') return false;
+        if($action == 'manageview' && $group->role == 'limited') return false;
+        if($action == 'manageprojectadmin' && $group->role != 'projectAdmin') return false;
+        if($action == 'copy' && $group->role == 'limited') return false;
 
         return true;
     }
