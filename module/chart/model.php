@@ -57,21 +57,21 @@ class chartModel extends model
         $group = $this->loadModel('tree')->getByID($groupID);
         if(empty($group) || $group->grade != 1) return array();
 
-        $groups = $this->dao->select('id, grade, name')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('path')->like("{$group->path}%")->orderBy('`order`')->fetchAll();
+        $groups = $this->dao->select('id')->from(TABLE_MODULE)->where('deleted')->eq('0')->andWhere('path')->like(",{$groupID},%")->orderBy('`order`')->fetchPairs();
         if(!$groups) return array();
 
         $this->app->loadModuleConfig('screen');
 
         /* 获取分组下的第一个图表。*/
         /* Get the first chart under the group. */
-        foreach($groups as $group)
+        foreach($groups as $groupID)
         {
             $chart = $this->dao->select('*')->from(TABLE_CHART)
                 ->where('deleted')->eq('0')
                 ->andWhere('builtin', true)->eq('0')
                 ->orWhere('id')->in($this->config->screen->builtinChart)
                 ->markRight(1)
-                ->andWhere("FIND_IN_SET({$group->id}, `group`)")
+                ->andWhere("FIND_IN_SET({$groupID}, `group`)")
                 ->andWhere('stage')->eq('published')
                 ->orderBy('id_desc')
                 ->limit(1)
@@ -79,7 +79,7 @@ class chartModel extends model
             if($chart)
             {
                 $chart = $this->processChart($chart);
-                $chart->currentGroup = $group->id;
+                $chart->currentGroup = $groupID;
 
                 return array($chart);
             }
