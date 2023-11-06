@@ -1108,7 +1108,7 @@ class kanbanModel extends model
 
             foreach($actions as $action)
             {
-                if($this->isClickable($lane, $action)) $item['actions'][] = $action;
+                if($this->isClickable($lane, $action)) $item['actionList'][] = $action;
             }
 
             $laneGroup[$lane->group][] = $item;

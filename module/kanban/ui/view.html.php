@@ -41,6 +41,7 @@ foreach($kanbanList as $regionID => $region)
 jsVar('laneCount',  $laneCount);
 jsVar('kanbanLang', $lang->kanban);
 jsVar('columnLang', $lang->kanbancolumn);
+jsVar('laneLang', $lang->kanbanlane);
 jsVar('kanbanID', $kanban->id);
 jsVar('kanban', $kanban);
 jsVar('columnCount', $columnCount);

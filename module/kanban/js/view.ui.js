@@ -4,8 +4,22 @@ window.getLane = function(lane)
     if(laneCount < 2) lane.minHeight = window.innerHeight - 235;
 }
 
+/*
+ * 构造看板泳道上的操作按钮。
+ * Build action buttons on the kanban lane.
+ */
 window.getLaneActions = function(lane)
 {
+    return [{
+        type: 'dropdown',
+        icon: 'ellipsis-v',
+        caret: false,
+        items: [
+            lane.actionList.includes('editLaneName') ? {text: kanbanLang.editLaneName, icon: 'edit',  url: $.createLink('kanban', 'editLaneName', 'id=' + lane.id), 'data-toggle': 'modal'} : null,
+            lane.actionList.includes('editLaneColor') ? {text: kanbanLang.editLaneColor, icon: 'color',  url: $.createLink('kanban', 'editLaneColor', 'id=' + lane.id), 'data-toggle': 'modal'} : null,
+            lane.actionList.includes('deleteLane') ? {text: kanbanLang.deleteLane, icon: 'trash',  url: $.createLink('kanban', 'deleteLane', 'id=' + lane.id), 'data-confirm': laneLang.confirmDelete, 'innerClass': 'ajax-submit'} : null,
+        ],
+    }];
 }
 
 window.getCol = function(col)
