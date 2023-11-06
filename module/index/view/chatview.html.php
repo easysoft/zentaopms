@@ -12,20 +12,20 @@
 <style>
   #chat-container {position: fixed; left: 96px; right: 0; height: calc(100% - 40px); display: none;}
   .menu-hide #chat-container {left: 40px;}
-  #chat-switch {position: absolute; width: 280px; height: 52px; right: 0; background: #fff; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid #eee; z-index: 20;}
+  #chat-switch {position: absolute; width: 330px; height: 52px; right: 0; background: #fff; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid #eee; z-index: 20;}
   .chat-switch-bg {display: flex; justify-content: center; align-items: center; background-color: #eff5ff; border-radius: 16px;}
   .chat-switch-item {width: 96px; padding: 4px 0; border-radius: 16px; text-align: center; color: #838a9c; position: relative; user-select: none;}
   .chat-switch-item.active {font-weight: bold; color: #fff; background-color: #5999fc;}
-  #xuan-chat-view {position: absolute; width: 100%; height: 100%; z-index: 10;}
+  #xuan-chat-view {position: absolute; width: 100%; height: 100%; z-index: 10; display: none;}
   #xuan-chat-view #xx-embed-container {position: absolute; bottom: 0; left: 0; right: 0; top: 0;}
-  #ai-chat-view {position: fixed; right: 0; width: 280px; bottom: 40px; top: 50px;}
-  #ai-chat-frame {height: 100%;}
+  #ai-chat-view {position: fixed; right: 0; width: 330px; bottom: 40px; top: 50px; outline: 1px solid #eee;}
+  #ai-chat-frame {height: 100%; width: 100%;}
 </style>
 <div id="chat-container">
   <div id="chat-switch">
     <div class="chat-switch-bg">
-      <a class="chat-switch-item active" data-value="chat"><?php echo $lang->index->chat->chat; ?></a>
-      <a class="chat-switch-item" data-value="ai"><?php echo $lang->index->chat->ai; ?></a>
+      <a class="chat-switch-item" data-value="chat"><?php echo $lang->index->chat->chat; ?></a>
+      <a class="chat-switch-item active" data-value="ai"><?php echo $lang->index->chat->ai; ?></a>
     </div>
   </div>
   <div id="xuan-chat-view"></div>
@@ -49,16 +49,17 @@
         {
           clearInterval(xuanFrameWaitLoop);
           tries = 0;
-          const chatsMenuWaitLoop = setInterval(function()
+          const chatsViewWaitLoop = setInterval(function()
           {
             if(document.querySelector('#xx-embed-container iframe').contentDocument.querySelector('.app-chats-menu'))
             {
-              clearInterval(chatsMenuWaitLoop);
-              document.querySelector('#xx-embed-container iframe').contentDocument.querySelector('.app-chats-menu').style.top = '48px';
+              clearInterval(chatsViewWaitLoop);
+              document.querySelector('#xx-embed-container iframe').contentDocument.querySelector('.app-chats-menu').style.cssText = 'width: 330px !important; top: 48px;';
+              document.querySelector('#xx-embed-container iframe').contentDocument.querySelector('.app-chats-cache').style.cssText = 'right: 330px !important;';
             }
             else
             {
-              if(++tries > 20) clearInterval(chatsMenuWaitLoop);
+              if(++tries > 20) clearInterval(chatsViewWaitLoop);
             }
           }, 200);
         }

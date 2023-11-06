@@ -54,9 +54,9 @@ if(isset($this->config->xuanxuan->turnon) && $this->config->xuanxuan->turnon && 
 #chatNoticeBadge.show {opacity: 1; transform: scale(1);}
 #xx-embed-container {bottom: 40px!important; z-index: 1010!important;}
 #xx-embed-container .xx-embed-has-animation {transition: min-width .5s ease-out, min-height .5s ease-out, transform, opacity!important;}
-#xx-embed-container .xx-embed {width: 280px; height: 100%; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06)!important;}
+#xx-embed-container .xx-embed {width: 330px; height: 100%; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06)!important;}
 #xx-embed-container .xx-embed.xx-embed-hidden,
-#xx-embed-container .xx-embed.xx-embed-collapsed {width: 280px!important; height: 100%!important; opacity: .7; pointer-events: none; transform: translateY(100%); display: block!important;}
+#xx-embed-container .xx-embed.xx-embed-collapsed {width: 330px!important; height: 100%!important; opacity: .7; pointer-events: none; transform: translateY(100%); display: block!important;}
 #xx-embed-container .xx-embed.has-chat-view {min-width: 1000px!important;}
 #xx-embed-container .xx-embed-body {min-height: initial!important;}
 </style>
@@ -88,7 +88,7 @@ function handleXuanRouteChange(route)
 Xuanxuan.setGlobalOptions(
 {
     position:      'right',
-    width:         280,
+    width:         330,
     preload:       true,
     showHeader:    false,
     onNotice:      handleXuanNoticeChange,
