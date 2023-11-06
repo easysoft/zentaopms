@@ -556,7 +556,7 @@ class productplan extends control
         $planStories = $this->loadModel('story')->getPlanStories($planID);
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($plan->product, "0,{$plan->branch}", $queryID, 'id', '', 'story', array_keys($planStories), $pager);
+            $allStories = $this->story->getBySearch($plan->product, "0,{$plan->branch}", (int)$param, 'id', 0, 'story', array_keys($planStories), $pager);
         }
         else
         {
@@ -566,7 +566,7 @@ class productplan extends control
         $modules = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
         foreach($allStories as $story)
         {
-            if(!isset($modules[$story->module])) $modules += $this->tree->getModulesName($story->module);
+            if(!isset($modules[$story->module])) $modules += $this->tree->getModulesName(array($story->module));
         }
 
         $this->view->allStories = $allStories;
