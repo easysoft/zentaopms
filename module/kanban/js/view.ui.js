@@ -6,7 +6,10 @@ window.getLane = function(lane)
 
 window.getCol = function(col)
 {
-    col.subtitle = `(1 / 5)`; //TODO: 获取col上的卡片数量、在制品限制数量，父类sum子列卡片数
+    /* 计算WIP。*/
+    const limit = col.limit == -1 ? "<i class='icon icon-md icon-infinite'></i>" : col.limit;
+    const cards = columnCount[col.id] || 0;
+    col.subtitle = {html: `(${cards} / ${limit})`};
     col.subtitleClass = 'ml-1';
 }
 

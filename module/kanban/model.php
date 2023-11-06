@@ -779,10 +779,12 @@ class kanbanModel extends model
             $groupData  = array();
 
             $heading = new stdclass();
-            $heading->title = zget($regions, $regionID, '');
+            $heading->title   = zget($regions, $regionID, '');
+            $heading->actions = $this->getRegionActions($kanbanID, $regionID);
 
-            $regionData['key']     = "region{$regionID}";
-            $regionData['heading'] = $heading;
+            $regionData['key']               = "region{$regionID}";
+            $regionData['heading']           = $heading;
+            $regionData['toggleFromHeading'] = true;
 
             $groups = zget($groupGroup, $regionID, array());
             foreach($groups as $group)
@@ -790,12 +792,15 @@ class kanbanModel extends model
                 $lanes = zget($laneGroup, $group->id, array());
                 if(!$lanes) continue;
 
+                $cols  = zget($columnGroup, $group->id, array());
+                $items = zget($cardGroup, $group->id, array());
+
                 $laneCount += count($lanes);
 
                 $groupData['key']           = "group{$group->id}";
                 $groupData['data']['lanes'] = $lanes;
-                $groupData['data']['cols']  = zget($columnGroup, $group->id, array());
-                $groupData['data']['items'] = zget($cardGroup, $group->id, array());
+                $groupData['data']['cols']  = $cols;
+                $groupData['data']['items'] = $items;
 
                 $regionData['items'][] = $groupData;
             }
@@ -805,6 +810,40 @@ class kanbanModel extends model
         }
 
         return $kanbanList;
+    }
+
+    /**
+     * 获取看板区域上的操作按钮。
+     * Get region actions.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @access public
+     * @return array
+     */
+    public function getRegionActions(int $kanbanID, int $regionID): array
+    {
+        $action  = array();
+        $actions = array();
+
+        $action['type']  = 'dropdown';
+        $action['icon']  = 'ellipsis-v';
+        $action['caret'] = false;
+        $action['items'] = array();
+
+        if(common::hasPriv('kanban', 'createRegion')) $action['items'][] = array('text' => $this->lang->kanban->createRegion, 'url' => helper::createLink('kanban', 'createRegion', "kanbanID=$kanbanID"), 'data-toggle' => 'modal', 'icon' => 'plus');
+        if(common::hasPriv('kanban', 'editRegion'))   $action['items'][] = array('text' => $this->lang->kanban->editRegion,   'url' => helper::createLink('kanban', 'editRegion', "kanbanID=$kanbanID"), 'data-toggle' => 'modal', 'icon' => 'edit');
+        if(common::hasPriv('kanban', 'createLane'))   $action['items'][] = array('text' => $this->lang->kanban->createLane,   'url' => helper::createLink('kanban', 'createLane', "kanbanID=$kanbanID&regionID=$regionID"), 'data-toggle' => 'modal', 'icon' => 'plus');
+        if(common::hasPriv('kanban', 'deleteRegion')) $action['items'][] = array('text' => $this->lang->kanban->deleteRegion, 'url' => helper::createLink('kanban', 'deleteRegion', "regionID=$regionID"), 'data-confirm' => $this->lang->kanbanregion->confirmDelete, 'icon' => 'trash', 'innerClass' => 'ajax-submit');
+
+        $action['items'][] = array('type' => 'divider');
+
+        if(commonModel::hasPriv('kanban', 'viewArchivedCard'))   $action['items'][] = array('text' => $this->lang->kanban->viewArchivedCard,   'url' => "javascript:loadMore(\"Card\", $regionID)", 'icon' => 'card-archive');
+        if(commonModel::hasPriv('kanban', 'viewArchivedColumn')) $action['items'][] = array('text' => $this->lang->kanban->viewArchivedColumn, 'url' => "javascript:loadMore(\"Column\", $regionID)", 'icon' => 'col-archive');
+
+        $actions[] = $action;
+
+        return $actions;
     }
 
     /**
@@ -1195,16 +1234,16 @@ class kanbanModel extends model
                     {
                         if($card->fromType == 'execution')
                         {
-                            if($card->execType == 'kanban' and common::hasPriv('execution', 'kanban')) $item['actions'][] = $action;
-                            if($card->execType != 'kanban' and common::hasPriv('execution', 'view')) $item['actions'][] = $action;
+                            if($card->execType == 'kanban' and common::hasPriv('execution', 'kanban')) $item['actionList'][] = $action;
+                            if($card->execType != 'kanban' and common::hasPriv('execution', 'view')) $item['actionList'][] = $action;
                         }
                         else
                         {
-                            if(common::hasPriv($fromType, 'view')) $item['actions'][] = $action;
+                            if(common::hasPriv($fromType, 'view')) $item['actionList'][] = $action;
                         }
                         continue;
                     }
-                    if(common::hasPriv('kanban', $action)) $item['actions'][] = $action;
+                    if(common::hasPriv('kanban', $action)) $item['actionList'][] = $action;
                 }
 
                 $cardGroup[$card->group][$cell->lane][$cell->column][] = $item;
