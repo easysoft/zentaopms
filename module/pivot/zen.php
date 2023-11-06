@@ -205,50 +205,32 @@ class pivotZen extends pivot
     /**
      * Display the built-in pivots in the first dimension.
      *
-     * @param  int    $dimension
-     * @param  object $group
-     * @param  string $currentModule
-     * @param  string $currentMethod
+     * @param  int    $dimensionID
+     * @param  object $currengGroup
      * @access protected
      * @return array
      */
-    protected function getBuiltinMenus(int $dimension, object $group, string $currentModule, string $currentMethod): array
+    protected function getBuiltinMenus(int $dimensionID, object $currentGroup): array
     {
-        $firstDimension = $this->loadModel('dimension')->getFirst();
-        if($dimension != $firstDimension->id) return array();
-
-        $collector = $group->collector;
+        $collector = $currentGroup->collector;
         if(empty($this->lang->pivotList->$collector->lists)) return array();
 
-        $menus         = array();
-        $currentModule = strtolower($currentModule);
-        $currentMethod = strtolower($currentMethod);
+        $menus = array();
 
         ksort($this->lang->pivotList->$collector->lists);
         foreach($this->lang->pivotList->$collector->lists as $item)
         {
-            $items = explode('|', $item . '|');
-            if(count($items) < 4) continue;
+            $items = explode('|', $item);
+            if(count($items) != 3) continue;
 
-            list($label, $module, $method, $params) = $items;
+            $label  = $items[0];
+            $method = $items[2];
 
-            if(!common::hasPriv($module, $method)) continue;
+            if(!common::hasPriv('pivot', $method)) continue;
 
-            $params = helper::safe64Encode($params);
+            $url = inlink('preview', "dimension={$dimensionID}&group={$currentGroup->id}&method={$method}");
 
-            $pivotMenu = new stdclass();
-            $pivotMenu->id     = $module . '_' . $method;
-            $pivotMenu->parent = '0';
-            $pivotMenu->name   = $label;
-            $pivotMenu->url    = inlink('preview', "dimension={$dimension}&group={$group->id}&module={$module}&method={$method}&params={$params}");
-
-            $menus[] = $pivotMenu;
-
-            if($currentModule == strtolower($module) && $currentMethod == strtolower($method))
-            {
-                $this->view->title       = $pivotMenu->name;
-                $this->view->currentMenu = $pivotMenu->id;
-            }
+            $menus[] = (object)array('id' => $method, 'parent' => 0, 'name' => $label, 'url' => $url);
         }
 
         return $menus;
