@@ -2193,18 +2193,30 @@ class storyModel extends model
      * @param  int|string  $branch
      * @param  int         $queryID
      * @param  string      $orderBy
-     * @param  string      $executionID
+     * @param  int|array   $executionID
      * @param  string      $type requirement|story
      * @param  string      $excludeStories
      * @param  object      $pager
      * @access public
      * @return array
      */
-    public function getBySearch(int $productID, int|string $branch = '', int $queryID = 0, string $orderBy = '', int $executionID = 0, string $type = 'story', array|string $excludeStories = '', object|null $pager = null): array
+    public function getBySearch(int $productID, int|string $branch = '', int $queryID = 0, string $orderBy = '', int|array $executionID = 0, string $type = 'story', array|string $excludeStories = '', object|null $pager = null): array
     {
         $this->loadModel('product');
         $executionID = empty($executionID) ? 0 : $executionID;
-        $products    = empty($executionID) ? $this->product->getList(0, 'all', 0, 0, 'all') : $this->product->getProducts($executionID);
+        if(is_array($executionID))
+        {
+            $products = array();
+            foreach($executionID as $id)
+            {
+                $productList = $this->product->getProducts($id);
+                $products   += $productList;
+            }
+        }
+        else
+        {
+            $products = empty($executionID) ? $this->product->getList(0, 'all', 0, 0, 'all') : $this->product->getProducts($executionID);
+        }
 
         $this->loadModel('search')->setQuery('story', $queryID);
 
