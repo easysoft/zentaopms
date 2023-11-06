@@ -706,6 +706,8 @@ class executionZen extends execution
             $task->status       = 'wait';
             $task->openedDate   = $now;
             $task->openedBy     = $this->app->user->account;
+            $task->estStarted   = $task->estStarted ? $task->estStarted : null;
+            $task->deadline     = $task->deadline ? $task->deadline : null;
 
             if($task->estimate !== '') $task->left = $task->estimate;
             if(!empty($task->assignedTo)) $task->assignedDate = $now;
