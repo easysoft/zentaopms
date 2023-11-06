@@ -17,6 +17,27 @@ featureBar
     (
         set::text($lang->goback),
         set::url(createLink('gitlab', 'browseProject', "gitlabID={$gitlabID}")),
+    ),
+    form
+    (
+        setID('searchForm'),
+        setClass('ml-4'),
+        set::actions(array()),
+        formRow
+        (
+            input
+            (
+                set::placeholder($lang->gitlab->tag->placeholderSearch),
+                set::name('keyword'),
+                set::value($keyword)
+            ),
+            btn
+            (
+                setClass('primary'),
+                $lang->gitlab->search,
+                on::click('search')
+            )
+        )
     )
 );
 hasPriv('instance', 'manage') ? toolBar

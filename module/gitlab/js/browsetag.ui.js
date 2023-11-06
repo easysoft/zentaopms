@@ -7,3 +7,8 @@ window.renderCell = function(result, info)
 
     return result;
 }
+
+function search()
+{
+    loadPage({method:'post', data: {keyword: $('#keyword').val()}, target: '#table-gitlab-browseproject>*'});
+}
