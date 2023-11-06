@@ -20,6 +20,7 @@
   #xuan-chat-view #xx-embed-container {position: absolute; bottom: 0; left: 0; right: 0; top: 0;}
   #ai-chat-view {position: fixed; right: 0; width: 330px; bottom: 40px; top: 50px; outline: 1px solid #eee;}
   #ai-chat-frame {height: 100%; width: 100%;}
+  .unconfigured {position: absolute; width: 330px; padding: 20px; right: 0; top: 50px; bottom: 0; background: #fff; outline: 1px solid #eee;}
 </style>
 <div id="chat-container">
   <div id="chat-switch">
@@ -28,9 +29,17 @@
       <a class="chat-switch-item active" data-value="ai"><?php echo $lang->index->chat->ai; ?></a>
     </div>
   </div>
-  <div id="xuan-chat-view"></div>
+  <div id="xuan-chat-view">
+    <?php if(!isset($this->config->xuanxuan->turnon) || !$this->config->xuanxuan->turnon || $this->loadModel('im')->getXxdStatus() != 'online'): ?>
+      <div class="unconfigured text-gray"><?php echo sprintf($lang->index->chat->unconfiguredFormat, $lang->index->chat->chat, (common::hasPriv('setting', 'xuanxuan') ? sprintf($lang->index->chat->goConfigureFormat, helper::createLink('setting', 'xuanxuan'), $lang->index->chat->chat) : $lang->index->chat->contactAdminForHelp)); ?></div>
+    <?php endif; ?>
+  </div>
   <div id="ai-chat-view">
-    <iframe id="ai-chat-frame" src="<?php echo helper::createLink('ai', 'chat'); ?>" frameborder="no" allowtransparency="true" scrolling="auto" hidefocus></iframe>
+    <?php if($this->loadModel('ai')->isModelConfigured() && commonModel::hasPriv('ai', 'chat')): ?>
+      <iframe id="ai-chat-frame" src="<?php echo helper::createLink('ai', 'chat'); ?>" frameborder="no" allowtransparency="true" scrolling="auto" hidefocus></iframe>
+    <?php else: ?>
+      <div class="unconfigured text-gray"><?php echo sprintf($lang->index->chat->unconfiguredFormat, $lang->index->chat->ai, (common::hasPriv('ai', 'models') ? sprintf($lang->index->chat->goConfigureFormat, helper::createLink('ai', 'models'), $lang->index->chat->ai) : $lang->index->chat->contactAdminForHelp)); ?></div>
+    <?php endif; ?>
   </div>
 </div>
 <script>

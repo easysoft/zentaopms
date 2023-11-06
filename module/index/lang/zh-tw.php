@@ -19,3 +19,6 @@ $lang->index->website        = '請訪問官網';
 $lang->index->chat = new stdclass();
 $lang->index->chat->chat = '聊天';
 $lang->index->chat->ai   = 'AI 對話';
+$lang->index->chat->unconfiguredFormat  = '尚未配置 %s 功能，%s。';
+$lang->index->chat->goConfigureFormat   = '點擊前往 <a class="text-primary" href="%s">%s 配置頁面</a> 進行功能配置';
+$lang->index->chat->contactAdminForHelp = '請聯繫管理員進行功能配置';

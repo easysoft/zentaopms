@@ -19,3 +19,6 @@ $lang->index->website        = '请访问官网';
 $lang->index->chat = new stdclass();
 $lang->index->chat->chat = '聊天';
 $lang->index->chat->ai   = 'AI 对话';
+$lang->index->chat->unconfiguredFormat  = '尚未配置 %s 功能，%s。';
+$lang->index->chat->goConfigureFormat   = '点击前往 <a class="text-primary" href="%s">%s 配置页面</a> 进行功能配置';
+$lang->index->chat->contactAdminForHelp = '请联系管理员进行功能配置';
