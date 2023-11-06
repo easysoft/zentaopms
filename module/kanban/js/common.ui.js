@@ -9,8 +9,8 @@ window.changeSpaceType = function()
 window.changeKanbanType = function()
 {
     const type = $('[name=type]:checked').val();
-    $('.params').toggleClass('hidden', type == 'private');
-    $('.whitelistBox').toggleClass('hidden', type != 'private');
+    const url  = $.createLink('kanban', 'create', 'spaceID=' + spaceID + '&type=' + type);
+    loadPartial(url, '#WIPCountBox, #spaceBox, #nameBox, #ownerBox, #teamBox, #fixedColBox, #autoColBox, #archiveBox, #manageProgressBox, #alignmentBox, #descBox, #whitelistBox');
 }
 
 window.loadAllUsers = function()

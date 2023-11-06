@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('spaceID', $spaceID);
 jsVar('spaceType', $type);
 
 modalHeader(set::title($lang->kanban->create), set::titleClass('article-h1'));
@@ -89,7 +90,7 @@ formPanel
     formRow
     (
         set::id('ownerBox'),
-        set::className('params ' . ($type == 'private' ? 'hidden' : '')),
+        set::className($type == 'private' ? 'hidden' : ''),
         formGroup
         (
             set::width('1/2'),
@@ -118,7 +119,7 @@ formPanel
     formRow
     (
         set::id('teamBox'),
-        set::className('params ' . ($type == 'private' ? 'hidden' : '')),
+        set::className($type == 'private' ? 'hidden' : ''),
         formGroup
         (
             set::label($lang->kanban->team),
@@ -269,7 +270,7 @@ formPanel
     formRow
     (
         set::id('whitelistBox'),
-        set::className('whitelistBox ' . ($type != 'private' ? 'hidden' : '')),
+        set::className($type != 'private' ? 'hidden' : ''),
         formGroup
         (
             set::label($lang->whitelist),
