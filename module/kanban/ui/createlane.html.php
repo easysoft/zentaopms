@@ -14,6 +14,7 @@ modalHeader(set::title($lang->kanban->createLane), set::titleClass('article-h1')
 formPanel
 (
     on::change('[name=mode]', 'changeMode'),
+    set::labelWidth('140px'),
     formRow
     (
         formGroup

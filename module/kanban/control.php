@@ -495,7 +495,10 @@ class kanban extends control
             $actionID = $this->action->create('kanbanregion', $regionID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateRegionName', 'params' => array($regionID, $this->post->name))));
+            $region     = $this->kanban->getRegionByID($regionID);
+            $kanbanData = $this->kanban->getKanbanData($region->kanban, array($regionID));
+            $kanbanData = reset($kanbanData);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $regionID, $kanbanData))));
         }
 
         $this->view->region  = $this->kanban->getRegionByID($regionID);
