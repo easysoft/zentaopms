@@ -84,6 +84,8 @@ detailBody
             set::data(array_values($tableData)),
             set::fixedLeftWidth('0.5'),
             set::checkable($hasCheckbox),
+            set::orderBy($orderBy),
+            set::sortLink(createLink('testsuite', 'view', "suiteID={$suite->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
             set::footToolbar($footToolbar),
             set::footPager(usePager('pager', 'short')),
         ),
