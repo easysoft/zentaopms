@@ -50,7 +50,7 @@ if(isset($this->config->xuanxuan->turnon) && $this->config->xuanxuan->turnon && 
 <style>
 #chatBtn {padding: 3px; position: relative;}
 #chatBtn .icon {font-size: 24px;}
-#chatNoticeBadge {position: absolute; top: -4px; right: -2px; line-height: 14px; height: 14px; min-width: 14px; text-align: center; display: inline-block; font-size: 12px; border-radius: 7px; opacity: 0; transform: scale(0); transition: .2s; transition-property: transform, opacity; padding: 0 2px;}
+#chatNoticeBadge {position: absolute; bottom: 4px; right: 0; line-height: 14px; height: 14px; min-width: 14px; text-align: center; display: inline-block; font-size: 12px; border-radius: 7px; opacity: 0; transform: scale(0); transition: .2s; transition-property: transform, opacity; padding: 0 2px;}
 #chatNoticeBadge.show {opacity: 1; transform: scale(1);}
 #xx-embed-container {z-index: 1010!important;}
 #xx-embed-container .xx-embed-has-animation {transition: min-width .5s ease-out, min-height .5s ease-out, transform, opacity!important;}
