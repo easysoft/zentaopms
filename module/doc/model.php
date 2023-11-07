@@ -1697,11 +1697,11 @@ class docModel extends model
             if($append and !isset($products[$append])) $products[$append] = $this->product->getByID($append);
             foreach($products as $id => $product)
             {
-                if($product->status == 'normal' and $product->PO == $this->app->user->account)
+                if($product->status != 'closed' and $product->PO == $this->app->user->account)
                 {
                     $myObjects[$id] = $product->name;
                 }
-                elseif($product->status == 'normal' and !($product->PO == $this->app->user->account))
+                elseif($product->status != 'closed' and !($product->PO == $this->app->user->account))
                 {
                     $normalObjects[$id] = $product->name;
                 }
