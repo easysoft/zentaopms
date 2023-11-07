@@ -36,17 +36,17 @@ featureBar
     (
         set::className('ml-4'),
         $lang->testtask->beginAndEnd,
-        input
+        datePicker
         (
+            setClass('w-28'),
             set::name('begin'),
-            set::type('date'),
             set::value($beginTime),
         ),
         $lang->testtask->to,
-        input
+        datePicker
         (
+            setClass('w-28'),
             set::name('end'),
-            set::type('date'),
             set::value($endTime),
         )
     )
