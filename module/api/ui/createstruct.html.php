@@ -89,6 +89,7 @@ formPanel
                     select
                     (
                         setClass('objectType'),
+                        set::name(''),
                         set::value('object'),
                         set::items($lang->api->paramsTypeOptions)
                     )
