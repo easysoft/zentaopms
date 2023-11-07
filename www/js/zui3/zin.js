@@ -189,13 +189,59 @@
         if(DEBUG) zui.Messager.show({content: 'ZIN: load an old page.', close: false});
     }
 
+    function layoutNanavbar(immediate)
+    {
+        if(!immediate)
+        {
+            if(layoutNanavbar.timer) clearTimeout(layoutNanavbar.timer);
+            layoutNanavbar.timer = setTimeout(() => layoutNanavbar(true), 50);
+            return;
+        }
+
+        const $navbar = $('#navbar');
+        if(!$navbar.length) return;
+
+        const $nav = $navbar.children('.nav');
+        let layout = $nav.data('_layout');
+        let itemPadding = 12;
+        let dividerMargin = 8;
+        if(!layout)
+        {
+            layout = {itemCount: 0, contentWidth: 0, dividerCount: 0};
+            $nav.find('.nav-item,.nav-divider').each(function()
+            {
+                const $item = $(this);
+                if($item.hasClass('nav-divider'))
+                {
+                    layout.dividerCount++;
+                }
+                else
+                {
+                    layout.itemCount++;
+                    layout.contentWidth += $item.width() - (itemPadding * 2);
+                }
+            });
+            $nav.data('_layout', layout);
+        }
+
+        const totalWidth = $navbar.width();
+        const maxWidth = totalWidth - (2 * itemPadding) - (2 * Math.max($('#heading').outerWidth() || 0, $('#toolbar').outerWidth() || 0));
+        let width = Math.ceil((layout.itemCount * 2 * itemPadding) + layout.contentWidth + layout.dividerCount + (layout.dividerCount * dividerMargin * 2));
+        const fixSize = width > maxWidth ? Math.ceil((width - maxWidth) / (2 * (layout.itemCount + layout.dividerCount))) : 0;
+        itemPadding -= Math.min(7, fixSize);
+        dividerMargin -= Math.min(7, fixSize);
+        $nav.css({'--nav-item-padding': itemPadding + 'px', '--nav-divider-margin': dividerMargin + 'px'}).toggleClass('compact', fixSize > 6).toggleClass('compact-extra', fixSize > 8);
+    }
+
     function updateNavbar(data)
     {
         const $navbar = $('#navbar');
+
         const $newNav = $(data);
         if($newNav.text().trim() !== $navbar.text().trim() || $newNav.find('.nav-item>a').map((_, element) => element.href).get().join(' ') !== $navbar.find('.nav-item>a').map((_, element) => element.href).get().join(' ')) return $navbar.empty().append($newNav);
 
         activeNav($newNav.find('.nav-item>a.active').data('id'), $navbar);
+        layoutNanavbar();
     }
 
     function updateHeading(data)
@@ -214,6 +260,7 @@
         {
             $heading.html(data);
         }
+        layoutNanavbar();
     }
 
     function activeNav(activeID, nav)
@@ -284,7 +331,13 @@
     function renderPage(list, options)
     {
         if(DEBUG) console.log('[APP] ', 'render:', list);
-        list.forEach(item => renderPartial(item, options));
+        let hasUpdatePage = false;
+        list.forEach(item =>
+        {
+            renderPartial(item, options);
+            if(item.name === 'html' || item.name === 'body') hasUpdatePage = true;
+        });
+        if(hasUpdatePage) updatePageLayout();
         if(!options.partial)
         {
             const newState = $.apps.updateApp(currentCode, currentAppUrl, document.title);
@@ -1021,35 +1074,12 @@
         }, _interval);
     }
 
-    function setImageSize(image, maxWidth, maxHeight)
+    function updatePageLayout()
     {
-        var $image = $(image);
-        if($image.parent().prop('tagName').toLowerCase() == 'a') return;
-
-        /* If not set maxWidth, set it auto. */
-        if(!maxWidth)
-        {
-            bodyWidth = $('body').width();
-            maxWidth  = bodyWidth - 470; // The side bar's width is 336, and add some margins.
-        }
-        if(!maxHeight) maxHeight = $(top.window).height();
-
-        setTimeout(function()
-        {
-            maxHeightStyle = $image.height() > 0 ? 'max-height:' + maxHeight + 'px' : '';
-            if(!document.getElementsByClassName('xxc-embed').length && $image.width() > 0 && $image.width() > maxWidth) $image.attr('width', maxWidth);
-            $image.wrap('<a href="' + $image.attr('src') + '" style="display:inline-block;position:relative;overflow:hidden;' + maxHeightStyle + '" target="_blank"></a>');
-            if($image.height() > 0 && $image.height() > maxHeight) $image.closest('a').append("<a href='###' class='showMoreImage' onclick='showMoreImage(this)'>" + lang.expand + " <i class='icon-angle-down'></i></a>");
-        }, 50);
+        layoutNanavbar();
     }
 
-    function showMoreImage(obj)
-    {
-        $(obj).parents('a').css('max-height', 'none');
-        $(obj).remove();
-    }
-
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage});
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk, waitDom: waitDom});
     $.extend($.apps, {openUrl: openUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 
@@ -1119,6 +1149,9 @@
         if(data.app) return openPage(data.url + (data.selector ? (' ' + data.selector) : ''), data.app);
         loadPage(data.url, data.selector);
     });
+
+    /* Auto layout UI. */
+    $(window).on('resize', updatePageLayout);
 
     if(!isInAppTab)
     {
