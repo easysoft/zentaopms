@@ -1158,7 +1158,7 @@ class gitlab extends control
         {
             $data = fixer::input('post')->get();
 
-            $accounts = array_filter($data->accounts);
+            $accounts = array_filter($data->account);
             if(count($accounts) != count(array_unique($accounts))) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->group->repeatError));
 
             $repo        = $this->loadModel('repo')->getByID($repoID);
@@ -1179,10 +1179,10 @@ class gitlab extends control
             foreach($accounts as $key => $account)
             {
                 /* If the user has set permissions, check whether they are bound. */
-                if(!empty($data->levels[$key]))
+                if(!empty($data->access_level[$key]))
                 {
                     if(!isset($bindedUsers[$account])) return $this->send(array('result' => 'fail', 'message' => $users[$account] . ' ' . $this->lang->gitlab->project->notbindedError));
-                    $newGitlabMembers[$bindedUsers[$account]] = (object) array('access_level' => $data->levels[$key], 'expires_at' => $data->expires[$key]);
+                    $newGitlabMembers[$bindedUsers[$account]] = (object) array('access_level' => $data->access_level[$key], 'expires_at' => $data->expires_at[$key]);
                 }
             }
 
@@ -1259,8 +1259,8 @@ class gitlab extends control
             }
 
             $repo->acl->users = array_values($accounts);
-            $this->dao->update(TABLE_REPO)->data(array('acl'=>json_encode($repo->acl)))->where('id')->eq($repoID)->exec();
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('repo', 'maintain')));
+            $this->dao->update(TABLE_REPO)->data(array('acl' => json_encode($repo->acl)))->where('id')->eq($repoID)->exec();
+            return $this->sendSuccess(array('load' => helper::createLink('gitlab', 'browseProject', "gitlabID={$repo->gitService}")));
         }
 
         $repo           = $this->loadModel('repo')->getByID($repoID);
@@ -1281,6 +1281,7 @@ class gitlab extends control
             if(isset($projectMember->id) and isset($bindedUsers[$projectMember->id]))
             {
                 $account                  = $bindedUsers[$projectMember->id];
+                $projectMember->account   = $account;
                 $userAccessData[$account] = $projectMember;
             }
         }
