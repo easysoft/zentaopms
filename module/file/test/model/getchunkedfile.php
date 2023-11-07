@@ -10,12 +10,6 @@ title=测试 fileModel->getChunkedFile();
 cid=1
 pid=1
 
-测试获取上传image1时的文件信息 >> png,img1,3021,/tmp/phpsjisk
-测试获取上传image2时的文件信息 >> png,img2,3281,/tmp/phpsjisk
-测试获取上传image3时的文件信息 >> png,img3,938,/tmp/phpsjisk
-测试获取上传image4时的文件信息 >> png,img4,4821,/tmp/phpsjisk
-测试获取上传image5时的文件信息 >> png,img5,9870,/tmp/phpsjisk
-
 */
 
 $_SERVER['HTTP_X_FILENAME']     = 'a.png';

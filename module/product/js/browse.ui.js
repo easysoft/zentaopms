@@ -52,6 +52,7 @@ window.renderCell = function(result, info)
         const story = info.row.data;
         let html = '';
         if(typeof modulePairs[story.rawModule] != 'undefined') html += "<span class='label gray-pale rounded-xl clip'>" + modulePairs[story.rawModule] + "</span> ";
+        if(story.parent > 0) html += "<span class='label gray-pale rounded-xl clip'>" + childrenAB + "</span> ";
         if(html) result.unshift({html});
     }
     return result;

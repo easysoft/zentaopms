@@ -285,6 +285,7 @@ if($app->rawModule == 'projectstory' && !empty($project))
 
 data('storyBrowseType', $storyBrowseType);
 
+jsVar('childrenAB',     $lang->story->childrenAB);
 jsVar('projectID',      $projectID);
 jsVar('modulePairs',    $modulePairs);
 jsVar('checkedSummary', str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary));
