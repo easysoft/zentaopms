@@ -28,18 +28,22 @@ toolbar
 );
 
 $config->testcase->actionList['runResult']['url'] = array('module' => 'testtask', 'method' => 'results', 'params' => 'runID={id}&caseID={case}');
-$config->testtask->unitgroup->dtable->fieldList['actions']['list']         = $config->testcase->actionList;
-$config->testtask->unitgroup->dtable->fieldList['id']['name']              = 'case';
-$config->testtask->unitgroup->dtable->fieldList['title']['link']['params'] = 'caseID={case}';
-$config->testtask->unitgroup->dtable->fieldList['bugs']['link']['params']  = 'runID={id}&caseID={case}';
 
-$runs = initTableData($runs, $config->testtask->unitgroup->dtable->fieldList);
+$cols = $config->testtask->unitgroup->dtable->fieldList;
+$cols['actions']['list']         = $config->testcase->actionList;
+$cols['actions']['width']        = '60px';
+$cols['id']['name']              = 'case';
+$cols['title']['link']['params'] = 'caseID={case}';
+$cols['bugs']['link']['params']  = 'runID={id}&caseID={case}';
+foreach($cols as $field => $param) $cols[$field]['sortType'] = false;
+
+$runs = initTableData($runs, $cols);
 
 dtable
 (
     set::id('groupCaseTable'),
     set::userMap($users),
-    set::cols($config->testtask->unitgroup->dtable->fieldList),
+    set::cols($cols),
     set::data($runs),
     set::plugins(array('cellspan')),
     set::onRenderCell(jsRaw('window.onRenderCell')),
