@@ -75,6 +75,8 @@ dtable
     set::data($data),
     set::userMap($users),
     set::fixedLeftWidth('20%'),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('testtask', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&beginTime={$beginTime}&endTime={$endTime}")),
     set::footer(array(array('html' => $footerHTML), 'flex', 'pager')),
     set::footPager(usePager()),
 );
