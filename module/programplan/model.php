@@ -1209,7 +1209,7 @@ class programplanModel extends model
         if(empty($stage) || empty($stage->path)) return false;
 
         $project = $this->loadModel('project')->getByID($stage->project);
-        if(isset($project->model) && $project->model != 'waterfall' && $project->model != 'waterfallplus') return false;
+        if(empty($stage) or empty($stage->path) or (!in_array($project->model, array('waterfall','waterfallplus','ipd')))) return false;
 
         $action       = strtolower($action);
         $parentIdList = explode(',', trim($stage->path, ','));
