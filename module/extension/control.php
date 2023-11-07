@@ -360,8 +360,10 @@ class extension extends control
 
         $this->extension->executeDB($extension, 'uninstall');
         $this->extension->updateExtension($extension, array('status' => 'available'));
+        $this->extension->togglePackageDisable($extension, 'disabled');
+
+        $this->view->title          = $this->lang->extension->uninstallFinished;
         $this->view->removeCommands = $this->extension->removePackage($extension);
-        $this->view->title = $this->lang->extension->uninstallFinished;
 
         if($postUninstallHook = $this->extension->getHookFile($extension, 'postuninstall')) include $postUninstallHook;
         $this->display();
@@ -388,6 +390,7 @@ class extension extends control
             }
         }
 
+        $this->extension->togglePackageDisable($extension, 'active');
         $this->extension->copyPackageFiles($extension);
         $this->extension->updateExtension($extension, array('status' => 'installed'));
         $this->view->title      = $this->lang->extension->activateFinished;
@@ -405,6 +408,7 @@ class extension extends control
     public function deactivate($extension)
     {
         $this->extension->updateExtension($extension, array('status' => 'deactivated'));
+        $this->extension->togglePackageDisable($extension, 'disabled');
         $this->view->removeCommands = $this->extension->removePackage($extension);
         $this->view->title      = $this->lang->extension->deactivateFinished;
         $this->view->position[] = $this->lang->extension->deactivateFinished;
@@ -435,6 +439,8 @@ class extension extends control
             $tmpName   = $_FILES['file']['tmp_name'];
             $fileName  = $_FILES['file']['name'];
             $dest      = $this->app->getTmpRoot() . "extension/$fileName";
+
+            if(!is_dir(dirname($dest))) mkdir(dirname($dest));
             if(!move_uploaded_file($tmpName, $dest))
             {
                 $downloadPath = $this->app->getTmpRoot() . 'extension/';
