@@ -59,18 +59,16 @@ else
             ),
             inputGroup
             (
-                input
+                datePicker
                 (
-                    set::type('date'),
                     set::id('begin'),
                     set::name('begin'),
                     set::value($begin),
                     on::change('loadCommit'),
                 ),
                 $lang->to,
-                input
+                datePicker
                 (
-                    set::type('date'),
                     set::id('end'),
                     set::name('end'),
                     set::value($end),
