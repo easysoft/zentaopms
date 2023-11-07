@@ -25,7 +25,7 @@ if($canSwitch)
             $url = createLink('testcase', 'browse', "productID={$product->id}&branch=&browseType=all&param=0&caseType={$type}");
         }
 
-        $caseTypeItems[] = array('text' => $typeName ?: $lang->testcase->allType, 'url' => $url);
+        $caseTypeItems[] = array('text' => $typeName ?: $lang->testcase->allType, 'url' => $url, 'active' => $type == 'unit');
     }
 }
 
