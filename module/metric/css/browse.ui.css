@@ -15,3 +15,5 @@
 .clear-gap {gap: 0 !important;}
 .dtable-cell-html {width: inherit;}
 .dtable-name-flex {display: flex; justify-content: space-between;}
+
+#mainMenu+#mainContent>.sidebar-left {margin-top: 0;}
