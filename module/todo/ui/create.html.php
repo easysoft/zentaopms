@@ -137,7 +137,7 @@ formPanel
                 ),
                 control
                 (
-                    set::type('date'),
+                    set::type('datePicker'),
                     set::id('configDate'),
                     set::name('config[date]'),
                     set::className('cycle-date'),
