@@ -12,48 +12,51 @@
 class dimensionModel extends model
 {
     /**
-     * Get dimension by ID.
+     * 根据 id 获取一个维度对象。
+     * Get a dimension object by id.
      *
      * @param  int    $dimensionID
      * @access public
      * @return object
      */
-    public function getByID($dimensionID)
+    public function getByID(int $dimensionID): object
     {
         return $this->dao->select('*')->from(TABLE_DIMENSION)->where('id')->eq($dimensionID)->fetch();
     }
 
     /**
-     * Get first dimension.
+     * 获取第一个维度对象。
+     * Get the first dimension object.
      *
      * @access public
      * @return object
      */
-    public function getFirst()
+    public function getFirst(): object
     {
         return $this->dao->select('*')->from(TABLE_DIMENSION)->where('deleted')->eq('0')->orderBy('id')->limit(1)->fetch();
     }
 
     /**
-     * Get dimension list.
+     * 获取维度对象数组。
+     * Get dimension object array.
      *
      * @access public
      * @return array
      */
-    public function getList()
+    public function getList(): array
     {
         return $this->dao->select('*')->from(TABLE_DIMENSION)->where('deleted')->eq('0')->fetchAll('id');
     }
 
     /**
-     * Set switcher menu and save last dimension.
+     * 获取当前的维度 ID 并保存到数据库中。
+     * Get current dimension ID and save to database.
      *
      * @param  int    $dimensionID
-     * @param  string $type         screen | pivot | chart
      * @access public
-     * @return void
+     * @return int
      */
-    public function getDimension($dimensionID = 0, $type = '')
+    public function getDimension(int $dimensionID = 0): int
     {
         $dimensionID = $this->saveState($dimensionID);
         $this->loadModel('setting')->setItem($this->app->user->account . 'common.dimension.lastDimension', $dimensionID);
@@ -62,28 +65,42 @@ class dimensionModel extends model
     }
 
     /**
-     * Save dimension state.
+     * 把维度 ID 保存到 session 中并返回。
+     * Save dimension ID to session and return.
      *
      * @param  int    $dimensionID
      * @access public
      * @return int
      */
-    public function saveState($dimensionID)
+    public function saveState(int $dimensionID): int
     {
-        $dimensions = $this->getList();
+        /* 如果维度 ID 为空，尝试从数据库中获取最后一次记录的维度。*/
+        /* If dimension ID is empty, try to get the last dimension from database. */
+        if(!$dimensionID && !empty($this->config->dimensions->lastDimension)) $dimensionID = $this->config->dimensions->lastDimension;
 
-        /* When the session do not exist, get it from the database. */
-        if(empty($dimensionID) and isset($this->config->dimension->lastDimension) and isset($dimensions[$this->config->dimension->lastDimension]))
+        /* 如果维度 ID 为空，尝试从 session 中获取维度。*/
+        /* If dimension ID is empty, try to get dimension from session. */
+        if(!$dimensionID && $this->session->dimension) $dimensionID = $this->session->dimension;
+
+        /* 如果维度 ID 不为空，检查对应的对象是否存在。*/
+        /* If dimension ID is not empty, check if the object exists. */
+        if($dimensionID)
         {
-            $this->session->set('dimension', $this->config->dimension->lastDimension, $this->app->tab);
-            return $this->session->dimension;
+            $dimension = $this->getByID($dimensionID);
+            if(!$dimension) $dimensionID = 0;
         }
 
-        if($dimensionID == 0 and $this->session->dimension)        $dimensionID = $this->session->dimension;
-        if($dimensionID == 0 or !isset($dimensions[$dimensionID])) $dimensionID = key($dimensions);
+        /* 如果维度 ID 为空，尝试从数据库中获取第一个维度。*/
+        /* If dimension ID is empty, try to get the first dimension from database. */
+        if(!$dimensionID)
+        {
+            $dimension = $this->getFirst();
+            if($dimension) $dimensionID = $dimension->id;
+        }
 
+        /* 把维度 ID 保存到 session 中并返回。*/
+        /* Save dimension ID to session and return. */
         $this->session->set('dimension', (int)$dimensionID, $this->app->tab);
-
         return $this->session->dimension;
     }
 }
