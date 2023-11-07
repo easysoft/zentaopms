@@ -275,11 +275,11 @@ $(function()
 
             if(task.nav.formType === 'table')
             {
-                fieldSelector = 'input[type="checkbox"]';
-                var $checkboxes = $form.find(fieldSelector);
-                targetStatus.form = $checkboxes.filter(':checked').length > 0;
+                fieldSelector = '.dtable-checkbox';
+                var $checkboxes = $$(fieldSelector).eq(1);
+                targetStatus.form = $checkboxes.hasClass('checked');
                 if(!targetStatus.form) {
-                    targetStatus.waitField = $checkboxes.filter(':not(:checked):first').closest('td');
+                    targetStatus.waitField = $checkboxes.closest('div');
                 }
             }
             else if(requiredFields)
@@ -311,6 +311,7 @@ $(function()
                 var onSubmit = function(e)
                 {
                     var status = checkTask();
+                    console.log('检查表单的状态', status);
                     if(!status.submitOK)
                     {
                         if(status.waitField)
@@ -336,13 +337,44 @@ $(function()
                     {
                         finishTask();
                     }
-                    e.preventDefault();
-                    e.stopPropagation();
+
+                    if(e)
+                    {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+
                     return false;
                 }
+
                 $form = $form.is('form') ? $form : $form.find('form').last();
-                if(task.nav.submit) $form.on('click.tutorial', task.nav.submit, onSubmit);
-                else $form.submit(onSubmit);
+                if($form.length)
+                {
+                    if(task.nav.submit) $form.on('click.tutorial', task.nav.submit, onSubmit);
+                    else $form.submit(onSubmit);
+                }
+                else
+                {
+                    $checkbox = $$(task.nav.target).on('click', function(){
+                        var current = this
+                        setTimeout(
+                            function()
+                            {
+                                console.log(task.nav.submit, $$(task.nav.submit))
+                                if($(current).hasClass('checked'))
+                                {
+                                    highlight($$(task.nav.submit))
+                                    showToolTip($$(task.nav.submit), $submitTarget.text(), {placement: 'top'});
+                                }
+
+                                $$(task.nav.submit).on('click', function(){
+                                    finishTask();
+                                })
+                            },
+                            500
+                        )
+                    });
+                }
             }
 
             if(targetStatus.form)

@@ -33,7 +33,7 @@ $footToolbar['items'][] = array
 (
     'type'  => 'btn-group',
     'items' => array(
-        array('text' => $lang->save, 'className' => "btn size-sm batch-btn ajax-btn", 'btnType' => 'secondary', 'data-url' => createLink('execution', 'linkStory', "objectID=$object->id")),
+        array('text' => $lang->save, 'className' => "btn size-sm batch-btn ajax-btn link-story-btn", 'btnType' => 'secondary', 'data-url' => commonModel::isTutorialMode() ? '' :  createLink('execution', 'linkStory', "objectID=$object->id")),
     )
 );
 

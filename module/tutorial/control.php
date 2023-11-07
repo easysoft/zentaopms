@@ -12,7 +12,9 @@
 class tutorial extends control
 {
     /**
-     * Start page
+     * 新手教程开始页面。
+     * Tutorial start page.
+     *
      * @access public
      * @return void
      */
@@ -23,7 +25,9 @@ class tutorial extends control
     }
 
     /**
-     * Index page
+     * 新手教程页面。
+     * Tutorial page.
+     *
      * @access public
      * @return void
      */
@@ -43,11 +47,12 @@ class tutorial extends control
     }
 
     /**
+     * Ajax设置任务。
      * Ajax set tasks
      *
      * @param  string $finish
      * @access public
-     * @return void
+     * @return string
      */
     public function ajaxSetTasks($finish = 'keepAll')
     {
@@ -62,7 +67,8 @@ class tutorial extends control
     }
 
     /**
-     * Exit tutorial mode
+     * 退出新手教程模式。
+     * Exit tutorial mode.
      *
      * @param  string $referer
      * @access public
@@ -77,6 +83,7 @@ class tutorial extends control
     }
 
     /**
+     * 通过ajax退出新手教程模式。
      * Ajax quit tutorial mode
      *
      * @access public
@@ -90,6 +97,7 @@ class tutorial extends control
     }
 
     /**
+     * 导向页面。
      * Wizard.
      *
      * @param  string $module
@@ -135,6 +143,7 @@ class tutorial extends control
     }
 
     /**
+     * 通过ajax保存新手教程结果。
      * Ajax save novice result.
      *
      * @param  string $novice
@@ -150,6 +159,7 @@ class tutorial extends control
     }
 
     /**
+     * 通过ajax保存新手教程进度。
      * Ajax save tutorial score.
      *
      * @access public
