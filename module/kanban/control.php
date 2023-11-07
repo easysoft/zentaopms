@@ -403,8 +403,6 @@ class kanban extends control
         $kanbanIdList = $this->kanban->getCanViewObjects();
         if(!$this->app->user->admin and !in_array($kanbanID, $kanbanIdList)) return print(js::error($this->lang->kanban->accessDenied) . js::locate('back'));
 
-        $this->kanban->setSwitcher($kanban);
-
         $userList    = array();
         $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
         foreach($avatarPairs as $account => $avatar)
@@ -919,7 +917,6 @@ class kanban extends control
     public function batchCreateCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0)
     {
         $kanban = $this->kanban->getById($kanbanID);
-        $this->kanban->setSwitcher($kanban);
 
         if($_POST)
         {
@@ -1940,7 +1937,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function ajaxGetKanbanMenu($kanbanID, $moduleName, $methodName)
+    public function ajaxGetDropMenu($kanbanID, $moduleName, $methodName)
     {
         $kanbanIdList = $this->kanban->getCanViewObjects();
         $spacePairs   = $this->kanban->getSpacePairs('showClosed');
@@ -1955,6 +1952,7 @@ class kanban extends control
         $this->view->spaceList = $spacePairs;
         $this->view->module    = $moduleName;
         $this->view->method    = $methodName;
+        $this->view->link      = $this->createLink('kanban', 'view', 'id={id}');
         $this->display();
     }
 

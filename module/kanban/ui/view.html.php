@@ -1,6 +1,8 @@
 <?php
 namespace zin;
 
+dropmenu(set::tab('kanban'), set::objectID($kanban->id));
+
 $laneCount   = 0;
 $columnCount = array();
 $parentCols  = array();
