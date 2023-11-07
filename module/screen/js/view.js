@@ -28,3 +28,4 @@ self["MonacoEnvironment"] = (function(paths) {
 location.hash = '#/chart/preview/' + screen.id;
 window.chartData = screen.chartData;
 window.location.replace(window.location.href.toString().replace(window.location.hash, '')+'#/chart/preview/' + screen.id)
+window.fetchChartApi = createLink('screen', 'ajaxGetChart');
