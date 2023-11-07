@@ -132,25 +132,46 @@ class api extends control
             $this->view->typeList = $this->api->getTypeList($libID);
         }
 
-        $this->view->lib            = $lib;
-        $this->view->release        = $release;
-        $this->view->isFirstLoad    = $isFirstLoad;
-        $this->view->title          = $this->lang->api->pageTitle;
-        $this->view->libID          = $libID;
-        $this->view->apiID          = $apiID;
-        $this->view->libs           = $libs;
-        $this->view->browseType     = $browseType;
-        $this->view->objectType     = $objectType;
-        $this->view->objectID       = $objectID;
-        $this->view->moduleID       = $moduleID;
-        $this->view->version        = $version;
-        $this->view->libTree        = $this->doc->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType, $param);
-        $this->view->users          = $this->user->getPairs('noclosed,noletter');
-        $this->view->objectDropdown = isset($libs[$libID]) ? $this->generateLibsDropMenu($libs[$libID], $release) : '';
-        $this->view->spaceType      = 'api';
-        $this->view->linkParams     = '%s';
+        $this->view->lib               = $lib;
+        $this->view->release           = $release;
+        $this->view->isFirstLoad       = $isFirstLoad;
+        $this->view->title             = $this->lang->api->pageTitle;
+        $this->view->libID             = $libID;
+        $this->view->apiID             = $apiID;
+        $this->view->libs              = $libs;
+        $this->view->browseType        = $browseType;
+        $this->view->objectType        = $objectType;
+        $this->view->objectID          = $objectID;
+        $this->view->moduleID          = $moduleID;
+        $this->view->version           = $version;
+        $this->view->libTree           = $this->doc->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType, $param);
+        $this->view->users             = $this->user->getPairs('noclosed,noletter');
+        $this->view->objectDropdown    = isset($libs[$libID]) ? $this->generateLibsDropMenu($libs[$libID], $release) : '';
+        $this->view->spaceType         = 'api';
+        $this->view->linkParams        = '%s';
+        $this->view->defaultNestedShow = $this->getDefacultNestedShow($libID, $moduleID);
 
         $this->display();
+    }
+
+    /**
+     * 设置文档树默认展开的节点。
+     * Set the default expanded nodes of the document tree.
+     *
+     * @param  int       $libID
+     * @param  int       $moduleID
+     * @access protected
+     * @return array
+     */
+    protected function getDefacultNestedShow(int $libID, int $moduleID): array
+    {
+        if(!$libID && !$moduleID) return array();
+        if($libID && !$moduleID) return array("{$libID}" => true);
+
+        $module = $this->loadModel('tree')->getByID($moduleID);
+        $path   = explode(',', trim($module->path, ','));
+        $path   = implode(':', $path);
+        return array("{$libID}:{$path}" => true);
     }
 
     /**
