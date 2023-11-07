@@ -273,6 +273,8 @@ class product extends control
         /* Set menu when page come from program. */
         if($this->app->tab == 'program') common::setMenuVars('program', 0);
 
+        if($this->config->vision == 'or') unset($this->lang->product->statusList['normal']);
+
         /* 构造批量编辑页面表单配置数据。*/
         $this->productZen->buildBatchEditForm($programID, $productIdList);
     }
