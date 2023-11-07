@@ -455,7 +455,6 @@ formPanel
                 datePicker
                 (
                     set::name('begin'),
-                    set::type('date'),
                     set('id', 'begin'),
                     set::value($execution->begin),
                     set::placeholder($lang->execution->begin),
@@ -465,7 +464,6 @@ formPanel
                 datePicker
                 (
                     set::name('end'),
-                    set::type('date'),
                     set('id', 'end'),
                     set::value($execution->end),
                     set::placeholder($lang->execution->end),
