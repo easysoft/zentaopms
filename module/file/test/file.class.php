@@ -93,30 +93,6 @@ class fileTest
     }
 
     /**
-     * Test get uploaded file from zui.uploader.
-     *
-     * @param  array  $image
-     * @param  array  $files
-     * @access public
-     * @return object
-     */
-    public function getUploadFileTest($image, $files)
-    {
-        $_FILES['file'] = $files;
-
-        foreach($image as $key => $value) $_POST[$key] = $value;
-
-        $object = $this->objectModel->getUploadFile($htmlTagName = 'file');
-
-        unset($_POST);
-        unset($_FILES['file']);
-
-        if(dao::isError()) return dao::getError();
-
-        return $object;
-    }
-
-    /**
      * Test get extension of a file.
      *
      * @param  string $filename
