@@ -16,6 +16,7 @@
   .chat-switch-bg {display: flex; justify-content: center; align-items: center; background-color: #eff5ff; border-radius: 16px;}
   .chat-switch-item {width: 96px; padding: 4px 0; border-radius: 16px; text-align: center; color: #838a9c; position: relative; user-select: none;}
   .chat-switch-item.active {font-weight: bold; color: #fff; background-color: #5999fc;}
+  .chat-switch-item.has-notice::after {content: ''; position: absolute; right: 26px; top: 4px; width: 6px; height: 6px; border-radius: 50%; background-color: #ff535d;}
   #xuan-chat-view {position: absolute; width: 100%; height: 100%; z-index: 10; display: none;}
   #xuan-chat-view #xx-embed-container {position: absolute; bottom: 0; left: 0; right: 0; top: 0;}
   #ai-chat-view {position: fixed; right: 0; width: 330px; bottom: 40px; top: 50px; outline: 1px solid #eee;}
@@ -52,6 +53,13 @@
     {
       document.querySelector('#xuan-chat-view').prepend(document.querySelector('#xx-embed-container'));
 
+      /* Update badge on chat. */
+      window.xuan._options.onNotice = function(notice)
+      {
+        window.handleXuanNoticeChange(notice);
+        $('.chat-switch-item[data-value="chat"]').toggleClass('has-notice', !!notice.count);
+      }
+
       /* Set style into xuan frame. */
       let tries = 0;
       const xuanFrameWaitLoop = setInterval(function()
@@ -67,6 +75,8 @@
               clearInterval(chatsViewWaitLoop);
               document.querySelector('#xx-embed-container iframe').contentDocument.querySelector('.app-chats-menu').style.cssText = 'width: 330px !important; top: 48px;';
               document.querySelector('#xx-embed-container iframe').contentDocument.querySelector('.app-chats-cache').style.cssText = 'right: 330px !important;';
+              document.querySelector('#xx-embed-container iframe').contentDocument.querySelector('.app-chats-menu-search').style.cssText = 'padding: 10px 8px !important;';
+              document.querySelector('#xx-embed-container iframe').contentDocument.querySelector('.app-chats-menu-search .btn:first-child').style.cssText = 'display: none;';
             }
             else
             {
