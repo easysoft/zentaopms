@@ -4023,7 +4023,7 @@ class kanbanModel extends model
                 }
                 return $object->archived == '1';
             case 'archivecolumn' :
-                if($object->archived != '0') return false;    // The column has been archived.
+                return $object->archived == '0';    // The column has been archived.
             case 'deletecolumn' :
                 if($object->deleted != '0') return false;
 
@@ -4036,8 +4036,14 @@ class kanbanModel extends model
                     ->fetch('count');
 
                 return $count > 1;
-            case 'sortColumn' :
-                if($object->deleted != '0') return false;
+            case 'sortcolumn' :
+                return $object->deleted == '0';
+            case 'finishcard' :
+                return $object->status != 'done';
+            case 'activatecard' :
+                return $object->status == 'done';
+            case 'deletecard' :
+                return $object->deleted == '0';
         }
 
         return true;
@@ -4101,4 +4107,6 @@ class kanbanModel extends model
         $kanbanData = reset($kanbanData);
         return array('name' => 'updateKanbanRegion', 'params' => array('region' . $regionID, $kanbanData));
     }
+
+
 }

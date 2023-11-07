@@ -995,7 +995,7 @@ class kanban extends control
             $this->action->logHistory($actionID, $changes);
 
             $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
 
         $this->view->card    = $this->kanban->getCardByID($cardID);

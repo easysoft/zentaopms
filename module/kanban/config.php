@@ -7,6 +7,11 @@ $config->kanban->require->createregion = 'name';
 $config->kanban->require->createlane   = 'name';
 $config->kanban->require->createcolumn = 'name';
 
+$config->kanban->actions = new stdclass();
+$config->kanban->actions->view = array();
+$config->kanban->actions->viewcard['mainActions']   = array('editCard', 'finishCard', 'activateCard', 'archiveCard');
+$config->kanban->actions->viewcard['suffixActions'] = array('deleteCard');
+
 $config->kanban->setwip        = new stdclass();
 $config->kanban->setlane       = new stdclass();
 $config->kanban->setlaneColumn = new stdclass();
