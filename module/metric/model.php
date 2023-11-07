@@ -136,7 +136,7 @@ class metricModel extends model
             $metric->oldUnit     = $oldMetric->unit;
             $metric->collectType = $oldMetric->collectType;
             $metric->collectConf = $oldMetric->collectConf;
-            $metric->execTime    = $oldMetric->execTime;
+        $metric->execTime    = $oldMetric->execTime;
         }
 
         return $metric;
@@ -296,6 +296,17 @@ class metricModel extends model
         return $excutableMetrics;
     }
 
+    public function clearMetricLib()
+    {
+        $nowDate = date('Y-m-d');
+
+        $this->dao->delete()->from(TABLE_METRICLIB)
+            ->where('date')->like("$nowDate%")
+            ->exec();
+
+        return dao::isError();
+    }
+
     /**
      * 插入度量库数据。
      * Insert into metric lib.
@@ -304,7 +315,7 @@ class metricModel extends model
      * @access public
      * @return void
      */
-    public function insertmetricLib($records)
+    public function insertMetricLib($records)
     {
         $this->dao->begin();
         foreach($records as $record)
@@ -369,7 +380,7 @@ class metricModel extends model
     {
         $calcList = $this->getExecutableCalcList();
 
-        include $this->metricTao->getBaseCalcPath();
+        include_once $this->metricTao->getBaseCalcPath();
         $calcInstances = array();
         foreach($calcList as $id => $calc)
         {
