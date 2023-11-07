@@ -25,9 +25,9 @@ formPanel
                 set::inline(true),
                 set::name('turnon'),
                 set::items($lang->message->browserSetting->turnonList),
-                set::value($browserConfig->turnon),
-            ),
-        ),
+                set::value($browserConfig->turnon)
+            )
+        )
     ),
     formRow
     (
@@ -36,15 +36,15 @@ formPanel
             set::width('1/2'),
             set::label($lang->message->browserSetting->pollTime),
             set::name('pollTime'),
-            set::value($browserConfig->pollTime),
+            set::value($browserConfig->pollTime)
         ),
         formGroup
         (
             setClass('content-center ml-2'),
             set::width('1/2'),
-            $lang->message->browserSetting->pollTimePlaceholder,
-        ),
-    ),
+            $lang->message->browserSetting->pollTimePlaceholder
+        )
+    )
 );
 
 render();

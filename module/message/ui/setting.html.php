@@ -12,6 +12,7 @@ namespace zin;
 
 /* First row. */
 $messageSetting = is_string($config->message->setting) ? json_decode($config->message->setting, true) : $config->message->setting;
+
 $headerThs = array(h::th());
 foreach($lang->message->typeList as $type => $typeName)
 {
@@ -24,9 +25,10 @@ foreach($lang->message->typeList as $type => $typeName)
             set::name("type-{$type}"),
             set::value(1),
             set::text($typeName),
-        ),
+        )
     );
 }
+
 $bodyTrs = array();
 foreach($config->message->objectTypes as $objectType => $actions)
 {
@@ -42,9 +44,9 @@ foreach($config->message->objectTypes as $objectType => $actions)
                 set::id("objectType-{$objectType}"),
                 set::name("objectType-{$objectType}"),
                 set::value(1),
-                set::text($objectTypes[$objectType]),
-            ),
-        ),
+                set::text($objectTypes[$objectType])
+            )
+        )
     );
     foreach($lang->message->typeList as $type => $typeName)
     {
@@ -69,7 +71,7 @@ foreach($config->message->objectTypes as $objectType => $actions)
                     set::title($value),
                     set::value($key),
                     set::checked(strpos(",{$selected},", ",{$key},") !== false),
-                    set::text($value),
+                    set::text($value)
                 );
             }
             if(isset($config->message->condition[$type][$objectType]))
@@ -85,7 +87,7 @@ foreach($config->message->objectTypes as $objectType => $actions)
                         set::name("messageSetting[{$type}][condition][{$objectType}][{$condition}][]"),
                         set::items($list),
                         set::value(isset($messageSetting[$type]['condition'][$objectType][$condition]) ? join(',', $messageSetting[$type]['condition'][$objectType][$condition]) : ''),
-                        set::multiple(true),
+                        set::multiple(true)
                     );
                 }
             }
@@ -96,17 +98,14 @@ foreach($config->message->objectTypes as $objectType => $actions)
             (
                 setClass('flex content-center items-center flex-wrap'),
                 $cell
-            ),
+            )
         );
     }
     $bodyTrs[] = h::tr($bodyTr);
 }
 $bodyTrs[] = h::tr
 (
-    h::td
-    (
-        $lang->message->blockUser,
-    ),
+    h::td($lang->message->blockUser),
     h::td
     (
         picker
@@ -114,9 +113,9 @@ $bodyTrs[] = h::tr
             set::name("blockUser"),
             set::items($users),
             set::value(isset($config->message->blockUser) ? $config->message->blockUser: ''),
-            set::multiple(true),
-        ),
-    ),
+            set::multiple(true)
+        )
+    )
 );
 
 panel
@@ -127,9 +126,9 @@ panel
         (
             setClass('table condensed bordered'),
             h::thead(h::tr($headerThs)),
-            h::tbody($bodyTrs),
-        ),
-    ),
+            h::tbody($bodyTrs)
+        )
+    )
 );
 
 render();
