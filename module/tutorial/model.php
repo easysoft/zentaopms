@@ -12,12 +12,13 @@
 class tutorialModel extends model
 {
     /**
-     * Check novice.
+     * 检查新手模式配置。
+     * Check novice mode config.
      *
      * @access public
      * @return bool
      */
-    public function checkNovice()
+    public function checkNovice(): bool
     {
         $account = $this->app->user->account;
         if($account == 'guest') return false;
@@ -32,34 +33,37 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式产品键值对。
      * Get tutorial product pairs.
      *
      * @access public
      * @return array
      */
-    public function getProductPairs()
+    public function getProductPairs(): array
     {
         return array(1 => 'Test product');
     }
 
     /**
+     * 获取新手模式模块键值对。
      * Get module pairs for tutorial.
      *
      * @access public
      * @return array
      */
-    public function getModulePairs()
+    public function getModulePairs(): array
     {
         return array(1 => 'Test module');
     }
 
     /**
+     * 获取新手模式产品信息。
      * Get tutorial product.
      *
      * @access public
      * @return object
      */
-    public function getProduct()
+    public function getProduct(): object
     {
         $product = new stdclass();
         $product->id             = 1;
@@ -90,12 +94,13 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式产品统计数据。
      * Get product stats for tutorial.
      *
      * @access public
      * @return array
      */
-    public function getProductStats()
+    public function getProductStats(): array
     {
         $product = $this->getProduct();
         $product->stories = array();
@@ -135,12 +140,13 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式项目。
      * Get project for tutorial;
      *
      * @access public
      * @return object
      */
-    public function getProject()
+    public function getProject(): object
     {
         $project = new stdclass();
         $project->id           = 2;
@@ -181,24 +187,26 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式项目键值对。
      * Get tutorial project pairs.
      *
      * @access public
      * @return array
      */
-    public function getProjectPairs()
+    public function getProjectPairs(): array
     {
         return array(2 => 'Test Project');
     }
 
     /**
+     * 获取新手模式项目统计数据。
      * Get project stats for tutorial
      *
      * @param  string $browseType
      * @access public
      * @return array
      */
-    public function getProjectStats($browseType = '')
+    public function getProjectStats($browseType = ''): array
     {
         $project   = $this->getProject();
         $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
@@ -215,13 +223,14 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式执行统计数据。
      * Get execution stats for tutorial.
      *
      * @param  string $browseType
      * @access public
      * @return array
      */
-    public function getExecutionStats($browseType = '')
+    public function getExecutionStats($browseType = ''): array
     {
         $execution = $this->getProject();
         $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
@@ -245,12 +254,13 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式故事点。
      * Get tutorial stories.
      *
      * @access public
      * @return array
      */
-    public function getStories()
+    public function getStories(): array
     {
         $story = new stdclass();
         $story->id             = 1;
@@ -299,23 +309,25 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式执行键值对。
      * Get tutorial Execution pairs.
      *
      * @access public
      * @return array
      */
-    public function getExecutionPairs()
+    public function getExecutionPairs(): array
     {
         return array(3 => 'Test execution');
     }
 
     /**
+     * 获取新手模式执行。
      * Get tutorial execution.
      *
      * @access public
      * @return object
      */
-    public function getExecution()
+    public function getExecution(): object
     {
         /* Fix bug #21097. */
         $hours = new stdclass();
@@ -368,24 +380,26 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式执行的产品。
      * Get tutorial execution products.
      *
      * @access public
      * @return array
      */
-    public function getExecutionProducts()
+    public function getExecutionProducts(): array
     {
         $product = $this->getProduct();
         return array($product->id => $product);
     }
 
     /**
+     * 获取新手模式执行的故事点。
      * Get tutorial execution stories.
      *
      * @access public
      * @return array
      */
-    public function getExecutionStories()
+    public function getExecutionStories(): array
     {
         $stories = $this->getStories();
         $story   = $stories[0];
@@ -393,12 +407,13 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式执行的故事点键值对。
      * Get tutorial execution story pairs.
      *
      * @access public
      * @return array
      */
-    public function getExecutionStoryPairs()
+    public function getExecutionStoryPairs(): array
     {
         $stories = $this->getStories();
         $story   = $stories[0];
@@ -406,12 +421,13 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式团队成员。
      * Get tutorial team members.
      *
      * @access public
      * @return array
      */
-    public function getTeamMembers()
+    public function getTeamMembers(): array
     {
         $member = new stdclass();
         $member->project     = 1;
@@ -428,24 +444,26 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取团队成员键值对。
      * Get team members pairs.
      *
      * @access public
      * @return array
      */
-    public function getTeamMembersPairs()
+    public function getTeamMembersPairs(): array
     {
         $account = $this->app->user->account;
         return array('' => '', $account => $this->app->user->realname);
     }
 
     /**
+     * 获取新手模式用户键值对。
      * Get tutorial user pairs.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getUserPairs()
+    public function getUserPairs(): array
     {
         $account = $this->app->user->account;
 
@@ -456,12 +474,13 @@ class tutorialModel extends model
     }
 
     /**
+     * 获取新手模式进度。
      * Get tutorialed.
      *
      * @access public
-     * @return string
+     * @return object
      */
-    public function getTutorialed()
+    public function getTutorialed(): object
     {
         return $this->dao->select('*')->from(TABLE_CONFIG)->where('module')->eq('tutorial')->andWhere('owner')->eq($this->app->user->account)->andWhere('section')->eq('tasks')->andWhere('`key`')->eq('setting')->fetch('value');
     }

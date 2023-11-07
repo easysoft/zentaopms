@@ -100,7 +100,7 @@ panel
         (
             set('class', 'panel-title w-full justify-between'),
             $block->title,
-            a(
+            !commonModel::isTutorialMode() ? a(
                 set(
                     array(
                         'href' => createLink('tutorial', 'start'),
@@ -109,7 +109,7 @@ panel
                     )
                 ),
                 $lang->block->tutorial
-            )
+            ) : null
         )
     ),
     div
