@@ -18,10 +18,9 @@ formPanel
     (
         set::width('1/3'),
         set::label($lang->testcase->reviewedDateAB),
-        input
+        datePicker
         (
             set::name('reviewedDate'),
-            set::type('date'),
             set::value(helper::today()),
         )
     ),
