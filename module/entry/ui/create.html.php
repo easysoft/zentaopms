@@ -93,7 +93,6 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->entry->key),
-            set::placeholder($lang->entry->note->key),
             set::name('key'),
             set::value(md5((string)rand())),
             set::readonly(true)
