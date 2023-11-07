@@ -753,7 +753,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getKanbanData($kanbanID, $regionIDList = '')
+    public function getKanbanData($kanbanID, $regionIDList = '', $groupID = 0)
     {
         $regions = $this->getRegionPairs($kanbanID);
 
@@ -4095,5 +4095,21 @@ class kanbanModel extends model
     {
         if(!preg_match("/^-?\d+$/", $count) or $count <= DEFAULT_CARDCOUNT or $count > MAX_CARDCOUNT) dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
         return !dao::isError();
+    }
+
+    /**
+     * 获取看板动态刷新的回调函数数组。
+     * Get kanban callback data.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @access public
+     * @return void
+     */
+    public function getKanbanCallback($kanbanID, $regionID)
+    {
+        $kanbanData = $this->getKanbanData($kanbanID, $regionID);
+        $kanbanData = reset($kanbanData);
+        return array('name' => 'updateKanbanRegion', 'params' => array('region' . $regionID, $kanbanData));
     }
 }
