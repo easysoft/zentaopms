@@ -22,7 +22,7 @@ $generateData = function() use ($lang, $title, $cols, $workload, $depts, $dept, 
         div
         (
             setID('conditions'),
-            setClass('flex gap-4 bg-canvas p-2'),
+            setClass('flex gap-2 bg-canvas p-2'),
             on::change('loadWorkload'),
             inputGroup
             (
@@ -38,9 +38,9 @@ $generateData = function() use ($lang, $title, $cols, $workload, $depts, $dept, 
             (
                 setClass('w-1/3'),
                 $lang->pivot->beginAndEnd,
-                input(set(array('name' => 'begin', 'type' => 'date', 'value' => $begin))),
+                datePicker(set(array('name' => 'begin', 'value' => $begin))),
                 $lang->pivot->to,
-                input(set(array('name' => 'end', 'type' => 'date', 'value' => $end))),
+                datePicker(set(array('name' => 'end', 'value' => $end))),
             ),
             inputGroup
             (
@@ -50,7 +50,7 @@ $generateData = function() use ($lang, $title, $cols, $workload, $depts, $dept, 
             ),
             div
             (
-                setClass('flex gap-4 w-1/3'),
+                setClass('flex gap-2 w-1/3'),
                 inputGroup
                 (
                     setClass('w-5/12'),

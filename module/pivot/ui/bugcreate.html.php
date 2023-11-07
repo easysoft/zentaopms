@@ -26,9 +26,9 @@ $generateData = function() use ($lang, $title, $cols, $bugs, $products, $executi
             (
                 setClass('w-5/12'),
                 $lang->pivot->bugOpenedDate,
-                input(set(array('name' => 'begin', 'type' => 'date', 'value' => $begin))),
+                datePicker(set(array('name' => 'begin', 'value' => $begin))),
                 $lang->pivot->to,
-                input(set(array('name' => 'end', 'type' => 'date', 'value' => $end))),
+                datePicker(set(array('name' => 'end', 'value' => $end))),
             ),
             inputGroup
             (
