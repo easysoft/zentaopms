@@ -51,10 +51,10 @@ sidebar
 (
     moduleMenu(set(array
     (
-        'modules'   => $deptTree,
-        'activeKey' => $type == 'bydept' ? $param : 0,
+        'modules'     => $deptTree,
+        'activeKey'   => $type == 'bydept' ? $param : 0,
         'settingLink' => $settingLink,
-        'closeLink' => $closeLink,
+        'closeLink'   => $closeLink,
         'showDisplay' => false,
         'settingText' => $lang->dept->manage,
     )))
