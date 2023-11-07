@@ -133,7 +133,7 @@ window.getItem = function(info)
         beginAndEnd = formatDate(begin) + ' ~ ' + formatDate(end);
     }
 
-    let avatar = "<span class='avatar rounded-full size-xs ml-1 " + (info.item.uavatar ? 'primary' : 'bg-lighter text-canvas') + "'>" + (info.item.uavatar ? info.item.uavatar : "<i class='icon icon-person'></i>");
+    let avatar = "<span class='avatar rounded-full size-xs ml-1 " + (info.item.uavatar ? 'primary' : 'bg-lighter text-canvas') + "' title=" +  info.item.realname + '>' + (info.item.uavatar ? info.item.uavatar : "<i class='icon icon-person'></i>");
 
     const content = `
       <div class='flex items-center'>

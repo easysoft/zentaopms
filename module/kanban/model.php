@@ -1212,6 +1212,7 @@ class kanbanModel extends model
 
         $actions     = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild', 'viewTicket', 'activateCard', 'finishCard');
         $userAvatars = $this->loadModel('user')->getAvatarPairs();
+        $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $cardGroup   = array();
         foreach($cellList as $cell)
         {
@@ -1236,6 +1237,7 @@ class kanbanModel extends model
                 $item['group']    = $card->group;
                 $item['region']   = $card->region;
                 $item['color']    = $card->color;
+                $item['realname'] = zget($users, $card->assignedTo, '');
                 $item['fromType'] = $card->fromType;
 
                 $userAvatar = zget($userAvatars, $card->assignedTo, '');
