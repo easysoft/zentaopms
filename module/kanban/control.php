@@ -735,10 +735,10 @@ class kanban extends control
             $this->kanban->splitColumn($columnID);
             if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
 
-            $column      = $this->kanban->getColumnById($columnID);
-            $region      = $this->kanban->getRegionByID($column->region);
-            $kanbanGroup = $this->kanban->getKanbanData($region->kanban, $region->id);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($column->region, $kanbanGroup))));
+            $column   = $this->kanban->getColumnById($columnID);
+            $region   = $this->kanban->getRegionByID($column->region);
+            $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
 
         $this->view->column = $this->kanban->getColumnByID($columnID);
@@ -1644,9 +1644,9 @@ class kanban extends control
             }
             elseif($from == 'kanban')
             {
-                $region      = $this->kanban->getRegionByID($column->region);
-                $kanbanGroup = $this->kanban->getKanbanData($region->kanban, $region->id);
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($column->region, $kanbanGroup))));
+                $region   = $this->kanban->getRegionByID($column->region);
+                $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
             }
             else
             {
@@ -1783,8 +1783,9 @@ class kanban extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateColumnName', 'params' => array($columnID, $this->post->name, $this->post->color))));
+            $region   = $this->kanban->getRegionByID($column->region);
+            $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
 
         $this->view->canEdit = $from == 'RDKanban' ? 0 : 1;
