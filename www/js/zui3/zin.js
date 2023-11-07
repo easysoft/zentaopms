@@ -337,7 +337,7 @@
             renderPartial(item, options);
             if(item.name === 'html' || item.name === 'body') hasUpdatePage = true;
         });
-        if(hasUpdatePage) setImageSize();
+        if(hasUpdatePage) updatePageLayout();
         if(!options.partial)
         {
             const newState = $.apps.updateApp(currentCode, currentAppUrl, document.title);
@@ -1179,7 +1179,7 @@
     });
 
     /* Auto layout UI. */
-    $(window).on('resize', setImageSize);
+    $(window).on('resize', updatePageLayout);
 
     if(!isInAppTab)
     {
