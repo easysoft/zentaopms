@@ -2647,11 +2647,11 @@ class kanbanModel extends model
      * @param  int    $laneID
      * @param  int    $colID
      * @param  string $type story|task|bug|card
-     * @param  int    $cardID
+     * @param  string $cardID
      * @access public
      * @return void
      */
-    public function addKanbanCell(int $kanbanID, int $laneID, int $colID, string $type, int $cardID = 0): void
+    public function addKanbanCell(int $kanbanID, int $laneID, int $colID, string $type, string $cardID = ''): void
     {
         $cell = $this->dao->select('id, cards')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($kanbanID)

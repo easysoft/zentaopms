@@ -14,6 +14,22 @@ jsVar('regionID', $regionID);
 jsVar('groupID',  $groupID);
 jsVar('columnID', $columnID);
 jsVar('methodName', $this->app->rawMethod);
+
+$config->kanban->dtable->card->fieldList['title']['map'] = $kanbanPairs;
+foreach($cards2Imported as $card)
+{
+    $assignedToList = '';
+    if($card->assignedTo)
+    {
+        foreach(explode(',', $card->assignedTo) as $assignedTo)
+        {
+            $userName = zget($users, $assignedTo, '');
+            if($userName) $assignedToList .= $userName . ' ';
+        }
+        $card->assignedTo = $assignedToList;
+    }
+}
+
 featureBar
 (
     inputGroup
