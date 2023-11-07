@@ -978,6 +978,11 @@ class screenModel extends model
                 return $this->buildCardChart($component, $chart);
                 break;
             case 'line':
+                if($chart->builtin == '0')
+                {
+                    $chart->sql = $this->setFilterSQL($chart);
+                    return $this->getLineChartOption($component, $chart, $filters);
+                }
                 return $this->buildLineChart($component, $chart);
                 break;
             case 'bar':
