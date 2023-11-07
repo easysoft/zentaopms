@@ -27,7 +27,7 @@ window.changeProduct = function()
 {
     const targetID = $('[name=product]').val();
     const url      = $.createLink('kanban', methodName, 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID + '&targetID=' + targetID);
-    loadPartial(url, '#planForm');
+    loadPartial(url, '#linkForm');
 }
 
 window.changeKanbanType = function()

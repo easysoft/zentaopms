@@ -1,6 +1,6 @@
 <?php
 /**
- * The importplan view file of kanban module of ZenTaoPMS.
+ * The importrelease view file of kanban module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuting Wang <wangyuting@easycorp.ltd>
@@ -14,6 +14,23 @@ jsVar('regionID', $regionID);
 jsVar('groupID',  $groupID);
 jsVar('columnID', $columnID);
 jsVar('methodName', $this->app->rawMethod);
+
+foreach($releases2Imported as $release)
+{
+    $projects = '';
+    $builds   = '';
+    if($release->builds)
+    {
+        foreach($release->builds as $build)
+        {
+            $builds   .= $build->name . ' ';
+            $projects .= $build->projectName . ' ';
+        }
+        $release->build   = $builds;
+        $release->project = $projects;
+    }
+}
+
 featureBar
 (
     inputGroup
@@ -25,11 +42,9 @@ featureBar
     )
 );
 
-unset($config->productplan->dtable->fieldList['title']['link']);
-unset($config->productplan->dtable->fieldList['title']['nestedToggle']);
-unset($config->productplan->dtable->fieldList['branch']);
-unset($config->productplan->dtable->fieldList['execution']);
-unset($config->productplan->dtable->fieldList['actions']);
+unset($config->release->dtable->fieldList['title']['link']);
+unset($config->release->dtable->fieldList['branch']);
+unset($config->release->dtable->fieldList['actions']);
 
 formBase
 (
@@ -38,12 +53,11 @@ formBase
     set::className('mt-2'),
     dtable
     (
-        set::id('linkPlan'),
         set::fixedLeftWidth('0.33'),
         set::checkable(true),
-        set::cols(array_values($config->productplan->dtable->fieldList)),
-        set::data(array_values($plans2Imported)),
-        set::footToolbar(array('items' => array(array('text' => $lang->kanban->importCard, 'btnType' => 'primary', 'className' => 'size-sm importcardBtn batch-btn', 'data-url'  => inlink('importplan', "kanbanID=$kanbanID&regionID=$regionID&groupID=$groupID&columnID=$columnID&selectedProductID=$selectedProductID"))))),
+        set::cols(array_values($config->release->dtable->fieldList)),
+        set::data(array_values($releases2Imported)),
+        set::footToolbar(array('items' => array(array('text' => $lang->kanban->importCard, 'btnType' => 'primary', 'className' => 'size-sm importcardBtn batch-btn', 'data-url'  => inlink('importrelease', "kanbanID=$kanbanID&regionID=$regionID&groupID=$groupID&columnID=$columnID&selectedProductID=$selectedProductID"))))),
         set::footPager(usePager())
     )
 );
