@@ -13,7 +13,7 @@ namespace zin;
 featureBar
 (
     set::current($type),
-    set::linkParams("projectID={$projectID}&executionID={$executionID}&type={key}&orderBy={$orderBy}"),
+    set::linkParams("projectID={$projectID}&executionID={$executionID}&type={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
 );
 
 toolbar
@@ -29,12 +29,7 @@ toolbar
 );
 
 jsVar('markerTitle', $lang->release->marker);
-jsVar('showBranch', $showBranch);
-jsVar('products', $products);
-jsVar('orderBy', $orderBy);
-jsVar('sortLink', helper::createLink('projectrelease', 'browse', "projectID={$project->id}&executionID={$executionID}&type={$type}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
-jsVar('type', $type);
-jsVar('canViewProjectbuild', common::hasPriv('projectbuild', 'view'));
+jsVar('canViewProjectbuild', hasPriv('projectbuild', 'view'));
 
 if(!$showBranch) unset($config->projectrelease->dtable->fieldList['branch']);
 $config->projectrelease->dtable->fieldList['product']['map'] = $products;
@@ -46,6 +41,7 @@ dtable
     set::data($tableData),
     set::fixedLeftWidth('0.33'),
     set::onRenderCell(jsRaw('window.renderCell')),
+    set::sortLink(createLink('projectrelease', 'browse', "projectID={$project->id}&executionID={$executionID}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer([jsRaw("function(){return {html: '{$pageSummary}'};}"), 'flex', 'pager']),
     set::footPager(usePager()),
 );
