@@ -2721,8 +2721,10 @@ class gitlabModel extends model
      */
     public function manageTagPrivs($gitlabID, $projectID, $protected = array())
     {
-        $data = (array)fixer::input('post')->get();
-        extract($data);
+        $data         = fixer::input('post')->get();
+        $tags         = $data->name;
+        $createLevels = $data->createAccess;
+
         $failure = array();
 
         /* Remove privs. */

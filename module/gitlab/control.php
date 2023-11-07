@@ -1486,10 +1486,7 @@ class gitlab extends control
         }
 
         $hasAccessTags = $this->gitlab->apiGetTagPrivs($gitlabID, $projectID, '', 'name_asc');
-        foreach($hasAccessTags as $tag)
-        {
-            $tag->createAccess = $this->gitlab->checkAccessLevel($tag->create_access_levels);
-        }
+        foreach($hasAccessTags as $tag) $tag->createAccess = $this->gitlab->checkAccessLevel($tag->create_access_levels);
 
         if(!empty($_POST))
         {
@@ -1498,18 +1495,15 @@ class gitlab extends control
 
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => inlink('browseProject', "gitlabID=$gitlabID")));
         }
-        $allTags      = $this->gitlab->apiGetTags($gitlabID, $projectID);
-        $noAccessTags = array();
-        foreach($allTags as $tag)
-        {
-            if(!isset($hasAccessTags[$tag->name])) $noAccessTags[$tag->name] = $tag->name;
-        }
+        $allTags  = $this->gitlab->apiGetTags($gitlabID, $projectID);
+        $tagPairs = array();
+        foreach($allTags as $tag) $tagPairs[$tag->name] = $tag->name;
 
         $this->view->title         = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseTagPriv;
         $this->view->gitlabID      = $gitlabID;
         $this->view->projectID     = $projectID;
         $this->view->hasAccessTags = $hasAccessTags;
-        $this->view->noAccessTags  = $noAccessTags;
+        $this->view->tagPairs      = $tagPairs;
         $this->display();
     }
 }
