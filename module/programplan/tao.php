@@ -294,6 +294,11 @@ class programplanTao extends programplanModel
 
         $today       = helper::today();
         $isMilestone = "<icon class='icon icon-flag icon-sm red'></icon> ";
+        foreach($plans as $plan)
+        {
+            $plan->isParent = false;
+            if(isset($plans[$plan->parent])) $plans[$plan->parent]->isParent = true;
+        }
 
         foreach($plans as $plan)
         {
@@ -319,6 +324,7 @@ class programplanTao extends programplanModel
             $data->realBegan     = $realBegan ? substr($realBegan, 0, 10) : '';
             $data->realEnd       = $realEnd ? substr($realEnd, 0, 10) : '';
             $data->parent        = $plan->grade == 1 ? 0 :$plan->parent;
+            $data->isParent      = $plan->isParent
             $data->open          = true;
             $data->start_date    = $start;
             $data->endDate       = $end;
