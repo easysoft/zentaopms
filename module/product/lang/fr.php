@@ -258,6 +258,9 @@ $lang->product->featureBar['dynamic']['lastWeek']  = 'Last Week';
 $lang->product->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->product->featureBar['dynamic']['lastMonth'] = 'Last Month';
 
+$lang->product->action = new stdclass();
+$lang->product->action->activate = array('main' => '$date, activated by <strong>$actor</strong>.');
+
 $lang->product->belongingLine     = 'Product Line';
 $lang->product->testCaseCoverage  = 'Case Coverage';
 $lang->product->activatedBug      = 'Activated Bugs';
