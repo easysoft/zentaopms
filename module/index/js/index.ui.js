@@ -855,9 +855,11 @@ window.browserNotify = function()
 
         $.get($.createLink('message', 'ajaxGetMessage', "windowBlur=" + (windowBlur ? '1' : '0')), function(data)
         {
+            if(!data) return;
             if(!windowBlur)
             {
-                if(!data) return;
+                if(!$(data).hasClass('browser-message-content')) return false;
+
                 zui.Messager.show(
                 {
                     content: {html: data},
@@ -869,7 +871,6 @@ window.browserNotify = function()
             }
             else
             {
-                if(!data) return;
                 if(typeof data == 'string') data = JSON.parse(data);
                 if(typeof data.message == 'string') notifyMessage(data);
             }
