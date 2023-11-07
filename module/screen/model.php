@@ -1669,7 +1669,7 @@ class screenModel extends model
 
         if(!isset($component->option) or $typeChanged)
         {
-            $component->option = json_decode(zget($this->config->screen->chartConfig, $component->type));
+            $component->option = json_decode(zget($this->config->screen->chartOption, $component->type));
             $component->option->dataset = new stdclass();
         }
 
