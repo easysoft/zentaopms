@@ -71,9 +71,9 @@ modal
         btn(setClass('primary'), set::id('saveButton'), $lang->save),
         btn(setClass('default'), set('data-dismiss', 'modal'), $lang->cancel),
     ),
-
     inputGroup
     (
+        setClass('pt-2'),
         $lang->product->link2Project,
         select(set::name('project'), set::items($projects))
     ),
