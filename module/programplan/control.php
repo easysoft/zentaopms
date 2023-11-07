@@ -106,7 +106,7 @@ class programplan extends control
         if($executionType != 'stage') unset($this->lang->execution->typeList[''], $this->lang->execution->typeList['stage']);
 
         $plans = $this->programplan->getStage($planID ?: $projectID, $this->productID, 'parent', 'order_asc');
-        if(!empty($planID) && $project->model == 'waterfallplus')
+        if(!empty($planID) and in_array($project->model, array('ipd', 'waterfallplus')))
         {
             if(!empty($plans))
             {
