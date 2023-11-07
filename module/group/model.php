@@ -505,6 +505,7 @@ class groupModel extends model
 
             foreach($insertPrivs as $key => $priv)
             {
+                if(!isset($dependPrivs[$key])) continue;
                 foreach($dependPrivs[$key] as $depend)
                 {
                     if(isset($insertPrivs[$depend])) continue;
