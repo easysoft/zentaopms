@@ -483,7 +483,7 @@ $lang->block->zentaoclient->edition->linux64 = 'Linux';
 $lang->block->zentaoclient->edition->mac64   = 'Mac OS';
 
 $lang->block->guideTabs['flowchart']      = 'Flowchart';
-$lang->block->guideTabs['systemMode']     = 'Operating Modes';
+if($config->systemMode == 'ALM') $lang->block->guideTabs['systemMode']     = 'Operating Modes';
 $lang->block->guideTabs['visionSwitch']   = 'Interface Switch';
 $lang->block->guideTabs['themeSwitch']    = 'Theme Switch';
 $lang->block->guideTabs['preference']     = 'Personalized setting';
