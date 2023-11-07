@@ -105,4 +105,79 @@ class screen extends control
             $this->display();
         }
     }
+
+    /**
+     * Ajax get chart.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetChart()
+    {
+        if(!empty($_POST))
+        {
+            $chartID      = $this->post->sourceID;
+            $type         = $this->post->type;
+            $queryType    = isset($_POST['queryType']) ? $this->post->queryType : 'filter';
+
+            $type = ($type == 'Tables' or $type == 'pivot') ? 'pivot' : 'chart';
+
+            $table = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
+            $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
+
+            $filterFormat = '';
+            if($queryType == 'filter')
+            {
+                $filterParams = json_decode($this->post->filters, true);
+                $filters      = json_decode($chart->filters, true);
+                $mergeFilters = array();
+
+                foreach($filters as $index => $filter)
+                {
+                    $default = isset($filterParams[$index]['default']) ? $filterParams[$index]['default'] : null;
+                    $filterType = $filter['type'];
+                    if($filterType == 'date' or $filterType == 'datetime')
+                    {
+                        if(isset($filter['from']) and $filter['from'] == 'query')
+                        {
+                            if(is_numeric($default)) $default = date('Y-m-d H:i:s', $default / 1000);
+                        }
+                        else
+                        {
+                            if(is_array($default))
+                            {
+                                $begin = $default[0];
+                                $end   = $default[1];
+
+                                $begin = date('Y-m-d H:i:s', $begin / 1000);
+                                $end = date('Y-m-d H:i:s', $end / 1000);
+
+                                $default = array('begin' => $begin, 'end' => $end);
+                            }
+                            else
+                            {
+                                $default = array('begin' => '', 'end' => '');
+                            }
+                        }
+
+                    }
+                    $filter['default'] = $default;
+                    $mergeFilters[] = $filter;
+                }
+
+                if($table == TABLE_PIVOT)
+                {
+                    list($sql, $filterFormat) = $this->loadModel($type)->getFilterFormat($chart->sql, $mergeFilters);
+                    $chart->sql = $sql;
+                }
+                else
+                {
+                    $filterFormat = $this->loadModel($type)->getFilterFormat($mergeFilters);
+                }
+            }
+
+            $chartData = $this->screen->genComponentData($chart, $type, null, $filterFormat);
+            print(json_encode($chartData));
+        }
+    }
 }
