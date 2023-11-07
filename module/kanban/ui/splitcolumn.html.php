@@ -24,13 +24,26 @@ for($index = 0; $index <= 1; $index ++)
             set::label($lang->kanbancolumn->childName),
             inputGroup
             (
-                input(set::name("name[$index]")),
+                inputControl
+                (
+                    input(set::name("name[$index]")),
+                    set::suffixWidth('icon'),
+                    to::suffix
+                    (
+                        colorPicker
+                        (
+                            set::name("color[$index]"),
+                            set::items($config->kanban->laneColorList),
+                            set::value('#333')
+                        )
+                    )
+                ),
                 span
                 (
                     set('class', 'input-group-addon'),
                     $lang->kanban->WIPCount
                 ),
-                input(set::name("WIPCount[$index]"), set::disabled(true)),
+                input(set::name("WIPCount[$index]"), set::disabled(true), set::style(array('width' => '80px'))),
                 span
                 (
                     set('class', 'input-group-addon'),
