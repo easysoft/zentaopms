@@ -69,19 +69,17 @@ formPanel
         set::width('1/2'),
         inputGroup
         (
-            input
+            datePicker
             (
-                set::type('date'),
                 set::name('begin'),
                 set::value(date('Y-m-d')),
                 on::change('suitEndDate')
             ),
             $lang->testtask->to,
-            input
+            datePicker
             (
-                set::type('date'),
                 set::name('end'),
-                set::value(date('Y-md-d', time() + 24 * 3600)),
+                set::value(date('Y-m-d', time() + 24 * 3600)),
             )
         )
     ),
