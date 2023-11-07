@@ -345,7 +345,7 @@ detailBody
                         array_values(array_map(function($reviewer, $result) use($users)
                         {
                             global $lang;
-                            return !empty($result) ? span(set::title($lang->story->reviewed), set::style(array('color' => '#cbd0db')), zget($users, $reviewer)) : span(set::title($lang->story->toBeReviewed), zget($users, $reviewer));
+                            return !empty($result) ? span(setClass('mr-2'), set::title($lang->story->reviewed), set::style(array('color' => '#cbd0db')), zget($users, $reviewer)) : span(setClass('mr-2'), set::title($lang->story->toBeReviewed), zget($users, $reviewer));
                         }, array_keys($reviewers), array_values($reviewers))),
                     ),
                     item

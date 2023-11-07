@@ -14,7 +14,7 @@ namespace zin;
 
 jsVar('lastReviewer', $reviewers);
 
-$needNotReviewBox = '';
+$needNotReviewBox = null;
 if(!$this->story->checkForceReview())
 {
     $needNotReviewBox = span
@@ -25,6 +25,7 @@ if(!$this->story->checkForceReview())
             set::id('needNotReview'),
             set::name('needNotReview'),
             set::text($lang->story->needNotReview),
+            set::value(1)
         ),
     );
 }

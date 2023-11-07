@@ -227,7 +227,7 @@ formPanel
     ) : null,
     formRow
     (
-        set::hidden(!$forceReview && !$needReview),
+        set::hidden(!$forceReview),
         formGroup
         (
             set::width('1/2'),
@@ -245,7 +245,7 @@ formPanel
                     set::value($fields['reviewer']['default']),
                 ),
             ),
-            formHidden('needNotReview', 1),
+            formHidden('needNotReview', $forceReview ? 0 : 1),
         )
     ),
     isset($fields['URS']) ? formRow
