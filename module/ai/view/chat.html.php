@@ -34,7 +34,8 @@
   <form method="post">
     <div class="chat-input">
       <textarea name="message" placeholder="<?php echo $lang->ai->chatPlaceholderInput; ?>" autocomplete="off"></textarea>
-      <input type="submit" value="<?php echo $lang->ai->chatSend; ?>" />
+      <input type="submit" value class="disabled" disabled />
+      <input type="button" id="reset" <?php if(empty($shownMessages)) echo 'class="disabled"'; ?> value="<?php echo $lang->ai->chatReset; ?>" />
     </div>
     <input type="hidden" name="history" value="<?php echo htmlspecialchars(json_encode($messages)); ?>" />
   </form>

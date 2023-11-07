@@ -5,10 +5,12 @@ $(function()
     $('input[type=submit]').attr('readonly', true).addClass('busy');
     $('textarea[name=message]').attr('readonly', true).addClass('busy');
     $('#retry').addClass('busy');
+    $('#reset').addClass('busy');
   }
 
-  function reset()
+  function reset(e)
   {
+    if($(e.target).hasClass('busy') || $(e.target).hasClass('disabled')) return;
     markBusy();
     $.ajax({
       url: createLink('ai', 'chat'),
@@ -21,8 +23,9 @@ $(function()
     });
   }
 
-  function retry()
+  function retry(e)
   {
+    if($(e.target).hasClass('busy')) return;
     markBusy();
     $.ajax({
       url: createLink('ai', 'chat'),
@@ -47,9 +50,15 @@ $(function()
         if(e.ctrlKey || e.metaKey)
         {
           $('textarea[name=message]').val($('textarea[name=message]').val() + '\n');
+          $('textarea[name=message]').trigger('input');
         }
         else
         {
+          if($('textarea[name=message]').val().trim().length == 0)
+          {
+            e.preventDefault();
+            return;
+          }
           $('form').submit();
         }
       }
@@ -58,14 +67,15 @@ $(function()
     {
       /* Disable form and add message. */
       markBusy();
-      $('.messages').prepend("<div class='message-container-user'><div class='message-content'>" + $('textarea[name=message]').val() + '</div></div>');
+      const message = $('textarea[name=message]').val().trim();
+      $('.messages').prepend("<div class='message-container-user'><div class='message-content'>" + message + '</div></div>');
 
       /* Send message to server and re-render the chat. */
       e.preventDefault();
       $.ajax({
         url: createLink('ai', 'chat'),
         type: 'POST',
-        data: {message: $('textarea[name=message]').val(), history: $('input[name=history]').val()},
+        data: {message, history: $('input[name=history]').val()},
         dataType: 'html',
         success: function(response)
         {
@@ -77,6 +87,17 @@ $(function()
     $('#reset').click(reset);
     $('#retry').click(retry);
     $('textarea[name=message]').focus();
+    $('textarea[name=message]').on('input', function()
+    {
+      /* Toggle send button. */
+      const hasMessage = $(this).val().trim().length > 0;
+      $('input[type=submit]').attr('disabled', !hasMessage).toggleClass('disabled', !hasMessage);
+
+      /* Resize textarea to fit content. */
+      const clientHeight = +$(this).prop('clientHeight');
+      const scrollHeight = +$(this).prop('scrollHeight');
+      if(clientHeight < 150 && clientHeight < scrollHeight) $(this).css('height', (scrollHeight + 2) + 'px');
+    });
   }
   init();
 });
