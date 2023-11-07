@@ -37,6 +37,8 @@ class admin extends control
      */
     public function index()
     {
+        set_time_limit(0);
+
         $community = zget($this->config->global, 'community', '');
         if(!$community or $community == 'na')
         {
