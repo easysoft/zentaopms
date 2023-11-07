@@ -46,7 +46,8 @@ class projectStory extends control
         $this->products = $this->loadModel('product')->getProductPairsByProject($projectID);
 
         /* Set product list for export. */
-        $this->session->set('exportProductList', $this->products);
+        $this->session->set('exportProductList',  $this->products);
+        $this->session->set('executionStoryList', $this->app->getURI(true));
 
         if(empty($this->products)) $this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID));
 
