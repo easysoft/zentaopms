@@ -78,7 +78,7 @@ class productTao extends productModel
      */
     protected function fetchAllProductProjects(int $productID, string $browseType = 'all', string $branch = '0', string $orderBy = 'order_desc', object|null $pager = null): array
     {
-        return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        return $this->dao->select('DISTINCT t2.id, t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->eq('project')
@@ -106,7 +106,7 @@ class productTao extends productModel
      */
     protected function fetchInvolvedProductProjects(int $productID, string $browseType = 'all', string $branch = '0', string $orderBy = 'order_desc', object|null $pager = null): array
     {
-        return $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        return $this->dao->select('DISTINCT t2.id, t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.id=t3.root')
             ->leftJoin(TABLE_STAKEHOLDER)->alias('t4')->on('t2.id=t4.objectID')
