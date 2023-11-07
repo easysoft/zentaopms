@@ -359,6 +359,7 @@ class extension extends control
 
         $this->extension->executeDB($extension, 'uninstall');
         $this->extension->updateExtension($extension, array('status' => 'available'));
+        $this->extension->togglePackageDisable($extension, 'disabled');
         $this->view->removeCommands = $this->extension->removePackage($extension);
         $this->view->title = $this->lang->extension->uninstallFinished;
 
@@ -387,7 +388,7 @@ class extension extends control
             }
         }
 
-        $this->extension->copyPackageFiles($extension);
+        $this->extension->togglePackageDisable($extension, 'active');
         $this->extension->updateExtension($extension, array('status' => 'installed'));
         $this->view->title      = $this->lang->extension->activateFinished;
         $this->display();
@@ -403,6 +404,7 @@ class extension extends control
     public function deactivate($extension)
     {
         $this->extension->updateExtension($extension, array('status' => 'deactivated'));
+        $this->extension->togglePackageDisable($extension, 'disabled');
 
         $this->view->title          = $this->lang->extension->deactivateFinished;
         $this->view->removeCommands = $this->extension->removePackage($extension);
@@ -432,6 +434,7 @@ class extension extends control
             $fileName  = $_FILES['files']['name'][0];
             $dest      = $this->app->getTmpRoot() . "extension/$fileName";
 
+            if(!is_dir(dirname($dest))) mkdir(dirname($dest));
             if(!move_uploaded_file($tmpName, $dest))
             {
                 $downloadPath = $this->app->getTmpRoot() . 'extension/';

@@ -25,6 +25,14 @@ class extensionModel extends model
     public $apiRoot;
 
     /**
+     * The package root.
+     *
+     * @var string
+     * @access public
+     */
+    public $pkgRoot;
+
+    /**
      * The construct function.
      *
      * @access public
@@ -35,6 +43,7 @@ class extensionModel extends model
         parent::__construct();
         $this->setApiRoot();
         $this->classFile = $this->app->loadClass('zfile');
+        $this->pkgRoot   = $this->app->getExtensionRoot() . 'pkg' . DS;
     }
 
     /**
@@ -213,7 +222,7 @@ class extensionModel extends model
         $info = new stdclass();
 
         /* First, try ini file. before 2.5 version. */
-        $infoFile = "ext/$extension/doc/copyright.txt";
+        $infoFile = $this->pkgRoot . "$extension/doc/copyright.txt";
         if(file_exists($infoFile)) return (object)parse_ini_file($infoFile);
 
         /**
@@ -222,8 +231,8 @@ class extensionModel extends model
 
         /* Try the yaml of current lang, then try en. */
         $lang = $this->app->getClientLang();
-        $infoFile = "ext/$extension/doc/$lang.yaml";
-        if(!file_exists($infoFile)) $infoFile = "ext/$extension/doc/en.yaml";
+        $infoFile = $this->pkgRoot . "$extension/doc/$lang.yaml";
+        if(!file_exists($infoFile)) $infoFile = $this->pkgRoot . "$extension/doc/en.yaml";
         if(!file_exists($infoFile)) return $info;
 
         /* Load the yaml file and parse it into object. */
@@ -281,9 +290,6 @@ class extensionModel extends model
             }
         }
 
-        /* Append the paths to stored the extracted files. */
-        $paths[] = "module/extension/ext/";
-
         return array_unique($paths);
     }
 
@@ -296,7 +302,7 @@ class extensionModel extends model
      */
     public function getFilesFromPackage($extension)
     {
-        $extensionDir = "ext/$extension/";
+        $extensionDir = $this->pkgRoot . $extension;
         $files = $this->classFile->readDir($extensionDir, array('db', 'doc'));
         return $files;
     }
@@ -354,7 +360,7 @@ class extensionModel extends model
      */
     public function getHookFile($extension, $hook)
     {
-        $hookFile = "ext/$extension/hook/$hook.php";
+        $hookFile = $this->pkgRoot . "$extension/hook/$hook.php";
         if(file_exists($hookFile)) return $hookFile;
         return false;
     }
@@ -369,7 +375,7 @@ class extensionModel extends model
      */
     public function getDBFile($extension, $method = 'install')
     {
-        return "ext/$extension/db/$method.sql";
+        return $this->pkgRoot . "$extension/db/$method.sql";
     }
 
     /**
@@ -424,6 +430,18 @@ class extensionModel extends model
         $checkResult->chmodCommands = '';
         $checkResult->dirs2Created  = array();
 
+        if(!is_dir($this->pkgRoot) and !mkdir($this->pkgRoot))
+        {
+            $checkResult->errors  .= sprintf($this->lang->extension->errorTargetPathNotExists, $this->pkgRoot) . '<br />';
+            $checkResult->mkdirCommands .= "sudo mkdir -p {$this->pkgRoot}<br />";
+            $checkResult->chmodCommands .= "sudo chmod -R 777 {$this->pkgRoot}<br />";
+        }
+        if(is_dir($this->pkgRoot) and !is_writable($this->pkgRoot))
+        {
+            $checkResult->errors .= sprintf($this->lang->extension->errorTargetPathNotWritable, $this->pkgRoot) . '<br />';
+            $checkResult->chmodCommands .= "sudo chmod -R 777 {$this->pkgRoot}<br />";
+        }
+
         $appRoot = $this->app->getAppRoot();
         $paths  = $this->getPathsFromPackage($extension);
         foreach($paths as $path)
@@ -453,7 +471,7 @@ class extensionModel extends model
                     $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
                     $checkResult->mkdirCommands .= "sudo mkdir -p $path<br />";
                 }
-                if(file_exists($path) and realpath($path) != realpath($appRoot . 'module/extension') . 'ext') $checkResult->dirs2Created[] = $path;
+                if(file_exists($path) and realpath($path) != $this->pkgRoot) $checkResult->dirs2Created[] = $path;
             }
         }
 
@@ -500,7 +518,7 @@ class extensionModel extends model
         $appRoot = $this->app->getAppRoot();
         foreach($extensionFiles as $extensionFile)
         {
-            $compareFile = $appRoot . str_replace(realpath("ext/$extension") . '/', '', $extensionFile);
+            $compareFile = $appRoot . str_replace($this->pkgRoot . $extension . DS, '', $extensionFile);
             if(!file_exists($compareFile)) continue;
             if(md5_file($extensionFile) != md5_file($compareFile)) $return->error .= $compareFile . '<br />';
         }
@@ -523,7 +541,7 @@ class extensionModel extends model
         $return->error  = '';
 
         /* try remove pre extracted files. */
-        $extensionPath = "ext/$extension";
+        $extensionPath = $this->pkgRoot . $extension;
         if(is_dir($extensionPath)) $this->classFile->removeDir($extensionPath);
 
         /* Extract files. */
@@ -553,7 +571,7 @@ class extensionModel extends model
     public function copyPackageFiles($extension)
     {
         $appRoot      = $this->app->getAppRoot();
-        $extensionDir = "ext/$extension/";
+        $extensionDir = $this->pkgRoot . $extension . DS;
         $paths        = scandir($extensionDir);
         $copiedFiles  = array();
 
@@ -681,7 +699,7 @@ class extensionModel extends model
         }
 
         /* Remove the extracted files. */
-        $extractedDir = realpath("ext/$extension");
+        $extractedDir = $this->pkgRoot . $extension;
         if($extractedDir and $extractedDir != '/' and !$this->classFile->removeDir($extractedDir))
         {
             $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $extractedDir" : "rmdir $extractedDir /s";
@@ -959,5 +977,23 @@ class extensionModel extends model
             }
         }
         return $plugins;
+    }
+
+    /**
+     * Mark package active or disabled
+     *
+     * @param  string $extension
+     * @param  string $action     disabled|active
+     * @access public
+     * @return bool
+     */
+    public function togglePackageDisable($extension, $action = 'disabled')
+    {
+        if(!is_dir($this->pkgRoot . $extension)) return true;
+
+        $disabledFile = $this->pkgRoot . $extension . DS . 'disabled';
+        if($action == 'disabled') touch($disabledFile);
+        if($action == 'active' && file_exists($disabledFile)) unlink($disabledFile);
+        return true;
     }
 }
