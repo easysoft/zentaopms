@@ -12,22 +12,33 @@
 class dimension extends control
 {
     /**
-     * Drop menu page, type is used for tree-browsegroup link.
+     * 显示切换维度的 1.5 级导航的下拉菜单。
+     * Show the drop menu of 1.5 level navigation for switching dimension.
      *
+     * @param  int    $dimensionID
+     * @param  string $module
+     * @param  string $method
      * @access public
-     * @param  string currentModule
-     * @param  string currentMethod
-     * @param  int    dimensionID
-     * @param  string type          screen|pivot|chart
      * @return void
      */
     public function ajaxGetDropMenu(int $dimensionID, string $module, string $method)
     {
-        $this->view->dimensionID   = $dimensionID;
-
+        $items      = array();
         $dimensions = $this->dimension->getList();
-        $this->view->dimensionTree = $this->dimensionZen->buildTree($dimensions);
-        $this->view->link          = $this->dimensionZen->getLink($module, $method, '{id}', '', 'dimension');
+        foreach($dimensions as $dimension)
+        {
+            /* 构造 1.5 级导航的数据。*/
+            /* Build the data of 1.5 level navigation. */
+            $items[] = array
+            (
+                'id'    => $dimension->id,
+                'text'  => $dimension->name,
+                'keys'  => zget(common::convert2Pinyin(array($dimension->name)), $dimension->name, ''),
+            );
+        }
+        $this->view->link        = $this->createLink($module, $method, 'dimensionID={id}');
+        $this->view->items       = $items;
+        $this->view->dimensionID = $dimensionID;
         $this->display();
     }
 }

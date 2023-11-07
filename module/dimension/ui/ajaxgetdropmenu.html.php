@@ -11,20 +11,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$topItem = array();
-$topItem['id']    = 0;
-$topItem['type']  = 'dimension';
-$topItem['text']  = $lang->dimension->common;
-$topItem['url']   = false;
-$topItem['label'] = false;
-$topItem['items'] = $dimensionTree;
-
 /**
  * 定义最终的 JSON 数据。
  * Define the final json data.
  */
 $json = array();
-$json['data']       = array($topItem);
+$json['data']       = $items;
 $json['searchHint'] = $lang->searchAB;
 $json['link']       = array('dimension' => $link);
 $json['labelMap']   = array('dimension' => $lang->dimension->common);
