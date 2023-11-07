@@ -17,7 +17,7 @@ formPanel
     dtable
     (
         set::cols($this->config->holiday->dtable->import->fieldList),
-        set::data($holidays),
+        set::data($holidays)
     ),
     formRow
     (
@@ -27,11 +27,10 @@ formPanel
             set::label(''),
             set::name('submit'),
             set::control('hidden'),
-            set::value(''),
-        ),
-    ),
+            set::value('')
+        )
+    )
 );
-
 
 render();
 

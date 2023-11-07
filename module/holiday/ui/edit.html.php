@@ -29,9 +29,9 @@ formPanel
                 set::inline(true),
                 set::name('type'),
                 set::items($lang->holiday->typeList),
-                set::value($holiday->type),
-            ),
-        ),
+                set::value($holiday->type)
+            )
+        )
     ),
     formRow
     (
@@ -43,7 +43,7 @@ formPanel
             set::name('begin'),
             set::value($holiday->begin),
             set::required('true')
-        ),
+        )
     ),
     formRow
     (
@@ -55,7 +55,7 @@ formPanel
             set::name('end'),
             set::value($holiday->end),
             set::required('true')
-        ),
+        )
     ),
     formRow
     (
@@ -66,7 +66,7 @@ formPanel
             set::name('name'),
             set::value($holiday->name),
             set::required('true')
-        ),
+        )
     ),
     formRow
     (
@@ -77,12 +77,11 @@ formPanel
             (
                 set::name('desc'),
                 set::rows('2'),
-                set::value($holiday->desc),
+                set::value($holiday->desc)
             )
-        ),
-    ),
+        )
+    )
 );
-
 
 render();
 

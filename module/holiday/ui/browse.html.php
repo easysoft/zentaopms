@@ -50,7 +50,7 @@ sidebar
                 ),
             ),
         ),
-    ),
+    )
 );
 
 $tableData = initTableData($holidays, $this->config->holiday->dtable->fieldList, $this->holiday);
@@ -75,8 +75,8 @@ panel
                     set::value($currentYear),
                     set::items($yearList),
                     on::change('changeYear'),
-                ),
-            ),
+                )
+            )
         ),
         toolbar
         (
@@ -88,14 +88,14 @@ panel
                 set('data-toggle', 'modal'),
                 set('data-size', 'sm'),
                 $lang->holiday->create
-            ),
-        ),
+            )
+        )
     ),
     dtable
     (
         set::cols($this->config->holiday->dtable->fieldList),
         set::data($tableData),
-        set::footer(),
+        set::footer()
     ),
     center
     (
@@ -107,7 +107,6 @@ panel
         )
     )
 );
-
 
 render();
 
