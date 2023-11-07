@@ -96,7 +96,17 @@ $(function()
       /* Resize textarea to fit content. */
       const clientHeight = +$(this).prop('clientHeight');
       const scrollHeight = +$(this).prop('scrollHeight');
-      if(clientHeight < 150 && clientHeight < scrollHeight) $(this).css('height', (scrollHeight + 2) + 'px');
+      if(clientHeight < scrollHeight)
+      {
+        if(clientHeight < 150)
+        {
+          $(this).css('height', (scrollHeight + 2) + 'px');
+        }
+        else
+        {
+          $(this).addClass('has-scrollbar');
+        }
+      }
     });
   }
   init();
