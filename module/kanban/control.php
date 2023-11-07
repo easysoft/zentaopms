@@ -658,6 +658,7 @@ class kanban extends control
      */
     public function deleteLane($regionID, $kanbanID, $laneID)
     {
+        $lane = $this->kanban->getLaneById($laneID);
         $this->kanban->delete(TABLE_KANBANLANE, $laneID);
 
         if($this->app->tab == 'execution')
@@ -671,8 +672,16 @@ class kanban extends control
             return print("<script>parent.updateKanban($kanbanData, $regionID)</script>");
         }
 
-        $callback = $this->kanban->getKanbanCallback($kanbanID, $regionID);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
+        $lanes = $this->kanban->getLanePairsByGroup($lane->group);
+        if($lanes)
+        {
+            $callback = $this->kanban->getKanbanCallback($kanbanID, $regionID);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
+        }
+        else
+        {
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $regionID, array('items' => array(array('key' => 'group' . $lane->group, 'deleted' => true)))))));
+        }
     }
 
     /**
@@ -915,9 +924,9 @@ class kanban extends control
             $actionID = $this->action->create('kanbanCard', $cardID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
-            $card        = $this->kanban->getCardByID($cardID);
-            $kanbanGroup = $this->kanban->getKanbanData($card->kanban, $card->region);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($card->region, $kanbanGroup))));
+            $card     = $this->kanban->getCardByID($cardID);
+            $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
 
         $card        = $this->kanban->getCardByID($cardID);
@@ -958,10 +967,8 @@ class kanban extends control
         $actionID = $this->action->create('kanbanCard', $cardID, 'finished');
         $this->action->logHistory($actionID, $changes);
 
-        if(isInModal()) return print(js::reload('parent.parent'));
-
-        $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
-        return print(json_encode($kanbanGroup));
+        $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
     }
 
     /**
@@ -987,6 +994,7 @@ class kanban extends control
             $actionID = $this->action->create('kanbanCard', $cardID, 'activated');
             $this->action->logHistory($actionID, $changes);
 
+            $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
@@ -1042,8 +1050,9 @@ class kanban extends control
 
         $this->loadModel('action')->create('kanbanCard', $cardID, 'moved');
 
-        $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
-        echo json_encode($kanbanGroup);
+        $card     = $this->kanban->getCardByID($cardID);
+        $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
     }
 
     /**
@@ -1401,8 +1410,10 @@ class kanban extends control
     {
         $this->kanban->updateCardColor($cardID, $color);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
-        echo json_encode($kanbanGroup);
+
+        $card     = $this->kanban->getCardByID($cardID);
+        $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
     }
 
     /**
@@ -1440,11 +1451,9 @@ class kanban extends control
         $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'archived');
         $this->action->logHistory($actionID, $changes);
 
-        if(isInModal()) return print(js::reload('parent.parent'));
-        $card        = $this->kanban->getCardByID($cardID);
-        $kanbanGroup = $this->kanban->getKanbanData($card->kanban, $card->region);
-        $kanbanGroupParam = json_encode($kanbanGroup);
-        return print("<script>parent.updateRegion({$card->region}, $kanbanGroupParam)</script>");
+        $card     = $this->kanban->getCardByID($cardID);
+        $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
     }
 
     /**
@@ -1506,12 +1515,8 @@ class kanban extends control
         if($card->fromType == '') $this->kanban->delete(TABLE_KANBANCARD, $cardID);
         if($card->fromType != '') $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
 
-        if(isInModal()) return print(js::reload('parent.parent'));
-
-        $kanbanGroup      = $this->kanban->getKanbanData($card->kanban, $card->region);
-        $kanbanGroupParam = json_encode($kanbanGroup);
-        if($card->archived) return print(js::reload(parent));
-        return print("<script>parent.updateRegion({$card->region}, $kanbanGroupParam)</script>");
+        $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
     }
 
     /**

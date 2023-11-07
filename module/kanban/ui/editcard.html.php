@@ -48,7 +48,7 @@ formPanel
                     set('class', 'input-group-addon'),
                     $lang->kanbancard->estimate
                 ),
-                input(set::name('estimate'), set::placeholder($lang->kanbancard->lblHour))
+                input(set::name('estimate'), set::placeholder($lang->kanbancard->lblHour), set::value($card->estimate))
             )
         ),
         formGroup
