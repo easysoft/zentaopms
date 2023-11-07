@@ -16,6 +16,13 @@ window.changeSpaceType = function()
     $('.whitelistBox').toggleClass('hidden', type != 'private');
 }
 
+window.changeKanban = function()
+{
+    const targetID = $('[name=kanban]').val();
+    const url      = $.createLink('kanban', methodName, 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID + '&targetID=' + targetID);
+    loadPartial(url, '#cardForm');
+}
+
 window.changeKanbanType = function()
 {
     const type = $('[name=type]:checked').val();
