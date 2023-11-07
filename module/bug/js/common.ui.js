@@ -68,7 +68,6 @@ function changeExecution(event)
     if(executionID != 0)
     {
         loadProjectByExecutionID(executionID);
-        loadExecutionTasks(executionID);
         loadExecutionStories(executionID);
         loadExecutionBuilds(executionID);
         loadAssignedToByExecution(executionID);
@@ -89,6 +88,8 @@ function changeExecution(event)
             loadProjectBuilds(projectID);
         }
     }
+
+    loadExecutionTasks(executionID);
 }
 
 function changeModule(event)
