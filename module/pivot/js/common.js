@@ -188,7 +188,7 @@ function validate(showError = false)
             {
                 var error = '<div id="column' + index + 'Label" class="text-danger help-text">' + notemptyLang.replace('%s', pivotLang.step2.columnField) + '</div>';
                 $column.find('#column').addClass('has-error');
-                $column.find('#column').next().after(error);
+                $column.find('#column').parent().after(error);
             }
         }
 
