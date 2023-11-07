@@ -14,13 +14,13 @@ featureBar
     entityLabel
     (
         set::text($entry->name),
-        set::level(1),
+        set::level(1)
     ),
     label
     (
         setClass('secondary size-sm mr-2'),
-        $lang->entry->log,
-    ),
+        $lang->entry->log
+    )
 );
 
 toolbar
@@ -36,8 +36,8 @@ toolbar
     backBtn
     (
         set::back('GLOBAL'),
-        $lang->goback,
-    ),
+        $lang->goback
+    )
 );
 
 panel
@@ -48,8 +48,8 @@ panel
     (
         set::cols($this->config->entry->log->dtable->fieldList),
         set::data($logs),
-        set::footPager(usePager()),
-    ),
+        set::footPager(usePager())
+    )
 );
 
 render();

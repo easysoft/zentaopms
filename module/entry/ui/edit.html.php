@@ -21,8 +21,8 @@ formPanel
             set::entityID($entry->id),
             set::level(1),
             set::text($entry->name),
-            set::reverse(true),
-        ),
+            set::reverse(true)
+        )
     ),
     to::headingActions
     (
@@ -33,17 +33,17 @@ formPanel
                 setClass('text-darken'),
                 set::href($lang->entry->helpLink),
                 set('target', '_blank'),
-                $lang->entry->help,
+                $lang->entry->help
             ),
-            div(setClass('toolbar-divider')),
+            item(set::type('divider')),
             a
             (
                 setClass('text-darken'),
                 set::href($lang->entry->notifyLink),
                 set('target', '_blank'),
-                $lang->entry->notify,
-            ),
-        ),
+                $lang->entry->notify
+            )
+        )
     ),
     formRow
     (
@@ -55,7 +55,7 @@ formPanel
             set::title($lang->entry->note->name),
             set::placeholder($lang->entry->note->name),
             set::value($entry->name)
-        ),
+        )
     ),
     formRow
     (
@@ -67,7 +67,7 @@ formPanel
             set::title($lang->entry->note->code),
             set::placeholder($lang->entry->note->code),
             set::value($entry->code)
-        ),
+        )
     ),
     formRow
     (
@@ -82,8 +82,8 @@ formPanel
                 set::items($lang->entry->freePasswdList),
                 set::value($entry->freePasswd),
                 set::inline(true),
-            ),
-        ),
+            )
+        )
     ),
     formRow
     (
@@ -95,8 +95,8 @@ formPanel
             set::placeholder($lang->entry->note->account),
             set::name('account'),
             set::items($users),
-            set::value($entry->account),
-        ),
+            set::value($entry->account)
+        )
     ),
     formRow
     (
@@ -107,7 +107,7 @@ formPanel
             set::placeholder($lang->entry->note->key),
             set::name('key'),
             set::value($entry->key),
-            set::readonly(true),
+            set::readonly(true)
         ),
         formGroup
         (
@@ -116,8 +116,8 @@ formPanel
                 setClass('btn ml-2 text-darken'),
                 on::click('createKey()'),
                 $lang->entry->createKey,
-            ),
-        ),
+            )
+        )
     ),
     formRow
     (
@@ -129,7 +129,7 @@ formPanel
             set::placeholder($lang->entry->note->ip),
             set::name('ip'),
             set::value($entry->ip),
-            set::disabled($entry->ip == '*'),
+            set::disabled($entry->ip == '*')
         ),
         formGroup
         (
@@ -139,9 +139,9 @@ formPanel
                 set::name('allIP'),
                 on::change('toggleAllIP'),
                 set::checked($entry->ip == '*'),
-                $lang->entry->note->allIP,
-            ),
-        ),
+                $lang->entry->note->allIP
+            )
+        )
     ),
     formGroup
     (
@@ -150,9 +150,9 @@ formPanel
         (
             set::name('desc'),
             set::rows('3'),
-            html($entry->desc),
+            html($entry->desc)
         )
-    ),
+    )
 );
 
 render();

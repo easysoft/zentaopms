@@ -20,7 +20,7 @@ toolbar
             set::icon('plus'),
             set::url(helper::createLink('entry', 'create')),
             $lang->entry->create
-        ),
+        )
     )
 );
 
@@ -33,7 +33,7 @@ dtable
     set::orderBy($orderBy),
     set::sortLink(createLink('entry', 'browse', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer(jsRaw("function(){return window.footerGenerator.call(this, '" . sprintf($lang->entry->summaryTip, count($tableData)) . "');}")),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();
