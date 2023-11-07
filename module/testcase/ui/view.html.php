@@ -348,6 +348,7 @@ detailBody
 (
     sectionList
     (
+        on::click('.steps-section .step-change-view-btn .icon', 'toggleStepsView'),
         section
         (
             setClass(empty($case->precondition) ? 'hidden' : ''),
@@ -359,7 +360,7 @@ detailBody
         (
             setClass('steps-section'),
             set::title($lang->testcase->steps),
-            !empty($steps) ? to::actions
+            !empty($case->steps) ? to::actions
             (
                 row
                 (
@@ -371,7 +372,6 @@ detailBody
                         $stepsType == 'table' ? setClass('text-primary') : '',
                         icon
                         (
-                            on::click('toggleStepsView'),
                             set::size('9'),
                             'table-large',
                         ),
@@ -382,14 +382,13 @@ detailBody
                         $stepsType != 'table' ? setClass('text-primary') : '',
                         icon
                         (
-                            on::click('toggleStepsView'),
                             set::size('9'),
                             'tree'
                         ),
                     ),
                 ),
             ) : null,
-            !empty($steps) ? div
+            !empty($case->steps) ? div
             (
                 $stepsType == 'table' ? div
                 (
@@ -421,8 +420,6 @@ detailBody
                     mindmap
                     (
                         set::data($case->mindMapSteps),
-                        set::height('600px'),
-                        set::width('100%'),
                         set::readonly(true),
                     ),
                 ),
