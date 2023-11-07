@@ -833,7 +833,7 @@ class kanbanModel extends model
         $action['items'] = array();
 
         if(common::hasPriv('kanban', 'createRegion')) $action['items'][] = array('text' => $this->lang->kanban->createRegion, 'url' => helper::createLink('kanban', 'createRegion', "kanbanID=$kanbanID"), 'data-toggle' => 'modal', 'icon' => 'plus');
-        if(common::hasPriv('kanban', 'editRegion'))   $action['items'][] = array('text' => $this->lang->kanban->editRegion,   'url' => helper::createLink('kanban', 'editRegion', "kanbanID=$kanbanID"), 'data-toggle' => 'modal', 'icon' => 'edit');
+        if(common::hasPriv('kanban', 'editRegion'))   $action['items'][] = array('text' => $this->lang->kanban->editRegion,   'url' => helper::createLink('kanban', 'editRegion', "regionID=$regionID"), 'data-toggle' => 'modal', 'icon' => 'edit');
         if(common::hasPriv('kanban', 'createLane'))   $action['items'][] = array('text' => $this->lang->kanban->createLane,   'url' => helper::createLink('kanban', 'createLane', "kanbanID=$kanbanID&regionID=$regionID"), 'data-toggle' => 'modal', 'icon' => 'plus');
         if(common::hasPriv('kanban', 'deleteRegion')) $action['items'][] = array('text' => $this->lang->kanban->deleteRegion, 'url' => helper::createLink('kanban', 'deleteRegion', "regionID=$regionID"), 'data-confirm' => $this->lang->kanbanregion->confirmDelete, 'icon' => 'trash', 'innerClass' => 'ajax-submit');
 
@@ -1238,6 +1238,7 @@ class kanbanModel extends model
                 $item['group']    = $card->group;
                 $item['region']   = $card->region;
                 $item['color']    = $card->color;
+                $item['progress'] = $card->progress;
                 $item['realname'] = zget($users, $card->assignedTo, '');
                 $item['fromType'] = $card->fromType;
 

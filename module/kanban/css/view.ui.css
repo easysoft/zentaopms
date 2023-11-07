@@ -6,3 +6,4 @@
 .color-b10b0b > .card { background-color: #b10b0b !important; color: #fff !important }
 .color-2a5f29 > .card { background-color: #2a5f29 !important; color: #fff !important }
 .color-cfa227 > .card { background-color: #cfa227 !important; color: #fff !important }
+.progress {height: 0.5rem !important}
