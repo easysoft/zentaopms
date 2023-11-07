@@ -288,10 +288,17 @@ $lang->execution->treeViewTask              = '树状图查看任务';
 $lang->execution->treeViewStory             = "树状图查看{$lang->SRCommon}";
 $lang->execution->storyKanban               = "{$lang->SRCommon}看板";
 $lang->execution->storySort                 = "{$lang->SRCommon}排序";
+<<<<<<< HEAD
 $lang->execution->importPlanStory           = "创建{$lang->executionCommon}成功！\n是否导入计划关联的相关" . $lang->SRCommon . '？导入时只能导入激活状态的' . $lang->SRCommon . '。';
 $lang->execution->importEditPlanStory       = "编辑{$lang->executionCommon}成功！\n是否导入计划关联的相关" . $lang->SRCommon . '？导入时将自动过滤掉草稿状态的' . $lang->SRCommon . '。';
 $lang->execution->importBranchPlanStory     = "创建{$lang->executionCommon}成功！\n是否导入计划关联的相关" . $lang->SRCommon . '？导入时将只关联本' . $lang->executionCommon . '所关联分支的激活需求。';
 $lang->execution->importBranchEditPlanStory = "编辑{$lang->executionCommon}成功！\n是否导入计划关联的相关" . $lang->SRCommon . '？导入时将只关联本' . $lang->executionCommon . '所关联分支的激活需求。';
+=======
+$lang->execution->importPlanStory           = '创建' . $lang->executionCommon . '成功！是否导入计划关联的相关' . $lang->SRCommon . '？导入时只能导入激活状态的' . $lang->SRCommon . '。';
+$lang->execution->importEditPlanStory       = '编辑' . $lang->executionCommon . '成功！是否导入计划关联的相关' . $lang->SRCommon . '？导入时将自动过滤掉草稿状态的' . $lang->SRCommon . '。';
+$lang->execution->importBranchPlanStory     = '创建' . $lang->executionCommon . '成功！是否导入计划关联的相关' . $lang->SRCommon . '？导入时将只关联本' . $lang->executionCommon . '所关联分支的激活需求。';
+$lang->execution->importBranchEditPlanStory = '编辑' . $lang->executionCommon . '成功！是否导入计划关联的相关' . $lang->SRCommon . '？导入时将只关联本' . $lang->executionCommon . '所关联分支的激活需求。';
+>>>>>>> c520fe75cc (* Fix bug #40206.)
 $lang->execution->needLinkProducts          = "该执行还未关联任何{$lang->productCommon}，相关功能无法使用，请先关联{$lang->productCommon}后再试。";
 $lang->execution->iteration                 = '版本迭代';
 $lang->execution->iterationInfo             = '迭代%s次';

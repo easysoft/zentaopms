@@ -288,10 +288,17 @@ $lang->execution->treeViewTask              = 'Tree View Task';
 $lang->execution->treeViewStory             = 'Tree View Story';
 $lang->execution->storyKanban               = 'Story Kanban';
 $lang->execution->storySort                 = 'Rank Story';
+<<<<<<< HEAD
 $lang->execution->importPlanStory           = "{$lang->executionCommon} is created!\nDo you want to import stories that have been linked to the plan? Only active " . $lang->SRCommon . ' can be imported.';
 $lang->execution->importEditPlanStory       = "{$lang->executionCommon} is edited!\nDo you want to import stories that have been linked to the plan? The stories in the draft will be automatically filtered out when imported.";
 $lang->execution->importBranchPlanStory     = "{$lang->executionCommon} is created!\nDo you want to import stories that have been linked to the plan? Only the activation stories of the branch associated with this " . $lang->executionCommon. ' will be associated with the import';
 $lang->execution->importBranchEditPlanStory = "{$lang->executionCommon} is edited!\nDo you want to import stories that have been linked to the plan? Only the activation stories of the branch associated with this " . $lang->executionCommon. ' will be associated with the import';
+=======
+$lang->execution->importPlanStory           = $lang->executionCommon . ' is created! Do you want to import stories that have been linked to the plan? Only active ' . $lang->SRCommon . ' can be imported.';
+$lang->execution->importEditPlanStory       = $lang->executionCommon . ' is edited! Do you want to import stories that have been linked to the plan? The stories in the draft will be automatically filtered out when imported.';
+$lang->execution->importBranchPlanStory     = $lang->executionCommon . ' is created! Do you want to import stories that have been linked to the plan? Only the activation stories of the branch associated with this ' .$lang->executionCommon. ' will be associated with the import';
+$lang->execution->importBranchEditPlanStory = $lang->executionCommon . ' is edited! Do you want to import stories that have been linked to the plan? Only the activation stories of the branch associated with this ' .$lang->executionCommon. ' will be associated with the import';
+>>>>>>> c520fe75cc (* Fix bug #40206.)
 $lang->execution->needLinkProducts          = "The execution has not been linked with any {$lang->productCommon}, and the related functions cannot be used. Please link the {$lang->productCommon} first and try again.";
 $lang->execution->iteration                 = 'Iterations';
 $lang->execution->iterationInfo             = '%s Iterations';
