@@ -174,10 +174,10 @@ $lang->block->default['singleproduct'][] = array('title' => "未关闭的{$lang-
 $lang->block->default['singleproduct'][] = array('title' => "最新动态",                                 'module' => 'singleproduct', 'code' => 'singledynamic',          'width' => '1');
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon}月度推进分析",       'module' => 'singleproduct', 'code' => 'singlemonthlyprogress',  'width' => '1');
 
-$lang->block->default['qa'][] = array('title' => '测试统计',   'module' => 'qa', 'code' => 'statistic', 'width' => '2', 'params' => array('type' => 'noclosed',   'count' => '20'));
-$lang->block->default['qa'][] = array('title' => '测试单列表', 'module' => 'qa', 'code' => 'testtask',  'width' => '2', 'params' => array('type' => 'wait',       'count' => '15', 'orderBy' => 'id_desc'));
-$lang->block->default['qa'][] = array('title' => 'Bug列表',    'module' => 'qa', 'code' => 'bug',       'width' => '1', 'params' => array('type' => 'assignedTo', 'count' => '15', 'orderBy' => 'id_desc'));
-$lang->block->default['qa'][] = array('title' => '用例列表',   'module' => 'qa', 'code' => 'case',      'width' => '1', 'params' => array('type' => 'assigntome', 'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['qa'][] = array('title' => '测试统计',           'module' => 'qa', 'code' => 'statistic', 'width' => '2', 'params' => array('type' => 'noclosed',   'count' => '20'));
+$lang->block->default['qa'][] = array('title' => '待测测试单列表',     'module' => 'qa', 'code' => 'testtask',  'width' => '2', 'params' => array('type' => 'wait',       'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['qa'][] = array('title' => '指派给我的Bug列表',  'module' => 'qa', 'code' => 'bug',       'width' => '1', 'params' => array('type' => 'assignedTo', 'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['qa'][] = array('title' => '指派给我的用例列表', 'module' => 'qa', 'code' => 'case',      'width' => '1', 'params' => array('type' => 'assigntome', 'count' => '15', 'orderBy' => 'id_desc'));
 
 $lang->block->default['full']['my'][] = array('title' => '欢迎总览',                               'module' => 'welcome',         'code' => 'welcome',         'width' => '2');
 $lang->block->default['full']['my'][] = array('title' => "使用帮助",                               'module' => 'guide',           'code' => 'guide',           'width' => '2');
