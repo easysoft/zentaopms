@@ -1004,6 +1004,7 @@ class releaseModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t2')->on("FIND_IN_SET(t1.id, t2.stories)")
             ->where('t1.id')->in($storyIdList)
             ->andWhere('t1.deleted')->eq(0)
+            ->beginIF(!empty($storyIdList))->groupBy('t1.id')->fi()
             ->beginIF($orderBy)->orderBy($orderBy)->fi()
             ->page($pager)
             ->fetchAll('id');
