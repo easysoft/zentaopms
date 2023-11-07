@@ -27,7 +27,7 @@ class select extends wg
      */
     protected static array $defineProps = array
     (
-        'name?: string',
+        'name: string',
         'id?: string',
         'class?: string="form-control"',
         'value?: string=""',
