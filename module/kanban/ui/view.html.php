@@ -4,10 +4,13 @@ namespace zin;
 $laneCount   = 0;
 $columnCount = array();
 $parentCols  = array();
+$groupCols   = array(); // 卡片可以移动到的同一group下的列。
 foreach($kanbanList as $regionID => $region)
 {
-    foreach($region['items'] as $groupID => $group)
+    foreach($region['items'] as $index => $group)
     {
+        $groupID = $group['id'];
+
         $group['getLane']     = jsRaw('window.getLane');
         $group['getCol']      = jsRaw('window.getCol');
         $group['getItem']     = jsRaw('window.getItem');
@@ -17,8 +20,14 @@ foreach($kanbanList as $regionID => $region)
         $group['laneProps']   = array('actions' => jsRaw('window.getLaneActions'));
         $group['itemProps']   = array('actions' => jsRaw('window.getItemActions'));
 
+        foreach($group['data']['cols'] as $col)
+        {
+            $colID = $col['id'];
+            if($col['parent'] != '-1') $groupCols[$groupID][$colID] = $col['title'];
+            $parentCols[$colID] = $col['parent'];
+        }
+
         /* 计算各个列上的卡片数量。 */
-        foreach($group['data']['cols'] as $col) $parentCols[$col['id']] = $col['parent'];
         foreach($group['data']['items'] as $colGroup)
         {
             foreach($colGroup as $colID => $items)
@@ -34,7 +43,7 @@ foreach($kanbanList as $regionID => $region)
             }
         }
 
-        $kanbanList[$regionID]['items'][$groupID] = $group;
+        $kanbanList[$regionID]['items'][$index] = $group;
     }
 
     $laneCount += $region['laneCount'];
@@ -47,8 +56,10 @@ jsVar('laneLang', $lang->kanbanlane);
 jsVar('cardLang', $lang->kanbancard);
 jsVar('kanbanID', $kanban->id);
 jsVar('kanban', $kanban);
+jsVar('groupCols', $groupCols);
 jsVar('columnCount', $columnCount);
 jsVar('vision', $config->vision);
+jsVar('colorList', $config->kanban->cardColorList);
 
 zui::kanbanList
 (

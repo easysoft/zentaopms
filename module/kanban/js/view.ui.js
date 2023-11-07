@@ -122,11 +122,11 @@ window.getItem = function(info)
 
     if(begin < '1970-01-01' && end > '1970-01-01')
     {
-        beginAndEnd = formatDate(end) + cardLang.deadlineAB;
+        beginAndEnd = end + ' ' + cardLang.deadlineAB;
     }
     else if(end < '1970-01-01' && begin > '1970-01-01')
     {
-        beginAndEnd = formatDate(begin) + cardLang.beginAB;
+        beginAndEnd = begin + ' ' + cardLang.beginAB;
     }
     else if(begin > '1970-01-01' && end > '1970-01-01')
     {
@@ -143,7 +143,98 @@ window.getItem = function(info)
       </div>
     `;
 
-    info.item.content = {html: content};
+    info.item.titleUrl   = $.createLink('kanban', 'viewCard', `id=${info.item.id}`);
+    info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.title};
+
+    info.item.content  = {html: content};
+    if(info.item.color && info.item.color != '#fff') info.item.className = 'color-' + info.item.color.replace('#', '');
+}
+
+window.getItemActions = function(item)
+{
+    return [{
+        type: 'dropdown',
+        icon: 'ellipsis-v',
+        caret: false,
+        items: buildCardActions(item),
+    }];
+}
+
+window.buildCardActions = function(item)
+{
+    let actions = [];
+
+    if(item.actionList.includes('editCard'))   actions.push({text: kanbanLang.editCard, url: $.createLink('kanban', 'editCard', `id=${item.id}`), 'data-toggle': 'modal', 'icon': 'edit'});
+    if(item.actionList.includes('deleteCard')) actions.push({text: kanbanLang.deleteCard, url: $.createLink('kanban', 'deleteCard', `id=${item.id}`), 'data-confirm': cardLang.confirmDelete, 'innerClass': 'ajax-submit', 'icon': 'trash'});
+
+    if(kanban.performable == 1 && item.fromType == '')
+    {
+        if(item.status == 'done')
+        {
+            if(item.actionList.includes('activateCard')) actions.push({text: kanbanLang.activateCard, url: $.createLink('kanban', 'activateCard', `id=${item.id}`), 'icon': 'magic', 'data-toggle': 'modal'});
+        }
+        else
+        {
+            if(item.actionList.includes('finishCard')) actions.push({text: kanbanLang.finishCard, url: $.createLink('kanban', 'finishCard', `id=${item.id}`), 'icon': 'checked', 'innerClass': 'ajax-submit'});
+        }
+    }
+
+    if(kanban.archived == '1' && item.actionList.includes('archiveCard')) actions.push({text: kanbanLang.archiveCard, url: $.createLink('kanban', 'archiveCard', `id=${item.id}`), 'icon': 'card-archive', 'data-confirm': cardLang.confirmArchive, 'innerClass': 'ajax-submit'});
+
+    /* Append divider. */
+    const editCardAction    = (item.actionList.includes('editCard') && item.fromType == '') ? true : false;
+    const deleteCardAction  = item.actionList.includes('deleteCard');
+    const archiveCardAction = (item.actionList.includes('archiveCard') && kanban.archived == '1') ? true : false;
+
+    const performable  = kanban.performable == 1 ? true : false;
+
+    const moveCardAction     = item.actionList.includes('moveCard');
+    const setCardColorAction = item.actionList.includes('setCardColor');
+
+    const basicActions = (editCardAction || deleteCardAction || archiveCardAction) ? true : false;
+    const otherActions = (moveCardAction || setCardColorAction) ? true : false;
+
+    if((performable || basicActions) && otherActions) actions.push({type: 'divider'});
+
+    if(item.actionList.includes('moveCard'))
+    {
+        moveColumns = groupCols[item.group] || {};
+        let moveCardItems = [];
+
+        for(const toColID in moveColumns)
+        {
+            if(toColID == item.column) continue;
+            moveCardItems.push({text: moveColumns[toColID], url: $.createLink('kanban', 'moveCard', `cardID=${item.id}&fromColID=${item.column}&toColID=${toColID}&fromLaneID=${item.lane}&toLaneID=${item.lane}&kanbanID=${kanbanID}`), 'innerClass': 'ajax-submit'});
+        }
+
+        actions.push({text: kanbanLang.moveCard, icon: 'move', items: moveCardItems});
+    }
+    if(item.actionList.includes('setCardColor'))
+    {
+        actions.push({text: kanbanLang.cardColor, 'icon': 'color', items: buildColorItems(item)});
+    }
+
+    return actions;
+}
+
+window.buildColorItems = function(card)
+{
+    let items = [];
+
+    for (let index in colorList)
+    {
+        let color = colorList[index];
+        let icon  = (card.color == color) || (!card.color && color == '#fff') ? "<i class='icon icon-check' style='position: relative; right: 3px'></i>" : '';
+        items.push({text: {html: `<div class="colorbox" onclick="changCardColor('${card.id}', '${color}');"><div class='cardcolor' style='background:${color}'></div>` + cardLang.colorList[color] + ' ' + icon + '</div>'}});
+    }
+
+    return items;
+}
+
+window.changCardColor = function(cardID, color)
+{
+    color = color.replace('#', '');
+    $.ajaxSubmit({url: $.createLink('kanban', 'setCardColor', 'cardID=' + cardID + '&color=' + color + '&kanbanID=' + kanbanID)});
 }
 
 function formatDate(inputDate)

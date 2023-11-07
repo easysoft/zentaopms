@@ -797,6 +797,7 @@ class kanbanModel extends model
 
                 $laneCount += count($lanes);
 
+                $groupData['id']            = $group->id;
                 $groupData['key']           = "group{$group->id}";
                 $groupData['data']['lanes'] = $lanes;
                 $groupData['data']['cols']  = $cols;
@@ -1209,7 +1210,7 @@ class kanbanModel extends model
             ->andWhere('type')->eq('common')
             ->fetchAll();
 
-        $actions     = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild', 'viewTicket');
+        $actions     = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild', 'viewTicket', 'activateCard', 'finishCard');
         $userAvatars = $this->loadModel('user')->getAvatarPairs();
         $cardGroup   = array();
         foreach($cellList as $cell)
@@ -1224,13 +1225,18 @@ class kanbanModel extends model
                 $card = zget($cards, $cardID);
 
                 $item = array();
-                $item['column'] = $cell->column;
-                $item['lane']   = $cell->lane;
-                $item['title']  = htmlspecialchars_decode($card->name);
-                $item['name']   = $card->id;
-                $item['pri']    = $card->pri;
-                $item['begin']  = $card->begin;
-                $item['end']    = $card->end;
+                $item['column']   = $cell->column;
+                $item['lane']     = $cell->lane;
+                $item['title']    = htmlspecialchars_decode($card->name);
+                $item['id']       = $card->id;
+                $item['name']     = $card->id;
+                $item['pri']      = $card->pri;
+                $item['begin']    = $card->begin;
+                $item['end']      = $card->end;
+                $item['group']    = $card->group;
+                $item['region']   = $card->region;
+                $item['color']    = $card->color;
+                $item['fromType'] = $card->fromType;
 
                 $userAvatar = zget($userAvatars, $card->assignedTo, '');
                 $userAvatar = $userAvatar ? "<img src='$userAvatar'/>" : strtoupper(mb_substr($card->assignedTo, 0, 1, 'utf-8'));
