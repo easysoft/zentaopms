@@ -20,7 +20,7 @@
   #xuan-chat-view #xx-embed-container {position: absolute; bottom: 0; left: 0; right: 0; top: 0;}
   #ai-chat-view {position: fixed; right: 0; width: 330px; bottom: 40px; top: 50px; outline: 1px solid #eee;}
   #ai-chat-frame {height: 100%; width: 100%;}
-  .unconfigured {position: absolute; width: 330px; padding: 20px; right: 0; top: 50px; bottom: 0; background: #fff; outline: 1px solid #eee;}
+  .unconfigured {position: absolute; width: 330px; padding: 20px; right: 0; top: 0; bottom: 0; background: #fff; outline: 1px solid #eee;}
 </style>
 <div id="chat-container">
   <div id="chat-switch">
@@ -35,10 +35,12 @@
     <?php endif; ?>
   </div>
   <div id="ai-chat-view">
-    <?php if($this->loadModel('ai')->isModelConfigured() && commonModel::hasPriv('ai', 'chat')): ?>
-      <iframe id="ai-chat-frame" src="<?php echo helper::createLink('ai', 'chat'); ?>" frameborder="no" allowtransparency="true" scrolling="auto" hidefocus></iframe>
-    <?php else: ?>
+    <?php if(!$this->loadModel('ai')->isModelConfigured()): ?>
       <div class="unconfigured text-gray"><?php echo sprintf($lang->index->chat->unconfiguredFormat, $lang->index->chat->ai, (common::hasPriv('ai', 'models') ? sprintf($lang->index->chat->goConfigureFormat, helper::createLink('ai', 'models'), $lang->index->chat->ai) : $lang->index->chat->contactAdminForHelp)); ?></div>
+    <?php elseif(!commonModel::hasPriv('ai', 'chat')): ?>
+      <div class="unconfigured text-gray"><?php echo $lang->index->chat->unauthorized; ?></div>
+    <?php else: ?>
+      <iframe id="ai-chat-frame" src="<?php echo helper::createLink('ai', 'chat'); ?>" frameborder="no" allowtransparency="true" scrolling="auto" hidefocus></iframe>
     <?php endif; ?>
   </div>
 </div>
