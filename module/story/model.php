@@ -1224,9 +1224,6 @@ class storyModel extends model
      */
     public function submitReview(int $storyID, object $story): array|false
     {
-        $story->reviewer = array_filter($story->reviewer);
-        if(empty($story->reviewer)) return false;
-
         $oldStory     = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $reviewerList = $this->getReviewerPairs($oldStory->id, $oldStory->version);
         $oldStory->reviewer = implode(',', array_keys($reviewerList));
@@ -1241,7 +1238,7 @@ class storyModel extends model
         }
 
         $story->reviewer = implode(',', $story->reviewer);
-        $story->status   = ($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') ? 'launched' : 'reviewing';
+        if($story->reviewer) $story->status = ($this->config->systemMode == 'PLM' and $oldStory->type == 'requirement' and $story->status == 'active' and $this->config->vision == 'rnd') ? 'launched' : 'reviewing';
 
         $this->dao->update(TABLE_STORY)->data($story, 'reviewer')->where('id')->in($twinsIdList)->exec();
 
