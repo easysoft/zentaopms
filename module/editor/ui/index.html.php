@@ -18,14 +18,14 @@ $fnProcessTreeData = function($moduleTree, $level = 0, $parent = null) use (&$fn
     foreach($moduleTree as $menu)
     {
         $menu->text = $menu->name;
-        $menu->url  = empty($menu->url) ? '' : helper::createLink('editor', 'extend', "module={$menu->id}");
+        $menu->link = empty($menu->url) ? '' : helper::createLink('editor', 'extend', "module={$menu->id}");
         if(!empty($menu->children)) $menu->items = $fnProcessTreeData($menu->children, $level + 1, $menu);
         if($menu->active)
         {
             $active[$level] = $menu->id;
             if($parent) $parent->active = 1;
         }
-        unset($menu->children);
+        unset($menu->children, $menu->url);
     }
     return $moduleTree;
 };
@@ -39,14 +39,14 @@ div
     setClass('flex'),
     cell
     (
-        set::width('180px'),
+        set::style(array('width' => '180px')),
         setClass('sidebar bg-white mr-2'),
         h::header
         (
             setClass('h-10 flex items-center pl-4 flex-none gap-3'),
             span(setClass('text-lg font-semibold'), icon('list'), $lang->editor->moduleList),
         ),
-        div(setID('moduleTree')),
+        ul(setID('moduleTree')),
     ),
     cell
     (
