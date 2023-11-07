@@ -49,7 +49,6 @@ foreach($testStories as $storyID => $storyTitle)
                 (
                     set::id("testEstStarted{$i}"),
                     set::name("testEstStarted[$i]"),
-                    set::type('date'),
                     set::value(empty($task->estStarted) ? '' : $task->estStarted),
                 ),
             ),
@@ -59,7 +58,6 @@ foreach($testStories as $storyID => $storyTitle)
                 (
                     set::id("testDeadline{$i}"),
                     set::name("testDeadline[$i]"),
-                    set::type('date'),
                     set::value(empty($task->deadline) ? '' : $task->deadline),
                 ),
             ),
