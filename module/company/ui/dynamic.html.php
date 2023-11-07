@@ -11,13 +11,12 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('browseType', $browseType);
-jsVar('direction', $direction);
 
 /* zin: Define the feature bar on main menu. */
 featureBar
 (
     set::current($browseType),
-    set::linkParams("browseType={key}&param={$param}&recTotal=0&date=&direction={$direction}&userID={$userID}&productID={$productID}&projectID={$projectID}&executionID={$executionID}&orderBy={$orderBy}"),
+    set::linkParams("browseType={key}&param={$param}&recTotal=0&date=&direction=next&userID={$userID}&productID={$productID}&projectID={$projectID}&executionID={$executionID}&orderBy={$orderBy}"),
     li
     (
         setClass('w-28 ml-4'),
