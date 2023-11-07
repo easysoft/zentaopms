@@ -158,7 +158,7 @@ featureBar
     ) : null,
     $rawMethod != 'browseunits' && $rawMethod != 'zerocase' && $rawMethod != 'groupcase' ? li
     (
-        set::className('nav-item'),
+        set::className('nav-item mr-2'),
         checkbox
         (
             setID('onlyAutoCase'),
