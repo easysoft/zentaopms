@@ -102,6 +102,7 @@ $lang->misc->feature->visionsDesc    = "<p>The concept of interface has been add
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions_en.png';
 
 /* Release Date. */
+$lang->misc->releaseDate['18.4']        = '2023-06-14';
 $lang->misc->releaseDate['18.4.beta1']  = '2023-05-31';
 $lang->misc->releaseDate['18.4.alpha1'] = '2023-04-21';
 $lang->misc->releaseDate['18.3']        = '2023-03-15';
@@ -201,6 +202,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['18.4'][]        = array('title' => 'Fix bugs.', 'desc' => '');
 $lang->misc->feature->all['18.4.beta1'][]  = array('title' => 'Fix bugs.', 'desc' => '');
 $lang->misc->feature->all['18.4.alpha1'][] = array('title' => 'We have enhanced the interaction experience of permissions and documents, while introducing the concept of test scenarios. Moreover, we now provide support for importing use cases with XMIND. Additionally, we have fully revamped the BI module by incorporating large screens, pivot tables, charts, and data capabilities.', 'desc' => '');
 $lang->misc->feature->all['18.3'][]        = array('title' => 'Language item customization is added in secondary development, which supports the definition of language items for menus and search tags; Editor functionality is added in the secondary development, which allows users to turn it on and off on demand; The forms could be saved temporarily when users exits unexpectedly, and the unsaved information will be filled automatically the next time you enter.', 'desc' => '');
