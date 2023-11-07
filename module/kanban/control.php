@@ -1302,7 +1302,8 @@ class kanban extends control
                 $this->loadModel('action')->create('kanbancard', $cardID, 'importedBuild', '', $buildID);
             }
 
-            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+            $callback = $this->kanban->getKanbanCallback($kanbanID, $regionID);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
 
         $this->loadModel('build');
