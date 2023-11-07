@@ -558,7 +558,7 @@ class userModel extends model
 
         $userID = $oldUser->id;
         $user   = fixer::input('post')
-            ->setDefault('join', '0000-00-00')
+            ->setDefault('join', null)
             ->setDefault('company', 0)
             ->setDefault('visions', '')
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
