@@ -575,8 +575,16 @@ class jobModel extends model
     {
         $pipeline = json_decode($job->pipeline);
 
-        $pipelineParams = new stdclass;
-        $pipelineParams->ref = $pipeline->reference ? $pipeline->reference : 'master';
+        $pipelineParams      = new stdclass;
+        $pipelineParams->ref = zget($pipeline, 'reference', '');
+        if(!$pipelineParams->ref)
+        {
+            $project = $this->loadModel('gitlab')->apiGetSingleProject($job->server, $pipeline->project, false);
+            $pipelineParams->ref = zget($project, 'default_branch', 'master');
+
+            $pipeline->reference = $pipelineParams->ref;
+            $this->dao->update(TABLE_JOB)->set('pipeline')->eq(json_encode($pipeline))->where('id')->eq($job->id)->exec();
+        }
 
         $customParams = json_decode($job->customParam);
         $variables    = array();
