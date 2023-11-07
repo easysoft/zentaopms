@@ -30,6 +30,4 @@ $config->index->oldPages[] = 'execution-kanban';
 $config->index->oldPages[] = 'execution-taskkanban';
 $config->index->oldPages[] = 'repo-setrules';
 $config->index->oldPages[] = 'host-treemap';
-$config->index->oldPages[] = 'gogs-binduser';
-$config->index->oldPages[] = 'gitea-binduser';
 $config->index->oldPages[] = 'screen-view';
