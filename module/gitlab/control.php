@@ -489,15 +489,15 @@ class gitlab extends control
         {
             $data = fixer::input('post')->get();
 
-            $ids = array_filter($data->ids);
+            $ids = array_filter($data->id);
             if(count($ids) != count(array_unique($ids))) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->group->repeatError));
             $newMembers = array();
             foreach($ids as $key => $id)
             {
                 /* Check whether each member has selected accesslevel. */
-                if(empty($data->levels[$key])) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->group->memberAccessLevel . $this->lang->gitlab->group->emptyError ));
+                if(empty($data->access_level[$key])) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->group->memberAccessLevel . $this->lang->gitlab->group->emptyError ));
 
-                $newMembers[$id] = (object)array('access_level'=>$data->levels[$key], 'expires_at'=>$data->expires[$key]);
+                $newMembers[$id] = (object)array('access_level'=>$data->access_level[$key], 'expires_at'=>$data->expires_at[$key]);
             }
 
             $currentMembers = $this->gitlab->apiGetGroupMembers($gitlabID, $groupID);
