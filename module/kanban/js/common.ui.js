@@ -23,6 +23,13 @@ window.changeKanban = function()
     loadPartial(url, '#cardForm');
 }
 
+window.changeProduct = function()
+{
+    const targetID = $('[name=product]').val();
+    const url      = $.createLink('kanban', methodName, 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID + '&targetID=' + targetID);
+    loadPartial(url, '#planForm');
+}
+
 window.changeKanbanType = function()
 {
     const type = $('[name=type]:checked').val();
