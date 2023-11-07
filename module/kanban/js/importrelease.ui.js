@@ -10,5 +10,6 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     checkedList.forEach((id) => form.append('releases[]', id));
 
     $.ajaxSubmit({url, data:form});
+    return false;
 });
 

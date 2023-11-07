@@ -7,7 +7,7 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     const url  = $(this).data('url');
     const form = new FormData();
     form.append('targetLane', $('[name=lane]').val())
-    checkedList.forEach((id) => form.append('cards[]', id));
+    checkedList.forEach((id) => form.append('executions[]', id));
 
     $.ajaxSubmit({url, data:form});
     return false;

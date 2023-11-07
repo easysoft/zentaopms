@@ -10,5 +10,6 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     checkedList.forEach((id) => form.append('productplans[]', id));
 
     $.ajaxSubmit({url, data:form});
+    return false;
 });
 

@@ -30,6 +30,13 @@ window.changeProduct = function()
     loadPartial(url, '#linkForm');
 }
 
+window.changeProject = function()
+{
+    const targetID = $('[name=project]').val();
+    const url      = $.createLink('kanban', methodName, 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID + '&targetID=' + targetID);
+    loadPartial(url, '#linkForm');
+}
+
 window.changeKanbanType = function()
 {
     const type = $('[name=type]:checked').val();

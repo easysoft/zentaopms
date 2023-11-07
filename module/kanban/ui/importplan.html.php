@@ -43,7 +43,7 @@ formBase
         set::checkable(true),
         set::cols(array_values($config->productplan->dtable->fieldList)),
         set::data(array_values($plans2Imported)),
-        set::footToolbar(array('items' => array(array('text' => $lang->kanban->importCard, 'btnType' => 'primary', 'className' => 'size-sm importcardBtn batch-btn', 'data-url'  => inlink('importplan', "kanbanID=$kanbanID&regionID=$regionID&groupID=$groupID&columnID=$columnID&selectedProductID=$selectedProductID"))))),
+        set::footToolbar(array('items' => array(array('text' => $lang->kanban->importCard, 'btnType' => 'primary', 'className' => 'size-sm importcardBtn batch-btn', 'data-url'  => inlink('importplan', "kanbanID=$kanbanID&regionID=$regionID&groupID=$groupID&columnID=$columnID"))))),
         set::footPager(usePager())
     )
 );
