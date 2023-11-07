@@ -240,3 +240,5 @@ tbody tr td.c-actions .dividing-line {width: 1px; height: 16px; display: inline-
 #adminMenu.dropdown-menu > li.disabled img {filter: grayscale(100%); opacity: .6;}
 
 #userNav .dropdown-menu > li > a:hover > .user-profile-role {color: #FFFFFF;}
+
+.btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding: 7px !important;}
