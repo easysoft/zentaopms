@@ -324,7 +324,7 @@ class programplanTao extends programplanModel
             $data->realBegan     = $realBegan ? substr($realBegan, 0, 10) : '';
             $data->realEnd       = $realEnd ? substr($realEnd, 0, 10) : '';
             $data->parent        = $plan->grade == 1 ? 0 :$plan->parent;
-            $data->isParent      = $plan->isParent
+            $data->isParent      = $plan->isParent;
             $data->open          = true;
             $data->start_date    = $start;
             $data->endDate       = $end;
