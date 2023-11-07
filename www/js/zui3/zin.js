@@ -1074,12 +1074,35 @@
         }, _interval);
     }
 
-    function updatePageLayout()
+    function setImageSize(image, maxWidth, maxHeight)
     {
-        layoutNanavbar();
+        var $image = $(image);
+        if($image.parent().prop('tagName').toLowerCase() == 'a') return;
+
+        /* If not set maxWidth, set it auto. */
+        if(!maxWidth)
+        {
+            bodyWidth = $('body').width();
+            maxWidth  = bodyWidth - 470; // The side bar's width is 336, and add some margins.
+        }
+        if(!maxHeight) maxHeight = $(top.window).height();
+
+        setTimeout(function()
+        {
+            maxHeightStyle = $image.height() > 0 ? 'max-height:' + maxHeight + 'px' : '';
+            if(!document.getElementsByClassName('xxc-embed').length && $image.width() > 0 && $image.width() > maxWidth) $image.attr('width', maxWidth);
+            $image.wrap('<a href="' + $image.attr('src') + '" style="display:inline-block;position:relative;overflow:hidden;' + maxHeightStyle + '" target="_blank"></a>');
+            if($image.height() > 0 && $image.height() > maxHeight) $image.closest('a').append("<a href='###' class='showMoreImage' onclick='showMoreImage(this)'>" + lang.expand + " <i class='icon-angle-down'></i></a>");
+        }, 50);
     }
 
-    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk, waitDom: waitDom});
+    function showMoreImage(obj)
+    {
+        $(obj).parents('a').css('max-height', 'none');
+        $(obj).remove();
+    }
+
+    $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, selectVision: selectVision, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk, waitDom: waitDom, setImageSize: setImageSize, showMoreImage: showMoreImage});
     $.extend($.apps, {openUrl: openUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
 
