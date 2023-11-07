@@ -193,13 +193,11 @@ $(function()
             trigger: 'manual',
             title: text,
             placement: placement,
-            container: container,
             className: 'warning',
             html: true
         }, options);
         $e = $e.first();
 
-        console.log($e.css('display'), $e.parent().is('#menuMainNav'))
         if($e.css('display') !== 'none')
         {
             if(!$e.data('zui.tooltip')) $e.addClass('tooltip-tutorial').attr('data-toggle', 'tooltip').tooltip(options);
@@ -209,9 +207,8 @@ $(function()
         else if($e.parent().is('#menuMainNav'))
         {
             var $menuMoreItem = appsWindow.$('#menuMoreNav>li').last();
-            console.log('menuMoreItem', $menuMoreItem);
             highlight($menuMoreItem);
-            showToolTip($menuMoreItem, text, $.extend({}, options, {tipClass: 'warning', container: false}));
+            showToolTip($menuMoreItem, text, $.extend({}, options, {tipClass: 'warning'}));
             var appCode = $e.data('app');
             appsWindow.$('#menuMoreList>li').removeClass('active').attr('data-tip', '');
             appsWindow.$('#menuMoreList>li[data-app="' + appCode + '"]').addClass('active hl-tutorial hl-in').attr('data-tip', text);
@@ -227,7 +224,6 @@ $(function()
         if(checkTaskId) clearTimeout(checkTaskId);
 
         var iWindow = getAppWindow();
-        console.log(iWindow, iWindow.config, iWindow.$)
         if(!(iWindow && iWindow.config && iWindow.$))
         {
             checkTaskId = setTimeout(tryCheckTask, 1000);
@@ -245,12 +241,8 @@ $(function()
         var iWindow = getAppWindow();
         if(!iWindow || !iWindow.$) return tryCheckTask();
         var task = tasks[current];
-        console.log('current is', current)
-        console.log('module is ', task.nav.app)
         var appCode = task.nav.app || task.nav.menuModule || task.nav['module'];
-        console.log('appCode is ', appCode);
         var app = getApp(appCode);
-        console.log('app is', app);
         if(!app) return;
 
         var $$ = iWindow.$;
@@ -311,7 +303,6 @@ $(function()
                 var onSubmit = function(e)
                 {
                     var status = checkTask();
-                    console.log('检查表单的状态', status);
                     if(!status.submitOK)
                     {
                         if(status.waitField)
@@ -360,7 +351,6 @@ $(function()
                         setTimeout(
                             function()
                             {
-                                console.log(task.nav.submit, $$(task.nav.submit))
                                 if($(current).hasClass('checked'))
                                 {
                                     highlight($$(task.nav.submit))
@@ -395,11 +385,9 @@ $(function()
             /* Highlight app button in left menu */
             var $appNav = appsWindow.$('#menuMainNav > li[data-app="' + appCode + '"]');
             var lastApp = appsWindow.$.apps.getLastApp();
-            console.log('左侧菜单栏元素', $appNav)
-            console.log('左侧菜单栏是否打开', app, app.opened)
-            console.log('是否打开当前菜单', appsWindow.$.apps.getLastApp());
             if(appCode !== lastApp.code)
             {
+                if($appNav.css('display') === 'none' && appsWindow.$('#menuMoreList').css('display') !== 'none') $appNav = appsWindow.$('#menuMoreList > li[data-app="' + appCode + '"]');
                 var targetAppTip = lang.targetAppTip.replace('%s', app.text || lang.target);
                 highlight($appNav);
                 showToolTip($appNav, targetAppTip);
@@ -407,13 +395,10 @@ $(function()
             else
             {
                 var menuModule = task.nav.menuModule || task.nav['module'];
-                console.log('当前的menu菜单为', menuModule, task.nav.menuModule, task.nav['module'])
                 var $navbar    = $$('#navbar');
                 if(task.nav.app == 'admin') $navbar = $$('#settings');
                 var $navbarItem = $navbar.find('[data-id="' + menuModule + '"]');
                 var targetPageTip = lang.targetPageTip.replace('%s', task.nav.targetPageName || lang.target);
-                console.log('激活的菜单栏元素', $navbarItem);
-                console.log('当前激活的任务', task);
                 if($navbarItem.length && !$navbarItem.hasClass('active'))
                 {
                     highlight($navbarItem);
@@ -445,9 +430,6 @@ $(function()
                     else if(task.nav.menu[0] === '#')
                     {
                         var $customMenu = $$(task.nav.menu).last();
-                        console.log('custom菜单', $customMenu, $$(task.nav.menu) ,task.nav.menu);
-                        console.log('高亮元素', $customMenu);
-                        console.log('custom菜单组', $$(task.nav.menu))
                         if($customMenu.length)
                         {
                             highlight($customMenu);
@@ -578,6 +560,9 @@ $(function()
         {
             appsWindow.$(appsWindow.document).on('reloadapp.apps openapp.apps showapp.apps closeapp.apps hideapp.apps', function()
             {
+                tryCheckTutorialState(1000);
+            });
+            appsWindow.$('#menuMoreList').siblings('a').on('click', function(){
                 tryCheckTutorialState(1000);
             });
 
