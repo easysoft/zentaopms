@@ -360,8 +360,9 @@ class extension extends control
         $this->extension->executeDB($extension, 'uninstall');
         $this->extension->updateExtension($extension, array('status' => 'available'));
         $this->extension->togglePackageDisable($extension, 'disabled');
+
+        $this->view->title          = $this->lang->extension->uninstallFinished;
         $this->view->removeCommands = $this->extension->removePackage($extension);
-        $this->view->title = $this->lang->extension->uninstallFinished;
 
         if($postUninstallHook = $this->extension->getHookFile($extension, 'postuninstall')) include $postUninstallHook;
         $this->display();
@@ -389,8 +390,9 @@ class extension extends control
         }
 
         $this->extension->togglePackageDisable($extension, 'active');
+        $this->extension->copyPackageFiles($extension);
         $this->extension->updateExtension($extension, array('status' => 'installed'));
-        $this->view->title      = $this->lang->extension->activateFinished;
+        $this->view->title = $this->lang->extension->activateFinished;
         $this->display();
     }
 
