@@ -12,16 +12,18 @@
 class screen extends control
 {
     /**
-     * Browse screen list.
+     * 浏览一个维度下的所有大屏。
+     * Browse screens of a dimension.
      *
-     * @param  int $dimensionID
+     * @param  int    $dimensionID
      * @access public
      * @return void
      */
-    public function browse($dimensionID = 0)
+    public function browse(int $dimensionID = 0)
     {
-        $dimensionID = $this->loadModel('dimension')->getDimension($dimensionID);
         $this->checkShowGuide();
+
+        $dimensionID = $this->loadModel('dimension')->getDimension($dimensionID);
 
         $this->view->title       = $this->lang->screen->common;
         $this->view->screens     = $this->screen->getList($dimensionID);
@@ -30,7 +32,8 @@ class screen extends control
     }
 
     /**
-     * Check whether show guide.
+     * 检查是否需要显示 BI 新功能的引导页面。
+     * Check if need to show the guide of BI new features.
      *
      * @access public
      * @return void
@@ -63,24 +66,25 @@ class screen extends control
     }
 
     /**
-     * View screen.
+     * 查看一个大屏。
+     * View a screen.
      *
-     * @param  int $screenID
-     * @param  int $year
-     * @param  int $dept
+     * @param  int    $screenID
+     * @param  int    $year
+     * @param  int    $dept
      * @param  string $account
      * @access public
      * @return void
      */
-    public function view($screenID, $year = 0, $dept = 0, $account = '')
+    public function view(int $screenID, int $year = 0, int $dept = 0, string $account = '')
     {
-        if(empty($year)) $year = date('Y');
-
         if($screenID == 3)
         {
             echo $this->fetch('report', 'annualData', "year=$year&dept=$dept&account=$account");
             return;
         }
+
+        if(empty($year)) $year = date('Y');
 
         $screen = $this->screen->getByID($screenID, $year, $dept, $account);
 
