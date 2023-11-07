@@ -38,6 +38,7 @@ formPanel
             set::control('date'),
             set::name('begin'),
             set::value(''),
+            set::required('true')
         ),
     ),
     formRow
@@ -49,6 +50,7 @@ formPanel
             set::control('date'),
             set::name('end'),
             set::value(''),
+            set::required('true')
         ),
     ),
     formRow
@@ -59,6 +61,7 @@ formPanel
             set::label($lang->holiday->name),
             set::name('name'),
             set::value(''),
+            set::required('true')
         ),
     ),
     formRow
