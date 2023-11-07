@@ -671,9 +671,8 @@ class kanban extends control
             return print("<script>parent.updateKanban($kanbanData, $regionID)</script>");
         }
 
-        $kanbanGroup = $this->kanban->getKanbanData($kanbanID, $regionID);
-        $kanbanGroup = json_encode($kanbanGroup);
-        return print("<script>parent.updateRegion($regionID, $kanbanGroup)</script>");
+        $callback = $this->kanban->getKanbanCallback($kanbanID, $regionID);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
     }
 
     /**
@@ -1644,7 +1643,10 @@ class kanban extends control
 
             $this->loadModel('action')->create('kanbanlane', $laneID, 'Edited', '', $executionID);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateLaneName', 'params' => array($laneID, $this->post->name))));
+            $lane     = $this->kanban->getLaneById($laneID);
+            $region   = $this->kanban->getRegionByID($lane->region);
+            $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
 
         $lane = $this->kanban->getLaneById($laneID);
@@ -1675,7 +1677,10 @@ class kanban extends control
 
             $this->loadModel('action')->create('kanbanlane', $laneID, 'Edited', '', $executionID);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateLaneColor', 'params' => array($laneID, $this->post->color))));
+            $lane     = $this->kanban->getLaneById($laneID);
+            $region   = $this->kanban->getRegionByID($lane->region);
+            $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
 
         $lane = $this->kanban->getLaneById($laneID);
