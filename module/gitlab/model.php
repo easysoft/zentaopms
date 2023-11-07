@@ -2638,9 +2638,11 @@ class gitlabModel extends model
      */
     public function manageBranchPrivs($gitlabID, $projectID, $protected = array())
     {
-        $data = (array)fixer::input('post')->get();
-        extract($data);
-        $failure = array();
+        $data        = fixer::input('post')->get();
+        $branches    = $data->name;
+        $pushLevels  = $data->pushAccess;
+        $mergeLevels = $data->mergeAccess;
+        $failure     = array();
 
         /* Remove privs. */
         foreach($protected as $name => $branch)

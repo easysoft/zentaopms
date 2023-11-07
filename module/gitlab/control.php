@@ -1406,7 +1406,6 @@ class gitlab extends control
         /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
         $tagName = urldecode(helper::safe64Decode($tagName));
         $reponse = $this->gitlab->apiDeleteTag($gitlabID, $projectID, $tagName);
-        a($response); die;
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
         if(!$reponse or substr($reponse->message, 0, 2) == '20')
@@ -1440,8 +1439,8 @@ class gitlab extends control
         $hasAccessBranches = $this->gitlab->apiGetBranchPrivs($gitlabID, $projectID, '', 'name_asc');
         foreach($hasAccessBranches as $branch)
         {
-            $branch->pushAccess  = $this->gitlab->checkAccessLevel($branch->push_access_levels);
-            $branch->mergeAccess = $this->gitlab->checkAccessLevel($branch->merge_access_levels);
+            $branch->pushAccess  = (string)$this->gitlab->checkAccessLevel($branch->push_access_levels);
+            $branch->mergeAccess = (string)$this->gitlab->checkAccessLevel($branch->merge_access_levels);
         }
 
         if(!empty($_POST))
@@ -1451,18 +1450,15 @@ class gitlab extends control
 
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => inlink('browseProject', "gitlabID=$gitlabID")));
         }
-        $allBranches      = $this->gitlab->apiGetBranches($gitlabID, $projectID);
-        $noAccessBranches = array();
-        foreach($allBranches as $branch)
-        {
-            if(!isset($hasAccessBranches[$branch->name])) $noAccessBranches[$branch->name] = $branch->name;
-        }
+        $allBranches = $this->gitlab->apiGetBranches($gitlabID, $projectID);
+        $branchPairs = array();
+        foreach($allBranches as $branch) $branchPairs[$branch->name] = $branch->name;
 
         $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseBranchPriv;
         $this->view->gitlabID          = $gitlabID;
         $this->view->projectID         = $projectID;
+        $this->view->branchPairs       = $branchPairs;
         $this->view->hasAccessBranches = $hasAccessBranches;
-        $this->view->noAccessBranches  = $noAccessBranches;
         $this->display();
     }
 
@@ -1486,7 +1482,7 @@ class gitlab extends control
         }
 
         $hasAccessTags = $this->gitlab->apiGetTagPrivs($gitlabID, $projectID, '', 'name_asc');
-        foreach($hasAccessTags as $tag) $tag->createAccess = $this->gitlab->checkAccessLevel($tag->create_access_levels);
+        foreach($hasAccessTags as $tag) $tag->createAccess = (string)$this->gitlab->checkAccessLevel($tag->create_access_levels);
 
         if(!empty($_POST))
         {
