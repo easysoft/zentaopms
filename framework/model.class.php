@@ -53,6 +53,45 @@ class model extends baseModel
     }
 
     /**
+     * Load dao of bi.
+     *
+     * @access public
+     * @return void
+     */
+    public function loadBIDAO()
+    {
+        global $config, $biDAO;
+        if(is_object($biDAO)) return $this->dao = $biDAO;
+
+        if(!isset($config->biDB)) return;
+
+        $driver = $config->db->driver;
+        $biDAO = new $driver();
+
+        $biDAO->slaveDBH = $this->app->connectByPDO($config->biDB, 'BI');
+
+        $this->dao = $biDAO;
+    }
+
+    /**
+     * 通过对象ID获取对象信息。
+     * Get object information by ID.
+     *
+     * @param  int         $objectID
+     * @param  string      $moduleName
+     * @access public
+     * @return object|bool
+     */
+    public function fetchByID(int $objectID, string $moduleName = ''): object|bool
+    {
+        if(empty($objectID)) return false;
+        if(empty($moduleName)) $moduleName = $this->getModuleName();
+        $table = $this->config->objectTables[$moduleName];
+
+        return $this->dao->findById($objectID)->from($table)->fetch();
+    }
+
+    /**
      * 删除记录
      * Delete one record.
      *
@@ -226,24 +265,6 @@ class model extends baseModel
     }
 
     /**
-     * 通过对象ID获取对象信息。
-     * Get object information by ID.
-     *
-     * @param  int         $objectID
-     * @param  string      $moduleName
-     * @access public
-     * @return object|bool
-     */
-    public function fetchByID(int $objectID, string $moduleName = ''): object|bool
-    {
-        if(empty($objectID)) return false;
-        if(empty($moduleName)) $moduleName = $this->getModuleName();
-        $table = $this->config->objectTables[$moduleName];
-
-        return $this->dao->findById($objectID)->from($table)->fetch();
-    }
-
-    /**
      * Process status of an object according to its subStatus.
      *
      * @param  string $module   product | release | story | project | task | bug | testcase | testtask | feedback
@@ -411,26 +432,5 @@ class model extends baseModel
         if(method_exists($taoClass, $method)) return call_user_func_array("{$taoClass}::{$method}", $arguments);
 
         $app->triggerError("the module {$moduleName} has no {$method} method", __FILE__, __LINE__, true);
-    }
-
-    /**
-     * Load dao of bi.
-     *
-     * @access public
-     * @return void
-     */
-    public function loadBIDAO()
-    {
-        global $config, $biDAO;
-        if(is_object($biDAO)) return $this->dao = $biDAO;
-
-        if(!isset($config->biDB)) return;
-
-        $driver = $config->db->driver;
-        $biDAO = new $driver();
-
-        $biDAO->slaveDBH = $this->app->connectByPDO($config->biDB, 'BI');
-
-        $this->dao = $biDAO;
     }
 }
