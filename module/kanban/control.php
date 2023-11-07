@@ -181,11 +181,10 @@ class kanban extends control
      * Delete a space.
      *
      * @param  int    $spaceID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function deleteSpace($spaceID, $confirm = 'no')
+    public function deleteSpace($spaceID)
     {
         $this->kanban->delete(TABLE_KANBANSPACE, $spaceID);
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
@@ -429,12 +428,11 @@ class kanban extends control
      * Delete a kanban.
      *
      * @param  int    $kanbanID
-     * @param  string $confirm
      * @param  string $browseType involved|cooperation|public|private
      * @access public
      * @return void
      */
-    public function delete($kanbanID, $confirm = 'no', $browseType = 'involved')
+    public function delete($kanbanID, $browseType = 'involved')
     {
         $this->kanban->delete(TABLE_KANBAN, $kanbanID);
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
@@ -655,39 +653,27 @@ class kanban extends control
      * @param  int    $regionID
      * @param  int    $kanbanID
      * @param  int    $laneID
-     * @param  string $confirm no|yes
      * @access public
      * @return void
      */
-    public function deleteLane($regionID, $kanbanID, $laneID, $confirm = 'no')
+    public function deleteLane($regionID, $kanbanID, $laneID)
     {
-        if($confirm == 'no')
+        $this->kanban->delete(TABLE_KANBANLANE, $laneID);
+
+        if($this->app->tab == 'execution')
         {
-            $laneType   = $this->kanban->getLaneById($laneID)->type;
-            $confirmTip = in_array($laneType, array('story', 'task', 'bug')) ? sprintf($this->lang->kanbanlane->confirmDeleteTip, $this->lang->{$laneType}->common) : $this->lang->kanbanlane->confirmDelete;
+            if(dao::isError()) return $this->sendError(dao::getError());
 
-            return print(js::confirm($confirmTip, $this->createLink('kanban', 'deleteLane', "regionID=$regionID&kanbanID=$kanbanID&laneID=$laneID&confirm=yes"), ''));
-
+            $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
+            $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
+            $kanbanData   = $this->loadModel('kanban')->getRDKanban($kanbanID, $executionLaneType, 'id_desc', $regionID, $executionGroupBy);
+            $kanbanData   = json_encode($kanbanData);
+            return print("<script>parent.updateKanban($kanbanData, $regionID)</script>");
         }
-        else
-        {
-            $this->kanban->delete(TABLE_KANBANLANE, $laneID);
 
-            if($this->app->tab == 'execution')
-            {
-                if(dao::isError()) return $this->sendError(dao::getError());
-
-                $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                $kanbanData   = $this->loadModel('kanban')->getRDKanban($kanbanID, $executionLaneType, 'id_desc', $regionID, $executionGroupBy);
-                $kanbanData   = json_encode($kanbanData);
-                return print("<script>parent.updateKanban($kanbanData, $regionID)</script>");
-            }
-
-            $kanbanGroup = $this->kanban->getKanbanData($kanbanID, $regionID);
-            $kanbanGroup = json_encode($kanbanGroup);
-            return print("<script>parent.updateRegion($regionID, $kanbanGroup)</script>");
-        }
+        $kanbanGroup = $this->kanban->getKanbanData($kanbanID, $regionID);
+        $kanbanGroup = json_encode($kanbanGroup);
+        return print("<script>parent.updateRegion($regionID, $kanbanGroup)</script>");
     }
 
     /**
@@ -710,9 +696,9 @@ class kanban extends control
 
             $this->loadModel('action')->create('kanbanColumn', $columnID, 'Created');
 
-            $region      = $this->kanban->getRegionByID($column->region);
-            $kanbanGroup = $this->kanban->getKanbanData($region->kanban, $region->id);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($column->region, $kanbanGroup))));
+            $region   = $this->kanban->getRegionByID($column->region);
+            $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
         }
 
         $this->view->title    = $this->lang->kanban->createColumn;
@@ -749,65 +735,48 @@ class kanban extends control
      * Archive a column.
      *
      * @param  int    $columnID
-     * @param  string $confirm no|yes
      * @access public
      * @return void
      */
-    public function archiveColumn($columnID, $confirm = 'no')
+    public function archiveColumn($columnID)
     {
-        if($confirm == 'no')
+        $column = $this->kanban->getColumnById($columnID);
+        if($column->parent)
         {
-            return print(js::confirm($this->lang->kanbancolumn->confirmArchive, $this->createLink('kanban', 'archiveColumn', "columnID=$columnID&confirm=yes")));
+            $children = $this->dao->select('count(*) as count')->from(TABLE_KANBANCOLUMN)
+                ->where('parent')->eq($column->parent)
+                ->andWhere('id')->ne($column->id)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('archived')->eq('0')
+                ->fetch('count');
+
+            if(!$children) $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(0)->where('id')->eq($column->parent)->exec();
         }
-        else
-        {
-            $column = $this->kanban->getColumnById($columnID);
-            if($column->parent)
-            {
-                $children = $this->dao->select('count(*) as count')->from(TABLE_KANBANCOLUMN)
-                    ->where('parent')->eq($column->parent)
-                    ->andWhere('id')->ne($column->id)
-                    ->andWhere('deleted')->eq('0')
-                    ->andWhere('archived')->eq('0')
-                    ->fetch('count');
 
-                if(!$children) $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(0)->where('id')->eq($column->parent)->exec();
-            }
+        $this->kanban->archiveColumn($columnID);
+        if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
 
-            $this->kanban->archiveColumn($columnID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+        $this->loadModel('action')->create('kanbancolumn', $columnID, 'archived');
 
-            $this->loadModel('action')->create('kanbancolumn', $columnID, 'archived');
-
-            $region      = $this->kanban->getRegionByID($column->region);
-            $kanbanGroup = $this->kanban->getKanbanData($region->kanban, $region->id);
-            $kanbanGroup = json_encode($kanbanGroup);
-            return print("<script>parent.updateRegion({$column->region}, $kanbanGroup)</script>");
-        }
+        $region   = $this->kanban->getRegionByID($column->region);
+        $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
     }
 
     /**
      * Restore a column.
      *
      * @param  int    $columnID
-     * @param  string $confirm no|yes
      * @access public
      * @return void
      */
-    public function restoreColumn($columnID, $confirm = 'no')
+    public function restoreColumn($columnID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->kanbancolumn->confirmRestore, $this->createLink('kanban', 'restoreColumn', "columnID=$columnID&confirm=yes"), ''));
-        }
-        else
-        {
-            $this->kanban->restoreColumn($columnID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+        $this->kanban->restoreColumn($columnID);
+        if(dao::isError()) return print(js::error(dao::getError()));
 
-            $this->loadModel('action')->create('kanbancolumn', $columnID, 'restore');
-            return print(js::reload('parent'));
-        }
+        $this->loadModel('action')->create('kanbancolumn', $columnID, 'restore');
+        return print(js::reload('parent'));
     }
 
     /**
@@ -847,29 +816,19 @@ class kanban extends control
      * Delete a column.
      *
      * @param  int    $columnID
-     * @param  string $confirm no|yes
      * @access public
      * @return void
      */
-    public function deleteColumn($columnID, $confirm = 'no')
+    public function deleteColumn($columnID)
     {
         $column = $this->kanban->getColumnById($columnID);
-        if($confirm == 'no')
-        {
-            $confirmLang = $column->parent > 0 ? $this->lang->kanbancolumn->confirmDeleteChild : $this->lang->kanbancolumn->confirmDelete;
-            return print(js::confirm($confirmLang, $this->createLink('kanban', 'deleteColumn', "columnID=$columnID&confirm=yes")));
-        }
-        else
-        {
-            if($column->parent > 0) $this->kanban->processCards($column);
+        if($column->parent > 0) $this->kanban->processCards($column);
 
-            $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->exec();
+        $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->exec();
 
-            $region      = $this->kanban->getRegionByID($column->region);
-            $kanbanGroup = $this->kanban->getKanbanData($region->kanban, $region->id);
-            $kanbanGroup = json_encode($kanbanGroup);
-            return print("<script>parent.updateRegion({$column->region}, $kanbanGroup)</script>");
-        }
+        $region   = $this->kanban->getRegionByID($column->region);
+        $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
     }
 
     /**
@@ -1471,30 +1430,22 @@ class kanban extends control
      * Archive a card.
      *
      * @param  int    $cardID
-     * @param  string $confirm no|yes
      * @access public
      * @return void
      */
-    public function archiveCard($cardID, $confirm = 'no')
+    public function archiveCard($cardID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->kanbancard->confirmArchive, $this->createLink('kanban', 'archiveCard', "cardID=$cardID&confirm=yes")));
-        }
-        else
-        {
-            $changes = $this->kanban->archiveCard($cardID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        $changes = $this->kanban->archiveCard($cardID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'archived');
-            $this->action->logHistory($actionID, $changes);
+        $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'archived');
+        $this->action->logHistory($actionID, $changes);
 
-            if(isInModal()) return print(js::reload('parent.parent'));
-            $card        = $this->kanban->getCardByID($cardID);
-            $kanbanGroup = $this->kanban->getKanbanData($card->kanban, $card->region);
-            $kanbanGroupParam = json_encode($kanbanGroup);
-            return print("<script>parent.updateRegion({$card->region}, $kanbanGroupParam)</script>");
-        }
+        if(isInModal()) return print(js::reload('parent.parent'));
+        $card        = $this->kanban->getCardByID($cardID);
+        $kanbanGroup = $this->kanban->getKanbanData($card->kanban, $card->region);
+        $kanbanGroupParam = json_encode($kanbanGroup);
+        return print("<script>parent.updateRegion({$card->region}, $kanbanGroupParam)</script>");
     }
 
     /**
@@ -1527,65 +1478,41 @@ class kanban extends control
      * Restore a card.
      *
      * @param  int    $cardID
-     * @param  string $confirm no|yes
      * @access public
      * @return void
      */
-    public function restoreCard($cardID, $confirm = 'no')
+    public function restoreCard($cardID)
     {
-        if($confirm == 'no')
-        {
-            $column = $this->dao->select('t2.*')->from(TABLE_KANBANCELL)->alias('t1')
-                ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column=t2.id')
-                ->where('t1.cards')->like("%,$cardID,%")
-                ->andWhere('t1.type')->eq('common')
-                ->fetch();
-            if($column->archived or $column->deleted) return print(js::alert(sprintf($this->lang->kanbancard->confirmRestoreTip, $column->name)));
+        $this->kanban->restoreCard($cardID);
 
-            return print(js::confirm(sprintf($this->lang->kanbancard->confirmRestore, $column->name), $this->createLink('kanban', 'restoreCard', "cardID=$cardID&confirm=yes"), ''));
-        }
-        else
-        {
-            $this->kanban->restoreCard($cardID);
+        $changes = $this->kanban->restoreCard($cardID);
+        if(dao::isError()) return print(js::error(dao::getError()));
 
-            $changes = $this->kanban->restoreCard($cardID);
-            if(dao::isError()) return print(js::error(dao::getError()));
+        $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'restore');
+        $this->action->logHistory($actionID, $changes);
 
-            $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'restore');
-            $this->action->logHistory($actionID, $changes);
-
-            return print(js::reload('parent'));
-        }
+        return print(js::reload('parent'));
     }
 
 	/**
 	 * Delete a card.
 	 *
 	 * @param  int    $cardID
-	 * @param  string $confirm no|yes
 	 * @access public
 	 * @return void
 	 */
-    public function deleteCard($cardID, $confirm = 'no')
+    public function deleteCard($cardID)
     {
         $card = $this->kanban->getCardByID($cardID);
-        if($confirm == 'no')
-        {
-            $confirmTip = $card->fromType == '' ? $this->lang->kanbancard->confirmDelete : $this->lang->kanbancard->confirmRemove;
-            return print(js::confirm($confirmTip, $this->createLink('kanban', 'deleteCard', "cardID=$cardID&confirm=yes")));
-        }
-        else
-        {
-            if($card->fromType == '') $this->kanban->delete(TABLE_KANBANCARD, $cardID);
-            if($card->fromType != '') $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
+        if($card->fromType == '') $this->kanban->delete(TABLE_KANBANCARD, $cardID);
+        if($card->fromType != '') $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
 
-            if(isInModal()) return print(js::reload('parent.parent'));
+        if(isInModal()) return print(js::reload('parent.parent'));
 
-            $kanbanGroup      = $this->kanban->getKanbanData($card->kanban, $card->region);
-            $kanbanGroupParam = json_encode($kanbanGroup);
-            if($card->archived) return print(js::reload(parent));
-            return print("<script>parent.updateRegion({$card->region}, $kanbanGroupParam)</script>");
-        }
+        $kanbanGroup      = $this->kanban->getKanbanData($card->kanban, $card->region);
+        $kanbanGroupParam = json_encode($kanbanGroup);
+        if($card->archived) return print(js::reload(parent));
+        return print("<script>parent.updateRegion({$card->region}, $kanbanGroupParam)</script>");
     }
 
     /**
