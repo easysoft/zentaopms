@@ -806,7 +806,11 @@ class gitlab extends control
         $namespaces = array();
         foreach($namespacesList as $namespace)
         {
-            if($namespace->kind == 'user' and $namespace->path == $user->username) $namespaces[$namespace->id] = $namespace->path;
+            if($namespace->kind == 'user' and $namespace->path == $user->username)
+            {
+                $namespaces[$namespace->id] = $namespace->path;
+                $this->view->defaultSpace = $namespace->id;
+            }
             if($namespace->kind == 'group') $namespaces[$namespace->id] = $namespace->path;
         }
 
