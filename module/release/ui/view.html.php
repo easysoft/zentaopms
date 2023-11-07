@@ -119,7 +119,7 @@ if($canBeChanged)
         $linkLeftBtn = btn(set(array(
             'text'     => $lang->release->linkBug,
             'icon'     => 'bug',
-            'data-url' => createLink($releaseModule, 'linkBug', "releaseID={$release->id}". ($link == 'true' && $type == 'leftBug' ? $decodeParam : '&browseType=leftBug&param=0&type=leftBug')),
+            'data-url' => createLink($releaseModule, 'linkBug', "releaseID={$release->id}". ($link == 'true' && $type == 'leftBug' ? $decodeParam . '&type=leftBug' : '&browseType=leftBug&param=0&type=leftBug')),
             'class'    => 'link',
             'type'     => 'primary',
             'onclick'  => 'showLink(this)',
