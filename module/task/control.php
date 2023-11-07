@@ -1692,13 +1692,17 @@ class task extends control
      * @access public
      * @return void
      */
-    public function batchClose($skipTaskIdList = '')
+    public function batchClose($confirm = 0)
     {
-        if($this->post->taskIDList or $skipTaskIdList)
+        if($this->post->taskIDList or $confirm)
         {
             $taskIDList = $this->post->taskIDList;
-            if($taskIDList)     $taskIDList = array_unique($taskIDList);
-            if($skipTaskIdList) $taskIDList = $skipTaskIdList;
+            if(!isset($_POST['taskIDList']) && !empty($_SESSION['batchCloseTaskIDList']))
+            {
+                $taskIDList = explode(',', $this->session->batchCloseTaskIDList);
+                unset($_SESSION['batchCloseTaskIDList']);
+            }
+            if($taskIDList) $taskIDList = array_unique($taskIDList);
 
             unset($_POST['taskIDList']);
             unset($_POST['assignedTo']);
@@ -1707,7 +1711,7 @@ class task extends control
             $tasks = $this->task->getByList($taskIDList);
             foreach($tasks as $taskID => $task)
             {
-                if(empty($skipTaskIdList) and ($task->status != 'done' and $task->status != 'cancel'))
+                if(($task->status != 'done' and $task->status != 'cancel') and empty($confirm))
                 {
                     $skipTasks[$taskID] = $taskID;
                     continue;
@@ -1730,11 +1734,12 @@ class task extends control
                     $this->action->logHistory($actionID, $changes);
                 }
             }
-            if(isset($skipTasks) and empty($skipTaskIdList))
+            if(isset($skipTasks) and empty($confirm))
             {
                 $skipTasks  = join(',', $skipTasks);
-                $confirmURL = $this->createLink('task', 'batchClose', "skipTaskIdList=$skipTasks");
+                $confirmURL = $this->createLink('task', 'batchClose', "confirm=1");
                 $cancelURL  = $this->server->HTTP_REFERER;
+                $this->session->set('batchCloseTaskIDList', $skipTasks, 'task');
                 return print(js::confirm(sprintf($this->lang->task->error->skipClose, $skipTasks), $confirmURL, $cancelURL, 'self', 'parent'));
             }
 
