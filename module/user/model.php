@@ -318,7 +318,7 @@ class userModel extends model
         if(strtolower($_POST['account']) == 'guest') return false;
 
         $user = fixer::input('post')
-            ->setDefault('join', '0000-00-00')
+            ->setDefault('join', null)
             ->setDefault('type', 'inside')
             ->setDefault('company', 0)
             ->setDefault('visions', '')
