@@ -1077,7 +1077,7 @@
     function setImageSize(image, maxWidth, maxHeight)
     {
         var $image = $(image);
-        if($image.parent().prop('tagName').toLowerCase() == 'a') return;
+        if($image.parent().prop('tagName') && $image.parent().prop('tagName').toLowerCase() == 'a') return;
 
         /* If not set maxWidth, set it auto. */
         if(!maxWidth)
