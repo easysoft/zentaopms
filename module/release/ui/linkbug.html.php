@@ -32,11 +32,11 @@ dtable
             'btnType'   => 'primary',
             'className' => 'size-sm linkObjectBtn',
             'data-type' => 'bug',
-            'data-url'  => createLink($buildModule, 'linkBug', "releaseID={$release->id}&browseType={$browseType}&param={$param}&type={$type}"),
+            'data-url'  => createLink($buildModule, 'linkBug', "releaseID={$release->id}&browseType={$browseType}&param={$param}&type={$type}")
         ))
     )),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(createLink($buildModule, 'view', "releaseID=$release->id&type=$type"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

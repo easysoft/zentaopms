@@ -5,13 +5,12 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
     if(!checkedList.length) return;
 
     const tabType  = $(this).data('type');
-    const postData = [];
-    postData[`${tabType}IdList[]`] = checkedList;
 
-    $.ajaxSubmit({
-        url:  $(this).data('url'),
-        data: postData
-    });
+    const url  = $(this).data('url');
+    const form = new FormData();
+    checkedList.forEach((id) => form.append(`${tabType}IdList[]`, id));
+
+    $.ajaxSubmit({url, data:form});
 }).off('click', '.linkObjectBtn').on('click', '.linkObjectBtn', function()
 {
     const type   = $(this).data('type');
