@@ -483,8 +483,14 @@ class install extends control
     public function ajaxCheck()
     {
         $this->loadModel('common');
-        $data      = fixer::input('post')->get();
-        $appMap    = $this->loadModel('store')->getAppMapByNames($data->apps);
+
+        $apps = (array)$this->post->apps;
+        foreach($apps as $index => $app)
+        {
+            if($app == $this->lang->install->solution->skipInstall) unset($apps[$index]);
+        }
+
+        $appMap    = $this->loadModel('store')->getAppMapByNames($apps);
         $resources = array();
 
         foreach($data->apps as $app) $resources[] = array('cpu' => $appMap->$app->cpu, 'memory' => $appMap->$app->memory);
