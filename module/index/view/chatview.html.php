@@ -46,7 +46,7 @@
   </div>
   <div id="ai-chat-view">
     <?php if(!$isAIConfigured): ?>
-      <div class="unconfigured text-gray"><?php echo sprintf($lang->index->chat->unconfiguredFormat, $lang->index->chat->ai, (common::hasPriv('ai', 'models') ? sprintf($lang->index->chat->goConfigureFormat, helper::createLink('ai', 'models'), $lang->index->chat->ai) : $lang->index->chat->contactAdminForHelp)); ?></div>
+      <div class="unconfigured text-gray"><?php echo sprintf($lang->index->chat->unconfiguredFormat, $lang->index->chat->ai, (common::hasPriv('ai', 'models') ? sprintf($lang->index->chat->goConfigureFormat, helper::createLink('ai', 'models') . '#app=admin', $lang->index->chat->ai) : $lang->index->chat->contactAdminForHelp)); ?></div>
     <?php elseif(!$hasAIChatPriv): ?>
       <div class="unconfigured text-gray"><?php echo $lang->index->chat->unauthorized; ?></div>
     <?php else: ?>
