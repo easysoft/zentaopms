@@ -25,6 +25,7 @@ if($app->rawModule == 'doc' && $app->rawMethod == 'myspace')
 
 sidebar
 (
+    setClass('w-48'),
     docMenu
     (
         set::modules($libTree),
