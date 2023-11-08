@@ -31,7 +31,11 @@ $tableData = initTableData($sonarqubeProjectList, $config->sonarqube->dtable->pr
 
 featureBar
 (
-    backBtn(set::text($lang->goback)),
+    backBtn
+    (
+        set::text($lang->goback),
+        set::url(createLink('instance', 'view', "id={$sonarqube->instanceID}&type={$sonarqube->type}")),
+    ),
     form
     (
         setID('searchForm'),
