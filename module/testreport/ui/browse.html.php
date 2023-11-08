@@ -58,6 +58,7 @@ dtable
     set::sortLink(createLink($app->rawModule, $app->rawMethod, $linkParams)),
     set::fixedLeftWidth('0.33'),
     set::footPager(usePager()),
+    set::emptyTip($lang->testreport->noReport)
 );
 
 render();
