@@ -60,6 +60,10 @@ foreach($sons as $son)
                     set::control('hidden'),
                 ),
             ),
+            batchActions
+            (
+                set::actionClass('action-group child-hidden'),
+            )
         ),
     );
 }
@@ -97,7 +101,10 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
                     set::control('hidden'),
                 ),
             ),
-            batchActions(),
+            batchActions
+            (
+                set::actionClass('action-group'),
+            ),
         ),
     );
 }

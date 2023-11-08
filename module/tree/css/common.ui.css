@@ -2,3 +2,5 @@
 .row-module + .row-module {margin-top: 5px;}
 .form .input-group .col-module {border-radius: 2px 0 0 2px;}
 .form .input-group .col-short {width: 110px; border-radius: 0 2px 2px 0;}
+.action-group {min-width: 76px;}
+.child-hidden {visibility: hidden;}
