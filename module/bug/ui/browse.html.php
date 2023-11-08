@@ -154,9 +154,9 @@ if($canBatchAction)
         array('text' => $lang->edit, 'className' => 'primary batch-btn not-open-url', 'disabled' => ($canBatchEdit ? '': 'disabled'), 'data-url' => createLink('bug', 'batchEdit', "productID={$product->id}&branch=$branch")),
         array('caret' => 'up', 'data-placement' => 'top-start', 'class' => 'btn btn-caret size-sm primary not-open-url', 'items' => $batchItems),
     ));
-    if($canBatchChangeBranch && $this->session->currentProductType && $this->session->currentProductType != 'normal')
+    if($canBatchChangeBranch && $product->type != 'normal')
     {
-        $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'type' => 'dropdown', 'data-placement' => 'top-start', 'items' => $branchItems);
+        $footToolbar['items'][] = array('caret' => 'up', 'text' => $lang->product->branchName[$product->type], 'type' => 'dropdown', 'data-placement' => 'top-start', 'items' => $branchItems);
     }
     if($canBatchChangeModule)
     {

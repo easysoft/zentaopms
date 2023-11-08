@@ -743,7 +743,8 @@ class bugModel extends model
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs(array($productID), 'all', 'withbranch|releasetag');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
-        if($this->session->currentProductType == 'normal')
+        $product = $this->loadModel('product')->fetchByID($productID);
+        if($product->type == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);
             unset($this->config->bug->search['params']['branch']);
