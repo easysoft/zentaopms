@@ -360,18 +360,15 @@ class screenModel extends model
     {
         $settings = json_decode($chart->settings)[0];
 
-        if(isset($settings->rotateX) && $settings->rotateX == 'use')
-        {
-            $component->chartConfig->xAxis = new stdclass();
-            $component->chartConfig->xAxis->axisLabel = new stdclass();
-            $component->chartConfig->xAxis->axisLabel->rotate = 30;
-        }
-        if(isset($settings->rotateX) && $settings->rotateX == 'use')
-        {
-            $component->chartConfig->yAxis = new stdclass();
-            $component->chartConfig->yAxis->axisLabel = new stdclass();
-            $component->chartConfig->yAxis->axisLabel->rotate = 30;
-        }
+        $component->chartConfig->xAxis = new stdclass();
+        $component->chartConfig->yAxis = new stdclass();
+        $component->chartConfig->xAxis->axisLabel = new stdclass();
+        $component->chartConfig->yAxis->axisLabel = new stdclass();
+
+        $component->chartConfig->xAxis->axisLabel->rotate = 0;
+        $component->chartConfig->yAxis->axisLabel->rotate = 0;
+        if(isset($settings->rotateX) && $settings->rotateX == 'use') $component->chartConfig->xAxis->axisLabel->rotate = 30;
+        if(isset($settings->rotateX) && $settings->rotateX == 'use') $component->chartConfig->yAxis->axisLabel->rotate = 30;
 
         return $component;
     }
