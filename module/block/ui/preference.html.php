@@ -60,7 +60,7 @@ function printPreference()
                     'items' => $lang->my->productLinkList
                 ))
             ),
-            formGroup
+            $config->vision != 'or' ? formGroup
             (
                 set::value($config->projectLink),
                 set::label($lang->my->projectLink),
@@ -70,8 +70,8 @@ function printPreference()
                     'type'  => 'picker',
                     'items' => $lang->my->projectLinkList
                 ))
-            ),
-            formGroup
+            ) : null,
+            $config->vision != 'or' ? formGroup
             (
                 set::value($config->executionLink),
                 set::label($lang->my->executionLink),
@@ -81,7 +81,7 @@ function printPreference()
                     'type'  => 'picker',
                     'items' => $lang->my->executionLinkList
                 ))
-            )
+            ) : null,
         )
     );
 }
