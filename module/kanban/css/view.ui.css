@@ -9,3 +9,13 @@
 .progress {height: 0.5rem !important}
 .kanban-header-title .as-subtitle {font-weight: 700;}
 .kanban-header-title .text-danger {color:rgb(255, 93, 93); opacity: 1;}
+
+.regionMenu {display: inline-flex; border-bottom: none; margin-bottom: -3px;}
+.regionMenu li {text-align: center; float: left; position: relative; display: block;}
+.regionMenu li a {min-width: 134px; overflow: hidden; white-space: nowrap; z-index: 0; position: relative; padding: 0.8rem; margin-left: -10px; background: none; outline: 0; cursor: pointer !important; display: block; color: rgba(var(--color-black-rgb),var(--tw-text-opacity))}
+.regionMenu li:first-child > a {margin-left: 0px}
+.regionMenu li a:before {content: ""; position: absolute; top: -0.2rem; left: 0; background: #e9e9e9; height: 100%; width: 100%; z-index: -1; border-top-left-radius: 1rem; border-top-right-radius: 1rem; transform: perspective(0.5rem) rotateX(2deg); transform-origin: bottom;}
+.regionMenu li.active > a {z-index: 1; color: rgba(var(--color-primary-500-rgb),var(--tw-text-opacity));}
+.regionMenu li.active > a:before {background: #fff}
+.regionMenu li a:hover {color: rgba(var(--color-primary-500-rgb),var(--tw-text-opacity));}
+.regionMenu li a span {vertical-align: bottom; overflow: hidden; max-width: 6em; white-space: nowrap; display: inline-block;}

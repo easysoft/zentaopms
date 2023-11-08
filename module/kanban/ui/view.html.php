@@ -1,11 +1,9 @@
 <?php
 namespace zin;
-
-dropmenu(set::tab('kanban'), set::objectID($kanban->id));
-
-$laneCount = 0;
-$groupCols = array(); // 卡片可以移动到的同一group下的列。
-foreach($kanbanList as $regionID => $region)
+$laneCount    = 0;
+$groupCols    = array(); // 卡片可以移动到的同一group下的列。
+$regionMenu[] = li(set::className($regionID == 'all' ? 'active' : ''), a(set::href('javascript:;'), span(set::title($lang->kanbanregion->all), $lang->kanbanregion->all)), set('data-on', 'click'), set('data-call', 'clickRegionMenu'), set('data-params', 'event'), set('data-region', 'all'));
+foreach($kanbanList as $current => $region)
 {
     foreach($region['items'] as $index => $group)
     {
@@ -27,11 +25,14 @@ foreach($kanbanList as $regionID => $region)
             if($col['parent'] != '-1') $groupCols[$groupID][$col['id']] = $col['title'];
         }
 
-        $kanbanList[$regionID]['items'][$index] = $group;
+        $kanbanList[$current]['items'][$index] = $group;
     }
 
     $laneCount += $region['laneCount'];
+
+    $regionMenu[] = li(set::className($regionID == $region['id'] ? 'active' : ''), a(set::href('javascript:;'), span(set::title($region['heading']->title), $region['heading']->title)), set('data-on', 'click'), set('data-call', 'clickRegionMenu'), set('data-params', 'event'), set('data-region', $region['id']));
 }
+
 
 jsVar('laneCount',  $laneCount);
 jsVar('kanbanLang', $lang->kanban);
@@ -45,9 +46,21 @@ jsVar('vision', $config->vision);
 jsVar('colorList', $config->kanban->cardColorList);
 jsVar('canMoveCard', common::hasPriv('kanban', 'moveCard'));
 
-zui::kanbanList
+dropmenu(set::tab('kanban'), set::objectID($kanban->id));
+
+ul
 (
-    set::key('kanban'),
-    set::items($kanbanList),
-    set::height('calc(100vh - 80px)')
+    set::className('regionMenu'),
+    $regionMenu
+);
+
+div
+(
+    set::id('kanbanList'),
+    zui::kanbanList
+    (
+        set::key('kanban'),
+        set::items($kanbanList),
+        set::height('calc(100vh - 80px)')
+    )
 );

@@ -383,15 +383,16 @@ class kanban extends control
      /**
      * View a kanban.
      *
-     * @param  int    $kanbanID
+     * @param  int        $kanbanID
+     * @param  string|int $regionID
      * @access public
      * @return void
      */
-    public function view($kanbanID)
+    public function view($kanbanID, $regionID = '')
     {
-        $kanban   = $this->kanban->getByID($kanbanID);
-        $users    = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $regionID = $this->session->regionID ? $this->session->regionID : 'all';
+        $kanban = $this->kanban->getByID($kanbanID);
+        $users  = $this->loadModel('user')->getPairs('noletter|nodeleted');
+
 
         if(!$kanban)
         {
@@ -411,14 +412,16 @@ class kanban extends control
         }
 
         $regions = $this->kanban->getRegionPairs($kanbanID);
-        if(!isset($regions[$regionID])) $this->session->set('regionID', 'all', 'kanban');
+        if(!$regionID) $regionID = $this->session->regionID ? $this->session->regionID : 'all';
+        $regionID = !isset($regions[$regionID]) ? 'all' : $regionID;
+        $this->session->set('regionID', $regionID, 'kanban');
 
         $this->view->users         = $users;
         $this->view->title         = $this->lang->kanban->view;
         $this->view->userList      = $userList;
         $this->view->kanban        = $kanban;
-        $this->view->kanbanList    = $this->kanban->getKanbanData($kanbanID);
-        $this->view->regionID      = isset($regions[$regionID]) ? $regionID : 'all';
+        $this->view->kanbanList    = $this->kanban->getKanbanData($kanbanID, $regionID == 'all' ? '' : array($regionID));
+        $this->view->regionID      = $regionID;
         $this->view->appendToolbar = $this->kanban->getHeaderActions($kanban);
 
         $this->display();

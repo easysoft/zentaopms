@@ -784,6 +784,7 @@ class kanbanModel extends model
             $heading->actions = $this->getRegionActions($kanbanID, $regionID);
 
             $regionData['key']               = "region{$regionID}";
+            $regionData['id']                = $regionID;
             $regionData['heading']           = $heading;
             $regionData['toggleFromHeading'] = true;
 

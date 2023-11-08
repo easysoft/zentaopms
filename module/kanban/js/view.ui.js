@@ -277,6 +277,16 @@ window.onDrop = function(changes, dropInfo)
     $.ajaxSubmit({url});
 }
 
+window.clickRegionMenu = function(event)
+{
+    $('.regionMenu li').removeClass('active');
+    $(event.target).closest('li').addClass('active');
+
+    const regionID = $(event.target).closest('li').data('region');
+    const url      = $.createLink('kanban', 'view', 'kanbanID=' + kanbanID + '&regionID=' + regionID);
+    loadPartial(url, '#kanbanList');
+}
+
 function formatDate(inputDate)
 {
     const date = new Date(inputDate);
