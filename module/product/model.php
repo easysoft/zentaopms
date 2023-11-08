@@ -1235,7 +1235,7 @@ class productModel extends model
             }
         }
 
-        $casesCount = $this->productTao->getStoryCasesCount($storyIdList);
+        $casesCount = count($this->productTao->filterNoCasesStory($storyIdList));
         $rate       = empty($stories) || $rateCount == 0 ? 0 : round($casesCount / $rateCount, 2);
 
         $storyCommon = $this->lang->SRCommon;

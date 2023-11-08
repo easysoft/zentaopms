@@ -428,6 +428,19 @@ class productTao extends productModel
     }
 
     /**
+     * 过滤无用例的需求。
+     * Filter no cases story.
+     *
+     * @param  array     $storyIDList
+     * @access protected
+     * @return array
+     */
+    protected function filterNoCasesStory(array $storyIDList): array
+    {
+        return $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIDList)->andWhere('deleted')->eq(0)->fetchAll('story');
+    }
+
+    /**
      * 获取项目关联的产品。
      * Get products by project ID.
      *

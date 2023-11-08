@@ -75,7 +75,7 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
         {
             const story = row.data;
             estimate   += parseFloat(story.estimate);
-            if(story.cases > 0)
+            if(story.caseCount > 0)
             {
                 hasCase += 1;
             }
