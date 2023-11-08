@@ -401,7 +401,7 @@ class todoZen extends todo
         $objectIdList = array();
 
         $allTodos = $this->todo->getList($type, $account, $status);
-        if($form->data->todoIdList) $todoIdList = $form->data->todoIdList;
+        if($this->post->todoIdList) $todoIdList = $this->post->todoIdList;
 
         /* Initialize todos whose need to edited. */
         foreach($allTodos as $todo)
