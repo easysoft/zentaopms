@@ -88,25 +88,21 @@ detailBody
         $canEditContent ? section
         (
             set::title($lang->story->reviewers),
-            formGroup
+            formRow
             (
-                row
+                picker
                 (
-                    setClass('reviewerRow'),
-                    span
-                    (
-                        setClass('reviewerBox'),
-                        picker
-                        (
-                            set::id('reviewer'),
-                            set::name('reviewer[]'),
-                            set::items($fields['reviewer']['options']),
-                            set::value($fields['reviewer']['default']),
-                            set::multiple(true),
-                            on::change('changeReviewer'),
-                        ),
-                    ),
-                    $forceReview ? null : checkbox
+                    set::id('reviewer'),
+                    set::name('reviewer[]'),
+                    set::items($fields['reviewer']['options']),
+                    set::value($fields['reviewer']['default']),
+                    set::multiple(true),
+                    on::change('changeReviewer'),
+                ),
+                $forceReview ? null : span
+                (
+                    setClass('input-group-addon'),
+                    checkbox
                     (
                         set::id('needNotReview'),
                         set::name('needNotReview'),
@@ -114,8 +110,9 @@ detailBody
                         set::value(1),
                         set::text($lang->story->needNotReview),
                         on::change('changeNeedNotReview(e.target)'),
-                    ),
-                )
+                    )
+                ),
+                formHidden('needNotReview', $forceReview ? 0 : 1),
             )
         ) : null,
         section

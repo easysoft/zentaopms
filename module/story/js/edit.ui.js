@@ -55,27 +55,37 @@ window.linkStories = function(e)
 
 window.changeNeedNotReview = function(obj)
 {
-    $this = $(obj);
-    $('#reviewer').val($this.prop('checked') ? '' : lastReviewer).attr('disabled', $this.prop('checked') ? 'disabled' : null);
+    var $this = $(obj);
+    var isChecked = $this.prop('checked');
+    var $reviewer = $('[name^="reviewer"]').zui('picker');
+
+    if(isChecked)
+    {
+        $('#needNotReview').val(1);
+        $('input[name=needNotReview]').val(1);
+        $reviewer.render({disabled: true});
+    }
+    else
+    {
+        $('#needNotReview').val(0);
+        $('input[name=needNotReview]').val(0);
+        $reviewer.render({disabled: false});
+    }
 };
 
 window.changeReviewer = function()
 {
     if(storyStatus == 'reviewing')
     {
-        if(!$('#reviewer').val())
+        if(!$('[name^="reviewer"]').val().filter(Boolean).length)
         {
             zui.Modal.alert(reviewerNotEmpty);
-            $('#reviewer').val(reviewers);
-        }
-        else
-        {
-            reviewers = $('#reviewer').val();
+            $('[name^="reviewer"]').zui('picker').$.setValue(Object.keys(reviewers).join());
         }
     }
     else
     {
-        if(!$('#reviewer').val())
+        if(!$('[name^="reviewer"]').val().filter(Boolean).length)
         {
             $('#needNotReview').prop('checked', true);
             changeNeedNotReview($('#needNotReview'));
@@ -83,7 +93,10 @@ window.changeReviewer = function()
     }
 }
 
-if(!$('#reviewer').val()) changeNeedNotReview($('#needNotReview'));
+$(document).ready(function()
+{
+    if(!$('[name^="reviewer"]').val().filter(Boolean).length) changeNeedNotReview($('#needNotReview'));
+});
 
 function loadProductBranches(productID)
 {

@@ -3915,19 +3915,18 @@ class storyModel extends model
      * Do update reviewer.
      *
      * @param  int       $storyID
-     * @param  array     $reviewers
      * @param  object    $story
      * @access protected
      * @return void
      */
-    public function doUpdateReviewer(int $storyID, array $reviewers = array(), object $story = null): void
+    public function doUpdateReviewer(int $storyID, object $story): void
     {
         $oldStory = $this->fetchByID($storyID);
         if(empty($oldStory)) return;
 
         $oldReviewer  = $this->getReviewerPairs($storyID, $oldStory->version);
         $twins        = explode(',', trim($oldStory->twins, ','));
-        $reviewerList = implode(',', $reviewers);
+        $reviewerList = implode(',', array_filter($story->reviewer));
 
         /* Update story reviewer. */
         $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)
@@ -3947,8 +3946,9 @@ class storyModel extends model
             }
         }
 
-        foreach($reviewers as $reviewer)
+        foreach($story->reviewer as $reviewer)
         {
+            if(empty($reviewer)) continue;
             if($oldStory->status == 'reviewing' and isset($oldReviewer[$reviewer])) continue;
 
             $reviewData = new stdclass();

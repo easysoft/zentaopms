@@ -1,8 +1,6 @@
 .input-group #moduleIdBox{width:100%;}
 .input-group #planIdBox{width:100%;}
-.reviewerRow .reviewerBox{width:100%;}
 .branchIdBox{width:120px;}
-.reviewerRow .checkbox-primary{width:110px; padding-left:8px;}
 
 #linkedStories .label, #linkStoriesBox .label, .twins .label{margin-right:8px;}
 .twins .title{margin-right:8px;}
