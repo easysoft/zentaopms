@@ -33,12 +33,12 @@ div
                 (
                     btn($app->config->langs[$app->cookie->lang]),
                     set::name('lang'),
-                    set::items($langItems),
-                ),
+                    set::items($langItems)
+                )
             ),
             cell
             (
-                html(nl2br($lang->install->desc)),
+                html(nl2br($lang->install->desc))
             ),
             cell
             (
@@ -47,7 +47,7 @@ div
                 (
                     setClass('mt-5'),
                     width('calc(100% - 210px)'),
-                    html(nl2br(sprintf($lang->install->links, $versionName))),
+                    html(nl2br(sprintf($lang->install->links, $versionName)))
                 ),
                 cell
                 (
@@ -57,8 +57,8 @@ div
                         set::src($this->app->getWebRoot() . 'theme/default/images/main/weixin.jpg'),
                         width('200px'),
                         height('200px'),
-                    ) : null,
-                ),
+                    ) : null
+                )
             ),
             cell
             (
@@ -68,11 +68,11 @@ div
                     setClass('px-6'),
                     set::url(inlink('license')),
                     set::type('primary'),
-                    $lang->install->start,
-                ),
-            ),
-        ),
-    ),
+                    $lang->install->start
+                )
+            )
+        )
+    )
 );
 
 render('pagebase');

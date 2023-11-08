@@ -44,8 +44,8 @@ div
                 formGroup
                 (
                     set::label($lang->install->company),
-                    set::name('company'),
-                ),
+                    set::name('company')
+                )
             ),
             formRow
             (
@@ -55,16 +55,16 @@ div
                     set::label($lang->install->working),
                     set::name('flow'),
                     set::items($lang->install->workingList),
-                    set::value('full'),
-                ),
+                    set::value('full')
+                )
             ),
             formRow
             (
                 formGroup
                 (
                     set::label($lang->install->account),
-                    set::name('account'),
-                ),
+                    set::name('account')
+                )
             ),
             formRow
             (
@@ -76,7 +76,7 @@ div
                         set::name('password'),
                         set::placeholder($lang->install->placeholder->password),
                     )
-                ),
+                )
             ),
             formRow
             (
@@ -87,12 +87,12 @@ div
                     checkbox
                     (
                         set::text($lang->install->importDemoData),
-                        set::name('importDemoData'),
-                    ),
-                ),
-            ),
-        ),
-    ),
+                        set::name('importDemoData')
+                    )
+                )
+            )
+        )
+    )
 );
 
 render('pagebase');

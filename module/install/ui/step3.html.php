@@ -40,22 +40,8 @@ if($customSession) $configContent .= "\n\$config->customSession = true;";
 
 $configRoot   = $this->app->getConfigRoot();
 $myConfigFile = $configRoot . 'my.php';
-$saveTip      = '';
-if(is_writable($configRoot))
-{
-    if(@file_put_contents($myConfigFile, $configContent))
-    {
-        $saveTip = sprintf($lang->install->saved2File, $myConfigFile);
-    }
-    else
-    {
-        $saveTip = sprintf($lang->install->save2File, $myConfigFile);
-    }
-}
-else
-{
-    $saveTip = sprintf($lang->install->save2File, $myConfigFile);
-}
+$saveTip      = sprintf($lang->install->save2File, $myConfigFile);
+if(is_writable($configRoot) && @file_put_contents($myConfigFile, $configContent)) $saveTip = sprintf($lang->install->saved2File, $myConfigFile);
 
 div
 (
@@ -71,12 +57,12 @@ div
             textarea
             (
                 set::name('config'),
-                html($configContent),
+                html($configContent)
             ),
             cell
             (
                 setClass('text-center p-2'),
-                html($saveTip),
+                html($saveTip)
             ),
             cell
             (
@@ -87,19 +73,19 @@ div
                     input
                     (
                         set::name('hidden'),
-                        set::type('hidden'),
+                        set::type('hidden')
                     ),
                     btn
                     (
                         setClass('px-6'),
                         set::type('primary'),
                         set::btnType('submit'),
-                        $lang->install->next,
-                    ),
+                        $lang->install->next
+                    )
                 )
-            ),
-        ),
-    ),
+            )
+        )
+    )
 );
 
 render('pagebase');

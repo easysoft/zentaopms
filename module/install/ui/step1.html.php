@@ -14,11 +14,11 @@ set::zui(true);
 
 $checkTrs    = array();
 $extendItems = array('pdo', 'pdoMySQL', 'json', 'openssl', 'mbstring', 'zlib', 'curl', 'filter', 'iconv');
-$dirItems   = array('tmpRoot', 'dataRoot', 'session');
+$dirItems    = array('tmpRoot', 'dataRoot', 'session');
 foreach($extendItems as $extendItem)
 {
-    $result = ${"{$extendItem}Result"};
-    $failLang = $extendItem . 'Fail';
+    $result     = ${"{$extendItem}Result"};
+    $failLang   = $extendItem . 'Fail';
     $checkTrs[] = h::tr
     (
         h::th($lang->install->{$extendItem}),
@@ -26,48 +26,38 @@ foreach($extendItems as $extendItem)
         h::td
         (
             setClass($result . ' text-white' . ($result == 'ok' ? ' bg-success' : ' bg-danger')),
-            $lang->install->{$result},
+            $lang->install->{$result}
         ),
         h::td
         (
             setClass('text-left'),
-            $result == 'fail' ? $lang->install->{$failItem} : '',
-        ),
+            $result == 'fail' ? $lang->install->{$failItem} : ''
+        )
     );
 }
 foreach($dirItems as $dirItem)
 {
-    $info   = ${"{$dirItem}Info"};
-    $result = ${"{$dirItem}Result"};
+    $info       = ${"{$dirItem}Info"};
+    $result     = ${"{$dirItem}Result"};
     $checkTrs[] = h::tr
     (
         h::th($lang->install->{$dirItem}),
         h::td
         (
             $info['exists']   ? $lang->install->exists   : $lang->install->notExists,
-            $info['writable'] ? $lang->install->writable : $lang->install->notWritable,
+            $info['writable'] ? $lang->install->writable : $lang->install->notWritable
         ),
         h::td
         (
             setClass($result . ' text-white' . ($result == 'ok' ? ' bg-success' : ' bg-danger')),
-            $lang->install->{$result},
+            $lang->install->{$result}
         ),
         h::td
         (
             setClass('text-left'),
-            !$info['exists'] ? html(sprintf
-            (
-                strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $lang->install->mkdirWin : $lang->install->mkdirLinux,
-                $info['path'],
-                $info['path']
-            )) : '',
-            !$info['writable'] ? html(sprintf
-            (
-                strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $lang->install->chmodWin : $lang->install->chmodLinux,
-                $info['path'],
-                $info['path']
-            )) : '',
-        ),
+            !$info['exists'] ? html(sprintf(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $lang->install->mkdirWin : $lang->install->mkdirLinux, $info['path'], $info['path'])) : '',
+            !$info['writable'] ? html(sprintf(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $lang->install->chmodWin : $lang->install->chmodLinux, $info['path'], $info['path'])) : ''
+        )
     );
 }
 
@@ -89,10 +79,10 @@ div
                     icon
                     (
                         setClass('text-warning px-1'),
-                        'help',
+                        'help'
                     ),
-                    $notice,
-                ),
+                    $notice
+                )
             ) : '',
             h::table
             (
@@ -104,22 +94,19 @@ div
                         h::th
                         (
                             width('1/5'),
-                            $lang->install->checkItem,
+                            $lang->install->checkItem
                         ),
                         h::th
                         (
                             width('1/4'),
-                            $lang->install->current,
+                            $lang->install->current
                         ),
                         h::th
                         (
                             width('1/6'),
-                            $lang->install->result,
+                            $lang->install->result
                         ),
-                        h::th
-                        (
-                            $lang->install->action,
-                        ),
+                        h::th($lang->install->action)
                     ),
                     h::tr
                     (
@@ -128,16 +115,16 @@ div
                         h::td
                         (
                             setClass($phpResult . ' text-white' . ($phpResult == 'ok' ? ' bg-success' : ' bg-danger')),
-                            $lang->install->{$phpResult},
+                            $lang->install->{$phpResult}
                         ),
                         h::td
                         (
                             setClass($phpResult),
-                            $phpResult == 'fail' ? $lang->install->phpFail : '',
-                        ),
+                            $phpResult == 'fail' ? $lang->install->phpFail : ''
+                        )
                     ),
-                    $checkTrs,
-                ),
+                    $checkTrs
+                )
             ),
             cell
             (
@@ -151,17 +138,17 @@ div
                     setClass('px-6 mx-4'),
                     set::url(inlink('step2')),
                     set::type('primary'),
-                    $lang->install->next,
+                    $lang->install->next
                 ) : btn
                 (
                     setClass('px-6 mx-4'),
                     set::url(inlink('step1')),
                     set::type('primary'),
-                    $lang->install->reload,
-                ),
-            ),
-        ),
-    ),
+                    $lang->install->reload
+                )
+            )
+        )
+    )
 );
 
 render('pagebase');

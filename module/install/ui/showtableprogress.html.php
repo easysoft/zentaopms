@@ -26,10 +26,10 @@ div
             form
             (
                 h::pre(setID('progress'), setClass('progress')),
-                set::actions(array(array('disabled' => true, 'text' => $lang->install->next, 'class' => 'primary next'))),
-            ),
-        ),
-    ),
+                set::actions(array(array('disabled' => true, 'text' => $lang->install->next, 'class' => 'primary next')))
+            )
+        )
+    )
 );
 
 render('pagebase');

@@ -33,10 +33,7 @@ div
                     set::size('3x'),
                     'check-circle'
                 ),
-                cell
-                (
-                    html(nl2br(sprintf($joinZentao, $config->version, $this->createLink('admin', 'register'), $this->createLink('admin', 'bind'), inlink('step6')))),
-                ),
+                cell(html(nl2br(sprintf($joinZentao, $config->version, $this->createLink('admin', 'register'), $this->createLink('admin', 'bind'), inlink('step6')))))
             ),
             cell
             (
@@ -46,12 +43,12 @@ div
                     setClass('px-4'),
                     set::url($lang->install->officeDomain),
                     set::type('success'),
-                    $lang->install->register,
+                    $lang->install->register
                 ),
                 cell
                 (
                     setClass('flex items-center text-gray px-2'),
-                    $lang->install->or,
+                    $lang->install->or
                 ),
                 btn
                 (
@@ -59,11 +56,11 @@ div
                     set::target('_self'),
                     set::url('index.php'),
                     set::type('primary'),
-                    $lang->install->login,
-                ),
-            ),
-        ),
-    ),
+                    $lang->install->login
+                )
+            )
+        )
+    )
 );
 
 render('pagebase');

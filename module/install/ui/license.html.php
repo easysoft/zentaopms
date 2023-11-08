@@ -26,10 +26,7 @@ div
             setClass('p-8'),
             set::title($lang->install->license),
             set::titleClass('text-xl'),
-            textarea
-            (
-                $license
-            ),
+            textarea($license),
             cell
             (
                 setClass('mt-2'),
@@ -37,8 +34,8 @@ div
                 (
                     on::change('agreeChange'),
                     set::checked(true),
-                    html($lang->agreement),
-                ),
+                    html($lang->agreement)
+                )
             ),
             cell
             (
@@ -48,11 +45,11 @@ div
                     setClass('px-6 btn-install'),
                     set::url(inlink('step1')),
                     set::type('primary'),
-                    $lang->install->next,
-                ),
-            ),
-        ),
-    ),
+                    $lang->install->next
+                )
+            )
+        )
+    )
 );
 
 render('pagebase');

@@ -39,7 +39,7 @@ div
                             $lang->install->key
                         ),
                         h::th($lang->install->value),
-                        h::th(),
+                        h::th()
                     ),
                     h::tr
                     (
@@ -50,10 +50,10 @@ div
                             (
                                 set::name('timezone'),
                                 set::items($timezoneList),
-                                set::value($config->timezone),
-                            ),
+                                set::value($config->timezone)
+                            )
                         ),
-                        h::td(),
+                        h::td()
                     ),
                     h::tr
                     (
@@ -64,10 +64,10 @@ div
                             (
                                 set::name('defaultLang'),
                                 set::items($config->langs),
-                                set::value($app->getClientLang()),
+                                set::value($app->getClientLang())
                             ),
                         ),
-                        h::td(),
+                        h::td()
                     ),
                     $config->edition != 'open' ? h::tr
                     (
@@ -79,15 +79,15 @@ div
                             (
                                 set::name('dbDriver'),
                                 set::items($lang->install->dbDriverList),
-                                set::value('mysql'),
-                            ),
+                                set::value('mysql')
+                            )
                         ),
-                        h::td(),
+                        h::td()
                     ) : input
                     (
                         setClass('hidden'),
                         set::name('dbDriver'),
-                        set::value('mysql'),
+                        set::value('mysql')
                     ),
                     h::tr
                     (
@@ -98,10 +98,10 @@ div
                             input
                             (
                                 set::name('dbHost'),
-                                set::value($dbHost),
-                            ),
+                                set::value($dbHost)
+                            )
                         ),
-                        h::td($lang->install->dbHostNote),
+                        h::td($lang->install->dbHostNote)
                     ),
                     h::tr
                     (
@@ -112,9 +112,9 @@ div
                             input
                             (
                                 set::name('dbPort'),
-                                set::value($dbPort),
-                            ),
-                        ),
+                                set::value($dbPort)
+                            )
+                        )
                     ),
                     h::tr
                     (
@@ -125,10 +125,10 @@ div
                             input
                             (
                                 set::name('dbEncoding'),
-                                set::value($this->config->db->encoding),
-                            ),
+                                set::value($this->config->db->encoding)
+                            )
                         ),
-                        h::td(),
+                        h::td()
                     ),
                     h::tr
                     (
@@ -139,10 +139,10 @@ div
                             input
                             (
                                 set::name('dbUser'),
-                                set::value($dbUser),
-                            ),
+                                set::value($dbUser)
+                            )
                         ),
-                        h::td(),
+                        h::td()
                     ),
                     h::tr
                     (
@@ -153,10 +153,10 @@ div
                             input
                             (
                                 set::name('dbPassword'),
-                                set::value($dbPassword),
+                                set::value($dbPassword)
                             ),
                         ),
-                        h::td(),
+                        h::td()
                     ),
                     h::tr
                     (
@@ -166,10 +166,10 @@ div
                             input
                             (
                                 set::name('dbName'),
-                                set::value($dbName),
+                                set::value($dbName)
                             ),
                         ),
-                        h::td(),
+                        h::td()
                     ),
                     h::tr
                     (
@@ -179,22 +179,22 @@ div
                             input
                             (
                                 set::name('dbPrefix'),
-                                set::value('zt_'),
-                            ),
+                                set::value('zt_')
+                            )
                         ),
                         h::td
                         (
                             checkbox
                             (
                                 set::text($lang->install->clearDB),
-                                set::name('clearDB'),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
+                                set::name('clearDB')
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    )
 );
 
 render('pagebase');
