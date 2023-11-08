@@ -415,7 +415,7 @@ class productplan extends control
         $this->productplan->updateStatus($planID, 'done', 'finished');
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        return $this->sendSuccess(array('load' => true, 'closeModal' => true));
+        return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
     }
 
     /**
@@ -433,7 +433,7 @@ class productplan extends control
             $this->productplan->updateStatus($planID, 'closed', 'closed');
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
 
         $this->view->productplan = $this->productplan->getById($planID);
