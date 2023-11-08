@@ -1728,7 +1728,6 @@ class docModel extends model
                     ->andWhere('t1.vision')->eq($this->config->vision)
                     ->andWhere('t1.deleted')->eq(0)
                     ->beginIF($this->config->vision == 'rnd')->andWhere('model')->ne('kanban')->fi()
-                    ->beginIF($append)->orWhere('t1.id')->eq($append)->fi()
                     ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
                     ->fetchPairs();
             }
