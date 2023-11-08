@@ -9,6 +9,14 @@
  * @link        https://www.zentao.net
  */
 ?>
+<?php
+  $isXuanAvailable = isset($this->config->xuanxuan->turnon) && $this->config->xuanxuan->turnon && $this->loadModel('im')->getXxdStatus() == 'online';
+  $isAIConfigured  = $this->loadModel('ai')->isModelConfigured();
+  $hasAIChatPriv   = commonModel::hasPriv('ai', 'chat');
+  js::set('isXuanAvailable', $isXuanAvailable);
+  js::set('isAIConfigured', $isAIConfigured);
+  js::set('hasAIChatPriv', $hasAIChatPriv);
+?>
 <style>
   #chat-container {position: fixed; left: 96px; right: 0; height: calc(100% - 40px); display: none;}
   .menu-hide #chat-container {left: 40px;}
@@ -22,6 +30,7 @@
   #ai-chat-view {position: fixed; right: 0; width: 330px; bottom: 40px; top: 50px; outline: 1px solid #eee;}
   #ai-chat-frame {height: 100%; width: 100%;}
   .unconfigured {position: absolute; width: 330px; padding: 20px; right: 0; top: 0; bottom: 0; background: #fff; outline: 1px solid #eee;}
+  #xuan-chat-view .unconfigured {top: 50px;}
 </style>
 <div id="chat-container">
   <div id="chat-switch">
@@ -31,14 +40,14 @@
     </div>
   </div>
   <div id="xuan-chat-view">
-    <?php if(!isset($this->config->xuanxuan->turnon) || !$this->config->xuanxuan->turnon || $this->loadModel('im')->getXxdStatus() != 'online'): ?>
+    <?php if(!$isXuanAvailable): ?>
       <div class="unconfigured text-gray"><?php echo sprintf($lang->index->chat->unconfiguredFormat, $lang->index->chat->chat, (common::hasPriv('setting', 'xuanxuan') ? sprintf($lang->index->chat->goConfigureFormat, helper::createLink('setting', 'xuanxuan'), $lang->index->chat->chat) : $lang->index->chat->contactAdminForHelp)); ?></div>
     <?php endif; ?>
   </div>
   <div id="ai-chat-view">
-    <?php if(!$this->loadModel('ai')->isModelConfigured()): ?>
+    <?php if(!$isAIConfigured): ?>
       <div class="unconfigured text-gray"><?php echo sprintf($lang->index->chat->unconfiguredFormat, $lang->index->chat->ai, (common::hasPriv('ai', 'models') ? sprintf($lang->index->chat->goConfigureFormat, helper::createLink('ai', 'models'), $lang->index->chat->ai) : $lang->index->chat->contactAdminForHelp)); ?></div>
-    <?php elseif(!commonModel::hasPriv('ai', 'chat')): ?>
+    <?php elseif(!$hasAIChatPriv): ?>
       <div class="unconfigured text-gray"><?php echo $lang->index->chat->unauthorized; ?></div>
     <?php else: ?>
       <iframe id="ai-chat-frame" src="<?php echo helper::createLink('ai', 'chat'); ?>" frameborder="no" allowtransparency="true" scrolling="auto" hidefocus></iframe>
@@ -108,5 +117,8 @@
       $('#ai-chat-view').toggle($(this).data('value') == 'ai');
       $('#xuan-chat-view').toggle($(this).data('value') == 'chat');
     });
+
+    /* Switch to xuan chat view if AI is unavailable. */
+    if(isXuanAvailable && !(isAIConfigured && hasAIChatPriv)) $('#chat-switch .chat-switch-item[data-value="chat"]').trigger('click');
   });
 </script>
