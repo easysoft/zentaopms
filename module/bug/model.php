@@ -523,7 +523,7 @@ class bugModel extends model
      */
     public function activate(object $bug, array $kanbanParams = array()): bool
     {
-        $oldBug = $this->getBaseInfo($bug->id);
+        $oldBug = parent::fetchByID($bug->id);
 
         $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
         if(dao::isError()) return false;
