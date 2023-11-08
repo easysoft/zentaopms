@@ -306,3 +306,78 @@ window.loadMore = function(type, regionID)
         $(selector + ' .panel').css('height', height);
     });
 }
+
+window.fullScreen = function()
+{
+    var element       = document.getElementById('kanbanList');
+    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
+
+    if(requestMethod)
+    {
+        var afterEnterFullscreen = function()
+        {
+            $('#kanbanList').addClass('fullscreen').css('background', '#fff');
+            window.hideAllAction();
+            $.cookie.set('isFullScreen', 1);
+        };
+
+        var whenFailEnterFullscreen = function()
+        {
+            exitFullScreen();
+        };
+
+        try
+        {
+            var result = requestMethod.call(element);
+            if(result && (typeof result.then === 'function' || result instanceof window.Promise))
+            {
+                result.then(afterEnterFullscreen).catch(whenFailEnterFullscreen);
+            }
+            else
+            {
+                afterEnterFullscreen();
+            }
+        }
+        catch (error)
+        {
+            whenFailEnterFullscreen(error);
+        }
+    }
+}
+
+/**
+ * Exit full screen.
+ *
+ * @access public
+ * @return void
+ */
+function exitFullScreen()
+{
+    $('.btn').show();
+    $.cookie.set('isFullScreen', 0);
+}
+
+document.addEventListener('fullscreenchange', function (e)
+{
+    if(!document.fullscreenElement) exitFullScreen();
+});
+
+document.addEventListener('webkitfullscreenchange', function (e)
+{
+    if(!document.webkitFullscreenElement) exitFullScreen();
+});
+
+document.addEventListener('mozfullscreenchange', function (e)
+{
+    if(!document.mozFullScreenElement) exitFullScreen();
+});
+
+document.addEventListener('msfullscreenChange', function (e)
+{
+    if(!document.msfullscreenElement) exitFullScreen();
+});
+
+window.hideAllAction = function()
+{
+    $('.btn').hide();
+}
