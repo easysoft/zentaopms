@@ -206,7 +206,7 @@ class executionZen extends execution
             foreach($story->children as $child) $storyIdList[$child->id] = $child->id;
         }
 
-        $summary = $this->loadModel('product')->summary($stories);
+        $summary = $this->loadModel('product')->summary($stories, $storyType);
 
         $this->view->stories    = $stories;
         $this->view->storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList, $executionID);
