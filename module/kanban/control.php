@@ -784,7 +784,7 @@ class kanban extends control
         if(dao::isError()) return print(js::error(dao::getError()));
 
         $this->loadModel('action')->create('kanbancolumn', $columnID, 'restore');
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
@@ -796,26 +796,10 @@ class kanban extends control
      */
     public function viewArchivedColumn($regionID)
     {
-        $columns     = $this->kanban->getColumnsByObject('region', $regionID, '');
-        $columnsData = array();
-        foreach($columns as $column)
-        {
-            if($column->archived == 0) continue;
-            if($column->parent > 0 and isset($columns[$column->parent]))
-            {
-                if(empty($columnsData[$column->parent])) $columnsData[$column->parent] = $columns[$column->parent];
-                $columnsData[$column->parent]->child[$column->id] = $column;
-            }
-            elseif($column->parent <= 0)
-            {
-                if(empty($columnsData[$column->id])) $columnsData[$column->id] = $column;
-            }
-        }
-
         $region = $this->kanban->getRegionByID($regionID);
 
         $this->view->kanban  = $this->kanban->getByID($region->kanban);
-        $this->view->columns = $columnsData;
+        $this->view->columns = $this->kanban->getColumnsByObject('region', $regionID, '1');
 
         $this->display();
     }
@@ -1496,7 +1480,7 @@ class kanban extends control
         $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'restore');
         $this->action->logHistory($actionID, $changes);
 
-        return print(js::reload('parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
 	/**

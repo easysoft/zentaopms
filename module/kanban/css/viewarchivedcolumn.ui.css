@@ -1,0 +1,3 @@
+.panel-heading {justify-content: center;}
+#archivedColumns {top: 50px; right: 0px; width: 400px; position: fixed; z-index: 1050; background-color: rgb(255,255,255);}
+#archivedColumns .panel .panel-body {overflow: auto; padding: 10px;}
