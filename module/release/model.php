@@ -412,8 +412,8 @@ class releaseModel extends model
             elseif($notify == 'SC' && !empty($release->build))
             {
                 $stories  = implode(',', $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll());
-                $stories .= $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($release->id)->fetch('stories');
-                $stories  = trim($stories, ',');
+                $stories .= ',' . $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($release->id)->fetch('stories');
+                $stories  = trim(str_replace(',,', ',', $stories), ',');
                 if(empty($stories)) continue;
 
                 $openedByList   = $this->dao->select('openedBy')->from(TABLE_STORY)->where('id')->in($stories)->fetchPairs();
