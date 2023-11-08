@@ -164,7 +164,7 @@ class bugModel extends model
      */
     public function getByID(int $bugID, bool $setImgSize = false): object|false
     {
-        $bug = $this->bugTao->fetchBugInfo($bugID);
+        $bug = parent::fetchByID($bugID);
         if(!$bug) return false;
 
         $this->loadModel('file');
