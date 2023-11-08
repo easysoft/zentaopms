@@ -21,7 +21,6 @@ $isonlybody ? modalHeader
 formPanel
 (
     set::size('sm'),
-    setStyle('padding-top', '1rem'),
     $isonlybody ? null :
     to::heading
     (
