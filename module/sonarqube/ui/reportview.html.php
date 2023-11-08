@@ -28,6 +28,7 @@ div
     a
     (
         setClass('article-h2'),
+        set('data-close-modal', true),
         $projectName,
         hasPriv('instance', 'manage') ? set::href(createLink('sonarqube', 'browseIssue', "sonarqubeID={$sonarqubeID}&project=" . str_replace('-', '*', $projectKey))) : null
     ),
