@@ -50,8 +50,6 @@ $lang->testtask->done             = "Jouée";
 $lang->testtask->totalStatus      = "Toutes";
 $lang->testtask->all              = 'Toutes';
 $lang->testtask->allTasks         = 'Toutes Recettes';
-$lang->testtask->collapseAll      = 'Replier';
-$lang->testtask->expandAll        = 'Déplier';
 $lang->testtask->auto             = 'Test Automation Tasks';
 $lang->testtask->task             = 'Test Task';
 $lang->testtask->run              = 'Test Run ID';
@@ -80,6 +78,7 @@ $lang->testtask->executor          = 'Executeur';
 $lang->testtask->execTime          = 'Durée Exec';
 $lang->testtask->pri               = 'Priorité';
 $lang->testtask->name              = 'Nom Campagne';
+$lang->testtask->unitName          = 'Name Of Unit Test';
 $lang->testtask->begin             = 'Début';
 $lang->testtask->end               = 'Fin';
 $lang->testtask->realBegan         = 'Actual Started Date';
@@ -110,6 +109,7 @@ $lang->testtask->passCount         = 'Pass';
 $lang->testtask->failCount         = 'Fail';
 $lang->testtask->summary           = '%s CasTest, %s échecs, %s heures.';
 $lang->testtask->stepSummary       = 'Total %s steps, %s passes, %s failures.';
+$lang->testtask->unitSummary       = 'Total %s unit test results.';
 $lang->testtask->pageSummary       = 'Total testtasks: <strong>%s</strong>.';
 $lang->testtask->mySummary         = 'Total testtasks: <strong>%s</strong>, Wait: <strong>%s</strong>, Testing: <strong>%s</strong>, Blocked: <strong>%s</strong>.';
 $lang->testtask->allSummary        = 'Total testtasks: <strong>%s</strong>, Wait: <strong>%s</strong>, Testing: <strong>%s</strong>, Blocked: <strong>%s</strong>, Done: <strong>%s</strong>.';
@@ -207,6 +207,12 @@ $lang->testtask->featureBar['browse']['done']        = $lang->testtask->done;
 
 $lang->testtask->featureBar['cases']['all']          = $lang->testtask->allCases;
 $lang->testtask->featureBar['cases']['assignedtome'] = $lang->testtask->assignedToMe;
+
+$lang->testtask->featureBar['linkcase']['all']     = $lang->all;
+$lang->testtask->featureBar['linkcase']['bystory'] = $lang->testtask->linkByStory;
+$lang->testtask->featureBar['linkcase']['bysuite'] = $lang->testtask->linkBySuite;
+$lang->testtask->featureBar['linkcase']['bybuild'] = $lang->testtask->linkByBuild;
+$lang->testtask->featureBar['linkcase']['bybug']   = $lang->testtask->linkByBug;
 
 $lang->testtask->featureBar['browseunits']['all']       = 'All';
 $lang->testtask->featureBar['browseunits']['newest']    = 'Recently';
