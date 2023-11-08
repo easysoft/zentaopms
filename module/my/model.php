@@ -1104,7 +1104,6 @@ class myModel extends model
         $stmt = $this->dao->select("t1.*")->from(TABLE_DEMAND)->alias('t1')
             ->leftJoin(TABLE_DEMANDREVIEW)->alias('t2')->on('t1.id = t2.demand and t1.version = t2.version')
             ->where('t1.deleted')->eq(0)
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->andWhere('t2.reviewer')->eq($this->app->user->account)
             ->andWhere('t2.result')->eq('')
             ->andWhere('t1.vision')->eq($this->config->vision)
