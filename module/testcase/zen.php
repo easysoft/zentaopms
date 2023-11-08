@@ -2373,13 +2373,9 @@ class testcaseZen extends testcase
         }
         else
         {
-            $this->app->loadLang('branch');
-
             $branches = $this->loadModel('branch')->getPairs($productID, '', $projectID);
-            $branches = array('') + array('0' => $this->lang->branch->main) + $branches + array('all' => $this->lang->branch->all);
-
-            $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-            $this->config->testcase->search['params']['branch']['values'] = $branches;
+            $this->config->testcase->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            $this->config->testcase->search['params']['branch']['values'] = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branches + array('all' => $this->lang->branch->all);
         }
 
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
