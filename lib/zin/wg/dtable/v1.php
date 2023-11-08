@@ -14,6 +14,7 @@ class dtable extends wg
         'emptyTip?:string',                   // 表格数据源为空时显示的文本
         'createTip?:string',                  // 表格数据源为空时的创建文本
         'createLink?:array|string',           // 表格数据源为空时的创建链接
+        'createAttr?:string',                 // 表格数据源为空时的创建链接属性
     );
 
     static $dtableID = 0;
@@ -202,8 +203,9 @@ class dtable extends wg
             {
                 if(!empty($createLink))
                 {
-                    $createTip = $this->prop('createTip', $lang->create);
-                    $emptyTip  = array('html' => "<div class='text-gray'>$emptyTip</div><a class='btn primary-pale border-primary' href='$createLink'><i class='icon icon-plus'></i> $createTip</a>", 'className' => 'row gap-4 items-center');
+                    $createTip  = $this->prop('createTip', $lang->create);
+                    $createAttr = $this->prop('createAttr', '');
+                    $emptyTip   = array('html' => "<div class='text-gray'>$emptyTip</div><a class='btn primary-pale border-primary' href='$createLink' $createAttr><i class='icon icon-plus'></i> $createTip</a>", 'className' => 'row gap-4 items-center');
                 }
                 else
                 {
