@@ -325,6 +325,9 @@ dtable
     set::checkInfo(jsRaw("function(checkedIdList){return window.setStatistics(this, checkedIdList, '{$summary}');}")),
     set::footPager(usePager()),
     set::footToolbar($footToolbar),
+    set::emptyTip($storyType == 'story' ? $lang->story->noStory : $lang->story->noRequirement),
+    set::createTip($lang->story->create),
+    set::createLink(hasPriv($storyType, 'create') ? createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '') : '')
 );
 
 modal(set::id('#batchUnlinkStoryBox'));

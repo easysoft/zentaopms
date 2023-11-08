@@ -92,6 +92,7 @@ featureBar
     li(searchToggle(set::open($browseType == 'bySearch')))
 );
 
+$canCreate = hasPriv('product', 'create');
 toolbar
 (
     btn
@@ -108,14 +109,14 @@ toolbar
         toggle::modal(array('url' => createLink('product', 'manageLine', $browseType), 'id' => 'manageLineModal')),
         $lang->product->editLine
     ) : null,
-    btn
+    $canCreate ? btn
     (
         set::text($lang->product->create),
         set::icon('plus'),
         set::type('primary'),
         set::url(createLink('product', 'create')),
         set::className('create-product-btn')
-    )
+    ) : null
 );
 
 $canBatchEdit = common::hasPriv('product', 'batchEdit');
@@ -139,7 +140,10 @@ dtable
             setData('dataMap', 'productIDList[]:#products~checkedIDList')
         )
     ) : null,
-    set::footPager(usePager())
+    set::footPager(usePager()),
+    set::emptyTip($lang->product->noProduct),
+    set::createTip($lang->product->create),
+    set::createLink($canCreate ? createLink('product', 'create') : ''),
 );
 
 render();

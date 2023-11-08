@@ -36,7 +36,7 @@ if(empty($dateGroups))
 {
     $content = div
     (
-        setClass('flex items-center justify-center h-64'),
+        setClass('flex bg-canvas items-center justify-center h-64'),
         span
         (
             setClass('text-gray'),

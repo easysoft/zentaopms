@@ -136,6 +136,10 @@ dtable
     set::onRenderCell(jsRaw('function(result, data){return window.renderCustomCell(result, data);}')),
     set::footer(array(array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
     set::footPager(usePager()),
+    set::emptyTip($lang->project->empty),
+    set::createTip($lang->project->create),
+    set::createLink($branchStatus != 'closed' && hasPriv('project', 'create') ? createLink('project', 'createGuide', "programID=$product->program&from=project&productID={$product->id}&branchID=$branchID", '', true) : ''),
+    set::createAttr("data-toggle='modal'")
 );
 
 render();
