@@ -152,7 +152,7 @@ zentaoxx:
 	sed -i 's/v\.//g' zentaoxx/extension/xuan/client/js/checkupgrade.js
 	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/extension/xuan/im/control.php
 	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/extension/xuan/im/model/conference.php
-	sed -i 's/commonModel::isLicensedMethod([^\)]*)/false/g' zentaoxx/extension/xuan/conference/model.php
+	sed -i 's/commonModel::isLicensedMethod/extCommonModel::ilMethod/g' zentaoxx/extension/xuan/conference/model.php
 	sed -i "s#\$this->app->getModuleRoot() . 'im/apischeme.json'#\$this->app->getExtensionRoot() . 'xuan/im/apischeme.json'#g" zentaoxx/extension/xuan/im/model.php
 	sed -i "s/'..\/..\/common\/view\/header.html.php'/\$$app->getModuleRoot() . 'common\/view\/header.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
 	sed -i "s/'..\/..\/common\/view\/footer.html.php'/\$$app->getModuleRoot() . 'common\/view\/footer.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
