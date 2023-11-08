@@ -1052,7 +1052,7 @@ class kanban extends control
 
         $card     = $this->kanban->getCardByID($cardID);
         $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
+        return $this->send(array('result' => 'success', 'callback' => $callback));
     }
 
     /**

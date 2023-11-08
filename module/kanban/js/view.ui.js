@@ -27,8 +27,18 @@ window.getCol = function(col)
     /* 计算WIP。*/
     const limit = col.limit == -1 ? "<i class='icon icon-md icon-infinite'></i>" : col.limit;
     const cards = columnCount[col.id] || 0;
-    col.subtitle = {html: `(${cards} / ${limit})`};
+
     col.subtitleClass = 'ml-1';
+
+    let wip = `(${cards} / ${limit})`;
+
+    if(col.limit != -1 && cards > col.limit)
+    {
+        col.subtitleClass += ' text-danger';
+        wip += ' <i class="icon icon-exclamation-sign"></i>';
+    }
+
+    col.subtitle = {html: wip};
 }
 
 window.getColActions = function(col)
@@ -239,6 +249,32 @@ window.changCardColor = function(cardID, color)
 {
     color = color.replace('#', '');
     $.ajaxSubmit({url: $.createLink('kanban', 'setCardColor', 'cardID=' + cardID + '&color=' + color + '&kanbanID=' + kanbanID)});
+}
+
+window.canDrop = function(dragInfo, dropInfo)
+{
+    if(!dragInfo) return false;
+
+    const column = this.getCol(dropInfo.col);
+    const lane   = this.getLane(dropInfo.lane);
+    if(!column || !lane) return false;
+
+    if(dropInfo.type == 'item') return false;
+
+    /* 卡片可在同组内拖动。 */
+    return dragInfo.item.group == column.group;
+}
+
+window.onDrop = function(changes, dropInfo)
+{
+    if(!dropInfo || !canMoveCard) return false;
+
+    const item     = dropInfo['drag']['item'];
+    const toColID  = dropInfo['drop']['col']
+    const toLaneID = dropInfo['drop']['lane']
+
+    const url =  $.createLink('kanban', 'moveCard', `cardID=${item.id}&fromColID=${item.column}&toColID=${toColID}&fromLaneID=${item.lane}&toLaneID=${toLaneID}&kanbanID=${kanbanID}`);
+    $.ajaxSubmit({url});
 }
 
 function formatDate(inputDate)
