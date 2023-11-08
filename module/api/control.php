@@ -561,27 +561,15 @@ class api extends control
      * Delete api library.
      *
      * @param  int    $libID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function deleteLib($libID, $confirm = 'no')
+    public function deleteLib($libID)
     {
-        if($confirm == 'no')
-        {
-            return print(js::confirm($this->lang->api->confirmDeleteLib, $this->createLink('api', 'deleteLib', "libID=$libID&confirm=yes")));
-        }
-        else
-        {
-            $this->doc->delete(TABLE_DOCLIB, $libID);
-            if(isInModal())
-            {
-                unset($_GET['onlybody']);
-                return print(js::locate($this->createLink('api', 'index'), 'parent.parent'));
-            }
+        $this->doc->delete(TABLE_DOCLIB, $libID);
+        if(isInModal()) return $this->send(array('result' => 'success', 'load' => $this->createLink('api', 'index'), 'closeModal' => true, 'app' => $this->app->tab));
 
-            return print(js::reload('parent'));
-        }
+        return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true, 'app' => $this->app->tab));
     }
 
     /**
