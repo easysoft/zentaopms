@@ -19,20 +19,22 @@ formPanel
         formGroup
         (
             set::label($lang->kanbancolumn->name),
-            input(set::name('name'), set::value($column->name))
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::label($lang->kanbancolumn->color),
-            colorPicker
+            inputControl
             (
-                set::name('color'),
-                set::items($config->kanban->columnColorList),
-                set::value($column->color)
-            ),
+                input(set::name('name'), set::value($column->name), set::style(array('color' => $column->color))),
+                set::suffixWidth('icon'),
+                to::suffix
+                (
+                    colorPicker
+                    (
+                        set::name('color'),
+                        set::items($config->kanban->columnColorList),
+                        set::value($column->color),
+                        set('data-on', 'change'),
+                        set('data-call', "$('[name=name]').css('color', $('[name=color]').val())")
+                    )
+                )
+            )
         )
     )
 );
