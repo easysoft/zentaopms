@@ -186,7 +186,6 @@ class releaseZen extends release
         $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts(array_keys($stories));
         $this->view->summary      = $this->product->summary($stories);
         $this->view->builds       = $this->loadModel('build')->getBuildPairs(array($release->product), 'all', 'withbranch|hasproject|hasdeleted', 0, 'execution', '', true);
-        $this->view->branchName   = $release->productType == 'normal' ? '' : $this->loadModel('branch')->getByID($release->branch);
         $this->view->bugs         = $bugs;
         $this->view->leftBugs     = $leftBugs;
         $this->view->bugPager     = $bugPager;
