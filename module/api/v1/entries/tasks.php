@@ -54,6 +54,21 @@ class tasksEntry extends entry
         }
         else
         {
+            /* If $executionID is a project that have no execution, get real executionID. */
+            $project = $this->loadModel('project')->getByID($executionID);
+            if($project and $project->type == 'project' and !$project->multiple)
+            {
+                $executions = $this->loadModel('execution')->getList($project->id);
+                foreach($executions as $execution)
+                {
+                    if(!$execution->multiple)
+                    {
+                        $executionID = $execution->id;
+                        break;
+                    }
+                }
+            }
+
             /* Get tasks by execution. */
             $control = $this->loadController('execution', 'task');
             $control->task($executionID, $this->param('status', 'all'), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 100), $this->param('page', 1));
