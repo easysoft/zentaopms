@@ -665,7 +665,7 @@ class transferModel extends model
                     }
                     else
                     {
-                        $rows[$id]->$field = zget($exportDatas[$field], $value, '');
+                        $rows[$id]->$field = zget($exportDatas[$field], $value, $value);
                     }
                 }
                 elseif(strpos($this->config->transfer->userFields, $field) !== false)
