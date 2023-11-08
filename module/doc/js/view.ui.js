@@ -6,14 +6,15 @@
  */
 window.fullScreen = function()
 {
-    var element       = document.getElementById('content');
+    var element       = document.getElementById('docPanel');
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
     if(requestMethod)
     {
         var afterEnterFullscreen = function()
         {
-            $('#content').addClass('scrollbar-hover');
-            $('#content').css('background', '#fff');
+            $('#docPanel').addClass('scrollbar-hover');
+            $('#docPanel').css('background', '#fff');
+            $('#docPanel .panel-actions, #docPanel .selelct-version').addClass('hidden');
             $.cookie.set('isFullScreen', 1);
         };
 
@@ -49,7 +50,8 @@ window.fullScreen = function()
  */
 function exitFullScreen()
 {
-    $('#content').removeClass('scrollbar-hover');
+    $('#docPanel').removeClass('scrollbar-hover');
+    $('#docPanel .panel-actions, #docPanel .selelct-version').removeClass('hidden');
     $.cookie.set('isFullScreen', 0);
 }
 

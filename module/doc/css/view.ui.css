@@ -2,7 +2,7 @@
 .panel-heading { justify-content: space-between; }
 .panel-actions { margin-left: auto; }
 
-.doc-content .flex .doc-panel {flex: 1 1 100%; margin-right: 1.5rem;}
+#docPanel {flex: 1 1 100%; margin-right: 1.5rem;}
 
 .scrollbar-hover { overflow-y: scroll; }
 #mainContent .panel+.panel {flex: none}
@@ -15,7 +15,7 @@
 #contentTree {background: #fff; position: sticky; height: calc(100vh - 180px)!important; overflow: auto; top: 3rem; right: 1rem; z-index: 100; flex: 0 1 30%;}
 #contentTree .tree-item .item-content > a {white-space: nowrap; text-overflow: clip; overflow: hidden;}
 
-#content .detail-content.article-content::-webkit-scrollbar,
+#docPanel::-webkit-scrollbar,
 #contentTree::-webkit-scrollbar {height: 0px; width: 0px; background: transparent;}
 #contentTree::-moz-scrollbar {height: 0px; width: 0px; background: transparent;}
 

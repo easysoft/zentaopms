@@ -118,7 +118,8 @@ if(!empty($editors))
 
 $contentDom = div
 (
-    setClass('flex-auto doc-panel'),
+    setClass('flex-auto'),
+    setID('docPanel'),
     div
     (
         setClass('panel-heading'),
@@ -132,7 +133,7 @@ $contentDom = div
         (
             btn
             (
-                setClass('ghost btn square btn-default'),
+                setClass('ghost btn square btn-default selelct-version'),
                 'V' . ($version ? $version : $doc->version)
             ),
             set::items($versionList)
@@ -145,9 +146,9 @@ $contentDom = div
                 setClass('toolbar'),
                 btn
                 (
-                    set::url('javascript:fullScreen()'),
                     setClass('btn ghost'),
                     icon('fullscreen'),
+                    on::click('fullScreen')
                 ),
                 common::hasPriv('doc', 'collect') ? html($starBtn) : null,
                 ($config->vision == 'rnd' and $config->edition == 'max' and $app->tab == 'project') ? $importLibBtn : null,
