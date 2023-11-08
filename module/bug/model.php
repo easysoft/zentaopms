@@ -167,8 +167,6 @@ class bugModel extends model
         $bug = parent::fetchByID($bugID);
         if(!$bug) return false;
 
-        $this->loadModel('mr');
-
         $bug = $this->loadModel('file')->replaceImgURL($bug, 'steps');
         if($setImgSize) $bug->steps = $this->file->setImgSize($bug->steps);
 
@@ -179,7 +177,7 @@ class bugModel extends model
         if($bug->toTask)       $bug->toTaskTitle       = $this->bugTao->getNameFromTable($bug->toTask,       TABLE_TASK,    'name');
         if($bug->relatedBug)   $bug->relatedBugTitles  = $this->bugTao->getBugPairsByList($bug->relatedBug);
 
-        $bug->linkMRTitles = $this->mr->getLinkedMRPairs($bugID, 'bug');
+        $bug->linkMRTitles = $this->loadModel('mr')->getLinkedMRPairs($bugID, 'bug');
         $bug->toCases      = $this->bugTao->getCasesFromBug($bugID);
         $bug->files        = $this->file->getByObject('bug', $bugID);
 
