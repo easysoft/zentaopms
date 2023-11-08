@@ -393,7 +393,6 @@ class kanban extends control
         $kanban = $this->kanban->getByID($kanbanID);
         $users  = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
-
         if(!$kanban)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
@@ -420,6 +419,7 @@ class kanban extends control
         $this->view->title         = $this->lang->kanban->view;
         $this->view->userList      = $userList;
         $this->view->kanban        = $kanban;
+        $this->view->regions       = $regions;
         $this->view->kanbanList    = $this->kanban->getKanbanData($kanbanID, $regionID == 'all' ? '' : array($regionID));
         $this->view->regionID      = $regionID;
         $this->view->appendToolbar = $this->kanban->getHeaderActions($kanban);
