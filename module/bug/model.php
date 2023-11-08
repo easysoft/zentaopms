@@ -167,10 +167,9 @@ class bugModel extends model
         $bug = parent::fetchByID($bugID);
         if(!$bug) return false;
 
-        $this->loadModel('file');
         $this->loadModel('mr');
 
-        $bug = $this->file->replaceImgURL($bug, 'steps');
+        $bug = $this->loadModel('file')->replaceImgURL($bug, 'steps');
         if($setImgSize) $bug->steps = $this->file->setImgSize($bug->steps);
 
         if($bug->project)      $bug->projectName       = $this->bugTao->getNameFromTable($bug->project,      TABLE_PROJECT, 'name');
