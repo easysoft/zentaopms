@@ -1,12 +1,24 @@
 .panel-heading .title {font-size: 18px; font-weight: 600}
 .panel-heading { justify-content: space-between; }
 .panel-actions { margin-left: auto; }
-#content .user-time {margin-right: 4px; color: #838a9d}
-#content .user-time .icon {margin-right: 4px}
+
+.doc-content .flex .doc-panel {flex: 1 1 100%;}
 
 .scrollbar-hover { overflow-y: scroll; }
 #mainContent .panel+.panel {flex: none}
-#history{ position: relative;}
-#history > #closeBtn { position: absolute; right: 10px; top: 10px;}
+#history{ position: relative; flex: 0 1 40%;}
+#history > #closeBtn { position: absolute; right: 0; top: 0;}
 
-#content {height: calc(100vh - 300px); overflow-y: auto}
+.main-content-cell > .panel {max-height: calc(100vh - 110px); overflow-y: auto;}
+.main-content-cell > .panel > .doc-content {padding-right: 0;}
+
+#contentTree {background: #fff; position: sticky; height: calc(100vh - 180px)!important; overflow: auto; top: 5rem; right: 1rem; z-index: 100; flex: 0 1 30%;}
+#contentTree .tree-item .item-content > a {white-space: nowrap; text-overflow: clip; overflow: hidden;}
+
+#content .detail-content.article-content::-webkit-scrollbar,
+#contentTree::-webkit-scrollbar {height: 0px; width: 0px; background: transparent;}
+#contentTree::-moz-scrollbar {height: 0px; width: 0px; background: transparent;}
+
+.w-144 {width: 36rem;}
+
+#outlineToggle {display: block; position: absolute; top: 7rem; right: 3rem; z-index: 110;}

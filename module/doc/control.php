@@ -112,24 +112,25 @@ class doc extends control
             $docs = $this->doc->getMineList($type, $browseType, $orderBy, $pager, $queryID);
         }
 
-        $this->view->title          = $this->lang->doc->common;
-        $this->view->moduleID       = $moduleID;
-        $this->view->docs           = $docs;
-        $this->view->users          = $this->user->getPairs('noletter');
-        $this->view->orderBy        = $orderBy;
-        $this->view->browseType     = $browseType;
-        $this->view->param          = $param;
-        $this->view->libID          = $libID;
-        $this->view->lib            = $this->doc->getLibById($libID);
-        $this->view->libTree        = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID, 0, $browseType);
-        $this->view->pager          = $pager;
-        $this->view->type           = $type;
-        $this->view->objectID       = 0;
-        $this->view->canExport      = ($this->config->edition != 'open' and common::hasPriv('doc', 'mine2export') and $type == 'mine');
-        $this->view->libType        = 'lib';
-        $this->view->objectDropdown = $objectDropdown;
-        $this->view->spaceType      = 'mine';
-        $this->view->linkParams     = "objectID=$objectID&%s&browseType=&orderBy=$orderBy&param=0";
+        $this->view->title             = $this->lang->doc->common;
+        $this->view->moduleID          = $moduleID;
+        $this->view->docs              = $docs;
+        $this->view->users             = $this->user->getPairs('noletter');
+        $this->view->orderBy           = $orderBy;
+        $this->view->browseType        = $browseType;
+        $this->view->param             = $param;
+        $this->view->libID             = $libID;
+        $this->view->lib               = $this->doc->getLibById($libID);
+        $this->view->libTree           = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID, 0, $browseType);
+        $this->view->pager             = $pager;
+        $this->view->type              = $type;
+        $this->view->objectID          = 0;
+        $this->view->canExport         = ($this->config->edition != 'open' and common::hasPriv('doc', 'mine2export') and $type == 'mine');
+        $this->view->libType           = 'lib';
+        $this->view->objectDropdown    = $objectDropdown;
+        $this->view->spaceType         = 'mine';
+        $this->view->linkParams        = "objectID=$objectID&%s&browseType=&orderBy=$orderBy&param=0";
+        $this->view->defaultNestedShow = $this->docZen->getDefacultNestedShow($libID, $moduleID, $type);
 
         $this->display();
     }
@@ -199,7 +200,7 @@ class doc extends control
         elseif($type == 'mine')
         {
             $acl = 'private';
-            $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList['private'];
+            $this->lang->doclib->aclList = $this->lang->doclib->mySpaceAclList;
         }
 
         if($type != 'custom' and $type != 'mine')
@@ -1017,27 +1018,28 @@ class doc extends control
         $fileIcon    = $this->doc->getFileIcon($files);
         $sourcePairs = $this->doc->getFileSourcePairs($files);
 
-        $this->view->title          = $object->name;
-        $this->view->type           = $type;
-        $this->view->object         = $object;
-        $this->view->files          = $this->docZen->processFiles($files, $fileIcon, $sourcePairs);
-        $this->view->fileIcon       = $fileIcon;
-        $this->view->sourcePairs    = $sourcePairs;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager          = $pager;
-        $this->view->viewType       = $viewType;
-        $this->view->orderBy        = $orderBy;
-        $this->view->objectID       = $objectID;
-        $this->view->canBeChanged   = common::canModify($type, $object); // Determines whether an object is editable.
-        $this->view->summary        = $this->doc->summary($files);
-        $this->view->libTree        = $this->doc->getLibTree(0, $libs, $type, 0, $objectID);
-        $this->view->objectDropdown = $objectDropdown;
-        $this->view->searchTitle    = $searchTitle;
-        $this->view->linkParams     = "objectID=$objectID&%s&browseType=&orderBy=status,id_desc&param=0";
-        $this->view->spaceType      = $type;
-        $this->view->objectType     = $type;
-        $this->view->libID          = 0;
-        $this->view->moduleID       = 0;
+        $this->view->title             = $object->name;
+        $this->view->type              = $type;
+        $this->view->object            = $object;
+        $this->view->files             = $this->docZen->processFiles($files, $fileIcon, $sourcePairs);
+        $this->view->fileIcon          = $fileIcon;
+        $this->view->sourcePairs       = $sourcePairs;
+        $this->view->users             = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager             = $pager;
+        $this->view->viewType          = $viewType;
+        $this->view->orderBy           = $orderBy;
+        $this->view->objectID          = $objectID;
+        $this->view->canBeChanged      = common::canModify($type, $object); // Determines whether an object is editable.
+        $this->view->summary           = $this->doc->summary($files);
+        $this->view->libTree           = $this->doc->getLibTree(0, $libs, $type, 0, $objectID);
+        $this->view->objectDropdown    = $objectDropdown;
+        $this->view->searchTitle       = $searchTitle;
+        $this->view->linkParams        = "objectID=$objectID&%s&browseType=&orderBy=status,id_desc&param=0";
+        $this->view->spaceType         = $type;
+        $this->view->objectType        = $type;
+        $this->view->libID             = 0;
+        $this->view->moduleID          = 0;
+        $this->view->defaultNestedShow = $this->docZen->getDefacultNestedShow(0, 0, $type);
 
         $this->display();
     }
@@ -1109,7 +1111,8 @@ class doc extends control
         if(isset($doc) and $doc->type == 'text')
         {
             /* Split content into an array. */
-            $content = explode("\n", $doc->content);
+            $content = preg_replace('/(<(h[1-6])[\S\s]*?\>[\S\s]*?<\/\2>)/', "\$1\n", $doc->content);
+            $content = explode("\n", $content);
 
             /* Get the head element, for example h1,h2,etc. */
             $includeHeadElement = array();
@@ -1122,80 +1125,56 @@ class doc extends control
 
             /* Get the two elements with the highest rank. */
             sort($includeHeadElement);
-            $includeHeadElement = array_slice($includeHeadElement, 0, 2);
 
             if($includeHeadElement)
             {
-                $outline    = '<ul class="tree tree-angles" data-ride="tree" id="outline">';
-                $preElement = '';
+                $topLevel    = (int)ltrim($includeHeadElement[0], 'h');
+                $outlineList = $this->docZen->buildOutlineList($topLevel, $content, $includeHeadElement);
+                $outlineTree = $this->docZen->buildOutlineTree($outlineList);
+                $this->view->outlineTree = $outlineTree;
+
                 foreach($content as $index => $element)
                 {
                     preg_match('/<(h[1-6])([\S\s]*?)>([\S\s]*?)<\/\1>/', $element, $headElement);
 
                     /* The current element is existed, the element is in the includeHeadElement, and the text in the element is not null. */
-                    if(isset($headElement[1]) and in_array($headElement[1], $includeHeadElement) and strip_tags($headElement[3]) != '')
+                    if(isset($headElement[1]) && in_array($headElement[1], $includeHeadElement) && strip_tags($headElement[3]) != '')
                     {
-                        /* The element is the first level. */
-                        if(array_search($headElement[1], $includeHeadElement) == 0)
-                        {
-                            /* The second level is existed, and previous element is the second level element. */
-                            if(isset($includeHeadElement[1]) and $preElement == $includeHeadElement[1]) $outline .= '</ul></li>';
-                            if($preElement == $includeHeadElement[0]) $outline .= '</li>';
-
-                            /* Add the anchor to the element. */
-                            $content[$index] = str_replace('<' . $includeHeadElement[0] . $headElement[2] . '>', '<' . $includeHeadElement[0] . $headElement[2] . " id='anchor{$index}'" . '>', $content[$index]);
-                            $outline        .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[3]), '', "title='" . strip_tags($headElement[3]) . "'");
-
-                            $preElement = $headElement[1];
-                        }
-                        elseif(array_search($headElement[1], $includeHeadElement) == 1)
-                        {
-                            if($preElement == '') $outline .= '<li><ul>';
-                            if($preElement == $includeHeadElement[0]) $outline .= '<ul>';
-
-                            /* Add the anchor to the element. */
-                            $content[$index] = str_replace('<' . $includeHeadElement[1] . $headElement[2] . '>', '<' . $includeHeadElement[1] . $headElement[2] . " id='anchor{$index}'" . '>', $content[$index]);
-                            $outline        .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[3]), '', "title='" . strip_tags($headElement[3]) . "'") . '</li>';
-
-                            $preElement = $includeHeadElement[1];
-                        }
+                        $content[$index] = str_replace('<' . $headElement[1] . $headElement[2] . '>', '<' . $headElement[1] . $headElement[2] . " id='anchor{$index}'" . '>', $content[$index]);
                     }
-                    if(isset($includeHeadElement[1]) and $preElement == $includeHeadElement[1] and !isset($content[$index + 1])) $outline .= '</ul></li>';
                 }
-                $outline .= '</ul>';
 
                 $doc->content = implode("\n", $content);
-
-                $this->view->outline = $outline;
             }
         }
 
         if($this->app->tab != 'execution' and !empty($doc->execution)) $object = $this->execution->getByID($doc->execution);
 
-        $this->view->title          = $this->lang->doc->common . $this->lang->colon . $doc->title;
-        $this->view->docID          = $docID;
-        $this->view->doc            = $doc;
-        $this->view->version        = $version;
-        $this->view->object         = $object;
-        $this->view->objectID       = $objectID;
-        $this->view->objectType     = $objectType;
-        $this->view->type           = $type;
-        $this->view->libID          = $libID;
-        $this->view->lib            = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
-        $this->view->libs           = $this->doc->getLibsByObject($type, (int)$objectID);
-        $this->view->canBeChanged   = common::canModify($type, $object); // Determines whether an object is editable.
-        $this->view->actions        = $docID ? $this->action->getList('doc', $docID) : array();
-        $this->view->users          = $this->user->getPairs('noclosed,noletter');
-        $this->view->autoloadPage   = $this->doc->checkAutoloadPage($doc);
-        $this->view->libTree        = $this->doc->getLibTree((int)$libID, (array)$libs, $type, $doc->module, (int)$objectID, '', 0, $docID);
-        $this->view->preAndNext     = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
-        $this->view->moduleID       = $doc->module;
-        $this->view->objectDropdown = $objectDropdown;
-        $this->view->canExport      = ($this->config->edition != 'open' && common::hasPriv('doc', $type . '2export'));
-        $this->view->exportMethod   = $type . '2export';
-        $this->view->editors        = $this->doc->getEditors($docID);
-        $this->view->linkParams     = "objectID=$objectID&%s&browseType=&orderBy=status,id_desc&param=0";
-        $this->view->spaceType      = $objectType;
+        $this->view->title             = $this->lang->doc->common . $this->lang->colon . $doc->title;
+        $this->view->docID             = $docID;
+        $this->view->doc               = $doc;
+        $this->view->version           = $version;
+        $this->view->object            = $object;
+        $this->view->objectID          = $objectID;
+        $this->view->objectType        = $objectType;
+        $this->view->type              = $type;
+        $this->view->libID             = $libID;
+        $this->view->lib               = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
+        $this->view->libs              = $this->doc->getLibsByObject($type, (int)$objectID);
+        $this->view->canBeChanged      = common::canModify($type, $object); // Determines whether an object is editable.
+        $this->view->actions           = $docID ? $this->action->getList('doc', $docID) : array();
+        $this->view->users             = $this->user->getPairs('noclosed,noletter');
+        $this->view->autoloadPage      = $this->doc->checkAutoloadPage($doc);
+        $this->view->libTree           = $this->doc->getLibTree((int)$libID, (array)$libs, $type, $doc->module, (int)$objectID, '', 0, $docID);
+        $this->view->preAndNext        = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
+        $this->view->moduleID          = $doc->module;
+        $this->view->objectDropdown    = $objectDropdown;
+        $this->view->canExport         = ($this->config->edition != 'open' && common::hasPriv('doc', $type . '2export'));
+        $this->view->exportMethod      = $type . '2export';
+        $this->view->editors           = $this->doc->getEditors($docID);
+        $this->view->linkParams        = "objectID=$objectID&%s&browseType=&orderBy=status,id_desc&param=0";
+        $this->view->spaceType         = $objectType;
+        $this->view->defaultNestedShow = $this->docZen->getDefacultNestedShow($libID, $doc->module);
 
         $this->display();
     }
@@ -1295,28 +1274,29 @@ class doc extends control
             $this->view->$objectKey = $objectID;
         }
 
-        $this->view->title          = $title;
-        $this->view->type           = $type;
-        $this->view->objectType     = $type;
-        $this->view->browseType     = $browseType;
-        $this->view->isFirstLoad    = $isFirstLoad;
-        $this->view->param          = $queryID;
-        $this->view->users          = $this->user->getPairs('noletter');
-        $this->view->libTree        = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType, $param);
-        $this->view->libID          = $libID;
-        $this->view->moduleID       = $moduleID;
-        $this->view->objectDropdown = $objectDropdown;
-        $this->view->lib            = $lib;
-        $this->view->libType        = $libType;
-        $this->view->pager          = $pager;
-        $this->view->objectID       = $objectID;
-        $this->view->orderBy        = $orderBy;
-        $this->view->release        = $browseType == 'byrelease' ? $param : 0;
-        $this->view->canExport      = $canExport;
-        $this->view->exportMethod   = $libType == 'api' ? 'export' : $type . '2export';
-        $this->view->apiLibID       = key($apiLibs);
-        $this->view->spaceType      = $type;
-        $this->view->linkParams     = "objectID=$objectID&%s&browseType=&orderBy=$orderBy&param=0";
+        $this->view->title             = $title;
+        $this->view->type              = $type;
+        $this->view->objectType        = $type;
+        $this->view->browseType        = $browseType;
+        $this->view->isFirstLoad       = $isFirstLoad;
+        $this->view->param             = $queryID;
+        $this->view->users             = $this->user->getPairs('noletter');
+        $this->view->libTree           = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType, $param);
+        $this->view->libID             = $libID;
+        $this->view->moduleID          = $moduleID;
+        $this->view->objectDropdown    = $objectDropdown;
+        $this->view->lib               = $lib;
+        $this->view->libType           = $libType;
+        $this->view->pager             = $pager;
+        $this->view->objectID          = $objectID;
+        $this->view->orderBy           = $orderBy;
+        $this->view->release           = $browseType == 'byrelease' ? $param : 0;
+        $this->view->canExport         = $canExport;
+        $this->view->exportMethod      = $libType == 'api' ? 'export' : $type . '2export';
+        $this->view->apiLibID          = key($apiLibs);
+        $this->view->spaceType         = $type;
+        $this->view->linkParams        = "objectID=$objectID&%s&browseType=&orderBy=$orderBy&param=0";
+        $this->view->defaultNestedShow = $this->docZen->getDefacultNestedShow($libID, $moduleID, $type);
 
         $this->display();
     }

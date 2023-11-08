@@ -116,8 +116,9 @@ if(!empty($editors))
     );
 }
 
-panel
+$contentDom = div
 (
+    setClass('flex-auto doc-panel'),
     div
     (
         setClass('panel-heading'),
@@ -169,6 +170,7 @@ panel
                     set::url('###)'),
                     setClass('btn ghost'),
                     icon('clock'),
+                    on::click('showHistory'),
                 ),
             ),
             div
@@ -181,47 +183,94 @@ panel
     ),
     div
     (
-        set::className('panel-body'),
-        set::id('content'),
-        div
+        setClass('info'),
+        span
         (
-            setClass('info'),
-            span
+            setClass('user-time text-gray mr-2'),
+            icon
             (
-                setClass('user-time'),
-                icon('contacts'),
-                $createInfo,
+                'contacts',
+                setClass('mr-2')
             ),
-            span
-            (
-                setClass('user-time'),
-                icon('star'),
-                $doc->collects ? $doc->collects : 0,
-            ),
-            span
-            (
-                setClass('user-time'),
-                icon('eye'),
-                $doc->views,
-            ),
-            $keywordsLabel ? span
-            (
-                setClass('keywords'),
-                $keywordsLabel
-            ) : null,
+            $createInfo,
         ),
+        span
+        (
+            setClass('user-time text-gray mr-2'),
+            icon
+            (
+                'star',
+                setClass('mr-2')
+            ),
+            $doc->collects ? $doc->collects : 0,
+        ),
+        span
+        (
+            setClass('user-time text-gray'),
+            icon
+            (
+                'eye',
+                setClass('mr-2')
+            ),
+            $doc->views,
+        ),
+        $keywordsLabel ? span
+        (
+            setClass('keywords'),
+            $keywordsLabel
+        ) : null,
+    ),
+    div
+    (
+        setClass('detail-content article-content'),
         html($doc->content)
     ),
-    h::hr(),
-    $doc->files ? fileList
+    div
     (
-        set::files($doc->files)
-    ) : null
+        setClass('docFile'),
+        $doc->files ? h::hr() : null,
+        $doc->files ? fileList
+        (
+            set::files($doc->files)
+        ) : null,
+    )
+);
+
+$treeDom = isset($outlineTree) ? div
+(
+    setClass('mt-8 border-l of-auto'),
+    setID('contentTree'),
+    tree
+    (
+        set::items($outlineTree),
+        set::defaultNestedShow(true)
+    )
+) : null;
+
+$toggleTreeBtn = isset($outlineTree) ? btn
+    (
+        setID('outlineToggle'),
+        setClass('btn ghost'),
+        icon('menu-arrow-right'),
+        on::click('toggleOutline'),
+    ) : null;
+
+$historyDom = div
+(
+    set::id('history'),
+    setClass('hidden border-l'),
+    history()
 );
 
 panel
 (
-    set::id('history'),
-    setClass('hidden'),
-    history()
+    set::bodyClass('doc-content'),
+    div
+    (
+        setClass('flex'),
+        $contentDom,
+        $treeDom,
+        $toggleTreeBtn,
+        $historyDom
+    ),
 );

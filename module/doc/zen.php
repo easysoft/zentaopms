@@ -50,5 +50,134 @@ class docZen extends doc
         }
         return $files;
     }
-}
 
+    /**
+     * 构造大纲的数据。
+     * Build the data of outline.
+     *
+     * @param  int       $topLevel
+     * @param  array     $content
+     * @param  array     $includeHeadElement
+     * @access protected
+     * @return array
+     */
+    protected function buildOutlineList(int $topLevel, array $content, array $includeHeadElement): array
+    {
+        $preLevel     = 0;
+        $preIndex     = 0;
+        $parentID     = 0;
+        $currentLevel = 0;
+        $outlineList  = array();
+        foreach($content as $index => $element)
+        {
+            preg_match('/<(h[1-6])([\S\s]*?)>([\S\s]*?)<\/\1>/', $element, $headElement);
+
+            /* The current element is existed, the element is in the includeHeadElement, and the text in the element is not null. */
+            if(isset($headElement[1]) && in_array($headElement[1], $includeHeadElement) && strip_tags($headElement[3]) != '')
+            {
+                $currentLevel = (int)ltrim($headElement[1], 'h');
+
+                $item = array();
+                $item['id']    = $index;
+                $item['title'] = strip_tags($headElement[3]);
+                $item['hint']  = strip_tags($headElement[3]);
+                $item['url']   = '#anchor' . $index;
+                $item['level'] = $currentLevel;
+
+                if($currentLevel == $topLevel)
+                {
+                    $parentID = -1;
+                }
+                elseif($currentLevel > $preLevel)
+                {
+                    $parentID = $preIndex;
+                }
+                elseif($currentLevel < $preLevel)
+                {
+                    $parentID = $this->getOutlineParentID($outlineList, $currentLevel);
+                }
+
+                $item['parent'] = $parentID;
+
+                $preIndex = $index;
+                $preLevel = $currentLevel;
+                $outlineList[$index] = $item;
+            }
+        }
+        return $outlineList;
+    }
+
+    /**
+     * 获取大纲的父级ID。
+     * Get the parent ID of the outline.
+     *
+     * @param  array     $outlineList
+     * @param  int       $currentLevel
+     * @access protected
+     * @return int
+     */
+    protected function getOutlineParentID(array $outlineList, int $currentLevel): int
+    {
+        $parentID    = 0;
+        $outlineList = array_reverse($outlineList, true);
+        foreach($outlineList as $index => $item)
+        {
+            if($item['level'] < $currentLevel)
+            {
+                $parentID = $index;
+                break;
+            }
+        }
+        return $parentID;
+    }
+
+    /**
+     * 构造大纲的树形结构。
+     * Build the tree structure of the outline.
+     *
+     * @param  array     $outlineList
+     * @param  int       $parentID
+     * @access protected
+     * @return array
+     */
+    protected function buildOutlineTree(array $outlineList, int $parentID = -1): array
+    {
+        $outlineTree = array();
+        foreach($outlineList as $index => $item)
+        {
+            if($item['parent'] != $parentID) continue;
+
+            unset($outlineList[$index]);
+
+            $items = $this->buildOutlineTree($outlineList, $index);
+            if(!empty($items)) $item['items'] = $items;
+
+            $outlineTree[] = $item;
+        }
+
+        return $outlineTree;
+    }
+
+    /**
+     * 设置文档树默认展开的节点。
+     * Set the default expanded nodes of the document tree.
+     *
+     * @param  int       $libID
+     * @param  int       $moduleID
+     * @param  string    $objectType mine|product|project|execution|custom
+     * @access protected
+     * @return array
+     */
+    protected function getDefacultNestedShow(int $libID, int $moduleID, string $objectType = ''): array
+    {
+        if(!$libID && !$moduleID) return array();
+
+        $prefix = $objectType == 'mine' ? "0:" : '';
+        if($libID && !$moduleID) return array("{$prefix}{$libID}" => true);
+
+        $module = $this->loadModel('tree')->getByID($moduleID);
+        $path   = explode(',', trim($module->path, ','));
+        $path   = implode(':', $path);
+        return array("{$prefix}{$libID}:{$path}" => true);
+    }
+}
