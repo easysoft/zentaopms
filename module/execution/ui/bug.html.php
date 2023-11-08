@@ -99,6 +99,9 @@ dtable
     set::footPager(
         usePager(array('linkCreator' => helper::createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={$orderBy}&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"))),
     ),
+    set::emptyTip($lang->bug->notice->noBug),
+    set::createTip($lang->bug->create),
+    set::createLink($canCreateBug ? createLink('bug', 'create', "productID={$defaultProduct}&branch=0&extras=executionID={$execution->id}") : ''),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}'))
 );
 render();

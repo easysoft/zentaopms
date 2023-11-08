@@ -27,9 +27,11 @@ featureBar
     )
 );
 
+$canCreate = $canBeChanged && hasPriv('testtask', 'create');
+
 toolbar
 (
-    $canBeChanged && common::hasPriv('testtask', 'create') ? btn
+    $canCreate ? btn
     (
         setClass('btn primary'),
         set::icon('plus'),
@@ -68,4 +70,7 @@ dtable
         'linkCreator' => helper::createLink('execution', 'testtask', "executionID={$execution->id}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
     ))),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
+    set::emptyTip($lang->testtask->noTesttask),
+    set::createTip($lang->testtask->create),
+    set::createLink($canCreate ? createLink('testtask', 'create', "product=0&executionID=$executionID&build=0&projectID=$execution->project") : '')
 );
