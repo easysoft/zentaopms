@@ -2365,7 +2365,8 @@ class testcaseZen extends testcase
         $this->config->testcase->search['params']['scene']['values']   = $this->testcase->getSceneMenu($productID, $moduleID, $branch, 0, 0, true);
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
 
-        if($this->session->currentProductType == 'normal' || $this->app->tab == 'project')
+        $product = $this->loadModel('product')->fetchByID($productID);
+        if($product->type == 'normal' || $this->app->tab == 'project')
         {
             unset($this->config->testcase->search['fields']['branch']);
             unset($this->config->testcase->search['params']['branch']);
@@ -2373,7 +2374,6 @@ class testcaseZen extends testcase
         else
         {
             $this->app->loadLang('branch');
-            $product = $this->loadModel('product')->getByID($productID);
 
             $branches = $this->loadModel('branch')->getPairs($productID, '', $projectID);
             $branches = array('') + array('0' => $this->lang->branch->main) + $branches + array('all' => $this->lang->branch->all);

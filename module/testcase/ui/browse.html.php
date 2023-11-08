@@ -20,7 +20,7 @@ $canBatchReview             = hasPriv('testcase', 'batchReview') && !$isOnlyScen
 $canBatchDelete             = hasPriv('testcase', 'batchDelete') && !$isOnlyScene;
 $canBatchChangeType         = hasPriv('testcase', 'batchChangeType') && !$isOnlyScene;
 $canBatchConfirmStoryChange = hasPriv('testcase', 'batchConfirmStoryChange') && !$isOnlyScene;
-$canBatchChangeBranch       = hasPriv('testcase', 'batchChangeBranch') && !$isOnlyScene && $this->session->currentProductType && $this->session->currentProductType != 'normal';
+$canBatchChangeBranch       = hasPriv('testcase', 'batchChangeBranch') && !$isOnlyScene && $product->type != 'normal';
 $canBatchChangeModule       = hasPriv('testcase', 'batchChangeModule') && !empty($productID) && ($product->type == 'normal' || $branch !== 'all');
 $canBatchChangeScene        = hasPriv('testcase', 'batchChangeScene') && !$isOnlyScene;
 $canImportToLib             = hasPriv('testcase', 'importToLib') && !$isOnlyScene;
@@ -83,7 +83,7 @@ $footToolbar = $canBatchAction ? array('items' => array
         $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn secondary not-open-url', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=$caseProductID&branch=$branch")) : null,
         !empty($navActions) ? array('caret' => 'up', 'className' => 'secondary', 'items' => $navActions, 'data-placement' => 'top-start') : null,
     )) : null,
-    $canBatchChangeBranch ? array('caret' => 'up', 'text' => $lang->product->branchName[$this->session->currentProductType], 'type' => 'dropdown', 'items' => $branchItems, 'data-placement' => 'top-start') : null,
+    $canBatchChangeBranch ? array('caret' => 'up', 'text' => $lang->product->branchName[$product->type], 'type' => 'dropdown', 'items' => $branchItems, 'data-placement' => 'top-start') : null,
     $canBatchChangeModule ? array('caret' => 'up', 'text' => $lang->testcase->moduleAB, 'type' => 'dropdown', 'items' => $moduleItems, 'data-placement' => 'top-start') : null,
     $canBatchChangeScene ? array('caret' => 'up', 'text' => $lang->testcase->scene, 'type' => 'dropdown', 'items' => $sceneItems, 'data-placement' => 'top-start') : null,
     $canImportToLib ? array('text' => $lang->testcase->importToLib, 'data-toggle' => 'modal', 'data-target' => '#importToLib', 'data-size' => 'sm') : null,
