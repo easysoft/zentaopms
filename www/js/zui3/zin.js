@@ -432,6 +432,10 @@
                     if(options.success) options.success(data);
                     if(onFinish) onFinish(null, data);
                 }
+                else if(data.open)
+                {
+                    openUrl(data.open);
+                }
                 else if(data.load)
                 {
                     if(data.load === 'table') loadTable();
@@ -838,8 +842,8 @@
         {
             return zui.Modal.confirm(options.confirm).then(confirmed =>
             {
-                if(!confirmed) return;
-                openUrl(url, $.extend({}, options, {confirm: false}), event);
+                if(confirmed) openUrl(url, $.extend({}, options, {confirm: false}), event);
+                else if(options.canceled) openUrl(options.canceled, $.extend({}, options, {confirm: false}), event);
             });
         }
 
