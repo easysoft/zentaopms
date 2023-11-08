@@ -280,11 +280,9 @@ class productplanZen extends productplan
         }
         else
         {
-            $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-
-            $branchPairs = $this->loadModel('branch')->getPairsByIdList(explode(',', trim($plan->branch, ',')));
-            $branches    = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branchPairs;
-            $this->config->product->search['params']['branch']['values'] = $branches;
+            $branches = $this->loadModel('branch')->getPairsByIdList(explode(',', trim($plan->branch, ',')));
+            $this->config->product->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            $this->config->product->search['params']['branch']['values'] = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branches;
         }
 
         unset($this->config->product->search['fields']['product']);
@@ -326,10 +324,9 @@ class productplanZen extends productplan
         }
         else
         {
-            $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
-
-            $branchPairs = $this->loadModel('branch')->getPairsByIdList(explode(',', trim($plan->branch, ',')));
-            $this->config->bug->search['params']['branch']['values'] = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branchPairs;
+            $branches = $this->loadModel('branch')->getPairsByIdList(explode(',', trim($plan->branch, ',')));
+            $this->config->bug->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+            $this->config->bug->search['params']['branch']['values'] = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
     }
