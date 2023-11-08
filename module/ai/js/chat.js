@@ -47,6 +47,8 @@ $(function()
       /* Send message on enter, allowing linebreak inputs. */
       if((e.keyCode == 13 || e.keyCode == 10))
       {
+        if($(this).hasClass('busy')) return;
+
         if(e.ctrlKey || e.metaKey)
         {
           $('textarea[name=message]').val($('textarea[name=message]').val() + '\n');
