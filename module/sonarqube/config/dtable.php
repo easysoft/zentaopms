@@ -57,3 +57,25 @@ $config->sonarqube->dtable->project->fieldList['actions']['title'] = $lang->acti
 $config->sonarqube->dtable->project->fieldList['actions']['type']  = 'actions';
 $config->sonarqube->dtable->project->fieldList['actions']['menu']  = array('deleteProject', 'execJob', 'reportView');
 $config->sonarqube->dtable->project->fieldList['actions']['list']  = $config->sonarqube->actionList;
+
+$config->sonarqube->dtable->report = new stdclass();
+$config->sonarqube->dtable->report->fieldList['bugs']['title'] = array('html' => '<i class="icon icon-bug"></i>' . $lang->sonarqube->report->bugs);
+$config->sonarqube->dtable->report->fieldList['bugs']['type']  = 'text';
+
+$config->sonarqube->dtable->report->fieldList['vulnerabilities']['title'] = array('html' => '<i class="icon icon-unlock"></i>' . $lang->sonarqube->report->vulnerabilities);
+$config->sonarqube->dtable->report->fieldList['vulnerabilities']['type']  = 'text';
+
+$config->sonarqube->dtable->report->fieldList['security_hotspots_reviewed']['title'] = array('html' => '<i class="icon icon-shield"></i>' . $lang->sonarqube->report->security_hotspots_reviewed);
+$config->sonarqube->dtable->report->fieldList['security_hotspots_reviewed']['type']  = 'text';
+
+$config->sonarqube->dtable->report->fieldList['code_smells']['title'] = array('html' => '<i class="icon icon-frown"></i>' . $lang->sonarqube->report->code_smells);
+$config->sonarqube->dtable->report->fieldList['code_smells']['type']  = 'text';
+
+$config->sonarqube->dtable->report->fieldList['coverage']['title'] = $lang->sonarqube->report->coverage;
+$config->sonarqube->dtable->report->fieldList['coverage']['type']  = 'text';
+
+$config->sonarqube->dtable->report->fieldList['duplicated_lines_density']['title'] = $lang->sonarqube->report->duplicated_lines_density;
+$config->sonarqube->dtable->report->fieldList['duplicated_lines_density']['type']  = 'text';
+
+$config->sonarqube->dtable->report->fieldList['ncloc']['title'] = $lang->sonarqube->report->ncloc;
+$config->sonarqube->dtable->report->fieldList['ncloc']['type']  = 'text';

@@ -67,7 +67,7 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function reportView($jobID)
+    public function reportView(int $jobID)
     {
         $job         = $this->loadModel('job')->getByID($jobID);
         $qualitygate = $this->sonarqube->apiGetQualitygate($job->sonarqubeServer, $job->projectKey);

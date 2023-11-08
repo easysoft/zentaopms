@@ -51,4 +51,5 @@ $config->sonarqube->actionList['reportView']['icon']        = 'audit';
 $config->sonarqube->actionList['reportView']['text']        = $lang->sonarqube->reportView;
 $config->sonarqube->actionList['reportView']['hint']        = $lang->sonarqube->reportView;
 $config->sonarqube->actionList['reportView']['data-toggle'] = 'modal';
+$config->sonarqube->actionList['reportView']['data-size']   = 'lg';
 $config->sonarqube->actionList['reportView']['url']         = helper::createLink('sonarqube', 'reportView',"jobID={jobID}");
