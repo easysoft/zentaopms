@@ -45,7 +45,7 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -192,7 +192,7 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function edit($sonarqubeID)
+    public function edit(int $sonarqubeID)
     {
         $oldSonarQube = $this->loadModel('pipeline')->getByID($sonarqubeID);
 
@@ -227,7 +227,7 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function delete($sonarqubeID)
+    public function delete(int $sonarqubeID)
     {
         $oldSonarQube = $this->loadModel('pipeline')->getByID($sonarqubeID);
         $this->loadModel('action');
@@ -257,7 +257,7 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function execJob($jobID)
+    public function execJob(int $jobID)
     {
         echo $this->fetch('job', 'exec', "jobID=$jobID");
     }
@@ -273,7 +273,7 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function browseProject($sonarqubeID, $orderBy = 'name_desc', $recPerPage = 15, $pageID = 1)
+    public function browseProject(int $sonarqubeID, string $orderBy = 'name_desc', int $recPerPage = 15, int $pageID = 1)
     {
         $this->app->loadClass('pager', true);
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
@@ -318,7 +318,6 @@ class sonarqube extends control
         $this->view->title                = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseProject;
         $this->view->sonarqubeID          = $sonarqubeID;
         $this->view->sonarqubeProjectList = (empty($sonarqubeProjectList) or empty($sonarqubeProjectList[$pageID - 1])) ? array() : $sonarqubeProjectList[$pageID - 1];
-
         $this->view->projectJobPairs      = $projectJobPairs;
         $this->view->orderBy              = $orderBy;
         $this->view->successJobs          = $successJobs;
@@ -352,22 +351,19 @@ class sonarqube extends control
      *
      * @param  int    $sonarqubeID
      * @param  string $projectKey
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function deleteProject($sonarqubeID, $projectKey, $confirm = 'no')
+    public function deleteProject(int $sonarqubeID, string $projectKey)
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->sonarqube->confirmDeleteProject, inlink('deleteProject', "sonarqubeID=$sonarqubeID&projectKey=$projectKey&confirm=yes")));
-
         /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
         $projectKey = str_replace('*', '-', $projectKey);
         $reponse    = $this->sonarqube->apiDeleteProject($sonarqubeID, $projectKey);
 
-        if(isset($reponse->errors)) return print(js::alert($reponse->errors[0]->msg));
+        if(isset($reponse->errors)) return $this->sendError($reponse->errors[0]->msg);
 
         $this->loadModel('action')->create('sonarqubeproject', 0, 'deleted', '', $projectKey);
-        return print(js::reload('parent'));
+        return $this->sendSuccess(array('load' => true));
     }
 
     /**

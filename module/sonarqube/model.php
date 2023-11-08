@@ -341,8 +341,8 @@ class sonarqubeModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'execjob')    return $sonarqube->exec == '';
-        if($action == 'reportview') return $sonarqube->report == '';
+        if($action == 'execjob')    return $sonarqube->jobID;
+        if($action == 'reportview') return $sonarqube->reportView;
 
         return true;
     }

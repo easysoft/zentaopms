@@ -19,7 +19,7 @@ $canCreate  = hasPriv('sonarqube', 'create');
 $createLink = $this->createLink('sonarqube', 'create');
 $createItem = array('text' => $lang->sonarqube->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus');
 
-$tableData = initTableData($sonarqubeList, $config->sonarqube->dtable->fieldList, $this->sonarqube);
+$tableData = initTableData($sonarqubeList, $config->sonarqube->dtable->browse->fieldList, $this->sonarqube);
 
 toolbar
 (
@@ -33,7 +33,7 @@ jsVar('sortLink',         helper::createLink('sonarqube', 'browse', "orderBy={or
 
 dtable
 (
-    set::cols(array_values($config->sonarqube->dtable->fieldList)),
+    set::cols(array_values($config->sonarqube->dtable->browse->fieldList)),
     set::data($tableData),
     set::sortLink(jsRaw('createSortLink')),
     set::onRenderCell(jsRaw('window.renderCell')),
