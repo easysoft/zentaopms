@@ -302,7 +302,7 @@ window.loadMore = function(type, regionID)
     const link     = $.createLink('kanban', method, 'regionID=' + regionID);
     $(selector).load(link, function()
     {
-        const height  = $('#mainContent > .kanban-list').height();
+        const height  = $(window).height() - $('#header').height();
         $(selector + ' .panel').css('height', height);
     });
 }
