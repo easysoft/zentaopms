@@ -23,6 +23,7 @@
   #chat-switch {position: absolute; width: 330px; height: 52px; right: 0; background: #fff; display: flex; justify-content: center; align-items: center; border-bottom: 1px solid #eee; z-index: 20;}
   .chat-switch-bg {display: flex; justify-content: center; align-items: center; background-color: #eff5ff; border-radius: 16px;}
   .chat-switch-item {width: 96px; padding: 4px 0; border-radius: 16px; text-align: center; color: #838a9c; position: relative; user-select: none;}
+  .chat-switch-item:hover {color: #838a9c;}
   .chat-switch-item.active {font-weight: bold; color: #fff; background-color: #5999fc;}
   .chat-switch-item.has-notice::after {content: ''; position: absolute; right: 26px; top: 4px; width: 6px; height: 6px; border-radius: 50%; background-color: #ff535d;}
   #xuan-chat-view {position: absolute; width: 100%; height: 100%; z-index: 10; display: none;}
