@@ -723,7 +723,7 @@ class bugModel extends model
     {
         $productIdList = array();
         foreach($bugs as $bug) $productIdList[$bug->product] = $bug->product;
-        $builds = $this->loadModel('build')->getBuildPairs(array_unique($productIdList), 'all', $params = '');
+        $builds = $this->loadModel('build')->getBuildPairs(array_unique($productIdList), 'all', $params = 'noterminate,nodone,hasdeleted');
 
         /* Process the openedBuild and resolvedBuild fields. */
         foreach($bugs as $bug)
