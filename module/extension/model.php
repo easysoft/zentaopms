@@ -459,7 +459,7 @@ class extensionModel extends model
             else
             {
                 $parentDir = mb_substr($path, 0, strripos($path, '/'));
-                if(!is_writable($parentDir))
+                if(is_dir($parentDir) and !is_writable($parentDir))
                 {
                     $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
                     $checkResult->chmodCommands .= "sudo chmod -R 777 $path<br />";
