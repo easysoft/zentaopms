@@ -42,7 +42,7 @@ featureBar
 /* Toolbar. */
 $createLink      = $this->createLink('stakeholder', 'create', "projectID=$projectID");
 $batchCreateLink = $this->createLink('stakeholder', 'batchCreate', "projectID=$projectID");
-$createItem      = array('text' => $lang->stakeholder->create,      'url' => $createLink);
+$createItem      = array('text' => $lang->stakeholder->create,      'url' => $createLink, 'data-app' => 'project');
 $batchCreateItem = array('text' => $lang->stakeholder->batchCreate, 'url' => $batchCreateLink);
 
 if(common::hasPriv('stakeholder', 'batchcreate') and common::hasPriv('stakeholder', 'create'))
@@ -51,7 +51,7 @@ if(common::hasPriv('stakeholder', 'batchcreate') and common::hasPriv('stakeholde
     (
         btngroup
         (
-            btn(setClass('btn primary'), set::icon('plus'), set::url($createLink), $lang->stakeholder->create),
+            btn(setClass('btn primary'), setData(array('app' => 'project')), set::icon('plus'), set::url($createLink), $lang->stakeholder->create),
             dropdown
             (
                 btn(setClass('btn primary dropdown-toggle'),
@@ -74,7 +74,10 @@ dtable
     set::data($data),
     set::orderBy($orderBy),
     set::sortLink(createLink('stakeholder', 'browse', "projectID={$projectID}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    set::footPager(usePager())
+    set::footPager(usePager()),
+    set::createTip($lang->stakeholder->create),
+    set::createLink(hasPriv('stakeholder', 'create') ? $createLink : ''),
+    set::createAttr("data-app='project'")
 );
 
 render();
