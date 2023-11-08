@@ -128,6 +128,7 @@ $lang->product->PO             = 'PO';
 $lang->product->QD             = 'QS Manager';
 $lang->product->RD             = 'Release Manager';
 $lang->product->feedback       = 'Feedback Manger';
+$lang->product->ticket         = 'Ticket Manager';
 $lang->product->acl            = 'Zugriffskontrolle';
 $lang->product->reviewer       = 'Reviewer';
 $lang->product->groups         = 'Groups';

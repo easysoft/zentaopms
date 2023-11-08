@@ -128,6 +128,7 @@ $lang->product->PO             = "{$lang->productCommon} Owner";
 $lang->product->QD             = 'Quality Manager';
 $lang->product->RD             = 'Release Manager';
 $lang->product->feedback       = 'Feedback Manger';
+$lang->product->ticket         = 'Ticket Manager';
 $lang->product->acl            = "Contrôle accès";
 $lang->product->reviewer       = 'Reviewer';
 $lang->product->groups         = 'Groups';
