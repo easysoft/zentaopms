@@ -79,3 +79,47 @@ $config->sonarqube->dtable->report->fieldList['duplicated_lines_density']['type'
 
 $config->sonarqube->dtable->report->fieldList['ncloc']['title'] = $lang->sonarqube->report->ncloc;
 $config->sonarqube->dtable->report->fieldList['ncloc']['type']  = 'text';
+
+$config->sonarqube->dtable->issue = new stdclass();
+$config->sonarqube->dtable->issue->fieldList['message']['title']  = $lang->sonarqube->issue->message;
+$config->sonarqube->dtable->issue->fieldList['message']['type']   = 'title';
+$config->sonarqube->dtable->issue->fieldList['message']['link']   = array('url' => '%s/project/issues?id={projectKey}&issues={key}&open={key}', 'target' => '_blank');
+
+$config->sonarqube->dtable->issue->fieldList['severity']['title']    = $lang->sonarqube->issue->severity;
+$config->sonarqube->dtable->issue->fieldList['severity']['type']     = 'text';
+$config->sonarqube->dtable->issue->fieldList['severity']['sortType'] = true;
+$config->sonarqube->dtable->issue->fieldList['severity']['width']    = 120;
+
+$config->sonarqube->dtable->issue->fieldList['type']['title']    = $lang->sonarqube->issue->type;
+$config->sonarqube->dtable->issue->fieldList['type']['type']     = 'text';
+$config->sonarqube->dtable->issue->fieldList['type']['width']    = 100;
+$config->sonarqube->dtable->issue->fieldList['type']['sortType'] = true;
+
+$config->sonarqube->dtable->issue->fieldList['status']['title']    = $lang->sonarqube->issue->status;
+$config->sonarqube->dtable->issue->fieldList['status']['type']     = 'text';
+$config->sonarqube->dtable->issue->fieldList['status']['width']    = 100;
+$config->sonarqube->dtable->issue->fieldList['status']['sortType'] = true;
+
+$config->sonarqube->dtable->issue->fieldList['file']['title']    = $lang->sonarqube->issue->file;
+$config->sonarqube->dtable->issue->fieldList['file']['type']     = 'text';
+$config->sonarqube->dtable->issue->fieldList['file']['sortType'] = true;
+
+$config->sonarqube->dtable->issue->fieldList['line']['title']    = $lang->sonarqube->issue->line;
+$config->sonarqube->dtable->issue->fieldList['line']['type']     = 'text';
+$config->sonarqube->dtable->issue->fieldList['line']['width']    = 100;
+$config->sonarqube->dtable->issue->fieldList['line']['sortType'] = true;
+
+$config->sonarqube->dtable->issue->fieldList['effort']['title']    = $lang->sonarqube->issue->effort;
+$config->sonarqube->dtable->issue->fieldList['effort']['type']     = 'text';
+$config->sonarqube->dtable->issue->fieldList['effort']['sortType'] = true;
+
+$config->sonarqube->dtable->issue->fieldList['creationDate']['title']    = $lang->sonarqube->issue->creationDate;
+$config->sonarqube->dtable->issue->fieldList['creationDate']['type']     = 'datetime';
+$config->sonarqube->dtable->issue->fieldList['creationDate']['sortType'] = true;
+
+$config->sonarqube->dtable->issue->fieldList['actions']['name']  = 'actions';
+$config->sonarqube->dtable->issue->fieldList['actions']['title'] = $lang->actions;
+$config->sonarqube->dtable->issue->fieldList['actions']['type']  = 'actions';
+$config->sonarqube->dtable->issue->fieldList['actions']['menu']  = array('createBug');
+$config->sonarqube->dtable->issue->fieldList['actions']['list']  = $config->sonarqube->actionList;
+$config->sonarqube->dtable->issue->fieldList['actions']['width'] = 60;

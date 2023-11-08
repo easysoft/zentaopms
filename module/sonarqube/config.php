@@ -53,3 +53,8 @@ $config->sonarqube->actionList['reportView']['hint']        = $lang->sonarqube->
 $config->sonarqube->actionList['reportView']['data-toggle'] = 'modal';
 $config->sonarqube->actionList['reportView']['data-size']   = 'lg';
 $config->sonarqube->actionList['reportView']['url']         = helper::createLink('sonarqube', 'reportView',"jobID={jobID}");
+
+$config->sonarqube->actionList['createBug']['icon'] = 'bug';
+$config->sonarqube->actionList['createBug']['text'] = $lang->sonarqube->createBug;
+$config->sonarqube->actionList['createBug']['hint'] = $lang->sonarqube->createBug;
+$config->sonarqube->actionList['createBug']['url']  = 'javascript: saveIssueTitle("{productID}", "{sonarqubeID}", "{issueKey}", \'{message}\')';
