@@ -1,0 +1,270 @@
+<?php
+declare(strict_types=1);
+/**
+ * The setrules view file of repo module of ZenTaoPMS.
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Shujie Tian <tianshujie@easycorp.ltd>
+ * @package     repo
+ * @link        https://www.zentao.net
+ */
+namespace zin;
+jsVar('rulesExample', $lang->repo->rules->example);
+
+$moduleDom = null;
+foreach($config->repo->rules['module'] as $module => $match)
+{
+    $moduleDom[] = inputGroup
+        (
+            setClass('w-1'),
+            span
+            (
+                setClass('input-group-addon'),
+                $lang->{$module}->common
+            ),
+            input
+            (
+                setID("rules[module][{$module}]"),
+                set::name("rules[module][{$module}]"),
+                set::value($match)
+            )
+        );
+}
+
+$idDom = null;
+foreach($config->repo->rules['id'] as $method => $match)
+{
+    $idDom[] = inputGroup
+        (
+            setClass('w-1'),
+            span
+            (
+                setClass('input-group-addon'),
+                $lang->repo->$method
+            ),
+            input
+            (
+                setID("rules[id][{$method}]"),
+                set::name("rules[id][{$method}]"),
+                set::value($match)
+            )
+        );
+}
+
+$space = common::checkNotCN() ? ' ' : '';
+
+formPanel
+(
+    setID('setRulesForm'),
+    set::title($lang->repo->setRules),
+    set::actions(array('submit')),
+    set::actionsClass('w-2/3'),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->repo->objectRule),
+        $moduleDom,
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->repo->objectIdRule),
+        $idDom
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->repo->actionRule),
+        inputGroup
+        (
+            setClass('w-1'),
+            span
+            (
+                setClass('input-group-addon'),
+                $lang->task->common . $space . $lang->task->start
+            ),
+            input
+            (
+                setID("rules[task][start]"),
+                set::name("rules[task][start]"),
+                set::value($config->repo->rules['task']['start'])
+            )
+        ),
+        inputGroup
+        (
+            setClass('w-1'),
+            span
+            (
+                setClass('input-group-addon'),
+                $lang->task->common . $space . $lang->task->finish
+            ),
+            input
+            (
+                setID("rules[task][finish]"),
+                set::name("rules[task][finish]"),
+                set::value($config->repo->rules['task']['finish'])
+            )
+        ),
+        inputGroup
+        (
+            setClass('w-1'),
+            span
+            (
+                setClass('input-group-addon'),
+                $lang->bug->common . $space . $lang->bug->resolve
+            ),
+            input
+            (
+                setID("rules[bug][resolve]"),
+                set::name("rules[bug][resolve]"),
+                set::value($config->repo->rules['bug']['resolve'])
+            )
+        )
+    ),
+    formGroup
+    (
+        set::label(''),
+        set::width('2/3'),
+        inputGroup
+        (
+            setClass('w-1'),
+            span
+            (
+                setClass('input-group-addon'),
+                $lang->task->common . $space . $lang->task->logEfforts
+            ),
+            input
+            (
+                setID("rules[task][logEfforts]"),
+                set::name("rules[task][logEfforts]"),
+                set::value($config->repo->rules['task']['logEfforts'])
+            )
+        )
+    ),
+    formRow
+    (
+        setClass('mt-0'),
+        formGroup
+        (
+            set::label($lang->repo->manHourRule),
+            set::width('2/3'),
+            inputGroup
+            (
+                setClass('w-1'),
+                span
+                (
+                    setClass('input-group-addon'),
+                    $lang->task->consumed
+                ),
+                input
+                (
+                    setID("rules[task][consumed]"),
+                    set::name("rules[task][consumed]"),
+                    set::value($config->repo->rules['task']['consumed'])
+                )
+            ),
+            inputGroup
+            (
+                setClass('w-1'),
+                span
+                (
+                    setClass('input-group-addon'),
+                    $lang->repo->mark
+                ),
+                input
+                (
+                    setID("rules[mark][consumed]"),
+                    set::name("rules[mark][consumed]"),
+                    set::value($config->repo->rules['mark']['consumed'])
+                )
+            ),
+            inputGroup
+            (
+                setClass('w-1'),
+                span
+                (
+                    setClass('input-group-addon'),
+                    $lang->repo->ruleUnit
+                ),
+                input
+                (
+                    setID("rules[unit][consumed]"),
+                    set::name("rules[unit][consumed]"),
+                    set::value($config->repo->rules['unit']['consumed'])
+                )
+            )
+        )
+    ),
+    formRow
+    (
+        setClass('mt-0'),
+        formGroup
+        (
+            set::label(''),
+            set::width('2/3'),
+            inputGroup
+            (
+                setClass('w-1'),
+                span
+                (
+                    setClass('input-group-addon'),
+                    $lang->task->left
+                ),
+                input
+                (
+                    setID("rules[task][left]"),
+                    set::name("rules[task][left]"),
+                    set::value($config->repo->rules['task']['left'])
+                )
+            ),
+            inputGroup
+            (
+                setClass('w-1'),
+                span
+                (
+                    setClass('input-group-addon'),
+                    $lang->repo->mark
+                ),
+                input
+                (
+                    setID("rules[mark][left]"),
+                    set::name("rules[mark][left]"),
+                    set::value($config->repo->rules['mark']['left'])
+                )
+            ),
+            inputGroup
+            (
+                setClass('w-1'),
+                span
+                (
+                    setClass('input-group-addon'),
+                    $lang->repo->ruleUnit
+                ),
+                input
+                (
+                    setID("rules[unit][left]"),
+                    set::name("rules[unit][left]"),
+                    set::value($config->repo->rules['unit']['left'])
+                )
+            )
+        ),
+    ),
+    formGroup
+    (
+        set::label(''),
+        span
+        (
+            setClass('pl-2 text-danger'),
+            $lang->repo->ruleSplit
+        )
+    ),
+    formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->repo->rules->exampleLabel),
+        div
+        (
+            setID('example'),
+        )
+    )
+);

@@ -903,7 +903,7 @@ class repo extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.repo.rules', json_encode($this->post->rules));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
         $repoID = $this->session->repoID;
@@ -915,7 +915,7 @@ class repo extends control
         $this->app->loadLang('story');
         if(is_string($this->config->repo->rules)) $this->config->repo->rules = json_decode($this->config->repo->rules, true);
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->setRules;
+        $this->view->title = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->setRules;
 
         $this->display();
     }
