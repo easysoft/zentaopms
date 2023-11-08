@@ -329,32 +329,25 @@ class doc extends control
      */
     public function deleteLib($libID, $confirm = 'no', $type = 'lib', $from = 'teamSpace')
     {
-        if($libID == 'product' or $libID == 'execution') return;
-        if($confirm == 'no')
+        if($libID == 'product' || $libID == 'execution') return;
+        $lib = $this->doc->getLibByID($libID);
+        if(!empty($lib->main)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorMainSysLib, 'load' => array('alert' => $this->lang->doc->errorMainSysLib)));
+
+        $this->doc->delete(TABLE_DOCLIB, $libID);
+        if($this->app->tab == 'doc' and $from == 'teamSpace') return $this->send(array('result' => 'success', 'load' => true));
+
+        $objectType = $lib->type;
+        $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
+        $moduleName = 'doc';
+        $methodName = zget($this->config->doc->spaceMethod, $objectType);
+        if($this->app->tab == 'execution' and $objectType == 'execution')
         {
-            return print(js::confirm($this->lang->doc->confirmDeleteLib, $this->createLink('doc', 'deleteLib', "libID=$libID&confirm=yes&type=$type&from=$from")));
+            $moduleName = 'execution';
+            $methodName = 'doc';
         }
-        else
-        {
-            $lib = $this->doc->getLibByID($libID);
-            if(!empty($lib->main)) return print(js::alert($this->lang->doc->errorMainSysLib));
+        $browseLink = $this->createLink($moduleName, $methodName, "objectID=$objectID");
 
-            $this->doc->delete(TABLE_DOCLIB, $libID);
-            if($this->app->tab == 'doc' and $from == 'teamSpace') return print(js::reload('parent'));
-
-            $objectType = $lib->type;
-            $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
-            $moduleName = 'doc';
-            $methodName = zget($this->config->doc->spaceMethod, $objectType);
-            if($this->app->tab == 'execution' and $objectType == 'execution')
-            {
-                $moduleName = 'execution';
-                $methodName = 'doc';
-            }
-            $browseLink = $this->createLink($moduleName, $methodName, "objectID=$objectID");
-
-            return print(js::locate($browseLink, 'parent'));
-        }
+        return $this->send(array('result' => 'success', 'load' => $browseLink));
     }
 
     /**
