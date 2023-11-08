@@ -656,36 +656,36 @@ class branchModel extends model
      * 判断是否展示分支标签。
      * Display of branch label.
      *
-     * @param  int $productID
-     * @param  int $moduleID
-     * @param  int $executionID
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @param  int    $executionID
      * @access public
      * @return bool
      */
     public function showBranch(int $productID, int $moduleID = 0, int $executionID = 0): bool
     {
         $this->loadModel('product');
-        if(empty($productID) and empty($moduleID))
+        if(!$productID)
         {
-            $productPairs = $this->product->getProductPairsByProject($executionID);
-            if($this->app->tab != 'project') $productID = count($productPairs) == 1 ? key($productPairs) : 0;
+            if($moduleID)
+            {
+                $module = $this->loadModel('tree')->getByID($moduleID);
+                if($module && $module->type != 'task') $productID = $module->root;
+            }
+            else if($executionID && $this->app->tab != 'project')
+            {
+                $productPairs = $this->product->getProductPairsByProject($executionID);
+                if(count($productPairs) == 1) $productID = key($productPairs);
+            }
         }
-        elseif(empty($productID) and !empty($moduleID))
-        {
-            $module    = $this->loadModel('tree')->getById($moduleID);
-            $productID = $module->type != 'task' ? $module->root : 0;
-        }
+        if(!$productID) return false;
 
-        $product = $productID ? $this->product->getById($productID) : '';
+        $product = $this->product->getByID($productID);
+        if(!$product || $product->type == 'normal') return false;
 
-        if($product and $product->type != 'normal')
-        {
-            $this->app->loadLang('datatable');
-            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
-            return true;
-        }
-
-        return false;
+        $this->app->loadLang('datatable');
+        $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
+        return true;
     }
 
     /**
