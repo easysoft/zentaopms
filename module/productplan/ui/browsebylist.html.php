@@ -87,6 +87,8 @@ dtable
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footToolbar($footToolbar),
     set::emptyTip($lang->productplan->noPlan),
+    set::createTip($lang->productplan->create),
+    set::createLink($canCreatePlan ? createLink($app->rawModule, 'create', "productID={$productID}&branch={$branch}") : ''),
     set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '{$summary}');}")),
     set::footPager(
         usePager(array('linkCreator' => createLink($app->rawModule, 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"))),
