@@ -216,13 +216,13 @@ class testreport extends control
         if(isset($objectType))
         {
             $objectID = $this->testreportZen->commonAction($oldReport->{$objectType}, $objectType);
-            if($objectID != $oldReport->{$objectType}) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'load' => array('alter' => $this->lang->error->accessDenied, 'back' => true))); ;
+            if($objectID != $oldReport->{$objectType}) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'load' => array('alert' => $this->lang->error->accessDenied, 'locate' => array('load' => true)))); ;
         }
 
         if($oldReport->objectType == 'testtask')
         {
             $task = $this->testtask->getByID($oldReport->objectID);
-            if($task->build == 'trunk') return $this->send(array('result' => 'fail', 'message' => $this->lang->error->errorTrunk, 'load' => array('alter' => $this->lang->error->errorTrunk, 'back' => true))); ;
+            if($task->build == 'trunk') return $this->send(array('result' => 'fail', 'message' => $this->lang->error->errorTrunk, 'load' => array('alert' => $this->lang->error->errorTrunk, 'locate' => array('load' => true)))); ;
 
             $reportData = $this->testreportZen->assignTesttaskReportData($oldReport->objectID, $begin, $end, $oldReport->product, $task, 'edit');
         }
@@ -254,7 +254,7 @@ class testreport extends control
     public function view(int $reportID, string $tab = 'basic', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         $report = $this->testreport->getById($reportID);
-        if(!$report) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->notFount, 'load' => array('alter' => $this->lang->error->notFount, 'locate' => $this->createLink('qa', 'index'))));
+        if(!$report) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->notFount, 'load' => array('alert' => $this->lang->error->notFount, 'locate' => $this->createLink('qa', 'index'))));
 
         /* Set session. */
         $this->session->project = $report->project;
@@ -266,7 +266,7 @@ class testreport extends control
         if(isset($objectType))
         {
             $objectID = $this->testreportZen->commonAction($report->{$objectType}, $objectType);
-            if($objectID != $report->{$objectType}) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'load' => array('alter' => $this->lang->error->accessDenied, 'back' => true))); ;
+            if($objectID != $report->{$objectType}) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'load' => array('alert' => $this->lang->error->accessDenied, 'locate' => array('load' => true)))); ;
         }
 
         /* Get report data. */
