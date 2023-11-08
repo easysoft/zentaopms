@@ -188,20 +188,15 @@ class sonarqubeModel extends model
     /**
      * Create a sonarqube project.
      *
-     * @param int $sonarqubeID
+     * @param  int    $sonarqubeID
+     * @param  object $project
      * @access public
      * @return bool
      */
-    public function createProject($sonarqubeID)
+    public function createProject(int $sonarqubeID, object $project): bool
     {
-        $project = fixer::input('post')->get();
-
-        $this->dao->insert('sonarqube')->data($project)
-            ->batchCheck($this->config->sonarqube->createproject->requiredFields, 'notempty');
-        if(dao::isError()) return false;
-
         if(mb_strlen($project->projectName) > 255) dao::$errors['projectName'][] = sprintf($this->lang->sonarqube->lengthError, $this->lang->sonarqube->projectName, 255);
-        if(mb_strlen($project->projectKey) > 400) dao::$errors['projectKey'][] = sprintf($this->lang->sonarqube->lengthError, $this->lang->sonarqube->projectKey, 400);
+        if(mb_strlen($project->projectKey) > 400)  dao::$errors['projectKey'][]  = sprintf($this->lang->sonarqube->lengthError, $this->lang->sonarqube->projectKey, 400);
         if(dao::isError()) return false;
 
         $response = $this->apiCreateProject($sonarqubeID, $project);
@@ -222,7 +217,7 @@ class sonarqubeModel extends model
      * @access public
      * @return bool
      */
-    public function apiErrorHandling($response)
+    public function apiErrorHandling(object|null $response): bool
     {
         if(!empty($response->errors))
         {
@@ -230,13 +225,13 @@ class sonarqubeModel extends model
             {
                 if(isset($error->msg))
                 {
-                    dao::$errors[] = $this->convertApiError($error->msg);
+                    dao::$errors['name'][] = $this->convertApiError($error->msg);
                 }
             }
             return false;
         }
 
-        if(!$response) dao::$errors[] = false;
+        dao::$errors['name'][] = 'error';
         return false;
     }
 

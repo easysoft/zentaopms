@@ -331,14 +331,15 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function createProject($sonarqubeID)
+    public function createProject(int $sonarqubeID)
     {
         if($_POST)
         {
-            $this->sonarqube->createProject($sonarqubeID);
+            $project = form::data($this->config->sonarqube->form->createProject)->get();
+            $this->sonarqube->createProject($sonarqubeID, $project);
 
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseProject', "sonarqubeID=$sonarqubeID")));
+            if(dao::isError()) return $this->sendError(dao::getError());
+            return $this->sendSuccess(array('load' => inlink('browseProject', "sonarqubeID=$sonarqubeID"), 'closeModal' => true));
         }
 
         $this->view->title       = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->createProject;

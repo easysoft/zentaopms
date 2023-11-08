@@ -61,6 +61,7 @@ hasPriv('instance', 'manage') ? toolbar
     (
         set::text($lang->sonarqube->createProject),
         set::url($this->createLink('sonarqube', 'createProject', "sonarqubeID={$sonarqube->id}")),
+        set('data-toggle', 'modal'),
         setClass('primary'),
         set::icon('plus')
     )
