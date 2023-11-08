@@ -3,19 +3,6 @@ declare(strict_types=1);
 class bugTao extends bugModel
 {
     /**
-     * 获取Bug的基础数据。
-     * Fetch base info of a bug.
-     *
-     * @param  int          $bugID
-     * @access protected
-     * @return object|false
-     */
-    protected function fetchBaseInfo(int $bugID): object|false
-    {
-        return $this->dao->select('*')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
-    }
-
-    /**
      * Get bug details, including all contents of the TABLE_BUG, execution name, associated story name, associated story status, associated story version, associated task name, and associated plan name.
      * 获取bug的详情，包含bug表的所有内容、所属执行名称、关联需求名称、关联需求状态、关联需求版本、关联任务名称、关联计划名称
      *
