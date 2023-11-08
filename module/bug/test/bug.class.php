@@ -481,7 +481,7 @@ class bugTest
         {
             unset(dao::$cache[TABLE_KANBANLANE]);
 
-            $bug = $this->objectModel->getBaseInfo($bugID);
+            $bug = $this->objectModel->fetchByID($bugID);
             return $tester->dao->select('t3.type')->from(TABLE_KANBANLANE)->alias('t1')
                 ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.lane AND t1.execution=t2.kanban')
                 ->leftJoin(TABLE_KANBANCOLUMN)->alias('t3')->on('t2.column=t3.id')
@@ -491,7 +491,7 @@ class bugTest
                 ->fetch('type');
         }
 
-        return $this->objectModel->getBaseInfo($bugID);
+        return $this->objectModel->fetchByID($bugID);
     }
 
     /**
