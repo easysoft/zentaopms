@@ -39,7 +39,7 @@ foreach($fields as $field => $attr)
         )
     );
 }
-$formItems['affected'] = $getAffectedTabs($story, $users);
+if($this->config->vision != 'or') $formItems['affected'] = $getAffectedTabs($story, $users);
 
 $formItems['result']->add(on::change('switchShow(e.target);'));
 $formItems['assignedTo']->add(set::id('assignedToBox'))->add(set::hidden(!$isLastOne));
