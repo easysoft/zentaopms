@@ -320,21 +320,18 @@ class doc extends control
     /**
      * Delete a library.
      *
-     * @param int $libID
-     * @param string $confirm yes|no
-     * @param string $type    lib|book
-     * @param string $from    tableContents|view
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    public function deleteLib($libID, $confirm = 'no', $type = 'lib', $from = 'teamSpace')
+    public function deleteLib($libID)
     {
         if($libID == 'product' || $libID == 'execution') return;
         $lib = $this->doc->getLibByID($libID);
         if(!empty($lib->main)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->errorMainSysLib, 'load' => array('alert' => $this->lang->doc->errorMainSysLib)));
 
         $this->doc->delete(TABLE_DOCLIB, $libID);
-        if($this->app->tab == 'doc' and $from == 'teamSpace') return $this->send(array('result' => 'success', 'load' => true));
+        if($this->app->tab == 'doc') return $this->send(array('result' => 'success', 'load' => true, 'app' => $this->app->tab));
 
         $objectType = $lib->type;
         $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
@@ -347,7 +344,7 @@ class doc extends control
         }
         $browseLink = $this->createLink($moduleName, $methodName, "objectID=$objectID");
 
-        return $this->send(array('result' => 'success', 'load' => $browseLink));
+        return $this->send(array('result' => 'success', 'load' => $browseLink, 'app' => $this->app->tab));
     }
 
     /**
