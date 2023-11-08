@@ -456,7 +456,7 @@ class extension extends control
             if(isset($info->code) and $info->code != $extension)
             {
                 $classFile = $this->app->loadClass('zfile');
-                $classFile->removeDir("ext/$extension");
+                $classFile->removeDir($this->extension->pkgRoot . $extension);
                 rename($this->app->getTmpRoot() . "/extension/$fileName", $this->app->getTmpRoot() . "/extension/{$info->code}.zip");
                 $extension = $info->code;
             }
