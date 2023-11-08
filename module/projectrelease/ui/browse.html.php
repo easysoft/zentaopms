@@ -44,6 +44,9 @@ dtable
     set::sortLink(createLink('projectrelease', 'browse', "projectID={$project->id}&executionID={$executionID}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer([jsRaw("function(){return {html: '{$pageSummary}'};}"), 'flex', 'pager']),
     set::footPager(usePager()),
+    set::emptyTip($lang->release->noRelease),
+    set::createTip($lang->release->create),
+    set::createLink(hasPriv('projectrelease', 'create') ? createLink('projectrelease', 'create', "projectID={$projectID}") : ''),
 );
 
 /* ====== Render page ====== */
