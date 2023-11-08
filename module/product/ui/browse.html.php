@@ -83,14 +83,14 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
             $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
             if($isProjectStory) $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=&projectID=$projectID");
             $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
-            $items[] = array('text' => $lang->story->createCommon, 'icon' => 'plus', 'url' => $link);
+            $items[] = array('text' => $lang->story->createCommon, 'url' => $link);
         }
         else
         {
-            $items[] = array('text' => $lang->story->create, 'icon' => 'plus', 'url' => $createLink);
+            $items[] = array('text' => $lang->story->create, 'url' => $createLink);
         }
 
-        $items[] = array('text' => $lang->story->batchCreate, 'icon' => 'plus', 'url' => $batchCreateLink);
+        $items[] = array('text' => $lang->story->batchCreate, 'url' => $batchCreateLink);
 
         return btnGroup
         (
