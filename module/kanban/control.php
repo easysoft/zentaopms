@@ -494,9 +494,7 @@ class kanban extends control
             $actionID = $this->action->create('kanbanregion', $regionID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
-            $region   = $this->kanban->getRegionByID($regionID);
-            $callback = $this->kanban->getKanbanCallback($region->kanban, $regionID);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->region  = $this->kanban->getRegionByID($regionID);
@@ -1415,7 +1413,10 @@ class kanban extends control
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq(",$cards,")->where('kanban')->eq($kanbanID)->andWhere('lane')->eq($laneID)->andWhere('`column`')->eq($columnID)->exec();
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+
+        $lane     = $this->kanban->getLaneById($laneID);
+        $callback = $this->kanban->getKanbanCallback($kanbanID, $lane->region);
+        return $this->send(array('result' => 'success', 'callback' => $callback));
     }
 
     /**

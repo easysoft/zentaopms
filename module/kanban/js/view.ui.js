@@ -259,7 +259,8 @@ window.canDrop = function(dragInfo, dropInfo)
     const lane   = this.getLane(dropInfo.lane);
     if(!column || !lane) return false;
 
-    if(dropInfo.type == 'item') return false;
+    /* 卡片的排序目前仅支持本单元格内排序 */
+    if(dropInfo.type == 'item' && (dropInfo.col != dragInfo.item.col || dropInfo.lane != dragInfo.item.lane)) return false;
 
     /* 卡片可在同组内拖动。 */
     return dragInfo.item.group == column.group;
@@ -272,8 +273,22 @@ window.onDrop = function(changes, dropInfo)
     const item     = dropInfo['drag']['item'];
     const toColID  = dropInfo['drop']['col']
     const toLaneID = dropInfo['drop']['lane']
+    console.log(changes);
+    console.log(dropInfo);
 
-    const url =  $.createLink('kanban', 'moveCard', `cardID=${item.id}&fromColID=${item.column}&toColID=${toColID}&fromLaneID=${item.lane}&toLaneID=${toLaneID}&kanbanID=${kanbanID}`);
+    if(item.col == toColID && item.lane == toLaneID)
+    {
+        let sortList = '';
+        if(changes)
+        {
+            for(let i = 0; i < changes['items'].length; i++) sortList += changes['items'][i].id.replace(/[^0-9]/ig, '') + ',';
+        }
+        url = $.createLink('kanban', 'sortCard', `kanbanID=${kanbanID}&laneID=${toLaneID}&columnID=${toColID}&cards=${sortList}`);
+    }
+    else
+    {
+        url = $.createLink('kanban', 'moveCard', `cardID=${item.id}&fromColID=${item.column}&toColID=${toColID}&fromLaneID=${item.lane}&toLaneID=${toLaneID}&kanbanID=${kanbanID}`);
+    }
     $.ajaxSubmit({url});
 }
 
