@@ -756,6 +756,27 @@ $(function()
     gantt.attachEvent('onTaskClick', function(id, e)
     {
         if($(e.srcElement).hasClass('gantt_close') || $(e.srcElement).hasClass('gantt_open')) return false;
+        var task = gantt.getTask(id);
+        if(task.type == 'point' && task.rawStatus) location.href = createLink('review', 'view', 'reviewID=' + task.reviewID);
+        if(task.type == 'plan')                    window.parent.$.apps.open(createLink('execution', 'task', 'id=' + task.id), 'execution');
+        if($(e.srcElement).hasClass('icon-confirm'))
+        {
+            var pointAttr = JSON.parse(reviewPoints);
+            var category  = id.split("-")[1];
+
+            if(pointAttr[category]['disabled'])
+            {
+                new $.zui.Messager(pointAttr[category]['message'], {
+                    type: 'danger',
+                    icon: 'exclamation-sign'
+                }).show();
+                return false;
+            }
+            else
+            {
+                location.href = createLink('review', 'create', 'projectID=' + projectID);
+            }
+        }
         if(ganttType == 'assignedTo')
         {
             taskID = id;
