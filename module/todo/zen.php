@@ -798,6 +798,8 @@ class todoZen extends todo
             $todo->begin = $todo->begin == '2400' ? '' : $begin;
             $todo->end   = $todo->end   == '2400' ? '' : $end;
 
+            $todo->assignedTo = zget($assemble->users, $todo->assignedTo);
+
             $type = $todo->type;
             if(isset($assemble->users[$todo->account])) $todo->account = $assemble->users[$todo->account];
 
