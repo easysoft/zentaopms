@@ -230,7 +230,7 @@ class releaseZen extends release
         foreach($moduleGroups as $modules) $searchModules += $modules;
         $this->config->product->search['params']['module']['values'] = $searchModules;
 
-        if($this->session->currentProductType == 'normal')
+        if($release->productType == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);
             unset($this->config->product->search['params']['branch']);
@@ -279,7 +279,7 @@ class releaseZen extends release
         foreach($moduleGroups as $modules) $searchModules += $modules;
         $this->config->bug->search['params']['module']['values'] = $searchModules;
 
-        if($this->session->currentProductType == 'normal')
+        if($release->productType == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);
             unset($this->config->bug->search['params']['branch']);
