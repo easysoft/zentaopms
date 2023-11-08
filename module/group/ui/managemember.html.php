@@ -26,8 +26,9 @@ div
         moduleMenu(set(array(
             'modules'     => $deptTree,
             'activeKey'   => $deptID,
-            'closeLink'   => $this->createLink('group', 'manageMember', "groupID={$group->id}"),
+            'closeLink'   => $this->createLink('project', 'manageGroupMember', "groupID={$group->id}"),
             'showDisplay' => false,
+            'app'         => $app->tab
         )))
     ),
     cell
