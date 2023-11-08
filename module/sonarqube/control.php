@@ -179,7 +179,6 @@ class sonarqube extends control
         if(isset($existSonarQube->url) and $existSonarQube->url == $sonarqube->url) return $this->send(array('result' => 'fail', 'message' => $this->lang->sonarqube->urlRepeatError));
 
         $token  = base64_encode("{$sonarqube->account}:{$sonarqube->password}");
-        a("{$sonarqube->account}:{$sonarqube->password}"); die;
         $result = $this->sonarqube->apiValidate($sonarqube->url, $token);
 
         if(!empty($result)) return $this->send(array('result' => 'fail', 'message' => $result));
@@ -199,6 +198,8 @@ class sonarqube extends control
 
         if($_POST)
         {
+            $oldSonarQube->account  = $this->post->account;
+            $oldSonarQube->password = $this->post->password;
             $this->checkToken($oldSonarQube, $sonarqubeID);
             $this->pipeline->update($sonarqubeID);
             $sonarqube = $this->pipeline->getByID($sonarqubeID);
