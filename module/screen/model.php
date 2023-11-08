@@ -278,7 +278,7 @@ class screenModel extends model
         }
 
         $component = $this->getChartOption($chart, $component, $filters);
-        $component = $this->getAxisRotateOption($chart, $component);
+        if($type == 'chart') $component = $this->getAxisRotateOption($chart, $component);
 
         $component->chartConfig->dataset  = $component->option->dataset;
         $component->chartConfig->fields   = json_decode($chart->fields);
