@@ -97,6 +97,9 @@ dtable
     (
         'linkCreator' => helper::createLink('execution', 'all', "status={$status}&orderBy={$orderBy}&productID={$productID}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")
     ))),
+    set::emptyTip($from == 'execution' ? $lang->execution->noExecutions : $lang->execution->noExecution),
+    set::createTip($from == 'execution' ? $lang->execution->createExec : $lang->execution->create),
+    set::createLink(hasPriv('execution', 'create') ? createLink('execution', 'create') : '')
 );
 
 render();

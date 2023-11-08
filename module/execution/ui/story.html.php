@@ -380,6 +380,9 @@ dtable
         'linkCreator' => helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&type={$type}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")
     ))),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
+    set::emptyTip($lang->story->noStory),
+    set::createTip($lang->story->create),
+    set::createLink($canCreate ? $createLink : '')
 );
 
 render();

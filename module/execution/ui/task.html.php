@@ -182,7 +182,10 @@ dtable
         'linkCreator' => helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
     ))),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
-    set::customCols(true)
+    set::customCols(true),
+    set::emptyTip($lang->task->noTask),
+    set::createTip($lang->task->create),
+    set::createLink($canCreate && common::canModify('execution', $execution) ? $createLink : '')
 );
 
 render();

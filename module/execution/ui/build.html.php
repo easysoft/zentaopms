@@ -60,6 +60,9 @@ dtable
             array('linkCreator' => helper::createLink('execution', 'build', "executionID={$execution->id}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage),
         ),
     ),
+    set::emptyTip($lang->build->noBuild),
+    set::createTip($lang->build->create),
+    set::createLink($canCreateBuild ? createLink('build', 'create', "executionID={$execution->id}") : ''),
 );
 
 /* ====== Render page ====== */
