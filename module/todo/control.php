@@ -372,7 +372,6 @@ class todo extends control
         if(in_array($todo->type, $types))
         {
             $confirmNote = 'confirm' . ucfirst($todo->type);
-            $okTarget    = isInModal() ? 'parent' : 'window.parent.$.apps.open';
             $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->objectID");
 
             if($todo->type == 'bug')   $app = 'qa';
@@ -380,7 +379,7 @@ class todo extends control
             if($todo->type == 'story') $app = 'product';
 
             $cancelURL = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
-            return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
+            return $this->send(array('result' => 'success', 'open' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'url' => array('url' => $confirmURL, 'app' => $app), 'canceled' => $cancelURL), 'closeModal' => true));
         }
 
         if(defined('RUN_MODE') && RUN_MODE == 'api')
