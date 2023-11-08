@@ -35,7 +35,9 @@ for($index = 0; $index <= 1; $index ++)
                         (
                             set::name("color[$index]"),
                             set::items($config->kanban->laneColorList),
-                            set::value('#333')
+                            set::value('#333'),
+                            set('data-on', 'change'),
+                            set('data-call', "$('[name=\"name\[$index\]\"]').css('color', $('[name=\"color\[$index\]\"]').val())")
                         )
                     )
                 ),

@@ -19,7 +19,21 @@ formPanel
         formGroup
         (
             set::label($lang->kanbancolumn->name),
-            input(set::name('name'))
+            inputControl
+            (
+                input(set::name('name')),
+                set::suffixWidth('icon'),
+                to::suffix
+                (
+                    colorPicker
+                    (
+                        set::name('color'),
+                        set::items($config->kanban->columnColorList),
+                        set('data-on', 'change'),
+                        set('data-call', "$('[name=name]').css('color', $('[name=color]').val())")
+                    )
+                )
+            )
         )
     ),
     formRow
@@ -39,23 +53,10 @@ formPanel
                         set::items(array('-1' => $this->lang->kanban->noLimit)),
                         set::value('-1')
                     )
-                )
+                ),
+                input(set::className('hidden'), set::name('group'), set::value($column->group)),
+                input(set::className('hidden'), set::name('parent'), set::value($column->parent > 0 ? $column->parent : 0)),
             )
-        )
-    ),
-    formRow
-    (
-        formGroup
-        (
-            set::label($lang->kanbancolumn->color),
-            colorPicker
-            (
-                set::name('color'),
-                set::items($config->kanban->columnColorList),
-                set::value('#333')
-            ),
-            input(set::className('hidden'), set::name('group'), set::value($column->group)),
-            input(set::className('hidden'), set::name('parent'), set::value($column->parent > 0 ? $column->parent : 0)),
         )
     )
 );
