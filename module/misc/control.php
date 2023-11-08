@@ -180,7 +180,7 @@ class misc extends control
         $this->view->version  = $version;
         $this->view->features = zget($this->lang->misc->feature->all, $version, '');
 
-        $detailed      = '';
+        $detailed = '';
         $changeLogFile = $this->app->getBasePath() . 'doc' . DS . 'CHANGELOG';
         if(file_exists($changeLogFile))
         {
