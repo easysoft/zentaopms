@@ -9,9 +9,20 @@ $(function()
 
 function toggleReviewer()
 {
-    var $this      = $('#needNotReview');
-    var $formGroup = $this.closest('.form-group');
-    var isChecked  = $this.prop('checked');
-    $('#reviewer').val(isChecked ? '' : lastReviewer).attr('disabled', isChecked ? 'disabled' : null);
-    $formGroup.find('.form-label').toggleClass('required', !isChecked);
+    var $this     = $('#needNotReview');
+    var isChecked = $this.prop('checked');
+    var $reviewer = $('#reviewer').zui('picker');
+
+    if(isChecked)
+    {
+        $('#needNotReview').val(1);
+        $('input[name=needNotReview]').val(1);
+        $reviewer.render({disabled: true});
+    }
+    else
+    {
+        $('#needNotReview').val(0);
+        $('input[name=needNotReview]').val(0);
+        $reviewer.render({disabled: false});
+    }
 }

@@ -58,7 +58,8 @@ $formItems['reviewer'] = formGroup
                 set::id('needNotReview'),
                 set::name('needNotReview'),
                 set::checked($needReview),
-                set::text($lang->story->needNotReview)
+                set::text($lang->story->needNotReview),
+                set::value(1)
             )
         ) : null,
     ),
