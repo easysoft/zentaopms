@@ -2030,6 +2030,7 @@ class productModel extends model
             }
             return helper::createLink($module, $method, "productID=%s&branch={$branchID}&groupBy=&projectID=$projectID") . "#app=project";
         }
+        if($module == 'story' and $this->config->vision == 'or') return helper::createLink('story', 'create', "productID=%s&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID0&todoID=0&extra=&storyType=requirement");
 
         return helper::createLink($module, $method, "productID=%s{$branchParam}");
     }
