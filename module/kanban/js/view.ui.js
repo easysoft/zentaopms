@@ -26,7 +26,7 @@ window.getCol = function(col)
 {
     /* 计算WIP。*/
     const limit = col.limit == -1 ? "<i class='icon icon-md icon-infinite'></i>" : col.limit;
-    const cards = columnCount[col.id] || 0;
+    const cards = col.cards;
 
     col.subtitleClass = 'ml-1';
 
