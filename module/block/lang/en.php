@@ -138,6 +138,7 @@ $lang->block->titleList['projectdynamic'] = "{$lang->projectCommon} Dynamic";
 $lang->block->titleList['bug']            = 'Bug';
 $lang->block->titleList['case']           = 'Case';
 $lang->block->titleList['testtask']       = 'Test Task';
+$lang->block->titleList['statistic']      = "{$lang->projectCommon} Statistic";
 
 $lang->block->default['scrumproject'][] = array('title' => "{$lang->projectCommon} Overview",   'module' => 'scrumproject', 'code' => 'scrumoverview',  'width' => '2');
 $lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCommon} List",     'module' => 'scrumproject', 'code' => 'scrumlist',      'width' => '2', 'params' => array('type' => 'undone', 'count' => '20', 'orderBy' => 'id_desc'));
@@ -669,14 +670,12 @@ $lang->block->sprint->totalExecution = 'Total';
 $lang->block->sprint->thisYear       = 'This Year';
 $lang->block->sprint->statusCount    = "Status of {$lang->executionCommon}";
 
-
-
-
-
-
-
-
-
+$lang->block->zentaodynamic = new stdclass();
+$lang->block->zentaodynamic->zentaosalon  = 'ZenTao China Travel';
+$lang->block->zentaodynamic->publicclass  = 'ZenTao Webinar';
+$lang->block->zentaodynamic->release      = 'Latest Release';
+$lang->block->zentaodynamic->registration = 'Registration';
+$lang->block->zentaodynamic->reservation  = 'Reservation';
 
 $lang->block->monthlyprogress = new stdclass();
 $lang->block->monthlyprogress->doneStoryEstimateTrendChart = "The Finished {$lang->SRCommon} Scale Trend Chart";
@@ -707,8 +706,8 @@ $lang->block->moduleList['execution']       = $lang->execution->common;
 $lang->block->moduleList['qa']              = $lang->qa->common;
 $lang->block->moduleList['welcome']         = $lang->block->welcome->common;
 $lang->block->moduleList['guide']           = $lang->block->guide;
-$lang->block->moduleList['teamDynamic']     = $lang->zentaoPMS . ' ' . $lang->dynamic;
-$lang->block->moduleList['teamAchievement'] = $lang->block->teamAchievement;
+$lang->block->moduleList['zentaodynamic']   = $lang->block->zentaoDynamic;
+$lang->block->moduleList['teamachievement'] = $lang->block->teamAchievement;
 $lang->block->moduleList['assigntome']      = $lang->block->assignToMe;
 $lang->block->moduleList['dynamic']         = $lang->block->dynamic;
 $lang->block->moduleList['html']            = $lang->block->html;

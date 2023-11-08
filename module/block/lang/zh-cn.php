@@ -248,7 +248,6 @@ $lang->block->modules['agileplus']     = $lang->block->modules['scrumproject'];
 $lang->block->modules['waterfallplus'] = $lang->block->modules['waterfallproject'];
 
 $lang->block->modules['product'] = new stdclass();
-
 $lang->block->modules['product']->availableBlocks['overview']         = $lang->productCommon . '总览';
 $lang->block->modules['product']->availableBlocks['statistic']        = $lang->productCommon . '统计';
 $lang->block->modules['product']->availableBlocks['releasestatistic'] = "{$lang->productCommon}发布统计";
