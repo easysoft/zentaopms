@@ -49,6 +49,9 @@ dtable
             array('linkCreator' => helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={$orderBy}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage),
         ),
     ),
+    set::emptyTip($lang->release->noRelease),
+    set::createTip($lang->release->create),
+    set::createLink($canCreateRelease ? createLink('release', 'create', "productID={$product->id}&branch={$branch}") : ''),
 );
 
 /* ====== Render page ====== */
