@@ -16,7 +16,7 @@ $forceReview    = $this->story->checkForceReview();
 $assignedToList = $story->status == 'closed' ? $users + array('closed' => 'Closed') : $users;
 
 $planCount    = !empty($story->planTitle) ? count($story->planTitle) : 0;
-$multiplePlan = ($this->session->currentProductType != 'normal' && empty($story->branch) && $planCount > 1);
+$multiplePlan = ($product->type != 'normal' && empty($story->branch) && $planCount > 1);
 
 $minStage    = $story->stage;
 $stageList   = implode(',', array_keys($this->lang->story->stageList));
