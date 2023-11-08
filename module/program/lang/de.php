@@ -210,8 +210,6 @@ $lang->program->kanban->normalReleases  = 'Normal Releases';
 $lang->program->kanban->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
 
 $lang->program->defaultProgram    = 'Default Program';
-$lang->program->projectView       = 'Project View';
-$lang->program->productView       = 'Product View';
 $lang->program->manDay            = 'Man Day';
 $lang->program->createdDate       = 'Created Date';
 $lang->program->totalStories      = 'Total Stories';

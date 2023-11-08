@@ -209,8 +209,6 @@ $lang->program->kanban->normalReleases  = '正常的发布';
 $lang->program->kanban->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
 
 $lang->program->defaultProgram    = '默认项目集';
-$lang->program->projectView       = '项目视角';
-$lang->program->productView       = '产品视角';
 $lang->program->manDay            = '人天';
 $lang->program->createdDate       = '创建时间';
 $lang->program->totalStories      = '需求总数';
