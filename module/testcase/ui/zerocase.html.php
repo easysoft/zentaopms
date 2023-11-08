@@ -80,6 +80,7 @@ dtable
     set::footPager(usePager()),
     set::footToolbar($footToolbar),
     set::checkable($canBatchAction),
+    set::emptyTip($lang->story->noStory)
 );
 
 render();
