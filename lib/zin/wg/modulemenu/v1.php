@@ -34,9 +34,11 @@ class moduleMenu extends wg
         $children = $this->getChildModule($parentID);
         if(count($children) === 0) return [];
 
-        $activeKey = $this->prop('activeKey');
-        $treeItems = array();
-        $tab       = $this->prop('app');
+        $activeKey  = $this->prop('activeKey');
+        $treeItems  = array();
+        $tab        = $this->prop('app');
+        $titleAttrs = array('data-app' => $tab);
+        if(isInModal()) $titleAttrs['data-load'] = 'modal';
 
         foreach($children as $child)
         {
@@ -45,7 +47,7 @@ class moduleMenu extends wg
                 'text'         => $child->name,
                 'hint'         => $child->name,
                 'url'          => zget($child, 'url', ''),
-                'data-app'     => $tab,
+                'titleAttrs'   => $titleAttrs,
                 'contentClass' => 'overflow-x-hidden'
             );
             $items = $this->buildMenuTree($child->id);
@@ -153,6 +155,7 @@ class moduleMenu extends wg
         return a
         (
             set('href', $closeLink),
+            isInModal() ? set('data-load', 'modal') : null,
             icon('close', setStyle('color', 'var(--color-slate-600)'))
         );
     }
