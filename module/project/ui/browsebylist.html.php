@@ -104,7 +104,11 @@ dtable
     set::orderBy($orderBy),
     set::sortLink(createLink('project', 'browse', "programID=$programID&browseType=$browseType&param=$param&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
-    set::customCols(true)
+    set::customCols(true),
+    set::emptyTip($lang->project->empty),
+    set::createTip($lang->project->create),
+    set::createLink(hasPriv('project', 'create') ? createLink('project', 'createGuide') : ''),
+    set::createAttr("data-toggle='modal'")
 );
 
 /* ====== Render page ====== */

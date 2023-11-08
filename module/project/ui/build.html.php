@@ -65,6 +65,9 @@ dtable
             array('linkCreator' => helper::createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage),
         ),
     ),
+    set::emptyTip($lang->build->noBuild),
+    set::createTip($lang->build->create),
+    set::createLink($canCreateBuild ? createLink('projectbuild', 'create', "projectID={$project->id}") : '')
 );
 
 /* ====== Render page ====== */

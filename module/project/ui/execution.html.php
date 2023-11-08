@@ -110,8 +110,8 @@ toolbar
     ))) : null,
     hasPriv('execution', 'create') ? item(set(array
     (
-        'icon' => 'plus',
-        'text' => $lang->execution->createExec,
+        'icon'  => 'plus',
+        'text'  => $isStage ? $lang->programplan->create : $lang->execution->create,
         'class' => "primary create-execution-btn",
         'url'   => $createLink,
     ))) : null
@@ -132,6 +132,9 @@ dtable
             array('linkCreator' => helper::createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}"))
         ),
     ),
+    set::emptyTip($lang->execution->noExecution),
+    set::createTip($isStage ? $lang->programplan->create : $lang->execution->create),
+    set::createLink(hasPriv('execution', 'create') ? $createLink : '')
 );
 
 render();

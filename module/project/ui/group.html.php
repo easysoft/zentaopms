@@ -41,6 +41,10 @@ dtable
     set::fixedLeftWidth('30%'),
     set::cols(array_values($config->projectGroup->dtable->fieldList)),
     set::data($groups),
+    set::emptyTip($lang->group->noGroup),
+    set::createTip($lang->group->create),
+    set::createLink(hasPriv('project', 'createGroup') ? createLink('project', 'createGroup', "projectID={$projectID}") : ''),
+    set::createAttr("data-toggle='modal'")
 );
 
 render();
