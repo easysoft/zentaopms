@@ -34,6 +34,7 @@ function loadList(type, id, defaultType, objectID)
     id = id ? id : '';
     var param = 'userID=' + userID + '&id=' + id;
     if(type == "task") param += '&status=wait,doing';
+    if(type == 'risk') param += '&status=active,hangup';
     if(type == defaultType && objectID != 0) param += '&objectID=' + objectID;
 
     if(moduleList.indexOf(type) !== -1)
