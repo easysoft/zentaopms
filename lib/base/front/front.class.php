@@ -1224,6 +1224,7 @@ EOT;
         $jsConfig->requiredFields = $requiredFields;
         $jsConfig->router         = $app->server->SCRIPT_NAME;
         $jsConfig->save           = $lang->save ?? '';
+        $jsConfig->expand         = $lang->expand ?? '';
         $jsConfig->runMode        = $runMode;
         $jsConfig->timeout        = $config->timeout ?? '';
         $jsConfig->pingInterval   = $config->pingInterval ?? '';
