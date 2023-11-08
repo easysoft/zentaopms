@@ -278,6 +278,7 @@ class screenModel extends model
         }
 
         $component = $this->getChartOption($chart, $component, $filters);
+        $component = $this->getAxisRotateOption($chart, $component);
 
         $component->chartConfig->dataset  = $component->option->dataset;
         $component->chartConfig->fields   = json_decode($chart->fields);
@@ -345,6 +346,34 @@ class screenModel extends model
             default:
                 return '';
         }
+    }
+
+    /**
+     * Get chart option about rotate.
+     *
+     * @param  object $chart
+     * @param  object $component
+     * @access public
+     * @return object
+     */
+    public function getAxisRotateOption($chart, $component)
+    {
+        $settings = json_decode($chart->settings)[0];
+
+        if(isset($settings->rotateX) && $settings->rotateX == 'use')
+        {
+            $component->chartConfig->xAxis = new stdclass();
+            $component->chartConfig->xAxis->axisLabel = new stdclass();
+            $component->chartConfig->xAxis->axisLabel->rotate = 30;
+        }
+        if(isset($settings->rotateX) && $settings->rotateX == 'use')
+        {
+            $component->chartConfig->yAxis = new stdclass();
+            $component->chartConfig->yAxis->axisLabel = new stdclass();
+            $component->chartConfig->yAxis->axisLabel->rotate = 30;
+        }
+
+        return $component;
     }
 
     /**
