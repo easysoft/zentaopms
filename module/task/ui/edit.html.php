@@ -122,6 +122,7 @@ detailBody
             set::title($lang->files),
             upload()
         ),
+        formHidden('lastEditedDate', helper::isZeroDate($task->lastEditedDate) ? '' : $task->lastEditedDate),
     ),
     history
     (
@@ -428,11 +429,10 @@ detailBody
             item
             (
                 set::name($lang->task->realStarted),
-                control
+                datePicker
                 (
                     set::name('realStarted'),
                     set::value(helper::isZeroDate($task->realStarted) ? '' : $task->realStarted),
-                    set::type('datetime-local')
                 )
             ),
             item
@@ -449,11 +449,10 @@ detailBody
             item
             (
                 set::name($lang->task->finishedDate),
-                control
+                datePicker
                 (
                     set::name('finishedDate'),
-                    set::value($task->finishedDate),
-                    set::type('datetime-local')
+                    set::value(helper::isZeroDate($task->finishedDate) ? '' : $task->finishedDate),
                 ),
             ),
             item
@@ -470,11 +469,10 @@ detailBody
             item
             (
                 set::name($lang->task->canceledDate),
-                control
+                datePicker
                 (
                     set::name('canceledDate'),
-                    set::value($task->canceledDate),
-                    set::type('datetime-local')
+                    set::value(helper::isZeroDate($task->canceledDate) ? '' : $task->canceledDate),
                 )
             ),
             item
@@ -502,20 +500,10 @@ detailBody
             item
             (
                 set::name($lang->task->closedDate),
-                control
+                datePicker
                 (
                     set::name('closedDate'),
-                    set::value($task->closedDate),
-                )
-            ),
-            item
-            (
-                set::trClass('hidden'),
-                control
-                (
-                    set::name('lastEditedDate'),
-                    set::value($task->lastEditedDate),
-                    set::id('lastEditedDate'),
+                    set::value(helper::isZeroDate($task->closedDate) ? '' : $task->closedDate),
                 )
             ),
         )
