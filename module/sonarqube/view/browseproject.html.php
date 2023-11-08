@@ -24,7 +24,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('instance', 'manage', "sonarqubeID=$sonarqubeID", "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-primary'");?>
+    <?php common::printLink('sonarqube', 'createProject', "sonarqubeID=$sonarqubeID", "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php if(empty($sonarqubeProjectList)):?>
@@ -32,7 +32,7 @@
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
     <?php if(empty($keyword) and commonModel::hasPriv('space', 'browse')):?>
-    <?php echo html::a($this->createLink('instance', 'manage', "sonarqubeID=$sonarqubeID"), "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-info'");?>
+    <?php echo html::a($this->createLink('sonarqube', 'createProject', "sonarqubeID=$sonarqubeID"), "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-info'");?>
     <?php endif;?>
   </p>
 </div>
