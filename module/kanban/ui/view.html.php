@@ -66,3 +66,7 @@ div
         set::height('calc(100vh - 80px)')
     )
 );
+
+div(set::id('archivedCards'));
+div(set::id('archivedColumns'));
+

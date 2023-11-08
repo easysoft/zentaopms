@@ -414,7 +414,7 @@ $lang->kanbancard->ditto           = 'Ditto';
 
 $lang->kanbancard->confirmArchive    = 'Are you sure to archive this card? After archiving the card, it will be hidden from the column and you can view it in the Region - Archived.';
 $lang->kanbancard->confirmDelete     = 'Are you sure to delete this card? After deleting the card, it will be deleted from the Kanban. You can only view it in the system recycle bin.';
-$lang->kanbancard->confirmRestore    = "Are you sure you want to restore this card? After the card is restored, the card will be restored to the '%s' Kanban column.";
+$lang->kanbancard->confirmRestore    = "Are you sure you want to restore this card?";
 $lang->kanbancard->confirmRestoreTip = "The card's column has been archived or deleted, please restore '%s' column first.";
 $lang->kanbancard->confirmRemove     = 'Are you sure to remove this card? After removing the card, the original data would not be affected.The card would be removed from the Kanban and counld not be restored.';
 

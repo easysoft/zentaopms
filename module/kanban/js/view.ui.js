@@ -294,3 +294,15 @@ function formatDate(inputDate)
 
     return formattedDate;
 }
+
+window.loadMore = function(type, regionID)
+{
+    const method   = 'viewArchived' + type;
+    const selector = '#archived' + type + 's';
+    const link     = $.createLink('kanban', method, 'regionID=' + regionID);
+    $(selector).load(link, function()
+    {
+        const height  = $('#mainContent > .kanban-list').height();
+        $(selector + ' .panel').css('height', height);
+    });
+}
