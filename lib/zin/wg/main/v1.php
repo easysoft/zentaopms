@@ -82,18 +82,36 @@ class main extends wg
         {
             foreach($sidebars as $sidebar)
             {
-                if($sidebar instanceof wg && $sidebar->prop('side') === 'left') $leftSides[] = $sidebar;
+                if(!($sidebar instanceof wg)) continue;
+                $sidebar->setDefaultProps(array('parent' => '#mainContainer'));
+                if($sidebar->prop('side') === 'left') $leftSides[] = $sidebar;
                 else $rightSides[] = $sidebar;
             }
+        }
+
+        $children     = $this->children();
+        $hasLeftSide  = !empty($leftSides);
+        $hasRightSide = !empty($rightSides);
+
+        if($hasLeftSide || $hasRightSide)
+        {
+            $children = array
+            (
+                setClass('row', array('has-sidebar-left' => $hasLeftSide, 'has-sidebar-right' => $hasRightSide)),
+                $leftSides,
+                div
+                (
+                    $children,
+                    setClass('main-content-cell')
+                ),
+                $rightSides
+            );
         }
 
         return div
         (
             set::id('mainContent'),
-            $leftSides,
-            set::className(empty($leftSides) && empty($rightSides) ? '' : 'row', empty($leftSides) ? '' : 'has-sidebar-left', empty($rightSides) ? '' : 'has-sidebar-right'),
-            $this->children(),
-            $rightSides
+            $children,
         );
     }
 
@@ -125,7 +143,8 @@ class main extends wg
             $this->buildMainNavbar(),
             div
             (
-                set::className('container'),
+                setID('mainContainer'),
+                setClass('container'),
                 $this->buildMenu(),
                 $this->buildContent()
             )
