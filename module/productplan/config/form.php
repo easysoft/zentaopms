@@ -19,6 +19,7 @@ $config->productplan->form->create['desc']        = array('type' => 'string',   
 $config->productplan->form->create['product']     = array('type' => 'int',       'required' => false, 'default' => 0);
 $config->productplan->form->create['createdBy']   = array('type' => 'string',    'required' => false, 'default' => $app->user->account);
 $config->productplan->form->create['createdDate'] = array('type' => 'datetime ', 'required' => false, 'default' => $now);
+$config->productplan->form->create['order']       = array('type' => 'string',    'required' => false, 'default' => 0);
 
 $config->productplan->form->edit['parent']  = array('type' => 'int',       'required' => false, 'default' => 0);
 $config->productplan->form->edit['branch']  = array('type' => 'array',     'required' => false, 'default' => array(), 'filter' => 'join');
