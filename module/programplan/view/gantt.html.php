@@ -693,6 +693,12 @@ $(function()
         });
     });
 
+    gantt.attachEvent("onBeforeTaskMove", function(id, mode, e)
+    {
+        task = gantt.getTask(id);
+        if(task.type == 'point') return false;
+    });
+
     var isGanttExpand    = false;
     var delayTimer       = null;
     var handleFullscreen = function()
