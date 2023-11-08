@@ -16,7 +16,7 @@ $cols = array();
 foreach($config->release->dtable->defaultFields['linkBug'] as $field) $cols[$field] = zget($config->bug->dtable->fieldList, $field, array());
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 
-div(setID('searchFormPanel'), set('data-module', 'bug'), searchToggle(set::open(true), set::module('bug')));
+div(setID("{$type}SearchFormPanel"), set('data-module', 'bug'), searchToggle(set::open(true), set::module('bug'), set::formName("{$type}SearchFormPanel")));
 dtable
 (
     set::id('unlinkBugList'),
