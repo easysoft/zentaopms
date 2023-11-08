@@ -20,21 +20,8 @@ if(!$longBlock)
 
 foreach($cases as $case) $case->lastRunDate = formatTime($case->lastRunDate, DT_DATE1);
 
-panel
+blockPanel
 (
-    set::title($block->title),
-    set('class', 'case-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
-    set('headingClass', 'border-b'),
-    to::headingActions
-    (
-        a
-        (
-            set('class', 'text-gray'),
-            set('href', $block->moreLink),
-            $lang->more,
-            icon('caret-right')
-        )
-    ),
     dtable
     (
         set::id('case'),
@@ -42,7 +29,7 @@ panel
         set::bordered(false),
         set::horzScrollbarPos('inside'),
         set::cols(array_values($config->block->case->dtable->fieldList)),
-        set::data(array_values($cases)),
+        set::data(array_values($cases))
     )
 );
 

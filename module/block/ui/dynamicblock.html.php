@@ -37,21 +37,6 @@ else
     );
 }
 
-panel
-(
-    setClass('dynamic-block'),
-    set::title($block->title),
-    to::headingActions
-    (
-        a
-        (
-            set('class', 'text-gray'),
-            set('href', createLink('project', 'browse', 'program=0&browseType=' . $block->params->type)),
-            $lang->more,
-            icon('caret-right')
-        )
-    ),
-    $content,
-);
+blockPanel($content);
 
 render();

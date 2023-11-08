@@ -120,11 +120,8 @@ foreach($resolvedBugCount as $productID => $bugCount)
     );
 }
 
-panel
+blockPanel
 (
-    set('headingClass', 'border-b'),
-    set::title($block->title),
-    set::bodyClass('px-0'),
     div
     (
         setClass('flex h-full w-full' . ($longBlock ? ' flex-nowrap' : ' flex-wrap')),
@@ -136,16 +133,13 @@ panel
             (
                 setClass('w-full font-bold'),
                 icon('card-archive mr-1 mb-2'),
-                span
-                (
-                    $lang->block->annualworkload->doneStoryEstimate
-                ),
+                span($lang->block->annualworkload->doneStoryEstimate)
             ),
             cell
             (
                 setClass('w-full overflow-y-auto' . ($longBlock ? ' h-64' : ' h-48')),
-                $doneStoryEstimateRows,
-            ),
+                $doneStoryEstimateRows
+            )
         ),
         cell
         (
@@ -156,16 +150,13 @@ panel
             (
                 setClass('w-full font-bold'),
                 icon('sub-review mr-1 mb-2'),
-                span
-                (
-                    $lang->block->annualworkload->doneStoryCount
-                ),
+                span($lang->block->annualworkload->doneStoryCount)
             ),
             cell
             (
                 setClass('w-full overflow-y-auto' . ($longBlock ? ' h-64' : ' h-48')),
-                $doneStoryCountRows,
-            ),
+                $doneStoryCountRows
+            )
         ),
         cell
         (
@@ -175,17 +166,14 @@ panel
             (
                 setClass('w-full font-bold'),
                 icon('bug mr-1 mb-2'),
-                span
-                (
-                    $lang->block->annualworkload->resolvedBugCount
-                ),
+                span($lang->block->annualworkload->resolvedBugCount)
             ),
             cell
             (
                 setClass('w-full overflow-y-auto' . ($longBlock ? ' h-64' : ' h-48')),
-                $resolvedBugCountRows,
-            ),
-        ),
+                $resolvedBugCountRows
+            )
+        )
     )
 );
 

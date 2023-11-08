@@ -118,24 +118,16 @@ foreach($hasViewPriv as $type => $bool)
     );
 }
 
-panel
+blockPanel
 (
-    set('class', 'assigntome-block'),
-    set('headingClass', 'border-b'),
-    set('bodyClass', 'p-0'),
     to::heading
     (
         div
         (
-            set('class', 'panel-title flex justify-between w-full'),
-            $block->title,
-            div
+            ul
             (
-                ul
-                (
-                    set('class', 'nav nav-tabs'),
-                    $menus
-                )
+                set('class', 'nav nav-tabs'),
+                $menus
             )
         )
     ),

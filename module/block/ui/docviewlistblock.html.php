@@ -42,11 +42,6 @@ namespace zin;
   <?php endif;?>
 </div>
 <?php
-panel
-(
-    set('class', 'doccollectlist-block ' . ($longBlock ? 'block-long' : 'block-sm')),
-    set::title($block->title),
-    rawContent()
-);
+blockPanel(rawContent());
 
 render();

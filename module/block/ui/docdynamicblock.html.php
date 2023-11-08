@@ -56,14 +56,6 @@ namespace zin;
 </ul>
 <?php endif;?>
 <?php
-panel
-(
-    set('class', 'docdynamic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
-    set::title($block->title),
-    div
-    (
-        rawContent()
-    )
-);
+blockPanel(div(rawContent()));
 
 render();

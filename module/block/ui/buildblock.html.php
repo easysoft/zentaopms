@@ -16,21 +16,8 @@ if(!$longBlock)
     unset($config->block->build->dtable->fieldList['project']);
 }
 
-panel
+blockPanel
 (
-    set::title($block->title),
-    set::className('build-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
-    set::headingClass('border-b'),
-    to::headingActions
-    (
-        a
-        (
-            set('class', 'text-gray'),
-            set('href', $block->moreLink),
-            $lang->more,
-            icon('caret-right')
-        )
-    ),
     dtable
     (
         set::height(318),
@@ -38,7 +25,7 @@ panel
         set::fixedLeftWidth('0.5'),
         set::horzScrollbarPos('inside'),
         set::cols(array_values($config->block->build->dtable->fieldList)),
-        set::data(array_values($builds)),
+        set::data(array_values($builds))
     )
 );
 

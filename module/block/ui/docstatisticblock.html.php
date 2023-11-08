@@ -58,10 +58,5 @@ namespace zin;
   </div>
 </div>
 <?php
-panel
-(
-    set('class', 'docstatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
-    set::title($block->title),
-    rawContent()
-);
+blockPanel(rawContent());
 render();

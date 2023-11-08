@@ -66,9 +66,6 @@ foreach($docList as $doc)
     );
 }
 
-blockPanel
-(
-    empty($docList) ? $lang->doc->noDoc : div(setClass('flex flex-wrap content-between gap-3'), $docItems)
-);
+blockPanel(empty($docList) ? $lang->doc->noDoc : div(setClass('flex flex-wrap content-between gap-3'), $docItems));
 
 render();
