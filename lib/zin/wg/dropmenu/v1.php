@@ -154,6 +154,10 @@ class dropmenu extends wg
             $text   = $object ? $object->name : '';
         }
 
+        /* 如果是产品的 1.5 级导航，把当前产品的类型存入 session 以供后面使用。*/
+        /* If the tab is product, save the product type to session. */
+        if($tab == 'product' && $object) $app->session->set('currentProductType', $object->type);
+
         return array
         (
             zui::dropmenu
