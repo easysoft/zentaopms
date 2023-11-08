@@ -68,7 +68,7 @@ class storiesEntry extends entry
         if(!$productID and isset($this->requestBody->product)) $productID = $this->requestBody->product;
         if(!$productID) return $this->sendError(400, 'Need product id.');
 
-        $fields = 'title,spec,verify,module,reviewer,type,parent,moduleOptionMenu,source,sourceNote,category,pri,estimate,mailto,keywords,notifyemail,uid,URS,status';
+        $fields = 'title,spec,verify,module,reviewer,assignedTo,type,parent,moduleOptionMenu,source,sourceNote,category,pri,estimate,mailto,keywords,notifyemail,uid,URS,status';
         $this->batchSetPost($fields);
 
         $this->setPost('plans', array($this->request('plan')));
