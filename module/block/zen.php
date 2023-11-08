@@ -342,7 +342,7 @@ class blockZen extends block
             if(!empty($data->publicclass) && time() < strtotime($data->zentaosalon->time))
             {
                 $data->publicclass->title     = $this->lang->block->zentaodynamic->publicclass;
-                $data->publicclass->label     = formatTime($data->publicclass->time, DT_DATE4) . $this->lang->datepicker->dayNames[date('w', strtotime($data->publicclass->time))] . ' ' . formatTime($data->publicclass->time, 'H:i');
+                $data->publicclass->label     = formatTime($data->publicclass->time, DT_DATE4) . ' ' . $this->lang->datepicker->dayNames[date('w', strtotime($data->publicclass->time))] . ' ' . formatTime($data->publicclass->time, 'H:i');
                 $data->publicclass->linklabel = $this->lang->block->zentaodynamic->reservation;
                 $dynamics[] = $data->publicclass;
             }
@@ -353,7 +353,7 @@ class blockZen extends block
                 foreach($data->release as $release)
                 {
                     $release->title = $this->lang->block->zentaodynamic->release;
-                    $release->label = formatTime($data->publicclass->time, DT_DATE4) . $this->lang->datepicker->dayNames[date('w', strtotime($data->publicclass->time))];
+                    $release->label = formatTime($data->publicclass->time, DT_DATE4) . ' ' . $this->lang->datepicker->dayNames[date('w', strtotime($data->publicclass->time))];
                     $dynamics[] = $release;
                 }
             }
