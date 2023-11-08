@@ -13,6 +13,7 @@
 <?php
 $currentVendor = empty($modelConfig->vendor) ? key($lang->ai->models->vendorList->{empty($modelConfig->type) ? key($lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
 $requiredFields = $config->ai->vendorList[$currentVendor]['requiredFields'];
+if(empty($requiredFields)) $requiredFields = array();
 ?>
 <div id='mainContent' class='main-content'>
   <table class='table table-form mw-600px'>

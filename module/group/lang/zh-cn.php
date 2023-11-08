@@ -558,6 +558,7 @@ $lang->group->package->deleteRoadmap         = '删除产品路标';
 $lang->group->package->deleteDemandPool      = '删除需求池';
 $lang->group->package->exportDatatable       = '导出数据表';
 $lang->group->package->ai                    = 'AI';
+$lang->group->package->aiChatting            = 'AI 聊天';
 $lang->group->package->executePrompt         = '执行提词';
 $lang->group->package->manageLLM             = '语言模型管理';
 $lang->group->package->browsePrompt          = '浏览提词';

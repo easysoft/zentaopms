@@ -15,8 +15,8 @@ $config->ai->openai->api->openai->version    = 'v1';                           /
 $config->ai->openai->api->openai->format     = 'https://api.openai.com/%s/%s'; // OpenAI API format, args: API version, API name.
 $config->ai->openai->api->openai->authFormat = 'Authorization: Bearer %s';     // OpenAI API auth header format.
 $config->ai->openai->api->azure = new stdclass();
-$config->ai->openai->api->azure->resource    = 'openai-at-zentao';             // your Azure OpenAI resource name, required.
-$config->ai->openai->api->azure->deployment  = 'the-first-gpt';                // your Azure OpenAI deployment name, required.
+$config->ai->openai->api->azure->resource    = '';                             // Azure OpenAI resource name, required.
+$config->ai->openai->api->azure->deployment  = '';                             // Azure OpenAI deployment name, required.
 $config->ai->openai->api->azure->apiVersion  = '2023-07-01-preview';           // Azure OpenAI API version, required.
 $config->ai->openai->api->azure->format      = 'https://%s.openai.azure.com/openai/deployments/%s/%s?api-version=%s'; // Azure API format, args: resource name, deployment name, API name, API version.
 $config->ai->openai->api->azure->authFormat  = 'api-key: %s';                  // Azure API auth header format.
@@ -57,9 +57,9 @@ $config->ai->ernie->params = new stdclass();
 $config->ai->ernie->params->chat     = new stdclass();
 $config->ai->ernie->params->function = new stdclass();
 $config->ai->ernie->params->chat->required     = array('messages');
-$config->ai->ernie->params->chat->optional     = array('temperature', 'top_p', 'penalty_score', 'stream', 'user_id');
+$config->ai->ernie->params->chat->optional     = array('temperature', 'top_p', 'penalty_score', 'stream', 'system', 'user_id');
 $config->ai->ernie->params->function->required = array('messages', 'functions');
-$config->ai->ernie->params->function->optional = array('temperature', 'top_p', 'penalty_score', 'stream', 'user_id');
+$config->ai->ernie->params->function->optional = array('temperature', 'top_p', 'penalty_score', 'stream', 'system', 'user_id');
 
 $config->ai->ernie->model = new stdclass();
 $config->ai->ernie->model->chat     = 'ernie-bot-turbo';

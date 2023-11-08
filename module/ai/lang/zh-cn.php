@@ -49,6 +49,14 @@ $lang->ai->promptView             = '查看提词详情';
 $lang->ai->promptExecute          = '执行提词';
 $lang->ai->promptExecutionReset   = '重置调试';
 $lang->ai->roleTemplates          = '管理角色模板';
+$lang->ai->chat                   = '聊天';
+
+$lang->ai->chatPlaceholderMessage = 'Hi，我是 AI 助手阿道，您可以问我任何问题。';
+$lang->ai->chatPlaceholderInput   = '问问阿道…';
+$lang->ai->chatSystemMessage      = '你叫阿道，是禅道的 AI 助手兼吉祥物，你可以回答用户的问题和与用户聊天。你当前所处的环境是禅道项目管理软件。';
+$lang->ai->chatSend               = '发送';
+$lang->ai->chatReset              = '清空';
+$lang->ai->chatNoResponse         = '会话发生了错误，<a id="retry" class="text-blue">点击这里重试</a>。';
 
 $lang->ai->nextStep  = '下一步';
 $lang->ai->goTesting = '去调试';

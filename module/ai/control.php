@@ -694,4 +694,41 @@ class ai extends control
         $this->view->roleTemplates = $this->ai->getRoleTemplates();
         $this->display();
     }
+
+    /**
+     * Chat with LLMs.
+     *
+     * @access public
+     * @return void
+     */
+    public function chat()
+    {
+        $messages = array();
+
+        if(!empty($_POST))
+        {
+            $history = $this->post->history;
+            $message = $this->post->message;
+            $isRetry = $this->post->retry == 'true';
+
+            $messages = json_decode($history);
+            if(empty($messages)) $messages[] = (object)array('role' => 'system', 'content' => $this->lang->ai->chatSystemMessage);
+
+            if(!$isRetry) $messages[] = (object)array('role' => 'user', 'content' => $message);
+
+            $response = $this->ai->converse($messages);
+            if(empty($response))
+            {
+                $this->view->error = $this->lang->ai->chatNoResponse;
+            }
+            else
+            {
+                $messages[] = (object)array('role' => 'assistant', 'content' => is_array($response) ? current($response) : $response);
+            }
+        }
+
+        $this->view->title    = $this->lang->ai->chat;
+        $this->view->messages = $messages;
+        $this->display();
+    }
 }

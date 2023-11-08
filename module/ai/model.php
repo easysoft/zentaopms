@@ -65,7 +65,7 @@ class aiModel extends model
         $modelConfig = new stdclass();
         $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
         foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
-        return !empty($modelConfig->key);
+        return $modelConfig->status == 'on' && !empty($modelConfig->key);
     }
 
     /**
@@ -96,7 +96,7 @@ class aiModel extends model
         {
             if($modelVendor == 'azure')
             {
-                $url = sprintf($this->config->ai->openai->api->azure->format, $this->config->ai->openai->api->azure->resource, $this->config->ai->openai->api->azure->deployment, $this->config->ai->openai->api->methods[$type], $this->config->ai->openai->api->azure->apiVersion);
+                $url = sprintf($this->config->ai->openai->api->azure->format, $this->modelConfig->resource, $this->modelConfig->deployment, $this->config->ai->openai->api->methods[$type], $this->config->ai->openai->api->azure->apiVersion);
             }
             else
             {
@@ -469,6 +469,15 @@ class aiModel extends model
      */
     public function converse($messages, $options = array())
     {
+        /* Filter system message out for ERNIE. */
+        if($this->config->ai->models[$this->modelConfig->type] == 'ernie')
+        {
+            $systemMessage = current(array_filter($messages, function($message) { return $message->role == 'system'; }));
+            if(!empty($systemMessage)) $options['system'] = $systemMessage->content;
+
+            $messages = array_values(array_filter($messages, function($message) { return $message->role == 'assistant' || $message->role == 'user'; }));
+        }
+
         $data = compact('messages');
 
         if(!empty($options))

@@ -558,6 +558,7 @@ $lang->group->package->deleteRoadmap         = 'Delete Roadmap';
 $lang->group->package->deleteDemandPool      = 'Delete Demand Pool';
 $lang->group->package->exportDatatable       = 'Export Datatable';
 $lang->group->package->ai                    = 'AI';
+$lang->group->package->aiChatting            = 'AI Chat';
 $lang->group->package->executePrompt         = 'Execute Prompts';
 $lang->group->package->manageLLM             = 'Manage Models';
 $lang->group->package->browsePrompt          = 'Browse Prompts';

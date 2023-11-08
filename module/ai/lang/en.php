@@ -49,6 +49,14 @@ $lang->ai->promptView             = 'View Prompt';
 $lang->ai->promptExecute          = 'Execute Prompt';
 $lang->ai->promptExecutionReset   = 'Reset Execute Prompt';
 $lang->ai->roleTemplates          = 'Manage Role Templates';
+$lang->ai->chat                   = 'Chat';
+
+$lang->ai->chatPlaceholderMessage = 'Hi, I\'m Adao, your AI assistant at ZenTao!';
+$lang->ai->chatPlaceholderInput   = 'type here...';
+$lang->ai->chatSystemMessage      = 'You\'re Adao, the AI assistant and mascot of ZenTao. You can answer questions and chat with users. You\'re currently within the ZenTao project management software.';
+$lang->ai->chatSend               = 'Send';
+$lang->ai->chatReset              = 'Reset';
+$lang->ai->chatNoResponse         = 'Something went wrong, <a id="retry" class="text-blue">click here to retry</a>.';
 
 $lang->ai->nextStep  = 'Next';
 $lang->ai->goTesting = 'Go testing';
