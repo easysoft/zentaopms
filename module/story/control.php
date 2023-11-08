@@ -174,7 +174,7 @@ class story extends control
         {
             $story = $this->story->getByID($storyID);
             $this->view->storyTitle = isset($story->title) ? $story->title : '';
-            if(!$this->story->checkCanSubdivide($story, !empty($product->shadow))) return print(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
+            if(!$this->story->checkCanSubdivide($story, !empty($product->shadow))) return $this->send(array('result' => 'fail', 'message' => $this->lang->story->errorNotSubdivide, 'load' => array('alert' => $this->lang->story->errorNotSubdivide)));
         }
 
         /* The 'batchCreateFields' of global variable $config will be changed and used by the following business logic. */
