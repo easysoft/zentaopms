@@ -373,7 +373,7 @@ class actionTao extends actionModel
 
             $name = $project->name;
             if($project->model == 'kanban') $method = 'kanban';
-            if($name) $action->extra = common::hasPriv('project', $method) ? html::a(helper::createLink('project', $method, "projectID={$action->project}"), $name) : $name;
+            if($name) $action->extra = (common::hasPriv('project', $method) and $this->config->vision != 'or') ? html::a(helper::createLink('project', $method, "projectID=$action->project"), $name) : $name;
         }
         elseif($type == 'plan' || $type == 'productplan')
         {
