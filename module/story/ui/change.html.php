@@ -164,7 +164,7 @@ $formItems['file'] = formGroup
     set::label($lang->attach),
     upload()
 );
-$formItems['affected'] = $getAffectedTabs($story, $users);
+if($this->config->vision != 'or') $formItems['affected'] = $getAffectedTabs($story, $users);
 
 $formActions = formRow
 (
