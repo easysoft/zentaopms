@@ -54,20 +54,22 @@ featureBar
 
 if($product->shadow) unset($config->testtask->dtable->fieldList['product']);
 
-$tasks = initTableData($tasks, $config->testtask->dtable->fieldList, $this->testtask);
-$cols  = array_values($config->testtask->dtable->fieldList);
-$data  = array_values($tasks);
+$canCreate = common::canModify('product', $product) && common::hasPriv('testtask', 'create');
+
 toolbar
 (
-    common::canModify('product', $product) && common::hasPriv('testtask', 'create') ? btn
+    $canCreate ? btn
     (
         setClass('btn primary'),
         set::icon('plus'),
-        set::url(helper::createLink('testtask', 'create', "product=$product->id")),
+        set::url(inlink('create', "product=$product->id")),
         $lang->testtask->create
     ) : null
 );
 
+$tasks      = initTableData($tasks, $config->testtask->dtable->fieldList, $this->testtask);
+$cols       = array_values($config->testtask->dtable->fieldList);
+$data       = array_values($tasks);
 $footerHTML = strtolower($status) == 'totalstatus' ? $allSummary : $pageSummary;
 dtable
 (
@@ -79,6 +81,9 @@ dtable
     set::sortLink(createLink('testtask', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&beginTime={$beginTime}&endTime={$endTime}")),
     set::footer(array(array('html' => $footerHTML), 'flex', 'pager')),
     set::footPager(usePager()),
+    set::emptyTip($lang->testtask->noTesttask),
+    set::createTip($lang->testtask->create),
+    set::createLink($canCreate ? inlink('create', "product={$product->id}") : '')
 );
 
 render();
