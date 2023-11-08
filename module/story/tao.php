@@ -1631,23 +1631,23 @@ class storyTao extends storyModel
         $canRecall = common::hasPriv('story', 'recall') && $this->isClickable($story, 'recall');
         $title     = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
         if(!$canRecall) $title = $this->lang->story->recallTip['actived'];
-        $actRecall = array('name' => $story->status == 'changing' ? 'recalledchange' : 'recall', 'innerClass' => 'ajax-submit', 'url' => $canRecall ? $recallLink : null, 'hint' => $title, 'disabled' => !$canRecall);
+        $actRecall = array('name' => $story->status == 'changing' ? 'recalledchange' : 'recall', 'url' => $canRecall ? $recallLink : null, 'hint' => $title, 'disabled' => !$canRecall);
 
         /* Change the render order. */
         if(!empty($actSubmitreview))
         {
             $actions[] = $actSubmitreview;
-            $actions[] = array('name' => 'dropdown', 'type' => 'dropdown', 'items' => array($actRecall));
+            $actions[] = array('name' => 'dropdown', 'type' => 'dropdown', 'items' => array($actRecall + array('innerClass' => 'ajax-submit')));
         }
         elseif($actReview['disabled'] && !$actRecall['disabled'])
         {
-            $actions[] = $actRecall;
+            $actions[] = $actRecall + array('className' => 'ajax-submit');
             $actions[] = array('name' => 'dropdown', 'type' => 'dropdown', 'items' => array($actReview));
         }
         else
         {
             $actions[] = $actReview;
-            $actions[] = array('name' => 'dropdown', 'type' => 'dropdown', 'items' => array($actRecall));
+            $actions[] = array('name' => 'dropdown', 'type' => 'dropdown', 'items' => array($actRecall + array('innerClass' => 'ajax-submit')));
         }
 
         if($this->config->vision != 'lite') $actions[] = array('name' => 'close', 'url' => $canClose ? $closeLink : null, 'data-toggle' => 'modal', 'disabled' => !$canClose);
