@@ -105,7 +105,8 @@ class testresultsEntry extends entry
     {
         if($taskID)
         {
-            $run = $this->loadModel('testtask')->getRunByCase($taskID, $caseID);
+            $run       = $this->loadModel('testtask')->getRunByCase($taskID, $caseID);
+            $run->case = $this->loadModel('testcase')->getById($caseID, $version);
         }
         else
         {
