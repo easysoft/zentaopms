@@ -153,6 +153,7 @@ $lang->block->default['waterfallproject'][] = array('title' => "{$lang->projectC
 $lang->block->default['waterfallproject'][] = array('title' => 'Dynamic',                    'module' => 'waterfallproject', 'code' => 'projectdynamic', 'width' => '1');
 
 $lang->block->default['waterfallplusproject'] = $lang->block->default['waterfallproject'];
+$lang->block->default['ipdproject']           = $lang->block->default['waterfallproject'];
 
 $lang->block->default['product'][] = array('title' => "{$lang->productCommon} Overview",                   'module' => 'product', 'code' => 'overview',         'width' => '3');
 $lang->block->default['product'][] = array('title' => "Unclosed {$lang->productCommon} Statistic",         'module' => 'product', 'code' => 'statistic',        'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
