@@ -133,6 +133,10 @@ class testtaskZen extends testtask
             ->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)
             ->get();
 
+        /* Fix bug #35419. */
+        $execution     = $this->loadModel('execution')->getByID($task->execution);
+        $task->project = $execution->project;
+
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
         return $task;
     }
