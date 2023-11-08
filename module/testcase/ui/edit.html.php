@@ -13,7 +13,9 @@ namespace zin;
 jsVar('tab', $this->app->tab);
 jsVar('isLibCase', $isLibCase);
 jsVar('caseBranch', $case->branch);
-jsVar('executionID', $case->execution);
+if($app->tab == 'execution') jsVar('objectID', $case->executionID);
+if($app->tab == 'project')   jsVar('objectID', $case->project);
+if($app->tab == 'qa')        jsVar('objectID', 0);
 
 set::title($lang->testcase->edit);
 

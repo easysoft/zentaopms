@@ -10,10 +10,10 @@ declare(strict_types=1);
  * @link        http://www.zentao.net
  */
 namespace zin;
-jsVar('executionID', $executionID);
 jsVar('tab', $this->app->tab);
 if($app->tab == 'execution') jsVar('objectID', $executionID);
 if($app->tab == 'project')   jsVar('objectID', $projectID);
+if($app->tab == 'qa')        jsVar('objectID', 0);
 
 $priList  = array_filter($lang->testcase->priList);
 unset($lang->testcase->typeList['unit']);

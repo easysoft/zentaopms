@@ -8,7 +8,7 @@ function loadProductStories(productID)
     if(typeof(moduleID) == 'undefined') moduleID = 0;
     if(typeof(storyID)  == 'undefined') storyID  = 0;
 
-    const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID + '&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=' + executionID);
+    const link = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID + '&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&objectID=' + objectID);
     $.getJSON(link, function(data)
     {
         let $storyPicker = $('[name=story]').zui('picker');
@@ -148,7 +148,7 @@ function loadScenesForBatch(productID, moduleID, $currentRow)
 function loadStoriesForBatch(productID, moduleID, num, $currentRow = null)
 {
     const branchID = $currentRow.find('.form-batch-control[data-name="branch"]').length ? $currentRow.find('.form-batch-control[data-name="branch"] .pick-value').val() : 0;
-    var storyLink  = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&executionID=0&number=' + num);
+    var storyLink  = $.createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=0&type=full&hasParent=1&objectID=0&number=' + num);
     $.getJSON(storyLink, function(stories)
     {
         if(!stories) return;
