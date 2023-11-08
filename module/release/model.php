@@ -1029,14 +1029,19 @@ class releaseModel extends model
      */
     public function getBugList(string $bugIdList,  string $orderBy = '', object $pager = null): array
     {
-        $bugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
-            ->where('id')->in($bugIdList)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF($orderBy)->orderBy($orderBy)->fi()
-            ->page($pager)
-            ->fetchAll();
+        $bugs = array();
 
-        if($bugIdList) $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
+        if($bugIdList)
+        {
+            $bugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) as severityOrder")->from(TABLE_BUG)
+                ->where('id')->in($bugIdList)
+                ->andWhere('deleted')->eq(0)
+                ->beginIF($orderBy)->orderBy($orderBy)->fi()
+                ->page($pager)
+                ->fetchAll();
+
+            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
+        }
 
         return $bugs;
     }
