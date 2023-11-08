@@ -3,11 +3,6 @@ window.updateKanbanRegion = function(regionID, kanbanData)
     $('.kanban-list').zui('kanbanlist').$.getKanban(regionID).update(kanbanData);
 }
 
-window.updateKanbanGroup = function(key, kanbanData)
-{
-    $('.kanban-list').zui('kanbanlist').$.getKanban(key).update(kanbanData);
-}
-
 window.changeSpaceType = function()
 {
     const type = $('[name=type]:checked').val();

@@ -675,8 +675,7 @@ class kanban extends control
         $lanes = $this->kanban->getLanePairsByGroup($lane->group);
         if($lanes)
         {
-            $callback = $this->kanban->getKanbanCallback($kanbanID, $regionID);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $lane->region, array('items' => array(array('key' => 'group' . $lane->group, 'data' => array('lanes' => array(array('id' => $laneID, 'name' => $laneID, 'deleted' => true))))))))));
         }
         else
         {
@@ -766,9 +765,7 @@ class kanban extends control
 
         $this->loadModel('action')->create('kanbancolumn', $columnID, 'archived');
 
-        $region   = $this->kanban->getRegionByID($column->region);
-        $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $column->region, array('items' => array(array('key' => 'group' . $column->group, 'data' => array('cols' => array(array('id' => $columnID, 'name' => $columnID, 'deleted' => true))))))))));
     }
 
     /**
@@ -834,9 +831,7 @@ class kanban extends control
 
         $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->exec();
 
-        $region   = $this->kanban->getRegionByID($column->region);
-        $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $column->region, array('items' => array(array('key' => 'group' . $column->group, 'data' => array('cols' => array(array('id' => $columnID, 'name' => $columnID, 'deleted' => true))))))))));
     }
 
     /**
