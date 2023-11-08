@@ -19,7 +19,7 @@ $lang->index->website        = 'Visit ZenTao official website';
 $lang->index->chat = new stdclass();
 $lang->index->chat->chat = 'Chat';
 $lang->index->chat->ai   = 'AI';
-$lang->index->chat->unconfiguredFormat  = '% is currently not configured. %s.';
+$lang->index->chat->unconfiguredFormat  = '%s is currently not configured. %s.';
 $lang->index->chat->goConfigureFormat   = 'To configure the function, click to navigate to <a class="text-primary" href="%s">%s configuration</a>';
 $lang->index->chat->contactAdminForHelp = 'Please contact an administrator for assistance';
 $lang->index->chat->unauthorized        = 'You are not authorized to access AI chatting. Please contact an administrator for permission.';
