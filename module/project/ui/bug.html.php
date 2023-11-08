@@ -18,6 +18,7 @@ featureBar
     li(searchToggle(set::module('projectBug'), set::open($type == 'bysearch')))
 );
 
+$canCreate = (common::canModify('project', $project) && hasPriv('bug', 'create'));
 toolbar
 (
     hasPriv('bug', 'export') ? item(set(array
@@ -28,7 +29,7 @@ toolbar
         'url'   => createLink('bug', 'export', "productID={$productID}&orderBy=$orderBy&browseType=&projectID={$project->id}"),
         'data-toggle' => 'modal'
     ))) : null,
-    (common::canModify('project', $project) && hasPriv('bug', 'create')) ? item(set(array
+    $canCreate ? item(set(array
     (
         'text' => $lang->bug->create,
         'icon' => 'plus',
@@ -93,6 +94,9 @@ dtable
     set::sortLink(createLink('project', 'bug', "projectID={$project->id}&productID={$productID}&branchID={$branchID}&orderBy={name}_{sortType}&build={$buildID}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
+    set::emptyTip($lang->bug->notice->noBug),
+    set::createTip($lang->bug->create),
+    set::createLink($canCreate ? createLink('bug', 'create', "productID={$productID}&branch={$branchID}&extras=projectID={$project->id}") : '')
 );
 
 render();
