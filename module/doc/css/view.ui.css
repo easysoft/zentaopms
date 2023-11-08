@@ -2,7 +2,7 @@
 .panel-heading { justify-content: space-between; }
 .panel-actions { margin-left: auto; }
 
-.doc-content .flex .doc-panel {flex: 1 1 100%;}
+.doc-content .flex .doc-panel {flex: 1 1 100%; margin-right: 1.5rem;}
 
 .scrollbar-hover { overflow-y: scroll; }
 #mainContent .panel+.panel {flex: none}
@@ -12,7 +12,7 @@
 .main-content-cell > .panel {max-height: calc(100vh - 110px); overflow-y: auto;}
 .main-content-cell > .panel > .doc-content {padding-right: 0;}
 
-#contentTree {background: #fff; position: sticky; height: calc(100vh - 180px)!important; overflow: auto; top: 5rem; right: 1rem; z-index: 100; flex: 0 1 30%;}
+#contentTree {background: #fff; position: sticky; height: calc(100vh - 180px)!important; overflow: auto; top: 3rem; right: 1rem; z-index: 100; flex: 0 1 30%;}
 #contentTree .tree-item .item-content > a {white-space: nowrap; text-overflow: clip; overflow: hidden;}
 
 #content .detail-content.article-content::-webkit-scrollbar,
@@ -21,4 +21,4 @@
 
 .w-144 {width: 36rem;}
 
-#outlineToggle {display: block; position: absolute; top: 7rem; right: 3rem; z-index: 110;}
+#outlineToggle {display: block; position: absolute; top: 5.5rem; right: 3rem; z-index: 110;}
