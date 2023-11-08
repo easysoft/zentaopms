@@ -92,7 +92,9 @@ js::set('isIntranet',    helper::isIntranet());
       <?php else:?>
       <?php $version     = $config->version;?>
       <?php $versionName = $lang->pmsName . $config->version;?>
+      <?php if($config->systemMode != 'PLM'):?>
       <a href='javascript:void(0)' id='bizLink' class='btn btn-link' style='color: #B57D4F;'><span class='upgrade'><?php echo $lang->bizName;?></span> <i class='text-danger icon-pro-version'></i></a>
+      <?php endif;?>
       <?php endif;?>
       <a href='<?php echo $lang->website;?>' class="btn btn-sm btn-link" target='_blank' title='<?php echo $version;?>'>
         <i class="icon icon-zentao" style="font-size: 24px;"></i>
