@@ -283,6 +283,7 @@ class caselibModel extends model
         if(dao::isError()) return false;
 
         $forceNotReview = $this->loadModel('testcase')->forceNotReview();
+        $this->dao->begin();
         foreach($cases as $key => $caseData)
         {
             if(!empty($data->id[$key]) && !$this->post->insert)
@@ -294,6 +295,7 @@ class caselibModel extends model
                 $this->caselibTao->insertImportedCase($key, $caseData, $data, $forceNotReview);
             }
         }
+        $this->dao->commit();
 
         if($data->isEndPage)
         {
