@@ -282,7 +282,10 @@ dtable
             ) : null,
         )
     )),
-    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList);}"))
+    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList);}")),
+    set::emptyTip($lang->product->noProduct),
+    set::createTip($lang->product->create),
+    set::createLink(hasPriv('product', 'create') ? createLink('product', 'create') : null),
 );
 
 jsVar('pageSummary', sprintf($lang->product->lineSummary, $linesCount, count($productStats)));

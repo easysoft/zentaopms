@@ -160,23 +160,26 @@ featureBar
     li(searchToggle(set::module('program'), set::open($status == 'bySearch')))
 );
 
+$canCreateProject = hasPriv('project', 'create');
+$canCreateProgram = hasPriv('program', 'create');
+
 toolbar
 (
-    item(set
+    $canCreateProject ? item(set
     ([
         'text'  => $lang->program->createProject,
         'icon'  => 'plus',
         'class' => 'btn secondary',
-        'url'   => $this->createLink('project', 'createGuide'),
+        'url'   => createLink('project', 'createGuide'),
         'data-toggle' => 'modal',
-    ])),
-    item(set
+    ])) : null,
+    $canCreateProgram ? item(set
     ([
         'text' => $lang->program->create,
         'icon' => 'plus',
         'class'=> 'btn primary create-program-btn',
-        'url'  => $this->createLink('program', 'create')
-    ])),
+        'url'  => createLink('program', 'create')
+    ])) : null,
 );
 
 $canBatchEdit = common::hasPriv('project', 'batchEdit');
@@ -209,7 +212,10 @@ dtable
             ) : null,
         )
     )),
-    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList);}"))
+    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList);}")),
+    set::emptyTip($lang->program->noProgram),
+    set::createTip($lang->program->create),
+    set::createLink($canCreateProgram ? createLink('program', 'create') : ''),
 );
 
 render();
