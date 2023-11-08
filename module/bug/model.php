@@ -15,38 +15,6 @@ declare(strict_types=1);
 class bugModel extends model
 {
     /**
-     * Set menu.
-     *
-     * @param  array  $products
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $moduleID
-     * @param  string $browseType
-     * @param  string $orderBy
-     * @access public
-     * @return void
-     */
-    public function setMenu($products, $productID, $branch = 0, $moduleID = 0, $browseType = 'unclosed', $orderBy = '')
-    {
-        $this->loadModel('product')->setMenu($productID, $branch, $moduleID, 'bug');
-        if($this->lang->navGroup->testcase == 'project' and $this->app->methodName == 'browse') $products = array(0 => $this->lang->bug->allProduct) + $products;
-        $selectHtml = $this->product->select($products, $productID, 'bug', 'browse', '', $branch, $moduleID, 'bug');
-
-        $pageNav     = '';
-        $pageActions = '';
-        $isMobile    = $this->app->viewType == 'mhtml';
-        if($isMobile)
-        {
-            $this->app->loadLang('qa');
-            $pageNav = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
-        }
-        $pageNav .= $selectHtml;
-
-        $this->lang->modulePageNav = $pageNav;
-        $this->lang->TRActions     = $pageActions;
-    }
-
-    /**
      * bug 的入库操作。
      * Insert bug into zt_bug.
      *
