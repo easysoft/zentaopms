@@ -23,6 +23,9 @@ featureBar
     ),
 );
 
+$canCreate      = hasPriv('todo', 'create');
+$canBatchCreate = hasPriv('todo', 'batchCreate');
+
 toolbar
 (
     hasPriv('todo', 'export') ? item
@@ -35,9 +38,9 @@ toolbar
             'data-toggle' => 'modal'
         ))
     ) : null,
-    hasPriv('todo', 'create') || hasPriv('todo', 'batchCreate') ? btngroup
+    $canCreate || $canBatchCreate ? btngroup
     (
-        hasPriv('todo', 'create') ? btn
+        $canCreate ? btn
         (
             setClass('btn primary'),
             set::icon('plus'),
@@ -51,7 +54,7 @@ toolbar
             set::url(helper::createLink('todo', 'batchCreate')),
             $lang->todo->batchCreate
         ),
-        hasPriv('todo', 'create') && hasPriv('todo', 'batchCreate') ? dropdown
+        $canCreate && $canBatchCreate ? dropdown
         (
             btn(setClass('btn primary dropdown-toggle'), setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
             set::items(array
@@ -94,6 +97,8 @@ dtable
     set::orderBy($orderBy),
     set::sortLink(createLink('my', 'todo', "type={$type}&userID={$user->id}&status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::emptyTip($lang->my->noTodo),
+    set::createTip($lang->todo->create),
+    set::createLink($canCreate ? createLink('todo', 'create') : ''),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::footer(array('checkbox', 'toolbar', hasPriv('todo', 'import2Today') && $importFuture ? jsRaw('window.generateHtml') : '', 'checkedInfo', 'flex', 'pager')),

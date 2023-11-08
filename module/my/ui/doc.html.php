@@ -37,6 +37,7 @@ dtable
     set::orderBy($orderBy),
     set::sortLink(createLink('my', $app->rawMethod, "mode=doc&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
+    set::emptyTip($lang->doc->noDoc)
 );
 
 render();

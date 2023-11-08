@@ -69,7 +69,8 @@ dtable
     set::orderBy($orderBy),
     set::sortLink(createLink('my', 'project', "status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer(array(array('html' => $footerHtml), 'flex', 'pager')),
-    set::footPager(usePager())
+    set::footPager(usePager()),
+    set::emptyTip($lang->project->empty)
 );
 
 render();

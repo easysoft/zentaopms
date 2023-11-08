@@ -84,6 +84,7 @@ dtable
     set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
+    set::emptyTip(sprintf($lang->my->noData, $lang->SRCommon))
 );
 
 render();

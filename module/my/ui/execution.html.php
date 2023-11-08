@@ -34,7 +34,8 @@ dtable
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
         'linkCreator' => createLink('my', 'execution', "type={$type}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPaga={recPerPage}&page={page}"),
-    )))
+    ))),
+    set::emptyTip($lang->execution->noExecutions)
 );
 
 render();
