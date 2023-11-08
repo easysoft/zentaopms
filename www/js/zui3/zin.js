@@ -1148,6 +1148,7 @@
                 options.partial = true;
                 if(!options.url) options.url = $modal.data('zui.Modal').options.url;
             }
+            if(options.closeModal) zui.Modal.query(typeof options.closeModal === 'string' ? options.closeModal : $modal).hide();
         }
         else
         {
