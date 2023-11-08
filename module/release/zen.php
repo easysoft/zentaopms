@@ -237,12 +237,9 @@ class releaseZen extends release
         }
         else
         {
-            $allBranchs = $this->loadModel('branch')->getPairs($release->product);
-            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main);
-            foreach(explode(',', trim($release->branch, ',')) as $branchID) $branches[$branchID] = zget($allBranchs, $branchID);
-
-            $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$release->productType]);
-            $this->config->product->search['params']['branch']['values'] = $branches;
+            $branches = $this->loadModel('branch')->getPairsByIdList(explode(',', trim($release->branch, ',')));
+            $this->config->product->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$release->productType]);
+            $this->config->product->search['params']['branch']['values'] = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
@@ -286,12 +283,9 @@ class releaseZen extends release
         }
         else
         {
-            $allBranchs = $this->loadModel('branch')->getPairs($release->product);
-            $branches   = array(BRANCH_MAIN => $this->lang->branch->main);
-            foreach(explode(',', trim($release->branch, ',')) as $branchID) $branches[$branchID] = zget($allBranchs, $branchID);
-
-            $this->config->bug->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$release->productType]);
-            $this->config->bug->search['params']['branch']['values'] = $branches;
+            $branches = $this->loadModel('branch')->getPairsByIdList(explode(',', trim($release->branch, ',')));
+            $this->config->bug->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$release->productType]);
+            $this->config->bug->search['params']['branch']['values'] = array('' => '', BRANCH_MAIN => $this->lang->branch->main) + $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
     }
