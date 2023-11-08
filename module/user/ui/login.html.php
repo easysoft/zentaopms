@@ -16,7 +16,7 @@ $resetLink     = (isset($this->config->resetPWDByMail) and $this->config->resetP
 $zentaoDirName = basename($this->app->getBasePath());
 $clientLang    = $app->getClientLang();
 $langItems     = array();
-foreach($config->langs as $key => $value) $langItems[] = array('text' => $value, 'data-on' => 'click', 'data-call' => 'switchLang', 'data-params' => $key);
+foreach($config->langs as $key => $value) $langItems[] = array('text' => $value, 'data-on' => 'click', 'data-call' => 'switchLang', 'data-params' => $key, 'active' => $key == $clientLang);
 
 $pluginTips      = '';
 $expiredPlugins  = implode('、', $plugins['expired']);
@@ -84,7 +84,7 @@ div
                 dropdown
                 (
                     setClass('actions btn'),
-                    to('trigger', btn($config->langs[$clientLang])),
+                    to('trigger', btn(html($config->langs[$clientLang]))),
                     to('title', 'Change Language/更换语言/更換語言'),
                     set::items($langItems),
                     set::menuClass('langsDropMenu'),
