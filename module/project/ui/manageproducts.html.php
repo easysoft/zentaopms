@@ -17,7 +17,7 @@ jsVar('branchGroups', $branchGroups);
 jsVar('BRANCH_MAIN', BRANCH_MAIN);
 jsVar('unLinkProductTip', $lang->project->unLinkProductTip);
 
-$noticeSwitch = ($project->stageBy == 'product' and count($linkedProducts) == 1 and empty($executions));
+$noticeSwitch = (!$project->division and count($linkedProducts) == 1 and empty($executions) and in_array($project->model, array('waterfall', 'waterfallplus')));
 jsVar('linkedProducts', array_keys($linkedProducts));
 jsVar('noticeSwitch', $noticeSwitch);
 jsVar('noticeDivsion', $lang->project->noticeDivsion);
