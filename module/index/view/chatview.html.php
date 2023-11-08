@@ -10,7 +10,7 @@
  */
 ?>
 <?php
-  $isXuanAvailable = isset($this->config->xuanxuan->turnon) && $this->config->xuanxuan->turnon && $this->loadModel('im')->getXxdStatus() == 'online';
+  $isXuanAvailable = isset($this->config->xuanxuan->turnon) && $this->config->xuanxuan->turnon && $this->loadModel('im') && $this->im->getXxdStatus() == 'online';
   $isAIConfigured  = $this->loadModel('ai')->isModelConfigured();
   $hasAIChatPriv   = commonModel::hasPriv('ai', 'chat');
   js::set('isXuanAvailable', $isXuanAvailable);
