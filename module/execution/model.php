@@ -3470,7 +3470,15 @@ class executionModel extends model
         {
             /* If executionBurnList > $itemCounts, split it, else call processBurnData() to pad burnList. */
             $begin             = helper::isZeroDate($executions[$executionID]->begin) ? $executions[$executionID]->openedDate : $executions[$executionID]->begin;
-            $executionBurnList = $this->processBurnData($executionBurnList, $this->config->execution->defaultBurnPeriod, $begin, $executions[$executionID]->end);
+            $end               = $executions[$executionID]->end;
+
+            /* Unset burn information that is greater than the execution end date. */
+            foreach($executionBurnList as $date => $burnInfo)
+            {
+                if($date > $end) unset($executionBurns[$date]);
+            }
+
+            $executionBurnList = $this->processBurnData($executionBurnList, $this->config->execution->defaultBurnPeriod, $begin, $end);
 
             /* Shorter names. */
             foreach($executionBurnList as $executionBurn)
