@@ -1039,7 +1039,7 @@ class gitlab extends control
             $failedIssues = array();
             foreach($executionList as $issueID => $executionID)
             {
-                if(empty($executionID) and $productList[$issueID] != 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->importIssueError, 'locate' => $this->server->http_referer));
+                if(empty($executionID) and $productList[$issueID]) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->importIssueError));
             }
 
             foreach($executionList as $issueID => $executionID)
@@ -1076,8 +1076,8 @@ class gitlab extends control
                 }
             }
 
-            if($failedIssues) return $this->send(array('result' => 'success', 'message' => $this->lang->gitlab->importIssueWarn, 'locate' => $this->server->http_referer));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
+            if($failedIssues) return $this->send(array('result' => 'success', 'message' => $this->lang->gitlab->importIssueWarn));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'reload' => true));
         }
 
         $savedIssueIDList = $this->dao->select('BID as issueID')->from(TABLE_RELATION)
@@ -1110,7 +1110,7 @@ class gitlab extends control
         $this->view->gitlabID        = $gitlabID;
         $this->view->gitlabProjectID = $projectID;
         $this->view->objectTypes     = $this->config->gitlab->objectTypes;
-        $this->view->gitlabIssues    = $gitlabIssues;
+        $this->view->gitlabIssues    = array_values($gitlabIssues);
 
         $this->display();
     }
@@ -1305,12 +1305,14 @@ class gitlab extends control
         if(!$productID) return $this->send(array('message' => array()));
 
         $executions = $this->loadModel('product')->getExecutionPairsByProduct($productID);
-        $options    = "<option value=''></option>";
-        foreach($executions as $index =>$execution)
+
+        $options = array();
+        $options[] = array('text' => '', 'value' => '');;
+        foreach($executions as $index => $execution)
         {
-            $options .= "<option title='{$execution}' value='{$index}' data-name='{$execution}'>{$execution}</option>";
+            $options[] = array('text' => $execution, 'value' => $index);
         }
-        return $this->send($options);
+        return print(json_encode($options));
     }
 
     /**
