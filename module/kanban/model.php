@@ -297,6 +297,7 @@ class kanbanModel extends model
                 ->setIF($parent > 0, 'parent', $parent)
                 ->setIF($order, 'order', $order)
                 ->setDefault('color', '#333')
+                ->setDefault('limit', -1)
                 ->trim('name')
                 ->remove('WIPCount,noLimit')
                 ->get();
