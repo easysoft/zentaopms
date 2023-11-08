@@ -42,7 +42,7 @@ class execution extends control
         if($this->app->upgrading || !isset($this->app->user)) return false;
 
         $mode = $this->app->tab == 'execution' ? 'multiple' : '';
-        if(defined('RUN_MODE') and RUN_MODE == 'api') $mode = '';
+        if((defined('RUN_MODE') and RUN_MODE == 'api') or $this->viewType == 'json') $mode = '';
 
         $this->executions = $this->execution->getPairs(0, 'all', "nocode,{$mode}");
         $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all', 'ajaxgetcopyprojectexecutions');
