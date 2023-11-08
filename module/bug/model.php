@@ -768,7 +768,7 @@ class bugModel extends model
     public function processBuildForBugs(array $bugs): array
     {
         $productIdList = array();
-        foreach($bugs as $bug) $productIdList[$bug->id] = $bug->product;
+        foreach($bugs as $bug) $productIdList[$bug->product] = $bug->product;
         $builds = $this->loadModel('build')->getBuildPairs(array_unique($productIdList), 'all', $params = '');
 
         /* Process the openedBuild and resolvedBuild fields. */

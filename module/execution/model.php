@@ -3475,7 +3475,7 @@ class executionModel extends model
             /* Unset burn information that is greater than the execution end date. */
             foreach($executionBurnList as $date => $burnInfo)
             {
-                if($date > $end) unset($executionBurns[$date]);
+                if($date > $end) unset($executionBurnList[$date]);
             }
 
             $executionBurnList = $this->processBurnData($executionBurnList, $this->config->execution->defaultBurnPeriod, $begin, $end);
