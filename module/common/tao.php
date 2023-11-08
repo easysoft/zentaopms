@@ -58,7 +58,7 @@ class commonTao extends commonModel
      */
     protected function queryListForPreAndNext(string $type, string $sql): array
     {
-        $objectIdListKey   = strtolower($type . $this->app->getModuleName() . $this->app->getMethodName()) . 'BrowseList';
+        $objectIdListKey   = $type . 'BrowseList';
         $existsObjectList  = $this->session->$objectIdListKey;
         $typeOnlyCondition = $type . 'OnlyCondition';
         if(empty($existsObjectList) or trim($existsObjectList['sql']) != trim($sql))
@@ -132,7 +132,7 @@ class commonTao extends commonModel
     {
         $queryCondition    = $type . 'QueryCondition';
         $typeOnlyCondition = $type . 'OnlyCondition';
-        $objectIdListKey   = strtolower($type . $this->app->getModuleName() . $this->app->getMethodName()) . 'BrowseList';
+        $objectIdListKey   = $type . 'BrowseList';
         $queryCondition    = $this->session->$queryCondition;
         $existsObjectList  = $this->session->$objectIdListKey;
         $table             = zget($this->config->objectTables, $type, '');
