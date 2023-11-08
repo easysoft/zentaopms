@@ -33,7 +33,7 @@ foreach($lang->misc->zentao as $label => $groupItems)
                 setID($groupItem),
                 set('href', $link),
                 set('target', '_blank'),
-                set('class', ($groupItem == 'zentaotrain' ? 'text-danger' : '')),
+                set('class', ($groupItem == 'zentaotrain' || $groupItem == 'bizversion' ? 'text-danger' : '')),
                 $groupLabel,
             )
         );
