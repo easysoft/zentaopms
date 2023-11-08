@@ -1191,7 +1191,7 @@ class programModel extends model
         $treeMenu = array();
         foreach($programList as $program)
         {
-            if(!$this->app->user->admin && strpos($mode, 'all') !== false && strpos(",{$this->app->user->view->programs},", ",{$program->id},") === false) continue;
+            if(!$this->app->user->admin && strpos($mode, 'all') === false && strpos(",{$this->app->user->view->programs},", ",{$program->id},") === false) continue;
 
             $programName = $showRoot ? '/' : '';
             $parentList  = explode(',', trim($program->path, ','));
