@@ -1446,9 +1446,8 @@ class kanban extends control
         $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'archived');
         $this->action->logHistory($actionID, $changes);
 
-        $card     = $this->kanban->getCardByID($cardID);
-        $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
+        $card = $this->kanban->getCardByID($cardID);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $card->region, array('items' => array(array('key' => 'group' . $card->group, 'data' => array('items' => array(array('id' => $cardID, 'name' => $cardID, 'deleted' => true))))))))));
     }
 
     /**
@@ -1510,8 +1509,7 @@ class kanban extends control
         if($card->fromType == '') $this->kanban->delete(TABLE_KANBANCARD, $cardID);
         if($card->fromType != '') $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
 
-        $callback = $this->kanban->getKanbanCallback($card->kanban, $card->region);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('name' => 'updateKanbanRegion', 'params' => array('region' . $card->region, array('items' => array(array('key' => 'group' . $card->group, 'data' => array('items' => array(array('id' => $cardID, 'name' => $cardID, 'deleted' => true))))))))));
     }
 
     /**
