@@ -1,0 +1,14 @@
+html, body, #main, .container {width: 100%; height: 100%;}
+#main {min-width: 100%; padding: 0;}
+.container {padding: 0!important;}
+#test-miniprogram {display: flex; flex-grow: 1;}
+textarea.field-type {height: 32px;}
+#test-miniprogram > div {background-color: #fafafa;}
+
+.content-debug-area,
+.prompt-design-area,
+.prompt-preview-area,
+.prompt-result-area {padding: 16px;}
+
+.table-form {table-layout: auto;}
+.table-form th {width: auto!important;}

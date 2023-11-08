@@ -24,14 +24,14 @@
         <tr>
           <th><?php echo $lang->ai->miniPrograms->category; ?></th>
           <td>
-            <?php echo html::select('category', $lang->ai->miniPrograms->categoryList, '', "class='form-control chosen' required"); ?>
+            <?php echo html::select('category', $lang->ai->miniPrograms->categoryList, $category, "class='form-control chosen' required"); ?>
           </td>
           <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->prompt->model; ?></th>
           <td>
-            <?php echo html::select('model', $lang->ai->miniPrograms->modelList, '', "class='form-control chosen' required"); ?>
+            <?php echo html::select('model', $lang->ai->miniPrograms->modelList, $model, "class='form-control chosen' required"); ?>
           </td>
           <td></td>
         </tr>

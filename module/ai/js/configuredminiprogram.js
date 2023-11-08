@@ -11,17 +11,14 @@ const words = new Map();
  * @param {Event} event
  * @returns {void}
  */
-function handleFieldTypeChange(event)
-{
+function handleFieldTypeChange(event) {
     const fieldType = $(event.target).prop('value');
-    if(fieldType === 'text' || fieldType === 'textarea')
-    {
+    if (fieldType === 'text' || fieldType === 'textarea') {
         $('input[name="placeholder"]').closest('tr').removeClass('hidden');
         $('.field-options').addClass('hidden');
         revertOptions();
     }
-    else
-    {
+    else {
         revertOptions();
         $('input[name="placeholder"]').closest('tr').addClass('hidden');
         $('.field-options').removeClass('hidden');
@@ -33,10 +30,8 @@ function handleFieldTypeChange(event)
  *
  * @returns {void}
  */
-function fixOptionsOrder()
-{
-    const forEach = function()
-    {
+function fixOptionsOrder() {
+    const forEach = function () {
         const index = $(this).children('span.input-group-addon').html().replace(/\d+$/, $(this).index() + 1);
         $(this).children('span.input-group-addon').html(index);
     }
@@ -49,8 +44,7 @@ function fixOptionsOrder()
  * @param {Event} event
  * @returns {void}
  */
-function handleRemoveOptionClick(event)
-{
+function handleRemoveOptionClick(event) {
     $(event.target).closest('.input-group').remove();
     fixOptionsOrder();
 }
@@ -61,8 +55,7 @@ function handleRemoveOptionClick(event)
  * @param {Event} event
  * @returns {void}
  */
-function handleAddOptionClick(event)
-{
+function handleAddOptionClick(event) {
     const template = document.getElementById('option-template');
     const $clone = $(document.importNode(template.content, true));
     $(event.target).closest('.options-container').append($clone);
@@ -74,8 +67,7 @@ function handleAddOptionClick(event)
  *
  * @returns {void}
  */
-function revertOptions()
-{
+function revertOptions() {
     const template = document.getElementById('option-template');
     const $optionsContainer = $('<div class="options-container"></div>');
     const $option = $(document.importNode(template.content, true));
@@ -98,8 +90,7 @@ function revertOptions()
  *
  * @returns {void}
  */
-function handleAddFieldClick()
-{
+function handleAddFieldClick() {
     const $modal = $('#add-field-modal');
     const $modalBody = $modal.find('.modal-body');
     $modalBody.empty();
@@ -116,23 +107,21 @@ function handleAddFieldClick()
  * @param {*} $fieldTr
  * @returns {[boolean, *]}
  */
-function getEditingField($fieldTr)
-{
+function getEditingField($fieldTr) {
     const name = $fieldTr.find('.field-name').html();
     const isTextType = !$fieldTr.find('.picker').length;
-    if(isTextType)
-    {
+    if (isTextType) {
         const type = $fieldTr.find('input.field-type').length ? 'text' : 'textarea';
         const placeholder = $fieldTr.find('input[type="text"]').prop('placeholder');
         const required = $fieldTr.find('input[type="text"]').closest('td').hasClass('required');
-        return [true, {name, type, placeholder, required}];
+        return [true, { name, type, placeholder, required }];
     }
 
     const $picker = $fieldTr.find('.picker');
     const type = $picker.hasClass('picker-multi') ? 'checkbox' : 'radio';
     const options = $picker.attr('data-options').split(',');
     const required = $picker.closest('td').hasClass('required');
-    return [false, {name, type, options, required}];
+    return [false, { name, type, options, required }];
 }
 
 /**
@@ -141,8 +130,7 @@ function getEditingField($fieldTr)
  * @param {Event} event
  * @returns {void}
  */
-function handleEditFieldClick(event)
-{
+function handleEditFieldClick(event) {
     const $fieldTr = $(event.target).closest('tr');
     $editingField = $fieldTr;
     const [isTextType, field] = getEditingField($fieldTr);
@@ -156,21 +144,18 @@ function handleEditFieldClick(event)
     $modalBody.find('input[name="field-name"]').prop('value', field.name);
     $modalBody.find('select[name="field-type"]').prop('value', field.type);
 
-    if(isTextType)
-    {
+    if (isTextType) {
         $modalBody.find('input[name="placeholder"]').prop('value', field.placeholder);
         $('input[name="placeholder"]').closest('tr').removeClass('hidden');
         $('.field-options').addClass('hidden');
     }
-    else
-    {
+    else {
         const $optionsWrapper = $modalBody.find('.field-options > td')
         $optionsWrapper.empty();
         const $optionsContainer = $(`<div class="options-container"></div>`)
         $optionsWrapper.append($optionsContainer);
 
-        field.options.forEach((option) =>
-        {
+        field.options.forEach((option) => {
             const template = document.getElementById('option-template');
             const $clone = $(document.importNode(template.content, true));
             $optionsContainer.append($clone);
@@ -182,13 +167,11 @@ function handleEditFieldClick(event)
         $('.field-options').removeClass('hidden');
     }
 
-    if(field.required)
-    {
+    if (field.required) {
         $modalBody.find('input[value="1"]').attr('checked', 'checked');
         $modalBody.find('input[value="0"]').removeAttr('checked');
     }
-    else
-    {
+    else {
         $modalBody.find('input[value="0"]').attr('checked', 'checked');
         $modalBody.find('input[value="1"]').removeAttr('checked');
     }
@@ -202,17 +185,16 @@ function handleEditFieldClick(event)
  * @param {Event} event
  * @returns {void}
  */
-function handleRemoveFieldClick(event)
-{
+function handleRemoveFieldClick(event) {
     const result = window.confirm(deleteTip);
-    if(!result) return;
+    if (!result) return;
 
     const $tr = $(event.target).closest('tr');
     const fieldID = $tr.attr('data-id');
     $tr.remove();
     $('.field-content').find(`[data-id="${fieldID}"]`).remove();
 
-    if($('.field-configuration').children().length === 0) $('.field-configuration').parent().addClass('hidden').prev().removeClass('hidden');
+    if ($('.field-configuration').children().length === 0) $('.field-configuration').parent().addClass('hidden').prev().removeClass('hidden');
     words.delete($tr.find('th').prop('title'));
     const innerHTML = $('#autocomplete-textarea').html();
     $('#autocomplete-textarea').html(innerHTML.replace(/<strong class="text-primary">/g, '').replace(/<\/strong>/g, ''));
@@ -234,26 +216,22 @@ const checkDuplicatedFieldName = (name) => Array.from(words.keys()).includes(nam
  * @param {HTMLFormElement} formData
  * @returns {boolean} result
  */
-function showFieldNameErrorIfExist($required, form)
-{
+function showFieldNameErrorIfExist($required, form) {
     const $form = $(form);
     const formData = new FormData(form);
     const name = formData.get('field-name');
     $form.find('.text-danger.help-text').remove();
     $form.find('.has-error').removeClass('has-error');
 
-    if(!name)
-    {
+    if (!name) {
         $required
             .addClass('has-error')
             .append(`<div class="text-danger help-text">${emptyWarning}</div>`);
         return true;
     }
 
-    if(checkDuplicatedFieldName(name))
-    {
-        if(!$editingField || $editingField.find('.field-name').html() !== name)
-        {
+    if (checkDuplicatedFieldName(name)) {
+        if (!$editingField || $editingField.find('.field-name').html() !== name) {
             $required
                 .addClass('has-error')
                 .append(`<div class="text-danger help-text">${duplicatedWarning}</div>`);
@@ -261,8 +239,7 @@ function showFieldNameErrorIfExist($required, form)
         }
     }
 
-    if(['radio', 'checkbox'].includes(formData.get('field-type')) && formData.getAll('option[]').filter(x => !!x).length === 0)
-    {
+    if (['radio', 'checkbox'].includes(formData.get('field-type')) && formData.getAll('option[]').filter(x => !!x).length === 0) {
         $form.find('.options-container').children().first().addClass('has-error').after(`<div class="text-danger help-text">${emptyOptionWarning}</div>`);
         return true;
     }
@@ -276,14 +253,13 @@ function showFieldNameErrorIfExist($required, form)
  *
  * @returns {void}
  */
-function handleSaveFieldClick()
-{
+function handleSaveFieldClick() {
     const form = document.querySelector('#add-field-modal form');
     const formData = new FormData(form);
     const name = formData.get('field-name');
     const $required = $('#add-field-modal input[name="field-name"]').closest('.required');
 
-    if(showFieldNameErrorIfExist($required, form)) return;
+    if (showFieldNameErrorIfExist($required, form)) return;
 
     $('#add-field-modal').modal('hide');
     const $fieldView = createFieldView(formData);
@@ -293,8 +269,8 @@ function handleSaveFieldClick()
 
     const $button = $('.field-configuration-main > div');
     const $table = $('.field-configuration-main > table');
-    if(!$button.hasClass('hidden')) $button.addClass('hidden');
-    if($table.hasClass('hidden')) $table.removeClass('hidden');
+    if (!$button.hasClass('hidden')) $button.addClass('hidden');
+    if ($table.hasClass('hidden')) $table.removeClass('hidden');
 
     const $fieldViewClone = createFieldView(formData);
     $fieldViewClone.attr('data-id', $fieldView.attr('data-id'));
@@ -314,15 +290,14 @@ function handleSaveFieldClick()
  *
  * @returns {void}
  */
-function handleSaveEditedFieldClick()
-{
+function handleSaveEditedFieldClick() {
     const oldName = $editingField.find('.field-name').html();
     const form = document.querySelector('#edit-field-modal form');
     const formData = new FormData(form);
     const name = formData.get('field-name');
     const $required = $('#edit-field-modal input[name="field-name"]').closest('.required');
 
-    if(showFieldNameErrorIfExist($required, form)) return;
+    if (showFieldNameErrorIfExist($required, form)) return;
 
     $('#edit-field-modal').modal('hide');
     const $fieldView = createFieldView(formData);
@@ -350,8 +325,7 @@ function handleSaveEditedFieldClick()
  * @param {FormData} formData
  * @returns {*}
  */
-function createFieldView(formData)
-{
+function createFieldView(formData) {
     const $tr = $(`<tr class="sortable-item"></tr>`);
     $tr.append(createFieldNameView(formData));
     $tr.append(createFieldTypeView(formData));
@@ -365,8 +339,7 @@ function createFieldView(formData)
  * @param {FormData} formData
  * @returns {*}
  */
-function createFieldNameView(formData)
-{
+function createFieldNameView(formData) {
     const name = formData.get('field-name');
     return $(`<th class="drag-area" title="${name}">
         <div>
@@ -382,21 +355,18 @@ function createFieldNameView(formData)
  * @param {FormData} formData
  * @returns {*}
  */
-function createFieldTypeView(formData)
-{
+function createFieldTypeView(formData) {
     const type = formData.get('field-type');
     const required = formData.get('required') === '1';
     const $td = $(`<td data-type="${type}"></td>`);
-    if(required) $td.addClass('required');
-    if(type === 'text')
-    {
+    if (required) $td.addClass('required');
+    if (type === 'text') {
         const placeholder = formData.get('placeholder') || pleaseInput;
         $td.append(`<input type="text" class="form-control field-type" placeholder="${placeholder}" readonly />`);
         return $td;
     }
 
-    if(type === 'textarea')
-    {
+    if (type === 'textarea') {
         const placeholder = formData.get('placeholder') || pleaseInput;
         $td.append(`<textarea class="form-control field-type" placeholder="${placeholder}" readonly />`);
         return $td;
@@ -404,8 +374,8 @@ function createFieldTypeView(formData)
 
     const options = formData.getAll('option[]');
     const $picker = $(`<div class="picker"><input type="text" class="field-type" /></div>`);
-    if(type === 'checkbox') $picker.attr('data-multi', 'true');
-    $picker.picker({list: options.map(option => ({text: option, value: option}))});
+    if (type === 'checkbox') $picker.attr('data-multi', 'true');
+    $picker.picker({ list: options.map(option => ({ text: option, value: option })) });
     $picker.attr('data-options', options.join(','));
     $td.append($picker);
     return $td;
@@ -416,8 +386,7 @@ function createFieldTypeView(formData)
  *
  * @returns {*}
  */
-function createFieldButtons()
-{
+function createFieldButtons() {
     return $(`<td style="width: 100px;">
         <button type="button" class="btn btn-link btn-sm btn-icon" onclick="handleAddFieldClick()">
             <i class="icon icon-plus"></i>
@@ -437,10 +406,9 @@ function createFieldButtons()
  * @param {string} content prompt content.
  * @returns {string} result.
  */
-function formatContent(content)
-{
-    if(words.size === 0) return content;
-    Array.from(words.keys()).forEach(word => {content = content.replace(new RegExp(`\\s<${word}>\\s`, 'g'), `&nbsp;<strong class="text-primary">&lt;${word}&gt;</strong>&nbsp;`);});
+function formatContent(content) {
+    if (words.size === 0) return content;
+    Array.from(words.keys()).forEach(word => { content = content.replace(new RegExp(`\\s<${word}>\\s`, 'g'), `&nbsp;<strong class="text-primary">&lt;${word}&gt;</strong>&nbsp;`); });
     return content;
 }
 
@@ -449,27 +417,24 @@ function formatContent(content)
  *
  * @returns {string} result
  */
-function updatePromptPreview()
-{
+function updatePromptPreview() {
     const innerText = $('#autocomplete-textarea').text();
     let innerHTML = formatContent(innerText);
     $('#autocomplete-textarea').html(innerHTML);
-    if(!innerHTML || words.size === 0)
-    {
+    if (!innerHTML || words.size === 0) {
         $('.prompt-preview-area .preview-container').html(innerHTML);
         return;
     }
 
     const regex = /<strong\sclass="text-primary">&lt;([^>]+)&gt;<\/strong>&nbsp;/g;
     const matches = innerHTML.match(regex);
-    if(!matches) return;
+    if (!matches) return;
 
-    matches.forEach((match) =>
-    {
+    matches.forEach((match) => {
         const result = match.match(/<strong\sclass="text-primary">&lt;([^>]+)&gt;<\/strong>&nbsp;/)[1];
         const fieldIndex = words.get(result);
         const fieldValue = $(`.field-content [data-id="${fieldIndex}"] .field-type`).prop('value');
-        if(!fieldValue) return;
+        if (!fieldValue) return;
         innerHTML = innerHTML.replace(new RegExp(`&lt;${result}&gt;`, 'g'), fieldValue);
     });
 
@@ -479,18 +444,16 @@ function updatePromptPreview()
     $('.prompt-preview-area .preview-container').html(innerHTML);
 }
 
-function getRequiredFields()
-{
+function getRequiredFields() {
     const fields = [];
-    $('.field-content').children().each(function()
-    {
+    $('.field-content').children().each(function () {
         const field = {};
         field.name = $(this).find('.field-name').html();
         field.type = $(this).find('td').attr('data-type');
         field.required = $(this).find('td').hasClass('required') ? '1' : '0'
-        field.appid = appid;
-        if(['text', 'textarea'].includes(field.type)) field.placeholder = $(this).find('.field-type').prop('placeholder');
-        else                                          field.options = $(this).find('.picker').attr('data-options').split(',');
+        field.appID = appID;
+        if (['text', 'textarea'].includes(field.type)) field.placeholder = $(this).find('.field-type').prop('placeholder');
+        else field.options = $(this).find('.picker').attr('data-options').split(',');
         fields.push(field);
     });
     const prompt = $('#autocomplete-textarea').html();
@@ -503,16 +466,13 @@ function getRequiredFields()
  * @param {'0'|'1'} toPublish
  * @returns {void}
  */
-function saveMiniProgram(toPublish)
-{
+function saveMiniProgram(toPublish) {
     const prompt = $('#autocomplete-textarea').html();
-    if(!prompt)
-    {
+    if (!prompt) {
         alert(emptyPrompterTip);
         return;
     }
-    if(toPublish === '1')
-    {
+    if (toPublish === '1') {
         const $modal = $('#publish-confirm-modal');
         $modal.modal('show', 'fit');
         return;
@@ -520,22 +480,18 @@ function saveMiniProgram(toPublish)
     postMiniProgramData('0', console.log);
 }
 
-$('#publish-confirm-modal .btn-primary').on('click', function()
-{
-    postMiniProgramData('1', () => {window.location.href = createLink('ai', 'miniPrograms');});
+$('#publish-confirm-modal .btn-primary').on('click', function () {
+    postMiniProgramData('1', () => { window.location.href = createLink('ai', 'miniPrograms'); });
 });
 
-function postMiniProgramData(toPublish, callback)
-{
+function postMiniProgramData(toPublish, callback) {
     const [fields, prompt] = getRequiredFields();
-    $.post(createLink('ai', 'configuredMiniProgram', `appID=${appid}`), {fields, prompt, toPublish}).done(callback);
+    $.post(createLink('ai', 'configuredMiniProgram', `appID=${appID}`), { fields, prompt, toPublish }).done(callback);
 }
 
-function backToList()
-{
+function backToList() {
     const [prompt] = getRequiredFields();
-    if(prompt)
-    {
+    if (prompt) {
         $modal = $('#back-to-list-modal');
         $modal.modal('show', 'fit');
         return;
@@ -543,51 +499,91 @@ function backToList()
     window.location.href = createLink('ai', 'miniPrograms');
 }
 
-function backWithoutSave()
-{
+function backWithoutSave() {
     $modal = $('#back-to-list-modal');
     $modal.modal('hide');
 }
 
-function backWithSave()
-{
+function backWithSave() {
     $modal = $('#back-to-list-modal');
     $modal.modal('hide');
     saveMiniProgram('0');
 }
 
-$(function()
-{
+$(function () {
     $('#sortable-list').sortable(
-    {
-        selector: '.sortable-item',
-        trigger: '.drag-area',
-        finish: function(e)
         {
-            const $draggedElm = e.element;
-            const $fieldContent = $('.field-content');
-            const selector = `[data-id="${$draggedElm.attr('data-id')}"]`;
-            const prevSelector = `[data-id="${$draggedElm.prev().attr('data-id')}"]`;
-            const index = $draggedElm.index();
-            const $draggedElmContent = $fieldContent.find(selector);
-            if(index === 0) $fieldContent.prepend($draggedElmContent);
-            else            $draggedElmContent.insertAfter($fieldContent.find(prevSelector));
-        },
-    });
+            selector: '.sortable-item',
+            trigger: '.drag-area',
+            finish: function (e) {
+                const $draggedElm = e.element;
+                const $fieldContent = $('.field-content');
+                const selector = `[data-id="${$draggedElm.attr('data-id')}"]`;
+                const prevSelector = `[data-id="${$draggedElm.prev().attr('data-id')}"]`;
+                const index = $draggedElm.index();
+                const $draggedElmContent = $fieldContent.find(selector);
+                if (index === 0) $fieldContent.prepend($draggedElmContent);
+                else $draggedElmContent.insertAfter($fieldContent.find(prevSelector));
+            },
+        });
     $('#autocomplete-textarea').textcomplete(
-    [{
-        match: /(\s+)(\<\S*)$/,
-        search(term, callback)
-        {
-            callback(Array.from(words.keys()).filter(word => `<${word}>`.indexOf(term) === 0));
-        },
-        replace(word)
-        {
-            word = `<strong class="text-primary">&lt;${word}&gt;</strong>`;
-            return `$1${word} `;
-        }
-    }]);
+        [{
+            match: /(\s+)(\<\S*)$/,
+            search(term, callback) {
+                callback(Array.from(words.keys()).filter(word => `<${word}>`.indexOf(term) === 0));
+            },
+            replace(word) {
+                word = `<strong class="text-primary">&lt;${word}&gt;</strong>`;
+                return `$1${word} `;
+            }
+        }]);
 
     $('#autocomplete-textarea').on('blur', updatePromptPreview);
+
+    if(Array.isArray(currentFields))
+    {
+        currentFields.forEach(field =>
+        {
+            const formData = new FormData();
+            formData.set('field-name', field.name);
+            formData.set('field-required', field.required);
+            formData.set('field-type', field.type);
+            formData.set('placeholder', field.placeholder);
+
+            if(typeof field.options === 'string' && field.options.length > 0)
+            {
+                field.options = field.options.split(',');
+                field.options.forEach(option => formData.append('option[]', option));
+            }
+
+            const $fieldView = createFieldView(formData);
+            $fieldView.attr('data-id', `field-${++fieldIndex}`);
+            $('#sortable-list').append($fieldView);
+            $fieldView.find('.picker').addClass('disabled');
+
+            const $button = $('.field-configuration-main > div');
+            const $table = $('.field-configuration-main > table');
+            if (!$button.hasClass('hidden')) $button.addClass('hidden');
+            if ($table.hasClass('hidden')) $table.removeClass('hidden');
+
+            const $fieldViewClone = createFieldView(formData);
+            $fieldViewClone.attr('data-id', $fieldView.attr('data-id'));
+            $fieldViewClone.children().last().remove();
+            $fieldViewClone.find('.drag-area').removeClass('darg-area');
+            $fieldViewClone.removeClass('srotable-item');
+            $fieldViewClone.find('.icon-move').remove();
+            $fieldViewClone.find('[readonly]').removeAttr('readonly');
+            $fieldViewClone.find('.field-type').on('change', updatePromptPreview);
+            $('.field-content').append($fieldViewClone);
+
+            words.set(field.name, $fieldView.attr('data-id'));
+        });
+    }
+
+    if(currentPrompt)
+    {
+        $('#autocomplete-textarea').html(currentPrompt);
+        updatePromptPreview();
+    }
 });
 

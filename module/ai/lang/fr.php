@@ -101,6 +101,7 @@ $lang->ai->prompts->action->edit            = 'Edit';
 $lang->ai->prompts->action->publish         = 'Publish';
 $lang->ai->prompts->action->unpublish       = 'Unpublish';
 $lang->ai->prompts->action->delete          = 'Delete';
+$lang->ai->prompts->action->disable         = 'Disable';
 $lang->ai->prompts->action->deleteConfirm   = 'Deleted prompts will be no longer available. Are you sure you want to proceed?';
 $lang->ai->prompts->action->publishSuccess  = 'Publish Success';
 

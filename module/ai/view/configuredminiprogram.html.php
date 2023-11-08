@@ -18,9 +18,11 @@ js::set('deleteTip', $lang->ai->miniPrograms->deleteTip);
 js::set('emptyWarning', $lang->ai->miniPrograms->field->emptyNameWarning);
 js::set('duplicatedWarning', $lang->ai->miniPrograms->field->duplicatedNameWarning);
 js::set('emptyOptionWarning', $lang->ai->miniPrograms->field->emptyOptionWarning);
-js::set('appid', $appid);
+js::set('appID', $appID);
 js::set('publishConfirm', $lang->ai->miniPrograms->publishConfirm);
 js::set('emptyPrompterTip', $lang->ai->miniPrograms->emptyPrompterTip);
+js::set('currentFields', $currentFields);
+js::set('currentPrompt', $currentPrompt);
 ?>
 
 <template id="option-template">
@@ -168,7 +170,7 @@ js::set('emptyPrompterTip', $lang->ai->miniPrograms->emptyPrompterTip);
       <div class="content-debug-area" style="min-height: 50%;">
         <div class="area-title">
           <strong><?php echo $lang->ai->miniPrograms->field->contentDebugging; ?></strong>
-          <i title="帮助" class="icon icon-help text-warning"></i>
+          <i title="<?= $lang->help; ?>" class="icon icon-help text-warning"></i>
           <span class="text-muted"><?php echo $lang->ai->miniPrograms->field->contentDebuggingTip; ?></span>
         </div>
         <table class="table table-form">
@@ -178,7 +180,7 @@ js::set('emptyPrompterTip', $lang->ai->miniPrograms->emptyPrompterTip);
       <div class="prompt-design-area" style="height: 50%; position: relative; padding-top: 0;">
         <div class="area-title">
           <strong><?php echo $lang->ai->miniPrograms->field->prompterDesign; ?></strong>
-          <i title="帮助" class="icon icon-help text-warning"></i>
+          <i title="<?= $lang->help; ?>" class="icon icon-help text-warning"></i>
           <span class="text-muted"><?php echo $lang->ai->miniPrograms->field->prompterDesignTip; ?></span>
         </div>
         <div class="form-control" id="autocomplete-textarea" contenteditable="true" style="overflow-y: auto; position: absolute; top: 32px; left: 24px; right: 24px; bottom: 24px; height: auto; width: auto;"></div>
@@ -222,7 +224,7 @@ js::set('emptyPrompterTip', $lang->ai->miniPrograms->emptyPrompterTip);
 </div>
 <footer style="display: flex; justify-content: center; align-items: center; height: 56px; background: #fff; border-top: 1px solid #eff1f7; position: fixed; bottom: 0; left: 20px; right: 20px; gap: 24px;">
   <a onclick="backToList()" class="btn btn-wide"><?php echo $lang->ai->miniPrograms->backToListPage; ?></a>
-  <a href="<?php echo $this->createLink('ai', 'createMiniProgram'); ?>" class="btn btn-wide"><?php echo $lang->ai->miniPrograms->lastStep; ?></a>
+  <a href="<?php echo $this->createLink('ai', 'createMiniProgram', "appID=$appID"); ?>" class="btn btn-wide"><?php echo $lang->ai->miniPrograms->lastStep; ?></a>
   <a class="btn btn-wide btn-secondary" onclick="saveMiniProgram('0')"><?php echo $lang->save; ?></a>
   <a class="btn btn-wide btn-primary" onclick="saveMiniProgram('1')"><?php echo $lang->ai->prompts->action->publish; ?></a>
 </footer>
