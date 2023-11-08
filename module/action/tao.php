@@ -568,7 +568,7 @@ class actionTao extends actionModel
     protected function processLinkStoryAndBugActionExtra(object $action, string $module, string $method): void
     {
         $extra = '';
-        foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv($module, $method) ? html::a(helper::createLink($module, $method, "{$module}ID={$id}"), "#{$id} ") . ', ' : "#{$id}, ";
+        foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv($module, $method) ? html::a(helper::createLink($module, $method, "{$module}ID={$id}"), "#{$id} ", '', "data-size='lg' data-load='modal'") . ', ' : "#{$id}, ";
         $action->extra = trim(trim($extra), ',');
     }
 
