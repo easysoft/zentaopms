@@ -65,7 +65,7 @@ class aiModel extends model
         $modelConfig = new stdclass();
         $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
         foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
-        return !empty($modelConfig->key);
+        return $modelConfig->status == 'on' && !empty($modelConfig->key);
     }
 
     /**
