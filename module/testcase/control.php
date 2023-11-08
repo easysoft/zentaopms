@@ -1762,12 +1762,12 @@ class testcase extends control
         $folder = $this->session->xmindImport;
         if($this->session->xmindImportType == 'xml')
         {
-            $xmlPath = $this->session->xmindImport . 'content.xml';
+            $xmlPath = $this->session->xmindImport . '/content.xml';
             $results = $this->testcase->getXmindImport($xmlPath);
         }
         else
         {
-            $jsonPath = $this->session->xmindImport . 'content.json';
+            $jsonPath = $this->session->xmindImport . '/content.json';
             $results  = file_get_contents($jsonPath);
         }
         $results = json_decode($results, true);
