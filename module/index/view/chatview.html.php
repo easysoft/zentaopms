@@ -120,5 +120,13 @@
 
     /* Switch to xuan chat view if AI is unavailable. */
     if(isXuanAvailable && !(isAIConfigured && hasAIChatPriv)) $('#chat-switch .chat-switch-item[data-value="chat"]').trigger('click');
+
+    /* Handle backdrop click, hide chat view. */
+    $(document).on('click', function(e)
+    {
+      if($('#chat-container').is(':hidden')) return;
+      if($(e.target).closest('#chat-switch,#ai-chat-view,#xx-embed,#chatBtn').length) return;
+      $('#chat-container').hide();
+    });
   });
 </script>
