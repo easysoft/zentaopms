@@ -347,9 +347,14 @@
 
     function toggleLoading(target, isLoading)
     {
-        const $target = $(target);
+        var $target = $(target);
+
+        $loginPanel = $target.find('#loginPanel');
+        if($loginPanel.length > 0) $target = $loginPanel;
+
         const position = $target.css('position');
         if(!['relative', 'absolute', 'fixed'].includes(position)) $target.css('position', 'relative');
+
         if(!$target.hasClass('load-indicator')) $target.addClass('load-indicator');
         if(isLoading === undefined) isLoading = !$target.hasClass('loading');
         $target.toggleClass('loading', isLoading);
