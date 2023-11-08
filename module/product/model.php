@@ -1490,7 +1490,7 @@ class productModel extends model
      */
     public function formatDataForList(object $product, array $users): object
     {
-        $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
+        $totalStories = $product->stories['closed'] + $product->stories['unclosed'];
         $totalBugs    = $product->unResolved + $product->fixedBugs;
 
         $item = new stdClass();
