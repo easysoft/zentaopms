@@ -30,7 +30,7 @@ if($task->mode == 'linear')
 }
 elseif($canRecordEffort)
 {
-    $assignedToControl = select(
+    $assignedToControl = picker(
         set::name('assignedTo'),
         set::value($assignedTo),
         set::items($members),
@@ -74,23 +74,25 @@ else
         formGroup
         (
             set::className($task->mode == 'multi' ? 'hidden' : ''),
-            set::width('1/3'),
+            set::width('1/2'),
             set::label($lang->task->assignedTo),
             $assignedToControl,
         ),
         formGroup
         (
-            set::width('1/3'),
+            set::width('1/2'),
             set::label($lang->task->realStarted),
-            set::name('realStarted'),
-            set::control('datetime-local'),
-            set::value(helper::isZeroDate($task->realStarted) ? helper::now() : $task->realStarted)
+            datetimePicker
+            (
+                set::name('realStarted'),
+                set::value(helper::isZeroDate($task->realStarted) ? helper::now() : $task->realStarted)
+            )
         ),
         formRow
         (
             formGroup
             (
-                set::width('1/3'),
+                set::width('1/2'),
                 set::label($task->mode == 'linear' ? $lang->task->myConsumed : $lang->task->consumed),
                 inputControl
                 (
@@ -105,7 +107,7 @@ else
             ),
             formGroup
             (
-                set::width('1/3'),
+                set::width('1/2'),
                 set::label($lang->task->left),
                 inputControl
                 (
