@@ -400,6 +400,8 @@ class installModel extends model
             $dbFile = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
             $tables = explode(';', file_get_contents($dbFile));
 
+            if($this->config->db->driver == 'dm') $tables = array_merge($tables, explode(';', file_get_contents($this->app->getAppRoot() . 'db' . DS . 'dm.sql'));
+
             foreach($tables as $table)
             {
                 $table = trim($table);
