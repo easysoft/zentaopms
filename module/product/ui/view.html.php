@@ -174,7 +174,7 @@ div
                 div
                 (
                     setClass('flex mt-4'),
-                    $config->systemMode == 'ALM' && $product->program ? div
+                    in_array($this->config->systemMode, array('ALM', 'PLM')) && $product->program ? div
                     (
                         setClass('clip w-1/2'),
                         set::title($lang->product->program),

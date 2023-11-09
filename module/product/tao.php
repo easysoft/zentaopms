@@ -587,7 +587,7 @@ class productTao extends productModel
             ->andWhere('t2.deleted')->eq('0')
             ->fetchGroup('product', 'project');
 
-        if($this->config->systemMode != 'ALM' || $this->config->product->showAllProjects) return $projectProductList;
+        if(!in_array($this->config->systemMode, array('ALM', 'PLM')) || $this->config->product->showAllProjects) return $projectProductList;
 
         /* ALM mode and don't show all projects. */
         foreach($projectProductList as $productID => $projects)

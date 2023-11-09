@@ -46,7 +46,7 @@ foreach($products as $programID => $programProducts)
     foreach($programProducts as $index => $product)
     {
         $group = $getProductGroup($product);
-        $name  = ($config->systemMode == 'ALM' and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
+        $name  = (in_array($this->config->systemMode, array('ALM', 'PLM')) and $product->line) ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
 
         $item = array();
         $item['id']     = $product->id;

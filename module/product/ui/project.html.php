@@ -99,7 +99,7 @@ foreach($config->productProject->showFields as $showField)
 $cols['id']['checkbox'] = false;
 $cols['PM']['link']     = helper::createLink('user', 'profile', 'userID={PMUserID}', '', true);
 $cols['PM']['type']     = 'html';
-if($config->systemMode != 'ALM') unset($cols['program']);
+if(!in_array($this->config->systemMode, array('ALM', 'PLM'))) unset($cols['program']);
 if(!str_contains('all,undone', $status)) unset($cols['status']);
 
 /* Set extend fields for workflow. */

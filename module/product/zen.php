@@ -573,7 +573,7 @@ class productZen extends product
         $authPrograms   = array();
         $unauthPrograms = array();
         $lines          = array();
-        if($this->config->systemMode == 'ALM')
+        if(in_array($this->config->systemMode, array('ALM', 'PLM')))
         {
             $authPrograms   = $this->loadModel('program')->getTopPairs();
             $unauthPrograms = $this->getUnauthProgramsOfProducts($products, $authPrograms);
@@ -682,7 +682,7 @@ class productZen extends product
         foreach($data->modules as $id => $name)
         {
             if(empty($name)) continue;
-            if($this->config->systemMode == 'ALM' and empty($data->programs[$id]))
+            if(in_array($this->config->systemMode, array('ALM', 'PLM')) and empty($data->programs[$id]))
             {
                 dao::$errors["programs[{$id}]"] = $this->lang->product->programEmpty;
                 return false;
@@ -1354,7 +1354,7 @@ class productZen extends product
      */
     protected function canChangeProgram(object $lines): bool
     {
-        if($this->config->systemMode != 'ALM') return true;
+        if(!in_array($this->config->systemMode, array('ALM', 'PLM'))) return true;
 
         /* 获取修改项目集的产品线。 */
         /* Get the product lines which program change. */

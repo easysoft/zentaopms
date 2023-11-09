@@ -19,11 +19,11 @@ $formRowList[] = formRow
         setClass('flex flex-1'),
         formGroup
         (
-            set::width($config->systemMode == 'ALM' ? '1/2' : 'full'),
+            set::width(in_array($this->config->systemMode, array('ALM', 'PLM')) ? '1/2' : 'full'),
             set::label($lang->product->lineName),
             set::labelClass('font-bold'),
         ),
-        $config->systemMode == 'ALM' ? formGroup
+        in_array($this->config->systemMode, array('ALM', 'PLM')) ? formGroup
         (
             set::width('1/2'),
             set::className('ml-4'),
@@ -63,12 +63,12 @@ foreach($lines as $line)
             setClass('flex flex-1'),
             formGroup
             (
-                set::width($config->systemMode == 'ALM' ? '1/2' : 'full'),
+                set::width(in_array($this->config->systemMode, array('ALM', 'PLM')) ? '1/2' : 'full'),
                 set::control(array('type' => 'text', 'id' => "modules_id{$line->id}")),
                 set::name("modules[id$line->id]"),
                 set::value($line->name),
             ),
-            $config->systemMode == 'ALM' ? formGroup
+            in_array($this->config->systemMode, array('ALM', 'PLM')) ? formGroup
             (
                 set::width('1/2'),
                 set::className('ml-4'),
@@ -92,11 +92,11 @@ for($i = 0; $i <= 5; $i ++)
             setClass('flex flex-1'),
             formGroup
             (
-                set::width($config->systemMode == 'ALM' ? '1/2' : 'full'),
+                set::width(in_array($this->config->systemMode, array('ALM', 'PLM')) ? '1/2' : 'full'),
                 set::control(array('type' => 'text', 'id' => "modules_{$i}")),
                 set::name("modules[$i]"),
             ),
-            $config->systemMode == 'ALM' ? formGroup
+            in_array($this->config->systemMode, array('ALM', 'PLM')) ? formGroup
             (
                 set::width('1/2'),
                 set::className('ml-4'),

@@ -246,7 +246,7 @@ class productModel extends model
             if(array_key_exists($product->line, $lines))
             {
                 $lineName = $lines[$product->line];
-                if($this->config->systemMode == 'ALM') $product->name = $lineName . '/' . $product->name;
+                if(in_array($this->config->systemMode, array('ALM', 'PLM'))) $product->name = $lineName . '/' . $product->name;
                 $productsWithLine[] = $product;
             }
             else
@@ -442,7 +442,7 @@ class productModel extends model
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
-            if($this->config->systemMode == 'ALM') $programID = (int)zget($product, 'program', $oldProduct->program);
+            if(in_array($this->config->systemMode, array('ALM', 'PLM'))) $programID = (int)zget($product, 'program', $oldProduct->program);
 
             $result = $this->productTao->doUpdate($product, $productID, $programID);
             if(!$result) return array('result' => 'fail', 'message' => 'product#' . $productID . dao::getError(true));
@@ -767,7 +767,7 @@ class productModel extends model
         $this->config->product->all->search['queryID']   = $queryID;
         $this->config->product->all->search['actionURL'] = $actionURL;
 
-        if($this->config->systemMode == 'ALM')
+        if(in_array($this->config->systemMode, array('ALM', 'PLM')))
         {
             $this->config->product->all->search['params']['program']['values'] = $this->loadModel('program')->getTopPairs('noclosed');
             $this->config->product->all->search['params']['line']['values']    = $this->getLinePairs();

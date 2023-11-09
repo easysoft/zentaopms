@@ -102,7 +102,7 @@ toolbar
         toggle::modal(array('url' => createLink('product', 'export', "programID=$programID&status=$browseType&orderBy=$orderBy&param=$param"))),
         $lang->export
     ),
-    $config->systemMode == 'ALM' ? btn
+    in_array($this->config->systemMode, array('ALM', 'PLM')) ? btn
     (
         set::className('ghost text-primary'),
         set::icon('edit'),
