@@ -492,7 +492,7 @@ function getRequiredFields()
         else field.options = $(this).find('.picker').attr('data-options').split(',');
         fields.push(field);
     });
-    const prompt = $('#autocomplete-textarea').html();
+    const prompt = $('#autocomplete-textarea').text();
     return [fields, prompt];
 }
 
@@ -504,19 +504,13 @@ function getRequiredFields()
  */
 function saveMiniProgram(toPublish)
 {
-    const prompt = $('#autocomplete-textarea').html();
-    if(!prompt)
-    {
-        alert(emptyPrompterTip);
-        return;
-    }
     if(toPublish === '1')
     {
         const $modal = $('#publish-confirm-modal');
         $modal.modal('show', 'fit');
         return;
     }
-    postMiniProgramData('0', console.log);
+    postMiniProgramData('0', () => location.reload());
 }
 
 $('#publish-confirm-modal .btn-primary').on('click', function ()
@@ -532,8 +526,9 @@ function postMiniProgramData(toPublish, callback)
 
 function backToList()
 {
-    const [prompt] = getRequiredFields();
-    if(prompt)
+    const [, prompt] = getRequiredFields();
+    console.log(prompt);
+    if(prompt && prompt.trim())
     {
         $modal = $('#back-to-list-modal');
         $modal.modal('show', 'fit');
@@ -553,6 +548,20 @@ function backWithSave()
     $modal = $('#back-to-list-modal');
     $modal.modal('hide');
     saveMiniProgram('0');
+}
+
+function updateButtonStatus()
+{
+    if($('#autocomplete-textarea').text().trim())
+    {
+        $('.footer > a.btn-primary').removeAttr('disabled');
+        $('.footer > a.btn-secondary').removeAttr('disabled');
+    }
+    else
+    {
+        $('.footer > a.btn-primary').attr('disabled', 'disabled');
+        $('.footer > a.btn-secondary').attr('disabled', 'disabled');
+    }
 }
 
 $(function ()
@@ -587,52 +596,65 @@ $(function ()
             }
         }]);
 
-    $('#autocomplete-textarea').on('blur', updatePromptPreview);
-
-    if(Array.isArray(currentFields))
+    $('#autocomplete-textarea').on('blur', () =>
     {
-        currentFields.forEach(field =>
-        {
-            const formData = new FormData();
-            formData.set('field-name', field.name);
-            formData.set('field-required', field.required);
-            formData.set('field-type', field.type);
-            formData.set('placeholder', field.placeholder);
-
-            if(typeof field.options === 'string' && field.options.length > 0)
-            {
-                field.options = field.options.split(',');
-                field.options.forEach(option => formData.append('option[]', option));
-            }
-
-            const $fieldView = createFieldView(formData);
-            $fieldView.attr('data-id', `field-${++fieldIndex}`);
-            $('#sortable-list').append($fieldView);
-            $fieldView.find('.picker').addClass('disabled');
-
-            const $button = $('.field-configuration-main > div');
-            const $table = $('.field-configuration-main > table');
-            if(!$button.hasClass('hidden')) $button.addClass('hidden');
-            if($table.hasClass('hidden')) $table.removeClass('hidden');
-
-            const $fieldViewClone = createFieldView(formData);
-            $fieldViewClone.attr('data-id', $fieldView.attr('data-id'));
-            $fieldViewClone.children().last().remove();
-            $fieldViewClone.find('.drag-area').removeClass('darg-area');
-            $fieldViewClone.removeClass('srotable-item');
-            $fieldViewClone.find('.icon-move').remove();
-            $fieldViewClone.find('[readonly]').removeAttr('readonly');
-            $fieldViewClone.find('.field-type').on('change', updatePromptPreview);
-            $('.field-content').append($fieldViewClone);
-
-            words.set(field.name, $fieldView.attr('data-id'));
-        });
-    }
-
-    if(currentPrompt)
-    {
-        $('#autocomplete-textarea').html(currentPrompt);
         updatePromptPreview();
+        updateButtonStatus();
+    });
+
+    if(!currentPrompt)
+    {
+        currentFields = defaultFields;
+        console.log(defaultFields);
+        currentPrompt = currentFields.pop();
+        currentFields = currentFields.map(name =>
+        ({
+            name,
+            required: '0',
+            type: 'text',
+            placeholder: '',
+        }));
     }
+
+    currentFields.forEach(field =>
+    {
+        const formData = new FormData();
+        formData.set('field-name', field.name);
+        formData.set('field-required', field.required);
+        formData.set('field-type', field.type);
+        formData.set('placeholder', field.placeholder);
+
+        if(typeof field.options === 'string' && field.options.length > 0)
+        {
+            field.options = field.options.split(',');
+            field.options.forEach(option => formData.append('option[]', option));
+        }
+
+        const $fieldView = createFieldView(formData);
+        $fieldView.attr('data-id', `field-${++fieldIndex}`);
+        $('#sortable-list').append($fieldView);
+        $fieldView.find('.picker').addClass('disabled');
+
+        const $button = $('.field-configuration-main > div');
+        const $table = $('.field-configuration-main > table');
+        if(!$button.hasClass('hidden')) $button.addClass('hidden');
+        if($table.hasClass('hidden')) $table.removeClass('hidden');
+
+        const $fieldViewClone = createFieldView(formData);
+        $fieldViewClone.attr('data-id', $fieldView.attr('data-id'));
+        $fieldViewClone.children().last().remove();
+        $fieldViewClone.find('.drag-area').removeClass('darg-area');
+        $fieldViewClone.removeClass('srotable-item');
+        $fieldViewClone.find('.icon-move').remove();
+        $fieldViewClone.find('[readonly]').removeAttr('readonly');
+        $fieldViewClone.find('.field-type').on('change', updatePromptPreview);
+        $('.field-content').append($fieldViewClone);
+
+        words.set(field.name, $fieldView.attr('data-id'));
+    });
+
+    $('#autocomplete-textarea').html(currentPrompt);
+    updatePromptPreview();
+    updateButtonStatus();
 });
 

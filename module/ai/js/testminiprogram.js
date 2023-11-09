@@ -51,6 +51,12 @@ function updatePromptPreview()
     $('.prompt-preview-area .preview-container').html(innerHTML);
 }
 
+function updateButtonStatus()
+{
+    if($('#autocomplete-textarea').text().trim()) $('button[type="submit"]').removeAttr('disabled');
+    else $('button[type="submit"]').attr('disabled', 'disabled');
+}
+
 $(function()
 {
     $('#autocomplete-textarea').textcomplete(
@@ -66,12 +72,17 @@ $(function()
         }]
     );
 
-    $('#autocomplete-textarea').on('blur', updatePromptPreview);
+    $('#autocomplete-textarea').on('blur', () =>
+    {
+        updatePromptPreview();
+        updateButtonStatus();
+    });
     $('.field-content .field-type').on('change', updatePromptPreview);
 
     currentField.forEach((field, index) => words.set(field.name, `field-${index}`));
     $('#autocomplete-textarea').html(currentPrompt);
     updatePromptPreview();
+    updateButtonStatus();
 });
 
 function handleSave()

@@ -485,6 +485,7 @@ class aiModel extends model
             ->from(TABLE_MINIPROGRAM)
             ->where('name')->eq($name)
             ->andWhere('id')->ne($appID)
+            ->andWhere('deleted')->eq('0')
             ->fetch();
         return !empty($miniProgram);
     }

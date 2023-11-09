@@ -421,10 +421,15 @@ $lang->ai->miniPrograms->customBackground  = '自定义背景色';
 $lang->ai->miniPrograms->customIcon        = '自定义icon';
 $lang->ai->miniPrograms->backToListPage    = '返回列表页';
 $lang->ai->miniPrograms->lastStep          = '上一步';
-$lang->ai->miniPrograms->backToListPageTip = '表单有数据变动，是否保存并返回';
+$lang->ai->miniPrograms->backToListPageTip = '选择对象的参数配置已变动，是否保存并返回？';
 $lang->ai->miniPrograms->saveAndBack       = '保存并返回';
 $lang->ai->miniPrograms->publishConfirm    = array('您确定要发布吗？', '发布后将在客户端前台小程序广场显示。');
 $lang->ai->miniPrograms->emptyPrompterTip  = '小程序提词为空，请编辑后再进行发布';
+
+$lang->ai->miniPrograms->latestPublishedDate = '最新发布时间';
+$lang->ai->miniPrograms->deleteTip           = '确定删除该小程序吗？删除后可以到后台回收站恢复';
+$lang->ai->miniPrograms->disableTip          = '禁用小程序用户将无法使用，是否确认禁用？';
+$lang->ai->miniPrograms->publishTip          = '您确定要发布吗？发布后将在客户端前台小程序广场显示';
 
 $lang->ai->miniPrograms->placeholder          = new stdClass();
 $lang->ai->miniPrograms->placeholder->name    = '请输入小程序名称';
@@ -432,7 +437,7 @@ $lang->ai->miniPrograms->placeholder->desc    = '请输入小程序简介';
 $lang->ai->miniPrograms->placeholder->default = '请输入填写提示，默认为“请输入”';
 $lang->ai->miniPrograms->placeholder->input   = '请输入';
 
-$lang->ai->miniPrograms->deleteTip = '您确定删除该字段吗？';
+$lang->ai->miniPrograms->deleteFieldTip = '您确定删除该字段吗？';
 
 $lang->ai->miniPrograms->field                    = new stdClass();
 $lang->ai->miniPrograms->field->name              = '字段名称';
@@ -458,6 +463,13 @@ $lang->ai->miniPrograms->field->prompterDesignTip = '输入“<>”符号可引�
 $lang->ai->miniPrograms->field->prompterPreview   = '提词预览';
 $lang->ai->miniPrograms->field->generateResult    = '生成结果';
 $lang->ai->miniPrograms->field->resultPreview     = '结果预览';
+
+$lang->ai->miniPrograms->field->default = array(
+    '角色',
+    '场景',
+    '目标',
+    '作为一名 <角色> ，我希望在 <场景> 时，能 <目标> 。'
+);
 
 $lang->ai->miniPrograms->field->emptyNameWarning       = '『字段名称』不能为空';
 $lang->ai->miniPrograms->field->duplicatedNameWarning  = '『字段名称』重复';

@@ -146,7 +146,7 @@ class ai extends control
         $programs = $this->ai->getMiniPrograms();
         foreach($programs as $program)
         {
-            $program->canPublish     = $this->ai->canPublishMiniProgram($program);
+            $program->canPublish     = empty($program->published) && $this->ai->canPublishMiniProgram($program);
             $program->createdByLabel = $this->loadModel('user')->getById($program->createdBy, 'account')->realname;
             $program->categoryLabel  = $this->lang->ai->miniPrograms->categoryList[$program->category];
             $program->publishedLabel = $program->published === '1'
@@ -258,13 +258,16 @@ class ai extends control
      */
     public function configuredMiniProgram($appID)
     {
-        if(!is_numeric($appID)) return $this->locate('ai', 'createMiniProgram');
         if(!empty($_POST))
         {
+            $toPublish = $_POST['toPublish'];
+            unset($_POST['toPublish']);
             $this->ai->saveMiniProgramFields($appID);
+            if($toPublish === '1') $this->ai->publishMiniProgram($appID, '1');
         }
+        $program = $this->ai->getMiniProgramByID($appID);
         $this->view->currentFields = $this->ai->getMiniProgramFields($appID);
-        $this->view->currentPrompt = $this->ai->getMiniProgramByID($appID)->prompt;
+        $this->view->currentPrompt = $program->prompt;
         $this->view->title         = $this->lang->ai->miniPrograms->common;
         $this->view->appID         = $appID;
         $this->display();

@@ -15,12 +15,13 @@
   <div id="sidebarHeader">
     <div class="title" title="<?php echo $this->lang->ai->prompts->modules[$module]; ?>">
       <?php echo $this->lang->ai->prompts->modules[$module]; ?>
-      <?php if ($module) echo html::a($this->createLink('ai', 'prompts'), "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'"); ?>
+      <?php if($module) echo html::a($this->createLink('ai', 'prompts'), "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'"); ?>
     </div>
   </div>
   <div class="btn-toolbar pull-left">
     <?php
-    foreach ($this->lang->ai->prompts->statuses as $statusKey => $statusName) {
+    foreach($this->lang->ai->prompts->statuses as $statusKey => $statusName)
+    {
       echo html::a($this->createLink('ai', 'prompts', "module=$module&status=$statusKey"), "<span class='text'>{$this->lang->ai->prompts->statuses[$statusKey]}" . ($status == $statusKey ? '<span class="label label-light label-badge" style="margin-left: 4px;">' . $pager->recTotal . '</span>' : '') . "</span>", '', "id='status-$statusKey' class='btn btn-link" . ($status == $statusKey ? ' btn-active-text' : '') . "'");
     }
     ?>
@@ -37,7 +38,7 @@
           <circle cx="12.0159" cy="12.0163" r="12" transform="rotate(0.0777774 12.0159 12.0163)" fill="#FFA34D" />
           <path d="M12.4516 14.621C12.8867 14.6215 13.3224 14.1498 13.3231 13.6775L13.6588 7.42006C13.6595 6.94777 13.661 6.00319 12.3559 6.0016C11.1595 6.00013 11.0495 6.8265 11.0486 7.41686L11.3655 13.6751C11.5823 14.1476 12.0166 14.6204 12.4516 14.621ZM12.4499 15.8017C11.7973 15.8009 11.1439 16.3905 11.1426 17.217C11.1416 17.9254 11.6843 18.6345 12.4456 18.6354C13.2069 18.6363 13.7516 18.0467 13.7528 17.2202C13.7541 16.3936 13.1024 15.8025 12.4499 15.8017Z" fill="white" />
         </svg>
-        <span style="padding-left: 16px;">禁用小程序用户将无法使用，是否确认禁用？</span>
+        <span style="padding-left: 16px;"><?= $lang->ai->miniPrograms->disableTip; ?></span>
       </div>
       <div class="modal-footer" style="display: flex; justify-content: center; border-top: none; padding-top: 0;">
         <button type="button" class="btn btn-primary" onclick="publishMiniProgram('0')" data-dismiss="modal"><?= $lang->confirm; ?></button>
@@ -54,7 +55,7 @@
           <circle cx="12.0159" cy="12.0163" r="12" transform="rotate(0.0777774 12.0159 12.0163)" fill="#FFA34D" />
           <path d="M12.4516 14.621C12.8867 14.6215 13.3224 14.1498 13.3231 13.6775L13.6588 7.42006C13.6595 6.94777 13.661 6.00319 12.3559 6.0016C11.1595 6.00013 11.0495 6.8265 11.0486 7.41686L11.3655 13.6751C11.5823 14.1476 12.0166 14.6204 12.4516 14.621ZM12.4499 15.8017C11.7973 15.8009 11.1439 16.3905 11.1426 17.217C11.1416 17.9254 11.6843 18.6345 12.4456 18.6354C13.2069 18.6363 13.7516 18.0467 13.7528 17.2202C13.7541 16.3936 13.1024 15.8025 12.4499 15.8017Z" fill="white" />
         </svg>
-        <span style="padding-left: 16px;">确定删除该小程序吗？删除后可以到后台回收站恢复</span>
+        <span style="padding-left: 16px;"><?= $lang->ai->miniPrograms->deleteTip; ?></span>
       </div>
       <div class="modal-footer" style="display: flex; justify-content: center; border-top: none; padding-top: 0;">
         <button type="button" class="btn btn-primary" onclick="deleteMiniProgram('1')" data-dismiss="modal"><?= $lang->confirm; ?></button>
@@ -71,7 +72,7 @@
           <circle cx="12.0159" cy="12.0163" r="12" transform="rotate(0.0777774 12.0159 12.0163)" fill="#FFA34D" />
           <path d="M12.4516 14.621C12.8867 14.6215 13.3224 14.1498 13.3231 13.6775L13.6588 7.42006C13.6595 6.94777 13.661 6.00319 12.3559 6.0016C11.1595 6.00013 11.0495 6.8265 11.0486 7.41686L11.3655 13.6751C11.5823 14.1476 12.0166 14.6204 12.4516 14.621ZM12.4499 15.8017C11.7973 15.8009 11.1439 16.3905 11.1426 17.217C11.1416 17.9254 11.6843 18.6345 12.4456 18.6354C13.2069 18.6363 13.7516 18.0467 13.7528 17.2202C13.7541 16.3936 13.1024 15.8025 12.4499 15.8017Z" fill="white" />
         </svg>
-        <span style="padding-left: 16px;">您确定要发布吗？发布后将在客户端前台小程序广场显示</span>
+        <span style="padding-left: 16px;"><?= $lang->ai->miniPrograms->publishTip; ?></span>
       </div>
       <div class="modal-footer" style="display: flex; justify-content: center; border-top: none; padding-top: 0;">
         <button type="button" class="btn btn-primary" onclick="publishMiniProgram('1')" data-dismiss="modal"><?= $lang->confirm; ?></button>
@@ -93,12 +94,12 @@
         <thead>
           <tr>
             <td class="c-id" style="width: 70px;">ID</td>
-            <td class="c-name" style="width: 30%;">小程序名称</td>
-            <td class="c-status">阶段</td>
-            <td class="c-category">所属分组</td>
-            <td class="c-createdby">创建者</td>
-            <td class="c-createddate">创建时间</td>
-            <td class="c-publisheddate">最新发布时间</td>
+            <td class="c-name" style="width: 30%;"><?= $lang->prompt->name; ?></td>
+            <td class="c-status"><?= $lang->prompt->status; ?></td>
+            <td class="c-category"><?= $lang->prompt->module; ?></td>
+            <td class="c-createdby"><?= $lang->prompt->createdBy; ?></td>
+            <td class="c-createddate"><?= $lang->prompt->createdDate; ?></td>
+            <td class="c-publisheddate"><?= $lang->ai->miniPrograms->latestPublishedDate; ?></td>
             <td class="c-actions" style="width: 160px;"><?php echo $lang->actions; ?></td>
           </tr>
         </thead>
@@ -113,28 +114,29 @@
               <td class="c-createddate"><?= $miniProgram->createdDate; ?></td>
               <td class="c-publisheddate"><?= $miniProgram->publishedDate; ?></td>
               <td class="c-actions">
+                <?php $isPublished = $miniProgram->published === '1'; ?>
                 <?php
-                echo $miniProgram->publish
-                  ? "<button class='btn' disabled title='{$lang->ai->prompts->action->edit}'><i class='icon-edit text-primary'></i></button>"
-                  : "<a class='btn' title='{$lang->ai->prompts->action->edit}' href='{$this->createLink('ai', 'createMiniProgram', "appID=$miniProgram->id")}'><i class='icon-edit text-primary'></i></a>";
+                  echo $isPublished
+                    ? "<button class='btn' disabled title='{$lang->ai->prompts->action->edit}'><i class='icon-edit text-primary'></i></button>"
+                    : "<a class='btn' title='{$lang->ai->prompts->action->edit}' href='{$this->createLink('ai', 'createMiniProgram', "appID=$miniProgram->id")}'><i class='icon-edit text-primary'></i></a>";
                 ?>
-                <a
+                <button
                   class="btn iframe"
                   data-toggle="modal"
                   data-width="800"
-                  data-height="600"
+                  data-height="600"<?= $isPublished ? ' disabled' : ''; ?>
                   title="<?= $lang->ai->prompts->action->test; ?>"
-                  href="<?= $this->createLink('ai', 'testMiniProgram', "appID={$miniProgram->id}&onlybody=yes"); ?>"
+                  data-iframe="<?= $this->createLink('ai', 'testMiniProgram', "appID={$miniProgram->id}&onlybody=yes"); ?>"
                 >
                   <i class="icon-menu-backend text-primary"></i>
-                </a>
-                <button class="btn" onclick="openPublishDialog(event)" title="<?= $lang->ai->prompts->action->publish; ?>" <?= $miniProgram->canPublish ? '' : ' disabled'; ?>>
+                </button>
+                <button class="btn" onclick="openPublishDialog(event)" title="<?= $lang->ai->prompts->action->publish; ?>"<?= $miniProgram->canPublish ? '' : ' disabled'; ?>>
                   <i class="icon-publish text-primary"></i>
                 </button>
-                <button class="btn" onclick="openDisableDialog(event)" title="<?= $lang->ai->prompts->action->disable; ?>" <?= $miniProgram->published === '1' ? '' : ' disabled'; ?>>
+                <button class="btn" onclick="openDisableDialog(event)" title="<?= $lang->ai->prompts->action->disable; ?>"<?= $isPublished ? '' : ' disabled'; ?>>
                   <i class="icon-ban-circle text-primary"></i>
                 </button>
-                <button class="btn" onclick="openDeleteDialog(event)" title="<?= $lang->ai->prompts->action->delete; ?>" <?= $miniProgram->published === '1' ? ' disabled' : ''; ?>>
+                <button class="btn" onclick="openDeleteDialog(event)" title="<?= $lang->ai->prompts->action->delete; ?>"<?= $isPublished ? ' disabled' : ''; ?>>
                   <i class="icon-trash text-primary"></i>
                 </button>
               </td>

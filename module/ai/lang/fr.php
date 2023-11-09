@@ -421,10 +421,15 @@ $lang->ai->miniPrograms->customBackground  = 'Custom background Color';
 $lang->ai->miniPrograms->customIcon        = 'Custom icon';
 $lang->ai->miniPrograms->backToListPage    = 'Return to list page';
 $lang->ai->miniPrograms->lastStep          = 'Previous step';
-$lang->ai->miniPrograms->backToListPageTip = 'There are data changes in the form. Do you want to save and go back?';
+$lang->ai->miniPrograms->backToListPageTip = 'The parameter configuration for selecting the object has been changed. Do you want to save and return?';
 $lang->ai->miniPrograms->saveAndBack       = 'Save and Go Back';
 $lang->ai->miniPrograms->publishConfirm    = array('Are you sure you want to publish?', 'It will be displayed on the front-end mini program plaza in the client.');
 $lang->ai->miniPrograms->emptyPrompterTip  = 'The prompter of the mini program is empty. Please edit it before publishing.';
+
+$lang->ai->miniPrograms->latestPublishedDate = 'Latest Published Date';
+$lang->ai->miniPrograms->deleteTip           = 'Are you sure you want to delete this mini program? It can be restored from the backend recycle bin after deletion.';
+$lang->ai->miniPrograms->disableTip          = 'Disabling the mini program will prevent users from accessing it. Are you sure you want to disable it?';
+$lang->ai->miniPrograms->publishTip          = 'Are you sure you want to publish? After publishing, it will be displayed on the frontend mini program square.';
 
 $lang->ai->miniPrograms->placeholder          = new stdClass();
 $lang->ai->miniPrograms->placeholder->name    = 'Please enter a small program name';
@@ -432,7 +437,7 @@ $lang->ai->miniPrograms->placeholder->desc    = 'Please enter a brief introducti
 $lang->ai->miniPrograms->placeholder->default = 'Please fill in the prompt, the default is "please enter"';
 $lang->ai->miniPrograms->placeholder->input   = 'Please enter';
 
-$lang->ai->miniPrograms->deleteTip = 'Are you sure to delete this field?';
+$lang->ai->miniPrograms->deleteFieldTip = 'Are you sure to delete this field?';
 
 $lang->ai->miniPrograms->field                    = new stdClass();
 $lang->ai->miniPrograms->field->name              = 'Field name';
@@ -458,6 +463,13 @@ $lang->ai->miniPrograms->field->prompterDesignTip = 'The <> symbol is used to re
 $lang->ai->miniPrograms->field->prompterPreview   = 'Prompterpreview';
 $lang->ai->miniPrograms->field->generateResult    = 'Generate result';
 $lang->ai->miniPrograms->field->resultPreview     = 'Result Preview';
+
+$lang->ai->miniPrograms->field->default = array(
+    'Role',
+    'Scene',
+    'Objective',
+    'As a <Role>, I hope to <Objective> in <Scene>.'
+);
 
 $lang->ai->miniPrograms->field->emptyNameWarning      = 'Field name cannot be empty';
 $lang->ai->miniPrograms->field->duplicatedNameWarning = 'Duplicate field name';

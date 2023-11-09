@@ -14,7 +14,7 @@
 
 <?php
 js::set('pleaseInput', $lang->ai->miniPrograms->placeholder->input);
-js::set('deleteTip', $lang->ai->miniPrograms->deleteTip);
+js::set('deleteTip', $lang->ai->miniPrograms->deleteFieldTip);
 js::set('emptyWarning', $lang->ai->miniPrograms->field->emptyNameWarning);
 js::set('duplicatedWarning', $lang->ai->miniPrograms->field->duplicatedNameWarning);
 js::set('emptyOptionWarning', $lang->ai->miniPrograms->field->emptyOptionWarning);
@@ -23,6 +23,7 @@ js::set('publishConfirm', $lang->ai->miniPrograms->publishConfirm);
 js::set('emptyPrompterTip', $lang->ai->miniPrograms->emptyPrompterTip);
 js::set('currentFields', $currentFields);
 js::set('currentPrompt', $currentPrompt);
+js::set('defaultFields', $lang->ai->miniPrograms->field->default);
 ?>
 
 <template id="option-template">
@@ -117,12 +118,12 @@ js::set('currentPrompt', $currentPrompt);
           <circle cx="12.0159" cy="12.0163" r="12" transform="rotate(0.0777774 12.0159 12.0163)" fill="#FFA34D" />
           <path d="M12.4516 14.621C12.8867 14.6215 13.3224 14.1498 13.3231 13.6775L13.6588 7.42006C13.6595 6.94777 13.661 6.00319 12.3559 6.0016C11.1595 6.00013 11.0495 6.8265 11.0486 7.41686L11.3655 13.6751C11.5823 14.1476 12.0166 14.6204 12.4516 14.621ZM12.4499 15.8017C11.7973 15.8009 11.1439 16.3905 11.1426 17.217C11.1416 17.9254 11.6843 18.6345 12.4456 18.6354C13.2069 18.6363 13.7516 18.0467 13.7528 17.2202C13.7541 16.3936 13.1024 15.8025 12.4499 15.8017Z" fill="white" />
         </svg>
-        <strong style="font-size: 16px;"><?php echo $lang->ai->miniPrograms->backToListPageTip; ?></strong>
+        <span style="font-size: 16px;"><?php echo $lang->ai->miniPrograms->backToListPageTip; ?></span>
       </div>
-      <div class="modal-footer" style="display: flex; justify-content: center; border-top: none; gap: 10px;">
-        <a href="<?php echo $this->createLink('ai', 'miniPrograms'); ?>" class="btn btn-wide btn-primary" onclick="backWithoutSave()"><?php echo $lang->ai->miniPrograms->saveAndBack; ?></a>
-        <a href="<?php echo $this->createLink('ai', 'miniPrograms'); ?>" class="btn btn-wide btn-secondary" onclick="backWithSave()"><?php echo $lang->save; ?></a>
+      <div class="modal-footer" style="display: flex; padding-top: 0; justify-content: center; border-top: none; gap: 10px;">
+        <a href="<?php echo $this->createLink('ai', 'miniPrograms'); ?>" class="btn btn-wide btn-primary" onclick="backWithSave()"><?= $lang->save; ?></a>
         <a class="btn btn-wide" data-dismiss="modal"><?php echo $lang->cancel; ?></a>
+        <a href="<?php echo $this->createLink('ai', 'miniPrograms'); ?>" class="btn btn-wide btn-link text-primary" onclick="backWithoutSave()"><?= $lang->ai->prompts->roleTemplateSaveList['discard']; ?></a>
       </div>
     </div>
   </div>
