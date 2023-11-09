@@ -109,6 +109,7 @@ window.buildColActions = function(col)
 
     if(col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}`), 'data-toggle': 'modal', 'icon': 'edit'});
     if(col.actionList.includes('setWIP')) actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}`), 'data-toggle': 'modal', 'icon': 'alert'});
+    if(col.actionList.includes('sortColumn')) actions.push({text: kanbanLang.sortColumn, url: 'javascript:;', 'icon': 'move', 'data-on': 'click', 'data-call': 'sortItems', 'data-params': 'event', 'data-type': 'column', 'data-id': col.id});
     actions.push({type: 'divider'});
     if(col.actionList.includes('splitColumn')) actions.push({text: kanbanLang.splitColumn, url: $.createLink('kanban', 'splitColumn', `columnID=${col.id}`), 'data-toggle': 'modal', 'icon': 'col-split'});
     if(col.actionList.includes('createColumn')) actions.push({text: kanbanLang.createColumnOnLeft, url: $.createLink('kanban', 'createColumn', `columnID=${col.id}&position=left`), 'data-toggle': 'modal', 'icon': 'col-add-left'});
@@ -434,10 +435,12 @@ window.sortItems = function(event)
         }).then(orders => {
             if(orders)
             {
-                const link = $.createLink('kanban', 'sortRegion', 'regions=' + orders);
+                if(objectType == 'region') link = $.createLink('kanban', 'sortRegion', 'regions=' + orders);
+                if(objectType == 'column') link = $.createLink('kanban', 'sortColumn', 'columns=' + orders);
                 $.getJSON(link, function(result)
                 {
-                    loadCurrentPage();
+                    if(objectType == 'region') loadCurrentPage();
+                    $('.kanban-list').zui('kanbanlist').$.getKanban(result.regionID).update(result.kanbanData);
                 });
             }
         });

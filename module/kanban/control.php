@@ -612,13 +612,11 @@ class kanban extends control
     /**
      * Sort columns.
      *
-     * @param  int    $regionID
-     * @param  int    $kanbanID
      * @param  string $columns
      * @access public
      * @return array|string
      */
-    public function sortColumn($regionID, $kanbanID, $columns = '')
+    public function sortColumn($columns = '')
     {
         if(empty($columns)) return;
         $columns =  explode(',', trim($columns, ','));
@@ -626,14 +624,15 @@ class kanban extends control
         $order = 1;
         foreach($columns as $columnID)
         {
-            $this->dao->update(TABLE_KANBANCOLUMN)->set('`order`')->eq($order)->where('id')->eq($columnID)->andWhere('region')->eq($regionID)->exec();
+            $this->dao->update(TABLE_KANBANCOLUMN)->set('`order`')->eq($order)->where('id')->eq($columnID)->exec();
             $order ++;
         }
 
-        $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
-
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return print(json_encode($kanbanGroup));
+        $column     = $this->kanban->getColumnByID($columnID);
+        $region     = $this->kanban->getRegionByID($column->region);
+        $kanbanData = $this->kanban->getKanbanData($region->kanban, $column->region);
+        $kanbanData = reset($kanbanData);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'regionID' => 'region' . $column->region, 'kanbanData' => $kanbanData));
     }
 
     /**
@@ -1940,6 +1939,12 @@ class kanban extends control
             $region      = $this->kanban->getRegionByID($objectID);
             $regionPairs = $this->kanban->getRegionPairs($region->kanban);
             foreach($regionPairs as $regionID => $regionName) $itemList[] = array('id' => $regionID, 'text' => $regionName);
+        }
+        if($objectType == 'column')
+        {
+            $column      = $this->kanban->getColumnByID($objectID);
+            $columnPairs = $this->dao->select('id,name')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->orderBy('order_asc')->fetchPairs();
+            foreach($columnPairs as $columnID => $columnName) $itemList[] = array('id' => $columnID, 'text' => $columnName);
         }
         return print(json_encode($itemList));
     }

@@ -1178,7 +1178,7 @@ class kanbanModel extends model
             ->orderBy($order)
             ->fetchAll();
 
-        $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'batchCreateCard', 'splitColumn', 'sortColumn');
+        $actions = array('createColumn', 'setColumn', 'setWIP', 'sortColumn', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'batchCreateCard', 'splitColumn', 'sortColumn');
 
         /* Group by parent. */
         $columnGroup = array();
