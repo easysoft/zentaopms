@@ -10,6 +10,7 @@ $config->block->bug->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->block->bug->dtable->fieldList['id']['type']  = 'id';
 $config->block->bug->dtable->fieldList['id']['fixed'] = false;
 $config->block->bug->dtable->fieldList['id']['sort']  = true;
+$config->block->bug->dtable->fieldList['id']['fixed'] = 'left';
 
 $config->block->bug->dtable->fieldList['title']['name']        = 'title';
 $config->block->bug->dtable->fieldList['title']['title']       = $lang->bug->title;
@@ -19,6 +20,7 @@ $config->block->bug->dtable->fieldList['title']['data-size']   = 'lg';
 $config->block->bug->dtable->fieldList['title']['type']        = 'title';
 $config->block->bug->dtable->fieldList['title']['fixed']       = false;
 $config->block->bug->dtable->fieldList['title']['sort']        = true;
+$config->block->bug->dtable->fieldList['title']['fixed']       = 'left';
 
 $config->block->bug->dtable->fieldList['severity']['name']  = 'severity';
 $config->block->bug->dtable->fieldList['severity']['title'] = $lang->bug->abbr->severity;
