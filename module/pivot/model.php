@@ -208,9 +208,101 @@ class pivotModel extends model
                 }
                 $pivots[$index]->used = $this->screen->checkIFChartInUse($pivot->id, 'pivot', $screenList);
             }
+
+            if($isObject) $pivots[$index] = $this->processFieldSettings($pivots[$index]);
         }
 
         return $isObject ? reset($pivots) : $pivots;
+    }
+
+    /**
+     * Process pivot field settings, function like dataview/js/basequery.js getFieldSettings().
+     *
+     * @param  object $pivot
+     * @access public
+     * @return object
+     */
+    public function processFieldSettings($pivot)
+    {
+       $this->loadModel('chart');
+       $this->loadModel('dataview');
+
+       $sql        = isset($pivot->sql)     ? $pivot->sql     : '';
+       $filters    = isset($pivot->filters) ? $pivot->filters : array();
+       $recPerPage = 20;
+       $pageID     = 1;
+
+       if(!empty($filters))
+       {
+           foreach($filters as $index => $filter)
+           {
+               if(empty($filter['default'])) continue;
+
+               $filters[$index]['default'] = $this->processDateVar($filter['default']);
+           }
+       }
+       $querySQL = $this->chart->parseSqlVars($sql, $filters);
+
+       $columns      = $this->dataview->getColumns($querySQL);
+       $columnFields = array();
+       foreach($columns as $column => $type) $columnFields[$column] = $column;
+
+       $tableAndFields = $this->chart->getTables($querySQL);
+       $tables   = $tableAndFields['tables'];
+       $fields   = $tableAndFields['fields'];
+       $querySQL = $tableAndFields['sql'];
+
+       $moduleNames = array();
+       if($tables) $moduleNames = $this->dataview->getModuleNames($tables);
+
+       list($fieldPairs, $relatedObject) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames);
+
+       /* Use fieldPairs, columns, relatedObject, objectFields refresh pivot fieldSettings .*/
+
+       $fieldSettings = $pivot->fieldSettings;
+       $objectFields = array();
+       foreach($this->lang->dataview->objects as $object => $objectName) $objectFields[$object] = $this->dataview->getTypeOptions($object);
+
+       $fieldSettingsNew = new stdclass();
+
+       foreach($fieldPairs as $index => $field)
+       {
+           $defaultType   = $columns->$index;
+           $defaultObject = $relatedObject[$index];
+
+           if(!empty($objectFields) and isset($objectFields[$defaultObject]) and isset($objectFields[$defaultObject][$index])) $defaultType = $objectFields[$defaultObject][$index]['type'] == 'object' ? 'string' : $objectFields[$defaultObject][$index]['type'];
+
+           if(!isset($fieldSettings->$index))
+           {
+               $fieldItem = new stdclass();
+               $fieldItem->name   = $field;
+               $fieldItem->object = $defaultObject;
+               $fieldItem->field  = $index;
+               $fieldItem->type   = $defaultType;
+
+               $fieldSettingsNew[$index] = $fieldItem;
+           }
+           else
+           {
+               if(!isset($fieldSettings->$index->object) or strlen($fieldSettings->$index->object) == 0) $fieldSettings->$index->object = $defaultObject;
+
+               if(!isset($fieldSettings->$index->field) or strlen($fieldSettings->$index->field) == 0)
+               {
+                   $fieldSettings->$index->field  = $index;
+                   $fieldSettings->$index->object = $defaultObject;
+                   $fieldSettings->$index->type   = 'string';
+               }
+
+               $object = $fieldSettings->$index->object;
+               $type   = $fieldSettings->$index->type;
+               if($object == $defaultObject && $type != $defaultType) $fieldSettings->$index->type = $defaultType;
+
+               $fieldSettingsNew->$index = $fieldSettings->$index;
+           }
+       }
+       $pivot->fieldSettings = $fieldSettingsNew;
+
+       return $pivot;
     }
 
     /**
