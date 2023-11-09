@@ -82,7 +82,8 @@ div
         set::width('240'),
         formPanel
         (
-            setID('chartForm'),
+            setClass('chart-form'),
+            set::id('chartForm'),
             set('title', $lang->task->report->select),
             set('actions', array
             (
@@ -113,7 +114,8 @@ div
     cell
     (
         setID('chartContainer'),
-        setClass('flex-auto ml-4 bg-white px-4 py-2'),
+        set::flex('1'),
+        set::className('ml-5 bg-white px-4 py-2'),
         tabs
         (
             on::click('.font-medium', 'changeTab'),
