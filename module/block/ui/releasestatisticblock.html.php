@@ -38,7 +38,7 @@ foreach($releases as $productName => $releaseCount)
             span
             (
                 set::className('pl-2 text-' . $nameClass),
-                $productName,
+                $productName
             )
         ),
         cell
@@ -50,7 +50,7 @@ foreach($releases as $productName => $releaseCount)
                 div
                 (
                     set::className('progress-bar primary'),
-                    setStyle('width', $progress),
+                    setStyle('width', $progress)
                 )
             )
         )
@@ -58,11 +58,8 @@ foreach($releases as $productName => $releaseCount)
     $i ++;
 }
 
-panel
+blockPanel
 (
-    set::title($block->title),
-    set::className('releasestatistic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
-    set('headingClass', 'border-b'),
     div
     (
         set::className('flex flex-wrap justify-between'),
@@ -74,7 +71,7 @@ panel
             div
             (
                 set::className('px-2 pb-2'),
-                $lang->block->releasestatistic->monthly,
+                $lang->block->releasestatistic->monthly
             ),
             echarts
             (
@@ -95,7 +92,7 @@ panel
                         )
                     )
                 )
-            )->size('100%', $longBlock ? 200 : 175),
+            )->size('100%', $longBlock ? 200 : 175)
         ),
         cell
         (
@@ -110,9 +107,9 @@ panel
             (
                 set::className('p-2 overflow-y-auto'),
                 setStyle('height', $longBlock ? '200px' : '175px'),
-                $releaseProgressData,
+                $releaseProgressData
             )
-        ),
+        )
     )
 );
 

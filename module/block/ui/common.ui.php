@@ -74,9 +74,6 @@ function buildBlockModuleNav(?array $modules = null, ?string $module = null): wg
         set::stacked(true),
         set::items($items),
         on::click('.nav-item>a', 'getForm'),
-        h::css
-        (
-            '.block-modules-nav > .nav-item > a.active {box-shadow: inset 2px 0 0 var(--color-primary-500); color: var(--color-fore)}'
-        )
+        h::css('.block-modules-nav > .nav-item > a.active {box-shadow: inset 2px 0 0 var(--color-primary-500); color: var(--color-fore)}')
     );
 }

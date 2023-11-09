@@ -23,27 +23,9 @@ else
     foreach($stories as $story) $story->estimate .= $config->hourUnit;
 }
 
-$method = $block->params->type == 'assignedTo' ? 'work' : 'contribute';
-
-panel
+blockPanel
 (
-    setClass('p-0'),
-    set::title($block->title),
-    set::bodyClass('p-0 no-shadow border-t'),
-    to::headingActions
-    (
-        hasPriv('my', $method) && $block->params->type != 'reviewBy' ? h::nav
-        (
-            setClass('toolbar'),
-            btn
-            (
-                setClass('ghost toolbar-item size-sm z-10'),
-                set::url(createLink('my', $method, "mode=story&browseType={$block->params->type}")),
-                $lang->more,
-                span(setClass('caret-right')),
-            )
-        ) : '',
-    ),
+    setClass('list-block'),
     dtable
     (
         set::height(318),

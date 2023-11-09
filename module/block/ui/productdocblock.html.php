@@ -44,7 +44,7 @@ statisticBlock
                 array('text' => $lang->product->involved, 'url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("type=involved")), 'data-load' => 'target', 'data-selector' => "#doc-productdoc-{$block->id}", 'data-partial' => true),
                 array('text' => $lang->product->all, 'url' => createLink('block', 'printBlock', "blockID={$block->id}&params=" . helper::safe64Encode("type=all")), 'data-load' => 'target', 'data-selector' => "#doc-productdoc-{$block->id}", 'data-partial' => true))
             )
-        ),
+        )
     ),
     set::block($block),
     set::active($active),
@@ -58,7 +58,7 @@ statisticBlock
         set::horzScrollbarPos('inside'),
         set::cols(array_values($config->block->doc->dtable->fieldList)),
         set::data(!empty($docGroup) && !empty($docGroup[$product->id]) ? array_values($docGroup[$product->id]) : array()),
-        set::userMap($users),
+        set::userMap($users)
     )
 );
 

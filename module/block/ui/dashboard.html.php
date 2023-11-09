@@ -13,8 +13,8 @@ namespace zin;
 
 foreach($blocks as $block)
 {
-    $block->color  = isset($block->params->color) ? $block->params->color : null;
-    $block->fetch  = $block->blockLink;
+    $block->color = isset($block->params->color) ? $block->params->color : null;
+    $block->fetch = $block->blockLink;
     unset($block->title);
 }
 

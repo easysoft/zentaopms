@@ -18,28 +18,16 @@ if(!$longBlock)
     unset($config->block->testtask->dtable->fieldList['build']);
 }
 
-panel
+blockPanel
 (
-    setClass('p-0 scrumlist-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
-    set::title($block->title),
-    set::headingClass('border-b'),
-    to::headingActions
-    (
-        a
-        (
-            set('class', 'text-gray'),
-            set('href', $block->moreLink),
-            $lang->more,
-            icon('caret-right')
-        )
-    ),
+    setClass('list-block'),
     dtable
     (
         set::height(318),
         set::horzScrollbarPos('inside'),
         set::fixedLeftWidth($longBlock ? '0.33' : '0.5'),
         set::cols(array_values($config->block->testtask->dtable->fieldList)),
-        set::data(array_values($testtasks)),
+        set::data(array_values($testtasks))
     )
 );
 

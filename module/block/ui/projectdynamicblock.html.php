@@ -60,10 +60,7 @@ panel
 (
     set('class', 'dynamic-block ' . ($longBlock ? 'block-long' : 'block-sm')),
     set::title($block->title),
-    div
-    (
-        rawContent()
-    )
+    div(rawContent())
 );
 
 render();

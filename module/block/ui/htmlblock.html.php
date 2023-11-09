@@ -11,12 +11,6 @@ declare(strict_types=1);
 
 namespace zin;
 
-panel
-(
-    set::title($block->title),
-    set('class', 'html-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
-    set('headingClass', 'border-b'),
-    html($block->params->html)
-);
+blockPanel(html($block->params->html));
 
 render();

@@ -192,7 +192,7 @@ if($block->width == 3)
                                 '+' . $data->finishedReleaseCount['week']
                             )
                         ) : null
-                    ),
+                    )
                 ),
                 col
                 (
@@ -214,7 +214,7 @@ if($block->width == 3)
                                 '+' . $data->finishedStoryCount['week']
                             )
                         ) : null
-                    ),
+                    )
                 ),
                 col
                 (
@@ -241,7 +241,7 @@ if($block->width == 3)
                                 '+' . $data->finishedStoryPoint['week']
                             )
                         ) : null
-                    ),
+                    )
                 )
             )
         )

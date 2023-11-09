@@ -1101,7 +1101,7 @@ class myModel extends model
         if(!common::hasPriv('demand', 'review')) return array();
 
         $this->app->loadLang('demand');
-        $stmt = $this->dao->select("t1.*")->from(TABLE_DEMAND)->alias('t1')
+        $demands = $this->dao->select("t1.*, createdDate AS time, 'demand' AS `type`")->from(TABLE_DEMAND)->alias('t1')
             ->leftJoin(TABLE_DEMANDREVIEW)->alias('t2')->on('t1.id = t2.demand and t1.version = t2.version')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.reviewer')->eq($this->app->user->account)
@@ -1109,22 +1109,9 @@ class myModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.status')->eq('reviewing')
             ->orderBy($orderBy)
-            ->query();
+            ->fetchAll('id');
 
-        $demands = array();
-        while($data = $stmt->fetch())
-        {
-            if($checkExists) return true;
-            $demand = new stdclass();
-            $demand->id      = $data->id;
-            $demand->title   = $data->title;
-            $demand->type    = 'demand';
-            $demand->time    = $data->createdDate;
-            $demand->status  = $data->status;
-            $demands[$demand->id] = $demand;
-        }
-
-        $actions = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('demand')->andWhere('objectID')->in(array_keys($demands))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
+        $actions = $this->dao->select('objectID, `date`')->from(TABLE_ACTION)->where('objectType')->eq('demand')->andWhere('objectID')->in(array_keys($demands))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
         foreach($actions as $demandID => $date) $demands[$demandID]->time = $date;
         return array_values($demands);
     }

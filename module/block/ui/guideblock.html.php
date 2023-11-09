@@ -90,27 +90,21 @@ $config->executionLink = $executionLink;
 
 $usedMode = zget($config->global, 'mode', 'light');
 jsVar('changeModeTips', sprintf($lang->custom->changeModeTips, $lang->custom->modeList[$usedMode == 'light' ? 'ALM' : 'light']));
-panel
+blockPanel
 (
-    set('class', 'guide-block'),
-    set('headingClass', 'border-b'),
+    setClass('guide-block'),
     to::heading
     (
-        div
-        (
-            set('class', 'panel-title w-full justify-between'),
-            $block->title,
-            !commonModel::isTutorialMode() ? a(
-                set(
-                    array(
-                        'href' => createLink('tutorial', 'start'),
-                        'class' => 'btn btn-primary warning',
-                        'data-toggle' => 'modal',
-                    )
-                ),
-                $lang->block->tutorial
-            ) : null
-        )
+        !commonModel::isTutorialMode() ? a(
+            set(
+                array(
+                    'href' => createLink('tutorial', 'start'),
+                    'class' => 'btn btn-primary warning',
+                    'data-toggle' => 'modal',
+                )
+            ),
+            $lang->block->tutorial
+        ) : null
     ),
     div
     (

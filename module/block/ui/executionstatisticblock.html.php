@@ -55,16 +55,7 @@ $burn = center
                 set::color(array('#2B80FF', '#17CE97')),
                 set::grid(array('left' => 0, 'bottom' => 0, 'top' => 0, 'right' => 0)),
                 set::legend(array('show' => false, 'width' => '100%')),
-                set::xAxis
-                (
-                    array
-                    (
-                        'show' => false,
-                        'type' => 'category',
-                        'data' => $chartData['labels'],
-                        'boundaryGap' => false,
-                    )
-                ),
+                set::xAxis(array('show' => false, 'type' => 'category', 'data' => $chartData['labels'], 'boundaryGap' => false)),
                 set::yAxis(array('show' => false)),
                 set::series
                 (
@@ -72,48 +63,23 @@ $burn = center
                     (
                         array
                         (
-                            'type' => 'line',
-                            'data' => $chartData['baseLine'],
+                            'type'       => 'line',
+                            'data'       => $chartData['baseLine'],
                             'symbolSize' => 0,
-                            'itemStyle' => array
-                            (
-                                'normal' => array
-                                (
-                                    'color' => '#D8D8D8',
-                                    'lineStyle' => array
-                                    (
-                                        'width' => 2,
-                                        'color' => '#F1F1F1',
-                                    )
-                                ),
-
-                            ),
-
+                            'itemStyle'  => array('normal' => array('color' => '#D8D8D8', 'lineStyle' => array('width' => 2, 'color' => '#F1F1F1')))
                         ),
                         array
                         (
-                            'data' => $chartData['burnLine'],
-                            'type' => 'line',
+                            'data'       => $chartData['burnLine'],
+                            'type'       => 'line',
                             'symbolSize' => 0,
-                            'areaStyle' => array
-                            (
-                                'color' => array
-                                (
-                                    'type' => 'linear',
-                                    'x' => '0',
-                                    'y' => '0',
-                                    'x2' => '0',
-                                    'y2' => '1',
-                                    'colorStops' => array(array('offset' => 0, 'color' => '#DDECFE'), array('offset' => 1, 'color' => '#FFF')),
-                                    'global' => false
-                                )
-                            )
+                            'areaStyle'  => array('color' => array('type' => 'linear', 'x' => '0', 'y' => '0', 'x2' => '0', 'y2' => '1', 'colorStops' => array(array('offset' => 0, 'color' => '#DDECFE'), array('offset' => 1, 'color' => '#FFF')), 'global' => false))
                         )
                     )
                 )
-            )->size('100%', $longBlock ? 64 : 80),
+            )->size('100%', $longBlock ? 64 : 80)
         )
-    ),
+    )
 );
 
 statisticBlock
@@ -129,7 +95,7 @@ statisticBlock
                 span(setClass('caret align-middle ml-1'))
             ),
             set::items($projectItems)
-        ),
+        )
     ),
     set::block($block),
     set::active($active),
@@ -162,11 +128,7 @@ statisticBlock
                                 div
                                 (
                                     setClass('center absolute inset-0 num gap-1'),
-                                    div
-                                    (
-                                        span(setClass('text-2xl font-bold'), $execution->progress),
-                                        '%'
-                                    ),
+                                    div(span(setClass('text-2xl font-bold'), $execution->progress), '%'),
                                     div
                                     (
                                         span
@@ -184,7 +146,7 @@ statisticBlock
                                 )
                             )
                         ),
-                        !$longBlock ? $burn : null,
+                        !$longBlock ? $burn : null
                     ),
                     cell
                     (
@@ -264,7 +226,7 @@ statisticBlock
                                     (
                                         set::className('progress-bar'),
                                         set('role', 'progressbar'),
-                                        setStyle(array('width' => '50%', 'background' => 'var(--color-primary-300)')),
+                                        setStyle(array('width' => '50%', 'background' => 'var(--color-primary-300)'))
                                     )
                                 ),
                                 div
@@ -275,16 +237,16 @@ statisticBlock
                                         set('width', '50%'),
                                         set::className('text-center'),
                                         div(span($execution->doneStory)),
-                                        div(set::className('text-sm text-gray'), span($lang->block->executionstatistic->doneStory)),
+                                        div(set::className('text-sm text-gray'), span($lang->block->executionstatistic->doneStory))
                                     ),
                                     cell
                                     (
                                         set('width', '50%'),
                                         set::className('text-center'),
                                         div(span($execution->totalStory)),
-                                        div(set::className('text-sm text-gray'), span($lang->block->executionstatistic->totalStory)),
+                                        div(set::className('text-sm text-gray'), span($lang->block->executionstatistic->totalStory))
                                     )
-                                ),
+                                )
                             )
                         ),
                         cell
@@ -294,7 +256,7 @@ statisticBlock
                             cell
                             (
                                 set::className('flex-1'),
-                                span(set::className('font-bold'), $lang->block->executionstatistic->task),
+                                span(set::className('font-bold'), $lang->block->executionstatistic->task)
                             ),
                             cell
                             (
@@ -315,5 +277,5 @@ statisticBlock
                 )
             )
         )
-    ),
+    )
 );

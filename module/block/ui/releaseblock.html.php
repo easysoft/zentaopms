@@ -20,11 +20,9 @@ if(!$longBlock)
     unset($config->block->release->dtable->fieldList['buildName']);
 }
 
-panel
+blockPanel
 (
-    setClass('p-0'),
-    set::title($block->title),
-    set::bodyClass('p-0 no-shadow border-t'),
+    setClass('list-block'),
     dtable
     (
         set::height(318),

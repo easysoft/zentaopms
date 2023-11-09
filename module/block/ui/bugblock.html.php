@@ -23,7 +23,7 @@ blockPanel
     setClass('bug-block list-block'),
     dtable
     (
-        set::id('bug-list'),
+        setID('bug-list'),
         set::height(318),
         set::bordered(false),
         set::horzScrollbarPos('inside'),

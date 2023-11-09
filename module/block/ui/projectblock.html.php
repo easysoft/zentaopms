@@ -25,21 +25,9 @@ if(!$longBlock)
     unset($config->block->project->dtable->fieldList['leftBugs']);
 }
 
-panel
+blockPanel
 (
-    set('class', 'project-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
-    set('headingClass', 'border-b'),
-    set::title($block->title),
-    to::headingActions
-    (
-        a
-        (
-            set('class', 'text-gray'),
-            set('href', createLink('project', 'browse', 'program=0&browseType=' . $block->params->type)),
-            $lang->more,
-            icon('caret-right')
-        )
-    ),
+    setClass('list-block'),
     dtable
     (
         set::id('project'),
@@ -49,7 +37,7 @@ panel
         set::cols(array_values($config->block->project->dtable->fieldList)),
         set::data(array_values($projects)),
         set::userMap($users),
-        set::onRenderCell(jsRaw('window.onRenderProjectNameCell')),
+        set::onRenderCell(jsRaw('window.onRenderProjectNameCell'))
     )
 );
 

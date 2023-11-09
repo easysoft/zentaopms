@@ -28,29 +28,15 @@ foreach($productStats as $product)
     }
 }
 
-panel
+blockPanel
 (
-    setClass('p-0'),
-    set::title($block->title),
-    set::bodyClass('p-0 no-shadow border-t'),
-    to::headingActions
-    (
-        hasPriv('product', 'all') ? h::nav
-        (
-            setClass('toolbar'),
-            btn
-            (
-                setClass('ghost toolbar-item size-sm z-10'),
-                set::url(createLink('product', 'all', "browseType={$block->params->type}")),
-                $lang->more,
-                span(setClass('caret-right')),
-            )
-        ) : '',
-    ),
+    setClass('list-block'),
     dtable
     (
+        setID('product-list'),
         set::height(318),
-        set::shadow(false),
+        set::bordered(false),
+        set::horzScrollbarPos('inside'),
         set::fixedLeftWidth('0.25'),
         set::cols(array_values($config->block->product->dtable->fieldList)),
         set::data(array_values($productStats))

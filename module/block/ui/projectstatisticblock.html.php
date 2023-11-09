@@ -140,7 +140,7 @@ if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
             (
                 set::width('100%'),
                 $cellItems
-            ),
+            )
         );
     }
 }
@@ -160,8 +160,8 @@ else
                 set('circleWidth', 6),
                 set('text', "{$project->progress}%"),
                 set('textY', 50),
-                set('textStyle', 'font-size: 30px;'),
-            ),
+                set('textStyle', 'font-size: 30px;')
+            )
         ),
         div
         (
@@ -175,8 +175,8 @@ else
                     setClass('pl-0.5'),
                     toggle::tooltip(array('title' => $lang->block->projectstatistic->totalProgressTip)),
                     'help'
-                ),
-            ),
+                )
+            )
         )
     );
     $cells[] = cell
@@ -190,7 +190,7 @@ else
             (
                 setClass('font-bold'),
                 $lang->project->progress
-            ),
+            )
         ),
         h::table
         (
@@ -207,8 +207,7 @@ else
                         (
                             toggle::tooltip(array('title' => '提示文本')),
                             'help'
-                        ),
-                        ':',
+                        ), ':'
                     ),
                     h::td
                     (
@@ -216,9 +215,9 @@ else
                         span
                         (
                             setClass('font-bold text-black mr-1'),
-                            (!empty($project->sv) ? $project->sv : 0) . $lang->percent,
-                        ),
-                    ),
+                            (!empty($project->sv) ? $project->sv : 0) . $lang->percent
+                        )
+                    )
                 ),
                 h::tr
                 (
@@ -230,8 +229,7 @@ else
                         (
                             toggle::tooltip(array('title' => '提示文本')),
                             'help'
-                        ),
-                        ':',
+                        ), ':'
                     ),
                     h::td
                     (
@@ -239,9 +237,9 @@ else
                         span
                         (
                             setClass('font-bold text-black mr-1'),
-                            (!empty($project->pv) ? $project->pv : 0) . $lang->percent,
-                        ),
-                    ),
+                            (!empty($project->pv) ? $project->pv : 0) . $lang->percent
+                        )
+                    )
                 ),
                 h::tr
                 (
@@ -253,8 +251,7 @@ else
                         (
                             toggle::tooltip(array('title' => '提示文本')),
                             'help'
-                        ),
-                        ':',
+                        ), ':'
                     ),
                     h::td
                     (
@@ -262,12 +259,12 @@ else
                         span
                         (
                             setClass('font-bold text-black mr-1'),
-                            (!empty($project->ev) ? $project->ev : 0) . $lang->percent,
-                        ),
-                    ),
-                ),
-            ),
-        ),
+                            (!empty($project->ev) ? $project->ev : 0) . $lang->percent
+                        )
+                    )
+                )
+            )
+        )
     );
     $cells[] = cell
     (
@@ -280,7 +277,7 @@ else
             (
                 setClass('font-bold'),
                 $lang->block->projectstatistic->currentCost
-            ),
+            )
         ),
         h::table
         (
@@ -297,8 +294,7 @@ else
                         (
                             toggle::tooltip(array('title' => '提示文本')),
                             'help'
-                        ),
-                        ':',
+                        ), ':'
                     ),
                     h::td
                     (
@@ -306,9 +302,9 @@ else
                         span
                         (
                             setClass('font-bold text-black mr-1'),
-                            (!empty($project->cv) ? $project->cv : 0) . $lang->percent,
-                        ),
-                    ),
+                            (!empty($project->cv) ? $project->cv : 0) . $lang->percent
+                        )
+                    )
                 ),
                 h::tr
                 (
@@ -320,8 +316,7 @@ else
                         (
                             toggle::tooltip(array('title' => '提示文本')),
                             'help'
-                        ),
-                        ':',
+                        ), ':'
                     ),
                     h::td
                     (
@@ -329,9 +324,9 @@ else
                         span
                         (
                             setClass('font-bold text-black mr-1'),
-                            (!empty($project->ev) ? $project->ev : 0) . $lang->percent,
-                        ),
-                    ),
+                            (!empty($project->ev) ? $project->ev : 0) . $lang->percent
+                        )
+                    )
                 ),
                 h::tr
                 (
@@ -343,8 +338,7 @@ else
                         (
                             toggle::tooltip(array('title' => '提示文本')),
                             'help'
-                        ),
-                        ':',
+                        ), ':'
                     ),
                     h::td
                     (
@@ -352,12 +346,12 @@ else
                         span
                         (
                             setClass('font-bold text-black mr-1'),
-                            (!empty($project->ac) ? $project->ac : 0) . $lang->percent,
-                        ),
-                    ),
-                ),
-            ),
-        ),
+                            (!empty($project->ac) ? $project->ac : 0) . $lang->percent
+                        )
+                    )
+                )
+            )
+        )
     );
 }
 
@@ -375,12 +369,12 @@ statisticBlock
         (
             setClass('flex bg-white leading-6 px-2 py-1 mt-1 mx-3 shadow items-center gap-x-2 justify-between' . ($longBlock ? ' h-10 mb-6 flex-nowrap' : 'h-20 mb-4 flex-wrap')),
             $projectOverview,
-            $lastestExecution,
+            $lastestExecution
         ),
         div
         (
             setClass('flex' . (!$longBlock ? ' flex-wrap' : '')),
-            $cells,
+            $cells
         )
-    ),
+    )
 );

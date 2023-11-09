@@ -81,7 +81,7 @@ function printPreference()
                     'type'  => 'picker',
                     'items' => $lang->my->executionLinkList
                 ))
-            ) : null,
+            ) : null
         )
     );
 }
