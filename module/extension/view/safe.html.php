@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
-  <?php echo $error;?>
+  <?php echo isset($error) ? $error : '';?>
   <?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href', 'btn btn-primary');?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

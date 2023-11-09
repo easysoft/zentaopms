@@ -35,7 +35,8 @@ class extension extends control
         $statusFile = str_replace('\\', '/', $statusFile);
         $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
 
-        die($this->display());
+        $this->display();
+        helper::end();
     }
 
     /**
