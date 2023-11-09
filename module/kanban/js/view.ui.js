@@ -418,3 +418,29 @@ window.hideAllAction = function()
 {
     $('.btn').hide();
 }
+
+window.sortItems = function(event)
+{
+    const title      = $(event.target).closest('a').text();
+    const objectType = $(event.target).closest('a').data('type');
+    const objectID   = $(event.target).closest('a').data('id');
+    const url = $.createLink('kanban', 'ajaxGetSortItems', 'objectType=' + objectType + '&objectID=' + objectID);
+
+    $.getJSON(url, function(items)
+    {
+        zui.Modal.sortView({
+            title,
+            items,
+        }).then(orders => {
+            if(orders)
+            {
+                const link = $.createLink('kanban', 'sortRegion', 'regions=' + orders);
+                $.getJSON(link, function(result)
+                {
+                    loadCurrentPage();
+                });
+            }
+        });
+    });
+
+}

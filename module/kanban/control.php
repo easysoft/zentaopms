@@ -486,8 +486,7 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->region  = $this->kanban->getRegionByID($regionID);
-
+        $this->view->region = $this->kanban->getRegionByID($regionID);
         $this->display();
     }
 
@@ -511,7 +510,7 @@ class kanban extends control
         }
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
@@ -1922,5 +1921,26 @@ class kanban extends control
     public function ajaxSaveRegionID($regionID)
     {
         $this->session->set('regionID', $regionID, 'kanban');
+    }
+
+    /**
+     * 获取排序的列表。
+     * Ajax Get sort items.
+     *
+     * @param  int    $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetSortItems($objectType, $objectID)
+    {
+        $itemList = array();
+        if($objectType == 'region')
+        {
+            $region      = $this->kanban->getRegionByID($objectID);
+            $regionPairs = $this->kanban->getRegionPairs($region->kanban);
+            foreach($regionPairs as $regionID => $regionName) $itemList[] = array('id' => $regionID, 'text' => $regionName);
+        }
+        return print(json_encode($itemList));
     }
 }
