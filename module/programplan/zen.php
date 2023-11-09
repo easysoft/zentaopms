@@ -244,7 +244,7 @@ class programplanZen extends programplan
 
         /* Obtain user page configuration items. */
         $owner = $this->app->user->account;
-        if(!isset($this->config->programplan->browse->stageCustom)) $this->loadModel('setting')->setItem("$owner.programplan.browse.stageCustom", 'date,task');
+        if(!isset($this->config->programplan->browse->stageCustom)) $this->setting->setItem("$owner.$module.browse.stageCustom", 'date,task,point');
         $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module=programplan&section=browse&key=stageCustom");
         $dateDetails  = strpos($selectCustom, 'date') !== false ? 0 : 1; // Gantt chart detail date display.
 
