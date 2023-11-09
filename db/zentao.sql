@@ -2070,6 +2070,7 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `mailto` text NULL,
   `desc` mediumtext NULL,
   `report` text NULL,
+  `members` text NULL,
   `status` enum('blocked','doing','wait','done') NOT NULL DEFAULT 'wait',
   `testreport` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `auto` varchar(10) NOT NULL DEFAULT 'no',
