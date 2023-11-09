@@ -245,17 +245,6 @@ class header extends wg
         $items[] = array('text' => $lang->help, 'icon' => 'help', 'items' => $helpItems);
 
         /* printClientLink */
-        if(isset($config->xxserver->installed) and $config->xuanxuan->turnon)
-        {
-            $mobileItems = array();
-            $mobileItems[] = array('type' => 'html', 'html' => '<img src="' . $config->webRoot . 'static/images/app-qrcode.png">');
-
-            $clientItems = array();
-            $clientItems[] = array('text' => $lang->downloadClient, 'url' => createLink('misc', 'downloadClient'), 'data-toggle' => 'modal');
-            $clientItems[] = array('text' => $lang->downloadMobile, 'items' => $mobileItems);
-            $clientItems[] = array('text' => $lang->clientHelp, 'url' => $lang->clientHelpLink);
-            $items[] = array('text' => $lang->clientName, 'items' => $clientItems);
-        }
 
         $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'), 'data-toggle' => 'modal');
         $items[] = array('type' => 'html', 'className' => 'menu-item', 'html' => $lang->designedByAIUX);
