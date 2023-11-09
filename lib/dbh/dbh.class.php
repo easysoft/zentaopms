@@ -265,12 +265,12 @@ class dbh
      */
     public function tableExits($tableName)
     {
-        $tableName = str_replace('`', "'", $tableName);
-        $sql = "SHOW TABLES FROM {$this->config->name} like $tableName";
+        $tableName = str_replace("'", "", $tableName);
+        $sql = "SHOW TABLES FROM {$this->config->name} like '{$tableName}'";
         switch($this->config->driver)
         {
             case 'mysql':
-                $sql = "SHOW TABLES FROM {$this->config->name} like {$tableName}";
+                $sql = "SHOW TABLES FROM {$this->config->name} like '{$tableName}'";
                 break;
             case 'dm':
                 $sql = "SELECT * FROM all_tables WHERE owner='{$this->config->name}' AND table_name={$tableName}";
