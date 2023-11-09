@@ -50,6 +50,8 @@ window.setStatistics = function(element, checkedIDList)
         {
             const task = row.data;
 
+            if(task.isParent) return;
+
             totalEstimate += Number(task.estimate);
             totalConsumed += Number(task.consumed);
             if(task.status != 'cancel' && task.status != 'closed') totalLeft += Number(task.left);
