@@ -18,6 +18,7 @@ if(!$longBlock)
 
 blockPanel
 (
+    setClass('build-block list-block'),
     dtable
     (
         set::height(318),

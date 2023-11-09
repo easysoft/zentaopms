@@ -20,6 +20,7 @@ if(!$longBlock)
 
 blockPanel
 (
+    setClass('bug-block list-block'),
     dtable
     (
         set::id('bug-list'),

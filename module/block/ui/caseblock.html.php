@@ -22,6 +22,7 @@ foreach($cases as $case) $case->lastRunDate = formatTime($case->lastRunDate, DT_
 
 blockPanel
 (
+    setClass('case-block list-block'),
     dtable
     (
         set::id('case'),

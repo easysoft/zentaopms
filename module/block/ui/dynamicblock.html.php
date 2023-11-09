@@ -37,6 +37,6 @@ else
     );
 }
 
-blockPanel($content);
+blockPanel(setClass('dynamic-block'), $content);
 
 render();

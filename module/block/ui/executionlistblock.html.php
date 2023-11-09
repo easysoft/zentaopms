@@ -21,6 +21,7 @@ if(!$longBlock)
 
 blockPanel
 (
+    setClass('executionlist-block list-block'),
     dtable
     (
         set::height(318),
