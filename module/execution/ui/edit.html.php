@@ -68,9 +68,9 @@ if(isset($project))
 }
 
 $typeBox = null;
-if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
+if(in_array($project->model, array('waterfall', 'waterfallplus')))
 {
-    $typeList = $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList;
+    $typeList = $lang->stage->typeList;
     $typeBox  = formRow
         (
             formGroup
@@ -102,7 +102,7 @@ if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
             )
         );
 }
-elseif($execution->type != 'kanban')
+elseif($execution->type != 'kanban' and $project->model != 'ipd')
 {
     $typeBox = formRow
         (
