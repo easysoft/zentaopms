@@ -120,7 +120,7 @@ foreach($hasViewPriv as $type => $bool)
 
 blockPanel
 (
-    setClass('assigntome-block'),
+    setClass('assigntome-block list-block'),
     to::heading
     (
         div
