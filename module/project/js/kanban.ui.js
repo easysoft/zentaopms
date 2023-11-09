@@ -46,10 +46,11 @@ window.canDrop = function(dragInfo, dropInfo)
 
 window.onDrop = function(changes, dropInfo)
 {
-    const item     = dropInfo['drag']['item'];
-    const toColID  = dropInfo['drop']['col']
-    const toLaneID = dropInfo['drop']['lane']
+    const item  = dropInfo['drag']['item'];
+    const toCol = dropInfo['drop']['col'];
 
-    url = $.createLink('kanban', 'moveCard', `cardID=${item.id}&fromColID=${item.column}&toColID=${toColID}&fromLaneID=${item.lane}&toLaneID=${toLaneID}&kanbanID=${kanbanID}`);
-    $.ajaxSubmit({url});
+    if(item.status == 'wait')   methodName = toCol == 'doingProjects' ? 'start' : 'close';
+    if(item.status == 'doing')  methodName = 'close';
+    if(item.status == 'closed') methodName = 'activate';
+    zui.Modal.open({url: $.createLink('project', methodName, 'projectID=' + item.id), size: 'lg'});
 }
