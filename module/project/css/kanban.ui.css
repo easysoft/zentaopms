@@ -1,0 +1,8 @@
+.card {padding: 6px;}
+.card-item-wait   .card {border-left: 2px solid rgba(var(--color-primary-500-rgb),var(--tw-text-opacity));}
+.card-item-doing  .card {border-left: 2px solid rgba(var(--color-success-500-rgb),var(--tw-text-opacity));}
+.card-item-closed .card {border-left: 2px solid rgba(var(--color-gray-500-rgb),var(--tw-text-opacity));}
+.card-item-delay  .card {border-left: 2px solid rgba(var(--color-danger-500-rgb),var(--tw-text-opacity));}
+
+.card-prefix {position: absolute; right: 10px}
+.card-suffix {min-width: 46px;}
