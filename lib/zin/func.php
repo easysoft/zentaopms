@@ -1726,6 +1726,14 @@ function mindmap(): mindmap
 }
 
 /**
+ * Treemap widget.
+ */
+function treemap(): treemap
+{
+    return createWg('treemap', func_get_args());
+}
+
+/**
  * Image cutter widget.
  */
 function imgCutter(): imgCutter
