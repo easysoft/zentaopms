@@ -209,7 +209,7 @@ class pivotModel extends model
                 $pivots[$index]->used = $this->screen->checkIFChartInUse($pivot->id, 'pivot', $screenList);
             }
 
-            if($isObject) $pivots[$index] = $this->processFieldSettings($pivots[$index]);
+            if($isObject and $pivots[$index]->stage == 'published') $pivots[$index] = $this->processFieldSettings($pivots[$index]);
         }
 
         return $isObject ? reset($pivots) : $pivots;
