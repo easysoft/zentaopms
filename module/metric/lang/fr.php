@@ -207,6 +207,7 @@ if(in_array($config->edition, array('max', 'ipd')))
     $lang->metric->objectList['risk']        = "Risk";
     $lang->metric->objectList['issue']       = "Issue";
 }
+
 $lang->metric->objectList['review'] = "Review";
 $lang->metric->objectList['other']  = "Other";
 
