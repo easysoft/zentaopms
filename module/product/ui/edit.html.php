@@ -20,9 +20,9 @@ foreach($fields as $field => $attr)
 
     $control = array();
     $control['type'] = $attr['control'];
-    if($attr['control'] == 'select')$control['type']  = 'picker';
-    if($attr['control'] == 'radio') $control['type']  = 'radioList';
-    if(!empty($attr['options']))    $control['items'] = $attr['options'];
+    if($attr['control'] == 'select') $control['type']  = 'picker';
+    if($attr['control'] == 'radio')  $control['type']  = 'radioList';
+    if(isset($attr['options']))      $control['items'] = $attr['options'];
     if($attr['control'] == 'multi-select')
     {
         $control['type']     = 'picker';
