@@ -26,7 +26,7 @@ class floatToolbar extends wg
     {
         if(empty($wg1) || empty($wg2)) return null;
 
-        return div(setClass('divider w-px h-6 mx-2'));
+        return div(setClass('divider w-px self-center h-6 mx-2'));
     }
 
     private function buildBtns(array|null $items): array|null
@@ -41,7 +41,7 @@ class floatToolbar extends wg
             if(!empty($item['url']))      $item['url']      = preg_replace_callback('/\{(\w+)\}/', array($this, 'getObjectValue'), $item['url']);
             if(!empty($item['data-url'])) $item['data-url'] = preg_replace_callback('/\{(\w+)\}/', array($this, 'getObjectValue'), $item['data-url']);
 
-            $className = 'ghost text-white';
+            $className = 'ghost';
             if(!empty($item['className'])) $className .= ' ' . $item['className'];
             $btns[] = btn(set($item), setClass($className));
         }
@@ -62,11 +62,11 @@ class floatToolbar extends wg
 
         if($block[0] instanceof btn)
         {
-            $block[0]->add(setClass('ghost', 'text-white'));
+            $block[0]->add(setClass('ghost'));
         }
         else
         {
-            foreach($block[0]->children() as $blockBtn) $blockBtn->add(setClass('ghost', 'text-white'));
+            foreach($block[0]->children() as $blockBtn) $blockBtn->add(setClass('ghost'));
         }
         if(empty($btns)) return $block;
 
@@ -90,7 +90,7 @@ class floatToolbar extends wg
 
         return div
         (
-            setClass('float-toolbar inline-flex rounded p-1.5 items-center'),
+            setClass('toolbar bg-darker backdrop-blur bg-opacity-70 text-canvas float-toolbar rounded p-1.5'),
             $prefixBtns,
             $this->buildDivider($prefixBtns, $mainBtns),
             $mainBtns,
