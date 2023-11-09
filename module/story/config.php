@@ -16,6 +16,7 @@ $config->story->change = new stdclass();
 $config->story->close  = new stdclass();
 $config->story->review = new stdclass();
 $config->story->create->requiredFields = 'title';
+$config->story->edit->requiredFields = 'title';
 $config->story->change->requiredFields = 'title';
 $config->story->close->requiredFields  = 'closedReason';
 $config->story->review->requiredFields = '';
