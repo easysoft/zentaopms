@@ -35,7 +35,7 @@
         <tr>
           <td><?php echo html::a($executionLink, $execution->id, '', "data-app='execution'");?></td>
           <td>
-            <?php if($this->config->edition == 'max'):?>
+            <?php if(in_array($this->config->edition, array('max', 'ipd'))):?>
             <span class='project-type-label label label-info label-outline'><?php echo zget($lang->user->executionTypeList, $execution->type);?></span>
             <?php endif;?>
             <?php echo html::a($executionLink, $execution->name, '', "data-app='execution'");?>

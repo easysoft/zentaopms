@@ -350,7 +350,7 @@ class todoZen extends todo
         $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted|noempty');
         $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
         if($this->config->edition != 'open') $feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account, '', isset($objectIdList['feedback']) ? $objectIdList['feedback'] : '');
-        if($this->config->edition == 'max')
+        if(in_array($this->config->edition, array('max', 'ipd')))
         {
             $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
             $risks         = $this->loadmodel('risk')->getUserRiskPairs($account);
@@ -374,7 +374,7 @@ class todoZen extends todo
         $this->view->userID      = $userID;
         $this->view->status      = $status;
         if($this->config->edition != 'open') $this->view->feedback = $feedbacks;
-        if($this->config->edition == 'max')
+        if(in_array($this->config->edition, array('max', 'ipd')))
         {
             $this->view->issues        = $issues;
             $this->view->risks         = $risks;
@@ -808,7 +808,7 @@ class todoZen extends todo
             if($type == 'story')    $todo->name = isset($assemble->stories[$todo->objectID])   ? $assemble->stories[$todo->objectID]   . "(#$todo->objectID)" : '';
             if($type == 'testtask') $todo->name = isset($assemble->testTasks[$todo->objectID]) ? $assemble->testTasks[$todo->objectID] . "(#$todo->objectID)" : '';
 
-            if($this->config->edition == 'max')
+            if(in_array($this->config->edition, array('max', 'ipd')))
             {
                 if($type == 'issue')       $todo->name = isset($assemble->issues[$todo->objectID]) ? $assemble->issues[$todo->objectID] . "(#$todo->objectID)" : '';
                 if($type == 'risk')        $todo->name = isset($assemble->risks[$todo->objectID])  ? $assemble->risks[$todo->objectID]  . "(#$todo->objectID)" : '';

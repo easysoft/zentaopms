@@ -2846,7 +2846,8 @@ class userModel extends model
         $personalData['createdBugs']         = $this->dao->select($t1Count)->from(TABLE_BUG)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')->where('t1.openedBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');
         $personalData['resolvedBugs']        = $this->dao->select($t1Count)->from(TABLE_BUG)->alias('t1')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')->where('t1.resolvedBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');
         $personalData['createdCases']        = $this->dao->select($count)->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
-        if($this->config->edition == 'max')
+
+        if(in_array($this->config->edition, array('max', 'ipd')))
         {
             $personalData['createdRisks']   = $this->dao->select($t1Count)->from(TABLE_RISK)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->where('t1.createdBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');
             $personalData['resolvedRisks']  = $this->dao->select($t1Count)->from(TABLE_RISK)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->where('t1.resolvedBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');

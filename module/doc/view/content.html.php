@@ -46,7 +46,7 @@
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect btn btn-link'><?php echo html::image("static/svg/{$star}.svg", "class='$star'");?></a>
             <?php endif;?>
 
-            <?php if($config->vision == 'rnd' and $config->edition == 'max' and $app->tab == 'project'):?>
+            <?php if($config->vision == 'rnd' and in_array($config->edition, array('max', 'ipd')) and $app->tab == 'project'):?>
             <?php
             $canImportToPracticeLib  = (common::hasPriv('doc', 'importToPracticeLib')  and helper::hasFeature('practicelib'));
             $canImportToComponentLib = (common::hasPriv('doc', 'importToComponentLib') and helper::hasFeature('componentlib'));
@@ -214,7 +214,7 @@
   </div>
 </div>
 
-<?php if($this->config->edition == 'max'):?>
+<?php if(in_array($config->edition, array('max', 'ipd'))):?>
 <div class="modal fade" id="importToPracticeLib">
   <div class="modal-dialog mw-500px">
     <div class="modal-content">

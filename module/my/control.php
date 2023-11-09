@@ -156,7 +156,7 @@ class my extends control
         $qaCount      = 0;
         $meetingCount = 0;
         $ticketCount  = 0;
-        $isMax        = $this->config->edition == 'max' ? 1 : 0;
+        $isMax        = in_array($this->config->edition, array('max', 'ipd')) ? 1 : 0;
 
         $feedbackCount = 0;
         $isBiz         = $this->config->edition == 'biz' ? 1 : 0;
@@ -999,7 +999,7 @@ EOF;
         }
 
         $this->view->flows = array();
-        if($this->config->edition == 'max')
+        if(in_array($this->config->edition, array('max', 'ipd')))
         {
             $this->app->loadLang('approval');
             $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');

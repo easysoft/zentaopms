@@ -298,7 +298,7 @@ class userEntry extends entry
                     $info->issue = array('total' => 0, 'issues' => array());
                     if(!common::hasPriv('my', 'work')) break;
 
-                    if($this->config->edition == 'max')
+                    if(in_array($this->config->edition, array('max', 'ipd')))
                     {
                         global $app;
                         $app->rawMethod = 'work';
@@ -318,7 +318,7 @@ class userEntry extends entry
                     $info->risk = array('total' => 0, 'risks' => array());
                     if(!common::hasPriv('my', 'work')) break;
 
-                    if($this->config->edition == 'max')
+                    if(in_array($this->config->edition, array('max', 'ipd')))
                     {
                         global $app;
                         $app->rawMethod = 'work';
@@ -338,7 +338,7 @@ class userEntry extends entry
                     $info->meeting = array('total' => 0, 'meetings' => array());
                     if(!common::hasPriv('my', 'work')) break;
 
-                    if($this->config->edition == 'max')
+                    if(in_array($this->config->edition, array('max', 'ipd')))
                     {
                         global $app;
                         $app->rawMethod = 'work';

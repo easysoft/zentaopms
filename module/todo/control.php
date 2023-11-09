@@ -489,7 +489,7 @@ class todo extends control
             $assemble->stories   = $stories;
             $assemble->tasks     = $tasks;
             $assemble->testTasks = $testTasks;
-            if($this->config->edition == 'max')
+            if(in_array($this->config->edition, array('max', 'ipd')))
             {
                 $iroData = $this->todoZen->exportInfo((string)$this->config->edition, (string)$user->account);
                 $assemble->issues        = $iroData[0];

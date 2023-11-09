@@ -8026,7 +8026,7 @@ class upgradeModel extends model
             /* User requriement */
             $requirementStory = $this->dao->select('count(1) as total')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->fetch('total');
             if($requirementStory > 0) $returnData['ur'] = true;
-            if($this->config->edition == 'max')
+            if(in_array($this->config->edition, array('max', 'ipd')))
             {
                 /* issue,risk,opportunity,process,QA,meeting */
                 $issue = $this->dao->select('count(1) as total')->from(TABLE_ISSUE)->alias('t1')

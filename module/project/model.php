@@ -2198,7 +2198,7 @@ class projectModel extends model
         if(empty($model)) return false;
 
         $checkList = $this->config->project->checkList->$model;
-        if($this->config->edition == 'max') $checkList = $this->config->project->maxCheckList->$model;
+        if(in_array($this->config->edition, array('max', 'ipd'))) $checkList = $this->config->project->maxCheckList->$model;
         foreach($checkList as $module)
         {
             if($module == '') continue;

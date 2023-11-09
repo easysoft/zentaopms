@@ -921,7 +921,7 @@ class executionZen extends execution
         if($this->post->heightType == 'custom' && !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return false;
 
         /* Set planDuration and realDuration. */
-        if($this->config->edition == 'max')
+        if(in_array($this->config->edition, array('max', 'ipd')))
         {
             $execution->planDuration = $this->loadModel('programplan')->getDuration($execution->begin, $execution->end);
             if(!empty($execution->realBegan) && !empty($execution->realEnd)) $execution->realDuration = $this->programplan->getDuration($execution->realBegan, $execution->realEnd);

@@ -371,7 +371,7 @@ class executionModel extends model
         if(!empty($execution->percent) and isset($this->config->setPercent) and $this->config->setPercent == 1) $this->checkWorkload('update', $execution->percent, $oldExecution);
 
         /* Set planDuration and realDuration. */
-        if($this->config->edition == 'max')
+        if(in_array($this->config->edition, array('max', 'ipd')))
         {
             $execution->planDuration = $this->loadModel('programplan')->getDuration($execution->begin, $execution->end);
             if(!empty($execution->realBegan) and !empty($execution->realEnd)) $execution->realDuration = $this->programplan->getDuration($execution->realBegan, $execution->realEnd);

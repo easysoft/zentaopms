@@ -1901,7 +1901,7 @@ class docModel extends model
         }
         elseif($type == 'project')
         {
-            if($this->config->edition == 'max')
+            if(in_array($this->config->edition, array('max', 'ipd')))
             {
                 $issueIdList   = $this->dao->select('id')->from(TABLE_ISSUE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
                 $meetingIdList = $this->dao->select('id')->from(TABLE_MEETING)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
@@ -3241,7 +3241,7 @@ class docModel extends model
         if(!common::hasPriv('doc', 'create') or !isset($lib->id)) return null;
 
         $objectID      = zget($lib, $lib->type, 0);
-        $templateParam = $this->config->edition == 'max' ? '&from=template' : '';
+        $templateParam = in_array($this->config->edition, array('max', 'ipd')) ? '&from=template' : '';
         $class         = $from == 'list' ? 'btn-info' : 'btn-primary';
         $html          = "<div class='dropdown btn-group createDropdown'>";
         $html         .= html::a(helper::createLink('doc', 'create', "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html$templateParam"), "<i class='icon icon-plus'></i> {$this->lang->doc->create}", '', "class='btn $class' data-app='{$this->app->tab}'");
@@ -3255,7 +3255,7 @@ class docModel extends model
             $attr     = "data-app='{$this->app->tab}'";
             $class    = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
             $params   = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=$typeKey";
-            if($typeKey == 'template' and $this->config->edition == 'max') $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
+            if($typeKey == 'template' and in_array($this->config->edition, array('max', 'ipd'))) $params = "objectType={$lib->type}&objectID=$objectID&libID={$lib->id}&moduleID=$moduleID&type=html&from=template";
 
             $html .= "<li>";
             $html .= html::a(helper::createLink('doc', 'create', $params, '', $class ? true : false), $icon . ' ' . $typeName, '', "class='$class' $attr");
