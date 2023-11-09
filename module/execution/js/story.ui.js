@@ -24,7 +24,7 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     return false;
 }).on('click', '#linkStoryByPlan button[type="submit"]', function()
 {
-    var planID = $('#plan').val();
+    var planID = $('[name=plan]').val();
     if(planID)
     {
         $.ajaxSubmit({url: $.createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID)});

@@ -42,9 +42,11 @@ modal
         (
             set::label($lang->execution->selectStoryPlan),
             set::required(true),
-            select
+            setClass('text-left'),
+            picker
             (
                 set::name('plan'),
+                set::required(true),
                 set::items($allPlans)
             )
         ),
@@ -172,11 +174,13 @@ modal
         set::url(createLink('story', 'batchToTask', "executionID={$execution->id}&projectID={$execution->project}")),
         formGroup
         (
+            setClass('text-left'),
             set::label($lang->task->type),
             set::required(true),
             set::width('1/2'),
-            select
+            picker
             (
+                set::required(true),
                 set::name('type'),
                 set::items($lang->task->typeList)
             )
