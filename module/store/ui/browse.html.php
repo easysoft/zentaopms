@@ -110,7 +110,6 @@ div
                 set::control(array
                 (
                     'type'        => 'inputControl',
-                    'prefix'      => icon('search'),
                     'prefixWidth' => 'icon',
                     'placeholder' => $lang->store->searchApp,
                     'value'       => $keyword,
@@ -120,24 +119,24 @@ div
     ),
 
     div(...$groups),
-    pager(
-        setID('storePager'),
+    count($cloudApps) ? pager(
+        set::props(array('id' => 'storePager')),
         set::page($setting['page']),
         set::recTotal($setting['recTotal']),
         set::recPerPage($setting['recPerPage']),
         set::linkCreator($setting['linkCreator']),
         set::items($setting['items']),
         set::gap($setting['gap']),
-    ),
+    ) : null,
 );
 
-sidebar
+count($cloudApps) ? sidebar
 (
-    tree
+    treeEditor
     (
-        set::id('storeTree'),
+        setID('storeTree'),
         set::items($tree),
         set::canSplit(false),
         set::onClickItem(jsRaw('window.treeClick')),
     )
-);
+) : null;
