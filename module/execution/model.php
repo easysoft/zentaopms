@@ -2000,7 +2000,7 @@ class executionModel extends model
             $executionQuery = "`execution` " . helper::dbIN(array_keys($executions));
             $taskQuery      = str_replace("`execution` = 'all'", $executionQuery, $taskQuery); // Search all execution.
             $this->session->set('taskQueryCondition', $taskQuery, $this->app->tab);
-            $this->session->set('taskOnlyCondition', '1=1', $this->app->tab);
+            $this->session->set('taskOnlyCondition', true, $this->app->tab);
 
             return $this->getSearchTasks($taskQuery, $sort, $pager);
         }
@@ -3660,7 +3660,7 @@ class executionModel extends model
              ->orderBy($orderBy)
              ->fetchAll('id');
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', '1=1');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', true);
 
         return $this->processTasks($tasks);
     }

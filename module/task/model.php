@@ -1647,8 +1647,7 @@ class taskModel extends model
         $tasks = array();
         if($this->session->taskOnlyCondition)
         {
-            if($this->session->taskOnlyCondition == true) $this->session->taskOnlyCondition = '1=1';
-            $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskOnlyCondition)
+            $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)
                 ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
                 ->orderBy($sort)
                 ->fetchAll('id');

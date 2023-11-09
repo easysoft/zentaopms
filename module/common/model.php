@@ -2174,7 +2174,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function saveQueryCondition($sql, $objectType, $onlyCondition = '1=1')
+    public function saveQueryCondition($sql, $objectType, $onlyCondition = true)
     {
         /* Set the query condition session. */
         if($onlyCondition)
