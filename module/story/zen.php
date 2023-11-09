@@ -1194,7 +1194,6 @@ class storyZen extends story
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('deleteFiles', array())
             ->setDefault('lastEditedDate', $now)
-            ->setDefault('status', $oldStory->status)
             ->setDefault('version', $oldStory->version)
             ->get();
 
@@ -1218,6 +1217,10 @@ class storyZen extends story
             $story->closedReason = '';
             if($oldStory->reviewedBy) $story->reviewedDate = null;
             if($oldStory->closedBy)   $story->closedDate   = null;
+        }
+        else
+        {
+            $story->status = $oldStory->status;
         }
 
         if(!isset($_POST['relievedTwins'])) unset($story->relievedTwins);
