@@ -165,14 +165,16 @@ class docZen extends doc
      * @param  int       $libID
      * @param  int       $moduleID
      * @param  string    $objectType mine|product|project|execution|custom
+     * @param  int       $executionID
      * @access protected
      * @return array
      */
-    protected function getDefacultNestedShow(int $libID, int $moduleID, string $objectType = ''): array
+    protected function getDefacultNestedShow(int $libID, int $moduleID, string $objectType = '', int $executionID = 0): array
     {
         if(!$libID && !$moduleID) return array();
 
         $prefix = $objectType == 'mine' ? "0:" : '';
+        $prefix = $executionID ? "{$executionID}:" : $prefix;
         if($libID && !$moduleID) return array("{$prefix}{$libID}" => true);
 
         $module = $this->loadModel('tree')->getByID($moduleID);

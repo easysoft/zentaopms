@@ -1264,6 +1264,8 @@ class doc extends control
             $this->view->$objectKey = $objectID;
         }
 
+        $executionID = $type == 'project' && $lib->type == 'execution' ? $lib->execution : 0;
+
         $this->view->title             = $title;
         $this->view->type              = $type;
         $this->view->objectType        = $type;
@@ -1286,7 +1288,7 @@ class doc extends control
         $this->view->apiLibID          = key($apiLibs);
         $this->view->spaceType         = $type;
         $this->view->linkParams        = "objectID=$objectID&%s&browseType=&orderBy=$orderBy&param=0";
-        $this->view->defaultNestedShow = $this->docZen->getDefacultNestedShow($libID, $moduleID, $type);
+        $this->view->defaultNestedShow = $this->docZen->getDefacultNestedShow($libID, $moduleID, $type, $executionID);
 
         $this->display();
     }
