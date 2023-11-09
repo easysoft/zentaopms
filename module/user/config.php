@@ -19,5 +19,10 @@ $config->user->lockMinutes          = 10;
 $config->user->batchCreate          = 10;
 $config->user->resetPasswordTimeout = 3;
 
+$config->user->loginImg = array();
+$config->user->loginImg['logo'] = 'zt-login-logo.svg';
+$config->user->loginImg['bg']   = 'zt-login-bg.svg';
+$config->user->loginImg['ai']   = 'zt-login-ai.svg';
+
 /* User detail fields for API against JIHU GitLab. */
 $config->user->detailFields = 'id,account,realname,avatar';

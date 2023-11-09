@@ -12,44 +12,56 @@ include '../../common/view/header.lite.html.php';
 if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
 ?>
 <?php js::set('loginTimeoutTip', $lang->user->error->loginTimeoutTip);?>
+<?php $imgBasePath = $config->webRoot . 'theme/default/images/main/';?>
 <?php $zentaodirName = basename($this->app->getBasePath());?>
 <main id="main" class="fade no-padding">
   <div class="container" id="login">
     <div id="loginPanel">
-      <header>
-        <h2><?php printf($lang->welcome, $app->company->name);?></h2>
-        <div class="actions dropdown dropdown-hover" id='langs'>
-          <button type='button' class='btn' title='Change Language/更换语言/更換語言'><?php echo $config->langs[$this->app->getClientLang()]; ?> <span class="caret"></span></button>
-          <ul class="dropdown-menu pull-right">
-            <?php foreach($config->langs as $key => $value):?>
-            <li><a class="switch-lang" data-value="<?php echo $key; ?>"><?php echo $value; ?></a></li>
-            <?php endforeach;?>
-          </ul>
-        </div>
-      </header>
       <div class="table-row">
-        <div class="col-4 text-center" id='logo-box'>
-          <img src="<?php echo $config->webRoot . 'theme/default/images/main/' . $this->lang->logoImg;?>" />
+        <div class="col-5 text-center" id='logo-box' style='background-image: url(<?php echo $imgBasePath . $config->user->loginImg['bg'];?>)'>
+          <?php
+          $logoVerticalMargin = !empty($this->config->safe->loginCaptcha) ? 'top: 80px;' : 'top: 60px;';
+          $aiVerticalMargin   = !empty($this->config->safe->loginCaptcha) ? 'bottom: 64px;' : 'bottom: 48px;';
+          ?>
+          <img id='login-logo' style="<?php echo $logoVerticalMargin;?>" src="<?php echo $imgBasePath . $config->user->loginImg['logo'];?>">
+          <img id='login-ai' style="<?php echo $aiVerticalMargin;?>"     src="<?php echo $imgBasePath . $config->user->loginImg['ai'];?>">
         </div>
-        <div class="col-8">
-          <form method='post' target='hiddenwin'>
+        <div class="col-7">
+          <header>
+            <h2><?php printf($lang->welcome, $app->company->name);?></h2>
+            <div class="actions dropdown dropdown-hover" id='langs'>
+              <button type='button' class='btn' title='Change Language/更换语言/更換語言'><?php echo $config->langs[$this->app->getClientLang()]; ?> <span class="caret"></span></button>
+              <ul class="dropdown-menu pull-right">
+                <?php foreach($config->langs as $key => $value):?>
+                <li><a class="switch-lang" data-value="<?php echo $key; ?>"><?php echo $value; ?></a></li>
+                <?php endforeach;?>
+              </ul>
+            </div>
+          </header>
+          <form method='post' target='hiddenwin' id='loginForm'>
             <table class='table table-form'>
               <tbody>
                 <?php if($loginExpired):?>
                 <p class='text-red'><?php echo $lang->user->loginExpired;?></p>
                 <?php endif;?>
                 <tr>
-                  <th><?php echo $lang->user->account;?></th>
-                  <td><input class='form-control' type='text' name='account' id='account' autocomplete='off' autofocus /></td>
+                  <td colspan='2'><?php echo $lang->user->account;?></td>
                 </tr>
                 <tr>
-                  <th><?php echo $lang->user->password;?></th>
-                  <td><input class='form-control' type='password' name='password' autocomplete='off' /></td>
+                  <td colspan='2'><input class='form-control' type='text' name='account' id='account' autocomplete='off' autofocus /></td>
+                </tr>
+                <tr>
+                  <td colspan='2'><?php echo $lang->user->password;?></td>
+                </tr>
+                <tr>
+                  <td colspan='2'><input class='form-control' type='password' name='password' autocomplete='off' /></td>
                 </tr>
                 <?php if(!empty($this->config->safe->loginCaptcha)):?>
                 <tr>
-                  <th><?php echo $lang->user->captcha;?></th>
-                  <td class='captchaBox'>
+                  <td colspan='2'><?php echo $lang->user->captcha;?></td>
+                </tr>
+                <tr>
+                  <td class='captchaBox' colspan='2'>
                     <div class='input-group'>
                       <?php echo html::input('captcha', '', "class='form-control'");?>
                       <span class='input-group-addon'><img src="<?php echo $this->createLink('misc', 'captcha', "sessionVar=captcha");?>" /></span>
@@ -58,18 +70,20 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th></th>
                   <td id="keeplogin"><?php echo html::checkBox('keepLogin', $lang->user->keepLogin, $keepLogin);?></td>
+                  <td id='resetPassword'>
+                    <?php
+                    $resetLink = (isset($this->config->resetPWDByMail) and $this->config->resetPWDByMail) ? inlink('forgetPassword') : inlink('reset');
+                    echo html::a($resetLink, $lang->user->resetPassword);
+                    ?>
+                  </td>
                 </tr>
                 <tr>
-                  <td></td>
-                  <td class="form-actions">
+                  <td class="form-actions" colspan='2'>
                   <?php
                   echo html::submitButton($lang->login, '', 'btn btn-primary');
                   if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
                   echo html::hidden('referer', $referer);
-                  $resetLink = (isset($this->config->resetPWDByMail) and $this->config->resetPWDByMail) ? inlink('forgetPassword') : inlink('reset');
-                  echo html::a($resetLink, $lang->user->resetPassword);
                   ?>
                   </td>
                 </tr>
