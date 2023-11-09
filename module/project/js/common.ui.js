@@ -521,6 +521,7 @@ window.loadBranches = function(product)
         $formRow.find('.form-group').last().find('select').val('');
         $formRow.find('.form-group').eq(0).addClass('w-1/2').removeClass('w-1/4');
         $formRow.find('.form-group').eq(1).addClass('hidden').find('select').val('');
+        $formRow.find('.form-group').eq(0).find('.newProductBox').removeClass('hidden');
     }
 
     $.get($.createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=" + oldBranch + "&param=active"), function(data)
@@ -532,6 +533,7 @@ window.loadBranches = function(product)
 
             $formRow.find('.form-group').eq(0).addClass('w-1/4').removeClass('w-1/2');
             $formRow.find('.form-group').eq(1).removeClass('hidden');
+            $formRow.find('.form-group').eq(0).find('.newProductBox').addClass('hidden');
 
             data = JSON.parse(data);
             new zui.Picker(`#branch${index}`, {

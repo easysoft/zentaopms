@@ -363,7 +363,7 @@ formPanel
                 ),
                 div
                 (
-                    setClass('flex items-center pl-2 clip'),
+                    setClass('flex items-center pl-2 clip newProductBox'),
                     checkbox
                     (
                         set::name('newProduct'),
@@ -379,10 +379,23 @@ formPanel
             inputGroup
             (
                 $lang->product->branchName['branch'],
-                picker
+                div
                 (
-                    set::name("branch[0][]"),
-                    set::items(array())
+                    setClass('grow'),
+                    picker
+                    (
+                        set::name("branch[0][]"),
+                        set::items(array())
+                    )
+                ),
+                div
+                (
+                    setClass('flex items-center pl-2 clip'),
+                    checkbox
+                    (
+                        set::name('newProduct'),
+                        set::text($lang->project->newProduct),
+                    )
                 )
             ),
         ),
