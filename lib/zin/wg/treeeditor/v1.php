@@ -25,9 +25,11 @@ class treeEditor extends wg
     {
         $this->setProp('items', $this->buildTree($this->prop('items')));
         $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'id', 'itemActions', 'hover', 'onClick'));
+        $idProps   = $treeProps['id'] ? array('id' => $treeProps['id']) : null;
         return zui::tree
         (
             set::_tag('ul'),
+            set::props($idProps),
             set($treeProps)
         );
     }
