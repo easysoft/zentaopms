@@ -148,7 +148,8 @@ else
                 set::name('realStarted'),
                 set::value($realStarted),
                 set('disabled', !empty($realStarted))
-            )
+            ),
+            formHidden('realStarted', $realStarted)
         ),
         formGroup
         (
