@@ -42,6 +42,6 @@ namespace zin;
   <?php endif;?>
 </div>
 <?php
-blockPanel(rawContent());
+blockPanel(set::className('doccollectlist-block'), rawContent());
 
 render();

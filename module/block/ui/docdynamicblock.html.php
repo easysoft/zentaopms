@@ -56,6 +56,6 @@ namespace zin;
 </ul>
 <?php endif;?>
 <?php
-blockPanel(div(rawContent()));
+blockPanel(set::className('docdynamic-block'), rawContent());
 
 render();

@@ -58,5 +58,5 @@ namespace zin;
   </div>
 </div>
 <?php
-blockPanel(rawContent());
+blockPanel(set::className('docstatistic-block'), rawContent());
 render();
