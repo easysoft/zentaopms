@@ -66,7 +66,7 @@ $config->product->actionList['close']['hint']        = $lang->product->close;
 $config->product->actionList['close']['url']         = helper::createLink('product', 'close', 'productID={id}');
 $config->product->actionList['close']['data-toggle'] = 'modal';
 
-$config->product->actionList['activate']['icon']        = 'off';
+$config->product->actionList['activate']['icon']        = 'magic';
 $config->product->actionList['activate']['text']        = $lang->product->activate;
 $config->product->actionList['activate']['hint']        = $lang->product->activate;
 $config->product->actionList['activate']['url']         = helper::createLink('product', 'activate', 'productID={id}');
