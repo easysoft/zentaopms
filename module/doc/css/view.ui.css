@@ -6,7 +6,7 @@
 
 .scrollbar-hover { overflow-y: scroll; }
 #mainContent .panel+.panel {flex: none}
-#history{ position: relative; flex: 0 1 40%;}
+#history{ position: relative; flex: 0 1 40%; z-index: 120;}
 #history > #closeBtn { position: absolute; right: 0; top: 0;}
 
 .main-content-cell > .panel {max-height: calc(100vh - 110px); overflow-y: auto;}
