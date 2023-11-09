@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Treemap - Zentao</title>
+<link rel="stylesheet" href="../../../theme/zui/css/min.css" />
+<script src="../../jquery/lib.js"></script>
+<script src="../min.js"></script>
+<script src="./min.js"></script>
+<link rel="stylesheet" href="./min.css" />
+<style>
+#treemap,body,html {width: 100%; height: 100%; background: none; overflow: hidden;}
+#treemap .treemap-node-fold-icon {font-size: 12px;}
+#treemap .treemap-node-fold-icon:before {content: '\e6f1'; left: 0;}
+#treemap .treemap-node.collapsed .treemap-node-fold-icon:before {content: '\e6f2'}
+</style>
+</head>
+<body>
+<div id="treemap"></div>
+<script>
+$('#treemap').treemap($.extend({}, window.parent[$.getSearchParam('options')]));
+const treemap = $('#treemap').data('zui.treemap');
+parent.gettreemap = function() {return treemap;};
+</script>
+</body>
+</html>
