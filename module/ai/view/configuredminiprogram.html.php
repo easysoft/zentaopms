@@ -196,18 +196,8 @@ js::set('currentPrompt', $currentPrompt);
       <div class="prompt-preview-area" style="height: 50%; position: relative;">
         <div class="area-title" style="display: flex; justify-content: space-between;">
           <strong><?php echo $lang->ai->miniPrograms->field->prompterPreview; ?></strong>
-          <button class="btn btn-link" style="display: flex; align-items: center; gap: 4px; color: #2E7FFF;">
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <g clip-path="url(#clip0_669_15822)">
-                <path d="M12.5418 1.45837L8.66266 12.5417L6.446 7.55421L1.4585 5.33754L12.5418 1.45837Z" stroke="#2E7FFF" stroke-linejoin="round" />
-                <path d="M12.5416 1.45837L6.4458 7.55421" stroke="#2E7FFF" stroke-linecap="round" stroke-linejoin="round" />
-              </g>
-              <defs>
-                <clipPath id="clip0_669_15822">
-                  <rect width="14" height="14" fill="white" />
-                </clipPath>
-              </defs>
-            </svg>
+          <button class="btn btn-link" style="color: #2E7FFF; position: absolute; right: 16px;">
+            <i class="icon-publish text-primary"></i>
             <?php echo $lang->ai->miniPrograms->field->generateResult; ?>
           </button>
         </div>

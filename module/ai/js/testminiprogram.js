@@ -73,3 +73,15 @@ $(function()
     $('#autocomplete-textarea').html(currentPrompt);
     updatePromptPreview();
 });
+
+function handleSave()
+{
+    $('input[name="prompt"]').prop('value', $('#autocomplete-textarea').text());
+    $('input[name="toPublish"]').prop('value', '0');
+}
+
+function handlePublish()
+{
+    $('input[name="prompt"]').prop('value', $('#autocomplete-textarea').text());
+    $('input[name="toPublish"]').prop('value', '1');
+}

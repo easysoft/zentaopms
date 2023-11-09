@@ -43,18 +43,18 @@ class ai extends control
     {
         $modelConfig     = new stdclass();
         $modelConfigData = $this->loadModel('setting')->getItems('owner=system&module=ai');
-        foreach ($modelConfigData as $item) $modelConfig->{$item->key} = $item->value;
+        foreach($modelConfigData as $item) $modelConfig->{$item->key} = $item->value;
 
         $modelConfigured = !empty($modelConfig->key) && !empty($modelConfig->type) && (empty($modelConfig->proxyType) || !empty($modelConfig->proxyAddr));
 
-        /* Redirect to model edit if user has priv and model is unconfigured. */
-        if (commonModel::hasPriv('ai', 'editModel') && !$modelConfigured) return $this->locate($this->createLink('ai', 'editModel'));
+        /* Redirect to model edit ifuser has priv and model is unconfigured. */
+        if(commonModel::hasPriv('ai', 'editModel') && !$modelConfigured) return $this->locate($this->createLink('ai', 'editModel'));
 
-        /* Redirect to prompts if user has priv. */
-        if (commonModel::hasPriv('ai', 'prompts')) return $this->locate($this->createLink('ai', 'prompts'));
+        /* Redirect to prompts ifuser has priv. */
+        if(commonModel::hasPriv('ai', 'prompts')) return $this->locate($this->createLink('ai', 'prompts'));
 
-        /* Redirect to models if user has priv. */
-        if (commonModel::hasPriv('ai', 'models')) return $this->locate($this->createLink('ai', 'models'));
+        /* Redirect to models ifuser has priv. */
+        if(commonModel::hasPriv('ai', 'models')) return $this->locate($this->createLink('ai', 'models'));
 
         /* User has no priv, deny access. */
         return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied, 'locate' => $this->createLink('admin', 'index')));
@@ -79,7 +79,7 @@ class ai extends control
         $modelConfig->status      = '';
 
         $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
-        foreach ($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
+        foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
 
         $this->view->modelConfig = $modelConfig;
         $this->view->title       = $this->lang->ai->models->title;
@@ -94,25 +94,28 @@ class ai extends control
      */
     public function editModel()
     {
-        if (strtolower($this->server->request_method) == 'post') {
+        if(strtolower($this->server->request_method) == 'post')
+        {
             $modelConfig = fixer::input('post')->get();
 
             $currentVendor = empty($modelConfig->vendor) ? key($this->lang->ai->models->vendorList->{empty($modelConfig->type) ? key($this->lang->ai->models->typeList) : $modelConfig->type}) : $modelConfig->vendor;
             $vendorRequiredFields = $this->config->ai->vendorList[$currentVendor]['requiredFields'];
 
             $errors = array();
-            if (empty($modelConfig->type)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->type);
-            foreach ($vendorRequiredFields as $field) {
-                if (empty($modelConfig->$field)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->$field);
+            if(empty($modelConfig->type)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->type);
+            foreach($vendorRequiredFields as $field)
+            {
+                if(empty($modelConfig->$field)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->$field);
             }
-            if (!empty($modelConfig->proxyType) && empty($modelConfig->proxyAddr)) {
+            if(!empty($modelConfig->proxyType) && empty($modelConfig->proxyAddr))
+            {
                 $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->proxyAddr);
             }
-            if (!empty($errors)) return $this->send(array('result' => 'fail', 'message' => implode(' ', $errors)));
+            if(!empty($errors)) return $this->send(array('result' => 'fail', 'message' => implode(' ', $errors)));
 
             $this->loadModel('setting')->setItems('system.ai', $modelConfig);
 
-            if (dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('models') . '#app=admin'));
         }
 
@@ -125,7 +128,7 @@ class ai extends control
         $modelConfig->status      = '';
 
         $storedModelConfig = $this->loadModel('setting')->getItems('owner=system&module=ai');
-        foreach ($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
+        foreach($storedModelConfig as $item) $modelConfig->{$item->key} = $item->value;
 
         $this->view->modelConfig = $modelConfig;
         $this->view->title       = $this->lang->ai->models->title;
@@ -141,7 +144,8 @@ class ai extends control
     public function miniPrograms()
     {
         $programs = $this->ai->getMiniPrograms();
-        foreach ($programs as $program) {
+        foreach($programs as $program)
+        {
             $program->canPublish     = $this->ai->canPublishMiniProgram($program);
             $program->createdByLabel = $this->loadModel('user')->getById($program->createdBy, 'account')->realname;
             $program->categoryLabel  = $this->lang->ai->miniPrograms->categoryList[$program->category];
@@ -166,7 +170,7 @@ class ai extends control
     public function deleteMiniProgram($appID, $deleted)
     {
         $result = $this->ai->deleteMiniProgram($appID, $deleted);
-        if ($result) return $this->send(array('result' => 'success', 'locate' => $this->server->http_referer));
+        if($result) return $this->send(array('result' => 'success', 'locate' => $this->server->http_referer));
         $this->sendError(dao::getError());
     }
 
@@ -181,14 +185,23 @@ class ai extends control
     public function publishMiniProgram($appID, $published)
     {
         $result = $this->ai->publishMiniProgram($appID, $published);
-        if ($result) return $this->send(array('result' => 'success', 'locate' => $this->server->http_referer));
+        if($result) return $this->send(array('result' => 'success', 'locate' => $this->server->http_referer));
         $this->sendError(dao::getError());
     }
 
     public function testMiniProgram($appID)
     {
+        if(!empty($_POST))
+        {
+            $toPublish = $_POST['toPublish'];
+            unset($_POST['toPublish']);
+            $this->ai->createTmpMiniProgram($appID);
+            if($toPublish === '1') $this->ai->publishMiniProgram($appID, '1');
+            return $this->display('miniPrograms');
+        }
         $this->view->currentFields = $this->ai->getMiniProgramFields($appID);
         $this->view->currentPrompt = $this->ai->getMiniProgramByID($appID)->prompt;
+        $this->view->appID         = $appID;
         $this->display();
     }
 
@@ -201,30 +214,34 @@ class ai extends control
      */
     public function createMiniProgram($appID = null)
     {
-        if (!empty($_POST)) {
+        if(!empty($_POST))
+        {
             $toNext = $_POST['toNext'];
             unset($_POST['toNext']);
             $requiredFields = array('category' => $this->lang->ai->miniPrograms->category, 'model' => $this->lang->prompt->model, 'name' => $this->lang->prompt->name, 'desc' => $this->lang->ai->miniPrograms->desc);
             $errors = $this->ai->verifyRequiredFields($requiredFields);
-            if ($errors !== false) return $this->sendError($errors);
+            if($errors !== false) return $this->sendError($errors);
 
             $isDuplicated = $this->ai->checkDuplicatedAppName($_POST['name'], $appID);
-            if ($isDuplicated) return $this->sendError(array('name' => $this->lang->ai->miniPrograms->field->duplicatedNameTip));
+            if($isDuplicated) return $this->sendError(array('name' => $this->lang->ai->miniPrograms->field->duplicatedNameTip));
 
             $id = $this->ai->createTmpMiniProgram($appID);
-            if ($id === false) return $this->sendError(array('message' => $this->lang->fail));
-            if ($toNext === '1') return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'configuredMiniProgram', "appID=$id")));
+            if($id === false) return $this->sendError(array('message' => $this->lang->fail));
+            if($toNext === '1') return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'configuredMiniProgram', "appID=$id")));
             return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'locate' => $this->createLink('ai', 'createMiniProgram', "appID=$id")));
         }
 
-        if (!empty($appID)) {
+        if(!empty($appID))
+        {
             $miniProgram = $this->ai->getMiniProgramByID($appID);
             $this->view->name     = $miniProgram->name;
             $this->view->desc     = $miniProgram->desc;
             $this->view->model    = $miniProgram->model;
             $this->view->category = $miniProgram->category;
             list($this->view->iconName, $this->view->iconTheme) = explode('-', $miniProgram->icon);
-        } else {
+        }
+        else
+        {
             $this->view->iconName = 'writinghand';
             $this->view->iconTheme = 7;
         }
@@ -241,8 +258,9 @@ class ai extends control
      */
     public function configuredMiniProgram($appID)
     {
-        if (!is_numeric($appID)) return $this->locate('ai', 'createMiniProgram');
-        if (!empty($_POST)) {
+        if(!is_numeric($appID)) return $this->locate('ai', 'createMiniProgram');
+        if(!empty($_POST))
+        {
             $this->ai->saveMiniProgramFields($appID);
         }
         $this->view->currentFields = $this->ai->getMiniProgramFields($appID);
@@ -266,14 +284,16 @@ class ai extends control
         $vendorRequiredFields = $this->config->ai->vendorList[$currentVendor]['requiredFields'];
 
         $errors = array();
-        if (empty($modelConfig->type)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->type);
-        foreach ($vendorRequiredFields as $field) {
-            if (empty($modelConfig->$field)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->$field);
+        if(empty($modelConfig->type)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->type);
+        foreach($vendorRequiredFields as $field)
+        {
+            if(empty($modelConfig->$field)) $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->$field);
         }
-        if (!empty($modelConfig->proxyType) && empty($modelConfig->proxyAddr)) {
+        if(!empty($modelConfig->proxyType) && empty($modelConfig->proxyAddr))
+        {
             $errors[] = sprintf($this->lang->ai->validate->noEmpty, $this->lang->ai->models->proxyAddr);
         }
-        if (!empty($errors)) return $this->send(array('result' => 'fail', 'message' => implode(' ', $errors)));
+        if(!empty($errors)) return $this->send(array('result' => 'fail', 'message' => implode(' ', $errors)));
 
         $this->ai->setConfig($modelConfig);
 
@@ -281,11 +301,14 @@ class ai extends control
         {
             $messages = array((object)array('role' => 'user', 'content' => 'test'));
             $result = $this->ai->converse($messages, array('maxTokens' => 1));
-        } else {
+        }
+        else
+        {
             $result = $this->ai->complete('test', 1); // Test completing 'test' with length of 1.
         }
 
-        if ($result === false) {
+        if($result === false)
+        {
             return $this->send(array('result' => 'fail', 'message' => empty($this->ai->errors) ? $this->lang->ai->models->testConnectionResult->fail : sprintf($this->lang->ai->models->testConnectionResult->failFormat, implode(', ', $this->ai->errors))));
         }
 
@@ -305,14 +328,16 @@ class ai extends control
         $this->loadModel('user');
         $users = $this->user->getPairs('noletter');
 
-        if ($_POST) {
+        if($_POST)
+        {
             $data = fixer::input('post')->get();
-            if (isset($data->togglePromptStatus) && isset($data->promptId)) {
-                if (!$this->ai->isModelConfigured()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
+            if(isset($data->togglePromptStatus) && isset($data->promptId))
+            {
+                if(!$this->ai->isModelConfigured()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
 
                 $this->ai->togglePromptStatus($data->promptId);
 
-                if (dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 return $this->send(array('result' => 'success'));
             }
         }
@@ -329,8 +354,10 @@ class ai extends control
         $this->view->title      = $this->lang->ai->prompts->common;
         $this->view->users      = $users;
 
-        if ($this->config->edition == 'open') {
-            $this->view->promptModules = array_map(function ($prompt) {
+        if($this->config->edition == 'open')
+        {
+            $this->view->promptModules = array_map(function ($prompt)
+            {
                 return $prompt->module;
             }, $this->ai->getPrompts());
         }
@@ -366,11 +393,12 @@ class ai extends control
      */
     public function createPrompt()
     {
-        if (strtolower($this->server->request_method) == 'post') {
+        if(strtolower($this->server->request_method) == 'post')
+        {
             $prompt   = fixer::input('post')->get();
             $promptID = $this->ai->createPrompt($prompt);
 
-            if (dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'callback' => "gotoPrompt($promptID)"));
         }
 
@@ -389,7 +417,8 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptByID($id);
 
-        if (strtolower($this->server->request_method) == 'post') {
+        if(strtolower($this->server->request_method) == 'post')
+        {
             $data = fixer::input('post')->get();
 
             $prompt->name = $data->name;
@@ -397,7 +426,7 @@ class ai extends control
 
             $this->ai->updatePrompt($prompt);
 
-            if (dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'locate' => $this->inlink('promptView', "id={$prompt->id}") . '#app=admin'));
         }
 
@@ -417,7 +446,7 @@ class ai extends control
     {
         $result = $this->ai->deletePrompt($prompt);
 
-        if (dao::isError() || $result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(dao::isError() || $result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success'));
     }
 
@@ -432,7 +461,8 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptByID($promptID);
 
-        if ($_POST) {
+        if($_POST)
+        {
             $data = fixer::input('post')->get();
 
             $originalPrompt = clone $prompt;
@@ -441,15 +471,16 @@ class ai extends control
             $prompt->role             = $data->role;
             $prompt->characterization = $data->characterization;
 
-            if (!empty($data->saveTemplate) && $data->saveTemplate == 'save') {
+            if(!empty($data->saveTemplate) && $data->saveTemplate == 'save')
+            {
                 $this->ai->createRoleTemplate($prompt->role, $prompt->characterization);
             }
 
             $this->ai->updatePrompt($prompt, $originalPrompt);
 
-            if (dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if (!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSelectDataSource', "promptID=$promptID") . '#app=admin'));
+            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSelectDataSource', "promptID=$promptID") . '#app=admin'));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptAssignRole', "promptID=$promptID") . '#app=admin'));
         }
@@ -473,7 +504,8 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptByID($promptID);
 
-        if ($_POST) {
+        if($_POST)
+        {
             $data = fixer::input('post')->get();
 
             $originalPrompt = clone $prompt;
@@ -483,9 +515,9 @@ class ai extends control
 
             $this->ai->updatePrompt($prompt, $originalPrompt);
 
-            if (dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if (!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID") . '#app=admin'));
+            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID") . '#app=admin'));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSelectDataSource', "promptID=$promptID") . '#app=admin'));
         }
@@ -510,7 +542,8 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptByID($promptID);
 
-        if ($_POST) {
+        if($_POST)
+        {
             $data = fixer::input('post')->get();
 
             $originalPrompt = clone $prompt;
@@ -520,9 +553,9 @@ class ai extends control
 
             $this->ai->updatePrompt($prompt, $originalPrompt);
 
-            if (dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if (!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID") . '#app=admin'));
+            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID") . '#app=admin'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID") . '#app=admin'));
         }
 
@@ -545,7 +578,8 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptByID($promptID);
 
-        if ($_POST) {
+        if($_POST)
+        {
             $data = fixer::input('post')->get();
 
             $originalPrompt = clone $prompt;
@@ -554,15 +588,15 @@ class ai extends control
 
             $this->ai->updatePrompt($prompt, $originalPrompt);
 
-            if (dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if (!empty($data->goTesting)) // Go to testing object view.
+            if(!empty($data->goTesting)) // Go to testing object view.
             {
                 $location = $this->ai->getTestingLocation($prompt);
                 return $this->send(empty($location) ? array('result' => 'fail', 'target' => '#go-test-btn', 'message' => $this->lang->ai->prompts->goingTestingFail) : array('result' => 'success', 'target' => '#go-test-btn', 'msg' => $this->lang->ai->prompts->goingTesting, 'locate' => $location));
             }
 
-            if (!empty($data->jumpToNext)) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID") . '#app=admin'));
+            if(!empty($data->jumpToNext)) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID") . '#app=admin'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID") . '#app=admin'));
         }
 
@@ -585,7 +619,8 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptByID($promptID);
 
-        if ($_POST) {
+        if($_POST)
+        {
             $data = fixer::input('post')->get();
 
             $originalPrompt = clone $prompt;
@@ -594,13 +629,13 @@ class ai extends control
             $prompt->desc = $data->desc;
 
             $this->ai->updatePrompt($prompt, $originalPrompt);
-            if (dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if (!empty($data->jumpToNext)) $this->ai->togglePromptStatus($prompt, 'active');
+            if(!empty($data->jumpToNext)) $this->ai->togglePromptStatus($prompt, 'active');
 
-            if (dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if (!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('prompts') . '#app=admin'));
+            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('prompts') . '#app=admin'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID") . '#app=admin'));
         }
 
@@ -621,42 +656,45 @@ class ai extends control
      */
     public function promptExecute($promptId, $objectId)
     {
-        if (!$this->ai->isModelConfigured()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
+        if(!$this->ai->isModelConfigured()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
 
         $prompt = $this->ai->getPromptByID($promptId);
-        if (empty($prompt) || !$this->ai->isExecutable($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
+        if(empty($prompt) || !$this->ai->isExecutable($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
 
         $object = $this->ai->getObjectForPromptById($prompt, $objectId);
-        if (empty($object)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noObjectData'])));
+        if(empty($object)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noObjectData'])));
 
         list($objectData, $rawObject) = $object;
 
         list($location, $stop) = $this->ai->getTargetFormLocation($prompt, $rawObject);
-        if (empty($location)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noTargetForm'])));
-        if (!empty($stop))    return header("location: $location", true, 302);
+        if(empty($location)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noTargetForm'])));
+        if(!empty($stop))    return header("location: $location", true, 302);
 
         /* Execute prompt and catch exceptions. */
-        try {
+        try
+        {
             $response = $this->ai->executePrompt($prompt, $object);
-        } catch (AIResponseException $e) {
+        }
+        catch (AIResponseException $e)
+        {
             $output = array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $e->getMessage()));
 
             /* Audition shall quit on such exception. */
-            if (isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60) {
+            if(isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60) {
                 $output['locate'] = $this->inlink('promptAudit', "promptID=$promptId&objectId=$objectId&exit=true");
             }
             return $this->send($output);
         }
 
-        if (is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
-        if (empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
+        if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
+        if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
         $this->ai->setInjectData($prompt->targetForm, $response);
 
         $_SESSION['aiPrompt']['prompt']   = $prompt;
         $_SESSION['aiPrompt']['objectId'] = $objectId;
 
-        if ($prompt->status == 'draft') $_SESSION['auditPrompt']['time'] = time();
+        if($prompt->status == 'draft') $_SESSION['auditPrompt']['time'] = time();
 
         $promptViewLink = $this->inlink('promptview', "promptID=$promptId");
         echo js::start() . "const currentApp = parent.$.apps.getLastApp().code; parent.$.apps.open('$location'); if(currentApp == 'admin') {location.href = '$promptViewLink';} else if(currentApp != parent.$.apps.getLastApp().code) {parent.$.apps.close(currentApp);}" . js::end();
@@ -675,7 +713,7 @@ class ai extends control
         unset($_SESSION['aiPrompt']);
         unset($_SESSION['auditPrompt']);
 
-        if ($failed) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noTargetForm']), 'locate' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''));
+        if($failed) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noTargetForm']), 'locate' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : ''));
         return $this->send(array('result' => 'success'));
     }
 
@@ -690,14 +728,14 @@ class ai extends control
      */
     public function promptAudit($promptId, $objectId, $exit = false)
     {
-        if (!empty($exit)) {
+        if(!empty($exit)) {
             unset($_SESSION['auditPrompt']);
             return $this->send(array('result' => 'success', 'locate' => $this->inlink('promptview', "promptID=$promptId") . '#app=admin'));
         }
 
         $prompt = $this->ai->getPromptByID($promptId);
 
-        if ($_POST) {
+        if($_POST) {
             $data = fixer::input('post')->get();
 
             $originalPrompt = clone $prompt;
@@ -709,11 +747,14 @@ class ai extends control
 
             $this->ai->updatePrompt($prompt, $originalPrompt);
 
-            if (dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if (empty($data->backLocation)) {
+            if(empty($data->backLocation))
+            {
                 $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true);
-            } else {
+            }
+            else
+            {
                 $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "reloadPrompt($promptId, $objectId)");
             }
 
@@ -721,7 +762,7 @@ class ai extends control
         }
 
         $objectForPrompt = $this->ai->getObjectForPromptById($prompt, $objectId);
-        if (empty($objectForPrompt)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
+        if(empty($objectForPrompt)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->fail));
 
         list($objectData, $object) = $objectForPrompt;
 
@@ -742,13 +783,14 @@ class ai extends control
      */
     public function promptPublish($id, $backToTestingLocation = false)
     {
-        if (!$this->ai->isModelConfigured()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
+        if(!$this->ai->isModelConfigured()) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->models->noModelError, 'locate' => $this->inlink('models') . '#app=admin'));
 
         unset($_SESSION['auditPrompt']);
         $this->ai->togglePromptStatus($id, 'active');
 
-        if (dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        if ($backToTestingLocation) {
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if($backToTestingLocation)
+        {
             return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->publishSuccess, 'locate' => $this->inlink('promptview', "id=$id") . '#app=admin'));
         }
 
@@ -766,7 +808,7 @@ class ai extends control
     {
         $this->ai->togglePromptStatus($id, 'draft');
 
-        if (dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success'));
     }
 
@@ -780,7 +822,8 @@ class ai extends control
      */
     public function roleTemplates()
     {
-        if ($_POST) {
+        if($_POST)
+        {
             $data   = fixer::input('post')->get();
             $method = $data->method;
             switch ($method) {

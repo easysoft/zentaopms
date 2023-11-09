@@ -40,7 +40,7 @@ class aiModel extends model
         /* Load config from setting. */
         $this->modelConfig = new stdclass();
         $openaiSettings = $this->loadModel('setting')->getItems("owner=system&module=ai");
-        foreach ($openaiSettings as $item) $this->modelConfig->{$item->key} = $item->value;
+        foreach($openaiSettings as $item) $this->modelConfig->{$item->key} = $item->value;
     }
 
     /**
@@ -76,7 +76,7 @@ class aiModel extends model
      * @param  mixed    $data     data to send
      * @param  int      $timeout  request timeout in seconds
      * @access private
-     * @return object   response object, three properties: result, message (if fail), content(if success).
+     * @return object   response object, three properties: result, message (iffail), content(ifsuccess).
      */
     private function makeRequest($type, $data, $timeout = 10)
     {
@@ -85,11 +85,11 @@ class aiModel extends model
 
         /* Try encoding data to json, handles both encoded json and raw data. */
         $postData = json_encode($data);
-        if (json_last_error()) $postData = $data;
+        if(json_last_error()) $postData = $data;
 
         /* Set auth and content-type headers. */
         $requestHeaders = array();
-        if (isset($this->config->ai->$modelType->api->$modelVendor->authFormat)) $requestHeaders[] = sprintf($this->config->ai->$modelType->api->$modelVendor->authFormat, $this->modelConfig->key);
+        if(isset($this->config->ai->$modelType->api->$modelVendor->authFormat)) $requestHeaders[] = sprintf($this->config->ai->$modelType->api->$modelVendor->authFormat, $this->modelConfig->key);
         $requestHeaders[] = isset($this->config->ai->$modelType->contentType[$type]) ? $this->config->ai->$modelType->contentType[$type] : $this->config->ai->$modelType->contentType[''];
 
         /* Assemble request url. */
@@ -103,7 +103,9 @@ class aiModel extends model
             {
                 $url = sprintf($this->config->ai->openai->api->openai->format, $this->config->ai->openai->api->openai->version, $this->config->ai->openai->api->methods[$type]);
             }
-        } elseif ($modelType == 'ernie') {
+        }
+        elseif($modelType == 'ernie')
+        {
             $clientID     = $this->modelConfig->key;
             $clientSecret = $this->modelConfig->secret;
             $authURL = sprintf($this->config->ai->ernie->api->$modelVendor->auth, $clientID, $clientSecret);
@@ -113,7 +115,8 @@ class aiModel extends model
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
             $result = curl_exec($ch);
-            if (!$result || curl_errno($ch)) {
+            if(!$result || curl_errno($ch))
+            {
                 $response = new stdclass();
                 $response->result  = 'fail';
                 $response->message = curl_error($ch);
@@ -121,7 +124,8 @@ class aiModel extends model
                 return $response;
             }
             $result = json_decode($result);
-            if (json_last_error()) {
+            if(json_last_error())
+            {
                 $response = new stdclass();
                 $response->result  = 'fail';
                 $response->message = 'JSON decode error: ' . json_last_error_msg();
@@ -143,20 +147,22 @@ class aiModel extends model
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
 
-        /* Use proxy if proxy is set. */
-        if (!empty($this->modelConfig->proxyType) && !empty($this->modelConfig->proxyAddr)) {
+        /* Use proxy ifproxy is set. */
+        if(!empty($this->modelConfig->proxyType) && !empty($this->modelConfig->proxyAddr))
+        {
             curl_setopt($ch, CURLOPT_PROXY,     $this->modelConfig->proxyAddr);
             curl_setopt($ch, CURLOPT_PROXYTYPE, static::getProxyType($this->modelConfig->proxyType));
         }
 
         $result = curl_exec($ch);
 
-        if (isset($this->config->debug) && $this->config->debug >= 1) {
+        if(isset($this->config->debug) && $this->config->debug >= 1)
+        {
             global $app;
             $logFile = $app->getLogRoot() . 'saas.' . date('Ymd') . '.log.php';
-            if (!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
+            if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
             $fh = @fopen($logFile, 'a');
-            if ($fh) {
+            if($fh) {
                 fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . ' AI Request' . "\n");
                 fwrite($fh, "postData:    " . print_r($data, true) . "\n");
                 fwrite($fh, "results:" . print_r($result, true) . "\n");
@@ -166,10 +172,13 @@ class aiModel extends model
 
         $response = new stdclass();
 
-        if (!$result || curl_errno($ch)) {
+        if(!$result || curl_errno($ch))
+        {
             $response->result  = 'fail';
             $response->message = curl_error($ch);
-        } else {
+        }
+        else
+        {
             $response->result = 'success';
             $response->content = $result;
         }
@@ -187,7 +196,7 @@ class aiModel extends model
      */
     private static function getProxyType($proxyType)
     {
-        if (!in_array($proxyType, array('http', 'socks4', 'socks5'))) return false;
+        if(!in_array($proxyType, array('http', 'socks4', 'socks5'))) return false;
         return constant('CURLPROXY_' . strtoupper($proxyType));
     }
 
@@ -213,17 +222,17 @@ class aiModel extends model
     private static function standardizeParams($data)
     {
         $standardizedData = new stdclass();
-        foreach ($data as $key => $value) $standardizedData->{static::camelCaseToSnakeCase($key)} = $value;
+        foreach($data as $key => $value) $standardizedData->{static::camelCaseToSnakeCase($key)} = $value;
         return $standardizedData;
     }
 
     /**
-     * Assemble request data params, filters out the unwanted ones, and will return false if missing any required param.
+     * Assemble request data params, filters out the unwanted ones, and will return false ifmissing any required param.
      *
      * @param  string   $type
      * @param  object   $data
      * @access private
-     * @return mixed    false if missing required params, post data object if success
+     * @return mixed    false ifmissing required params, post data object ifsuccess
      */
     private function assembleRequestData($type, $data)
     {
@@ -238,38 +247,43 @@ class aiModel extends model
 
         $data = static::standardizeParams($data);
 
-        /* Set required params, abort if missing. */
-        foreach ($this->config->ai->$modelType->params->$type->required as $param) {
-            if (!isset($data->$param)) return false;
+        /* Set required params, abort ifmissing. */
+        foreach($this->config->ai->$modelType->params->$type->required as $param)
+        {
+            if(!isset($data->$param)) return false;
             $postData->$param = $data->$param;
         }
 
         /* Set optional params. */
-        foreach ($this->config->ai->$modelType->params->$type->optional as $param) {
-            if (isset($data->$param)) $postData->$param = $data->$param;
+        foreach($this->config->ai->$modelType->params->$type->optional as $param)
+        {
+            if(isset($data->$param)) $postData->$param = $data->$param;
         }
 
         return $postData;
     }
 
     /**
-     * Decode response from OpenAI API, add error to $this->errors if any.
+     * Decode response from OpenAI API, add error to $this->errors ifany.
      *
      * @param  object   $response  response object
      * @access private
-     * @return mixed    false if error, json object if success
+     * @return mixed    false iferror, json object ifsuccess
      */
     private function decodeResponse($response)
     {
-        if ($response->result === 'fail') {
+        if($response->result === 'fail')
+        {
             $this->errors[] = empty($response->message) ? 'Unknown error' : $response->message;
             return false;
         }
 
         $response = json_decode($response->content);
-        if (json_last_error()) {
+        if(json_last_error())
+        {
             /* Polyfill for PHP 5 < 5.5.0. */
-            if (!function_exists('json_last_error_msg')) {
+            if(!function_exists('json_last_error_msg'))
+            {
                 function json_last_error_msg()
                 {
                     switch (json_last_error()) {
@@ -361,7 +375,7 @@ class aiModel extends model
     {
         $data = new stdClass();
         $data->published = $published;
-        if ($published === '1') $data->publishedDate = helper::now();
+        if($published === '1') $data->publishedDate = helper::now();
 
         $this->dao->update(TABLE_MINIPROGRAM)
             ->data($data)
@@ -403,19 +417,24 @@ class aiModel extends model
         $data = fixer::input('post')->get();
         $data->editedBy    = $this->app->user->account;
         $data->editedDate  = helper::now();
-        $data->icon        = $data->iconName . '-' . $data->iconTheme;
-        if (empty($appID)) {
+        if(empty($appID))
+        {
             $data->createdBy   = $this->app->user->account;
             $data->createdDate = helper::now();
         }
-        unset($data->iconName);
-        unset($data->iconTheme);
+        if(!empty($data->iconName) && !empty($data->iconTheme))
+        {
+            $data->icon = $data->iconName . '-' . $data->iconTheme;
+            unset($data->iconName);
+            unset($data->iconTheme);
+        }
 
-        if ($appID === null) {
+        if($appID === null)
+        {
             $this->dao->insert(TABLE_MINIPROGRAM)
                 ->data($data)
                 ->exec();
-            if (dao::isError()) return false;
+            if(dao::isError()) return false;
             return $this->dao->lastInsertID();
         }
 
@@ -423,7 +442,7 @@ class aiModel extends model
             ->data($data)
             ->where('id')->eq($appID)
             ->exec();
-        if (dao::isError()) return false;
+        if(dao::isError()) return false;
         return $appID;
     }
 
@@ -442,7 +461,7 @@ class aiModel extends model
             ->exec();
 
         $fields = $data->fields;
-        foreach ($fields as $field)
+        foreach($fields as $field)
         {
             if(is_array($field['options'])) $field['options'] = implode(',', $field['options']);
             $this->dao->insert(TABLE_MINIPROGRAMFIELDS)
@@ -461,7 +480,7 @@ class aiModel extends model
      */
     public function checkDuplicatedAppName($name, $appID)
     {
-        if (empty($appID)) $appID = -1;
+        if(empty($appID)) $appID = -1;
         $miniProgram = $this->dao->select('*')
             ->from(TABLE_MINIPROGRAM)
             ->where('name')->eq($name)
@@ -480,10 +499,11 @@ class aiModel extends model
     public function verifyRequiredFields($requiredFields)
     {
         $errors = array();
-        foreach ($requiredFields as $field => $fieldLang) {
-            if (!isset($_POST[$field]) || empty($_POST[$field])) $errors[$field] = sprintf($this->lang->error->notempty, $fieldLang);
+        foreach($requiredFields as $field => $fieldLang)
+        {
+            if(!isset($_POST[$field]) || empty($_POST[$field])) $errors[$field] = sprintf($this->lang->error->notempty, $fieldLang);
         }
-        if (!empty($errors)) return $errors;
+        if(!empty($errors)) return $errors;
         return false;
     }
 
@@ -492,17 +512,17 @@ class aiModel extends model
      *
      * @param  string   $response  json string
      * @access private
-     * @return mixed    false if error, array of texts (choices) if success
+     * @return mixed    false iferror, array of texts (choices) ifsuccess
      */
     private function parseTextResponse($response)
     {
         $response = $this->decodeResponse($response);
-        if (empty($response)) return false;
+        if(empty($response)) return false;
 
         /* Extract text response choices. */
-        if (isset($response->choices) && count($response->choices) > 0) {
+        if(isset($response->choices) && count($response->choices) > 0) {
             $texts = array();
-            foreach ($response->choices as $choice) $texts[] = $choice->text;
+            foreach($response->choices as $choice) $texts[] = $choice->text;
             return $texts;
         }
         return false;
@@ -513,24 +533,29 @@ class aiModel extends model
      *
      * @param  string   $response  json string
      * @access private
-     * @return mixed    false if error, array of chat message texts (choices) if success
+     * @return mixed    false iferror, array of chat message texts (choices) ifsuccess
      */
     private function parseChatResponse($response)
     {
         $response = $this->decodeResponse($response);
-        if (empty($response)) return false;
+        if(empty($response)) return false;
 
-        if ($this->config->ai->models[$this->modelConfig->type] == 'ernie') {
+        if($this->config->ai->models[$this->modelConfig->type] == 'ernie')
+        {
             /* Extract chat message text. */
-            if (!empty($response->result)) {
+            if(!empty($response->result))
+            {
                 $messages = array($response->result);
                 return $messages;
             }
-        } else {
+        }
+        else
+        {
             /* Extract chat message choices. */
-            if (isset($response->choices) && count($response->choices) > 0) {
+            if(isset($response->choices) && count($response->choices) > 0)
+            {
                 $messages = array();
-                foreach ($response->choices as $choice) $messages[] = $choice->message->content;
+                foreach($response->choices as $choice) $messages[] = $choice->message->content;
                 return $messages;
             }
         }
@@ -542,23 +567,28 @@ class aiModel extends model
      *
      * @param  string   $response  json string
      * @access private
-     * @return mixed    false if error, array of function call arguments (choices) if success
+     * @return mixed    false iferror, array of function call arguments (choices) ifsuccess
      */
     private function parseFunctionCallResponse($response)
     {
         $response = $this->decodeResponse($response);
-        if (empty($response)) return false;
+        if(empty($response)) return false;
 
-        if ($this->config->ai->models[$this->modelConfig->type] == 'ernie') {
+        if($this->config->ai->models[$this->modelConfig->type] == 'ernie')
+        {
             /* Extract function call arguments. */
-            if (!empty($response->function_call)) return array($response->function_call->arguments);
+            if(!empty($response->function_call)) return array($response->function_call->arguments);
             throw new AIResponseException('notFunctionCalling', $response);
-        } else {
+        }
+        else
+        {
             /* Extract function call choices. */
-            if (isset($response->choices) && count($response->choices) > 0) {
+            if(isset($response->choices) && count($response->choices) > 0)
+            {
                 $arguments = array();
-                foreach ($response->choices as $choice) {
-                    if (!empty($choice->message->function_call)) $arguments[] = $choice->message->function_call->arguments;
+                foreach($response->choices as $choice)
+                {
+                    if(!empty($choice->message->function_call)) $arguments[] = $choice->message->function_call->arguments;
                 }
                 return $arguments;
             }
@@ -573,18 +603,19 @@ class aiModel extends model
      * @param   int      $maxTokens  max tokens to generate
      * @param   array    $options    optional params, see https://platform.openai.com/docs/api-reference/completions/create
      * @access  public
-     * @return  mixed    false if error, array of texts (choices) if success
+     * @return  mixed    false iferror, array of texts (choices) ifsuccess
      */
     public function complete($prompt, $maxTokens = 512, $options = array())
     {
         $data = compact('prompt', 'maxTokens');
 
-        if (!empty($options)) {
-            foreach ($options as $key => $value) $data[$key] = $value;
+        if(!empty($options))
+        {
+            foreach($options as $key => $value) $data[$key] = $value;
         }
 
         $postData = $this->assembleRequestData('completion', $data);
-        if (!$postData) return false;
+        if(!$postData) return false;
 
         $response = $this->makeRequest('completion', $postData);
         return $this->parseTextResponse($response);
@@ -597,18 +628,19 @@ class aiModel extends model
      * @param   string  $instruction  edit instruction
      * @param   array   $options      optional params, see https://platform.openai.com/docs/api-reference/edits/create
      * @access  public
-     * @return  mixed   false if error, array of texts (choices) if success
+     * @return  mixed   false iferror, array of texts (choices) ifsuccess
      */
     public function edit($input, $instruction, $options = array())
     {
         $data = compact('input', 'instruction');
 
-        if (!empty($options)) {
-            foreach ($options as $key => $value) $data[$key] = $value;
+        if(!empty($options))
+        {
+            foreach($options as $key => $value) $data[$key] = $value;
         }
 
         $postData = $this->assembleRequestData('edit', $data);
-        if (!$postData) return false;
+        if(!$postData) return false;
 
         $response = $this->makeRequest('edit', $postData);
         return $this->parseTextResponse($response);
@@ -639,7 +671,7 @@ class aiModel extends model
      * @param  array   $messages  array of chat messages
      * @param  array   $options   optional params, see https://platform.openai.com/docs/api-reference/chat/create
      * @access public
-     * @return mixed   false if error, array of chat messages if success
+     * @return mixed   false iferror, array of chat messages ifsuccess
      */
     public function converse($messages, $options = array())
     {
@@ -654,12 +686,13 @@ class aiModel extends model
 
         $data = compact('messages');
 
-        if (!empty($options)) {
-            foreach ($options as $key => $value) $data[$key] = $value;
+        if(!empty($options))
+        {
+            foreach($options as $key => $value) $data[$key] = $value;
         }
 
         $postData = $this->assembleRequestData('chat', $data);
-        if (!$postData) return false;
+        if(!$postData) return false;
 
         $response = $this->makeRequest('chat', $postData);
         return $this->parseChatResponse($response);
@@ -681,7 +714,7 @@ class aiModel extends model
      * @param  object $schema    schema of the output
      * @param  array  $options   optional params, see https://platform.openai.com/docs/api-reference/chat/create
      * @access public
-     * @return mixed  false if error, array of JSON object if success
+     * @return mixed  false iferror, array of JSON object ifsuccess
      */
     public function converseForJSON($messages, $schema, $options = array())
     {
@@ -690,12 +723,13 @@ class aiModel extends model
 
         $data = compact('messages', 'functions', 'functionCall');
 
-        if (!empty($options)) {
-            foreach ($options as $key => $value) $data[$key] = $value;
+        if(!empty($options))
+        {
+            foreach($options as $key => $value) $data[$key] = $value;
         }
 
         $postData = $this->assembleRequestData('function', $data);
-        if (!$postData) return false;
+        if(!$postData) return false;
 
         $response = $this->makeRequest('function', $postData);
         return $this->parseFunctionCallResponse($response);
@@ -711,37 +745,39 @@ class aiModel extends model
      * @param  object $schema    schema of the output
      * @param  array  $options   optional params, see https://platform.openai.com/docs/api-reference/chat/create
      * @access public
-     * @return mixed  false if error, array of JSON object if success
+     * @return mixed  false iferror, array of JSON object ifsuccess
      * @throws AIResponseException
      */
     public function converseTwiceForJSON($messages, $schema, $options = array())
     {
         /* First conversation. */
         $data = compact('messages');
-        if (!empty($options)) {
-            foreach ($options as $key => $value) $data[$key] = $value;
+        if(!empty($options))
+        {
+            foreach($options as $key => $value) $data[$key] = $value;
         }
 
         $postData = $this->assembleRequestData('chat', $data);
-        if (!$postData) return false;
+        if(!$postData) return false;
 
         $chatResponse = $this->makeRequest('chat', $postData);
         $chatMessages = $this->parseChatResponse($chatResponse);
 
         $chatMessage = current($chatMessages);
-        if (empty($chatMessage)) return false;
+        if(empty($chatMessage)) return false;
 
         /* Second conversation for JSON output. */
         $messages  = array_merge($this->lang->ai->engineeredPrompts->askForFunctionCalling, array((object)array('role' => 'user', 'content' => $chatMessage)));
         $functions = array((object)array('name' => 'function', 'description' => 'function', 'parameters' => $schema));
 
         $data = compact('messages', 'functions');
-        if (!empty($options)) {
-            foreach ($options as $key => $value) $data[$key] = $value;
+        if(!empty($options))
+        {
+            foreach($options as $key => $value) $data[$key] = $value;
         }
 
         $postData = $this->assembleRequestData('function', $data);
-        if (!$postData) return false;
+        if(!$postData) return false;
 
         $response = $this->makeRequest('function', $postData);
         return $this->parseFunctionCallResponse($response);
@@ -803,7 +839,7 @@ class aiModel extends model
             ->check('name', 'unique')
             ->autoCheck()
             ->exec();
-        if (dao::isError()) return false;
+        if(dao::isError()) return false;
 
         $promptId = $this->dao->lastInsertID();
         $this->loadModel('action')->create('prompt', $promptId, 'created');
@@ -825,16 +861,21 @@ class aiModel extends model
         $actionType = 'edited';
 
         /* Compare with original, check what changed. */
-        if (!empty($originalPrompt)) {
+        if(!empty($originalPrompt))
+        {
             $changedFields = array();
-            foreach ($prompt as $key => $value) {
-                if ($value != $originalPrompt->$key) $changedFields[] = $key;
+            foreach($prompt as $key => $value)
+            {
+                if($value != $originalPrompt->$key) $changedFields[] = $key;
             }
 
-            /* If only status changed, action is either published or unpublished. */
-            if (count($changedFields) == 1 && current($changedFields) == 'status') {
+            /* ifonly status changed, action is either published or unpublished. */
+            if(count($changedFields) == 1 && current($changedFields) == 'status')
+            {
                 $actionType = $prompt->status == 'draft' ? 'unpublished' : 'published';
-            } else {
+            }
+            else
+            {
                 $changes = commonModel::createChanges($originalPrompt, $prompt);
             }
         }
@@ -852,10 +893,10 @@ class aiModel extends model
             ->autoCheck()
             ->where('id')->eq($prompt->id)
             ->exec();
-        if (dao::isError()) return false;
+        if(dao::isError()) return false;
 
         $actionId = $this->loadModel('action')->create('prompt', $prompt->id, $actionType);
-        if (!empty($changes)) $this->action->logHistory($actionId, $changes);
+        if(!empty($changes)) $this->action->logHistory($actionId, $changes);
 
         return true;
     }
@@ -870,13 +911,13 @@ class aiModel extends model
     public function deletePrompt($id)
     {
         $prompt = $this->getPromptById($id);
-        if (empty($prompt)) return false;
+        if(empty($prompt)) return false;
 
         $this->dao->update(TABLE_PROMPT)
             ->set('deleted')->eq(1)
             ->where('id')->eq($id)
             ->exec();
-        if (dao::isError()) return false;
+        if(dao::isError()) return false;
 
         $this->loadModel('action')->create('prompt', $id, 'deleted');
 
@@ -887,14 +928,14 @@ class aiModel extends model
      * Toggle prompt status.
      *
      * @param  int|object  $prompt  prompt (or id) to toggle.
-     * @param  string      $status  optional, will set status to $status if provided.
+     * @param  string      $status  optional, will set status to $status ifprovided.
      * @access public
      * @return bool
      */
     public function togglePromptStatus($prompt, $status = '')
     {
-        if (is_numeric($prompt)) $prompt = $this->getPromptById($prompt);
-        if (empty($prompt)) return false;
+        if(is_numeric($prompt)) $prompt = $this->getPromptById($prompt);
+        if(empty($prompt)) return false;
 
         $flipedStatus = $prompt->status == 'draft' ? 'active' : 'draft';
 
@@ -915,15 +956,17 @@ class aiModel extends model
      */
     public function serializeDataToPrompt($module, $sources, $data)
     {
-        if (empty($data)) return '';
+        if(empty($data)) return '';
 
         /* Handle object data. */
-        if (is_object($data)) $data = (array)$data;
+        if(is_object($data)) $data = (array)$data;
 
         /* Handle raw (non-exploded) sources. */
-        if (is_string($sources) && strpos($sources, ',') !== false) {
+        if(is_string($sources) && strpos($sources, ',') !== false)
+        {
             $sources = array_filter(explode(',', $sources));
-            $sources = array_map(function ($source) {
+            $sources = array_map(function ($source)
+            {
                 return explode('.', $source);
             }, $sources);
         }
@@ -933,33 +976,38 @@ class aiModel extends model
         $supplement = '';
         $supplementTypes = array();
 
-        foreach ($sources as $source) {
+        foreach($sources as $source) {
             $objectName = $source[0];
             $objectKey  = $source[1];
 
             $semanticName = $this->lang->ai->dataSource[$module][$objectName]['common'];
             $semanticKey  = $this->lang->ai->dataSource[$module][$objectName][$objectKey];
 
-            if (empty($dataObject[$semanticName])) $dataObject[$semanticName] = array();
+            if(empty($dataObject[$semanticName])) $dataObject[$semanticName] = array();
 
             $obj = $data[$objectName];
-            if (static::isAssoc($obj)) {
+            if(static::isAssoc($obj))
+            {
                 $dataObject[$semanticName][$semanticKey] = $data[$objectName][$objectKey];
-            } else {
-                foreach (array_keys($obj) as $idx) {
-                    if (empty($dataObject[$semanticName][$idx])) $dataObject[$semanticName][$idx] = array();
+            }
+            else
+            {
+                foreach(array_keys($obj) as $idx)
+                {
+                    if(empty($dataObject[$semanticName][$idx])) $dataObject[$semanticName][$idx] = array();
                     $dataObject[$semanticName][$idx][$semanticKey] = $data[$objectName][$idx][$objectKey];
                 }
             }
 
-            if (in_array($objectKey, $supplementTypes) || !isset($this->lang->ai->dataType->$objectKey)) continue;
+            if(in_array($objectKey, $supplementTypes) || !isset($this->lang->ai->dataType->$objectKey)) continue;
 
             $supplementTypes[] = $objectKey;
             $supplement .= sprintf($this->lang->ai->dataTypeDesc, $semanticKey, $this->lang->ai->dataType->$objectKey->type, $this->lang->ai->dataType->$objectKey->desc) . "\n";
         }
 
         /* @see https://stackoverflow.com/a/2934602 */
-        return preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function ($match) {
+        return preg_replace_callback('/\\\\u([0-9a-fA-F]{4})/', function ($match)
+        {
             return mb_convert_encoding(pack('H*', $match[1]), 'UTF-8', 'UCS-2BE');
         }, json_encode($dataObject)) . "\n" . $supplement;
     }
@@ -974,29 +1022,35 @@ class aiModel extends model
      */
     public function generateDemoDataPrompt($module, $source)
     {
-        if (empty($this->lang->ai->demoData->$module)) return $this->lang->ai->demoData->notExist;
+        if(empty($this->lang->ai->demoData->$module)) return $this->lang->ai->demoData->notExist;
 
         $sources = explode(',', $source);
         $sources = array_filter($sources);
 
-        if (empty($sources)) return '';
+        if(empty($sources)) return '';
 
-        foreach ($sources as $index => $source) {
+        foreach($sources as $index => $source)
+        {
             $sources[$index] = explode('.', $source);
         }
 
         $data = array();
-        foreach ($sources as $source) {
+        foreach($sources as $source)
+        {
             $objectName = $source[0];
             $objectKey  = $source[1];
-            if (empty($data[$objectName])) $data[$objectName] = array();
+            if(empty($data[$objectName])) $data[$objectName] = array();
 
             $demoData = $this->lang->ai->demoData->$module[$objectName];
-            if (static::isAssoc($demoData)) {
+            if(static::isAssoc($demoData))
+            {
                 $data[$objectName][$objectKey] = $demoData[$objectKey];
-            } else {
-                foreach ($demoData as $index => $value) {
-                    if (empty($data[$objectName][$index])) $data[$objectName][$index] = array();
+            }
+            else
+            {
+                foreach($demoData as $index => $value)
+                {
+                    if(empty($data[$objectName][$index])) $data[$objectName][$index] = array();
                     $data[$objectName][$index][$objectKey] = $value[$objectKey];
                 }
             }
@@ -1006,7 +1060,7 @@ class aiModel extends model
     }
 
     /**
-     * Determines if an array is associative.
+     * Determines ifan array is associative.
      *
      * @param  array $array
      * @access private
@@ -1028,10 +1082,10 @@ class aiModel extends model
     public function getFunctionCallSchema($form)
     {
         $formPath = explode('.', $form);
-        if (count($formPath) !== 2) return array();
+        if(count($formPath) !== 2) return array();
 
         $targetForm = $this->config->ai->targetForm[$formPath[0]][$formPath[1]];
-        if (empty($targetForm)) return array();
+        if(empty($targetForm)) return array();
 
         $schema = $this->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)];
 
@@ -1044,7 +1098,7 @@ class aiModel extends model
      * @param  object        $prompt    prompt object
      * @param  int           $objectId  object id
      * @access public
-     * @return array|false   array of object data and object, or false if error.
+     * @return array|false   array of object data and object, or false iferror.
      */
     public function getObjectForPromptById($prompt, $objectId)
     {
@@ -1053,11 +1107,12 @@ class aiModel extends model
 
         /* Explode into grouped sources list. */
         $sourceGroups = array();
-        foreach ($sources as $source) {
+        foreach($sources as $source)
+        {
             $source = explode('.', $source);
             $objectName = $source[0];
             $objectKey  = $source[1];
-            if (empty($sourceGroups[$objectName])) $sourceGroups[$objectName] = array();
+            if(empty($sourceGroups[$objectName])) $sourceGroups[$objectName] = array();
             $sourceGroups[$objectName][] = $objectKey;
         }
 
@@ -1065,44 +1120,45 @@ class aiModel extends model
         $objectData = new stdclass();
 
         /* Query necessary object data from zentao. */
-        switch ($module) {
+        switch ($module)
+        {
             case 'story':
-                if (isset($sourceGroups['story'])) $object->story = $this->loadModel('story')->getById($objectId);
+                if(isset($sourceGroups['story'])) $object->story = $this->loadModel('story')->getById($objectId);
                 break;
             case 'execution':
-                if (isset($sourceGroups['execution'])) $object->execution = $this->loadModel('execution')->getByID($objectId);
-                if (isset($sourceGroups['tasks']))     $object->tasks     = array_values($this->loadModel('task')->getExecutionTasks($objectId));
+                if(isset($sourceGroups['execution'])) $object->execution = $this->loadModel('execution')->getByID($objectId);
+                if(isset($sourceGroups['tasks']))     $object->tasks     = array_values($this->loadModel('task')->getExecutionTasks($objectId));
                 break;
             case 'product':
-                if (isset($sourceGroups['product'])) $object->product = $this->loadModel('product')->getById($objectId);
+                if(isset($sourceGroups['product'])) $object->product = $this->loadModel('product')->getById($objectId);
                 break;
             case 'project':
-                if (isset($sourceGroups['project'])) $object->project = $this->loadModel('project')->getById($objectId);
-                if ($object->project->model == 'waterfall' && isset($sourceGroups['programplans'])) $object->programplans = array_values($this->loadModel('execution')->getByProject($object->project->id));
-                if ($object->project->model != 'waterfall' && isset($sourceGroups['executions'])) $object->executions = array_values($this->loadModel('execution')->getByProject($object->project->id));
+                if(isset($sourceGroups['project'])) $object->project = $this->loadModel('project')->getById($objectId);
+                if($object->project->model == 'waterfall' && isset($sourceGroups['programplans'])) $object->programplans = array_values($this->loadModel('execution')->getByProject($object->project->id));
+                if($object->project->model != 'waterfall' && isset($sourceGroups['executions'])) $object->executions = array_values($this->loadModel('execution')->getByProject($object->project->id));
                 break;
             case 'release':
-                if (isset($sourceGroups['release'])) $object->release = $this->loadModel('release')->getById($objectId);
-                if (isset($sourceGroups['stories'])) $object->stories = array_values($this->loadModel('story')->getByList(array_filter(explode(',', $object->release->stories))));
-                if (isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByList(array_filter(explode(',', $object->release->bugs))));
+                if(isset($sourceGroups['release'])) $object->release = $this->loadModel('release')->getById($objectId);
+                if(isset($sourceGroups['stories'])) $object->stories = array_values($this->loadModel('story')->getByList(array_filter(explode(',', $object->release->stories))));
+                if(isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByList(array_filter(explode(',', $object->release->bugs))));
                 break;
             case 'productplan':
-                if (isset($sourceGroups['productplan'])) $object->productplan = $this->loadModel('productplan')->getByID($objectId);
-                if (isset($sourceGroups['stories']))     $object->stories     = array_values($this->loadModel('story')->getPlanStories($objectId));
-                if (isset($sourceGroups['bugs']))        $object->bugs        = array_values($this->dao->select('*')->from(TABLE_BUG)->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetchAll());
+                if(isset($sourceGroups['productplan'])) $object->productplan = $this->loadModel('productplan')->getByID($objectId);
+                if(isset($sourceGroups['stories']))     $object->stories     = array_values($this->loadModel('story')->getPlanStories($objectId));
+                if(isset($sourceGroups['bugs']))        $object->bugs        = array_values($this->dao->select('*')->from(TABLE_BUG)->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetchAll());
                 break;
             case 'task':
-                if (isset($sourceGroups['task'])) $object->task = $this->loadModel('task')->getById($objectId);
+                if(isset($sourceGroups['task'])) $object->task = $this->loadModel('task')->getById($objectId);
                 break;
             case 'case':
-                if (isset($sourceGroups['case']))  $object->case  = $this->loadModel('testcase')->getById($objectId);
-                if (isset($sourceGroups['steps'])) $object->steps = array_values($object->case->steps);
+                if(isset($sourceGroups['case']))  $object->case  = $this->loadModel('testcase')->getById($objectId);
+                if(isset($sourceGroups['steps'])) $object->steps = array_values($object->case->steps);
                 break;
             case 'bug':
-                if (isset($sourceGroups['bug'])) $object->bug = $this->loadModel('bug')->getById($objectId);
+                if(isset($sourceGroups['bug'])) $object->bug = $this->loadModel('bug')->getById($objectId);
                 break;
             case 'doc':
-                if (isset($sourceGroups['doc'])) $object->doc = $this->loadModel('doc')->getById($objectId);
+                if(isset($sourceGroups['doc'])) $object->doc = $this->loadModel('doc')->getById($objectId);
                 break;
             case 'my':
                 /* TODO: add more later. */
@@ -1110,20 +1166,26 @@ class aiModel extends model
         }
 
         $objectVars = get_object_vars($object);
-        if (empty($objectVars)) return false;
+        if(empty($objectVars)) return false;
 
         /* Format data as per data source definitions. */
-        foreach ($sourceGroups as $objectName => $objectKeys) {
+        foreach($sourceGroups as $objectName => $objectKeys)
+        {
             $objectData->$objectName = array();
-            foreach ($objectKeys as $objectKey) {
-                if (!isset($object->$objectName)) continue;
+            foreach($objectKeys as $objectKey)
+            {
+                if(!isset($object->$objectName)) continue;
 
-                /* Check if is plain object, data might contain arrays. */
-                if (is_object($object->$objectName)) {
-                    if (isset($object->$objectName->$objectKey)) $objectData->$objectName[$objectKey] = $object->$objectName->$objectKey;
-                } elseif (is_array($object->$objectName)) {
-                    foreach ($object->$objectName as $idx => $obj) {
-                        if (isset($obj->$objectKey)) $objectData->$objectName[$idx][$objectKey] = $obj->$objectKey;
+                /* Check ifis plain object, data might contain arrays. */
+                if(is_object($object->$objectName))
+                {
+                    if(isset($object->$objectName->$objectKey)) $objectData->$objectName[$objectKey] = $object->$objectName->$objectKey;
+                }
+                elseif(is_array($object->$objectName))
+                {
+                    foreach($object->$objectName as $idx => $obj)
+                    {
+                        if(isset($obj->$objectKey)) $objectData->$objectName[$idx][$objectKey] = $obj->$objectKey;
                     }
                 }
             }
@@ -1133,7 +1195,7 @@ class aiModel extends model
     }
 
     /**
-     * Auto prepend newline to text if text has newline in the middle.
+     * Auto prepend newline to text iftext has newline in the middle.
      *
      * @param  string  $text
      * @access private
@@ -1141,14 +1203,14 @@ class aiModel extends model
      */
     private static function autoPrependNewline($text)
     {
-        if (empty($text)) return '';
+        if(empty($text)) return '';
 
         preg_match('/\n[^$]/', $text, $matches);
         return empty($matches) ? $text : "\n$text";
     }
 
     /**
-     * Try to punctuate sentence if sentence is not ended with punctuation.
+     * Try to punctuate sentence ifsentence is not ended with punctuation.
      *
      * @param  string  $sentence
      * @param  bool    $newline
@@ -1157,10 +1219,10 @@ class aiModel extends model
      */
     private static function tryPunctuate($sentence, $newline = false)
     {
-        if (empty($sentence)) return '';
+        if(empty($sentence)) return '';
 
         preg_match('/\p{P}$/u', $sentence, $matches);
-        if (empty($matches)) $sentence .= '.';
+        if(empty($matches)) $sentence .= '.';
 
         return $newline ? "$sentence\n" : $sentence;
     }
@@ -1197,28 +1259,28 @@ class aiModel extends model
      */
     public function executePrompt($prompt, $object)
     {
-        if (is_numeric($prompt)) $prompt = $this->getPromptById($prompt);
-        if (empty($prompt)) return -1;
+        if(is_numeric($prompt)) $prompt = $this->getPromptById($prompt);
+        if(empty($prompt)) return -1;
 
-        if (is_numeric($object)) $object = $this->getObjectForPromptById($prompt, $object);
-        if (empty($object)) return -2;
+        if(is_numeric($object)) $object = $this->getObjectForPromptById($prompt, $object);
+        if(empty($object)) return -2;
 
         list($objectData) = $object;
         $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
-        if (empty($dataPrompt)) return -3;
+        if(empty($dataPrompt)) return -3;
 
         $wholePrompt = static::assemblePrompt($prompt, $dataPrompt);
         $schema      = $this->getFunctionCallSchema($prompt->targetForm);
-        if (empty($schema)) return -4;
+        if(empty($schema)) return -4;
 
         $response = $this->{$this->config->ai->models[$this->modelConfig->type] == 'ernie' ? 'converseTwiceForJSON' : 'converseForJSON'}(array((object)array('role' => 'user', 'content' => $wholePrompt)), $schema);
-        if (empty($response)) return -5;
+        if(empty($response)) return -5;
 
         return current($response);
     }
 
     /**
-     * Check if prompt can be tested.
+     * Check ifprompt can be tested.
      *
      * @param  object|int  $prompt  prompt object or prompt id
      * @access public
@@ -1226,14 +1288,16 @@ class aiModel extends model
      */
     public function isExecutable($prompt)
     {
-        if (is_numeric($prompt)) $prompt = $this->getByID($prompt);
-        if (empty($prompt)) return false;
+        if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
+        if(empty($prompt)) return false;
 
         $executable = true;
         $requiredFields = explode(',', $this->config->ai->testPrompt->requiredFields);
 
-        foreach ($requiredFields as $field) {
-            if (empty($prompt->$field) || $prompt->$field == ',,') {
+        foreach($requiredFields as $field)
+        {
+            if(empty($prompt->$field) || $prompt->$field == ',,')
+            {
                 $executable = false;
                 break;
             }
@@ -1253,65 +1317,91 @@ class aiModel extends model
     {
         $module = $prompt->module;
 
-        if ($module == 'my') {
+        if($module == 'my')
+        {
             return helper::createLink('my', 'effort', "type=all");
-        } elseif ($module == 'product') {
+        }
+        elseif($module == 'product')
+        {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCT)
                 ->where('id')->in($this->app->user->view->products)
                 ->fetch('maxId');
-        } elseif ($module == 'productplan') {
+        }
+        elseif($module == 'productplan')
+        {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCTPLAN)
                 ->where('product')->in($this->app->user->view->products)
                 ->fetch('maxId');
-        } elseif ($module == 'release') {
+        }
+        elseif($module == 'release')
+        {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_RELEASE)
                 ->where('project')->in($this->app->user->view->projects)
                 ->orWhere('product')->in($this->app->user->view->products)
                 ->fetch('maxId');
-        } elseif ($module == 'project') {
+        }
+        elseif($module == 'project')
+        {
             /* programplan/create only exist in the waterfall model project. */
-            if (strpos($prompt->targetForm, 'programplan/create')) {
+            if(strpos($prompt->targetForm, 'programplan/create'))
+            {
                 $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
                     ->where('id')->in($this->app->user->view->projects)
                     ->andWhere('model')->eq('waterfall')
                     ->fetch('maxId');
-            } else {
+            }
+            else
+            {
                 $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
                     ->where('id')->in($this->app->user->view->projects)
                     ->fetch('maxId');
             }
-        } elseif ($module == 'story') {
+        }
+        elseif($module == 'story')
+        {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_STORY)
                 ->where('product')->in($this->app->user->view->products)
                 ->fetch('maxId');
-        } elseif ($module == 'execution') {
+        }
+        elseif($module == 'execution')
+        {
             $executionIds = array_map('intval', explode(',', $this->app->user->view->sprints));
             $objectId  = max($executionIds);
-        } elseif ($module == 'task') {
+        }
+        elseif($module == 'task')
+        {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_TASK)
                 ->where('project')->in($this->app->user->view->projects)
                 ->fetch('maxId');
-        } elseif ($module == 'case') {
+        }
+        elseif($module == 'case')
+        {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_CASE)
                 ->where('project')->in($this->app->user->view->projects)
                 ->orWhere('product')->in($this->app->user->view->products)
                 ->fetch('maxId');
-        } elseif ($module == 'bug') {
+        }
+        elseif($module == 'bug')
+        {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)
                 ->where('project')->in($this->app->user->view->projects)
                 ->orWhere('product')->in($this->app->user->view->products)
                 ->fetch('maxId');
-        } elseif ($module == 'doc') {
+        }
+        elseif($module == 'doc')
+        {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
                 ->where('project')->in($this->app->user->view->projects)
                 ->orWhere('product')->in($this->app->user->view->products)
                 ->fetch('maxId');
-            if (empty($objectId)) {
+            if(empty($objectId))
+            {
                 $userDocLibs = $this->dao->select('id')->from(TABLE_DOCLIB)
                     ->where('type')->eq('mine')
                     ->andWhere('addedBy')->eq($this->app->user->account)
                     ->fetchPairs();
-                if (!empty($userDocLibs)) {
+                if(!empty($userDocLibs))
+                {
                     $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
                         ->where('lib')->in($userDocLibs)
                         ->fetch('maxId');
@@ -1319,7 +1409,7 @@ class aiModel extends model
             }
         }
 
-        if (!empty($objectId)) return helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId");
+        if(!empty($objectId)) return helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId");
 
         return false;
     }
@@ -1329,17 +1419,17 @@ class aiModel extends model
      *
      * @param  object|int   $prompt    prompt object or prompt id
      * @param  object       $object
-     * @param  array        $linkArgs  optional, link arguments, as defined in `->args` of items of `$config->ai->targetFormVars`, e.g. array('story' => 1). If not provided, will try to get from object.
+     * @param  array        $linkArgs  optional, link arguments, as defined in `->args` of items of `$config->ai->targetFormVars`, e.g. array('story' => 1). ifnot provided, will try to get from object.
      * @access public
      * @return array        array(link|false, bool), link to target form, and whether php should stop execution and return link.
      */
     public function getTargetFormLocation($prompt, $object, $linkArgs = array())
     {
-        if (is_numeric($prompt)) $prompt = $this->getByID($prompt);
-        if (empty($prompt)) return array(false, true);
+        if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
+        if(empty($prompt)) return array(false, true);
 
         $targetForm = $prompt->targetForm;
-        if (empty($targetForm)) return array(false, true);
+        if(empty($targetForm)) return array(false, true);
 
         list($m, $f) = explode('.', $targetForm);
         $targetFormConfig = $this->config->ai->targetForm[$m][$f];
@@ -1349,23 +1439,30 @@ class aiModel extends model
         /* Try to assemble link vars from both passed-in `$linkArgs` and object props. */
         $varsConfig = $this->config->ai->targetFormVars[$module][$method];
         $vars = array();
-        foreach ($varsConfig->args as $arg => $isRequired) {
+        foreach($varsConfig->args as $arg => $isRequired)
+        {
             $var = '';
-            if (!empty($linkArgs[$arg])) // Use provided link args.
+            if(!empty($linkArgs[$arg])) // Use provided link args.
             {
                 $var = $linkArgs[$arg];
-            } elseif (!empty($object->$arg) && is_object($object->$arg) && !empty($object->$arg->id)) // If the corresponding object exists, use its id.
+            }
+            elseif(!empty($object->$arg) && is_object($object->$arg) && !empty($object->$arg->id)) // ifthe corresponding object exists, use its id.
             {
                 $var = $object->$arg->id;
-            } elseif (!empty($object->{$prompt->module}->$arg)) // If object has the prop, use it.
+            }
+            elseif(!empty($object->{$prompt->module}->$arg)) // ifobject has the prop, use it.
             {
                 $var = $object->{$prompt->module}->$arg;
-            } else {
-                /* Try to get a related object, we are sorry if it could not find any. */
+            }
+            else
+            {
+                /* Try to get a related object, we are sorry ifit could not find any. */
                 $relatedObj = $this->tryGetRelatedObjects($prompt, $object, array($arg));
-                if (!empty($relatedObj)) {
+                if(!empty($relatedObj))
+                {
                     $relatedObj = current($relatedObj);
-                    if (is_string($relatedObj) && strlen($relatedObj) && $relatedObj[0] === ',' && $relatedObj[strlen($relatedObj) - 1] === ',') {
+                    if(is_string($relatedObj) && strlen($relatedObj) && $relatedObj[0] === ',' && $relatedObj[strlen($relatedObj) - 1] === ',')
+                    {
                         $relatedObj = explode(',', $relatedObj);
                         $relatedObj = array_filter($relatedObj);
                         $relatedObj = current($relatedObj);
@@ -1373,13 +1470,13 @@ class aiModel extends model
                     $var = $relatedObj;
                 }
             }
-            if (!empty($isRequired) && empty($var)) return array(helper::createLink('ai', 'promptExecutionReset', 'failed=1'), true);
+            if(!empty($isRequired) && empty($var)) return array(helper::createLink('ai', 'promptExecutionReset', 'failed=1'), true);
             $vars[] = $var;
         }
         $linkVars = vsprintf($varsConfig->format, $vars);
 
         /* Override method for story drafts. */
-        if ($module == 'story' && $method == 'change' && !empty($object->story) && $object->story->status == 'draft') $method = 'edit';
+        if($module == 'story' && $method == 'change' && !empty($object->story) && $object->story->status == 'draft') $method = 'edit';
 
         return array(helper::createLink($module, $method, $linkVars) . (empty($varsConfig->app) ? '' : "#app=$varsConfig->app"), false);
     }
@@ -1392,40 +1489,48 @@ class aiModel extends model
      * @param  array        $objectNames object names to get, e.g. array('story', 'tasks'),
      *                                   values in: product, story, branch, productplan, execution, task, bug, case, project, doc
      * @access public
-     * @return array|false  returns array of required object values, or false if error.
+     * @return array|false  returns array of required object values, or false iferror.
      */
     public function tryGetRelatedObjects($prompt, $object, $objectNames = array())
     {
-        if (empty($objectNames)) return array();
+        if(empty($objectNames)) return array();
 
-        if (is_numeric($prompt)) $prompt = $this->getByID($prompt);
-        if (empty($prompt)) return false;
+        if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
+        if(empty($prompt)) return false;
 
-        if (is_numeric($object)) $object = $this->getObjectForPromptById($prompt, $object);
-        if (empty($object)) return false;
+        if(is_numeric($object)) $object = $this->getObjectForPromptById($prompt, $object);
+        if(empty($object)) return false;
 
         $vars = array();
 
-        /* If a native object of a module exists, try getting stuff related to its id. */
-        if (!empty($object->{$prompt->module}) && is_object($object->{$prompt->module}) && !empty($object->{$prompt->module}->id)) {
+        /* ifa native object of a module exists, try getting stuff related to its id. */
+        if(!empty($object->{$prompt->module}) && is_object($object->{$prompt->module}) && !empty($object->{$prompt->module}->id))
+        {
             $objectId = $object->{$prompt->module}->id;
-            foreach ($objectNames as $objectName) {
+            foreach($objectNames as $objectName)
+            {
                 /* Note that modules are within (product, story, productplan, release, project, execution, task, bug, case, doc). */
-                switch ($prompt->module) {
+                switch ($prompt->module)
+                {
                     case 'product': // story, branch, productplan, execution, task, bug, case, project, doc
-                        if (in_array($objectName, array('story', 'branch', 'productplan', 'task', 'bug', 'case', 'doc'))) {
+                        if(in_array($objectName, array('story', 'branch', 'productplan', 'task', 'bug', 'case', 'doc')))
+                        {
                             $vars[] = $this->dao->select('max(id) as maxId')->from(constant(strtoupper("TABLE_$objectName")))
                                 ->where('product')->eq($objectId)
                                 ->andWhere('deleted')->eq(0)
                                 ->fetch('maxId');
-                        } elseif ($objectName == 'project') {
+                        }
+                        elseif($objectName == 'project')
+                        {
                             $vars[] = $this->dao->select('max(tpp.project) as maxId')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
                                 ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tpp.project')
                                 ->where('tpp.product')->eq($objectId)
                                 ->andWhere('tp.type')->eq('project')
                                 ->andWhere('tp.deleted')->eq(0)
                                 ->fetch('maxId');
-                        } elseif ($objectName == 'execution') {
+                        }
+                        elseif($objectName == 'execution')
+                        {
                             $vars[] = $this->dao->select('max(tpp.project) as maxId')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
                                 ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tpp.project')
                                 ->where('tpp.product')->eq($objectId)
@@ -1435,13 +1540,15 @@ class aiModel extends model
                         }
                         break;
                     case 'story': // product, branch, productplan, execution, task, bug, case, project, doc
-                        if ($objectName == 'product') $vars[] = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($objectId)->fetch('product');
-                        if ($objectName == 'branch')  $vars[] = $this->dao->select('branch')->from(TABLE_STORY)->where('id')->eq($objectId)->fetch('branch');
-                        if ($objectName == 'productplan') $vars[] = $this->dao->select('plan')->from(TABLE_STORY)->where('id')->eq($objectId)->fetch('plan');
-                        if (in_array($objectName, array('task', 'bug', 'case', 'doc'))) {
+                        if($objectName == 'product') $vars[] = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($objectId)->fetch('product');
+                        if($objectName == 'branch')  $vars[] = $this->dao->select('branch')->from(TABLE_STORY)->where('id')->eq($objectId)->fetch('branch');
+                        if($objectName == 'productplan') $vars[] = $this->dao->select('plan')->from(TABLE_STORY)->where('id')->eq($objectId)->fetch('plan');
+                        if(in_array($objectName, array('task', 'bug', 'case', 'doc')))
+                        {
                             $vars[] = $this->dao->select('max(id) as maxId')->from(constant(strtoupper("TABLE_$objectName")))->where('story')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
                         }
-                        if ($objectName == 'execution') {
+                        if($objectName == 'execution')
+                        {
                             $vars[] = $this->dao->select('tps.project')->from(TABLE_PROJECTSTORY)->alias('tps')
                                 ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tps.project')
                                 ->where('tps.story')->eq($objectId)
@@ -1449,7 +1556,8 @@ class aiModel extends model
                                 ->andWhere('tp.deleted')->eq(0)
                                 ->fetch('project');
                         }
-                        if ($objectName == 'project') {
+                        if($objectName == 'project')
+                        {
                             $vars[] = $this->dao->select('tps.project')->from(TABLE_PROJECTSTORY)->alias('tps')
                                 ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tps.project')
                                 ->where('tps.story')->eq($objectId)
@@ -1459,12 +1567,14 @@ class aiModel extends model
                         }
                         break;
                     case 'productplan': // product, story, branch, execution, task, bug, case, project, doc
-                        if ($objectName == 'product') $vars[] = $this->dao->select('product')->from(TABLE_PRODUCTPLAN)->where('id')->eq($objectId)->fetch('product');
-                        if ($objectName == 'branch')  $vars[] = $this->dao->select('branch')->from(TABLE_PRODUCTPLAN)->where('id')->eq($objectId)->fetch('branch');
-                        if (in_array($objectName, array('story', 'bug'))) {
+                        if($objectName == 'product') $vars[] = $this->dao->select('product')->from(TABLE_PRODUCTPLAN)->where('id')->eq($objectId)->fetch('product');
+                        if($objectName == 'branch')  $vars[] = $this->dao->select('branch')->from(TABLE_PRODUCTPLAN)->where('id')->eq($objectId)->fetch('branch');
+                        if(in_array($objectName, array('story', 'bug')))
+                        {
                             $vars[] = $this->dao->select('max(id) as maxId')->from(constant(strtoupper("TABLE_$objectName")))->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
                         }
-                        if ($objectName == 'execution') {
+                        if($objectName == 'execution')
+                        {
                             $vars[] = $this->dao->select('max(tpp.project) as maxId')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
                                 ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tpp.project')
                                 ->where('tpp.plan')->eq($objectId)
@@ -1472,7 +1582,8 @@ class aiModel extends model
                                 ->andWhere('tp.deleted')->eq(0)
                                 ->fetch('maxId');
                         }
-                        if ($objectName == 'project') {
+                        if($objectName == 'project')
+                        {
                             $vars[] = $this->dao->select('max(tpp.project) as maxId')->from(TABLE_PROJECTPRODUCT)->alias('tpp')
                                 ->leftJoin(TABLE_PROJECT)->alias('tp')->on('tp.id = tpp.project')
                                 ->where('tpp.plan')->eq($objectId)
@@ -1480,20 +1591,23 @@ class aiModel extends model
                                 ->andWhere('tp.deleted')->eq(0)
                                 ->fetch('maxId');
                         }
-                        if ($objectName == 'task') $vars[] = '';
-                        if ($objectName == 'case') $vars[] = '';
-                        if ($objectName == 'doc')  $vars[] = '';
+                        if($objectName == 'task') $vars[] = '';
+                        if($objectName == 'case') $vars[] = '';
+                        if($objectName == 'doc')  $vars[] = '';
                         break;
                     case 'release': // product, story, branch, productplan, execution, task, bug, case, project, doc
-                        if (in_array($objectName, array('product', 'branch', 'project'))) {
+                        if(in_array($objectName, array('product', 'branch', 'project')))
+                        {
                             $this->dao->select($objectName)->from(TABLE_RELEASE)->where('id')->eq($objectId)->fetch($objectName);
                         }
-                        if ($objectName == 'story') {
+                        if($objectName == 'story')
+                        {
                             $stories = $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($objectId)->fetch('stories');
                             $stories = explode(',', $stories);
                             $vars[] = empty($stories) ? '' : max($stories);
                         }
-                        if ($objectName == 'productplan') {
+                        if($objectName == 'productplan')
+                        {
                             $execution = $this->dao->select('tb.execution')->from(TABLE_BUILD)->alias('tb')
                                 ->leftJoin(TABLE_RELEASE)->alias('tr')->on('tr.build = tb.id')
                                 ->where('tr.id')->eq($objectId)
@@ -1504,30 +1618,35 @@ class aiModel extends model
                                 ->andWhere('tp.deleted')->eq(0)
                                 ->fetch('maxId');
                         }
-                        if ($objectName == 'execution') {
+                        if($objectName == 'execution')
+                        {
                             $vars[] = $this->dao->select('tb.execution')->from(TABLE_BUILD)->alias('tb')
                                 ->leftJoin(TABLE_RELEASE)->alias('tr')->on('tr.build = tb.id')
                                 ->where('tr.id')->eq($objectId)
                                 ->fetch('execution');
                         }
-                        if ($objectName == 'bug') {
+                        if($objectName == 'bug')
+                        {
                             $bugs = $this->dao->select('bugs')->from(TABLE_RELEASE)->where('id')->eq($objectId)->fetch('bugs');
                             $bugs = explode(',', $bugs);
                             $vars[] = empty($bugs) ? '' : max($bugs);
                         }
-                        if ($objectName == 'task') $vars[] = '';
-                        if ($objectName == 'case') $vars[] = '';
-                        if ($objectName == 'doc')  $vars[] = '';
+                        if($objectName == 'task') $vars[] = '';
+                        if($objectName == 'case') $vars[] = '';
+                        if($objectName == 'doc')  $vars[] = '';
                         break;
                     case 'project': // product, story, branch, productplan, execution, task, bug, case, doc
-                        if (in_array($objectName, array('product', 'branch', 'productplan'))) {
-                            if ($objectName == 'productplan') $objectName = 'plan';
+                        if(in_array($objectName, array('product', 'branch', 'productplan')))
+                        {
+                            if($objectName == 'productplan') $objectName = 'plan';
                             $vars[] = $this->dao->select($objectName)->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectId)->fetch($objectName);
                         }
-                        if (in_array($objectName, array('execution', 'bug', 'task', 'case', 'doc'))) {
+                        if(in_array($objectName, array('execution', 'bug', 'task', 'case', 'doc')))
+                        {
                             $vars[] = $this->dao->select('max(id) as maxId')->from(constant(strtoupper("TABLE_$objectName")))->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
                         }
-                        if ($objectName == 'story') {
+                        if($objectName == 'story')
+                        {
                             $vars[] = $this->dao->select('max(tps.story) as maxId')->from(TABLE_PROJECTSTORY)->alias('tps')
                                 ->leftJoin(TABLE_STORY)->alias('ts')->on('ts.id = tps.story')
                                 ->where('tps.project')->eq($objectId)
@@ -1536,102 +1655,115 @@ class aiModel extends model
                         }
                         break;
                     case 'execution': // product, story, branch, productplan, task, bug, case, project, doc
-                        if ($objectName == 'project')     $vars[] = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($objectId)->fetch('project');
-                        if ($objectName == 'product')     $vars[] = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectId)->fetch('product');
-                        if ($objectName == 'story')       $vars[] = $this->dao->select('max(story) as maxId')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectId)->fetch('maxId');
-                        if ($objectName == 'branch')      $vars[] = $this->dao->select('max(branch) as maxId')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectId)->fetch('maxId');
-                        if ($objectName == 'productplan') $vars[] = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectId)->fetch('plan');
-                        if ($objectName == 'task')        $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_TASK)->where('execution')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
-                        if ($objectName == 'bug')         $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
-                        if ($objectName == 'case')        $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_CASE)->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
-                        if ($objectName == 'doc')         $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'project')     $vars[] = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($objectId)->fetch('project');
+                        if($objectName == 'product')     $vars[] = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectId)->fetch('product');
+                        if($objectName == 'story')       $vars[] = $this->dao->select('max(story) as maxId')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectId)->fetch('maxId');
+                        if($objectName == 'branch')      $vars[] = $this->dao->select('max(branch) as maxId')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectId)->fetch('maxId');
+                        if($objectName == 'productplan') $vars[] = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectId)->fetch('plan');
+                        if($objectName == 'task')        $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_TASK)->where('execution')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'bug')         $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'case')        $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_CASE)->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'doc')         $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)->where('project')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
                         break;
                     case 'task': // product, story, branch, productplan, execution, bug, case, project, doc
-                        if ($objectName == 'product') {
+                        if($objectName == 'product')
+                        {
                             $vars[] = $this->dao->select('tpp.product')->from(TABLE_TASK)->alias('tt')
                                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('tpp')->on('tpp.project = tt.project')
                                 ->where('tt.id')->eq($objectId)
                                 ->fetch('product');
                         }
-                        if ($objectName == 'story')     $vars[] = $this->dao->select('story')->from(TABLE_TASK)->where('id')->eq($objectId)->fetch('story');
-                        if ($objectName == 'branch') {
+                        if($objectName == 'story')     $vars[] = $this->dao->select('story')->from(TABLE_TASK)->where('id')->eq($objectId)->fetch('story');
+                        if($objectName == 'branch')
+                        {
                             $vars[] = $this->dao->select('tpp.branch')->from(TABLE_TASK)->alias('tt')
                                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('tpp')->on('tpp.project = tt.project')
                                 ->where('tt.id')->eq($objectId)
                                 ->fetch('branch');
                         }
-                        if ($objectName == 'productplan') {
+                        if($objectName == 'productplan')
+                        {
                             $vars[] = $this->dao->select('tpp.plan')->from(TABLE_TASK)->alias('tt')
                                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('tpp')->on('tpp.project = tt.project')
                                 ->where('tt.id')->eq($objectId)
                                 ->fetch('plan');
                         }
-                        if ($objectName == 'execution') $vars[] = $this->dao->select('execution')->from(TABLE_TASK)->where('id')->eq($objectId)->fetch('execution');
-                        if ($objectName == 'bug')       $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->where('task')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
-                        if ($objectName == 'case')      $vars[] = '';
-                        if ($objectName == 'doc')       $vars[] = '';
+                        if($objectName == 'execution') $vars[] = $this->dao->select('execution')->from(TABLE_TASK)->where('id')->eq($objectId)->fetch('execution');
+                        if($objectName == 'bug')       $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->where('task')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'case')      $vars[] = '';
+                        if($objectName == 'doc')       $vars[] = '';
                         break;
                     case 'bug': // product, story, branch, productplan, execution, task, case, project, doc
-                        if (in_array($objectName, array('product', 'branch', 'productplan', 'execution', 'task', 'case', 'story', 'project'))) {
-                            if ($objectName == 'productplan') $objectName = 'plan';
+                        if(in_array($objectName, array('product', 'branch', 'productplan', 'execution', 'task', 'case', 'story', 'project')))
+                        {
+                            if($objectName == 'productplan') $objectName = 'plan';
                             $vars[] = $this->dao->select($objectName)->from(TABLE_BUG)->where('id')->eq($objectId)->fetch($objectName);
                         }
-                        if ($objectName == 'doc') $vars[] = '';
+                        if($objectName == 'doc') $vars[] = '';
                         break;
                     case 'case': // product, story, branch, productplan, execution, task, bug, project, doc
-                        if (in_array($objectName, array('product', 'story', 'branch', 'execution', 'project'))) {
+                        if(in_array($objectName, array('product', 'story', 'branch', 'execution', 'project')))
+                        {
                             $vars[] = $this->dao->select($objectName)->from(TABLE_CASE)->where('id')->eq($objectId)->fetch($objectName);
                         }
-                        if ($objectName == 'productplan') {
+                        if($objectName == 'productplan')
+                        {
                             $vars[] = $this->dao->select('tpp.plan')->from(TABLE_CASE)->alias('tc')
                                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('tpp')->on('tpp.project = tc.project')
                                 ->where('tc.id')->eq($objectId)
                                 ->fetch('plan');
                         }
-                        if ($objectName == 'task') $vars[] = $this->dao->select('max(task) as maxId')->from(TABLE_BUG)->where('case')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
-                        if ($objectName == 'bug')  $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->where('case')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
-                        if ($objectName == 'doc')  $vars[] = '';
+                        if($objectName == 'task') $vars[] = $this->dao->select('max(task) as maxId')->from(TABLE_BUG)->where('case')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'bug')  $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->where('case')->eq($objectId)->andWhere('deleted')->eq(0)->fetch('maxId');
+                        if($objectName == 'doc')  $vars[] = '';
                         break;
                     case 'doc': // product, story, branch, productplan, execution, task, bug, case, project
-                        if (in_array($objectName, array('product', 'execution', 'project'))) {
+                        if(in_array($objectName, array('product', 'execution', 'project')))
+                        {
                             $vars[] = $this->dao->select($objectName)->from(TABLE_DOC)->where('id')->eq($objectId)->fetch($objectName);
                         }
-                        if ($objectName == 'story') {
+                        if($objectName == 'story')
+                        {
                             $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_STORY)->alias('ts')
                                 ->leftJoin(TABLE_DOC)->alias('td')->on('td.product = ts.product')
                                 ->where('td.id')->eq($objectId)
                                 ->andWhere('ts.deleted')->eq(0)
                                 ->fetch('maxId');
                         }
-                        if ($objectName == 'branch') {
+                        if($objectName == 'branch')
+                        {
                             $vars[] = $this->dao->select('branch')->from(TABLE_STORY)->alias('ts')
                                 ->leftJoin(TABLE_DOC)->alias('td')->on('td.product = ts.product')
                                 ->where('td.id')->eq($objectId)
                                 ->andWhere('ts.deleted')->eq(0)
                                 ->fetch('branch');
                         }
-                        if ($objectName == 'productplan') {
+                        if($objectName == 'productplan')
+                        {
                             $vars[] = $this->dao->select('plan')->from(TABLE_STORY)->alias('ts')
                                 ->leftJoin(TABLE_DOC)->alias('td')->on('td.product = ts.product')
                                 ->where('td.id')->eq($objectId)
                                 ->andWhere('ts.deleted')->eq(0)
                                 ->fetch('plan');
                         }
-                        if ($objectName == 'task') {
+                        if($objectName == 'task')
+                        {
                             $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_TASK)->alias('tt')
                                 ->leftJoin(TABLE_DOC)->alias('td')->on('td.project = tt.project or td.execution = tt.execution')
                                 ->where('td.id')->eq($objectId)
                                 ->andWhere('tt.deleted')->eq(0)
                                 ->fetch('maxId');
                         }
-                        if ($objectName == 'bug') {
+                        if($objectName == 'bug')
+                        {
                             $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)->alias('tb')
                                 ->leftJoin(TABLE_DOC)->alias('td')->on('td.product = tb.product')
                                 ->where('td.id')->eq($objectId)
                                 ->andWhere('tb.deleted')->eq(0)
                                 ->fetch('maxId');
                         }
-                        if ($objectName == 'case') {
+                        if($objectName == 'case')
+                        {
                             $vars[] = $this->dao->select('max(id) as maxId')->from(TABLE_CASE)->alias('tc')
                                 ->leftJoin(TABLE_DOC)->alias('td')->on('td.product = tc.product')
                                 ->where('td.id')->eq($objectId)
@@ -1656,11 +1788,12 @@ class aiModel extends model
      */
     public function getLastActiveStep($prompt)
     {
-        if (!empty($prompt)) {
-            if ($prompt->status == 'active') return 'finalize';
-            if (!empty($prompt->targetForm)) return 'settargetform';
-            if (!empty($prompt->purpose))    return 'setpurpose';
-            if (!empty($prompt->source))     return 'selectdatasource';
+        if(!empty($prompt))
+        {
+            if($prompt->status == 'active') return 'finalize';
+            if(!empty($prompt->targetForm)) return 'settargetform';
+            if(!empty($prompt->purpose))    return 'setpurpose';
+            if(!empty($prompt->source))     return 'selectdatasource';
         }
         return 'assignrole';
     }
@@ -1688,27 +1821,33 @@ class aiModel extends model
      * @param  array   $prompts
      * @param  bool    $keepUnauthorized  optional, whether to keep unauthorized prompts but set their `unauthorized` property to true.
      * @access public
-     * @return array   filtered prompts, those unauthorized will be removed if `$keepUnauthorized` is false, unexecutable ones will always be removed.
+     * @return array   filtered prompts, those unauthorized will be removed if`$keepUnauthorized` is false, unexecutable ones will always be removed.
      */
     public function filterPromptsForExecution($prompts, $keepUnauthorized = false)
     {
-        if (empty($prompts)) return array();
+        if(empty($prompts)) return array();
 
         /* Remove the unexecutable ones. */
         $prompts = array_filter($prompts, array($this, 'isExecutable'));
 
         /* Check user's priv to targetForm. */
-        foreach ($prompts as $idx => $prompt) {
+        foreach($prompts as $idx => $prompt)
+        {
             list($m, $f) = explode('.', $prompt->targetForm);
             $targetFormConfig = $this->config->ai->targetForm[$m][$f];
-            if (empty($targetFormConfig)) {
+            if(empty($targetFormConfig))
+            {
                 unset($prompts[$idx]);
                 continue;
             }
-            if (!commonModel::hasPriv($targetFormConfig->m, $targetFormConfig->f)) {
-                if ($keepUnauthorized) {
+            if(!commonModel::hasPriv($targetFormConfig->m, $targetFormConfig->f))
+            {
+                if($keepUnauthorized)
+                {
                     $prompts[$idx]->unauthorized = true;
-                } else {
+                }
+                else
+                {
                     unset($prompts[$idx]);
                 }
             }
@@ -1726,13 +1865,13 @@ class aiModel extends model
      */
     public function setInjectData($form, $data)
     {
-        if (is_string($form)) $form = explode('.', $form);
+        if(is_string($form)) $form = explode('.', $form);
 
         $targetForm = $this->config->ai->targetForm[$form[0]][$form[1]];
-        if (empty($targetForm)) return;
+        if(empty($targetForm)) return;
 
         /* Override method for story drafts. */
-        if ($targetForm->m == 'story' && $targetForm->f == 'change') $_SESSION['aiInjectData']['story']['edit'] = is_string($data) ? $data : json_encode($data);
+        if($targetForm->m == 'story' && $targetForm->f == 'change') $_SESSION['aiInjectData']['story']['edit'] = is_string($data) ? $data : json_encode($data);
 
         $_SESSION['aiInjectData'][$targetForm->m][$targetForm->f] = is_string($data) ? $data : json_encode($data);
     }
@@ -1767,7 +1906,7 @@ class aiModel extends model
         $this->dao->insert(TABLE_PROMPTROLE)
             ->data($roleTemplate)
             ->exec();
-        if (dao::isError()) return false;
+        if(dao::isError()) return false;
 
         return $this->dao->lastInsertID();
     }
@@ -1785,7 +1924,7 @@ class aiModel extends model
             ->set('deleted')->eq(1)
             ->where('id')->eq($id)
             ->exec();
-        if (dao::isError()) return false;
+        if(dao::isError()) return false;
 
         return true;
     }
@@ -1808,7 +1947,7 @@ class aiModel extends model
             ->data($roleTemplate)
             ->where('id')->eq($id)
             ->exec();
-        if (dao::isError()) return false;
+        if(dao::isError()) return false;
 
         return true;
     }
