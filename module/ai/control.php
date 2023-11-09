@@ -197,7 +197,7 @@ class ai extends control
             unset($_POST['toPublish']);
             $this->ai->createTmpMiniProgram($appID);
             if($toPublish === '1') $this->ai->publishMiniProgram($appID, '1');
-            return $this->display('miniPrograms');
+            return print(js::closeModal('parent', 'this'));
         }
         $this->view->currentFields = $this->ai->getMiniProgramFields($appID);
         $this->view->currentPrompt = $this->ai->getMiniProgramByID($appID)->prompt;
