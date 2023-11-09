@@ -22,6 +22,8 @@ $this->loadModel('project');
 $config->project->dtable->fieldList['id']['type']     = 'id';
 $config->project->dtable->fieldList['id']['checkbox'] = false;
 
+$config->project->dtable->fieldList['hasProduct']['map'] = $lang->project->projectTypeList;
+
 $projects = initTableData($projects, $config->project->dtable->fieldList, $this->project);
 
 $waitCount      = 0;
