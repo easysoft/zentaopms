@@ -25,7 +25,7 @@ dropmenu();
         <th colspan="3"><?php echo $lang->personnel->task;?></th>
         <th colspan="3"><?php echo $lang->personnel->bug;?></th>
         <th <?php echo $config->URAndSR ? "colspan='2'" : "rowspan='2'";?> class="c-story"><?php echo $lang->personnel->createStories;?></th>
-        <?php if($this->config->edition == 'max'): ?>
+        <?php if($this->config->edition == 'max' or $this->config->edition == 'ipd'): ?>
         <th colspan="3"><?php echo $lang->personnel->issue;?></th>
         <th colspan="3"><?php echo $lang->personnel->risk;?></th>
         <?php endif;?>
@@ -43,7 +43,7 @@ dropmenu();
         <th><?php echo $lang->personnel->UR;?></th>
         <th><?php echo $lang->personnel->SR;?></th>
         <?php endif;?>
-        <?php if($this->config->edition == 'max'): ?>
+        <?php if($this->config->edition == 'max' or $this->config->edition == 'ipd'): ?>
         <th><?php echo $lang->personnel->created;?></th>
         <th><?php echo $lang->personnel->resolved;?></th>
         <th><?php echo $lang->personnel->wait;?></th>
@@ -73,7 +73,7 @@ dropmenu();
         <td><?php echo $personnel['UR'];?></td>
         <?php endif;?>
         <td><?php echo $personnel['SR'];?></td>
-        <?php if($this->config->edition == 'max'): ?>
+        <?php if($this->config->edition == 'max' or $this->config->edition == 'ipd'): ?>
         <td><?php echo $personnel['createdIssue'];?></td>
         <td><?php echo $personnel['resolvedIssue'];?></td>
         <td><?php echo $personnel['pendingIssue'];?></td>

@@ -292,7 +292,7 @@ class commonModel extends model
     public function setApproval()
     {
         $this->config->openedApproval = false;
-        if($this->config->edition == 'max' && $this->config->vision == 'rnd') $this->config->openedApproval = true;
+        if(($this->config->edition == 'max' or $this->config->edition == 'ipd') && $this->config->vision == 'rnd') $this->config->openedApproval = true;
     }
 
     /**

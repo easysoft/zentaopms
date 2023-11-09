@@ -1890,7 +1890,7 @@ class bugZen extends bug
     {
         $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
         $this->action->create('todo', $todoID, 'finished', '', "BUG:$bugID");
-        if($this->config->edition == 'biz' || $this->config->edition == 'max')
+        if($this->config->edition != 'open')
         {
             $todo = $this->dao->select('type, objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
             if($todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done');
@@ -2270,7 +2270,7 @@ class bugZen extends bug
 
         /* 更新相关反馈的状态。*/
         /* Update status of related feedback. */
-        if($this->config->edition != 'pms' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+        if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
     }
 
     /**

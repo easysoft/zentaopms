@@ -560,7 +560,7 @@ class installModel extends model
             }
         }
 
-        if($this->config->edition == 'max')
+        if($this->config->edition == 'max' or $this->config->edition == 'ipd')
         {
             /* Update process by lang. */
             foreach($this->lang->install->processList as $id => $name)

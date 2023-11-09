@@ -3059,7 +3059,7 @@ class taskModel extends model
 
         /* Create action record. */
         $this->taskTao->createUpdateParentTaskAction($oldParentTask);
-        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldParentTask->feedback, $status, $oldParentTask->status);
+        if($this->config->edition != 'open' && $oldParentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldParentTask->feedback, $status, $oldParentTask->status);
     }
 
     /**

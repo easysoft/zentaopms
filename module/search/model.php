@@ -822,12 +822,13 @@ class searchModel extends model
             $table = $this->config->objectTables[$module];
 
             $fields = '';
-            if($module == 'issue') $fields = $this->config->edition == 'max' ? 'id,project,owner,lib' : 'id,project,owner';
+            if($module == 'issue') $fields = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? 'id,project,owner,lib' : 'id,project,owner';
             if($module == 'project') $fields = 'id,model';
             if($module == 'execution')$fields = 'id,type,project';
-            if($module == 'story' or $module == 'requirement') $fields = $this->config->edition == 'max' ? 'id,type,lib' : 'id,type';
-            if(($module == 'risk' or $module == 'opportunity') and $this->config->edition == 'max') $fields = 'id,lib';
-            if($module == 'doc' and $this->config->edition == 'max') $fields = 'id,assetLib,assetLibType';
+            if($module == 'story' or $module == 'requirement') $fields = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? 'id,type,lib' : 'id,type';
+            if(($module == 'risk' or $module == 'opportunity') and ($this->config->edition == 'max' or $this->config->edition == 'ipd')) $fields = 'id,lib';
+            if($module == 'doc' and ($this->config->edition == 'max' or $this->config->edition == 'ipd')) $fields = 'id,assetLib,assetLibType';
+
             if(empty($fields)) continue;
 
             $objectList[$module] = $this->dao->select($fields)->from($table)->where('id')->in($idList)->fetchAll('id');
@@ -894,7 +895,7 @@ class searchModel extends model
 
                 $record->extraType = isset($story->type) ? $story->type : '';
             }
-            elseif(($module == 'risk' or $module == 'opportunity') and $this->config->edition == 'max')
+            elseif(($module == 'risk' or $module == 'opportunity') and ($this->config->edition == 'max'  or $this->config->edition == 'ipd'))
             {
                 $object = $objectList[$module][$record->objectID];
                 if(!empty($object->lib))
@@ -905,7 +906,7 @@ class searchModel extends model
 
                 $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
             }
-            elseif($module == 'doc' and $this->config->edition == 'max')
+            elseif($module == 'doc' and ($this->config->edition == 'max' or $this->config->edition == 'ipd'))
             {
                 $doc = $objectList['doc'][$record->objectID];
                 if(!empty($doc->assetLib))

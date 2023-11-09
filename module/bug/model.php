@@ -434,7 +434,7 @@ class bugModel extends model
         if($changes) $this->action->logHistory($actionID, $changes);
 
         /* If the edition is not pms, update feedback. */
-        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+        if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
         return !dao::isError();
     }
@@ -559,7 +559,7 @@ class bugModel extends model
         $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
         if(dao::isError()) return false;
 
-        if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
+        if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status);
 
         $changes = common::createChanges($oldBug, $bug);
         $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Closed', $bug->comment);
