@@ -6,6 +6,6 @@ class tree extends wg
 {
     protected function build(): zui
     {
-        return zui::tree(set::_tag('ul'), inherit($this));
+        return zui::tree(set::_tag('menu'), inherit($this));
     }
 }

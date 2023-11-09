@@ -185,7 +185,7 @@ class moduleMenu extends wg
             ),
             zui::tree
             (
-                set::_tag('ul'),
+                set::_tag('menu'),
                 set::_class('col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden px-4'),
                 set::defaultNestedShow(true),
                 set::hover(true),
