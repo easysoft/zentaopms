@@ -126,3 +126,8 @@ $lang->programplan->error->sameType        = '父阶段类型为"%s"，阶段类
 
 $lang->programplan->ganttBrowseType['gantt']       = '按阶段分组';
 $lang->programplan->ganttBrowseType['assignedTo']  = '按指派给分组';
+
+$lang->programplan->reviewColorList['draft']     = '#FC913F';
+$lang->programplan->reviewColorList['reviewing'] = '#CD6F27';
+$lang->programplan->reviewColorList['pass']      = '#0DBB7D';
+$lang->programplan->reviewColorList['fail']      = '#FB2B2B';
