@@ -240,7 +240,7 @@ class execution extends control
         /* Get users and build task group data. */
         $users = $this->loadModel('user')->getPairs('noletter');
         $tasks = $groupTasks;
-        list($groupTasks, $groupByList) = $this->executionZen->buildGroupTasks($groupBy, $groupTasks, $users);
+        list($groupTasks, $groupByList) = $this->executionZen->buildGroupTasks($groupBy, $groupTasks, array('' => '') + $users);
 
         /* Remove task by filter and group. */
         $filter = (empty($filter) && isset($this->lang->execution->groupFilter[$groupBy])) ? key($this->lang->execution->groupFilter[$groupBy]) : $filter;
