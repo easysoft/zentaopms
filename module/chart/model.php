@@ -480,7 +480,12 @@ class chartModel extends model
 
         /* Cluster bar X graphs and cluster bar Y graphs are really just x and y axes switched, so cluster bar Y $xaixs and $yaxis are swapped so that the method can be reused. */
         /* 簇状柱形图和簇状条形图其实只是x轴和y轴换了换，所以交换一下簇状条形图 xAxis和yAxis即可，这样方法就可以复用了。*/
-        if(in_array($settings['type'], array('cluBarY', 'stackedBarY'))) list($xaxis, $yaxis) = array($yaxis, $xaxis);
+        $label = array('show' => true, 'position' => 'top', 'formatter' => '{c}');
+        if(in_array($settings['type'], array('cluBarY', 'stackedBarY')))
+        {
+            list($xaxis, $yaxis) = array($yaxis, $xaxis);
+            $label['position'] = 'right';
+        }
 
         $series     = array();
         $clientLang = $this->app->getClientLang();
@@ -500,7 +505,7 @@ class chartModel extends model
             if(isset($langs[$metrics[$index]]) and !empty($langs[$metrics[$index]][$clientLang])) $fieldName = $langs[$metrics[$index]][$clientLang];
 
             $seriesName = $fieldName . '(' . $this->lang->chart->aggList[$aggs[$index]] . ')';
-            $series[]   = array('name' => $seriesName, 'data' => $yData, 'type' => 'bar', 'stack' => $stack);
+            $series[]   = array('name' => $seriesName, 'data' => $yData, 'type' => 'bar', 'stack' => $stack, 'label' => $label);
         }
 
         $dataZoomX = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"xAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":"80%","height":"5","xAxisIndex":[0],"fillerColor":"#ccc","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"bottom":"0","left":"10%"}]';
