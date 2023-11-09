@@ -224,85 +224,98 @@ class pivotModel extends model
      */
     public function processFieldSettings($pivot)
     {
-       $this->loadModel('chart');
-       $this->loadModel('dataview');
+        if(isset($pivot->fieldSettings))
+        {
+            $fieldSettings = $pivot->fieldSettings;
+        }
+        else
+        {
+            $fieldSettings = (!empty($pivot->fields) and $pivot->fields != 'null') ? json_decode($pivot->fields) : array();
+        }
+        if(empty($fieldSettings)) return $pivot;
 
-       $sql        = isset($pivot->sql)     ? $pivot->sql     : '';
-       $filters    = isset($pivot->filters) ? $pivot->filters : array();
-       $recPerPage = 20;
-       $pageID     = 1;
+        $this->loadModel('chart');
+        $this->loadModel('dataview');
 
-       if(!empty($filters))
-       {
-           foreach($filters as $index => $filter)
-           {
-               if(empty($filter['default'])) continue;
+        $sql        = isset($pivot->sql)     ? $pivot->sql     : '';
+        $filters    = isset($pivot->filters) ? (is_array($pivot->filters) ? $pivot->filters : json_decode($pivot->filters, true)) : array();
+        $recPerPage = 20;
+        $pageID     = 1;
 
-               $filters[$index]['default'] = $this->processDateVar($filter['default']);
-           }
-       }
-       $querySQL = $this->chart->parseSqlVars($sql, $filters);
+        if(!empty($filters))
+        {
+            foreach($filters as $index => $filter)
+            {
+                if(empty($filter['default'])) continue;
 
-       $columns      = $this->dataview->getColumns($querySQL);
-       $columnFields = array();
-       foreach($columns as $column => $type) $columnFields[$column] = $column;
+                $filters[$index]['default'] = $this->processDateVar($filter['default']);
+            }
+        }
+        $querySQL = $this->chart->parseSqlVars($sql, $filters);
 
-       $tableAndFields = $this->chart->getTables($querySQL);
-       $tables   = $tableAndFields['tables'];
-       $fields   = $tableAndFields['fields'];
-       $querySQL = $tableAndFields['sql'];
+        $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_SILENT);
+        $stmt = $this->dbh->query($querySQL);
+        if(!$stmt) return $pivot;
 
-       $moduleNames = array();
-       if($tables) $moduleNames = $this->dataview->getModuleNames($tables);
+        $columns      = $this->dataview->getColumns($querySQL);
+        $columnFields = array();
+        foreach($columns as $column => $type) $columnFields[$column] = $column;
 
-       list($fieldPairs, $relatedObject) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames);
+        $tableAndFields = $this->chart->getTables($querySQL);
+        $tables   = $tableAndFields['tables'];
+        $fields   = $tableAndFields['fields'];
+        $querySQL = $tableAndFields['sql'];
 
-       /* Use fieldPairs, columns, relatedObject, objectFields refresh pivot fieldSettings .*/
+        $moduleNames = array();
+        if($tables) $moduleNames = $this->dataview->getModuleNames($tables);
 
-       $fieldSettings = $pivot->fieldSettings;
-       $objectFields = array();
-       foreach($this->lang->dataview->objects as $object => $objectName) $objectFields[$object] = $this->dataview->getTypeOptions($object);
+        list($fieldPairs, $relatedObject) = $this->dataview->mergeFields($columnFields, $fields, $moduleNames);
 
-       $fieldSettingsNew = new stdclass();
+        /* Use fieldPairs, columns, relatedObject, objectFields refresh pivot fieldSettings .*/
 
-       foreach($fieldPairs as $index => $field)
-       {
-           $defaultType   = $columns->$index;
-           $defaultObject = $relatedObject[$index];
+        $objectFields = array();
+        foreach($this->lang->dataview->objects as $object => $objectName) $objectFields[$object] = $this->dataview->getTypeOptions($object);
 
-           if(!empty($objectFields) and isset($objectFields[$defaultObject]) and isset($objectFields[$defaultObject][$index])) $defaultType = $objectFields[$defaultObject][$index]['type'] == 'object' ? 'string' : $objectFields[$defaultObject][$index]['type'];
+        $fieldSettingsNew = new stdclass();
 
-           if(!isset($fieldSettings->$index))
-           {
-               $fieldItem = new stdclass();
-               $fieldItem->name   = $field;
-               $fieldItem->object = $defaultObject;
-               $fieldItem->field  = $index;
-               $fieldItem->type   = $defaultType;
+        foreach($fieldPairs as $index => $field)
+        {
+            $defaultType   = $columns->$index;
+            $defaultObject = $relatedObject[$index];
 
-               $fieldSettingsNew[$index] = $fieldItem;
-           }
-           else
-           {
-               if(!isset($fieldSettings->$index->object) or strlen($fieldSettings->$index->object) == 0) $fieldSettings->$index->object = $defaultObject;
+            if(!empty($objectFields) and isset($objectFields[$defaultObject]) and isset($objectFields[$defaultObject][$index])) $defaultType = $objectFields[$defaultObject][$index]['type'] == 'object' ? 'string' : $objectFields[$defaultObject][$index]['type'];
 
-               if(!isset($fieldSettings->$index->field) or strlen($fieldSettings->$index->field) == 0)
-               {
-                   $fieldSettings->$index->field  = $index;
-                   $fieldSettings->$index->object = $defaultObject;
-                   $fieldSettings->$index->type   = 'string';
-               }
+            if(!isset($fieldSettings->$index))
+            {
+                $fieldItem = new stdclass();
+                $fieldItem->name   = $field;
+                $fieldItem->object = $defaultObject;
+                $fieldItem->field  = $index;
+                $fieldItem->type   = $defaultType;
 
-               $object = $fieldSettings->$index->object;
-               $type   = $fieldSettings->$index->type;
-               if($object == $defaultObject && $type != $defaultType) $fieldSettings->$index->type = $defaultType;
+                $fieldSettingsNew->$index = $fieldItem;
+            }
+            else
+            {
+                if(!isset($fieldSettings->$index->object) or strlen($fieldSettings->$index->object) == 0) $fieldSettings->$index->object = $defaultObject;
 
-               $fieldSettingsNew->$index = $fieldSettings->$index;
-           }
-       }
-       $pivot->fieldSettings = $fieldSettingsNew;
+                if(!isset($fieldSettings->$index->field) or strlen($fieldSettings->$index->field) == 0)
+                {
+                    $fieldSettings->$index->field  = $index;
+                    $fieldSettings->$index->object = $defaultObject;
+                    $fieldSettings->$index->type   = 'string';
+                }
 
-       return $pivot;
+                $object = $fieldSettings->$index->object;
+                $type   = $fieldSettings->$index->type;
+                if($object == $defaultObject && $type != $defaultType) $fieldSettings->$index->type = $defaultType;
+
+                $fieldSettingsNew->$index = $fieldSettings->$index;
+            }
+        }
+        $pivot->fieldSettings = $fieldSettingsNew;
+
+        return $pivot;
     }
 
     /**
