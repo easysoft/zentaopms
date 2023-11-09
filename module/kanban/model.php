@@ -1131,6 +1131,7 @@ class kanbanModel extends model
             $item['region'] = $lane->region;
             $item['title']  = htmlspecialchars_decode($lane->name);
             $item['color']  = $lane->color;
+            $item['order']  = $lane->order;
 
             foreach($actions as $action)
             {
@@ -1195,6 +1196,7 @@ class kanbanModel extends model
             $item['group']  = $column->group;
             $item['parent'] = $column->parent;
             $item['color']  = $column->color;
+            $item['order']  = $column->order;
             if($column->parent > 0) $item['parentName'] = $column->parent;
 
             /* Judge column action priv. */
