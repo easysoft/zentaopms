@@ -219,7 +219,7 @@ $config->task->dtable->importTask = new stdclass();
 $config->task->dtable->importTask->fieldList['id']['title']    = $lang->idAB;
 $config->task->dtable->importTask->fieldList['id']['name']     = 'id';
 $config->task->dtable->importTask->fieldList['id']['type']     = 'checkID';
-$config->task->dtable->importTask->fieldList['id']['sortType'] = 'desc';
+$config->task->dtable->importTask->fieldList['id']['sortType'] = true;
 $config->task->dtable->importTask->fieldList['id']['checkbox'] = true;
 
 $config->task->dtable->importTask->fieldList['name']['title']       = $lang->task->name;

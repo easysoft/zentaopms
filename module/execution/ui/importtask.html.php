@@ -36,8 +36,6 @@ featureBar
 $config->task->dtable->importTask->fieldList['execution']['map'] = $executions;
 if($execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'))) unset($config->task->dtable->importTask->fieldList['story']);
 
-jsVar('orderBy',  $orderBy);
-jsVar('sortLink', helper::createLink('execution', 'importTask', "executionID={$execution->id}&fromExecution={$fromExecution}&orderBy={orderBy}&recPerPage={$pager->recPerPage}"));
 jsVar('executionID', $execution->id);
 dtable
 (
@@ -45,7 +43,8 @@ dtable
     set::cols(array_values($config->task->dtable->importTask->fieldList)),
     set::data($tasks2Imported),
     set::showToolbarOnChecked(false),
-    set::sortLink(jsRaw('createSortLink')),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('execution', 'importTask', "executionID={$execution->id}&fromExecution={$fromExecution}&orderBy={name}_{sortType}&recPerPage={$pager->recPerPage}")),
     set::footToolbar(array(
         'items' => array(
             array(
