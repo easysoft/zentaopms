@@ -866,7 +866,7 @@ class screenModel extends model
             case 'year':
                 $component->option->value = $this->filter->year;
 
-                $begin = $this->dao->select('YEAR(MIN(date)) year')->from(TABLE_ACTION)->where('date')->ne('0000-00-00')->fetch('year');
+                $begin = $this->dao->select('YEAR(MIN(date)) year')->from(TABLE_ACTION)->where('date')->notZeroDate()->fetch('year');
                 if($begin < 2009) $begin = 2009;
 
                 $options = array();
