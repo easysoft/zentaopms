@@ -24,12 +24,11 @@ class treeEditor extends wg
     protected function build(): zui
     {
         $this->setProp('items', $this->buildTree($this->prop('items')));
-        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'id', 'itemActions', 'hover', 'onClick'));
-        $idProps   = $treeProps['id'] ? array('id' => $treeProps['id']) : null;
+        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'itemActions', 'hover', 'onClick'));
         return zui::tree
         (
-            set::_tag('ul'),
-            set::props($idProps),
+            set::_id($this->prop('id')),
+            set::_tag('menu'),
             set($treeProps)
         );
     }

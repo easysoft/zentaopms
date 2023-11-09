@@ -7,3 +7,5 @@
 #dynamicPager .ghost {color: rgb(131, 138, 157);}
 #dynamicTable a {color: inherit;}
 #store-detail-action .install-btn {padding-left: 25px; padding-right: 25px;}
+
+.menu-item > .item-inner, .menu-item > a {justify-content: flex-start;}
