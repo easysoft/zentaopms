@@ -480,12 +480,13 @@ class chartModel extends model
 
         /* Cluster bar X graphs and cluster bar Y graphs are really just x and y axes switched, so cluster bar Y $xaixs and $yaxis are swapped so that the method can be reused. */
         /* 簇状柱形图和簇状条形图其实只是x轴和y轴换了换，所以交换一下簇状条形图 xAxis和yAxis即可，这样方法就可以复用了。*/
-        $label = array('show' => true, 'position' => 'top', 'formatter' => '{c}');
-        if(in_array($settings['type'], array('cluBarY', 'stackedBarY')))
-        {
-            list($xaxis, $yaxis) = array($yaxis, $xaxis);
-            $label['position'] = 'right';
-        }
+
+        $position = 'top';
+        if($settings['type'] == 'stackedBar' or $settings['type'] == 'stackedBarY')  $position = 'inside';
+        if($settings['type'] == 'cluBarY') $position = 'right';
+        $label = array('show' => true, 'position' => $position, 'formatter' => '{c}');
+
+        if(in_array($settings['type'], array('cluBarY', 'stackedBarY'))) list($xaxis, $yaxis) = array($yaxis, $xaxis);
 
         $series     = array();
         $clientLang = $this->app->getClientLang();
