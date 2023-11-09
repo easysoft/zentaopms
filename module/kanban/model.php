@@ -989,8 +989,7 @@ class kanbanModel extends model
     {
         if($groupBy != 'default' and $groupBy != '') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue, $orderBy);
 
-        $kanbanData   = array();
-        $actions      = array('sortGroup');
+        $kanbanList   = array();
         $regions      = $this->getRegionPairs($executionID, $regionID, 'execution');
         $regionIDList = $regionID == 0 ? array_keys($regions) : array(0 => $regionID);
         $groupGroup   = $this->getGroupGroupByRegions($regionIDList);
@@ -1001,10 +1000,18 @@ class kanbanModel extends model
 
         foreach($regions as $regionID => $regionName)
         {
-            $region = new stdclass();
-            $region->id        = $regionID;
-            $region->name      = $regionName;
-            $region->laneCount = 0;
+            $laneCount  = 0;
+            $regionData = array();
+            $groupData  = array();
+
+            $heading = new stdclass();
+            $heading->title   = $regionName;
+            //$heading->actions = $this->getRegionActions($kanbanID, $regionID);
+
+            $regionData['key']               = "region{$regionID}";
+            $regionData['id']                = $regionID;
+            $regionData['heading']           = $heading;
+            $regionData['toggleFromHeading'] = true;
 
             $groups = zget($groupGroup, $regionID, array());
             foreach($groups as $group)
@@ -1012,35 +1019,40 @@ class kanbanModel extends model
                 $lanes = zget($laneGroup, $group->id, array());
                 if(!$lanes) continue;
 
+                $cols  = zget($columnGroup, $group->id, array());
+                $items = zget($cardGroup, $group->id, array());
+
                 foreach($lanes as $key => $lane)
                 {
+                    $lane['execution'] = $executionID;
                     if(in_array($execution->attribute, array('request', 'design', 'review')) and $lane->type == 'bug') continue 2;
                     if(in_array($execution->attribute, array('request', 'review')) and $lane->type == 'story') continue 2;
                     $this->refreshCards($lane);
-                    $lane->items           = isset($cardGroup[$lane->id]) ? $cardGroup[$lane->id] : array();
-                    $lane->defaultCardType = $lane->type;
+                    $lane['defaultCardType'] = $lane['type'];
                     if($searchValue != '' and count($lane->items) == 0) unset($lanes[$key]);
                 }
+
                 $lanes = array_values($lanes);
+                $laneCount += count($lanes);
 
                 if($searchValue != '' and empty($lanes)) continue;
-                $group->columns = zget($columnGroup, $group->id, array());
-                $group->lanes   = $lanes;
-                $group->actions = array();
 
-                foreach($actions as $action)
-                {
-                    if(commonModel::hasPriv('kanban', $action)) $group->actions[] = $action;
-                }
+                $laneCount += count($lanes);
 
-                $region->groups[]   = $group;
-                $region->laneCount += count($lanes);
+                $groupData['id']            = $group->id;
+                $groupData['key']           = "group{$group->id}";
+                $groupData['data']['lanes'] = $lanes;
+                $groupData['data']['cols']  = $cols;
+                $groupData['data']['items'] = $items;
+
+                $regionData['items'][] = $groupData;
             }
 
-            $kanbanData[$regionID] = $region;
+            $regionData['laneCount']  = $laneCount;
+            $kanbanList[] = $regionData;
         }
 
-        return $kanbanData;
+        return $kanbanList;
     }
 
     /**
@@ -1432,43 +1444,31 @@ class kanbanModel extends model
         $actions = array('setColumn', 'setWIP', 'deleteColumn');
 
         /* Group by parent. */
-        $parentColumnGroup = array();
+        $columnData = array();
         foreach($columnGroup as $group => $columns)
         {
             foreach($columns as $column)
             {
-                $column->actions = array();
+                $item = array();
+                $item['title']  = htmlspecialchars_decode($column->name);
+                $item['name']   = $column->id;
+                $item['id']     = $column->id;
+                $item['type']   = $column->type;
+                $item['color']  = $column->color;
+                $item['limit']  = $column->limit;
+                $item['region'] = $column->region;
+                $item['group']  = $column->group;
+                $item['parent'] = $column->parent;
+                $item['color']  = $column->color;
+                if($column->parent > 0) $item['parentName'] = $column->parent;
+
                 /* Judge column action priv. */
                 foreach($actions as $action)
                 {
-                    if($this->isClickable($column, $action)) $column->actions[] = $action;
+                    if($this->isClickable($column, $action)) $item['actionList'][] = $action;
                 }
 
-                if($column->parent > 0) continue;
-
-                $parentColumnGroup[$group][] = $column;
-            }
-        }
-
-        $columnData = array();
-        foreach($parentColumnGroup as $group => $parentColumns)
-        {
-            foreach($parentColumns as $parentColumn)
-            {
-                $columnData[$group][] = $parentColumn;
-                foreach($columnGroup[$group] as $column)
-                {
-                    if($column->parent == $parentColumn->id)
-                    {
-                        $parentColumn->asParent = true;
-
-                        if(strpos(',developing,developed,', $column->type) !== false) $column->parentType = 'develop';
-                        if(strpos(',testing,tested,',       $column->type) !== false) $column->parentType = 'test';
-                        if(strpos(',fixing,fixed,',         $column->type) !== false) $column->parentType = 'resolving';
-
-                        $columnData[$group][] = $column;
-                    }
-                }
+                $columnData[$group][] = $item;
             }
         }
 
@@ -1488,7 +1488,7 @@ class kanbanModel extends model
      */
     public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc', $searchValue = '')
     {
-        $cards = $this->dao->select('t1.*, t2.type as columnType')
+        $cards = $this->dao->select('t1.*, t2.type as columnType, t2.group')
             ->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column=t2.id')
             ->where('t1.kanban')->eq($executionID)
@@ -1518,6 +1518,7 @@ class kanbanModel extends model
                     if(empty($object)) continue;
 
                     $cardData['id']             = $object->id;
+                    $cardData['name']           = $object->id;
                     $cardData['order']          = $cardOrder++;
                     $cardData['pri']            = $object->pri ? $object->pri : '';
                     $cardData['estimate']       = $cell->type == 'bug' ? '' : $object->estimate;
@@ -1535,7 +1536,7 @@ class kanbanModel extends model
                     if($cell->type == 'task')
                     {
                         if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
-                        $cardData['name']       = $object->name;
+                        $cardData['title']      = $object->name;
                         $cardData['left']       = $object->left;
                         $cardData['estStarted'] = $object->estStarted;
                         $cardData['mode']       = $object->mode;
@@ -1545,7 +1546,7 @@ class kanbanModel extends model
                         if($searchValue != '' and strpos($object->title, $searchValue) === false) continue;
                         $cardData['title'] = $object->title;
                     }
-                    $cardGroup[$laneID][$cell->columnType][] = $cardData;
+                    $cardGroup[$cell->group][$laneID][$cell->column][] = $cardData;
                 }
             }
         }
@@ -2994,14 +2995,14 @@ class kanbanModel extends model
      */
     public function refreshCards($lane)
     {
-        $laneType      = $lane->type;
-        $executionID   = $lane->execution;
+        $laneType      = $lane['type'];
+        $executionID   = $lane['execution'];
         $otherCardList = '';
         $otherLanes    = $this->dao->select('t2.id, t2.cards')->from(TABLE_KANBANLANE)->alias('t1')
             ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.lane')
-            ->where('t1.id')->ne($lane->id)
+            ->where('t1.id')->ne($lane['id'])
             ->andWhere('t1.execution')->eq($executionID)
-            ->andWhere('t2.`type`')->eq($lane->type)
+            ->andWhere('t2.`type`')->eq($lane['type'])
             ->fetchPairs();
 
         foreach($otherLanes as $cardIDList)
@@ -3013,7 +3014,7 @@ class kanbanModel extends model
         $cardPairs = $this->dao->select('t2.type, t1.cards')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->where('t1.kanban')->eq($executionID)
-            ->andWhere('t1.lane')->eq($lane->id)
+            ->andWhere('t1.lane')->eq($lane['id'])
             ->fetchPairs();
 
         if(empty($cardPairs)) return;
@@ -3114,7 +3115,7 @@ class kanbanModel extends model
         $colPairs = $this->dao->select('t2.type, t2.id')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->where('t1.kanban')->eq($executionID)
-            ->andWhere('t1.lane')->eq($lane->id)
+            ->andWhere('t1.lane')->eq($lane['id'])
             ->fetchPairs();
 
         $updated = false;
@@ -3123,11 +3124,11 @@ class kanbanModel extends model
             if(!isset($colPairs[$colType])) continue;
             if($sourceCards[$colType] == $cards) continue;
 
-            $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cards)->where('lane')->eq($lane->id)->andWhere('`column`')->eq($colPairs[$colType])->exec();
+            $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cards)->where('lane')->eq($lane['id'])->andWhere('`column`')->eq($colPairs[$colType])->exec();
             if(!$updated) $updated = true;
         }
 
-        if($updated) $this->dao->update(TABLE_KANBANLANE)->set('lastEditedTime')->eq(helper::now())->where('id')->eq($lane->id)->exec();
+        if($updated) $this->dao->update(TABLE_KANBANLANE)->set('lastEditedTime')->eq(helper::now())->where('id')->eq($lane['id'])->exec();
     }
 
     /**

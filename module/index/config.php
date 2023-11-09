@@ -23,10 +23,5 @@ $config->index->appGroup['effort']      = 'my';
 $config->index->appGroup['user']        = 'admin';
 
 $config->index->oldPages = array();
-$config->index->oldPages[] = 'product-kanban';
-$config->index->oldPages[] = 'program-kanban';
-$config->index->oldPages[] = 'project-kanban';
-$config->index->oldPages[] = 'execution-kanban';
-$config->index->oldPages[] = 'execution-taskkanban';
 $config->index->oldPages[] = 'host-treemap';
 $config->index->oldPages[] = 'screen-view';

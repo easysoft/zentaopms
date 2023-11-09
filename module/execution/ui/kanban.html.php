@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The view file of kanban module of ZenTaoPMS.
+ * The kanban view file of execution module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Sun Guangming <sunguangming@easycorp.ltd>
@@ -23,8 +23,8 @@ foreach($kanbanList as $current => $region)
         $group['getItem']     = jsRaw('window.getItem');
         $group['canDrop']     = jsRaw('window.canDrop');
         $group['onDrop']      = jsRaw('window.onDrop');
-        $group['minColWidth'] = $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->minColWidth;
-        $group['maxColWidth'] = $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->maxColWidth;
+        $group['minColWidth'] = $execution->fluidBoard == '0' ? $execution->colWidth : $execution->minColWidth;
+        $group['maxColWidth'] = $execution->fluidBoard == '0' ? $execution->colWidth : $execution->maxColWidth;
         $group['colProps']    = array('actions' => jsRaw('window.getColActions'));
         $group['laneProps']   = array('actions' => jsRaw('window.getLaneActions'));
         $group['itemProps']   = array('actions' => jsRaw('window.getItemActions'));
@@ -40,30 +40,6 @@ foreach($kanbanList as $current => $region)
     $laneCount += $region['laneCount'];
 }
 
-$regionMenu   = array();
-$regionMenu[] = li(set::className($regionID == 'all' ? 'active' : ''), a(set::href('javascript:;'), span(set::title($lang->kanbanregion->all), $lang->kanbanregion->all)), set('data-on', 'click'), set('data-call', 'clickRegionMenu'), set('data-params', 'event'), set('data-region', 'all'));
-foreach($regions as $currentRegionID => $regionName) $regionMenu[] = li(set::className($regionID == $currentRegionID ? 'active' : ''), a(set::href('javascript:;'), span(set::title($regionName), $regionName)), set('data-on', 'click'), set('data-call', 'clickRegionMenu'), set('data-params', 'event'), set('data-region', $currentRegionID));
-
-jsVar('laneCount',  $laneCount);
-jsVar('kanbanLang', $lang->kanban);
-jsVar('columnLang', $lang->kanbancolumn);
-jsVar('laneLang', $lang->kanbanlane);
-jsVar('cardLang', $lang->kanbancard);
-jsVar('kanbanID', $kanban->id);
-jsVar('kanban', $kanban);
-jsVar('groupCols', $groupCols);
-jsVar('vision', $config->vision);
-jsVar('colorList', $config->kanban->cardColorList);
-jsVar('canMoveCard', common::hasPriv('kanban', 'moveCard'));
-
-dropmenu(set::tab('kanban'), set::objectID($kanban->id));
-
-ul
-(
-    set::className('regionMenu'),
-    $regionMenu
-);
-
 div
 (
     set::id('kanbanList'),
@@ -74,7 +50,3 @@ div
         set::height('calc(100vh - 120px)')
     )
 );
-
-div(set::id('archivedCards'));
-div(set::id('archivedColumns'));
-

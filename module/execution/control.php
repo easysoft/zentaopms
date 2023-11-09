@@ -1593,7 +1593,6 @@ class execution extends control
         $this->session->set('rdSearchValue', '');
 
         /* Get kanban data and set actions. */
-        $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
         foreach($this->config->execution->statusActions as $action)
         {
@@ -1612,16 +1611,15 @@ class execution extends control
         $this->executionZen->assignKanbanVars($executionID);
 
         $this->view->title            = $this->lang->kanban->view;
-        $this->view->regions          = $kanbanData;
         $this->view->execution        = $execution;
         $this->view->executionID      = $executionID;
+        $this->view->kanbanList       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $this->view->browseType       = $browseType;
         $this->view->orderBy          = $orderBy;
         $this->view->groupBy          = $groupBy;
         $this->view->projectID        = $execution->project;
         $this->view->project          = $this->loadModel('project')->getByID($execution->project);
         $this->view->features         = $features;
-        $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
         $this->view->kanban           = $this->lang->execution->kanban;
         $this->view->taskToOpen       = $taskToOpen;
