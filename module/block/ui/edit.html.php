@@ -41,6 +41,7 @@ row
         (
             on::change('[name="code"]', 'getForm'),
             on::change('[name="params\[type\]"]', 'changeType'),
+            set::submitBtnText($lang->save),
             formRow
             (
                 setClass('hidden'),
