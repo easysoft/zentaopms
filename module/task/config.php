@@ -152,7 +152,7 @@ $config->task->actionList['delete']['class']        = 'ajax-submit';
 $config->task->actionList['view']['icon'] = 'chevron-double-up';
 $config->task->actionList['view']['hint'] = $lang->task->parent;
 $config->task->actionList['view']['text'] = $lang->task->parent;
-$config->task->actionList['view']['url']  = helper::createLink('task', 'view', 'taskID={id}');
+$config->task->actionList['view']['url']  = helper::createLink('task', 'view', 'taskID={parent}');
 
 $config->task->actionList['cancel']['icon']        = 'ban-circle';
 $config->task->actionList['cancel']['hint']        = $lang->task->cancel;

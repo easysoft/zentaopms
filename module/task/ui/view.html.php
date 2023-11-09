@@ -75,7 +75,7 @@ foreach($config->task->view->operateList['common'] as $operate)
     if($operate == 'view' && $task->parent <= 0) continue;
 
     $settings = $config->task->actionList[$operate];
-    $settings['text'] = '';
+    if($operate != 'view') $settings['text'] = '';
 
     $commonActions[] = $settings;
 }
