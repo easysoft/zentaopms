@@ -52,7 +52,7 @@ else
     {
         $consumedControl = formGroup
             (
-                set::width('1/3'),
+                set::width('1/2'),
                 set::label($lang->task->my . $lang->task->hasConsumed),
                 div(
                     set::className('consumed'),
@@ -62,7 +62,7 @@ else
 
         $assignedToControl = formGroup
             (
-                set::width('1/3'),
+                set::width('1/2'),
                 set::label($lang->story->assignTo),
                 set::control('input'),
                 set::disabled(true),
@@ -76,7 +76,7 @@ else
 
         $assignedToControl = formGroup
             (
-                set::width('1/3'),
+                set::width('1/2'),
                 set::name('assignedTo'),
                 set::label($lang->story->assignTo),
                 set::control('picker'),
@@ -124,7 +124,7 @@ else
         $consumedControl,
         formGroup
         (
-            set::width('1/3'),
+            set::width('1/2'),
             set::label($lang->task->currentConsumed),
             inputControl
             (
@@ -141,24 +141,27 @@ else
         $assignedToControl,
         formGroup
         (
-            set::width('1/3'),
-            set::name('realStarted'),
+            set::width('1/2'),
             set::label($lang->project->realBeganAB),
-            set::control('datetime-local'),
-            set::value($realStarted),
-            set('disabled', $realStarted)
+            datetimePicker
+            (
+                set::name('realStarted'),
+                set::value($realStarted),
+                set('disabled', !empty($realStarted))
+            )
         ),
         formGroup
         (
-            set::width('1/3'),
-            set::name('finishedDate'),
+            set::width('1/2'),
             set::label($lang->project->realEndAB),
-            set::value(helper::now()),
-            set::control('datetime-local')
+            datetimePicker
+            (
+                set::name('finishedDate'),
+                set::value(helper::now()),
+            )
         ),
         formGroup
         (
-            set::width('2/3'),
             set::label($lang->story->files),
             upload()
         ),
