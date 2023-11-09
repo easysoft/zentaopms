@@ -297,16 +297,11 @@ window.onDrop = function(changes, dropInfo)
     const item     = dropInfo['drag']['item'];
     const toColID  = dropInfo['drop']['col']
     const toLaneID = dropInfo['drop']['lane']
-    console.log(changes);
-    console.log(dropInfo);
 
     if(item.col == toColID && item.lane == toLaneID)
     {
         let sortList = '';
-        if(changes)
-        {
-            for(let i = 0; i < changes['items'].length; i++) sortList += changes['items'][i].id.replace(/[^0-9]/ig, '') + ',';
-        }
+        for(let i = 0; i < dropInfo['data']['list'].length; i++) sortList += dropInfo['data']['list'][i] + ',';
         url = $.createLink('kanban', 'sortCard', `kanbanID=${kanbanID}&laneID=${toLaneID}&columnID=${toColID}&cards=${sortList}`);
     }
     else
