@@ -3081,7 +3081,7 @@ class executionModel extends model
             ->markRight(1)
             ->orWhere('id')->eq($projectID)
             ->orderBy('type_asc,openedDate_desc')
-            ->limit('9')
+            ->limit('11')
             ->fetchPairs();
 
         $countPairs = $this->dao->select('root, COUNT(*) as count')->from(TABLE_TEAM)
