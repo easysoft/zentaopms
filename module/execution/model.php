@@ -4640,6 +4640,7 @@ class executionModel extends model
     public function generateRow(array $executions, array $users, array $avatarList): array
     {
         $rows = array();
+        $this->app->loadConfig('project');
         foreach($executions as $execution)
         {
             $execution->rawID         = $execution->id;
@@ -4653,6 +4654,19 @@ class executionModel extends model
             $execution->totalEstimate = $execution->hours->totalEstimate;
             $execution->totalConsumed = $execution->hours->totalConsumed;
             $execution->totalLeft     = $execution->hours->totalLeft;
+            $execution->actions       = array();
+            foreach($this->config->projectExecution->dtable->fieldList['actions'][$execution->projectModel] as $actionKey)
+            {
+                $action  = array();
+                $actions = explode('|', $actionKey);
+                foreach($actions as $actionName)
+                {
+                    if(!commonModel::hasPriv('execution', $actionName)) continue;
+                    $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
+                    if(!$action['disabled']) break;
+                }
+                if(!empty($action)) $execution->actions[] = $action;
+            }
 
             /* For user's avatar. */
             if($execution->PM)
@@ -4692,6 +4706,7 @@ class executionModel extends model
             foreach($this->config->projectExecution->dtable->fieldList['actions']['task'] as $action)
             {
                 $rawAction = str_replace('Task', '', $action);
+                if(!commonModel::hasPriv('task', $rawAction)) continue;
                 $clickable = $this->task->isClickable($task, $rawAction);
                 $action    = array('name' => $action);
                 if(!$clickable) $action['disabled'] = true;

@@ -45,12 +45,6 @@ if($canBatchAction)
     }
 }
 
-/* Waterfall project use another actions. */
-$config->projectExecution->dtable->fieldList['actions']['menu'] = $config->projectExecution->dtable->fieldList['actions'][$project->model];
-
-$executions = $this->execution->generateRow($executionStats, $users, $avatarList);
-$executions = initTableData($executions, $config->projectExecution->dtable->fieldList, $this->project);
-
 /* Generate data table fields. */
 $fnGenerateCols = function() use ($config, $project)
 {
@@ -64,6 +58,9 @@ $fnGenerateCols = function() use ($config, $project)
 
     return array_values($fieldList);
 };
+
+foreach(array_keys($config->projectExecution->dtable->fieldList['actions']['actionsMap']) as $actionKey) unset($config->projectExecution->dtable->fieldList['actions']['actionsMap'][$actionKey]['text']);
+$executions = $this->execution->generateRow($executionStats, $users, $avatarList);
 
 /* zin: Define the feature bar on main menu. */
 $productItems = array();
