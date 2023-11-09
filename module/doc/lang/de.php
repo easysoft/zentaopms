@@ -215,7 +215,6 @@ $lang->doc->docCheckedSummary = 'Seleted: <strong>%total%</strong>.';
 $lang->doc->showDoc           = 'Whether to display documents';
 $lang->doc->uploadDoc         = 'Upload Document';
 $lang->doc->uploadFormat      = 'Upload Format';
-$lang->doc->uploadDoc         = 'Upload File';
 $lang->doc->editedList        = 'File editor';
 
 $lang->doc->fileType = new stdclass();
