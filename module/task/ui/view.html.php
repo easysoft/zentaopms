@@ -22,6 +22,7 @@ detailHeader
         ) : null,
         entityLabel
         (
+            set::text(''),
             set
             (
                 array
@@ -40,7 +41,6 @@ detailHeader
                 span('/'),
                 $task->name
             ) : $task->name
-
         )
     ),
     !isAjaxRequest('modal') && common::hasPriv('task', 'create') ? to::suffix(btn(set::icon('plus'), set::url(createLink('task', 'create', "executionID={$task->execution}")), set::type('primary'), $lang->task->create)) : null
