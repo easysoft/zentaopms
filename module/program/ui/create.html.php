@@ -18,6 +18,7 @@ jsVar('budgetOverrun', $lang->project->budgetOverrun);
 set::title($parentID ? $lang->program->children : $lang->program->create);
 formPanel
 (
+    set::id('createProgram'),
     to::heading
     (
         div

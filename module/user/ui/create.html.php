@@ -31,6 +31,7 @@ foreach($visionList as $key => $label)
 
 formPanel
 (
+    set::id('createUser'),
     on::change('input[name=type]', 'changeType'),
     on::change('input[name=role]', 'changeRole'),
     on::change('#addCompany', 'changeAddCompany'),

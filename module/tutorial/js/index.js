@@ -258,7 +258,7 @@ $(function()
         if(targetStatus.nav)
         {
             var $form = $$(task.nav.form);
-            var $formWrapper = $form.closest('.main-content');
+            var $formWrapper = $form.closest('#mainContent');
             if(!$formWrapper.length) $formWrapper = $form;
             highlight($formWrapper);
             showToolTip($formWrapper, $formTarget.text());
@@ -369,6 +369,7 @@ $(function()
 
             if(targetStatus.form)
             {
+                clearTips();
                 $submitTarget.addClass('active');
                 if(task.nav.submit) showToolTip($form.find(task.nav.submit), $submitTarget.text(), {placement: 'top'});
             }
@@ -588,6 +589,9 @@ $(function()
 
         $(document).on('click', '.btn-task', function()
         {
+            iWindow = getAppWindow();
+            iWindow.$('.hl-tutorial').removeClass('hl-tutorial hl-in');
+            iWindow.$('.popover').remove();
             showTask($(this).data('name'));
 
             /* Code for task #51133. */

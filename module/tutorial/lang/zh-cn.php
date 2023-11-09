@@ -43,7 +43,7 @@ $lang->tutorial->tasks['createAccount']['nav']['module']         = 'user';
 $lang->tutorial->tasks['createAccount']['nav']['method']         = 'create';
 $lang->tutorial->tasks['createAccount']['nav']['menuModule']     = 'company';
 $lang->tutorial->tasks['createAccount']['nav']['menu']           = 'browseUser';
-$lang->tutorial->tasks['createAccount']['nav']['form']           = '#mainContent';
+$lang->tutorial->tasks['createAccount']['nav']['form']           = '#createUser';
 $lang->tutorial->tasks['createAccount']['nav']['requiredFields'] = 'account,realname,verifyPassword,password1,password2';
 $lang->tutorial->tasks['createAccount']['nav']['submit']         = 'button[type=submit]';
 $lang->tutorial->tasks['createAccount']['nav']['target']         = '.create-user-btn';
@@ -60,7 +60,7 @@ $lang->tutorial->tasks['createProgram']['nav']['module']         = 'program';
 $lang->tutorial->tasks['createProgram']['nav']['method']         = 'create';
 $lang->tutorial->tasks['createProgram']['nav']['menuModule']     = 'program';
 $lang->tutorial->tasks['createProgram']['nav']['menu']           = '.create-program-btn';
-$lang->tutorial->tasks['createProgram']['nav']['form']           = '#mainContent';
+$lang->tutorial->tasks['createProgram']['nav']['form']           = '#createProgram';
 $lang->tutorial->tasks['createProgram']['nav']['submit']         = 'button[type=submit]';
 $lang->tutorial->tasks['createProgram']['nav']['target']         = '.create-program-btn';
 $lang->tutorial->tasks['createProgram']['nav']['targetPageName'] = '添加项目集';
@@ -140,9 +140,10 @@ $lang->tutorial->tasks['createProjectExecution']['nav']['app']            = 'pro
 $lang->tutorial->tasks['createProjectExecution']['nav']['module']         = 'execution';
 $lang->tutorial->tasks['createProjectExecution']['nav']['method']         = 'create';
 $lang->tutorial->tasks['createProjectExecution']['nav']['menuModule']     = '';
-$lang->tutorial->tasks['createProjectExecution']['nav']['menu']           = '#heading > .toolbar > .toolbar-item, .create-execution-btn';
+$lang->tutorial->tasks['createProjectExecution']['nav']['menu']           = '#heading > .toolbar > .toolbar-item, #table-tutorial-wizard > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="name"] > .dtable-cell-content > a, .create-execution-btn';
 $lang->tutorial->tasks['createProjectExecution']['nav']['form']           = '#mainContent';
 $lang->tutorial->tasks['createProjectExecution']['nav']['submit']         = 'button[type=submit]';
+$lang->tutorial->tasks['createProjectExecution']['nav']['targetPageName'] = "添加{$lang->executionCommon}";
 
 $lang->tutorial->tasks['createProjectExecution']['desc'] = "<p>在系统创建一个新的{$lang->executionCommon}：</p><ul><li data-target='nav'>打开 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> {$lang->executionCommon} <i class='icon icon-angle-right'></i> 添加{$lang->executionCommon}</span> 页面；</li><li data-target='form'>在{$lang->executionCommon}表单中填写要创建的{$lang->executionCommon}信息；</li><li data-target='submit'>保存{$lang->executionCommon}信息。</li></ul>";
 
