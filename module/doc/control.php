@@ -179,7 +179,7 @@ class doc extends control
             $objects       = $this->project->getPairsByProgram(0, 'all', false, 'order_asc', $excludedModel);
             if($this->app->tab == 'doc')
             {
-                $this->view->executionPairs = array(0 => '') + $this->execution->getPairs($objectID, 'all', 'multiple,leaf,noprefix');
+                $this->view->executionPairs = $this->execution->getPairs($objectID, 'sprint,stage', 'multiple,leaf,noprefix');
                 $this->view->project        = $this->project->getById($objectID);
             }
         }
