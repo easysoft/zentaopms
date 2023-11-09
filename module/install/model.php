@@ -400,8 +400,6 @@ class installModel extends model
             $dbFile = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
             $tables = explode(';', file_get_contents($dbFile));
 
-            if($this->config->db->driver == 'dm') $tables = array_merge($tables, explode(';', file_get_contents($this->app->getAppRoot() . 'db' . DS . 'dm.sql')));
-
             foreach($tables as $table)
             {
                 $table = trim($table);
@@ -444,6 +442,20 @@ class installModel extends model
             helper::end();
         }
         return true;
+    }
+
+    /**
+     * Exec dm.sql.
+     *
+     * @access public
+     * @return bool
+     */
+    public function execDMSQL()
+    {
+        $dbFile = $this->app->getAppRoot() . 'db' . DS . 'dm.sql';
+        $tables = explode(';', file_get_contents($dbFile));
+
+        foreach($tables as $table) $this->dbh->exec($table);
     }
 
     /**

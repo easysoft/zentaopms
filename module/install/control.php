@@ -320,6 +320,8 @@ class install extends control
             if(!isset($this->config->installed) || !$this->config->installed) return $this->send(array('result' => 'fail', 'message' => $this->lang->install->errorNotSaveConfig, 'load' => 'step3'));
 
             $this->loadModel('common');
+            if($this->config->db->driver == 'dm') $this->install->execDMSQL();
+
             $this->install->grantPriv();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
