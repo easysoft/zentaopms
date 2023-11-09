@@ -129,5 +129,12 @@
       if($(e.target).closest('#chat-switch,#ai-chat-view,#xx-embed,#chatBtn').length) return;
       $('#chat-container').hide();
     });
+
+    /* Handle configure link click, use $.apps.open() instead. */
+    $('#chat-container .unconfigured > a').click(function(e)
+    {
+      e.preventDefault();
+      $.apps.open($(this).attr('href'));
+    });
   });
 </script>
