@@ -9,3 +9,8 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 
     $.ajaxSubmit({url: $(this).data('url'), data: form});
 });
+
+window.changeExecution = function(e)
+{
+    loadPage($.createLink('execution', 'importTask', 'executionID=' + executionID + '&fromExecution=' + $(e.target).val()));
+}

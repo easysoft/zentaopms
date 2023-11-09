@@ -22,13 +22,14 @@ featureBar
         set::text($lang->execution->selectExecution),
         setClass('ml-6')
     ),
-    productMenu
+    picker
     (
-        setClass('px-6'),
-        set::title($lang->execution->allExecutions),
+        set::width(200),
+        set::name('execution'),
         set::items($executions),
-        set::activeKey($fromExecution),
-        set::link(inlink('importtask', "executionID={$execution->id}&fromExecution=%s"))
+        set::value($fromExecution),
+        set::required(true),
+        on::change('changeExecution')
     )
 );
 
@@ -37,6 +38,7 @@ if($execution->lifetime == 'ops' || in_array($execution->attribute, array('reque
 
 jsVar('orderBy',  $orderBy);
 jsVar('sortLink', helper::createLink('execution', 'importTask', "executionID={$execution->id}&fromExecution={$fromExecution}&orderBy={orderBy}&recPerPage={$pager->recPerPage}"));
+jsVar('executionID', $execution->id);
 dtable
 (
     set::userMap($memberPairs),
