@@ -121,9 +121,9 @@ js::set('defaultFields', $lang->ai->miniPrograms->field->default);
         <span style="font-size: 16px;"><?php echo $lang->ai->miniPrograms->backToListPageTip; ?></span>
       </div>
       <div class="modal-footer" style="display: flex; padding-top: 0; justify-content: center; border-top: none; gap: 10px;">
-        <a href="<?php echo $this->createLink('ai', 'miniPrograms'); ?>" class="btn btn-wide btn-primary" onclick="backWithSave()"><?= $lang->save; ?></a>
-        <a class="btn btn-wide" data-dismiss="modal"><?php echo $lang->cancel; ?></a>
-        <a href="<?php echo $this->createLink('ai', 'miniPrograms'); ?>" class="btn btn-wide btn-link text-primary" onclick="backWithoutSave()"><?= $lang->ai->prompts->roleTemplateSaveList['discard']; ?></a>
+        <button class="btn btn-wide btn-primary" onclick="backWithSave()"><?= $lang->save; ?></button>
+        <button class="btn btn-wide" data-dismiss="modal"><?php echo $lang->cancel; ?></button>
+        <button class="btn btn-wide btn-link text-primary" onclick="backWithoutSave()"><?= $lang->ai->prompts->roleTemplateSaveList['discard']; ?></button>
       </div>
     </div>
   </div>

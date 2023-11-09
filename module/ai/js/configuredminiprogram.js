@@ -541,6 +541,7 @@ function backWithoutSave()
 {
     $modal = $('#back-to-list-modal');
     $modal.modal('hide');
+    window.location.href = createLink('ai', 'miniPrograms');
 }
 
 function backWithSave()
@@ -548,6 +549,7 @@ function backWithSave()
     $modal = $('#back-to-list-modal');
     $modal.modal('hide');
     saveMiniProgram('0');
+    window.location.href = createLink('ai', 'miniPrograms');
 }
 
 function updateButtonStatus()
