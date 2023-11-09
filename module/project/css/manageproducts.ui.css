@@ -1,4 +1,4 @@
-#manageProducts .product-block {flex: 0 1 30%; padding: 10px; margin: 4px;}
+#manageProducts .product-block {flex: 0 1 30%; padding: 10px; margin: 4px; height: 3rem;}
 #manageProducts .product-block .border {border-radius: 4px;}
 
 #manageProducts .product-block.more-product {min-height: 220px;}
