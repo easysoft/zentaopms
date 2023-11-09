@@ -141,7 +141,7 @@ detailBody
                     setClass('table borderless table-hover mb-3'),
                     ...$dynamicArticlesWd,
                 ),
-                pager(setID('dynamicPager')),
+                pager(set::props(array('id' => 'dynamicPager'))),
             )
         )
     )
