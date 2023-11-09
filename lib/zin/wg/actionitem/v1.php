@@ -53,7 +53,7 @@ class actionItem extends wg
 
     protected function buildDropdownItem()
     {
-        list($dropdown, $items, $icon, $text, $trailingIcon, $active, $disabled, $badge, $props, $caret, $textClass) = $this->prop(array('dropdown', 'items', 'icon', 'text', 'trailingIcon', 'active', 'disabled', 'badge', 'props', 'caret', 'textClass'));
+        list($dropdown, $items, $icon, $text, $trailingIcon, $active, $disabled, $badge, $props, $caret, $textClass, $trigger, $menu) = $this->prop(array('dropdown', 'items', 'icon', 'text', 'trailingIcon', 'active', 'disabled', 'badge', 'props', 'caret', 'textClass', 'trigger', 'menu'));
 
         if(is_string($badge))
         {
@@ -67,6 +67,8 @@ class actionItem extends wg
         $dropdown = new dropdown
         (
             set::items($items),
+            set::trigger($trigger),
+            set::menu($menu),
             set($dropdown),
             h::a(
                 setClass(array('active' => $active, 'disabled' => $disabled)),
