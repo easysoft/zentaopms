@@ -42,10 +42,11 @@ $config->sonarqube->actionList['deleteProject']['ajaxSubmit']   = true;
 $config->sonarqube->actionList['deleteProject']['data-confirm'] = $lang->sonarqube->confirmDeleteProject;
 $config->sonarqube->actionList['deleteProject']['url']          = helper::createLink('sonarqube', 'deleteProject',"sonarqubeID={sonarqubeID}&projectID={projectKey}");
 
-$config->sonarqube->actionList['execJob']['icon'] = 'sonarqube';
-$config->sonarqube->actionList['execJob']['text'] = $lang->sonarqube->execJob;
-$config->sonarqube->actionList['execJob']['hint'] = $lang->sonarqube->execJob;
-$config->sonarqube->actionList['execJob']['url']  = helper::createLink('sonarqube', 'execJob',"jobID={jobID}");
+$config->sonarqube->actionList['execJob']['icon']      = 'sonarqube';
+$config->sonarqube->actionList['execJob']['text']      = $lang->sonarqube->execJob;
+$config->sonarqube->actionList['execJob']['hint']      = $lang->sonarqube->execJob;
+$config->sonarqube->actionList['execJob']['className'] = 'ajax-submit';
+$config->sonarqube->actionList['execJob']['url']       = helper::createLink('sonarqube', 'execJob',"jobID={jobID}");
 
 $config->sonarqube->actionList['reportView']['icon']        = 'audit';
 $config->sonarqube->actionList['reportView']['text']        = $lang->sonarqube->reportView;
