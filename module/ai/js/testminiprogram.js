@@ -9,8 +9,9 @@ const words = new Map();
  * @param {string} content prompt content.
  * @returns {string} result.
  */
-function formatContent(content) {
-    if (words.size === 0) return content;
+function formatContent(content)
+{
+    if(words.size === 0) return content;
     Array.from(words.keys()).forEach(word => { content = content.replace(new RegExp(`\\s<${word}>\\s`, 'g'), `&nbsp;<strong class="text-primary">&lt;${word}&gt;</strong>&nbsp;`); });
     return content;
 }
@@ -20,24 +21,27 @@ function formatContent(content) {
  *
  * @returns {string} result
  */
-function updatePromptPreview() {
+function updatePromptPreview()
+{
     const innerText = $('#autocomplete-textarea').text();
     let innerHTML = formatContent(innerText);
     $('#autocomplete-textarea').html(innerHTML);
-    if (!innerHTML || words.size === 0) {
+    if(!innerHTML || words.size === 0)
+    {
         $('.prompt-preview-area .preview-container').html(innerHTML);
         return;
     }
 
     const regex = /<strong\sclass="text-primary">&lt;([^>]+)&gt;<\/strong>&nbsp;/g;
     const matches = innerHTML.match(regex);
-    if (!matches) return;
+    if(!matches) return;
 
-    matches.forEach((match) => {
+    matches.forEach((match) =>
+    {
         const result = match.match(/<strong\sclass="text-primary">&lt;([^>]+)&gt;<\/strong>&nbsp;/)[1];
         const fieldIndex = words.get(result);
         const fieldValue = $(`.field-content [data-id="${fieldIndex}"] .field-type`).prop('value');
-        if (!fieldValue) return;
+        if(!fieldValue) return;
         innerHTML = innerHTML.replace(new RegExp(`&lt;${result}&gt;`, 'g'), fieldValue);
     });
 
