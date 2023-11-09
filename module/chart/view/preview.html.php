@@ -21,6 +21,8 @@
 <?php js::set('WIDTH_INPUT',  $config->chart->widthInput);?>
 <?php js::set('WIDTH_DATE',   $config->chart->widthDate);?>
 <?php js::set('pickerHeight', $config->bi->pickerHeight);?>
+<?php js::set('canLabelRotate', $this->config->chart->canLabelRotate);?>
+<?php js::set('labelMaxLength', $this->config->chart->labelMaxLength);?>
 <?php $queryDom = "<div class='queryBtn query-inside hidden'> <button type='submit' id='submit' onclick='queryData(this)' class='btn btn-primary btn-query' data-loading='Loading...'>{$lang->chart->query}</button></div>";?>
 <?php js::set('queryDom', $queryDom);?>
 

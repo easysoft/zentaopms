@@ -17,10 +17,25 @@ function ajaxGetChart(check = true, chart = DataStorage.chart, echart = window.e
         var data = JSON.parse(resp);
         if(echart)
         {
-            if(chartParams.settings[0].type == 'waterpolo')
+            var type = chartParams.settings[0].type;
+            if(type == 'waterpolo')
             {
                 data.series[0].label.formatter = function(params) { return (params.value * 100).toFixed(2) + '%';};
                 data.tooltip.formatter         = function(params) { return (params.value * 100).toFixed(2) + '%';};
+            }
+
+            if(canLabelRotate.includes(type))
+            {
+                if(!data.xAxis.axisLabel) data.xAxis.axisLabel = {};
+                if(!data.yAxis.axisLabel) data.yAxis.axisLabel = {};
+                var labelFormatter = function(value)
+                {
+                    value = value.toString();
+                    return (value.length <= labelMaxLength) ? value : value.substring(0, labelMaxLength) + '...';
+                }
+
+                data.xAxis.axisLabel.formatter = labelFormatter;
+                data.yAxis.axisLabel.formatter = labelFormatter;
             }
 
             echart.resize();
