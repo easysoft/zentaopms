@@ -66,6 +66,7 @@ $lang->programplan->delayDays        = 'Delay days';
 $lang->programplan->settingGantt     = 'Gantt Setting';
 $lang->programplan->viewSetting      = 'Setting';
 $lang->programplan->desc             = 'Description';
+$lang->programplan->wait             = 'Wait';
 
 $lang->programplan->errorBegin       = "{$lang->projectCommon} begin date: %s, begin date should be >= {$lang->projectCommon} begin date.";
 $lang->programplan->errorEnd         = "{$lang->projectCommon} end date: %s, end date should be <= {$lang->projectCommon} end date.";
