@@ -52,7 +52,7 @@ class mindmap extends wg
     {
         global $app;
 
-        list($width, $height) = $this->prop(array('width', 'height', 'data'));
+        list($width, $height) = $this->prop(array('width', 'height'));
         $dataVarName = "_mindmap_$this->gid";
         $mindmapPath = $app->getWebRoot() . 'js/mindmap/index.html?options=' . $dataVarName;
         $options = $this->props->pick(array('hotkeyEnable', 'hotkeys', 'lang', 'langs', 'data', 'nodeTeamplate', 'hSpace', 'vSpace', 'canvasPadding', 'removingNodeTip', 'lineCurvature', 'subLineWidth', 'lineColor', 'lineOpacity', 'lineSaturation', 'lineLightness', 'nodeLineWidth', 'showToggleButton', 'readonly', 'minimap', 'toolbar', 'zoom', 'zoomMax', 'zoomMin', 'minimapHeight'));
