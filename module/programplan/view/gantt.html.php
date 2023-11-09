@@ -21,6 +21,7 @@
 .checkbox-primary {margin-top: 0px; margin-left: 10px;}
 form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_task_content span.task-label, .gantt_task_content span.label-pri{display: none;}
+.gantt_task_content .icon-seal{display: none;}
 #ganttPris > span {display: inline-block; line-height: 20px; min-width: 20px; border-radius: 2px;}
 .gantt_task_line.gantt_selected {box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045)}
 .gantt_link_arrow_right {border-left-color: #2196F3;}
