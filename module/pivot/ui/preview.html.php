@@ -26,7 +26,7 @@ foreach($groups as $id => $name)
 
 featureBar(set::items($items));
 
-if($config->edition == 'biz' || $config->edition == 'max')
+if($config->edition != 'open')
 {
     toolbar
     (

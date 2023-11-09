@@ -98,11 +98,11 @@ function getTrackTd($storyID, $story, $tab, $module)
 
     $trackItem[] = h::td(getTaskTd($story->tasks)); // Task
 
-    if($config->edition == 'max') $trackItem[] = h::td(getDesignTd($story->designs)); // Design
+    if(in_array($config->edition, array('max', 'ipd')) $trackItem[] = h::td(getDesignTd($story->designs)); // Design
 
     $trackItem[] = h::td(getCaseTd($story->cases)); // Case
 
-    if($config->edition == 'max' && helper::hasFeature('devops')) $trackItem[] = h::td(getRevisionTd($story->revisions)); // Revision
+    if(in_array($config->edition, array('max', 'ipd')) && helper::hasFeature('devops')) $trackItem[] = h::td(getRevisionTd($story->revisions)); // Revision
 
     $trackItem[] = h::td(getBugTd($story->bugs)); // Bug
 
@@ -215,9 +215,9 @@ div
                 ) : null,
                 h::th($lang->story->story),
                 h::th($lang->story->tasks),
-                $config->edition == 'max' ? h::th($lang->story->design) : null,
+                in_array($config->edition, array('max', 'ipd')) ? h::th($lang->story->design) : null,
                 h::th($lang->story->case),
-                $config->edition == 'max' && helper::hasFeature('devops') ? h::th($lang->story->repoCommit) : null,
+                in_array($config->edition, array('max', 'ipd')) && helper::hasFeature('devops') ? h::th($lang->story->repoCommit) : null,
                 h::th($lang->story->bug),
             ),
             h::tbody

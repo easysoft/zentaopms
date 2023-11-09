@@ -191,7 +191,7 @@ class actionModel extends model
             if(in_array($actionName, array('totask', 'linkchildtask', 'unlinkchildrentask', 'linkparenttask', 'unlinkparenttask', 'deletechildrentask')) && $action->objectType != 'feedback') $this->actionTao->processActionExtra(TABLE_TASK, $action, 'name', 'task', 'view');;
             if(in_array($actionName, array('linkchildstory', 'unlinkchildrenstory', 'linkparentstory', 'unlinkparentstory', 'deletechildrenstory'))) $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'view');
             if(in_array($actionName, array('testtaskopened', 'testtaskstarted', 'testtaskclosed'))) $this->actionTao->processActionExtra(TABLE_TESTTASK, $action, 'name', 'testtask', 'view');
-            if(in_array($actionName, array('importfromstorylib', 'importfromrisklib', 'importfromissuelib', 'importfromopportunitylib')) && $this->config->edition == 'max') $this->actionTao->processActionExtra(TABLE_ASSETLIB, $action, 'name', 'assetlib', $action->objectType);
+            if(in_array($actionName, array('importfromstorylib', 'importfromrisklib', 'importfromissuelib', 'importfromopportunitylib')) && in_array($this->config->edition, array('max', 'ipd'))) $this->actionTao->processActionExtra(TABLE_ASSETLIB, $action, 'name', 'assetlib', $action->objectType);
             if(in_array($actionName, array('opened', 'managed', 'edited')) && in_array($objectType, array('execution', 'project'))) $this->processExecutionAndProjectActionExtra($action);
             if(in_array($actionName, array('linkstory', 'unlinkstory', 'createchildrenstory'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'story', 'view');
             if(in_array($actionName, array('linkbug', 'unlinkbug'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'bug', 'view');
@@ -489,7 +489,7 @@ class actionModel extends model
                 $this->app->loadLang('mr');
                 $desc = sprintf($this->lang->mr->{$mrAction}, $mrDate, $mrActor, $mrLink);
             }
-            elseif($this->config->edition == 'max' && strpos($this->config->action->assetType, ",{$action->objectType},") !== false && $action->action == 'approved')
+            elseif(in_array($this->config->edition, array('max', 'ipd')) && strpos($this->config->action->assetType, ",{$action->objectType},") !== false && $action->action == 'approved')
             {
                 $desc = empty($this->lang->action->approve->{$action->extra}) ? '' : $this->lang->action->approve->{$action->extra};
             }
@@ -957,7 +957,7 @@ class actionModel extends model
             }
         }
 
-        if($this->config->edition == 'max' && $objectType == 'assetlib')
+        if(in_array($this->config->edition, array('max', 'ipd')) && $objectType == 'assetlib')
         {
             $libType = $this->dao->select('type')->from(TABLE_ASSETLIB)->where('id')->eq($objectID)->fetch('type');
             if(strpos('story,issue,risk,opportunity,practice,component', $libType) !== false) $actionObjectLabel = $this->lang->action->label->{$libType . 'assetlib'};
@@ -995,7 +995,7 @@ class actionModel extends model
                 if($objectDeleted) return $action;
             }
 
-            if($this->config->edition == 'max' && strpos($this->config->action->assetType, ",{$action->objectType},") !== false && empty($action->project) && empty($action->product) && empty($action->execution))
+            if(in_array($this->config->edition, array('max', 'ipd')) && strpos($this->config->action->assetType, ",{$action->objectType},") !== false && empty($action->project) && empty($action->product) && empty($action->execution))
             {
                 $this->actionTao->processMaxDocObjectLink($action, $moduleName, $methodName, $vars);
             }

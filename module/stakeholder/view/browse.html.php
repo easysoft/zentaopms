@@ -78,7 +78,7 @@
             <?php
             common::printIcon('stakeholder', 'communicate', "id=$stakeholder->id", $stakeholder, 'list', 'chat-line', '', 'iframe', 'yes');
             common::printIcon('stakeholder', 'expect', "id=$stakeholder->id", $stakeholder, 'list', 'flag', '', 'iframe', 'yes');
-            if($this->config->edition == 'max' and $stakeholder->projectModel == 'waterfall') common::printIcon('stakeholder', 'userIssue', "account=$stakeholder->id", $stakeholder, 'list', 'list-alt', '', 'iframe', 'yes');
+            if(in_array($this->config->edition, array('max', 'ipd')) and $stakeholder->projectModel == 'waterfall') common::printIcon('stakeholder', 'userIssue', "account=$stakeholder->id", $stakeholder, 'list', 'list-alt', '', 'iframe', 'yes');
             common::printIcon('stakeholder', 'edit', "id=$stakeholder->id", $stakeholder, 'list', '', '', '', '');
             $deleteClass = common::hasPriv('stakeholder', 'delete') ? 'btn' : 'btn disabled';
             echo html::a($this->createLink('stakeholder', 'delete', "id=$stakeholder->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->stakeholder->delete}' class='{$deleteClass}'");

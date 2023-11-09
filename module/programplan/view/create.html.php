@@ -100,7 +100,7 @@
             <th class='c-date <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>'><?php echo $lang->programplan->realBegan;?></th>
             <th class='c-date <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>'><?php echo $lang->programplan->realEnd;?></th>
             <th class='c-desc <?php echo zget($visibleFields, 'desc', ' hidden') . zget($requiredFields, 'desc', '', ' required');?>'><?php echo $lang->programplan->desc;?></th>
-            <?php if($this->config->edition == 'max' and $executionType == 'stage'):?>
+            <?php if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $executionType == 'stage'):?>
             <th class='w-110px'><?php echo $lang->programplan->output;?></th>
             <?php endif;?>
             <th class="c-action text-center w-110px"> <?php echo $lang->actions;?></th>
@@ -129,7 +129,7 @@
               <td><input type='text' name='end[<?php echo $i;?>]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
               <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='realBegan[<?php echo $i;?>]' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
               <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
-              <?php if($this->config->edition == 'max' and $executionType == 'stage'):?>
+              <?php if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $executionType == 'stage'):?>
               <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control picker-select' data-drop-width='auto' multiple");?></td>
               <?php endif;?>
               <td class='c-actions text-center'>
@@ -166,7 +166,7 @@
               <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='realBegan[<?php echo $i;?>] ' id='realBegan<?php echo $i;?>' value='<?php echo $plan->realBegan;?>' class='form-control form-date' /></td>
               <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='<?php echo $plan->realEnd;?>' class='form-control form-date' /></td>
               <td class='<?php echo zget($visibleFields, 'desc', 'hidden')?>'><?php echo html::textarea("desc[$i]", $plan->desc, "rows='1' class='form-control autosize'");?></td>
-              <?php if($this->config->edition == 'max' and $executionType == 'stage'):?>
+              <?php if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $executionType == 'stage'):?>
               <?php $option = empty($plan->output) ? 0 : explode(',', $plan->output);?>
               <td><?php echo html::select("output[$i][]", $documentList, $option, "class='form-control picker-select' data-drop-width='auto' multiple");?></td>
               <?php endif;?>
@@ -202,7 +202,7 @@
             <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='realBegan[<?php echo $i;?>] ' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <td class='<?php echo zget($visibleFields, 'desc', 'hidden')?>'><?php echo html::textarea("desc[$i]", '', "rows='1' class='form-control autosize'");?></td>
-            <?php if($this->config->edition == 'max' and $executionType == 'stage'):?>
+            <?php if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $executionType == 'stage'):?>
             <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control picker-select' data-drop-width='auto' multiple");?></td>
             <?php endif;?>
             <td class='c-actions text-center'>
@@ -250,7 +250,7 @@
       <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='<?php echo "realBegan[$i]";?>' id='realBegan<?php echo $i;?>' class='form-control form-date' /></td>
       <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='<?php echo "realEnd[$i]";?>' id='realEnd<?php echo $i;?>' class='form-control form-date' /></td>
       <td class='<?php echo zget($visibleFields, 'desc', 'hidden')?>'><?php echo html::textarea("desc[$i]", '', "rows='1' class='form-control autosize'");?></td>
-      <?php if($this->config->edition == 'max' and $executionType == 'stage'):?>
+      <?php if(($this->config->edition == 'max' or $this->config->edition == 'ipd') and $executionType == 'stage'):?>
       <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control' data-drop-width='auto' multiple");?></td>
       <?php endif;?>
       <td class='c-actions text-center'>

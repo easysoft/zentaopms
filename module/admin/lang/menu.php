@@ -208,7 +208,7 @@ $lang->admin->menuList->platform['menuOrder']['25'] = 'setrules';
 
 $lang->admin->menuList->platform['dividerMenu'] = ',plat,setrules,';
 
-if($config->edition != 'max')
+if($config->edition != 'max' and $config->edition != 'ipd')
 {
     unset($lang->admin->menuList->model['subMenu']['scrum']);
     unset($lang->admin->menuList->model['subMenu']['agileplus']);
@@ -226,7 +226,7 @@ if(!helper::hasFeature('waterfallplus'))
     unset($lang->admin->menuList->model['subMenu']['waterfallplus']);
     unset($lang->admin->menuList->model['menuOrder']['25']);
 }
-if($config->edition == 'max')
+if($config->edition == 'max' or $config->edition == 'ipd')
 {
     if(!helper::hasFeature('scrum_auditplan') and !helper::hasFeature('scrum_process')) unset($lang->admin->menuList->model['subMenu']['scrum'], $lang->admin->menuList->model['menuOrder']['10']);
     if(!helper::hasFeature('agileplus_auditplan') and !helper::hasFeature('agileplus_process')) unset($lang->admin->menuList->model['subMenu']['agileplus'], $lang->admin->menuList->model['menuOrder']['20']);

@@ -218,7 +218,7 @@ $fnGenerateDefaultData = function() use ($config, $plans, $planID, $stages, $exe
         $item->realEnd      = $plan->realEnd;
         $item->desc         = $plan->desc;
         $item->setMilestone = $plan->setMilestone;
-        if($config->edition == 'max' && $executionType == 'stage')
+        if(in_array($config->edition, array('max', 'ipd')) && $executionType == 'stage')
         {
             $item->output = empty($plan->output) ? 0 : explode(',', $plan->output);
         }
