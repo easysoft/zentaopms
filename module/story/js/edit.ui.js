@@ -93,10 +93,7 @@ window.changeReviewer = function()
     }
 }
 
-$(document).ready(function()
-{
-    if(!$('[name^="reviewer"]').val().filter(Boolean).length) changeNeedNotReview($('#needNotReview'));
-});
+window.waitDom('[name^="reviewer"]', function(){if(!$('[name^="reviewer"]').val().filter(Boolean).length) changeNeedNotReview($('#needNotReview'));})
 
 function loadProductBranches(productID)
 {
