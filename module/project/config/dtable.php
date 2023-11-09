@@ -235,6 +235,7 @@ $config->projectExecution->dtable->fieldList['actions']['width']         = '160'
 $config->projectExecution->dtable->fieldList['actions']['sortType']      = false;
 $config->projectExecution->dtable->fieldList['actions']['fixed']         = 'right';
 $config->projectExecution->dtable->fieldList['actions']['scrum']         = array('start', 'createTask', 'edit', 'close|activate', 'delete');
+$config->projectExecution->dtable->fieldList['actions']['kanban']        = array('start', 'createTask', 'edit', 'close|activate', 'delete');
 $config->projectExecution->dtable->fieldList['actions']['agileplus']     = array('start', 'createTask', 'edit', 'close|activate', 'delete');
 $config->projectExecution->dtable->fieldList['actions']['waterfall']     = array('start', 'createTask', 'createChildStage', 'edit', 'close|activate', 'delete');
 $config->projectExecution->dtable->fieldList['actions']['waterfallplus'] = array('start', 'createTask', 'createChildStage', 'edit', 'close|activate', 'delete');
