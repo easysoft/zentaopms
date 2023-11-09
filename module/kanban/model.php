@@ -1236,9 +1236,9 @@ class kanbanModel extends model
             ->fetchAll();
 
         $actions     = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild', 'viewTicket', 'activateCard', 'finishCard');
-        $userAvatars = $this->loadModel('user')->getAvatarPairs();
-        $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $cardGroup   = array();
+        $avatarPairs = $this->loadModel('user')->getAvatarPairs();
+        $users       = $this->loadModel('user')->getPairs('noletter');
         foreach($cellList as $cell)
         {
             $cardIdList = array_filter(explode(',', $cell->cards));
@@ -1251,24 +1251,36 @@ class kanbanModel extends model
                 $card = zget($cards, $cardID);
 
                 $item = array();
-                $item['column']   = $cell->column;
-                $item['lane']     = $cell->lane;
-                $item['title']    = htmlspecialchars_decode($card->name);
-                $item['id']       = $card->id;
-                $item['name']     = $card->id;
-                $item['pri']      = $card->pri;
-                $item['begin']    = $card->begin;
-                $item['end']      = $card->end;
-                $item['group']    = $card->group;
-                $item['region']   = $card->region;
-                $item['color']    = $card->color;
-                $item['progress'] = $card->progress;
-                $item['realname'] = zget($users, $card->assignedTo, '');
-                $item['fromType'] = $card->fromType;
+                $item['column']     = $cell->column;
+                $item['lane']       = $cell->lane;
+                $item['title']      = htmlspecialchars_decode($card->name);
+                $item['id']         = $card->id;
+                $item['name']       = $card->id;
+                $item['pri']        = $card->pri;
+                $item['begin']      = $card->begin;
+                $item['end']        = $card->end;
+                $item['group']      = $card->group;
+                $item['region']     = $card->region;
+                $item['color']      = $card->color;
+                $item['progress']   = $card->progress;
+                $item['assignedTo'] = $card->assignedTo;
+                $item['fromType']   = $card->fromType;
+                $item['avatarList'] = array();
+                $item['realnames']  = '';
 
-                $userAvatar = zget($userAvatars, $card->assignedTo, '');
-                $userAvatar = $userAvatar ? "<img src='$userAvatar'/>" : strtoupper(mb_substr($card->assignedTo, 0, 1, 'utf-8'));
-                $item['uavatar'] = $userAvatar;
+                if($card->assignedTo)
+                {
+                    $assignedToList = explode(',', $card->assignedTo);
+                    foreach($assignedToList as $account)
+                    {
+                        if(!$account) continue;
+
+                        $userAvatar = zget($avatarPairs, $account, '');
+                        $userAvatar = $userAvatar ? "<img src='$userAvatar'/>" : strtoupper(mb_substr($account, 0, 1, 'utf-8'));
+                        $item['avatarList'][]  = $userAvatar;
+                        $item['realnames']    .= zget($users, $account, '') . ' ';
+                    }
+                }
 
                 foreach($actions as $action)
                 {

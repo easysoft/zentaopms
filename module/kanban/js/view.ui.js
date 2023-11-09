@@ -143,13 +143,13 @@ window.getItem = function(info)
         beginAndEnd = formatDate(begin) + ' ~ ' + formatDate(end);
     }
 
-    let avatar = "<span class='avatar rounded-full size-xs ml-1 " + (info.item.uavatar ? 'primary' : 'bg-lighter text-canvas') + "' title=" + info.item.realname + '>' + (info.item.uavatar ? info.item.uavatar : "<i class='icon icon-person'></i>");
+    const avatar = renderAvatar(info.item.avatarList);
 
     const content = `
       <div class='flex items-center'>
         <span class='pri-${info.item.pri}'>${info.item.pri}</span>
         <span class='date ml-1'>${beginAndEnd}</span>
-        <div class='flex-1 flex justify-end'>${avatar}</div>
+        <div class='flex-1 flex justify-end' title='${info.item.realnames}'>${avatar}</div>
       </div>
     `;
 
@@ -162,6 +162,28 @@ window.getItem = function(info)
     {
         info.item.footer = {html: "<div class='flex'><div class='circle progress mt-3' style='width:80%'><div class='progress-bar' style='width: " + info.item.progress + '%\'></div></div><div class="mt-2 ml-2">' + info.item.progress + '%' + '</div></div>'};
     }
+}
+
+function renderAvatar(avatarList)
+{
+    if(avatarList.length == 0)
+    {
+        return '<div class="avatar rounded-full size-xs ml-1 primary" title="' + cardLang.noAssigned + '" style="background: #ccc"><i class="icon icon-person"></i></div>';
+    }
+
+    let assignees = '<div class="avatar-group size-sm">';
+    let count     = 0;
+    for(let avatar of avatarList)
+    {
+        if(count > 2) break;
+        assignees += `<div class="avatar rounded-full size-xs ml-1 primary">${avatar}</div>`;
+        count ++;
+    }
+
+    if(count > 2) assignees += '<div class="avatar circle size-xs gray-pale">...</div>';
+    assignees += '</div>';
+
+    return assignees;
 }
 
 window.getItemActions = function(item)
@@ -324,26 +346,26 @@ window.loadMore = function(type, regionID)
 
 window.fullScreen = function()
 {
-    var element       = document.getElementById('kanbanList');
-    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
+    let element       = document.getElementById('kanbanList');
+    let requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
 
     if(requestMethod)
     {
-        var afterEnterFullscreen = function()
+        let afterEnterFullscreen = function()
         {
             $('#kanbanList').addClass('fullscreen').css('background', '#fff');
             window.hideAllAction();
             $.cookie.set('isFullScreen', 1);
         };
 
-        var whenFailEnterFullscreen = function()
+        let whenFailEnterFullscreen = function()
         {
             exitFullScreen();
         };
 
         try
         {
-            var result = requestMethod.call(element);
+            let result = requestMethod.call(element);
             if(result && (typeof result.then === 'function' || result instanceof window.Promise))
             {
                 result.then(afterEnterFullscreen).catch(whenFailEnterFullscreen);

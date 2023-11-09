@@ -391,7 +391,6 @@ class kanban extends control
     public function view($kanbanID, $regionID = '')
     {
         $kanban = $this->kanban->getByID($kanbanID);
-        $users  = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         if(!$kanban)
         {
@@ -402,22 +401,12 @@ class kanban extends control
         $kanbanIdList = $this->kanban->getCanViewObjects();
         if(!$this->app->user->admin and !in_array($kanbanID, $kanbanIdList)) return print(js::error($this->lang->kanban->accessDenied) . js::locate('back'));
 
-        $userList    = array();
-        $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
-        foreach($avatarPairs as $account => $avatar)
-        {
-            if(!$avatar) continue;
-            $userList[$account]['avatar'] = $avatar;
-        }
-
         $regions = $this->kanban->getRegionPairs($kanbanID);
         if(!$regionID) $regionID = $this->session->regionID ? $this->session->regionID : 'all';
         $regionID = !isset($regions[$regionID]) ? 'all' : $regionID;
         $this->session->set('regionID', $regionID, 'kanban');
 
-        $this->view->users         = $users;
         $this->view->title         = $this->lang->kanban->view;
-        $this->view->userList      = $userList;
         $this->view->kanban        = $kanban;
         $this->view->regions       = $regions;
         $this->view->kanbanList    = $this->kanban->getKanbanData($kanbanID, $regionID == 'all' ? '' : array($regionID));

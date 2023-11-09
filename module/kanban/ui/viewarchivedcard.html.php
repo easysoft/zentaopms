@@ -45,6 +45,8 @@ foreach($cards as $card)
                 $assignedToBox[] = userAvatar(set::avatar($usersAvatar[$account]), set::account($account), set::realname($users[$account]), set::size('sm'));
                 $count ++;
             }
+
+            if($count > 2) $assignedToBox[] = span(setClass('font-bold'), '...');
         }
     }
     else
