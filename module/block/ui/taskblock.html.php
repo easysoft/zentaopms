@@ -18,21 +18,9 @@ if(!$longBlock)
     unset($config->block->task->dtable->fieldList['progress']);
 }
 
-panel
+blockPanel
 (
-    set::className('task-block list-block ' . ($longBlock ? 'block-long' : 'block-sm')),
-    set::title($block->title),
-    set::headingClass('border-b'),
-    to::headingActions
-    (
-        a
-        (
-            set('class', 'text-gray'),
-            set('href', $block->moreLink),
-            $lang->more,
-            icon('caret-right')
-        )
-    ),
+    setClass('list-block'),
     dtable
     (
         set::height(318),

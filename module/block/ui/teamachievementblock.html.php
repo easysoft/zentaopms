@@ -33,15 +33,12 @@ panel
                     div
                     (
                         setClass('h-0 w-0'),
-                        div
-                        (
-                            setClass('item-icon h-9 w-9'),
-                        ),
+                        div(setClass('item-icon h-9 w-9'))
                     ),
                     div
                     (
                         setClass('text-gray'),
-                        $lang->block->teamachievement->finishedTasks,
+                        $lang->block->teamachievement->finishedTasks
                     ),
                     div
                     (
@@ -53,13 +50,13 @@ panel
                             span
                             (
                                 setClass('text-gray text-sm'),
-                                $lang->today,
+                                $lang->today
                             ),
                             span
                             (
                                 setClass('ml-0.5 text-lg'),
-                                $finishedTasks,
-                            ),
+                                $finishedTasks
+                            )
                         ),
                         $comparedTasks > 0 ? row
                         (
@@ -68,14 +65,14 @@ panel
                             span
                             (
                                 setClass('text-gray text-sm'),
-                                $lang->block->teamachievement->vs,
+                                $lang->block->teamachievement->vs
                             ),
                             span
                             (
                                 setClass('text-warning font-sm'),
-                                '+' . $comparedTasks,
-                            ),
-                        ) : null,
+                                '+' . $comparedTasks
+                            )
+                        ) : null
                     )
                 ),
                 cell
@@ -85,7 +82,7 @@ panel
                     div
                     (
                         setClass('text-gray'),
-                        $lang->block->teamachievement->createdStories,
+                        $lang->block->teamachievement->createdStories
                     ),
                     div
                     (
@@ -97,13 +94,13 @@ panel
                             span
                             (
                                 setClass('text-gray text-sm'),
-                                $lang->today,
+                                $lang->today
                             ),
                             span
                             (
                                 setClass('ml-0.5 text-lg'),
-                                $createdStories,
-                            ),
+                                $createdStories
+                            )
                         ),
                         $comparedStories > 0 ? row
                         (
@@ -112,17 +109,17 @@ panel
                             span
                             (
                                 setClass('text-gray text-sm'),
-                                $lang->block->teamachievement->vs,
+                                $lang->block->teamachievement->vs
                             ),
                             span
                             (
                                 setClass('text-warning font-sm'),
-                                '+' . $comparedStories,
-                            ),
-                        ) : null,
+                                '+' . $comparedStories
+                            )
+                        ) : null
                     )
                 )
-            ),
+            )
         ),
         div
         (
@@ -138,15 +135,12 @@ panel
                     div
                     (
                         setClass('h-0 w-0'),
-                        div
-                        (
-                            setClass('item-icon h-9 w-9'),
-                        ),
+                        div(setClass('item-icon h-9 w-9'))
                     ),
                     div
                     (
                         setClass('text-gray'),
-                        $lang->block->teamachievement->closedBugs,
+                        $lang->block->teamachievement->closedBugs
                     ),
                     div
                     (
@@ -158,13 +152,13 @@ panel
                             span
                             (
                                 setClass('text-gray text-sm'),
-                                $lang->today,
+                                $lang->today
                             ),
                             span
                             (
                                 setClass('ml-0.5 text-lg'),
-                                $closedBugs,
-                            ),
+                                $closedBugs
+                            )
                         ),
                         $comparedBugs > 0 ? row
                         (
@@ -173,14 +167,14 @@ panel
                             span
                             (
                                 setClass('text-gray text-sm'),
-                                $lang->block->teamachievement->vs,
+                                $lang->block->teamachievement->vs
                             ),
                             span
                             (
                                 setClass('text-warning font-sm'),
-                                '+' . $comparedBugs,
-                            ),
-                        ) : null,
+                                '+' . $comparedBugs
+                            )
+                        ) : null
                     )
                 ),
                 cell
@@ -190,7 +184,7 @@ panel
                     div
                     (
                         setClass('text-gray'),
-                        $lang->block->teamachievement->runCases,
+                        $lang->block->teamachievement->runCases
                     ),
                     div
                     (
@@ -202,13 +196,13 @@ panel
                             span
                             (
                                 setClass('text-gray text-sm'),
-                                $lang->today,
+                                $lang->today
                             ),
                             span
                             (
                                 setClass('ml-0.5 text-lg'),
-                                $runCases,
-                            ),
+                                $runCases
+                            )
                         ),
                         $comparedCases > 0 ? row
                         (
@@ -217,17 +211,17 @@ panel
                             span
                             (
                                 setClass('text-gray text-sm'),
-                                $lang->block->teamachievement->vs,
+                                $lang->block->teamachievement->vs
                             ),
                             span
                             (
                                 setClass('text-warning font-sm'),
-                                '+' . $comparedCases,
-                            ),
-                        ) : null,
+                                '+' . $comparedCases
+                            )
+                        ) : null
                     )
                 )
-            ),
+            )
         ),
         div
         (
@@ -243,15 +237,12 @@ panel
                     div
                     (
                         setClass('h-0 w-0'),
-                        div
-                        (
-                            setClass('item-icon h-9 w-9'),
-                        ),
+                        div(setClass('item-icon h-9 w-9'))
                     ),
                     div
                     (
                         setClass('text-gray'),
-                        $lang->block->teamachievement->consumedHours . ' / ' . $lang->block->projectstatistic->hour,
+                        $lang->block->teamachievement->consumedHours . ' / ' . $lang->block->projectstatistic->hour
                     ),
                     div
                     (
@@ -263,13 +254,13 @@ panel
                             span
                             (
                                 setClass('text-gray text-sm'),
-                                $lang->today,
+                                $lang->today
                             ),
                             span
                             (
                                 setClass('ml-0.5 text-lg'),
-                                $consumedHours,
-                            ),
+                                $consumedHours
+                            )
                         ),
                         $comparedHours > 0 ? row
                         (
@@ -278,14 +269,14 @@ panel
                             span
                             (
                                 setClass('text-gray text-sm'),
-                                $lang->block->teamachievement->vs,
+                                $lang->block->teamachievement->vs
                             ),
                             span
                             (
                                 setClass('text-warning font-sm'),
-                                '+' . $comparedHours,
+                                '+' . $comparedHours
                             ),
-                        ) : null,
+                        ) : null
                     )
                 ),
                 cell
@@ -295,7 +286,7 @@ panel
                     div
                     (
                         setClass('text-gray'),
-                        $lang->block->teamachievement->totalWorkload . ' / ' . $lang->block->projectstatistic->personDay,
+                        $lang->block->teamachievement->totalWorkload . ' / ' . $lang->block->projectstatistic->personDay
                     ),
                     div
                     (
@@ -307,8 +298,8 @@ panel
                             span
                             (
                                 setClass('ml-0.5 text-lg'),
-                                $totalWorkload,
-                            ),
+                                $totalWorkload
+                            )
                         ),
                         $todayWorkload > 0 ? row
                         (
@@ -317,18 +308,18 @@ panel
                             span
                             (
                                 setClass('text-gray text-sm'),
-                                $lang->today,
+                                $lang->today
                             ),
                             span
                             (
                                 setClass('text-warning font-sm'),
-                                '+' . $todayWorkload,
-                            ),
-                        ) : null,
+                                '+' . $todayWorkload
+                            )
+                        ) : null
                     )
                 )
-            ),
-        ),
+            )
+        )
     )
 );
 

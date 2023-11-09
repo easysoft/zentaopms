@@ -210,7 +210,7 @@ statisticBlock
             (
                 setClass('flex-1 gap-1.5 px-3 py-2'),
                 div($lang->block->qastatistic->bugStatistics),
-                !empty($product) ? $buildProgressBars($product, $longBlock) : null,
+                !empty($product) ? $buildProgressBars($product, $longBlock) : null
             ),
             $testTasksView
         )
