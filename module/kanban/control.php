@@ -606,17 +606,22 @@ class kanban extends control
             $order++;
         }
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+
+        $region     = $this->kanban->getRegionByID($regionID);
+        $kanbanData = $this->kanban->getKanbanData($region->kanban, $regionID);
+        $kanbanData = reset($kanbanData);
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'regionID' => 'region' . $regionID, 'kanbanData' => $kanbanData));
     }
 
     /**
      * Sort columns.
      *
+     * @param  int    $regionID
      * @param  string $columns
      * @access public
      * @return array|string
      */
-    public function sortColumn($columns = '')
+    public function sortColumn($regionID, $columns = '')
     {
         if(empty($columns)) return;
         $columns =  explode(',', trim($columns, ','));
@@ -624,15 +629,15 @@ class kanban extends control
         $order = 1;
         foreach($columns as $columnID)
         {
-            $this->dao->update(TABLE_KANBANCOLUMN)->set('`order`')->eq($order)->where('id')->eq($columnID)->exec();
+            $this->dao->update(TABLE_KANBANCOLUMN)->set('`order`')->eq($order)->where('id')->eq($columnID)->andWhere('region')->eq($regionID)->exec();
             $order ++;
         }
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $column     = $this->kanban->getColumnByID($columnID);
-        $region     = $this->kanban->getRegionByID($column->region);
-        $kanbanData = $this->kanban->getKanbanData($region->kanban, $column->region);
+        $region     = $this->kanban->getRegionByID($regionID);
+        $kanbanData = $this->kanban->getKanbanData($region->kanban, $regionID);
         $kanbanData = reset($kanbanData);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'regionID' => 'region' . $column->region, 'kanbanData' => $kanbanData));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'regionID' => 'region' . $regionID, 'kanbanData' => $kanbanData));
     }
 
     /**
@@ -1940,11 +1945,17 @@ class kanban extends control
             $regionPairs = $this->kanban->getRegionPairs($region->kanban);
             foreach($regionPairs as $regionID => $regionName) $itemList[] = array('id' => $regionID, 'text' => $regionName);
         }
-        if($objectType == 'column')
+        else if($objectType == 'column')
         {
             $column      = $this->kanban->getColumnByID($objectID);
-            $columnPairs = $this->dao->select('id,name')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->orderBy('order_asc')->fetchPairs();
+            $columnPairs = $this->kanban->getColumnPairsByGroup($column->group);
             foreach($columnPairs as $columnID => $columnName) $itemList[] = array('id' => $columnID, 'text' => $columnName);
+        }
+        else if($objectType == 'lane')
+        {
+            $lane      = $this->kanban->getLaneById($objectID);
+            $lanePairs = $this->kanban->getLanePairsByGroup($lane->group);
+            foreach($lanePairs as $laneID => $laneName) $itemList[] = array('id' => $laneID, 'text' => $laneName);
         }
         return print(json_encode($itemList));
     }

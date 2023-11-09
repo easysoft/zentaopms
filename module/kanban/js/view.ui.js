@@ -17,6 +17,7 @@ window.getLaneActions = function(lane)
         items: [
             lane.actionList.includes('editLaneName') ? {text: kanbanLang.editLaneName, icon: 'edit',  url: $.createLink('kanban', 'editLaneName', 'id=' + lane.id), 'data-toggle': 'modal'} : null,
             lane.actionList.includes('editLaneColor') ? {text: kanbanLang.editLaneColor, icon: 'color',  url: $.createLink('kanban', 'editLaneColor', 'id=' + lane.id), 'data-toggle': 'modal'} : null,
+            lane.actionList.includes('sortLane') ? {text: kanbanLang.sortLane, icon: 'move',  url: 'javascript:;', 'data-on': 'click', 'data-call': 'sortItems', 'data-params': 'event', 'data-type': 'lane', 'data-id': lane.id, 'data-region': lane.region} : null,
             lane.actionList.includes('deleteLane') ? {text: kanbanLang.deleteLane, icon: 'trash',  url: $.createLink('kanban', 'deleteLane', 'regionID=' + lane.region + '&kanbanID=' + kanbanID + '&id=' + lane.id), 'data-confirm': laneLang.confirmDelete, 'innerClass': 'ajax-submit'} : null,
         ],
     }];
@@ -109,7 +110,7 @@ window.buildColActions = function(col)
 
     if(col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}`), 'data-toggle': 'modal', 'icon': 'edit'});
     if(col.actionList.includes('setWIP')) actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}`), 'data-toggle': 'modal', 'icon': 'alert'});
-    if(col.actionList.includes('sortColumn')) actions.push({text: kanbanLang.sortColumn, url: 'javascript:;', 'icon': 'move', 'data-on': 'click', 'data-call': 'sortItems', 'data-params': 'event', 'data-type': 'column', 'data-id': col.id});
+    if(col.actionList.includes('sortColumn')) actions.push({text: kanbanLang.sortColumn, url: 'javascript:;', 'icon': 'move', 'data-on': 'click', 'data-call': 'sortItems', 'data-params': 'event', 'data-type': 'column', 'data-id': col.id, 'data-region': col.region});
     actions.push({type: 'divider'});
     if(col.actionList.includes('splitColumn')) actions.push({text: kanbanLang.splitColumn, url: $.createLink('kanban', 'splitColumn', `columnID=${col.id}`), 'data-toggle': 'modal', 'icon': 'col-split'});
     if(col.actionList.includes('createColumn')) actions.push({text: kanbanLang.createColumnOnLeft, url: $.createLink('kanban', 'createColumn', `columnID=${col.id}&position=left`), 'data-toggle': 'modal', 'icon': 'col-add-left'});
@@ -425,6 +426,7 @@ window.sortItems = function(event)
     const title      = $(event.target).closest('a').text();
     const objectType = $(event.target).closest('a').data('type');
     const objectID   = $(event.target).closest('a').data('id');
+    const regionID   = $(event.target).closest('a').data('region');
     const url = $.createLink('kanban', 'ajaxGetSortItems', 'objectType=' + objectType + '&objectID=' + objectID);
 
     $.getJSON(url, function(items)
@@ -436,7 +438,8 @@ window.sortItems = function(event)
             if(orders)
             {
                 if(objectType == 'region') link = $.createLink('kanban', 'sortRegion', 'regions=' + orders);
-                if(objectType == 'column') link = $.createLink('kanban', 'sortColumn', 'columns=' + orders);
+                if(objectType == 'column') link = $.createLink('kanban', 'sortColumn', 'regionID=' + regionID + '&columns=' + orders);
+                if(objectType == 'lane')   link = $.createLink('kanban', 'sortLane',   'regionID=' + regionID + '&lanes=' + orders);
                 $.getJSON(link, function(result)
                 {
                     if(objectType == 'region') loadCurrentPage();

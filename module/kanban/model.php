@@ -1162,6 +1162,23 @@ class kanbanModel extends model
     }
 
     /**
+     * Get kanban column pairs by group id.
+     *
+     * @param  int    $groupID
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getColumnPairsByGroup($groupID, $orderBy = '`order`_asc')
+    {
+        return $this->dao->select('id,name')->from(TABLE_KANBANCOLUMN)
+            ->where('deleted')->eq(0)
+            ->andWhere('`group`')->eq($groupID)
+            ->orderBy($orderBy)
+            ->fetchPairs();
+    }
+
+    /**
      * Get column group by regions.
      *
      * @param  array  $regions
