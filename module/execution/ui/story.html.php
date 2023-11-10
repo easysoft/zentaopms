@@ -169,8 +169,7 @@ modal
     (
         setClass('text-center', 'py-4'),
         setID('toTaskForm'),
-        set::actions(array('submit')),
-        set::submitBtnText($lang->execution->next),
+        set::actions(array()),
         set::url(createLink('story', 'batchToTask', "executionID={$execution->id}&projectID={$execution->project}")),
         formGroup
         (
@@ -220,6 +219,13 @@ modal
                 set::type('hidden'),
                 set::name('storyIdList')
             )
+        ),
+        btn
+        (
+            set::text($lang->execution->next),
+            set::btnType('submit'),
+            set::type('primary'),
+            set('data-dismiss', 'primary'),
         )
     )
 );
