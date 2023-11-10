@@ -36,7 +36,11 @@ else
     (
         formGroup
         (
-            upload()
+            upload
+            (
+                set::limitSize($maxUploadSize),
+                set::exceededSizeHint($exceedLimitMsg),
+            )
         ),
         set::submitBtnText($lang->extension->install),
     );
