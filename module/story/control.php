@@ -974,7 +974,7 @@ class story extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('execution', 'task', "executionID=$executionID")));
         }
 
-        if(!$this->post->storyIdList) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
+        if(!$this->post->storyIdList) return $this->locate($this->session->storyList);
 
         $stories       = $this->story->getByList($_POST['storyIdList']);
         $activeStories = array();
