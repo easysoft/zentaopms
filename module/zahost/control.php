@@ -60,7 +60,6 @@ class zahost extends control
         $this->view->orderBy     = $orderBy;
         $this->view->browseType  = $browseType;
         $this->view->showFeature = $showFeature;
-        $this->view->sortLink    = $this->createLink('zahost', 'browse', "browseType={$browseType}&param={$param}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 
         $this->display();
     }
@@ -221,7 +220,6 @@ class zahost extends control
         $this->view->param      = $param;
         $this->view->orderBy    = $orderBy;
         $this->view->browseType = $browseType;
-        $this->view->sortLink   = $this->createLink('zahost', 'browseImage', "hostID={$hostID}&browseType={$browseType}&param={$param}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 
         $this->display();
     }

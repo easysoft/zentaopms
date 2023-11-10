@@ -34,13 +34,6 @@ window.checkedChange = function()
     if(checkedList.length == 2) $('#mergeBranch').show();
 }
 
-window.createSortLink = function(col)
-{
-    var sort = col.name + '_asc';
-    if(sort == orderBy) sort = col.name + '_desc';
-    return sortLink.replace('{orderBy}', sort);
-}
-
 $(document).on('click', '.batch-btn', function()
 {
     const dtable = zui.DTable.query($(this).target);

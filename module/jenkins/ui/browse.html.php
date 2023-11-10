@@ -27,17 +27,14 @@ toolbar
 );
 
 jsVar('confirmDelete',    $lang->jenkins->confirmDelete);
-jsVar('orderBy',          $orderBy);
 jsVar('canBrowseProject', common::hasPriv('jenkins', 'browseProject'));
-jsVar('sortLink',         helper::createLink('jenkins', 'browse', "orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
 dtable
 (
     set::cols(array_values($config->jenkins->dtable->fieldList)),
     set::data($tableData),
-    set::sortLink(jsRaw('createSortLink')),
+    set::sortLink(createLink('jenkins', 'browse', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager()),
 );
-
-render();

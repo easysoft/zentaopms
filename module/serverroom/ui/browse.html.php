@@ -31,15 +31,13 @@ toolbar
     $canCreate ? item(set($createItem)) : null,
 );
 
-jsVar('orderBy',  $orderBy);
-jsVar('sortLink', helper::createLink('serverroom', 'browse', "browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
-
 dtable
 (
     set::userMap($users),
     set::cols(array_values($config->serverroom->dtable->fieldList)),
     set::data($tableData),
-    set::sortLink(jsRaw('createSortLink')),
+    set::sortLink(createLink('serverroom', 'browse', "browseType=$browseType&param=$param&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+    set::orderBy($orderBy),
     set::footPager(usePager()),
 );
 

@@ -10,9 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('orderBy', $orderBy);
-jsVar('sortLink', $sortLink);
-
 $createItem = array('text' => $lang->zanode->create, 'url' => createLink('zanode', 'create'), 'icon' => 'plus', 'class' => 'btn primary');
 
 foreach($nodeList as $node)
@@ -47,7 +44,8 @@ dtable
     set::data($nodeList),
     set::onRenderCell(jsRaw('window.renderList')),
     set::afterRender(jsRaw('window.afterRender')),
-    set::sortLink(jsRaw('createSortLink')),
+    set::sortLink(createLink('zanode', 'browse', "browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::orderBy($orderBy),
     set::footPager(usePager()),
     set::orderBy(str_replace('t1.', '', $orderBy)),
 );

@@ -10,9 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('orderBy',  $orderBy);
-jsVar('sortLink', $sortLink);
-
 h::importCss($app->getWebRoot() . 'js/xterm/xterm.css');
 h::importJs($app->getWebRoot() . 'js/xterm/xterm.js');
 
@@ -66,7 +63,8 @@ dtable
     set::cols($config->space->dtable->fieldList),
     set::data($instances),
     set::onRenderCell(jsRaw('window.renderInstanceList')),
-    set::sortLink(jsRaw('createSortLink')),
+    set::sortLink(createLink('space', 'browse', "spaceID=&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
+    set::orderBys($orderBy),
     set::footPager(usePager()),
 );
 

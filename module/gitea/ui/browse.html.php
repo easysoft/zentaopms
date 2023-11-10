@@ -27,15 +27,14 @@ toolbar
 );
 
 jsVar('confirmDelete',    $lang->gitea->confirmDelete);
-jsVar('orderBy',          $orderBy);
 jsVar('canBrowseProject', common::hasPriv('gitea', 'browseProject'));
-jsVar('sortLink',         helper::createLink('gitea', 'browse', "orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 
 dtable
 (
     set::cols(array_values($config->gitea->dtable->fieldList)),
     set::data($tableData),
-    set::sortLink(jsRaw('createSortLink')),
+    set::sortLink(createLink('gitea', 'browse', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager()),
 );

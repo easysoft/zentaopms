@@ -1,11 +1,3 @@
-window.createSortLink = function(col)
-{
-    var sort = col.name + '_asc';
-    if(sort == orderBy) sort = col.name + '_desc';
-
-    return sortLink.replace('{orderBy}', sort);
-};
-
 window.renderList = function (result, {col, row, value})
 {
     if(col.name === 'status')

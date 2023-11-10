@@ -60,7 +60,6 @@ class zanode extends control
         $this->view->orderBy     = $orderBy;
         $this->view->browseType  = $browseType;
         $this->view->showFeature = $showFeature;
-        $this->view->sortLink    = $this->createLink('zanode', 'browse', "browseType={$browseType}&param={$param}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 
         $this->display();
     }

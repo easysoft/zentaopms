@@ -103,7 +103,6 @@ class space extends control
         $this->view->currentSpace = $space;
         $this->view->searchName   = $search;
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed,noletter');
-        $this->view->sortLink     = $this->createLink('space', 'browse', "spaceID=&browseType={$browseType}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}");
 
         $this->display();
     }

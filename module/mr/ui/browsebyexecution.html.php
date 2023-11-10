@@ -10,9 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('orderBy',  $orderBy);
-jsVar('sortLink', $sortLink);
-
 dropmenu
 (
     set::url(createLink('execution', 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
@@ -113,7 +110,8 @@ dtable
     set::userMap($users),
     set::cols($config->mr->dtable->fieldList),
     set::data($MRs),
-    set::sortLink(jsRaw('createSortLink')),
+    set::sortLink(createLink('mr', 'browse', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$executionID}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
+    set::orderBy($orderBy),
     set::footPager(usePager()),
 );
 

@@ -11,8 +11,6 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('pageLink', $pageLink);
-jsVar('orderBy',  $orderBy);
-jsVar('sortLink', $this->createLink('artifactrepo', 'browse', "browseType={$browseType}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}"));
 
 $statusMap = array();
 $canCreate = hasPriv('artifactrepo', 'create');
@@ -53,9 +51,7 @@ dtable
     set::cols($config->artifactrepo->dtable->fieldList),
     set::data($artifactRepos),
     set::onRenderCell(jsRaw('window.renderList')),
-    set::sortLink(jsRaw('createSortLink')),
+    set::sortLink(createLink('artifactrepo', 'browse', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
+    set::orderBy($orderBy),
     set::footPager(usePager()),
 );
-
-render();
-

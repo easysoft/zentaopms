@@ -10,9 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('orderBy',  $orderBy);
-jsVar('sortLink', createLink('repo', 'maintain', "objectID=$objectID&orderBy={orderBy}&recTotal={$pager->recTotal}&pageID={$pager->pageID}"));
-
 $createItem      = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create'));
 $createRepoItem  = array('text' => $lang->repo->createRepoAction, 'url' => createLink('repo', 'createRepo'));
 $batchCreateItem = array('text' => $lang->repo->batchCreate, 'url' => createLink('repo', 'import'));
@@ -103,7 +100,8 @@ dtable
 (
     set::cols($config->repo->dtable->fieldList),
     set::data($repos),
-    set::sortLink(jsRaw('createSortLink')),
+    set::sortLink(createLink('repo', 'maintain', "objectID=$objectID&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&pageID={$pager->pageID}")),
+    set::orderBy($orderBy),
     set::footPager(usePager())
 );
 

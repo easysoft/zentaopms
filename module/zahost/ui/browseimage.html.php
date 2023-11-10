@@ -11,13 +11,8 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('hostID', $hostID);
-jsVar('orderBy', $orderBy);
-jsVar('sortLink', $sortLink);
 
-foreach($imageList as $image)
-{
-    $image->hostID = $hostID;
-}
+foreach($imageList as $image) $image->hostID = $hostID;
 
 $imageList = initTableData($imageList, $config->zahost->imageDtable->fieldList, $this->zahost);
 
@@ -27,10 +22,7 @@ dtable
 (
     set::cols($config->zahost->imageDtable->fieldList),
     set::data($imageList),
-    set::sortLink(jsRaw('createSortLink')),
+    set::sortLink(createLink('zahost', 'browseImage', "hostID={$hostID}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
     set::orderBy($orderBy)
 );
-
-render();
-

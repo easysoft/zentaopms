@@ -28,9 +28,6 @@ featureBar
 /* zin: Define the toolbar on main menu. */
 toolbar();
 
-jsVar('orderBy',  $orderBy);
-jsVar('sortLink', helper::createLink('compile', 'browse', "repoID=$repoID&jobID={$jobID}&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
-
 $tableData = initTableData($buildList, $config->compile->dtable->fieldList, $this->compile);
 
 foreach($tableData as $row) if(!$row->testtask) unset($row->actions[1]);
@@ -39,7 +36,8 @@ dtable
 (
     set::cols($config->compile->dtable->fieldList),
     set::data($tableData),
-    set::sortLink(jsRaw('createSortLink')),
+    set::sortLink(createLink('compile', 'browse', "repoID=$repoID&jobID={$jobID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager()),
 );

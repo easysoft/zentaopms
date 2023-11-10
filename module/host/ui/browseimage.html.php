@@ -12,9 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('hostID',     $hostID);
-jsVar('orderBy',    $orderBy);
-jsVar('sortLink',  helper::createLink('host', 'browseImage', "hostID={$hostID}&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
+jsVar('hostID', $hostID);
 
 $tableData = initTableData($imageList, $config->host->imageDtable->fieldList);
 
@@ -22,7 +20,8 @@ dtable
 (
     set::cols(array_values($config->host->imageDtable->fieldList)),
     set::data($tableData),
-    set::sortLink(jsRaw('createSortLink')),
+    set::sortLink(createLink('host', 'browseImage', "hostID={$hostID}&browseType=$browseType&param=$param&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+    set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager()),
 );

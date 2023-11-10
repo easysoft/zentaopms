@@ -58,6 +58,7 @@ dtable
     set::cols($config->repo->reviewDtable->fieldList),
     set::data($bugs),
     set::sortLink(jsRaw('createSortLink')),
+    set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderRepobugList')),
     set::footPager(usePager()),
 );

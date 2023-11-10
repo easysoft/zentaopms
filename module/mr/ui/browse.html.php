@@ -10,9 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('orderBy',  $orderBy);
-jsVar('sortLink', $sortLink);
-
 dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
 
 foreach($MRList as $MR)
@@ -78,7 +75,8 @@ dtable
     set::userMap($users),
     set::cols($config->mr->dtable->fieldList),
     set::data($MRs),
-    set::sortLink(jsRaw('createSortLink')),
+    set::sortLink(createLink('mr', 'browse', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
+    set::orderBy($orderBy),
     set::footPager(usePager()),
 );
 

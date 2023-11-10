@@ -206,13 +206,6 @@ function convertStringToDate(dateString)
     return new Date(dateString[0], dateString[1] - 1, dateString[2]);
 }
 
-window.createSortLink = function(col)
-{
-    var sort = col.name + '_asc';
-    if(sort == orderBy) sort = col.name + '_desc';
-    return sortLink.replace('{orderBy}', sort);
-}
-
 /**
  * 提示并删除项目。
  * Delete project with tips.

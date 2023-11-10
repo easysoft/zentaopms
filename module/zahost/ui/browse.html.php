@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('orderBy', $orderBy);
-jsVar('sortLink', $sortLink);
 jsVar('webRoot', getWebRoot());
 jsVar('undeletedNotice', $lang->zahost->undeletedNotice);
 jsVar('uninitNotice', $lang->zahost->uninitNotice);
@@ -52,7 +50,7 @@ dtable
     set::data($hostList),
     set::onRenderCell(jsRaw('window.renderList')),
     set::afterRender(jsRaw('window.afterRender')),
-    set::sortLink(jsRaw('createSortLink')),
+    set::sortLink(createLink('zahost', 'browse', "browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
     set::orderBy(str_replace('id_', 'hostID_', $orderBy)),
 );

@@ -140,7 +140,6 @@ class mr extends control
         $this->view->orderBy    = $orderBy;
         $this->view->openIDList = $openIDList;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->sortLink   = $this->createLink('mr', 'browse', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}");
         $this->display();
     }
 
@@ -220,7 +219,6 @@ class mr extends control
         $this->view->orderBy     = $orderBy;
         $this->view->openIDList  = $openIDList;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->sortLink    = $this->createLink('mr', 'browse', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$executionID}&orderBy={orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}");
         $this->display();
     }
 
