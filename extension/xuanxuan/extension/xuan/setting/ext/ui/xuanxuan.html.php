@@ -13,6 +13,7 @@ namespace zin;
 
 if($type == 'edit')
 {
+    $https = zget($config->xuanxuan, 'https', 'off');
     formPanel
     (
         set::title($lang->im->settings),
@@ -59,9 +60,11 @@ if($type == 'edit')
         formGroup
         (
             set::label($lang->im->backendLang),
-            select
+            set::required(true),
+            picker
             (
-                width('1/4'),
+                setStyle(array('width' => '25%')),
+                set::required(true),
                 set::name('backendLang'),
                 set::items($lang->setting->langs),
                 set::value(zget($config->xuanxuan, 'backendLang', ''))
@@ -70,10 +73,11 @@ if($type == 'edit')
         formGroup
         (
             set::label($lang->im->xxdServer),
+            set::required(true),
             input
             (
                 width('1/4'),
-                set::name('domain'),
+                set::name('server'),
                 set::value($domain)
             ),
             span
@@ -85,6 +89,7 @@ if($type == 'edit')
         formGroup
         (
             set::label($lang->im->pollingInterval),
+            set::required(true),
             input
             (
                 width('1/4'),
@@ -100,6 +105,7 @@ if($type == 'edit')
         formGroup
         (
             set::label($lang->im->xxd->ip),
+            set::required(true),
             input
             (
                 width('1/4'),
@@ -110,6 +116,7 @@ if($type == 'edit')
         formGroup
         (
             set::label($lang->im->xxd->chatPort),
+            set::required(true),
             input
             (
                 width('1/4'),
@@ -120,6 +127,7 @@ if($type == 'edit')
         formGroup
         (
             set::label($lang->im->xxd->commonPort),
+            set::required(true),
             input
             (
                 width('1/4'),
@@ -130,6 +138,7 @@ if($type == 'edit')
         formGroup
         (
             set::label($lang->im->xxd->uploadFileSize),
+            set::required(true),
             inputGroup
             (
                 setClass('grow-0 w-1/4'),
@@ -168,7 +177,40 @@ if($type == 'edit')
                 set::name('https'),
                 set::inline(true),
                 set::items($lang->im->httpsOptions),
-                set::value(zget($config->xuanxuan, 'https', 'off'))
+                set::value($https),
+                on::change("$('[name=sslkey],[name=sslcrt]').closest('.form-row').toggleClass('hidden');")
+            )
+        ),
+        formRow
+        (
+            $https == 'off' ? set::hidden(true) : null,
+            formGroup
+            (
+                set::label($lang->im->xxd->sslkey),
+                set::required(true),
+                textarea
+                (
+                    set::name('sslkey'),
+                    set::value(zget($config->xuanxuan, 'sslkey', '')),
+                    set::placeholder($lang->im->placeholder->xxd->sslkey),
+                    set::rows(5)
+                )
+            )
+        ),
+        formRow
+        (
+            $https == 'off' ? set::hidden(true) : null,
+            formGroup
+            (
+                set::label($lang->im->xxd->sslcrt),
+                set::required(true),
+                textarea
+                (
+                    set::name('sslcrt'),
+                    set::value(zget($config->xuanxuan, 'sslcrt', '')),
+                    set::placeholder($lang->im->placeholder->xxd->sslcrt),
+                    set::rows(5)
+                )
             )
         ),
         formGroup
@@ -215,7 +257,7 @@ else
                     set::name('os'),
                     set::items($lang->im->osList),
                     set::value(zget($config->xuanxuan, $os)),
-                    on::change('changeOS')
+                    on::change("$('#downloadXXD').attr('href', $.createLink('setting', 'downloadXXD', 'type=package&os=' + \$ele.val()));")
                 )
             ),
             item
