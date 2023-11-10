@@ -45,7 +45,9 @@ class programEntry extends entry
         $control = $this->loadController('program', 'edit');
         $control->edit($programID);
 
-        $this->getData();
+        $data = $this->getData();
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+
         $program = $this->program->getByID($programID);
         return $this->send(200, $this->format($program, 'begin:date,end:date,PO:user,PM:user,QD:user,RD:user,realBegan:date,realEnd:date,openedBy:user,openedDate:time,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,deleted:bool,whitelist:userList'));
     }
