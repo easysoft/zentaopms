@@ -26,9 +26,9 @@ foreach($releases2Imported as $release)
             $builds   .= $build->name . ' ';
             $projects .= $build->projectName . ' ';
         }
-        $release->build   = $builds;
-        $release->project = $projects;
     }
+    $release->build   = $builds;
+    $release->project = $projects;
 }
 
 featureBar
