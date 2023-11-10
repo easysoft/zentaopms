@@ -554,6 +554,8 @@ class project extends control
      */
     public function view(int $projectID = 0)
     {
+        $this->app->loadLang('build');
+
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->checkAccess((int)$projectID, $this->project->getPairsByProgram());
         if(is_bool($projectID)) return $this->send(array('result' => 'fail', 'message' => $this->lang->project->accessDenied, 'locate' => $this->createLink('project', 'browse')));
 
