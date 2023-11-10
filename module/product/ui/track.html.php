@@ -37,7 +37,7 @@ $getRequirements = function($tracks)
             set('href', createLink('story', 'view', "storyID={$requirement->id}")),
             set('title', $requirement->title),
             set('data-app', $tab),
-            $requirement->title,
+            $requirement->title
        ) : $requirement->title;
 
         $requirementItems[] = h::tr(
