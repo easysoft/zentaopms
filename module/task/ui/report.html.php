@@ -84,23 +84,27 @@ div
         (
             setClass('chart-form'),
             set::id('chartForm'),
-            set('title', $lang->task->report->select),
-            set('actions', array
+            set::title($lang->task->report->select),
+            set::actionsClass('justify-start'),
+            set::actions
             (
                 array
                 (
-                    'text'  => $lang->selectAll,
-                    'class' => 'btn-select-all space',
-                    'url'   => 'javascript:triggerChecked();'
-                ),
-                array
-                (
-                    'type'  => 'primary',
-                    'text'  => $lang->task->report->create,
-                    'class' => 'btn-select-all space',
-                    'url'   => 'javascript:createChart();'
-                ),
-            )),
+                    array
+                    (
+                        'text'  => $lang->selectAll,
+                        'class' => 'btn-select-all space',
+                        'url'   => 'javascript:triggerChecked();'
+                    ),
+                    array
+                    (
+                        'type'  => 'primary',
+                        'text'  => $lang->task->report->create,
+                        'class' => 'btn-select-all space',
+                        'url'   => 'javascript:createChart();'
+                    ),
+                )
+            ),
             checkList
             (
                 set::primary(true),
