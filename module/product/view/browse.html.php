@@ -577,7 +577,7 @@ js::set('vision',        $this->config->vision);
           <?php endif;?>
           <?php endif;?>
 
-          <?php if($canBatchAssignTo):?>
+          <?php if($canBatchAssignTo and $config->vision == 'or'):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn assignedTo"><?php echo $lang->story->assignedTo;?> <span class="caret"></span></button>
             <?php
