@@ -291,6 +291,12 @@ jsVar('modulePairs',    $modulePairs);
 jsVar('showBranch',     $showBranch);
 jsVar('checkedSummary', str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary));
 
+if($isProjectStory and $storyType == 'requirement')
+{
+    unset($lang->projectstory->featureBar['story']['linkedexecution']);
+    unset($lang->projectstory->featureBar['story']['unlinkedexecution']);
+}
+
 featureBar
 (
     set::current($storyBrowseType),
