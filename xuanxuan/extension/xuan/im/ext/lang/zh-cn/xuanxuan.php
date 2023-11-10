@@ -131,3 +131,7 @@ $lang->im->bot->zentaoBot->help = <<<EOT
 | 完成 任务 #ID	| 完成任务并记录其消耗/剩余工时 |
 | 关闭 任务 #ID	| 关闭任务并记录其消耗/剩余工时 |
 EOT;
+
+$lang->im->bot->upgradeWelcome->link = 'https://www.zentao.net/page/download-new.html';
+$lang->im->detachedConferenceUpgradeMessage->newClient->content = '管理员已将会议机制更新，支持 v7.2.beta 及以上版本，为了不影响您的使用体验，建议您重启应用我们将更新您的会议机制，详情请移步禅道官网查看。';
+$lang->im->detachedConferenceUpgradeMessage->oldClient->content = '管理员已将会议机制更新，支持 v7.2.beta 及以上版本，为了不影响您的使用体验，建议您重启应用我们将更新您的会议机制，请移步禅道官网更新。';
