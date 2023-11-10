@@ -1895,6 +1895,14 @@ class docModel extends model
         }
         elseif($type == 'project')
         {
+            $project     = $this->loadModel('project')->getByID($objectID);
+            $storyIDList = '';
+            if(!$project->hasProduct)
+            {
+                $projectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->orWhere('project')->eq($objectID)->fetchPairs('id', 'id');
+                $storyIDList   = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->in($projectIDList)->fetchPairs('story', 'story');
+            }
+
             if(in_array($this->config->edition, array('max', 'ipd')))
             {
                 $issueIdList   = $this->dao->select('id')->from(TABLE_ISSUE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
@@ -1911,9 +1919,17 @@ class docModel extends model
             if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
 
             $executionIdList = join(',', $executionIdList);
+            $storyIDList     = join(',', $storyIDList);
         }
         elseif($type == 'execution')
         {
+            $execution   = $this->loadModel('execution')->getByID($objectID);
+            $project     = $this->loadModel('project')->getByID($execution->project);
+            $storyIDList = '';
+
+            if(!$project->hasProduct) $storyIDList = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($objectID)->fetchPairs('story', 'story');
+            if($storyIDList) $storyIDList = join(',', $storyIDList);
+
             $taskPairs = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('execution')->in($userView)->fetchPairs('id');
             if(!empty($taskPairs)) $taskIdList = implode(',', $taskPairs);
 
@@ -1943,6 +1959,7 @@ class docModel extends model
             ->beginIF($type == 'project' or $type == 'execution')
             ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
             ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
+            ->beginIF($storyIDList)->orWhere("(objectType = 'story' and objectID in ($storyIDList))")->fi()
             ->fi()
             ->markRight(1)
             ->beginIF($searchTitle !== false)->andWhere('title')->like("%{$searchTitle}%")->fi()
