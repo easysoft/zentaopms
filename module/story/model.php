@@ -2171,7 +2171,7 @@ class storyModel extends model
         $stories = $this->dao->select("*,IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) as priOrder")->from(TABLE_STORY)
             ->where('product')->in($productID)
             ->andWhere('type')->eq($type)
-            ->beginIF($branch)->andWhere("branch")->eq($branch)->fi()
+            ->beginIF($branch and $branch != 'all')->andWhere("branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("module")->in($modules)->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")
