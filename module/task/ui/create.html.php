@@ -76,7 +76,7 @@ if($execution->type == 'kanban')
                 set::value($regionID),
                 set::items($regionPairs),
                 on::change('loadLanes'),
-                set::required(true),
+                set::required(true)
             )
         ),
         formGroup
@@ -88,9 +88,9 @@ if($execution->type == 'kanban')
                 set::name('lane'),
                 set::value($laneID),
                 set::items($lanePairs),
-                set::required(true),
+                set::required(true)
             )
-        ),
+        )
     );
 }
 
@@ -100,16 +100,13 @@ if(!empty($execution->hasProduct))
     $storyEmptyPreTip = span
     (
         setClass('input-control-prefix'),
-        span
-        (
-            $lang->task->noticeLinkStory,
-        ),
+        span($lang->task->noticeLinkStory),
         a
         (
             set::href($this->createLink('execution', 'linkStory', "executionID=$execution->id")),
             setClass('text-primary'),
             $lang->execution->linkStory
-        ),
+        )
     );
 }
 else
@@ -117,10 +114,7 @@ else
     $storyEmptyPreTip = span
     (
         setClass('input-control-prefix'),
-        span
-        (
-            $lang->task->noticeLinkStory,
-        ),
+        span($lang->task->noticeLinkStory)
     );
 }
 $storyPreviewBtn = span
@@ -132,10 +126,10 @@ $storyPreviewBtn = span
         to::trigger(
             btn(
                 setClass('text-gray'),
-                set::icon('eye'),
-            ),
-        ),
-    ),
+                set::icon('eye')
+            )
+        )
+    )
 );
 
 $teamForm = array();
@@ -159,7 +153,7 @@ for($i = 1; $i <= 3; $i ++)
             picker
             (
                 set::name("team[]"),
-                set::items($members),
+                set::items($members)
             )
         ),
         h::td
@@ -170,11 +164,11 @@ for($i = 1; $i <= 3; $i ++)
                 input
                 (
                     set::name("teamEstimate[]"),
-                    set::placeholder($lang->task->estimateAB),
+                    set::placeholder($lang->task->estimateAB)
                 ),
                 to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20),
-            ),
+                set::suffixWidth(20)
+            )
         ),
         h::td
         (
@@ -184,7 +178,7 @@ for($i = 1; $i <= 3; $i ++)
             (
                 set::items(array(
                     array('icon' => 'plus',  'class' => 'btn ghost btn-add'),
-                    array('icon' => 'trash', 'class' => 'btn ghost btn-delete'),
+                    array('icon' => 'trash', 'class' => 'btn ghost btn-delete')
                 ))
             )
         )
@@ -196,7 +190,7 @@ if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('req
 {
     $selectStoryRow = formRow(
         set::id('testStoryBox'),
-        setClass('hidden'),
+        setClass('hidden')
     );
 }
 
@@ -214,7 +208,7 @@ if(!isAjaxRequest('modal'))
             set::value(!empty($task->id) ? 'toTaskList' : 'continueAdding'),
             set::items($config->task->afterOptions),
             set::inline(true)
-        ),
+        )
     );
 }
 
@@ -239,7 +233,7 @@ formPanel
                     set::name('module'),
                     set::value($task->module),
                     set::items($modulePairs),
-                    on::change('loadExecutionStories'),
+                    on::change('loadExecutionStories')
                 ),
                 span
                 (
@@ -251,7 +245,7 @@ formPanel
                         $lang->task->allModule,
                         on::click('showAllModule')
                     ),
-                    formHidden('isShowAllModule', 0),
+                    formHidden('isShowAllModule', 0)
                 )
             )
         )
@@ -284,9 +278,9 @@ formPanel
                 set::value(1),
                 set::text($lang->task->selectTestStory),
                 set::rootClass('ml-4'),
-                on::change('toggleSelectTestStory'),
+                on::change('toggleSelectTestStory')
             )
-        ),
+        )
     ),
     formRow
     (
@@ -299,7 +293,7 @@ formPanel
                 set::id('assignedTo'),
                 set::name('assignedTo'),
                 set::value($task->assignedTo),
-                set::items($members),
+                set::items($members)
             ),
             btn
             (
@@ -310,15 +304,12 @@ formPanel
                         'class' => 'btn primary-pale hidden add-team mr-3',
                         'data-toggle' => 'modal',
                         'url' => '#modalTeam',
-                        'icon' => 'plus',
+                        'icon' => 'plus'
                     ),
                 ),
-                $lang->task->addMember,
+                $lang->task->addMember
             ),
-            div
-            (
-                setClass('assignedToList'),
-            ),
+            div(setClass('assignedToList'))
         ),
         formGroup
         (
@@ -329,9 +320,9 @@ formPanel
                 set::name('multiple'),
                 set::text($lang->task->multiple),
                 set::rootClass('ml-4'),
-                on::change('toggleTeam'),
+                on::change('toggleTeam')
             )
-        ),
+        )
     ),
     formRow
     (
@@ -339,7 +330,7 @@ formPanel
         formGroup
         (
             set::control('hidden'),
-            set::name('teamMember'),
+            set::name('teamMember')
         )
     ),
     formRow
@@ -357,9 +348,9 @@ formPanel
                     set::name('story'),
                     set::value($task->story),
                     set::items(array_filter($stories)),
-                    on::change('setStoryRelated'),
+                    on::change('setStoryRelated')
                 ),
-                $storyPreviewBtn,
+                $storyPreviewBtn
             )
         ),
         formGroup
@@ -373,7 +364,7 @@ formPanel
                 input(
                     set::name(''),
                     set('readonly'),
-                    set('onfocus', 'this.blur()'),
+                    set('onfocus', 'this.blur()')
                 ),
                 span
                 (
@@ -382,11 +373,11 @@ formPanel
                         setClass('text-gray'),
                         set::id('refreshStories'),
                         set::icon('refresh'),
-                        on::click('loadExecutionStories'),
+                        on::click('loadExecutionStories')
                     )
-                ),
-            ),
-        ),
+                )
+            )
+        )
     ),
     $selectStoryRow,
     formRow
@@ -402,7 +393,7 @@ formPanel
                 input
                 (
                     set::name('name'),
-                    set::value($task->name),
+                    set::value($task->name)
                 ),
                 to::suffix
                 (
@@ -425,7 +416,7 @@ formPanel
             ),
             formHidden('storyEstimate', ''),
             formHidden('storyDesc', ''),
-            formHidden('storyPri', 0),
+            formHidden('storyPri', 0)
         ),
         formGroup
         (
@@ -436,14 +427,14 @@ formPanel
                 span
                 (
                     setClass("input-group-addon {$hiddenPri}"),
-                    $lang->task->pri,
+                    $lang->task->pri
                 ),
                 priPicker
                 (
                     setClass($hiddenPri),
                     set::name('pri'),
                     set::value('3'),
-                    set::items(array_filter($lang->task->priList)),
+                    set::items(array_filter($lang->task->priList))
                 ),
                 span
                 (
@@ -454,14 +445,11 @@ formPanel
                 (
                     set::className($hiddenEstimate),
                     input(set::name('estimate')),
-                    to::suffix
-                    (
-                        $lang->task->suffixHour
-                    ),
-                    set::suffixWidth(20),
-                ),
-            ),
-        ),
+                    to::suffix($lang->task->suffixHour),
+                    set::suffixWidth(20)
+                )
+            )
+        )
     ),
     formGroup
     (
@@ -469,7 +457,7 @@ formPanel
         editor
         (
             set::name('desc'),
-            set::rows('5'),
+            set::rows('5')
         )
     ),
     formGroup
@@ -490,13 +478,13 @@ formPanel
                 set::control('date'),
                 set::name('estStarted'),
                 set::value($task->estStarted),
-                set::placeholder($lang->task->estStarted),
+                set::placeholder($lang->task->estStarted)
             ),
             span
             (
                 setClass('input-group-addon'),
                 setClass($hiddenEstStarted || $hiddenDeadline ? 'hidden' : ''),
-                $lang->task->to,
+                $lang->task->to
             ),
             datepicker
             (
@@ -504,8 +492,8 @@ formPanel
                 set::control('date'),
                 set::name('deadline'),
                 set::value($task->deadline),
-                set::placeholder($lang->task->deadline),
-            ),
+                set::placeholder($lang->task->deadline)
+            )
         )
     ),
     formGroup
@@ -516,7 +504,7 @@ formPanel
         (
             set::multiple(true),
             set::name('mailto[]'),
-            set::items($users),
+            set::items($users)
         )
     ),
     $afterRow,
@@ -543,8 +531,8 @@ formPanel
                             set::name("mode"),
                             set::value("linear"),
                             set::items($lang->task->modeList),
-                            set::required(true),
-                        ),
+                            set::required(true)
+                        )
                     )
                 ),
                 setClass('table table-form'),
