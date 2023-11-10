@@ -309,7 +309,7 @@ class blockZen extends block
     protected function printDynamicBlock(): void
     {
         $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', 30);
-        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all');
+        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all', '', 0, array_unique(array_column($this->view->actions, 'actor')));
     }
 
     /**
@@ -772,7 +772,7 @@ class blockZen extends block
         foreach($projects as $project) $project->progress = $project->hours->progress;
 
         $this->view->projects = $projects;
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter', '', 0, array_unique(array_column($this->view->projects, 'PM')));
     }
 
     /**
@@ -1503,7 +1503,7 @@ class blockZen extends block
         $count     = isset($block->params->count) ? (int)$block->params->count : 10;
 
         $this->view->actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $count, 'all', $projectID);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter', '', 0, array_unique(array_column($this->view->actions, 'actor')));
     }
 
     /**
@@ -2216,7 +2216,7 @@ class blockZen extends block
         $pager = new pager(0, 30, 1);
 
         $this->view->actions = $this->loadModel('doc')->getDynamic($pager);
-        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all');
+        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all', '', 0, array_unique(array_column($this->view->actions, 'actor')));
     }
 
     /**
