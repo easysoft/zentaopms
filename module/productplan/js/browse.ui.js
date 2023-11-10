@@ -192,3 +192,94 @@ $(document).on('click', '.switchButton', function()
     $.cookie.set('viewType', type);
     loadCurrentPage();
 })
+
+
+window.getCol = function(col)
+{
+    col.subtitle = {html: "<span class='text-gray ml-1'>" + col.cards + "</span>"};
+}
+
+window.getItem = function(info)
+{
+    if(info.item.delay)
+    {
+        info.item.suffix      = expired;
+        info.item.suffixClass = 'label danger rounded-xl' + (info.item.status == 'doing' ? ' mr-8' : '');
+    }
+    info.item.icon         = 'delay';
+    info.item.titleAttrs   = {'class': 'text-black clip', 'title' : info.item.title};
+    info.item.content      = {html: info.item.desc};
+    info.item.contentClass = 'text-gray';
+    info.item.footer       = {html: "<div class='flex'><span class='label label-" + info.item.status + "'>" + info.item.statusLabel + "</span><span class='label lighter ml-2'>" + info.item.dateLine + "</span></div>"};
+    if(privs.canViewPlan) info.item.titleUrl = $.createLink('productplan', 'view', `id=${info.item.id}`);
+}
+
+window.canDrop = function(dragInfo, dropInfo)
+{
+    if(!dragInfo) return false;
+
+    const column = this.getCol(dropInfo.col);
+    const lane   = this.getLane(dropInfo.lane);
+    if(!column || !lane) return false;
+
+    console.log(dropInfo);
+    if(dropInfo.type == 'item')             return false;
+    if(dragInfo.item.lane != lane.name)     return false;
+    if(dragInfo.item.status == 'wait'      && dropInfo.col == 'doing')  return privs.canStartPlan;
+    if(dragInfo.item.status == 'wait'      && dropInfo.col == 'closed') return privs.canClosePlan;
+    if(dragInfo.item.status == 'doing'     && dropInfo.col == 'done')   return privs.canFinishPlan;
+    if(dragInfo.item.status == 'doing'     && dropInfo.col == 'closed') return privs.canClosePlan;
+    if(dragInfo.item.status == 'done'      && dropInfo.col == 'doing')  return privs.canActivatePlan;
+    if(dragInfo.item.status == 'done'      && dropInfo.col == 'closed') return privs.canClosePlan;
+    if(dragInfo.item.status == 'closed'    && dropInfo.col == 'doing')  return privs.canActivatePlan;
+    return false;
+}
+
+window.onDrop = function(changes, dropInfo)
+{
+    const item  = dropInfo['drag']['item'];
+    const toCol = dropInfo['drop']['col'];
+
+    if(item.status == 'wait' && toCol == 'doing')
+    {
+        zui.Modal.confirm(confirmStart).then(result =>
+        {
+            if(result)
+            {
+                const url = $.createLink('productplan', 'start', 'planID=' + item.id)
+                $.ajaxSubmit({url});
+                this.update(changes);
+            }
+        });
+        return false;
+    }
+    else if(item.status == 'doing' && toCol == 'done')
+    {
+        zui.Modal.confirm(confirmFinish).then(result =>
+        {
+            if(result)
+            {
+                const url = $.createLink('productplan', 'finish', 'planID=' + item.id)
+                $.ajaxSubmit({url});
+                this.update(changes);
+            }
+        });
+        return false;
+    }
+    else if((item.status == 'done' || item.status == 'closed') && toCol == 'doing')
+    {
+        zui.Modal.confirm(confirmActivate).then(result =>
+        {
+            if(result)
+            {
+                const url = $.createLink('productplan', 'activate', 'planID=' + item.id)
+                $.ajaxSubmit({url});
+                this.update(changes);
+            }
+        });
+        return false;
+    }
+
+    zui.Modal.open({url: $.createLink('productplan', 'close', 'planID=' + item.id), size: 'lg'});
+    return false;
+}

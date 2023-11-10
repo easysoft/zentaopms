@@ -885,14 +885,11 @@ class kanbanModel extends model
         $this->loadModel('branch');
         $this->loadModel('productplan');
 
-        $kanbanData  = new stdclass();
         $lanes       = array();
         $columns     = array();
         $branches    = array();
         $colorIndex  = 0;
         $laneOrder   = 1;
-        $cardActions = array('view', 'createExecution', 'linkStory', 'linkBug', 'edit', 'start', 'finish', 'close', 'activate', 'delete');
-
         if($product->type == 'normal')
         {
             $branches = array('all' => $this->lang->productplan->allAB);
@@ -914,61 +911,48 @@ class kanbanModel extends model
             }
         }
 
+        $kanbanData  = array();
+        $planList    = array();
+        $lanes       = array();
+        $columns     = array();
+        $columnCards = array();
         foreach($branches as $id => $name)
         {
             if($product->type != 'normal') $plans = isset($planGroup[$product->id][$id]) ? array_filter($planGroup[$product->id][$id]) : array();
             if($product->type == 'normal') $plans = $planGroup;
-            $planList = array();
 
             foreach($plans as $planID => $plan)
             {
                 if(empty($plan) or $plan->parent == -1) continue;
-                if(!isset($planList[$plan->status])) $planList[$plan->status] = array();
+                $item = array();
+                $item['id'] = $plan->id;
+                $item['name'] = $plan->id;
+                $item['title'] = htmlspecialchars_decode($plan->title);
+                $item['status'] = $plan->status;
+                $item['statusLabel'] = zget($this->lang->productplan->statusList, $plan->status);
+                $item['delay'] = helper::today() > $plan->end ? true : false;
+                $item['desc'] =  strip_tags(htmlspecialchars_decode($plan->desc));
+                $item['dateLine'] =  date('m-d', strtotime($plan->begin)) . ' ' . $this->lang->productplan->to . ' ' . date('m-d', strtotime($plan->end));
+                $planList[$id][$plan->status][] = $item;
 
-                $plan->title   = htmlspecialchars_decode($plan->title);
-                $plan->desc    = strip_tags(htmlspecialchars_decode($plan->desc));
-                $plan->delay   = helper::today() > $plan->end ? true : false;
-                $plan->actions = array();
-                foreach($cardActions as $action)
-                {
-                    if($action == 'createExecution')
-                    {
-                        if(common::hasPriv('execution', 'create')) $plan->actions[] = $action;
-                        continue;
-                    }
-                    if($this->productplan->isClickable($plan, $action)) $plan->actions[] = $action;
-                }
-                $planList[$plan->status][] = $plan;
+                if(!isset($columnCards[$plan->status])) $columnCards[$plan->status] = 0;
+                $columnCards[$plan->status] ++;
             }
 
-            $lane = new stdclass();
-            $lane->id    = $id;
-            $lane->type  = 'branch';
-            $lane->name  = $name;
-            $lane->color = $this->config->productplan->laneColorList[$colorIndex];
-            $lane->order = $laneOrder;
-            $lane->items = $planList;
-
-            $lanes[] = $lane;
+            $lanes[] = array('id' => $id, 'name' => $id, 'title' => $name, 'color' => $this->config->productplan->laneColorList[$colorIndex], 'order' => $laneOrder);
             $laneOrder ++;
             $colorIndex ++;
             if($colorIndex == count($this->config->productplan->laneColorList)) $colorIndex = 0;
         }
 
-        foreach($this->lang->kanban->defaultColumn as $columnType => $columnName)
-        {
-            $column = new stdclass();
-            $column->id   = $columnType;
-            $column->type = $columnType;
-            $column->name = $columnName;
+        foreach($this->lang->kanban->defaultColumn as $columnType => $columnName) $columns[] = array('id' => $columnType, 'name' => $columnType, 'title' => $columnName);
+        foreach($columns as $key => $column) $columns[$key]['cards'] = !empty($columnCards[$column['name']]) ? $columnCards[$column['name']] : 0;
 
-            $columns[] = $column;
-        }
-
-        $kanbanData->id      = 'plans';
-        $kanbanData->lanes   = $lanes;
-        $kanbanData->columns = $columns;
-
+        $groupData['key']           = 'planKanban';
+        $groupData['data']['lanes'] = $lanes;
+        $groupData['data']['cols']  = $columns;
+        $groupData['data']['items'] = $planList;
+        $kanbanData[] = array('items' => array($groupData), 'key' => 'planKanban', 'heading' => array('title' => $this->lang->productplan->all . ' ' . count($planList)));
         return $kanbanData;
     }
 

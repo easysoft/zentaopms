@@ -106,7 +106,7 @@ class productplanZen extends productplan
             $this->view->branches = array('all' => $this->lang->productplan->allAB . ' ' . $planCount) + $branchPairs;
         }
 
-        $this->view->kanbanData = $this->loadModel('kanban')->getPlanKanban($product, $branchID, $planGroup);
+        $this->view->kanbanList = $this->loadModel('kanban')->getPlanKanban($product, $branchID, $planGroup);
     }
 
     /**

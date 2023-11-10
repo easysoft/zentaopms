@@ -1,0 +1,6 @@
+.card {padding: 6px;}
+.label-wait {--tw-ring-color: rgba(var(--color-gray-100-rgb),var(--tw-ring-opacity)); background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity)); color: rgba(var(--color-gray-500-rgb),var(--tw-text-opacity));}
+.label-doing {background-color: rgba(var(--color-danger-100-rgb),var(--tw-bg-opacity)); color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); --tw-ring-color: rgba(var(--color-danger-500-rgb),var(--tw-ring-opacity));}
+.label-done {background-color: rgba(var(--color-success-100-rgb),var(--tw-bg-opacity)); color: rgba(var(--color-success-500-rgb),var(--tw-text-opacity)); --tw-ring-color: rgba(var(--color-success-500-rgb),var(--tw-ring-opacity));}
+.label-closed {background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity)); color: rgba(var(--color-gray-500-rgb),var(--tw-text-opacity)); --tw-ring-color: rgba(var(--color-gray-500-rgb),var(--tw-ring-opacity));}
+

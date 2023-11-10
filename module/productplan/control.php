@@ -291,7 +291,7 @@ class productplan extends control
 
         $viewType = $this->cookie->viewType ? $this->cookie->viewType : 'list';
 
-        $this->commonAction($productID, $branch);
+        $this->commonAction($productID, (int)$branch);
         $product     = $this->view->product;
         $productName = empty($product) ? '' : $product->name;
         if($product->type != 'normal') $this->config->productplan->dtable->fieldList['branch']['title'] = $this->lang->product->branch;
