@@ -380,6 +380,7 @@ define('TABLE_HOLIDAY',       '`' . $config->db->prefix . 'holiday`');
 define('TABLE_HISTORY',       '`' . $config->db->prefix . 'history`');
 define('TABLE_EXTENSION',     '`' . $config->db->prefix . 'extension`');
 define('TABLE_CRON',          '`' . $config->db->prefix . 'cron`');
+define('TABLE_QUEUE',         '`' . $config->db->prefix . 'queue`');
 define('TABLE_BLOCK',         '`' . $config->db->prefix . 'block`');
 define('TABLE_DOCACTION',     '`' . $config->db->prefix . 'docaction`');
 define('TABLE_DOCCONTENT',    '`' . $config->db->prefix . 'doccontent`');

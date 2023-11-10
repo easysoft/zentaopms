@@ -32,7 +32,7 @@ panel
     set::bodyClass('p-0'),
     !empty($config->global->cron) ? set::headingActions(array
     (
-        array('class' => 'mr-3 ajaxRefresh', 'data-href' => inlink('ajaxExec', 'start=1'), 'text' => $lang->cron->openProcess, 'onclick' => 'refreshURL(this)'),
+        array('class' => 'mr-3 ajaxRefresh', 'data-href' => inlink('ajaxExec', 'restart=1'), 'text' => $lang->cron->openProcess, 'onclick' => 'refreshURL(this)'),
         array('class' => 'mr-3 ajaxTurnon ajax-submit', 'url' => inlink('turnon'), 'text' => $lang->cron->turnonList[0], 'data-confirm' => $this->lang->cron->confirmTurnon),
         array('class' => 'mr-3 primary', 'data-toggle' => 'modal', 'url' => inlink('create'), 'text' => $lang->cron->create),
     )) : null,
