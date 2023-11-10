@@ -18,6 +18,8 @@ jsVar('orderBy',   $orderBy);
 jsVar('productID', $productID);
 jsVar('typeList', $lang->execution->typeList);
 jsVar('delayed', $lang->execution->delayed);
+jsVar('pageExecSummary', $lang->execution->pageExecSummary);
+jsVar('checkedExecSummary', $lang->execution->checkedExecSummary);
 
 $footToolbar = array();
 $canBatchEdit         = common::hasPriv('execution', 'batchEdit');
@@ -122,6 +124,8 @@ dtable
     set::checkable($canBatchAction),
     set::fixedLeftWidth('44%'),
     set::onRenderCell(jsRaw('window.onRenderCell')),
+    set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.id.indexOf('pid') > -1;}")),
+    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(this, checkedIDList);}")),
     set::footToolbar($footToolbar),
     set::footPager(
         usePager

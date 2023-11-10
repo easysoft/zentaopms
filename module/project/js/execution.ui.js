@@ -59,7 +59,31 @@ window.onRenderCell = function(result, {col, row})
         result[result.length] = {html: executionName};
         return result;
     }
-    if(col.name == 'rawID' && row.id.indexOf('tid') > -1) result[1] = '';
 
     return result;
 }
+
+window.footerSummary = function(element, checkedIdList)
+{
+    const rows = element.layout.rows;
+    var totalCount = 0;
+    var waitCount  = 0;
+    var doingCount = 0;
+    rows.forEach(function(data)
+    {
+        if(checkedIdList.length > 0 && checkedIdList.indexOf(data.id) > -1)
+        {
+            if(data.data.status == 'wait')  waitCount ++;
+            if(data.data.status == 'doing') doingCount ++;
+            totalCount ++;
+        }
+        else if(checkedIdList.length == 0)
+        {
+            if(data.data.status == 'wait')  waitCount ++;
+            if(data.data.status == 'doing') doingCount ++;
+            totalCount ++;
+        }
+    });
+
+    return {html: (checkedIdList.length > 0 ? checkedExecSummary : pageExecSummary).replace('%total%', totalCount).replace('%wait%', waitCount).replace('%doing%', doingCount)};
+};
