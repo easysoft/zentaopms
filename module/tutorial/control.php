@@ -40,6 +40,7 @@ class tutorial extends control
 
         $this->view->title   = $this->lang->tutorial->common;
         $this->view->current = $task;
+        $this->view->tasks   = $this->lang->tutorial->tasks;
         $this->view->setting = $setting;
         $this->view->referer = base64_decode($referer);
         $this->view->mode    = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
