@@ -21,6 +21,10 @@ if(isset($_SERVER['HTTP_REFERER']) && str_contains($_SERVER['HTTP_REFERER'], 'ca
 $hideExportRange     = isset($_SERVER['HTTP_REFERER']) && str_contains($_SERVER['HTTP_REFERER'], 'kanban');
 $customExportRowList = array();
 $isCustomExport      = (!empty($customExport) and !empty($allExportFields));
+$showBizGuide        = $config->edition == 'open' && empty($config->{$this->moduleName}->closeBizGuide) ? true : false;
+$bizGuideLink        = common::checkNotCN() ? 'https://www.zentao.pm/page/zentao-pricing.html' : 'https://www.zentao.net/page/enterprise.html';
+$bizName             = $showBizGuide ? "<a href='{$bizGuideLink}' target='_blank' class='text-primary'>{$lang->bizName}</a>" : '';
+
 if($isCustomExport)
 {
     $allExportFields  = explode(',', $allExportFields);
@@ -113,8 +117,7 @@ formPanel
     css('.modal-content{padding-top: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; padding-bottom: 1.25rem;}'),
     setCssVar('--form-grid-label-width', '4rem'),
     set::target('_self'),
-    set::actions(array('submit')),
-    set::submitBtnText($lang->export),
+    set::actions(array()),
     on::submit('setDownloading'),
     formGroup
     (
@@ -175,7 +178,44 @@ formPanel
         )
     ),
     /* Custom export. */
-    $customExportRowList
+    $customExportRowList,
+    formRow
+    (
+        setClass('justify-center'),
+        div
+        (
+            setClass('form-actions'),
+            btn
+            (
+                set::btnType('submit'),
+                set::type('primary'),
+                $lang->export
+            )
+        ),
+    ),
+    $showBizGuide ? formRow
+    (
+        setClass('justify-center bizGuideBox'),
+        div
+        (
+            span
+            (
+                setClass('text-gray'),
+                html(sprintf($lang->file->bizGuide, $bizName))
+            ),
+            a
+            (
+                setID('closeBizGuideButton'),
+                setClass('btn btn-default ghost text-gray'),
+                set::href('#'),
+                icon(
+                    'close',
+                    setStyle('font-size', '12px')
+                ),
+                on::click('closeBizGuide')
+            )
+        )
+    ) : null
 );
 
 set::title($lang->file->exportData);
@@ -297,6 +337,21 @@ if($('.dtable .dtable-header .has-checkbox').length > 0)
         $('#exportType').val('selected');
         $.cookie.set('checkedItem', checkedList.join(','));
     }
+}
+
+
+/**
+ * 关闭升级到企业版提示。
+ * Close the biz guide.
+ *
+ * @access public
+ * @return void
+ */
+window.closeBizGuide = function()
+{
+    let closeBizGuideLink = $.createLink('file', 'ajaxcloseBizGuide', 'module={$this->moduleName}');
+    $.get(closeBizGuideLink);
+    $('.bizGuideBox').remove();
 }
 
 JAVASCRIPT
