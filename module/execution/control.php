@@ -1711,7 +1711,6 @@ class execution extends control
         $kanbanGroup = empty($myExecutions) ? $kanbanGroup : array($myExecutions) + $kanbanGroup;
 
         $kanbanList  = array();
-        $regionData  = array();
         $lanes       = array();
         $items       = array();
         $columnCards = array();
@@ -1740,12 +1739,8 @@ class execution extends control
         $groupData['data']['items'] = $items;
         $kanbanList[] = array('items' => array($groupData), 'key' => 'executionKanban', 'heading' => array('title' => $this->lang->execution->executionKanban));
 
-        $this->view->title        = $this->lang->execution->executionKanban;
-        $this->view->kanbanList   = $kanbanList;
-        $this->view->projects     = $projects;
-        $this->view->projectCount = $projectCount;
-        $this->view->statusCount  = $statusCount;
-
+        $this->view->title      = $this->lang->execution->executionKanban;
+        $this->view->kanbanList = $kanbanList;
         $this->display();
     }
 

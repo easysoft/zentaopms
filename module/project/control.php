@@ -353,68 +353,8 @@ class project extends control
      */
     public function kanban()
     {
-        list($kanbanGroup, $latestExecutions) = $this->project->getStats4Kanban();
-        $programPairs = array(0 => $this->lang->project->noProgram) + $this->loadModel('program')->getPairs(true, 'order_asc');
-
-        $kanbanList = array();
-        $regionData = array();
-        foreach($kanbanGroup as $regionKey => $region)
-        {
-            if(!$region) continue;
-
-            $lanes       = array();
-            $items       = array();
-            $columnCards = array();
-            foreach($region as $laneKey => $laneData)
-            {
-                $lanes[] = array('name' => $laneKey, 'title' => zget($programPairs, $laneKey));
-                $columns = array();
-                foreach(array('wait', 'doing', 'closed') as $columnKey)
-                {
-                    $columns[] = array('name' => $columnKey, 'title' => $columnKey != 'doing' ? $this->lang->project->{$columnKey . 'Projects'} : $this->lang->project->statusList[$columnKey]);
-                    if($columnKey == 'doing')
-                    {
-                        $columns[] = array('name' => 'doingProjects',   'parentName' => 'doing', 'title' => $this->lang->project->doingProjects,   'order' => 1);
-                        $columns[] = array('name' => 'doingExecutions', 'parentName' => 'doing', 'title' => $this->lang->project->doingExecutions, 'order' => 2);
-                    }
-
-                    $cardList = !empty($laneData[$columnKey]) ? $laneData[$columnKey] : array();
-                    foreach($cardList as $card)
-                    {
-                        $columnKey = $columnKey == 'doing' ? 'doingProjects' : $columnKey;
-                        $items[$laneKey][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => $card->name, 'status' => $card->status, 'type' => 'project', 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => $card->progress);
-
-                        if(!isset($columnCards[$columnKey])) $columnCards[$columnKey] = 0;
-                        $columnCards[$columnKey] ++;
-
-                        if($columnKey == 'doingProjects')
-                        {
-                            if(!empty($latestExecutions[$card->id]))
-                            {
-                                $columnKey = 'doingExecutions';
-                                $execution = $latestExecutions[$card->id];
-                                $items[$laneKey][$columnKey][] = array('id' => $execution->id, 'name' => $execution->id, 'title' => $execution->name, 'status' => $execution->status, 'type' => 'execution', 'delay' => !empty($execution->delay) ? $execution->delay : 0, 'progress' => $execution->progress);
-
-                                if(!isset($columnCards[$columnKey])) $columnCards[$columnKey] = 0;
-                                $columnCards[$columnKey] ++;
-                            }
-                        }
-                    }
-                }
-            }
-
-            foreach($columns as $key => $column) $columns[$key]['cards'] = !empty($columnCards[$column['name']]) ? $columnCards[$column['name']] : 0;
-            $groupData['key']           = $regionKey;
-            $groupData['data']['lanes'] = $lanes;
-            $groupData['data']['cols']  = $columns;
-            $groupData['data']['items'] = $items;
-            $kanbanList[] = array('items' => array($groupData), 'key' => $regionKey, 'heading' => array('title' => $this->lang->project->typeList[$regionKey]));
-        }
-
-        $this->view->title            = $this->lang->project->kanban;
-        $this->view->kanbanList       = $kanbanList;
-        $this->view->latestExecutions = $latestExecutions;
-        $this->view->programPairs     = $programPairs;
+        $this->view->title      = $this->lang->project->kanban;
+        $this->view->kanbanList = $this->projectZen->getKanbanData();
         $this->display();
     }
 
