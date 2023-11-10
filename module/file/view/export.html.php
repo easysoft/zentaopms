@@ -26,19 +26,10 @@
 </style>
 <?php if($config->edition == 'open' && empty($config->{$this->moduleName}->closeBizGuide)):?>
 <style>
-#mainContent .actionBox {text-align: left;}
-#submit {margin-left: 130px;}
-#exportTable .bizGuideBox {display: inline; padding-left: 10px;}
-#exportTable .bizGuideBox > span {color: #838a9d; vertical-align: sub;}
-#exportTable .bizGuideBox > span > a {vertical-align: baseline;}
-#closeBizGuideButton {vertical-align: bottom;}
-#exportTable .bizGuideBox > a .icon-close {font-size: 12px;}
+#exportTable .bizGuideBox span {color: #838a9d;}
+#closeBizGuideButton {vertical-align: initial;}
+#closeBizGuideButton .icon-close {font-size: 12px; color: #838a9d;}
 </style>
-<?php if(common::checkNotCN()):?>
-<style>
-#submit {margin-left: 40px;}
-</style>
-<?php endif;?>
 <?php endif;?>
 <script>
 function setDownloading()
@@ -380,18 +371,23 @@ if($isCustomExport)
             <tr>
               <th></th>
                 <?php $colspan = $config->edition == 'open' && empty($config->{$this->moduleName}->closeBizGuide) ? "colspan='2'" : '';?>
-                <td class='actionBox' <?php echo $colspan?>>
+                <td class='text-center'>
                 <?php echo html::submitButton($lang->export, "onclick='setDownloading();'", 'btn btn-primary');?>
-                <?php if($config->edition == 'open' && empty($config->{$this->moduleName}->closeBizGuide)):?>
-                <div class='bizGuideBox'>
+              </td>
+            </tr>
+            <?php if($config->edition == 'open' && empty($config->{$this->moduleName}->closeBizGuide)):?>
+            <tr class='bizGuideBox'>
+              <th></th>
+              <td colspan='2'>
+                <div>
                     <?php $bizGuideLink = common::checkNotCN() ? 'https://www.zentao.pm/page/zentao-pricing.html' : 'https://www.zentao.net/page/enterprise.html';?>
                     <?php $bizName      = html::a($bizGuideLink, $lang->bizName, '', "class='text-primary' target='_blank'");?>
                     <span><?php echo sprintf($lang->file->bizGuide, $bizName);?></span>
                     <?php echo html::a('#', "<i class='icon-close'></i>", '', 'class="btn btn-link" id="closeBizGuideButton" onclick=closeBizGuide(this)');?>
                 </div>
-                <?php endif;?>
               </td>
             </tr>
+            <?php endif;?>
           </tbody>
         </table>
       </form>
