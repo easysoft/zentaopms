@@ -21,10 +21,15 @@ featureBar
 );
 
 $canCreatePlan = common::canModify('product', $product) && common::hasPriv($app->rawModule, 'create');
-$canCreatePlan ? toolbar
+toolbar
 (
-    item(set(array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->productplan->create, 'url' => createLink($app->rawModule, 'create', "productID={$productID}&branch={$branch}")))),
-) : null;
+    div
+    (
+        btn(setClass($viewType == 'list'   ? 'text-primary' : 'text-darker'), set::icon('format-list-bulleted'), setData('type', 'list'), setClass('switchButton')),
+        btn(setClass($viewType == 'kanban' ? 'text-primary' : 'text-darker'), set::icon('kanban'), setData('type', 'kanban'), setClass('switchButton')),
+    ),
+    $canCreatePlan ? item(set(array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->productplan->create, 'url' => createLink($app->rawModule, 'create', "productID={$productID}&branch={$branch}")))) : null,
+);
 
 $cols      = $this->loadModel('datatable')->getSetting('productplan');
 $tableData = initTableData($plans, $cols, $this->productplan);

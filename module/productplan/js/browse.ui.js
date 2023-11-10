@@ -185,3 +185,10 @@ window.renderCell = function(result, info)
 
     return result;
 }
+
+$(document).on('click', '.switchButton', function()
+{
+    const type = $(this).data('type');
+    $.cookie.set('viewType', type);
+    loadCurrentPage();
+})
