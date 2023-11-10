@@ -489,7 +489,7 @@ $lang->qa->dividerMenu = ',bug,testtask,caselib,automation,';
 /* DevOps menu. */
 $lang->devops->homeMenu = new stdclass();
 //$lang->devops->homeMenu->dashboard   = array('link' => "{$lang->dashboard}|system|dashboard");
-$lang->devops->homeMenu->repos        = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import');
+$lang->devops->homeMenu->repos        = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo');
 $lang->devops->homeMenu->compile      = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->homeMenu->artifactrepo = array('link' => "{$lang->devops->artifactrepo}|artifactrepo|browse", 'alias' => 'create');
 $lang->devops->homeMenu->apps         = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs,sonarqube', 'alias' => 'createapplication,binduser,edit');
