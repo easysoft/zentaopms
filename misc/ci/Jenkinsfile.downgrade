@@ -60,7 +60,7 @@ pipeline {
               steps {
                 sh 'env'
                 replayCheckout([
-                  [name: "downRepo", subDir: true, url: "${env.DOWNGRADE_GIT_REPO}", credentialsId: "git-zcorp-cc-jenkins-bot-http", branch: "downgrade/${env.GIT_BRANCH}/src"]
+                  [name: "downRepo", subDir: true, url: "${env.DOWNGRADE_GIT_REPO}", credentialsId: "git-zcorp-cc-jenkins-bot-http", branch: "downgrade/blank"]
                 ])
 
                 container('package') {
@@ -73,27 +73,27 @@ pipeline {
                   sh 'ls -l $ZENTAO_RELEASE_PATH'
                   sh 'test ! -f ${ZENTAO_RELEASE_PATH}/downgradeReport.html'
                 }
-                
-                post {
-                  failure {
-                    container('package') {
-                      sh 'mkdir ./report && cp ${ZENTAO_RELEASE_PATH}/downgradeReport.html ./report'
-                    }
-
-                    publishHTML([
-                      allowMissing: true,
-                      alwaysLinkToLastBuild: false,
-                      keepAll: true,
-                      reportDir: './report',
-                      reportFiles: 'downgradeReport.html',
-                      reportName: 'DowngradeReport'
-                    ])
-
-                    ximNotify(title: "禅道增量降级失败", content: "[PHP语法错误报告]($BUILD_URL/DowngradeReport/)", contentHeaderFile: job.headerFileName())
-                  }
-                }
-
               }
+
+              post {
+                failure {
+                  container('package') {
+                    sh 'mkdir ./report && cp ${ZENTAO_RELEASE_PATH}/downgradeReport.html ./report'
+                  }
+
+                  publishHTML([
+                    allowMissing: true,
+                    alwaysLinkToLastBuild: false,
+                    keepAll: true,
+                    reportDir: './report',
+                    reportFiles: 'downgradeReport.html',
+                    reportName: 'DowngradeReport'
+                  ])
+
+                  ximNotify(title: "禅道全量降级失败", content: "[PHP语法错误报告]($BUILD_URL/DowngradeReport/)")
+                }
+              }
+
             }
 
           }
@@ -104,5 +104,6 @@ pipeline {
   }
 
 }
+
 
 
