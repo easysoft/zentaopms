@@ -36,6 +36,7 @@ toolbar
         setClass('btn primary'),
         set::icon('plus'),
         set::url(createLink('testtask', 'create', "product=0&executionID=$executionID&build=0&projectID=$execution->project")),
+        set('data-app', $app->tab),
         $lang->testtask->create
     ) : null
 );
