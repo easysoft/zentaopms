@@ -21,6 +21,11 @@ class dtable extends wg
 
     static $dtableID = 0;
 
+    public static function getPageCSS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
     protected function created()
     {
         global $app;
@@ -29,89 +34,52 @@ class dtable extends wg
         $this->setDefaultProps(array('id' => static::$dtableID ? ($defaultID . static::$dtableID) : $defaultID));
         static::$dtableID++;
 
-        $customColsProp = $this->prop('customCols');
-        if($customColsProp)
-        {
-            $app->loadLang('datatable');
-            $customUrl = is_bool($customColsProp) || empty($customColsProp['url']) ? null : $customColsProp['url'];
-            $this->setProp('customCols', array(
-                'custom' => array(
-                    'url' => $customUrl ? $customUrl : createLink('datatable', 'ajaxcustom', "module=$app->moduleName&method=$app->methodName"),
-                    'text' => $app->lang->datatable->custom
-                ),
-                'setGlobal' => array(
-                    'url' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}"),
-                    'text' => $app->lang->datatable->setGlobal,
-                ),
-                'reset' => array(
-                    'url' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}"),
-                    'text' => $app->lang->datatable->reset,
-                ),
-                'resetGlobal' => array(
-                    'url' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=1"),
-                    'text' => $app->lang->datatable->resetGlobal,
-                ),
-            ));
-        }
-
+        global $app;
         $module = $this->prop('module', $app->rawModule);
         if(!isset($app->lang->$module)) $app->loadLang($module);
 
         /* Set col default name and title. */
-        $colConfigs = $this->prop('cols');
-        foreach($colConfigs as $field => &$config)
-        {
-            if(is_object($config)) $config = (array)$config;
-
-            if(!isset($config['name']))  $config['name'] = $field;
-            if(!isset($config['title'])) $config['title'] = zget($app->lang->{$module}, $config['name'], zget($app->lang, $config['name']));
-            if(isset($config['link']) && is_array($config['link'])) $config['link'] = $this->getLink($config['link']);
-            if(isset($config['assignLink']) && is_array($config['assignLink'])) $config['assignLink'] = $this->getLink($config['assignLink']);
-
-            if(!empty($config['type']) && $config['type'] == 'control')
-            {
-                if(!empty($config['control']) && is_string($config['control'])) $config['control'] = array('type' => $config['control']);
-
-                if(isset($config['controlItems']))
-                {
-                    if(empty($config['control'])) $config['control'] = array('type' => 'picker');
-
-                    $items    = $config['controlItems'];
-                    $newItems = array();
-                    foreach($items as $key => $value)
-                    {
-                        if(is_numeric($key) && is_array($value)) $newItems[] = $value;
-                        else $newItems[] = array('text' => $value, 'value' => $key);
-                    }
-                    $config['control']['props']['items'] = $newItems;
-                    unset($config['controlItems']);
-
-                    if(isset($config['defaultValue'])) $config['control']['props']['defaultValue'] = $config['defaultValue'];
-                }
-            }
-
-            if(!empty($config['actionsMap']))
-            {
-                foreach($config['actionsMap'] as &$action)
-                {
-                    if(isset($action['data-toggle']) && !isset($action['data-position'])) $action['data-position'] = 'center';
-
-                    $className = zget($action, 'className', '');
-                    if(!empty($action['ajaxSubmit']))
-                    {
-                        $className .= ' ajax-submit';
-                        if(!isset($action['data-confirm'])) $action['data-confirm'] = zget($app->lang->$module, 'confirmDelete');
-                    }
-                    $action['className'] = "{$className} text-primary";
-                }
-            }
-        }
-        $this->setProp('cols', array_values($colConfigs));
+        $this->initCustomCols();
+        $this->initCols($module);
+        $this->initSortLink();
+        $this->initPager();
+        $this->initFooterBar();
 
         $tableData = $this->prop('data', array());
         $this->setProp('data', array_values($tableData));
+    }
 
-        /* Add dtable load info to pager links. */
+    /**
+     * 格式化排序链接及默认值。
+     * Format sorting links and default values.
+     *
+     * @access public
+     * @return void
+     */
+    public function initSortLink()
+    {
+        $orderBy = $this->prop('orderBy');
+        if(!$orderBy) $orderBy = data('orderBy');
+        if(is_string($orderBy))
+        {
+            list($orderByName, $orderByType) = explode('_', strpos($orderBy, '_') === false ? $orderBy . '_desc' : $orderBy);
+            $this->setProp('orderBy', array($orderByName => $orderByType));
+        }
+
+        global $app;
+        $sortLink = $this->prop('sortLink');
+        if(is_string($sortLink) && $sortLink) $this->setProp('sortLink', array('url' => $sortLink, 'data-app' => $app->tab));
+    }
+
+    /**
+     * 格式化表格分页属性。
+     * Format table pagination properties.
+     *
+     * @access public
+     * @return void
+     */
+    public function initPager()
+    {
         $pager = $this->prop('footPager');
         if(!empty($pager) && isset($pager['items']))
         {
@@ -131,19 +99,144 @@ class dtable extends wg
             }
             $this->setProp('footPager', $pager);
         }
+    }
 
-        $orderBy = $this->prop('orderBy');
-        if(!$orderBy) $orderBy = data('orderBy');
-        if(is_string($orderBy))
+    /**
+     * 格式化表格自定义列属性
+     * Format table custom column properties
+     *
+     * @access public
+     * @return void
+     */
+    public function initCustomCols()
+    {
+        $customColsProp = $this->prop('customCols');
+        if($customColsProp)
         {
-            list($orderByName, $orderByType) = explode('_', strpos($orderBy, '_') === false ? $orderBy . '_desc' : $orderBy);
-            $this->setProp('orderBy', array($orderByName => $orderByType));
+            global $app;
+            $app->loadLang('datatable');
+            $customUrl = is_bool($customColsProp) || empty($customColsProp['url']) ? null : $customColsProp['url'];
+            $this->setProp('customCols', array(
+                'custom' => array(
+                    'url' => $customUrl ? $customUrl : createLink('datatable', 'ajaxcustom', "module=$app->moduleName&method=$app->methodName"),
+                    'text' => $app->lang->datatable->custom
+                ),
+                'setGlobal' => array(
+                    'url' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}"),
+                    'text' => $app->lang->datatable->setGlobal,
+                ),
+                'reset' => array(
+                    'url' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}"),
+                    'text' => $app->lang->datatable->reset,
+                ),
+                'resetGlobal' => array(
+                    'url' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=1"),
+                    'text' => $app->lang->datatable->resetGlobal,
+                )
+            ));
+        }
+    }
+
+    /**
+     * 格式化表格列配置。
+     * Format table column configuration.
+     *
+     * @param  int    $module
+     * @access public
+     * @return void
+     */
+    public function initCols($module)
+    {
+        global $app;
+        $colConfigs = $this->prop('cols');
+        foreach($colConfigs as $field => &$config)
+        {
+            if(is_object($config)) $config = (array)$config;
+
+            if(!isset($config['name']))  $config['name']  = $field;
+            if(!isset($config['title'])) $config['title'] = zget($app->lang->{$module}, $config['name'], zget($app->lang, $config['name']));
+            if(isset($config['link']) && is_array($config['link'])) $config['link'] = $this->getLink($config['link']);
+            if(isset($config['assignLink']) && is_array($config['assignLink'])) $config['assignLink'] = $this->getLink($config['assignLink']);
+
+            if(!empty($config['type']) && $config['type'] == 'control') $config = $this->initFormCol($config);
+
+            if(!empty($config['actionsMap'])) $config['actionsMap'] = $this->initActions($config['actionsMap'], $module);
         }
 
-        $sortLink = $this->prop('sortLink');
-        if(is_string($sortLink) && $sortLink) $this->setProp('sortLink', array('url' => $sortLink, 'data-app' => $app->tab));
+        $this->setProp('cols', array_values($colConfigs));
+    }
 
-        /* Support to set footToolbar with items array. */
+    /**
+     * 格式化表格表单列配置。
+     * Format table form column configuration.
+     *
+     * @param  array  $config
+     * @access public
+     * @return array
+     */
+    public function initFormCol(array $config): array
+    {
+        if(!empty($config['control']) && is_string($config['control'])) $config['control'] = array('type' => $config['control']);
+
+        if(isset($config['controlItems']))
+        {
+            if(empty($config['control'])) $config['control'] = array('type' => 'picker');
+
+            $items    = $config['controlItems'];
+            $newItems = array();
+            foreach($items as $key => $value)
+            {
+                if(is_numeric($key) && is_array($value)) $newItems[] = $value;
+                else $newItems[] = array('text' => $value, 'value' => $key);
+            }
+            $config['control']['props']['items'] = $newItems;
+            unset($config['controlItems']);
+
+            if(isset($config['defaultValue'])) $config['control']['props']['defaultValue'] = $config['defaultValue'];
+        }
+
+        return $config;
+    }
+
+    /**
+     * 格式化表格操作列配置。
+     * Format table action column configuration.
+     *
+     * @param  array  $actionsMap
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function initActions(array $actionsMap,  string $module): array
+    {
+        if(empty($actionsMap)) return $actionsMap;
+
+        global $app;
+        foreach($actionsMap as &$action)
+        {
+            if(isset($action['data-toggle']) && !isset($action['data-position'])) $action['data-position'] = 'center';
+
+            $className = zget($action, 'className', '');
+            if(!empty($action['ajaxSubmit']))
+            {
+                $className .= ' ajax-submit';
+                if(!isset($action['data-confirm'])) $action['data-confirm'] = zget($app->lang->$module, 'confirmDelete');
+            }
+            $action['className'] = "{$className} text-primary";
+        }
+
+        return $actionsMap;
+    }
+
+    /**
+     * 格式化表格底部工具栏配置。
+     * Format table bottom toolbar configuration.
+     *
+     * @access public
+     * @return void
+     */
+    public function initFooterBar()
+    {
         $footToolbar = $this->prop('footToolbar');
         if(!empty($footToolbar))
         {
@@ -161,11 +254,6 @@ class dtable extends wg
             }
             $this->setProp('footToolbar', $footToolbar);
         }
-    }
-
-    public static function getPageCSS(): string|false
-    {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
     }
 
     /**
