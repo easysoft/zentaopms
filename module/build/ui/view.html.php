@@ -58,9 +58,7 @@ detailHeader
 
 jsVar('initLink',       $link);
 jsVar('type',           $type);
-jsVar('orderBy',        $orderBy);
 jsVar('buildID',        $build->id);
-jsVar('sortLink',       helper::createLink($buildModule, 'view', "buildID={$build->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
 jsVar('confirmDelete',  $lang->build->confirmDelete);
 jsVar('currentAccount', $app->user->account);
 jsVar('buildProduct',   $build->product);
@@ -129,7 +127,8 @@ detailBody
                     set::cols(array_values($config->build->story->dtable->fieldList)),
                     set::data($stories),
                     set::checkable($canBatchUnlinkStory || $canBatchCloseStory),
-                    set::sortLink(jsRaw('window.createSortLink')),
+                    set::sortLink(createLink($buildModule, 'view', "buildID={$build->id}&type=story&link={$link}&param={$param}&orderBy={name}_{sortType}")),
+                    set::orderBy($orderBy),
                     set::footToolbar($storyFootToolbar),
                     set::footPager(usePager('storyPager', '', array(
                         'recPerPage'  => $storyPager->recPerPage,
@@ -158,7 +157,8 @@ detailBody
                     set::cols(array_values($config->build->bug->dtable->fieldList)),
                     set::data($bugs),
                     set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
-                    set::sortLink(jsRaw('window.createSortLink')),
+                    set::sortLink(createLink($buildModule, 'view', "buildID={$build->id}&type=bug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
+                    set::orderBy($orderBy),
                     set::footToolbar($bugFootToolbar),
                     set::footPager(usePager('bugPager', '', array(
                         'recPerPage'  => $bugPager->recPerPage,
@@ -180,7 +180,8 @@ detailBody
                     set::userMap($users),
                     set::cols(array_values($config->build->generatedBug->dtable->fieldList)),
                     set::data(array_values($generatedBugs)),
-                    set::sortLink(jsRaw('window.createSortLink')),
+                    set::sortLink(createLink($buildModule, 'view', "buildID={$build->id}&type=generatedBug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
+                    set::orderBy($orderBy),
                     set::footPager(usePager('generatedBugPager', '', array(
                         'recPerPage'  => $generatedBugPager->recPerPage,
                         'recTotal'    => $generatedBugPager->recTotal,

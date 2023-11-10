@@ -28,23 +28,6 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
     window.appendLinkBtn();
 });
 
-/**
- * 生成列表的排序链接。
- * Create sort link for table.
- *
- * @param  object col
- * @access public
- * @return string
- */
-window.createSortLink = function(col)
-{
-    let tabType = $('.tab-pane.active').attr('id');
-    let sort    = `${col.name}_asc`;
-
-    if(sort == orderBy) sort = col.name + '_desc';
-    return sortLink.replace('{type}', tabType).replace('{orderBy}', sort);
-}
-
 window.showLink = function(obj)
 {
     var $this  = $(obj);

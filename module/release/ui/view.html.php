@@ -22,9 +22,7 @@ detailHeader
     !empty($menus) ? to::suffix(btnGroup(set::items($menus))) : null
 );
 
-jsVar('orderBy', $orderBy);
 jsVar('releaseID', $release->id);
-jsVar('sortLink', helper::createLink($releaseModule, 'view', "releaseID={$release->id}&type={type}&link={$link}&param={$param}&orderBy={orderBy}"));
 
 /* Table data and setting for finished stories tab. */
 jsVar('summary', $summary);
@@ -154,7 +152,8 @@ detailBody
                     set::data($storyTableData),
                     set::userMap($users),
                     set::checkable($canBatchUnlinkStory || $canBatchCloseStory),
-                    set::sortLink(jsRaw('window.createSortLink')),
+                    set::sortLink(createLink($releaseModule, 'view', "releaseID={$release->id}&type=story&link={$link}&param={$param}&orderBy={name}_{sortType}")),
+                    set::orderBy($orderBy),
                     set::footToolbar($storyFootToolbar),
                     set::footPager(usePager('storyPager', '', array('recPerPage' => $storyPager->recPerPage, 'recTotal' => $storyPager->recTotal, 'linkCreator' => createLink($releaseModule, 'view', "releaseID={$release->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}")))),
                     set::checkInfo(jsRaw('function(checkedIDList){return window.setStoryStatistics(this, checkedIDList);}'))
@@ -180,7 +179,8 @@ detailBody
                     set::cols(array_values($config->release->dtable->bug->fieldList)),
                     set::data($bugTableData),
                     set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
-                    set::sortLink(jsRaw('window.createSortLink')),
+                    set::sortLink(createLink($releaseModule, 'view', "releaseID={$release->id}&type=bug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
+                    set::orderBy($orderBy),
                     set::footToolbar($bugFootToolbar),
                     set::footPager(usePager('bugPager', '', array('recPerPage' => $bugPager->recPerPage, 'recTotal' => $bugPager->recTotal, 'linkCreator' => createLink($releaseModule, 'view', "releaseID={$release->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
                 )
@@ -205,7 +205,8 @@ detailBody
                     set::cols(array_values($config->release->dtable->leftBug->fieldList)),
                     set::data($leftBugTableData),
                     set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
-                    set::sortLink(jsRaw('window.createSortLink')),
+                    set::sortLink(createLink($releaseModule, 'view', "releaseID={$release->id}&type=leftBug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
+                    set::orderBy($orderBy),
                     set::footToolbar($leftBugFootToolbar),
                     set::footPager(usePager('leftBugPager', '', array('recPerPage' => $leftBugPager->recPerPage, 'recTotal' => $leftBugPager->recTotal, 'linkCreator' => createLink($releaseModule, 'view', "releaseID={$release->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$leftBugPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
                 )

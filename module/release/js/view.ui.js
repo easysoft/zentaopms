@@ -71,37 +71,6 @@ window.setStoryStatistics = function(element, checkedIDList)
 }
 
 /**
- * 生成列表的排序链接。
- * Create sort link for table.
- *
- * @param  object col
- * @param  string tabType
- * @access public
- * @return string
- */
-window.createSortLink = function(col, sortType)
-{
-    const tabID   = $('.tab-pane.active').attr('id');
-    let   tabType = '';
-    switch(tabID)
-    {
-        case 'resolvedBug':
-            tabType = 'bug';
-            break;
-        case 'leftBug':
-            tabType = 'leftBug';
-            break;
-        default:
-            tabType = 'story';
-            break;
-    }
-
-    let sort = `${col.name}_asc`;
-    if(sort == orderBy) sort = col.name + '_desc';
-    return sortLink.replace('{type}', tabType).replace('{orderBy}', sort);
-}
-
-/**
  * 移除关联的对象。
  * Remove linked object.
  *
