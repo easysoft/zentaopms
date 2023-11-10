@@ -2,6 +2,7 @@ $(function()
 {
     if(typeof(storyType) == 'undefined') storyType = '';
     if(typeof(rawModule) == 'undefined') rawModule = 'product';
+    if(typeof(rawMethod) == 'undefined') rawMethod = '';
     if(typeof(app)       == 'undefined') app       = '';
     if(typeof(execution) != 'undefined') rawModule = 'projectstory';
     if(['project', 'projectstory'].indexOf(rawModule) === -1 && app != 'qa' && rawMethod != 'batchtotask')
