@@ -50,7 +50,7 @@ div.setting-box[data-id=platform] > button.btn {padding-right: 5px;}
 .settings-list > .setting-box > .btn > h4  > div {gap: 3px;}
 .settings-list > .setting-box > .btn > h4 > img {padding-right: 8px; padding-bottom: 3px; width: 32px; height: 27px;}
 .settings-list > .setting-box > .btn > .setting-desc {padding-bottom: 16px; line-height: 25px; height: 50px; overflow: hidden;}
-.settings-list.lite-setting > .setting-box {flex: 1 1 30%;}
+.settings-list.lite-setting > .setting-box {flex: 0 1 25%;}
 
 .plugin-list {display: flex; flex-wrap: wrap; padding: 12px 4px 4px 4px;}
 .plugin-list > .plugin-item {flex: 1 1 26%; padding: 16px 10px; border: 1px solid #EDEEF2; border-radius: 4px; margin-right: 10px; margin-bottom: 16px; width: 0px; cursor: pointer;}

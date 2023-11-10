@@ -921,6 +921,12 @@ $lang->cron->methodOrder[25] = 'toggle';
 $lang->cron->methodOrder[30] = 'delete';
 $lang->cron->methodOrder[35] = 'openProcess';
 
+$lang->resource->ai = new stdclass();
+$lang->resource->ai->models         = 'modelBrowse';
+$lang->resource->ai->editModel      = 'modelEdit';
+$lang->resource->ai->testConnection = 'modelTestConnection';
+$lang->resource->ai->chat           = 'chat';
+
 $lang->resource->contact            = new stdclass();
 $lang->resource->programstakeholder = new stdclass();
 $lang->resource->researchplan       = new stdclass();

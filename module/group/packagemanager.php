@@ -3792,9 +3792,9 @@ $config->group->package->manageLLM = new stdclass();
 $config->group->package->manageLLM->order  = 2060;
 $config->group->package->manageLLM->subset = 'ai';
 $config->group->package->manageLLM->privs  = array();
-$config->group->package->manageLLM->privs['ai-models']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('admin-index'), 'recommend' => array());
-$config->group->package->manageLLM->privs['ai-editModel']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('admin-index', 'ai-models', 'ai-testConnection'), 'recommend' => array());
-$config->group->package->manageLLM->privs['ai-testConnection'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('admin-index', 'ai-editModel', 'ai-models'), 'recommend' => array());
+$config->group->package->manageLLM->privs['ai-models']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 5,  'depend' => array('admin-index'), 'recommend' => array());
+$config->group->package->manageLLM->privs['ai-editModel']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 10, 'depend' => array('admin-index', 'ai-models', 'ai-testConnection'), 'recommend' => array());
+$config->group->package->manageLLM->privs['ai-testConnection'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 15, 'depend' => array('admin-index', 'ai-editModel', 'ai-models'), 'recommend' => array());
 
 $config->group->package->browsePrompt = new stdclass();
 $config->group->package->browsePrompt->order  = 2080;
