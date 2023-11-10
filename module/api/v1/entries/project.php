@@ -101,8 +101,10 @@ class projectEntry extends entry
         $oldProject     = $this->loadModel('project')->getByID($projectID);
         $linkedProducts = $this->loadModel('product')->getProducts($projectID);
 
+        $useCode = $this->checkCodeUsed();
         /* Set $_POST variables. */
-        $fields = 'name,code,begin,end,acl,parent,desc,PM,whitelist,model';
+        $fields = 'name,begin,end,acl,parent,desc,PM,whitelist,model';
+        if($useCode) $fields .= ',code';
         $this->batchSetPost($fields, $oldProject);
 
         $products = array();
@@ -119,7 +121,7 @@ class projectEntry extends entry
         $control->edit($projectID);
 
         $data = $this->getData();
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         if(!isset($data->result)) return $this->sendError(400, 'error');
 
         $project = $this->project->getByID($projectID);
