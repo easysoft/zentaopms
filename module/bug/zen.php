@@ -1341,7 +1341,7 @@ class bugZen extends bug
             $stories         = $this->story->getExecutionStoryPairs($executionID);
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct(array($product->id), $executionID) : array();
             $branches        = isset($productBranches[$product->id]) ? $productBranches[$product->id] : array();
-            $branch          = key($branches);
+            $branch          = key($branches) ? key($branches) : 'all';
 
             /* Get the variables associated with kanban. */
             $execution = $this->loadModel('execution')->getById($executionID);

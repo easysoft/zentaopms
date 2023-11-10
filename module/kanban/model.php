@@ -1037,8 +1037,6 @@ class kanbanModel extends model
 
                 if($searchValue != '' and empty($lanes)) continue;
 
-                $laneCount += count($lanes);
-
                 $groupData['id']            = $group->id;
                 $groupData['key']           = "group{$group->id}";
                 $groupData['data']['lanes'] = $lanes;
@@ -1048,7 +1046,7 @@ class kanbanModel extends model
                 $regionData['items'][] = $groupData;
             }
 
-            $regionData['laneCount']  = $laneCount;
+            $regionData['laneCount'] = $laneCount;
             $kanbanList[] = $regionData;
         }
 
@@ -1503,9 +1501,11 @@ class kanbanModel extends model
 
         $cardGroup = array();
 
+        $avatarPairs = $this->loadModel('user')->getAvatarPairs();
+        $users       = $this->loadModel('user')->getPairs('noletter');
         foreach($cards as $laneID => $cells)
         {
-            foreach($cells as $columnID => $cell)
+            foreach($cells as $cell)
             {
                 $cardIdList = array_filter(explode(',', $cell->cards));
                 $cardOrder  = 1;
@@ -1517,21 +1517,32 @@ class kanbanModel extends model
 
                     if(empty($object)) continue;
 
-                    $cardData['id']             = $object->id;
-                    $cardData['name']           = $object->id;
-                    $cardData['order']          = $cardOrder++;
-                    $cardData['pri']            = $object->pri ? $object->pri : '';
-                    $cardData['estimate']       = $cell->type == 'bug' ? '' : $object->estimate;
-                    $cardData['assignedTo']     = $object->assignedTo;
-                    $cardData['deadline']       = $cell->type == 'story' ? '' : $object->deadline;
-                    $cardData['severity']       = $cell->type == 'bug' ? $object->severity : '';
-                    $cardData['acl']            = 'open';
-                    $cardData['lane']           = $laneID;
-                    $cardData['column']         = $cell->column;
-                    $cardData['openedDate']     = $object->openedDate;
-                    $cardData['closedDate']     = $object->closedDate;
-                    $cardData['lastEditedDate'] = $object->lastEditedDate;
-                    $cardData['status']         = $object->status;
+                    $cardData['id']                 = $object->id;
+                    $cardData['name']               = $object->id;
+                    $cardData['order']              = $cardOrder++;
+                    $cardData['pri']                = $object->pri ? $object->pri : '';
+                    $cardData['estimate']           = $cell->type == 'bug' ? '' : $object->estimate;
+                    $cardData['assignedTo']         = $object->assignedTo;
+                    $cardData['deadline']           = $cell->type == 'story' ? '' : $object->deadline;
+                    $cardData['severity']           = $cell->type == 'bug' ? $object->severity : '';
+                    $cardData['acl']                = 'open';
+                    $cardData['lane']               = $laneID;
+                    $cardData['column']             = $cell->column;
+                    $cardData['openedDate']         = $object->openedDate;
+                    $cardData['closedDate']         = $object->closedDate;
+                    $cardData['lastEditedDate']     = $object->lastEditedDate;
+                    $cardData['status']             = $object->status;
+                    $cardData['cardType']           = $cell->type;
+                    $cardData['uavatar']            = '';
+                    $cardData['assignedToRealName'] = '';
+
+                    if($object->assignedTo)
+                    {
+                        $userAvatar = zget($avatarPairs, $object->assignedTo, '');
+                        $userAvatar = $userAvatar ? "<img src='$userAvatar'/>" : strtoupper(mb_substr($object->assignedTo, 0, 1, 'utf-8'));
+                        $cardData['uavatar']            = $userAvatar;
+                        $cardData['assignedToRealName'] = zget($users, $object->assignedTo, '');
+                    }
 
                     if($cell->type == 'task')
                     {
