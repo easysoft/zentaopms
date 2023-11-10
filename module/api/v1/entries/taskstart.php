@@ -22,7 +22,7 @@ class taskStartEntry extends entry
     {
         $task = $this->loadModel('task')->getByID($taskID);
 
-        $fields = 'assignedTo,realStarted,consumed,left,comment';
+        $fields = 'assignedTo,consumed,left,comment';
         $this->batchSetPost($fields);
 
         $this->setPost('realStarted', $this->request('realStarted', helper::now()));
