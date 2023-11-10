@@ -33,6 +33,7 @@ featureBar
     )
 );
 
+$config->execution->dtable->fieldList['rawID']['name'] = 'id';
 $config->execution->dtable->fieldList['name']['name'] = 'name';
 $config->execution->dtable->fieldList['name']['type'] = 'title';
 $config->execution->dtable->fieldList['PM']['type']   = 'user';

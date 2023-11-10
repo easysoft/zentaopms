@@ -42,6 +42,7 @@ featureBar
     )
 );
 
+$config->release->dtable->fieldList['id']['type'] = 'checkID';
 unset($config->release->dtable->fieldList['title']['link']);
 unset($config->release->dtable->fieldList['branch']);
 unset($config->release->dtable->fieldList['actions']);

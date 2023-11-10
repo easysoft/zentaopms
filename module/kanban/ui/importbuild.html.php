@@ -26,6 +26,7 @@ featureBar
     )
 );
 
+$config->build->dtable->fieldList['id']['type'] = 'checkID';
 $config->build->dtable->fieldList['execution']['name'] = 'executionName';
 unset($config->build->dtable->fieldList['branch']);
 unset($config->build->dtable->fieldList['path']);
