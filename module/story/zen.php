@@ -632,7 +632,9 @@ class storyZen extends story
         $reviewers = $this->story->getProductReviewers($productID);
         $users     = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $stories   = $this->story->getParentStoryPairs($productID);
-        $URS       = $storyType != 'story' ? array() : $this->story->getProductStoryPairs($productID, $branch, 0, 'changing,active,reviewing', 'id_desc', 0, '', 'requirement');
+
+        $storyTypes = strpos($product->vision, 'or') !== false ? 'launched' : 'changing,active,reviewing';
+        $URS        = $storyType != 'story' ? array() : $this->story->getProductStoryPairs($productID, $branch, 0, $storyTypes, 'id_desc', 0, '', 'requirement');
 
         /* 设置下拉菜单内容。 */
         $fields['branch']['options'] = $branches;
