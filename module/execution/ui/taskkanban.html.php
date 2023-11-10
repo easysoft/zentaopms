@@ -68,7 +68,6 @@ jsVar('kanbanList', array_keys($kanbanGroup));
 jsVar('browseType', $browseType);
 jsVar('groupBy', $groupBy);
 jsVar('productNum', $productNum);
-jsVar('searchValue', '');
 jsVar('priv', array(
         'canEditName'         => common::hasPriv('kanban', 'setColumn'),
         'canSetWIP'           => common::hasPriv('kanban', 'setWIP'),
@@ -128,14 +127,18 @@ row
     setClass('items-center justify-between mb-3'),
     cell
     (
+        setClass('flex'),
         $features['qa'] ? inputControl
         (
             setClass('c-type'),
             picker
             (
+                set::width('200'),
                 set::name('type'),
                 set::items($lang->kanban->type),
                 set::value($browseType),
+                set::require(true),
+                set::onchange('changeBrowseType()'),
             )
         ) : null,
         $browseType != 'all' ? inputControl
@@ -143,17 +146,21 @@ row
             setClass('c-group'),
             picker
             (
+                set::width('200'),
                 set::name('group'),
                 set::items($lang->kanban->group->$browseType),
                 set::value($groupBy),
+                set::require(true),
+                set::onchange('changeGroupBy()'),
             )
         ) : null,
     ),
     cell
     (
-        setClass('flex'),
+        setClass('flex toolbar'),
         inputGroup
         (
+            set::style(array('display' => 'none')),
             setID('taskKanbanSearch'),
             inputControl
             (
@@ -168,13 +175,13 @@ row
                 )
             )
         ),
-        btn(setClass('querybox-toggle'), set::onclick('toggleSearchBox()'), set::icon('search'), $lang->searchAB),
-        common::hasPriv('task', 'export') ? btn(set::url(createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=unclosed")), set::icon('export'), set('data-toggle', 'modal'), $lang->export) : null,
+        btn(setClass('querybox-toggle'), set::type('link'), set::onclick('toggleSearchBox()'), set::icon('search'), $lang->searchAB),
+        common::hasPriv('task', 'export') ? btn(set::type('link'), set::url(createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=unclosed")), set::icon('export'), set('data-toggle', 'modal'), $lang->export) : null,
         $canBeChanged ? dropdown
         (
             setID('importAction'),
             set::arrow(true),
-            btn(set::icon('import'), $lang->import),
+            btn(set::type('link'), set::icon('import'), $lang->import),
             set::items(array
             (
                 common::hasPriv('execution', 'importTask') ? array('text' => $lang->execution->importTask, 'url' => createLink('execution', 'importTask', "execution=$execution->id")) : null,
@@ -183,28 +190,28 @@ row
         ) : null,
         dropdown
         (
-            btn(icon('ellipsis-v')),
+            setClass('kanbanSetting mr-2'),
+            btn(set::type('link'), icon('ellipsis-v')),
             set::items(array
             (
                 common::hasPriv('execution', 'setKanban') ? array('text' => $lang->execution->setKanban, 'url' => createLink('execution', 'setKanban', "executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'sm') : null,
                 common::hasPriv('execution', 'printKanban') ? array('text' => $lang->execution->printKanban, 'url' => createLink('execution', 'printKanban', "executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'sm', 'id' => 'printKanban') : null,
-                array('text' => $lang->execution->fullScreen, 'url' => 'javascript:fullScreen()', 'data-toggle' => 'modal', 'data-size' => 'sm'),
+                array('text' => $lang->execution->fullScreen, 'url' => 'javascript:fullScreen()'),
             )),
-            set::arrow(false),
         ),
         $canCreateObject ? dropdown
         (
             setID('createDropdown'),
-            btn(set::icon('plus'), $lang->create),
+            btn(setClass('primary'),set::icon('plus'), $lang->create),
             set::items(array
             (
                 ($features['story'] and $hasStoryButton and $canCreateStory) ? array('text' => $lang->execution->createStory, 'url' => createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 ($features['story'] and $hasStoryButton and $canBatchCreateStory) ? array('text' => $lang->execution->batchCreateStory, 'url' => createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 ($features['story'] and $hasStoryButton and $canLinkStory) ? array('text' => $lang->execution->linkStory, 'url' => createLink('story', 'linkStory', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 ($features['story'] and $hasStoryButton and $canLinkStoryByPlan) ? array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal') : null,
-                ($features['story'] and $hasStoryButton and $features['qa']) ? array('text' => '', 'class' => 'menu-divider') : null,
+                ($features['story'] and $hasStoryButton and $features['qa']) ? array('class' => 'menu-divider') : null,
                 ($features['qa'] && $canCreateBug) ? array('text' => $lang->bug->create, 'url' => createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
-                ($features['qa'] && $canBatchCreateBug) ? array('text' => $lang->bug->create, 'url' => ($productNum > 1 ? '#batchCreateBug' : createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id")), 'data-toggle' => 'modal', $productNum > 1 ? null : 'data-size' => 'lg') : null,
+                ($features['qa'] && $canBatchCreateBug) ? array('text' => $lang->bug->batchCreate, 'url' => ($productNum >= 1 ? '#batchCreateBug' : createLink('bug', 'batchCreate', "productID=$productID&branch=0&executionID=$execution->id")), 'data-toggle' => 'modal', $productNum > 1 ? null : 'data-size' => 'lg') : null,
                 ($features['qa'] && $canImportBug) ? array('text' => $lang->execution->importBug, 'url' => createLink('execution', 'importBug', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 ($features['story'] and $hasStoryButton and $features['qa']) ? array('text' => '', 'class' => 'menu-divider') : null,
                 ($canCreateTask) ? array('text' => $lang->task->create, 'url' => createLink('task', 'create', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
@@ -216,6 +223,7 @@ row
 
 div
 (
+    set::id('kanbanList'),
     setClass('bg-white'),
     zui::kanbanList
     (
@@ -233,21 +241,20 @@ modal
         h4($lang->execution->linkStoryByPlan),
         "({$lang->execution->linkStoryByPlanTips})",
     ),
-    div
+    inputGroup
     (
-        inputGroup
+        setClass('mt-1'),
+        picker
         (
-            picker
-            (
-                setID('plan'),
-                set::name('plan'),
-                set::items($allPlans),
-            ),
-            span
-            (
-                setClass('input-group-btn'),
-                btn(setClass('primary'), setID('toStoryButton'), $lang->execution->linkStory)
-            )
+            set::width(200),
+            setID('plan'),
+            set::name('plan'),
+            set::items($allPlans),
+        ),
+        span
+        (
+            setClass('input-group-btn'),
+            btn(setClass('primary'), setID('toStoryButton'), set::onclick('linkPlanStory()'), $lang->execution->linkStory)
         )
     )
 );
@@ -255,36 +262,33 @@ modal
 modal
 (
     setID('batchCreateBug'),
-    set::header($lang->bug->product),
-    div
+    set::title($lang->bug->product),
+    inputGroup
     (
-        inputGroup
+        setClass('mt-3'),
+        picker
         (
-            picker
+            set::width(200),
+            setID('product'),
+            set::name('productName'),
+            set::items($productNames),
+            set::onchange('changeBugProduct()'),
+        ),
+        span
+        (
+            setClass('input-group-btn'),
+            btn
             (
-                setID('product'),
-                set::name('productName'),
-                set::items($productNames),
-            ),
-            span
-            (
-                setClass('input-group-btn'),
-                btn
-                (
-                    setClass('primary'),
-                    setID('batchCreateBugButton'),
-                    set::url(createLink('bug', 'batchCreate', 'productID=' . key($productNames) . '&branch=&executionID=' . $executionID)),
-                    set('data-toggle', 'modal'),
-                    set('data-dismiss', 'modal'),
-                    set('data-size', 'lg'),
-                    $lang->bug->batchCreate
-                )
+                setClass('primary'),
+                setID('batchCreateBugButton'),
+                set::url(createLink('bug', 'batchCreate', 'productID=' . key($productNames) . '&branch=&executionID=' . $executionID)),
+                set('data-toggle', 'modal'),
+                set('data-dismiss', 'modal'),
+                set('data-size', 'lg'),
+                $lang->bug->batchCreate
             )
         )
     )
 );
 
-modal(setID('actionModal'));
-
 render();
-

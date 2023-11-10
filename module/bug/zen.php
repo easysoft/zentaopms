@@ -1371,7 +1371,7 @@ class bugZen extends bug
         $this->view->builds           = $builds;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($product->id, 'bug', 0, $branch === 'all' ? 0 : $branch);
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($product->id, 'bug', 0, $branch === 'all' ? 0 : (int)$branch);
     }
 
     /**

@@ -1579,7 +1579,7 @@ class kanbanModel extends model
 
         if(empty($lanes)) return array();
 
-        foreach($lanes as $lane) $this->refreshCards($lane);
+        foreach($lanes as $lane) $this->refreshCards((array)$lane);
 
         $columns = $this->dao->select('t1.cards, t1.lane, t2.id, t2.type, t2.name, t2.color, t2.limit, t2.parent')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column = t2.id')
@@ -2985,7 +2985,7 @@ class kanbanModel extends model
                 ->fetchAll('id');
         }
 
-        foreach($lanes as $lane) $this->refreshCards($lane);
+        foreach($lanes as $lane) $this->refreshCards((array)$lane);
     }
 
     /**

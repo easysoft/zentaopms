@@ -1,4 +1,4 @@
-window.kanbanDropRules =
+const kanbanDropRules =
 {
     story:
     {
@@ -28,7 +28,52 @@ window.kanbanDropRules =
         'canceled': ['developing', 'closed'],
         'closed': ['developing'],
     }
-}
+};
+
+window.changeBrowseType = function()
+{
+    const type = $('.c-type [name=type]').val();
+    loadPage($.createLink('execution', 'taskKanban', "executionID=" + executionID + '&type=' + type));
+};
+
+window.changeGroupBy = function()
+{
+    const troup = $('.c-group [name=group]').val();
+    const type  = $('.c-type [name=type]').val();
+    loadPage($.createLink('execution', 'taskKanban',  'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group));
+};
+
+window.changeBugProduct = function()
+{
+    const productID = $('[name=productName]').val();
+    if(productID) $('#batchCreateBugButton').attr('href', $.createLink('bug', 'batchCreate', 'productID=' + productID + '&branch=&executionID=' + executionID));
+};
+
+window.linkPlanStory = function()
+{
+    const planID = $('[name=plan]').val();
+    if(planID)
+    {
+        var param = "&param=executionID=" + executionID + ",browseType=" + browseType + ",orderBy=id_asc,groupBy=" + groupBy;
+        $.ajaxSubmit({url: $.createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=taskKanban&extra=' + param)});
+    }
+};
+
+window.toggleSearchBox = function()
+{
+    $('#taskKanbanSearch').toggle();
+
+    if($('#taskKanbanSearch').css('display') == 'block')
+    {
+        $(".querybox-toggle").css("color", "#0c64eb");
+    }
+    else
+    {
+        $(".querybox-toggle").css("color", "#3c495c");
+        $('#taskKanbanSearchInput').attr('value', '');
+        searchCards('');
+    }
+};
 
 window.getLane = function(lane)
 {
@@ -226,9 +271,6 @@ window.buildCardActions = function(item)
 
 window.canDrop = function(dragInfo, dropInfo)
 {
-  console.log(dragInfo);
-  console.log(dropInfo);
-    return true;
     if(!dragInfo) return false;
 
     const column = this.getCol(dropInfo.col);
@@ -239,11 +281,6 @@ window.canDrop = function(dragInfo, dropInfo)
 
     /* 卡片可在同组内拖动。 */
     if(dragInfo.item.group != column.group) return false;
-
-    let kanbanRules = window.kanbanDropRules[lane.type];
-    let colRules    = typeof kanbanRules[colPairs[dragInfo.col]] == 'undefined' ? null : kanbanRules[colPairs[dragInfo.col]];
-    if(!colRules) return false;
-    return true;
 }
 
 window.onDrop = function(changes, dropInfo)
@@ -258,6 +295,11 @@ window.onDrop = function(changes, dropInfo)
     const fromColType = colPairs[fromColID];
     const toColType   = colPairs[toColID];
     const objectID    = dropInfo.drag.item.id;
+
+    let kanbanRules = kanbanDropRules[laneType];
+    let colRules    = typeof kanbanRules[fromColType] == 'undefined' ? null : kanbanRules[fromColType];
+    if(!colRules) return false;
+    if(!colRules.includes(toColType)) return false;
 
     let link     = '';
     let moveCard = false;
@@ -308,18 +350,25 @@ window.onDrop = function(changes, dropInfo)
                 if(data)
                 {
                     data = $.parseJSON(data);
-                    if(data.status == 'draft' || data.status == 'changing' || data.status == 'reviewing') return zui.Modal.alert(executionLang.storyDragError);
-                    return ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID);
+                    if(data.status == 'draft' || data.status == 'changing' || data.status == 'reviewing')
+                    {
+                        zui.Modal.alert(executionLang.storyDragError);
+                        return false;
+                    }
+                    ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID);
+                    return false;
                 }
             });
         }
         else if(!link)
         {
-            return ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID);
+            ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID);
+            return false;
         }
     }
 
     if(link) zui.Modal.open({url: link});
+    return false;
 }
 
 function formatDate(inputDate)
@@ -416,8 +465,21 @@ window.hideAllAction = function()
  * @access public
  * @return void
  */
-function ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID)
+window.ajaxMoveCard = function(objectID, fromColID, toColID, fromLaneID, toLaneID)
 {
     var link = $.createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
     $.get(link, function(data){ loadCurrentPage() });
+}
+
+window.searchCards = function(value, order)
+{
+    const $kanbanList = $('[data-zui-kanbanlist]').zui('kanbanList');
+    const options     = $kanbanList.options;
+    const searchValue = value;
+    if(typeof order == 'undefined') order = orderBy;
+    $.get($.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value + '&orderBy=' + order), function(data)
+    {
+        options.items = $.parseJSON(data);
+        $kanbanList.render(options);
+    });
 }

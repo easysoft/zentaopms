@@ -156,7 +156,7 @@ $lang->kanban->group = new stdclass();
 
 $lang->kanban->group->all = array();
 $lang->kanban->group->story = array();
-$lang->kanban->group->story['default']    = "默认方式";
+$lang->kanban->group->story['default']    = "默认分组";
 $lang->kanban->group->story['pri']        = "需求优先级";
 $lang->kanban->group->story['category']   = "需求类别";
 $lang->kanban->group->story['module']     = "需求模块";
@@ -164,7 +164,7 @@ $lang->kanban->group->story['source']     = "需求来源";
 $lang->kanban->group->story['assignedTo'] = "指派人员";
 
 $lang->kanban->group->task = array();
-$lang->kanban->group->task['default']    = "默认方式";
+$lang->kanban->group->task['default']    = "默认分组";
 $lang->kanban->group->task['pri']        = "任务优先级";
 $lang->kanban->group->task['type']       = "任务类型";
 $lang->kanban->group->task['module']     = "任务所属模块";
@@ -172,7 +172,7 @@ $lang->kanban->group->task['assignedTo'] = "指派人员";
 $lang->kanban->group->task['story']      = "{$lang->SRCommon}";
 
 $lang->kanban->group->bug = array();
-$lang->kanban->group->bug['default']    = "默认方式";
+$lang->kanban->group->bug['default']    = "默认分组";
 $lang->kanban->group->bug['pri']        = "Bug优先级";
 $lang->kanban->group->bug['severity']   = "Bug严重程度";
 $lang->kanban->group->bug['module']     = "Bug模块";

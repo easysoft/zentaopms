@@ -156,7 +156,7 @@ $lang->kanban->group = new stdclass();
 
 $lang->kanban->group->all = array();
 $lang->kanban->group->story = array();
-$lang->kanban->group->story['default']    = "Default";
+$lang->kanban->group->story['default']    = "Default Group";
 $lang->kanban->group->story['pri']        = "Story Priority";
 $lang->kanban->group->story['category']   = "Story Category";
 $lang->kanban->group->story['module']     = "Story Module";
@@ -164,7 +164,7 @@ $lang->kanban->group->story['source']     = "Story Source";
 $lang->kanban->group->story['assignedTo'] = "Assigned To";
 
 $lang->kanban->group->task = array();
-$lang->kanban->group->task['default']    = "Default";
+$lang->kanban->group->task['default']    = "Default Group";
 $lang->kanban->group->task['pri']        = "Task Priority";
 $lang->kanban->group->task['type']       = "Task Type";
 $lang->kanban->group->task['module']     = "Task Module";
@@ -172,7 +172,7 @@ $lang->kanban->group->task['assignedTo'] = "Assigned To";
 $lang->kanban->group->task['story']      = "Story";
 
 $lang->kanban->group->bug = array();
-$lang->kanban->group->bug['default']    = "Default";
+$lang->kanban->group->bug['default']    = "Default Group";
 $lang->kanban->group->bug['pri']        = "Bug Priority";
 $lang->kanban->group->bug['severity']   = "Bug Severity";
 $lang->kanban->group->bug['module']     = "Bug Module";
