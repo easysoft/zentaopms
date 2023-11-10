@@ -11,14 +11,16 @@ declare(strict_types=1);
 namespace zin;
 
 $createButton  = $emptyCreateBtn = null;
-$typeID        = zget($lib, (string)$lib->type, 0);
+$typeID        = empty($lib) ? $objectID : zget($lib, (string)$lib->type, 0);
+$libID         = empty($lib) ? 0 : $lib->id;
+$libType       = empty($lib) ? '' : $lib->type;
 $templateParam = $this->config->edition == 'max' ? '&from=template' : '';
 $buttonItems   = array();
 foreach($lang->doc->createList as $typeKey => $typeName)
 {
     $docType = zget($config->doc->iconList, $typeKey);
-    $params  = "objectType={$lib->type}&objectID={$typeID}&libID={$lib->id}&moduleID={$moduleID}&type={$typeKey}";
-    if($typeKey == 'template' and $config->edition == 'max') $params = "objectType={$lib->type}&objectID={$typeID}&libID={$lib->id}&moduleID={$moduleID}&type=html&from=template";
+    $params  = "objectType={$libType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type={$typeKey}";
+    if($typeKey == 'template' and $config->edition == 'max') $params = "objectType={$libType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html&from=template";
 
     $buttonItems[] = array
         (
@@ -31,14 +33,14 @@ foreach($lang->doc->createList as $typeKey => $typeName)
     if($typeKey == 'template') $buttonItems[] = array('type' => 'divider');
 }
 
-$buildCreateBtn = function($type, $typeID, $lib, $moduleID, $templateParam, $buttonItems) use($app, $lang)
+$buildCreateBtn = function($type, $typeID, $libID, $moduleID, $templateParam, $buttonItems) use($app, $lang)
 {
     return btngroup(
         btn
         (
             setClass('btn primary ml-2'),
             set::icon('plus'),
-            set::url(createLink('doc', 'create', "objectType={$type}&objectID={$typeID}&libID={$lib->id}&moduleID={$moduleID}&type=html{$templateParam}")),
+            set::url(createLink('doc', 'create', "objectType={$type}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html{$templateParam}")),
             set('data-app', $app->tab),
             $lang->doc->create
         ),
@@ -52,4 +54,4 @@ $buildCreateBtn = function($type, $typeID, $lib, $moduleID, $templateParam, $but
     );
 };
 
-$createButton = $buildCreateBtn($type, $typeID, $lib, $moduleID, $templateParam, $buttonItems);
+$createButton = $buildCreateBtn($type, $typeID, $libID, $moduleID, $templateParam, $buttonItems);
