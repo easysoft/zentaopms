@@ -1529,17 +1529,7 @@ class story extends control
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
 
-        $storyStatus = '';
-        if($status == 'noclosed')
-        {
-            $storyStatus = $this->lang->story->statusList;
-            unset($storyStatus['closed']);
-            $storyStatus = array_keys($storyStatus);
-        }
-        elseif($status == 'active')
-        {
-            $storyStatus = $status;
-        }
+        $storyStatus = $this->story->getStatusList($status);
 
         if($objectID)
         {

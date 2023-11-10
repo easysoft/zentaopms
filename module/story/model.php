@@ -4430,4 +4430,26 @@ class storyModel extends model
             ->groupBy('product, status')
             ->fetchAll('status');
     }
+
+    /**
+     * Get product stroies by status.
+     *
+     * @param  string $status noclosed || active
+     * @access public
+     * @return array | string
+     */
+    public function getStatusList(string $status)
+    {
+        $storyStatus = '';
+        if($status == 'noclosed')
+        {
+            $storyStatus = $this->lang->story->statusList;
+            unset($storyStatus['closed']);
+            $storyStatus = array_keys($storyStatus);
+        }
+
+        if($status == 'active') $storyStatus = $status;
+
+        return $storyStatus;
+    }
 }
