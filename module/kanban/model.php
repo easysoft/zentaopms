@@ -2997,14 +2997,15 @@ class kanbanModel extends model
      */
     public function refreshCards($lane)
     {
-        $laneType      = $lane['type'];
-        $executionID   = $lane['execution'];
+        $laneID        = zget($lane, 'id');
+        $laneType      = zget($lane, 'type');
+        $executionID   = zget($lane, 'execution');
         $otherCardList = '';
         $otherLanes    = $this->dao->select('t2.id, t2.cards')->from(TABLE_KANBANLANE)->alias('t1')
             ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.lane')
-            ->where('t1.id')->ne($lane['id'])
+            ->where('t1.id')->ne($laneID)
             ->andWhere('t1.execution')->eq($executionID)
-            ->andWhere('t2.`type`')->eq($lane['type'])
+            ->andWhere('t2.`type`')->eq($laneType)
             ->fetchPairs();
 
         foreach($otherLanes as $cardIDList)
@@ -3016,7 +3017,7 @@ class kanbanModel extends model
         $cardPairs = $this->dao->select('t2.type, t1.cards')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->where('t1.kanban')->eq($executionID)
-            ->andWhere('t1.lane')->eq($lane['id'])
+            ->andWhere('t1.lane')->eq($laneID)
             ->fetchPairs();
 
         if(empty($cardPairs)) return;
@@ -3117,7 +3118,7 @@ class kanbanModel extends model
         $colPairs = $this->dao->select('t2.type, t2.id')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->where('t1.kanban')->eq($executionID)
-            ->andWhere('t1.lane')->eq($lane['id'])
+            ->andWhere('t1.lane')->eq($laneID)
             ->fetchPairs();
 
         $updated = false;
@@ -3126,11 +3127,11 @@ class kanbanModel extends model
             if(!isset($colPairs[$colType])) continue;
             if($sourceCards[$colType] == $cards) continue;
 
-            $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cards)->where('lane')->eq($lane['id'])->andWhere('`column`')->eq($colPairs[$colType])->exec();
+            $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cards)->where('lane')->eq($laneID)->andWhere('`column`')->eq($colPairs[$colType])->exec();
             if(!$updated) $updated = true;
         }
 
-        if($updated) $this->dao->update(TABLE_KANBANLANE)->set('lastEditedTime')->eq(helper::now())->where('id')->eq($lane['id'])->exec();
+        if($updated) $this->dao->update(TABLE_KANBANLANE)->set('lastEditedTime')->eq(helper::now())->where('id')->eq($laneID)->exec();
     }
 
     /**
