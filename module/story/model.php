@@ -3093,38 +3093,39 @@ class storyModel extends model
      */
     public static function isClickable(object $story, string $action): bool
     {
-        static $shadowProducts = array();
-        if(isset($story->product) && empty($shadowProducts[$story->product]))
-        {
-            global $app;
-            $stmt = $app->dbQuery('SELECT id FROM ' . TABLE_PRODUCT . " WHERE shadow = 1")->fetchAll();
-            foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
-        }
-
+        global $app, $config;
         $action = strtolower($action);
 
-        global $app, $config;
-
-        if(isset($story->parent) && $story->parent < 0 && strpos($config->story->list->actionsOperatedParentStory, ",$action,") === false) return false;
-
-        $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
-        $story->notReview = isset($story->notReview) ? $story->notReview : array();
-
-        $isSuperReviewer = str_contains(',' . zget($config->story, 'superReviewers', '') . ',', ",{$app->user->account},");
-
-        if($action == 'change')       return (($isSuperReviewer or count($story->reviewer) == 0 or count($story->notReview) == 0) and (in_array($story->status, array('active', 'launched', 'developing'))));
-        if($action == 'submitreview') return strpos('draft,changing', $story->status) !== false;
-        if($action == 'review')       return (($isSuperReviewer or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
-        if($action == 'recall')       return strpos('reviewing,changing', $story->status) !== false;
-        if($action == 'close')        return $story->status != 'closed';
-        if($action == 'activate')     return $story->status == 'closed';
-        if($action == 'assignto')     return $story->status != 'closed';
+        if($action == 'recall')     return strpos('reviewing,changing', $story->status) !== false;
+        if($action == 'close')      return $story->status != 'closed';
+        if($action == 'activate')   return $story->status == 'closed';
+        if($action == 'assignto')   return $story->status != 'closed';
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and !empty($story->twins)) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return strpos('draft,reviewing,changing', $story->status) === false;
+        if($action == 'submitreview' and strpos('draft,changing', $story->status) === false) return false;
+
+        static $shadowProducts = array();
+        static $hasShadow      = true;
+        if($hasShadow and empty($shadowProducts[$story->product]))
+        {
+            $stmt = $app->dbQuery('SELECT id FROM ' . TABLE_PRODUCT . " WHERE shadow = 1")->fetchAll();
+            if(empty($stmt)) $hasShadow = false;
+            foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
+        }
+
+        if($story->parent < 0 and strpos($config->story->list->actionsOpratedParentStory, ",$action,") === false) return false;
+
         if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
         /* Adjust code, hide split entry. */
         if($action == 'batchcreate' and ($story->status != 'active' or (isset($shadowProducts[$story->product])) or (!isset($shadowProducts[$story->product]) && $story->stage != 'wait') or !empty($story->plan))) return false;
+
+        $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
+        $story->notReview = isset($story->notReview) ? $story->notReview : array();
+        $isSuperReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
+
+        if($action == 'change') return (($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status == 'active');
+        if($action == 'review') return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and $story->status == 'reviewing');
 
         return true;
     }
