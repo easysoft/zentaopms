@@ -197,7 +197,7 @@ class dtable extends wg
     {
         if(empty($this->prop('data')))
         {
-            global $lang;
+            global $lang, $app;
             $emptyTip   = $this->prop('emptyTip', $lang->noData);
             $createLink = !empty($this->prop('createLink')) ? $this->prop('createLink') : '';
             if(is_string($emptyTip))
@@ -206,6 +206,7 @@ class dtable extends wg
                 {
                     $createTip  = $this->prop('createTip', $lang->create);
                     $createAttr = $this->prop('createAttr', '');
+                    if(strpos($createAttr, 'data-app') === false) $createAttr .= " data-app='{$app->tab}'";
                     $emptyTip   = array('html' => "<div class='text-gray'>$emptyTip</div><a class='btn primary-pale border-primary' href='$createLink' $createAttr><i class='icon icon-plus'></i> $createTip</a>", 'className' => 'row gap-4 items-center');
                 }
                 else
