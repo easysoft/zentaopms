@@ -15,6 +15,8 @@ class dtable extends wg
         'createTip?:string',                  // 表格数据源为空时的创建文本
         'createLink?:array|string',           // 表格数据源为空时的创建链接
         'createAttr?:string',                 // 表格数据源为空时的创建链接属性
+        'sortLink?:array|string',             // 排序链接
+        'orderBy?:string',                    // 排序字段
     );
 
     static $dtableID = 0;
@@ -131,11 +133,15 @@ class dtable extends wg
         }
 
         $orderBy = $this->prop('orderBy');
+        if(!$orderBy) $orderBy = data('orderBy');
         if(is_string($orderBy))
         {
             list($orderByName, $orderByType) = explode('_', strpos($orderBy, '_') === false ? $orderBy . '_desc' : $orderBy);
             $this->setProp('orderBy', array($orderByName => $orderByType));
         }
+
+        $sortLink = $this->prop('sortLink');
+        if(is_string($sortLink) && $sortLink) $this->setProp('sortLink', array('url' => $sortLink, 'data-app' => $app->tab));
 
         /* Support to set footToolbar with items array. */
         $footToolbar = $this->prop('footToolbar');
