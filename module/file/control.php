@@ -530,4 +530,18 @@ class file extends control
             fclose($handle);
         }
     }
+
+    /**
+     * 关闭升级到企业版提示。
+     * Close the biz guide.
+     *
+     * @param  string $moduleName
+     * @access public
+     * @return void
+     */
+    public function ajaxcloseBizGuide($moduleName)
+    {
+        $path = "{$this->app->user->account}.{$moduleName}.closeBizGuide@rnd";
+        $this->loadModel('setting')->setItem($path, 1);
+    }
 }

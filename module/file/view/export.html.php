@@ -22,7 +22,23 @@
 
 #mainContent .c-name {width:120px;}
 #mainContent .c-fileName {width:300px;}
+#mainContent .actionBox {text-align: center;}
 </style>
+<?php if($config->edition == 'open' && empty($config->{$this->moduleName}->closeBizGuide)):?>
+<style>
+#mainContent .actionBox {text-align: left;}
+#submit {margin-left: 130px;}
+#exportTable .bizGuideBox {display: inline; padding-left: 10px;}
+#exportTable .bizGuideBox > span {color: #838a9d; vertical-align: sub;}
+#exportTable .bizGuideBox > span > a {vertical-align: baseline;}
+#exportTable .bizGuideBox > a .icon-close {font-size: 12px;}
+</style>
+<?php if(common::checkNotCN()):?>
+<style>
+#submit {margin-left: 40px;}
+</style>
+<?php endif;?>
+<?php endif;?>
 <script>
 function setDownloading()
 {
@@ -255,6 +271,20 @@ $(document).ready(function()
         })
     }
 });
+
+/**
+ * 关闭升级到企业版提示。
+ * Close the biz guide.
+ *
+ * @access public
+ * @return void
+ */
+function closeBizGuide()
+{
+    var closeBizGuideLink = '<?php echo $this->createLink('file', 'ajaxcloseBizGuide', 'module=' . $this->moduleName);?>';
+    $.get(closeBizGuideLink);
+    $('.bizGuideBox').remove();
+}
 </script>
 <?php
 $isCustomExport = (!empty($customExport) and !empty($allExportFields));
@@ -283,7 +313,7 @@ if($isCustomExport)
         <h2><?php echo $lang->export;?></h2>
       </div>
       <form class='main-form' method='post' target='hiddenwin'>
-        <table class="table table-form">
+        <table class="table table-form" id='exportTable'>
           <tbody>
             <tr>
               <th class='c-name'><?php echo $lang->file->fileName;?></th>
@@ -348,8 +378,17 @@ if($isCustomExport)
             <?php endif?>
             <tr>
               <th></th>
-              <td class='text-center'>
+                <?php $colspan = $config->edition == 'open' && empty($config->{$this->moduleName}->closeBizGuide) ? "colspan='2'" : '';?>
+                <td class='actionBox' <?php echo $colspan?>>
                 <?php echo html::submitButton($lang->export, "onclick='setDownloading();'", 'btn btn-primary');?>
+                <?php if($config->edition == 'open' && empty($config->{$this->moduleName}->closeBizGuide)):?>
+                <div class='bizGuideBox'>
+                    <?php $bizGuideLink = common::checkNotCN() ? 'https://www.zentao.pm/page/zentao-pricing.html' : 'https://www.zentao.net/page/enterprise.html';?>
+                    <?php $bizName      = html::a($bizGuideLink, $lang->bizName, '', "class='text-primary' target='_blank'");?>
+                    <span><?php echo sprintf($lang->file->bizGuide, $bizName);?></span>
+                    <?php echo html::a('#', "<i class='icon-close'></i>", '', 'class="btn btn-link" id="closeBizGuideButton" onclick=closeBizGuide(this)');?>
+                </div>
+                <?php endif;?>
               </td>
             </tr>
           </tbody>
