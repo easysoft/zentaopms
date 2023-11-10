@@ -15,9 +15,3 @@ function createKey()
     $('#key').val(key);
     return false;
 }
-
-function changeOS()
-{
-    const url = $.createLink('setting', 'downloadxxd', 'type=package&os=' + $(this).val());
-    $('#downloadXXD').attr('href', url);
-}
