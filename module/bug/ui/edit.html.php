@@ -203,7 +203,8 @@ detailBody
                 (
                     set::items($lang->bug->severityList),
                     set::name('severity'),
-                    set::value($bug->severity)
+                    set::value($bug->severity),
+                    set::required(true)
                 )
             ),
             item
@@ -213,7 +214,8 @@ detailBody
                 (
                     set::items($lang->bug->priList),
                     set::name('pri'),
-                    set::value($bug->pri)
+                    set::value($bug->pri),
+                    set::required(true)
                 )
             ),
             item

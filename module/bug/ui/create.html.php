@@ -306,18 +306,20 @@ formPanel
             set::width('180px'),
             set::label($lang->bug->severity),
             set::control('severityPicker'),
-            set::items(array_filter($lang->bug->severityList)),
+            set::items($lang->bug->severityList),
             set::name('severity'),
-            set::value($bug->severity)
+            set::value($bug->severity),
+            set::required(true)
         ),
         formGroup
         (
             set::width('180px'),
             set::label($lang->bug->pri),
             set::control('priPicker'),
-            set::items(array_filter($lang->bug->priList)),
+            set::items($lang->bug->priList),
             set::name('pri'),
-            set::value($bug->pri)
+            set::value($bug->pri),
+            set::required(true)
         )
     ),
     formRow
