@@ -218,6 +218,7 @@ class programModel extends model
             ->beginIF($this->app->rawMethod == 'browse' && $type === 'top')->andWhere('parent')->eq(0)->fi()
             ->beginIF($this->app->rawMethod == 'browse' && ($type === 'child' or !$this->app->user->admin))->andWhere('id')->in($objectIdList)->fi()
             ->beginIF(!$this->app->user->admin && $this->app->rawMethod != 'browse')->andWhere('id')->in($userViewIdList)->fi()
+            ->beginIF(defined('RUN_MODE') && RUN_MODE == 'api' && !$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
