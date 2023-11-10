@@ -31,6 +31,7 @@
 #exportTable .bizGuideBox {display: inline; padding-left: 10px;}
 #exportTable .bizGuideBox > span {color: #838a9d; vertical-align: sub;}
 #exportTable .bizGuideBox > span > a {vertical-align: baseline;}
+#closeBizGuideButton {vertical-align: bottom;}
 #exportTable .bizGuideBox > a .icon-close {font-size: 12px;}
 </style>
 <?php if(common::checkNotCN()):?>
