@@ -1595,23 +1595,31 @@ class kanbanModel extends model
 
         /* Get objects cards menus. */
         $storyCardMenu = $browseType == 'all' || $browseType == 'story' ? $this->getKanbanCardMenu($executionID, $objectGroup['story'], 'story') : array();
-        $bugCardMenu   = $browseType == 'all' || $browseType == 'bug' ? $this->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug') : array();
-        $taskCardMenu  = $browseType == 'all' || $browseType == 'task' ? $this->getKanbanCardMenu($executionID, $objectGroup['task'], 'task') : array();
+        $bugCardMenu   = $browseType == 'all' || $browseType == 'bug'   ? $this->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug')     : array();
+        $taskCardMenu  = $browseType == 'all' || $browseType == 'task'  ? $this->getKanbanCardMenu($executionID, $objectGroup['task'], 'task')   : array();
 
         /* Build kanban group data. */
         $kanbanGroup = array();
         foreach($lanes as $lane)
         {
-            list($laneData, $columnData) = $this->buildExecutionGroup($lane, $columns, $objectGroup, $searchValue, $storyCardMenu, $bugCardMenu, $taskCardMenu);
+            list($laneData, $columnData, $cardsData) = $this->buildExecutionGroup($lane, $columns, $objectGroup, $searchValue, $storyCardMenu, $bugCardMenu, $taskCardMenu);
 
-            if($searchValue != '' && empty($laneData['cards'])) continue;
-            $kanbanGroup[$lane->type]['id']              = $lane->id;
-            $kanbanGroup[$lane->type]['columns']         = array_values($columnData);
-            $kanbanGroup[$lane->type]['lanes'][]         = $laneData;
-            $kanbanGroup[$lane->type]['defaultCardType'] = $lane->type;
+            if($searchValue != '' && empty($cardsData)) continue;
+            $kanbanGroup[$lane->type]['id']   = $lane->id;
+            $kanbanGroup[$lane->type]['key']  = 'group' . $lane->id;
+            $kanbanGroup[$lane->type]['data'] = array();
+            $kanbanGroup[$lane->type]['data']['lanes'] = array($laneData);
+            $kanbanGroup[$lane->type]['data']['cols']  = $columnData;
+            $kanbanGroup[$lane->type]['data']['items'] = $cardsData;
         }
 
-        return $kanbanGroup;
+        $kanbanSetting = array();
+        $kanbanSetting['id']        = 0;
+        $kanbanSetting['key']       = 'region0';
+        $kanbanSetting['items']     = array_values($kanbanGroup);
+        $kanbanSetting['laneCount'] = count($kanbanSetting['items']);
+
+        return $kanbanSetting['items'];
     }
 
     /**
@@ -1632,37 +1640,36 @@ class kanbanModel extends model
     {
         $laneData   = array();
         $columnData = array();
+        $cardsData  = array();
 
-        $laneData['id']              = $lane->id;
-        $laneData['laneID']          = $lane->id;
-        $laneData['name']            = $lane->name;
-        $laneData['color']           = $lane->color;
-        $laneData['order']           = $lane->order;
-        $laneData['defaultCardType'] = $lane->type;
+        $laneData['id']     = $lane->id;
+        $laneData['type']   = $lane->type;
+        $laneData['name']   = $lane->id;
+        $laneData['region'] = $lane->region;
+        $laneData['title']  = $lane->name;
+        $laneData['color']  = $lane->color;
 
         foreach($columns[$lane->id] as $columnID => $column)
         {
-            $columnData[$column->id]['id']       = $columnID;
-            $columnData[$column->id]['type']     = $column->type;
-            $columnData[$column->id]['name']     = $column->name;
-            $columnData[$column->id]['color']    = $column->color;
-            $columnData[$column->id]['limit']    = $column->limit;
-            $columnData[$column->id]['laneType'] = $lane->type;
-            $columnData[$column->id]['asParent'] = $column->parent == -1 ? true : false;
-            $columnData[$column->id]['parent']   = $column->parent;
+            $cardIdList = array_unique(array_filter(explode(',', $column->cards)));
 
-            if($column->parent > 0)
-            {
-                if($column->type == 'developing' || $column->type == 'developed') $columnData[$column->id]['parentType'] = 'develop';
-                if($column->type == 'testing' || $column->type == 'tested')       $columnData[$column->id]['parentType'] = 'test';
-                if($column->type == 'fixing' || $column->type == 'fixed')         $columnData[$column->id]['parentType'] = 'resolving';
-            }
+            $columnData[$column->id]['id']     = $columnID;
+            $columnData[$column->id]['type']   = $column->type;
+            $columnData[$column->id]['name']   = $columnID;
+            $columnData[$column->id]['title']  = $column->name;
+            $columnData[$column->id]['color']  = $column->color;
+            $columnData[$column->id]['limit']  = $column->limit;
+            $columnData[$column->id]['region'] = $lane->region;
+            $columnData[$column->id]['group']  = $lane->type;
+            $columnData[$column->id]['parent'] = $column->parent;
+            $columnData[$column->id]['cards']  = empty($column->cares) ? 0 : count($cardIdList);
+            $columnData[$column->id]['actionList'] = array('setColumn', 'setWIP');
 
-            $cardIdList = array_filter(explode(',', $column->cards));
-            $laneData   = $this->buildExecutionCards($lane, $laneData, $column->type, $cardIdList, $objectGroup, $searchValue, $storyCardMenu, $bugCardMenu, $taskCardMenu);
+            if($column->parent > 0) $columnData[$column->id]['parentName'] = $column->parent;
+            if($cardIdList) $cardsData = $this->buildExecutionCards($cardsData, $column, $lane->type, $cardIdList, $objectGroup, $searchValue, $storyCardMenu, $bugCardMenu, $taskCardMenu);
         }
 
-        return array($laneData, $columnData);
+        return array($laneData, array_values($columnData), $cardsData);
     }
 
     /**
@@ -1681,52 +1688,47 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function buildExecutionCards(object $lane, array $laneData, string $columnType, array $cardIdList, array $objectGroup, string $searchValue = '', array $storyCardMenu = array(), array $bugCardMenu = array(), array $taskCardMenu = array()): array
+    public function buildExecutionCards(array $cardsData, object $column, string $laneType, array $cardIdList, array $objectGroup, string $searchValue = '', array $storyCardMenu = array(), array $bugCardMenu = array(), array $taskCardMenu = array()): array
     {
         $cardOrder  = 1;
         foreach($cardIdList as $cardID)
         {
             $cardData = array();
-            $objects  = zget($objectGroup, $lane->type, array());
+            $objects  = zget($objectGroup, $laneType, array());
             $object   = zget($objects, $cardID, array());
 
             if(empty($object)) continue;
 
             $cardData['id']         = $object->id;
-            $cardData['order']      = $cardOrder;
-            $cardData['pri']        = $object->pri ? $object->pri : '';
-            $cardData['estimate']   = $lane->type == 'bug' ? '' : $object->estimate;
+            $cardData['lane']       = $column->lane;
+            $cardData['column']     = $column->id;
+            $cardData['pri']        = zget($object, 'pri', 0);
+            $cardData['group']      = $laneType;
+            $cardData['estimate']   = $laneType == 'bug' ? 0 : $object->estimate;
             $cardData['assignedTo'] = $object->assignedTo;
-            $cardData['deadline']   = $lane->type == 'story' ? '' : $object->deadline;
-            $cardData['severity']   = $lane->type == 'bug' ? $object->severity : '';
+            $cardData['deadline']   = $laneType == 'story' ? '' : $object->deadline;
+            $cardData['severity']   = $laneType == 'bug' ? $object->severity : '';
 
-            if($lane->type == 'task')
+            $cardData['title'] = zget($object, 'title', '');
+            if($laneType == 'task')
             {
-                if($searchValue != '' && strpos($object->name, $searchValue) === false) continue;
-                $cardData['name']       = $object->name;
+                $cardData['title']      = $object->name;
                 $cardData['status']     = $object->status;
                 $cardData['left']       = $object->left;
                 $cardData['estStarted'] = $object->estStarted;
                 $cardData['mode']       = $object->mode;
                 if($object->mode == 'multi') $cardData['teamMembers'] = $object->teamMembers;
             }
-            else
-            {
-                if($searchValue != '' and strpos($object->title, $searchValue) === false) continue;
-                $cardData['title'] = $object->title;
-            }
+            if($searchValue != '' and !str_contains($cardData['title'], $searchValue)) continue;
 
-            if($lane->type == 'story') $cardData['menus'] = $storyCardMenu[$object->id];
-            if($lane->type == 'bug')   $cardData['menus'] = $bugCardMenu[$object->id];
-            if($lane->type == 'task')  $cardData['menus'] = $taskCardMenu[$object->id];
+            if($laneType == 'story') $cardData['actionList'] = $storyCardMenu[$object->id];
+            if($laneType == 'bug')   $cardData['actionList'] = $bugCardMenu[$object->id];
+            if($laneType == 'task')  $cardData['actionList'] = $taskCardMenu[$object->id];
 
-            $laneData['cards'][$columnType][] = $cardData;
-            $cardOrder ++;
+            $cardsData[$column->lane][$column->id][] = $cardData;
         }
 
-        if($searchValue == '' && !isset($laneData['cards'][$columnType])) $laneData['cards'][$columnType] = array();
-
-        return $laneData;
+        return $cardsData;
     }
 
     /**
