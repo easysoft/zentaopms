@@ -672,6 +672,9 @@ class productModel extends model
         if($browseType == 'bysearch')       return $this->story->getBySearch($productID, $branch, $queryID, $sort, 0, $type, '', $pager);
         if($browseType == 'willclose')      return $this->story->get2BeClosed($productID, $branch, $modules, $type, $sort, $pager);
 
+        if($browseType == 'developingstory') return $this->story->getByStatus($productID, $branch, $modules, 'developing', $type, $sort, $pager);
+        if($browseType == 'launchedstory')   return $this->story->getByStatus($productID, $branch, $modules, 'launched', $type, $sort, $pager);
+
         if($browseType == 'unclosed')
         {
             $unclosedStatus = $this->lang->story->statusList;
