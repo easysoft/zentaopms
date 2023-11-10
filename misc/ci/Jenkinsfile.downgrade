@@ -18,7 +18,7 @@ pipeline {
     ZENTAO_RELEASE_PATH = "${WORKSPACE}/release"
 
     // DOWNGRADE_VERSIONS = "7.2"
-    DOWNGRADE_VERSIONS = "7.2,7.1,7.0"
+    DOWNGRADE_VERSIONS = "7.2,7.1,7.0,5.4"
   }
 
   stages {
