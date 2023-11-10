@@ -258,6 +258,19 @@ class helper extends baseHelper
                 return (string)$value;
         }
     }
+
+    /**
+     * 检查是否启用缓存。
+     * Check is enable cache.
+     *
+     * @return bool
+     */
+    public static function isCacheEnabled()
+    {
+        if(isset($_GET['_nocache']) || isset($_SERVER['HTTP_X_ZT_REFRESH'])) return false;
+        global $config;
+        return $config->cache->enable;
+    }
 }
 
 /**
