@@ -2,7 +2,7 @@
 class xuanxuanAdmin extends adminModel
 {
     public function blockStatus($block = null)
-    {   
+    {
         if(empty($block)) return false;
 
         $this->app->loadLang('client');
@@ -80,18 +80,21 @@ class xuanxuanAdmin extends adminModel
     }
 
     /**
-     * Get XXC All file size.
-     * 
+     * 获取所有聊天文件的总大小。
+     * Get total size of all xxc files.
+     *
      * @access public
-     * @return int
+     * @return string
      */
-    public function getXxcAllFileSize()
+    public function getXxcAllFileSize(): string
     {
-        $xxcFiles = $this->dao->select('size')->from(TABLE_FILE)
-            ->where('objectType')->eq('chat')
-            ->fetchPairs();
+        $fileSize = $this->dao->select('SUM(size) AS size')->from(TABLE_FILE)->where('objectType')->eq('chat')->fetch('size');
+        if(!$fileSize) $fileSize = 0;
 
-        if(empty($xxcFiles)) return 0;
-        return array_sum($xxcFiles);
+        if($fileSize > pow(1024, 3)) return round($fileSize / pow(1024, 3), 2) . '<small> GB</small>';
+        if($fileSize > pow(1024, 2)) return round($fileSize / pow(1024, 2), 2) . '<small> MB</small>';
+        if($fileSize > 1024) return round($fileSize / 1024, 2) . '<small> KB</small>';
+        return $fileSize . '<small> B</small>';
+    }
     }
 }
