@@ -36,7 +36,7 @@ dtable
     set::sortLink(reateLink('sonarqube', 'browse', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"))),
     set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();
