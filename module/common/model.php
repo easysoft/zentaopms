@@ -2960,6 +2960,8 @@ EOF;
      */
     public static function canBeChanged($module, $object = null)
     {
+        if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
+
         global $app, $config;
         static $productsStatus   = array();
         static $executionsStatus = array();
