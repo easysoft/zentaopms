@@ -139,7 +139,7 @@
       </div>
       <?php endforeach;?>
     </div>
-    <?php if($config->edition != 'ipd'):?>
+    <?php if(!in_array($config->edition, array('max', 'ipd'))):?>
     <div class="border-gray mb-16 radius-4">
       <div class="h-40 pl-16 flex align-center justify-between">
         <div class="panel-title"><?php echo $lang->admin->upgradeRecommend?></div>
