@@ -64,13 +64,13 @@
             <td class="w-400px">
               <?php if($type != 'edit'): ?>
                 <div class="checkbox-primary disabled <?php if($detachedConference && extCommonModel::ilMethod('conference', 'detachedConference')) echo 'checked';?>">
-                  <label id="detachedConferenceTip"><a href="https://www.xuanim.com/book/xuanxuankehuduan/283.html" target="_blank" rel="noopener noreferrer"><?php echo $lang->conference->detachedConferenceUrl;?></a><?php echo $lang->conference->detachedConferenceTip;?></label>
+                  <label id="detachedConferenceTip"><?php echo $lang->conference->detachedConferenceTip;?></label>
                 </div>
               <?php else: ?>
                 <div class="checkbox-primary">
                   <input type='hidden' value='0' name='detachedConference'>
                   <input type="checkbox" name="detachedConference" id='detachedConference' value="true" <?php if($detachedConference && extCommonModel::ilMethod('conference', 'detachedConference')) echo 'checked';?> <?php if($type != 'edit' || !extCommonModel::ilMethod('conference', 'detachedConference') || $backendType == 'owt') echo 'disabled';?>>
-                  <label id="detachedConferenceTip" for='detachedConference'><a href="https://www.xuanim.com/book/xuanxuankehuduan/283.html" target="_blank" rel="noopener noreferrer"><?php echo $lang->conference->detachedConferenceUrl;?></a><?php echo $lang->conference->detachedConferenceTip;?></label>
+                  <label id="detachedConferenceTip" for='detachedConference'><?php echo $lang->conference->detachedConferenceTip;?></label>
                 </div>
               <?php endif; ?>
             </td>
@@ -162,12 +162,11 @@
         <div id="setupTip">
           <h3><?php echo $lang->conference->setupTitle;?></h3>
           <p><?php echo $lang->conference->setupDescription;?></p>
-          <a href="https://www.xuanim.com/page/download.html" target="_blank"><?php echo $lang->conference->download;?></a>
           <hr>
           <h4><?php echo $lang->conference->srsSetupTitle;?></h4>
-          <a href="https://www.xuanim.com/book/xuanxuanserver/273.html" target="_blank"><?php echo $lang->conference->setupDoc;?></a>
+          <a href="https://www.zentao.net/book/zentaopms/1158.html" target="_blank"><?php echo $lang->conference->setupDoc;?></a>
           <br>
-          <a href="https://www.xuanim.com/book/xxbservice/274.html" target="_blank"><?php echo $lang->conference->configDoc;?></a>
+          <a href="https://www.zentao.net/book/zentaopms/1159.html" target="_blank"><?php echo $lang->conference->configDoc;?></a>
           <hr>
           <h4><?php echo $lang->conference->owtSetupTitle;?></h4>
           <a href="https://www.xuanim.com/book/xuanxuanserver/237.html" target="_blank"><?php echo $lang->conference->setupDoc;?></a>
@@ -263,7 +262,7 @@ $(function()
             }
         }
     });
-    $("#conference-admin-form").submit(function(event)
+    $("#submit").click(function(event)
     {
       event.preventDefault();
       var conferenceAdminFormData = new FormData(document.getElementById('conference-admin-form'));
