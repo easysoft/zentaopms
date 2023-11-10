@@ -98,8 +98,8 @@ class upgrade extends control
 
         if($_POST) $this->locate(inlink('confirm', "fromVersion={$this->post->fromVersion}"));
 
-        $this->view->title      = $this->lang->upgrade->common . $this->lang->colon . $this->lang->upgrade->selectVersion;
-        $this->view->version    = $version;
+        $this->view->title   = $this->lang->upgrade->common . $this->lang->colon . $this->lang->upgrade->selectVersion;
+        $this->view->version = $version;
         $this->display();
     }
 
@@ -124,9 +124,9 @@ class upgrade extends control
         $confirmSql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $confirmSql);
 
         $this->session->set('step', '');
-        $this->view->title       = $this->lang->upgrade->confirm;
-        $this->view->confirm     = $confirmSql;
-        $this->view->writable    = $writable;
+        $this->view->title    = $this->lang->upgrade->confirm;
+        $this->view->confirm  = $confirmSql;
+        $this->view->writable = $writable;
 
         /* When sql is empty then skip it. */
         if(empty($this->view->confirm)) $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
