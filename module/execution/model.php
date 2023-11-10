@@ -340,7 +340,7 @@ class executionModel extends model
         if(!empty($formData->products))
         {
             $multipleProducts = $this->loadModel('product')->getMultiBranchPairs();
-            if(!empty($formData->branch)) $formData->branch = is_array($formData->branch) ? $formData->branch : json_decode($formData->branch, true);
+            if(isset($formData->branch) and !empty($formData->branch)) $formData->branch = is_array($formData->branch) ? $formData->branch : json_decode($formData->branch, true);
             foreach($formData->products as $index => $productID)
             {
                 if(!isset($formData->branch[$index])) continue;
