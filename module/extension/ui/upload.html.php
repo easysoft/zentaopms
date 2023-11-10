@@ -38,7 +38,7 @@ else
         (
             upload
             (
-                set::limitSize($maxUploadSize),
+                set::limitSize($maxUploadSize . 'B'),
                 set::exceededSizeHint($exceedLimitMsg),
             )
         ),
