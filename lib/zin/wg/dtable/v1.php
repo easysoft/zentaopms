@@ -58,8 +58,7 @@ class dtable extends wg
      */
     public function initSortLink()
     {
-        $orderBy = $this->prop('orderBy');
-        if(!$orderBy) $orderBy = data('orderBy');
+        $orderBy = $this->prop('orderBy', data('orderBy'));
         if(is_string($orderBy))
         {
             list($orderByName, $orderByType) = explode('_', strpos($orderBy, '_') === false ? $orderBy . '_desc' : $orderBy);
@@ -68,7 +67,7 @@ class dtable extends wg
 
         global $app;
         $sortLink = $this->prop('sortLink');
-        if(is_string($sortLink) && $sortLink) $this->setProp('sortLink', array('url' => $sortLink, 'data-app' => $app->tab));
+        if(is_string($sortLink) && !str_contains($sortLink, 'RAWJS')) $this->setProp('sortLink', array('url' => $sortLink, 'data-app' => $app->tab));
     }
 
     /**
