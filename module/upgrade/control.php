@@ -147,7 +147,7 @@ class upgrade extends control
         session_write_close();
         $this->session->set('step', '');
 
-        $this->view->title      = $this->lang->upgrade->result;
+        $this->view->title = $this->lang->upgrade->result;
 
         $result = $this->upgrade->deleteFiles();
         if($result)
