@@ -1,4 +1,10 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
+<?php if($this->config->edition == 'open'):?>
+<div class="btn-toolbar pull-right bizGuide">
+<?php $bizGuideLink = common::checkNotCN() ? 'https://www.zentao.pm/page/zentao-pricing.html' : 'https://www.zentao.net/page/enterprise.html';?>
+<?php echo html::a($bizGuideLink, $lang->screen->bizGuide . " <i class='icon-chevron-right'></i>", '', "class='text-primary' target='_blank'")?>
+</div>
+<?php endif;?>
 <?php js::set('showGuide', $showGuide ? 1 : 0);?>
 <div id="mainContent">
   <?php if(empty($screens)):?>

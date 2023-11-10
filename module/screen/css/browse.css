@@ -39,3 +39,6 @@
 #firstGuide .modal-footer {text-align: center !important; border-top: none !important; padding: 24px 0px !important;}
 #firstGuide .btn-wide {min-width: 90px !important;}
 #firstGuide .clickable-area {position: absolute; width: 50px; height: 20px; top: 235px; right: 117px;}
+
+#main .bizGuide {width: 100%; padding-bottom: 8px;}
+#main .bizGuide > a {float: right;}
