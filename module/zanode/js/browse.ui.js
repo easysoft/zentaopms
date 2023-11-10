@@ -29,10 +29,3 @@ window.afterRender = function()
 {
     $('.dtable-cell-content .toolbar button.create-snapshot i').replaceWith("<img src='static/svg/snapshot.svg' />");
 }
-
-function goHelp()
-{
-    var encodedHelpPageUrl = encodeURIComponent('https://www.zentao.net/book/zentaopms/978.html?fullScreen=zentao');
-    var urlForNewTab = webRoot + '#app=help&url=' + encodedHelpPageUrl;
-    window.open(urlForNewTab)
-}

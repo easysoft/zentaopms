@@ -34,10 +34,10 @@ $hostList = initTableData($hostList, $config->zahost->dtable->fieldList, $this->
     a
     (
         setClass('btn btn-link'),
-        set::id('helpTab'),
         icon('help'),
         $lang->help,
-        on::click('goHelp')
+        set('data-app', 'qa'),
+        set::href('https://www.zentao.net/book/zentaopms/978.html?fullScreen=zentao')
     )
 );
 
