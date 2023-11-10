@@ -252,8 +252,12 @@ class mail extends control
             return $this->sendSuccess(array('load' => inLink('test')));
         }
 
+        $users     = $this->dao->select('*')->from(TABLE_USER)->where('email')->ne('')->andWhere('deleted')->eq(0)->orderBy('account')->fetchAll();
+        $userPairs = array();
+        foreach($users as $user) $userPairs[$user->account] = $user->realname . ' ' . $user->email;
+
         $this->view->title = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->test;
-        $this->view->users = $this->dao->select('account,  CONCAT(realname, " ", email) AS email' )->from(TABLE_USER)->where('email')->ne('')->andWhere('deleted')->eq(0)->orderBy('account')->fetchPairs();
+        $this->view->users = $userPairs;
         $this->display();
     }
 
