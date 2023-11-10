@@ -63,7 +63,7 @@ dtable
     set::cols($config->space->dtable->fieldList),
     set::data($instances),
     set::onRenderCell(jsRaw('window.renderInstanceList')),
-    set::sortLink(createLink('space', 'browse', "spaceID=&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
+    set::sortLink(createLink('space', 'browse', "spaceID=&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::orderBys($orderBy),
     set::footPager(usePager()),
 );

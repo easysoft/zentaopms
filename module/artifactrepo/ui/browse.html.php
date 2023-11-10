@@ -51,7 +51,7 @@ dtable
     set::cols($config->artifactrepo->dtable->fieldList),
     set::data($artifactRepos),
     set::onRenderCell(jsRaw('window.renderList')),
-    set::sortLink(createLink('artifactrepo', 'browse', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$recTotal}&recPerPage={$recPerPage}")),
+    set::sortLink(createLink('artifactrepo', 'browse', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::orderBy($orderBy),
     set::footPager(usePager()),
 );
