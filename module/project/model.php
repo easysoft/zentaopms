@@ -420,9 +420,11 @@ class projectModel extends model
         $workhour = new stdclass();
         $workhour->totalHours = $this->dao->select('sum(t1.days * t1.hours) AS totalHours')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root=t2.id')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.account=t3.account')
             ->where('t2.id')->in($projectID)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('project')
+            ->andWhere('t3.deleted')->eq(0)
             ->fetch('totalHours');
 
         $workhour->totalHours    = empty($workhour->totalHours) ? 0 : $workhour->totalHours;

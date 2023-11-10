@@ -2083,9 +2083,17 @@ class executionModel extends model
             ->andWhere('status')->in('closed,cancel')
             ->fetch('totalLeft');
 
+        $totalHours = $this->dao->select('sum(t1.days * t1.hours) AS totalHours')->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')
+            ->on('t1.account=t2.account')
+            ->where('t1.root')->eq($execution->id)
+            ->andWhere('t1.type')->eq('execution')
+            ->andWhere('t2.deleted')->eq(0)
+            ->fetch('totalHours');
+
         /* Set the hours information for the task. */
+        $execution->totalHours    = $totalHours;
         $execution->days          = $execution->days ? $execution->days : 0;
-        $execution->totalHours    = $this->dao->select('sum(days * hours) AS totalHours')->from(TABLE_TEAM)->where('root')->eq($execution->id)->andWhere('type')->eq('execution')->fetch('totalHours');
         $execution->totalEstimate = round((float)$total->totalEstimate, 1);
         $execution->totalConsumed = round((float)$total->totalConsumed, 1);
         $execution->totalLeft     = round(((float)$total->totalLeft - (float)$closedTotalLeft), 1);
