@@ -2236,6 +2236,7 @@ EOF;
             ->andWhere($titleField)->in($titles)
             ->andWhere($dateField)->ge($date)->fi()
             ->beginIF($condition)->andWhere($condition)->fi()
+            ->beginIF($type == 'story')->andWhere('type')->eq($data->type)
             ->fetchPairs();
 
         if($duplicate and is_string($titles)) return array('stop' => true, 'duplicate' => key($duplicate));
