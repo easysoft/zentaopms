@@ -1607,7 +1607,15 @@ class pivotModel extends model
                 }
                 else
                 {
-                    $columnSQL = "$stat(tt.`$field`) as `$uuName`";
+                    if($fields[$field]['type'] != 'number' and in_array($stat, array('avg', 'sum')))
+                    {
+                        $convertSql = $this->config->db->driver == 'mysql' ? "CAST(tt.`$field` AS DECIMAL(32, 2))" : "TO_DECIMAL(tt.`$field`)";
+                        $columnSQL  = "$stat($convertSql) as `$uuName`";
+                    }
+                    else
+                    {
+                        $columnSQL = "$stat(tt.`$field`) as `$uuName`";
+                    }
                 }
 
                 if($slice != 'noSlice') $columnSQL = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $orderSQL . ",tt.`$slice`";
