@@ -25,8 +25,7 @@ class repo extends control
         $disFuncs = str_replace(' ', '', ini_get('disable_functions'));
         if(stripos(",$disFuncs,", ',exec,') !== false or stripos(",$disFuncs,", ',shell_exec,') !== false)
         {
-            echo js::alert($this->lang->repo->error->useless);
-            return print(js::locate('back'));
+            return $this->sendError($this->lang->repo->error->useless, true);
         }
 
         $this->projectID = $this->session->project ? $this->session->project : 0;
@@ -65,12 +64,12 @@ class repo extends control
             $this->loadModel('execution')->setMenu($objectID);
             $this->view->executionID = $objectID;
         }
-        else
+        elseif($tab != 'admin')
         {
             $this->repo->setMenu($this->repos, $repoID);
         }
 
-        if(empty($this->repos) and !in_array($this->methodName, array('create', 'setrules'))) return print($this->locate($this->repo->createLink('create', "objectID=$objectID")));
+        if(empty($this->repos) && !in_array($this->methodName, array('create', 'setrules'))) return $this->locate($this->repo->createLink('create', "objectID=$objectID"));
     }
 
     /**
@@ -908,7 +907,6 @@ class repo extends control
 
         $repoID = $this->session->repoID;
         $this->commonAction($repoID);
-        $this->lang->switcherMenu = '';
 
         $this->app->loadLang('task');
         $this->app->loadLang('bug');

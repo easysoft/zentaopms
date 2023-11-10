@@ -1,8 +1,8 @@
-$(function()
+window.afterPageUpdate = function()
 {
     replaceExample();
     $(document).on('keyup', 'input', function(){replaceExample()});
-})
+}
 
 function replaceExample()
 {
@@ -18,34 +18,34 @@ function replaceExample()
     let cunits       = $('[id*=unit][id*=consumed]').val().split(';');
     let lunits       = $('[id*=unit][id*=left]').val().split(';');
 
-    for(i in startTask)
+    for(let i in startTask)
     {
         start = startTask[i];
-        for(j in taskModule)
+        for(let j in taskModule)
         {
             task = taskModule[j];
-            for(k in idMark)
+            for(let k in idMark)
             {
                 id = idMark[k];
-                for(l in idSplit)
+                for(let l in idSplit)
                 {
                     split = idSplit[l];
-                    for(m in costs)
+                    for(let m in costs)
                     {
                         cost = costs[m];
-                        for(n in consumedmark)
+                        for(let n in consumedmark)
                         {
                             consumed = consumedmark[n];
-                            for(o in lefts)
+                            for(let o in lefts)
                             {
                                 left = lefts[o];
-                                for(p in leftMarks)
+                                for(let p in leftMarks)
                                 {
                                     leftMark = leftMarks[p];
-                                    for(q in cunits)
+                                    for(let q in cunits)
                                     {
                                         cunit = cunits[q];
-                                        for(r in lunits)
+                                        for(let r in lunits)
                                         {
                                             lunit = lunits[r];
                                             html += '<br />' + rulesExample['task']['start'].replace('%start%', start)
@@ -70,25 +70,25 @@ function replaceExample()
     }
 
     let finishTask = $('[id*=finish]').val().split(';');
-    for(i in finishTask)
+    for(let i in finishTask)
     {
         finish = finishTask[i];
-        for(j in taskModule)
+        for(let j in taskModule)
         {
             task = taskModule[j];
-            for(k in idMark)
+            for(let k in idMark)
             {
                 id = idMark[k];
-                for(l in idSplit)
+                for(let l in idSplit)
                 {
                     split = idSplit[l];
-                    for(m in costs)
+                    for(let m in costs)
                     {
                         cost = costs[m];
-                        for(n in consumedmark)
+                        for(let n in consumedmark)
                         {
                             consumed = consumedmark[n];
-                            for(o in cunits)
+                            for(let o in cunits)
                             {
                                 cunit = cunits[o];
                                 html += '<br />' + rulesExample['task']['finish'].replace('%finish%', finish)
@@ -107,34 +107,34 @@ function replaceExample()
     }
 
     let effortTask = $('[id*=logEfforts]').val().split(';');
-    for(i in effortTask)
+    for(let i in effortTask)
     {
         effort = effortTask[i];
-        for(j in taskModule)
+        for(let j in taskModule)
         {
             task = taskModule[j];
-            for(k in idMark)
+            for(let k in idMark)
             {
                 id = idMark[k];
-                for(l in idSplit)
+                for(let l in idSplit)
                 {
                     split = idSplit[l];
-                    for(m in costs)
+                    for(let m in costs)
                     {
                         cost = costs[m];
-                        for(n in consumedmark)
+                        for(let n in consumedmark)
                         {
                             consumed = consumedmark[n];
-                            for(o in lefts)
+                            for(let o in lefts)
                             {
                                 left = lefts[o];
-                                for(p in leftMarks)
+                                for(let p in leftMarks)
                                 {
                                     leftMark = leftMarks[p];
-                                    for(q in cunits)
+                                    for(let q in cunits)
                                     {
                                         cunit = cunits[q];
-                                        for(r in lunits)
+                                        for(let r in lunits)
                                         {
                                             lunit = lunits[r];
                                             html += '<br />' + rulesExample['task']['effort'].replace('%effort%', effort)
@@ -160,16 +160,16 @@ function replaceExample()
 
     let resolveBug  = $('[id*=bug][id*="resolve"]').val().split(';');
     let bugModule   = $('[id*=module][id*=bug]').val().split(';');
-    for(i in resolveBug)
+    for(let i in resolveBug)
     {
         resolve = resolveBug[i];
-        for(j in bugModule)
+        for(let j in bugModule)
         {
             bug = bugModule[j];
-            for(k in idMark)
+            for(let k in idMark)
             {
                 id = idMark[k];
-                for(l in idSplit)
+                for(let l in idSplit)
                 {
                     split = idSplit[l];
                     html += '<br />' + rulesExample['bug']['resolve'].replace('%resolve%', resolve)
