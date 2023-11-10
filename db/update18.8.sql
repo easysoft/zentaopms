@@ -8,11 +8,11 @@ ALTER TABLE `zt_block` ADD `left` enum('0', '1', '2') NOT NULL DEFAULT '0' AFTER
 ALTER TABLE `zt_block` ADD `top` smallint(5) UNSIGNED NOT NULL DEFAULT 0 AFTER `left`;
 ALTER TABLE `zt_block` MODIFY `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `hidden`;
 
+DROP INDEX account_vision_module_type_order ON `zt_block`;
 UPDATE `zt_block` SET `dashboard` = CONCAT(`module`, `type`);
 UPDATE `zt_block` SET `module` = IF(`source` != '', `source`, `code`);
 UPDATE `zt_block` SET `width` = IF(`grid` > 4, '2', '1');
 UPDATE `zt_block` SET `params` = '{"count":"20"}' WHERE `module` = 'assigntome' AND `code` = 'assigntome';
-DROP INDEX account_vision_module_type_order ON `zt_block`;
 
 ALTER TABLE `zt_block` DROP COLUMN `source`;
 ALTER TABLE `zt_block` DROP COLUMN `type`;
