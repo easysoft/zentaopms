@@ -1066,7 +1066,7 @@ class doc extends control
             echo(js::alert($this->lang->doc->accessDenied));
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
             if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(inlink('index')));
-            helper::end(print(js::locate('back')));
+            helper::end(print(js::locate(inlink('index'))));
         }
 
         if(!$doc or !isset($doc->id))
