@@ -1708,9 +1708,40 @@ class execution extends control
         }
 
         list($projectCount, $statusCount, $myExecutions, $kanbanGroup) = $this->executionZen->buildExecutionKanbanData(array_keys($projects), $executions);
+        $kanbanGroup = empty($myExecutions) ? $kanbanGroup : array($myExecutions) + $kanbanGroup;
+
+        $kanbanList  = array();
+        $regionData  = array();
+        $lanes       = array();
+        $items       = array();
+        $columnCards = array();
+        foreach($kanbanGroup as $laneKey => $laneData)
+        {
+            $lanes[] = array('name' => $laneKey, 'title' => zget($projects, $laneKey));
+            $columns = array();
+            foreach(array('wait', 'doing', 'suspended', 'closed') as $columnKey)
+            {
+                $columns[] = array('name' => $columnKey, 'title' => $this->lang->execution->kanbanColType[$columnKey]);
+                $cardList  = !empty($laneData[$columnKey]) ? $laneData[$columnKey] : array();
+                foreach($cardList as $card)
+                {
+                    $items[$laneKey][$columnKey][] = array('id' => $card->id, 'name' => $card->id, 'title' => $card->name, 'status' => $card->status, 'delay' => !empty($card->delay) ? $card->delay : 0, 'progress' => $card->hours->progress);
+
+                    if(!isset($columnCards[$columnKey])) $columnCards[$columnKey] = 0;
+                    $columnCards[$columnKey] ++;
+                }
+            }
+        }
+
+        foreach($columns as $key => $column) $columns[$key]['cards'] = !empty($columnCards[$column['name']]) ? $columnCards[$column['name']] : 0;
+        $groupData['key']           = 'executionKanban';
+        $groupData['data']['lanes'] = $lanes;
+        $groupData['data']['cols']  = $columns;
+        $groupData['data']['items'] = $items;
+        $kanbanList[] = array('items' => array($groupData), 'key' => 'executionKanban', 'heading' => array('title' => $this->lang->execution->executionKanban));
 
         $this->view->title        = $this->lang->execution->executionKanban;
-        $this->view->kanbanGroup  = empty($myExecutions) ? $kanbanGroup : array($myExecutions) + $kanbanGroup;
+        $this->view->kanbanList   = $kanbanList;
         $this->view->projects     = $projects;
         $this->view->projectCount = $projectCount;
         $this->view->statusCount  = $statusCount;
