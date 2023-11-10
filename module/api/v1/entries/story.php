@@ -104,8 +104,8 @@ class storyEntry extends entry
 
         $data = $this->getData();
 
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
-        if(!isset($data->status)) return $this->sendError(400, 'error');
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+        if(!isset($data->result)) return $this->sendError(400, 'error');
 
         $story = $this->story->getByID($storyID);
         return $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
