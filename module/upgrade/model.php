@@ -2161,7 +2161,7 @@ class upgradeModel extends model
                 $this->saveLogs($e->getMessage());
                 $errorInfo = $e->errorInfo;
                 $errorCode = !empty($errorInfo) ? $errorInfo[1] : '';
-                if(strpos($ignoreCode, "|$errorCode|") === false) static::$errors[] = $e->getMessage() . "<p>The sql is: $sql</p>";
+                if(strpos($ignoreCode, "|$errorCode|") === false) static::$errors[] = $e->getMessage();
             }
         }
     }
