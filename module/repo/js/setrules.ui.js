@@ -1,8 +1,8 @@
-window.afterPageUpdate = function()
+$(function()
 {
     replaceExample();
     $(document).on('keyup', 'input', function(){replaceExample()});
-}
+});
 
 function replaceExample()
 {
