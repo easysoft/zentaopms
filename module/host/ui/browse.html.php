@@ -16,8 +16,8 @@ jsVar('orderBy',   $orderBy);
 jsVar('hostLang',  $lang->host);
 jsVar('sortLink',  helper::createLink('host', 'browse', "browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"));
 
-$config->host->featureBar[0]['active'] = true;
-$config->host->featureBar[0]['badge']  = $pager->recTotal != '' ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null;
+$config->host->featureBar['all']['active'] = true;
+$config->host->featureBar['all']['badge']  = $pager->recTotal != '' ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null;
 featureBar
 (
     set::items($config->host->featureBar),

@@ -23,5 +23,4 @@ $config->index->appGroup['effort']      = 'my';
 $config->index->appGroup['user']        = 'admin';
 
 $config->index->oldPages = array();
-$config->index->oldPages[] = 'host-treemap';
 $config->index->oldPages[] = 'screen-view';

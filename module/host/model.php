@@ -286,40 +286,47 @@ class hostModel extends model
         {
             $hostGroup[$host->city][$host->roomID][] = $host;
         }
-
-        /* Generate a tree map. */
-        $treemap = "<ul class='treemap-data hide'>";
+        $treeMap = array();
         foreach($hostGroup as $city => $rooms)
         {
-            $treemap .= "<li data-type='city'>" . zget($this->lang->serverroom->cityList, $city);
-            $treemap .= '<ul>';
+            $children = array();
+            $children['text']      = zget($this->lang->serverroom->cityList, $city);
+            $children['collapsed'] = false;
+            $children['children']  = array();
+
             foreach($rooms as $roomID => $cabinets)
             {
                 $host = reset($cabinets);
                 if(is_array($host)) $host = reset($host);
-                $treemap .= "<li data-type='room'>" . htmlspecialchars($host->roomName);
-                $treemap .= '<ul>';
+
+                $subChildren = array();
+                $subChildren['text']      = htmlspecialchars($host->roomName);
+                $subChildren['collapsed'] = false;
+                $subChildren['children']  = array();
+
                 foreach($cabinets as $cabinet => $hosts)
                 {
                     if(is_array($hosts))
                     {
-                        $treemap .= "<li data-type='cabinet'>" . htmlspecialchars($cabinet);
-                        $treemap .= '<ul>';
-                        foreach($hosts as $host) $treemap .= "<li data-type='host' data-hostid='{$host->id}'>" . htmlspecialchars($host->name) . '</li>';
-                        $treemap .= '</ul></li>';
+                        $hostNameList = array();
+                        foreach($hosts as $host) $hostNameList[] = array('text' => htmlspecialchars($host->name));
+                        $subChildren['children'][] = array(
+                            'text'      => htmlspecialchars($cabinet),
+                            'collapsed' => false,
+                            'children'  => $hostNameList
+                        );
                     }
                     else
                     {
-                        $host     = $hosts;
-                        $treemap .= "<li data-type='host' data-hostid='{$host->id}'>" . htmlspecialchars($host->name) . '</li>';
+                        $subChildren['children'][] = array('text' => htmlspecialchars($hosts->name));
                     }
                 }
-                $treemap .= '</ul></li>';
+                $children['children'][] = $subChildren;
             }
-            $treemap .= '</ul></li>';
+
+            $treeMap[] = $children;
         }
-        $treemap .= '</ul>';
-        return $treemap;
+        return $treeMap;
     }
 
     /**
@@ -344,49 +351,47 @@ class hostModel extends model
         {
             foreach(explode(',', trim($module->path)) as $path) $paths[$path] = $path;
         }
-        $stmt = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($paths)->orderBy('grade_desc,`order`,id')->query();
+        $modules = $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('id')->in($paths)
+            ->orderBy('grade_desc,`order`,id')
+            ->fetchAll();
 
-        /* Generate a tree map. */
         $treemap = array();
-        while($module = $stmt->fetch())
+        foreach($modules as $module)
         {
-            if(!isset($treemap[$module->parent])) $treemap[$module->parent] = '';
-            $treemap[$module->parent] .= "<li data-type='group'>" . htmlspecialchars($module->name);
-            if(isset($treemap[$module->id]) or isset($hostGroups[$module->id]))
+            if(!isset($treemap[$module->parent])) $treemap[$module->parent] = array('text' => '', 'collapsed' => false, 'children' => array());
+            $treemap[$module->parent]['text'] = htmlspecialchars($module->name);
+            if(isset($treemap[$module->id]))
             {
-                $treemap[$module->parent] .= '<ul>';
-                if(isset($treemap[$module->id]))
-                {
-                    $treemap[$module->parent] .= $treemap[$module->id];
-                    unset($treemap[$module->id]);
-                }
-                if(isset($hostGroups[$module->id]))
-                {
-                    foreach($hostGroups[$module->id] as $host)
-                    {
-                        $treemap[$module->parent] .= "<li data-type='host' data-hostid='{$host->id}'>" . htmlspecialchars($host->name) . "</li>";
-                    }
-                }
-                $treemap[$module->parent] .= '</ul>';
+                $treemap[$module->parent]['children'][] = $treemap[$module->id];
+                unset($treemap[$module->id]);
             }
-            $treemap[$module->parent] .= "</li>";
+
+            if(isset($hostGroups[$module->id]))
+            {
+                $treemap[$module->id] = array('text' => $module->name, 'collapsed' => false, 'children' => array());
+                foreach($hostGroups[$module->id] as $host)
+                {
+                    $treemap[$module->id]['children'][] = array('text' => htmlspecialchars($host->name));
+                }
+            }
         }
 
-        $groupTree = '';
         if(isset($treemap[0]) or isset($hostGroups[0]))
         {
-            $groupTree  = "<ul class='treemap-data hide'>";
-            $groupTree .= "<li data-type='root'>/";
-            $groupTree .= "<ul>";
-            if(isset($treemap[0])) $groupTree .= $treemap[0];
+            if(isset($treemap[0])) $groupTree = $treemap[0];
 
             if(isset($hostGroups[0]))
             {
-                foreach($hostGroups[0] as $host) $groupTree .= "<li data-type='host' data-hostid='{$host->id}'>" . htmlspecialchars($host->name) . "</li>";
+                foreach($hostGroups[0] as $host) $groupTree['children'][] = array('text' => htmlspecialchars($host->name));
             }
-            $groupTree .= "</ul></li></ul>";
+            $treemap[0] = $groupTree;
         }
-        return $groupTree;
+
+        $treeData['text']      = '/';
+        $treeData['collapsed'] = false;
+        $treeData['children']  = array_values($treemap);
+        return $treeData;
     }
 
     /**

@@ -12,17 +12,17 @@ $config->host->editor->changestatus = array('id' => 'reason', 'tools' => 'simple
 
 global $lang;
 $config->host->featureBar = array(
-    array(
+    'all' => array(
         'text'   => $lang->host->featureBar['browse']['all'],
         'active' => false,
         'url'    => helper::createLink('host', 'browse'),
     ),
-    array(
+    'serverroom' => array(
         'text'   => $lang->host->featureBar['browse']['serverroom'],
         'active' => false,
         'url'    => helper::createLink('host', 'treemap', 'type=serverroom'),
     ),
-    array(
+    'group' => array(
         'text'   => $lang->host->featureBar['browse']['group'],
         'active' => false,
         'url'    => helper::createLink('host', 'treemap', 'type=group'),
