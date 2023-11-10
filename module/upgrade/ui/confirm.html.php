@@ -30,19 +30,16 @@ div
             (
                 set::className('border p-4 mb-4'),
                 set::style(array('background-color' => 'var(--color-gray-100)')),
-                div
-                (
-                    html(nl2br($confirm)),
-                )
+                div(html(nl2br($confirm)))
             ),
             input
             (
                 set::type('hidden'),
                 set::name('fromVersion'),
-                set::value($fromVersion),
+                set::value($fromVersion)
             ),
             set::actions(array('submit', 'upgradingTips' => array('text' => $lang->upgrade->upgradingTips, 'class' => 'text-danger ghost hidden', 'id' => 'upgradingTips'))),
-            set::submitBtnText($lang->upgrade->sureExecute),
+            set::submitBtnText($lang->upgrade->sureExecute)
         )
     )
 );

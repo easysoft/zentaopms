@@ -24,7 +24,7 @@ function updateProgress()
     $.ajax(
     {
         url: url,
-        success:function(result)
+        success: function(result)
         {
             var progress = parseInt(result);
             $("#progress .progress-bar").css('width', progress + '%');
