@@ -29,7 +29,7 @@ class featureBar extends wg
     protected function getItems()
     {
         $items = $this->prop('items');
-        if(!empty($items)) return $items;
+        if(!empty($items)) return array_values($items);
 
         global $app, $lang;
         $currentModule = $this->prop('module', $app->rawModule);
