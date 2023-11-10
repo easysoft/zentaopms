@@ -34,7 +34,7 @@ class taskRestartEntry extends entry
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');
-        if(isset($data->result) and $data->result == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $task = $this->loadModel('task')->getByID($taskID);
 
