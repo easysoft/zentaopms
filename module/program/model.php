@@ -571,7 +571,7 @@ class programModel extends model
                 ->orWhere("CONCAT(',', t1.whitelist, ',')")->like("%,{$this->app->user->account},%")
                 ->markRight(1);
         }
-        $projectList = $stmt->orderBy($orderBy)->page($pager)->fetchAll('id');
+        $projectList = $stmt->orderBy($orderBy)->page($pager, 't1.id')->fetchAll('id');
 
         /* Determine how to display the name of the program. */
         if($programTitle and in_array($this->config->systemMode, array('ALM', 'PLM')))
