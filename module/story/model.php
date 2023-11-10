@@ -6804,7 +6804,7 @@ class storyModel extends model
                 if($col->name == 'BSA')          $data->BSA          = zget($this->lang->demand->bsaList, $story->BSA);
                 if($col->name == 'taskCount')    $data->taskCount    = $storyTasks[$story->id] > 0 ? html::a(helper::createLink('story', 'tasks', "storyID=$story->id"), $storyTasks[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
                 if($col->name == 'bugCount')     $data->bugCount     = $storyBugs[$story->id]  > 0 ? html::a(helper::createLink('story', 'bugs', "storyID=$story->id"),  $storyBugs[$story->id],  '', 'class="iframe" data-toggle="modal"') : '0';
-                if($col->name == 'caseCount')    $data->caseCount    = $storyCases[$story->id] > 0 ? html::a(helper::createLink('story', 'cases', "storyID=$story->id"),  $storyBugs[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
+                if($col->name == 'caseCount')    $data->caseCount    = $storyCases[$story->id] > 0 ? html::a(helper::createLink('story', 'cases', "storyID=$story->id"),  $storyCases[$story->id], '', 'class="iframe" data-toggle="modal"') : '0';
                 if($col->name == 'estimate')     $data->estimate     = (float)$story->estimate . $this->config->hourUnit;
                 if($col->name == 'reviewedBy')
                 {
