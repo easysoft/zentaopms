@@ -40,18 +40,23 @@ if($app->tab == 'project' && !empty($multipleProject))
 $executionRow = '';
 if(!empty($multipleProject))
 {
-    $executionRow = formRow(
-        formGroup
+    $executionRow = formRow
         (
-            set::width('1/2'),
-            set::name('execution'),
-            set::label($lang->executionCommon),
-            set::value($executionID),
-            set::items($executions),
-            set::required(true),
-            on::change('loadProducts')
-        ),
-    );
+            formGroup
+            (
+                set::width('1/2'),
+                set::label($lang->executionCommon),
+                set::required(true),
+                picker
+                (
+                    set::name('execution'),
+                    set::value($executionID),
+                    set::items($executions),
+                    set::required(true),
+                    on::change('loadProducts')
+                ),
+            ),
+        );
 }
 
 $productRow = '';
