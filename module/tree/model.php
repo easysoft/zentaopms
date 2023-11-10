@@ -1010,7 +1010,7 @@ class treeModel extends model
      * @access public
      * @return object|false
      */
-    public function build20Tree(object $module, string $type, int|string $parent = 0, array $userFunc = array(), array|string $extra = array(), string $branch = 'all'): object|false
+    public function build20Tree(object $module, string $type, $parent = 0, array $userFunc = array(), $extra = array(), string $branch = 'all'): object|false
     {
         /* Add for task #1945. check the module has case or no. */
         if((isset($extra['rootID']) and isset($extra['branch']) and $branch === 'null') or ($type == 'case' and is_numeric($extra)))
