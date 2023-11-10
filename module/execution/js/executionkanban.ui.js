@@ -16,8 +16,8 @@ window.getItem = function(info)
         info.item.suffixClass = 'label danger rounded-xl' + (info.item.status == 'doing' ? ' mr-8' : '');
     }
     info.item.prefix     = {component: 'ProgressCircle', props: {percent: info.item.progress, size: 24}};
-    info.item.titleUrl   = $.createLink('execution', 'task', `id=${info.item.id}`);
     info.item.titleAttrs = {'class': 'text-black clip', 'title' : info.item.title};
+    if(privs.canViewExecution) info.item.titleUrl = $.createLink('execution', 'task', `id=${info.item.id}`);
 }
 
 window.canDrop = function(dragInfo, dropInfo)
@@ -31,10 +31,14 @@ window.canDrop = function(dragInfo, dropInfo)
     console.log(dropInfo);
     if(dropInfo.type == 'item')             return false;
     if(dragInfo.item.lane != lane.name)     return false;
-    if(dragInfo.item.status == 'wait')      return true;
-    if(dragInfo.item.status == 'doing')     return dropInfo.col == 'closed' || dropInfo.col == 'suspended';
-    if(dragInfo.item.status == 'suspended') return dropInfo.col == 'closed' || dropInfo.col == 'doing';
-    if(dragInfo.item.status == 'closed')    return dropInfo.col == 'doing';
+    if(dragInfo.item.status == 'wait'      && dropInfo.col == 'doing')     return privs.canStartExecution;
+    if(dragInfo.item.status == 'wait'      && dropInfo.col == 'suspended') return privs.canSuspendExecution;
+    if(dragInfo.item.status == 'wait'      && dropInfo.col == 'closed')    return privs.canCloseExecution;
+    if(dragInfo.item.status == 'doing'     && dropInfo.col == 'closed')    return privs.canCloseExecution;
+    if(dragInfo.item.status == 'doing'     && dropInfo.col == 'suspended') return privs.canSuspendExecution;
+    if(dragInfo.item.status == 'suspended' && dropInfo.col == 'closed')    return privs.canCloseExecution;
+    if(dragInfo.item.status == 'suspended' && dropInfo.col == 'doing')     return privs.canActivateExecution;
+    if(dragInfo.item.status == 'closed'    && dropInfo.col == 'doing')     return privs.canActivateExecution;
     return false;
 }
 

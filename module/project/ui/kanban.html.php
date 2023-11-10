@@ -9,7 +9,15 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('delayed', $lang->project->statusList['delay']);
+
+$privs = array
+(
+    'canViewExecution'   => common::hasPriv('execution', 'task'),
+    'canViewProject'     => common::hasPriv('project', 'index'),
+    'canStartProject'    => common::hasPriv('project', 'start'),
+    'canActivateProject' => common::hasPriv('project', 'activate'),
+    'canCloseProject'    => common::hasPriv('project', 'close'),
+);
 
 foreach($kanbanList as $current => $region)
 {
@@ -26,6 +34,8 @@ foreach($kanbanList as $current => $region)
     }
 }
 
+jsVar('privs',   $privs);
+jsVar('delayed', $lang->project->statusList['delay']);
 zui::kanbanList
 (
     set::key('kanban'),
