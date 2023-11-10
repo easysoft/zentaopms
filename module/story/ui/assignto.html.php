@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('storyType', $story->type);
+
 modalHeader(set::title($lang->story->assignTo));
 formPanel
 (

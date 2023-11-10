@@ -9,4 +9,6 @@
  */
 declare(strict_types=1);
 
+js::set('storyType', $storyType);
+
 include '../../file/ui/export.html.php';

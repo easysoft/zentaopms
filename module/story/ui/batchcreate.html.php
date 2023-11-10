@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace zin;
 
+jsVar('storyType', $type);
+
 !isAjaxRequest() && dropmenu();
 
 /* Generate fields for the batch create form. */

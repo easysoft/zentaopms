@@ -1,3 +1,17 @@
+$(function()
+{
+    if(typeof(storyType) == 'undefined') storyType = '';
+    if(typeof(rawModule) == 'undefined') rawModule = 'product';
+    if(typeof(app)       == 'undefined') app       = '';
+    if(typeof(execution) != 'undefined') rawModule = 'projectstory';
+    if(['project', 'projectstory'].indexOf(rawModule) === -1 && app != 'qa')
+    {
+        if(app != 'my') $('#navbar .nav li a').removeClass('active');
+        $("#navbar .nav li a[data-id=" + storyType + ']').addClass('active');
+        $('#subNavbar li a[data-id="' + storyType + '"]').addClass('active');
+    }
+});
+
 window.customSubmit = function(e)
 {
     const $saveButton      = $('#saveButton');

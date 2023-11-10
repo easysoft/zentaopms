@@ -16,6 +16,7 @@ if($story->type == 'requirement') $confirmDelete = str_replace($lang->SRCommon, 
 jsVar('relievedTip', $lang->story->relievedTip);
 jsVar('unlinkStoryTip', $lang->story->unlinkStory);
 jsVar('confirmDeleteTip', $confirmDelete);
+jsVar('storyType', $story->type);
 
 $isInModal  = isInModal();
 $otherParam = 'storyID=&projectID=';

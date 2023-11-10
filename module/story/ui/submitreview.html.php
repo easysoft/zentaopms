@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 jsVar('lastReviewer', $reviewers);
+jsVar('storyType', $story->type);
 
 $needNotReviewBox = null;
 if(!$this->story->checkForceReview())
