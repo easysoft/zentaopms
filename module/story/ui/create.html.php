@@ -66,13 +66,34 @@ formPanel
             set::label($lang->story->module),
             inputGroup
             (
-                span
+                set('id', 'moduleIdBox'),
+                picker
                 (
-                    set::id('moduleIdBox'),
-                    picker(setID('module'), set::name('module'), set::items($fields['module']['options']), set::value($fields['module']['default']), set::required(true)),
+                    set::name('module'),
+                    set::name('module'),
+                    set::items($fields['module']['options']),
+                    set::value($fields['module']['default']),
+                    set::required(true)
                 ),
-                count($fields['module']['options']) == 1 ? btn(set::url($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch")), setClass('primary'), set('data-toggle', 'modal'), $lang->tree->manage) : null,
-                count($fields['module']['options']) == 1 ? btn(set('data-on', 'click'), set('data-call', 'loadProductModules'), set('data-params', $productID), setClass('refresh'), icon('refresh')) : null,
+                count($fields['module']['options']) == 1 ? span
+                (
+                    set('class', 'input-group-addon'),
+                    a
+                    (
+                        set('class', 'mr-2'),
+                        set('href', $this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch={$branch}")),
+                        set('data-toggle', 'modal'),
+                        set('data-size', 'lg'),
+                        $lang->tree->manage
+                    ),
+                    a
+                    (
+                        set('data-on', 'click'),
+                        set('data-call', 'loadProductModules'),
+                        set('data-params', $productID),
+                        icon('refresh')
+                    )
+                ) : null
             )
         ),
     ),
