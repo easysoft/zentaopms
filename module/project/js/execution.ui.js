@@ -71,6 +71,7 @@ window.footerSummary = function(element, checkedIdList)
     var doingCount = 0;
     rows.forEach(function(data)
     {
+        if(data.id.indexOf('tid') > -1) return;
         if(checkedIdList.length > 0 && checkedIdList.indexOf(data.id) > -1)
         {
             if(data.data.status == 'wait')  waitCount ++;
