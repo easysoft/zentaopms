@@ -665,7 +665,7 @@ $config->group->package->createProduct->privs['product-edit']        = array('ed
 $config->group->package->createProduct->privs['product-batchEdit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 35, 'depend' => array('product-all'), 'recommend' => array('product-edit'));
 $config->group->package->createProduct->privs['product-close']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 70, 'depend' => array('product-view'), 'recommend' => array('product-create', 'product-edit'));
 $config->group->package->createProduct->privs['product-updateOrder'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 75, 'depend' => array('product-all'), 'recommend' => array('product-create', 'product-edit'));
-$config->group->package->createProduct->privs['product-activate']    = array('edition' => 'ipd', 'vision' => 'or,rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
+$config->group->package->createProduct->privs['product-activate']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'or,rnd', 'order' => 10, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->importProduct = new stdclass();
 $config->group->package->importProduct->order  = 20;
