@@ -1127,8 +1127,11 @@ class storyZen extends story
             $storyPlanDiff = array_diff($oldStoryPlan, $storyPlan);
             if(!empty($oldPlanDiff) or !empty($storyPlanDiff)) dao::$errors[] = $this->lang->story->notice->changePlan;
         }
-        if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
-        if(!$this->post->needNotReview and empty($_POST['reviewer'])) dao::$errors['reviewer'] = $this->lang->story->errorEmptyReviewedBy;
+        if(strpos(',draft,changing,', $oldStory->status) !== false)
+        {
+            if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
+            if(!$this->post->needNotReview and empty($_POST['reviewer'])) dao::$errors['reviewer'] = $this->lang->story->errorEmptyReviewedBy;
+        }
         if(dao::isError()) return false;
 
         $hasProduct = $this->dao->select('t2.hasProduct')->from(TABLE_PROJECTPRODUCT)->alias('t1')
