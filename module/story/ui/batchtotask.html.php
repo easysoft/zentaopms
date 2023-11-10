@@ -14,15 +14,15 @@ namespace zin;
 
 jsVar('executionID', $executionID);
 jsVar('langPreview', $lang->preview);
-jsVar('copyStoryTitle', $lang->task->copyStoryTitle);
+jsVar('copyStoryTitleTip', $lang->task->copyStoryTitle);
 
 $fields = array();
 $fields['id']         = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '32px');
-$fields['module']     = array_merge(array('name' => 'module',     'label' => $lang->task->module,     'width' => '200px', 'ditto' => true,  'defaultDitto' => 'off', 'items'  => $modules,              'control' => 'select'),    $config->task->form->batchcreate['module']);
-$fields['story']      = array_merge(array('name' => 'story',      'label' => $lang->task->story,      'width' => '250px', 'ditto' => true,  'defaultDitto' => 'off', 'items'  => $storyPairs,           'control' => 'select'),    $config->task->form->batchcreate['story']);
-$fields['name']       = array_merge(array('name' => 'name',       'label' => $lang->task->name,                           'ditto' => false, 'defaultDitto' => 'off', 'filter' => 'trim',                'control' => 'text'),      $config->task->form->batchcreate['name']);
-$fields['type']       = array_merge(array('name' => 'type',       'label' => $lang->typeAB,           'width' => '120px', 'ditto' => true,  'defaultDitto' => 'off', 'items'  => $lang->task->typeList, 'control' => 'select'),    $config->task->form->batchcreate['type']);
-$fields['assignedTo'] = array_merge(array('name' => 'assignedTo', 'label' => $lang->task->assignedTo, 'width' => '120px', 'ditto' => false, 'defaultDitto' => 'off', 'items'  => $members,              'control' => 'select'),    $config->task->form->batchcreate['assignedTo']);
+$fields['module']     = array_merge(array('name' => 'module',     'label' => $lang->task->module,     'width' => '200px', 'ditto' => true,  'defaultDitto' => 'off', 'items'  => $modules,              'control' => 'picker'),    $config->task->form->batchcreate['module']);
+$fields['story']      = array_merge(array('name' => 'story',      'label' => $lang->task->story,      'width' => '250px', 'ditto' => true,  'defaultDitto' => 'off', 'items'  => $storyPairs,           'control' => 'picker'),    $config->task->form->batchcreate['story']);
+$fields['name']       = array_merge(array('name' => 'name',       'label' => $lang->task->name,       'width' => '250px', 'ditto' => false, 'defaultDitto' => 'off', 'filter' => 'trim',                'control' => 'text'),      $config->task->form->batchcreate['name']);
+$fields['type']       = array_merge(array('name' => 'type',       'label' => $lang->typeAB,           'width' => '140px', 'ditto' => true,  'defaultDitto' => 'off', 'items'  => $lang->task->typeList, 'control' => 'picker'),    $config->task->form->batchcreate['type']);
+$fields['assignedTo'] = array_merge(array('name' => 'assignedTo', 'label' => $lang->task->assignedTo, 'width' => '120px', 'ditto' => false, 'defaultDitto' => 'off', 'items'  => $members,              'control' => 'picker'),    $config->task->form->batchcreate['assignedTo']);
 $fields['estimate']   = array_merge(array('name' => 'estimate',   'label' => $lang->task->estimateAB, 'width' => '120px', 'ditto' => true,  'defaultDitto' => 'off', 'filter' => 'trim',                'control' => 'text'),      $config->task->form->batchcreate['estimate']);
 $fields['estStarted'] = array_merge(array('name' => 'estStarted', 'label' => $lang->task->estStarted, 'width' => '120px', 'ditto' => true,  'defaultDitto' => 'off', 'filter' => 'trim',                'control' => 'date'),      $config->task->form->batchcreate['estStarted']);
 $fields['deadline']   = array_merge(array('name' => 'deadline',   'label' => $lang->task->deadline,   'width' => '120px', 'ditto' => true,  'defaultDitto' => 'off', 'filter' => 'trim',                'control' => 'date'),      $config->task->form->batchcreate['deadline']);
@@ -59,6 +59,9 @@ formBatchPanel
     set::maxRows(count($data)),
     set::data($data),
     set::onRenderRow(jsRaw('renderRowData')),
+    on::change('[data-name="module"]', 'setStories'),
+    on::change('[data-name="story"]', 'setStoryRelated'),
+    on::click('.copy-title-btn', 'copyStoryTitle'),
     formHidden('syncFields', implode(',', $syncFields)),
 );
 
