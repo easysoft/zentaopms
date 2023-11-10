@@ -104,8 +104,10 @@ class tasksEntry extends entry
         $fields = 'name,type,assignedTo,estimate,story,execution,project,module,pri,desc,estStarted,deadline,mailto,team,teamEstimate,multiple,uid';
         $this->batchSetPost($fields);
 
-        $assignedTo = $this->request('assignedTo');
-        if($assignedTo and !is_array($assignedTo)) $this->setPost('assignedTo', array($assignedTo));
+        $assignedTo = $this->request('assignedTo', array(0 => ''));
+        if($assignedTo and !is_array($assignedTo)) $assignedTo = array($assignedTo);
+        $this->setPost('assignedTo', $assignedTo);
+
         if($this->request('multiple'))
         {
             if(count($this->request('team')) != count($this->request('teamEstimate'))) return $this->sendError(400, 'Arrays team and teamEstimate should be the same length');
