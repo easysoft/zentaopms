@@ -63,7 +63,8 @@ class hostSubmitEntry extends baseEntry
 
         if($imageInfo->from != 'zentao' && in_array($imageInfo->status, array('creating', 'restoring')))
         {
-            $this->dao->update(TABLE_ZAHOST)->data(array("status" => "wait"))->where("id")->eq($imageInfo->host)->exec();
+            $hostID = is_numeric($imageInfo->snapshot) ? $imageInfo->from : $imageInfo->host;
+            $this->dao->update(TABLE_ZAHOST)->data(array("status" => "wait"))->where("id")->eq($hostID)->exec();
         }
 
         return $this->sendSuccess(200, 'success');

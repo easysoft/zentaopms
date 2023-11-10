@@ -95,7 +95,7 @@ class hostHeartbeatEntry extends baseEntry
                     if(empty($node)) continue;
 
                     if(in_array($node->status, array('restoring', 'creating_img', 'creating_snap')))
-                        $vmData->status = $vm->status = $node->status;
+                        $vmData['status'] = $vm->status = $node->status;
                     $this->dao->update(TABLE_ZAHOST)->data($vmData)->where('mac')->eq($vm->macAddress)->exec();
                 }
                 
