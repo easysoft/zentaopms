@@ -589,7 +589,7 @@ class api extends control
 
             if($changes)
             {
-                $actionID = $this->action->create('api', $apiID, 'edited');
+                $actionID = $this->action->create('api', $apiID, 'edited', '', '', '', false);
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -632,7 +632,7 @@ class api extends control
             $api = $this->api->create();
             if($api === false) return $this->sendError(dao::getError());
 
-            $this->action->create('api', $api->id, 'Created');
+            $this->action->create('api', $api->id, 'Created', '', '', '', false);
 
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 'true', 'callback' => "parentLocate({$api->id}, {$api->lib}, {$api->module})"));
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}&apiID={$api->id}")));
