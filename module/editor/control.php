@@ -161,7 +161,7 @@ class editor extends control
             if(strpos(strtolower($filePath), strtolower($this->app->getBasePath())) !== 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->editFileError));
 
             $fileName = empty($_POST['fileName']) ? '' : trim($this->post->fileName);
-            if($action == 'newPage' and empty($fileName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->emptyFileName));
+            if($action != 'edit' and empty($fileName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->emptyFileName));
 
             if($action != 'edit' and $action != 'newPage') $filePath = $this->editor->getSavePath($filePath, $action);
             if($action != 'edit' and $action != 'newPage' and file_exists($filePath) and !$this->post->override) return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->repeatFile));
