@@ -86,7 +86,7 @@ function getTrackTd($storyID, $story, $tab, $module)
         isset($story->parent) && $story->parent > 0 ? label(
             setClass('rounded-full light mr-1'),
             set('title', $lang->story->children),
-            $lang->story->childrenAB,
+            $lang->story->childrenAB
         ) : null,
         a(
             set('href', createLink($module, 'view', "storyID={$storyID}")),

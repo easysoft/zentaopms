@@ -23,7 +23,7 @@ $tableData = initTableData($sonarqubeList, $config->sonarqube->dtable->browse->f
 
 toolbar
 (
-    $canCreate ? item(set($createItem)) : null,
+    $canCreate ? item(set($createItem)) : null
 );
 
 jsVar('confirmDelete',    $lang->sonarqube->confirmDelete);
