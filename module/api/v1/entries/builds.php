@@ -50,13 +50,9 @@ class buildsEntry extends entry
     {
         if(!$projectID) $projectID = $this->param('project', 0);
 
-        if($projectID)
-        {
-            $project = $this->loadModel('project')->getByID($projectID);
-            if(!$project) return $this->sendError(404, 'Error project id');
-
-            $this->setPost('project', $projectID);
-        }
+        $project = $this->loadModel('project')->getByID($projectID);
+        if(!$project) return $this->sendError(404, 'Error project id');
+        $this->setPost('project', $projectID);
 
         $fields = 'execution,product,name,builder,date,scmPath,filePath,desc,branch';
         $this->batchSetPost($fields);
