@@ -826,7 +826,7 @@ class story extends control
         }
 
         /* Get story and product. */
-        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type')->fetch();
+        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, `type`')->fetch();
 
         $this->story->replaceURLang($story->type);
 
