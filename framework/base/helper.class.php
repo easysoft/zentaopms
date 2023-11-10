@@ -304,6 +304,7 @@ class baseHelper
             return "IN ('" . join("','", $idList) . "')";
         }
 
+        if(is_null($idList)) $idList = '';
         if(!is_string($idList)) $idList = json_encode($idList);
 
         $idList = str_replace(',', "','", str_replace(' ', '', addslashes($idList)));
