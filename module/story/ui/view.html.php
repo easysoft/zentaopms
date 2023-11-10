@@ -403,7 +403,7 @@ detailBody
                     }, $twins))
                 ),
             ) : null,
-            ($this->config->URAndSR && !$hiddenURS) ? tabPane
+            ($this->config->URAndSR && !$hiddenURS && $config->vision != 'or') ? tabPane
             (
                 set::key('legendStories'),
                 set::title($story->type == 'story' ? $lang->story->requirement : $lang->story->story),
@@ -435,7 +435,7 @@ detailBody
                 set::active((!$this->config->URAndSR || $hiddenURS) && empty($twins)),
                 h::ul($taskItems)
             ) : null,
-            tabPane
+            $config->vision == 'or' ? tabPane
             (
                 set::key('legendRelated'),
                 set::title($lang->story->legendRelated),
@@ -584,7 +584,7 @@ detailBody
                         )
                     ),
                 )
-            )
+            ) : null
         )
     )
 );
