@@ -2229,6 +2229,7 @@ EOF;
         $date       = date(DT_DATETIME1, time() - $this->config->duplicateTime);
         $dateField  = $type == 'doc' ? 'addedDate' : 'openedDate';
         $titles     = zget($data, $titleField, array());
+        $storyType  = zget($data, 'type', '');
 
         if(empty($titles)) return false;
         $duplicate = $this->dao->select("id,$titleField")->from($table)
@@ -2236,7 +2237,7 @@ EOF;
             ->andWhere($titleField)->in($titles)
             ->andWhere($dateField)->ge($date)->fi()
             ->beginIF($condition)->andWhere($condition)->fi()
-            ->beginIF($type == 'story')->andWhere('type')->eq($data->type)
+            ->beginIF($type == 'story')->andWhere('type')->eq($storyType)
             ->fetchPairs();
 
         if($duplicate and is_string($titles)) return array('stop' => true, 'duplicate' => key($duplicate));
