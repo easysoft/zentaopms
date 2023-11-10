@@ -59,6 +59,7 @@ window.onRenderCell = function(result, {col, row})
         result[result.length] = {html: executionName};
         return result;
     }
+    if(col.name == 'rawID' && row.id.indexOf('tid') > -1) result[1] = '';
 
     return result;
 }
