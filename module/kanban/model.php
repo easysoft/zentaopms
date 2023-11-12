@@ -1608,13 +1608,7 @@ class kanbanModel extends model
             $kanbanGroup[$lane->type]['data']['items'] = $cardsData;
         }
 
-        $kanbanSetting = array();
-        $kanbanSetting['id']        = 0;
-        $kanbanSetting['key']       = 'region0';
-        $kanbanSetting['items']     = array_values($kanbanGroup);
-        $kanbanSetting['laneCount'] = count($kanbanSetting['items']);
-
-        return $kanbanSetting['items'];
+        return array_values($kanbanGroup);
     }
 
     /**

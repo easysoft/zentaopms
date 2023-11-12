@@ -1607,7 +1607,7 @@ class taskZen extends task
 
         if($from == 'taskkanban')
         {
-            $response['callback'] = "parent.parent.updateKanban(\"task\", $kanbanData)";
+            $response['callback'] = "refreshKanban()";
             return $response;
         }
 

@@ -116,8 +116,8 @@ jsVar('displayCards', $execution->displayCards);
 jsVar('needLinkProducts', $lang->execution->needLinkProducts);
 jsVar('hourUnit', $config->hourUnit);
 jsVar('orderBy', $storyOrder);
-jsVar('defaultMinColWidth', $this->config->minColWidth);
-jsVar('defaultMaxColWidth', $this->config->maxColWidth);
+jsVar('minColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->minColWidth);
+jsVar('maxColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->maxColWidth);
 jsVar('teamWords', $lang->execution->teamWords);
 jsVar('canImportBug', $features['qa']);
 

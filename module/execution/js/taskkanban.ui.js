@@ -196,7 +196,6 @@ window.getItem = function(info)
     let begin       = info.item.begin;
     let end         = info.item.end;
     let beginAndEnd = '';
-    let titleIcon   = '';
     let assignLink  = '';
     let assignedTo  = '';
     let avatar      = "<span class='avatar rounded-full size-xs ml-1 bg-lighter text-canvas' title='" + noAssigned + "'><i class='icon icon-person'></i></span>";
@@ -213,10 +212,6 @@ window.getItem = function(info)
     {
         beginAndEnd = formatDate(begin) + ' ~ ' + formatDate(end);
     }
-
-    if(info.laneInfo.type == 'story') titleIcon = "<i class='icon icon-lightbulb text-gray mr-1'></i>";
-    if(info.laneInfo.type == 'task')  titleIcon = "<i class='icon icon-checked text-gray mr-1'></i>";
-    if(info.laneInfo.type == 'bug')   titleIcon = "<i class='icon icon-bug text-gray mr-1'></i>";
 
     if(info.item.assignedTo)
     {
@@ -243,7 +238,6 @@ window.getItem = function(info)
     info.item.titleUrl   = $.createLink(info.laneInfo.type, 'view', `id=${info.item.id}`);
     info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.title};
 
-    info.item.title   = {html: titleIcon + info.item.title};
     info.item.content = {html: content};
     if(info.item.color && info.item.color != '#fff') info.item.className = 'color-' + info.item.color.replace('#', '');
 }
@@ -277,7 +271,8 @@ window.canDrop = function(dragInfo, dropInfo)
     const lane   = this.getLane(dropInfo.lane);
     if(!column || !lane) return false;
 
-    if(dropInfo.type == 'item') return false;
+    if(priv.canSortCards && dropInfo.type == 'item' && (dropInfo.col != dragInfo.item.col || dropInfo.lane != dragInfo.item.lane)) return false;
+    if(!priv.canSortCards && dropInfo.type == 'item') return false;
 
     /* 卡片可在同组内拖动。 */
     if(dragInfo.item.group != column.group) return false;
@@ -294,26 +289,34 @@ window.onDrop = function(changes, dropInfo)
     const toColID     = dropInfo.drop.col;
     const fromColType = colPairs[fromColID];
     const toColType   = colPairs[toColID];
-    const objectID    = dropInfo.drag.item.id;
+    const item        = dropInfo.drag.item;
+    const objectID    = item.id;
+
+    let link     = '';
+    let moveCard = false;
+
+    if(item.col == toColID && item.lane == toLaneID && priv.canSortCards)
+    {
+        link = $.createLink('kanban', 'sortCard', 'kanbanID=' + executionID + '&laneID=' + toLaneID + '&columnID=' + toColID + '&cards=' + dropInfo['data']['list'].join(','));
+        $.get(link, function(){refreshKanban()})
+        return true;
+    }
 
     let kanbanRules = kanbanDropRules[laneType];
     let colRules    = typeof kanbanRules[fromColType] == 'undefined' ? null : kanbanRules[fromColType];
     if(!colRules) return false;
     if(!colRules.includes(toColType)) return false;
 
-    let link     = '';
-    let moveCard = false;
-
       /* Task lane. */
     if(laneType == 'task')
     {
         if(toColType == 'developed' && (fromColType == 'developing' || fromColType == 'wait') && priv.canFinishTask) link = $.createLink('task', 'finish', 'taskID=' + objectID + '&extra=from=taskkanban');
         if(toColType == 'pause' && fromColType == 'developing' && priv.canPauseTask) link = $.createLink('task', 'pause', 'taskID=' + objectID + '&extra=from=taskkanban');
-        if(toColType == 'canceled' && (fromColType == 'developing' || fromColType == 'wait' || fromColType == 'pause') && priv.canCancelTask) link = createLink('task', 'cancel', 'taskID=' + objectID + '&extra=from=taskkanban');
+        if(toColType == 'canceled' && (fromColType == 'developing' || fromColType == 'wait' || fromColType == 'pause') && priv.canCancelTask) link = createLink('task', 'cancel', 'taskID=' + objectID + '&cardPosition=&from=taskkanban');
         if(toColType == 'closed' && (fromColType == 'developed' || fromColType == 'canceled') && priv.canCloseTask) link = createLink('task', 'close', 'taskID=' + objectID + '&extra=from=taskkanban');
         if(toColType == 'developing')
         {
-            if((fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask) link = $.createLink('task', 'activate', 'taskID=' + objectID + '&extra=from=taskkanban');
+            if((fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask) link = $.createLink('task', 'activate', 'taskID=' + objectID + '&extra=&from=taskkanban');
             if(fromColType == 'pause' && priv.canActivateTask) link = $.createLink('task', 'restart', 'taskID=' + objectID + '&from=taskkanban');
             if(fromColType == 'wait' && priv.canStartTask) link = $.createLink('task', 'start', 'taskID=' + objectID + '&extra=from=taskkanban');
         }
@@ -335,8 +338,8 @@ window.onDrop = function(changes, dropInfo)
         if(moveCard)
         {
             link = $.createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
-            $.get(link, function(data){ loadCurrentPage() });
-            return;
+            refreshKanban(link);
+            return true;
         }
     }
 
@@ -356,14 +359,14 @@ window.onDrop = function(changes, dropInfo)
                         return false;
                     }
                     ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID);
-                    return false;
+                    return true;
                 }
             });
         }
         else if(!link)
         {
             ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID);
-            return false;
+            return true;
         }
     }
 
@@ -468,18 +471,37 @@ window.hideAllAction = function()
 window.ajaxMoveCard = function(objectID, fromColID, toColID, fromLaneID, toLaneID)
 {
     var link = $.createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
-    $.get(link, function(data){ loadCurrentPage() });
+    refreshKanban(link);
 }
 
 window.searchCards = function(value, order)
 {
-    const $kanbanList = $('[data-zui-kanbanlist]').zui('kanbanList');
-    const options     = $kanbanList.options;
     const searchValue = value;
     if(typeof order == 'undefined') order = orderBy;
-    $.get($.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value + '&orderBy=' + order), function(data)
+    refreshKanban($.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value + '&orderBy=' + order));
+}
+
+window.refreshKanban = function(url)
+{
+    if(typeof url == 'undefined') url = $.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=&orderBy=' + orderBy);
+
+    const $kanbanList = $('[data-zui-kanbanlist]').zui('kanbanList');
+    let   options     = $kanbanList.options;
+    $.getJSON(url, function(data)
     {
-        options.items = $.parseJSON(data);
+        for(const group of data)
+        {
+            group.getLane     = window.getLane;
+            group.getCol      = window.getCol;
+            group.getItem     = window.getItem;
+            group.canDrop     = window.canDrop;
+            group.onDrop      = window.onDrop;
+            group.minColWidth = minColWidth;
+            group.maxColWidth = maxColWidth;
+            group.colProps    = {'actions': window.getColActions};
+            group.itemProps   = {'actions': window.getItemActions};
+        }
+        options.items = data;
         $kanbanList.render(options);
     });
 }
