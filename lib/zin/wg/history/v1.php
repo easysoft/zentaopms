@@ -82,7 +82,7 @@ class history extends wg
         return zui::historyPanel
         (
             set::_id($id),
-            $panel ? set::_class('canvas py-1 px-2') : null,
+            $panel ? set::className('canvas py-1 px-2') : null,
             set::objectID($objectID),
             set::objectType($objectType),
             set::actions($actions),
