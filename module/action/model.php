@@ -631,6 +631,67 @@ class actionModel extends model
     }
 
     /**
+     * 格式化操作备注。
+     * Format action comment.
+     *
+     * @param string $comment
+     * @access public
+     * @return string
+     */
+    public function formatActionComment($comment): string
+    {
+        if(str_contains($comment, '<pre class="prettyprint lang-html">'))
+        {
+            $before   = explode('<pre class="prettyprint lang-html">', $comment);
+            $after    = explode('</pre>', $before[1]);
+            $htmlCode = $after[0];
+            return $before[0] . htmlspecialchars($htmlCode) . $after[1];
+        }
+
+        return strip_tags($comment) === $comment
+            ? nl2br($comment)
+            : $comment;
+    }
+
+    /**
+     * 构建操作记录列表，便于前端组件进行渲染。
+     * Build action list for render by frontend component.
+     *
+     * @param array $actions
+     * @param array $users
+     * @param bool  $commentEditable
+     * @access public
+     * @return array
+     */
+    public function buildActionList(array $actions, array $users = null, $commentEditable = true): array
+    {
+        if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
+
+        $list = array();
+        foreach($actions as $action)
+        {
+            $item = new stdClass();
+            $item->id = $action->id;
+            if(strlen(trim(($action->comment))) !== 0)
+            {
+                $item->comment         = $this->formatActionComment($action->comment);
+                $item->commentEditable = $commentEditable && end($actions) == $action && $action->actor == $this->app->user->account && common::hasPriv('action', 'editComment');
+            }
+
+            if($action->action === 'assigned' || $action->action === 'toaudit') $action->extra = zget($users, $action->extra);
+            $action->actor = zget($users, $action->actor);
+            if(str_contains($action->actor, ':')) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
+
+            if(!empty($action->history)) $item->historyChanges = $this->renderChanges($action->objectType, $action->history);
+
+            $item->content = $this->renderAction($action);
+
+            $list[] = $item;
+        }
+        return $list;
+    }
+
+    /**
      * 打印一个对象的所有操作记录。
      * Print actions of an object.
      *

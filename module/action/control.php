@@ -229,32 +229,40 @@ class action extends control
      */
     public function comment(string $objectType, int $objectID)
     {
-        /* 当评论的是任务，需判断当前用户是否拥有任务的权限。 */
-        /* When commenting on a task, you need to determine whether the current user has the permission of the task. */
-        if(strtolower($objectType) == 'task')
+        if(!empty($_POST))
         {
-            $task       = $this->loadModel('task')->getById($objectID);
-            $executions = explode(',', $this->app->user->view->sprints);
-            if(!in_array($task->execution, $executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
-        }
-        /* 当评论的是用户故事，需判断当前用户是否有此用户故事的权限。 */
-        /* When commenting on a story, you need to determine whether the current user has the permission of the story. */
-        elseif(strtolower($objectType) == 'story')
-        {
-            $story      = $this->loadModel('story')->getById($objectID);
-            $executions = explode(',', $this->app->user->view->sprints);
-            $products   = explode(',', $this->app->user->view->products);
-            if(!array_intersect(array_keys($story->executions), $executions) && !in_array($story->product, $products) && empty($story->lib)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+            /* 当评论的是任务，需判断当前用户是否拥有任务的权限。 */
+            /* When commenting on a task, you need to determine whether the current user has the permission of the task. */
+            if(strtolower($objectType) == 'task')
+            {
+                $task       = $this->loadModel('task')->getById($objectID);
+                $executions = explode(',', $this->app->user->view->sprints);
+                if(!in_array($task->execution, $executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+            }
+            /* 当评论的是用户故事，需判断当前用户是否有此用户故事的权限。 */
+            /* When commenting on a story, you need to determine whether the current user has the permission of the story. */
+            elseif(strtolower($objectType) == 'story')
+            {
+                $story      = $this->loadModel('story')->getById($objectID);
+                $executions = explode(',', $this->app->user->view->sprints);
+                $products   = explode(',', $this->app->user->view->products);
+                if(!array_intersect(array_keys($story->executions), $executions) && !in_array($story->product, $products) && empty($story->lib)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+            }
+
+            /* 获取评论内容并生成一条action数据。 */
+            $commentData = form::data($this->config->action->form->comment)->get();
+            $actionID    = $this->action->create($objectType, $objectID, 'Commented', $commentData->comment);
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $actionID));
+
+            /* 用于ZIN的新UI。*/
+            /* For new UI with ZIN. */
+            return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $objectType, 'objectID' => $objectID))));
         }
 
-        /* 获取评论内容并生成一条action数据。 */
-        $commentData = form::data($this->config->action->form->comment)->get();
-        $actionID    = $this->action->create($objectType, $objectID, 'Commented', $commentData->comment);
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $actionID));
-
-        /* 用于ZIN的新UI。*/
-        /* For new UI with ZIN. */
-        return $this->send(array('status' => 'success', 'closeModal' => true, 'load' => true));
+        $this->view->title      = $this->lang->action->create;
+        $this->view->objectType = $objectType;
+        $this->view->objectID   = $objectID;
+        $this->display();
     }
 
     /**
@@ -267,26 +275,54 @@ class action extends control
      */
     public function editComment(int $actionID)
     {
-        /* 获取表单内的数据。 */
-        /* Get form data. */
-        $commentData = form::data($this->config->action->form->editComment)->get();
+        $action = $this->action->getById($actionID);
 
-        $error = false;
-
-        /* 判断是否符合更新的条件。 */
-        /* Determine whether the update conditions are met. */
-        if(strlen(trim(strip_tags($commentData->lastComment, '<img>'))) != 0)
+        if(!empty($_POST))
         {
-            $error = $this->action->updateComment($actionID, $commentData->lastComment, $commentData->uid);
+            /* 获取表单内的数据。 */
+            /* Get form data. */
+            $commentData = form::data($this->config->action->form->editComment)->get();
+
+            $error = false;
+
+            /* 判断是否符合更新的条件。 */
+            /* Determine whether the update conditions are met. */
+            if(strlen(trim(strip_tags($commentData->lastComment, '<img>'))) != 0)
+            {
+                $error = $this->action->updateComment($actionID, $commentData->lastComment, $commentData->uid);
+            }
+
+            if(!$error)
+            {
+                /* 不符合更新条件，返回错误。 */
+                /* The update conditions are not met and an error is returned. */
+                dao::$errors['submit'][] = $this->lang->action->historyEdit;
+                return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
+
+            $action = $this->action->getById($actionID);
+            return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $action->objectType, 'objectID' => $action->objectID))));
         }
 
-        if(!$error)
-        {
-            /* 不符合更新条件，返回错误。 */
-            /* The update conditions are not met and an error is returned. */
-            dao::$errors['submit'][] = $this->lang->action->historyEdit;
-            return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        }
-        return $this->send(array('result' => 'success', 'load' => true));
+        $this->view->title      = $this->lang->action->editComment;
+        $this->view->actionID   = $actionID;
+        $this->view->comment    = $this->action->formatActionComment($action->comment);
+        $this->display();
+    }
+
+    /**
+     * 通过 Ajax 获取操作记录列表。
+     * Get action list by ajax.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetList(string $objectType, int $objectID)
+    {
+        $actions = $this->action->getList($objectType, $objectID);
+        $actions = $this->action->buildActionList($actions);
+        return $this->send($actions);
     }
 }
