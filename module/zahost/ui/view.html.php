@@ -266,7 +266,7 @@ detailBody
     ),
     detailSide
     (
-        history(set::commentUrl(createLink('action', 'comment', array('objectType' => 'zahost', 'objectID' => $zahost->id))),),
+        history()
     ),
 );
 

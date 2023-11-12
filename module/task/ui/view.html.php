@@ -208,7 +208,7 @@ detailBody
     (
         set::files($task->files),
     ) : null,
-    history(set::commentUrl(createLink('action', 'comment', array('objectType' => 'task', 'objectID' => $task->id))),),
+    history(),
     floatToolbar
     (
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),

@@ -487,7 +487,7 @@ detailBody
     ),
     detailSide
     (
-        history(set::commentUrl(createLink('action', 'comment', array('objectType' => 'zanode', 'objectID' => $zanode->id))),),
+        history()
     ),
 );
 

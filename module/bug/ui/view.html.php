@@ -202,7 +202,7 @@ detailBody
             set::padding(false),
         ),
     ),
-    history(set::commentUrl(createLink('action', 'comment', array('objectType' => 'bug', 'objectID' => $bug->id)))),
+    history(),
     floatToolbar
     (
         set::object($bug),

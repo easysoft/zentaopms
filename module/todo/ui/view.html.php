@@ -392,7 +392,7 @@ detailBody
             to::actions($fnGenerateTitleSuffix()),
         ),
         $fromItemData,
-        history(set::commentUrl(createLink('action', 'comment', "objectType=todo&objectID=$todo->id"))),
+        history(),
 
         /* Render float toolbar. */
         $actionList ? center(floatToolbar(set($actionList))) : null

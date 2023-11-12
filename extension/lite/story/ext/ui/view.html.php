@@ -205,7 +205,7 @@ detailBody
             )
         ),
     ),
-    history(set::commentUrl(helper::createLink('action', 'comment', "objectType=story&objectID=$story->id"))),
+    history(),
     floatToolbar
     (
         set::object($story),

@@ -45,7 +45,7 @@ detailBody
             set::useHtml(true)
         )
     ),
-    history(set::commentUrl(createLink('action', 'comment', array('objectType' => 'kanbancard', 'objectID' => $card->id)))),
+    history(set(array('objectType' => 'kanbancard', 'objectID' => $card->id))),
     floatToolbar
     (
         set::object($card),
