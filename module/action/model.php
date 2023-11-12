@@ -671,7 +671,6 @@ class actionModel extends model
         foreach($actions as $action)
         {
             $item = new stdClass();
-            $item->id = $action->id;
             if(strlen(trim(($action->comment))) !== 0)
             {
                 $item->comment         = $this->formatActionComment($action->comment);
@@ -684,6 +683,8 @@ class actionModel extends model
 
             if(!empty($action->history)) $item->historyChanges = $this->renderChanges($action->objectType, $action->history);
 
+            $item->id      = $action->id;
+            $item->action  = $action->action;
             $item->content = $this->renderAction($action);
 
             $list[] = $item;
