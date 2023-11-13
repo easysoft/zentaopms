@@ -267,15 +267,27 @@ window.canDrop = function(dragInfo, dropInfo)
 {
     if(!dragInfo) return false;
 
-    const column = this.getCol(dropInfo.col);
-    const lane   = this.getLane(dropInfo.lane);
-    if(!column || !lane) return false;
+    const fromColumn  = this.getCol(dragInfo.col);
+    const toColumn    = this.getCol(dropInfo.col);
+    const lane        = this.getLane(dropInfo.lane);
+    const laneType    = lanePairs[lane.id];
+    const fromColType = colPairs[fromColumn.id];
+    const toColType   = colPairs[toColumn.id];
+    if(!fromColumn || !lane) return false;
 
     if(priv.canSortCards && dropInfo.type == 'item' && (dropInfo.col != dragInfo.item.col || dropInfo.lane != dragInfo.item.lane)) return false;
     if(!priv.canSortCards && dropInfo.type == 'item') return false;
 
     /* 卡片可在同组内拖动。 */
-    if(dragInfo.item.group != column.group) return false;
+    if(dragInfo.item.group != toColumn.group) return false;
+
+    if(dropInfo.type != 'item')
+    {
+        let kanbanRules = kanbanDropRules[laneType];
+        let colRules    = typeof kanbanRules[fromColType] == 'undefined' ? null : kanbanRules[fromColType];
+        if(!colRules) return false;
+        if(!colRules.includes(toColType)) return false;
+    }
 }
 
 window.onDrop = function(changes, dropInfo)
@@ -302,12 +314,7 @@ window.onDrop = function(changes, dropInfo)
         return true;
     }
 
-    let kanbanRules = kanbanDropRules[laneType];
-    let colRules    = typeof kanbanRules[fromColType] == 'undefined' ? null : kanbanRules[fromColType];
-    if(!colRules) return false;
-    if(!colRules.includes(toColType)) return false;
-
-      /* Task lane. */
+    /* Task lane. */
     if(laneType == 'task')
     {
         if(toColType == 'developed' && (fromColType == 'developing' || fromColType == 'wait') && priv.canFinishTask) link = $.createLink('task', 'finish', 'taskID=' + objectID + '&extra=from=taskkanban');
