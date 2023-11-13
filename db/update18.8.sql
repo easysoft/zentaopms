@@ -69,3 +69,14 @@ UPDATE `zt_chart` SET `type` = 'cluBarY', `settings` = '[{\"type\":\"cluBarY\",\
 UPDATE `zt_chart` SET `type` = 'cluBarY', `settings` = '[{\"type\":\"cluBarY\",\"xaxis\":[{\"field\":\"realname\",\"name\":\"realname\",\"group\":\"\"}],\"yaxis\":[{\"field\":\"consumed\",\"name\":\"\\u8017\\u65f6\",\"valOrAgg\":\"sum\"}]}]', `filters` = '[{\"field\":\"year\",\"type\":\"select\",\"name\":\"\\u5e74\\u4efd\"}]', `fields` = '{\"year\":{\"name\":\"year\",\"object\":\"user\",\"field\":\"year\",\"type\":\"number\"},\"realname\":{\"name\":\"realname\",\"object\":\"zt_user\",\"field\":\"realname\",\"type\":\"string\"},\"consumed\":{\"name\":\"\\u8017\\u65f6\",\"object\":\"effort\",\"field\":\"consumed\",\"type\":\"number\"}}', `langs` = '', `sql` = 'SELECT YEAR(t1.date) AS `year`, t2.realname, ROUND(SUM(t1.consumed),1) AS consumed\nFROM zt_effort AS t1 LEFT JOIN zt_user AS t2 ON t1.account = t2.account\nWHERE t1.deleted = \'0\' AND t2.deleted = \'0\'\nGROUP BY `year`, realname\nORDER BY `year`, consumed DESC', `stage` = 'published', `builtin` = 0 WHERE `id` = 1109;
 UPDATE `zt_chart` SET `type` = 'cluBarY', `settings` = '[{\"type\":\"cluBarY\",\"xaxis\":[{\"field\":\"realname\",\"name\":\"realname\",\"group\":\"\"}],\"yaxis\":[{\"field\":\"count\",\"name\":\"count\",\"valOrAgg\":\"sum\"}]}]', `filters` = '[{\"field\":\"year\",\"type\":\"select\",\"name\":\"\\u5e74\\u4efd\"}]', `fields` = '{\"year\":{\"name\":\"year\",\"object\":\"user\",\"field\":\"year\",\"type\":\"number\"},\"realname\":{\"name\":\"realname\",\"object\":\"zt_action\",\"field\":\"realname\",\"type\":\"string\"},\"count\":{\"name\":\"count\",\"object\":\"user\",\"field\":\"count\",\"type\":\"string\"}}', `langs` = '', `sql` = 'SELECT YEAR(t1.date) AS `year`,IFNULL(t2.realname,t1.actor) AS realname,count(1) AS count\nFROM zt_action t1 LEFT JOIN zt_user AS t2 ON t1.actor=t2.account\nGROUP BY `year`,t1.actor\nORDER BY `year`, `count` DESC', `stage` = 'published', `builtin` = 0 WHERE `id` = 1110;
 
+CREATE TABLE `zt_queue` (
+  `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
+  `cron` mediumint NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `command` text NOT NULL,
+  `status` enum('wait','doing','done') NOT NULL DEFAULT 'wait',
+  `execId` int DEFAULT NULL,
+  `createdDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

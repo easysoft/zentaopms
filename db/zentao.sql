@@ -1542,6 +1542,19 @@ CREATE TABLE IF NOT EXISTS `zt_projectstory` (
 CREATE UNIQUE INDEX `project` ON `zt_projectstory`(`project`,`story`);
 CREATE INDEX `story` ON `zt_projectstory` (`story`);
 
+-- DROP TABLE IF EXISTS `zt_queue`;
+CREATE TABLE `zt_queue` (
+  `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
+  `cron` mediumint NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `command` text NOT NULL,
+  `status` enum('wait','doing','done') NOT NULL DEFAULT 'wait',
+  `execId` int DEFAULT NULL,
+  `createdDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 -- DROP TABLE IF EXISTS `zt_relation`;
 CREATE TABLE IF NOT EXISTS `zt_relation` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
