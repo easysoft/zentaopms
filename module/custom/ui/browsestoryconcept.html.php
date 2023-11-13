@@ -34,14 +34,14 @@ div
             ),
             toolbar
             (
-                !empty($createItem) ? item(set($createItem)) : null,
-            ),
+                !empty($createItem) ? item(set($createItem)) : null
+            )
         ),
         dtable
         (
             set::cols($config->custom->browseStoryConcept->dtable->fieldList),
             set::data($tableData),
-            set::onRenderCell(jsRaw('window.renderCell')),
+            set::onRenderCell(jsRaw('window.renderCell'))
         )
     )
 );

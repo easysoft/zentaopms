@@ -20,14 +20,14 @@ formBatchPanel
     (
         set::width('1/3'),
         set::label($lang->custom->URConcept),
-        set::name('URName'),
+        set::name('URName')
     ) : null,
     formBatchItem
     (
         set::width('1/3'),
         set::label($lang->custom->SRConcept),
-        set::name('SRName'),
-    ),
+        set::name('SRName')
+    )
 );
 
 /* ====== Render page ====== */

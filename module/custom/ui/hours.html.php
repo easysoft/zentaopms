@@ -30,7 +30,7 @@ div
             set::label($lang->custom->workingHours),
             set::width('1/3'),
             set::name('defaultWorkhours'),
-            set::value($workhours),
+            set::value($workhours)
         ),
         formGroup
         (
@@ -42,7 +42,7 @@ div
                 set::name('weekend'),
                 set::items($lang->custom->weekendList),
                 set::value($weekend),
-                set::inline(true),
+                set::inline(true)
             )
         ),
         formGroup
@@ -56,11 +56,11 @@ div
                 set::name('restDay'),
                 set::items($lang->custom->restDayList),
                 set::value($restDay),
-                set::required(true),
+                set::required(true)
             )
         ),
-        formHidden('type', $type),
-    ),
+        formHidden('type', $type)
+    )
 );
 
 /* ====== Render page ====== */

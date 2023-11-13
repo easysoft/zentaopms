@@ -36,8 +36,8 @@ div
                 set::name('execution'),
                 set::items($lang->custom->CRExecution),
                 set::value(isset($config->CRExecution) ? $config->CRExecution : 0),
-                set::inline(true),
-            ),
+                set::inline(true)
+            )
         ),
         formGroup
         (
@@ -48,7 +48,7 @@ div
                 $lang->custom->notice->readOnlyOfExecution
             )
         )
-    ),
+    )
 );
 
 /* ====== Render page ====== */

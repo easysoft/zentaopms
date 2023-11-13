@@ -32,7 +32,7 @@ foreach($requiredFields as $method => $requiredField)
                 set::items($fields),
                 set::value($requiredField),
                 set::multiple(true),
-                set::required(true),
+                set::required(true)
             )
         );
 }
@@ -44,7 +44,7 @@ if(common::hasPriv('custom', 'resetRequired'))
         'url'          => inlink('resetRequired', "module=$module"),
         'text'         => $lang->custom->restore,
         'class'        => 'btn-wide ajax-submit',
-        'data-confirm' => $lang->custom->confirmRestore,
+        'data-confirm' => $lang->custom->confirmRestore
     );
 }
 

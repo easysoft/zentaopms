@@ -24,8 +24,8 @@ formPanel
                 set::name('code'),
                 set::items($lang->custom->conceptOptions->URAndSR),
                 set::value(isset($config->setCode) ? $config->setCode : 0),
-                set::inline(true),
-            ),
+                set::inline(true)
+            )
         )
     ),
     formRow

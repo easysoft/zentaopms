@@ -64,7 +64,7 @@ if(!empty($lang->custom->{$module}->fields))
                     (
                         setClass($active),
                         set::href(createLink($currentModule, $method, $params)),
-                        $value,
+                        $value
                     )
                 );
         }

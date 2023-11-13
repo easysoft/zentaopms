@@ -35,7 +35,7 @@ formPanel
                 setClass('article-h2'),
                 $lang->custom->SRConcept
             )
-        ),
+        )
     ),
     formRow
     (
@@ -45,14 +45,14 @@ formPanel
             setClass(!$this->config->URAndSR ? 'hidden' : ''),
             set::width('1/2'),
             set::name('URName'),
-            set::value($URSR->URName),
+            set::value($URSR->URName)
         ),
         formGroup
         (
             set::width('1/2'),
             set::name('SRName'),
-            set::value($URSR->SRName),
-        ),
+            set::value($URSR->SRName)
+        )
     )
 );
 

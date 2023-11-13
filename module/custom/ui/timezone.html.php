@@ -39,10 +39,10 @@ else
                 (
                     set::name('timezone'),
                     set::items($timezoneList),
-                    set::value($config->timezone),
+                    set::value($config->timezone)
                 )
             )
-        ),
+        )
     );
 }
 

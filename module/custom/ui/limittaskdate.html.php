@@ -35,10 +35,10 @@ div
                 set::name('limitTaskDate'),
                 set::items($lang->custom->limitTaskDate),
                 set::value(isset($config->limitTaskDate) ? $config->limitTaskDate : 0),
-                set::inline(true),
-            ),
-        ),
-    ),
+                set::inline(true)
+            )
+        )
+    )
 );
 
 /* ====== Render page ====== */

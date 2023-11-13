@@ -45,7 +45,7 @@ if($module == 'project' && $field == 'unitList')
         set::name('defaultCurrency'),
         set::items($checkedUnitList),
         set::value($defaultCurrency),
-        set::required(true),
+        set::required(true)
     );
     $actionWidth = 'w-full';
 }
@@ -58,7 +58,7 @@ elseif($module == 'story' && $field == 'reviewRules')
         set::name('reviewRules'),
         set::value($reviewRule),
         set::control('radioListInline'),
-        set::items($lang->custom->reviewRules),
+        set::items($lang->custom->reviewRules)
     );
 
     $formItems[] = formGroup
@@ -68,7 +68,7 @@ elseif($module == 'story' && $field == 'reviewRules')
         set::name('superReviewers'),
         set::value($superReviewers),
         set::control(array('type' => 'picker', 'multiple' => true)),
-        set::items($users),
+        set::items($users)
     );
 }
 elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
@@ -81,7 +81,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
         set::value($needReview),
         set::control('radioListInline'),
         set::items($lang->custom->reviewList),
-        on::change('changeReview'),
+        on::change('changeReview')
     );
 
     if($module == 'story')
@@ -95,7 +95,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 set::label(''),
                 set::name(''),
                 set::value(sprintf($lang->custom->notice->forceReview, $lang->$module->common) . $lang->custom->notice->storyReviewTip),
-                set::control('static'),
+                set::control('static')
             )
         );
 
@@ -108,7 +108,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 set::label(''),
                 set::name(''),
                 set::value(sprintf($lang->custom->notice->forceNotReview, $lang->$module->common) . $lang->custom->notice->storyReviewTip),
-                set::control('static'),
+                set::control('static')
             )
         );
 
@@ -147,7 +147,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 set::value($forceReviewDepts),
                 set::items($depts),
                 set::control(array('type' => 'picker', 'multiple' => true))
-            ),
+            )
         );
         $formItems[] = div
         (
@@ -160,7 +160,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 set::name('forceNotReview'),
                 set::value($forceNotReview),
                 set::items($users),
-                set::control(array('type' => 'picker', 'multiple' => true)),
+                set::control(array('type' => 'picker', 'multiple' => true))
             ),
             formRow
             (
@@ -172,7 +172,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                     set::name('forceNotReviewRoles'),
                     set::value($forceNotReviewRoles),
                     set::items($lang->user->roleList),
-                    set::control(array('type' => 'picker', 'multiple' => true)),
+                    set::control(array('type' => 'picker', 'multiple' => true))
                 )
             ),
             formGroup
@@ -182,7 +182,7 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 set::name('forceNotReviewDepts'),
                 set::value($forceNotReviewDepts),
                 set::items($depts),
-                set::control(array('type' => 'picker', 'multiple' => true)),
+                set::control(array('type' => 'picker', 'multiple' => true))
             )
         );
     }
@@ -205,14 +205,14 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                     set::name('forceNotReview'),
                     set::value($forceNotReview),
                     set::items($users),
-                    set::control(array('type' => 'picker', 'multiple' => true)),
+                    set::control(array('type' => 'picker', 'multiple' => true))
                 ),
                 icon
                 (
                     'help',
                     setClass('pl-4 pt-2'),
                     set('data-toggle', 'tooltip'),
-                    set('data-title', sprintf($lang->custom->notice->forceNotReview, $lang->$module->common)),
+                    set('data-title', sprintf($lang->custom->notice->forceNotReview, $lang->$module->common))
                 )
             )
         );
@@ -229,14 +229,14 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                     set::name('forceReview'),
                     set::value($forceReview),
                     set::items($users),
-                    set::control(array('type' => 'picker', 'multiple' => true)),
+                    set::control(array('type' => 'picker', 'multiple' => true))
                 ),
                 icon
                 (
                     'help',
                     setClass('pl-4 pt-2'),
                     set('data-toggle', 'tooltip'),
-                    set('data-title', sprintf($lang->custom->notice->forceReview, $lang->$module->common)),
+                    set('data-title', sprintf($lang->custom->notice->forceReview, $lang->$module->common))
                 )
             )
         );
@@ -260,7 +260,7 @@ elseif($module == 'bug' && $field == 'longlife')
         set::width('1/3'),
         set::control(array(
             'type'   => 'inputControl',
-            'suffix' => $lang->day,
+            'suffix' => $lang->day
         ))
     );
 
@@ -283,7 +283,7 @@ elseif($module == 'block' && $field == 'closed')
             set::label($lang->custom->block->fields['closed']),
             set::name('closed'),
             set::value($lang->custom->notice->noClosedBlock),
-            set::control('static'),
+            set::control('static')
         );
         $formActions = array();
     }
@@ -297,7 +297,7 @@ elseif($module == 'block' && $field == 'closed')
             set::value($closedBlock),
             set::control(array(
                 'type'     => 'picker',
-                'multiple' => true,
+                'multiple' => true
             )),
             set::items($blockPairs)
         );
@@ -327,7 +327,7 @@ elseif($module == 'user' && $field == 'contactField')
             'url'          => inlink('restore', "module=user&field=contactField"),
             'text'         => $lang->custom->restore,
             'class'        => 'btn-wide ajax-submit',
-            'data-confirm' => $lang->custom->confirmRestore,
+            'data-confirm' => $lang->custom->confirmRestore
         );
     }
 }
@@ -373,7 +373,7 @@ else
                 (
                     set::width('1/2'),
                     set::label('addRow'),
-                    set::name('values[]'),
+                    set::name('values[]')
                 ),
                 span
                 (
@@ -381,14 +381,14 @@ else
                     (
                         setClass('add-item btn ghost'),
                         on::click('addRow'),
-                        icon('plus'),
+                        icon('plus')
                     ),
                     btn
                     (
                         setClass('del-item btn ghost'),
                         on::click('removeRow'),
-                        icon('trash'),
-                    ),
+                        icon('trash')
+                    )
                 )
             )
         );
@@ -424,15 +424,15 @@ else
                     (
                         setClass('add-item btn ghost'),
                         on::click('addRow'),
-                        icon('plus'),
+                        icon('plus')
                     ),
                     btn
                     (
                         setClass('del-item btn ghost'),
                         on::click('removeRow'),
-                        icon ('trash'),
-                    ),
-                ) : null,
+                        icon ('trash')
+                    )
+                ) : null
             );
         }
 
@@ -447,7 +447,7 @@ else
                 set::name('lang'),
                 set::items($appliedTo),
                 set::value($lang2Set),
-                set::control('radioListInline'),
+                set::control('radioListInline')
             )
         );
 
@@ -457,7 +457,7 @@ else
                 'url'          => inlink('restore', "module={$module}&field={$field}"),
                 'text'         => $lang->custom->restore,
                 'class'        => 'btn-wide ajax-submit',
-                'data-confirm' => $lang->custom->confirmRestore,
+                'data-confirm' => $lang->custom->confirmRestore
             );
         }
 
@@ -490,9 +490,9 @@ div
         span
         (
             setClass('article-h2'),
-            $lang->custom->$module->fields[$field],
+            $lang->custom->$module->fields[$field]
         ),
-        $formItems,
+        $formItems
     )
 );
 

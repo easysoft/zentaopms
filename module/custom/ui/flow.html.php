@@ -34,14 +34,14 @@ formPanel
             set::name('sprintConcept'),
             set::items($lang->custom->sprintConceptList),
             set::value(zget($this->config->custom, 'sprintConcept', '0')),
-            set::inline(true),
+            set::inline(true)
         )
     ),
     formGroup
     (
         set::label('2.'),
         setClass('items-center'),
-        span($lang->custom->conceptQuestions['storypoint']),
+        span($lang->custom->conceptQuestions['storypoint'])
     ),
     formGroup
     (
@@ -51,9 +51,9 @@ formPanel
             set::name('hourPoint'),
             set::items($lang->custom->conceptOptions->hourPoint),
             set::value(zget($this->config->custom, 'hourPoint')),
-            set::inline(true),
+            set::inline(true)
         )
-    ),
+    )
 );
 
 /* ====== Render page ====== */

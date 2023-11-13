@@ -27,8 +27,8 @@ div
                 set::name('kanban'),
                 set::items($lang->custom->CRKanban),
                 set::value(isset($config->CRKanban) ? $config->CRKanban : 0),
-                set::inline(true),
-            ),
+                set::inline(true)
+            )
         ),
         formGroup
         (
@@ -39,5 +39,5 @@ div
                 $lang->custom->notice->readOnlyOfKanban
             )
         )
-    ),
+    )
 );

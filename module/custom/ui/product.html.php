@@ -36,8 +36,8 @@ div
                 set::name('product'),
                 set::items($lang->custom->CRProduct),
                 set::value(isset($config->CRProduct) ? $config->CRProduct : 0),
-                set::inline(true),
-            ),
+                set::inline(true)
+            )
         ),
         formGroup
         (
@@ -49,7 +49,7 @@ div
                 $lang->custom->notice->readOnlyOfProduct
             )
         )
-    ),
+    )
 );
 
 /* ====== Render page ====== */

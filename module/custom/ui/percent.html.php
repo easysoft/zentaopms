@@ -24,8 +24,8 @@ formPanel
                 set::name('percent'),
                 set::items($lang->custom->conceptOptions->URAndSR),
                 set::value(isset($config->setPercent) ? $config->setPercent : 0),
-                set::inline(true),
-            ),
+                set::inline(true)
+            )
         )
     ),
     formRow
