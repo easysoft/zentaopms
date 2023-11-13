@@ -213,6 +213,7 @@ function addFileUploadMutationObserver()
         var dotIdx = title.lastIndexOf('.');
         if(dotIdx != '-1') title = title.substring(0, dotIdx);
         $('#title').val(title);
+        $('#file-upload .file-input-list .file-input').length <= 1 ? $('#uploadFormat').hide() : $('#uploadFormat').show();
     });
 
     observer.observe(fileUpload, {childList: true, subtree: true});

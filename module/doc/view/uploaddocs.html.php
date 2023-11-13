@@ -48,7 +48,7 @@
             <th><?php echo $lang->doc->uploadFile;?></th>
             <td colspan='4'><?php echo $this->fetch('file', 'buildform');?></td>
           </tr>
-          <tr>
+          <tr id='uploadFormat' style="display: none">
             <th><?php echo $lang->doc->uploadFormat;?></th>
             <td colspan='4'><?php echo html::radio('uploadFormat', $lang->doc->uploadFormatList, 'separateDocs', "onchange='toggleDocTitle(this.value)'");?></td>
           </tr>
