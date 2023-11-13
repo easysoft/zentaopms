@@ -30,7 +30,7 @@ class clientZen extends client
             if($_POST)
             {
                 $error = str_replace("\n", '', $error);
-                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({message: {html: \"{$error}\"}})"));
+                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert({message: {html: \"{$error}\"}, size: 'sm'})"));
             }
 
             $this->view->error = $error;
