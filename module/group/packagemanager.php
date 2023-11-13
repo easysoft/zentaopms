@@ -3564,11 +3564,11 @@ $config->group->package->exportDoc = new stdclass();
 $config->group->package->exportDoc->order  = 25;
 $config->group->package->exportDoc->subset = 'doc';
 $config->group->package->exportDoc->privs  = array();
-$config->group->package->exportDoc->privs['doc-mine2export']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 125, 'depend' => array('doc-mySpace'), 'recommend' => array());
-$config->group->package->exportDoc->privs['doc-product2export'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 130, 'depend' => array('doc-productSpace'), 'recommend' => array());
+$config->group->package->exportDoc->privs['doc-mine2export']    = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd,lite', 'order' => 125, 'depend' => array('doc-mySpace'), 'recommend' => array());
+$config->group->package->exportDoc->privs['doc-product2export'] = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd,lite', 'order' => 130, 'depend' => array('doc-productSpace'), 'recommend' => array());
 $config->group->package->exportDoc->privs['doc-project2export'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 135, 'depend' => array('doc-projectSpace'), 'recommend' => array());
-$config->group->package->exportDoc->privs['doc-custom2export']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 140, 'depend' => array('doc-teamSpace'), 'recommend' => array());
-$config->group->package->exportDoc->privs['doc-exportFiles']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 145, 'depend' => array('doc-showFiles'), 'recommend' => array());
+$config->group->package->exportDoc->privs['doc-custom2export']  = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd,lite', 'order' => 140, 'depend' => array('doc-teamSpace'), 'recommend' => array());
+$config->group->package->exportDoc->privs['doc-exportFiles']    = array('edition' => 'biz,max,ipd', 'vision' => 'or,rnd,lite', 'order' => 145, 'depend' => array('doc-showFiles'), 'recommend' => array());
 
 $config->group->package->browseAPI = new stdclass();
 $config->group->package->browseAPI->order  = 5;
