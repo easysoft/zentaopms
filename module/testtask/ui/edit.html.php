@@ -18,7 +18,7 @@ formPanel
         set::width('1/2'),
         set::className('hidden'),
         set::name('product'),
-        set::value($productID),
+        set::value($productID)
     ),
     formGroup
     (
@@ -28,7 +28,7 @@ formPanel
         set::value($task->execution),
         set::className(((!empty($project) && !$project->multiple) || ($app->tab == 'execution' && $task->execution)) ? 'hidden' : ''),
         set::control('picker'),
-        set::items($executions),
+        set::items($executions)
     ),
     formGroup
     (
@@ -38,7 +38,7 @@ formPanel
         set::name('build'),
         set::value($task->build),
         set::control('picker'),
-        set::items($builds),
+        set::items($builds)
     ),
     formGroup
     (
@@ -48,7 +48,7 @@ formPanel
         set::value($task->type),
         set::control('picker'),
         set::items($lang->testtask->typeList),
-        set::multiple(true),
+        set::multiple(true)
     ),
     formGroup
     (
@@ -57,7 +57,7 @@ formPanel
         set::name('owner'),
         set::value($task->owner),
         set::control('picker'),
-        set::items($users),
+        set::items($users)
     ),
     formGroup
     (
@@ -72,7 +72,7 @@ formPanel
                 set::name('begin'),
                 set::required(true),
                 set::value($task->begin),
-                on::change('suitEndDate'),
+                on::change('suitEndDate')
             ),
             $lang->testtask->end,
             datePicker
@@ -80,8 +80,8 @@ formPanel
                 set::id('endDate'),
                 set::name('end'),
                 set::required(true),
-                set::value($task->end),
-            ),
+                set::value($task->end)
+            )
         )
     ),
     formGroup
@@ -92,7 +92,7 @@ formPanel
         set::required(true),
         set::value($task->status),
         set::control('picker'),
-        set::items($lang->testtask->statusList),
+        set::items($lang->testtask->statusList)
     ),
     formGroup
     (
@@ -101,7 +101,7 @@ formPanel
         set::name('testreport'),
         set::value($task->testreport),
         set::control('picker'),
-        set::items($testreports),
+        set::items($testreports)
     ),
     formGroup
     (
@@ -113,7 +113,7 @@ formPanel
             (
                 set::name('name'),
                 set::required(true),
-                set::value($task->name),
+                set::value($task->name)
             ),
             $lang->testtask->pri,
             priPicker

@@ -24,13 +24,13 @@ div
     setClass('border-b'),
     div
     (
-        h::strong($lang->testcase->precondition),
+        h::strong($lang->testcase->precondition)
     ),
     div
     (
         setClass('leading-6 h-6 my-2'),
-        nl2br($case->precondition),
-    ),
+        nl2br($case->precondition)
+    )
 );
 
 $count      = count($results);
@@ -62,14 +62,14 @@ foreach($results as $i => $result)
             ) : h::strong
             (
                 setClass('text-waring'),
-                $lang->testtask->running,
+                $lang->testtask->running
             ),
             $result->node > 0 ? span
             (
                 setClass('label'),
                 $lang->testtask->auto
-            ) : null,
-        ),
+            ) : null
+        )
     );
 
     $stepResultTrs = array();
@@ -85,27 +85,27 @@ foreach($results as $i => $result)
         (
             setClass('text-left flex border-r'),
             width('calc(25% + 2px)'),
-            isset($stepResult['expect']) ? html(nl2br($stepResult['expect'])) : '',
+            isset($stepResult['expect']) ? html(nl2br($stepResult['expect'])) : ''
         );
         $itemTds[] = !empty($stepResult['result']) ? div
         (
             setClass("status-{$stepResult['result']} text-center flex border-r"),
             width('80px'),
-            $lang->testcase->resultList[$stepResult['result']],
+            $lang->testcase->resultList[$stepResult['result']]
         ) : div
         (
             setClass('border-r'),
-            width('80px'),
+            width('80px')
         );
         $itemTds[] = !empty($stepResult['result']) ? div
         (
             setClass('text-left flex border-r'),
             width('240px'),
-            nl2br($stepResult['real']),
+            nl2br($stepResult['real'])
         ) : div
         (
             setClass('border-r'),
-            width('240px'),
+            width('240px')
         );
         $itemTds[] = !empty($stepResult['result']) ? div
         (
@@ -116,13 +116,13 @@ foreach($results as $i => $result)
                 set::href("#stepResult{$modalID}"),
                 set('data-toggle', 'modal'),
                 icon('paper-clip'),
-                $fileCount,
-            ) : '',
+                $fileCount
+            ) : ''
         ) : div(width('56px'));
         $fileModals[] = modal
         (
             set::id("stepResult{$modalID}"),
-            !empty($stepResult['files']) ? fileList(set::files($stepResult['files'])) : '',
+            !empty($stepResult['files']) ? fileList(set::files($stepResult['files'])) : ''
         );
 
         $stepResultTrs[] = div
@@ -140,7 +140,7 @@ foreach($results as $i => $result)
                     on::click('toggleCheckChildItem'),
                     set::id("stepIdList[{$stepResult['id']}]"),
                     set('name', "stepIdList[{$stepResult['id']}]"),
-                    set('value', $key),
+                    set('value', $key)
                 ) : '',
                 div
                 (
@@ -149,18 +149,18 @@ foreach($results as $i => $result)
                     (
                         setClass('step-item-id mr-2'),
                         setClass('ml-' . ((zget($stepResult, 'grade', 1) - 1) * 2)),
-                        zget($stepResult, 'name', ''),
+                        zget($stepResult, 'name', '')
                     ),
-                    zget($stepResult, 'desc', ''),
-                ),
+                    zget($stepResult, 'desc', '')
+                )
             ),
-            $itemTds,
+            $itemTds
         );
     }
     $stepResultTrs[] = !empty($result->ZTFResult) && $result->node > 0 ? div
     (
         h::p($lang->testtask->runningLog),
-        h::p($result->ZTFResult),
+        h::p($result->ZTFResult)
     ) : '';
 
     $projectParam   = $this->app->tab == 'project' ? "projectID={$this->session->project}," : '';
@@ -191,37 +191,37 @@ foreach($results as $i => $result)
                         (
                             width('calc(75% - 376px)'),
                             setClass('text-left desc border-r'),
-                            $lang->testcase->stepDesc,
+                            $lang->testcase->stepDesc
                         ),
                         div
                         (
                             width('calc(25%)'),
                             setClass('text-left border-r'),
-                            $lang->testcase->stepExpect,
+                            $lang->testcase->stepExpect
                         ),
                         div
                         (
                             width('80px'),
                             setClass('text-center border-r'),
-                            $lang->testcase->result,
+                            $lang->testcase->result
                         ),
                         div
                         (
                             width('240px'),
                             setClass('text-left border-r'),
-                            $lang->testcase->real,
+                            $lang->testcase->real
                         ),
                         div
                         (
                             width('56px'),
                             setClass('text-left'),
                             $lang->attach
-                        ),
+                        )
                     ),
                     div
                     (
                         setClass('steps-body ml-2'),
-                        $stepResultTrs,
+                        $stepResultTrs
                     ),
                     $result->caseResult == 'fail' && common::hasPriv('testcase', 'createBug') ? div
                     (
@@ -232,7 +232,7 @@ foreach($results as $i => $result)
                             set::id("checkAll[{$i}]"),
                             set('type', 'checkbox'),
                             set('name', 'checkAll'),
-                            set::text($lang->selectAll),
+                            set::text($lang->selectAll)
                         ),
                         div
                         (
@@ -243,24 +243,24 @@ foreach($results as $i => $result)
                                 set('data-dismiss', 'modal'),
                                 on::click('createBug'),
                                 $lang->testcase->createBug
-                            ),
-                        ),
-                    ) : '',
-                ),
-            ),
-        ),
+                            )
+                        )
+                    ) : ''
+                )
+            )
+        )
     );
 }
 $resultItem = array();
 $resultItem[] = span
 (
     setClass('px-3 my-1 border-r'),
-    html(sprintf($lang->testtask->showResult, $count)),
+    html(sprintf($lang->testtask->showResult, $count))
 );
 $resultItem[] = span
 (
     setClass('pl-3 my-1'),
-    html(sprintf($lang->testtask->showFail, $failCount)),
+    html(sprintf($lang->testtask->showFail, $failCount))
 );
 
 div
@@ -275,15 +275,15 @@ div
             set::items
             (
                 $resultItem
-            ),
+            )
         ) : null,
         h::table
         (
             setClass('table border'),
-            $trs,
+            $trs
         ),
-        $fileModals,
-    ),
+        $fileModals
+    )
 );
 
 render();

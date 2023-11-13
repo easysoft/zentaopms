@@ -20,7 +20,7 @@ detailHeader
             set::level(1),
             set::text($lang->testtask->report->common)
         )
-    ),
+    )
 );
 
 $reports = array();

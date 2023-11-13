@@ -37,7 +37,7 @@ featureBar
         dropdown
         (
             to('trigger', btn($lang->testcase->typeList['unit'], setClass('ghost'))),
-            set::items($caseTypeItems),
+            set::items($caseTypeItems)
         )
     ) : null,
     set::link(createLink('testtask', 'browseUnits', "productID={$product->id}&browseType={key}"))
@@ -54,7 +54,7 @@ if($canImport && (empty($product) || $canModify))
             set::className('btn primary'),
             set::icon('import'),
             set::url(createLink('testtask', 'importUnitResult', "product={$product->id}")),
-            $lang->testtask->importUnitResult,
+            $lang->testtask->importUnitResult
         )
     );
 }

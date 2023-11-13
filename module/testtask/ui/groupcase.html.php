@@ -54,14 +54,14 @@ toolbar
             set::icon('kanban')
         ),
         set::items($viewItems),
-        set::placement('bottom-end'),
+        set::placement('bottom-end')
     ),
     $canLinkCase ? btn
     (
         set::className('ghost'),
         set::icon('link'),
         set::url(inlink('linkCase', "taskID=$task->id")),
-        $lang->testtask->linkCase,
+        $lang->testtask->linkCase
     ) : null,
     $canExport ? btn
     (
@@ -106,7 +106,7 @@ dtable
     set::data($cases),
     set::plugins(array('cellspan')),
     set::onRenderCell(jsRaw('window.onRenderCell')),
-    set::getCellSpan(jsRaw('window.getCellSpan')),
+    set::getCellSpan(jsRaw('window.getCellSpan'))
 );
 
 render();

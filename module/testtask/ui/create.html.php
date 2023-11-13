@@ -33,7 +33,7 @@ formPanel
     (
         set::type('hidden'),
         set::name('execution'),
-        set::value($noMultipleExecutionID),
+        set::value($noMultipleExecutionID)
     ) : formGroup
     (
         set::width('1/2'),
@@ -42,7 +42,7 @@ formPanel
         set::name('execution'),
         set::value($executionID),
         set::control('picker'),
-        set::items($executions),
+        set::items($executions)
     ),
     formGroup
     (
@@ -58,7 +58,7 @@ formPanel
                 set::name('build'),
                 set::items($builds),
                 set::required(true),
-                set::value($build),
+                set::value($build)
             ),
             span
             (
@@ -67,7 +67,7 @@ formPanel
                 (
                     set('href', createLink('build', 'create', "executionID=$executionID&productID={$product->id}&projectID={$projectID}")),
                     set('data-toggle', 'modal'),
-                    $lang->build->create,
+                    $lang->build->create
                 )
             ),
             span
@@ -91,7 +91,7 @@ formPanel
         (
             set::multiple(true),
             set::name('type[]'),
-            set::items($lang->testtask->typeList),
+            set::items($lang->testtask->typeList)
         )
     ),
     formGroup
@@ -100,7 +100,7 @@ formPanel
         set::label($lang->testtask->owner),
         set::name('owner'),
         set::control('picker'),
-        set::items($users),
+        set::items($users)
     ),
     formGroup
     (
@@ -114,15 +114,15 @@ formPanel
                 set::id('beginDate'),
                 set::name('begin'),
                 set::required(true),
-                on::change('suitEndDate'),
+                on::change('suitEndDate')
             ),
             $lang->testtask->end,
             datePicker
             (
                 set::id('endDate'),
                 set::name('end'),
-                set::required(true),
-            ),
+                set::required(true)
+            )
         )
     ),
     formGroup
@@ -132,7 +132,7 @@ formPanel
         set::name('status'),
         set::required(true),
         set::control('picker'),
-        set::items($lang->testtask->statusList),
+        set::items($lang->testtask->statusList)
     ),
     formGroup
     (
@@ -140,7 +140,7 @@ formPanel
         set::label($lang->testtask->testreport),
         set::name('testreport'),
         set::control('picker'),
-        set::items($testreports),
+        set::items($testreports)
     ),
     formGroup
     (
@@ -152,7 +152,7 @@ formPanel
             (
                 zui::width('1/2'),
                 set::name('name'),
-                set::required(true),
+                set::required(true)
             ),
             $lang->testtask->pri,
             priPicker
@@ -185,9 +185,9 @@ formPanel
         (
             set::multiple(true),
             set::name('mailto[]'),
-            set::items($users),
+            set::items($users)
         )
-    ),
+    )
 );
 
 render();

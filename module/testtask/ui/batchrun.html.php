@@ -64,7 +64,7 @@ foreach($cases as $caseID => $case)
                         set::name("steps[$caseID][$stepID]"),
                         set::items($lang->testcase->resultList),
                         set::required(true),
-                        set::value('pass'),
+                        set::value('pass')
                     )
                 ) : null,
                 $step->type != 'group' ? h::td
@@ -74,7 +74,7 @@ foreach($cases as $caseID => $case)
                     (
                         set::name("reals[$caseID][$stepID]")
                     )
-                ) : null,
+                ) : null
             );
             $childId ++;
         }
@@ -106,7 +106,7 @@ foreach($cases as $caseID => $case)
             h::span
             (
                 set::hint(true),
-                $case->title,
+                $case->title
             )
         ),
         h::td
@@ -115,7 +115,7 @@ foreach($cases as $caseID => $case)
             span
             (
                 set::hint(true),
-                $case->precondition,
+                $case->precondition
             )
         ),
         h::td
@@ -126,7 +126,7 @@ foreach($cases as $caseID => $case)
                 set::name("results[$caseID]"),
                 set::value('pass'),
                 set::inline(false),
-                set::items($lang->testcase->resultList),
+                set::items($lang->testcase->resultList)
             )
         ),
         h::td
@@ -140,7 +140,7 @@ foreach($cases as $caseID => $case)
             empty($steps[$caseID]) ? input
             (
                 set::name("reals[$caseID][]")
-            ) : null,
+            ) : null
         )
     );
 }

@@ -47,7 +47,7 @@ dtable
     set::data($runs),
     set::plugins(array('cellspan')),
     set::onRenderCell(jsRaw('window.onRenderCell')),
-    set::getCellSpan(jsRaw('window.getCellSpan')),
+    set::getCellSpan(jsRaw('window.getCellSpan'))
 );
 
 render();

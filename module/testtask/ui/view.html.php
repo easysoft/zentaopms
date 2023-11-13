@@ -20,7 +20,7 @@ detailHeader
         (
             set(array('entityID' => $task->id, 'level' => 1, 'text' => $task->name))
         )
-    ),
+    )
 );
 
 $taskType = '';
@@ -74,8 +74,8 @@ detailBody
                         (
                             set('href', createLink('execution', 'story', "executionID=$task->execution")),
                             set('title', $task->executionName),
-                            $task->executionName,
-                        ),
+                            $task->executionName
+                        )
                     ) : null,
                     item
                     (
@@ -85,9 +85,9 @@ detailBody
                             $isInModal ? $buildName :a
                             (
                                 set::href(createLink('build', 'view', "buildID=$task->build")),
-                                $buildName,
+                                $buildName
                             )
-                        ),
+                        )
                     ),
                     item
                     (
@@ -136,7 +136,7 @@ detailBody
                         (
                             set('href', createLink('testreport', 'view', "reportID=$task->testreport")),
                             zget($testreport, 'title', '')
-                        ) : null,
+                        ) : null
                     )
                 )
             )

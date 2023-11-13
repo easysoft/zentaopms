@@ -19,7 +19,7 @@ modalHeader
 (
     set::title($lang->testtask->lblRunCase),
     set::entityText($run->case->title),
-    set::entityID($caseID),
+    set::entityID($caseID)
 );
 
 $stepTrs    = array();
@@ -54,15 +54,15 @@ if($confirm != 'yes')
                     (
                         setClass('step-item-id mr-2'),
                         setClass('ml-' . (($step->grade- 1) * 2)),
-                        $step->name,
+                        $step->name
                     ),
-                    nl2br(zget($step, 'desc', '')),
-                ),
+                    nl2br(zget($step, 'desc', ''))
+                )
             ),
             h::td
             (
                 setClass('text-left border'),
-                nl2br(zget($step, 'expect', '')),
+                nl2br(zget($step, 'expect', ''))
             ),
             h::td
             (
@@ -76,8 +76,8 @@ if($confirm != 'yes')
                     set::value($step->type != 'group' ? 'pass' : ''),
                     set::required($step->type != 'group'),
                     set::disabled($step->type == 'group'),
-                    $step->type == 'group' ? set('disabled', 'disabled') : '',
-                ),
+                    $step->type == 'group' ? set('disabled', 'disabled') : ''
+                )
             ),
             h::td
             (
@@ -97,7 +97,7 @@ if($confirm != 'yes')
                                 set('rows', '1'),
                                 set::name("real[{$step->id}]"),
                                 nl2br(zget($step, 'real', '')),
-                                $step->type == 'group' ? set('disabled', 'disabled') : '',
+                                $step->type == 'group' ? set('disabled', 'disabled') : ''
                             )
                         ),
                         h::td
@@ -111,12 +111,12 @@ if($confirm != 'yes')
                                 $step->type != 'group' ? set('data-toggle', 'modal') : '',
                                 set('title', $lang->testtask->files),
                                 set::icon('paper-clip'),
-                                set::disabled($step->type == 'group'),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
+                                set::disabled($step->type == 'group')
+                            )
+                        )
+                    )
+                )
+            )
         );
 
         $fileModals[] = modal
@@ -126,7 +126,7 @@ if($confirm != 'yes')
             setData('position', 'center'),
             upload
             (
-                set::name("files{$step->id}[]"),
+                set::name("files{$step->id}[]")
             ),
             div
             (
@@ -135,9 +135,9 @@ if($confirm != 'yes')
                 (
                     setClass('btn-wide primary'),
                     set('data-dismiss', 'modal'),
-                    $lang->save,
-                ),
-            ),
+                    $lang->save
+                )
+            )
         );
     }
 }
@@ -150,7 +150,7 @@ if($confirm != 'yes')
         h::td
         (
             setClass('case-precondition w-16 align-top'),
-            $lang->testcase->precondition,
+            $lang->testcase->precondition
         ),
         h::td
         (
@@ -159,9 +159,9 @@ if($confirm != 'yes')
             nl2br(zget($run->case, 'precondition', '')),
             nl2br(zget($run->case, 'precondition', '')),
             nl2br(zget($run->case, 'precondition', '')),
-            nl2br(zget($run->case, 'precondition', '')),
-        ),
-    ),
+            nl2br(zget($run->case, 'precondition', ''))
+        )
+    )
 ) : '';
 
 
@@ -180,25 +180,25 @@ form
                 h::td
                 (
                     setClass('w-96'),
-                    $lang->testcase->stepDesc,
+                    $lang->testcase->stepDesc
                 ),
                 h::td
                 (
                     width('cal(760px - 24rem)'),
-                    $lang->testcase->stepExpect,
+                    $lang->testcase->stepExpect
                 ),
                 h::td
                 (
                     setClass('result-td'),
                     width('96px'),
-                    $lang->testcase->result,
+                    $lang->testcase->result
                 ),
                 h::td
                 (
                     width('280px'),
-                    $lang->testcase->real,
-                ),
-            ) : '',
+                    $lang->testcase->real
+                )
+            ) : ''
         ),
         h::tbody
         (
@@ -218,13 +218,13 @@ form
                             set::id('pre'),
                             set::href($preLink),
                             set('data-load', 'modal'),
-                            $lang->testtask->pre,
+                            $lang->testtask->pre
                         ) : '',
                         $run->case->status != 'wait' && $confirm != 'yes' && !empty($run->case->steps) ? btn
                         (
                             setClass('primary btn-wide w-24 m-3'),
                             set::btnType('submit'),
-                            $lang->save,
+                            $lang->save
                         ) : '',
                         $nextLink ? a
                         (
@@ -232,26 +232,26 @@ form
                             set::id('next'),
                             set::href($nextLink),
                             set('data-load', 'modal'),
-                            $lang->testtask->next,
+                            $lang->testtask->next
                         ) : '',
                         input
                         (
                             setClass('hidden'),
                             set::name('case'),
-                            set::value($run->case->id),
+                            set::value($run->case->id)
                         ),
                         input
                         (
                             setClass('hidden'),
                             set::name('version'),
-                            set::value($run->case->currentVersion),
-                        ),
-                    ),
-                ),
-            ),
-        ),
+                            set::value($run->case->currentVersion)
+                        )
+                    )
+                )
+            )
+        )
     ),
-    $fileModals,
+    $fileModals
 );
 
 div
@@ -260,8 +260,8 @@ div
     set::id('resultsContainer'),
     div
     (
-        set::id('casesResults'),
-    ),
+        set::id('casesResults')
+    )
 );
 
 set::id('runCaseModal');

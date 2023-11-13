@@ -40,14 +40,14 @@ featureBar
         (
             setClass('w-28'),
             set::name('begin'),
-            set::value($beginTime),
+            set::value($beginTime)
         ),
         $lang->testtask->to,
         datePicker
         (
             setClass('w-28'),
             set::name('end'),
-            set::value($endTime),
+            set::value($endTime)
         )
     )
 );

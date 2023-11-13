@@ -25,7 +25,7 @@ formPanel
             picker
             (
                 set::name('execution'),
-                set::items($executions),
+                set::items($executions)
             )
         ),
         formGroup
@@ -47,11 +47,11 @@ formPanel
                     (
                         set::url(createLink('build', 'create', "executionID=$executionID")),
                         set('data-toggle', 'modal'),
-                        $lang->build->create,
+                        $lang->build->create
                     )
-                ) : null,
+                ) : null
             )
-        ),
+        )
     ),
     formGroup
     (
@@ -60,7 +60,7 @@ formPanel
         picker
         (
             set::name('frame'),
-            set::items($lang->job->frameList),
+            set::items($lang->job->frameList)
         )
     ),
     formGroup
@@ -79,7 +79,7 @@ formPanel
             datePicker
             (
                 set::name('end'),
-                set::value(date('Y-m-d', time() + 24 * 3600)),
+                set::value(date('Y-m-d', time() + 24 * 3600))
             )
         )
     ),
@@ -93,14 +93,14 @@ formPanel
             fileInput
             (
                 set::name('resultFile')
-            ),
+            )
         ),
         div
         (
             $lang->testtask->unitXMLFormat,
             setStyle('height', '32px'),
             setStyle('line-height', '32px'),
-            setStyle('padding-left', '8px'),
+            setStyle('padding-left', '8px')
         )
     ),
     formRow
@@ -109,7 +109,7 @@ formPanel
         (
             set::label($lang->testtask->name),
             set::name('name'),
-            set::value(sprintf($lang->testtask->titleOfAuto, date('Y-m-d H:i:s'))),
+            set::value(sprintf($lang->testtask->titleOfAuto, date('Y-m-d H:i:s')))
         ),
         formGroup
         (
@@ -119,7 +119,7 @@ formPanel
             (
                 set::name('owner'),
                 set::items($users),
-                set::value($this->app->user->account),
+                set::value($this->app->user->account)
             )
         ),
         formGroup
@@ -141,7 +141,7 @@ formPanel
         editor
         (
             set::name('desc'),
-            set::rows(10),
+            set::rows(10)
         )
     ),
     formGroup
@@ -154,7 +154,7 @@ formPanel
                 set::name('mailto[]'),
                 set::items($users),
                 set::multiple(true)
-            ),
+            )
         )
     )
 );

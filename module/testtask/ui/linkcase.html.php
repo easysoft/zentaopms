@@ -96,7 +96,7 @@ dtable
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

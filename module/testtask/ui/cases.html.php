@@ -84,7 +84,7 @@ toolbar
             set::icon('kanban')
         ),
         set::items($viewItems),
-        set::placement('bottom-end'),
+        set::placement('bottom-end')
     ),
     $canLinkCase ? btn
     (
@@ -92,7 +92,7 @@ toolbar
         set::icon('link'),
         set::url(inlink('linkCase', "taskID=$task->id")),
         set('data-app', $app->tab),
-        $lang->testtask->linkCase,
+        $lang->testtask->linkCase
     ) : null,
     $canExport ? btn
     (

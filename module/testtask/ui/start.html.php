@@ -23,7 +23,7 @@ form
             set::rows(6)
         )
     ),
-    set::actions(array('submit')),
+    set::actions(array('submit'))
 );
 hr();
 history();

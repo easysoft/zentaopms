@@ -12,13 +12,13 @@ namespace zin;
 
 modalHeader();
 
-form
+formPanel
 (
     formGroup
     (
         set::label($lang->testtask->realFinishedDate),
         set::name('realFinishedDate'),
-        set::value(helper::isZeroDate($testtask->realFinishedDate) ? helper::now() : $testtask->realFinishedDate),
+        set::value(helper::isZeroDate($testtask->realFinishedDate) ? helper::now() : $testtask->realFinishedDate)
     ),
     formGroup
     (
@@ -38,14 +38,14 @@ form
             (
                 set::name('mailto'),
                 set::items($users),
-                set::value($testtask->mailto ? tr_replace(' ', '', $testtask->mailto) : ''),
-                set::multiple(true),
+                set::value($testtask->mailto ? str_replace(' ', '', $testtask->mailto) : ''),
+                set::multiple(true)
             ),
             $contactList ? picker
             (
                 set::name('contact'),
                 set::items($contactList),
-                on::change("setMailto('mailto', this.value)"),
+                on::change("setMailto('mailto', this.value)")
             ) : null
         )
     ),
