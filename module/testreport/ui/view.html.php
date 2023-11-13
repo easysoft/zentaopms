@@ -115,7 +115,7 @@ foreach($lang->bug->priList as $key => $value)
         h::td(label(set::className('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $label),
         h::td($generated),
         h::td($legacy),
-        h::td($resolved),
+        h::td($resolved)
     );
     if(!next($colorList)) reset($colorList);
 }
@@ -144,7 +144,7 @@ $bugStageChart = div
                 ),
                 set::yAxis(array('type' => 'value')),
                 set::series($chartOption)
-            )->size('100%', 300),
+            )->size('100%', 300)
         ),
         cell
         (
@@ -193,7 +193,7 @@ for($time = $beginTime; $time <= $endTime; $time += 86400)
         h::td($date),
         h::td($generated),
         h::td($legacy),
-        h::td($resolved),
+        h::td($resolved)
     );
 }
 $chartOption    = array_values($chartOption);
@@ -221,7 +221,7 @@ $bugHandleChart = div
                 ),
                 set::yAxis(array('type' => 'value')),
                 set::series($chartOption)
-            )->size('100%', 300),
+            )->size('100%', 300)
         ),
         cell
         (
@@ -303,7 +303,7 @@ foreach($bugInfo as $infoKey => $infoValue)
                             )
                         )
                     )
-                )->size('100%', 300),
+                )->size('100%', 300)
             ),
             cell
             (

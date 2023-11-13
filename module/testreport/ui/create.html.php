@@ -29,7 +29,7 @@ formPanel
             set::control('picker'),
             set::name('selectTask'),
             set::items($taskPairs),
-            set::value($objectID),
+            set::value($objectID)
         )
     ),
     formRow
@@ -43,13 +43,13 @@ formPanel
                 datePicker
                 (
                     set::name('begin'),
-                    set::value($begin),
+                    set::value($begin)
                 ),
                 $lang->testtask->to,
                 datePicker
                 (
                     set::name('end'),
-                    set::value($end),
+                    set::value($end)
                 )
             ),
             input
@@ -290,7 +290,7 @@ foreach($charts as $chartType => $chartOption)
                             )
                         )
                     )
-                )->size('100%', 300),
+                )->size('100%', 300)
             ),
             cell
             (
@@ -329,7 +329,7 @@ foreach($lang->bug->priList as $key => $value)
         h::td(label(set::className('label-dot mr-2'), set::style(array('background-color' => $color, '--tw-ring-color' => $color))), $label),
         h::td($generated),
         h::td($legacy),
-        h::td($resolved),
+        h::td($resolved)
     );
     if(!next($colorList)) reset($colorList);
 }
@@ -358,7 +358,7 @@ $bugStageChart = div
                 ),
                 set::yAxis(array('type' => 'value')),
                 set::series($chartOption)
-            )->size('100%', 300),
+            )->size('100%', 300)
         ),
         cell
         (
@@ -406,7 +406,7 @@ for($time = $beginTime; $time <= $endTime; $time += 86400)
         h::td($date),
         h::td($generated),
         h::td($legacy),
-        h::td($resolved),
+        h::td($resolved)
     );
 }
 $chartOption    = array_values($chartOption);
@@ -434,7 +434,7 @@ $bugHandleChart = div
                 ),
                 set::yAxis(array('type' => 'value')),
                 set::series($chartOption)
-            )->size('100%', 300),
+            )->size('100%', 300)
         ),
         cell
         (
@@ -516,7 +516,7 @@ foreach($bugInfo as $infoKey => $infoValue)
                             )
                         )
                     )
-                )->size('100%', 300),
+                )->size('100%', 300)
             ),
             cell
             (
