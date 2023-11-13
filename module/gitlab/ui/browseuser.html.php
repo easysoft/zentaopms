@@ -39,7 +39,8 @@ foreach($gitlabUserList as $gitlabUser)
     $gitlabUser->createOn     = substr($gitlabUser->createdAt, 0, 10);
     $gitlabUser->lastActivity = substr($gitlabUser->lastActivityOn, 0, 10);
     $gitlabUser->isAdmin      = $isAdmin;
-    $gitlabUser->name         = html::image($gitlabUser->avatar, "height=40") . '<strong>' .$gitlabUser->realname . '</strong> ' . $gitlabUser->account . ' ' . $gitlabUser->email;
+    $gitlabUser->name         = $gitlabUser->realname . ' ' . $gitlabUser->account . ' ' . $gitlabUser->email;
+    $gitlabUser->nameAvatar   = $gitlabUser->avatar;
 }
 
 $gitlabUserList = initTableData($gitlabUserList, $config->gitlab->dtable->user->fieldList, $this->gitlab);
@@ -92,6 +93,5 @@ dtable
     set::cols($config->gitlab->dtable->user->fieldList),
     set::data($gitlabUserList),
     set::sortLink(createLink('gitlab', 'browseUser', "gitlabID={$gitlabID}&orderBy={name}_{sortType}")),
-    set::onRenderCell(jsRaw('window.renderCell')),
     set::orderBy($orderBy),
 );

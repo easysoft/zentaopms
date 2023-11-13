@@ -173,10 +173,10 @@ $config->gitlab->dtable->user->fieldList['id']['title'] = $lang->gitlab->user->i
 $config->gitlab->dtable->user->fieldList['id']['type']  = 'id';
 $config->gitlab->dtable->user->fieldList['id']['width'] = '80px';
 
-$config->gitlab->dtable->user->fieldList['name']['title'] = $lang->gitlab->user->name;
-$config->gitlab->dtable->user->fieldList['name']['name']  = 'name';
-$config->gitlab->dtable->user->fieldList['name']['type']  = 'html';
-$config->gitlab->dtable->user->fieldList['name']['sortType'] = true;
+$config->gitlab->dtable->user->fieldList['user']['title'] = $lang->gitlab->user->name;
+$config->gitlab->dtable->user->fieldList['user']['name']  = 'name';
+$config->gitlab->dtable->user->fieldList['user']['type']  = 'avatarName';
+$config->gitlab->dtable->user->fieldList['user']['sortType'] = true;
 
 $config->gitlab->dtable->user->fieldList['createOn']['title'] = $lang->gitlab->user->createOn;
 
