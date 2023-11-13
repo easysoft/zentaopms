@@ -20,6 +20,7 @@ $lang->index->chat = new stdclass();
 $lang->index->chat->chat = '聊天';
 $lang->index->chat->ai   = 'AI 对话';
 $lang->index->chat->unconfiguredFormat  = '尚未配置 %s 功能，%s。';
-$lang->index->chat->goConfigureFormat   = '点击前往 <a class="text-primary" href="%s">%s 配置页面</a> 进行功能配置';
+$lang->index->chat->goConfigureFormat   = '点击前往 <a class="text-primary configure-chat-button" href="%s">%s 配置页面</a> 进行功能配置';
 $lang->index->chat->contactAdminForHelp = '请联系管理员进行功能配置';
 $lang->index->chat->unauthorized        = '没有权限访问 AI 聊天功能，请联系管理员进行权限分配。';
+$lang->index->chat->reloadTip           = '若已完成相关配置，请尝试 <a class="text-primary" id="reload-ai-chat">重新加载页面</a>。';

@@ -31,7 +31,9 @@
   #ai-chat-view {position: fixed; right: 0; width: 330px; bottom: 40px; top: 50px; outline: 1px solid #eee;}
   #ai-chat-frame {height: 100%; width: 100%;}
   .unconfigured {position: absolute; width: 330px; padding: 20px; right: 0; top: 0; bottom: 0; background: #fff; outline: 1px solid #eee;}
+  .unconfigured > div {margin-bottom: 10px;}
   #xuan-chat-view .unconfigured {top: 50px;}
+  #reload-ai-chat.disabled {cursor: wait; color: #999!important;}
 </style>
 <div id="chat-container">
   <div id="chat-switch">
@@ -45,11 +47,18 @@
       <div class="unconfigured text-gray"><?php echo sprintf($lang->index->chat->unconfiguredFormat, $lang->index->chat->chat, (common::hasPriv('setting', 'xuanxuan') ? sprintf($lang->index->chat->goConfigureFormat, helper::createLink('setting', 'xuanxuan'), $lang->index->chat->chat) : $lang->index->chat->contactAdminForHelp)); ?></div>
     <?php endif; ?>
   </div>
-  <div id="ai-chat-view">
-    <?php if(!$isAIConfigured): ?>
-      <div class="unconfigured text-gray"><?php echo sprintf($lang->index->chat->unconfiguredFormat, $lang->index->chat->ai, (common::hasPriv('ai', 'models') ? sprintf($lang->index->chat->goConfigureFormat, helper::createLink('ai', 'models') . '#app=admin', $lang->index->chat->ai) : $lang->index->chat->contactAdminForHelp)); ?></div>
-    <?php elseif(!$hasAIChatPriv): ?>
-      <div class="unconfigured text-gray"><?php echo $lang->index->chat->unauthorized; ?></div>
+  <div id="ai-chat-view" class="ai-chat-view">
+    <?php if(!$isAIConfigured || !$hasAIChatPriv): ?>
+      <div class="unconfigured text-gray">
+        <div>
+          <?php if(!$isAIConfigured): ?>
+            <?php echo sprintf($lang->index->chat->unconfiguredFormat, $lang->index->chat->ai, (common::hasPriv('ai', 'models') ? sprintf($lang->index->chat->goConfigureFormat, helper::createLink('ai', 'models') . '#app=admin', $lang->index->chat->ai) : $lang->index->chat->contactAdminForHelp)); ?>
+          <?php elseif(!$hasAIChatPriv): ?>
+            <?php echo $lang->index->chat->unauthorized; ?>
+          <?php endif; ?>
+          </div>
+        <div><?php echo $lang->index->chat->reloadTip; ?></div>
+      </div>
     <?php else: ?>
       <iframe id="ai-chat-frame" src="<?php echo helper::createLink('ai', 'chat'); ?>" frameborder="no" allowtransparency="true" scrolling="auto" hidefocus></iframe>
     <?php endif; ?>
@@ -68,7 +77,7 @@
       {
         window.handleXuanNoticeChange(notice);
         $('.chat-switch-item[data-value="chat"]').toggleClass('has-notice', !!notice.count);
-      }
+      };
 
       /* Set style into xuan frame. */
       let tries = 0;
@@ -130,11 +139,41 @@
       $('#chat-container').hide();
     });
 
-    /* Handle configure link click, use $.apps.open() instead. */
-    $('#chat-container .unconfigured > a').click(function(e)
+    const registerUnconfiguredClickHandlers = function()
     {
-      e.preventDefault();
-      $.apps.open($(this).attr('href'));
-    });
+      /* Handle configure link click, use $.apps.open() instead. */
+      $('.configure-chat-button').click(function(e)
+      {
+        e.preventDefault();
+        $.apps.open($(this).attr('href'));
+      });
+
+      /* Handle AI chat reload. */
+      $('#reload-ai-chat').click(function(e)
+      {
+        e.preventDefault();
+        if($(this).hasClass('disabled')) return;
+        $(this).addClass('disabled');
+
+        setTimeout(function()
+        {
+          $.ajax({
+            url: createLink('index', 'index'),
+            dataType: 'html',
+            success: function(response)
+            {
+              const $indexView = $($.parseHTML(response));
+              const $chatContainer = $indexView.filter('#chat-container');
+              if(!$chatContainer.length) return;
+              const $aiChatView = $chatContainer.children().filter('#ai-chat-view');
+              if(!$aiChatView.length) return;
+              $('#ai-chat-view').html($aiChatView.html());
+              registerUnconfiguredClickHandlers();
+            }
+          });
+        }, 1000);
+      });
+    }
+    registerUnconfiguredClickHandlers();
   });
 </script>
