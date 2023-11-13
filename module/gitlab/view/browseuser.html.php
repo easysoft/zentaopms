@@ -49,7 +49,7 @@
         <?php foreach ($gitlabUserList as $id => $gitlabUser): ?>
         <tr>
           <td class='text'><?php echo $gitlabUser->id;?></td>
-          <td class='w-60px'><?php echo html::image($gitlabUser->avatar, "height=40");?></td>
+          <td class='w-60px'><?php echo html::image($gitlabUser->avatar, "height=20");?></td>
           <td class='text-left'>
               <strong><?php echo $gitlabUser->realname;?></strong>
               <?php echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;";?>
