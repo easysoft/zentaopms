@@ -2882,7 +2882,7 @@ EOF;
         $this->session->set('user', $user);
         $this->app->user = $user;
 
-        $this->dao->update(TABLE_USER)->set('last')->eq($user->last)->where('account')->eq($user->account)->exec();
+        $this->dao->update(TABLE_USER)->set('last')->eq($user->last)->set('visits=visits+1')->where('account')->eq($user->account)->exec();
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
