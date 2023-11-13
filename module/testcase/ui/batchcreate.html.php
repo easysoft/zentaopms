@@ -36,7 +36,7 @@ $items[] = array
     'name'    => 'id',
     'label'   => $lang->idAB,
     'control' => 'index',
-    'width'   => '32px',
+    'width'   => '32px'
 );
 
 /* Field of branch. */
@@ -51,7 +51,7 @@ if($product->type != 'normal')
         'items'   => $branches,
         'value'   => $branch,
         'width'   => '200px',
-        'ditto'   => true,
+        'ditto'   => true
     );
 }
 
@@ -66,7 +66,7 @@ $items[] = array
     'value'    => $currentModuleID,
     'width'    => '200px',
     'required' => isset($requiredFields['module']),
-    'ditto'    => true,
+    'ditto'    => true
 );
 
 /* Field of scene. */
@@ -80,7 +80,7 @@ $items[] = array
     'value'    => $currentSceneID,
     'width'    => '200px',
     'required' => isset($requiredFields['scene']),
-    'ditto'    => true,
+    'ditto'    => true
 );
 
 unset($lang->testcase->typeList['unit']);
@@ -95,7 +95,7 @@ $items[] = array
     'value'    => 'feature',
     'width'    => '160px',
     'required' => true,
-    'ditto'    => true,
+    'ditto'    => true
 );
 
 /* Field of stage. */
@@ -109,7 +109,7 @@ $items[] = array
     'value'    => '',
     'multiple' => true,
     'width'    => '160px',
-    'required' => isset($requiredFields['stage']),
+    'required' => isset($requiredFields['stage'])
 );
 
 /* Field of story. */
@@ -122,7 +122,7 @@ $items[] = array
     'items'    => $storyPairs,
     'value'    => $story ? $story->id : '',
     'width'    => '200px',
-    'required' => isset($requiredFields['story']),
+    'required' => isset($requiredFields['story'])
 );
 
 /* Field of title. */
@@ -131,7 +131,7 @@ $items[] = array
     'name'     => 'title',
     'label'    => $lang->testcase->title,
     'width'    => '240px',
-    'required' => true,
+    'required' => true
 );
 
 /* Field of pri. */
@@ -145,7 +145,7 @@ $items[] = array
     'value'    => 3,
     'width'    => '100px',
     'required' => isset($requiredFields['pri']),
-    'ditto'   => true,
+    'ditto'   => true
 );
 
 /* Field of review. */
@@ -158,7 +158,7 @@ $items[] = array
     'items'    => $lang->testcase->reviewList,
     'value'    => $needReview,
     'width'    => '160px',
-    'ditto'    => true,
+    'ditto'    => true
 );
 
 /* Field of precondition. */
@@ -168,7 +168,7 @@ $items[] = array
     'label'    => $lang->testcase->precondition,
     'hidden'   => zget($visibleFields, 'precondition', true, false),
     'width'    => '200px',
-    'required' => isset($requiredFields['precondition']),
+    'required' => isset($requiredFields['precondition'])
 );
 
 /* Field of keywords. */
@@ -178,7 +178,7 @@ $items[] = array
     'label'    => $lang->testcase->keywords,
     'hidden'   => zget($visibleFields, 'keywords', true, false),
     'width'    => '200px',
-    'required' => isset($requiredFields['keywords']),
+    'required' => isset($requiredFields['keywords'])
 );
 
 formBatchPanel
@@ -187,7 +187,7 @@ formBatchPanel
     set::pasteField('title'),
     set::items($items),
     on::change('[data-name="branch"]', 'onBranchChangedForBatch'),
-    on::change('[data-name="module"]', 'onModuleChangedForBatch'),
+    on::change('[data-name="module"]', 'onModuleChangedForBatch')
 );
 
 render();

@@ -74,7 +74,7 @@ formPanel
                     set::name('module'),
                     set::items($moduleOptionMenu),
                     set::value($currentModuleID),
-                    set::required(true),
+                    set::required(true)
                 ),
                 span
                 (
@@ -94,9 +94,9 @@ formPanel
                         set('href', 'javascript:void(0)'),
                         icon('refresh')
                     )
-                ),
+                )
             )
-        ),
+        )
     ),
     formRow
     (
@@ -113,7 +113,7 @@ formPanel
                     set::name('scene'),
                     set::items($sceneOptionMenu),
                     set::value($currentSceneID),
-                    set::required(true),
+                    set::required(true)
                 )
             )
         )
@@ -132,7 +132,7 @@ formPanel
                 set::items($lang->testcase->typeList),
                 set::value($case->type),
                 set::required(true)
-            ),
+            )
         ),
         formGroup
         (
@@ -144,7 +144,7 @@ formPanel
                 set::value('auto'),
                 set::text($lang->testcase->automated)
             )
-        ),
+        )
     ),
     formRow
     (
@@ -232,7 +232,7 @@ formPanel
                 input
                 (
                     set::name('title'),
-                    set::value($case->title),
+                    set::value($case->title)
                 ),
                 set::suffixWidth('icon'),
                 to::suffix
@@ -257,7 +257,7 @@ formPanel
                 set::name('pri'),
                 set::items($priList),
                 set::value($case->pri)
-            ),
+            )
         ),
         $needReview ? formGroup
         (
@@ -270,8 +270,8 @@ formPanel
                 set::id('needReview'),
                 set::name('needReview'),
                 set::value('0'),
-                set::required(true),
-            ),
+                set::required(true)
+            )
         ) : null
     ),
     formRow
@@ -338,7 +338,7 @@ function printStepsTable()
                         checkbox
                         (
                             set::name("stepType[$i]"),
-                            set::text($lang->testcase->automated),
+                            set::text($lang->testcase->automated)
                         )
                     )
                 )

@@ -51,14 +51,14 @@ else
         'name'    => 'id',
         'label'   => $lang->idAB,
         'control' => 'hidden',
-        'hidden'  => true,
+        'hidden'  => true
     );
     $items[] = array
     (
         'name'    => 'id',
         'label'   => $lang->idAB,
         'control' => 'index',
-        'width'   => '50px',
+        'width'   => '50px'
     );
     $items[] = array
     (
@@ -70,7 +70,7 @@ else
         'ditto'        => true,
         'hidden'       => !isset($visibleFields['pri']),
         'required'     => isset($requiredFields['pri']),
-        'defaultDitto' => 'off',
+        'defaultDitto' => 'off'
     );
     $items[] = array
     (
@@ -80,7 +80,7 @@ else
         'control'  => array('type' => 'picker', 'required' => true),
         'items'    => $lang->testcase->statusList,
         'hidden'   => !isset($visibleFields['status']),
-        'required' => isset($requiredFields['status']),
+        'required' => isset($requiredFields['status'])
     );
     $items[] = array
     (
@@ -89,7 +89,7 @@ else
         'width'   => '180px',
         'control' => 'picker',
         'items'   => zget($branchTagOption, $productID, array()),
-        'hidden'  => !$branchProduct,
+        'hidden'  => !$branchProduct
     );
     $items[] = array
     (
@@ -99,7 +99,7 @@ else
         'control'  => array('type' => 'picker', 'required' => true),
         'items'    => array(),
         'hidden'   => !isset($visibleFields['module']),
-        'required' => isset($requiredFields['module']),
+        'required' => isset($requiredFields['module'])
     );
     $items[] = array
     (
@@ -109,7 +109,7 @@ else
         'control'  => array('type' => 'picker', 'required' => true),
         'items'    => array(),
         'hidden'   => ($isLibCase || !isset($visibleFields['scene'])),
-        'required' => isset($requiredFields['scene']),
+        'required' => isset($requiredFields['scene'])
     );
     $items[] = array
     (
@@ -119,7 +119,7 @@ else
         'width'    => '180px',
         'items'    => $stories,
         'hidden'   => !isset($visibleFields['story']),
-        'required' => isset($requiredFields['story']),
+        'required' => isset($requiredFields['story'])
     );
     $items[] = array
     (
@@ -127,7 +127,7 @@ else
         'label'    => $lang->testcase->title,
         'control'  => 'input',
         'width'    => '180px',
-        'required' => true,
+        'required' => true
     );
 
     unset($lang->testcase->typeList['unit']);
@@ -140,7 +140,7 @@ else
         'items'        => $lang->testcase->typeList,
         'ditto'        => true,
         'required'     => isset($requiredFields['type']),
-        'defaultDitto' => 'off',
+        'defaultDitto' => 'off'
     );
     $items[] = array
     (
@@ -149,7 +149,7 @@ else
         'width'    => '180px',
         'control'  => 'textarea',
         'hidden'   => !isset($visibleFields['precondition']),
-        'required' => isset($requiredFields['precondition']),
+        'required' => isset($requiredFields['precondition'])
     );
     $items[] = array
     (
@@ -158,7 +158,7 @@ else
         'control'  => 'input',
         'width'    => '180px',
         'hidden'   => !isset($visibleFields['keywords']),
-        'required' => isset($requiredFields['keywords']),
+        'required' => isset($requiredFields['keywords'])
     );
     $items[] = array
     (
@@ -169,7 +169,7 @@ else
         'multiple' => true,
         'items'    => $lang->testcase->stageList,
         'hidden'   => !isset($visibleFields['stage']),
-        'required' => isset($requiredFields['stage']),
+        'required' => isset($requiredFields['stage'])
     );
 
     formBatchPanel
@@ -179,7 +179,7 @@ else
         set::mode('edit'),
         set::data(array_values($cases)),
         set::items($items),
-        set::onRenderRow(jsRaw('handleRenderRow')),
+        set::onRenderRow(jsRaw('handleRenderRow'))
     );
 }
 

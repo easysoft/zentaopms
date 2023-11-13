@@ -54,9 +54,9 @@ detailHeader
             set::entityID($case->id),
             set::level(1),
             set::text($case->title),
-            set::reverse(true),
+            set::reverse(true)
         )
-    ),
+    )
 );
 
 detailBody
@@ -83,7 +83,7 @@ detailBody
                     (
                         set::name('title'),
                         set::value($case->title),
-                        set::placeholder($lang->case->title),
+                        set::placeholder($lang->case->title)
                     ),
                     set::suffixWidth('icon'),
                     to::suffix
@@ -109,7 +109,7 @@ detailBody
                     set::name('scene'),
                     set::items($sceneOptionMenu),
                     set::value($case->scene),
-                    set::required(true),
+                    set::required(true)
                 )
             )
         ),
@@ -136,7 +136,7 @@ detailBody
                 set::files($case->files),
                 set::fieldset(false),
                 set::showEdit(true),
-                set::showDelete(true),
+                set::showDelete(true)
             ) : null,
             upload()
         ),
@@ -146,7 +146,7 @@ detailBody
             editor
             (
                 set::name('comment'),
-                set::rows(5),
+                set::rows(5)
             )
         )
     ),
@@ -155,7 +155,7 @@ detailBody
         set::actions($actions),
         set::users($users),
         set::methodName($methodName),
-        set::hasComment(false),
+        set::hasComment(false)
     ),
     detailSide
     (
@@ -169,7 +169,7 @@ detailBody
                 (
                     set::name('lib'),
                     set::items($libraries),
-                    set::value($case->lib),
+                    set::value($case->lib)
                 )
             ) : item
             (
@@ -182,7 +182,7 @@ detailBody
                         setID('product'),
                         set::name('product'),
                         set::items($products),
-                        set::value($case->product),
+                        set::value($case->product)
                     ),
                     picker
                     (
@@ -190,7 +190,7 @@ detailBody
                         setID('branch'),
                         set::name('branch'),
                         set::items($branchTagOption),
-                        set::value($case->branch),
+                        set::value($case->branch)
                     )
                 )
             ),
@@ -206,7 +206,7 @@ detailBody
                         set::name('module'),
                         set::items($moduleOptionMenu),
                         set::value($case->module),
-                        set::required(true),
+                        set::required(true)
                     ),
                     span
                     (
@@ -225,8 +225,8 @@ detailBody
                             set('class', 'text-black'),
                             icon('refresh')
                         )
-                    ),
-                ),
+                    )
+                )
             ),
             !$isLibCase ? item
             (
@@ -239,7 +239,7 @@ detailBody
                         setID('story'),
                         set::name('story'),
                         set::items($stories),
-                        set::value($case->story),
+                        set::value($case->story)
                     )
                 )
             ) : null,
@@ -283,7 +283,7 @@ detailBody
                 input
                 (
                     set::type('hidden'),
-                    set::name('script'),
+                    set::name('script')
                 )
             ),
             item
@@ -304,7 +304,7 @@ detailBody
                 (
                     set::name('pri'),
                     set::items($priList),
-                    set::value($case->pri),
+                    set::value($case->pri)
                 )
             ),
             item
@@ -314,7 +314,7 @@ detailBody
                 (
                     set::name('status'),
                     set::items($lang->testcase->statusList),
-                    set::value($case->status),
+                    set::value($case->status)
                 )
             ),
             item
@@ -334,7 +334,7 @@ detailBody
                     set::href(createLink('testcase', 'linkCases', "caseID={$case->id}")),
                     set('data-toggle', 'modal'),
                     set('data-size', 'lg'),
-                    $lang->testcase->linkCases,
+                    $lang->testcase->linkCases
                 )
             ) : null,
             (!$isLibCase && hasPriv('testcase', 'linkCases')) ? item
@@ -345,7 +345,7 @@ detailBody
                     set::type('checkList'),
                     set::name('linkCase[]'),
                     set::value(isset($case->linkCaseTitles) ? array_keys($case->linkCaseTitles) : ''),
-                    set::items($linkCaseItems),
+                    set::items($linkCaseItems)
                 )
             ) : null,
             (!$isLibCase && hasPriv('testcase', 'linkBugs')) ? item
@@ -356,7 +356,7 @@ detailBody
                     set::href(createLink('testcase', 'linkBugs', "caseID={$case->id}")),
                     set('data-toggle', 'modal'),
                     set('data-size', 'lg'),
-                    $lang->testcase->linkBugs,
+                    $lang->testcase->linkBugs
                 )
             ) : null,
             (!$isLibCase && hasPriv('testcase', 'linkBugs')) ? item
@@ -367,9 +367,9 @@ detailBody
                     set::type('checkList'),
                     set::name('linkBug[]'),
                     set::value(array_keys($case->toBugs)),
-                    set::items($linkBugItems),
-                ),
-            ) : null,
+                    set::items($linkBugItems)
+                )
+            ) : null
         ),
         tableData
         (
@@ -377,12 +377,12 @@ detailBody
             item
             (
                 set::name($lang->testcase->openedBy),
-                zget($users, $case->openedBy) . $lang->at . $case->openedDate,
+                zget($users, $case->openedBy) . $lang->at . $case->openedDate
             ),
             item
             (
                 set::name($lang->testcase->lblLastEdited),
-                $case->lastEditedBy ?  zget($users, $case->lastEditedBy) . $lang->at . $case->lastEditedDate : null,
+                $case->lastEditedBy ?  zget($users, $case->lastEditedBy) . $lang->at . $case->lastEditedDate : null
             )
         )
     )

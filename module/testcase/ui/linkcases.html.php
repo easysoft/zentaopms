@@ -14,7 +14,7 @@ modalHeader
 (
     set::title($lang->testcase->linkCases),
     set::entityText($case->title),
-    set::entityID($case->id),
+    set::entityID($case->id)
 );
 
 div
@@ -37,7 +37,7 @@ dtable
     set::userMap($users),
     set::checkable(true),
     set::footToolbar($footToolbar),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render('modalDialog');

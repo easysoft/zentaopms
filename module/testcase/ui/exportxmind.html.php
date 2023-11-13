@@ -23,7 +23,6 @@ formPanel
         set::name('product'),
         set::value($productName),
         set::disabled(true)
-
     ),
     formGroup
     (
@@ -32,7 +31,7 @@ formPanel
         set::name('imodule'),
         set::control('picker'),
         set::value($moduleID),
-        set::items($moduleOptionMenu),
+        set::items($moduleOptionMenu)
     ),
     formRowGroup
     (
@@ -43,9 +42,9 @@ formPanel
             (
                 'help',
                 setClass('text-gray pl-1'),
-                toggle::tooltip(array('title' => $lang->testcase->xmindSettingTip)),
+                toggle::tooltip(array('title' => $lang->testcase->xmindSettingTip))
             )
-        ),
+        )
     ),
     formRow
     (
@@ -55,7 +54,7 @@ formPanel
             set::label($lang->testcase->settingModule),
             set::name('module'),
             set::value($settings['module']),
-            set::placeholder('M'),
+            set::placeholder('M')
         ),
         formGroup
         (
@@ -64,7 +63,7 @@ formPanel
             set::name('scene'),
             set::value($settings['scene']),
             set::placeholder('S')
-        ),
+        )
     ),
     formGroup
     (
@@ -82,7 +81,7 @@ formPanel
             set::label($lang->testcase->settingPri),
             set::name('pri'),
             set::value($settings['pri']),
-            set::placeholder('P'),
+            set::placeholder('P')
         ),
         formGroup
         (
@@ -94,7 +93,7 @@ formPanel
         )
     ),
     set::actions(array('submit')),
-    set::submitBtnText($lang->export),
+    set::submitBtnText($lang->export)
 );
 
 render('modalDialog');

@@ -16,7 +16,7 @@ dtable
 (
     set::cols($config->testcase->bug->dtable->fieldList),
     set::data(array_values($bugs)),
-    set::userMap($users),
+    set::userMap($users)
 );
 
 render();

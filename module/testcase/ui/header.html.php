@@ -252,7 +252,7 @@ toolbar
             set::icon('kanban')
         ),
         set::items($viewItems),
-        set::placement('bottom-end'),
+        set::placement('bottom-end')
     ) : null,
     $canAutomation ? btn
     (
@@ -261,7 +261,7 @@ toolbar
         set::hint($lang->testcase->automation),
         set::url(inlink('automation', "productID={$productID}")),
         set('data-toggle', 'modal'),
-        set('data-width', '50%'),
+        set('data-width', '50%')
     ) : null,
     $exportItems ? dropdown
     (
@@ -271,17 +271,17 @@ toolbar
             set::icon('export'),
         ),
         set::items($exportItems),
-        set::placement('bottom-end'),
+        set::placement('bottom-end')
     ) : null,
     $importItems && $rawMethod != 'browseunits'? dropdown
     (
         btn
         (
             setClass('btn ghost square'),
-            set::icon('import'),
+            set::icon('import')
         ),
         set::items($importItems),
-        set::placement('bottom-end'),
+        set::placement('bottom-end')
     ) : null,
     $canCreate && $rawMethod != 'browseunits' ? btngroup
     (
@@ -297,16 +297,16 @@ toolbar
         (
             btn(setClass('btn primary dropdown-toggle'), setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
             set::items($createItems),
-            set::placement('bottom-end'),
-        ) : null,
+            set::placement('bottom-end')
+        ) : null
     ) : null,
     $rawMethod == 'browseunits' && (empty($productID) || $canModify) && $canImportUnitResult ? btn
     (
         set::className('btn primary'),
         set::icon('import'),
         set::url(createLink('testtask', 'importUnitResult', "product=$productID")),
-        $lang->testtask->importUnitResult,
-    ) : null,
+        $lang->testtask->importUnitResult
+    ) : null
 );
 
 if($rawMethod != 'zerocase' && $rawMethod != 'browseunits' && $rawMethod != 'groupcase')

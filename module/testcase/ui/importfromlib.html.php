@@ -35,7 +35,7 @@ featureBar
             set::required(true),
             bind::change("window.toggleLib(event)")
         )
-    ),
+    )
 );
 
 div

@@ -57,7 +57,7 @@ menu
 (
     set::id('navStage'),
     set::className('dropdown-menu'),
-    set::items($stageItems),
+    set::items($stageItems)
 );
 
 $stories = initTableData($stories, $config->testcase->zerocase->dtable->fieldList, $this->story);

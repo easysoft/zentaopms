@@ -36,7 +36,7 @@ dtable
     set::userMap($users),
     set::plugins(array('cellspan')),
     set::onRenderCell(jsRaw('window.onRenderCell')),
-    set::getCellSpan(jsRaw('window.getCellSpan')),
+    set::getCellSpan(jsRaw('window.getCellSpan'))
 );
 
 render();

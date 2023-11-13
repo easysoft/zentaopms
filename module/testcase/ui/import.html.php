@@ -26,7 +26,7 @@ formPanel
         (
             set::name('encode'),
             set::items($config->charsets[$this->cookie->lang]),
-            set::value('utf-8'),
+            set::value('utf-8')
         )
     )
 );

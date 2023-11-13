@@ -17,7 +17,7 @@ to::header
    span
    (
        $lang->testcase->automation,
-       set::className('article-h1'),
+       set::className('article-h1')
    ),
    icon
    (
@@ -25,7 +25,7 @@ to::header
        set::className('text-gray'),
        set::id('automationTip'),
        set('data-toggle', 'tooltip'),
-       set('title', 'tooltip'),
+       set('title', 'tooltip')
    )
 );
 
@@ -39,7 +39,7 @@ formPanel
         (
             set::name('product'),
             set::items($products),
-            on::change('#product', 'loadProduct'),
+            on::change('#product', 'loadProduct')
         )
     ) : null,
     formGroup
@@ -53,7 +53,7 @@ formPanel
                 setID('node'),
                 set::name('node'),
                 set::items($nodeList),
-                set::value(!empty($automation->node) ? $automation->node : ''),
+                set::value(!empty($automation->node) ? $automation->node : '')
             ),
             div
             (
@@ -63,7 +63,7 @@ formPanel
                     set::className('btn'),
                     $lang->zanode->create,
                     set::href(createLink('zanode', 'create')),
-                    set::target('_blank'),
+                    set::target('_blank')
                 )
             )
         )
@@ -74,7 +74,7 @@ formPanel
         set::required(true),
         set::name('scriptPath'),
         set::value(!empty($automation->scriptPath) ? $automation->scriptPath : ''),
-        set::placeholder($lang->zanode->scriptTips),
+        set::placeholder($lang->zanode->scriptTips)
     ),
     formGroup
     (
@@ -84,23 +84,23 @@ formPanel
             set::name('shell'),
             set::value(!empty($automation->shell) ? $automation->shell : ''),
             set::rows(6),
-            set::placeholder($lang->zanode->shellTips),
+            set::placeholder($lang->zanode->shellTips)
         )
     ),
     $productID ? input
     (
         set::type('hidden'),
         set::name('product'),
-        set::value($productID),
+        set::value($productID)
     ) : null,
     $automation ? input
     (
         set::type('hidden'),
         set::name('id'),
-        set::value($automation->id),
+        set::value($automation->id)
     ) : null,
     set::actions(array('submit')),
-    set::submitBtnText($lang->save),
+    set::submitBtnText($lang->save)
 );
 
 render('modalDialog');

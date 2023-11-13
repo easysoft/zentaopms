@@ -67,7 +67,7 @@ formPanel
                     set::name('module'),
                     set::items($modules),
                     set::value($scene->module),
-                    set::required(true),
+                    set::required(true)
                 ),
                 count($modules) == 1 ? div
                 (
@@ -77,7 +77,7 @@ formPanel
                         $lang->tree->manage,
                         set('href', createLink('tree', 'browse', "rootId=$productID&view=case&currentModuleID=0&branch=$branch")),
                         set('class', 'btn'),
-                        set('data-toggle', 'mdoal'),
+                        set('data-toggle', 'mdoal')
                     ),
                     a
                     (
@@ -97,7 +97,7 @@ formPanel
         (
             set::name('parent'),
             set::items($scenes),
-            set::value($scene->parent),
+            set::value($scene->parent)
         )
     ),
     formGroup
@@ -105,7 +105,7 @@ formPanel
         set::label($lang->testcase->sceneTitle),
         set::required(true),
         set::name('title'),
-        set::value($scene->title),
+        set::value($scene->title)
     )
 );
 

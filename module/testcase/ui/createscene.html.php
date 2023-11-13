@@ -34,7 +34,7 @@ formPanel
                     setID('product'),
                     set::name('product'),
                     set::items($products),
-                    set::value($product->id),
+                    set::value($product->id)
                 ),
                 isset($product->type) && $product->type != 'normal' ? picker
                 (
@@ -57,7 +57,7 @@ formPanel
                     setID('module'),
                     set::name('module'),
                     set::items($modules),
-                    set::value($moduleID),
+                    set::value($moduleID)
                 ),
                 count($modules) == 1 ? div
                 (
@@ -67,7 +67,7 @@ formPanel
                         $lang->tree->manage,
                         set('href', createLink('tree', 'browse', "rootId=$productID&view=case&currentModuleID=0&branch=$branch")),
                         set('class', 'btn'),
-                        set('data-toggle', 'mdoal'),
+                        set('data-toggle', 'mdoal')
                     ),
                     a
                     (
@@ -88,7 +88,7 @@ formPanel
             setID('parent'),
             set::name('parent'),
             set::items($scenes),
-            set::value($parent),
+            set::value($parent)
         )
     ),
     formGroup

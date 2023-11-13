@@ -30,7 +30,7 @@ form
                 setClass('text-gray pl-1'),
                 toggle::tooltip(array('title' => $lang->testcase->xmindSettingTip)),
             )
-        ),
+        )
     ),
     formRow
     (
@@ -40,7 +40,7 @@ form
             set::label($lang->testcase->settingModule),
             set::name('module'),
             set::value($settings['module']),
-            set::placeholder('M'),
+            set::placeholder('M')
         ),
         formGroup
         (
@@ -49,7 +49,7 @@ form
             set::name('scene'),
             set::value($settings['scene']),
             set::placeholder('S')
-        ),
+        )
     ),
     formGroup
     (
@@ -67,7 +67,7 @@ form
             set::label($lang->testcase->settingPri),
             set::name('pri'),
             set::value($settings['pri']),
-            set::placeholder('P'),
+            set::placeholder('P')
         ),
         formGroup
         (

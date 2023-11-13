@@ -32,16 +32,16 @@ if($stepsType == 'table')
                     span
                     (
                         setClass('pr-2 pl-' . (($step->grade - 1) * 2)),
-                        $step->name,
+                        $step->name
                     ),
-                    html(nl2br(str_replace(' ', '&nbsp;', $step->desc))),
+                    html(nl2br(str_replace(' ', '&nbsp;', $step->desc)))
                 ),
                 cell
                 (
                     setClass('text-left flex'),
                     width('1/2'),
-                    html(nl2br(str_replace(' ', '&nbsp;', $step->expect))),
-                ),
+                    html(nl2br(str_replace(' ', '&nbsp;', $step->expect)))
+                )
             );
     }
 }
@@ -75,19 +75,19 @@ if($isLibCase)
         (
             set::href($this->createLink('testcase', 'view', "caseID={$linkCaseID}", '', true)),
             set('data-toggle', 'modal'),
-            "#{$linkCaseID} {$linkCaseTitle}",
+            "#{$linkCaseID} {$linkCaseTitle}"
         );
     }
     $fromCaseItem = item
     (
         set::name($lang->testcase->fromCase),
-        $linkCaseTitles,
+        $linkCaseTitles
     );
 
     $libItem = item
     (
         set::name($lang->testcase->lib),
-        hasPriv('caselib', 'browse') ? a(set::href($this->createLink('caselib', 'browse', "libID={$case->lib}")), $libName) : $libName,
+        hasPriv('caselib', 'browse') ? a(set::href($this->createLink('caselib', 'browse', "libID={$case->lib}")), $libName) : $libName
     );
 
     $mainActions   = array();
@@ -121,7 +121,7 @@ else
     (
         set::name($lang->testcase->product),
         set::href($productLink),
-        $product->name,
+        $product->name
     );
 
     if($product->type != 'normal')
@@ -130,7 +130,7 @@ else
         (
             set::name(sprintf($lang->product->branch, $lang->product->branchName[$product->type])),
             set::href($branchLink),
-            $branchName,
+            $branchName
         );
     }
 
@@ -171,7 +171,7 @@ else
     $moduleItem = item
     (
         set::name($lang->testcase->module),
-        empty($modulePath) ? '/' : $moduleItems,
+        empty($modulePath) ? '/' : $moduleItems
     );
 
     $param = $tab == 'project' ? "&version=0&projectID={$this->session->project}" : '';
@@ -182,7 +182,7 @@ else
             (
                 setClass('warning'),
                 $lang->testcase->changed,
-                common::hasPriv('testcase', 'confirmStoryChange', $case) ? a(set::href($this->createLink('testcase', 'confirmStoryChange', "caseID={$case->id}")), $lang->confirm) : '',
+                common::hasPriv('testcase', 'confirmStoryChange', $case) ? a(set::href($this->createLink('testcase', 'confirmStoryChange', "caseID={$case->id}")), $lang->confirm) : ''
             );
     }
     $storyItem = item
@@ -190,21 +190,21 @@ else
         set::name($lang->testcase->story),
         isset($case->storyTitle) && hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "storyID={$case->story}{$param}")), set('data-toggle', 'modal'), "#{$case->story}:{$case->storyTitle}") : (isset($case->storyTitle) ? "#{$case->story}:{$case->storyTitle}" : ''),
         set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
-        $confirmStatusChange,
+        $confirmStatusChange
     );
 
     $app->loadLang('testtask');
     $lastRunTimeItem = item
     (
         set::name($lang->testtask->lastRunTime),
-        !helper::isZeroDate($case->lastRunDate) ? $case->lastRunDate : '',
+        !helper::isZeroDate($case->lastRunDate) ? $case->lastRunDate : ''
     );
 
     $lastRunResultItem = item
     (
         set::tdClass("result-testcase status-{$case->lastRunResult}"),
         set::name($lang->testtask->lastRunResult),
-        $case->lastRunResult ? $lang->testcase->resultList[$case->lastRunResult] : $lang->testcase->unexecuted,
+        $case->lastRunResult ? $lang->testcase->resultList[$case->lastRunResult] : $lang->testcase->unexecuted
     );
 
     $linkBugs = array();
@@ -217,7 +217,7 @@ else
             set::entityID($case->fromBug),
             set::text($case->fromBugData->title),
             set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
-            set('title', $case->fromBugData->title),
+            set('title', $case->fromBugData->title)
         );
     }
     if($case->toBugs)
@@ -231,7 +231,7 @@ else
                 set::entityID($bugID),
                 set::text($bug->title),
                 set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
-                set('title', $bug->title),
+                set('title', $bug->title)
             );
         }
     }
@@ -240,7 +240,7 @@ else
         set::tdClass('linkBugTitles'),
         !empty($linkBugs) ? set::collapse(true) : '',
         set::name($lang->testcase->legendLinkBugs),
-        $linkBugs,
+        $linkBugs
     );
 
     $linkCases = array();
@@ -255,7 +255,7 @@ else
                 set::entityID($linkCaseID),
                 set::text($linkCaseTitle),
                 set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
-                set('title', $linkCaseTitle),
+                set('title', $linkCaseTitle)
             );
         }
     }
@@ -264,7 +264,7 @@ else
         set::tdClass('linkCaseTitles'),
         set::name($lang->testcase->linkCase),
         !empty($linkCases) ? set::collapse(true) : '',
-        $linkCases,
+        $linkCases
     );
 
     $actions = $this->loadModel('common')->buildOperateMenu($case);
@@ -295,7 +295,7 @@ if($case->version > $case->currentVersion && $from == 'testtask')
         setClass('warning'),
         set('title', $lang->testcase->fromTesttask),
         $lang->testcase->changed,
-        hasPriv('testcase', 'confirmchange') ? a(setClass('btn btn-mini btn-info'), set::href($this->createLink('testcase', 'confirmchange', "caseID={$case->id}&taskID={$taskID}")), $lang->testcase->sync) : '',
+        hasPriv('testcase', 'confirmchange') ? a(setClass('btn btn-mini btn-info'), set::href($this->createLink('testcase', 'confirmchange', "caseID={$case->id}&taskID={$taskID}")), $lang->testcase->sync) : ''
     );
 }
 if(isset($case->fromCaseVersion) && $case->fromCaseVersion > $case->version && $from != 'testtask' && !empty($case->product))
@@ -307,7 +307,7 @@ if(isset($case->fromCaseVersion) && $case->fromCaseVersion > $case->version && $
         $lang->testcase->changed,
         hasPriv('testcase', 'confirmLibcaseChange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href($this->createLink('testcase', 'confirmLibcaseChange', "caseID={$case->id}&libcaseID={$case->fromCaseID}")), $lang->testcase->sync) : '',
         hasPriv('testcase', 'ignoreLibcaseChange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href($this->createLink('testcase', 'ignoreLibcaseChange', "caseID={$case->id}")), $lang->testcase->ignore) : '',
-        ')',
+        ')'
     );
 }
 
@@ -354,7 +354,7 @@ detailBody
             setClass(empty($case->precondition) ? 'hidden' : ''),
             set::title($lang->testcase->precondition),
             set::content(nl2br($case->precondition)),
-            set::useHtml(true),
+            set::useHtml(true)
         ),
         section
         (
@@ -373,8 +373,8 @@ detailBody
                         icon
                         (
                             set::size('9'),
-                            'table-large',
-                        ),
+                            'table-large'
+                        )
                     ),
                     cell
                     (
@@ -384,9 +384,9 @@ detailBody
                         (
                             set::size('9'),
                             'tree'
-                        ),
-                    ),
-                ),
+                        )
+                    )
+                )
             ) : null,
             !empty($case->steps) ? div
             (
@@ -400,19 +400,19 @@ detailBody
                         (
                             setClass('text-left inline-block steps border'),
                             width('1/2'),
-                            $lang->testcase->stepDesc,
+                            $lang->testcase->stepDesc
                         ),
                         div
                         (
                             setClass('text-left inline-block border border-l-0'),
                             width('1/2'),
-                            $lang->testcase->stepExpect,
-                        ),
+                            $lang->testcase->stepExpect
+                        )
                     ),
                     div
                     (
                         setClass('steps-body'),
-                        $steps,
+                        $steps
                     )
                 ) : div
                 (
@@ -420,9 +420,9 @@ detailBody
                     mindmap
                     (
                         set::data($case->mindMapSteps),
-                        set::readonly(true),
-                    ),
-                ),
+                        set::readonly(true)
+                    )
+                )
             ) : div
             (
                 setClass('canvas text-center py-2'),
@@ -436,13 +436,13 @@ detailBody
                     )
                 )
             ),
-            set::useHtml(true),
+            set::useHtml(true)
         ),
         $case->files ? fileList
         (
             set::files($case->files),
-            set::padding(false),
-        ) : null,
+            set::padding(false)
+        ) : null
     ),
     history(),
     floatToolbar
@@ -473,12 +473,12 @@ detailBody
                     item
                     (
                         set::name($lang->testcase->type),
-                        zget($lang->case->typeList, $case->type),
+                        zget($lang->case->typeList, $case->type)
                     ),
                     item
                     (
                         set::name($lang->testcase->stage),
-                        $caseStage,
+                        $caseStage
                     ),
                     item
                     (
@@ -489,16 +489,16 @@ detailBody
                     (
                         set::name($lang->testcase->status),
                         $this->processStatus('testcase', $case),
-                        $caseChange,
+                        $caseChange
                     ),
                     $lastRunTimeItem,
                     $lastRunResultItem,
                     item
                     (
                         set::name($lang->testcase->keywords),
-                        $case->keywords,
-                    ),
-                ),
+                        $case->keywords
+                    )
+                )
             ),
             tabPane
             (
@@ -509,23 +509,23 @@ detailBody
                     item
                     (
                         set::name($lang->testcase->openedBy),
-                        zget($users, $case->openedBy) . $lang->at . $case->openedDate,
+                        zget($users, $case->openedBy) . $lang->at . $case->openedDate
                     ),
                     item
                     (
                         set::name($lang->testcase->reviewedBy),
-                        $reviewedBy,
+                        $reviewedBy
                     ),
                     item
                     (
                         set::name($lang->testcase->reviewedDate),
-                        !empty($case->reviewedBy) ? $case->reviewedDate : '',
+                        !empty($case->reviewedBy) ? $case->reviewedDate : ''
                     ),
                     item
                     (
                         set::name($lang->testcase->lblLastEdited),
-                        !empty($case->lastEditedBy) ? zget($users, $case->lastEditedBy) . $lang->at . $case->lastEditedDate : '',
-                    ),
+                        !empty($case->lastEditedBy) ? zget($users, $case->lastEditedBy) . $lang->at . $case->lastEditedDate : ''
+                    )
                 )
             )
         ),
@@ -541,11 +541,11 @@ detailBody
                 (
                     set::useTable(false),
                     isset($linkBugItem) ? $linkBugItem : null,
-                    $linkCaseItem,
-                ),
-            ),
-        ),
-    ),
+                    $linkCaseItem
+                )
+            )
+        )
+    )
 );
 
 if(!isInModal())

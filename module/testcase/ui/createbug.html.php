@@ -18,7 +18,7 @@ div
 (
     setClass('main'),
     setID('resultsContainer'),
-    div(setID('casesResults')),
+    div(setID('casesResults'))
 );
 
 render('modalDialog');

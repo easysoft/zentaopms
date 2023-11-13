@@ -164,8 +164,8 @@ modal
                 set::name('lib'),
                 set::items($libraries),
                 set::value(''),
-                set::required(true),
-            ),
+                set::required(true)
+            )
         ),
         formRow
         (
@@ -173,10 +173,10 @@ modal
             formGroup
             (
                 set::name('caseIdList'),
-                set::value(''),
-            ),
-        ),
-    ),
+                set::value('')
+            )
+        )
+    )
 );
 
 render();

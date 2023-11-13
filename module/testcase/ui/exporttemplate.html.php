@@ -21,7 +21,7 @@ formPanel
         set::label($lang->testcase->num),
         set::name('num'),
         set::type('number'),
-        set::value(10),
+        set::value(10)
     ),
     formGroup
     (
@@ -29,10 +29,10 @@ formPanel
         set::name('encode'),
         set::value('utf-8'),
         set::control('picker'),
-        set::items($config->charsets[$this->cookie->lang]),
+        set::items($config->charsets[$this->cookie->lang])
     ),
     set::actions(array('submit')),
-    set::submitBtnText($lang->export),
+    set::submitBtnText($lang->export)
 );
 
 js

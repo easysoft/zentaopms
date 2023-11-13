@@ -21,7 +21,7 @@ formPanel
         datePicker
         (
             set::name('reviewedDate'),
-            set::value(helper::today()),
+            set::value(helper::today())
         )
     ),
     formGroup
@@ -32,7 +32,7 @@ formPanel
         picker
         (
             set::name('result'),
-            set::items($lang->testcase->reviewResultList),
+            set::items($lang->testcase->reviewResultList)
         )
     ),
     formGroup
@@ -43,7 +43,7 @@ formPanel
             set::name('reviewedBy[]'),
             set::value($app->user->account),
             set::items($users),
-            set::multiple(true),
+            set::multiple(true)
         )
     ),
     formGroup
@@ -55,7 +55,7 @@ formPanel
             set::rows(8)
         )
     ),
-    set::actions(array('submit')),
+    set::actions(array('submit'))
 );
 hr();
 history();
