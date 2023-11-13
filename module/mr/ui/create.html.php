@@ -45,7 +45,7 @@ formPanel
         picker
         (
             setClass('font-normal w-36'),
-            set::name('changeRepo'),
+            set::name('repoID'),
             set::items($repoPairs),
             set::value($repo->id),
             on::change('changeRepo')
