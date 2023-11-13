@@ -204,7 +204,7 @@ $config->program->browse->dtable->fieldList['name']['flex']         = 1;
 $config->program->browse->dtable->fieldList['name']['nestedToggle'] = true;
 $config->program->browse->dtable->fieldList['name']['checkbox']     = true;
 $config->program->browse->dtable->fieldList['name']['sortType']     = true;
-$config->program->browse->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(val,row){ if(row.data.type === \'program\') return \'icon-cards-view text-gray\'; if(row.data.type === \'productLine\') return \'icon-scrum text-gray\'; return \'\';}>RAWJS';
+$config->program->browse->dtable->fieldList['name']['iconRender']   = 'RAWJS<function(val,row){ if(row.data.type === \'program\') return \'icon-cards-view text-gray\'; if(row.data.type === \'productLine\') return \'icon-scrum text-gray\'; if(row.data.type == \'project\') return \'icon-\' + (row.data.model == \'scrum\' ? \'sprint\' : row.data.model) + \' text-gray\'; return \'\';}>RAWJS';
 $config->program->browse->dtable->fieldList['name']['required']     = true;
 $config->program->browse->dtable->fieldList['name']['show']         = true;
 $config->program->browse->dtable->fieldList['name']['group']        = 1;
