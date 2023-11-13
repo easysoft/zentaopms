@@ -498,7 +498,7 @@ detailBody
                     (
                         set::name('resolvedBuild'),
                         set::items($resolvedBuilds),
-                        set::value($bug->resolvedBuild),
+                        set::value($bug->resolvedBuild)
                     ),
                     span
                     (
@@ -551,7 +551,7 @@ detailBody
                     set::name('closedDate'),
                     set::value($bug->closedDate)
                 )
-            ),
+            )
         ),
         tableData
         (
@@ -567,7 +567,7 @@ detailBody
                     (
                         set::multiple(true),
                         set::name('relatedBug[]'),
-                        set::items(isset($bug->relatedBugTitles) ? $bug->relatedBugTitles : array()),
+                        set::items(isset($bug->relatedBugTitles) ? $bug->relatedBugTitles : array())
                     ),
                     common::hasPriv('bug', 'linkBugs') ? span
                     (

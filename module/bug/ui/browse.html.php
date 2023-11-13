@@ -81,11 +81,11 @@ if(!isonlybody())
             (
                 btn(setClass('btn primary dropdown-toggle'), setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
                 set::items(array($createItem, $batchCreateItem)),
-                set::placement('bottom-end'),
+                set::placement('bottom-end')
             )
         ) : null,
         $canCreate && !$canBatchCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
-        $canBatchCreate && !$canCreate ? item(set($batchCreateItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+        $canBatchCreate && !$canCreate ? item(set($batchCreateItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null
     );
 }
 
@@ -98,7 +98,7 @@ sidebar
         'modules'     => $moduleTree,
         'activeKey'   => $currentModuleID,
         'closeLink'   => $closeLink,
-        'settingLink' => $settingLink,
+        'settingLink' => $settingLink
     )))
 );
 
@@ -152,7 +152,7 @@ if($canBatchAction)
     $footToolbar['items'][] = array('type' => 'btn-group', 'items' => array
     (
         array('text' => $lang->edit, 'className' => 'primary batch-btn not-open-url', 'disabled' => ($canBatchEdit ? '': 'disabled'), 'data-url' => createLink('bug', 'batchEdit', "productID={$product->id}&branch=$branch")),
-        array('caret' => 'up', 'data-placement' => 'top-start', 'class' => 'btn btn-caret size-sm primary not-open-url', 'items' => $batchItems),
+        array('caret' => 'up', 'data-placement' => 'top-start', 'class' => 'btn btn-caret size-sm primary not-open-url', 'items' => $batchItems)
     ));
     if($canBatchChangeBranch && $product->type != 'normal')
     {
@@ -197,7 +197,7 @@ dtable
     set::modules($modulePairs),
     set::emptyTip($lang->bug->notice->noBug),
     set::createTip($lang->bug->create),
-    set::createLink($canBeChanged && hasPriv('bug', 'create') ? createLink('bug', 'create', "productID={$product->id}&branch={$branch}&extra=moduleID=$currentModuleID") : ''),
+    set::createLink($canBeChanged && hasPriv('bug', 'create') ? createLink('bug', 'create', "productID={$product->id}&branch={$branch}&extra=moduleID=$currentModuleID") : '')
 );
 
 render();

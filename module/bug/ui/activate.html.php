@@ -22,7 +22,7 @@ formPanel
         (
             set::name('assignedTo'),
             set::value($bug->resolvedBy),
-            set::items($users),
+            set::items($users)
         )
     ),
     formGroup

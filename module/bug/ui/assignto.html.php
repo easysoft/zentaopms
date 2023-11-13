@@ -27,7 +27,7 @@ formPanel
         set::name('assignedTo'),
         set::label($lang->bug->assignedTo),
         set::value($bug->assignedTo),
-        set::items($users),
+        set::items($users)
     ),
     formGroup
     (
@@ -36,15 +36,15 @@ formPanel
         set::name('mailto[]'),
         set::value(str_replace(' ', '', $bug->mailto ?: '')),
         set::items($users),
-        set::multiple(true),
+        set::multiple(true)
     ),
     formGroup
     (
         set::label($lang->comment),
         set::name('comment'),
         set::control('editor'),
-        set::rows(6),
-    ),
+        set::rows(6)
+    )
 );
 hr();
 history();

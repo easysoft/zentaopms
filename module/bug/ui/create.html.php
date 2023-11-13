@@ -230,7 +230,7 @@ formPanel
             set::label($lang->bug->feedbackBy),
             set::name('feedbackBy'),
             set::value(isset($bug->feedbackBy) ? $bug->feedbackBy : '')
-        ),
+        )
     ),
     formRow
     (
@@ -332,7 +332,7 @@ formPanel
                 set::name('steps'),
                 html($bug->steps)
             )
-        ),
+        )
     ),
     formRow
     (
@@ -434,26 +434,26 @@ formPanel
         (
             setClass('hidden'),
             set::name('case'),
-            set::value($bug->caseID),
+            set::value($bug->caseID)
         ),
         input
         (
             setClass('hidden'),
             set::name('caseVersion'),
-            set::value($bug->version),
+            set::value($bug->version)
         ),
         input
         (
             setClass('hidden'),
             set::name('result'),
-            set::value($bug->runID),
+            set::value($bug->runID)
         ),
         input
         (
             setClass('hidden'),
             set::name('testtask'),
-            set::value($bug->testtask),
-        ),
+            set::value($bug->testtask)
+        )
     )
 );
 

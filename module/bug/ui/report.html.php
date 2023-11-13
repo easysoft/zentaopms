@@ -20,7 +20,7 @@ detailHeader
             set::level(1),
             set::text($lang->bug->report->common)
         )
-    ),
+    )
 );
 
 $reports = array();

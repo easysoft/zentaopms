@@ -34,7 +34,7 @@ $items[] = array
     'name'    => 'id',
     'label'   => $lang->idAB,
     'control' => 'index',
-    'width'   => '32px',
+    'width'   => '32px'
 );
 
 /* Field of branch. */
@@ -47,7 +47,7 @@ $items[] = array
     'items'   => $branches,
     'value'   => $branch,
     'width'   => '200px',
-    'ditto'   => true,
+    'ditto'   => true
 );
 
 /* Field of module. */
@@ -60,7 +60,7 @@ $items[] = array
     'value'    => $moduleID,
     'width'    => '200px',
     'required' => isset($requiredFields['module']),
-    'ditto'    => true,
+    'ditto'    => true
 );
 
 /* Field of project. */
@@ -74,7 +74,7 @@ $items[] = array
     'value'    => $projectID,
     'width'    => '200px',
     'required' => isset($requiredFields['project']),
-    'ditto'    => true,
+    'ditto'    => true
 );
 
 /* Field of execution. */
@@ -88,7 +88,7 @@ $items[] = array
     'value'    => $executionID,
     'width'    => '200px',
     'required' => isset($requiredFields['execution']),
-    'ditto'    => true,
+    'ditto'    => true
 );
 
 /* Field of openedBuild. */
@@ -102,7 +102,7 @@ $items[] = array
     'multiple' => true,
     'width'    => '200px',
     'required' => true,
-    'ditto'    => true,
+    'ditto'    => true
 );
 
 /* Field of title. */
@@ -111,7 +111,7 @@ $items[] = array
     'name'     => 'title',
     'label'    => $lang->bug->title,
     'width'    => '240px',
-    'required' => true,
+    'required' => true
 );
 
 /* Field of region and lane. */
@@ -125,7 +125,7 @@ if(isset($executionType) && $executionType == 'kanban')
         'value'    => $regionID,
         'items'    => $regionPairs,
         'width'    => '200px',
-        'required' => true,
+        'required' => true
     );
 
     $items[] = array
@@ -136,7 +136,7 @@ if(isset($executionType) && $executionType == 'kanban')
         'value'    => $laneID,
         'items'    => $lanePairs,
         'width'    => '200px',
-        'required' => true,
+        'required' => true
     );
 }
 
@@ -149,7 +149,7 @@ $items[] = array
     'control'  => 'date',
     'width'    => '136px',
     'required' => isset($requiredFields['deadline']),
-    'ditto'    => true,
+    'ditto'    => true
 );
 
 /* Field of steps. */
@@ -159,7 +159,7 @@ $items[] = array
     'label'    => $lang->bug->steps,
     'hidden'   => zget($visibleFields, 'steps', true, false),
     'width'    => '240px',
-    'required' => isset($requiredFields['steps']),
+    'required' => isset($requiredFields['steps'])
 );
 
 /* Field of type. */
@@ -173,7 +173,7 @@ $items[] = array
     'value'    => '',
     'width'    => '160px',
     'required' => isset($requiredFields['type']),
-    'ditto'    => true,
+    'ditto'    => true
 );
 
 /* Field of pri. */
@@ -187,7 +187,7 @@ $items[] = array
     'value'    => 3,
     'width'    => '100px',
     'required' => isset($requiredFields['pri']),
-    'ditto'    => true,
+    'ditto'    => true
 );
 
 /* Field of severity. */
@@ -200,7 +200,7 @@ $items[] = array
     'items'    => $lang->bug->severityList,
     'value'    => 3,
     'width'    => '80px',
-    'required' => isset($requiredFields['severity']),
+    'required' => isset($requiredFields['severity'])
 );
 
 /* Field of os. */
@@ -213,7 +213,7 @@ $items[] = array
     'items'    => $lang->bug->osList,
     'width'    => '200px',
     'multiple' => true,
-    'required' => isset($requiredFields['os']),
+    'required' => isset($requiredFields['os'])
 );
 
 /* Field of browser. */
@@ -226,7 +226,7 @@ $items[] = array
     'items'    => $lang->bug->browserList,
     'width'    => '200px',
     'multiple' => true,
-    'required' => isset($requiredFields['browser']),
+    'required' => isset($requiredFields['browser'])
 );
 
 /* Field of keywords. */
@@ -236,7 +236,7 @@ $items[] = array
     'label'    => $lang->bug->keywords,
     'hidden'   => zget($visibleFields, 'keywords', true, false),
     'width'    => '200px',
-    'required' => isset($requiredFields['keywords']),
+    'required' => isset($requiredFields['keywords'])
 );
 
 formBatchPanel
@@ -249,7 +249,7 @@ formBatchPanel
     on::change('[data-name="project"]', 'loadProductExecutionsByProject'),
     on::change('[data-name="execution"]', 'loadExecutionBuilds'),
     on::change('[data-name="region"]', 'setLane'),
-    formHidden('product', $product->id),
+    formHidden('product', $product->id)
 );
 
 render();

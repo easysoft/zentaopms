@@ -117,8 +117,8 @@ $legendMain['story']['text']          = $bug->story ? div
             set::href(createLink('bug', 'confirmStoryChange', "bugID=$bug->id")),
             $lang->confirm,
         ),
-        ')',
-    ) : '',
+        ')'
+    ) : ''
 ) : '';
 $legendMain['task']['text']           = $bug->task  ? div(label(set('class', 'dark-outline rounded-full size-sm mr-2'), $bug->task),  span($bug->taskName))   : '';;
 $legendMisc['relatedBug']['text']     = $relatedBugs;
@@ -178,7 +178,7 @@ $buildItems = function($items): array
                 !empty($item['attr']) && is_array($item['attr']) ? set($item['attr']) : null,
                 $item['text']
             ) : $item['text'],
-            set::collapse(!empty($item['text'])),
+            set::collapse(!empty($item['text']))
         );
     }
 
@@ -199,8 +199,8 @@ detailBody
         fileList
         (
             set::files($bug->files),
-            set::padding(false),
-        ),
+            set::padding(false)
+        )
     ),
     history(),
     floatToolbar
@@ -287,7 +287,7 @@ modal
                 set::required(true),
                 set::control('picker'),
                 set::name('taskProjects'),
-                set::items($projects),
+                set::items($projects)
             )
         ),
         formRow
@@ -302,7 +302,7 @@ modal
                     picker
                     (
                         set::name('execution'),
-                        set::items($executions),
+                        set::items($executions)
                     )
                 )
             )

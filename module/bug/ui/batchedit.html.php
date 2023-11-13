@@ -47,7 +47,7 @@ formBatchPanel
         set::name('id'),
         set::label($lang->idAB),
         set::control('hidden'),
-        set::hidden(true),
+        set::hidden(true)
     ),
     /* Field of id index. */
     formBatchItem
@@ -55,7 +55,7 @@ formBatchPanel
         set::name('id'),
         set::label($lang->idAB),
         set::control('index'),
-        set::width('32px'),
+        set::width('32px')
     ),
     /* Field of type. */
     formBatchItem
@@ -79,7 +79,7 @@ formBatchPanel
         set::control('severityPicker'),
         set::items($lang->bug->severityList),
         set::width('80px'),
-        set::required(isset($requiredFields['severity'])),
+        set::required(isset($requiredFields['severity']))
     ),
     /* Field of pri. */
     formBatchItem
@@ -90,7 +90,7 @@ formBatchPanel
         set::control('priPicker'),
         set::items($lang->bug->priList),
         set::width('80px'),
-        set::required(isset($requiredFields['pri'])),
+        set::required(isset($requiredFields['pri']))
     ),
     /* Field of title. */
     formBatchItem
@@ -98,7 +98,7 @@ formBatchPanel
         set::name('title'),
         set::label($lang->bug->title),
         set::width('240px'),
-        set::required(true),
+        set::required(true)
     ),
     /* Field of branch. */
     formBatchItem
@@ -109,7 +109,7 @@ formBatchPanel
         set::items(array()),
         set::width('200px'),
         set::required(isset($requiredFields['branch'])),
-        set::hidden(!$branchProduct),
+        set::hidden(!$branchProduct)
     ),
     /* Field of module. */
     formBatchItem
@@ -155,7 +155,7 @@ formBatchPanel
         set::hidden(zget($visibleFields, 'deadline', true, false)),
         set::control('date'),
         set::width('128px'),
-        set::required(isset($requiredFields['deadline'])),
+        set::required(isset($requiredFields['deadline']))
     ),
     /* Field of os. */
     formBatchItem
@@ -167,7 +167,7 @@ formBatchPanel
         set::items($lang->bug->osList),
         set::multiple(true),
         set::width('200px'),
-        set::required(isset($requiredFields['os'])),
+        set::required(isset($requiredFields['os']))
     ),
     /* Field of browser. */
     formBatchItem
@@ -179,7 +179,7 @@ formBatchPanel
         set::items($lang->bug->browserList),
         set::multiple(true),
         set::width('200px'),
-        set::required(isset($requiredFields['browser'])),
+        set::required(isset($requiredFields['browser']))
     ),
     /* Field of keywords. */
     formBatchItem
@@ -188,7 +188,7 @@ formBatchPanel
         set::label($lang->bug->keywords),
         set::hidden(zget($visibleFields, 'keywords', true, false)),
         set::width('200px'),
-        set::required(isset($requiredFields['keywords'])),
+        set::required(isset($requiredFields['keywords']))
     ),
     /* Field of resolvedBy. */
     formBatchItem
@@ -215,7 +215,7 @@ formBatchPanel
             (
                 set::name('resolution'),
                 set::items($lang->bug->resolutionList),
-                set::required(isset($requiredFields['resolution'])),
+                set::required(isset($requiredFields['resolution']))
             ),
             picker
             (
@@ -223,10 +223,10 @@ formBatchPanel
                 set::name('duplicateBug'),
                 set::items(array()),
                 set::placeholder($lang->bug->placeholder->duplicate),
-                set::required(true),
-            ),
-        ),
-    ),
+                set::required(true)
+            )
+        )
+    )
 );
 
 render();

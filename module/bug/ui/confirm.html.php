@@ -24,8 +24,8 @@ formPanel
         (
             set::name('assignedTo'),
             set::items($users),
-            set::value($bug->assignedTo),
-        ),
+            set::value($bug->assignedTo)
+        )
     ),
     formGroup
     (
@@ -54,7 +54,7 @@ formPanel
             set::name('status'),
             set::control('hidden'),
             set::value($bug->status)
-        ),
+        )
     ),
     formGroup
     (
@@ -64,7 +64,7 @@ formPanel
             set::items($users),
             set::multiple(true),
             set::name('mailto[]'),
-            set::value(str_replace(' ', '', $bug->mailto ? $bug->mailto : '')),
+            set::value(str_replace(' ', '', $bug->mailto ? $bug->mailto : ''))
         )
     ),
     formGroup
@@ -73,7 +73,7 @@ formPanel
         editor
         (
             set::name('comment'),
-            set::value(),
+            set::value()
         )
     )
 );

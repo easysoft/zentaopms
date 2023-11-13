@@ -27,7 +27,7 @@ if(common::hasPriv('build', 'create'))
             set::id('createBuild'),
             set::name('createBuild'),
             set::rootClass('ml-4 items-center'),
-            set::text($lang->bug->createBuild),
+            set::text($lang->bug->createBuild)
         )
     );
 }
@@ -44,7 +44,7 @@ formPanel
         set::label($lang->bug->resolution),
         set::value(''),
         set::items($lang->bug->resolutionList),
-        on::change('setDuplicate'),
+        on::change('setDuplicate')
     ),
     formRow
     (
@@ -58,8 +58,8 @@ formPanel
             set::items(array()),
             set::placeholder($lang->bug->placeholder->duplicate),
             set::value(''),
-            set::required(true),
-        ),
+            set::required(true)
+        )
     ),
     formRow
     (
@@ -74,8 +74,8 @@ formPanel
             (
                 set::name('buildExecution'),
                 set::items($executions),
-                set::value($bug->execution),
-            ),
+                set::value($bug->execution)
+            )
         ),
         formGroup
         (
@@ -84,7 +84,7 @@ formPanel
             set::label($lang->bug->resolvedBuild),
             set::name('resolvedBuild'),
             set::value(''),
-            set::items($builds),
+            set::items($builds)
         ),
         formGroup
         (
@@ -101,12 +101,12 @@ formPanel
                     input
                     (
                         set::name('buildName'),
-                        set::value(''),
-                    ),
-                ),
-            ),
+                        set::value('')
+                    )
+                )
+            )
         ),
-        $createBuild,
+        $createBuild
     ),
     formGroup
     (
@@ -122,7 +122,7 @@ formPanel
         set::name('assignedTo'),
         set::label($lang->bug->assignedTo),
         set::value($bug->assignedTo),
-        set::items($users),
+        set::items($users)
     ),
     formGroup
     (
@@ -134,8 +134,8 @@ formPanel
         set::label($lang->comment),
         set::name('comment'),
         set::control('editor'),
-        set::rows(6),
-    ),
+        set::rows(6)
+    )
 );
 hr();
 history();

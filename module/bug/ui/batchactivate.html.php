@@ -30,7 +30,7 @@ formBatchPanel
     set::title($lang->bug->common . $lang->colon . $lang->bug->batchActivate),
     set::mode('edit'),
     set::items($items),
-    set::data(array_values($bugs)),
+    set::data(array_values($bugs))
 );
 
 render();
