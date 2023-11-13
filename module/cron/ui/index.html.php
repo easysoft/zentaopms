@@ -34,7 +34,7 @@ panel
     (
         array('class' => 'mr-3 ajaxRefresh', 'data-href' => inlink('ajaxExec', 'restart=1'), 'text' => $lang->cron->openProcess, 'onclick' => 'refreshURL(this)'),
         array('class' => 'mr-3 ajaxTurnon ajax-submit', 'url' => inlink('turnon'), 'text' => $lang->cron->turnonList[0], 'data-confirm' => $this->lang->cron->confirmTurnon),
-        array('class' => 'mr-3 primary', 'data-toggle' => 'modal', 'url' => inlink('create'), 'text' => $lang->cron->create),
+        array('class' => 'mr-3 primary', 'data-toggle' => 'modal', 'url' => inlink('create'), 'text' => $lang->cron->create)
     )) : null,
     !empty($config->global->cron) ? div
     (
@@ -43,8 +43,8 @@ panel
             set::bordered(true),
             set::cols($config->cron->dtable->fieldList),
             set::data(array_values($crons)),
-            set::footer(array('html' => $lang->cron->notice->help, 'className' => 'text-secondary')),
-        ),
+            set::footer(array('html' => $lang->cron->notice->help, 'className' => 'text-secondary'))
+        )
     ) : div
     (
         html($lang->cron->introduction),

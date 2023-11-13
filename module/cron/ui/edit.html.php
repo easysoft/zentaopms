@@ -29,7 +29,7 @@ formPanel
             set::width('1/4'),
             set::label($lang->cron->m),
             set::name('m'),
-            set::value($cron->m),
+            set::value($cron->m)
         ),
         formGroup
         (
@@ -41,7 +41,7 @@ formPanel
                 set('data-placement', 'right'),
                 set('data-type', 'white'),
                 set('data-class-name', 'text-gray border border-light'),
-                setClass('ml-2 mt-2 text-gray'),
+                setClass('ml-2 mt-2 text-gray')
             )
         )
     ),
@@ -52,7 +52,7 @@ formPanel
             set::width('1/4'),
             set::label($lang->cron->h),
             set::name('h'),
-            set::value($cron->h),
+            set::value($cron->h)
         ),
         formGroup
         (
@@ -64,7 +64,7 @@ formPanel
                 set('data-placement', 'right'),
                 set('data-type', 'white'),
                 set('data-class-name', 'text-gray border border-light'),
-                setClass('ml-2 mt-2 text-gray'),
+                setClass('ml-2 mt-2 text-gray')
             )
         )
     ),
@@ -75,7 +75,7 @@ formPanel
             set::width('1/4'),
             set::label($lang->cron->dom),
             set::name('dom'),
-            set::value($cron->dom),
+            set::value($cron->dom)
         ),
         formGroup
         (
@@ -87,7 +87,7 @@ formPanel
                 set('data-placement', 'right'),
                 set('data-type', 'white'),
                 set('data-class-name', 'text-gray border border-light'),
-                setClass('ml-2 mt-2 text-gray'),
+                setClass('ml-2 mt-2 text-gray')
             )
         )
     ),
@@ -98,7 +98,7 @@ formPanel
             set::width('1/4'),
             set::label($lang->cron->mon),
             set::name('mon'),
-            set::value($cron->mon),
+            set::value($cron->mon)
         ),
         formGroup
         (
@@ -110,7 +110,7 @@ formPanel
                 set('data-placement', 'right'),
                 set('data-type', 'white'),
                 set('data-class-name', 'text-gray border border-light'),
-                setClass('ml-2 mt-2 text-gray'),
+                setClass('ml-2 mt-2 text-gray')
             )
         )
     ),
@@ -121,7 +121,7 @@ formPanel
             set::width('1/4'),
             set::label($lang->cron->dow),
             set::name('dow'),
-            set::value($cron->dow),
+            set::value($cron->dow)
         ),
         formGroup
         (
@@ -133,7 +133,7 @@ formPanel
                 set('data-placement', 'right'),
                 set('data-type', 'white'),
                 set('data-class-name', 'text-gray border border-light'),
-                setClass('ml-2 mt-2 text-gray'),
+                setClass('ml-2 mt-2 text-gray')
             )
         )
     ),
@@ -142,14 +142,14 @@ formPanel
         set::width('full'),
         set::label($lang->cron->command),
         set::name('command'),
-        set::value(str_replace("'", "&#039;", $cron->command)),
+        set::value(str_replace("'", "&#039;", $cron->command))
     ),
     formGroup
     (
         set::width('full'),
         set::label($lang->cron->remark),
         set::name('remark'),
-        set::value($cron->remark),
+        set::value($cron->remark)
     ),
     formGroup
     (
@@ -157,8 +157,8 @@ formPanel
         set::label($lang->cron->type),
         set::name('type'),
         set::items($lang->cron->typeList),
-        set::value('zentao'),
-    ),
+        set::value('zentao')
+    )
 );
 
 /* ====== Render page ====== */
