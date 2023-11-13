@@ -2173,9 +2173,9 @@ class bugZen extends bug
      * @param  string    $from
      * @param  string    $message
      * @access protected
-     * @return void
+     * @return array
      */
-    protected function responseAfterDelete(object $bug, string $from, string $message = ''): void
+    protected function responseAfterDelete(object $bug, string $from, string $message = ''): array
     {
         if(!$message) $message = $this->lang->saveSuccess;
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message));
