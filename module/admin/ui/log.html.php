@@ -22,7 +22,7 @@ formPanel
         input
         (
             set::name('days'),
-            set::value($config->admin->log->saveDays),
+            set::value($config->admin->log->saveDays)
         )
     ),
     formGroup

@@ -24,7 +24,7 @@ formPanel
                 set::name('turnon'),
                 set::items($lang->sso->turnonList),
                 set::inline(true),
-                set::value($turnon),
+                set::value($turnon)
             )
         )
     ),
@@ -38,7 +38,7 @@ formPanel
                 set::name('redirect'),
                 set::items($lang->sso->turnonList),
                 set::inline(true),
-                set::value($redirect),
+                set::value($redirect)
             )
         )
     ),
@@ -64,7 +64,7 @@ formPanel
             div
             (
                 icon('help text-warning mr-1'),
-                html($lang->sso->help->addr),
+                html($lang->sso->help->addr)
             )
         )
     ),
@@ -76,7 +76,7 @@ formPanel
             input
             (
                 set::name('code'),
-                set::value($code),
+                set::value($code)
             )
         )
     ),
@@ -88,7 +88,7 @@ formPanel
             div
             (
                 icon('help text-warning mr-1'),
-                html($lang->sso->help->code),
+                html($lang->sso->help->code)
             )
         )
     ),
@@ -100,7 +100,7 @@ formPanel
             input
             (
                 set::name('key'),
-                set::value($key),
+                set::value($key)
             )
         )
     ),
@@ -112,7 +112,7 @@ formPanel
             div
             (
                 icon('help text-warning mr-1'),
-                html($lang->sso->help->key),
+                html($lang->sso->help->key)
             )
         )
     )

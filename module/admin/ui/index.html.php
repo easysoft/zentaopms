@@ -51,7 +51,7 @@ $buildPluginHeader = function($name, $url): h
         div
         (
             setClass('panel-title py-2.5'),
-            $name,
+            $name
         ),
         a
         (
@@ -109,9 +109,9 @@ foreach($lang->admin->menuList as $menuKey => $menu)
                         set::href($config->admin->helpURL[$menuKey]),
                         set::title($lang->help),
                         set::target('_blank'),
-                        icon('help'),
+                        icon('help')
                     )
-                ),
+                )
             ),
             p
             (
@@ -303,7 +303,7 @@ div
                     set::href(inlink('register')),
                     $lang->admin->registerNotice->submitHere
                 ),
-                substr($lang->admin->notice->register, strpos($lang->admin->notice->register, '%s') + 2),
+                substr($lang->admin->notice->register, strpos($lang->admin->notice->register, '%s') + 2)
             ) : null
         ),
         div
@@ -344,7 +344,7 @@ div
     (
         setClass('border rounded-md mb-4'),
         $buildHeader($lang->admin->updateDynamics, $config->admin->dynamicURL),
-        $dynamicItems,
+        $dynamicItems
     ),
     div
     (

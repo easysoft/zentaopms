@@ -56,7 +56,7 @@ foreach($config->featureGroup as $group => $features)
                 set::type('hidden'),
                 set::id("module{$code}"),
                 set::name("module[{$code}]"),
-                set::value($value),
+                set::value($value)
             );
         }
         $rows[] = h::tr
@@ -104,7 +104,7 @@ formPanel
                     setClass('text-md p-2.5 border-l'),
                     $lang->admin->setModule->optional
                 )
-            ),
+            )
         ),
         h::tbody
         (
@@ -140,7 +140,7 @@ formPanel
                 )
             )
         )
-    ),
+    )
 );
 
 render();

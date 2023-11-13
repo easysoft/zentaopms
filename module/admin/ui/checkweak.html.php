@@ -19,7 +19,7 @@ if(common::hasPriv('admin', 'safe'))
         a
         (
             set::href(createLink('admin', 'safe')),
-            $lang->admin->safe->set,
+            $lang->admin->safe->set
         )
     );
 }
@@ -32,7 +32,7 @@ if(common::hasPriv('admin', 'checkWeak'))
         (
             setClass('active'),
             set::href(createLink('admin', 'checkWeak')),
-            $lang->admin->safe->checkWeak,
+            $lang->admin->safe->checkWeak
         )
     );
 }
@@ -44,7 +44,7 @@ if(common::hasPriv('admin', 'resetPWDSetting'))
         a
         (
             set::href(createLink('admin', 'resetPWDSetting')),
-            $lang->admin->resetPWDSetting,
+            $lang->admin->resetPWDSetting
         )
     );
 }
@@ -67,8 +67,8 @@ div
     dtable
     (
         set::cols($config->admin->checkWeak->dtable->fieldList),
-        set::data($weakUsers),
-    ),
+        set::data($weakUsers)
+    )
 );
 
 

@@ -19,7 +19,7 @@ if(common::hasPriv('admin', 'safe'))
         a
         (
             set::href(createLink('admin', 'safe')),
-            $lang->admin->safe->set,
+            $lang->admin->safe->set
         )
     );
 }
@@ -31,7 +31,7 @@ if(common::hasPriv('admin', 'checkWeak'))
         a
         (
             set::href(createLink('admin', 'checkWeak')),
-            $lang->admin->safe->checkWeak,
+            $lang->admin->safe->checkWeak
         )
     );
 }
@@ -44,7 +44,7 @@ if(common::hasPriv('admin', 'resetPWDSetting'))
         (
             setClass('active'),
             set::href(createLink('admin', 'resetPWDSetting')),
-            $lang->admin->resetPWDSetting,
+            $lang->admin->resetPWDSetting
         )
     );
 }
@@ -76,10 +76,10 @@ div
                 set::name('resetPWDByMail'),
                 set::control('radioListInline'),
                 set::items($lang->admin->safe->resetPWDList),
-                set::value(isset($config->resetPWDByMail) ? $config->resetPWDByMail : 0),
+                set::value(isset($config->resetPWDByMail) ? $config->resetPWDByMail : 0)
             )
-        ),
-    ),
+        )
+    )
 );
 
 

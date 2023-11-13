@@ -22,7 +22,7 @@ if(common::hasPriv('admin', 'safe'))
         (
             setClass('active'),
             set::href(createLink('admin', 'safe')),
-            $lang->admin->safe->set,
+            $lang->admin->safe->set
         )
     );
 }
@@ -34,7 +34,7 @@ if(common::hasPriv('admin', 'checkWeak'))
         a
         (
             set::href(createLink('admin', 'checkWeak')),
-            $lang->admin->safe->checkWeak,
+            $lang->admin->safe->checkWeak
         )
     );
 }
@@ -46,7 +46,7 @@ if(common::hasPriv('admin', 'resetPWDSetting'))
         a
         (
             set::href(createLink('admin', 'resetPWDSetting')),
-            $lang->admin->resetPWDSetting,
+            $lang->admin->resetPWDSetting
         )
     );
 }
@@ -91,14 +91,14 @@ div
                         icon
                         (
                             setClass('text-warning mr-1'),
-                            'help',
+                            'help'
                         ),
                         span
                         (
                             !empty($config->safe->changeWeak) ? $lang->admin->safe->noticeWeakMode : $lang->admin->safe->noticeMode
                         )
-                    ),
-                ),
+                    )
+                )
             )
         ),
         formRow
@@ -113,10 +113,10 @@ div
                     icon
                     (
                         setClass('text-warning mr-1'),
-                        'help',
+                        'help'
                     ),
-                    $lang->admin->safe->modeRuleList[1] . $lang->admin->safe->noticeStrong,
-                ),
+                    $lang->admin->safe->modeRuleList[1] . $lang->admin->safe->noticeStrong
+                )
             )
         ),
         formRow
@@ -131,10 +131,10 @@ div
                     icon
                     (
                         setClass('text-warning mr-1'),
-                        'help',
+                        'help'
                     ),
-                    $lang->admin->safe->modeRuleList[2] . $lang->admin->safe->noticeStrong,
-                ),
+                    $lang->admin->safe->modeRuleList[2] . $lang->admin->safe->noticeStrong
+                )
             )
         ),
         formRow
@@ -146,8 +146,8 @@ div
                 (
                     set::name('weak'),
                     set::value($config->safe->weak),
-                    set::rows('5'),
-                ),
+                    set::rows('5')
+                )
             )
         ),
         formRow
@@ -159,7 +159,7 @@ div
                 set::name('changeWeak'),
                 set::control('radioListInline'),
                 set::items($lang->admin->safe->modifyPasswordList),
-                set::value(isset($config->safe->changeWeak) ? $config->safe->changeWeak : 0,),
+                set::value(isset($config->safe->changeWeak) ? $config->safe->changeWeak : 0,)
             )
         ),
         formRow
@@ -170,7 +170,7 @@ div
                 set::name('modifyPasswordFirstLogin'),
                 set::control('radioListInline'),
                 set::items($lang->admin->safe->modifyPasswordList),
-                set::value(isset($config->safe->modifyPasswordFirstLogin) ? $config->safe->modifyPasswordFirstLogin : 0,),
+                set::value(isset($config->safe->modifyPasswordFirstLogin) ? $config->safe->modifyPasswordFirstLogin : 0,)
             )
         ),
         formRow
@@ -186,7 +186,7 @@ div
                         set::items($lang->admin->safe->loginCaptchaList),
                         set::value(isset($config->safe->loginCaptcha) ? $config->safe->loginCaptcha : 0,),
                         set::inline(true),
-                        set::disabled(!extension_loaded('gd')),
+                        set::disabled(!extension_loaded('gd'))
                     ),
                     !extension_loaded('gd') ? span
                     (
@@ -194,13 +194,13 @@ div
                         icon
                         (
                             setClass('text-warning mr-1'),
-                            'help',
+                            'help'
                         ),
                         $lang->admin->safe->noticeGd
-                    ) : null,
-                ),
+                    ) : null
+                )
             )
-        ),
+        )
     )
 );
 
