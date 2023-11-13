@@ -34,7 +34,7 @@ formPanel
                 set::name('desc'),
                 set::rows('5'),
                 html($suite->desc)
-            ),
+            )
         )
     ),
     formRow
@@ -48,10 +48,10 @@ formPanel
                 set::inline(true),
                 set::name('type'),
                 set::items($lang->testsuite->authorList),
-                set::value($suite->type),
+                set::value($suite->type)
             )
         )
-    ),
+    )
 );
 
 render();

@@ -21,7 +21,7 @@ formPanel
             set::width('1/2'),
             set::name('name'),
             set::label($lang->testsuite->name),
-            set::value(''),
+            set::value('')
         )
     ),
     formRow
@@ -33,8 +33,8 @@ formPanel
             editor
             (
                 set::name('desc'),
-                set::rows('5'),
-            ),
+                set::rows('5')
+            )
         )
     ),
     formRow
@@ -48,10 +48,10 @@ formPanel
                 set::inline(true),
                 set::name('type'),
                 set::items($lang->testsuite->authorList),
-                set::value('private'),
+                set::value('private')
             )
         )
-    ),
+    )
 );
 
 render();

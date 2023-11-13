@@ -12,7 +12,6 @@ namespace zin;
 
 featureBar
 (
-
     detailHeader
     (
         to::title
@@ -22,7 +21,7 @@ featureBar
             $lang->testsuite->linkCase,
             li(searchToggle(set::open(true)))
         )
-    ),
+    )
 );
 
 $footToolbar = array('items' => array
@@ -51,7 +50,7 @@ dtable
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

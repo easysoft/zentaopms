@@ -20,7 +20,7 @@ detailHeader
             set::level(1),
             set::text($suite->name)
         ),
-        $suite->deleted ? span(setClass('label danger'), $lang->testsuite->deleted) : null,
+        $suite->deleted ? span(setClass('label danger'), $lang->testsuite->deleted) : null
     ),
     to::suffix
     (
@@ -48,9 +48,9 @@ detailHeader
                 set::href(createLink('testsuite', 'delete', "suiteID={$suite->id}")),
                 icon('trash', setClass('text-primary')),
                 $lang->delete,
-            ) : '',
-        ),
-    ),
+            ) : ''
+        )
+    )
 );
 
 $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
@@ -87,13 +87,13 @@ detailBody
             set::orderBy($orderBy),
             set::sortLink(createLink('testsuite', 'view', "suiteID={$suite->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
             set::footToolbar($footToolbar),
-            set::footPager(usePager('pager', 'short')),
-        ),
+            set::footPager(usePager('pager', 'short'))
+        )
     ),
     history(
         set::hasComment(false),
         set::commentBtn(false),
-        set::methodName('view_1'),
+        set::methodName('view_1')
     ),
     detailSide
     (
@@ -103,8 +103,8 @@ detailBody
             set::title($lang->testsuite->legendDesc),
             set::content(!empty($suite->desc) ? $suite->desc : "<span class='text-gray'>{$lang->noDesc}</span>"),
             set::useHtml(true)
-        ),
-    ),
+        )
+    )
 );
 
 render();
