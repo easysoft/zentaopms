@@ -13,7 +13,7 @@ namespace zin;
 featureBar
 (
     set::current($type),
-    set::linkParams("projectID={$projectID}&executionID={$executionID}&type={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    set::linkParams("projectID={$projectID}&executionID={$executionID}&type={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")
 );
 
 toolbar
@@ -23,8 +23,8 @@ toolbar
         'text'  => $lang->release->create,
         'icon'  => 'plus',
         'class' => 'btn primary',
-        'url'   => $this->createLink('projectrelease', 'create', "projectID={$projectID}"),
-    ])) : '',
+        'url'   => $this->createLink('projectrelease', 'create', "projectID={$projectID}")
+    ])) : ''
 
 );
 
@@ -46,7 +46,7 @@ dtable
     set::footPager(usePager()),
     set::emptyTip($lang->release->noRelease),
     set::createTip($lang->release->create),
-    set::createLink(hasPriv('projectrelease', 'create') ? createLink('projectrelease', 'create', "projectID={$projectID}") : ''),
+    set::createLink(hasPriv('projectrelease', 'create') ? createLink('projectrelease', 'create', "projectID={$projectID}") : '')
 );
 
 /* ====== Render page ====== */
