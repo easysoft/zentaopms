@@ -635,7 +635,7 @@
                     {
                         if($mrPriv)
                         {
-                            echo "<li title='$linkMRTitle'>" . html::a($this->createLink('mr', 'view', "MRID=$MRID"), "#$MRID $linkMRTitle") . '</li>';
+                            echo "<li title='$linkMRTitle'>" . html::a($this->createLink('mr', 'view', "MRID=$MRID"), "#$MRID $linkMRTitle", '', 'data-app="devops"') . '</li>';
                         }
                         else
                         {
@@ -658,7 +658,7 @@
                         $commitTitle = $revision . ' ' . $commit->comment;
                         if($canViewRevision)
                         {
-                            echo "<li class='link-commit' title='$commitTitle'>" . html::a($this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), $revision) . ' ' . $commit->comment . '</li>';
+                            echo "<li class='link-commit' title='$commitTitle'>" . html::a($this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), $revision, '', 'data-app="devops"') . ' ' . $commit->comment . '</li>';
                         }
                         else
                         {
