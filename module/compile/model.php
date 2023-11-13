@@ -166,7 +166,10 @@ class compileModel extends model
             $userPWD         = "$jenkinsUser:$jenkinsPassword";
 
             $infoUrl  = sprintf('%s/job/%s/api/xml?tree=builds[id,number,queueId]&xpath=//build[queueId=%s]', $jenkins->url, $job->pipeline, $compile->queue);
-            $response = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD));
+            $result   = common::http($infoUrl, '', array(CURLOPT_USERPWD => $userPWD), array(), 'data', 'POST', 30, true);
+            $response = $result['body'];
+            $httpCode = $result[1];
+            if($httpCode == 404) return '';
             if($response)
             {
                 $buildInfo   = simplexml_load_string($response);
@@ -188,7 +191,9 @@ class compileModel extends model
             $this->loadModel('ci');
             foreach($jobs as $gitlabJob)
             {
-                if(empty($gitlabJob->duration) or $gitlabJob->duration == '') $gitlabJob->duration = '-';
+                if(!is_object($gitlabJob)) continue;
+
+                if(empty($gitlabJob->duration)) $gitlabJob->duration = '-';
                 $logs .= "<font style='font-weight:bold'>&gt;&gt;&gt; Job: $gitlabJob->name, Stage: $gitlabJob->stage, Status: $gitlabJob->status, Duration: $gitlabJob->duration Sec\r\n </font>";
                 $logs .= "Job URL: <a href=\"$gitlabJob->web_url\" target='_blank'>$gitlabJob->web_url</a> \r\n";
                 $logs .= $this->ci->transformAnsiToHtml($this->gitlab->apiGetJobLog($job->server, $projectID, $gitlabJob->id));

@@ -22,7 +22,7 @@ class compile extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        if($this->app->rawMethod != 'browse') $this->loadModel('ci')->setMenu();
+        if(!in_array($this->app->rawMethod, array('browse', 'logs'))) $this->loadModel('ci')->setMenu();
     }
 
     /**
@@ -51,7 +51,14 @@ class compile extends control
         if($repoID || $jobID) $this->compile->syncCompile($repoID, $jobID);
 
         $this->app->loadLang('job');
-        if($repoID) $this->ci->setMenu($repoID);
+        if($repoID)
+        {
+            $this->ci->setMenu($repoID);
+        }
+        else
+        {
+            $this->session->set('repoID', 0);
+        }
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -78,6 +85,12 @@ class compile extends control
      */
     public function logs($buildID)
     {
+        if($this->session->repoID)
+        {
+            $this->loadModel('ci')->setMenu();
+            $this->view->repoID = $this->session->repoID;
+        }
+
         $build = $this->compile->getByID($buildID);
         $job   = $this->loadModel('job')->getByID($build->job);
 
