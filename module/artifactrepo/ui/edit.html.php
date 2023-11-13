@@ -20,7 +20,7 @@ formPanel
         set::name('name'),
         set::required(true),
         set::label($lang->artifactrepo->name),
-        set::value($artifactRepo->name),
+        set::value($artifactRepo->name)
     ),
     formGroup
     (
@@ -29,7 +29,7 @@ formPanel
         set::label($lang->repo->product),
         set::control(array('type' => 'picker', 'multiple' => true)),
         set::items($products),
-        set::value($artifactRepo->products),
+        set::value($artifactRepo->products)
     ),
     formGroup
     (
@@ -37,36 +37,36 @@ formPanel
         setClass('servers'),
         set::label($lang->artifactrepo->serverID),
         set::control('static'),
-        set::value($artifactRepo->serverName),
+        set::value($artifactRepo->serverName)
     ),
     formGroup
     (
         set::width('2/3'),
         set::label($lang->artifactrepo->repoName),
         set::control('static'),
-        set::value($artifactRepo->repoName),
+        set::value($artifactRepo->repoName)
     ),
     formGroup
     (
         set::width('2/3'),
         set::label($lang->artifactrepo->type),
         set::control('static'),
-        set::value($artifactRepo->type),
+        set::value($artifactRepo->type)
     ),
     formGroup
     (
         set::width('2/3'),
         set::label($lang->artifactrepo->status),
         set::control('static'),
-        set::value($artifactRepo->status),
+        set::value($artifactRepo->status)
     ),
     formGroup
     (
         set::width('2/3'),
         set::label($lang->artifactrepo->url),
         set::control('static'),
-        set::value($artifactRepo->url),
-    ),
+        set::value($artifactRepo->url)
+    )
 );
 
 render();

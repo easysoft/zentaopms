@@ -43,7 +43,7 @@ toolBar
         'icon'  => 'plus',
         'class' => 'btn primary',
         'url'   => createLink('artifactrepo', 'create'),
-    ))) : null,
+    ))) : null
 );
 
 dtable
@@ -53,5 +53,5 @@ dtable
     set::onRenderCell(jsRaw('window.renderList')),
     set::sortLink(createLink('artifactrepo', 'browse', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::orderBy($orderBy),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );

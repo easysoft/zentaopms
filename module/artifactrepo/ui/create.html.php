@@ -19,7 +19,7 @@ formPanel
         set::width('2/3'),
         set::name('name'),
         set::required(true),
-        set::label($lang->artifactrepo->name),
+        set::label($lang->artifactrepo->name)
     ),
     formGroup
     (
@@ -27,7 +27,7 @@ formPanel
         set::name('products[]'),
         set::label($lang->repo->product),
         set::control(array('type' => 'picker', 'multiple' => true)),
-        set::items($products),
+        set::items($products)
     ),
     formGroup
     (
@@ -36,7 +36,7 @@ formPanel
         set::name('serverID'),
         set::label($lang->artifactrepo->serverID),
         set::items($nexusList),
-        on::change('getArtifactRepo'),
+        on::change('getArtifactRepo')
     ),
     formGroup
     (
@@ -45,7 +45,7 @@ formPanel
         set::required(true),
         set::label($lang->artifactrepo->repoName),
         set::items(array()),
-        on::change('onRepoChange'),
+        on::change('onRepoChange')
     ),
     formGroup
     (
@@ -57,8 +57,8 @@ formPanel
         input
         (
             set::type('hidden'),
-            set::name('format'),
-        ),
+            set::name('format')
+        )
     ),
     formGroup
     (
@@ -66,15 +66,15 @@ formPanel
         set::name('status'),
         set::required(true),
         set::label($lang->artifactrepo->status),
-        set::readonly(true),
+        set::readonly(true)
     ),
     formGroup
     (
         set::width('2/3'),
         set::name('url'),
         set::label($lang->artifactrepo->url),
-        set::readonly(true),
-    ),
+        set::readonly(true)
+    )
 );
 
 render();
