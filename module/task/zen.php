@@ -766,7 +766,7 @@ class taskZen extends task
             ->get();
 
         if(!$this->post->currentConsumed && $oldTask->consumed == '0') dao::$errors['currentConsumed'][] = $this->lang->task->error->consumedEmpty;
-        if($task->realStarted > $task->finishedDate) dao::$errors['realStarted'][] = $this->lang->task->error->finishedDateSmall;
+        if($task->realStarted > $task->finishedDate) dao::$errors['finishedDate'][] = $this->lang->task->error->finishedDateSmall;
 
         $task->consumed = $oldTask->consumed + (float)$this->post->currentConsumed;
         return $task;

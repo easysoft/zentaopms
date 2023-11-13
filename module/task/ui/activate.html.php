@@ -12,7 +12,6 @@ namespace zin;
 /* ====== Preparing and processing page data ====== */
 jsVar('oldConsumed', $task->consumed);
 jsVar('currentUser', $app->user->account);
-jsVar('members', $members);
 jsVar('teamMemberError', $lang->task->error->teamMember);
 jsVar('teamLeftEmpty', $lang->task->error->teamLeftEmpty);
 jsVar('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));
@@ -21,7 +20,34 @@ jsVar('leftNotEmpty', sprintf($lang->task->error->notempty, $lang->task->left));
 jsVar('teamNotEmpty', sprintf($lang->error->notempty, $lang->task->assignedTo));
 jsVar('isMultiple', $isMultiple);
 jsVar('taskMode', $task->mode);
-if($isMultiple) jsVar('assignedToHtml', html::select('assignedTo', $teamMembers, '', "class='form-control' disabled"));
+
+$teamData  = array();
+$teamUsers = array();
+if($isMultiple)
+{
+    $index = 1;
+    foreach($task->team as $member)
+    {
+        $member->id           = $index;
+        $member->team         = $member->account;
+        $member->teamSource   = $member->account;
+        $member->teamEstimate = $member->estimate;
+        $member->teamConsumed = $member->consumed;
+        $member->teamLeft     = $member->left;
+
+        $teamData[]  = $member;
+        $teamUsers[] = $member->account;
+        $index ++;
+    }
+
+    $teamItems = array();
+    foreach($teamMembers as $key => $value) $teamItems[] = array('text' => $value, 'value' => $key);
+    jsVar('teamItems', $teamItems);
+}
+
+$memberItems = array();
+foreach($members as $key => $value) $memberItems[] = array('text' => $value, 'value' => $key);
+jsVar('memberItems', $memberItems);
 
 /* zin: Set variables to define control for form. */
 modalHeader();
@@ -41,8 +67,8 @@ if($isMultiple)
                 set::className('hidden'),
                 set::name('mode'),
                 set::value($task->mode),
-            ),
-        ),
+            )
+        )
     );
 }
 
@@ -58,6 +84,7 @@ if($isMultiple)
             set::name('multiple'),
             set::text($lang->task->manageTeam),
             set::rootClass('ml-4'),
+            on::click('manageTeam')
         )
     );
 }
@@ -66,14 +93,14 @@ $leftBox = '';
 if($task->parent != '-1')
 {
     $leftBox = formGroup(
-        set::width('1/3'),
+        set::width('1/2'),
         set::label($lang->task->left),
         set::name('left'),
         inputControl
         (
             to::suffix($lang->task->suffixHour),
             set::suffixWidth(20),
-        ),
+        )
     );
 }
 
@@ -84,26 +111,8 @@ if($isMultiple)
         set::text($lang->task->team),
         set::className('team-group hidden'),
         set::url('#modalTeam'),
-        set('data-toggle', 'modal'),
+        set('data-toggle', 'modal')
     );
-}
-
-$teamData = array();
-if($isMultiple)
-{
-    $index = 1;
-    foreach($task->team as $member)
-    {
-        $member->id           = $index;
-        $member->team         = $member->account;
-        $member->teamSource   = $member->account;
-        $member->teamEstimate = $member->estimate;
-        $member->teamConsumed = $member->consumed;
-        $member->teamLeft     = $member->left;
-
-        $teamData[] = $member;
-        $index ++;
-    }
 }
 
 if(!empty($task->team)) $rowCount = count($task->team) < 6 ? 6 : 1 + count($task->team);
@@ -137,12 +146,15 @@ foreach($task->team as $member)
         h::td
         (
             set::width('240px'),
-            select
+            picker
             (
+                setID("team$i"),
+                setClass('team-select'),
                 set::name('team[]'),
                 set::value($member->account),
                 set::items($members),
                 set::placeholder($lang->task->assignedTo),
+                set::disabled($memberDisabled)
             ),
             input
             (
@@ -168,8 +180,8 @@ foreach($task->team as $member)
                     set::readonly($hourDisabled),
                 ),
                 to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20),
-            ),
+                set::suffixWidth(20)
+            )
         ),
         h::td
         (
@@ -180,11 +192,11 @@ foreach($task->team as $member)
                     set::name('teamConsumed[]'),
                     set::value((float)$member->consumed),
                     set::placeholder($lang->task->consumed),
-                    set::readonly($hourDisabled),
+                    set::readonly($hourDisabled)
                 ),
                 to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20),
-            ),
+                set::suffixWidth(20)
+            )
         ),
         h::td
         (
@@ -196,11 +208,11 @@ foreach($task->team as $member)
                     set::name('teamLeft[]'),
                     set::value((float)$member->left),
                     set::placeholder($lang->task->left),
-                    set::readonly($hourDisabled),
+                    set::readonly($hourDisabled)
                 ),
                 to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20),
-            ),
+                set::suffixWidth(20)
+            )
         ),
         h::td
         (
@@ -236,17 +248,19 @@ for($i; $i <= $rowCount; $i ++)
         h::td
         (
             set::width('240px'),
-            select
+            picker
             (
+                setID("team$i"),
+                setClass('team-select'),
                 set::name('team[]'),
                 set::items($members),
-                set::placeholder($lang->task->assignedTo),
+                set::placeholder($lang->task->assignedTo)
             ),
             input
             (
                 set::type('hidden'),
                 set::name('teamSource[]'),
-                set::value(''),
+                set::value('')
             )
         ),
         h::td
@@ -256,10 +270,10 @@ for($i; $i <= $rowCount; $i ++)
                 input
                 (
                     set::name('teamEstimate[]'),
-                    set::placeholder($lang->task->estimateAB),
+                    set::placeholder($lang->task->estimateAB)
                 ),
                 to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20),
+                set::suffixWidth(20)
             ),
         ),
         h::td
@@ -269,10 +283,10 @@ for($i; $i <= $rowCount; $i ++)
                 input
                 (
                     set::name('teamConsumed[]'),
-                    set::placeholder($lang->task->consumed),
+                    set::placeholder($lang->task->consumed)
                 ),
                 to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20),
+                set::suffixWidth(20)
             ),
         ),
         h::td
@@ -282,10 +296,10 @@ for($i; $i <= $rowCount; $i ++)
                 input
                 (
                     set::name('teamLeft[]'),
-                    set::placeholder($lang->task->left),
+                    set::placeholder($lang->task->left)
                 ),
                 to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20),
+                set::suffixWidth(20)
             ),
         ),
         h::td
@@ -296,7 +310,7 @@ for($i; $i <= $rowCount; $i ++)
             (
                 set::items(array(
                     array('icon' => 'plus',  'class' => 'btn ghost btn-add text-gray'),
-                    array('icon' => 'trash', 'class' => 'btn ghost btn-delete text-gray'),
+                    array('icon' => 'trash', 'class' => 'btn ghost btn-delete text-gray')
                 ))
             )
         )
@@ -311,21 +325,23 @@ formPanel
     (
         formGroup
         (
-            set::width('1/3'),
+            set::width('1/2'),
             set::label($lang->task->assignedTo),
             set::required($isMultiple),
             inputGroup
             (
-                select
+                picker
                 (
+                    setID('assignedTo'),
                     set::name('assignedTo'),
                     set::items($isMultiple ? $teamMembers : $members),
                     set::value($isMultiple ? '' : $task->finishedBy),
+                    on::change('setTeamUser')
                 ),
-                $modalTeamBtn,
-            ),
+                $modalTeamBtn
+            )
         ),
-        $manageTeamBox,
+        $manageTeamBox
     ),
     $leftBox,
     formGroup
@@ -334,7 +350,7 @@ formPanel
         editor
         (
             set::name('comment'),
-            set::rows('5'),
+            set::rows('5')
         )
     ),
     modalTrigger
@@ -347,11 +363,13 @@ formPanel
             set('data-backdrop', false),
             to::footer
             (
+                div(setClass('multi-append')),
                 btn
                 (
                     setClass('primary btn-wide'),
                     set::id('confirmButton'),
                     set::text($lang->confirm),
+                    on::click('checkTeam')
                 )
             ),
             h::table
@@ -359,9 +377,9 @@ formPanel
                 setClass('table table-form'),
                 set::id('teamForm'),
                 $teamForm
-            ),
+            )
         )
-    ),
+    )
 );
 hr();
 history();
