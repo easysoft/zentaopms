@@ -263,6 +263,7 @@ class mr extends control
         $this->view->title       = $this->lang->mr->create;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->repo        = $repo;
+        $this->view->repoID      = $repoID;
         $this->view->repoPairs   = $repoPairs;
         $this->view->project     = $project;
         $this->view->executionID = $objectID;
