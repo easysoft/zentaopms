@@ -66,11 +66,11 @@ if($isCustomExport)
                 span
                 (
                     setClass('input-group-addon'),
-                    checkbox(setID('showCustomFieldsBox'), set::checked(false), on::change('setExportTPL'), $lang->file->setExportTPL),
+                    checkbox(setID('showCustomFieldsBox'), set::checked(false), on::change('setExportTPL'), $lang->file->setExportTPL)
                 )
             ),
-            $templateList ? $templateList : null,
-        ),
+            $templateList ? $templateList : null
+        )
     );
 
     /* Panel for customize template. */
@@ -91,7 +91,7 @@ if($isCustomExport)
                     set::items($exportFieldPairs),
                     set::value($selectedFields),
                     set::multiple(true),
-                    set::required(true),
+                    set::required(true)
                 ),
                 inputGroup
                 (
@@ -101,7 +101,7 @@ if($isCustomExport)
                     hasPriv('file', 'setPublic') ? div
                     (
                         setClass('input-group-addon'),
-                        checkbox(set::name('public'), set::value(1), $lang->public),
+                        checkbox(set::name('public'), set::value(1), $lang->public)
                     ) : null,
                     btn(setClass('btn-link'), on::click('window.saveTemplate'), icon('save')),
                     btn(setClass('btn-link'), on::click('window.deleteTemplate'), icon('trash'))
@@ -191,7 +191,7 @@ formPanel
                 set::type('primary'),
                 $lang->export
             )
-        ),
+        )
     ),
     $showBizGuide ? formRow
     (
