@@ -38,7 +38,7 @@ dtable
     set::data($tableData),
     set::sortLink(createLink('account', 'browse', "browseType=$browseType&param=$param&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::orderBy($orderBy),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

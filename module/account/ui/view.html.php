@@ -21,7 +21,7 @@ detailHeader
         entityLabel(
             set(array('entityID' => $account->id, 'level' => 1, 'text' => $account->name))
         )
-    ),
+    )
 );
 
 detailBody
@@ -66,20 +66,20 @@ detailBody
                 (
                     set::name($lang->account->mobile),
                     $account->mobile
-                ),
+                )
             )
-        ),
+        )
     ),
     history
     (
-        set::commentUrl(createLink('action', 'comment', array('objectType' => 'account', 'objectID' => $account->id))),
+        set::commentUrl(createLink('action', 'comment', array('objectType' => 'account', 'objectID' => $account->id)))
     ),
     floatToolbar
     (
         set::object($account),
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
         set::suffix($actions['suffixActions'])
-    ),
+    )
 );
 
 render();
