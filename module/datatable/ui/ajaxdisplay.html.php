@@ -26,13 +26,13 @@ form
     (
         set('class', 'hidden'),
         set::name('target'),
-        set::value($datatableId),
+        set::value($datatableId)
     ),
     input
     (
         set('class', 'hidden'),
         set::name('name'),
-        set::value('showModule'),
+        set::value('showModule')
     ),
     formGroup
     (
@@ -42,8 +42,8 @@ form
             set::name('value'),
             set::inline(true),
             set::items($lang->datatable->showModuleList),
-            set::value($showModule),
-        ),
+            set::value($showModule)
+        )
     ),
     $moduleName == 'execution' && $methodName == 'task' && $this->config->vision != 'lite' ? formGroup
     (
@@ -53,8 +53,8 @@ form
             set::name('allModule'),
             set::inline(true),
             set::items($lang->datatable->showAllModuleList),
-            set::value($showAllModule),
-        ),
+            set::value($showAllModule)
+        )
     ) : null,
     !empty($showBranch) ? formGroup
     (
@@ -64,22 +64,22 @@ form
             set::name('showBranch'),
             set::inline(true),
             set::items($lang->datatable->showBranchList),
-            set::value(isset($config->$currentModule->$currentMethod->showBranch) ? $config->$currentModule->$currentMethod->showBranch : 1),
-        ),
+            set::value(isset($config->$currentModule->$currentMethod->showBranch) ? $config->$currentModule->$currentMethod->showBranch : 1)
+        )
     ) : null,
     input
     (
         set('class', 'hidden'),
         set::name('currentModule'),
-        set::value($currentModule),
+        set::value($currentModule)
     ),
     input
     (
         set('class', 'hidden'),
         set::name('currentMethod'),
-        set::value($currentMethod),
+        set::value($currentMethod)
     ),
-    set::actions(array('submit')),
+    set::actions(array('submit'))
 );
 
 render();

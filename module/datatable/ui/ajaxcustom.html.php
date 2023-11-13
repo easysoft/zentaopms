@@ -45,10 +45,10 @@ function buildItem(array $item): wg
             input
             (
                 setClass('w-8', 'h-5', 'shadow-none', 'px-1', 'text-center'),
-                set::value($item['width']),
+                set::value($item['width'])
             ),
-            span('px'),
-        ),
+            span('px')
+        )
     );
 }
 
@@ -66,7 +66,7 @@ function buildBody(array $cols): form
     $itemsList = array(
         'left' => array(),
         'no' => array(),
-        'right' => array(),
+        'right' => array()
     );
 
     foreach($cols as $col)
@@ -87,7 +87,7 @@ function buildBody(array $cols): form
     (
         setClass('col', 'gap-0.5'),
         set::grid(false),
-        set::actions(array()),
+        set::actions(array())
     );
 
     foreach($itemsList as $key => $items)
