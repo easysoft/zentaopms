@@ -716,14 +716,21 @@ class ai extends control
 
             if(!$isRetry) $messages[] = (object)array('role' => 'user', 'content' => $message);
 
-            $response = $this->ai->converse($messages);
-            if(empty($response))
+            if($this->ai->isModelConfigured())
             {
-                $this->view->error = $this->lang->ai->chatNoResponse;
+                $response = $this->ai->converse($messages);
+                if(empty($response))
+                {
+                    $this->view->error = $this->lang->ai->chatNoResponse;
+                }
+                else
+                {
+                    $messages[] = (object)array('role' => 'assistant', 'content' => is_array($response) ? current($response) : $response);
+                }
             }
             else
             {
-                $messages[] = (object)array('role' => 'assistant', 'content' => is_array($response) ? current($response) : $response);
+                $this->view->error = $this->lang->ai->models->noModelError;
             }
         }
 
