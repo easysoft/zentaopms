@@ -14,6 +14,30 @@ $progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($executi
 $isKanban = isset($execution->type) && $execution->type == 'kanban';
 $chartURL = createLink('execution', $isKanban ? 'ajaxGetCFD' : 'ajaxGetBurn', "executionID={$execution->id}");
 
+/* Construct suitable actions for the current execution. */
+$execution->rawID = $execution->id;
+$operateMenus = array();
+foreach($config->execution->view->operateList['main'] as $operate)
+{
+    if(!common::hasPriv('execution', $operate)) continue;
+    if(!$this->execution->isClickable($execution, $operate)) continue;
+
+    $operateMenus[] = $config->execution->actionList[$operate];
+}
+
+/* Construct common actions for execution. */
+$commonActions = array();
+foreach($config->execution->view->operateList['common'] as $operate)
+{
+    if(!common::hasPriv('execution', $operate)) continue;
+
+    $settings = $config->execution->actionList[$operate];
+    $settings['text'] = '';
+    if($operate == 'edit') unset($settings['data-toggle']);
+
+    $commonActions[] = $settings;
+}
+
 $programDom = null;
 if($config->systemMode == 'ALM' && $execution->projectInfo->grade > 1)
 {
@@ -805,33 +829,9 @@ div
     ),
 );
 
-/* Construct suitable actions for the current execution. */
-$execution->rawID = $execution->id;
-$operateMenus = array();
-foreach($config->execution->view->operateList['main'] as $operate)
-{
-    if(!common::hasPriv('execution', $operate)) continue;
-    if(!$this->execution->isClickable($execution, $operate)) continue;
-
-    $operateMenus[] = $config->execution->actionList[$operate];
-}
-
-/* Construct common actions for execution. */
-$commonActions = array();
-foreach($config->execution->view->operateList['common'] as $operate)
-{
-    if(!common::hasPriv('execution', $operate)) continue;
-
-    $settings = $config->execution->actionList[$operate];
-    $settings['text'] = '';
-    if($operate == 'edit') unset($settings['data-toggle']);
-
-    $commonActions[] = $settings;
-}
-
 div
 (
-    setClass('w-2/3 text-center fixed actions-menu'),
+    setClass('center w-2/3'),
     floatToolbar
     (
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
