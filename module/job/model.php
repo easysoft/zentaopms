@@ -575,7 +575,7 @@ class jobModel extends model
     {
         $pipeline = json_decode($job->pipeline);
 
-        $pipelineParams      = new stdclass;
+        $pipelineParams = new stdclass;
         $pipelineParams->ref = zget($pipeline, 'reference', '');
         if(!$pipelineParams->ref)
         {
