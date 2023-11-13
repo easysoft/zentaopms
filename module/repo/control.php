@@ -892,12 +892,13 @@ class repo extends control
     }
 
     /**
+     * 设置DevOps指令.
      * Set Rules.
      *
      * @access public
      * @return void
      */
-    public function setRules($module = '')
+    public function setRules()
     {
         if($_POST)
         {
@@ -905,7 +906,7 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
-        $repoID = $this->session->repoID;
+        $repoID = (int)$this->session->repoID;
         $this->commonAction($repoID);
 
         $this->app->loadLang('task');
