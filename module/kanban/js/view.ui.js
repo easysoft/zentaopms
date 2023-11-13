@@ -10,16 +10,16 @@ window.getLane = function(lane)
  */
 window.getLaneActions = function(lane)
 {
+    let actions = [];
+    if(lane.actionList.includes('editLaneName')) actions.push({text: kanbanLang.editLaneName, key: 'editLaneName', icon: 'edit',  url: $.createLink('kanban', 'editLaneName', 'id=' + lane.id), 'data-toggle': 'modal'});
+    if(lane.actionList.includes('editLaneColor')) actions.push({text: kanbanLang.editLaneColor, key: 'editLaneColor', icon: 'color',  url: $.createLink('kanban', 'editLaneColor', 'id=' + lane.id), 'data-toggle': 'modal'});
+    if(lane.actionList.includes('sortLane')) actions.push({text: kanbanLang.sortLane, key: 'sortLane', icon: 'move',  url: 'javascript:;', 'data-on': 'click', 'data-call': 'sortItems', 'data-params': 'event', 'data-type': 'lane', 'data-id': lane.id, 'data-region': lane.region});
+    if(lane.actionList.includes('deleteLane')) actions.push({text: kanbanLang.deleteLane, key: 'deleteLane', icon: 'trash',  url: $.createLink('kanban', 'deleteLane', 'regionID=' + lane.region + '&kanbanID=' + kanbanID + '&id=' + lane.id), 'data-confirm': laneLang.confirmDelete, 'innerClass': 'ajax-submit'});
     return [{
         type: 'dropdown',
         icon: 'ellipsis-v',
         caret: false,
-        items: [
-            lane.actionList.includes('editLaneName') ? {text: kanbanLang.editLaneName, icon: 'edit',  url: $.createLink('kanban', 'editLaneName', 'id=' + lane.id), 'data-toggle': 'modal'} : null,
-            lane.actionList.includes('editLaneColor') ? {text: kanbanLang.editLaneColor, icon: 'color',  url: $.createLink('kanban', 'editLaneColor', 'id=' + lane.id), 'data-toggle': 'modal'} : null,
-            lane.actionList.includes('sortLane') ? {text: kanbanLang.sortLane, icon: 'move',  url: 'javascript:;', 'data-on': 'click', 'data-call': 'sortItems', 'data-params': 'event', 'data-type': 'lane', 'data-id': lane.id, 'data-region': lane.region} : null,
-            lane.actionList.includes('deleteLane') ? {text: kanbanLang.deleteLane, icon: 'trash',  url: $.createLink('kanban', 'deleteLane', 'regionID=' + lane.region + '&kanbanID=' + kanbanID + '&id=' + lane.id), 'data-confirm': laneLang.confirmDelete, 'innerClass': 'ajax-submit'} : null,
-        ],
+        items: actions
     }];
 }
 
