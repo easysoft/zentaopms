@@ -14,7 +14,6 @@ class history extends wg
 {
     protected static array $defineProps = array
     (
-        'id?: string',                  // ID。
         'panel?: bool=true',            // 是否渲染为面板。
         'objectType?: string',          // 操作对象类型。
         'objectID?: int',               // 操作对象 ID。
@@ -71,17 +70,14 @@ class history extends wg
             if(!empty($actions))                     $actions = $app->loadTarget('action')->buildActionList($actions, $users, $this->prop('commentBtn'));
             $this->setProp('actions', $actions);
         }
-
-        if(!$this->hasProp('id')) $this->setProp('id', 'history_' . $objectType . '-' . $objectID);
     }
 
     protected function build(): wg
     {
-        list($id, $panel, $objectID, $objectType, $title, $actions, $commentUrl, $commentBtn) = $this->prop(array('id', 'panel', 'objectID', 'objectType', 'title', 'actions', 'commentUrl', 'commentBtn'));
+        list($panel, $objectID, $objectType, $title, $actions, $commentUrl, $commentBtn) = $this->prop(array('panel', 'objectID', 'objectType', 'title', 'actions', 'commentUrl', 'commentBtn'));
 
         return zui::historyPanel
         (
-            set::_id($id),
             $panel ? set::className('canvas py-1 px-2') : null,
             set::objectID($objectID),
             set::objectType($objectType),
