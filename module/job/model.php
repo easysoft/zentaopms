@@ -166,23 +166,12 @@ class jobModel extends model
     /**
      * Create a job.
      *
+     * @param  object $job
      * @access public
      * @return int|bool
      */
-    public function create()
+    public function create($job)
     {
-        $job = fixer::input('post')
-            ->setDefault('atDay,projectKey', '')
-            ->setDefault('sonarqubeServer', 0)
-            ->setIF($this->post->triggerType != 'commit', 'comment', '')
-            ->setIF($this->post->triggerType != 'schedule', 'atDay', '')
-            ->setIF($this->post->triggerType != 'schedule', 'atTime', '')
-            ->setIF($this->post->triggerType != 'tag', 'lastTag', '')
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::now())
-            ->remove('repoType,reference')
-            ->cleanInt('product')
-            ->get();
         $repo = $this->loadModel('repo')->getByID($job->repo);
 
         if($job->engine == 'jenkins')

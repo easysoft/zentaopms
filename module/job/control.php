@@ -117,7 +117,15 @@ class job extends control
     {
         if($_POST)
         {
-            $jobID = $this->job->create();
+            $job = form::data($this->config->job->form->create)
+                ->setIF($this->post->triggerType != 'commit', 'comment', '')
+                ->setIF($this->post->triggerType != 'schedule', 'atDay', '')
+                ->setIF($this->post->triggerType != 'schedule', 'atTime', '')
+                ->setIF($this->post->triggerType != 'tag', 'lastTag', '')
+                ->get();
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $jobID = $this->job->create($job);
             if(dao::isError())
             {
                 $errors = dao::getError();
@@ -150,7 +158,7 @@ class job extends control
         $this->loadModel('ci');
         $this->app->loadLang('action');
         $repoList    = $this->loadModel('repo')->getList($this->projectID, false);
-        $repoPairs   = array(0 => '');
+        $repoPairs   = array();
         $gitlabRepos = array(0 => '');
         $repoTypes   = array();
         $gitlabs     = array();
