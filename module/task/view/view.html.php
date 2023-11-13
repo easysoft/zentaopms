@@ -421,7 +421,7 @@
                   $canViewMR = common::hasPriv('mr', 'view');
                   foreach($linkMRTitles as $MRID => $linkMRTitle)
                   {
-                      echo ($canViewMR ? html::a($this->createLink('mr', 'view', "MRID=$MRID"), "#$MRID $linkMRTitle") : "#$MRID $linkMRTitle") . '<br />';
+                      echo ($canViewMR ? html::a($this->createLink('mr', 'view', "MRID=$MRID"), "#$MRID $linkMRTitle", '', "data-app={$app->tab}") : "#$MRID $linkMRTitle") . '<br />';
                   }
                   ?>
                 </td>
@@ -435,7 +435,7 @@
                   {
                       $revision    = substr($commit->revision, 0, 10);
                       $commitTitle = $revision . ' ' . $commit->comment;
-                      echo "<div class='link-commit' title='$commitTitle'>" . ($canViewRevision ? html::a($this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}"), "$revision") . ' ' . $commit->comment : $commitTitle) . '<br />';
+                      echo "<div class='link-commit' title='$commitTitle'>" . ($canViewRevision ? html::a($this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID={$task->execution}&revision={$commit->revision}"), "$revision", '', "data-app={$app->tab}") . ' ' . $commit->comment : $commitTitle) . '<br />';
                   }
                   ?>
                 </td>
