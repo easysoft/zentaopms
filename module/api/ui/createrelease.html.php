@@ -25,7 +25,7 @@ formPanel
         set::label($lang->api->desc),
         textarea
         (
-            set::name('desc'),
-        ),
-    ),
+            set::name('desc')
+        )
+    )
 );

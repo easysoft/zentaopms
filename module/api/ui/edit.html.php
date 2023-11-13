@@ -11,7 +11,7 @@ $defaultTR = function()
             input
             (
                 set::name('')
-            ),
+            )
         ),
         h::td
         (
@@ -22,7 +22,7 @@ $defaultTR = function()
             textarea
             (
                 set::rows(1)
-            ),
+            )
         ),
         h::td
         (
@@ -37,7 +37,7 @@ $defaultTR = function()
                 btn
                 (
                     setClass('btn ghost btn-delete'),
-                    icon('trash'),
+                    icon('trash')
                 ),
             )
         )
@@ -57,7 +57,7 @@ if(!empty($api->params['header']))
                 (
                     set::name(''),
                     set::value($param['field'])
-                ),
+                )
             ),
             h::td
             (
@@ -69,7 +69,7 @@ if(!empty($api->params['header']))
                 (
                     set::rows(1),
                     set::value($param['desc'])
-                ),
+                )
             ),
             h::td
             (
@@ -84,8 +84,8 @@ if(!empty($api->params['header']))
                     btn
                     (
                         setClass('btn ghost btn-delete'),
-                        icon('trash'),
-                    ),
+                        icon('trash')
+                    )
                 )
             )
         );
@@ -109,7 +109,7 @@ if(!empty($api->params['query']))
                 (
                     set::name(''),
                     set::value($query['field'])
-                ),
+                )
             ),
             h::td
             (
@@ -121,7 +121,7 @@ if(!empty($api->params['query']))
                 (
                     set::rows(1),
                     set::value($query['desc'])
-                ),
+                )
             ),
             h::td
             (
@@ -136,8 +136,8 @@ if(!empty($api->params['query']))
                     btn
                     (
                         setClass('btn ghost btn-delete'),
-                        icon('trash'),
-                    ),
+                        icon('trash')
+                    )
                 )
             )
         );
@@ -188,7 +188,7 @@ $parseTree = function($data, $typeList, $level = 0) use (&$parseTree)
             (
                 set::rows(1),
                 set::value($data['desc'])
-            ),
+            )
         ),
         h::td
         (
@@ -208,8 +208,8 @@ $parseTree = function($data, $typeList, $level = 0) use (&$parseTree)
                 btn
                 (
                     setClass('btn ghost btn-delete'),
-                    icon('trash'),
-                ),
+                    icon('trash')
+                )
             )
         )
     );
@@ -239,8 +239,8 @@ else
         (
             input
             (
-                set::name(''),
-            ),
+                set::name('')
+            )
         ),
         h::td
         (
@@ -261,7 +261,7 @@ else
             textarea
             (
                 set::rows(1)
-            ),
+            )
         ),
         h::td
         (
@@ -281,8 +281,8 @@ else
                 btn
                 (
                     setClass('btn ghost btn-delete'),
-                    icon('trash'),
-                ),
+                    icon('trash')
+                )
             )
         )
     );
@@ -304,8 +304,8 @@ else
         (
             input
             (
-                set::name(''),
-            ),
+                set::name('')
+            )
         ),
         h::td
         (
@@ -326,7 +326,7 @@ else
             textarea
             (
                 set::rows(1)
-            ),
+            )
         ),
         h::td
         (
@@ -346,8 +346,8 @@ else
                 btn
                 (
                     setClass('btn ghost btn-delete'),
-                    icon('trash'),
-                ),
+                    icon('trash')
+                )
             )
         )
     );
@@ -361,7 +361,7 @@ formPanel
         (
             setClass('panel-title text-lg'),
             $lang->api->edit
-        ),
+        )
     ),
     formGroup
     (
@@ -372,8 +372,8 @@ formPanel
             set::items($moduleOptionMenu),
             set::name('module'),
             set::value($api->module),
-            set::required(true),
-        ),
+            set::required(true)
+        )
     ),
     formGroup
     (
@@ -384,7 +384,7 @@ formPanel
         (
             set::name('title'),
             set::value($api->title)
-        ),
+        )
     ),
     formRow
     (
@@ -400,7 +400,7 @@ formPanel
                     set::required(true),
                     set::items($lang->api->protocalOptions),
                     set::name('protocol'),
-                    set::value($api->protocol),
+                    set::value($api->protocol)
                 ),
                 picker
                 (
@@ -408,8 +408,8 @@ formPanel
                     set::width('1/5'),
                     set::items($lang->api->methodOptions),
                     set::name('method'),
-                    set::value($api->method),
-                ),
+                    set::value($api->method)
+                )
             )
         ),
         formGroup
@@ -429,8 +429,8 @@ formPanel
         (
             set::name('requestType'),
             set::value($api->requestType),
-            set::items($lang->api->requestTypeOptions),
-        ),
+            set::items($lang->api->requestTypeOptions)
+        )
     ),
     formGroup
     (
@@ -440,8 +440,8 @@ formPanel
             set::name('status'),
             set::inline(true),
             set::value($api->status),
-            set::items($lang->api->statusOptions),
-        ),
+            set::items($lang->api->statusOptions)
+        )
     ),
     formGroup
     (
@@ -451,8 +451,8 @@ formPanel
         (
             set::name('owner'),
             set::items($allUsers),
-            set::value($api->owner),
-        ),
+            set::value($api->owner)
+        )
     ),
     formGroup
     (
@@ -480,11 +480,11 @@ formPanel
                 ),
                 h::th
                 (
-                    width('100px'),
-                ),
+                    width('100px')
+                )
             ),
-            $apiHeader,
-        ),
+            $apiHeader
+        )
     ),
     formGroup
     (
@@ -512,11 +512,11 @@ formPanel
                 ),
                 h::th
                 (
-                    width('100px'),
-                ),
+                    width('100px')
+                )
             ),
             $apiQuery
-        ),
+        )
     ),
     formGroup
     (
@@ -528,8 +528,8 @@ formPanel
             set::name('type'),
             set::inline(true),
             set::value($api->params['paramsType']),
-            set::items($lang->struct->typeOptions),
-        ),
+            set::items($lang->struct->typeOptions)
+        )
     ),
     formGroup
     (
@@ -562,11 +562,11 @@ formPanel
                 ),
                 h::th
                 (
-                    width('100px'),
-                ),
+                    width('100px')
+                )
             ),
             $apiParams
-        ),
+        )
     ),
     formHidden('params', json_encode($api->params)),
     formGroup
@@ -575,8 +575,8 @@ formPanel
         set::label($lang->api->paramsExample),
         textarea
         (
-            set::name('paramsExample'),
-        ),
+            set::name('paramsExample')
+        )
     ),
     formGroup
     (
@@ -609,11 +609,11 @@ formPanel
                 ),
                 h::th
                 (
-                    width('100px'),
-                ),
+                    width('100px')
+                )
             ),
             $apiResponse
-        ),
+        )
     ),
     formHidden('response', json_encode($api->response)),
     formGroup
@@ -622,8 +622,8 @@ formPanel
         set::label($lang->api->responseExample),
         textarea
         (
-            set::name('responseExample'),
-        ),
+            set::name('responseExample')
+        )
     ),
     formGroup
     (
@@ -631,7 +631,7 @@ formPanel
         editor
         (
             set::name('desc'),
-            html($api->desc),
-        ),
-    ),
+            html($api->desc)
+        )
+    )
 );

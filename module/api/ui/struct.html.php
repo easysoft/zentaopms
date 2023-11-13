@@ -29,7 +29,7 @@ toolbar
         'text'        => $lang->api->createStruct,
         'class'       => 'primary',
         'url'         => createLink('api', 'createStruct', "libID=$libID"),
-    ))) : null,
+    ))) : null
 );
 
 $structs = initTableData($structs, $config->api->dtable->struct->fieldList, $this->api);
@@ -40,5 +40,5 @@ dtable
     set::cols($cols),
     set::data($data),
     set::userMap($users),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );

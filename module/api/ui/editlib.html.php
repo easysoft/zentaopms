@@ -16,7 +16,7 @@ modalHeader
 (
     set::title($lang->api->editLib),
     set::entityID($lib->id),
-    set::entityText($lib->name),
+    set::entityText($lib->name)
 );
 
 formPanel
@@ -31,13 +31,13 @@ formPanel
     (
         set::label($lang->api->name),
         set::name('name'),
-        set::value($lib->name),
+        set::value($lib->name)
     ),
     formGroup
     (
         set::label($lang->api->baseUrl),
         set::name('baseUrl'),
-        set::value($lib->baseUrl),
+        set::value($lib->baseUrl)
     ),
     formRow
     (
@@ -50,8 +50,8 @@ formPanel
                 set::name('acl'),
                 set::items($lang->api->aclList),
                 set::value($lib->acl),
-                on::change("toggleAcl('lib')"),
-            ),
+                on::change("toggleAcl('lib')")
+            )
         )
     ),
     formRow
@@ -74,7 +74,7 @@ formPanel
                             set::name('groups[]'),
                             set::items($groups),
                             set::value($lib->groups),
-                            set::multiple(true),
+                            set::multiple(true)
                         )
                     )
                 ),
@@ -88,14 +88,14 @@ formPanel
                             set::name('users[]'),
                             set::items($users),
                             set::value($lib->users),
-                            set::multiple(true),
+                            set::multiple(true)
                         )
                     )
                 )
             )
         )
     ),
-    formHidden('type', $type),
+    formHidden('type', $type)
 );
 
 /* ====== Render page ====== */

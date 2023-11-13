@@ -25,7 +25,7 @@ if($app->rawModule == 'api')
             'icon'  => 'treemap',
             'class' => 'ghost',
             'text'  => $lang->api->struct,
-            'url'   => createLink('api', 'struct', "libID={$libID}"),
+            'url'   => createLink('api', 'struct', "libID={$libID}")
         ))) : null,
         $libID && common::hasPriv('api', 'releases') ? item(set(array
         (
@@ -64,7 +64,7 @@ if($app->rawModule == 'api')
             'icon'        => 'plus',
             'class'       => 'btn primary',
             'text'        => $lang->api->createApi,
-            'url'         => createLink('api', 'create', "libID={$libID}&moduleID={$moduleID}"),
+            'url'         => createLink('api', 'create', "libID={$libID}&moduleID={$moduleID}")
         ))) : null,
     );
 
@@ -97,7 +97,7 @@ foreach($apiList as $api)
                 (
                     setClass('desc'),
                     $api->title
-                ),
+                )
             )
         )
     );
@@ -109,7 +109,7 @@ $docContent = panel
     div
     (
         setClass('detail base-url'),
-        $lang->api->baseUrl . $delimiter . $lib->baseUrl,
+        $lang->api->baseUrl . $delimiter . $lib->baseUrl
     ),
     h::hr(setClass('mb-4')),
     div

@@ -18,7 +18,7 @@ for($itemVersion = $api->version; $itemVersion > 0; $itemVersion--)
     $link = createLink('api', 'index', "libID={$libID}&moduleID=$moduleID&apiID={$apiID}&version={$itemVersion}");
     $versionList[] = array(
         'text'     => "V$itemVersion",
-        'onClick'  => jsRaw("() => {loadPage('$link', '#docContent')}"),
+        'onClick'  => jsRaw("() => {loadPage('$link', '#docContent')}")
     );
 }
 
@@ -36,7 +36,7 @@ $parseTree = function($data, $typeList, $level = 0) use(&$parseTree)
         h::td(html($field)),
         h::td(zget($typeList, (string)$data['paramsType'], '')),
         h::td(zget($lang->api->boolList, (string)$data['required'], '')),
-        h::td($data['desc']),
+        h::td($data['desc'])
     );
 
     if(isset($data['children']) && count($data['children']) > 0)
@@ -58,7 +58,7 @@ if($api->params['header'])
             h::td($param['field']),
             h::td('String'),
             h::td(zget($lang->api->boolList, (string)$param['required'])),
-            h::td($param['desc']),
+            h::td($param['desc'])
         );
     }
 
@@ -71,7 +71,7 @@ if($api->params['header'])
             h::th($lang->api->req->name),
             h::th($lang->api->req->type),
             h::th($lang->api->req->required),
-            h::th($lang->api->req->desc),
+            h::th($lang->api->req->desc)
         ),
         $tbody
     );
@@ -87,7 +87,7 @@ if($api->params['query'])
             h::td($param['field']),
             h::td('String'),
             h::td(zget($lang->api->boolList, (string)$param['required'])),
-            h::td($param['desc']),
+            h::td($param['desc'])
         );
     }
 
@@ -100,7 +100,7 @@ if($api->params['query'])
             h::th($lang->api->req->name),
             h::th($lang->api->req->type),
             h::th($lang->api->req->required),
-            h::th($lang->api->req->desc),
+            h::th($lang->api->req->desc)
         ),
         $tbody
     );
@@ -120,7 +120,7 @@ if($api->params['params'])
             h::th($lang->api->req->name),
             h::th($lang->api->req->type),
             h::th($lang->api->req->required),
-            h::th($lang->api->req->desc),
+            h::th($lang->api->req->desc)
         ),
         $tbody
     );
@@ -140,7 +140,7 @@ if($api->response)
             h::th($lang->api->req->name),
             h::th($lang->api->req->type),
             h::th($lang->api->req->required),
-            h::th($lang->api->req->desc),
+            h::th($lang->api->req->desc)
         ),
         $tbody
     );
@@ -152,7 +152,7 @@ div
     setClass('flex flex-wrap content-start'),
     featureBar
     (
-        li(backBtn(setClass('ghost'), set::icon('back'), $lang->goback)),
+        li(backBtn(setClass('ghost'), set::icon('back'), $lang->goback))
     ),
     toolbar
     (
@@ -161,7 +161,7 @@ div
             'icon'  => 'treemap',
             'class' => 'ghost',
             'text'  => $lang->api->struct,
-            'url'   => createLink('api', 'struct', "libID={$libID}"),
+            'url'   => createLink('api', 'struct', "libID={$libID}")
         ))) : null,
         $libID && common::hasPriv('api', 'releases') ? item(set(array
         (
@@ -203,7 +203,7 @@ div
             'url'         => createLink('api', 'create', "libID={$libID}&moduleID={$moduleID}"),
             'data-size'   => 'lg',
             'data-toggle' => $spaceType != 'api' ? 'modal' : ''
-        ))) : null,
+        ))) : null
     ),
     div
     (
@@ -243,28 +243,28 @@ div
                         (
                             set::url('javascript:fullScreen()'),
                             setClass('btn ghost'),
-                            icon('fullscreen'),
+                            icon('fullscreen')
                         ),
                         (!$isRelease && common::hasPriv('api', 'edit')) ? btn
                         (
                             set::url(createLink('api', 'edit', "apiID=$api->id")),
                             setClass('btn ghost'),
-                            icon('edit'),
+                            icon('edit')
                         ) : null,
                         (!$isRelease && common::hasPriv('api', 'delete')) ? btn
                         (
                             set::url(createLink('api', 'delete', "apiID=$api->id")),
                             setClass('btn ghost ajax-submit'),
                             set('data-confirm', $lang->api->confirmDelete),
-                            icon('trash'),
+                            icon('trash')
                         ) : null,
                         btn
                         (
                             set::id('hisTrigger'),
                             set::url('###)'),
                             setClass('btn ghost'),
-                            icon('clock'),
-                        ),
+                            icon('clock')
+                        )
                     )
                 )
             ),
@@ -281,7 +281,7 @@ div
                 $api->paramsExample ? html("<pre><code>" . $api->paramsExample . "</code></pre>") : null,
                 $apiResponse,
                 $api->responseExample ? h3($lang->api->responseExample) : null,
-                $api->responseExample ? html("<pre><code>" . $api->responseExample . "</code></pre>") : null,
+                $api->responseExample ? html("<pre><code>" . $api->responseExample . "</code></pre>") : null
             )
         ),
         panel

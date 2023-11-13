@@ -18,7 +18,7 @@ formPanel
         (
             setClass('panel-title text-lg'),
             $lang->api->createStruct
-        ),
+        )
     ),
     formGroup
     (
@@ -37,8 +37,8 @@ formPanel
             set::name('type'),
             set::inline(true),
             set::value('formData'),
-            set::items($lang->struct->typeOptions),
-        ),
+            set::items($lang->struct->typeOptions)
+        )
     ),
     formGroup
     (
@@ -71,8 +71,8 @@ formPanel
                 ),
                 h::th
                 (
-                    width('100px'),
-                ),
+                    width('100px')
+                )
             ),
             h::tr
             (
@@ -82,7 +82,7 @@ formPanel
                 set('data-parent', '0'),
                 h::td
                 (
-                    input(),
+                    input()
                 ),
                 h::td
                 (
@@ -103,7 +103,7 @@ formPanel
                     textarea
                     (
                         set::rows(1)
-                    ),
+                    )
                 ),
                 h::td
                 (
@@ -123,12 +123,12 @@ formPanel
                         btn
                         (
                             setClass('btn ghost btn-delete'),
-                            icon('trash'),
-                        ),
+                            icon('trash')
+                        )
                     )
                 )
-            ),
-        ),
+            )
+        )
     ),
     formHidden('attribute'),
     formGroup
@@ -136,7 +136,7 @@ formPanel
         set::label($lang->api->desc),
         editor
         (
-            set::name('desc'),
+            set::name('desc')
         )
     )
 );

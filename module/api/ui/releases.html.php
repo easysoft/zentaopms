@@ -21,7 +21,7 @@ if(empty($releases))
         (
             setClass('text-gray'),
             $lang->api->noRelease
-        ),
+        )
     );
 }
 else
@@ -39,7 +39,7 @@ else
             h::td
             (
                 common::hasPriv('api', 'deleteRelease') ? html(html::a(helper::createLink('api', 'deleteRelease', "libID=$libID&id=$release->id"), '<i class="icon-trash"></i>', '', "data-confirm={$lang->custom->notice->confirmDelete} class='ghost ajax-submit'")) : null
-            ),
+            )
         );
     }
 

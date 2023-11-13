@@ -24,8 +24,8 @@ formPanel
             set::items($lang->api->libTypeList),
             set::value($type),
             set::inline(true),
-            on::change('toggleLibType'),
-        ),
+            on::change('toggleLibType')
+        )
     ),
     formRow
     (
@@ -38,7 +38,7 @@ formPanel
             set::name('product'),
             set::items($products),
             set::value($type == 'product' ? $objectID : 0),
-            set::required(true),
+            set::required(true)
         )
     ),
     formRow
@@ -52,21 +52,21 @@ formPanel
             set::name('project'),
             set::items($projects),
             set::value($type == 'project' ? $objectID : 0),
-            set::required(true),
+            set::required(true)
         )
     ),
     formGroup
     (
         set::label($lang->api->name),
         set::width('3/4'),
-        set::name('name'),
+        set::name('name')
     ),
     formGroup
     (
         set::label($lang->api->baseUrl),
         set::width('3/4'),
         set::name('baseUrl'),
-        set::placeholder($lang->api->baseUrlDesc),
+        set::placeholder($lang->api->baseUrlDesc)
     ),
     formRow
     (
@@ -79,7 +79,7 @@ formPanel
                 set::name('acl'),
                 set::items($lang->api->aclList),
                 set::value('open'),
-                on::change("toggleAcl('lib')"),
+                on::change("toggleAcl('lib')")
             )
         )
     ),
@@ -103,7 +103,7 @@ formPanel
                         (
                             set::name('groups[]'),
                             set::items($groups),
-                            set::multiple(true),
+                            set::multiple(true)
                         )
                     )
                 ),
@@ -116,13 +116,13 @@ formPanel
                         (
                             set::name('users[]'),
                             set::items($users),
-                            set::multiple(true),
+                            set::multiple(true)
                         )
                     )
                 )
             )
         )
-    ),
+    )
 );
 /* ====== Render page ====== */
 render();

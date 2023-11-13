@@ -54,7 +54,7 @@ if(!empty($struct->attribute))
                     set::rows(1),
                     set::name(''),
                     set::value($data['desc'])
-                ),
+                )
             ),
             h::td
             (
@@ -74,8 +74,8 @@ if(!empty($struct->attribute))
                     btn
                     (
                         setClass('btn ghost btn-delete'),
-                        icon('trash'),
-                    ),
+                        icon('trash')
+                    )
                 )
             )
         );
@@ -103,8 +103,8 @@ else
         (
             input
             (
-                set::name(''),
-            ),
+                set::name('')
+            )
         ),
         h::td
         (
@@ -125,8 +125,8 @@ else
             textarea
             (
                 set::rows(1),
-                set::name(''),
-            ),
+                set::name('')
+            )
         ),
         h::td
         (
@@ -146,8 +146,8 @@ else
                 btn
                 (
                     setClass('btn ghost btn-delete'),
-                    icon('trash'),
-                ),
+                    icon('trash')
+                )
             )
         )
     );
@@ -161,7 +161,7 @@ formPanel
         (
             setClass('panel-title text-lg'),
             $lang->api->editStruct
-        ),
+        )
     ),
     formGroup
     (
@@ -181,8 +181,8 @@ formPanel
             set::name('type'),
             set::inline(true),
             set::value($struct->type),
-            set::items($lang->struct->typeOptions),
-        ),
+            set::items($lang->struct->typeOptions)
+        )
     ),
     formGroup
     (
@@ -215,11 +215,11 @@ formPanel
                 ),
                 h::th
                 (
-                    width('100px'),
-                ),
+                    width('100px')
+                )
             ),
             $attributes
-        ),
+        )
     ),
     formHidden('attribute', $struct->attribute),
     formGroup
@@ -229,8 +229,8 @@ formPanel
         (
             set::name('desc'),
             html($struct->desc)
-        ),
-    ),
+        )
+    )
 );
 
 render();
