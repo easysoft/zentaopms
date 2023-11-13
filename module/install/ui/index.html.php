@@ -56,7 +56,7 @@ div
                     (
                         set::src($this->app->getWebRoot() . 'theme/default/images/main/weixin.jpg'),
                         width('200px'),
-                        height('200px'),
+                        height('200px')
                     ) : null
                 )
             ),

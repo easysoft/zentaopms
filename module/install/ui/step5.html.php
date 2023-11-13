@@ -74,7 +74,7 @@ div
                     password
                     (
                         set::name('password'),
-                        set::placeholder($lang->install->placeholder->password),
+                        set::placeholder($lang->install->placeholder->password)
                     )
                 )
             ),

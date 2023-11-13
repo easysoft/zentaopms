@@ -60,17 +60,17 @@ div
                     'text'  => $lang->install->solution->skip,
                     'href'  => createLink('install', 'step6'),
                     'id'    => 'skipBtn',
-                    'class' => 'btn hidden',
+                    'class' => 'btn hidden'
                 ),
                 array(
                     'text'    => $lang->solution->install,
                     'id'      => 'submitBtn',
                     'class'   => 'btn primary',
                     'onclick' => 'checkSolution(this)'
-                ),
+                )
             ))
-        ),
-    ),
+        )
+    )
 );
 
 render('pagebase');

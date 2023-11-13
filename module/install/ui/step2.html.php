@@ -65,7 +65,7 @@ div
                                 set::name('defaultLang'),
                                 set::items($config->langs),
                                 set::value($app->getClientLang())
-                            ),
+                            )
                         ),
                         h::td()
                     ),
@@ -154,7 +154,7 @@ div
                             (
                                 set::name('dbPassword'),
                                 set::value($dbPassword)
-                            ),
+                            )
                         ),
                         h::td()
                     ),
@@ -167,7 +167,7 @@ div
                             (
                                 set::name('dbName'),
                                 set::value($dbName)
-                            ),
+                            )
                         ),
                         h::td()
                     ),

@@ -89,10 +89,10 @@ div
                     'id'      => 'cancelInstallBtn',
                     'class'   => 'btn',
                     'onclick' => 'cancelInstall(this)'
-                ),
+                )
             ))
-        ),
-    ),
+        )
+    )
 );
 
 if(!helper::isAjaxRequest('modal')) render('pagebase');
