@@ -43,7 +43,7 @@ detailBody
         (
             set::content($logs),
             set::useHtml(true)
-        ),
+        )
     )
 );
 

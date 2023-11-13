@@ -22,7 +22,7 @@ if($repoID)
 featureBar
 (
     set::current('compile'),
-    set::link($this->createLink('{key}', 'browse', "repoID=$repoID")),
+    set::link($this->createLink('{key}', 'browse', "repoID=$repoID"))
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -39,7 +39,7 @@ dtable
     set::sortLink(createLink('compile', 'browse', "repoID=$repoID&jobID={$jobID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();
