@@ -20,7 +20,7 @@ class repoTao extends repoModel
      * @access protected
      * @return string|false
      */
-    protected function getLastRevision(int $repoID): string|false
+    protected function getLastRevision(int $repoID)
     {
         return $this->dao->select('time')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->orderBy('time_desc')->fetch('time');
     }

@@ -174,7 +174,7 @@ class repoModel extends model
      * @access public
      * @return int|false
      */
-    public function create(object $repo, bool $isPipelineServer): int|false
+    public function create(object $repo, bool $isPipelineServer)
     {
         $this->dao->insert(TABLE_REPO)->data($repo, 'serviceToken')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
@@ -219,7 +219,7 @@ class repoModel extends model
      * @access public
      * @return int|false
      */
-    public function createRepo(object $repo, int $namespace): int|false
+    public function createRepo(object $repo, int $namespace)
     {
         $check = $this->repoTao->checkName($repo);
         if(!$check)
@@ -269,7 +269,7 @@ class repoModel extends model
      * @access public
      * @return object|false
      */
-    public function createGitlabRepo(object $repo, int $namespace): object|false
+    public function createGitlabRepo(object $repo, int $namespace)
     {
         $project = new stdclass();
         $project->name                   = $repo->name;
@@ -300,7 +300,7 @@ class repoModel extends model
      * @access public
      * @return object|false
      */
-    public function createGiteaRepo(object $repo, int $namespaceID): object|false
+    public function createGiteaRepo(object $repo, int $namespaceID)
     {
         $namespace = $this->getGroups($repo->serviceHost, $namespaceID);
 
@@ -3066,7 +3066,7 @@ class repoModel extends model
      * @access public
      * @return string|array|false
      */
-    public function getGroups(int|string $serverID, int|string $groupID = 0): string|array|false
+    public function getGroups($serverID, $groupID = 0)
     {
         $server       = $this->loadModel('pipeline')->getByID($serverID);
         $getGroupFunc = 'get' . $server->type . 'Groups';
@@ -3175,7 +3175,7 @@ class repoModel extends model
      * @access public
      * @return string|false
      */
-    public function checkGiteaConnection(string $scm, string $name, int|string $serviceHost, int|string $serviceProject): string|false
+    public function checkGiteaConnection(string $scm, string $name, $serviceHost, $serviceProject)
     {
         if($name != '' and $serviceProject != '')
         {
