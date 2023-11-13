@@ -73,16 +73,16 @@ formBatchPanel
                         $lang->todo->periods['future'],
                         on::click('window.changFuture')
                     )
-                ),
-            ),
-        ),
+                )
+            )
+        )
     ),
     formBatchItem
     (
         set::name('id'),
         set::label($lang->idAB),
         set::control('index'),
-        set::width('30px'),
+        set::width('30px')
     ),
     formBatchItem
     (
@@ -91,7 +91,7 @@ formBatchPanel
         set::width('120px'),
         set::control('picker'),
         set::value('custom'),
-        set::items($lang->todo->typeList),
+        set::items($lang->todo->typeList)
     ),
     formBatchItem
     (
@@ -100,19 +100,19 @@ formBatchPanel
         set::width('80px'),
         set::control('priPicker'),
         set::value('3'),
-        set::items($lang->todo->priList),
+        set::items($lang->todo->priList)
     ),
     formBatchItem
     (
         set::name('name'),
         set::label($lang->todo->name),
-        set::minWidth('100px'),
+        set::minWidth('100px')
     ),
     formBatchItem
     (
         set::name('desc'),
         set::label($lang->todo->desc),
-        set::control('textarea'),
+        set::control('textarea')
     ),
     formBatchItem
     (
@@ -122,7 +122,7 @@ formBatchPanel
         set::ditto(true),
         set::width('140px'),
         set::control('picker'),
-        set::items($users),
+        set::items($users)
     ),
     formBatchItem
     (
@@ -156,13 +156,13 @@ formBatchPanel
                 (
                     setClass('time-check'),
                     set::name('switchTime'),
-                    $lang->todo->periods['future'],
+                    $lang->todo->periods['future']
                 )
             )
         )
     ),
     input(set::type('hidden'), set::name('date'), set::value($date)),
-    input(set::type('hidden'), set::name('futureDate'), set::value(0)),
+    input(set::type('hidden'), set::name('futureDate'), set::value(0))
 );
 
 /* ====== Render page ====== */

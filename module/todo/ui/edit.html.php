@@ -103,7 +103,7 @@ $buildCycleOfDayConfig = function(object $todo): mixed
             (
                 setClass('have-fix'),
                 span(setClass('input-group-addon justify-center'), $lang->todo->from),
-                datePicker(setID('config_date'), set::name('config[date]'), set::value($todo->date ? $todo->date : date('Y-m-d')), on::change('verifyCycleDate')),
+                datePicker(setID('config_date'), set::name('config[date]'), set::value($todo->date ? $todo->date : date('Y-m-d')), on::change('verifyCycleDate'))
             )
         ),
         formGroup
@@ -193,7 +193,7 @@ $buildCycleOfMonthConfig = function(object $todo): mixed
             inputGroup
             (
                 span(setClass('input-group-addon'), $lang->todo->monthly),
-                picker(set(array('required' => true, 'id' => 'config_month', 'name' => 'config[month]', 'items' => $days, 'value' => isset($todo->config->month) ? $todo->config->month : ''))),
+                picker(set(array('required' => true, 'id' => 'config_month', 'name' => 'config[month]', 'items' => $days, 'value' => isset($todo->config->month) ? $todo->config->month : '')))
             )
         )
     );
@@ -322,7 +322,7 @@ $buildDeadline = function($todo): mixed
         (
             set::width('1/3'),
             set::label($lang->todo->deadline),
-            datePicker(setID('config_end'), set::name('config[end]'), set::value(isset($todo->config->end) ? $todo->config->end : '')),
+            datePicker(setID('config_end'), set::name('config[end]'), set::value(isset($todo->config->end) ? $todo->config->end : ''))
         )
     );
 };
@@ -391,7 +391,7 @@ $buildTodoType = function(object $todo)
     (
         set::width('1/3'),
         set::label($lang->todo->type),
-        picker(set(array('required' => true, 'name' => 'type', 'items' => $lang->todo->typeList, 'value' => $todo->type, 'onchange' => 'changeType(this)'))),
+        picker(set(array('required' => true, 'name' => 'type', 'items' => $lang->todo->typeList, 'value' => $todo->type, 'onchange' => 'changeType(this)')))
     );
 };
 
@@ -403,7 +403,7 @@ formPanel
         setClass('flex items-center pb-2.5'),
         span($lang->todo->edit),
         span(setClass('text-lg font-bold ml-3'), $todo->name),
-        label(setClass('circle ml-2 label-id px-2'), $todo->id),
+        label(setClass('circle ml-2 label-id px-2'), $todo->id)
     ),
     $buildDateControl($todo),
     $todo->cycle ? fragment
@@ -490,7 +490,7 @@ formPanel
             set::width('1/5'),
             setClass('priBox'),
             set::label($lang->todo->pri),
-            priPicker(setID('pri'), set::name('pri'), set::items($lang->todo->priList), set::value($todo->pri)),
+            priPicker(setID('pri'), set::name('pri'), set::items($lang->todo->priList), set::value($todo->pri))
         )
     ),
     formGroup
@@ -499,13 +499,13 @@ formPanel
         setID('desc'),
         set::name('desc'),
         set::control('editor'),
-        set::value(htmlSpecialString($todo->desc)),
+        set::value(htmlSpecialString($todo->desc))
     ),
     formGroup
     (
         set::width('1/3'),
         set::label($lang->todo->status),
-        set::control(array('type' => 'picker', 'id' => 'status', 'name' => 'status', 'items' => $lang->todo->statusList, 'value' => $todo->status)),
+        set::control(array('type' => 'picker', 'id' => 'status', 'name' => 'status', 'items' => $lang->todo->statusList, 'value' => $todo->status))
     ),
     formRow
     (
@@ -551,7 +551,7 @@ formPanel
                     ),
                     on::change('verifyEndTime')
                 )
-            ),
+            )
         ),
         div
         (

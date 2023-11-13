@@ -49,10 +49,10 @@ div
             (
                 setClass('time-check'),
                 set::name('switchTime'),
-                $lang->todo->periods['future'],
+                $lang->todo->periods['future']
             )
         )
-    ),
+    )
 );
 
 formBatchPanel
@@ -70,21 +70,21 @@ formBatchPanel
         set::name('id'),
         set::label($lang->idAB),
         set::control('hidden'),
-        set::hidden(true),
+        set::hidden(true)
     ),
     formBatchItem
     (
         set::name('id'),
         set::label($lang->idAB),
         set::control('index'),
-        set::width('64px'),
+        set::width('64px')
     ),
     formBatchItem
     (
         set::name('date'),
         set::label($lang->todo->date),
         set::width('120px'),
-        set::control('datePicker'),
+        set::control('datePicker')
     ),
     formBatchItem
     (
@@ -92,7 +92,7 @@ formBatchPanel
         set::label($lang->todo->type),
         set::width('100px'),
         set::control('picker'),
-        set::items($lang->todo->typeList),
+        set::items($lang->todo->typeList)
     ),
     formBatchItem
     (
@@ -100,12 +100,12 @@ formBatchPanel
         set::label($lang->todo->pri),
         set::width('60px'),
         set::control('priPicker'),
-        set::items($lang->todo->priList),
+        set::items($lang->todo->priList)
     ),
     formBatchItem
     (
         set::name('name'),
-        set::label($lang->todo->name),
+        set::label($lang->todo->name)
     ),
     formBatchItem
     (
@@ -113,13 +113,13 @@ formBatchPanel
         set::label($lang->todo->assignedTo),
         set::width('120px'),
         set::control('picker'),
-        set::items($users),
+        set::items($users)
     ),
     formBatchItem
     (
         set::name('beginAndEnd'),
         set::label($lang->todo->beginAndEnd),
-        set::width('260px'),
+        set::width('260px')
     ),
     formBatchItem
     (
@@ -128,7 +128,7 @@ formBatchPanel
         set::width('100px'),
         set::control('picker'),
         set::items($lang->todo->statusList)
-    ),
+    )
 );
 /* ====== Render page ====== */
 render();

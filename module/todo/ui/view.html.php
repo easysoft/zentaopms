@@ -61,7 +61,7 @@ if(hasPriv('story', 'create') && $config->vision != 'lite')
                     (
                         set::name('product'),
                         set::items($products),
-                        set::required(true),
+                        set::required(true)
                     ),
                     btn
                     (
@@ -71,8 +71,8 @@ if(hasPriv('story', 'create') && $config->vision != 'lite')
                         on::click('toStory')
                     )
                 )
-            ),
-        ),
+            )
+        )
     );
 }
 
@@ -94,7 +94,7 @@ if(hasPriv('story', 'create') && $config->vision == 'lite')
                     (
                         set::name('projectToStory'),
                         set::items($projects),
-                        set::required(true),
+                        set::required(true)
                     ),
                     btn
                     (
@@ -104,8 +104,8 @@ if(hasPriv('story', 'create') && $config->vision == 'lite')
                         on::click('toStory')
                     )
                 )
-            ),
-        ),
+            )
+        )
     );
 }
 
@@ -192,9 +192,9 @@ if(hasPriv('bug', 'create'))
                 (
                     set::name('bugProduct'),
                     set::items($projectProducts),
-                    set::required(true),
+                    set::required(true)
                 )
-            ),
+            )
         )
     );
 }
@@ -272,7 +272,7 @@ $fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects, 
     (
         setID('navActions'),
         setClass('menu dropdown-menu'),
-        set::items($suffixItems),
+        set::items($suffixItems)
     );
 
     return $actionList;
@@ -293,7 +293,7 @@ $fnGenerateFrom = function() use ($app, $lang, $config, $todo)
         $objectData[] = item
         (
             set::title($lang->{$todo->type}->{$relatedTitle}),
-            empty($content) ? $lang->noData : html($content),
+            empty($content) ? $lang->noData : html($content)
         );
     }
 
@@ -305,10 +305,10 @@ $fnGenerateFrom = function() use ($app, $lang, $config, $todo)
             entityLabel
             (
                 set::entityID($todo->objectID),
-                set::text($todo->name),
+                set::text($todo->name)
             ),
-            $objectData,
-        ),
+            $objectData
+        )
     );
 
     /* Generate from item. */
@@ -321,8 +321,8 @@ $fnGenerateFrom = function() use ($app, $lang, $config, $todo)
             set('data-toggle', 'modal'),
             set('data-data-type', 'html'),
             set('data-type', 'ajax'),
-            $todo->name,
-        ),
+            $todo->name
+        )
     );
 
     return array($fromItem, $fromItemData);
@@ -377,7 +377,7 @@ $isInModal && modalHeader();
             set::text($todo->name)
         ),
         $todo->deleted ? span(setClass('label danger circle'), $lang->todo->deleted) : null
-    ),
+    )
 );
 
 detailBody
@@ -389,7 +389,7 @@ detailBody
             set::title($lang->todo->desc),
             set::content(nl2br($todo->desc)),
             set::useHtml(true),
-            to::actions($fnGenerateTitleSuffix()),
+            to::actions($fnGenerateTitleSuffix())
         ),
         $fromItemData,
         history(),
@@ -419,7 +419,7 @@ detailBody
 
                 !isset($todo->assignedTo) ? null : item(set::name($lang->todo->assignedTo),   zget($users, $todo->assignedTo)),
                 !isset($todo->assignedTo) ? null : item(set::name($lang->todo->assignedBy),   zget($users, $todo->assignedBy)),
-                !isset($todo->assignedTo) ? null : item(set::name($lang->todo->assignedDate), formatTime($todo->assignedDate, DT_DATE1)),
+                !isset($todo->assignedTo) ? null : item(set::name($lang->todo->assignedDate), formatTime($todo->assignedDate, DT_DATE1))
             )
         )),
         /* Cycle information. */
@@ -431,10 +431,10 @@ detailBody
             tableData
             (
                 item(set::name($lang->todo->beginAndEnd), $todo->config->begin . " ~ " . $todo->config->end),
-                item(set::name($lang->todo->cycleConfig), html($fnGenerateCycleCfg())),
+                item(set::name($lang->todo->cycleConfig), html($fnGenerateCycleCfg()))
             )
         )) : null
-    ),
+    )
 );
 
 render();

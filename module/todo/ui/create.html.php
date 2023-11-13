@@ -94,7 +94,7 @@ formPanel
                     )
                 ) : null
             )
-        ),
+        )
     ),
     formRow
     (
@@ -142,7 +142,7 @@ formPanel
                     set::name('config[date]'),
                     set::className('cycle-date'),
                     on::change("e.target.closest('.input-group').classList.toggle('has-error', !e.target.value)")
-                ),
+                )
             )
         ),
         formGroup
@@ -339,7 +339,7 @@ formPanel
         set::items($lang->todo->typeList),
         set::name('type'),
         set::required(true),
-        on::change("loadList(e.target.value, '');"),
+        on::change("loadList(e.target.value, '');")
     ),
     formRow
     (
@@ -351,7 +351,7 @@ formPanel
             set::items($users),
             set::value($app->user->account),
             set::name('assignedTo'),
-            on::change("$('#private').prop('disabled', e.target.value !== '{$app->user->account}');"),
+            on::change("$('#private').prop('disabled', e.target.value !== '{$app->user->account}');")
         ),
         formGroup
         (
@@ -369,8 +369,8 @@ formPanel
                 set::icon('help'),
                 toggle::tooltip(array('placement' => 'top-start', 'title' => $lang->todo->privateTip)),
                 set::square(true),
-                set::className('ghost h-6 mt-0.5 tooltip-btn'),
-            ),
+                set::className('ghost h-6 mt-0.5 tooltip-btn')
+            )
         )
     ),
     formRow
@@ -391,8 +391,8 @@ formPanel
             set::width('1/5'),
             setClass('priBox'),
             set::label($lang->todo->pri),
-            priPicker(setID('pri'), set::name('pri'), set::items($lang->todo->priList), set::value(3)),
-        ),
+            priPicker(setID('pri'), set::name('pri'), set::items($lang->todo->priList), set::value(3))
+        )
     ),
     formGroup
     (
@@ -451,7 +451,7 @@ formPanel
                             'name'     => 'end',
                             'required' => true,
                             'items'    => $times,
-                            'value'    => date('Y-m-d') != $date ? $timesKeys[3] : $defaultEnd,
+                            'value'    => date('Y-m-d') != $date ? $timesKeys[3] : $defaultEnd
                         )
                     ),
                     on::change('verifyEndTime')
