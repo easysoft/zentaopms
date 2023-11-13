@@ -35,6 +35,7 @@ $(function()
 
     var appsWindow = window.frames['iframePage'];
     var checkTaskId = null, modalShowTaskId;
+    var checkFormReadyId = null;
     var showToolTipTask = null;
 
     var getApp = function(code)
@@ -91,6 +92,7 @@ $(function()
             var $appBody = appWindow.$('body');
             $appBody.find('.hl-tutorial').removeClass('hl-tutorial hl-in');
             $appBody.find('.tooltip-tutorial').tooltip('destroy').removeClass('tooltip-tutorial');
+            $appBody.find('.popover').remove();
         }
     };
 
@@ -123,7 +125,8 @@ $(function()
 
             $.post(ajaxSetTasksUrl, {finish: postData.join(',')}, function(e)
             {
-                if(e.result === 'success')
+                result = JSON.parse(e);
+                if(result.result === 'success')
                 {
                     $task.addClass('finish').find('[data-target]').removeClass('active').removeClass('wait').addClass('finish');
                     updateUI();
@@ -134,7 +137,7 @@ $(function()
                     setting[current] = false;
                     alert(serverErrorTip);
                 }
-            }, 'json').error(function() {alert(lang.timeout)});
+            }, 'json').fail(function(e) {alert(lang.timeout)});
         }
     };
 
@@ -153,7 +156,7 @@ $(function()
             {
                 alert(serverErrorTip);
             }
-        }, 'json').error(function() {alert(lang.timeout)});
+        }, 'json').fail(function() {alert(lang.timeout)});
     };
 
     var showToolTip = function($e, text, options)
@@ -235,6 +238,124 @@ $(function()
         }
     };
 
+    var checkFormReady = function()
+    {
+        clearTips();
+
+        var iWindow = getAppWindow();
+        if(!iWindow || !iWindow.$) return tryCheckTask();
+        var task = tasks[current];
+        var appCode = task.nav.app || task.nav.menuModule || task.nav['module'];
+        var app = getApp(appCode);
+        if(!app) return;
+
+        var $$ = iWindow.$;
+        var pageConfig = iWindow.config;
+        var currentModule  = (iWindow.TUTORIAL ? iWindow.TUTORIAL['module'] : pageConfig ? pageConfig.currentModule : '').toLowerCase();
+        var currentMethod  = (iWindow.TUTORIAL ? iWindow.TUTORIAL['method'] : pageConfig ? pageConfig.currentMethod : '').toLowerCase();
+        var targetStatus = {},
+            $navTarget = $task.find('[data-target="nav"]').removeClass('active'),
+            $formTarget = $task.find('[data-target="form"]').removeClass('active'),
+            $submitTarget = $task.find('[data-target="submit"]').removeClass('active');
+        targetStatus.nav = task.nav['module'].toLowerCase() === currentModule && task.nav['method'].toLowerCase() === currentMethod && (!task.nav.app || task.nav.app === appCode);
+
+        var requiredFields = task.nav.requiredFields || pageConfig.requiredFields;
+
+        if(task.nav.formType === 'table')
+        {
+            targetStatus.form = true;
+            if(current === 'manageTeam') fieldSelector = '#' + task.nav.requiredFields;
+            else fieldSelector = '.dtable-checkbox';
+
+            var $formItem = $$(fieldSelector);
+            targetStatus.form = $formItem && ($formItem.eq(1).hasClass('checked') || ($formItem.val() !== undefined && $formItem.val() !== null && $formItem.val() !== '' && $formItem.val() !== '0'));
+            if(!targetStatus.form) {
+                targetStatus.waitField = $formItem.closest('div');
+            }
+        }
+        else if(requiredFields)
+        {
+            targetStatus.form = true;
+            requiredFields = requiredFields.split(',');
+            $.each(requiredFields, function(idx, requiredId)
+            {
+                var $required = $$('#' + requiredId);
+                var $authBlock = !$required.is('input') ? $required.find('input').last() : $required;
+                if($authBlock.length)
+                {
+                    var val = $authBlock.val();
+                    if(val === undefined || val === null || val === '' || val === '0')
+                    {
+                        targetStatus.form = false;
+                        if(!targetStatus.waitField) targetStatus.waitField = $required;
+                        showFormPopver = false;
+                    }
+                }
+            });
+        }
+
+        var $form = $$(task.nav.form);
+        var $formWrapper = $form.closest('#mainContent');
+        if(!$formWrapper.length) $formWrapper = $form;
+
+        if(targetStatus.form)
+        {
+            if(showToolTipTask) clearTimeout(showToolTipTask);
+
+            $submitTarget.addClass('active');
+            if(task.nav.submit) showToolTip($form.find(task.nav.submit), $submitTarget.text(), {placement: 'top'});
+        }
+        else
+        {
+            if(targetStatus.waitField)
+            {
+                if(targetStatus.waitField.hasClass("chosen-controled")) targetStatus.waitField = targetStatus.waitField.next();
+                var fieldName = targetStatus.waitField.siblings('label').text();
+                if(!fieldName) fieldName = targetStatus.waitField.find('label').text();
+                if(!fieldName) fieldName = targetStatus.waitField.parent().siblings('label').text();
+                if(fieldName) showToolTip(targetStatus.waitField, lang.requiredTip.replace('%s', fieldName));
+                highlight(targetStatus.waitField, function()
+                {
+                    clearTimeout(showToolTipTask);
+                    showToolTipTask = setTimeout(function()
+                    {
+                        targetStatus.waitField.closest('td').find('#typeLabel').remove();
+                        showToolTip($formWrapper, $formTarget.text());
+                        highlight($formWrapper);
+                    }, 2000);
+                });
+            }
+            $formTarget.addClass('active');
+        }
+
+        $navTarget.toggleClass('finish', !!targetStatus.nav);
+        $formTarget.toggleClass('finish', !!targetStatus.form);
+        $submitTarget.toggleClass('finish', !!targetStatus.submit);
+        $navTarget.toggleClass('wait', !$navTarget.is('.finish,.active'));
+        $formTarget.toggleClass('wait', !$formTarget.is('.finish,.active'));
+        $submitTarget.toggleClass('wait', !$submitTarget.is('.finish,.active'));
+        $openTaskPage.toggleClass('open', targetStatus.nav);
+
+        targetStatus.submitOK = targetStatus.nav && targetStatus.form;
+
+        return targetStatus;
+    }
+
+    var tryCheckFormReady = function()
+    {
+        if(checkFormReadyId) clearTimeout(checkFormReadyId);
+
+        var iWindow = getAppWindow();
+        if(!(iWindow && iWindow.config && iWindow.$))
+        {
+            checkFormReadyId = setTimeout(tryCheckFormReady, 1000);
+        }
+        else
+        {
+            checkFormReadyId = setTimeout(checkFormReady, 200);
+        }
+    }
+
     var checkTask = function()
     {
         clearTips();
@@ -268,12 +389,8 @@ $(function()
 
             if(task.nav.formType === 'table')
             {
-                fieldSelector = '.dtable-checkbox';
-                var $checkboxes = $$(fieldSelector).eq(1);
-                targetStatus.form = $checkboxes.hasClass('checked');
-                if(!targetStatus.form) {
-                    targetStatus.waitField = $checkboxes.closest('div');
-                }
+                if(current === 'manageTeam') fieldSelector = '#' + task.nav.requiredFields;
+                else fieldSelector = '.dtable-checkbox';
             }
             else if(requiredFields)
             {
@@ -282,17 +399,6 @@ $(function()
                 $.each(requiredFields, function(idx, requiredId)
                 {
                     fieldSelector += ',' + '#' + requiredId;
-                    var $required = $$('#' + requiredId);
-                    var $authBlock = !$required.is('input') ? $required.find('input').last() : $required;
-                    if($authBlock.length)
-                    {
-                        var val = $authBlock.val();
-                        if(val === undefined || val === null || val === '' || val === '0')
-                        {
-                            targetStatus.form = false;
-                            if(!targetStatus.waitField) targetStatus.waitField = $required;
-                        }
-                    }
                 });
                 if(fieldSelector.length > 1) fieldSelector = fieldSelector.substring(1);
             }
@@ -300,42 +406,18 @@ $(function()
             if(!$form.data('bindCheckTaskEvent'))
             {
                 $form.off('.tutorial').off('submit');
-                $form.on('change.tutorial', fieldSelector, tryCheckTask);
+
                 var onSubmit = function(e)
                 {
-                    var status = checkTask();
-                    if(!status.submitOK)
+                    var status = checkFormReady();
+                    if(status.submitOK)
                     {
-                        if(status.waitField)
-                        {
-                            if(status.waitField.hasClass("chosen-controled")) status.waitField = status.waitField.next();
-                            var fieldName = status.waitField.siblings('label').text();
-                            if(!fieldName) fieldName = status.waitField.find('label').text();
-                            if(!fieldName) fieldName = status.waitField.parent().siblings('label').text();
-                            if(fieldName) showToolTip(status.waitField, lang.requiredTip.replace('%s', fieldName));
-                            highlight(status.waitField, function()
-                            {
-                                clearTimeout(showToolTipTask);
-                                showToolTipTask = setTimeout(function()
-                                {
-                                    status.waitField.closest('td').find('#typeLabel').remove();
-                                    showToolTip($formWrapper, $formTarget.text());
-                                    highlight($formWrapper);
-                                }, 2000);
-                            });
-                        }
-                    }
-                    else
-                    {
+                        clearTips();
                         finishTask();
                     }
 
-                    if(e)
-                    {
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }
-
+                    e.preventDefault();
+                    e.stopPropagation();
                     return false;
                 }
 
@@ -368,16 +450,14 @@ $(function()
                 }
             }
 
-            if(targetStatus.form)
-            {
-                clearTips();
-                $submitTarget.addClass('active');
-                if(task.nav.submit) showToolTip($form.find(task.nav.submit), $submitTarget.text(), {placement: 'top'});
-            }
-            else
-            {
-                $formTarget.addClass('active');
-            }
+            setTimeout(
+                function()
+                {
+                    $form.on('change.tutorial', fieldSelector, tryCheckFormReady)
+                    $form.on('blur.tutorial', fieldSelector, tryCheckFormReady)
+                },
+                2000
+            )
         }
         else
         {
@@ -470,15 +550,6 @@ $(function()
                 }
             }
         }
-        $navTarget.toggleClass('finish', !!targetStatus.nav);
-        $formTarget.toggleClass('finish', !!targetStatus.form);
-        $submitTarget.toggleClass('finish', !!targetStatus.submit);
-        $navTarget.toggleClass('wait', !$navTarget.is('.finish,.active'));
-        $formTarget.toggleClass('wait', !$formTarget.is('.finish,.active'));
-        $submitTarget.toggleClass('wait', !$submitTarget.is('.finish,.active'));
-        $openTaskPage.toggleClass('open', targetStatus.nav);
-
-        targetStatus.submitOK = targetStatus.nav && targetStatus.form;
 
         return targetStatus;
     };
@@ -563,6 +634,7 @@ $(function()
         {
             appsWindow.$(appsWindow.document).on('reloadapp.apps openapp.apps showapp.apps closeapp.apps hideapp.apps', function()
             {
+                appsWindow.$('body').find('.popover').remove();
                 tryCheckTutorialState(1000);
             });
             appsWindow.$('#menuMoreList').siblings('a').on('click', function(){

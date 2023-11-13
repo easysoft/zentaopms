@@ -69,11 +69,11 @@
 #taskModalBack.in {filter: alpha(opacity=60); opacity: 0.6;}
 #taskModal {width: 500px; position: absolute; background: #43a047; color: #fff; text-align: center; overflow: hidden; transform: scale(.5) translate(0, 200px) rotateX(120deg); transition: transform .4s, opacity .4s; opacity: 0; transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1); top: 0; padding: 30px; left: 50%; margin-left: -250px; top: 20%; box-shadow: 0 0 20px 0 rgba(0,0,0,.25); display: none;}
 #taskModal.in {transform: scale(1) translate(0) rotateX(0); opacity: 1;}
-#taskModal h3 {margin-bottom: 20px;}
+#taskModal h3 {margin-bottom: 20px; font-size: 18px; font-weight: 700}
 #taskModal .start-icon > .icon-spin {-moz-animation: spin 10s infinite linear; -o-animation: spin 10s infinite linear; -webkit-animation: spin 10s infinite linear; animation: spin 10s infinite linear;}
 #taskModal .start-icon {width: 60px; height: 60px; text-align: center; margin: 10px auto; position: relative;}
 #taskModal .start-icon > .icon-front {font-size: 56px; color: #fff; line-height: 60px; width: 60px; height: 60px; position: absolute; left: 0; top: 0;}
-#taskModal > .close {position: absolute; right: 15px; top: 10px;}
+#taskModal > .close {position: absolute; right: 15px; top: 10px; cursor: pointer;}
 #taskModal > .finish-all {display: none;}
 #taskModal > .finish {display: block;}
 #taskModal.show-all > .finish-all {display: block;}

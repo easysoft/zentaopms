@@ -68,6 +68,69 @@ div
             set::src(helper::createLink('index', 'index', 't=tutorial')),
         )
     ),
+    div(set::id('taskModalBack')),
+    div
+    (
+        set::id('taskModal'),
+        div
+        (
+            set::className('close'),
+            set::icon('close'),
+        ),
+        div
+        (
+            set::className('finish-all'),
+            div
+            (
+                set::className('start-icon'),
+                icon(
+                    set::class('icon-front'),
+                    'check-circle'
+                ),
+            ),
+            h::h3($lang->tutorial->congratulation),
+            btn
+            (
+                set::icon('restart'),
+                set::className('btn btn-outline btn-reset-tasks'),
+                $lang->tutorial->restart
+            ),
+            ' ',
+            btn
+            (
+                set::className('btn btn-outline'),
+                set::url(helper::createLink('tutorial', 'quit')),
+                $lang->tutorial->exit
+            )
+        ),
+        div
+        (
+            set::className('finish'),
+            div
+            (
+                set::className('start-icon'),
+                icon(
+                    set::class('icon-front'),
+                    'check-circle'
+                ),
+            ),
+            h::h3(
+                $lang->tutorial->congratulateTask,
+                "【",
+                span
+                (
+                    set::className('task-name-current'),
+                ),
+                "】！"
+            ),
+            btn
+            (
+                set::className('btn btn-outline btn-next-task btn-task'),
+                $lang->tutorial->nextTask,
+                set::trailingIcon('angle-right')
+            )
+        )
+    ),
     div
     (
         set::id('sidebar'),

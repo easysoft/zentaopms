@@ -27,7 +27,7 @@ $lang->tutorial->target           = '目标';
 $lang->tutorial->targetPageTip    = '按此指示打开【%s】页面';
 $lang->tutorial->targetAppTip     = '按此指示打开【%s】应用';
 $lang->tutorial->requiredTip      = '【%s】为必填项';
-$lang->tutorial->congratulateTask = '恭喜，你完成了任务 【<span class="task-name-current"></span>】！';
+$lang->tutorial->congratulateTask = '恭喜，你完成了任务 ';
 $lang->tutorial->serverErrorTip   = '发生了一些错误。';
 $lang->tutorial->ajaxSetError     = '必须指定已完成的任务，如果要重置任务，请设置值为空。';
 $lang->tutorial->novice           = "你可能初次使用禅道，是否进入新手教程";
@@ -125,7 +125,8 @@ $lang->tutorial->tasks['manageTeam']['nav']['method']         = 'managemembers';
 $lang->tutorial->tasks['manageTeam']['nav']['menuModule']     = '';
 $lang->tutorial->tasks['manageTeam']['nav']['menu']           = '#actionBar, #header > .container > #heading > .toolbar, #table-tutorial-wizard > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="name"] > .dtable-cell-content > a, #table-project-browse > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell[data-col="name"] > .dtable-cell-content > a, .nav-item > a[data-id="settings"], #mainNavbar > .container > .nav > .nav-item > a[data-id="members"]';
 $lang->tutorial->tasks['manageTeam']['nav']['form']           = '#teamForm';
-$lang->tutorial->tasks['manageTeam']['nav']['requiredFields'] = 'accounts1';
+$lang->tutorial->tasks['manageTeam']['nav']['requiredFields'] = 'account1';
+$lang->tutorial->tasks['manageTeam']['nav']['formType']       = 'table';
 $lang->tutorial->tasks['manageTeam']['nav']['submit']         = '.form-row > .form-actions > button:first-child';
 $lang->tutorial->tasks['manageTeam']['nav']['target']         = '.manage-team-btn';
 $lang->tutorial->tasks['manageTeam']['nav']['targetPageName'] = '团队管理';
@@ -159,6 +160,7 @@ $lang->tutorial->tasks['linkStory']['nav']['menu']           = '#heading > .tool
 $lang->tutorial->tasks['linkStory']['nav']['form']           = '#table-tutorial-wizard';
 $lang->tutorial->tasks['linkStory']['nav']['formType']       = 'table';
 $lang->tutorial->tasks['linkStory']['nav']['submit']         = '.link-story-btn';
+$lang->tutorial->tasks['linkStory']['nav']['target']         = '.dtable-checkbox';
 $lang->tutorial->tasks['linkStory']['nav']['targetPageName'] = "关联{$lang->SRCommon}";
 
 $lang->tutorial->tasks['linkStory']['desc'] = "<p>将{$lang->SRCommon}关联到执行：</p><ul><li data-target='nav'>打开 <span class='task-nav'> 执行 <i class='icon icon-angle-right'></i> {$lang->SRCommon} <i class='icon icon-angle-right'></i> 关联{$lang->SRCommon}</span> 页面；</li><li data-target='form'>在{$lang->SRCommon}列表中勾选要关联的{$lang->SRCommon}；</li><li data-target='submit'>保存关联的{$lang->SRCommon}信息。</li></ul>";
