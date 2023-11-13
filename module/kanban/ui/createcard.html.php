@@ -18,7 +18,7 @@ formPanel
         formGroup
         (
             set::label($lang->kanbancard->name),
-            input(set::name('name'))
+            set::name('name')
         ),
         formGroup
         (
