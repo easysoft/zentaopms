@@ -1553,7 +1553,7 @@ class projectModel extends model
         }
 
         /* Update shadow product's status if need .*/
-        if($oldProject->status != $project->status && str_contains('doing,closed', $project->status))
+        if(isset($project->status) && $oldProject->status != $project->status && str_contains('doing,closed', $project->status))
         {
             $productID = $this->loadModel('product')->getProductIDByProject($oldProject->id);
             if($project->status == 'doing')  $this->product->activate($productID);
