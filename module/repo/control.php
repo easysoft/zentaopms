@@ -65,7 +65,7 @@ class repo extends control
             $this->loadModel('execution')->setMenu($objectID);
             $this->view->executionID = $objectID;
         }
-        else
+        elseif($tab != 'admin')
         {
             $this->repo->setMenu($this->repos, $repoID);
         }

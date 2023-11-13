@@ -424,7 +424,7 @@ class instance extends control
     {
         if(!commonModel::hasPriv('instance', 'manage')) $this->loadModel('common')->deny('instance', 'manage', false);
 
-        $this->app->loadModuleConfig('sonarqube');
+        $this->loadModel('sonarqube');
         $this->app->loadLang('pipeline');
 
         $externalApp = form::data($this->config->sonarqube->form->create)
