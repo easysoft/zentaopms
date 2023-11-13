@@ -141,6 +141,32 @@ else
     }
 }
 
+$canViewMR = common::hasPriv('mr', 'view');
+$linkedMR  = array();
+foreach($linkMRTitles as $MRID => $linkMRTitle)
+{
+    $linkedMR[] = $canViewMR ? a
+    (
+        set::href(createLink('mr', 'view', "MRID=$MRID")),
+        "#$MRID $linkMRTitle",
+        set('data-ap', $app->tab)
+    ) : div("#$MRID $linkMRTitle");
+}
+
+$canViewRevision = common::hasPriv('repo', 'revision');
+$linkedCommits   = array();
+foreach($linkCommits as $commit)
+{
+    $revision        = substr($commit->revision, 0, 10);
+    $linkedCommits[] = $canViewRevision ? a
+    (
+        set::href(createLink('repo', 'revision', "repoID={$commit->repo}&objectID={$task->execution}&revision={$commit->revision}")),
+        "#$MRID $linkMRTitle",
+        set('data-ap', $app->tab)
+
+    ) : div($revision . ' ' . $commit->comment);
+}
+
 detailBody
 (
     sectionList
@@ -426,17 +452,17 @@ detailBody
                     empty($task->linkedBranch) ? null : item
                     (
                         set::name($lang->task->relatedBranch),
-                        $task->linkedBranch
+                        current($task->linkedBranch)
                     ),
                     item
                     (
                         set::name($lang->task->linkMR),
-                        $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : ''
+                        div($linkedMR)
                     ),
                     item
                     (
                         set::name($lang->task->linkCommit),
-                        $task->finishedBy ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : ''
+                        div($linkedCommits)
                     )
                 )
             )
