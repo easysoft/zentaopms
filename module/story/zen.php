@@ -636,6 +636,22 @@ class storyZen extends story
         $storyTypes = strpos($product->vision, 'or') !== false ? 'launched' : 'changing,active,reviewing';
         $URS        = $storyType != 'story' ? array() : $this->story->getProductStoryPairs($productID, $branch, 0, $storyTypes, 'id_desc', 0, '', 'requirement');
 
+        /* 追加字段的label属性。 */
+        foreach($fields as $field => $attr)
+        {
+            if(!isset($attr['label']))
+            {
+                if(strpos(',region,lane,', ",$field,") !== false)
+                {
+                    $this->app->loadLang('kanban');
+                    $fields[$field]['label'] = zget($this->lang->kanbancard, $field);
+                    continue;
+                }
+
+                $fields[$field]['label'] = zget($this->lang->story, $field);
+            }
+        }
+
         /* 设置下拉菜单内容。 */
         $fields['branch']['options'] = $branches;
         switch ($product->type)
