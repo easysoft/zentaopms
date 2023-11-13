@@ -376,3 +376,29 @@ $('#teamForm').on('change', '.team-select [name^=team]', function()
     $tr.find('[name^=teamConsumed]').val(consumed);
     $tr.find('[name^=teamEstimate]').val(estimate);
 });
+
+window.clickSubmit = function()
+{
+    if(isMultiple)
+    {
+        var multiple = $('#multiple').is(":checked");
+        if(!multiple)
+        {
+            var assignedTo = $('[name=assignedTo]').val();
+            if(!assignedTo)
+            {
+                zui.Modal.alert(teamNotEmpty);
+                return false;
+            }
+        }
+
+        var estimate = parseInt($('#left').val());
+        if(isNaN(estimate) || estimate <= 0)
+        {
+            zui.Modal.alert(multiple ? teamLeftEmpty : leftNotEmpty);
+            return false;
+        }
+
+        $('#assignedTo').val('');
+    }
+}

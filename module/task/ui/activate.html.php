@@ -320,6 +320,7 @@ for($i; $i <= $rowCount; $i ++)
 /* ====== Define the page structure with zin widgets ====== */
 formPanel
 (
+    set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
     $taskModeBox,
     formRow
     (
