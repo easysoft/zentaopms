@@ -2,7 +2,7 @@ body {background: #1183fb linear-gradient(-90deg, #0a48d1 0%, #1183fb 100%); bac
 #login {max-width: 720px !important; margin: 0 auto; margin-top: 5%;}
 #loginPanel {background: #fff; overflow: hidden; box-shadow: 0 0 20px 0 rgba(0,0,0,.1); border-radius: 3px;}
 #loginPanel header {position: relative;}
-#loginPanel header > h2 {font-size: 16px; margin: 0; line-height: 32px; max-width: calc(100% - 85px); display: inline-block;}
+#loginPanel header > h2 {font-size: 16px; margin: 0; line-height: 32px; max-width: calc(100% - 90px); display: inline-block;}
 
 #logo-box {background-size: cover; background-position: center; position: relative;}
 #login-logo, #login-ai {position: absolute; left: 50%; transform: translateX(-50%);}
