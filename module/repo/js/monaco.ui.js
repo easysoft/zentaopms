@@ -50,7 +50,7 @@ window.afterPageUpdate = function()
         /* Reload current page when click dropmeu. */
         $('body').on('click', '.dropmenu-tree .dropmenu-item', function()
         {
-            var branchOrTag = $(this).find('.item-content').attr('title');
+            var branchOrTag = $(this).find('.listitem').data('value');
             var url         = $(this).find('.listitem').data('url');
 
             if(url != 'javascript:;') return;
