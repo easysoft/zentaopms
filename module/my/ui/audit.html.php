@@ -22,7 +22,7 @@ if($rawMethod == 'contribute') $linkParam = "mode=$mode&$linkParam";
 featurebar
 (
     set::current($browseType),
-    set::linkParams($linkParam),
+    set::linkParams($linkParam)
 );
 
 if($rawMethod != 'audit') unset($config->my->audit->dtable->fieldList['actions']);
@@ -95,7 +95,7 @@ dtable
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::orderBy($orderBy),
     set::sortLink($sortLink),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

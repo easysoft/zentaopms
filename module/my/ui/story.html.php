@@ -64,7 +64,7 @@ $footToolbar = array('items' => array
    $canBatchEdit     ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('story', 'batchEdit', "productID=0&executionID=0&branch=0&storyType=story&from={$app->rawMethod}")) : null,
    $canBatchReview   ? array('caret' => 'up', 'text' => $lang->story->review, 'type' => 'dropdown', 'items' => $reviewItems, 'data-placement' => 'top-start') : null,
    $canBatchAssignTo ? array('caret' => 'up', 'text' => $lang->story->assignedTo, 'type' => 'dropdown', 'items' => $assignedToItems, 'data-placement' => 'top-start') : null,
-   $canBatchClose    ? array('text' => $lang->story->close, 'className' => 'batch-btn', 'data-url' => helper::createLink('story', 'batchClose', "productID=0&executionID=0&storyType=story&from={$app->rawMethod}")) : null,
+   $canBatchClose    ? array('text' => $lang->story->close, 'className' => 'batch-btn', 'data-url' => helper::createLink('story', 'batchClose', "productID=0&executionID=0&storyType=story&from={$app->rawMethod}")) : null
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
 if($canBatchAction) $config->my->story->dtable->fieldList['id']['type'] = 'checkID';

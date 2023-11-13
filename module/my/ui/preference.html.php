@@ -65,7 +65,7 @@ formPanel
             set('menu', array('class' => 'menu picker-menu-list no-nested-items menu-nested flex flex-wrap content-between ursr-menu')),
             set::name('URSR'),
             set::items($URSRItems),
-            set::value($URSR),
+            set::value($URSR)
         )
     ),
     $this->config->systemMode == 'ALM' ? formGroup

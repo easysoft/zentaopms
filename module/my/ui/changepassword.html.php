@@ -27,7 +27,7 @@ formPanel
         div
         (
             setClass('panel-title text-lg'),
-            $lang->my->changePassword,
+            $lang->my->changePassword
         )
     ),
     on::change('#originalPassword,#password1,#password2', 'changePassword'),

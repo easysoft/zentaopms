@@ -32,7 +32,7 @@ dtable
     set::orderBy($orderBy),
     set::sortLink(inlink('team', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::fixedLeftWidth('0.2'),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

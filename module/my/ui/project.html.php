@@ -15,7 +15,7 @@ jsVar('delayInfo', $lang->project->delayInfo);
 featurebar
 (
     set::current($status),
-    set::linkParams("status={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    set::linkParams("status={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")
 );
 
 $this->loadModel('project');

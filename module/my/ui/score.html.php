@@ -15,7 +15,7 @@ jsVar('methods', $lang->score->methods);
 featureBar
 (
     set::current('all'),
-    set::linkParams("date={key}&userID={$app->user->id}&status=undone"),
+    set::linkParams("date={key}&userID={$app->user->id}&status=undone")
 );
 
 $cols = array_values($config->my->score->dtable->fieldList);
@@ -28,7 +28,7 @@ toolbar
         h::strong
         (
             $lang->score->current,
-            ':',
+            ':'
         ),
         $user->score
     ),
@@ -37,7 +37,7 @@ toolbar
         setClass('btn primary'),
         set::url(helper::createLink('score', 'rule')),
         $lang->my->scoreRule
-    ),
+    )
 );
 
 dtable
@@ -46,7 +46,7 @@ dtable
     set::data($data),
     set::fixedLeftWidth('0.2'),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

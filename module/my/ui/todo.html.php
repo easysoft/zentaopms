@@ -20,7 +20,7 @@ featureBar
         set::_class('w-32'),
         set::value($date),
         set::onChange(jsRaw("(value) => loadPage($.createLink('my', 'todo', 'date=' + (value ? zui.formatDate(value, 'yyyyMMdd') : '')), '#mainContent,#featureBar')"))
-    ),
+    )
 );
 
 $canCreate      = hasPriv('todo', 'create');

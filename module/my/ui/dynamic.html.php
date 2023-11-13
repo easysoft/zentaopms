@@ -14,7 +14,7 @@ namespace zin;
 featureBar
 (
     set::current($type),
-    set::linkParams('&type={key}'),
+    set::linkParams('&type={key}')
 );
 
 $content = null;
@@ -27,7 +27,7 @@ if(empty($dateGroups))
         (
             setClass('text-gray'),
             $lang->action->noDynamic
-        ),
+        )
     );
 }
 else
@@ -46,12 +46,12 @@ else
                 setClass('cursor-pointer leading-5'),
                 span
                 (
-                    icon('angle-down text-primary border-2 rounded-full z-10 bg-canvas align-middle'),
+                    icon('angle-down text-primary border-2 rounded-full z-10 bg-canvas align-middle')
                 ),
                 span
                 (
                     setClass('ml-2'),
-                    $isToday ? $lang->today : $date,
+                    $isToday ? $lang->today : $date
                 ),
                 on::click('toggleCollapse')
             ),
@@ -65,7 +65,7 @@ else
                     dynamic
                     (
                         set::dynamics($actions),
-                        set::users($users),
+                        set::users($users)
                     )
                 )
             )

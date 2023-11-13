@@ -22,7 +22,7 @@ if(!empty($config->user->contactField))
             set::width('1/2'),
             set::label($lang->user->{$field}),
             set::name($field),
-            set::value($user->{$field}),
+            set::value($user->{$field})
         );
 
         if($i % 2 == 1) $contacts[] = formRow($contactGroup);
@@ -40,9 +40,9 @@ formPanel
             entityLabel
             (
                 set::level(1),
-                set::text($lang->my->editProfile),
-            ),
-        ),
+                set::text($lang->my->editProfile)
+            )
+        )
     ),
     formRowGroup(set::title($lang->my->form->lblBasic)),
     formRow
@@ -59,7 +59,7 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->email),
             set::name('email'),
-            set::value($user->email),
+            set::value($user->email)
         )
     ),
     formRow
@@ -74,7 +74,7 @@ formPanel
                 set::name('gender'),
                 set::items($lang->user->genderList),
                 set::value($user->gender)
-            ),
+            )
         ),
         formGroup
         (
@@ -83,7 +83,7 @@ formPanel
             set::control('datePicker'),
             set::name('join'),
             set::value($user->join)
-        ),
+        )
     ),
     formRowGroup(set::title($lang->my->form->lblAccount)),
     formRow
@@ -101,8 +101,8 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->commiter),
             set::name('commiter'),
-            set::value($user->commiter),
-        ),
+            set::value($user->commiter)
+        )
     ),
     formRow
     (
@@ -116,9 +116,9 @@ formPanel
                 (
                     set::id('password1'),
                     set::name('password1'),
-                    set::checkStrength(true),
-                ),
-            ),
+                    set::checkStrength(true)
+                )
+            )
         ),
         formGroup
         (
@@ -126,7 +126,7 @@ formPanel
             set::label($lang->user->password2),
             set::control('password'),
             set::name('password2'),
-            set::value(''),
+            set::value('')
         )
     ),
     formRowGroup(set::title($lang->my->form->lblBasic)),
@@ -138,14 +138,14 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->address),
             set::name('address'),
-            set::value($user->address),
+            set::value($user->address)
         ),
         formGroup
         (
             set::width('1/2'),
             set::label($lang->user->zipcode),
             set::name('zipcode'),
-            set::value($user->zipcode),
+            set::value($user->zipcode)
         )
     ),
     formRowGroup(set::title($lang->user->verify)),
@@ -158,8 +158,8 @@ formPanel
             set::control('password'),
             set::name('verifyPassword'),
             set::value(''),
-            set::placeholder($lang->user->placeholder->verify),
-        ),
+            set::placeholder($lang->user->placeholder->verify)
+        )
     ),
     formRow
     (
@@ -167,14 +167,14 @@ formPanel
         formGroup
         (
             set::name('passwordLength'),
-            set::value(0),
+            set::value(0)
         ),
         formGroup
         (
             set::name('verifyRand'),
-            set::value($rand),
-        ),
-    ),
+            set::value($rand)
+        )
+    )
 );
 
 render();
