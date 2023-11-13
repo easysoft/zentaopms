@@ -561,7 +561,14 @@ detailBody
                                 (
                                     set::title($linkMRTitle),
                                     label(setClass('circle size-sm'), $MRID),
-                                    common::hasPriv('mr', 'view') ? a(set::href(helper::createLink('mr', 'view', "MRID=$MRID")), setClass('title'), set::title($linkMRTitle), $linkMRTitle) : span(setClass('title'), $linkMRTitle),
+                                    common::hasPriv('mr', 'view') ? a
+                                    (
+                                        set::href(helper::createLink('mr', 'view', "MRID=$MRID")),
+                                        setClass('title'),
+                                        set::title($linkMRTitle),
+                                        set('data-app', 'devops'),
+                                        $linkMRTitle
+                                    ) : span(setClass('title'), $linkMRTitle),
                                 );
                             }, array_keys($linkedMRs), array_values($linkedMRs)))
                         )
@@ -578,7 +585,14 @@ detailBody
                                 (
                                     set::title($commit->comment),
                                     label(setClass('circle size-sm'), substr($commit->revision, 0, 10)),
-                                    common::hasPriv('repo', 'revision') ? a(set::href(helper::createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}")), setClass('title'), set::title($commit->comment), $commit->comment) : span(setClass('title'), $commit->comment),
+                                    common::hasPriv('repo', 'revision') ? a
+                                    (
+                                        set::href(helper::createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}")),
+                                        setClass('title'),
+                                        set::title($commit->comment),
+                                        set('data-app', 'devops'),
+                                        $commit->comment
+                                    ) : span(setClass('title'), $commit->comment),
                                 );
                             }, $linkedCommits))
                         )

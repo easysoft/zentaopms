@@ -80,6 +80,7 @@ foreach($legendMisc['linkMR']['text'] as $MRID => $linkMRTitle)
     $linkMR[] = div(a
     (
         $canViewMR ? set('href', $this->createLink('mr', 'view', "MRID={$MRID}")) : null,
+        set('data-app', 'devops'),
         span(label(set::className('dark-outline rounded-full mr-2'), $MRID), $linkMRTitle)
     ));
 }
@@ -89,6 +90,7 @@ foreach($legendMisc['linkCommit']['text'] as $commit)
 {
     $linkCommits[] = div(a
     (
+        set('data-app', 'devops'),
         $canViewRepo ? set('href', $this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}")) : null,
         "{$commit->comment}"
     ));
