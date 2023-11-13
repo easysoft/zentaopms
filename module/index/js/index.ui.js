@@ -891,3 +891,4 @@ window.startCron = function(restart)
 
 turnon ? browserNotify() : ping();
 if(runnable) startCron();
+if(scoreNotice) zui.Messager.show({ content: {html: scoreNotice}, placement: 'bottom-right', time: 0, icon: 'diamond', className: 'primary-pale' });

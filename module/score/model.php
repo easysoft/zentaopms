@@ -359,14 +359,6 @@ class scoreModel extends model
             ->fetch('score');
         if(!$score) return '';
 
-        $notice     = sprintf($this->lang->score->tips, $score, $this->app->user->score);
-        $fullNotice = <<<EOT
-<div id='noticeAttend' class='alert alert-success with-icon alert-dismissable' style='width:310px; position:fixed; bottom:25px; right:15px; z-index: 9999;' id='planInfo'>
-   <i class='icon icon-diamond'>  </i>
-   <div class='content'>{$notice}</div>
-   <button type="button" class="close" data-dismiss="alert">×</button>
- </div>
-EOT;
-        return $fullNotice;
+        return sprintf($this->lang->score->tips, $score, $this->app->user->score);
     }
 }

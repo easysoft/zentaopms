@@ -27,6 +27,10 @@ jsVar('pollTime',    (!empty($config->message->browser->turnon) && isset($config
 jsVar('turnon',      empty($config->message->browser->turnon) ? 0 : 1);
 jsVar('runnable',    $this->loadModel('cron')->runnable());
 
+$scoreNotice = '';
+if($config->vision != 'lite') $scoreNotice = $this->loadModel('score')->getNotice();
+jsVar('scoreNotice', $scoreNotice);
+
 set::zui(true);
 set::bodyClass($this->cookie->hideMenu ? 'hide-menu' : 'show-menu');
 
@@ -104,9 +108,5 @@ div
         )
     ),
 );
-
-$scoreNotice = '';
-if($config->vision != 'lite') $scoreNotice = $this->loadModel('score')->getNotice();
-div(setID('noticeBox'), empty($scoreNotice) ? null : html($scoreNotice));
 
 render('pagebase');
