@@ -120,7 +120,11 @@ class build extends control
 
         /* Set menu. */
         if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($build->project);
-        if($this->app->tab == 'execution') $this->execution->setMenu($build->execution);
+        if($this->app->tab == 'execution')
+        {
+            $this->execution->setMenu($build->execution);
+            $this->view->executionID = $build->execution;
+        }
 
         $this->commonActions($build->project);
         $this->buildZen->assignEditData($build);
