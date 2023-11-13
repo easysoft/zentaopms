@@ -145,6 +145,34 @@ $(document).on('click', '#createExecutionButton', function()
     zui.Modal.hide('#createExecutionModal');
 });
 
+window.getPlanID = function(event)
+{
+    const planID = $(event.target).closest('a').data('plan');
+    const branch = $(event.target).closest('a').data('branch');
+    $('[name=planID]').val(planID);
+
+    const link = $.createLink('productplan', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + (branch ? branch : 0));
+    $.getJSON(link, function(projects)
+    {
+        $('[name=project]').zui('picker').render({items: projects});
+
+        var projectList = $("[name=project]").val();
+        if(!projectList)
+        {
+            $("#programs").zui('picker').render({disabled: true});
+            $(".tips").removeClass('hidden');
+
+            var locateLink   = $.createLink('product', 'project', 'status=all&productID=' + productID + '&branch=' + branch);
+            var locateButton = "<a href=" + locateLink + " class='btn btn-primary' data-app='product'>" + enterProjectList + "</a>";
+            $("#projects .btn-primary").replaceWith(locateButton);
+        }
+        else
+        {
+            $(".tips").addClass('hidden');
+        }
+    });
+}
+
 /**
  * 对部分列进行重定义。
  * Redefine the partial column.
@@ -203,7 +231,7 @@ window.getItem = function(info)
 {
     if(info.item.delay)
     {
-        info.item.suffix      = expired;
+        info.item.suffix      = productplanLang.expired;
         info.item.suffixClass = 'label danger rounded-xl' + (info.item.status == 'doing' ? ' mr-8' : '');
     }
     info.item.icon         = 'delay';
@@ -222,7 +250,6 @@ window.canDrop = function(dragInfo, dropInfo)
     const lane   = this.getLane(dropInfo.lane);
     if(!column || !lane) return false;
 
-    console.log(dropInfo);
     if(dropInfo.type == 'item')             return false;
     if(dragInfo.item.lane != lane.name)     return false;
     if(dragInfo.item.status == 'wait'      && dropInfo.col == 'doing')  return privs.canStartPlan;
@@ -242,7 +269,7 @@ window.onDrop = function(changes, dropInfo)
 
     if(item.status == 'wait' && toCol == 'doing')
     {
-        zui.Modal.confirm(confirmStart).then(result =>
+        zui.Modal.confirm(productplanLang.confirmStart).then(result =>
         {
             if(result)
             {
@@ -255,7 +282,7 @@ window.onDrop = function(changes, dropInfo)
     }
     else if(item.status == 'doing' && toCol == 'done')
     {
-        zui.Modal.confirm(confirmFinish).then(result =>
+        zui.Modal.confirm(productplanLang.confirmFinish).then(result =>
         {
             if(result)
             {
@@ -268,7 +295,7 @@ window.onDrop = function(changes, dropInfo)
     }
     else if((item.status == 'done' || item.status == 'closed') && toCol == 'doing')
     {
-        zui.Modal.confirm(confirmActivate).then(result =>
+        zui.Modal.confirm(productplanLang.confirmActivate).then(result =>
         {
             if(result)
             {
@@ -282,4 +309,31 @@ window.onDrop = function(changes, dropInfo)
 
     zui.Modal.open({url: $.createLink('productplan', 'close', 'planID=' + item.id), size: 'lg'});
     return false;
+}
+
+window.getItemActions = function(item)
+{
+    return [{
+        type: 'dropdown',
+        icon: 'ellipsis-v',
+        caret: false,
+        items: buildCardActions(item),
+    }];
+}
+
+window.buildCardActions = function(item)
+{
+    let actions = [];
+
+    if(item.actionList.includes('createExecution')) actions.push({text: productplanLang.createExecution, icon: 'plus',    url: '#createExecutionModal', 'data-toggle': 'modal', 'data-on': 'click', 'data-call': 'getPlanID', 'data-params': 'event', 'data-branch': item.branch, 'data-plan': item.id});
+    if(item.actionList.includes('linkStory'))       actions.push({text: productplanLang.linkStory,       icon: 'link',    url: $.createLink(rawModule, 'view', "planID=" + item.id + "&type=story&orderBy=id_desc&link=true")});
+    if(item.actionList.includes('linkBug'))         actions.push({text: productplanLang.linkBug,         icon: 'bug',     url: $.createLink(rawModule, 'view', "planID=" + item.id + "&type=bug&orderBy=id_desc&link=true")});
+    if(item.actionList.includes('edit'))            actions.push({text: productplanLang.edit,            icon: 'edit',    url: $.createLink(rawModule, 'edit', "planID=" + item.id)});
+    if(item.actionList.includes('start'))           actions.push({text: productplanLang.start,           icon: 'start',   url: $.createLink('productplan', 'start', "planID=" + item.id), 'data-confirm': productplanLang.confirmStart});
+    if(item.actionList.includes('finish'))          actions.push({text: productplanLang.finish,          icon: 'checked', url: $.createLink('productplan', 'finish', "planID=" + item.id), 'data-confirm': productplanLang.confirmFinish});
+    if(item.actionList.includes('close'))           actions.push({text: productplanLang.close,           icon: 'off',     url: $.createLink('productplan', 'close', "planID=" + item.id), 'data-toggle': 'modal'});
+    if(item.actionList.includes('activate'))        actions.push({text: productplanLang.activate,        icon: 'magic',   url: $.createLink('productplan', 'activate', "planID=" + item.id), 'data-confirm': productplanLang.confirmActivate});
+    if(item.actionList.includes('delete'))          actions.push({text: productplanLang.delete,          icon: 'trash',   url: $.createLink('productplan', 'delete', "planID=" + item.id), 'data-confirm': productplanLang.confirmDelete});
+
+    return actions;
 }

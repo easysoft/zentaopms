@@ -502,11 +502,11 @@ class productplan extends control
      * Get projects by product id.
      *
      * @param  int    $productID
-     * @param  int    $branch
+     * @param  string $branch
      * @access public
      * @return void
      */
-    public function ajaxGetProjects(int $productID, int $branch = 0)
+    public function ajaxGetProjects(int $productID, string $branch = '0')
     {
         $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branch, '', $status = 'noclosed', 'multiple');
 

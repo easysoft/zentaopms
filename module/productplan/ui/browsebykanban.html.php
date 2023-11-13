@@ -11,7 +11,11 @@ declare(strict_types=1);
 namespace zin;
 $privs = array
 (
-    'canViewPlan' => common::hasPriv($app->rawModule, 'view'),
+    'canViewPlan'     => common::hasPriv($app->rawModule, 'view'),
+    'canStartPlan'    => common::hasPriv($app->rawModule, 'start'),
+    'canClosePlan'    => common::hasPriv($app->rawModule, 'close'),
+    'canFinishPlan'   => common::hasPriv($app->rawModule, 'finish'),
+    'canActivatePlan' => common::hasPriv($app->rawModule, 'activate')
 );
 
 foreach($kanbanList as $current => $region)
@@ -24,6 +28,7 @@ foreach($kanbanList as $current => $region)
         $group['getItem']    = jsRaw('window.getItem');
         $group['canDrop']    = jsRaw('window.canDrop');
         $group['onDrop']     = jsRaw('window.onDrop');
+        $group['itemProps']  = array('actions' => jsRaw('window.getItemActions'));
         $kanbanList[$current]['items'][$index] = $group;
     }
 }
@@ -35,10 +40,8 @@ foreach($lang->productplan->orderList as $order => $label)
 }
 
 jsVar('privs',           $privs);
-jsVar('expired',         $lang->productplan->expired);
-jsVar('confirmStart',    $lang->productplan->confirmStart);
-jsVar('confirmFinish',   $lang->productplan->confirmFinish);
-jsVar('confirmActivate', $lang->productplan->confirmActivate);
+jsVar('productplanLang', $lang->productplan);
+jsVar('rawModule',       $app->rawModule);
 toolbar
 (
     set::className('w-full justify-end'),
@@ -78,4 +81,61 @@ zui::kanbanList
     set::height('calc(100vh - 120px)')
 );
 
+modalTrigger
+(
+    modal
+    (
+        setID('createExecutionModal'),
+        set::modalProps(array('title' => $lang->productplan->selectProjects)),
+        form
+        (
+            setID('createExecutionForm'),
+            setClass('py-4'),
+            set::actions
+            (
+                array
+                (
+                    array
+                    (
+                        'text' => !empty($projects) ? $lang->productplan->nextStep : $lang->productplan->enterProjectList,
+                        'id'   => !empty($projects) ? 'createExecutionButton' : '',
+                        'type' => 'primary',
+                        'url'  => !empty($projects) ? '###' : createLink('product', 'project', "status=all&productID={$productID}&branch={$branch}")
+                    ),
+                    array
+                    (
+                        'text' => $lang->cancel,
+                        'data-dismiss' => 'modal',
+                    ),
+                )
+            ),
+            formGroup
+            (
+                set::label($lang->productplan->project),
+                picker
+                (
+                    set::name('project'),
+                    set::items($projects),
+                    set::required(true),
+                    set::disabled(empty($projects)),
+                )
+            ),
+            formRow
+            (
+                !empty($projects) ? setClass('hidden') : null,
+                setClass('projectTips'),
+                formGroup
+                (
+                    set::label(''),
+                    span
+                    (
+                        setClass('text-danger'),
+                        $lang->productplan->noLinkedProject
+                    ),
+                    formHidden('planID', ''),
+                )
+            ),
+        )
+    )
+);
 render();

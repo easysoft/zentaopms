@@ -916,6 +916,7 @@ class kanbanModel extends model
         $lanes       = array();
         $columns     = array();
         $columnCards = array();
+        $cardActions = array('view', 'createExecution', 'linkStory', 'linkBug', 'edit', 'start', 'finish', 'close', 'activate', 'delete');
         foreach($branches as $id => $name)
         {
             if($product->type != 'normal') $plans = isset($planGroup[$product->id][$id]) ? array_filter($planGroup[$product->id][$id]) : array();
@@ -924,15 +925,27 @@ class kanbanModel extends model
             foreach($plans as $planID => $plan)
             {
                 if(empty($plan) or $plan->parent == -1) continue;
+                $plan->isParent = false;
+
                 $item = array();
-                $item['id'] = $plan->id;
-                $item['name'] = $plan->id;
-                $item['title'] = htmlspecialchars_decode($plan->title);
-                $item['status'] = $plan->status;
+                $item['id']          = $plan->id;
+                $item['name']        = $plan->id;
+                $item['title']       = htmlspecialchars_decode($plan->title);
+                $item['status']      = $plan->status;
                 $item['statusLabel'] = zget($this->lang->productplan->statusList, $plan->status);
-                $item['delay'] = helper::today() > $plan->end ? true : false;
-                $item['desc'] =  strip_tags(htmlspecialchars_decode($plan->desc));
-                $item['dateLine'] =  date('m-d', strtotime($plan->begin)) . ' ' . $this->lang->productplan->to . ' ' . date('m-d', strtotime($plan->end));
+                $item['delay']       = helper::today() > $plan->end ? true : false;
+                $item['desc']        =  strip_tags(htmlspecialchars_decode($plan->desc));
+                $item['dateLine']    =  date('m-d', strtotime($plan->begin)) . ' ' . $this->lang->productplan->to . ' ' . date('m-d', strtotime($plan->end));
+                $item['actionList']  = array();
+                foreach($cardActions as $action)
+                {
+                    if($action == 'createExecution')
+                    {
+                        if(common::hasPriv('execution', 'create')) $item['actionList'][] = $action;
+                        continue;
+                    }
+                    if($this->productplan->isClickable($plan, $action)) $item['actionList'][] = $action;
+                }
                 $planList[$id][$plan->status][] = $item;
 
                 if(!isset($columnCards[$plan->status])) $columnCards[$plan->status] = 0;
