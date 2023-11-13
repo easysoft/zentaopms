@@ -45,12 +45,15 @@ $regionMenu   = array();
 $regionMenu[] = li(set::className($regionID == 'all' ? 'active' : ''), a(set::href('javascript:;'), span(set::title($lang->kanbanregion->all), $lang->kanbanregion->all)), set('data-on', 'click'), set('data-call', 'clickRegionMenu'), set('data-params', 'event'), set('data-region', 'all'));
 foreach($regions as $currentRegionID => $regionName) $regionMenu[] = li(set::className($regionID == $currentRegionID ? 'active' : ''), a(set::href('javascript:;'), span(set::title($regionName), $regionName)), set('data-on', 'click'), set('data-call', 'clickRegionMenu'), set('data-params', 'event'), set('data-region', $currentRegionID));
 
+$app->loadLang('release');
+$app->loadLang('execution');
 jsVar('laneCount',  $laneCount);
 jsVar('kanbanLang', $lang->kanban);
 jsVar('columnLang', $lang->kanbancolumn);
 jsVar('laneLang', $lang->kanbanlane);
 jsVar('cardLang', $lang->kanbancard);
 jsVar('executionLang', $lang->execution);
+jsVar('releaseLang', $lang->release);
 jsVar('kanbanID', $kanban->id);
 jsVar('kanban', $kanban);
 jsVar('groupCols', $groupCols);

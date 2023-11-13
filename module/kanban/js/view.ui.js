@@ -223,9 +223,29 @@ window.renderExecutionItem = function(info)
 }
 window.renderReleaseItem = function(info)
 {
+    info.item.icon       = 'publish';
+    info.item.titleUrl   = $.createLink('release', 'view', `id=${info.item.fromID}`);
+    info.item.titleAttrs = {'class': 'text-black clip', 'title' : info.item.title};
+
+    if(info.item.deleted == '0')
+    {
+        statusBox = '<span class="label label-' + info.item.objectStatus + '">' + releaseLang.statusList[info.item.objectStatus] + '</span>';
+    }
+    else
+    {
+        statusBox = '<span class="label label-deleted">' + releaseLang.deleted + '</span>';
+    }
+    const date = '<span class="ml-2 label lighter">' + info.item.date + '</span>';
+    info.item.content = {html: statusBox + date}
 }
 window.renderBuildItem = function(info)
 {
+    info.item.icon       = 'ver';
+    info.item.titleUrl   = $.createLink('build', 'view', `id=${info.item.fromID}`);
+    info.item.titleAttrs = {'class': 'text-black clip', 'title' : info.item.title};
+
+    const date = '<span class="label lighter">' + info.item.date + '</span>';
+    info.item.content = {html: date}
 }
 window.renderProductplanItem = function(info)
 {

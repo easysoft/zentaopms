@@ -1264,8 +1264,9 @@ class kanbanModel extends model
         foreach($cellList as $cell)
         {
             $cardIdList = array_filter(explode(',', $cell->cards));
-
             if(empty($cardIdList)) continue;
+
+            $order = 0;
             foreach($cardIdList as $cardID)
             {
                 if(!isset($cards[$cardID])) continue;
@@ -1292,9 +1293,12 @@ class kanbanModel extends model
                 $item['status']       = !empty($card->status) ? $card->status : '';
                 $item['objectStatus'] = !empty($card->objectStatus) ? $card->objectStatus : '';
                 $item['deleted']      = !empty($card->deleted) ? $card->deleted : 0;
+                $item['date']         = !empty($card->date) ? $card->date : '';
                 $item['avatarList']   = array();
                 $item['realnames']    = '';
+                $item['order']        = $order;
 
+                $order ++;
                 if($card->assignedTo)
                 {
                     $assignedToList = explode(',', $card->assignedTo);
