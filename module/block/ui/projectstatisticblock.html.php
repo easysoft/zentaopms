@@ -40,14 +40,14 @@ $projectOverview[] = cell
         span
         (
             setClass('font-bold text-black px-1'),
-            abs($remainingDays),
+            abs($remainingDays)
         ),
         $lang->block->projectstatistic->day
     ) : span
     (
         setClass('text-gray'),
         $project->status == 'closed' ? $lang->block->projectstatistic->projectClosed : $lang->block->projectstatistic->longTimeProject
-    ),
+    )
 );
 $projectOverview[] = $config->edition != 'open' ? cell
 (
@@ -89,11 +89,11 @@ $lastestExecution = !empty($project->executions) && $project->multiple ? cell
             setClass('pl-2'),
             set::href(helper::createLink('execution', 'task', "executionID={$project->executions[0]->id}")),
             set('title', $project->executions[0]->name),
-            $project->executions[0]->name,
+            $project->executions[0]->name
         ) : span
         (
             setClass('pl-2'),
-            $project->executions[0]->name,
+            $project->executions[0]->name
         )
     )
 ) : null;
@@ -134,7 +134,7 @@ if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
                 (
                     setClass('font-bold'),
                     $lang->block->projectstatistic->{$module}
-                ),
+                )
             ),
             tableData
             (
@@ -207,7 +207,8 @@ else
                         (
                             toggle::tooltip(array('title' => '提示文本')),
                             'help'
-                        ), ':'
+                        ),
+                        ':'
                     ),
                     h::td
                     (
@@ -229,7 +230,8 @@ else
                         (
                             toggle::tooltip(array('title' => '提示文本')),
                             'help'
-                        ), ':'
+                        ),
+                        ':'
                     ),
                     h::td
                     (
@@ -251,7 +253,8 @@ else
                         (
                             toggle::tooltip(array('title' => '提示文本')),
                             'help'
-                        ), ':'
+                        ),
+                        ':'
                     ),
                     h::td
                     (
@@ -294,7 +297,8 @@ else
                         (
                             toggle::tooltip(array('title' => '提示文本')),
                             'help'
-                        ), ':'
+                        ),
+                        ':'
                     ),
                     h::td
                     (
@@ -316,7 +320,8 @@ else
                         (
                             toggle::tooltip(array('title' => '提示文本')),
                             'help'
-                        ), ':'
+                        ),
+                        ':'
                     ),
                     h::td
                     (
@@ -338,7 +343,8 @@ else
                         (
                             toggle::tooltip(array('title' => '提示文本')),
                             'help'
-                        ), ':'
+                        ),
+                        ':'
                     ),
                     h::td
                     (

@@ -27,8 +27,8 @@ blockPanel
         set::bordered(false),
         set::horzScrollbarPos('inside'),
         set::cols(array_values($config->block->task->dtable->fieldList)),
-        set::data(array_values($tasks)),
-    ),
+        set::data(array_values($tasks))
+    )
 );
 
 render();

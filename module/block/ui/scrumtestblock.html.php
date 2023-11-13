@@ -39,7 +39,7 @@ panel
         set::horzScrollbarPos('inside'),
         set::fixedLeftWidth($longBlock ? '0.33' : '0.5'),
         set::cols(array_values($config->block->testtask->dtable->fieldList)),
-        set::data(array_values($testtasks)),
+        set::data(array_values($testtasks))
     )
 );
 

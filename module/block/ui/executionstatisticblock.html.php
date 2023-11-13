@@ -45,7 +45,7 @@ $burn = center
         div
         (
             $longBlock ? set::className('pb-2') : null,
-            span(set::className('font-bold'), $lang->block->executionstatistic->burn),
+            span(set::className('font-bold'), $lang->block->executionstatistic->burn)
         ),
         div
         (

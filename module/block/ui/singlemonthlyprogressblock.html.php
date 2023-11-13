@@ -32,10 +32,10 @@ blockPanel
                     array
                     (
                         'type' => 'line',
-                        'data' => array_values($doneStoryEstimate),
-                    ),
-                ),
-            )->size('100%', 200),
+                        'data' => array_values($doneStoryEstimate)
+                    )
+                )
+            )->size('100%', 200)
         ),
         cell
         (
@@ -57,17 +57,17 @@ blockPanel
                         (
                             'type' => 'line',
                             'name' => $lang->block->productstatistic->opened,
-                            'data' => array_values($createStoryCount),
+                            'data' => array_values($createStoryCount)
                         ),
                         array
                         (
                             'type' => 'line',
                             'name' => $lang->block->productstatistic->done,
-                            'data' => array_values($doneStoryCount),
-                        ),
-                    ),
-                ),
-            )->size('100%', 200),
+                            'data' => array_values($doneStoryCount)
+                        )
+                    )
+                )
+            )->size('100%', 200)
         ),
         cell
         (
@@ -89,17 +89,17 @@ blockPanel
                         (
                             'type' => 'line',
                             'name' => $lang->block->productstatistic->opened,
-                            'data' => array_values($createBugCount),
+                            'data' => array_values($createBugCount)
                         ),
                         array
                         (
                             'type' => 'line',
                             'name' => $lang->bug->resolve,
-                            'data' => array_values($fixedBugCount),
-                        ),
-                    ),
-                ),
-            )->size('100%', 200),
+                            'data' => array_values($fixedBugCount)
+                        )
+                    )
+                )
+            )->size('100%', 200)
         ),
         cell
         (
@@ -120,12 +120,12 @@ blockPanel
                         (
                             'type' => 'line',
                             'name' => $lang->product->releases,
-                            'data' => array_values($releaseCount),
+                            'data' => array_values($releaseCount)
                         )
                     )
                 )
-            )->size('100%', 200),
-        ),
+            )->size('100%', 200)
+        )
     )
 );
 

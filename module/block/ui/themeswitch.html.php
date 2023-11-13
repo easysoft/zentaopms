@@ -46,7 +46,7 @@ function printThemeSwitch()
                         (
                             icon('check-circle mr-2 hidden'),
                             $themeName
-                        ),
+                        )
                     )
                 )
             )

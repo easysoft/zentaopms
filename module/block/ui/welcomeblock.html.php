@@ -52,7 +52,7 @@ panel
             (
                 set('width', '22%'),
                 set('class', 'center'),
-                span($todaySummary),
+                span($todaySummary)
 
             ),
             cell

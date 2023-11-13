@@ -48,7 +48,7 @@ row
                 formGroup
                 (
                     set::name('module'),
-                    set::value($showModules ? $module : $dashboard),
+                    set::value($showModules ? $module : $dashboard)
                 )
             ),
             formRow
@@ -82,7 +82,7 @@ row
                         set::name('title'),
                         set::value($blockTitle),
                         set::control('input')
-                    ),
+                    )
                 ),
                 buildParamsRows($block, null, $module, $code),
                 formRow
@@ -96,8 +96,8 @@ row
                             set::name('width'),
                             set::items($widthOptions),
                             set::value($code == $block->code ? $block->width : ''),
-                            set::required(true),
-                        ),
+                            set::required(true)
+                        )
                     )
                 ),
                 formRow
@@ -106,7 +106,7 @@ row
                     formGroup
                     (
                         set::label($lang->block->lblHtml),
-                        editor(set::name('html'), html(zget($block->params, 'html'))),
+                        editor(set::name('html'), html(zget($block->params, 'html')))
                     )
                 )
             )

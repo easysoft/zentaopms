@@ -88,6 +88,6 @@ blockPanel
     !empty($cards) ? $cards : center
     (
         setClass('text-gray flex-auto'),
-        $lang->noData,
-    ),
+        $lang->noData
+    )
 );

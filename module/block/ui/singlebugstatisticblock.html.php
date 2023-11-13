@@ -35,8 +35,8 @@ panel
                     set('circleWidth', 6),
                     set('text', $resolvedRate . '%'),
                     set('textY', 50),
-                    set('textStyle', 'font-size: 30px;'),
-                ),
+                    set('textStyle', 'font-size: 30px;')
+                )
             ),
             div
             (
@@ -50,8 +50,8 @@ panel
                         setClass('pl-0.5'),
                         toggle::tooltip(array('title' => '提示文本')),
                         'help'
-                    ),
-                ),
+                    )
+                )
             ),
             cell
             (
@@ -61,41 +61,41 @@ panel
                     span
                     (
                         setClass('flex justify-center'),
-                        $totalBugs,
+                        $totalBugs
                     ),
                     span
                     (
                         setClass('text-sm text-gray'),
                         $lang->block->bugstatistic->effective
-                    ),
+                    )
                 ),
                 col
                 (
                     span
                     (
                         setClass('flex justify-center'),
-                        $closedBugs,
+                        $closedBugs
                     ),
                     span
                     (
                         setClass('text-sm text-gray'),
                         $lang->block->bugstatistic->fixed
-                    ),
+                    )
                 ),
                 col
                 (
                     span
                     (
                         setClass('flex justify-center'),
-                        $unresovledBugs,
+                        $unresovledBugs
                     ),
                     span
                     (
                         setClass('text-sm text-gray'),
                         $lang->block->bugstatistic->activated
-                    ),
-                ),
-            ),
+                    )
+                )
+            )
         ),
         cell
         (
@@ -121,26 +121,26 @@ panel
                             'barWidth' => '8',
                             'stack'    => 'Ad',
                             'name'     => $lang->bug->activate,
-                            'data'     => array_values($activateBugs),
+                            'data'     => array_values($activateBugs)
                         ),
                         array
                         (
                             'type'  => 'bar',
                             'name'  => $lang->bug->resolve,
                             'stack' => 'Ad',
-                            'data'  => array_values($resolveBugs),
+                            'data'  => array_values($resolveBugs)
                         ),
                         array
                         (
                             'type'  => 'bar',
                             'name'  => $lang->bug->close,
                             'stack' => 'Ad',
-                            'data'  => array_values($closeBugs),
-                        ),
-                    ),
-                ),
+                            'data'  => array_values($closeBugs)
+                        )
+                    )
+                )
             )->size('100%', 200),
-        ),
+        )
     )
 );
 

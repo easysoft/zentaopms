@@ -21,7 +21,7 @@ if(empty($actions))
         (
             setClass('text-gray'),
             $lang->action->noDynamic
-        ),
+        )
     );
 }
 else
@@ -32,7 +32,7 @@ else
         dynamic
         (
             set::dynamics($actions),
-            set::users($users),
+            set::users($users)
         )
     );
 }
@@ -51,7 +51,7 @@ panel
             icon('caret-right')
         )
     ),
-    $content,
+    $content
 );
 
 render();

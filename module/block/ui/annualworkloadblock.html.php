@@ -25,8 +25,8 @@ foreach($doneStoryEstimate as $productID => $storyEstimate)
             span
             (
                 set::title(zget($products, $productID)),
-                zget($products, $productID),
-            ),
+                zget($products, $productID)
+            )
         ),
         cell
         (
@@ -37,14 +37,14 @@ foreach($doneStoryEstimate as $productID => $storyEstimate)
                 width("calc(calc(100% - {$spanWidth}) * " . ($maxStoryEstimate ? $storyEstimate / $maxStoryEstimate : 0) . ')'),
                 setClass('progress progress-bar h-2'),
                 set('role', 'progressbar'),
-                setStyle(array('background' => 'var(--color-primary-300)')),
+                setStyle(array('background' => 'var(--color-primary-300)'))
             ),
             span
             (
                 setClass('pl-0.5'),
                 $storyEstimate
-            ),
-        ),
+            )
+        )
     );
 }
 
@@ -62,7 +62,7 @@ foreach($doneStoryCount as $productID => $storyCount)
             span
             (
                 zget($products, $productID),
-            ),
+            )
         ),
         cell
         (
@@ -79,8 +79,8 @@ foreach($doneStoryCount as $productID => $storyCount)
             (
                 setClass('pl-0.5'),
                 $storyCount
-            ),
-        ),
+            )
+        )
     );
 }
 
@@ -95,10 +95,7 @@ foreach($resolvedBugCount as $productID => $bugCount)
         (
             setClass('ellipsis overflow-hidden whitespace-nowrap mr-1 text-right'),
             set::width('50%'),
-            span
-            (
-                zget($products, $productID),
-            ),
+            span(zget($products, $productID))
         ),
         cell
         (
@@ -115,8 +112,8 @@ foreach($resolvedBugCount as $productID => $bugCount)
             (
                 setClass('pl-0.5'),
                 $bugCount
-            ),
-        ),
+            )
+        )
     );
 }
 

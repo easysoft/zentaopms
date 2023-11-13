@@ -40,9 +40,9 @@ panel
                 setClass('ghost toolbar-item size-sm z-10'),
                 set::url(createLink('my', $method, "mode=story&browseType={$block->params->type}")),
                 $lang->more,
-                span(setClass('caret-right')),
+                span(setClass('caret-right'))
             )
-        ) : '',
+        ) : ''
     ),
     dtable
     (

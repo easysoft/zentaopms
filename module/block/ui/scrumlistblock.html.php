@@ -52,7 +52,7 @@ panel
         set::fixedLeftWidth($longBlock ? '0.33' : '0.5'),
         set::cols(array_values($config->block->scrum->dtable->fieldList)),
         set::data(array_values($executionStats)),
-        set::onRenderCell(jsRaw('window.onRenderScrumNameCell')),
+        set::onRenderCell(jsRaw('window.onRenderScrumNameCell'))
     )
 );
 

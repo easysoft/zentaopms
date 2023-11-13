@@ -161,7 +161,7 @@ if($block->width == 3)
                         set::type('ghost'),
                         set::size('sm'),
                         setClass('text-gray ml-4'),
-                        $currentYear . $suffix,
+                        $currentYear . $suffix
                     ),
                     set::placement('bottom-end'),
                     set::menu(array('style' => array('minWidth' => 70, 'width' => 70))),

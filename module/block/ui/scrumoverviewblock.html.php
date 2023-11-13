@@ -45,13 +45,13 @@ foreach($config->block->projectstatistic->items as $module => $items)
             (
                 setClass('font-bold'),
                 $lang->block->projectstatistic->{$module}
-            ),
+            )
         ),
         tableData
         (
             set::width('100%'),
             $cellItems
-        ),
+        )
     );
 }
 
@@ -79,14 +79,14 @@ panel
                     span
                     (
                         setClass('font-bold text-black px-1'),
-                        abs($remainingDays),
+                        abs($remainingDays)
                     ),
                     $lang->block->projectstatistic->day
                 ) : span
                 (
                     setClass('text-gray'),
                     $project->status == 'closed' ? $lang->block->projectstatistic->projectClosed : $lang->block->projectstatistic->longTimeProject
-                ),
+                )
             ),
             $config->edition != 'open' ? cell
             (
@@ -126,11 +126,11 @@ panel
                         setClass('pl-2'),
                         set::href(helper::createLink('execution', 'task', "executionID={$project->executions[0]->id}")),
                         set('title', $project->executions[0]->name),
-                        $project->executions[0]->name,
+                        $project->executions[0]->name
                     ) : span
                     (
                         setClass('pl-2'),
-                        $project->executions[0]->name,
+                        $project->executions[0]->name
                     )
                 )
             ) : null,
@@ -138,7 +138,7 @@ panel
         div
         (
             setClass('flex w-full' . (!$longBlock ? ' flex-wrap' : '')),
-            $cells,
+            $cells
         )
     )
 );

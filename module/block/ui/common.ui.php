@@ -29,10 +29,10 @@ function buildParamsRows(object $block = null, ?array $params = null, string $mo
                 (
                     'id'       => "params$key",
                     'type'     => $row['control'],
-                    'items'    => isset($row['options']) ? $row['options'] : null,
+                    'items'    => isset($row['options']) ? $row['options'] : null
                 )),
-                set::required($row['control'] === 'picker'),
-            ),
+                set::required($row['control'] === 'picker')
+            )
         );
     }
     return $rows;

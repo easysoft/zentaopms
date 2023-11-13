@@ -100,7 +100,7 @@ blockPanel
                 array(
                     'href' => createLink('tutorial', 'start'),
                     'class' => 'btn btn-primary warning',
-                    'data-toggle' => 'modal',
+                    'data-toggle' => 'modal'
                 )
             ),
             $lang->block->tutorial
@@ -117,7 +117,7 @@ blockPanel
             (
                 set('class', 'nav nav-tabs nav-stacked'),
                 $getGuideTabs($blockNavCode)
-            ),
+            )
         ),
         cell
         (

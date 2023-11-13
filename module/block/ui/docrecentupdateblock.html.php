@@ -46,7 +46,7 @@ foreach($docList as $doc)
             span
             (
                 setClass('text-gray my-2 pl-2 pull-right'),
-                $editTip,
+                $editTip
             ),
             div
             (

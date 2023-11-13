@@ -37,7 +37,7 @@ function printDownloadMobile()
                         set('class', 'flex'),
                         div(img(set('src', $config->webRoot . 'theme/default/images/guide/app_index.png')), set('class', 'flex-1 pr-2')),
                         div(img(set('src', $config->webRoot . 'theme/default/images/guide/app_execution.png')), set('class', 'flex-1 pr-2')),
-                        div(img(set('src', $config->webRoot . 'theme/default/images/guide/app_statistic.png')), set('class', 'flex-1 pr-2')),
+                        div(img(set('src', $config->webRoot . 'theme/default/images/guide/app_statistic.png')), set('class', 'flex-1 pr-2'))
                     )
                 ),
                 cell

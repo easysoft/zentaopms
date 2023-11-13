@@ -35,7 +35,7 @@ function printDownloadClient()
                     set('class', 'avatar rounded-full flex-none size-sm has-img mr-2'),
                     img(set('src', $config->webRoot . "theme/default/images/guide/edition_{$edition}.png"), set('class', 'inline p-1.5'))
                 ),
-                span($editionName),
+                span($editionName)
             )
         );
     }

@@ -87,7 +87,7 @@ panel
                                     (
                                         'help',
                                         setClass('text-light'),
-                                        toggle::tooltip(array('title' => '提示文本')),
+                                        toggle::tooltip(array('title' => '提示文本'))
                                     )
                                 )
                             )
@@ -221,7 +221,7 @@ panel
                                         )
                                     )
                                 )
-                            )->size('100%', 170),
+                            )->size('100%', 170)
                         )
                     )
                 )
