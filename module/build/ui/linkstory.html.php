@@ -38,7 +38,7 @@ dtable
         'btnType'   => 'primary',
         'className' => 'size-sm linkObjectBtn',
         'data-type' => 'story',
-        'data-url'  => createLink($buildModule, 'linkStory', "buildID={$build->id}&browseType=$browseType&param=$param"),
+        'data-url'  => createLink($buildModule, 'linkStory', "buildID={$build->id}&browseType=$browseType&param=$param")
     )))),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(helper::createLink($buildModule, 'view', "buildID=$build->id&type=story"). "#app={$app->tab}", $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
     set::footPager(usePager(array
@@ -46,7 +46,7 @@ dtable
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
         'linkCreator' => helper::createLink($buildModule, 'view', "buildID={$build->id}&type=story&link=true&param=" . helper::safe64Encode("&browseType={$browseType}&param={$param}") . "&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
-    ))),
+    )))
 );
 
 h::js

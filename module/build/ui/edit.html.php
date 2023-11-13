@@ -37,7 +37,7 @@ if(!$hidden)
             set::width('1/2'),
             setClass('items-center pl-4'),
             $lang->build->notice->changeProduct
-        ) : '',
+        ) : ''
     );
 }
 
@@ -57,7 +57,7 @@ if(!$build->execution)
                 set::value($build->builds),
                 set::disabled(!empty($testtaskID)),
                 set::placeholder($lang->build->placeholder->multipleSelect),
-                set::multiple(true),
+                set::multiple(true)
             )
         ),
         formGroup
@@ -79,13 +79,13 @@ elseif(!empty($multipleProject))
             set::value($build->execution),
             set::items($executions),
             set::disabled(!empty($testtaskID)),
-            set::required(true),
+            set::required(true)
         ),
         $testtaskID ? formGroup(
             set::width('1/2'),
             setClass('items-center pl-4'),
             $lang->build->notice->changeExecution
-        ) : '',
+        ) : ''
     );
 }
 
@@ -109,7 +109,7 @@ formPanel
                 set::name('branch[]'),
                 set::value($build->branch),
                 set::items($branchTagOption),
-                set::multiple(true),
+                set::multiple(true)
             )
         )
     ),
@@ -122,7 +122,7 @@ formPanel
             set::name('name'),
             set::label($lang->build->nameAB),
             set::value($build->name),
-        ),
+        )
     ),
     formRow
     (
@@ -132,8 +132,8 @@ formPanel
             set::name('builder'),
             set::label($lang->build->builder),
             set::value($build->builder),
-            set::items($users),
-        ),
+            set::items($users)
+        )
     ),
     formRow
     (
@@ -143,8 +143,8 @@ formPanel
             set::name('date'),
             set::label($lang->build->date),
             set::control('date'),
-            set::value($build->date),
-        ),
+            set::value($build->date)
+        )
     ),
     formRow
     (
@@ -153,8 +153,8 @@ formPanel
             set::name('scmPath'),
             set::label($lang->build->scmPath),
             set::placeholder($lang->build->placeholder->scmPath),
-            set::value($build->scmPath),
-        ),
+            set::value($build->scmPath)
+        )
     ),
     formRow
     (
@@ -163,8 +163,8 @@ formPanel
             set::name('filePath'),
             set::label($lang->build->filePath),
             set::placeholder($lang->build->placeholder->filePath),
-            set::value($build->filePath),
-        ),
+            set::value($build->filePath)
+        )
     ),
     formRow
     (
@@ -172,7 +172,7 @@ formPanel
         (
             set::label($lang->build->files),
             upload()
-        ),
+        )
     ),
     formRow
     (
@@ -182,9 +182,9 @@ formPanel
             editor
             (
                 set::name('desc'),
-                html($build->desc),
+                html($build->desc)
             )
-        ),
+        )
     )
 );
 

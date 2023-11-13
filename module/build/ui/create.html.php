@@ -32,8 +32,8 @@ if($app->tab == 'project' && !empty($multipleProject))
                 set::items($lang->build->isIntegrated),
                 set::value('no'),
                 set::inline(true)
-            ),
-        ),
+            )
+        )
     );
 }
 
@@ -54,8 +54,8 @@ if(!empty($multipleProject))
                     set::items($executions),
                     set::required(true),
                     on::change('loadProducts')
-                ),
-            ),
+                )
+            )
         );
 }
 
@@ -91,8 +91,8 @@ if(!$hidden)
                     set::value('no'),
                     set::inline(true),
                     on::click('onShowArtifactRepo')
-                ),
-            ),
+                )
+            )
         );
         $artifactRepoRow[] = formRow
         (
@@ -103,8 +103,8 @@ if(!$hidden)
                 set::label($lang->artifactrepo->repoName),
                 set::name('artifactRepoID'),
                 set::items(array()),
-                on::change('onChangeArtifactRepo'),
-            ),
+                on::change('onChangeArtifactRepo')
+            )
         );
     }
     else
@@ -114,11 +114,11 @@ if(!$hidden)
             setClass('items-center'),
             set::id('productBox'),
             set::label($lang->build->product),
-            html(sprintf($lang->build->noProduct, helper::createLink('execution', 'manageproducts', "executionID={$executionID}", '', true), $app->tab)),
+            html(sprintf($lang->build->noProduct, helper::createLink('execution', 'manageproducts', "executionID={$executionID}", '', true), $app->tab))
         );
     }
     $productRow = formRow(
-        $productBox,
+        $productBox
     );
 }
 
@@ -144,7 +144,7 @@ formPanel
                 set::name('branch[]'),
                 set::value(key($productBranches)),
                 set::items($branches),
-                set::multiple(true),
+                set::multiple(true)
             )
         )
     ),
@@ -161,7 +161,7 @@ formPanel
                 set::id('builds'),
                 set::name('builds[]'),
                 set::items(array()),
-                set::multiple(true),
+                set::multiple(true)
             )
         ),
         formGroup
@@ -171,9 +171,9 @@ formPanel
             icon(
                 'help',
                 set('data-toggle', 'tooltip'),
-                set('id', 'tooltipHover'),
-            ),
-        ),
+                set('id', 'tooltipHover')
+            )
+        )
     ),
     formRow
     (
@@ -181,7 +181,7 @@ formPanel
         (
             set::width('1/2'),
             set::name('name'),
-            set::label($lang->build->nameAB),
+            set::label($lang->build->nameAB)
         ),
         $lastBuild ? formGroup
         (
@@ -194,10 +194,10 @@ formPanel
                 div
                 (
                     setClass('help-block'),
-                    html('&nbsp;' . $lang->build->last . ': <a class="code label light rounded-full" id="lastBuildBtn">' . $lastBuild->name . '</a>'),
-                ),
+                    html('&nbsp;' . $lang->build->last . ': <a class="code label light rounded-full" id="lastBuildBtn">' . $lastBuild->name . '</a>')
+                )
             )
-        ) : '',
+        ) : ''
     ),
     formRow
     (
@@ -207,8 +207,8 @@ formPanel
             set::name('builder'),
             set::label($lang->build->builder),
             set::value($app->user->account),
-            set::items($users),
-        ),
+            set::items($users)
+        )
     ),
     formRow
     (
@@ -218,8 +218,8 @@ formPanel
             set::name('date'),
             set::label($lang->build->date),
             set::control('date'),
-            set::value(helper::today()),
-        ),
+            set::value(helper::today())
+        )
     ),
     formRow
     (
@@ -227,8 +227,8 @@ formPanel
         (
             set::name('scmPath'),
             set::label($lang->build->scmPath),
-            set::placeholder($lang->build->placeholder->scmPath),
-        ),
+            set::placeholder($lang->build->placeholder->scmPath)
+        )
     ),
     formRow
     (
@@ -236,8 +236,8 @@ formPanel
         (
             set::name('filePath'),
             set::label($lang->build->filePath),
-            set::placeholder($lang->build->placeholder->filePath),
-        ),
+            set::placeholder($lang->build->placeholder->filePath)
+        )
     ),
     formRow
     (
@@ -245,7 +245,7 @@ formPanel
         (
             set::label($lang->build->files),
             upload()
-        ),
+        )
     ),
     formRow
     (
@@ -255,14 +255,14 @@ formPanel
             editor
             (
                 set::name('desc'),
-                set::rows('10'),
+                set::rows('10')
             )
         ),
         formGroup
         (
             setClass('hidden'),
             set::name('project'),
-            set::value($projectID),
+            set::value($projectID)
         )
     )
 );

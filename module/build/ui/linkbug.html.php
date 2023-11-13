@@ -46,7 +46,7 @@ dtable
             'btnType'   => 'primary',
             'className' => 'size-sm linkObjectBtn',
             'data-type' => 'bug',
-            'data-url'  => createLink($buildModule, 'linkBug', "buildID=$build->id&browseType=$browseType&param=$param"),
+            'data-url'  => createLink($buildModule, 'linkBug', "buildID=$build->id&browseType=$browseType&param=$param")
         ))
     )),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(createLink($buildModule, 'view', "buildID=$build->id&type=bug"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
@@ -55,7 +55,7 @@ dtable
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
         'linkCreator' => helper::createLink($buildModule, 'view', "buildID={$build->id}&type=bug&link=true&param=" . helper::safe64Encode("&browseType={$browseType}&param={$param}") . "&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
-    ))),
+    )))
 );
 
 render();

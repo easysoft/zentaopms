@@ -47,10 +47,10 @@ detailHeader
                     set::level(2),
                     set::text($build->name),
                     set::textClass('text-primary'),
-                    set::idClass('id-label'),
-                ),
+                    set::idClass('id-label')
+                )
             ),
-            set::items($buildItems),
+            set::items($buildItems)
         )
     ),
     !empty($menus) ? to::suffix(btnGroup(set::items($menus))) : null
@@ -118,7 +118,7 @@ detailBody
                 div
                 (
                     setClass('tabnActions'),
-                    !common::hasPriv($buildModule, 'linkStory') ? null : btn(set::text($lang->build->linkStory), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', createLink($buildModule, 'linkStory', "buildID={$build->id}" . (($link == 'true' && $type == 'story') ? $decodeParam : "&browseType=&param=")))),
+                    !common::hasPriv($buildModule, 'linkStory') ? null : btn(set::text($lang->build->linkStory), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', createLink($buildModule, 'linkStory', "buildID={$build->id}" . (($link == 'true' && $type == 'story') ? $decodeParam : "&browseType=&param="))))
                 ),
                 dtable
                 (
@@ -134,7 +134,7 @@ detailBody
                         'recPerPage'  => $storyPager->recPerPage,
                         'recTotal'    => $storyPager->recTotal,
                         'linkCreator' => helper::createLink($buildModule, 'view', "buildID={$build->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}")
-                    ))),
+                    )))
                 )
             ),
 
@@ -148,7 +148,7 @@ detailBody
                 div
                 (
                     setClass('tabnActions'),
-                    !common::hasPriv($buildModule, 'linkBug') ? null : btn(set::text($lang->build->linkBug), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', createLink($buildModule, 'linkBug', "buildID={$build->id}" . (($link == 'true' && $type == 'bug') ? $decodeParam : "&browseType=&param=")))),
+                    !common::hasPriv($buildModule, 'linkBug') ? null : btn(set::text($lang->build->linkBug), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', createLink($buildModule, 'linkBug', "buildID={$build->id}" . (($link == 'true' && $type == 'bug') ? $decodeParam : "&browseType=&param="))))
                 ),
                 dtable
                 (
@@ -164,7 +164,7 @@ detailBody
                         'recPerPage'  => $bugPager->recPerPage,
                         'recTotal'    => $bugPager->recTotal,
                         'linkCreator' => helper::createLink($buildModule, 'view', "buildID={$build->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}")
-                    ))),
+                    )))
                 )
             ),
 
@@ -186,7 +186,7 @@ detailBody
                         'recPerPage'  => $generatedBugPager->recPerPage,
                         'recTotal'    => $generatedBugPager->recTotal,
                         'linkCreator' => helper::createLink($buildModule, 'view', "buildID={$build->id}&type=generatedBug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$generatedBugPager->recTotal}&recPerPage={recPerPage}&page={page}")
-                    ))),
+                    )))
                 )
             ),
 
@@ -241,7 +241,7 @@ detailBody
                                 $build->scmPath,
                                 set('href', $build->scmPath),
                                 set('target', '_blank'),
-                                set('rel', 'nooperner noreferrer'),
+                                set('rel', 'nooperner noreferrer')
                             )
                         ),
                         item
@@ -252,22 +252,22 @@ detailBody
                                 $build->filePath,
                                 set('href', $build->filePath),
                                 set('target', '_blank'),
-                                set('rel', 'nooperner noreferrer'),
+                                set('rel', 'nooperner noreferrer')
                             )
                         ),
                         item
                         (
                             set::name($lang->build->desc),
                             html($build->desc)
-                        ),
+                        )
                     ),
                     $build->files ? h::hr(set::className('mt-6')) : null,
                     section
                     (
                         $build->files ? fileList
                         (
-                            set::files($build->files),
-                        ) : null,
+                            set::files($build->files)
+                        ) : null
                     ),
                     h::hr(set::className('mt-6')),
                     history()
