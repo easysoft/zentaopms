@@ -628,7 +628,7 @@ class repoModel extends model
         foreach($products as $productID => $product)
         {
             $productItem = array();
-            $productItem['id']    = $productID;
+            $productItem['pid']   = $productID;
             $productItem['type']  = 'product';
             $productItem['text']  = $product->name;
             $productItem['items'] = array();
