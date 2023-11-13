@@ -9,15 +9,6 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-$privs = array
-(
-    'canViewPlan'     => common::hasPriv($app->rawModule, 'view'),
-    'canStartPlan'    => common::hasPriv($app->rawModule, 'start'),
-    'canClosePlan'    => common::hasPriv($app->rawModule, 'close'),
-    'canFinishPlan'   => common::hasPriv($app->rawModule, 'finish'),
-    'canActivatePlan' => common::hasPriv($app->rawModule, 'activate')
-);
-
 foreach($kanbanList as $current => $region)
 {
     foreach($region['items'] as $index => $group)
@@ -39,9 +30,6 @@ foreach($lang->productplan->orderList as $order => $label)
     $orderItems[] = array('text' => $label, 'active' => $orderBy == $order, 'url' => $this->createLink($app->rawModule, 'browse', "productID=$productID&branch=$branchID&browseType=$browseType&queryID=$queryID&orderBy=$order"));
 }
 
-jsVar('privs',           $privs);
-jsVar('productplanLang', $lang->productplan);
-jsVar('rawModule',       $app->rawModule);
 toolbar
 (
     set::className('w-full justify-end'),

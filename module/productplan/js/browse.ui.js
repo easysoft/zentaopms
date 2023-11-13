@@ -145,34 +145,6 @@ $(document).on('click', '#createExecutionButton', function()
     zui.Modal.hide('#createExecutionModal');
 });
 
-window.getPlanID = function(event)
-{
-    const planID = $(event.target).closest('a').data('plan');
-    const branch = $(event.target).closest('a').data('branch');
-    $('[name=planID]').val(planID);
-
-    const link = $.createLink('productplan', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + (branch ? branch : 0));
-    $.getJSON(link, function(projects)
-    {
-        $('[name=project]').zui('picker').render({items: projects});
-
-        var projectList = $("[name=project]").val();
-        if(!projectList)
-        {
-            $("#programs").zui('picker').render({disabled: true});
-            $(".tips").removeClass('hidden');
-
-            var locateLink   = $.createLink('product', 'project', 'status=all&productID=' + productID + '&branch=' + branch);
-            var locateButton = "<a href=" + locateLink + " class='btn btn-primary' data-app='product'>" + enterProjectList + "</a>";
-            $("#projects .btn-primary").replaceWith(locateButton);
-        }
-        else
-        {
-            $(".tips").addClass('hidden');
-        }
-    });
-}
-
 /**
  * 对部分列进行重定义。
  * Redefine the partial column.
@@ -336,4 +308,10 @@ window.buildCardActions = function(item)
     if(item.actionList.includes('delete'))          actions.push({text: productplanLang.delete,          icon: 'trash',   url: $.createLink('productplan', 'delete', "planID=" + item.id), 'data-confirm': productplanLang.confirmDelete});
 
     return actions;
+}
+
+window.getPlanID = function(event)
+{
+    const planID = $(event.target).closest('a').data('plan');
+    $('[name=planID]').val(planID);
 }

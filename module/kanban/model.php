@@ -939,11 +939,6 @@ class kanbanModel extends model
                 $item['actionList']  = array();
                 foreach($cardActions as $action)
                 {
-                    if($action == 'createExecution')
-                    {
-                        if(common::hasPriv('execution', 'create')) $item['actionList'][] = $action;
-                        continue;
-                    }
                     if($this->productplan->isClickable($plan, $action)) $item['actionList'][] = $action;
                 }
                 $planList[$id][$plan->status][] = $item;

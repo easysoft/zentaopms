@@ -9,6 +9,17 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+$privs = array
+(
+    'canViewPlan'     => common::hasPriv($app->rawModule, 'view'),
+    'canStartPlan'    => common::hasPriv($app->rawModule, 'start'),
+    'canClosePlan'    => common::hasPriv($app->rawModule, 'close'),
+    'canFinishPlan'   => common::hasPriv($app->rawModule, 'finish'),
+    'canActivatePlan' => common::hasPriv($app->rawModule, 'activate')
+);
 
-jsVar('productID', $productID);
+jsVar('productID',       $productID);
+jsVar('productplanLang', $lang->productplan);
+jsVar('privs',           $privs);
+jsVar('rawModule',       $app->rawModule);
 include("browseby{$viewType}.html.php");
