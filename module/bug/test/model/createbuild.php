@@ -63,4 +63,4 @@ r($bug->createBuildTest($emptyBuildName,      $bugIdList[4])) && p()       && e(
 r($bug->createBuildTest($emptyBuildExecution, $bugIdList[5])) && p()       && e('『所属看板』不能为空。');   // 测试解决版本执行12 解决方案为设计如此的时候创建一个版本执行为空的版本
 r($bug->createBuildTest($emptyBuildExecution, $bugIdList[6])) && p()       && e('『所属执行』不能为空。');   // 测试解决版本执行11 解决方案为设计如此的时候创建一个版本执行为空的版本
 
-r($bug->createBuildTest($bydesignBug1, $bugIdList[0])) && p() && e('『新版本名称』已经有『bug新建的版本1』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); // 测试解决bugID 11 解决方案为设计如此的时候创建一个同名版本
+r($bug->createBuildTest($bydesignBug1, $bugIdList[0])) && p() && e('『新版本名称』已经有『bug新建的版本1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 测试解决bugID 11 解决方案为设计如此的时候创建一个同名版本

@@ -17,7 +17,7 @@ Visions为空的情况 >> 『界面类型』不能为空。
 用户名为空的情况 >> 『用户名』不能为空。
 用户名特殊的情况 >> 『用户名』只能是字母、数字或下划线的组合三位以上。
 两次密码不相同的情况 >> 两次密码应该相同。<br/>
-插入重复的用户名，返回报错信息 >> 『用户名』已经有『admin』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。
+插入重复的用户名，返回报错信息 >> 『用户名』已经有『admin』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
 正常插入用户，返回新插入的真实姓名 >> 新的测试用户
 
 */
@@ -57,5 +57,5 @@ r($user->createUserTest($emptyVisions))      && p('visions:0')   && e('『界面
 r($user->createUserTest($emptyAccount))      && p('account:0')   && e('『用户名』不能为空。');                                                                         //用户名为空的情况
 r($user->createUserTest($specialAccount))    && p('account:0')   && e('『用户名』只能是字母、数字或下划线的组合三位以上。');                                           //用户名特殊的情况
 r($user->createUserTest($differentPassword)) && p('password1:0') && e('两次密码应该相同。');                                                                      //两次密码不相同的情况
-r($user->createUserTest($existUser))         && p('account:0')   && e('『用户名』已经有『admin』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); //插入重复的用户名，返回报错信息
+r($user->createUserTest($existUser))         && p('account:0')   && e('『用户名』已经有『admin』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); //插入重复的用户名，返回报错信息
 r($user->createUserTest($normalUser))        && p('realname')    && e('新的测试用户');                                                                                 //正常插入用户，返回新插入的真实姓名

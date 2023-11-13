@@ -19,7 +19,7 @@ pid=1
 新建私有接口库 >> private;www.zentaopms.com
 新建自定义接口库 >> custom;1,2,3;admin,dev1,dev10
 接口库名称为空 >> 『接口库名称』不能为空。
-重复创建接口库 >> 『接口库名称』已经有『新建api文档库』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。
+重复创建接口库 >> 『接口库名称』已经有『新建api文档库』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
 
 */
 $acl       = array('', 'open', 'custom', 'private');
@@ -41,5 +41,5 @@ r($doc->createApiLibTest($customApilib))  && p('acl;groups;users') && e('custom;
 r($doc->createApiLibTest($noName))        && p('name:0')           && e('『接口库名称』不能为空。');     //接口库名称为空
 r($doc->createApiLibTest($noAcl))         && p('acl')              && e('');                             //接口库权限为空
 r($doc->createApiLibTest($noBaseUrl))     && p('baseUrl')          && e('');                             //接口库地址为空
-r($doc->createApiLibTest($openApilib))    && p('name:0')           && e('『接口库名称』已经有『新建api文档库』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。');//重复创建接口库
+r($doc->createApiLibTest($openApilib))    && p('name:0')           && e('『接口库名称』已经有『新建api文档库』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。');//重复创建接口库
 

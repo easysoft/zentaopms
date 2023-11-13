@@ -59,5 +59,5 @@ r($testcase->createSceneTest($scene14)) && p('scene:id|sort|parent|grade|path;ac
 r($testcase->createSceneTest($scene15)) && p('scene:id|sort|parent|grade|path;action:objectType|action', '|') && e('3|3|2|3|,1,2,3,;scene|opened'); // 创建场景 3 成功后检测场景信息和日志。
 r($testcase->createSceneTest($scene16)) && p('scene:id|sort|parent|grade|path;action:objectType|action', '|') && e('4|4|0|1|,4,;scene|opened');     // 创建场景 4 成功后检测场景信息和日志。
 
-r($testcase->createSceneTest($scene17)) && p('title:0') && e('『场景名称』已经有『这个是测试场景1』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); // 同产品下场景标题重复输出错误提示。
+r($testcase->createSceneTest($scene17)) && p('title:0') && e('『场景名称』已经有『这个是测试场景1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 同产品下场景标题重复输出错误提示。
 r($testcase->createSceneTest($scene18)) && p('scene:id|product|sort|parent|grade|path;action:objectType|action', '|') && e('5|2|5|0|1|,5,;scene|opened');                 // 不同产品下场景标题重复，创建场景 5 成功后检测场景信息和日志。

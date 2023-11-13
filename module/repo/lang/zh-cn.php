@@ -241,7 +241,7 @@ $lang->repo->error->differentVersions = '基准和对比不能一样';
 $lang->repo->error->needTwoVersion    = '必须选择两个分支/标签';
 $lang->repo->error->emptyVersion      = '版本不能为空';
 $lang->repo->error->versionError      = '版本格式错误！';
-$lang->repo->error->projectUnique     = $lang->repo->serviceProject . '已经有这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。';
+$lang->repo->error->projectUnique     = $lang->repo->serviceProject . '已经有这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。';
 $lang->repo->error->repoNameInvalid   = '名称应该只包含字母数字，破折号，下划线和点。';
 $lang->repo->error->createdFail       = '创建失败';
 

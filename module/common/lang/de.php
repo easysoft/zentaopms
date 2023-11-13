@@ -487,7 +487,7 @@ $lang->error = new stdclass();
 $lang->error->companyNotFound = "The domain %s cannot be found!";
 $lang->error->length          = array("『%s』Length Error. It should be『%s』", "『%s』length should be <=『%s』and >『%s』.");
 $lang->error->reg             = "『%s』Format Error. It should be『%s』.";
-$lang->error->unique          = "『%s』『%s』existed. Please go to Admin->System->Data->Recycle to restore it, if you are sure it is deleted.";
+$lang->error->unique          = "『%s』『%s』existed. Please go to Admin->System->Recycle to restore it, if you are sure it is deleted.";
 $lang->error->repeat          = "『%s』『%s』exists.";
 $lang->error->gt              = "『%s』should be >『%s』.";
 $lang->error->ge              = "『%s』should be >=『%s』.";

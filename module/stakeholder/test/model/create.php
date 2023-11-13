@@ -17,7 +17,7 @@ pid=1
 输入不存在的用户名 >> autotest
 不输入用户 >> 用户不能为空！
 输入错误的key值 >> 『key』不符合格式，应当为:『/0|1/』。
-创建相同的干系人 >> 『用户』已经有『po22』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。
+创建相同的干系人 >> 『用户』已经有『po22』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
 
 */
 $objectIDList = array('1', '11', '101');
@@ -42,5 +42,5 @@ r($stakeholder->createTest($objectIDList[2],$errorFrom))          && p('from')  
 r($stakeholder->createTest($objectIDList[0],$errorUser))          && p('user')     && e('autotest');                             //输入不存在的用户名
 r($stakeholder->createTest($objectIDList[0],$noUser)[0])          && p()           && e('用户不能为空！');                       //不输入用户
 r($stakeholder->createTest($objectIDList[2],$noKey))              && p('key:0')    && e('『key』不符合格式，应当为:『/0|1/』。');//输入错误的key值
-r($stakeholder->createTest($objectIDList[0],$teamStakeholder))    && p('user:0')   && e('『用户』已经有『po22』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。');//创建相同的干系人
+r($stakeholder->createTest($objectIDList[0],$teamStakeholder))    && p('user:0')   && e('『用户』已经有『po22』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。');//创建相同的干系人
 

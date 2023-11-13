@@ -10,7 +10,7 @@ timeout=0
 cid=1
 
 - 正常创建gitlab版本库属性id @2
-- 当已有版本库时提示已有记录第serviceProject条的0属性 @仓库已经有这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。
+- 当已有版本库时提示已有记录第serviceProject条的0属性 @仓库已经有这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
 - 客户端为空创建gitea版本库第client条的0属性 @『客户端』不能为空。
 - 正常创建gitea版本库属性SCM @Gitea
 - 客户端为空创建git版本库第client条的0属性 @『客户端』不能为空。
@@ -71,7 +71,7 @@ $svn = array(
 
 $repo = new repoTest();
 r($repo->createTest($gitlab))      && p('id')     && e('2');                                                                                         //正常创建gitlab版本库
-r($repo->createTest($gitlab))      && p('serviceProject:0') && e('仓库已经有这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); //当已有版本库时提示已有记录
+r($repo->createTest($gitlab))      && p('serviceProject:0') && e('仓库已经有这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); //当已有版本库时提示已有记录
 r($repo->createTest($gitea))       && p('client:0')    && e('『客户端』不能为空。');                                                                 //客户端为空创建gitea版本库
 $gitea['client'] = '/usr/bin/git';
 r($repo->createTest($gitea))       && p('SCM')    && e('Gitea');                                                                                     //正常创建gitea版本库

@@ -46,6 +46,6 @@ $data->type    = 'branch';
 $data->acl     = 'private';
 $result = $product->doUpdateTest($data, $productID, $programID);
 
-r(array_shift($result['name'])) && p() && e('『产品名称』已经有『修改产品1』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。');
-r(array_shift($result['code'])) && p() && e('『产品代号』已经有『newcode1』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。');
+r(array_shift($result['name'])) && p() && e('『产品名称』已经有『修改产品1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。');
+r(array_shift($result['code'])) && p() && e('『产品代号』已经有『newcode1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。');
 

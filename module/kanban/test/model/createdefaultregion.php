@@ -14,7 +14,7 @@ pid=1
 创建看板10002的默认区域 >> 10002,10002,默认区域
 创建看板10003的默认区域 >> 10003,10003,默认区域
 创建看板10004的默认区域 >> 10004,10004,默认区域
-重复创建看板1的默认区域 >> 『区域名称』已经有『默认区域』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。
+重复创建看板1的默认区域 >> 『区域名称』已经有『默认区域』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
 
 */
 
@@ -44,4 +44,4 @@ r($kanban->createDefaultRegionTest($kanban1)) && p('space,kanban,name') && e('10
 r($kanban->createDefaultRegionTest($kanban2)) && p('space,kanban,name') && e('10002,10002,默认区域'); // 创建看板10002的默认区域
 r($kanban->createDefaultRegionTest($kanban3)) && p('space,kanban,name') && e('10003,10003,默认区域'); // 创建看板10003的默认区域
 r($kanban->createDefaultRegionTest($kanban4)) && p('space,kanban,name') && e('10004,10004,默认区域'); // 创建看板10004的默认区域
-r($kanban->createDefaultRegionTest($kanban5)) && p('name:0')            && e('『区域名称』已经有『默认区域』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。'); // 重复创建看板1的默认区域
+r($kanban->createDefaultRegionTest($kanban5)) && p('name:0')            && e('『区域名称』已经有『默认区域』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 重复创建看板1的默认区域
