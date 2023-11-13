@@ -22,3 +22,5 @@ span.table-nest-icon {padding-left: 22px;}
 #mainMenu .pull-right .icon-list{padding-left: 7px;}
 #mainMenu .btn-group.dropdown > .create-execution-btn {border-right: 1px solid rgba(255,255,255,0.2);}
 #mainMenu .btn-group.dropdown > button.btn-primary {padding: 6px;}
+
+.c-enddate {text-align: center; width: 100px;}
