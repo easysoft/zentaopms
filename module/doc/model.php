@@ -423,7 +423,6 @@ class docModel extends model
             $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
                 ->where('objectType')->eq('doc')
                 ->andWhere('objectID')->in($hasPrivDocIdList)
-                ->andWhere('templateType')->eq('')
                 ->andWhere('actor')->eq($this->app->user->account)
                 ->andWhere('action')->eq('edited')
                 ->fetchAll('objectID');
