@@ -510,6 +510,7 @@ $lang->error->editedByOther   = 'Cet enregistrement a peut-être été modifié.
 $lang->error->tutorialData    = "Aucune donnée ne peut être importée en mode tutoriel. Veuillez d'abord quitter le didacticiel !";
 $lang->error->noCurlExt       = 'Aucun module Curl installé';
 $lang->error->loginTimeout    = 'Login has timed out, please login again!';
+$lang->error->httpServerError = 'Server error';
 
 /* Page info. */
 $lang->pager = new stdclass();

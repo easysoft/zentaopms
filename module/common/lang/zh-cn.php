@@ -510,6 +510,7 @@ $lang->error->editedByOther   = '该记录可能已经被改动。请刷新页�
 $lang->error->tutorialData    = '新手模式下不会插入数据，请退出新手模式操作';
 $lang->error->noCurlExt       = '服务器未安装Curl模块。';
 $lang->error->loginTimeout    = '登录已超时，请重新登入!';
+$lang->error->httpServerError = '服务器错误';
 
 /* 分页信息。*/
 $lang->pager               = new stdclass();
