@@ -14,5 +14,5 @@ $config->block->projectstatistic->items['task'][]  = array('field' => 'wait',   
 $config->block->projectstatistic->items['task'][]  = array('field' => 'doing',  'unit' => 'unit');
 
 $config->block->projectstatistic->items['bug'][]   = array('field' => 'bugs',      'unit' => 'unit');
-$config->block->projectstatistic->items['bug'][]   = array('field' => 'resolved',  'unit' => 'unit');
+$config->block->projectstatistic->items['bug'][]   = array('field' => 'closed',    'unit' => 'unit');
 $config->block->projectstatistic->items['bug'][]   = array('field' => 'activated', 'unit' => 'unit');
