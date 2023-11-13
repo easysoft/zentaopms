@@ -23,8 +23,8 @@ formPanel
         (
             set::name('name'),
             set::label($lang->company->name),
-            set::value($company->name),
-        ),
+            set::value($company->name)
+        )
     ),
     formRow
     (
@@ -32,8 +32,8 @@ formPanel
         (
             set::name('phone'),
             set::label($lang->company->phone),
-            set::value($company->phone),
-        ),
+            set::value($company->phone)
+        )
     ),
     formRow
     (
@@ -41,8 +41,8 @@ formPanel
         (
             set::name('fax'),
             set::label($lang->company->fax),
-            set::value($company->fax),
-        ),
+            set::value($company->fax)
+        )
     ),
     formRow
     (
@@ -50,8 +50,8 @@ formPanel
         (
             set::name('address'),
             set::label($lang->company->address),
-            set::value($company->address),
-        ),
+            set::value($company->address)
+        )
     ),
     formRow
     (
@@ -59,8 +59,8 @@ formPanel
         (
             set::name('zipcode'),
             set::label($lang->company->zipcode),
-            set::value($company->zipcode),
-        ),
+            set::value($company->zipcode)
+        )
     ),
     formRow
     (
@@ -68,8 +68,8 @@ formPanel
         (
             set::name('website'),
             set::label($lang->company->website),
-            set::value($company->website ? $company->website: 'http://'),
-        ),
+            set::value($company->website ? $company->website: 'http://')
+        )
     ),
     formRow
     (
@@ -77,8 +77,8 @@ formPanel
         (
             set::name('backyard'),
             set::label($lang->company->backyard),
-            set::value($company->backyard ? $company->backyard : 'http://'),
-        ),
+            set::value($company->backyard ? $company->backyard : 'http://')
+        )
     ),
     formRow
     (
@@ -91,9 +91,9 @@ formPanel
                 set::items($lang->company->guestOptions),
                 set::value($company->guest),
                 set::inline(true)
-            ),
-        ),
-    ),
+            )
+        )
+    )
 );
 
 render();

@@ -22,8 +22,8 @@ detailHeader
             set('data-toggle', 'modal'),
             set('data-size', 'sm'),
             $lang->edit
-        ),
-    ),
+        )
+    )
 );
 detailBody
 (
@@ -34,45 +34,45 @@ detailBody
             item
             (
                 set::name($lang->company->name),
-                $company->name,
+                $company->name
             ),
             item
             (
                 set::name($lang->company->phone),
-                $company->phone,
+                $company->phone
             ),
             item
             (
                 set::name($lang->company->fax),
-                $company->fax,
+                $company->fax
             ),
             item
             (
                 set::name($lang->company->address),
-                $company->address,
+                $company->address
             ),
             item
             (
                 set::name($lang->company->zipcode),
-                $company->zipcode,
+                $company->zipcode
             ),
             item
             (
                 set::name($lang->company->website),
-                $company->website,
+                $company->website
             ),
             item
             (
                 set::name($lang->company->backyard),
-                $company->backyard,
+                $company->backyard
             ),
             item
             (
                 set::name($lang->company->guest),
-                zget($lang->company->guestOptions, $company->guest),
-            ),
-        ),
-    ),
+                zget($lang->company->guestOptions, $company->guest)
+            )
+        )
+    )
 );
 
 render();

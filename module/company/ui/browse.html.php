@@ -14,7 +14,7 @@ featureBar
 (
     set::current($browseType),
     set::linkParams("browseType={key}"),
-    li(searchToggle(set::open($type == 'bysearch'), set::module('user'))),
+    li(searchToggle(set::open($type == 'bysearch'), set::module('user')))
 );
 
 toolbar
@@ -37,10 +37,10 @@ toolbar
                 (
                     array('text' => $lang->user->create,      'url' => helper::createLink('user', 'create', "deptID={$deptID}"), 'className' => '.create-user-btn
 '),
-                    array('text' => $lang->user->batchCreate, 'url' => helper::createLink('user', 'batchCreate', "deptID={$deptID}")),
+                    array('text' => $lang->user->batchCreate, 'url' => helper::createLink('user', 'batchCreate', "deptID={$deptID}"))
                 )
             ),
-            set::placement('bottom-end'),
+            set::placement('bottom-end')
         )
     )
 );
@@ -56,7 +56,7 @@ sidebar
         'settingLink' => $settingLink,
         'closeLink'   => $closeLink,
         'showDisplay' => false,
-        'settingText' => $lang->dept->manage,
+        'settingText' => $lang->dept->manage
     )))
 );
 $footToolbar = common::hasPriv('user', 'batchEdit') ? array(
@@ -77,7 +77,7 @@ dtable
     set::checkable(common::hasPriv('user', 'batchEdit')),
     set::fixedLeftWidth('0.2'),
     set::footToolbar($footToolbar),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

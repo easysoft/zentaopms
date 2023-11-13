@@ -27,8 +27,8 @@ featureBar
             set::placeholder($lang->user->common),
             set::items($userIdPairs),
             set::value($userID),
-            on::change('changeItem'),
-        ),
+            on::change('changeItem')
+        )
     ),
     $this->config->vision == 'rnd' ? li
     (
@@ -40,8 +40,8 @@ featureBar
             set::placeholder($lang->product->common),
             set::items($products),
             set::value($productID),
-            on::change('changeItem'),
-        ),
+            on::change('changeItem')
+        )
     ) : null,
     li
     (
@@ -53,8 +53,8 @@ featureBar
             set::placeholder($lang->project->common),
             set::items($projects),
             set::value($projectID),
-            on::change('changeItem'),
-        ),
+            on::change('changeItem')
+        )
     ),
     li
     (
@@ -66,8 +66,8 @@ featureBar
             set::placeholder($lang->execution->common),
             set::items($executions),
             set::value($executionID),
-            on::change('changeItem'),
-        ),
+            on::change('changeItem')
+        )
     ),
     li
     (
@@ -80,10 +80,10 @@ featureBar
             set::items($lang->company->order),
             set::value($orderBy),
             set::required(true),
-            on::change('changeItem'),
-        ),
+            on::change('changeItem')
+        )
     ),
-    li(searchToggle(set::module('action'))),
+    li(searchToggle(set::module('action')))
 );
 
 $content = null;
@@ -96,7 +96,7 @@ if(empty($dateGroups))
         (
             setClass('text-gray'),
             $lang->action->noDynamic
-        ),
+        )
     );
 }
 else
@@ -115,12 +115,12 @@ else
                 setClass('cursor-pointer leading-5'),
                 span
                 (
-                    icon('angle-down text-primary border-2 rounded-full z-10 bg-canvas align-middle'),
+                    icon('angle-down text-primary border-2 rounded-full z-10 bg-canvas align-middle')
                 ),
                 span
                 (
                     setClass('ml-2'),
-                    $isToday ? $lang->today : $date,
+                    $isToday ? $lang->today : $date
                 ),
                 on::click('toggleCollapse')
             ),
@@ -134,7 +134,7 @@ else
                     dynamic
                     (
                         set::dynamics($actions),
-                        set::users($accountPairs),
+                        set::users($accountPairs)
                     )
                 )
             )
