@@ -26,7 +26,7 @@ formPanel
                     set::name('lib'),
                     set::items($libraries),
                     set::value($libID)
-                ),
+                )
             )
         ),
         formGroup
@@ -61,7 +61,7 @@ formPanel
                     )
                 ) : null
             )
-        ),
+        )
     ),
     formRow
     (
@@ -76,7 +76,7 @@ formPanel
                 set::items($lang->testcase->typeList),
                 set::value($type),
                 set::required(true)
-            ),
+            )
         ),
         formGroup
         (
@@ -130,7 +130,7 @@ formPanel
             set::control(array('type' => 'priPicker', 'items' => array_filter($lang->testcase->priList))),
             set::name('pri'),
             set::value('3')
-        ),
+        )
     ),
     formRow
     (

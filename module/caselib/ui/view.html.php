@@ -14,7 +14,7 @@ $isInModal = isAjaxRequest('modal');
 detailHeader
 (
     $isInModal ? to::prefix('') : '',
-    to::title(entityLabel(set(array('entityID' => $lib->id, 'level' => 1, 'text' => $lib->name)))),
+    to::title(entityLabel(set(array('entityID' => $lib->id, 'level' => 1, 'text' => $lib->name))))
 );
 
 $commonActions = array();
@@ -34,7 +34,7 @@ detailBody
             set::content($lib->desc),
             set::useHtml(true)
         ),
-        history(),
+        history()
     ),
     floatToolbar
     (
@@ -43,8 +43,8 @@ detailBody
             array(array('icon' => 'back', 'text' => $lang->goback, 'url' => 'javascript:goBack("execution-task", "execution-task")'))
         ) : '',
         set::suffix($commonActions),
-        set::object($lib),
-    ),
+        set::object($lib)
+    )
 );
 
 render();

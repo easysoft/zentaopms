@@ -43,7 +43,7 @@ toolbar
         set('data-toggle', 'modal'),
         set('data-id', 'viewLibModal'),
         icon('list-alt'),
-        $lang->caselib->view,
+        $lang->caselib->view
     ) : '',
     $canExport || $canImport ? btngroup
     (
@@ -54,7 +54,7 @@ toolbar
             set('data-toggle', 'modal'),
             set('data-size', 'sm'),
             icon('export'),
-            $lang->caselib->exportTemplate,
+            $lang->caselib->exportTemplate
         ) : '',
         $canImport ? a
         (
@@ -63,8 +63,8 @@ toolbar
             set('data-toggle', 'modal'),
             set('data-size', 'sm'),
             icon('import'),
-            $lang->testcase->fileImport,
-        ) : '',
+            $lang->testcase->fileImport
+        ) : ''
     ) : '',
     $canCreateLib ? btn
     (
@@ -81,7 +81,7 @@ toolbar
             setClass('btn primary'),
             set::icon('plus'),
             set::url(helper::createLink('caselib', 'createCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0))),
-            $lang->testcase->create,
+            $lang->testcase->create
         ),
         dropdown
         (
@@ -89,10 +89,10 @@ toolbar
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
             set::items(array($createCaseItem, $batchCreateCaseItem)),
             set::placement('bottom-end')
-        ),
+        )
     ) : null,
     $canCreateCase && !$canBatchCreateCase ? item(set($createCaseItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
-    $canBatchCreateCase && !$canCreateCase ? item(set($batchCreateCaseItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canBatchCreateCase && !$canCreateCase ? item(set($batchCreateCaseItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null
 );
 
 $settingLink = $this->createLink('tree', 'browse', "libID={$libID}&view=caselib&currentModuleID=0&branch=0&from={$lang->navGroup->caselib}");
@@ -104,8 +104,8 @@ sidebar
         set::modules($moduleTree),
         set::activeKey($moduleID),
         set::settingLink($settingLink),
-        set::closeLink($closeLink),
-    ),
+        set::closeLink($closeLink)
+    )
 );
 
 $reviewItems = array();
@@ -131,7 +131,7 @@ if($canBatchReview || $canBatchDelete || $canBatchChangeModule)
     (
         $canBatchReview ? array('text' => $lang->testcase->review, 'class' => 'not-hide-menu', 'items' => $reviewItems) : null,
         $canBatchDelete ? array('text' => $lang->delete, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchDelete', "libID=$libID")) : null,
-        $canBatchChangeModule ? array('text' => $lang->testcase->module, 'class' => 'not-hide-menu', 'items' => $moduleItems) : null,
+        $canBatchChangeModule ? array('text' => $lang->testcase->module, 'class' => 'not-hide-menu', 'items' => $moduleItems) : null
     );
 }
 

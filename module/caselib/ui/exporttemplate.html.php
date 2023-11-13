@@ -21,17 +21,17 @@ formPanel
         set::label($lang->caselib->recordNum),
         set::name('num'),
         set::type('number'),
-        set::value(10),
+        set::value(10)
     ),
     formGroup
     (
         set::label($lang->caselib->templateType),
         set::name('encode'),
         set::value('utf-8'),
-        set::control(array('type' => 'picker', 'items' => $config->charsets[$this->cookie->lang])),
+        set::control(array('type' => 'picker', 'items' => $config->charsets[$this->cookie->lang]))
     ),
     set::actions(array('submit')),
-    set::submitBtnText($lang->export),
+    set::submitBtnText($lang->export)
 );
 
 js

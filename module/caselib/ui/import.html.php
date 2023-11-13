@@ -14,7 +14,7 @@ modalHeader
 (
     set::entityText($lang->testcase->fileImport),
     set::id(''),
-    set::title(''),
+    set::title('')
 );
 
 formPanel
@@ -26,7 +26,7 @@ formPanel
         (
             set::label($lang->caselib->selectFile),
             fileInput()
-        ),
+        )
     ),
     formRow
     (

@@ -19,7 +19,7 @@ formPanel
     (
         set::label($lang->caselib->name),
         set::name('name'),
-        set::value($lib->name),
+        set::value($lib->name)
     ),
     formGroup
     (
@@ -30,7 +30,7 @@ formPanel
             set::rows(10),
             html($lib->desc)
         )
-    ),
+    )
 );
 
 render();

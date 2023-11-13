@@ -49,7 +49,7 @@ else
     (
         'name'  => 'title',
         'label' => $lang->testcase->title,
-        'width' => '240px',
+        'width' => '240px'
     );
 
     $items[] = array
@@ -58,7 +58,7 @@ else
         'label'   => $lang->testcase->module,
         'control' => 'picker',
         'items'   => $modules,
-        'width'   => '200px',
+        'width'   => '200px'
     );
 
     $items[] = array
@@ -67,7 +67,7 @@ else
         'label'   => $lang->testcase->type,
         'control' => 'picker',
         'items'   => $lang->testcase->typeList,
-        'width'   => '160px',
+        'width'   => '160px'
     );
 
     $items[] = array
@@ -76,7 +76,7 @@ else
         'label'   => $lang->testcase->pri,
         'control' => 'pripicker',
         'items'   => $lang->testcase->priList,
-        'width'   => '80px',
+        'width'   => '80px'
     );
 
     $items[] = array
@@ -84,14 +84,14 @@ else
         'name'    => 'precondition',
         'label'   => $lang->testcase->precondition,
         'control' => 'textarea',
-        'width'   => '240px',
+        'width'   => '240px'
     );
 
     $items[] = array
     (
         'name'  => 'keywords',
         'label' => $lang->testcase->keywords,
-        'width' => '240px',
+        'width' => '240px'
     );
 
     $items[] = array
@@ -101,7 +101,7 @@ else
         'control' => 'picker',
         'multiple' => true,
         'items'   => $lang->testcase->stageList,
-        'width'   => '240px',
+        'width'   => '240px'
     );
 
     $items[] = array

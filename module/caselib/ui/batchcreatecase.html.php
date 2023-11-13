@@ -16,7 +16,7 @@ $items[] = array
     'name'    => 'id',
     'label'   => $lang->idAB,
     'control' => 'index',
-    'width'   => '32px',
+    'width'   => '32px'
 );
 
 /* Field of module. */
@@ -29,7 +29,7 @@ $items[] = array
     'value'    => $currentModuleID,
     'width'    => '200px',
     'required' => strpos($config->testcase->create->requiredFields, 'module') !== false,
-    'ditto'    => true,
+    'ditto'    => true
 );
 
 /* Field of type. */
@@ -42,7 +42,7 @@ $items[] = array
     'value'    => 1,
     'width'    => '160px',
     'required' => true,
-    'ditto'    => true,
+    'ditto'    => true
 );
 
 /* Field of stage. */
@@ -55,10 +55,10 @@ $items[] = array
         'items'    => $lang->testcase->stageList,
         'value'    => '',
         'multiple' => true,
-        'required' => strpos($config->testcase->create->requiredFields, 'stage') !== false,
+        'required' => strpos($config->testcase->create->requiredFields, 'stage') !== false
     ),
     'required' => strpos($config->testcase->create->requiredFields, 'stage') !== false,
-    'width'    => '160px',
+    'width'    => '160px'
 );
 
 /* Field of title. */
@@ -67,7 +67,7 @@ $items[] = array
     'name'     => 'title',
     'label'    => $lang->testcase->title,
     'width'    => '240px',
-    'required' => true,
+    'required' => true
 );
 
 /* Field of pri. */
@@ -81,7 +81,7 @@ $items[] = array
     'value'    => 3,
     'width'    => '90px',
     'required' => strpos($config->testcase->create->requiredFields, 'pri') !== false,
-    'ditto'    => true,
+    'ditto'    => true
 );
 
 /* Field of precondition. */
@@ -90,7 +90,7 @@ $items[] = array
     'name'     => 'precondition',
     'label'    => $lang->testcase->precondition,
     'width'    => '200px',
-    'required' => strpos($config->testcase->create->requiredFields, 'precondition') !== false,
+    'required' => strpos($config->testcase->create->requiredFields, 'precondition') !== false
 );
 
 /* Field of keywords. */
@@ -99,14 +99,14 @@ $items[] = array
     'name'     => 'keywords',
     'label'    => $lang->testcase->keywords,
     'width'    => '200px',
-    'required' => strpos($config->testcase->create->requiredFields, 'keywords') !== false,
+    'required' => strpos($config->testcase->create->requiredFields, 'keywords') !== false
 );
 
 formBatchPanel
 (
     set::title($lang->testcase->batchCreate),
     set::pasteField('title'),
-    set::items($items),
+    set::items($items)
 );
 
 render();
