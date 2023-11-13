@@ -1273,22 +1273,27 @@ class kanbanModel extends model
                 $card = zget($cards, $cardID);
 
                 $item = array();
-                $item['column']     = $cell->column;
-                $item['lane']       = $cell->lane;
-                $item['title']      = htmlspecialchars_decode($card->name);
-                $item['id']         = $card->id;
-                $item['name']       = $card->id;
-                $item['pri']        = $card->pri;
-                $item['begin']      = $card->begin;
-                $item['end']        = $card->end;
-                $item['group']      = $card->group;
-                $item['region']     = $card->region;
-                $item['color']      = $card->color;
-                $item['progress']   = $card->progress;
-                $item['assignedTo'] = $card->assignedTo;
-                $item['fromType']   = $card->fromType;
-                $item['avatarList'] = array();
-                $item['realnames']  = '';
+                $item['column']       = $cell->column;
+                $item['lane']         = $cell->lane;
+                $item['title']        = htmlspecialchars_decode($card->name);
+                $item['id']           = $card->id;
+                $item['name']         = $card->id;
+                $item['pri']          = $card->pri;
+                $item['begin']        = $card->begin;
+                $item['end']          = $card->end;
+                $item['group']        = $card->group;
+                $item['region']       = $card->region;
+                $item['color']        = $card->color;
+                $item['progress']     = $card->progress;
+                $item['assignedTo']   = $card->assignedTo;
+                $item['fromID']       = $card->fromID;
+                $item['fromType']     = $card->fromType;
+                $item['delay']        = !empty($card->delay) ? $card->delay : 0;
+                $item['status']       = !empty($card->status) ? $card->status : '';
+                $item['objectStatus'] = !empty($card->objectStatus) ? $card->objectStatus : '';
+                $item['deleted']      = !empty($card->deleted) ? $card->deleted : 0;
+                $item['avatarList']   = array();
+                $item['realnames']    = '';
 
                 if($card->assignedTo)
                 {

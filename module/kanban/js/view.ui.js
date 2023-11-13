@@ -128,6 +128,34 @@ window.buildColActions = function(col)
  */
 window.getItem = function(info)
 {
+    if(info.item.fromType == 'execution')
+    {
+        renderExecutionItem(info);
+    }
+    else if(info.item.fromType == 'release')
+    {
+        renderReleaseItem(info);
+    }
+    else if(info.item.fromType == 'build')
+    {
+        renderBuildItem(info);
+    }
+    else if(info.item.fromType == 'productplan')
+    {
+        renderProductplanItem(info);
+    }
+    else if(info.item.fromType == 'ticket')
+    {
+        renderTicketItem(info);
+    }
+    else
+    {
+        renderGeneralItem(info)
+    }
+}
+
+window.renderGeneralItem = function(info)
+{
     let begin = info.item.begin;
     let end   = info.item.end;
     let beginAndEnd = '';
@@ -160,10 +188,50 @@ window.getItem = function(info)
 
     info.item.content  = {html: content};
     if(info.item.color && info.item.color != '#fff') info.item.className = 'color-' + info.item.color.replace('#', '');
-    if(kanban.performable == 1 && (info.item.fromType == '' || info.item.fromType == 'execution'))
+    if(kanban.performable == 1)
     {
-        info.item.footer = {html: "<div class='flex'><div class='circle progress mt-3' style='width:80%'><div class='progress-bar' style='width: " + info.item.progress + '%\'></div></div><div class="mt-2 ml-2">' + info.item.progress + '%' + '</div></div>'};
+        info.item.footer = {html: "<div class='flex'><div class='circle progress mt-3 flex-1' style='width:80%'><div class='progress-bar' style='width: " + info.item.progress + '%\'></div></div><div class="mt-2 ml-2">' + info.item.progress + '%' + '</div></div>'};
     }
+}
+
+window.renderExecutionItem = function(info)
+{
+    info.item.icon       = 'run';
+    info.item.titleUrl   = $.createLink('execution', 'task', `id=${info.item.fromID}`);
+    info.item.titleAttrs = {'class': 'text-black clip', 'title' : info.item.title};
+    console.log(info.item);
+    if(info.item.delay)
+    {
+        info.item.suffix      = executionLang.delayed;
+        info.item.suffixClass = 'label danger rounded-xl';
+    }
+
+    if(info.item.deleted == '0')
+    {
+        statusBox = '<span class="label label-' + info.item.objectStatus + '">' + executionLang.statusList[info.item.objectStatus] + '</span>';
+    }
+    else
+    {
+        statusBox = '<span class="label label-deleted">' + executionLang.deleted + '</span>';
+    }
+    const date = '<span class="ml-2 label ' + (info.item.delay ? 'danger' : 'lighter') + '">' + info.item.end.slice(5) + ' ' + cardLang.deadlineAB + '</span>';
+    info.item.content = {html: statusBox + date}
+    if(kanban.performable == 1)
+    {
+        info.item.footer = {html: "<div class='flex'><div class='circle progress mt-3 flex-1' style='width:80%'><div class='progress-bar' style='width: " + info.item.progress + '%\'></div></div><div class="mt-2 ml-2">' + info.item.progress + '%' + '</div></div>'};
+    }
+}
+window.renderReleaseItem = function(info)
+{
+}
+window.renderBuildItem = function(info)
+{
+}
+window.renderProductplanItem = function(info)
+{
+}
+window.renderTicketItem = function(info)
+{
 }
 
 function renderAvatar(avatarList)

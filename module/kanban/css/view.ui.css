@@ -19,3 +19,13 @@
 .regionMenu li.active > a:before {background: #fff}
 .regionMenu li a:hover {color: rgba(var(--color-primary-500-rgb),var(--tw-text-opacity));}
 .regionMenu li a span {vertical-align: bottom; overflow: hidden; max-width: 6em; white-space: nowrap; display: inline-block;}
+.card-suffix.label {min-width: 46px;}
+
+.label-wait      {background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity));    color: rgba(var(--color-gray-500-rgb),var(--tw-text-opacity));    --tw-ring-color: rgba(var(--color-gray-500-rgb),var(--tw-ring-opacity));}
+.label-doing     {background-color: rgba(var(--color-danger-100-rgb),var(--tw-bg-opacity));  color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity));  --tw-ring-color: rgba(var(--color-danger-500-rgb),var(--tw-ring-opacity));}
+.label-suspended {background-color: rgba(var(--color-warning-100-rgb),var(--tw-bg-opacity));    color: rgba(var(--color-warning-500-rgb),var(--tw-text-opacity));    --tw-ring-color: rgba(var(--color-warning-500-rgb),var(--tw-ring-opacity));}
+.label-future    {background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity));    color: rgba(var(--color-gray-500-rgb),var(--tw-text-opacity));    --tw-ring-color: rgba(var(--color-gray-500-rgb),var(--tw-ring-opacity));}
+.label-done      {background-color: rgba(var(--color-success-100-rgb),var(--tw-bg-opacity)); color: rgba(var(--color-success-500-rgb),var(--tw-text-opacity)); --tw-ring-color: rgba(var(--color-success-500-rgb),var(--tw-ring-opacity));}
+.label-closed    {background-color: rgba(var(--color-gray-100-rgb),var(--tw-bg-opacity));    color: rgba(var(--color-gray-500-rgb),var(--tw-text-opacity));    --tw-ring-color: rgba(var(--color-gray-500-rgb),var(--tw-ring-opacity));}
+.label-normal    {background-color: rgba(var(--color-success-100-rgb),var(--tw-bg-opacity)); color: rgba(var(--color-success-500-rgb),var(--tw-text-opacity)); --tw-ring-color: rgba(var(--color-success-500-rgb),var(--tw-ring-opacity));}
+.label-deleted   {background-color: rgba(var(--color-danger-100-rgb),var(--tw-bg-opacity));  color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity));  --tw-ring-color: rgba(var(--color-danger-500-rgb),var(--tw-ring-opacity));}

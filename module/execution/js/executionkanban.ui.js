@@ -28,7 +28,6 @@ window.canDrop = function(dragInfo, dropInfo)
     const lane   = this.getLane(dropInfo.lane);
     if(!column || !lane) return false;
 
-    console.log(dropInfo);
     if(dropInfo.type == 'item')             return false;
     if(dragInfo.item.lane != lane.name)     return false;
     if(dragInfo.item.status == 'wait'      && dropInfo.col == 'doing')     return privs.canStartExecution;
