@@ -48,9 +48,9 @@ sidebar
             set::id('deptTree'),
             set::items($tree),
             set::hover(true),
-            set::itemActions($deptActions),
-        ),
-    ),
+            set::itemActions($deptActions)
+        )
+    )
 );
 
 $parentNames = array();
@@ -63,13 +63,13 @@ foreach($parentDepts as $dept)
         (
             set::title($dept->name,),
             set::href(createLink('dept', 'browse', "deptID={$dept->id}")),
-            $dept->name,
+            $dept->name
         ),
         icon
         (
             setClass('mx-2'),
             'angle-right'
-        ),
+        )
     );
 }
 
@@ -83,7 +83,7 @@ foreach($sons as $dept)
     (
         setClass('w-full my-1'),
         set::name("depts[id{$dept->id}]"),
-        set::value($dept->name),
+        set::value($dept->name)
     );
 }
 $emptyInputs = array();
@@ -93,7 +93,7 @@ for($i = 0; $i < \DEPT::NEW_CHILD_COUNT ; $i ++)
     (
         setClass('w-full my-1'),
         set::name("depts[]"),
-        set::value(''),
+        set::value('')
     );
 }
 
@@ -117,11 +117,11 @@ panel
                     (
                         set::title($this->app->company->name,),
                         set::href(createLink('dept', 'browse')),
-                        $this->app->company->name,
+                        $this->app->company->name
                     ),
-                    icon('angle-right'),
+                    icon('angle-right')
                 ),
-                $parentNames,
+                $parentNames
             ),
             cell
             (
@@ -133,17 +133,17 @@ panel
                 (
                     setClass('hidden'),
                     set::name('maxOrder'),
-                    set::value($maxOrder),
+                    set::value($maxOrder)
                 ),
                 formGroup
                 (
                     setClass('hidden'),
                     set::name('parentDeptID'),
-                    set::value($deptID),
-                ),
-            ),
-        ),
-    ),
+                    set::value($deptID)
+                )
+            )
+        )
+    )
 );
 
 render();

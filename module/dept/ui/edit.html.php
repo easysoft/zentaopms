@@ -13,7 +13,7 @@ namespace zin;
 modalHeader
 (
     set::text($lang->dept->edit),
-    set::entityID(''),
+    set::entityID('')
 );
 
 formPanel
@@ -29,9 +29,9 @@ formPanel
             (
                 set::name('parent'),
                 set::items($optionMenu),
-                set::value($dept->parent),
-            ),
-        ),
+                set::value($dept->parent)
+            )
+        )
     ),
     formRow
     (
@@ -39,8 +39,8 @@ formPanel
         (
             set::label($lang->dept->name),
             set::name('name'),
-            set::value($dept->name),
-        ),
+            set::value($dept->name)
+        )
     ),
     formRow
     (
@@ -51,10 +51,10 @@ formPanel
             (
                 set::name('manager'),
                 set::items($users),
-                set::value($dept->manager),
-            ),
-        ),
-    ),
+                set::value($dept->manager)
+            )
+        )
+    )
 );
 
 render();
