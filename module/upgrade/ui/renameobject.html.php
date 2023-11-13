@@ -32,7 +32,7 @@ $items[] = array
 (
     'name'  => 'project',
     'label' => $lang->upgrade->editedName,
-    'width' => '200px',
+    'width' => '200px'
 );
 
 div
@@ -50,7 +50,7 @@ div
             set::data(array_values($objectGroup)),
             set::actions(array('submit')),
             set::mode('edit'),
-            set::actionsText(false),
+            set::actionsText(false)
         )
     )
 );

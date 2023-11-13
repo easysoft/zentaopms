@@ -20,7 +20,7 @@ foreach($repoes as $repoID => $repo)
         on::change('checkRepo'),
         set::id("repoes[{$repoID}]"),
         set::name("repoes[{$repoID}]"),
-        set::text($repo),
+        set::text($repo)
     );
 }
 
@@ -40,7 +40,7 @@ div
             cell
             (
                 setClass('flex gap-y-2 p-2 text-secondary tips'),
-                $lang->upgrade->mergeRepoTips,
+                $lang->upgrade->mergeRepoTips
             ),
             form
             (
@@ -61,15 +61,15 @@ div
                                     on::change('checkAllRepoes'),
                                     set::id('checkAllRepoes'),
                                     set::name('checkAllRepoes'),
-                                    set::text($lang->upgrade->repo),
-                                ),
+                                    set::text($lang->upgrade->repo)
+                                )
                             ),
                             cell
                             (
                                 setClass('check-list repo-list'),
-                                $repoItems,
-                            ),
-                        ),
+                                $repoItems
+                            )
+                        )
                     ),
                     col
                     (
@@ -82,14 +82,14 @@ div
                             (
                                 set::name('products[]'),
                                 set::items($products),
-                                set::multiple(true),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
+                                set::multiple(true)
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    )
 );
 
 render('pagebase');

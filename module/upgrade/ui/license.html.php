@@ -39,8 +39,8 @@ div
                 (
                     on::change('agreeChange'),
                     set::checked(true),
-                    html($lang->agreement),
-                ),
+                    html($lang->agreement)
+                )
             ),
             cell
             (
@@ -50,11 +50,11 @@ div
                     setClass('px-8 btn-install'),
                     set::url(inlink('license', 'agree=true')),
                     set::type('primary'),
-                    $lang->confirm,
-                ),
-            ),
-        ),
-    ),
+                    $lang->confirm
+                )
+            )
+        )
+    )
 );
 
 render('pagebase');

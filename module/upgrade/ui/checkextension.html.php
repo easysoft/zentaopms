@@ -53,7 +53,7 @@ div
             div(span(set::className('text-base text-black'), $this->lang->upgrade->forbiddenExt)),
             div(set::className('p-2'), $extensions)
         ),
-        div(set::className('center'), a(set::href(inlink('selectVersion')), set::className('btn btn-wide primary'), $this->lang->upgrade->continue)),
+        div(set::className('center'), a(set::href(inlink('selectVersion')), set::className('btn btn-wide primary'), $this->lang->upgrade->continue))
     )
 );
 

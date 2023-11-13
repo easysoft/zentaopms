@@ -55,9 +55,9 @@ modal
         (
             setClass('progress-bar'),
             set('role', 'progressbar'),
-            set('style', '"width: 1%'),
-        ),
-    ),
+            set('style', '"width: 1%')
+        )
+    )
 );
 
 render('pagebase');

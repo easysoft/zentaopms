@@ -36,7 +36,7 @@ if(!empty($needProcess['changeEngine']))
             setClass('text-warning px-1'),
             'help'
         ),
-        $lang->upgrade->needChangeEngine,
+        $lang->upgrade->needChangeEngine
     );
 }
 if(!empty($needProcess['search']))
@@ -49,7 +49,7 @@ if(!empty($needProcess['search']))
             setClass('text-warning px-1'),
             'help'
         ),
-        $lang->upgrade->needBuild4Add,
+        $lang->upgrade->needBuild4Add
     );
 }
 if(!empty($needProcess['updateFile']))
@@ -65,13 +65,13 @@ if(!empty($needProcess['updateFile']))
                 setClass('text-warning px-1'),
                 'help'
             ),
-            $lang->upgrade->updateFile,
+            $lang->upgrade->updateFile
         ),
         col
         (
             setClass('w-full justify-center text-center'),
-            set::id('resultBox'),
-        ),
+            set::id('resultBox')
+        )
     );
 }
 
@@ -94,13 +94,13 @@ div
                 (
                     setClass('text-success'),
                     set::size('100'),
-                    'check-circle',
-                ),
+                    'check-circle'
+                )
             ),
             cell
             (
                 setClass('flex justify-center items-start font-bold text-lg h-12'),
-                html($lang->upgrade->success),
+                html($lang->upgrade->success)
             ),
             cell
             (
@@ -112,16 +112,16 @@ div
                     set::target('_self'),
                     set::url('index.php'),
                     set::type('primary'),
-                    $lang->upgrade->tohome,
-                ),
-            ),
+                    $lang->upgrade->tohome
+                )
+            )
         ),
         row
         (
             setClass('flex-wrap pt-6 text-gray gap-y-1'),
-            $tips,
-        ),
-    ),
+            $tips
+        )
+    )
 );
 
 render('pagebase');

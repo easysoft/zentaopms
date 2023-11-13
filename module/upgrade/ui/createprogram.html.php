@@ -113,7 +113,7 @@ $createProgram = function($data)
                     datePicker(set::id('begin'), set::name('begin'), set::value(date('Y-m-d'))),
                     span(set::className('input-group-addon'), $lang->project->to),
                     datePicker(set::id('end'), set::name('end')),
-                    span(set::className('input-group-addon'), checkbox(set::name('longTime'), set::value('1'), set::text($lang->project->longTime), set('data-on', 'change'), set('data-call', 'changeLongTime'))),
+                    span(set::className('input-group-addon'), checkbox(set::name('longTime'), set::value('1'), set::text($lang->project->longTime), set('data-on', 'change'), set('data-call', 'changeLongTime')))
                 )
             ),
             formGroup
@@ -121,7 +121,7 @@ $createProgram = function($data)
                 set::className('programParams hidden'),
                 set::label($lang->project->acl),
                 radioList(set::name('programAcl'), set::items($lang->program->aclList), set::value('open')),
-                radioList(set::name('projectAcl'), set::className('hidden'), set::items($lang->project->subAclList), set::value('open')),
+                radioList(set::name('projectAcl'), set::className('hidden'), set::items($lang->project->subAclList), set::value('open'))
             )
         ),
         center(set::className('form-actions mt-4'), btn(set::btnType('submit'), set::className('primary'), $lang->save))

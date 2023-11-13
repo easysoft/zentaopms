@@ -23,7 +23,7 @@ foreach($lang->upgrade->mergeModes as $mode => $label)
             set::id("projectType_{$mode}"),
             set::name('projectType'),
             set::value($mode),
-            $mode == 'project' ? set('checked', 'checked') : '',
+            $mode == 'project' ? set('checked', 'checked') : ''
         ),
         h::label
         (
@@ -32,9 +32,9 @@ foreach($lang->upgrade->mergeModes as $mode => $label)
             span
             (
                 setClass('flex text-gray mt-1'),
-                '(' . $lang->upgrade->{$tipLang} . ($systemMode == 'ALM' && $mode != 'manually' ? $lang->upgrade->createProgramTip : '') . ')',
-            ),
-        ),
+                '(' . $lang->upgrade->{$tipLang} . ($systemMode == 'ALM' && $mode != 'manually' ? $lang->upgrade->createProgramTip : '') . ')'
+            )
+        )
     );
 }
 
@@ -68,9 +68,9 @@ div
                     div
                     (
                         setClass('check-list gap-4'),
-                        $mergeModes,
-                    ),
-                ),
+                        $mergeModes
+                    )
+                )
             ),
             cell
             (
@@ -79,18 +79,18 @@ div
                 (
                     setClass('px-6 mx-3'),
                     set::url(createLink('upgrade', 'to18guide', "fromVersion=$fromVersion")),
-                    $lang->upgrade->back,
+                    $lang->upgrade->back
                 ),
                 btn
                 (
                     setClass('px-6 mx-3'),
                     set::type('primary'),
                     set::btnType('submit'),
-                    $lang->upgrade->next,
-                ),
-            ),
-        ),
-    ),
+                    $lang->upgrade->next
+                )
+            )
+        )
+    )
 );
 
 render('pagebase');

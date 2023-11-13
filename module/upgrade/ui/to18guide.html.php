@@ -27,17 +27,17 @@ foreach($disabledFeatures as $feature)
             icon
             (
                 setClass('text-danger font-bold'),
-                'ban-circle',
-            ),
+                'ban-circle'
+            )
         ),
         h::td
         (
             icon
             (
                 setClass('text-success font-bold'),
-                'check',
-            ),
-        ),
+                'check'
+            )
+        )
     );
 }
 foreach($config->custom->allFeatures as $feature)
@@ -49,24 +49,24 @@ foreach($config->custom->allFeatures as $feature)
     (
         h::td
         (
-            ($feature == 'scrumDetail' && !empty($enabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $enabledScrumFeatures)) : $this->lang->custom->features[$feature],
+            ($feature == 'scrumDetail' && !empty($enabledScrumFeatures)) ? sprintf($this->lang->custom->scrum->common, implode($lang->comma, $enabledScrumFeatures)) : $this->lang->custom->features[$feature]
         ),
         h::td
         (
             icon
             (
                 setClass('text-success font-bold'),
-                'check',
-            ),
+                'check'
+            )
         ),
         h::td
         (
             icon
             (
                 setClass('text-success font-bold'),
-                'check',
-            ),
-        ),
+                'check'
+            )
+        )
     );
 }
 
@@ -91,10 +91,10 @@ div
                     icon
                     (
                         setClass('text-warning px-1'),
-                        'help',
+                        'help'
                     ),
                     $this->lang->upgrade->remarkDesc
-                ),
+                )
             ),
             h::table
             (
@@ -106,19 +106,19 @@ div
                         h::th
                         (
                             width('1/3'),
-                            $lang->custom->mode,
+                            $lang->custom->mode
                         ),
                         h::td
                         (
                             width('1/3'),
-                            $this->lang->custom->modeList['light'],
+                            $this->lang->custom->modeList['light']
                         ),
                         h::td
                         (
                             width('1/3'),
-                            $this->lang->custom->modeList['ALM'],
-                        ),
-                    ),
+                            $this->lang->custom->modeList['ALM']
+                        )
+                    )
                 ),
                 h::tbody
                 (
@@ -126,16 +126,16 @@ div
                     (
                         h::td
                         (
-                            $lang->custom->usage,
+                            $lang->custom->usage
                         ),
                         h::td
                         (
-                            $this->lang->custom->modeIntroductionList['light'],
+                            $this->lang->custom->modeIntroductionList['light']
                         ),
                         h::td
                         (
-                            $this->lang->custom->modeIntroductionList['ALM'],
-                        ),
+                            $this->lang->custom->modeIntroductionList['ALM']
+                        )
                     ),
                     $trs,
                     h::tr
@@ -143,7 +143,7 @@ div
                         h::td
                         (
                             setClass('select-usage font-bold'),
-                            $lang->custom->selectUsage,
+                            $lang->custom->selectUsage
                         ),
                         h::td
                         (
@@ -153,8 +153,8 @@ div
                                 set::id('light'),
                                 set::btnType('submit'),
                                 setClass('px-4'),
-                                $lang->custom->useLight,
-                            ),
+                                $lang->custom->useLight
+                            )
                         ),
                         h::td
                         (
@@ -164,19 +164,19 @@ div
                                 set::id('ALM'),
                                 set::btnType('submit'),
                                 setClass('px-4'),
-                                $lang->custom->useALM,
-                            ),
-                        ),
-                    ),
-                ),
+                                $lang->custom->useALM
+                            )
+                        )
+                    )
+                )
             ),
             input
             (
                 set::name('mode'),
-                set::type('hidden'),
-            ),
-        ),
-    ),
+                set::type('hidden')
+            )
+        )
+    )
 );
 
 render('pagebase');

@@ -25,7 +25,7 @@ if($result == 'success')
             set::id($file),
             set::name("files[$file]"),
             set::text($file),
-            set::checked(true),
+            set::checked(true)
         );
     }
 }
@@ -46,7 +46,7 @@ div
             $result == 'success' ? cell
             (
                 setClass('move-extfile-tip text-secondary p-4 flex flex-wrap gap-3'),
-                html($lang->upgrade->moveExtFileTip),
+                html($lang->upgrade->moveExtFileTip)
             ) : null,
             $result == 'success' ? cell
             (
@@ -56,8 +56,8 @@ div
                     set::id('checkAll'),
                     set::name('checkAll'),
                     set::text($lang->upgrade->fileName),
-                    set::checked(true),
-                ),
+                    set::checked(true)
+                )
             ) : null,
             cell
             (
@@ -67,9 +67,9 @@ div
                     h::code
                     (
                         setClass('bg-surface'),
-                        $command,
-                    ),
-                ),
+                        $command
+                    )
+                )
             ),
             $result == 'success' ? cell
             (
@@ -79,8 +79,8 @@ div
                     setClass('px-6'),
                     set::btnType('submit'),
                     set::type('primary'),
-                    set::text($lang->upgrade->next),
-                ),
+                    set::text($lang->upgrade->next)
+                )
             ) : cell
             (
                 $lang->upgrade->moveEXTFileFail,
@@ -88,11 +88,11 @@ div
                 (
                     on::click('loadCurrentPage'),
                     setClass('px-6 ml-4'),
-                    set::text($lang->refresh),
-                ),
-            ),
-        ),
-    ),
+                    set::text($lang->refresh)
+                )
+            )
+        )
+    )
 );
 
 render('pagebase');

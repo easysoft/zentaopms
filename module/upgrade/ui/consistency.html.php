@@ -36,7 +36,7 @@ div
                 (
                     set::className('text-danger leading-loose'),
                     html("SET @@sql_mode= '';<br />"),
-                    html(nl2br($alterSQL)),
+                    html(nl2br($alterSQL))
                 )
             ),
             div
@@ -47,7 +47,7 @@ div
                     on::click('loadCurrentPage'),
                     set::type('primary'),
                     set::className('px-10'),
-                    $lang->refresh,
+                    $lang->refresh
                 )
             )
         )

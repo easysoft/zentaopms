@@ -36,7 +36,7 @@ div
             (
                 set::style(array('background-color' => 'var(--color-gray-100)')),
                 set::className('p-5 mb-4 space-y-2'),
-                html($lang->upgrade->warnningContent),
+                html($lang->upgrade->warnningContent)
             ),
             div
             (
@@ -47,7 +47,7 @@ div
                     set::type('primary'),
                     set::className('px-10'),
                     set('disabled', 'disabled'),
-                    $lang->upgrade->common,
+                    $lang->upgrade->common
                 )
             )
         )
