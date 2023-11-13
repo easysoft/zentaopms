@@ -12,6 +12,7 @@ namespace zin;
 
 featureBar
 (
+    set::load(''),
     set::current($scope),
     set::linkParams("scope={key}"),
 );
