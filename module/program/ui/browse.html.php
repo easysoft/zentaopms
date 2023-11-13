@@ -65,7 +65,6 @@ foreach($programs as $program)
         {
             foreach($paths as $i => $parentID)
             {
-                var_dump(isset($programs[$parentID]));
                 if(isset($programs[$parentID]))
                 {
                     $program->parent = $parentID;
