@@ -1271,10 +1271,11 @@ class bug extends control
         /* 展示关联的变量。 */
         /* Show the variables associated. */
         $bugIdList = array_unique($this->post->bugIdList);
-        $this->view->title  = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchActivate;
-        $this->view->bugs   = $this->bug->getByIdList($bugIdList);
-        $this->view->users  = $this->user->getPairs('noclosed');
-        $this->view->builds = $this->loadModel('build')->getBuildPairs(array($productID), $branch, 'noempty,noreleased');
+        $this->view->title     = $this->products[$productID] . $this->lang->colon . $this->lang->bug->batchActivate;
+        $this->view->bugs      = $this->bug->getByIdList($bugIdList);
+        $this->view->users     = $this->user->getPairs('noclosed');
+        $this->view->builds    = $this->loadModel('build')->getBuildPairs(array($productID), $branch, 'noempty,noreleased');
+        $this->view->productID = $productID;
         $this->display();
     }
 
