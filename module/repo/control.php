@@ -906,7 +906,7 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
-        $repoID = $this->session->repoID;
+        $repoID = (int)$this->session->repoID;
         $this->commonAction($repoID);
         $this->lang->switcherMenu = '';
 
