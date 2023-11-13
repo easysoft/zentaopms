@@ -316,7 +316,22 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->status;?></th>
-                  <td><span class='status-story status-<?php echo $story->status?>'><span class="label label-dot"></span> <?php echo $this->processStatus('story', $story);?></span></td>
+                  <td>
+                    <?php $statusClass = $story->URChanged ? 'status-changed' : "status-{$story->status}";?>
+                    <span class='status-story <?php echo $statusClass?>'>
+                      <span class="label label-dot"></span>
+                      <?php
+                      if($story->URChanged)
+                      {
+                         echo $this->lang->story->URChanged;
+                      }
+                      else
+                      {
+                        echo $this->processStatus('story', $story);
+                      }
+                      ?>
+                    </span>
+                  </td>
                 </tr>
                 <?php if($story->type != 'requirement'):?>
                 <tr class='stage-line'>
