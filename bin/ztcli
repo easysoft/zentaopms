@@ -73,5 +73,19 @@ else
     $_SERVER['REQUEST_URI'] = isset($request['query']) ? $request['query'] : '';
 }
 
-$app->parseRequest();
-$app->loadModule();
+try
+{
+    $app->parseRequest();
+    if(!$app->setParams()) helper::end();
+    $common->checkPriv();
+    if(!$common->checkIframe()) helper::end();
+
+    $app->loadModule();
+}
+catch (EndResponseException $endResponseException)
+{
+    echo $endResponseException->getContent();
+}
+
+/* Flush the buffer. */
+echo helper::removeUTF8Bom(ob_get_clean());

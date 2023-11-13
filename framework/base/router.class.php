@@ -3130,7 +3130,8 @@ class baseRouter
         }
 
         /* 保存到日志文件(Save to log file) */
-        $errorFile = $this->logRoot . 'php.' . date('Ymd') . '.log.php';
+        $runMode = PHP_SAPI == 'cli' ? '_cli' : '';
+        $errorFile = $this->logRoot . "php$runMode." . date('Ymd') . '.log.php';
         if(!is_file($errorFile)) file_put_contents($errorFile, "<?php\n die();\n?" . ">\n");
 
         $fh = fopen($errorFile, 'a');

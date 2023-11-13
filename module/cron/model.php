@@ -121,11 +121,13 @@ class cronModel extends model
      * @access public
      * @return void
      */
-    public function logCron($log, $prefix = '')
+    public function logCron($log)
     {
         if(!is_writable($this->app->getLogRoot())) return false;
 
-        $file = $this->app->getLogRoot() . $prefix . 'cron.' . date('Ymd') . '.log.php';
+	$runMode = PHP_SAPI == 'cli' ? '_cli' : '';
+
+        $file = $this->app->getLogRoot() . "cron$runMode." . date('Ymd') . '.log.php';
         if(!is_file($file)) $log = "<?php\n die();\n" . $log;
 
         $fp = fopen($file, "a");
@@ -331,7 +333,7 @@ class cronModel extends model
             $cronInfo = $crons[$id];
 
             /* Skip empty and stop cron.*/
-            if(empty($cronInfo) or $cronInfo->status == 'stop') continue;
+            if(empty($cronInfo) || $cronInfo->status == 'stop') continue;
 
             if(!$cron['command'] || !isset($crons[$id])) continue;
 
@@ -425,7 +427,7 @@ class cronModel extends model
         }
 
         $this->dao->update(TABLE_QUEUE)->set('status')->eq('done')->where('id')->eq($task->id)->exec();
-	$this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('id')->eq($task->cron)->exec();
+        $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('id')->eq($task->cron)->exec();
 
         $log = date('G:i:s') . " execute\ncronId: {$task->cron}\nexecId: $execId\noutput: taskId:{$task->id}.\ncommand: {$task->command}.\nreturn : $return.\noutput : $output\n\n";
         $this->logCron($log);

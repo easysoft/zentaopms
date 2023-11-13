@@ -165,12 +165,9 @@ class cron extends control
      */
     protected function canSchedule($execId)
     {
-        $settings = $this->loadModel('setting')->getItems('owner=system&module=cron&sestion=run');
-        foreach($settings as $setting)
-        {
-            if($setting->key == 'execId' && $setting->value == $execId) return true;
-            if($setting->key == 'lastTime' && $setting->value < date('Y-m-d H:i:s', strtotime('-1 minute'))) return true;
-        }
+        $settings = $this->dao->select('`key`,`value`')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('cron')->andWhere('section')->eq('run')->fetchPairs();
+        if(!isset($settings['execId']) || $settings['execId'] == $execId) return true;
+        if(!isset($settings['lastTime']) || $settings['lastTime'] < date('Y-m-d H:i:s', strtotime('-1 minute'))) return true;
 
         return false;
     }
