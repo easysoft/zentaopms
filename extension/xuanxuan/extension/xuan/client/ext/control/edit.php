@@ -1,20 +1,38 @@
 <?php
-helper::import('../../control.php');
-class myClient extends client
+declare(strict_types=1);
+/**
+ * The edit control file of client module of ZenTaoPMS.
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Gang Liu <liugang@easycorp.ltd>
+ * @package     client
+ * @link        https://www.zentao.net
+ */
+class client extends control
 {
-    public function edit($clientID)
+    /**
+     * 编辑一个客户端版本。
+     * Edit a client version.
+     *
+     * @param  int    $clientID
+     * @access public
+     * @return void
+     */
+    public function edit(int $clientID)
     {
-        $statusFile = $this->loadModel('common')->checkSafeFile();
-        if($statusFile)
+        $this->checkSafeFile();
+
+        if($_POST)
         {
-            $this->app->loadLang('extension');
-            $statusFile = str_replace('\\', '/', $statusFile);
-            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
-            return print($this->display('client', 'safe'));
+            $this->post->set('desc', mb_substr($this->post->desc, 0, 100));
+            $this->client->update($clientID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
-        if($_POST) $_POST['desc'] = mb_substr($this->post->desc, 0, 100);
-
-        parent::edit($clientID);
+        $this->view->title  = $this->lang->client->edit;
+        $this->view->client = $this->client->getByID($clientID);
+        $this->display();
     }
 }
