@@ -294,27 +294,24 @@ class storyTao extends storyModel
      * @access protected
      * @return int[]
      */
-    protected function mergeChildren(array $stories, string $type = 'story'): array
+    protected function appendSRToChildren(array $stories): array
     {
         /* For requirement children. */
-        $relationGroups = array();
-        if($type == 'requirement') $relationGroups = $this->batchGetRelations(array_keys($stories), $type, array('*'));
+        $relationGroups = $this->batchGetRelations(array_keys($stories), 'requirement', array('*'));
+        if(empty($stories));
 
         foreach($stories as $storyID => $story)
         {
-            /* Merge to parent and unset in list. */
-            if($story->parent > 0 and isset($stories[$story->parent]))
-            {
-                $stories[$story->parent]->children[$story->id] = $story;
-                unset($stories[$storyID]);
-            }
-
             /* Merge subdivided stories for requirement. */
-            if(!empty($relationGroups[$story->id]))
+            if(empty($relationGroups[$story->id])) continue;
+
+            $story->parent = '-1';
+            foreach($relationGroups[$story->id] as $SRID => $SRStory)
             {
-                $story->children    = $relationGroups[$story->id];
-                $story->linkStories = implode(',', array_column($story->children, 'title'));
+                $SRStory->parent = $story->id;
+                $story->children[$SRID] = $SRStory;
             }
+            $story->linkStories = implode(',', array_column($story->children, 'title'));
         }
         return $stories;
     }
@@ -340,7 +337,6 @@ class storyTao extends storyModel
         if(is_int($productID))$productID = (string)$productID;
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->Where('deleted')->eq(0)->andWhere('product')->in($productID)->fetchPairs('id', 'title');
 
-        //$stories = $this->mergeChildren($stories, $type); //Future lists no longer require parent-child hierarchy for implementation.
         $parents = $this->extractParents($stories);
         if($parents)
         {
@@ -359,6 +355,7 @@ class storyTao extends storyModel
             ->groupBy($mainID)
             ->fetchAll($mainID);
 
+        if($type == 'requirement') $stories = $this->appendSRToChildren($stories);
         foreach($stories as $story)
         {
             /* Export story linkstories. */

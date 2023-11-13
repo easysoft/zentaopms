@@ -289,6 +289,7 @@ jsVar('childrenAB',     $lang->story->childrenAB);
 jsVar('projectID',      $projectID);
 jsVar('modulePairs',    $modulePairs);
 jsVar('showBranch',     $showBranch);
+jsVar('storyType',      $storyType);
 jsVar('checkedSummary', str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary));
 
 if($isProjectStory and $storyType == 'requirement')
