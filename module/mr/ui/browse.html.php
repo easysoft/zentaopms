@@ -66,7 +66,7 @@ toolBar
         'text'  => $lang->mr->create,
         'icon'  => 'plus',
         'class' => 'btn primary',
-        'url'   => createLink('mr', 'create'),
+        'url'   => createLink('mr', 'create', $app->tab == 'devops' ? "repoID={$repoID}" : '')
     ))) : null,
 );
 

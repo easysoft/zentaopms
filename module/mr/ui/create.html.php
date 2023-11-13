@@ -66,8 +66,7 @@ formPanel
             set::label($lang->mr->sourceProject),
             set::name('sourceProject'),
             set::id('sourceProject'),
-            set::items($projectItem),
-            set::disabled(true),
+            set::items($projectItem)
         ),
         formGroup
         (
@@ -76,7 +75,7 @@ formPanel
             set::label($lang->mr->sourceBranch),
             set::name('sourceBranch'),
             set::items(array()),
-        ),
+        )
     ),
     formRow
     (
@@ -87,8 +86,7 @@ formPanel
             set::label($lang->mr->targetProject),
             set::id('targetProject'),
             set::name('targetProject'),
-            set::items($projectItem),
-            set::disabled(true),
+            set::items($projectItem)
         ),
         formGroup
         (
@@ -97,7 +95,7 @@ formPanel
             set::label($lang->mr->targetBranch),
             set::name('targetBranch'),
             set::items(array()),
-        ),
+        )
     ),
     formGroup
     (
