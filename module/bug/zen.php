@@ -2173,9 +2173,9 @@ class bugZen extends bug
      * @param  string    $from
      * @param  string    $message
      * @access protected
-     * @return bool
+     * @return void
      */
-    protected function responseAfterDelete(object $bug, string $from, string $message = ''): bool
+    protected function responseAfterDelete(object $bug, string $from, string $message = ''): void
     {
         if(!$message) $message = $this->lang->saveSuccess;
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message));
@@ -2188,7 +2188,7 @@ class bugZen extends bug
             if(!$task->deleted)
             {
                 $confirmedURL = $this->createLink('task', 'view', "taskID={$bug->toTask}");
-                $canceledURL  = $this->createLink('bug', 'view', "bugID=$bugID");
+                $canceledURL  = $this->createLink('bug', 'view', "bugID={$bug->id}");
                 return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->bug->notice->remindTask, $bug->toTask), 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
             }
         }
