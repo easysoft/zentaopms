@@ -4037,7 +4037,7 @@ class storyModel extends model
         $selectedIDList = $this->cookie->checkedItem ? $this->cookie->checkedItem : '0';
         if($this->session->storyOnlyCondition)
         {
-            $queryCondition = $postData->exportType == 'selected' ? ' `id` ' . helper::dbIN($selectedIDList) : str_replace('story', 'id', $this->session->storyQueryCondition);
+            $queryCondition = $postData->exportType == 'selected' ? ' `id` ' . helper::dbIN($selectedIDList) : str_replace('`story`', '`id`', $this->session->storyQueryCondition);
             $stories        = $this->dao->select('id,title,linkStories,childStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where($queryCondition)->orderBy($orderBy)->fetchAll('id');
         }
         else
