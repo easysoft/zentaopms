@@ -27,12 +27,12 @@ modalTrigger
             (
                 setClass('danger wide cover'),
                 zui::width('86px'),
-                $lang->importAndCover,
+                $lang->importAndCover
             ),
             btn
             (
                 setClass('primary wide insert'),
-                $lang->importAndInsert,
+                $lang->importAndInsert
             )
         ),
         div
@@ -40,7 +40,7 @@ modalTrigger
             setClass('alert'),
             icon('exclamation-sign'),
             $lang->noticeImport
-        ),
+        )
     )
 );
 
