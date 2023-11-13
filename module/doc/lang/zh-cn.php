@@ -213,6 +213,7 @@ $lang->doc->confirm           = '确认';
 $lang->doc->docSummary        = '本页共 <strong>%s</strong> 个文档。';
 $lang->doc->docCheckedSummary = '共选中 <strong>%total%</strong> 个文档。';
 $lang->doc->showDoc           = '是否显示文档';
+$lang->doc->uploadFile        = '上传文件';
 $lang->doc->uploadDoc         = '上传文档';
 $lang->doc->uploadFormat      = '上传格式';
 $lang->doc->editedList        = '文档编辑者';
