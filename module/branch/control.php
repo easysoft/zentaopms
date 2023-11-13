@@ -102,7 +102,7 @@ class branch extends control
         }
 
         $this->view->product = $this->loadModel('product')->getById($productID);
-        $this->view->branch  = $this->branch->getById($branchID, 0, '');
+        $this->view->branch  = $this->branch->getById((string)$branchID, 0, '');
         $this->display();
     }
 
