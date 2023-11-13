@@ -13,7 +13,7 @@ namespace zin;
 modalHeader
 (
     set::title(''),
-    set::entityText($lang->backup->setting),
+    set::entityText($lang->backup->setting)
 );
 
 if(!empty($error))
@@ -31,7 +31,7 @@ else
             (
                 set::name('setting'),
                 set::items($lang->backup->settingList),
-                set::value(isset($config->backup->setting) ? $config->backup->setting : ''),
+                set::value(isset($config->backup->setting) ? $config->backup->setting : '')
             )
         ),
         formGroup
@@ -42,7 +42,7 @@ else
                 input
                 (
                     set::name('settingDir'),
-                    set::value(!empty($config->backup->settingDir) ? $config->backup->settingDir : $this->app->getTmpRoot() . 'backup/'),
+                    set::value(!empty($config->backup->settingDir) ? $config->backup->settingDir : $this->app->getTmpRoot() . 'backup/')
                 )
             )
         ),
@@ -54,10 +54,10 @@ else
                 input
                 (
                     set::name('holdDays'),
-                    set::value($config->backup->holdDays),
+                    set::value($config->backup->holdDays)
                 )
             )
-        ) : null,
+        ) : null
     );
 }
 
