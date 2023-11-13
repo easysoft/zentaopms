@@ -40,7 +40,7 @@ formPanel
         (
             set::name('desc'),
             set::value($branch->desc),
-            set::rows('5'),
+            set::rows('5')
         )
-    ),
+    )
 );

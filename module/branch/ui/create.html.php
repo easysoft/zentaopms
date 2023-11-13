@@ -22,7 +22,7 @@ formPanel
         set::required(true),
         input
         (
-            set::name('name'),
+            set::name('name')
         )
     ),
     formGroup
@@ -31,9 +31,9 @@ formPanel
         textarea
         (
             set::name('desc'),
-            set::rows('5'),
+            set::rows('5')
         )
-    ),
+    )
 );
 
 render();

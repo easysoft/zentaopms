@@ -61,7 +61,7 @@ modal
                 (
                     set::name('targetBranch'),
                     set::items($branchPairs),
-                    set::required(true),
+                    set::required(true)
                 ),
                 div
                 (
@@ -72,7 +72,7 @@ modal
                         set::name('createBranch'),
                         set::text($lang->branch->create),
                         set::value(1),
-                        on::change('createBranch'),
+                        on::change('createBranch')
                     )
                 )
             ),
@@ -98,7 +98,7 @@ modal
                 textarea
                 (
                     set::name('desc'),
-                    set::rows('5'),
+                    set::rows('5')
                 )
             )
         )
@@ -140,7 +140,7 @@ dtable
     set::onCheckChange(jsRaw('checkedChange')),
     set::footToolbar($footToolbar),
     set::footPager(
-        usePager(),
+        usePager()
     )
 );
 

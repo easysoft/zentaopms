@@ -23,7 +23,7 @@ formBatchPanel
         set::name('branchID'),
         set::label($lang->idAB),
         set::control('hidden'),
-        set::hidden(true),
+        set::hidden(true)
     ),
     formBatchItem
     (
@@ -31,7 +31,7 @@ formBatchPanel
         set::label($lang->idAB),
         set::control('index'),
         set::width('64px'),
-        set::disabled('{branchID} == 0'),
+        set::disabled('{branchID} == 0')
     ),
     formBatchItem
     (
@@ -49,8 +49,8 @@ formBatchPanel
         set::name("status"),
         set::label($lang->branch->status),
         set::control('select'),
-        set::items($lang->branch->statusList),
-    ),
+        set::items($lang->branch->statusList)
+    )
 );
 /* ====== Render page ====== */
 render();
