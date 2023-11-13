@@ -302,13 +302,17 @@ class testreport extends control
 
         list($bugInfo, $bugSummary) = $this->testreport->getBug4Report($tasks, $productIdList, $begin, $end, $builds);
 
+        /* Get testtasks members. */
+        $taskMembers = '';
+        foreach($tasks as $testtask) $taskMembers .= ',' . $testtask->members;
+        $taskMembers = explode(',', $taskMembers);
+
         $members     = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
-        $taskMembers = explode(',', $task->members);
         $members     = array_merge($members, $taskMembers);
 
         $this->view->begin   = $begin;
         $this->view->end     = $end;
-        $this->view->members = $members; 
+        $this->view->members = $members;
         $this->view->owner   = $owner;
 
         $this->view->stories       = $stories;
