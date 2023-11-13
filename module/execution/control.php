@@ -694,6 +694,8 @@ class execution extends control
 
         $this->config->bug->search['params']['project']['values'] = array('' => '') + $projects;
 
+        $this->config->bug->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs($productID, 'all', 'withbranch|releasetag');
+
         unset($this->config->bug->search['fields']['resolvedBy']);
         unset($this->config->bug->search['fields']['closedBy']);
         unset($this->config->bug->search['fields']['status']);
