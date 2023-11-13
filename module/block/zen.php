@@ -25,11 +25,9 @@ class blockZen extends block
             if(strpos(",{$closedBlock},", ",{$block['module']}|{$block['code']},") !== false) continue;
 
             /* 根据module和code生成区块的宽度和高度。 */
-            $sizeConfig  = $this->config->block->size[$block['module']][$block['code']];
-            $defaultSize = empty($sizeConfig) ? $this->config->block->defaultSize : $sizeConfig; // 默认为区块的统一默认尺寸。
-            if(!empty($sizeConfig[$block['width']])) $block['height'] = $sizeConfig[$block['width']];
-            if(empty($block['width']))               $block['width']  = reset(array_keys($defaultSize));
-            if(empty($block['height']))              $block['height'] = reset($defaultSize);
+            $sizeConfig = !empty($this->config->block->size[$block['module']][$block['code']]) ? $this->config->block->size[$block['module']][$block['code']] : $this->config->block->defaultSize;
+            if(empty($block['width'])) $block['width'] = reset(array_keys($sizeConfig));
+            $block['height'] = zget($sizeConfig, $block['width'], reset($sizeConfig));
 
             $block['account']   = $account;   // 所属用户。
             $block['dashboard'] = $dashboard; // 所属仪表盘。
@@ -220,12 +218,11 @@ class blockZen extends block
             /* 生成更多链接。 */
             $this->createMoreLink($block, $projectID);
 
-            $sizeConfig  = $this->config->block->size[$block->module][$block->code];
-            $defaultSize = empty($sizeConfig) ? $this->config->block->defaultSize : $sizeConfig; // 默认为区块的统一默认尺寸。
+            $sizeConfig = !empty($this->config->block->size[$block->module][$block->code]) ? $this->config->block->size[$block->module][$block->code] : $this->config->block->defaultSize;
 
             /* 设置区块的默认宽度和高度。 */
-            if(empty($block->width))  $block->width  = reset(array_keys($defaultSize));
-            if(empty($block->height)) $block->height = !empty($sizeConfig[$block->width]) ? $sizeConfig[$block->width] : reset($defaultSize);
+            if(empty($block->width))  $block->width  = reset(array_keys($sizeConfig));
+            if(empty($block->height)) $block->height = zget($sizeConfig, $block->width, reset($defaultSize));
 
             /* 设置区块距离左侧的宽度和距离顶部的高度。 */
             if(empty($block->left)) $block->left = $block->width == 1 ? 2 : 0;
