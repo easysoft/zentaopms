@@ -4093,14 +4093,18 @@ class kanbanModel extends model
                     ->fetch('count');
 
                 return $count > 1;
-            case 'sortcolumn' :
+            case 'sortcolumn':
                 return $object->deleted == '0';
-            case 'finishcard' :
+            case 'finishcard':
                 return $object->status != 'done';
-            case 'activatecard' :
+            case 'activatecard':
                 return $object->status == 'done';
-            case 'deletecard' :
+            case 'deletecard':
                 return $object->deleted == '0';
+            case 'archivecard':
+                return $object->archived == '0';
+            case 'restorecard':
+                return $object->archived == '1';
         }
 
         return true;

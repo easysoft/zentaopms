@@ -27,6 +27,13 @@ $config->kanban->actionList['archiveCard']['url']          = array('module' => '
 $config->kanban->actionList['archiveCard']['data-confirm'] =  $lang->kanbancard->confirmArchive;
 $config->kanban->actionList['archiveCard']['className']    = 'ajax-submit';
 
+$config->kanban->actionList['restoreCard']['icon']         = 'back';
+$config->kanban->actionList['restoreCard']['text']         = $lang->kanban->restoreCard;
+$config->kanban->actionList['restoreCard']['hint']         = $lang->kanban->restoreCard;
+$config->kanban->actionList['restoreCard']['url']          = array('module' => 'kanban', 'method' => 'restoreCard', 'params' => 'cardID={id}');
+$config->kanban->actionList['restoreCard']['data-confirm'] =  $lang->kanbancard->confirmRestore;
+$config->kanban->actionList['restoreCard']['className']    = 'ajax-submit';
+
 $config->kanban->actionList['deleteCard']['icon']         = 'trash';
 $config->kanban->actionList['deleteCard']['text']         = $lang->kanbancard->delete;
 $config->kanban->actionList['deleteCard']['hint']         = $lang->kanbancard->delete;
