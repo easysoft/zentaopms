@@ -59,7 +59,7 @@ div
         set::sortLink(inlink('testtask', "userID={$user->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
         set::footPager(usePager()),
         set::onRenderCell(jsRaw('window.renderCell')),
-        set::footer(array(array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
+        set::footer(array(array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager'))
     )
 );
 

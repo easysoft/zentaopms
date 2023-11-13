@@ -59,7 +59,7 @@ div
         set::orderBy($orderBy),
         set::sortLink(inlink('todo', "userID={$user->id}&type={$type}&status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
         set::footer(array(array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
-        set::footPager(usePager()),
+        set::footPager(usePager())
     )
 );
 

@@ -25,7 +25,7 @@ foreach($visionList as $key => $label)
         set::name('visions[]'),
         set::text($label),
         set::value($key),
-        set::checked($key == 'rnd'),
+        set::checked($key == 'rnd')
     );
 }
 
@@ -79,7 +79,7 @@ formPanel
                         set::id('addCompany'),
                         set::name('new[]'),
                         set::value('0'),
-                        set::text($lang->company->create),
+                        set::text($lang->company->create)
                     )
                 )
             )

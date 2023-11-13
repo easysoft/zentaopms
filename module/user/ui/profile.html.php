@@ -35,7 +35,7 @@ div
         (
             set::width('50%'),
             setClass('text-right pr-3'),
-            userAvatar(set::user($user)),
+            userAvatar(set::user($user))
         ),
         cell
         (
@@ -45,8 +45,8 @@ div
             (
                 setClass('user-role text-gray'),
                 zget($lang->user->roleList, $user->role)
-            ),
-        ),
+            )
+        )
     ),
     h::table
     (
@@ -55,29 +55,29 @@ div
             h::th($lang->user->realname),
             h::td($user->realname),
             h::th($lang->user->gender),
-            h::td(zget($lang->user->genderList, $user->gender)),
+            h::td(zget($lang->user->genderList, $user->gender))
         ),
         h::tr
         (
             h::th($lang->user->account),
             h::td($user->account),
             h::th($lang->user->email),
-            h::td(set::title($user->email), $user->email ? a(set::href("mailto:{$user->email}"), $user->email) : null),
+            h::td(set::title($user->email), $user->email ? a(set::href("mailto:{$user->email}"), $user->email) : null)
         ),
         h::tr
         (
             h::th($lang->user->dept),
             h::td(html($deptName)),
             h::th($lang->user->role),
-            h::td(zget($lang->user->roleList, $user->role, '')),
+            h::td(zget($lang->user->roleList, $user->role, ''))
         ),
         h::tr
         (
             h::th($lang->user->joinAB),
             h::td(formatTime($user->join)),
             h::th($lang->user->priv),
-            h::td(trim($groupName)),
-        ),
+            h::td(trim($groupName))
+        )
     ),
     h::hr(),
     h::table
@@ -87,22 +87,22 @@ div
             h::th($lang->user->mobile),
             h::td($user->mobile),
             h::th($lang->user->weixin),
-            h::td($user->weixin),
+            h::td($user->weixin)
         ),
         h::tr
         (
             h::th($lang->user->phone),
             h::td($user->phone),
             h::th($lang->user->qq),
-            h::td($user->qq),
+            h::td($user->qq)
         ),
         h::tr
         (
             h::th($lang->user->zipcode),
             h::td($user->zipcode),
             h::th($lang->user->addressAB),
-            h::td(set::title($user->address), $user->address),
-        ),
+            h::td(set::title($user->address), $user->address)
+        )
     ),
     isInModal() ? null : h::hr(),
     isInModal() ? null : h::table
@@ -112,30 +112,30 @@ div
             h::th($lang->user->commiter),
             h::td($user->commiter),
             h::th($lang->user->skype),
-            h::td($user->skype ? a(set::href("callto://{$user->skype}"), $user->skype) : null),
+            h::td($user->skype ? a(set::href("callto://{$user->skype}"), $user->skype) : null)
         ),
         h::tr
         (
             h::th($lang->user->visits),
             h::td($user->visits),
             h::th($lang->user->whatsapp),
-            h::td($user->whatsapp),
+            h::td($user->whatsapp)
         ),
         h::tr
         (
             h::th($lang->user->last),
             h::td($user->last),
             h::th($lang->user->slack),
-            h::td($user->slack),
+            h::td($user->slack)
         ),
         h::tr
         (
             h::th($lang->user->ip),
             h::td($user->ip),
             h::th($lang->user->dingding),
-            h::td($user->dingding),
-        ),
-    ),
+            h::td($user->dingding)
+        )
+    )
 );
 
 render();

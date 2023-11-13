@@ -14,7 +14,7 @@ modalHeader
 (
     set::title(''),
     set::entityID(''),
-    set::entityText(sprintf($lang->user->noticeDelete, $user->realname)),
+    set::entityText(sprintf($lang->user->noticeDelete, $user->realname))
 );
 
 formPanel
@@ -33,7 +33,7 @@ formPanel
         setClass('hidden'),
         set::name('verifyRand'),
         set::value($rand)
-    ),
+    )
 );
 
 render();

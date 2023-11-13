@@ -57,7 +57,7 @@ div
         set::data(array_values($stories)),
         set::orderBy($orderBy),
         set::sortLink(inlink('story', "userID={$user->id}&storyType={$storyType}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-        set::footPager(usePager()),
+        set::footPager(usePager())
     )
 );
 

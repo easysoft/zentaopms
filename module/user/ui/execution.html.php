@@ -45,7 +45,7 @@ panel
         set::orderBy($orderBy),
         set::sortLink(inlink('execution', "userID={$user->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
         set::onRenderCell(jsRaw('window.renderCell')),
-        set::footPager(usePager()),
+        set::footPager(usePager())
     )
 );
 

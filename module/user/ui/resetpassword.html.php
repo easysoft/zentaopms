@@ -15,7 +15,7 @@ $content = $expired ? div
 (
     setClass('alert-danger p-4 mb-6'),
     $lang->user->linkExpired,
-    html(sprintf($lang->user->jumping, inlink('login'))),
+    html(sprintf($lang->user->jumping, inlink('login')))
 ) : formPanel
 (
     setClass('reset-password w-full'),
@@ -30,8 +30,8 @@ $content = $expired ? div
             password
             (
                 set::checkStrength(true)
-            ),
-        ),
+            )
+        )
     ),
     formRow
     (
@@ -41,7 +41,7 @@ $content = $expired ? div
             set::required(true),
             set::control('password'),
             set::name('password2'),
-            set::value(''),
+            set::value('')
         )
     ),
     formRow
@@ -50,13 +50,13 @@ $content = $expired ? div
         formGroup
         (
             set::name('passwordLength'),
-            set::value(0),
+            set::value(0)
         ),
         formGroup
         (
             set::name('verifyRand'),
-            set::value($rand),
-        ),
+            set::value($rand)
+        )
     ),
     formRow
     (
@@ -64,9 +64,9 @@ $content = $expired ? div
         toolbar
         (
             btn(set(array('text' => $lang->user->submit, 'btnType' => 'submit', 'type' => 'primary', 'class' => 'mx-4'))),
-            btn(set(array('text' => $lang->goback, 'url' => createLink('user', 'login'), 'back' => true, 'class' => 'mx-4'))),
-        ),
-    ),
+            btn(set(array('text' => $lang->goback, 'url' => createLink('user', 'login'), 'back' => true, 'class' => 'mx-4')))
+        )
+    )
 );
 
 set::zui(true);
@@ -76,8 +76,8 @@ div
     div
     (
         set::id('mainContent'),
-        $content,
-    ),
+        $content
+    )
 );
 
 render('pagebase');

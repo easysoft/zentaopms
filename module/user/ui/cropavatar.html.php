@@ -21,7 +21,7 @@ formPanel
         set::tipText($lang->user->cropAvatarTip),
         set::src($image->webPath),
         set::handleBtnClick(jsRaw('saveAvatar')),
-        setStyle('max-width', '540px'),
+        setStyle('max-width', '540px')
     )
 );
 

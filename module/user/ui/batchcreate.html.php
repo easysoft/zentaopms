@@ -42,7 +42,7 @@ formBatchPanel
                 set::name('type'),
                 set::value('inside'),
                 set::inline(true),
-                set::items($lang->user->typeList),
+                set::items($lang->user->typeList)
             )
         )
     ),
@@ -62,7 +62,7 @@ formBatchPanel
         set::items($depts),
         set::value($deptID),
         set::ditto(true),
-        set::hidden(zget($visibleFields, 'dept', true, false)),
+        set::hidden(zget($visibleFields, 'dept', true, false))
     ),
     formBatchItem
     (
@@ -78,13 +78,13 @@ formBatchPanel
             (
                 set::name('company'),
                 set::items($companies),
-                set::value(''),
+                set::value('')
             ),
             input
             (
                 set::name('newCompany'),
                 set::value(''),
-                setClass('hidden'),
+                setClass('hidden')
             ),
             checkbox
             (
@@ -93,9 +93,9 @@ formBatchPanel
                 set::value(0),
                 set::text($lang->company->create),
                 set::rootClass('btn'),
-                width('96px'),
-            ),
-        ),
+                width('96px')
+            )
+        )
     ),
     formBatchItem
     (
@@ -133,7 +133,7 @@ formBatchPanel
         set::width('200px'),
         set::items($lang->user->roleList),
         set::value(''),
-        set::ditto(true),
+        set::ditto(true)
     ),
     formBatchItem
     (
@@ -143,7 +143,7 @@ formBatchPanel
         set::items($groupList),
         set::width('200px'),
         set::value(''),
-        set::ditto(true),
+        set::ditto(true)
     ),
     formBatchItem
     (
@@ -151,7 +151,7 @@ formBatchPanel
         set::label($lang->user->email),
         set::control('input'),
         set::width('160px'),
-        set::hidden(zget($visibleFields, 'email', true, false)),
+        set::hidden(zget($visibleFields, 'email', true, false))
     ),
     formBatchItem
     (
@@ -161,7 +161,7 @@ formBatchPanel
         set::items($lang->user->genderList),
         set::value('m'),
         set::width('160px'),
-        set::hidden(zget($visibleFields, 'gender', true, false)),
+        set::hidden(zget($visibleFields, 'gender', true, false))
     ),
     formBatchItem
     (
@@ -174,12 +174,12 @@ formBatchPanel
             (
                 set::name('password'),
                 set::value(''),
-                set::placeholder(zget($lang->user->placeholder->passwordStrength, $config->safe->mode, '')),
+                set::placeholder(zget($lang->user->placeholder->passwordStrength, $config->safe->mode, ''))
             ),
             span
             (
-                setClass('input-group-addon passwordStrength hidden'),
-            ),
+                setClass('input-group-addon passwordStrength hidden')
+            )
         ),
         set::width('200px'),
         set::required(true)
@@ -190,14 +190,14 @@ formBatchPanel
         set::label($lang->user->commiter),
         set::control('input'),
         set::width('160px'),
-        set::hidden(zget($visibleFields, 'commiter', true, false)),
+        set::hidden(zget($visibleFields, 'commiter', true, false))
     ),
     formBatchItem
     (
         set::name('join'),
         set::label($lang->user->join),
         set::control('date'),
-        set::width('160px'),
+        set::width('160px')
     ),
     formBatchItem
     (
@@ -205,7 +205,7 @@ formBatchPanel
         set::label($lang->user->skype),
         set::control('input'),
         set::width('160px'),
-        set::hidden(zget($visibleFields, 'skype', true, false)),
+        set::hidden(zget($visibleFields, 'skype', true, false))
     ),
     formBatchItem
     (
@@ -213,7 +213,7 @@ formBatchPanel
         set::label($lang->user->qq),
         set::control('input'),
         set::width('160px'),
-        set::hidden(zget($visibleFields, 'qq', true, false)),
+        set::hidden(zget($visibleFields, 'qq', true, false))
     ),
     formBatchItem
     (
@@ -221,7 +221,7 @@ formBatchPanel
         set::label($lang->user->dingding),
         set::control('input'),
         set::width('160px'),
-        set::hidden(zget($visibleFields, 'dingding', true, false)),
+        set::hidden(zget($visibleFields, 'dingding', true, false))
     ),
     formBatchItem
     (
@@ -229,7 +229,7 @@ formBatchPanel
         set::label($lang->user->weixin),
         set::control('input'),
         set::width('160px'),
-        set::hidden(zget($visibleFields, 'weixin', true, false)),
+        set::hidden(zget($visibleFields, 'weixin', true, false))
     ),
     formBatchItem
     (
@@ -237,7 +237,7 @@ formBatchPanel
         set::label($lang->user->mobile),
         set::control('input'),
         set::width('160px'),
-        set::hidden(zget($visibleFields, 'mobile', true, false)),
+        set::hidden(zget($visibleFields, 'mobile', true, false))
     ),
     formBatchItem
     (
@@ -245,7 +245,7 @@ formBatchPanel
         set::label($lang->user->slack),
         set::control('input'),
         set::width('160px'),
-        set::hidden(zget($visibleFields, 'slack', true, false)),
+        set::hidden(zget($visibleFields, 'slack', true, false))
     ),
     formBatchItem
     (
@@ -253,7 +253,7 @@ formBatchPanel
         set::label($lang->user->whatsapp),
         set::control('input'),
         set::width('160px'),
-        set::hidden(zget($visibleFields, 'whatsapp', true, false)),
+        set::hidden(zget($visibleFields, 'whatsapp', true, false))
     ),
     formBatchItem
     (
@@ -261,7 +261,7 @@ formBatchPanel
         set::label($lang->user->phone),
         set::control('input'),
         set::width('160px'),
-        set::hidden(zget($visibleFields, 'phone', true, false)),
+        set::hidden(zget($visibleFields, 'phone', true, false))
     ),
     formBatchItem
     (
@@ -269,7 +269,7 @@ formBatchPanel
         set::label($lang->user->address),
         set::control('input'),
         set::width('160px'),
-        set::hidden(zget($visibleFields, 'address', true, false)),
+        set::hidden(zget($visibleFields, 'address', true, false))
     ),
     formBatchItem
     (
@@ -277,7 +277,7 @@ formBatchPanel
         set::label($lang->user->zipcode),
         set::control('input'),
         set::width('160px'),
-        set::hidden(zget($visibleFields, 'zipcode', true, false)),
+        set::hidden(zget($visibleFields, 'zipcode', true, false))
     ),
     div
     (
@@ -291,21 +291,21 @@ formBatchPanel
             set::control('password'),
             set::name('verifyPassword'),
             set::value(''),
-            set::required(true),
-        ),
+            set::required(true)
+        )
     ),
     formGroup
     (
         setClass('hidden'),
         set::name('verifyRand'),
-        set::value($rand),
+        set::value($rand)
     ),
     formGroup
     (
         setClass('hidden'),
         set::name('userType'),
-        set::value('inside'),
-    ),
+        set::value('inside')
+    )
 );
 
 render();

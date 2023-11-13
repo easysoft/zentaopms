@@ -89,7 +89,7 @@ div
                     set::items($langItems),
                     set::menuClass('langsDropMenu'),
                     set::staticMenu(true),
-                    set::trigger('hover'),
+                    set::trigger('hover')
                 )
             ),
             div
@@ -99,7 +99,7 @@ div
                 (
                     set::width('1/3'),
                     setID('logo-box'),
-                    h::img(set::src($config->webRoot . 'theme/default/images/main/' . $this->lang->logoImg)),
+                    h::img(set::src($config->webRoot . 'theme/default/images/main/' . $this->lang->logoImg))
                 ),
                 cell
                 (
@@ -112,13 +112,13 @@ div
                         (
                             set::label($lang->user->account),
                             set::strong(true),
-                            set::control(array('type' => 'text', 'name' => 'account')),
+                            set::control(array('type' => 'text', 'name' => 'account'))
                         ),
                         formGroup
                         (
                             set::label($lang->user->password),
                             set::strong(true),
-                            set::control(array('type' => 'password', 'name' => 'password')),
+                            set::control(array('type' => 'password', 'name' => 'password'))
                         ),
                         !empty($this->config->safe->loginCaptcha) ? formGroup
                         (
@@ -129,23 +129,23 @@ div
                                 inputGroup
                                 (
                                     input(set::name('captcha')),
-                                    span(setClass('input-group-addon'), h::img(set::src($this->createLink('misc', 'captcha', "sessionVar=captcha")), on::click('refreshCaptcha(e.target)'))),
+                                    span(setClass('input-group-addon'), h::img(set::src($this->createLink('misc', 'captcha', "sessionVar=captcha")), on::click('refreshCaptcha(e.target)')))
                                 )
                             )
                         ) : null,
                         formGroup
                         (
                             set::label(''),
-                            set::control(array('type' => 'checkList', 'items' => $lang->user->keepLogin, 'name' => 'keepLogin', 'value' => $keepLogin)),
+                            set::control(array('type' => 'checkList', 'items' => $lang->user->keepLogin, 'name' => 'keepLogin', 'value' => $keepLogin))
                         ),
                         formHidden('referer', $referer),
                         set::actions(array
                         (
                             array('text' => $lang->login, 'id' => 'submit', 'class' => 'primary'),
-                            array('text' => $lang->user->resetPassword, 'class' => 'resetPassword', 'url' => $resetLink),
-                        )),
-                    ),
-                ),
+                            array('text' => $lang->user->resetPassword, 'class' => 'resetPassword', 'url' => $resetLink)
+                        ))
+                    )
+                )
             ),
             (count($plugins['expired']) > 0 || count($plugins['expiring']) > 0) ? div
             (
@@ -154,15 +154,15 @@ div
                 (
                     setID('notice'),
                     setClass('alert secondary'),
-                    div(setClass('content'), icon(setClass('text-secondary'), 'exclamation-sign'), $expiredCountTips),
+                    div(setClass('content'), icon(setClass('text-secondary'), 'exclamation-sign'), $expiredCountTips)
                 )
             ) : null,
             empty($demoUsers) ? null : div
             (
                 setClass('footer'),
                 span($lang->user->loginWithDemoUser),
-                $demoUserItems,
-            ),
+                $demoUserItems
+            )
         ),
         div
         (
@@ -170,8 +170,8 @@ div
             div
             (
                 setID('poweredby'),
-                ($unsafeSites && !empty($unsafeSites[$zentaoDirName])) ? div(a(setClass('showNotice'), set::href('###'), on::click('showNotice'), $lang->user->notice4Safe)) : null,
-            ),
+                ($unsafeSites && !empty($unsafeSites[$zentaoDirName])) ? div(a(setClass('showNotice'), set::href('###'), on::click('showNotice'), $lang->user->notice4Safe)) : null
+            )
         )
     )
 );

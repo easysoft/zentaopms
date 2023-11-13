@@ -35,9 +35,9 @@ formBatchPanel
             set::control('password'),
             set::name('verifyPassword'),
             set::value(''),
-            set::required(true),
-        ),
-    ),
+            set::required(true)
+        )
+    )
 );
 formHidden('verifyRand', $rand);
 

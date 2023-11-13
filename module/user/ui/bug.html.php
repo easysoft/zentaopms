@@ -48,7 +48,7 @@ div
         set::data(array_values($bugs)),
         set::orderBy($orderBy),
         set::sortLink(inlink('bug', "userID={$user->id}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-        set::footPager(usePager()),
+        set::footPager(usePager())
     )
 );
 

@@ -65,7 +65,7 @@ div
         set::orderBy($orderBy),
         set::sortLink(inlink('task', "userID={$user->id}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
         set::onRenderCell(jsRaw('window.renderCell')),
-        set::footPager(usePager()),
+        set::footPager(usePager())
     )
 );
 

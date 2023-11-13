@@ -24,8 +24,8 @@ div
                 a
                 (
                     set::href(inlink('reset')),
-                    $lang->user->resetTitle,
-                ),
+                    $lang->user->resetTitle
+                )
             ),
             set::title($lang->admin->resetPWDByMail),
             setClass('forget-password'),
@@ -40,7 +40,7 @@ div
                     set::value(''),
                     set::required(true),
                     set::placeholder($lang->user->placeholder->loginAccount)
-                ),
+                )
             ),
             formRow
             (
@@ -59,11 +59,11 @@ div
                 toolbar
                 (
                     btn(set(array('text' => $lang->user->submit, 'btnType' => 'submit', 'type' => 'primary', 'class' => 'mx-4'))),
-                    btn(set(array('text' => $lang->goback, 'url' => createLink('user', 'login'), 'back' => true, 'class' => 'mx-4'))),
-                ),
-            ),
-        ),
-    ),
+                    btn(set(array('text' => $lang->goback, 'url' => createLink('user', 'login'), 'back' => true, 'class' => 'mx-4')))
+                )
+            )
+        )
+    )
 );
 
 render('pagebase');

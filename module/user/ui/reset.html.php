@@ -20,7 +20,7 @@ $content = $needCreateFile ? div
         cell
         (
             setClass('alert-info p-4 mb-6'),
-            html(sprintf($lang->user->noticeResetFile, $resetFileName)),
+            html(sprintf($lang->user->noticeResetFile, $resetFileName))
         ),
         cell
         (
@@ -30,16 +30,16 @@ $content = $needCreateFile ? div
                 setClass('px-8 mx-4'),
                 set::type('primary'),
                 set::url(inlink('reset')),
-                $lang->refresh,
+                $lang->refresh
             ),
             backBtn
             (
                 setClass('px-8 mx-4'),
                 set::back('GLOBAL'),
                 $lang->goback
-            ),
-        ),
-    ),
+            )
+        )
+    )
 ) : div
 (
     setClass('reset-password cell flex justify-center mt-24'),
@@ -54,8 +54,8 @@ $content = $needCreateFile ? div
                 set::label($lang->user->account),
                 set::name('account'),
                 set::value(''),
-                set::required(true),
-            ),
+                set::required(true)
+            )
         ),
         formRow
         (
@@ -63,8 +63,8 @@ $content = $needCreateFile ? div
             (
                 set::label($lang->user->password),
                 password(set::checkStrength(true)),
-                set::required(true),
-            ),
+                set::required(true)
+            )
         ),
         formRow
         (
@@ -74,7 +74,7 @@ $content = $needCreateFile ? div
                 set::control('password'),
                 set::name('password2'),
                 set::value(''),
-                set::required(true),
+                set::required(true)
             )
         ),
         formRow
@@ -83,15 +83,15 @@ $content = $needCreateFile ? div
             formGroup
             (
                 set::name('passwordLength'),
-                set::value(0),
+                set::value(0)
             ),
             formGroup
             (
                 set::name('verifyRand'),
-                set::value($rand),
-            ),
-        ),
-    ),
+                set::value($rand)
+            )
+        )
+    )
 );
 
 set::zui(true);
@@ -101,8 +101,8 @@ div
     div
     (
         set::id('mainContent'),
-        $content,
-    ),
+        $content
+    )
 );
 
 render('pagebase');

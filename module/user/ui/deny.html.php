@@ -46,15 +46,15 @@ panel
     set::footerActions
     (array(
         $refererBeforeDeny ? array('url' => helper::safe64Decode($refererBeforeDeny), 'text' => $lang->user->goback) : array('back' => 'APP', 'text' => $lang->user->goback),
-        array('data-url' => createLink('user', 'logout', "referer=" . helper::safe64Encode($denyPage)), 'class' => 'primary', 'text' => $lang->user->relogin, 'onclick' => 'locateLogin(this)'),
+        array('data-url' => createLink('user', 'logout', "referer=" . helper::safe64Encode($denyPage)), 'class' => 'primary', 'text' => $lang->user->relogin, 'onclick' => 'locateLogin(this)')
     )),
     set::footerClass('justify-center'),
     div
     (
         setClass('alert'),
         icon(setClass('icon-3x alert-icon'), set::style(array('opacity' => '0.6')), 'exclamation-sign'),
-        div(html($denyContent)),
-    ),
+        div(html($denyContent))
+    )
 );
 
 render();
