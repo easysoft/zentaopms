@@ -52,7 +52,7 @@ toolbar
         'text'  => $lang->action->dynamic->hidden,
         'class' => 'danger',
         'url'   => inlink('trash', "browseType=all&type=hidden")
-    ))) : null,
+    ))) : null
 );
 
 if($currentObjectType != 'task')                                    unset($config->action->dtable->fieldList['execution']);
