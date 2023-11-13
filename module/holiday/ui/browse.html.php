@@ -27,8 +27,8 @@ sidebar
                 a
                 (
                     set::href(hasPriv('custom', 'hours') ? createLink('custom', 'hours', 'type=hours') : ''),
-                    $lang->custom->setHours,
-                ),
+                    $lang->custom->setHours
+                )
             ),
             li
             (
@@ -36,8 +36,8 @@ sidebar
                 a
                 (
                     set::href(hasPriv('custom', 'hours') ? createLink('custom', 'hours', 'type=weekend') : ''),
-                    $lang->custom->setWeekend,
-                ),
+                    $lang->custom->setWeekend
+                )
             ),
             li
             (
@@ -46,10 +46,10 @@ sidebar
                 (
                     setClass('active'),
                     set::href(createLink('holiday', 'browse')),
-                    $lang->custom->setHoliday,
-                ),
-            ),
-        ),
+                    $lang->custom->setHoliday
+                )
+            )
+        )
     )
 );
 
@@ -67,14 +67,14 @@ panel
                 span
                 (
                     setClass('form-name'),
-                    h::strong($lang->holiday->checkYear),
+                    h::strong($lang->holiday->checkYear)
                 ),
                 picker
                 (
                     set::name('year'),
                     set::value($currentYear),
                     set::items($yearList),
-                    on::change('changeYear'),
+                    on::change('changeYear')
                 )
             )
         ),
@@ -103,7 +103,7 @@ panel
         div
         (
             setClass('table-import shadow-sm'),
-            html(sprintf($lang->holiday->importTip, html::a(helper::createLink('holiday', 'import', "year={$currentYear}"), $lang->import, '', "class='text-primary' data-toggle='modal' data-size='480px'"))),
+            html(sprintf($lang->holiday->importTip, html::a(helper::createLink('holiday', 'import', "year={$currentYear}"), $lang->import, '', "class='text-primary' data-toggle='modal' data-size='480px'")))
         )
     )
 );
