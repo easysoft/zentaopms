@@ -168,7 +168,7 @@ $lang->tutorial->tasks['linkStory']['nav']['targetPageName'] = "关联{$lang->SR
 $lang->tutorial->tasks['linkStory']['desc'] = "<p>将{$lang->SRCommon}关联到执行：</p><ul><li data-target='nav'>打开 <span class='task-nav'> 执行 <i class='icon icon-angle-right'></i> {$lang->SRCommon} <i class='icon icon-angle-right'></i> 关联{$lang->SRCommon}</span> 页面；</li><li data-target='form'>在{$lang->SRCommon}列表中勾选要关联的{$lang->SRCommon}；</li><li data-target='submit'>保存关联的{$lang->SRCommon}信息。</li></ul>";
 
 $lang->tutorial->tasks['createTask'] = array();
-$lang->tutorial->tasks['createTask']['title'] = '创建任务';
+$lang->tutorial->tasks['createTask']['title'] = '分解任务';
 
 $lang->tutorial->tasks['createTask']['nav']   = array();
 $lang->tutorial->tasks['createTask']['nav']['app']            = 'execution';
