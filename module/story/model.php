@@ -126,6 +126,21 @@ class storyModel extends model
     }
 
     /**
+     * 获取指定的需求 id name 的键值对。
+     * Get pairs by list.
+     *
+     * @param  array|string $storyIdList
+     * @access public
+     * @return array
+     */
+    public function getPairsByList(array|string $storyIdList): array
+    {
+        $storyPairs = $this->dao->select('id, title')->from(TABLE_STORY)->where('id')->in($storyIdList)->beginIF($this->config->vision == 'or')->andWhere('t1.vision')->eq('or')->fi()->fetchPairs();
+
+        return array(0 => '') + $storyPairs;
+    }
+
+    /**
      * 获取执行中已经为该需求创建了测试类型任务的需求ID的键值对。
      * Get the key-value pairs for story ID which the test type task has been created for this story in the execution.
      *

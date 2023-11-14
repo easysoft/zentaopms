@@ -1074,8 +1074,9 @@ class bugZen extends bug
         $this->view->branchTagOption = $branchTagOption;
         $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
         $this->view->executions      = $executions;
-        $this->view->tasks           = $this->loadModel('task')->getByIdList($taskIdList);
-        $this->view->stories         = $this->loadModel('story')->getByList($storyIdList);
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($product->id);
+        $this->view->tasks           = $this->loadModel('task')->getPairsByIdList($taskIdList);
+        $this->view->stories         = $this->loadModel('story')->getPairsByList($storyIdList);
         $this->view->builds          = $this->loadModel('build')->getBuildPairs(array($product->id), $branch);
         $this->view->bugs            = $bugs;
         $this->view->users           = $this->user->getPairs('noletter');

@@ -1266,6 +1266,20 @@ class taskModel extends model
     }
 
     /**
+     * 获取指定的任务 id name 键值对。
+     * Get task pairs by task ID list.
+     *
+     * @param  array    $taskIdList
+     * @access public
+     * @return array
+     */
+    public function getPairsByIdList(array $taskIdList = array()) : array
+    {
+        $taskPairs = $this->dao->select('id, name')->from(TABLE_TASK)->where('deleted')->eq('0')->andWhere('id')->in($taskIdList)->fetchPairs();
+        return array(0 => '') + $taskPairs;
+    }
+
+    /**
      * 获取按每天完成统计的报表数据。
      * Get report data of finished tasks per day.
      *
