@@ -38,7 +38,7 @@ form
         (
             set::type('hidden'),
             set::name('module'),
-            set::value($module),
+            set::value($module)
         ),
         span
         (
