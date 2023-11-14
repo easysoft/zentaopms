@@ -12,7 +12,7 @@
 .btn-left, .btn-right {display: none;}
 #linkObject{display: none;}
 #related .btn-right, #related .btn-left {padding-top: 6px;}
-#monacoTree .tree-item-content span {cursor: pointer;}
+.tree-item, .listitem, .item-content {cursor: pointer;}
 .directory {background-image:url('theme/default/images/repo/dir.png');}
 .file {background-image:url('theme/default/images/repo/txt.png');}
 .mini-icon {display: inline-block; height: 16px; width: 16px; background-color: transparent; background-position: 0 0; background-repeat: no-repeat; vertical-align: text-bottom; margin-right: 5px;}

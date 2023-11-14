@@ -16,7 +16,7 @@
 .directory {background-image:url('theme/default/images/repo/dir.png');}
 .file {background-image:url('theme/default/images/repo/txt.png');}
 .mini-icon {display: inline-block; height: 16px; width: 16px; background-color: transparent; background-position: 0 0; background-repeat: no-repeat; vertical-align: text-bottom; margin-right: 5px;}
-#monacoTree .tree-item-content {cursor: pointer;}
+.tree-item, .listitem, .item-content {cursor: pointer;}
 .sync-content {margin: 10px}
 .sync-main-content {padding: 20px;background-color: #fff;border-radius: 4px;}
 .sync-line {border-top: 1px solid #e4e4e4; margin: 10px 0;}
