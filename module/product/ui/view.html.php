@@ -301,7 +301,7 @@ div
 $actionMenuList = !$product->deleted ? $this->product->buildOperateMenu($product) : array();
 div
 (
-    setClass('w-2/3 text-center fixed actions-menu'),
+    setClass('w-2/3 center fixed actions-menu'),
     setClass($product->deleted ? 'no-divider' : ''),
     floatToolbar
     (
