@@ -284,7 +284,7 @@ div
             'text'    => $lang->save,
             'type'    => 'primary',
             'btnType' => 'button',
-            'onclick' => 'changeProjectMembers()'
+            'onclick' => commonModel::isTutorialMode() ? '' : 'changeProjectMembers()'
             ),
             'cancel'
         ))
