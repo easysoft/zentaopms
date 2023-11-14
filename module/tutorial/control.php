@@ -40,7 +40,7 @@ class tutorial extends control
 
         $this->view->title   = $this->lang->tutorial->common;
         $this->view->current = $task;
-        $this->view->tasks   = $this->config->tutorial->tasks;
+        $this->view->tasks   = $this->config->tutorial->tasksConfig;
         $this->view->setting = $setting;
         $this->view->referer = base64_decode($referer);
         $this->view->mode    = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
@@ -116,7 +116,7 @@ class tutorial extends control
         /* Check priv for tutorial. */
         $hasPriv = false;
         $moduleLower = strtolower($module);
-        foreach($this->lang->tutorial->tasks as $task)
+        foreach($this->config->tutorial->tasksConfig as $task)
         {
             $taskModule     = strtolower($task['nav']['module']);
             $taskMenuModule = strtolower($task['nav']['menuModule']);

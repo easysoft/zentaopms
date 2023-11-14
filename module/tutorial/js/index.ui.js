@@ -197,10 +197,10 @@ $(function()
         options = $.extend(
         {
             trigger: 'manual',
-            title: text,
+            title: {html: text},
             placement: placement,
             className: 'warning',
-            mask: false
+            mask: false,
         }, options);
         $e = $e.first();
 

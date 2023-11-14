@@ -116,13 +116,7 @@ div
                 )
             ),
             h3(
-                $lang->tutorial->congratulateTask,
-                "【",
-                span
-                (
-                    setClass('task-name-current')
-                ),
-                "】！"
+                html($lang->tutorial->congratulateTask),
             ),
             btn
             (

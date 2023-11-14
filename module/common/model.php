@@ -2492,7 +2492,7 @@ EOF;
         {
             $app->loadLang('tutorial');
             $app->loadConfig('tutorial');
-            foreach($app->config->tutorial->tasks as $task)
+            foreach($app->config->tutorial->tasksConfig as $task)
             {
                 if($task['nav']['module'] == $module and $task['nav']['method'] = $method) return true;
             }

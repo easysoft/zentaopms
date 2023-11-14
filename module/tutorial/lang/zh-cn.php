@@ -27,7 +27,7 @@ $lang->tutorial->target           = '目标';
 $lang->tutorial->targetPageTip    = '按此指示打开【%s】页面';
 $lang->tutorial->targetAppTip     = '按此指示打开【%s】应用';
 $lang->tutorial->requiredTip      = '【%s】为必填项';
-$lang->tutorial->congratulateTask = '恭喜，你完成了任务 ';
+$lang->tutorial->congratulateTask = '恭喜，你完成了任务【<span class="task-name-current"></span>】';
 $lang->tutorial->serverErrorTip   = '发生了一些错误。';
 $lang->tutorial->ajaxSetError     = '必须指定已完成的任务，如果要重置任务，请设置值为空。';
 $lang->tutorial->novice           = "你可能初次使用禅道，是否进入新手教程";
