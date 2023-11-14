@@ -40,15 +40,15 @@ formPanel
             set::width('1/2'),
             set::label($lang->mr->sourceProject),
             set::value($sourceProject),
-            set::control('static'),
+            set::control('static')
         ),
         formGroup
         (
             set::labelWidth('5em'),
             set::label($lang->mr->sourceBranch),
             set::value($MR->sourceBranch),
-            set::control('static'),
-        ),
+            set::control('static')
+        )
     ),
     formRow
     (
@@ -57,7 +57,7 @@ formPanel
             set::width('1/2'),
             set::label($lang->mr->targetProject),
             set::value($targetProject),
-            set::control('static'),
+            set::control('static')
         ),
         formGroup
         (
@@ -66,15 +66,15 @@ formPanel
             set::label($lang->mr->targetBranch),
             set::value($MR->targetBranch),
             !$noEditBranch ? set::name('targetBranch') : null,
-            !$noEditBranch ? set::items($targetBranchList) : set::control('static'),
-        ),
+            !$noEditBranch ? set::items($targetBranchList) : set::control('static')
+        )
     ),
     formGroup
     (
         set::required(true),
         set::name('title'),
         set::label($lang->mr->title),
-        set::value($MR->title),
+        set::value($MR->title)
     ),
     formGroup
     (
@@ -94,20 +94,20 @@ formPanel
             set::name('needCI'),
             set::width('270px'),
             set::control(array('type' => 'checkbox', 'text' => $lang->mr->needCI, 'value' => '1', 'checked' => $MR->needCI == '1')),
-            on::change('onNeedCiChange'),
+            on::change('onNeedCiChange')
         ),
         formGroup
         (
             set::name('removeSourceBranch'),
             set::width('150px'),
             set::control(array('type' => 'checkbox', 'text' => $lang->mr->removeSourceBranch, 'value' => '1', 'checked' => $MR->canDeleteBranch && $MR->removeSourceBranch == '1')),
-            set::disabled(!$MR->canDeleteBranch),
+            set::disabled(!$MR->canDeleteBranch)
         ),
         formGroup
         (
             set::name('squash'),
-            set::control(array('type' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1', 'checked' => $MR->squash == '1')),
-        ),
+            set::control(array('type' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1', 'checked' => $MR->squash == '1'))
+        )
     ),
     formRow
     (
@@ -120,15 +120,15 @@ formPanel
             set::label($lang->job->common),
             set::control('picker'),
             set::items($jobList),
-            set::value($MR->jobID),
-        ),
+            set::value($MR->jobID)
+        )
     ),
     formGroup
     (
         set::name('description'),
         set::label($lang->mr->description),
         set::control('textarea'),
-        set::value($MR->description),
+        set::value($MR->description)
     ),
     formRow
     (
@@ -139,9 +139,9 @@ formPanel
             set::label($lang->devops->repo),
             set::control('picker'),
             set::items($repoList),
-            set::value($MR->repoID),
-        ),
-    ),
+            set::value($MR->repoID)
+        )
+    )
 );
 
 render();

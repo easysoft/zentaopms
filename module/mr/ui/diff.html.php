@@ -31,9 +31,9 @@ detailHeader
         $MR->deleted ? h::span
         (
             setClass('label danger'),
-            $lang->product->deleted,
-        ) : null,
-    ),
+            $lang->product->deleted
+        ) : null
+    )
 );
 
 $entry        = count($diffs) ? $diffs[0]->fileName : '';
@@ -117,7 +117,7 @@ panel
                     set::href(inlink('link', "MRID={$MR->id}&type=task")),
                     set('data-app', $app->tab)
                 )
-            ),
+            )
         )
     ),
     empty($diffs) ? p(setClass('detail-content'), $lang->mr->noChanges) : div(
@@ -140,10 +140,10 @@ panel
                         icon
                         (
                             'close',
-                            set::className('monaco-close'),
+                            set::className('monaco-close')
                         )
                     ),
-                    div(set::id('tab-' . $currentEntry)),
+                    div(set::id('tab-' . $currentEntry))
                 ),
                 dropdown
                 (
@@ -153,15 +153,15 @@ panel
                     btn
                     (
                         setClass('ghost text-black pull-right'),
-                        set::icon('ellipsis-v rotate-90'),
+                        set::icon('ellipsis-v rotate-90')
                     ),
                     set::items
                     (
                         $dropMenus
-                    ),
+                    )
                 ),
                 div(set::className('absolute top-0 left-0 z-20 arrow-left btn-left'), icon('chevron-left')),
-                div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right')),
+                div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right'))
             )
         ),
 
@@ -177,7 +177,7 @@ panel
                 set::expandedIcon('folder-open'),
                 set::normalIcon('file-text-alt'),
                 set::activeKey($entry),
-                set::onClickItem(jsRaw('window.treeClick')),
+                set::onClickItem(jsRaw('window.treeClick'))
             )
         ),
         a(set::className('iframe'), setData('size', '1200px'), setData('toggle', 'modal'), set::id('linkObject'))
