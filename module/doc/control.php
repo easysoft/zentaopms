@@ -373,7 +373,6 @@ class doc extends control
     public function uploadDocs($objectType, $objectID, $libID, $moduleID = 0, $docType = '', $from = 'doc')
     {
         $linkType = $objectType;
-        if($objectType == 'execution' and $this->app->tab != 'execution') $linkType = 'project';
 
         if(!empty($_POST))
         {
@@ -531,7 +530,6 @@ class doc extends control
     public function create($objectType, $objectID, $libID, $moduleID = 0, $docType = '', $from = 'doc')
     {
         $linkType = $objectType;
-        if($objectType == 'execution' and $this->app->tab != 'execution') $linkType = 'project';
 
         if(!empty($_POST))
         {
