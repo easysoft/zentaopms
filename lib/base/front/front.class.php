@@ -1303,7 +1303,7 @@ EOT;
      * Set js value.
      *
      * @param  string   $key
-     * @param  mix      $value
+     * @param  mixed    $value
      * @static
      * @access public
      * @return string

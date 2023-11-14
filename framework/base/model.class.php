@@ -151,6 +151,7 @@ class baseModel
 
         $this->loadDAO();
         $this->setSuperVars();
+        $this->loadCache();
 
         /**
          * 读取当前模块的tao类。
@@ -322,6 +323,20 @@ class baseModel
 
         $dao = new $driver();
         $this->dao = $dao;
+    }
+
+    /**
+     * 加载缓存类。
+     * Load cache class.
+     *
+     * @access public
+     * @return void
+     */
+    public function loadCache()
+    {
+        $this->app->loadClass('cache', $static = true);
+        $namespace   = isset($this->session->user->account) ? $this->session->user->account : 'guest';
+        $this->cache = cache::create($this->config->cache->driver, $namespace, $this->config->cache->lifetime);
     }
 
     /**
