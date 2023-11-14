@@ -41,7 +41,7 @@ $hostList = initTableData($hostList, $config->zahost->dtable->fieldList, $this->
 
 toolBar
 (
-    hasPriv('zahost', 'create') ? item(set($createItem)) : null,
+    hasPriv('zahost', 'create') ? item(set($createItem)) : null
 );
 
 dtable
@@ -52,7 +52,7 @@ dtable
     set::afterRender(jsRaw('window.afterRender')),
     set::sortLink(createLink('zahost', 'browse', "browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
-    set::orderBy(str_replace('id_', 'hostID_', $orderBy)),
+    set::orderBy(str_replace('id_', 'hostID_', $orderBy))
 );
 
 render();

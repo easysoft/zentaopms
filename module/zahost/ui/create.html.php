@@ -25,7 +25,7 @@ formPanel
             set('data-type', 'white'),
             set('data-class-name', 'text-gray border border-light'),
             setClass('text-gray')
-        ),
+        )
     )),
     formGroup
     (
@@ -33,7 +33,7 @@ formPanel
         set::label($lang->zahost->vsoft),
         set::required(true),
         set::width('1/2'),
-        set::items($lang->zahost->softwareList),
+        set::items($lang->zahost->softwareList)
     ),
     formGroup
     (
@@ -41,21 +41,21 @@ formPanel
         set::label($lang->zahost->zaHostType),
         set::required(true),
         set::width('1/2'),
-        set::items($lang->zahost->zaHostTypeList),
+        set::items($lang->zahost->zaHostTypeList)
     ),
     formGroup
     (
         set::name('name'),
         set::label($lang->zahost->name),
         set::required(true),
-        set::width('1/2'),
+        set::width('1/2')
     ),
     formGroup
     (
         set::name('extranet'),
         set::label($lang->zahost->extranet),
         set::required(true),
-        set::width('1/2'),
+        set::width('1/2')
     ),
     formGroup
     (
@@ -63,7 +63,7 @@ formPanel
         set::label($lang->zahost->cpuCores),
         set::required(true),
         set::width('1/2'),
-        set::items($config->zahost->cpuCoreList),
+        set::items($config->zahost->cpuCoreList)
     ),
     formRow
     (
@@ -76,11 +76,11 @@ formPanel
             (
                 input
                 (
-                    set::name('memory'),
+                    set::name('memory')
                 ),
                 'GB'
-            ),
-        ),
+            )
+        )
     ),
     formRow
     (
@@ -93,18 +93,18 @@ formPanel
             (
                 input
                 (
-                    set::name('diskSize'),
+                    set::name('diskSize')
                 ),
                 'GB'
-            ),
-        ),
+            )
+        )
     ),
     formGroup
     (
         set::label($lang->zahost->desc),
         set::name('desc'),
-        set::control('editor'),
-    ),
+        set::control('editor')
+    )
 );
 
 render();
