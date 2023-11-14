@@ -383,7 +383,7 @@ class hostModel extends model
 
             if(isset($hostGroups[0]))
             {
-                foreach($hostGroups[0] as $host) $groupTree['children'][] = array('text' => htmlspecialchars($host->name), 'hostid' => $host->id));
+                foreach($hostGroups[0] as $host) $groupTree['children'][] = array('text' => htmlspecialchars($host->name), 'hostid' => $host->id);
             }
             $treemap[0] = $groupTree;
         }
