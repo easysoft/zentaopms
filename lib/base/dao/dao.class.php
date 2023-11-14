@@ -1479,7 +1479,12 @@ class baseDAO
         $message .= ' ' . helper::checkDB2Repair($exception);
 
         $sql = $this->sqlobj->get();
-        $this->app->triggerError($message . "<p>The sql is: $sql</p>", __FILE__, __LINE__, $exit = true);
+        $message .= "<p>The sql is: $sql</p>";
+        if($this->app->throwError)
+        {
+            return throw new Exception($message);
+        }
+        $this->app->triggerError($message, __FILE__, __LINE__, $exit = true);
     }
 }
 
