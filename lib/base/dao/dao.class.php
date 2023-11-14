@@ -1500,6 +1500,9 @@ class baseDAO
 
         $sql = $this->sqlobj->get();
         $message .= "<p>The sql is: $sql</p>";
+        /*
+         * 如果开启了将sql错误作为异常抛出，那么拦截sql错误，不触发错误。
+         */
         if($this->app->throwError)
         {
             return throw new Exception($message);
