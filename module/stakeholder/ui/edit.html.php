@@ -18,7 +18,7 @@ formPanel
     (
         set::width('1/3'),
         set::label($lang->stakeholder->isKey),
-        radioList(set::name('key'), set::items($lang->stakeholder->keyList), set::value($stakeholder->key), set::inline(true)),
+        radioList(set::name('key'), set::items($lang->stakeholder->keyList), set::value($stakeholder->key), set::inline(true))
     ),
     $stakeholder->type == 'outside' ? formGroup
     (
@@ -26,7 +26,7 @@ formPanel
         setClass('user-info'),
         set::label($lang->stakeholder->name),
         set::name('name'),
-        set::value($stakeholder->name),
+        set::value($stakeholder->name)
     ) : null,
     $stakeholder->type == 'outside' ? formGroup
     (
@@ -34,7 +34,7 @@ formPanel
         setClass('user-info'),
         set::label($lang->stakeholder->phone),
         set::name('phone'),
-        set::value($stakeholder->phone),
+        set::value($stakeholder->phone)
     ) : null,
     $stakeholder->type == 'outside' ? formGroup
     (
@@ -42,7 +42,7 @@ formPanel
         setClass('user-info'),
         set::label($lang->stakeholder->qq),
         set::name('qq'),
-        set::value($stakeholder->qq),
+        set::value($stakeholder->qq)
     ) : null,
     $stakeholder->type == 'outside' ? formGroup
     (
@@ -50,7 +50,7 @@ formPanel
         setClass('user-info'),
         set::label($lang->stakeholder->weixin),
         set::name('weixin'),
-        set::value($stakeholder->weixin),
+        set::value($stakeholder->weixin)
     ) : null,
     $stakeholder->type == 'outside' ? formGroup
     (
@@ -58,7 +58,7 @@ formPanel
         setClass('user-info'),
         set::label($lang->stakeholder->email),
         set::name('email'),
-        set::value($stakeholder->email),
+        set::value($stakeholder->email)
     ) : null,
     $stakeholder->type == 'outside' ? formGroup
     (
@@ -67,7 +67,7 @@ formPanel
         set::label($lang->stakeholder->company),
         set::name('company'),
         set::control(array('type' => 'picker', 'items' => $companys)),
-        set::value($stakeholder->company),
+        set::value($stakeholder->company)
     ) : null,
     formGroup
     (
@@ -75,7 +75,7 @@ formPanel
         set::label($lang->stakeholder->nature),
         set::name('nature'),
         set::control('editor'),
-        set::value($stakeholder->nature), 
+        set::value($stakeholder->nature)
     ),
     formGroup
     (
@@ -83,7 +83,7 @@ formPanel
         set::label($lang->stakeholder->analysis),
         set::name('analysis'),
         set::control('editor'),
-        set::value($stakeholder->analysis), 
+        set::value($stakeholder->analysis)
     ),
     formGroup
     (
@@ -91,6 +91,6 @@ formPanel
         set::label($lang->stakeholder->strategy),
         set::name('strategy'),
         set::control('editor'),
-        set::value($stakeholder->strategy), 
-    ),
+        set::value($stakeholder->strategy)
+    )
 );

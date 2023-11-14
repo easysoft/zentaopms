@@ -18,8 +18,8 @@ formPanel
     (
         set::label($lang->stakeholder->communicate),
         set::name('comment'),
-        set::control('editor'),
-    ),
+        set::control('editor')
+    )
 );
 hr();
 history();

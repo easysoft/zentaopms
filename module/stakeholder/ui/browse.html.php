@@ -57,7 +57,7 @@ if(common::hasPriv('stakeholder', 'batchcreate') and common::hasPriv('stakeholde
                 btn(setClass('btn primary dropdown-toggle'),
                 setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
                 set::items(array_filter(array($createItem, $batchCreateItem))),
-                set::placement('bottom-end'),
+                set::placement('bottom-end')
             )
         )
     );

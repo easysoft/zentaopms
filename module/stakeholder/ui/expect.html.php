@@ -18,12 +18,12 @@ formPanel
     (
         set::label($lang->stakeholder->expect),
         set::name('expect'),
-        set::control('editor'),
+        set::control('editor')
     ),
     formGroup
     (
         set::label($lang->stakeholder->progress),
         set::name('progress'),
-        set::control('editor'),
-    ),
+        set::control('editor')
+    )
 );

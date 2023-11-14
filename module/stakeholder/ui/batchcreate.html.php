@@ -43,7 +43,7 @@ formBatchPanel
             $lang->execution->selectDept,
             picker(set::name('dept'), set::items($depts), set::value($dept), setID('dept'), set('data-placeholder', $lang->execution->selectDeptTitle), on::change("setDeptUsers")),
         ),
-        $project->parent ? btn(set::url($this->createLink('stakeholder', 'batchcreate', "projectID={$projectID}&dept=&parent=$project->parent")), setClass('primary'), $lang->program->importStakeholder) : null,
+        $project->parent ? btn(set::url($this->createLink('stakeholder', 'batchcreate', "projectID={$projectID}&dept=&parent=$project->parent")), setClass('primary'), $lang->program->importStakeholder) : null
     ),
     set::minRows(count($data) + 5),
     set::bodyClass('w-1/2'),
@@ -53,6 +53,6 @@ formBatchPanel
         set::name('accounts'),
         set::label($lang->team->account),
         set::control('picker'),
-        set::items($users),
-    ),
+        set::items($users)
+    )
 );
