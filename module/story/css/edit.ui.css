@@ -8,3 +8,5 @@
 .twins:hover .unlink{display:unset;}
 
 .picker-box{width:100%;}
+
+table.table-data th{width: 78px !important;}
