@@ -1919,7 +1919,7 @@ class docModel extends model
             if(!empty($buildPairs)) $buildIdList = implode(',', $buildPairs);
 
             $executionIdList = join(',', $executionIdList);
-            $storyIDList     = join(',', $storyIDList);
+            if($storyIDList) $storyIDList = join(',', $storyIDList);
         }
         elseif($type == 'execution')
         {
