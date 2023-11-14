@@ -986,9 +986,22 @@ class kanbanModel extends model
         $regionIDList = $regionID == 0 ? array_keys($regions) : array(0 => $regionID);
         $groupGroup   = $this->getGroupGroupByRegions($regionIDList);
         $laneGroup    = $this->getLaneGroupByRegions($regionIDList, $browseType);
+        $execution    = $this->loadModel('execution')->getByID($executionID);
+
+        foreach($laneGroup as $lanes)
+        {
+            foreach($lanes as $lane)
+            {
+                $lane['execution'] = $executionID;
+                if(in_array($execution->attribute, array('request', 'design', 'review')) and $lane['type'] == 'bug') continue 2;
+                if(in_array($execution->attribute, array('request', 'review')) and $lane['type'] == 'story') continue 2;
+                $this->refreshCards($lane);
+                $lane['defaultCardType'] = $lane['type'];
+            }
+        }
+
         $columnGroup  = $this->getRDColumnGroupByRegions($regionIDList, array_keys($laneGroup));
         $cardGroup    = $this->getCardGroupByExecution($executionID, $browseType, $orderBy, $searchValue);
-        $execution    = $this->loadModel('execution')->getByID($executionID);
 
         foreach($regions as $regionID => $regionName)
         {
@@ -1014,20 +1027,10 @@ class kanbanModel extends model
                 $cols  = zget($columnGroup, $group->id, array());
                 $items = zget($cardGroup, $group->id, array());
 
-                foreach($lanes as $key => $lane)
-                {
-                    $lane['execution'] = $executionID;
-                    if(in_array($execution->attribute, array('request', 'design', 'review')) and $lane->type == 'bug') continue 2;
-                    if(in_array($execution->attribute, array('request', 'review')) and $lane->type == 'story') continue 2;
-                    $this->refreshCards($lane);
-                    $lane['defaultCardType'] = $lane['type'];
-                    if($searchValue != '' and count($lane->items) == 0) unset($lanes[$key]);
-                }
-
                 $lanes = array_values($lanes);
                 $laneCount += count($lanes);
 
-                if($searchValue != '' and empty($lanes)) continue;
+                if($searchValue != '' and empty($items)) continue;
 
                 $groupData['id']            = $group->id;
                 $groupData['key']           = "group{$group->id}";
@@ -4177,6 +4180,4 @@ class kanbanModel extends model
         $kanbanData = reset($kanbanData);
         return array('name' => 'updateKanbanRegion', 'params' => array('region' . $regionID, $kanbanData));
     }
-
-
 }

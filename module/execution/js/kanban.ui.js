@@ -204,7 +204,7 @@ window.buildBugActions = function(item)
 {
     let actions = [];
 
-    if(priv.canEditBug) actions.push({text: bugLang.edit, icon: 'edit', url: $.createLink('bug', 'edit', 'bugID=' + item.id + '&kanbanGroup=' + groupBy), 'data-toggle': 'modal', 'data-size': 'lg'});
+    if(priv.canEditBug) actions.push({text: bugLang.edit, icon: 'edit', url: $.createLink('bug', 'edit', 'bugID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canResolveBug && (item.status == 'unconfirmed' || item.status == 'confirmed' || item.status == 'fixing')) actions.push({text: bugLang.resolve, icon: 'checked', url: $.createLink('bug', 'resolve', 'bugID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canConfirmBug && (item.status == 'fixed' || item.status == 'testing' || item.status == 'tested')) actions.push({text: bugLang.close, icon: 'off', url: $.createLink('bug', 'close', 'bugID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canConfirmBug && item.status == 'unconfirmed') actions.push({text: bugLang.confirm, icon: 'ok', url: $.createLink('bug', 'confirm', 'bugID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
@@ -221,8 +221,8 @@ window.buildTaskActions = function(item)
     let actions = [];
 
     if(priv.canEditTask) actions.push({text: taskLang.edit, icon: 'edit', url: $.createLink('task', 'edit', 'taskID=' + item.id + '&comment=&kanbanGroup=' + groupBy), 'data-toggle': 'modal', 'data-size': 'lg'});
-    if(priv.canRestartTask && item.status == 'pause') actions.push({text: taskLang.restart, icon: 'play', url: $.createLink('task', 'restart', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
-    if(priv.canPauseTask && item.status == 'developing') actions.push({text: taskLang.pause, icon: 'pause', url: $.createLink('task', 'pause', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
+    if(priv.canRestartTask && item.status == 'pause') actions.push({text: taskLang.restart, icon: 'play', url: $.createLink('task', 'restart', 'taskID=' + item.id + '&from=execution'), 'data-toggle': 'modal'});
+    if(priv.canPauseTask && item.status == 'developing') actions.push({text: taskLang.pause, icon: 'pause', url: $.createLink('task', 'pause', 'taskID=' + item.id), 'data-toggle': 'modal'});
     if(priv.canRecordWorkhourTask) actions.push({text: executionLang.effort, icon: 'time', url: $.createLink('task', 'recordWorkhour', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canActivateTask && (item.status == 'developed' || item.status == 'canceled' || item.status == 'closed')) actions.push({text: executionLang.activate, icon: 'magic', url: $.createLink('task', 'activate', 'taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
     if(priv.canCreateTask) actions.push({text: taskLang.copy, icon: 'copy', url: $.createLink('task', 'create', 'executionID=' + executionID + '&storyID=' + '0' + '&moduleID=' + '0' + '&taskID=' + item.id), 'data-toggle': 'modal', 'data-size': 'lg'});
@@ -275,6 +275,7 @@ window.onDrop = function(changes, dropInfo)
         const toColType   = this.getCol(toCol).type;
         const regionID    = this.getLane(toLane).region;
         changeCardColType(item.id, fromCol, toCol, fromLane, toLane, item.cardType, fromColType, toColType, regionID);
+        return false;
     }
 }
 
@@ -350,7 +351,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
             }
             if(fromColType == 'pause' && priv.canActivateTask)
             {
-                var link = $.createLink('task', 'restart', 'taskID=' + objectID, '', true);
+                var link = $.createLink('task', 'restart', 'taskID=' + objectID + '&from=execution', '', true);
                 showIframe = true;
             }
             if(fromColType == 'wait' && priv.canStartTask)
@@ -441,17 +442,14 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
             {
                 $.get($.createLink('story', 'ajaxGetInfo', "storyID=" + cardID), function(data)
                 {
-                    if(data)
+                    data = JSON.parse(data);
+                    if(data.status == 'draft' || data.status == 'changing' || data.status == 'reviewing')
                     {
-                        data = $.parseJSON(data);
-                        if(data.status == 'draft' || data.status == 'changing' || data.status == 'reviewing')
-                        {
-                            zui.Modal.alert(executionLang.storyDragError);
-                        }
-                        else
-                        {
-                            ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID);
-                        }
+                        zui.Modal.alert(executionLang.storyDragError);
+                    }
+                    else
+                    {
+                        ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID);
                     }
                 });
             }
@@ -465,12 +463,121 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
 
     if(showIframe)
     {
-        zui.Modal.open({url: link, size: 'lg'});
+        zui.Modal.open({url: link});
     }
 }
 
 window.ajaxMoveCard = function(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID)
 {
-    var link = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy + '&regionID=' + regionID+ '&orderBy=' + orderBy );
-    $.ajaxSubmit({url: link});
+    const link = $.createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy + '&regionID=' + regionID+ '&orderBy=' + orderBy );
+    refreshKanban(link);
+}
+
+window.searchCards = function(value, order)
+{
+    if(typeof order == 'undefined') order = orderBy;
+    refreshKanban($.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value + '&orderBy=' + order));
+}
+
+window.refreshKanban = function(url)
+{
+    if(typeof url == 'undefined') url = $.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=&orderBy=' + orderBy);
+
+    const $kanbanList = $('[data-zui-kanbanlist]').zui('kanbanList');
+    let   options     = $kanbanList.options;
+    $.getJSON(url, function(data)
+    {
+        for(const region of data)
+        {
+            for(const group of region.items)
+            {
+                group.getLane     = window.getLane;
+                group.getCol      = window.getCol;
+                group.getItem     = window.getItem;
+                group.canDrop     = window.canDrop;
+                group.onDrop      = window.onDrop;
+                group.minColWidth = minColWidth;
+                group.maxColWidth = maxColWidth;
+                group.colProps    = {'actions': window.getColActions};
+                group.itemProps   = {'actions': window.getItemActions};
+            }
+        }
+        options.items = data;
+        $kanbanList.render(options);
+    });
+}
+
+window.fullScreen = function()
+{
+    var element       = document.getElementById('kanbanList');
+    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
+
+    if(requestMethod)
+    {
+        var afterEnterFullscreen = function()
+        {
+            $('#kanbanList').addClass('fullscreen').css('background', '#fff');
+            window.hideAllAction();
+            $.cookie.set('isFullScreen', 1);
+        };
+
+        var whenFailEnterFullscreen = function()
+        {
+            exitFullScreen();
+        };
+
+        try
+        {
+            var result = requestMethod.call(element);
+            if(result && (typeof result.then === 'function' || result instanceof window.Promise))
+            {
+                result.then(afterEnterFullscreen).catch(whenFailEnterFullscreen);
+            }
+            else
+            {
+                afterEnterFullscreen();
+            }
+        }
+        catch (error)
+        {
+            whenFailEnterFullscreen(error);
+        }
+    }
+}
+
+/**
+ * Exit full screen.
+ *
+ * @access public
+ * @return void
+ */
+function exitFullScreen()
+{
+    $('.btn').show();
+    $.cookie.set('isFullScreen', 0);
+}
+
+document.addEventListener('fullscreenchange', function (e)
+{
+    if(!document.fullscreenElement) exitFullScreen();
+});
+
+document.addEventListener('webkitfullscreenchange', function (e)
+{
+    if(!document.webkitFullscreenElement) exitFullScreen();
+});
+
+document.addEventListener('mozfullscreenchange', function (e)
+{
+    if(!document.mozFullScreenElement) exitFullScreen();
+});
+
+document.addEventListener('msfullscreenChange', function (e)
+{
+    if(!document.msfullscreenElement) exitFullScreen();
+});
+
+window.hideAllAction = function()
+{
+    $('.btn').hide();
 }

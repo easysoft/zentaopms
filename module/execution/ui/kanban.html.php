@@ -111,6 +111,10 @@ jsVar('productID', $productID);
 jsVar('productCount', count($productNames));
 jsVar('vision', $config->vision);
 jsVar('groupBy', $groupBy);
+jsVar('browseType', $browseType);
+jsVar('orderBy', $orderBy);
+jsVar('minColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->minColWidth);
+jsVar('maxColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->maxColWidth);
 jsVar('priv',
     array(
         'canCreateTask'         => $canCreateTask,

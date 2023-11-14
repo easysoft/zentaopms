@@ -3015,13 +3015,13 @@ class execution extends control
      * @param  int    $enterTime
      * @param  string $browseType  all|story|task|bug
      * @param  string $groupBy     default|pri|category|module|source|assignedTo|type|story|severity
-     * @param  string $from        execution|RD
+     * @param  string $from        taskkanban|execution
      * @param  string $searchValue
      * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function ajaxUpdateKanban(int $executionID = 0, int $enterTime = 0, string $browseType = '', string $groupBy = '', string $from = 'execution', string $searchValue = '', string $orderBy = 'id_asc')
+    public function ajaxUpdateKanban(int $executionID = 0, int $enterTime = 0, string $browseType = '', string $groupBy = '', string $from = 'taskkanban', string $searchValue = '', string $orderBy = 'id_asc')
     {
         $this->loadModel('kanban');
         if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'pri_asc';
@@ -3033,7 +3033,7 @@ class execution extends control
         $enterTime      = date('Y-m-d H:i:s', $enterTime);
         if(in_array(true, array(is_null($lastEditedTime), strtotime($lastEditedTime) < 0, $lastEditedTime > $enterTime, $groupBy != 'default', !empty($searchValue))))
         {
-            $kanbanGroup = $from == 'execution' ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $searchValue, $orderBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy, $searchValue);
+            $kanbanGroup = $from == 'taskkanban' ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $searchValue, $orderBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy, $searchValue);
             return print(json_encode($kanbanGroup));
         }
     }

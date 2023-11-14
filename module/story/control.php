@@ -159,7 +159,7 @@ class story extends control
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));
-            if(isInModal()) return $this->send($this->storyZen->getResponseInModal($this->lang->saveSuccess, $executionID));
+            if(isInModal()) return $this->send($this->storyZen->getResponseInModal($this->lang->saveSuccess));
 
             $locateLink = $this->storyZen->getAfterBatchCreateLocation($productID, $branch, $executionID, $storyID, $storyType);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));

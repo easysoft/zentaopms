@@ -485,12 +485,12 @@ window.searchCards = function(value, order)
 {
     const searchValue = value;
     if(typeof order == 'undefined') order = orderBy;
-    refreshKanban($.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value + '&orderBy=' + order));
+    refreshKanban($.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=taskkanban&searchValue=' + value + '&orderBy=' + order));
 }
 
 window.refreshKanban = function(url)
 {
-    if(typeof url == 'undefined') url = $.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=&orderBy=' + orderBy);
+    if(typeof url == 'undefined') url = $.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=taskkanban&searchValue=&orderBy=' + orderBy);
 
     const $kanbanList = $('[data-zui-kanbanlist]').zui('kanbanList');
     let   options     = $kanbanList.options;
