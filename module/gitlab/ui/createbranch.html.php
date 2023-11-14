@@ -35,5 +35,5 @@ formPanel
             set::items($branchPairs),
             set::required(true)
         )
-    ),
+    )
 );

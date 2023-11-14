@@ -20,7 +20,7 @@ formBatchPanel
         set::name('id'),
         set::label('ID'),
         set::control('index'),
-        set::width('50px'),
+        set::width('50px')
     ),
     formBatchItem
     (
@@ -34,7 +34,7 @@ formBatchPanel
                 'name' => 'account',
                 'cache' => false,
                 'items' => $users,
-                'menu'  => jsRaw('{getItem(item) {return getMenu(item)}}'),
+                'menu'  => jsRaw('{getItem(item) {return getMenu(item)}}')
             )
         )
     ),
@@ -51,6 +51,6 @@ formBatchPanel
         set::name('expires_at'),
         set::label($lang->gitlab->group->memberExpiresAt),
         set::control('datePicker'),
-        set::width('1/3'),
+        set::width('1/3')
     )
 );

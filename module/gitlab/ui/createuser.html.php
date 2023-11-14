@@ -22,14 +22,14 @@ formPanel
         set::required(true),
         set::items($userPairs),
         set::width('1/2'),
-        on::change('onAccountChange'),
+        on::change('onAccountChange')
     ),
     formGroup
     (
         set::name('name'),
         set::label($lang->gitlab->user->name),
         set::required(true),
-        set::width('1/2'),
+        set::width('1/2')
     ),
     formGroup
     (
@@ -51,7 +51,7 @@ formPanel
         set::label($lang->gitlab->user->password),
         set::required(true),
         set::width('1/2'),
-        set::type('password'),
+        set::type('password')
     ),
     formGroup
     (
@@ -59,7 +59,7 @@ formPanel
         set::label($lang->gitlab->user->passwordRepeat),
         set::required(true),
         set::width('1/2'),
-        set::type('password'),
+        set::type('password')
     ),
     formRow
     (
@@ -71,21 +71,21 @@ formPanel
             set::placeholder($lang->gitlab->user->projectsLimit),
             set::value('100000'),
             set::width('1/2')
-        ),
+        )
     ),
     formGroup
     (
         set::name('can_create_group'),
         set::label($lang->gitlab->user->canCreateGroup),
         set::control(array('type' => 'checkbox', 'checked' => true)),
-        set::value('1'),
+        set::value('1')
     ),
     formGroup
     (
         set::name('external'),
         set::label($lang->gitlab->user->external),
         set::control(array('type' => 'checkbox', 'text' => $lang->gitlab->user->externalTip)),
-        set::value('1'),
+        set::value('1')
     ),
     formGroup
     (
@@ -106,7 +106,7 @@ formPanel
                 icon
                 (
                     setClass('icon icon-pencil icon-2x'),
-                    set::name(''),
+                    set::name('')
                 )
             )
         )

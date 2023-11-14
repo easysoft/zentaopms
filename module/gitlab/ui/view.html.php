@@ -18,7 +18,7 @@ detailHeader
         entityLabel(
             set(array('entityID' => $gitlab->id, 'level' => 1, 'text' => $gitlab->name))
         )
-    ),
+    )
 );
 
 detailBody
@@ -30,9 +30,9 @@ detailBody
             set::title($lang->gitlab->url),
             set::content("<a href='{$gitlab->url}' target='_blank'>{$gitlab->url}</a>"),
             set::useHtml(true)
-        ),
+        )
     ),
-    history(),
+    history()
 );
 
 render();

@@ -42,5 +42,5 @@ formPanel
         set::name('message'),
         set::label($lang->gitlab->tag->message),
         set::width('1/2')
-    ),
+    )
 );

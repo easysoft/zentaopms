@@ -53,7 +53,7 @@ formPanel
         inputGroup
         (
             $urlOptions
-        ),
+        )
     ),
     formGroup
     (
@@ -61,7 +61,7 @@ formPanel
         set::name('path'),
         set::placeholder($lang->gitlab->placeholder->projectPath),
         set::required(true),
-        set::width('2/3'),
+        set::width('2/3')
     ),
     formGroup
     (

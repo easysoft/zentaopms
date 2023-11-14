@@ -30,7 +30,7 @@ foreach($config->gitlab->menus as $key => $method)
         (
             setClass('' . ($key == 'group' ? 'active' : '')),
             set::href(createLink('gitlab', $method, "gitlabID={$gitlabID}")),
-            $lang->gitlab->$langKey,
+            $lang->gitlab->$langKey
         )
     );
 }
@@ -57,7 +57,7 @@ featureBar
         set::id('groupDropmenu'),
         set::objectID($gitlabID),
         set::text($gitlab->name),
-        set::data(array('data' => array('group' => $menus), 'tabs' => array(array('name' => 'group', 'text' => '')))),
+        set::data(array('data' => array('group' => $menus), 'tabs' => array(array('name' => 'group', 'text' => ''))))
     ),
     $items,
     form
@@ -89,8 +89,8 @@ toolBar
         'text' => $lang->gitlab->group->create,
         'icon' => 'plus',
         'class' => 'btn primary',
-        'url'   => createLink('gitlab', 'createGroup', "gitlabID={$gitlabID}"),
-    ))) : null,
+        'url'   => createLink('gitlab', 'createGroup', "gitlabID={$gitlabID}")
+    ))) : null
 );
 
 dtable
@@ -99,7 +99,7 @@ dtable
     set::data($gitlabGroupList),
     set::sortLink(createLink('gitlab', 'browseGroup', "gitlabID={$gitlabID}&orderBy={name}_{sortType}")),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::orderBy($orderBy),
+    set::orderBy($orderBy)
 );
 
 render();

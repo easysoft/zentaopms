@@ -23,7 +23,7 @@ $tableData = initTableData($gitlabList, $config->gitlab->dtable->fieldList, $thi
 
 toolbar
 (
-    $canCreate ? item(set($createItem)) : null,
+    $canCreate ? item(set($createItem)) : null
 );
 
 jsVar('confirmDelete',    $lang->gitlab->confirmDelete);
@@ -36,5 +36,5 @@ dtable
     set::orderBy($orderBy),
     set::sortLink(createLink('gitlab', 'browse', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );

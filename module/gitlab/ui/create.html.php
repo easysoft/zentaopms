@@ -45,5 +45,5 @@ formPanel
             set::value($gitlab->token),
             set::placeholder($lang->gitlab->placeholder->token)
         )
-    ),
+    )
 );

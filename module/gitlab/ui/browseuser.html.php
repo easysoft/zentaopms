@@ -28,7 +28,7 @@ foreach($config->gitlab->menus as $key => $method)
         (
             setClass('' . ($key == 'user' ? 'active' : '')),
             set::href(createLink('gitlab', $method, "gitlabID={$gitlabID}")),
-            $lang->gitlab->$langKey,
+            $lang->gitlab->$langKey
         )
     );
 }
@@ -52,7 +52,7 @@ featureBar
         set::id('userDropmenu'),
         set::objectID($gitlabID),
         set::text($gitlabs[$gitlabID]),
-        set::data(array('data' => array('user' => $menus), 'tabs' => array(array('name' => 'user', 'text' => '')))),
+        set::data(array('data' => array('user' => $menus), 'tabs' => array(array('name' => 'user', 'text' => ''))))
     ),
     $items,
     form
@@ -84,8 +84,8 @@ toolBar
         'text' => $lang->gitlab->user->create,
         'icon' => 'plus',
         'class' => 'btn primary',
-        'url'   => createLink('gitlab', 'createUser', "gitlabID={$gitlabID}"),
-    ))) : null,
+        'url'   => createLink('gitlab', 'createUser', "gitlabID={$gitlabID}")
+    ))) : null
 );
 
 dtable
@@ -93,5 +93,5 @@ dtable
     set::cols($config->gitlab->dtable->user->fieldList),
     set::data($gitlabUserList),
     set::sortLink(createLink('gitlab', 'browseUser', "gitlabID={$gitlabID}&orderBy={name}_{sortType}")),
-    set::orderBy($orderBy),
+    set::orderBy($orderBy)
 );

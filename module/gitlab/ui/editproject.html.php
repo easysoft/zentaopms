@@ -33,7 +33,7 @@ formPanel
         set::placeholder($lang->gitlab->project->name),
         set::required(true),
         set::value($project->name),
-        set::width('2/3'),
+        set::width('2/3')
     ),
     formGroup
     (

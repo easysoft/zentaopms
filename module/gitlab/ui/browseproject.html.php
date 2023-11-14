@@ -31,7 +31,7 @@ foreach($config->gitlab->menus as $key => $method)
         (
             setClass('' . ($key == 'project' ? 'active' : '')),
             set::href(createLink('gitlab', $method, "gitlabID={$gitlabID}")),
-            $lang->gitlab->$langKey,
+            $lang->gitlab->$langKey
         )
     );
 }
@@ -58,7 +58,7 @@ featureBar
         set::id('projectDropmenu'),
         set::objectID($gitlabID),
         set::text($gitlab->name),
-        set::data(array('data' => array('project' => $menus), 'tabs' => array(array('name' => 'project', 'text' => '')))),
+        set::data(array('data' => array('project' => $menus), 'tabs' => array(array('name' => 'project', 'text' => ''))))
     ),
     $items,
     form
@@ -90,8 +90,8 @@ toolBar
         'text' => $lang->gitlab->project->create,
         'icon' => 'plus',
         'class' => 'btn primary',
-        'url'   => createLink('gitlab', 'createProject', "gitlabID={$gitlabID}"),
-    ))) : null,
+        'url'   => createLink('gitlab', 'createProject', "gitlabID={$gitlabID}")
+    ))) : null
 );
 
 dtable

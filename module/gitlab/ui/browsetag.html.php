@@ -16,7 +16,7 @@ featureBar
     backBtn
     (
         set::text($lang->goback),
-        set::url(createLink('gitlab', 'browseProject', "gitlabID={$gitlabID}")),
+        set::url(createLink('gitlab', 'browseProject', "gitlabID={$gitlabID}"))
     ),
     form
     (
@@ -47,8 +47,8 @@ hasPriv('instance', 'manage') ? toolBar
         setClass('btn primary'),
         set::text($lang->gitlab->createTag),
         set::icon('plus'),
-        set::url(createLink('gitlab', 'createTag', "gitlabID={$gitlabID}&projectID={$projectID}")),
-    ),
+        set::url(createLink('gitlab', 'createTag', "gitlabID={$gitlabID}&projectID={$projectID}"))
+    )
 ) : null;
 
 $tagList = initTableData($gitlabTagList, $config->gitlab->dtable->tag->fieldList, $this->gitlab);

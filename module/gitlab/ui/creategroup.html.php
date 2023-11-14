@@ -78,7 +78,7 @@ formPanel
             set::items($lang->gitlab->group->projectCreationLevelList),
             set::value('developer'),
             set::required(true)
-        ),
+        )
     ),
     formGroup
     (

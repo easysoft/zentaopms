@@ -15,7 +15,7 @@ featureBar
     backBtn
     (
         set::text($lang->goback),
-        set::url(createLink('gitlab', 'browseProject', "gitlabID={$gitlabID}")),
+        set::url(createLink('gitlab', 'browseProject', "gitlabID={$gitlabID}"))
     )
 );
 hasPriv('instance', 'manage') ? toolBar
@@ -25,8 +25,8 @@ hasPriv('instance', 'manage') ? toolBar
         setClass('btn primary'),
         set::text($lang->gitlab->createBranch),
         set::icon('plus'),
-        set::url(createLink('gitlab', 'createBranch', "gitlabID={$gitlabID}&projectID={$projectID}")),
-    ),
+        set::url(createLink('gitlab', 'createBranch', "gitlabID={$gitlabID}&projectID={$projectID}"))
+    )
 ) : null;
 
 $branchList = initTableData($gitlabBranchList, $config->gitlab->dtable->branch->fieldList, $this->gitlab);

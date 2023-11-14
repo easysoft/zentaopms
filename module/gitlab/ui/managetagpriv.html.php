@@ -20,7 +20,7 @@ formBatchPanel
         set::name('id'),
         set::label('ID'),
         set::control('index'),
-        set::width('50px'),
+        set::width('50px')
     ),
     formBatchItem
     (
@@ -34,7 +34,7 @@ formBatchPanel
                 'name' => 'name',
                 'cache' => false,
                 'items' => $tagPairs,
-                'menu'  => jsRaw('{getItem(item) {return getMenu(item)}}'),
+                'menu'  => jsRaw('{getItem(item) {return getMenu(item)}}')
             )
         )
     ),
