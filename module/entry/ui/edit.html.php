@@ -81,7 +81,7 @@ formPanel
                 set::name('freePasswd'),
                 set::items($lang->entry->freePasswdList),
                 set::value($entry->freePasswd),
-                set::inline(true),
+                set::inline(true)
             )
         )
     ),
@@ -114,7 +114,7 @@ formPanel
             (
                 setClass('btn ml-2 text-darken'),
                 on::click('createKey()'),
-                $lang->entry->createKey,
+                $lang->entry->createKey
             )
         )
     ),
