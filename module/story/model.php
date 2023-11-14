@@ -48,15 +48,15 @@ class storyModel extends model
         $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type, t2.multiple')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->in('sprint,stage,kanban')
-            ->beginIF($story->twins)->andWhere('t1.story')->in(ltrim($story->twins, ',') . $story->id)
-            ->beginIF(!$story->twins)->andWhere('t1.story')->in($story->id)
+            ->beginIF($story->twins)->andWhere('t1.story')->in(ltrim($story->twins, ',') . $story->id)->fi()
+            ->beginIF(!$story->twins)->andWhere('t1.story')->in($story->id)->fi()
             ->orderBy('t1.`order` DESC')
             ->fetchAll('project');
 
         $story->tasks  = $this->dao->select('id, name, assignedTo, execution, project, status, consumed, `left`,type')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
-            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)
-            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)
+            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)->fi()
+            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)->fi()
             ->orderBy('id DESC')
             ->fetchGroup('execution');
 
@@ -174,8 +174,8 @@ class storyModel extends model
         /* Get affected bugs. */
         $story->bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->ne('closed')
-            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)
-            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)
+            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)->fi()
+            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)->fi()
             ->andWhere('status')->ne('closed')
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')->fetchAll();
@@ -183,8 +183,8 @@ class storyModel extends model
         /* Get affected cases. */
         $story->cases = $this->dao->select('*')->from(TABLE_CASE)
             ->where('deleted')->eq(0)
-            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)
-            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)
+            ->beginIF($story->twins)->andWhere('story')->in(ltrim($story->twins, ',') . $story->id)->fi()
+            ->beginIF(!$story->twins)->andWhere('story')->in($story->id)->fi()
             ->fetchAll();
 
         return $story;
