@@ -19,9 +19,10 @@ $config->testcase->dtable->fieldList['title']['required']     = true;
 $config->testcase->dtable->fieldList['title']['group']        = 1;
 $config->testcase->dtable->fieldList['title']['data-app']     = $app->tab;
 
-$config->testcase->dtable->fieldList['branch']['title'] = $lang->testcase->branch;
-$config->testcase->dtable->fieldList['branch']['type']  = 'text';
-$config->testcase->dtable->fieldList['branch']['group'] = 2;
+$config->testcase->dtable->fieldList['branch']['title']      = $lang->testcase->branch;
+$config->testcase->dtable->fieldList['branch']['type']       = 'text';
+$config->testcase->dtable->fieldList['branch']['group']      = 2;
+$config->testcase->dtable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID');
 
 $config->testcase->dtable->fieldList['pri']['title']    = $lang->testcase->pri;
 $config->testcase->dtable->fieldList['pri']['type']     = 'pri';
@@ -51,10 +52,12 @@ $config->testcase->dtable->fieldList['precondition']['type']     = 'desc';
 $config->testcase->dtable->fieldList['precondition']['group']    = 3;
 $config->testcase->dtable->fieldList['precondition']['sortType'] = true;
 
-$config->testcase->dtable->fieldList['story']['title'] = $lang->testcase->story;
-$config->testcase->dtable->fieldList['story']['type']  = 'desc';
-$config->testcase->dtable->fieldList['story']['link']  = array('module' => 'story', 'method' => 'view', 'params' => "storyID={story}");
-$config->testcase->dtable->fieldList['story']['group'] = 3;
+$config->testcase->dtable->fieldList['story']['title']      = $lang->testcase->story;
+$config->testcase->dtable->fieldList['story']['type']       = 'desc';
+$config->testcase->dtable->fieldList['story']['link']       = array('module' => 'story', 'method' => 'view', 'params' => "storyID={story}");
+$config->testcase->dtable->fieldList['story']['group']      = 3;
+$config->testcase->dtable->fieldList['story']['control']    = 'select';
+$config->testcase->dtable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getProductStoryPairs', 'params' => '$productID&$branch');
 
 $config->testcase->dtable->fieldList['keywords']['title']    = $lang->testcase->keywords;
 $config->testcase->dtable->fieldList['keywords']['type']     = 'text';
@@ -132,6 +135,15 @@ $config->testcase->dtable->fieldList['lastEditedDate']['title']    = $lang->test
 $config->testcase->dtable->fieldList['lastEditedDate']['type']     = 'date';
 $config->testcase->dtable->fieldList['lastEditedDate']['group']    = 6;
 $config->testcase->dtable->fieldList['lastEditedDate']['sortType'] = true;
+
+$config->testcase->datatable->fieldList['product']['title']      = 'product';
+$config->testcase->datatable->fieldList['product']['control']    = 'hidden';
+$config->testcase->datatable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => '&0&&all');
+$config->testcase->datatable->fieldList['product']['display']    = false;
+
+$config->testcase->datatable->fieldList['module']['control']    = 'select';
+$config->testcase->datatable->fieldList['module']['dataSource'] = array('module' => 'testcase', 'method' => 'getDatatableModules', 'params' => '$productID');
+$config->testcase->datatable->fieldList['module']['display']    = false;
 
 $config->testcase->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->testcase->dtable->fieldList['actions']['type']     = 'actions';
