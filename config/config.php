@@ -34,7 +34,7 @@ $config->methodVar   = 'f';                       // 请求类型为GET：模块
 $config->viewVar     = 't';                       // 请求类型为GET：视图变量名。            requestType=GET: the view var name.
 $config->sessionVar  = 'zentaosid';               // 请求类型为GET：session变量名。         requestType=GET: the session var name.
 $config->views       = ',html,json,mhtml,xhtml,'; // 支持的视图类型。                       Supported view formats.
-$config->visions     = ',or,rnd,lite,';          // 支持的界面类型。                       Supported vision formats.
+$config->visions     = ',rnd,or,lite,';           // 支持的界面类型。                       Supported vision formats.
 
 /* 支持的主题和语言。Supported themes and languages. */
 $config->themes['default'] = 'default';
@@ -194,6 +194,10 @@ if(file_exists($filterConfig)) include $filterConfig;
 /* 引用数据库的配置。 Include the database config file. */
 $dbConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'db.php';
 if(file_exists($dbConfig)) include $dbConfig;
+
+/* 引用缓存的配置。 Include the cache config file. */
+$cacheConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'cache.php';
+if(file_exists($cacheConfig)) include $cacheConfig;
 
 /* 读取环境变量的配置。 Read the env config. */
 if($config->inContainer || $config->inQuickon)

@@ -34,6 +34,7 @@ $routes['/configurations/:name'] = 'config';
 $routes['/programs/:id/products'] = 'products';
 $routes['/products']              = 'products';
 $routes['/products/:id']          = 'product';
+$routes['/product/:id']           = 'product';
 
 $routes['/productlines']     = 'productLines';
 $routes['/productlines/:id'] = 'productLine';
