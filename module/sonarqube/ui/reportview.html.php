@@ -36,8 +36,7 @@ div
     (
         setClass("ml-2 rounded-full {$statusClass}"),
         set::text($status)
-
-    ),
+    )
 );
 dtable
 (

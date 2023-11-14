@@ -35,7 +35,7 @@ featureBar
     backBtn
     (
         set::text($lang->goback),
-        set::url(createLink('sonarqube', 'browseProject', "sonarqubeID={$sonarqube->id}")),
+        set::url(createLink('sonarqube', 'browseProject', "sonarqubeID={$sonarqube->id}"))
     ),
     form
     (
@@ -66,5 +66,5 @@ dtable
     set::data($tableData),
     set::sortLink(createLink('sonarqube', 'browseIssue', "sonarqubeID={$sonarqube->id}&projectKey={$replaceKey}&search={$search}&orderBy={name}_{sortType}")),
     set::orderBy($orderBy),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );

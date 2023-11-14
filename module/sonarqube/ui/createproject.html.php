@@ -25,5 +25,5 @@ formPanel
     (
         set::name('projectKey'),
         set::label($lang->sonarqube->projectKey)
-    ),
+    )
 );
