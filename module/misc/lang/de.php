@@ -106,11 +106,9 @@ $lang->misc->feature->visionsDesc       = "<p>The concept of interface has been 
 $lang->misc->feature->visionsImage      = 'theme/default/images/main/visions_en.png';
 $lang->misc->feature->aiPrompts         = 'AI prompts';
 $lang->misc->feature->aiPromptsImage    = 'theme/default/images/main/ai_prompts_en.svg';
-$lang->misc->feature->promptDesign      = 'Prompt Engineering';
-$lang->misc->feature->promptDesignImage = 'theme/default/images/main/prompt_design_en.svg';
-$lang->misc->feature->promptExec        = 'Prompt Execution';
-$lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec_en.svg';
-$lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
+$lang->misc->feature->aiChat            = 'AI chat';
+$lang->misc->feature->aiChatImage       = 'theme/default/images/main/ai_chat_en.svg';
+$lang->misc->feature->learnMoreLink     = 'https://www.zentao.net/book/zentaopms/1096.html';
 
 /* Release Date. */
 $lang->misc->releaseDate['18.9']        = '2023-11-09';

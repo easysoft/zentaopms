@@ -104,13 +104,11 @@ $lang->misc->feature->tutorialDesc      = "<p>禅道15系列新增了多项功�
 $lang->misc->feature->themeDesc         = "<p>禅道15系列上线了全新的“青春蓝”主题，页面呈现更加美观，体验更加友好。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-主题-青春蓝</span>]，点击青春蓝，即可设置成功。</p>";
 $lang->misc->feature->visionsDesc       = "<p>从16.5开始增加了界面概念，用户可以在<span style='color:#0c60e1'>[研发综合界面]</span>中处理研发事务、在<span style='color:#0c60e1'>[运营管理界面]</span>处理日常办公事务。</p><p>在头像右侧即可查看当前所处界面，点击当前界面名称可查看和切换其他的界面。</p>";
 $lang->misc->feature->visionsImage      = 'theme/default/images/main/visions.png';
-$lang->misc->feature->aiPrompts         = 'AI提词功能';
+$lang->misc->feature->aiPrompts         = 'AI 提词功能';
 $lang->misc->feature->aiPromptsImage    = 'theme/default/images/main/ai_prompts.svg';
-$lang->misc->feature->promptDesign      = '设计AI提词';
-$lang->misc->feature->promptDesignImage = 'theme/default/images/main/prompt_design.svg';
-$lang->misc->feature->promptExec        = '执行AI提词';
-$lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec.svg';
-$lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
+$lang->misc->feature->aiChat            = 'AI 会话功能';
+$lang->misc->feature->aiChatImage       = 'theme/default/images/main/ai_chat.svg';
+$lang->misc->feature->learnMoreLink     = 'https://www.zentao.net/book/zentaopms/1096.html';
 
 /* Release Date. */
 $lang->misc->releaseDate['18.9']        = '2023-11-09';

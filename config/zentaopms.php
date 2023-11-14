@@ -531,7 +531,7 @@ $config->objectTables['artifactrepo'] = TABLE_ARTIFACTREPO;
 $config->objectTables['prompt']       = TABLE_PROMPT;
 $config->objectTables['metric']       = TABLE_METRIC;
 
-$config->newFeatures      = array('aiPrompts', 'promptDesign', 'promptExec');
+$config->newFeatures      = array('aiChat', 'aiPrompts');
 $config->disabledFeatures = '';
 $config->closedFeatures   = '';
 
