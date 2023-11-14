@@ -4267,11 +4267,11 @@ class taskModel extends model
         $plmCanStart = !($isPLMMode and empty($execution['canStart']));
         if($plmCanStart) $menu .= $this->buildMenu('task', 'start',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
         if($plmCanStart) $menu .= $this->buildMenu('task', 'restart',        $params, $task, 'view', '', '', 'iframe showinonlybody', true);
-        if(empty($task->linkedBranch))
-        {
-            $hasRepo = $this->loadModel('repo')->getRepoPairs('execution', $task->execution, false);
-            if($hasRepo) $menu .= $this->buildMenu('repo', 'createBranch', $params . "&execution={$task->execution}", $task, '', 'treemap', '', 'iframe showinonlybody', true, '', $this->lang->repo->createBranchAction);
-        }
+        //if(empty($task->linkedBranch))
+        //{
+        //    $hasRepo = $this->loadModel('repo')->getRepoPairs('execution', $task->execution, false);
+        //    if($hasRepo) $menu .= $this->buildMenu('repo', 'createBranch', $params . "&execution={$task->execution}", $task, '', 'treemap', '', 'iframe showinonlybody', true, '', $this->lang->repo->createBranchAction);
+        //}
         if($plmCanStart) $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'view', '', '', 'iframe showinonlybody', true);
 
         $menu .= $this->buildMenu('task', 'pause',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
