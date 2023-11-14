@@ -20,7 +20,7 @@ panel
         set::enctype('multipart/form-data'),
         set::target('_self'),
         input(set::type('file'), set::name('file')),
-        span(setClass('label secondary'), $lang->transfer->importNotice),
-    ),
+        span(setClass('label secondary'), $lang->transfer->importNotice)
+    )
 );
 h::js('$.cookie.set("maxImport", 0);');
