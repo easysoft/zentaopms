@@ -163,11 +163,10 @@ div
     setClass('flex gap-x-4'),
     div
     (
-        setClass('sidebar sidebar-left basis-2/6'),
+        setClass('sidebar sidebar-left w-1/3'),
         panel
         (
             set::title($title),
-            setStyle('max-width', '400px'),
             ($app->tab == 'product' and $viewType == 'story') ? to::headingActions
             (
                 btn
@@ -195,10 +194,9 @@ div
     ),
     div
     (
-        setClass('basis-4/6'),
+        setClass('w-2/3'),
         panel
         (
-            set::shadow(false),
             set::title($manageTitle),
             div
             (
@@ -214,7 +212,7 @@ div
                     setClass('flex-1 form-grid'),
                     set::url(helper::createLink('tree', 'manageChild', "root=$root->id&viewType=$viewType")),
                     $moduleRows,
-                    set::actionsClass('justify-start'),
+                    set::actionsClass('justify-start mb-4'),
                     set::submitBtnText($lang->save),
                     formGroup
                     (
