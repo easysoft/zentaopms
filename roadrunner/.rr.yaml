@@ -1,7 +1,19 @@
+version: "3"
+
 service:
-  cron:
-    command: php cron-worker.php
-    process_num: 4
+  cron_schedule:
+    command: php cron.php
+    process_num: 1
     exec_timeout: 0
-    remain_after_exit: true
     restart_sec: 1
+    relay: pipes
+
+server:
+  command: php worker.php
+  relay: pipes
+jobs:
+  consume: [ "crons" ]
+  pool:
+    num_workers: 5
+    allocate_timeout: 60s
+    destroy_timeout: 60s

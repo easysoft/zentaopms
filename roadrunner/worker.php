@@ -30,6 +30,6 @@ $app = router::createApp('pms', dirname(__DIR__), 'router');
 $common = $app->loadCommon();
 
 $app->moduleName = 'cron';
-$app->methodName = 'ajaxExec';
+$app->methodName = 'rrConsume';
 $app->setControlFile();
 $app->loadModule();

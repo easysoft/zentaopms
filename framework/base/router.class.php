@@ -1680,7 +1680,7 @@ class baseRouter
             $modulePath = $this->getExtensionRoot() . 'saas' . DS . $moduleName . DS;
             if(is_dir($modulePath) and (file_exists($modulePath . 'control.php') or file_exists($modulePath . 'model.php'))) return $modulePath;
 
-            /* 1. 最后尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
+            /* 1. 尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
             $modulePath = $this->getExtensionRoot() . 'custom' . DS . $moduleName . DS;
             if(is_dir($modulePath) and (file_exists($modulePath . 'control.php') or file_exists($modulePath . 'model.php'))) return $modulePath;
 
