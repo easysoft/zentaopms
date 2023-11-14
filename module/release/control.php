@@ -444,7 +444,7 @@ class release extends control
                 if(!empty($release->leftBugs))
                 {
                     $bugs = $this->dao->select('id, title')->from(TABLE_BUG)
-                        ->where(id)->in($release->leftBugs)
+                        ->where('id')->in($release->leftBugs)
                         ->andWhere('deleted')->eq(0)
                         ->fetchAll('id');
 
