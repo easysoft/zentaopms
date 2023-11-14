@@ -25,7 +25,7 @@ $fnBuildContent = function() use ($fields, $selectedTable)
             h::td($field['name']),
             h::td($field['type']),
             h::td(isset($field['options']['max']) ? $field['options']['max'] : ''),
-            h::td($field['null']),
+            h::td($field['null'])
         );
         $i++;
     }
@@ -46,11 +46,11 @@ $fnBuildContent = function() use ($fields, $selectedTable)
                     h::th($lang->dev->fields['desc']),
                     h::th($lang->dev->fields['type']),
                     h::th($lang->dev->fields['length']),
-                    h::th($lang->dev->fields['null']),
+                    h::th($lang->dev->fields['null'])
                 )
             ),
-            h::tbody($trItems),
-        ),
+            h::tbody($trItems)
+        )
     );
 };
 
@@ -79,5 +79,5 @@ sidebar
 div
 (
     setClass('bg-white'),
-    $selectedTable ? $fnBuildContent() : null,
+    $selectedTable ? $fnBuildContent() : null
 );

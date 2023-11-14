@@ -47,7 +47,7 @@ $fnShowCompareItems = function() use ($isCurrentLang, $originalLangs, $moduleNam
                     setClass('input-group-addon flex-center'),
                     set::title($config->custom->commonLang[$subLang]),
                     $config->custom->commonLang[$subLang],
-                    input(set::type('hidden'), set::name("{$itemKey}[]"), set::value($subLang)),
+                    input(set::type('hidden'), set::name("{$itemKey}[]"), set::value($subLang))
                 );
             }
             else
@@ -82,7 +82,7 @@ $fnShowCompareItems = function() use ($isCurrentLang, $originalLangs, $moduleNam
             (
                 setClass('input-group'),
                 icon(setClass('text-primary'), 'angle-right'),
-                (($originalLangChanged and is_array($customedLang)) or (!$originalLangChanged and is_array($defaultValue))) ? $fnBuildSubItems($originalLangChanged ? $customedLang : $defaultValue, $originalLangChanged, $itemKey) : input(set::name($itemKey), setClass('shadow-primary-hover'), set::placeholder($originalLang), set::value($customedLang)),
+                (($originalLangChanged and is_array($customedLang)) or (!$originalLangChanged and is_array($defaultValue))) ? $fnBuildSubItems($originalLangChanged ? $customedLang : $defaultValue, $originalLangChanged, $itemKey) : input(set::name($itemKey), setClass('shadow-primary-hover'), set::placeholder($originalLang), set::value($customedLang))
             )
         );
     }
@@ -131,8 +131,8 @@ if(in_array($type, $config->dev->navTypes))
                 setClass("search-box search-example"),
                 input(setClass('search-input'), set::type('search')),
                 to::suffix(icon('search')),
-                set::suffixWidth('18'),
-            ),
+                set::suffixWidth('18')
+            )
         ),
         treeEditor(set(array('items' => $menuTree, 'canEdit' => false, 'canDelete' => false, 'canSplit' => false)))
     );
@@ -147,7 +147,7 @@ form
         array
         (
             'submit',
-            array('url' => inlink('resetLang', "type={$type}&module={$moduleName}&method={$method}&language={$language}"), 'text' => $lang->restore, 'class' => 'btn reset-btn ajax-submit', 'data-confirm' => $lang->dev->confirmRestore),
+            array('url' => inlink('resetLang', "type={$type}&module={$moduleName}&method={$method}&language={$language}"), 'text' => $lang->restore, 'class' => 'btn reset-btn ajax-submit', 'data-confirm' => $lang->dev->confirmRestore)
         )
     ),
     div
@@ -155,11 +155,11 @@ form
         setClass('title-content flex'),
         $isCurrentLang ? null : div(setClass('title'), $lang->dev->currentLang),
         div(setClass('title'), $lang->dev->defaultValue),
-        div(setClass('title title-input'), $lang->dev->modifyValue),
+        div(setClass('title title-input'), $lang->dev->modifyValue)
     ),
     div
     (
         setClass("form-item-content form-active-primary"),
-        $fnShowCompareItems(),
-    ),
+        $fnShowCompareItems()
+    )
 );

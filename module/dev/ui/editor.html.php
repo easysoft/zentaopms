@@ -14,5 +14,5 @@ div
 (
     setClass('bg-white text-center p-10'),
     $lang->dev->noteEditor,
-    common::hasPriv('editor', 'turnon') ? btn(set::url($this->createLink('editor', 'turnon', 'status=1')), setClass('btn primary ajax-submit'), $lang->dev->switchList[1]) : null,
+    common::hasPriv('editor', 'turnon') ? btn(set::url($this->createLink('editor', 'turnon', 'status=1')), setClass('btn primary ajax-submit'), $lang->dev->switchList[1]) : null
 );

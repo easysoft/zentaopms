@@ -17,7 +17,7 @@ foreach($lang->dev->featureBar['api'] as $key => $label)
     (
         'text'   => $label,
         'active' => ($selectedModule == $key || ($key == 'index' and $selectedModule != 'restapi')),
-        'url'    => inlink('api', "module=$key"),
+        'url'    => inlink('api', "module=$key")
     );
 }
 
@@ -43,7 +43,7 @@ $fnBuildAPIContent = function() use($selectedModule, $apis)
                 (
                     h::td($param['var']),
                     h::td($param['type']),
-                    h::td($param['desc']),
+                    h::td($param['desc'])
                 );
             }
         }
@@ -68,7 +68,7 @@ $fnBuildAPIContent = function() use($selectedModule, $apis)
                 (
                     h::td($paramName),
                     h::td($paramType),
-                    h::td(html($paramDesc)),
+                    h::td(html($paramDesc))
                 );
             }
         }
@@ -81,7 +81,7 @@ $fnBuildAPIContent = function() use($selectedModule, $apis)
             (
                 setClass('detail-title font-bold'),
                 !empty($api['post']) ? 'GET/POST' : 'GET',
-                '  ' . helper::createLink($selectedModule, $methodName, $params, 'json'),
+                '  ' . helper::createLink($selectedModule, $methodName, $params, 'json')
             ),
             div
             (
@@ -96,7 +96,7 @@ $fnBuildAPIContent = function() use($selectedModule, $apis)
                         h::th($lang->dev->type),
                         h::th($lang->dev->desc),
                     ),
-                    isset($api['param']) ? $paramTR : h::tr(h::td(set::colspan(3), $lang->dev->noParam)),
+                    isset($api['param']) ? $paramTR : h::tr(h::td(set::colspan(3), $lang->dev->noParam))
                 ),
                 isset($config->dev->postParams[$selectedModule][$methodName]) ? h::table
                 (
@@ -106,11 +106,11 @@ $fnBuildAPIContent = function() use($selectedModule, $apis)
                     (
                         h::th($lang->dev->params),
                         h::th($lang->dev->type),
-                        h::th($lang->dev->desc),
+                        h::th($lang->dev->desc)
                     ),
-                    $postTR,
-                ) : null,
-            ),
+                    $postTR
+                ) : null
+            )
         );
     }
 
@@ -131,7 +131,7 @@ h::css("
 featureBar
 (
     set::items($featureBarItems),
-    icon(set('title', $lang->dev->apiTips), 'help'),
+    icon(set('title', $lang->dev->apiTips), 'help')
 );
 
 sidebar
@@ -148,5 +148,5 @@ sidebar
 div
 (
     setClass('bg-white p-3'),
-    $selectedModule ? div(setClass("module-content"), $fnBuildAPIContent()) : null,
+    $selectedModule ? div(setClass("module-content"), $fnBuildAPIContent()) : null
 );

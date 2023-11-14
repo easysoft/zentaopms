@@ -17,7 +17,7 @@ foreach($lang->dev->featureBar['api'] as $key => $label)
     (
         'text'   => $label,
         'active' => ($selectedModule == $key || ($key == 'index' and $selectedModule != 'restapi')),
-        'url'    => inlink('api', "module=$key"),
+        'url'    => inlink('api', "module=$key")
     );
 }
 
@@ -58,7 +58,7 @@ $fnGetHeaderContent = function($api)
             h::td($param['field']),
             h::td('String'),
             h::td($lang->api->boolList[$param['required']]),
-            h::td(html($param['desc'])),
+            h::td(html($param['desc']))
         );
     }
 
@@ -74,10 +74,10 @@ $fnGetHeaderContent = function($api)
                 h::th($lang->api->req->name),
                 h::th($lang->api->req->type),
                 h::th($lang->api->req->required),
-                h::th($lang->api->req->desc),
+                h::th($lang->api->req->desc)
             )
         ),
-        h::tbody($headerTr),
+        h::tbody($headerTr)
     );
     return $content;
 };
@@ -95,7 +95,7 @@ $fnGetQueryContent = function($api)
             h::td($param['field']),
             h::td('String'),
             h::td($lang->api->boolList[$param['required']]),
-            h::td(html($param['desc'])),
+            h::td(html($param['desc']))
         );
     }
 
@@ -111,10 +111,10 @@ $fnGetQueryContent = function($api)
                 h::th($lang->api->req->name),
                 h::th($lang->api->req->type),
                 h::th($lang->api->req->required),
-                h::th($lang->api->req->desc),
+                h::th($lang->api->req->desc)
             )
         ),
-        h::tbody($queryTr),
+        h::tbody($queryTr)
     );
     return $content;
 };
@@ -139,10 +139,10 @@ $fnGetParamsContent = function($api) use(&$parseTree, $typeList)
                 h::th($lang->api->req->name),
                 h::th($lang->api->req->type),
                 h::th($lang->api->req->required),
-                h::th($lang->api->req->desc),
+                h::th($lang->api->req->desc)
             )
         ),
-        h::tbody($paramsTr),
+        h::tbody($paramsTr)
     );
     if(!empty($api->paramsExample))
     {
@@ -172,10 +172,10 @@ $fnGetResponseContent = function($api) use($parseTree, $typeList)
                 h::th($lang->api->req->name),
                 h::th($lang->api->req->type),
                 h::th($lang->api->req->required),
-                h::th($lang->api->req->desc),
+                h::th($lang->api->req->desc)
             )
         ),
-        h::tbody($responseTr),
+        h::tbody($responseTr)
     );
     if(!empty($api->responseExample))
     {
@@ -192,7 +192,7 @@ $fnBuildAPIContent = function() use($api, $fnGetHeaderContent, $fnGetQueryConten
     (
         setClass('panel-heading'),
         div(setClass('http-method label'), $api->method),
-        div(setClass('path'), set::title($api->path), $api->path),
+        div(setClass('path'), set::title($api->path), $api->path)
     );
     $content[] = div
     (
@@ -204,7 +204,7 @@ $fnBuildAPIContent = function() use($api, $fnGetHeaderContent, $fnGetQueryConten
             $fnGetHeaderContent($api),
             $fnGetQueryContent($api),
             $fnGetParamsContent($api),
-            $fnGetResponseContent($api),
+            $fnGetResponseContent($api)
         )
     );
     return $content;
@@ -224,7 +224,7 @@ h::css("
 featureBar
 (
     set::items($featureBarItems),
-    icon(set('title', $lang->dev->apiTips), 'help'),
+    icon(set('title', $lang->dev->apiTips), 'help')
 );
 
 sidebar
@@ -234,7 +234,7 @@ sidebar
     h::header
     (
         setClass('h-10 flex items-center pl-4 flex-none gap-3'),
-        span(setClass('text-lg font-semibold'), icon('list'), $lang->dev->moduleList),
+        span(setClass('text-lg font-semibold'), icon('list'), $lang->dev->moduleList)
     ),
     treeEditor(set(array('className' => 'pl-3', 'items' => $moduleTree, 'canEdit' => false, 'canDelete' => false, 'canSplit' => false)))
 );
@@ -242,5 +242,5 @@ sidebar
 div
 (
     setClass('bg-white p-3 panel'),
-    $selectedModule ? $fnBuildAPIContent() : null,
+    $selectedModule ? $fnBuildAPIContent() : null
 );
