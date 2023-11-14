@@ -260,7 +260,7 @@ $historyDom = div
 (
     set::id('history'),
     setClass('hidden border-l'),
-    history()
+    history(set::objectID($doc->id))
 );
 
 panel
