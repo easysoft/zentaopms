@@ -74,7 +74,7 @@ div
         setID('taskModal'),
         div
         (
-            set::class('close'),
+            setClass('close'),
             set::icon('close'),
         ),
         div
@@ -110,7 +110,7 @@ div
             (
                 setClass('start-icon'),
                 icon(
-                    set::class('icon-front'),
+                    setClass('icon-front'),
                     'check-circle'
                 ),
             ),
