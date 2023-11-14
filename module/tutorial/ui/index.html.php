@@ -30,7 +30,7 @@ $taskGroup = array_map(function($key, $task) use(&$i)
                     setClass('task-name'),
                     $task['title']
                 )
-            ),
+            )
         );
 }, array_keys($tasks), $tasks);
 
@@ -66,7 +66,7 @@ div
         (
             setID('iframePage'),
             set::name('iframePage'),
-            set::src(createLink('index', 'index')),
+            set::src(createLink('index', 'index'))
         )
     ),
     div(setID('taskModalBack')),
@@ -76,7 +76,7 @@ div
         div
         (
             setClass('close'),
-            set::icon('close'),
+            set::icon('close')
         ),
         div
         (
@@ -87,7 +87,7 @@ div
                 icon(
                     setClass('icon-front'),
                     'check-circle'
-                ),
+                )
             ),
             h3($lang->tutorial->congratulation),
             btn
@@ -113,14 +113,14 @@ div
                 icon(
                     setClass('icon-front'),
                     'check-circle'
-                ),
+                )
             ),
             h3(
                 $lang->tutorial->congratulateTask,
                 "【",
                 span
                 (
-                    setClass('task-name-current'),
+                    setClass('task-name-current')
                 ),
                 "】！"
             ),
@@ -159,7 +159,7 @@ div
                     setClass('size-sm'),
                     set::type('danger'),
                     set::url(inlink('quit')),
-                    $lang->tutorial->exit,
+                    $lang->tutorial->exit
                 )
             )
         ),
@@ -178,12 +178,12 @@ div
                     (
                         span
                         (
-                            setClass('task-id-current'),
+                            setClass('task-id-current')
                         ),
                         '. ',
                         span
                         (
-                            setClass('task-name task-name-current'),
+                            setClass('task-name task-name-current')
                         )
                     )
                 ),
@@ -199,17 +199,17 @@ div
                             li
                             (
                                 setData(array('target' => 'nav')),
-                                setClass('wait'),
+                                setClass('wait')
                             ),
                             li
                             (
                                 setData(array('target' => 'form')),
-                                setClass('wait'),
+                                setClass('wait')
                             ),
                             li
                             (
                                 setData(array('target' => 'submit')),
-                                setClass('wait'),
+                                setClass('wait')
                             )
                         )
                     ),
@@ -251,7 +251,7 @@ div
                     set::icon('arrow-left'),
                     set::size('sm'),
                     setClass('btn-prev-task btn-task circle'),
-                    $lang->tutorial->previous,
+                    $lang->tutorial->previous
                 ),
                 btn
                 (
@@ -259,7 +259,7 @@ div
                     set::size('sm'),
                     set::type('primary'),
                     setClass('btn-next-task btn-task circle pull-right'),
-                    $lang->tutorial->nextTask,
+                    $lang->tutorial->nextTask
                 )
             )
         ),
@@ -272,7 +272,7 @@ div
                 span
                 (
                     setClass('task-num-finish'),
-                    0,
+                    0
                 ),
                 '/',
                 span
@@ -288,7 +288,7 @@ div
                 setClass('progress'),
                 div
                 (
-                    setClass('progress-bar primary'),
+                    setClass('progress-bar primary')
                 )
             ),
             ul
@@ -298,7 +298,7 @@ div
                 $taskGroup
             )
         )
-    ),
+    )
 );
 
 
