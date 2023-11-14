@@ -49,7 +49,7 @@ formPanel
                 set::items($branches),
                 on::change('loadModules')
             )
-        ) : null,
+        ) : null
     ) : null,
     $type == 'doc' ? formGroup
     (
@@ -67,7 +67,7 @@ formPanel
         set::name('name'),
         set::label($name),
         set::control('input'),
-        set::value($module->name),
+        set::value($module->name)
     ),
     $module->type != 'line' ? formGroup
     (
@@ -100,8 +100,8 @@ formPanel
             input
             (
                 set::name('short'),
-                set::value($module->short),
-            ),
+                set::value($module->short)
+            )
         )
-    ),
+    )
 );
