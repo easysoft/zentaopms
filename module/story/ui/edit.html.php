@@ -58,7 +58,7 @@ detailHeader
             set::level(1),
             set::entityID($story->id),
             set::reverse(true),
-            $story->title
+            span(setID('storyTitle'), $story->title)
         )
     )
 );
@@ -78,11 +78,25 @@ detailBody
         section
         (
             set::title($lang->story->title),
-            formGroup
+            inputControl
             (
-                set::name('title'),
-                set::value($fields['title']['default']),
-                set::disabled(!$canEditContent)
+                input
+                (
+                    set::name('title'),
+                    set::value($fields['title']['default']),
+                    set::disabled(!$canEditContent)
+                ),
+                set::suffixWidth('40'),
+                to::suffix
+                (
+                    colorPicker
+                    (
+                        set::heading($lang->story->colorTag),
+                        set::name('color'),
+                        set::value($story->color),
+                        set::syncColor('#title, #storyTitle')
+                    )
+                )
             )
         ),
         $canEditContent ? section
