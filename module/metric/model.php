@@ -650,57 +650,6 @@ class metricModel extends model
     }
 
     /**
-     * 检查度量项计算文件是否存在。
-     * Check if the calculator file exists or not.
-     *
-     * @param  object $metric
-     * @access public
-     * @return bool
-     */
-    public function checkCustomCalcExists($metric)
-    {
-        $calcName = $this->getCustomCalcRoot() . $metric->code . '.php';
-        return file_exists($calcName);
-    }
-
-    /**
-     * 检查度量项计算文件是否定义了必要的类。
-     * Check whether the necessary class exist in the file.
-     *
-     * @param  object $row
-     * @access public
-     * @return bool
-     */
-    public function checkCalcClass($metric)
-    {
-        if(!$this->checkCustomCalcExists($metric)) return false;
-
-        $this->includeCalc($metric->code);
-        return class_exists($metric->code);
-    }
-
-    /**
-     * 检查度量项计算文件中是否编写了必要的方法。
-     * Check whether the necessary methods exist in the file.
-     *
-     * @param  object $row
-     * @access public
-     * @return bool
-     */
-    public function checkCalcMethods($metric)
-    {
-        if(!$this->checkCustomCalcExists($metric)) return false;
-
-        $methodNameList = $this->getMethodNameList($metric->code);
-        foreach($this->config->metric->necessaryMethodList as $method)
-        {
-            if(!in_array($method, $methodNameList)) return false;
-        }
-
-        return true;
-    }
-
-    /**
      * 没有度量的显示范围不做显示。
      * Unset scope item that have no metric.
      *
@@ -813,88 +762,6 @@ class metricModel extends model
     }
 
     /**
-     * 导入用户自定义的度量项计算文件。
-     * Include custom calculator file.
-     *
-     * @param  string $code
-     * @access public
-     * @return void
-     */
-    public function includeCalc($code)
-    {
-        require $this->getBaseCalcPath();
-        require $this->getCustomCalcFile($code);
-    }
-
-    /**
-     * 从度量项计算文件中提取代码，去除注释。
-     * Extract code from calculator file, remove the comment.
-     *
-     * @param  string $file
-     * @access public
-     * @return string
-     */
-    public function extractCode($file)
-    {
-        $reg = '/class.*extends.*baseCalc/';
-        if(basename($file) == 'calc.class.php') $reg = '/class.*baseCalc/';
-
-        $contents = file_get_contents($file);
-        $lines = explode("\n", $contents);
-
-        $matchedLines = array_filter($lines, function($line) use($reg) {
-            return preg_match($reg, $line);
-        });
-        $matchedLines = array_values($matchedLines);
-
-        $startIndex = array_search($matchedLines[0], $lines);
-        $code = implode("\n", array_slice($lines, $startIndex));
-
-        return $code;
-    }
-
-    /**
-     * 合并度量项计算文件与基类文件。
-     * Merge the calculator file and base calculator file.
-     *
-     * @param  string $code
-     * @access public
-     * @return string
-     */
-    public function mergeBaseCalc($code)
-    {
-        $baseCalcFile = $this->getBaseCalcPath();
-        $calcFile     = $this->getCustomCalcFile($code);
-
-        $baseCalcScript = $this->extractCode($baseCalcFile);
-        $calcScript     = $this->extractCode($calcFile);
-
-        $phpTag = '<?php';
-        $mergedScript = $phpTag . "\n" . $baseCalcScript . "\n" . $calcScript;
-
-        return $mergedScript;
-    }
-
-    /**
-     * 试运行用户自定义的度量项计算文件，返回错误信息。
-     * Dry run custom calculator file, return error message.
-     *
-     * @param  string $code
-     * @access public
-     * @return string
-     */
-    public function dryRunCalc($code)
-    {
-        $tmpCalcFile = $this->getCustomCalcRoot() . $code . '.php.tmp';
-
-        $calcScript = $this->mergeBaseCalc($code);
-        file_put_contents($tmpCalcFile, $calcScript);
-        exec("php $tmpCalcFile 2>&1", $output);
-
-        return $output;
-    }
-
-    /**
      * 根据数据初始化操作按钮。
      * Init action button by data.
      *
@@ -919,33 +786,6 @@ class metricModel extends model
         }
 
         return $metrics;
-    }
-
-    /**
-     * 运行用户自定义的度量项文件。
-     * Run metric file by custom, get result.
-     *
-     * @param  string $code
-     * @access public
-     * @return array
-     */
-    public function runCustomCalc($code)
-    {
-        $metric = $this->dao->select('id,code,scope,purpose')->from(TABLE_METRIC)->where('code')->eq($code)->fetch();
-        if(!$metric) return false;
-
-        $calcPath = $this->getCustomCalcRoot() . $code . '.php';
-        if(!is_file($calcPath)) return false;
-
-        include_once $this->getBaseCalcPath();
-        include_once $calcPath;
-        $calculator = new $metric->code;
-
-        $statement = $this->getDataStatement($calculator);
-        $rows = $statement->fetchAll();
-
-        foreach($rows as $row) $calculator->calculate($row);
-        return $calculator->getResult();
     }
 
     /**
@@ -1450,18 +1290,6 @@ class metricModel extends model
     }
 
     /**
-     * 获取用户自定义的度量项计算文件的根目录。
-     * Get root of custom metric calculator.
-     *
-     * @access public
-     * @return string
-     */
-    public function getCustomCalcRoot()
-    {
-        return $this->app->getTmpRoot() . 'metric' .DS;
-    }
-
-    /**
      * 获取数据集文件的路径
      * Get path of calculator data set.
      *
@@ -1483,40 +1311,6 @@ class metricModel extends model
     public function getBaseCalcPath()
     {
         return $this->app->getModuleRoot() . 'metric' . DS . 'calc.class.php';
-    }
-
-    /**
-     * 获取自定义的度量项计算文件的路径。
-     * Get path of custom calculator file.
-     *
-     * @access public
-     * @return string
-     */
-    public function getCustomCalcFile($code)
-    {
-        return $this->getCustomCalcRoot() . $code . '.php';
-    }
-
-    /**
-     * 通过反射获取类的函数列表。
-     * Get method name list of class by reflection.
-     *
-     * @param  string $className
-     * @access public
-     * @return array
-     */
-    public function getMethodNameList($className)
-    {
-        $classReflection = new ReflectionClass($className);
-        $methodList = $classReflection->getMethods();
-
-        $methodNameList = array();
-        foreach($methodList as $index => $reflectionMethod)
-        {
-            if($reflectionMethod->class == $className) $methodNameList[$index] = $reflectionMethod->name;
-        }
-
-        return $methodNameList;
     }
 
     /**
