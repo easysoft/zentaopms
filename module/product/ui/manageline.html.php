@@ -21,23 +21,23 @@ $formRowList[] = formRow
         (
             set::width(in_array($this->config->systemMode, array('ALM', 'PLM')) ? '1/2' : 'full'),
             set::label($lang->product->lineName),
-            set::labelClass('font-bold'),
+            set::labelClass('font-bold')
         ),
         in_array($this->config->systemMode, array('ALM', 'PLM')) ? formGroup
         (
             set::width('1/2'),
             set::className('ml-4'),
             set::label($lang->product->program),
-            set::labelClass('font-bold required'),
-        ) : null,
+            set::labelClass('font-bold required')
+        ) : null
     ),
     cell
     (
         set::width('100px'),
         formGroup
         (
-            span(setClass('form-label font-bold'), set::style(array('justify-content' =>'flex-start')), $lang->actions),
-        ),
+            span(setClass('form-label font-bold'), set::style(array('justify-content' =>'flex-start')), $lang->actions)
+        )
     )
 );
 foreach($lines as $line)
@@ -52,7 +52,7 @@ foreach($lines as $line)
             set::size('sm'),
             setClass('ghost text-gray ajax-submit'),
             set::url(createLink('product', 'ajaxDeleteLine', "lineID={$line->id}")),
-            set('data-confirm', $lang->product->confirmDeleteLine),
+            set('data-confirm', $lang->product->confirmDeleteLine)
         )
     );
 
@@ -66,7 +66,7 @@ foreach($lines as $line)
                 set::width(in_array($this->config->systemMode, array('ALM', 'PLM')) ? '1/2' : 'full'),
                 set::control(array('type' => 'text', 'id' => "modules_id{$line->id}")),
                 set::name("modules[id$line->id]"),
-                set::value($line->name),
+                set::value($line->name)
             ),
             in_array($this->config->systemMode, array('ALM', 'PLM')) ? formGroup
             (
@@ -75,10 +75,10 @@ foreach($lines as $line)
                 set::control(array('type' => 'picker', 'id' => "programs_id{$line->id}")),
                 set::name("programs[id$line->id]"),
                 set::items($programs),
-                set::value($line->root),
-            ) : null,
+                set::value($line->root)
+            ) : null
         ),
-        cell(set::width('100px')),
+        cell(set::width('100px'))
     );
 }
 
@@ -94,7 +94,7 @@ for($i = 0; $i <= 5; $i ++)
             (
                 set::width(in_array($this->config->systemMode, array('ALM', 'PLM')) ? '1/2' : 'full'),
                 set::control(array('type' => 'text', 'id' => "modules_{$i}")),
-                set::name("modules[$i]"),
+                set::name("modules[$i]")
             ),
             in_array($this->config->systemMode, array('ALM', 'PLM')) ? formGroup
             (
@@ -102,8 +102,8 @@ for($i = 0; $i <= 5; $i ++)
                 set::className('ml-4'),
                 set::control(array('type' => 'picker', 'id' => "programs_{$i}")),
                 set::name("programs[$i]"),
-                set::items($programs),
-            ) : null,
+                set::items($programs)
+            ) : null
         ),
         cell
         (
@@ -121,8 +121,8 @@ for($i = 0; $i <= 5; $i ++)
                 (
                     setClass('btn btn-link text-gray removeLine'),
                     icon('trash'),
-                    on::click('removeLine'),
-                ),
+                    on::click('removeLine')
+                )
             )
         )
     );
@@ -143,7 +143,7 @@ div
         (
             setClass('mt-4 mr-4 pl-5 pt-2 pt-2 pb-2'),
             set::style(array('background' => 'var(--color-gray-100)')),
-            $lineMenuList,
+            $lineMenuList
         )
     ),
     cell

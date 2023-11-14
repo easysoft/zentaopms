@@ -49,7 +49,7 @@ formBatchPanel
     set::title($lang->product->batchEdit),
     set::mode('edit'),
     set::items($items),
-    set::data(array_values($productData)),
+    set::data(array_values($productData))
 );
 
 render();

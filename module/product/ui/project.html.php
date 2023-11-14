@@ -24,14 +24,14 @@ featureBar
         set::id('involved'),
         set::name('involved'),
         set::checked($this->cookie->involved),
-        set::text($lang->project->mine),
+        set::text($lang->project->mine)
     ),
     item(set(array
     (
         'icon' => "help",
         'text' => '',
-        'title' => $lang->product->projectInfo,
-    ))),
+        'title' => $lang->product->projectInfo
+    )))
 );
 
 /* Set right toolbar. */
@@ -45,7 +45,7 @@ if($branchStatus != 'closed')
             'text'        => $lang->product->link2Project,
             'class'       => "secondary",
             'url'         => '#link2Project',
-            'data-toggle' => 'modal',
+            'data-toggle' => 'modal'
         ))),
         !common::hasPriv('project', 'create') ? null : item(set(array
         (
@@ -54,7 +54,7 @@ if($branchStatus != 'closed')
             'class'       => "primary create-project-btn",
             'url'         => $this->createLink('project', 'createGuide', "programID=$product->program&from=project&productID={$product->id}&branchID=$branchID", '', true),
             'data-toggle' => 'modal',
-            'data-type'   => 'ajax',
+            'data-type'   => 'ajax'
         )))
     );
 }
@@ -69,7 +69,7 @@ modal
     to::footer
     (
         btn(setClass('primary'), set::id('saveButton'), $lang->save),
-        btn(setClass('default'), set('data-dismiss', 'modal'), $lang->cancel),
+        btn(setClass('default'), set('data-dismiss', 'modal'), $lang->cancel)
     ),
     inputGroup
     (
@@ -78,7 +78,7 @@ modal
         select(set::name('project'), set::items($projects))
     ),
     input(set::type('hidden'), set::name('product'), set::value($product->id)),
-    input(set::type('hidden'), set::name('branch'), set::value($branchID)),
+    input(set::type('hidden'), set::name('branch'), set::value($branchID))
 );
 
 /* Get column settings of the data table. */

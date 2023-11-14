@@ -43,8 +43,8 @@ foreach($fields as $field => $attr)
                 set::items($control['items']),
                 set::name($fieldName),
                 set::value($attr['default']),
-                !empty($control['multiple']) ? set::multiple(true) : null,
-            ),
+                !empty($control['multiple']) ? set::multiple(true) : null
+            )
         );
     }
     elseif($control['type'] == 'editor')
@@ -58,7 +58,7 @@ foreach($fields as $field => $attr)
             (
                 set::name($fieldName),
                 html($attr['default'])
-            ),
+            )
         );
     }
     else
@@ -135,7 +135,7 @@ formPanel
 (
     on::change('#program', 'toggleLineByProgram(e.target)'),
     on::change('#acl', 'setWhite(e.target)'),
-    $formItems,
+    $formItems
 );
 
 /* ====== Render page ====== */

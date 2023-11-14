@@ -143,7 +143,7 @@ dtable
     set::footPager(usePager()),
     set::emptyTip($lang->product->noProduct),
     set::createTip($lang->product->create),
-    set::createLink($canCreate ? createLink('product', 'create') : ''),
+    set::createLink($canCreate ? createLink('product', 'create') : '')
 );
 
 render();

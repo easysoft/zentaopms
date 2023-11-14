@@ -98,7 +98,7 @@ function getTrackTd($storyID, $story, $tab, $module)
 
     $trackItem[] = h::td(getTaskTd($story->tasks)); // Task
 
-    if(in_array($config->edition, array('max', 'ipd')) $trackItem[] = h::td(getDesignTd($story->designs)); // Design
+    if(in_array($config->edition, array('max', 'ipd'))) $trackItem[] = h::td(getDesignTd($story->designs)); // Design
 
     $trackItem[] = h::td(getCaseTd($story->cases)); // Case
 
@@ -210,7 +210,7 @@ div
                             $projectProducts[$productID]
                         ),
                         set::items($productItems),
-                        set::placement('bottom-start'),
+                        set::placement('bottom-start')
                     ) : $lang->story->requirement
                 ) : null,
                 h::th($lang->story->story),
@@ -218,11 +218,11 @@ div
                 in_array($config->edition, array('max', 'ipd')) ? h::th($lang->story->design) : null,
                 h::th($lang->story->case),
                 in_array($config->edition, array('max', 'ipd')) && helper::hasFeature('devops') ? h::th($lang->story->repoCommit) : null,
-                h::th($lang->story->bug),
+                h::th($lang->story->bug)
             ),
             h::tbody
             (
-                $getRequirements($tracks),
+                $getRequirements($tracks)
             )
         ),
         div
@@ -230,10 +230,10 @@ div
             setClass('table-footer'),
             pager(
                 set::_className('flex justify-end items-center'),
-                set::linkCreator(createLink($app->rawModule, $app->rawMethod, "productID={$productID}&branch={$branch}&projectID={$projectID}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pagerID={page}")),
+                set::linkCreator(createLink($app->rawModule, $app->rawMethod, "productID={$productID}&branch={$branch}&projectID={$projectID}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pagerID={page}"))
             )
         )
-    ),
+    )
 );
 
 render();
