@@ -88,7 +88,7 @@ formPanel
             (
                 datePicker(set::name('begin'), set::placeholder($lang->kanbancard->begin)),
                 span(set::className('input-group-addon'), '~'),
-                datePicker(set::name('end'), set::placeholder($lang->kanbancard->end)),
+                datePicker(set::name('end'), set::placeholder($lang->kanbancard->end))
             )
         )
     ),

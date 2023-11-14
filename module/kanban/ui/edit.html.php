@@ -110,7 +110,7 @@ formPanel
                 set::multiple(true),
                 set::value($kanban->whitelist)
             )
-        ),
+        )
     )
 );
 

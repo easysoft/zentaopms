@@ -37,7 +37,7 @@ featureBar
         span(set::className('input-group-addon'), $lang->kanban->selectedKanban),
         picker(set::name('kanban'), set::items($kanbanPairs), set::value($selectedKanbanID), set::style(array('width' => '200px')), set('data-on', 'change'), set('data-call', 'changeKanban'), set::required(true)),
         span(set::className('input-group-addon'), $lang->kanban->selectedLane),
-        picker(set::name('lane'), set::items($lanePairs), set::style(array('width' => '200px')), set::required(true)),
+        picker(set::name('lane'), set::items($lanePairs), set::style(array('width' => '200px')), set::required(true))
     )
 );
 

@@ -88,10 +88,10 @@ foreach($cards as $card)
                         (
                             'href'        => inlink('viewCard', "cardID=$card->id"),
                             'data-toggle' => 'modal',
-                            'class'       => 'card-title',
+                            'class'       => 'card-title'
                         )
                     ),
-                    $card->name,
+                    $card->name
                 )
             ),
             div
@@ -123,16 +123,16 @@ foreach($cards as $card)
                         div
                         (
                             setClass('progress-bar'),
-                            setStyle('width', $card->progress . '%'),
-                        ),
+                            setStyle('width', $card->progress . '%')
+                        )
                     ),
                         div
                         (
                             setClass('mt-2 ml-2'),
-                            $card->progress . '%',
+                            $card->progress . '%'
                         )
                 )
-            ) : null,
+            ) : null
         ),
         div
         (
@@ -145,10 +145,10 @@ foreach($cards as $card)
                     (
                         'class'        => 'btn primary size-sm ajax-submit',
                         'url'          => inlink('restoreCard', "cardID=$card->id"),
-                        'data-confirm' => $lang->kanbancard->confirmRestore,
-                    ),
+                        'data-confirm' => $lang->kanbancard->confirmRestore
+                    )
                 ),
-                $lang->kanban->restore,
+                $lang->kanban->restore
             ) : null,
             (commonModel::hasPriv('kanban', 'deleteCard') and $CRKanban) ? btn
             (
@@ -158,11 +158,11 @@ foreach($cards as $card)
                     (
                         'class'        => 'btn size-sm ajax-submit mt-2',
                         'url'          => inlink('deleteCard', "cardID=$card->id"),
-                        'data-confirm' => $lang->kanbancard->confirmDelete,
-                    ),
+                        'data-confirm' => $lang->kanbancard->confirmDelete
+                    )
                 ),
-                $lang->delete,
-            ) : null,
+                $lang->delete
+            ) : null
         )
     );
 }
@@ -174,7 +174,7 @@ panel
         div
         (
             set('class', 'panel-title'),
-            $lang->kanban->archivedCard,
+            $lang->kanban->archivedCard
         )
     ),
     to::headingActions
@@ -182,12 +182,12 @@ panel
         btn
         (
             setClass('closeBtn ghost'),
-            'x',
+            'x'
         )
     ),
     div
     (
         setClass('panel-body'),
-        $cardItems,
+        $cardItems
     )
 );

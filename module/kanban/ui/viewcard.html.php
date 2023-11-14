@@ -88,7 +88,7 @@ detailBody
                 (
                     item(set::name($lang->kanbancard->createdBy),    \zget($users, $card->createdBy) . $lang->at . $card->createdDate),
                     item(set::name($lang->kanbancard->archivedBy),   $card->archivedBy ? \zget($users, $card->archivedBy) . $lang->at . $card->archivedDate : ''),
-                    item(set::name($lang->kanbancard->lastEditedBy), $card->lastEditedBy ? \zget($users, $card->lastEditedBy) . $lang->at . $card->lastEditedDate : ''),
+                    item(set::name($lang->kanbancard->lastEditedBy), $card->lastEditedBy ? \zget($users, $card->lastEditedBy) . $lang->at . $card->lastEditedDate : '')
                 )
             )
         )

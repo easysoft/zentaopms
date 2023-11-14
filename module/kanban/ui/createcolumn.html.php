@@ -55,7 +55,7 @@ formPanel
                     )
                 ),
                 input(set::className('hidden'), set::name('group'), set::value($column->group)),
-                input(set::className('hidden'), set::name('parent'), set::value($column->parent > 0 ? $column->parent : 0)),
+                input(set::className('hidden'), set::name('parent'), set::value($column->parent > 0 ? $column->parent : 0))
             )
         )
     )
