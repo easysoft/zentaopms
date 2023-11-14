@@ -1764,16 +1764,16 @@ class story extends control
             /* Create field lists. */
             if(!$productID or $browseType == 'bysearch')
             {
-                $this->config->story->datatable->fieldList['branch']['dataSource']           = array('module' => 'branch', 'method' => 'getAllPairs', 'params' => 1);
-                $this->config->story->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
-                $this->config->story->datatable->fieldList['module']['dataSource']['params'] = 'story';
+                $this->config->story->dtable->fieldList['branch']['dataSource']           = array('module' => 'branch', 'method' => 'getAllPairs', 'params' => 1);
+                $this->config->story->dtable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
+                $this->config->story->dtable->fieldList['module']['dataSource']['params'] = 'story';
 
-                $this->config->story->datatable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $executionID);
-                $this->config->story->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $executionID);
+                $this->config->story->dtable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $executionID);
+                $this->config->story->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $executionID);
 
                 $productIdList = implode(',', array_flip($this->session->exportProductList));
 
-                $this->config->story->datatable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
+                $this->config->story->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => $productIdList);
             }
 
             $this->post->set('rows', $this->story->getExportStories($orderBy, $storyType, $postData));

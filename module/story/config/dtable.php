@@ -44,18 +44,21 @@ $config->story->dtable->fieldList['pri']['type']     = 'pri';
 $config->story->dtable->fieldList['pri']['show']     = true;
 $config->story->dtable->fieldList['pri']['group']    = 2;
 
-$config->story->dtable->fieldList['branch']['name']     = 'branch';
-$config->story->dtable->fieldList['branch']['title']    = $lang->story->branch;
-$config->story->dtable->fieldList['branch']['sortType'] = true;
-$config->story->dtable->fieldList['branch']['width']    = '100';
-$config->story->dtable->fieldList['branch']['group']    = 3;
+$config->story->dtable->fieldList['branch']['name']       = 'branch';
+$config->story->dtable->fieldList['branch']['title']      = $lang->story->branch;
+$config->story->dtable->fieldList['branch']['sortType']   = true;
+$config->story->dtable->fieldList['branch']['width']      = '100';
+$config->story->dtable->fieldList['branch']['group']      = 3;
+$config->story->dtable->fieldList['branch']['control']    = 'select';
+$config->story->dtable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID&active');
 
-$config->story->dtable->fieldList['plan']['name']     = 'plan';
-$config->story->dtable->fieldList['plan']['title']    = $lang->story->planAB;
-$config->story->dtable->fieldList['plan']['sortType'] = true;
-$config->story->dtable->fieldList['plan']['width']    = '136';
-$config->story->dtable->fieldList['plan']['show']     = true;
-$config->story->dtable->fieldList['plan']['group']    = 4;
+$config->story->dtable->fieldList['plan']['name']       = 'plan';
+$config->story->dtable->fieldList['plan']['title']      = $lang->story->planAB;
+$config->story->dtable->fieldList['plan']['sortType']   = true;
+$config->story->dtable->fieldList['plan']['width']      = '136';
+$config->story->dtable->fieldList['plan']['show']       = true;
+$config->story->dtable->fieldList['plan']['group']      = 4;
+$config->story->dtable->fieldList['plan']['dataSource'] = array('module' => 'productplan', 'method' => 'getPairs', 'params' => '$productID');
 
 $config->story->dtable->fieldList['category']['name']     = 'category';
 $config->story->dtable->fieldList['category']['title']    = $lang->story->category;
@@ -130,10 +133,14 @@ $config->story->dtable->fieldList['assignedDate']['group']    = 6;
 $config->story->dtable->fieldList['product']['name']       = 'product';
 $config->story->dtable->fieldList['product']['title']      = $lang->story->product;
 $config->story->dtable->fieldList['product']['type']       = 'text';
+$config->story->dtable->fieldList['product']['control']    = 'hidden';
+$config->story->dtable->fieldList['product']['dataSource'] = array('module' => 'transfer', 'method' => 'getRelatedObjects', 'params' => 'story&product&id,name');
 
 $config->story->dtable->fieldList['module']['name']       = 'module';
 $config->story->dtable->fieldList['module']['title']      = $lang->story->module;
 $config->story->dtable->fieldList['module']['type']       = 'text';
+$config->story->dtable->fieldList['module']['control']    = 'select';
+$config->story->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&story&0&all');
 
 $config->story->dtable->fieldList['taskCount']['name']        = 'taskCount';
 $config->story->dtable->fieldList['taskCount']['title']       = 'T';
