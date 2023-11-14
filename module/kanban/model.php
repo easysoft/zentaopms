@@ -1027,6 +1027,27 @@ class kanbanModel extends model
                 $cols  = zget($columnGroup, $group->id, array());
                 $items = zget($cardGroup, $group->id, array());
 
+                /* 计算各个列上的卡片数量。 */
+                $columnCount = array();
+                $parentCols  = array();
+                foreach($cols as $col) $parentCols[$col['id']] = $col['parent'];
+                foreach($items as $colGroup)
+                {
+                    foreach($colGroup as $colID => $cards)
+                    {
+                        if(!isset($columnCount[$colID])) $columnCount[$colID] = 0;
+                        $columnCount[$colID] += count($cards);
+
+                        if(isset($parentCols[$colID]) && $parentCols[$colID] > 0)
+                        {
+                            if(!isset($columnCount[$parentCols[$colID]])) $columnCount[$parentCols[$colID]] = 0;
+                            $columnCount[$parentCols[$colID]] += count($cards);
+                        }
+                    }
+                }
+
+                foreach($cols as $colIndex => $col) $cols[$colIndex]['cards'] = isset($columnCount[$col['id']]) ? $columnCount[$col['id']] : 0;
+
                 $lanes = array_values($lanes);
                 $laneCount += count($lanes);
 

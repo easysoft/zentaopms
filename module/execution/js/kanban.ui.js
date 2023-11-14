@@ -4,6 +4,25 @@ window.getLane = function(lane)
     if(laneCount < 2) lane.minHeight = window.innerHeight - 235;
 }
 
+window.getCol = function(col)
+{
+    /* 计算WIP。*/
+    const limit = col.limit == -1 ? "<i class='icon icon-md icon-infinite'></i>" : col.limit;
+    const cards = col.cards;
+
+    col.subtitleClass = 'ml-1';
+
+    let wip = `(${cards} / ${limit})`;
+
+    if(col.limit != -1 && cards > col.limit)
+    {
+        col.subtitleClass += ' text-danger';
+        wip += ' <i class="icon icon-exclamation-sign"></i>';
+    }
+
+    col.subtitle = {html: wip};
+}
+
 /*
  * 构造看板泳道上的操作按钮。
  * Build action buttons on the kanban lane.
@@ -55,8 +74,8 @@ window.buildColActions = function(col)
 {
     let actions = [];
 
-    if(col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}`), 'data-toggle': 'modal', 'icon': 'edit'});
-    if(col.actionList.includes('setWIP')) actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}`), 'data-toggle': 'modal', 'icon': 'alert'});
+    if(col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'edit'});
+    if(col.actionList.includes('setWIP')) actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert'});
 
     return actions;
 }
