@@ -584,7 +584,7 @@ class groupModel extends model
             }
         }
 
-        $actions['views'] = array_keys($actions['views']);
+        $actions['views'] = empty($actions['views']) ? array() : array_keys($actions['views']);
         $actions['views'] = array_combine($actions['views'], $actions['views']);
         if(isset($_POST['actionallchecker'])) $actions['views']   = array();
         if(!isset($actions['actions']))       $actions['actions'] = array();
@@ -601,7 +601,7 @@ class groupModel extends model
                 $groupName = $moduleName;
                 if(isset($this->lang->navGroup->$moduleName)) $groupName = $this->lang->navGroup->$moduleName;
                 if($moduleName == 'case') $groupName = $this->lang->navGroup->testcase;
-                if($groupName != 'my' and isset($actions['views']) and !in_array($groupName, $actions['views'])) continue;
+                if($groupName != 'my' and !isset($actions['views'][$groupName])) continue;
 
                 $moduleActions = array_keys($moduleActions);
                 $dynamic[$moduleName] = array_combine($moduleActions, $moduleActions);
