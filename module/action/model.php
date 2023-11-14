@@ -905,6 +905,17 @@ class actionModel extends model
         $projectIdList = array();
         foreach($relatedProjects as $objectType => $idList) $projectIdList = array_merge($projectIdList, $idList);
 
+        /* If idList include ',*,' Format ',*,' to '*'. */
+        foreach($projectIdList as $key => $idList)
+        {
+            $idList = explode(',', $idList);
+
+            foreach($idList as $id) $projectIdList[] = $id;
+            unset($projectIdList[$key]);
+        }
+
+        if($projectIdList) $projectIdList = array_unique($projectIdList);
+
         /* 获取需要验证的元素列表。 */
         /* Get the list of elements that need to be verified. */
         $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
@@ -1120,7 +1131,7 @@ class actionModel extends model
         {
             $func = "get$period";
             extract(date::$func());
-            return array('begin' => $begin, 'end' => $end . ' 23:59:59');
+            return array('begin' => $begin, 'end' => $end);
         }
 
         if($period == 'thismonth')  return date::getThisMonth();

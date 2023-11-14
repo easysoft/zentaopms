@@ -245,7 +245,7 @@ class actionTao extends actionModel
         if($result)
         {
             $product = $result->product;
-            $project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($result->build)->fetch('project');
+            $project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->in($result->build)->fetch('project');
         }
         return array($product, $project);
     }
@@ -331,7 +331,7 @@ class actionTao extends actionModel
             ->andWhere('((action')->ne('deleted')->andWhere('objectID')->in($objectID)->markRight(1)
             ->orWhere('(action')->eq('deleted')->andWhere('objectID')->in($modules)->markRight(1)->markRight(1)
             ->fi()
-            ->beginIF(strpos('project,case,story,module', $objectType) === false)
+            ->beginIF(!in_array($objectType, array('project', 'case', 'story', 'module')))
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->in($objectID)
             ->fi()
