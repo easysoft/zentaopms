@@ -425,7 +425,7 @@ function changeAssignedTo(projectID)
 function loadProductExecutionsByProject(productID, projectID = 0, num = 0)
 {
     var branch = $('#branches' + num).val();
-    if(typeof(branch) == 'undefined') branch = 0;
+    if(typeof(branch) === undefined || branch == null) branch = 0;
 
     if(projectID == 'ditto')
     {

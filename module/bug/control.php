@@ -126,7 +126,17 @@ class bug extends control
 
         $this->bugZen->buildBrowseSearchForm($productID, $branch, $queryID);
 
-        $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
+        /* Get executions. */
+        $cacheKey = sprintf($this->config->cacheKeys->bug->browse, $this->projectID);
+        if(helper::isCacheEnabled() && $this->cache->has($cacheKey))
+        {
+            $executions = $this->cache->get($cacheKey);
+        }
+        else
+        {
+            $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
+            if($this->config->cache->enable) $this->cache->set($cacheKey, $executions);
+        }
         $bugs       = $this->bugZen->getBrowseBugs($product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
 
         $this->bugZen->buildBrowseView($bugs, $product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager);
@@ -1472,16 +1482,26 @@ class bug extends control
      * @access public
      * @return int
      */
-    public function ajaxGetProductBugs($productID, $bugID): int
+    public function ajaxGetProductBugs($productID, $bugID, $type = 'html'): int
     {
         /* 获取除了这个 bugID 的产品 bugs。 */
         /* Get product bugs exclude this bugID. */
+        $search      = $this->get->search;
+        $limit       = $this->get->limit;
         $product     = $this->loadModel('product')->getById($productID);
         $bug         = $this->bug->getById($bugID);
-        $branch      = $bug->branch > 0 ? $bug->branch . ',0' : '0';
-        $branch      = $product->type == 'branch' ? $branch : '';
-        $productBugs = $this->bug->getProductBugPairs($productID, $branch);
+        $branch = $product->type == 'branch' ? ($bug->branch > 0 ? $bug->branch . ',0' : '0') : '';
+
+        $productBugs = array();
+        if($bug->resolution and $bug->duplicateBug)
+        {
+            $duplicateBug = $this->bug->getByID($bug->duplicateBug);
+            $productBugs  = $this->bug->getProductBugPairs($productID, $branch, $duplicateBug->title, $limit);
+        }
+        $this->config->moreLinks['duplicateBug'] = inlink('ajaxGetProductBugs', "productID={$productID}&bugID={$bugID}&type=json");
+
         unset($productBugs[$bugID]);
+        if($type == 'json') return print(helper::jsonEncode($productBugs));
 
         $bugList = array();
         foreach($productBugs as $bugID => $bugName) $bugList[] = array('value' => $bugID, 'text' => $bugName);
@@ -1545,5 +1565,24 @@ class bug extends control
         $releasedBuilds = $this->loadModel('release')->getReleasedBuilds($productID, $branch);
 
         return print(helper::jsonEncode($releasedBuilds));
+    }
+    
+    /**
+     * Ajax get relation cases.
+     *
+     * @param  int        $bugID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetProductCases($bugID)
+    {
+        $search = $this->get->search;
+        $limit  = $this->get->limit;
+
+        $bug = $this->bug->getByID($bugID);
+
+        $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch), $search, $limit);
+
+        return print(helper::jsonEncode($cases));
     }
 }

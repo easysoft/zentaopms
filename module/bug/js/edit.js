@@ -2,6 +2,21 @@ $(function()
 {
     loadModuleRelated();
 
+    initPicker = function($element)
+    {
+        var picker = $element.data('zui.picker');
+        var originOptions = picker.options;
+
+        if(picker) picker.destroy();
+
+        var options = $.extend({}, originOptions, {searchDelay : 1000});
+        $element.picker(options);
+    };
+
+    initPicker($('#case'));
+    initPicker($('#duplicateBug'));
+
+
     resolution = $('#resolution').val();
     if(resolution == 'fixed')
     {
