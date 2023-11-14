@@ -150,8 +150,8 @@ class job extends control
         $this->loadModel('ci');
         $this->app->loadLang('action');
         $repoList    = $this->loadModel('repo')->getList($this->projectID, false);
-        $repoPairs   = array(0 => '');
-        $gitlabRepos = array(0 => '');
+        $repoPairs   = array();
+        $gitlabRepos = array();
         $repoTypes   = array();
         $gitlabs     = array();
 
