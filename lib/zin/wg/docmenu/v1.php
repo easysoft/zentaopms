@@ -439,9 +439,10 @@ class docMenu extends wg
                     setClass('module-menu rounded shadow-sm bg-white col rounded-sm'),
                     $title && empty($menuLink) ? h::header
                     (
-                        setClass('h-10 flex items-center pl-4 flex-none gap-3'),
+                        setClass('h-10 flex items-center pl-4 mr-4 gap-3 clip'),
                         span
                         (
+                            set::title($title),
                             setClass('module-title text-lg font-semibold'),
                             html($title)
                         ),
