@@ -40,7 +40,7 @@ detailBody
             h::tr
             (
                 h::th($lang->host->group),
-                h::td($optionMenu[$host->group]),
+                h::td(zget($optionMenu, $host->group)),
                 h::th($lang->host->serverRoom),
                 h::td(zget($rooms, $host->serverRoom, "")),
             ),
@@ -84,7 +84,7 @@ detailBody
                 h::th($lang->host->osName),
                 h::td($host->osName),
                 h::th($lang->host->osVersion),
-                h::td($lang->host->{$host->osName.'List'}[$host->osVersion]),
+                h::td(zget($lang->host->{$host->osName.'List'}, $host->osVersion)),
             ),
             h::tr
             (
