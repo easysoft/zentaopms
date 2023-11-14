@@ -305,13 +305,13 @@ class hostModel extends model
                     {
                         $treemap .= "<li data-type='cabinet'>" . htmlspecialchars($cabinet);
                         $treemap .= '<ul>';
-                        foreach($hosts as $host) $treemap .= "<li data-type='host' data-hostid='{$host->id}'>" . htmlspecialchars($host->name) . '</li>';
+                        foreach($hosts as $host) $treemap .= "<li data-type='host' data-hostid='{$host->id}'>" . html::a(helper::createLink('host', 'view', "hostID={$host->id}", '', true), $host->name, '', 'data-toggle="modal" data-type="iframe" data-width="800" class="treemap-node-wrapper"') . '</li>';
                         $treemap .= '</ul></li>';
                     }
                     else
                     {
                         $host     = $hosts;
-                        $treemap .= "<li data-type='host' data-hostid='{$host->id}'>" . htmlspecialchars($host->name) . '</li>';
+                        $treemap .= "<li data-type='host' data-hostid='{$host->id}'>" . html::a(helper::createLink('host', 'view', "hostID={$host->id}", '', true), $host->name, '', 'data-toggle="modal" data-type="iframe" data-width="800" class="treemap-node-wrapper"') . '</li>';
                     }
                 }
                 $treemap .= '</ul></li>';
@@ -364,7 +364,7 @@ class hostModel extends model
                 {
                     foreach($hostGroups[$module->id] as $host)
                     {
-                        $treemap[$module->parent] .= "<li data-type='host' data-hostid='{$host->id}'>" . htmlspecialchars($host->name) . "</li>";
+                        $treemap[$module->parent] .= "<li data-type='host' data-hostid='{$host->id}'>" . html::a(helper::createLink('host', 'view', "hostID={$host->id}", '', true), htmlspecialchars($host->name), '', 'data-toggle="modal" data-type="iframe" data-width="800" class="treemap-node-wrapper"') . "</li>";
                     }
                 }
                 $treemap[$module->parent] .= '</ul>';
@@ -382,7 +382,7 @@ class hostModel extends model
 
             if(isset($hostGroups[0]))
             {
-                foreach($hostGroups[0] as $host) $groupTree .= "<li data-type='host' data-hostid='{$host->id}'>" . htmlspecialchars($host->name) . "</li>";
+                foreach($hostGroups[0] as $host) $groupTree .= "<li data-type='host' data-hostid='{$host->id}'>" . html::a(helper::createLink('host', 'view', "hostID={$host->id}", '', true), htmlspecialchars($host->name), '', 'data-toggle="modal" data-type="iframe" data-width="800" class="treemap-node-wrapper"') . "</li>";
             }
             $groupTree .= "</ul></li></ul>";
         }

@@ -43,17 +43,9 @@ $(function()
             var $node = $('<div class="treemap-node"></div>');
             if(node.type) $node.addClass('treemap-node-' + node.type);
             if(node.hostid) $node.attr('data-hostid', node.hostid);
-            $node.append('<a class="treemap-node-wrapper">' + node.text + '</a>');
+            if(node.text) $node.append('<a class="treemap-node-wrapper">' + node.text + '</a>');
+            if(node.html) $node.append(node.html);
             return $node;
-        },
-        onNodeClick: function(node)
-        {
-            if(!node.children)
-            {
-                var hostID = node.hostid;
-                var url = createLink('host', 'view', "hostID=" + hostID, 'html', true);
-                $.modalTrigger({width:1000, type:'iframe', url:url});
-            }
         }
     });
 

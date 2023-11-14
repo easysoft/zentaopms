@@ -11,17 +11,27 @@ declare(strict_types=1);
  */
 
 namespace zin;
-detailHeader
-(
-    isAjaxRequest('modal') ? to::prefix() : '',
-    to::title(
-        entityLabel(
-            set(array('entityID' => $host->id, 'level' => 1, 'text' => $host->name))
-        )
-    ),
-);
+if(isonlybody())
+{
+    to::header(false);
+    to::main(false);
 
-$actions = $this->loadModel('common')->buildOperateMenu($host);
+    $actions = array();
+}
+else
+{
+    detailHeader
+    (
+        isAjaxRequest('modal') ? to::prefix() : '',
+        to::title(
+            entityLabel(
+                set(array('entityID' => $host->id, 'level' => 1, 'text' => $host->name))
+            )
+        ),
+    );
+
+    $actions = $this->loadModel('common')->buildOperateMenu($host);
+}
 
 detailBody
 (
@@ -40,7 +50,7 @@ detailBody
             h::tr
             (
                 h::th($lang->host->group),
-                h::td($optionMenu[$host->group]),
+                h::td(zget($optionMenu, $host->group)),
                 h::th($lang->host->serverRoom),
                 h::td(zget($rooms, $host->serverRoom, "")),
             ),
@@ -84,7 +94,7 @@ detailBody
                 h::th($lang->host->osName),
                 h::td($host->osName),
                 h::th($lang->host->osVersion),
-                h::td($lang->host->{$host->osName.'List'}[$host->osVersion]),
+                h::td(zget($lang->host->{$host->osName.'List'}, $host->osVersion)),
             ),
             h::tr
             (
@@ -99,7 +109,7 @@ detailBody
     (
         set::commentUrl(createLink('action', 'comment', array('objectType' => 'host', 'objectID' => $host->id))),
     ),
-    floatToolbar
+    isonlybody() ? null : floatToolbar
     (
         set::object($host),
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
