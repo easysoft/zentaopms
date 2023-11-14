@@ -102,8 +102,8 @@ if($canBatchActionStory)
         array('type' => 'btn-group', 'items' => array
         (
             array('text' => $lang->productplan->unlinkStoryAB, 'className' => 'batch-btn size-sm', 'disabled' => ($canBatchUnlinkStory ? '' : 'disabled'), 'btnType' => 'secondary', 'data-type' => 'story', 'data-url' => helper::createLink('productplan', 'batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy")),
-            array('caret' => 'up', 'className' => 'size-sm', 'btnType' => 'secondary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'items' => $navStoryActionItems),
-        )),
+            array('caret' => 'up', 'className' => 'size-sm', 'btnType' => 'secondary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'items' => $navStoryActionItems)
+        ))
     ));
 }
 
@@ -123,8 +123,8 @@ if($canBatchActionBug)
         array('type' => 'btn-group', 'items' => array
         (
             $canBatchUnlinkBug ? array('text' => $lang->productplan->unlinkAB, 'className' => 'batch-btn size-sm', 'btnType' => 'secondary', 'data-type' => 'bug', 'data-url' => helper::createLink('productplan', 'batchUnlinkBug', "planID=$plan->id&orderBy=$orderBy")) : null,
-            array('caret' => 'up', 'className' => 'size-sm', 'btnType' => 'secondary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'items' => $navBugActionItems),
-        )),
+            array('caret' => 'up', 'className' => 'size-sm', 'btnType' => 'secondary', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start', 'items' => $navBugActionItems)
+        ))
     ));
 }
 
@@ -162,7 +162,7 @@ detailHeader
         div(setClass('nav-divider')),
         entityLabel(set(array('entityID' => $plan->id, 'level' => 1, 'text' => $plan->title))),
         span(setClass('label circle primary'), ($plan->begin == FUTURE_TIME || $plan->end == FUTURE_TIME) ? $lang->productplan->future : $plan->begin . '~' . $plan->end),
-        $plan->deleted ? span(setClass('label danger'), $lang->product->deleted) : null,
+        $plan->deleted ? span(setClass('label danger'), $lang->product->deleted) : null
     ),
     (!$plan->deleted && $actionMenus) ? to::suffix(btnGroup(set::items($actionMenus))) : null
 );
@@ -188,9 +188,9 @@ detailBody
                         btn(set::text($lang->story->create), set::target('_parent'), setClass('secondary' . (empty($createStoryLink) ? ' disabled' : '')), set::icon('plus'), set::caret(true), set::url($createStoryLink)),
                         set::items(array(array('text' => $lang->story->batchCreate, 'url' => $batchCreateStoryLink, 'class' => empty($batchCreateStoryLink) ? 'disabled' : ''))),
                         set::trigger('hover'),
-                        set::placement('bottom-end'),
+                        set::placement('bottom-end')
                     ),
-                    !common::hasPriv('productplan', 'linkStory') ? null : btn(set::text($lang->productplan->linkStory), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', inlink('linkStory', "planID={$plan->id}" . (($link == 'true' && $type == 'story') ? $decodeParam : "&browseType=&param=") . "&orderBy={$orderBy}"))),
+                    !common::hasPriv('productplan', 'linkStory') ? null : btn(set::text($lang->productplan->linkStory), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', inlink('linkStory', "planID={$plan->id}" . (($link == 'true' && $type == 'story') ? $decodeParam : "&browseType=&param=") . "&orderBy={$orderBy}")))
                 ),
                 dtable
                 (
@@ -211,8 +211,8 @@ detailBody
                             'recPerPage' => $storyPager->recPerPage,
                             'recTotal' => $storyPager->recTotal,
                             'linkCreator' => helper::createLink('productplan', 'view', "planID={$plan->id}&type=story&orderBy={$orderBy}&link=false&param={$param}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}")
-                        )),
-                    ),
+                        ))
+                   ),
                 )
             ),
             tabPane
@@ -224,7 +224,7 @@ detailBody
                 div
                 (
                     setClass('tabnActions'),
-                    !common::hasPriv('productplan', 'linkBug') ? null : btn(set::text($lang->productplan->linkBug), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', inlink('linkBug', "planID={$plan->id}" . (($link == 'true' && $type == 'bug') ? $decodeParam : "&browseType=&param=") . "&orderBy={$orderBy}"))),
+                    !common::hasPriv('productplan', 'linkBug') ? null : btn(set::text($lang->productplan->linkBug), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', inlink('linkBug', "planID={$plan->id}" . (($link == 'true' && $type == 'bug') ? $decodeParam : "&browseType=&param=") . "&orderBy={$orderBy}")))
                 ),
                 dtable
                 (
@@ -244,8 +244,8 @@ detailBody
                             'recPerPage' => $bugPager->recPerPage,
                             'recTotal' => $bugPager->recTotal,
                             'linkCreator' => helper::createLink('productplan', 'view', "planID={$plan->id}&type=bug&orderBy={$orderBy}&link=false&param={$param}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}")
-                        )),
-                    ),
+                        ))
+                    )
                 )
             ),
             tabPane
@@ -264,11 +264,11 @@ detailBody
                     item(set::name($lang->productplan->end), $plan->end == FUTURE_TIME ? $lang->productplan->future : $plan->end),
                     $plan->parent == '-1' ? item(set::name($lang->productplan->children), $fnGetChildrenPlans($childrenPlans)) : null,
                     item(set::name($lang->productplan->status), $lang->productplan->statusList[$plan->status]),
-                    item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : html(($plan->desc))),
+                    item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : html(($plan->desc)))
                 ),
                 h::hr(setClass('mt-4')),
-                history(set::commentBtn(false)),
-            ),
+                history(set::commentBtn(false))
+            )
         )
     )
 );

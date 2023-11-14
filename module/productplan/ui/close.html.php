@@ -28,7 +28,7 @@ formPanel
             set::name('closedReason'),
             set::strong(false),
             set::items($lang->productplan->closedReasonList),
-            set::required(true),
+            set::required(true)
         )
     ),
     formGroup
@@ -36,8 +36,8 @@ formPanel
         set::label($lang->comment),
         set::name('comment'),
         set::control('editor'),
-        set::rows(6),
-    ),
+        set::rows(6)
+    )
 );
 hr();
 history();

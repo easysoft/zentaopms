@@ -45,7 +45,7 @@ toolbar
     div
     (
         btn(setClass($viewType == 'list'   ? 'text-primary' : 'text-darker'), set::icon('format-list-bulleted'), setData('type', 'list'), setClass('switchButton')),
-        btn(setClass($viewType == 'kanban' ? 'text-primary' : 'text-darker'), set::icon('kanban'), setData('type', 'kanban'), setClass('switchButton')),
+        btn(setClass($viewType == 'kanban' ? 'text-primary' : 'text-darker'), set::icon('kanban'), setData('type', 'kanban'), setClass('switchButton'))
     ),
     common::hasPriv('productplan', 'create') ? item
     (
@@ -93,8 +93,8 @@ modalTrigger
                     array
                     (
                         'text' => $lang->cancel,
-                        'data-dismiss' => 'modal',
-                    ),
+                        'data-dismiss' => 'modal'
+                    )
                 )
             ),
             formGroup
@@ -105,7 +105,7 @@ modalTrigger
                     set::name('project'),
                     set::items($projects),
                     set::required(true),
-                    set::disabled(empty($projects)),
+                    set::disabled(empty($projects))
                 )
             ),
             formRow
@@ -120,9 +120,9 @@ modalTrigger
                         setClass('text-danger'),
                         $lang->productplan->noLinkedProject
                     ),
-                    formHidden('planID', ''),
+                    formHidden('planID', '')
                 )
-            ),
+            )
         )
     )
 );

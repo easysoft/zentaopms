@@ -46,7 +46,7 @@ formPanel
         set::label($lang->productplan->parent),
         set::name('parent'),
         set::items($parentPlanPairs),
-        $product->type != 'normal' ? on::change('loadBranches') : '',
+        $product->type != 'normal' ? on::change('loadBranches') : ''
     ) : formHidden('parent', $parent),
     !$product->shadow && $product->type != 'normal' ? formGroup
     (
@@ -59,7 +59,7 @@ formPanel
             set::name('branch[]'),
             set::items($branches),
             set::multiple(true),
-            on::change('loadTitle'),
+            on::change('loadTitle')
         )
     ) : null,
     formRow
@@ -68,7 +68,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->productplan->title),
-            set::name('title'),
+            set::name('title')
         ),
         $lastPlan ? formGroup
         (
@@ -79,8 +79,8 @@ formPanel
                 setClass('ml-4'),
                 setID('lastTitleBox'),
                 '(' . $lang->productplan->last . ': ' . $lastPlan->title . ')'
-            ),
-        ) : null,
+            )
+        ) : null
     ),
     formRow
     (
@@ -91,7 +91,7 @@ formPanel
             set::control('date'),
             setID('begin'),
             set::name('begin'),
-            set::value(formatTime($begin)),
+            set::value(formatTime($begin))
         ),
         formGroup
         (
@@ -114,7 +114,7 @@ formPanel
             set::label($lang->productplan->end),
             set::control('date'),
             setID('end'),
-            set::name('end'),
+            set::name('end')
         ),
         formGroup
         (
@@ -123,7 +123,7 @@ formPanel
                 set::name('delta'),
                 set::inline(true),
                 set::items($lang->productplan->endList),
-                on::change('computeEndDate'),
+                on::change('computeEndDate')
             )
         )
     ),
@@ -133,10 +133,10 @@ formPanel
         editor
         (
             set::name('desc'),
-            set::rows(10),
+            set::rows(10)
         )
     ),
-    formHidden('product', $product->id),
+    formHidden('product', $product->id)
 );
 
 /* ====== Render page ====== */

@@ -34,7 +34,7 @@ formBatchPanel
     set::title($lang->productplan->batchClose),
     set::mode('edit'),
     set::items($items),
-    set::data(array_values($plans)),
+    set::data(array_values($plans))
 );
 
 render();
