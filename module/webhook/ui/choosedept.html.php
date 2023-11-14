@@ -35,7 +35,7 @@ panel
     (
         setClass('actions'),
         btn(setClass('primary save'), $lang->save),
-        btn(set::url(createLink('webhook', 'browse')), $lang->goback),
+        btn(set::url(createLink('webhook', 'browse')), $lang->goback)
     )
 );
 

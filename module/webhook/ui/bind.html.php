@@ -45,12 +45,12 @@ $fnBuildTbody = function() use($users, $bindedUsers, $oauthUsers, $useridPairs, 
                 div
                 (
                     setClass("username"),
-                    $userid ? span(setClass('label primary-outline circle'), zget($useridPairs, $userid)) : null,
+                    $userid ? span(setClass('label primary-outline circle'), zget($useridPairs, $userid)) : null
                 ),
-                formHidden("userid[{$user->account}]", $userid),
+                formHidden("userid[{$user->account}]", $userid)
             ),
             h::td(set::style(array('text-align' => 'center')), btn(setClass('bind btn-link'), set('data-value', "userid[{$user->account}]"), set('data-toggle', "modal"), set('data-target', '#userList'), set('data-size', 'sm'), icon('edit'))),
-            h::td(set::style(array('text-align' => 'center')), \zget($lang->webhook->dingBindStatusList, $bindStatus, '')),
+            h::td(set::style(array('text-align' => 'center')), \zget($lang->webhook->dingBindStatusList, $bindStatus, ''))
         );
     }
 
@@ -68,9 +68,9 @@ $fnBuildFooter = function() use($users, $lang, $selectedDepts, $webhook)
         (
             btn(set::btnType('submit'), setClass('primary mr-2'), set::size('sm'), $lang->save),
             btn(set::url(createLink('webhook', 'browse')), setClass('mr-2'), set::size('sm'), $lang->goback),
-            $selectedDepts ? btn(set::url(createLink('webhook', 'chooseDept', "id={$webhook->id}")), set::size('sm'), $lang->webhook->chooseDeptAgain) : null,
+            $selectedDepts ? btn(set::url(createLink('webhook', 'chooseDept', "id={$webhook->id}")), set::size('sm'), $lang->webhook->chooseDeptAgain) : null
         ),
-        cell(pager()),
+        cell(pager())
     );
 };
 
@@ -95,12 +95,12 @@ panel
                     h::th(set::colspan(2), $lang->webhook->zentaoUser),
                     h::th(set::colspan(2), $useridLang),
                     h::th(set::width('80'), set::style(array('text-align' => 'center')), $lang->actions),
-                    h::th(set::width('150'), set::style(array('text-align' => 'center')), $statusLang),
+                    h::th(set::width('150'), set::style(array('text-align' => 'center')), $statusLang)
                 )
             ),
-            $fnBuildTbody(),
+            $fnBuildTbody()
         ),
-        $fnBuildFooter(),
+        $fnBuildFooter()
     )
 );
 
@@ -113,9 +113,9 @@ modal
     (
         setClass('mt-3'),
         picker(setID('userSelect'), set::name('userid'), set::items($useridPairs)),
-        div(setClass('text-center'), btn(setClass('primary mt-3'), set('onclick', 'confirmChanges()'), $lang->save)),
+        div(setClass('text-center'), btn(setClass('primary mt-3'), set('onclick', 'confirmChanges()'), $lang->save))
     ),
-    div(setID('saveInput')),
+    div(setID('saveInput'))
 );
 
 render();

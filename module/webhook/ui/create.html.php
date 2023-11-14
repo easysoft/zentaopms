@@ -75,13 +75,13 @@ foreach($fields as $field => $attr)
             set::label($title),
             set::control($control),
             set::value($attr['default']),
-            set::required($required),
+            set::required($required)
         ),
         $notice ? formGroup
         (
             $field == 'url' ? setID('urlNote') : null,
-            html($notice),
-        ) : null,
+            html($notice)
+        ) : null
     );
 }
 
