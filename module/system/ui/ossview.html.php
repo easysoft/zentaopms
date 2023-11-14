@@ -27,16 +27,16 @@ panel
             (
                 set::id('ossVisitUrl'),
                 set::target('_blank'),
-                $lang->system->visit,
-            ),
+                $lang->system->visit
+            )
         ),
         item
         (
             set::name($lang->system->oss->user),
             span
             (
-                set::id('ossAdmin'),
-            ),
+                set::id('ossAdmin')
+            )
         ),
         item
         (
@@ -45,23 +45,23 @@ panel
             (
                 setClass('hidden'),
                 set::id('ossPassword'),
-                set::value($ossAccount->password),
+                set::value($ossAccount->password)
             ),
             btn
             (
                 $lang->system->copy,
-                on::click('copyPassBtn'),
+                on::click('copyPassBtn')
             )
         ),
         item
         (
             set::name($lang->system->oss->apiURL),
-            $apiURL,
+            $apiURL
         ),
         item
         (
             set::name($lang->system->oss->accessKey),
-            $ossAccount->username,
+            $ossAccount->username
         ),
         item
         (
@@ -70,15 +70,15 @@ panel
             (
                 setClass('hidden'),
                 set::id('ossSK'),
-                set::value($ossAccount->password),
+                set::value($ossAccount->password)
             ),
             btn
             (
                 $lang->system->copy,
-                on::click('copySK'),
+                on::click('copySK')
             )
-        ),
-    ),
+        )
+    )
 );
 
 render();

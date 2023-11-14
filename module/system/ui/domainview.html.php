@@ -22,22 +22,22 @@ panel
         (
             setClass('primary'),
             $lang->system->domain->editDomain,
-            set::url($this->createLink('system', 'editDomain')),
-        ),
+            set::url($this->createLink('system', 'editDomain'))
+        )
     ),
     tableData
     (
         item
         (
             set::name($lang->system->domain->currentDomain),
-            zget($domainSettings, 'customDomain', ''),
+            zget($domainSettings, 'customDomain', '')
         ),
         item
         (
             set::name($lang->system->domain->expiredDate),
             $expiredDate
-        ),
-    ),
+        )
+    )
 );
 
 render();

@@ -25,8 +25,8 @@ panel
             set::href($this->createLink('system', 'backupPlatform')),
             set::target('hiddenwin'),
             $lang->backup->backup,
-            set('data-toggle', 'modal'),
-        ),
+            set('data-toggle', 'modal')
+        )
     ),
     div
     (
@@ -34,9 +34,9 @@ panel
         dtable
         (
             set::cols($config->system->dtable->backup->fieldList),
-            set::data($backups),
-        ),
-    ),
+            set::data($backups)
+        )
+    )
 );
 
 render();

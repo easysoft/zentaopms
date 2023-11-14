@@ -16,7 +16,7 @@ jsVar('error', $error);
 div
 (
     setClass('restoreProgress text-3xl'),
-    $lang->system->backup->waittingStore,
+    $lang->system->backup->waittingStore
 );
 
 render();

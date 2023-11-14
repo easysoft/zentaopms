@@ -26,8 +26,8 @@ panel
             set::cols($config->system->dtable->dbList->fieldList),
             set::data($dbList),
             set::onRenderCell(jsRaw('window.renderDbList'))
-        ),
-    ),
+        )
+    )
 );
 
 render();
