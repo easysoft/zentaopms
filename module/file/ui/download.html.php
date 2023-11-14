@@ -50,9 +50,9 @@ else
         (
             div
             (
-                select(setID('charset'), set::name('charset'), set::items($config->file->charset), set::required(true), set::value($charset), set('onchange', 'setCharset(this)'), setClass('ml-2')),
+                select(setID('charset'), set::name('charset'), set::items($config->file->charset), set::required(true), set::value($charset), set('onchange', 'setCharset(this)'), setClass('ml-2'))
             )
-        ) : null,
+        ) : null
     );
 
     $fileType == 'image' ? div
@@ -62,7 +62,7 @@ else
     ) : div
     (
         setID('txtFile'),
-        h::pre(set::style(array('background-color' => 'rgb(var(--color-gray-200-rgb))')), $fileContent),
+        h::pre(set::style(array('background-color' => 'rgb(var(--color-gray-200-rgb))')), $fileContent)
     );
 
 $isInModal = isInModal();

@@ -15,10 +15,10 @@ formGroup
         span
         (
             setClass('input-group-addon'),
-            checkbox(setID('showCustomFieldsBox'), set::checked(true), on::change('setExportTPL'), $lang->file->setExportTPL),
+            checkbox(setID('showCustomFieldsBox'), set::checked(true), on::change('setExportTPL'), $lang->file->setExportTPL)
         )
     ),
-    $templateList ? $templateList : null,
+    $templateList ? $templateList : null
 );
 
 render();
