@@ -12,7 +12,7 @@ namespace zin;
 
 featureBar
 (
-    set::current('all'),
+    set::current('all')
 );
 
 toolbar
@@ -22,14 +22,14 @@ toolbar
         setClass('btn primary'),
         set::url(helper::createLink('my', 'score')),
         $lang->score->common
-    ),
+    )
 );
 
 dtable
 (
     set::cols(array_values($config->score->dtable->fieldList)),
     set::data($rules),
-    set::fixedLeftWidth('0.2'),
+    set::fixedLeftWidth('0.2')
 );
 
 render();
