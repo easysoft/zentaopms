@@ -19,13 +19,14 @@ div
         set::className('flex flex-nowrap justify-between mb-2'),
         div
         (
-            set('class', 'panel-title'),
+            setClass('panel-title nowrap overflow-hidden'),
             $execution->name . $lang->execution->burn,
+            set::title($execution->name . $lang->execution->burn),
             isset($execution->delay) ? label
             (
                 setClass('danger-pale ring-danger ml-1'),
                 $lang->execution->delayed
-            ) : null,
+            ) : null
         ),
         common::hasPriv('execution', 'burn') ? btn
         (
@@ -111,7 +112,7 @@ div
                             'width' => 3,
                             'color' => '#F1F1F1',
                         )
-                    ),
+                    )
                 ),
                 array
                 (
@@ -137,7 +138,7 @@ div
                             'borderColor' => '#006AF1',
                             'borderWidth' => 2
                         )
-                    ),
+                    )
                 ),
                 array
                 (
@@ -162,10 +163,10 @@ div
                             'borderColor' => '#F00',
                             'borderWidth' => 2
                         )
-                    ),
-                ),
+                    )
+                )
             )
-        ),
+        )
     )->size('100%', '150%') : null
 );
 

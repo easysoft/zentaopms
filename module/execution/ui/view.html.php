@@ -231,7 +231,7 @@ div
                         $statData->bugCount
                     ),
                     $lang->bug->common
-                ) : null,
+                ) : null
             )
         ),
         div
@@ -248,6 +248,7 @@ div
                 div
                 (
                     setClass('article-h2 ml-2 clip'),
+                    set::title($execution->name),
                     $execution->name
                 ),
                 !empty($config->setCode) ? label
@@ -271,7 +272,7 @@ div
                 ),
                 span
                 (
-                    setClass('ml-2 flex-none'),
+                    setClass('ml-2 flex-none mb-1'),
                     $lang->execution->kanbanAclList[$execution->acl],
                     icon
                     (
@@ -280,9 +281,9 @@ div
                         set('data-placement', 'right'),
                         set('data-type', 'white'),
                         set('data-class-name', 'text-gray border border-light'),
-                        setClass('ml-2 mt-2 text-gray'),
+                        setClass('ml-2 mt-2 text-gray')
                     )
-                ),
+                )
             ),
             div
             (
@@ -300,18 +301,18 @@ div
                     (
                         setClass('clip'),
                         set::href($this->createLink('project', 'index', "projectID={$execution->project}")),
-                        $execution->projectInfo->name,
+                        $execution->projectInfo->name
                     ) : span
                     (
                         setClass('clip w-full'),
                         $execution->projectInfo->name
-                    ),
-                ),
+                    )
+                )
             ),
             div
             (
                 set::className('detail-content mt-4'),
-                html($execution->desc),
+                html($execution->desc)
             ),
         ),
     ),
@@ -322,8 +323,9 @@ div
         (
             div
             (
-                set('class', 'panel-title'),
-                $execution->name . $lang->execution->CFD,
+                setClass('panel-title nowrap overflow-hidden'),
+                set::title($execution->name . $lang->execution->CFD),
+                $execution->name . $lang->execution->CFD
             )
         ) : null,
         $isKanban ? to::headingActions
@@ -359,7 +361,7 @@ foreach(array('PM', 'PO', 'QD', 'RD') as $field)
                 setClass('primary-outline'),
                 set::size('36'),
                 set::text($user->realname),
-                set::src($user->avatar),
+                set::src($user->avatar)
             ),
             span
             (
@@ -370,7 +372,7 @@ foreach(array('PM', 'PO', 'QD', 'RD') as $field)
             (
                 setClass('text-gray'),
                 $lang->execution->$field
-            ),
+            )
         );
     }
 
@@ -392,7 +394,7 @@ foreach($teamMembers as $teamMember)
         (
             set::size('36'),
             set::text($user->realname),
-            set::src($user->avatar),
+            set::src($user->avatar)
         ),
         span
         (
@@ -403,7 +405,7 @@ foreach($teamMembers as $teamMember)
         (
             setClass('text-gray'),
             $lang->execution->member
-        ),
+        )
     );
     $memberCount ++;
 }
@@ -420,7 +422,7 @@ if(common::hasPriv('execution', 'manageMembers'))
             set::size('36'),
             set::foreColor('var(--color-primary-500-rgb)'),
             set::background('var(--menu-active-bg)'),
-            icon('plus'),
+            icon('plus')
         ),
         $lang->project->manage
     );
@@ -462,7 +464,7 @@ if($canBeChanged && common::hasPriv('doc', 'createLib'))
             span($lang->doc->createLib),
             set::href(createLink('doc', 'createLib', "type=execution&objectID={$execution->id}")),
             set('data-toggle', 'modal'),
-            set('data-app', $app->tab),
+            set('data-app', $app->tab)
         )
     );
 }
@@ -501,7 +503,7 @@ div
                                     set::icon('link text-primary'),
                                     set::url(createLink('execution', 'manageproducts', "projectID={$execution->id}")),
                                     $lang->more
-                                ) : null,
+                                ) : null
                             )
                         ) : null,
                         $features['plan'] ? h::th
@@ -538,9 +540,9 @@ div
                                     set::trailingIcon('caret-right pb-0.5'),
                                     set::url(createLink('execution', 'team', "executionID={$execution->id}")),
                                     $lang->more
-                                ) : null,
+                                ) : null
                             )
-                        ),
+                        )
                     )
                 ),
                 h::tbody
@@ -552,7 +554,7 @@ div
                             div
                             (
                                 setClass('flex flex-wrap member-list pt-2'),
-                                $membersDom,
+                                $membersDom
                             )
                         )
                     )
@@ -572,9 +574,9 @@ div
                             div
                             (
                                 setClass('flex items-center justify-between'),
-                                span($lang->execution->DurationStats),
+                                span($lang->execution->DurationStats)
                             )
-                        ),
+                        )
                     )
                 ),
                 h::tbody
@@ -592,7 +594,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->begin,
+                                        $lang->execution->begin
                                     ),
                                     span
                                     (
@@ -606,7 +608,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->end,
+                                        $lang->execution->end
                                     ),
                                     span
                                     (
@@ -620,7 +622,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->realBeganAB,
+                                        $lang->execution->realBeganAB
                                     ),
                                     span
                                     (
@@ -634,14 +636,14 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->realEndAB,
+                                        $lang->execution->realEndAB
                                     ),
                                     span
                                     (
                                         setClass('ml-2'),
                                         helper::isZeroDate($execution->realEnd) ? '' : $execution->realEnd
                                     )
-                                ),
+                                )
                             )
                         )
                     )
@@ -659,9 +661,9 @@ div
                             div
                             (
                                 setClass('flex items-center justify-between'),
-                                span($lang->execution->lblStats),
+                                span($lang->execution->lblStats)
                             )
-                        ),
+                        )
                     )
                 ),
                 h::tbody
@@ -679,7 +681,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->estimateHours,
+                                        $lang->execution->estimateHours
                                     ),
                                     span
                                     (
@@ -693,7 +695,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->consumedHours,
+                                        $lang->execution->consumedHours
                                     ),
                                     span
                                     (
@@ -707,7 +709,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->leftHours,
+                                        $lang->execution->leftHours
                                     ),
                                     span
                                     (
@@ -721,7 +723,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->totalDays,
+                                        $lang->execution->totalDays
                                     ),
                                     span
                                     (
@@ -735,14 +737,14 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->totalHours,
+                                        $lang->execution->totalHours
                                     ),
                                     span
                                     (
                                         setClass('ml-2'),
                                         $execution->totalHours . $lang->execution->workHourUnit
                                     )
-                                ),
+                                )
                             )
                         )
                     )
@@ -769,9 +771,9 @@ div
                                     set::trailingIcon('caret-right pb-0.5'),
                                     set::url(createLink('execution', 'doc', "executionID={$execution->id}")),
                                     $lang->more
-                                ) : null,
+                                ) : null
                             )
-                        ),
+                        )
                     )
                 ),
                 h::tbody
@@ -783,12 +785,12 @@ div
                             div
                             (
                                 setClass('flex flex-nowrap pt-2'),
-                                $docLibDom,
+                                $docLibDom
                             )
                         )
                     )
                 )
-            ) : null,
+            ) : null
         ),
     ) : null,
     div
@@ -801,7 +803,7 @@ div
                 div
                 (
                     set('class', 'panel-title'),
-                    $lang->execution->latestDynamic,
+                    $lang->execution->latestDynamic
                 )
             ),
             to::headingActions
@@ -825,8 +827,8 @@ div
                 set::commentUrl(createLink('action', 'comment', array('objectType' => 'execution', 'objectID' => $execution->id))),
                 set::bodyClass('h-72 overflow-y-auto')
             )
-        ),
-    ),
+        )
+    )
 );
 
 div
