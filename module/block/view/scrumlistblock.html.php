@@ -56,13 +56,13 @@
           <span class="status-project status-<?php echo $execution->status?>" title='<?php echo $statusName;?>'><?php echo $statusName;?></span>
           <?php endif;?>
         </td>
-        <td class="c-hours" title="<?php echo $execution->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalEstimate . $lang->execution->workHourUnit;?></td>
-        <td class="c-hours" title="<?php echo $execution->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalConsumed . $lang->execution->workHourUnit;?></td>
-        <td class="c-hours" title="<?php echo $execution->hours->totalLeft     . ' ' . $lang->execution->workHour;?>"><?php echo $execution->hours->totalLeft     . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours" title="<?php echo $execution->estimate . ' ' . $lang->execution->workHour;?>"><?php echo $execution->estimate . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours" title="<?php echo $execution->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $execution->consumed . $lang->execution->workHourUnit;?></td>
+        <td class="c-hours" title="<?php echo $execution->left     . ' ' . $lang->execution->workHour;?>"><?php echo $execution->left     . $lang->execution->workHourUnit;?></td>
         <?php endif;?>
         <td class="c-progress">
-          <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($execution->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-            <div class='progress-info'><?php echo round($execution->hours->progress);?></div>
+          <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($execution->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+            <div class='progress-info'><?php echo round($execution->progress);?></div>
           </div>
         </td>
         <?php if($longBlock):?>

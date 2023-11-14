@@ -42,10 +42,10 @@
         <?php $executionName = zget($executions, $product->id, '');?>
         <td class='c-name c-execution text-left' title='<?php echo $executionName;?>'><?php echo $executionName;?></td>
         <?php endif;?>
-        <td class="c-num"><?php echo $product->plans?></td>
-        <td class="c-num"><?php echo $product->releases?></td>
-        <td class="c-num"><?php echo $product->stories['active']?></td>
-        <td class="c-num"><?php echo $product->unResolved?></td>
+        <td class="c-num"><?php echo $product->plans;?></td>
+        <td class="c-num"><?php echo $product->releases;?></td>
+        <td class="c-num"><?php echo $product->activeStories;?></td>
+        <td class="c-num"><?php echo $product->unresolvedBugs;?></td>
       </tr> 
       <?php endforeach;?>
     </tbody>
