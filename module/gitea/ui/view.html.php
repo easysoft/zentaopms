@@ -18,7 +18,7 @@ detailHeader
         entityLabel(
             set(array('entityID' => $gitea->id, 'level' => 1, 'text' => $gitea->name))
         )
-    ),
+    )
 );
 
 detailBody
@@ -30,9 +30,9 @@ detailBody
             set::title($lang->gitea->url),
             set::content("<a href='{$gitea->url}' target='_blank'>{$gitea->url}</a>"),
             set::useHtml(true)
-        ),
+        )
     ),
-    history(),
+    history()
 );
 
 render();

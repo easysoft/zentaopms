@@ -22,7 +22,7 @@ formPanel
         (
             set::name('name'),
             set::label($lang->gitea->name),
-            set::value($gitea->name),
+            set::value($gitea->name)
         )
     ),
     formRow
@@ -31,7 +31,7 @@ formPanel
         (
             set::name('url'),
             set::label($lang->gitea->url),
-            set::value($gitea->url),
+            set::value($gitea->url)
         )
     ),
     formRow
@@ -40,7 +40,7 @@ formPanel
         (
             set::name('token'),
             set::label($lang->gitea->token),
-            set::value($gitea->token),
+            set::value($gitea->token)
         )
-    ),
+    )
 );
