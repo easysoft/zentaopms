@@ -20,7 +20,7 @@ class docMenu extends wg
         'spaceType?: string',
         'objectType?: string',
         'objectID?: int=0',
-        'hover?: bool=true',
+        'hover?: bool=true'
     );
 
     public static function getPageCSS(): string|false
@@ -193,7 +193,7 @@ class docMenu extends wg
                 $items[] = array(
                     'text'  => $treeTitle,
                     'icon'  => $treeIcon,
-                    'class' => 'project-tree-title ' . ($index > 0 ? 'border-t mt-2 pt-2' : ''),
+                    'class' => 'project-tree-title ' . ($index > 0 ? 'border-t mt-2 pt-2' : '')
                 );
 
                 $items = array_merge($items, $this->buildMenuTree($modules, $this->libID));
@@ -218,7 +218,7 @@ class docMenu extends wg
                 'type'      => 'dropdown',
                 'dropdown'  => array(
                     'placement' => 'bottom-end',
-                    'items'     => array(),
+                    'items'     => array()
                 )
             );
 
@@ -234,7 +234,7 @@ class docMenu extends wg
                     'text'   => $version->version,
                     'hint'   => $version->version,
                     'url'    => $this->buildLink($item, $version->id),
-                    'active' => $version->id == $this->release,
+                    'active' => $version->id == $this->release
                 );
             }
         }
@@ -252,7 +252,7 @@ class docMenu extends wg
                     'caret'    => false,
                     'dropdown' => array(
                         'placement' => 'bottom-end',
-                        'items'     => $actions,
+                        'items'     => $actions
                     )
                 );
             }
@@ -288,7 +288,7 @@ class docMenu extends wg
                     'icon'        => 'edit',
                     'text'        => $this->lang->doc->libDropdown['editLib'],
                     'data-toggle' => 'modal',
-                    'data-url'    => createlink($moduleName, 'editLib', "libID={$itemID}"),
+                    'data-url'    => createlink($moduleName, 'editLib', "libID={$itemID}")
                 );
             }
 
@@ -300,7 +300,7 @@ class docMenu extends wg
                     'text'         => $this->lang->doc->libDropdown['deleteLib'],
                     'innerClass'   => 'ajax-submit',
                     'data-url'     => createLink($moduleName, 'deleteLib', "libID={$itemID}"),
-                    'data-confirm' => $this->lang->{$moduleName}->confirmDeleteLib,
+                    'data-confirm' => $this->lang->{$moduleName}->confirmDeleteLib
                 );
             }
         }
@@ -331,7 +331,7 @@ class docMenu extends wg
                     'text' => $this->lang->doc->libDropdown['editModule'],
                     'link' => '',
                     'data-toggle' => 'modal',
-                    'data-url'    => createlink($moduleName, 'editCatalog', "moduleID={$item->id}&type=" . ($this->rawModule == 'api' ? 'api' : 'doc')),
+                    'data-url'    => createlink($moduleName, 'editCatalog', "moduleID={$item->id}&type=" . ($this->rawModule == 'api' ? 'api' : 'doc'))
                 );
             }
 
@@ -343,7 +343,7 @@ class docMenu extends wg
                     'text'         => $this->lang->doc->libDropdown['delModule'],
                     'innerClass'   => 'ajax-submit',
                     'data-url'     => createLink($moduleName, 'deleteCatalog', "moduleID={$item->id}"),
-                    'data-confirm' => $this->lang->doc->confirmDeleteModule,
+                    'data-confirm' => $this->lang->doc->confirmDeleteModule
                 );
             }
         }
@@ -414,7 +414,7 @@ class docMenu extends wg
                         $settingText
                     )
                 )
-                : null,
+                : null
         );
     }
 
@@ -432,7 +432,7 @@ class docMenu extends wg
                     set::id('docDropmenu'),
                     set::menuID('docDropmenuMenu'),
                     set::text($title),
-                    set::url($menuLink),
+                    set::url($menuLink)
                 ) : null,
                 div
                 (
@@ -445,7 +445,7 @@ class docMenu extends wg
                             set::title($title),
                             setClass('module-title text-lg font-semibold'),
                             html($title)
-                        ),
+                        )
                     ) : null,
                     h::main
                     (
@@ -454,7 +454,7 @@ class docMenu extends wg
                         zui::tree(set::_tag('ul'), $treeProps)
                     ),
                     $this->buildBtns()
-                ),
+                )
         );
     }
 }
