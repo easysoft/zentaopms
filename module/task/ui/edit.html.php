@@ -69,9 +69,9 @@ detailHeader
             set::entityID($task->id),
             set::level(1),
             set::text($task->name),
-            set::reverse(true),
+            set::reverse(true)
         )
-    ),
+    )
 );
 
 detailBody
@@ -90,8 +90,8 @@ detailBody
                 set::placeholder($lang->task->name),
                 set::control('input'),
                 set::required(true),
-                set::autofocus(true),
-            ),
+                set::autofocus(true)
+            )
         ),
         section
         (
@@ -115,22 +115,16 @@ detailBody
                     set::value($task->story),
                     set::items($storyOptions)
                 )
-            ),
+            )
         ),
         section
         (
             set::title($lang->files),
             upload()
         ),
-        formHidden('lastEditedDate', helper::isZeroDate($task->lastEditedDate) ? '' : $task->lastEditedDate),
+        formHidden('lastEditedDate', helper::isZeroDate($task->lastEditedDate) ? '' : $task->lastEditedDate)
     ),
-    history
-    (
-        set::actions($actions),
-        set::users($users),
-        set::methodName($methodName),
-        set::commentBtn(true)
-    ),
+    history(),
     detailSide
     (
         tableData
@@ -145,7 +139,7 @@ detailBody
                     set::required(true),
                     set::value($task->execution),
                     set::items($executionOptions),
-                    on::change('loadAll(this.value)'),
+                    on::change('loadAll(this.value)')
                 )
             ),
             item
@@ -173,7 +167,7 @@ detailBody
                             set::name('showAllModule'),
                             set::items(array('1' => $lang->all)),
                             set::value($showAllModule ? '1' : ''),
-                            set::inline(true),
+                            set::inline(true)
                         )
                     ),
                 )
@@ -227,7 +221,7 @@ detailBody
                             set::value($task->assignedTo),
                             set::items($assignedToOptions),
                             setClass('w-full'),
-                            !empty($task->team) && $task->mode == 'linear' ? set::disabled(true) : null,
+                            !empty($task->team) && $task->mode == 'linear' ? set::disabled(true) : null
                         )
                     ),
                     div
@@ -238,7 +232,7 @@ detailBody
                             'text' => $lang->task->team,
                             'class' => "input-group-btn team-group $hiddenTeam",
                             'url' => '#modalTeam',
-                            'data-toggle' => 'modal',
+                            'data-toggle' => 'modal'
                         )))
                     )
                 )
@@ -307,7 +301,7 @@ detailBody
                         ),
                     )
                 )
-            ),
+            )
         ),
         modalTrigger
         (
@@ -345,7 +339,7 @@ detailBody
                 datePicker
                 (
                     set::name('estStarted'),
-                    helper::isZeroDate($task->estStarted) ? null : set::value($task->estStarted),
+                    helper::isZeroDate($task->estStarted) ? null : set::value($task->estStarted)
                 )
             ),
             item
@@ -354,7 +348,7 @@ detailBody
                 datePicker
                 (
                     set::name('deadline'),
-                    helper::isZeroDate($task->deadline) ? null : set::value($task->deadline),
+                    helper::isZeroDate($task->deadline) ? null : set::value($task->deadline)
                 )
             ),
             item
@@ -421,7 +415,7 @@ detailBody
                         )
                     )
                 )
-            ),
+            )
         ),
         tableData
         (
@@ -432,7 +426,7 @@ detailBody
                 datePicker
                 (
                     set::name('realStarted'),
-                    set::value(helper::isZeroDate($task->realStarted) ? '' : $task->realStarted),
+                    set::value(helper::isZeroDate($task->realStarted) ? '' : $task->realStarted)
                 )
             ),
             item
@@ -452,8 +446,8 @@ detailBody
                 datePicker
                 (
                     set::name('finishedDate'),
-                    set::value(helper::isZeroDate($task->finishedDate) ? '' : $task->finishedDate),
-                ),
+                    set::value(helper::isZeroDate($task->finishedDate) ? '' : $task->finishedDate)
+                )
             ),
             item
             (
@@ -472,7 +466,7 @@ detailBody
                 datePicker
                 (
                     set::name('canceledDate'),
-                    set::value(helper::isZeroDate($task->canceledDate) ? '' : $task->canceledDate),
+                    set::value(helper::isZeroDate($task->canceledDate) ? '' : $task->canceledDate)
                 )
             ),
             item
@@ -503,9 +497,9 @@ detailBody
                 datePicker
                 (
                     set::name('closedDate'),
-                    set::value(helper::isZeroDate($task->closedDate) ? '' : $task->closedDate),
+                    set::value(helper::isZeroDate($task->closedDate) ? '' : $task->closedDate)
                 )
-            ),
+            )
         )
     )
 );
