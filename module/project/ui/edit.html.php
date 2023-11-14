@@ -77,9 +77,9 @@ if($linkedProducts)
                             set::value($product->id),
                             set::items($allProducts),
                             set::last($product->id),
-                            $hasBranch ? set::lastBranch(implode(',', $product->branches)) : null,
+                            $hasBranch ? set::lastBranch(implode(',', $product->branches)) : null
                         )
-                    ),
+                    )
                 )
             ),
             formGroup
@@ -94,9 +94,9 @@ if($linkedProducts)
                         set::name("branch[$i][]"),
                         set::multiple(true),
                         set::items($branches),
-                        set::value(implode(',', $product->branches)),
+                        set::value(implode(',', $product->branches))
                     )
-                ),
+                )
             ),
             formGroup
             (
@@ -129,7 +129,7 @@ if($linkedProducts)
                         setClass('btn ghost removeLine'),
                         icon('trash'),
                         $i == 0 ? set::disabled(true) : null
-                    ),
+                    )
                 )
             )
         );
@@ -163,7 +163,7 @@ formPanel
             ),
             set::placement('bottom'),
             set::menu(array('style' => array('color' => 'var(--color-fore)'))),
-            set::items($projectModelItems),
+            set::items($projectModelItems)
         )
     )),
     on::click('.addLine', 'addNewLine'),
@@ -193,7 +193,7 @@ formPanel
                 set::value($project->parent),
                 set::disabled($disableParent),
                 set::items($programList),
-                set::required(true),
+                set::required(true)
             )
         ),
         $disableParent ? formHidden('parent', $project->parent) : null,
@@ -208,7 +208,7 @@ formPanel
                 (
                     'help',
                     set('data-toggle', 'tooltip'),
-                    set('id', 'programHover'),
+                    set('id', 'programHover')
                 )
             )
         ),
@@ -216,7 +216,7 @@ formPanel
         (
             set::name('model'),
             set::value($project->model),
-            set::control('hidden'),
+            set::control('hidden')
         )
     ),
     formGroup
@@ -225,7 +225,7 @@ formPanel
         set::name('name'),
         set::value($project->name),
         set::label($lang->project->name),
-        set::strong(true),
+        set::strong(true)
     ),
     (isset($config->setCode) && $config->setCode == 1) ? formGroup
     (
@@ -233,7 +233,7 @@ formPanel
         set::name('code'),
         set::value($project->code),
         set::label($lang->project->code),
-        set::strong(true),
+        set::strong(true)
     ) : null,
     (in_array($model, array('scrum', 'kanban'))) ? formGroup
     (
@@ -243,7 +243,7 @@ formPanel
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->project->multipleList),
         set::value($project->multiple),
-        set::disabled(true),
+        set::disabled(true)
     ) : null,
     formGroup
     (
@@ -276,7 +276,7 @@ formPanel
             set::name('PM'),
             set::value($project->PM),
             set::items($PMUsers)
-        ),
+        )
     ),
     formRow
     (
@@ -292,7 +292,7 @@ formPanel
                 'prefix'      => zget($lang->project->currencySymbol, $currency),
                 'prefixWidth' => 'icon',
                 'suffix'      => $lang->project->tenThousandYuan,
-                'suffixWidth' => 60,
+                'suffixWidth' => 60
             )),
             $parentProgram ? null : formHidden('budgetUnit', $config->project->defaultCurrency)
         ),
@@ -320,7 +320,7 @@ formPanel
                     set('id', 'begin'),
                     set::value($project->begin),
                     set::placeholder($lang->project->begin),
-                    set::required(true),
+                    set::required(true)
                 ),
                 $lang->project->to,
                 datePicker
@@ -330,8 +330,8 @@ formPanel
                     set::value($project->end),
                     set::placeholder($lang->project->end),
                     set::required(true),
-                    set::disabled($project->end == LONG_TIME),
-                ),
+                    set::disabled($project->end == LONG_TIME)
+                )
             )
         ),
         formGroup
@@ -345,7 +345,7 @@ formPanel
                 set::inline(true),
                 set::items($lang->project->endList)
             )
-        ),
+        )
     ),
     formRow
     (
@@ -361,7 +361,7 @@ formPanel
                 (
                     set::name('days'),
                     set::value($project->days),
-                    set::required(true),
+                    set::required(true)
                 ),
                 div
                 (
@@ -369,7 +369,7 @@ formPanel
                     $lang->project->day
                 )
             )
-        ),
+        )
     ),
     empty($linkedProducts) ?
     formRow
@@ -389,9 +389,9 @@ formPanel
                     picker
                     (
                         set::name('products[0]'),
-                        set::items($allProducts),
+                        set::items($allProducts)
                     )
-                ),
+                )
             )
         ),
         formGroup
@@ -404,9 +404,9 @@ formPanel
                 picker
                 (
                     set::name("branch[0][]"),
-                    set::items(array()),
+                    set::items(array())
                 )
-            ),
+            )
         ),
         formGroup
         (
@@ -418,7 +418,7 @@ formPanel
                 picker
                 (
                     set::name('plans[0][]'),
-                    set::items(array()),
+                    set::items(array())
                 )
             ),
             div
@@ -432,8 +432,8 @@ formPanel
                 btn
                 (
                     setClass('btn ghost removeLine'),
-                    icon('trash'),
-                ),
+                    icon('trash')
+                )
             )
         ),
     ) : $productGroup,
@@ -458,7 +458,7 @@ formPanel
                     setClass('project-stageBy-1'),
                     set::disabled($disableStageBy),
                     $lang->project->stageByList[1]
-                ),
+                )
             ),
             formHidden('stageBy', $project->stageBy)
         )
@@ -483,8 +483,8 @@ formPanel
             set::control('radioList'),
             set::items($lang->project->aclList),
             $programID ? set::items($lang->project->subAclList) : set::items($lang->project->aclList),
-            set::value($project->acl),
-        ),
+            set::value($project->acl)
+        )
     ),
     formGroup
     (
@@ -508,7 +508,7 @@ formPanel
         set::items($lang->project->authList),
         set::value('extend')
     ),
-    formHidden('multiple', $project->multiple),
+    formHidden('multiple', $project->multiple)
 );
 
 useData('title', $title);

@@ -19,7 +19,7 @@ formPanel
         set::label($lang->project->realEnd),
         set::name('realEnd'),
         set::control('date'),
-        set::value(!helper::isZeroDate($project->realEnd) ? $project->realEnd : helper::today()),
+        set::value(!helper::isZeroDate($project->realEnd) ? $project->realEnd : helper::today())
     ),
     formGroup
     (
@@ -27,9 +27,9 @@ formPanel
         editor
         (
             set::name('comment'),
-            set::rows('6'),
+            set::rows('6')
         )
-    ),
+    )
 );
 hr();
 history();

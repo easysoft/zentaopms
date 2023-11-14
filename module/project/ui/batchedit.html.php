@@ -30,14 +30,14 @@ formBatchPanel
         set::name('id'),
         set::label($lang->idAB),
         set::control('hidden'),
-        set::hidden(true),
+        set::hidden(true)
     ),
     formBatchItem
     (
         set::name('id'),
         set::label($lang->idAB),
         set::control('index'),
-        set::width('38px'),
+        set::width('38px')
     ),
     formBatchItem
     (
@@ -45,19 +45,19 @@ formBatchPanel
         set::label($lang->project->program),
         set::control('picker'),
         set::items($programs),
-        set::width('128px'),
+        set::width('128px')
     ),
     formBatchItem
     (
         set::name('name'),
         set::label($lang->project->name),
-        set::width('240px'),
+        set::width('240px')
     ),
     $setCode ? formBatchItem
     (
         set::name('code'),
         set::label($lang->project->code),
-        set::width('136px'),
+        set::width('136px')
     ) : null,
     formBatchItem
     (
@@ -67,21 +67,21 @@ formBatchPanel
         set::ditto(true),
         set::defaultDitto('off'),
         set::items($PMUsers),
-        set::width('136px'),
+        set::width('136px')
     ),
     formBatchItem
     (
         set::name('begin'),
         set::label($lang->project->begin),
         set::control('date'),
-        set::width('84px'),
+        set::width('84px')
     ),
     formBatchItem
     (
         set::name('end'),
         set::label($lang->project->end),
         set::control('date'),
-        set::width('84px'),
+        set::width('84px')
     ),
     formBatchItem
     (
@@ -89,8 +89,8 @@ formBatchPanel
         set::label($lang->project->acl),
         set::control('picker'),
         set::items(array()),
-        set::width('76px'),
-    ),
+        set::width('76px')
+    )
 );
 
 render();

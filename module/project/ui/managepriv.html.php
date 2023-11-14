@@ -21,16 +21,16 @@ div
             span
             (
                 icon('lock mr-2'),
-                $group->name,
-            ),
+                $group->name
+            )
         ),
         li
         (
             span
             (
                 set::className('text-md text-gray'),
-                html($lang->arrow),
-            ),
+                html($lang->arrow)
+            )
         ),
         li
         (
@@ -41,7 +41,7 @@ div
                 set::href(inlink('managepriv', "projectID=$projectID&type=byGroup&param=$groupID")),
                 span($lang->group->all)
             )
-        ),
+        )
     )
 );
 
@@ -64,7 +64,7 @@ $getActions = function($moduleActions, $moduleName, $groupPrivs)
                     set::name("actions[{$moduleName}][]"),
                     set::text($lang->$moduleName->$actionLabel),
                     set::value($action),
-                    set::checked(isset($groupPrivs[$moduleName][$action]) && $groupPrivs[$moduleName][$action] == $action),
+                    set::checked(isset($groupPrivs[$moduleName][$action]) && $groupPrivs[$moduleName][$action] == $action)
                 )
             );
     }
@@ -98,7 +98,7 @@ foreach($lang->resource as $moduleName => $moduleActions)
                     set::rootClass('check-all'),
                     setID("allChecker{$moduleName}"),
                     set::text($lang->$moduleName->common),
-                    set::checked($methodPrivs == $mehtodSelect),
+                    set::checked($methodPrivs == $mehtodSelect)
                 )
             ),
             isset($lang->$moduleName->menus) ? h::td
@@ -110,21 +110,21 @@ foreach($lang->resource as $moduleName => $moduleActions)
                     set::name("actions[{$moduleName}][]"),
                     set::text($lang->$moduleName->browse),
                     set::value('browse'),
-                    set::checked(isset($groupPrivs[$moduleName]) && $groupPrivs[$moduleName] == 'browse'),
+                    set::checked(isset($groupPrivs[$moduleName]) && $groupPrivs[$moduleName] == 'browse')
                 ),
                 icon('plus'),
                 checkList
                 (
                     set::items($lang->$moduleName->menus),
                     set::name("actions[{$moduleName}][]"),
-                    set::value(isset($groupPrivs[$moduleName]) ? implode(',', $groupPrivs[$moduleName]) : ''),
-                ),
+                    set::value(isset($groupPrivs[$moduleName]) ? implode(',', $groupPrivs[$moduleName]) : '')
+                )
             ) : null,
             h::td
             (
                 set('id', $moduleName),
                 set('colspan', !empty($lang->$moduleName->menus) ? 1 : 2),
-                $getActions($moduleActions, $moduleName, $groupPrivs),
+                $getActions($moduleActions, $moduleName, $groupPrivs)
             )
         );
 
@@ -169,7 +169,7 @@ panel
                         set::rootClass('check-all'),
                         setID('allChecker'),
                         set::text($lang->selectAll),
-                        set::checked($modulePrivs == $moduleSelect),
+                        set::checked($modulePrivs == $moduleSelect)
                     )
                 ),
                 h::td
@@ -179,9 +179,9 @@ panel
                     toolbar
                     (
                         btn(set(array('text' => $lang->save, 'btnType' => 'submit', 'type' => 'primary', 'class' => 'mx-6'))),
-                        btn(set(array('text' => $lang->goback, 'url' => createLink('project', 'group', "projectID={$projectID}"), 'back' => true))),
+                        btn(set(array('text' => $lang->goback, 'url' => createLink('project', 'group', "projectID={$projectID}"), 'back' => true)))
                     ),
-                    formHidden('noChecked', 1),
+                    formHidden('noChecked', 1)
                 )
             )
         )

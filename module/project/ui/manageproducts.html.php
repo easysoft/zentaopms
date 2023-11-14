@@ -44,7 +44,7 @@ if($config->systemMode == 'ALM')
                     set::multiple(true),
                     set::items($otherProducts)
                 )
-            ),
+            )
         )
 
     );
@@ -135,7 +135,7 @@ foreach($unlinkedProducts as $productID => $productName)
         (
             set::name("products[{$index}]"),
             set::text($productName),
-            set::value($productID),
+            set::value($productID)
         ),
         isset($branchGroups[$productID]) ? picker
         (

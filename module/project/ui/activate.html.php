@@ -25,15 +25,15 @@ formPanel
                 (
                     set::control('date'),
                     set::name('begin'),
-                    set::value($newBegin),
+                    set::value($newBegin)
                 ),
                 $lang->execution->to,
                 input
                 (
                     set::control('date'),
                     set::name('end'),
-                    set::value($newEnd),
-                ),
+                    set::value($newEnd)
+                )
             )
         ),
         formGroup
@@ -44,9 +44,9 @@ formPanel
                 set::name('readjustTask'),
                 set::text($lang->execution->readjustTask),
                 set::value(1),
-                set::rootClass('ml-4'),
+                set::rootClass('ml-4')
             )
-        ),
+        )
     ),
     formGroup
     (
@@ -54,9 +54,9 @@ formPanel
         editor
         (
             set::name('comment'),
-            set::rows('6'),
-        ),
-    ),
+            set::rows('6')
+        )
+    )
 );
 hr();
 history();

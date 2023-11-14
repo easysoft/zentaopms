@@ -90,7 +90,7 @@ featureBar
             set::name('showTask'),
             set::checked($this->cookie->showTask ? 'checked' : ''),
             set::text($lang->programplan->stageCustom->task),
-            set::rootClass('ml-4'),
+            set::rootClass('ml-4')
         )
     )
 );
@@ -105,14 +105,14 @@ toolbar
         'text'        => $lang->programplan->exporting,
         'class'       => "ghost export",
         'data-toggle' => "modal",
-        'url'         => createLink('execution', 'export', "status={$status}&productID={$productID}&orderBy={$orderBy}&from=project"),
+        'url'         => createLink('execution', 'export', "status={$status}&productID={$productID}&orderBy={$orderBy}&from=project")
     ))) : null,
     hasPriv('execution', 'create') ? item(set(array
     (
         'icon'  => 'plus',
         'text'  => $isStage ? $lang->programplan->create : $lang->execution->create,
         'class' => "primary create-execution-btn",
-        'url'   => $createLink,
+        'url'   => $createLink
     ))) : null
 );
 
@@ -131,7 +131,7 @@ dtable
         usePager
         (
             array('linkCreator' => helper::createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}"))
-        ),
+        )
     ),
     set::emptyTip($lang->execution->noExecution),
     set::createTip($isStage ? $lang->programplan->create : $lang->execution->create),

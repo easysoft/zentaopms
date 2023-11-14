@@ -23,7 +23,7 @@ foreach($teamMembers as $member)
 featureBar
 (
     set::current('all'),
-    set::linkParams("projectID={$projectID}"),
+    set::linkParams("projectID={$projectID}")
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -36,7 +36,7 @@ if($canManageMembers) $manageMembersItem = array('icon' => 'persons', 'class' =>
 
 toolbar
 (
-    $canManageMembers ? item(set($manageMembersItem)) : null,
+    $canManageMembers ? item(set($manageMembersItem)) : null
 );
 
 jsVar('confirmUnlinkMember', $lang->project->confirmUnlinkMember);

@@ -20,8 +20,8 @@ if($project->hasProduct)
             set::name('product'),
             set::value($productID),
             set::items($products),
-            on::change('changeProduct'),
-        ),
+            on::change('changeProduct')
+        )
     );
 }
 /* zin: Define the set::module('projectBuild') feature bar on main menu. */
@@ -32,7 +32,7 @@ featureBar
     set::module('project'),
     set::method('build'),
     $changeProductBox,
-    li(searchToggle(set::module('projectBuild'))),
+    li(searchToggle(set::module('projectBuild')))
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -40,7 +40,7 @@ $canCreateBuild = hasPriv('projectbuild', 'create') && common::canModify('projec
 if($canCreateBuild) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->build->create, 'url' => $this->createLink('projectbuild', 'create', "projectID={$project->id}"));
 toolbar
 (
-    !empty($createItem) ? item(set($createItem)) : null,
+    !empty($createItem) ? item(set($createItem)) : null
 );
 
 jsVar('projectID', $project->id);
@@ -62,8 +62,8 @@ dtable
     set::footPager(
         usePager
         (
-            array('linkCreator' => helper::createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage),
-        ),
+            array('linkCreator' => helper::createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage)
+        )
     ),
     set::emptyTip($lang->build->noBuild),
     set::createTip($lang->build->create),

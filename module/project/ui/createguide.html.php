@@ -63,7 +63,7 @@ div
             setClass('border text-gray text-center'),
             $lang->project->moreModelTitle
         )
-    ),
+    )
 );
 
 render();

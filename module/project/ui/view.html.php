@@ -143,7 +143,7 @@ if(!empty($project->PM))
                 (
                     setClass('text-gray'),
                     $lang->project->PM
-                ),
+                )
             );
     }
 
@@ -175,7 +175,7 @@ foreach($teamMembers as $teamMember)
             (
                 setClass('text-gray'),
                 $lang->project->member
-            ),
+            )
         );
     $memberCount ++;
 }
@@ -295,7 +295,7 @@ div
                         setClass('text-gray'),
                         $lang->bug->common
                     )
-                ),
+                )
             )
         ),
         div
@@ -362,7 +362,7 @@ div
                 (
                     setClass('clip text-secondary programBox'),
                     $programDom
-                ),
+                )
             ),
             div
             (
