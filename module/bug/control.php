@@ -610,8 +610,8 @@ class bug extends control
             {
                 /* 设置模块数据源。 */
                 /* Set module data source. */
-                $this->config->bug->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
-                $this->config->bug->datatable->fieldList['module']['dataSource']['params'] = 'bug';
+                $this->config->bug->dtable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
+                $this->config->bug->dtable->fieldList['module']['dataSource']['params'] = 'bug';
 
                 /* 如果导出执行的bug，设置数据源。 */
                 /* In execution, set data source. */
@@ -619,8 +619,8 @@ class bug extends control
                 {
                     $object    = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
                     $projectID = $object->type == 'project' ? $object->id : $object->parent;
-                    $this->config->bug->datatable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $projectID);
-                    $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
+                    $this->config->bug->dtable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $projectID);
+                    $this->config->bug->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
                 }
             }
 
