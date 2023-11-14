@@ -34,7 +34,7 @@ foreach($lang->misc->zentao as $label => $groupItems)
                 set('href', $link),
                 set('target', '_blank'),
                 set('class', ($groupItem == 'zentaotrain' || $groupItem == 'bizversion' ? 'text-danger' : '')),
-                $groupLabel,
+                $groupLabel
             )
         );
     }
@@ -66,7 +66,7 @@ h::table
             zui::width('177px'),
             img
             (
-                set('src', $config->webRoot . 'theme/default/images/main/' . $lang->logoImg),
+                set('src', $config->webRoot . 'theme/default/images/main/' . $lang->logoImg)
             ),
             h4
             (
@@ -79,9 +79,9 @@ h::table
             div
             (
                 set::className('flex flex-nowrap justify-start'),
-                $zentaoItems,
+                $zentaoItems
             )
-        ),
+        )
     ),
     h::tr
     (
