@@ -29,9 +29,9 @@ $formTitle = div
     (
         set::level(1),
         setClass('pl-2'),
-        set::text($story->title),
         set::entityID($story->id),
         set::reverse(true),
+        span(setID('storyTitle'), $story->title)
     )
 );
 
@@ -72,19 +72,23 @@ $formItems['title'] = formGroup
     set::label($fields['title']['title']),
     inputGroup
     (
-        input
+        inputControl
         (
-            set::name('title'),
-            set::value($fields['title']['default']),
-        ),
-        span
-        (
-            setClass('input-group-addon'),
-            colorPicker
+            input
             (
-                set::name('color'),
-                set::type('color'),
-                set::value($fields['color']['default']),
+                set::name('title'),
+                set::value($fields['title']['default'])
+            ),
+            set::suffixWidth('40'),
+            to::suffix
+            (
+                colorPicker
+                (
+                    set::name('color'),
+                    set::type('color'),
+                    set::value($fields['color']['default']),
+                    set::syncColor('#title, #storyTitle')
+                )
             )
         ),
         empty($story->twins) ? null : span
