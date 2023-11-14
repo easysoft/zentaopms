@@ -3516,7 +3516,7 @@ class storyModel extends model
 
         foreach($stories as $id)
         {
-            $requirement = $this->getByID($id);
+            $requirement = $this->getByID((int)$id);
             $data = new stdclass();
             $data->AType    = 'requirement';
             $data->BType    = 'story';

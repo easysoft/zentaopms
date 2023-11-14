@@ -61,6 +61,10 @@ window.renderCell = function(result, info)
         if(story.parent > 0) html += "<span class='label gray-pale rounded-xl clip'>" + (storyType == 'requirement' ? 'SR' : childrenAB) + "</span> ";
         if(html) result.unshift({html});
     }
+    if(info.col.name == 'status' && result)
+    {
+        if(info.row.data.URChanged == '1') result[0] = {html: "<span class='status-changed'>" + URChanged + "</span>"};
+    }
     return result;
 };
 
