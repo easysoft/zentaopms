@@ -2,9 +2,6 @@
 <script>
 $('#subNavbar li').not('[data-id=<?php echo $groupID;?>]').removeClass('active');
 </script>
-<?php if($this->config->edition != 'open'):?>
-<style>.hide-sidebar #sidebar{width: 0 !important}</style>
-<?php endif;?>
 <?php js::set('dimension', $dimension);?>
 <?php js::set('groupID', $groupID);?>
 

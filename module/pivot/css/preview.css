@@ -1,4 +1,5 @@
 #mainContent > .side-col.col-lg {width: 240px;}
+.hide-sidebar #sidebar{width: 0 !important;}
 .main-col .btn-toolbar {margin-bottom: 10px;}
 .main-position {position: relative;}
 .child-position {position: absolute; right: 0;}
