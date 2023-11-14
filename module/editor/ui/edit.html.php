@@ -39,7 +39,7 @@ formPanel
     (
         setClass('heading'),
         icon('edit'),
-        $filePath ? span(span(setClass('font-bold'), $lang->editor->filePath), h::code($filePath)) : null,
+        $filePath ? span(span(setClass('font-bold'), $lang->editor->filePath), h::code($filePath)) : null
     ),
     empty($showContent) ? null : div(p(setClass('font-bold'), $lang->editor->sourceFile), div(setID('showContentEditor'))),
     div(div(setID('fileContentEditor')), input(setID('fileContent'), set::name('fileContent'), set::type('hidden'))),
@@ -50,7 +50,7 @@ formPanel
         (
             set::prefix($lang->editor->fileName),
             input(set::name('fileName')),
-            set::suffix($fileSuffix),
+            set::suffix($fileSuffix)
         )
     ) : input(setID('fileName'), set::name('fileName'), set::type('hidden'), set::value(basename($filePath))),
     div
@@ -58,7 +58,7 @@ formPanel
         setClass('flex items-center form-actions'),
         btn(set('btnType', 'submit'), setClass('primary'), set::onclick('syncFileContent()'), $lang->save),
         ($action and $action != 'edit' and $action != 'newPage') ? checkbox(set::name('override'), set::value(1), set::text($lang->editor->isOverride)) : null
-    ),
+    )
 );
 
 render('pagebase');

@@ -44,19 +44,19 @@ div
         h::header
         (
             setClass('h-10 flex items-center pl-4 flex-none gap-3'),
-            span(setClass('text-lg font-semibold'), icon('list'), $lang->editor->moduleList),
+            span(setClass('text-lg font-semibold'), icon('list'), $lang->editor->moduleList)
         ),
-        ul(setID('moduleTree')),
+        ul(setID('moduleTree'))
     ),
     cell
     (
         set::width('350px'),
         setClass('module-col bg-white mr-2'),
-        h::iframe(set::name('extendWin'), setID('extendWin'), set::height('100%'), set::width('100%'), set::frameborder(0)),
+        h::iframe(set::name('extendWin'), setID('extendWin'), set::height('100%'), set::width('100%'), set::frameborder(0))
     ),
     cell
     (
         setClass('main-col main-content flex-1 bg-white'),
-        h::iframe(set::name('editWin'), setID('editWin'), set::height('100%'), set::width('100%'), set::frameborder(0)),
-    ),
+        h::iframe(set::name('editWin'), setID('editWin'), set::height('100%'), set::width('100%'), set::frameborder(0))
+    )
 );

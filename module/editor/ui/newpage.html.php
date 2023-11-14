@@ -20,7 +20,7 @@ formPanel
     to::heading
     (
         icon('plus'),
-        span(setClass('font-bold'), $lang->editor->newPage),
+        span(setClass('font-bold'), $lang->editor->newPage)
     ),
     set::actions(array('submit')),
     formGroup
@@ -28,15 +28,15 @@ formPanel
         set::style(array('align-items' => 'center')),
         set::label($lang->editor->filePath),
         set::control(false),
-        h::code($filePath),
+        h::code($filePath)
     ),
     formGroup
     (
         set::label($lang->editor->pageName),
         set::control('input'),
         set::name('fileName'),
-        set::placeholder($lang->editor->examplePHP),
-    ),
+        set::placeholder($lang->editor->examplePHP)
+    )
 );
 
 render('pagebase');
