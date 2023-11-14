@@ -40,16 +40,16 @@ formPanel
     set::customFields(true),
     formRow
     (
-        on::change('#product', 'loadProduct'),
-        on::change('#branch', 'loadBranch'),
+        on::change('[name=product]', 'loadProduct'),
+        on::change('[name=branch]', 'loadBranch'),
         formGroup
         (
             set::label($lang->story->product),
             set::width('1/2'),
             inputGroup
             (
-                picker(setID('product'), set::name('product'), set::value($fields['product']['default']), set::items($fields['product']['options'])),
-                isset($fields['branch']) && $type != 'story' ? picker(setID('branch'), set::name('branch'), set::items($fields['branch']['options']), set::value($fields['branch']['default'])) : null,
+                picker(set::name('product'), set::value($fields['product']['default']), set::items($fields['product']['options'])),
+                isset($fields['branch']) && $type != 'story' ? picker(set::name('branch'), set::items($fields['branch']['options']), set::value($fields['branch']['default'])) : null,
             ),
             set::required(true),
         ),
@@ -167,7 +167,7 @@ formPanel
                 span
                 (
                     set::id('planIdBox'),
-                    picker(setID('plan'), set::name('plan'), set::items($fields['plan']['options']), set::value($fields['plan']['default'])),
+                    picker(set::name('plan'), set::items($fields['plan']['options']), set::value($fields['plan']['default'])),
                 ),
                 empty($fields['plan']['options']) ? btn(set::url($this->createLink('productplan', 'create', "productID=$productID&branch=$branch")), set('data-toggle', 'modal'), set::title($lang->productplan->create), icon('plus')) : null,
                 empty($fields['plan']['options']) ? btn(setClass('refresh'), set::title($lang->refresh), set('onclick', "loadProductPlans($productID)"), icon('refresh')) : null,

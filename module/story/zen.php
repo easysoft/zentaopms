@@ -1072,9 +1072,10 @@ class storyZen extends story
     protected function getAssignMeBlockID(): int
     {
         if(!isonlybody()) return 0;
-        return (int)$this->dao->select('id')->from(TABLE_BLOCK)->where('block')->eq('assigntome')
+        return (int)$this->dao->select('id')->from(TABLE_BLOCK)->where('module')->eq('assigntome')
             ->andWhere('module')->eq('my')
             ->andWhere('account')->eq($this->app->user->account)
+            ->andWhere('vision')->eq($this->config->vision)
             ->orderBy('order_desc')
             ->limit(1)
             ->fetch('id');

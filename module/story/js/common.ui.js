@@ -26,7 +26,7 @@ window.customSubmit = function(e)
     if($this.prop('tagName') != 'BUTTON') $this = $this.closest('button');
 
     var storyStatus = 'active';
-    if(!$dataform.hasClass('form-batch')) storyStatus = !$('#reviewer').zui('picker').$.value || $('#needNotReview').prop('checked') ? 'active' : 'reviewing';
+    if(!$dataform.hasClass('form-batch')) storyStatus = !$('[name=reviewer]').val() || $('#needNotReview').prop('checked') ? 'active' : 'reviewing';
     if($this.attr('id') == 'saveDraftButton')
     {
         storyStatus = 'draft';
@@ -38,6 +38,7 @@ window.customSubmit = function(e)
 
     $.ajaxSubmit(
     {
+        headers: $this.closest('.modal').length > 0 ? {'X-Zui-Modal': 'modal'} : {},
         data: new FormData($dataform[0]),
         url: $dataform.attr('action'),
         onSuccess: function(result) {loadPage(result.load)},
@@ -111,10 +112,10 @@ window.toggleFeedback = function(obj)
 
 window.loadURS = function(allURS)
 {
-    var productID       = $('#product').zui('picker').$.state.value;
-    var branchID        = $('#branch').length == 0 ? 0 : $('#branch').zui('picker').$.state.value;
-    var moduleID        = typeof(allURS) == 'undefined' ? $('#module').zui('picker').$.state.value : 0;
-    var requirementList = $('#URS').zui('picker').$.state.value;
+    var productID       = $('[name=product]').val();
+    var branchID        = $('[name=branch]').length == 0 ? 0 : $('[name=#branch]').val();
+    var moduleID        = typeof(allURS) == 'undefined' ? $('[name=module]').val() : 0;
+    var requirementList = $('[name=URS]').val();
     requirementList     = requirementList ? encodeURIComponent(requirementList.join(',')) : '';
     if(typeof(branchID) == 'undefined') branchID = 0;
 
@@ -177,8 +178,8 @@ window.loadProductPlans = function(productID, branch)
 
 window.loadBranch = function()
 {
-    var branch    = $('#branch').val();
-    var productID = $('#product').val();
+    var branch    = $('[name=branch]').val();
+    var productID = $('[name=product]').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
     loadProductModules(productID, branch);

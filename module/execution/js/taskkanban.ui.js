@@ -137,14 +137,14 @@ window.buildColCardActions = function(col)
     let actions = [];
     if(col.type == 'backlog')
     {
-        if(priv.canCreateStory)      actions.push({text: storyLang.create, url:$.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID), 'data-toggle': 'modal'});
+        if(priv.canCreateStory)      actions.push({text: storyLang.create, url:$.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(priv.canBatchCreateStory) actions.push({text: executionLang.batchCreateStory, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(priv.canLinkStory)        actions.push({text: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(priv.canLinkStoryByPlan)  actions.push({text: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'data-toggle': 'modal'});
     }
     else if(col.type == 'unconfirmed')
     {
-        if(priv.canCreateBug) actions.push({text: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID), 'data-toggle': 'modal'});
+        if(priv.canCreateBug) actions.push({text: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(priv.canBatchCreateBug)
         {
             if(productNum > 1) actions.push({text: bugLang.batchCreate, url: '#batchCreateBug', 'data-toggle': 'modal', 'data-size': 'lg'});
