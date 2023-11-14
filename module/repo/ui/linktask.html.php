@@ -18,7 +18,7 @@ detailHeader
     to::prefix(''),
     to::title
     (
-        $lang->repo->linkTask,
+        $lang->repo->linkTask
     )
 );
 
@@ -49,7 +49,7 @@ dtable
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::sortLink(jsRaw('createSortLink')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

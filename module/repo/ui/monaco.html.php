@@ -63,10 +63,10 @@ div(
                 icon
                 (
                     'close',
-                    set::className('monaco-close'),
+                    set::className('monaco-close')
                 )
             ),
-            div(set::id('tab-' . $file)),
+            div(set::id('tab-' . $file))
         ),
         empty($monacoDropMenus) ? null : dropdown
         (
@@ -77,15 +77,15 @@ div(
             btn
             (
                 setClass('ghost text-black pull-right'),
-                set::icon('ellipsis-v rotate-90'),
+                set::icon('ellipsis-v rotate-90')
             ),
             set::items
             (
                 $monacoDropMenus
-            ),
+            )
         ),
         div(set::className('absolute top-0 left-0 z-20 arrow-left btn-left'), icon('chevron-left')),
-        div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right')),
+        div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right'))
     )
 );
 

@@ -41,7 +41,7 @@ $breadcrumbItems[] = h::a
 (
     set::href($this->repo->createLink('browse', "repoID=$repoID&branchID=&objectID=$objectID"), $repo->name, '', "data-app='{$app->tab}'"),
     set('data-app', $app->tab),
-    $repo->name,
+    $repo->name
 );
 
 $breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
@@ -58,7 +58,7 @@ foreach($paths as $pathName)
     (
         set::href($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath))),
         set('data-app', $app->tab),
-        trim($pathName, '/'),
+        trim($pathName, '/')
     );
 
     $breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
@@ -110,7 +110,7 @@ else
         setStyle('width', '160px'),
         set::name('oldRevision'),
         set::value($oldRevision),
-        set::placeholder($lang->repo->source),
+        set::placeholder($lang->repo->source)
     );
     $breadcrumbItems[] = span(setClass('label label-exchange mr-2'), icon('exchange'));
     $breadcrumbItems[] = input
@@ -119,7 +119,7 @@ else
         setStyle('width', '160px'),
         set::name('newRevision'),
         set::value($newRevision),
-        set::placeholder($lang->repo->target),
+        set::placeholder($lang->repo->target)
     );
     $breadcrumbItems[] = btn
     (
@@ -135,7 +135,7 @@ else
 (
     backBtn(set::icon('back'), setClass('bg-transparent diff-back-btn'), set::back('GLOBAL'), $lang->goback),
     item(set::type('divider')),
-    ...$breadcrumbItems,
+    ...$breadcrumbItems
 );
 
 if($diffs) include 'diffeditor.html.php';

@@ -29,7 +29,7 @@ $breadcrumbItems   = array();
 $breadcrumbItems[] = h::a
 (
     set::href($this->repo->createLink('log', "repoID=$repoID&objectID=$objectID")),
-    $repo->name,
+    $repo->name
 );
 $breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
 
@@ -42,7 +42,7 @@ foreach($paths as $pathName)
     $breadcrumbItems[] = h::a
     (
         set::href($this->repo->createLink('log', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($postPath))),
-        trim($pathName, '/'),
+        trim($pathName, '/')
     );
     $breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
 }
@@ -84,7 +84,7 @@ dtable
     set::footToolbar($footToolbar),
     set::footer(array('toolbar', 'flex', 'pager')),
     set::footPager(usePager('pager', 'noTotalCount')),
-    set::showToolbarOnChecked(false),
+    set::showToolbarOnChecked(false)
 );
 
 render();

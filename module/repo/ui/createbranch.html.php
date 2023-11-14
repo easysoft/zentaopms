@@ -48,7 +48,7 @@ formPanel
     (
         set::name('name'),
         set::label($lang->repo->branchName),
-        set::required(true),
+        set::required(true)
     ),
     set::actions(array('submit'))
 );
