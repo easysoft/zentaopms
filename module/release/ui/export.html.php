@@ -26,7 +26,7 @@ formPanel
         set::name('type'),
         set::value('all'),
         set::items($lang->release->exportTypeList),
-        set::required(true),
+        set::required(true)
     ),
     set::submitBtnText($lang->export),
     set::formClass('border-0')

@@ -20,7 +20,7 @@ formPanel
             set::width('1/2'),
             set::name('name'),
             set::label($lang->release->name),
-            set::value($release->name),
+            set::value($release->name)
         ),
         $app->tab != 'project' || empty($product->shadow) ? formGroup
         (
@@ -31,9 +31,9 @@ formPanel
                 set::rootClass('ml-4'),
                 set::value(1),
                 set::checked(!empty($release->marker)),
-                set::text($lang->release->marker),
-            ),
-        ) : '',
+                set::text($lang->release->marker)
+            )
+        ) : ''
     ),
     formRow
     (
@@ -47,9 +47,9 @@ formPanel
                 set::placeholder($lang->build->placeholder->multipleSelect),
                 set::items($builds),
                 set::value($release->build),
-                set::multiple(true),
-            ),
-        ),
+                set::multiple(true)
+            )
+        )
     ),
     formRow
     (
@@ -60,7 +60,7 @@ formPanel
             set::label($lang->release->date),
             set::value($release->date),
             set::control('date')
-        ),
+        )
     ),
     formRow
     (
@@ -70,8 +70,8 @@ formPanel
             set::name('status'),
             set::label($lang->release->status),
             set::value($release->status),
-            set::items($lang->release->statusList),
-        ),
+            set::items($lang->release->statusList)
+        )
     ),
     formGroup
     (
@@ -80,7 +80,7 @@ formPanel
         (
             set::name('desc'),
             html($release->desc),
-            set::rows('10'),
+            set::rows('10')
         )
     ),
     formGroup
@@ -91,7 +91,7 @@ formPanel
             set::name('mailto[]'),
             set::value($release->mailto),
             set::items($users),
-            set::multiple(true),
+            set::multiple(true)
         )
     ),
     formGroup
@@ -99,7 +99,7 @@ formPanel
         set::label($lang->release->files),
         upload()
     ),
-    formHidden('product', $release->product),
+    formHidden('product', $release->product)
 );
 
 /* ====== Render page ====== */

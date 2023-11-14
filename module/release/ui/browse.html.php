@@ -25,7 +25,7 @@ $canCreateRelease = hasPriv('release', 'create') && common::canModify('product',
 if($canCreateRelease) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->release->create, 'url' => $this->createLink('release', 'create', "productID={$product->id}&branch={$branch}"));
 toolbar
 (
-    !empty($createItem) ? item(set($createItem)) : null,
+    !empty($createItem) ? item(set($createItem)) : null
 );
 
 jsVar('markerTitle', $lang->release->marker);
@@ -46,12 +46,12 @@ dtable
     set::footPager(
         usePager
         (
-            array('linkCreator' => helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={$orderBy}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage),
-        ),
+            array('linkCreator' => helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={$orderBy}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage)
+        )
     ),
     set::emptyTip($lang->release->noRelease),
     set::createTip($lang->release->create),
-    set::createLink($canCreateRelease ? createLink('release', 'create', "productID={$product->id}&branch={$branch}") : ''),
+    set::createLink($canCreateRelease ? createLink('release', 'create', "productID={$product->id}&branch={$branch}") : '')
 );
 
 /* ====== Render page ====== */
