@@ -358,7 +358,8 @@ class screenModel extends model
      */
     public function getAxisRotateOption($chart, $component)
     {
-        $settings = json_decode($chart->settings[0]);
+        $settings = json_decode($chart->settings);
+        $setting  = $settings[0];
 
         $component->chartConfig->xAxis = new stdclass();
         $component->chartConfig->yAxis = new stdclass();
@@ -367,8 +368,8 @@ class screenModel extends model
 
         $component->chartConfig->xAxis->axisLabel->rotate = 0;
         $component->chartConfig->yAxis->axisLabel->rotate = 0;
-        if(isset($settings->rotateX) && $settings->rotateX == 'use') $component->chartConfig->xAxis->axisLabel->rotate = 30;
-        if(isset($settings->rotateY) && $settings->rotateY == 'use') $component->chartConfig->yAxis->axisLabel->rotate = 30;
+        if(isset($setting->rotateX) && $setting->rotateX == 'use') $component->chartConfig->xAxis->axisLabel->rotate = 30;
+        if(isset($setting->rotateY) && $setting->rotateY == 'use') $component->chartConfig->yAxis->axisLabel->rotate = 30;
 
         return $component;
     }
