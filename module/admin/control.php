@@ -32,6 +32,7 @@ class admin extends control
 
     /**
      * Index page.
+     *
      * @access public
      * @return void
      */
@@ -71,7 +72,7 @@ class admin extends control
      */
     public function ajaxSetZentaoData()
     {
-        if(helper::isIntranet()) return $this->send(array('result' => 'fail'));
+        if(helper::isIntranet()) return $this->send(array('result' => 'ignore'));
 
         $hasInternet = $this->admin->checkInternet();
 

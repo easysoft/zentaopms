@@ -39,10 +39,13 @@ $lang->admin->menuList->dev['name']  = $lang->admin->menuSetting['dev']['name'];
 $lang->admin->menuList->dev['desc']  = $lang->admin->menuSetting['dev']['desc'];
 $lang->admin->menuList->dev['order'] = 45;
 
-$lang->admin->menuList->convert['name']  = $lang->admin->menuSetting['convert']['name'];
-$lang->admin->menuList->convert['desc']  = $lang->admin->menuSetting['convert']['desc'];
-$lang->admin->menuList->convert['link']  = 'convert|convertjira';
-$lang->admin->menuList->convert['order'] = 50;
+if($config->db->driver == 'mysql')
+{
+    $lang->admin->menuList->convert['name']  = $lang->admin->menuSetting['convert']['name'];
+    $lang->admin->menuList->convert['desc']  = $lang->admin->menuSetting['convert']['desc'];
+    $lang->admin->menuList->convert['link']  = 'convert|convertjira';
+    $lang->admin->menuList->convert['order'] = 50;
+}
 
 $lang->admin->menuList->platform['name']  = $lang->admin->menuSetting['platform']['name'];
 $lang->admin->menuList->platform['desc']  = $lang->admin->menuSetting['platform']['desc'];
