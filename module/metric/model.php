@@ -802,22 +802,6 @@ class metricModel extends model
     }
 
     /**
-     * 将用户定义的度量文件从临时目录移动到系统目录中。
-     * Move custom calculator file to calc directory
-     *
-     * @param  object $metric
-     * @access public
-     * @return bool
-     */
-    public function moveCalcFile($metric)
-    {
-        $tmpCalc = $this->getCustomCalcFile($metric->code);
-        $newCalc = $this->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
-
-        return rename($tmpCalc, $newCalc);
-    }
-
-    /**
      * 创建SQL函数。
      * Create sql function.
      *
