@@ -1,0 +1,4 @@
+#main>.container {height: auto; min-height: 280px;}
+#dataform tr > th {width: 70px;}
+
+#dataform #group_chosen .chosen-drop .chosen-results {max-height: 140px;}

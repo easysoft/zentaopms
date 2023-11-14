@@ -1,0 +1,6 @@
+.form-actions .btn {margin-right: 5px;}
+.td-row {display: flex;}
+.td-row>div {flex: 1;}
+.error td {color: red;}
+.datatable{width: auto;}
+.table-panel {overflow: auto;}
