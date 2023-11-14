@@ -75,17 +75,24 @@ window.changeNeedNotReview = function(obj)
 
 window.changeReviewer = function()
 {
+    var $reviewer     = $('[name^="reviewer"]');
+    var reviewerCount = $reviewer.val().filter(Boolean).length;
     if(storyStatus == 'reviewing')
     {
-        if(!$('[name^="reviewer"]').val().filter(Boolean).length)
+        if(!reviewerCount)
         {
             zui.Modal.alert(reviewerNotEmpty);
-            $('[name^="reviewer"]').zui('picker').$.setValue(storyReviewers.join());
+            if(typeof(lastSeletedReviewer) == 'undefined') lastSeletedReviewer = storyReviewers.join();
+            $reviewer.zui('picker').$.setValue(lastSeletedReviewer);
+        }
+        else
+        {
+            lastSeletedReviewer = $reviewer.val();
         }
     }
     else
     {
-        if(!$('[name^="reviewer"]').val().filter(Boolean).length)
+        if(!reviewerCount)
         {
             $('#needNotReview').prop('checked', true);
             changeNeedNotReview($('#needNotReview'));
