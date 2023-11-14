@@ -95,7 +95,7 @@ $generateData = function() use ($lang, $title, $cols, $executions, $chartData, $
                 set::cols($cols),
                 set::data($executions),
                 set::emptyTip($lang->error->noData),
-                set::height(jsRaw('getHeight')),
+                set::height(jsRaw('getHeight'))
             )
         ),
         panel

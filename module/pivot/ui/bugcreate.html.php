@@ -28,7 +28,7 @@ $generateData = function() use ($lang, $title, $cols, $bugs, $products, $executi
                 $lang->pivot->bugOpenedDate,
                 datePicker(set(array('name' => 'begin', 'value' => $begin))),
                 $lang->pivot->to,
-                datePicker(set(array('name' => 'end', 'value' => $end))),
+                datePicker(set(array('name' => 'end', 'value' => $end)))
             ),
             inputGroup
             (
