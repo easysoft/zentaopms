@@ -41,7 +41,7 @@ foreach($tasks as $key => &$task)
     $i++;
     $task['id'] = $i;
     $task['name'] = $task['title'];
-    $task['url'] = helper::createLink($task['nav']['module'], $task['nav']['method'], isset($task['nav']['vars']) ? $task['nav']['vars'] : '', 'tutorial');
+    $task['url'] = helper::createLink($task['nav']['module'], $task['nav']['method'], isset($task['nav']['vars']) ? $task['nav']['vars'] : '');
     $tutorialTasks[$key] = $task;
 }
 
@@ -65,7 +65,7 @@ div
         (
             setID('iframePage'),
             set::name('iframePage'),
-            set::src(createLink('index', 'index', 't=tutorial')),
+            set::src(createLink('index', 'index')),
         )
     ),
     div(setID('taskModalBack')),
