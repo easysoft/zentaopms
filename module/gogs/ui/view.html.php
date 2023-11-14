@@ -18,7 +18,7 @@ detailHeader
         entityLabel(
             set(array('entityID' => $gogs->id, 'level' => 1, 'text' => $gogs->name))
         )
-    ),
+    )
 );
 
 detailBody
@@ -30,9 +30,9 @@ detailBody
             set::title($lang->gogs->url),
             set::content("<a href='{$gogs->url}' target='_blank'>{$gogs->url}</a>"),
             set::useHtml(true)
-        ),
+        )
     ),
-    history(),
+    history()
 );
 
 render();

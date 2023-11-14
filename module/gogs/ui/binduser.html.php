@@ -17,7 +17,7 @@ featureBar
 (
     to::leading(array(backBtn(set::icon('back'), set::className('secondary'), $lang->goback))),
     set::current($type),
-    set::link($this->createLink('gogs', 'binduser', "gogsID=$gogsID&type={key}")),
+    set::link($this->createLink('gogs', 'binduser', "gogsID=$gogsID&type={key}"))
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -55,9 +55,9 @@ form
                 array(
                     'text'    => $lang->goback,
                     'btnType' => 'info',
-                    'onClick' => jsRaw('() => {goBack()}'),
+                    'onClick' => jsRaw('() => {goBack()}')
                 )
             )
-        )),
+        ))
     )
 );

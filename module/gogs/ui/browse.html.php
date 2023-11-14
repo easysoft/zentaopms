@@ -23,7 +23,7 @@ $tableData = initTableData($gogsList, $config->gogs->dtable->fieldList, $this->g
 
 toolbar
 (
-    $canCreate ? item(set($createItem)) : null,
+    $canCreate ? item(set($createItem)) : null
 );
 
 jsVar('confirmDelete',    $lang->gogs->confirmDelete);
@@ -36,7 +36,7 @@ dtable
     set::sortLink(createLink('gogs', 'browse', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();
