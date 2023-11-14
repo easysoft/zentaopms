@@ -45,7 +45,7 @@ panel
             (
                 setClass('hidden'),
                 set::id('ossPassword'),
-                set::value($ossAccount->password)
+                set::value(zget($ossAccount, 'password', ''))
             ),
             btn
             (
@@ -61,7 +61,7 @@ panel
         item
         (
             set::name($lang->system->oss->accessKey),
-            $ossAccount->username
+            zget($ossAccount, 'username', '')
         ),
         item
         (
@@ -70,7 +70,7 @@ panel
             (
                 setClass('hidden'),
                 set::id('ossSK'),
-                set::value($ossAccount->password)
+                set::value(zget($ossAccount, 'password', ''))
             ),
             btn
             (
