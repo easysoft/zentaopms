@@ -20,7 +20,7 @@ detailHeader
         entityLabel(
             set(array('entityID' => $serverRoom->id, 'level' => 1, 'text' => $serverRoom->name))
         )
-    ),
+    )
 );
 
 detailBody
@@ -70,20 +70,20 @@ detailBody
                 (
                     set::name($lang->serverroom->createdDate),
                     $serverRoom->createdDate
-                ),
+                )
             )
-        ),
+        )
     ),
     history
     (
-        set::commentUrl(createLink('action', 'comment', array('objectType' => 'serverroom', 'objectID' => $serverRoom->id))),
+        set::commentUrl(createLink('action', 'comment', array('objectType' => 'serverroom', 'objectID' => $serverRoom->id)))
     ),
     floatToolbar
     (
         set::object($serverRoom),
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
         set::suffix($actions['suffixActions'])
-    ),
+    )
 );
 
 render();

@@ -23,7 +23,7 @@ formPanel
             set::width('600px'),
             set::name('name'),
             set::label($lang->serverroom->name),
-            set::value($serverRoom->name),
+            set::value($serverRoom->name)
         )
     ),
     formRow
@@ -33,7 +33,7 @@ formPanel
             set::width('600px'),
             set::name('bandwidth'),
             set::label($lang->serverroom->bandwidth),
-            set::value($serverRoom->bandwidth),
+            set::value($serverRoom->bandwidth)
         )
     ),
     formRow
@@ -83,5 +83,5 @@ formPanel
             set::items($users),
             set::value($serverRoom->owner)
         )
-    ),
+    )
 );
