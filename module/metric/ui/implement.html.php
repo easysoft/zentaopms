@@ -10,6 +10,10 @@ declare(strict_types=1);
  * @link        http://www.zentao.net
  */
 namespace zin;
+jsVar('metricId',     $metric->id);
+jsVar('code',         $metric->code);
+jsVar('verifyCustomMethods', $verifyCustom);
+jsVar('isVerify',     $isVerify);
 
 detailHeader
 (
@@ -32,30 +36,6 @@ detailHeader
         ),
     ),
 );
-
-$fnGenerateVerifyResult = function() use($verifyResult)
-{
-    if(empty($verifyResult)) return null;
-
-    $results = array();
-    foreach($verifyResult as $result)
-    {
-        $class = 'verify-sentence';
-        $class .= $result->result ? ' pass' : ' error';
-        $icon = $result->result ? 'check' : 'close';
-        $results[] = p
-        (
-            setClass($class),
-            $result->tip,
-            icon
-            (
-                $icon
-            ),
-        );
-    }
-
-    return $results;
-};
 
 $fnGenerateInstructions = function() use($lang)
 {
@@ -143,7 +123,6 @@ panel
         empty($result) ? div
         (
             setClass('verify-content'),
-            $fnGenerateVerifyResult(),
         ) : $fnGenerateDataDisplay(),
     ),
 
@@ -152,8 +131,9 @@ panel
     ([
         [
             'type' => 'secondary',
+            'class' => 'btn-verify',
             'text' => $lang->metric->verifyFile,
-            'url' => helper::createLink('metric', 'implement', "metricID={$metric->id}&isVerify=true")
+            'url' => helper::createLink('metric', 'implement', "metricID={$metric->id}")
         ],
         [
             'type' => 'primary',
@@ -162,7 +142,7 @@ panel
             'disabled' => empty($result),
             'url' => helper::createLink('metric', 'publish', "metricID={$metric->id}")
         ],
-    ]),
+    ])
 );
 
 render();
