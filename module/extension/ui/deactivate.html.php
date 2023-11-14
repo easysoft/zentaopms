@@ -24,18 +24,18 @@ div
         (
             'exclamation-sign',
             set::size('2x'),
-            setClass('text-warning mr-4'),
+            setClass('text-warning mr-4')
         ),
         div
         (
             setClass('article-h2 leading-8 mb-2'),
-            $title,
+            $title
         )
     ),
     $removeCommands ?  div
     (
         setClass('font-bold mb-2'),
-        $lang->extension->unremovedFiles,
+        $lang->extension->unremovedFiles
     ) : null,
     $removeCommands ?  div
     (

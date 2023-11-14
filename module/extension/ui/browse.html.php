@@ -62,7 +62,7 @@ foreach($extensions as $extension)
                 setClass('pull-right'),
                 btnGroup
                 (
-                    set::items($btnItems),
+                    set::items($btnItems)
                 )
             )
         ),
@@ -94,7 +94,7 @@ toolbar
         'text'  => $lang->extension->obtain,
         'class' => 'primary',
         'url'   => createLink('extension', 'obtain')
-    ))) : null,
+    ))) : null
 );
 
 div

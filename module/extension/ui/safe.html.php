@@ -15,13 +15,13 @@ panel
     p
     (
         setClass('text-danger mb-3'),
-        html($error),
+        html($error)
     ),
     btn
     (
         on::click('loadCurrentPage'),
         set::type('primary'),
-        $lang->extension->refreshPage,
+        $lang->extension->refreshPage
     )
 );
 

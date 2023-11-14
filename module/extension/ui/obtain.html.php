@@ -44,7 +44,7 @@ foreach(array('byUpdatedTime', 'byAddedTime', 'byDownloads') as $listType)
         (
             setClass($active),
             set::href(createLink('extension', 'obtain', "type=$listType")),
-            $lang->extension->$listType,
+            $lang->extension->$listType
         )
     );
 }
@@ -59,7 +59,7 @@ foreach($lang->extension->featureBar['browse'] as $browseType => $browseLabel)
         (
             set('href', createLink('extension', 'browse', "type=$browseType")),
             set('data-id', $browseType),
-            $browseLabel,
+            $browseLabel
         )
     );
 }
@@ -82,7 +82,7 @@ toolbar
         'text'  => $lang->extension->obtain,
         'class' => 'primary',
         'url'   => createLink('extension', 'obtain')
-    ))) : null,
+    ))) : null
 );
 
 foreach($moduleTree as $module) $module->url = createLink('extension', 'obtain', "type=bymodule&param=" . base64_encode($module->id));
@@ -98,7 +98,7 @@ sidebar
         (
             setClass('p-0'),
             $menuItems
-        ),
+        )
     ),
     moduleMenu
     (
@@ -183,7 +183,7 @@ foreach($extensions as $extension)
             (
                 setClass('pull-right text-sm text-warning'),
                 html(sprintf($lang->extension->latest, $latestRelease->viewLink, $latestRelease->releaseVersion, $latestRelease->zentaoCompatible))
-            ) : null,
+            ) : null
         ),
         div
         (
@@ -207,10 +207,10 @@ foreach($extensions as $extension)
                 setClass('pull-right'),
                 btnGroup
                 (
-                    set::items($btnItems),
+                    set::items($btnItems)
                 )
-            ),
-        ),
+            )
+        )
     );
     $i ++;
 }
@@ -223,7 +223,7 @@ if($pager->recTotal)
         set::type('full'),
         set::page($pager->page),
         set::recTotal($pager->recTotal),
-        set::recPerPage($pager->recPerPage),
+        set::recPerPage($pager->recPerPage)
     );
 }
 
@@ -244,14 +244,14 @@ div
             div
             (
                 setClass('font-bold text-lg'),
-                $lang->extension->errorOccurs,
+                $lang->extension->errorOccurs
             ),
             p
             (
-                html($lang->extension->errorGetExtensions),
+                html($lang->extension->errorGetExtensions)
             )
         )
-    ),
+    )
 );
 
 render();

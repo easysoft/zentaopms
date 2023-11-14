@@ -36,13 +36,13 @@ foreach($files as $fileName => $md5)
     p
     (
         setClass('text-danger mb-3'),
-        html($error),
+        html($error)
     ),
     btn
     (
         set::type('primary'),
         set::onclick('window.reloadPage(this)'),
-        $lang->extension->refreshPage,
+        $lang->extension->refreshPage
     )
 ) : null;
 
@@ -61,7 +61,7 @@ empty($error) && isset($license) ? div
         (
             set::rows(15),
             set::name('license'),
-            set::value($license),
+            set::value($license)
         )
     ),
     btn
@@ -69,7 +69,7 @@ empty($error) && isset($license) ? div
         set::type('primary'),
         set('data-load', 'modal'),
         set('url', $agreeLink),
-        $lang->extension->agreeLicense,
+        $lang->extension->agreeLicense
     )
 ) : null;
 
@@ -85,7 +85,7 @@ empty($error) && !isset($license) ? div
         set::type('success'),
         set('load-url', createLink('extension', 'browse')),
         set::onclick('window.loadParentUrl(this)'),
-        $lang->extension->viewInstalled,
+        $lang->extension->viewInstalled
     ),
     div
     (
@@ -95,11 +95,11 @@ empty($error) && !isset($license) ? div
             setClass('alert-content'),
             p 
             (
-                $lang->extension->successDownloadedPackage,
+                $lang->extension->successDownloadedPackage
             ),
             p 
             (
-                $lang->extension->successCopiedFiles,
+                $lang->extension->successCopiedFiles
             ),
             ul
             (
@@ -107,7 +107,7 @@ empty($error) && !isset($license) ? div
             ),
             p 
             (
-                $lang->extension->successInstallDB,
+                $lang->extension->successInstallDB
             )
         )
     )

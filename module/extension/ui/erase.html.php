@@ -22,12 +22,12 @@ div
         (
             'check-circle',
             set::size('2x'),
-            setClass('text-success mr-4'),
+            setClass('text-success mr-4')
         ),
         div
         (
             setClass('article-h2 leading-8 mb-2 text-success'),
-            $title,
+            $title
         )
     ),
     $removeCommands ? div
@@ -38,7 +38,7 @@ div
             setClass('font-bold'),
             $lang->extension->unremovedFiles
         ),
-        html(\implode('<br />', $removeCommands)),
+        html(\implode('<br />', $removeCommands))
     ) : null,
     div
     (

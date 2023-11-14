@@ -20,7 +20,7 @@ if(!empty($error))
             set('data-load', 'modal'),
             set('url', createLink('extension', 'upload')),
             set::type('primary'),
-            $lang->extension->refreshPage,
+            $lang->extension->refreshPage
         )
     );
 }
@@ -39,10 +39,10 @@ else
             upload
             (
                 set::limitSize($maxUploadSize . 'B'),
-                set::exceededSizeHint($exceedLimitMsg),
+                set::exceededSizeHint($exceedLimitMsg)
             )
         ),
-        set::submitBtnText($lang->extension->install),
+        set::submitBtnText($lang->extension->install)
     );
 }
 
