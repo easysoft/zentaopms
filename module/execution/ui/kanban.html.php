@@ -158,7 +158,38 @@ jsVar('priv',
     )
 );
 
-featureBar();
+if(!$features['story']) unset($lang->kanban->type['story']);
+if(!$features['qa'])    unset($lang->kanban->type['bug']);
+featureBar
+(
+    ($features['story'] or $features['qa']) ? inputControl
+    (
+        setClass('c-type'),
+        picker
+        (
+            set::width('200'),
+            set::name('type'),
+            set::items($lang->kanban->type),
+            set::value($browseType),
+            set::required(true),
+            set::onchange('changeBrowseType()'),
+        )
+    ) : null,
+    $browseType != 'all' ? inputControl
+    (
+        setClass('c-group ml-5'),
+        picker
+        (
+            set::width('200'),
+            set::name('group'),
+            set::items($lang->kanban->group->$browseType),
+            set::value($groupBy),
+            set::required(true),
+            set::onchange('changeGroupBy()'),
+        )
+    ) : null,
+);
+
 toolbar
 (
     btnGroup

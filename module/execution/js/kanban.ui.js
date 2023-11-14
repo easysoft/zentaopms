@@ -581,3 +581,16 @@ window.hideAllAction = function()
 {
     $('.btn').hide();
 }
+
+window.changeBrowseType = function()
+{
+    const type = $('.c-type [name=type]').val();
+    loadPage($.createLink('execution', 'kanban', "executionID=" + executionID + '&type=' + type));
+};
+
+window.changeGroupBy = function()
+{
+    const group = $('.c-group [name=group]').val();
+    const type  = $('.c-type [name=type]').val();
+    loadPage($.createLink('execution', 'kanban',  'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group));
+};

@@ -137,20 +137,20 @@ row
                 set::name('type'),
                 set::items($lang->kanban->type),
                 set::value($browseType),
-                set::require(true),
+                set::required(true),
                 set::onchange('changeBrowseType()')
             )
         ) : null,
         $browseType != 'all' ? inputControl
         (
-            setClass('c-group'),
+            setClass('c-group ml-5'),
             picker
             (
                 set::width('200'),
                 set::name('group'),
                 set::items($lang->kanban->group->$browseType),
                 set::value($groupBy),
-                set::require(true),
+                set::required(true),
                 set::onchange('changeGroupBy()')
             )
         ) : null

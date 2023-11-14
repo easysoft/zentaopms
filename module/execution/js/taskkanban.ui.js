@@ -38,7 +38,7 @@ window.changeBrowseType = function()
 
 window.changeGroupBy = function()
 {
-    const troup = $('.c-group [name=group]').val();
+    const group = $('.c-group [name=group]').val();
     const type  = $('.c-type [name=type]').val();
     loadPage($.createLink('execution', 'taskKanban',  'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group));
 };
