@@ -587,8 +587,8 @@ class storyZen extends story
         /* 设置默认值。 */
         if(empty($fields['reviewer']['default'])) $fields['reviewer']['default'] = implode(',', array_keys($reviewerList));
 
-        $this->view->users     = $users;
-        $this->view->reviewers = $reviewers;
+        $this->view->users          = $users;
+        $this->view->storyReviewers = array_keys($reviewerList);
 
         return $fields;
     }

@@ -80,7 +80,7 @@ window.changeReviewer = function()
         if(!$('[name^="reviewer"]').val().filter(Boolean).length)
         {
             zui.Modal.alert(reviewerNotEmpty);
-            $('[name^="reviewer"]').zui('picker').$.setValue(Object.keys(reviewers).join());
+            $('[name^="reviewer"]').zui('picker').$.setValue(storyReviewers.join());
         }
     }
     else

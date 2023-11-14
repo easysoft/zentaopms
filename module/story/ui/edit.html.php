@@ -38,7 +38,7 @@ jsVar('storyType', $story->type);
 jsVar('storyID', $story->id);
 jsVar('storyStatus', $story->status);
 jsVar('lastReviewer', explode(',', $lastReviewer));
-jsVar('reviewers', $reviewers);
+jsVar('storyReviewers', $storyReviewers);
 jsVar('reviewerNotEmpty', $lang->story->notice->reviewerNotEmpty);
 jsVar('oldProductID', $story->product);
 jsVar('twins', $story->twins);
@@ -60,7 +60,7 @@ detailHeader
             set::reverse(true),
             $story->title
         )
-    ),
+    )
 );
 
 detailBody
@@ -71,7 +71,7 @@ detailBody
     (
         array('tag' => 'button', 'class' => 'primary', 'id' => 'saveButton', 'data-on' => 'click', 'data-call' => 'customSubmit', 'data-params' => 'event', 'text' => $lang->save),
         array('tag' => 'button', 'class' => 'secondary', 'id' => 'saveDraftButton', 'data-on' => 'click', 'data-call' => 'customSubmit', 'data-params' => 'event', 'text' => $story->status == 'changing' ? $lang->story->doNotSubmit : $lang->story->saveDraft),
-        isInModal() ? null : array('text' => $lang->goback, 'back' => 'APP'),
+        isInModal() ? null : array('text' => $lang->goback, 'back' => 'APP')
     )) : null,
     sectionList
     (
@@ -112,7 +112,7 @@ detailBody
                         on::change('changeNeedNotReview(e.target)'),
                     )
                 ),
-                formHidden('needNotReview', $forceReview ? 0 : 1),
+                formHidden('needNotReview', $forceReview ? 0 : 1)
             )
         ) : null,
         section
@@ -149,7 +149,7 @@ detailBody
                         common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink size-xs"), on::click('unlinkTwins'), set('data-id', $twin->id), icon('unlink')) : null,
                     );
                 }, $twins))
-            ),
+            )
         ),
         $canEditContent || $story->files ? section
         (
@@ -160,7 +160,7 @@ detailBody
                 set::files($story->files),
                 set::fieldset(false),
                 set::object($story),
-            ) : null,
+            ) : null
         ) : null,
         section
         (
@@ -186,7 +186,7 @@ detailBody
                         set::name('product'),
                         set::items($fields['product']['options']),
                         set::value($fields['product']['default']),
-                        on::change('loadProduct'),
+                        on::change('loadProduct')
                     ),
                     span
                     (
@@ -198,7 +198,7 @@ detailBody
                             set::name('branch'),
                             set::items($fields['branch']['options']),
                             set::value($fields['branch']['default']),
-                            on::change('loadBranch'),
+                            on::change('loadBranch')
                         ) : null
                     )
                 )
@@ -221,17 +221,17 @@ detailBody
                             set::name('module'),
                             set::items($fields['module']['options']),
                             set::value($fields['module']['default'])
-                        ),
+                        )
                     ),
                     count($moduleOptionMenu) == 1 ? btn(set::url($this->createLink('tree', 'browse', "rootID={$story->product}&view=story&currentModuleID=0&branch={$story->branch}")), set('data-toggle', 'modal'), $lang->tree->manage) : null,
-                    count($moduleOptionMenu) == 1 ? btn(set('onclick', "loadProductModules({$story->product})"), setClass('refresh'), icon('refresh')) : null,
+                    count($moduleOptionMenu) == 1 ? btn(set('onclick', "loadProductModules({$story->product})"), setClass('refresh'), icon('refresh')) : null
                 )
             ),
             $story->parent >= 0 && $story->type == 'story' ? item
             (
                 set::trClass(zget($fields['parent'], 'className', '')),
                 set::name($lang->story->parent),
-                picker(setID('parent'), set::name('parent'), set::items($fields['parent']['options']), set::value($fields['parent']['default'])),
+                picker(setID('parent'), set::name('parent'), set::items($fields['parent']['options']), set::value($fields['parent']['default']))
             ) : null,
             item
             (
@@ -245,7 +245,7 @@ detailBody
                         picker(setID('plan'), set::name($multiplePlan ? 'plan[]' : 'plan'), set::items($fields['plan']['options']), set::value($fields['parent']['default']), set::multiple($multiplePlan)),
                     ),
                     empty($plans) ? btn(set::url($this->createLink('productplan', 'create', "productID={$story->product}&branch={$story->branch}")), set('data-toggle', 'modal'), icon('plus')) : null,
-                    empty($plans) ? btn(set('onclick', "loadProductPlans({$story->product})"), setClass('refresh'), icon('refresh')) : null,
+                    empty($plans) ? btn(set('onclick', "loadProductPlans({$story->product})"), setClass('refresh'), icon('refresh')) : null
                 )
             ),
             item
@@ -262,7 +262,7 @@ detailBody
             (
                 set::name($lang->story->status),
                 span(setClass("status-{$story->status}"), $this->processStatus('story', $story)),
-                formHidden('status', $story->status),
+                formHidden('status', $story->status)
             ),
             $story->type == 'story' ? item
             (
@@ -282,26 +282,26 @@ detailBody
             item
             (
                 set::name($lang->story->estimate),
-                $story->parent >= 0 ? input(set::name('estimate'), set::value($story->estimate)) : $story->estimate,
+                $story->parent >= 0 ? input(set::name('estimate'), set::value($story->estimate)) : $story->estimate
             ),
             item
             (
                 set::trClass('feedbackBox'),
                 set::trClass(in_array($story->source, $config->story->feedbackSource) ? '' : 'hidden'),
                 set::name($lang->story->feedbackBy),
-                input(set::name('feedbackBy'), set::value($story->feedbackBy)),
+                input(set::name('feedbackBy'), set::value($story->feedbackBy))
             ),
             item
             (
                 set::trClass('feedbackBox'),
                 set::trClass(in_array($story->source, $config->story->feedbackSource) ? '' : 'hidden'),
                 set::name($lang->story->notifyEmail),
-                input(set::name('notifyEmail'), set::value($story->notifyEmail)),
+                input(set::name('notifyEmail'), set::value($story->notifyEmail))
             ),
             item
             (
                 set::name($lang->story->keywords),
-                input(set::name('keywords'), set::value($story->keywords)),
+                input(set::name('keywords'), set::value($story->keywords))
             ),
             item
             (
@@ -360,7 +360,7 @@ detailBody
                     set::items($fields['reviewer']['options']),
                     set::value($fields['reviewer']['default']),
                     set::multiple(true),
-                    on::change('changeReviewer'),
+                    on::change('changeReviewer')
                 )
             ) : null,
             $story->status == 'closed' ? item
@@ -387,7 +387,7 @@ detailBody
             (
                 set::name($story->type == 'story' ? $lang->requirement->linkStory : $lang->story->linkStory),
                 (common::hasPriv('story', 'linkStories') && $story->type == 'story') ? btn(setClass('secondary'), set::id('linkStoriesLink'), set('data-toggle', 'modal'), set('data-size', 'lg'), on::click('linkStories'), $lang->story->linkStoriesAB) : null,
-                (common::hasPriv('requirement', 'linkRequirements') && $story->type == 'requirement') ? btn(setClass('secondary'), set::id('linkStoriesLink'), set('data-toggle', 'modal'), set('data-size', 'lg'), on::click('linkStories'), $lang->story->linkRequirementsAB) : null,
+                (common::hasPriv('requirement', 'linkRequirements') && $story->type == 'requirement') ? btn(setClass('secondary'), set::id('linkStoriesLink'), set('data-toggle', 'modal'), set('data-size', 'lg'), on::click('linkStories'), $lang->story->linkRequirementsAB) : null
             ),
             item
             (
@@ -407,7 +407,7 @@ detailBody
                         );
                     }, array_keys($story->linkStoryTitles), array_values($story->linkStoryTitles)))
                 ) : null,
-                div(set::id('linkStoriesBox')),
+                div(set::id('linkStoriesBox'))
             )
         ),
     )
