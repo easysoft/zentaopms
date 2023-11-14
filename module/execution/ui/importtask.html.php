@@ -50,7 +50,7 @@ dtable
             array(
                 'text'      => $lang->execution->importTask,
                 'className' => 'btn secondary toolbar-item batch-btn size-sm',
-                'data-url'  => createLink('execution', 'importtask', "executionID={$execution->id}&fromExecution={$fromExecution}"),
+                'data-url'  => createLink('execution', 'importtask', "executionID={$execution->id}&fromExecution={$fromExecution}")
             ),
             array(
                 'text'      => $lang->goback,
@@ -64,7 +64,7 @@ dtable
         usePager
         (
             array('linkCreator' => helper::createLink('execution', 'importTask', "executionID={$execution->id}&fromExecution={$fromExecution}&orderBy=$orderBy&recPerPage={recPerPage}&page={page}"))
-        ),
+        )
     )
 );
 

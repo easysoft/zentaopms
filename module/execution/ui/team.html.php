@@ -14,7 +14,7 @@ namespace zin;
 featureBar
 (
     set::current('all'),
-    set::linkParams("executionID={$execution->id}"),
+    set::linkParams("executionID={$execution->id}")
 );
 
 /* zin: Define the toolbar on main menu. */

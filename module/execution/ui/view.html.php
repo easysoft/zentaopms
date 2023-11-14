@@ -193,7 +193,7 @@ div
                                 set('data-placement', 'bottom'),
                                 set('data-type', 'white'),
                                 set('data-class-name', 'text-gray border border-light'),
-                                setClass('text-gray '),
+                                setClass('text-gray ')
                             )
                         )
                     )
@@ -313,8 +313,8 @@ div
             (
                 set::className('detail-content mt-4'),
                 html($execution->desc)
-            ),
-        ),
+            )
+        )
     ),
     div
     (
@@ -444,7 +444,7 @@ if(common::hasPriv('execution', 'doc'))
             (
                 $docLib->name,
                 set('data-app', $app->tab == 'search' ? 'execution' : $app->tab),
-                set::href($libID == 'files' ? $this->createLink('doc', 'showFiles', "type=execution&objectID={$execution->id}") : $this->createLink('execution', 'doc', "objectID={$execution->id}&libID={$libID}")),
+                set::href($libID == 'files' ? $this->createLink('doc', 'showFiles', "type=execution&objectID={$execution->id}") : $this->createLink('execution', 'doc', "objectID={$execution->id}&libID={$libID}"))
             )
         );
 
@@ -791,7 +791,7 @@ div
                     )
                 )
             ) : null
-        ),
+        )
     ) : null,
     div
     (

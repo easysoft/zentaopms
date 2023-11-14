@@ -21,7 +21,7 @@ featureBar
         set::name('showStory'),
         set::text($lang->execution->treeLevel['story']),
         on::change('changeDisplay')
-    ),
+    )
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -45,7 +45,7 @@ toolbar
         'icon'  => 'bar-chart',
         'text'  => $lang->task->reportChart,
         'class' => 'ghost',
-        'url'   => createLink('task', 'report', "execution={$executionID}&browseType={$browseType}"),
+        'url'   => createLink('task', 'report', "execution={$executionID}&browseType={$browseType}")
     ))) : null,
     (!empty($importTaskItem) || !empty($importBugItem)) ? dropdown(
         btn(
@@ -54,7 +54,7 @@ toolbar
             set::text($lang->import)
         ),
         set::items(array_filter(array($importTaskItem, $importBugItem))),
-        set::placement('bottom-end'),
+        set::placement('bottom-end')
     ) : null,
     hasPriv('task', 'export') ? item(set(array
     (
@@ -69,7 +69,7 @@ toolbar
         'icon' => 'plus',
         'text' => $lang->task->create,
         'class' => 'primary create-execution-btn',
-        'url'   => createLink('task', 'create', "execution={$executionID}"),
+        'url'   => createLink('task', 'create', "execution={$executionID}")
     ))) : null
 );
 
@@ -90,7 +90,7 @@ if(empty($tree))
             set::text($lang->task->create),
             set::icon('plus'),
             set::url(createLink('task', 'create', "execution={$executionID}" . (isset($moduleID) ? "&storyID=&moduleID={$moduleID}" : ''))),
-            setClass('primary ml-2'),
+            setClass('primary ml-2')
         ) : null
     );
 }
@@ -114,6 +114,6 @@ div
     div
     (
         setID('detailBlock'),
-        setClass('w-96 ml-4 hidden'),
+        setClass('w-96 ml-4 hidden')
     )
 );

@@ -23,7 +23,7 @@ $canCreateTestcase = hasPriv('testcase', 'create') && common::canModify('executi
 if($canCreateTestcase) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->testcase->create, 'url' => $this->createLink('testcase', 'create', "productID={$productID}&branch=0&moduleID=0&from=execution&param={$execution->id}"), 'data-app' => 'execution');
 toolbar
 (
-    !empty($createItem) ? item(set($createItem)) : null,
+    !empty($createItem) ? item(set($createItem)) : null
 );
 
 /* zin: Define the sidebar in main content. */

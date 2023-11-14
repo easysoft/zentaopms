@@ -25,7 +25,7 @@ if($canBatchAction)
     $footToolbar['items'][] = array(
         'type'  => 'btn-group',
         'items' => array(
-            array('text' => $lang->edit, 'className' => "btn secondary size-sm {$editClass}", 'data-url' => createLink('execution', 'batchEdit')),
+            array('text' => $lang->edit, 'className' => "btn secondary size-sm {$editClass}", 'data-url' => createLink('execution', 'batchEdit'))
         )
     );
 
@@ -75,7 +75,7 @@ toolbar
         'icon' => 'plus',
         'text' => $lang->execution->createExec,
         'class' => "primary create-execution-btn",
-        'url'   => createLink('execution', 'create'),
+        'url'   => createLink('execution', 'create')
     ))) : null
 );
 

@@ -12,7 +12,7 @@ namespace zin;
 
 modalHeader
 (
-    set::title($lang->execution->suspend . $space . $lang->executionCommon),
+    set::title($lang->execution->suspend . $space . $lang->executionCommon)
 );
 
 $space = common::checkNotCN() ? ' ' : '';
@@ -25,9 +25,9 @@ formPanel
         editor
         (
             set::name('comment'),
-            set::rows('6'),
+            set::rows('6')
         )
-    ),
+    )
 );
 hr();
 history();

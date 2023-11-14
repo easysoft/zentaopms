@@ -49,7 +49,7 @@ modal
                 set::required(true),
                 set::items($allPlans)
             )
-        ),
+        )
     )
 );
 
@@ -92,7 +92,7 @@ $product ? toolbar
         'text'  => $lang->story->report->common,
         'icon'  => 'bar-chart',
         'class' => 'ghost',
-        'url'   => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}") . '#app=execution',
+        'url'   => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}") . '#app=execution'
     ))) : null,
     hasPriv('story', 'export') ? item(set(array
     (
@@ -117,7 +117,7 @@ $product ? toolbar
             btn(setClass('btn secondary dropdown-toggle'),
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
             set::items(array_filter(array($createItem, $batchCreateItem))),
-            set::placement('bottom-end'),
+            set::placement('bottom-end')
         )
     ) : null,
     $canCreate && !$canBatchCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
@@ -136,11 +136,11 @@ $product ? toolbar
             btn(setClass('btn primary dropdown-toggle'),
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
             set::items(array_filter(array($linkItem, $linkPlanItem))),
-            set::placement('bottom-end'),
+            set::placement('bottom-end')
         )
     ) : null,
     $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'plus'))) : null,
-    $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null
 ) : null;
 
 sidebar
@@ -202,7 +202,7 @@ modal
                     setClass('input-group-addon'),
                     $lang->workingHour
                 )
-            ),
+            )
         ) : null,
         formGroup
         (
@@ -225,7 +225,7 @@ modal
             set::text($lang->execution->next),
             set::btnType('submit'),
             set::type('primary'),
-            set('data-dismiss', 'primary'),
+            set('data-dismiss', 'primary')
         )
     )
 );
@@ -265,7 +265,7 @@ if($canBatchAction)
             'type'  => 'btn-group',
             'items' => array(
                 array('text' => $lang->edit, 'className' => "btn secondary size-sm {$editClass}", 'btnType' => 'primary', 'data-url' => createLink('story', 'batchEdit', "productID=0&executionID={$execution->id}&branch=0&storyType={$storyType}")),
-                array('caret' => 'up', 'className' => 'btn btn-caret size-sm secondary', 'url' => '#batchToTask', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+                array('caret' => 'up', 'className' => 'btn btn-caret size-sm secondary', 'url' => '#batchToTask', 'data-toggle' => 'dropdown', 'data-placement' => 'top-start')
             )
         );
     }
@@ -290,7 +290,7 @@ if($canBatchAction)
             'text'        => $lang->story->assignedTo,
             'className'   => 'btn btn-caret size-sm secondary',
             'type'        => 'dropdown',
-            'items'       => $assignedToItems,
+            'items'       => $assignedToItems
         );
     }
 

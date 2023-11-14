@@ -26,9 +26,9 @@ featureBar
             set::placeholder($lang->execution->viewByUser),
             set::items($userIdPairs),
             set::value($param),
-            on::change('changeUser'),
-        ),
-    ),
+            on::change('changeUser')
+        )
+    )
 );
 
 $content = null;
@@ -41,7 +41,7 @@ if(empty($dateGroups))
         (
             setClass('text-gray'),
             $lang->action->noDynamic
-        ),
+        )
     );
 }
 else
@@ -60,12 +60,12 @@ else
                 setClass('cursor-pointer leading-5'),
                 span
                 (
-                    icon('angle-down text-primary border-2 rounded-full z-10 bg-canvas align-middle'),
+                    icon('angle-down text-primary border-2 rounded-full z-10 bg-canvas align-middle')
                 ),
                 span
                 (
                     setClass('ml-2'),
-                    $isToday ? $lang->action->dynamic->today : $date,
+                    $isToday ? $lang->action->dynamic->today : $date
                 ),
                 on::click('toggleCollapse')
             ),
@@ -79,7 +79,7 @@ else
                     dynamic
                     (
                         set::dynamics($actions),
-                        set::users($accountPairs),
+                        set::users($accountPairs)
                     )
                 )
             )

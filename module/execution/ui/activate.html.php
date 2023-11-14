@@ -12,7 +12,7 @@ namespace zin;
 
 modalHeader
 (
-    set::title($lang->execution->activate . $space . $lang->executionCommon),
+    set::title($lang->execution->activate . $space . $lang->executionCommon)
 );
 
 $space = common::checkNotCN() ? ' ' : '';
@@ -30,14 +30,14 @@ formPanel
                 datePicker
                 (
                     set::name('begin'),
-                    set::value($newBegin),
+                    set::value($newBegin)
                 ),
                 $lang->execution->to,
                 datePicker
                 (
                     set::name('end'),
-                    set::value($newEnd),
-                ),
+                    set::value($newEnd)
+                )
             )
         ),
         formGroup
@@ -48,9 +48,9 @@ formPanel
                 set::name('readjustTask'),
                 set::text($lang->execution->readjustTask),
                 set::value(1),
-                set::rootClass('ml-4'),
+                set::rootClass('ml-4')
             )
-        ),
+        )
     ),
     formGroup
     (
@@ -58,9 +58,9 @@ formPanel
         editor
         (
             set::name('comment'),
-            set::rows('6'),
-        ),
-    ),
+            set::rows('6')
+        )
+    )
 );
 hr();
 history();

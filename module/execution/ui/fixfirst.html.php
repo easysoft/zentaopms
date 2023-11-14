@@ -13,7 +13,7 @@ to::header(
     span
     (
         set::className('article-h2'),
-        $lang->execution->fixFirst,
+        $lang->execution->fixFirst
     ),
     span
     (
@@ -22,9 +22,9 @@ to::header(
         span
         (
             setClass('label secondary-pale rounded-full'),
-            $execution->totalEstimate . $lang->execution->workHour,
-        ),
-    ),
+            $execution->totalEstimate . $lang->execution->workHour
+        )
+    )
 );
 formPanel
 (
@@ -40,7 +40,7 @@ formPanel
             (
                 set::name('estimate'),
                 set::value(!empty($firstBurn->estimate) ? $firstBurn->estimate : (!empty($firstBurn->left) ? $firstBurn->left : '')),
-                set::placeholder($lang->execution->placeholder->totalLeft),
+                set::placeholder($lang->execution->placeholder->totalLeft)
             ),
             checkbox
             (
@@ -48,8 +48,8 @@ formPanel
                 set::value(1),
                 set::checked(true),
                 set::text($lang->execution->fixFirstWithLeft),
-                set::rootClass('ml-4 w-1/3 items-center'),
-            ),
-        ),
+                set::rootClass('ml-4 w-1/3 items-center')
+            )
+        )
     )
 );

@@ -138,7 +138,7 @@ row
                 set::items($lang->kanban->type),
                 set::value($browseType),
                 set::require(true),
-                set::onchange('changeBrowseType()'),
+                set::onchange('changeBrowseType()')
             )
         ) : null,
         $browseType != 'all' ? inputControl
@@ -151,9 +151,9 @@ row
                 set::items($lang->kanban->group->$browseType),
                 set::value($groupBy),
                 set::require(true),
-                set::onchange('changeGroupBy()'),
+                set::onchange('changeGroupBy()')
             )
-        ) : null,
+        ) : null
     ),
     cell
     (
@@ -171,7 +171,7 @@ row
                     setID('taskKanbanSearchInput'),
                     set::name('taskKanbanSearchInput'),
                     set::oninput('searchCards(this.value)'),
-                    set::placeholder($lang->execution->pleaseInput),
+                    set::placeholder($lang->execution->pleaseInput)
                 )
             )
         ),
@@ -185,8 +185,8 @@ row
             set::items(array
             (
                 common::hasPriv('execution', 'importTask') ? array('text' => $lang->execution->importTask, 'url' => createLink('execution', 'importTask', "execution=$execution->id")) : null,
-                ($features['qa'] && common::hasPriv('execution', 'importBug')) ? array('text' => $lang->execution->importBug, 'url' => createLink('execution', 'importBug', "execution=$execution->id")) : null,
-            )),
+                ($features['qa'] && common::hasPriv('execution', 'importBug')) ? array('text' => $lang->execution->importBug, 'url' => createLink('execution', 'importBug', "execution=$execution->id")) : null
+            ))
         ) : null,
         dropdown
         (
@@ -196,8 +196,8 @@ row
             (
                 common::hasPriv('execution', 'setKanban') ? array('text' => $lang->execution->setKanban, 'url' => createLink('execution', 'setKanban', "executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'sm') : null,
                 common::hasPriv('execution', 'printKanban') ? array('text' => $lang->execution->printKanban, 'url' => createLink('execution', 'printKanban', "executionID=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'sm', 'id' => 'printKanban') : null,
-                array('text' => $lang->execution->fullScreen, 'url' => 'javascript:fullScreen()'),
-            )),
+                array('text' => $lang->execution->fullScreen, 'url' => 'javascript:fullScreen()')
+            ))
         ),
         $canCreateObject ? dropdown
         (
@@ -215,9 +215,9 @@ row
                 ($features['qa'] && $canImportBug) ? array('text' => $lang->execution->importBug, 'url' => createLink('execution', 'importBug', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
                 ($features['story'] and $hasStoryButton and $features['qa']) ? array('text' => '', 'class' => 'menu-divider') : null,
                 ($canCreateTask) ? array('text' => $lang->task->create, 'url' => createLink('task', 'create', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
-                ($canBatchCreateTask) ? array('text' => $lang->execution->batchCreateTask, 'url' => createLink('task', 'batchCreate', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null,
+                ($canBatchCreateTask) ? array('text' => $lang->execution->batchCreateTask, 'url' => createLink('task', 'batchCreate', "execution=$execution->id"), 'data-toggle' => 'modal', 'data-size' => 'lg') : null
             ))
-        ) : null,
+        ) : null
     )
 );
 
@@ -239,7 +239,7 @@ modal
     to::header
     (
         h4($lang->execution->linkStoryByPlan),
-        "({$lang->execution->linkStoryByPlanTips})",
+        "({$lang->execution->linkStoryByPlanTips})"
     ),
     inputGroup
     (
@@ -249,7 +249,7 @@ modal
             set::width(200),
             setID('plan'),
             set::name('plan'),
-            set::items($allPlans),
+            set::items($allPlans)
         ),
         span
         (
@@ -272,7 +272,7 @@ modal
             setID('product'),
             set::name('productName'),
             set::items($productNames),
-            set::onchange('changeBugProduct()'),
+            set::onchange('changeBugProduct()')
         ),
         span
         (

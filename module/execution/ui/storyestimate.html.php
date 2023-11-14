@@ -46,7 +46,7 @@ else
                 set::items($rounds),
                 set::value($round),
                 set::required(true),
-                on::change("selectRound('{$loadUrl}')"),
+                on::change("selectRound('{$loadUrl}')")
             ),
             btn
             (
@@ -88,7 +88,7 @@ else
                     set::disabled(!empty($estimateInfo->estimate)),
                     set::value($estimate),
                     on::input('updateAverage()')
-                ),
+                )
             ),
             !empty($estimateInfo->estimate) ? h::td
             (
@@ -99,8 +99,8 @@ else
                     set::name('estimate[]'),
                     set::value($estimate),
                     on::input('updateAverage()')
-                ),
-            ) : null,
+                )
+            ) : null
         );
     }
 
@@ -138,7 +138,7 @@ else
                             empty($estimateInfo->estimate) ? set::name('average') : null,
                             set::readonly(true),
                             set::value(!empty($estimateInfo->estimate) ? $estimateInfo->average : '')
-                        ),
+                        )
                     ),
                     !empty($estimateInfo->estimate) ? h::td
                     (
@@ -149,15 +149,15 @@ else
                             setClass('form-control text-primary'),
                             set::readonly(true),
                             set::value($estimateInfo->average)
-                        ),
-                    ) : null,
+                        )
+                    ) : null
                 )
             )
         ),
         set::actions(array(array(
             'text'      => $lang->save,
             'type'      => empty($estimateInfo->estimate) ? 'primary' : 'primary hidden',
-            'btnType'   => 'submit',
+            'btnType'   => 'submit'
         )))
     );
 }

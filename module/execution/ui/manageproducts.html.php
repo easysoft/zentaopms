@@ -43,7 +43,7 @@ foreach($allProducts as $productID => $productName)
                 set::items($allBranches[$productID]),
                 set::disabled(true),
                 set::required(true),
-            ) : formHidden("branch[{$index}]", $branchID),
+            ) : formHidden("branch[{$index}]", $branchID)
         );
 
         if(!isset($branchGroups[$productID])) unset($allProducts[$productID]);
@@ -68,7 +68,7 @@ if($execution->grade == 1 || $execution->grade == 2)
                 (
                     set::name("products[{$index}]"),
                     set::text($productName),
-                    set::value($productID),
+                    set::value($productID)
                 ),
                 isset($branchGroups[$productID]) ? picker
                 (
@@ -76,7 +76,7 @@ if($execution->grade == 1 || $execution->grade == 2)
                     set::value(key($branchGroups[$productID])),
                     set::items($branchGroups[$productID]),
                     set::required(true),
-                ) : formHidden("branch[{$index}]", 0),
+                ) : formHidden("branch[{$index}]", 0)
             );
 
         $index ++;
@@ -112,9 +112,9 @@ form
             )
         ) : null,
 
-        $canModify ? h::hr() : null,
+        $canModify ? h::hr() : null
     ),
-    $canModify ? set::actions(array('submit')) : null,
+    $canModify ? set::actions(array('submit')) : null
 );
 
 render();

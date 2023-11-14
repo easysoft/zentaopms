@@ -33,7 +33,7 @@ div
             setClass('ghost text-gray'),
             set::url(createLink('execution', 'burn', "executionID={$execution->id}")),
             $lang->more
-        ) : null,
+        ) : null
     ),
     common::hasPriv('execution', 'burn') ? echarts
     (
@@ -54,7 +54,7 @@ div
             (
                 'type'     => 'value',
                 'name'     => "({$lang->execution->workHour})",
-                'axisLine' => array('show' => true),
+                'axisLine' => array('show' => true)
             )
         ),
         set::legend
@@ -62,7 +62,7 @@ div
             array
             (
                 'selectedMode' => false,
-                'data' => array($lang->execution->charts->burn->graph->actuality, $lang->execution->charts->burn->graph->reference, $lang->execution->charts->burn->graph->delay),
+                'data' => array($lang->execution->charts->burn->graph->actuality, $lang->execution->charts->burn->graph->reference, $lang->execution->charts->burn->graph->delay)
             )
         ),
         set::tooltip
@@ -95,14 +95,14 @@ div
                             'lineStyle' => array
                             (
                                 'width' => 3,
-                                'color' => '#F1F1F1',
+                                'color' => '#F1F1F1'
                             )
                         ),
                         'emphasis' => array
                         (
                             'color' => '#FFF',
                             'borderColor' => '#D8D8D8',
-                            'borderWidth' => 2,
+                            'borderWidth' => 2
                         )
                     ),
                     'emphasis' => array
@@ -110,7 +110,7 @@ div
                         'lineStyle' => array
                         (
                             'width' => 3,
-                            'color' => '#F1F1F1',
+                            'color' => '#F1F1F1'
                         )
                     )
                 ),
@@ -129,7 +129,7 @@ div
                             'lineStyle' => array
                             (
                                 'width' => 3,
-                                'color' => '#2B7DFE',
+                                'color' => '#2B7DFE'
                             )
                         ),
                         'emphasis' => array
@@ -154,7 +154,7 @@ div
                             'color' => '#F00',
                             'lineStyle' => array
                             (
-                                'color' => '#F00',
+                                'color' => '#F00'
                             )
                         ),
                         'emphasis' => array

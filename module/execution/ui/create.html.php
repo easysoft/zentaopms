@@ -33,7 +33,7 @@ if(!empty($project->model) && $project->model == 'agileplus')
             set::label($lang->execution->method),
             set::items($lang->execution->typeList),
             set::value($execution->type),
-            on::change('setType'),
+            on::change('setType')
         ),
         formGroup
         (
@@ -46,7 +46,7 @@ if(!empty($project->model) && $project->model == 'agileplus')
                 (
                     'help',
                     set('data-toggle', 'tooltip'),
-                    set('id', 'methodHover'),
+                    set('id', 'methodHover')
                 )
             )
         )
@@ -67,7 +67,7 @@ if((empty($project) || $project->model != 'kanban') && $execution->type != 'kanb
                 set::name($isStage ? 'attribute' : 'lifetime'),
                 set::items($isStage ? $lang->stage->typeList : $lang->execution->lifeTimeList),
                 !$isStage ? on::change('showLifeTimeTips') : null,
-                set::required(true),
+                set::required(true)
             )
         ),
         formGroup
@@ -75,8 +75,8 @@ if((empty($project) || $project->model != 'kanban') && $execution->type != 'kanb
             set::width('1/2'),
             set::id('lifeTimeTips'),
             set::className('text-gray hidden'),
-            span($lang->execution->typeDesc),
-        ),
+            span($lang->execution->typeDesc)
+        )
     );
 }
 
@@ -122,9 +122,9 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
                             set::items($allProducts),
                             set::last($product->id),
                             set::disabled($isStage && $project->stageBy == 'project'),
-                            $isStage && $project->stageBy == 'project' ? formHidden("products[$i]", $product->id) : null,
+                            $isStage && $project->stageBy == 'project' ? formHidden("products[$i]", $product->id) : null
                         )
-                    ),
+                    )
                 )
             ),
             formGroup
@@ -144,7 +144,7 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
                         set::multiple(true),
                         on::change("branchChange")
                     )
-                ),
+                )
             ),
             formGroup
             (
@@ -174,10 +174,10 @@ if(isset($project->hasProduct) && !empty($project->hasProduct) && $products)
                     (
                         setClass('btn btn-link text-gray removeLine'),
                         setClass($i == 0 ? 'hidden' : ''),
-                        icon('trash'),
-                    ),
+                        icon('trash')
+                    )
                 )
-            ),
+            )
         );
 
         $i ++;
@@ -199,9 +199,9 @@ elseif(!empty($project) && empty($project->hasProduct) && !in_array($project->mo
                 set::items(isset($productPlan) ? $productPlan : array()),
                 set::multiple(true),
                 formHidden('products[]', $planProductID),
-                formHidden('branch[0][0]', 0),
+                formHidden('branch[0][0]', 0)
             )
-        ),
+        )
     );
 }
 else
@@ -218,7 +218,7 @@ else
             picker
             (
                 set::name('products[0]'),
-                set::items($allProducts),
+                set::items($allProducts)
             )
         ),
         formGroup
@@ -235,7 +235,7 @@ else
                     set::multiple(true),
                     on::change("branchChange")
                 )
-            ),
+            )
         ),
         formGroup
         (
@@ -264,10 +264,10 @@ else
                 (
                     setClass('btn btn-link text-gray removeLine'),
                     setClass('hidden'),
-                    icon('trash'),
-                ),
-            ),
-        ),
+                    icon('trash')
+                )
+            )
+        )
     );
 }
 
@@ -306,7 +306,7 @@ formPanel
             set::name('project'),
             set::items($allProjects),
             set::value($projectID),
-            on::change('refreshPage'),
+            on::change('refreshPage')
         )
     ),
     $methodBox,
@@ -315,14 +315,14 @@ formPanel
         set::width('1/2'),
         set::name('name'),
         set::label($showExecutionExec ? $lang->execution->execName : $lang->execution->name),
-        set::value($execution->name),
+        set::value($execution->name)
     ),
     isset($config->setCode) && $config->setCode == 1 ? formGroup
     (
         set::width('1/2'),
         set::name('code'),
         set::label($showExecutionExec ? $lang->execution->execCode : $lang->execution->code),
-        set::value($execution->code),
+        set::value($execution->code)
     ) : null,
     formRow
     (
@@ -338,7 +338,7 @@ formPanel
                     set::name('begin'),
                     set('id', 'begin'),
                     set::value((isset($plan) && !empty($plan->begin) ? $plan->begin : date('Y-m-d'))),
-                    set::placeholder($lang->execution->begin),
+                    set::placeholder($lang->execution->begin)
                 ),
                 $lang->project->to,
                 datePicker
@@ -346,9 +346,9 @@ formPanel
                     set::name('end'),
                     set('id', 'end'),
                     set::value((isset($plan) && !empty($plan->end)) ? $plan->end : ''),
-                    set::placeholder($lang->execution->end),
+                    set::placeholder($lang->execution->end)
                 )
-            ),
+            )
         ),
         formGroup
         (
@@ -357,9 +357,9 @@ formPanel
                 set::name('delta'),
                 set::inline(true),
                 set::items($lang->execution->endList),
-                on::change('computeEndDate'),
+                on::change('computeEndDate')
             )
-        ),
+        )
     ),
     formGroup
     (
@@ -371,7 +371,7 @@ formPanel
             input
             (
                 set::name('days'),
-                set::value(isset($plan) && !empty($plan->begin) ? (helper::workDays($plan->begin, $plan->end) + 1) : ''),
+                set::value(isset($plan) && !empty($plan->begin) ? (helper::workDays($plan->begin, $plan->end) + 1) : '')
             ),
             div
             (
@@ -386,7 +386,7 @@ formPanel
         set::width('1/2'),
         set::name('percent'),
         set::label($lang->stage->percent),
-        set::required(true),
+        set::required(true)
     ) : null,
     $productsBox,
     formRowGroup(set::title($lang->execution->teamSetting)),
@@ -395,7 +395,7 @@ formPanel
         set::width('1/2'),
         set::name('team'),
         set::label($lang->execution->teamName),
-        set::value($execution->team),
+        set::value($execution->team)
     ),
     formGroup
     (
@@ -408,7 +408,7 @@ formPanel
             set::items($teams),
             set::value(empty($copyExecution) ? $projectID : $copyExecutionID),
             set('data-placeholder', $lang->execution->copyTeamTip),
-            on::change('loadMembers'),
+            on::change('loadMembers')
         )
     ),
     formRow
@@ -421,7 +421,7 @@ formPanel
             (
                 set::name('PM'),
                 set::items($pmUsers),
-                set::value(empty($copyExecution) ? '' : $copyExecution->PM),
+                set::value(empty($copyExecution) ? '' : $copyExecution->PM)
             )
         ),
         formGroup
@@ -432,7 +432,7 @@ formPanel
             (
                 set::name('PO'),
                 set::items($poUsers),
-                set::value(empty($copyExecution) ? '' : $copyExecution->PO),
+                set::value(empty($copyExecution) ? '' : $copyExecution->PO)
             )
         ),
         formGroup
@@ -443,7 +443,7 @@ formPanel
             (
                 set::name('QD'),
                 set::items($qdUsers),
-                set::value(empty($copyExecution) ? '' : $copyExecution->QD),
+                set::value(empty($copyExecution) ? '' : $copyExecution->QD)
             )
         ),
         formGroup
@@ -454,9 +454,9 @@ formPanel
             (
                 set::name('RD'),
                 set::items($rdUsers),
-                set::value(empty($copyExecution) ? '' : $copyExecution->RD),
+                set::value(empty($copyExecution) ? '' : $copyExecution->RD)
             )
-        ),
+        )
     ),
     formGroup
     (
@@ -465,7 +465,7 @@ formPanel
         (
             set::name('teamMembers[]'),
             set::items($users),
-            set::multiple(true),
+            set::multiple(true)
         )
     ),
     h::hr(),
@@ -473,7 +473,7 @@ formPanel
     (
         set::name('desc'),
         set::label($showExecutionExec ? $lang->execution->execDesc : $lang->execution->desc),
-        set::control('editor'),
+        set::control('editor')
     ),
     formRow
     (
@@ -486,7 +486,7 @@ formPanel
             set::control('radioList'),
             set::items($lang->execution->aclList),
             set::value($execution->acl),
-            on::change('setWhite(this.value)'),
+            on::change('setWhite(this.value)')
         )
     ),
     formGroup
@@ -497,9 +497,9 @@ formPanel
         (
             set::name('whitelist[]'),
             set::items($users),
-            set::multiple(true),
+            set::multiple(true)
         )
-    ),
+    )
 );
 
 modalTrigger
@@ -525,8 +525,8 @@ modalTrigger
                 set::items($copyProjects),
                 set::value($projectID),
                 set::required(true),
-                on::change('loadProjectExecutions'),
-            ),
+                on::change('loadProjectExecutions')
+            )
         ),
         to::footer
         (
@@ -534,13 +534,13 @@ modalTrigger
             (
                 setClass('primary btn-wide hidden confirmBtn'),
                 set::text($lang->confirm),
-                on::click('setCopyExecution'),
+                on::click('setCopyExecution')
             )
         ),
         div
         (
             set::id('copyExecutions'),
-            setClass('flex items-center flex-wrap'),
+            setClass('flex items-center flex-wrap')
         )
     )
 );

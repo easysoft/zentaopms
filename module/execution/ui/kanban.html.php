@@ -150,7 +150,7 @@ jsVar('priv',
         'canChangeStory'        => common::hasPriv('story', 'change'),
         'canCloseStory'         => common::hasPriv('story', 'close'),
         'canUnlinkStory'        => (common::hasPriv('execution', 'unlinkStory') && !empty($execution->hasProduct)),
-        'canViewStory'          => common::hasPriv('execution', 'storyView'),
+        'canViewStory'          => common::hasPriv('execution', 'storyView')
     )
 );
 
@@ -170,7 +170,7 @@ toolbar
                     'icon'  => 'fullscreen'
                 )
             ),
-            $lang->kanban->fullScreen,
+            $lang->kanban->fullScreen
         ),
         common::hasPriv('execution', 'setKanban') ? btn
         (
@@ -184,7 +184,7 @@ toolbar
                     'data-toggle' => 'modal'
                 )
             ),
-            $lang->settings,
+            $lang->settings
         ) : null,
         common::hasPriv('execution', 'edit') ? btn
         (
@@ -199,8 +199,8 @@ toolbar
                     'data-size' => 'lg'
                 )
             ),
-            $lang->edit,
-        ) : null,
+            $lang->edit
+        ) : null
     ),
     $operationMenu ? dropdown
     (
@@ -210,7 +210,7 @@ toolbar
             set::icon('ellipsis-v'),
         ),
         set::caret(false),
-        set::items($operationMenu),
+        set::items($operationMenu)
     ) : null,
     $createMenu ? dropdown
     (
@@ -220,8 +220,8 @@ toolbar
             set::icon('plus'),
             $lang->create,
         ),
-        set::items($createMenu),
-    ) : null,
+        set::items($createMenu)
+    ) : null
 );
 
 div

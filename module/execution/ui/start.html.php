@@ -25,7 +25,7 @@ formPanel
         set::label($lang->execution->realBegan),
         set::name('realBegan'),
         set::control('date'),
-        set::value(!helper::isZeroDate($execution->realBegan) ? $execution->realBegan : helper::today()),
+        set::value(!helper::isZeroDate($execution->realBegan) ? $execution->realBegan : helper::today())
     ),
     formGroup
     (
@@ -33,9 +33,9 @@ formPanel
         editor
         (
             set::name('comment'),
-            set::rows('6'),
+            set::rows('6')
         )
-    ),
+    )
 );
 hr();
 history();

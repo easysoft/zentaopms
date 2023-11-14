@@ -60,7 +60,7 @@ featureBar
                 (
                     set::type('date'),
                     set::name('begin'),
-                    set::value($begin),
+                    set::value($begin)
                 ),
                 span
                 (
@@ -71,7 +71,7 @@ featureBar
                 (
                     set::type('date'),
                     set::name('end'),
-                    set::value($end),
+                    set::value($end)
                 ),
                 btn
                 (
@@ -79,9 +79,9 @@ featureBar
                     set::btnType('submit'),
                     $lang->preview
                 )
-            ),
+            )
         )
-    ),
+    )
 );
 
 $index       = 0;
@@ -97,7 +97,7 @@ foreach($chartData['line'] as $label => $set)
         'color'     => $chartColors[$index],
         'areaStyle' => array('color' => $chartColors[$index], 'opacity' => 0.2),
         'itemStyle' => array('normal' => array('lineStyle' => array('width' => 1))),
-        'emphasis'  => array('focus' => 'series'),
+        'emphasis'  => array('focus' => 'series')
     );
 
     $index ++;
@@ -159,7 +159,7 @@ panel
 (
     set::headingClass('justify-center'),
     set::title(
-        $executionName . ' - ' . zget($lang->execution->cfdTypeList, $type) . $lang->execution->CFD,
+        $executionName . ' - ' . zget($lang->execution->cfdTypeList, $type) . $lang->execution->CFD
     ),
     to::heading
     (
@@ -168,8 +168,8 @@ panel
             'help',
             setClass('mt-2 cfd-help'),
             set('data-toggle', 'tooltip'),
-            set('id', 'cfdHover'),
-        ),
+            set('id', 'cfdHover')
+        )
     ),
     set::titleClass('article-h1 mt-2'),
     $cfdChart

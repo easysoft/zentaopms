@@ -23,7 +23,7 @@ if(empty($executions))
             span
             (
                 set::className('font-bold ml-2'),
-                $lang->execution->copyNoExecution,
+                $lang->execution->copyNoExecution
             )
         );
 }
@@ -42,7 +42,7 @@ else
                 setClass('text-gray'),
                 $lang->icons[$execution->type]
             ),
-            span($execution->name),
+            span($execution->name)
         );
     }
 }

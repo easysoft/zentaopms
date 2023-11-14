@@ -42,7 +42,7 @@ if($canCreateBug) $createItem = array
 toolbar
 (
     !empty($canExportBug) ? item(set($exportItem)) : null,
-    !empty($createItem) ? item(set($createItem)) : null,
+    !empty($createItem) ? item(set($createItem)) : null
 );
 
 /* zin: Define the sidebar in main content. */
@@ -97,7 +97,7 @@ dtable
     set::footToolbar($footToolbar),
     set::customCols(true),
     set::footPager(
-        usePager(array('linkCreator' => helper::createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={$orderBy}&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"))),
+        usePager(array('linkCreator' => helper::createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={$orderBy}&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}")))
     ),
     set::emptyTip($lang->bug->notice->noBug),
     set::createTip($lang->bug->create),

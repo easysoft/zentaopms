@@ -28,14 +28,14 @@ formBatchPanel
         set::name('id'),
         set::label($lang->idAB),
         set::control('hidden'),
-        set::hidden(true),
+        set::hidden(true)
     ),
     formBatchItem
     (
         set::name('id'),
         set::label($lang->idAB),
         set::control('index'),
-        set::width('38px'),
+        set::width('38px')
     ),
     isset($project) && $project->model == 'scrum' ? formBatchItem
     (
@@ -44,7 +44,7 @@ formBatchPanel
         set::name("project"),
         set::items($allProjects),
         set::required(true),
-        set::width('136px'),
+        set::width('136px')
     ) : null,
     formBatchItem
     (
@@ -60,13 +60,13 @@ formBatchPanel
         set::control('picker'),
         set::items($lang->execution->typeList),
         set::disabled(true),
-        set::width('80px'),
+        set::width('80px')
     ) : null,
     $setCode ? formBatchItem
     (
         set::name('code'),
         set::label($lang->execution->code),
-        set::width('136px'),
+        set::width('136px')
     ) : null,
     formBatchItem
     (
@@ -76,7 +76,7 @@ formBatchPanel
         set::ditto(true),
         set::defaultDitto('off'),
         set::items($pmUsers),
-        set::width('112px'),
+        set::width('112px')
     ),
     formBatchItem
     (
@@ -87,7 +87,7 @@ formBatchPanel
         set::defaultDitto('off'),
         set::items($poUsers),
         set::width('80px'),
-        set::hidden(true),
+        set::hidden(true)
     ),
     formBatchItem
     (
@@ -98,7 +98,7 @@ formBatchPanel
         set::defaultDitto('off'),
         set::items($qdUsers),
         set::width('80px'),
-        set::hidden(true),
+        set::hidden(true)
     ),
     formBatchItem
     (
@@ -109,7 +109,7 @@ formBatchPanel
         set::defaultDitto('off'),
         set::items(array()),
         set::width('80px'),
-        set::hidden(true),
+        set::hidden(true)
     ),
     formBatchItem
     (
@@ -129,9 +129,9 @@ formBatchPanel
             (
                 'id'             => 'tooltipHover',
                 'data-toggle'    => 'tooltip',
-                'data-placement' => 'right',
+                'data-placement' => 'right'
             )
-        ) : null,
+        ) : null
     ),
     formBatchItem
     (
@@ -139,7 +139,7 @@ formBatchPanel
         set::label($lang->execution->begin),
         set::control('date'),
         set::width('76px'),
-        set::required(true),
+        set::required(true)
     ),
     formBatchItem
     (
@@ -147,7 +147,7 @@ formBatchPanel
         set::label($lang->execution->end),
         set::control('date'),
         set::width('76px'),
-        set::required(true),
+        set::required(true)
     ),
     formBatchItem
     (
@@ -163,7 +163,7 @@ formBatchPanel
         set::label($lang->execution->desc),
         set::control('textarea'),
         set::width('160px'),
-        set::hidden(true),
+        set::hidden(true)
     ),
     formBatchItem
     (
@@ -178,8 +178,8 @@ formBatchPanel
                 'suffixWidth' => 20
             )
         ),
-        set::width('64px'),
-    ),
+        set::width('64px')
+    )
 );
 
 render();

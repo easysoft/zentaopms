@@ -28,8 +28,8 @@ featureBar
             (
                 'class' => 'btn primary mr-5 ajax-submit',
                 'url' => createLink('execution', 'computeBurn', 'reload=yes'),
-                'icon' => 'refresh',
-            ),
+                'icon' => 'refresh'
+            )
         ),
         $lang->execution->computeBurn
     ),
@@ -63,8 +63,8 @@ featureBar
                 array
                 (
                     'href' => createLink('execution', 'fixFirst', "id={$execution->id}"),
-                    'data-toggle' => 'modal',
-                ),
+                    'data-toggle' => 'modal'
+                )
             ),
             $lang->execution->fixFirst
         )
@@ -83,7 +83,7 @@ featureBar
             set::name('burnBy'),
             set::items($lang->execution->burnByList),
             set::value($burnBy),
-            set::required(true),
+            set::required(true)
         )
     ),
     $interval ? li
@@ -95,7 +95,7 @@ featureBar
             set::name('interval'),
             set::items($dayList),
             set::value($interval),
-            set::required(true),
+            set::required(true)
         )
     ) : null
 );
@@ -106,7 +106,7 @@ panel
     (
         setClass('flex items-center justify-center'),
         $executionName . ' ' . $this->lang->execution->burn . '(' . zget($lang->execution->burnByList, $burnBy) . ')',
-        isset($execution->delay) ? label(setClass('label danger-pale ring-danger ml-3'), $lang->execution->delayed) : null,
+        isset($execution->delay) ? label(setClass('label danger-pale ring-danger ml-3'), $lang->execution->delayed) : null
     ),
     echarts
     (
@@ -127,7 +127,7 @@ panel
             (
                 'type'     => 'value',
                 'name'     => $burnBy == 'storyPoint' ?  "({$lang->execution->storyPoint})" : "({$lang->execution->workHour})",
-                'axisLine' => array('show' => true),
+                'axisLine' => array('show' => true)
             )
         ),
         set::legend
@@ -139,7 +139,7 @@ panel
                 'left' => 'right',
                 'top' => 'center',
                 'align' => 'left',
-                'data' => array($lang->execution->charts->burn->graph->actuality, $lang->execution->charts->burn->graph->reference, $lang->execution->charts->burn->graph->delay),
+                'data' => array($lang->execution->charts->burn->graph->actuality, $lang->execution->charts->burn->graph->reference, $lang->execution->charts->burn->graph->delay)
             )
         ),
         set::tooltip
@@ -172,14 +172,14 @@ panel
                             'lineStyle' => array
                             (
                                 'width' => 3,
-                                'color' => '#F1F1F1',
+                                'color' => '#F1F1F1'
                             )
                         ),
                         'emphasis' => array
                         (
                             'color' => '#FFF',
                             'borderColor' => '#D8D8D8',
-                            'borderWidth' => 2,
+                            'borderWidth' => 2
                         )
                     ),
                     'emphasis' => array
@@ -187,9 +187,9 @@ panel
                         'lineStyle' => array
                         (
                             'width' => 3,
-                            'color' => '#F1F1F1',
+                            'color' => '#F1F1F1'
                         )
-                    ),
+                    )
                 ),
                 array
                 (
@@ -206,7 +206,7 @@ panel
                             'lineStyle' => array
                             (
                                 'width' => 3,
-                                'color' => '#2B7DFE',
+                                'color' => '#2B7DFE'
                             )
                         ),
                         'emphasis' => array
@@ -215,7 +215,7 @@ panel
                             'borderColor' => '#006AF1',
                             'borderWidth' => 2
                         )
-                    ),
+                    )
                 ),
                 strpos($type, 'withdelay') !== false ? array
                 (
@@ -231,7 +231,7 @@ panel
                             'color' => '#F00',
                             'lineStyle' => array
                             (
-                                'color' => '#F00',
+                                'color' => '#F00'
                             )
                         ),
                         'emphasis' => array
@@ -241,8 +241,8 @@ panel
                             'borderWidth' => 2
                         )
                     ),
-                ) : null,
+                ) : null
             )
-        ),
+        )
     )->size('100%', 500),
 );

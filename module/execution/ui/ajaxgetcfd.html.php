@@ -71,7 +71,7 @@ panel
             setClass('ghost text-gray'),
             set::url(createLink('execution', 'cfd', "executionID={$execution->id}")),
             $lang->more
-        ) : null,
+        ) : null
     ),
     div($cfdChart)
 );

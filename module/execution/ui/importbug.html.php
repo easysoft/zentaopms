@@ -40,7 +40,7 @@ formBase
             'items' => array(
                 array(
                     'text'      => $lang->import,
-                    'className' => 'btn secondary import-bug-btn size-sm',
+                    'className' => 'btn secondary import-bug-btn size-sm'
                 ),
                 array(
                     'text'      => $lang->goback,
@@ -51,7 +51,7 @@ formBase
             )
         )),
         set::footPager(
-            usePager(array('linkCreator' => helper::createLink('execution', 'importBug', "executionID={$execution->id}&browseType={$browseType}&param=$param&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}"))),
+            usePager(array('linkCreator' => helper::createLink('execution', 'importBug', "executionID={$execution->id}&browseType={$browseType}&param=$param&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")))
         )
     )
 );

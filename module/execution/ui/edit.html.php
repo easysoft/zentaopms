@@ -38,7 +38,7 @@ if(isset($project))
                 set::label($lang->execution->projectName),
                 set::items($allProjects),
                 set::value($execution->project),
-                on::change('changeProject'),
+                on::change('changeProject')
             );
     }
     elseif($project->model == 'kanban')
@@ -62,7 +62,7 @@ if(isset($project))
                 set::name('parent'),
                 set::label($lang->programplan->parent),
                 set::items($parentStageList),
-                set::value($execution->parent),
+                set::value($execution->parent)
             );
     }
 }
@@ -83,8 +83,8 @@ if(in_array($project->model, array('waterfall', 'waterfallplus')))
                     set::name('attribute'),
                     set::items($typeList),
                     set::value($execution->attribute),
-                    set::required(true),
-                ) : span(zget($typeList, $execution->attribute)),
+                    set::required(true)
+                ) : span(zget($typeList, $execution->attribute))
             ),
             formGroup
             (
@@ -96,7 +96,7 @@ if(in_array($project->model, array('waterfall', 'waterfallplus')))
                     (
                         'help',
                         set('data-toggle', 'tooltip'),
-                        set('id', 'typeHover'),
+                        set('id', 'typeHover')
                     )
                 )
             )
@@ -126,8 +126,8 @@ elseif($execution->type != 'kanban' and $project->model != 'ipd')
                 set::id('lifeTimeTips'),
                 set::className('text-gray'),
                 set::className($execution->lifetime != 'ops' ? 'hidden' : ''),
-                span($lang->execution->typeDesc),
-            ),
+                span($lang->execution->typeDesc)
+            )
         );
 }
 
@@ -164,7 +164,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                                     set::items($allProducts),
                                     set::value($product->id),
                                     set::last($product->id),
-                                    $hasBranch ? set::lastBranch(implode(',', $product->branches)) : null,
+                                    $hasBranch ? set::lastBranch(implode(',', $product->branches)) : null
                                 )
                             )
                         )
@@ -186,7 +186,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                                 set::multiple(true),
                                 on::change("branchChange")
                             )
-                        ),
+                        )
                     ),
                     formGroup
                     (
@@ -216,8 +216,8 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                             (
                                 setClass('btn btn-link text-gray removeLine'),
                                 setClass($i == 0 ? 'hidden' : ''),
-                                icon('trash'),
-                            ),
+                                icon('trash')
+                            )
                         )
                     )
                 );
@@ -242,9 +242,9 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                     set::value(isset($linkedProducts[$planProductID]) ? $linkedProducts[$planProductID]->plans : ''),
                     set::multiple(true),
                     formHidden('products[0]', $planProductID),
-                    formHidden('branch[0][0]', 0),
+                    formHidden('branch[0][0]', 0)
                 )
-            ),
+            )
         );
     }
     else
@@ -262,7 +262,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                     (
                         set::id('products0'),
                         set::name('products[0]'),
-                        set::items($allProducts),
+                        set::items($allProducts)
                     )
                 ),
                 formGroup
@@ -280,7 +280,7 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                             set::items(array()),
                             on::change('branchChange')
                         )
-                    ),
+                    )
                 ),
                 formGroup
                 (
@@ -309,9 +309,9 @@ if($project->model != 'waterfall' && $project->model != 'waterfallplus')
                         (
                             setClass('btn btn-link text-gray removeLine'),
                             setClass('hidden'),
-                            icon('trash'),
-                        ),
-                    ),
+                            icon('trash')
+                        )
+                    )
                 ),
             );
     }
@@ -347,9 +347,9 @@ elseif(!empty($project) && !empty($project->hasProduct))
                                 set::last($product->id),
                                 $hasBranch && $product->branches ? set::lastBranch(implode(',', $product->branches)) : null,
                                 set::disabled(in_array($project->model, array('waterfall', 'waterfallplus'))),
-                                set::required(in_array($project->model, array('waterfall', 'waterfallplus'))),
+                                set::required(in_array($project->model, array('waterfall', 'waterfallplus')))
                             )
-                        ),
+                        )
                     )
                 ),
                 formGroup
@@ -370,7 +370,7 @@ elseif(!empty($project) && !empty($project->hasProduct))
                             set::multiple(true),
                             on::change('branchChange')
                         )
-                    ),
+                    )
                 ),
                 formGroup
                 (
@@ -387,7 +387,7 @@ elseif(!empty($project) && !empty($project->hasProduct))
                             set::value(isset($product->plans) ? implode(',', $product->plans) : ''),
                             set::multiple(true)
                         )
-                    ),
+                    )
                 )
             );
 
@@ -403,7 +403,7 @@ elseif(!empty($project) && !empty($project->hasProduct))
                 set::name("branch[][]"),
                 set::items(array()),
                 set::value(''),
-                set::multiple(true),
+                set::multiple(true)
             );
     }
 }
@@ -416,7 +416,7 @@ else
             set::hidden(true),
             set::items(isset($linkedBranches[key($linkedProducts)]) ? $linkedBranches[key($linkedProducts)] : array()),
             set::value(isset($linkedBranches[key($linkedProducts)]) ? implode(',', $linkedBranches[key($linkedProducts)]) : ''),
-            set::multiple(true),
+            set::multiple(true)
         );
 }
 
@@ -434,14 +434,14 @@ formPanel
         set::width('1/2'),
         set::name('name'),
         set::label($lang->execution->name),
-        set::value($execution->name),
+        set::value($execution->name)
     ),
     isset($config->setCode) && $config->setCode == 1 ? formGroup
     (
         set::width('1/2'),
         set::name('code'),
         set::label($lang->execution->code),
-        set::value($execution->code),
+        set::value($execution->code)
     ) : null,
     formRow
     (
@@ -469,7 +469,7 @@ formPanel
                     set::placeholder($lang->execution->end),
                     on::change('computeWorkDays')
                 )
-            ),
+            )
         ),
         formGroup
         (
@@ -479,9 +479,9 @@ formPanel
                 set::inline(true),
                 set::items($lang->execution->endList),
                 set::value((strtotime($execution->end) - strtotime($execution->begin)) / 3600 / 24 + 1),
-                on::change('computeEndDate'),
+                on::change('computeEndDate')
             )
-        ),
+        )
     ),
     formGroup
     (
@@ -493,7 +493,7 @@ formPanel
             input
             (
                 set::name('days'),
-                set::value($execution->days),
+                set::value($execution->days)
             ),
             div
             (
@@ -509,7 +509,7 @@ formPanel
         set::name('percent'),
         set::label($lang->stage->percent),
         set::value($execution->percent),
-        set::required(true),
+        set::required(true)
     ) : null,
     $project->model != 'ipd' ? formGroup
     (
@@ -520,7 +520,7 @@ formPanel
             set::name('status'),
             set::items($lang->execution->statusList),
             set::value($execution->status),
-            set::required(true),
+            set::required(true)
         )
     ) : null,
     $productsBox,
@@ -530,7 +530,7 @@ formPanel
         set::width('1/2'),
         set::name('team'),
         set::label($lang->execution->teamName),
-        set::value($execution->team),
+        set::value($execution->team)
     ),
     formRow
     (
@@ -542,7 +542,7 @@ formPanel
             (
                 set::name('PM'),
                 set::items($pmUsers),
-                set::value($execution->PM),
+                set::value($execution->PM)
             )
         ),
         formGroup
@@ -553,7 +553,7 @@ formPanel
             (
                 set::name('PO'),
                 set::items($poUsers),
-                set::value($execution->PO),
+                set::value($execution->PO)
             )
         ),
         formGroup
@@ -564,7 +564,7 @@ formPanel
             (
                 set::name('QD'),
                 set::items($qdUsers),
-                set::value($execution->QD),
+                set::value($execution->QD)
             )
         ),
         formGroup
@@ -575,9 +575,9 @@ formPanel
             (
                 set::name('RD'),
                 set::items($rdUsers),
-                set::value($execution->RD),
+                set::value($execution->RD)
             )
-        ),
+        )
     ),
     formGroup
     (
@@ -587,7 +587,7 @@ formPanel
             set::name('teamMembers[]'),
             set::items($users),
             set::value(array_keys($teamMembers)),
-            set::multiple(true),
+            set::multiple(true)
         )
     ),
     h::hr(),
@@ -597,7 +597,7 @@ formPanel
         editor
         (
             set::name('desc'),
-            html($execution->desc),
+            html($execution->desc)
         )
     ),
     formRow
@@ -612,7 +612,7 @@ formPanel
             set::items($lang->execution->aclList),
             set::value($execution->acl),
             set::disabled($execution->grade == 2),
-            on::change('setWhite(this.value)'),
+            on::change('setWhite(this.value)')
         )
     ),
     formGroup
@@ -624,9 +624,9 @@ formPanel
         (
             set::name('whitelist'),
             set::items($users),
-            set::multiple(true),
+            set::multiple(true)
         )
-    ),
+    )
 );
 
 /* ====== Render page ====== */

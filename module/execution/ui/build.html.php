@@ -25,10 +25,10 @@ featureBar
             set::name('product'),
             set::value($product),
             set::items($products),
-            on::change('changeProduct'),
-        ),
+            on::change('changeProduct')
+        )
     ),
-    li(searchToggle(set::module('executionBuild'))),
+    li(searchToggle(set::module('executionBuild')))
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -57,12 +57,12 @@ dtable
     set::footPager(
         usePager
         (
-            array('linkCreator' => helper::createLink('execution', 'build', "executionID={$execution->id}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage),
-        ),
+            array('linkCreator' => helper::createLink('execution', 'build', "executionID={$execution->id}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage)
+        )
     ),
     set::emptyTip($lang->build->noBuild),
     set::createTip($lang->build->create),
-    set::createLink($canCreateBuild ? createLink('build', 'create', "executionID={$execution->id}") : ''),
+    set::createLink($canCreateBuild ? createLink('build', 'create', "executionID={$execution->id}") : '')
 );
 
 /* ====== Render page ====== */

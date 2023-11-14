@@ -36,7 +36,7 @@ formPanel
                     set::name('begin'),
                     set::value($execution->begin),
                     set::placeholder($lang->execution->begin),
-                    on::change('computeWorkDays'),
+                    on::change('computeWorkDays')
                 ),
                 $lang->execution->to,
                 input
@@ -46,9 +46,9 @@ formPanel
                     set::name('end'),
                     set::value($execution->end),
                     set::placeholder($lang->execution->end),
-                    on::change('computeWorkDays'),
-                ),
-            ),
+                    on::change('computeWorkDays')
+                )
+            )
         ),
         formGroup
         (
@@ -58,8 +58,8 @@ formPanel
                 set::name('delta'),
                 set::items($lang->execution->endList),
                 set::inline(true),
-                on::change('computeEndDate'),
-            ),
+                on::change('computeEndDate')
+            )
         )
     ),
     formRow
@@ -72,8 +72,8 @@ formPanel
             (
                 input(set::name('days')),
                 to::suffix($lang->execution->day),
-                set::suffixWidth(20),
-            ),
+                set::suffixWidth(20)
+            )
         )
     ),
     formRow
@@ -84,7 +84,7 @@ formPanel
             editor
             (
                 set::name('comment'),
-                set::rows('6'),
+                set::rows('6')
             )
         )
     )

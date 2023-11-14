@@ -73,7 +73,7 @@ toolbar
             set::icon('import')
         ),
         set::items($importItems),
-        set::placement('bottom-end'),
+        set::placement('bottom-end')
     ) : null,
     $canCreate && $canBatchCreate ? btngroup
     (
@@ -83,11 +83,11 @@ toolbar
             btn(setClass('btn primary dropdown-toggle'),
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
             set::items(array_filter(array($createItem, $batchCreateItem))),
-            set::placement('bottom-end'),
+            set::placement('bottom-end')
         )
     ) : null,
     $canCreate && !$canBatchCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
-    $canBatchCreate && !$canCreate ? item(set($batchCreateItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canBatchCreate && !$canCreate ? item(set($batchCreateItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null
 );
 
 /* zin: Define the sidebar in main content. */
@@ -118,7 +118,7 @@ if($canBatchAction)
         $batchItems = array
         (
             array('text' => $lang->close,        'innerClass' => 'batch-btn ajax-btn not-open-url' . ($canBatchClose  ? '' : 'hidden'), 'data-url' => createLink('task', 'batchClose')),
-            array('text' => $lang->task->cancel, 'innerClass' => 'batch-btn ajax-btn not-open-url' . ($canBatchCancel ? '' : 'hidden'), 'data-url' => createLink('task', 'batchCancel')),
+            array('text' => $lang->task->cancel, 'innerClass' => 'batch-btn ajax-btn not-open-url' . ($canBatchCancel ? '' : 'hidden'), 'data-url' => createLink('task', 'batchCancel'))
         );
     }
 
@@ -147,7 +147,7 @@ if($canBatchAction)
             'type'  => 'btn-group',
             'items' => array(
                 array('text' => $lang->edit, 'className' => "btn size-sm {$editClass}", 'btnType' => 'secondary', 'data-url' => createLink('task', 'batchEdit', "executionID={$execution->id}")),
-                array('caret' => 'up', 'className' => 'btn btn-caret size-sm  not-open-url', 'btnType' => 'secondary', 'items' => $batchItems, 'data-placement' => 'top-start'),
+                array('caret' => 'up', 'className' => 'btn btn-caret size-sm  not-open-url', 'btnType' => 'secondary', 'items' => $batchItems, 'data-placement' => 'top-start')
             )
         );
     }
