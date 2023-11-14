@@ -138,6 +138,7 @@ panel
         [
             'type' => 'primary',
             'text' => $lang->metric->publish,
+            'class' => 'ajax-submit',
             'btnType' => 'submit',
             'disabled' => empty($result),
             'url' => helper::createLink('metric', 'publish', "metricID={$metric->id}")
