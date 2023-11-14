@@ -614,7 +614,6 @@ class storyModel extends model
             $story->estimate   = $stories->estimate[$i] ? $stories->estimate[$i] : '';
             $story->spec       = $stories->spec[$i];
             $story->verify     = $stories->verify[$i];
-            $story->reviewedBy = implode(',', $stories->reviewer[$i]);
             $story->status     = $saveDraft ? 'draft' : ((empty($stories->reviewer[$i]) and !$forceReview) ? 'active' : 'reviewing');
             $story->stage      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? 'projected' : 'wait';
             $story->keywords   = $stories->keywords[$i];
