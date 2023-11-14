@@ -24,7 +24,7 @@ $fnGenerateSide = function() use($metrics, $current, $viewType, $scope, $filters
                 set::className($class . ' metric-item font-medium'),
                 a(
                     $metric->name,
-                    set::href(helper::createLink('metric', 'preview', $params)),
+                    set::href(helper::createLink('metric', 'preview', $params))
                 )
             );
     }
@@ -42,7 +42,7 @@ $fnGenerateFilterPanel = function($code, $filterItem) use($lang)
     (
         'class' => 'text-primary ghost',
         'text'  => sprintf($lang->metric->filter->clearAction, $lang->metric->filter->$code),
-        'onclick' => 'window.handleFilterClearItem(this)',
+        'onclick' => 'window.handleFilterClearItem(this)'
     );
     return panel
     (
@@ -55,9 +55,9 @@ $fnGenerateFilterPanel = function($code, $filterItem) use($lang)
             set::primary(true),
             set::name($code),
             set::inline(true),
-            set::items($items),
+            set::items($items)
         ),
-        set::headingActions(array($removeAction)),
+        set::headingActions(array($removeAction))
     );
 };
 
@@ -81,8 +81,8 @@ featureBar
             ),
             span
             (
-                setClass('checked'),
-            ),
+                setClass('checked')
+            )
         ),
         panel
         (
@@ -93,14 +93,14 @@ featureBar
                 array
                 (
                     array('type' => 'primary', 'text' => $lang->metric->filter->common, 'onclick' => 'window.handleFilterClick(this)'),
-                    array('type' => 'default', 'text' => $lang->metric->filter->clear, 'onclick' => 'window.handleFilterClearAll(this)'),
+                    array('type' => 'default', 'text' => $lang->metric->filter->clear, 'onclick' => 'window.handleFilterClearAll(this)')
                 )
             ),
             $fnGenerateFilterPanel('scope',   $filterItems['scope']),
             $fnGenerateFilterPanel('object',  $filterItems['object']),
-            $fnGenerateFilterPanel('purpose', $filterItems['purpose']),
-        ),
-    ),
+            $fnGenerateFilterPanel('purpose', $filterItems['purpose'])
+        )
+    )
 );
 
 $firstScope = current(array_keys($this->lang->metric->featureBar['preview']));
@@ -113,15 +113,15 @@ toolbar
         set::icon('exchange'),
         set::iconClass('icon-18'),
         set::url(helper::createLink('metric', 'preview', "scope=$exchangeScope&viewType=multiple&metricID={$current->id}")),
-        $lang->metric->viewType->multiple,
-    ),
+        $lang->metric->viewType->multiple
+    )
     /*
     common::hasPriv('metric', 'preview') ? btn
     (
         setClass('btn primary'),
         set::url(helper::createLink('metric', 'browse')),
         $lang->metric->manage
-    ) : null,
+    ) : null
     */
 );
 
@@ -142,7 +142,7 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
             set::label($this->lang->metric->query->scope[$current->scope]),
             set::name('scope'),
             set::control(array('type' => 'picker', 'multiple' => true)),
-            set::items($objectPairs),
+            set::items($objectPairs)
         );
     }
 
@@ -158,15 +158,15 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
                 datePicker
                 (
                     set::name('dateBegin'),
-                    set('id', 'dateBegin'),
+                    set('id', 'dateBegin')
                 ),
                 $this->lang->metric->to,
                 datePicker
                 (
                     set::name('dateEnd'),
-                    set('id', 'dateEnd'),
-                ),
-            ),
+                    set('id', 'dateEnd')
+                )
+            )
         );
     }
 
@@ -182,15 +182,15 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
                 datePicker
                 (
                     set::name('calcBegin'),
-                    set('id', 'calcBegin'),
+                    set('id', 'calcBegin')
                 ),
                 $this->lang->metric->to,
                 datePicker
                 (
                     set::name('calcEnd'),
-                    set('id', 'calcEnd'),
-                ),
-            ),
+                    set('id', 'calcEnd')
+                )
+            )
         );
     }
     else
@@ -207,9 +207,9 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
                     set::name('calcTime'),
                     set('id', 'calcTime'),
                     set::required(true),
-                    set::value(helper::today()),
-                ),
-            ),
+                    set::value(helper::today())
+                )
+            )
         );
     }
 
@@ -227,11 +227,11 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
                 (
                     setClass('btn secondary'),
                     set::text($this->lang->metric->query->action),
-                    set::onclick("window.handleQueryClick($current->id, 'single')"),
-                ),
+                    set::onclick("window.handleQueryClick($current->id, 'single')")
+                )
             )
         ),
-        set::actions(array()),
+        set::actions(array())
     );
 };
 
@@ -250,14 +250,14 @@ div
             (
                 setClass('name-color'),
                 $sideTitle
-            ),
+            )
         ),
         div
         (
             setClass('metric-tree'),
-            $fnGenerateSide($metrics, $current, $viewType, $scope),
-        ),
-    ),
+            $fnGenerateSide($metrics, $current, $viewType, $scope)
+        )
+    )
 );
 div
 (
@@ -275,7 +275,7 @@ div
                 span
                 (
                     setClass('metric-name-weight'),
-                    isset($current) ? $current->name : null,
+                    isset($current) ? $current->name : null
                 ),
                 btn
                 (
@@ -286,8 +286,8 @@ div
                     set::square(true),
                     set::size('sm'),
                     set::title($lang->metric->collectStar),
-                    on::click('.metric-collect', "window.collectMetric({$current->id})"),
-                ),
+                    on::click('.metric-collect', "window.collectMetric({$current->id})")
+                )
             ),
             div
             (
@@ -306,18 +306,17 @@ div
                         'icon'  => 'menu-backend',
                         'text'  => $this->lang->metric->filters,
                         'class' => 'ghost hidden',
-                        'url'   => '#',
+                        'url'   => '#'
                     ))) : null,
                     haspriv('metric', 'zAnalysis') ? item(set(array
                     (
                         'icon'  => 'chart-line',
                         'text'  => $this->lang->metric->zAnalysis,
                         'class' => 'ghost chart-line-margin hidden',
-                        'url'   => '#',
-                    ))) : null,
-
+                        'url'   => '#'
+                    ))) : null
                 )
-            ),
+            )
         ),
         $fnGenerateQueryForm(),
         div
@@ -333,8 +332,8 @@ div
                         set::bordered(true),
                         set::cols($resultHeader),
                         set::data(array_values($resultData)),
-                        set::onRenderCell(jsRaw('window.renderDTableCell')),
-                    ) : null,
+                        set::onRenderCell(jsRaw('window.renderDTableCell'))
+                    ) : null
                 )
             ),
             div
@@ -349,8 +348,8 @@ div
                         set::items($chartTypeList),
                         set::value('line'),
                         set::required(true),
-                        set::onchange("window.handleChartTypeChange($current->id, 'single')"),
-                    ) : null,
+                        set::onchange("window.handleChartTypeChange($current->id, 'single')")
+                    ) : null
                 ),
                 div
                 (
@@ -360,12 +359,12 @@ div
                         set::xAxis($echartOptions['xAxis']),
                         set::yAxis($echartOptions['yAxis']),
                         set::legend($echartOptions['legend']),
-                        set::series($echartOptions['series']),
-                    )->size('100%', '100%') : null,
-                ),
-            ),
-        ),
-    ),
+                        set::series($echartOptions['series'])
+                    )->size('100%', '100%') : null
+                )
+            )
+        )
+    )
 );
 
 render();

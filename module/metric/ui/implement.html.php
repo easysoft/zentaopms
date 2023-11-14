@@ -29,8 +29,8 @@ detailHeader
             )),
             set::text($lang->metric->implement->tip),
             setClass('label ghost')
-        ),
-    ),
+        )
+    )
 );
 
 $fnGenerateVerifyResult = function() use($verifyResult)
@@ -50,7 +50,7 @@ $fnGenerateVerifyResult = function() use($verifyResult)
             icon
             (
                 $icon
-            ),
+            )
         );
     }
 
@@ -66,7 +66,7 @@ $fnGenerateInstructions = function() use($lang)
         (
             set::className('font-medium text-md'),
             setStyle('padding-top', '12px'),
-            html($tip),
+            html($tip)
         );
     }
 
@@ -90,7 +90,7 @@ $fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metr
                 (
                     set::className('card-title'),
                     $lang->metric->objectList[$metric->object]
-                ),
+                )
             )
 
         );
@@ -99,7 +99,7 @@ $fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metr
         (
             set::height(400),
             set::cols($resultHeader),
-            set::data($resultData),
+            set::data($resultData)
         );
 };
 
@@ -112,7 +112,7 @@ panel
         setClass('ghost btn-download'),
         $lang->metric->implement->downloadPHP,
         set::url(helper::createLink('metric', 'downloadTemplate', "metricID={$metric->id}")),
-        set::target('_blank'),
+        set::target('_blank')
     ),
     div
     (
@@ -124,12 +124,12 @@ panel
 
                 $lang->metric->implement->instruction,
                 setClass('gray-pale text-md font-bold')
-            ),
+            )
         ),
         div
         (
             setClass('leading-loose'),
-            $fnGenerateInstructions(),
+            $fnGenerateInstructions()
         ),
         h1
         (
@@ -138,13 +138,13 @@ panel
             (
                 $lang->metric->verifyResult,
                 setClass('gray-pale text-md font-bold')
-            ),
+            )
         ),
         empty($result) ? div
         (
             setClass('verify-content'),
-            $fnGenerateVerifyResult(),
-        ) : $fnGenerateDataDisplay(),
+            $fnGenerateVerifyResult()
+        ) : $fnGenerateDataDisplay()
     ),
 
     set::footerClass('footer-actions'),
@@ -161,8 +161,8 @@ panel
             'btnType' => 'submit',
             'disabled' => empty($result),
             'url' => helper::createLink('metric', 'publish', "metricID={$metric->id}")
-        ],
-    ]),
+        ]
+    ])
 );
 
 render();

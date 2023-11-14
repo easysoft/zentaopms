@@ -28,7 +28,7 @@ $fnGenerateScopeMenu = function() use ($scope, $scopeText, $scopeList)
         set::caret(false),
         set::popWidth(200),
         set::popClass('popup text-md'),
-        set::data(array('search' => false, 'checkIcon' => false, 'link' => $link, 'data' => $scopeList)),
+        set::data(array('search' => false, 'checkIcon' => false, 'link' => $link, 'data' => $scopeList))
     );
 };
 
@@ -37,7 +37,7 @@ featureBar
     to::before($fnGenerateScopeMenu($scope, $scopeText, $scopeList)),
     set::current($stage),
     set::linkParams("scope=$scope&status={key}&param=$param&type=$type"),
-    li(searchToggle(set::open($type == 'bysearch'), set::module('metric'))),
+    li(searchToggle(set::open($type == 'bysearch'), set::module('metric')))
 );
 
 toolbar
@@ -47,11 +47,11 @@ toolbar
     (
         setClass('btn primary-outline'),
         set::url(helper::createLink('metric', 'preview')),
-        $lang->metric->exitManage,
+        $lang->metric->exitManage
     ),
     common::hasPriv('metric', 'create') ? div
     (
-        setClass('btn-divider'),
+        setClass('btn-divider')
     ) : null,
     common::hasPriv('metric', 'create') ? btn
     (
@@ -60,7 +60,7 @@ toolbar
         set::url(helper::createLink('metric', 'create')),
         set('data-toggle', 'modal'),
         $lang->metric->create
-    ) : null,
+    ) : null
 );
 
 sidebar
@@ -70,7 +70,7 @@ sidebar
         'modules'   => $metricTree,
         'activeKey' => $type == 'byTree' ? $param : 0,
         'closeLink' => $closeLink,
-        'showDisplay' => false,
+        'showDisplay' => false
     )))
 );
 
@@ -83,7 +83,7 @@ dtable
     set::cols($this->config->metric->dtable->definition->fieldList),
     set::data($tableData),
     set::onRenderCell(jsRaw('window.onRenderCell')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();
