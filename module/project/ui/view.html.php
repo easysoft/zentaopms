@@ -132,7 +132,7 @@ if(!empty($project->PM))
                 (
                     setClass('primary-outline'),
                     set::text($user->realname),
-                    set::src($user->avatar),
+                    set::src($user->avatar)
                 ),
                 span
                 (
@@ -164,7 +164,7 @@ foreach($teamMembers as $teamMember)
             avatar
             (
                 set::text($user->realname),
-                set::src($user->avatar),
+                set::src($user->avatar)
             ),
             span
             (
@@ -351,7 +351,7 @@ div
                         set('data-placement', 'right'),
                         set('data-type', 'white'),
                         set('data-class-name', 'text-gray border border-light'),
-                        setClass('ml-2 text-gray'),
+                        setClass('ml-2 text-gray')
                     )
                 )
             ),
@@ -367,9 +367,9 @@ div
             div
             (
                 set::className('detail-content mt-4'),
-                html($project->desc),
-            ),
-        ),
+                html($project->desc)
+            )
+        )
     ),
     div
     (
@@ -403,7 +403,7 @@ div
                                     set::url(createLink('project', 'manageproducts', "projectID={$project->id}")),
                                     icon('link', setClass('text-primary')),
                                     span($lang->more, setClass('font-normal'))
-                                ) : null,
+                                ) : null
                             )
                         ) : null,
                         h::th
@@ -439,7 +439,7 @@ div
                                     set::trailingIcon('caret-right pb-0.5'),
                                     set::url(createLink('project', 'team', "projectID={$project->id}")),
                                     span($lang->more, setClass('font-normal'))
-                                ) : null,
+                                ) : null
                             )
                         )
                     )
@@ -453,7 +453,7 @@ div
                             div
                             (
                                 setClass('flex flex-wrap member-list pt-2'),
-                                $membersDom,
+                                $membersDom
                             )
                         )
                     )
@@ -472,9 +472,9 @@ div
                             div
                             (
                                 setClass('flex items-center justify-between'),
-                                span($lang->execution->DurationStats),
+                                span($lang->execution->DurationStats)
                             )
-                        ),
+                        )
                     )
                 ),
                 h::tbody
@@ -492,7 +492,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->project->begin,
+                                        $lang->project->begin
                                     ),
                                     span
                                     (
@@ -506,7 +506,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->project->end,
+                                        $lang->project->end
                                     ),
                                     span
                                     (
@@ -520,7 +520,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->project->realBeganAB,
+                                        $lang->project->realBeganAB
                                     ),
                                     span
                                     (
@@ -534,14 +534,14 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->project->realEndAB,
+                                        $lang->project->realEndAB
                                     ),
                                     span
                                     (
                                         setClass('ml-2'),
                                         helper::isZeroDate($project->realEnd) ? '' : $project->realEnd
                                     )
-                                ),
+                                )
                             )
                         )
                     )
@@ -559,9 +559,9 @@ div
                             div
                             (
                                 setClass('flex items-center justify-between'),
-                                span($lang->execution->lblStats),
+                                span($lang->execution->lblStats)
                             )
-                        ),
+                        )
                     )
                 ),
                 h::tbody
@@ -579,7 +579,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->estimateHours,
+                                        $lang->execution->estimateHours
                                     ),
                                     span
                                     (
@@ -593,7 +593,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->consumedHours,
+                                        $lang->execution->consumedHours
                                     ),
                                     span
                                     (
@@ -607,7 +607,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->leftHours,
+                                        $lang->execution->leftHours
                                     ),
                                     span
                                     (
@@ -621,7 +621,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->totalDays,
+                                        $lang->execution->totalDays
                                     ),
                                     span
                                     (
@@ -635,7 +635,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        $lang->execution->totalHours,
+                                        $lang->execution->totalHours
                                     ),
                                     span
                                     (
@@ -656,13 +656,13 @@ div
                                         setClass('ml-2'),
                                         $project->budget ? '￥' . $project->budget : $lang->project->future
                                     )
-                                ),
+                                )
                             )
                         )
                     )
                 )
-            ),
-        ),
+            )
+        )
     )
 );
 
@@ -677,7 +677,7 @@ div
             div
             (
                 set('class', 'panel-title article-h2'),
-                $lang->execution->latestDynamic,
+                $lang->execution->latestDynamic
             )
         ),
         to::headingActions
@@ -732,7 +732,7 @@ foreach($config->project->view->operateList['common'] as $operate)
 
 div
 (
-    setClass('w-2/3 text-center fixed actions-menu'),
+    setClass('w-2/3 center fixed actions-menu'),
     floatToolbar
     (
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
