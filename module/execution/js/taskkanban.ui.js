@@ -120,23 +120,11 @@ window.getColActions = function(col)
     /* 父列不需要创建卡片相关的操作按钮。 */
     if(col.parent != '-1' && (col.type == 'backlog' || col.type == 'unconfirmed' || col.type == 'wait'))
     {
-        actionList.push(
-        {
-            type: 'dropdown',
-            icon: 'expand-alt text-primary',
-            caret: false,
-            items: buildColCardActions(col),
-        });
+        let cardActions = buildColCardActions(col);
+        if(cardActions.length > 0) actionList.push({type:'dropdown', icon:'expand-alt text-primary', caret:false, items:cardActions});
     }
 
-    actionList.push(
-    {
-        type: 'dropdown',
-        icon: 'ellipsis-v',
-        caret: false,
-        items: buildColActions(col),
-    });
-
+    actionList.push({type:'dropdown', icon:'ellipsis-v', caret:false, items:buildColActions(col)});
     return actionList;
 }
 
@@ -159,13 +147,13 @@ window.buildColCardActions = function(col)
         if(priv.canCreateBug) actions.push({text: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID), 'data-toggle': 'modal'});
         if(priv.canBatchCreateBug)
         {
-            if(productNum > 1) actions.push({text: bugLang.batchCreate, url: '#batchCreateBug', 'data-toggle': 'modal'});
+            if(productNum > 1) actions.push({text: bugLang.batchCreate, url: '#batchCreateBug', 'data-toggle': 'modal', 'data-size': 'lg'});
             else actions.push({text: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&moduleID=0&executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         }
     }
     else if(col.type == 'wait')
     {
-        if(priv.canCreateTask)                actions.push({text: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID), 'data-toggle': 'modal'});
+        if(priv.canCreateTask)                actions.push({text: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(priv.canBatchCreateTask)           actions.push({text: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(priv.canImportBug && canImportBug) actions.push({text: executionLang.importBug, url: $.createLink('execution', 'importBug', 'executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
     }
@@ -213,7 +201,7 @@ window.getItem = function(info)
         beginAndEnd = formatDate(begin) + ' ~ ' + formatDate(end);
     }
 
-    if(info.item.assignedTo)
+    if(info.item.assignedTo && typeof userList[info.item.assignedTo] != 'undefined')
     {
         user       = userList[info.item.assignedTo];
         assignedTo = user.realname;

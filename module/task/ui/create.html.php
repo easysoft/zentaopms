@@ -237,11 +237,10 @@ formPanel
                 ),
                 span
                 (
-                    set('class', 'input-group-addon'),
-                    a
+                    set('class', 'input-group-btn'),
+                    btn
                     (
-                        set('id', 'showAllModuleButton'),
-                        set('href', 'javascript:;'),
+                        setID('showAllModuleButton'),
                         $lang->task->allModule,
                         on::click('showAllModule')
                     ),
