@@ -192,6 +192,7 @@ $lang->tutorial->tasks['createBug']['nav']['app']            = 'qa';
 $lang->tutorial->tasks['createBug']['nav']['module']         = 'bug';
 $lang->tutorial->tasks['createBug']['nav']['method']         = 'create';
 $lang->tutorial->tasks['createBug']['nav']['menuModule']     = 'bug';
+$lang->tutorial->tasks['createBug']['nav']['vars']           = 'productID=1';
 $lang->tutorial->tasks['createBug']['nav']['menu']           = '#heading > .toolbar > .toolbar-item, .create-bug-btn';
 $lang->tutorial->tasks['createBug']['nav']['form']           = '#mainContent';
 $lang->tutorial->tasks['createBug']['nav']['submit']         = 'button[type=submit]';
