@@ -48,5 +48,5 @@ $docContent = dtable
     set::emptyTip($lang->doc->noDoc),
     set::createLink($createDocLink),
     set::createTip($lang->doc->create),
-    set::footPager(usePager(array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params)))),
+    set::footPager(usePager(array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params))))
 );

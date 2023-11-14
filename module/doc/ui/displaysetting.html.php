@@ -22,7 +22,7 @@ formPanel
             set::inline(true),
             set::name('showDoc'),
             set::items($lang->doc->showDocList),
-            set::value($showDoc),
+            set::value($showDoc)
         )
     )
 );

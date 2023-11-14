@@ -156,14 +156,14 @@ $contentDom = div
                 (
                     set::url(createLink('doc', 'edit', "docID=$doc->id")),
                     setClass('btn ghost'),
-                    icon('edit'),
+                    icon('edit')
                 ) : null,
                 common::hasPriv('doc', 'delete') ? btn
                 (
                     set::url(createLink('doc', 'delete', "docID=$doc->id")),
                     setClass('btn ghost ajax-submit'),
                     set('data-confirm', $lang->doc->confirmDelete),
-                    icon('trash'),
+                    icon('trash')
                 ) : null,
                 btn
                 (
@@ -171,8 +171,8 @@ $contentDom = div
                     set::url('###)'),
                     setClass('btn ghost'),
                     icon('clock'),
-                    on::click('showHistory'),
-                ),
+                    on::click('showHistory')
+                )
             ),
             div
             (
@@ -193,7 +193,7 @@ $contentDom = div
                 'contacts',
                 setClass('mr-2')
             ),
-            $createInfo,
+            $createInfo
         ),
         span
         (
@@ -203,7 +203,7 @@ $contentDom = div
                 'star',
                 setClass('mr-2')
             ),
-            $doc->collects ? $doc->collects : 0,
+            $doc->collects ? $doc->collects : 0
         ),
         span
         (
@@ -213,13 +213,13 @@ $contentDom = div
                 'eye',
                 setClass('mr-2')
             ),
-            $doc->views,
+            $doc->views
         ),
         $keywordsLabel ? span
         (
             setClass('keywords'),
             $keywordsLabel
-        ) : null,
+        ) : null
     ),
     div
     (
@@ -233,7 +233,7 @@ $contentDom = div
         $doc->files ? fileList
         (
             set::files($doc->files)
-        ) : null,
+        ) : null
     )
 );
 
@@ -253,7 +253,7 @@ $toggleTreeBtn = isset($outlineTree) ? btn
         setID('outlineToggle'),
         setClass('btn ghost'),
         icon('menu-arrow-right'),
-        on::click('toggleOutline'),
+        on::click('toggleOutline')
     ) : null;
 
 $historyDom = div
@@ -273,5 +273,5 @@ panel
         $treeDom,
         $toggleTreeBtn,
         $historyDom
-    ),
+    )
 );

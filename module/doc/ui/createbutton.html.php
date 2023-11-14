@@ -49,7 +49,7 @@ $buildCreateBtn = function($type, $typeID, $libID, $moduleID, $templateParam, $b
             btn(setClass('btn primary dropdown-toggle'),
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
             set::placement('bottom-end'),
-            set::items($buttonItems),
+            set::items($buttonItems)
         )
     );
 };

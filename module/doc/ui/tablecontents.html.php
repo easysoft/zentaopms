@@ -35,7 +35,7 @@ toolbar
         'icon'  => 'treemap',
         'class' => 'ghost',
         'text'  => $lang->api->struct,
-        'url'   => createLink('api', 'struct', "libID={$libID}"),
+        'url'   => createLink('api', 'struct', "libID={$libID}")
     ))) : null,
     $libType == 'api' && common::hasPriv('api', 'releases') ? item(set(array
     (

@@ -31,7 +31,7 @@ form
             set::items($spaceList),
             set::value(key($spaceList)),
             set::inline(true),
-            on::change('changeSpace'),
+            on::change('changeSpace')
         )
     ),
     formRow
@@ -46,7 +46,7 @@ form
                 set::items($typeList),
                 set::value(''),
                 set::inline(true),
-                on::change('changeDocType'),
+                on::change('changeDocType')
             )
         )
     ),
@@ -63,7 +63,7 @@ form
                 set::name('apiType'),
                 set::items($lang->doc->apiTypeList),
                 set::value(''),
-                on::change('changeApiType'),
+                on::change('changeApiType')
             )
         )
     ),
@@ -80,7 +80,7 @@ form
                 setID('projectBox'),
                 set::name('project'),
                 set::items($projects),
-                set::value(key($projects)),
+                set::value(key($projects))
             )
         ),
         formGroup
@@ -94,7 +94,7 @@ form
                 set::name('execution'),
                 set::items(array()),
                 set::value(''),
-                on::change("loadObjectModules('execution')"),
+                on::change("loadObjectModules('execution')")
             )
         ),
         formGroup
@@ -108,7 +108,7 @@ form
                 set('data-placement', 'right'),
                 set('data-type', 'white'),
                 set('data-class-name', 'text-gray border border-light'),
-                setClass('ml-2 mt-2 text-gray'),
+                setClass('ml-2 mt-2 text-gray')
             )
         )
     ),
@@ -125,7 +125,7 @@ form
                 set::name('product'),
                 set::items($products),
                 set::value(key($products)),
-                on::change("loadObjectModules('product')"),
+                on::change("loadObjectModules('product')")
             )
         )
     ),
@@ -139,7 +139,7 @@ form
             setID('moduleBox'),
             set::name('module'),
             set::items(array()),
-            set::value(''),
+            set::value('')
         )
     )
 );

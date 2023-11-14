@@ -31,8 +31,8 @@ form
             (
                 set::name('title'),
                 set::value($doc->title),
-                set::placeholder($lang->doc->titlePlaceholder),
-            ),
+                set::placeholder($lang->doc->titlePlaceholder)
+            )
         ),
         $doc->status == 'draft' ? btn
         (
@@ -42,7 +42,7 @@ form
                 (
                     'class' => 'btn secondary mr-2 save-draft',
                     'text'  => $lang->doc->saveDraft,
-                    'btnType' => 'submit',
+                    'btnType' => 'submit'
                 )
             )
         ) : null,
@@ -54,7 +54,7 @@ form
                 (
                     'class' => 'btn primary save-btn',
                     'text'  => $lang->doc->release,
-                    'btnType' => 'submit',
+                    'btnType' => 'submit'
                 )
             )
         ),
@@ -98,8 +98,8 @@ form
                     set::level(1),
                     set::text($doc->title),
                     set::reverse(true),
-                    setClass('pl-2'),
-                ),
+                    setClass('pl-2')
+                )
             ),
             set::id('modalBasicInfo'),
             on::change('#product',   "loadObjectModules"),
@@ -138,7 +138,7 @@ form
                 input
                 (
                     set::name('keywords'),
-                    set::value($doc->keywords),
+                    set::value($doc->keywords)
                 )
             ),
             formGroup
@@ -154,7 +154,7 @@ form
                     set::multiple(true),
                     set::name('mailto[]'),
                     set::items($users),
-                    set::value($doc->mailto),
+                    set::value($doc->mailto)
                 )
             ),
             formGroup
@@ -178,14 +178,14 @@ form
                     set::name('groups[]'),
                     set::items($groups),
                     set::multiple(true),
-                    set::value($doc->groups),
+                    set::value($doc->groups)
                 ),
                 picker
                 (
                     set::name('users[]'),
                     set::items($users),
                     set::multiple(true),
-                    set::value($doc->users),
+                    set::value($doc->users)
                 )
             ),
             formRow
@@ -200,7 +200,7 @@ form
                             array
                             (
                                 'class'   => 'btn primary',
-                                'btnType' => 'submit',
+                                'btnType' => 'submit'
                             )
                         ),
                         $lang->doc->release

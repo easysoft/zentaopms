@@ -25,7 +25,7 @@ formPanel
             set::items($lang->doclib->type),
             set::value('wiki'),
             set::inline(true),
-            on::change('changeDoclibAcl'),
+            on::change('changeDoclibAcl')
         )
     ) : null,
     in_array($type, array('product', 'project', 'execution')) ? formRow
@@ -52,7 +52,7 @@ formPanel
             set::name('execution'),
             set::items($executionPairs),
             set::placeholder($lang->doclib->tip->selectExecution),
-            set::disabled(!$project->multiple),
+            set::disabled(!$project->multiple)
         ),
         formGroup
         (
@@ -64,7 +64,7 @@ formPanel
                 set('data-placement', 'right'),
                 set('data-type', 'white'),
                 set('data-class-name', 'text-gray border border-light'),
-                setClass('ml-2 mt-2 text-gray'),
+                setClass('ml-2 mt-2 text-gray')
             )
         )
     ) : null,
@@ -75,7 +75,7 @@ formPanel
         (
             set::label($lang->doclib->name),
             set::width('3/4'),
-            set::name('name'),
+            set::name('name')
         )
     ),
     formRow
@@ -86,7 +86,7 @@ formPanel
             set::label($lang->api->baseUrl),
             set::width('3/4'),
             set::name('baseUrl'),
-            set::placeholder($lang->api->baseUrlDesc),
+            set::placeholder($lang->api->baseUrlDesc)
         )
     ),
     formRow
@@ -101,9 +101,9 @@ formPanel
                 set::name('acl'),
                 set::items($lang->doclib->aclList),
                 set::value($acl),
-                on::change("toggleAcl('lib')"),
-            ),
-        ),
+                on::change("toggleAcl('lib')")
+            )
+        )
     ),
     formRow
     (
@@ -125,7 +125,7 @@ formPanel
                         (
                             set::name('groups[]'),
                             set::items($groups),
-                            set::multiple(true),
+                            set::multiple(true)
                         )
                     )
                 ),
@@ -138,7 +138,7 @@ formPanel
                         (
                             set::name('users[]'),
                             set::items($users),
-                            set::multiple(true),
+                            set::multiple(true)
                         )
                     )
                 )
@@ -155,7 +155,7 @@ formPanel
             radioList
             (
                 set::name('acl'),
-                set::items($lang->api->aclList),
+                set::items($lang->api->aclList)
             )
         )
     ),
@@ -169,11 +169,11 @@ formPanel
             radioList
             (
                 set::name('acl'),
-                set::items($lang->doclib->aclList),
+                set::items($lang->doclib->aclList)
             )
         ),
-        formHidden('type', $type),
-    ),
+        formHidden('type', $type)
+    )
 );
 
 /* ====== Render page ====== */

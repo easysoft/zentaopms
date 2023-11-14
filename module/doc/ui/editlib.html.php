@@ -24,7 +24,7 @@ formPanel
     (
         set::label($lang->doc->{$lib->type}),
         set::control('static'),
-        set::value($object->name),
+        set::value($object->name)
     ) : null,
     formGroup
     (
@@ -36,8 +36,8 @@ formPanel
             setClass('hidden'),
             set::name('acl'),
             set::items($lang->doc->libTypeList),
-            set::value($lib->type),
-        ),
+            set::value($lib->type)
+        )
     ),
     formRow
     (
@@ -50,8 +50,8 @@ formPanel
                 set::name('acl'),
                 set::items($lib->type == 'api' ? $lang->api->aclList : $lang->doclib->aclList),
                 set::value(empty($lib->main) ?  $lib->acl : 'default'),
-                on::change("toggleAcl('lib')"),
-            ),
+                on::change("toggleAcl('lib')")
+            )
         )
     ),
     formRow
@@ -74,7 +74,7 @@ formPanel
                             set::name('groups[]'),
                             set::items($groups),
                             set::value($lib->groups),
-                            set::multiple(true),
+                            set::multiple(true)
                         )
                     )
                 ),
@@ -88,13 +88,13 @@ formPanel
                             set::name('users[]'),
                             set::items($users),
                             set::value($lib->users),
-                            set::multiple(true),
+                            set::multiple(true)
                         )
                     )
                 )
             )
         )
-    ),
+    )
 );
 
 /* ====== Render page ====== */

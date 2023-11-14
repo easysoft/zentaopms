@@ -69,9 +69,9 @@ else
                     set::name('execution'),
                     set::id('execution'),
                     set::items($executions),
-                    set::value(isset($execution) ? $objectID : ''),
+                    set::value(isset($execution) ? $objectID : '')
                 )
-            ) : null,
+            ) : null
         );
     }
 
@@ -89,8 +89,8 @@ else
                 input
                 (
                     set::name('title'),
-                    set::placeholder($lang->doc->titlePlaceholder),
-                ),
+                    set::placeholder($lang->doc->titlePlaceholder)
+                )
             ),
             btn
             (
@@ -100,7 +100,7 @@ else
                     (
                         'class' => 'btn secondary save-draft mr-2',
                         'text'  => $lang->doc->saveDraft,
-                        'btnType' => 'submit',
+                        'btnType' => 'submit'
                     )
                 )
             ),
@@ -124,7 +124,7 @@ else
             set::name('content'),
             set::size('full'),
             set::resizable(false),
-            set::placeholder($lang->noticePasteImg),
+            set::placeholder($lang->noticePasteImg)
         ),
         formHidden('status', 'normal'),
         formHidden('contentType', 'html'),
@@ -185,7 +185,7 @@ else
                     set::label($lang->doc->keywords),
                     input
                     (
-                        set::name('keywords'),
+                        set::name('keywords')
                     )
                 ),
                 formGroup
@@ -200,7 +200,7 @@ else
                     (
                         set::multiple(true),
                         set::name('mailto[]'),
-                        set::items($users),
+                        set::items($users)
                     )
                 ),
                 formGroup
@@ -223,13 +223,13 @@ else
                     (
                         set::name('groups[]'),
                         set::items($groups),
-                        set::multiple(true),
+                        set::multiple(true)
                     ),
                     picker
                     (
                         set::name('users[]'),
                         set::items($users),
-                        set::multiple(true),
+                        set::multiple(true)
                     )
                 ),
                 formRow
@@ -244,7 +244,7 @@ else
                                 array
                                 (
                                     'class'   => 'btn primary',
-                                    'btnType' => 'submit',
+                                    'btnType' => 'submit'
                                 )
                             ),
                             $lang->doc->release

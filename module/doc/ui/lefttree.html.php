@@ -42,6 +42,6 @@ sidebar
         set::menuLink(isset($objectDropdown['link']) ? $objectDropdown['link'] : ''),
         set::settingLink($app->rawModule == 'doc' && $app->rawMethod == 'view' && common::hasPriv('doc', 'displaySetting') ? inlink('displaySetting') : ''),
         set::settingText($lang->doc->displaySetting),
-        set::defaultNestedShow($defaultNestedShow),
+        set::defaultNestedShow($defaultNestedShow)
     )
 );

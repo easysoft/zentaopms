@@ -41,5 +41,5 @@ $docContent = dtable(
     set::createTip($lang->doc->create),
     set::orderBy($orderBy),
     set::sortLink(createLink($app->rawModule, $app->rawMethod, "objectID={$objectID}&libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&orderBy={name}_{sortType}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    set::footPager(usePager(array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params)))),
+    set::footPager(usePager(array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params))))
 );

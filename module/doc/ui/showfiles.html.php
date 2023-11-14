@@ -27,7 +27,7 @@ if(!empty($files))
                 set::cols($config->doc->showfiles->dtable->fieldList),
                 set::data($tableData),
                 set::onRenderCell(jsRaw('window.renderCell')),
-                set::footPager(usePager($linkTpl)),
+                set::footPager(usePager($linkTpl))
             );
     }
     else
@@ -62,9 +62,9 @@ if(!empty($files))
                                     img
                                     (
                                         setClass(empty($file->imageWidth) ? 'not-exist' : ''),
-                                        set('src', $file->webPath),
+                                        set('src', $file->webPath)
                                     )
-                                ) : html($file->fileIcon),
+                                ) : html($file->fileIcon)
                             ),
                             div
                             (
@@ -81,7 +81,7 @@ if(!empty($files))
                                     set::href(createLink(($file->objectType == 'requirement' ? 'story' : $file->objectType), 'view', "objectID={$file->objectID}")),
                                     set::title($file->sourceName),
                                     $file->sourceName,
-                                    $file->objectType != 'doc' ? set(array('data-toggle' => 'modal', 'data-size' => 'lg')) : null,
+                                    $file->objectType != 'doc' ? set(array('data-toggle' => 'modal', 'data-size' => 'lg')) : null
                                 )
                             )
                         )
@@ -100,7 +100,7 @@ if(!empty($files))
                 ),
                 pager(
                     set::_className('flex justify-end items-center'),
-                    set(usePager($linkTpl)),
+                    set(usePager($linkTpl))
                 )
             );
     }
@@ -114,7 +114,7 @@ else
             (
                 setClass('text-gray'),
                 $lang->pager->noRecord
-            ),
+            )
         );
 }
 
@@ -133,13 +133,13 @@ div
                 (
                     set::name('title'),
                     set::value($searchTitle),
-                    set::placeholder($lang->doc->fileTitle),
+                    set::placeholder($lang->doc->fileTitle)
                 ),
                 span
                 (
                     setClass('input-control-suffix'),
-                    btn(set(array('icon' => 'search', 'class' => 'ghost', 'onclick' => 'searchTitle()'))),
-                ),
+                    btn(set(array('icon' => 'search', 'class' => 'ghost', 'onclick' => 'searchTitle()')))
+                )
             )
         ),
         div
@@ -154,7 +154,7 @@ div
                     setClass('btn switchBtn'),
                     setClass($viewType == 'list' ? ' text-primary' : ''),
                     set::href(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle={$searchTitle}")),
-                    set('data-app', $app->tab),
+                    set('data-app', $app->tab)
                 ),
                 a
                 (
@@ -162,8 +162,8 @@ div
                     setClass('btn switchBtn'),
                     setClass($viewType != 'list' ? ' text-primary' : ''),
                     set::href(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&searchTitle=$searchTitle")),
-                    set('data-app', $app->tab),
-                ),
+                    set('data-app', $app->tab)
+                )
             ),
             common::hasPriv('doc', 'createLib') ? btn
             (
@@ -171,8 +171,8 @@ div
                 set::text($lang->doc->createLib),
                 set::icon('plus'),
                 set::url(createLink('doc', 'createLib', "type={$type}&objectID={$objectID}")),
-                set('data-toggle', 'modal'),
-            ) : null,
+                set('data-toggle', 'modal')
+            ) : null
         )
     ),
     div
