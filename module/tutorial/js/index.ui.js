@@ -37,6 +37,7 @@ $(function()
     var checkTaskId = null, modalShowTaskId;
     var checkFormReadyId = null;
     var showToolTipTask = null;
+    var submitBindCount = 0;
 
     var getApp = function(code)
     {
@@ -240,8 +241,6 @@ $(function()
 
     var checkFormReady = function()
     {
-        clearTips();
-
         var iWindow = getAppWindow();
         if(!iWindow || !iWindow.$) return tryCheckTask();
         var task = tasks[current];
@@ -288,7 +287,6 @@ $(function()
                     {
                         targetStatus.form = false;
                         if(!targetStatus.waitField) targetStatus.waitField = $required;
-                        showFormPopver = false;
                     }
                 }
             });
@@ -330,7 +328,7 @@ $(function()
 
         $navTarget.toggleClass('finish', !!targetStatus.nav);
         $formTarget.toggleClass('finish', !!targetStatus.form);
-        $submitTarget.toggleClass('finish', !!targetStatus.submit);
+        $submitTarget.toggleClass('finish', !!targetStatus.submitOK);
         $navTarget.toggleClass('wait', !$navTarget.is('.finish,.active'));
         $formTarget.toggleClass('wait', !$formTarget.is('.finish,.active'));
         $submitTarget.toggleClass('wait', !$submitTarget.is('.finish,.active'));
@@ -382,6 +380,7 @@ $(function()
             var $form = $$(task.nav.form);
             var $formWrapper = $form.closest('#mainContent');
             if(!$formWrapper.length) $formWrapper = $form;
+            $formTarget.addClass('active');
             highlight($formWrapper);
             showToolTip($formWrapper, $formTarget.text());
             var fieldSelector = '';
@@ -406,6 +405,8 @@ $(function()
             if(!$form.data('bindCheckTaskEvent'))
             {
                 $form.off('.tutorial').off('submit');
+                $form.on('change.tutorial', fieldSelector, tryCheckFormReady)
+                $form.on('blur.tutorial', fieldSelector, tryCheckFormReady)
 
                 var onSubmit = function(e)
                 {
@@ -449,15 +450,6 @@ $(function()
                     });
                 }
             }
-
-            setTimeout(
-                function()
-                {
-                    $form.on('change.tutorial', fieldSelector, tryCheckFormReady)
-                    $form.on('blur.tutorial', fieldSelector, tryCheckFormReady)
-                },
-                2000
-            )
         }
         else
         {
@@ -551,6 +543,15 @@ $(function()
             }
         }
 
+        $navTarget.toggleClass('finish', !!targetStatus.nav);
+        $formTarget.toggleClass('finish', !!targetStatus.form);
+        $submitTarget.toggleClass('finish', !!targetStatus.submitOK);
+        $navTarget.toggleClass('wait', !$navTarget.is('.finish,.active'));
+        $formTarget.toggleClass('wait', !$formTarget.is('.finish,.active'));
+        $submitTarget.toggleClass('wait', !$submitTarget.is('.finish,.active'));
+        $openTaskPage.toggleClass('open', targetStatus.nav);
+
+        targetStatus.submitOK = targetStatus.nav && targetStatus.form;
         return targetStatus;
     };
 
@@ -670,7 +671,7 @@ $(function()
             if(status.submitOK) window.location.reload();
         }).on('click', '.btn-open-target-page', function()
         {
-            appsWindow.$.apps.open(tasks[current].url);
+            appsWindow.$.apps.openApp(tasks[current].url);
         }).on('click', '.btn-reset-tasks', function()
         {
             hideModal();

@@ -18,16 +18,16 @@ $taskGroup = array_map(function($key, $task) use(&$i)
     $i++;
     return li
         (
-            set::style(array('width' => '100%')),
-            set('data-name', $key),
+            setClass('w-full'),
+            setData(array('name' => $key)),
             a
             (
-                set('data-name', $key),
+                setData(array('name' => $key)),
                 set::href('javascript:;'),
-                set::className('btn-task pull-left'),
+                setClass('btn-task pull-left'),
                 span($i .'. '),
                 span(
-                    set::className('task-name'),
+                    setClass('task-name'),
                     $task['title']
                 )
             ),
@@ -57,75 +57,75 @@ jsVar('langRequiredTip', $lang->tutorial->requiredTip);
 
 div
 (
-    set::id('pageContainer'),
+    setID('pageContainer'),
     div
     (
-        set::id('iframeWrapper'),
+        setID('iframeWrapper'),
         h::iframe
         (
-            set::id('iframePage'),
+            setID('iframePage'),
             set::name('iframePage'),
-            set::src(helper::createLink('index', 'index', 't=tutorial')),
+            set::src(createLink('index', 'index', 't=tutorial')),
         )
     ),
-    div(set::id('taskModalBack')),
+    div(setID('taskModalBack')),
     div
     (
-        set::id('taskModal'),
+        setID('taskModal'),
         div
         (
-            set::className('close'),
+            set::class('close'),
             set::icon('close'),
         ),
         div
         (
-            set::className('finish-all'),
+            setClass('finish-all'),
             div
             (
-                set::className('start-icon'),
+                setClass('start-icon'),
                 icon(
-                    set::class('icon-front'),
+                    setClass('icon-front'),
                     'check-circle'
                 ),
             ),
-            h::h3($lang->tutorial->congratulation),
+            h3($lang->tutorial->congratulation),
             btn
             (
                 set::icon('restart'),
-                set::className('btn btn-outline btn-reset-tasks'),
+                setClass('btn btn-outline btn-reset-tasks'),
                 $lang->tutorial->restart
             ),
             ' ',
             btn
             (
-                set::className('btn btn-outline'),
-                set::url(helper::createLink('tutorial', 'quit')),
+                setClass('btn btn-outline'),
+                set::url(createLink('tutorial', 'quit')),
                 $lang->tutorial->exit
             )
         ),
         div
         (
-            set::className('finish'),
+            setClass('finish'),
             div
             (
-                set::className('start-icon'),
+                setClass('start-icon'),
                 icon(
                     set::class('icon-front'),
                     'check-circle'
                 ),
             ),
-            h::h3(
+            h3(
                 $lang->tutorial->congratulateTask,
                 "【",
                 span
                 (
-                    set::className('task-name-current'),
+                    setClass('task-name-current'),
                 ),
                 "】！"
             ),
             btn
             (
-                set::className('btn btn-outline btn-next-task btn-task'),
+                setClass('btn btn-outline btn-next-task btn-task'),
                 $lang->tutorial->nextTask,
                 set::trailingIcon('angle-right')
             )
@@ -133,151 +133,167 @@ div
     ),
     div
     (
-        set::id('sidebar'),
+        setID('sidebar'),
         h::header
         (
-            set::className('bg-primary'),
+            setClass('bg-primary'),
             div
             (
-                set::className('start-icon'),
+                setClass('start-icon'),
+                icon(
+                    setClass('icon-back'),
+                    'certificate'
+                ),
+                icon(
+                    setClass('icon-front text-secondary'),
+                    'flag'
+                )
             ),
-            h::h2('新手教程'),
+            h2($lang->tutorial->common),
             div
             (
-                set::className('actions'),
+                setClass('actions'),
                 btn
                 (
-                    set::className('size-sm'),
+                    setClass('size-sm'),
                     set::type('danger'),
-                    set::url(helper::createLink('tutorial', 'quit')),
-                    '退出教程',
+                    set::url(inlink('quit')),
+                    $lang->tutorial->exit,
                 )
             )
         ),
         h::section
         (
-            set::id('current'),
-            h::h4('当前任务'),
+            setID('current'),
+            h4('当前任务'),
             div
             (
-                set::id('task'),
-                set::className('panel'),
+                setID('task'),
+                setClass('panel'),
                 div
                 (
-                    set::className('panel-heading bg-secondary'),
+                    setClass('panel-heading bg-secondary'),
                     h::strong
                     (
                         span
                         (
-                            set::className('task-id-current'),
+                            setClass('task-id-current'),
                         ),
                         '. ',
                         span
                         (
-                            set::className('task-name task-name-current'),
+                            setClass('task-name task-name-current'),
                         )
                     )
                 ),
                 div
                 (
-                    set::className('panel-body'),
+                    setClass('panel-body'),
                     div
                     (
-                        set::className('task-desc'),
+                        setClass('task-desc'),
                         p(),
-                        h::ul
+                        ul
                         (
                             li
                             (
-                                set::data_target('nav'),
-                                set::className('wait'),
+                                setData(array('target' => 'nav')),
+                                setClass('wait'),
                             ),
                             li
                             (
-                                set::data_target('form'),
-                                set::className('wait'),
+                                setData(array('target' => 'form')),
+                                setClass('wait'),
                             ),
                             li
                             (
-                                set::data_target('submit'),
-                                set::className('wait'),
+                                setData(array('target' => 'submit')),
+                                setClass('wait'),
                             )
                         )
                     ),
-                    h::a(
+                    a(
+                        setID('openTaskPage'),
+                        setClass('btn-open-target-page hl-primary open'),
+                        set::href('javascript:;'),
                         div
                         (
-                            set::className('normal'),
+                            setClass('normal'),
+                            icon('magic'),
+                            html($lang->tutorial->openTargetPage)
                         ),
                         div
                         (
-                            set::className('opened'),
+                            setClass('opened'),
+                            icon('flag'),
+                            html($lang->tutorial->atTargetPage)
                         ),
                         div
                         (
-                            set::className('reload'),
-                        ),
+                            setClass('reload'),
+                            icon('restart'),
+                            html($lang->tutorial->reloadTargetPage)
+                        )
                     ),
                     div
                     (
-                        set::className('alert warning-pale flex items-center'),
-                        set::style(array('padding' => '5px', 'margin-bottom' => '0px')),
-                        "教程任务中，数据不会保存。"
+                        setClass('alert warning-pale flex items-center p-4 my-0'),
+                        $lang->tutorial->dataNotSave
                     )
                 )
             ),
             div
             (
-                set::className('clearfix actions'),
+                setClass('clearfix actions'),
                 btn
                 (
                     set::icon('arrow-left'),
                     set::size('sm'),
-                    set::className('btn-prev-task btn-task circle'),
-                    '上一个',
+                    setClass('btn-prev-task btn-task circle'),
+                    $lang->tutorial->previous,
                 ),
                 btn
                 (
                     set::trailingIcon('arrow-right'),
                     set::size('sm'),
                     set::type('primary'),
-                    set::className('btn-next-task btn-task circle pull-right'),
-                    '下一个任务',
+                    setClass('btn-next-task btn-task circle pull-right'),
+                    $lang->tutorial->nextTask,
                 )
             )
         ),
         h::section
         (
-            set::id('all'),
-            h::h4(
-                '所有任务(',
+            setID('all'),
+            h4(
+                $lang->tutorial->allTasks,
+                '(',
                 span
                 (
-                    set::className('task-num-finish'),
-                    5,
+                    setClass('task-num-finish'),
+                    0,
                 ),
                 '/',
                 span
                 (
-                    set::className('task-count'),
+                    setClass('task-count'),
                     10
                 ),
                 ')'
             ),
             div
             (
-                set::id('tasksProgress'),
-                set::className('progress'),
+                setID('tasksProgress'),
+                setClass('progress'),
                 div
                 (
-                    set::className('progress-bar primary'),
-                    set::style(array('width' => '30%')),
+                    setClass('progress-bar primary'),
                 )
             ),
-            h::ul
+            ul
             (
-                set::id('tasks'),
-                set::className('nav nav-primary nav-stacked'),
+                setID('tasks'),
+                setClass('nav nav-primary nav-stacked mt-5'),
                 $taskGroup
             )
         )

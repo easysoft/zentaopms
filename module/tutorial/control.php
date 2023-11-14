@@ -80,7 +80,7 @@ class tutorial extends control
         $this->session->set('tutorialMode', false);
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', 0);
         if(empty($referer)) $referer = helper::safe64Encode(helper::createLink('my', 'index', '', 'html'));
-        echo js::locate(helper::safe64Decode($referer), 'parent');
+        return $this->send(array('result' => 'success', 'open' => $this->createLink('index', 'index')));
     }
 
     /**
