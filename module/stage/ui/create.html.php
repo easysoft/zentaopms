@@ -24,8 +24,8 @@ if(isset($config->setPercent) && $config->setPercent == 1)
                 (
                     input(set::name('percent')),
                     to::suffix('%'),
-                    set::suffixWidth(20),
-                ),
+                    set::suffixWidth(20)
+                )
             )
         )
     );
@@ -42,7 +42,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->stage->name),
-            set::name('name'),
+            set::name('name')
         )
     ),
     $percentRow,
@@ -53,9 +53,9 @@ formPanel
             set::width('1/2'),
             set::label($lang->stage->type),
             set::name('type'),
-            set::items($lang->stage->typeList),
+            set::items($lang->stage->typeList)
         )
-    ),
+    )
 );
 /* ====== Render page ====== */
 render();

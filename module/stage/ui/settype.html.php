@@ -15,11 +15,11 @@ $formItems[] = formRow
     set::width('1/3'),
     formGroup
     (
-        set::label($lang->custom->key),
+        set::label($lang->custom->key)
     ),
     formGroup
     (
-        set::label($lang->custom->value),
+        set::label($lang->custom->value)
     ),
     formGroup()
 );
@@ -35,7 +35,7 @@ div
         (
             set::width('1/3'),
             set::label('addRow'),
-            set::name('values[]'),
+            set::name('values[]')
         ),
         div 
         (
@@ -51,7 +51,7 @@ div
                 setClass('btn ghost del-item'),
                 on::click('removeRow'),
                 icon('trash')
-            ),
+            )
         )
     )
 );
@@ -90,7 +90,7 @@ foreach($fieldList as $key => $value)
                 setClass('btn ghost del-item'),
                 on::click('removeRow'),
                 icon('trash')
-            ),
+            )
         )
     );
 }
@@ -103,7 +103,7 @@ if(common::hasPriv('custom', 'restore'))
         'url'          => createLink('custom', 'restore', "module=stage&field=typeList"),
         'text'         => $lang->custom->restore,
         'class'        => 'btn-wide ajax-submit',
-        'data-confirm' => $lang->custom->confirmRestore,
+        'data-confirm' => $lang->custom->confirmRestore
     );
 }
 
@@ -115,7 +115,7 @@ $formItems[] = formGroup
     set::name('lang'),
     set::items($appliedTo),
     set::value($lang2Set),
-    set::control('radioListInline'),
+    set::control('radioListInline')
 );
 
 div

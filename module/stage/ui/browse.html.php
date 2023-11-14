@@ -25,14 +25,14 @@ div
         div
         (
             setClass('flex-auto'),
-            html('<strong>' . $lang->stage->browse . '</strong>'),
+            html('<strong>' . $lang->stage->browse . '</strong>')
         ),
         toolbar
         (
             !empty($batchCreateItem) ? item(set($batchCreateItem)) : null,
-            !empty($createItem) ? item(set($createItem)) : null,
-        ),
-    ),
+            !empty($createItem) ? item(set($createItem)) : null
+        )
+    )
 );
 
 $tableData = initTableData($stages, $config->stage->dtable->fieldList, $this->stage);
@@ -41,7 +41,7 @@ dtable
     set::cols($config->stage->dtable->fieldList),
     set::data($tableData),
     set::orderBy($orderBy),
-    set::sortLink(createLink('stage', 'browse', "orderBy={name}_{sortType}&type={$type}")),
+    set::sortLink(createLink('stage', 'browse', "orderBy={name}_{sortType}&type={$type}"))
 );
 
 /* ====== Render page ====== */

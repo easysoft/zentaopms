@@ -16,7 +16,7 @@ if(isset($config->setPercent) and $config->setPercent == 1)
     $percentItem = formBatchItem(
         set::name('percent'),
         set::label($lang->stage->percent),
-        set::width('150px'),
+        set::width('150px')
         );
 }
 formBatchPanel
@@ -26,12 +26,12 @@ formBatchPanel
         set::name('id'),
         set::label($lang->stage->id),
         set::control('index'),
-        set::width('32px'),
+        set::width('32px')
     ),
     formBatchItem
     (
         set::name('name'),
-        set::label($lang->stage->name),
+        set::label($lang->stage->name)
     ),
     $percentItem,
     formBatchItem
@@ -40,8 +40,8 @@ formBatchPanel
         set::label($lang->stage->type),
         set::width('150px'),
         set::control('select'),
-        set::items($lang->stage->typeList),
-    ),
+        set::items($lang->stage->typeList)
+    )
 );
 /* ====== Render page ====== */
 render();
