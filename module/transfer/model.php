@@ -582,9 +582,13 @@ class transferModel extends model
         {
             $values = call_user_func_array(array($this->loadModel($module), $method), $params);
         }
-        else
+        elseif($params)
         {
             $values = $this->loadModel($module)->$method($params);
+        }
+        else
+        {
+            $values = $this->loadModel($module)->$method();
         }
 
         if(!empty($pairs))
