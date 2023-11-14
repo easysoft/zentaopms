@@ -35,7 +35,7 @@ formPanel
         set::name('name'),
         set::label($lang->job->name),
         set::required(true),
-        set::width('1/2'),
+        set::width('1/2')
     ),
     formRow
     (
@@ -47,14 +47,14 @@ formPanel
             set::required(true),
             set::items(array('' => '') + $lang->job->engineList),
             set::value(''),
-            on::change('changeEngine'),
+            on::change('changeEngine')
         ),
         h::span
         (
             set::id('gitlabServerTR'),
             setClass('hidden leading-8 ml-2'),
-            html($lang->job->engineTips->success),
-        ),
+            html($lang->job->engineTips->success)
+        )
     ),
     formRow
     (
@@ -65,7 +65,7 @@ formPanel
             set::name('repo'),
             set::items($repoPairs),
             set::width('1/2'),
-            on::change('changeRepo'),
+            on::change('changeRepo')
         ),
         formGroup
         (
@@ -75,15 +75,15 @@ formPanel
             set::required(true),
             set::name('reference'),
             set::width('1/2'),
-            set::items(array()),
-        ),
+            set::items(array())
+        )
     ),
     formGroup
     (
         set::name('product'),
         set::label($lang->job->product),
         set::width('1/2'),
-        set::items(array()),
+        set::items(array())
     ),
     formGroup
     (
@@ -91,7 +91,7 @@ formPanel
         set::label($lang->job->frame),
         set::items(array()),
         set::width('1/2'),
-        on::change('changeFrame'),
+        on::change('changeFrame')
     ),
     formRow
     (
@@ -101,8 +101,8 @@ formPanel
             set::width('1/2'),
             set::label($lang->job->triggerType),
             set::items($lang->job->triggerTypeList),
-            on::change('changeTriggerType'),
-        ),
+            on::change('changeTriggerType')
+        )
     ),
     formRow
     (
@@ -113,8 +113,8 @@ formPanel
             set::name('svnDir[]'),
             set::width('1/2'),
             set::label($lang->job->svnDir),
-            set::control('select'),
-        ),
+            set::control('select')
+        )
     ),
     formRow
     (
@@ -127,8 +127,8 @@ formPanel
             set::value(''),
             set::width('1/2'),
             set::required(true),
-            on::change('changeSonarqubeServer'),
-        ),
+            on::change('changeSonarqubeServer')
+        )
     ),
     formRow
     (
@@ -140,8 +140,8 @@ formPanel
             set::label($lang->job->projectKey),
             set::width('1/2'),
             set::items(array()),
-            set::required(true),
-        ),
+            set::required(true)
+        )
     ),
     formRow
     (
@@ -151,13 +151,13 @@ formPanel
             set::name('comment'),
             set::width('1/2'),
             set::label($lang->job->comment),
-            set::required(true),
+            set::required(true)
         ),
         h::span
         (
             setClass('leading-8 ml-2'),
-            html($lang->job->commitEx),
-        ),
+            html($lang->job->commitEx)
+        )
     ),
     formRow
     (
@@ -167,8 +167,8 @@ formPanel
             set::label(''),
             set::name('atDay[]'),
             set::control('checkListInline'),
-            set::items($lang->datepicker->dayNames),
-        ),
+            set::items($lang->datepicker->dayNames)
+        )
     ),
     formRow
     (
@@ -182,10 +182,10 @@ formPanel
                 $lang->job->atTime,
                 timePicker
                 (
-                    set::name('atTime'),
-                ),
-            ),
-        ),
+                    set::name('atTime')
+                )
+            )
+        )
     ),
     formRow
     (
@@ -202,13 +202,13 @@ formPanel
                 (
                     set::name('jkServer'),
                     set::items($jenkinsServerList),
-                    on::change('changeJenkinsServer'),
+                    on::change('changeJenkinsServer')
                 ),
                 $lang->job->pipeline,
                 input
                 (
                     set::name('jkTask'),
-                    set::type('hidden'),
+                    set::type('hidden')
                 ),
                 dropmenu
                 (
@@ -216,10 +216,10 @@ formPanel
                     set::id('pipelineDropmenu'),
                     set::popPlacement('top'),
                     set::text($lang->job->selectPipeline),
-                    set::url($this->createLink('jenkins', 'ajaxGetJenkinsTasks')),
-                ),
-            ),
-        ),
+                    set::url($this->createLink('jenkins', 'ajaxGetJenkinsTasks'))
+                )
+            )
+        )
     ),
     formRow
     (
@@ -235,7 +235,7 @@ formPanel
                 (
                     setStyle('width', '50%'),
                     setClass('form-control paramName'),
-                    set::name('paramName[]'),
+                    set::name('paramName[]')
                 ),
                 $lang->job->paramValue,
                 select
@@ -243,14 +243,14 @@ formPanel
                     setStyle('width', '25%'),
                     setClass('paramValue'),
                     set::name('paramValue[]'),
-                    set::items($lang->job->paramValueList),
+                    set::items($lang->job->paramValueList)
                 ),
                 input
                 (
                     setStyle('width', '25%'),
                     setClass('form-control hidden paramValue'),
                     set::name('paramValue[]'),
-                    set::disabled(true),
+                    set::disabled(true)
                 ),
                 span
                 (
@@ -259,8 +259,8 @@ formPanel
                     (
                         setClass('custom'),
                         set::name('custom'),
-                        set::text($lang->job->custom),
-                    ),
+                        set::text($lang->job->custom)
+                    )
                 ),
                 span
                 (
@@ -269,8 +269,8 @@ formPanel
                     (
                         setClass('add-param'),
                         set::href('javascript:void(0)'),
-                        icon('plus'),
-                    ),
+                        icon('plus')
+                    )
                 ),
                 span
                 (
@@ -279,12 +279,12 @@ formPanel
                     (
                         setClass('delete-param'),
                         set::href('javascript:void(0)'),
-                        icon('close'),
-                    ),
-                ),
-            ),
-        ),
-    ),
+                        icon('close')
+                    )
+                )
+            )
+        )
+    )
 );
 
 render();

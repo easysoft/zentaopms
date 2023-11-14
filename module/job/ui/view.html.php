@@ -18,8 +18,8 @@ detailHeader
         entityLabel(
             set(array('entityID' => $job->id, 'level' => 1, 'text' => $job->name))
         ),
-        $job->deleted ? span(setClass('label danger'), $lang->product->deleted) : null,
-    ),
+        $job->deleted ? span(setClass('label danger'), $lang->product->deleted) : null
+    )
 );
 
 $hasResult = ($compile and !empty($compile->testtask));
@@ -109,9 +109,9 @@ detailBody
                     item
                     (
                         set::name($lang->job->customParam),
-                        html($customParam),
-                    ),
-                ),
+                        html($customParam)
+                    )
+                )
             ),
             $hasResult ? tabPane
             (
@@ -133,7 +133,7 @@ detailBody
                         html(nl2br($compile->logs))
                     )
                 )
-            ) : '',
-        ),
-    ),
+            ) : ''
+        )
+    )
 );

@@ -22,7 +22,7 @@ if($repoID)
 featureBar
 (
     set::current('job'),
-    set::link($this->createLink('{key}', 'browse', "repoID=$repoID")),
+    set::link($this->createLink('{key}', 'browse', "repoID=$repoID"))
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -34,7 +34,7 @@ $tableData = initTableData($jobList, $config->job->dtable->fieldList, $this->job
 
 toolbar
 (
-    $canCreate ? item(set($createItem)) : null,
+    $canCreate ? item(set($createItem)) : null
 );
 
 jsVar('confirmDelete',    $lang->job->confirmDelete);
@@ -47,5 +47,5 @@ dtable
     set::sortLink(createLink('job', 'browse', "repoID={$repoID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
