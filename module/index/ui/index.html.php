@@ -59,7 +59,7 @@ div
                 ),
                 ul(setClass('dropdown-menu nav'), setID('menuMoreList'))
             )
-        ),
+        )
     ),
     div
     (
@@ -106,7 +106,7 @@ div
             set::hint($version),
             set::text($versionName)
         )
-    ),
+    )
 );
 
 render('pagebase');
