@@ -599,7 +599,7 @@ class screenModel extends model
         if($chart->sql)
         {
             $settings = json_decode($chart->settings, true);
-            $fields   = json_decode($chart->fields, true);
+            $fields   = json_decode(json_encode($chart->fieldSettings), true);
             $langs    = json_decode($chart->langs, true);
 
             if(isset($settings['summary']) and $settings['summary'] == 'notuse')
