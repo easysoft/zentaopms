@@ -82,6 +82,7 @@ detailBody
             (
                 input
                 (
+                    setClass('filter-none'),
                     set::name('title'),
                     set::value($fields['title']['default']),
                     set::disabled(!$canEditContent)
