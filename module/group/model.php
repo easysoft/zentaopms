@@ -584,14 +584,16 @@ class groupModel extends model
             }
         }
 
-        if(isset($_POST['allchecker']))$actions['views']   = array();
-        if(!isset($actions['actions']))$actions['actions'] = array();
+        $actions['views'] = array_keys($actions['views']);
+        $actions['views'] = array_combine($actions['views'], $actions['views']);
+        if(isset($_POST['actionallchecker'])) $actions['views']   = array();
+        if(!isset($actions['actions']))       $actions['actions'] = array();
 
-        if(isset($actions['actions']['project']['started']))   $actions['actions']['project']['syncproject'] = 'syncproject';
+        if(isset($actions['actions']['project']['started']))   $actions['actions']['project']['syncproject']     = 'syncproject';
         if(isset($actions['actions']['execution']['started'])) $actions['actions']['execution']['syncexecution'] = 'syncexecution';
 
         $dynamic = $actions['actions'];
-        if(!isset($_POST['allchecker']))
+        if(!isset($_POST['actionallchecker']))
         {
             $dynamic = array();
             foreach($actions['actions'] as $moduleName => $moduleActions)
@@ -601,7 +603,8 @@ class groupModel extends model
                 if($moduleName == 'case') $groupName = $this->lang->navGroup->testcase;
                 if($groupName != 'my' and isset($actions['views']) and !in_array($groupName, $actions['views'])) continue;
 
-                $dynamic[$moduleName] = $moduleActions;
+                $moduleActions = array_keys($moduleActions);
+                $dynamic[$moduleName] = array_combine($moduleActions, $moduleActions);
             }
         }
         $actions['actions'] = $dynamic;

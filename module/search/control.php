@@ -31,8 +31,8 @@ class search extends control
         $searchForm   = $module . 'Form';
         $queryID      = (empty($module) and empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
         $fields       = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
-        $params       = empty($params) ?  json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
-        $actionURL    = empty($actionURL) ?    $_SESSION[$searchParams]['actionURL'] : $actionURL;
+        $params       = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
+        $actionURL    = empty($actionURL) ? $_SESSION[$searchParams]['actionURL'] : $actionURL;
         $style        = isset($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : '';
         $onMenuBar    = isset($_SESSION[$searchParams]['onMenuBar']) ? $_SESSION[$searchParams]['onMenuBar'] : '';
 

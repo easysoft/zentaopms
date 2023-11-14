@@ -19,25 +19,25 @@ foreach($lang->mainNav as $menuKey => $menu)
 
     $moduleName      = strip_tags($moduleName);
     $viewCheckList[] = checkbox
-        (
-            set::rootClass('group-item'),
-            set::id($menuKey),
-            set::name('actions[views][' . strtolower($menuKey) . ']'),
-            set::text($moduleName),
-            set::checked(isset($group->acl['views'][$menuKey]) || empty($group->acl['views'])),
-            on::change('toggleBox')
-        );
+    (
+        set::rootClass('group-item'),
+        set::id($menuKey),
+        set::name('actions[views][' . strtolower($menuKey) . ']'),
+        set::text($moduleName),
+        set::checked(isset($group->acl['views'][$menuKey]) || empty($group->acl['views'])),
+        on::change('toggleBox')
+    );
 }
 
 $viewCheckList[] = checkbox
-    (
-        set::rootClass('group-item'),
-        set::name('allchecker'),
-        set::text($lang->selectAll),
-        set::checked(empty($group->acl['views'])),
-        on::click('selectAll'),
-        on::change('toggleBox')
-    );
+(
+    set::rootClass('group-item'),
+    set::name('actionallchecker'),
+    set::text($lang->selectAll),
+    set::checked(empty($group->acl['views'])),
+    on::click('selectAll'),
+    on::change('toggleBox')
+);
 
 function getActionsBox($navGroup, $group, $module)
 {
@@ -48,16 +48,16 @@ function getActionsBox($navGroup, $group, $module)
         foreach($lang->action->dynamicAction->$module as $action => $actionTitle)
         {
             $actionsBox[] = div
+            (
+                set::className('action-item'),
+                checkbox
                 (
-                    set::className('action-item'),
-                    checkbox
-                    (
-                        set::id("{$module}-{$action}"),
-                        set::name("actions[actions][$module][$action]"),
-                        set::text($actionTitle),
-                        set::checked(isset($group->acl['actions'][$module][$action]) || !isset($group->acl['actions']))
-                    )
-                );
+                    set::id("{$module}-{$action}"),
+                    set::name("actions[actions][$module][$action]"),
+                    set::text($actionTitle),
+                    set::checked(isset($group->acl['actions'][$module][$action]) || !isset($group->acl['actions']))
+                )
+            );
         }
     }
 
@@ -70,16 +70,16 @@ function getActionsBox($navGroup, $group, $module)
                 foreach($lang->action->dynamicAction->$subModule as $action => $actionTitle)
                 {
                     $actionsBox[] = div
+                    (
+                        set::className('action-item'),
+                        checkbox
                         (
-                            set::className('action-item'),
-                            checkbox
-                            (
-                                set::id("$subModule-$action"),
-                                set::name("actions[actions][$subModule][$action]"),
-                                set::text($actionTitle),
-                                set::checked(isset($group->acl['actions'][$subModule][$action]) || !isset($group->acl['actions']))
-                            )
-                        );
+                            set::id("$subModule-$action"),
+                            set::name("actions[actions][$subModule][$action]"),
+                            set::text($actionTitle),
+                            set::checked(isset($group->acl['actions'][$subModule][$action]) || !isset($group->acl['actions']))
+                        )
+                    );
                 }
             }
         }
@@ -109,25 +109,25 @@ foreach($lang->mainNav as $module => $title)
     }
     if($isNullActions) continue;
     $dynamicActionList[] = div
+    (
+        set::id("{$module}ActionBox"),
+        set::className('flex w-full'),
+        div
         (
-            set::id("{$module}ActionBox"),
-            set::className('flex w-full'),
-            div
+            set::className('flex item-center action-title'),
+            checkbox
             (
-                set::className('flex item-center action-title'),
-                checkbox
-                (
-                    set::name('allchecker'),
-                    on::click('selectItems')
-                ),
-                span(html(substr($title, 0, strpos($title, '|'))))
+                set::name('allchecker'),
+                on::click('selectItems')
             ),
-            div
-            (
-                set::className('flex check-list-inline w-full justify-start'),
-                getActionsBox($navGroup, $group, $module)
-            )
-        );
+            span(html(substr($title, 0, strpos($title, '|'))))
+        ),
+        div
+        (
+            set::className('flex check-list-inline w-full justify-start'),
+            getActionsBox($navGroup, $group, $module)
+        )
+    );
 }
 
 
@@ -166,7 +166,7 @@ formPanel
             $programs ? inputGroup
             (
                 setClass('input-control'),
-                select
+                picker
                 (
                     set::name('actions[programs][]'),
                     set::items($programs),
@@ -199,7 +199,7 @@ formPanel
             set::label($lang->group->productList),
             $products ? inputGroup
             (
-                select
+                picker
                 (
                     set::name('actions[products][]'),
                     set::items($products),
@@ -232,7 +232,7 @@ formPanel
             set::label($lang->group->projectList),
             $projects ? inputGroup
             (
-                select
+                picker
                 (
                     set::name('actions[projects][]'),
                     set::items($projects),
@@ -265,7 +265,7 @@ formPanel
             set::label($lang->group->executionList),
             $executions ? inputGroup
             (
-                select
+                picker
                 (
                     set::name('actions[sprints][]'),
                     set::items($executions),
@@ -293,8 +293,7 @@ formPanel
     (
         set::label($lang->group->dynamic),
         $dynamicActionList
-    ),
-    formHidden('foo', '')
+    )
 );
 
 /* ====== Render page ====== */
