@@ -237,10 +237,26 @@ $lang->metric->implement->instructionTips[] = '1.下载度量项模板文件，�
 $lang->metric->implement->instructionTips[] = '2.请将开发后的文件放到下方目录，<strong>需保持文件名称与度量代号一致</strong>。<br/> <span class="label code-slate">{tmpRoot}metric</span>';
 $lang->metric->implement->instructionTips[] = '3.执行命令赋予文件可执行权限：<p><span class="label code-slate">chmod 777 {tmpRoot}metric</span></p><p><span class="label code-slate">chmod 777 {tmpRoot}metric/{code}.php</span></p>';
 
-$lang->metric->verifyList = array();
-$lang->metric->verifyList['checkCustomCalcExists'] = '检查度量项是否存在';
-$lang->metric->verifyList['checkCalcClass']        = '检查度量项类名是否正确';
-$lang->metric->verifyList['checkCalcMethods']      = '检查度量项是否定义了必须的方法';
+$lang->metric->verifyCustom = new stdclass();
+$lang->metric->verifyCustom->checkCustomCalcExists = array();
+$lang->metric->verifyCustom->checkCustomCalcExists['text']       = '检查度量项文件是否存在';
+$lang->metric->verifyCustom->checkCustomCalcExists['error']      = '度量项文件不存在';
+
+$lang->metric->verifyCustom->checkCustomCalcSyntax = array();
+$lang->metric->verifyCustom->checkCustomCalcSyntax['text']       = '检查语法错误';
+$lang->metric->verifyCustom->checkCustomCalcSyntax['error']      = '语法错误';
+
+$lang->metric->verifyCustom->checkCustomCalcClassName = array();
+$lang->metric->verifyCustom->checkCustomCalcClassName['text']    = '检查度量项类名是否正确';
+$lang->metric->verifyCustom->checkCustomCalcClassName['error']   = '度量项类名错误';
+
+$lang->metric->verifyCustom->checkCustomCalcClassMethod = array();
+$lang->metric->verifyCustom->checkCustomCalcClassMethod['text']  = '检查度量项是否定义了必须的方法';
+$lang->metric->verifyCustom->checkCustomCalcClassMethod['error'] = '度量项没有定义必须的方法';
+
+$lang->metric->verifyCustom->checkCustomCalcRuntime = array();
+$lang->metric->verifyCustom->checkCustomCalcRuntime['text']      = '检查度量项运行时错误';
+$lang->metric->verifyCustom->checkCustomCalcRuntime['error']     = '';
 
 $lang->metric->weekList = array();
 $lang->metric->weekList['1'] = '星期一';

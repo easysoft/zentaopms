@@ -237,10 +237,26 @@ $lang->metric->implement->instructionTips[] = '1.Download the measurement templa
 $lang->metric->implement->instructionTips[] = '2.Please put the developed file in the following directory,<strong>Keep the file name consistent with the measurement code</strong>。<br/> <span class="label code-slate">{tmpRoot}metric</span>';
 $lang->metric->implement->instructionTips[] = '3.Execute commands to grant executable permissions to files:<p><span class="label code-slate">chmod 777 {tmpRoot}metric</span></p><p><span class="label code-slate">chmod 777 {tmpRoot}metric/{code}.php</span></p>';
 
-$lang->metric->verifyList = array();
-$lang->metric->verifyList['checkCustomCalcExists'] = 'Check whether the metric exists';
-$lang->metric->verifyList['checkCalcClass']        = 'Check the metric class name is correct';
-$lang->metric->verifyList['checkCalcMethods']      = 'Check whether the metrics defines the required methods';
+$lang->metric->verifyCustom = new stdclass();
+$lang->metric->verifyCustom->checkCustomCalcExists = array();
+$lang->metric->verifyCustom->checkCustomCalcExists['text']       = 'Check if the metric file exists';
+$lang->metric->verifyCustom->checkCustomCalcExists['error']      = 'The metric file does not exist';
+
+$lang->metric->verifyCustom->checkCustomCalcSyntax = array();
+$lang->metric->verifyCustom->checkCustomCalcSyntax['text']       = 'Check if the metric file syntax is correct';
+$lang->metric->verifyCustom->checkCustomCalcSyntax['error']      = 'The metric file syntax is incorrect';
+
+$lang->metric->verifyCustom->checkCustomCalcClassName = array();
+$lang->metric->verifyCustom->checkCustomCalcClassName['text']    = 'Check if the metric file class name is correct';
+$lang->metric->verifyCustom->checkCustomCalcClassName['error']   = 'The metric file class name is incorrect';
+
+$lang->metric->verifyCustom->checkCustomCalcClassMethod = array();
+$lang->metric->verifyCustom->checkCustomCalcClassMethod['text']  = 'Check if the metric file class method is correct';
+$lang->metric->verifyCustom->checkCustomCalcClassMethod['error'] = 'The metric file class method is incorrect';
+
+$lang->metric->verifyCustom->checkCustomCalcRuntime = array();
+$lang->metric->verifyCustom->checkCustomCalcRuntime['text']      = 'Check if the metric file can be executed';
+$lang->metric->verifyCustom->checkCustomCalcRuntime['error']     = '';
 
 $lang->metric->weekList = array();
 $lang->metric->weekList['1'] = 'Monday';
