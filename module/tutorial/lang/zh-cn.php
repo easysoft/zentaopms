@@ -91,6 +91,7 @@ $lang->tutorial->tasks['createStory']['nav']['app']            = 'product';
 $lang->tutorial->tasks['createStory']['nav']['module']         = 'story';
 $lang->tutorial->tasks['createStory']['nav']['method']         = 'create';
 $lang->tutorial->tasks['createStory']['nav']['menuModule']     = 'story';
+$lang->tutorial->tasks['createStory']['nav']['vars']           = 'productID=1';
 $lang->tutorial->tasks['createStory']['nav']['menu']           = '#products > .dtable-body > .dtable-cells > .dtable-cells-container > .dtable-cell > .dtable-cell-content > a, #heading > .toolbar > .toolbar-item, .create-story-btn';
 $lang->tutorial->tasks['createStory']['nav']['form']           = '#mainContent';
 $lang->tutorial->tasks['createStory']['nav']['submit']         = '#saveButton';
