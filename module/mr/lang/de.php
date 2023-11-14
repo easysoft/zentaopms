@@ -193,7 +193,8 @@ $lang->mr->commandDocument = <<< EOD
   </p>
   <p>
     step 4. Push the result of the merge to Git
-    <pre> git push origin "%s" </pre>
+    <pre>
+    git push origin "%s" </pre>
   </p>
 </div>
 EOD;
