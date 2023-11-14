@@ -451,48 +451,6 @@ class metricZen extends metric
     }
 
     /**
-     * 校验度量项。
-     * Verify calculator of metric.
-     *
-     * @param  object $metric
-     * @access protected
-     * @return string
-     */
-    protected function verifyCalc($metric)
-    {
-        $verifyResult = array();
-        $hasError = false;
-        foreach($this->config->metric->verifyList as $method => $tip)
-        {
-            $verifyItem = new stdclass();
-            $verifyItem->tip    = $tip;
-            $verifyItem->result = $this->metric->$method($metric);
-
-            if(!$verifyItem->result) $hasError = true;
-
-            $verifyResult[] = $verifyItem;
-
-            if(!$verifyItem->result) break;
-        }
-
-        if(count($verifyResult) != 3) return array($hasError, $verifyResult);
-
-        $dryRunOutput = $this->metric->dryRunCalc($metric->code);
-
-        if(!empty($dtyRunOutput))
-        {
-            $dryRunResult = new stdclass();
-            $dryRunResult->tip    = $dryRunOutput;
-            $dryRunResult->result = false;
-
-            $verifyResult[] = $dryRunResult;
-            $hasError = true;
-        }
-
-        return array($hasError, $verifyResult);
-    }
-
-    /**
      * 构建操作权限。
      * Prepare action priv.
      *
