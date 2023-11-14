@@ -1246,7 +1246,7 @@ class bugZen extends bug
             $cases = $this->loadmodel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch), $case->title, $this->config->maxCount);
         }
 
-        $this->config->moreLinks['case'] = inlink('ajaxGetProductCases', "bugID={$bugID}");
+        $this->config->moreLinks['case'] = inlink('ajaxGetProductCases', "bugID={$bug->id}");
 
         $this->view->openedBuilds   = $openedBuilds;
         $this->view->resolvedBuilds = $this->build->getBuildPairs(array($bug->product), $bug->branch, 'noempty');
