@@ -66,7 +66,7 @@ if($isMultiple)
             (
                 set::className('hidden'),
                 set::name('mode'),
-                set::value($task->mode),
+                set::value($task->mode)
             )
         )
     );
@@ -99,7 +99,7 @@ if($task->parent != '-1')
         inputControl
         (
             to::suffix($lang->task->suffixHour),
-            set::suffixWidth(20),
+            set::suffixWidth(20)
         )
     );
 }
@@ -160,12 +160,12 @@ foreach($task->team as $member)
             (
                 set::type('hidden'),
                 set::name('teamSource[]'),
-                set::value($member->account),
+                set::value($member->account)
             ),
             $memberDisabled ? input(
                 set::type('hidden'),
                 set::name('team[]'),
-                set::value($member->account),
+                set::value($member->account)
             ) : null
         ),
         h::td
@@ -222,7 +222,7 @@ foreach($task->team as $member)
             (
                 set::items(array(
                     array('icon' => 'plus',  'class' => 'btn ghost btn-add text-gray', 'disabled' => $memberDisabled ? 'disabled' : ''),
-                    array('icon' => 'trash', 'class' => 'btn ghost btn-delete text-gray', 'disabled' => $memberDisabled ? 'disabled' : ''),
+                    array('icon' => 'trash', 'class' => 'btn ghost btn-delete text-gray', 'disabled' => $memberDisabled ? 'disabled' : '')
                 ))
             )
         )
@@ -274,7 +274,7 @@ for($i; $i <= $rowCount; $i ++)
                 ),
                 to::suffix($lang->task->suffixHour),
                 set::suffixWidth(20)
-            ),
+            )
         ),
         h::td
         (
@@ -287,7 +287,7 @@ for($i; $i <= $rowCount; $i ++)
                 ),
                 to::suffix($lang->task->suffixHour),
                 set::suffixWidth(20)
-            ),
+            )
         ),
         h::td
         (
@@ -300,7 +300,7 @@ for($i; $i <= $rowCount; $i ++)
                 ),
                 to::suffix($lang->task->suffixHour),
                 set::suffixWidth(20)
-            ),
+            )
         ),
         h::td
         (

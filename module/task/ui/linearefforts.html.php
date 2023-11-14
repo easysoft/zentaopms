@@ -78,8 +78,8 @@ foreach($myCountList as $order => $count)
                         set('data-confirm', $lang->task->confirmDeleteEffort),
                         set::href(createLink('task', 'deleteWorkhour', "id={$effort->id}")),
                         icon('trash')
-                    ) : null,
-                ),
+                    ) : null
+                )
             );
     }
 }
@@ -101,7 +101,7 @@ foreach($recorders as $order => $accounts)
                 h::td(zget($users, $effort->account)),
                 h::td($effort->work),
                 h::td($effort->consumed . ' H'),
-                h::td($effort->left . ' H'),
+                h::td($effort->left . ' H')
             );
     }
 }
@@ -151,7 +151,7 @@ div
                     (
                         width('80px'),
                         $lang->actions
-                    ),
+                    )
                 ),
                 $myEffortTable
             )
@@ -190,10 +190,10 @@ div
                     (
                         width('60px'),
                         $lang->task->leftAB
-                    ),
+                    )
                 ),
                 $allEffortTable
             )
-        ),
+        )
     )
 );

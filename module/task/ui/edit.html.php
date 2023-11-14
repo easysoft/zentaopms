@@ -169,7 +169,7 @@ detailBody
                             set::value($showAllModule ? '1' : ''),
                             set::inline(true)
                         )
-                    ),
+                    )
                 )
             ),
             ($task->parent >= 0 and empty($task->team))
@@ -181,7 +181,7 @@ detailBody
                         set::name('parent'),
                         set::value($task->parent),
                         set::items($tasks)
-                    ),
+                    )
                 )
                 : null,
             empty($modeText)
@@ -246,7 +246,7 @@ detailBody
                     set::required(true),
                     set::value($task->type),
                     set::items($typeOptions)
-                ),
+                )
             ),
             empty($task->children)
                 ? item
@@ -258,7 +258,7 @@ detailBody
                         set::required(true),
                         set::value($task->status),
                         set::items($statusOptions)
-                    ),
+                    )
                 )
                 : null,
             item
@@ -287,7 +287,7 @@ detailBody
                             'type' => 'picker',
                             'items' => $mailtoOptions,
                             'multiple' => true
-                        ))),
+                        )))
                     ),
                     div
                     (
@@ -298,7 +298,7 @@ detailBody
                             set::type('picker'),
                             set::items($contactListMenuOptions),
                             on::change('setMailto')
-                        ),
+                        )
                     )
                 )
             )

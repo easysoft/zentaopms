@@ -21,7 +21,7 @@ to::header
         set::text($task->name),
         set::entityID($task->id),
         set::reverse(true),
-        setClass('clip w-1/2'),
+        setClass('clip w-1/2')
     ),
     span
     (
@@ -30,8 +30,8 @@ to::header
         span
         (
             setClass('label secondary-pale'),
-            $task->estimate . $lang->task->suffixHour,
-        ),
+            $task->estimate . $lang->task->suffixHour
+        )
     ),
     span
     (
@@ -45,7 +45,7 @@ to::header
                 setID('totalConsumed'),
                 $task->consumed
             ),
-            $lang->task->suffixHour,
+            $lang->task->suffixHour
         )
     )
 );
@@ -77,7 +77,7 @@ if($efforts)
                             setClass('btn ghost toolbar-item square size-sm'),
                             set::href(createLink('task', 'editEffort', "id={$effort->id}")),
                             icon('edit'),
-                            set('data-dismiss', 'modal'),
+                            set('data-dismiss', 'modal')
                         ) : null,
                         common::hasPriv('task', 'deleteWorkhour') ? a
                         (
@@ -85,8 +85,8 @@ if($efforts)
                             set('data-confirm', $lang->task->confirmDeleteEffort),
                             set::href(createLink('task', 'deleteWorkhour', "id={$effort->id}")),
                             icon('trash')
-                        ) : null,
-                    ),
+                        ) : null
+                    )
                 );
         }
         div
@@ -129,7 +129,7 @@ if($efforts)
                 (
                     width('80px'),
                     $lang->actions
-                ),
+                )
             ),
             $effortRows
         );
@@ -172,7 +172,7 @@ else
             set::name('id'),
             set::label($lang->idAB),
             set::control('index'),
-            set::width('32px'),
+            set::width('32px')
         ),
         formBatchItem
         (

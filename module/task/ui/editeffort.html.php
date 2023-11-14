@@ -28,7 +28,7 @@ formPanel
             set::level(1),
             set::text($task->name),
             set::entityID($task->id),
-            set::reverse(true),
+            set::reverse(true)
         )
     ),
     formGroup
@@ -50,11 +50,11 @@ formPanel
                 input
                 (
                     set::name('consumed'),
-                    set::value($effort->consumed),
+                    set::value($effort->consumed)
                 ),
                 to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20),
-            ),
+                set::suffixWidth(20)
+            )
         ),
         formGroup
         (
@@ -66,11 +66,11 @@ formPanel
                 (
                     set::name('left'),
                     set::value($effort->left),
-                    set::readonly($readonly),
+                    set::readonly($readonly)
                 ),
                 to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20),
-            ),
+                set::suffixWidth(20)
+            )
         )
     ),
     formGroup
@@ -78,8 +78,8 @@ formPanel
         set::label($lang->task->work),
         set::control('textarea'),
         set::name('work'),
-        set::rows('1'),
-    ),
+        set::rows('1')
+    )
 );
 
 render();

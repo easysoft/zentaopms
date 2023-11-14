@@ -24,14 +24,14 @@ formPanel
         editor
         (
             set::name('comment'),
-            set::rows('5'),
+            set::rows('5')
         ),
         input(
             set::className('hidden'),
             set::name('status'),
             set::value('pause')
         )
-    ),
+    )
 );
 hr();
 history();

@@ -24,7 +24,7 @@ if($task->mode == 'linear')
         (
             set::className('hidden'),
             set::name('assignedTo'),
-            set::value($assignedTo),
+            set::value($assignedTo)
         )
     );
 }
@@ -33,7 +33,7 @@ elseif($canRecordEffort)
     $assignedToControl = picker(
         set::name('assignedTo'),
         set::value($assignedTo),
-        set::items($members),
+        set::items($members)
     );
 }
 
@@ -76,7 +76,7 @@ else
             set::className($task->mode == 'multi' ? 'hidden' : ''),
             set::width('1/2'),
             set::label($lang->task->assignedTo),
-            $assignedToControl,
+            $assignedToControl
         ),
         formGroup
         (
@@ -99,11 +99,11 @@ else
                     input
                     (
                         set::name('consumed'),
-                        set::value(!empty($currentTeam) ? (float)$currentTeam->consumed : $task->consumed),
+                        set::value(!empty($currentTeam) ? (float)$currentTeam->consumed : $task->consumed)
                     ),
                     to::suffix($lang->task->suffixHour),
-                    set::suffixWidth(20),
-                ),
+                    set::suffixWidth(20)
+                )
             ),
             formGroup
             (
@@ -114,12 +114,12 @@ else
                     input
                     (
                         set::name('left'),
-                        set::value(!empty($currentTeam) ? (float)$currentTeam->left : $task->left),
+                        set::value(!empty($currentTeam) ? (float)$currentTeam->left : $task->left)
                     ),
                     to::suffix($lang->task->suffixHour),
-                    set::suffixWidth(20),
-                ),
-            ),
+                    set::suffixWidth(20)
+                )
+            )
         ),
         formGroup
         (
@@ -127,9 +127,9 @@ else
             editor
             (
                 set::name('comment'),
-                set::rows('5'),
+                set::rows('5')
             )
-        ),
+        )
     );
     hr();
     history();

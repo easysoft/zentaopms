@@ -21,7 +21,7 @@ if($task->mode == 'linear')
         (
             set::className('hidden'),
             set::name('assignedTo'),
-            set::value($assignedTo),
+            set::value($assignedTo)
         )
     );
 }
@@ -30,7 +30,7 @@ elseif($canRecordEffort)
     $assignedToControl = select(
         set::name('assignedTo'),
         set::value($assignedTo),
-        set::items($members),
+        set::items($members)
     );
 }
 
@@ -71,7 +71,7 @@ else
             set::className($task->mode == 'multi' ? 'hidden' : ''),
             set::width('1/3'),
             set::label($lang->task->assignedTo),
-            $assignedToControl,
+            $assignedToControl
         ),
         formGroup
         (
@@ -96,8 +96,8 @@ else
                         set::disabled(!empty($currentTeam) ? true : false),
                     ),
                     to::suffix($lang->task->suffixHour),
-                    set::suffixWidth(20),
-                ),
+                    set::suffixWidth(20)
+                )
             ),
             formGroup
             (
@@ -111,9 +111,9 @@ else
                         set::value(!empty($currentTeam) ? (float)$currentTeam->left : $task->left),
                     ),
                     to::suffix($lang->task->suffixHour),
-                    set::suffixWidth(20),
-                ),
-            ),
+                    set::suffixWidth(20)
+                )
+            )
         ),
         formGroup
         (
@@ -121,9 +121,9 @@ else
             editor
             (
                 set::name('comment'),
-                set::rows('5'),
+                set::rows('5')
             )
-        ),
+        )
     );
     hr();
     history();

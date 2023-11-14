@@ -21,9 +21,9 @@ formPanel
         editor
         (
             set::name('comment'),
-            set::rows('5'),
+            set::rows('5')
         )
-    ),
+    )
 );
 hr();
 history();

@@ -28,7 +28,7 @@ detailHeader
                 array
                 (
                     'entityID' => $task->id,
-                    'level' => 1,
+                    'level' => 1
                 )
             ),
             $task->parent > 0 ?
@@ -108,7 +108,7 @@ if($task->team)
             (
                 setClass("status-{$team->status}"),
                 zget($lang->task->statusList, $team->status)
-            ),
+            )
         );
     }
 }
@@ -163,7 +163,6 @@ foreach($linkCommits as $commit)
         set::href(createLink('repo', 'revision', "repoID={$commit->repo}&objectID={$task->execution}&revision={$commit->revision}")),
         "#$MRID $linkMRTitle",
         set('data-ap', $app->tab)
-
     ) : div($revision . ' ' . $commit->comment);
 }
 
@@ -186,7 +185,7 @@ detailBody
                 entityLabel
                 (
                     set::entityID($task->fromBug),
-                    set::text($fromBug->title),
+                    set::text($fromBug->title)
                 ),
                 item
                 (
@@ -204,7 +203,7 @@ detailBody
                 entityLabel
                 (
                     set::entityID($task->storyID),
-                    set::text($task->storyTitle),
+                    set::text($task->storyTitle)
                 ),
                 item
                 (
@@ -215,7 +214,7 @@ detailBody
                 (
                     set::title($lang->task->storyVerify),
                     empty($task->storyVerify) ? $lang->noData : html($task->storyVerify)
-                ),
+                )
             )
         ) : null,
         $task->children ?
@@ -226,13 +225,13 @@ detailBody
             (
                 set::cols(array_values($config->task->dtable->children->fieldList)),
                 set::data($children),
-                set::checkable(false),
+                set::checkable(false)
             )
-        ) : null,
+        ) : null
     ),
     $task->files ? fileList
     (
-        set::files($task->files),
+        set::files($task->files)
     ) : null,
     history(),
     floatToolbar
@@ -339,12 +338,12 @@ detailBody
                     item
                     (
                         set::name($lang->task->canceledBy),
-                        $task->canceledBy ? zget($users, $task->canceledBy, $task->canceledBy) . $lang->at . $task->canceledDate : '',
+                        $task->canceledBy ? zget($users, $task->canceledBy, $task->canceledBy) . $lang->at . $task->canceledDate : ''
                     ),
                     item
                     (
                         set::name($lang->task->closedBy),
-                        $task->closedBy ? zget($users, $task->closedBy, $task->closedBy) . $lang->at . $task->closedDate : '',
+                        $task->closedBy ? zget($users, $task->closedBy, $task->closedBy) . $lang->at . $task->closedDate : ''
                     ),
                     item
                     (
@@ -355,7 +354,7 @@ detailBody
                     (
                         set::name($lang->task->lastEdited),
                         $task->lastEditedBy ? zget($users, $task->lastEditedBy, $task->lastEditedBy) . $lang->at . $task->lastEditedDate : ''
-                    ),
+                    )
                 )
             ),
             $task->team ? tabPane
@@ -373,33 +372,33 @@ detailBody
                             h::th
                             (
                                 $lang->task->team,
-                                set::width('80px'),
+                                set::width('80px')
                             ),
                             h::th
                             (
                                 $lang->task->estimateAB,
-                                set::width('60px'),
+                                set::width('60px')
                             ),
                             h::th
                             (
                                 $lang->task->consumedAB,
-                                set::width('60px'),
+                                set::width('60px')
                             ),
                             h::th
                             (
                                 $lang->task->leftAB,
-                                set::width('60px'),
+                                set::width('60px')
                             ),
                             h::th
                             (
                                 $lang->task->statusAB,
-                                set::width('80px'),
-                            ),
-                        ),
+                                set::width('80px')
+                            )
+                        )
                     ),
                     h::tbody($teams)
                 )
-            ) : null,
+            ) : null
         ),
         tabs
         (
@@ -419,7 +418,7 @@ detailBody
                     item
                     (
                         set::name($lang->task->consumed),
-                        round($task->consumed, 2) . $lang->workingHour,
+                        round($task->consumed, 2) . $lang->workingHour
                     ),
                     item
                     (
@@ -434,13 +433,13 @@ detailBody
                     item
                     (
                         set::name($lang->task->realStarted),
-                        helper::isZeroDate($task->realStarted) ? '' : substr($task->realStarted, 0, 19),
+                        helper::isZeroDate($task->realStarted) ? '' : substr($task->realStarted, 0, 19)
                     ),
                     item
                     (
                         set::name($lang->task->deadline),
                         $task->deadline
-                    ),
+                    )
                 )
             ),
             tabPane

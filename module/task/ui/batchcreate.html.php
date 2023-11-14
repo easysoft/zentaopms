@@ -28,7 +28,7 @@ if(!$hideStory)
         set::control('picker'),
         set::items($stories),
         set::width('240px'),
-        set::ditto(true),
+        set::ditto(true)
     );
 
     $previewItem = formBatchItem(
@@ -45,7 +45,7 @@ if(!$hideStory)
             set('hint', $lang->preview),
             set('data-url', '#'),
             set('data-toggle', 'modal'),
-            set('disabled', true),
+            set('disabled', true)
         )
     );
 
@@ -60,7 +60,7 @@ if(!$hideStory)
             set('type', 'btn'),
             set('icon', 'arrow-right'),
             set('class', 'ghost'),
-            set('hint', $lang->task->copyStoryTitle),
+            set('hint', $lang->task->copyStoryTitle)
         )
     );
 
@@ -68,21 +68,21 @@ if(!$hideStory)
         set::name('storyEstimate'),
         set::label(''),
         set('labelClass', 'hidden'),
-        set::control('hidden'),
+        set::control('hidden')
     );
 
     $storyDescItem = formBatchItem(
         set::name('storyDesc'),
         set::label(''),
         set('labelClass', 'hidden'),
-        set::control('hidden'),
+        set::control('hidden')
     );
 
     $storyPriItem = formBatchItem(
         set::name('storyPri'),
         set::label(''),
         set('labelClass', 'hidden'),
-        set::control('hidden'),
+        set::control('hidden')
     );
 }
 
@@ -100,7 +100,7 @@ if($execution->type == 'kanban')
         set::width('160px'),
         set::ditto(true),
         set::required(true),
-        set::hidden($config->vision == 'lite'),
+        set::hidden($config->vision == 'lite')
     );
     $laneItem = formBatchItem(
         set::name('lane'),
@@ -111,7 +111,7 @@ if($execution->type == 'kanban')
         set::width('160px'),
         set::ditto(true),
         set::required(true),
-        set::hidden($config->vision == 'lite'),
+        set::hidden($config->vision == 'lite')
     );
 }
 
@@ -127,7 +127,7 @@ formBatchPanel
         set::name('id'),
         set::label($lang->idAB),
         set::control('index'),
-        set::width('32px'),
+        set::width('32px')
     ),
     formBatchItem
     (
@@ -137,7 +137,7 @@ formBatchPanel
         set::value($moduleID),
         set::items($modules),
         set::width('200px'),
-        set::ditto(true),
+        set::ditto(true)
     ),
     $storyItem,
     $previewItem,
@@ -149,7 +149,7 @@ formBatchPanel
     (
         set::name('name'),
         set::label($lang->task->name),
-        set::width('240px'),
+        set::width('240px')
     ),
     $regionItem,
     $laneItem,
@@ -160,7 +160,7 @@ formBatchPanel
         set::control('picker'),
         set::items($lang->task->typeList),
         set::width('160px'),
-        set::ditto(true),
+        set::ditto(true)
     ),
     formBatchItem
     (
@@ -169,7 +169,7 @@ formBatchPanel
         set::control('picker'),
         set::items($members),
         set::width('128px'),
-        set::ditto(true),
+        set::ditto(true)
     ),
     formBatchItem
     (
@@ -179,7 +179,7 @@ formBatchPanel
         set::value(3),
         set::required(true),
         set::items($lang->task->priList),
-        set::width('80px'),
+        set::width('80px')
     ),
     formBatchItem
     (
@@ -201,7 +201,7 @@ formBatchPanel
         set::label($lang->task->estStarted),
         set::control('date'),
         set::width('128px'),
-        set::ditto(true),
+        set::ditto(true)
     ),
     formBatchItem
     (
@@ -209,14 +209,14 @@ formBatchPanel
         set::label($lang->task->deadline),
         set::control('date'),
         set::width('128px'),
-        set::ditto(true),
+        set::ditto(true)
     ),
     formBatchItem
     (
         set::name('desc'),
         set::label($lang->task->desc),
         set::control('textarea'),
-        set::width('240px'),
+        set::width('240px')
     ),
     to::headingActions
     (
@@ -224,13 +224,13 @@ formBatchPanel
         (
             set::id('zeroTaskStory'),
             set::text($lang->story->zeroTask),
-            on::change('toggleZeroTaskStory'),
-        ),
+            on::change('toggleZeroTaskStory')
+        )
     ),
     on::change('[data-name="module"]', 'setStories'),
     on::change('[data-name="story"]', 'setStoryRelated'),
     on::click('[data-name="copyStory"]', 'copyStoryTitle'),
-    on::change('[data-name="region"]', 'loadLanes'),
+    on::change('[data-name="region"]', 'loadLanes')
 );
 
 /* ====== Render page ====== */
