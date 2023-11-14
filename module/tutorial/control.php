@@ -40,7 +40,7 @@ class tutorial extends control
 
         $this->view->title   = $this->lang->tutorial->common;
         $this->view->current = $task;
-        $this->view->tasks   = $this->lang->tutorial->tasks;
+        $this->view->tasks   = $this->config->tutorial->tasks;
         $this->view->setting = $setting;
         $this->view->referer = base64_decode($referer);
         $this->view->mode    = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
@@ -59,7 +59,8 @@ class tutorial extends control
     {
         if($_POST && isset($_POST['finish'])) $finish = $_POST['finish'];
 
-        if($finish == 'keepAll') return $this->send(array('result' => 'fail', 'message' => $this->lang->tutorial->ajaxSetError));
+        if($finish == 'keepAll') return $this->send(array('result' => 'fail', 'alert' => $this->lang->tutorial->ajaxSetError));
+
         $account = $this->app->user->account;
         $this->session->set('tutorialMode', false);
         $this->loadModel('setting')->setItem("$account.tutorial.tasks.setting", $finish);

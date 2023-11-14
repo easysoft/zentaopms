@@ -2491,7 +2491,8 @@ EOF;
         if(commonModel::isTutorialMode())
         {
             $app->loadLang('tutorial');
-            foreach($lang->tutorial->tasks as $task)
+            $app->loadConfig('tutorial');
+            foreach($app->config->tutorial->tasks as $task)
             {
                 if($task['nav']['module'] == $module and $task['nav']['method'] = $method) return true;
             }
