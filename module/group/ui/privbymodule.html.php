@@ -15,7 +15,7 @@ to::header(
     span
     (
         set::className('article-h2'),
-        $lang->group->managePriv,
+        $lang->group->managePriv
     ),
     span
     (
@@ -36,7 +36,7 @@ foreach($packages as $subset => $subsetPackages)
             set::multiple(true),
             set::required(true),
             set('data-module', $subset),
-            on::change('setActions'),
+            on::change('setActions')
         );
 
     $hiddenClass = 'hidden';
@@ -56,7 +56,7 @@ form
             div
             (
                 set::className('text-center pb-2'),
-                h::strong($lang->group->module),
+                h::strong($lang->group->module)
             ),
             div
             (
@@ -67,7 +67,7 @@ form
                     set::size(10),
                     set::value(key($subsets)),
                     set::required(true),
-                    on::change('window.setSubsetPackages'),
+                    on::change('window.setSubsetPackages')
                 )
             )
         ),
@@ -83,7 +83,7 @@ form
             div
             (
                 set::id('packageBox'),
-                $packageBox,
+                $packageBox
             )
         ),
         cell
@@ -126,7 +126,7 @@ form
                 )
             )
         ),
-        formHidden('foo', ''),
+        formHidden('foo', '')
     )
 );
 

@@ -25,7 +25,7 @@ foreach($lang->mainNav as $menuKey => $menu)
             set::name('actions[views][' . strtolower($menuKey) . ']'),
             set::text($moduleName),
             set::checked(isset($group->acl['views'][$menuKey]) || empty($group->acl['views'])),
-            on::change('toggleBox'),
+            on::change('toggleBox')
         );
 }
 
@@ -36,7 +36,7 @@ $viewCheckList[] = checkbox
         set::text($lang->selectAll),
         set::checked(empty($group->acl['views'])),
         on::click('selectAll'),
-        on::change('toggleBox'),
+        on::change('toggleBox')
     );
 
 function getActionsBox($navGroup, $group, $module)
@@ -55,7 +55,7 @@ function getActionsBox($navGroup, $group, $module)
                         set::id("{$module}-{$action}"),
                         set::name("actions[actions][$module][$action]"),
                         set::text($actionTitle),
-                        set::checked(isset($group->acl['actions'][$module][$action]) || !isset($group->acl['actions'])),
+                        set::checked(isset($group->acl['actions'][$module][$action]) || !isset($group->acl['actions']))
                     )
                 );
         }
@@ -77,7 +77,7 @@ function getActionsBox($navGroup, $group, $module)
                                 set::id("$subModule-$action"),
                                 set::name("actions[actions][$subModule][$action]"),
                                 set::text($actionTitle),
-                                set::checked(isset($group->acl['actions'][$subModule][$action]) || !isset($group->acl['actions'])),
+                                set::checked(isset($group->acl['actions'][$subModule][$action]) || !isset($group->acl['actions']))
                             )
                         );
                 }
@@ -118,9 +118,9 @@ foreach($lang->mainNav as $module => $title)
                 checkbox
                 (
                     set::name('allchecker'),
-                    on::click('selectItems'),
+                    on::click('selectItems')
                 ),
-                span(html(substr($title, 0, strpos($title, '|')))),
+                span(html(substr($title, 0, strpos($title, '|'))))
             ),
             div
             (
@@ -138,7 +138,7 @@ formPanel
     (
         set::className('article-h2'),
         icon('lock mr-2'),
-        $group->name,
+        $group->name
     ),
     span
     (
@@ -171,7 +171,7 @@ formPanel
                     set::name('actions[programs][]'),
                     set::items($programs),
                     set::value(isset($group->acl['programs']) ? join(',', $group->acl['programs']) : ''),
-                    set::multiple(true),
+                    set::multiple(true)
                 ),
                 div
                 (
@@ -180,9 +180,9 @@ formPanel
                     (
                         setClass('btn btn-default cursor-text'),
                         icon('info text-warning'),
-                        $lang->group->noticeVisit,
+                        $lang->group->noticeVisit
                     )
-                ),
+                )
             ) : span(
                 set::className('flex items-center'),
                 icon('info text-warning mr-2'),
@@ -204,7 +204,7 @@ formPanel
                     set::name('actions[products][]'),
                     set::items($products),
                     set::value(isset($group->acl['products']) ? join(',', $group->acl['products']) : ''),
-                    set::multiple(true),
+                    set::multiple(true)
                 ),
                 div
                 (
@@ -213,9 +213,9 @@ formPanel
                     (
                         setClass('btn btn-default cursor-text'),
                         icon('info text-warning'),
-                        $lang->group->noticeVisit,
+                        $lang->group->noticeVisit
                     )
-                ),
+                )
             ) : span(
                 set::className('flex items-center'),
                 icon('info text-warning mr-2'),
@@ -237,7 +237,7 @@ formPanel
                     set::name('actions[projects][]'),
                     set::items($projects),
                     set::value(isset($group->acl['projects']) ? join(',', $group->acl['projects']) : ''),
-                    set::multiple(true),
+                    set::multiple(true)
                 ),
                 div
                 (
@@ -246,7 +246,7 @@ formPanel
                     (
                         setClass('btn btn-default cursor-text'),
                         icon('info text-warning'),
-                        $lang->group->noticeVisit,
+                        $lang->group->noticeVisit
                     )
                 ),
             ) : span(
@@ -270,7 +270,7 @@ formPanel
                     set::name('actions[sprints][]'),
                     set::items($executions),
                     set::value(isset($group->acl['sprints']) ? join(',', $group->acl['sprints']) : ''),
-                    set::multiple(true),
+                    set::multiple(true)
                 ),
                 div
                 (
@@ -279,9 +279,9 @@ formPanel
                     (
                         setClass('btn btn-default cursor-text'),
                         icon('info text-warning'),
-                        $lang->group->noticeVisit,
+                        $lang->group->noticeVisit
                     )
-                ),
+                )
             ) : span(
                 set::className('flex items-center'),
                 icon('info text-warning mr-2'),
@@ -292,7 +292,7 @@ formPanel
     formGroup
     (
         set::label($lang->group->dynamic),
-        $dynamicActionList,
+        $dynamicActionList
     ),
     formHidden('foo', '')
 );

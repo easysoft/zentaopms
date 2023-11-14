@@ -32,7 +32,7 @@ formPanel
         (
             set::name('desc'),
             set::value($group->desc),
-            set::rows('5'),
+            set::rows('5')
         )
     ),
     formGroup
@@ -42,7 +42,7 @@ formPanel
         (
             set::name('options[]'),
             set::inline(true),
-            set::items($lang->group->copyOptions),
+            set::items($lang->group->copyOptions)
         )
-    ),
+    )
 );

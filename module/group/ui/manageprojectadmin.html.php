@@ -16,7 +16,7 @@ sidebar
         'modules'     => $deptTree,
         'activeKey'   => $deptID,
         'closeLink'   => $this->createLink('group', 'manageProjectAdmin', "groupID={$groupID}"),
-        'showDisplay' => false,
+        'showDisplay' => false
     )))
 );
 
@@ -40,7 +40,7 @@ if($projectAdmins)
                     set::name("members[$group->group][]"),
                     set::items($allUsers),
                     set::value($account),
-                    set::multiple(true),
+                    set::multiple(true)
                 )
             ),
             h::td
@@ -55,7 +55,7 @@ if($projectAdmins)
                         set::name("program[$group->group][]"),
                         set::items($programs),
                         set::value($group->programs == 'all' ? '' : $group->programs),
-                        set::multiple(true),
+                        set::multiple(true)
                     )
                 )
             ),
@@ -66,7 +66,7 @@ if($projectAdmins)
                 (
                     set::name("programAll[$group->group]"),
                     set::items(array(1 => '')),
-                    set::checked($group->programs == 'all'),
+                    set::checked($group->programs == 'all')
                 )
             ),
             $hiddenProgram ? h::td
@@ -81,7 +81,7 @@ if($projectAdmins)
                         set::name("project[$group->group][]"),
                         set::items($projects),
                         set::checked($group->projects == 'all'),
-                        set::multiple(true),
+                        set::multiple(true)
                     )
                 )
             ) : null,
@@ -92,7 +92,7 @@ if($projectAdmins)
                 (
                     set::name("projectAll[$group->group]"),
                     set::items(array(1 => '')),
-                    set::checked($group->projects == 'all'),
+                    set::checked($group->projects == 'all')
                 )
             ) : null,
             h::td
@@ -130,7 +130,7 @@ if($projectAdmins)
                             set::name("project[$group->group][]"),
                             set::value($group->projects == 'all' ? '' : $group->projects),
                             set::items($projects),
-                            set::multiple(true),
+                            set::multiple(true)
                         )
                     )
                 ),
@@ -141,9 +141,9 @@ if($projectAdmins)
                     (
                         set::name("projectAll[$group->group]"),
                         set::items(array(1 => '')),
-                        set::checked($group->projects == 'all'),
+                        set::checked($group->projects == 'all')
                     )
-                ),
+                )
             );
         }
 
@@ -162,7 +162,7 @@ if($projectAdmins)
                             set::name("product[$group->group][]"),
                             set::items($products),
                             set::value($group->products == 'all' ? '' : $group->products),
-                            set::multiple(true),
+                            set::multiple(true)
                         )
                     )
                 ),
@@ -173,9 +173,9 @@ if($projectAdmins)
                     (
                         set::name("productAll[$group->group]"),
                         set::items(array(1 => '')),
-                        set::checked($group->products == 'all'),
+                        set::checked($group->products == 'all')
                     )
-                ),
+                )
             );
 
         $tbody[] = h::tr
@@ -193,7 +193,7 @@ if($projectAdmins)
                             set::name("execution[$group->group][]"),
                             set::value($group->executions == 'all' ? '' : $group->executions),
                             set::items($executions),
-                            set::multiple(true),
+                            set::multiple(true)
                         )
                     )
                 ),
@@ -204,9 +204,9 @@ if($projectAdmins)
                     (
                         set::name("executionAll[$group->group]]"),
                         set::items(array(1 => '')),
-                        set::checked($group->executions == 'all'),
+                        set::checked($group->executions == 'all')
                     )
-                ),
+                )
             );
 
         $i ++;
@@ -224,7 +224,7 @@ else
                 (
                     set::name('members[1][]'),
                     set::items($allUsers),
-                    set::multiple(true),
+                    set::multiple(true)
             )
         ),
         h::td
@@ -237,7 +237,7 @@ else
                 (
                     set::name('program[1][]'),
                     set::items($programs),
-                    set::multiple(true),
+                    set::multiple(true)
                 )
             )
         ),
@@ -247,7 +247,7 @@ else
             checkbox 
             (
                 set::name('programAll[1]'),
-                set::items(array(1 => '')),
+                set::items(array(1 => ''))
             )
         ),
         $hiddenProgram ? h::td
@@ -260,7 +260,7 @@ else
                 (
                     set::name('project[1][]'),
                     set::items($projects),
-                    set::multiple(true),
+                    set::multiple(true)
                 )
             )
         ) : null,
@@ -270,7 +270,7 @@ else
             checkbox
             (
                 set::name('projectAll[1]'),
-                set::items(array(1 => '')),
+                set::items(array(1 => ''))
             )
         ) : null,
         h::td
@@ -306,7 +306,7 @@ else
                     (
                         set::name('project[1][]'),
                         set::items($projects),
-                        set::multiple(true),
+                        set::multiple(true)
                     )
                 )
             ),
@@ -316,9 +316,9 @@ else
                 checkbox
                 (
                     set::name('projectAll[1]'),
-                    set::items(array(1 => '')),
+                    set::items(array(1 => ''))
                 )
-            ),
+            )
         );
     }
 
@@ -335,7 +335,7 @@ else
                 (
                     set::name('product[1][]'),
                     set::items($products),
-                    set::multiple(true),
+                    set::multiple(true)
                 )
             )
         ),
@@ -345,9 +345,9 @@ else
             checkbox
             (
                 set::name('productAll[1]'),
-                set::items(array(1 => '')),
+                set::items(array(1 => ''))
             )
-        ),
+        )
     );
 
     $tbody[] = h::tr
@@ -363,7 +363,7 @@ else
                 (
                     set::name('execution[1][]'),
                     set::items($executions),
-                    set::multiple(true),
+                    set::multiple(true)
                 )
             )
         ),
@@ -373,9 +373,9 @@ else
             checkbox
             (
                 set::name('executionAll[1]'),
-                set::items(array(1 => '')),
+                set::items(array(1 => ''))
             )
-        ),
+        )
     );
 }
 
@@ -410,7 +410,7 @@ panel
                 (
                     width('120px'),
                     $lang->actions
-                ),
+                )
             ),
             $tbody
         )

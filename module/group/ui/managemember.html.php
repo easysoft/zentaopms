@@ -51,8 +51,8 @@ div
                         set::id('allInsideChecker'),
                         set::name('allInsideChecker'),
                         set::className('check-all'),
-                        set::checked(true),
-                    ),
+                        set::checked(true)
+                    )
                 ),
                 formGroup
                 (
@@ -62,9 +62,9 @@ div
                         set::name('members[]'),
                         set::items($groupUsers),
                         set::value(implode(',', array_keys($groupUsers))),
-                        set::inline(true),
+                        set::inline(true)
                     )
-                ),
+                )
             ) : null,
             $groupUsers ? h::hr() : null,
             !empty($otherUsers) ? formRow
@@ -79,8 +79,8 @@ div
                     (
                         set::id('allOtherChecker'),
                         set::name('allOtherChecker'),
-                        set::className('check-all'),
-                    ),
+                        set::className('check-all')
+                    )
                 ),
                 formGroup
                 (
@@ -89,10 +89,10 @@ div
                         setClass('flex-wrap w-full h-full group-user-box'),
                         set::name('members[]'),
                         set::items($otherUsers),
-                        set::inline(true),
+                        set::inline(true)
                     ),
-                    formHidden('foo', ''),
-                ),
+                    formHidden('foo', '')
+                )
             ) : null,
             $outsideUsers ? h::hr() : null,
             !empty($outsideUsers) ? formRow
@@ -107,8 +107,8 @@ div
                     (
                         set::id('allOutSideChecker'),
                         set::name('allOutSideChecker'),
-                        set::className('check-all'),
-                    ),
+                        set::className('check-all')
+                    )
                 ),
                 formGroup
                 (
@@ -117,10 +117,10 @@ div
                         setClass('flex-wrap w-full h-full group-user-box'),
                         set::name('members[]'),
                         set::items($outsideUsers),
-                        set::inline(true),
+                        set::inline(true)
                     )
-                ),
-            ) : null,
+                )
+            ) : null
         )
     )
 );

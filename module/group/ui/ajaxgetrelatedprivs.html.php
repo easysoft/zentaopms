@@ -16,7 +16,7 @@ foreach($relatedPrivData['depend'] as $dependPrivs)
     $dependTree[] = checkboxGroup
         (
             set::title(array('text' => $dependPrivs['text'], 'id' => "dependPrivs[{$dependPrivs['id']}]", 'name' => 'dependPrivs[]', 'data-id' => $dependPrivs['id'], 'data-has-children' => !empty($dependPrivs['children']), 'disabled' => true, 'checked' => true)),
-            !empty($dependPrivs['children']) ? set::items($dependPrivs['children']) : null,
+            !empty($dependPrivs['children']) ? set::items($dependPrivs['children']) : null
         );
 }
 
@@ -26,7 +26,7 @@ foreach($relatedPrivData['recommend'] as $recommendPrivs)
     $recommendTree[] = checkboxGroup
         (
             set::title(array('text' => $recommendPrivs['text'], 'id' => "recommendPrivs[{$recommendPrivs['id']}]", 'name' => 'recommendPrivs[]', 'data-id' => $recommendPrivs['id'], 'data-has-children' => !empty($recommendPrivs['children']), 'checked' => $recommendPrivs['checked'], 'labelClass' => $recommendPrivs['labelClass'])),
-            !empty($recommendPrivs['children']) ? set::items($recommendPrivs['children']) : null,
+            !empty($recommendPrivs['children']) ? set::items($recommendPrivs['children']) : null
         );
 }
 
@@ -45,7 +45,7 @@ div
             set('data-placement', 'right'),
             set('data-type', 'white'),
             set('data-class-name', 'text-gray border border-light w-40'),
-            setClass('text-gray'),
+            setClass('text-gray')
         )
     ),
     div
@@ -65,7 +65,7 @@ div
             (
                 setClass('text-gray'),
                 $lang->noData
-            ),
+            )
         )
     )
 );
@@ -84,7 +84,7 @@ div
             set('data-placement', 'right'),
             set('data-type', 'white'),
             set('data-class-name', 'text-gray border border-light w-40'),
-            setClass('text-gray'),
+            setClass('text-gray')
         )
     ),
     div
@@ -104,7 +104,7 @@ div
             (
                 setClass('text-gray'),
                 $lang->noData
-            ),
+            )
         )
     )
 );

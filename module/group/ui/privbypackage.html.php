@@ -31,7 +31,7 @@ if($group->role == 'limited')
                     setclass('active'),
                     span($group->name)
                 )
-            ),
+            )
         )
     );
 
@@ -51,8 +51,8 @@ if($group->role == 'limited')
                     h::tr
                     (
                         h::th($lang->group->module),
-                        h::th($lang->group->method),
-                    ),
+                        h::th($lang->group->method)
+                    )
                 ),
                 h::tr
                 (
@@ -72,19 +72,19 @@ if($group->role == 'limited')
                             set::name('actions[my][]'),
                             set::value('limited'),
                             set::checked(isset($groupPrivs['my']['limited'])),
-                            set::text($lang->my->limited),
+                            set::text($lang->my->limited)
                         )
                     ),
-                    formHidden('noChecked', ''),
+                    formHidden('noChecked', '')
                 )
-            ),
+            )
         ),
         toolbar
         (
             setClass('form-actions w-1/2'),
             btn(set(array('text' => $lang->save, 'btnType' => 'submit', 'type' => 'primary', 'onclick' => 'setNoChecked()'))),
-            btn(set(array('text' => $lang->goback, 'url' => createLink('group', 'browse'), 'back' => true))),
-        ),
+            btn(set(array('text' => $lang->goback, 'url' => createLink('group', 'browse'), 'back' => true)))
+        )
     );
 }
 else
@@ -126,7 +126,7 @@ else
                             setClass('ghost btn square btn-default'),
                             $lang->group->more
                         ),
-                        set::items($dropDownItems),
+                        set::items($dropDownItems)
                     )
                 );
         }
@@ -170,7 +170,7 @@ else
                             set::value($priv->method),
                             set::checked($priv->method == $privMethod),
                             set::text($priv->name),
-                            set('data-id', $privID),
+                            set('data-id', $privID)
                         )
                     )
                 );
@@ -206,10 +206,10 @@ else
                                 set::value(1),
                                 set::checked($packagePrivs == $packageSelect),
                                 set::text($lang->group->package->$packageID),
-                                set::labelClass(!empty($packageSelect) && $packagePrivs != $packageSelect ? 'text-left checkbox-indeterminate-block' : 'text-left'),
-                            ),
+                                set::labelClass(!empty($packageSelect) && $packagePrivs != $packageSelect ? 'text-left checkbox-indeterminate-block' : 'text-left')
+                            )
                         ),
-                        h::i(setClass('priv-toggle icon')),
+                        h::i(setClass('priv-toggle icon'))
                     ),
                     div
                     (
@@ -253,15 +253,15 @@ else
                             set::labelClass($subset->selectCount && $subset->selectCount != $subset->allCount ? 'text-left checkbox-indeterminate-block' : 'text-left'),
                             set::value(1),
                             set::checked($subset->selectCount && $subset->selectCount == $subset->allCount),
-                            set::text($subsetTitle),
-                        ),
+                            set::text($subsetTitle)
+                        )
                     )
                 ),
                 h::td
                 (
                     setClass('td-sm text-middle text-left package-column'),
                     set('data-module', $subsetName),
-                    $getPackagesBox($subsetName, $packages[$subsetName], $groupPrivs),
+                    $getPackagesBox($subsetName, $packages[$subsetName], $groupPrivs)
                 )
             );
     }
@@ -272,7 +272,7 @@ else
         $dependTree[] = checkboxGroup
             (
                 set::title(array('text' => $dependPrivs['text'], 'id' => "dependPrivs[{$dependPrivs['id']}]", 'name' => 'dependPrivs[]', 'data-id' => $dependPrivs['id'], 'data-has-children' => !empty($dependPrivs['children']), 'disabled' => true, 'checked' => true)),
-                !empty($dependPrivs['children']) ? set::items($dependPrivs['children']) : null,
+                !empty($dependPrivs['children']) ? set::items($dependPrivs['children']) : null
             );
     }
 
@@ -282,7 +282,7 @@ else
         $recommendTree[] = checkboxGroup
             (
                 set::title(array('text' => $recommendPrivs['text'], 'id' => "recommendPrivs[{$recommendPrivs['id']}]", 'name' => 'recommendPrivs[]', 'data-id' => $recommendPrivs['id'], 'data-has-children' => !empty($recommendPrivs['children']))),
-                !empty($recommendPrivs['children']) ? set::items($recommendPrivs['children']) : null,
+                !empty($recommendPrivs['children']) ? set::items($recommendPrivs['children']) : null
             );
     }
 
@@ -297,16 +297,16 @@ else
                 span
                 (
                     icon('lock mr-2'),
-                    $group->name,
-                ),
+                    $group->name
+                )
             ),
             li
             (
                 span
                 (
                     set::className('text-md text-gray'),
-                    html($lang->arrow),
-                ),
+                    html($lang->arrow)
+                )
             ),
             li
             (
@@ -336,9 +336,9 @@ else
                 set::items($this->lang->group->versions),
                 set::value($version),
                 set::placeholder($this->lang->group->versions['']),
-                on::change('showPriv'),
+                on::change('showPriv')
             )
-        ),
+        )
     );
 
     form
@@ -361,14 +361,14 @@ else
                     (
                         setClass('btn switchBtn text-primary'),
                         set::href(inlink('managePriv', "type=byPackage&param=$groupID&nav=$nav&version=$version")),
-                        html("<i class='icon-has-authority-pack'></i>"),
+                        html("<i class='icon-has-authority-pack'></i>")
                     ),
                     a
                     (
                         setClass('btn switchBtn'),
                         set::href(inlink('managePriv', "type=byGroup&param=$groupID&nav=$nav&version=$version")),
-                        html("<i class='icon-without-authority-pack'></i>"),
-                    ),
+                        html("<i class='icon-without-authority-pack'></i>")
+                    )
                 ),
                 h::table
                 (
@@ -393,7 +393,7 @@ else
                     h::tbody
                     (
                         $privBody
-                    ),
+                    )
                 )
             ),
             div
@@ -414,7 +414,7 @@ else
                             set('data-placement', 'right'),
                             set('data-type', 'white'),
                             set('data-class-name', 'text-gray border border-light w-40'),
-                            setClass('text-gray'),
+                            setClass('text-gray')
                         )
                     ),
                     div
@@ -434,7 +434,7 @@ else
                             (
                                 setClass('text-gray'),
                                 $lang->noData
-                            ),
+                            )
                         )
                     )
                 ),
@@ -453,7 +453,7 @@ else
                             set('data-placement', 'right'),
                             set('data-type', 'white'),
                             set('data-class-name', 'text-gray border border-light w-40'),
-                            setClass('text-gray'),
+                            setClass('text-gray')
                         )
                     ),
                     div
@@ -473,7 +473,7 @@ else
                             (
                                 setClass('text-gray'),
                                 $lang->noData
-                            ),
+                            )
                         )
                     )
                 )
@@ -486,11 +486,11 @@ else
             (
                 setID('allChecker'),
                 set::rootClass('check-all'),
-                set::text($lang->selectAll),
+                set::text($lang->selectAll)
             ),
             btn(set(array('text' => $lang->save, 'btnType' => 'submit', 'type' => 'primary', 'onclick' => 'setNoChecked()'))),
-            btn(set(array('text' => $lang->goback, 'url' => createLink('group', 'browse'), 'back' => true))),
-        ),
+            btn(set(array('text' => $lang->goback, 'url' => createLink('group', 'browse'), 'back' => true)))
+        )
     );
 }
 
