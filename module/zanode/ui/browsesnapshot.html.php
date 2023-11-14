@@ -24,7 +24,7 @@ dtable
 (
     set::cols($config->zanode->snapshotDtable->fieldList),
     set::data($snapshotList),
-    set::afterRender(jsRaw('window.afterRender')),
+    set::afterRender(jsRaw('window.afterRender'))
 );
 
 render();

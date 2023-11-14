@@ -30,7 +30,7 @@ to::header('');
 dtable
 (
     set::cols($fieldList),
-    set::data($nodeList),
+    set::data($nodeList)
 );
 
 render();

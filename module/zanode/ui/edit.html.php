@@ -28,7 +28,7 @@ formPanel
             set('data-type', 'white'),
             set('data-class-name', 'text-gray border border-light'),
             setClass('text-gray')
-        ),
+        )
     )),
     $zanode->hostType != 'physics' ? formGroup
     (
@@ -36,7 +36,7 @@ formPanel
         set::label($lang->zanode->hostName),
         set::value($host->name),
         set::width('1/2'),
-        set::readonly(true),
+        set::readonly(true)
     ) : null,
     formGroup
     (
@@ -45,7 +45,7 @@ formPanel
         set::required(true),
         set::width('1/2'),
         set::value($zanode->name),
-        set::readonly($zanode->hostType != 'physics' ? true : false),
+        set::readonly($zanode->hostType != 'physics' ? true : false)
     ),
     $zanode->hostType != 'physics' ? formGroup
     (
@@ -53,14 +53,14 @@ formPanel
         set::label($lang->zanode->image),
         set::width('1/2'),
         set::value($image->name),
-        set::readonly(true),
+        set::readonly(true)
     ) : formGroup
     (
         set::name('extranet'),
         set::label($lang->zahost->IP),
         set::readonly(true),
         set::width('1/2'),
-        set::value($zanode->extranet),
+        set::value($zanode->extranet)
     ),
     formGroup
     (
@@ -68,7 +68,7 @@ formPanel
         set::width('1/2'),
         set::name(''),
         set::value(zget($config->zanode->os->cpuCores, $zanode->cpuCores)),
-        set::readonly(true),
+        set::readonly(true)
     ),
     formRow
     (
@@ -82,11 +82,11 @@ formPanel
                 (
                     set::name('memory'),
                     set::readonly(true),
-                    set::value($zanode->memory),
+                    set::value($zanode->memory)
                 ),
                 'GB'
-            ),
-        ),
+            )
+        )
     ),
     formRow
     (
@@ -100,11 +100,11 @@ formPanel
                 (
                     set::name('diskSize'),
                     set::readonly(true),
-                    set::value($zanode->diskSize),
+                    set::value($zanode->diskSize)
                 ),
                 'GB'
-            ),
-        ),
+            )
+        )
     ),
     formRow
     (
@@ -114,8 +114,8 @@ formPanel
             set::label($lang->zanode->osName),
             set::readonly(true),
             set::width('1/2'),
-            set::value($zanode->hostType != 'physics' ? $zanode->osName : zget($config->zanode->linuxList, $zanode->osName, zget($config->zanode->windowsList, $zanode->osName))),
-        ),
+            set::value($zanode->hostType != 'physics' ? $zanode->osName : zget($config->zanode->linuxList, $zanode->osName, zget($config->zanode->windowsList, $zanode->osName)))
+        )
     ),
     formGroup
     (
@@ -123,9 +123,9 @@ formPanel
         editor
         (
             set::name('desc'),
-            html($zanode->desc),
-        ),
-    ),
+            html($zanode->desc)
+        )
+    )
 );
 
 render();

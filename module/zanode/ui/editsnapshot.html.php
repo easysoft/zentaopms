@@ -25,7 +25,7 @@ formPanel
         set::label($lang->zanode->desc),
         set::control('textarea'),
         set::value($snapshot->desc)
-    ),
+    )
 );
 
 render();
