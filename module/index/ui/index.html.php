@@ -18,7 +18,7 @@ jsVar('vision',      $config->vision);
 jsVar('navGroup',    $lang->navGroup);
 jsVar('oldPages',    $config->index->oldPages);
 jsVar('appsItems',   $appsItems);
-jsVar('defaultOpen', (isset($open) and !empty($open)) ? $open : '');
+jsVar('defaultOpen', !empty($open) ? $open : '');
 jsVar('manualText',  $lang->manual);
 jsVar('manualUrl',   ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme']);
 jsVar('lang',        array_merge(array('search' => $lang->index->search, 'searchAB' => $lang->searchAB), (array)$lang->index->dock));
