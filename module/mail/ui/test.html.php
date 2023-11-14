@@ -31,7 +31,7 @@ formPanel
         set::control('picker'),
         set::name('to'),
         set::value($app->user->account),
-        set::items($users),
+        set::items($users)
     ),
     set::actionsClass('w-1/3'),
     set::actions(array(
@@ -43,8 +43,8 @@ formPanel
         array(
             'url'   => inlink(($mta == 'sendcloud' || $mta == 'ztcloud') ? $mta : 'edit'),
             'text'  => $lang->mail->edit,
-            'class' => 'btn-wide',
+            'class' => 'btn-wide'
         )
     )),
-    div(setID('resultWin')),
+    div(setID('resultWin'))
 );

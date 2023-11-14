@@ -18,7 +18,7 @@ formPanel
     set::actions(array
     (
         common::hasPriv('mail', 'detect') ? array('url' => inLink('detect'), 'text' => $lang->mail->smtp) : null
-    )),
+    ))
 );
 
 render();

@@ -37,7 +37,7 @@ panel
                 'data-call'       => 'onClickBatchDelete',
                 'data-params'     => 'event',
                 'data-formaction' => createLink('mail', 'batchDelete'),
-                'data-confirm'    => $lang->mail->confirmDelete,
+                'data-confirm'    => $lang->mail->confirmDelete
             ))
         )) : null,
         set::footPager(usePager())
