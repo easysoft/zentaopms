@@ -271,7 +271,7 @@ $(function()
                 if(item.type == 'apiDoc' && release) item.hasAction = false;
                 if(typeof item.hasAction == 'undefined') item.hasAction = true;
                 if(typeof item.active == 'undefined') item.active = 0;
-                if(typeof docID != 'undefined' && item.id == docID) item.active = 1;
+                if(typeof docID != 'undefined' && item.id == docID && item.type == 'doc') item.active = 1;
                 if(['text', 'word', 'ppt', 'excel', 'attachment'].indexOf(item.type) !== -1) item.hasAction = false;
 
                 var objectType  = config.currentModule == 'api' && ['project', 'product', 'execution'].indexOf(item.objectType) === false ? item.objectType : item.type;
