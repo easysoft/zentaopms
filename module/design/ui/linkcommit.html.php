@@ -23,7 +23,7 @@ if(empty($repoID))
         span
         (
             setClass('text-gray'),
-            $lang->design->noCommit,
+            $lang->design->noCommit
         ),
     );
 }
@@ -46,8 +46,8 @@ else
                 set::value($repoID),
                 set::items($repos),
                 on::change('loadCommit'),
-                set::required(true),
-            ),
+                set::required(true)
+            )
         ),
         div
         (
@@ -64,7 +64,7 @@ else
                     set::id('begin'),
                     set::name('begin'),
                     set::value($begin),
-                    on::change('loadCommit'),
+                    on::change('loadCommit')
                 ),
                 $lang->to,
                 datePicker
@@ -72,8 +72,8 @@ else
                     set::id('end'),
                     set::name('end'),
                     set::value($end),
-                    on::change('loadCommit'),
-                ),
+                    on::change('loadCommit')
+                )
             )
         )
     );
@@ -81,7 +81,7 @@ else
     $footToolbar['items'][] = array(
         'text' => $lang->save,
         'class' => 'btn batch-btn secondary size-sm',
-        'data-url' => inlink('linkCommit', "designID={$designID}&repoID={$repoID}&begin={$begin}&end={$end}"),
+        'data-url' => inlink('linkCommit', "designID={$designID}&repoID={$repoID}&begin={$begin}&end={$end}")
     );
 
     dtable
@@ -95,9 +95,9 @@ else
         set::footPager(
             usePager
             (
-                array('linkCreator' => helper::createLink('design', 'linkCommit', "designID={$designID}&repoID={$repoID}&begin={$begin}&end={$end}&recPerPage={recPerPage}&pageID={page}")),
-            ),
-        ),
+                array('linkCreator' => helper::createLink('design', 'linkCommit', "designID={$designID}&repoID={$repoID}&begin={$begin}&end={$end}&recPerPage={recPerPage}&pageID={page}"))
+            )
+        )
     );
 }
 

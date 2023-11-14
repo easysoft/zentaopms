@@ -27,7 +27,7 @@ if($project->hasProduct)
             set::value($design->product),
             set::items($products),
             set::required(true),
-            on::change('loadStory'),
+            on::change('loadStory')
         )
     );
 }
@@ -41,7 +41,7 @@ formPanel
     (
         set::entityID($design->id),
         set::level(1),
-        set::text($design->name),
+        set::text($design->name)
     ),
     $productRow,
     formRow
@@ -52,7 +52,7 @@ formPanel
             set::name('story'),
             set::label($lang->design->story),
             set::value($design->story),
-            set::items($stories),
+            set::items($stories)
         )
     ),
     formRow
@@ -63,7 +63,7 @@ formPanel
             set::name('type'),
             set::label($lang->design->type),
             set::value($design->type),
-            set::items($lang->design->typeList),
+            set::items($lang->design->typeList)
         )
     ),
     formRow
@@ -73,7 +73,7 @@ formPanel
             set::width('1/2'),
             set::name('name'),
             set::value($design->name),
-            set::label($lang->design->name),
+            set::label($lang->design->name)
         )
     ),
     formRow
@@ -87,7 +87,7 @@ formPanel
                 set::value($design->desc),
                 set::rows('5'),
             )
-        ),
+        )
     ),
     formRow
     (
@@ -95,8 +95,8 @@ formPanel
         (
             set::label($lang->design->file),
             upload()
-        ),
-    ),
+        )
+    )
 );
 
 /* ====== Render page ====== */

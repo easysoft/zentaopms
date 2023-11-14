@@ -20,7 +20,7 @@ formBatchPanel
         set::name('id'),
         set::label($lang->idAB),
         set::control('index'),
-        set::width('32px'),
+        set::width('32px')
     ),
     formBatchItem
     (
@@ -29,7 +29,7 @@ formBatchPanel
         set::control('picker'),
         set::items($stories),
         set::width('200px'),
-        set::ditto(true),
+        set::ditto(true)
     ),
     formBatchItem
     (
@@ -38,21 +38,21 @@ formBatchPanel
         set::control('select'),
         set::items($lang->design->typeList),
         set::width('200px'),
-        set::ditto(true),
+        set::ditto(true)
     ),
     formBatchItem
     (
         set::name('name'),
         set::label($lang->design->name),
-        set::width('240px'),
+        set::width('240px')
     ),
     formBatchItem
     (
         set::name('desc'),
         set::label($lang->design->desc),
         set::control('textarea'),
-        set::width('240px'),
-    ),
+        set::width('240px')
+    )
 );
 
 /* ====== Render page ====== */

@@ -25,7 +25,7 @@ formPanel
             set::level(1),
             set::text($design->name),
             set::entityID($design->id),
-            set::reverse(true),
+            set::reverse(true)
         )
     ),
     set::shadow(!isonlybody()),
@@ -43,7 +43,7 @@ formPanel
         editor
         (
             set::name('comment'),
-            set::rows('5'),
+            set::rows('5')
         )
     )
 );

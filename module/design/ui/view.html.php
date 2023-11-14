@@ -13,7 +13,7 @@ namespace zin;
 jsVar('type', strtolower($design->type));
 detailHeader
 (
-    to::title(entityLabel(set(array('entityID' => $design->id, 'level' => 1, 'text' => $design->name)))),
+    to::title(entityLabel(set(array('entityID' => $design->id, 'level' => 1, 'text' => $design->name))))
 );
 
 /* Construct suitable actions for the current task. */
@@ -40,7 +40,7 @@ if($common::hasPriv($moduleName, 'view'))
 {
     $storyItem = a(
         set::href(helper::createLink($moduleName, 'view', "id={$design->story}")),
-        $storyName,
+        $storyName
     );
 }
 else
@@ -57,11 +57,11 @@ detailBody
             set::title($lang->design->desc),
             set::content(empty($design->desc) ? $lang->noDesc : $design->desc),
             set::useHtml(true)
-        ),
+        )
     ),
     $design->files ? fileList
     (
-        set::files($design->files),
+        set::files($design->files)
     ) : null,
     history(),
     floatToolbar
@@ -94,7 +94,7 @@ detailBody
                 item
                 (
                     set::name($lang->design->story),
-                    $storyItem,
+                    $storyItem
                 ),
                 item
                 (
@@ -110,10 +110,10 @@ detailBody
                 (
                     set::name($lang->design->createdDate),
                     substr($design->createdDate, 0, 11)
-                ),
-            ),
-        ),
-    ),
+                )
+            )
+        )
+    )
 );
 
 /* ====== Render page ====== */

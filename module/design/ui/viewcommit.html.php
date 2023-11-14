@@ -20,7 +20,7 @@ $linkCommitItem = $canLinkCommit ? btn(
     set::text($lang->design->linkCommit),
     set::type('primary'),
     set('url', createLink('design', 'linkCommit', "designID=$design->id")),
-    set('data-load', 'modal'),
+    set('data-load', 'modal')
 ) : null;
 
 if(empty($design->commit))
@@ -53,9 +53,9 @@ else
         set::footPager(
             usePager
             (
-                array('linkCreator' => helper::createLink('design', 'viewCommit', "designID={$design->id}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}")),
-            ),
-        ),
+                array('linkCreator' => helper::createLink('design', 'viewCommit', "designID={$design->id}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"))
+            )
+        )
     );
 }
 

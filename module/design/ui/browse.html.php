@@ -35,11 +35,11 @@ toolbar
             btn(setClass('btn primary dropdown-toggle'),
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
             set::items(array_filter(array($createItem, $batchCreateItem))),
-            set::placement('bottom-end'),
+            set::placement('bottom-end')
         )
     ) : null,
     $canCreate && !$canBatchCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
-    $canBatchCreate && !$canCreate ? item(set($batchCreateItem  + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canBatchCreate && !$canCreate ? item(set($batchCreateItem  + array('class' => 'btn primary', 'icon' => 'plus'))) : null
 );
 
 jsVar('confirmDelete', $lang->design->confirmDelete);
@@ -51,8 +51,8 @@ dtable
     set::cols($config->design->dtable->fieldList),
     set::data($tableData),
     set::footPager(
-        usePager(),
-    ),
+        usePager()
+    )
 );
 
 /* ====== Render page ====== */
