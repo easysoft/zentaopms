@@ -136,9 +136,9 @@ $(function()
                 else
                 {
                     setting[current] = false;
-                    alert(serverErrorTip);
+                    zui.Modal.alert(serverErrorTip);
                 }
-            }, 'json').fail(function(e) {alert(lang.timeout)});
+            }, 'json').fail(function() {zui.Modal.alert(lang.timeout)});
         }
     };
 
@@ -148,16 +148,17 @@ $(function()
 
         $.post(ajaxSetTasksUrl, {finish: ''}, function(e)
         {
-            if(e.result === 'success')
+            result = JSON.parse(e);
+            if(result.result === 'success')
             {
                 setting = {};
                 updateUI();
             }
             else
             {
-                alert(serverErrorTip);
+                zui.Modal.alert(serverErrorTip);
             }
-        }, 'json').fail(function() {alert(lang.timeout)});
+        }, 'json').fail(function() {zui.Modal.alert(lang.timeout)});
     };
 
     var showToolTip = function($e, text, options)

@@ -54,6 +54,7 @@ jsVar('langTargetPageTip', $lang->tutorial->targetPageTip);
 jsVar('langTarget', $lang->tutorial->target);
 jsVar('langTargetAppTip', $lang->tutorial->targetAppTip);
 jsVar('langRequiredTip', $lang->tutorial->requiredTip);
+jsVar('serverErrorTip', $lang->tutorial->serverErrorTip);
 
 div
 (
