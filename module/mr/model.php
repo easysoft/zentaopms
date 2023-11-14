@@ -288,7 +288,7 @@ class mrModel extends model
         $this->linkObjects($MR);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'browse'));
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'browse', $this->app->tab == 'execution' ? "repoID=0&mode=status&param=opened&objectID={$this->post->executionID}" : ''));
     }
 
     /**
