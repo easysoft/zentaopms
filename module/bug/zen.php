@@ -1974,7 +1974,7 @@ class bugZen extends bug
 
         /* 给 bug 解决者积分奖励。*/
         /* Add score to the user who resolved the bug. */
-        if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bug->id);
+        if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bug);
 
         /* 更新 bug 所属看板的泳道。*/
         /* Update the lane of the bug kanban. */
