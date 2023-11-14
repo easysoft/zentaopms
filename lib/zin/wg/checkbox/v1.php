@@ -15,7 +15,7 @@ class checkbox extends wg
         'value?: string',
         'typeClass?: string',
         'rootClass?: string',
-        'labelClass?: string',
+        'labelClass?: string'
     );
 
     public function onAddChild($child)
@@ -43,13 +43,13 @@ class checkbox extends wg
                 set::id($id),
                 set::name($name),
                 set::checked($checked),
-                set($this->props->skip('text,primary,typeClass,rootClass,id,labelClass')),
+                set($this->props->skip('text,primary,typeClass,rootClass,id,labelClass'))
             ),
             h::label
             (
                 set('for', $id),
                 setClass($labelClass),
-                $text,
+                $text
             ),
             $this->children()
         );
@@ -66,7 +66,7 @@ class checkbox extends wg
             h::input
             (
                 set::type($type),
-                set($this->props->skip('text,primary,typeClass')),
+                set($this->props->skip('text,primary,typeClass'))
             ),
             is_string($text) ? span($text, set::className('text')) : $text,
             $this->children()
