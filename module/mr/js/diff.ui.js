@@ -204,11 +204,11 @@ window.afterPageUpdate = function()
         $('#monacoTree').css('height', getSidebarHeight() - 8 + 'px');
         /* Init tab template. */
         if(!tabTemp) tabTemp = $('#monacoTabs ul li').first().clone();
-        
+
         /* Load default tab content. */
         var height = getIframeHeight();
         $('#tab-' + fileAsId).html("<iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetDiffEditorContent', urlParams.replace('%s', fileAsId)) + "' width='100%' height='" + height + "' scrolling='no'></iframe>")
-        
+
         /* Select default tree item. */
         const currentElement = findItemInTreeItems(tree, fileAsId, 0);
         if(currentElement != undefined) $('#' + currentElement.id).parent().addClass('selected');
