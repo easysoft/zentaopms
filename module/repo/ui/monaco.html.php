@@ -93,7 +93,7 @@ helper::isAjaxRequest('modal') ? null : sidebar
 (
     set::side('left'),
     setClass('repo-sidebar canvas'),
-    div
+    $repo->SCM == 'Subversion' ? null : div
     (
         setClass('surface'),
         dropmenu
