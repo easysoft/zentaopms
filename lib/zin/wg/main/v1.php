@@ -111,7 +111,7 @@ class main extends wg
         return div
         (
             set::id('mainContent'),
-            $children,
+            $children
         );
     }
 
