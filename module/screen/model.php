@@ -368,8 +368,8 @@ class screenModel extends model
 
         $component->chartConfig->xAxis->axisLabel->rotate = 0;
         $component->chartConfig->yAxis->axisLabel->rotate = 0;
-        if(isset($setting->rotateX) && $setting->rotateX == 'use') $component->chartConfig->xAxis->axisLabel->rotate = 30;
-        if(isset($setting->rotateY) && $setting->rotateY == 'use') $component->chartConfig->yAxis->axisLabel->rotate = 30;
+        if(isset($setting['rotateX']) && $setting['rotateX'] == 'use') $component->chartConfig->xAxis->axisLabel->rotate = 30;
+        if(isset($setting['rotateY']) && $setting['rotateY'] == 'use') $component->chartConfig->yAxis->axisLabel->rotate = 30;
 
         return $component;
     }
