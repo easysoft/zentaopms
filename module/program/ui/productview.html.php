@@ -252,7 +252,7 @@ $fnGenerateCols = function() use ($canBatchEdit)
 featureBar
 (
     set::current($browseType),
-    set::linkParams("status={key}&orderBy=$orderBy"),
+    set::linkParams("status={key}&orderBy=$orderBy&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     li(searchToggle(set::open($browseType == 'bySearch'), set::module('program')))
 );
 toolbar($fnGenerateCreateProgramBtns());
