@@ -370,14 +370,16 @@ class action extends control
         {
             $this->action->updateComment($actionID);
         }
-        elseif(in_array($objectType, $this->config->action->newPageModule))
-        {
-            return $this->send(array('status' => 'success', 'closeModal' => true, 'load' => true));
-        }
         else
         {
             dao::$errors['submit'][] = $this->lang->action->historyEdit;
             return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        }
+
+        $action = $this->action->getById($actionID);
+        if(in_array($action->objectType, $this->config->action->newPageModule))
+        {
+            return $this->send(array('status' => 'success', 'closeModal' => true, 'load' => true));
         }
         return $this->send(array('result' => 'success', 'locate' => 'reload', 'load' => true, 'closeModal' => true));
     }
