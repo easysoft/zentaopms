@@ -137,6 +137,7 @@ function initRecomendTree(data)
         itemCreator: function($li, item)
         {
             var index = item.relationPriv ? recommedSelect.indexOf(item.relationPriv.toString()) : -1;
+            if(item.relationPriv === undefined) item.relationPriv = '';
             $li.append('<div class="checkbox-primary ' + (item.children ? 'check-all' : '') + '"><input ' + (index >= 0 ? 'checked="checked"' : '') + 'data-has-children="' + (item.children ? !!item.children.length : false) + '"' + (item.children ? '' : 'data-type="recommend" data-privid="' + item.privID + '" data-relationpriv="' + item.relationPriv + '"') + 'type="checkbox" name="recommendPrivs[]" value="' + item.relationPriv + '" title="' + item.title + '" id="recommendPrivs[' + item.module + ']' + item.method + '" data-module="' + item.module + '" data-method="' + item.method + '"><label>' + item.title + '</label></div>');
         }
     });
