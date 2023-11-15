@@ -93,7 +93,7 @@ class modalDialog extends wg
             setClass('modal-body scrollbar-hover', $this->prop('bodyClass')),
             set($this->prop('bodyProps')),
             $this->children(),
-            $rawContent ? rawContent() : null,
+            $rawContent ? rawContent() : null
         );
     }
 
