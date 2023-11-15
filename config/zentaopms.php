@@ -292,6 +292,13 @@ $config->openMethods[] = 'instance.ajaxDBAuthUrl';
 $config->openMethods[] = 'search.deletezinquery';
 $config->openMethods[] = 'space.edit';
 $config->openMethods[] = 'space.binduser';
+$config->openMethods[] = 'space.getstoreappinfo';
+$config->openMethods[] = 'store.browse';
+$config->openMethods[] = 'store.appview';
+$config->openMethods[] = 'system.editdomain';
+$config->openMethods[] = 'doc.uploaddocs';
+$config->openMethods[] = 'cron.schedule';
+$config->openMethods[] = 'cron.consume';
 
 $config->openModules = array();
 $config->openModules[] = 'install';

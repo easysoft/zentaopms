@@ -116,6 +116,64 @@ class cron extends control
     }
 
     /**
+     * Schedule cron task by RoadRunner.
+     *
+     * @access public
+     * @return void
+     */
+    public function rrSchedule()
+    {
+        if('cli' !== PHP_SAPI) return;
+
+        set_time_limit(0);
+        session_write_close();
+
+        $this->loadModel('common');
+
+        $execId = mt_rand();
+        while(true)
+        {
+            dao::$cache = array();
+            if(empty($this->config->global->cron) || !$this->canSchedule($execId))
+            {
+                sleep(60);
+                continue;
+            }
+
+            $this->schedule($execId);
+            sleep(30);
+        }
+    }
+
+    /**
+     * Consume cron task by RoadRunner.
+     *
+     * @access public
+     * @return void
+     */
+    public function rrConsume()
+    {
+        if('cli' !== PHP_SAPI) return;
+
+        set_time_limit(0);
+        session_write_close();
+
+        $this->loadModel('common');
+
+        while(true)
+        {
+            if(empty($this->config->global->cron))
+            {
+                sleep(60);
+                continue;
+            }
+
+            $this->execTasks(mt_rand());
+            sleep(10);
+        }
+    }
+
+    /**
      * 使用Ajax请求执行定时任务.
      * Ajax execute cron.
      *
@@ -139,17 +197,18 @@ class cron extends control
         $execId = mt_rand();
         while(true)
         {
+            dao::$cache = array();
             if($restart || $this->canSchedule($execId))
             {
-                $this->cron->schedule($execId);
-                $this->cron->execTasks($execId);
+                $this->schedule($execId);
+                $this->execTasks($execId);
 
                 $restart = false;
                 sleep(20);
             }
             else
             {
-                $this->cron->execTasks($execId);
+                $this->execTasks($execId);
                 return;  // If no task in queue, executor will exit.
             }
         }
@@ -170,5 +229,139 @@ class cron extends control
         if(!isset($settings['lastTime']) || $settings['lastTime'] < date('Y-m-d H:i:s', strtotime('-1 minute'))) return true;
 
         return false;
+    }
+
+    /**
+     * 调度生成队列任务.
+     * Schedule, push tasks to queue.
+     *
+     * @param  int    $execId
+     * @access public
+     * @return bool
+     */
+    public function schedule($execId)
+    {
+        $now = date(DT_DATETIME1);
+
+        $this->loadModel('setting')->setItem('system.cron.run.execId', $execId);
+        $this->setting->setItem('system.cron.run.lastTime', $now);
+
+        /* Get and parse crons. */
+        $tasks = $this->dao->select('cron,MAX(`createdDate`) `datetime`')->from(TABLE_QUEUE)->groupBy('cron')->fetchAll('cron');
+        $crons = $this->cron->getCrons('nostop');
+        foreach($crons as $index => $cron)
+        {
+            $cron->datetime = isset($tasks[$cron->id]) ? $tasks[$cron->id]->datetime : '1970-01-01';
+        }
+
+        $parsedCrons = $this->cron->parseCron($crons);
+
+        foreach($parsedCrons as $id => $cron)
+        {
+            $cronInfo = $crons[$id];
+
+            /* Skip empty and stop cron.*/
+            if(empty($cronInfo) || $cronInfo->status == 'stop') continue;
+
+            if(!$cron['command'] || !isset($crons[$id])) continue;
+
+            /* Check time. */
+            if($now < $cron['time']->format(DT_DATETIME1)) continue;
+
+            /* Push task into queue. */
+            $task = new stdclass();
+            $task->cron        = $id;
+            $task->type        = $crons[$id]->type;
+            $task->command     = $cron['command'];
+            $task->createdDate = $now;
+            $this->dao->insert(TABLE_QUEUE)->data($task)->exec();
+
+            $log = date('G:i:s') . " schedule\ncronId: $id\nexecId: $execId\noutput: push task to queue\n\n";
+            $this->cron->logCron($log);
+        }
+    }
+
+    /**
+     * 执行所有定时任务.
+     * Execute all tasks.
+     *
+     * @param  int    $execId
+     * @access public
+     * @return bool
+     */
+    public function execTasks($execId)
+    {
+        while(true)
+        {
+            dao::$cache = array();
+            $task = $this->dao->select('*')->from(TABLE_QUEUE)->where('status')->eq('wait')->andWhere('command')->ne('')->orderBy('createdDate')->fetch();
+            if(!$task) break;
+
+            $this->cron->logCron(strval($task->id) . "\n");
+
+            $this->execTask($execId, $task);
+        }
+    }
+
+    /**
+     * 执行一个定时任务.
+     * Execute one task.
+     *
+     * @param  int    $execId
+     * @param  object $task
+     * @access public
+     * @return bool
+     */
+    public function execTask($execId, $task)
+    {
+        /* Other executor may execute the task at the same time，so we mark execId and wait 500ms to check whether we own it. */
+        $this->dao->update(TABLE_QUEUE)->set('status')->eq('doing')->set('execId')->eq($execId)->where('id')->eq($task->id)->exec();
+        usleep(500);
+
+        $task = $this->dao->select('*')->from(TABLE_QUEUE)->where('id')->eq($task->id)->fetch();
+        if($task->execId != $execId) return;
+
+        /* Execution command. */
+        $output = '';
+        $return = '';
+
+        unset($_SESSION['company']);
+        unset($this->app->company);
+        $this->common->setCompany();
+        $this->common->loadConfigFromDB();
+
+        try
+        {
+            if($task->type == 'zentao')
+            {
+                parse_str($task->command, $params);
+                if(isset($params['moduleName']) and isset($params['methodName']))
+                {
+                    $this->app->loadConfig($params['moduleName']);
+                    $output = $this->fetch($params['moduleName'], $params['methodName']);
+                }
+            }
+            elseif($task->type == 'system')
+            {
+                exec($task->command, $out, $return);
+                if($out) $output = implode(PHP_EOL, $out);
+            }
+        }
+        catch(EndResponseException $endResponseException)
+        {
+            $output = $endResponseException->getContent();
+        }
+        catch(Exception $e)
+        {
+            $output = $e;
+        }
+
+        $this->dao->update(TABLE_QUEUE)->set('status')->eq('done')->where('id')->eq($task->id)->exec();
+        $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('id')->eq($task->cron)->exec();
+
+        $log = date('G:i:s') . " execute\ncronId: {$task->cron}\nexecId: $execId\noutput: taskId:{$task->id}.\ncommand: {$task->command}.\nreturn : $return.\noutput : $output\n\n";
+        $this->cron->logCron($log);
+
+        return true;
     }
 }
