@@ -24,11 +24,7 @@ class executionModel extends model
      */
     public function checkPriv(int $executionID): bool
     {
-        if(empty($executionID)) return false;
-
-        /* If is admin, return true. */
-        if($this->app->user->admin) return true;
-        return (strpos(",{$this->app->user->view->sprints},", ",{$executionID},") !== false);
+        return !empty($executionID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->sprints},", ",{$executionID},") !== false));
     }
 
     /**
@@ -1464,6 +1460,35 @@ class executionModel extends model
     }
 
     /**
+     * Get execution count.
+     *
+     * @param  int    $projectID
+     * @param  string $browseType all|undone|wait|doing|suspended|closed|involved|review
+     * @access public
+     * @return int
+     */
+    public function getExecutionCounts(int $projectID = 0, string $browseType = 'all'): int
+    {
+        $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.type')->in('sprint,stage,kanban')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.multiple')->eq('1')
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
+            ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bySearch')))->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF($browseType == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
+            ->beginIF($browseType == 'review')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
+            ->fetchAll('id');
+
+        return count($executions);
+    }
+
+    /**
      * 获取执行数据。
      * Get execution stat data.
      *
@@ -1573,7 +1598,7 @@ class executionModel extends model
             ->andWhere('t1.multiple')->eq('1')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
-            ->beginIF($productID)->andWhere('t3.product')->eq((int)$productID)->fi()
+            ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bySearch')))->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
@@ -2259,6 +2284,7 @@ class executionModel extends model
         $this->config->product->search['params']['plan']['values']    = $planPairs;
         $this->config->product->search['params']['module']['values']  = $modules;
         $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
+        $this->config->product->search['params']['stage']['values']   = array('' => '') + $this->lang->story->stageList;
         if($productType == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);

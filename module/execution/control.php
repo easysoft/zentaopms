@@ -1546,6 +1546,7 @@ class execution extends control
 
         /* Execution not found to prevent searching for. */
         if(!isset($this->executions[$execution->id])) $this->executions = $this->execution->getPairs($execution->project, 'all', 'nocode');
+        if(!$this->loadModel('common')->checkPrivByObject('execution', $executionID)) return $this->execution->accessDenied();
 
         $execution->projectInfo = $this->loadModel('project')->getByID($execution->project);
         $programList = array_filter(explode(',', $execution->projectInfo->path));
@@ -1639,6 +1640,7 @@ class execution extends control
      */
     public function taskKanban(int $executionID, string $browseType = 'all', string $orderBy = 'order_asc', string $groupBy = '')
     {
+        if(!$this->loadModel('common')->checkPrivByObject('execution', $executionID)) return $this->execution->accessDenied();
         /* Load model and language. */
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
@@ -2493,6 +2495,29 @@ class execution extends control
      */
     public function ajaxGetDropMenu(int $executionID, string $module, string $method, string $extra = '')
     {
+        $this->view->link        = $this->executionZen->getLink($module, $method, $extra);
+        $this->view->module      = $module;
+        $this->view->method      = $method;
+        $this->view->executionID = $executionID;
+        $this->view->extra       = $extra;
+
+        $cacheProjectsKey   = $this->config->cacheKeys->execution->ajaxGetDropMenuProjects;
+        $cacheExecutionsKey = $this->config->cacheKeys->execution->ajaxGetDropMenuExecutions;
+
+        if(helper::isCacheEnabled())
+        {
+            $projects          = $this->cache->get($cacheProjectsKey);
+            $projectExecutions = $this->cache->get($cacheExecutionsKey);
+
+            if(!empty($projects) && !empty($projectExecutions))
+            {
+                $this->view->projects          = $projects;
+                $this->view->projectExecutions = $projectExecutions;
+                $this->display();
+                return;
+            }
+        }
+
         $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', '', true); /* 获取所有项目的列表。*/
         $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION) /* 按照项目分组，获取有权限访问的执行列表。*/
             ->where('deleted')->eq('0')
@@ -2540,10 +2565,12 @@ class execution extends control
             $projectExecutions[$execution->project][] = $execution;
         }
 
-        $this->view->link               = $this->executionZen->getLink($module, $method, $extra);
-        $this->view->module             = $module;
-        $this->view->method             = $method;
-        $this->view->extra              = $extra;
+        if($this->config->cache->enable)
+        {
+            $this->cache->set($cacheProjectsKey, $projectPairs);
+            $this->cache->set($cacheExecutionsKey, $projectExecutions);
+        }
+
         $this->view->projects           = $projectPairs;      /* 项目ID为索引，项目名称为值的数组 [projectID => projectName]。 */
         $this->view->projectExecutions  = $projectExecutions; /* 项目对应的执行列表 [projectID => execution]。*/
         $this->view->executionID        = $executionID;
@@ -2667,12 +2694,12 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function all(string $status = 'undone', string $orderBy = 'order_asc', int $productID = 0, string $param = '', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
+    public function all(string $status = 'undone', string $orderBy = 'order_asc', int $productID = 0, string $param = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->app->loadLang('my');
-        $this->app->loadLang('product');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
+        $this->loadModel('product');
         $this->loadModel('datatable');
 
         $from = $this->app->tab;
@@ -2687,6 +2714,8 @@ class execution extends control
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->loadModel('program')->refreshStats(); // Refresh stats fields of projects.
 
         $queryID   = ($status == 'bySearch') ? (int)$param : 0;
         $actionURL = $this->createLink('execution', 'all', "status=bySearch&orderBy=$orderBy&productID=$productID&param=myQueryID");
@@ -2930,7 +2959,7 @@ class execution extends control
     public function treeStory(int $storyID, int $version = 0)
     {
         $story   = $this->loadModel('story')->getById($storyID, $version, true);
-        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name,id,`type`,shadow')->fetch();
+        $product = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, `type`, shadow')->fetch();
 
         $this->view->story      = $story;
         $this->view->product    = $product;

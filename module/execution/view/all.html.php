@@ -37,7 +37,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN());
   <div class='btn-toolBar pull-left'>
     <?php if($from == 'project'):?>
     <div class='btn-group'>
-      <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
+      <?php $viewName = $productID != 0 ? zget($productList, $productID) : $lang->product->allProduct;?>
       <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
