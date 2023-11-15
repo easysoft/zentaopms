@@ -394,6 +394,10 @@
                     if(options.success) options.success(data);
                     if(onFinish) onFinish(null, data);
                 }
+                else if(data.open)
+                {
+                    openUrl(data.open);
+                }
                 else if(data.load)
                 {
                     if(data.load === 'table') loadTable();
