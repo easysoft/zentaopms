@@ -29,6 +29,8 @@ window.getCol = function(col)
  */
 window.getLaneActions = function(lane)
 {
+    if(!lane.hasOwnProperty('actionList')) return false;
+
     return [{
         type: 'dropdown',
         icon: 'ellipsis-v',

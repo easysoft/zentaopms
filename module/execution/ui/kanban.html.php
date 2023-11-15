@@ -31,7 +31,7 @@ foreach($kanbanList as $current => $region)
         $kanbanList[$current]['items'][$index] = $group;
     }
 
-    $laneCount += $region['laneCount'];
+    $laneCount += isset($region['laneCount']) ? $region['laneCount'] : 0;
 }
 
 $operationMenu = array();
