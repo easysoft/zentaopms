@@ -56,7 +56,7 @@ featureBar
 (
     set::current($status),
     set::linkParams("status={key}"),
-    li(searchToggle())
+    li(searchToggle(set::open($status == 'bySearch')))
 );
 
 /* zin: Define the toolbar on main menu. */

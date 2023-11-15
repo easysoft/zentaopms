@@ -32,7 +32,7 @@ featureBar
     set::module('project'),
     set::method('build'),
     $changeProductBox,
-    li(searchToggle(set::module('projectBuild')))
+    li(searchToggle(set::module('projectBuild'), set::open($type == 'bysearch')))
 );
 
 /* zin: Define the toolbar on main menu. */
