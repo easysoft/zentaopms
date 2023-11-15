@@ -24,7 +24,7 @@ class modalTrigger extends wg
         'custom?:object',
         'url?:string',
         'request?:object',
-        'dataType?:string',
+        'dataType?:string'
     );
 
     protected static array $defineBlocks = array(
