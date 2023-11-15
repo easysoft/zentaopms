@@ -40,7 +40,7 @@ class testsuite extends control
         parent::__construct($moduleName, $methodName);
 
         $this->view->products = $this->products = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        if(empty($this->products) && !helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'locate' => $this->createLink('product', 'showErrorNone', 'moduleName=qa&activeMenu=testsuite')));
+        if(empty($this->products) && !helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'open' => $this->createLink('product', 'showErrorNone', 'moduleName=qa&activeMenu=testsuite')));
     }
 
     /**
