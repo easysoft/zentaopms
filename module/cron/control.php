@@ -149,6 +149,8 @@ class cron extends control
         $execId = mt_rand();
         while(true)
         {
+            dao::$cache = array();
+
             if($restart || $this->canSchedule($execId))
             {
                 $this->schedule($execId);
@@ -183,6 +185,8 @@ class cron extends control
         $execId = mt_rand();
         while(true)
         {
+            dao::$cache = array();
+
             if(empty($this->config->global->cron) || !$this->canSchedule($execId))
             {
                 sleep(60);
@@ -301,8 +305,11 @@ class cron extends control
     {
         while(true)
         {
+            dao::$cache = array();
+
             $task = $this->dao->select('*')->from(TABLE_QUEUE)->where('status')->eq('wait')->andWhere('command')->ne('')->orderBy('createdDate')->fetch();
             if(!$task) break;
+
             $this->cron->logCron(strval($task->id) . "\n");
 
             $this->execTask($execId, $task);

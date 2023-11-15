@@ -1,19 +1,16 @@
 version: "3"
 
 service:
-  cron_schedule:
-    command: php cron.php
+  cron_scheduler:
+    command: php scheduler.php
     process_num: 1
     exec_timeout: 0
     restart_sec: 1
     relay: pipes
 
-server:
-  command: php worker.php
-  relay: pipes
-jobs:
-  consume: [ "crons" ]
-  pool:
-    num_workers: 5
-    allocate_timeout: 60s
-    destroy_timeout: 60s
+  cron_consumer:
+    command: php consumer.php
+    process_num: 4
+    exec_timeout: 0
+    restart_sec: 1
+    relay: pipes
