@@ -23,8 +23,8 @@ $buildItems = function($items): array
             (
                 set::href($item['href']),
                 !empty($item['attr']) && is_array($item['attr']) ? set($item['attr']) : null,
-                $item['text']
-            ) : $item['text'],
+                html($item['text'])
+            ) : html($item['text']),
             set::collapse(!empty($item['text'])),
         );
     }
