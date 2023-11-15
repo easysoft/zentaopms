@@ -164,9 +164,8 @@ $config->story->datatable->fieldList['assignedDate']['width']    = '95';
 $config->story->datatable->fieldList['assignedDate']['required'] = 'no';
 
 $config->story->datatable->fieldList['product']['title']      = 'product';
-$config->story->datatable->fieldList['product']['type']       = 'html';
-$config->story->datatable->fieldList['product']['sortType']   = true;
 $config->story->datatable->fieldList['product']['control']    = 'hidden';
+$config->story->datatable->fieldList['product']['display']    = false;
 $config->story->datatable->fieldList['product']['dataSource'] = array('module' => 'transfer', 'method' => 'getRelatedObjects', 'params' => 'story&product&id,name');
 
 $config->story->datatable->fieldList['branch']['title']      = 'branch';
@@ -179,9 +178,8 @@ $config->story->datatable->fieldList['branch']['control']    = 'select';
 $config->story->datatable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID&active');
 
 $config->story->datatable->fieldList['module']['title']      = 'module';
-$config->story->datatable->fieldList['module']['type']       = 'html';
-$config->story->datatable->fieldList['module']['sortType']   = true;
 $config->story->datatable->fieldList['module']['control']    = 'select';
+$config->story->datatable->fieldList['module']['display']    = false;
 $config->story->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&story&0&all');
 
 $config->story->datatable->fieldList['keywords']['title']    = 'keywords';

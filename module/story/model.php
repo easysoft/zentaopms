@@ -3567,6 +3567,7 @@ class storyModel extends model
         }
 
         $orderBy = str_replace('branch_', 't2.branch_', $orderBy);
+        $orderBy = str_replace('version_', 't2.version_', $orderBy);
         $type    = strtolower($type);
 
         $products = $this->loadModel('product')->getProducts($executionID);
