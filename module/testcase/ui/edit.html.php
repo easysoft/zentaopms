@@ -75,6 +75,7 @@ detailBody
         section
         (
             set::title($lang->testcase->title),
+            set::required(true),
             formGroup
             (
                 inputControl
