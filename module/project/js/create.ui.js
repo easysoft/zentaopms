@@ -3,31 +3,15 @@ $(function()
     new zui.Tooltip('#programHover', {title: programTip, trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light programTip'});
 
     setWhite();
-    if(copyProjectID > 0)
-    {
-        $('#name').addClass('has-info')
-        $('#name').after('<div id="nameLabelInfo" class="text-info text-warning">' + nameTips + '</div>')
-        $('#code').addClass('has-info')
-        $('#code').after('<div id="codeLabelInfo" class="text-info text-warning">' + codeTips + '</div>')
-        $('#end').addClass('has-info')
-        $('#end').parent().after('<div id="endLabelInfo" class="text-info text-warning">' + endTips + '</div>')
-        $('#days').addClass('has-info')
-        $('#days').parent().after('<div id="daysLabelInfo" class="text-info text-warning">' + daysTips + '</div>')
-    }
 
+    if(copyProjectID > 0) $('#end .date-picker input[type=text]').addClass('has-info')
 });
 
 $(document).on('click', 'button[type=submit]', function()
 {
     /* Remove init tips. */
-    $('#name').removeClass('has-info');
-    $('#nameLabelInfo').remove();
-    $('#code').removeClass('has-info');
-    $('#codeLabelInfo').remove();
-    $('#end').removeClass('has-info');
-    $('#endLabelInfo').remove();
-    $('#days').removeClass('has-info');
-    $('#daysLabelInfo').remove();
+    $('.has-info').removeClass('has-info');
+    $('.text-warning').remove();
 })
 
 window.addProduct = function(e)
