@@ -9,11 +9,6 @@ jsVar('endGreatThanParent', $lang->project->endGreatThanParent);
 jsVar('ignore', $lang->project->ignore);
 jsVar('multiBranchProducts', $multiBranchProducts);
 jsVar('errorSameProducts', $lang->project->errorSameProducts);
-jsVar('copyProjectID', $copyProjectID);
-jsVar('nameTips', $lang->project->copyProject->nameTips);
-jsVar('codeTips', $lang->project->copyProject->codeTips);
-jsVar('endTips', $lang->project->copyProject->endTips);
-jsVar('daysTips', $lang->project->copyProject->daysTips);
 jsVar('programTip', $lang->program->tips);
 
 $projectModelItems = array();
