@@ -32,7 +32,7 @@ class uploadImgs extends wg
         'duplicatedHint?: string',         // 文件名重复提示
         'exceededSizeHint?: string',       // 上传超出大小限制提示
         'exceededCountHint?: string',      // 上传超出个数限制提示
-        'totalCountText?: string',         // 文件数量文本
+        'totalCountText?: string'          // 文件数量文本
     );
 
     protected function build(): zui
