@@ -11,7 +11,8 @@ class tableData extends wg
 {
     protected static array $defineProps = array(
         'title?: string',
-        'useTable?: bool=true'
+        'useTable?: bool=true',
+        'class?: string'
     );
 
     public static function getPageCSS(): string|false
@@ -103,12 +104,14 @@ class tableData extends wg
 
     protected function build(): wg
     {
-        $useTable = $this->prop('useTable');
+        $useTable   = $this->prop('useTable');
+        $tableClass = $this->prop('class');
         if($useTable)
         {
             return h::table
             (
                 setClass('table-data'),
+                $tableClass ? setClass($tableClass) : null,
                 $this->caption(),
                 h::tbody($this->children())
             );
@@ -117,6 +120,7 @@ class tableData extends wg
         return div
         (
             setClass('table-data'),
+            $tableClass ? setClass($tableClass) : null,
             div
             (
                 setClass('table-data-body'),
