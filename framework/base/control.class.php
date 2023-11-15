@@ -1019,19 +1019,10 @@ class baseControl
          */
         extract(\zin\zin::$data);
 
-        /* 生成hook的Javascript代码。 Generate Javascript code of hook file. */
-        ob_start();
-        foreach($hookFiles as $hookFile)
-        {
-            if(file_exists($hookFile)) include $hookFile;
-        }
-        $hookCode = ob_get_clean();
+        /* 将 hooks 文件添加到当前 context 中。 */
+        if(!empty($hookFiles)) \zin\context::current()->addHookFiles($hookFiles);
 
         ob_start();
-
-        /* viewFile可能会直接render，所以需要写在前面。Before viewFile, because it will be render by self. */
-        \zin\html($hookCode);
-
         include $viewFile;
 
         if(!\zin\zin::$rendered) \zin\render();

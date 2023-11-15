@@ -303,3 +303,18 @@ function rawContent(): rawContent
 
     return new rawContent();
 }
+
+/**
+ * Include hooks files.
+ */
+function includeHooks()
+{
+    $hookFiles = context::current()->getHookFiles();
+    ob_start();
+    foreach($hookFiles as $hookFile)
+    {
+        if(!empty($hookFile) && file_exists($hookFile)) include $hookFile;
+    }
+    $hookCode = ob_get_clean();
+    return html($hookCode);
+}
