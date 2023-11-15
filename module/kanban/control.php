@@ -1781,7 +1781,7 @@ class kanban extends control
 
         $fromCards = str_replace(",$cardID,", ',', $fromCell->cards);
         $fromCards = $fromCards == ',' ? '' : $fromCards;
-        $toCards   = ",$cardID," . ltrim($toCell->cards, ',');
+        $toCards   = ',' . implode(',', array_unique(array_filter(explode(',', $toCell->cards)))) . ",$cardID,";
 
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCards)
             ->where('kanban')->eq($executionID)
