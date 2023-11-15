@@ -18,17 +18,19 @@ foreach($kanbanList as $current => $region)
     {
         $groupID = $group['id'];
 
-        $group['getLane']     = jsRaw('window.getLane');
-        $group['getCol']      = jsRaw('window.getCol');
-        $group['getItem']     = jsRaw('window.getItem');
-        $group['canDrop']     = jsRaw('window.canDrop');
-        $group['onDrop']      = jsRaw('window.onDrop');
-        $group['colWidth']    = 'auto';
-        $group['minColWidth'] = $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->minColWidth;
-        $group['maxColWidth'] = $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->maxColWidth;
-        $group['colProps']    = array('actions' => jsRaw('window.getColActions'));
-        $group['laneProps']   = array('actions' => jsRaw('window.getLaneActions'));
-        $group['itemProps']   = array('actions' => jsRaw('window.getItemActions'));
+        $group['getLane']       = jsRaw('window.getLane');
+        $group['getCol']        = jsRaw('window.getCol');
+        $group['getItem']       = jsRaw('window.getItem');
+        $group['canDrop']       = jsRaw('window.canDrop');
+        $group['onDrop']        = jsRaw('window.onDrop');
+        $group['colWidth']      = 'auto';
+        $group['laneHeight']    = 'auto';
+        $group['minColWidth']   = $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->minColWidth;
+        $group['maxColWidth']   = $kanban->fluidBoard == '0' ? $kanban->colWidth : $kanban->maxColWidth;
+        $group['maxLaneHeight'] = '500';
+        $group['colProps']      = array('actions' => jsRaw('window.getColActions'));
+        $group['laneProps']     = array('actions' => jsRaw('window.getLaneActions'));
+        $group['itemProps']     = array('actions' => jsRaw('window.getItemActions'));
 
         foreach($group['data']['cols'] as $colIndex => $col)
         {
