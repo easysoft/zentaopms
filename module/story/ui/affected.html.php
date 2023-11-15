@@ -42,7 +42,7 @@ $getAffectedTabs = function($story, $users)
                 set::key('affectedProjects'),
                 set::title($lang->story->affectedProjects),
                 set::active(true),
-                empty($affectedProjects) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : $affectedProjects,
+                empty($affectedProjects) ? div(setClass('dtable-empty-tip'), div(setClass('text-gray'), $lang->noData)) : $affectedProjects
             ),
             tabPane
             (
@@ -76,7 +76,7 @@ $getAffectedTabs = function($story, $users)
                     set::cols($config->story->affect->twins->fields),
                     set::data(array_values($story->twins))
                 )
-            ),
+            )
         )
     );
 };

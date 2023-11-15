@@ -108,7 +108,7 @@ if($story->type == 'story')
                 (isset($execution->type) && $execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executionName) : a(set::href($executionLink), setClass('muted title'), $executionName),
                 label(setClass('circle size-sm'), $task->id),
                 common::hasPriv('task', 'view') ? a(set::href($this->createLink('task', 'view', "taskID=$task->id")), setClass('title'), set('data-toggle', 'modal'), $task->name) : span(setClass('title'), $task->name),
-                label(setClass("status-{$task->status} size-sm"), $this->lang->task->statusList[$task->status]),
+                label(setClass("status-{$task->status} size-sm"), $this->lang->task->statusList[$task->status])
             );
         }
     }
@@ -124,7 +124,7 @@ if($story->type == 'story')
             $taskItems[] = h::li
             (
                 set::title($execution->name),
-                ($execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executions[$executionID]) : a(set::href($this->createLink('execution', 'view', "executionID=$executionID")), setClass('muted title'), $executions[$executionID]),
+                ($execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executions[$executionID]) : a(set::href($this->createLink('execution', 'view', "executionID=$executionID")), setClass('muted title'), $executions[$executionID])
             );
         }
     }
@@ -158,14 +158,14 @@ detailHeader
             set::text(''),
             $story->parent > 0 ? label(setClass('circle child'), $lang->story->childrenAB) : null,
             $story->parent > 0 && isset($story->parentName) ? span(a(set::href(inlink('view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type")), $story->parentName), ' / ') : null,
-            span(setStyle(array('color' => $story->color)), $story->title),
+            span(setStyle(array('color' => $story->color)), $story->title)
         ),
         count($versions) > 1 ? dropdown
         (
             btn(setClass('btn-link'), "#{$version}"),
-            set::items($versions),
+            set::items($versions)
         ) : null,
-        $story->deleted ? span(setClass('label danger'), $lang->story->deleted) : null,
+        $story->deleted ? span(setClass('label danger'), $lang->story->deleted) : null
     ),
 
     $isInModal ? null : to::suffix
@@ -175,7 +175,7 @@ detailHeader
             set::icon('plus'),
             set::type('primary'),
             set::text($lang->story->create),
-            common::hasPriv('story', 'create') ? set::url($createStoryLink) : null,
+            common::hasPriv('story', 'create') ? set::url($createStoryLink) : null
         )
     )
 );
@@ -200,7 +200,7 @@ detailBody
         (
             set::files($story->files),
             set::showDelete(false),
-            set::object($story),
+            set::object($story)
         ) : null,
         empty($story->children) ? null : section
         (
@@ -208,9 +208,9 @@ detailBody
             dtable
             (
                 set::cols($cols),
-                set::data(array_values($story->children)),
+                set::data(array_values($story->children))
             )
-        ),
+        )
     ),
     history(),
     floatToolbar
@@ -218,7 +218,7 @@ detailBody
         set::object($story),
         $isInModal ? null : to::prefix(backBtn(setClass('btn-default ghost text-white'), set::icon('back'), $lang->goback)),
         $story->deleted ? null : set::main($menus['mainMenu']),
-        $story->deleted ? null : set::suffix($menus['suffixMenu']),
+        $story->deleted ? null : set::suffix($menus['suffixMenu'])
     ),
     detailSide
     (
@@ -240,7 +240,7 @@ detailBody
                     $product->type == 'normal' ? null : item
                     (
                         set::name($lang->story->branch),
-                        common::hasPriv('product', 'browse') ? a(set::href($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch")), $branches[$story->branch]) : $branches[$story->branch],
+                        common::hasPriv('product', 'browse') ? a(set::href($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch")), $branches[$story->branch]) : $branches[$story->branch]
                     ),
                     item
                     (
@@ -370,7 +370,7 @@ detailBody
                     (
                         set::name($lang->story->lastEditedBy),
                         $story->lastEditedBy ? zget($users, $story->lastEditedBy) . $lang->at . $story->lastEditedDate : null
-                    ),
+                    )
                 )
             )
         ),
@@ -398,10 +398,10 @@ detailBody
                             label(setClass('circle size-sm'), $twin->id),
                             common::hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "id={$twin->id}")), setClass('title'), set::title($twin->title), set('data-toggle', 'modal'), $twin->title) : span(setClass('title'), $twin->title),
                             label(setClass('size-sm'), set::title($stage), $stage),
-                            common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink hidden size-xs"), on::click('unlinkTwins'), set('data-id', $twin->id), icon('unlink')) : null,
+                            common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink hidden size-xs"), on::click('unlinkTwins'), set('data-id', $twin->id), icon('unlink')) : null
                         );
                     }, $twins))
-                ),
+                )
             ) : null,
             ($this->config->URAndSR && !$hiddenURS && $config->vision != 'or') ? tabPane
             (
@@ -422,10 +422,10 @@ detailBody
                             set::title($relation->title),
                             label(setClass('circle size-sm'), $relation->id),
                             $canViewStory ? a(set::href(helper::createLink('story', 'view', "id={$relation->id}&version=0&param=0&storyType=$relationType")), setClass('title'), set('data-toggle', 'modal'), $relation->title) : span(setClass('title'), $relation->title),
-                            $canLinkStory ? a(set('url', helper::createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID={$relation->id}&browseType=&queryID=0&storyType=$story->type")), setClass('unlink unlinkStory hidden'), icon('link')) : null,
+                            $canLinkStory ? a(set('url', helper::createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID={$relation->id}&browseType=&queryID=0&storyType=$story->type")), setClass('unlink unlinkStory hidden'), icon('link')) : null
                         );
                     }, $relations)),
-                    !common::hasPriv($story->type, 'linkStory') ? null : h::li(a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")), set('data-toggle', 'modal'), set('data-size', 'lg'), set::id('linkButton'), setClass('btn secondary size-sm'), icon('plus'), $lang->story->link . ($story->type == 'story' ? $lang->story->requirement : $lang->story->story))),
+                    !common::hasPriv($story->type, 'linkStory') ? null : h::li(a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")), set('data-toggle', 'modal'), set('data-size', 'lg'), set::id('linkButton'), setClass('btn secondary size-sm'), icon('plus'), $lang->story->link . ($story->type == 'story' ? $lang->story->requirement : $lang->story->story)))
                 )
             ) : null,
             $story->type == 'story' && common::hasPriv('story', 'tasks') ? tabPane
@@ -486,7 +486,7 @@ detailBody
                                 (
                                     set::title($case->title),
                                     label(setClass('circle size-sm'), $case->id),
-                                    common::hasPriv('testcase', 'view') ? a(set::href(helper::createLink('testcase', 'view', "caseID=$case->id")), setClass('title'), set('data-toggle', 'modal'), set::title($case->title), $case->title) : span(setClass('title'), $case->title),
+                                    common::hasPriv('testcase', 'view') ? a(set::href(helper::createLink('testcase', 'view', "caseID=$case->id")), setClass('title'), set('data-toggle', 'modal'), set::title($case->title), $case->title) : span(setClass('title'), $case->title)
                                 );
                             }, $cases))
                         )
@@ -505,7 +505,7 @@ detailBody
                                 (
                                     set::title($build->name),
                                     label(setClass('circle size-sm'), $build->id),
-                                    common::hasPriv('build', 'view') ? a(set::href(helper::createLink('build', 'view', "buildID=$build->id")), setClass('title'), set('data-app', $tab), set::title($build->name), $build->name) : span(setClass('title'), $build->name),
+                                    common::hasPriv('build', 'view') ? a(set::href(helper::createLink('build', 'view', "buildID=$build->id")), setClass('title'), set('data-app', $tab), set::title($build->name), $build->name) : span(setClass('title'), $build->name)
                                 );
                             }, $builds))
                         )
@@ -525,7 +525,7 @@ detailBody
                                 (
                                     set::title($release->name),
                                     label(setClass('circle size-sm'), $release->id),
-                                    common::hasPriv($releaseModule, 'view') ? a(set::href(helper::createLink($releaseModule, 'view', "releaseID=$release->id")), setClass('title'), set('data-app', $tab), set::title($release->name), $release->name) : span(setClass('title'), $release->name),
+                                    common::hasPriv($releaseModule, 'view') ? a(set::href(helper::createLink($releaseModule, 'view', "releaseID=$release->id")), setClass('title'), set('data-app', $tab), set::title($release->name), $release->name) : span(setClass('title'), $release->name)
                                 );
                             }, $releases))
                         )
@@ -544,7 +544,7 @@ detailBody
                                 (
                                     set::title($storyTitle),
                                     label(setClass('circle size-sm'), $storyID),
-                                    $hasPriv ? a(set::href(helper::createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type")), setClass('title'), set('data-toggle', 'modal'), set::title($storyTitle), $storyTitle) : span(setClass('title'), $storyTitle),
+                                    $hasPriv ? a(set::href(helper::createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type")), setClass('title'), set('data-toggle', 'modal'), set::title($storyTitle), $storyTitle) : span(setClass('title'), $storyTitle)
                                 );
                             }, array_keys($story->linkStoryTitles), array_values($story->linkStoryTitles)))
                         )
@@ -568,7 +568,7 @@ detailBody
                                         set::title($linkMRTitle),
                                         set('data-app', 'devops'),
                                         $linkMRTitle
-                                    ) : span(setClass('title'), $linkMRTitle),
+                                    ) : span(setClass('title'), $linkMRTitle)
                                 );
                             }, array_keys($linkedMRs), array_values($linkedMRs)))
                         )
@@ -592,11 +592,11 @@ detailBody
                                         set::title($commit->comment),
                                         set('data-app', 'devops'),
                                         $commit->comment
-                                    ) : span(setClass('title'), $commit->comment),
+                                    ) : span(setClass('title'), $commit->comment)
                                 );
                             }, $linkedCommits))
                         )
-                    ),
+                    )
                 )
             ) : null
         )
@@ -619,7 +619,7 @@ if(isset($libs))
                 (
                     set::name('lib'),
                     set::items($libs),
-                    set::required(true),
+                    set::required(true)
                 )
             ),
             (!common::hasPriv('assetlib', 'approveStory') && !common::hasPriv('assetlib', 'batchApproveStory')) ? formGroup
@@ -628,11 +628,11 @@ if(isset($libs))
                 picker
                 (
                     set::name('assignedTo'),
-                    set::items($approvers),
+                    set::items($approvers)
                 )
             ) : null,
             set::submitBtnText($lang->import),
-            set::actions(array('submit')),
+            set::actions(array('submit'))
         )
     );
 }

@@ -26,7 +26,7 @@ formPanel
         set::width('1/2'),
         set::value(''),
         set::items($reasonList),
-        on::change('#closedReason', 'setStory'),
+        on::change('#closedReason', 'setStory')
     ),
     formRow
     (
@@ -39,8 +39,8 @@ formPanel
             set::label($lang->story->duplicateStory),
             set::width('1/2'),
             set::value(''),
-            set::items($productStories),
-        ),
+            set::items($productStories)
+        )
     ),
     formGroup
     (
@@ -49,7 +49,7 @@ formPanel
         (
             set::name('comment')
         )
-    ),
+    )
 );
 hr();
 history();

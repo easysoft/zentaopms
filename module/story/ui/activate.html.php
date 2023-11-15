@@ -24,14 +24,14 @@ formPanel
         set::label($lang->story->assignedTo),
         set::width('1/3'),
         set::value($story->closedBy),
-        set::items($users),
+        set::items($users)
     ),
     empty($story->twins) ? null : formGroup
     (
         set::width('full'),
         set::label(' '),
         icon('exclamation-sign'),
-        $lang->story->assignSyncTip,
+        $lang->story->assignSyncTip
     ),
     formGroup
     (

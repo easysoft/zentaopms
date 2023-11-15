@@ -29,13 +29,13 @@ formPanel
     (
         setClass('panel-title text-lg'),
         $lang->story->create,
-        !$forceReview ? checkbox(set::id('needNotReview'), set::rootClass('text-base font-medium'), set::value(1), set::text($lang->story->needNotReview), set::checked($needReview), on::change('toggleReviewer(e.target)')) : null,
+        !$forceReview ? checkbox(set::id('needNotReview'), set::rootClass('text-base font-medium'), set::value(1), set::text($lang->story->needNotReview), set::checked($needReview), on::change('toggleReviewer(e.target)')) : null
     )),
     set::actions(array
     (
         array('text' => $lang->save,             'id' => 'saveButton',      'class' => 'primary'),
         array('text' => $lang->story->saveDraft, 'id' => 'saveDraftButton', 'class' => 'secondary'),
-        array('text' => $lang->goback, 'data-back' => 'APP', 'class' => 'open-url'),
+        array('text' => $lang->goback, 'data-back' => 'APP', 'class' => 'open-url')
     )),
     set::customFields(true),
     formRow
@@ -51,7 +51,7 @@ formPanel
                 picker(set::name('product'), set::value($fields['product']['default']), set::items($fields['product']['options'])),
                 isset($fields['branch']) && $type != 'story' ? picker(set::name('branch'), set::items($fields['branch']['options']), set::value($fields['branch']['default'])) : null,
             ),
-            set::required(true),
+            set::required(true)
         ),
         isset($fields['branch']) && $type == 'story' ? formGroup
         (
@@ -59,7 +59,7 @@ formPanel
             set::label($lang->story->assignedTo),
             set::width('1/2'),
             set::name('assignedTo'),
-            set::items($fields['assignedTo']['options']),
+            set::items($fields['assignedTo']['options'])
         ) : null,
         isset($fields['branch']) && $type == 'story' ? null : formGroup
         (
@@ -95,7 +95,7 @@ formPanel
                     )
                 ) : null
             )
-        ),
+        )
     ),
     isset($fields['branches']) && $type == 'story' ? formRow
     (
@@ -116,9 +116,9 @@ formPanel
                     set('data-index', '0'),
                     set('data-on', 'change'),
                     set('data-call', 'loadBranchRelation'),
-                    set('data-params', 'event'),
+                    set('data-params', 'event')
                 )
-            ),
+            )
         ),
         formGroup
         (
@@ -128,7 +128,7 @@ formPanel
             (
                 set::id('moduleIdBox'),
                 picker(setID('modules_0'), set::name('modules[0]'), set::items($fields['modules']['options']), set::value($fields['modules']['default']), set::required(true))
-            ),
+            )
         ),
         formGroup
         (
@@ -137,13 +137,13 @@ formPanel
             (
                 set::id('planIdBox'),
                 picker(setID('plans_0'), set::name('plans[0]'), set::items($fields['plans']['options']), set::value($fields['plans']['default']))
-            ),
+            )
         ),
         count($branches) > 1 ? formGroup
         (
             set::width('50px'),
             setClass('c-actions'),
-            btn(setClass('btn-link addNewLine'), set('data-on', 'click'), set('data-call', 'addBranchesBox'), set('data-params', 'event'), set::title(sprintf($lang->story->addBranch, $lang->product->branchName[$product->type])), icon('plus')),
+            btn(setClass('btn-link addNewLine'), set('data-on', 'click'), set('data-call', 'addBranchesBox'), set('data-params', 'event'), set::title(sprintf($lang->story->addBranch, $lang->product->branchName[$product->type])), icon('plus'))
         ) : null,
     ) : null,
     isset($fields['branches']) && $type == 'story' ? formRow
@@ -153,7 +153,7 @@ formPanel
         formGroup
         (
             set::label(' '),
-            div(setClass('text-gray'), icon(setClass('text-warning'), 'help'), set::style(array('font-size' => '12px')), $lang->story->notice->branch),
+            div(setClass('text-gray'), icon(setClass('text-warning'), 'help'), set::style(array('font-size' => '12px')), $lang->story->notice->branch)
         )
     ) : null,
     !isset($fields['branch']) && $type == 'story' ? formRow
@@ -167,11 +167,11 @@ formPanel
                 span
                 (
                     set::id('planIdBox'),
-                    picker(set::name('plan'), set::items($fields['plan']['options']), set::value($fields['plan']['default'])),
+                    picker(set::name('plan'), set::items($fields['plan']['options']), set::value($fields['plan']['default']))
                 ),
                 empty($fields['plan']['options']) ? btn(set::url($this->createLink('productplan', 'create', "productID=$productID&branch=$branch")), set('data-toggle', 'modal'), set::title($lang->productplan->create), icon('plus')) : null,
-                empty($fields['plan']['options']) ? btn(setClass('refresh'), set::title($lang->refresh), set('onclick', "loadProductPlans($productID)"), icon('refresh')) : null,
-            ),
+                empty($fields['plan']['options']) ? btn(setClass('refresh'), set::title($lang->refresh), set('onclick', "loadProductPlans($productID)"), icon('refresh')) : null
+            )
         ),
         formGroup
         (
@@ -180,8 +180,8 @@ formPanel
             set::name('assignedTo'),
             set::label($lang->story->assignedTo),
             set::items($fields['assignedTo']['options']),
-            set::value($fields['assignedTo']['default']),
-        ),
+            set::value($fields['assignedTo']['default'])
+        )
     ) : null,
     $type == 'story' ? formRow
     (
@@ -192,7 +192,7 @@ formPanel
             set::name('source'),
             set::items($fields['source']['options']),
             set::value($fields['source']['default']),
-            on::change('toggleFeedback(e.target)'),
+            on::change('toggleFeedback(e.target)')
         ),
         formGroup
         (
@@ -200,7 +200,7 @@ formPanel
             set::label($lang->story->sourceNote),
             set::control('text'),
             set::name('sourceNote'),
-            set::value($fields['sourceNote']['default']),
+            set::value($fields['sourceNote']['default'])
         ),
         formGroup
         (
@@ -209,7 +209,7 @@ formPanel
             set::label($lang->story->feedbackBy),
             set::control('text'),
             set::name('feedbackBy'),
-            set::value($fields['feedbackBy']['default']),
+            set::value($fields['feedbackBy']['default'])
         ),
         formGroup
         (
@@ -218,8 +218,8 @@ formPanel
             set::label($lang->story->notifyEmail),
             set::control('text'),
             set::name('notifyEmail'),
-            set::value($fields['notifyEmail']['default']),
-        ),
+            set::value($fields['notifyEmail']['default'])
+        )
     ) : null,
     $type != 'story' ? formRow
     (
@@ -244,7 +244,7 @@ formPanel
             set::width('1/4'),
             set::label($lang->story->sourceNote),
             input(set::name('sourceNote'), set::value($fields['sourceNote']['default']))
-        ),
+        )
     ) : null,
     formRow
     (
@@ -263,10 +263,10 @@ formPanel
                     set::name('reviewer[]'),
                     set::multiple(true),
                     set::items($fields['reviewer']['options']),
-                    set::value($fields['reviewer']['default']),
-                ),
+                    set::value($fields['reviewer']['default'])
+                )
             ),
-            formHidden('needNotReview', $forceReview ? 0 : 1),
+            formHidden('needNotReview', $forceReview ? 0 : 1)
         )
     ),
     isset($fields['URS']) ? formRow
@@ -278,7 +278,7 @@ formPanel
             inputGroup
             (
                 span(setClass('URSBox'), picker(setID('URS'), set::name('URS[]'), set::items($fields['URS']['options']), set::value($fields['URS']['default']))),
-                btn(set('data-on', 'click'), set('data-call', 'loadURS'), set('data-params', 'allURS'), $lang->story->loadAllStories),
+                btn(set('data-on', 'click'), set('data-call', 'loadURS'), set('data-params', 'allURS'), $lang->story->loadAllStories)
             )
         ),
         formGroup
@@ -288,7 +288,7 @@ formPanel
             set::label($lang->story->parent),
             set::name('parent'),
             set::items($fields['parent']['options']),
-            set::value($fields['parent']['default']),
+            set::value($fields['parent']['default'])
         )
     ) : null,
     $type == 'story' && !$this->config->URAndSR ? formRow
@@ -299,7 +299,7 @@ formPanel
             set::label($lang->story->parent),
             set::name('parent'),
             set::items($fields['parent']['options']),
-            set::value($fields['parent']['default']),
+            set::value($fields['parent']['default'])
         )
     ) : null,
     isset($executionType) && $executionType == 'kanban' ? formRow
@@ -313,7 +313,7 @@ formPanel
             set::items($fields['region']['options']),
             set::value($fields['region']['default']),
             set('data-on', 'change'),
-            set('data-call', 'setLane'),
+            set('data-call', 'setLane')
         ),
         formGroup
         (
@@ -321,7 +321,7 @@ formPanel
             set::label($fields['lane']['title']),
             set::name('lane'),
             set::items($fields['lane']['options']),
-            set::value($fields['lane']['default']),
+            set::value($fields['lane']['default'])
         )
     ) : null,
     formRow
@@ -337,7 +337,7 @@ formPanel
                 input
                 (
                     set::name('title'),
-                    set::value($fields['title']['default']),
+                    set::value($fields['title']['default'])
                 ),
                 to::suffix
                 (
@@ -347,9 +347,9 @@ formPanel
                         set::name('color'),
                         set::value(''),
                         set::syncColor('#title')
-                    ),
-                ),
-            ),
+                    )
+                )
+            )
         ),
         formGroup
         (
@@ -362,9 +362,9 @@ formPanel
                 $lang->story->pri,
                 priPicker(set::name('pri'), set::items($fields['pri']['options']), set::value($fields['pri']['default'])),
                 $lang->story->estimateAB,
-                input(set::name('estimate'), set::placeholder($lang->story->hour), set::value($fields['estimate']['default'])),
+                input(set::name('estimate'), set::placeholder($lang->story->hour), set::value($fields['estimate']['default']))
             )
-        ),
+        )
     ),
     formGroup
     (
@@ -374,8 +374,8 @@ formPanel
             set::name('spec'),
             set::placeholder($lang->story->specTemplate . "\n" . $lang->noticePasteImg),
             set::required($fields['spec']['required']),
-            html($fields['spec']['default']),
-        ),
+            html($fields['spec']['default'])
+        )
     ),
     formGroup
     (
@@ -384,7 +384,7 @@ formPanel
         (
             set::name('verify'),
             set::required($fields['verify']['required']),
-            html($fields['verify']['default']),
+            html($fields['verify']['default'])
         )
     ),
     formGroup
@@ -401,17 +401,17 @@ formPanel
             set::name('mailto[]'),
             set::items($fields['mailto']['options']),
             set::value($fields['mailto']['default']),
-            set::multiple(true),
-        ),
+            set::multiple(true)
+        )
     ),
     formGroup
     (
         set::label($lang->story->keywords),
         set::name('keywords'),
         set::control('input'),
-        set::values($fields['keywords']['default']),
+        set::values($fields['keywords']['default'])
     ),
-    formHidden('type', $type),
+    formHidden('type', $type)
 );
 
 isset($fields['branches']) && $type == 'story' ? formRow
@@ -425,8 +425,8 @@ isset($fields['branches']) && $type == 'story' ? formRow
         inputGroup
         (
             set::id('branchBox'),
-            div(setID('branches'), setClass('form-group-wrapper')),
-        ),
+            div(setID('branches'), setClass('form-group-wrapper'))
+        )
     ),
     formGroup
     (
@@ -435,8 +435,8 @@ isset($fields['branches']) && $type == 'story' ? formRow
         inputGroup
         (
             set::id('moduleIdBox'),
-            div(setID('modules'), setClass('form-group-wrapper')),
-        ),
+            div(setID('modules'), setClass('form-group-wrapper'))
+        )
     ),
     formGroup
     (
@@ -444,16 +444,16 @@ isset($fields['branches']) && $type == 'story' ? formRow
         inputGroup
         (
             set::id('planIdBox'),
-            div(setID('plans'), setClass('form-group-wrapper')),
-        ),
+            div(setID('plans'), setClass('form-group-wrapper'))
+        )
     ),
     formGroup
     (
         set::width('50px'),
         setClass('c-actions'),
         btn(setClass('btn-link addNewLine'),    set::title(sprintf($lang->story->addBranch,    $lang->product->branchName[$product->type])), icon('plus')),
-        btn(setClass('btn-link removeNewLine'), set::title(sprintf($lang->story->deleteBranch, $lang->product->branchName[$product->type])), icon('trash')),
-    ),
+        btn(setClass('btn-link removeNewLine'), set::title(sprintf($lang->story->deleteBranch, $lang->product->branchName[$product->type])), icon('trash'))
+    )
 ) : null;
 
 render();

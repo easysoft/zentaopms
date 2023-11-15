@@ -27,7 +27,7 @@ if(!$this->story->checkForceReview())
             set::name('needNotReview'),
             set::text($lang->story->needNotReview),
             set::value(1)
-        ),
+        )
     );
 }
 
@@ -50,11 +50,11 @@ formPanel
                 set::name('reviewer[]'),
                 set::value($story->reviewer),
                 set::multiple(true),
-                set::items($reviewers),
+                set::items($reviewers)
             ),
-            $needNotReviewBox,
+            $needNotReviewBox
         )
-    ),
+    )
 );
 hr();
 history();

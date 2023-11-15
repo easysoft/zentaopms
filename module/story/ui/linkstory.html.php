@@ -38,7 +38,7 @@ dtable
     set::cols($cols),
     set::data($data),
     set::footToolbar(array('items' => array(array('text' => $lang->save, 'btnType' => 'primary', 'className' => 'size-sm', 'data-on' => 'click', 'data-call' => 'fnLinkStories', 'data-params' => 'event')))),
-    set::footer(array('checkbox', 'toolbar')),
+    set::footer(array('checkbox', 'toolbar'))
 );
 
 h::js
