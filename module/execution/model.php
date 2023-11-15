@@ -2592,7 +2592,7 @@ class executionModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('status')->notin('closed,cancel')
             ->andWhere('execution')->in($executionIdList)
-            ->orderBy('id_asc')
+            ->orderBy('order_asc')
             ->fetchGroup('execution', 'id');
 
         $taskIdList = array();
