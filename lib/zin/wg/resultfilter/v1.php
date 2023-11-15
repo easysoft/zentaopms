@@ -40,7 +40,7 @@ class resultFilter extends filter
                 setClass('w-full'),
                 set::name($name . '_begin'),
                 set::value(zget($value, 'end', ''))
-            ),
+            )
         );
     }
 
@@ -64,7 +64,7 @@ class resultFilter extends filter
                 setClass('w-full'),
                 set::name($name . '_end'),
                 set::value(zget($value, 'end', ''))
-            ),
+            )
         );
     }
 
