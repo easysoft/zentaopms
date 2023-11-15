@@ -88,6 +88,3 @@ $lang->tutorial->tasks->createBug = new stdClass();
 $lang->tutorial->tasks->createBug->title          = "Report Bug";
 $lang->tutorial->tasks->createBug->targetPageName = "Report Bug";
 $lang->tutorial->tasks->createBug->desc           = "<p>Report a Bug: </p><ul><li data-target='nav'>Open <span class='task-nav'> Test <i class='icon icon-angle-right'></i> Bug <i class='icon icon-angle-right'></i> Report Bug</span>；</li><li data-target='form'>Fill the form with bug information:</li><li data-target='submit'>Save</li></ul>";
-
-global $config;
-if($config->systemMode == 'light') unset($lang->tutorial->tasks['createProgram']);
