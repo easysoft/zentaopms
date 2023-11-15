@@ -73,14 +73,14 @@ class statisticBlock extends blockPanel
                 (
                     toggle::tab(array('target' => "#blockTab_{$id}_{$item['id']}")),
                     setClass('block-statistic-nav-item flex-auto min-w-0', $item['id'] == $active ? 'active scroll-into-view' : ''),
-                    span(setClass('text clip'), $item['text']),
+                    span(setClass('text clip'), $item['text'])
                 ),
                 !$longBlock ? span(setClass('block-statistic-nav-title text text-primary font-bold clip'), $item['text']) : null,
                 !empty($item['url']) ? a
                 (
                     $longBlock ? setClass('block-statistic-nav-url top-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity') : null,
                     set::href($item['url']),
-                    icon('import rotate-270 primary-pale rounded-full w-5 h-5 center'),
+                    icon('import rotate-270 primary-pale rounded-full w-5 h-5 center')
                 ) : null
             );
         }
@@ -111,7 +111,7 @@ class statisticBlock extends blockPanel
                     '$element.find(".block-statistic-nav-btn[data-type=\'prev\']").toggleClass(disabled, !$nextItem.prev().length);',
                     '$element.find(".block-statistic-nav-btn[data-type=\'next\']").toggleClass(disabled, !$nextItem.next().length);'
                 )))
-            ),
+            )
         );
     }
 
@@ -132,7 +132,7 @@ class statisticBlock extends blockPanel
             return center
                 (
                     setClass('text-gray flex-auto'),
-                    $lang->noData,
+                    $lang->noData
                 );
         }
 
