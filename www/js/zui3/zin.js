@@ -1255,6 +1255,7 @@
 
     /* Auto layout UI. */
     $(window).on('resize', updatePageLayout);
+    updatePageLayout();
 
     if(!isInAppTab)
     {
