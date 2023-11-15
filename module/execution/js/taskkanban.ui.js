@@ -500,3 +500,5 @@ window.refreshKanban = function(url)
         $kanbanList.render(options);
     });
 }
+
+waitDom('.c-group .picker-box .picker-single-selection', function(){this.html(kanbanLang.laneGroup + ': ' + this.html());});

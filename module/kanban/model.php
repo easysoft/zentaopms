@@ -1694,7 +1694,7 @@ class kanbanModel extends model
             $columnData[$column->id]['region'] = $lane->region;
             $columnData[$column->id]['group']  = $lane->type;
             $columnData[$column->id]['parent'] = $column->parent;
-            $columnData[$column->id]['cards']  = empty($column->cares) ? 0 : count($cardIdList);
+            $columnData[$column->id]['cards']  = empty($column->cards) ? 0 : count($cardIdList);
             $columnData[$column->id]['actionList'] = array('setColumn', 'setWIP');
 
             if($column->parent > 0) $columnData[$column->id]['parentName'] = $column->parent;
@@ -1817,7 +1817,7 @@ class kanbanModel extends model
 
         $execution = $this->loadModel('execution')->getByID($executionID);
 
-        $columns = $this->dao->select('t1.*, GROUP_CONCAT(t1.cards) as cards, t2.`type` as columnType, t2.limit, t2.name as columnName, t2.color')->from(TABLE_KANBANCELL)->alias('t1')
+        $columns = $this->dao->select('t1.*, GROUP_CONCAT(t1.cards) as cards, t2.`type` as columnType, t2.parent, t2.limit, t2.name as columnName, t2.color')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->leftJoin(TABLE_KANBANLANE)->alias('t3')->on('t1.lane = t3.id')
             ->leftJoin(TABLE_KANBANREGION)->alias('t4')->on('t1.kanban = t4.kanban')
@@ -1832,8 +1832,6 @@ class kanbanModel extends model
             ->fetchAll('columnType');
 
         $cardGroup = array();
-        $actions   = array('setColumn', 'setWIP');
-
         foreach($columns as $column)
         {
             if(empty($column->cards)) continue;
@@ -1846,75 +1844,41 @@ class kanbanModel extends model
 
         /* Build kanban group data. */
         $kanbanGroup = array();
+        $lanesData   = array();
+        $columnsData = array();
+        $cardsData   = array();
         foreach($lanes as $laneID => $lane)
         {
-            $laneData   = array();
-            $columnData = array();
-            $cardCount  = 0;
+            $laneData = array();
+            $laneData['id']     = $groupBy . $laneID;
+            $laneData['type']   = $browseType;
+            $laneData['name']   = $laneData['id'];
+            $laneData['region'] = $lane->execution;
+            $laneData['title']  = (($groupBy == 'pri' or $groupBy == 'severity') and $laneID) ? $this->lang->$browseType->$groupBy . ':' . $lane->name : $lane->name;
+            $laneData['color']  = $lane->color;
+            $laneData['order']  = $lane->order;
 
-            $laneData['id']              = $groupBy . $laneID;
-            $laneData['laneID']          = $groupBy . $laneID;
-            $laneData['name']            = (($groupBy == 'pri' or $groupBy == 'severity') and $laneID) ? $this->lang->$browseType->$groupBy . ':' . $lane->name : $lane->name;
-            $laneData['color']           = $lane->color;
-            $laneData['order']           = $lane->order;
-            $laneData['type']            = $browseType;
-            $laneData['defaultCardType'] = $browseType;
             if(empty($laneID) and !in_array($groupBy, array('module', 'story', 'pri', 'severity'))) $laneID = '';
-
-            if($browseType == 'task' and $groupBy == 'story')
-            {
-                $columnData[0]['id']         = 0;
-                $columnData[0]['type']       = 'story';
-                $columnData[0]['name']       = $this->lang->SRCommon;
-                $columnData[0]['color']      = '#333';
-                $columnData[0]['limit']      = '-1';
-                $columnData[0]['laneType']   = $browseType;
-                $columnData[0]['asParent']   = false;
-                $columnData[0]['parentType'] = '';
-                $columnData[0]['actions']    = array();
-
-                if(empty($searchValue) or strpos($lane->name, $searchValue) !== false)
-                {
-                    $cardData = array();
-                    $cardData['id']         = $laneID;
-                    $cardData['title']      = $lane->name;
-                    $cardData['order']      = 1;
-                    $cardData['pri']        = $lane->pri;
-                    $cardData['estimate']   = '';
-                    $cardData['assignedTo'] = $lane->assignedTo;
-                    $cardData['deadline']   = '';
-                    $cardData['severity']   = '';
-                    $laneData['cards']['story'][] = $cardData;
-                }
-            }
 
             /* Construct kanban column data. */
             foreach($columns as $column)
             {
-                $parentColumn = '';
-                if(in_array($column->columnType, array('developing', 'developed'))) $parentColumn = 'develop';
-                if(in_array($column->columnType, array('testing', 'tested')))       $parentColumn = 'test';
-                if(in_array($column->columnType, array('fixing', 'fixed')))         $parentColumn = 'resolving';
+                $cardIdList = array_unique(array_filter(explode(',', $column->cards)));
 
-                /* Judge column action priv. */
-                $column->actions = array();
-                foreach($actions as $action)
-                {
-                    if($this->isClickable($column, $action)) $column->actions[] = $action;
-                }
+                $columnData = array();
+                $columnData['id']         = $column->column;
+                $columnData['type']       = $column->columnType;
+                $columnData['name']       = $column->column;
+                $columnData['title']      = $column->columnName;
+                $columnData['color']      = $column->color;
+                $columnData['limit']      = $column->limit;
+                $columnData['region']     = $laneData['region'];
+                $columnData['group']      = 0;
+                $columnData['cards']      = empty($column->cards) ? 0 : count($cardIdList);
+                $columnData['actionList'] = array('setColumn', 'setWIP');
+                if($column->parent > 0) $columnData['parentName'] = $column->parent;
 
-                $columnData[$column->column]['id']         = $column->column;
-                $columnData[$column->column]['type']       = $column->columnType;
-                $columnData[$column->column]['name']       = $column->columnName;
-                $columnData[$column->column]['color']      = $column->color;
-                $columnData[$column->column]['limit']      = $column->limit;
-                $columnData[$column->column]['laneType']   = $browseType;
-                $columnData[$column->column]['asParent']   = in_array($column->columnType, array('develop', 'test', 'resolving')) ? true : false;
-                $columnData[$column->column]['parentType'] = $parentColumn;
-                $columnData[$column->column]['actions']    = $column->actions;
-
-                $cardOrder = 1;
-                $objects   = zget($cardGroup, $column->columnType, array());
+                $objects = zget($cardGroup, $column->columnType, array());
                 foreach($objects as $object)
                 {
                     if(empty($object)) continue;
@@ -1933,46 +1897,47 @@ class kanbanModel extends model
                     }
 
                     $cardData['id']         = $object->id;
-                    $cardData['order']      = $cardOrder;
+                    $cardData['lane']       = $laneData['id'];
+                    $cardData['column']     = $column->column;
                     $cardData['pri']        = $object->pri ? $object->pri : '';
+                    $cardData['group']      = $laneData['id'];
                     $cardData['estimate']   = $browseType == 'bug' ? '' : $object->estimate;
                     $cardData['assignedTo'] = empty($cardData['assignedTo']) ? $object->assignedTo : $cardData['assignedTo'];
                     $cardData['deadline']   = $browseType == 'story' ? '' : $object->deadline;
                     $cardData['severity']   = $browseType == 'bug' ? $object->severity : '';
 
-                    if($lane->type == 'story') $cardData['menus'] = $storyCardMenu[$object->id];
-                    if($lane->type == 'bug')   $cardData['menus'] = $bugCardMenu[$object->id];
-                    if($lane->type == 'task')  $cardData['menus'] = $taskCardMenu[$object->id];
+                    if($lane->type == 'story') $cardData['actionList'] = $storyCardMenu[$object->id];
+                    if($lane->type == 'bug')   $cardData['actionList'] = $bugCardMenu[$object->id];
+                    if($lane->type == 'task')  $cardData['actionList'] = $taskCardMenu[$object->id];
 
                     if($browseType == 'task')
                     {
-                        if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
-                        $cardData['name']       = $object->name;
+                        $cardData['title']      = $object->name;
                         $cardData['status']     = $object->status;
                         $cardData['left']       = $object->left;
                         $cardData['estStarted'] = $object->estStarted;
                     }
                     else
                     {
-                        if($searchValue != '' and strpos($object->title, $searchValue) === false) continue;
                         $cardData['title'] = $object->title;
                     }
+                    if($searchValue != '' and strpos($cardData['title'], $searchValue) === false) continue;
 
-                    $laneData['cards'][$column->columnType][] = $cardData;
-                    $cardOrder ++;
+                    $cardsData[$laneData['id']][$column->column][] = $cardData;
                 }
-                $cardCount += $cardOrder - 1;
-                if($searchValue == '' and !isset($laneData['cards'][$column->columnType])) $laneData['cards'][$column->columnType] = array();
+                $columnsData[$column->column] = $columnData;
             }
-
-            if(($searchValue != '' and empty($laneData['cards'])) or ($laneData['id'] == 'story0' and $cardCount == 0 and count($lanes) > 1)) continue;
-            $kanbanGroup[$groupBy]['id']              = $groupBy . $laneID;
-            $kanbanGroup[$groupBy]['columns']         = array_values($columnData);
-            $kanbanGroup[$groupBy]['lanes'][]         = $laneData;
-            $kanbanGroup[$groupBy]['defaultCardType'] = $browseType;
+            $lanesData[] = $laneData;
         }
 
-        return $kanbanGroup;
+        $kanbanGroup['id']   = $executionID;
+        $kanbanGroup['key']  = 'group' . $executionID;
+        $kanbanGroup['data'] = array();
+        $kanbanGroup['data']['lanes'] = $lanesData;
+        $kanbanGroup['data']['cols']  = array_values($columnsData);
+        $kanbanGroup['data']['items'] = $cardsData;
+
+        return array($kanbanGroup);
     }
 
     /**
@@ -2009,32 +1974,16 @@ class kanbanModel extends model
         {
             if($groupBy == 'module')
             {
-                $objectPairs += $this->dao->select('id,name')->from(TABLE_MODULE)
-                    ->where('type')->in('story,task,bug')
-                    ->andWhere('deleted')->eq('0')
-                    ->andWhere('id')->in($groupByList)
-                    ->fetchPairs();
+                $objectPairs += $this->dao->select('id,name')->from(TABLE_MODULE)->where('type')->in('story,task,bug')->andWhere('deleted')->eq('0')->andWhere('id')->in($groupByList)->fetchPairs();
             }
             elseif($groupBy == 'story')
             {
-                $objectPairs += $this->dao->select('id,title')->from(TABLE_STORY)
-                    ->where('deleted')->eq(0)
-                    ->andWhere('id')->in($groupByList)
-                    ->orderBy($orderBy)
-                    ->fetchPairs();
-
-                $objects = $this->dao->select('*')->from(TABLE_STORY)
-                    ->where('deleted')->eq(0)
-                    ->andWhere('id')->in($groupByList)
-                    ->orderBy($orderBy)
-                    ->fetchAll('id');
+                $objectPairs += $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('id')->in($groupByList)->orderBy($orderBy)->fetchPairs();
+                $objects      = $this->dao->select('*')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('id')->in($groupByList)->orderBy($orderBy)->fetchAll('id');
             }
             else
             {
-                $objectPairs += $this->dao->select('account,realname')->from(TABLE_USER)
-                    ->where('account')->in($groupByList)
-                    ->fetchPairs();
-
+                $objectPairs += $this->dao->select('account,realname')->from(TABLE_USER)->where('account')->in($groupByList)->fetchPairs();
                 if(isset($groupByList['closed'])) $objectPairs['closed'] = 'Closed';
             }
         }
