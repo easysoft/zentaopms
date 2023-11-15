@@ -192,11 +192,14 @@ detailBody
             item
             (
                 set::name($lang->bug->type),
-                picker
+                formGroup
                 (
-                    set::items($lang->bug->typeList),
-                    set::name('type'),
-                    set::value($bug->type)
+                    picker
+                    (
+                        set::items($lang->bug->typeList),
+                        set::name('type'),
+                        set::value($bug->type)
+                    )
                 )
             ),
             item
@@ -271,10 +274,13 @@ detailBody
             item
             (
                 set::name($lang->bug->deadline),
-                datePicker
+                formGroup
                 (
-                    set::name('deadline'),
-                    set::value($bug->deadline)
+                    datePicker
+                    (
+                        set::name('deadline'),
+                        set::value($bug->deadline)
+                    )
                 )
             ),
             item
@@ -298,32 +304,41 @@ detailBody
             item
             (
                 set::name($lang->bug->os),
-                picker
+                formGroup
                 (
-                    set::items($lang->bug->osList),
-                    set::multiple(true),
-                    set::name('os[]'),
-                    set::value($bug->os)
+                    picker
+                    (
+                        set::items($lang->bug->osList),
+                        set::multiple(true),
+                        set::name('os[]'),
+                        set::value($bug->os)
+                    )
                 )
             ),
             item
             (
                 set::name($lang->bug->browser),
-                picker
+                formGroup
                 (
-                    set::items($lang->bug->browserList),
-                    set::name('browser'),
-                    set::value($bug->browser),
-                    set::multiple(true),
+                    picker
+                    (
+                        set::items($lang->bug->browserList),
+                        set::name('browser'),
+                        set::value($bug->browser),
+                        set::multiple(true),
+                    )
                 )
             ),
             item
             (
                 set::name($lang->bug->keywords),
-                input
+                formGroup
                 (
-                    set::name('keywords'),
-                    set::value($bug->keywords)
+                    input
+                    (
+                        set::name('keywords'),
+                        set::value($bug->keywords)
+                    )
                 )
             ),
             item
