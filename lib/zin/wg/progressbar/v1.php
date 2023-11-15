@@ -60,7 +60,7 @@ class progressBar extends wg
             $bars[] = div
             (
                 setClass('progress-bar'),
-                setStyle(array('width' => "{$info['value']}%", '--progress-bar-color' => isset($info['color']) ? $info['color'] : $color)),
+                setStyle(array('width' => "{$info['value']}%", '--progress-bar-color' => isset($info['color']) ? $info['color'] : $color))
             );
         }
 
