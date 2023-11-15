@@ -75,7 +75,7 @@ function checkTeam()
     let totalLeft     = 0;
     let error         = false;
 
-    $('.team-select [name^=team]').each(function()
+    $('.picker-box [name^=team]').each(function()
     {
         if($(this).val() == '') return;
 
@@ -142,7 +142,7 @@ function updateAssignedTo()
         let assignedToItems = new Array();
         let index           = 0;
 
-        $('.team-select [name^=team]').each(function()
+        $('.picker-box [name^=team]').each(function()
         {
             let $tr      = $(this).closest('tr');
             let realName = $tr.find('.picker-single-selection').text();
@@ -165,198 +165,7 @@ function updateAssignedTo()
     $assignedToPicker.$.setValue(assignedTo);
 }
 
-$('#teamForm').on('click.team', '.btn-add', function()
-{
-    /* Copy row and set value is empty.  */
-    let $newRow = $(this).closest('tr').clone();
-    $newRow.find('td.required').removeClass('required');
-    $newRow.find('input').val('');
-
-    /* Get the maximum index for the team. */
-    let index   = 0;
-    let options = zui.Picker.query("[name^='team']").options;
-    $(".team-select").each(function()
-    {
-        let id = $(this).attr('id').substring(4);
-
-        id = parseInt(id);
-        id ++;
-
-        index = id > index ? id : index;
-    });
-
-    /* Reset the team dropdown container. */
-    $newRow.find('.team-select.picker-box').remove();
-    $newRow.find('td').eq(1).append('<div class="team-select picker-box" id="team' + index + '"></div>');
-
-    /* Add a new row. */
-    $(this).closest('tr').after($newRow);
-
-    /* Init team's select picker. */
-    options.defaultValue = '';
-    options.disabled     = false;
-
-    let members = [];
-    let $teams  = $('#teamForm').find('.team-select [name^=team]');
-    for(i = 0; i < $teams.length; i++)
-    {
-        let value = $teams.eq(i).val();
-        if(members.includes(value))
-        {
-            $teams.eq(i).closest('tr').addClass('hidden');
-            continue;
-        }
-        if(value != '') members.push(value);
-    }
-
-    $.each(options.items, function(i, item)
-    {
-        if(item.value == '') return;
-        options.items[i].disabled = members.includes(item.value);
-    });
-    new zui.Picker(`#team${index}`, options);
-
-    /* Process releate data. */
-    toggleBtn();
-    setLineIndex();
-});
-
-
-$('#teamForm').on('click.team', '.btn-delete', function()
-{
-    let $row = $(this).closest('tr');
-    if(isMultiple && !checkRemove($row.index())) return;
-
-    $row.remove();
-    toggleBtn();
-    disableMembers();
-    setLineIndex();
-});
-
-
-/**
- * Set line number.
- *
- * @access public
- * @return void
- */
-function setLineIndex()
-{
-    let index = 1;
-    $('.team-number').each(function()
-    {
-        $(this).text(index);
-        index ++;
-    });
-}
-
-/**
- * Check delete button hide or not.
- *
- * @access public
- * @return void
- */
-function toggleBtn()
-{
-    let $deleteBtn = $('#teamForm').find('.btn-delete');
-    if($deleteBtn.length == 1)
-    {
-        $deleteBtn.addClass('hidden');
-    }
-    else
-    {
-        $deleteBtn.removeClass('hidden');
-    }
-};
-
-/**
- * Disable user select box.
- *
- * @access public
- * @return void
- */
-function disableMembers()
-{
-    let mode = $('#mode').val();
-    if(mode == 'multi')
-    {
-        let members = [];
-        let $teams  = $('#teamForm').find('.team-select [name^=team]');
-        for(i = 0; i < $teams.length; i++)
-        {
-            let value = $teams.eq(i).val();
-            if(members.includes(value))
-            {
-                $teams.eq(i).closest('tr').addClass('hidden');
-                continue;
-            }
-            if(value != '') members.push(value);
-        }
-
-        $teams.each(function()
-        {
-            let $team       = $(this);
-            let account     = $team.val();
-            let $teamPicker = $team.zui('picker');
-            let teamItems   = $teamPicker.options.items;
-            $.each(teamItems, function(i, item)
-            {
-                if(item.value == '') return;
-                teamItems[i].disabled = members.includes(item.value) && item.value != account;
-            })
-
-            $teamPicker.render({items: teamItems});
-        });
-
-        $('#teamForm').find('tr.hidden').remove();
-    }
-}
-
-
-/**
- * Check if it can be removed.
- *
- * @param  int    $removeIndex
- * @access public
- * @return void
- */
-function checkRemove(removeIndex)
-{
-    let $teams      = $('#teamForm').find('.team-select [name^=team]');
-    let totalLeft   = 0;
-    let memberCount = 0;
-    for(i = 0; i < $teams.length; i++)
-    {
-        let $this = $teams.eq(i);
-        let value = $this.val();
-        if(value == '') continue;
-
-        let $tr = $this.closest('tr');
-        if($tr.index() == removeIndex) continue;
-
-        memberCount++;
-
-        let $teamLeft = $tr.find('[name^=teamLeft]');
-        if($teamLeft.length > 0)
-        {
-            left = parseFloat($teamLeft.val());
-            if(!isNaN(left)) totalLeft += left;
-        }
-    }
-
-    if(memberCount < 2)
-    {
-        zui.Modal.alert(teamMemberError);
-        return false;
-    }
-
-    if($('#teamForm').find('td > .btn-delete:enabled').length == 1) return false;
-
-    return true;
-}
-
-
-$('#teamForm').on('change', '.team-select [name^=team]', function()
+$('#teamTable').on('change', '.picker-box [name^=team]', function()
 {
     $(this).closest('tr').find('input[name^=teamLeft]').closest('td').toggleClass('required', $(this).val() != '')
 

@@ -148,8 +148,6 @@ foreach($task->team as $member)
             set::width('240px'),
             picker
             (
-                setID("team$i"),
-                setClass('team-select'),
                 set::name('team[]'),
                 set::value($member->account),
                 set::items($members),
@@ -250,8 +248,6 @@ for($i; $i <= $rowCount; $i ++)
             set::width('240px'),
             picker
             (
-                setID("team$i"),
-                setClass('team-select'),
                 set::name('team[]'),
                 set::items($members),
                 set::placeholder($lang->task->assignedTo)
@@ -376,7 +372,7 @@ formPanel
             h::table
             (
                 setClass('table table-form'),
-                set::id('teamForm'),
+                set::id('teamTable'),
                 $teamForm
             )
         )
