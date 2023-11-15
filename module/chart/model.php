@@ -647,6 +647,7 @@ class chartModel extends model
      */
     public static function isClickable($chart, $action)
     {
+        if($chart->id <= 20015) return false;
         if($chart->builtin) return false;
         return true;
     }
