@@ -32,13 +32,6 @@ function removeAllTips()
     $('.text-warning').remove();
 }
 
-$(document).on('click', 'button[type=submit]', function()
-{
-    /* Remove init tips. */
-    $('.has-warning').removeClass('has-warning');
-    $('.text-warning').remove();
-})
-
 window.addProduct = function(e)
 {
     if($(e.target).prop('checked'))
@@ -135,37 +128,6 @@ $(document).on('keyup', '#projectName', function()
     {
         if($(this).text().includes(name) || $(this).data('pinyin').includes(name)) $(this).show();
     });
-});
-
-/* Click remove tips.  */
-$(document).on('click', '#name', function()
-{
-    $('#name').removeClass('has-warning');
-    $('#nameLabelInfo').remove();
-});
-
-$(document).on('click', '#code', function()
-{
-    $('#code').removeClass('has-warning');
-    $('#codeLabelInfo').remove();
-});
-
-$(document).on('click', '#end', function()
-{
-    $('#end').removeClass('has-warning');
-    $('#endLabelInfo').remove();
-});
-
-$(document).on('change', '#end', function()
-{
-    $('#end').removeClass('has-error');
-    $('#endTip').remove();
-});
-
-$(document).on('click', '#days', function()
-{
-    $('#days').removeClass('has-warning');
-    $('#daysLabelInfo').remove();
 });
 
 /**
