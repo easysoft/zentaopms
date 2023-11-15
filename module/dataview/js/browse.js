@@ -74,6 +74,11 @@ function queryTableData()
     });
 }
 
+function checkObjProp(obj, field)
+{
+    return obj.hasOwnProperty(field);
+}
+
 /**
  * Build dataview data table.
  *
@@ -91,8 +96,8 @@ function buildTable(resp)
     for(var field in resp.fields)
     {
         var fieldName = field;
-        if(typeof(dataview) != 'undefined' && typeof(dataview.fieldSettings) != 'undefined' && typeof(dataview.fieldSettings[field]) != 'undefined' && typeof(dataview.fieldSettings[field].name) != 'undefined') fieldName = dataview.fieldSettings[field].name ? dataview.fieldSettings[field].name : field;
-        if(typeof(dataview.langs) != 'undefined' && dataview.langs != '')
+        if(dataview && checkObjProp(dataview, fieldSettings)) fieldName = dataview.fieldSettings[field].name || field;
+        if(dataview && checkObjProp(dataview, langs) && dataview.langs != '')
         {
             var langs = JSON.parse(dataview.langs);
             if(langs && typeof(langs[field]) != 'undefined' && typeof(langs[field][clientLang]) != 'undefined') fieldName = langs[field][clientLang] ? langs[field][clientLang] : fieldName;
