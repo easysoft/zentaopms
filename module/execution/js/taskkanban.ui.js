@@ -169,8 +169,8 @@ window.buildColActions = function(col)
 {
     let actions = [];
 
-    if(priv.canEditName && col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}`), 'data-toggle': 'modal', 'icon': 'edit'});
-    if(priv.canSetWIP   && col.actionList.includes('setWIP'))    actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}`), 'data-toggle': 'modal', 'icon': 'alert'});
+    if(priv.canEditName && col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'edit'});
+    if(priv.canSetWIP   && col.actionList.includes('setWIP'))    actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert'});
 
     return actions;
 }
@@ -267,6 +267,7 @@ window.canDrop = function(dragInfo, dropInfo)
     if(!priv.canSortCards && dropInfo.type == 'item') return false;
 
     /* 卡片可在同组内拖动。 */
+    if(dragInfo.lane != dropInfo.lane) return false;
     if(dragInfo.item.group != toColumn.group) return false;
 
     if(dropInfo.type != 'item')
@@ -282,9 +283,9 @@ window.onDrop = function(changes, dropInfo)
 {
     if(!dropInfo) return false;
 
-    const fromLaneID  = dropInfo.drag.lane;
     const toLaneID    = dropInfo.drop.lane;
-    const laneType    = lanePairs[fromLaneID];
+    const toColumn    = this.getCol(dropInfo.drop.col);
+    const laneType    = lanePairs[dropInfo.drag.lane];
     const fromColID   = dropInfo.drag.col;
     const toColID     = dropInfo.drop.col;
     const fromColType = colPairs[fromColID];
@@ -294,10 +295,12 @@ window.onDrop = function(changes, dropInfo)
 
     let link     = '';
     let moveCard = false;
+    let laneID   = toLaneID;
+    if(typeof toColumn.laneName != 'undefined') laneID = toColumn.laneName;
 
     if(item.col == toColID && item.lane == toLaneID && priv.canSortCards)
     {
-        link = $.createLink('kanban', 'sortCard', 'kanbanID=' + executionID + '&laneID=' + toLaneID + '&columnID=' + toColID + '&cards=' + dropInfo['data']['list'].join(','));
+        link = $.createLink('kanban', 'sortCard', 'kanbanID=' + executionID + '&laneID=' + laneID + '&columnID=' + toColID + '&cards=' + dropInfo['data']['list'].join(','));
         $.get(link, function(){refreshKanban()})
         return true;
     }
@@ -332,7 +335,7 @@ window.onDrop = function(changes, dropInfo)
 
         if(moveCard)
         {
-            link = $.createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
+            link = $.createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + laneID + '&toLaneID=' + laneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
             refreshKanban(link);
             return true;
         }
@@ -343,24 +346,15 @@ window.onDrop = function(changes, dropInfo)
         if(toColType == 'closed' && priv.canCloseStory) link = $.createLink('story', 'close', 'storyID=' + objectID + '&from=taskkanban');
         if(toColType == 'ready')
         {
-            $.get($.createLink('story', 'ajaxGetInfo', "storyID=" + objectID), function(data)
+            if(item.status == 'draft' || item.status == 'changing' || item.status == 'reviewing')
             {
-                if(data)
-                {
-                    data = $.parseJSON(data);
-                    if(data.status == 'draft' || data.status == 'changing' || data.status == 'reviewing')
-                    {
-                        zui.Modal.alert(executionLang.storyDragError);
-                        return false;
-                    }
-                    ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID);
-                    return true;
-                }
-            });
+                zui.Modal.alert(executionLang.storyDragError);
+                return false;
+            }
         }
-        else if(!link)
+        if(!link)
         {
-            ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID);
+            ajaxMoveCard(objectID, fromColID, toColID, laneID, laneID);
             return true;
         }
     }
@@ -467,14 +461,14 @@ window.ajaxMoveCard = function(objectID, fromColID, toColID, fromLaneID, toLaneI
 {
     var link = $.createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
     refreshKanban(link);
-}
+};
 
 window.searchCards = function(value, order)
 {
     const searchValue = value;
     if(typeof order == 'undefined') order = orderBy;
     refreshKanban($.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=taskkanban&searchValue=' + value + '&orderBy=' + order));
-}
+};
 
 window.refreshKanban = function(url)
 {
@@ -499,6 +493,6 @@ window.refreshKanban = function(url)
         options.items = data;
         $kanbanList.render(options);
     });
-}
+};
 
 waitDom('.c-group .picker-box .picker-single-selection', function(){this.html(kanbanLang.laneGroup + ': ' + this.html());});
