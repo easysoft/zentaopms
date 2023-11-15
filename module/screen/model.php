@@ -767,20 +767,16 @@ class screenModel extends model
                     if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
                 }
                 break;
-            case 'string':
-                if($field)
+            default:
+                if($field && $sql)
                 {
-                    if($sql)
-                    {
-                        $cols = $this->dbh->query($sql)->fetchAll();
-                        foreach($cols as $col)
-                        {
-                            $data = $col->$field;
-                            $options[$data] = $data;
-                        }
-                    }
+                    $options = $this->dao->select("tt.`$field`,tt.`$field`")
+                        ->from("($sql)")->alias('tt')
+                        ->groupBy("tt.`$field`")
+                        ->orderBy("tt.`$field` desc")
+                        ->fetchPairs();
                 }
-                break;
+
         }
 
         $options = array_filter($options);
