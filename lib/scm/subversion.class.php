@@ -310,7 +310,7 @@ class Subversion
                     $blame['time']      = date('Y-m-d H:i:s', strtotime($line->commit->date));
                     $blame['line']      = (int)$line['line-number'];
                     $blame['lines']     = 1;
-                    $blame['content']   = $content[$blame['line'] - 1];
+                    $blame['content']   = isset($content[$blame['line'] - 1]) ? $content[$blame['line'] - 1] : '';
                     $blame['message']   = '';
 
                     if($showComment)
@@ -710,7 +710,7 @@ class Subversion
         /* Get repo name. */
         $pathList = explode('/', trim($this->root, '/'));
         $repoDir  = $savePath . DS . end($pathList);
-        execCmd($this->replaceAuth(escapeCmd("$this->client export $this->root $repoDir")));
+        execCmd($this->replaceAuth(escapeCmd($this->buildCMD("$this->root $repoDir", 'export', ''))));
 
         $fileName = $savePath . DS . "{$this->repo->name}.zip";
         $app->loadClass('pclzip', true);
