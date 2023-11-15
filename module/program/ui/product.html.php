@@ -16,7 +16,7 @@ dropmenu();
 featureBar
 (
     set::current($browseType),
-    set::linkParams("programID={$programID}&browseType={key}&orderBy=$orderBy"),
+    set::linkParams("programID={$programID}&browseType={key}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")
 );
 
 toolbar
@@ -27,7 +27,7 @@ toolbar
         'icon' => 'plus',
         'class'=> 'btn primary',
         'url'  => $this->createLink('product', 'create', "programID={$programID}")
-    ))),
+    )))
 );
 
 $cols = $this->config->product->dtable->fieldList;
@@ -37,7 +37,7 @@ $products = initTableData($products, $cols, $this->product);
 foreach($products as $product) $data[] = $this->product->formatDataForList($product, $users, $usersAvatar);
 
 $summary = sprintf($lang->product->pageSummary, count($data));
-$footToolbar = common::hasPriv('product', 'batchEdit') ? array(
+$footToolbar = hasPriv('product', 'batchEdit') ? array(
     'type'  => 'btn-group',
     'items' => array(
         array(
@@ -46,7 +46,7 @@ $footToolbar = common::hasPriv('product', 'batchEdit') ? array(
             'data-page' => 'batch',
             'data-app'  => $this->app->tab,
             'data-formaction' => $this->createLink('product', 'batchEdit', "programID={$programID}")
-        ),
+        )
     )
 ) : null;
 
@@ -61,7 +61,7 @@ dtable
     set::sortLink(createLink('program', 'product', "programID={$programID}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList, '{$summary}');}")),
+    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList, '{$summary}');}"))
 );
 
 render();

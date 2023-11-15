@@ -37,7 +37,7 @@ formPanel
         set::name('parent'),
         set::label($lang->program->parent),
         set::value($parentID),
-        set::items($parents),
+        set::items($parents)
     ),
     formGroup
     (
@@ -68,10 +68,10 @@ formPanel
                     $parentProgram ? set::prefixWidth('icon') : null,
                     input(set::name('budget')),
                     set::suffix($lang->project->tenThousandYuan),
-                    set::suffixWidth(50),
+                    set::suffixWidth(50)
                 ),
-                $parentProgram ? formHidden('budgetUnit', $parentProgram->budgetUnit) : picker(set::name('budgetUnit'), set::items($budgetUnitList), set::value($config->project->defaultCurrency)),
-            ),
+                $parentProgram ? formHidden('budgetUnit', $parentProgram->budgetUnit) : picker(set::name('budgetUnit'), set::items($budgetUnitList), set::value($config->project->defaultCurrency))
+            )
         ),
         formGroup
         (
@@ -79,7 +79,7 @@ formPanel
             set::name('future'),
             set::className('items-center'),
             set::control(array('type' => 'checkList', 'inline' => true)),
-            set::items(array('1' => $lang->project->future)),
+            set::items(array('1' => $lang->project->future))
         )
     ),
     formRow
@@ -110,7 +110,7 @@ formPanel
                     set::required(true),
                     set::value(''),
                     on::change('computeWorkDays')
-                ),
+                )
             )
         ),
         formGroup
@@ -118,8 +118,8 @@ formPanel
             set::name('delta'),
             set::className('pl-4 items-center'),
             set::control(array('type' => 'radioList', 'inline' => true, 'rootClass' => 'ml-4', 'items' => $lang->program->endList)),
-            on::change('setDate'),
-        ),
+            on::change('setDate')
+        )
     ),
     formGroup
     (
@@ -134,7 +134,7 @@ formPanel
         set::label($lang->program->acl),
         set::value('open'),
         set::items($aclList),
-        set::control('radioList'),
+        set::control('radioList')
     ),
     formRow
     (
@@ -145,7 +145,7 @@ formPanel
             set::width('3/4'),
             set::name('whitelist[]'),
             set::label($lang->whitelist),
-            set::control(array('type' => 'picker', 'multiple' => true, 'items' => $users)),
+            set::control(array('type' => 'picker', 'multiple' => true, 'items' => $users))
         )
     )
 );

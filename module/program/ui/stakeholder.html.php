@@ -14,7 +14,6 @@ namespace zin;
 dropmenu();
 
 /* Feature bar. */
-$navLinkParams = array('program' => $programID);
 featureBar
 (
     li
@@ -22,27 +21,17 @@ featureBar
         set::className('nav-item'),
         a
         (
-            set::href($this->createLink('program', 'stakeholder', $navLinkParams)),
-            set('data-app', $app->tab),
+            set::href(createLink('program', 'stakeholder', "proram={$programID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+            setClass('active'),
+            setData('app', $app->tab),
             $lang->program->stakeholder
         )
-    ),
-    set::current('all')
+    )
 );
 
 /* Toolbar. */
-$createLink  = $this->createLink('program', 'createstakeholder', "programID=$programID");
-
-if(common::hasPriv('program', 'createstakeholder'))
-{
-    toolbar
-    (
-        btngroup
-        (
-            btn(setClass('btn primary'), set::icon('plus'), set::url($createLink), $lang->program->createStakeholder),
-        )
-    );
-}
+$createLink = $this->createLink('program', 'createstakeholder', "programID=$programID");
+if(hasPriv('program', 'createstakeholder')) toolbar(btn(setClass('btn primary'), set::icon('plus'), set::url($createLink), $lang->program->createStakeholder));
 
 /* Create datatable with reusing stakeholder module. */
 $this->loadModel('stakeholder');
@@ -69,15 +58,15 @@ $this->config->stakeholder->dtable->fieldList = $fieldListExtend;
 $cols = $this->loadModel('datatable')->getSetting('stakeholder');
 
 /* Set list and menu of actions to customize the actions of stakeholder in program module. */
-$cols['actions']['list'] = array('unlinkStakeholder' => array(
+$cols['actions']['list'] = array('unlinkStakeholder' => array
+(
     'icon'         => 'unlink',
     'className'    => 'ajax-submit',
     'text'         => $lang->program->unlinkStakeholder,
     'hint'         => $lang->program->unlinkStakeholder,
     'url'          => $this->createLink('program', 'unlinkStakeholder', "programID={$programID}&id={id}"),
-    'data-confirm' => $lang->program->confirmUnlink,
-    )
-);
+    'data-confirm' => $lang->program->confirmUnlink
+));
 $cols['actions']['menu'] = array('unlinkStakeholder');
 
 $data = initTableData($stakeholders, $cols, $this->stakeholder);
@@ -100,7 +89,8 @@ dtable
     set::checkable(true),
     set::orderBy($orderBy),
     set::sortLink(createLink('program', 'stakeholder', "programID={$programID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    set::footToolbar(array(
+    set::footToolbar(array
+    (
         'type'  => 'btn-group',
         'items' => array(array
         (
@@ -109,7 +99,7 @@ dtable
             'onClick'  => jsRaw('onClickBatchUnlink'),
             'data-url' => createLink('program', 'batchUnlinkStakeholders', "programID={$programID}")
         ))
-    )),
+    ))
 );
 
 render();

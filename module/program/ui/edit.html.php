@@ -37,7 +37,7 @@ formPanel
         set::name('parent'),
         set::label($lang->program->parent),
         set::value($parentID),
-        set::items($parents),
+        set::items($parents)
     ),
     formGroup
     (
@@ -71,10 +71,10 @@ formPanel
                 'prefix'      => zget($lang->project->currencySymbol, $currency),
                 'prefixWidth' => 'icon',
                 'suffix'      => $lang->project->tenThousandYuan,
-                'suffixWidth' => 60,
+                'suffixWidth' => 60
             )),
             formHidden('syncPRJUnit', 'false'),
-            formHidden('exchangeRate', ''),
+            formHidden('exchangeRate', '')
         ),
         formGroup
         (
@@ -83,7 +83,7 @@ formPanel
             set::className('items-center'),
             $program->budget == 0 ? set::value('1') : null,
             set::control(array('type' => 'checkList', 'inline' => true)),
-            set::items(array('1' => $lang->project->future)),
+            set::items(array('1' => $lang->project->future))
         )
     ),
     formRow
@@ -115,7 +115,7 @@ formPanel
                     set::required(true),
                     $program->end == LONG_TIME ? set::disabled(true) : null,
                     on::change('computeWorkDays')
-                ),
+                )
             )
         ),
         formGroup
@@ -124,8 +124,8 @@ formPanel
             set::className('pl-4 items-center'),
             set::control(array('type' => 'radioList', 'inline' => true, 'rootClass' => 'ml-4', 'items' => $lang->program->endList)),
             $program->end == LONG_TIME ? set::value(999) : null,
-            on::change('setDate'),
-        ),
+            on::change('setDate')
+        )
     ),
     formGroup
     (
@@ -134,7 +134,7 @@ formPanel
         (
             set::name('desc'),
             html($program->desc)
-        ),
+        )
     ),
     formGroup
     (
@@ -142,7 +142,7 @@ formPanel
         set::label($lang->program->acl),
         set::value($program->acl),
         set::items($aclList),
-        set::control('radioList'),
+        set::control('radioList')
     ),
     formGroup
     (
@@ -156,9 +156,9 @@ formPanel
             set::label($lang->whitelist),
             set::multiple(true),
             set::items($pmUsers),
-            set::value($program->whitelist),
+            set::value($program->whitelist)
         )
-    ),
+    )
 );
 
 render();
