@@ -1346,33 +1346,6 @@ class metricModel extends model
     }
 
     /**
-     * 获取度量数据的日期字段。
-     * Get date field of metric data.
-     *
-     * @param  string $code
-     * @access public
-     * @return array
-     */
-    public function getMetricRecordDateField(string $code): array
-    {
-        $record = $this->dao->select("year, month, week, day")
-            ->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
-            ->fetch();
-
-        if(!$record) return array();
-
-        $dataFields = array();
-        $recordKeys = array_keys((array)$record);
-        foreach($recordKeys as $recordKey)
-        {
-            if(!empty($record->$recordKey)) $dataFields[] = $recordKey;
-        }
-
-        return $dataFields;
-    }
-
-    /**
      * 获取度量数据的日期类型。
      * Get date type of metric data.
      *
