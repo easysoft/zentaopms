@@ -51,7 +51,7 @@ class password extends wg
         (
             set::type('password'),
             set::name($name),
-            set($this->getRestProps()),
+            set($this->getRestProps())
         );
     }
 }
