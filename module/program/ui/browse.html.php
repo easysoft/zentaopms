@@ -170,7 +170,7 @@ toolbar
         'icon'  => 'plus',
         'class' => 'btn secondary',
         'url'   => createLink('project', 'createGuide'),
-        'data-toggle' => 'modal',
+        'data-toggle' => 'modal'
     ])) : null,
     $canCreateProgram ? item(set
     ([
@@ -178,7 +178,7 @@ toolbar
         'icon' => 'plus',
         'class'=> 'btn primary create-program-btn',
         'url'  => createLink('program', 'create')
-    ])) : null,
+    ])) : null
 );
 
 $canBatchEdit = common::hasPriv('project', 'batchEdit');
@@ -208,13 +208,13 @@ dtable
                 'className' => 'secondary size-sm batch-btn',
                 'data-page' => 'batch',
                 'data-formaction' => $this->createLink('project', 'batchEdit')
-            ) : null,
+            ) : null
         )
     )),
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList);}")),
     set::emptyTip($lang->program->noProgram),
     set::createTip($lang->program->create),
-    set::createLink($canCreateProgram ? createLink('program', 'create') : ''),
+    set::createLink($canCreateProgram ? createLink('program', 'create') : '')
 );
 
 render();
