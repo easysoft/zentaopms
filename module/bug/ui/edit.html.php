@@ -53,21 +53,24 @@ detailBody
         section
         (
             set::title($lang->bug->title),
-            inputControl
+            formGroup
             (
-                input
+                inputControl
                 (
-                    set::name('title'),
-                    set::value($bug->title)
-                ),
-                set::suffixWidth('icon'),
-                to::suffix
-                (
-                    colorPicker
+                    input
                     (
-                        set::name('color'),
-                        set::value($bug->color),
-                        set::syncColor('#title')
+                        set::name('title'),
+                        set::value($bug->title)
+                    ),
+                    set::suffixWidth('icon'),
+                    to::suffix
+                    (
+                        colorPicker
+                        (
+                            set::name('color'),
+                            set::value($bug->color),
+                            set::syncColor('#title')
+                        )
                     )
                 )
             )
@@ -125,43 +128,43 @@ detailBody
             ),
             item
             (
-                    set::name($lang->bug->module),
-                    inputGroup
+                set::name($lang->bug->module),
+                inputGroup
+                (
+                    set('id', 'moduleBox'),
+                    picker
                     (
-                        set('id', 'moduleBox'),
-                        picker
+                        set::name('module'),
+                        set::items($moduleOptionMenu),
+                        set::value($bug->module),
+                        set::required('true')
+                    ),
+                    count($moduleOptionMenu) == 1 ? span
+                    (
+                        set('class', 'input-group-addon'),
+                        a
                         (
-                            set::name('module'),
-                            set::items($moduleOptionMenu),
-                            set::value($bug->module),
-                            set::required('true')
+                            set('class', 'mr-2'),
+                            set('href', $this->createLink('tree', 'browse', "rootID={$product->id}&view=bug&currentModuleID=0&branch={$bug->branch}")),
+                            set('data-toggle', 'modal'),
+                            set('data-size', 'lg'),
+                            $lang->tree->manage
                         ),
-                        count($moduleOptionMenu) == 1 ? span
+                        a
                         (
-                            set('class', 'input-group-addon'),
-                            a
-                            (
-                                set('class', 'mr-2'),
-                                set('href', $this->createLink('tree', 'browse', "rootID={$product->id}&view=bug&currentModuleID=0&branch={$bug->branch}")),
-                                set('data-toggle', 'modal'),
-                                set('data-size', 'lg'),
-                                $lang->tree->manage
-                            ),
-                            a
-                            (
-                                set('id', 'refreshModule'),
-                                set('class', 'text-black'),
-                                set('href', 'javascript:void(0)'),
-                                icon('refresh')
-                            )
-                        ) : null
-                    )
+                            set('id', 'refreshModule'),
+                            set('class', 'text-black'),
+                            set('href', 'javascript:void(0)'),
+                            icon('refresh')
+                        )
+                    ) : null
+                )
             ),
             item
             (
                 set::trClass($product->shadow && isset($project) && empty($project->multiple) ? 'hidden' : ''),
                 set::name($lang->bug->plan),
-                inputGroup
+                formGroup
                 (
                     set('id', 'planBox'),
                     picker
@@ -175,7 +178,7 @@ detailBody
             item
             (
                 set::name($lang->bug->fromCase),
-                inputGroup
+                formGroup
                 (
                     set('id', 'caseBox'),
                     picker
@@ -241,23 +244,26 @@ detailBody
             item
             (
                 set::name($lang->bug->assignedTo),
-                inputGroup
+                formGroup
                 (
-                    picker
+                    inputGroup
                     (
-                        set::disabled($bug->status == 'closed' ? true : false),
-                        set::name('assignedTo'),
-                        set::items($assignedToList),
-                        set::value($bug->assignedTo)
-                    ),
-                    span
-                    (
-                        set('class', 'input-group-addon'),
-                        a
+                        picker
                         (
-                            set('id', 'allUsers'),
-                            set('href', 'javascript:;'),
-                            $lang->bug->loadAll
+                            set::disabled($bug->status == 'closed' ? true : false),
+                            set::name('assignedTo'),
+                            set::items($assignedToList),
+                            set::value($bug->assignedTo)
+                        ),
+                        span
+                        (
+                            set('class', 'input-group-addon'),
+                            a
+                            (
+                                set('id', 'allUsers'),
+                                set('href', 'javascript:;'),
+                                $lang->bug->loadAll
+                            )
                         )
                     )
                 )
@@ -375,7 +381,7 @@ detailBody
             item
             (
                 set::name($lang->bug->project),
-                inputGroup
+                formGroup
                 (
                     set('id', 'projectBox'),
                     picker
@@ -390,7 +396,7 @@ detailBody
             (
                 set::trClass($execution && !$execution->multiple ? 'hidden' : ''),
                 set::name($lang->bug->execution),
-                inputGroup
+                formGroup
                 (
                     set('id', 'executionBox'),
                     picker
@@ -404,7 +410,7 @@ detailBody
             item
             (
                 set::name($lang->bug->story),
-                inputGroup
+                formGroup
                 (
                     set('id', 'storyBox'),
                     picker
@@ -418,7 +424,7 @@ detailBody
             item
             (
                 set::name($lang->bug->task),
-                inputGroup
+                formGroup
                 (
                     set('id', 'taskBox'),
                     picker
@@ -447,24 +453,27 @@ detailBody
             item
             (
                 set::name($lang->bug->openedBuild),
-                inputGroup
+                formGroup
                 (
-                    set('id', 'openedBuildBox'),
-                    picker
+                    inputGroup
                     (
-                        set::name('openedBuild[]'),
-                        set::items($openedBuilds),
-                        set::value($bug->openedBuild),
-                        set::multiple(true)
-                    ),
-                    span
-                    (
-                        set('class', 'input-group-addon'),
-                        a
+                        set('id', 'openedBuildBox'),
+                        picker
                         (
-                            set('id', 'allBuilds'),
-                            set('href', 'javascript:;'),
-                            $lang->bug->loadAll
+                            set::name('openedBuild[]'),
+                            set::items($openedBuilds),
+                            set::value($bug->openedBuild),
+                            set::multiple(true)
+                        ),
+                        span
+                        (
+                            set('class', 'input-group-addon'),
+                            a
+                            (
+                                set('id', 'allBuilds'),
+                                set('href', 'javascript:;'),
+                                $lang->bug->loadAll
+                            )
                         )
                     )
                 )
@@ -491,23 +500,26 @@ detailBody
             item
             (
                 set::name($lang->bug->resolvedBuild),
-                inputGroup
+                formGroup
                 (
-                    set('id', 'resolvedBuildBox'),
-                    picker
+                    inputGroup
                     (
-                        set::name('resolvedBuild'),
-                        set::items($resolvedBuilds),
-                        set::value($bug->resolvedBuild)
-                    ),
-                    span
-                    (
-                        set('class', 'input-group-addon'),
-                        a
+                        set('id', 'resolvedBuildBox'),
+                        picker
                         (
-                            set('id', 'allBuilds'),
-                            set('href', 'javascript:;'),
-                            $lang->bug->loadAll
+                            set::name('resolvedBuild'),
+                            set::items($resolvedBuilds),
+                            set::value($bug->resolvedBuild)
+                        ),
+                        span
+                        (
+                            set('class', 'input-group-addon'),
+                            a
+                            (
+                                set('id', 'allBuilds'),
+                                set('href', 'javascript:;'),
+                                $lang->bug->loadAll
+                            )
                         )
                     )
                 )
