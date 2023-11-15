@@ -155,6 +155,7 @@ detailHeader
         (
             set::entityID($story->id),
             set::level(1),
+            set::text(''),
             $story->parent > 0 ? label(setClass('circle child'), $lang->story->childrenAB) : null,
             $story->parent > 0 && isset($story->parentName) ? span(a(set::href(inlink('view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type")), $story->parentName), ' / ') : null,
             span(setStyle(array('color' => $story->color)), $story->title),
