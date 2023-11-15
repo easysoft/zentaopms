@@ -711,6 +711,9 @@ class upgradeModel extends model
                 /* Upgrade members for testtask. */
                 $this->upgradeTesttaskMembers();
                 $this->loadModel('program')->refreshStats(true);
+
+                /* Stop old cron. */
+                touch($this->app->getCacheRoot() . 'restartcron');
                 break;
         }
 
