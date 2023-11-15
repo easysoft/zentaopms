@@ -945,6 +945,7 @@ class screenModel extends model
                 return $this->buildPieCircleChart($component, $chart);
                 break;
             case 'pie':
+                if($chart->builtin == '0') return $this->getPieChartOption($component, $chart, $filters);
                 return $this->buildPieChart($component, $chart);
                 break;
             case 'radar':
@@ -955,6 +956,12 @@ class screenModel extends model
                 break;
             case 'table':
                 return $this->buildTableChart($component, $chart);
+                break;
+            case 'cluBarY':
+            case 'stackedBarY':
+            case 'cluBarX':
+            case 'stackedBar':
+                return $this->getBarChartOption($component, $chart);
                 break;
         }
     }
