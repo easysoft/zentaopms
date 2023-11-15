@@ -69,3 +69,7 @@ UPDATE `zt_privrelation` SET `priv` = 'testcase-batchChangeType' WHERE `priv` = 
 ALTER TABLE `zt_action` MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
 ALTER TABLE `zt_actionrecent` MODIFY `id` int(11) unsigned NOT NULL AUTO_INCREMENT;
 ALTER TABLE `zt_mr` ADD executionID mediumint(8) unsigned NOT NULL DEFAULT 0 AFTER `jobID`;
+
+/* Update createdBy to system in chart and pivot. */
+UPDATE `zt_chart` SET `createdBy` = 'system' WHERE `builtin` = '1';
+UPDATE `zt_pivot` SET `createdBy` = 'system' WHERE `id` >= 1000 and `id` <= 1027;
