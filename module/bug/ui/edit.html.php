@@ -53,6 +53,7 @@ detailBody
         section
         (
             set::title($lang->bug->title),
+            set::required(true),
             formGroup
             (
                 inputControl
