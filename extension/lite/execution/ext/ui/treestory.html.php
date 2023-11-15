@@ -53,7 +53,7 @@ div
         (
             setClass('article-h2 clip'),
             $story->title
-        ),
+        )
     ),
     div
     (
@@ -64,7 +64,7 @@ div
             (
                 setClass('ml-2 article-h3'),
                 $lang->story->stageList[$story->stage]
-            ),
+            )
         ),
         div
         (
@@ -88,7 +88,7 @@ div
             set::hint($lang->story->operateList['changed']),
             set::url(createLink('story', 'change', array('storyID' => $story->id))),
             set::disabled(!$this->story->isClickable($story, 'change')),
-            set('data-app', $app->tab),
+            set('data-app', $app->tab)
         ) : null,
         hasPriv('story', 'delete') ? btn
         (
@@ -97,7 +97,7 @@ div
             set::hint($lang->story->delete),
             set::url(createLink('story', 'delete', array('storyID' => $story->id))),
             set::disabled(!$this->story->isClickable($story, 'delete')),
-            set('data-confirm', $story->type == 'requirement' ? str_replace($lang->SRCommon, $lang->URCommon, $lang->story->confirmDelete) : $lang->story->confirmDelete),
+            set('data-confirm', $story->type == 'requirement' ? str_replace($lang->SRCommon, $lang->URCommon, $lang->story->confirmDelete) : $lang->story->confirmDelete)
         ) : null,
         hasPriv('story', 'review') ? btn
         (
@@ -106,7 +106,7 @@ div
             set::hint($lang->story->review),
             set::url(createLink('story', 'review', array('storyID' => $story->id))),
             set::disabled(!$this->story->isClickable($story, 'review')),
-            set('data-app', $app->tab),
+            set('data-app', $app->tab)
         ) : null,
         hasPriv('story', 'close') ? btn
         (
@@ -115,7 +115,7 @@ div
             set::hint($lang->story->close),
             set::url(createLink('story', 'close', array('storyID' => $story->id))),
             set::disabled(!$this->story->isClickable($story, 'close')),
-            set('data-toggle', 'modal'),
+            set('data-toggle', 'modal')
         ) : null,
         hasPriv('story', 'edit') ? btn
         (
@@ -124,8 +124,8 @@ div
             set::hint($lang->story->edit),
             set::url(createLink('story', 'edit', array('storyID' => $story->id))),
             set::disabled(!$this->story->isClickable($story, 'edit')),
-            set('data-app', $app->tab),
-        ) : null,
+            set('data-app', $app->tab)
+        ) : null
     ),
     hr(),
     section
@@ -138,7 +138,7 @@ div
     fileList
     (
         set::padding(false),
-        set::files($story->files),
+        set::files($story->files)
     ),
     hr(),
     section
@@ -234,14 +234,14 @@ div
                 (
                     set::name($lang->story->lastEditedBy),
                     $story->lastEditedBy ? zget($users, $story->lastEditedBy) . $lang->at . $story->lastEditedDate : $lang->noData
-                ),
+                )
             )
         )
-    ),
+    )
 );
 
 history
 (
     set::commentBtn(true),
-    set::commentUrl(createLink('action', 'comment', array('objectType' => 'story', 'objectID' => $story->id))),
+    set::commentUrl(createLink('action', 'comment', array('objectType' => 'story', 'objectID' => $story->id)))
 );
