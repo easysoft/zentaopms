@@ -312,11 +312,11 @@ formPanel
                 $lang->project->to,
                 datepicker
                 (
-                    setClass('has-warning'),
                     set::name('end'),
                     set('id', 'end'),
                     set::placeholder($lang->project->end),
-                    set::required(true)
+                    set::required(true),
+                    $copyProjectID ? setClass('has-warning') : null
                 )
             ),
             $copyProjectID ? div(setClass('text-warning'), $lang->project->copyProject->endTips) : null
