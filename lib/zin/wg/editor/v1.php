@@ -47,7 +47,7 @@ class editor extends wg
         (
             setTag('tiptap-editor'),
             setClass('form-control', 'p-0'),
-            $this->prop('size') === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
+            $this->prop('size') === 'full' ? setStyle('height', '100%') : setClass('h-auto')
         );
 
         $props = $this->props->pick(array('createInput', 'uploadUrl', 'placeholder', 'fullscreenable', 'resizable', 'exposeEditor', 'size', 'hideMenubar', 'bubbleMenu', 'menubarMode', 'collaborative', 'hocuspocus', 'docName', 'username', 'userColor'));
