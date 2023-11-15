@@ -21,7 +21,7 @@ class history extends wg
         'users?: array',                // 用户 Map 数据。
         'commentUrl?: string',          // 备注对话框 URL。
         'title?: string|array',         // 标题。
-        'commentBtn?: string|array',    // 是否允许添加备注。
+        'commentBtn?: string|array'     // 是否允许添加备注。
     );
 
     protected function onCheckErrors(): array | null
