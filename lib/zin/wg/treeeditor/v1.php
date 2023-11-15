@@ -13,7 +13,7 @@ class treeEditor extends wg
         'canUpdateOrder?: bool=false',
         'canEdit?: bool=false',
         'canDelete?: bool=false',
-        'canSplit?: bool=true',
+        'canSplit?: bool=true'
     );
 
     public static function getPageJS(): string|false

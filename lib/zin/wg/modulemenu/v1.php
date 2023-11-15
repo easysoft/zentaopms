@@ -19,7 +19,7 @@ class moduleMenu extends wg
         'app?: string=""',
         'checkbox?: bool',
         'checkOnClick?: bool|string',
-        'onCheck?: function',
+        'onCheck?: function'
     );
 
     public static function getPageCSS(): string|false
@@ -34,9 +34,11 @@ class moduleMenu extends wg
         $children = $this->getChildModule($parentID);
         if(count($children) === 0) return [];
 
-        $activeKey = $this->prop('activeKey');
-        $treeItems = array();
-        $tab       = $this->prop('app');
+        $activeKey  = $this->prop('activeKey');
+        $treeItems  = array();
+        $tab        = $this->prop('app');
+        $titleAttrs = array('data-app' => $tab);
+        if(isInModal()) $titleAttrs['data-load'] = 'modal';
 
         foreach($children as $child)
         {
@@ -45,7 +47,7 @@ class moduleMenu extends wg
                 'text'         => $child->name,
                 'hint'         => $child->name,
                 'url'          => zget($child, 'url', ''),
-                'data-app'     => $tab,
+                'titleAttrs'   => $titleAttrs,
                 'contentClass' => 'overflow-x-hidden'
             );
             $items = $this->buildMenuTree($child->id);
@@ -153,6 +155,7 @@ class moduleMenu extends wg
         return a
         (
             set('href', $closeLink),
+            isInModal() ? set('data-load', 'modal') : null,
             icon('close', setStyle('color', 'var(--color-slate-600)'))
         );
     }
@@ -178,18 +181,18 @@ class moduleMenu extends wg
                     setClass('module-title text-lg font-semibold clip'),
                     $title
                 ),
-                $this->buildCloseBtn(),
+                $this->buildCloseBtn()
             ),
             zui::tree
             (
-                set::_tag('ul'),
+                set::_tag('menu'),
                 set::_class('col flex-auto scrollbar-hover scrollbar-thin overflow-y-auto overflow-x-hidden px-4'),
                 set::defaultNestedShow(true),
                 set::hover(true),
                 set::preserve($preserve),
                 set($treeProps)
             ),
-            $this->buildActions(),
+            $this->buildActions()
         );
     }
 }
