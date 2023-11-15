@@ -37,7 +37,7 @@ class upload extends wg
         'limitSize?: false|string=false',  // 上传尺寸限制
         'duplicatedHint?: string',         // 文件名重复提示
         'exceededSizeHint?: string',       // 上传超出大小限制提示
-        'exceededCountHint?: string',      // 上传超出个数限制提示
+        'exceededCountHint?: string'       // 上传超出个数限制提示
     );
 
     protected function build(): zui
