@@ -1354,7 +1354,7 @@ class metricModel extends model
             $keyA = $a->$x;
             $keyB = $b->$x;
 
-            return $keyA < $keyB ? -1 : 1;
+            return $keyA > $keyB ? -1 : 1;
         };
         usort($datas, $cmp);
 
