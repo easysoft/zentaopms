@@ -711,7 +711,7 @@ class upgradeModel extends model
                 /* Upgrade members for testtask. */
                 $this->upgradeTesttaskMembers();
                 $this->loadModel('program')->refreshStats(true);
-
+                $this->deleteGeneralReportBlock();
                 /* Stop old cron. */
                 touch($this->app->getCacheRoot() . 'restartcron');
                 break;
@@ -9906,5 +9906,27 @@ class upgradeModel extends model
             $members = implode(',', array_keys($members));
             $this->dao->update(TABLE_TESTTASK)->set('members')->eq($members)->where('id')->eq($taskID)->exec();
         }
+    }
+
+    /**
+     * Delete waterfall general report block. 
+     * 
+     * @access public
+     * @return true
+     */
+    public function deleteGeneralReportBlock()
+    {
+        $this->loadModel('setting');
+        $closedBlocks = $this->setting->getItem('owner=system&module=block&key=closed');
+
+        if(strpos($closedBlocks, 'waterfallgeneralreport') !== false)
+        {
+            $closedBlocks = str_replace(',project|waterfallgeneralreport', '', $closedBlocks);
+            $this->setting->setItem('system.block.closed', $closedBlocks);
+        }
+
+        $this->dao->delete()->from(TABLE_BLOCK)->where('block')->eq('waterfallgeneralreport')->exec();
+
+        return true;
     }
 }
