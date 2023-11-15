@@ -3,14 +3,12 @@ $(function()
     new zui.Tooltip('#programHover', {title: programTip, trigger: 'hover', placement: 'right', type: 'white', 'className': 'text-gray border border-light programTip'});
 
     setWhite();
-
-    if(copyProjectID > 0) $('#end .date-picker input[type=text]').addClass('has-info')
 });
 
 $(document).on('click', 'button[type=submit]', function()
 {
     /* Remove init tips. */
-    $('.has-info').removeClass('has-info');
+    $('.has-warning').removeClass('has-warning');
     $('.text-warning').remove();
 })
 
@@ -115,19 +113,19 @@ $(document).on('keyup', '#projectName', function()
 /* Click remove tips.  */
 $(document).on('click', '#name', function()
 {
-    $('#name').removeClass('has-info');
+    $('#name').removeClass('has-warning');
     $('#nameLabelInfo').remove();
 });
 
 $(document).on('click', '#code', function()
 {
-    $('#code').removeClass('has-info');
+    $('#code').removeClass('has-warning');
     $('#codeLabelInfo').remove();
 });
 
 $(document).on('click', '#end', function()
 {
-    $('#end').removeClass('has-info');
+    $('#end').removeClass('has-warning');
     $('#endLabelInfo').remove();
 });
 
@@ -139,7 +137,7 @@ $(document).on('change', '#end', function()
 
 $(document).on('click', '#days', function()
 {
-    $('#days').removeClass('has-info');
+    $('#days').removeClass('has-warning');
     $('#daysLabelInfo').remove();
 });
 

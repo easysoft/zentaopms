@@ -211,7 +211,7 @@ formPanel
         (
             set::name('name'),
             set::value($copyProjectID ? $copyProject->name : ''),
-            $copyProjectID ? setClass('has-info') : null
+            $copyProjectID ? setClass('has-warning') : null
         ),
         $copyProjectID ? div(setClass('text-warning'), $lang->project->copyProject->nameTips) : null
     ),
@@ -224,7 +224,7 @@ formPanel
         (
             set::name('code'),
             set::value($copyProjectID ? $copyProject->code : ''),
-            $copyProjectID ? setClass('has-info') : null
+            $copyProjectID ? setClass('has-warning') : null
         ),
         $copyProjectID ? div(setClass('text-warning'), $lang->project->copyProject->codeTips) : null
     ) : null,
@@ -312,6 +312,7 @@ formPanel
                 $lang->project->to,
                 datepicker
                 (
+                    setClass('has-warning'),
                     set::name('end'),
                     set('id', 'end'),
                     set::placeholder($lang->project->end),
@@ -339,7 +340,7 @@ formPanel
         inputControl
         (
             setClass('has-suffix'),
-            input(set::name('days'), $copyProjectID ? setClass('has-info') : null),
+            input(set::name('days'), $copyProjectID ? setClass('has-warning') : null),
             div
             (
                 setClass('input-control-suffix z-50'),
