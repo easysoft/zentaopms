@@ -450,6 +450,7 @@ $lang->action->label->syncprogram             = 'start';
 $lang->action->label->syncproject             = 'start';
 $lang->action->label->syncexecution           = 'start';
 $lang->action->label->syncexecutionbychild    = 'start';
+$lang->action->label->syncmultipleproject     = 'start';
 $lang->action->label->startProgram            = '(The start of the project sets the status of the program as Ongoing)';
 $lang->action->label->createmr                = 'Merge Request Linked';
 $lang->action->label->deletemr                = 'Merge Request Unlinked';
