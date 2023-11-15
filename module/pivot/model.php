@@ -1575,7 +1575,7 @@ class pivotModel extends model
                         }
                     }
 
-                    if($slice != 'noSlice') $columnSQL = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`";
+                    if($slice != 'noSlice') $columnSQL = "select $groupList,`$slice`,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . ",tt.`$slice`" . $orderSQL . ",tt.`$slice`";
                     if($slice == 'noSlice') $columnSQL = "select $groupList,$columnSQL from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
                 }
 
@@ -1590,7 +1590,7 @@ class pivotModel extends model
                 }
 
                 $cols = $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs, $column['showOrigin']);
-                if($slice != 'noSlice') $columnRows = $this->processSliceData($columnRows, $groups, $sql, $slice, $uuName);
+                if($slice != 'noSlice') $columnRows = $this->processSliceData($columnRows, $groups, $slice, $uuName);
                 $columnRows = $this->processShowData($columnRows, $groups, $column, $showColTotal, $uuName);
 
                 $rowIndex = 0;
@@ -1644,26 +1644,6 @@ class pivotModel extends model
          * 代表在整个tbody中，位于[0,0]坐标的td rowspan为2，位于[0,1]坐标的td rowspan为1, 位于[2,0]坐标的td rowspan为2
          */
         return array($data, $configs);
-    }
-
-    /**
-     * Get sql field options.
-     *
-     * @param  string $sql
-     * @param  string $slice
-     * @access public
-     * @return array
-     */
-    public function getSliceList($sql, $slice)
-    {
-        $sliceList = array();
-        $rows = $this->dao->query($sql)->fetchAll();
-        foreach($rows as $row)
-        {
-            $sliceList[$row->{$slice}] = $row->{$slice};
-        }
-
-        return $sliceList;
     }
 
     /**
@@ -2005,9 +1985,10 @@ class pivotModel extends model
      * @access public
      * @return array
      */
-    public function processSliceData($columnRows, $groups, $sql, $slice, $uuName)
+    public function processSliceData($columnRows, $groups, $slice, $uuName)
     {
-        $sliceList = $this->getSliceList($sql, $slice);
+        $sliceList = array();
+        foreach($columnRows as $rows) $sliceList[$rows->{$slice}] = $rows->{$slice};
 
         $index     = 0;
         $sliceRows = array();
