@@ -134,7 +134,7 @@ formPanel
     $productRow,
     formRow
     (
-        setClass(!empty($product) && $product->type != 'normal' ? '' : 'hidden'),
+        setClass(!empty($product) && $productType != 'normal' ? '' : 'hidden'),
         formGroup
         (
             set::width('1/2'),
