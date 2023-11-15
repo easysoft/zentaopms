@@ -14,6 +14,7 @@ $config->task->dtable->fieldList['name']['nestedToggle'] = true;
 $config->task->dtable->fieldList['name']['sortType']     = true;
 $config->task->dtable->fieldList['name']['link']         = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}');
 $config->task->dtable->fieldList['name']['required']     = true;
+$config->task->dtable->fieldList['name']['color']        = true;
 
 $config->task->dtable->fieldList['pri']['title']    = $lang->priAB;
 $config->task->dtable->fieldList['pri']['type']     = 'pri';
