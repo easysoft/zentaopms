@@ -288,6 +288,7 @@ class screenModel extends model
         {
             if(!empty($component->option->series))
             {
+
                 $defaultSeries = $component->option->series;
                 if($component->type == 'radar')
                 {
@@ -297,6 +298,10 @@ class screenModel extends model
                     $legends = array();
                     foreach($component->option->dataset->seriesData as $seriesData) $legends[] = $seriesData->name;
                     $component->option->legend->data = $legends;
+                }
+                elseif($component->type == 'waterpolo')
+                {
+                    // Do nothing
                 }
                 else
                 {
