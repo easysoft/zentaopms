@@ -81,7 +81,7 @@ class control extends wg
         return new inputControl
         (
             set($controlProps),
-            new input(set($allProps)),
+            new input(set($allProps))
         );
     }
 
