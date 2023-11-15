@@ -72,7 +72,7 @@ class priPicker extends wg
             set::_props($restProps),
             set::popWidth('100%'),
             set($props),
-            $this->children(),
+            $this->children()
         );
     }
 }
