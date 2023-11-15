@@ -17,11 +17,6 @@ class floatToolbar extends wg
         'suffix' => array()
     );
 
-    public static function getPageCSS(): string|false
-    {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
-    }
-
     private function buildDivider(wg|array|null $wg1, wg|array|null $wg2): wg|null
     {
         if(empty($wg1) || empty($wg2)) return null;
