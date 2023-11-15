@@ -98,6 +98,7 @@ $lang->metric->implementAction = '实现度量项';
 $lang->metric->deleteAction    = '删除度量项';
 $lang->metric->delistAction    = '下架度量项';
 $lang->metric->detailsAction   = '度量项详情';
+$lang->metric->updateMetricLib = '更新度量库';
 
 $lang->metric->stageList = array();
 $lang->metric->stageList['wait']     = "未发布";

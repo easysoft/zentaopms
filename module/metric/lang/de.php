@@ -98,6 +98,7 @@ $lang->metric->implementAction = 'Implement Metric';
 $lang->metric->deleteAction    = 'Delete Metric';
 $lang->metric->delistAction    = 'Delist Metric';
 $lang->metric->detailsAction   = 'Metric Detail';
+$lang->metric->updateMetricLib = 'Update Metric Lib';
 
 $lang->metric->stageList = array();
 $lang->metric->stageList['wait']     = "Not Released";
