@@ -4,9 +4,13 @@
 .main-position {position: relative;}
 .child-position {position: absolute; right: 0;}
 .parent-position {padding-right: 160px;}
-.datagrid {overflow: auto;}
+.datagrid {overflow: auto; max-height: 500px;}
+@media (max-width: 1366px) {.datagrid {max-height: 500px;}}
+@media (min-width: 1366px) and (max-width: 1919px) {.datagrid {max-height: 600px;}}
+@media (min-width: 1920px) {.datagrid {max-height: 800px;}}
+
+.reportData thead {position: sticky; background-color: #fff; top: -1px;}
 .heading-padding, .datagrid-padding {padding-left: 6px; padding-right: 6px;}
-.datagrid-padding {padding-top: 2px;}
 
 .filter-items > .table-row{display: table!important;}
 .filter-items .filter-item:first-child {padding-left: 0!important;}
