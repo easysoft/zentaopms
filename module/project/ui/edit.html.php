@@ -354,7 +354,7 @@ formPanel
         (
             set::label($lang->project->days),
             set::width('1/4'),
-            inputGroup
+            inputControl
             (
                 setClass('has-suffix'),
                 input
