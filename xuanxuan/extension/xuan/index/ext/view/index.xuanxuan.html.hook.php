@@ -1,4 +1,5 @@
 <?php if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') != false): ?>
+<?php $this->app->setClientTheme('blue'); ?>
 <style>
 #appsBar, #apps {left: 0!important;}
 </style>
