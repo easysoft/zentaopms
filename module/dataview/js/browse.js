@@ -92,7 +92,7 @@ function buildTable(resp)
     {
         var fieldName = field;
         if(typeof(dataview) != 'undefined' && typeof(dataview.fieldSettings) != 'undefined' && typeof(dataview.fieldSettings[field]) != 'undefined' && typeof(dataview.fieldSettings[field].name) != 'undefined') fieldName = dataview.fieldSettings[field].name ? dataview.fieldSettings[field].name : field;
-        if(typeof(dataview.langs) != 'undefined')
+        if(typeof(dataview.langs) != 'undefined' && dataview.langs != '')
         {
             var langs = JSON.parse(dataview.langs);
             if(langs && typeof(langs[field]) != 'undefined' && typeof(langs[field][clientLang]) != 'undefined') fieldName = langs[field][clientLang] ? langs[field][clientLang] : fieldName;
@@ -110,7 +110,7 @@ function buildTable(resp)
         html += '<tr>';
         for(var field in resp.fields)
         {
-            var tdValue = (typeof(data[field]) != 'undefined' && data[field]) ? data[field] : 'null';
+            var tdValue = (typeof(data[field]) != 'undefined' && data[field]) ? data[field] : '';
             html += "<td title='" + tdValue + "'>" + tdValue + "</td>";
         }
         html += '</tr>';
