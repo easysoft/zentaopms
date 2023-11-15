@@ -32,11 +32,13 @@ $lang->im->xxdServerTip   = 'XXD server address contains protocol, host and port
 $lang->im->xxdServerEmpty = 'XXD server address is empty.';
 $lang->im->xxdServerError = 'XXD server address should not be 127.0.0.1.';
 
+if(!isset($lang->im->xxd)) $lang->im->xxd = new stdclass();
 $lang->im->xxd->aes  = 'Server-side AES';
 $lang->im->xxdAESTip = 'This only affects server-side AES encryption between XXB and XXD.';
 $lang->im->aesOptions['on']  = 'Enabled';
 $lang->im->aesOptions['off'] = 'Disabled';
 
+if(!isset($lang->im->bot)) $lang->im->bot = new stdclass();
 $lang->im->bot->zentaoBot = new stdclass();
 $lang->im->bot->zentaoBot->name = 'ZenTao';
 $lang->im->bot->zentaoBot->pageSearchRegex = '/(pageID|recPerPage)=(\d+)/';

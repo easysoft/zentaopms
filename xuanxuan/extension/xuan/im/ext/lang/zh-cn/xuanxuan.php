@@ -32,11 +32,13 @@ $lang->im->xxdServerTip    = '禅道服务器地址为完整的协议+地址+端
 $lang->im->xxdServerEmpty  = '禅道服务器地址为空。';
 $lang->im->xxdServerError  = '禅道服务器地址不能为 127.0.0.1。';
 
+if(!isset($lang->im->xxd)) $lang->im->xxd = new stdclass();
 $lang->im->xxd->aes  = '服务端通信 AES';
 $lang->im->xxdAESTip = '该设置仅针对 XXB 和 XXD 之间的通讯加密，不影响客户端通讯加密。';
 $lang->im->aesOptions['on']  = '开启';
 $lang->im->aesOptions['off'] = '关闭';
 
+if(!isset($lang->im->bot)) $lang->im->bot = new stdclass();
 $lang->im->bot->commonName = '阿道';
 $lang->im->bot->welcome->title = '哈喽~我是你的助手阿道';
 $lang->im->bot->upgradeWelcome->title = '哈喽~我是你的助手阿道';
