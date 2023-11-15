@@ -143,6 +143,7 @@ detailBody
     (
         tableData
         (
+            setClass('mt-5'),
             set::title($lang->task->legendBasic),
             item
             (
@@ -370,6 +371,7 @@ detailBody
         ),
         tableData
         (
+            setClass('mt-4'),
             set::title($lang->task->legendEffort),
             item
             (
@@ -444,81 +446,106 @@ detailBody
         ),
         tableData
         (
+            setClass('mt-4'),
             set::title($lang->task->legendLife),
             item
             (
                 set::name($lang->task->realStarted),
-                datetimePicker
+                formGroup
                 (
-                    set::name('realStarted'),
-                    set::value(helper::isZeroDate($task->realStarted) ? '' : $task->realStarted)
+                    datetimePicker
+                    (
+                        set::name('realStarted'),
+                        set::value(helper::isZeroDate($task->realStarted) ? '' : $task->realStarted)
+                    )
                 )
             ),
             item
             (
                 set::name($lang->task->finishedBy),
-                picker
+                formGroup
                 (
-                    set::name('finishedBy'),
-                    set::value($task->finishedBy),
-                    set::items($finishedByOptions)
+                    picker
+                    (
+                        set::name('finishedBy'),
+                        set::value($task->finishedBy),
+                        set::items($finishedByOptions)
+                    )
                 )
             ),
             item
             (
                 set::name($lang->task->finishedDate),
-                datetimePicker
+                formGroup
                 (
-                    set::name('finishedDate'),
-                    set::value(helper::isZeroDate($task->finishedDate) ? '' : $task->finishedDate)
+                    datetimePicker
+                    (
+                        set::name('finishedDate'),
+                        set::value(helper::isZeroDate($task->finishedDate) ? '' : $task->finishedDate)
+                    )
                 )
             ),
             item
             (
                 set::name($lang->task->canceledBy),
-                picker
+                formGroup
                 (
-                    set::name('canceledBy'),
-                    set::value($task->canceledBy),
-                    set::items($canceledByOptions)
+                    picker
+                    (
+                        set::name('canceledBy'),
+                        set::value($task->canceledBy),
+                        set::items($canceledByOptions)
+                    )
                 )
             ),
             item
             (
                 set::name($lang->task->canceledDate),
-                datetimePicker
+                formGroup
                 (
-                    set::name('canceledDate'),
-                    set::value(helper::isZeroDate($task->canceledDate) ? '' : $task->canceledDate)
+                    datetimePicker
+                    (
+                        set::name('canceledDate'),
+                        set::value(helper::isZeroDate($task->canceledDate) ? '' : $task->canceledDate)
+                    )
                 )
             ),
             item
             (
                 set::name($lang->task->closedBy),
-                picker
+                formGroup
                 (
-                    set::name('closedBy'),
-                    set::value($task->closedBy),
-                    set::items($closedByOptions)
+                    picker
+                    (
+                        set::name('closedBy'),
+                        set::value($task->closedBy),
+                        set::items($closedByOptions)
+                    )
                 )
             ),
             item
             (
                 set::name($lang->task->closedReason),
-                picker
+                formGroup
                 (
-                    set::name('closedReason'),
-                    set::value($task->closedReason),
-                    set::items($closedReasonOptions)
+                    picker
+                    (
+                        set::name('closedReason'),
+                        set::value($task->closedReason),
+                        set::items($closedReasonOptions)
+                    )
                 )
             ),
             item
             (
                 set::name($lang->task->closedDate),
-                datetimePicker
+                formGroup
                 (
-                    set::name('closedDate'),
-                    set::value(helper::isZeroDate($task->closedDate) ? '' : $task->closedDate)
+                    datetimePicker
+                    (
+                        set::name('closedDate'),
+                        set::value(helper::isZeroDate($task->closedDate) ? '' : $task->closedDate)
+                    )
                 )
             )
         )
