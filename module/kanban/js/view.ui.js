@@ -150,8 +150,9 @@ window.getItem = function(info)
     }
     else
     {
-        renderGeneralItem(info)
+        renderGeneralItem(info);
     }
+    if(info.item.color && info.item.color != '#fff') info.item.className = 'color-' + info.item.color.replace('#', '');
 }
 
 window.renderGeneralItem = function(info)
@@ -187,7 +188,6 @@ window.renderGeneralItem = function(info)
     info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.title};
 
     info.item.content  = {html: content};
-    if(info.item.color && info.item.color != '#fff') info.item.className = 'color-' + info.item.color.replace('#', '');
     if(kanban.performable == 1)
     {
         info.item.footer = {html: "<div class='flex'><div class='circle progress mt-3 flex-1' style='width:80%'><div class='progress-bar' style='width: " + info.item.progress + '%\'></div></div><div class="mt-2 ml-2">' + info.item.progress + '%' + '</div></div>'};
@@ -198,7 +198,7 @@ window.renderExecutionItem = function(info)
 {
     info.item.icon       = 'run';
     info.item.titleUrl   = $.createLink('execution', 'task', `id=${info.item.fromID}`);
-    info.item.titleAttrs = {'class': 'text-black clip', 'title' : info.item.title};
+    info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
     if(info.item.delay)
     {
         info.item.suffix      = executionLang.delayed;
@@ -224,7 +224,7 @@ window.renderReleaseItem = function(info)
 {
     info.item.icon       = 'publish';
     info.item.titleUrl   = $.createLink('release', 'view', `id=${info.item.fromID}`);
-    info.item.titleAttrs = {'class': 'text-black clip', 'title' : info.item.title};
+    info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
 
     if(info.item.deleted == '0')
     {
@@ -241,7 +241,7 @@ window.renderBuildItem = function(info)
 {
     info.item.icon       = 'ver';
     info.item.titleUrl   = $.createLink('build', 'view', `id=${info.item.fromID}`);
-    info.item.titleAttrs = {'class': 'text-black clip', 'title' : info.item.title};
+    info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
 
     const date = '<span class="label lighter">' + info.item.date + '</span>';
     info.item.content = {html: date}
@@ -250,7 +250,7 @@ window.renderProductplanItem = function(info)
 {
     info.item.icon       = 'delay';
     info.item.titleUrl   = $.createLink('productplan', 'view', `id=${info.item.fromID}`);
-    info.item.titleAttrs = {'class': 'text-black clip', 'title' : info.item.title};
+    info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
 
     if(info.item.deleted == '0')
     {
