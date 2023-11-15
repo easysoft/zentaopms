@@ -102,6 +102,7 @@ if(!empty($task->team))
             ),
             h::td
             (
+                setClass('required'),
                 set::width('135px'),
                 inputControl
                 (

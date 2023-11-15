@@ -82,15 +82,29 @@ detailBody
         section
         (
             set::title($lang->task->name),
-            input
+            set::required(true),
+            formGroup
             (
-                set::label($lang->task->name),
-                set::name('name'),
-                set::value($task->name),
-                set::placeholder($lang->task->name),
-                set::control('input'),
-                set::required(true),
-                set::autofocus(true)
+                inputControl
+                (
+                    input
+                    (
+                        set::name('name'),
+                        set::value($task->name),
+                        set::placeholder($lang->task->name),
+                    ),
+                    to::suffix
+                    (
+                        colorPicker
+                        (
+                            set::heading($lang->task->colorTag),
+                            set::name('color'),
+                            set::value($task->color),
+                            set::syncColor('#name')
+                        )
+                    ),
+                    set::suffixWidth('35')
+                )
             )
         ),
         section
@@ -102,7 +116,7 @@ detailBody
                 $task->desc && isHTML($task->desc) ? html($task->desc) : $task->desc
             )
         ),
-        section
+        $execution->lifetime != 'ops' && !in_array($execution->attribute, array('request', 'review')) ? section
         (
             set::title($lang->task->story),
             formGroup
@@ -116,7 +130,7 @@ detailBody
                     set::items($storyOptions)
                 )
             )
-        ),
+        ) : null,
         section
         (
             set::title($lang->files),
@@ -133,13 +147,15 @@ detailBody
             item
             (
                 set::name($lang->task->execution),
-                picker
+                formGroup
                 (
-                    set::name('execution'),
-                    set::required(true),
-                    set::value($task->execution),
-                    set::items($executionOptions),
-                    on::change('loadAll(this.value)')
+                    picker
+                    (
+                        set::name('execution'),
+                        set::value($task->execution),
+                        set::items($executionOptions),
+                        on::change('loadAll')
+                    )
                 )
             ),
             item
@@ -150,62 +166,58 @@ detailBody
                     div
                     (
                         setClass('flex grow'),
-                        control(set(array
+                        picker
                         (
-                            'name'  => 'module',
-                            'value' => $task->module,
-                            'type'  => 'picker',
-                            'class' => 'w-full',
-                            'items' => $moduleOptions
-                        )))
+                            setClass('w-full'),
+                            set::name('module'),
+                            set::value($task->module),
+                            set::items($moduleOptions),
+                            set::width(2/3),
+                            set::required(true)
+                        )
                     ),
                     div
                     (
-                        checkList
-                        (
-                            setClass('shrink-0 ml-3'),
+                        setClass('flex'),
+                        checkbox(
+                            set::rootClass('items-center ml-3'),
+                            setID('showAllModule'),
                             set::name('showAllModule'),
-                            set::items(array('1' => $lang->all)),
-                            set::value($showAllModule ? '1' : ''),
-                            set::inline(true)
+                            set::text($lang->all),
+                            set::value(1),
+                            set::checked($showAllModule),
+                            on::change('loadAllModule')
                         )
                     )
                 )
             ),
-            ($task->parent >= 0 and empty($task->team))
-                ? item
+            $task->parent >= 0 && empty($task->team) ? item
+            (
+                set::name($lang->task->parent),
+                picker
                 (
-                    set::name($lang->task->parent),
-                    picker
-                    (
-                        set::name('parent'),
-                        set::value($task->parent),
-                        set::items($tasks)
-                    )
+                    set::name('parent'),
+                    set::value($task->parent),
+                    set::items($tasks)
                 )
-                : null,
-            empty($modeText)
-                ? item
+            ) : null,
+            empty($modeText) ? item
+            (
+                set::name($lang->task->mode),
+                picker
                 (
-                    set::name($lang->task->mode),
-                    picker
-                    (
-                        set::name('mode'),
-                        set::value($task->mode),
-                        set::items($modeOptions),
-                        set::required(true),
-                        on::change('changeMode')
-                    )
+                    set::name('mode'),
+                    set::value($task->mode),
+                    set::items($modeOptions),
+                    set::required(true),
+                    on::change('changeMode')
                 )
-                : item
-                (
-                    set::name($lang->task->mode),
-                    inputGroup
-                    (
-                        $modeText
-                    ),
-                    formHidden('mode', $task->mode)
-                ),
+            ) : item
+            (
+                set::name($lang->task->mode),
+                $modeText,
+                formHidden('mode', $task->mode)
+            ),
             item
             (
                 set::name($lang->task->assignedTo),
@@ -216,24 +228,25 @@ detailBody
                         setClass('flex grow'),
                         picker
                         (
+                            setID('assignedTo'),
+                            setClass('w-full'),
                             set::name('assignedTo'),
-                            set::id('assignedTo'),
                             set::value($task->assignedTo),
                             set::items($assignedToOptions),
-                            setClass('w-full'),
+                            !empty($task->team) ? set::required(true) : null,
                             !empty($task->team) && $task->mode == 'linear' ? set::disabled(true) : null
                         )
                     ),
                     div
                     (
-                        btn(set(array
+                        btn
                         (
-                            'type' => 'btn',
-                            'text' => $lang->task->team,
-                            'class' => "input-group-btn team-group $hiddenTeam",
-                            'url' => '#modalTeam',
-                            'data-toggle' => 'modal'
-                        )))
+                            $lang->task->team,
+                            setClass('input-group-btn team-group'),
+                            set::url('#modalTeam'),
+                            setData('toggle', 'modal'),
+                            $task->mode == 'multi' ? on::click('disableMembers') : null
+                        )
                     )
                 )
             ),
@@ -243,32 +256,41 @@ detailBody
                 picker
                 (
                     set::name('type'),
-                    set::required(true),
                     set::value($task->type),
-                    set::items($typeOptions)
+                    set::items($typeOptions),
+                    set::required(true)
                 )
             ),
-            empty($task->children)
-                ? item
+            empty($task->children) ? item
+            (
+                set::name($lang->task->status),
+                picker
                 (
-                    set::name($lang->task->status),
-                    picker
-                    (
-                        set::name('status'),
-                        set::required(true),
-                        set::value($task->status),
-                        set::items($statusOptions)
-                    )
+                    set::name('status'),
+                    set::value($task->status),
+                    set::items($statusOptions),
+                    set::required(true)
                 )
-                : null,
+            ) : null,
             item
             (
                 set::name($lang->task->pri),
-                picker
+                priPicker
                 (
                     set::name('pri'),
                     set::value($task->pri),
-                    set::items($priOptions)
+                    set::items($priOptions),
+                )
+            ),
+            item
+            (
+                set::name($lang->task->progress),
+                progresscircle
+                (
+                    set::percent($task->progress),
+                    set::circleColor('var(--color-success-500)'),
+                    set::circleBg('var(--color-border)'),
+                    set::circleWidth(1)
                 )
             ),
             item
@@ -276,28 +298,44 @@ detailBody
                 set::name($lang->task->mailto),
                 inputGroup
                 (
-                    div
+                    picker
                     (
-                        setStyle('width', '70%'),
-                        control(set(array
-                        (
-                            'name' => 'mailto[]',
-                            'id' => 'mailto',
-                            'value' => $task->mailto,
-                            'type' => 'picker',
-                            'items' => $mailtoOptions,
-                            'multiple' => true
-                        )))
+                        setID('mailto'),
+                        set::name('mailto[]'),
+                        set::value($task->mailto),
+                        set::items($mailtoOptions),
+                        set::multiple(true)
                     ),
-                    div
+                    span
                     (
-                        setStyle('width', '30%'),
-                        control
+                        set('id', 'contactBox'),
+                        set('class', 'input-group-addon'),
+                        $contactListMenuOptions ? setStyle(array('width' => '100px', 'padding' => '0')) : null,
+                        $contactListMenuOptions ? picker
                         (
-                            set::name('contactListMenu'),
-                            set::type('picker'),
+                            set::className('width', 'w-20'),
+                            set::name('contactListMenuOptionsMenu'),
                             set::items($contactListMenuOptions),
-                            on::change('setMailto')
+                            set::placeholder($lang->contact->common)
+                        ) :
+                        span
+                        (
+                            set('class', 'input-group-addon'),
+                            a
+                            (
+                                set('class', 'mr-2'),
+                                set('href', createLink('my', 'managecontacts', 'listID=0&mode=new')),
+                                set('title', $lang->user->contacts->manage),
+                                set('data-toggle', 'modal'),
+                                icon('cog'),
+                            ),
+                            a
+                            (
+                                set('id', 'refreshMailto'),
+                                set('class', 'text-black'),
+                                set('href', 'javascript:void(0)'),
+                                icon('refresh')
+                            )
                         )
                     )
                 )
@@ -354,7 +392,7 @@ detailBody
             item
             (
                 set::name($lang->task->estimate),
-                inputGroup
+                inputControl
                 (
                     input
                     (
@@ -362,34 +400,28 @@ detailBody
                         set::value($task->estimate),
                         !empty($task->team) ? set::readonly(true) : null
                     ),
-                    div
-                    (
-                        setClass('input-group-btn'),
-                        btn
-                        (
-                            setClass('btn btn-default'),
-                            'H'
-                        )
-                    )
+                    to::suffix($lang->task->suffixHour),
+                    set::suffixWidth(20)
                 )
             ),
             item
             (
                 set::name($lang->task->consumed),
-                row
+                inputGroup
                 (
+                    setClass('items-center'),
                     span
                     (
-                        setClass('span-text mr-1'),
-                        set::id('consumedSpan'),
-                        $task->consumed . 'H'
-                    ),
-                    h::a
-                    (
                         setClass('span-text'),
+                        set::id('consumedSpan'),
+                        $task->consumed . $lang->task->suffixHour
+                    ),
+                    btn
+                    (
+                        setClass('ghost text-primary'),
+                        icon('time'),
                         set::href(inlink('recordWorkhour', "id={$task->id}")),
-                        set('data-toggle', 'modal'),
-                        icon('time')
+                        setData('toggle', 'modal')
                     ),
                     formHidden('consumed', $task->consumed)
                 )
@@ -397,7 +429,7 @@ detailBody
             item
             (
                 set::name($lang->task->left),
-                inputGroup
+                inputControl
                 (
                     input
                     (
@@ -405,15 +437,8 @@ detailBody
                         set::value($task->left),
                         !empty($task->team) ? set::readonly(true) : null
                     ),
-                    div
-                    (
-                        setClass('input-group-btn'),
-                        btn
-                        (
-                            setClass('btn btn-default'),
-                            'H'
-                        )
-                    )
+                    to::suffix($lang->task->suffixHour),
+                    set::suffixWidth(20)
                 )
             )
         ),
@@ -423,7 +448,7 @@ detailBody
             item
             (
                 set::name($lang->task->realStarted),
-                datePicker
+                datetimePicker
                 (
                     set::name('realStarted'),
                     set::value(helper::isZeroDate($task->realStarted) ? '' : $task->realStarted)
@@ -432,18 +457,17 @@ detailBody
             item
             (
                 set::name($lang->task->finishedBy),
-                control
+                picker
                 (
                     set::name('finishedBy'),
                     set::value($task->finishedBy),
-                    set::type('picker'),
                     set::items($finishedByOptions)
                 )
             ),
             item
             (
                 set::name($lang->task->finishedDate),
-                datePicker
+                datetimePicker
                 (
                     set::name('finishedDate'),
                     set::value(helper::isZeroDate($task->finishedDate) ? '' : $task->finishedDate)
@@ -452,18 +476,17 @@ detailBody
             item
             (
                 set::name($lang->task->canceledBy),
-                control
+                picker
                 (
                     set::name('canceledBy'),
                     set::value($task->canceledBy),
-                    set::type('picker'),
                     set::items($canceledByOptions)
                 )
             ),
             item
             (
                 set::name($lang->task->canceledDate),
-                datePicker
+                datetimePicker
                 (
                     set::name('canceledDate'),
                     set::value(helper::isZeroDate($task->canceledDate) ? '' : $task->canceledDate)
@@ -472,29 +495,27 @@ detailBody
             item
             (
                 set::name($lang->task->closedBy),
-                control
+                picker
                 (
                     set::name('closedBy'),
                     set::value($task->closedBy),
-                    set::type('picker'),
                     set::items($closedByOptions)
                 )
             ),
             item
             (
                 set::name($lang->task->closedReason),
-                control
+                picker
                 (
                     set::name('closedReason'),
                     set::value($task->closedReason),
-                    set::type('picker'),
                     set::items($closedReasonOptions)
                 )
             ),
             item
             (
                 set::name($lang->task->closedDate),
-                datePicker
+                datetimePicker
                 (
                     set::name('closedDate'),
                     set::value(helper::isZeroDate($task->closedDate) ? '' : $task->closedDate)

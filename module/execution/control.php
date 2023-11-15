@@ -2432,15 +2432,11 @@ class execution extends control
     public function ajaxGetMembers(int $executionID, string $assignedTo = '')
     {
         $users = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
-        if($this->app->getViewType() === 'json')
-        {
-            return print(json_encode($users));
-        }
-        else
-        {
-            $assignedTo = isset($users[$assignedTo]) ? $assignedTo : '';
-            return print(html::select('assignedTo', $users, $assignedTo, "class='form-control'"));
-        }
+        if($this->app->getViewType() === 'json') return print(json_encode($users));
+
+        $items = array();
+        foreach($users as $account => $realName) $items[] = array('value' => $account, 'text' => $realName, 'keys' => $account);
+        return print(json_encode($items));
     }
 
     /**
