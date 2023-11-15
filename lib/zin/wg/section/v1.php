@@ -7,12 +7,12 @@ class section extends wg
     protected static array $defineProps = array(
         'title?: string',         // 标题
         'content?: string|array', // 内容
-        'useHtml?: bool=false',   // 内容是否解析 HTML 标签
+        'useHtml?: bool=false'    // 内容是否解析 HTML 标签
     );
 
     protected static array $defineBlocks = array(
         'subtitle' => array(),
-        'actions'  => array(),
+        'actions'  => array()
     );
 
     protected function onAddChild($child)
@@ -35,7 +35,7 @@ class section extends wg
         (
             setClass('flex', 'items-center', 'mb-2'),
             div(setClass('article-h1'), $title),
-            $actionsView,
+            $actionsView
         );
     }
 
@@ -46,7 +46,7 @@ class section extends wg
         return div
         (
             setClass('article-content'),
-            $useHtml ? html($content) : $content,
+            $useHtml ? html($content) : $content
         );
 
     }
