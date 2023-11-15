@@ -280,3 +280,102 @@ div
         set::height('calc(100vh - 120px)')
     )
 );
+
+modal
+(
+    setID('linkStoryByPlan'),
+    setData('size', '500px'),
+    to::header
+    (
+        h4($lang->execution->linkStoryByPlan),
+        "({$lang->execution->linkStoryByPlanTips})"
+    ),
+    inputGroup
+    (
+        setClass('mt-1'),
+        picker
+        (
+            set::width(300),
+            setID('plan'),
+            set::name('plan'),
+            set::items($allPlans)
+        ),
+        span
+        (
+            setClass('input-group-btn ml-2'),
+            btn(setClass('primary'), setID('toStoryButton'), set::onclick('linkPlanStory()'), $lang->execution->linkStory)
+        )
+    )
+);
+
+modal
+(
+    setID('batchCreateStory'),
+    to::header
+    (
+        h4($lang->bug->product)
+    ),
+    setData('size', '500px'),
+    inputGroup
+    (
+        setClass('mt-3'),
+        picker
+        (
+            set::width(300),
+            set::name('productName'),
+            set::items($productNames),
+            set::required(true),
+            set::onchange('changeStoryProduct()')
+        ),
+        span
+        (
+            setClass('input-group-btn ml-2'),
+            btn
+            (
+                setClass('primary'),
+                setID('batchCreateStoryButton'),
+                set::url(createLink('story', 'batchCreate', 'productID=' . key($productNames) . '&branch=moduleID=0&storyID=0&executionID=' . $executionID)),
+                set('data-toggle', 'modal'),
+                set('data-dismiss', 'modal'),
+                set('data-size', 'lg'),
+                $lang->story->batchCreate
+            )
+        )
+    )
+);
+
+modal
+(
+    setID('batchCreateBug'),
+    to::header
+    (
+        h4($lang->bug->product)
+    ),
+    setData('size', '500px'),
+    inputGroup
+    (
+        setClass('mt-3'),
+        picker
+        (
+            set::width(300),
+            set::name('productName'),
+            set::items($productNames),
+            set::required(true),
+            set::onchange('changeBugProduct()')
+        ),
+        span
+        (
+            setClass('input-group-btn ml-2'),
+            btn
+            (
+                setClass('primary'),
+                setID('batchCreateBugButton'),
+                set::url(createLink('bug', 'batchCreate', 'productID=' . key($productNames) . '&branch=&executionID=' . $executionID)),
+                set('data-toggle', 'modal'),
+                set('data-dismiss', 'modal'),
+                set('data-size', 'lg'),
+                $lang->bug->batchCreate
+            )
+        )
+    )
+);

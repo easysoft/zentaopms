@@ -2911,7 +2911,7 @@ class execution extends control
             $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->haveBranchDraft : $this->lang->execution->haveDraft;
             $haveDraft           = sprintf($importPlanStoryTips, $draftCount);
             if(!$execution->multiple || $moduleName == 'projectstory') $haveDraft = str_replace($this->lang->executionCommon, $this->lang->projectCommon, $haveDraft);
-            return $this->sendError($haveDraft);
+            return $this->send(array('closeModal' => true, 'load' => true, 'result' => 'fail', 'message' => $haveDraft));
         }
 
         return $this->sendSuccess(array('closeModal' => true, 'load' => true));
