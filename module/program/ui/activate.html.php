@@ -22,14 +22,14 @@ formPanel
             datePicker
             (
                 set::name('begin'),
-                set::value($newBegin),
+                set::value($newBegin)
             ),
             $lang->execution->to,
             datePicker
             (
                 set::name('end'),
-                set::value($newEnd),
-            ),
+                set::value($newEnd)
+            )
         )
     ),
     formGroup
@@ -38,9 +38,9 @@ formPanel
         editor
         (
             set::name('comment'),
-            set::rows('6'),
-        ),
-    ),
+            set::rows('6')
+        )
+    )
 );
 hr();
 history();
