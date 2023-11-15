@@ -71,6 +71,6 @@ $config->gogs->dtable->bindUser->fieldList['zentaoUsers']['control'] = 'picker';
 $config->gogs->dtable->bindUser->fieldList['zentaoUsers']['width']   = 300;
 
 $config->gogs->dtable->bindUser->fieldList['status']['title'] = $lang->gogs->bindingStatus;
-$config->gogs->dtable->bindUser->fieldList['status']['type']  = 'html';
+$config->gogs->dtable->bindUser->fieldList['status']['html']  = true;
 $config->gogs->dtable->bindUser->fieldList['status']['width'] = 100;
 $config->gogs->dtable->bindUser->fieldList['status']['map']   = $lang->gogs->bindStatus;

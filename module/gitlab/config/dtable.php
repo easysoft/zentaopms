@@ -71,6 +71,6 @@ $config->gitlab->dtable->bindUser->fieldList['zentaoUsers']['control'] = 'picker
 $config->gitlab->dtable->bindUser->fieldList['zentaoUsers']['width']   = 300;
 
 $config->gitlab->dtable->bindUser->fieldList['status']['title'] = $lang->gitlab->bindingStatus;
-$config->gitlab->dtable->bindUser->fieldList['status']['type']  = 'html';
+$config->gitlab->dtable->bindUser->fieldList['status']['html']  = true;
 $config->gitlab->dtable->bindUser->fieldList['status']['width'] = 100;
 $config->gitlab->dtable->bindUser->fieldList['status']['map']   = $lang->gitlab->bindStatus;
