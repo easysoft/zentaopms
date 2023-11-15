@@ -16,7 +16,7 @@ class dtable extends wg
         'createLink?:array|string',           // 表格数据源为空时的创建链接
         'createAttr?:string',                 // 表格数据源为空时的创建链接属性
         'sortLink?:array|string',             // 排序链接
-        'orderBy?:string',                    // 排序字段
+        'orderBy?:string'                     // 排序字段
     );
 
     static $dtableID = 0;
@@ -122,15 +122,15 @@ class dtable extends wg
                 ),
                 'setGlobal' => array(
                     'url' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}"),
-                    'text' => $app->lang->datatable->setGlobal,
+                    'text' => $app->lang->datatable->setGlobal
                 ),
                 'reset' => array(
                     'url' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}"),
-                    'text' => $app->lang->datatable->reset,
+                    'text' => $app->lang->datatable->reset
                 ),
                 'resetGlobal' => array(
                     'url' => createLink('datatable', 'ajaxreset', "module={$app->moduleName}&method={$app->methodName}&system=1"),
-                    'text' => $app->lang->datatable->resetGlobal,
+                    'text' => $app->lang->datatable->resetGlobal
                 )
             ));
         }
