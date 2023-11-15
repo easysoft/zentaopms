@@ -49,7 +49,7 @@ class checkbox extends wg
             (
                 set('for', $id),
                 setClass($labelClass),
-                $text
+                html($text)
             ),
             $this->children()
         );

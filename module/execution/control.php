@@ -1769,7 +1769,7 @@ class execution extends control
                 ->remove('heightType')
                 ->get();
 
-            if(!isset($_POST['heightType']) || $this->post->heightType != 'custom' || $this->loadModel('kanban')->checkDisplayCards($execution->displayCards))
+            if(!isset($_POST['heightType']) || $this->post->heightType != 'custom' || $this->loadModel('kanban')->checkDisplayCards($executionData->displayCards))
             {
                 $this->execution->setKanban($executionID, $executionData);
             }

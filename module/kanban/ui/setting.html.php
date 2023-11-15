@@ -48,7 +48,6 @@ formPanel
                 span('px')
             )
         )
-
     ),
     formRow
     (
