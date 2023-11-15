@@ -444,7 +444,7 @@ detailBody
             set::padding(false)
         ) : null
     ),
-    history(),
+    history(set::objectID($case->id)),
     floatToolbar
     (
         set::object($case),
