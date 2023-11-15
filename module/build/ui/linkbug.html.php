@@ -28,10 +28,10 @@ foreach($config->build->defaultFields['linkBug'] as $field)
 }
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 
-div(setID('searchFormPanel'), set('data-module', 'bug'), searchToggle(set::open(true), set::module('bug')));
+div(setID('searchFormPanel'), setData(array('module' => 'bug')), searchToggle(set::open(true), set::module('bug')));
 dtable
 (
-    set::id('unlinkBugList'),
+    setID('unlinkBugList'),
     set::userMap($users),
     set::checkable(true),
     set::cols($cols),
