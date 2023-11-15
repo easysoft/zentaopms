@@ -3144,7 +3144,8 @@ EOF;
 
         if($log or $app->config->debug)
         {
-            $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
+            $runMode = PHP_SAPI == 'cli' ? '_cli' : '';
+            $logFile = $app->getLogRoot() . 'saas' . $runMode . '.' . date('Ymd') . '.log.php';
             if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
 
             $fh = fopen($logFile, 'a');

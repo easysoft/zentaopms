@@ -2023,7 +2023,8 @@ class baseRouter
         if(empty($extFiles) and empty($hookFiles) and empty($apiFiles)) return $mainTargetFile;
 
         /* 计算合并之后的targetFile路径。Compute the merged target file path. */
-        $extTargetPrefix = $this->config->edition . DS . $this->config->vision . DS;
+        $runMode = PHP_SAPI == 'cli' ? '_cli' : '';
+        $extTargetPrefix = $this->config->edition . $runMode . DS . $this->config->vision . DS;
         if($siteExtended and !empty($this->siteCode)) $extTargetPrefix .= $this->siteCode[0] . DS . $this->siteCode;
 
         $mergedTargetDir  = $this->getTmpRoot() . $class . DS . $extTargetPrefix;
