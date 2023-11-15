@@ -1072,6 +1072,8 @@ class screenModel extends model
                 $chart->sql = $this->setFilterSQL($chart);
                 return $this->getBarChartOption($component, $chart);
                 break;
+            case 'waterpolo':
+                return $this->getWaterPoloOption($component, $chart);
         }
     }
 
