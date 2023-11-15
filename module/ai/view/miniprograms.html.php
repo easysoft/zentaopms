@@ -20,9 +20,9 @@
   </div>
   <div class="btn-toolbar pull-left">
     <?php
-    foreach($this->lang->ai->prompts->statuses as $statusKey => $statusName)
+    foreach($this->lang->ai->miniPrograms->statuses as $statusKey => $statusName)
     {
-      echo html::a($this->createLink('ai', 'prompts', "module=$module&status=$statusKey"), "<span class='text'>{$this->lang->ai->prompts->statuses[$statusKey]}" . ($status == $statusKey ? '<span class="label label-light label-badge" style="margin-left: 4px;">' . $pager->recTotal . '</span>' : '') . "</span>", '', "id='status-$statusKey' class='btn btn-link" . ($status == $statusKey ? ' btn-active-text' : '') . "'");
+      echo html::a($this->createLink('ai', 'miniPrograms', "module=$module&status=$statusKey"), "<span class='text'>{$this->lang->ai->miniPrograms->statuses[$statusKey]}" . ($status == $statusKey ? '<span class="label label-light label-badge" style="margin-left: 4px;">' . $pager->recTotal . '</span>' : '') . "</span>", '', "id='status-$statusKey' class='btn btn-link" . ($status == $statusKey ? ' btn-active-text' : '') . "'");
     }
     ?>
   </div>

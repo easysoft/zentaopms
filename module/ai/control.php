@@ -141,21 +141,23 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function miniPrograms()
+    public function miniPrograms($category = '', $status = '')
     {
-        $programs = $this->ai->getMiniPrograms();
+        $programs = $this->ai->getMiniPrograms($category, $status);
         foreach($programs as $program)
         {
             $program->canPublish     = empty($program->published) && $this->ai->canPublishMiniProgram($program);
             $program->createdByLabel = $this->loadModel('user')->getById($program->createdBy, 'account')->realname;
             $program->categoryLabel  = $this->lang->ai->miniPrograms->categoryList[$program->category];
             $program->publishedLabel = $program->published === '1'
-                ? $this->lang->ai->prompts->statuses['active']
-                : $this->lang->ai->prompts->statuses['draft'];
+                ? $this->lang->ai->miniPrograms->statuses['active']
+                : $this->lang->ai->miniPrograms->statuses['draft'];
         }
 
         $this->view->title        = $this->lang->ai->miniPrograms->common;
         $this->view->miniPrograms = $programs;
+        $this->view->category     = $category;
+        $this->view->status       = $status;
         $this->display();
     }
 

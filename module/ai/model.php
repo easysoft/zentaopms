@@ -330,11 +330,15 @@ class aiModel extends model
      * @access public
      * @return array
      */
-    public function getMiniPrograms()
+    public function getMiniPrograms($category, $status)
     {
         return $this->dao->select('*')
             ->from(TABLE_MINIPROGRAM)
             ->where('deleted')->eq('0')
+            ->beginIF(!empty($category))->andWhere('category')->eq($category)->fi()
+            ->beginIF($status === 'active')->andWhere('published')->eq('1')->fi()
+            ->beginIF($status === 'draft')->andWhere('published')->ne('1')->fi()
+            ->beginIF($status === 'createdByMe')->andWhere('createdBy')->eq($this->app->user->account)->fi()
             ->fetchAll();
     }
 

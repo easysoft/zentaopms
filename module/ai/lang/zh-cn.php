@@ -475,6 +475,13 @@ $lang->ai->miniPrograms->field->emptyNameWarning       = '『字段名称』不�
 $lang->ai->miniPrograms->field->duplicatedNameWarning  = '『字段名称』重复';
 $lang->ai->miniPrograms->field->emptyOptionWarning     = '请至少配置一个选项';
 
+$lang->ai->miniPrograms->statuses = array(
+    ''            => '全部',
+    'draft'       => '未发布',
+    'active'      => '已发布',
+    'createdByMe' => '由我创建'
+);
+
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = '语言模型配置';
 $lang->ai->models->common         = '语言模型';
