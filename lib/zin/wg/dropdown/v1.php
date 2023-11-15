@@ -79,7 +79,7 @@ class dropdown extends wg
                 (
                     setClass('dropdown-menu'),
                     set::items($items),
-                    divorce($itemsList),
+                    divorce($itemsList)
                 );
 
                 if($hasIcons === null)
