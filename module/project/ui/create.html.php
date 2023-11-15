@@ -205,18 +205,28 @@ formPanel
     formGroup
     (
         set::width('1/2'),
-        set::name('name'),
         set::label($lang->project->name),
-        set::value($copyProjectID ? $copyProject->name : ''),
-        set::strong(true)
+        set::strong(true),
+        input
+        (
+            set::name('name'),
+            set::value($copyProjectID ? $copyProject->name : ''),
+            $copyProjectID ? setClass('has-info') : null
+        ),
+        $copyProjectID ? div(setClass('text-warning'), $lang->project->copyProject->nameTips) : null
     ),
     (isset($config->setCode) && $config->setCode == 1) ? formGroup
     (
         set::width('1/2'),
-        set::name('code'),
         set::label($lang->project->code),
-        set::value($copyProjectID ? $copyProject->code : ''),
-        set::strong(true)
+        set::strong(true),
+        input
+        (
+            set::name('code'),
+            set::value($copyProjectID ? $copyProject->code : ''),
+            $copyProjectID ? setClass('has-info') : null
+        ),
+        $copyProjectID ? div(setClass('text-warning'), $lang->project->copyProject->codeTips) : null
     ) : null,
     (in_array($model, array('scrum', 'kanban'))) ? formGroup
     (
@@ -307,7 +317,8 @@ formPanel
                     set::placeholder($lang->project->end),
                     set::required(true)
                 )
-            )
+            ),
+            $copyProjectID ? div(setClass('text-warning'), $lang->project->copyProject->endTips) : null
         ),
         formGroup
         (
@@ -328,17 +339,14 @@ formPanel
         inputControl
         (
             setClass('has-suffix'),
-            input
-            (
-                set::name('days'),
-                set::required(true)
-            ),
+            input(set::name('days'), $copyProjectID ? setClass('has-info') : null),
             div
             (
                 setClass('input-control-suffix z-50'),
                 $lang->project->day
             )
-        )
+        ),
+        $copyProjectID ? div(setClass('text-warning'), $lang->project->copyProject->daysTips) : null
     ),
     !empty($products) ? $productsBox :
     formRow
