@@ -14,7 +14,7 @@ class floatToolbar extends wg
     protected static array $defineBlocks = array(
         'prefix' => array(),
         'main'   => array(),
-        'suffix' => array(),
+        'suffix' => array()
     );
 
     public static function getPageCSS(): string|false
@@ -95,7 +95,7 @@ class floatToolbar extends wg
             $this->buildDivider($prefixBtns, $mainBtns),
             $mainBtns,
             $this->buildDivider($mainBtns, $suffixBtns),
-            $suffixBtns,
+            $suffixBtns
         );
     }
 }
