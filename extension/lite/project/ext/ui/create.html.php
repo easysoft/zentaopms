@@ -21,7 +21,7 @@ formPanel
     to::heading(div
     (
         setClass('panel-title text-lg'),
-        $title,
+        $title
     )),
     to::headingActions
     (
@@ -56,7 +56,7 @@ formPanel
         set::name('name'),
         set::label($lang->project->name),
         set::value($copyProjectID ? $copyProject->name : ''),
-        set::strong(true),
+        set::strong(true)
     ),
     formGroup
     (
@@ -79,7 +79,7 @@ formPanel
                     set::name('begin'),
                     set('id', 'begin'),
                     set::value(date('Y-m-d')),
-                    set::required(true),
+                    set::required(true)
                 ),
                 $lang->project->to,
                 datepicker
@@ -87,8 +87,8 @@ formPanel
                     set::name('end'),
                     set('id', 'end'),
                     set::placeholder($lang->project->end),
-                    set::required(true),
-                ),
+                    set::required(true)
+                )
             )
         ),
         formGroup
@@ -101,7 +101,7 @@ formPanel
                 set::inline(true),
                 set::items($lang->project->endList)
             )
-        ),
+        )
     ),
     formGroup
     (
@@ -119,7 +119,7 @@ formPanel
             set::label($lang->project->acl),
             set::control('radioList'),
             $programID ? set::items($lang->project->subAclList) : set::items($lang->project->aclList),
-            set::value($copyProjectID ? $copyProject->acl : 'private'),
+            set::value($copyProjectID ? $copyProject->acl : 'private')
         )
     ),
     formGroup
@@ -136,7 +136,7 @@ formPanel
     formHidden('parent', 0),
     formHidden('model', $model),
     formHidden('vision', 'lite'),
-    formHidden('hasProduct', 1),
+    formHidden('hasProduct', 1)
 );
 
 $copyProjectsBox = array();
@@ -152,7 +152,7 @@ foreach($copyProjects as $id => $name)
             setClass('text-gray'),
             $lang->icons['project']
         ),
-        span($name),
+        span($name)
     );
 }
 
@@ -174,8 +174,8 @@ modalTrigger
             input
             (
                 set::name('projectName'),
-                set::placeholder($lang->project->searchByName),
-            ),
+                set::placeholder($lang->project->searchByName)
+            )
         ),
         div
         (
