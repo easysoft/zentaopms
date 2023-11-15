@@ -1192,7 +1192,7 @@
         if(!$link.length || $link.hasClass('ajax-submit') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_' || ($link.is('a') && !$link.attr('href'))) return;
 
         const options = $link.dataset();
-        if(options.toggle) return;
+        if(options.toggle && options.toggle !== 'tooltip' && !$link.hasClass('open-url')) return;
 
         const url = options.url || $link.attr('href');
         const $modal = $link.closest('.modal');
