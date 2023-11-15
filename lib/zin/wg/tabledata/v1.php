@@ -27,7 +27,7 @@ class tableData extends wg
             h::th
             (
                 setClass('py-1.5 pr-2 font-normal nowrap text-right', $item->prop('thClass')),
-                $item->prop('name'),
+                $item->prop('name')
             ),
             h::td
             (
@@ -53,7 +53,7 @@ class tableData extends wg
                         setClass('w-5 h-5 ml-1'),
                         set::target('.table-data-td'),
                         set::parent('.table-data-tr')
-                    ),
+                    )
                 ),
                 div
                 (
@@ -69,7 +69,7 @@ class tableData extends wg
             div
             (
                 setClass('py-1.5 pr-2 font-normal nowrap table-data-th', $item->prop('thClass')),
-                $item->prop('name'),
+                $item->prop('name')
             ),
             div
             (
