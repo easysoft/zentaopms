@@ -47,6 +47,7 @@ foreach($regions as $currentRegionID => $regionName) $regionMenu[] = li(set::cla
 
 $app->loadLang('release');
 $app->loadLang('execution');
+$app->loadLang('productplan');
 jsVar('laneCount',  $laneCount);
 jsVar('kanbanLang', $lang->kanban);
 jsVar('columnLang', $lang->kanbancolumn);
@@ -54,6 +55,7 @@ jsVar('laneLang', $lang->kanbanlane);
 jsVar('cardLang', $lang->kanbancard);
 jsVar('executionLang', $lang->execution);
 jsVar('releaseLang', $lang->release);
+jsVar('productplanLang', $lang->productplan);
 jsVar('kanbanID', $kanban->id);
 jsVar('kanban', $kanban);
 jsVar('groupCols', $groupCols);

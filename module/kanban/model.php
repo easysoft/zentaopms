@@ -1300,7 +1300,7 @@ class kanbanModel extends model
                 $item = array();
                 $item['column']       = $cell->column;
                 $item['lane']         = $cell->lane;
-                $item['title']        = htmlspecialchars_decode($card->name);
+                $item['title']        = !empty($card->title) ? htmlspecialchars_decode($card->title) : htmlspecialchars_decode($card->name);
                 $item['id']           = $card->id;
                 $item['name']         = $card->id;
                 $item['pri']          = $card->pri;
@@ -1313,6 +1313,7 @@ class kanbanModel extends model
                 $item['assignedTo']   = $card->assignedTo;
                 $item['fromID']       = $card->fromID;
                 $item['fromType']     = $card->fromType;
+                $item['desc']         = !empty($card->desc) ? $card->desc : '';
                 $item['delay']        = !empty($card->delay) ? $card->delay : 0;
                 $item['status']       = !empty($card->status) ? $card->status : '';
                 $item['objectStatus'] = !empty($card->objectStatus) ? $card->objectStatus : '';
@@ -1418,6 +1419,7 @@ class kanbanModel extends model
                     if($fromType == 'productplan' or $fromType == 'release')
                     {
                         $objectCard->createdBy = zget($creators, $object->id, '');
+                        $objectCard->delay     = helper::today() > $objectCard->end ? true : false;
                     }
 
                     if($fromType =='execution')
