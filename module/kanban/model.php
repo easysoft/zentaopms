@@ -1027,6 +1027,8 @@ class kanbanModel extends model
                 $cols  = zget($columnGroup, $group->id, array());
                 $items = zget($cardGroup, $group->id, array());
 
+                if($searchValue != '' and empty($items)) continue;
+
                 /* 计算各个列上的卡片数量。 */
                 $columnCount = array();
                 $parentCols  = array();
@@ -1051,8 +1053,6 @@ class kanbanModel extends model
                 $lanes = array_values($lanes);
                 $laneCount += count($lanes);
 
-                if($searchValue != '' and empty($items)) continue;
-
                 $groupData['id']            = $group->id;
                 $groupData['key']           = "group{$group->id}";
                 $groupData['data']['lanes'] = $lanes;
@@ -1063,7 +1063,7 @@ class kanbanModel extends model
             }
 
             $regionData['laneCount'] = $laneCount;
-            $kanbanList[] = $regionData;
+            if(!empty($regionData['items'])) $kanbanList[] = $regionData;
         }
 
         return $kanbanList;

@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace zin;
 
 $laneCount = 0;
-$groupCols = array(); // 卡片可以移动到的同一group下的列。
 foreach($kanbanList as $current => $region)
 {
     foreach($region['items'] as $index => $group)
@@ -28,11 +27,6 @@ foreach($kanbanList as $current => $region)
         $group['colProps']    = array('actions' => jsRaw('window.getColActions'));
         $group['laneProps']   = array('actions' => jsRaw('window.getLaneActions'));
         $group['itemProps']   = array('actions' => jsRaw('window.getItemActions'));
-
-        foreach($group['data']['cols'] as $colIndex => $col)
-        {
-            if($col['parent'] != '-1') $groupCols[$groupID][$col['id']] = $col['title'];
-        }
 
         $kanbanList[$current]['items'][$index] = $group;
     }
@@ -192,6 +186,23 @@ featureBar
 
 toolbar
 (
+    inputGroup
+    (
+        set::style(array('display' => 'none')),
+        setID('kanbanSearch'),
+        inputControl
+        (
+            setID('searchBox'),
+            setClass('search-box'),
+            input
+            (
+                setID('kanbanSearchInput'),
+                set::name('kanbanSearchInput'),
+                set::placeholder($lang->execution->pleaseInput)
+            )
+        )
+    ),
+    btn(setClass('querybox-toggle ghost btn-default'), set::onclick('toggleSearchBox()'), set::icon('search'), $lang->searchAB),
     btnGroup
     (
         btn

@@ -492,12 +492,6 @@ window.ajaxMoveCard = function(objectID, fromColID, toColID, fromLaneID, toLaneI
     refreshKanban(link);
 }
 
-window.searchCards = function(value, order)
-{
-    if(typeof order == 'undefined') order = orderBy;
-    refreshKanban($.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value + '&orderBy=' + order));
-}
-
 window.refreshKanban = function(url)
 {
     if(typeof url == 'undefined') url = $.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=&orderBy=' + orderBy);
@@ -523,6 +517,15 @@ window.refreshKanban = function(url)
         }
         options.items = data;
         $kanbanList.render(options);
+
+        if(data.length == 0)
+        {
+            if($('#kanbanList').find('.dtable-empty-tip').length == 0) $('#kanbanList').prepend('<div class="dtable-empty-tip" style="background:#fff"><div class="row gap-4 items-center"><span class="text-gray">' + cardLang.empty + '</span></div></div>');
+        }
+        else
+        {
+            $('#kanbanList .dtable-empty-tip').remove();
+        }
     });
 }
 
@@ -612,4 +615,45 @@ window.changeGroupBy = function()
     const group = $('.c-group [name=group]').val();
     const type  = $('.c-type [name=type]').val();
     loadPage($.createLink('execution', 'kanban',  'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group));
+};
+
+window.toggleSearchBox = function()
+{
+    $('#kanbanSearch').toggle();
+
+    if($('#kanbanSearch').css('display') != 'none')
+    {
+        $(".querybox-toggle").css("color", "#0c64eb");
+    }
+    else
+    {
+        $(".querybox-toggle").css("color", "#3c495c");
+        $('#kanbanSearchInput').attr('value', '');
+        searchCards('');
+    }
+};
+
+window.debounce = function (callback, delay)
+{
+    let timer;
+    return function() {
+        const context = this;
+        const args = arguments;
+
+        clearTimeout(timer);
+
+        timer = setTimeout(function () {
+            callback.apply(context, args);
+        }, delay);
+    };
+};
+
+$('#kanbanSearchInput').on('input', debounce(function(){
+    searchCards($(this).val());
+}, 500));
+
+window.searchCards = function(value, order)
+{
+    if(typeof order == 'undefined') order = orderBy;
+    refreshKanban($.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value + '&orderBy=' + order));
 };
