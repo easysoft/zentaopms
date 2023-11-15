@@ -4184,6 +4184,28 @@ class execution extends control
     }
 
     /**
+     * Flatten Object Array.
+     *
+     * @param array $array
+     * @access public
+     * @return void
+     */
+    public function flattenObjectArray($array = array())
+    {
+        $result = array();
+
+        foreach ($array as $key => $object) {
+            $result[$object->id] = $object;
+
+            if (isset($object->children) && is_array($object->children)) {
+                $result = array_replace($result, $this->flattenObjectArray($object->children));
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Export execution.
      *
      * @param  string $status
@@ -4215,7 +4237,8 @@ class execution extends control
                 unset($fields[$key]);
             }
 
-            $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, false, 'hasParentName', 'order_asc');
+            $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, false, 'withchild', 'order_asc');
+            $executionStats = $this->flattenObjectArray($executionStats);
 
             $users = $this->loadModel('user')->getPairs('noletter');
             foreach($executionStats as $i => $execution)
@@ -4224,6 +4247,7 @@ class execution extends control
                 $execution->status        = isset($execution->delay) ? $executionLang->delayed : $this->processStatus('execution', $execution);
                 $execution->progress     .= '%';
                 $execution->name          = isset($execution->title) ? $execution->title : $execution->name;
+                if(isset($executionStats[$execution->parent])) $execution->name = $executionStats[$execution->parent]->name . '/' . $execution->name;
                 if($this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $execution->method = zget($executionLang->typeList, $execution->type);
 
                 if($this->post->exportType == 'selected')
@@ -4232,6 +4256,7 @@ class execution extends control
                     if(strpos(",$checkedItem,", ",{$execution->id},") === false) unset($executionStats[$i]);
                 }
             }
+
             if($this->config->edition != 'open') list($fields, $executionStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $executionStats);
 
             $this->post->set('fields', $fields);
