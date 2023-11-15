@@ -6,7 +6,7 @@ class floatPreNextBtn extends wg
 {
     protected static array $defineProps = array(
         'preLink?:string',
-        'nextLink?:string',
+        'nextLink?:string'
     );
 
     public static function getPageCSS(): string|false
@@ -41,7 +41,7 @@ class floatPreNextBtn extends wg
                 setClass('float-btn fixed z-10'),
                 set::icon('angle-right'),
                 set('data-app', $app->tab)
-            ) : null,
+            ) : null
         );
     }
 }
