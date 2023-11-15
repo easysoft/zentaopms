@@ -5485,6 +5485,11 @@ class executionModel extends model
             foreach($execution->tasks as $task)
             {
                 $showmore = (count($execution->tasks) == 50) && ($task == end($execution->tasks));
+                $task->ipdStage = new stdclass();
+                $task->ipdStage->canStart      = $execution->ipdStage['canStart'];
+                $task->ipdStage->taskStartTip  = sprintf($this->lang->execution->disabledTip->taskStartTip, $this->lang->stage->ipdTypeList[$execution->ipdStage['preAttribute']], $this->lang->stage->ipdTypeList[$execution->attribute]);
+                $task->ipdStage->taskFinishTip = sprintf($this->lang->execution->disabledTip->taskFinishTip, $this->lang->stage->ipdTypeList[$execution->ipdStage['preAttribute']], $this->lang->stage->ipdTypeList[$execution->attribute]);
+                $task->ipdStage->taskRecordTip = sprintf($this->lang->execution->disabledTip->taskRecordTip, $this->lang->stage->ipdTypeList[$execution->ipdStage['preAttribute']], $this->lang->stage->ipdTypeList[$execution->attribute]);
                 echo $this->task->buildNestedList($execution, $task, false, $showmore, $users);
             }
         }
