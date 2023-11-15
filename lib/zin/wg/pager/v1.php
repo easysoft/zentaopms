@@ -41,7 +41,7 @@ class pager extends wg
             array('type' => 'link', 'hint' => $lang->pager->previousPage, 'page' => 'prev', 'icon' => 'icon-angle-left'),
             array('type' => 'info', 'text' => '{page}/{pageTotal}'),
             array('type' => 'link', 'hint' => $lang->pager->nextPage, 'page' => 'next', 'icon' => 'icon-angle-right'),
-            array('type' => 'link', 'hint' => $lang->pager->lastPage, 'page' => 'last', 'icon' => 'icon-last-page'),
+            array('type' => 'link', 'hint' => $lang->pager->lastPage, 'page' => 'last', 'icon' => 'icon-last-page')
         );
 
         $this->setProp($props);
