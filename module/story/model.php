@@ -3122,14 +3122,14 @@ class storyModel extends model
 
         static $shadowProducts = array();
         static $hasShadow      = true;
-        if($hasShadow and empty($shadowProducts[$story->product]))
+        if(isset($story->product) && $hasShadow && empty($shadowProducts[$story->product]))
         {
             $stmt = $app->dbQuery('SELECT id FROM ' . TABLE_PRODUCT . " WHERE shadow = 1")->fetchAll();
             if(empty($stmt)) $hasShadow = false;
             foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
         }
 
-        if($story->parent < 0 and strpos($config->story->list->actionsOperatedParentStory, ",$action,") === false) return false;
+        if(isset($story->parent) && $story->parent < 0 && strpos($config->story->list->actionsOperatedParentStory, ",$action,") === false) return false;
 
         if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
         /* Adjust code, hide split entry. */
