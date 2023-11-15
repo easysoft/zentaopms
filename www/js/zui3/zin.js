@@ -210,6 +210,50 @@
         if(DEBUG) zui.Messager.show({content: 'ZIN: load an old page.', close: false});
     }
 
+    function layoutNanavbar(immediate)
+    {
+        if(!immediate)
+        {
+            if(layoutNanavbar.timer) clearTimeout(layoutNanavbar.timer);
+            layoutNanavbar.timer = setTimeout(() => layoutNanavbar(true), 50);
+            return;
+        }
+
+        const $navbar = $('#navbar');
+        if(!$navbar.length) return;
+
+        const $nav = $navbar.children('.nav');
+        let layout = $nav.data('_layout');
+        let itemPadding = 12;
+        let dividerMargin = 8;
+        if(!layout)
+        {
+            layout = {itemCount: 0, contentWidth: 0, dividerCount: 0};
+            $nav.find('.nav-item,.nav-divider').each(function()
+            {
+                const $item = $(this);
+                if($item.hasClass('nav-divider'))
+                {
+                    layout.dividerCount++;
+                }
+                else
+                {
+                    layout.itemCount++;
+                    layout.contentWidth += $item.width() - (itemPadding * 2);
+                }
+            });
+            $nav.data('_layout', layout);
+        }
+
+        const totalWidth = $navbar.width();
+        const maxWidth = totalWidth - (2 * itemPadding) - (2 * Math.max($('#heading').outerWidth() || 0, $('#toolbar').outerWidth() || 0));
+        let width = Math.ceil((layout.itemCount * 2 * itemPadding) + layout.contentWidth + layout.dividerCount + (layout.dividerCount * dividerMargin * 2));
+        const fixSize = width > maxWidth ? Math.ceil((width - maxWidth) / (2 * (layout.itemCount + layout.dividerCount))) : 0;
+        itemPadding -= Math.min(7, fixSize);
+        dividerMargin -= Math.min(7, fixSize);
+        $nav.css({'--nav-item-padding': itemPadding + 'px', '--nav-divider-margin': dividerMargin + 'px'}).toggleClass('compact', fixSize > 6).toggleClass('compact-extra', fixSize > 8);
+    }
+
     function updateNavbar(data)
     {
         const $navbar = $('#navbar');
@@ -217,6 +261,7 @@
         if($newNav.text().trim() !== $navbar.text().trim() || $newNav.find('.nav-item>a').map((_, element) => element.href).get().join(' ') !== $navbar.find('.nav-item>a').map((_, element) => element.href).get().join(' ')) return $navbar.empty().append($newNav);
 
         activeNav($newNav.find('.nav-item>a.active').data('id'), $navbar);
+        layoutNanavbar();
     }
 
     function updateHeading(data)
@@ -235,6 +280,7 @@
         {
             $heading.html(data);
         }
+        layoutNanavbar();
     }
 
     function activeNav(activeID, nav)
@@ -305,7 +351,13 @@
     function renderPage(list, options)
     {
         if(DEBUG) console.log('[APP] ', 'render:', list);
-        list.forEach(item => renderPartial(item, options));
+        let hasUpdatePage = false;
+        list.forEach(item =>
+        {
+            renderPartial(item, options);
+            if(item.name === 'html' || item.name === 'body') hasUpdatePage = true;
+        });
+        if(hasUpdatePage) updatePageLayout();
         if(!options.partial)
         {
             const newState = $.apps.updateApp(currentCode, currentAppUrl, document.title);
@@ -1120,6 +1172,11 @@
         parent.selectTheme(theme);
     }
 
+    function updatePageLayout()
+    {
+        layoutNanavbar();
+    }
+
     $.extend(window, {registerRender: registerRender, fetchContent: fetchContent, loadTable: loadTable, loadPage: loadPage, postAndLoadPage: postAndLoadPage, loadCurrentPage: loadCurrentPage, parseSelector: parseSelector, toggleLoading: toggleLoading, openUrl: openUrl, openPage: openPage, goBack: goBack, registerTimer: registerTimer, loadModal: loadModal, loadTarget: loadTarget, loadComponent: loadComponent, loadPartial: loadPartial, reloadPage: reloadPage, selectLang: selectLang, selectTheme: selectTheme, changeAppLang, changeAppTheme: changeAppTheme, uploadFileByChunk: uploadFileByChunk});
     $.extend($.apps, {openUrl: openUrl});
     $.extend($, {ajaxSendScore: ajaxSendScore, selectLang: selectLang});
@@ -1195,6 +1252,9 @@
         if(data.app) return openPage(data.url + (data.selector ? (' ' + data.selector) : ''), data.app);
         loadPage(data.url, data.selector);
     });
+
+    /* Auto layout UI. */
+    $(window).on('resize', updatePageLayout);
 
     if(!isInAppTab)
     {
