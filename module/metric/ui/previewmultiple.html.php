@@ -80,7 +80,7 @@ div
                     (
                         'text'  => $this->lang->metric->details,
                         'class' => 'ghost details',
-                        'url'         => helper::createLink('metric', 'details', "metricID=$current->id"),
+                        'url'         => helper::createLink('metric', 'details', "metricID={id}"),
                         'data-toggle' => 'modal'
                     ))) : null,
                     item(set(array
