@@ -95,8 +95,7 @@ dtable
         'items' => array(array
         (
             'text'     => $lang->unlink,
-            'class'    => 'btn secondary toolbar-item batch-btn size-sm ajax-submit',
-            'onClick'  => jsRaw('onClickBatchUnlink'),
+            'class'    => 'btn primary batch-unlink',
             'data-url' => createLink('program', 'batchUnlinkStakeholders', "programID={$programID}")
         ))
     ))
