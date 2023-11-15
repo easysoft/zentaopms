@@ -238,22 +238,23 @@ class api extends control
             $objectDropdown = $this->generateLibsDropMenu($libs[$libID], $release);
             $libTree = $this->doc->getLibTree($libID, $libs, 'api', $moduleID);
         }
-        $this->view->title          = $this->lang->api->pageTitle;
-        $this->view->libs           = $libs;
-        $this->view->isRelease      = $release > 0;
-        $this->view->release        = $release;
-        $this->view->version        = $version;
-        $this->view->libID          = $libID;
-        $this->view->apiID          = $apiID;
-        $this->view->moduleID       = $moduleID;
-        $this->view->objectType     = $type;
-        $this->view->type           = $type;
-        $this->view->objectID       = $objectID;
-        $this->view->users          = $this->user->getPairs('noclosed,noletter');
-        $this->view->libTree        = $libTree;
-        $this->view->objectDropdown = $objectDropdown;
-        $this->view->spaceType      = $spaceType;
-        $this->view->linkParams     = $linkParams;
+        $this->view->title             = $this->lang->api->pageTitle;
+        $this->view->libs              = $libs;
+        $this->view->isRelease         = $release > 0;
+        $this->view->release           = $release;
+        $this->view->version           = $version;
+        $this->view->libID             = $libID;
+        $this->view->apiID             = $apiID;
+        $this->view->moduleID          = $moduleID;
+        $this->view->objectType        = $type;
+        $this->view->type              = $type;
+        $this->view->objectID          = $objectID;
+        $this->view->users             = $this->user->getPairs('noclosed,noletter');
+        $this->view->libTree           = $libTree;
+        $this->view->objectDropdown    = $objectDropdown;
+        $this->view->spaceType         = $spaceType;
+        $this->view->linkParams        = $linkParams;
+        $this->view->defaultNestedShow = $this->getDefacultNestedShow($libID, $moduleID);
 
         $this->display();
     }

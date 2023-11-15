@@ -288,7 +288,10 @@ div
         (
             set::id('history'),
             setClass('hidden'),
-            history()
+            history
+            (
+                set::objectID($api->id)
+            )
         )
     )
 );
