@@ -2446,7 +2446,8 @@ EOF;
          * The following pages can be allowed to open in non-iframe, so ignore these pages.
          */
         $module    = $this->app->getModuleName();
-        $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|report-annualdata|misc-captcha|execution-printkanban|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|';
+        $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|report-annualdata|misc-captcha|execution-printkanban|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|screen-view|zanode-create|';
+        
         if(strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false) return true;
 
         /**
@@ -2484,6 +2485,7 @@ EOF;
         if($module == 'product' and $method == 'browse' and !empty($app->params['storyType']) and $app->params['storyType'] == 'requirement') $method = 'requirement';
         if($module == 'product' and $method == 'browse' and !empty($params['storyType']) and $params['storyType'] == 'requirement') $method = 'requirement';
         if($module == 'story' and $method == 'linkrequirements') $module = 'requirement';
+        if($app->config->vision != 'lite' and $module == 'feedback' and $method == 'view') $method = 'adminview';
 
         /* If the user is doing a tutorial, have all tutorial privileges. */
         if(commonModel::isTutorialMode())
@@ -2795,7 +2797,10 @@ EOF;
             $itemsPinYin     = explode(trim($sign), $convertedPinYin);
             foreach($notConvertedItems as $item)
             {
-                $itemPinYin  = array_shift($itemsPinYin);
+                $key        = key($itemsPinYin);
+                $itemPinYin = $itemsPinYin[$key];
+                unset($itemsPinYin[$key]);
+
                 $wordsPinYin = explode("\t", trim($itemPinYin));
 
                 $abbr = '';
@@ -3908,6 +3913,23 @@ EOT;
 
         return $duration;
     }
+
+    /**
+     * Check object priv.
+     *
+     * @param  string   $objectType program|project|product|execution
+     * @param  int      $objectID
+     * @access public
+     * @return bool
+     */
+    public function checkPrivByObject(string $objectType, int $objectID): bool
+    {
+        $objectType = strtolower($objectType);
+        if(in_array($objectType, array('program', 'project', 'product', 'execution'))) return $this->loadModel($objectType)->checkPriv($objectID);
+
+        return false;
+    }
+
 }
 
 class common extends commonModel
