@@ -358,7 +358,7 @@ class screenModel extends model
      */
     public function getAxisRotateOption($chart, $component)
     {
-        $settings = json_decode($chart->settings, true);
+        $settings = json_decode($chart->settings);
         $setting  = $settings[0];
 
         $component->chartConfig->xAxis = new stdclass();
