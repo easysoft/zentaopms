@@ -11,16 +11,16 @@ class popovers extends wg
         'flip?: bool=true',            // 是否启用 flip
         'shift?: array|bool',          // 是否启用 shift
         'arrow?: bool=false',          // 是否启用箭头
-        'offset?: int=1',              // 偏移量
+        'offset?: int=1'               // 偏移量
     );
 
     protected static array $defaultProps = array(
-        'shift' => array('padding' => 5),
+        'shift' => array('padding' => 5)
     );
 
     protected static array $defineBlocks = array(
         'trigger' => array(),
-        'target' => array(),
+        'target' => array()
     );
 
     protected function build(): array
@@ -38,7 +38,7 @@ class popovers extends wg
         return array(
             $trigger,
             $target,
-            zui::popovers(set($props)),
+            zui::popovers(set($props))
         );
     }
 }
