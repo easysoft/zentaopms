@@ -90,7 +90,7 @@ function computeWorkDays()
     if(end == LONG_TIME)
     {
         $('#delta999').prop('checked', true);
-        $('#days').val(0).tigger('change');
+        $('#days').val(0).trigger('change');
     }
     else
     {
