@@ -119,7 +119,9 @@ function computeEndDate()
     const beginDate = $('#begin').zui('datePicker').$.state.value;
     if(!beginDate) return;
 
-    const delta      = parseInt($('input[name=delta]:checked').val());
+    const delta = parseInt($('input[name=delta]:checked').val());
+    if(isNaN(delta)) return;
+
     const isLongTime = delta == 999;
     const endDate    = isLongTime ? LONG_TIME : formatDate(beginDate, delta - 1);
 
