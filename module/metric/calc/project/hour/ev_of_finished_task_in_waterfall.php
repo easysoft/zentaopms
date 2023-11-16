@@ -41,7 +41,7 @@ class ev_of_finished_task_in_waterfall extends baseCalc
             ->leftJoin("($ev)")->alias('t2')->on('t1.id=t2.project')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.type')->eq('project')
-            ->andWhere('t1.model')->eq('waterfall')
+            ->andWhere('t1.model')->in('waterfall,waterfallplus')
             ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
             ->query();
