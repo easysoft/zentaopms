@@ -159,7 +159,7 @@ formPanel
     on::change('[name^=products]', 'productChange'),
     on::change('[name^=branch]', 'branchChange'),
     on::change('[name=multiple]', 'toggleMultiple'),
-    on::change('[name=delta]', 'setDate'),
+    on::change('#begin, [name=delta]', 'setDate'),
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=newProduct]', 'addProduct'),
     formRow
