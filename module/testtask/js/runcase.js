@@ -103,7 +103,7 @@ $(document).ready(function()
         }
     });
 
-    window.parent.triggerHidden();
+    if(typeof window.parent.triggerHidden == 'function') window.parent.triggerHidden();
 
     $(document).on('click', ".step-group input[type='checkbox']", function()
     {
