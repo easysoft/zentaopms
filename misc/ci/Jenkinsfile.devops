@@ -63,28 +63,28 @@ pipeline {
 
             dir('xuansrc') {
               checkout scmGit(branches: [[name: "${env.XUANVERSION}"]],
-                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/xuanxuan.git']]
+                userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/xuanxuan.git']]
               )
             }
 
             dir('zdoo') {
               checkout scmGit(branches: [[name: "${env.ZDOO_VERSION}"]],
                 extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/zdoo.git']]
+                userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/zdoo.git']]
               )
             }
 
             dir('zdooext') {
               checkout scmGit(branches: [[name: "${env.ZDOOEXT_VERSION}"]],
                 extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/zdooext.git']]
+                userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: 'https://git.zcorp.cc/easycorp/zdooext.git']]
               )
             }
 
             dir('zentaoext') {
               checkout scmGit(branches: [[name: "${env.ZENTAOEXT_VERSION}"]],
                 extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: "${env.ZENTAOEXT_GIT_REPO}"]]
+                userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "${env.ZENTAOEXT_GIT_REPO}"]]
               )
             }
           
@@ -134,7 +134,7 @@ pipeline {
                   sh 'git config --global --add safe.directory $(pwd)'
                   sh '/usr/local/bin/xuanimbot --title "`echo -n 5byA5aeL5p6E5bu656aF6YGT | base64 --decode`" --url "${BUILD_URL}" --content "Build by Tag ${TAG_NAME}" --debug --custom'
                 }
-                withCredentials([gitUsernamePassword(credentialsId: 'git-zcorp-cc-jenkins-bot-http',gitToolName: 'git-tool')]) {
+                withCredentials([gitUsernamePassword(credentialsId: 'git-jenkins-bot-http',gitToolName: 'git-tool')]) {
                   container('package') {
                     sh 'mkdir ${ZENTAO_RELEASE_PATH} && chown 1000:1000 ${ZENTAO_RELEASE_PATH}'
                     sh 'git config --global pull.ff only'
@@ -368,7 +368,7 @@ pipeline {
           steps {
             checkout scmGit(branches: [[name: "master"]],
               extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-              userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/devops/zentao-package.git']]
+              userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: 'https://git.zcorp.cc/devops/zentao-package.git']]
             )
             container('xuanimbot') {
               sh 'env | grep GIT'
@@ -403,7 +403,7 @@ pipeline {
                 sh 'env'
                 checkout scmGit(branches: [[name: "master"]],
                   extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
-                  userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: 'https://git.zcorp.cc/app/zentao.git']]
+                  userRemoteConfigs: [[credentialsId: 'git-jenkins-bot-http', url: "https://${env.GIT_HOST}/app/zentao.git"]]
                 )
                 container('docker') {
                   sh "sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories"
