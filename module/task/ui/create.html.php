@@ -221,11 +221,11 @@ formPanel
     $from == 'task' ? set::customFields(true) : null,
     modal
     (
-        set::id('modalTeam'),
+        setID('modalTeam'),
         set::title($lang->task->teamMember),
         h::table
         (
-            set::id('teamTable'),
+            setID('teamTable'),
             h::tr
             (
                 h::td

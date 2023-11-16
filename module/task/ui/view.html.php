@@ -149,7 +149,7 @@ foreach($linkMRTitles as $MRID => $linkMRTitle)
     (
         set::href(createLink('mr', 'view', "MRID=$MRID")),
         "#$MRID $linkMRTitle",
-        set('data-ap', $app->tab)
+        setData(array('ap' => $app->tab))
     ) : div("#$MRID $linkMRTitle");
 }
 
@@ -162,7 +162,7 @@ foreach($linkCommits as $commit)
     (
         set::href(createLink('repo', 'revision', "repoID={$commit->repo}&objectID={$task->execution}&revision={$commit->revision}")),
         "#$MRID $linkMRTitle",
-        set('data-ap', $app->tab)
+        setData(array('ap' => $app->tab))
     ) : div($revision . ' ' . $commit->comment);
 }
 
@@ -273,8 +273,13 @@ detailBody
                         set::name($lang->task->story),
                         a
                         (
-                            set('data-toggle', 'modal'),
-                            set('data-size', 'lg'),
+                            setData(
+                                array
+                                (
+                                    'toggle' => 'modal',
+                                    'size'   => 'lg'
+                                )
+                            ),
                             set::href(createLink('story', 'view', "id={$task->story}")),
                             set::title($task->storyTitle),
                             $task->storyTitle
@@ -285,8 +290,14 @@ detailBody
                         set::name($lang->task->fromBug),
                         !empty($fromBug) ? a
                         (
-                            set('data-toggle', 'modal'),
-                            set('data-size', 'lg'),
+                            setData
+                            (
+                                array
+                                (
+                                    'toggle' => 'modal',
+                                    'size'   => 'lg'
+                                )
+                            ),
                             set::href(createLink('bug', 'view', "id={$task->fromBug}")),
                             set::title($fromBug->title),
                             $fromBug->title
@@ -364,7 +375,7 @@ detailBody
                 h::table
                 (
                     setClass('table table-data'),
-                    set::id('team'),
+                    setID('team'),
                     h::thead
                     (
                         h::tr

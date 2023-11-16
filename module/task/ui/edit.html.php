@@ -181,8 +181,8 @@ detailBody
                     (
                         setClass('flex'),
                         checkbox(
-                            set::rootClass('items-center ml-3'),
                             setID('showAllModule'),
+                            set::rootClass('items-center ml-3'),
                             set::name('showAllModule'),
                             set::text($lang->all),
                             set::value(1),
@@ -309,31 +309,31 @@ detailBody
                     ),
                     span
                     (
-                        set('id', 'contactBox'),
-                        set('class', 'input-group-addon'),
+                        setID('contactBox'),
+                        setClass('input-group-addon'),
                         $contactListMenuOptions ? setStyle(array('width' => '100px', 'padding' => '0')) : null,
                         $contactListMenuOptions ? picker
                         (
-                            set::className('width', 'w-20'),
+                            setClass('w-20'),
                             set::name('contactListMenuOptionsMenu'),
                             set::items($contactListMenuOptions),
                             set::placeholder($lang->contact->common)
                         ) :
                         span
                         (
-                            set('class', 'input-group-addon'),
+                            setClass('input-group-addon'),
                             a
                             (
-                                set('class', 'mr-2'),
                                 set('href', createLink('my', 'managecontacts', 'listID=0&mode=new')),
                                 set('title', $lang->user->contacts->manage),
-                                set('data-toggle', 'modal'),
+                                setClass('mr-2'),
+                                setData(array('toggle' => 'modal')),
                                 icon('cog'),
                             ),
                             a
                             (
-                                set('id', 'refreshMailto'),
-                                set('class', 'text-black'),
+                                setID('refreshMailto'),
+                                setClass('text-black'),
                                 set('href', 'javascript:void(0)'),
                                 icon('refresh')
                             )
@@ -346,7 +346,7 @@ detailBody
         (
             modal
             (
-                set::id('modalTeam'),
+                setID('modalTeam'),
                 set::title($lang->task->teamMember),
                 h::table
                 (
@@ -415,7 +415,7 @@ detailBody
                     span
                     (
                         setClass('span-text'),
-                        set::id('consumedSpan'),
+                        setID('consumedSpan'),
                         $task->consumed . $lang->task->suffixHour
                     ),
                     btn

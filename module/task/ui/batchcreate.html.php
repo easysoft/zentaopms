@@ -39,13 +39,18 @@ if(!$hideStory)
         set::control('hidden'),
         btn
         (
-            set('type', 'btn'),
-            set('icon', 'eye'),
-            set('class', 'ghost'),
-            set('hint', $lang->preview),
-            set('data-url', '#'),
-            set('data-toggle', 'modal'),
-            set('disabled', true)
+            set(
+                array
+                (
+                    'type' => 'btn',
+                    'icon' => 'eye',
+                    'class' => 'ghost',
+                    'hint' => $lang->preview,
+                    'data-url' => '#',
+                    'data-toggle' => 'modal',
+                    'disabled' => true
+                )
+            )
         )
     );
 
@@ -57,10 +62,15 @@ if(!$hideStory)
         set::control('hidden'),
         btn
         (
-            set('type', 'btn'),
-            set('icon', 'arrow-right'),
-            set('class', 'ghost'),
-            set('hint', $lang->task->copyStoryTitle)
+            set(
+                array
+                (
+                    'type' => 'btn',
+                    'icon' => 'copy',
+                    'class' => 'ghost',
+                    'hint' => $lang->task->copyStoryTitle
+                )
+            )
         )
     );
 
@@ -222,7 +232,7 @@ formBatchPanel
     (
         checkbox
         (
-            set::id('zeroTaskStory'),
+            setID('zeroTaskStory'),
             set::text($lang->story->zeroTask),
             on::change('toggleZeroTaskStory')
         )
