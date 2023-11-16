@@ -50,7 +50,6 @@ window.renderCell = function(result, info)
     if(info.col.name == 'title' && result)
     {
         const story = info.row.data;
-        if(story.color) result[0].props.style = 'color: ' + story.color;
         let html = '';
         if(showBranch) html += "<span class='label gray-pale rounded-xl clip'>" + story.branch + "</span> ";
         if(typeof modulePairs[story.rawModule] != 'undefined') html += "<span class='label gray-pale rounded-xl clip'>" + modulePairs[story.rawModule] + "</span> ";
