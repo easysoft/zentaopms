@@ -33,6 +33,9 @@ class count_of_daily_review_story_in_user extends baseCalc
 
         if(empty($reviewedDate) || empty($reviewedBy)) return false;
 
+        /* input ,admin output admin */
+        $reviewedBy = current(array_filter(explode(',', $reviewedBy)));
+
         $year = substr($reviewedDate, 0, 4);
         if($year == '0000') return false;
 
