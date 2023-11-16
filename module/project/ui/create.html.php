@@ -302,16 +302,16 @@ formPanel
             (
                 datepicker
                 (
+                    setID('begin'),
                     set::name('begin'),
-                    set('id', 'begin'),
                     set::value(date('Y-m-d')),
                     set::required(true)
                 ),
                 $lang->project->to,
                 datepicker
                 (
+                    setID('end'),
                     set::name('end'),
-                    set('id', 'end'),
                     set::placeholder($lang->project->end),
                     set::required(true),
                     $copyProjectID ? setClass('has-warning') : null
