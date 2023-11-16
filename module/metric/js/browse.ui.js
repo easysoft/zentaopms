@@ -61,3 +61,20 @@ window.confirmEdit = function(metricID, isOldMetric)
         $(triggerClass).trigger('click');
     }
 }
+
+window.getCurrentModal = function()
+{
+    target = zui.Modal.query().id;
+    target = `#${target}`;
+
+    return zui.Modal.query(target);
+}
+
+window.loadImplement = function(link)
+{
+    const modal = window.getCurrentModal();
+    if(!modal) return;
+
+    $("#" + modal.id).attr('load-url', link);
+    modal.render({url: link});
+}
