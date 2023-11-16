@@ -34,7 +34,7 @@ detailBody
             set::content($lib->desc),
             set::useHtml(true)
         ),
-        history()
+        history(set::objectID($lib->id))
     ),
     floatToolbar
     (
