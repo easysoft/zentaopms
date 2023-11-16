@@ -194,7 +194,7 @@ class zanodemodel extends model
 
         $result = json_decode(commonModel::http($agnetUrl . static::KVM_EXPORT_PATH, json_encode($param,JSON_NUMERIC_CHECK), null, array("Authorization:$node->tokenSN"), 'data', 'POST', 10));
 
-        
+
         if(!empty($result) and $result->code == 'success')
         {
             $this->dao->update(TABLE_ZAHOST)->set('status')->eq(static::STATUS_CREATING_IMG)->where('id')->eq($node->id)->exec();
@@ -598,11 +598,7 @@ class zanodemodel extends model
                 if($this->session->zanodeQuery == false) $this->session->set('zanodeQuery', ' 1 = 1');
             }
             $query = $this->session->zanodeQuery;
-            $query = str_replace('`id`', 't1.`id`', $query);
-            $query = str_replace('`name`', 't1.`name`', $query);
-            $query = str_replace('`status`', 't1.`status`', $query);
-            $query = str_replace('`os`', 't1.`os`', $query);
-            $query = str_replace('`parent`', 't1.`parent`', $query);
+            $query = preg_replace('/`(id|name|status|os|parent|cpuCores|memory|diskSize|extranet)`/', 't1.`\1`', $query);
             $query = str_replace('`hostID`', 't2.`id`', $query);
         }
 
