@@ -222,7 +222,7 @@ $config->my->task->dtable->fieldList['name']['name']         = 'name';
 $config->my->task->dtable->fieldList['name']['title']        = $lang->task->name;
 $config->my->task->dtable->fieldList['name']['type']         = 'title';
 $config->my->task->dtable->fieldList['name']['nestedToggle'] = true;
-$config->my->task->dtable->fieldList['name']['link']         = array('url' => array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}'), 'data-app' => 'project');
+$config->my->task->dtable->fieldList['name']['link']         = array('url' => array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}'), 'data-app' => 'execution');
 $config->my->task->dtable->fieldList['name']['fixed']        = 'left';
 $config->my->task->dtable->fieldList['name']['sortType']     = true;
 
