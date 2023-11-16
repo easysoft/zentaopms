@@ -21,11 +21,7 @@ class productModel extends model
      */
     public function checkPriv(int $productID): bool
     {
-        if(empty($productID)) return false;
-
-        /* Is admin? */
-        if($this->app->user->admin) return true;
-        return (strpos(",{$this->app->user->view->products},", ",{$productID},") !== false);
+        return !empty($productID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->products},", ",{$productID},") !== false));
     }
 
     /**
@@ -731,6 +727,9 @@ class productModel extends model
         $product = ($this->app->tab == 'project' && empty($productID)) ? $products : array();
         if(empty($product) && isset($products[$productID])) $product = array($productID => $products[$productID]);
         $searchConfig['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
+
+        /* Get product stage data. */
+        $this->config->product->search['params']['stage']['values'] = array('' => '') + $this->lang->story->stageList;
 
         /* Get module data. */
         $projectID = ($this->app->tab == 'project' && empty($projectID)) ? $this->session->project : $projectID;
@@ -1592,12 +1591,16 @@ class productModel extends model
      * @param  int        $limit
      * @param  int        $line
      * @param  string|int $shadow    all | 0 | 1
+     * @param  string     $fields    * or fieldList, such as id,name,program
      * @access protected
      * @return array
      */
-    protected function getList(int $programID = 0, string $status = 'all', int $limit = 0, int $line = 0, string|int $shadow = 0): array
+    protected function getList(int $programID = 0, string $status = 'all', int $limit = 0, int $line = 0, string|int $shadow = 0, string $fields = '*'): array
     {
-        return $this->dao->select('DISTINCT t1.*,t2.order')->from(TABLE_PRODUCT)->alias('t1')
+        $fields = explode(',', $fields);
+        $fields = trim(implode(',t1.', $fields), ',');
+
+        return $this->dao->select("DISTINCT t1.$fields,t2.order")->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t3.product = t1.id')
             ->leftJoin(TABLE_TEAM)->alias('t4')->on("t4.root = t3.project and t4.type='project'")
@@ -1605,9 +1608,9 @@ class productModel extends model
             ->beginIF($shadow !== 'all')->andWhere('t1.shadow')->eq((int)$shadow)->fi()
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF($line > 0)->andWhere('t1.line')->eq($line)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->beginIF(strpos($status, 'feedback') === false && !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
-            ->beginIF($status == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF(!in_array($status, array('all', 'noclosed', 'involved', 'review'), true))->andWhere('t1.status')->in($status)->fi()
             ->beginIF($status == 'involved')
             ->andWhere('t1.PO', true)->eq($this->app->user->account)

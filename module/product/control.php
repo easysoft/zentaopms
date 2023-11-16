@@ -585,6 +585,8 @@ class product extends control
             $products = $this->product->getList($programID, $browseType);
         }
 
+        $this->product->refreshStats(); // Refresh stats fields of products.
+
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $productStatList = $this->product->getStats(array_keys($products), $orderBy, $pager, 'story', $programID);
