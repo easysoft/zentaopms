@@ -15929,7 +15929,6 @@ CREATE TABLE IF NOT EXISTS `zt_metric` (
   `order` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_metriclib`;
