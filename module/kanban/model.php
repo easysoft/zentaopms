@@ -1962,6 +1962,7 @@ class kanbanModel extends model
                     $cardData = $this->buildExecutionCard($object, $column, $browseType, $searchValue, $menus);
                     if(empty($cardData)) continue;
 
+                    $cardData['cardType'] = $browseType;
                     if($groupBy == 'assignedTo' && $object->$groupBy !== $laneID) $cardData['assignedTo'] = $laneID;
                     if($cardData['assignedTo'])
                     {
