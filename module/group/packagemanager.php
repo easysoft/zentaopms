@@ -3214,7 +3214,7 @@ $config->group->package->track = new stdclass();
 $config->group->package->track->order  = 5;
 $config->group->package->track->subset = 'projecttrack';
 $config->group->package->track->privs  = array();
-$config->group->package->track->privs['projectstory-track'] = array('edition' => 'max', 'vision' => 'rnd', 'order' => 10, 'depend' => array('project-index'), 'recommend' => array('design-revision', 'projectstory-story', 'projectstory-view'));
+$config->group->package->track->privs['projectstory-track'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('project-index'), 'recommend' => array('design-revision', 'projectstory-story', 'projectstory-view'));
 
 $config->group->package->workflowRelation = new stdclass();
 $config->group->package->workflowRelation->order  = 65;
