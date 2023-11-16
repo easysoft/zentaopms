@@ -14,8 +14,9 @@ $config->doc->edit->requiredFields      = 'title';
 
 $config->doc->customObjectLibs  = 'files,customFiles';
 $config->doc->notArticleType    = '';
-$config->doc->officeTypes       = 'word,ppt,excel';
+$config->doc->officeTypes       = 'word,ppt,excel,attachment';
 $config->doc->textTypes         = 'html,markdown,text';
+$config->doc->docTypes          = 'text,word,ppt,excel,url,article,attachment';
 $config->doc->saveDraftInterval = '60';
 
 $config->doc->custom = new stdclass();

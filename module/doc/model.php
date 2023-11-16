@@ -665,7 +665,7 @@ class docModel extends model
                 ->leftJoin(TABLE_DOCLIB)->alias('t3')->on("t1.lib=t3.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne('')
-                ->andWhere('t1.type')->in('text,word,ppt,excel,url,article,attachment')
+                ->andWhere('t1.type')->in($this->config->doc->docTypes)
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t2.action')->eq($type)
                 ->andWhere('t2.actor')->eq($this->app->user->account)
@@ -699,7 +699,7 @@ class docModel extends model
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne('')
                 ->andWhere('t1.vision')->eq($this->config->vision)
-                ->andWhere('t1.type')->in('text,word,ppt,excel,url,article,attachment')
+                ->andWhere('t1.type')->in($this->config->doc->docTypes)
                 ->beginIF($type == 'createdby')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($type == 'editedby')->andWhere('t1.id')->in($docIdList)->fi()
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
@@ -2295,7 +2295,7 @@ class docModel extends model
         $statistic = new stdclass();
         $statistic->totalDocs = $this->dao->select('count(*) as count')->from(TABLE_DOC)
             ->where('deleted')->eq('0')
-            ->andWhere('type')->in('text,word,ppt,excel,url,article')
+            ->andWhere('type')->in($this->config->doc->docTypes)
             ->andWhere('vision')->eq($this->config->vision)
             ->fetch('count');
         $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT objectID) as count')->from(TABLE_ACTIONRECENT)->alias('t1')
@@ -2306,13 +2306,13 @@ class docModel extends model
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('LEFT(t1.date, 10)')->eq($today)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.type')->in('text,word,ppt,excel,url,article')
+            ->andWhere('t2.type')->in($this->config->doc->docTypes)
             ->fetch('count');
         $statistic->myEditedDocs = $this->dao->select('count(*) as count')->from(TABLE_DOC)
             ->where("CONCAT(',', editedList, ',')")->like("%,{$this->app->user->account},%")
             ->andWhere('lib')->ne('')
             ->andWhere('deleted')->eq(0)
-            ->andWhere('type')->in('text,word,ppt,excel,url,article')
+            ->andWhere('type')->in($this->config->doc->docTypes)
             ->fetch('count');
 
         $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)
