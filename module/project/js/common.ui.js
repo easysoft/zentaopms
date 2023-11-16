@@ -62,8 +62,8 @@ function setDate()
 }
 
 /**
- * 计算两个时间的天数。
- * Compute delta of two days.
+ * 计算两个日期之间可用的工作日。
+ * Compute work days between two dates.
  *
  * @param  string date1
  * @param  string date2
@@ -72,21 +72,20 @@ function setDate()
  */
 function computeDaysDelta(date1, date2)
 {
-    date1 = convertStringToDate(date1);
-    date2 = convertStringToDate(date2);
-    delta = (date2 - date1) / DAY_MILLISECONDS + 1;
+    date1 = new Date(date1);
+    date2 = new Date(date2);
+    const time = date2 - date1;
+    const days = parseInt(time / DAY_MILLISECONDS) + 1;
+    if(isNaN(days)) return;
 
-    if(isNaN(delta)) return;
-
-    weekEnds = 0;
-    for(i = 0; i < delta; i++)
+    let weekendDays = 0;
+    for(i = 0; i < days; i++)
     {
-        if((weekend == 2 && date1.getDay() == 6) || date1.getDay() == 0) weekEnds ++;
-        date1 = date1.valueOf();
-        date1 += DAY_MILLISECONDS;
+        if((weekend == 2 && date1.getDay() == 6) || date1.getDay() == 0) weekendDays ++;
+        date1 = date1.valueOf() + DAY_MILLISECONDS;
         date1 = new Date(date1);
     }
-    return delta - weekEnds;
+    return days - weekendDays;
 }
 
 /**
