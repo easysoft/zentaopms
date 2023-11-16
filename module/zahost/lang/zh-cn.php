@@ -105,7 +105,7 @@ $lang->zahost->image->cancelDownloadSuccess = '取消下载镜像任务成功';
 $lang->zahost->empty         = '暂时没有宿主机';
 
 $lang->zahost->statusList['wait']    = '待初始化';
-$lang->zahost->statusList['ready']   = '在线';
+$lang->zahost->statusList['ready']   = '就绪';
 $lang->zahost->statusList['online']  = '在线';
 $lang->zahost->statusList['offline'] = '离线';
 $lang->zahost->statusList['busy']    = '繁忙';
