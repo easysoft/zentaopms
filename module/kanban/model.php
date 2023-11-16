@@ -1012,8 +1012,8 @@ class kanbanModel extends model
         if($groupBy != 'default' and $groupBy != '')
         {
             $regionData = array();
-            $heading        = new stdclass();
-            $heading->title = $execution->name;
+            $heading          = new stdclass();
+            $heading->title   = $execution->name;
             $heading->actions = $this->getRDRegionActions($executionID, $regionID);
 
             $regionData['key']               = "region{$executionID}";

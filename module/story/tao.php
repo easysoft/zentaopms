@@ -985,7 +985,7 @@ class storyTao extends storyModel
             $columnID = $this->loadModel('kanban')->getColumnIDByLaneID($laneID, 'backlog');
             if(empty($columnID)) $columnID = zget($extra, 'columnID', 0);
 
-            if(!empty($laneID) && !empty($columnID)) $this->kanban->addKanbanCell($executionID, (int)$laneID, (int)$columnID, 'story', $storyID);
+            if(!empty($laneID) && !empty($columnID)) $this->kanban->addKanbanCell($executionID, (int)$laneID, (int)$columnID, 'story', (string)$storyID);
             if(empty($laneID)  || empty($columnID))  $this->kanban->updateLane($executionID, 'story');
         }
 

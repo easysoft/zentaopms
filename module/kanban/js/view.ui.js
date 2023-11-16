@@ -454,6 +454,7 @@ window.fullScreen = function()
         let afterEnterFullscreen = function()
         {
             $('#kanbanList').addClass('fullscreen').css('background', '#fff');
+            $('#kanbanList .kanban-list').css('height', '100%');
             window.hideAllAction();
             $.cookie.set('isFullScreen', 1);
         };
@@ -491,6 +492,7 @@ window.fullScreen = function()
 function exitFullScreen()
 {
     $('.btn').show();
+    $('#kanbanList .kanban-list').css('height', 'calc(100vh - 120px)');
     $.cookie.set('isFullScreen', 0);
 }
 
