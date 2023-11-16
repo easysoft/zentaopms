@@ -187,6 +187,7 @@ $filter->kanban->space            = new stdclass();
 $filter->execution->kanban        = new stdclass();
 $filter->execution->all           = new stdclass();
 $filter->group->editmanagepriv    = new stdclass();
+$filter->caselib->default         = new stdclass();
 
 $filter->index->index->get['open'] = 'reg::base64';
 
@@ -220,6 +221,7 @@ $filter->bug->create->cookie['sonarqubeIssue'] = 'reg::any';
 $filter->bug->export->cookie['checkedItem']    = 'reg::checked';
 
 $filter->caselib->create->cookie['lastLibCaseModule'] = 'int';
+$filter->caselib->default->cookie['preBranch']        = 'reg::word';
 
 $filter->doc->create->cookie['lastDocModule']               = 'int';
 $filter->doc->browse->cookie['browseType']                  = 'reg::browseType';
@@ -352,6 +354,7 @@ $filter->testreport->default->cookie['lastProduct']  = 'int';
 $filter->testreport->default->cookie['lastProject']  = 'int';
 $filter->testreport->default->cookie['preProductID'] = 'int';
 $filter->testreport->default->cookie['projectMode']  = 'code';
+$filter->testreport->default->cookie['preBranch']    = 'reg::word';
 
 $filter->testsuite->default->cookie['lastCaseLib']   = 'int';
 $filter->testsuite->default->cookie['lastProduct']   = 'int';
