@@ -26,7 +26,7 @@ class history extends wg
 
     protected function onCheckErrors(): array | null
     {
-        if(empty($this->prop('objectID'))) return array('The property "objectID" is undefined.');
+        if(empty($this->prop('objectID'))) return array('The property "objectID" of widget "history" is undefined.');
         return null;
     }
 
