@@ -479,10 +479,11 @@ EOF;
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        if(strpos($orderBy, 'estimateLabel') !== false || strpos($orderBy, 'consumedLabel') !== false || strpos($orderBy, 'leftLabel') !== false) $orderBy = str_replace('Label', '', $orderBy);
+        $realOrder = $orderBy;
+        if(strpos($orderBy, 'estimateLabel') !== false || strpos($orderBy, 'consumedLabel') !== false || strpos($orderBy, 'leftLabel') !== false) $realOrder = str_replace('Label', '', $realOrder);
 
         /* append id for second sort. */
-        $sort = common::appendOrder($orderBy);
+        $sort = common::appendOrder($realOrder);
 
         /* Get tasks. */
         if($type == 'assignedBy')
