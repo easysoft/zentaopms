@@ -44,9 +44,12 @@ $lang->admin->menuList->convert['desc']  = $lang->admin->menuSetting['convert'][
 $lang->admin->menuList->convert['link']  = 'convert|convertjira';
 $lang->admin->menuList->convert['order'] = 50;
 
-$lang->admin->menuList->platform['name']  = $lang->admin->menuSetting['platform']['name'];
-$lang->admin->menuList->platform['desc']  = $lang->admin->menuSetting['platform']['desc'];
-$lang->admin->menuList->platform['order'] = 55;
+if(helper::hasFeature('devops'))
+{
+    $lang->admin->menuList->platform['name']  = $lang->admin->menuSetting['platform']['name'];
+    $lang->admin->menuList->platform['desc']  = $lang->admin->menuSetting['platform']['desc'];
+    $lang->admin->menuList->platform['order'] = 55;
+}
 
 $lang->admin->menuList->system['subMenu']['mode']        = array('link' => "{$lang->custom->mode}|custom|mode|");
 $lang->admin->menuList->system['subMenu']['trash']       = array('link' => "{$lang->action->trash}|action|trash|");
@@ -181,32 +184,35 @@ $lang->admin->menuList->dev['menuOrder']['15'] = 'langItem';
 $lang->admin->menuList->dev['menuOrder']['20'] = 'editor';
 $lang->admin->menuList->dev['menuOrder']['25'] = 'entry';
 
-//$lang->admin->menuList->platform['subMenu']['environment'] = array('link' => "{$lang->devops->environment}|gitlab|browse|", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'create,edit,import');
-$lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|host|browse|", 'subModule' => 'host,account,serverroom,ops,tree');
-$lang->admin->menuList->platform['subMenu']['setrules']    = array('link' => "{$lang->devops->rules}|repo|setrules|");
+if(helper::hasFeature('devops'))
+{
+    //$lang->admin->menuList->platform['subMenu']['environment'] = array('link' => "{$lang->devops->environment}|gitlab|browse|", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'create,edit,import');
+    $lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|host|browse|", 'subModule' => 'host,account,serverroom,ops,tree');
+    $lang->admin->menuList->platform['subMenu']['setrules']    = array('link' => "{$lang->devops->rules}|repo|setrules|");
 
-$lang->admin->menuList->platform['tabMenu']['resource']['host']       = array('link' => "{$lang->devops->host}|host|browse|", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree');
-$lang->admin->menuList->platform['tabMenu']['resource']['serverroom'] = array('link' => "{$lang->devops->serverroom}|serverroom|browse|", 'alias' => 'create,edit,view');
-$lang->admin->menuList->platform['tabMenu']['resource']['account']    = array('link' => "{$lang->devops->account}|account|browse|", 'alias' => 'create,edit,view');
-$lang->admin->menuList->platform['tabMenu']['resource']['provider']   = array('link' => "{$lang->devops->provider}|ops|provider|", 'alias' => 'provider');
-$lang->admin->menuList->platform['tabMenu']['resource']['city']       = array('link' => "{$lang->devops->city}|ops|city|", 'alias' => 'city');
-$lang->admin->menuList->platform['tabMenu']['resource']['cpuBrand']   = array('link' => "{$lang->devops->cpuBrand}|ops|cpuBrand|", 'alias' => 'cpubrand');
-$lang->admin->menuList->platform['tabMenu']['resource']['os']         = array('link' => "{$lang->devops->os}|ops|os|", 'alias' => 'os');
+    $lang->admin->menuList->platform['tabMenu']['resource']['host']       = array('link' => "{$lang->devops->host}|host|browse|", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree');
+    $lang->admin->menuList->platform['tabMenu']['resource']['serverroom'] = array('link' => "{$lang->devops->serverroom}|serverroom|browse|", 'alias' => 'create,edit,view');
+    $lang->admin->menuList->platform['tabMenu']['resource']['account']    = array('link' => "{$lang->devops->account}|account|browse|", 'alias' => 'create,edit,view');
+    $lang->admin->menuList->platform['tabMenu']['resource']['provider']   = array('link' => "{$lang->devops->provider}|ops|provider|", 'alias' => 'provider');
+    $lang->admin->menuList->platform['tabMenu']['resource']['city']       = array('link' => "{$lang->devops->city}|ops|city|", 'alias' => 'city');
+    $lang->admin->menuList->platform['tabMenu']['resource']['cpuBrand']   = array('link' => "{$lang->devops->cpuBrand}|ops|cpuBrand|", 'alias' => 'cpubrand');
+    $lang->admin->menuList->platform['tabMenu']['resource']['os']         = array('link' => "{$lang->devops->os}|ops|os|", 'alias' => 'os');
 
-$lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['5']  = 'host';
-$lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['10'] = 'serverroom';
-$lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['15'] = 'account';
-$lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['20'] = 'provider';
-$lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['25'] = 'city';
-$lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['30'] = 'cpuBrand';
-$lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['35'] = 'os';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['5']  = 'host';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['10'] = 'serverroom';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['15'] = 'account';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['20'] = 'provider';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['25'] = 'city';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['30'] = 'cpuBrand';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['35'] = 'os';
 
-//$lang->admin->menuList->platform['menuOrder']['5']  = 'dashboard';
-//$lang->admin->menuList->platform['menuOrder']['15'] = 'environment';
-$lang->admin->menuList->platform['menuOrder']['20'] = 'resource';
-$lang->admin->menuList->platform['menuOrder']['25'] = 'setrules';
+    //$lang->admin->menuList->platform['menuOrder']['5']  = 'dashboard';
+    //$lang->admin->menuList->platform['menuOrder']['15'] = 'environment';
+    $lang->admin->menuList->platform['menuOrder']['20'] = 'resource';
+    $lang->admin->menuList->platform['menuOrder']['25'] = 'setrules';
 
-$lang->admin->menuList->platform['dividerMenu'] = ',plat,setrules,';
+    $lang->admin->menuList->platform['dividerMenu'] = ',plat,setrules,';
+}
 
 if($config->edition != 'max' and $config->edition != 'ipd')
 {
@@ -272,7 +278,7 @@ if($config->vision == 'lite')
     $lang->admin->menuList->feature['menuOrder']['15'] = 'project';
 }
 
-if($config->inQuickon)
+if($config->inQuickon && helper::hasFeature('devops'))
 {
     $lang->admin->menuList->platform['subMenu']['dashboard'] = array('link' => "{$lang->dashboard}|system|dashboard|");
     $lang->admin->menuList->platform['menuOrder']['5']       = 'dashboard';
