@@ -236,8 +236,7 @@ formPanel
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->project->multipleList),
         set::disabled($copyProjectID),
-        set::value('1'),
-        $copyProjectID ? formHidden('multiple', $copyProject->multiple) : null
+        set::value($copyProject ? $copyProject->multiple : 1)
     ) : null,
     formGroup
     (
