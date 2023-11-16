@@ -95,7 +95,7 @@ class search extends control
             if(preg_match("/^{$this->config->moduleVar}=\w+\&{$this->config->methodVar}=\w+/", $query) == 0) return;
         }
 
-        return print(json_encode(array('load' => $actionURL)));
+        return print(json_encode(array('result' => 'success', 'load' => $actionURL)));
     }
 
     /**
@@ -111,7 +111,7 @@ class search extends control
         if($_POST)
         {
             $queryID = $this->search->saveQuery();
-            if(!$queryID) return print(js::error(dao::getError()));
+            if(!$queryID) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $data     = fixer::input('post')->get();
             $shortcut = empty($data->onMenuBar) ? 0 : 1;
@@ -121,7 +121,7 @@ class search extends control
                 echo 'success';
                 return;
             }
-            return $this->send(array('closeModal' => true, 'callback' => '$(\'#searchFormPanel form button[type="submit"]\').trigger("click")'));
+            return $this->send(array('closeModal' => true, 'callback' => array('name' => 'zui.SearchForm.addQuery', 'params' => array(array('module' => $module, 'id' => $queryID, 'text' => $data->title)))));
         }
 
         $this->view->module    = $module;

@@ -1,55 +1,62 @@
 <?php
 namespace zin;
 
-form
+if(isInModal())
+{
+    set::size('sm');
+    set::title($lang->search->saveCondition);
+    set::bodyClass('pb-7');
+}
+
+formBase
 (
-    set::actions(array()),
+    set::actions(false),
     set::action($_SERVER['REQUEST_URI']),
-    set::method('post'),
-    inputGroup
+    row
     (
-        input
+        setClass('items-start gap-4 pt-1'),
+        formGroup
         (
-            set::id('title'),
-            set::name('title'),
-            set::type('text'),
-            set::placeholder($lang->search->setCondName)
-        ),
-        span
-        (
-            setClass('input-group-addon'),
-            checkbox
+            setClass('flex-auto'),
+            inputGroup
             (
-                set::name('common'),
-                set::value(1),
-                $lang->search->setCommon
+                input
+                (
+                    set::name('title'),
+                    set::type('text'),
+                    set::placeholder($lang->search->setCondName)
+                ),
+                inputGroupAddon
+                (
+                    checkbox
+                    (
+                        set::name('common'),
+                        set::value(1),
+                        $lang->search->setCommon
+                    )
+                ),
+                $onMenuBar == 'yes' ? inputGroupAddon
+                (
+                    checkbox
+                    (
+                        set::name('onMenuBar'),
+                        $lang->search->onMenuBar
+                    )
+                ) : null
             )
         ),
-        $onMenuBar == 'yes' ? span
+        btn
         (
-            setClass('input-group-addon'),
-            checkbox
-            (
-                set::name('onMenuBar'),
-                $lang->search->onMenuBar
-            )
-        ) : null,
+            set::type('primary'),
+            set::btnType('submit'),
+            set::className('btn-wide'),
+            $lang->save
+        ),
         input
         (
             set::type('hidden'),
             set::name('module'),
             set::value($module)
-        ),
-        span
-        (
-            setClass('input-group-btn'),
-            btn
-            (
-                setClass('primary'),
-                set::btnType('submit'),
-                set('data-type', 'submit'),
-                $lang->save
-            )
         )
     )
 );
