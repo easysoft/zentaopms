@@ -214,6 +214,7 @@ $config->testcase->datatable->fieldList['lastEditedDate']['required'] = 'no';
 $config->testcase->datatable->fieldList['version']['title']    = 'version';
 $config->testcase->datatable->fieldList['version']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['version']['width']    = '60';
+$config->testcase->datatable->fieldList['version']['sort']     = 'no';
 $config->testcase->datatable->fieldList['version']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['bugs']['title']    = 'B';
