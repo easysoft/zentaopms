@@ -49,19 +49,6 @@ function changeStageBy(type)
 }
 
 /**
- * 设置计划结束时间。
- * Set plan end date.
- *
- * @access public
- * @return void
- */
-function setDate()
-{
-    const delta = $('input[name=delta]:checked').val();
-    computeEndDate(delta);
-}
-
-/**
  * 计算两个日期之间可用的工作日。
  * Compute work days between two dates.
  *
