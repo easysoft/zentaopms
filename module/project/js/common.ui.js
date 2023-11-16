@@ -1,3 +1,5 @@
+const DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
+
 window.ignoreTips = {
     'beyondBudgetTip' : false,
     'dateTip'         : false
@@ -72,7 +74,7 @@ function computeDaysDelta(date1, date2)
 {
     date1 = convertStringToDate(date1);
     date2 = convertStringToDate(date2);
-    delta = (date2 - date1) / (1000 * 60 * 60 * 24) + 1;
+    delta = (date2 - date1) / DAY_MILLISECONDS + 1;
 
     if(isNaN(delta)) return;
 
@@ -81,7 +83,7 @@ function computeDaysDelta(date1, date2)
     {
         if((weekend == 2 && date1.getDay() == 6) || date1.getDay() == 0) weekEnds ++;
         date1 = date1.valueOf();
-        date1 += 1000 * 60 * 60 * 24;
+        date1 += DAY_MILLISECONDS;
         date1 = new Date(date1);
     }
     return delta - weekEnds;
@@ -120,7 +122,7 @@ function computeWorkDays(e)
         var begin = new Date(beginDate.replace(/-/g,"/"));
         var end   = new Date(endDate.replace(/-/g,"/"));
         var time  = end.getTime() - begin.getTime();
-        var days  = parseInt(time / (1000 * 60 * 60 * 24)) + 1;
+        var days  = parseInt(time / DAY_MILLISECONDS) + 1;
         if(days != $("input[name='delta']:checked").val()) $("input[name='delta']:checked").attr('checked', false);
         if(endDate == longTime) $("#delta999").prop('checked', true);
     }
