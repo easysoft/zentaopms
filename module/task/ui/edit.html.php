@@ -350,7 +350,7 @@ detailBody
                 set::title($lang->task->teamMember),
                 h::table
                 (
-                    set::id('teamTable'),
+                    setID('teamTable'),
                     setClass('table table-form'),
                     $teamForm,
                     h::tr
