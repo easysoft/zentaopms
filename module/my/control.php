@@ -472,7 +472,7 @@ EOF;
 
         /* Save session. */
         if($type != 'bySearch')            $this->session->set('myTaskType', $type);
-        if($this->app->viewType != 'json') $this->session->set('taskList', $this->app->getURI(true), 'execution');
+        if($this->app->viewType != 'json') $this->session->set('taskList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

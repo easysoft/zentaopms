@@ -1504,8 +1504,8 @@ class taskZen extends task
      */
     protected function responseAfterBatchEdit(array $allChanges): array
     {
-        $response['result']     = 'success';
-        $response['message']    = $this->lang->saveSuccess;
+        $response['result']  = 'success';
+        $response['message'] = $this->lang->saveSuccess;
 
         if(!empty($allChanges))
         {
