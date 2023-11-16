@@ -703,3 +703,8 @@ $lang->block->moduleList['teamachievement'] = $lang->block->teamAchievement;
 $lang->block->moduleList['assigntome']      = $lang->block->assignToMe;
 $lang->block->moduleList['dynamic']         = $lang->block->dynamic;
 $lang->block->moduleList['html']            = $lang->block->html;
+
+$lang->block->tooltips = array();
+$lang->block->tooltips['deliveryRate']   = '需求交付率=按产品统计的已交付研发需求数/（按产品统计的研发需求总数-按产品统计的无效研发需求数）*100%';
+$lang->block->tooltips['effectiveStory'] = '按产品统计的研发需求总数：产品中研发需求的个数求和，过滤已删除的研发需求，过滤已删除的产品。';
+$lang->block->tooltips['deliveredStory'] = '按产品统计的已交付研发需求数：产品中研发需求个数求和，所处阶段为已发布或关闭原因为已完成，过滤已删除的研发需求，过滤已删除的产品。';
