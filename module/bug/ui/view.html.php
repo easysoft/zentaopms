@@ -21,6 +21,35 @@ $canViewRepo  = hasPriv('repo', 'revision');
 $canViewMR    = hasPriv('mr', 'view');
 $canViewBug   = hasPriv('bug', 'view');
 
+$moduleHTML = array();
+$moduleTitle = '';
+$moduleItems = array();
+if(empty($modulePath))
+{
+    $moduleTitle  .= '/';
+    $moduleItems[] = span('/');
+}
+else
+{
+    if($bug->branch and isset($branches[$bug->branch]))
+    {
+        $moduleTitle  .= $branches[$bug->branch] . '/';
+        $moduleItems[] = span($branches[$bug->branch], icon('angle-right'));
+    }
+
+    foreach($modulePath as $key => $module)
+    {
+        $moduleTitle  .= $module->name;
+        $moduleItems[] = $product->shadow ? span($module->name) : a(set::href(helper::createLink('bug', 'browse', "productID=$bug->product&branch=$bug->branch&browseType=byModule&param=$module->id")), $module->name);
+        if(isset($modulePath[$key + 1]))
+        {
+            $moduleTitle  .= '/';
+            $moduleItems[] = icon('angle-right');
+        }
+    }
+}
+$legendBasic['module']['text'] = $moduleItems;
+
 $buildsHTML   = array();
 $openedBuilds = explode(',', $legendLife['openedBuild']['text']);
 foreach($openedBuilds as $openedBuild)

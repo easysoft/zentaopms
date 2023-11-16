@@ -594,23 +594,6 @@ class bugZen extends bug
         $canViewPlan    = common::hasPriv('productplan', 'view');
         $canViewCase    = common::hasPriv('testcase', 'view');
 
-        $moduleTitle = '';
-        if(empty($modulePath))
-        {
-            $moduleTitle .= '/';
-        }
-        else
-        {
-            if($bugModule->branch && isset($branches[$bugModule->branch])) $moduleTitle .= $branches[$bugModule->branch] . '/';
-
-            foreach($modulePath as $key => $module)
-            {
-                $moduleTitle .= $module->name;
-
-                if(isset($modulePath[$key + 1])) $moduleTitle .= '/';
-            }
-        }
-
         $branchTitle  = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
         $fromCaseName = $bug->case ? "#{$bug->case} {$bug->caseTitle}" : '';
         $productLink  = $bug->product && $canViewProduct ? helper::createLink('product',     'view',   "productID={$bug->product}")                           : '';
@@ -621,7 +604,7 @@ class bugZen extends bug
         $legendBasic = array();
         if(empty($product->shadow))    $legendBasic['product'] = array('name' => $this->lang->bug->product, 'text' => $product->name, 'href' => $productLink, 'attr' => array('data-app' => 'product'));
         if($product->type != 'normal') $legendBasic['branch']  = array('name' => $branchTitle,        'text' => $branchName,    'href' => $branchLink);
-        $legendBasic['module'] = array('name' => $this->lang->bug->module, 'text' => $moduleTitle);
+        $legendBasic['module'] = array('name' => $this->lang->bug->module, 'text' => $bug->module);
         if(empty($product->shadow) || !empty($project->multiple)) $legendBasic['productplan'] = array('name' => $this->lang->bug->plan, 'text' => $bug->planName, 'href' => $planLink);
         $legendBasic['fromCase']       = array('name' => $this->lang->bug->fromCase,       'text' => $fromCaseName, 'href' => $fromCaseLink, 'attr' => array('data-toggle' => 'modal', 'data-size' => 'lg'));
         $legendBasic['type']           = array('name' => $this->lang->bug->type,           'text' => zget($this->lang->bug->typeList, $bug->type));
