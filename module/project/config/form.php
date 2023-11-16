@@ -49,6 +49,7 @@ $config->project->form->batchedit['name']    = array('type' => 'string', 'requir
 $config->project->form->batchedit['PM']      = array('type' => 'string', 'required' => false);
 $config->project->form->batchedit['begin']   = array('type' => 'date',   'required' => true);
 $config->project->form->batchedit['end']     = array('type' => 'date',   'required' => true);
+$config->project->form->batchedit['day']     = array('type' => 'int',    'required' => false);
 $config->project->form->batchedit['acl']     = array('type' => 'string', 'required' => false);
 if(isset($config->setCode) and $config->setCode == 1) $config->project->form->batchedit['code'] = array('type' => 'string', 'required' => true, 'filter' => 'trim');
 
