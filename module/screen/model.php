@@ -817,11 +817,11 @@ class screenModel extends model
             default:
                 if($field && $sql)
                 {
-                    $options = $this->dao->select("tt.`$field`,tt.`$field`")
-                        ->from("($sql)")->alias('tt')
-                        ->groupBy("tt.`$field`")
-                        ->orderBy("tt.`$field` desc")
-                        ->fetchPairs();
+                    $cols = $this->dao->query("select tt.`$field` from ($sql) tt group by tt.`$field` order by tt.`$field` desc")->fetchAll();
+                    foreach($cols as $col)
+                    {
+                        $options[$col->$field] = $col->$field;
+                    }
                 }
                 break;
         }
