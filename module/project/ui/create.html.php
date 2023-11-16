@@ -2,6 +2,7 @@
 namespace zin;
 
 jsVar('model', $model);
+jsVar('LONG_TIME', LONG_TIME);
 jsVar('longTime', $lang->project->longTime);
 jsVar('weekend', $config->execution->weekend);
 jsVar('beginLessThanParent', $lang->project->beginLessThanParent);

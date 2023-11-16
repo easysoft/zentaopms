@@ -141,36 +141,21 @@ function computeWorkDays(e)
  * 计算并设置计划完成时间。
  * Compute the end date for project.
  *
- * @param  int    delta
  * @access public
  * @return void
  */
-function computeEndDate(delta)
+function computeEndDate()
 {
-    let beginDate = $('#begin').zui('datePicker').$.state.value;
+    const beginDate = $('#begin').zui('datePicker').$.state.value;
     if(!beginDate) return;
 
-    delta = parseInt(delta);
-    if(delta == 999)
-    {
-        $('#end').datePicker({disabled: true});
-        $('#days').val(0).closest('.form-row').addClass('hidden');
-        outOfDateTip();
-        return false;
-    }
+    const delta      = parseInt($('input[name=delta]:checked').val());
+    const isLongTime = delta == 999;
+    const endDate    = isLongTime ? LONG_TIME : formatDate(beginDate, delta - 1);
 
-    $('#end').datePicker({disabled: false});
-    $('#days').closest('.form-row').removeClass('hidden');
-
-    beginDate = convertStringToDate(beginDate);
-    if((delta == 7 || delta == 14) && (beginDate.getDay() == 1))
-    {
-        delta = (weekend == 2) ? (delta - 2) : (delta - 1);
-    }
-
-    endDate = formatDate(beginDate, delta - 1);
-    $('#end').zui('datePicker').$.changeState({value: endDate});
-    computeWorkDays();
+    $('#end').toggleClass('hidden', isLongTime).zui('datePicker').$.changeState({value: endDate});
+    $('#end').next().toggleClass('hidden', !isLongTime);
+    $('#days').closest('.form-row').toggleClass('hidden', isLongTime);
 }
 
 /**
