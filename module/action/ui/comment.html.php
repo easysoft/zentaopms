@@ -22,7 +22,7 @@ form
     setClass('comment-form'),
     editor
     (
-        set::name('comment')
+        set::name('actioncomment')
     ),
     set::actions($actions)
 );
