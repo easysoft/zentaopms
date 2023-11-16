@@ -267,7 +267,7 @@ detailBody
                     item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : html(($plan->desc)))
                 ),
                 h::hr(setClass('mt-4')),
-                history(set::commentBtn(false))
+                history(set::objectID($plan->id), set::commentBtn(false))
             )
         )
     )

@@ -81,7 +81,7 @@ class testtaskZen extends testtask
 
         $searchConfig = $this->config->testcase->search;
         $searchConfig['style']                       = 'simple';
-        $searchConfig['actionURL']                   = inlink('linkcase', "taskID={$task->id}&type={$type}&param={$param}");
+        $searchConfig['actionURL']                   = inlink('linkcase', "taskID={$task->id}&type=bySearch&param={$param}");
         $searchConfig['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($product->id, 'case', 0, $task->branch);
         $searchConfig['params']['scene']['values']   = $this->testcase->getSceneMenu($product->id);
         $searchConfig['params']['product']['values'] = array($product->id => $product->name);
