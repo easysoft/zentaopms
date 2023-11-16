@@ -89,53 +89,35 @@ function computeDaysDelta(date1, date2)
 }
 
 /**
- * 计算可用工作日天数。
- * Compute work days.
+ * 更新可用工作日天数。
+ * Update work days.
  *
- * @param  string currentID
  * @access public
  * @return void
  */
-function computeWorkDays(e)
+function computeWorkDays()
 {
-    isBactchEdit  = false;
-    let currentID = typeof e == 'object' ? $(e.target).attr('id') : '';
-    if(currentID)
-    {
-        index = currentID.replace('begins[', '');
-        index = index.replace('ends[', '');
-        index = index.replace(']', '');
-        if(!isNaN(index)) isBactchEdit = true;
-    }
+    const begin = $('#begin').zui('datePicker').$.state.value;
+    const end   = $('#end').zui('datePicker').$.state.value;
 
-    if(isBactchEdit)
+    if(end == LONG_TIME)
     {
-        beginDate = $('#begins\\[' + index + '\\]').zui('datePicker').$.state.value;
-        endDate   = $('#ends\\[' + index + '\\]').zui('datePicker').$.state.value;
+        $('#delta999').prop('checked', true);
+        $('#days').val(0).tigger('change');
     }
     else
     {
-        beginDate = $('#begin').zui('datePicker').$.state.value;
-        endDate   = $('#end').zui('datePicker').$.state.value;
-
-        var begin = new Date(beginDate.replace(/-/g,"/"));
-        var end   = new Date(endDate.replace(/-/g,"/"));
-        var time  = end.getTime() - begin.getTime();
-        var days  = parseInt(time / DAY_MILLISECONDS) + 1;
-        if(days != $("input[name='delta']:checked").val()) $("input[name='delta']:checked").attr('checked', false);
-        if(endDate == longTime) $("#delta999").prop('checked', true);
+        $('#days').val(computeDaysDelta(begin, end)).trigger('change');
+        const time = new Date(end) - new Date(begin);
+        const days = parseInt(time / DAY_MILLISECONDS) + 1;
+        if(days != $("input[name='delta']:checked").val())
+        {
+            $("input[name='delta']:checked").prop('checked', false);
+            $('#delta' + days).prop('checked', true);
+        }
     }
 
-    if(beginDate && endDate)
-    {
-        if(isBactchEdit)  $('#dayses\\[' + index + '\\]').val(computeDaysDelta(beginDate, endDate));
-        if(!isBactchEdit) $('#days').val(computeDaysDelta(beginDate, endDate)).trigger('change');
-    }
-    else if($('input[checked="true"]').val())
-    {
-        computeEndDate();
-    }
-    outOfDateTip(isBactchEdit ? index : 0);
+    outOfDateTip();
 }
 
 /**
