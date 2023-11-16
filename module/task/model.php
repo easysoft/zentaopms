@@ -4661,8 +4661,8 @@ class taskModel extends model
 
         foreach($tasks as $task)
         {
-            $task->assignedTo = $this->printAssignedHtml($task, $users, false);
             $task->actions    = '<div class="c-actions">' . $this->buildOperateBrowseMenu($task) . '</div>';
+            $task->assignedTo = $this->printAssignedHtml($task, $users, false);
 
             $taskName  = '';
             $taskLink  = helper::createLink('task', 'view', "taskID=$task->id", '', $this->config->vision == 'lite' ? true : false);
