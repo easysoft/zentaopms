@@ -30,11 +30,13 @@ class dtable extends wg
     {
         global $app;
 
-        $defaultID = "table-{$app->rawModule}-{$app->rawMethod}";
-        $this->setDefaultProps(array('id' => static::$dtableID ? ($defaultID . static::$dtableID) : $defaultID));
-        static::$dtableID++;
+        if(!$this->hasProp('id'))
+        {
+            $defaultID = "table-{$app->rawModule}-{$app->rawMethod}";
+            $this->setProp('id', static::$dtableID ? ($defaultID . static::$dtableID) : $defaultID);
+            static::$dtableID++;
+        }
 
-        global $app;
         $module = $this->prop('module', $app->rawModule);
         if(!isset($app->lang->$module)) $app->loadLang($module);
 
