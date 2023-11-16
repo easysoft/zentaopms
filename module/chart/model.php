@@ -646,7 +646,8 @@ class chartModel extends model
      */
     public static function isClickable($chart, $action)
     {
-        if($chart->id <= 20015) return false;
+        $updatedChart = array(1042,1043,1044,1046,1047,1049,1050,1051,10114,10115,1077,1078,1079,1080,1081,1082,10018,10020,10021,10022,10212,10213,10215,10216,10217,10218,10219,10220,1085,1086,1087,1088,1089,1090,1091,1092,1093,1094,1096,1097,1098,1099,1100,1101,1102,1103,1104,1105,1106,1107,1108,1109,1110);
+        if(in_array($chart->id, $updatedChart)) return false;
         if($chart->builtin) return false;
         return true;
     }
