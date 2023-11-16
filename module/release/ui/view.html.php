@@ -270,7 +270,7 @@ detailBody
                         set::files($release->files)
                     ),
                     h::hr(set::className('mt-6')),
-                    history()
+                    history(set::objectID($release->id))
                 )
             )
         )
