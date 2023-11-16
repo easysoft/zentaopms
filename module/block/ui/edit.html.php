@@ -31,7 +31,7 @@ row
     $showModules ? cell
     (
         set::width(128),
-        set::className('flex-none bg-surface rounded rounded-r-none rounded-tl-none overflow-y-auto'),
+        setClass('flex-none bg-surface rounded rounded-r-none rounded-tl-none overflow-y-auto'),
         buildBlockModuleNav()
     ) : null,
     cell
@@ -53,7 +53,7 @@ row
             ),
             formRow
             (
-                set::id('codesRow'),
+                setID('codesRow'),
                 setClass($showCodes ? '' : 'hidden'),
                 formGroup
                 (
@@ -72,8 +72,8 @@ row
             ),
             div
             (
-                set::id('paramsRow'),
-                set::className('space-y-4'),
+                setID('paramsRow'),
+                setClass('space-y-4'),
                 formRow
                 (
                     formGroup
@@ -102,7 +102,7 @@ row
                 ),
                 formRow
                 (
-                    set::className($module == 'html' ? '' : 'hidden'),
+                    setClass($module == 'html' ? '' : 'hidden'),
                     formGroup
                     (
                         set::label($lang->block->lblHtml),
