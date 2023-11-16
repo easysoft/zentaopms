@@ -330,7 +330,17 @@ formPanel
                     set::value($project->end),
                     set::placeholder($lang->project->end),
                     set::required(true),
-                    set::disabled($project->end == LONG_TIME)
+                    $project->end == LONG_TIME ? setClass('hidden') : null
+                ),
+                inputControl
+                (
+                    setClass('has-suffix-icon w-full' . ($project->end != LONG_TIME ? ' hidden' : '')),
+                    to::suffix(icon('calendar')),
+                    input
+                    (
+                        set::value($lang->project->longTime),
+                        set::disabled(true)
+                    )
                 )
             )
         ),
