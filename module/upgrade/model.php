@@ -9909,8 +9909,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Delete waterfall general report block. 
-     * 
+     * Delete waterfall general report block.
+     *
      * @access public
      * @return true
      */
