@@ -3017,7 +3017,7 @@ class storyModel extends model
         {
             foreach($stories2Link as $id => $story)
             {
-                if($storyType == 'story' and $story->status == 'draft') unset($stories2Link[$id]);
+                if($storyType == 'story' and $story->status != 'active') unset($stories2Link[$id]);
             }
         }
 
