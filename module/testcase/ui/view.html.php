@@ -164,7 +164,7 @@ else
             {
                 $moduleItems[] = $module->name;
             }
-            if(isset($modulePath[$key + 1])) $moduleItems[] = ' / ';
+            if(isset($modulePath[$key + 1])) $moduleItems[] = icon('angle-right');
         }
 
     }
