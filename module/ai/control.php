@@ -141,9 +141,13 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function miniPrograms($category = '', $status = '')
+    public function miniPrograms($category = '', $status = '', $orderBy = 'createdDate_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $programs = $this->ai->getMiniPrograms($category, $status);
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $order = common::appendOrder($orderBy);
+
+        $programs = $this->ai->getMiniPrograms($category, $status, $order, $pager);
         foreach($programs as $program)
         {
             $program->canPublish     = empty($program->published) && $this->ai->canPublishMiniProgram($program);
@@ -158,6 +162,8 @@ class ai extends control
         $this->view->miniPrograms = $programs;
         $this->view->category     = $category;
         $this->view->status       = $status;
+        $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
         $this->display();
     }
 

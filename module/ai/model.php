@@ -330,7 +330,7 @@ class aiModel extends model
      * @access public
      * @return array
      */
-    public function getMiniPrograms($category, $status)
+    public function getMiniPrograms($category = '', $status = '', $order = 'createdDate_desc', $pager = null)
     {
         return $this->dao->select('*')
             ->from(TABLE_MINIPROGRAM)
@@ -339,6 +339,8 @@ class aiModel extends model
             ->beginIF($status === 'active')->andWhere('published')->eq('1')->fi()
             ->beginIF($status === 'draft')->andWhere('published')->ne('1')->fi()
             ->beginIF($status === 'createdByMe')->andWhere('createdBy')->eq($this->app->user->account)->fi()
+            ->orderBy($order)
+            ->page($pager)
             ->fetchAll();
     }
 

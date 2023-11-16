@@ -482,6 +482,8 @@ $lang->ai->miniPrograms->statuses = array(
     'createdByMe' => '由我创建'
 );
 
+$lang->ai->miniPrograms->summary = '本页共 %s 个小程序。';
+
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = '语言模型配置';
 $lang->ai->models->common         = '语言模型';

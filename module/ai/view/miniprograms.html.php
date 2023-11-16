@@ -93,14 +93,15 @@
       <table class="main-table table has-sort-head table-fixed">
         <thead>
           <tr>
-            <td class="c-id" style="width: 70px;">ID</td>
-            <td class="c-name" style="width: 30%;"><?= $lang->prompt->name; ?></td>
-            <td class="c-status"><?= $lang->prompt->status; ?></td>
-            <td class="c-category"><?= $lang->prompt->module; ?></td>
-            <td class="c-createdby"><?= $lang->prompt->createdBy; ?></td>
-            <td class="c-createddate"><?= $lang->prompt->createdDate; ?></td>
-            <td class="c-publisheddate"><?= $lang->ai->miniPrograms->latestPublishedDate; ?></td>
-            <td class="c-actions" style="width: 160px;"><?php echo $lang->actions; ?></td>
+            <?php $vars = "category=$category&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+            <th class="c-id" style="width: 70px;"><?php common::printOrderLink('id', $orderBy, $vars, 'ID');?></th>
+            <th class="c-name" style="width: 30%;"><?= $lang->prompt->name; ?></th>
+            <th class="c-status"><?= $lang->prompt->status; ?></th>
+            <th class="c-category"><?= $lang->prompt->module; ?></th>
+            <th class="c-createdby"><?= $lang->prompt->createdBy; ?></th>
+            <th class="c-createddate"><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->prompt->createdDate); ?></th>
+            <th class="c-publisheddate"><?php common::printOrderLink('publishedDate', $orderBy, $vars, $lang->ai->miniPrograms->latestPublishedDate); ?></th>
+            <th class="c-actions" style="width: 160px;"><?php echo $lang->actions; ?></th>
           </tr>
         </thead>
         <tbody>
@@ -144,6 +145,10 @@
           <?php endforeach; ?>
         </tbody>
       </table>
+      <div class='table-footer'>
+          <div class="table-statistic"><?php echo sprintf($lang->ai->miniPrograms->summary, count($miniPrograms));?></div>
+          <?php $pager->show('right', 'pagerjs');?>
+        </div>
     </div>
   </div>
 </div>
