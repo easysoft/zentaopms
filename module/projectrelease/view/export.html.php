@@ -23,13 +23,12 @@ function setDownloading()
 
 function closeWindow()
 {
-    if($.cookie('downloading') == 1 || i >= 30)
+    if($.cookie('downloading') == 1)
     {
         parent.$.closeModal();
         $.cookie('downloading', null);
         clearInterval(time);
     }
-    i ++;
 }
 </script>
 <div id='mainContent' class='main-content'>
