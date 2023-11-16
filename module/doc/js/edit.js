@@ -110,6 +110,14 @@ $(function()
             }, 200);
         }
     });
+
+    setTimeout(function(){
+        var windowHeight = window.innerHeight;
+        $('.CodeMirror-lines').css({
+            'max-height': windowHeight - 90 + 'px',
+            'overflow': 'auto',
+        });
+    }, 200);
 })
 
 /**
