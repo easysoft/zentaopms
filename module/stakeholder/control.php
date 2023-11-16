@@ -179,11 +179,13 @@ class stakeholder extends control
             $users   = array_diff($users, $members);
         }
 
-        $this->view->title       = $this->lang->stakeholder->edit;
+        if($stakeholder->objectType == 'project') $this->view->projectID = $stakeholder->objectID;
 
+        $this->view->title       = $this->lang->stakeholder->edit;
         $this->view->stakeholder = $stakeholder;
         $this->view->users       = $users;
         $this->view->companys    = $this->loadModel('company')->getOutsideCompanies();
+
         $this->display();
     }
 
@@ -359,6 +361,8 @@ class stakeholder extends control
 
         $this->loadModel('project')->setMenu($user->objectID);
         $this->commonAction($userID, 'stakeholder');
+
+        if($user->objectType == 'project') $this->view->projectID = $user->objectID;
 
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->view;
         $this->view->user       = $user;
