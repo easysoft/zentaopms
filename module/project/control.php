@@ -315,6 +315,8 @@ class project extends control
         $browseType  = strtolower($browseType);
         if(!in_array($browseType, array('all', 'undone'))) unset($this->config->project->dtable->fieldList['status']);
 
+        $this->loadModel('program')->refreshStats(); // Refresh stats fields of projects.
+
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -324,7 +326,7 @@ class project extends control
         $this->project->buildSearchForm($queryID, $actionURL);
 
         $programTitle = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=project&key=programTitle");
-        $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $programTitle, false, $pager);
+        $projectStats = $this->program->getProjectStats($programID, $browseType, $queryID, $orderBy, $programTitle, false, $pager);
 
         $this->view->title         = $this->lang->project->browse;
         $this->view->projectStats  = $this->projectZen->processProjectListData($projectStats);
@@ -749,6 +751,8 @@ class project extends control
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->loadModel('program')->refreshStats(); // Refresh stats fields of projects.
 
         $this->view->title          = $this->lang->execution->allExecutions;
         $this->view->executionStats = $this->execution->getStatData($projectID, $status, $productID, 0, (bool)$this->cookie->showTask, '', $orderBy, $pager);

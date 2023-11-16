@@ -45,11 +45,9 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function checkPriv(int $projectID): bool
+    public function checkPriv($projectID)
     {
-        if(empty($projectID)) return false;
-
-        return $this->app->user->admin || str_contains(",{$this->app->user->view->projects},", ",{$projectID},");
+        return !empty($projectID) && ($this->app->user->admin || (strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false));
     }
 
     /**
