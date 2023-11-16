@@ -68,7 +68,7 @@ featureBar
     set::current($type),
     set::linkParams("taskID={$task->id}&type={key}"),
     to::before(backBtn(set::icon('back'), set::className('btn secondary'), $lang->goback)),
-    li(searchToggle(set::module('testcase'), set::open($type == 'bySearch')))
+    li(searchToggle(set::module('testcase'), set::open(true)))
 );
 
 $footToolbar = array('items' => array
