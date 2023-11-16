@@ -14,7 +14,7 @@ if(!isset($task->members[$app->user->account]))
     div
     (
         setClass('alert with-icon my-8'),
-        icon('exclamation-sign text-gray'),
+        icon('exclamation-sign text-gray text-4xl'),
         div
         (
             setClass('content'),
