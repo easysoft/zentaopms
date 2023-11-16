@@ -144,7 +144,7 @@ class api extends control
         $this->view->objectID          = $objectID;
         $this->view->moduleID          = $moduleID;
         $this->view->version           = $version;
-        $this->view->libTree           = $this->doc->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType, $param);
+        $this->view->libTree           = $this->doc->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType, (int)$param);
         $this->view->users             = $this->user->getPairs('noclosed,noletter');
         $this->view->objectDropdown    = isset($libs[$libID]) ? $this->generateLibsDropMenu($libs[$libID], $release) : '';
         $this->view->spaceType         = 'api';

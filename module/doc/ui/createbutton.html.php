@@ -12,14 +12,14 @@ namespace zin;
 
 $createButton  = $emptyCreateBtn = null;
 $typeID        = empty($lib) ? $objectID : zget($lib, (string)$lib->type, 0);
-$libType       = empty($lib) ? '' : $lib->type;
+$createType    = empty($lib) ? '' : $lib->type;
 $templateParam = $this->config->edition == 'max' ? '&from=template' : '';
 $buttonItems   = array();
 foreach($lang->doc->createList as $typeKey => $typeName)
 {
     $docType = zget($config->doc->iconList, $typeKey);
-    $params  = "objectType={$libType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type={$typeKey}";
-    if($typeKey == 'template' and $config->edition == 'max') $params = "objectType={$libType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html&from=template";
+    $params  = "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type={$typeKey}";
+    if($typeKey == 'template' and $config->edition == 'max') $params = "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html&from=template";
 
     $buttonItems[] = array
         (
