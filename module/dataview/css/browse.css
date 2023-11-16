@@ -4,7 +4,11 @@
 .side-col {width: 240px;}
 #sidebar> .cell {width: 220px;}
 
-#datas {overflow: scroll;}
+#datas {overflow: scroll; max-height: 500px;}
+@media (max-width: 1366px) {#datas {max-height: 500px;}}
+@media (min-width: 1366px) and (max-width: 1919px) {#datas {max-height: 650px;}}
+@media (min-width: 1920px) {#datas {max-height: 800px;}}
+#datas table thead {position: sticky; background-color: #fff; top: -1px;}
 #data th, #data td, #schema td, #modules li > strong {overflow: hidden; text-overflow: unset; white-space: nowrap;}
 #dataContent {margin: 0px; padding: 0px;}
 #dataContent .detail {margin: 0px; padding: 0px;}
