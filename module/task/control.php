@@ -243,6 +243,13 @@ class task extends control
     {
         $this->taskZen->commonAction($taskID);
 
+        $task = $this->task->getByID($taskID);
+        if(!empty($task->team) && $task->mode == 'multi' && strpos('done,cencel,closed', $task->status) === false)
+        {
+            echo $this->fetch('task', 'manageTeam', "executionID=$executionID&taskID=$taskID&from=$from");
+            return;
+        }
+
         if(!empty($_POST))
         {
             $task = form::data($this->config->task->form->assign)

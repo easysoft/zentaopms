@@ -166,9 +166,24 @@ class execution extends control
         $memberPairs = $this->loadModel('user')->processAccountSort($memberPairs);
 
         /* Append branches to task. */
+        $this->loadModel('task');
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($this->view->products));
         foreach($tasks as $task)
         {
+            if($task->mode == 'multi' && strpos('done,closed', $task->status) === false)
+            {
+                $task->assignedTo = '';
+
+                $taskTeam = $this->task->getTeamByTask($task->id);
+                foreach($taskTeam as $teamMember)
+                {
+                    if($this->app->user->account == $teamMember->account and $teamMember->status != 'done')
+                    {
+                        $task->assignedTo = $this->app->user->account;
+                        break;
+                    }
+                }
+            }
             if(isset($branchGroups[$task->product][$task->branch])) $task->branch = $branchGroups[$task->product][$task->branch];
         }
 
