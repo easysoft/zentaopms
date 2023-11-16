@@ -169,12 +169,8 @@ $config->story->datatable->fieldList['product']['display']    = false;
 $config->story->datatable->fieldList['product']['dataSource'] = array('module' => 'transfer', 'method' => 'getRelatedObjects', 'params' => 'story&product&id,name');
 
 $config->story->datatable->fieldList['branch']['title']      = 'branch';
-$config->story->datatable->fieldList['branch']['fixed']      = 'no';
-$config->story->datatable->fieldList['branch']['type']       = 'html';
-$config->story->datatable->fieldList['branch']['sortType']   = true;
-$config->story->datatable->fieldList['branch']['width']      = '100';
-$config->story->datatable->fieldList['branch']['required']   = 'no';
 $config->story->datatable->fieldList['branch']['control']    = 'select';
+$config->story->datatable->fieldList['branch']['display']    = false;
 $config->story->datatable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID&active');
 
 $config->story->datatable->fieldList['module']['title']      = 'module';
