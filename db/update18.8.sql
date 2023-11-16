@@ -84,3 +84,11 @@ CREATE TABLE `zt_queue` (
 UPDATE `zt_dimension` SET `desc` = '为管理层提供洞察力和决策支持，从而推动业务增长和发展' WHERE `id` = 1;
 UPDATE `zt_dimension` SET `desc` = '识别项目管理流程中的关键步骤、瓶颈和性能指标，从而做出有针对性的改进措施，达到优化项目管理流程和降本增效的目的' WHERE `id` = 2;
 UPDATE `zt_dimension` SET `desc` = '确保项目交付过程和成果符合预期的质量标准和要求，从而实现客户满意度、提高项目绩效、保障项目可持续性和促进持续改进' WHERE `id` = 3;
+
+ALTER TABLE zt_metric DROP INDEX `code`;
+
+/* Add installed date to config. */
+INSERT INTO `zt_config` ( `vision`, `owner`, `module`, `section`, `key`, `value` ) VALUES ('', 'system', 'common', 'global', 'installedDate', (SELECT LEFT( date, 10 ) AS date FROM zt_action WHERE LEFT ( date, 10 ) != '2012-06-05' AND LEFT ( date, 10 ) != '2021-04-28' AND date > '2009-03-14' ORDER BY id LIMIT 1));
+
+REPLACE INTO `zt_chart`(`id`, `name`, `dimension`, `type`, `group`, `dataset`, `desc`, `settings`, `filters`, `step`, `fields`, `langs`, `sql`, `stage`, `builtin`, `objects`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES (1030, '宏观数据-禅道使用时长', 1, 'card', '58', '', '', '{\"value\": {\"type\": \"value\", \"field\": \"period\", \"agg\": \"value\"}, \"title\": {\"type\": \"text\", \"name\": \"\"},\n\"type\": \"value\"\n}', '[]', 0, '', NULL, '	SELECT if(t2.`year` > 0, concat(t2.`year`, \'年\', t2.`day`, \'天\'), concat(t2.`day`, \'天\')) as period from (\r\nSELECT TIMESTAMPDIFF(YEAR,t1.firstDay,t1.today) AS `year`,DATEDIFF(DATE_SUB(t1.today,INTERVAL TIMESTAMPDIFF(YEAR,t1.firstDay,t1.today) YEAR), t1.firstDay) AS `day`  \r\nFROM (SELECT `value` AS firstDay, now() AS today FROM zt_config WHERE `owner` = \'system\' AND `key` = \'installedDate\') AS t1\r\n) t2', 'published', 1, '', 'system', '2022-12-07 14:59:41', '', '2022-12-07 14:59:41', 0);
+REPLACE INTO `zt_chart`(`id`, `name`, `dimension`, `type`, `group`, `dataset`, `desc`, `settings`, `filters`, `step`, `fields`, `langs`, `sql`, `stage`, `builtin`, `objects`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES (20015, '使用数据分析-上线时间', 1, 'card', '58', '0', ' ', '{\"value\": {\"type\": \"value\", \"field\": \"date\", \"agg\": \"value\"}, \"title\": {\"type\": \"text\", \"name\": \"\"}, \"type\": \"value\"}', '[]', 0, ' ', NULL, 'select `value` as date from zt_config where `owner` = \'system\' and `key` = \'installedDate\'', 'published', 1, ' ', 'system', '2023-08-16 15:32:10', 'admin', '2023-08-16 15:32:17', 0);
