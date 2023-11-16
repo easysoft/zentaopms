@@ -93,7 +93,8 @@ detailBody
     history(
         set::hasComment(false),
         set::commentBtn(false),
-        set::methodName('view_1')
+        set::methodName('view_1'),
+        set::objectID($suite->id)
     ),
     detailSide
     (

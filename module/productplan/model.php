@@ -285,6 +285,7 @@ class productplanModel extends model
 
                 if($plan->parent == '-1' && strpos($param, 'skipparent') !== false) continue 2;
 
+                $plan->expired = $plan->end < helper::today();
                 $planGroup[$plan->product][$branch][$plan->id] = $plan;
             }
         }

@@ -14,6 +14,10 @@ else
     $versionName = $lang->pmsName . $config->version;
 }
 
+$scoreNotice = '';
+if($config->vision != 'lite') $scoreNotice = $this->loadModel('score')->getNotice();
+
+jsVar('scoreNotice', $scoreNotice);
 jsVar('vision',      $config->vision);
 jsVar('navGroup',    $lang->navGroup);
 jsVar('oldPages',    $config->index->oldPages);
@@ -26,10 +30,6 @@ jsVar('browserMessage', $browserMessage);
 jsVar('pollTime',    (!empty($config->message->browser->turnon) && isset($config->message->browser->pollTime)) ? $config->message->browser->pollTime : 600);
 jsVar('turnon',      empty($config->message->browser->turnon) ? 0 : 1);
 jsVar('runnable',    $this->loadModel('cron')->runnable());
-
-$scoreNotice = '';
-if($config->vision != 'lite') $scoreNotice = $this->loadModel('score')->getNotice();
-jsVar('scoreNotice', $scoreNotice);
 
 set::zui(true);
 set::bodyClass($this->cookie->hideMenu ? 'hide-menu' : 'show-menu');
@@ -59,7 +59,7 @@ div
                 ),
                 ul(setClass('dropdown-menu nav'), setID('menuMoreList'))
             )
-        ),
+        )
     ),
     div
     (
@@ -106,7 +106,7 @@ div
             set::hint($version),
             set::text($versionName)
         )
-    ),
+    )
 );
 
 render('pagebase');

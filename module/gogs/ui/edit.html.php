@@ -24,7 +24,7 @@ formPanel
         (
             set::name('name'),
             set::label($lang->gogs->name),
-            set::value($gogs->name),
+            set::value($gogs->name)
         )
     ),
     formRow
@@ -33,7 +33,7 @@ formPanel
         (
             set::name('url'),
             set::label($lang->gogs->url),
-            set::value($gogs->url),
+            set::value($gogs->url)
         )
     ),
     formRow
@@ -42,7 +42,7 @@ formPanel
         (
             set::name('token'),
             set::label($lang->gogs->token),
-            set::value($gogs->token),
+            set::value($gogs->token)
         )
-    ),
+    )
 );

@@ -104,7 +104,7 @@ function toggleBox(e)
     const checkedCount = $obj.closest('.form-group').find('input[name^=actions]:checked').length;
     const totalCount   = $obj.closest('.form-group').find('input[name^=actions]').length;
     if(checkedCount < totalCount) allChecked = false;
-    $('.group-item input[name^="allchecker"]').prop('checked', allChecked);
+    $('.group-item input[name^="actionallchecker"]').prop('checked', allChecked);
 
     let id = $obj.attr('id');
     if(id == 'program')   toggleProgram();
@@ -119,6 +119,6 @@ function toggleBox(e)
         const checkedCount = $(this).find('input[name^=actions]:checked').length;
         const totalCount   = $(this).find('input[name^=actions]').length;
         if(checkedCount < totalCount) allChecked = false;
-        $(this).find('input[name^="allchecker"]').prop('checked', allChecked);
+        $(this).find('input[name^="actionallchecker"]').prop('checked', allChecked);
     });
 }

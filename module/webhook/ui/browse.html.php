@@ -19,7 +19,7 @@ toolbar
         'text'  => $lang->webhook->create,
         'icon'  => 'plus',
         'class' => 'primary',
-        'url'   => (common::hasPriv('webhook', 'create') and ($app->rawMethod == 'browse') or $app->rawMethod == 'log') ? createLink('webhook', 'create') : null,
+        'url'   => (common::hasPriv('webhook', 'create') and ($app->rawMethod == 'browse') or $app->rawMethod == 'log') ? createLink('webhook', 'create') : null
     ))),
 );
 
@@ -51,7 +51,7 @@ dtable
     set::data($data),
     set::sortLink(createLink('webhook', 'browse', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

@@ -10,8 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$reviewPrivs = array();
+foreach(array_keys($lang->my->featureBar['audit']) as $type) $reviewPrivs[$type] = hasPriv($type, 'review');
+
 jsVar('viewLink',   createLink('{module}', 'view',   'id={id}'));
 jsVar('reviewLink', createLink('{module}', 'review', 'id={id}'));
+jsVar('reviewPrivs', $reviewPrivs);
 
 $rawMethod = $app->rawMethod;
 if($rawMethod != 'audit' && isset($lang->my->featureBar[$rawMethod]['audit'])) $lang->my->featureBar[$rawMethod] = $lang->my->featureBar[$rawMethod]['audit'];

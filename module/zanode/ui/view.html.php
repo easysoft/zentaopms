@@ -80,9 +80,9 @@ if($zanode->hostType == 'physics')
                 (
                     setClass('icon-common-copy icon-copy'),
                     set::title($lang->zanode->copy),
-                    set::name(''),
+                    set::name('')
                 ),
-                on::click('sshCopy'),
+                on::click('sshCopy')
             ) : null,
             h::textarea
             (
@@ -184,7 +184,7 @@ else
                 (
                     setClass('icon-common-copy icon-copy'),
                     set::title($lang->zanode->copy),
-                    set::name(''),
+                    set::name('')
                 ),
                 on::click('sshCopy')
             ) : null,
@@ -289,7 +289,7 @@ else
                 (
                     setClass('icon-common-copy icon-copy'),
                     set::title($lang->zanode->copy),
-                    set::name(''),
+                    set::name('')
                 ),
                 on::click('pwdCopy')
             ),
@@ -300,9 +300,9 @@ else
                 (
                     setClass('icon-common-eye icon-eye'),
                     set::title($lang->zanode->showPwd),
-                    set::name(''),
+                    set::name('')
                 ),
-                on::click('pwdShow'),
+                on::click('pwdShow')
             ),
             h::textarea
             (
@@ -324,7 +324,7 @@ detailHeader
             set::level(1),
             set::text($zanode->name)
         ),
-        $zanode->deleted ? span(setClass('label danger'), $lang->zanode->deleted) : null,
+        $zanode->deleted ? span(setClass('label danger'), $lang->zanode->deleted) : null
     )
 );
 
@@ -347,7 +347,7 @@ detailBody
                             setClass('flex flex-wrap pt-2 mx-4'),
                             $baseInfo
                         )
-                    ),
+                    )
                 )
             )
         ),
@@ -368,8 +368,8 @@ detailBody
                 setClass('ghost btn'),
                 icon('refresh', setClass('text-primary')),
                 $lang->zanode->init->checkStatus,
-                on::click('checkServiceStatus'),
-            ),
+                on::click('checkServiceStatus')
+            )
         ),
         $zanode->hostType != 'physics' ? div
         (
@@ -386,7 +386,7 @@ detailBody
                 (
                     setClass('zenagent-status'),
                     $lang->zanode->initializing
-                ),
+                )
             )
         ) : null,
         div
@@ -404,12 +404,12 @@ detailBody
                 (
                     setClass('ztf-status'),
                     $lang->zanode->initializing
-                ),
+                )
             )
         ),
         div
         (
-            set::id('statusContainer'),
+            set::id('statusContainer')
         ),
         div
         (
@@ -442,11 +442,11 @@ detailBody
                             set::title($lang->zanode->copy),
                             set::name('')
                         ),
-                        on::click('onCopy'),
+                        on::click('onCopy')
                     )
-                ),
-            ) : null,
-        ),
+                )
+            ) : null
+        )
     ),
     common::hasPriv('zanode', 'browseSnapshot') && $zanode->hostType == '' ? sectionList
     (
@@ -465,30 +465,30 @@ detailBody
                         set::url(createLink('zanode', 'createSnapshot', "zanodeID={$zanode->id}")),
                         set::icon('plus'),
                         set('data-toggle', 'modal'),
-                        set::disabled($zanode->status != 'running' ? true : false),
+                        set::disabled($zanode->status != 'running' ? true : false)
                     )
                 )
-            ),
+            )
         ),
         !empty($snapshotList) ? h::iframe
         (
             set::src(createLink('zanode', 'browseSnapshot', "nodeID={$zanode->id}", '', true)),
             set::scrolling('auto'),
             set::frameborder('no'),
-            setStyle('min-height', '300px'),
-        ) : $lang->noData,
+            setStyle('min-height', '300px')
+        ) : $lang->noData
     ) : null,
     floatToolbar
     (
         to::prefix(backBtn(set::icon('back'), $lang->goback)),
         set::main($mainActions),
         set::suffix($commonActions),
-        set::object($zanode),
+        set::object($zanode)
     ),
     detailSide
     (
         history()
-    ),
+    )
 );
 
 render();

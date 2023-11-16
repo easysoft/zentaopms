@@ -474,10 +474,10 @@ function goBack(target, url, startState)
         }
         else
         {
-            const pathSet = new Set(target.split(','));
+            const pathSet = new Set(target.toLowerCase().split(','));
             let state = startState;
             while(state && state.path && !pathSet.has(state.path)) state = state.prev;
-            if(state && pathSet.has(state.path))
+            if(state && pathSet.has(state.path.toLowerCase()))
             {
                 if(state.index === preState.index) return window.history.back();
                 return openApp(state.url, state.code, false);

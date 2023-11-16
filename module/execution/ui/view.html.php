@@ -438,8 +438,8 @@ if(common::hasPriv('execution', 'doc'))
 
         $docLibDom[] = div
         (
-            setClass('flex-none w-1/5 py-1 clip'),
-            icon('wiki-lib mr-2'),
+            setClass('flex-none w-1/5 py-1 clip pl-4'),
+            icon('wiki-lib mr-1'),
             a
             (
                 $docLib->name,
@@ -456,7 +456,7 @@ if($canBeChanged && common::hasPriv('doc', 'createLib'))
 {
     $docLibDom[] = div
     (
-        setClass('flex-none w-1/5 py-1'),
+        setClass('flex-none w-1/5 py-1 pl-4'),
         a
         (
             setClass('ghost text-gray'),
@@ -784,7 +784,7 @@ div
                         (
                             div
                             (
-                                setClass('flex flex-nowrap pt-2'),
+                                setClass('flex flex-wrap pt-2'),
                                 $docLibDom
                             )
                         )

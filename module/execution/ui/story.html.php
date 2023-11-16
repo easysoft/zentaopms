@@ -16,7 +16,7 @@ featureBar
 (
     set::current($this->session->storyBrowseType),
     set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type={key}")),
-    li(searchToggle(set::module('executionStory')))
+    li(searchToggle(set::module('executionStory'), set::open($type == 'bysearch')))
 );
 
 jsVar('executionID', $execution->id);

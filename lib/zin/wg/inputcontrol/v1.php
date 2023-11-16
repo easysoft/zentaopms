@@ -11,12 +11,12 @@ class inputControl extends wg
         'suffix?: mixed',
         'prefixWidth?: string|int',
         'suffixWidth?: string|int',
-        'class?: string',
+        'class?: string'
     );
 
     protected static array $defineBlocks = array(
         'prefix' => array(),
-        'suffix' => array(),
+        'suffix' => array()
     );
 
     protected function build(): wg

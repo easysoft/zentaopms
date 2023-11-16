@@ -11,7 +11,7 @@ class formItemDropdown extends wg
         'method?: string',
         'url?: string',
         'actions?: array',
-        'target?: string',
+        'target?: string'
     );
 
     public static function getPageCSS(): string|false

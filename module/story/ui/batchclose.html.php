@@ -44,7 +44,7 @@ formBatchPanel
         set::name('id'),
         set::label($lang->idAB),
         set::control('hidden'),
-        set::hidden(true),
+        set::hidden(true)
     ),
     /* Field of storyIdList. */
     formBatchItem
@@ -52,7 +52,7 @@ formBatchPanel
         set::name('storyIdList'),
         set::label($lang->idAB),
         set::control('hidden'),
-        set::hidden(true),
+        set::hidden(true)
     ),
     /* Field of id index. */
     formBatchItem
@@ -60,7 +60,7 @@ formBatchPanel
         set::name('id'),
         set::label($lang->idAB),
         set::control('index'),
-        set::width('60px'),
+        set::width('60px')
     ),
     /* Field of title. */
     formBatchItem
@@ -68,7 +68,7 @@ formBatchPanel
         set::name('title'),
         set::label($lang->story->title),
         set::control('static'),
-        set::width('300px'),
+        set::width('300px')
     ),
     /* Field of status. */
     formBatchItem
@@ -76,7 +76,7 @@ formBatchPanel
         set::name('statusName'),
         set::label($lang->story->status),
         set::control('static'),
-        set::width('60px'),
+        set::width('60px')
     ),
     /* Field of closeReason. */
     formBatchItem
@@ -92,16 +92,16 @@ formBatchPanel
                 setClass('closedReason-select'),
                 set::name('closedReason'),
                 set::items($lang->story->reasonList),
-                set::required(true),
+                set::required(true)
             ),
             picker
             (
                 setClass('duplicate-select hidden'),
                 set::name('duplicateStory'),
                 set::items(array()),
-                set::required(true),
-            ),
-        ),
+                set::required(true)
+            )
+        )
     ),
     /* Field of comment. */
     formBatchItem
@@ -109,7 +109,7 @@ formBatchPanel
         set::name('comment'),
         set::label($lang->comment),
         set::control('text'),
-        set::width('300px'),
+        set::width('300px')
     )
 );
 

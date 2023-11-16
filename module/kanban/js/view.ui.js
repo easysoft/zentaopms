@@ -36,7 +36,7 @@ window.getCol = function(col)
     if(col.limit != -1 && cards > col.limit)
     {
         col.subtitleClass += ' text-danger';
-        wip += ' <i class="icon icon-exclamation-sign"></i>';
+        wip += ' <i class="icon icon-exclamation-sign" data-toggle="tooltip" data-title="' + kanbanLang.limitExceeded + '"></i>';
     }
 
     col.subtitle = {html: wip};
@@ -91,7 +91,7 @@ window.buildColCardActions = function(col)
                     {text: kanbanLang.importRelease, url: $.createLink('kanban', 'importRelease', `kanbanID=${kanbanID}&regionID=${col.region}&groupID=${col.group}&columnID=${col.id}`), 'data-toggle': 'modal', 'data-size': 'lg'},
                     {text: kanbanLang.importExecution, url: $.createLink('kanban', 'importExecution', `kanbanID=${kanbanID}&regionID=${col.region}&groupID=${col.group}&columnID=${col.id}`), 'data-toggle': 'modal', 'data-size': 'lg'},
                     {text: kanbanLang.importBuild, url: $.createLink('kanban', 'importBuild', `kanbanID=${kanbanID}&regionID=${col.region}&groupID=${col.group}&columnID=${col.id}`), 'data-toggle': 'modal', 'data-size': 'lg'},
-                    {text: kanbanLang.importTicket, url: $.createLink('kanban', 'importTicket', `kanbanID=${kanbanID}&regionID=${col.region}&groupID=${col.group}&columnID=${col.id}`), 'data-toggle': 'modal', 'data-size': 'lg'},
+                    //{text: kanbanLang.importTicket, url: $.createLink('kanban', 'importTicket', `kanbanID=${kanbanID}&regionID=${col.region}&groupID=${col.group}&columnID=${col.id}`), 'data-toggle': 'modal', 'data-size': 'lg'},
                 ]
             }
         );
@@ -150,8 +150,9 @@ window.getItem = function(info)
     }
     else
     {
-        renderGeneralItem(info)
+        renderGeneralItem(info);
     }
+    if(info.item.color && info.item.color != '#fff') info.item.className = 'color-' + info.item.color.replace('#', '');
 }
 
 window.renderGeneralItem = function(info)
@@ -187,7 +188,6 @@ window.renderGeneralItem = function(info)
     info.item.titleAttrs = {'data-toggle': 'modal', 'data-size' : 'lg', 'title' : info.item.title};
 
     info.item.content  = {html: content};
-    if(info.item.color && info.item.color != '#fff') info.item.className = 'color-' + info.item.color.replace('#', '');
     if(kanban.performable == 1)
     {
         info.item.footer = {html: "<div class='flex'><div class='circle progress mt-3 flex-1' style='width:80%'><div class='progress-bar' style='width: " + info.item.progress + '%\'></div></div><div class="mt-2 ml-2">' + info.item.progress + '%' + '</div></div>'};
@@ -198,8 +198,7 @@ window.renderExecutionItem = function(info)
 {
     info.item.icon       = 'run';
     info.item.titleUrl   = $.createLink('execution', 'task', `id=${info.item.fromID}`);
-    info.item.titleAttrs = {'class': 'text-black clip', 'title' : info.item.title};
-    console.log(info.item);
+    info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
     if(info.item.delay)
     {
         info.item.suffix      = executionLang.delayed;
@@ -225,7 +224,7 @@ window.renderReleaseItem = function(info)
 {
     info.item.icon       = 'publish';
     info.item.titleUrl   = $.createLink('release', 'view', `id=${info.item.fromID}`);
-    info.item.titleAttrs = {'class': 'text-black clip', 'title' : info.item.title};
+    info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
 
     if(info.item.deleted == '0')
     {
@@ -242,13 +241,29 @@ window.renderBuildItem = function(info)
 {
     info.item.icon       = 'ver';
     info.item.titleUrl   = $.createLink('build', 'view', `id=${info.item.fromID}`);
-    info.item.titleAttrs = {'class': 'text-black clip', 'title' : info.item.title};
+    info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
 
     const date = '<span class="label lighter">' + info.item.date + '</span>';
     info.item.content = {html: date}
 }
 window.renderProductplanItem = function(info)
 {
+    info.item.icon       = 'delay';
+    info.item.titleUrl   = $.createLink('productplan', 'view', `id=${info.item.fromID}`);
+    info.item.titleAttrs = {'class': 'card-title clip', 'title' : info.item.title};
+
+    if(info.item.deleted == '0')
+    {
+        statusBox = '<span class="label label-' + info.item.objectStatus + '">' + executionLang.statusList[info.item.objectStatus] + '</span>';
+    }
+    else
+    {
+        statusBox = '<span class="label label-deleted">' + executionLang.deleted + '</span>';
+    }
+    const date = '<span class="ml-2 label ' + (info.item.delay ? 'danger' : 'lighter') + '">' + info.item.begin.slice(5) + ' ' + productplanLang.to + ' ' + info.item.end.slice(5) + '</span>';
+    info.item.content      = {html: info.item.desc}
+    info.item.contentClass = 'text-gray';
+    info.item.footer       = {html: statusBox + date}
 }
 window.renderTicketItem = function(info)
 {
@@ -290,8 +305,8 @@ window.buildCardActions = function(item)
 {
     let actions = [];
 
-    if(item.actionList.includes('editCard'))   actions.push({text: kanbanLang.editCard, url: $.createLink('kanban', 'editCard', `id=${item.id}`), 'data-toggle': 'modal', 'icon': 'edit'});
-    if(item.actionList.includes('deleteCard')) actions.push({text: kanbanLang.deleteCard, url: $.createLink('kanban', 'deleteCard', `id=${item.id}`), 'data-confirm': cardLang.confirmDelete, 'innerClass': 'ajax-submit', 'icon': 'trash'});
+    if(item.actionList.includes('editCard') && item.fromType == '')   actions.push({text: kanbanLang.editCard, url: $.createLink('kanban', 'editCard', `id=${item.id}`), 'data-toggle': 'modal', 'icon': 'edit'});
+    if(item.actionList.includes('deleteCard')) actions.push({text:  item.fromType == '' ? kanbanLang.deleteCard : kanbanLang.removeCard, url: $.createLink('kanban', 'deleteCard', `id=${item.id}`), 'data-confirm': cardLang.confirmDelete, 'innerClass': 'ajax-submit', 'icon': 'trash'});
 
     if(kanban.performable == 1 && item.fromType == '')
     {

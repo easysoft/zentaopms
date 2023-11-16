@@ -89,7 +89,7 @@ featureBar
         (
             btn(setClass('dropdown-toggle ghost btn square btn-default'), zget($repoPairs, $repoID, $lang->mr->statusList['all'])),
             set::items($repoData),
-            set::placement('bottom-end'),
+            set::placement('bottom-end')
         )
     ) : null
 );
@@ -102,7 +102,7 @@ toolBar
         set::className('btn primary'),
         set::url(createLink('mr', 'create', "repoID=" . ($repoID ? $repoID : key($repoList)) . "&objectID={$objectID}")),
         set('data-app', $app->tab)
-    ) : null,
+    ) : null
 );
 
 dtable
@@ -112,7 +112,7 @@ dtable
     set::data($MRs),
     set::sortLink(createLink('mr', 'browse', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$executionID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::orderBy($orderBy),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

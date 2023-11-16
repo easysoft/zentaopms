@@ -14,7 +14,7 @@ featureBar
 (
     set::load(''),
     set::current($scope),
-    set::linkParams("scope={key}"),
+    set::linkParams("scope={key}")
 );
 
 div
@@ -24,8 +24,8 @@ div
     (
         set::cols(array()),
         set::data(array()),
-        set::emptyTip($lang->metric->emptyCollect),
-    ),
+        set::emptyTip($lang->metric->emptyCollect)
+    )
 );
 
 render();

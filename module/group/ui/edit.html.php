@@ -32,7 +32,7 @@ formPanel
         (
             set::name('desc'),
             set::value($group->desc),
-            set::rows('5'),
+            set::rows('5')
         )
-    ),
+    )
 );

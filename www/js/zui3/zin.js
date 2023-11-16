@@ -659,6 +659,7 @@
      */
     function loadTable(url, target, options)
     {
+        if(!url) url = currentAppUrl;
         if(!target)
         {
             const urlInfo = $.parseLink(url);
@@ -1185,7 +1186,7 @@
         }
         if(data.load) return openUrl(data);
         if(data.app) return openPage(data.url + (data.selector ? (' ' + data.selector) : ''), data.app);
-        loadPage(data.url, data.selector);
+        loadPage(data);
     });
 
     /* Auto layout UI. */

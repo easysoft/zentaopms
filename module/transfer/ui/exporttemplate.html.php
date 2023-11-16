@@ -22,7 +22,7 @@ form
         set::label($lang->transfer->num),
         set::name('num'),
         set::type('number'),
-        set::value(10),
+        set::value(10)
     ),
     formGroup
     (
@@ -30,9 +30,9 @@ form
         set::name('fileType'),
         set::value('xlsx'),
         set::control('picker'),
-        set::items(array('xlsx' => 'xlsx', 'xls' => 'xls')),
+        set::items(array('xlsx' => 'xlsx', 'xls' => 'xls'))
     ),
-    set::actions(array('submit')),
+    set::actions(array('submit'))
 );
 
 js

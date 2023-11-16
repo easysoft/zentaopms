@@ -28,7 +28,7 @@ featureBar
             on::change('changeProduct')
         )
     ),
-    li(searchToggle(set::module('executionBuild')))
+    li(searchToggle(set::module('executionBuild'), set::open($type == 'bysearch')))
 );
 
 /* zin: Define the toolbar on main menu. */

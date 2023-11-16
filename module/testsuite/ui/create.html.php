@@ -12,7 +12,7 @@ namespace zin;
 
 formPanel
 (
-    set::id('testsuiteCreateForm'),
+    setID('testsuiteCreateForm'),
     set::title($lang->testsuite->create),
     formRow
     (

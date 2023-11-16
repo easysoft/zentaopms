@@ -21,7 +21,7 @@ formPanel
         editor
         (
             set::name('comment'),
-            set::rows('6'),
+            set::rows('6')
         ),
         input(
             set::className('hidden'),

@@ -38,7 +38,7 @@ window.changeBrowseType = function()
 
 window.changeGroupBy = function()
 {
-    const troup = $('.c-group [name=group]').val();
+    const group = $('.c-group [name=group]').val();
     const type  = $('.c-type [name=type]').val();
     loadPage($.createLink('execution', 'taskKanban',  'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group));
 };
@@ -120,23 +120,11 @@ window.getColActions = function(col)
     /* 父列不需要创建卡片相关的操作按钮。 */
     if(col.parent != '-1' && (col.type == 'backlog' || col.type == 'unconfirmed' || col.type == 'wait'))
     {
-        actionList.push(
-        {
-            type: 'dropdown',
-            icon: 'expand-alt text-primary',
-            caret: false,
-            items: buildColCardActions(col),
-        });
+        let cardActions = buildColCardActions(col);
+        if(cardActions.length > 0) actionList.push({type:'dropdown', icon:'expand-alt text-primary', caret:false, items:cardActions});
     }
 
-    actionList.push(
-    {
-        type: 'dropdown',
-        icon: 'ellipsis-v',
-        caret: false,
-        items: buildColActions(col),
-    });
-
+    actionList.push({type:'dropdown', icon:'ellipsis-v', caret:false, items:buildColActions(col)});
     return actionList;
 }
 
@@ -149,23 +137,23 @@ window.buildColCardActions = function(col)
     let actions = [];
     if(col.type == 'backlog')
     {
-        if(priv.canCreateStory)      actions.push({text: storyLang.create, url:$.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID), 'data-toggle': 'modal'});
+        if(priv.canCreateStory)      actions.push({text: storyLang.create, url:$.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(priv.canBatchCreateStory) actions.push({text: executionLang.batchCreateStory, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(priv.canLinkStory)        actions.push({text: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(priv.canLinkStoryByPlan)  actions.push({text: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'data-toggle': 'modal'});
     }
     else if(col.type == 'unconfirmed')
     {
-        if(priv.canCreateBug) actions.push({text: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID), 'data-toggle': 'modal'});
+        if(priv.canCreateBug) actions.push({text: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(priv.canBatchCreateBug)
         {
-            if(productNum > 1) actions.push({text: bugLang.batchCreate, url: '#batchCreateBug', 'data-toggle': 'modal'});
+            if(productNum > 1) actions.push({text: bugLang.batchCreate, url: '#batchCreateBug', 'data-toggle': 'modal', 'data-size': 'lg'});
             else actions.push({text: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&moduleID=0&executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         }
     }
     else if(col.type == 'wait')
     {
-        if(priv.canCreateTask)                actions.push({text: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID), 'data-toggle': 'modal'});
+        if(priv.canCreateTask)                actions.push({text: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(priv.canBatchCreateTask)           actions.push({text: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
         if(priv.canImportBug && canImportBug) actions.push({text: executionLang.importBug, url: $.createLink('execution', 'importBug', 'executionID=' + executionID), 'data-toggle': 'modal', 'data-size': 'lg'});
     }
@@ -181,8 +169,8 @@ window.buildColActions = function(col)
 {
     let actions = [];
 
-    if(priv.canEditName && col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}`), 'data-toggle': 'modal', 'icon': 'edit'});
-    if(priv.canSetWIP   && col.actionList.includes('setWIP'))    actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}`), 'data-toggle': 'modal', 'icon': 'alert'});
+    if(priv.canEditName && col.actionList.includes('setColumn')) actions.push({text: kanbanLang.setColumn, url: $.createLink('kanban', 'setColumn', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'edit'});
+    if(priv.canSetWIP   && col.actionList.includes('setWIP'))    actions.push({text: kanbanLang.setWIP, url: $.createLink('kanban', 'setWIP', `columnID=${col.id}&executionID=${executionID}&from=RDKanban`), 'data-toggle': 'modal', 'icon': 'alert'});
 
     return actions;
 }
@@ -213,7 +201,7 @@ window.getItem = function(info)
         beginAndEnd = formatDate(begin) + ' ~ ' + formatDate(end);
     }
 
-    if(info.item.assignedTo)
+    if(info.item.assignedTo && typeof userList[info.item.assignedTo] != 'undefined')
     {
         user       = userList[info.item.assignedTo];
         assignedTo = user.realname;
@@ -279,6 +267,7 @@ window.canDrop = function(dragInfo, dropInfo)
     if(!priv.canSortCards && dropInfo.type == 'item') return false;
 
     /* 卡片可在同组内拖动。 */
+    if(dragInfo.lane != dropInfo.lane) return false;
     if(dragInfo.item.group != toColumn.group) return false;
 
     if(dropInfo.type != 'item')
@@ -294,9 +283,9 @@ window.onDrop = function(changes, dropInfo)
 {
     if(!dropInfo) return false;
 
-    const fromLaneID  = dropInfo.drag.lane;
     const toLaneID    = dropInfo.drop.lane;
-    const laneType    = lanePairs[fromLaneID];
+    const toColumn    = this.getCol(dropInfo.drop.col);
+    const laneType    = lanePairs[dropInfo.drag.lane];
     const fromColID   = dropInfo.drag.col;
     const toColID     = dropInfo.drop.col;
     const fromColType = colPairs[fromColID];
@@ -306,10 +295,12 @@ window.onDrop = function(changes, dropInfo)
 
     let link     = '';
     let moveCard = false;
+    let laneID   = toLaneID;
+    if(typeof toColumn.laneName != 'undefined') laneID = toColumn.laneName;
 
     if(item.col == toColID && item.lane == toLaneID && priv.canSortCards)
     {
-        link = $.createLink('kanban', 'sortCard', 'kanbanID=' + executionID + '&laneID=' + toLaneID + '&columnID=' + toColID + '&cards=' + dropInfo['data']['list'].join(','));
+        link = $.createLink('kanban', 'sortCard', 'kanbanID=' + executionID + '&laneID=' + laneID + '&columnID=' + toColID + '&cards=' + dropInfo['data']['list'].join(','));
         $.get(link, function(){refreshKanban()})
         return true;
     }
@@ -344,7 +335,7 @@ window.onDrop = function(changes, dropInfo)
 
         if(moveCard)
         {
-            link = $.createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
+            link = $.createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + laneID + '&toLaneID=' + laneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
             refreshKanban(link);
             return true;
         }
@@ -355,24 +346,15 @@ window.onDrop = function(changes, dropInfo)
         if(toColType == 'closed' && priv.canCloseStory) link = $.createLink('story', 'close', 'storyID=' + objectID + '&from=taskkanban');
         if(toColType == 'ready')
         {
-            $.get($.createLink('story', 'ajaxGetInfo', "storyID=" + objectID), function(data)
+            if(item.status == 'draft' || item.status == 'changing' || item.status == 'reviewing')
             {
-                if(data)
-                {
-                    data = $.parseJSON(data);
-                    if(data.status == 'draft' || data.status == 'changing' || data.status == 'reviewing')
-                    {
-                        zui.Modal.alert(executionLang.storyDragError);
-                        return false;
-                    }
-                    ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID);
-                    return true;
-                }
-            });
+                zui.Modal.alert(executionLang.storyDragError);
+                return false;
+            }
         }
-        else if(!link)
+        if(!link)
         {
-            ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID);
+            ajaxMoveCard(objectID, fromColID, toColID, laneID, laneID);
             return true;
         }
     }
@@ -479,18 +461,18 @@ window.ajaxMoveCard = function(objectID, fromColID, toColID, fromLaneID, toLaneI
 {
     var link = $.createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
     refreshKanban(link);
-}
+};
 
 window.searchCards = function(value, order)
 {
     const searchValue = value;
     if(typeof order == 'undefined') order = orderBy;
-    refreshKanban($.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value + '&orderBy=' + order));
-}
+    refreshKanban($.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=taskkanban&searchValue=' + value + '&orderBy=' + order));
+};
 
 window.refreshKanban = function(url)
 {
-    if(typeof url == 'undefined') url = $.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=&orderBy=' + orderBy);
+    if(typeof url == 'undefined') url = $.createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=taskkanban&searchValue=&orderBy=' + orderBy);
 
     const $kanbanList = $('[data-zui-kanbanlist]').zui('kanbanList');
     let   options     = $kanbanList.options;
@@ -511,4 +493,6 @@ window.refreshKanban = function(url)
         options.items = data;
         $kanbanList.render(options);
     });
-}
+};
+
+waitDom('.c-group .picker-box .picker-single-selection', function(){this.html(kanbanLang.laneGroup + ': ' + this.html());});

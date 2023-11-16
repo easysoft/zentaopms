@@ -66,7 +66,7 @@ if(!empty($task->team))
                     set::items($members),
                     set::value($member->account),
                     $memberDisabled ? set::disabled(true) : null
-                ),
+                )
             ),
             h::td
             (
@@ -78,11 +78,11 @@ if(!empty($task->team))
                         set::name("teamEstimate[]"),
                         set::value((float)$member->estimate),
                         $hourDisabled ? set::readonly(true) : null,
-                        set::placeholder($lang->task->estimateAB),
+                        set::placeholder($lang->task->estimateAB)
                     ),
                     to::suffix($lang->task->suffixHour),
-                    set::suffixWidth(20),
-                ),
+                    set::suffixWidth(20)
+                )
             ),
             h::td
             (
@@ -94,14 +94,15 @@ if(!empty($task->team))
                         set::name("teamConsumed[]"),
                         set::value((float)$member->consumed),
                         set::readonly(true),
-                        set::placeholder($lang->task->consumedAB),
+                        set::placeholder($lang->task->consumedAB)
                     ),
                     to::suffix($lang->task->suffixHour),
-                    set::suffixWidth(20),
-                ),
+                    set::suffixWidth(20)
+                )
             ),
             h::td
             (
+                setClass('required'),
                 set::width('135px'),
                 inputControl
                 (
@@ -110,11 +111,11 @@ if(!empty($task->team))
                         set::name("teamLeft[]"),
                         set::value((float)$member->left),
                         $hourDisabled ? set::readonly(true) : null,
-                        set::placeholder($lang->task->leftAB),
+                        set::placeholder($lang->task->leftAB)
                     ),
                     to::suffix($lang->task->suffixHour),
-                    set::suffixWidth(20),
-                ),
+                    set::suffixWidth(20)
+                )
             ),
             h::td
             (
@@ -124,7 +125,7 @@ if(!empty($task->team))
                 (
                     set::items(array(
                         array('icon' => 'plus',  'class' => 'btn ghost btn-add'),
-                        array('icon' => 'trash', 'class' => 'btn ghost btn-delete'),
+                        array('icon' => 'trash', 'class' => 'btn ghost btn-delete')
                     ))
                 )
             )
@@ -155,8 +156,8 @@ for($i; $i < $count; $i ++)
             picker
             (
                 set::name("team[]"),
-                set::items($members),
-            ),
+                set::items($members)
+            )
         ),
         h::td
         (
@@ -166,11 +167,11 @@ for($i; $i < $count; $i ++)
                 input
                 (
                     set::name("teamEstimate[]"),
-                    set::placeholder($lang->task->estimateAB),
+                    set::placeholder($lang->task->estimateAB)
                 ),
                 to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20),
-            ),
+                set::suffixWidth(20)
+            )
         ),
         !empty($task->team) ? h::td
         (
@@ -182,11 +183,11 @@ for($i; $i < $count; $i ++)
                     set::name("teamConsumed[]"),
                     set::value(0),
                     set::readonly(true),
-                    set::placeholder($lang->task->consumedAB),
+                    set::placeholder($lang->task->consumedAB)
                 ),
                 to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20),
-            ),
+                set::suffixWidth(20)
+            )
         ) : null,
         !empty($task->team) ? h::td
         (
@@ -196,11 +197,11 @@ for($i; $i < $count; $i ++)
                 input
                 (
                     set::name("teamLeft[]"),
-                    set::placeholder($lang->task->leftAB),
+                    set::placeholder($lang->task->leftAB)
                 ),
                 to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20),
-            ),
+                set::suffixWidth(20)
+            )
         ) : null,
         h::td
         (
@@ -210,7 +211,7 @@ for($i; $i < $count; $i ++)
             (
                 set::items(array(
                     array('icon' => 'plus',  'class' => 'btn ghost btn-add'),
-                    array('icon' => 'trash', 'class' => 'btn ghost btn-delete'),
+                    array('icon' => 'trash', 'class' => 'btn ghost btn-delete')
                 ))
             )
         )

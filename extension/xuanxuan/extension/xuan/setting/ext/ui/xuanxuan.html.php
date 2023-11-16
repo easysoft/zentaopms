@@ -149,7 +149,7 @@ if($type == 'edit')
                     set::value(zget($config->xuanxuan, 'uploadFileSize', 20))
                 ),
                 'M'
-            ),
+            )
         ),
         formGroup
         (

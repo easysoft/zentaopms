@@ -1771,7 +1771,7 @@ class execution extends control
                 ->remove('heightType')
                 ->get();
 
-            if(!isset($_POST['heightType']) || $this->post->heightType != 'custom' || $this->loadModel('kanban')->checkDisplayCards($execution->displayCards))
+            if(!isset($_POST['heightType']) || $this->post->heightType != 'custom' || $this->loadModel('kanban')->checkDisplayCards($executionData->displayCards))
             {
                 $this->execution->setKanban($executionID, $executionData);
             }
@@ -2434,15 +2434,11 @@ class execution extends control
     public function ajaxGetMembers(int $executionID, string $assignedTo = '')
     {
         $users = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
-        if($this->app->getViewType() === 'json')
-        {
-            return print(json_encode($users));
-        }
-        else
-        {
-            $assignedTo = isset($users[$assignedTo]) ? $assignedTo : '';
-            return print(html::select('assignedTo', $users, $assignedTo, "class='form-control'"));
-        }
+        if($this->app->getViewType() === 'json') return print(json_encode($users));
+
+        $items = array();
+        foreach($users as $account => $realName) $items[] = array('value' => $account, 'text' => $realName, 'keys' => $account);
+        return print(json_encode($items));
     }
 
     /**
@@ -2940,7 +2936,7 @@ class execution extends control
             $importPlanStoryTips = $multiBranchProduct ? $this->lang->execution->haveBranchDraft : $this->lang->execution->haveDraft;
             $haveDraft           = sprintf($importPlanStoryTips, $draftCount);
             if(!$execution->multiple || $moduleName == 'projectstory') $haveDraft = str_replace($this->lang->executionCommon, $this->lang->projectCommon, $haveDraft);
-            return $this->sendError($haveDraft);
+            return $this->send(array('closeModal' => true, 'load' => true, 'result' => 'fail', 'message' => $haveDraft));
         }
 
         return $this->sendSuccess(array('closeModal' => true, 'load' => true));
@@ -3044,13 +3040,13 @@ class execution extends control
      * @param  int    $enterTime
      * @param  string $browseType  all|story|task|bug
      * @param  string $groupBy     default|pri|category|module|source|assignedTo|type|story|severity
-     * @param  string $from        execution|RD
+     * @param  string $from        taskkanban|execution
      * @param  string $searchValue
      * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function ajaxUpdateKanban(int $executionID = 0, int $enterTime = 0, string $browseType = '', string $groupBy = '', string $from = 'execution', string $searchValue = '', string $orderBy = 'id_asc')
+    public function ajaxUpdateKanban(int $executionID = 0, int $enterTime = 0, string $browseType = '', string $groupBy = '', string $from = 'taskkanban', string $searchValue = '', string $orderBy = 'id_asc')
     {
         $this->loadModel('kanban');
         if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'pri_asc';
@@ -3062,7 +3058,7 @@ class execution extends control
         $enterTime      = date('Y-m-d H:i:s', $enterTime);
         if(in_array(true, array(is_null($lastEditedTime), strtotime($lastEditedTime) < 0, $lastEditedTime > $enterTime, $groupBy != 'default', !empty($searchValue))))
         {
-            $kanbanGroup = $from == 'execution' ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $searchValue, $orderBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy, $searchValue);
+            $kanbanGroup = $from == 'taskkanban' ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $searchValue, $orderBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy, $searchValue);
             return print(json_encode($kanbanGroup));
         }
     }

@@ -54,7 +54,7 @@ featureBar
         (
             setClass('btn ghost group-collapse-all'),
             span(setClass('text'), $lang->execution->treeLevel['root']),
-            icon('fold-all'),
+            icon('fold-all')
         )
     ),
     li
@@ -64,7 +64,7 @@ featureBar
         (
             setClass('btn ghost group-expand-all'),
             span(setClass('text'), $lang->execution->treeLevel['all']),
-            icon('unfold-all'),
+            icon('unfold-all')
         )
     ),
     $items
@@ -107,12 +107,12 @@ toolbar
         btn(
             setClass('ghost btn square btn-default'),
             set::icon('import'),
-            set::text($lang->import),
+            set::text($lang->import)
         ),
         set::items(array_filter(array($importTaskItem))),
-        set::placement('bottom-end'),
+        set::placement('bottom-end')
     ) : null,
-    $canCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null
 );
 
 $groupList = array();
@@ -121,7 +121,7 @@ foreach($lang->execution->groups as $key => $value)
     $link = createLink('execution', 'grouptask', "executionID={$executionID}&groupBy={$key}");
     $groupList[] = array(
         'text' => $value,
-        'url'  => $link,
+        'url'  => $link
     );
 }
 
@@ -283,15 +283,15 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                             setClass('groupBtn'),
                             set::href('###'),
                             icon('caret-down'),
-                            $groupName,
+                            $groupName
                         ),
                         div
                         (
                             setClass('groupSummary small'),
                             ($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) ? html(sprintf($lang->execution->memberHoursAB, zget($users, $task->assignedTo), $members[$task->assignedTo]->totalHours)) : null,
                             html(sprintf($lang->execution->groupSummaryAB, $groupSum, $groupWait, $groupDoing, $groupEstimate . $lang->execution->workHourUnit, $groupConsumed . $lang->execution->workHourUnit, $groupLeft . $lang->execution->workHourUnit))
-                        ),
-                    ),
+                        )
+                    )
                 ) : null,
                 h::td(sprintf('%03d', (string)$task->id)),
                 h::td
@@ -405,7 +405,7 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                                 'icon'         => 'trash'
                             )
                         )
-                    ) : null,
+                    ) : null
                 )
                 : h::td()
             );
@@ -430,9 +430,9 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                             setClass('summaryBtn'),
                             set::href('###'),
                             icon('caret-right'),
-                            $groupName,
+                            $groupName
                         )
-                    ),
+                    )
                 ),
                 h::td
                 (
@@ -460,7 +460,7 @@ $tbody = function() use($tasks, $lang, $groupBy, $users, $groupByList, $executio
                             )
                         ) : null,
                         html(sprintf($lang->execution->countSummary, $groupSum, $groupDoing, $groupWait)),
-                        html(sprintf($lang->execution->timeSummary, $groupEstimate . $lang->execution->workHourUnit, $groupConsumed . $lang->execution->workHourUnit, $groupLeft . $lang->execution->workHourUnit)),
+                        html(sprintf($lang->execution->timeSummary, $groupEstimate . $lang->execution->workHourUnit, $groupConsumed . $lang->execution->workHourUnit, $groupLeft . $lang->execution->workHourUnit))
                     )
                 )
             );
@@ -481,7 +481,7 @@ if($tasks)
         (
             setClass('table condensed'),
             h::thead($thead()),
-            h::tbody($tbody()),
+            h::tbody($tbody())
         )
     );
 }

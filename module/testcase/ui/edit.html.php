@@ -75,6 +75,7 @@ detailBody
         section
         (
             set::title($lang->testcase->title),
+            set::required(true),
             formGroup
             (
                 inputControl
@@ -116,11 +117,14 @@ detailBody
         section
         (
             set::title($lang->testcase->precondition),
-            textarea
+            formGroup
             (
-                set::name('precondition'),
-                set::value($case->precondition),
-                set::rows(2)
+                textarea
+                (
+                    set::name('precondition'),
+                    set::value($case->precondition),
+                    set::rows(2)
+                )
             )
         ),
         section
@@ -150,13 +154,7 @@ detailBody
             )
         )
     ),
-    history
-    (
-        set::actions($actions),
-        set::users($users),
-        set::methodName($methodName),
-        set::hasComment(false)
-    ),
+    history(set::objectID($case->id)),
     detailSide
     (
         tableData
@@ -197,33 +195,36 @@ detailBody
             item
             (
                 set::name($lang->testcase->module),
-                inputGroup
+                formGroup
                 (
-                    set::id('moduleIdBox'),
-                    picker
+                    inputGroup
                     (
-                        setID('module'),
-                        set::name('module'),
-                        set::items($moduleOptionMenu),
-                        set::value($case->module),
-                        set::required(true)
-                    ),
-                    span
-                    (
-                        set('class', 'input-group-addon' . (count($moduleOptionMenu) > 1 ? ' hidden' : '')),
-                        a
+                        set::id('moduleIdBox'),
+                        picker
                         (
-                            set('class', 'mr-2'),
-                            set('href', $createModuleLink),
-                            set('data-toggle', 'modal'),
-                            set('data-size', 'lg'),
-                            $lang->tree->manage
+                            setID('module'),
+                            set::name('module'),
+                            set::items($moduleOptionMenu),
+                            set::value($case->module),
+                            set::required(true)
                         ),
-                        a
+                        span
                         (
-                            set('id', 'refresh'),
-                            set('class', 'text-black'),
-                            icon('refresh')
+                            set('class', 'input-group-addon' . (count($moduleOptionMenu) > 1 ? ' hidden' : '')),
+                            a
+                            (
+                                set('class', 'mr-2'),
+                                set('href', $createModuleLink),
+                                set('data-toggle', 'modal'),
+                                set('data-size', 'lg'),
+                                $lang->tree->manage
+                            ),
+                            a
+                            (
+                                set('id', 'refresh'),
+                                set('class', 'text-black'),
+                                icon('refresh')
+                            )
                         )
                     )
                 )
@@ -231,7 +232,7 @@ detailBody
             !$isLibCase ? item
             (
                 set::name($lang->testcase->story),
-                div
+                formGroup
                 (
                     set::id('storyIdBox'),
                     picker
@@ -289,41 +290,54 @@ detailBody
             item
             (
                 set::name($lang->testcase->stage),
-                picker
+                formGroup
                 (
-                    set::name('stage[]'),
-                    set::items($lang->testcase->stageList),
-                    set::value($case->stage),
-                    set::multiple(true)
+                    picker
+                    (
+                        set::name('stage[]'),
+                        set::items($lang->testcase->stageList),
+                        set::value($case->stage),
+                        set::multiple(true)
+                    )
                 )
             ),
             item
             (
                 set::name($lang->testcase->pri),
-                priPicker
+                formGroup
                 (
-                    set::name('pri'),
-                    set::items($priList),
-                    set::value($case->pri)
+                    priPicker
+                    (
+                        set::name('pri'),
+                        set::items($priList),
+                        set::value($case->pri)
+                    )
                 )
             ),
             item
             (
                 set::name($lang->testcase->status),
-                !$forceNotReview && $case->status == 'wait' ? $lang->testcase->statusList[$case->status] : picker
+                !$forceNotReview && $case->status == 'wait' ? $lang->testcase->statusList[$case->status] :
+                formGroup
                 (
-                    set::name('status'),
-                    set::items($lang->testcase->statusList),
-                    set::value($case->status)
+                    picker
+                    (
+                        set::name('status'),
+                        set::items($lang->testcase->statusList),
+                        set::value($case->status)
+                    )
                 )
             ),
             item
             (
                 set::name($lang->testcase->keywords),
-                input
+                formGroup
                 (
-                    set::name('keywords'),
-                    set::value($case->keywords)
+                    input
+                    (
+                        set::name('keywords'),
+                        set::value($case->keywords)
+                    )
                 )
             ),
             (!$isLibCase && hasPriv('testcase', 'linkCases')) ? item

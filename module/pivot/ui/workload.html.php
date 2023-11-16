@@ -40,7 +40,7 @@ $generateData = function() use ($lang, $title, $cols, $workload, $depts, $dept, 
                 $lang->pivot->beginAndEnd,
                 datePicker(set(array('name' => 'begin', 'value' => $begin))),
                 $lang->pivot->to,
-                datePicker(set(array('name' => 'end', 'value' => $end))),
+                datePicker(set(array('name' => 'end', 'value' => $end)))
             ),
             inputGroup
             (
@@ -55,7 +55,7 @@ $generateData = function() use ($lang, $title, $cols, $workload, $depts, $dept, 
                 (
                     setClass('w-5/12'),
                     $lang->pivot->workhour,
-                    input(set(array('name' => 'workhour', 'value' => $workhour, 'class' => 'text-right'))),
+                    input(set(array('name' => 'workhour', 'value' => $workhour, 'class' => 'text-right')))
                 ),
                 picker
                 (

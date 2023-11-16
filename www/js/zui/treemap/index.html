@@ -20,9 +20,12 @@
 <body>
 <div id="treemap"></div>
 <script>
-$('#treemap').treemap($.extend({}, window.parent[$.getSearchParam('options')]));
-const treemap = $('#treemap').data('zui.treemap');
-parent.gettreemap = function() {return treemap;};
+window.parent.$(function()
+{
+    $('#treemap').treemap($.extend({}, window.parent[$.getSearchParam('options')]));
+    const treemap = $('#treemap').data('zui.treemap');
+    window.parent.getTreemap = function() {return treemap;};
+});
 </script>
 </body>
 </html>

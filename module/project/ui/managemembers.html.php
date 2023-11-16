@@ -35,8 +35,8 @@ if(count($teams2Import) > 1)
                 set::value($copyProjectID),
                 set::items($teams2Import),
                 set('data-placeholder', $lang->project->copyTeamTitle),
-                on::change('choseTeam2Copy'),
-            ),
+                on::change('choseTeam2Copy')
+            )
         );
 }
 
@@ -59,10 +59,10 @@ featureBar
             set::value($dept),
             set::items($depts),
             set('data-placeholder', $lang->execution->selectDeptTitle),
-            on::change('setDeptUsers'),
+            on::change('setDeptUsers')
         ),
-        $copyTeamBox,
-    ),
+        $copyTeamBox
+    )
 );
 
 $memberTR = array();
@@ -78,15 +78,15 @@ foreach($teamMembers as $member)
                     set::id("realnames{$i}"),
                     set::name("realnames[$i]"),
                     set::value($member->realname),
-                    set::readonly(true),
+                    set::readonly(true)
                 ),
                 input
                 (
                     set::id("accounts{$i}"),
                     set::name("accounts[$i]"),
                     set::value($member->account),
-                    set::type('hidden'),
-                ),
+                    set::type('hidden')
+                )
             ) : h::td(
                 picker
                 (
@@ -95,8 +95,8 @@ foreach($teamMembers as $member)
                     set::value($member->account),
                     set::items($users),
                     set('data-max-list-count', $config->maxCount),
-                    set('onchange', "setRole(this.value, '{$i}')"),
-                ),
+                    set('onchange', "setRole(this.value, '{$i}')")
+                )
             ),
             h::td
             (
@@ -104,7 +104,7 @@ foreach($teamMembers as $member)
                 (
                     set::id("role{$i}"),
                     set::name("roles[$i]"),
-                    set::value($member->role),
+                    set::value($member->role)
                 )
             ),
             h::td
@@ -113,7 +113,7 @@ foreach($teamMembers as $member)
                 (
                     set::id("days{$i}"),
                     set::name("days[$i]"),
-                    set::value($member->days),
+                    set::value($member->days)
                 )
             ),
             h::td
@@ -122,7 +122,7 @@ foreach($teamMembers as $member)
                 (
                     set::id("hours{$i}"),
                     set::name("hours[$i]"),
-                    set::value($member->hours),
+                    set::value($member->hours)
                 )
             ),
             h::td
@@ -133,7 +133,7 @@ foreach($teamMembers as $member)
                     set::name("limited[$i]"),
                     set::items($lang->team->limitedList),
                     set::value($member->limited),
-                    set::inline(true),
+                    set::inline(true)
                 )
             ),
             h::td
@@ -143,7 +143,7 @@ foreach($teamMembers as $member)
                 (
                     set::items(array(
                         array('class' => 'btn btn-link text-gray', 'icon' => 'plus', 'onclick' => 'addItem(this)'),
-                        array('class' => 'btn btn-link text-gray', 'icon' => 'trash', 'onclick' => 'deleteItem(this)'),
+                        array('class' => 'btn btn-link text-gray', 'icon' => 'trash', 'onclick' => 'deleteItem(this)')
                     ))
                 )
             )
@@ -168,15 +168,15 @@ h::table
                 set::name("accounts[$i]"),
                 set::items($users),
                 set('data-max-list-count', $config->maxCount),
-                set('onchange', "setRole(this.value, '{$i}')"),
-            ),
+                set('onchange', "setRole(this.value, '{$i}')")
+            )
         ),
         h::td
         (
             input
             (
                 set::id("role{$i}"),
-                set::name("roles[$i]"),
+                set::name("roles[$i]")
             )
         ),
         h::td
@@ -185,7 +185,7 @@ h::table
             (
                 set::id("days{$i}"),
                 set::name("days[$i]"),
-                set::value($project->days),
+                set::value($project->days)
             )
         ),
         h::td
@@ -194,7 +194,7 @@ h::table
             (
                 set::id("hours{$i}"),
                 set::name("hours[$i]"),
-                set::value($config->execution->defaultWorkhours),
+                set::value($config->execution->defaultWorkhours)
             )
         ),
         h::td
@@ -205,7 +205,7 @@ h::table
                 set::name("limited[$i]"),
                 set::items($lang->team->limitedList),
                 set::value('no'),
-                set::inline(true),
+                set::inline(true)
             )
         ),
         h::td
@@ -215,7 +215,7 @@ h::table
             (
                 set::items(array(
                     array('class' => 'btn btn-link text-gray', 'icon' => 'plus', 'onclick' => 'addItem(this)'),
-                    array('class' => 'btn btn-link text-gray', 'icon' => 'trash', 'onclick' => 'deleteItem(this)'),
+                    array('class' => 'btn btn-link text-gray', 'icon' => 'trash', 'onclick' => 'deleteItem(this)')
                 ))
             )
         )
@@ -239,34 +239,34 @@ div
                     h::th
                     (
                         $lang->team->account,
-                        set::width('240px'),
+                        set::width('240px')
                     ),
                     h::th
                     (
                         $lang->team->role,
-                        set::width('240px'),
+                        set::width('240px')
                     ),
                     h::th
                     (
                         $lang->team->days,
-                        set::width('76px'),
+                        set::width('76px')
                     ),
                     h::th
                     (
                         $lang->team->hours,
-                        set::width('136px'),
+                        set::width('136px')
                     ),
                     h::th
                     (
                         $lang->team->limited,
-                        set::width('96px'),
+                        set::width('96px')
                     ),
                     h::th
                     (
                         $lang->actions,
-                        set::width('48px'),
-                    ),
-                ),
+                        set::width('48px')
+                    )
+                )
             ),
             h::tbody
             (
@@ -275,7 +275,7 @@ div
                 (
                     set::type('hidden'),
                     set::name('removeExecution'),
-                    set::value('no'),
+                    set::value('no')
                 )
             )
         ),
@@ -284,11 +284,11 @@ div
             'text'    => $lang->save,
             'type'    => 'primary',
             'btnType' => 'button',
-            'onclick' => 'changeProjectMembers()'
+            'onclick' => commonModel::isTutorialMode() ? '' : 'changeProjectMembers()'
             ),
             'cancel'
         ))
-    ),
+    )
 );
 
 /* ====== Render page ====== */

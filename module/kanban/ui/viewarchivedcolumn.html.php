@@ -32,12 +32,12 @@ foreach($columns as $column)
                     array
                     (
                         'class' => 'btn primary size-sm ajax-submit',
-                        'url'   => inlink('restoreColumn', "colID=$column->id"),
-                    ),
+                        'url'   => inlink('restoreColumn', "colID=$column->id")
+                    )
                 ),
                 $lang->kanban->restore,
-            ) : null,
-        ),
+            ) : null
+        )
     );
 }
 
@@ -48,7 +48,7 @@ panel
         div
         (
             set('class', 'panel-title'),
-            $lang->kanban->archivedColumn,
+            $lang->kanban->archivedColumn
         )
     ),
     to::headingActions
@@ -56,12 +56,12 @@ panel
         btn
         (
             setClass('closeBtn ghost'),
-            'x',
+            'x'
         )
     ),
     div
     (
         setClass('panel-body'),
-        $colItems,
+        $colItems
     )
 );

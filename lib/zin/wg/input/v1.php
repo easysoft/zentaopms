@@ -14,12 +14,12 @@ class input extends wg
         'placeholder?: string',
         'autofocus?: bool',
         'autocomplete?: bool=false',
-        'disabled?: bool',
+        'disabled?: bool'
     );
 
     protected static array $defaultProps = array(
         'type' => 'text',
-        'class' => 'form-control',
+        'class' => 'form-control'
     );
 
     protected function build(): wg

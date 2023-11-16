@@ -33,7 +33,10 @@ class treemap extends wg
         'listenNodeResize?: bool',       // 监听节点尺寸变化。
         'tooltip?: array',               // 工具提示选项。
         'nodeStyle?: array',             // 定义节点的默认样式。
-        'nodeTemplate?: string'          // 节点元素模板。
+        'nodeTemplate?: string',         // 节点元素模板。
+        'onNodeClick?: function',        // 节点元素模板。
+        'afterDrawLines?: function',     // 节点元素模板。
+        'afterRender?: function'         // 节点元素模板。
     );
 
     protected function build(): array
@@ -43,9 +46,10 @@ class treemap extends wg
         list($width, $height) = $this->prop(array('width', 'height'));
         $dataVarName = "_treemap_$this->gid";
         $treemapPath = $app->getWebRoot() . 'js/zui/treemap/index.html?options=' . $dataVarName;
-        $options = $this->props->pick(array('hotkeyEnable', 'hotkeys', 'lang', 'langs', 'data', 'nodeTeamplate', 'hSpace', 'vSpace', 'canvasPadding', 'removingNodeTip', 'lineCurvature', 'subLineWidth', 'lineColor', 'lineOpacity', 'lineSaturation', 'lineLightness', 'nodeLineWidth', 'showToggleButton', 'readonly', 'minimap', 'toolbar', 'zoom', 'zoomMax', 'zoomMin', 'minimapHeight'));
+        $options = $this->props->pick(array('hotkeyEnable', 'hotkeys', 'lang', 'langs', 'data', 'nodeTeamplate', 'hSpace', 'vSpace', 'canvasPadding', 'removingNodeTip', 'lineCurvature', 'subLineWidth', 'lineColor', 'lineOpacity', 'lineSaturation', 'lineLightness', 'nodeLineWidth', 'showToggleButton', 'readonly', 'minimap', 'toolbar', 'zoom', 'zoomMax', 'zoomMin', 'minimapHeight', 'onNodeClick', 'afterDrawLines', 'afterRender'));
         return array
         (
+            h::jsVar("window.$dataVarName", $options),
             h::iframe
             (
                 set::className('treemap-iframe'),
@@ -56,8 +60,7 @@ class treemap extends wg
                 set::scrolling('auto'),
                 set::style(array('width' => $width, 'height' => $height)),
                 set($this->getRestProps())
-            ),
-            h::jsVar("window.$dataVarName", $options)
+            )
         );
     }
 }

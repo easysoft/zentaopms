@@ -40,7 +40,7 @@ class testsuite extends control
         parent::__construct($moduleName, $methodName);
 
         $this->view->products = $this->products = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        if(empty($this->products) && !helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'locate' => $this->createLink('product', 'showErrorNone', 'moduleName=qa&activeMenu=testsuite')));
+        if(empty($this->products) && !helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'open' => $this->createLink('product', 'showErrorNone', 'moduleName=qa&activeMenu=testsuite')));
     }
 
     /**
@@ -370,8 +370,8 @@ class testsuite extends control
      */
     public function batchUnlinkCases(int $suiteID)
     {
-        $formData = form::data($this->config->testsuite->form->batchUnlinkCases)->get();
-        $this->testsuite->deleteCaseBySuiteID($formData->caseIdList, $suiteID);
+        $caseIDList = zget($_POST, 'caseIdList', array());
+        $this->testsuite->deleteCaseBySuiteID($caseIDList, $suiteID);
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'load' => true));

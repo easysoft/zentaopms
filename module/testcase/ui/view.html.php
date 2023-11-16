@@ -328,7 +328,7 @@ detailHeader
         (
             set::entityID($case->id),
             set::level(1),
-            set::text($case->title)
+            span(setStyle('color', $case->color), $case->title)
         )
     ),
     $isInModal ? to::prefix('') : null,
@@ -444,7 +444,7 @@ detailBody
             set::padding(false)
         ) : null
     ),
-    history(),
+    history(set::objectID($case->id)),
     floatToolbar
     (
         set::object($case),

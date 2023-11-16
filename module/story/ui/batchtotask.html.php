@@ -62,7 +62,7 @@ formBatchPanel
     on::change('[data-name="module"]', 'setStories'),
     on::change('[data-name="story"]', 'setStoryRelated'),
     on::click('.copy-title-btn', 'copyStoryTitle'),
-    formHidden('syncFields', implode(',', $syncFields)),
+    formHidden('syncFields', implode(',', $syncFields))
 );
 
 render();

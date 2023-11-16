@@ -1072,9 +1072,10 @@ class storyZen extends story
     protected function getAssignMeBlockID(): int
     {
         if(!isonlybody()) return 0;
-        return (int)$this->dao->select('id')->from(TABLE_BLOCK)->where('block')->eq('assigntome')
+        return (int)$this->dao->select('id')->from(TABLE_BLOCK)->where('module')->eq('assigntome')
             ->andWhere('module')->eq('my')
             ->andWhere('account')->eq($this->app->user->account)
+            ->andWhere('vision')->eq($this->config->vision)
             ->orderBy('order_desc')
             ->limit(1)
             ->fetch('id');
@@ -1534,34 +1535,15 @@ class storyZen extends story
      * Get response when open in modal.
      *
      * @param  string    $message
-     * @param  int       $executionID
      * @access protected
      * @return array|false
      */
-    protected function getResponseInModal(string $message = '', int $executionID = 0): array|false
+    protected function getResponseInModal(string $message = ''): array|false
     {
         if(!isInModal()) return false;
         if($this->app->tab != 'execution') return array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true);
 
-        $executionID       = $executionID ? $executionID : $this->session->execution;
-        $execution         = $this->execution->getByID($executionID);
-        $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-        $executionGroupBy  = $this->session->executionGroupBy  ? $this->session->executionGroupBy  : 'default';
-
-        if($execution->type == 'kanban')
-        {
-            $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-            $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $executionLaneType, 'id_desc', 0, $executionGroupBy, $rdSearchValue);
-            $kanbanData    = json_encode($kanbanData);
-            return array('result' => 'success', 'message' => $message, 'closeModal' => true, 'callback' => "updateKanban($kanbanData, 0)");
-        }
-
-        $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-        $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($execution->id, $executionLaneType, $executionGroupBy, $taskSearchValue);
-        $kanbanType      = $executionLaneType == 'all' ? 'story' : key($kanbanData);
-        $kanbanData      = $kanbanData[$kanbanType];
-        $kanbanData      = json_encode($kanbanData);
-        return array('result' => 'success', 'message' => $message, 'closeModal' => true, 'callback' => "updateKanban(\"story\", $kanbanData)");
+        return array('result' => 'success', 'message' => $message, 'closeModal' => true, 'callback' => "refreshKanban()");
     }
 
     /**

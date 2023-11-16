@@ -171,7 +171,7 @@ window.rendDocCell = function(result, {col, row})
     {
         if(col.setting.list.edit && row.data.type != 'text')
         {
-            result[0][0]['data-toggle'] = 'modal';
+            result[0]['props']['items'][0]['data-toggle'] = 'modal';
             return result;
         }
     }

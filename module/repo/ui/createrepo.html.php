@@ -46,7 +46,7 @@ formPanel
             set::control(array("type" => "picker","multiple" => true)),
             set::items($products),
             set::value(empty($objectID) ? '' : implode(',', array_keys($products)))
-        ),
+        )
     ),
     formGroup
     (
@@ -69,7 +69,7 @@ formPanel
             set::value(""),
             set::control("picker"),
             set::items($serviceHosts)
-        ),
+        )
     ),
     formGroup
     (
@@ -78,7 +78,7 @@ formPanel
         set::label($lang->repo->namespace),
         set::required(true),
         set::items($repoGroups),
-        set::control("picker"),
+        set::control("picker")
     ),
     formRow
     (
@@ -91,8 +91,8 @@ formPanel
             set::label($lang->repo->client),
             set::required(true),
             set::control("text"),
-            set::placeholder($lang->repo->example->client->git),
-        ),
+            set::placeholder($lang->repo->example->client->git)
+        )
     ),
     formGroup
     (
@@ -108,7 +108,7 @@ formPanel
         set::name("desc"),
         set::label($lang->story->spec),
         set::control("input"),
-        set::placeholder($lang->repo->descPlaceholder),
+        set::placeholder($lang->repo->descPlaceholder)
     ),
     formRow
     (
@@ -121,7 +121,7 @@ formPanel
             set::control('radioList'),
             set::items($lang->repo->aclList),
             set::value('open'),
-            on::change('onAclChange'),
+            on::change('onAclChange')
         )
     ),
     formRow
@@ -159,8 +159,8 @@ formPanel
                 ))),
                 setClass('mt-2')
             )
-        ),
-    ),
+        )
+    )
 );
 
 render();

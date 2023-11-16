@@ -71,6 +71,6 @@ $config->gitea->dtable->bindUser->fieldList['zentaoUsers']['control'] = 'picker'
 $config->gitea->dtable->bindUser->fieldList['zentaoUsers']['width']   = 300;
 
 $config->gitea->dtable->bindUser->fieldList['status']['title'] = $lang->gitea->bindingStatus;
-$config->gitea->dtable->bindUser->fieldList['status']['type']  = 'html';
+$config->gitea->dtable->bindUser->fieldList['status']['html']  = true;
 $config->gitea->dtable->bindUser->fieldList['status']['width'] = 100;
 $config->gitea->dtable->bindUser->fieldList['status']['map']   = $lang->gitea->bindStatus;

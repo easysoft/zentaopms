@@ -23,7 +23,7 @@ $tableData = initTableData($jenkinsList, $config->jenkins->dtable->fieldList, $t
 
 toolbar
 (
-    $canCreate ? item(set($createItem)) : null,
+    $canCreate ? item(set($createItem)) : null
 );
 
 jsVar('confirmDelete',    $lang->jenkins->confirmDelete);
@@ -36,5 +36,5 @@ dtable
     set::sortLink(createLink('jenkins', 'browse', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );

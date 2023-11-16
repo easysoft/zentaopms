@@ -86,7 +86,9 @@ class caselibModel extends model
     {
         $oldLib = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->eq($lib->id)->fetch();
 
-        $this->dao->update(TABLE_TESTSUITE)->data($lib, $skip = 'uid')
+        $this->lang->testsuite->name = $this->lang->caselib->name;
+
+        $this->dao->update(TABLE_TESTSUITE)->data($lib, 'uid')
             ->autoCheck()
             ->batchcheck($this->config->caselib->edit->requiredFields, 'notempty')
             ->checkFlow()

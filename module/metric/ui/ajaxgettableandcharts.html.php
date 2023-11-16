@@ -24,8 +24,8 @@ div
                 set::bordered(true),
                 set::cols($resultHeader),
                 set::data(array_values($resultData)),
-                set::onRenderCell(jsRaw('window.renderDTableCell')),
-            ) : null,
+                set::onRenderCell(jsRaw('window.renderDTableCell'))
+            ) : null
         )
     ),
     div
@@ -40,8 +40,8 @@ div
                 set::items($chartTypeList),
                 set::value('line'),
                 set::required(true),
-                set::onchange("window.handleChartTypeChange($metric->id, '$viewType')"),
-            ) : null,
+                set::onchange("window.handleChartTypeChange($metric->id, '$viewType')")
+            ) : null
         ),
         div
         (
@@ -50,8 +50,8 @@ div
             (
                 set::xAxis($echartOptions['xAxis']),
                 set::yAxis($echartOptions['yAxis']),
-                set::series($echartOptions['series']),
-            )->size('100%', '100%') : null,
-        ),
-    ),
+                set::series($echartOptions['series'])
+            )->size('100%', '100%') : null
+        )
+    )
 );

@@ -4815,6 +4815,7 @@ class executionModel extends model
         $executionData->hasProduct  = $project->hasProduct;
         $executionData->openedBy    = $this->app->user->account;
         $executionData->openedDate  = helper::now();
+        $executionData->parent      = $projectID;
         if($project->code) $executionData->code = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();

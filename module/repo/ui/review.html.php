@@ -22,6 +22,7 @@ jsVar('appTab', $app->tab);
 
 foreach($bugs as $bug)
 {
+    $repo     = zget($repos, $bug->repo, $repo);
     $objectID = $app->tab == 'execution' ? $bug->execution : 0;
     $bug->revisionA = $repo->SCM != 'Subversion' ? strtr($bug->v2, '*', '-') : $bug->v2;
 
@@ -47,7 +48,7 @@ $bugs = initTableData($bugs, $config->repo->reviewDtable->fieldList);
 
 \zin\featureBar
 (
-    set::linkParams("repoID={$repoID}&browseType={key}&objectID={$objectID}"),
+    set::linkParams("repoID={$repoID}&browseType={key}&objectID={$objectID}")
 );
 
 dtable
@@ -58,5 +59,5 @@ dtable
     set::sortLink(createLink('repo', 'review', "repoID=$repoID&browseType=$browseType&objectID={$objectID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderRepobugList')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );

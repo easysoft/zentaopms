@@ -12,34 +12,37 @@ declare(strict_types=1);
 
 namespace zin;
 
-$hasProduct   = false;
+$hasProduct = false;
 
 /* Closure creating program buttons. */
 $fnGenerateCreateProgramBtns = function() use ($lang, $browseType)
 {
     $items = array();
-
     hasPriv('program', 'create')     && $items[] = array('text' => $lang->program->create,        'icon' => 'plus', 'url'      => createLink('program', 'create'));
     hasPriv('product', 'create')     && $items[] = array('text' => $lang->program->createProduct, 'icon' => 'plus', 'url'      => createLink('product', 'create'), 'data-app' => 'product');
     hasPriv('product', 'manageLine') && $items[] = array('text' => $lang->program->manageLine,    'icon' => 'edit', 'data-url' => createLink('product', 'manageLine', $browseType), 'data-toggle' => 'modal', 'data-id' => 'manageLineModal');
 
-    return btnGroup
+    if(empty($items)) return null;
+
+    return count($items) > 1 ? btnGroup
     (
-        hasPriv('program', 'create') ? btn
+        btn
         (
             setClass('btn primary'),
-            set::icon('plus'),
-            set::text($lang->program->create),
-            set::url(createLink('program', 'create'))
-        ) : null,
-        !empty($items) ? dropdown
+            set(reset($items))
+        ),
+        dropdown
         (
             setClass('btn primary'),
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0')),
             set::placement('bottom-end'),
             set::items($items),
             span(setClass('caret'))
-        ) : null
+        )
+    ) : btn
+    (
+        setClass('btn primary'),
+        set(reset($items))
     );
 };
 
@@ -249,7 +252,7 @@ $fnGenerateCols = function() use ($canBatchEdit)
 featureBar
 (
     set::current($browseType),
-    set::linkParams("status={key}&orderBy=$orderBy"),
+    set::linkParams("status={key}&orderBy=$orderBy&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     li(searchToggle(set::open($browseType == 'bySearch'), set::module('program')))
 );
 toolbar($fnGenerateCreateProgramBtns());
@@ -279,13 +282,13 @@ dtable
                 'className' => 'secondary batch-btn',
                 'data-page' => 'batch',
                 'data-formaction' => $this->createLink('product', 'batchEdit')
-            ) : null,
+            ) : null
         )
     )),
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList);}")),
     set::emptyTip($lang->product->noProduct),
     set::createTip($lang->product->create),
-    set::createLink(hasPriv('product', 'create') ? createLink('product', 'create') : null),
+    set::createLink(hasPriv('product', 'create') ? createLink('product', 'create') : null)
 );
 
 jsVar('pageSummary', sprintf($lang->product->lineSummary, $linesCount, count($productStats)));

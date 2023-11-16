@@ -25,8 +25,8 @@ if(!empty($projectID))
             set::name('product'),
             set::label($lang->release->product),
             set::items($products),
-            set::value($product->id),
-        ),
+            set::value($product->id)
+        )
     );
 }
 
@@ -39,7 +39,7 @@ formPanel
         (
             set::width('1/2'),
             set::name('name'),
-            set::label($lang->release->name),
+            set::label($lang->release->name)
         ),
         $app->tab != 'project' || empty($product->shadow) ? formGroup
         (
@@ -49,10 +49,10 @@ formPanel
                 set::name('marker'),
                 set::rootClass('ml-4'),
                 set::value(1),
-                set::text($lang->release->marker),
+                set::text($lang->release->marker)
             ),
             $lastRelease ? '(' . $lang->release->last . ': ' . $lastRelease->name . ')' : ''
-        ) : '',
+        ) : ''
     ),
     $productRow,
     formRow
@@ -66,8 +66,8 @@ formPanel
                 set::name('build[]'),
                 set::placeholder($lang->build->placeholder->multipleSelect),
                 set::items($builds),
-                set::multiple(true),
-            ),
+                set::multiple(true)
+            )
         ),
         formGroup
         (
@@ -78,9 +78,9 @@ formPanel
                 set::rootClass('ml-4'),
                 set::checked(1),
                 set::value(1),
-                set::text($lang->release->syncFromBuilds),
-            ),
-        ),
+                set::text($lang->release->syncFromBuilds)
+            )
+        )
     ),
     formRow
     (
@@ -91,7 +91,7 @@ formPanel
             set::label($lang->release->date),
             set::value(helper::today()),
             set::control('date')
-        ),
+        )
     ),
     formGroup
     (
@@ -99,7 +99,7 @@ formPanel
         editor
         (
             set::name('desc'),
-            set::rows('10'),
+            set::rows('10')
         )
     ),
     formGroup
@@ -109,14 +109,14 @@ formPanel
         (
             set::name('mailto[]'),
             set::items($users),
-            set::multiple(true),
+            set::multiple(true)
         )
     ),
     formGroup
     (
         set::label($lang->release->files),
         upload()
-    ),
+    )
 );
 
 /* ====== Render page ====== */

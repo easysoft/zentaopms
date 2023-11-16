@@ -16,7 +16,7 @@ $formActions = array(
     array(
         'url'   => inlink('reset'),
         'text'  => $lang->mail->reset,
-        'class' => 'btn-wide',
+        'class' => 'btn-wide'
     )
 );
 if(common::hasPriv('mail', 'browse') && !empty($config->mail->async) && !empty($config->global->cron))
@@ -24,7 +24,7 @@ if(common::hasPriv('mail', 'browse') && !empty($config->mail->async) && !empty($
     $formActions[] = array(
         'url'   => inlink('browse'),
         'text'  => $lang->mail->browse,
-        'class' => 'btn-wide',
+        'class' => 'btn-wide'
     );
 }
 
@@ -44,7 +44,7 @@ formPanel
         set::control('radioListInline'),
         set::name('turnon'),
         set::value(1),
-        set::items($lang->mail->turnonList),
+        set::items($lang->mail->turnonList)
     ),
     !empty($config->global->cron) ? formGroup(
         set::width('1/2'),
@@ -52,7 +52,7 @@ formPanel
         set::control('radioListInline'),
         set::name('async'),
         set::value(zget($config->mail, 'async', 0)),
-        set::items($lang->mail->asyncList),
+        set::items($lang->mail->asyncList)
     ) : null,
     formRow
     (
@@ -60,7 +60,7 @@ formPanel
             set::width('1/4'),
             set::label($lang->mail->fromAddress),
             set::name('fromAddress'),
-            set::value($mailConfig->fromAddress),
+            set::value($mailConfig->fromAddress)
         ),
         span
         (
@@ -74,25 +74,25 @@ formPanel
         set::label($lang->mail->fromName),
         set::name('fromName'),
         set::value($mailConfig->fromName),
-        set::required(true),
+        set::required(true)
     ),
     formGroup(
         set::width('1/2'),
         set::label($lang->mail->domain),
         set::name('domain'),
-        set::value($mailConfig->domain),
+        set::value($mailConfig->domain)
     ),
     formGroup(
         set::width('1/2'),
         set::label($lang->mail->host),
         set::name('host'),
-        set::value($mailConfig->host),
+        set::value($mailConfig->host)
     ),
     formGroup(
         set::width('1/4'),
         set::label($lang->mail->port),
         set::name('port'),
-        set::value($mailConfig->port),
+        set::value($mailConfig->port)
     ),
     formRow
     (
@@ -102,7 +102,7 @@ formPanel
             set::control('radioListInline'),
             set::name('secure'),
             set::value($mailConfig->secure),
-            set::items($lang->mail->secureList),
+            set::items($lang->mail->secureList)
         ),
         !$openssl ? span
         (
@@ -117,13 +117,13 @@ formPanel
         set::control('radioListInline'),
         set::name('auth'),
         set::value($mailConfig->auth),
-        set::items($lang->mail->authList),
+        set::items($lang->mail->authList)
     ),
     formGroup(
         set::width('1/2'),
         set::label($lang->mail->username),
         set::name('username'),
-        set::value($mailConfig->username),
+        set::value($mailConfig->username)
     ),
     formGroup(
         set::width('1/2'),
@@ -139,7 +139,7 @@ formPanel
         set::control('radioListInline'),
         set::name('debug'),
         set::value($mailConfig->debug),
-        set::items($lang->mail->debugList),
+        set::items($lang->mail->debugList)
     ),
     formGroup(
         set::width('1/2'),
@@ -147,9 +147,9 @@ formPanel
         set::control('radioListInline'),
         set::name('charset'),
         set::value($mailConfig->charset),
-        set::items($config->charsets[$this->cookie->lang]),
+        set::items($config->charsets[$this->cookie->lang])
     ),
-    set::actions($formActions),
+    set::actions($formActions)
 );
 
 div
@@ -188,5 +188,5 @@ div
             icon('info text-warning mr-1'),
             $lang->mail->setForUser
         )
-    ),
+    )
 );

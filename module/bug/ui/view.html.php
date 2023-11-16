@@ -144,7 +144,7 @@ detailHeader
         (
             set::entityID($bug->id),
             set::level(1),
-            set::text($bug->title)
+            span(setStyle('color', $bug->color), $bug->title)
         )
     ),
     to::suffix

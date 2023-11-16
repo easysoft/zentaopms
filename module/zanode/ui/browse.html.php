@@ -47,7 +47,7 @@ dtable
     set::sortLink(createLink('zanode', 'browse', "browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
     set::footPager(usePager()),
-    set::orderBy(str_replace('t1.', '', $orderBy)),
+    set::orderBy(str_replace('t1.', '', $orderBy))
 );
 
 render();

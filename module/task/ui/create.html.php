@@ -237,11 +237,10 @@ formPanel
                 ),
                 span
                 (
-                    set('class', 'input-group-addon'),
-                    a
+                    set('class', 'input-group-btn'),
+                    btn
                     (
-                        set('id', 'showAllModuleButton'),
-                        set('href', 'javascript:;'),
+                        setID('showAllModuleButton'),
                         $lang->task->allModule,
                         on::click('showAllModule')
                     ),
@@ -305,7 +304,7 @@ formPanel
                         'data-toggle' => 'modal',
                         'url' => '#modalTeam',
                         'icon' => 'plus'
-                    ),
+                    )
                 ),
                 $lang->task->addMember
             ),
@@ -411,8 +410,8 @@ formPanel
                         set::text($lang->task->copyStoryTitle),
                         set::rootClass('ml-8 border-l border-gray pl-2'),
                         on::change('copyStoryTitle')
-                    ),
-                ),
+                    )
+                )
             ),
             formHidden('storyEstimate', ''),
             formHidden('storyDesc', ''),

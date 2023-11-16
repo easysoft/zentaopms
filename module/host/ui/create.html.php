@@ -22,7 +22,7 @@ formPanel
         (
             set::width('1/3'),
             set::name('name'),
-            set::label($lang->host->name),
+            set::label($lang->host->name)
         ),
         formGroup
         (
@@ -30,7 +30,7 @@ formPanel
             set::label($lang->host->admin),
             set::control('picker'),
             set::name('admin'),
-            set::items($accounts),
+            set::items($accounts)
         )
     ),
     formRow
@@ -41,13 +41,13 @@ formPanel
             set::label($lang->host->cpuBrand),
             set::control('picker'),
             set::name('cpuBrand'),
-            set::items($lang->host->cpuBrandList),
+            set::items($lang->host->cpuBrandList)
         ),
         formGroup
         (
             set::width('1/3'),
             set::name('cpuModel'),
-            set::label($lang->host->cpuModel),
+            set::label($lang->host->cpuModel)
         )
     ),
     formRow
@@ -56,13 +56,13 @@ formPanel
         (
             set::width('1/3'),
             set::name('cpuNumber'),
-            set::label($lang->host->cpuNumber),
+            set::label($lang->host->cpuNumber)
         ),
         formGroup
         (
             set::width('1/3'),
             set::name('cpuCores'),
-            set::label($lang->host->cpuCores),
+            set::label($lang->host->cpuCores)
         )
     ),
     formRow
@@ -76,8 +76,8 @@ formPanel
             (
                 'type'        => 'inputControl',
                 'suffix'      => 'GB',
-                'suffixWidth' => 40,
-            )),
+                'suffixWidth' => 40
+            ))
         ),
         formGroup
         (
@@ -88,8 +88,8 @@ formPanel
             (
                 'type'        => 'inputControl',
                 'suffix'      => 'GB',
-                'suffixWidth' => 40,
-            )),
+                'suffixWidth' => 40
+            ))
         )
     ),
     formRow
@@ -100,7 +100,7 @@ formPanel
             set::label($lang->host->group),
             set::control('picker'),
             set::name('group'),
-            set::items($optionMenu),
+            set::items($optionMenu)
         ),
         formGroup
         (
@@ -108,7 +108,7 @@ formPanel
             set::label($lang->host->serverRoom),
             set::control('picker'),
             set::name('serverRoom'),
-            set::items($rooms),
+            set::items($rooms)
         )
     ),
     formRow
@@ -117,7 +117,7 @@ formPanel
         (
             set::width('1/3'),
             set::name('serverModel'),
-            set::label($lang->host->serverModel),
+            set::label($lang->host->serverModel)
         ),
         formGroup
         (
@@ -139,7 +139,7 @@ formPanel
             set::name('osName'),
             set::items($lang->host->osNameList),
             set::value($osName ? $osName : $host->osName),
-            on::change('osChange'),
+            on::change('osChange')
         ),
         formGroup
         (
@@ -147,7 +147,7 @@ formPanel
             set::label($lang->host->osVersion),
             set::control('picker'),
             set::name('osVersion'),
-            set::items($lang->host->{"{$osName}List"}),
+            set::items($lang->host->{"{$osName}List"})
         )
     ),
     formRow
@@ -157,7 +157,7 @@ formPanel
             set::width('1/3'),
             set::name('zap'),
             set::label($lang->host->zap),
-            set::value(8086),
+            set::value(8086)
         ),
         formGroup
         (
@@ -175,13 +175,13 @@ formPanel
         (
             set::width('1/3'),
             set::name('intranet'),
-            set::label($lang->host->intranet),
+            set::label($lang->host->intranet)
         ),
         formGroup
         (
             set::width('1/3'),
             set::name('extranet'),
-            set::label($lang->host->extranet),
+            set::label($lang->host->extranet)
         )
     ),
     formRow
@@ -192,7 +192,7 @@ formPanel
             set::label($lang->host->provider),
             set::control('picker'),
             set::name('provider'),
-            set::items($lang->host->providerList),
+            set::items($lang->host->providerList)
         ),
         formGroup
         (
@@ -202,7 +202,7 @@ formPanel
             set::label($lang->host->status),
             set::value('online'),
             set::inline(true),
-            set::items($lang->host->statusList),
+            set::items($lang->host->statusList)
         )
-    ),
+    )
 );

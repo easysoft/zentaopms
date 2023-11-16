@@ -27,7 +27,7 @@ formPanel
         textarea
         (
             set::name('desc'),
-            set::rows('5'),
+            set::rows('5')
         )
     ),
     $app->tab != 'project' ? formGroup
@@ -39,5 +39,5 @@ formPanel
             set::name('limited'),
             set::value(1)
         )
-    ) : null,
+    ) : null
 );

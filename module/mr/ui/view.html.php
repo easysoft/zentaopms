@@ -67,7 +67,7 @@ if($MR->compileID)
             item
             (
                 set::name($lang->compile->atTime),
-                $compile->createdDate,
+                $compile->createdDate
             ),
             ($compileJob && !empty($compileJob->id)) ?  item
             (
@@ -79,9 +79,9 @@ if($MR->compileID)
                     set::href($this->createLink('job', 'view', "jobID={$compileJob->id}&compileID={$compile->id}")),
                     set('data-toggle', 'modal'),
                     icon('search'),
-                    $lang->compile->logs,
-                ),
-            ) : null,
+                    $lang->compile->logs
+                )
+            ) : null
         );
 }
 elseif($MR->needCI)
@@ -94,7 +94,7 @@ elseif($MR->needCI)
                 set::href($compileUrl),
                 set::target('_blank'),
                 $lang->compile->statusList[$MR->compileStatus]
-            ),
+            )
         );
 }
 else
@@ -102,7 +102,7 @@ else
     $job = div
         (
             setClass('text-center'),
-            $lang->mr->noCompileJob,
+            $lang->mr->noCompileJob
         );
 }
 
@@ -186,7 +186,7 @@ panel
                     set::href(inlink('link', "MRID={$MR->id}&type=task")),
                     set('data-app', $app->tab)
                 )
-            ),
+            )
         )
     ),
     div
@@ -218,8 +218,8 @@ panel
                             setClass('font-normal ml-2 mr-2'),
                             set::href($targetProjectURL),
                             set::target('_blank'),
-                            $targetProjectName . ':' . $MR->targetBranch,
-                        ),
+                            $targetProjectName . ':' . $MR->targetBranch
+                        )
                     ),
                     tableData
                     (
@@ -230,39 +230,39 @@ panel
                             (
                                 setClass('danger'),
                                 $MR->status
-                            ) : zget($lang->mr->statusList, $MR->status),
+                            ) : zget($lang->mr->statusList, $MR->status)
                         ),
                         item
                         (
                             set::name($lang->mr->mergeStatus),
                             ($MR->synced && empty($rawMR->changes_count)) ? span($lang->mr->cantMerge, h::code($lang->mr->noChanges)
-                            ) : zget($lang->mr->mergeStatusList, !empty($rawMR->merge_status) ? $rawMR->merge_status : $MR->mergeStatus),
+                            ) : zget($lang->mr->mergeStatusList, !empty($rawMR->merge_status) ? $rawMR->merge_status : $MR->mergeStatus)
                         ),
                         item
                         (
                             set::name($lang->mr->MRHasConflicts),
-                            $hasNoConflict ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict,
+                            $hasNoConflict ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict
                         ),
                         item
                         (
                             set::name($lang->mr->description),
-                            !empty($MR->description) ? html(nl2br($MR->description)) : $lang->noData,
-                        ),
-                    ),
+                            !empty($MR->description) ? html(nl2br($MR->description)) : $lang->noData
+                        )
+                    )
                 ),
                 cell
                 (
                     setClass('cell mb-2'),
-                    html(sprintf($lang->mr->commandDocument, $httpRepoURL, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch)),
+                    html(sprintf($lang->mr->commandDocument, $httpRepoURL, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch))
                 ),
                 cell
                 (
                     setClass('cell cell-history'),
                     history
                     (
-                        set::commentUrl(createLink('action', 'comment', array('objectType' => 'mr', 'objectID' => $MR->id))),
+                        set::commentUrl(createLink('action', 'comment', array('objectType' => 'mr', 'objectID' => $MR->id)))
                     )
-                ),
+                )
             ),
             cell
             (
@@ -272,11 +272,11 @@ panel
                 div
                 (
                     setClass('article-h1'),
-                    $lang->mr->jobID,
+                    $lang->mr->jobID
                 ),
                 $job
-            ),
-        ),
+            )
+        )
 );
 
 div
@@ -288,7 +288,7 @@ div
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
         set::main($mainActions),
         set::suffix($suffixActions)
-    ),
+    )
 );
 
 render();

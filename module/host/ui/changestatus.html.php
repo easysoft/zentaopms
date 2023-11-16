@@ -23,7 +23,7 @@ formPanel
             set::name('reason'),
             set::label(' '),
             set::control('editor'),
-            set::required(true),
-        ),
-    ),
+            set::required(true)
+        )
+    )
 );

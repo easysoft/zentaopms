@@ -26,9 +26,9 @@ toolbar
     div
     (
         btn(setClass($viewType == 'list'   ? 'text-primary' : 'text-darker'), set::icon('format-list-bulleted'), setData('type', 'list'), setClass('switchButton')),
-        btn(setClass($viewType == 'kanban' ? 'text-primary' : 'text-darker'), set::icon('kanban'), setData('type', 'kanban'), setClass('switchButton')),
+        btn(setClass($viewType == 'kanban' ? 'text-primary' : 'text-darker'), set::icon('kanban'), setData('type', 'kanban'), setClass('switchButton'))
     ),
-    $canCreatePlan ? item(set(array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->productplan->create, 'url' => createLink($app->rawModule, 'create', "productID={$productID}&branch={$branch}")))) : null,
+    $canCreatePlan ? item(set(array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->productplan->create, 'url' => createLink($app->rawModule, 'create', "productID={$productID}&branch={$branch}")))) : null
 );
 
 $cols      = $this->loadModel('datatable')->getSetting('productplan');
@@ -59,7 +59,7 @@ if($canBatchAction)
                 (
                     'text'     => $statusText,
                     'class'    => 'batch-btn',
-                    'data-url' => createLink('productplan', 'batchChangeStatus', "status={$statusKey}&productID={$productID}"),
+                    'data-url' => createLink('productplan', 'batchChangeStatus', "status={$statusKey}&productID={$productID}")
                 );
             if($statusKey == 'closed') $items[$statusKey]['data-page'] = 'batch';
         }
@@ -77,7 +77,7 @@ if($canBatchAction)
             'caret'          => 'up',
             'url'            => '#navStatus',
             'data-toggle'    => 'dropdown',
-            'data-placement' => 'top-start',
+            'data-placement' => 'top-start'
         );
     }
 }
@@ -96,7 +96,7 @@ dtable
     set::createLink($canCreatePlan ? createLink($app->rawModule, 'create', "productID={$productID}&branch={$branch}") : ''),
     set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '{$summary}');}")),
     set::footPager(
-        usePager(array('linkCreator' => createLink($app->rawModule, 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"))),
+        usePager(array('linkCreator' => createLink($app->rawModule, 'browse', "productID={$productID}&branch={$branch}&browseType={$browseType}&queryID={$queryID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}")))
     )
 );
 
@@ -121,8 +121,8 @@ modal
                 array
                 (
                     'text' => $lang->cancel,
-                    'data-dismiss' => 'modal',
-                ),
+                    'data-dismiss' => 'modal'
+                )
             )
         ),
         formGroup
@@ -133,7 +133,7 @@ modal
                 set::name('project'),
                 set::items($projects),
                 set::required(true),
-                set::disabled(empty($projects)),
+                set::disabled(empty($projects))
             )
         ),
         formRow
@@ -148,8 +148,8 @@ modal
                     setClass('text-danger'),
                     $lang->productplan->noLinkedProject
                 ),
-                formHidden('planID', ''),
+                formHidden('planID', '')
             )
-        ),
+        )
     )
 );

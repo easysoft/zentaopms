@@ -22,7 +22,7 @@ formPanel
         (
             set::name('name'),
             set::label($lang->jenkins->name),
-            set::value($jenkins->name),
+            set::value($jenkins->name)
         )
     ),
     formRow
@@ -31,7 +31,7 @@ formPanel
         (
             set::name('url'),
             set::label($lang->jenkins->url),
-            set::value($jenkins->url),
+            set::value($jenkins->url)
         )
     ),
     formRow
@@ -40,7 +40,7 @@ formPanel
         (
             set::name('account'),
             set::label($lang->jenkins->account),
-            set::value($jenkins->account),
+            set::value($jenkins->account)
         )
     ),
     formRow
@@ -62,5 +62,5 @@ formPanel
             set::value($jenkins->password),
             set::placeholder($lang->jenkins->tips)
         )
-    ),
+    )
 );

@@ -22,7 +22,7 @@ formPanel
         (
             set::name('name'),
             set::label($lang->sonarqube->name),
-            set::value($sonarqube->name),
+            set::value($sonarqube->name)
         )
     ),
     formRow
@@ -51,7 +51,7 @@ formPanel
         (
             set::name('password'),
             set::label($lang->sonarqube->password),
-            set::value($sonarqube->password),
+            set::value($sonarqube->password)
         )
-    ),
+    )
 );

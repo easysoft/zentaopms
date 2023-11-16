@@ -126,6 +126,21 @@ class storyModel extends model
     }
 
     /**
+     * 获取指定的需求 id name 的键值对。
+     * Get pairs by list.
+     *
+     * @param  array|string $storyIdList
+     * @access public
+     * @return array
+     */
+    public function getPairsByList(array|string $storyIdList): array
+    {
+        $storyPairs = $this->dao->select('id, title')->from(TABLE_STORY)->where('id')->in($storyIdList)->beginIF($this->config->vision == 'or')->andWhere('t1.vision')->eq('or')->fi()->fetchPairs();
+
+        return array(0 => '') + $storyPairs;
+    }
+
+    /**
      * 获取执行中已经为该需求创建了测试类型任务的需求ID的键值对。
      * Get the key-value pairs for story ID which the test type task has been created for this story in the execution.
      *
@@ -3107,14 +3122,14 @@ class storyModel extends model
 
         static $shadowProducts = array();
         static $hasShadow      = true;
-        if($hasShadow and empty($shadowProducts[$story->product]))
+        if(isset($story->product) && $hasShadow && empty($shadowProducts[$story->product]))
         {
             $stmt = $app->dbQuery('SELECT id FROM ' . TABLE_PRODUCT . " WHERE shadow = 1")->fetchAll();
             if(empty($stmt)) $hasShadow = false;
             foreach($stmt as $row) $shadowProducts[$row->id] = $row->id;
         }
 
-        if($story->parent < 0 and strpos($config->story->list->actionsOperatedParentStory, ",$action,") === false) return false;
+        if(isset($story->parent) && $story->parent < 0 && strpos($config->story->list->actionsOperatedParentStory, ",$action,") === false) return false;
 
         if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
         /* Adjust code, hide split entry. */

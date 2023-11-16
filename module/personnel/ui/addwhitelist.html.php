@@ -55,8 +55,8 @@ formBatchPanel
                 set::items($depts),
                 set::required(true),
                 set('data-placeholder', $lang->execution->selectDeptTitle),
-                on::change('setObjectUsers'),
-            ),
+                on::change('setObjectUsers')
+            )
         ),
         div
         (
@@ -72,9 +72,9 @@ formBatchPanel
                 set::value($copyID),
                 set::items($objects),
                 set('data-placeholder', $lang->personnel->selectObjectTips),
-                on::change('setObjectUsers'),
-            ),
-        ),
+                on::change('setObjectUsers')
+            )
+        )
     ),
     formBatchItem
     (
@@ -82,8 +82,8 @@ formBatchPanel
         set::label($lang->team->account),
         set::control('picker'),
         set::items($users),
-        set::width('200px'),
-    ),
+        set::width('200px')
+    )
 );
 
 render();

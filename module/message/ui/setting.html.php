@@ -24,7 +24,7 @@ foreach($lang->message->typeList as $type => $typeName)
             set::id("type-{$type}"),
             set::name("type-{$type}"),
             set::value(1),
-            set::text($typeName),
+            set::text($typeName)
         )
     );
 }

@@ -309,7 +309,7 @@ class hostModel extends model
                     if(is_array($hosts))
                     {
                         $hostNameList = array();
-                        foreach($hosts as $host) $hostNameList[] = array('text' => htmlspecialchars($host->name));
+                        foreach($hosts as $host) $hostNameList[] = array('text' => htmlspecialchars($host->name), 'hostid' => $host->id);
                         $subChildren['children'][] = array(
                             'text'      => htmlspecialchars($cabinet),
                             'collapsed' => false,
@@ -318,7 +318,7 @@ class hostModel extends model
                     }
                     else
                     {
-                        $subChildren['children'][] = array('text' => htmlspecialchars($hosts->name));
+                        $subChildren['children'][] = array('text' => htmlspecialchars($hosts->name), 'hostid' => $hosts->id);
                     }
                 }
                 $children['children'][] = $subChildren;
@@ -372,7 +372,7 @@ class hostModel extends model
                 $treemap[$module->id] = array('text' => $module->name, 'collapsed' => false, 'children' => array());
                 foreach($hostGroups[$module->id] as $host)
                 {
-                    $treemap[$module->id]['children'][] = array('text' => htmlspecialchars($host->name));
+                    $treemap[$module->id]['children'][] = array('text' => htmlspecialchars($host->name), 'hostid' => $host->id);
                 }
             }
         }
@@ -383,7 +383,7 @@ class hostModel extends model
 
             if(isset($hostGroups[0]))
             {
-                foreach($hostGroups[0] as $host) $groupTree['children'][] = array('text' => htmlspecialchars($host->name));
+                foreach($hostGroups[0] as $host) $groupTree['children'][] = array('text' => htmlspecialchars($host->name), 'hostid' => $host->id);
             }
             $treemap[0] = $groupTree;
         }

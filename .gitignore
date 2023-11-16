@@ -35,6 +35,7 @@ test/www
 !/**/.gitkeep
 .scannerwork
 bin/roadrunner/rr
+rr
 
 **/test/model/data/*.yaml
 **/test/model/data/sql/*.sql

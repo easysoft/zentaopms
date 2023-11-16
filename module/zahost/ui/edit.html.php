@@ -25,7 +25,7 @@ formPanel
             set('data-type', 'white'),
             set('data-class-name', 'text-gray border border-light'),
             setClass('text-gray')
-        ),
+        )
     )),
     formGroup
     (
@@ -34,7 +34,7 @@ formPanel
         set::required(true),
         set::width('1/2'),
         set::items($lang->zahost->softwareList),
-        set::value($host->vsoft),
+        set::value($host->vsoft)
     ),
     formGroup
     (
@@ -43,7 +43,7 @@ formPanel
         set::required(true),
         set::width('1/2'),
         set::items($lang->zahost->zaHostTypeList),
-        set::value($host->hostType),
+        set::value($host->hostType)
     ),
     formGroup
     (
@@ -51,7 +51,7 @@ formPanel
         set::label($lang->zahost->name),
         set::required(true),
         set::width('1/2'),
-        set::value($host->name),
+        set::value($host->name)
     ),
     formGroup
     (
@@ -59,7 +59,7 @@ formPanel
         set::label($lang->zahost->extranet),
         set::required(true),
         set::width('1/2'),
-        set::value($host->extranet),
+        set::value($host->extranet)
     ),
     formGroup
     (
@@ -68,7 +68,7 @@ formPanel
         set::required(true),
         set::width('1/2'),
         set::items($config->zahost->cpuCoreList),
-        set::value($host->cpuCores),
+        set::value($host->cpuCores)
     ),
     formRow
     (
@@ -82,11 +82,11 @@ formPanel
                 input
                 (
                     set::name('memory'),
-                    set::value($host->memory),
+                    set::value($host->memory)
                 ),
                 'GB'
-            ),
-        ),
+            )
+        )
     ),
     formRow
     (
@@ -100,11 +100,11 @@ formPanel
                 input
                 (
                     set::name('diskSize'),
-                    set::value($host->diskSize),
+                    set::value($host->diskSize)
                 ),
                 'GB'
-            ),
-        ),
+            )
+        )
     ),
     formGroup
     (
@@ -112,9 +112,9 @@ formPanel
         editor
         (
             set::name('desc'),
-            html($host->desc),
-        ),
-    ),
+            html($host->desc)
+        )
+    )
 );
 
 render();

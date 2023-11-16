@@ -32,7 +32,7 @@ class globalSearch extends wg
             'commonSearchText' => $lang->searchAB,
             'commonSearchKey' => 'all',
             'searchItems' => $searchItems,
-            'searchFunc' => jsRaw('window.globalSearch'),
+            'searchFunc' => jsRaw('window.globalSearch')
         ));
 
         $input = inputGroup
@@ -41,13 +41,13 @@ class globalSearch extends wg
             input
             (
                 setID('globalSearchInput'),
-                set::placeholder($lang->index->pleaseInput),
+                set::placeholder($lang->index->pleaseInput)
             ),
             btn
             (
                 set::icon('search'),
-                set::type('primary'),
-            ),
+                set::type('primary')
+            )
         );
         $input->setProp('data-zin-id', $input->gid);
         $props = array_merge

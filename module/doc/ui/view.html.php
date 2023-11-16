@@ -125,8 +125,12 @@ $contentDom = div
         setClass('panel-heading'),
         div
         (
-            setClass('title'),
-            $doc->title
+            setClass('flex-1 w-0'),
+            div
+            (
+                setClass('title clip'),
+                $doc->title
+            )
         ),
         $doc->deleted ? span(setClass('label danger'), $lang->doc->deleted) : null,
         $doc->status != 'draft' ? dropdown
@@ -260,7 +264,7 @@ $historyDom = div
 (
     set::id('history'),
     setClass('hidden border-l'),
-    history()
+    history(set::objectID($doc->id))
 );
 
 panel

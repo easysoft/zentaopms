@@ -18,7 +18,7 @@ $config->metric->actionList['implement']['icon']        = 'code';
 $config->metric->actionList['implement']['text']        = $lang->metric->implement->common;
 $config->metric->actionList['implement']['hint']        = $lang->metric->implement->common;
 $config->metric->actionList['implement']['data-toggle'] = 'modal';
-$config->metric->actionList['implement']['url']         = helper::createLink('metric', 'implement', 'metricID={id}&isVerify=true');
+$config->metric->actionList['implement']['url']         = helper::createLink('metric', 'implement', 'metricID={id}');
 
 $config->metric->actionList['delist']['icon'] = 'ban-circle';
 $config->metric->actionList['delist']['text'] = $lang->metric->delist;
@@ -55,8 +55,3 @@ $config->metric->oldObjectMap['stage']       = 'execution';
 $config->metric->oldObjectMap['program']     = 'project';
 $config->metric->oldObjectMap['softRequest'] = 'story';
 $config->metric->oldObjectMap['userRequest'] = 'requirement';
-
-$config->metric->verifyList = array();
-$config->metric->verifyList['checkCustomCalcExists'] = $lang->metric->verifyList['checkCustomCalcExists'];
-$config->metric->verifyList['checkCalcClass']        = $lang->metric->verifyList['checkCalcClass'];
-$config->metric->verifyList['checkCalcMethods']      = $lang->metric->verifyList['checkCalcMethods'];

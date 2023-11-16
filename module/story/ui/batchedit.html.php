@@ -65,7 +65,7 @@ formBatchPanel
     set::items($items),
     set::data(array_values($data)),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
-    set::onRenderRow(jsRaw('renderRowData')),
+    set::onRenderRow(jsRaw('renderRowData'))
 );
 
 render();

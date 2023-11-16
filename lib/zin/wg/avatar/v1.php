@@ -283,7 +283,7 @@ class avatar extends wg
                 setClass('avatar-img'),
                 set('src', $src),
                 set('alt', $text),
-                set('data-code', $code),
+                set('data-code', $code)
             );
         }
 

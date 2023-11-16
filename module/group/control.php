@@ -190,7 +190,7 @@ class group extends control
      */
     public function manageView(int $groupID)
     {
-        if($_POST)
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             $this->group->updateView($groupID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));

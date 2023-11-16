@@ -12,7 +12,6 @@ namespace zin;
 
 $createButton  = $emptyCreateBtn = null;
 $typeID        = empty($lib) ? $objectID : zget($lib, (string)$lib->type, 0);
-$libID         = empty($lib) ? 0 : $lib->id;
 $libType       = empty($lib) ? '' : $lib->type;
 $templateParam = $this->config->edition == 'max' ? '&from=template' : '';
 $buttonItems   = array();

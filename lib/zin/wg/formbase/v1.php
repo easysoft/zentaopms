@@ -108,7 +108,7 @@ class formBase extends wg
             $this->buildProps(),
             set($this->getRestProps()),
             $this->buildContent(),
-            $this->buildActions(),
+            $this->buildActions()
         );
     }
 }

@@ -9,7 +9,7 @@ class productMenu extends wg
         'items?:array',
         'activeKey?:string',
         'link?:string',
-        'leading?:bool=true',
+        'leading?:bool=true'
     );
 
     public static function getPageCSS(): string|false
@@ -73,7 +73,7 @@ class productMenu extends wg
             set::popWidth(200),
             set::popClass('popup text-md'),
             set::onClick(jsRaw("(event) => {if(!event.target.closest('.is-caret')) return; openUrl('$closeLink'); return false}")),
-            set::data(array('search' => false, 'checkIcon' => false, 'link' => $link, 'data' => $items)),
+            set::data(array('search' => false, 'checkIcon' => false, 'link' => $link, 'data' => $items))
         );
     }
 }

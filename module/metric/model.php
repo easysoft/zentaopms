@@ -139,7 +139,7 @@ class metricModel extends model
             $metric->oldUnit     = $oldMetric->unit;
             $metric->collectType = $oldMetric->collectType;
             $metric->collectConf = $oldMetric->collectConf;
-            $metric->execTime    = $oldMetric->execTime;
+        $metric->execTime    = $oldMetric->execTime;
         }
 
         return $metric;
@@ -192,7 +192,7 @@ class metricModel extends model
     {
         if(!empty($calculator->dataset))
         {
-            include_once $this->metricTao->getDatasetPath();
+            include_once $this->getDatasetPath();
 
             $dataset    = new dataset($this->dao);
             $dataSource = $calculator->dataset;
@@ -264,10 +264,10 @@ class metricModel extends model
         $metric = $this->metricTao->fetchMetricByCode($code);
         if(!$metric) return false;
 
-        $calcPath = $this->metricTao->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
+        $calcPath = $this->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
         if(!is_file($calcPath)) return false;
 
-        include_once $this->metricTao->getBaseCalcPath();
+        include_once $this->getBaseCalcPath();
         include_once $calcPath;
         $calculator = new $metric->code;
 
@@ -325,6 +325,17 @@ class metricModel extends model
         return $excutableMetrics;
     }
 
+    public function clearMetricLib()
+    {
+        $nowDate = date('Y-m-d');
+
+        $this->dao->delete()->from(TABLE_METRICLIB)
+            ->where('date')->like("$nowDate%")
+            ->exec();
+
+        return dao::isError();
+    }
+
     /**
      * 插入度量库数据。
      * Insert into metric lib.
@@ -333,11 +344,12 @@ class metricModel extends model
      * @access public
      * @return void
      */
-    public function insertmetricLib($records)
+    public function insertMetricLib($records)
     {
         $this->dao->begin();
         foreach($records as $record)
         {
+            if(empty($record)) continue;
             $this->dao->insert(TABLE_METRICLIB)
                 ->data($record)
                 ->exec();
@@ -356,7 +368,7 @@ class metricModel extends model
      */
     public function getExecutableCalcList()
     {
-        $funcRoot = $this->metricTao->getCalcRoot();
+        $funcRoot = $this->getCalcRoot();
 
         $fileList = array();
         foreach($this->config->metric->scopeList as $scope)
@@ -397,7 +409,7 @@ class metricModel extends model
     {
         $calcList = $this->getExecutableCalcList();
 
-        include $this->metricTao->getBaseCalcPath();
+        include_once $this->getBaseCalcPath();
         $calcInstances = array();
         foreach($calcList as $id => $calc)
         {
@@ -423,7 +435,7 @@ class metricModel extends model
      */
     public function getDataset()
     {
-        $datasetPath = $this->metricTao->getDatasetPath();
+        $datasetPath = $this->getDatasetPath();
         include_once $datasetPath;
         return new dataset($this->dao);
     }
@@ -633,59 +645,8 @@ class metricModel extends model
 
     public function checkCalcExists($metric)
     {
-        $calcName = $this->metricTao->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
+        $calcName = $this->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
         return file_exists($calcName);
-    }
-
-    /**
-     * 检查度量项计算文件是否存在。
-     * Check if the calculator file exists or not.
-     *
-     * @param  object $metric
-     * @access public
-     * @return bool
-     */
-    public function checkCustomCalcExists($metric)
-    {
-        $calcName = $this->metricTao->getCustomCalcRoot() . $metric->code . '.php';
-        return file_exists($calcName);
-    }
-
-    /**
-     * 检查度量项计算文件是否定义了必要的类。
-     * Check whether the necessary class exist in the file.
-     *
-     * @param  object $row
-     * @access public
-     * @return bool
-     */
-    public function checkCalcClass($metric)
-    {
-        if(!$this->checkCustomCalcExists($metric)) return false;
-
-        $this->includeCalc($metric->code);
-        return class_exists($metric->code);
-    }
-
-    /**
-     * 检查度量项计算文件中是否编写了必要的方法。
-     * Check whether the necessary methods exist in the file.
-     *
-     * @param  object $row
-     * @access public
-     * @return bool
-     */
-    public function checkCalcMethods($metric)
-    {
-        if(!$this->checkCustomCalcExists($metric)) return false;
-
-        $methodNameList = $this->metricTao->getMethodNameList($metric->code);
-        foreach($this->config->metric->necessaryMethodList as $method)
-        {
-            if(!in_array($method, $methodNameList)) return false;
-        }
-
-        return true;
     }
 
     /**
@@ -801,88 +762,6 @@ class metricModel extends model
     }
 
     /**
-     * 导入用户自定义的度量项计算文件。
-     * Include custom calculator file.
-     *
-     * @param  string $code
-     * @access public
-     * @return void
-     */
-    public function includeCalc($code)
-    {
-        require $this->metricTao->getBaseCalcPath();
-        require $this->metricTao->getCustomCalcFile($code);
-    }
-
-    /**
-     * 从度量项计算文件中提取代码，去除注释。
-     * Extract code from calculator file, remove the comment.
-     *
-     * @param  string $file
-     * @access public
-     * @return string
-     */
-    public function extractCode($file)
-    {
-        $reg = '/class.*extends.*baseCalc/';
-        if(basename($file) == 'calc.class.php') $reg = '/class.*baseCalc/';
-
-        $contents = file_get_contents($file);
-        $lines = explode("\n", $contents);
-
-        $matchedLines = array_filter($lines, function($line) use($reg) {
-            return preg_match($reg, $line);
-        });
-        $matchedLines = array_values($matchedLines);
-
-        $startIndex = array_search($matchedLines[0], $lines);
-        $code = implode("\n", array_slice($lines, $startIndex));
-
-        return $code;
-    }
-
-    /**
-     * 合并度量项计算文件与基类文件。
-     * Merge the calculator file and base calculator file.
-     *
-     * @param  string $code
-     * @access public
-     * @return string
-     */
-    public function mergeBaseCalc($code)
-    {
-        $baseCalcFile = $this->metricTao->getBaseCalcPath();
-        $calcFile     = $this->metricTao->getCustomCalcFile($code);
-
-        $baseCalcScript = $this->extractCode($baseCalcFile);
-        $calcScript     = $this->extractCode($calcFile);
-
-        $phpTag = '<?php';
-        $mergedScript = $phpTag . "\n" . $baseCalcScript . "\n" . $calcScript;
-
-        return $mergedScript;
-    }
-
-    /**
-     * 试运行用户自定义的度量项计算文件，返回错误信息。
-     * Dry run custom calculator file, return error message.
-     *
-     * @param  string $code
-     * @access public
-     * @return string
-     */
-    public function dryRunCalc($code)
-    {
-        $tmpCalcFile = $this->metricTao->getCustomCalcRoot() . $code . '.php.tmp';
-
-        $calcScript = $this->mergeBaseCalc($code);
-        file_put_contents($tmpCalcFile, $calcScript);
-        exec("php $tmpCalcFile 2>&1", $output);
-
-        return $output;
-    }
-
-    /**
      * 根据数据初始化操作按钮。
      * Init action button by data.
      *
@@ -910,33 +789,6 @@ class metricModel extends model
     }
 
     /**
-     * 运行用户自定义的度量项文件。
-     * Run metric file by custom, get result.
-     *
-     * @param  string $code
-     * @access public
-     * @return array
-     */
-    public function runCustomCalc($code)
-    {
-        $metric = $this->dao->select('id,code,scope,purpose')->from(TABLE_METRIC)->where('code')->eq($code)->fetch();
-        if(!$metric) return false;
-
-        $calcPath = $this->metricTao->getCustomCalcRoot() . $code . '.php';
-        if(!is_file($calcPath)) return false;
-
-        include_once $this->metricTao->getBaseCalcPath();
-        include_once $calcPath;
-        $calculator = new $metric->code;
-
-        $statement = $this->getDataStatement($calculator);
-        $rows = $statement->fetchAll();
-
-        foreach($rows as $row) $calculator->calculate($row);
-        return $calculator->getResult();
-    }
-
-    /**
      * 判断度量项是否是旧版度量项。
      * Judge if the metric is old.
      *
@@ -947,22 +799,6 @@ class metricModel extends model
     public function isOldMetric($metric)
     {
         return $metric->type == 'sql';
-    }
-
-    /**
-     * 将用户定义的度量文件从临时目录移动到系统目录中。
-     * Move custom calculator file to calc directory
-     *
-     * @param  object $metric
-     * @access public
-     * @return bool
-     */
-    public function moveCalcFile($metric)
-    {
-        $tmpCalc = $this->metricTao->getCustomCalcFile($metric->code);
-        $newCalc = $this->metricTao->getCalcRoot() . $metric->scope . DS . $metric->purpose . DS . $metric->code . '.php';
-
-        return rename($tmpCalc, $newCalc);
     }
 
     /**
@@ -977,7 +813,7 @@ class metricModel extends model
     public function createSqlFunction($sql, $measurement)
     {
         $measFunction = $this->getSqlFunctionName($measurement);
-        $postFunction = $this->metricTao->parseSqlFunction($sql);
+        $postFunction = $this->parseSqlFunction($sql);
         if(!$measFunction || !$postFunction) return array('result' => 'fail', 'errors' => $this->lang->metric->tips->nameError);
 
         $sql = str_replace($postFunction, $measFunction, $sql);
@@ -1354,7 +1190,7 @@ class metricModel extends model
             $keyA = $a->$x;
             $keyB = $b->$x;
 
-            return $keyA < $keyB ? -1 : 1;
+            return $keyA > $keyB ? -1 : 1;
         };
         usort($datas, $cmp);
 
@@ -1423,5 +1259,126 @@ class metricModel extends model
         $now = helper::now();
         $metricIDList = $this->dao->select('id')->from(TABLE_METRIC)->where('deleted')->eq('0')->fetchPairs();
         foreach($metricIDList as $metricID) $this->dao->update(TABLE_METRIC)->set('createdDate')->eq($now)->exec();
+    }
+
+    /**
+     * 获取度量项计算文件的根目录。
+     * Get root of metric calculator.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCalcRoot()
+    {
+        return $this->app->getModuleRoot() . 'metric' . DS . 'calc' . DS;
+    }
+
+    /**
+     * 获取数据集文件的路径
+     * Get path of calculator data set.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDatasetPath()
+    {
+        return $this->app->getModuleRoot() . 'metric' . DS . 'dataset.php';
+    }
+
+    /**
+     * 获取度量项基类文件的路径。
+     * Get path of base calculator class.
+     *
+     * @access public
+     * @return string
+     */
+    public function getBaseCalcPath()
+    {
+        return $this->app->getModuleRoot() . 'metric' . DS . 'calc.class.php';
+    }
+
+    /**
+     * 处理度量数据查询条件。
+     * Process metric data query.
+     *
+     * @param  array     $query
+     * @param  string    $key
+     * @param  string    $type
+     * @access public
+     * @return object|string|false
+     */
+    public function processRecordQuery(array $query, string $key, string $type = 'common'): object|string|false
+    {
+        if(!isset($query[$key]) || empty($query[$key])) return false;
+
+        if($type == 'date')
+        {
+            list($year, $month, $day) = explode('-', $query[$key]);
+
+            $timestamp = strtotime($query[$key]);
+            $week      = date('W', $timestamp);
+
+            $dateParse = new stdClass();
+            $dateParse->year  = $year;
+            $dateParse->month = "{$year}{$month}";
+            $dateParse->week  = "{$year}{$week}";
+            $dateParse->day   = "{$year}{$month}{$day}";
+
+            return $dateParse;
+        }
+        return $query[$key];
+    }
+
+    /**
+     * 获取度量数据的日期类型。
+     * Get date type of metric data.
+     *
+     * @param  array    $dateFields
+     * @access public
+     * @return string
+     */
+    public function getDateType(array $dateFields): string
+    {
+        if(in_array('day', $dateFields)) return 'day';
+        if(in_array('week', $dateFields)) return 'week';
+        if(in_array('month', $dateFields)) return 'month';
+        if(in_array('year', $dateFields)) return 'year';
+    }
+
+    /**
+     * 解析SQL函数。
+     * Parsing SQL function.
+     *
+     * @param  string $sql
+     * @access public
+     * @return string
+     */
+    public function parseSqlFunction($sql)
+    {
+        $pattern = "/create\s+function\s+`{0,1}([\$,a-z,A-z,_,0-9,\(,|)]+`{0,1})\(+/Ui";
+        preg_match_all($pattern, $sql, $matches);
+
+        if(empty($matches[1][0])) return null;
+        return trim($matches[1][0], '`');
+    }
+
+    /**
+     * 替换换行符和回车符为指定字符。
+     * Replace CR and LF to char.
+     *
+     * @param  string $str
+     * @param  string $replace
+     * @access public
+     * @return string
+     */
+    public function replaceCRLF(string $str, string $replace = ';'): string
+    {
+        $str = trim($str);
+        if(strpos($str, "\n\r") !== false) $str = str_replace("\n\r", $replace, $str);
+        if(strpos($str, "\r\n") !== false) $str = str_replace("\r\n", $replace, $str);
+        if(strpos($str, "\n") !== false)   $str = str_replace("\n",   $replace, $str);
+        if(strpos($str, "\r") !== false)   $str = str_replace("\r",   $replace, $str);
+
+        return $str;
     }
 }

@@ -29,9 +29,9 @@ $formTitle = div
     (
         set::level(1),
         setClass('pl-2'),
-        set::text($story->title),
         set::entityID($story->id),
         set::reverse(true),
+        span(setID('storyTitle'), $story->title)
     )
 );
 
@@ -48,7 +48,7 @@ $formItems['reviewer'] = formGroup
             set::name('reviewer[]'),
             set::multiple(true),
             set::items($fields['reviewer']['options']),
-            set::value($fields['reviewer']['default']),
+            set::value($fields['reviewer']['default'])
         ),
         !$forceReview ? span
         (
@@ -62,7 +62,7 @@ $formItems['reviewer'] = formGroup
                 set::value(1)
             )
         ) : null,
-        formHidden('needNotReview', $forceReview ? 0 : 1),
+        formHidden('needNotReview', $forceReview ? 0 : 1)
     ),
     set::required($fields['reviewer']['required'])
 );
@@ -72,19 +72,23 @@ $formItems['title'] = formGroup
     set::label($fields['title']['title']),
     inputGroup
     (
-        input
+        inputControl
         (
-            set::name('title'),
-            set::value($fields['title']['default']),
-        ),
-        span
-        (
-            setClass('input-group-addon'),
-            colorPicker
+            input
             (
-                set::name('color'),
-                set::type('color'),
-                set::value($fields['color']['default']),
+                set::name('title'),
+                set::value($fields['title']['default'])
+            ),
+            set::suffixWidth('40'),
+            to::suffix
+            (
+                colorPicker
+                (
+                    set::name('color'),
+                    set::type('color'),
+                    set::value($fields['color']['default']),
+                    set::syncColor('#title, #storyTitle')
+                )
             )
         ),
         empty($story->twins) ? null : span
@@ -95,7 +99,7 @@ $formItems['title'] = formGroup
                 set::id('relievedTwins'),
                 set::name('relievedTwins'),
                 set::value(1),
-                $lang->story->relievedTwinsRelation,
+                $lang->story->relievedTwinsRelation
             )
         )
     ),
@@ -119,8 +123,8 @@ $formItems['spec'] = formGroup
     editor
     (
         set::name('spec'),
-        html($fields['spec']['default']),
-    ),
+        html($fields['spec']['default'])
+    )
 );
 unset($fields['reviewer'], $fields['title'], $fields['color'], $fields['status'], $fields['lastEditedDate'], $fields['spec']);
 
@@ -141,8 +145,8 @@ foreach($fields as $field => $attr)
             editor
             (
                 set::name($fieldName),
-                html($attr['default']),
-            ),
+                html($attr['default'])
+            )
         );
     }
     else
@@ -172,7 +176,7 @@ $formActions = formRow
     setClass('form-actions form-group no-label'),
     btn(setClass('primary'), set::id('saveButton'), $lang->save),
     btn(setClass('secondary'), set::id('saveDraftButton'), $lang->story->doNotSubmit),
-    backBtn($lang->goback),
+    backBtn($lang->goback)
 );
 
 formPanel
@@ -185,7 +189,7 @@ formPanel
     $formItems,
     $formActions,
     h::hr(),
-    history(),
+    history()
 );
 
 render();

@@ -22,12 +22,12 @@ formPanel
         set::label($lang->comment),
         set::name('comment'),
         set::control('textarea'),
-        set::rows('6'),
+        set::rows('6')
     ),
     set::actions(array
     (
-        array('text' => $lang->confirm, 'id' => 'startBackup', 'class' => 'primary'),
-    )),
+        array('text' => $lang->confirm, 'id' => 'startBackup', 'class' => 'primary')
+    ))
 );
 
 render();

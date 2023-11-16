@@ -22,7 +22,7 @@ formPanel
         formGroup
         (
             setclass('user-title'),
-            $lang->release->notifyUsers,
+            $lang->release->notifyUsers
         )
     ),
     formRow
@@ -35,7 +35,7 @@ formPanel
                 set::name('notify[]'),
                 set::value('FB'),
                 set::items($lang->release->notifyList),
-                set::inline(true),
+                set::inline(true)
             )
         )
     )

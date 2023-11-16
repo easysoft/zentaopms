@@ -749,6 +749,10 @@ class screenModel extends model
             case 'dept':
                 $options = $this->loadModel('dept')->getOptionMenu(0);
                 break;
+            case 'project.status':
+                $this->app->loadLang('project');
+                $options = $this->lang->project->statusList;
+                break;
             case 'option':
                 if($field)
                 {
@@ -767,20 +771,16 @@ class screenModel extends model
                     if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
                 }
                 break;
-            case 'string':
-                if($field)
+            default:
+                if($field && $sql)
                 {
-                    if($sql)
-                    {
-                        $cols = $this->dbh->query($sql)->fetchAll();
-                        foreach($cols as $col)
-                        {
-                            $data = $col->$field;
-                            $options[$data] = $data;
-                        }
-                    }
+                    $options = $this->dao->select("tt.`$field`,tt.`$field`")
+                        ->from("($sql)")->alias('tt')
+                        ->groupBy("tt.`$field`")
+                        ->orderBy("tt.`$field` desc")
+                        ->fetchPairs();
                 }
-                break;
+
         }
 
         $options = array_filter($options);
@@ -945,6 +945,7 @@ class screenModel extends model
                 return $this->buildPieCircleChart($component, $chart);
                 break;
             case 'pie':
+                if($chart->builtin == '0') return $this->getPieChartOption($component, $chart, $filters);
                 return $this->buildPieChart($component, $chart);
                 break;
             case 'radar':
@@ -955,6 +956,12 @@ class screenModel extends model
                 break;
             case 'table':
                 return $this->buildTableChart($component, $chart);
+                break;
+            case 'cluBarY':
+            case 'stackedBarY':
+            case 'cluBarX':
+            case 'stackedBar':
+                return $this->getBarChartOption($component, $chart);
                 break;
         }
     }

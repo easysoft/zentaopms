@@ -36,7 +36,7 @@ $fnPrintSingleRoadmap = function($branchKey = 0) use ($roadmaps, $product, $prod
                 (
                     icon('plus'),
                     setClass('text-primary'),
-                    $lang->release->create,
+                    $lang->release->create
                 )
             ) : null
         );
@@ -57,7 +57,7 @@ $fnPrintBranchRoadmap = function() use ($branches, $roadmaps, $product, $product
             set::key("roadmap_{$branchKey}"),
             set::title($branchName),
             set::active($branchKey == 0),
-            $fnPrintSingleRoadmap($branchKey),
+            $fnPrintSingleRoadmap($branchKey)
         );
     }
     return tabs($tabPaneItems);
@@ -70,7 +70,7 @@ panel
     set::headingClass('justify-start'),
     to::heading
     (
-        span(setClass('label light rounded-full text-dark'), sprintf($lang->product->iterationInfo, $roadmaps['total'])),
+        span(setClass('label light rounded-full text-dark'), sprintf($lang->product->iterationInfo, $roadmaps['total']))
     ),
-    $product->type == 'normal' ? $fnPrintSingleRoadmap() : $fnPrintBranchRoadmap(),
+    $product->type == 'normal' ? $fnPrintSingleRoadmap() : $fnPrintBranchRoadmap()
 );

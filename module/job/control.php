@@ -159,7 +159,7 @@ class job extends control
         $this->app->loadLang('action');
         $repoList    = $this->loadModel('repo')->getList($this->projectID, false);
         $repoPairs   = array();
-        $gitlabRepos = array(0 => '');
+        $gitlabRepos = array();
         $repoTypes   = array();
         $gitlabs     = array();
 

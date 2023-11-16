@@ -96,8 +96,8 @@ else
                 span
                 (
                     setClass('label secondary-pale'),
-                    $task->consumed . $lang->task->suffixHour,
-                ),
+                    $task->consumed . $lang->task->suffixHour
+                )
             ),
             span
             (
@@ -111,7 +111,7 @@ else
                         setID('totalConsumed'),
                         $task->consumed
                     ),
-                    $lang->task->suffixHour,
+                    $lang->task->suffixHour
                 )
             )
         )
@@ -132,11 +132,11 @@ else
                 (
                     set::name('currentConsumed'),
                     set::value(0),
-                    set::type('text'),
+                    set::type('text')
                 ),
                 to::suffix($lang->task->suffixHour),
-                set::suffixWidth(20),
-            ),
+                set::suffixWidth(20)
+            )
         ),
         $assignedToControl,
         formGroup
@@ -158,7 +158,7 @@ else
             datetimePicker
             (
                 set::name('finishedDate'),
-                set::value(helper::now()),
+                set::value(helper::now())
             )
         ),
         formGroup
@@ -171,7 +171,7 @@ else
             set::name('comment'),
             set::label($lang->comment),
             set::control("editor")
-        ),
+        )
     );
     hr();
     history();

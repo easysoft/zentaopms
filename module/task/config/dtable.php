@@ -14,6 +14,7 @@ $config->task->dtable->fieldList['name']['nestedToggle'] = true;
 $config->task->dtable->fieldList['name']['sortType']     = true;
 $config->task->dtable->fieldList['name']['link']         = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}');
 $config->task->dtable->fieldList['name']['required']     = true;
+$config->task->dtable->fieldList['name']['color']        = true;
 
 $config->task->dtable->fieldList['pri']['title']    = $lang->priAB;
 $config->task->dtable->fieldList['pri']['type']     = 'pri';
@@ -55,6 +56,8 @@ $config->task->dtable->fieldList['assignedTo']['assignLink']  = array('module' =
 $config->task->dtable->fieldList['assignedTo']['sortType']    = true;
 $config->task->dtable->fieldList['assignedTo']['show']        = true;
 $config->task->dtable->fieldList['assignedTo']['group']       = 3;
+$config->task->dtable->fieldList['assignedTo']['control']     = 'select';
+$config->task->dtable->fieldList['assignedTo']['dataSource']  = array('module' => 'user', 'method' => 'getTeamMemberPairs', 'params' => '$executionID&execution');
 
 $config->task->dtable->fieldList['assignedDate']['type']     = 'date';
 $config->task->dtable->fieldList['assignedDate']['sortType'] = true;
@@ -141,12 +144,38 @@ $config->task->dtable->fieldList['activatedDate']['type']     = 'date';
 $config->task->dtable->fieldList['activatedDate']['sortType'] = true;
 $config->task->dtable->fieldList['activatedDate']['group']    = 8;
 
-$config->task->dtable->fieldList['story']['title']    = $lang->task->storyAB;
-$config->task->dtable->fieldList['story']['name']     = 'storyTitle';
-$config->task->dtable->fieldList['story']['type']     = 'desc';
-$config->task->dtable->fieldList['story']['sortType'] = true;
-$config->task->dtable->fieldList['story']['show']     = true;
-$config->task->dtable->fieldList['story']['group']    = 9;
+$config->task->dtable->fieldList['story']['title']      = $lang->task->storyAB;
+$config->task->dtable->fieldList['story']['name']       = 'storyTitle';
+$config->task->dtable->fieldList['story']['type']       = 'desc';
+$config->task->dtable->fieldList['story']['sortType']   = true;
+$config->task->dtable->fieldList['story']['show']       = true;
+$config->task->dtable->fieldList['story']['group']      = 9;
+$config->task->dtable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' => 'getExecutionStoryPairs', 'params' => '$executionID&0&all&&&active');
+
+$config->task->dtable->fieldList['module']['title']      = 'module';
+$config->task->dtable->fieldList['module']['control']    = 'select';
+$config->task->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getTaskOptionMenu', 'params' => '$executionID');
+$config->task->dtable->fieldList['module']['display']    = false;
+
+$config->task->dtable->fieldList['execution']['title']      = 'execution';
+$config->task->dtable->fieldList['execution']['control']    = 'hidden';
+$config->task->dtable->fieldList['execution']['type']       = 'html';
+$config->task->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs');
+$config->task->dtable->fieldList['execution']['display']    = false;
+
+$config->task->dtable->fieldList['project']['title']      = 'project';
+$config->task->dtable->fieldList['project']['control']    = 'hidden';
+$config->task->dtable->fieldList['project']['type']       = 'html';
+$config->task->dtable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairs');
+$config->task->dtable->fieldList['project']['display']    = false;
+
+$config->task->dtable->fieldList['mode']['title']   = 'mode';
+$config->task->dtable->fieldList['mode']['control'] = 'hidden';
+$config->task->dtable->fieldList['mode']['display'] = false;
+
+$config->task->dtable->fieldList['desc']['title']   = 'desc';
+$config->task->dtable->fieldList['desc']['control'] = 'textarea';
+$config->task->dtable->fieldList['desc']['display'] = false;
 
 $config->task->dtable->fieldList['mailto']['type']     = 'user';
 $config->task->dtable->fieldList['mailto']['sortType'] = true;

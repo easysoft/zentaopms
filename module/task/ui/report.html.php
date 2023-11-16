@@ -22,7 +22,7 @@ detailHeader
             set::level(1),
             set::text($lang->task->report->common)
         )
-    ),
+    )
 );
 
 $selectCharts = array();
@@ -48,8 +48,8 @@ foreach($charts as $type => $option)
         set::tableHeaders(array(
             'item'    => $lang->task->report->$type->item,
             'value'   => $lang->task->report->value,
-            'percent' => $lang->report->percent,
-        )),
+            'percent' => $lang->report->percent
+        ))
     );
 }
 
@@ -102,7 +102,7 @@ div
                         'text'  => $lang->task->report->create,
                         'class' => 'btn-select-all space',
                         'url'   => 'javascript:createChart();'
-                    ),
+                    )
                 )
             ),
             checkList
@@ -111,9 +111,9 @@ div
                 set::name('charts[]'),
                 set::value('code'),
                 set::inline(false),
-                set::items($selectCharts),
-            ),
-        ),
+                set::items($selectCharts)
+            )
+        )
     ),
     cell
     (

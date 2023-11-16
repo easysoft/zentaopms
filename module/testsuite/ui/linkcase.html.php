@@ -31,11 +31,11 @@ $footToolbar = array('items' => array
 
 div
 (
-    set('class', 'mb-2'),
+    setClass('mb-2'),
     icon('unlink'),
     span
     (
-        set('class', 'font-semibold ml-2'),
+        setClass('font-semibold ml-2'),
         $lang->testsuite->unlinkedCases . "({$pager->recTotal})"
     )
 );

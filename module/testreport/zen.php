@@ -362,7 +362,7 @@ class testreportZen extends testreport
             $field = trim($field);
             if($field && empty($testreport->{$field}))
             {
-                $fieldName = $this->config->testreport->form->showImport[$field]['type'] != 'array' ? "{$field}" : "{$field}[]";
+                $fieldName = $this->config->testreport->form->create[$field]['type'] != 'array' ? "{$field}" : "{$field}[]";
                 $reportErrors[$fieldName][] = sprintf($this->lang->error->notempty, $this->lang->testreport->{$field});
             }
          }
@@ -394,7 +394,7 @@ class testreportZen extends testreport
             $field = trim($field);
             if($field && empty($testreport->{$field}))
             {
-                $fieldName = $this->config->testreport->form->showImport[$field]['type'] != 'array' ? "{$field}" : "{$field}[]";
+                $fieldName = $this->config->testreport->form->edit[$field]['type'] != 'array' ? "{$field}" : "{$field}[]";
                 $reportErrors[$fieldName][] = sprintf($this->lang->error->notempty, $this->lang->testreport->{$field});
             }
          }

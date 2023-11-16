@@ -18,7 +18,7 @@ detailHeader
     to::prefix(''),
     to::title
     (
-        $lang->repo->linkTask,
+        $lang->repo->linkTask
     )
 );
 
@@ -50,7 +50,7 @@ dtable
     set::footToolbar($footToolbar),
     set::sortLink(jsRaw('createSortLink')),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('link', "MRID=$MRID&type=task"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

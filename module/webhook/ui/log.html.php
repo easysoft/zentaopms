@@ -19,7 +19,7 @@ toolbar
         'text'  => $lang->webhook->create,
         'icon'  => 'plus',
         'class' => 'primary',
-        'url'   => (common::hasPriv('webhook', 'create') and ($app->rawMethod == 'browse') or $app->rawMethod == 'log') ? createLink('webhook', 'create') : null,
+        'url'   => (common::hasPriv('webhook', 'create') and ($app->rawMethod == 'browse') or $app->rawMethod == 'log') ? createLink('webhook', 'create') : null
     ))),
 );
 
@@ -41,12 +41,12 @@ panel
         div
         (
             btn(set::url(createLink('webhook', 'browse')), set::icon('back'), $lang->goback),
-            span(setClass('pl-2'), $webhook->name . $lang->webhook->log),
-        ),
+            span(setClass('pl-2'), $webhook->name . $lang->webhook->log)
+        )
     ),
     common::hasPriv('admin', 'log') ? to::headingActions
     (
-        btn(set::url(createLink('admin', 'log')), setClass('primary mr-2'), set('data-toggle', 'modal'), set::icon('cog'), $lang->webhook->setting),
+        btn(set::url(createLink('admin', 'log')), setClass('primary mr-2'), set('data-toggle', 'modal'), set::icon('cog'), $lang->webhook->setting)
     ) : null,
     dtable
     (
@@ -56,8 +56,8 @@ panel
         set::data($data),
         set::sortLink(createLink('webhook', 'log', "id={$webhook->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
         set::orderBy($orderBy),
-        set::footPager(usePager()),
-    ),
+        set::footPager(usePager())
+    )
 );
 
 render();

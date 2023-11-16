@@ -7,6 +7,5 @@
 #copyProjects .btn.primary-outline {background-color: var(--color-primary-50);}
 #copyProjects .btn.primary-outline:after {position: absolute; content: '\e92f'; font-family: ZentaoIcon; font-size: 20px; right: 25px;}
 #copyProjects .btn.primary-outline span {color: rgba(var(--color-fore-rgb),var(--tw-text-opacity));}
-.has-info {--tw-ring-color: var(--color-warning-500) !important;}
 .productBox .line-btn {width: 48px; margin-right: 32px;}
 .productBox div[id^=plan] {flex: 1 1;}

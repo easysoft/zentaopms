@@ -105,7 +105,7 @@ class pageBase extends wg
                 h::title($title),
                 $this->block('headBefore'),
                 $headImports,
-                $head,
+                $head
             ),
             h::body
             (

@@ -19,7 +19,7 @@ featureBar
     (
         set::rootClass('ml-2'),
         set::name('involved'),
-        set::text($lang->project->mine),
+        set::text($lang->project->mine)
     ),
     li(searchToggle(set::module('project')))
 );
@@ -96,8 +96,8 @@ if(!empty($projectStats))
                         (
                             set::size('sm'),
                             set::text($users[$member]),
-                            set::src(zget($usersAvatar, $member, '')),
-                        ),
+                            set::src(zget($usersAvatar, $member, ''))
+                        )
                     );
                 $count ++;
             }
@@ -172,7 +172,7 @@ if(!empty($projectStats))
                                 setClass('label lighter mr-2'),
                                 setClass($status == 'delay' ? 'text-danger' : ''),
                                 $project->date
-                            ),
+                            )
                         ),
                         div
                         (
@@ -189,7 +189,7 @@ if(!empty($projectStats))
                                         (
                                             setClass('statistics-title'),
                                             $lang->projectCommon . $lang->project->progress
-                                        ),
+                                        )
                                     ),
                                     div
                                     (
@@ -197,7 +197,7 @@ if(!empty($projectStats))
                                         set('data-zui', 'ProgressCircle'),
                                         set('data-percent', $project->hours->progress),
                                         set('data-size', 24),
-                                        set('data-circle-color', 'var(--color-success-500)'),
+                                        set('data-circle-color', 'var(--color-success-500)')
                                     )
                                 ),
                                 div
@@ -229,7 +229,7 @@ if(!empty($projectStats))
                                         set::title(empty($project->hours->totalLeft) ? '— ' : $project->hours->totalLeft . 'h'),
                                         empty($project->hours->totalLeft) ? '— ' : $project->hours->totalLeft . 'h'
                                     )
-                                ),
+                                )
                             )
                         ),
                         div
@@ -254,16 +254,16 @@ if(!empty($projectStats))
                                         (
                                             set::size('sm'),
                                             set::text($users[$lastMember]),
-                                            set::src(zget($usersAvatar, $lastMember, '')),
-                                        ),
+                                            set::src(zget($usersAvatar, $lastMember, ''))
+                                        )
                                     ) : null,
                                     a
                                     (
                                         setClass('project-members-total pl-2 mt-1'),
                                         set::href(createLink('project', 'team', "projectID={$project->id}")),
-                                        sprintf($lang->project->teamSumCount, $project->teamCount),
+                                        sprintf($lang->project->teamSumCount, $project->teamCount)
                                     )
-                                ),
+                                )
                             ),
                             div
                             (

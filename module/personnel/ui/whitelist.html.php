@@ -24,7 +24,7 @@ dropmenu();
 featureBar
 (
     set::current('all'),
-    set::linkParams("objectID={$objectID}&module=whitelist&objectType={$objectType}"),
+    set::linkParams("objectID={$objectID}&module=whitelist&objectType={$objectType}")
 );
 
 $whitelistVars    = $module == 'program' ? "objectID={$objectID}&programID={$projectProgramID}&module={$module}&from={$from}" : "objectID={$objectID}";
@@ -48,7 +48,7 @@ dtable
     set::cols($cols),
     set::data($data),
     set::fixedLeftWidth('0.33'),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

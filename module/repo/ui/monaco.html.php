@@ -43,7 +43,7 @@ if(common::hasPriv('repo', 'blame'))    $monacoDropMenus[] = array('text' => $th
 if(common::hasPriv('repo', 'download')) $monacoDropMenus[] = array('text' => $this->lang->repo->download, 'icon' => 'download', 'data-link' => $this->repo->createLink('download', "repoID=$repoID&path={path}&fromRevision=$revision"), 'class' => 'repoDropDownMenu');
 
 $tabs = array(array('name' => 'branch', 'text' => $lang->repo->branch), array('name' => 'tag', 'text' => $lang->repo->tag));
-$menuData = array('branch' => $dropMenus['branchMenus'], 'tag' => $dropMenus['tagMenus']);
+$menuData = $repo->SCM == 'Subversion' ? array() : array('branch' => $dropMenus['branchMenus'], 'tag' => $dropMenus['tagMenus']);
 
 div(
     set::id('fileTabs'),
@@ -63,10 +63,10 @@ div(
                 icon
                 (
                     'close',
-                    set::className('monaco-close'),
+                    set::className('monaco-close')
                 )
             ),
-            div(set::id('tab-' . $file)),
+            div(set::id('tab-' . $file))
         ),
         empty($monacoDropMenus) ? null : dropdown
         (
@@ -77,15 +77,15 @@ div(
             btn
             (
                 setClass('ghost text-black pull-right'),
-                set::icon('ellipsis-v rotate-90'),
+                set::icon('ellipsis-v rotate-90')
             ),
             set::items
             (
                 $monacoDropMenus
-            ),
+            )
         ),
         div(set::className('absolute top-0 left-0 z-20 arrow-left btn-left'), icon('chevron-left')),
-        div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right')),
+        div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right'))
     )
 );
 
@@ -93,7 +93,7 @@ helper::isAjaxRequest('modal') ? null : sidebar
 (
     set::side('left'),
     setClass('repo-sidebar canvas'),
-    div
+    $repo->SCM == 'Subversion' ? null : div
     (
         setClass('surface'),
         dropmenu

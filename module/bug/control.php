@@ -182,6 +182,7 @@ class bug extends control
         $this->session->set('storyList', '', 'product');
         $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
 
+        if($this->app->tab == 'repo') $this->view->repoID = $bug->repo;
         $this->view->title       = "BUG #$bug->id $bug->title - " . $product->name;
         $this->view->product     = $product;
         $this->view->project     = $this->loadModel('project')->getByID($bug->project);
@@ -266,11 +267,10 @@ class bug extends control
      *
      * @param  int    $bugID
      * @param  bool   $comment true|false
-     * @param  string $kanbanGroup
      * @access public
      * @return void
      */
-    public function edit(int $bugID, bool $comment = false, string $kanbanGroup = 'default')
+    public function edit(int $bugID, bool $comment = false)
     {
         $oldBug = $this->bug->getByID($bugID);
         if(!empty($_POST))
@@ -291,7 +291,7 @@ class bug extends control
 
             /* Get response after editing bug. */
             $message = $this->executeHooks($bugID);
-            return $this->bugZen->responseAfterOperate($bugID, $changes, $kanbanGroup, 0, $message);
+            return $this->bugZen->responseAfterOperate($bugID, $changes, $message);
         }
 
         $this->bugZen->checkBugExecutionPriv($oldBug);
@@ -387,7 +387,7 @@ class bug extends control
             /* Return response after confirming bug. */
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $message = $this->executeHooks($bugID);
-            return $this->bugZen->responseAfterOperate($bugID, array(), '', zget($kanbanData, 'regionID', 0), $message);
+            return $this->bugZen->responseAfterOperate($bugID, array(), $message);
         }
 
         $this->qa->setMenu($oldBug->product, $oldBug->branch);
@@ -449,7 +449,7 @@ class bug extends control
             /* Return response after resolving bug. */
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $message = $this->executeHooks($bugID);
-            return $this->bugZen->responseAfterOperate($bugID, array(), '', zget($output, 'regionID', 0), $message);
+            return $this->bugZen->responseAfterOperate($bugID, array(), $message);
         }
 
         /* 移除解决方案“转需求”。 */
@@ -514,7 +514,7 @@ class bug extends control
             /* Return response after activating bug. */
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $message = $this->executeHooks($bugID);
-            return $this->bugZen->responseAfterOperate($bugID, array(), '', zget($kanbanParams, 'regionID', 0), $message);
+            return $this->bugZen->responseAfterOperate($bugID, array(), $message);
         }
 
         $productID = $oldBug->product;
@@ -564,8 +564,7 @@ class bug extends control
             /* Return response after closing bug. */
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $message  = $this->executeHooks($bugID);
-            $regionID = zget($output, 'regionID', 0);
-            return $this->bugZen->responseAfterOperate($bugID, array(), '', $regionID, $message);
+            return $this->bugZen->responseAfterOperate($bugID, array(), $message);
         }
 
         $this->view->title   = $this->lang->bug->close;
@@ -622,8 +621,8 @@ class bug extends control
             {
                 /* 设置模块数据源。 */
                 /* Set module data source. */
-                $this->config->bug->datatable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
-                $this->config->bug->datatable->fieldList['module']['dataSource']['params'] = 'bug';
+                $this->config->bug->dtable->fieldList['module']['dataSource']['method'] = 'getAllModulePairs';
+                $this->config->bug->dtable->fieldList['module']['dataSource']['params'] = 'bug';
 
                 /* 如果导出执行的bug，设置数据源。 */
                 /* In execution, set data source. */
@@ -631,8 +630,8 @@ class bug extends control
                 {
                     $object    = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
                     $projectID = $object->type == 'project' ? $object->id : $object->parent;
-                    $this->config->bug->datatable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $projectID);
-                    $this->config->bug->datatable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
+                    $this->config->bug->dtable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => $projectID);
+                    $this->config->bug->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
                 }
             }
 

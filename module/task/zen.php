@@ -1194,38 +1194,6 @@ class taskZen extends task
     }
 
     /**
-     * 任务的数据更新之后，获取对应看板的数据。
-     * Get R&D kanban's or task kanban's data after task's data is updated.
-     *
-     * @param  object    $execution
-     * @param  int       $regionID
-     * @access protected
-     * @return string
-     */
-    protected function getKanbanData(object $execution, int $regionID = 0): string
-    {
-        $this->loadModel('kanban');
-
-        $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-        $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-        $rdSearchValue     = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-        $taskSearchValue   = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-
-        /* 处理专业研发看板。 Handling professional R&D kanban. */
-        if($execution->type == 'kanban')
-        {
-            $kanbanData = $this->kanban->getRDKanban($execution->id, $executionLaneType, 'id_desc', $regionID, $executionGroupBy, $rdSearchValue);
-            return json_encode($kanbanData);
-        }
-
-        /* 处理任务看板。 Handling task kanban. */
-        $kanbanData = $this->kanban->getExecutionKanban($execution->id, $executionLaneType, $executionGroupBy, $taskSearchValue);
-        $kanbanType = $executionLaneType == 'all' ? 'task' : key($kanbanData);
-        $data       = isset($kanbanData[$kanbanType]) ? $kanbanData[$kanbanType] : array();
-        return json_encode($data);
-    }
-
-    /**
      * 处理创建后选择跳转的返回信息。
      * Process the return information for selecting a jump after creation.
      *
@@ -1585,29 +1553,21 @@ class taskZen extends task
      *
      * @param  object    $task
      * @param  string    $from     ''|taskkanban
-     * @param  int       $regionID
      * @access protected
      * @return array
      */
-    protected function responseModal(object $task, string $from, int $regionID = 0): array
+    protected function responseModal(object $task, string $from): array
     {
         $response['result']     = 'success';
         $response['message']    = $this->lang->saveSuccess;
         $response['closeModal'] = true;
 
-        $execution  = $this->loadModel('execution')->getByID((int)$task->execution);
-        $kanbanData = $this->getKanbanData($execution, $regionID);
+        $execution = $this->loadModel('execution')->getByID((int)$task->execution);
 
         $inLiteKanban = $this->config->vision == 'lite' && $this->app->tab == 'project' && $this->session->kanbanview == 'kanban';
-        if(($this->app->tab == 'execution' || $inLiteKanban) && $execution->type == 'kanban')
+        if(($this->app->tab == 'execution' || $inLiteKanban) && $execution->type == 'kanban' || $from == 'taskkanban')
         {
-            $response['callback'] = "parent.parent.updateKanban({$kanbanData}, {$regionID})";
-            return $response;
-        }
-
-        if($from == 'taskkanban')
-        {
-            $response['callback'] = "refreshKanban()";
+            $response['callback'] = 'refreshKanban()';
             return $response;
         }
 
@@ -1646,9 +1606,8 @@ class taskZen extends task
             /* If it is Kanban execution, refresh the Kanban statically through callback. */
             if($this->app->tab == 'execution' || $this->config->vision == 'lite')
             {
-                $kanbanData = $this->getKanbanData($execution);
                 $response['closeModal'] = true;
-                $response['callback']   = $execution->type == 'kanban' ? "parent.updateKanban({$kanbanData}, 0)" : "parent.updateKanban(\"task\", {$kanbanData})";
+                $response['callback']   = 'refreshKanban()';
                 return $response;
             }
             $response['load'] = true;
@@ -1688,13 +1647,7 @@ class taskZen extends task
         if(helper::isAjaxRequest('modal') && ($this->app->tab == 'execution' || $this->config->vision == 'lite'))
         {
             $response['closeModal'] = true;
-            $kanbanData = $this->getKanbanData($execution);
-            if($execution->type == 'kanban')
-            {
-                $response['callback'] = "parent.parent.updateKanban($kanbanData, 0)";
-                return $response;
-            }
-            $response['callback'] = "parent.parent.updateKanban(\"task\", $kanbanData)";
+            $response['callback']   = "refreshKanban()";
             return $response;
         }
 

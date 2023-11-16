@@ -55,7 +55,7 @@ class datePicker extends wg
         'maxDate?: string|int',             // 最大可选的日期。
         'menu?: array',                     // 左侧显示的菜单设置。
         'actions?: array',                  // 底部工具栏设置。
-        'onInvalid?: function',             // 日期值无效时的回调函数。
+        'onInvalid?: function'              // 日期值无效时的回调函数。
     );
 
     /**
@@ -79,7 +79,7 @@ class datePicker extends wg
             set::_map(array('value' => 'defaultValue', 'formID' => 'id')),
             set($props),
             set::_props($restProps),
-            $this->children(),
+            $this->children()
         );
     }
 }

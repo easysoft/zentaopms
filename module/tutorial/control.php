@@ -40,7 +40,7 @@ class tutorial extends control
 
         $this->view->title   = $this->lang->tutorial->common;
         $this->view->current = $task;
-        $this->view->tasks   = $this->lang->tutorial->tasks;
+        $this->view->tasks   = $this->config->tutorial->tasksConfig;
         $this->view->setting = $setting;
         $this->view->referer = base64_decode($referer);
         $this->view->mode    = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
@@ -59,7 +59,8 @@ class tutorial extends control
     {
         if($_POST && isset($_POST['finish'])) $finish = $_POST['finish'];
 
-        if($finish == 'keepAll') return $this->send(array('result' => 'fail', 'message' => $this->lang->tutorial->ajaxSetError));
+        if($finish == 'keepAll') return $this->send(array('result' => 'fail', 'alert' => $this->lang->tutorial->ajaxSetError));
+
         $account = $this->app->user->account;
         $this->session->set('tutorialMode', false);
         $this->loadModel('setting')->setItem("$account.tutorial.tasks.setting", $finish);
@@ -79,7 +80,6 @@ class tutorial extends control
     {
         $this->session->set('tutorialMode', false);
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', 0);
-        if(empty($referer)) $referer = helper::safe64Encode(helper::createLink('my', 'index', '', 'html'));
         return $this->send(array('result' => 'success', 'open' => $this->createLink('index', 'index')));
     }
 
@@ -116,7 +116,7 @@ class tutorial extends control
         /* Check priv for tutorial. */
         $hasPriv = false;
         $moduleLower = strtolower($module);
-        foreach($this->lang->tutorial->tasks as $task)
+        foreach($this->config->tutorial->tasksConfig as $task)
         {
             $taskModule     = strtolower($task['nav']['module']);
             $taskMenuModule = strtolower($task['nav']['menuModule']);

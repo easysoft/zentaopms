@@ -21,7 +21,7 @@ formPanel
     to::heading(div
     (
         setClass('panel-title text-lg'),
-        $lang->execution->create,
+        $lang->execution->create
     )),
     to::headingActions
     (
@@ -47,7 +47,7 @@ formPanel
             set::name('project'),
             set::items($allProjects),
             set::value($projectID),
-            on::change('refreshPage'),
+            on::change('refreshPage')
         )
     ) : null,
     formGroup
@@ -55,14 +55,14 @@ formPanel
         set::width('1/2'),
         set::name('name'),
         set::label($lang->execution->name),
-        set::value($execution->name),
+        set::value($execution->name)
     ),
     formGroup
     (
         set::width('1/2'),
         set::name('code'),
         set::label($lang->execution->code),
-        set::value($execution->code),
+        set::value($execution->code)
     ),
     formRow
     (
@@ -78,7 +78,7 @@ formPanel
                     set::name('begin'),
                     set('id', 'begin'),
                     set::value(date('Y-m-d')),
-                    set::placeholder($lang->execution->begin),
+                    set::placeholder($lang->execution->begin)
                 ),
                 $lang->project->to,
                 datePicker
@@ -86,9 +86,9 @@ formPanel
                     set::name('end'),
                     set('id', 'end'),
                     set::value(''),
-                    set::placeholder($lang->execution->end),
+                    set::placeholder($lang->execution->end)
                 )
-            ),
+            )
         ),
         formGroup
         (
@@ -97,9 +97,9 @@ formPanel
                 set::name('delta'),
                 set::inline(true),
                 set::items($lang->execution->endList),
-                on::change('computeEndDate'),
+                on::change('computeEndDate')
             )
-        ),
+        )
     ),
     formGroup
     (
@@ -111,7 +111,7 @@ formPanel
             input
             (
                 set::name('days'),
-                set::value(''),
+                set::value('')
             ),
             div
             (
@@ -128,7 +128,7 @@ formPanel
         (
             set::name('PM'),
             set::items($pmUsers),
-            set::value(empty($copyExecution) ? '' : $copyExecution->PM),
+            set::value(empty($copyExecution) ? '' : $copyExecution->PM)
         )
     ),
     formGroup
@@ -138,7 +138,7 @@ formPanel
         (
             set::name('teamMembers[]'),
             set::items($users),
-            set::multiple(true),
+            set::multiple(true)
         )
     ),
     formGroup

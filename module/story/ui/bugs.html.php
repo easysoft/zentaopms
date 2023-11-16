@@ -19,5 +19,5 @@ dtable
     set::groupDivider(true),
     set::userMap($users),
     set::cols($config->story->bugTable->fieldList),
-    set::data($tableData),
+    set::data($tableData)
 );

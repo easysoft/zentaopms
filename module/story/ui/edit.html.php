@@ -58,7 +58,7 @@ detailHeader
             set::level(1),
             set::entityID($story->id),
             set::reverse(true),
-            $story->title
+            span(setID('storyTitle'), $story->title)
         )
     )
 );
@@ -78,11 +78,26 @@ detailBody
         section
         (
             set::title($lang->story->title),
-            formGroup
+            inputControl
             (
-                set::name('title'),
-                set::value($fields['title']['default']),
-                set::disabled(!$canEditContent)
+                input
+                (
+                    setClass('filter-none'),
+                    set::name('title'),
+                    set::value($fields['title']['default']),
+                    set::disabled(!$canEditContent)
+                ),
+                set::suffixWidth('40'),
+                to::suffix
+                (
+                    colorPicker
+                    (
+                        set::heading($lang->story->colorTag),
+                        set::name('color'),
+                        set::value($story->color),
+                        set::syncColor('#title, #storyTitle')
+                    )
+                )
             )
         ),
         $canEditContent ? section
@@ -97,7 +112,7 @@ detailBody
                     set::items($fields['reviewer']['options']),
                     set::value($fields['reviewer']['default']),
                     set::multiple(true),
-                    on::change('changeReviewer'),
+                    on::change('changeReviewer')
                 ),
                 $forceReview ? null : span
                 (
@@ -109,7 +124,7 @@ detailBody
                         set::checked(empty($fields['reviewer']['default'])),
                         set::value(1),
                         set::text($lang->story->needNotReview),
-                        on::change('changeNeedNotReview(e.target)'),
+                        on::change('changeNeedNotReview(e.target)')
                     )
                 ),
                 formHidden('needNotReview', $forceReview ? 0 : 1)
@@ -146,7 +161,7 @@ detailBody
                         label(setClass('circle size-sm'), $twin->id),
                         common::hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "id={$twin->id}")), setClass('title'), set::title($twin->title), set('data-toggle', 'modal'), $twin->title) : span(setClass('title'), $twin->title),
                         label(setClass('size-sm'), set::title($stage), $stage),
-                        common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink size-xs"), on::click('unlinkTwins'), set('data-id', $twin->id), icon('unlink')) : null,
+                        common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink size-xs"), on::click('unlinkTwins'), set('data-id', $twin->id), icon('unlink')) : null
                     );
                 }, $twins))
             )
@@ -159,7 +174,7 @@ detailBody
             (
                 set::files($story->files),
                 set::fieldset(false),
-                set::object($story),
+                set::object($story)
             ) : null
         ) : null,
         section
@@ -320,7 +335,7 @@ detailBody
                         set('url', createLink('my', 'managecontacts', 'listID=0&mode=new')),
                         set('title', $lang->user->contacts->manage),
                         set('data-toggle', 'modal'),
-                        icon('cog'),
+                        icon('cog')
                     ),
                     isset($contactList) ? null : btn
                     (
@@ -409,7 +424,7 @@ detailBody
                 ) : null,
                 div(set::id('linkStoriesBox'))
             )
-        ),
+        )
     )
 );
 

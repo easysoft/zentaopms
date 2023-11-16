@@ -139,6 +139,13 @@ class metric extends control
      */
     public function updateMetricLib()
     {
+        // 保存当前的错误报告级别和显示错误的设置
+        $originalDebug = $this->config->debug;
+
+        // 开启调试模式
+        $this->config->debug = 2;
+
+        $this->metric->clearMetricLib();
         $calcList = $this->metric->getCalcInstanceList();
         $classifiedCalcGroup = $this->metric->classifyCalc($calcList);
 
@@ -146,16 +153,26 @@ class metric extends control
         {
             if($this->config->edition == 'open' and in_array($calcGroup->dataset, array('getFeedbacks', 'getIssues', 'getRisks'))) continue;
 
-            $statement = $this->metricZen->prepareDataset($calcGroup);
-            if(empty($statement)) continue;
+            try
+            {
+                $statement = $this->metricZen->prepareDataset($calcGroup);
+                if(empty($statement)) continue;
 
-            $rows = $statement->fetchAll();
-            $this->metricZen->calcMetric($rows, $calcGroup->calcList);
+                $rows = $statement->fetchAll();
+                $this->metricZen->calcMetric($rows, $calcGroup->calcList);
 
-            $records = $this->metricZen->prepareMetricRecord($calcGroup->calcList);
+                $records = $this->metricZen->prepareMetricRecord($calcGroup->calcList);
 
-            $this->metric->insertMetricLib($records);
+                $this->metric->insertMetricLib($records);
+            }
+            catch(Exception $e)
+            {
+                a($e->getMessage());
+            }
         }
+
+        // 恢复之前的调试状态
+        $this->config->debug = $originalDebug;
 
         if(dao::isError())
         {

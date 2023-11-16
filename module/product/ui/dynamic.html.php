@@ -41,7 +41,7 @@ if(empty($dateGroups))
         (
             setClass('text-gray'),
             $lang->action->noDynamic
-        ),
+        )
     );
 
     return;
@@ -69,8 +69,8 @@ foreach($dateGroups as $date => $actions)
             span
             (
                 setClass('ml-2'),
-                $isToday ? $lang->action->dynamic->today : $date,
-            ),
+                $isToday ? $lang->action->dynamic->today : $date
+            )
         ),
         div
         (

@@ -26,7 +26,7 @@ div
         set::className('btn btn-default btn-start-now btn-lg btn-info'),
         set::href($this->inlink('index')),
         set::target('_top'),
-        span($lang->tutorial->start),
+        span($lang->tutorial->start)
     )
 );
 

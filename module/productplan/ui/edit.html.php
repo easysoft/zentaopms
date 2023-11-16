@@ -35,7 +35,7 @@ formPanel
         set::name('parent'),
         set::items($parentPlanPairs),
         set::value($plan->parent),
-        $product->type != 'normal' ? on::change('loadBranches') : '',
+        $product->type != 'normal' ? on::change('loadBranches') : ''
     ),
     !$product->shadow && $product->type != 'normal' ? formGroup
     (
@@ -48,7 +48,7 @@ formPanel
             set::name('branch[]'),
             set::items($branchTagOption),
             set::value($plan->branch),
-            set::multiple(true),
+            set::multiple(true)
         )
     ) : null,
     formGroup
@@ -56,7 +56,7 @@ formPanel
         set::width('1/2'),
         set::label($lang->productplan->title),
         set::name('title'),
-        set::value($plan->title),
+        set::value($plan->title)
     ),
     formGroup
     (
@@ -77,7 +77,7 @@ formPanel
             set::control('date'),
             setID('begin'),
             set::name('begin'),
-            set::value($plan->begin != $config->productplan->future ? formatTime($plan->begin) : ''),
+            set::value($plan->begin != $config->productplan->future ? formatTime($plan->begin) : '')
         ),
         formGroup
         (
@@ -103,7 +103,7 @@ formPanel
             set::control('date'),
             setID('end'),
             set::name('end'),
-            set::value($plan->end != $config->productplan->future ? formatTime($plan->end) : ''),
+            set::value($plan->end != $config->productplan->future ? formatTime($plan->end) : '')
         ),
         formGroup
         (
@@ -113,10 +113,10 @@ formPanel
                 set::inline(true),
                 set::items($lang->productplan->endList),
                 set::value($deltaValue),
-                on::change('computeEndDate'),
+                on::change('computeEndDate')
             )
         ),
-        formHidden('product', $product->id),
+        formHidden('product', $product->id)
     ),
     formGroup
     (
@@ -124,9 +124,9 @@ formPanel
         editor
         (
             set::name('desc'),
-            html($plan->desc),
+            html($plan->desc)
         )
-    ),
+    )
 );
 
 /* ====== Render page ====== */

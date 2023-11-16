@@ -31,7 +31,7 @@ dtable
             'btnType'   => 'secondary',
             'className' => 'size-sm linkObjectBtn',
             'data-type' => 'bug',
-            'data-url'  => inlink('linkBug', "planID=$plan->id&browseType=$browseType&param=$param&orderBy=$orderBy"),
+            'data-url'  => inlink('linkBug', "planID=$plan->id&browseType=$browseType&param=$param&orderBy=$orderBy")
         ))
     )),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=$orderBy"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
@@ -42,7 +42,7 @@ dtable
             'recTotal' => $pager->recTotal,
             'linkCreator' => helper::createLink('productplan', 'view', "planID={$plan->id}&type=bug&orderBy={$orderBy}&link=true&param=" . helper::safe64Encode("&browseType={$browseType}&param={$param}") . "&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
         ))
-    ),
+    )
 );
 
 render();

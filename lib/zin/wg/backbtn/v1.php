@@ -61,7 +61,7 @@ class backBtn extends btn
             'repo'           => 'repo-log,repo-browse',
             'compile'        => 'compile-browse',
             'store'          => 'store-browse',
-            'space'          => 'space-browse',
+            'space'          => 'space-browse'
         );
 
         $props = parent::getProps();

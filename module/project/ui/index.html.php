@@ -14,7 +14,7 @@ namespace zin;
 featureBar
 (
     set::current($browseType),
-    set::linkParams("projectID={$project->id}&browseType={key}"),
+    set::linkParams("projectID={$project->id}&browseType={key}")
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -27,7 +27,7 @@ if(hasPriv('execution', 'create'))
             'icon'  => 'plus',
             'text'  => $lang->project->createKanban,
             'class' => 'primary',
-            'url'   => createLink('execution', 'create', "projectID={$project->id}"),
+            'url'   => createLink('execution', 'create', "projectID={$project->id}")
         )))
     );
 }
@@ -63,8 +63,8 @@ if(!empty($kanbanList))
                 (
                     set::size('sm'),
                     set::src(zget($usersAvatar, $member->account, '')),
-                    set::text(zget($member, 'realname', $member->account)),
-                ),
+                    set::text(zget($member, 'realname', $member->account))
+                )
             );
             $count ++;
         }
@@ -161,13 +161,13 @@ if(!empty($kanbanList))
                                     (
                                         set::size('sm'),
                                         set::text($lastMember->realname),
-                                        set::src(zget($usersAvatar, $lastMember->account, '')),
+                                        set::src(zget($usersAvatar, $lastMember->account, ''))
                                     ),
                                 ) : null,
                                 span
                                 (
                                     setClass('project-members-total pl-2 mt-1'),
-                                    sprintf($lang->project->teamSumCount, count($members)),
+                                    sprintf($lang->project->teamSumCount, count($members))
                                 )
                             ),
                             div
@@ -180,7 +180,7 @@ if(!empty($kanbanList))
                                 ),
                                 zget($lang->execution->kanbanAclList, $kanban->acl, '')
                             )
-                        ),
+                        )
                     )
                 )
             )
@@ -210,7 +210,7 @@ panel
                 'text'  => $lang->project->createKanban,
                 'class' => 'ml-2',
                 'type'  => 'secondary',
-                'url'   => createLink('execution', 'create', "projectID={$project->id}"),
+                'url'   => createLink('execution', 'create', "projectID={$project->id}")
             ))) : null
         ) : $kanbanCards
     ),

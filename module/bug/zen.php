@@ -1074,8 +1074,9 @@ class bugZen extends bug
         $this->view->branchTagOption = $branchTagOption;
         $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
         $this->view->executions      = $executions;
-        $this->view->tasks           = $this->loadModel('task')->getByIdList($taskIdList);
-        $this->view->stories         = $this->loadModel('story')->getByList($storyIdList);
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($product->id);
+        $this->view->tasks           = $this->loadModel('task')->getPairsByIdList($taskIdList);
+        $this->view->stories         = $this->loadModel('story')->getPairsByList($storyIdList);
         $this->view->builds          = $this->loadModel('build')->getBuildPairs(array($product->id), $branch);
         $this->view->bugs            = $bugs;
         $this->view->users           = $this->user->getPairs('noletter');
@@ -1983,7 +1984,7 @@ class bugZen extends bug
 
         /* 给 bug 解决者积分奖励。*/
         /* Add score to the user who resolved the bug. */
-        if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bug->id);
+        if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bug);
 
         /* 更新 bug 所属看板的泳道。*/
         /* Update the lane of the bug kanban. */
@@ -2053,7 +2054,7 @@ class bugZen extends bug
      * @access protected
      * @return bool|int
      */
-    protected function responseAfterOperate(int $bugID, array $changes = array(), string $kanbanGroup = '', int $regionID = 0, string $message = ''): bool|int
+    protected function responseAfterOperate(int $bugID, array $changes = array(), string $message = ''): bool|int
     {
         if(!$message) $message = $this->lang->saveSuccess;
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'message' => $message, 'data' => $bugID));
@@ -2076,7 +2077,7 @@ class bugZen extends bug
 
         /* 在弹窗里编辑 bug 时的返回。*/
         /* Respond after updating in modal. */
-        if(isInModal()) return $this->responseInModal($bug->execution, $kanbanGroup, $regionID, $message);
+        if(isInModal()) return $this->responseInModal($message);
 
         return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('bug', 'view', "bugID=$bugID")));
     }
@@ -2085,45 +2086,16 @@ class bugZen extends bug
      * 在弹窗中操作后的返回。
      * Respond after operating in modal.
      *
-     * @param  int       $executionID
-     * @param  string    $kanbanGroup
-     * @param  int       $regionID
      * @param  string    $message
      * @access protected
-     * @return bool
+     * @return void
      */
-    protected function responseInModal(int $executionID, string $kanbanGroup = '', int $regionID = 0, string $message = ''): bool
+    protected function responseInModal(string $message = '')
     {
         /* 在执行应用下，编辑看板中的 bug 数据时，更新看板数据。*/
         /* Update kanban data after updating bug in kanban. */
         if(!$message) $message = $this->lang->saveSuccess;
-        if($this->app->tab == 'execution')
-        {
-            $this->loadModel('kanban');
-
-            $execution = $this->loadModel('execution')->getByID($executionID);
-            $laneType  = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-            $groupBy   = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-
-            /* 看板类型的执行。*/
-            /* The kanban exectuion. */
-            if(isset($execution->type) && $execution->type == 'kanban')
-            {
-                $groupBy       = $kanbanGroup ? $kanbanGroup : $groupBy;
-                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                $kanbanData    = $this->kanban->getRDKanban($executionID, $laneType, 'id_desc', $regionID, $groupBy, $rdSearchValue);
-                $kanbanData    = json_encode($kanbanData);
-                return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'callback' => "updateKanban($kanbanData)"));
-            }
-
-            /* 执行中的看板。*/
-            /* The kanban of execution. */
-            $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-            $kanbanData      = $this->kanban->getExecutionKanban($executionID, $laneType, $groupBy, $taskSearchValue);
-            $kanbanType      = $laneType == 'all' ? 'bug' : key($kanbanData);
-            $kanbanData      = json_encode($kanbanData[$kanbanType]);
-            return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "updateKanban(\"bug\", $kanbanData)"));
-        }
+        if($this->app->tab == 'execution') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
 
         return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
     }
@@ -2147,7 +2119,7 @@ class bugZen extends bug
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $bug->id));
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bug->id));
 
-        if(isInModal()) return $this->send($this->responseInModal($executionID));
+        if(isInModal()) return $this->send($this->responseInModal());
 
         if($this->app->tab == 'execution')
         {
@@ -2254,7 +2226,7 @@ class bugZen extends bug
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'idList' => $bugIdList));
 
         /* Respond after updating in modal. */
-        if(isInModal() && $executionID) return $this->responseInModal($executionID);
+        if(isInModal() && $executionID) return $this->responseInModal();
 
         /* If link from no head then reload. */
         if(isInModal()) return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));

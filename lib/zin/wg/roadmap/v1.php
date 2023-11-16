@@ -5,7 +5,7 @@ namespace zin;
 class roadMap extends wg
 {
     protected static array $defineProps = array(
-        'releases: array',
+        'releases: array'
     );
 
     public static function getPageJS(): string
@@ -26,13 +26,13 @@ class roadMap extends wg
             div
             (
                 setClass('title text-primary text-xl'),
-                $title,
+                $title
             ),
             div
             (
                 setClass('subtitle text-gray text-base'),
-                $subtitle,
-            ),
+                $subtitle
+            )
         );
     }
 
@@ -47,7 +47,7 @@ class roadMap extends wg
         return ul
         (
             setClass('release-line flex py-3'),
-            $releaseVersions,
+            $releaseVersions
         );
     }
 
@@ -65,7 +65,7 @@ class roadMap extends wg
                 (
                     div(setClass('title ellipsis text-lg text-dark'), set::title($release['version']), $release['version']),
                     div(setClass('date ellipsis text-sm text-gray'), $release['date'])
-                ),
+                )
             )
         );
     }
@@ -95,7 +95,7 @@ class roadMap extends wg
             div
             (
                 setClass('grow'),
-                $releaseLines,
+                $releaseLines
             )
         );
     }

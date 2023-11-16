@@ -25,7 +25,7 @@ if($canCreateGroup) $createItem = array('icon' => 'plus', 'class' => 'primary', 
 toolbar
 (
     $canManagePriv ? item(set($managePrivItem)) : null,
-    $canCreateGroup ? item(set($createItem)) : null,
+    $canCreateGroup ? item(set($createItem)) : null
 );
 
 jsVar('confirmDelete', $lang->group->confirmDelete);
@@ -33,7 +33,7 @@ $tableData = initTableData($groups, $config->group->dtable->fieldList, $this->gr
 dtable
 (
     set::cols(array_values($config->group->dtable->fieldList)),
-    set::data($tableData),
+    set::data($tableData)
 );
 
 /* ====== Render page ====== */

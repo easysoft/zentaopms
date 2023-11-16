@@ -11,7 +11,6 @@ declare(strict_types=1);
 namespace zin;
 
 $laneCount = 0;
-$groupCols = array(); // 卡片可以移动到的同一group下的列。
 foreach($kanbanList as $current => $region)
 {
     foreach($region['items'] as $index => $group)
@@ -29,15 +28,10 @@ foreach($kanbanList as $current => $region)
         $group['laneProps']   = array('actions' => jsRaw('window.getLaneActions'));
         $group['itemProps']   = array('actions' => jsRaw('window.getItemActions'));
 
-        foreach($group['data']['cols'] as $colIndex => $col)
-        {
-            if($col['parent'] != '-1') $groupCols[$groupID][$col['id']] = $col['title'];
-        }
-
         $kanbanList[$current]['items'][$index] = $group;
     }
 
-    $laneCount += $region['laneCount'];
+    $laneCount += isset($region['laneCount']) ? $region['laneCount'] : 0;
 }
 
 $operationMenu = array();
@@ -111,6 +105,10 @@ jsVar('productID', $productID);
 jsVar('productCount', count($productNames));
 jsVar('vision', $config->vision);
 jsVar('groupBy', $groupBy);
+jsVar('browseType', $browseType);
+jsVar('orderBy', $orderBy);
+jsVar('minColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->minColWidth);
+jsVar('maxColWidth', $execution->fluidBoard == '0' ? $execution->colWidth : $execution->maxColWidth);
 jsVar('priv',
     array(
         'canCreateTask'         => $canCreateTask,
@@ -154,9 +152,57 @@ jsVar('priv',
     )
 );
 
-featureBar();
+if(!$features['story']) unset($lang->kanban->type['story']);
+if(!$features['qa'])    unset($lang->kanban->type['bug']);
+featureBar
+(
+    ($features['story'] or $features['qa']) ? inputControl
+    (
+        setClass('c-type'),
+        picker
+        (
+            set::width('200'),
+            set::name('type'),
+            set::items($lang->kanban->type),
+            set::value($browseType),
+            set::required(true),
+            set::onchange('changeBrowseType()'),
+        )
+    ) : null,
+    $browseType != 'all' ? inputControl
+    (
+        setClass('c-group ml-5'),
+        picker
+        (
+            set::width('200'),
+            set::name('group'),
+            set::items($lang->kanban->group->$browseType),
+            set::value($groupBy),
+            set::required(true),
+            set::onchange('changeGroupBy()'),
+        )
+    ) : null,
+);
+
 toolbar
 (
+    inputGroup
+    (
+        set::style(array('display' => 'none')),
+        setID('kanbanSearch'),
+        inputControl
+        (
+            setID('searchBox'),
+            setClass('search-box'),
+            input
+            (
+                setID('kanbanSearchInput'),
+                set::name('kanbanSearchInput'),
+                set::placeholder($lang->execution->pleaseInput)
+            )
+        )
+    ),
+    btn(setClass('querybox-toggle ghost btn-default'), set::onclick('toggleSearchBox()'), set::icon('search'), $lang->searchAB),
     btnGroup
     (
         btn
@@ -232,5 +278,104 @@ div
         set::key('kanban'),
         set::items($kanbanList),
         set::height('calc(100vh - 120px)')
+    )
+);
+
+modal
+(
+    setID('linkStoryByPlan'),
+    setData('size', '500px'),
+    to::header
+    (
+        h4($lang->execution->linkStoryByPlan),
+        "({$lang->execution->linkStoryByPlanTips})"
+    ),
+    inputGroup
+    (
+        setClass('mt-1'),
+        picker
+        (
+            set::width(300),
+            setID('plan'),
+            set::name('plan'),
+            set::items($allPlans)
+        ),
+        span
+        (
+            setClass('input-group-btn ml-2'),
+            btn(setClass('primary'), setID('toStoryButton'), set::onclick('linkPlanStory()'), $lang->execution->linkStory)
+        )
+    )
+);
+
+modal
+(
+    setID('batchCreateStory'),
+    to::header
+    (
+        h4($lang->bug->product)
+    ),
+    setData('size', '500px'),
+    inputGroup
+    (
+        setClass('mt-3'),
+        picker
+        (
+            set::width(300),
+            set::name('productName'),
+            set::items($productNames),
+            set::required(true),
+            set::onchange('changeStoryProduct()')
+        ),
+        span
+        (
+            setClass('input-group-btn ml-2'),
+            btn
+            (
+                setClass('primary'),
+                setID('batchCreateStoryButton'),
+                set::url(createLink('story', 'batchCreate', 'productID=' . key($productNames) . '&branch=moduleID=0&storyID=0&executionID=' . $executionID)),
+                set('data-toggle', 'modal'),
+                set('data-dismiss', 'modal'),
+                set('data-size', 'lg'),
+                $lang->story->batchCreate
+            )
+        )
+    )
+);
+
+modal
+(
+    setID('batchCreateBug'),
+    to::header
+    (
+        h4($lang->bug->product)
+    ),
+    setData('size', '500px'),
+    inputGroup
+    (
+        setClass('mt-3'),
+        picker
+        (
+            set::width(300),
+            set::name('productName'),
+            set::items($productNames),
+            set::required(true),
+            set::onchange('changeBugProduct()')
+        ),
+        span
+        (
+            setClass('input-group-btn ml-2'),
+            btn
+            (
+                setClass('primary'),
+                setID('batchCreateBugButton'),
+                set::url(createLink('bug', 'batchCreate', 'productID=' . key($productNames) . '&branch=&executionID=' . $executionID)),
+                set('data-toggle', 'modal'),
+                set('data-dismiss', 'modal'),
+                set('data-size', 'lg'),
+                $lang->bug->batchCreate
+            )
+        )
     )
 );

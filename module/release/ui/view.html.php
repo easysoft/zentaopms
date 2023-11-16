@@ -83,7 +83,7 @@ if(common::hasPriv($releaseModule, 'export') && ($summary || count($bugs) || cou
         'url'         => createLink($releaseModule, 'export', "releaseID={$release->id}"),
         'class'       => 'ghost',
         'data-size'   => 'sm',
-        'data-toggle' => 'modal',
+        'data-toggle' => 'modal'
     )));
 }
 
@@ -99,7 +99,7 @@ if($canBeChanged)
             'data-url' => createLink($releaseModule, 'linkStory', "releaseID={$release->id}" . ($link == 'true' && $type == 'story' ? $decodeParam : '&browseType=story')),
             'class'    => 'link',
             'type'     => 'primary',
-            'onclick'  => 'showLink(this)',
+            'onclick'  => 'showLink(this)'
         )));
     }
 
@@ -111,7 +111,7 @@ if($canBeChanged)
             'data-url' => createLink($releaseModule, 'linkBug', "releaseID={$release->id}" . ($link == 'true' && $type == 'bug' ? $decodeParam : '&browseType=bug')),
             'class'    => 'link',
             'type'     => 'primary',
-            'onclick'  => 'showLink(this)',
+            'onclick'  => 'showLink(this)'
         )));
 
         $linkLeftBtn = btn(set(array(
@@ -120,7 +120,7 @@ if($canBeChanged)
             'data-url' => createLink($releaseModule, 'linkBug', "releaseID={$release->id}". ($link == 'true' && $type == 'leftBug' ? $decodeParam . '&type=leftBug' : '&browseType=leftBug&param=0&type=leftBug')),
             'class'    => 'link',
             'type'     => 'primary',
-            'onclick'  => 'showLink(this)',
+            'onclick'  => 'showLink(this)'
         )));
     }
 }
@@ -144,7 +144,7 @@ detailBody
                 (
                     setClass('tabnActions'),
                     $exportBtn,
-                    $linkStoryBtn,
+                    $linkStoryBtn
                 ),
                 dtable
                 (
@@ -171,7 +171,7 @@ detailBody
                 (
                     setClass('tabnActions'),
                     $exportBtn,
-                    $linkBugBtn,
+                    $linkBugBtn
                 ),
                 dtable
                 (
@@ -197,7 +197,7 @@ detailBody
                 (
                     setClass('tabnActions'),
                     $exportBtn,
-                    $linkLeftBtn,
+                    $linkLeftBtn
                 ),
                 dtable
                 (
@@ -221,7 +221,7 @@ detailBody
                 div
                 (
                     setClass('tabnActions'),
-                    $exportBtn,
+                    $exportBtn
                 ),
                 div(
                     section(
@@ -262,12 +262,12 @@ detailBody
                             (
                                 set::name($lang->release->desc),
                                 html($release->desc)
-                            ),
+                            )
                         )
                     ),
                     fileList
                     (
-                        set::files($release->files),
+                        set::files($release->files)
                     ),
                     h::hr(set::className('mt-6')),
                     history()

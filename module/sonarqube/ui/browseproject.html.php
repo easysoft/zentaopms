@@ -34,7 +34,7 @@ featureBar
     backBtn
     (
         set::text($lang->goback),
-        set::url(createLink('instance', 'view', "id={$sonarqube->instanceID}&type={$sonarqube->type}")),
+        set::url(createLink('instance', 'view', "id={$sonarqube->instanceID}&type={$sonarqube->type}"))
     ),
     form
     (
@@ -77,7 +77,7 @@ dtable
     set::data($tableData),
     set::sortLink(createLink('sonarqube', 'browseProject', "sonarqubeID={$sonarqube->id}&orderBy={name}_{sortType}")),
     set::orderBy($orderBy),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

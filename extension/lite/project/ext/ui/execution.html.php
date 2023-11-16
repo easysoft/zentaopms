@@ -91,9 +91,9 @@ $fnBuildSingleCard = function($kanban) use ($executionActions, $lang, $kanbanvie
                     (
                         icon('ellipsis-v'),
                         set::items($actionItems),
-                        set::hasIcons(true),
-                    ),
-                ) : null,
+                        set::hasIcons(true)
+                    )
+                ) : null
             ),
             div
             (
@@ -106,18 +106,18 @@ $fnBuildSingleCard = function($kanban) use ($executionActions, $lang, $kanbanvie
                     cell
                     (
                         setClass('kanban-members'),
-                        $fnGetKanbanTeams($kanban->id),
+                        $fnGetKanbanTeams($kanban->id)
                     ),
                     cell
                     (
                         setClass('kanban-members-count'),
-                        sprintf($lang->project->teamSumCount, count($teams)),
+                        sprintf($lang->project->teamSumCount, count($teams))
                     ),
                     cell
                     (
                         setClass('kanban-acl'),
-                        span(icon($kanban->acl == 'private' ? 'lock' : 'unlock-alt'), zget($lang->project->acls, $kanban->acl, '')),
-                    ),
+                        span(icon($kanban->acl == 'private' ? 'lock' : 'unlock-alt'), zget($lang->project->acls, $kanban->acl, ''))
+                    )
                 )
             )
         )
@@ -136,7 +136,7 @@ data('recTotal', count($kanbanList));
 featureBar
 (
     set::current($status),
-    set::linkParams("status={key}&projectID={$projectID}&orderBy=&productID=0&recTotal=0&recPerPage=10&pageID=1"),
+    set::linkParams("status={key}&projectID={$projectID}&orderBy=&productID=0&recTotal=0&recPerPage=10&pageID=1")
 );
 
 toolbar
@@ -146,7 +146,7 @@ toolbar
         'icon' => 'plus',
         'text' => $lang->project->createKanban,
         'class' => "primary create-execution-btn",
-        'url'   => createLink('execution', 'create', "projectID={$projectID}"),
+        'url'   => createLink('execution', 'create', "projectID={$projectID}")
     ))) : null
 );
 
@@ -158,7 +158,7 @@ $fnEmptyTip = function() use($allExecutionsNum, $lang, $projectID)
         p
         (
             span(setClass('text-muted'), $lang->execution->noExecution),
-            (common::hasPriv('execution', 'create') && $allExecutionsNum) ? a(set::href(createLink('execution', 'create', "projectID=$projectID")), setClass('btn primary-pale border-primary'), set('data-app', 'project'), icon('plus'),  $lang->project->createKanban) : null,
+            (common::hasPriv('execution', 'create') && $allExecutionsNum) ? a(set::href(createLink('execution', 'create', "projectID=$projectID")), setClass('btn primary-pale border-primary'), set('data-app', 'project'), icon('plus'),  $lang->project->createKanban) : null
         )
     );
 };
@@ -166,5 +166,5 @@ $fnEmptyTip = function() use($allExecutionsNum, $lang, $projectID)
 div
 (
     setClass('dtable'),
-    empty($kanbanList) ? $fnEmptyTip() : $fnShowCards($kanbanList),
+    empty($kanbanList) ? $fnEmptyTip() : $fnShowCards($kanbanList)
 );

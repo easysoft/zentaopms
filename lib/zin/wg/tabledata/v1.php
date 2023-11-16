@@ -11,7 +11,8 @@ class tableData extends wg
 {
     protected static array $defineProps = array(
         'title?: string',
-        'useTable?: bool=true'
+        'useTable?: bool=true',
+        'class?: string'
     );
 
     public static function getPageCSS(): string|false
@@ -27,7 +28,7 @@ class tableData extends wg
             h::th
             (
                 setClass('py-1.5 pr-2 font-normal nowrap text-right', $item->prop('thClass')),
-                $item->prop('name'),
+                $item->prop('name')
             ),
             h::td
             (
@@ -53,7 +54,7 @@ class tableData extends wg
                         setClass('w-5 h-5 ml-1'),
                         set::target('.table-data-td'),
                         set::parent('.table-data-tr')
-                    ),
+                    )
                 ),
                 div
                 (
@@ -69,7 +70,7 @@ class tableData extends wg
             div
             (
                 setClass('py-1.5 pr-2 font-normal nowrap table-data-th', $item->prop('thClass')),
-                $item->prop('name'),
+                $item->prop('name')
             ),
             div
             (
@@ -103,12 +104,14 @@ class tableData extends wg
 
     protected function build(): wg
     {
-        $useTable = $this->prop('useTable');
+        $useTable   = $this->prop('useTable');
+        $tableClass = $this->prop('class');
         if($useTable)
         {
             return h::table
             (
                 setClass('table-data'),
+                $tableClass ? setClass($tableClass) : null,
                 $this->caption(),
                 h::tbody($this->children())
             );
@@ -117,6 +120,7 @@ class tableData extends wg
         return div
         (
             setClass('table-data'),
+            $tableClass ? setClass($tableClass) : null,
             div
             (
                 setClass('table-data-body'),

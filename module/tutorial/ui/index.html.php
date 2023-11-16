@@ -30,7 +30,7 @@ $taskGroup = array_map(function($key, $task) use(&$i)
                     setClass('task-name'),
                     $task['title']
                 )
-            ),
+            )
         );
 }, array_keys($tasks), $tasks);
 
@@ -41,7 +41,7 @@ foreach($tasks as $key => &$task)
     $i++;
     $task['id'] = $i;
     $task['name'] = $task['title'];
-    $task['url'] = helper::createLink($task['nav']['module'], $task['nav']['method'], isset($task['nav']['vars']) ? $task['nav']['vars'] : '', 'tutorial');
+    $task['url'] = helper::createLink($task['nav']['module'], $task['nav']['method'], isset($task['nav']['vars']) ? $task['nav']['vars'] : '');
     $tutorialTasks[$key] = $task;
 }
 
@@ -54,6 +54,7 @@ jsVar('langTargetPageTip', $lang->tutorial->targetPageTip);
 jsVar('langTarget', $lang->tutorial->target);
 jsVar('langTargetAppTip', $lang->tutorial->targetAppTip);
 jsVar('langRequiredTip', $lang->tutorial->requiredTip);
+jsVar('serverErrorTip', $lang->tutorial->serverErrorTip);
 
 div
 (
@@ -65,7 +66,7 @@ div
         (
             setID('iframePage'),
             set::name('iframePage'),
-            set::src(createLink('index', 'index', 't=tutorial')),
+            set::src(createLink('index', 'index'))
         )
     ),
     div(setID('taskModalBack')),
@@ -74,8 +75,8 @@ div
         setID('taskModal'),
         div
         (
-            set::class('close'),
-            set::icon('close'),
+            setClass('close'),
+            set::icon('close')
         ),
         div
         (
@@ -86,7 +87,7 @@ div
                 icon(
                     setClass('icon-front'),
                     'check-circle'
-                ),
+                )
             ),
             h3($lang->tutorial->congratulation),
             btn
@@ -110,18 +111,12 @@ div
             (
                 setClass('start-icon'),
                 icon(
-                    set::class('icon-front'),
+                    setClass('icon-front'),
                     'check-circle'
-                ),
+                )
             ),
             h3(
-                $lang->tutorial->congratulateTask,
-                "【",
-                span
-                (
-                    setClass('task-name-current'),
-                ),
-                "】！"
+                html($lang->tutorial->congratulateTask),
             ),
             btn
             (
@@ -158,7 +153,7 @@ div
                     setClass('size-sm'),
                     set::type('danger'),
                     set::url(inlink('quit')),
-                    $lang->tutorial->exit,
+                    $lang->tutorial->exit
                 )
             )
         ),
@@ -177,12 +172,12 @@ div
                     (
                         span
                         (
-                            setClass('task-id-current'),
+                            setClass('task-id-current')
                         ),
                         '. ',
                         span
                         (
-                            setClass('task-name task-name-current'),
+                            setClass('task-name task-name-current')
                         )
                     )
                 ),
@@ -198,17 +193,17 @@ div
                             li
                             (
                                 setData(array('target' => 'nav')),
-                                setClass('wait'),
+                                setClass('wait')
                             ),
                             li
                             (
                                 setData(array('target' => 'form')),
-                                setClass('wait'),
+                                setClass('wait')
                             ),
                             li
                             (
                                 setData(array('target' => 'submit')),
-                                setClass('wait'),
+                                setClass('wait')
                             )
                         )
                     ),
@@ -250,7 +245,7 @@ div
                     set::icon('arrow-left'),
                     set::size('sm'),
                     setClass('btn-prev-task btn-task circle'),
-                    $lang->tutorial->previous,
+                    $lang->tutorial->previous
                 ),
                 btn
                 (
@@ -258,7 +253,7 @@ div
                     set::size('sm'),
                     set::type('primary'),
                     setClass('btn-next-task btn-task circle pull-right'),
-                    $lang->tutorial->nextTask,
+                    $lang->tutorial->nextTask
                 )
             )
         ),
@@ -271,7 +266,7 @@ div
                 span
                 (
                     setClass('task-num-finish'),
-                    0,
+                    0
                 ),
                 '/',
                 span
@@ -287,7 +282,7 @@ div
                 setClass('progress'),
                 div
                 (
-                    setClass('progress-bar primary'),
+                    setClass('progress-bar primary')
                 )
             ),
             ul
@@ -297,7 +292,7 @@ div
                 $taskGroup
             )
         )
-    ),
+    )
 );
 
 

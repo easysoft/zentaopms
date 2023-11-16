@@ -193,7 +193,8 @@ $lang->mr->commandDocument = <<< EOD
   </p>
   <p>
     第 4 步. 将合并结果推送到Git
-    <pre> git push origin "%s" </pre>
+    <pre>
+    git push origin "%s" </pre>
   </p>
 </div>
 EOD;

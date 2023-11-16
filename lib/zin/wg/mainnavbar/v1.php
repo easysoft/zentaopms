@@ -31,7 +31,7 @@ class mainNavbar extends nav
     protected static array $defineBlocks = array
     (
         'left' => array('map' => 'dropdown'),
-        'right' => array('map' => 'toolbar'),
+        'right' => array('map' => 'toolbar')
     );
 
     /**

@@ -25,7 +25,7 @@ $instances = initTableData($instances, $config->space->dtable->fieldList, $this-
 featureBar
 (
     set::current($browseType),
-    set::linkParams("spaceID=&browseType={key}"),
+    set::linkParams("spaceID=&browseType={key}")
 );
 
 $app->loadLang('solution');
@@ -39,22 +39,22 @@ toolBar
         'url'             => createLink('install', 'progress', "solutionID=$solutionID&install=true"),
         'data-size'       => 'md',
         'data-class-name' => 'install-progress',
-        'data-toggle'     => 'modal',
+        'data-toggle'     => 'modal'
     ))) : null,
     $config->inQuickon && $canInstall ? item(set(array
     (
         'text'  => $lang->store->cloudStore,
         'icon'  => 'program',
         'class' => 'btn ghost',
-        'url'   => createLink('store', 'browse'),
+        'url'   => createLink('store', 'browse')
     ))) : null,
     $canInstall ? item(set(array
     (
         'text'  => $lang->space->install,
         'icon'  => 'plus',
         'class' => 'btn primary',
-        'url'   => createLink('space', 'createApplication'),
-    ))) : null,
+        'url'   => createLink('space', 'createApplication')
+    ))) : null
 );
 
 dtable
@@ -65,7 +65,7 @@ dtable
     set::onRenderCell(jsRaw('window.renderInstanceList')),
     set::sortLink(createLink('space', 'browse', "spaceID=&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::orderBys($orderBy),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 a(setStyle('display', 'none'), setID('editLinkContainer'), setData('toggle', 'modal'));

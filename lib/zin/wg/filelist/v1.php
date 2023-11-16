@@ -13,7 +13,7 @@ class fileList extends wg
         'showDelete?:bool=true',
         'showEdit?:bool=true',
         'object?:object',
-        'padding?:bool=true',
+        'padding?:bool=true'
     );
 
     public static function getPageCSS(): string|false
@@ -70,7 +70,7 @@ class fileList extends wg
                 array(
                     'data-method' => $method,
                     'data-showDelete' => $showDelete,
-                    'data-session' => session_name() . '=' . session_id(),
+                    'data-session' => session_name() . '=' . session_id()
                 )
             ),
             $this->fileList()
@@ -83,7 +83,7 @@ class fileList extends wg
             set::title($lang->files),
             to::actions
             (
-                icon('paper-clip'),
+                icon('paper-clip')
             ),
             $fileDiv
         ) : $fileDiv;

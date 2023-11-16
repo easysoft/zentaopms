@@ -10,6 +10,10 @@ declare(strict_types=1);
  * @link        http://www.zentao.net
  */
 namespace zin;
+jsVar('metricId',     $metric->id);
+jsVar('code',         $metric->code);
+jsVar('verifyCustomMethods', $verifyCustom);
+jsVar('isVerify',     $isVerify);
 
 detailHeader
 (
@@ -29,33 +33,9 @@ detailHeader
             )),
             set::text($lang->metric->implement->tip),
             setClass('label ghost')
-        ),
-    ),
+        )
+    )
 );
-
-$fnGenerateVerifyResult = function() use($verifyResult)
-{
-    if(empty($verifyResult)) return null;
-
-    $results = array();
-    foreach($verifyResult as $result)
-    {
-        $class = 'verify-sentence';
-        $class .= $result->result ? ' pass' : ' error';
-        $icon = $result->result ? 'check' : 'close';
-        $results[] = p
-        (
-            setClass($class),
-            $result->tip,
-            icon
-            (
-                $icon
-            ),
-        );
-    }
-
-    return $results;
-};
 
 $fnGenerateInstructions = function() use($lang)
 {
@@ -66,7 +46,7 @@ $fnGenerateInstructions = function() use($lang)
         (
             set::className('font-medium text-md'),
             setStyle('padding-top', '12px'),
-            html($tip),
+            html($tip)
         );
     }
 
@@ -90,7 +70,7 @@ $fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metr
                 (
                     set::className('card-title'),
                     $lang->metric->objectList[$metric->object]
-                ),
+                )
             )
 
         );
@@ -99,7 +79,7 @@ $fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metr
         (
             set::height(400),
             set::cols($resultHeader),
-            set::data($resultData),
+            set::data($resultData)
         );
 };
 
@@ -112,7 +92,7 @@ panel
         setClass('ghost btn-download'),
         $lang->metric->implement->downloadPHP,
         set::url(helper::createLink('metric', 'downloadTemplate', "metricID={$metric->id}")),
-        set::target('_blank'),
+        set::target('_blank')
     ),
     div
     (
@@ -124,12 +104,12 @@ panel
 
                 $lang->metric->implement->instruction,
                 setClass('gray-pale text-md font-bold')
-            ),
+            )
         ),
         div
         (
             setClass('leading-loose'),
-            $fnGenerateInstructions(),
+            $fnGenerateInstructions()
         ),
         h1
         (
@@ -138,12 +118,11 @@ panel
             (
                 $lang->metric->verifyResult,
                 setClass('gray-pale text-md font-bold')
-            ),
+            )
         ),
         empty($result) ? div
         (
             setClass('verify-content'),
-            $fnGenerateVerifyResult(),
         ) : $fnGenerateDataDisplay(),
     ),
 
@@ -152,17 +131,19 @@ panel
     ([
         [
             'type' => 'secondary',
+            'class' => 'btn-verify',
             'text' => $lang->metric->verifyFile,
-            'url' => helper::createLink('metric', 'implement', "metricID={$metric->id}&isVerify=true")
+            'url' => helper::createLink('metric', 'implement', "metricID={$metric->id}")
         ],
         [
             'type' => 'primary',
             'text' => $lang->metric->publish,
+            'class' => 'ajax-submit',
             'btnType' => 'submit',
             'disabled' => empty($result),
             'url' => helper::createLink('metric', 'publish', "metricID={$metric->id}")
         ],
-    ]),
+    ])
 );
 
 render();

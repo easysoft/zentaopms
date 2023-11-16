@@ -14,7 +14,7 @@ modalHeader
 (
     set::title(''),
     set::entityText($MR->title . ' - ' . zget($lang->mr->approvalResultList, $action)),
-    set::entityID($MR->id),
+    set::entityID($MR->id)
 );
 
 formPanel
@@ -26,8 +26,8 @@ formPanel
         (
             set::href($compileUrl),
             set::target('_blank'),
-            $lang->compile->statusList[$MR->compileStatus],
-        ),
+            $lang->compile->statusList[$MR->compileStatus]
+        )
     ) : null,
     formGroup
     (
@@ -35,15 +35,15 @@ formPanel
         set::label($lang->mr->assignee),
         set::name('assignedTo'),
         set::items($users),
-        set::value($MR->createdBy),
+        set::value($MR->createdBy)
     ),
     formGroup
     (
         set::label($lang->comment),
         set::name('comment'),
         set::control('textarea'),
-        set::rows('6'),
-    ),
+        set::rows('6')
+    )
 );
 history();
 

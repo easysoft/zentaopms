@@ -25,14 +25,14 @@ formPanel
         set::width('1/3'),
         set::strong(false),
         set::value($story->assignedTo),
-        set::items($users),
+        set::items($users)
     ),
     empty($story->twins) ? null : formGroup
     (
         set::width('full'),
         set::label(' '),
         icon('exclamation-sign'),
-        $lang->story->assignSyncTip,
+        $lang->story->assignSyncTip
     ),
     input(set::type('hidden'), set::name('status'), set::value($story->status)),
     formGroup

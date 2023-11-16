@@ -69,7 +69,7 @@ if(common::hasPriv('mr', 'linkStory'))
         'data-url' => inlink('linkStory', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}"),
         'class'    => 'link mr-actions',
         'type'     => 'primary',
-        'onclick'  => 'showLink(this)',
+        'onclick'  => 'showLink(this)'
     )));
 }
 
@@ -81,7 +81,7 @@ if(common::hasPriv('mr', 'linkBug'))
         'data-url' => inlink('linkBug', "MRID={$MR->id}&productID={$product->id}{$param}&orderBy={$orderBy}"),
         'class'    => 'link mr-actions',
         'type'     => 'primary',
-        'onclick'  => 'showLink(this)',
+        'onclick'  => 'showLink(this)'
     )));
 }
 
@@ -93,7 +93,7 @@ if(common::hasPriv('mr', 'linkTask'))
         'data-url' => inlink('linkTask', "MRID={$MR->id}&productID={$product->id}{$param}&browseType=unclosed&orderBy={$orderBy}"),
         'class'    => 'link mr-actions',
         'type'     => 'primary',
-        'onclick'  => 'showLink(this)',
+        'onclick'  => 'showLink(this)'
     )));
 }
 
@@ -110,8 +110,8 @@ detailHeader
         $MR->deleted ? h::span
         (
             setClass('label danger'),
-            $lang->product->deleted,
-        ) : null,
+            $lang->product->deleted
+        ) : null
     )
 );
 
@@ -178,7 +178,7 @@ panel
                     set('data-toggle', 'tab'),
                     set('data-app', $app->tab)
                 )
-            ),
+            )
         )
     ),
     tabs
@@ -194,8 +194,8 @@ panel
                 set::cols($storyCols),
                 set::data($stories),
                 set::sortLink(jsRaw('createStorySortLink')),
-                set::footPager(usePager('storyPager')),
-            ),
+                set::footPager(usePager('storyPager'))
+            )
         ),
         tabPane
         (
@@ -208,8 +208,8 @@ panel
                 set::cols($bugCols),
                 set::data($bugs),
                 set::sortLink(jsRaw('createBugSortLink')),
-                set::footPager(usePager('bugPager')),
-            ),
+                set::footPager(usePager('bugPager'))
+            )
         ),
         tabPane
         (
@@ -222,10 +222,10 @@ panel
                 set::cols($taskCols),
                 set::data($tasks),
                 set::sortLink(jsRaw('createTaskSortLink')),
-                set::footPager(usePager('taskPager')),
-            ),
-        ),
-    ),
+                set::footPager(usePager('taskPager'))
+            )
+        )
+    )
 );
 
 render();

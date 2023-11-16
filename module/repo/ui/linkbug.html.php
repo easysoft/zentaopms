@@ -18,7 +18,7 @@ detailHeader
     to::prefix(''),
     to::title
     (
-        $lang->productplan->linkBug,
+        $lang->productplan->linkBug
     )
 );
 
@@ -54,7 +54,7 @@ dtable
     set::checkable(true),
     set::footToolbar($footToolbar),
     set::sortLink(jsRaw('createSortLink')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

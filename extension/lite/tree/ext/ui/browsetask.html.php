@@ -43,8 +43,8 @@ if($newModule and !$productID)
                     set::name("products[id$product->id]"),
                     set::type('input'),
                     set::value($product->name),
-                    set::disabled(true),
-                ),
+                    set::disabled(true)
+                )
             )
         );
     }
@@ -67,7 +67,7 @@ foreach($sons as $son)
                     set::name("modules[id$son->id]"),
                     set::type('input'),
                     set::value($son->name),
-                    set::placeholder($lang->tree->name),
+                    set::placeholder($lang->tree->name)
                 ),
                 input
                 (
@@ -75,17 +75,17 @@ foreach($sons as $son)
                     set::name("shorts[id$son->id]"),
                     set::type('input'),
                     set::value($son->short),
-                    set::placeholder($lang->tree->short),
+                    set::placeholder($lang->tree->short)
                 ),
                 input
                 (
                     setClass('hidden'),
                     set::name("order[id$son->id]"),
                     set::value($son->order),
-                    set::control('hidden'),
-                ),
-            ),
-        ),
+                    set::control('hidden')
+                )
+            )
+        )
     );
 }
 
@@ -104,7 +104,7 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
                     set::name("modules[$i]"),
                     set::type('input'),
                     set::value(''),
-                    set::placeholder($lang->tree->name),
+                    set::placeholder($lang->tree->name)
                 ),
                 input
                 (
@@ -112,18 +112,18 @@ for($i = 0; $i < \tree::NEW_CHILD_COUNT; $i ++)
                     set::name("shorts[$i]"),
                     set::type('input'),
                     set::value(''),
-                    set::placeholder($lang->tree->short),
+                    set::placeholder($lang->tree->short)
                 ),
                 input
                 (
                     setClass('hidden'),
                     set::name("branch[$i]"),
                     set::value(0),
-                    set::control('hidden'),
-                ),
+                    set::control('hidden')
+                )
             ),
-            batchActions(),
-        ),
+            batchActions()
+        )
     );
 }
 
@@ -134,12 +134,12 @@ $parentPath[] = span
     (
         setClass('tree-link'),
         set('href', helper::createLink('tree', 'browsetask', "rootID=$root->id&productID=$productID") . '#app=project'),
-        $root->name,
+        $root->name
     ),
     h::i
     (
         setClass('icon icon-angle-right muted align-middle'),
-        setStyle('color', '#313C52'),
+        setStyle('color', '#313C52')
     )
 );
 foreach($parentModules as $module)
@@ -150,12 +150,12 @@ foreach($parentModules as $module)
         (
             setClass('tree-link'),
             set('href', helper::createLink('tree', 'browsetask', "rootID=$root->id&productID=$productID&module=$module->id") . '#app=project'),
-            $module->name,
+            $module->name
         ),
         h::i
         (
             setClass('icon icon-angle-right muted align-middle'),
-            setStyle('color', '#313C52'),
+            setStyle('color', '#313C52')
         )
     );
 }
@@ -168,12 +168,12 @@ div
         set::icon('back'),
         set::type('secondary'),
         set::back('execution-task'),
-        $lang->goback,
+        $lang->goback
     ),
     div
     (
         setClass('entity-label flex items-center gap-x-2 article-h1'),
-        $lang->tree->common . $lang->colon . $root->name,
+        $lang->tree->common . $lang->colon . $root->name
     )
 );
 
@@ -191,8 +191,8 @@ div
                 set('type', 'task'),
                 set('items', $tree),
                 set('canEdit', common::hasPriv('tree', 'edit') && $canBeChanged),
-                set('canDelete', common::hasPriv('tree', 'delete') && $canBeChanged),
-            ),
+                set('canDelete', common::hasPriv('tree', 'delete') && $canBeChanged)
+            )
         )
     ),
     div
@@ -207,7 +207,7 @@ div
                 div
                 (
                     setClass('p-1 tree-item-content'),
-                    $parentPath,
+                    $parentPath
                 ),
                 form
                 (
@@ -222,17 +222,17 @@ div
                         setClass('hidden'),
                         set::name('parentModuleID'),
                         set::value($currentModuleID),
-                        set::control('hidden'),
+                        set::control('hidden')
                     ),
                     formGroup
                     (
                         setClass('hidden'),
                         set::name('maxOrder'),
                         set::value($maxOrder),
-                        set::control('hidden'),
-                    ),
-                ),
-            ),
+                        set::control('hidden')
+                    )
+                )
+            )
         )
     )
 );

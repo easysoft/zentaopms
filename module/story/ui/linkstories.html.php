@@ -36,7 +36,7 @@ dtable
     set::data($data),
     set::footPager(usePager()),
     set::footToolbar(array('items' => array(array('text' => $lang->save, 'btnType' => 'primary', 'className' => 'size-sm', 'data-on' => 'click', 'data-call' => 'fnLinkStories', 'data-params' => 'event')))),
-    set::footer(array('checkbox', 'toolbar', 'flex', 'pager')),
+    set::footer(array('checkbox', 'toolbar', 'flex', 'pager'))
 );
 
 h::js

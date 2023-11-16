@@ -19,7 +19,7 @@ class moduleMenu extends wg
         'app?: string=""',
         'checkbox?: bool',
         'checkOnClick?: bool|string',
-        'onCheck?: function',
+        'onCheck?: function'
     );
 
     public static function getPageCSS(): string|false
@@ -181,7 +181,7 @@ class moduleMenu extends wg
                     setClass('module-title text-lg font-semibold clip'),
                     $title
                 ),
-                $this->buildCloseBtn(),
+                $this->buildCloseBtn()
             ),
             zui::tree
             (
@@ -192,7 +192,7 @@ class moduleMenu extends wg
                 set::preserve($preserve),
                 set($treeProps)
             ),
-            $this->buildActions(),
+            $this->buildActions()
         );
     }
 }

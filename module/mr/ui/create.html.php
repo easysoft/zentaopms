@@ -55,7 +55,7 @@ formPanel
     (
         setClass('hidden'),
         set::name('hostID'),
-        set::value($repo->gitService),
+        set::value($repo->gitService)
     ),
     formRow
     (
@@ -74,7 +74,7 @@ formPanel
             set::required(true),
             set::label($lang->mr->sourceBranch),
             set::name('sourceBranch'),
-            set::items(array()),
+            set::items(array())
         )
     ),
     formRow
@@ -94,14 +94,14 @@ formPanel
             set::required(true),
             set::label($lang->mr->targetBranch),
             set::name('targetBranch'),
-            set::items(array()),
+            set::items(array())
         )
     ),
     formGroup
     (
         set::required(true),
         set::name('title'),
-        set::label($lang->mr->title),
+        set::label($lang->mr->title)
     ),
     formGroup
     (
@@ -110,7 +110,7 @@ formPanel
         set::name('assignee'),
         set::label($lang->mr->reviewer),
         set::control('picker'),
-        set::items($users),
+        set::items($users)
     ),
     formRow
     (
@@ -120,19 +120,19 @@ formPanel
             set::name('needCI'),
             set::width('270px'),
             set::control(array('type' => 'checkbox', 'text' => $lang->mr->needCI, 'value' => '1')),
-            on::change('onNeedCiChange'),
+            on::change('onNeedCiChange')
         ),
         formGroup
         (
             set::name('removeSourceBranch'),
             set::width('150px'),
-            set::control(array('type' => 'checkbox', 'text' => $lang->mr->removeSourceBranch, 'value' => '1')),
+            set::control(array('type' => 'checkbox', 'text' => $lang->mr->removeSourceBranch, 'value' => '1'))
         ),
         formGroup
         (
             set::name('squash'),
-            set::control(array('type' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1')),
-        ),
+            set::control(array('type' => 'checkbox', 'text' => $lang->mr->squash, 'value' => '1'))
+        )
     ),
     formRow
     (
@@ -143,14 +143,14 @@ formPanel
             set::required(true),
             set::name('jobID'),
             set::label($lang->job->common),
-            set::items($jobPairs),
-        ),
+            set::items($jobPairs)
+        )
     ),
     formGroup
     (
         set::name('description'),
         set::label($lang->mr->description),
-        set::control('textarea'),
+        set::control('textarea')
     ),
     formRow
     (
@@ -159,8 +159,8 @@ formPanel
         (
             set::name('repoID'),
             set::label($lang->devops->repo),
-            set::value($repo->id),
-        ),
+            set::value($repo->id)
+        )
     ),
     formRow
     (
@@ -169,8 +169,8 @@ formPanel
         (
             set::name('executionID'),
             set::label(''),
-            set::value($executionID),
-        ),
+            set::value($executionID)
+        )
     ),
     set::actions(array(
         'submit',
@@ -178,8 +178,8 @@ formPanel
             'text'     => $lang->goback,
             'class'    => 'btn',
             'data-app' => $app->tab,
-            'url'      => createLink('mr', 'browse', "repoID=" . ($executionID ? 0 : $repoID) . "&mode=status&param=opened&objectID={$executionID}"),
-        ),
+            'url'      => createLink('mr', 'browse', "repoID=" . ($executionID ? 0 : $repoID) . "&mode=status&param=opened&objectID={$executionID}")
+        )
     ))
 );
 

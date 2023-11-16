@@ -11,7 +11,7 @@ class checkboxGroup extends wg
 
     private static array $checkboxProps = array(
         'checked' => false,
-        'disabled' => false,
+        'disabled' => false
     );
 
     public static function getPageCSS(): string|false
@@ -61,7 +61,7 @@ class checkboxGroup extends wg
             set('data-params', 'event'),
             setClass('checkbox-group'),
             $this->buildTitle(),
-            $this->buildCheckboxList(),
+            $this->buildCheckboxList()
         );
     }
 }

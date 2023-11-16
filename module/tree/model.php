@@ -1684,7 +1684,7 @@ class treeModel extends model
         {
             $paths      = explode(',', trim($module->path, ','));
             $moduleName = '';
-            foreach($paths as $path) $moduleName .= '/' . $allModules[$path];
+            foreach($paths as $path) $moduleName .= '/' . zget($allModules, $path);
             $modulePairs[$module->id] = $moduleName;
 
             if($module->branch) $branchIDList[$module->branch] = $module->branch;

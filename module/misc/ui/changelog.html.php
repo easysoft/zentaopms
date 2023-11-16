@@ -53,12 +53,12 @@ foreach($features as $feature)
         div 
         (
             set('class', 'article-h2 py-2'),
-            $idx . ($idx ? '. ' : '') . $feature['title'],
+            $idx . ($idx ? '. ' : '') . $feature['title']
         ),
         div
         (
             set('class', 'desc pl-4'),
-            html($feature['desc']),
+            html($feature['desc'])
         )
     );
 
@@ -69,7 +69,7 @@ div
 (
     setID('featureList'),
     setClass('px-3 py-2'),
-    $featureItems,
+    $featureItems
 );
 
 ($detailed and !common::checkNotCN()) ? div

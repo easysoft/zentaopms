@@ -170,7 +170,7 @@ class header extends wg
                 'text' => $lang->profile,
                 'data-toggle' => 'modal',
                 'data-size' => 700,
-                'data-id'   => 'profile',
+                'data-id'   => 'profile'
             );
 
             if($app->config->vision === 'rnd')

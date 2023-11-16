@@ -56,9 +56,9 @@ foreach($dbList as $db)
                 setClass('btn text-primary ghost db-management ' .  $disabledClass),
                 setData('dbname', $db->name),
                 setData('dbtype', $db->db_type),
-                setData('id',   $instance->id),
+                setData('id',   $instance->id)
             )
-        ),
+        )
     );
 }
 
@@ -118,7 +118,7 @@ div
                                     span
                                     (
                                         setClass('text-gray'),
-                                        sprintf($lang->instance->memTotal, helper::formatKB($instanceMetric->memory->limit)),
+                                        sprintf($lang->instance->memTotal, helper::formatKB($instanceMetric->memory->limit))
                                     ),
                                     div
                                     (
@@ -134,8 +134,8 @@ div
                                             setStyle('width', $memoryInfo['rate'])
                                         )
                                     )
-                                ) : null,
-                            ),
+                                ) : null
+                            )
                         ),
                         $type !== 'store' ? null : btn
                         (
@@ -146,7 +146,7 @@ div
                             setData('toggle', 'modal'),
                             setData('size', 'sm'),
                             set::url(createLink('instance', 'setting', "id={$instance->id}")))
-                    ),
+                    )
                 ),
                 /* 基本信息区块 */
                 section
@@ -167,7 +167,7 @@ div
                             !empty($defaultAccount->username) ? h::th($lang->instance->defaultAccount) : null,
                             !empty($defaultAccount->password) ? h::th($lang->instance->defaultPassword) : null,
                             !empty($defaultAccount->token)    ? h::th($lang->instance->token) : null,
-                            (!in_array($instance->appName, array('gitlab', 'sonarqube'))) ? null : h::th($lang->instance->browseProject),
+                            (!in_array($instance->appName, array('gitlab', 'sonarqube'))) ? null : h::th($lang->instance->browseProject)
                         ),
                         h::tr
                         (
@@ -206,7 +206,7 @@ div
                                     set::disabled($instance->type === 'store' && $instance->status != 'running'),
                                     set::url(createLink($instance->appName, 'browseProject', "{$instance->appName}ID={$instance->externalID}"))
                                 )
-                            ),
+                            )
                         )
                     )
                 ),
@@ -223,11 +223,11 @@ div
                             h::th($lang->instance->dbName),
                             h::th($lang->instance->dbType, setStyle('width', '100px')),
                             h::th($lang->instance->status, setStyle('width', '100px')),
-                            h::th($lang->instance->action, setStyle('width', '100px')),
+                            h::th($lang->instance->action, setStyle('width', '100px'))
                         ),
                         $dbListWg
                     )
-                ),
+                )
             ),
             floatToolbar
             (
@@ -235,7 +235,7 @@ div
                 isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
                 set::main($actions['mainActions']),
                 set::suffix($actions['suffixActions'])
-            ),
+            )
         )
     ),
     div
@@ -243,7 +243,7 @@ div
         setClass('w-1/3'),
         history
         (
-            set::commentUrl(createLink('action', 'comment', array('objectType' => $type === 'store' ? 'instance' : $instance->type, 'objectID' => $instance->id))),
+            set::commentUrl(createLink('action', 'comment', array('objectType' => $type === 'store' ? 'instance' : $instance->type, 'objectID' => $instance->id)))
         )
     )
 );

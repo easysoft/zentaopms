@@ -468,7 +468,7 @@ class repoZen extends repo
             $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
         }
 
-        $serviceHosts = $this->loadModel('gitlab')->getPairs() + $this->loadModel('gitea')->getPairs();
+        $serviceHosts = $this->loadModel('gitlab')->getPairs();
         $repoGroups   = array();
 
         if(!empty($serviceHosts))

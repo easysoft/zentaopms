@@ -63,7 +63,7 @@ formPanel
     (
         set::width('2/3'),
         set::label($lang->repo->objectRule),
-        $moduleDom,
+        $moduleDom
     ),
     formGroup
     (
@@ -247,7 +247,7 @@ formPanel
                     set::value($config->repo->rules['unit']['left'])
                 )
             )
-        ),
+        )
     ),
     formGroup
     (
@@ -264,7 +264,7 @@ formPanel
         set::label($lang->repo->rules->exampleLabel),
         div
         (
-            setID('example'),
+            setID('example')
         )
     )
 );

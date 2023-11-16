@@ -31,7 +31,7 @@ class menu extends wg
             setClass('menu'),
             set($this->getRestProps()),
             is_array($items) ? array_map(array($this, 'onBuildItem'), $this->prop('items')) : null,
-            $this->children(),
+            $this->children()
         );
     }
 }

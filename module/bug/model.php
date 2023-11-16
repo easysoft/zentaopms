@@ -1766,6 +1766,35 @@ class bugModel extends model
     }
 
     /**
+     * Get related objects id lists.
+     *
+     * @param  int    $object
+     * @param  string $pairs
+     * @access public
+     * @return void
+     */
+    public function getRelatedObjects(string $object, string $pairs = ''): array
+    {
+        /* Get bugs. */
+        $bugs = $this->loadModel('transfer')->getQueryDatas('bug');
+
+        /* Get related objects id lists. */
+        $relatedObjectIdList = array();
+        $relatedObjects      = array();
+
+        foreach($bugs as $bug) $relatedObjectIdList[$bug->$object]  = $bug->$object;
+
+        if($object == 'openedBuild' or $object == 'resolvedBuild') $object = 'build';
+
+        /* Get related objects title or names. */
+        $table = $this->config->objectTables[$object];
+        if($table) $relatedObjects = $this->dao->select($pairs)->from($table)->where('id')->in($relatedObjectIdList)->fetchPairs();
+
+        if(in_array($object, array('build','resolvedBuild'))) $relatedObjects = array('trunk' => $this->lang->trunk) + $relatedObjects;
+        return array('' => '', 0 => '') + $relatedObjects;
+    }
+
+    /**
      * 判断当前动作是否可以点击。
      * Adjust the action is clickable.
      *

@@ -19,7 +19,7 @@ foreach($categories as $id => $category)
         'id'     => $id,
         'parent' => 0,
         'name'   => $category,
-        'key'    => 'storeTree-' . $id,
+        'key'    => 'storeTree-' . $id
     );
 }
 jsVar('tree', $tree);
@@ -75,7 +75,7 @@ foreach ($cloudApps as $group)
                     setData('size', 'sm'),
                     in_array($cloudApp->id, $installedApps) ? setData('confirm', $lang->store->alreadyInstalled) : null,
                     setData('url', $this->createLink('space', 'createApplication', "id={$cloudApp->id}")),
-                    on::click('installApp', array('stop' => true)),
+                    on::click('installApp', array('stop' => true))
                 )
             )
         );
@@ -99,7 +99,7 @@ div
         featureBar
         (
             set::current($sortType),
-            set::linkParams("sortType={key}"),
+            set::linkParams("sortType={key}")
         ),
 
         toolbar
@@ -112,10 +112,10 @@ div
                     'type'        => 'inputControl',
                     'prefixWidth' => 'icon',
                     'placeholder' => $lang->store->searchApp,
-                    'value'       => $keyword,
-                )),
-            ),
-        ),
+                    'value'       => $keyword
+                ))
+            )
+        )
     ),
 
     div(...$groups),
@@ -126,8 +126,8 @@ div
         set::recPerPage($setting['recPerPage']),
         set::linkCreator($setting['linkCreator']),
         set::items($setting['items']),
-        set::gap($setting['gap']),
-    ) : null,
+        set::gap($setting['gap'])
+    ) : null
 );
 
 count($cloudApps) ? sidebar
@@ -137,6 +137,6 @@ count($cloudApps) ? sidebar
         setID('storeTree'),
         set::items($tree),
         set::canSplit(false),
-        set::onClickItem(jsRaw('window.treeClick')),
+        set::onClickItem(jsRaw('window.treeClick'))
     )
 ) : null;

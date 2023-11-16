@@ -19,7 +19,7 @@ dropmenu();
 
 featureBar
 (
-    li(searchToggle(set::module('accessible'), set::open($browseType == 'bysearch'))),
+    li(searchToggle(set::module('accessible'), set::open($browseType == 'bysearch')))
 );
 
 $closeLink = $this->createLink('personnel', 'accessible', "programID=$programID&deptID=0");
@@ -30,8 +30,8 @@ sidebar
         set::modules($deptTree),
         set::activeKey($deptID),
         set::closeLink($closeLink),
-        set::showDisplay(false),
-    ),
+        set::showDisplay(false)
+    )
 );
 
 dtable
@@ -40,7 +40,7 @@ dtable
     set::data($data),
     set::fixedLeftWidth('0.33'),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

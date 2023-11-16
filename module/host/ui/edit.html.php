@@ -25,7 +25,7 @@ formPanel
             set::width('400px'),
             set::name('name'),
             set::label($lang->host->name),
-            set::value($host->name),
+            set::value($host->name)
         ),
         formGroup
         (
@@ -53,7 +53,7 @@ formPanel
             set::width('400px'),
             set::name('cpuModel'),
             set::label($lang->host->cpuModel),
-            set::value($host->cpuModel),
+            set::value($host->cpuModel)
         )
     ),
     formRow
@@ -63,14 +63,14 @@ formPanel
             set::width('400px'),
             set::name('cpuNumber'),
             set::label($lang->host->cpuNumber),
-            set::value($host->cpuNumber),
+            set::value($host->cpuNumber)
         ),
         formGroup
         (
             set::width('400px'),
             set::name('cpuCores'),
             set::label($lang->host->cpuCores),
-            set::value($host->cpuCores),
+            set::value($host->cpuCores)
         )
     ),
     formRow
@@ -85,8 +85,8 @@ formPanel
             (
                 'type'        => 'inputControl',
                 'suffix'      => 'GB',
-                'suffixWidth' => 40,
-            )),
+                'suffixWidth' => 40
+            ))
         ),
         formGroup
         (
@@ -98,8 +98,8 @@ formPanel
             (
                 'type'        => 'inputControl',
                 'suffix'      => 'GB',
-                'suffixWidth' => 40,
-            )),
+                'suffixWidth' => 40
+            ))
         )
     ),
     formRow
@@ -130,7 +130,7 @@ formPanel
             set::width('400px'),
             set::name('serverModel'),
             set::label($lang->host->serverModel),
-            set::value($host->serverModel),
+            set::value($host->serverModel)
         ),
         formGroup
         (
@@ -152,7 +152,7 @@ formPanel
             set::name('osName'),
             set::items($lang->host->osNameList),
             set::value($osName ? $osName : $host->osName),
-            on::change('osChange'),
+            on::change('osChange')
         ),
         formGroup
         (
@@ -171,7 +171,7 @@ formPanel
             set::width('400px'),
             set::name('zap'),
             set::label($lang->host->zap),
-            set::value($host->zap ? $host->zap : 8086),
+            set::value($host->zap ? $host->zap : 8086)
         ),
         formGroup
         (
@@ -190,14 +190,14 @@ formPanel
             set::width('400px'),
             set::name('intranet'),
             set::label($lang->host->intranet),
-            set::value($host->intranet),
+            set::value($host->intranet)
         ),
         formGroup
         (
             set::width('400px'),
             set::name('extranet'),
             set::label($lang->host->extranet),
-            set::value($host->extranet),
+            set::value($host->extranet)
         )
     ),
     formRow
@@ -219,7 +219,7 @@ formPanel
             set::label($lang->host->status),
             set::value($host->status ? $host->status : 'online'),
             set::inline(true),
-            set::items($lang->host->statusList),
+            set::items($lang->host->statusList)
         )
-    ),
+    )
 );

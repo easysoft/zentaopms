@@ -31,10 +31,10 @@ foreach($config->product->memberFields as $field)
             setClass('primary-outline'),
             set::size('36'),
             set::text($user->realname),
-            set::src($user->avatar),
+            set::src($user->avatar)
         ),
         span(setClass('my-2'), $user->realname),
-        span(setClass('text-gray'), $lang->product->$field),
+        span(setClass('text-gray'), $lang->product->$field)
     );
 }
 
@@ -78,7 +78,7 @@ div
                                     set('data-placement', 'bottom'),
                                     set('data-type', 'white'),
                                     set('data-class-name', 'text-gray border border-light'),
-                                    setClass('text-gray '),
+                                    setClass('text-gray ')
                                 )
                             )
                         )
@@ -93,9 +93,9 @@ div
                         div
                         (
                             setClass('article-h1'),
-                            $allStoryCount,
+                            $allStoryCount
                         ),
-                        $lang->product->totalStories,
+                        $lang->product->totalStories
                     ),
                     div
                     (
@@ -103,7 +103,7 @@ div
                         div
                         (
                             setClass('article-h1'),
-                            $product->stories['closed'],
+                            $product->stories['closed']
                         ),
                         $lang->story->statusList['closed']
                     ),
@@ -113,10 +113,10 @@ div
                         div
                         (
                             setClass('article-h1'),
-                            $allStoryCount - $product->stories['closed'],
+                            $allStoryCount - $product->stories['closed']
                         ),
                         $lang->story->unclosed
-                    ),
+                    )
                 )
             ),
             div
@@ -167,9 +167,9 @@ div
                             set('data-placement', 'right'),
                             set('data-type', 'white'),
                             set('data-class-name', 'text-gray border border-light'),
-                            setClass('ml-2 mt-2 text-gray'),
+                            setClass('ml-2 mt-2 text-gray')
                         )
-                    ),
+                    )
                 ),
                 div
                 (
@@ -179,22 +179,22 @@ div
                         setClass('clip w-1/2'),
                         set::title($lang->product->program),
                         icon('program', setClass('pr-1')),
-                        $product->programName,
+                        $product->programName
                     ) : null,
                     $product->line ? div
                     (
                         setClass('clip w-1/2'),
                         set::title($lang->product->line),
                         icon('lane', setClass('pr-1')),
-                        $product->lineName,
-                    ) : null,
+                        $product->lineName
+                    ) : null
                 ),
                 div
                 (
                     set::className('detail-content mt-4'),
-                    html($product->desc),
-                ),
-            ),
+                    html($product->desc)
+                )
+            )
         ),
         div
         (
@@ -259,10 +259,10 @@ div
                         setClass('w-1/4 item mb-3'),
                         span(setClass('text-gray'), $lang->product->executions),
                         span(setClass('ml-2'), $product->executions)
-                    ),
+                    )
                 )
-            ),
-        ),
+            )
+        )
     ),
     cell
     (
@@ -294,14 +294,14 @@ div
                 set::commentUrl(createLink('action', 'comment', array('objectType' => 'product', 'objectID' => $product->id))),
                 set::bodyClass('h-72 overflow-y-auto')
             )
-        ),
-    ),
+        )
+    )
 );
 
 $actionMenuList = !$product->deleted ? $this->product->buildOperateMenu($product) : array();
 div
 (
-    setClass('w-2/3 text-center fixed actions-menu'),
+    setClass('w-2/3 center fixed actions-menu'),
     setClass($product->deleted ? 'no-divider' : ''),
     floatToolbar
     (

@@ -5,7 +5,7 @@ window.toggleReviewer = function(obj)
     const $this     = $(obj);
     const isChecked = $this.prop('checked');
 
-    $reviewer = $('#reviewer').zui('picker');
+    $reviewer = $('[name=reviewer]').zui('picker');
     options   = $reviewer.options;
     if(isChecked)
     {
@@ -46,7 +46,10 @@ window.loadProduct = function(e)
 {
     const $this     = $(e.target);
     const productID = $this.val();
-    loadPage($.createLink('story', 'create', 'productID=' + productID + '&' + createParams))
+    const $modal    = $this.closest('.modal');
+    const inModal   = $modal.length > 0;
+    if(inModal)  loadModal($.createLink('story', 'create', 'productID=' + productID + '&' + createParams), $modal.attr('id'));
+    if(!inModal) loadPage($.createLink('story', 'create', 'productID=' + productID + '&' + createParams));
 };
 
 window.loadBranchRelation = function(e)
@@ -65,7 +68,7 @@ window.loadBranchRelation = function(e)
 
 window.addBranchesBox = function(e)
 {
-    const productID     = $('#product').zui('picker').$.value;
+    const productID     = $('[name=product]').val();
     const $formRow      = $(e.target).closest('.form-row');
     const $branchPicker = $('.switchBranch #branchBox .picker-box').zui('picker');
     const $modulePicker = $('.switchBranch #moduleIdBox .picker-box').zui('picker');

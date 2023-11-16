@@ -26,7 +26,7 @@ formPanel
             set::width('500px'),
             set::required(true),
             set::label($lang->instance->name),
-            set::value($instance->name),
+            set::value($instance->name)
         )
     ),
     formRow
@@ -39,7 +39,7 @@ formPanel
             set::required(true),
             set::label($lang->instance->adjustMem),
             set::value(intval($currentResource->max->memory / 1024)),
-            set::items($this->instance->filterMemOptions($currentResource)),
+            set::items($this->instance->filterMemOptions($currentResource))
         )
-    ),
+    )
 );

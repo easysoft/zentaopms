@@ -25,9 +25,9 @@ formPanel
             h::span
             (
                 setClass('tips-git leading-8 ml-2 text-danger'),
-                $lang->system->domain->notReuseOldDomain,
-            ),
-        ),
+                $lang->system->domain->notReuseOldDomain
+            )
+        )
     ),
     formGroup
     (
@@ -39,7 +39,7 @@ formPanel
         h::span
         (
             setClass('tips-git leading-8 ml-2'),
-            $lang->system->domain->setDNS,
+            $lang->system->domain->setDNS
         ),
         h::a
         (
@@ -47,14 +47,14 @@ formPanel
             set::target('_blank'),
             set::href('https://www.qucheng.com/book/Installation-manual/47.html'),
             $lang->system->domain->dnsHelperLink
-        ),
+        )
     ),
     formGroup
     (
         set::label(''),
         set::name('https[]'),
         set::control(array('type' => 'checkbox', 'text' => $lang->system->domain->uploadCert, 'value' => 'true')),
-        on::change('onHttpsChange'),
+        on::change('onHttpsChange')
     ),
     formGroup
     (
@@ -63,7 +63,7 @@ formPanel
         set::label($lang->system->certPem),
         set::name('certPem'),
         set::control('textarea'),
-        set::value(zget($domainSettings, 'certPem', '')),
+        set::value(zget($domainSettings, 'certPem', ''))
     ),
     formGroup
     (
@@ -72,7 +72,7 @@ formPanel
         set::label($lang->system->certKey),
         set::name('certPem'),
         set::control('textarea'),
-        set::value(zget($domainSettings, 'certKey', '')),
+        set::value(zget($domainSettings, 'certKey', ''))
     ),
     formRow
     (
@@ -84,15 +84,15 @@ formPanel
             (
                 $lang->system->verify,
                 set::id('validateCertBtn'),
-                on::click('checkCert'),
+                on::click('checkCert')
             ),
             h::span
             (
                 setClass('tips-git leading-8 ml-2'),
-                set::id('validateMsg'),
-            ),
+                set::id('validateMsg')
+            )
         )
-    ),
+    )
 );
 render();
 

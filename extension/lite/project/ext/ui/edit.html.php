@@ -31,7 +31,7 @@ foreach($lang->project->modelList as $key => $text)
         'class'      => 'model-drop',
         'data-key'   => $key,
         'data-value' => $text,
-        'text'       => $text,
+        'text'       => $text
     );
 }
 
@@ -74,7 +74,7 @@ formPanel
             ),
             set::placement('bottom'),
             set::menu(array('style' => array('color' => 'var(--color-fore)'))),
-            set::items($projectModelItems),
+            set::items($projectModelItems)
         )
     )),
     on::click('.addLine', 'addNewLine'),
@@ -100,7 +100,7 @@ formPanel
         set::name('name'),
         set::value($project->name),
         set::label($lang->project->name),
-        set::strong(true),
+        set::strong(true)
     ),
     (isset($config->setCode) && $config->setCode == 1) ? formGroup
     (
@@ -108,7 +108,7 @@ formPanel
         set::name('code'),
         set::value($project->code),
         set::label($lang->project->code),
-        set::strong(true),
+        set::strong(true)
     ) : null,
     formGroup
     (
@@ -119,7 +119,7 @@ formPanel
             set::name('PM'),
             set::value($project->PM),
             set::items($PMUsers)
-        ),
+        )
     ),
     formRow
     (
@@ -136,7 +136,7 @@ formPanel
                     set('id', 'begin'),
                     set::value($project->begin),
                     set::placeholder($lang->project->begin),
-                    set::required(true),
+                    set::required(true)
                 ),
                 $lang->project->to,
                 datePicker
@@ -146,8 +146,8 @@ formPanel
                     set::value($project->end),
                     set::placeholder($lang->project->end),
                     set::required(true),
-                    set::disabled($project->end == LONG_TIME),
-                ),
+                    set::disabled($project->end == LONG_TIME)
+                )
             )
         ),
         formGroup
@@ -161,7 +161,7 @@ formPanel
                 set::inline(true),
                 set::items($lang->project->endList)
             )
-        ),
+        )
     ),
     formGroup
     (
@@ -183,8 +183,8 @@ formPanel
             set::control('radioList'),
             set::items($lang->project->aclList),
             $programID ? set::items($lang->project->subAclList) : set::items($lang->project->aclList),
-            set::value($project->acl),
-        ),
+            set::value($project->acl)
+        )
     ),
     formGroup
     (
@@ -198,7 +198,7 @@ formPanel
             set::multiple(true)
         )
     ),
-    $productElements ? $productElements : null,
+    $productElements ? $productElements : null
 );
 
 useData('title', $title);

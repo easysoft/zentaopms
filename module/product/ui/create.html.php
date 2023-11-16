@@ -126,7 +126,7 @@ $formItems['whitelist'] = formRow
                     )
                 )
             )
-        ),
+        )
     )
 );
 

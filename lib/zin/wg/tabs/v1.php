@@ -45,7 +45,7 @@ class tabs extends wg
                 set::href("#$key"),
                 $prefix,
                 span($title),
-                $suffix,
+                $suffix
             )
         );
     }
@@ -65,7 +65,7 @@ class tabs extends wg
             setClass('nav nav-tabs gap-x-5', $collapse ? 'relative' : null, $headerClass ?: null),
             $isVertical ? setClass('nav-stacked') : null,
             $titleViews,
-            $this->buildCollapseBtn(),
+            $this->buildCollapseBtn()
         );
     }
 

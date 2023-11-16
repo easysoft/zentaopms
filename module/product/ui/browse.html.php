@@ -109,7 +109,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
                 setClass($app->tab != 'product' ? 'secondary' : 'primary'),
                 setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0')),
                 set::placement('bottom-end'),
-                set::items($items),
+                set::items($items)
             )
         );
     }
@@ -250,13 +250,13 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
                 'data-formaction' => $this->createLink('story', 'batchEdit', "productID=$storyProductID&projectID=$projectID&branch=$branch&storyType=$storyType")
             ),
             /* Popup menu trigger icon. */
-            array('caret' => 'up', 'className' => 'size-sm secondary', 'items' => $navActionItems, 'data-toggle' => 'dropdown', 'data-placement' => 'top-start'),
+            array('caret' => 'up', 'className' => 'size-sm secondary', 'items' => $navActionItems, 'data-toggle' => 'dropdown', 'data-placement' => 'top-start')
         )),
         /* Unlink stories button. */
         !$canBatchUnlink ? null : array
         (
             'text' => $lang->story->unlink,
-            'className' => 'secondary batchUnlinkStory',
+            'className' => 'secondary batchUnlinkStory'
         ),
         /* Module button. */
         array('caret' => 'up', 'text' => $lang->story->moduleAB, 'className' => $canBatchChangeModule ? 'secondary batchChangeModuleBtn' : 'hidden', 'items' => $moduleItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
@@ -267,13 +267,13 @@ $fnGenerateFootToolbar = function() use ($lang, $product, $productID, $project, 
         /* AssignedTo button. */
         array('caret' => 'up', 'text' => $lang->story->assignedTo, 'className' => ($canBatchAssignTo ? 'secondary batchAssignToBtn' : 'hidden'), 'items' => $assignItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
         /* Batch import to lib button .*/
-        !$canBatchImportToLib ? null : array('text' => $lang->story->importToLib, 'className' => 'btn secondary batchImportToLibBtn', 'id' => 'importToLib', 'data-toggle' => 'modal', 'url' => '#batchImportToLib'),
+        !$canBatchImportToLib ? null : array('text' => $lang->story->importToLib, 'className' => 'btn secondary batchImportToLibBtn', 'id' => 'importToLib', 'data-toggle' => 'modal', 'url' => '#batchImportToLib')
     );
 
     return array
     (
         'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'),
-        'items' => array_values(array_filter($items)),
+        'items' => array_values(array_filter($items))
     );
 };
 
@@ -311,7 +311,7 @@ toolbar
     (!common::hasPriv('story', 'report') || !$productID) ? null : item(set(array('id' => 'reportBtn', 'text' => $lang->project->report, 'icon' => 'bar-chart', 'class' => 'ghost', 'url' => helper::createLink('story', 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie&projectID=$projectID")))),
     !common::hasPriv('story', 'export') ? null : item(set(array('id' => 'exportBtn', 'text' => $lang->export, 'icon' => 'export', 'class' => 'ghost', 'url' => helper::createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType&storyType=$storyType"), 'data-toggle' => 'modal'))),
     $fnBuildCreateStoryButton(),
-    $fnBuildLinkStoryButton(),
+    $fnBuildLinkStoryButton()
 );
 
 $fnGenerateSideBar();

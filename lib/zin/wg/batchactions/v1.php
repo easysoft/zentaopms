@@ -25,14 +25,14 @@ class batchActions extends wg
                 (
                     icon('plus', set::size('lg')),
                     setClass('bg-white ring-0 rounded bg-opacity-20 add-btn'),
-                    on::click('addItem'),
+                    on::click('addItem')
                 ),
                 btn
                 (
                     icon('close', set::size('lg')),
                     setClass('bg-white ring-0 rounded bg-opacity-20 del-btn'),
-                    on::click('removeItem'),
-                ),
+                    on::click('removeItem')
+                )
             )
         );
     }

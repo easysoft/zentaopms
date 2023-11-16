@@ -51,7 +51,7 @@ detailHeader
             set::level(1),
             set::text($zahost->name)
         ),
-        $zahost->deleted ? span(setClass('label danger'), $lang->zahost->deleted) : null,
+        $zahost->deleted ? span(setClass('label danger'), $lang->zahost->deleted) : null
     )
 );
 
@@ -183,9 +183,9 @@ detailBody
                                     setClass('ml-2'),
                                     $zahost->diskSize . '' . $lang->zahost->unitList['GB']
                                 )
-                            ),
+                            )
                         )
-                    ),
+                    )
                 )
             )
         ),
@@ -206,12 +206,12 @@ detailBody
                 setClass('ghost btn'),
                 icon('refresh', setClass('text-primary')),
                 $lang->zahost->init->checkStatus,
-                on::click('ajaxGetServiceStatus'),
-            ),
+                on::click('ajaxGetServiceStatus')
+            )
         ),
         div
         (
-            set::id('statusContainer'),
+            set::id('statusContainer')
         ),
         div
         (
@@ -241,33 +241,33 @@ detailBody
                         set::title($lang->zahost->copy),
                         set::name('')
                     ),
-                    on::click('onCopy'),
+                    on::click('onCopy')
                 )
-            ),
-        ),
+            )
+        )
     ),
     common::hasPriv('zanode', 'browse') ? sectionList
     (
         section
         (
-            set::title($lang->zahost->browseNode),
+            set::title($lang->zahost->browseNode)
         ),
         !empty($nodeList) ? h::iframe
         (
             set::src(createLink('zanode', 'nodeList', "hostID={$zahost->id}", '', true)),
-        ) : $lang->noData,
+        ) : $lang->noData
     ) : null,
     floatToolbar
     (
         to::prefix(backBtn(set::icon('back'), $lang->goback)),
         set::main($mainActions),
         set::suffix($commonActions),
-        set::object($zahost),
+        set::object($zahost)
     ),
     detailSide
     (
         history()
-    ),
+    )
 );
 
 render();

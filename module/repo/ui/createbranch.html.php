@@ -16,20 +16,19 @@ to::main(false);
 jsVar('linkParams', "taskID={$taskID}&executionID={$executionID}&repoID=%s");
 formPanel
 (
-    on::change('#repoID', 'onRepoChange'),
     set::title($lang->repo->createBranchAction),
     formGroup
     (
         setID('repoID'),
         set::label($lang->repo->codeRepo),
-        set::disabled(count($repoPairs) == 1),
+        set::required(true),
         picker
         (
             set::name('repoID'),
-            set::required(true),
             set::items($repoPairs),
             set::value($repoID),
-            set::popPlacement('bottom')
+            set::popPlacement('bottom'),
+            on::change('window.onRepoChange')
         )
     ),
     formGroup
@@ -48,9 +47,7 @@ formPanel
     (
         set::name('name'),
         set::label($lang->repo->branchName),
-        set::required(true),
+        set::required(true)
     ),
     set::actions(array('submit'))
 );
-
-render();

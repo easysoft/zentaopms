@@ -136,9 +136,9 @@ $(function()
                 else
                 {
                     setting[current] = false;
-                    alert(serverErrorTip);
+                    zui.Modal.alert(serverErrorTip);
                 }
-            }, 'json').fail(function(e) {alert(lang.timeout)});
+            }, 'json').fail(function() {zui.Modal.alert(lang.timeout)});
         }
     };
 
@@ -148,16 +148,17 @@ $(function()
 
         $.post(ajaxSetTasksUrl, {finish: ''}, function(e)
         {
-            if(e.result === 'success')
+            result = JSON.parse(e);
+            if(result.result === 'success')
             {
                 setting = {};
                 updateUI();
             }
             else
             {
-                alert(serverErrorTip);
+                zui.Modal.alert(serverErrorTip);
             }
-        }, 'json').fail(function() {alert(lang.timeout)});
+        }, 'json').fail(function() {zui.Modal.alert(lang.timeout)});
     };
 
     var showToolTip = function($e, text, options)
@@ -196,10 +197,10 @@ $(function()
         options = $.extend(
         {
             trigger: 'manual',
-            title: text,
+            title: {html: text},
             placement: placement,
             className: 'warning',
-            mask: false
+            mask: false,
         }, options);
         $e = $e.first();
 
@@ -263,7 +264,7 @@ $(function()
         if(task.nav.formType === 'table')
         {
             targetStatus.form = true;
-            if(current === 'manageTeam') fieldSelector = '#' + task.nav.requiredFields;
+            if(current === 'manageTeam') fieldSelector = 'input[name="' + task.nav.requiredFields + '"]';
             else fieldSelector = '.dtable-checkbox';
 
             var $formItem = $$(fieldSelector);
@@ -301,6 +302,7 @@ $(function()
             if(showToolTipTask) clearTimeout(showToolTipTask);
 
             $submitTarget.addClass('active');
+            clearTips();
             if(task.nav.submit) showToolTip($form.find(task.nav.submit), $submitTarget.text(), {placement: 'top'});
         }
         else
@@ -388,7 +390,7 @@ $(function()
 
             if(task.nav.formType === 'table')
             {
-                if(current === 'manageTeam') fieldSelector = '#' + task.nav.requiredFields;
+                if(current === 'manageTeam') fieldSelector = 'input[name="' + task.nav.requiredFields + '"]';
                 else fieldSelector = '.dtable-checkbox';
             }
             else if(requiredFields)
@@ -430,7 +432,7 @@ $(function()
                 }
                 else
                 {
-                    $checkbox = $$(task.nav.target).on('click', function(){
+                    $$(task.nav.target).on('click', function(){
                         var current = this
                         setTimeout(
                             function()

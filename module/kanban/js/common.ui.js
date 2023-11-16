@@ -1,5 +1,6 @@
 window.updateKanbanRegion = function(regionID, kanbanData)
 {
+    if(!regionID || !kanbanData) return;
     $('.kanban-list').zui('kanbanlist').$.getKanban(regionID).update(kanbanData);
 }
 

@@ -53,7 +53,7 @@ formBatchPanel
     (
         array('text' => $lang->save,             'id' => 'saveButton',      'class' => 'primary'),
         array('text' => $lang->story->saveDraft, 'id' => 'saveDraftButton', 'class' => 'secondary'),
-        array('text' => $lang->goback, 'data-back' => 'APP', 'class' => 'open-url'),
+        array('text' => $lang->goback, 'data-back' => 'APP', 'class' => 'open-url')
     ))
 );
 

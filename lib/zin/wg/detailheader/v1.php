@@ -6,13 +6,13 @@ class detailHeader extends wg
 {
     protected static array $defineProps = array(
         'back?: string="APP"',
-        'backUrl?: string',
+        'backUrl?: string'
     );
 
     protected static array $defineBlocks = array(
         'prefix' => array(),
         'title'  => array(),
-        'suffix' => array(),
+        'suffix' => array()
     );
 
     private function backBtn(): wg
@@ -43,7 +43,7 @@ class detailHeader extends wg
             (
                 setClass('flex', 'items-center', 'gap-x-4'),
                 $prefix,
-                $title,
+                $title
             ),
             $suffix
         );

@@ -46,7 +46,7 @@ formPanel
             set::control(array("type" => "picker","multiple" => true)),
             set::items($products),
             set::value(empty($objectID) ? '' : implode(',', array_keys($products)))
-        ),
+        )
     ),
     formGroup
     (
@@ -73,8 +73,8 @@ formPanel
         h::span
         (
             setClass('tips-git leading-8 ml-2'),
-            html($lang->repo->syncTips),
-        ),
+            html($lang->repo->syncTips)
+        )
     ),
     formRow
     (
@@ -88,7 +88,7 @@ formPanel
             set::value(""),
             set::control("picker"),
             set::items($serviceHosts)
-        ),
+        )
     ),
     formRow
     (
@@ -99,8 +99,8 @@ formPanel
             set::name("serviceProject"),
             set::items(array()),
             set::label($lang->repo->serviceProject),
-            set::control("picker"),
-        ),
+            set::control("picker")
+        )
     ),
     formGroup
     (
@@ -120,8 +120,8 @@ formPanel
             set::label($lang->repo->path),
             set::required(true),
             set::control("text"),
-            set::placeholder($lang->repo->example->path->git),
-        ),
+            set::placeholder($lang->repo->example->path->git)
+        )
     ),
     formGroup
     (
@@ -131,7 +131,7 @@ formPanel
         set::required(true),
         set::value("utf-8"),
         set::control("text"),
-        set::placeholder($lang->repo->encodingsTips),
+        set::placeholder($lang->repo->encodingsTips)
     ),
     formRow
     (
@@ -143,7 +143,7 @@ formPanel
             set::label($lang->repo->client),
             set::required(true),
             set::control("text")
-        ),
+        )
     ),
     formRow
     (
@@ -154,7 +154,7 @@ formPanel
             set::name("account"),
             set::label($lang->user->account),
             set::control("text")
-        ),
+        )
     ),
     formRow
     (
@@ -189,7 +189,7 @@ formPanel
         set::name("desc"),
         set::label($lang->story->spec),
         set::control("input"),
-        set::placeholder($lang->repo->descPlaceholder),
+        set::placeholder($lang->repo->descPlaceholder)
     ),
     formRow
     (
@@ -202,7 +202,7 @@ formPanel
             set::control('radioList'),
             set::items($lang->repo->aclList),
             set::value('open'),
-            on::change('onAclChange'),
+            on::change('onAclChange')
         )
     ),
     formRow
@@ -240,8 +240,8 @@ formPanel
                 ))),
                 setClass('mt-2')
             )
-        ),
-    ),
+        )
+    )
 );
 
 render();

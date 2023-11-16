@@ -31,8 +31,8 @@ formPanel
             setStyle('color', 'initial'),
             setStyle('font-weight', 'initial'),
             setStyle('text-decoration', 'underline'),
-            $lang->instance->updateLog,
-        ),
+            $lang->instance->updateLog
+        )
     ),
     div(setStyle('height', '20px')),
     input(set::type('hidden'), set::name('confirm'), set::value('yes'))

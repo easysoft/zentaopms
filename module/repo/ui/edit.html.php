@@ -59,8 +59,8 @@ formPanel
         h::span
         (
             setClass('tips-git leading-8 ml-2'),
-            html($lang->repo->syncTips),
-        ),
+            html($lang->repo->syncTips)
+        )
     ),
     formRow
     (
@@ -73,8 +73,8 @@ formPanel
             set::required(true),
             set::value(isset($repo->gitService) ? $repo->gitService : ''),
             set::control("picker"),
-            set::items(!empty($serviceHosts) ? $serviceHosts : array()),
-        ),
+            set::items(!empty($serviceHosts) ? $serviceHosts : array())
+        )
     ),
     formRow
     (
@@ -87,8 +87,8 @@ formPanel
             set::required(true),
             set::control("picker"),
             set::items(!empty($projects) ? $projects : array()),
-            set::value(isset($repo->project) ? $repo->project : ''),
-        ),
+            set::value(isset($repo->project) ? $repo->project : '')
+        )
     ),
     formGroup
     (
@@ -97,7 +97,7 @@ formPanel
         set::label($lang->user->name),
         set::required(true),
         set::control("text"),
-        set::value($repo->name),
+        set::value($repo->name)
     ),
     formRow
     (
@@ -110,8 +110,8 @@ formPanel
             set::required(true),
             set::control("text"),
             set::placeholder($lang->repo->example->path->git),
-            set::value($repo->path),
-        ),
+            set::value($repo->path)
+        )
     ),
     formGroup
     (
@@ -121,7 +121,7 @@ formPanel
         set::required(true),
         set::value($repo->encoding),
         set::control("text"),
-        set::placeholder($lang->repo->encodingsTips),
+        set::placeholder($lang->repo->encodingsTips)
     ),
     formRow
     (
@@ -133,8 +133,8 @@ formPanel
             set::label($lang->repo->client),
             set::required(true),
             set::control("text"),
-            set::value($repo->client),
-        ),
+            set::value($repo->client)
+        )
     ),
     formRow
     (
@@ -145,8 +145,8 @@ formPanel
             set::name("account"),
             set::label($lang->user->account),
             set::control("text"),
-            set::value($repo->account),
-        ),
+            set::value($repo->account)
+        )
     ),
     formRow
     (
@@ -182,7 +182,7 @@ formPanel
         set::label($lang->story->spec),
         set::control("input"),
         set::placeholder($lang->repo->descPlaceholder),
-        set::value(strip_tags($repo->desc)),
+        set::value(strip_tags($repo->desc))
     ),
     formRow
     (
@@ -195,7 +195,7 @@ formPanel
             set::control('radioList'),
             set::items($lang->repo->aclList),
             set::value($repo->acl->acl),
-            on::change('onAclChange'),
+            on::change('onAclChange')
         )
     ),
     formRow
@@ -233,8 +233,8 @@ formPanel
                 ))),
                 setClass('mt-2')
             )
-        ),
-    ),
+        )
+    )
 );
 
 render();

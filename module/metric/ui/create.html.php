@@ -46,19 +46,19 @@ formPanel
             set::items($lang->metric->purposeList),
             set::value('scale'),
             set::required(true)
-        ),
+        )
     ),
     formGroup
     (
         set::label($lang->metric->name),
         set::name('name'),
-        set::required(true),
+        set::required(true)
     ),
     formGroup
     (
         set::label($lang->metric->code),
         set::name('code'),
-        set::required(true),
+        set::required(true)
     ),
     formRow
     (
@@ -75,7 +75,7 @@ formPanel
                     picker
                     (
                         set::name('unit'),
-                        set::items($lang->metric->unitList),
+                        set::items($lang->metric->unitList)
                     )
                 ),
                 div
@@ -84,7 +84,7 @@ formPanel
                     checkbox
                     (
                         set::name('customUnit'),
-                        set::text($lang->metric->customUnit),
+                        set::text($lang->metric->customUnit)
                     )
                 )
             )
@@ -103,7 +103,7 @@ formPanel
                 div
                 (
                     setClass('grow'),
-                    input(set::name('addunit')),
+                    input(set::name('addunit'))
                 ),
                 div
                 (
@@ -111,7 +111,7 @@ formPanel
                     checkbox
                     (
                         set::name('customUnit'),
-                        set::text($lang->metric->customUnit),
+                        set::text($lang->metric->customUnit)
                     )
                 )
             )
@@ -123,14 +123,14 @@ formPanel
         set::label($lang->metric->desc),
         set::control(array('type' => 'textarea', 'rows' => 3)),
         set::name('desc'),
-        set::placeholder($lang->metric->descTip),
+        set::placeholder($lang->metric->descTip)
     ),
     formGroup
     (
         set::label($lang->metric->definition),
         set::control(array('type' => 'textarea', 'rows' => 3)),
         set::name('definition'),
-        set::placeholder($lang->metric->definitionTip),
+        set::placeholder($lang->metric->definitionTip)
     ),
     formGroup
     (
@@ -139,7 +139,7 @@ formPanel
         set::label($lang->metric->afterCreate),
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->metric->afterCreateList),
-        set::value('implement'),
+        set::value('implement')
     ),
-    set::submitBtnText($lang->save),
+    set::submitBtnText($lang->save)
 );

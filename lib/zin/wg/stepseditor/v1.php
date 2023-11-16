@@ -84,7 +84,7 @@ class stepsEditor extends wg
                     (
                         set::className('steps-editor-col steps-editor-col-add'),
                         div($sameLevelText),
-                        div($subLevelText),
+                        div($subLevelText)
                     ),
                     cell
                     (

@@ -56,7 +56,7 @@ detailBody
             set::title($lang->stakeholder->strategy),
             set::content(!empty($user->strategy) ? $user->strategy : $lang->noDesc),
             set::useHtml(true)
-        ),
+        )
     ),
     /* Expect content. */
     array_map(function($expect) use ($lang)
@@ -74,7 +74,7 @@ detailBody
                 set::title($lang->stakeholder->progress . "($expect->createdDate)"),
                 set::content(!empty($expect->progress) ? $expect->progress : $lang->noDesc),
                 set::useHtml(true)
-            ),
+            )
         );
     }, $expects),
     /* Histories. */
@@ -94,7 +94,7 @@ detailBody
             item(set::name($lang->stakeholder->weixin),  empty($user->weixin)      ? '' :$user->weixin),
             item(set::name($lang->stakeholder->email),   empty($user->email)       ? '' :$user->email),
             item(set::name($lang->stakeholder->isKey),   zget($lang->stakeholder->keyList, $user->key, '')),
-            item(set::name($lang->stakeholder->from),    zget($lang->stakeholder->fromList, $user->from, '')),
+            item(set::name($lang->stakeholder->from),    zget($lang->stakeholder->fromList, $user->from, ''))
         )
     )))
 );

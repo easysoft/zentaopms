@@ -86,7 +86,7 @@ h::table
         (
             set::width('80px'),
             $lang->story->status
-        ),
+        )
     ),
     $tbody
 );

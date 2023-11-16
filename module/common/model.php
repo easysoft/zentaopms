@@ -989,6 +989,8 @@ class commonModel extends model
 
         foreach($menuOrder as $key => $group)
         {
+            if($group != 'my' && !empty($app->user->rights['acls']['views']) && !isset($app->user->rights['acls']['views'][$group])) continue;
+
             $nav = $lang->mainNav->$group;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
 
@@ -2491,7 +2493,8 @@ EOF;
         if(commonModel::isTutorialMode())
         {
             $app->loadLang('tutorial');
-            foreach($lang->tutorial->tasks as $task)
+            $app->loadConfig('tutorial');
+            foreach($app->config->tutorial->tasksConfig as $task)
             {
                 if($task['nav']['module'] == $module and $task['nav']['method'] = $method) return true;
             }
@@ -3146,7 +3149,8 @@ EOF;
 
         if($log or $app->config->debug)
         {
-            $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
+            $runMode = PHP_SAPI == 'cli' ? '_cli' : '';
+            $logFile = $app->getLogRoot() . 'saas' . $runMode . '.' . date('Ymd') . '.log.php';
             if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
 
             $fh = fopen($logFile, 'a');

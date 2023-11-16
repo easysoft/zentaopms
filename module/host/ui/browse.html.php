@@ -47,7 +47,7 @@ sidebar
         'settingText' => $lang->host->groupMaintenance,
         'showDisplay' => false,
         'settingLink' => $this->createLink('tree', 'browse', "productID=0&view=host"),
-        'closeLink'   => $this->createLink('host', 'browse'),
+        'closeLink'   => $this->createLink('host', 'browse')
     )))
 );
 
@@ -59,7 +59,7 @@ dtable
     set::sortLink(createLink('host', 'browse', "browseType=$browseType&param=$param&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

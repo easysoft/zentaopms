@@ -43,10 +43,10 @@ formPanel
             li(set::id('setting'),       set::className('hidden'), $lang->misc->client->setting),
             li(set::id('setted'),        set::className('hidden'), $lang->misc->client->setted),
             li(set::id('configError'),   set::className('hidden'), $lang->misc->client->errorInfo->configError),
-            li(set::id('downloadError'), set::className('hidden'), $lang->misc->client->errorInfo->downloadError),
+            li(set::id('downloadError'), set::className('hidden'), $lang->misc->client->errorInfo->downloadError)
         ),
         div(set::id('hasError')),
-        div(set::id('clearTmp')),
+        div(set::id('clearTmp'))
     ) : null,
     input(set::className('hidden'), set::name('action'), set::value($action))
 );

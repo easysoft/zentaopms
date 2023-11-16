@@ -1,8 +1,8 @@
 #menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg, var(--color-slate-800)); width: var(--zt-menu-width, 96px); color: rgba(var(--color-canvas-rgb), .8); transition: width .2s; user-select: none; z-index: 10;}
 #menu .nav {flex-direction: column; align-items: stretch;}
-#menu .nav > li {display: block; height: var(--zt-menu-height, 38px); padding: 4px 12px; transition: padding .2s;}
+#menu .nav > li {display: block; height: var(--zt-menu-height, 38px); padding: 4px 8px; transition: padding .2s;}
 #menu .nav > .divider {background: var(--color-canvas); opacity: .12; height: 1px; padding: 0; margin: 6px 12px;}
-#menu .nav > li > a {color: inherit; display: flex; align-items: center; gap: 8px; padding: 0 6px; height: calc(var(--zt-menu-height, 38px) - 8px); transition: color .2s, background-color .2s; border-radius: var(--radius-md);}
+#menu .nav > li > a {color: inherit; display: flex; align-items: center; gap: 4px; padding: 0 6px; height: calc(var(--zt-menu-height, 38px) - 8px); transition: color .2s, background-color .2s; border-radius: var(--radius-md);}
 #menu .nav > li > a.active,
 #menu .nav > li > a:hover {background: var(--zt-menu-hover-bg, var(--color-primary-500)); color: var(--color-canvas);}
 #menu .nav > li > a > .text {white-space: nowrap;}
@@ -51,3 +51,5 @@
 .hl-tutorial.hl-in { -webkit-box-shadow: 0 0 20px 0 #ffff8d,0 0 0 2px #ffd180,0 0 0 3000px rgba(0,0,0,.2)!important; box-shadow: 0 0 20px 0 #ffff8d,0 0 0 2px #ffd180,0 0 0 3000px rgba(0,0,0,.2)!important }
 .btn.tooltip-tutorial,.hl-tutorial.hl-in:hover { position: relative!important; z-index: 1010!important; -webkit-box-shadow: 0 0 30px 0 #ffff8d,0 0 0 5px #ffd180,0 0 0 3000px rgba(0,0,0,.3)!important; box-shadow: 0 0 30px 0 #ffff8d,0 0 0 5px #ffd180,0 0 0 3000px rgba(0,0,0,.3)!important
 }
+[lang^='en'] #apps {left: var(--zt-menu-width, 106px);}
+[lang^='en'] #menu {width: var(--zt-menu-width, 106px);}

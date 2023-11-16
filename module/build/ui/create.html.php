@@ -67,7 +67,7 @@ if(!$hidden)
     {
         $productBox = formGroup(
             set::width('1/2'),
-            set::id('productBox'),
+            setID('productBox'),
             set::name('product'),
             set::label($lang->build->product),
             set::value(empty($product) ? '' : $product->id),
@@ -112,7 +112,7 @@ if(!$hidden)
         $productBox = formGroup(
             set::width('1/2'),
             setClass('items-center'),
-            set::id('productBox'),
+            setID('productBox'),
             set::label($lang->build->product),
             html(sprintf($lang->build->noProduct, helper::createLink('execution', 'manageproducts', "executionID={$executionID}", '', true), $app->tab))
         );
@@ -134,7 +134,7 @@ formPanel
     $productRow,
     formRow
     (
-        setClass(!empty($product) && $product->type != 'normal' ? '' : 'hidden'),
+        setClass(!empty($product) && $productType != 'normal' ? '' : 'hidden'),
         formGroup
         (
             set::width('1/2'),
@@ -158,7 +158,7 @@ formPanel
             set::label($lang->build->builds),
             picker
             (
-                set::id('builds'),
+                setID('builds'),
                 set::name('builds[]'),
                 set::items(array()),
                 set::multiple(true)
@@ -171,7 +171,7 @@ formPanel
             icon(
                 'help',
                 set('data-toggle', 'tooltip'),
-                set('id', 'tooltipHover')
+                setID('tooltipHover')
             )
         )
     ),
@@ -189,7 +189,7 @@ formPanel
             setClass('items-center'),
             div
             (
-                set::id('lastBuildBox'),
+                setID('lastBuildBox'),
                 setClass('text-gray'),
                 div
                 (

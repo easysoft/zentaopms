@@ -9,11 +9,6 @@ jsVar('endGreatThanParent', $lang->project->endGreatThanParent);
 jsVar('ignore', $lang->project->ignore);
 jsVar('multiBranchProducts', $multiBranchProducts);
 jsVar('errorSameProducts', $lang->project->errorSameProducts);
-jsVar('copyProjectID', $copyProjectID);
-jsVar('nameTips', $lang->project->copyProject->nameTips);
-jsVar('codeTips', $lang->project->copyProject->codeTips);
-jsVar('endTips', $lang->project->copyProject->endTips);
-jsVar('daysTips', $lang->project->copyProject->daysTips);
 jsVar('programTip', $lang->program->tips);
 
 $projectModelItems = array();
@@ -59,9 +54,9 @@ if(!empty($products))
                             set::value($product->id),
                             set::items($allProducts),
                             set::last($product->id),
-                            set::required(true),
+                            set::required(true)
                         )
-                    ),
+                    )
                 )
             ),
             formGroup
@@ -76,9 +71,9 @@ if(!empty($products))
                     (
                         set::name("branch[$i][]"),
                         set::items($branches),
-                        set::value(implode(',', $product->branches)),
+                        set::value(implode(',', $product->branches))
                     )
-                ),
+                )
             ),
             formGroup
             (
@@ -107,9 +102,9 @@ if(!empty($products))
                         setClass('btn ghost removeLine'),
                         icon('trash'),
                         $i == 0 ? set::disabled(true) : null
-                    ),
+                    )
                 )
-            ),
+            )
         );
 
         $i ++;
@@ -156,6 +151,9 @@ formPanel
     on::click('.project-type-0', 'changeType(0)'),
     on::click('.project-stageBy-0', 'changeStageBy(0)'),
     on::click('.project-stageBy-1', 'changeStageBy(1)'),
+    on::click('[type=submit]', 'removeAllTips'),
+    on::click('#name, #code, #end, #days', 'removeTips'),
+    on::change('#end, #days', 'removeTips'),
     on::change('[name^=products]', 'productChange'),
     on::change('[name^=branch]', 'branchChange'),
     on::change('#parent', 'setParentProgram'),
@@ -177,7 +175,7 @@ formPanel
                 set::name('parent'),
                 set::items($programList),
                 set::value($programID),
-                set::required(true),
+                set::required(true)
             )
         ),
         formGroup
@@ -191,7 +189,7 @@ formPanel
                 (
                     'help',
                     set('data-toggle', 'tooltip'),
-                    set('id', 'programHover'),
+                    set('id', 'programHover')
                 )
             )
         ),
@@ -199,24 +197,36 @@ formPanel
         (
             set::name('model'),
             set::value($model),
-            set::control('hidden'),
+            set::control('hidden')
         )
     ),
     formGroup
     (
         set::width('1/2'),
-        set::name('name'),
         set::label($lang->project->name),
-        set::value($copyProjectID ? $copyProject->name : ''),
+        set::required(true),
         set::strong(true),
+        input
+        (
+            set::name('name'),
+            set::value($copyProjectID ? $copyProject->name : ''),
+            $copyProjectID ? setClass('has-warning') : null
+        ),
+        $copyProjectID ? div(setClass('text-warning'), $lang->project->copyProject->nameTips) : null
     ),
     (isset($config->setCode) && $config->setCode == 1) ? formGroup
     (
         set::width('1/2'),
-        set::name('code'),
         set::label($lang->project->code),
-        set::value($copyProjectID ? $copyProject->code : ''),
+        set::required(true),
         set::strong(true),
+        input
+        (
+            set::name('code'),
+            set::value($copyProjectID ? $copyProject->code : ''),
+            $copyProjectID ? setClass('has-warning') : null
+        ),
+        $copyProjectID ? div(setClass('text-warning'), $lang->project->copyProject->codeTips) : null
     ) : null,
     (in_array($model, array('scrum', 'kanban'))) ? formGroup
     (
@@ -227,7 +237,7 @@ formPanel
         set::items($lang->project->multipleList),
         set::disabled($copyProjectID),
         set::value('1'),
-        $copyProjectID ? formHidden('multiple', $copyProject->multiple) : null,
+        $copyProjectID ? formHidden('multiple', $copyProject->multiple) : null
     ) : null,
     formGroup
     (
@@ -270,7 +280,7 @@ formPanel
                 'prefix'      => zget($lang->project->currencySymbol, $currency),
                 'prefixWidth' => 'icon',
                 'suffix'      => $lang->project->tenThousandYuan,
-                'suffixWidth' => 60,
+                'suffixWidth' => 60
             )),
             $parentProgram ? null : formHidden('budgetUnit', $config->project->defaultCurrency)
         ),
@@ -280,7 +290,7 @@ formPanel
             set::name('future'),
             setClass('items-center'),
             set::control(array('type' => 'checkList', 'inline' => true)),
-            set::items(array('1' => $lang->project->future)),
+            set::items(array('1' => $lang->project->future))
         )
     ),
     formRow
@@ -297,7 +307,7 @@ formPanel
                     set::name('begin'),
                     set('id', 'begin'),
                     set::value(date('Y-m-d')),
-                    set::required(true),
+                    set::required(true)
                 ),
                 $lang->project->to,
                 datepicker
@@ -306,8 +316,10 @@ formPanel
                     set('id', 'end'),
                     set::placeholder($lang->project->end),
                     set::required(true),
-                ),
-            )
+                    $copyProjectID ? setClass('has-warning') : null
+                )
+            ),
+            $copyProjectID ? div(setClass('text-warning'), $lang->project->copyProject->endTips) : null
         ),
         formGroup
         (
@@ -319,26 +331,23 @@ formPanel
                 set::inline(true),
                 set::items($lang->project->endList)
             )
-        ),
+        )
     ),
     formGroup
     (
         set::label($lang->project->days),
         set::width('1/4'),
-        inputGroup
+        inputControl
         (
             setClass('has-suffix'),
-            input
-            (
-                set::name('days'),
-                set::required(true),
-            ),
+            input(set::name('days'), $copyProjectID ? setClass('has-warning') : null),
             div
             (
                 setClass('input-control-suffix z-50'),
                 $lang->project->day
             )
-        )
+        ),
+        $copyProjectID ? div(setClass('text-warning'), $lang->project->copyProject->daysTips) : null
     ),
     !empty($products) ? $productsBox :
     formRow
@@ -358,7 +367,7 @@ formPanel
                     picker
                     (
                         set::name('products[0]'),
-                        set::items($allProducts),
+                        set::items($allProducts)
                     )
                 ),
                 div
@@ -367,7 +376,7 @@ formPanel
                     checkbox
                     (
                         set::name('newProduct'),
-                        set::text($lang->project->newProduct),
+                        set::text($lang->project->newProduct)
                     )
                 )
             )
@@ -394,10 +403,10 @@ formPanel
                     checkbox
                     (
                         set::name('newProduct'),
-                        set::text($lang->project->newProduct),
+                        set::text($lang->project->newProduct)
                     )
                 )
-            ),
+            )
         ),
         formGroup
         (
@@ -425,9 +434,9 @@ formPanel
                     setClass('btn ghost removeLine'),
                     icon('trash'),
                     empty($i) ? set::disabled(true) : null
-                ),
+                )
             )
-        ),
+        )
     ),
     formRow
     (
@@ -443,7 +452,7 @@ formPanel
                 div
                 (
                     setClass('grow'),
-                    input(set::name('productName')),
+                    input(set::name('productName'))
                 ),
                 div
                 (
@@ -451,7 +460,7 @@ formPanel
                     checkbox
                     (
                         set::name('newProduct'),
-                        set::text($lang->project->newProduct),
+                        set::text($lang->project->newProduct)
                     )
                 )
             )
@@ -477,7 +486,7 @@ formPanel
                     setClass('project-stageBy-1'),
                     set::disabled($copyProjectID),
                     $lang->project->stageByList[1]
-                ),
+                )
             ),
             formHidden('stageBy', $copyProjectID ? $copyProject->stageBy : '0')
         )
@@ -498,7 +507,7 @@ formPanel
             set::label($lang->project->acl),
             set::control('radioList'),
             $programID ? set::items($lang->project->subAclList) : set::items($lang->project->aclList),
-            set::value($copyProjectID ? $copyProject->acl : 'private'),
+            set::value($copyProjectID ? $copyProject->acl : 'private')
         )
     ),
     formGroup
@@ -520,7 +529,7 @@ formPanel
         set::control('radioList'),
         set::items($lang->project->authList),
         set::value($copyProjectID ? $copyProject->auth : 'extend')
-    ),
+    )
 );
 
 $copyProjectsBox = array();
@@ -536,7 +545,7 @@ foreach($copyProjects as $id => $name)
             setClass('text-gray'),
             $lang->icons['project']
         ),
-        span($name),
+        span($name)
     );
 }
 
@@ -558,8 +567,8 @@ modalTrigger
             input
             (
                 set::name('projectName'),
-                set::placeholder($lang->project->searchByName),
-            ),
+                set::placeholder($lang->project->searchByName)
+            )
         ),
         div
         (

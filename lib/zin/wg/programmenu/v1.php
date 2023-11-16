@@ -14,7 +14,7 @@ class programMenu extends wg
         'activeIcon?: string="check"',
         'activeKey?: string',
         'link?: string',
-        'leadingAngle?: bool',
+        'leadingAngle?: bool'
     );
 
     public static function getPageCSS(): string|false
@@ -84,7 +84,7 @@ class programMenu extends wg
             set::popWidth(200),
             set::popClass('popup text-md'),
             set::onClick(jsRaw("(event) => {if(!event.target.closest('.is-caret')) return; openUrl('$closeLink'); return false}")),
-            set::data(array('search' => false, 'checkIcon' => false, 'title' => data('lang.product.selectProgram'), 'link' => $link, 'data' => $this->buildMenuTree(array(), 0))),
+            set::data(array('search' => false, 'checkIcon' => false, 'title' => data('lang.product.selectProgram'), 'link' => $link, 'data' => $this->buildMenuTree(array(), 0)))
         );
     }
 }

@@ -20,7 +20,7 @@ featureBar
         set::rootClass('ml-2'),
         set::name('involved'),
         set::text($lang->project->mine),
-        set::checked($this->cookie->involved ? 'checked' : ''),
+        set::checked($this->cookie->involved ? 'checked' : '')
     ),
     li(searchToggle(set::module('project')))
 );
@@ -80,7 +80,7 @@ if($canBatchEdit)
     $footToolbar['items'][] = array(
         'type'  => 'btn-group',
         'items' => array(
-            array('text' => $lang->edit, 'className' => 'btn size-sm batch-btn', 'btnType' => 'secondary', 'data-url' => createLink('project', 'batchEdit')),
+            array('text' => $lang->edit, 'className' => 'btn size-sm batch-btn', 'btnType' => 'secondary', 'data-url' => createLink('project', 'batchEdit'))
         )
     );
 }

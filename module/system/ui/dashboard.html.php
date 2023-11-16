@@ -48,7 +48,7 @@ div
                     ),
                     div(),
                     div(setClass('p-4 border-r'))
-                ),
+                )
             ),
             div
             (
@@ -67,7 +67,7 @@ div
                         setClass('flex col justify-between'),
                         div(setClass('text-4xl font-semibold text-primary'), $this->instance->totalServices()),
                         $lang->system->serviceQuantity
-                    ),
+                    )
                 )
             )
         ),
@@ -133,6 +133,6 @@ div
         set::cols($config->system->dtable->instanceList->fieldList),
         set::data($instances),
         set::onRenderCell(jsRaw('window.renderInstanceList')),
-        set::footPager(usePager()),
-    ),
+        set::footPager(usePager())
+    )
 );

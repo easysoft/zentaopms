@@ -56,7 +56,7 @@ $MRs = initTableData($MRList, $config->mr->dtable->fieldList, $this->mr);
 featureBar
 (
     set::current($mode != 'status' ? $mode : $param),
-    set::linkParams("repoID={$repoID}&mode=status&param={key}"),
+    set::linkParams("repoID={$repoID}&mode=status&param={key}")
 );
 
 toolBar
@@ -67,7 +67,7 @@ toolBar
         'icon'  => 'plus',
         'class' => 'btn primary',
         'url'   => createLink('mr', 'create', $app->tab == 'devops' ? "repoID={$repoID}" : '')
-    ))) : null,
+    ))) : null
 );
 
 dtable
@@ -77,7 +77,7 @@ dtable
     set::data($MRs),
     set::sortLink(createLink('mr', 'browse', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::orderBy($orderBy),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();

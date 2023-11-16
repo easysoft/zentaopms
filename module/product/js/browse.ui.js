@@ -50,11 +50,7 @@ window.renderCell = function(result, info)
     if(info.col.name == 'title' && result)
     {
         const story = info.row.data;
-        if(story.color)
-        {
-            let storyUrl = $.createLink('story', 'view', 'storyID=' + story.id);
-            result[0] = {html: '<a href= "' + storyUrl + '" style="color: ' + story.color + '" data-app="project">' + story.title + '</a>'};
-        }
+        if(story.color) result[0].props.style = 'color: ' + story.color;
         let html = '';
         if(showBranch) html += "<span class='label gray-pale rounded-xl clip'>" + story.branch + "</span> ";
         if(typeof modulePairs[story.rawModule] != 'undefined') html += "<span class='label gray-pale rounded-xl clip'>" + modulePairs[story.rawModule] + "</span> ";

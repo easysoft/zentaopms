@@ -1537,14 +1537,7 @@ class kanban extends control
 
             if($from == 'RDKanban')
             {
-                if(dao::isError()) return $this->sendError(dao::getError());
-
-                $regionID     = $column->region;
-                $executionLaneType = $this->session->executionLaneType ? $this->session->executionLaneType : 'all';
-                $executionGroupBy  = $this->session->executionGroupBy ? $this->session->executionGroupBy : 'default';
-                $kanbanData   = $this->loadModel('kanban')->getRDKanban($executionID, $executionLaneType, 'id_desc', $regionID, $executionGroupBy);
-                $kanbanData   = json_encode($kanbanData);
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "refreshKanban()"));
             }
             elseif($from == 'kanban')
             {
@@ -1693,6 +1686,8 @@ class kanban extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
+            if($from == 'RDKanban') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
+
             $region   = $this->kanban->getRegionByID($column->region);
             $callback = $this->kanban->getKanbanCallback($region->kanban, $region->id);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => $callback));
@@ -1786,7 +1781,7 @@ class kanban extends control
 
         $fromCards = str_replace(",$cardID,", ',', $fromCell->cards);
         $fromCards = $fromCards == ',' ? '' : $fromCards;
-        $toCards   = ",$cardID," . ltrim($toCell->cards, ',');
+        $toCards   = ',' . implode(',', array_unique(array_filter(explode(',', $toCell->cards)))) . ",$cardID,";
 
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCards)
             ->where('kanban')->eq($executionID)

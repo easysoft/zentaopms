@@ -7,7 +7,7 @@ class btnGroup extends wg
     protected static array $defineProps = array(
         'items?:array',
         'disabled?:bool',
-        'size?:string',
+        'size?:string'
     );
 
     public function onBuildItem($item): btn

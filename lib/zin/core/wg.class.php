@@ -54,6 +54,8 @@ class wg
 
     public bool $displayed = false;
 
+    public bool $removed = false;
+
     protected array $renderOptions = array();
 
     public function __construct(/* string|element|object|array|null ...$args */)
@@ -122,11 +124,94 @@ class wg
     }
 
     /**
+     * Mark widget been removed.
+     *
+     * @param string $selector
+     * @access public
+     * @return void
+     */
+    public function remove(string $selector = '')
+    {
+        if(!empty($selector))
+        {
+            $list = $this->find($selector);
+            foreach($list as $item) $item->remove();
+            return;
+        }
+        $this->removed = true;
+    }
+
+    /**
+     * Find widgets by selector.
+     *
+     * @param  string|array|object  $selector
+     * @param  string               $blockName
+     * @param  bool                 $nested
+     * @return array
+     * @access public
+     */
+    public function find(string|array|object $selector, string $blockName = '', bool $nested = true): array
+    {
+        $selectors = parseWgSelectors($selector);
+        $result    = array();
+        $blocks    = empty($blockName) ? $this->blocks : array($blockName => isset($this->blocks[$blockName]) ? $this->blocks[$blockName] : array());
+        foreach($blocks as $items)
+        {
+            foreach($items as $item)
+            {
+                if(!($item instanceof wg)) continue;
+
+                if($item->isMatch($selectors)) $result[] = $item;
+                elseif($nested) $result = array_merge($result, $item->find($selectors, '', $nested));
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Find children widgets by selector.
+     *
+     * @param  string $selector
+     * @return array
+     * @access public
+     */
+    public function findChildren(string $selector): array
+    {
+        return $this->find($selector, 'children', false);
+    }
+
+    /**
+     * Find first widget by selector.
+     *
+     * @param  string $selector
+     * @return wg|null
+     * @access public
+     */
+    public function first(string $selector = ''): wg | null
+    {
+        return reset($this->find($selector));
+    }
+
+    /**
+     * Find last widget by selector.
+     *
+     * @param  string $selector
+     * @return wg|null
+     * @access public
+     */
+    public function last(string $selector = ''): wg | null
+    {
+        return end($this->find($selector));
+    }
+
+    /**
      * Render widget to html
      * @return string
      */
     public function render(): string
     {
+        if($this->removed) return '';
+
         $dom    = $this->buildDom();
         $result = $dom->render();
 
@@ -214,6 +299,8 @@ class wg
 
     protected function build(): array|wg|directive
     {
+        if($this->removed) return array();
+
         return $this->children();
     }
 
@@ -349,13 +436,13 @@ class wg
         $list = array();
         if(isset($this->blocks[$name]))
         {
-            $blocks = $this->blocks[$name];
-            foreach($blocks as $block)
+            $items = $this->blocks[$name];
+            foreach($items as $item)
             {
-                $isWg = $block instanceof wg && $block->shortType() === 'wg';
-                $block = $isWg ? $block->children() : $block;
-                if(is_array($block)) $list = array_merge($list, $block);
-                else                 $list[] = $block;
+                $isWg = $item instanceof wg && $item->shortType() === 'wg';
+                $item = $isWg ? $item->children() : $item;
+                if(is_array($item)) $list = array_merge($list, $item);
+                else                 $list[] = $item;
             }
         }
         return $list;
@@ -505,8 +592,10 @@ class wg
     public function toJSON(): array
     {
         $data = array();
-        $data['gid'] = $this->gid;
-        $data['props'] = $this->props->toJSON();
+        $data['gid']     = $this->gid;
+        $data['id']      = $this->id();
+        $data['removed'] = $this->removed;
+        $data['props']   = $this->props->toJSON();
 
         $data['type'] = $this->type();
         if(str_starts_with($data['type'], 'zin\\')) $data['type'] = substr($data['type'], 4);

@@ -51,10 +51,10 @@ div(
                 icon
                 (
                     'close',
-                    set::className('monaco-close'),
+                    set::className('monaco-close')
                 )
             ),
-            div(set::id('tab-' . $currentEntry)),
+            div(set::id('tab-' . $currentEntry))
         ),
         dropdown
         (
@@ -65,15 +65,15 @@ div(
             btn
             (
                 setClass('ghost text-black pull-right'),
-                set::icon('ellipsis-v rotate-90'),
+                set::icon('ellipsis-v rotate-90')
             ),
             set::items
             (
                 $dropMenus
-            ),
+            )
         ),
         div(set::className('absolute top-0 left-0 z-20 arrow-left btn-left'), icon('chevron-left')),
-        div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right')),
+        div(set::className('absolute top-0 right-0 z-20 arrow-right btn-right'), icon('chevron-right'))
     )
 );
 
@@ -90,7 +90,7 @@ sidebar
         set::expandedIcon('folder-open'),
         set::normalIcon('file-text-alt'),
         set::activeKey($entry),
-        set::onClickItem(jsRaw('window.treeClick')),
+        set::onClickItem(jsRaw('window.treeClick'))
     )
 );
 

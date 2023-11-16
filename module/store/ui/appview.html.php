@@ -26,7 +26,7 @@ foreach($screenshots as $screenshot)
             set::src($screenshot),
             setClass('state'),
             on::click('window.open("' . $screenshot . '")')
-        ) : null,
+        ) : null
     );
 }
 
@@ -67,7 +67,7 @@ detailHeader(
                     set::icon('info-sign'),
                     $lang->store->support,
                 ),
-                set::items($dropMenus),
+                set::items($dropMenus)
             ),
             backBtn
             (
@@ -75,7 +75,7 @@ detailHeader(
                 setClass('primary btn install-btn w-20'),
                 set::type('primary'),
                 set::url($this->createLink('space', 'createApplication', "id={$cloudApp->id}")),
-                setData('toggle', 'modal'),
+                setData('toggle', 'modal')
             )
         )
     )
@@ -91,7 +91,7 @@ detailBody
                 setClass('flex'),
                 img(set::src($cloudApp->logo), setStyle(array('width' => '50px', 'height' => '50px'))),
                 div(setClass('app-name-container'),div($cloudApp->alias, setClass('app-name')))
-            ),
+            )
         ),
         section
         (
@@ -107,14 +107,14 @@ detailBody
                     h::th($lang->store->appVersion),
                     h::th($lang->store->appType),
                     h::th($lang->store->author),
-                    h::th($lang->store->releaseDate),
+                    h::th($lang->store->releaseDate)
                 ),
                 h::tr
                 (
                     h::td($cloudApp->app_version),
                     h::td(trim(implode('/', helper::arrayColumn($cloudApp->categories, 'alias')), '/')),
                     h::td($cloudApp->author),
-                    h::td((new \DateTime($cloudApp->publish_time))->format('Y-m-d')),
+                    h::td((new \DateTime($cloudApp->publish_time))->format('Y-m-d'))
                 )
             )
         ),
@@ -141,7 +141,7 @@ detailBody
                     setClass('table borderless table-hover mb-3'),
                     ...$dynamicArticlesWd,
                 ),
-                pager(set::props(array('id' => 'dynamicPager'))),
+                pager(set::props(array('id' => 'dynamicPager')))
             )
         )
     )

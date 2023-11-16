@@ -53,7 +53,7 @@ $breadcrumbItems[] = h::a
 (
     set::href($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID")),
     set('data-app', $app->tab),
-    $repo->name,
+    $repo->name
 );
 $breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
 
@@ -67,7 +67,7 @@ foreach($paths as $index => $pathName)
     (
         set::href($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($postPath))),
         set('data-app', $app->tab),
-        trim($pathName, '/'),
+        trim($pathName, '/')
     );
     $breadcrumbItems[] = h::span('/', setStyle('margin', '0 5px'));
 }
@@ -90,8 +90,8 @@ if($fileName) $breadcrumbItems[] = h::span($fileName);
             setID('repoBranchDropMenu'),
             set::objectID($selected),
             set::text($selected),
-            set::data(array('data' => $menuData, 'tabs' => $tabs)),
-        ) : null,
+            set::data(array('data' => $menuData, 'tabs' => $tabs))
+        ) : null
     ),
     ...$breadcrumbItems
 );
@@ -122,18 +122,18 @@ $downloadWg = div
                     set::type('text'),
                     set::name('svnUrl'),
                     set::value($cloneUrl->svn),
-                    set::readOnly(true),
-                ),
+                    set::readOnly(true)
+                )
             ),
             formGroup
             (
                 set::width('50px'),
                 btn
                 (
-                    set::icon('copy'),
+                    set::icon('copy')
                 )
             )
-        ),
+        )
     ) : null,
 
     !empty($cloneUrl->ssh) ? div
@@ -149,8 +149,8 @@ $downloadWg = div
                     set::type('text'),
                     set::name('sshUrl'),
                     set::value($cloneUrl->ssh),
-                    set::readOnly(true),
-                ),
+                    set::readOnly(true)
+                )
             ),
             formGroup
             (
@@ -158,10 +158,10 @@ $downloadWg = div
                 btn
                 (
                     set::className('copy-btn'),
-                    set::icon('copy'),
+                    set::icon('copy')
                 )
             )
-        ),
+        )
     ) : null,
 
     !empty($cloneUrl->http) ? div
@@ -177,8 +177,8 @@ $downloadWg = div
                     set::type('text'),
                     set::name('httpUrl'),
                     set::value($cloneUrl->http),
-                    set::readOnly(true),
-                ),
+                    set::readOnly(true)
+                )
             ),
             formGroup
             (
@@ -186,10 +186,10 @@ $downloadWg = div
                 btn
                 (
                     set::className('copy-btn'),
-                    set::icon('copy'),
+                    set::icon('copy')
                 )
             )
-        ),
+        )
     ) : null,
 
     div
@@ -199,9 +199,9 @@ $downloadWg = div
         (
             set::icon('down-circle'),
             set::className('downloadZip-btn'),
-            set::text($lang->repo->downloadZip),
+            set::text($lang->repo->downloadZip)
         )
-    ),
+    )
 );
 
 toolbar
@@ -223,17 +223,17 @@ toolbar
         to::items
         (
             array($downloadWg)
-        ),
+        )
     ),
     hasPriv('repo', 'create') && $app->tab == 'project' ? item
     (
         set($createItem + array
         (
             'icon'  => 'plus',
-            'class' => 'btn primary',
+            'class' => 'btn primary'
         )),
-        set('data-app', $this->app->tab),
-    ) : null,
+        set('data-app', $this->app->tab)
+    ) : null
 );
 
 dtable
@@ -242,7 +242,7 @@ dtable
     set::data($tableData),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::canRowCheckable(jsRaw('function(rowID){return false;}')),
-    set::footPager(),
+    set::footPager()
 );
 
 /* zin: Define the sidebar in main content. */
@@ -280,8 +280,8 @@ sidebar
         set::footToolbar($footToolbar),
         set::footer(array('toolbar', 'flex', 'pager')),
         set::footPager(usePager('pager', 'noTotalCount')),
-        set::showToolbarOnChecked(false),
-    ),
+        set::showToolbarOnChecked(false)
+    )
 );
 
 render();

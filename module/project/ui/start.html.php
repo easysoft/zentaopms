@@ -19,7 +19,7 @@ formPanel
         set::label($lang->project->realBegan),
         set::name('realBegan'),
         set::control('date'),
-        set::value(helper::today()),
+        set::value(helper::today())
     ),
     formGroup
     (
@@ -27,9 +27,9 @@ formPanel
         editor
         (
             set::name('comment'),
-            set::rows('6'),
+            set::rows('6')
         )
-    ),
+    )
 );
 hr();
 history();

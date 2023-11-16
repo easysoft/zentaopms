@@ -53,7 +53,7 @@ if($config->inQuickon)
                 set::value($appID ? $appID : $defaultApp),
                 set::disabled(!!$appID),
                 set::required(true),
-                on::change('onChangeStoreAppType'),
+                on::change('onChangeStoreAppType')
             )
         ),
         formRow
@@ -68,7 +68,7 @@ if($config->inQuickon)
                 set::control('radioListInline'),
                 set::items(array(array('text' => $lang->store->common, 'value' => 'store'), array('text' => $lang->space->handConfig, 'value' => 'external'))),
                 set::required(true),
-                on::change('onChangeType'),
+                on::change('onChangeType')
             )
         ),
         formRow
@@ -81,7 +81,7 @@ if($config->inQuickon)
                 set::name('customName'),
                 set::control('input'),
                 set::value($appID ? $apps[$appID] : ''),
-                set::required(true),
+                set::required(true)
             )
         ),
         $showVersion ? formGroup
@@ -102,7 +102,7 @@ if($config->inQuickon)
             input
             (
                 set::type('hidden'),
-                set::name('version'),
+                set::name('version')
             )
         ),
         formRow
@@ -118,11 +118,11 @@ if($config->inQuickon)
                     (
                         setClass('form-control'),
                         set::name('customDomain'),
-                        set::value($thirdDomain),
+                        set::value($thirdDomain)
                     ),
-                    $this->cne->sysDomain(),
-                ),
-            ),
+                    $this->cne->sysDomain()
+                )
+            )
         ),
         formRow
         (
@@ -143,8 +143,7 @@ if($config->inQuickon)
                     set::target('_blank'),
                     $lang->instance->howToSelectDB
                 )
-            ),
-
+            )
         ),
         formRow
         (
@@ -155,9 +154,9 @@ if($config->inQuickon)
                 set::label($lang->space->instanceType),
                 set::name('dbService'),
                 set::items(array()),
-                set::required(true),
-            ),
-        ),
+                set::required(true)
+            )
+        )
     );
 }
 
@@ -175,7 +174,7 @@ formPanel
         set::name('appType'),
         set::items($lang->space->appType),
         set::required(true),
-        on::change('onChangeAppType'),
+        on::change('onChangeAppType')
     ),
     $config->inQuickon ? formGroup
     (
@@ -185,14 +184,14 @@ formPanel
         set::control('radioListInline'),
         set::items(array(array('text' => $lang->store->common, 'value' => 'store'), array('text' => $lang->space->handConfig, 'value' => 'external'))),
         set::required(true),
-        on::change('onChangeType'),
+        on::change('onChangeType')
     ) : null,
     formGroup
     (
         set::width($colWidth),
         set::label($lang->gitlab->name),
         set::name('name'),
-        set::required(true),
+        set::required(true)
     ),
     formGroup
     (
@@ -210,8 +209,8 @@ formPanel
             set::width($colWidth),
             set::label($lang->user->account),
             set::name('account'),
-            set::required(true),
-        ),
+            set::required(true)
+        )
     ),
     formRow
     (
@@ -222,8 +221,8 @@ formPanel
             set::label($lang->gitlab->token),
             set::name('token'),
             set::placeholder($lang->gitlab->placeholder->token),
-            set::required(true),
-        ),
+            set::required(true)
+        )
     ),
     formRow
     (
@@ -232,9 +231,9 @@ formPanel
         (
             set::width($colWidth),
             set::label($lang->user->password),
-            set::name('password'),
-        ),
-    ),
+            set::name('password')
+        )
+    )
 );
 
 render();

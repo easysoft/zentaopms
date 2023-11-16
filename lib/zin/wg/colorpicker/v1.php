@@ -77,7 +77,7 @@ class colorPicker extends wg
             set::_map(array('value' => 'defaultValue', 'items' => 'colors', 'formID' => 'id')),
             set::_props($restProps),
             set($props),
-            $this->children(),
+            $this->children()
         );
     }
 }

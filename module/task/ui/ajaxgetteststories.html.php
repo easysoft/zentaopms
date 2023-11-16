@@ -29,8 +29,8 @@ foreach($testStories as $storyID => $storyTitle)
                     set::id("testStory{$i}"),
                     set::name("testStory[$i]"),
                     set::value($storyID),
-                    set::items(array($storyID => $storyTitle)),
-                ),
+                    set::items(array($storyID => $storyTitle))
+                )
             ),
             h::td
             (
@@ -40,8 +40,8 @@ foreach($testStories as $storyID => $storyTitle)
                     set::name("testPri[$i]"),
                     set::required(true),
                     set::value(empty($task->pri) ? 3 : $task->pri),
-                    set::items($lang->task->priList),
-                ),
+                    set::items($lang->task->priList)
+                )
             ),
             h::td
             (
@@ -49,8 +49,8 @@ foreach($testStories as $storyID => $storyTitle)
                 (
                     set::id("testEstStarted{$i}"),
                     set::name("testEstStarted[$i]"),
-                    set::value(empty($task->estStarted) ? '' : $task->estStarted),
-                ),
+                    set::value(empty($task->estStarted) ? '' : $task->estStarted)
+                )
             ),
             h::td
             (
@@ -58,8 +58,8 @@ foreach($testStories as $storyID => $storyTitle)
                 (
                     set::id("testDeadline{$i}"),
                     set::name("testDeadline[$i]"),
-                    set::value(empty($task->deadline) ? '' : $task->deadline),
-                ),
+                    set::value(empty($task->deadline) ? '' : $task->deadline)
+                )
             ),
             h::td
             (
@@ -68,8 +68,8 @@ foreach($testStories as $storyID => $storyTitle)
                     set::id("testAssignedTo{$i}"),
                     set::name("testAssignedTo[$i]"),
                     set::value(empty($task->assignedTo) ? '' : $task->assignedTo),
-                    set::items($members),
-                ),
+                    set::items($members)
+                )
             ),
             h::td
             (
@@ -78,11 +78,11 @@ foreach($testStories as $storyID => $storyTitle)
                     input
                     (
                         set::id("testEstimate{$i}"),
-                        set::name("testEstimate[$i]"),
+                        set::name("testEstimate[$i]")
                     ),
                     to::suffix($lang->task->suffixHour),
-                    set::suffixWidth(20),
-                ),
+                    set::suffixWidth(20)
+                )
             ),
             h::td
             (
@@ -91,7 +91,7 @@ foreach($testStories as $storyID => $storyTitle)
                 (
                     set::items(array(
                         array('class' => 'btn ghost text-gray', 'icon' => 'plus', 'onclick' => 'addItem(this)'),
-                        array('class' => 'btn ghost text-gray', 'icon' => 'trash', 'onclick' => 'removeItem(this)'),
+                        array('class' => 'btn ghost text-gray', 'icon' => 'trash', 'onclick' => 'removeItem(this)')
                     ))
                 )
             )
@@ -145,14 +145,14 @@ formGroup
                 (
                     $lang->actions,
                     set::width('70px')
-                ),
+                )
             )
         ),
         h::tbody
         (
             $taskTR
         )
-    ),
+    )
 );
 
 /* ====== Render page ====== */

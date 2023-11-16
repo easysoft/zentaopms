@@ -107,7 +107,7 @@ if($story->type == 'story')
                 (isset($execution->type) && $execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executionName) : a(set::href($executionLink), setClass('muted title'), $executionName),
                 label(setClass('circle size-sm'), $task->id),
                 common::hasPriv('task', 'view') ? a(set::href($this->createLink('task', 'view', "taskID=$task->id")), setClass('title'), set('data-toggle', 'modal'), $task->name) : span(setClass('title'), $task->name),
-                label(setClass("status-{$task->status} size-sm"), $this->lang->task->statusList[$task->status]),
+                label(setClass("status-{$task->status} size-sm"), $this->lang->task->statusList[$task->status])
             );
         }
     }
@@ -123,7 +123,7 @@ if($story->type == 'story')
             $taskItems[] = h::li
             (
                 set::title($execution->name),
-                ($execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executions[$executionID]) : a(set::href($this->createLink('execution', 'view', "executionID=$executionID")), setClass('muted title'), $executions[$executionID]),
+                ($execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executions[$executionID]) : a(set::href($this->createLink('execution', 'view', "executionID=$executionID")), setClass('muted title'), $executions[$executionID])
             );
         }
     }
@@ -157,14 +157,14 @@ detailHeader
             set::level(1),
             $story->parent > 0 ? label(setClass('circle child'), $lang->story->childrenAB) : null,
             $story->parent > 0 && isset($story->parentName) ? span(a(set::href(inlink('view', "storyID={$story->parent}&version=0&param=0&storyType=$story->type")), $story->parentName), ' / ') : null,
-            $story->title,
+            $story->title
         ),
         count($versions) > 1 ? dropdown
         (
             btn(setClass('btn-link'), "#{$version}"),
-            set::items($versions),
+            set::items($versions)
         ) : null,
-        $story->deleted ? span(setClass('label danger'), $lang->story->deleted) : null,
+        $story->deleted ? span(setClass('label danger'), $lang->story->deleted) : null
     ),
 
     $isInModal ? null : to::suffix
@@ -174,7 +174,7 @@ detailHeader
             set::icon('plus'),
             set::type('primary'),
             set::text($lang->story->create),
-            common::hasPriv('story', 'create') ? set::url($createStoryLink) : null,
+            common::hasPriv('story', 'create') ? set::url($createStoryLink) : null
         )
     )
 );
@@ -193,7 +193,7 @@ detailBody
         (
             set::files($story->files),
             set::showDelete(false),
-            set::object($story),
+            set::object($story)
         ) : null,
         empty($story->children) ? null : section
         (
@@ -201,9 +201,9 @@ detailBody
             dtable
             (
                 set::cols($cols),
-                set::data(array_values($story->children)),
+                set::data(array_values($story->children))
             )
-        ),
+        )
     ),
     history(),
     floatToolbar
@@ -211,7 +211,7 @@ detailBody
         set::object($story),
         $isInModal ? null : to::prefix(backBtn(setClass('btn-default ghost text-white'), set::icon('back'), $lang->goback)),
         $story->deleted ? null : set::main($menus['mainMenu']),
-        $story->deleted ? null : set::suffix($menus['suffixMenu']),
+        $story->deleted ? null : set::suffix($menus['suffixMenu'])
     ),
     detailSide
     (
@@ -295,7 +295,7 @@ detailBody
                         {
                             global $lang;
                             return !empty($result) ? span(set::title($lang->story->reviewed), set::style(array('color' => '#cbd0db')), zget($users, $reviewer)) : span(set::title($lang->story->toBeReviewed), zget($users, $reviewer));
-                        }, array_keys($reviewers), array_values($reviewers))),
+                        }, array_keys($reviewers), array_values($reviewers)))
                     ),
                     item
                     (
@@ -318,7 +318,7 @@ detailBody
                     (
                         set::name($lang->story->lastEditedBy),
                         $story->lastEditedBy ? zget($users, $story->lastEditedBy) . $lang->at . $story->lastEditedDate : null
-                    ),
+                    )
                 )
             )
         ),
@@ -346,10 +346,10 @@ detailBody
                             label(setClass('circle size-sm'), $twin->id),
                             common::hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "id={$twin->id}")), setClass('title'), set::title($twin->title), set('data-toggle', 'modal'), $twin->title) : span(setClass('title'), $twin->title),
                             label(setClass('size-sm'), set::title($stage), $stage),
-                            common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink hidden size-xs"), on::click('unlinkTwins'), set('data-id', $twin->id), icon('unlink')) : null,
+                            common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink hidden size-xs"), on::click('unlinkTwins'), set('data-id', $twin->id), icon('unlink')) : null
                         );
                     }, $twins))
-                ),
+               ),
             ) : null,
             $story->type == 'story' && common::hasPriv('story', 'tasks') ? tabPane
             (
@@ -357,7 +357,7 @@ detailBody
                 set::title($lang->story->legendProjectAndTask),
                 set::active(true),
                 h::ul($taskItems)
-            ) : null,
+            ) : null
         )
     )
 );
@@ -378,7 +378,7 @@ if(isset($libs))
                 (
                     set::name('lib'),
                     set::items($libs),
-                    set::required(true),
+                    set::required(true)
                 )
             ),
             (!common::hasPriv('assetlib', 'approveStory') && !common::hasPriv('assetlib', 'batchApproveStory')) ? formGroup
@@ -387,11 +387,11 @@ if(isset($libs))
                 picker
                 (
                     set::name('assignedTo'),
-                    set::items($approvers),
+                    set::items($approvers)
                 )
             ) : null,
             set::submitBtnText($lang->import),
-            set::actions(array('submit')),
+            set::actions(array('submit'))
         )
     );
 }

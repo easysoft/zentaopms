@@ -179,7 +179,7 @@ formPanel
     (
         set::label($lang->stakeholder->strategy),
         set::control(array('name' => 'strategy', 'type' => 'editor'))
-    ),
+    )
 );
 
 render();

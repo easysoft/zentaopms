@@ -22,8 +22,8 @@ formPanel
     (
         set::name('desc'),
         set::label($lang->zanode->desc),
-        set::control('textarea'),
-    ),
+        set::control('textarea')
+    )
 );
 
 render();

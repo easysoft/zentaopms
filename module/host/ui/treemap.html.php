@@ -24,5 +24,6 @@ featureBar
 treemap
 (
     setClass('canvas'),
-    set::data($treemap)
+    set::data($treemap),
+    set::onNodeClick(jsRaw('(node) => window.onTreemapNodeClick(node)'))
 );

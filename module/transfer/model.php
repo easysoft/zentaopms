@@ -50,7 +50,7 @@ class transferModel extends model
             $this->loadModel($model);
             $this->modelConfig     = $this->config->$model;
             $this->modelLang       = $this->lang->$model;
-            $this->modelFieldList  = $this->config->$model->datatable->fieldList ?? array();
+            $this->modelFieldList  = $this->config->$model->dtable->fieldList ?? array();
             $this->modelListFields = explode(',', $this->config->$model->listFields ?? '');
         }
     }
@@ -197,13 +197,7 @@ class transferModel extends model
         if($model == 'story')
         {
             $product = $this->loadModel('product')->getByID((int)$this->session->storyTransferParams['productID']);
-            if($product and $product->shadow)
-            {
-                foreach($rows as $id => $row)
-                {
-                    $rows[$id]->product = '';
-                }
-            }
+            if($product and $product->shadow) foreach($rows as $id => $row) $rows[$id]->product = '';
         }
 
         $list = $this->setListValue($model, $fieldList);
@@ -280,11 +274,15 @@ class transferModel extends model
 
             foreach($transferFieldList as $transferField => $value)
             {
-                $funcName = 'init' . ucfirst($transferField);
                 if((!isset($modelFieldList[$transferField])) or $transferField == 'title')
                 {
                     $modelFieldList[$transferField] = $this->transferConfig->fieldList[$transferField];
-                    if(strpos($this->transferConfig->initFunction, $transferField) !== false) $modelFieldList[$transferField] = $this->$funcName($model, $field);
+
+                    if(strpos($this->transferConfig->initFunction, $transferField) !== false)
+                    {
+                        $funcName = 'init' . ucfirst($transferField);
+                        $modelFieldList[$transferField] = $this->$funcName($model, $field);
+                    }
                 }
             }
 
@@ -418,10 +416,7 @@ class transferModel extends model
         if(is_array($values) and $withKey)
         {
             unset($values['']);
-            foreach($values as $key => $value)
-            {
-                $values[$key] = $value . "(#$key)";
-            }
+            foreach($values as $key => $value) $values[$key] = $value . "(#$key)";
         }
 
         return $values;
@@ -463,15 +458,16 @@ class transferModel extends model
         {
             $dataList[$field] = $this->loadModel($field)->getPairs();
             if(!isset($dataList[$field][0])) $dataList[$field][0] = '';
+
             sort($dataList[$field]);
+
             if($field == 'user')
             {
                 $dataList[$field] = $this->loadModel($field)->getPairs('noclosed|nodeleted|noletter');
+
                 unset($dataList[$field]['']);
-                if(!in_array(strtolower($this->app->methodName) ,array('ajaxgettbody','ajaxgetoptions','showimport')))
-                {
-                    foreach($dataList[$field] as $key => $value) $dataList[$field][$key] = $value . "(#$key)";
-                }
+
+                if(!in_array(strtolower($this->app->methodName), array('ajaxgettbody', 'ajaxgetoptions', 'showimport'))) foreach($dataList[$field] as $key => $value) $dataList[$field][$key] = $value . "(#$key)";
             }
         }
 
@@ -586,9 +582,13 @@ class transferModel extends model
         {
             $values = call_user_func_array(array($this->loadModel($module), $method), $params);
         }
-        else
+        elseif($params)
         {
             $values = $this->loadModel($module)->$method($params);
+        }
+        else
+        {
+            $values = $this->loadModel($module)->$method();
         }
 
         if(!empty($pairs))

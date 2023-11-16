@@ -35,7 +35,7 @@ $buildItems = function($items): array
                 !empty($item['attr']) && is_array($item['attr']) ? set($item['attr']) : null,
                 $item['text']
             ) : $item['text'],
-            set::collapse(!empty($item['text'])),
+            set::collapse(!empty($item['text']))
         );
     }
 
@@ -47,7 +47,7 @@ $formAction = array(
         'text' => $lang->metric->testMetric,
         'class' => 'secondary',
         'type' => 'submit',
-        'onclick' => 'window.testMetric()',
+        'onclick' => 'window.testMetric()'
     )
 );
 
@@ -72,10 +72,10 @@ $buildValueControl = function($paramName, $controlType, $value, $optionType, $va
         datePicker
         (
             set::name($name),
-            set::value($value),
+            set::value($value)
         ),
         setClass("form-body-item {$paramName}-{$varID}-date"),
-        setClass($controlType !== 'date' ? 'hidden' : ''),
+        setClass($controlType !== 'date' ? 'hidden' : '')
     );
     $selectControl = formGroup
     (
@@ -85,10 +85,10 @@ $buildValueControl = function($paramName, $controlType, $value, $optionType, $va
         (
             set::name($name),
             set::items($options),
-            set::disabled($controlType !== 'select' ? true : false),
+            set::disabled($controlType !== 'select' ? true : false)
         ),
         setClass("form-body-item {$paramName}-{$varID}-select"),
-        setClass($controlType !== 'select' ? 'hidden' : ''),
+        setClass($controlType !== 'select' ? 'hidden' : '')
     );
     $inputControl = formGroup
     (
@@ -98,10 +98,10 @@ $buildValueControl = function($paramName, $controlType, $value, $optionType, $va
         (
             set::name($name),
             set::value($value),
-            set::disabled($controlType !== 'input' ? true : false),
+            set::disabled($controlType !== 'input' ? true : false)
         ),
         setClass("form-body-item {$paramName}-{$varID}-input"),
-        setClass($controlType !== 'input' ? 'hidden' : ''),
+        setClass($controlType !== 'input' ? 'hidden' : '')
     );
 
     return div
@@ -109,7 +109,7 @@ $buildValueControl = function($paramName, $controlType, $value, $optionType, $va
         $dateControl,
         $selectControl,
         $inputControl,
-        setClass("{$paramName}-{$varID}-group"),
+        setClass("{$paramName}-{$varID}-group")
     );
 
     return $control;
@@ -122,39 +122,39 @@ $formHeader = div
         setClass('form-header-item'),
         setStyle('width', '50px'),
         setStyle('text-align', 'center'),
-        $lang->metric->param->varName,
+        $lang->metric->param->varName
     ),
     div
     (
         setClass('form-header-item'),
         setStyle('width', '150px'),
         setStyle('text-align', 'center'),
-        $lang->metric->param->showName,
+        $lang->metric->param->showName
     ),
     div
     (
         setClass('form-header-item'),
         setStyle('width', '300px'),
         setStyle('text-align', 'center'),
-        $lang->metric->param->varType,
+        $lang->metric->param->varType
     ),
     div
     (
         setClass('form-header-item'),
         setStyle('width', '150px'),
         $lang->metric->param->defaultValue,
-        setStyle('text-align', 'center'),
+        setStyle('text-align', 'center')
     ),
     div
     (
         setClass('form-header-item'),
         setStyle('width', '150px'),
         setStyle('text-align', 'center'),
-        $lang->metric->param->queryValue,
+        $lang->metric->param->queryValue
     ),
     setClass('flex form-header'),
     setStyle('justify-content', 'space-between'),
-    setStyle('flex', '1'),
+    setStyle('flex', '1')
 );
 
 /**
@@ -174,7 +174,7 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
     (
         $param['varName'],
         setStyle('width', '50px'),
-        setClass("form-body-item varName-{$varID}"),
+        setClass("form-body-item varName-{$varID}")
     );
     $showNameControl = formGroup
     (
@@ -182,7 +182,7 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
         set::control('input'),
         set::name('showName[]'),
         set::value($param['showName']),
-        setClass("form-body-item showName-{$varID}"),
+        setClass("form-body-item showName-{$varID}")
     );
     $varTypeControl = formGroup
     (
@@ -192,7 +192,7 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
         set::items($typeList),
         set::value(zget($param, 'varType')),
         set::label(''),
-        setClass("form-body-item varType-{$varID}"),
+        setClass("form-body-item varType-{$varID}")
     );
     $optionsControl = formGroup
     (
@@ -202,7 +202,7 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
         set::items($optionList),
         set::value($param['options']),
         setClass("form-body-item options-{$varID}"),
-        set::label(''),
+        set::label('')
     );
     $defaultValueControl = $buildValueControl('defaultValue', $varType, zget($param, 'defaultValue', ''), $param['options'], $varID);
     $queryValueControl  = $buildValueControl('queryValue', $varType, zget($param, 'queryValue', ''), $param['options'], $varID);
@@ -212,7 +212,7 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
         set::control('hidden'),
         set::name('varName[]'),
         set::value($param['varName']),
-        setClass("form-body-item varNameLabel-{$varID}"),
+        setClass("form-body-item varNameLabel-{$varID}")
     );
 
     $paramControlGroup = formRow
@@ -224,7 +224,7 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
             $varTypeControl,
             $optionsControl,
             setClass('flex form-body-group'),
-            setStyle('justify-content', 'flex-start'),
+            setStyle('justify-content', 'flex-start')
         ),
         $defaultValueControl,
         $queryValueControl,
@@ -233,7 +233,7 @@ $buildParamControlGroup = function($param, $buildValueControl, $typeList, $optio
         setStyle('justify-content', 'space-between'),
         setStyle('align-items', 'center'),
         setStyle('flex', '1'),
-        setStyle('width', '100%'),
+        setStyle('width', '100%')
     );
 
     return $paramControlGroup;
@@ -247,7 +247,7 @@ $formAction = array(
         'text' => $lang->metric->testMetric,
         'class' => 'secondary',
         'type' => 'submit',
-        'onclick' => 'testMetric({id})',
+        'onclick' => 'testMetric({id})'
     )
 );
 
@@ -305,14 +305,14 @@ detailBody
                 set::actions($formAction),
                 div
                 (
-                    setClass('response-box'),
-                ),
+                    setClass('response-box')
+                )
             )
-        ),
+        )
     ),
     history
     (
-        set::commentUrl(createLink('action', 'comment', array('objectType' => 'metric', 'objectID' => $metric->id))),
+        set::commentUrl(createLink('action', 'comment', array('objectType' => 'metric', 'objectID' => $metric->id)))
     ),
     floatToolbar
     (
@@ -336,8 +336,8 @@ detailBody
                 (
                     $buildItems($legendBasic)
                 )
-            ),
-        ),
+            )
+        )
     )
 );
 

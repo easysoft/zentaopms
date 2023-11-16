@@ -25,7 +25,7 @@ formPanel
             set::name('name'),
             set::required(true),
             set::label($lang->sonarqube->name),
-            set::value($app->name),
+            set::value($app->name)
         )
     ),
     formRow
@@ -35,7 +35,7 @@ formPanel
             set::name('url'),
             set::required(true),
             set::label($lang->sonarqube->url),
-            set::value($app->url),
+            set::value($app->url)
         )
     ),
     formRow
@@ -44,7 +44,7 @@ formPanel
         (
             set::name('account'),
             set::label($lang->sonarqube->account),
-            set::value($app->account),
+            set::value($app->account)
         )
     ),
     formRow
@@ -53,7 +53,7 @@ formPanel
         (
             set::name('password'),
             set::label($lang->sonarqube->password),
-            set::value($app->password),
+            set::value($app->password)
         )
-    ),
+    )
 );

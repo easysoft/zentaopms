@@ -30,7 +30,7 @@ mainNavbar
         (
             setID("execution-menu"),
             set('_id', 'switcher'),
-            set(array('text' => $execution->name, 'fetcher' => createLink('execution', 'ajaxGetExecutionSwitcherMenu', "projectID={$execution->project}&executionID={$execution->id}&method={$currentMethod}"), 'defaultValue' => $execution->id)),
+            set(array('text' => $execution->name, 'fetcher' => createLink('execution', 'ajaxGetExecutionSwitcherMenu', "projectID={$execution->project}&executionID={$execution->id}&method={$currentMethod}"), 'defaultValue' => $execution->id))
         )
     ),
     to::right

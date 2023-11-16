@@ -37,7 +37,7 @@ elseif(empty($maxImport) and $allCount > $this->config->file->maxImport)
     (
         set::title($lang->transfer->import),
         html(sprintf($lang->file->importSummary, $allCount, html::input('maxImport', $config->file->maxImport, "style='width:50px' onkeyup='recomputeTimes'"), ceil($allCount / $config->file->maxImport))),
-        btn(setID('import'), setClass('primary'), on::click('setMaxImport'), $lang->import),
+        btn(setID('import'), setClass('primary'), on::click('setMaxImport'), $lang->import)
     );
 }
 else
@@ -85,10 +85,10 @@ else
                             $this->session->insert && $dataInsert != '' ? formHidden('insert', $dataInsert) : null,
                             formHidden('isEndPage', $isEndPage ? 1 : 0),
                             formHidden('pagerID', $pagerID),
-                            html(sprintf($lang->file->importPager, $allCount, $pagerID, $allPager)),
+                            html(sprintf($lang->file->importPager, $allCount, $pagerID, $allPager))
                         )
-                    ),
-                ),
+                    )
+                )
             ),
             $this->session->insert ? null : modal
             (
@@ -100,14 +100,14 @@ else
                 (
                     setClass('alert flex items-center'),
                     icon(setClass('icon-2x alert-icon'), 'exclamation-sign'),
-                    div($lang->noticeImport),
+                    div($lang->noticeImport)
                 ),
                 to::footer
                 (
                     btn(setClass('danger btn-wide'), set('onclick', 'submitForm("cover")'), $lang->importAndCover),
-                    btn(setClass('primary btn-wide'), set('onclick', 'submitForm("insert")'), $lang->importAndInsert),
-                ),
-            ),
+                    btn(setClass('primary btn-wide'), set('onclick', 'submitForm("insert")'), $lang->importAndInsert)
+                )
+            )
         )
     );
 }

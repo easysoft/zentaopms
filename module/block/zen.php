@@ -222,7 +222,7 @@ class blockZen extends block
 
             /* 设置区块的默认宽度和高度。 */
             if(empty($block->width))  $block->width  = reset(array_keys($sizeConfig));
-            if(empty($block->height)) $block->height = zget($sizeConfig, $block->width, reset($defaultSize));
+            if(empty($block->height)) $block->height = zget($sizeConfig, $block->width, reset($sizeConfig));
 
             /* 设置区块距离左侧的宽度和距离顶部的高度。 */
             if(empty($block->left)) $block->left = $block->width == 1 ? 2 : 0;

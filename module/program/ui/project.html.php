@@ -8,25 +8,25 @@ dropmenu();
 featureBar
 (
     set::current($browseType),
-    set::linkParams("programID={$programID}&browseType={key}&orderBy=$orderBy"),
+    set::linkParams("programID={$programID}&browseType={key}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     checkbox
     (
-        set::id('involved'),
+        setID('involved'),
         set::name('involved'),
         set::checked($this->cookie->involved),
-        set::text($lang->project->mine),
-    ),
+        set::text($lang->project->mine)
+    )
 );
 
 toolbar
 (
-    common::hasPriv('project', 'create') ? item(set
+    hasPriv('project', 'create') ? item(set
     (array(
         'text' => $lang->project->create,
         'icon' => 'plus',
         'class'=> 'btn primary',
         'url'  => $this->createLink('project', 'createGuide', "programID={$programID}"),
-        'data-toggle' => 'modal',
+        'data-toggle' => 'modal'
     ))) : null,
 );
 
@@ -56,7 +56,7 @@ foreach($projectStats as $project)
 }
 
 $summary     = $browseType == 'all' ? sprintf($lang->project->allSummary, count($projectStats), $waitCount, $doingCount, $suspendedCount, $closedCount) : sprintf($lang->project->summary, count($projectStats));
-$footToolbar = common::hasPriv('project', 'batchEdit') ? array('items' => array(array('text' => $lang->edit, 'class' => 'btn batch-btn size-sm secondary', 'data-url' => $this->createLink('project', 'batchEdit', "from=pgmproject&programID={$programID}")))) : null;
+$footToolbar = hasPriv('project', 'batchEdit') ? array('items' => array(array('text' => $lang->edit, 'class' => 'btn batch-btn size-sm secondary', 'data-url' => $this->createLink('project', 'batchEdit', "from=pgmproject&programID={$programID}")))) : null;
 
 dtable
 (
@@ -68,7 +68,7 @@ dtable
     set::sortLink(createLink('program', 'project', "programID={$programID}&&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList, '{$summary}');}")),
+    set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(checkedIDList, '{$summary}');}"))
 );
 
 render();

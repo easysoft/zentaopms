@@ -29,20 +29,20 @@ formBatchPanel
         set::name('id'),
         set::label($lang->idAB),
         set::control('hidden'),
-        set::hidden(true),
+        set::hidden(true)
     ),
     formBatchItem
     (
         set::name('id'),
         set::label($lang->idAB),
         set::control('index'),
-        set::width('64px'),
+        set::width('64px')
     ),
     formBatchItem
     (
         set::name('name'),
         set::label($lang->task->name),
-        set::width('240px'),
+        set::width('240px')
     ),
     formBatchItem
     (
@@ -52,7 +52,7 @@ formBatchPanel
         set::items($modules),
         set::width('200px'),
         set::ditto(true),
-        set::defaultDitto('off'),
+        set::defaultDitto('off')
     ),
     formBatchItem
     (
@@ -62,7 +62,7 @@ formBatchPanel
         set::items(array()),
         set::width('128px'),
         set::ditto(true),
-        set::defaultDitto('off'),
+        set::defaultDitto('off')
     ),
     formBatchItem
     (
@@ -72,7 +72,7 @@ formBatchPanel
         set::items($lang->task->typeList),
         set::width('128px'),
         set::ditto(true),
-        set::defaultDitto('off'),
+        set::defaultDitto('off')
     ),
     formBatchItem
     (
@@ -82,21 +82,21 @@ formBatchPanel
         set::items($lang->task->statusList),
         set::width('128px'),
         set::ditto(true),
-        set::defaultDitto('off'),
+        set::defaultDitto('off')
     ),
     formBatchItem
     (
         set::name('estStarted'),
         set::label($lang->task->estStarted),
         set::control('date'),
-        set::width('128px'),
+        set::width('128px')
     ),
     formBatchItem
     (
         set::name('deadline'),
         set::label($lang->task->deadline),
         set::control('date'),
-        set::width('128px'),
+        set::width('128px')
     ),
     formBatchItem
     (
@@ -104,7 +104,7 @@ formBatchPanel
         set::label($lang->task->pri),
         set::control('priPicker'),
         set::items($lang->task->priList),
-        set::width('80px'),
+        set::width('80px')
     ),
     formBatchItem
     (
@@ -147,7 +147,7 @@ formBatchPanel
                 'suffixWidth' => 20
             )
         )
-    ),
+    )
 );
 /* ====== Render page ====== */
 render();

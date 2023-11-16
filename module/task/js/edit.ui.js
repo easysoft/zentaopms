@@ -1,3 +1,106 @@
+
+let showConfirmExecution = true;
+
+/**
+ * Load module, stories and members.
+ *
+ * @param  int    $executionID
+ * @access public
+ * @return void
+ */
+window.loadAll = function()
+{
+    if(showConfirmExecution)
+    {
+        const executionID = $('[name=execution]').val();
+        zui.Modal.confirm(confirmChangeExecution).then((res) => {
+            if(res)
+            {
+                loadModuleMenu(executionID);
+                loadExecutionStories(executionID);
+                loadExecutionMembers(executionID);
+            }
+            else
+            {
+                $('[name=execution]').zui('picker').$.setValue(oldExecutionID);
+                showConfirmExecution = false;
+            }
+        });
+    }
+    showConfirmExecution = true;
+}
+
+/**
+ * Load module of the execution.
+ *
+ * @param  int    $executionID
+ * @access public
+ * @return void
+ */
+function loadModuleMenu(executionID)
+{
+    const oldModuleID = $('[name=module]').val();
+    const extra       = $('#showAllModule').is(':checked') ? 'allModule' : '';
+    const link        = $.createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task&branch=0&rootModuleID=0&returnType=items&fieldID=&needManage=0&extra=' + extra);
+    $.getJSON(link, function(moduleItems)
+    {
+        let $modulePicker = $('[name=module]').zui('picker');
+        $modulePicker.render({items: moduleItems});
+        $modulePicker.$.setValue(oldModuleID);
+    });
+}
+
+/**
+ * Load stories of the execution.
+ *
+ * @param  int    $executionID
+ * @access public
+ * @return void
+ */
+function loadExecutionStories(executionID, moduleID)
+{
+    if(typeof(moduleID) == 'undefined') moduleID = 0;
+    const link = $.createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=0&moduleID=' + moduleID);
+    $.getJSON(link, function(storyItems)
+    {
+        let $storyPicker = $('[name=story]').zui('picker');
+        $storyPicker.render({items: storyItems});
+        $storyPicker.$.setValue(oldStoryID);
+    });
+}
+
+/**
+ * Load team members of the execution.
+ *
+ * @param  int    $executionID
+ * @access public
+ * @return void
+ */
+function loadExecutionMembers(executionID)
+{
+    const link = $.createLink('execution', 'ajaxGetMembers', 'executionID=' + executionID);
+    $.getJSON(link, function(assignedToItems)
+    {
+        let $assignedToPicker = $('[name=assignedTo]').zui('picker');
+        $assignedToPicker.render({items: assignedToItems});
+        $assignedToPicker.$.setValue(oldAssignedTo);
+    });
+}
+
+window.loadAllModule = function()
+{
+    const executionID = $('[name=execution]').val();
+    const oldModuleID = $('[name=module]').val();
+    const extra       = $('#showAllModule').is(':checked') ? 'allModule' : '';
+    const link        = $.createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task&branch=0&rootModuleID=0&returnType=items&fieldID=&needManage=0&extra=' + extra);
+    $.getJSON(link, function(moduleItems)
+    {
+        let $modulePicker = $('[name=module]').zui('picker');
+        $modulePicker.render({items: moduleItems});
+        $modulePicker.$.setValue(oldModuleID);
+    });
+}
+
 /**
  * Change mode event.
  *
@@ -5,9 +108,9 @@
  * @access public
  * @return void
  */
-window.changeMode = function(e)
+window.changeMode = function()
 {
-    let mode = $(e.target).val();
+    let mode = $('[name=mode]').val();
     if(mode != 'single')
     {
         if(mode != 'multi')
@@ -31,6 +134,7 @@ window.changeMode = function(e)
         $('#left').removeAttr('readonly');
     }
 }
+
 
 $('#teamTable .team-saveBtn').on('click.team', '.btn', function()
 {
@@ -142,7 +246,7 @@ function updateAssignedTo()
 
     let $assignedToPicker = $('#assignedTo').zui('picker');
     $assignedToPicker.render({items: users});
-    $assignedToPicker.$.changeState({value: assignedTo});
+    $assignedToPicker.$.setValue(assignedTo);
 
     if(mode == 'multi' && isTeamMember)
     {

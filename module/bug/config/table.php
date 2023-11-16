@@ -10,6 +10,12 @@ $config->bug->dtable->fieldList['id']['sortType'] = true;
 $config->bug->dtable->fieldList['id']['required'] = true;
 $config->bug->dtable->fieldList['id']['group']    = 1;
 
+$config->bug->dtable->fieldList['product']['display']    = false;
+$config->bug->dtable->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs', 'params' => '&0&&all'); ;
+
+$config->bug->dtable->fieldList['module']['display']    = false;
+$config->bug->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&bug&0&all');
+
 $config->bug->dtable->fieldList['title']['title']    = $lang->bug->title;
 $config->bug->dtable->fieldList['title']['type']     = 'title';
 $config->bug->dtable->fieldList['title']['fixed']    = 'left';
@@ -40,25 +46,30 @@ $config->bug->dtable->fieldList['type']['map']   = $lang->bug->typeList;
 $config->bug->dtable->fieldList['type']['flex']  = false;
 $config->bug->dtable->fieldList['type']['group'] = 2;
 
-$config->bug->dtable->fieldList['branch']['title'] = $lang->bug->branch;
-$config->bug->dtable->fieldList['branch']['type']  = 'text';
-$config->bug->dtable->fieldList['branch']['group'] = 3;
+$config->bug->dtable->fieldList['branch']['title']      = $lang->bug->branch;
+$config->bug->dtable->fieldList['branch']['type']       = 'text';
+$config->bug->dtable->fieldList['branch']['group']      = 3;
+$config->bug->dtable->fieldList['branch']['dataSource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$productID');
 
-$config->bug->dtable->fieldList['project']['title'] = $lang->bug->project;
-$config->bug->dtable->fieldList['project']['type']  = 'text';
-$config->bug->dtable->fieldList['project']['group'] = 3;
+$config->bug->dtable->fieldList['project']['title']      = $lang->bug->project;
+$config->bug->dtable->fieldList['project']['type']       = 'text';
+$config->bug->dtable->fieldList['project']['group']      = 3;
+$config->bug->dtable->fieldList['project']['dataSource'] = array('module' => 'project', 'method' => 'getPairs');
 
-$config->bug->dtable->fieldList['execution']['title'] = $lang->bug->execution;
-$config->bug->dtable->fieldList['execution']['type']  = 'text';
-$config->bug->dtable->fieldList['execution']['group'] = 3;
+$config->bug->dtable->fieldList['execution']['title']      = $lang->bug->execution;
+$config->bug->dtable->fieldList['execution']['type']       = 'text';
+$config->bug->dtable->fieldList['execution']['group']      = 3;
+$config->bug->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' =>'getPairs');
 
 $config->bug->dtable->fieldList['plan']['title'] = $lang->bug->plan;
 $config->bug->dtable->fieldList['plan']['width'] = 120;
 $config->bug->dtable->fieldList['plan']['group'] = 3;
 
-$config->bug->dtable->fieldList['openedBuild']['title'] = $lang->bug->openedBuild;
-$config->bug->dtable->fieldList['openedBuild']['type']  = 'text';
-$config->bug->dtable->fieldList['openedBuild']['group'] = 3;
+$config->bug->dtable->fieldList['openedBuild']['title']      = $lang->bug->openedBuild;
+$config->bug->dtable->fieldList['openedBuild']['type']       = 'text';
+$config->bug->dtable->fieldList['openedBuild']['group']      = 3;
+$config->bug->dtable->fieldList['openedBuild']['control']    = 'multiple';
+$config->bug->dtable->fieldList['openedBuild']['dataSource'] = array('module' => 'build', 'method' =>'getBuildPairs', 'params' => '$productID&$branch&noempty,noterminate,nodone,withbranch');
 
 $config->bug->dtable->fieldList['openedBy']['title'] = $lang->bug->abbr->openedBy;
 $config->bug->dtable->fieldList['openedBy']['type']  = 'user';
@@ -103,29 +114,32 @@ $config->bug->dtable->fieldList['resolution']['map']   = $lang->bug->resolutionL
 $config->bug->dtable->fieldList['resolution']['show']  = true;
 $config->bug->dtable->fieldList['resolution']['group'] = 6;
 
-$config->bug->dtable->fieldList['toTaskName']['title'] = $lang->bug->toTask;
-$config->bug->dtable->fieldList['toTaskName']['type']  = 'text';
-$config->bug->dtable->fieldList['toTaskName']['link']  = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={toTask}');
-$config->bug->dtable->fieldList['toTaskName']['group'] = 6;
+$config->bug->dtable->fieldList['toTask']['title'] = $lang->bug->toTask;
+$config->bug->dtable->fieldList['toTask']['type']  = 'text';
+$config->bug->dtable->fieldList['toTask']['link']  = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={toTask}');
+$config->bug->dtable->fieldList['toTask']['group'] = 6;
 
 $config->bug->dtable->fieldList['resolvedDate']['title']    = $lang->bug->abbr->resolvedDate;
 $config->bug->dtable->fieldList['resolvedDate']['type']     = 'date';
 $config->bug->dtable->fieldList['resolvedDate']['group']    = 6;
 $config->bug->dtable->fieldList['resolvedDate']['sortType'] = 'date';
 
-$config->bug->dtable->fieldList['resolvedBuild']['title'] = $lang->bug->resolvedBuild;
-$config->bug->dtable->fieldList['resolvedBuild']['type']  = 'text';
-$config->bug->dtable->fieldList['resolvedBuild']['group'] = 6;
+$config->bug->dtable->fieldList['resolvedBuild']['title']      = $lang->bug->resolvedBuild;
+$config->bug->dtable->fieldList['resolvedBuild']['type']       = 'text';
+$config->bug->dtable->fieldList['resolvedBuild']['group']      = 6;
+$config->bug->dtable->fieldList['resolvedBuild']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'resolvedBuild&id,name');
 
-$config->bug->dtable->fieldList['os']['title'] = $lang->bug->os;
-$config->bug->dtable->fieldList['os']['type']  = 'category';
-$config->bug->dtable->fieldList['os']['map']   = $lang->bug->osList;
-$config->bug->dtable->fieldList['os']['group'] = 7;
+$config->bug->dtable->fieldList['os']['title']   = $lang->bug->os;
+$config->bug->dtable->fieldList['os']['type']    = 'category';
+$config->bug->dtable->fieldList['os']['map']     = $lang->bug->osList;
+$config->bug->dtable->fieldList['os']['group']   = 7;
+$config->bug->dtable->fieldList['os']['control'] = 'multiple';
 
-$config->bug->dtable->fieldList['browser']['title'] = $lang->bug->browser;
-$config->bug->dtable->fieldList['browser']['type']  = 'category';
-$config->bug->dtable->fieldList['browser']['map']   = $lang->bug->browserList;
-$config->bug->dtable->fieldList['browser']['group'] = 7;
+$config->bug->dtable->fieldList['browser']['title']   = $lang->bug->browser;
+$config->bug->dtable->fieldList['browser']['type']    = 'category';
+$config->bug->dtable->fieldList['browser']['map']     = $lang->bug->browserList;
+$config->bug->dtable->fieldList['browser']['group']   = 7;
+$config->bug->dtable->fieldList['browser']['control'] = 'multiple';
 
 $config->bug->dtable->fieldList['activatedCount']['title'] = $lang->bug->abbr->activatedCount;
 $config->bug->dtable->fieldList['activatedCount']['type']  = 'count';
@@ -136,15 +150,17 @@ $config->bug->dtable->fieldList['activatedDate']['type']     = 'date';
 $config->bug->dtable->fieldList['activatedDate']['group']    = 8;
 $config->bug->dtable->fieldList['activatedDate']['sortType'] = 'date';
 
-$config->bug->dtable->fieldList['storyName']['title'] = $lang->bug->story;
-$config->bug->dtable->fieldList['storyName']['type']  = 'text';
-$config->bug->dtable->fieldList['storyName']['link']  = array('module' => 'story', 'method' => 'view', 'params' => 'storyID={story}');
-$config->bug->dtable->fieldList['storyName']['group'] = 8;
+$config->bug->dtable->fieldList['story']['title']      = $lang->bug->story;
+$config->bug->dtable->fieldList['story']['type']       = 'text';
+$config->bug->dtable->fieldList['story']['link']       = array('module' => 'story', 'method' => 'view', 'params' => 'storyID={story}');
+$config->bug->dtable->fieldList['story']['group']      = 8;
+$config->bug->dtable->fieldList['story']['dataSource'] = array('module' => 'story', 'method' =>'getProductStoryPairs', 'params' => '$productID');
 
-$config->bug->dtable->fieldList['taskName']['title'] = $lang->bug->task;
-$config->bug->dtable->fieldList['taskName']['type']  = 'text';
-$config->bug->dtable->fieldList['taskName']['link']  = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={task}');
-$config->bug->dtable->fieldList['taskName']['group'] = 8;
+$config->bug->dtable->fieldList['task']['title']      = $lang->bug->task;
+$config->bug->dtable->fieldList['task']['type']       = 'text';
+$config->bug->dtable->fieldList['task']['link']       = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={task}');
+$config->bug->dtable->fieldList['task']['group']      = 8;
+$config->bug->dtable->fieldList['task']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'task&id,name');
 
 $config->bug->dtable->fieldList['mailto']['title'] = $lang->bug->mailto;
 $config->bug->dtable->fieldList['mailto']['type']  = 'user';
@@ -171,6 +187,14 @@ $config->bug->dtable->fieldList['closedDate']['title']    = $lang->bug->closedDa
 $config->bug->dtable->fieldList['closedDate']['type']     = 'date';
 $config->bug->dtable->fieldList['closedDate']['group']    = 10;
 $config->bug->dtable->fieldList['closedDate']['sortType'] = 'date';
+ 
+$config->bug->dtable->fieldList['steps']['title']   = 'steps';
+$config->bug->dtable->fieldList['steps']['control'] = 'textarea';
+$config->bug->dtable->fieldList['steps']['display'] = false;
+
+$config->bug->dtable->fieldList['case']['title']      = 'case';
+$config->bug->dtable->fieldList['case']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'case&id,title');
+$config->bug->dtable->fieldList['case']['display']    = false;
 
 $config->bug->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->bug->dtable->fieldList['actions']['type']     = 'actions';

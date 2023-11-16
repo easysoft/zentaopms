@@ -39,13 +39,13 @@ foreach($lang->$module->$fieldList as $key => $value)
             set::label($key === '' ? 'NULL' : $key),
             set::name('keys[]'),
             set::control('hidden'),
-            set::value($key),
+            set::value($key)
         ),
         input
         (
             set::name('systems[]'),
             set::type('hidden'),
-            set::value(0),
+            set::value(0)
         ),
         formGroup
         (
@@ -59,7 +59,7 @@ foreach($lang->$module->$fieldList as $key => $value)
         (
             setClass('ops-actions'),
             icon('plus', setClass('ml-2')),
-            icon('close', setClass('ml-2')),
+            icon('close', setClass('ml-2'))
         )
     );
 }
@@ -74,7 +74,7 @@ $formRows[] = formRow
         set::control('radioList'),
         set::value(str_replace('_', '-', $currentLang)),
         set::inline(true),
-        set::items($appliedTo),
+        set::items($appliedTo)
     )
 );
 
@@ -94,15 +94,15 @@ formPanel
         formGroup
         (
             set::width('1/4'),
-            set::label($lang->custom->key),
+            set::label($lang->custom->key)
         ),
         formGroup
         (
             set::width('1/3'),
-            set::label($lang->custom->value),
-        ),
+            set::label($lang->custom->value)
+        )
     ),
-    $formRows,
+    $formRows
 );
 
 if($hasSideBar)

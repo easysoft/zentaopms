@@ -69,7 +69,7 @@ class picker extends wg
         'onPopShow?: function',             // 菜单显示时的回调函数。
         'onPopShown?: function',            // 菜单显示后的回调函数。
         'onPopHide?: function',             // 菜单隐藏时的回调函数。
-        'onPopHidden?: function',           // 菜单隐藏后的回调函数。
+        'onPopHidden?: function'            // 菜单隐藏后的回调函数。
     );
 
     /**

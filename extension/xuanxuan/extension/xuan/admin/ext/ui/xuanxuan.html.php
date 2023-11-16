@@ -82,15 +82,15 @@ row
             [
                 [
                     ['title' => $lang->client->totalUsers, 'value' => $totalUsers],
-                    ['title' => $lang->client->message['total'], 'value' => $messages->total],
+                    ['title' => $lang->client->message['total'], 'value' => $messages->total]
                 ],
                 [
                     ['title' => $lang->client->totalGroups, 'value' => $totalGroups],
-                    ['title' => $lang->client->message['day'], 'value' => $messages->day],
+                    ['title' => $lang->client->message['day'], 'value' => $messages->day]
                 ],
                 [
                     ['title' => $lang->client->fileSize, 'value' => html($fileSize)],
-                    ['title' => $lang->client->message['hour'], 'value' => $messages->hour],
+                    ['title' => $lang->client->message['hour'], 'value' => $messages->hour]
                 ]
             ]
         )

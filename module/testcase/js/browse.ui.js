@@ -59,6 +59,7 @@ window.onRenderCell = function(result, {row, col})
         {
             const data = row.data;
             const module = this.options.customData.modules[data.module];
+            if(data.color) result[0].props.style = 'color: ' + data.color;
             if(data.isScene) // 场景
             {
                 result.shift(); // 移除带链接的场景名称

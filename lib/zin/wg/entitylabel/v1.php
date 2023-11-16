@@ -9,7 +9,7 @@ class entityLabel extends wg
     protected static array $defineProps = array(
         'entityID?: string|int', // 实体编号
         'level?: string|int',    // 标题层级
-        'text: string',          // 实体文本
+        'text?: string',         // 实体文本
         'reverse?: bool=false',  // 编号与文本是否交换顺序
         'textClass?: string',    // 文本样式类
         'idClass?: string',      // 编号样式类

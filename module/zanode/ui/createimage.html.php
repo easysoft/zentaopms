@@ -29,13 +29,13 @@ if($task) modalHeader(set::title($lang->zanode->createImage));
     formGroup
     (
         set::name('name'),
-        set::label($lang->zanode->imageName),
+        set::label($lang->zanode->imageName)
     ),
     formGroup
     (
         set::name('desc'),
         set::label($lang->zanode->desc),
-        set::control('editor'),
+        set::control('editor')
     )
 ) : h::div
 (
@@ -50,8 +50,8 @@ if($task) modalHeader(set::title($lang->zanode->createImage));
         div
         (
             setClass('progress-bar primary'),
-            setStyle('width', $task->rate),
-        ),
+            setStyle('width', $task->rate)
+        )
     ),
     h6
     (
@@ -62,14 +62,14 @@ if($task) modalHeader(set::title($lang->zanode->createImage));
             setStyle('color', '#2e7fff'),
             set::target('_parent'),
             set::href($link),
-            $lang->zanode->createImageButton,
-        ),
+            $lang->zanode->createImageButton
+        )
     ),
     h6
     (
         setClass('text-center fail hidden'),
         $lang->zanode->createImageFail
-    ),
+    )
 );
 
 render();

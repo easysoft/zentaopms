@@ -31,7 +31,7 @@ foreach($repoList as $repo)
     (
         setClass('form-title'),
         set::href($this->createLink('repo', 'import')),
-        $lang->repo->batchCreate,
+        $lang->repo->batchCreate
     ),
     picker
     (
@@ -43,7 +43,7 @@ foreach($repoList as $repo)
         set::placeholder($lang->repo->importServer),
         set::items(array('' => '') + $gitlabPairs),
         set::value($gitlab->id)
-    ),
+    )
 );
 
 formBatchPanel
@@ -52,7 +52,7 @@ formBatchPanel
     (
         set::type('hidden'),
         set::name('serviceHost'),
-        set::value($gitlab->id),
+        set::value($gitlab->id)
     ),
     set::id('repoList'),
     set::back('repo-maintain'),
@@ -61,7 +61,7 @@ formBatchPanel
     set::items($items),
     set::data($repoList),
     set::maxRows(count($repoList)),
-    on::change('[data-name="product"]', 'loadProductProjects'),
+    on::change('[data-name="product"]', 'loadProductProjects')
 );
 
 render();

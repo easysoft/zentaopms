@@ -1,7 +1,5 @@
 #modalTeam .table tr {border: none;}
 .team-number {display: inline-block; width: 20px; height: 20px; line-height: 20px; border-radius: 10px; text-align: center; background: #f4f5f7;}
-#teamForm td.required {position: relative;}
-#teamForm td.required:after {content: '*'; color: rgba(var(--color-danger-500-rgb),var(--tw-text-opacity)); position: absolute; top: 1rem; right: 0.125rem;}
 #teamForm tr td:first-child {width: 40px; position: relative;}
 #teamForm tr td:first-child .icon{position:absolute; top: 40px; right: 19px;display: block; font-size: 8px; color: #9ea3bd;}
 #teamForm tr:nth-last-child(1) td:first-child .icon {display: none;}

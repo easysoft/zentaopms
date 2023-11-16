@@ -128,7 +128,7 @@ function computeWorkDays(e)
     if(beginDate && endDate)
     {
         if(isBactchEdit)  $('#dayses\\[' + index + '\\]').val(computeDaysDelta(beginDate, endDate));
-        if(!isBactchEdit) $('#days').val(computeDaysDelta(beginDate, endDate));
+        if(!isBactchEdit) $('#days').val(computeDaysDelta(beginDate, endDate)).trigger('change');
     }
     else if($('input[checked="true"]').val())
     {
