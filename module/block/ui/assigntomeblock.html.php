@@ -31,11 +31,11 @@ foreach($hasViewPriv as $type => $bool)
     {
         $menus[]  = li
         (
-            set('class', 'nav-item nav-switch'),
+            setClass('nav-item nav-switch'),
             a
             (
-                set('class', $type == $selected ? 'active' : ''),
-                set('data-toggle', 'tab'),
+                setClass($type == $selected ? 'active' : ''),
+                setData(array('toggle' => 'tab')),
                 set('href', "#assigntome{$type}Tab{$blockNavCode}"),
                 $type == 'review' ? $lang->my->audit : zget($lang->block->availableBlocks, $type)
             )
@@ -48,18 +48,18 @@ if(($longBlock && $count > 9) || (!$longBlock && $count > 4))
 {
     $menus[]  = li
     (
-        set('class', 'nav-item nav-switch'),
+        setClass('nav-item nav-switch'),
         a
         (
-            set('data-toggle', 'dropdown'),
+            setData(array('toggle' => 'dropdown')),
             set('href', "#assigntomeMenuMore{$blockNavCode}"),
             span($lang->more),
             icon('caret-down')
         ),
         menu
         (
-            set::id("assigntomeMenuMore{$blockNavCode}"),
-            set::className('dropdown-menu'),
+            setID("assigntomeMenuMore{$blockNavCode}"),
+            setClass('dropdown-menu'),
             set::items($moreMenus)
         )
     );
@@ -102,8 +102,8 @@ foreach($hasViewPriv as $type => $bool)
     $selected  = key($hasViewPriv);
     $contents[] = div
     (
-        set('class', 'tab-pane ' . ($type == $selected ? 'active' : '')),
-        set('id', "assigntome{$type}Tab{$blockNavCode}"),
+        setClass('tab-pane ' . ($type == $selected ? 'active' : '')),
+        setID("assigntome{$type}Tab{$blockNavCode}"),
         dtable
         (
             set::height(318),
@@ -127,7 +127,7 @@ blockPanel
         (
             ul
             (
-                set('class', 'nav nav-tabs'),
+                setClass('nav nav-tabs'),
                 $menus
             )
         )

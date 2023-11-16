@@ -30,7 +30,7 @@ blockPanel
     setClass('list-block'),
     dtable
     (
-        set::id('project'),
+        setID('project'),
         set::height(318),
         set::bordered(false),
         set::horzScrollbarPos('inside'),

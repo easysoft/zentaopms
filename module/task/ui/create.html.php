@@ -120,7 +120,7 @@ else
 $storyPreviewBtn = span
 (
     setClass('input-group-btn flex hidden'),
-    set::id('preview'),
+    setID('preview'),
     modalTrigger
     (
         to::trigger(
@@ -189,7 +189,7 @@ $selectStoryRow = '';
 if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review')))
 {
     $selectStoryRow = formRow(
-        set::id('testStoryBox'),
+        setID('testStoryBox'),
         setClass('hidden')
     );
 }
@@ -216,7 +216,7 @@ if(!isAjaxRequest('modal'))
 
 formPanel
 (
-    set::id('taskCreateForm'),
+    setID('taskCreateForm'),
     set::title($lang->task->create),
     $from == 'task' ? set::customFields(true) : null,
     formRow
@@ -237,7 +237,7 @@ formPanel
                 ),
                 span
                 (
-                    set('class', 'input-group-btn'),
+                    setClass('input-group-btn'),
                     btn
                     (
                         setID('showAllModuleButton'),
@@ -269,10 +269,10 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::id('selectTestStoryBox'),
+            setID('selectTestStoryBox'),
             setClass('hidden items-center'),
             checkbox(
-                set::id('selectTestStory'),
+                setID('selectTestStory'),
                 set::name('selectTestStory'),
                 set::value(1),
                 set::text($lang->task->selectTestStory),
@@ -289,7 +289,7 @@ formPanel
             setClass('assignedToBox'),
             picker
             (
-                set::id('assignedTo'),
+                setID('assignedTo'),
                 set::name('assignedTo'),
                 set::value($task->assignedTo),
                 set::items($members)
@@ -313,7 +313,7 @@ formPanel
         formGroup
         (
             set::width('1/10'),
-            set::id('multipleBox'),
+            setID('multipleBox'),
             setClass('items-center'),
             checkbox(
                 set::name('multiple'),
@@ -343,7 +343,7 @@ formPanel
             (
                 picker
                 (
-                    set::id('story'),
+                    setID('story'),
                     set::name('story'),
                     set::value($task->story),
                     set::items(array_filter($stories)),
@@ -370,7 +370,7 @@ formPanel
                     setClass('input-control-suffix'),
                     btn(
                         setClass('text-gray'),
-                        set::id('refreshStories'),
+                        setID('refreshStories'),
                         set::icon('refresh'),
                         on::click('loadExecutionStories')
                     )
@@ -404,7 +404,7 @@ formPanel
                         set::syncColor('#name')
                     ),
                     checkbox(
-                        set::id('copyButton'),
+                        setID('copyButton'),
                         set::name('copyButton'),
                         set::value(1),
                         set::text($lang->task->copyStoryTitle),
@@ -442,7 +442,7 @@ formPanel
                 ),
                 inputControl
                 (
-                    set::className($hiddenEstimate),
+                    setClass($hiddenEstimate),
                     input(set::name('estimate')),
                     to::suffix($lang->task->suffixHour),
                     set::suffixWidth(20)
@@ -511,11 +511,11 @@ formPanel
     (
         modal
         (
-            set::id('modalTeam'),
+            setID('modalTeam'),
             set::title($lang->task->teamMember),
             h::table
             (
-                set::id('teamTable'),
+                setID('teamTable'),
                 h::tr
                 (
                     h::td
