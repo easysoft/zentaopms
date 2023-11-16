@@ -13,8 +13,20 @@ namespace zin;
 
 dropmenu();
 
+jsVar('projectID', $projectID);
+jsVar('programID', $programID);
+
+$fromItems = array();
+foreach($lang->stakeholder->fromList as $fromKey => $fromName) $fromItems[] = array('text' => $fromName, 'value' => $fromKey);
+
+$keyItems = array();
+foreach($lang->stakeholder->keyList as $key => $keyName) $keyItems[] = array('text' => $keyName, 'value' => $key);
+
 formPanel
 (
+    on::change('[name=from]', 'toggleUser'),
+    on::change('[name=newUser]', 'toggleNewUserInfo'),
+    on::change('[name=new]', 'onChooseCompany'),
     set::url(createLink('stakeholder', 'create', "objectID=$objectID")),
     to::heading(div
     (
@@ -25,44 +37,24 @@ formPanel
     (
         set::label($lang->stakeholder->from),
         set::width('1/2'),
-        inputGroup(array_map
+        radioList
         (
-            function($val, $text)
-            {
-                return radio
-                (
-                    set::name('from'),
-                    set::value($val),
-                    set::text($text),
-                    set::checked($val == 'team'),
-                    on::change('onChangeStakeholderType')
-                );
-            },
-            array_keys($lang->stakeholder->fromList),
-            array_values($lang->stakeholder->fromList)
-        ))
+            set::name('from'),
+            set::value('team'),
+            set::inline(true),
+            set::items($fromItems)
+        )
     ),
     formGroup
     (
         set::label($lang->stakeholder->isKey),
         set::width('1/2'),
-        inputGroup
+        radioList
         (
-            array_map
-            (
-                function($val, $text)
-                {
-                    return radio
-                    (
-                        set::name('key'),
-                        set::value($val),
-                        set::text($text),
-                        set::checked($val == 0)
-                    );
-                },
-                array_keys($lang->stakeholder->keyList),
-                array_values($lang->stakeholder->keyList)
-            )
+            set::name('key'),
+            set::value('0'),
+            set::inline(true),
+            set::items($keyItems)
         )
     ),
     formRow(formGroup
@@ -77,12 +69,14 @@ formPanel
                 set::name('user'),
                 set::items($members)
             ),
-            checkbox
+            span
             (
-                set::rootClass('newuser-checkbox hidden w-20 justify-end items-center'),
-                set::name('newUser'),
-                on::click('onChangeNewUserCheckbox'),
-                set::text($lang->stakeholder->add)
+                setClass('input-group-addon hidden'),
+                checkbox
+                (
+                    set::name('newUser'),
+                    set::text($lang->stakeholder->add)
+                )
             )
         )
     )),
@@ -144,24 +138,24 @@ formPanel
         set::required(true),
         inputGroup
         (
-            select
+            picker
             (
                 set::name('companySelect'),
-                set::items($companys),
-                on::change('onChooseCompany')
+                set::items($companys)
             ),
             input
             (
                 set::name('company'),
                 setClass('hidden')
             ),
-            checkbox
+            span
             (
-                set::name('new'),
-                set::rootClass('w-20 justify-end items-center'),
-                set::value(0),
-                on::change('onChangeNewCompany'),
-                set::text($lang->stakeholder->add)
+                setClass('input-group-addon'),
+                checkbox
+                (
+                    set::name('new'),
+                    set::text($lang->stakeholder->add)
+                )
             )
         )
     )),

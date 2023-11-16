@@ -212,7 +212,10 @@ class stakeholder extends control
             if(isset($stakeholders[$account])) unset($members[$account]);
         }
 
-        echo html::select('user', $members, $user, "class='form-control chosen'");
+        $items = array();
+        foreach($members as $account => $realname) $items[] = array('key' => $account, 'text' => $realname);
+
+        return print(json_encode($items));
     }
 
     /**
@@ -243,7 +246,10 @@ class stakeholder extends control
             if(isset($stakeholders[$account])) unset($companyUsers[$account]);
         }
 
-        echo html::select('user', $companyUsers, $user, "class='form-control chosen'");
+        $userItems = array();
+        foreach($companyUsers as $account => $realname) $userItems[] = array('text' => $realname, 'key' => $account);
+
+        return print(json_encode($userItems));
     }
 
     /**
@@ -261,7 +267,10 @@ class stakeholder extends control
             if(isset($stakeholders[$account])) unset($users[$account]);
         }
 
-        echo html::select('user', $users, '', "class='form-control chosen' onchange=changeUser(this.value);");
+        $items = array();
+        foreach($users as $account => $realname) $items[] = array('text' => $realname, 'key' => $account);
+
+        return print(json_encode($items));
     }
 
     /**

@@ -3,63 +3,30 @@
  *
  * @return void
  */
-function onChangeStakeholderType(event)
+function toggleUser()
 {
-    if($(event.target).val() === 'outside')
+    if($(this).val() == 'team')    var link = $.createLink('stakeholder', 'ajaxGetMembers', 'user=&program=' + programID + '&projectID=' + projectID);
+    if($(this).val() == 'company') var link = $.createLink('stakeholder', 'ajaxGetCompanyUser', 'user=&programID=' + programID + '&projectID=' + projectID);
+    if($(this).val() == 'outside') var link = $.createLink('stakeholder', 'ajaxGetOutsideUser', 'objectID=' + programID ? programID : projectID);
+    $.getJSON(link, function(users)
     {
-        toggleNewUserCheckbox(true);
-        return;
-    }
+        let $userPicker = $('[name^="user"]').zui('picker');
+        $userPicker.render({items: users});
+        $userPicker.$.setValue('');
+    });
 
-    toggleNewUserCheckbox(false);
+    $('[name=newUser]').prop('checked', false);
+    $('[name=newUser]').parents('.input-group-addon').toggleClass('hidden', $(this).val() != 'outside');
+
+    toggleNewUserInfo();
 }
 
-/*
- * 显示新建用户选择框。
- *
- * @return void
- */
-function toggleNewUserCheckbox(remove)
+function toggleNewUserInfo()
 {
-    const elements = $('.newuser-checkbox');
-    if(remove)
-    {
-        elements.removeClass('hidden');
-        return;
-    }
+    let $userPicker = $('[name^="user"]').zui('picker');
+    $userPicker.render({disabled: $('[name=newUser]').prop('checked')});
 
-    elements.addClass('hidden');
-}
-
-/**
- * 新建用户选择框变更回调函数。
- *
- * @return void
- */
-function onChangeNewUserCheckbox(event)
-{
-    const checked = $(event.target).prop('checked');
-
-    toggleUserInfo(checked);
-
-    $('#user').prop('disabled', checked);
-}
-
-/**
- * 显示新建用户信息输入框。
- *
- * @return void
- */
-function toggleUserInfo(remove)
-{
-    const elements = $('.user-info');
-    if(remove)
-    {
-        elements.removeClass('hidden');
-        return;
-    }
-
-    elements.addClass('hidden');
+    $('.user-info').toggleClass('hidden', !$('[name=newUser]').prop('checked'));
 }
 
 /**
