@@ -55,9 +55,6 @@ $lang->stakeholder->fromList['team']    = $lang->projectCommon . ' Team';
 $lang->stakeholder->fromList['company'] = 'Internal';
 $lang->stakeholder->fromList['outside'] = 'External';
 
-$lang->stakeholder->userEmpty           = 'User cannot be empty!';
-$lang->stakeholder->nameEmpty           = 'Name cannot be empty!';
-$lang->stakeholder->companyEmpty        = 'Company cannot be empty!';
 $lang->stakeholder->confirmDelete       = "Do you want to delete the stakeholder?";
 $lang->stakeholder->confirmDeleteExpect = "Do you want to remove the expectation?";
 $lang->stakeholder->createCommunicate   = '<i class="icon icon-chat-line"></i>added Communication History.';

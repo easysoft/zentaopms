@@ -10,6 +10,7 @@ function toggleUser()
     if($(this).val() == 'outside') var link = $.createLink('stakeholder', 'ajaxGetOutsideUser', 'objectID=' + programID ? programID : projectID);
     $.getJSON(link, function(users)
     {
+        console.log(users);
         let $userPicker = $('[name^="user"]').zui('picker');
         $userPicker.render({items: users});
         $userPicker.$.setValue('');
@@ -44,40 +45,15 @@ function onChooseCompany(event)
  *
  * @return void
  */
-function onChangeNewCompany(event)
+function toggleCompany()
 {
-    const checkbox        = $(event.target);
-    const checkboxChecked = checkbox.prop('checked');
-    const companyInput    = $('#company');
-    const companySelect   = $('[name="companySelect"]');
+    let $companyPicker = $('[name^="company"]').zui('picker');
 
     /* Reset empty default value. */
-    companyInput.prop('value', '');
-    companySelect.prop('value', '');
+    $('#companyName').val('');
+    $companyPicker.$.setValue('');
 
-    /* Switch between 'select' and 'input'. */
-    if(checkboxChecked)
-    {
-        checkbox.prop('value', 1);
-        companyInput.removeClass('hidden');
-        companyInput.trigger('focus');
-        companySelect.addClass('hidden');
-    }
-    else
-    {
-        checkbox.prop('value', 0);
-        companyInput.removeClass('hidden');
-        companyInput.addClass('hidden');
-        companySelect.removeClass('hidden');
-        companySelect.trigger('focus');
-    }
+    $('#companyName').toggleClass('hidden', !$(this).prop('checked'));
 
-    /* Remove error tips and error style. */
-    companyInput.removeClass('has-error');
-    companySelect.removeClass('has-error');
-    const tip = checkbox.parents('.form-group').children('.form-tip');
-    if(tip)
-    {
-        tip.remove();
-    }
+    $('.company-picker').toggleClass('hidden', $(this).prop('checked'));
 }

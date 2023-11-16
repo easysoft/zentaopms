@@ -17,7 +17,6 @@ class stakeholderModel extends model
             ->setDefault('createdDate', helper::today())
             ->stripTags($this->config->stakeholder->editor->create['id'], $this->config->allowedTags)
             ->remove('uid')
-            ->remove('companySelect')
             ->get();
 
         $account = isset($data->user) ? $data->user : '';
@@ -40,27 +39,19 @@ class stakeholderModel extends model
             /* If it's an outsider and it's added for the first time, insert to user table. */
             if(!$account)
             {
-                if(!$data->name)
-                {
-                    dao::$errors['name'] = $this->lang->stakeholder->nameEmpty;
-                    return false;
-                }
+                if(!$data->name) dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->name);
+                if(!isset($data->newCompany) && !$data->company)    dao::$errors['company'] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->company);
+                if(isset($data->newCompany) && !$data->companyName) dao::$errors['company'] = sprintf($this->lang->error->notempty, $this->lang->stakeholder->company);
+                if(dao::isError()) return false;
 
                 $companyID = $data->company;
-                if($data->company and isset($data->new))
+                if(isset($data->newCompany) && $data->companyName)
                 {
                     $company = new stdclass();
-                    $company->name = $data->company;
-                    $this->dao->insert(TABLE_COMPANY)->data($company)->exec();
+                    $company->name = $data->companyName;
+                    $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->exec();
 
                     $companyID = $this->dao->lastInsertID();
-                }
-
-                if(!$companyID)
-                {
-                    $elementName = $data->new ? 'company' : 'companySelect';
-                    dao::$errors[$elementName] = $this->lang->stakeholder->companyEmpty;
-                    return false;
                 }
 
                 $user = new stdclass();
@@ -93,10 +84,7 @@ class stakeholderModel extends model
         $stakeholder->createdBy   = $this->app->user->account;
         $stakeholder->createdDate = helper::today();
 
-        $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)
-            ->check('user', 'unique', "objectID = {$stakeholder->objectID} and deleted = '0'")
-            ->autoCheck()
-            ->exec();
+        $this->dao->insert(TABLE_STAKEHOLDER)->data($stakeholder)->check('user', 'unique', "objectID = {$stakeholder->objectID} and deleted = '0'")->autoCheck()->exec();
         $stakeholderID = $this->dao->lastInsertID();
 
         if(!dao::isError())

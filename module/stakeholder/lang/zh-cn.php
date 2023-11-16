@@ -55,9 +55,6 @@ $lang->stakeholder->fromList['team']    = $lang->projectCommon . '团队成员';
 $lang->stakeholder->fromList['company'] = '公司同事';
 $lang->stakeholder->fromList['outside'] = '外部人员';
 
-$lang->stakeholder->userEmpty           = '用户不能为空！';
-$lang->stakeholder->nameEmpty           = '姓名不能为空！';
-$lang->stakeholder->companyEmpty        = '所属公司不能为空！';
 $lang->stakeholder->confirmDelete       = "您确定删除该干系人吗？";
 $lang->stakeholder->confirmDeleteExpect = "您确定删除该干系人期望吗？";
 $lang->stakeholder->createCommunicate   = '<i class="icon icon-chat-line"></i>添加沟通记录';

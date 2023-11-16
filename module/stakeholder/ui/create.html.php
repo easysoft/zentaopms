@@ -26,7 +26,7 @@ formPanel
 (
     on::change('[name=from]', 'toggleUser'),
     on::change('[name=newUser]', 'toggleNewUserInfo'),
-    on::change('[name=new]', 'onChooseCompany'),
+    on::change('[name=newCompany]', 'toggleCompany'),
     set::url(createLink('stakeholder', 'create', "objectID=$objectID")),
     to::heading(div
     (
@@ -140,12 +140,13 @@ formPanel
         (
             picker
             (
-                set::name('companySelect'),
+                setClass('company-picker'),
+                set::name('company'),
                 set::items($companys)
             ),
             input
             (
-                set::name('company'),
+                set::name('companyName'),
                 setClass('hidden')
             ),
             span
@@ -153,7 +154,7 @@ formPanel
                 setClass('input-group-addon'),
                 checkbox
                 (
-                    set::name('new'),
+                    set::name('newCompany'),
                     set::text($lang->stakeholder->add)
                 )
             )
