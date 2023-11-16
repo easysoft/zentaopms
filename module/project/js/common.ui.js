@@ -160,22 +160,19 @@ function computeEndDate()
 
 /**
  * 给指定日期加上具体天数，并返回格式化后的日期.
+ * Add days to date, and return formatted date.
  *
  * @param  string dateString
  * @param  int    days
  * @access public
- * @return date
+ * @return string
  */
 function formatDate(dateString, days)
 {
-  const date = new Date(dateString);
-  date.setDate(date.getDate() + days);
+    const date = new Date(dateString);
+    date.setDate(date.getDate() + days);
 
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
+    return date.toLocaleDateString('en-CA')
 }
 
 /**
