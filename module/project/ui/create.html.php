@@ -315,6 +315,16 @@ formPanel
                     set::placeholder($lang->project->end),
                     set::required(true),
                     $copyProjectID ? setClass('has-warning') : null
+                ),
+                inputControl
+                (
+                    setClass('has-suffix-icon w-full hidden'),
+                    to::suffix(icon('calendar')),
+                    input
+                    (
+                        set::value($lang->project->longTime),
+                        set::disabled(true)
+                    )
                 )
             ),
             $copyProjectID ? div(setClass('text-warning'), $lang->project->copyProject->endTips) : null
