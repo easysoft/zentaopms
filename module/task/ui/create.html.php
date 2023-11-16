@@ -219,6 +219,48 @@ formPanel
     setID('taskCreateForm'),
     set::title($lang->task->create),
     $from == 'task' ? set::customFields(true) : null,
+    modal
+    (
+        set::id('modalTeam'),
+        set::title($lang->task->teamMember),
+        h::table
+        (
+            set::id('teamTable'),
+            h::tr
+            (
+                h::td
+                (
+                    width('90px'),
+                    $lang->task->mode
+                ),
+                h::td
+                (
+                    picker
+                    (
+                        set::name("mode"),
+                        set::value("linear"),
+                        set::items($lang->task->modeList),
+                        set::required(true)
+                    )
+                )
+            ),
+            setClass('table table-form'),
+            $teamForm,
+            h::tr
+            (
+                h::td
+                (
+                    setClass('team-saveBtn'),
+                    set(array('colspan' => 4)),
+                    btn
+                    (
+                        setClass('toolbar-item btn primary'),
+                        $lang->save
+                    )
+                )
+            )
+        )
+    ),
     formRow
     (
         $executionBox,
@@ -507,52 +549,4 @@ formPanel
         )
     ),
     $afterRow,
-    modalTrigger
-    (
-        modal
-        (
-            setID('modalTeam'),
-            set::title($lang->task->teamMember),
-            h::table
-            (
-                setID('teamTable'),
-                h::tr
-                (
-                    h::td
-                    (
-                        width('90px'),
-                        $lang->task->mode
-                    ),
-                    h::td
-                    (
-                        picker
-                        (
-                            set::name("mode"),
-                            set::value("linear"),
-                            set::items($lang->task->modeList),
-                            set::required(true)
-                        )
-                    )
-                ),
-                setClass('table table-form'),
-                $teamForm,
-                h::tr
-                (
-                    h::td
-                    (
-                        setClass('team-saveBtn'),
-                        set(array('colspan' => 4)),
-                        btn
-                        (
-                            setClass('toolbar-item btn primary'),
-                            $lang->save
-                        )
-                    )
-                )
-            )
-        )
-    )
 );
-
-/* ====== Render page ====== */
-render();
