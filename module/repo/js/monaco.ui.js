@@ -70,7 +70,7 @@ window.afterPageUpdate = function()
             }
             else
             {
-                window.open(url.replace('{path}', activeFilePath));
+                window.open(url.replace('{path}', activeFilePath), '_self');
             }
             return;
         })
