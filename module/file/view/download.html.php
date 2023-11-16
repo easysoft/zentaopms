@@ -23,7 +23,7 @@
     <div id='imageFile'><?php echo html::image($this->createLink('file', 'read', "fileID=$file->id"));?></div>
     <?php elseif($fileType == 'video'):?>
     <div id='videoFile'>
-        <video src=<?php echo $file->webPath;?> autoplay controls controlsList='nodownload' onerror='showError()'></video>
+        <video src=<?php echo $file->webPath;?> autoplay controls controlsList='nodownload' onerror='showError()' onloadedmetadata='loadedmetadata()'></video>
         <div class='playfailed hide'><?php echo $lang->file->playFailed;?></div>
     </div>
     <?php else:?>
@@ -60,6 +60,18 @@
 function showError()
 {
     $('.playfailed').show();
+}
+
+function loadedmetadata()
+{
+    var videoElem      = $('video')[0];
+    var metaHeight     = videoElem.videoHeight;
+    var parentHeight   = window.parent.innerHeight;
+    var videoMaxHeight = parentHeight - 190;
+    if(videoMaxHeight < metaHeight)
+    {
+        $(videoElem).css('height', videoMaxHeight);
+    }
 }
 
 function setCharset(charset)
