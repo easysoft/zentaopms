@@ -31,34 +31,41 @@ featureBar
         set::className('nav-item'),
         a
         (
-            set::href($this->createLink('stakeholder', 'browse', $navLinkParams)),
+            setClass('active'),
+            set::href($this->createLink('stakeholder', 'browse', "project=$projectID&browseType={$browseType}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
             set('data-app', $app->tab),
             $lang->stakeholder->browse
         )
-    ),
-    set::current('all')
+    )
 );
 
 /* Toolbar. */
-$createLink      = $this->createLink('stakeholder', 'create', "projectID=$projectID");
-$batchCreateLink = $this->createLink('stakeholder', 'batchCreate', "projectID=$projectID");
-$createItem      = array('text' => $lang->stakeholder->create,      'url' => $createLink, 'data-app' => 'project');
-$batchCreateItem = array('text' => $lang->stakeholder->batchCreate, 'url' => $batchCreateLink);
+$canCreate       = hasPriv('stakeholder', 'create');
+$canBatchCreate  = hasPriv('stakeholder', 'batchcreate');
 
-if(common::hasPriv('stakeholder', 'batchcreate') and common::hasPriv('stakeholder', 'create'))
+if($canCreate || $canBatchCreate)
 {
+    $createLink      = $this->createLink('stakeholder', 'create', "projectID=$projectID");
+    $batchCreateLink = $this->createLink('stakeholder', 'batchCreate', "projectID=$projectID");
+    $items = array();
+    if($canCreate)      $items[] = array('text' => $lang->stakeholder->create,      'url' => $createLink, 'data-app' => 'project');
+    if($canBatchCreate) $items[] = array('text' => $lang->stakeholder->batchCreate, 'url' => $batchCreateLink);
     toolbar
     (
-        btngroup
+        count($items) > 1 ? btngroup
         (
             btn(setClass('btn primary'), setData(array('app' => 'project')), set::icon('plus'), set::url($createLink), $lang->stakeholder->create),
             dropdown
             (
                 btn(setClass('btn primary dropdown-toggle'),
                 setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
-                set::items(array_filter(array($createItem, $batchCreateItem))),
+                set::items($items),
                 set::placement('bottom-end')
             )
+        ) : btn
+        (
+            setClass('btn primary'),
+            set(reset($items))
         )
     );
 }
