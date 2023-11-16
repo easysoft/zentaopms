@@ -3,4 +3,4 @@
 .panel-form .panel-heading {padding: 1.5rem 0}
 .panel-form .panel-heading .panel-title {font-size: 14px}
 .panel-form .panel-body {padding: 0 0 1rem 0}
-div.alert {margin: 10px 0}
+div.alert > .icon {font-size: 42px;}
