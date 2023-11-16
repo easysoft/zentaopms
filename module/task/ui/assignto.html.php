@@ -63,8 +63,8 @@ formPanel
         (
             input
             (
+                setID('left'),
                 set::name('left'),
-                set::id('left'),
                 set::value($task->left),
                 set::type('text'),
                 set::disabled(false)

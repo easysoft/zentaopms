@@ -26,7 +26,7 @@ foreach($testStories as $storyID => $storyTitle)
             (
                 picker
                 (
-                    set::id("testStory{$i}"),
+                    setID("testStory{$i}"),
                     set::name("testStory[$i]"),
                     set::value($storyID),
                     set::items(array($storyID => $storyTitle))
@@ -36,7 +36,7 @@ foreach($testStories as $storyID => $storyTitle)
             (
                 picker
                 (
-                    set::id("testPri{$i}"),
+                    setID("testPri{$i}"),
                     set::name("testPri[$i]"),
                     set::required(true),
                     set::value(empty($task->pri) ? 3 : $task->pri),
@@ -47,7 +47,7 @@ foreach($testStories as $storyID => $storyTitle)
             (
                 datepicker
                 (
-                    set::id("testEstStarted{$i}"),
+                    setID("testEstStarted{$i}"),
                     set::name("testEstStarted[$i]"),
                     set::value(empty($task->estStarted) ? '' : $task->estStarted)
                 )
@@ -56,7 +56,7 @@ foreach($testStories as $storyID => $storyTitle)
             (
                 datepicker
                 (
-                    set::id("testDeadline{$i}"),
+                    setID("testDeadline{$i}"),
                     set::name("testDeadline[$i]"),
                     set::value(empty($task->deadline) ? '' : $task->deadline)
                 )
@@ -65,7 +65,7 @@ foreach($testStories as $storyID => $storyTitle)
             (
                 picker
                 (
-                    set::id("testAssignedTo{$i}"),
+                    setID("testAssignedTo{$i}"),
                     set::name("testAssignedTo[$i]"),
                     set::value(empty($task->assignedTo) ? '' : $task->assignedTo),
                     set::items($members)
@@ -77,7 +77,7 @@ foreach($testStories as $storyID => $storyTitle)
                 (
                     input
                     (
-                        set::id("testEstimate{$i}"),
+                        setID("testEstimate{$i}"),
                         set::name("testEstimate[$i]")
                     ),
                     to::suffix($lang->task->suffixHour),
@@ -86,7 +86,7 @@ foreach($testStories as $storyID => $storyTitle)
             ),
             h::td
             (
-                set::className('center'),
+                setClass('center'),
                 btnGroup
                 (
                     set::items(array(
@@ -105,8 +105,8 @@ formGroup
     set::labelClass('selectStoryLabel'),
     h::table
     (
-        set::className('table table-form'),
-        set::id('testTaskTable'),
+        setClass('table table-form'),
+        setID('testTaskTable'),
         h::thead
         (
             h::tr

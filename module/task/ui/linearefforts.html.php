@@ -75,7 +75,7 @@ foreach($myCountList as $order => $count)
                     common::hasPriv('task', 'deleteWorkhour') ? a
                     (
                         setClass('btn ghost toolbar-item square size-sm ajax-submit'),
-                        set('data-confirm', $lang->task->confirmDeleteEffort),
+                        setData(array('confirm' => $lang->task->confirmDeleteEffort)),
                         set::href(createLink('task', 'deleteWorkhour', "id={$effort->id}")),
                         icon('trash')
                     ) : null
@@ -108,7 +108,7 @@ foreach($recorders as $order => $accounts)
 
 div
 (
-    set::id('linearefforts'),
+    setID('linearefforts'),
     tabs
     (
         tabPane
