@@ -659,6 +659,7 @@
      */
     function loadTable(url, target, options)
     {
+        if(!url) url = currentAppUrl;
         if(!target)
         {
             const urlInfo = $.parseLink(url);
