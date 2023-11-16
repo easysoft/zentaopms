@@ -85,9 +85,9 @@ statisticBlock
                         (
                             array
                             (
-                                'title' => $lang->block->tooltip['deliveryRate'],
+                                'title'     => $lang->block->tooltips['deliveryRate'],
                                 'placement' => 'bottom',
-                                'type' => 'white',
+                                'type'      => 'white',
                                 'className' => 'text-dark border border-light leading-5'
                             )
                         )
@@ -117,9 +117,9 @@ statisticBlock
                             (
                                 array
                                 (
-                                    'title' => $lang->block->tooltip['effectiveStory'],
+                                    'title'     => $lang->block->tooltips['effectiveStory'],
                                     'placement' => 'bottom',
-                                    'type' => 'white',
+                                    'type'      => 'white',
                                     'className' => 'text-dark border border-light leading-5'
                                 )
                             )
@@ -146,9 +146,9 @@ statisticBlock
                             (
                                 array
                                 (
-                                    'title' => $lang->block->tooltip['deliveredStory'],
+                                    'title'     => $lang->block->tooltips['deliveredStory'],
                                     'placement' => 'bottom',
-                                    'type' => 'white',
+                                    'type'      => 'white',
                                     'className' => 'text-dark border border-light leading-5'
                                 )
                             )
