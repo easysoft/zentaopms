@@ -479,8 +479,7 @@ formPanel
         editor
         (
             set::name('desc'),
-            html($project->desc),
-            set::placeholder($lang->project->editorPlaceholder)
+            html($project->desc)
         )
     ),
     formRow

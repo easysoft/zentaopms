@@ -462,14 +462,13 @@ $lang->project->moreSelects = array();
 $lang->project->moreSelects['suspended'] = '已挂起';
 $lang->project->moreSelects['closed']    = '已关闭';
 
-$lang->project->manDay            = '人天';
-$lang->project->day               = '天';
-$lang->project->newProduct        = '新产品';
-$lang->project->associatePlan     = '关联计划';
-$lang->project->editorPlaceholder = '可以在编辑器直接贴图。快捷键：Command C+V';
-$lang->project->tenThousandYuan   = '万元';
-$lang->project->planDate          = '计划日期';
-$lang->project->delayInfo         = '延期 %s 天';
+$lang->project->manDay          = '人天';
+$lang->project->day             = '天';
+$lang->project->newProduct      = '新产品';
+$lang->project->associatePlan   = '关联计划';
+$lang->project->tenThousandYuan = '万元';
+$lang->project->planDate        = '计划日期';
+$lang->project->delayInfo       = '延期 %s 天';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . '迭代';
 $lang->project->executionList['waterfall']     = $lang->projectCommon . '阶段';

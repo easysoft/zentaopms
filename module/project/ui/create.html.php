@@ -504,8 +504,7 @@ formPanel
     (
         set::name('desc'),
         set::label($lang->project->desc),
-        set::control('editor'),
-        set::placeholder($lang->project->editorPlaceholder)
+        set::control('editor')
     ),
     formRow
     (

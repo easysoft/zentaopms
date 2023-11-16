@@ -458,14 +458,13 @@ $lang->project->moreSelects = array();
 $lang->project->moreSelects['suspended'] = 'Suspended';
 $lang->project->moreSelects['closed']    = 'Closed';
 
-$lang->project->manDay            = 'Man Day';
-$lang->project->day               = 'Day';
-$lang->project->newProduct        = 'New Product';
-$lang->project->associatePlan     = 'Associate Plan';
-$lang->project->editorPlaceholder = 'You can directly paste images in the editor. Hotkeys: Command C+V';
-$lang->project->tenThousandYuan   = '10k';
-$lang->project->planDate          = 'Schedule Date';
-$lang->project->delayInfo         = 'Delayed for %s days';
+$lang->project->manDay          = 'Man Day';
+$lang->project->day             = 'Day';
+$lang->project->newProduct      = 'New Product';
+$lang->project->associatePlan   = 'Associate Plan';
+$lang->project->tenThousandYuan = '10k';
+$lang->project->planDate        = 'Schedule Date';
+$lang->project->delayInfo       = 'Delayed for %s days';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . ' Sprint';
 $lang->project->executionList['waterfall']     = $lang->projectCommon . ' Stage';
