@@ -5,14 +5,14 @@ service:
     command: php scheduler.php
     process_num: 1
     exec_timeout: 0
+    remain_after_exit: true
     restart_sec: 1
     relay: pipes
-    user: "nobody"
 
   cron_consumer:
     command: php consumer.php
     process_num: 4
     exec_timeout: 0
+    remain_after_exit: true
     restart_sec: 1
     relay: pipes
-    user: "nobody"

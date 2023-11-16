@@ -151,6 +151,8 @@ class cron extends control
         {
             dao::$cache = array();
 
+            if($restart) $this->cron->clearQueue();
+
             if($restart || $this->canSchedule($execId))
             {
                 $this->schedule($execId);
@@ -170,10 +172,11 @@ class cron extends control
     /**
      * Schedule cron task by RoadRunner.
      *
+     * @param  bool $restart
      * @access public
      * @return void
      */
-    public function rrSchedule()
+    public function rrSchedule($restart = true)
     {
         if('cli' !== PHP_SAPI) return;
 
@@ -187,13 +190,20 @@ class cron extends control
         {
             dao::$cache = array();
 
-            if(empty($this->config->global->cron) || !$this->canSchedule($execId))
+            if(empty($this->config->global->cron))
             {
                 sleep(60);
                 continue;
             }
 
-            $this->schedule($execId);
+            if($restart) $this->cron->clearQueue();
+
+            if($restart || $this->canSchedule($execId))
+            {
+                $this->schedule($execId);
+                $restart = false;
+            }
+
             sleep(30);
         }
     }
@@ -309,8 +319,6 @@ class cron extends control
 
             $task = $this->dao->select('*')->from(TABLE_QUEUE)->where('status')->eq('wait')->andWhere('command')->ne('')->orderBy('createdDate')->fetch();
             if(!$task) break;
-
-            $this->cron->logCron(strval($task->id) . "\n");
 
             $this->execTask($execId, $task);
         }

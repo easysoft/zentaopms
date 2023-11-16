@@ -1487,7 +1487,8 @@ class baseDAO
          */
         if($this->app->throwError)
         {
-            return throw new Exception($message);
+            throw new Exception($message);
+            return;
         }
         $this->app->triggerError($message, __FILE__, __LINE__, $exit = true);
     }

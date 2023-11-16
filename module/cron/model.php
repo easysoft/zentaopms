@@ -310,4 +310,18 @@ class cronModel extends model
             ->andWhere('`key`')->eq('cron')
             ->fetch('value');
     }
+
+    /**
+     * Clear queue.
+     *
+     * @access public
+     * @return void
+     */
+    public function clearQueue()
+    {
+        $this->dao->delete()->from(TABLE_QUEUE)->where('createdDate')->le(date("Y-m-d H:i:s", strtotime("-1 week")))->exec();
+
+        $log = date('G:i:s') . " clear\n\n";
+        $this->logCron($log);
+    }
 }
