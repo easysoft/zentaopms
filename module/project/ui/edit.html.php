@@ -3,6 +3,7 @@ namespace zin;
 
 jsVar('model', $project->model);
 jsVar('labelClass', $config->project->labelClass);
+jsVar('LONG_TIME', LONG_TIME);
 jsVar('longTime', $lang->project->longTime);
 jsVar('weekend', $config->execution->weekend);
 jsVar('unmodifiableProducts', $unmodifiableProducts);
@@ -172,12 +173,11 @@ formPanel
     on::click('.project-type-0', 'changeType(0)'),
     on::click('.project-stageBy-0', 'changeStageBy(0)'),
     on::click('.project-stageBy-1', 'changeStageBy(1)'),
+    on::change('#parent', 'setParentProgram'),
+    on::change('#begin, [name=delta]', 'computeEndDate'),
+    on::change('#begin, #end', 'computeWorkDays'),
     on::change('[name^=products]', 'productChange'),
     on::change('[name^=branch]', 'branchChange'),
-    on::change('#parent', 'setParentProgram'),
-    on::change('#begin', 'computeWorkDays'),
-    on::change('#end', 'computeWorkDays'),
-    on::change('[name=delta]', 'setDate'),
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=newProduct]', 'addProduct'),
     formRow
