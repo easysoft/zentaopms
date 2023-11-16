@@ -213,7 +213,7 @@ class stakeholder extends control
         }
 
         $items = array();
-        foreach($members as $account => $realname) $items[] = array('key' => $account, 'text' => $realname);
+        foreach($members as $account => $realname) $items[] = array('value' => $account, 'text' => $realname);
 
         return print(json_encode($items));
     }
@@ -247,7 +247,7 @@ class stakeholder extends control
         }
 
         $userItems = array();
-        foreach($companyUsers as $account => $realname) $userItems[] = array('text' => $realname, 'key' => $account);
+        foreach($companyUsers as $account => $realname) $userItems[] = array('text' => $realname, 'value' => $account);
 
         return print(json_encode($userItems));
     }
@@ -268,7 +268,7 @@ class stakeholder extends control
         }
 
         $items = array();
-        foreach($users as $account => $realname) $items[] = array('text' => $realname, 'key' => $account);
+        foreach($users as $account => $realname) $items[] = array('text' => $realname, 'value' => $account);
 
         return print(json_encode($items));
     }
