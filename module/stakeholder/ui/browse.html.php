@@ -40,16 +40,18 @@ featureBar
 );
 
 /* Toolbar. */
-$canCreate       = hasPriv('stakeholder', 'create');
-$canBatchCreate  = hasPriv('stakeholder', 'batchcreate');
+$canCreate      = hasPriv('stakeholder', 'create');
+$canBatchCreate = hasPriv('stakeholder', 'batchcreate');
 
 if($canCreate || $canBatchCreate)
 {
     $createLink      = $this->createLink('stakeholder', 'create', "projectID=$projectID");
     $batchCreateLink = $this->createLink('stakeholder', 'batchCreate', "projectID=$projectID");
+
     $items = array();
     if($canCreate)      $items[] = array('text' => $lang->stakeholder->create,      'url' => $createLink, 'data-app' => 'project');
     if($canBatchCreate) $items[] = array('text' => $lang->stakeholder->batchCreate, 'url' => $batchCreateLink);
+
     toolbar
     (
         count($items) > 1 ? btngroup
