@@ -34,9 +34,31 @@ window.uploadImages = function()
             count++;
             if(count == length)
             {
-                var uploadimages = $uploadBox.zui('uploadimgs');
-                var modalID      = uploadimages.$element.closest('.modal').attr('id');
+                let uploadimages = $uploadBox.zui('uploadimgs');
+                let modalID      = uploadimages.$element.closest('.modal').attr('id');
                 zui.Modal.hide('#' . modalID);
+
+                const $form  = $('body').find('form.form-batch[data-zui-batchform]');
+                const $modal = $form.closest('.modal')
+                if($modal.length > 0)
+                {
+                    $.ajax(
+                    {
+                        url: locateUrl,
+                        headers:{'X-Zui-Modal': true},
+                        dataType: 'json',
+                        success: function(data)
+                        {
+                            $modal.find('[data-zui-ajaxform]').zui('ajaxform').destroy();
+                            $modal.find('[data-zui-batchform]').zui('batchForm').destroy();
+                            setTimeout(function()
+                            {
+                                loadModal(data.load, $modal.attr('id'));
+                            }, 500);
+                        }
+                    });
+                    return;
+                }
                 loadPage(locateUrl);
             }
         }).catch(json => {$('.uploadBtn').removeAttr('disabled'); if(typeof(json.message) != 'undefined') zui.Modal.alert(json.message)});

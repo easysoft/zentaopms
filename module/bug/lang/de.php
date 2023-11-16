@@ -198,9 +198,9 @@ $lang->bug->legendRelated               = 'Sonstige Infos';
 $lang->bug->legendThisWeekCreated       = 'This Week Created';
 
 /* Template. */
-$lang->bug->tplStep   = "<p>[Steps]</p><br/>";
-$lang->bug->tplResult = "<p>[Results]</p><br/>";
-$lang->bug->tplExpect = "<p>[Expectations]</p><br/>";
+$lang->bug->tplStep   = "<p>[Steps]</p><p></p>";
+$lang->bug->tplResult = "<p>[Results]</p><p></p>";
+$lang->bug->tplExpect = "<p>[Expectations]</p><p></p>";
 
 /* Value list for each field. */
 $lang->bug->severityList[0] = '';

@@ -1768,7 +1768,7 @@ class bugZen extends bug
      * @access protected
      * @return array
      */
-    protected function processImageForBatchCreate(object $bug, string $uploadImage, array $bugImagesFiles): array
+    protected function processImageForBatchCreate(object $bug, string|null $uploadImage, array $bugImagesFiles): array
     {
         /* When the bug is created by uploading an image, add the image to the step of the bug. */
         if(!empty($uploadImage))
@@ -1986,7 +1986,7 @@ class bugZen extends bug
      * @access protected
      * @return bool
      */
-    protected function afterBatchCreate(object $bug, array $output, string $uploadImage, array $file): bool
+    protected function afterBatchCreate(object $bug, array $output, string|null $uploadImage, array $file): bool
     {
         /* If bug has the execution, update kanban data. */
         if($bug->execution)

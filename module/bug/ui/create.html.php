@@ -154,9 +154,10 @@ formPanel
                 ),
                 span
                 (
-                    set('class', 'input-group-addon'),
+                    set('class', 'input-group-btn'),
                     a
                     (
+                        setClass('btn'),
                         set('id', 'allBuilds'),
                         set('href', 'javascript:;'),
                         $lang->bug->loadAll
@@ -178,9 +179,10 @@ formPanel
                 ),
                 span
                 (
-                    set('class', 'input-group-addon'),
+                    set('class', 'input-group-btn'),
                     a
                     (
+                        setClass('btn'),
                         set('id', 'allUsers'),
                         set('href', 'javascript:;'),
                         $lang->bug->loadAll

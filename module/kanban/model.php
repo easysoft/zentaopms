@@ -1929,18 +1929,26 @@ class kanbanModel extends model
             {
                 $cardIdList = array_unique(array_filter(explode(',', $column->cards)));
 
-                $columnData = array();
-                $columnData['id']         = $column->column;
-                $columnData['type']       = $column->columnType;
-                $columnData['name']       = $column->column;
-                $columnData['title']      = $column->columnName;
-                $columnData['color']      = $column->color;
-                $columnData['limit']      = $column->limit;
-                $columnData['region']     = $laneData['region'];
-                $columnData['laneName']   = $column->lane;
-                $columnData['group']      = $browseType;
-                $columnData['actionList'] = array('setColumn', 'setWIP');
-                if($column->parent > 0) $columnData['parentName'] = $column->parent;
+                if(!isset($columnsData[$column->column]))
+                {
+                    $columnData = array();
+                    $columnData['id']         = $column->column;
+                    $columnData['type']       = $column->columnType;
+                    $columnData['name']       = $column->column;
+                    $columnData['title']      = $column->columnName;
+                    $columnData['color']      = $column->color;
+                    $columnData['limit']      = $column->limit;
+                    $columnData['region']     = $laneData['region'];
+                    $columnData['laneName']   = $column->lane;
+                    $columnData['group']      = $browseType;
+                    $columnData['cards']      = 0;
+                    $columnData['actionList'] = array('setColumn', 'setWIP');
+                    if($column->parent > 0) $columnData['parentName'] = $column->parent;
+                }
+                else
+                {
+                    $columnData = $columnsData[$column->column];
+                }
 
                 $cardCount = 0;
                 $objects   = zget($cardGroup, $column->columnType, array());
@@ -1974,7 +1982,7 @@ class kanbanModel extends model
                     $cardsData[$laneData['id']][$column->column][] = $cardData;
                     $cardCount++;
                 }
-                $columnData['cards'] = $cardCount;
+                $columnData['cards'] += $cardCount;
                 $columnsData[$column->column] = $columnData;
             }
             $lanesData[] = $laneData;

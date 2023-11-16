@@ -198,9 +198,9 @@ $lang->bug->legendRelated               = '其他信息';
 $lang->bug->legendThisWeekCreated       = '本周新增';
 
 /* 模板。*/
-$lang->bug->tplStep   = "<p>[步骤]</p><br/>";
-$lang->bug->tplResult = "<p>[结果]</p><br/>";
-$lang->bug->tplExpect = "<p>[期望]</p><br/>";
+$lang->bug->tplStep   = "<p>[步骤]</p><p></p>";
+$lang->bug->tplResult = "<p>[结果]</p><p></p>";
+$lang->bug->tplExpect = "<p>[期望]</p><p></p>";
 
 /* 各个字段取值列表。*/
 $lang->bug->severityList[0] = '';

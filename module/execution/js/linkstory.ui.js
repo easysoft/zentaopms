@@ -1,5 +1,6 @@
-$(document).off('click','.batch-btn').on('click', '.batch-btn', function()
+$(document).off('click','.batch-btn').on('click', '.batch-btn', function(e)
 {
+    const $modal = $(e.target).closest('.modal');
     const dtable = zui.DTable.query($(this).target);
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
@@ -8,9 +9,11 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
     const form = new FormData();
     checkedList.forEach((id) => form.append('stories[]', id));
 
+    headers = {};
+    if($modal.length > 0) headers = {'X-Zui-Modal': true};
     if($(this).hasClass('ajax-btn'))
     {
-        $.ajaxSubmit({url, data: form});
+        $.ajaxSubmit({url: url, data: form, headers: headers});
     }
     else
     {
