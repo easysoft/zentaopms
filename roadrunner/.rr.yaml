@@ -8,6 +8,7 @@ service:
     remain_after_exit: true
     restart_sec: 1
     relay: pipes
+    user: "nobody"
 
   cron_consumer:
     command: php consumer.php
@@ -16,3 +17,4 @@ service:
     remain_after_exit: true
     restart_sec: 1
     relay: pipes
+    user: "nobody"
