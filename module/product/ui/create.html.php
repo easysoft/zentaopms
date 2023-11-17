@@ -22,13 +22,14 @@ foreach($fields as $field => $attr)
     $control['type'] = $attr['control'];
     if($attr['control'] == 'select') $control['type']  = 'picker';
     if($attr['control'] == 'radio')  $control['type']  = 'radioList';
-    if(!empty($attr['options']))     $control['items'] = $attr['options'];
     if($attr['control'] == 'multi-select')
     {
         $control['type']     = 'picker';
         $control['multiple'] = true;
         $fieldName          .= '[]';
     }
+
+    if($control['type'] == 'picker') $control['items'] = $attr['options'];
 
     if($field == 'line' and common::hasPriv('product', 'manageLine') and $programID)
     {
