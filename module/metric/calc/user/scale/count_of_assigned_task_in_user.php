@@ -22,7 +22,7 @@ class count_of_assigned_task_in_user extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.assignedTo', 't1.status', 't1.mode', 't5.account', 't3.status as projectStatus', 't2.status as executionStatus');
+    public $fieldList = array('t1.assignedTo', 't1.status', 't1.mode', 't4.account', 't3.status as projectStatus', 't2.status as executionStatus');
 
     public $result = array();
 
