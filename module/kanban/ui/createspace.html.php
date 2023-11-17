@@ -42,6 +42,7 @@ formPanel
         formGroup
         (
             set::label($lang->kanbanspace->owner),
+            set::required(true),
             picker
             (
                 set::name('owner'),
