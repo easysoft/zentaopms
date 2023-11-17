@@ -263,7 +263,7 @@ $config->task->datatable->fieldList['mailto']['required'] = 'no';
 
 $config->task->datatable->fieldList['module']['title']      = 'module';
 $config->task->datatable->fieldList['module']['control']    = 'select';
-$config->task->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getAllModulePairs');
+$config->task->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getTaskOptionMenu', 'params' => '$executionID');
 $config->task->datatable->fieldList['module']['display']    = false;
 
 $config->task->datatable->fieldList['execution']['title']      = 'execution';

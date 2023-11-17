@@ -2123,6 +2123,7 @@ class task extends control
         {
             $this->loadModel('file');
             $taskLang = $this->lang->task;
+            if($type == 'bysearch') $this->config->task->datatable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getAllModulePairs');
 
             /* Create field lists. */
             $sort   = common::appendOrder($orderBy);
