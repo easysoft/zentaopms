@@ -22,7 +22,6 @@ detailHeader
         ) : null,
         entityLabel
         (
-            set::text(''),
             set
             (
                 array
