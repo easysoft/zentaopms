@@ -26,7 +26,7 @@ else
     include $this->app->getConfigRoot() . 'timezones.php';
     formPanel
     (
-        set::id('timezoneForm'),
+        setID('timezoneForm'),
         set::actions(array('submit')),
         set::actionsClass('w-1/3'),
         formRow

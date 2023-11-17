@@ -120,8 +120,8 @@ if(hasPriv('task', 'create'))
         (
             div
             (
-                set::className('toolbar gap-4 w-full justify-center'),
-                btn($lang->todo->reasonList['task'], set::id('toTaskButton'), setClass('primary')),
+                setClass('toolbar gap-4 w-full justify-center'),
+                btn($lang->todo->reasonList['task'], setID('toTaskButton'), setClass('primary')),
                 on::click('toTask')
             )
         ),
@@ -165,8 +165,8 @@ if(hasPriv('bug', 'create'))
         (
             div
             (
-                set::className('toolbar gap-4 w-full justify-center'),
-                btn($lang->todo->reasonList['bug'], set::id('toBugButton'), setClass('primary')),
+                setClass('toolbar gap-4 w-full justify-center'),
+                btn($lang->todo->reasonList['bug'], setID('toBugButton'), setClass('primary')),
                 on::click('toBug')
             )
         ),
@@ -318,9 +318,15 @@ $fnGenerateFrom = function() use ($app, $lang, $config, $todo)
         a
         (
             set::href(createLink($todo->type, 'view', "id={$todo->objectID}", '', false)),
-            set('data-toggle', 'modal'),
-            set('data-data-type', 'html'),
-            set('data-type', 'ajax'),
+            setData
+            (
+                array
+                (
+                    'toggle'    => 'modal',
+                    'data-type' => 'html',
+                    'type'      => 'ajax'
+                )
+            ),
             $todo->name
         )
     );

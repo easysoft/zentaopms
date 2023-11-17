@@ -59,9 +59,9 @@ formPanel
                 set::seg(true),
                 control
                 (
-                    set::id('date'),
+                    setID('date'),
+                    setClass('date'),
                     set::name('date'),
-                    set::className('date'),
                     set::value('today'),
                     set::type('datePicker'),
                     on::change('changeCreateDate')
@@ -70,10 +70,10 @@ formPanel
                     setClass('input-group-addon'),
                     checkbox
                     (
-                        set::id('switchDate'),
+                        setID('switchDate'),
+                        setClass($lang->todo->periods['future']),
                         set::name('switchDate'),
                         set::text($lang->todo->periods['future']),
-                        set::className($lang->todo->periods['future']),
                         on::change("zui.DatePicker.query('#date').render({disabled: e.target.checked})")
                     )
                 ),
@@ -81,7 +81,7 @@ formPanel
                     setClass('input-group-addon'),
                     checkbox
                     (
-                        set::id('cycle'),
+                        setID('cycle'),
                         set::name('cycle'),
                         set::value('1'),
                         set::text($lang->todo->cycle),
@@ -132,10 +132,10 @@ formPanel
                 ),
                 control
                 (
+                    setID('configDate'),
                     set::type('datePicker'),
-                    set::id('configDate'),
                     set::name('config[date]'),
-                    set::className('cycle-date'),
+                    setClass('cycle-date'),
                     on::change("e.target.closest('.input-group').classList.toggle('has-error', !e.target.value)")
                 )
             )
@@ -353,8 +353,8 @@ formPanel
             setClass('items-center ml-4'),
             checkbox
             (
+                setID('private'),
                 set::name('private'),
-                set::id('private'),
                 set::text($lang->todo->private),
                 set::value(1),
                 on::change("zui.Picker.query('#assignedTo').render({disabled: e.target.checked})")
@@ -364,7 +364,7 @@ formPanel
                 set::icon('help'),
                 toggle::tooltip(array('placement' => 'top-start', 'title' => $lang->todo->privateTip)),
                 set::square(true),
-                set::className('ghost h-6 mt-0.5 tooltip-btn')
+                setClass('ghost h-6 mt-0.5 tooltip-btn')
             )
         )
     ),
@@ -376,8 +376,8 @@ formPanel
             set(array('id' => 'nameBox', 'required' => true, 'label' => $lang->todo->name, 'class' => 'name-box')),
             div
             (
-                setClass('w-full'),
                 setID('nameInputBox'),
+                setClass('w-full'),
                 input(set(array('id' => 'name', 'name' => 'name')))
             )
         ),
@@ -402,9 +402,9 @@ formPanel
     ),
     formGroup
     (
+        setID('status'),
         set::width('1/3'),
         set::label($lang->todo->status),
-        set::id('status'),
         set::name('status'),
         set::items($lang->todo->statusList),
         set::required(true)

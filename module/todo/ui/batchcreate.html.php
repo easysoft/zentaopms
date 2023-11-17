@@ -34,7 +34,7 @@ div
 
 formBatchPanel
 (
-    set::id('batchCreateTodoForm'),
+    setID('batchCreateTodoForm'),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),
 
     on::change('[data-name="type"]', 'changeType'),
