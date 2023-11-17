@@ -5,6 +5,7 @@ $config->product->form->create = array();
 $config->product->form->create['program']        = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0, 'options' => array());
 $config->product->form->create['line']           = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0, 'options' => array());
 $config->product->form->create['name']           = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');
+if(isset($this->config->setCode) && $this->config->setCode == 1) $config->product->form->create['code'] = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');
 $config->product->form->create['PO']             = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',       'options' => array());
 $config->product->form->create['QD']             = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',       'options' => array());
 $config->product->form->create['RD']             = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',       'options' => array());
@@ -19,13 +20,13 @@ $config->product->form->create['whitelist']      = array('type' => 'array',   'c
 $config->product->form->create['createdBy']      = array('type' => 'account', 'control' => '',             'required' => false, 'default' => (isset($app->user) && isset($app->user->account)) ? $app->user->account : '');
 $config->product->form->create['createdDate']    = array('type' => 'string',  'control' => '',             'required' => false, 'default' => helper::now());
 $config->product->form->create['createdVersion'] = array('type' => 'string',  'control' => '',             'required' => false, 'default' => $config->version);
-if(isset($this->config->setCode) && $this->config->setCode == 1) $config->product->form->create['code'] = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');
 if($config->systemMode != 'ALM') unset($config->product->form->create['program'], $config->product->form->create['line']);
 
 $config->product->form->edit = array();
 $config->product->form->edit['program']   = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0, 'options' => array());
 $config->product->form->edit['line']      = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => 0, 'options' => array());
 $config->product->form->edit['name']      = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');
+if(isset($this->config->setCode) && $this->config->setCode == 1) $config->product->form->edit['code'] = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');
 $config->product->form->edit['PO']        = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',        'options' => array());
 $config->product->form->edit['QD']        = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',        'options' => array());
 $config->product->form->edit['RD']        = array('type' => 'account', 'control' => 'select',       'required' => false, 'default' => '',        'options' => array());
@@ -37,7 +38,6 @@ $config->product->form->edit['desc']      = array('type' => 'string',  'control'
 $config->product->form->edit['acl']       = array('type' => 'string',  'control' => 'radio',        'required' => false, 'default' => 'private', 'width'   => 'full', 'options' => $lang->product->aclList);
 $config->product->form->edit['groups']    = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '',        'filter' => 'join', 'width' => 'full', 'options' => array());
 $config->product->form->edit['whitelist'] = array('type' => 'array',   'control' => 'multi-select', 'required' => false, 'default' => '',        'width'   => 'full', 'filter'  => 'join', 'options' => 'users');
-if(isset($this->config->setCode) && $this->config->setCode == 1) $config->product->form->edit['code'] = array('type' => 'string',  'control' => 'text',         'required' => true,  'filter'  => 'trim');
 if($config->systemMode != 'ALM') unset($config->product->form->edit['program'], $config->product->form->edit['line']);
 
 $config->product->form->batchEdit = array();
