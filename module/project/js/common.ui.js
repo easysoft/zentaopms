@@ -84,8 +84,8 @@ function computeDaysDelta(date1, date2)
  */
 function computeWorkDays()
 {
-    const begin = $('#begin').zui('datePicker').$.state.value;
-    const end   = $('#end').zui('datePicker').$.state.value;
+    const begin = $('#begin').zui('datePicker').$.value;
+    const end   = $('#end').zui('datePicker').$.value;
 
     if(end == LONG_TIME)
     {
@@ -116,7 +116,7 @@ function computeWorkDays()
  */
 function computeEndDate()
 {
-    const beginDate = $('#begin').zui('datePicker').$.state.value;
+    const beginDate = $('#begin').zui('datePicker').$.value;
     if(!beginDate) return;
 
     const delta = parseInt($('input[name=delta]:checked').val());
@@ -125,7 +125,7 @@ function computeEndDate()
     const isLongTime = delta == 999;
     const endDate    = isLongTime ? LONG_TIME : formatDate(beginDate, delta - 1);
 
-    $('#end').toggleClass('hidden', isLongTime).zui('datePicker').$.changeState({value: endDate});
+    $('#end').toggleClass('hidden', isLongTime).zui('datePicker').$.setValue(endDate);
     $('#end').next().toggleClass('hidden', !isLongTime);
     $('#days').closest('.form-row').toggleClass('hidden', isLongTime);
 }
