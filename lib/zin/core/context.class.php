@@ -78,7 +78,7 @@ class context extends \zin\utils\dataset
     public function getEventsBindings()
     {
         $wgs   = $this->getList('wgWithEvents');
-        $codes = [];
+        $codes = array();
         foreach($wgs as $wg)
         {
             if(!method_exists($wg, 'buildEvents')) continue;
