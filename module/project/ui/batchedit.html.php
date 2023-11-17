@@ -45,13 +45,12 @@ formBatchPanel
         set::label($lang->project->program),
         set::control('picker'),
         set::items($programs),
-        set::width('128px')
+        set::width('136px')
     ),
     formBatchItem
     (
         set::name('name'),
         set::label($lang->project->name),
-        set::width('240px')
     ),
     $setCode ? formBatchItem
     (
@@ -74,13 +73,19 @@ formBatchPanel
         set::name('begin'),
         set::label($lang->project->begin),
         set::control('date'),
-        set::width('84px')
+        set::width('120px')
     ),
     formBatchItem
     (
         set::name('end'),
         set::label($lang->project->end),
         set::control('date'),
+        set::width('120px')
+    ),
+    formBatchItem
+    (
+        set::name('days'),
+        set::label($lang->project->days),
         set::width('84px')
     ),
     formBatchItem
