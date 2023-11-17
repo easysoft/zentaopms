@@ -21,7 +21,30 @@ foreach($config->block->projectstatistic->items as $module => $items)
         $unit  = $item['unit'];
         $cellItems[] = item
         (
-            set::name($lang->block->projectstatistic->{$field} . ': '),
+            set::name
+            (
+                $lang->block->projectstatistic->{$field},
+                !isset($lang->block->tooltips[$field]) ? ':' : null
+            ),
+            to::suffixName
+            (
+                isset($lang->block->tooltips[$field]) ? icon
+                (
+                    setClass('text-light text-sm'),
+                    toggle::tooltip
+                    (
+                        array
+                        (
+                            'title'     => $lang->block->tooltips[$field],
+                            'placement' => 'bottom',
+                            'type'      => 'white',
+                            'className' => 'text-dark border border-light leading-5'
+                        )
+                    ),
+                    'help',
+                    ':'
+                ) : null
+            ),
             span
             (
                 setClass('font-bold text-black mr-0.5'),
