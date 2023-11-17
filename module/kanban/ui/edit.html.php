@@ -24,6 +24,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->kanban->space),
+            set::required(true),
             picker
             (
                 set::name('space'),
