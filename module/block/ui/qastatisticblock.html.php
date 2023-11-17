@@ -168,7 +168,21 @@ statisticBlock
                 (
                     setClass('row text-sm text-gray items-center gap-1'),
                     $lang->block->qastatistic->closedBugRate,
-                    icon('help text-light text-sm')
+                    icon
+                    (
+                        'help',
+                        setClass('text-light text-sm'),
+                        toggle::tooltip
+                        (
+                            array
+                            (
+                                'content'   => array('html' => $lang->block->tooltips['closedBugRate']),
+                                'placement' => 'bottom',
+                                'type'      => 'white',
+                                'className' => 'text-dark border border-light leading-5'
+                            )
+                        )
+                    )
                 )
             ),
             row

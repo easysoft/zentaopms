@@ -80,7 +80,7 @@ statisticBlock
                     $lang->block->productstatistic->deliveryRate,
                     icon
                     (
-                        'help',
+                        setClass('text-light text-sm'),
                         toggle::tooltip
                         (
                             array
@@ -90,7 +90,8 @@ statisticBlock
                                 'type'      => 'white',
                                 'className' => 'text-dark border border-light leading-5'
                             )
-                        )
+                        ),
+                        'help'
                     )
                 )
             ),

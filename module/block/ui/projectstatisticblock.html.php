@@ -120,7 +120,7 @@ if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
                 (
                     isset($lang->block->tooltips[$field]) ? icon
                     (
-                        'help',
+                        setClass('text-light text-sm'),
                         toggle::tooltip
                         (
                             array
@@ -131,6 +131,7 @@ if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
                                 'className' => 'text-dark border border-light leading-5'
                             )
                         ),
+                        'help',
                         ':'
                     ) : null
                 ),
@@ -189,12 +190,12 @@ else
                     $lang->block->projectstatistic->totalProgress,
                     icon
                     (
-                        setClass('pl-0.5'),
+                        setClass('pl-0.5 text-light text-sm'),
                         toggle::tooltip
                         (
                             array
                             (
-                                'title'     => $lang->block->projectstatistic->totalProgressTip,
+                                'content'   => array('html' => $lang->block->projectstatistic->totalProgressTip),
                                 'placement' => 'bottom',
                                 'type'      => 'white',
                                 'className' => 'text-dark border border-light leading-5'
@@ -228,6 +229,7 @@ else
                 (
                     icon
                     (
+                        setClass('text-light text-sm'),
                         toggle::tooltip
                         (
                             array
@@ -255,6 +257,7 @@ else
                 (
                     icon
                     (
+                        setClass('text-light text-sm'),
                         toggle::tooltip
                         (
                             array
@@ -282,6 +285,7 @@ else
                 (
                     icon
                     (
+                        setClass('text-light text-sm'),
                         toggle::tooltip
                         (
                             array
@@ -326,6 +330,7 @@ else
                 (
                     icon
                     (
+                        setClass('text-light text-sm'),
                         toggle::tooltip
                         (
                             array
@@ -353,6 +358,7 @@ else
                 (
                     icon
                     (
+                        setClass('text-light text-sm'),
                         toggle::tooltip
                         (
                             array
@@ -380,6 +386,7 @@ else
                 (
                     icon
                     (
+                        setClass('text-light text-sm'),
                         toggle::tooltip
                         (
                             array
