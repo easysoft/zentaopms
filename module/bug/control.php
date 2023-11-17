@@ -720,6 +720,7 @@ class bug extends control
 
         /* Assign. */
         $this->view->title     = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title {$this->lang->dash} " . $this->products[$bug->product];
+        $this->view->bug       = $bug;
         $this->view->bugs2Link = $this->bug->getBugs2Link($bugID, $bySearch, $excludeBugs, $queryID, $pager);
         $this->view->users     = $this->user->getPairs('noletter');
         $this->view->pager     = $pager;
