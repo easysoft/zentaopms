@@ -117,7 +117,7 @@ detailBody
                 set::active($type == 'story'),
                 div
                 (
-                    setClass('tabnActions'),
+                    setClass('tab-actions'),
                     !common::hasPriv($buildModule, 'linkStory') ? null : btn(set::text($lang->build->linkStory), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', createLink($buildModule, 'linkStory', "buildID={$build->id}" . (($link == 'true' && $type == 'story') ? $decodeParam : "&browseType=&param="))))
                 ),
                 dtable
@@ -147,7 +147,7 @@ detailBody
                 set::active($type == 'bug'),
                 div
                 (
-                    setClass('tabnActions'),
+                    setClass('tab-actions'),
                     !common::hasPriv($buildModule, 'linkBug') ? null : btn(set::text($lang->build->linkBug), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', createLink($buildModule, 'linkBug', "buildID={$build->id}" . (($link == 'true' && $type == 'bug') ? $decodeParam : "&browseType=&param="))))
                 ),
                 dtable

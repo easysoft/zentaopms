@@ -182,7 +182,7 @@ detailBody
                 set::active($type == 'story'),
                 div
                 (
-                    setClass('tabnActions'),
+                    setClass('tab-actions'),
                     dropdown
                     (
                         btn(set::text($lang->story->create), set::target('_parent'), setClass('secondary' . (empty($createStoryLink) ? ' disabled' : '')), set::icon('plus'), set::caret(true), set::url($createStoryLink)),
@@ -223,7 +223,7 @@ detailBody
                 set::active($type == 'bug'),
                 div
                 (
-                    setClass('tabnActions'),
+                    setClass('tab-actions'),
                     !common::hasPriv('productplan', 'linkBug') ? null : btn(set::text($lang->productplan->linkBug), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', inlink('linkBug', "planID={$plan->id}" . (($link == 'true' && $type == 'bug') ? $decodeParam : "&browseType=&param=") . "&orderBy={$orderBy}")))
                 ),
                 dtable

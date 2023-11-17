@@ -142,7 +142,7 @@ detailBody
                 set::active($type == 'story'),
                 div
                 (
-                    setClass('tabnActions'),
+                    setClass('tab-actions'),
                     $exportBtn,
                     $linkStoryBtn
                 ),
@@ -169,7 +169,7 @@ detailBody
                 set::active($type == 'bug'),
                 div
                 (
-                    setClass('tabnActions'),
+                    setClass('tab-actions'),
                     $exportBtn,
                     $linkBugBtn
                 ),
@@ -195,7 +195,7 @@ detailBody
                 set::active($type == 'leftBug'),
                 div
                 (
-                    setClass('tabnActions'),
+                    setClass('tab-actions'),
                     $exportBtn,
                     $linkLeftBtn
                 ),
@@ -220,7 +220,7 @@ detailBody
                 set::title($lang->release->basicInfo),
                 div
                 (
-                    setClass('tabnActions'),
+                    setClass('tab-actions'),
                     $exportBtn
                 ),
                 div(
