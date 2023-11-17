@@ -41,7 +41,7 @@ formBatchPanel
 (
     on::click('#saveButton', 'customSubmit'),
     on::click('#saveDraftButton', 'customSubmit'),
-    set::id('dataform'),
+    setID('dataform'),
     $stories ? set::data($stories) : null,
     set::title($storyID ? $storyTitle . $lang->colon . $this->lang->story->subdivide : $this->lang->story->batchCreate),
     set::uploadParams('module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan=&type=$type")),

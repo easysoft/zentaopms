@@ -15,7 +15,7 @@ div
     setClass('flex'),
     formPanel
     (
-        set::id('closedExecutionForm'),
+        setID('closedExecutionForm'),
         set::actions(array('submit')),
         setClass('flex-auto'),
         formGroup

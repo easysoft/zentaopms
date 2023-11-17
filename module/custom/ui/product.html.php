@@ -17,7 +17,7 @@ div
     $sidebarMenu,
     formPanel
     (
-        set::id('closedProductForm'),
+        setID('closedProductForm'),
         set::actions(array('submit')),
         set::actionsClass('w-2/3'),
         setClass('flex-auto ml-4'),
