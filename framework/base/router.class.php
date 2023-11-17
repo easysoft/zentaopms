@@ -3114,7 +3114,8 @@ class baseRouter
         if(!$this->config->debug) return true;
         if(!class_exists('dao')) return;
 
-        $sqlLog = $this->getLogRoot() . 'sql.' . date('Ymd') . '.log.php';
+        $runMode = PHP_SAPI == 'cli' ? '_cli' : '';
+        $sqlLog = $this->getLogRoot() . "sql$runMode." . date('Ymd') . '.log.php';
         if(!is_file($sqlLog)) file_put_contents($sqlLog, "<?php\n die();\n?" . ">\n");
 
         $fh = @fopen($sqlLog, 'a');
