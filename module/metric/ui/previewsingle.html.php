@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$currentID = $current->id ?? 0;
+
 $fnGenerateSide = function() use($metrics, $current, $viewType, $scope, $filtersBase64)
 {
     $metricList = array();
@@ -112,7 +114,7 @@ toolbar
         setClass('btn text-black ghost primary-hover-500'),
         set::icon('exchange'),
         set::iconClass('icon-18'),
-        set::url(helper::createLink('metric', 'preview', "scope=$exchangeScope&viewType=multiple&metricID={$current->id}")),
+        set::url(helper::createLink('metric', 'preview', "scope=$exchangeScope&viewType=multiple&metricID={$currentID}")),
         $lang->metric->viewType->multiple,
     ),
     /*
