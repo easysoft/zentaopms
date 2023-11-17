@@ -65,7 +65,7 @@ formPanel
         (
             set::href(createLink('zahost', 'create')),
             $lang->zahost->create,
-            setData(array('data-toggle' => 'modal')),
+            setData(array('toggle' => 'modal')),
             setClass('leading-8 ml-2')
         )
     ),
