@@ -62,7 +62,7 @@ class testcase extends control
                 $mode     = ($this->app->methodName == 'create' and empty($this->config->CRProduct)) ? 'noclosed' : '';
                 $products = $this->product->getPairs($mode, 0, '', 'all');
             }
-            if(empty($products) and !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testcase&objectID=$objectID")));
+            if(empty($products) and substr($this->app->rawMethod, 0, 4) != 'ajax') $this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testcase&objectID=$objectID"));
         }
         else
         {
