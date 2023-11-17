@@ -60,11 +60,11 @@ if($isMultiple)
         set::label($lang->task->mode),
         inputGroup
         (
-            set::className('no-background'),
+            setClass('no-background'),
             zget($lang->task->modeList, $task->mode),
             input
             (
-                set::className('hidden'),
+                setClass('hidden'),
                 set::name('mode'),
                 set::value($task->mode)
             )
@@ -80,7 +80,7 @@ if($isMultiple)
         setClass('items-center'),
         checkbox
         (
-            set::id('multiple'),
+            setID('multiple'),
             set::name('multiple'),
             set::text($lang->task->manageTeam),
             set::rootClass('ml-4'),
@@ -109,9 +109,9 @@ if($isMultiple)
 {
     $modalTeamBtn = btn(
         set::text($lang->task->team),
-        set::className('team-group hidden'),
+        setClass('team-group hidden'),
         set::url('#modalTeam'),
-        set('data-toggle', 'modal')
+        setData(array('toggle' => 'modal'))
     );
 }
 
@@ -129,9 +129,15 @@ foreach($task->team as $member)
     $teamForm[] = h::tr
     (
         setClass("member member-{$member->status}"),
-        set('data-estimate', (float)$member->estimate),
-        set('data-consumed', (float)$member->consumed),
-        set('data-left', (float)$member->left),
+        set
+        (
+            array
+            (
+                'estimate'  =>  (float)$member->estimate,
+                'consumed'  =>  (float)$member->consumed,
+                'left'      =>  (float)$member->left
+            )
+        ),
         h::td
         (
             setClass('team-index'),
@@ -354,25 +360,25 @@ formPanel
     (
         modal
         (
-            set::id('modalTeam'),
+            setID('modalTeam'),
+            setData(array('backdrop' => false)),
             set::title($lang->task->team),
             set::footerClass('flex-center'),
-            set('data-backdrop', false),
             to::footer
             (
                 div(setClass('multi-append')),
                 btn
                 (
+                    setID('confirmButton'),
                     setClass('primary btn-wide'),
-                    set::id('confirmButton'),
                     set::text($lang->confirm),
                     on::click('checkTeam')
                 )
             ),
             h::table
             (
+                setID('teamTable'),
                 setClass('table table-form'),
-                set::id('teamTable'),
                 $teamForm
             )
         )

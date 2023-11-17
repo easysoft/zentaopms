@@ -85,8 +85,14 @@ if(!empty($legendBasic['mailto']['text']))
 $duplicateLink = $bug->duplicateBug && $canViewBug ? a
 (
     set('href', $this->createLink('bug', 'view', "bugID={$bug->duplicateBug}")),
-    set('data-toggle', 'modal'),
-    set('data-size', 'lg'),
+    setData
+    (
+        array
+        (
+            'toggle' => 'modal',
+            'size'   => 'lg',
+        )
+    ),
     $bug->duplicateBugTitle
 ) : '';
 $duplicateBug = $bug->duplicateBug ? span("#{$bug->duplicateBug}:", $duplicateLink) : '';
@@ -97,9 +103,15 @@ foreach($legendMisc['relatedBug']['text'] as $relatedBugID => $relatedBugTitle)
     $relatedBugs[] = div(a
     (
         set('href', $this->createLink('bug', 'view', "bugID={$relatedBugID}")),
-        set('data-toggle', 'modal'),
-        set('data-size', 'lg'),
-        span(label(set::className('dark-outline rounded-full mr-2'), $relatedBugID), $relatedBugTitle)
+        setData
+        (
+            array
+            (
+                'toggle' => 'modal',
+                'size'   => 'lg',
+            )
+        ),
+        span(label(setClass('dark-outline rounded-full mr-2'), $relatedBugID), $relatedBugTitle)
     ));
 }
 
@@ -109,8 +121,8 @@ foreach($legendMisc['linkMR']['text'] as $MRID => $linkMRTitle)
     $linkMR[] = div(a
     (
         $canViewMR ? set('href', $this->createLink('mr', 'view', "MRID={$MRID}")) : null,
-        set('data-app', 'devops'),
-        span(label(set::className('dark-outline rounded-full mr-2'), $MRID), $linkMRTitle)
+        setData(array('data-app' => 'devops')),
+        span(label(setClass('dark-outline rounded-full mr-2'), $MRID), $linkMRTitle)
     ));
 }
 
@@ -119,7 +131,7 @@ foreach($legendMisc['linkCommit']['text'] as $commit)
 {
     $linkCommits[] = div(a
     (
-        set('data-app', 'devops'),
+        setData(array('app' => 'devops')),
         $canViewRepo ? set('href', $this->createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}")) : null,
         "{$commit->comment}"
     ));
@@ -151,7 +163,7 @@ $legendMain['story']['text']          = $bug->story ? div
         ')'
     ) : ''
 ) : '';
-$legendMain['task']['text']           = $bug->task  ? div(label(set('class', 'dark-outline rounded-full size-sm mr-2'), $bug->task),  span($bug->taskName))   : '';;
+$legendMain['task']['text']           = $bug->task  ? div(label(setClass('dark-outline rounded-full size-sm mr-2'), $bug->task),  span($bug->taskName))   : '';;
 $legendMisc['relatedBug']['text']     = $relatedBugs;
 $legendMisc['linkCommit']['text']     = $linkCommits;
 $legendMisc['linkMR']['text']         = $linkMR;
@@ -237,7 +249,7 @@ detailBody
     floatToolbar
     (
         set::object($bug),
-        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
+        isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), setClass('ghost text-white'), $lang->goback)),
         set::main($actions['mainActions']),
         set::suffix($actions['suffixActions'])
     ),
@@ -295,15 +307,15 @@ detailBody
 
 modal
 (
-    set::id('toTask'),
+    setID('toTask'),
     set::modalProps(array('title' => $lang->bug->selectProjects)),
     to::footer
     (
         div
         (
-            set::className('toolbar gap-4 w-full justify-center'),
-            btn($lang->bug->nextStep, set::id('toTaskButton'), setClass('primary')),
-            btn($lang->cancel, set::id('cancelButton'), set('data-dismiss', 'modal'))
+            setClass('toolbar gap-4 w-full justify-center'),
+            btn($lang->bug->nextStep, setID('toTaskButton'), setClass('primary')),
+            btn($lang->cancel, setID('cancelButton'), setData(array('dismiss' => 'modal')))
         )
     ),
     formPanel
@@ -329,7 +341,7 @@ modal
                 set::required(true),
                 inputGroup
                 (
-                    set('id', 'executionBox'),
+                    setID('executionBox'),
                     picker
                     (
                         set::name('execution'),

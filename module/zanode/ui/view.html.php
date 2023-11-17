@@ -87,7 +87,7 @@ if($zanode->hostType == 'physics')
             h::textarea
             (
                 setClass('hidden'),
-                set::id('ssh-copy'),
+                setID('ssh-copy'),
                 $ssh
             )
         )
@@ -191,7 +191,7 @@ else
             h::textarea
             (
                 setClass('hidden'),
-                set::id('ssh-copy'),
+                setID('ssh-copy'),
                 $ssh
             )
         )
@@ -279,7 +279,7 @@ else
             setClass('ml-2'),
             span
             (
-                set::id('pwd-text'),
+                setID('pwd-text'),
                 str_repeat('*', strlen($config->zanode->defaultPwd))
             ),
             h::button
@@ -306,7 +306,7 @@ else
             ),
             h::textarea
             (
-                set::id('pwd-copy'),
+                setID('pwd-copy'),
                 setClass('hidden'),
                 $config->zanode->defaultPwd
             )
@@ -409,7 +409,7 @@ detailBody
         ),
         div
         (
-            set::id('statusContainer')
+            setID('statusContainer')
         ),
         div
         (
@@ -425,7 +425,7 @@ detailBody
                 html($lang->zanode->init->initFailNoticeOnPhysics),
                 textarea
                 (
-                    set::id('initBash'),
+                    setID('initBash'),
                     setClass('hidden'),
                     $initBash
                 ),
@@ -464,7 +464,7 @@ detailBody
                         $lang->zanode->createSnapshot,
                         set::url(createLink('zanode', 'createSnapshot', "zanodeID={$zanode->id}")),
                         set::icon('plus'),
-                        set('data-toggle', 'modal'),
+                        setData(array('toggle' => 'modal')),
                         set::disabled($zanode->status != 'running' ? true : false)
                     )
                 )
