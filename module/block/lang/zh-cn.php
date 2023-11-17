@@ -486,7 +486,7 @@ $lang->block->zentaoclient->edition->linux64 = 'Linux版';
 $lang->block->zentaoclient->edition->mac64   = 'Mac版';
 
 $lang->block->guideTabs['flowchart']      = '流程图';
-if($config->systemMode == 'ALM') $lang->block->guideTabs['systemMode']     = '运行模式';
+if($config->systemMode != 'PLM') $lang->block->guideTabs['systemMode']     = '运行模式';
 $lang->block->guideTabs['visionSwitch']   = '界面切换';
 $lang->block->guideTabs['themeSwitch']    = '主题切换';
 $lang->block->guideTabs['preference']     = '个性化设置';
