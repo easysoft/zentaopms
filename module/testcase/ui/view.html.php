@@ -74,7 +74,7 @@ if($isLibCase)
         $linkCaseTitles[] = a
         (
             set::href($this->createLink('testcase', 'view', "caseID={$linkCaseID}", '', true)),
-            set('data-toggle', 'modal'),
+            setData(array('toggle' => 'modal')),
             "#{$linkCaseID} {$linkCaseTitle}"
         );
     }
@@ -188,8 +188,7 @@ else
     $storyItem = item
     (
         set::name($lang->testcase->story),
-        isset($case->storyTitle) && hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "storyID={$case->story}{$param}")), set('data-toggle', 'modal'), "#{$case->story}:{$case->storyTitle}") : (isset($case->storyTitle) ? "#{$case->story}:{$case->storyTitle}" : ''),
-        set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
+        isset($case->storyTitle) && hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "storyID={$case->story}{$param}")), setData(array('toggle' => 'modal')), "#{$case->story}:{$case->storyTitle}") : (isset($case->storyTitle) ? "#{$case->story}:{$case->storyTitle}" : ''), set::labelProps(array('data-toggle' => 'modal', 'data-size' => 'lg')),
         $confirmStatusChange
     );
 
@@ -392,7 +391,7 @@ detailBody
             (
                 $stepsType == 'table' ? div
                 (
-                    set::id('stepsTable'),
+                    setID('stepsTable'),
                     div
                     (
                         setClass('steps-header'),
@@ -416,7 +415,7 @@ detailBody
                     )
                 ) : div
                 (
-                    set::id('stepsView'),
+                    setID('stepsView'),
                     mindmap
                     (
                         set::data($case->mindMapSteps),
@@ -448,7 +447,7 @@ detailBody
     floatToolbar
     (
         set::object($case),
-        $isInModal ? null : to::prefix(backBtn(set::icon('back'), set::className('ghost text-white'), $lang->goback)),
+        $isInModal ? null : to::prefix(backBtn(set::icon('back'), setClass('ghost text-white'), $lang->goback)),
         set::main($actions['mainActions']),
         set::suffix($actions['suffixActions'])
     ),

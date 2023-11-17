@@ -30,7 +30,7 @@ $cases = initTableData(array_values($cases), $cols);
 
 dtable
 (
-    set::id('groupCaseTable'),
+    setID('groupCaseTable'),
     set::cols($cols),
     set::data($cases),
     set::userMap($users),

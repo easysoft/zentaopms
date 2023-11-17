@@ -20,11 +20,11 @@ if(common::hasPriv('build', 'create'))
 {
     $createBuild = formGroup
     (
-        set::id('createBuildBox'),
+        setID('createBuildBox'),
         set::width('1/3'),
         checkbox
         (
-            set::id('createBuild'),
+            setID('createBuild'),
             set::name('createBuild'),
             set::rootClass('ml-4 items-center'),
             set::text($lang->bug->createBuild)
@@ -49,7 +49,7 @@ formPanel
     formRow
     (
         setClass('hidden'),
-        set::id('duplicateBugBox'),
+        setID('duplicateBugBox'),
         formGroup
         (
             set::width('1/3'),
@@ -66,7 +66,7 @@ formPanel
         formGroup
         (
             set::width('1/3'),
-            set::id('newBuildExecutionBox'),
+            setID('newBuildExecutionBox'),
             setClass('hidden'),
             set::label(!empty($execution) && $execution->type == 'kanban' ? $lang->bug->kanban : $lang->build->execution),
             set::required(true),
@@ -80,7 +80,7 @@ formPanel
         formGroup
         (
             set::width('1/3'),
-            set::id('resolvedBuildBox'),
+            setID('resolvedBuildBox'),
             set::label($lang->bug->resolvedBuild),
             set::name('resolvedBuild'),
             set::value(''),
@@ -90,7 +90,7 @@ formPanel
         (
             set::width('1/3'),
             setClass('hidden'),
-            set::id('newBuildBox'),
+            setID('newBuildBox'),
             set::required(true),
             inputGroup
             (

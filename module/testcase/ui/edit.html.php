@@ -104,7 +104,7 @@ detailBody
             set::title($lang->testcase->scene),
             formGroup
             (
-                set::id('sceneIdBox'),
+                setID('sceneIdBox'),
                 picker
                 (
                     set::name('scene'),
@@ -184,7 +184,7 @@ detailBody
                     ),
                     picker
                     (
-                        set::className(!isset($product->type) || $product->type == 'normal' ? 'hidden' : ''),
+                        setClass(!isset($product->type) || $product->type == 'normal' ? 'hidden' : ''),
                         setID('branch'),
                         set::name('branch'),
                         set::items($branchTagOption),
@@ -199,7 +199,7 @@ detailBody
                 (
                     inputGroup
                     (
-                        set::id('moduleIdBox'),
+                        setID('moduleIdBox'),
                         picker
                         (
                             setID('module'),
@@ -234,7 +234,7 @@ detailBody
                 set::name($lang->testcase->story),
                 formGroup
                 (
-                    set::id('storyIdBox'),
+                    setID('storyIdBox'),
                     picker
                     (
                         setID('story'),
@@ -259,7 +259,7 @@ detailBody
                     ),
                     span
                     (
-                        set::className('input-group-addon'),
+                        setClass('input-group-addon'),
                         control
                         (
                             set::type('checkbox'),
