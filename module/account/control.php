@@ -14,16 +14,16 @@ class account extends control
     /**
      * Browse accouts page.
      *
-     * @param  string   $browseType
-     * @param  string   $param
-     * @param  string   $orderBy
+     * @param  string $browseType
+     * @param  string $param
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browse($browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(string $browseType = 'all', string $param = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->app->loadLang('serverroom');
         $browseType = strtolower($browseType);
@@ -47,7 +47,6 @@ class account extends control
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;
         $this->view->browseType  = $browseType;
-        $this->view->position[]  = $this->lang->account->common;
 
         $this->display();
     }

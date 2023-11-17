@@ -45,24 +45,21 @@ class accountModel extends model
      * @access public
      * @return array
      */
-    public function getList($browseType = 'all', $param = 0, $orderBy = 't1.id_desc', $pager = null)
+    public function getList(string $browseType = 'all', string $param = '', string $orderBy = 'id_desc', object|null $pager = null)
     {
-        $query   = '';
+        $query = '';
         if($browseType == 'bysearch')
         {
             /* Concatenate the conditions for the query. */
+            if(!$this->session->accountQuery) $this->session->set('accountQuery', ' 1 = 1');
             if($param)
             {
-                $query = $this->loadModel('search')->getZinQuery($param);
+                $query = $this->loadModel('search')->getQuery((int)$param);
                 if($query)
                 {
                     $this->session->set('accountQuery', $query->sql);
                     $this->session->set('accountForm', $query->form);
                 }
-            }
-            else
-            {
-                if(!$this->session->accountQuery) $this->session->set('accountQuery', ' 1 = 1');
             }
             $query = $this->session->accountQuery;
         }

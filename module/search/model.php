@@ -378,16 +378,16 @@ class searchModel extends model
      * @access public
      * @return object
      */
-    public function getQuery($queryID)
+    public function getQuery(int $queryID): object
     {
-        $query = $this->dao->findByID((int)$queryID)->from(TABLE_USERQUERY)->fetch();
+        $query = $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
         if(!$query) return false;
 
         /* Decode html encode. */
         $query->form = htmlspecialchars_decode($query->form, ENT_QUOTES);
         $query->sql  = htmlspecialchars_decode($query->sql, ENT_QUOTES);
 
-        $hasDynamic  = strpos($query->form, '$') !== false;
+        $hasDynamic  = str_contains($query->form, '$');
         $query->form = unserialize($query->form);
         if($hasDynamic)
         {
