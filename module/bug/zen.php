@@ -231,7 +231,8 @@ class bugZen extends bug
      */
     private function getBranchOptions(int $productID): array
     {
-        $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
+        $branches        = $this->loadModel('branch')->getList($productID, 0, 'all');
+        $branchTagOption = array();
         foreach($branches as $branchInfo)
         {
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
@@ -1028,7 +1029,7 @@ class bugZen extends bug
         /* 获取分支列表。*/
         /* Get branch options. */
         $branchTagOption = array();
-        if($product->type != 'normal') $branchTagOption = $this->getBranchOptions($product->id);
+        if($product->type != 'normal') $branchTagOption = $this->getBranchOptions((int)$product->id);
 
         /* 获取需求和任务的 id 列表。*/
         /* Get story and task id list. */
@@ -1052,12 +1053,12 @@ class bugZen extends bug
         $this->view->orderBy         = $orderBy;
         $this->view->pager           = $pager;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($product->id, 'bug', $showModule) : array();
-        $this->view->modules         = $this->tree->getOptionMenu($product->id, 'bug', 0, $branch);
-        $this->view->moduleTree      = $this->tree->getTreeMenu($product->id, 'bug', 0, array('treeModel', 'createBugLink'), array(), $branch);
+        $this->view->modules         = $this->tree->getOptionMenu((int)$product->id, 'bug', 0, $branch);
+        $this->view->moduleTree      = $this->tree->getTreeMenu((int)$product->id, 'bug', 0, array('treeModel', 'createBugLink'), array(), $branch);
         $this->view->branchTagOption = $branchTagOption;
         $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
         $this->view->executions      = $executions;
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($product->id);
+        $this->view->plans           = $this->loadModel('productplan')->getPairs((int)$product->id);
         $this->view->tasks           = $this->loadModel('task')->getPairsByIdList($taskIdList);
         $this->view->stories         = $this->loadModel('story')->getPairsByList($storyIdList);
         $this->view->builds          = $this->loadModel('build')->getBuildPairs(array($product->id), $branch);

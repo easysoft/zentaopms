@@ -105,7 +105,7 @@ class bug extends control
         /* Save the product id user last visited to session and cookie. */
         $productID  = $this->product->checkAccess($productID, $this->products);
         $product    = $this->product->getByID($productID);
-        $branch     = $this->bugZen->getBrowseBranch($branch, $product->type);
+        $branch     = $this->bugZen->getBrowseBranch($branch, (string)$product->type);
         $browseType = $browseType ? strtolower($browseType) : 'unclosed';
 
         /* 设置1.5级导航相关信息。*/
@@ -116,7 +116,7 @@ class bug extends control
         /* Set the order field. */
         if(!$orderBy) $orderBy =  $this->cookie->qaBugOrder ? $this->cookie->qaBugOrder : 'id_desc';
 
-        $this->bugZen->setBrowseCookie($product, $branch, $browseType, $param, $orderBy);
+        $this->bugZen->setBrowseCookie((object)$product, $branch, $browseType, $param, $orderBy);
 
         $this->bugZen->setBrowseSession($browseType);
 
@@ -127,9 +127,9 @@ class bug extends control
         $this->bugZen->buildBrowseSearchForm($productID, $branch, $queryID);
 
         $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
-        $bugs       = $this->bugZen->getBrowseBugs($product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
+        $bugs       = $this->bugZen->getBrowseBugs((int)$product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
 
-        $this->bugZen->buildBrowseView($bugs, $product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager);
+        $this->bugZen->buildBrowseView($bugs, (object)$product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager);
         $this->display();
     }
 
