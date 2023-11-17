@@ -31,7 +31,7 @@ function changeResolution(event)
     }
 }
 
-function linkBug(event)
+function linkBug()
 {
     const relatedBugs = $('[name^=relatedBug]').val();
     var   linkedBugs  = '';

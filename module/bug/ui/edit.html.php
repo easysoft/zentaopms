@@ -597,13 +597,13 @@ detailBody
                         set::name('relatedBug[]'),
                         set::items(isset($bug->relatedBugTitles) ? $bug->relatedBugTitles : array())
                     ),
-                    common::hasPriv('bug', 'linkBugs') ? span
+                    common::hasPriv('bug', 'linkBugs') ? inputGroupAddon
                     (
-                        set('class', 'input-group-addon'),
-                        a
+                        setClass('p-0'),
+                        btn
                         (
-                            set('id', 'linkBug'),
-                            set('href', 'javascript:;'),
+                            setID('linkBug'),
+                            setClass('ghost text-primary'),
                             $lang->bug->linkBugs
                         )
                     ) : null
