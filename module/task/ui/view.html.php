@@ -374,7 +374,7 @@ detailBody
                 set::title($lang->task->team),
                 h::table
                 (
-                    setClass('table table-data'),
+                    setClass('table condensed bordered'),
                     setID('team'),
                     h::thead
                     (
