@@ -2646,6 +2646,7 @@ EOF;
         if($module == 'product' and $method == 'browse' and !empty($app->params['storyType']) and $app->params['storyType'] == 'requirement') $method = 'requirement';
         if($module == 'product' and $method == 'browse' and !empty($params['storyType']) and $params['storyType'] == 'requirement') $method = 'requirement';
         if($module == 'story' and $method == 'linkrequirements') $module = 'requirement';
+        if($module == 'requirement' and $method == 'processstorychange') $module = 'story';
         if($app->config->vision != 'lite' and $module == 'feedback' and $method == 'view') $method = 'adminview';
 
         /* If the user is doing a tutorial, have all tutorial privs. */
