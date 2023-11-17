@@ -166,20 +166,21 @@ class cron extends control
     /**
      * Schedule cron task by RoadRunner.
      *
-     * @param  bool $restart
      * @access public
      * @return void
      */
-    public function rrSchedule($restart = true)
+    public function rrSchedule()
     {
         if('cli' !== PHP_SAPI) return;
 
         set_time_limit(0);
         session_write_close();
 
+        $execId = mt_rand();
+        $this->cron->restartCron($execId);
+
         $this->loadModel('common');
 
-        $execId = mt_rand();
         while(true)
         {
             if(empty($this->config->global->cron))
@@ -187,8 +188,6 @@ class cron extends control
                 sleep(60);
                 continue;
             }
-
-            if($restart) $this->cron->restartCron($execId);
 
             if($this->canSchedule($execId)) $this->schedule($execId);
 
