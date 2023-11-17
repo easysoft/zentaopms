@@ -1993,6 +1993,7 @@ class executionModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->beginIF($productID)->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')->fi()
             ->where('t1.type')->in('sprint,stage,kanban')
+            ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.multiple')->eq('1')
