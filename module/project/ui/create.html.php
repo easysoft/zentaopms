@@ -367,7 +367,6 @@ formPanel
             set::width('1/2'),
             set('id', 'linkProduct'),
             set::label($lang->project->manageProducts),
-            set::required(true),
             inputGroup
             (
                 div
