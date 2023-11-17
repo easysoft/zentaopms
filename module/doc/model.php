@@ -2317,7 +2317,7 @@ class docModel extends model
 
         $my = $this->dao->select("count(*) as myDocs, SUM(views) as docViews, SUM(collects) as docCollects")->from(TABLE_DOC)
             ->where('addedBy')->eq($this->app->user->account)
-            ->andWhere('type')->in('text,word,ppt,excel,url,article')
+            ->andWhere('type')->in($this->config->doc->docTypes)
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('lib')->ne('')
