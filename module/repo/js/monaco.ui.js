@@ -86,8 +86,9 @@ window.afterPageUpdate = function()
  */
 window.treeClick = function(info)
 {
-    if (info.item.items && info.item.items.length > 0) return;
-    $('#' + info.item.id).parent().addClass('selected');
+    if(info.item.items && (info.item.items.length > 0 || info.item.items.url)) return;
+
+    $('li[z-key="' + info.item.id + '"]').addClass('selected');
     openTab(info.item.key, info.item.text);
     arrowTabs('monacoTabs', -2);
 }
