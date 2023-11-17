@@ -836,7 +836,7 @@ class programplanModel extends model
             if($setCode)    $plan->code    = $codes[$key];
             if($setPercent) $plan->percent = $percents[$key];
             $plan->attribute  = (empty($parentID) or $parentAttribute == 'mix') ? $attributes[$key] : $parentAttribute;
-            $plan->milestone  = $milestone[$key];
+            $plan->milestone  = $milestone[$key] ? 1 : 0;
             $plan->output     = empty($output[$key]) ? '' : implode(',', $output[$key]);
             $plan->acl        = empty($parentID) ? $acl[$key] : $parentACL;
             $plan->PM         = empty($PM[$key]) ? '' : $PM[$key];
