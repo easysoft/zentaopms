@@ -687,11 +687,14 @@
             url = lasShowModal.options.url;
             target = lasShowModal.id;
         }
-        options = $.extend(url ? {url: url} : {}, options);
+        options  = $.extend(typeof url === 'object' ? (url || {}) : {url: url}, options);
+        target   = target || options.target;
+        callback = callback || options.callback;
+
         if(!target) return zui.Modal.open(options);
         else if(target === 'current') target = zui.Modal.query().id;
 
-        if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
+        if(typeof target === 'string' && target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const modal = zui.Modal.query(target);
         if(!modal) return;
         modal.render(options).then((result) => {if(result && callback) callback(modal.dialog);});
@@ -869,7 +872,7 @@
                 if(load === 'modal')
                 {
                     if(!options.target && event) options.target = $(event.target).closest('.modal').attr('id');
-                    return loadModal(options.url, options.target, options);
+                    return loadModal(options);
                 }
                 if(load === 'target') return loadTarget(options);
                 if(load !== 'APP' && typeof load === 'string') options.selector = load;
