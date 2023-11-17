@@ -9,7 +9,7 @@
  * 度量名称：按人员统计的每日完成任务数
  * 单位：个
  * 描述：按人员统计的日完成任务数表示每个人每日完成的任务数量之和。反映了每个人每日完成的任务规模。该数值越大，可能说明工作效率越高，任务完成速度越快。
- * 定义：某人某日完成的任务个数求和;
+ * 定义：任务个数求和;由谁完成为某人;过滤已删除的任务;过滤已删除项目的任务;过滤已删除执行的任务;过滤挂起的执行和项目;
  *
  * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
@@ -22,7 +22,7 @@ class count_of_daily_finished_task_in_user extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.finishedDate', 't1.finishedBy');
+    public $fieldList = array('t1.finishedDate', 't1.finishedBy', 't3.status as projectStatus', 't2.status as executionStatus');
 
     public $result = array();
 
@@ -31,7 +31,11 @@ class count_of_daily_finished_task_in_user extends baseCalc
         $finishedDate = $row->finishedDate;
         $finishedBy   = $row->finishedBy;
 
+        $projectStatus   = $row->projectStatus;
+        $executionStatus = $row->executionStatus;
+
         if(empty($finishedDate) || empty($finishedBy)) return false;
+        if($projectStatus == 'suspended' || $executionStatus == 'suspended') return false;
 
         $year = substr($finishedDate, 0, 4);
         if($year == '0000') return false;
