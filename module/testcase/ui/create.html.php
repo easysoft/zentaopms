@@ -43,16 +43,16 @@ formPanel
             (
                 picker
                 (
-                    set::id('product'),
+                    setID('product'),
                     set::name('product'),
                     set::items($products),
                     set::value(!empty($case->product) ? $case->product :  $productID)
                 ),
                 picker
                 (
-                    set::className(!isset($product->type) || $product->type == 'normal' ? 'hidden' : ''),
+                    setID('branch'),
+                    setClass(!isset($product->type) || $product->type == 'normal' ? 'hidden' : ''),
                     set::width('100px'),
-                    set::id('branch'),
                     set::name('branch'),
                     set::items($branches),
                     set::value($branch),
@@ -67,10 +67,10 @@ formPanel
             set::required(strpos(",{$config->testcase->create->requiredFields},", ',module,') !== false),
             inputGroup
             (
-                set('id', 'moduleBox'),
+                setID('moduleBox'),
                 picker
                 (
-                    set::id('module'),
+                    setID('module'),
                     set::name('module'),
                     set::items($moduleOptionMenu),
                     set::value($currentModuleID),
@@ -78,19 +78,24 @@ formPanel
                 ),
                 span
                 (
-                    set('class', 'input-group-addon' . (count($moduleOptionMenu) > 1 ? ' hidden' : '')),
+                    setClass('input-group-addon' . (count($moduleOptionMenu) > 1 ? ' hidden' : '')),
                     a
                     (
-                        set('class', 'mr-2'),
+                        setClass('mr-2'),
                         set('href', $this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch={$branch}")),
-                        set('data-toggle', 'modal'),
-                        set('data-size', 'lg'),
+                        setData
+                        (
+                            array(
+                                'toggle' => 'modal',
+                                'size'   => 'lg'
+                            )
+                        ),
                         $lang->tree->manage
                     ),
                     a
                     (
-                        set('id', 'refreshModule'),
-                        set('class', 'text-black'),
+                        setID('refreshModule'),
+                        setClass('text-black'),
                         set('href', 'javascript:void(0)'),
                         icon('refresh')
                     )
@@ -106,10 +111,10 @@ formPanel
             set::label($lang->testcase->scene),
             inputGroup
             (
-                set('id', 'sceneBox'),
+                setID('sceneBox'),
                 picker
                 (
-                    set::id('scene'),
+                    setID('scene'),
                     set::name('scene'),
                     set::items($sceneOptionMenu),
                     set::value($currentSceneID),
@@ -127,7 +132,7 @@ formPanel
             set::required(strpos(",{$config->testcase->create->requiredFields},", ',type,') !== false),
             picker
             (
-                set::id('type'),
+                setID('type'),
                 set::name('type'),
                 set::items($lang->testcase->typeList),
                 set::value($case->type),
@@ -139,7 +144,7 @@ formPanel
             setClass('ml-2 items-center'),
             checkbox
             (
-                set::id('auto'),
+                setID('auto'),
                 set::name('auto'),
                 set::value('auto'),
                 set::text($lang->testcase->automated)
@@ -175,10 +180,10 @@ formPanel
             set::required(strpos(",{$config->testcase->create->requiredFields},", ',stage,') !== false),
             inputGroup
             (
-                set('id', 'stageBox'),
+                setID('stageBox'),
                 picker
                 (
-                    set::id('stage'),
+                    setID('stage'),
                     set::name('stage[]'),
                     set::multiple(true),
                     set::items($lang->testcase->stageList),
@@ -196,23 +201,22 @@ formPanel
             set::required(strpos(",{$config->testcase->create->requiredFields},", ',story,') !== false),
             inputGroup
             (
-                set('id', 'storyBox'),
+                setID('storyBox'),
                 picker
                 (
-                    set::id('story'),
+                    setID('story'),
                     set::name('story'),
                     set::items($stories),
                     set::value($case->story)
                 ),
                 span
                 (
-                    set('class', 'input-group-addon'),
-                    set('class' , !$case->story ? 'hidden' : ''),
+                    setClass('input-group-addon' . (!$case->story ? ' hidden' : '')),
                     a
                     (
-                        set::id('preview'),
+                        setID('preview'),
                         set::href(helper::createLink('story', 'view', "storyID={$case->story}")),
-                        set('data-toggle', 'modal'),
+                        setData(array('toggle' => 'modal')),
                         $lang->preview
                     )
                 )
@@ -267,7 +271,7 @@ formPanel
             (
                 width('80px'),
                 set::items($lang->testcase->reviewList),
-                set::id('needReview'),
+                setID('needReview'),
                 set::name('needReview'),
                 set::value('0'),
                 set::required(true)
@@ -322,7 +326,7 @@ function printStepsTable()
     {
         $stepsTR[] = h::tr
         (
-            h::td(set::className('center'), $i),
+            h::td(setClass('center'), $i),
             h::td
             (
                 inputGroup
@@ -334,7 +338,7 @@ function printStepsTable()
                     ),
                     span
                     (
-                        set('class', 'input-group-addon'),
+                        setClass('input-group-addon'),
                         checkbox
                         (
                             set::name("stepType[$i]"),
@@ -353,7 +357,7 @@ function printStepsTable()
             ),
             h::td
             (
-                set::className('center'),
+                setClass('center'),
                 btnGroup
                 (
                     set::items(array(
@@ -367,7 +371,7 @@ function printStepsTable()
     }
     return h::table
     (
-        set::className('w-full'),
+        setClass('w-full'),
         h::thead
         (
             h::tr
