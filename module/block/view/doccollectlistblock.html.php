@@ -31,6 +31,7 @@
   <div class="doc-list table-row">
     <?php $rank = 1;?>
     <?php foreach($docList as $doc):?>
+    <?php if($doc->status == 'draft') continue;?>
     <div class='doc-title'>
       <span class="label-pri label-rank label-rank-<?php echo $rank;?>"><?php echo $rank;?></span>
       <?php
