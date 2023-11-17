@@ -996,7 +996,6 @@ class storyModel extends model
             ->setIF(!isset($_POST['title']), 'title', $oldStory->title)
             ->setIF(!isset($_POST['spec']), 'spec', $oldStory->spec)
             ->setIF(!isset($_POST['verify']), 'verify', $oldStory->verify)
-            ->setIF(isset($_POST['status']) && $_POST['status'] == 'reviewing', 'reviewedBy', '')
             ->stripTags($this->config->story->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->join('linkStories', ',')
