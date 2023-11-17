@@ -236,7 +236,7 @@ formPanel
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->project->multipleList),
         set::disabled($copyProjectID),
-        set::value($copyProject ? $copyProject->multiple : 1)
+        set::value($copyProjectID ? $copyProject->multiple : 1)
     ) : null,
     formGroup
     (
@@ -541,20 +541,36 @@ formPanel
 );
 
 $copyProjectsBox = array();
-foreach($copyProjects as $id => $name)
+if(!empty($copyProjects))
 {
-    $copyProjectsBox[] = btn(
-        setClass('project-block justify-start'),
-        setClass($copyProjectID == $id ? 'primary-outline' : ''),
-        set('data-id', $id),
-        set('data-pinyin', zget($copyPinyinList, $name, '')),
-        icon
+    foreach($copyProjects as $id => $name)
+    {
+        $copyProjectsBox[] = btn(
+            setClass('project-block justify-start'),
+            setClass($copyProjectID == $id ? 'primary-outline' : ''),
+            set('data-id', $id),
+            set('data-pinyin', zget($copyPinyinList, $name, '')),
+            icon
+            (
+                setClass('text-gray'),
+                $lang->icons['project']
+            ),
+            span($name)
+        );
+    }
+}
+else
+{
+    $copyProjectsBox[] = div
         (
-            setClass('text-gray'),
-            $lang->icons['project']
-        ),
-        span($name)
-    );
+            setClass('inline-flex items-center w-full bg-lighter h-12 mt-2 mb-8'),
+            icon('exclamation-sign icon-2x pl-2 text-warning'),
+            span
+            (
+                set::className('font-bold ml-2'),
+                $lang->project->copyNoProject
+            )
+        );
 }
 
 modalTrigger
