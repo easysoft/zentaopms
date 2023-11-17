@@ -133,8 +133,8 @@ public function getKanban4Group($executionID, $browseType, $groupBy, $searchValu
 
                 $cardData = array();
 
-                if(in_array($groupBy, array('module', 'story', 'pri', 'severity')) and (int)$object->$groupBy !== $laneID) continue;
-                if(in_array($groupBy, array('assignedTo', 'type', 'category', 'source')) and $object->$groupBy !== $laneID) continue;
+                if(in_array($groupBy, array('module', 'story', 'pri', 'severity')) and $object->$groupBy != $laneID) continue;
+                if(in_array($groupBy, array('assignedTo', 'type', 'category', 'source')) and $object->$groupBy != $laneID) continue;
 
                 $cardData['id']         = $object->id;
                 $cardData['order']      = $cardOrder;
