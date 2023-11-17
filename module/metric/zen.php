@@ -245,9 +245,18 @@ class metricZen extends metric
         $pureRow = new stdclass();
         foreach($calc->fieldList as $field)
         {
-            $extractField = explode('.', $field);
-            $pureField    = end($extractField);
-            $aliasField   = str_replace('.', '_', $field);
+            if(strpos(strtoupper($field), ' AS ') !== false)
+            {
+                $extractField = explode(' AS ', $field);
+                $pureField    = end($extractField);
+                $aliasField   = $pureField;
+            }
+            else
+            {
+                $extractField = explode('.', $field);
+                $pureField    = end($extractField);
+                $aliasField   = str_replace('.', '_', $field);
+            }
 
             $pureRow->$pureField = $row->$aliasField;
         }
