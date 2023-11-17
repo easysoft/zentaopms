@@ -19,7 +19,7 @@ if(isset($executionType) && $executionType == 'kanban')
 }
 
 $bugs = array();
-if($titles)
+if(!empty($titles))
 {
     foreach($titles as $title => $fileName)
     {
