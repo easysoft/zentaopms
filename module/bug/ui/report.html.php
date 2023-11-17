@@ -49,22 +49,22 @@ foreach($lang->report->typeList as $type => $typeName)
         set::param($type),
         set::key($type),
         to::prefix(icon($type == 'default' ? 'list-alt' : "chart-{$type}")),
-        div(set::className('pb-4 pt-2'), span(set::className('text-gray'), html(str_replace('%tab%', $lang->bug->unclosed . $lang->bug->common, $lang->report->notice->help)))),
+        div(setClass('pb-4 pt-2'), span(setClass('text-gray'), html(str_replace('%tab%', $lang->bug->unclosed . $lang->bug->common, $lang->report->notice->help)))),
         div($echarts)
     );
 }
 
 div
 (
-    set::className('flex items-start'),
+    setClass('flex items-start'),
     cell
     (
         set::width('240'),
-        set::className('bg-white p-4 mr-5'),
-        div(set::className('pb-2'), span(set::className('font-bold'), $lang->bug->report->select)),
+        setClass('bg-white p-4 mr-5'),
+        div(setClass('pb-2'), span(setClass('font-bold'), $lang->bug->report->select)),
         div
         (
-            set::className('pb-2'),
+            setClass('pb-2'),
             control
             (
                 set::type('checkList'),
@@ -74,24 +74,36 @@ div
         ),
         btn
         (
-            set('data-on', 'click'),
-            set('data-call', 'selectAll'),
+            setData
+            (
+                array
+                (
+                    'on'   => 'click',
+                    'call' => 'selectAll',
+                )
+            ),
             $lang->selectAll
         ),
         btn
         (
-            set::className('primary ml-4 inited'),
-            set('data-on', 'click'),
-            set('data-call', 'clickInit'),
-            set('data-params', 'event'),
+            setClass('primary ml-4 inited'),
+            setData
+            (
+                array
+                (
+                    'on'     => 'click',
+                    'call'   => 'clickInit',
+                    'params' => 'event',
+                )
+            ),
             $lang->bug->report->create
         )
     ),
     cell
     (
         set::flex('1'),
-        set::className('bg-white px-4 py-2'),
-        set::id('report'),
+        setClass('bg-white px-4 py-2'),
+        setID('report'),
         tabs($tabItems)
     )
 );

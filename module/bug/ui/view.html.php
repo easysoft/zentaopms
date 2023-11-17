@@ -121,7 +121,7 @@ foreach($legendMisc['linkMR']['text'] as $MRID => $linkMRTitle)
     $linkMR[] = div(a
     (
         $canViewMR ? set('href', $this->createLink('mr', 'view', "MRID={$MRID}")) : null,
-        setData(array('data-app' => 'devops')),
+        setData(array('app' => 'devops')),
         span(label(setClass('dark-outline rounded-full mr-2'), $MRID), $linkMRTitle)
     ));
 }
