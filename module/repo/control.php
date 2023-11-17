@@ -1980,4 +1980,20 @@ class repo extends control
             echo '';
         }
     }
+
+    /**
+     * Get gitlab files.
+     *
+     * @param  int    $repoID
+     * @param  string $branch
+     * @param  string $path
+     * @access public
+     * @return string
+     */
+    public function ajaxGetFiles(int $repoID, string $branch = '', string $path = '')
+    {
+        $repo = $this->repo->getByID($repoID);
+        if($path) $path = helper::safe64Decode($path);
+        echo json_encode($this->repo->getGitlabFilesByPath($repo, $path, $branch));
+    }
 }

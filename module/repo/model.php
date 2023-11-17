@@ -2442,8 +2442,9 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getFileList($repo, $branch, $path = '')
+    public function getFileList($repo, $branch = '', $path = '')
     {
+        $_COOKIE['repoBranch'] = $branch ? $branch : $this->cookie->repoBranch;
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
 
@@ -2532,43 +2533,43 @@ class repoModel extends model
             }
             else
             {
-            if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
-            $files = $this->dao->select('t1.path,t2.time,t1.action')->from(TABLE_REPOFILES)->alias('t1')
-                ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
-                ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
-                ->where('t1.repo')->eq($repo->id)
-                ->andWhere('t1.type')->eq('file')
-                ->andWhere('left(t2.`comment`, 12)')->ne('Merge branch')
-                ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
-                ->orderBy('t2.`time` asc')
-                ->fetchAll('path');
-
-            $removeDirs = array();
-            if($repo->SCM == 'Subversion')
-            {
-                $removeDirs = $this->dao->select('t2.time,t1.path')->from(TABLE_REPOFILES)->alias('t1')
+                if($repo->SCM != 'Subversion' and empty($branch)) $branch = $this->cookie->repoBranch;
+                $files = $this->dao->select('t1.path,t2.time,t1.action')->from(TABLE_REPOFILES)->alias('t1')
                     ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
+                    ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
                     ->where('t1.repo')->eq($repo->id)
-                    ->andWhere('t1.type')->eq('dir')
-                    ->andWhere('t1.action')->eq('D')
-                    ->fetchPairs();
+                    ->andWhere('t1.type')->eq('file')
+                    ->andWhere('left(t2.`comment`, 12)')->ne('Merge branch')
+                    ->beginIF($repo->SCM != 'Subversion' and $branch)->andWhere('t3.branch')->eq($branch)->fi()
+                    ->orderBy('t2.`time` asc')
+                    ->fetchAll('path');
 
-            }
-            foreach($files as $file)
-            {
-                foreach($removeDirs as $removeTime => $dir)
+                $removeDirs = array();
+                if($repo->SCM == 'Subversion')
                 {
-                    if(strpos($file->path, $dir . '/') === 0 and $file->time <= $removeTime)
+                    $removeDirs = $this->dao->select('t2.time,t1.path')->from(TABLE_REPOFILES)->alias('t1')
+                        ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
+                        ->where('t1.repo')->eq($repo->id)
+                        ->andWhere('t1.type')->eq('dir')
+                        ->andWhere('t1.action')->eq('D')
+                        ->fetchPairs();
+
+                }
+                foreach($files as $file)
+                {
+                    foreach($removeDirs as $removeTime => $dir)
                     {
-                        $file->action = 'D';
-                        break;
+                        if(strpos($file->path, $dir . '/') === 0 and $file->time <= $removeTime)
+                        {
+                            $file->action = 'D';
+                            break;
+                        }
+                    }
+                    if($file->action != 'D')
+                    {
+                        $allFiles[] = $file->path;
                     }
                 }
-                if($file->action != 'D')
-                {
-                    $allFiles[] = $file->path;
-                }
-            }
             }
         }
         else
@@ -2616,7 +2617,6 @@ class repoModel extends model
             }
         }
         sort($files);
-
         return $this->buildTree($files);
     }
 
@@ -3222,5 +3222,71 @@ class repoModel extends model
         $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
         return !dao::isError();
+    }
+
+    /**
+     * 根据路径获取gitlab文件列表。
+     * Get gitlab files by path.
+     *
+     * @param  object $repo
+     * @param  string $path
+     * @param  string $branch
+     * @access public
+     * @return array
+     */
+    public function getGitlabFilesByPath(object $repo, string $path = '', string $branch = ''): array
+    {
+        if(!$branch) $branch = $this->cookie->branch;
+
+        $fullPath = trim(str_replace($repo->client, '', $repo->codePath), '/');
+        $query    = array('query' => 'query { project(fullPath: "' . $fullPath . '") {repository {tree(path: "' . trim($path, '/') . '", ref: "' . $branch . '") {trees {nodes {name path}} blobs {nodes {name path}}}}}}');
+        $response = $this->loadModel('gitlab')->apiGetByGraphql($repo->serviceHost, $query);
+        if(!isset($response->data->project->repository)) return array();
+
+        $folderList = $response->data->project->repository->tree->trees->nodes;
+        $fileList   = $response->data->project->repository->tree->blobs->nodes;
+
+        $files    = array();
+        $folders  = array();
+        $dirList  = array();
+        $fileSort = $dirSort = array(); // Use it to sort array.
+
+        foreach($fileList as $file)
+        {
+            $base64Name = base64_encode($file->path);
+
+            $fileInfo = new stdclass();
+            $fileInfo->id   = $base64Name;
+            $fileInfo->name = $file->name;
+            $fileInfo->text = $file->name;
+            $fileInfo->path = $file->path;
+            $fileInfo->key  = $base64Name;
+            $fileInfo->kind = 'file';
+
+            $files[]    = $fileInfo;
+            $fileSort[] = $file->name;
+        }
+
+        foreach($folderList as $dir)
+        {
+            $base64Name = base64_encode($dir->path);
+
+            $folder = new stdclass();
+            $folder->id   = $base64Name;
+            $folder->name = $dir->name;
+            $folder->text = $dir->name;
+            $folder->path = $dir->path;
+            $folder->key  = $base64Name;
+            $folder->kind = 'dir';
+            $folder->items = array('url' => helper::createLink('repo', 'ajaxGetFiles', "repoID={$repo->id}&branch={$branch}&path=" . helper::safe64Encode($dir->path)));
+
+            $dirList[] = $dir->name;
+            $folders[] = $folder;
+            $dirSort[] = $dir->name;
+        }
+        array_multisort($fileSort, SORT_ASC, $files);
+        array_multisort($dirSort, SORT_ASC, $folders);
+
+        return array_merge($folders, $files);
     }
 }
