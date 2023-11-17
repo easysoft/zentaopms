@@ -290,7 +290,7 @@ else
                         (
                             array
                             (
-                                'title'     => $lang->block->tooltips['ev'],
+                                'content'   => array('html' => $lang->block->tooltips['ev']),
                                 'placement' => 'bottom',
                                 'type'      => 'white',
                                 'className' => 'text-dark border border-light leading-5'
@@ -363,7 +363,7 @@ else
                         (
                             array
                             (
-                                'title'     => $lang->block->tooltips['ev'],
+                                'content'   => array('html' => $lang->block->tooltips['ev']),
                                 'placement' => 'bottom',
                                 'type'      => 'white',
                                 'className' => 'text-dark border border-light leading-5'

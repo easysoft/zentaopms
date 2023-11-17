@@ -589,7 +589,9 @@ $lang->block->projectstatistic->lastestExecution = '最新执行';
 $lang->block->projectstatistic->projectClosed    = "{$lang->projectCommon}已关闭";
 $lang->block->projectstatistic->longTimeProject  = "长期{$lang->projectCommon}";
 $lang->block->projectstatistic->totalProgress    = '总进度';
-$lang->block->projectstatistic->totalProgressTip = "<strong>项目总进度</strong>=按项目统计的任务消耗工时数/（按项目统计的任务消耗工时数+按项目统计的任务剩余工时数）<br/><strong>按项目统计的任务消耗工时数</strong>：项目中任务的消耗工时数求和，过滤已删除的任务，过滤父任务，过滤已删除执行的任务。<br/><strong>按项目统计的任务剩余工时数</strong>：项目中任务的剩余工时数求和，过滤已删除的任务，过滤父任务，过滤已删除执行的任务。";
+$lang->block->projectstatistic->totalProgressTip = "<strong>项目总进度</strong>=按项目统计的任务消耗工时数 /（按项目统计的任务消耗工时数+按项目统计的任务剩余工时数）<br/>
+<strong>按项目统计的任务消耗工时数</strong>：项目中任务的消耗工时数求和，过滤已删除的任务，过滤父任务，过滤已删除执行的任务。<br/>
+<strong>按项目统计的任务剩余工时数</strong>：项目中任务的剩余工时数求和，过滤已删除的任务，过滤父任务，过滤已删除执行的任务。";
 $lang->block->projectstatistic->currentCost      = '当前成本';
 $lang->block->projectstatistic->sv               = '进度偏差率(SV)';
 $lang->block->projectstatistic->pv               = '计划完成(PV)';
@@ -705,13 +707,16 @@ $lang->block->moduleList['dynamic']         = $lang->block->dynamic;
 $lang->block->moduleList['html']            = $lang->block->html;
 
 $lang->block->tooltips = array();
-$lang->block->tooltips['deliveryRate']      = '需求交付率=按产品统计的已交付研发需求数/（按产品统计的研发需求总数-按产品统计的无效研发需求数）*100%';
-$lang->block->tooltips['effectiveStory']    = '按产品统计的研发需求总数：产品中研发需求的个数求和，过滤已删除的研发需求，过滤已删除的产品。';
-$lang->block->tooltips['deliveredStory']    = '按产品统计的已交付研发需求数：产品中研发需求个数求和，所处阶段为已发布或关闭原因为已完成，过滤已删除的研发需求，过滤已删除的产品。';
-$lang->block->tooltips['costs']             = '已投入=已消耗工时/每日可用工时';
-$lang->block->tooltips['sv']                = '进度偏差率=(EV-PV)/PV*100% ';
-$lang->block->tooltips['ev']                = '实际完成=按项目统计的任务预计工时数*按项目统计的任务进度，过滤已删除的任务，过滤已取消的任务，过滤已删除执行下的任务，过滤已删除的项目。\n 按项目统计的任务预计工时数：项目中任务的预计工时数求和，过滤已删除的任务，过滤父任务，过滤已删除执行的任务，过滤已删除的项目。';
-$lang->block->tooltips['pv']                = '计划完成:瀑布项目中所有任务的预计工时之和，过滤已删除的任务，过滤已取消的任务，过滤已删除的执行的任务，过滤已删除的项目。';
-$lang->block->tooltips['cv']                = '成本偏差率=(EV-AC)/AC*100%';
-$lang->block->tooltips['ac']                = '实际花费：瀑布项目中所有日志记录的工时之和，过滤已删除的项目。';
-$lang->block->tooltips['executionProgress'] = '<strong>执行进度</strong>=按执行统计的任务消耗工时数/（按执行统计的任务消耗工时数+按执行统计的任务剩余工时数）<br/><strong>按执行统计的任务消耗工时数</strong>：执行中任务的消耗工时数求和，过滤已删除的任务，过滤父任务，过滤已删除的执行，过滤已删除的项目。<br/><strong>按执行统计的任务剩余工时数</strong>：执行中任务的剩余工时数求和，过滤已删除的任务，过滤父任务，过滤已删除的执行，过滤已删除的项目。';
+$lang->block->tooltips['deliveryRate']      = "{$lang->SRCommon}交付率=按{$lang->productCommon}统计的已交付{$lang->SRCommon}数 /（按{$lang->productCommon}统计的{$lang->SRCommon}总数 - 按{$lang->productCommon}统计的无效{$lang->SRCommon}数） * 100%";
+$lang->block->tooltips['effectiveStory']    = "按{$lang->productCommon}统计的{$lang->SRCommon}总数：{$lang->productCommon}中{$lang->SRCommon}的个数求和，过滤已删除的{$lang->SRCommon}，过滤已删除的{$lang->productCommon}。";
+$lang->block->tooltips['deliveredStory']    = "按{$lang->productCommon}统计的已交付{$lang->SRCommon}数：{$lang->productCommon}中{$lang->SRCommon}个数求和，所处阶段为已发布或关闭原因为已完成，过滤已删除的{$lang->SRCommon}，过滤已删除的{$lang->productCommon}。";
+$lang->block->tooltips['costs']             = "已投入 = 已消耗工时 / 每日可用工时";
+$lang->block->tooltips['sv']                = "进度偏差率 = (EV - PV) / PV * 100% ";
+$lang->block->tooltips['ev']                = "<strong>实际完成</strong>=按{$lang->projectCommon}统计的任务预计工时数*按{$lang->projectCommon}统计的任务进度，过滤已删除的任务，过滤已取消的任务，过滤已删除{$lang->execution->common}下的任务，过滤已删除的{$lang->projectCommon}。<br/>
+<strong>按{$lang->projectCommon}统计的任务预计工时数</strong>：{$lang->projectCommon}中任务的预计工时数求和，过滤已删除的任务，过滤父任务，过滤已删除{$lang->execution->common}的任务，过滤已删除的{$lang->projectCommon}。";
+$lang->block->tooltips['pv']                = "计划完成:瀑布{$lang->projectCommon}中所有任务的预计工时之和，过滤已删除的任务，过滤已取消的任务，过滤已删除的{$lang->execution->common}的任务，过滤已删除的{$lang->projectCommon}。";
+$lang->block->tooltips['cv']                = "成本偏差率 = (EV - AC) / AC * 100%";
+$lang->block->tooltips['ac']                = "实际花费：瀑布{$lang->projectCommon}中所有日志记录的工时之和，过滤已删除的{$lang->projectCommon}。";
+$lang->block->tooltips['executionProgress'] = "<strong>{$lang->execution->common}进度</strong>=按{$lang->execution->common}统计的任务消耗工时数 /（按{$lang->execution->common}统计的任务消耗工时数+按{$lang->execution->common}统计的任务剩余工时数）<br/>
+<strong>按{$lang->execution->common}统计的任务消耗工时数</strong>：{$lang->execution->common}中任务的消耗工时数求和，过滤已删除的任务，过滤父任务，过滤已删除的{$lang->execution->common}，过滤已删除的{$lang->projectCommon}。<br/>
+<strong>按{$lang->execution->common}统计的任务剩余工时数</strong>：{$lang->execution->common}中任务的剩余工时数求和，过滤已删除的任务，过滤父任务，过滤已删除的{$lang->execution->common}，过滤已删除的{$lang->projectCommon}。";
