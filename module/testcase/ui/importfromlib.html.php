@@ -38,15 +38,11 @@ featureBar
     )
 );
 
-div
+searchForm
 (
-    setID('searchFormPanel'),
-    set('data-module', 'testsuite'),
-    searchToggle
-    (
-        set::open(true),
-        set::module('testsuite')
-    )
+    set::module('testsuite'),
+    set::simple(true),
+    set::show(true)
 );
 
 $config->testcase->importfromlib->dtable->fieldList['fromModule']['map'] = $libModules;

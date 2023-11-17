@@ -28,7 +28,13 @@ foreach($config->build->defaultFields['linkBug'] as $field)
 }
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 
-div(setID('searchFormPanel'), setData(array('module' => 'bug')), searchToggle(set::open(true), set::module('bug')));
+searchForm
+(
+    set::module('bug'),
+    set::simple(true),
+    set::show(true)
+);
+
 dtable
 (
     setID('unlinkBugList'),
@@ -36,6 +42,7 @@ dtable
     set::checkable(true),
     set::cols($cols),
     set::data(array_values($allBugs)),
+    set::extraHeight('+144'),
     set::onRenderCell(jsRaw('window.renderBugCell')),
     set::plugins(array('form')),
     set::footToolbar(array

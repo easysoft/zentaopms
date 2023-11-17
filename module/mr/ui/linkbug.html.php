@@ -18,7 +18,12 @@ $footToolbar = array('items' => array
     array('text' => $lang->productplan->linkBug, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('mr', 'linkBug', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy=$orderBy"))
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary', 'data-type' => 'bugs'));
 
-div(setID('searchFormPanel'), set('data-module', 'bug'), searchToggle(set::open(true), set::module('bug')));
+searchForm
+(
+    set::module('bug'),
+    set::simple(true),
+    set::show(true)
+);
 
 div
 (

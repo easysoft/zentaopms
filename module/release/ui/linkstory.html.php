@@ -18,7 +18,13 @@ $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $cols['title']['link']         = $this->createLink('story', 'view', "storyID={id}");
 $cols['title']['nestedToggle'] = false;
 
-div(setID('searchFormPanel'), set('data-module', 'story'), searchToggle(set::open(true), set::module('story')));
+searchForm
+(
+    set::module('story'),
+    set::simple(true),
+    set::show(true)
+);
+
 dtable
 (
     set::id('unlinkStoryList'),

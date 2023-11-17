@@ -401,8 +401,24 @@ detailBody
             item
             (
                 set::name($story->type == 'story' ? $lang->requirement->linkStory : $lang->story->linkStory),
-                (common::hasPriv('story', 'linkStories') && $story->type == 'story') ? btn(setClass('secondary'), set::id('linkStoriesLink'), set('data-toggle', 'modal'), set('data-size', 'lg'), on::click('linkStories'), $lang->story->linkStoriesAB) : null,
-                (common::hasPriv('requirement', 'linkRequirements') && $story->type == 'requirement') ? btn(setClass('secondary'), set::id('linkStoriesLink'), set('data-toggle', 'modal'), set('data-size', 'lg'), on::click('linkStories'), $lang->story->linkRequirementsAB) : null
+                ($story->type == 'story' && common::hasPriv('story', 'linkStories')) ? btn
+                (
+                    setClass('secondary'),
+                    set::id('linkStoriesLink'),
+                    set('data-toggle', 'modal'),
+                    set('data-size', 'lg'),
+                    on::click('linkStories'),
+                    $lang->story->linkStoriesAB
+                ) : null,
+                ($story->type == 'requirement' && common::hasPriv('requirement', 'linkRequirements')) ? btn
+                (
+                    setClass('secondary'),
+                    set::id('linkStoriesLink'),
+                    set('data-toggle', 'modal'),
+                    set('data-size', 'lg'),
+                    on::click('linkStories'),
+                    $lang->story->linkRequirementsAB
+                ) : null
             ),
             item
             (

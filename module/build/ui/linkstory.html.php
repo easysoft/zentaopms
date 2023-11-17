@@ -24,13 +24,20 @@ foreach($allStories as $story)
     $story->estimate = $story->estimate . $config->hourUnit;
 }
 
-div(setID('searchFormPanel'), set('data-module', 'story'), searchToggle(set::open(true), set::module('story')));
+searchForm
+(
+    set::module('story'),
+    set::simple(true),
+    set::show(true)
+);
+
 dtable
 (
     set::id('unlinkStoryList'),
     set::userMap($users),
     set::cols($cols),
     set::data(array_values($allStories)),
+    set::extraHeight('+144'),
     set::onRenderCell(jsRaw('window.renderStoryCell')),
     set::footToolbar(array('items' => array(array
     (
