@@ -10,6 +10,8 @@
 .projectstatistic-block .project-statistic-table table td {padding-left: 0px; margin-top: 1rem;}
 .projectstatistic-block .tab-pane .nav-tabs>.nav-item>a:after {border-bottom: none;}
 .projectstatistic-block .scrum table th, .projectstatistic-block .scrum table td {width: 50%}
+.projectstatistic-block .waterfall table th {width: 100px;}
+.projectstatistic-block .table-data {overflow: hidden;}
 .projectstatistic-block .progress-circle text {font-size: 35px;}
 .projectstatistic-block .progress-circle .progress-text {position: relative;}
 .projectstatistic-block.block-long .progress-circle .progress-text {top: -57px;}
