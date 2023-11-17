@@ -28,7 +28,8 @@ class tableData extends wg
             h::th
             (
                 setClass('py-1.5 pr-2 font-normal nowrap text-right', $item->prop('thClass')),
-                $item->prop('name')
+                $item->prop('name'),
+                $item->block('suffixName')
             ),
             h::td
             (
