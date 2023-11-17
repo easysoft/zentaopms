@@ -36,3 +36,14 @@ window.bindUser = function(e)
         data: postData
     });
 }
+
+window.onPageRender = function(info)
+{
+    if(info.name === 'dtable')
+    {
+        const dtable = zui.DTable.query('#table-gitlab-binduser');
+
+        /* Clear saved formData. */
+        if(dtable) dtable.$.data.formData = {};
+    }
+};
