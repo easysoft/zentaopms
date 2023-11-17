@@ -68,6 +68,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->kanban->space),
+            set::required(true),
             picker
             (
                 set::name('space'),
@@ -302,23 +303,40 @@ if($copyKanbanID != 0)
         )
     );
 }
-foreach ($kanbans as $id => $name)
+
+if(!empty($kanbans))
 {
-    $kanbanList[] = cell
-    (
-        set::width('1/3'),
-        set::className('p-2'),
-        div
+    foreach ($kanbans as $id => $name)
+    {
+        $kanbanList[] = cell
+            (
+                set::width('1/3'),
+                set::className('p-2'),
+                div
+                (
+                    set('data-on', 'click'),
+                    set('data-call', 'clickCopyCard'),
+                    set('data-params', 'event'),
+                    set('data-id', $id),
+                    set::className('copy-card p-2 border rounded-md'),
+                    icon('kanban', set::className('pr-2')),
+                    $name
+                )
+            );
+    }
+}
+else
+{
+    $kanbanList[] = div
         (
-            set('data-on', 'click'),
-            set('data-call', 'clickCopyCard'),
-            set('data-params', 'event'),
-            set('data-id', $id),
-            set::className('copy-card p-2 border rounded-md'),
-            icon('kanban', set::className('pr-2')),
-            $name
-        )
-    );
+            setClass('inline-flex items-center w-full bg-lighter h-12 mt-2 mb-8'),
+            icon('exclamation-sign icon-2x pl-2 text-warning'),
+            span
+            (
+                set::className('font-bold ml-2'),
+                $lang->kanban->copyNoKanban
+            )
+        );
 }
 
 modalTrigger
