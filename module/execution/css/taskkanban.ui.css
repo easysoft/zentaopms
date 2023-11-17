@@ -1,3 +1,4 @@
+.card-title { color: var(--color-black-rgb); }
 .toolbar .btn-link{color: unset; text-decoration-line: unset;}
 .toolbar .kanbanSetting.btn-link .caret{display: none;}
 .dropdown-menu .menu-divider a{display:none;}
