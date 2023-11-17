@@ -312,16 +312,91 @@ class cronModel extends model
     }
 
     /**
-     * Clear queue.
+     * Restart cron.
      *
      * @access public
      * @return void
      */
-    public function clearQueue()
+    public function restartCron($execId)
     {
+        $this->dao->update(TABLE_CONFIG)->set('value')->eq($execId)
+            ->where('owner')->eq('system')
+            ->andWhere('module')->eq('cron')
+            ->andWhere('section')->eq('scheduler')
+            ->andWhere('`key`')->eq($execId)
+            ->exec();
         $this->dao->delete()->from(TABLE_QUEUE)->where('createdDate')->le(date("Y-m-d H:i:s", strtotime("-1 week")))->exec();
 
-        $log = date('G:i:s') . " clear\n\n";
-        $this->logCron($log);
+        $this->logCron(date('G:i:s') . " restart\n\n");
+    }
+
+    /**
+     * Update last time of cron.
+     *
+     * @param string $role
+     * @param int    $execId
+     * @access public
+     * @return void
+     */
+    public function updateTime($role, $execId)
+    {
+        $now = date(DT_DATETIME1);
+
+        $settings = $this->dao->select('*')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('cron')->andWhere('section')->eq($role)->fetchAll('key');
+        if($role == 'scheduler')
+        {
+            if(isset($settings['execId']))
+            {
+                $setting = $settings['execId'];
+                if($setting->value != strval($execId)) $this->dao->update(TABLE_CONFIG)->set('value')->eq($execId)->where('id')->eq($setting->id)->exec();
+            }
+            else
+            {
+                $data = new stdclass();
+                $data->owner   = 'system';
+                $data->module  = 'cron';
+                $data->section = 'scheduler';
+                $data->key     = 'execId';
+                $data->value   = $execId;
+
+                $this->dao->insert(TABLE_CONFIG)->data($data)->exec();
+            }
+
+            if(isset($settings['lastTime']))
+            {
+                $setting = $settings['lastTime'];
+                $this->dao->update(TABLE_CONFIG)->set('value')->eq($now)->where('id')->eq($setting->id)->exec();
+            }
+            else
+            {
+                $data = new stdclass();
+                $data->owner   = 'system';
+                $data->module  = 'cron';
+                $data->section = 'scheduler';
+                $data->key     = 'lastTime';
+                $data->value   = $now;
+
+                $this->dao->insert(TABLE_CONFIG)->data($data)->exec();
+            }
+        }
+        else
+        {
+            if(isset($settings[strval($execId)]))
+            {
+                $setting = $settings[strval($execId)];
+                $this->dao->update(TABLE_CONFIG)->set('value')->eq($now)->where('id')->eq($setting->id)->exec();
+            }
+            else
+            {
+                $data = new stdclass();
+                $data->owner   = 'system';
+                $data->module  = 'cron';
+                $data->section = 'consumer';
+                $data->key     = $execId;
+                $data->value   = $now;
+
+                $this->dao->insert(TABLE_CONFIG)->data($data)->exec();
+            }
+        }
     }
 }
