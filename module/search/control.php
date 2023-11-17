@@ -362,6 +362,7 @@ class search extends control
         {
             if(!isset($this->lang->search->modules[$objectType])) continue;
             if($this->config->systemMode == 'light' and $objectType == 'program') continue;
+            if(!helper::hasFeature('devops') && in_array($objectType, array('deploy', 'service', 'deploystep'))) continue;
 
             $typeList[$objectType] = $this->lang->search->modules[$objectType];
         }

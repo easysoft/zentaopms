@@ -1341,6 +1341,12 @@ class commonModel extends model
 
         $searchObjects = $lang->searchObjects;
         if($config->systemMode == 'light') unset($searchObjects['program']);
+        if(!helper::hasFeature('devops'))
+        {
+            if(isset($searchObjects['deploy']))     unset($searchObjects['deploy']);
+            if(isset($searchObjects['service']))    unset($searchObjects['service']);
+            if(isset($searchObjects['deploystep'])) unset($searchObjects['deploystep']);
+        }
 
         foreach($searchObjects as $key => $value)
         {
