@@ -114,7 +114,7 @@
                     $params     = "runID=0&caseID={$file->caseID}";
                 }
                 ?>
-                <a title='<?php echo $fileObjectID;?>' href='<?php echo $this->createLink($moduleName, $methodName, $params, '', $isonlybody);?>' class='<?php if($isonlybody) echo "iframe";?>' data-width='90%'><?php echo $file->objectID;?></a>
+                <a title='<?php echo $fileObjectID;?>' href='<?php echo $this->createLink($moduleName, $methodName, $params, '', $isonlybody);?>' class='<?php if($isonlybody) echo "iframe";?>' data-width='90%'><?php echo $fileObjectID;?></a>
               </td>
               <td><?php echo $file->extension;?></td>
               <td><?php echo number_format($file->size / 1024, 1) . 'K';?></td>
