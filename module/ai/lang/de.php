@@ -61,6 +61,7 @@ $lang->ai->chatNoResponse         = 'Something went wrong, <a id="retry" class="
 
 $lang->ai->nextStep  = 'Next';
 $lang->ai->goTesting = 'Go testing';
+$lang->ai->maintenanceGroup = 'Maintenance Group';
 
 $lang->ai->validate = new stdclass();
 $lang->ai->validate->noEmpty       = '%s cannot be empty.';
@@ -416,6 +417,7 @@ $lang->ai->miniPrograms->icon              = 'Icon';
 $lang->ai->miniPrograms->desc              = 'Introduction';
 $lang->ai->miniPrograms->categoryList      = array('writing' => 'writing', 'statistics' => 'statistics', 'creative' => 'creative', 'raiders' => 'Guideline ', 'schedule' => 'schedule');
 $lang->ai->miniPrograms->modelList         = array('openai-GPT35 ' => 'openai/GPT-3.5');
+$lang->ai->miniPrograms->allCategories     = array('' => 'All categories');
 $lang->ai->miniPrograms->iconModification  = 'Icon modification';
 $lang->ai->miniPrograms->customBackground  = 'Custom background Color';
 $lang->ai->miniPrograms->customIcon        = 'Custom icon';
@@ -425,6 +427,7 @@ $lang->ai->miniPrograms->backToListPageTip = 'The parameter configuration for se
 $lang->ai->miniPrograms->saveAndBack       = 'Save and Go Back';
 $lang->ai->miniPrograms->publishConfirm    = array('Are you sure you want to publish?', 'It will be displayed on the front-end mini program plaza in the client.');
 $lang->ai->miniPrograms->emptyPrompterTip  = 'The prompter of the mini program is empty. Please edit it before publishing.';
+$lang->ai->miniPrograms->maintenanceGroup  = 'Maintenance mini program group';
 
 $lang->ai->miniPrograms->latestPublishedDate = 'Latest Published Date';
 $lang->ai->miniPrograms->deleteTip           = 'Are you sure you want to delete this mini program? It can be restored from the backend recycle bin after deletion.';

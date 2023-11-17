@@ -324,6 +324,42 @@ class aiModel extends model
             ->fetch();
     }
 
+    public function getCustomCategory()
+    {
+        return $this->dao->select('`key`,`value`')
+            ->from(TABLE_CONFIG)
+            ->where('module')->eq('ai')
+            ->andWhere('section')->eq('miniProgram')
+            ->fetchPairs();
+    }
+
+    public function updateCustomCategory()
+    {
+        $data = array_filter($_POST['custom']);
+        if(empty($data)) return;
+
+        $this->dao->delete()
+            ->from(TABLE_CONFIG)
+            ->where('module')->eq('ai')
+            ->andWhere('section')->eq('miniProgram')
+            ->exec();
+
+        foreach($data as $key => $value)
+        {
+            $lang = new stdClass();
+            $lang->module  = 'ai';
+            $lang->section = 'miniProgram';
+            $lang->value   = $value;
+            $lang->key     = is_numeric($key) ? uniqid('custom-') : $key;
+            $lang->owner   = 'system';
+            $lang->vision  = '';
+
+            $this->dao->insert(TABLE_CONFIG)
+                ->data($lang)
+                ->exec();
+        }
+    }
+
     /**
      * Get not deleted mini programs.
      *
@@ -347,7 +383,7 @@ class aiModel extends model
     public function getMiniProgramFields($appID)
     {
         return $this->dao->select('*')
-            ->from(TABLE_MINIPROGRAMFIELDS)
+            ->from(TABLE_MINIPROGRAMFIELD)
             ->where('appID')->eq($appID)
             ->fetchAll();
     }
@@ -462,7 +498,7 @@ class aiModel extends model
             ->exec();
 
         $this->dao->delete()
-            ->from(TABLE_MINIPROGRAMFIELDS)
+            ->from(TABLE_MINIPROGRAMFIELD)
             ->where('appID')->eq($appID)
             ->exec();
 
@@ -470,7 +506,7 @@ class aiModel extends model
         foreach($fields as $field)
         {
             if(is_array($field['options'])) $field['options'] = implode(',', $field['options']);
-            $this->dao->insert(TABLE_MINIPROGRAMFIELDS)
+            $this->dao->insert(TABLE_MINIPROGRAMFIELD)
                 ->data($field)
                 ->exec();
         }

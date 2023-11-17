@@ -161,9 +161,22 @@ class ai extends control
         $this->view->title        = $this->lang->ai->miniPrograms->common;
         $this->view->miniPrograms = $programs;
         $this->view->category     = $category;
+        $this->view->categoryList = $this->ai->getCustomCategory();;
         $this->view->status       = $status;
         $this->view->orderBy      = $orderBy;
         $this->view->pager        = $pager;
+        $this->display();
+    }
+
+    public function editMiniProgramCategory()
+    {
+        if(!empty($_POST))
+        {
+            $this->ai->updateCustomCategory();
+        }
+
+        $this->view->categoryList = $this->ai->getCustomCategory();
+        $this->view->title        = $this->lang->ai->miniPrograms->common;
         $this->display();
     }
 
@@ -253,6 +266,7 @@ class ai extends control
             $this->view->iconName = 'writinghand';
             $this->view->iconTheme = 7;
         }
+        $this->view->categoryList = $this->ai->getCustomCategory();
         $this->view->title = $this->lang->ai->miniPrograms->common;
         $this->display();
     }

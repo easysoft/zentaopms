@@ -24,7 +24,7 @@
         <tr>
           <th><?php echo $lang->ai->miniPrograms->category; ?></th>
           <td>
-            <?php echo html::select('category', $lang->ai->miniPrograms->categoryList, $category, "class='form-control chosen' required"); ?>
+            <?= html::select('category', array_merge($lang->ai->miniPrograms->categoryList, $categoryList), $category, "class='form-control chosen' required"); ?>
           </td>
           <td></td>
         </tr>

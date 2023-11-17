@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The ai mini programs view file of ai module of ZenTaoPMS.
  *
@@ -11,11 +10,15 @@
  */
 ?>
 <?php include '../../common/view/header.html.php'; ?>
+<?php
+  $list = array_merge($lang->ai->miniPrograms->categoryList, $categoryList);
+  $finalList = array_merge($list, $lang->ai->miniPrograms->allCategories);
+?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
-    <div class="title" title="<?php echo $this->lang->ai->prompts->modules[$module]; ?>">
-      <?php echo $this->lang->ai->prompts->modules[$module]; ?>
-      <?php if($module) echo html::a($this->createLink('ai', 'prompts'), "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'"); ?>
+    <div class="title" title="<?= $finalList[$category]; ?>">
+      <?= $finalList[$category]; ?>
+      <?php if($category) echo html::a($this->createLink('ai', 'miniPrograms'), "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'"); ?>
     </div>
   </div>
   <div class="btn-toolbar pull-left">
@@ -85,7 +88,15 @@
   <div class="side-col" id="sidebar">
     <div class="cell">
       <ul id="modules" class="tree" data-ride="tree" data-name="tree-modules">
+        <?php foreach ($list as $key => $value): ?>
+          <li <?php if($category == $key) echo 'class="active"'; ?>>
+            <a href="<?= $this->createLink('ai', 'miniPrograms', "category=$key"); ?>"><?= $value; ?></a>
+          </li>
+        <?php endforeach; ?>
       </ul>
+      <div class="text-center">
+        <a class="btn btn-info btn-wide" href="<?= $this->createLink('ai', 'editMiniProgramCategory'); ?>"><?= $lang->ai->MaintenanceGroup; ?></a>
+      </div>
     </div>
   </div>
   <div class="main-col">

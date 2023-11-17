@@ -61,6 +61,7 @@ $lang->ai->chatNoResponse         = '会话发生了错误，<a id="retry" class
 
 $lang->ai->nextStep  = '下一步';
 $lang->ai->goTesting = '去调试';
+$lang->ai->maintenanceGroup = '维护分组';
 
 $lang->ai->validate = new stdclass();
 $lang->ai->validate->noEmpty       = '%s不能为空。';
@@ -415,6 +416,7 @@ $lang->ai->miniPrograms->category          = '所属分类';
 $lang->ai->miniPrograms->icon              = '图标';
 $lang->ai->miniPrograms->desc              = '简介';
 $lang->ai->miniPrograms->categoryList      = array('writing' => '写作', 'statistics' => '统计', 'creative' => '创意', 'raiders' => '攻略', 'schedule' => '日程');
+$lang->ai->miniPrograms->allCategories     = array('' => '所有分组');
 $lang->ai->miniPrograms->modelList         = array('openai-gpt35' => 'OpenAI / GPT-3.5');
 $lang->ai->miniPrograms->iconModification  = '图标修改';
 $lang->ai->miniPrograms->customBackground  = '自定义背景色';
@@ -425,6 +427,7 @@ $lang->ai->miniPrograms->backToListPageTip = '选择对象的参数配置已变�
 $lang->ai->miniPrograms->saveAndBack       = '保存并返回';
 $lang->ai->miniPrograms->publishConfirm    = array('您确定要发布吗？', '发布后将在客户端前台小程序广场显示。');
 $lang->ai->miniPrograms->emptyPrompterTip  = '小程序提词为空，请编辑后再进行发布';
+$lang->ai->miniPrograms->maintenanceGroup  = '维护小程序分组';
 
 $lang->ai->miniPrograms->latestPublishedDate = '最新发布时间';
 $lang->ai->miniPrograms->deleteTip           = '确定删除该小程序吗？删除后可以到后台回收站恢复';

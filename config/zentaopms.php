@@ -1,14 +1,14 @@
 <?php
 /**
-* The config file of zentaophp.  Don't modify this file directly, copy the item to my.php and change it.
-*
-* @copyright   Copyright 2009-2017 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
-* @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
-* @author      Chunsheng Wang <chunsheng@cnezsoft.com>
-* @package     config
-* @version     $Id: zentaopms.php 5068 2017-06-20 15:35:22Z pengjx $
-* @link        http://www.zentao.net
-*/
+ * The config file of zentaophp.  Don't modify this file directly, copy the item to my.php and change it.
+ *
+ * @copyright   Copyright 2009-2017 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     config
+ * @version     $Id: zentaopms.php 5068 2017-06-20 15:35:22Z pengjx $
+ * @link        http://www.zentao.net
+ */
 
 /* Product common list. */
 $config->productCommonList['zh-cn'][0] = '产品';
@@ -466,7 +466,7 @@ define('TABLE_METRICRECORDS', '' . $config->db->prefix . 'metricrecords');
 define('TABLE_BASICMEAS', '' . $config->db->prefix . 'basicmeas');
 
 define('TABLE_MINIPROGRAM',       '`' . $config->db->prefix . 'miniprogram`');
-define('TABLE_MINIPROGRAMFIELDS', '`' . $config->db->prefix . 'miniprogramfields`');
+define('TABLE_MINIPROGRAMFIELD',  '`' . $config->db->prefix . 'miniprogramfield`');
 
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;

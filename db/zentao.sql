@@ -15948,7 +15948,7 @@ CREATE TABLE IF NOT EXISTS `zt_miniprogram` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-CREATE TABLE IF NOT EXISTS `zt_miniprogramfields` (
+CREATE TABLE IF NOT EXISTS `zt_miniprogramfield` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `appID` mediumint(8) unsigned NOT NULL,
   `name` varchar(30) NOT NULL,
