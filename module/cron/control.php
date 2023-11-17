@@ -309,6 +309,7 @@ class cron extends control
         }
 
         $parsedCrons = $this->cron->parseCron($crons);
+        $now         = date(DT_DATETIME1);
 
         foreach($parsedCrons as $id => $cron)
         {
