@@ -68,11 +68,10 @@
         body:          (data) => $('body').html(data),
         title:         (data) => document.title = data,
         main:          (data) => $('#main').html(data),
-        featureBar:    (data) => $('#featureBar').html(data),
+        featureBar:    updateFeatureBar,
         pageCSS:       (data) => $('style.zin-page-css').html(data),
         pageJS:        updatePageJS,
         configJS:      updateConfigJS,
-        activeFeature: (data) => activeNav(data, '#featureBar'),
         activeMenu:    (data) => activeNav(data),
         navbar:        updateNavbar,
         heading:       updateHeading,
@@ -242,6 +241,21 @@
 
         activeNav($newNav.find('.nav-item>a.active').data('id'), $navbar);
         layoutNanavbar();
+    }
+
+    function updateFeatureBar(data)
+    {
+        const $featureBar = $('#featureBar');
+        const isOpenSearch = $featureBar.find('.search-form-toggle.active').length && $featureBar.closest('.show-search-form').length;
+        $featureBar.html(data);
+        if(isOpenSearch)
+        {
+            const $searchToggle = $featureBar.find('.search-form-toggle');
+            if(!$searchToggle.hasClass('active'))
+            {
+                zui.toggleSearchForm({module: $searchToggle.data('module'), show: false});
+            }
+        }
     }
 
     function updateHeading(data)
