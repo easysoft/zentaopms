@@ -95,19 +95,19 @@ featureBar
 $canCreate = hasPriv('product', 'create');
 toolbar
 (
-    btn
+    hasPriv('product', 'export') ? btn
     (
         set::className('ghost text-darker'),
         set::icon('export'),
         toggle::modal(array('url' => createLink('product', 'export', "programID=$programID&status=$browseType&orderBy=$orderBy&param=$param"))),
         $lang->export
-    ),
-    in_array($this->config->systemMode, array('ALM', 'PLM')) ? btn
+    ) : null,
+    in_array($this->config->systemMode, array('ALM', 'PLM')) && hasPriv('product', 'manageline') ? btn
     (
         set::className('ghost text-primary'),
         set::icon('edit'),
         toggle::modal(array('url' => createLink('product', 'manageLine', $browseType), 'id' => 'manageLineModal')),
-        $lang->product->editLine
+        $lang->product->line
     ) : null,
     $canCreate ? btn
     (
