@@ -148,19 +148,6 @@ function formatDate(dateString, days)
 }
 
 /**
- * Convert a date string like 2011-11-11 to date object in js.
- *
- * @param  string dateString
- * @access public
- * @return date
- */
-function convertStringToDate(dateString)
-{
-    dateString = dateString.split('-');
-    return new Date(dateString[0], dateString[1] - 1, dateString[2]);
-}
-
-/**
  * 提示并删除项目。
  * Delete project with tips.
  *
