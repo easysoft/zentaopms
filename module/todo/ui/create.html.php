@@ -40,12 +40,7 @@ for($day = 1; $day <= 31; $day ++) $days[$day] = $day . $lang->todo->day;
 
 formPanel
 (
-    set::title(''),
-    div
-    (
-        setClass('text-lg pb-2.5'),
-        $lang->todo->create
-    ),
+    set::title($lang->todo->create),
     formRow
     (
         setClass('items-center'),
