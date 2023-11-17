@@ -376,9 +376,9 @@ class searchModel extends model
      *
      * @param  int    $queryID
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getQuery(int $queryID): object
+    public function getQuery(int $queryID): object|bool
     {
         $query = $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
         if(!$query) return false;
