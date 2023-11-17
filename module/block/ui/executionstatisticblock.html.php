@@ -138,7 +138,16 @@ statisticBlock
                                             icon
                                             (
                                                 'help',
-                                                toggle::tooltip(array('title' => '提示文本')),
+                                                toggle::tooltip
+                                                (
+                                                    array
+                                                    (
+                                                        'title'     => $lang->block->tooltips['executionProgress'],
+                                                        'placement' => 'bottom',
+                                                        'type'      => 'white',
+                                                        'className' => 'text-dark border border-light leading-5'
+                                                    )
+                                                ),
                                                 setClass('text-light ml-0.5')
                                             )
                                         )
