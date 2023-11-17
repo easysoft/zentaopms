@@ -738,7 +738,7 @@
 
         const ajaxOptions =
         {
-            url:         url,
+            url:         options.url,
             header:      options.header,
             type:        options.method || 'GET',
             data:        options.data,
