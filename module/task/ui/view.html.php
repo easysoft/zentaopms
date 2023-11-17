@@ -223,6 +223,7 @@ detailBody
             dtable
             (
                 set::cols(array_values($config->task->dtable->children->fieldList)),
+                set::userMap($users),
                 set::data($children),
                 set::checkable(false)
             )
