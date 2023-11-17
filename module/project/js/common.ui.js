@@ -87,10 +87,10 @@ function computeWorkDays()
     const begin = $('#begin').zui('datePicker').$.state.value;
     const end   = $('#end').zui('datePicker').$.state.value;
 
-    if(end >= LONG_TIME)
+    if(end == LONG_TIME)
     {
         $('#delta999').prop('checked', true);
-        computeEndDate();
+        $('#days').val(0).trigger('change');
     }
     else
     {
