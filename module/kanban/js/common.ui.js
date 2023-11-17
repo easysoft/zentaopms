@@ -69,3 +69,51 @@ window.changeKanbanSpace = function()
         });
     }
 }
+
+/**
+ * Handle radio logic of Kanban column width setting.
+ *
+ * @access public
+ * @return void
+ */
+window.handleKanbanWidthAttr = function()
+{
+    $('#colWidth, #minColWidth, #maxColWidth').attr('onkeyup', 'value=value.match(/^\\d+$/) ? value : ""');
+    $('#colWidth, #minColWidth, #maxColWidth').attr('maxlength', '3');
+    let fluidBoard = $(".form input[name='fluidBoard']:checked").val() || 0;
+    let addAttrEle = fluidBoard == 0 ? '#colWidth' : '#minColWidth, #maxColWidth';
+    let $fixedTip  = $('#fixedColBox .fixedTip');
+    let $autoTip   = $('#autoColBox .autoTip');
+    $(addAttrEle).closest('.width-radio-row').addClass('required');
+    if(fluidBoard == 1)
+    {
+        $('#colWidth').attr('disabled', true);
+        $('#minColWidth, #maxColWidth').removeAttr('disabled');
+    }
+    else
+    {
+        $('#colWidth').removeAttr('disabled');
+        $('#minColWidth, #maxColWidth').attr('disabled', true);
+    }
+
+    $(document).on("#minColWidth, #maxColWidth", 'input', function()
+    {
+        $('#minColWidthLabel, #maxColWidthLabel').remove();
+        $('#minColWidth, #maxColWidth').removeClass('has-error');
+    });
+
+    if(fluidBoard == 1)
+    {
+        $fixedTip.addClass('hidden');
+        $autoTip.removeClass('hidden');
+        $('#colWidth').closest('div').removeClass('required');
+        $('#maxColWidth').closest('div').addClass('required');
+    }
+    else
+    {
+        $fixedTip.removeClass('hidden');
+        $autoTip.addClass('hidden');
+        $('#colWidth').closest('div').addClass('required');
+        $('#maxColWidth').closest('div').removeClass('required');
+    }
+}
