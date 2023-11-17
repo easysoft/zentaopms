@@ -1961,13 +1961,13 @@ class kanbanModel extends model
                     $object = zget($objects, $cardID, array());
 
                     if(empty($object)) continue;
-                    if(in_array($groupBy, array('module', 'story', 'pri', 'severity')) and (int)$object->$groupBy !== $laneID) continue;
-                    if(in_array($groupBy, array('type', 'category', 'source')) and $object->$groupBy !== $laneID) continue;
+                    if(in_array($groupBy, array('module', 'story', 'pri', 'severity')) and $object->$groupBy != $laneID) continue;
+                    if(in_array($groupBy, array('type', 'category', 'source')) and $object->$groupBy != $laneID) continue;
                     if($groupBy == 'assignedTo')
                     {
                         $laneID = (string)$laneID;
                         if(empty($object->$groupBy)) $object->$groupBy = '';
-                        if(empty($object->teamMember) and (string)$object->$groupBy !== $laneID) continue;
+                        if(empty($object->teamMember) and $object->$groupBy != $laneID) continue;
                         if(!empty($object->teamMember) and !in_array($laneID, array_keys($object->teamMember), true)) continue;
                     }
 
