@@ -1,3 +1,20 @@
+/**
+ * 更新可用工作日天数。
+ * Update work days.
+ *
+ * @access public
+ * @return void
+ */
+function batchComputeWorkDays()
+{
+    if($(this).closest('tr').find('div[data-longtime="1"]').length > 0) return false;
+
+    const index     = $(this).attr('name').replace(/(begin\[)|(end\[)|(\])/g, '');
+    const beginDate = $('[name=begin\\[' + index + '\\]').val();
+    const endDate   = $('[name=end\\[' + index + '\\]').val();
+    $('[name=days\\[' + index + '\\]').val(computeDaysDelta(beginDate, endDate));
+}
+
 window.renderRowData = function($row, index, row)
 {
     /* 如果某个项目是长期项目，更新计划完成日期和可用工作日的样式。*/
