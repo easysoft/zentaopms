@@ -15,6 +15,7 @@ $projectAclList = array();
 foreach($lang->program->subAcls as $acl => $label) $programAclList[] = array('text' => $label, 'value' => $acl);
 foreach($lang->project->acls as $acl => $label) $projectAclList[] = array('text' => $label, 'value' => $acl);
 
+jsVar('LONG_TIME', LONG_TIME);
 jsVar('programAclList', $programAclList);
 jsVar('projectAclList', $projectAclList);
 jsVar('disabledprograms', !empty($globalDisableProgram));
@@ -80,7 +81,17 @@ formBatchPanel
         set::name('end'),
         set::label($lang->project->end),
         set::control('date'),
-        set::width('120px')
+        set::width('120px'),
+        inputControl
+        (
+            setClass('has-suffix-icon hidden'),
+            to::suffix(icon('calendar')),
+            input
+            (
+                set::value($lang->project->longTime),
+                set::disabled(true)
+            )
+        )
     ),
     formBatchItem
     (
