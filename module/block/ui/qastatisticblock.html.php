@@ -166,23 +166,8 @@ statisticBlock
                 div(span(setClass('text-2xl font-bold'), $product->closedBugRate), '%'),
                 div
                 (
-                    setClass('row text-sm text-gray items-center gap-1'),
-                    $lang->block->qastatistic->closedBugRate,
-                    icon
-                    (
-                        'help',
-                        setClass('text-light text-sm'),
-                        toggle::tooltip
-                        (
-                            array
-                            (
-                                'content'   => array('html' => $lang->block->tooltips['closedBugRate']),
-                                'placement' => 'bottom',
-                                'type'      => 'white',
-                                'className' => 'text-dark border border-light leading-5'
-                            )
-                        )
-                    )
+                    setClass('row text-gray items-center gap-1'),
+                    $lang->block->qastatistic->closedBugRate
                 )
             ),
             row

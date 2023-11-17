@@ -50,118 +50,110 @@ panel
                 setClass('flex h-full ' . ($longBlock ? '' : 'col')),
                 cell
                 (
-                    $longBlock ? set('width', '40%') : null,
+                    $longBlock ? set::width('40%') : setClass('my-4'),
+                    setClass('flex items-center'),
                     setClass($longBlock ? 'p-4' : 'px-4'),
-                    div
+                    center
                     (
-                        setClass('chart pie-chart ' . ($longBlock ? 'py-6' : 'py-1')),
-                        echarts
+                        setClass('flex-1 gap-4'),
+                        progressCircle
                         (
-                            set::color(array('#2B80FF', '#E3E4E9')),
-                            set::series
+                            set::percent($product->storyDeliveryRate),
+                            set::size(112),
+                            set::text(false),
+                            set::circleWidth(0.06),
+                            div(span(setClass('text-2xl font-bold'), $product->storyDeliveryRate), '%'),
+                            div
                             (
-                                array
+                                setClass('row text-sm text-gray items-center gap-1'),
+                                $lang->block->productstatistic->deliveryRate,
+                                icon
                                 (
-                                    array
+                                    setClass('text-light text-sm'),
+                                    toggle::tooltip
                                     (
-                                        'type'   => 'pie',
-                                        'radius' => array('80%', '90%'),
-                                        'itemStyle' => array('borderRadius' => '40'),
-                                        'label'  => array('show' => false),
-                                        'data'   => array($product->storyDeliveryRate, 100 - $product->storyDeliveryRate)
-                                    )
+                                        array
+                                        (
+                                            'title'     => $lang->block->tooltips['deliveryRate'],
+                                            'placement' => 'bottom',
+                                            'type'      => 'white',
+                                            'className' => 'text-dark border border-light leading-5'
+                                        )
+                                    ),
+                                    'help'
                                 )
                             )
-                        )->size('100%', 120),
+                        ),
                         div
                         (
-                            set::className('pie-chart-title text-center h-0'),
-                            div(span(set::className('text-2xl font-bold'), $product->storyDeliveryRate . '%')),
-                            div
+                            setClass('flex h-full story-num w-44'),
+                            cell
                             (
-                                span
+                                setClass('flex-1 text-center'),
+                                div
                                 (
-                                    setClass('text-sm text-gray'),
-                                    $lang->block->productstatistic->deliveryRate,
-                                    icon
+                                    common::hasPriv('product', 'browse') && $product->totalStories ? a
                                     (
-                                        'help',
-                                        setClass('text-light'),
-                                        toggle::tooltip(array('title' => '提示文本'))
+                                        set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=allStory&param=0&storyType=story")),
+                                        $product->totalStories
+                                    ) : span
+                                    (
+                                        $product->totalStories
+                                    )
+                                ),
+                                div
+                                (
+                                    span
+                                    (
+                                        setClass('text-sm text-gray'),
+                                        $lang->block->productstatistic->effectiveStory
                                     )
                                 )
-                            )
-                        )
-                    ),
-                    div
-                    (
-                        setClass('flex h-full story-num w-44'),
-                        cell
-                        (
-                            setClass('flex-1 text-center'),
-                            div
+                            ),
+                            cell
                             (
-                                common::hasPriv('product', 'browse') && $product->totalStories ? a
+                                setClass('flex-1 text-center'),
+                                div
                                 (
-                                    set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=allStory&param=0&storyType=story")),
-                                    $product->totalStories
-                                ) : span
+                                    common::hasPriv('product', 'browse') && $product->closedStories ? a
+                                    (
+                                        set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=closedstory&param=0&storyType=story")),
+                                        $product->closedStories
+                                    ) : span
+                                    (
+                                        $product->closedStories
+                                    )
+                                ),
+                                div
                                 (
-                                    $product->totalStories
+                                    span
+                                    (
+                                        setClass('text-sm text-gray'),
+                                        $lang->block->productstatistic->delivered
+                                    )
                                 )
                             ),
-                            div
+                            cell
                             (
-                                span
+                                setClass('flex-1 text-center'),
+                                div
                                 (
-                                    setClass('text-sm text-gray'),
-                                    $lang->block->productstatistic->effectiveStory
-                                )
-                            )
-                        ),
-                        cell
-                        (
-                            setClass('flex-1 text-center'),
-                            div
-                            (
-                                common::hasPriv('product', 'browse') && $product->closedStories ? a
+                                    common::hasPriv('product', 'browse') && $product->unclosedStories ? a
+                                    (
+                                        set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=unclosed&param=0&storyType=story")),
+                                        $product->unclosedStories
+                                    ) : span
+                                    (
+                                        $product->unclosedStories
+                                    )
+                                ),
+                                div
                                 (
-                                    set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=closedstory&param=0&storyType=story")),
-                                    $product->closedStories
-                                ) : span
-                                (
-                                    $product->closedStories
-                                )
-                            ),
-                            div
-                            (
-                                span
-                                (
-                                    setClass('text-sm text-gray'),
-                                    $lang->block->productstatistic->delivered
-                                )
-                            )
-                        ),
-                        cell
-                        (
-                            setClass('flex-1 text-center'),
-                            div
-                            (
-                                common::hasPriv('product', 'browse') && $product->unclosedStories ? a
-                                (
-                                    set('href', helper::createLink('product', 'browse', "productID={$product->id}&branch=all&browseType=unclosed&param=0&storyType=story")),
-                                    $product->unclosedStories
-                                ) : span
-                                (
-                                    $product->unclosedStories
-                                )
-                            ),
-                            div
-                            (
-                                span
-                                (
-                                    setClass('text-sm text-gray'),
-                                    $lang->block->productstatistic->unclosed
+                                    span
+                                    (
+                                        setClass('text-sm text-gray'),
+                                        $lang->block->productstatistic->unclosed
+                                    )
                                 )
                             )
                         )
