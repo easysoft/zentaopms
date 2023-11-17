@@ -15,7 +15,14 @@ foreach($config->productplan->defaultFields['linkBug'] as $field) $cols[$field] 
 $cols = array_map(function($col){$col['show'] = true; return $col;}, $cols);
 $cols['assignedTo']['type'] = 'user';
 
-div(setID('searchFormPanel'), set('data-module', 'bug'), searchToggle(set::open(true), set::module('bug')));
+searchForm
+(
+    set::module('bug'),
+    set::simple(true),
+    set::show(true),
+    set::onSearch(jsRaw("window.onSearchLinks.bind(null, 'bug')"))
+);
+
 dtable
 (
     set::id('unlinkBugList'),
@@ -23,6 +30,7 @@ dtable
     set::checkable(true),
     set::cols($cols),
     set::data(array_values($allBugs)),
+    set::extraHeight('+144'),
     set::footToolbar(array
     (
         'items' => array(array
