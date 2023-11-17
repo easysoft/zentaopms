@@ -56,6 +56,7 @@ $fieldListExtend['id']['type'] = 'checkID';
 
 $this->config->stakeholder->dtable->fieldList = $fieldListExtend;
 $cols = $this->loadModel('datatable')->getSetting('stakeholder');
+unset($cols['name']['link']);
 
 /* Set list and menu of actions to customize the actions of stakeholder in program module. */
 $cols['actions']['list'] = array('unlinkStakeholder' => array
