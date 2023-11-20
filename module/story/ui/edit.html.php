@@ -21,12 +21,12 @@ $multiplePlan = ($product->type != 'normal' && empty($story->branch) && $planCou
 $minStage    = $story->stage;
 $stageList   = implode(',', array_keys($this->lang->story->stageList));
 $minStagePos = strpos($stageList, $minStage);
-if(!empty($story->stages) and $branchTagOption)
+if(!empty($story->stages) && isset($fields['stage']['options']))
 {
     foreach($story->stages as $branch => $stage)
     {
         $position = strpos(",{$stageList},", ",{$stage},");
-        if($position !== false and $position > $minStagePos)
+        if($position !== false && $position > $minStagePos)
         {
             $minStage    = $stage;
             $minStagePos = $position;
