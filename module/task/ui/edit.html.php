@@ -162,32 +162,36 @@ detailBody
             item
             (
                 set::name($lang->task->module),
-                inputGroup
+                set::required(strpos(",{$this->config->task->edit->requiredFields},", ",module,") !== false),
+                formGroup
                 (
-                    div
+                    inputGroup
                     (
-                        setClass('flex grow'),
-                        picker
+                        div
                         (
-                            setClass('w-full'),
-                            set::name('module'),
-                            set::value($task->module),
-                            set::items($moduleOptions),
-                            set::width(2/3),
-                            set::required(true)
-                        )
-                    ),
-                    div
-                    (
-                        setClass('flex'),
-                        checkbox(
-                            setID('showAllModule'),
-                            set::rootClass('items-center ml-3'),
-                            set::name('showAllModule'),
-                            set::text($lang->all),
-                            set::value(1),
-                            set::checked($showAllModule),
-                            on::change('loadAllModule')
+                            setClass('flex grow'),
+                            picker
+                            (
+                                setClass('w-full'),
+                                set::name('module'),
+                                set::value($task->module),
+                                set::items($moduleOptions),
+                                set::width(2/3),
+                                set::required(true)
+                            )
+                        ),
+                        div
+                        (
+                            setClass('flex'),
+                            checkbox(
+                                setID('showAllModule'),
+                                set::rootClass('items-center ml-3'),
+                                set::name('showAllModule'),
+                                set::text($lang->all),
+                                set::value(1),
+                                set::checked($showAllModule),
+                                on::change('loadAllModule')
+                            )
                         )
                     )
                 )
@@ -276,11 +280,15 @@ detailBody
             item
             (
                 set::name($lang->task->pri),
-                priPicker
+                set::required(strpos(",{$this->config->task->edit->requiredFields},", ",pri,") !== false),
+                formGroup
                 (
-                    set::name('pri'),
-                    set::value($task->pri),
-                    set::items($priOptions),
+                    priPicker
+                    (
+                        set::name('pri'),
+                        set::value($task->pri),
+                        set::items($priOptions),
+                    )
                 )
             ),
             item
@@ -376,24 +384,33 @@ detailBody
             item
             (
                 set::name($lang->task->estStarted),
-                datePicker
+                set::required(strpos(",{$this->config->task->edit->requiredFields},", ",estStarted,") !== false),
+                formGroup
                 (
-                    set::name('estStarted'),
-                    helper::isZeroDate($task->estStarted) ? null : set::value($task->estStarted)
+                    datePicker
+                    (
+                        set::name('estStarted'),
+                        helper::isZeroDate($task->estStarted) ? null : set::value($task->estStarted)
+                    )
                 )
             ),
             item
             (
                 set::name($lang->task->deadline),
-                datePicker
+                set::required(strpos(",{$this->config->task->edit->requiredFields},", ",deadline,") !== false),
+                formGroup
                 (
-                    set::name('deadline'),
-                    helper::isZeroDate($task->deadline) ? null : set::value($task->deadline)
+                    datePicker
+                    (
+                        set::name('deadline'),
+                        helper::isZeroDate($task->deadline) ? null : set::value($task->deadline)
+                    )
                 )
             ),
             item
             (
                 set::name($lang->task->estimate),
+                set::required(strpos(",{$this->config->task->edit->requiredFields},", ",estimate,") !== false),
                 inputControl
                 (
                     input

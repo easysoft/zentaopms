@@ -268,6 +268,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->task->module),
+            set::required(strpos(",{$this->config->task->create->requiredFields},", ",module,") !== false),
             inputGroup
             (
                 picker
@@ -381,6 +382,7 @@ formPanel
         (
             set::label($lang->task->story),
             setClass(empty($stories) ? 'hidden' : ''),
+            set::required(strpos(",{$this->config->task->create->requiredFields},", ",story,") !== false),
             inputGroup
             (
                 picker
@@ -495,11 +497,9 @@ formPanel
     formGroup
     (
         set::label($lang->task->desc),
-        editor
-        (
-            set::name('desc'),
-            set::rows('5')
-        )
+        set::control('editor'),
+        set::name('desc'),
+        set::rows('5')
     ),
     formGroup
     (
@@ -511,6 +511,7 @@ formPanel
         set::width('1/2'),
         set::label($lang->task->datePlan),
         setClass($hiddenDatePlan),
+        set::required(strpos(",{$this->config->task->create->requiredFields},", ",estStarted,") !== false || strpos(",{$this->config->task->create->requiredFields},", ",deadline,") !== false),
         inputGroup
         (
             datepicker
