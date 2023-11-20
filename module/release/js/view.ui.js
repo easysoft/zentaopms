@@ -119,17 +119,7 @@ $(function()
 {
     if(initLink == 'true')
     {
-        let idName = 'finishedStory';
-        if(type == 'bug')
-        {
-            idName = 'resolvedBug';
-        }
-        else if(type == 'leftBug')
-        {
-            idName = 'leftBug';
-        }
-
-        window.showLink(idName, linkParams);
+        window.showLink(type, linkParams);
     }
 })
 
