@@ -1602,6 +1602,8 @@ class pivotModel extends model
         {
             foreach($settings['columns'] as $column)
             {
+                if($column['showOrigin']) $column['slice'] = 'noSlice';
+
                 $stat   = $column['stat'];
                 $field  = $column['field'];
                 $slice  = zget($column, 'slice', 'noSlice');
