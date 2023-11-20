@@ -28,6 +28,7 @@ formBatchPanel
     set::data(array_values($projects)),
     set::onRenderRow(jsRaw('renderRowData')),
     on::change('[name^=begin],[name^=end]', 'batchComputeWorkDays'),
+    $config->systemMode != 'light' ? on::change('[name^=begin],[name^=end],[name^=parent]', 'batchCheckDate') : null,
     formBatchItem
     (
         set::name('id'),
@@ -108,6 +109,27 @@ formBatchPanel
         set::control('picker'),
         set::items(array()),
         set::width('76px')
+    )
+);
+
+h::table
+(
+    setID('dateTipTemplate'),
+    setClass('hidden'),
+    h::tr
+    (
+        setClass('dateTip'),
+        h::td
+        (
+            set::colspan(9),
+            div
+            (
+                setClass('text-right'),
+                span(setClass('beginLess text-warning hidden'), html($lang->project->beginLessThanParent)),
+                span(setClass('endGreater text-warning hidden'), html($lang->project->endGreatThanParent)),
+                a(setClass('underline text-warning'), set::href('javascript:;'), $lang->project->ignore)
+            )
+        )
     )
 );
 
