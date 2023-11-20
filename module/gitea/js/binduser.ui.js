@@ -36,3 +36,14 @@ window.bindUser = function(e)
         data: postData
     });
 }
+
+window.afterPageUpdate = function($target, info)
+{
+    if(info.name === 'dtable')
+    {
+        const dtable = zui.DTable.query('#table-gitea-binduser');
+
+        /* Clear saved formData. */
+        if(dtable) dtable.$.resetFormData();
+    }
+};
