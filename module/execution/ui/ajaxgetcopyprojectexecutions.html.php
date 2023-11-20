@@ -18,7 +18,7 @@ if(empty($executions))
     $executionsBox[] = div
         (
             setClass('inline-flex items-center'),
-            setClass(empty($executions) ? 'bg-lighter h-12' : ''),
+            setClass('bg-lighter h-12'),
             icon('exclamation-sign icon-2x pl-2 text-warning'),
             span
             (
