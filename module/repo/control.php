@@ -316,7 +316,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function monaco($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
+    public function monaco(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $showBug = 'false', string $encoding = '')
     {
         $this->commonAction($repoID, $objectID);
 
@@ -356,7 +356,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function view($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
+    public function view(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $showBug = 'false', string $encoding = '')
     {
         set_time_limit(0);
         if($this->get->repoPath) $entry = $this->get->repoPath;
