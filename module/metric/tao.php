@@ -160,8 +160,7 @@ class metricTao extends metricModel
             }
             else
             {
-                $maxDate = $this->dao->select("max(date) maxDate")->from(TABLE_METRICLIB)->fetch('maxDate');
-                $date    = substr($maxDate, 0, 10);
+                $date = helper::today();
             }
         }
 
