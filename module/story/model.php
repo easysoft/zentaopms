@@ -751,7 +751,7 @@ class storyModel extends model
         /* Set new stage and update story sort of plan when story plan has changed. */
         if($oldStory->plan != $story->plan)
         {
-            $this->updateStoryOrderOfPlan($storyID, $story->plan, $oldStory->plan); // Insert a new story sort in this plan.
+            $this->updateStoryOrderOfPlan($storyID, (string)$story->plan, $oldStory->plan); // Insert a new story sort in this plan.
             if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
             if(!empty($oldStory->plan)) $this->action->create('productplan', (int)$oldStory->plan, 'unlinkstory', '', $storyID);
             if(!empty($story->plan))    $this->action->create('productplan', (int)$story->plan, 'linkstory', '', $storyID);
