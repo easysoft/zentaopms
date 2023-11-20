@@ -36,6 +36,8 @@ class group extends control
         $allPrivs = array();
         foreach($this->config->group->package as $packageCode => $package)
         {
+            if(empty($package->privs)) continue;
+
             foreach($package->privs as $privCode => $priv)
             {
                 $allPrivs[$privCode] = $privCode;
