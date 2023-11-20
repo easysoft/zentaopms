@@ -49,7 +49,7 @@
   </div>
   <?php else:?>
   <form class='main-table'>
-    <table class='table' id='memberList'>
+    <table class='table table-from table-fixed table-nested' id='memberList'>
       <thead>
         <tr>
           <th><?php echo $lang->team->account;?></th>
