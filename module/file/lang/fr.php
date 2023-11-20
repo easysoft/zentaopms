@@ -72,7 +72,7 @@ $lang->file->errorSuffix      = 'Format incorrect. Fichiers .zip SEULEMENT !';
 $lang->file->errorExtract     = "Echec de l'extraction des fichiers. Les fichiers peuvent être endommagé ou il y a un fichier invalide dans le zip.";
 $lang->file->fileNotFound     = 'Fichier non trouvé. Le fichier physique a peut-être été supprimé par innadvertance !';
 $lang->file->fileContentEmpty = 'The file is empty. Check the file and upload it again.';
-$lang->file->bizGuide         = 'To utilize Excel import/export, upgrade to ZenTao %s edition on our website';
+$lang->file->bizGuide         = 'To utilize Excel import/export, upgrade to ZenTao %s edition';
 
 $lang->file->uploadError[1] = 'The uploaded filesize exceeds the limit. Please change the upload_max_filesize and post_max_size options in php.ini';
 $lang->file->uploadError[2] = 'The size of the uploaded file exceeds the value specified by the MAX_FILE_SIZE option in the HTML form';
