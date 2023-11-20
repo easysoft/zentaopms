@@ -70,7 +70,7 @@ formPanel
                     set::suffix($lang->project->tenThousandYuan),
                     set::suffixWidth(50)
                 ),
-                $parentProgram ? formHidden('budgetUnit', $parentProgram->budgetUnit) : picker(set::name('budgetUnit'), set::items($budgetUnitList), set::value($config->project->defaultCurrency))
+                $parentProgram ? formHidden('budgetUnit', $parentProgram->budgetUnit) : picker(set::name('budgetUnit'), set::items($budgetUnitList), set::value($config->project->defaultCurrency), set::required(true))
             )
         ),
         formGroup
