@@ -137,17 +137,17 @@ div
                     ),
                     !$hiddenCode ? label
                     (
-                        setClass('light-outline mx-2 flex-none'),
+                        setClass('light-outline ml-2 flex-none'),
                         $product->code
                     ) : null,
                     $product->type != 'normal' ? label
                     (
-                        setClass('light-outline mx-2 text-warning flex-none'),
+                        setClass('light-outline ml-2 text-warning flex-none'),
                         $lang->product->typeList[$product->type]
                     ) : null,
                     $product->deleted ? label
                     (
-                        setClass('danger-outline text-dange flex-noner'),
+                        setClass('danger-outline text-dange flex-noner ml-2'),
                         $lang->product->deleted
                     ) : null,
                     label
