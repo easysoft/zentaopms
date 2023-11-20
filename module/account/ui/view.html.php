@@ -11,7 +11,11 @@ declare(strict_types=1);
 namespace zin;
 global $lang;
 
-if(isAjaxRequest('modal')) unset($config->account->actionList['edit']['data-toggle']);
+if(isAjaxRequest('modal'))
+{
+    $config->account->actionList['edit']['data-load'] = 'modal';
+    unset($config->account->actionList['edit']['data-toggle']);
+}
 $actions = $this->loadModel('common')->buildOperateMenu($account);
 
 detailHeader

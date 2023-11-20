@@ -243,7 +243,7 @@ $fnGenerateFloatToolbarBtns = function() use ($lang, $config, $todo, $projects, 
     $canStart    && $status == 'wait'                          ? $actionList['main'][] = array('icon' => 'play',  'url' => createLink('todo', 'start',    "todoID={$todo->id}"), 'text' => $lang->todo->abbr->start) : null;
     $canActivate && ($status == 'done' || $status == 'closed') ? $actionList['main'][] = array('icon' => 'magic', 'url' => createLink('todo', 'activate', "todoID={$todo->id}"), 'text' => $lang->activate) : null;
     $canClose    && $status == 'done'                          ? $actionList['main'][] = array('icon' => 'off',   'url' => createLink('todo', 'close',    "todoID={$todo->id}"), 'text' => $lang->close) : null;
-    $canEdit                                                   ? $actionList['main'][] = array('icon' => 'edit',  'url' => createLink('todo', 'edit',     "todoID={$todo->id}"), 'text' => $lang->edit) : null;
+    $canEdit                                                   ? $actionList['main'][] = array('icon' => 'edit',  'url' => createLink('todo', 'edit',     "todoID={$todo->id}"), 'data-load' => $isInModal ? 'modal' : null, 'text' => $lang->edit) : null;
     $canDelete                                                 ? $actionList['main'][] = array('icon' => 'trash', 'url' => createLink('todo', 'delete',   "todoID={$todo->id}"), 'text' => $lang->delete) : null;
 
     /* The status is 'done' or 'closed' without more action buttons. */
