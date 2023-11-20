@@ -269,6 +269,12 @@ class productZen extends product
         $fields = $this->setSelectFormOptions($programID, $this->config->product->form->create);
         $fields['program']['default'] = $programID;
 
+        /* Set required. */
+        foreach($fields as $field => $attr)
+        {
+            if(strpos(",{$this->config->product->create->requiredFields},", ",$field,") !== false) $fields[$field]['required'] = true;
+        }
+
         return $fields;
     }
 
@@ -300,6 +306,7 @@ class productZen extends product
         foreach($fields as $field => $attr)
         {
             if(isset($product->{$field})) $fields[$field]['default'] = $product->{$field};
+            if(strpos(",{$this->config->product->edit->requiredFields},", ",$field,") !== false) $fields[$field]['required'] = true;
         }
 
         return $fields;
