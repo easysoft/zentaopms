@@ -75,7 +75,11 @@ class metricModel extends model
         $purposes = array_keys($this->lang->metric->purposeList);
         foreach($groupMetrics as $key => $metrics)
         {
-            if(empty($metrics)) continue;
+            if(empty($metrics))
+            {
+                unset($groupMetrics[$key]);
+                continue;
+            }
 
             usort($metrics, function($a, $b) use ($purposes) {
                 $aIndex = array_search($a->purpose, $purposes);

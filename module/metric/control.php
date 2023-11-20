@@ -52,8 +52,10 @@ class metric extends control
         {
             $metrics = $this->metric->getList($scope, 'released');
         }
+        $groupMetrics = $this->metric->groupMetricByObject($metrics);
+
         $current = $this->metric->getByID($metricID);
-        if(empty($current)) $current = current($metrics);
+        if(empty($current) and $groupMetrics) $current = current(current($groupMetrics));
 
         $resultHeader = array();
         $resultData   = array();
@@ -67,7 +69,7 @@ class metric extends control
         }
 
         $this->view->metrics       = $metrics;
-        $this->view->groupMetrics  = $this->metric->groupMetricByObject($metrics);
+        $this->view->groupMetrics  = $groupMetrics;
         $this->view->current       = $current;
         $this->view->metricList    = $this->lang->metric->metricList;
         $this->view->scope         = $scope;
