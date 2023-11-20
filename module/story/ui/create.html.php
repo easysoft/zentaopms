@@ -272,7 +272,7 @@ formPanel
             inputGroup
             (
                 span(setClass('URSBox'), picker(setID('URS'), set::name('URS[]'), set::items($fields['URS']['options']), set::value($fields['URS']['default']))),
-                btn(setData(array('on' => 'click', 'call' => 'loadURS', 'params' => 'allURS')), $lang->story->loadMyStories)
+                btn(setData(array('on' => 'click', 'call' => 'loadURS', 'params' => 'allURS')), $lang->story->loadAllStories)
             )
         ),
         formGroup
