@@ -933,7 +933,8 @@ class treeModel extends model
             $extra['branchID'] = $branch;
         }
 
-        return call_user_func($userFunc, $type, $module, (int)$parent, $extra);
+        if($type != 'case') $parent = (int)$parent;
+        return call_user_func($userFunc, $type, $module, $parent, $extra);
     }
 
     /**
@@ -1278,12 +1279,12 @@ class treeModel extends model
      *
      * @param  string       $type
      * @param  object       $module
-     * @param  int          $parent
+     * @param  string       $parent
      * @param  array|string $extra
      * @access public
      * @return object
      */
-    public function createCaseLink(string $type, object $module, int $parent, array|string $extra = array()): object
+    public function createCaseLink(string $type, object $module, string $parent, array|string $extra = array()): object
     {
         $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'testcase';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'testcase' : 'browse';
@@ -1291,8 +1292,8 @@ class treeModel extends model
         $param      = $this->app->tab == 'execution' ? "executionID={$extra['projectID']}&" : $param;
 
         $data = new stdclass();
-        $data->id     = $parent ? uniqid() : $module->id;
-        $data->parent = $parent ? $parent : $module->parent;
+        $data->id     = $module->id;
+        $data->parent = $parent && empty($module->parent) ? $parent : $module->parent;
         $data->name   = $module->name;
         $data->url    = helper::createLink($moduleName, $methodName, $param . "productID={$module->root}&branch={$extra['branchID']}&browseType=byModule&param={$module->id}");
 
