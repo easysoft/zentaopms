@@ -61,21 +61,18 @@ class account extends control
     {
         if($_POST)
         {
-            $id = $this->account->create();
+            $account = $this->accountZen->buildDataForCreate();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('account', $id, 'created');
+            $this->account->create($account);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadCurrentPage()', 'closeModal' => true));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink('account', 'browse')));
         }
 
         $this->app->loadLang('serverroom');
-
-        $this->view->title      = $this->lang->account->create;
-        $this->view->position[] = html::a($this->createLink('account', 'browse'), $this->lang->account->common);
-        $this->view->position[] = $this->lang->account->create;
-
+        $this->view->title = $this->lang->account->create;
         $this->display();
     }
 

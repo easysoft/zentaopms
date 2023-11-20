@@ -88,22 +88,25 @@ class accountModel extends model
         return $this->dao->select('id,name')->from(TABLE_ACCOUNT)->where('deleted')->eq('0')->fetchPairs();
     }
 
-    public function create()
+    /**
+     * Create account
+     *
+     * @param  object $account
+     * @access public
+     * @return int|false
+     */
+    public function create(object $account): int|false
     {
-        $account = fixer::input('post')
-            ->setDefault('createdBy', $this->app->user->account)
-            ->setDefault('createdDate', helper::now())
-            ->get();
-
-        $this->dao->insert(TABLE_ACCOUNT)
-            ->data($account)
+        $this->dao->insert(TABLE_ACCOUNT)->data($account)
             ->batchCheck($this->config->account->create->requiredFields, 'notempty')
             ->checkIf($account->email, 'email', 'email')
             ->checkIf($account->mobile, 'mobile', 'mobile')
             ->exec();
-
         if(dao::isError()) return false;
-        return $this->dao->lastInsertID();
+
+        $accountID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('account', $accountID, 'created');
+        return $accountID;
     }
 
     /**
