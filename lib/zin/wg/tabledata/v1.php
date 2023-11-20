@@ -12,7 +12,8 @@ class tableData extends wg
     protected static array $defineProps = array(
         'title?: string',
         'useTable?: bool=true',
-        'class?: string'
+        'class?: string',
+        'required?: bool=false'
     );
 
     public static function getPageCSS(): string|false
@@ -22,13 +23,15 @@ class tableData extends wg
 
     private function buildItemWithTr($item): wg
     {
+        $required = $item->prop('required');
         return h::tr
         (
             setClass($item->prop('trClass')),
             h::th
             (
-                setClass('py-1.5 pr-2 font-normal nowrap text-right', $item->prop('thClass')),
-                $item->prop('name')
+                setClass('py-1.5 pr-2 font-normal nowrap text-right' . ($required ? ' required' : ''), $item->prop('thClass')),
+                $item->prop('name'),
+                $item->block('suffixName')
             ),
             h::td
             (

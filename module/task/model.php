@@ -1231,7 +1231,7 @@ class taskModel extends model
         if(!empty($task->mode))
         {
             $task->members = array();
-            $task->team    = $this->taskTao->getTeamByTask($taskID);
+            $task->team    = $this->getTeamByTask($taskID);
             foreach($task->team as $member) $task->members[$member->account] = $member->account;
         }
         else
@@ -3139,5 +3139,19 @@ class taskModel extends model
             ->andWhere('relation')->eq('linkrepobranch')
             ->andWhere('AID')->eq($taskID)
             ->fetchPairs();
+    }
+
+    /**
+     * 通过任务ID获取任务团队信息。
+     * Get the task team information through the task ID.
+     *
+     * @param  int       $taskID
+     * @param  string    $orderBy
+     * @access protected
+     * @return object[]
+     */
+    public function getTeamByTask(int $taskID, string $orderBy = 'order_asc'): array
+    {
+        return $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($taskID)->orderBy($orderBy)->fetchAll('id');
     }
 }

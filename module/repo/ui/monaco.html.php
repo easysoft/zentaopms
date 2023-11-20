@@ -20,7 +20,14 @@ dropmenu
     set::url(createLink($module, 'ajaxGetDropMenu', "objectID=$objectID&module={$app->rawModule}&method={$app->rawMethod}"))
 );
 
-$tree = $this->repo->getFileTree($repo);
+if($repo->SCM == 'Gitlab')
+{
+    $tree = $this->repo->getGitlabFilesByPath($repo, '', (string)$branchID);
+}
+else
+{
+    $tree = $this->repo->getFileTree($repo);
+}
 
 jsVar('isonlybody', isonlybody());
 jsVar('entry', $entry);

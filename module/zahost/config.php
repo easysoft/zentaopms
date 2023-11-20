@@ -42,10 +42,10 @@ $config->zahost->search['params']['vsoft']           = array('operator' => '=', 
 $config->zahost->search['params']['status']          = array('operator' => '=', 'control' => 'select',  'values' => $lang->zahost->statusList);
 $config->zahost->search['params']['instanceNum']     = array('operator' => '=', 'control' => 'input',  'values' => '');
 $config->zahost->search['params']['createdBy']       = array('operator' => '=', 'control' => 'select',  'values' => 'users');
-$config->zahost->search['params']['createdDate']     = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
-$config->zahost->search['params']['registerDate']    = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
+$config->zahost->search['params']['createdDate']     = array('operator' => '=', 'control' => 'date',  'values' => '');
+$config->zahost->search['params']['registerDate']    = array('operator' => '=', 'control' => 'date',  'values' => '');
 $config->zahost->search['params']['editedBy']        = array('operator' => '=', 'control' => 'select',  'values' => 'users');
-$config->zahost->search['params']['editedDate']      = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
+$config->zahost->search['params']['editedDate']      = array('operator' => '=', 'control' => 'date',  'values' => '');
 
 $config->zahost->editor = new stdclass();
 $config->zahost->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');

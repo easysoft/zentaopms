@@ -419,8 +419,8 @@ $lang->project->cannotCancelCat      = "There are child {$lang->projectCommon}s 
 $lang->project->parentBeginEnd       = "The begin and end date of the parent {$lang->projectCommon}: %s ~ %s";
 $lang->project->parentBudget         = "The budget of the parent program: ";
 
-$lang->project->beginLessThanParent     = "The start date of the {$lang->projectCommon} is < the start date of the parent program:";
-$lang->project->endGreatThanParent      = "The finish date of the {$lang->projectCommon} is > the finish date of the parent program:";
+$lang->project->beginLessThanParent     = "The start date of the {$lang->projectCommon} is < the start date of the parent program: <strong class='parentBegin'></strong>. ";
+$lang->project->endGreatThanParent      = "The finish date of the {$lang->projectCommon} is > the finish date of the parent program: <strong class='parentEnd'></strong>. ";
 $lang->project->dateExceedParent        = "The start and finish date of the {$lang->projectCommon} was > the start and finish date of the parent program:";
 $lang->project->beginGreatEqualChild    = "The start date of the {$lang->projectCommon} should be ≥ the start date of program: %s.";
 $lang->project->endLessThanChild        = "The finish date of the {$lang->projectCommon} should be ≤ the finish date of program: %s.";
@@ -458,14 +458,13 @@ $lang->project->moreSelects = array();
 $lang->project->moreSelects['suspended'] = 'Suspended';
 $lang->project->moreSelects['closed']    = 'Closed';
 
-$lang->project->manDay            = 'Man Day';
-$lang->project->day               = 'Day';
-$lang->project->newProduct        = 'New Product';
-$lang->project->associatePlan     = 'Associate Plan';
-$lang->project->editorPlaceholder = 'You can directly paste images in the editor. Hotkeys: Command C+V';
-$lang->project->tenThousandYuan   = '10k';
-$lang->project->planDate          = 'Schedule Date';
-$lang->project->delayInfo         = 'Delayed for %s days';
+$lang->project->manDay          = 'Man Day';
+$lang->project->day             = 'Day';
+$lang->project->newProduct      = 'New Product';
+$lang->project->associatePlan   = 'Associate Plan';
+$lang->project->tenThousandYuan = '10k';
+$lang->project->planDate        = 'Schedule Date';
+$lang->project->delayInfo       = 'Delayed for %s days';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . ' Sprint';
 $lang->project->executionList['waterfall']     = $lang->projectCommon . ' Stage';

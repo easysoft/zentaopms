@@ -251,7 +251,7 @@ class action extends control
 
             /* 获取评论内容并生成一条action数据。 */
             $commentData = form::data($this->config->action->form->comment)->get();
-            $actionID    = $this->action->create($objectType, $objectID, 'Commented', $commentData->comment);
+            $actionID    = $this->action->create($objectType, $objectID, 'Commented', $commentData->actioncomment);
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $actionID));
 
             /* 用于ZIN的新UI。*/

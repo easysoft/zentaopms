@@ -20,9 +20,8 @@ foreach($fields as $field => $attr)
 
     $control = array();
     $control['type'] = $attr['control'];
-    if($attr['control'] == 'select') $control['type']  = 'picker';
-    if($attr['control'] == 'radio')  $control['type']  = 'radioList';
-    if(!empty($attr['options']))     $control['items'] = $attr['options'];
+    if($attr['control'] == 'select') $control['type'] = 'picker';
+    if($attr['control'] == 'radio')  $control['type'] = 'radioList';
     if($attr['control'] == 'multi-select')
     {
         $control['type']     = 'picker';
@@ -30,7 +29,9 @@ foreach($fields as $field => $attr)
         $fieldName          .= '[]';
     }
 
-    if($field == 'line' and common::hasPriv('product', 'manageLine') and $programID)
+    if(isset($attr['options'])) $control['items'] = $attr['options'];
+
+    if($field == 'line' && hasPriv('product', 'manageLine') && $programID)
     {
         $formGroup = formGroup
         (

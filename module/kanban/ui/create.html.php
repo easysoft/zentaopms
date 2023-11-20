@@ -68,6 +68,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->kanban->space),
+            set::required(true),
             picker
             (
                 set::name('space'),
@@ -137,12 +138,14 @@ formPanel
         set::id('fixedColBox'),
         formGroup
         (
+            setClass('items-center'),
             set::label($lang->kanban->columnWidth),
             radioList
             (
                 set::name('fluidBoard'),
                 set::items(array('0' => $lang->kanbancolumn->fluidBoardList[0])),
-                set::value(isset($copyKanban->fluidBoard) ? $copyKanban->fluidBoard : 0)
+                set::value(isset($copyKanban->fluidBoard) ? $copyKanban->fluidBoard : 0),
+                on::change('handleKanbanWidthAttr')
             ),
             div
             (
@@ -151,6 +154,11 @@ formPanel
                 span($lang->kanban->colWidth),
                 input(set::type('number'), set::min($config->colWidth), set::name('colWidth'), set::className('w-16 size-sm mx-1'), set::value(isset($copyKanban->colWidth) ? $copyKanban->colWidth : $config->colWidth)),
                 span('px')
+            ),
+            div
+            (
+                setClass('fixedTip ml-4 text-primary'),
+                $lang->kanbancolumn->fixedTip
             )
         )
 
@@ -161,12 +169,14 @@ formPanel
         set::style(array('margin-top' => '0px')),
         formGroup
         (
+            setClass('items-center'),
             set::label(''),
             radioList
             (
                 set::name('fluidBoard'),
                 set::items(array(1 => $lang->kanbancolumn->fluidBoardList[1])),
-                set::value(isset($copyKanban->fluidBoard) ? $copyKanban->fluidBoard : 0)
+                set::value(isset($copyKanban->fluidBoard) ? $copyKanban->fluidBoard : 0),
+                on::change('handleKanbanWidthAttr')
             ),
             div
             (
@@ -177,6 +187,11 @@ formPanel
                 span('~', set::className('mx-1')),
                 input(set::type('number'), set::min($config->maxColWidth), set::name('maxColWidth'), set::className('w-16 size-sm mx-1'), set::value(isset($copyKanban->maxColWidth) ? $copyKanban->maxColWidth : $config->maxColWidth)),
                 span('px')
+            ),
+            div
+            (
+                setClass('autoTip hidden ml-4 text-primary'),
+                $lang->kanbancolumn->autoTip
             )
         )
     ),
@@ -190,13 +205,15 @@ formPanel
                 set::name('import'),
                 set::items($lang->kanban->importList),
                 set::inline(true),
-                set::value($enableImport)
+                set::value($enableImport),
+                on::change('toggleImportObjectBox')
             )
         )
     ),
     formRow
     (
         set::style(array('margin-top' => '0px')),
+        setID('objectBox'),
         formGroup
         (
             set::label(''),
@@ -302,23 +319,40 @@ if($copyKanbanID != 0)
         )
     );
 }
-foreach ($kanbans as $id => $name)
+
+if(!empty($kanbans))
 {
-    $kanbanList[] = cell
-    (
-        set::width('1/3'),
-        set::className('p-2'),
-        div
+    foreach ($kanbans as $id => $name)
+    {
+        $kanbanList[] = cell
+            (
+                set::width('1/3'),
+                set::className('p-2'),
+                div
+                (
+                    set('data-on', 'click'),
+                    set('data-call', 'clickCopyCard'),
+                    set('data-params', 'event'),
+                    set('data-id', $id),
+                    set::className('copy-card p-2 border rounded-md'),
+                    icon('kanban', set::className('pr-2')),
+                    $name
+                )
+            );
+    }
+}
+else
+{
+    $kanbanList[] = div
         (
-            set('data-on', 'click'),
-            set('data-call', 'clickCopyCard'),
-            set('data-params', 'event'),
-            set('data-id', $id),
-            set::className('copy-card p-2 border rounded-md'),
-            icon('kanban', set::className('pr-2')),
-            $name
-        )
-    );
+            setClass('inline-flex items-center w-full bg-lighter h-12 mt-2 mb-8'),
+            icon('exclamation-sign icon-2x pl-2 text-warning'),
+            span
+            (
+                set::className('font-bold ml-2'),
+                $lang->kanban->copyNoKanban
+            )
+        );
 }
 
 modalTrigger

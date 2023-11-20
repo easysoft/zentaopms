@@ -25,7 +25,7 @@ class projectZen extends project
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setIF(!isset($_POST['multiple']), 'multiple', '1')
-            ->setIF($this->post->model == 'ipd', 'division', '0')
+            ->setIF($this->post->model == 'ipd', 'stageBy', 'project')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('team', $this->post->name)

@@ -12,18 +12,18 @@ namespace zin;
 
 div
 (
-    set::id('start'),
-    set::className('bg-primary'),
+    setID('start'),
+    setClass('bg-primary'),
     div
     (
-        set::className('start-icon'),
+        setClass('start-icon'),
         icon('certificate icon-certificate-empty icon1 spin'),
         icon('flag icon2')
     ),
     h1($lang->tutorial->common),
     p($lang->tutorial->desc),
     a(
-        set::className('btn btn-default btn-start-now btn-lg btn-info'),
+        setClass('btn btn-default btn-start-now btn-lg btn-info'),
         set::href($this->inlink('index')),
         set::target('_top'),
         span($lang->tutorial->start)

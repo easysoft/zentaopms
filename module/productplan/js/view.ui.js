@@ -28,11 +28,22 @@ window.ajaxConfirmLoad = function(obj)
     });
 };
 
-window.showLink = function(obj)
+window.showLink = function(type, params, onlyUpdateTable)
 {
-    var $this  = $(obj);
-    var idName = $this.data('type') == 'story' ? '#stories' : '#bugs';
-    $(idName).load($this.data('linkurl'));
+    const url = $.createLink('productplan', type === 'story' ? 'linkStory' : 'linkBug', 'planID=' + planID + (params || '&browseType=&param='));
+    if(onlyUpdateTable)
+    {
+        loadComponent($('#' + (type === 'story' ? 'stories' : 'bugs')).find('.dtable').attr('id'), {url: url, component: 'dtable', partial: true});
+        return;
+    }
+    loadTarget({url: url, target: type === 'story' ? 'stories' : 'bugs'});
+};
+
+window.onSearchLinks = function(type, result)
+{
+    const params = $.parseLink(result.load).vars[4];
+    showLink(type, params ? atob(params[1]) : null, true);
+    return false;
 };
 
 $(document).off('click', '.batch-btn > a, .batch-btn').on('click', '.batch-btn > a, .batch-btn', function()
@@ -72,8 +83,10 @@ $(document).on('click', '.linkObjectBtn', function()
     $.ajaxSubmit({"url": $(this).data('url'), "data": postData});
 });
 
-if(initLink == 'true')
+$(function()
 {
-    var idName = type == 'story' ? '#stories' : '#bugs';
-    window.showLink($(idName).find('.link'));
-}
+    if(initLink == 'true')
+    {
+        window.showLink(type, linkParams);
+    }
+})

@@ -22,6 +22,6 @@ $config->serverroom->search['params']['bandwidth']   = array('operator' => 'incl
 $config->serverroom->search['params']['provider']    = array('operator' => '=', 'control' => 'select',  'values' => $lang->serverroom->providerList);
 $config->serverroom->search['params']['owner']       = array('operator' => '=', 'control' => 'select',  'values' => 'users');
 $config->serverroom->search['params']['createdBy']   = array('operator' => '=', 'control' => 'select',  'values' => 'users');
-$config->serverroom->search['params']['createdDate'] = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
+$config->serverroom->search['params']['createdDate'] = array('operator' => '=', 'control' => 'date',  'values' => '');
 $config->serverroom->search['params']['editedBy']    = array('operator' => '=', 'control' => 'select',  'values' => 'users');
-$config->serverroom->search['params']['editedDate']  = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
+$config->serverroom->search['params']['editedDate']  = array('operator' => '=', 'control' => 'date',  'values' => '');

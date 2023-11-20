@@ -13,6 +13,31 @@ declare(strict_types=1);
 namespace zin;
 
 /* zin: Define the form in main content */
+if(!empty($task->members) && strpos('wait,doing,pause', $task->status) !== false && (!isset($task->members[$app->user->account]) || $task->mode == 'linear'))
+{
+    $notice = '';
+    if($task->mode == 'linear')
+    {
+        $notice = $lang->task->transferNotice;
+    }
+    else
+    {
+        $notice = html(sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->transfer));
+    }
+
+    div
+    (
+        setClass('alert with-icon my-8'),
+        icon('exclamation-sign text-gray text-4xl'),
+        div
+        (
+            setClass('content'),
+            $notice
+        )
+    );
+}
+else
+{
 modalHeader
 (
     set::title($lang->task->assignAction),
@@ -38,8 +63,8 @@ formPanel
         (
             input
             (
+                setID('left'),
                 set::name('left'),
-                set::id('left'),
                 set::value($task->left),
                 set::type('text'),
                 set::disabled(false)
@@ -56,6 +81,10 @@ formPanel
     )
 );
 hr();
-history();
+history
+(
+    set::objectID($task->id)
+);
+}
 
 render();

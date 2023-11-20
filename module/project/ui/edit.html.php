@@ -3,6 +3,7 @@ namespace zin;
 
 jsVar('model', $project->model);
 jsVar('labelClass', $config->project->labelClass);
+jsVar('LONG_TIME', LONG_TIME);
 jsVar('longTime', $lang->project->longTime);
 jsVar('weekend', $config->execution->weekend);
 jsVar('unmodifiableProducts', $unmodifiableProducts);
@@ -172,12 +173,12 @@ formPanel
     on::click('.project-type-0', 'changeType(0)'),
     on::click('.project-stageBy-0', 'changeStageBy(0)'),
     on::click('.project-stageBy-1', 'changeStageBy(1)'),
+    on::change('#parent', 'setParentProgram'),
+    on::change('#begin, [name=delta]', 'computeEndDate'),
+    on::change('#begin, #end', 'computeWorkDays'),
+    on::change('#begin, #end, #parent', 'checkDate'),
     on::change('[name^=products]', 'productChange'),
     on::change('[name^=branch]', 'branchChange'),
-    on::change('#parent', 'setParentProgram'),
-    on::change('#begin', 'computeWorkDays'),
-    on::change('#end', 'computeWorkDays'),
-    on::change('[name=delta]', 'setDate'),
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=newProduct]', 'addProduct'),
     formRow
@@ -330,7 +331,17 @@ formPanel
                     set::value($project->end),
                     set::placeholder($lang->project->end),
                     set::required(true),
-                    set::disabled($project->end == LONG_TIME)
+                    $project->end == LONG_TIME ? setClass('hidden') : null
+                ),
+                inputControl
+                (
+                    setClass('has-suffix-icon w-full' . ($project->end != LONG_TIME ? ' hidden' : '')),
+                    to::suffix(icon('calendar')),
+                    input
+                    (
+                        set::value($lang->project->longTime),
+                        set::disabled(true)
+                    )
                 )
             )
         ),
@@ -345,6 +356,18 @@ formPanel
                 set::inline(true),
                 set::items($lang->project->endList)
             )
+        )
+    ),
+    formRow
+    (
+        setID('dateTip'),
+        setClass('hidden'),
+        formGroup
+        (
+            set::label(''),
+            span(setID('beginLess'), setClass('text-warning hidden'), html($lang->project->beginLessThanParent)),
+            span(setID('endGreater'), setClass('text-warning hidden'), html($lang->project->endGreatThanParent)),
+            a(setClass('underline text-warning'), set::href('javascript:;'), on::click("ignoreTip('dateTip')"), $lang->project->ignore)
         )
     ),
     formRow
@@ -469,8 +492,7 @@ formPanel
         editor
         (
             set::name('desc'),
-            html($project->desc),
-            set::placeholder($lang->project->editorPlaceholder)
+            html($project->desc)
         )
     ),
     formRow

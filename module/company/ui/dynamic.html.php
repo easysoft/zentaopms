@@ -83,7 +83,7 @@ featureBar
             on::change('changeItem')
         )
     ),
-    li(searchToggle(set::module('action')))
+    li(searchToggle(set::module('action'), set::open($browseType == 'bysearch')))
 );
 
 $content = null;

@@ -42,10 +42,10 @@ toolbar
         ),
         set::items($orderItems)
     ),
-    div
+    btnGroup
     (
-        btn(setClass($viewType == 'list'   ? 'text-primary' : 'text-darker'), set::icon('format-list-bulleted'), setData('type', 'list'), setClass('switchButton')),
-        btn(setClass($viewType == 'kanban' ? 'text-primary' : 'text-darker'), set::icon('kanban'), setData('type', 'kanban'), setClass('switchButton'))
+        btn(setClass($viewType == 'list'   ? 'text-primary font-bold shadow-inner bg-canvas' : ''), set::icon('format-list-bulleted'), setData('type', 'list'), setClass('switchButton')),
+        btn(setClass($viewType == 'kanban' ? 'text-primary font-bold shadow-inner bg-canvas' : ''), set::icon('kanban'), setData('type', 'kanban'), setClass('switchButton'))
     ),
     common::hasPriv('productplan', 'create') ? item
     (

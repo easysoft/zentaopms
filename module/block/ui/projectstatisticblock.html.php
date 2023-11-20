@@ -106,11 +106,35 @@ if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
         $cellItems = array();
         foreach($moduleItems as $item)
         {
-            $field = $item['field'];
-            $unit  = $item['unit'];
+            $field   = $item['field'];
+            $unit    = $item['unit'];
+
             $cellItems[] = item
             (
-                set::name($lang->block->projectstatistic->{$field} . ': '),
+                set::name
+                (
+                    $lang->block->projectstatistic->{$field},
+                    !isset($lang->block->tooltips[$field]) ? ':' : null
+                ),
+                to::suffixName
+                (
+                    isset($lang->block->tooltips[$field]) ? icon
+                    (
+                        setClass('text-light text-sm'),
+                        toggle::tooltip
+                        (
+                            array
+                            (
+                                'title'     => $lang->block->tooltips[$field],
+                                'placement' => 'bottom',
+                                'type'      => 'white',
+                                'className' => 'text-dark border border-light leading-5'
+                            )
+                        ),
+                        'help',
+                        ':'
+                    ) : null
+                ),
                 span
                 (
                     setClass('font-bold text-black mr-0.5'),
@@ -153,35 +177,39 @@ else
         div
         (
             setClass('flex justify-center w-full'),
-            zui::progressCircle
+            progressCircle
             (
-                set('percent', $project->progress),
-                set('size', 112),
-                set('circleWidth', 6),
-                set('text', "{$project->progress}%"),
-                set('textY', 50),
-                set('textStyle', 'font-size: 30px;')
-            )
-        ),
-        div
-        (
-            setClass('flex justify-center w-full h-0'),
-            span
-            (
-                setClass('text-gray text-md progress-text'),
-                $lang->block->projectstatistic->totalProgress,
-                icon
+                set::percent($project->progress),
+                set::size(112),
+                set::text(false),
+                set::circleWidth(0.06),
+                div(span(setClass('text-2xl font-bold'), $project->progress), '%'),
+                div
                 (
-                    setClass('pl-0.5'),
-                    toggle::tooltip(array('title' => $lang->block->projectstatistic->totalProgressTip)),
-                    'help'
+                    setClass('row text-sm text-gray items-center gap-1'),
+                    $lang->block->projectstatistic->totalProgress,
+                    icon
+                    (
+                        setClass('pl-0.5 text-light text-sm'),
+                        toggle::tooltip
+                        (
+                            array
+                            (
+                                'content'   => array('html' => $lang->block->projectstatistic->totalProgressTip),
+                                'placement' => 'bottom',
+                                'type'      => 'white',
+                                'className' => 'text-dark border border-light leading-5'
+                            )
+                        ),
+                        'help'
+                    )
                 )
             )
         )
     );
     $cells[] = cell
     (
-        setClass('project-statistic-table pl-4' . ($longBlock ? ' border-l' : ' mt-4')),
+        setClass('project-statistic-table waterfall pl-4' . ($longBlock ? ' border-l' : ' mt-4')),
         set::width($longBlock ? '32%' : '50%'),
         div
         (
@@ -192,86 +220,97 @@ else
                 $lang->project->progress
             )
         ),
-        h::table
+        tableData
         (
-            setClass('table-data'),
-            h::tbody
+            item
             (
-                h::tr
+                set::name($lang->block->projectstatistic->sv),
+                to::suffixName
                 (
-                    h::th
+                    icon
                     (
-                        setClass('py-1.5 pr-2 font-normal nowrap items-center text-right'),
-                        $lang->block->projectstatistic->sv,
-                        icon
+                        setClass('text-light text-sm'),
+                        toggle::tooltip
                         (
-                            toggle::tooltip(array('title' => '提示文本')),
-                            'help'
+                            array
+                            (
+                                'title'     => $lang->block->tooltips['sv'],
+                                'placement' => 'bottom',
+                                'type'      => 'white',
+                                'className' => 'text-dark border border-light leading-5'
+                            )
                         ),
-                        ':'
+                        'help'
                     ),
-                    h::td
-                    (
-                        setClass('py-1.5 pl-2'),
-                        span
-                        (
-                            setClass('font-bold text-black mr-1'),
-                            (!empty($project->sv) ? $project->sv : 0) . $lang->percent
-                        )
-                    )
+                    ':'
                 ),
-                h::tr
+                span
                 (
-                    h::th
+                    setClass('font-bold text-black mr-1'),
+                    (!empty($project->sv) ? $project->sv : 0) . $lang->percent
+                )
+            ),
+            item
+            (
+                set::name($lang->block->projectstatistic->pv),
+                to::suffixName
+                (
+                    icon
                     (
-                        setClass('py-1.5 pr-2 font-normal nowrap items-center text-right'),
-                        $lang->block->projectstatistic->pv,
-                        icon
+                        setClass('text-light text-sm'),
+                        toggle::tooltip
                         (
-                            toggle::tooltip(array('title' => '提示文本')),
-                            'help'
+                            array
+                            (
+                                'title'     => $lang->block->tooltips['pv'],
+                                'placement' => 'bottom',
+                                'type'      => 'white',
+                                'className' => 'text-dark border border-light leading-5'
+                            )
                         ),
-                        ':'
+                        'help'
                     ),
-                    h::td
-                    (
-                        setClass('py-1.5 pl-2'),
-                        span
-                        (
-                            setClass('font-bold text-black mr-1'),
-                            (!empty($project->pv) ? $project->pv : 0) . $lang->percent
-                        )
-                    )
+                    ':'
                 ),
-                h::tr
+                span
                 (
-                    h::th
+                    setClass('font-bold text-black mr-1'),
+                    (!empty($project->pv) ? $project->pv : 0) . $lang->percent
+                )
+            ),
+            item
+            (
+                set::name($lang->block->projectstatistic->ev),
+                to::suffixName
+                (
+                    icon
                     (
-                        setClass('py-1.5 pr-2 font-normal nowrap items-center text-right'),
-                        $lang->block->projectstatistic->ev,
-                        icon
+                        setClass('text-light text-sm'),
+                        toggle::tooltip
                         (
-                            toggle::tooltip(array('title' => '提示文本')),
-                            'help'
+                            array
+                            (
+                                'content'   => array('html' => $lang->block->tooltips['ev']),
+                                'placement' => 'bottom',
+                                'type'      => 'white',
+                                'className' => 'text-dark border border-light leading-5'
+                            )
                         ),
-                        ':'
+                        'help'
                     ),
-                    h::td
-                    (
-                        setClass('py-1.5 pl-2'),
-                        span
-                        (
-                            setClass('font-bold text-black mr-1'),
-                            (!empty($project->ev) ? $project->ev : 0) . $lang->percent
-                        )
-                    )
+                    ':'
+                ),
+                span
+                (
+                    setClass('font-bold text-black mr-1'),
+                    (!empty($project->ev) ? $project->ev : 0) . $lang->percent
                 )
             )
         )
     );
     $cells[] = cell
     (
-        setClass('project-statistic-table pl-4 border-l' . (!$longBlock ? ' mt-3' : '')),
+        setClass('project-statistic-table waterfall pl-4 border-l' . (!$longBlock ? ' mt-3' : '')),
         set::width($longBlock ? '32%' : '50%'),
         div
         (
@@ -282,79 +321,90 @@ else
                 $lang->block->projectstatistic->currentCost
             )
         ),
-        h::table
+        tableData
         (
-            setClass('table-data'),
-            h::tbody
+            item
             (
-                h::tr
+                set::name($lang->block->projectstatistic->cv),
+                to::suffixName
                 (
-                    h::th
+                    icon
                     (
-                        setClass('py-1.5 pr-2 font-normal nowrap items-center text-right'),
-                        $lang->block->projectstatistic->cv,
-                        icon
+                        setClass('text-light text-sm'),
+                        toggle::tooltip
                         (
-                            toggle::tooltip(array('title' => '提示文本')),
-                            'help'
+                            array
+                            (
+                                'title'     => $lang->block->tooltips['cv'],
+                                'placement' => 'bottom',
+                                'type'      => 'white',
+                                'className' => 'text-dark border border-light leading-5'
+                            )
                         ),
-                        ':'
+                        'help'
                     ),
-                    h::td
-                    (
-                        setClass('py-1.5 pl-2'),
-                        span
-                        (
-                            setClass('font-bold text-black mr-1'),
-                            (!empty($project->cv) ? $project->cv : 0) . $lang->percent
-                        )
-                    )
+                    ':'
                 ),
-                h::tr
+                span
                 (
-                    h::th
-                    (
-                        setClass('py-1.5 pr-2 font-normal nowrap items-center text-right'),
-                        $lang->block->projectstatistic->ev,
-                        icon
-                        (
-                            toggle::tooltip(array('title' => '提示文本')),
-                            'help'
-                        ),
-                        ':'
-                    ),
-                    h::td
-                    (
-                        setClass('py-1.5 pl-2'),
-                        span
-                        (
-                            setClass('font-bold text-black mr-1'),
-                            (!empty($project->ev) ? $project->ev : 0) . $lang->percent
-                        )
-                    )
+                    setClass('font-bold text-black mr-1'),
+                    (!empty($project->cv) ? $project->cv : 0) . $lang->percent
                 ),
-                h::tr
+            ),
+            item
+            (
+                set::name($lang->block->projectstatistic->ev),
+                to::suffixName
                 (
-                    h::th
+                    icon
                     (
-                        setClass('py-1.5 pr-2 font-normal nowrap items-center text-right'),
-                        $lang->block->projectstatistic->ac,
-                        icon
+                        setClass('text-light text-sm'),
+                        toggle::tooltip
                         (
-                            toggle::tooltip(array('title' => '提示文本')),
-                            'help'
+                            array
+                            (
+                                'content'   => array('html' => $lang->block->tooltips['ev']),
+                                'placement' => 'bottom',
+                                'type'      => 'white',
+                                'className' => 'text-dark border border-light leading-5'
+                            )
                         ),
-                        ':'
+                        'help'
                     ),
-                    h::td
+                    ':'
+                ),
+                span
+                (
+                    setClass('font-bold text-black mr-1'),
+                    (!empty($project->ev) ? $project->ev : 0) . $lang->percent
+                )
+            ),
+            item
+            (
+                set::name($lang->block->projectstatistic->ac),
+                to::suffixName
+                (
+                    icon
                     (
-                        setClass('py-1.5 pl-2'),
-                        span
+                        setClass('text-light text-sm'),
+                        toggle::tooltip
                         (
-                            setClass('font-bold text-black mr-1'),
-                            (!empty($project->ac) ? $project->ac : 0) . $lang->percent
-                        )
-                    )
+                            array
+                            (
+                                'title'     => $lang->block->tooltips['ac'],
+                                'placement' => 'bottom',
+                                'type'      => 'white',
+                                'className' => 'text-dark border border-light leading-5'
+                            )
+                        ),
+                        'help'
+                    ),
+                    ':'
+                ),
+                span
+                (
+                    setClass('font-bold text-black mr-1'),
+                    (!empty($project->ac) ? $project->ac : 0) . $lang->percent
                 )
             )
         )

@@ -51,7 +51,7 @@ class cv_in_waterfall extends baseCalc
             ->leftJoin("($ac)")->alias('t3')->on('t1.id=t3.project')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.type')->eq('project')
-            ->andWhere('t1.model')->eq('waterfall')
+            ->andWhere('t1.model')->in('waterfall,waterfallplus')
             ->query();
     }
 

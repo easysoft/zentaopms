@@ -17,7 +17,7 @@ namespace zin;
 modalHeader();
 formPanel
 (
-    set::id('taskPauseForm'),
+    setID('taskPauseForm'),
     formGroup
     (
         set::label($lang->comment),
@@ -27,7 +27,7 @@ formPanel
             set::rows('5')
         ),
         input(
-            set::className('hidden'),
+            setClass('hidden'),
             set::name('status'),
             set::value('pause')
         )

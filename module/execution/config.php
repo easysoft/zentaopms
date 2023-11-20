@@ -109,16 +109,16 @@ $config->execution->search['params']['lastEditedBy']   = array('operator' => '='
 
 $config->execution->search['params']['mailto']         = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 
-$config->execution->search['params']['openedDate']     = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->execution->search['params']['deadline']       = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->execution->search['params']['estStarted']     = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->execution->search['params']['realStarted']    = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->execution->search['params']['assignedDate']   = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->execution->search['params']['finishedDate']   = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->execution->search['params']['closedDate']     = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->execution->search['params']['canceledDate']   = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->execution->search['params']['lastEditedDate'] = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
-$config->execution->search['params']['activatedDate']  = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->execution->search['params']['openedDate']     = array('operator' => '=',      'control' => 'date',  'values' => '');
+$config->execution->search['params']['deadline']       = array('operator' => '=',      'control' => 'date',  'values' => '');
+$config->execution->search['params']['estStarted']     = array('operator' => '=',      'control' => 'date',  'values' => '');
+$config->execution->search['params']['realStarted']    = array('operator' => '=',      'control' => 'date',  'values' => '');
+$config->execution->search['params']['assignedDate']   = array('operator' => '=',      'control' => 'date',  'values' => '');
+$config->execution->search['params']['finishedDate']   = array('operator' => '=',      'control' => 'date',  'values' => '');
+$config->execution->search['params']['closedDate']     = array('operator' => '=',      'control' => 'date',  'values' => '');
+$config->execution->search['params']['canceledDate']   = array('operator' => '=',      'control' => 'date',  'values' => '');
+$config->execution->search['params']['lastEditedDate'] = array('operator' => '=',      'control' => 'date',  'values' => '');
+$config->execution->search['params']['activatedDate']  = array('operator' => '=',      'control' => 'date',  'values' => '');
 
 $app->loadLang('execution');
 $config->execution->all = new stdclass();
@@ -145,14 +145,14 @@ $config->execution->all->search['params']['status']         = array('operator' =
 $config->execution->all->search['params']['project']        = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->execution->all->search['params']['PM']             = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->execution->all->search['params']['openedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->execution->all->search['params']['openedDate']     = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->execution->all->search['params']['begin']          = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->execution->all->search['params']['end']            = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->execution->all->search['params']['realBegan']      = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->execution->all->search['params']['realEnd']        = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->execution->all->search['params']['openedDate']     = array('operator' => '=',       'control' => 'date',  'values' => '');
+$config->execution->all->search['params']['begin']          = array('operator' => '=',       'control' => 'date',  'values' => '');
+$config->execution->all->search['params']['end']            = array('operator' => '=',       'control' => 'date',  'values' => '');
+$config->execution->all->search['params']['realBegan']      = array('operator' => '=',       'control' => 'date',  'values' => '');
+$config->execution->all->search['params']['realEnd']        = array('operator' => '=',       'control' => 'date',  'values' => '');
 $config->execution->all->search['params']['closedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->execution->all->search['params']['lastEditedDate'] = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->execution->all->search['params']['closedDate']     = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->execution->all->search['params']['lastEditedDate'] = array('operator' => '=',       'control' => 'date',  'values' => '');
+$config->execution->all->search['params']['closedDate']     = array('operator' => '=',       'control' => 'date',  'values' => '');
 $config->execution->all->search['params']['teamCount']      = array('operator' => '=',       'control' => 'input',  'values' => '');
 
 $config->printKanban = new stdClass();

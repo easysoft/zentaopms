@@ -153,7 +153,7 @@ class programplanTao extends programplanModel
             return false;
         }
 
-        if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end);
+        if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end, $plan->parent);
         if(dao::isError()) return false;
 
         $setCode = isset($this->config->setCode) && $this->config->setCode == 1;

@@ -31,7 +31,7 @@ $config->design->search['params']['type']        = array('operator' => '=', 'con
 $config->design->search['params']['name']        = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->design->search['params']['commit']      = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->design->search['params']['createdBy']   = array('operator' => '=', 'control' => 'select',  'values' => 'users');
-$config->design->search['params']['createdDate'] = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
+$config->design->search['params']['createdDate'] = array('operator' => '=', 'control' => 'date',  'values' => '');
 $config->design->search['params']['assignedTo']  = array('operator' => '=', 'control' => 'select',  'values' => 'users');
 $config->design->search['params']['story']       = array('operator' => '=', 'control' => 'select',  'values' => '');
 

@@ -151,7 +151,7 @@ if(!$this->task->canOperateEffort($task))
     div
     (
         setClass('alert with-icon'),
-        icon('exclamation-sign'),
+        icon('exclamation-sign text-gray text-4xl'),
         div
         (
             setClass('content'),

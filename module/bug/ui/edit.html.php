@@ -79,6 +79,7 @@ detailBody
         section
         (
             set::title($lang->bug->legendSteps),
+            set::required(strpos(",{$config->bug->edit->requiredFields},", ',steps,') !== false),
             editor
             (
                 set::name('steps'),
@@ -165,6 +166,7 @@ detailBody
             (
                 set::trClass($product->shadow && isset($project) && empty($project->multiple) ? 'hidden' : ''),
                 set::name($lang->bug->plan),
+                set::required(strpos(",{$config->bug->edit->requiredFields},", ',plan,') !== false),
                 formGroup
                 (
                     set('id', 'planBox'),
@@ -193,6 +195,7 @@ detailBody
             item
             (
                 set::name($lang->bug->type),
+                set::required(strpos(",{$config->bug->edit->requiredFields},", ',type,') !== false),
                 formGroup
                 (
                     picker
@@ -206,6 +209,7 @@ detailBody
             item
             (
                 set::name($lang->bug->severity),
+                set::required(strpos(",{$config->bug->edit->requiredFields},", ',severity,') !== false),
                 severityPicker
                 (
                     set::items($lang->bug->severityList),
@@ -217,6 +221,7 @@ detailBody
             item
             (
                 set::name($lang->bug->pri),
+                set::required(strpos(",{$config->bug->edit->requiredFields},", ',pri,') !== false),
                 priPicker
                 (
                     set::items($lang->bug->priList),
@@ -248,6 +253,7 @@ detailBody
             item
             (
                 set::name($lang->bug->assignedTo),
+                set::required(strpos(",{$config->bug->edit->requiredFields},", ',assignedTo,') !== false),
                 formGroup
                 (
                     inputGroup
@@ -275,6 +281,7 @@ detailBody
             item
             (
                 set::name($lang->bug->deadline),
+                set::required(strpos(",{$config->bug->edit->requiredFields},", ',deadline,') !== false),
                 formGroup
                 (
                     datePicker
@@ -305,6 +312,7 @@ detailBody
             item
             (
                 set::name($lang->bug->os),
+                set::required(strpos(",{$config->bug->edit->requiredFields},", ',os,') !== false),
                 formGroup
                 (
                     picker
@@ -319,6 +327,7 @@ detailBody
             item
             (
                 set::name($lang->bug->browser),
+                set::required(strpos(",{$config->bug->edit->requiredFields},", ',browser,') !== false),
                 formGroup
                 (
                     picker
@@ -333,6 +342,7 @@ detailBody
             item
             (
                 set::name($lang->bug->keywords),
+                set::required(strpos(",{$config->bug->edit->requiredFields},", ',keywords,') !== false),
                 formGroup
                 (
                     input
@@ -397,6 +407,7 @@ detailBody
             item
             (
                 set::name($lang->bug->project),
+                set::required(strpos(",{$config->bug->edit->requiredFields},", ',project,') !== false),
                 formGroup
                 (
                     set('id', 'projectBox'),
@@ -597,13 +608,13 @@ detailBody
                         set::name('relatedBug[]'),
                         set::items(isset($bug->relatedBugTitles) ? $bug->relatedBugTitles : array())
                     ),
-                    common::hasPriv('bug', 'linkBugs') ? span
+                    common::hasPriv('bug', 'linkBugs') ? inputGroupAddon
                     (
-                        set('class', 'input-group-addon'),
-                        a
+                        setClass('p-0'),
+                        btn
                         (
-                            set('id', 'linkBug'),
-                            set('href', 'javascript:;'),
+                            setID('linkBug'),
+                            setClass('ghost text-primary'),
                             $lang->bug->linkBugs
                         )
                     ) : null

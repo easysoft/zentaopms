@@ -166,9 +166,8 @@ statisticBlock
                 div(span(setClass('text-2xl font-bold'), $product->closedBugRate), '%'),
                 div
                 (
-                    setClass('row text-sm text-gray items-center gap-1'),
-                    $lang->block->qastatistic->closedBugRate,
-                    icon('help text-light text-sm')
+                    setClass('row text-gray items-center gap-1'),
+                    $lang->block->qastatistic->closedBugRate
                 )
             ),
             row

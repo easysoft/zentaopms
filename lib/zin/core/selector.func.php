@@ -62,7 +62,7 @@ function parseWgSelector(string|object $selector): ?object
         }
         elseif($type === 'option')
         {
-            $options = [];
+            $options = array();
             parse_str($current, $options);
             foreach($options as $key => $value) $result[$key] = empty($value) ? true : $value;
         }
@@ -149,7 +149,7 @@ function stringifyWgSelectors(array|object|null $selector): string
     if(empty($selector)) return '';
     if(is_array($selector))
     {
-        $result = [];
+        $result = array();
         foreach($selector as $s) $result[] = stringifyWgSelectors($s);
         return implode(',', $result);
     }

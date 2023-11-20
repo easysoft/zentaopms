@@ -24,7 +24,7 @@ if($task) modalHeader(set::title($lang->zanode->createImage));
 !$task ? formPanel
 (
     in_array($node->status, array('shutdown', 'shutoff')) ? null : set::ajax(array('beforeSubmit' => jsRaw("() => zui.Modal.confirm('{$lang->zanode->createImageNotice}')"))),
-    set::id('createImageForm'),
+    setID('createImageForm'),
     set::title($lang->zanode->createImage),
     formGroup
     (

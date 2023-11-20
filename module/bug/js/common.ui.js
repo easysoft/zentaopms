@@ -695,8 +695,7 @@ function loadBuildActions()
 {
     if(config.currentMethod == 'edit') return;
     $('#buildBoxActions').empty().hide();
-    let itemCount = $('#openedBuild').find('option').length;
-    if($('#openedBuild').attr('data-items') != undefined) itemCount = $('#openedBuild').attr('data-items');
+    let itemCount = $('[name^=openedBuild]').zui('picker').options.items.length;
     if(itemCount <= 1)
     {
         let html = '';
@@ -712,8 +711,8 @@ function loadBuildActions()
             let link = $.createLink('release', 'create', 'productID=' + productID + '&branch=' + branch);
             if(projectID > 0) link = $.createLink('projectrelease', 'create', 'projectID=' + projectID);
 
-            html += '<a href="' + link + '" data-toggle="modal" style="padding-right:5px">' + createRelease + '</a> ';
-            html += '<a href="javascript:;" id="refreshProductBuild">' + refresh + '</a>';
+            html += '<a href="' + link + '" class="btn" data-toggle="modal">' + createRelease + '</a> ';
+            html += '<a href="javascript:;" class="btn" id="refreshProductBuild">' + refresh + '</a>';
         }
         else
         {
@@ -721,9 +720,8 @@ function loadBuildActions()
             const productID   = $('[name="product"]').val();
             const projectID   = $('[name="project"]').val();
             let link = $.createLink('build', 'create','executionID=' + executionID + '&productID=' + productID + '&projectID=' + projectID);
-            link += link.indexOf('?') >= 0 ? '&onlybody=yes' : '?onlybody=yes';
-            html += '<a href="' + link + '" data-toggle="modal" style="padding-right:5px">' + createBuild + '</a> ';
-            html += '<a href="javascript:;" id="refreshExecutionBuild">' + refresh + '</a>';
+            html += '<a href="' + link + '" class="btn" data-toggle="modal">' + createBuild + '</a> ';
+            html += '<a href="javascript:;" class="btn" id="refreshExecutionBuild">' + refresh + '</a>';
         }
         $('#buildBoxActions').html(html).show();
     }

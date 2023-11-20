@@ -383,7 +383,7 @@ div
                             set::fieldset(false)
                         )
                     ) : null,
-                    history()
+                    history(set::objectID($report->id))
                 )
             ),
             tabPane

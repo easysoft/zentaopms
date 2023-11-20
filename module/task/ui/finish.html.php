@@ -149,7 +149,7 @@ else
                 set::value($realStarted),
                 set('disabled', !empty($realStarted))
             ),
-            formHidden('realStarted', $realStarted)
+            !empty($realStarted) ? formHidden('realStarted', $realStarted) : null
         ),
         formGroup
         (

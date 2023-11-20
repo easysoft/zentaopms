@@ -20,7 +20,7 @@ formPanel
     set::submitBtnText($lang->story->closeAction),
     formGroup
     (
-        set::id('closedReason'),
+        setID('closedReason'),
         set::name('closedReason'),
         set::label($lang->story->closedReason),
         set::width('1/2'),
@@ -31,7 +31,7 @@ formPanel
     formRow
     (
         set::hidden(true),
-        set::id('duplicateStoryBox'),
+        setID('duplicateStoryBox'),
         formGroup
         (
             set::name('duplicateStory'),

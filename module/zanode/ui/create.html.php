@@ -22,11 +22,17 @@ formPanel
         icon
         (
             'help',
-            set('data-toggle', 'tooltip'),
-            set('data-placement', 'right'),
-            set('data-title', $lang->zanode->tips),
-            set('data-type', 'white'),
-            set('data-class-name', 'text-gray border border-light'),
+            setData
+            (
+                array
+                (
+                    'toggle' => 'tooltip',
+                    'placement' => 'right',
+                    'title' => $lang->zanode->tips,
+                    'type' => 'white',
+                    'class-name' => 'text-gray border border-light'
+                )
+            ),
             setClass('text-gray')
         )
     )),
@@ -59,7 +65,7 @@ formPanel
         (
             set::href(createLink('zahost', 'create')),
             $lang->zahost->create,
-            set('data-toggle', 'modal'),
+            setData(array('toggle' => 'modal')),
             setClass('leading-8 ml-2')
         )
     ),
@@ -147,11 +153,11 @@ formPanel
     ),
     formRow
     (
-        set::id('osNamePhysicsContainer'),
+        setID('osNamePhysicsContainer'),
         setClass('hidden'),
         formGroup
         (
-            set::id('osNamePhysicsPre'),
+            setID('osNamePhysicsPre'),
             set::label($lang->zanode->osName),
             set::items($config->zanode->osType),
             set::value('linux'),

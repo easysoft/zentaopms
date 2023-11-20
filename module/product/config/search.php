@@ -68,12 +68,12 @@ $config->product->search['params']['mailto']         = array('operator' => 'incl
 $config->product->search['params']['closedReason']   = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->reasonList);
 $config->product->search['params']['version']        = array('operator' => '>=',      'control' => 'input',  'values' => '');
 
-$config->product->search['params']['openedDate']     = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
-$config->product->search['params']['reviewedDate']   = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
-$config->product->search['params']['assignedDate']   = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
-$config->product->search['params']['closedDate']     = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
-$config->product->search['params']['lastEditedDate'] = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
-$config->product->search['params']['activatedDate']  = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
+$config->product->search['params']['openedDate']     = array('operator' => '=', 'control' => 'date',  'values' => '');
+$config->product->search['params']['reviewedDate']   = array('operator' => '=', 'control' => 'date',  'values' => '');
+$config->product->search['params']['assignedDate']   = array('operator' => '=', 'control' => 'date',  'values' => '');
+$config->product->search['params']['closedDate']     = array('operator' => '=', 'control' => 'date',  'values' => '');
+$config->product->search['params']['lastEditedDate'] = array('operator' => '=', 'control' => 'date',  'values' => '');
+$config->product->search['params']['activatedDate']  = array('operator' => '=', 'control' => 'date',  'values' => '');
 
 $app->loadLang('product');
 if(!isset($config->product->all)) $config->product->all = new stdclass();
@@ -109,5 +109,5 @@ $config->product->all->search['params']['QD']          = array('operator' => '='
 $config->product->all->search['params']['RD']          = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->all->search['params']['reviewer']    = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 $config->product->all->search['params']['type']        = array('operator' => '=',       'control' => 'select', 'values' => $lang->product->typeList);
-$config->product->all->search['params']['createdDate'] = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->product->all->search['params']['createdDate'] = array('operator' => '=',       'control' => 'date',  'values' => '');
 $config->product->all->search['params']['createdBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');

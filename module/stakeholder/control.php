@@ -179,11 +179,13 @@ class stakeholder extends control
             $users   = array_diff($users, $members);
         }
 
-        $this->view->title       = $this->lang->stakeholder->edit;
+        if($stakeholder->objectType == 'project') $this->view->projectID = $stakeholder->objectID;
 
+        $this->view->title       = $this->lang->stakeholder->edit;
         $this->view->stakeholder = $stakeholder;
         $this->view->users       = $users;
         $this->view->companys    = $this->loadModel('company')->getOutsideCompanies();
+
         $this->display();
     }
 
@@ -212,7 +214,10 @@ class stakeholder extends control
             if(isset($stakeholders[$account])) unset($members[$account]);
         }
 
-        echo html::select('user', $members, $user, "class='form-control chosen'");
+        $items = array();
+        foreach($members as $account => $realname) $items[] = array('value' => $account, 'text' => $realname);
+
+        return print(json_encode($items));
     }
 
     /**
@@ -243,7 +248,10 @@ class stakeholder extends control
             if(isset($stakeholders[$account])) unset($companyUsers[$account]);
         }
 
-        echo html::select('user', $companyUsers, $user, "class='form-control chosen'");
+        $userItems = array();
+        foreach($companyUsers as $account => $realname) $userItems[] = array('text' => $realname, 'value' => $account);
+
+        return print(json_encode($userItems));
     }
 
     /**
@@ -261,7 +269,10 @@ class stakeholder extends control
             if(isset($stakeholders[$account])) unset($users[$account]);
         }
 
-        echo html::select('user', $users, '', "class='form-control chosen' onchange=changeUser(this.value);");
+        $items = array();
+        foreach($users as $account => $realname) $items[] = array('text' => $realname, 'value' => $account);
+
+        return print(json_encode($items));
     }
 
     /**
@@ -350,6 +361,8 @@ class stakeholder extends control
 
         $this->loadModel('project')->setMenu($user->objectID);
         $this->commonAction($userID, 'stakeholder');
+
+        if($user->objectType == 'project') $this->view->projectID = $user->objectID;
 
         $this->view->title      = $this->lang->stakeholder->common . $this->lang->colon . $this->lang->stakeholder->view;
         $this->view->user       = $user;

@@ -17,15 +17,11 @@ modalHeader
     set::entityID($case->id)
 );
 
-div
+searchForm
 (
-    setID('searchFormPanel'),
-    set('data-module', 'testcase'),
-    searchToggle
-    (
-        set::open(true),
-        set::module('testcase')
-    )
+    set::module('testcase'),
+    set::simple(true),
+    set::show(true)
 );
 
 $footToolbar = array('items' => array(array('text' => $lang->save, 'btnType' => 'secondary', 'className' => 'link-btn')));

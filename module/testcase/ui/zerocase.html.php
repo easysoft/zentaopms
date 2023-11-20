@@ -44,8 +44,8 @@ foreach($lang->story->reviewResultList as $key => $result)
 
 menu
 (
-    set::id('navReview'),
-    set::className('dropdown-menu'),
+    setID('navReview'),
+    setClass('dropdown-menu'),
     set::items($reviewItems)
 );
 
@@ -55,8 +55,8 @@ foreach($lang->story->stageList as $key => $stage) $stageItems[] = array('text' 
 
 menu
 (
-    set::id('navStage'),
-    set::className('dropdown-menu'),
+    setID('navStage'),
+    setClass('dropdown-menu'),
     set::items($stageItems)
 );
 

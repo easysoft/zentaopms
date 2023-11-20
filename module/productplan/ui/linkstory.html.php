@@ -22,7 +22,14 @@ $cols['module']['map']         = $modules;
 
 foreach($allStories as $story) $story->estimate = $story->estimate . $config->hourUnit;
 
-div(setID('searchFormPanel'), set('data-module', 'story'), searchToggle(set::open(true), set::module('story')));
+searchForm
+(
+    set::module('story'),
+    set::simple(true),
+    set::show(true),
+    set::onSearch(jsRaw("window.onSearchLinks.bind(null, 'story')"))
+);
+
 dtable
 (
     set::id('unlinkStoryList'),
@@ -30,6 +37,7 @@ dtable
     set::cols($cols),
     set::data(array_values($allStories)),
     set::onRenderCell(jsRaw('window.renderStoryCell')),
+    set::extraHeight('+144'),
     set::footToolbar(array('items' => array(array
         (
             'text'      => $lang->productplan->linkStory,

@@ -16,11 +16,22 @@ featureBar
 (
     set::current('all'),
     set::linkParams("executionID={$execution->id}"),
-    li
-    (
-        searchToggle(set::module('importBug'))
-    )
+    isInModal() ? null : li(searchToggle(set::module('importBug')))
 );
+
+$footToolbar['items'][] = array(
+    'text'      => $lang->import,
+    'className' => 'btn secondary import-bug-btn size-sm'
+);
+if(!isInModal())
+{
+    $footToolbar['items'][] = array(
+        'text'      => $lang->goback,
+        'className' => 'btn btn-info size-sm text-gray',
+        'url'       => createLink('execution', 'task', "executionID={$execution->id}"),
+        'btnType'   => 'info'
+    );
+}
 
 $config->execution->importBug->dtable->fieldList['assignedTo']['controlItems'] = $users;
 formBase
@@ -36,20 +47,7 @@ formBase
         set::checkable(true),
         set::showToolbarOnChecked(false),
         set::plugins(array('form')),
-        set::footToolbar(array(
-            'items' => array(
-                array(
-                    'text'      => $lang->import,
-                    'className' => 'btn secondary import-bug-btn size-sm'
-                ),
-                array(
-                    'text'      => $lang->goback,
-                    'className' => 'btn btn-info size-sm text-gray',
-                    'url'       => createLink('execution', 'task', "executionID={$execution->id}"),
-                    'btnType'   => 'info'
-                )
-            )
-        )),
+        set::footToolbar($footToolbar),
         set::footPager(
             usePager(array('linkCreator' => helper::createLink('execution', 'importBug', "executionID={$execution->id}&browseType={$browseType}&param=$param&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")))
         )

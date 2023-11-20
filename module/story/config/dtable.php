@@ -26,7 +26,7 @@ if($app->tab == 'execution')
 $config->story->dtable->fieldList['title']['name']         = 'title';
 $config->story->dtable->fieldList['title']['title']        = $lang->story->title;
 $config->story->dtable->fieldList['title']['type']         = 'title';
-$config->story->dtable->fieldList['title']['link']         = helper::createLink('story', 'view', 'storyID={id}');
+$config->story->dtable->fieldList['title']['link']         = array('url' => helper::createLink('story', 'view', 'storyID={id}'), 'style' => array('color' => 'var(--color-link)'));
 $config->story->dtable->fieldList['title']['fixed']        = 'left';
 $config->story->dtable->fieldList['title']['sortType']     = true;
 $config->story->dtable->fieldList['title']['minWidth']     = '342';
@@ -35,6 +35,7 @@ $config->story->dtable->fieldList['title']['nestedToggle'] = true;
 $config->story->dtable->fieldList['title']['show']         = true;
 $config->story->dtable->fieldList['title']['group']        = 1;
 $config->story->dtable->fieldList['title']['data-app']     = $app->tab;
+$config->story->dtable->fieldList['title']['styleMap']     = array('--color-link' => 'color');
 
 $config->story->dtable->fieldList['pri']['name']     = 'pri';
 $config->story->dtable->fieldList['pri']['title']    = $lang->priAB;

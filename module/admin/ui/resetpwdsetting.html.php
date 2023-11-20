@@ -51,7 +51,7 @@ if(common::hasPriv('admin', 'resetPWDSetting'))
 
 div
 (
-    set::id('mainContent'),
+    setID('mainContent'),
     setClass('row has-sidebar-left'),
     $menuItems ? sidebar
     (

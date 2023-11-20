@@ -1,9 +1,9 @@
-window.ignoreTips = {
-    'beyondBudgetTip' : false,
-    'dateTip'         : false
-};
+const DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
 
-var batchEditDateTips = new Array();
+const ignoreTips = {
+    budgetTip: false,
+    dateTip: false
+}
 
 /**
  * 处理项目类型改变的交互。
@@ -47,21 +47,8 @@ function changeStageBy(type)
 }
 
 /**
- * 设置计划结束时间。
- * Set plan end date.
- *
- * @access public
- * @return void
- */
-function setDate()
-{
-    const delta = $('input[name=delta]:checked').val();
-    computeEndDate(delta);
-}
-
-/**
- * 计算两个时间的天数。
- * Compute delta of two days.
+ * 计算两个日期之间可用的工作日。
+ * Compute work days between two dates.
  *
  * @param  string date1
  * @param  string date2
@@ -70,140 +57,90 @@ function setDate()
  */
 function computeDaysDelta(date1, date2)
 {
-    date1 = convertStringToDate(date1);
-    date2 = convertStringToDate(date2);
-    delta = (date2 - date1) / (1000 * 60 * 60 * 24) + 1;
+    date1 = new Date(date1);
+    date2 = new Date(date2);
+    const time = date2 - date1;
+    const days = parseInt(time / DAY_MILLISECONDS) + 1;
+    if(isNaN(days)) return;
 
-    if(isNaN(delta)) return;
-
-    weekEnds = 0;
-    for(i = 0; i < delta; i++)
+    let weekendDays = 0;
+    for(i = 0; i < days; i++)
     {
-        if((weekend == 2 && date1.getDay() == 6) || date1.getDay() == 0) weekEnds ++;
-        date1 = date1.valueOf();
-        date1 += 1000 * 60 * 60 * 24;
+        if((weekend == 2 && date1.getDay() == 6) || date1.getDay() == 0) weekendDays ++;
+        date1 = date1.valueOf() + DAY_MILLISECONDS;
         date1 = new Date(date1);
     }
-    return delta - weekEnds;
+    return days - weekendDays;
 }
 
 /**
- * 计算可用工作日天数。
- * Compute work days.
+ * 更新可用工作日天数。
+ * Update work days.
  *
- * @param  string currentID
  * @access public
  * @return void
  */
-function computeWorkDays(e)
+function computeWorkDays()
 {
-    isBactchEdit  = false;
-    let currentID = typeof e == 'object' ? $(e.target).attr('id') : '';
-    if(currentID)
-    {
-        index = currentID.replace('begins[', '');
-        index = index.replace('ends[', '');
-        index = index.replace(']', '');
-        if(!isNaN(index)) isBactchEdit = true;
-    }
+    const begin = $('#begin').zui('datePicker').$.value;
+    const end   = $('#end').zui('datePicker').$.value;
 
-    if(isBactchEdit)
+    if(end == LONG_TIME)
     {
-        beginDate = $('#begins\\[' + index + '\\]').zui('datePicker').$.state.value;
-        endDate   = $('#ends\\[' + index + '\\]').zui('datePicker').$.state.value;
+        $('#delta999').prop('checked', true);
+        $('#days').val(0).trigger('change');
     }
     else
     {
-        beginDate = $('#begin').zui('datePicker').$.state.value;
-        endDate   = $('#end').zui('datePicker').$.state.value;
-
-        var begin = new Date(beginDate.replace(/-/g,"/"));
-        var end   = new Date(endDate.replace(/-/g,"/"));
-        var time  = end.getTime() - begin.getTime();
-        var days  = parseInt(time / (1000 * 60 * 60 * 24)) + 1;
-        if(days != $("input[name='delta']:checked").val()) $("input[name='delta']:checked").attr('checked', false);
-        if(endDate == longTime) $("#delta999").prop('checked', true);
+        $('#days').val(computeDaysDelta(begin, end)).trigger('change');
+        const time = new Date(end) - new Date(begin);
+        const days = parseInt(time / DAY_MILLISECONDS) + 1;
+        if(days != $("input[name='delta']:checked").val())
+        {
+            $("input[name='delta']:checked").prop('checked', false);
+            $('#delta' + days).prop('checked', true);
+        }
     }
-
-    if(beginDate && endDate)
-    {
-        if(isBactchEdit)  $('#dayses\\[' + index + '\\]').val(computeDaysDelta(beginDate, endDate));
-        if(!isBactchEdit) $('#days').val(computeDaysDelta(beginDate, endDate)).trigger('change');
-    }
-    else if($('input[checked="true"]').val())
-    {
-        computeEndDate();
-    }
-    outOfDateTip(isBactchEdit ? index : 0);
 }
 
 /**
  * 计算并设置计划完成时间。
  * Compute the end date for project.
  *
- * @param  int    delta
  * @access public
  * @return void
  */
-function computeEndDate(delta)
+function computeEndDate()
 {
-    let beginDate = $('#begin').zui('datePicker').$.state.value;
+    const beginDate = $('#begin').zui('datePicker').$.value;
     if(!beginDate) return;
 
-    delta = parseInt(delta);
-    if(delta == 999)
-    {
-        $('#end').datePicker({disabled: true});
-        $('#days').val(0).closest('.form-row').addClass('hidden');
-        outOfDateTip();
-        return false;
-    }
+    const delta = parseInt($('input[name=delta]:checked').val());
+    if(isNaN(delta)) return;
 
-    $('#end').datePicker({disabled: false});
-    $('#days').closest('.form-row').removeClass('hidden');
+    const isLongTime = delta == 999;
+    const endDate    = isLongTime ? LONG_TIME : formatDate(beginDate, delta - 1);
 
-    beginDate = convertStringToDate(beginDate);
-    if((delta == 7 || delta == 14) && (beginDate.getDay() == 1))
-    {
-        delta = (weekend == 2) ? (delta - 2) : (delta - 1);
-    }
-
-    endDate = formatDate(beginDate, delta - 1);
-    $('#end').zui('datePicker').$.changeState({value: endDate});
-    computeWorkDays();
+    $('#end').toggleClass('hidden', isLongTime).zui('datePicker').$.setValue(endDate);
+    $('#end').next().toggleClass('hidden', !isLongTime);
+    $('#days').closest('.form-row').toggleClass('hidden', isLongTime);
 }
 
 /**
  * 给指定日期加上具体天数，并返回格式化后的日期.
+ * Add days to date, and return formatted date.
  *
  * @param  string dateString
  * @param  int    days
  * @access public
- * @return date
+ * @return string
  */
 function formatDate(dateString, days)
 {
-  const date = new Date(dateString);
-  date.setDate(date.getDate() + days);
+    const date = new Date(dateString);
+    date.setDate(date.getDate() + days);
 
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-
-  return `${year}-${month}-${day}`;
-}
-
-/**
- * Convert a date string like 2011-11-11 to date object in js.
- *
- * @param  string dateString
- * @access public
- * @return date
- */
-function convertStringToDate(dateString)
-{
-    dateString = dateString.split('-');
-    return new Date(dateString[0], dateString[1] - 1, dateString[2]);
+    return date.toLocaleDateString('en-CA')
 }
 
 /**
@@ -317,84 +254,58 @@ function budgetOverrunTips()
 }
 
 /**
- *The date is out of the range of the parent project set, and a prompt is given.
+ * The date is out of the range of the parent project set, and a prompt is given.
  *
- * @param  string $currentID
  * @access public
  * @return void
  */
-function outOfDateTip(currentID)
+function checkDate()
 {
-    if(window.ignoreTips['dateTip']) return;
-    if(typeof(systemMode) != 'undefined' && systemMode == 'light') return;
-    if(batchEditDateTips.includes(Number(currentID))) return;
+    if(ignoreTips['dateTip']) return;
 
-    var end   = currentID ? $('#ends\\[' + currentID + '\\]').val() : $('#end').val();
-    var begin = currentID ? $('#begins\\[' + currentID + '\\]').val() : $('#begin').val();
-    if($('#dateTip.text-remind').length > 0) $('#dateTip').closest('.form-row').remove();
-    if(currentID) $('#dateTip\\[' + currentID + '\\]').remove();
+    const begin = $('#begin').zui('datePicker').$.value;
+    const end   = $('#end').zui('datePicker').$.value;
+    if(!begin || !end) return;
 
-    if(end == longTime) end = LONG_TIME;
-    if(end.length > 0 && begin.length > 0)
+    const selectedProgramID = $('[name=parent]').val();
+    if(selectedProgramID == 0 || selectedProgramID == undefined)
     {
-        var selectedProgramID = currentID ? $("[name='parents\[" + currentID + "\]']").val() : $('#parent').val();
-
-        if(selectedProgramID == 0 || selectedProgramID == undefined) return;
-
-        if(typeof(projectID) == 'undefined') projectID = 0;
-        projectID = currentID ? $('#projectIdList\\['+ currentID + '\\]').val() : projectID;
-        $.get($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=project&objectID=' + projectID + '&selectedProgramID=' + selectedProgramID), function(data)
-        {
-            var data         = JSON.parse(data);
-            var parentEnd    = new Date(data.selectedProgramEnd);
-            var parentBegin  = new Date(data.selectedProgramBegin);
-            var projectEnd   = new Date(end);
-            var projectBegin = new Date(begin);
-
-            var beginLessThanParentTip = beginLessThanParent + data.selectedProgramBegin;
-            var endGreatThanParentTip  = endGreatThanParent + data.selectedProgramEnd;
-
-            if(projectBegin >= parentBegin && projectEnd <= parentEnd) return;
-
-            var dateTip = "";
-            if(projectBegin < parentBegin)
-            {
-                dateTip = currentID ? beginLessThanParentTip + "'><p>" + beginLessThanParentTip : beginLessThanParentTip;
-            }
-            else if(projectEnd > parentEnd)
-            {
-                dateTip = currentID ? endGreatThanParentTip + "'><p>" + endGreatThanParentTip : endGreatThanParentTip;
-            }
-
-            if(currentID)
-            {
-                $("#projects\\[" + currentID + "\\]").after("<tr><td colspan='5'></td><td class='c-name' colspan='3'><span id='dateTip" + currentID + "' class='text-remind' title='" + dateTip + "</p><p id='ignore' onclick='ignoreTip(this," + currentID + ")'>" + ignore + "</p></span></td></tr>");
-                $('#dateTip'+ currentID).parent().css('line-height', '0')
-            }
-            else
-            {
-                $('#begin').closest('.form-row').after("<div class='form-row' id='dateTipBox'><div class='form-group'><div class='input-group'><span id='dateTip' class='text-remind'><p>" + dateTip + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></div></div></div>");
-            }
-        });
+        $('#dateTip, #beginLess, #endGreater').addClass('hidden');
+        return;
     }
+
+    if(typeof(projectID) == 'undefined') projectID = 0;
+    $.get($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=project&objectID=' + projectID + '&selectedProgramID=' + selectedProgramID), function(response)
+    {
+        const data         = JSON.parse(response);
+        const parentEnd    = new Date(data.selectedProgramEnd);
+        const parentBegin  = new Date(data.selectedProgramBegin);
+        const projectEnd   = new Date(end);
+        const projectBegin = new Date(begin);
+
+        if(projectBegin >= parentBegin && projectEnd <= parentEnd)
+        {
+            $('#dateTip, #beginLess, #endGreater').addClass('hidden');
+            return;
+        }
+
+        $('#dateTip').removeClass('hidden').find('#beginLess').toggleClass('hidden', projectBegin >= parentBegin).find('.parentBegin').text(data.selectedProgramBegin);
+        $('#dateTip').removeClass('hidden').find('#endGreater').toggleClass('hidden', projectEnd <= parentEnd).find('.parentEnd').text(data.selectedProgramEnd);
+    });
 }
 
 /**
- * Make this prompt no longer appear.
+ * 忽略提示信息。
+ * Ignore tips.
  *
- * @param  string  $obj
- * @param  string  $currentID
+ * @param  string $tip
  * @access public
  * @return void
  */
-window.ignoreTip = function(obj, currentID)
+function ignoreTip(tip)
 {
-    var parentID = obj.parentNode.id;
-    currentID ? $('#dateTip' + currentID).parent().parent().remove() : $('#' + parentID).closest('.form-row').remove();
-
-    if(parentID == 'dateTip') window.ignoreTips['dateTip'] = true;
-    if(parentID == 'dateTip' + currentID) batchEditDateTips.push(currentID);
-    if(parentID == 'beyondBudgetTip') window.ignoreTips['beyondBudgetTip'] = true;
+    $('#' + tip).remove();
+    ignoreTips[tip] = true;
 }
 
 /**

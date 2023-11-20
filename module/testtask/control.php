@@ -46,13 +46,13 @@ class testtask extends control
         {
             $products = $this->testtaskZen->getProducts();
 
-            /* 如果没有获取到产品键值对、并且即不是弹窗页面也不是 ajax 请求，那么跳转到错误提示页面。*/
-            /* If the product key-value pair is not obtained and it is not a pop-up page or an ajax request, then jump to the error page. */
-            if(empty($products) && !isInModal() && !helper::isAjaxRequest())
+            /* 如果没有获取到产品键值对、并且即不是弹窗页面，并且是 zin 或者 fetch 请求，那么跳转到错误提示页面。*/
+            /* If the product key-value pair is not obtained and it is not a pop-up page, and it is a zin request or a fetch request, then jump to the error page. */
+            if(empty($products) && !isInModal() && (helper::isAjaxRequest('zin') || helper::isAjaxRequest('fetch')))
             {
                 $tab      = ($this->app->tab == 'project' || $this->app->tab == 'execution') ? $this->app->tab : 'qa';
                 $objectID = ($tab == 'project' || $tab == 'execution') ? $this->session->$tab : 0;
-                helper::end($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testtask&objectID=$objectID")));
+                $this->locate($this->createLink('product', 'showErrorNone', "moduleName={$tab}&activeMenu=testtask&objectID=$objectID"));
             }
 
             $this->products       = $products;

@@ -488,7 +488,7 @@ class metricModel extends model
         $aliasList  = array();
         foreach($uniqueList as $field)
         {
-            if(strpos($field, '.') === false)
+            if(strpos($field, '.') === false || strpos(strtoupper($field), ' AS ') !== false)
             {
                 $aliasList[] = $field;
                 continue;

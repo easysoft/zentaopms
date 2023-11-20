@@ -73,24 +73,30 @@ formPanel
     (
         set::width('full'),
         set::label($lang->stakeholder->nature),
-        set::name('nature'),
-        set::control('editor'),
-        set::value($stakeholder->nature)
+        editor
+        (
+            set::name('nature'),
+            html($stakeholder->nature)
+        )
     ),
     formGroup
     (
         set::width('full'),
         set::label($lang->stakeholder->analysis),
-        set::name('analysis'),
-        set::control('editor'),
-        set::value($stakeholder->analysis)
+        editor
+        (
+            set::name('analysis'),
+            html($stakeholder->analysis)
+        )
     ),
     formGroup
     (
         set::width('full'),
         set::label($lang->stakeholder->strategy),
-        set::name('strategy'),
-        set::control('editor'),
-        set::value($stakeholder->strategy)
+        editor
+        (
+            set::name('strategy'),
+            html($stakeholder->strategy)
+        )
     )
 );

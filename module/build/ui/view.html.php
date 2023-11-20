@@ -58,10 +58,12 @@ detailHeader
 
 jsVar('initLink',       $link);
 jsVar('type',           $type);
+jsVar('linkParams',     $decodeParam);
 jsVar('buildID',        $build->id);
 jsVar('confirmDelete',  $lang->build->confirmDelete);
 jsVar('currentAccount', $app->user->account);
 jsVar('buildProduct',   $build->product);
+jsVar('buildModule',    $buildModule);
 
 /* Story's batch btn. */
 $canBatchUnlinkStory = $canBeChanged && common::hasPriv($buildModule, 'batchUnlinkStory');
@@ -117,8 +119,14 @@ detailBody
                 set::active($type == 'story'),
                 div
                 (
-                    setClass('tabnActions'),
-                    !common::hasPriv($buildModule, 'linkStory') ? null : btn(set::text($lang->build->linkStory), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', createLink($buildModule, 'linkStory', "buildID={$build->id}" . (($link == 'true' && $type == 'story') ? $decodeParam : "&browseType=&param="))))
+                    setClass('tab-actions'),
+                    common::hasPriv($buildModule, 'linkStory') ? btn
+                    (
+                        set::text($lang->build->linkStory),
+                        set::icon('link'),
+                        set::type('primary'),
+                        bind::click("window.showLink('story')")
+                    ) : null
                 ),
                 dtable
                 (
@@ -129,6 +137,7 @@ detailBody
                     set::checkable($canBatchUnlinkStory || $canBatchCloseStory),
                     set::sortLink(createLink($buildModule, 'view', "buildID={$build->id}&type=story&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
+                    set::extraHeight('+144'),
                     set::footToolbar($storyFootToolbar),
                     set::footPager(usePager('storyPager', '', array(
                         'recPerPage'  => $storyPager->recPerPage,
@@ -147,8 +156,14 @@ detailBody
                 set::active($type == 'bug'),
                 div
                 (
-                    setClass('tabnActions'),
-                    !common::hasPriv($buildModule, 'linkBug') ? null : btn(set::text($lang->build->linkBug), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', createLink($buildModule, 'linkBug', "buildID={$build->id}" . (($link == 'true' && $type == 'bug') ? $decodeParam : "&browseType=&param="))))
+                    setClass('tab-actions'),
+                    common::hasPriv($buildModule, 'linkBug') ? btn
+                    (
+                        set::text($lang->build->linkBug),
+                        set::type('primary'),
+                        set::icon('link'),
+                        bind::click("window.showLink('bug')")
+                    ) : null
                 ),
                 dtable
                 (
@@ -159,6 +174,7 @@ detailBody
                     set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
                     set::sortLink(createLink($buildModule, 'view', "buildID={$build->id}&type=bug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
+                    set::extraHeight('+144'),
                     set::footToolbar($bugFootToolbar),
                     set::footPager(usePager('bugPager', '', array(
                         'recPerPage'  => $bugPager->recPerPage,
@@ -270,7 +286,7 @@ detailBody
                         ) : null
                     ),
                     h::hr(set::className('mt-6')),
-                    history()
+                    history(set::objectID($build->id))
                 )
             )
         )

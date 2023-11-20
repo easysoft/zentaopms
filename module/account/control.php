@@ -14,16 +14,16 @@ class account extends control
     /**
      * Browse accouts page.
      *
-     * @param  string   $browseType
-     * @param  string   $param
-     * @param  string   $orderBy
+     * @param  string $browseType
+     * @param  string $param
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browse($browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(string $browseType = 'all', string $param = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->app->loadLang('serverroom');
         $browseType = strtolower($browseType);
@@ -47,7 +47,6 @@ class account extends control
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;
         $this->view->browseType  = $browseType;
-        $this->view->position[]  = $this->lang->account->common;
 
         $this->display();
     }
@@ -62,21 +61,18 @@ class account extends control
     {
         if($_POST)
         {
-            $id = $this->account->create();
+            $account = $this->accountZen->buildDataForCreate();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('account', $id, 'created');
+            $this->account->create($account);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadCurrentPage()', 'closeModal' => true));
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => helper::createLink('account', 'browse')));
         }
 
         $this->app->loadLang('serverroom');
-
-        $this->view->title      = $this->lang->account->create;
-        $this->view->position[] = html::a($this->createLink('account', 'browse'), $this->lang->account->common);
-        $this->view->position[] = $this->lang->account->create;
-
+        $this->view->title = $this->lang->account->create;
         $this->display();
     }
 
@@ -88,18 +84,15 @@ class account extends control
      * @access public
      * @return void
      */
-    public function edit($id, $from = 'parent')
+    public function edit(int $id, string $from = 'parent')
     {
         if($_POST)
         {
-            $changes = $this->account->update($id);
+            $account = $this->accountZen->buildDataForEdit();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($changes)
-            {
-                $actionID = $this->loadModel('action')->create('account', $id, 'Edited');
-                $this->action->logHistory($actionID, $changes);
-            }
+            $changes = $this->account->update($id, $account);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse'), 'closeModal' => true));
         }
@@ -107,10 +100,6 @@ class account extends control
         $this->view->title   = $this->lang->account->edit;
         $this->view->account = $this->account->getById($id);
         $this->view->rooms   = $this->loadModel('serverroom')->getPairs();
-        $this->view->from    = $from;
-
-        $this->view->position[] = html::a($this->createLink('account', 'browse'), $this->lang->account->common);
-        $this->view->position[] = $this->lang->account->edit;
 
         $this->display();
     }
@@ -122,13 +111,10 @@ class account extends control
      * @access public
      * @return void
      */
-    public function view($id)
+    public function view(int $id)
     {
         $this->view->title      = $this->lang->account->view;
-        $this->view->position[] = html::a($this->createLink('account', 'browse'), $this->lang->account->common);
-        $this->view->position[] = $this->lang->account->view;
-
-        $this->view->account       = $this->account->getById($id);
+        $this->view->account    = $this->account->getById($id);
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
         $this->view->actions    = $this->loadModel('action')->getList('account', $id);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
@@ -143,7 +129,7 @@ class account extends control
      * @access public
      * @return void
      */
-    public function delete($id)
+    public function delete(int $id)
     {
         $this->account->delete(TABLE_ACCOUNT, $id);
 
@@ -160,39 +146,4 @@ class account extends control
         }
         return $this->send($response);
     }
-
-    /**
-     * Change account status.
-     *
-     * @param  int    $id
-     * @param  int    $accountID
-     * @param  int    $status
-     * @access public
-     * @return void
-     */
-    public function changeStatus($id, $accountID, $status)
-    {
-        $accountStatus = $status == 'offline' ? 'online' : 'offline';
-        if($_SERVER['REQUEST_METHOD'] == 'POST')
-        {
-            $postData = fixer::input('post')->get();
-            if(empty($postData->reason))
-            {
-                $reasonKey = $accountStatus . 'Reason';
-                $errTip = $this->lang->account->{$reasonKey};
-                dao::$errors['submit'][] = sprintf($this->lang->error->notempty, $errTip);
-                return print(js::error(dao::getError()));
-            }
-
-            $this->account->updateStatus($accountID, $accountStatus);
-
-            $this->loadModel('action')->create('account', $id, $accountStatus, $postData->reason);
-            if(isInModal()) return print(js::reload('parent.parent'));
-            return print(js::reload('parent'));
-        }
-
-        $this->view->title = $this->lang->account->{$accountStatus};
-        $this->display();
-    }
-
 }

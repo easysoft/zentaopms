@@ -42,8 +42,8 @@ foreach($config->featureGroup as $group => $features)
 
             $items[] = checkbox
             (
+                setID("module{$code}"),
                 set::rootClass('w-40'),
-                set::id("module{$code}"),
                 set::name("module[{$code}]"),
                 set::value(1),
                 set::checked($value == 1),
@@ -53,8 +53,8 @@ foreach($config->featureGroup as $group => $features)
 
             $items[] = input
             (
+                setID("module{$code}"),
                 set::type('hidden'),
-                set::id("module{$code}"),
                 set::name("module[{$code}]"),
                 set::value($value)
             );
@@ -67,7 +67,7 @@ foreach($config->featureGroup as $group => $features)
                 setClass('p-2.5'),
                 checkbox
                 (
-                    set::id("allChecker{$group}"),
+                    setID("allChecker{$group}"),
                     set::name("allChecker[$group]"),
                     on::change('checkGroup'),
                     $lang->admin->setModule->{$group}
@@ -117,7 +117,7 @@ formPanel
                     setClass('p-2.5'),
                     checkbox
                     (
-                        set::id('allCheckeer'),
+                        setID('allCheckeer'),
                         on::change('checkAll'),
                         $lang->selectAll
                     )
@@ -134,7 +134,7 @@ formPanel
                     button
                     (
                         setClass('btn open-url'),
-                        set(array('data-back' => 'APP')),
+                        setData(array('back' => 'APP')),
                         $lang->goback
                     )
                 )

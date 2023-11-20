@@ -201,7 +201,7 @@ window.loadExecutionStories = function()
         setPreview();
 
         /* If there is no story option, select will be hidden and text will be displayed; otherwise, the opposite is true */
-        if(stories.length || parseInt(hasProduct) == 0)
+        if(stories.length)
         {
             $('#story').closest('.form-group').removeClass('hidden');
             $('.empty-story-tip').closest('.form-group').addClass('hidden');
@@ -285,7 +285,7 @@ function setStoryRelated()
  */
 function setPreview()
 {
-    if(!$("input[name='story']").val())
+    if(parseFloat($("input[name='story']").val()) == 0)
     {
         $('#preview').addClass('hidden');
         $('.title-group.required > div').removeAttr('id', 'copyStory-input').addClass('.required');

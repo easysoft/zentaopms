@@ -18,21 +18,9 @@ class accountModel extends model
      * @access public
      * @return object
      */
-    public function getByID($id)
+    public function getByID(int $id): object|false
     {
         return $this->dao->select('*')->from(TABLE_ACCOUNT)->where('id')->eq($id)->fetch();
-    }
-
-    /**
-     * Get accounts by id list.
-     *
-     * @param  int    $idList
-     * @access public
-     * @return array
-     */
-    public function getByIdList($idList)
-    {
-        return $this->dao->select('*')->from(TABLE_ACCOUNT)->where('id')->in($idList)->fetchAll('id');
     }
 
     /**
@@ -45,24 +33,21 @@ class accountModel extends model
      * @access public
      * @return array
      */
-    public function getList($browseType = 'all', $param = 0, $orderBy = 't1.id_desc', $pager = null)
+    public function getList(string $browseType = 'all', string $param = '', string $orderBy = 'id_desc', object|null $pager = null)
     {
-        $query   = '';
+        $query = '';
         if($browseType == 'bysearch')
         {
             /* Concatenate the conditions for the query. */
+            if(!$this->session->accountQuery) $this->session->set('accountQuery', ' 1 = 1');
             if($param)
             {
-                $query = $this->loadModel('search')->getZinQuery($param);
+                $query = $this->loadModel('search')->getQuery((int)$param);
                 if($query)
                 {
                     $this->session->set('accountQuery', $query->sql);
                     $this->session->set('accountForm', $query->form);
                 }
-            }
-            else
-            {
-                if(!$this->session->accountQuery) $this->session->set('accountQuery', ' 1 = 1');
             }
             $query = $this->session->accountQuery;
         }
@@ -86,53 +71,59 @@ class accountModel extends model
      * @access public
      * @return array
      */
-    public function getPairs()
+    public function getPairs(): array
     {
         return $this->dao->select('id,name')->from(TABLE_ACCOUNT)->where('deleted')->eq('0')->fetchPairs();
     }
 
-    public function create()
+    /**
+     * Create account
+     *
+     * @param  object $account
+     * @access public
+     * @return int|false
+     */
+    public function create(object $account): int|false
     {
-        $account = fixer::input('post')
-            ->setDefault('createdBy', $this->app->user->account)
-            ->setDefault('createdDate', helper::now())
-            ->get();
-
-        $this->dao->insert(TABLE_ACCOUNT)
-            ->data($account)
+        $this->dao->insert(TABLE_ACCOUNT)->data($account)
             ->batchCheck($this->config->account->create->requiredFields, 'notempty')
             ->checkIf($account->email, 'email', 'email')
             ->checkIf($account->mobile, 'mobile', 'mobile')
             ->exec();
-
         if(dao::isError()) return false;
-        return $this->dao->lastInsertID();
+
+        $accountID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('account', $accountID, 'created');
+        return $accountID;
     }
 
     /**
      * Update one account.
      *
      * @param  int    $id
+     * @param  object $account
      * @access public
-     * @return void
+     * @return bool
      */
-    public function update($id)
+    public function update(int $id, object $account): bool
     {
-        $now        = helper::now();
         $oldAccount = $this->getByID($id);
-        $newAccount = fixer::input('post')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', $now)
-            ->get();
-
-        $this->dao->update(TABLE_ACCOUNT)->data($newAccount)->autoCheck()
+        $this->dao->update(TABLE_ACCOUNT)->data($account)->autoCheck()
             ->batchCheck($this->config->account->edit->requiredFields, 'notempty')
-            ->checkIf($newAccount->email, 'email', 'email')
-            ->checkIf($newAccount->mobile, 'mobile', 'mobile')
+            ->checkIf($account->email, 'email', 'email')
+            ->checkIf($account->mobile, 'mobile', 'mobile')
             ->where('id')->eq($id)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldAccount, $newAccount);
+        if(!dao::isError())
+        {
+            $changes = common::createChanges($oldAccount, $account);
+            if(empty($changes)) return true;
+
+            $actionID = $this->loadModel('action')->create('account', $id, 'Edited');
+            $this->action->logHistory($actionID, $changes);
+            return true;
+        }
         return false;
     }
 }

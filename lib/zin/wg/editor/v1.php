@@ -18,7 +18,7 @@ class editor extends wg
         'bubbleMenu?: bool=false',        // 是否启用菜单冒泡
         'menubarMode?: string="compact"', // 菜单栏模式
         'value?: string',                 // 内容
-        'uid?: string=""'                 // 图片上传uid
+        'uid?: string'                    // 图片上传uid
     );
 
     public static function getPageCSS(): string|false
@@ -36,8 +36,7 @@ class editor extends wg
 
     protected function created()
     {
-        $uid = $this->prop('uid');
-        if(!$uid) $this->setProp('uid', uniqid());
+        if(empty($this->prop('uid'))) $this->setProp('uid', $this->gid);
         $this->setDefaultProps(array('uploadUrl' => helper::createLink('file', 'ajaxUpload', 'uid=' . $this->prop('uid'))));
     }
 
@@ -66,7 +65,7 @@ class editor extends wg
 
         return div
         (
-            setClass('editor-container p-px'),
+            setClass('editor-container p-px mt-px rounded ring -ring-offset-1'),
             $props['size'] === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
             $editor,
             textarea

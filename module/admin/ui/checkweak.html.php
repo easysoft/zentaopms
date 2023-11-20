@@ -53,7 +53,7 @@ $tableData = initTableData($weakUsers, $config->admin->checkWeak->dtable->fieldL
 
 div
 (
-    set::id('mainContent'),
+    setID('mainContent'),
     setClass('row has-sidebar-left'),
     $menuItems ? sidebar
     (

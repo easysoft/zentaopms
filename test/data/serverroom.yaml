@@ -47,44 +47,35 @@ fields:
     format: ""
   - field: owner
     note: "负责人"
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    fields:
+    - field: account1
+      range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
+    - field: account2
+      range: "[],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}"
   - field: createdBy
     note: "创建者"
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    fields:
+    - field: account1
+      range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
+    - field: account2
+      range: "[],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}"
   - field: createdDate
     note: "创建日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: editedBy
     note: "编辑者"
-    from: common.user.v1.yaml
-    use: user
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    fields:
+    - field: account1
+      range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
+    - field: account2
+      range: "[],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}"
   - field: editedDate
     note: "编辑日期"
-    from: common.date.v1.yaml
-    use: dateA
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
   - field: deleted
     note: "是否删除"
     range: 0

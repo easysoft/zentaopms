@@ -348,6 +348,7 @@ class productModel extends model
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->checkIF(!empty($product->name), 'name', 'unique', "`program` = {$product->program} AND `deleted` = '0'")
             ->checkIF(!empty($product->code), 'code', 'unique', "`deleted` = '0'")
+            ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->checkFlow()
             ->exec();
         if(dao::isError()) return false;

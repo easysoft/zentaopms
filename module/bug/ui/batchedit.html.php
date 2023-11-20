@@ -76,7 +76,7 @@ formBatchPanel
         set::name('severity'),
         set::label($lang->bug->severity),
         set::hidden(zget($visibleFields, 'severity', true, false)),
-        set::control('severityPicker'),
+        set::control(array('type' => 'severityPicker', 'required' => true)),
         set::items($lang->bug->severityList),
         set::width('80px'),
         set::required(isset($requiredFields['severity']))
@@ -87,7 +87,7 @@ formBatchPanel
         set::name('pri'),
         set::label($lang->bug->pri),
         set::hidden(zget($visibleFields, 'pri', true, false)),
-        set::control('priPicker'),
+        set::control(array('type' => 'priPicker', 'required' => true)),
         set::items($lang->bug->priList),
         set::width('80px'),
         set::required(isset($requiredFields['pri']))

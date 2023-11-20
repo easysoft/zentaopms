@@ -1294,6 +1294,12 @@ class commonModel extends model
 
         $searchObjects = $lang->searchObjects;
         if($config->systemMode == 'light') unset($searchObjects['program']);
+        if(!helper::hasFeature('devops'))
+        {
+            if(isset($searchObjects['deploy']))     unset($searchObjects['deploy']);
+            if(isset($searchObjects['service']))    unset($searchObjects['service']);
+            if(isset($searchObjects['deploystep'])) unset($searchObjects['deploystep']);
+        }
 
         foreach($searchObjects as $key => $value)
         {
@@ -3846,7 +3852,7 @@ EOT;
                     if(!common::hasPriv($moduleName, $action)) continue;
                 }
 
-                if(false === $this->{$moduleName}->isClickable($data, $action)) continue;
+                if(method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) continue;
 
                 if($menu == 'suffixActions' && !empty($actionData['text']) && empty($actionData['showText'])) $actionData['text'] = '';
 

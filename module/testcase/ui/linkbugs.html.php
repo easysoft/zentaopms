@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$footToolbar = array('items' => array(array('text' => $lang->save, 'btnType' => 'secondary', 'className' => 'link-btn')));
+
 modalHeader
 (
     set::title($lang->testcase->linkBugs),
@@ -17,18 +19,13 @@ modalHeader
     set::entityID($case->id)
 );
 
-div
+searchForm
 (
-    setID('searchFormPanel'),
-    set('data-module', 'bug'),
-    searchToggle
-    (
-        set::open(true),
-        set::module('bug')
-    )
+    set::className('surface'),
+    set::module('bug'),
+    set::simple(true),
+    set::show(true)
 );
-
-$footToolbar = array('items' => array(array('text' => $lang->save, 'btnType' => 'secondary', 'className' => 'link-btn')));
 
 dtable
 (
@@ -39,5 +36,3 @@ dtable
     set::footToolbar($footToolbar),
     set::footPager(usePager())
 );
-
-render('modalDialog');

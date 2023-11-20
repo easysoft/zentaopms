@@ -73,7 +73,7 @@ class serverroomModel extends model
      * @access public
      * @return array
      */
-    public function getPairs()
+    public function getPairs(): array
     {
         $stmt = $this->dao->select('*')->from(TABLE_SERVERROOM)
             ->where('deleted')->eq('0')

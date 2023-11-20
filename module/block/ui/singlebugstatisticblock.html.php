@@ -28,30 +28,19 @@ panel
             div
             (
                 setClass('flex justify-center w-full'),
-                zui::progressCircle
+                progressCircle
                 (
-                    set('percent', $resolvedRate),
-                    set('size', 112),
-                    set('circleWidth', 6),
-                    set('text', $resolvedRate . '%'),
-                    set('textY', 50),
-                    set('textStyle', 'font-size: 30px;')
-                )
-            ),
-            div
-            (
-                setClass('flex justify-center w-full h-0'),
-                span
-                (
-                    setClass('text-gray text-sm progress-text'),
-                    $lang->block->qastatistic->fixBugRate,
-                    icon
+                    set::percent($resolvedRate),
+                    set::size(112),
+                    set::text(false),
+                    set::circleWidth(0.06),
+                    div(span(setClass('text-2xl font-bold'), $resolvedRate), '%'),
+                    div
                     (
-                        setClass('pl-0.5'),
-                        toggle::tooltip(array('title' => '提示文本')),
-                        'help'
+                        setClass('row text-gray items-center gap-1'),
+                        $lang->block->qastatistic->closedBugRate
                     )
-                )
+                ),
             ),
             cell
             (

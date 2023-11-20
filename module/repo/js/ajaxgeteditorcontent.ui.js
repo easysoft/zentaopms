@@ -236,3 +236,9 @@ function initPage()
     /* Get file commits. */
     showCommitInfo();
 }
+
+window.downloadCode = function()
+{
+    var url = $(this).data('link');
+    window.open(url, '_self');
+}

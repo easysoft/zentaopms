@@ -66,8 +66,8 @@ foreach($lang->report->typeList as $type => $typeName)
         to::prefix(icon($type == 'default' ? 'list-alt' : "chart-{$type}")),
         div
         (
-            set::className('pb-4'),
-            span(set::className('text-gray'),
+            setClass('pb-4'),
+            span(setClass('text-gray'),
             html(str_replace('%tab%', $lang->task->waitTask . $lang->testcase->common, $lang->report->notice->help)))
         ),
         div($echarts)
@@ -83,7 +83,7 @@ div
         formPanel
         (
             setClass('chart-form'),
-            set::id('chartForm'),
+            setID('chartForm'),
             set::title($lang->task->report->select),
             set::actionsClass('justify-start'),
             set::actions
@@ -119,7 +119,7 @@ div
     (
         setID('chartContainer'),
         set::flex('1'),
-        set::className('ml-5 bg-white px-4 py-2'),
+        setClass('ml-5 bg-white px-4 py-2'),
         tabs
         (
             on::click('.font-medium', 'changeTab'),

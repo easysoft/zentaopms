@@ -9,6 +9,7 @@ $('#teamTable').on('click.team', '.btn-add', function()
 
     $newRow.find('input').val('');
     $newRow.find('[name^=teamConsumed]').val(0);
+    $newRow.find('.required').removeClass('required');
     $(this).closest('tr').after($newRow);
 
     toggleBtn();

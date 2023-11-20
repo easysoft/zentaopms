@@ -486,7 +486,7 @@ $lang->block->zentaoclient->edition->linux64 = 'Linux';
 $lang->block->zentaoclient->edition->mac64   = 'Mac OS';
 
 $lang->block->guideTabs['flowchart']      = 'Flowchart';
-if($config->systemMode == 'ALM') $lang->block->guideTabs['systemMode']     = 'Operating Modes';
+if($config->systemMode != 'PLM') $lang->block->guideTabs['systemMode']     = 'Operating Modes';
 $lang->block->guideTabs['visionSwitch']   = 'Interface Switch';
 $lang->block->guideTabs['themeSwitch']    = 'Theme Switch';
 $lang->block->guideTabs['preference']     = 'Personalized setting';
@@ -598,7 +598,9 @@ $lang->block->projectstatistic->lastestExecution = 'Lastest Execution';
 $lang->block->projectstatistic->projectClosed    = "{$lang->projectCommon} has been closed.";
 $lang->block->projectstatistic->longTimeProject  = "Long Time {$lang->projectCommon}";
 $lang->block->projectstatistic->totalProgress    = 'Total Progress';
-$lang->block->projectstatistic->totalProgressTip = 'Total Progress = Consumed Man Hours/(Consumed Man Hours + Left Man Hours)';
+$lang->block->projectstatistic->totalProgressTip = "<strong>Total Progress</strong> = Number of hours spent on tasks by {$lang->projectCommon}/（Number of hours spent on tasks by {$lang->projectCommon} + Number of hours remaining on tasks by {$lang->projectCommon}）<br/>
+<strong>Number of hours consumed on tasks by {$lang->projectCommon}</strong>: Summarise the number of hours spent on tasks in a {$lang->projectCommon}, filter deleted tasks, filter parent tasks, filter tasks in deleted {$lang->execution->common}.<br/>
+<strong>Number of hours remaining on tasks by {$lang->projectCommon}</strong>: Summarise the remaining hours of tasks in a {$lang->projectCommon}, filter deleted tasks, filter parent tasks, filter tasks in deleted {$lang->execution->common}.";
 $lang->block->projectstatistic->currentCost      = 'Current Cost';
 $lang->block->projectstatistic->sv               = 'Schedule Variance(SV)';
 $lang->block->projectstatistic->pv               = 'Planned Value(PV)';
@@ -712,3 +714,18 @@ $lang->block->moduleList['teamachievement'] = $lang->block->teamAchievement;
 $lang->block->moduleList['assigntome']      = $lang->block->assignToMe;
 $lang->block->moduleList['dynamic']         = $lang->block->dynamic;
 $lang->block->moduleList['html']            = $lang->block->html;
+
+$lang->block->tooltips = array();
+$lang->block->tooltips['deliveryRate']      = "{$lang->SRCommon} delivery rate = Number of {$lang->SRCommon} delivered by {$lang->productCommon} / (Total number of {$lang->SRCommon} by {$lang->productCommon} - Number of {$lang->SRCommon} delivered by {$lang->productCommon}) * 100%";
+$lang->block->tooltips['effectiveStory']    = "Total number of {$lang->SRCommon} by {$lang->productCommon}: Sum the number of {$lang->SRCommon} in a {$lang->productCommon}, filter deleted {$lang->SRCommon} and filter {$lang->SRCommon} in deleted {$lang->productCommon}.";
+$lang->block->tooltips['deliveredStory']    = "Number of {$lang->SRCommon} delivered by {$lang->productCommon}: Sum the number of {$lang->SRCommon} in the {$lang->productCommon}, the stage is released or the reason for closure is done, filter the deleted {$lang->SRCommon} and filter the {$lang->SRCommon} in deleteddeleted {$lang->productCommon}.";
+$lang->block->tooltips['costs']             = "Have invested = Hours consumed / Available hours per day";
+$lang->block->tooltips['sv']                = "Schedule Variance = (EV - PV) / PV * 100% ";
+$lang->block->tooltips['ev']                = "<strong>Earned Value</strong> = Number of estimated hours worked on tasks by {$lang->projectCommon} * Progress of tasks by {$lang->projectCommon}, filter deleted tasks, filter cancelled tasks, filter tasks in deleted tasks, filter tasks in deleted {$lang->projectCommon}. <br/>
+<strong>Number of estimated hours worked on tasks by {$lang->projectCommon}</strong>: Summarise the estimated hours of tasks in a {$lang->projectCommon}, filter deleted tasks, filter parent tasks, filter tasks in deleted tasks, filter tasks in deleted {$lang->projectCommon}.";
+$lang->block->tooltips['pv']                = "Planned Value: Summarise the estimated hours for all tasks in the waterfall {$lang->projectCommon}, filter deleted tasks, filter cancelled tasks, filter tasks in deleted tasks, filter tasks in deleted {$lang->projectCommon}.";
+$lang->block->tooltips['cv']                = 'Cost Variance = (EV - AC) / AC * 100%';
+$lang->block->tooltips['ac']                = "Actual Cost: Summarise all logged hours in the waterfall {$lang->projectCommon}, filtering for deleted {$lang->projectCommon}.";
+$lang->block->tooltips['executionProgress'] = "<strong>Total Progress</strong> = Number of hours consumed for task by {$lang->execution->common}/(Number of hours consumed for tasks by {$lang->execution->common} + Number of hours remaining for tasks by {$lang->execution->common})<br/>
+<strong>Number of hours consumed for tasks by {$lang->execution->common}</strong>: Summarise the number of hours consumed for tasks by {$lang->execution->common}, filter deleted tasks, filter parent tasks, filter tasks in deleted {$lang->execution->common}, filter tasks in deleted {$lang->projectCommon}.<br/>
+<strong>Number of hours remaining for tasks by {$lang->execution->common}</strong>: Summarise the number of remaining hours for tasks by {$lang->execution->common}, filter deleted tasks, filter parent tasks, filter tasks in deleted {$lang->execution->common}, filter tasks in deleted {$lang->projectCommon}.";

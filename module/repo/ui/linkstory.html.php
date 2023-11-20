@@ -27,7 +27,12 @@ $footToolbar = array('items' => array
     array('text' => $lang->repo->linkStory, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=$browseType&param=$param&orderBy=$orderBy"))
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary', 'data-type' => 'stories'));
 
-div(setID('searchFormPanel'), set('data-module', 'story'), searchToggle(set::open(true), set::module('story')));
+searchForm
+(
+    set::module('story'),
+    set::simple(true),
+    set::show(true)
+);
 
 div
 (

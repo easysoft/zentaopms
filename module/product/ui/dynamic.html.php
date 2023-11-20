@@ -62,10 +62,7 @@ foreach($dateGroups as $date => $actions)
         div
         (
             setClass('cursor-pointer leading-5'),
-            span(icon
-            (
-                'angle-down text-primary border-2 rounded-full z-10 bg-canvas align-middle dynamic-collapse-icon'
-            )),
+            span(icon('angle-down text-primary border-2 rounded-full z-10 bg-canvas align-middle dynamic-collapse-icon')),
             span
             (
                 setClass('ml-2'),

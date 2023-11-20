@@ -68,11 +68,10 @@
         body:          (data) => $('body').html(data),
         title:         (data) => document.title = data,
         main:          (data) => $('#main').html(data),
-        featureBar:    (data) => $('#featureBar').html(data),
+        featureBar:    updateFeatureBar,
         pageCSS:       (data) => $('style.zin-page-css').html(data),
         pageJS:        updatePageJS,
         configJS:      updateConfigJS,
-        activeFeature: (data) => activeNav(data, '#featureBar'),
         activeMenu:    (data) => activeNav(data),
         navbar:        updateNavbar,
         heading:       updateHeading,
@@ -244,6 +243,21 @@
         layoutNanavbar();
     }
 
+    function updateFeatureBar(data)
+    {
+        const $featureBar = $('#featureBar');
+        const isOpenSearch = $featureBar.find('.search-form-toggle.active').length && $featureBar.closest('.show-search-form').length;
+        $featureBar.html(data);
+        if(isOpenSearch)
+        {
+            const $searchToggle = $featureBar.find('.search-form-toggle');
+            if(!$searchToggle.hasClass('active'))
+            {
+                zui.toggleSearchForm({module: $searchToggle.data('module'), show: false});
+            }
+        }
+    }
+
     function updateHeading(data)
     {
         const $data = $(data);
@@ -311,7 +325,12 @@
             const props = info.data.props;
             if(typeof props !== 'object') return;
             const component = $target.zui(info.name);
-            if(typeof component === 'object' && typeof component.render === 'function') component.render(props);
+            if(typeof component === 'object' && typeof component.render === 'function')
+            {
+                beforeUpdate($target, info, options);
+                component.render(props);
+                afterUpdate($target, info, options);
+            }
             return;
         }
 
@@ -687,11 +706,14 @@
             url = lasShowModal.options.url;
             target = lasShowModal.id;
         }
-        options = $.extend(url ? {url: url} : {}, options);
+        options  = $.extend(typeof url === 'object' ? (url || {}) : {url: url}, options);
+        target   = target || options.target;
+        callback = callback || options.callback;
+
         if(!target) return zui.Modal.open(options);
         else if(target === 'current') target = zui.Modal.query().id;
 
-        if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
+        if(typeof target === 'string' && target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const modal = zui.Modal.query(target);
         if(!modal) return;
         modal.render(options).then((result) => {if(result && callback) callback(modal.dialog);});
@@ -721,7 +743,7 @@
 
         const ajaxOptions =
         {
-            url:         url,
+            url:         options.url,
             header:      options.header,
             type:        options.method || 'GET',
             data:        options.data,
@@ -869,7 +891,7 @@
                 if(load === 'modal')
                 {
                     if(!options.target && event) options.target = $(event.target).closest('.modal').attr('id');
-                    return loadModal(options.url, options.target, options);
+                    return loadModal(options);
                 }
                 if(load === 'target') return loadTarget(options);
                 if(load !== 'APP' && typeof load === 'string') options.selector = load;

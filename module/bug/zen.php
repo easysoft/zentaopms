@@ -231,7 +231,8 @@ class bugZen extends bug
      */
     private function getBranchOptions(int $productID): array
     {
-        $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
+        $branches        = $this->loadModel('branch')->getList($productID, 0, 'all');
+        $branchTagOption = array();
         foreach($branches as $branchInfo)
         {
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
@@ -594,23 +595,6 @@ class bugZen extends bug
         $canViewPlan    = common::hasPriv('productplan', 'view');
         $canViewCase    = common::hasPriv('testcase', 'view');
 
-        $moduleTitle = '';
-        if(empty($modulePath))
-        {
-            $moduleTitle .= '/';
-        }
-        else
-        {
-            if($bugModule->branch && isset($branches[$bugModule->branch])) $moduleTitle .= $branches[$bugModule->branch] . '/';
-
-            foreach($modulePath as $key => $module)
-            {
-                $moduleTitle .= $module->name;
-
-                if(isset($modulePath[$key + 1])) $moduleTitle .= '/';
-            }
-        }
-
         $branchTitle  = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
         $fromCaseName = $bug->case ? "#{$bug->case} {$bug->caseTitle}" : '';
         $productLink  = $bug->product && $canViewProduct ? helper::createLink('product',     'view',   "productID={$bug->product}")                           : '';
@@ -621,7 +605,7 @@ class bugZen extends bug
         $legendBasic = array();
         if(empty($product->shadow))    $legendBasic['product'] = array('name' => $this->lang->bug->product, 'text' => $product->name, 'href' => $productLink, 'attr' => array('data-app' => 'product'));
         if($product->type != 'normal') $legendBasic['branch']  = array('name' => $branchTitle,        'text' => $branchName,    'href' => $branchLink);
-        $legendBasic['module'] = array('name' => $this->lang->bug->module, 'text' => $moduleTitle);
+        $legendBasic['module'] = array('name' => $this->lang->bug->module, 'text' => $bug->module);
         if(empty($product->shadow) || !empty($project->multiple)) $legendBasic['productplan'] = array('name' => $this->lang->bug->plan, 'text' => $bug->planName, 'href' => $planLink);
         $legendBasic['fromCase']       = array('name' => $this->lang->bug->fromCase,       'text' => $fromCaseName, 'href' => $fromCaseLink, 'attr' => array('data-toggle' => 'modal', 'data-size' => 'lg'));
         $legendBasic['type']           = array('name' => $this->lang->bug->type,           'text' => zget($this->lang->bug->typeList, $bug->type));
@@ -1045,7 +1029,7 @@ class bugZen extends bug
         /* 获取分支列表。*/
         /* Get branch options. */
         $branchTagOption = array();
-        if($product->type != 'normal') $branchTagOption = $this->getBranchOptions($product->id);
+        if($product->type != 'normal') $branchTagOption = $this->getBranchOptions((int)$product->id);
 
         /* 获取需求和任务的 id 列表。*/
         /* Get story and task id list. */
@@ -1069,12 +1053,12 @@ class bugZen extends bug
         $this->view->orderBy         = $orderBy;
         $this->view->pager           = $pager;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($product->id, 'bug', $showModule) : array();
-        $this->view->modules         = $this->tree->getOptionMenu($product->id, 'bug', 0, $branch);
-        $this->view->moduleTree      = $this->tree->getTreeMenu($product->id, 'bug', 0, array('treeModel', 'createBugLink'), array(), $branch);
+        $this->view->modules         = $this->tree->getOptionMenu((int)$product->id, 'bug', 0, $branch);
+        $this->view->moduleTree      = $this->tree->getTreeMenu((int)$product->id, 'bug', 0, array('treeModel', 'createBugLink'), array(), $branch);
         $this->view->branchTagOption = $branchTagOption;
         $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
         $this->view->executions      = $executions;
-        $this->view->plans           = $this->loadModel('productplan')->getPairs($product->id);
+        $this->view->plans           = $this->loadModel('productplan')->getPairs((int)$product->id);
         $this->view->tasks           = $this->loadModel('task')->getPairsByIdList($taskIdList);
         $this->view->stories         = $this->loadModel('story')->getPairsByList($storyIdList);
         $this->view->builds          = $this->loadModel('build')->getBuildPairs(array($product->id), $branch);
@@ -1794,7 +1778,7 @@ class bugZen extends bug
      * @access protected
      * @return array
      */
-    protected function processImageForBatchCreate(object $bug, string $uploadImage, array $bugImagesFiles): array
+    protected function processImageForBatchCreate(object $bug, string|null $uploadImage, array $bugImagesFiles): array
     {
         /* When the bug is created by uploading an image, add the image to the step of the bug. */
         if(!empty($uploadImage))
@@ -2012,7 +1996,7 @@ class bugZen extends bug
      * @access protected
      * @return bool
      */
-    protected function afterBatchCreate(object $bug, array $output, string $uploadImage, array $file): bool
+    protected function afterBatchCreate(object $bug, array $output, string|null $uploadImage, array $file): bool
     {
         /* If bug has the execution, update kanban data. */
         if($bug->execution)

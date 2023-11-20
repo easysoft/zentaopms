@@ -20,15 +20,17 @@ $confirmLang['finish']   = $lang->productplan->confirmFinish;
 $confirmLang['activate'] = $lang->productplan->confirmActivate;
 $confirmLang['delete']   = $lang->productplan->confirmDelete;
 
+$decodeParam = helper::safe64Decode($param);
+
 jsVar('initLink',    $link);
 jsVar('type',        $type);
+jsVar('linkParams',  $decodeParam);
 jsVar('orderBy',     $orderBy);
 jsVar('planID',      $plan->id);
 jsVar('confirmLang', $confirmLang);
 jsVar('unlinkURL',   $unlinkURL);
 jsVar('childrenAB',  $lang->story->childrenAB);
 
-$decodeParam = helper::safe64Decode($param);
 $bugCols     = array();
 $storyCols   = array();
 foreach($config->productplan->defaultFields['story'] as $field) $storyCols[$field] = zget($config->story->dtable->fieldList, $field, array());
@@ -173,16 +175,17 @@ detailBody
     (
         tabs
         (
-            setClass('w-full'),
+            setClass('w-full relative'),
             tabPane
             (
-                to::prefix(icon($lang->icons['story'])),
+                to::prefix(icon($lang->icons['story'], setClass('text-secondary'))),
                 set::key('stories'),
                 set::title($lang->productplan->linkedStories),
                 set::active($type == 'story'),
-                div
+                toolbar
                 (
-                    setClass('tabnActions'),
+                    setClass('tab-actions absolute right-0 gap-2'),
+                    setStyle('top', '-8px'),
                     dropdown
                     (
                         btn(set::text($lang->story->create), set::target('_parent'), setClass('secondary' . (empty($createStoryLink) ? ' disabled' : '')), set::icon('plus'), set::caret(true), set::url($createStoryLink)),
@@ -190,7 +193,13 @@ detailBody
                         set::trigger('hover'),
                         set::placement('bottom-end')
                     ),
-                    !common::hasPriv('productplan', 'linkStory') ? null : btn(set::text($lang->productplan->linkStory), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'story'), set('data-linkurl', inlink('linkStory', "planID={$plan->id}" . (($link == 'true' && $type == 'story') ? $decodeParam : "&browseType=&param=") . "&orderBy={$orderBy}")))
+                    common::hasPriv('productplan', 'linkStory') ? btn
+                    (
+                        set::type('primary'),
+                        set::icon('link'),
+                        set::text($lang->productplan->linkStory),
+                        bind::click("window.showLink('story')")
+                    ) : null
                 ),
                 dtable
                 (
@@ -204,6 +213,7 @@ detailBody
                     set::footToolbar($storyFootToolbar),
                     set::sortLink(createLink('productplan', 'view', "planID={$plan->id}&type=story&orderBy={name}_{sortType}&link=false&param={$param}&recTotal={$storyPager->recTotal}&recPerPage={$storyPager->recPerPage}&page={$storyPager->pageID}")),
                     set::orderBy($orderBy),
+                    set::extraHeight('+144'),
                     set::footer(array('checkbox', 'toolbar', array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
                     set::footPager
                     (
@@ -212,19 +222,26 @@ detailBody
                             'recTotal' => $storyPager->recTotal,
                             'linkCreator' => helper::createLink('productplan', 'view', "planID={$plan->id}&type=story&orderBy={$orderBy}&link=false&param={$param}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}")
                         ))
-                   ),
+                   )
                 )
             ),
             tabPane
             (
-                to::prefix(icon(setClass('text-red'), $lang->icons['bug'])),
+                to::prefix(icon($lang->icons['bug'], setClass('text-danger'))),
                 set::key('bugs'),
                 set::title($lang->productplan->linkedBugs),
                 set::active($type == 'bug'),
-                div
+                toolbar
                 (
-                    setClass('tabnActions'),
-                    !common::hasPriv('productplan', 'linkBug') ? null : btn(set::text($lang->productplan->linkBug), setClass('primary link'), set::icon('link'), set::onclick('showLink(this)'), set('data-type', 'bug'), set('data-linkurl', inlink('linkBug', "planID={$plan->id}" . (($link == 'true' && $type == 'bug') ? $decodeParam : "&browseType=&param=") . "&orderBy={$orderBy}")))
+                    setClass('tab-actions absolute right-0 gap-2'),
+                    setStyle('top', '-8px'),
+                    common::hasPriv('productplan', 'linkBug') ? btn
+                    (
+                        set::type('primary'),
+                        set::icon('link'),
+                        set::text($lang->productplan->linkBug),
+                        bind::click("window.showLink('bug')")
+                    ) : null
                 ),
                 dtable
                 (
@@ -237,6 +254,7 @@ detailBody
                     set::footToolbar($bugFootToolbar),
                     set::sortLink(createLink('productplan', 'view', "planID={$plan->id}&type=bug&orderBy={name}_{sortType}&link=false&param={$param}&recTotal={$bugPager->recTotal}&recPerPage={$bugPager->recPerPage}&page={$bugPager->pageID}")),
                     set::orderBy($orderBy),
+                    set::extraHeight('+144'),
                     set::footer(array('checkbox', 'toolbar', array('html' => sprintf($lang->productplan->bugSummary, count($planBugs)), 'className' => "text-dark"), 'flex', 'pager')),
                     set::footPager
                     (
@@ -250,7 +268,7 @@ detailBody
             ),
             tabPane
             (
-                to::prefix(icon(setClass('text-info'), 'info')),
+                to::prefix(icon('flag', setClass('text-special'))),
                 set::key('planInfo'),
                 set::title($lang->productplan->view),
                 set::active($type == 'planInfo'),
@@ -267,7 +285,7 @@ detailBody
                     item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : html(($plan->desc)))
                 ),
                 h::hr(setClass('mt-4')),
-                history(set::commentBtn(false))
+                history(set::objectID($plan->id), set::commentBtn(false))
             )
         )
     )

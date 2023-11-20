@@ -225,7 +225,7 @@ modal
             set::text($lang->execution->next),
             set::btnType('submit'),
             set::type('primary'),
-            set('data-dismiss', 'primary')
+            setData(array('dismiss' => 'primary'))
         )
     )
 );
@@ -248,8 +248,8 @@ if($canBatchAction)
     {
         menu
         (
-            set::id('batchToTask'),
-            set::className('dropdown-menu'),
+            setID('batchToTask'),
+            setClass('dropdown-menu'),
             $canBatchToTask ? item(set(array(
                 'text'  => $lang->story->batchToTask,
                 'url'   => '#taskModal',
@@ -347,7 +347,7 @@ foreach($setting as $col)
     if(!$execution->hasProduct and !$execution->multiple and $value['name'] == 'plan') continue;
     if(!$execution->hasProduct and !$execution->multiple and $storyType == 'requirement' and $value['name'] == 'stage') continue;
 
-    if($col['name'] == 'title') $col['link'] = sprintf($col['link'], createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id)));
+    if($col['name'] == 'title') $col['link'] = sprintf(zget($col['link'], 'url'), createLink('execution', 'storyView', array('storyID' => '{id}', 'execution' => $execution->id)));
 
     $cols[] = $col;
 }
@@ -373,12 +373,12 @@ jsVar('summary', $summary);
 jsVar('checkedSummary', str_replace('%storyCommon%', $lang->SRCommon, $lang->product->checkedSummary));
 dtable
 (
+    setClass('shadow rounded'),
     set::userMap($users),
     set::customCols(true),
     set::groupDivider(true),
     set::cols($cols),
     set::data($data),
-    set::className('shadow rounded'),
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.renderStoryCell')),
     set::orderBy($orderBy),

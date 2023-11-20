@@ -93,9 +93,9 @@ window.setStatistics = function(element, checkedIDList)
  */
 window.renderCell = function(result, info)
 {
+    const task = info.row.data;
     if(info.col.name == 'name' && result)
     {
-        const task = info.row.data;
         let html = '';
 
         const module = this.options.modules[info.row.data.module];
@@ -126,6 +126,13 @@ window.renderCell = function(result, info)
         else if(result[0] < yesterday)
         {
             result[0] = {html: '<span class="label danger-pale rounded-full size-sm">' + result[0] + '</span>'};
+        }
+    }
+    if(info.col.name == 'assignedTo' && result)
+    {
+        if(!task.assignedTo && task.mode == 'multi' && !['done,closed'].includes(task.status))
+        {
+            result[0]['props']['children'][1]['props']['children'] = teamLang;
         }
     }
     return result;

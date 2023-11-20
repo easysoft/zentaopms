@@ -137,9 +137,18 @@ statisticBlock
                                             $lang->block->executionstatistic->progress,
                                             icon
                                             (
-                                                'help',
-                                                toggle::tooltip(array('title' => '提示文本')),
-                                                setClass('text-light ml-0.5')
+                                                setClass('text-light ml-0.5 text-sm'),
+                                                toggle::tooltip
+                                                (
+                                                    array
+                                                    (
+                                                        'content'   => array('html' => $lang->block->tooltips['executionProgress']),
+                                                        'placement' => 'bottom',
+                                                        'type'      => 'white',
+                                                        'className' => 'text-dark border border-light leading-5'
+                                                    )
+                                                ),
+                                                'help'
                                             )
                                         )
                                     )

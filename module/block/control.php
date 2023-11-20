@@ -323,6 +323,7 @@ class block extends control
 
         $blocksLayout = $this->post->block;
         $this->block->updateLayout($blocksLayout);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
     }

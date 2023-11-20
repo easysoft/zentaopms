@@ -1012,8 +1012,8 @@ class kanbanModel extends model
         if($groupBy != 'default' and $groupBy != '')
         {
             $regionData = array();
-            $heading        = new stdclass();
-            $heading->title = $execution->name;
+            $heading          = new stdclass();
+            $heading->title   = $execution->name;
             $heading->actions = $this->getRDRegionActions($executionID, $regionID);
 
             $regionData['key']               = "region{$executionID}";
@@ -1712,9 +1712,9 @@ class kanbanModel extends model
      */
     public function buildExecutionGroup(object $lane, array $columns, array $objectGroup, string $searchValue = '', array $menus = array()): array
     {
-        $laneData   = array();
-        $columnData = array();
-        $cardsData  = array();
+        $laneData    = array();
+        $columnsData = array();
+        $cardsData   = array();
 
         $laneData['id']     = $lane->id;
         $laneData['type']   = $lane->type;
@@ -1727,28 +1727,32 @@ class kanbanModel extends model
         {
             $cardIdList = array_unique(array_filter(explode(',', $column->cards)));
 
-            $columnData[$column->id]['id']         = $columnID;
-            $columnData[$column->id]['type']       = $column->type;
-            $columnData[$column->id]['name']       = $columnID;
-            $columnData[$column->id]['title']      = $column->name;
-            $columnData[$column->id]['color']      = $column->color;
-            $columnData[$column->id]['limit']      = $column->limit;
-            $columnData[$column->id]['region']     = $lane->region;
-            $columnData[$column->id]['laneName']   = $column->lane;
-            $columnData[$column->id]['group']      = $lane->type;
-            $columnData[$column->id]['parent']     = $column->parent;
-            $columnData[$column->id]['cards']      = 0;
-            $columnData[$column->id]['actionList'] = array('setColumn', 'setWIP');
+            $columnsData[$column->id]['id']         = $columnID;
+            $columnsData[$column->id]['type']       = $column->type;
+            $columnsData[$column->id]['name']       = $columnID;
+            $columnsData[$column->id]['title']      = $column->name;
+            $columnsData[$column->id]['color']      = $column->color;
+            $columnsData[$column->id]['limit']      = $column->limit;
+            $columnsData[$column->id]['region']     = $lane->region;
+            $columnsData[$column->id]['laneName']   = $column->lane;
+            $columnsData[$column->id]['group']      = $lane->type;
+            $columnsData[$column->id]['cards']      = 0;
+            $columnsData[$column->id]['actionList'] = array('setColumn', 'setWIP');
 
-            if($column->parent > 0) $columnData[$column->id]['parentName'] = $column->parent;
+            if($column->parent > 0) $columnsData[$column->id]['parentName'] = $column->parent;
             if($cardIdList)
             {
                 $cardsData = $this->buildExecutionCards($cardsData, $column, $lane->type, $cardIdList, $objectGroup, $searchValue, $menus);
-                $columnData[$column->id]['cards'] = count($cardsData[$column->lane][$column->id]);
+                $columnsData[$column->id]['cards'] = count($cardsData[$column->lane][$column->id]);
             }
         }
 
-        return array($laneData, array_values($columnData), $cardsData);
+        foreach($columnsData as $columnData)
+        {
+            if(isset($columnData['parentName'])) $columnsData[$columnData['parentName']]['cards'] += $columnData['cards'];
+        }
+
+        return array($laneData, array_values($columnsData), $cardsData);
     }
 
     /**
@@ -1929,18 +1933,26 @@ class kanbanModel extends model
             {
                 $cardIdList = array_unique(array_filter(explode(',', $column->cards)));
 
-                $columnData = array();
-                $columnData['id']         = $column->column;
-                $columnData['type']       = $column->columnType;
-                $columnData['name']       = $column->column;
-                $columnData['title']      = $column->columnName;
-                $columnData['color']      = $column->color;
-                $columnData['limit']      = $column->limit;
-                $columnData['region']     = $laneData['region'];
-                $columnData['laneName']   = $column->lane;
-                $columnData['group']      = $browseType;
-                $columnData['actionList'] = array('setColumn', 'setWIP');
-                if($column->parent > 0) $columnData['parentName'] = $column->parent;
+                if(!isset($columnsData[$column->column]))
+                {
+                    $columnData = array();
+                    $columnData['id']         = $column->column;
+                    $columnData['type']       = $column->columnType;
+                    $columnData['name']       = $column->column;
+                    $columnData['title']      = $column->columnName;
+                    $columnData['color']      = $column->color;
+                    $columnData['limit']      = $column->limit;
+                    $columnData['region']     = $laneData['region'];
+                    $columnData['laneName']   = $column->lane;
+                    $columnData['group']      = $browseType;
+                    $columnData['cards']      = 0;
+                    $columnData['actionList'] = array('setColumn', 'setWIP');
+                    if($column->parent > 0) $columnData['parentName'] = $column->parent;
+                }
+                else
+                {
+                    $columnData = $columnsData[$column->column];
+                }
 
                 $cardCount = 0;
                 $objects   = zget($cardGroup, $column->columnType, array());
@@ -1949,19 +1961,20 @@ class kanbanModel extends model
                     $object = zget($objects, $cardID, array());
 
                     if(empty($object)) continue;
-                    if(in_array($groupBy, array('module', 'story', 'pri', 'severity')) and (int)$object->$groupBy !== $laneID) continue;
-                    if(in_array($groupBy, array('type', 'category', 'source')) and $object->$groupBy !== $laneID) continue;
+                    if(in_array($groupBy, array('module', 'story', 'pri', 'severity')) and $object->$groupBy != $laneID) continue;
+                    if(in_array($groupBy, array('type', 'category', 'source')) and $object->$groupBy != $laneID) continue;
                     if($groupBy == 'assignedTo')
                     {
                         $laneID = (string)$laneID;
                         if(empty($object->$groupBy)) $object->$groupBy = '';
-                        if(empty($object->teamMember) and (string)$object->$groupBy !== $laneID) continue;
+                        if(empty($object->teamMember) and $object->$groupBy != $laneID) continue;
                         if(!empty($object->teamMember) and !in_array($laneID, array_keys($object->teamMember), true)) continue;
                     }
 
                     $cardData = $this->buildExecutionCard($object, $column, $browseType, $searchValue, $menus);
                     if(empty($cardData)) continue;
 
+                    $cardData['cardType'] = $browseType;
                     if($groupBy == 'assignedTo' && $object->$groupBy !== $laneID) $cardData['assignedTo'] = $laneID;
                     if($cardData['assignedTo'])
                     {
@@ -1973,10 +1986,15 @@ class kanbanModel extends model
                     $cardsData[$laneData['id']][$column->column][] = $cardData;
                     $cardCount++;
                 }
-                $columnData['cards'] = $cardCount;
+                $columnData['cards'] += $cardCount;
                 $columnsData[$column->column] = $columnData;
             }
             $lanesData[] = $laneData;
+        }
+
+        foreach($columnsData as $columnData)
+        {
+            if(isset($columnData['parentName'])) $columnsData[$columnData['parentName']]['cards'] += $columnData['cards'];
         }
 
         $kanbanGroup['id']   = $executionID;
@@ -2458,6 +2476,7 @@ class kanbanModel extends model
             ->setDefault('whitelist', '')
             ->setDefault('displayCards', 0)
             ->setIF($this->post->import == 'off', 'object', '')
+            ->cleanINT('space')
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
@@ -2535,6 +2554,7 @@ class kanbanModel extends model
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('whitelist', '')
             ->setDefault('team', '')
+            ->cleanINT('space')
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')

@@ -30,10 +30,17 @@ $data = array();
 foreach($stories2Link as $story) $data[] = $this->story->formatStoryForList($story);
 
 modalHeader(set::title($lang->story->linkStory));
-div(setID('searchFormPanel'), set('data-module', 'story'), searchToggle(set::open(true), set::module('story')));
+
+searchForm
+(
+    set::module('story'),
+    set::simple(true),
+    set::show(true)
+);
+
 dtable
 (
-    set::id('linkStories'),
+    setID('linkStories'),
     set::userMap($users),
     set::cols($cols),
     set::data($data),

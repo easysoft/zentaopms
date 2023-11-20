@@ -78,7 +78,21 @@ statisticBlock
                 (
                     setClass('row text-sm text-gray items-center gap-1'),
                     $lang->block->productstatistic->deliveryRate,
-                    icon('help text-light text-sm')
+                    icon
+                    (
+                        setClass('text-light text-sm'),
+                        toggle::tooltip
+                        (
+                            array
+                            (
+                                'title'     => $lang->block->tooltips['deliveryRate'],
+                                'placement' => 'bottom',
+                                'type'      => 'white',
+                                'className' => 'text-dark border border-light leading-5'
+                            )
+                        ),
+                        'help'
+                    )
                 )
             ),
             row
@@ -99,7 +113,17 @@ statisticBlock
                         span
                         (
                             setClass('text-sm text-gray'),
-                            $lang->block->productstatistic->effectiveStory
+                            $lang->block->productstatistic->effectiveStory,
+                            toggle::tooltip
+                            (
+                                array
+                                (
+                                    'title'     => $lang->block->tooltips['effectiveStory'],
+                                    'placement' => 'bottom',
+                                    'type'      => 'white',
+                                    'className' => 'text-dark border border-light leading-5'
+                                )
+                            )
                         )
                     )
                 ),
@@ -118,7 +142,17 @@ statisticBlock
                         span
                         (
                             setClass('text-sm text-gray'),
-                            $lang->block->productstatistic->delivered
+                            $lang->block->productstatistic->delivered,
+                            toggle::tooltip
+                            (
+                                array
+                                (
+                                    'title'     => $lang->block->tooltips['deliveredStory'],
+                                    'placement' => 'bottom',
+                                    'type'      => 'white',
+                                    'className' => 'text-dark border border-light leading-5'
+                                )
+                            )
                         )
                     )
                 ),

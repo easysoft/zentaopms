@@ -73,7 +73,7 @@ $lang->file->errorExtract     = 'Entpacken fehlgeschlagen. Die Datei ist vermutl
 $lang->file->errorUploadEmpty = 'No upload file.';
 $lang->file->fileNotFound     = 'The file was not found. The physical file might have been deleted!';
 $lang->file->fileContentEmpty = 'The file is empty. Check the file and upload it again.';
-$lang->file->bizGuide         = 'To utilize Excel import/export, upgrade to ZenTao %s edition on our website';
+$lang->file->bizGuide         = 'To utilize Excel import/export, upgrade to ZenTao %s edition';
 
 $lang->file->uploadError[1] = 'The uploaded filesize exceeds the limit. Please change the upload_max_filesize and post_max_size options in php.ini';
 $lang->file->uploadError[2] = 'The size of the uploaded file exceeds the value specified by the MAX_FILE_SIZE option in the HTML form';

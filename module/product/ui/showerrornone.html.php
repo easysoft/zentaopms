@@ -42,7 +42,7 @@ div
     (
         setClass('btn ghost text-primary'),
         set::href($link),
-        set('data-app', $app->tab),
+        setData('app', $tab),
         icon('plus'),
         $text
     )

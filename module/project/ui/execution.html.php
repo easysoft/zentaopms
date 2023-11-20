@@ -81,7 +81,6 @@ featureBar
     ),
     set::current($status),
     set::linkParams("status={key}&projectID={$projectID}&orderBy={$orderBy}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
-    li(searchToggle()),
     li
     (
         checkbox

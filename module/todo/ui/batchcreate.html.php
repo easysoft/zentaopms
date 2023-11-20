@@ -34,7 +34,7 @@ div
 
 formBatchPanel
 (
-    set::id('batchCreateTodoForm'),
+    setID('batchCreateTodoForm'),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),
 
     on::change('[data-name="type"]', 'changeType'),
@@ -89,7 +89,7 @@ formBatchPanel
         set::name('type'),
         set::label($lang->todo->type),
         set::width('120px'),
-        set::control('picker'),
+        set::control(array('type' => 'picker', 'required' => true)),
         set::value('custom'),
         set::items($lang->todo->typeList)
     ),
@@ -98,7 +98,7 @@ formBatchPanel
         set::name('pri'),
         set::label($lang->todo->pri),
         set::width('80px'),
-        set::control('priPicker'),
+        set::control(array('type' => 'priPicker', 'required' => true)),
         set::value('3'),
         set::items($lang->todo->priList)
     ),
@@ -121,7 +121,7 @@ formBatchPanel
         set::value($app->user->account),
         set::ditto(true),
         set::width('140px'),
-        set::control('picker'),
+        set::control(array('type' => 'picker', 'required' => true)),
         set::items($users)
     ),
     formBatchItem

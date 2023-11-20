@@ -20,10 +20,10 @@ if(!$this->story->checkForceReview())
 {
     $needNotReviewBox = span
     (
-        set('class', 'input-group-addon'),
+        setClass('input-group-addon'),
         checkbox
         (
-            set::id('needNotReview'),
+            setID('needNotReview'),
             set::name('needNotReview'),
             set::text($lang->story->needNotReview),
             set::value(1)

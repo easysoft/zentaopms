@@ -423,8 +423,8 @@ $lang->project->cannotCancelCat      = "该{$lang->projectCommon}下已经有子
 $lang->project->parentBeginEnd       = "父{$lang->projectCommon}起止时间：%s ~ %s";
 $lang->project->parentBudget         = "父项目集预算：";
 
-$lang->project->beginLessThanParent     = "{$lang->projectCommon}的开始日期小于了父项目集的开始日期：";
-$lang->project->endGreatThanParent      = "{$lang->projectCommon}的完成日期大于了父项目集的完成日期：";
+$lang->project->beginLessThanParent     = "{$lang->projectCommon}的开始日期小于了父项目集的开始日期：<strong class='parentBegin'></strong>。";
+$lang->project->endGreatThanParent      = "{$lang->projectCommon}的完成日期大于了父项目集的完成日期：<strong class='parentEnd'></strong>。";
 $lang->project->dateExceedParent        = "{$lang->projectCommon}的起止日期已超出父项目集的起止日期：";
 $lang->project->beginGreatEqualChild    = "{$lang->projectCommon}的开始日期应大于等于项目集的最小开始日期：%s";
 $lang->project->endLessThanChild        = "{$lang->projectCommon}的完成日期应小于等于项目集的最大完成日期：%s";
@@ -462,14 +462,13 @@ $lang->project->moreSelects = array();
 $lang->project->moreSelects['suspended'] = '已挂起';
 $lang->project->moreSelects['closed']    = '已关闭';
 
-$lang->project->manDay            = '人天';
-$lang->project->day               = '天';
-$lang->project->newProduct        = '新产品';
-$lang->project->associatePlan     = '关联计划';
-$lang->project->editorPlaceholder = '可以在编辑器直接贴图。快捷键：Command C+V';
-$lang->project->tenThousandYuan   = '万元';
-$lang->project->planDate          = '计划日期';
-$lang->project->delayInfo         = '延期 %s 天';
+$lang->project->manDay          = '人天';
+$lang->project->day             = '天';
+$lang->project->newProduct      = '新产品';
+$lang->project->associatePlan   = '关联计划';
+$lang->project->tenThousandYuan = '万元';
+$lang->project->planDate        = '计划日期';
+$lang->project->delayInfo       = '延期 %s 天';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . '迭代';
 $lang->project->executionList['waterfall']     = $lang->projectCommon . '阶段';

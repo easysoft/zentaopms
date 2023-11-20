@@ -9,6 +9,31 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+$createLibButton = common::hasPriv('doc', 'createLib') ? btn
+(
+    setClass('secondary'),
+    set::icon('plus'),
+    set::url(createLink('doc', 'createLib', "type={$type}&objectID={$objectID}")),
+    setData('toggle', 'modal'),
+    $lang->doc->createLib
+) : null;
+
+if(empty($libTree))
+{
+    featureBar();
+    toolbar($createLibButton);
+    dtable(
+        set::cols(array()),
+        set::data(array()),
+        set::createLink(createLink('doc', 'createLib', "type={$type}&objectID={$objectID}")),
+        set::createTip($lang->doc->createLib),
+        set::createAttr("data-toggle='modal'"),
+        set::emptyTip($lang->doc->noLib)
+    );
+    return;
+}
+
 if(!empty($libTree)) include 'lefttree.html.php';
 
 if($libType != 'api' && $libID && common::hasPriv('doc', 'create')) include 'createbutton.html.php';
@@ -62,14 +87,7 @@ toolbar
         'url'         => $exportLink,
         'data-toggle' => 'modal'
     ))) : null,
-    common::hasPriv('doc', 'createLib') ? item(set(array
-    (
-        'icon'        => 'plus',
-        'class'       => 'btn secondary',
-        'text'        => $lang->doc->createLib,
-        'url'         => createLink('doc', 'createLib', "type={$type}&objectID={$objectID}"),
-        'data-toggle' => 'modal'
-    ))) : null,
+    $createLibButton,
     $libType == 'api' && common::hasPriv('api', 'create') ? item(set(array
     (
         'icon'        => 'plus',

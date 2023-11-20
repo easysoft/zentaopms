@@ -211,8 +211,14 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 (
                     'help',
                     setClass('pl-4 pt-2'),
-                    set('data-toggle', 'tooltip'),
-                    set('data-title', sprintf($lang->custom->notice->forceNotReview, $lang->$module->common))
+                    setData
+                    (
+                        array
+                        (
+                            'toggle' => 'tooltip',
+                            'title'  => sprintf($lang->custom->notice->forceNotReview, $lang->$module->common)
+                        )
+                    )
                 )
             )
         );
@@ -235,8 +241,14 @@ elseif(($module == 'story' || $module == 'testcase') && $field == 'review')
                 (
                     'help',
                     setClass('pl-4 pt-2'),
-                    set('data-toggle', 'tooltip'),
-                    set('data-title', sprintf($lang->custom->notice->forceReview, $lang->$module->common))
+                    setData
+                    (
+                        array
+                        (
+                            'toggle' => 'tooltip',
+                            'title'  => sprintf($lang->custom->notice->forceReview, $lang->$module->common)
+                        )
+                    )
                 )
             )
         );
@@ -475,7 +487,7 @@ else
 
 div
 (
-    set::id('mainContent'),
+    setID('mainContent'),
     setClass('row has-sidebar-left'),
     $sidebarMenu,
     formPanel

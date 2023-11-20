@@ -25,4 +25,4 @@ $config->stakeholder->search['fields']['progress']    = $lang->stakeholder->prog
 $config->stakeholder->search['params']['expect']      = array('operator' => 'include', 'control' => 'input', 'values' => '');
 $config->stakeholder->search['params']['userID']      = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->stakeholder->search['params']['progress']    = array('operator' => 'include', 'control' => 'input', 'values' => '');
-$config->stakeholder->search['params']['createdDate'] = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
+$config->stakeholder->search['params']['createdDate'] = array('operator' => '=', 'control' => 'date',  'values' => '');

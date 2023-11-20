@@ -25,7 +25,7 @@ blockPanel
     setClass('case-block list-block'),
     dtable
     (
-        set::id('case'),
+        setID('case'),
         set::height(320),
         set::bordered(false),
         set::horzScrollbarPos('inside'),

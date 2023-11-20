@@ -114,13 +114,13 @@ else
     $storyEmptyPreTip = span
     (
         setClass('input-control-prefix'),
-        span($lang->task->noticeLinkStory)
+        span($lang->task->noticeLinkStoryNoProduct)
     );
 }
 $storyPreviewBtn = span
 (
     setClass('input-group-btn flex hidden'),
-    set::id('preview'),
+    setID('preview'),
     modalTrigger
     (
         to::trigger(
@@ -189,7 +189,7 @@ $selectStoryRow = '';
 if($execution->lifetime != 'ops' and !in_array($execution->attribute, array('request', 'review')))
 {
     $selectStoryRow = formRow(
-        set::id('testStoryBox'),
+        setID('testStoryBox'),
         setClass('hidden')
     );
 }
@@ -216,9 +216,51 @@ if(!isAjaxRequest('modal'))
 
 formPanel
 (
-    set::id('taskCreateForm'),
+    setID('taskCreateForm'),
     set::title($lang->task->create),
     $from == 'task' ? set::customFields(true) : null,
+    modal
+    (
+        setID('modalTeam'),
+        set::title($lang->task->teamMember),
+        h::table
+        (
+            setID('teamTable'),
+            h::tr
+            (
+                h::td
+                (
+                    width('90px'),
+                    $lang->task->mode
+                ),
+                h::td
+                (
+                    picker
+                    (
+                        set::name("mode"),
+                        set::value("linear"),
+                        set::items($lang->task->modeList),
+                        set::required(true)
+                    )
+                )
+            ),
+            setClass('table table-form'),
+            $teamForm,
+            h::tr
+            (
+                h::td
+                (
+                    setClass('team-saveBtn'),
+                    set(array('colspan' => 4)),
+                    btn
+                    (
+                        setClass('toolbar-item btn primary'),
+                        $lang->save
+                    )
+                )
+            )
+        )
+    ),
     formRow
     (
         $executionBox,
@@ -237,7 +279,7 @@ formPanel
                 ),
                 span
                 (
-                    set('class', 'input-group-btn'),
+                    setClass('input-group-btn'),
                     btn
                     (
                         setID('showAllModuleButton'),
@@ -269,10 +311,10 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::id('selectTestStoryBox'),
+            setID('selectTestStoryBox'),
             setClass('hidden items-center'),
             checkbox(
-                set::id('selectTestStory'),
+                setID('selectTestStory'),
                 set::name('selectTestStory'),
                 set::value(1),
                 set::text($lang->task->selectTestStory),
@@ -289,7 +331,7 @@ formPanel
             setClass('assignedToBox'),
             picker
             (
-                set::id('assignedTo'),
+                setID('assignedTo'),
                 set::name('assignedTo'),
                 set::value($task->assignedTo),
                 set::items($members)
@@ -313,7 +355,7 @@ formPanel
         formGroup
         (
             set::width('1/10'),
-            set::id('multipleBox'),
+            setID('multipleBox'),
             setClass('items-center'),
             checkbox(
                 set::name('multiple'),
@@ -343,7 +385,7 @@ formPanel
             (
                 picker
                 (
-                    set::id('story'),
+                    setID('story'),
                     set::name('story'),
                     set::value($task->story),
                     set::items(array_filter($stories)),
@@ -370,7 +412,7 @@ formPanel
                     setClass('input-control-suffix'),
                     btn(
                         setClass('text-gray'),
-                        set::id('refreshStories'),
+                        setID('refreshStories'),
                         set::icon('refresh'),
                         on::click('loadExecutionStories')
                     )
@@ -404,7 +446,7 @@ formPanel
                         set::syncColor('#name')
                     ),
                     checkbox(
-                        set::id('copyButton'),
+                        setID('copyButton'),
                         set::name('copyButton'),
                         set::value(1),
                         set::text($lang->task->copyStoryTitle),
@@ -442,7 +484,7 @@ formPanel
                 ),
                 inputControl
                 (
-                    set::className($hiddenEstimate),
+                    setClass($hiddenEstimate),
                     input(set::name('estimate')),
                     to::suffix($lang->task->suffixHour),
                     set::suffixWidth(20)
@@ -507,52 +549,4 @@ formPanel
         )
     ),
     $afterRow,
-    modalTrigger
-    (
-        modal
-        (
-            set::id('modalTeam'),
-            set::title($lang->task->teamMember),
-            h::table
-            (
-                set::id('teamTable'),
-                h::tr
-                (
-                    h::td
-                    (
-                        width('90px'),
-                        $lang->task->mode
-                    ),
-                    h::td
-                    (
-                        picker
-                        (
-                            set::name("mode"),
-                            set::value("linear"),
-                            set::items($lang->task->modeList),
-                            set::required(true)
-                        )
-                    )
-                ),
-                setClass('table table-form'),
-                $teamForm,
-                h::tr
-                (
-                    h::td
-                    (
-                        setClass('team-saveBtn'),
-                        set(array('colspan' => 4)),
-                        btn
-                        (
-                            setClass('toolbar-item btn primary'),
-                            $lang->save
-                        )
-                    )
-                )
-            )
-        )
-    )
 );
-
-/* ====== Render page ====== */
-render();

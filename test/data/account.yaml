@@ -1,0 +1,44 @@
+title: table zt_account
+desc: "运维账号"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10000
+  - field: name
+    prefix: 运维账号
+    range: 1-10000
+  - field: type
+    range: "``"
+  - field: provider
+    range: qingyun,tencent,aliyun,azure,local,westcn
+  - field: adminURI
+    range: "``"
+  - field: account
+    note: "管理员"
+    prefix: user
+    range: 1-10000
+    postfix: "@cnezsoft.com"
+  - field: email
+    prefix: user
+    range: 1-10000
+    postfix: "@cnezsoft.com"
+  - field: createdBy
+    note: "用户名"
+    fields:
+    - field: account1
+      range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
+    - field: account2
+      range: "[],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}"
+  - field: createdDate
+    range: "(-1M)-(+1w):-1D"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: password
+    range: "``"
+  - field: mobile
+    range: "``"
+  - field: extra
+    range: "``"
+  - field: status
+    range: "``"

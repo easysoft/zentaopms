@@ -11,9 +11,12 @@ declare(strict_types=1);
  */
 
 namespace zin;
-$typeList = $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList;
+$typeList  = $project->model == 'ipd' ? $lang->stage->ipdTypeList : $lang->stage->typeList;
+$typeItems = array();
+foreach($typeList as $key => $value) $typeItems[] = array('text' => $value, 'value' => $key);
 jsVar('plan',           $plan);
 jsVar('stageTypeList',  $typeList);
+jsVar('stageTypeItems', $typeItems);
 jsVar('changeAttrLang', $lang->programplan->confirmChangeAttr);
 jsVar('isTopStage',     $isTopStage);
 jsVar('isLeafStage',    $isLeafStage);
@@ -27,6 +30,8 @@ modalHeader
 
 formPanel
 (
+    set::id('editForm'),
+    set::ajax(array('beforeSubmit' => jsRaw("editStage"))),
     set::submitBtnText($lang->save),
     formGroup
     (
@@ -49,8 +54,7 @@ formPanel
         set::required(true),
         input(set::name('name'), set::value($plan->name))
     ),
-    isset($config->setCode) && $config->setCode == 1 ?
-    formGroup
+    isset($config->setCode) && $config->setCode == 1 ? formGroup
     (
         set::label($lang->execution->code),
         set::width('1/2'),
@@ -91,33 +95,24 @@ formPanel
             (
                 setID('attributeType'),
                 setClass('flex self-center w-full'),
-                $enableOptionalAttr ?
-                select(set(array(
-                    'id'       => 'attribute',
-                    'name'     => 'attribute',
-                    'items'    => $typeList,
-                    'value'    => $plan->attribute,
-                    'required' => true
-                ))) : zget($typeList, $plan->attribute)
+                $enableOptionalAttr ? picker
+                (
+                    set::id('attribute'),
+                    set::name('attribute'),
+                    set::items($typeList),
+                    set::value($plan->attribute),
+                    set::required(true)
+                ) : zget($typeList, $plan->attribute),
             )
         ),
         formGroup
         (
-            btn(set(array(
-                'icon'           => 'help',
-                'data-toggle'    => 'tooltip',
-                'data-placement' => 'right',
-                'href'           => 'helpTip',
-                'class'          => 'ghost h-8 tooltip-btn'
-            ))),
-            div
+            setClass('items-center'),
+            icon
             (
-                $lang->execution->typeTip,
-                setClass('w-1/3'),
-                set(array(
-                    'id'    => 'helpTip',
-                    'class' => 'tooltip darker'
-                ))
+                'help',
+                toggle::tooltip(array('title' => $lang->execution->typeTip, 'placement' => 'right')),
+                setClass('ghost ml-1')
             )
         )
     ),
@@ -148,7 +143,7 @@ formPanel
     (
         set::label($lang->project->acl),
         set::width('1/2'),
-        select
+        picker
         (
             set::name('acl'),
             set::items($lang->execution->aclList),
@@ -157,12 +152,12 @@ formPanel
             set::required(true)
         )
     ),
-    $plan->setMilestone ?
-    formGroup
+    $plan->setMilestone ? formGroup
     (
         set::label($lang->programplan->milestone),
         set::width('1/2'),
-        radioList(
+        radioList
+        (
             set::name('milestone'),
             set::items($lang->programplan->milestoneList),
             set::value($plan->milestone),
@@ -174,13 +169,14 @@ formPanel
     (
         set::label($lang->programplan->output),
         set::width('1/2'),
-        select(set(array(
-            'name'     => 'output[]',
-            'items'    => $documentList,
-            'value'    => $plan->output,
-            'multiple' => true,
-            'required' => true
-        )))
+        picker
+        (
+            set::name('output[]'),
+            set::items($documentList),
+            set::value($plan->output),
+            set::multiple(true),
+            set::required(true)
+        )
     ) : null
 );
 

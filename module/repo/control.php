@@ -316,7 +316,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function monaco($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
+    public function monaco(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $showBug = 'false', string $encoding = '')
     {
         $this->commonAction($repoID, $objectID);
 
@@ -356,7 +356,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function view($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
+    public function view(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $showBug = 'false', string $encoding = '')
     {
         set_time_limit(0);
         if($this->get->repoPath) $entry = $this->get->repoPath;
@@ -1979,5 +1979,21 @@ class repo extends control
         {
             echo '';
         }
+    }
+
+    /**
+     * Get gitlab files.
+     *
+     * @param  int    $repoID
+     * @param  string $branch
+     * @param  string $path
+     * @access public
+     * @return string
+     */
+    public function ajaxGetFiles(int $repoID, string $branch = '', string $path = '')
+    {
+        $repo = $this->repo->getByID($repoID);
+        if($path) $path = helper::safe64Decode($path);
+        echo json_encode($this->repo->getGitlabFilesByPath($repo, $path, $branch));
     }
 }

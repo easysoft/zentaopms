@@ -1293,7 +1293,7 @@ class doc extends control
         $this->view->isFirstLoad       = $isFirstLoad;
         $this->view->param             = $queryID;
         $this->view->users             = $this->user->getPairs('noletter');
-        $this->view->libTree           = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType, $param);
+        $this->view->libTree           = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType, (int)$param);
         $this->view->libID             = $libID;
         $this->view->moduleID          = $moduleID;
         $this->view->objectDropdown    = $objectDropdown;

@@ -53,7 +53,7 @@ if(common::hasPriv('admin', 'resetPWDSetting'))
 
 div
 (
-    set::id('mainContent'),
+    setID('mainContent'),
     setClass('row has-sidebar-left'),
     $menuItems ? sidebar
     (
@@ -103,7 +103,7 @@ div
         ),
         formRow
         (
-            set::id('mode1Rule'),
+            setID('mode1Rule'),
             $config->safe->mode != 1 ? setClass('hidden') : '',
             formGroup
             (
@@ -121,7 +121,7 @@ div
         ),
         formRow
         (
-            set::id('mode2Rule'),
+            setID('mode2Rule'),
             $config->safe->mode != 2 ? setClass('hidden') : '',
             formGroup
             (

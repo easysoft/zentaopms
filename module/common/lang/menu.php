@@ -352,7 +352,7 @@ if($config->edition != 'open') $lang->execution->menu->view = array('link' => "$
 $lang->execution->menu->storyGroup = array('link' => "{$lang->common->story}|execution|story|executionID=%s",'class' => 'dropdown dropdown-hover', 'subModule' => 'story', 'alias' => 'batchcreate,storykanban,batchtotask');
 $lang->execution->menu->story      = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'storykanban,linkstory,batchtotask');
 $lang->execution->menu->qa         = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport');
-$lang->execution->menu->devops     = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr');
+$lang->execution->menu->devops     = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,mr', 'alias' => 'create');
 $lang->execution->menu->doc        = array('link' => "{$lang->doc->common}|execution|doc|objectID=%s", 'subModule' => 'doc');
 $lang->execution->menu->build      = array('link' => "{$lang->build->common}|execution|build|executionID=%s", 'subModule' => 'build');
 $lang->execution->menu->action     = array('link' => "$lang->dynamic|execution|dynamic|executionID=%s");
@@ -464,6 +464,7 @@ $lang->qa->menu->testsuite     = array('link' => "{$lang->testcase->testsuite}|t
 $lang->qa->menu->testtask      = array('link' => "{$lang->testtask->common}|testtask|browse|productID=%s", 'subModule' => 'testtask', 'alias' => 'view,edit,linkcase,cases,start,close,batchrun,groupcase,report,importunitresult', 'exclude' => 'testtask-browseunits');
 $lang->qa->menu->report        = array('link' => "{$lang->testreport->common}|testreport|browse|productID=%s", 'subModule' => 'testreport');
 $lang->qa->menu->caselib       = array('link' => "{$lang->testcase->caselib}|caselib|browse|libID=0", 'subModule' => 'caselib');
+$lang->qa->menu->automation    = array('link' => "{$lang->automation->common}:|project|other|productID=%s", 'subModule' => 'automation', 'alias' => '', 'class' => "qa-automation-menu");
 $lang->qa->menu->zahost        = array('link' => "{$lang->zahost->common}|zahost|browse", 'subModule' => 'zahost');
 $lang->qa->menu->zanode        = array('link' => "{$lang->zanode->common}|zanode|browse", 'subModule' => 'zanode');
 
@@ -476,6 +477,7 @@ $lang->qa->menuOrder[25] = 'testsuite';
 $lang->qa->menuOrder[30] = 'testtask';
 $lang->qa->menuOrder[35] = 'report';
 $lang->qa->menuOrder[40] = 'caselib';
+$lang->qa->menuOrder[45] = 'automation';
 
 // $lang->qa->menu->automation['subMenu'] = new stdclass();
 // $lang->qa->menu->automation['subMenu']->browse = array('link' => "{$lang->automation->common}|zahost|browse", 'alias' => 'create');
@@ -492,7 +494,11 @@ $lang->devops->homeMenu = new stdclass();
 $lang->devops->homeMenu->repos        = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo');
 $lang->devops->homeMenu->compile      = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
 $lang->devops->homeMenu->artifactrepo = array('link' => "{$lang->devops->artifactrepo}|artifactrepo|browse", 'alias' => 'create');
-$lang->devops->homeMenu->apps         = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs,sonarqube', 'alias' => 'createapplication,binduser,edit');
+
+if($config->edition != 'open') $lang->devops->homeMenu->deploy = array('link' => "{$lang->devops->deploy}|deploy|browse", 'alias' => 'steps,managestep,create,edit,browse,view,scope,cases', 'subModule' => 'ops,deploy');
+
+$lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|browse", 'subModule' => 'instance,store,gitlab,gitea,gogs,jenkins,sonarqube', 'alias' => 'createapplication,binduser,edit');
+
 //$lang->devops->homeMenu->environment = array('link' => "{$lang->devops->environment}|gitlab|browse", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'setrules,create,edit,import');
 //$lang->devops->homeMenu->app         = array('link' => "{$lang->app->common}|app|serverlink|%s");
 
@@ -501,14 +507,14 @@ $lang->devops->menu->code    = array('link' => "{$lang->repo->common}|repo|brows
 $lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
 $lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
 
-$lang->devops->menuOrder[5]  = 'dashboard';
+//$lang->devops->menuOrder[5]  = 'dashboard';
 $lang->devops->menuOrder[10] = 'repos';
 $lang->devops->menuOrder[15] = 'code';
 $lang->devops->menuOrder[20] = 'mr';
 $lang->devops->menuOrder[25] = 'compile';
 $lang->devops->menuOrder[30] = 'apps';
-$lang->devops->menuOrder[35] = 'environment';
-$lang->devops->menuOrder[40] = 'app';
+//$lang->devops->menuOrder[35] = 'environment';
+//$lang->devops->menuOrder[40] = 'app';
 
 $lang->devops->dividerMenu = ',apps,';
 
@@ -682,6 +688,7 @@ $lang->navGroup->caselib       = 'qa';
 
 $lang->navGroup->devops           = 'devops';
 $lang->navGroup->repo             = 'devops';
+$lang->navGroup->repo_setRules    = 'admin';
 $lang->navGroup->job              = 'devops';
 $lang->navGroup->jenkins          = 'devops';
 $lang->navGroup->mr               = 'devops';
@@ -700,6 +707,7 @@ $lang->navGroup->devopssetting    = 'devops';
 $lang->navGroup->space            = 'devops';
 $lang->navGroup->store            = 'devops';
 $lang->navGroup->instance         = 'devops';
+$lang->navGroup->deploy           = 'devops';
 $lang->navGroup->artifactrepo     = 'devops';
 
 $lang->navGroup->company        = 'system';
@@ -750,6 +758,8 @@ $lang->navGroup->serverroom    = 'admin';
 $lang->navGroup->account       = 'admin';
 $lang->navGroup->host          = 'admin';
 $lang->navGroup->ops           = 'admin';
+$lang->navGroup->service       = 'admin';
+$lang->navGroup->domain        = 'admin';
 
 $lang->navGroup->index   = 'index';
 $lang->navGroup->misc    = 'misc';

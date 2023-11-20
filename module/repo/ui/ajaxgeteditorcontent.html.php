@@ -57,9 +57,9 @@ elseif($suffix == 'binary')
         set::className('binary'),
         a
         (
-            set::href($this->repo->createLink('download', "repoID=$repoID&path=" . $this->repo->encodePath($entry) . "&fromRevision=$revision")),
+            set('data-link', $this->repo->createLink('download', "repoID=$repoID&path=" . $this->repo->encodePath($entry) . "&fromRevision=$revision")),
             icon('download'),
-            set::target('_blank'),
+            on::click('downloadCode'),
             set::title($this->lang->repo->download)
         )
     );

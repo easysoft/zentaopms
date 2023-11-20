@@ -42,12 +42,12 @@ foreach($fields as $field => $attr)
 if($this->config->vision != 'or') $formItems['affected'] = $getAffectedTabs($story, $users);
 
 $formItems['result']->add(on::change('switchShow(e.target);'));
-$formItems['assignedTo']->add(set::id('assignedToBox'))->add(set::hidden(!$isLastOne));
-$formItems['closedReason']->add(set::id('rejectedReasonBox'))->add(set::hidden(true))->add(on::change('setStory(e.target);'));
-$formItems['duplicateStory']->add(set::id('duplicateStoryBox'))->add(set::hidden(true));
-$formItems['pri']->add(set::id('priBox'))->add(set::hidden(true));
-$formItems['estimate']->add(set::id('estimateBox'))->add(set::hidden(true));
-$formItems['childStories']->add(set::id('childStoriesBox'))->add(set::hidden(true));
+$formItems['assignedTo']->add(setID('assignedToBox'))->add(set::hidden(!$isLastOne));
+$formItems['closedReason']->add(setID('rejectedReasonBox'))->add(set::hidden(true))->add(on::change('setStory(e.target);'));
+$formItems['duplicateStory']->add(setID('duplicateStoryBox'))->add(set::hidden(true));
+$formItems['pri']->add(setID('priBox'))->add(set::hidden(true));
+$formItems['estimate']->add(setID('estimateBox'))->add(set::hidden(true));
+$formItems['childStories']->add(setID('childStoriesBox'))->add(set::hidden(true));
 $formItems['status']->add(set::hidden(true));
 
 modalHeader();
@@ -55,7 +55,7 @@ panel
 (
     setClass('panel-form mx-auto'),
     form($formItems),
-    h::hr(set::className('mt-6 mb-6')),
+    h::hr(setClass('mt-6 mb-6')),
     history()
 );
 

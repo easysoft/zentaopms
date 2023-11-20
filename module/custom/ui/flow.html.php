@@ -12,7 +12,7 @@ namespace zin;
 
 formPanel
 (
-    set::id('flowForm'),
+    setID('flowForm'),
     set::actions(array('submit')),
     set::actionsClass('w-1/3'),
     span

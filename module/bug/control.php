@@ -73,7 +73,7 @@ class bug extends control
                 $products = $this->product->getPairs($mode, 0, '', 'all');
             }
 
-            if(empty($products) and !helper::isAjaxRequest()) $this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=bug&objectID=$objectID"));
+            if(empty($products) && (helper::isAjaxRequest('zin') || helper::isAjaxRequest('fetch'))) $this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=bug&objectID=$objectID"));
         }
         else
         {
@@ -105,7 +105,7 @@ class bug extends control
         /* Save the product id user last visited to session and cookie. */
         $productID  = $this->product->checkAccess($productID, $this->products);
         $product    = $this->product->getByID($productID);
-        $branch     = $this->bugZen->getBrowseBranch($branch, $product->type);
+        $branch     = $this->bugZen->getBrowseBranch($branch, (string)$product->type);
         $browseType = $browseType ? strtolower($browseType) : 'unclosed';
 
         /* 设置1.5级导航相关信息。*/
@@ -116,7 +116,7 @@ class bug extends control
         /* Set the order field. */
         if(!$orderBy) $orderBy =  $this->cookie->qaBugOrder ? $this->cookie->qaBugOrder : 'id_desc';
 
-        $this->bugZen->setBrowseCookie($product, $branch, $browseType, $param, $orderBy);
+        $this->bugZen->setBrowseCookie((object)$product, $branch, $browseType, $param, $orderBy);
 
         $this->bugZen->setBrowseSession($browseType);
 
@@ -126,20 +126,10 @@ class bug extends control
 
         $this->bugZen->buildBrowseSearchForm($productID, $branch, $queryID);
 
-        /* Get executions. */
-        $cacheKey = sprintf($this->config->cacheKeys->bug->browse, $this->projectID);
-        if(helper::isCacheEnabled() && $this->cache->has($cacheKey))
-        {
-            $executions = $this->cache->get($cacheKey);
-        }
-        else
-        {
-            $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
-            if($this->config->cache->enable) $this->cache->set($cacheKey, $executions);
-        }
-        $bugs       = $this->bugZen->getBrowseBugs($product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
+        $executions = $this->loadModel('execution')->getPairs($this->projectID, 'all', 'empty|withdelete|hideMultiple');
+        $bugs       = $this->bugZen->getBrowseBugs((int)$product->id, $branch, $browseType, array_keys($executions), $moduleID, $queryID, $realOrderBy, $pager);
 
-        $this->bugZen->buildBrowseView($bugs, $product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager);
+        $this->bugZen->buildBrowseView($bugs, (object)$product, $branch, $browseType, $moduleID, $executions, $param, $orderBy, $pager);
         $this->display();
     }
 
@@ -730,6 +720,7 @@ class bug extends control
 
         /* Assign. */
         $this->view->title     = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title {$this->lang->dash} " . $this->products[$bug->product];
+        $this->view->bug       = $bug;
         $this->view->bugs2Link = $this->bug->getBugs2Link($bugID, $bySearch, $excludeBugs, $queryID, $pager);
         $this->view->users     = $this->user->getPairs('noletter');
         $this->view->pager     = $pager;
@@ -1565,7 +1556,7 @@ class bug extends control
 
         return print(helper::jsonEncode($releasedBuilds));
     }
-    
+
     /**
      * Ajax get relation cases.
      *

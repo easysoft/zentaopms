@@ -13,7 +13,25 @@ namespace zin;
 $cols = $config->bug->linkBugs->dtable->fieldList;
 $cols['product']['map'] = $products;
 
-div(setID('searchFormPanel'), set('data-module', 'bug'), searchToggle(set::open(true), set::module('bug')));
+$footToolbar = array('items' => array());
+$footToolbar['items'][] = array('text' => $lang->save, 'btnType' => 'primary', 'className' => 'size-sm', 'data-on' => 'click', 'data-call' => 'fnLinkBugs', 'data-params' => 'event');
+
+if(isInModal())
+{
+    modalHeader
+    (
+        set::title($lang->bug->linkBugs),
+        set::entityText($bug->title),
+        set::entityID($bug->id)
+    );
+}
+
+searchForm
+(
+    set::module('bug'),
+    set::simple(true),
+    set::show(true)
+);
 
 dtable
 (
@@ -21,7 +39,7 @@ dtable
     set::userMap($users),
     set::data($bugs2Link),
     set::footPager(usePager()),
-    set::footToolbar(array('items' => array(array('text' => $lang->save, 'btnType' => 'primary', 'className' => 'size-sm', 'data-on' => 'click', 'data-call' => 'fnLinkBugs', 'data-params' => 'event')))),
+    set::footToolbar($footToolbar),
     set::footer(array('checkbox', 'toolbar'))
 );
 

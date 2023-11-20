@@ -404,7 +404,7 @@ class executionZen extends execution
         $this->view->title           = $this->lang->execution->testcase;
         $this->view->executionID     = $executionID;
         $this->view->productID       = $productID;
-        $this->view->product         = $this->product->getByID((int) $productID);
+        $this->view->product         = $this->loadModel('product')->getByID((int)$productID);
         $this->view->orderBy         = $orderBy;
         $this->view->pager           = $pager;
         $this->view->type            = $type;
@@ -498,7 +498,7 @@ class executionZen extends execution
         $this->view->users        = $userPairs;
         $this->view->userList     = $userList;
         $this->view->products     = $products;
-        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
+        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'ignoreNormal', $linkedBranches);
         $this->view->planGroups   = $this->execution->getPlans(array_keys($products));
         $this->view->actions      = $this->loadModel('action')->getList('execution', $executionID);
         $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 50, 'all', 'all', $executionID);

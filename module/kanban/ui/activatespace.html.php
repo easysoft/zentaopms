@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-modalHeader(set::title($lang->kanban->activeSpace), set::entityText($space->name), set::entityID($space->id));
+modalHeader(set::title($lang->kanban->activateSpace), set::entityText($space->name), set::entityID($space->id));
 
 formPanel
 (

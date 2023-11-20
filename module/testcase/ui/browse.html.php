@@ -149,7 +149,7 @@ dtable
 modal
 (
     on::click('button[type="submit"]', 'getCheckedCaseIdList'),
-    set::id('importToLib'),
+    setID('importToLib'),
     set::modalProps(array('title' => $lang->testcase->importToLib)),
     formPanel
     (

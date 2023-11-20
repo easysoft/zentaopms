@@ -2,6 +2,7 @@
 namespace zin;
 
 jsVar('model', $model);
+jsVar('LONG_TIME', LONG_TIME);
 jsVar('longTime', $lang->project->longTime);
 jsVar('weekend', $config->execution->weekend);
 jsVar('beginLessThanParent', $lang->project->beginLessThanParent);
@@ -154,15 +155,15 @@ formPanel
     on::click('[type=submit]', 'removeAllTips'),
     on::click('#name, #code, #end, #days', 'removeTips'),
     on::change('#end, #days', 'removeTips'),
+    on::change('#parent', 'setParentProgram'),
+    on::change('#begin, [name=delta]', 'computeEndDate'),
+    on::change('#begin, #end', 'computeWorkDays'),
     on::change('[name^=products]', 'productChange'),
     on::change('[name^=branch]', 'branchChange'),
-    on::change('#parent', 'setParentProgram'),
     on::change('[name=multiple]', 'toggleMultiple'),
-    on::change('#begin', 'computeWorkDays'),
-    on::change('#end', 'computeWorkDays'),
-    on::change('[name=delta]', 'setDate'),
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=newProduct]', 'addProduct'),
+    $config->systemMode != 'light' ? on::change('#begin, #end, #parent', 'checkDate') : null,
     formRow
     (
         formGroup
@@ -236,8 +237,7 @@ formPanel
         set::control(array('type' => 'radioList', 'inline' => true)),
         set::items($lang->project->multipleList),
         set::disabled($copyProjectID),
-        set::value('1'),
-        $copyProjectID ? formHidden('multiple', $copyProject->multiple) : null
+        set::value($copyProjectID ? $copyProject->multiple : 1)
     ) : null,
     formGroup
     (
@@ -304,19 +304,29 @@ formPanel
             (
                 datepicker
                 (
+                    setID('begin'),
                     set::name('begin'),
-                    set('id', 'begin'),
                     set::value(date('Y-m-d')),
                     set::required(true)
                 ),
                 $lang->project->to,
                 datepicker
                 (
+                    setID('end'),
                     set::name('end'),
-                    set('id', 'end'),
                     set::placeholder($lang->project->end),
                     set::required(true),
                     $copyProjectID ? setClass('has-warning') : null
+                ),
+                inputControl
+                (
+                    setClass('has-suffix-icon w-full hidden'),
+                    to::suffix(icon('calendar')),
+                    input
+                    (
+                        set::value($lang->project->longTime),
+                        set::disabled(true)
+                    )
                 )
             ),
             $copyProjectID ? div(setClass('text-warning'), $lang->project->copyProject->endTips) : null
@@ -331,6 +341,18 @@ formPanel
                 set::inline(true),
                 set::items($lang->project->endList)
             )
+        )
+    ),
+    formRow
+    (
+        setID('dateTip'),
+        setClass('hidden'),
+        formGroup
+        (
+            set::label(''),
+            span(setID('beginLess'), setClass('text-warning hidden'), html($lang->project->beginLessThanParent)),
+            span(setID('endGreater'), setClass('text-warning hidden'), html($lang->project->endGreatThanParent)),
+            a(setClass('underline text-warning'), set::href('javascript:;'), on::click("ignoreTip('dateTip')"), $lang->project->ignore)
         )
     ),
     formGroup
@@ -358,7 +380,6 @@ formPanel
             set::width('1/2'),
             set('id', 'linkProduct'),
             set::label($lang->project->manageProducts),
-            set::required(true),
             inputGroup
             (
                 div
@@ -495,8 +516,7 @@ formPanel
     (
         set::name('desc'),
         set::label($lang->project->desc),
-        set::control('editor'),
-        set::placeholder($lang->project->editorPlaceholder)
+        set::control('editor')
     ),
     formRow
     (
@@ -533,20 +553,36 @@ formPanel
 );
 
 $copyProjectsBox = array();
-foreach($copyProjects as $id => $name)
+if(!empty($copyProjects))
 {
-    $copyProjectsBox[] = btn(
-        setClass('project-block justify-start'),
-        setClass($copyProjectID == $id ? 'primary-outline' : ''),
-        set('data-id', $id),
-        set('data-pinyin', zget($copyPinyinList, $name, '')),
-        icon
+    foreach($copyProjects as $id => $name)
+    {
+        $copyProjectsBox[] = btn(
+            setClass('project-block justify-start'),
+            setClass($copyProjectID == $id ? 'primary-outline' : ''),
+            set('data-id', $id),
+            set('data-pinyin', zget($copyPinyinList, $name, '')),
+            icon
+            (
+                setClass('text-gray'),
+                $lang->icons['project']
+            ),
+            span($name)
+        );
+    }
+}
+else
+{
+    $copyProjectsBox[] = div
         (
-            setClass('text-gray'),
-            $lang->icons['project']
-        ),
-        span($name)
-    );
+            setClass('inline-flex items-center w-full bg-lighter h-12 mt-2 mb-8'),
+            icon('exclamation-sign icon-2x pl-2 text-warning'),
+            span
+            (
+                set::className('font-bold ml-2'),
+                $lang->project->copyNoProject
+            )
+        );
 }
 
 modalTrigger

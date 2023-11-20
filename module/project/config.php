@@ -92,15 +92,15 @@ $config->project->search['params']['parent']         = array('operator' => '='  
 $config->project->search['params']['status']         = array('operator' => '='      , 'control' => 'select', 'values' => $lang->project->statusList);
 $config->project->search['params']['desc']           = array('operator' => 'include', 'control' => 'input' , 'values' => '');
 $config->project->search['params']['PM']             = array('operator' => '='      , 'control' => 'select', 'values' => 'users');
-$config->project->search['params']['openedDate']     = array('operator' => '='      , 'control' => 'input' , 'values' => '', 'class' => 'date');
-$config->project->search['params']['begin']          = array('operator' => '='      , 'control' => 'input' , 'values' => '', 'class' => 'date');
-$config->project->search['params']['end']            = array('operator' => '='      , 'control' => 'input' , 'values' => '', 'class' => 'date');
-$config->project->search['params']['realBegan']      = array('operator' => '='      , 'control' => 'input' , 'values' => '', 'class' => 'date');
-$config->project->search['params']['realEnd']        = array('operator' => '='      , 'control' => 'input' , 'values' => '', 'class' => 'date');
+$config->project->search['params']['openedDate']     = array('operator' => '='      , 'control' => 'date',  'values' => '');
+$config->project->search['params']['begin']          = array('operator' => '='      , 'control' => 'date',  'values' => '');
+$config->project->search['params']['end']            = array('operator' => '='      , 'control' => 'date',  'values' => '');
+$config->project->search['params']['realBegan']      = array('operator' => '='      , 'control' => 'date',  'values' => '');
+$config->project->search['params']['realEnd']        = array('operator' => '='      , 'control' => 'date',  'values' => '');
 $config->project->search['params']['openedBy']       = array('operator' => '='      , 'control' => 'select', 'values' => 'users');
 $config->project->search['params']['closedBy']       = array('operator' => '='      , 'control' => 'select', 'values' => 'users');
-$config->project->search['params']['lastEditedDate'] = array('operator' => '='      , 'control' => 'input' , 'values' => '', 'class' => 'date');
-$config->project->search['params']['closedDate']     = array('operator' => '='      , 'control' => 'input' , 'values' => '', 'class' => 'date');
+$config->project->search['params']['lastEditedDate'] = array('operator' => '='      , 'control' => 'date',  'values' => '');
+$config->project->search['params']['closedDate']     = array('operator' => '='      , 'control' => 'date',  'values' => '');
 
 $config->project->noSprintPriv['project']    = array('edit', 'group', 'createGroup', 'managePriv', 'manageMembers', 'manageGroupMember', 'copyGroup', 'editGroup', 'start', 'suspend', 'close', 'activate', 'delete', 'view', 'whitelist', 'addWhitelist', 'unbindWhitelist', 'manageProducts', 'dynamic', 'bug', 'testcase', 'testtask', 'testreport', 'team', 'unlinkMember');
 $config->project->noSprintPriv['execution']  = array('task', 'grouptask', 'importplanstories', 'importBug', 'story', 'burn', 'computeBurn', 'fixFirst', 'burnData', 'linkStory', 'unlinkStory', 'batchUnlinkStory', 'updateOrder', 'taskKanban', 'printKanban', 'tree', 'treeTask', 'treeStory', 'storyKanban', 'storySort', 'storyEstimate', 'setKanban', 'storyView', 'calendar', 'effortCalendar', 'effort', 'taskEffort', 'computeTaskEffort', 'deleterelation', 'maintainrelation', 'relation', 'gantt', 'ganttsetting', 'ganttEdit');

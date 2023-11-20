@@ -40,12 +40,7 @@ for($day = 1; $day <= 31; $day ++) $days[$day] = $day . $lang->todo->day;
 
 formPanel
 (
-    set::title(''),
-    div
-    (
-        setClass('text-lg pb-2.5'),
-        $lang->todo->create
-    ),
+    set::title($lang->todo->create),
     formRow
     (
         setClass('items-center'),
@@ -64,9 +59,9 @@ formPanel
                 set::seg(true),
                 control
                 (
-                    set::id('date'),
+                    setID('date'),
+                    setClass('date'),
                     set::name('date'),
-                    set::className('date'),
                     set::value('today'),
                     set::type('datePicker'),
                     on::change('changeCreateDate')
@@ -75,10 +70,10 @@ formPanel
                     setClass('input-group-addon'),
                     checkbox
                     (
-                        set::id('switchDate'),
+                        setID('switchDate'),
+                        setClass($lang->todo->periods['future']),
                         set::name('switchDate'),
                         set::text($lang->todo->periods['future']),
-                        set::className($lang->todo->periods['future']),
                         on::change("zui.DatePicker.query('#date').render({disabled: e.target.checked})")
                     )
                 ),
@@ -86,7 +81,7 @@ formPanel
                     setClass('input-group-addon'),
                     checkbox
                     (
-                        set::id('cycle'),
+                        setID('cycle'),
                         set::name('cycle'),
                         set::value('1'),
                         set::text($lang->todo->cycle),
@@ -137,10 +132,10 @@ formPanel
                 ),
                 control
                 (
+                    setID('configDate'),
                     set::type('datePicker'),
-                    set::id('configDate'),
                     set::name('config[date]'),
-                    set::className('cycle-date'),
+                    setClass('cycle-date'),
                     on::change("e.target.closest('.input-group').classList.toggle('has-error', !e.target.value)")
                 )
             )
@@ -358,8 +353,8 @@ formPanel
             setClass('items-center ml-4'),
             checkbox
             (
+                setID('private'),
                 set::name('private'),
-                set::id('private'),
                 set::text($lang->todo->private),
                 set::value(1),
                 on::change("zui.Picker.query('#assignedTo').render({disabled: e.target.checked})")
@@ -367,9 +362,9 @@ formPanel
             btn
             (
                 set::icon('help'),
-                toggle::tooltip(array('placement' => 'top-start', 'title' => $lang->todo->privateTip)),
+                toggle::tooltip(array('placement' => 'right', 'title' => $lang->todo->privateTip, 'type' => 'white', 'class-name' => 'text-gray border border-light')),
                 set::square(true),
-                set::className('ghost h-6 mt-0.5 tooltip-btn')
+                setClass('ghost h-6 mt-0.5 tooltip-btn')
             )
         )
     ),
@@ -377,21 +372,28 @@ formPanel
     (
         formGroup
         (
-            set::width('4/5'),
+            set::width('5/6'),
             set(array('id' => 'nameBox', 'required' => true, 'label' => $lang->todo->name, 'class' => 'name-box')),
             div
             (
-                setClass('w-full'),
                 setID('nameInputBox'),
+                setClass('w-full'),
                 input(set(array('id' => 'name', 'name' => 'name')))
             )
         ),
         formGroup
         (
-            set::width('1/5'),
+            set::width('1/6'),
             setClass('priBox'),
             set::label($lang->todo->pri),
-            priPicker(setID('pri'), set::name('pri'), set::items($lang->todo->priList), set::value(3))
+            priPicker
+            (
+                setID('pri'),
+                set::name('pri'),
+                set::items($lang->todo->priList),
+                set::value(3),
+                set::required(true)
+            )
         )
     ),
     formGroup
@@ -407,9 +409,9 @@ formPanel
     ),
     formGroup
     (
+        setID('status'),
         set::width('1/3'),
         set::label($lang->todo->status),
-        set::id('status'),
         set::name('status'),
         set::items($lang->todo->statusList),
         set::required(true)
@@ -420,7 +422,7 @@ formPanel
         formGroup
         (
             set::label($lang->todo->beginAndEnd),
-            set::width('1/2'),
+            set::width('1/3'),
             inputGroup
             (
                 picker

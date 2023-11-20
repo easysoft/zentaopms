@@ -23,7 +23,8 @@ formPanel
             set::name('comment'),
             set::rows('6')
         ),
-        input(
+        input
+        (
             set::className('hidden'),
             set::name('status'),
             set::value('normal')

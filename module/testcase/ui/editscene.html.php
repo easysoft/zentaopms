@@ -60,7 +60,7 @@ formPanel
             inputGroup
             (
                 $lang->testcase->module,
-                set::id('moduleIdBox'),
+                setID('moduleIdBox'),
                 picker
                 (
                     setID('module'),
@@ -71,19 +71,19 @@ formPanel
                 ),
                 count($modules) == 1 ? div
                 (
-                    set::className('input-group-btn flex'),
+                    setClass('input-group-btn flex'),
                     a
                     (
-                        $lang->tree->manage,
+                        setClass('btn'),
+                        setData(array('toggle' => 'mdoal')),
                         set('href', createLink('tree', 'browse', "rootId=$productID&view=case&currentModuleID=0&branch=$branch")),
-                        set('class', 'btn'),
-                        set('data-toggle', 'mdoal')
+                        $lang->tree->manage
                     ),
                     a
                     (
+                        setClass('btn refresh'),
                         $lang->refresh,
-                        set('href', 'javascript:;'),
-                        set('class', 'btn refresh')
+                        set('href', 'javascript:;')
                     )
                 ) : null
             )
@@ -92,7 +92,7 @@ formPanel
     formGroup
     (
         set::label($lang->testcase->parentScene),
-        set::id('sceneIdBox'),
+        setID('sceneIdBox'),
         picker
         (
             set::name('parent'),

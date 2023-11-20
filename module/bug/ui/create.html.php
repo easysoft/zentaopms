@@ -40,7 +40,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::className($product->shadow ? 'hidden' : ''),
+            setClass($product->shadow ? 'hidden' : ''),
             set::label($lang->bug->product),
             inputGroup
             (
@@ -67,7 +67,7 @@ formPanel
             set::required(strpos(",{$config->bug->create->requiredFields},", ',project,') !== false),
             inputGroup
             (
-                set('id', 'projectBox'),
+                setID('projectBox'),
                 picker
                 (
                     set::name('project'),
@@ -86,7 +86,7 @@ formPanel
             set::required(strpos(",{$config->bug->create->requiredFields},", ',module,') !== false),
             inputGroup
             (
-                set('id', 'moduleBox'),
+                setID('moduleBox'),
                 picker
                 (
                     set::name('module'),
@@ -96,19 +96,25 @@ formPanel
                 ),
                 count($moduleOptionMenu) == 1 ? span
                 (
-                    set('class', 'input-group-addon'),
+                    setClass('input-group-addon'),
                     a
                     (
-                        set('class', 'mr-2'),
+                        setClass('mr-2'),
                         set('href', $this->createLink('tree', 'browse', "rootID=$bug->productID&view=bug&currentModuleID=0&branch={$bug->branch}")),
-                        set('data-toggle', 'modal'),
-                        set('data-size', 'lg'),
+                        setData
+                        (
+                            array
+                            (
+                                'toggle' => 'modal',
+                                'size'   => 'lg'
+                            )
+                        ),
                         $lang->tree->manage
                     ),
                     a
                     (
-                        set('id', 'refreshModule'),
-                        set('class', 'text-black'),
+                        setID('refreshModule'),
+                        setClass('text-black'),
                         set('href', 'javascript:void(0)'),
                         icon('refresh')
                     )
@@ -118,7 +124,7 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set('id', 'executionBox'),
+            setID('executionBox'),
             set::label($bug->projectModel == 'kanban' ? $lang->bug->kanban : $lang->bug->execution),
             set::required(strpos(",{$config->bug->create->requiredFields},", ',execution,') !== false),
             picker
@@ -142,22 +148,23 @@ formPanel
                 (
                     set::multiple(true),
                     set::name('openedBuild[]'),
-                    set('data-items', count($builds)),
                     set::items($builds),
-                    set::value(empty($bug->buildID) ? 'trunk' : $bug->buildID)
+                    set::value(empty($bug->buildID) ? 'trunk' : $bug->buildID),
+                    setData(array('items' => count($builds)))
                 ),
                 span
                 (
-                    set('id', 'buildBoxActions'),
-                    set('class', 'input-group-addon'),
+                    setID('buildBoxActions'),
+                    setClass('input-group-addon'),
                     setStyle(array('display' => 'none'))
                 ),
                 span
                 (
-                    set('class', 'input-group-addon'),
+                    setClass('input-group-btn'),
                     a
                     (
-                        set('id', 'allBuilds'),
+                        setClass('btn'),
+                        setID('allBuilds'),
                         set('href', 'javascript:;'),
                         $lang->bug->loadAll
                     )
@@ -178,10 +185,11 @@ formPanel
                 ),
                 span
                 (
-                    set('class', 'input-group-addon'),
+                    setClass('input-group-btn'),
                     a
                     (
-                        set('id', 'allUsers'),
+                        setClass('btn'),
+                        setID('allUsers'),
                         set('href', 'javascript:;'),
                         $lang->bug->loadAll
                     )
@@ -219,7 +227,7 @@ formPanel
             set::required(strpos(",{$config->bug->create->requiredFields},", ',deadline,') !== false),
             datePicker
             (
-                set::id('deadline'),
+                setID('deadline'),
                 set::name('deadline'),
                 set::value($bug->deadline)
             )
@@ -342,7 +350,7 @@ formPanel
             set::label($lang->bug->story),
             inputGroup
             (
-                set('id', 'storyBox'),
+                setID('storyBox'),
                 picker
                 (
                     set::name('story'),
@@ -378,12 +386,12 @@ formPanel
                 ),
                 span
                 (
-                    set('id', 'contactBox'),
-                    set('class', 'input-group-addon'),
+                    setID('contactBox'),
+                    setClass('input-group-addon'),
                     $contactList ? setStyle(array('width' => '100px', 'padding' => '0')) : null,
                     $contactList ? picker
                     (
-                        set::className('width', 'w-20'),
+                        setClass('w-20'),
                         set::name('contactListMenu'),
                         set::items($contactList),
                         set::value(),
@@ -391,19 +399,19 @@ formPanel
                     ) :
                     span
                     (
-                        set('class', 'input-group-addon'),
+                        setClass('input-group-addon'),
                         a
                         (
-                            set('class', 'mr-2'),
+                            setClass('mr-2'),
+                            setData(array('toggle' => 'modal')),
                             set('href', createLink('my', 'managecontacts', 'listID=0&mode=new')),
                             set('title', $lang->user->contacts->manage),
-                            set('data-toggle', 'modal'),
                             icon('cog')
                         ),
                         a
                         (
-                            set('id', 'refreshMailto'),
-                            set('class', 'text-black'),
+                            setID('refreshMailto'),
+                            setClass('text-black'),
                             set('href', 'javascript:void(0)'),
                             icon('refresh')
                         )

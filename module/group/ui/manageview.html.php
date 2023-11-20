@@ -162,6 +162,7 @@ formPanel
         set::className('items-center hidden'),
         formGroup
         (
+            setClass('items-center'),
             set::label($lang->group->programList),
             $programs ? inputGroup
             (
@@ -196,6 +197,7 @@ formPanel
         set::className('items-center hidden'),
         formGroup
         (
+            setClass('items-center'),
             set::label($lang->group->productList),
             $products ? inputGroup
             (
@@ -229,6 +231,7 @@ formPanel
         set::id('projectBox'),
         formGroup
         (
+            setClass('items-center'),
             set::label($lang->group->projectList),
             $projects ? inputGroup
             (
@@ -262,6 +265,7 @@ formPanel
         set::id('executionBox'),
         formGroup
         (
+            setClass('items-center'),
             set::label($lang->group->executionList),
             $executions ? inputGroup
             (

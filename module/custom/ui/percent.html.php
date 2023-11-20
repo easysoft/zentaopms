@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 formPanel
 (
-    set::id('percentForm'),
+    setID('percentForm'),
     set::actions(array('submit')),
     formRow
     (

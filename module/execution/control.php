@@ -44,7 +44,7 @@ class execution extends control
         $mode = $this->app->tab == 'execution' ? 'multiple' : '';
         if((defined('RUN_MODE') and RUN_MODE == 'api') or $this->viewType == 'json') $mode = '';
 
-        $this->executions = $this->execution->getPairs(0, 'all', "nocode,{$mode}");
+        $this->executions = $this->execution->getPairs(0, 'all', "nocode,noprefix,{$mode}");
         $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all', 'ajaxgetcopyprojectexecutions');
         if(in_array($this->methodName, $skipCreateStep) && $this->app->tab == 'execution') return false;
         if($this->executions || $this->methodName == 'index' || $this->methodName == 'create' || $this->app->getViewType() == 'mhtml') return false;
@@ -166,9 +166,24 @@ class execution extends control
         $memberPairs = $this->loadModel('user')->processAccountSort($memberPairs);
 
         /* Append branches to task. */
+        $this->loadModel('task');
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($this->view->products));
         foreach($tasks as $task)
         {
+            if($task->mode == 'multi' && strpos('done,closed', $task->status) === false)
+            {
+                $task->assignedTo = '';
+
+                $taskTeam = $this->task->getTeamByTask($task->id);
+                foreach($taskTeam as $teamMember)
+                {
+                    if($this->app->user->account == $teamMember->account and $teamMember->status != 'done')
+                    {
+                        $task->assignedTo = $this->app->user->account;
+                        break;
+                    }
+                }
+            }
             if(isset($branchGroups[$task->product][$task->branch])) $task->branch = $branchGroups[$task->product][$task->branch];
         }
 
@@ -347,7 +362,7 @@ class execution extends control
             $this->execution->importBug($tasks);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            return $this->sendSuccess(array('load' => true));
+            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
         $this->execution->setMenu($executionID);
@@ -2149,23 +2164,15 @@ class execution extends control
             if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project, $this->post->stories ? $this->post->stories : array());
             $this->execution->linkStory($objectID, $this->post->stories ? $this->post->stories : array(), $extra);
 
-            if(!isInModal()) return $this->sendSuccess(array('load' => $browseLink));
-            if(!$this->app->tab !== 'execution') return $this->sendSuccess(array('closeModal' => true, 'locate' => $browseLink));
-
-            $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-            $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-            if($object->type == 'kanban')
+            if(isInModal())
             {
-                $kanbanData = $this->loadModel('kanban')->getRDKanban($objectID, $execLaneType, 'id_desc', 0, $execGroupBy);
-                $kanbanData = json_encode($kanbanData);
-                return $this->sendSuccess(array('closeModal' => true, 'load' => true, 'callback' => "parent.updateKanban($kanbanData)"));
+                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                if($object->type == 'kanban') return $this->sendSuccess(array('closeModal' => true, 'load' => true, 'callback' => "refreshKanban()"));
+                return $this->sendSuccess(array('closeModal' => true, 'load' => true, 'callback' => "refreshKanban()"));
             }
 
-            $kanbanData = $this->loadModel('kanban')->getExecutionKanban($objectID, $execLaneType, $execGroupBy);
-            $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
-            $kanbanData = $kanbanData[$kanbanType];
-            $kanbanData = json_encode($kanbanData);
-            return $this->sendSuccess(array('closeModal' => true, 'load' => true, 'callback' => "parent.updateKanban(\"story\", $kanbanData)"));
+            return $this->sendSuccess(array('load' => $browseLink));
         }
 
         if($object->type == 'project') $this->project->setMenu($object->id);

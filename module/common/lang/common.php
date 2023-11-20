@@ -102,6 +102,9 @@ $lang->instance    = new stdclass();
 $lang->CNE         = new stdclass();
 $lang->account     = new stdclass();
 $lang->ops         = new stdclass();
+$lang->domain      = new stdclass();
+$lang->service     = new stdclass();
+$lang->deploy      = new stdclass();
 $lang->metric      = new stdclass();
 
 $lang->serverroom         = new stdclass();
@@ -147,6 +150,9 @@ $lang->projectreview      = new stdclass();
 $lang->projecttrack       = new stdclass();
 $lang->projectqa          = new stdclass();
 $lang->holidayseason      = new stdclass();
+$lang->codereview         = new stdclass();
+$lang->repocode           = new stdclass();
+$lang->deploy             = new stdclass();
 
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();
@@ -215,6 +221,7 @@ $lang->icons['close']              = 'off';
 $lang->icons['activate']           = 'magic';
 $lang->icons['review']             = 'glasses';
 $lang->icons['confirm']            = 'search';
+$lang->icons['confirmBug']         = 'search';
 $lang->icons['putoff']             = 'calendar';
 $lang->icons['suspend']            = 'pause';
 $lang->icons['pause']              = 'pause';
