@@ -14,7 +14,7 @@ namespace zin;
 featureBar
 (
     set::current($browseType),
-    set::linkParams("programID={$programID}&status={key}"),
+    set::linkParams("programID={$programID}&status={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     checkbox
     (
         set::rootClass('ml-2'),
