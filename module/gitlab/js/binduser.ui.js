@@ -37,7 +37,7 @@ window.bindUser = function(e)
     });
 }
 
-window.onPageRender = function(info)
+window.afterPageUpdate = function($target, info)
 {
     if(info.name === 'dtable')
     {
