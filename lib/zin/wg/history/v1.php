@@ -90,7 +90,7 @@ class history extends wg
         return div
         (
             setClass('history-changes ml-1 mt-2'),
-            html($app->loadTarget('action')->renderChanges($action->objectType, $action->history)),
+            html(html_entity_decode($app->loadTarget('action')->renderChanges($action->objectType, $action->history))),
         );
     }
 
