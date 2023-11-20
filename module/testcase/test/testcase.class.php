@@ -371,12 +371,14 @@ class testcaseTest
      *
      * @param  int    $productID
      * @param  int    $branch
+     * @param  string $search
+     * @param  int    $limit
      * @access public
      * @return array|string
      */
-    public function getPairsByProductTest(int $productID = 0, int|array $branch = 0): array|string
+    public function getPairsByProductTest(int $productID = 0, int|array $branch = 0, string $search = '', int $limit = 0): array|string
     {
-        $objects = $this->objectModel->getPairsByProduct($productID, $branch);
+        $objects = $this->objectModel->getPairsByProduct($productID, $branch, $search, $limit);
 
         if(dao::isError()) return dao::getError();
 
