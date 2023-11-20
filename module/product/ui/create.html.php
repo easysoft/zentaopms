@@ -29,7 +29,7 @@ foreach($fields as $field => $attr)
         $fieldName          .= '[]';
     }
 
-    if($control['type'] == 'picker' || $control['type'] == 'radioList') $control['items'] = $attr['options'];
+    if(isset($attr['options'])) $control['items'] = $attr['options'];
 
     if($field == 'line' && hasPriv('product', 'manageLine') && $programID)
     {
