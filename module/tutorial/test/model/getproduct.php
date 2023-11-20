@@ -7,15 +7,15 @@ su('admin');
 /**
 
 title=测试 tutorialModel->getProduct();
+timeout=0
 cid=1
-pid=1
 
-测试是否能拿到数据 >> 1
-测试是否能拿到数据 >> Test branch
+- 测试是否能拿到数据属性id @1
+- 测试是否能拿到数据第plans条的1属性 @Test plan
 
 */
 
 $tutorial = new tutorialTest();
 
-r($tutorial->getProductTest()) && p('id')         && e('1');           //测试是否能拿到数据
-r($tutorial->getProductTest()) && p('branches:1') && e('Test branch'); //测试是否能拿到数据
+r($tutorial->getProductTest()) && p('id')      && e('1');         //测试是否能拿到数据
+r($tutorial->getProductTest()) && p('plans:1') && e('Test plan'); //测试是否能拿到数据

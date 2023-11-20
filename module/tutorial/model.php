@@ -108,7 +108,6 @@ class tutorialModel extends model
         $product->activeStories     = 0;
         $product->changingStories   = 0;
         $product->reviewingStories  = 0;
-        $product->plans             = 0;
         $product->releases          = 0;
         $product->unresolvedBugs    = 0;
         $product->fixedBugs         = 0;
