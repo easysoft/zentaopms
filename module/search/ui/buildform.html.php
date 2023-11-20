@@ -16,6 +16,11 @@ foreach($fieldParams as $name => $param)
     $condition->defaultOperator = $param['operator'];
     $condition->placeholder     = '';
 
+    if(isset($param['class']) && in_array('date', explode(' ', $param['class'])))
+    {
+        $condition->control = 'date';
+    }
+
     if(is_array($param['values']))
     {
         $condition->items = array();
