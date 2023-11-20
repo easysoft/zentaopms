@@ -18,7 +18,7 @@ dropmenu(set::text($product->name));
 featureBar
 (
     set::current($status),
-    set::linkParams("status={key}&productID={$product->id}&branch={$branchID}"),
+    set::linkParams("status={key}&productID={$product->id}&branch={$branchID}&involved={$involved}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     checkbox
     (
         set::id('involved'),
@@ -39,7 +39,7 @@ if($branchStatus != 'closed')
 {
     toolbar
     (
-        !common::hasPriv('project', 'manageProducts') ? null : item(set(array
+        !hasPriv('project', 'manageProducts') ? null : item(set(array
         (
             'icon'        => 'link',
             'text'        => $lang->product->link2Project,
@@ -47,7 +47,7 @@ if($branchStatus != 'closed')
             'url'         => '#link2Project',
             'data-toggle' => 'modal'
         ))),
-        !common::hasPriv('project', 'create') ? null : item(set(array
+        !hasPriv('project', 'create') ? null : item(set(array
         (
             'icon'        => 'plus',
             'text'        => $lang->project->create,
@@ -97,8 +97,11 @@ foreach($config->productProject->showFields as $showField)
     $cols[$showField]['group']    = 0;
 }
 $cols['id']['checkbox'] = false;
-$cols['PM']['link']     = helper::createLink('user', 'profile', 'userID={PMUserID}', '', true);
-$cols['PM']['type']     = 'html';
+
+$cols['PM']['type']        = 'link';
+$cols['PM']['link']        = helper::createLink('user', 'profile', 'userID={PMUserID}', '', true);
+$cols['PM']['data-toggle'] = 'modal';
+
 if(!in_array($this->config->systemMode, array('ALM', 'PLM'))) unset($cols['program']);
 if(!str_contains('all,undone', $status)) unset($cols['status']);
 
