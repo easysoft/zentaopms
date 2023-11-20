@@ -63,6 +63,34 @@ class metricModel extends model
         return $metrics;
     }
 
+    public function groupMetricByObject($metrics)
+    {
+        $groupMetrics = array_fill_keys(array_keys($this->lang->metric->objectList), array());
+        foreach($metrics as $metric)
+        {
+            $group = isset($groupMetrics[$metric->object]) ? $metric->object : 'other';
+            $groupMetrics[$group][] = $metric;
+        }
+
+        $purposes = array_keys($this->lang->metric->purposeList);
+        foreach($groupMetrics as $key => $metrics)
+        {
+            if(empty($metrics)) continue;
+
+            usort($metrics, function($a, $b) use ($purposes) {
+                $aIndex = array_search($a->purpose, $purposes);
+                $bIndex = array_search($b->purpose, $purposes);
+
+                if($aIndex === $bIndex) return 0;
+                return ($aIndex < $bIndex) ? -1 : 1;
+            });
+
+            $groupMetrics[$key] = $metrics;
+        }
+
+        return $groupMetrics;
+    }
+
     /**
      * 获取旧度量项列表。
      * Get old metric list.
@@ -139,7 +167,7 @@ class metricModel extends model
             $metric->oldUnit     = $oldMetric->unit;
             $metric->collectType = $oldMetric->collectType;
             $metric->collectConf = $oldMetric->collectConf;
-        $metric->execTime    = $oldMetric->execTime;
+            $metric->execTime    = $oldMetric->execTime;
         }
 
         return $metric;

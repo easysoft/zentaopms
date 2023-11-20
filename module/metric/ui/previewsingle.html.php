@@ -12,23 +12,34 @@ namespace zin;
 
 $currentID = $current->id ?? 0;
 
-$fnGenerateSide = function() use($metrics, $current, $viewType, $scope, $filtersBase64)
+$fnGenerateSide = function() use($groupMetrics, $current, $viewType, $scope, $lang, $filtersBase64)
 {
     $metricList = array();
-    foreach($metrics as $key => $metric)
+    foreach($groupMetrics as $key => $metrics)
     {
-        $class = $metric->id == $current->id ? 'metric-current' : '';
-        $params = "scope=$scope&viewType=$viewType&metricID={$metric->id}";
-        if(!empty($filtersBase64)) $params .= "&filtersBase64={$filtersBase64}";
+        if(empty($metrics)) continue;
 
         $metricList[] = li
             (
-                set::className($class . ' metric-item font-medium'),
-                a(
-                    $metric->name,
-                    set::href(helper::createLink('metric', 'preview', $params))
-                )
+                set::class('metric-group'),
+                $lang->metric->objectList[$key]
             );
+
+        foreach($metrics as $metric)
+        {
+            $class = $metric->id == $current->id ? 'metric-current' : '';
+            $params = "scope=$scope&viewType=$viewType&metricID={$metric->id}";
+            if(!empty($filtersBase64)) $params .= "&filtersBase64={$filtersBase64}";
+
+            $metricList[] = li
+                (
+                    set::className($class . ' metric-item font-medium'),
+                    a(
+                        $metric->name,
+                        set::href(helper::createLink('metric', 'preview', $params))
+                    )
+                );
+        }
     }
 
     return ul($metricList);
@@ -257,7 +268,7 @@ div
         div
         (
             setClass('metric-tree'),
-            $fnGenerateSide($metrics, $current, $viewType, $scope)
+            $fnGenerateSide($groupMetrics, $current, $viewType, $scope, $lang)
         )
     )
 );

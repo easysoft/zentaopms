@@ -67,6 +67,7 @@ class metric extends control
         }
 
         $this->view->metrics       = $metrics;
+        $this->view->groupMetrics  = $this->metric->groupMetricByObject($metrics);
         $this->view->current       = $current;
         $this->view->metricList    = $this->lang->metric->metricList;
         $this->view->scope         = $scope;

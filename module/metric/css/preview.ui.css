@@ -8,13 +8,14 @@
 .filter-btn {padding-left: 0.625rem !important; padding-right: 0.625rem !important;}
 
 .main, .side {border-radius: 2px;}
-.side .title {height: 48px; padding-left: 16px;}
+.side .title {height: 48px; padding-left: 16px; margin-bottom: 2px;}
 .side .name-color {color: var(--color-slate-600);}
 .side .metric-tree {height: calc(100vh - 180px); max-height: 864px; overflow-y: scroll;}
 .side .metric-item {padding-left: 24px; padding-top: 6px; padding-bottom: 6px;}
 .side .metric-item:hover {background-color: var(--color-gray-100);}
 .side .metric-item a {color: var(--color-inherit);}
 .side .metric-item:hover, .side .checkbox-primary:hover {color: var(--color-primary-500);}
+.side .metric-group {padding-left: 16px; padding-top: 6px; padding-bottom: 2px; color: var(--color-slate-600);}
 .side .metric-current {color: var(--color-primary-600); background-color:var(--color-primary-50);}
 
 .side .checkbox-primary {padding-left: 24px; padding-top: 6px; padding-bottom: 6px;}
