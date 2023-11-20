@@ -159,14 +159,14 @@ window.isMetricChecked = function(id)
 
 window.renderCheckList = function(metrics)
 {
-    $('.side .check-list-metric').empty();
+    $('.side .metric-tree').empty();
 
     var metricsHtml = metrics.map(function(metric){
         var isChecked = window.isMetricChecked(metric.id);
         return window.generateCheckItem(metric.name, metric.id, metric.scope, isChecked);
     }).join('');
 
-    $('.side .check-list-metric').html(metricsHtml);
+    $('.side .metric-tree').html(metricsHtml);
 }
 
 window.updateCheckList = function(id, name, isChecked)

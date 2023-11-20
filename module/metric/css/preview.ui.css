@@ -20,7 +20,8 @@
 
 .side .checkbox-primary {padding-left: 24px; padding-top: 6px; padding-bottom: 6px;}
 .side .checkbox-primary:hover {background-color: var(--color-gray-100);}
-.side .check-list-metric {padding-top: 0; padding-bottom: 12px; gap: 0;}
+.side .check-list-metric {padding-top: 0; padding-bottom: 0px; gap: 0;}
+.side .check-list-title {padding-top: 6px; padding-bottom: 2px; color: var(--color-slate-600); padding-left: 16px;}
 
 .main .metric-name {height: 48px; padding-left: 16px; margin-bottom: 8px; padding-right: 16px;}
 .main .metric-name-notfirst {border-top: 1px solid var(--color-slate-300);}
