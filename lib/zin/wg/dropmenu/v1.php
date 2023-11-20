@@ -76,6 +76,7 @@ class dropmenu extends wg
             $object = data($tab);
             if(isset($object->id)) $objectID = $object->id;
         }
+        if($method == 'showerrornone' && empty($object) && empty($objectID)) return array();
 
         if($module == 'testcase' && $method == 'view' && data('isLibCase')) $tab = 'caselib';
 
