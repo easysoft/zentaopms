@@ -44,7 +44,7 @@ class execution extends control
         $mode = $this->app->tab == 'execution' ? 'multiple' : '';
         if((defined('RUN_MODE') and RUN_MODE == 'api') or $this->viewType == 'json') $mode = '';
 
-        $this->executions = $this->execution->getPairs(0, 'all', "nocode,{$mode}");
+        $this->executions = $this->execution->getPairs(0, 'all', "nocode,noprefix,{$mode}");
         $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all', 'ajaxgetcopyprojectexecutions');
         if(in_array($this->methodName, $skipCreateStep) && $this->app->tab == 'execution') return false;
         if($this->executions || $this->methodName == 'index' || $this->methodName == 'create' || $this->app->getViewType() == 'mhtml') return false;
