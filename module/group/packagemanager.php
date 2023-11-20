@@ -2520,6 +2520,10 @@ $config->group->package->workflow->privs['workflow-setApproval'] = array('editio
 $config->group->package->workflow->privs['workflow-setJS']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 80, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 $config->group->package->workflow->privs['workflow-setCSS']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 85, 'depend' => array('workflow-browseFlow'), 'recommend' => array());
 
+$config->group->package->downloadCode = new stdclass();
+$config->group->package->downloadCode->order  = 10;
+$config->group->package->downloadCode->subset = 'repocode';
+
 $config->group->package->dev = new stdclass();
 $config->group->package->dev->order  = 5;
 $config->group->package->dev->subset = 'dev';
@@ -2657,6 +2661,10 @@ $config->group->package->webhook->privs['webhook-log']        = array('edition' 
 $config->group->package->webhook->privs['webhook-bind']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'lite,rnd,or', 'order' => 30, 'depend' => array('webhook-chooseDept'), 'recommend' => array());
 $config->group->package->webhook->privs['webhook-chooseDept'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'lite,rnd,or', 'order' => 35, 'depend' => array('webhook-browse'), 'recommend' => array('webhook-create', 'webhook-delete', 'webhook-edit'));
 
+$config->group->package->gitlab = new stdclass();
+$config->group->package->gitlab->order  = 10;
+$config->group->package->gitlab->subset = 'repo';
+
 $config->group->package->sms = new stdclass();
 $config->group->package->sms->order  = 20;
 $config->group->package->sms->subset = 'notifysetting';
@@ -2765,6 +2773,10 @@ $config->group->package->chat->privs['client-browse']         = array('edition' 
 $config->group->package->chat->privs['client-create']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
 $config->group->package->chat->privs['client-edit']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 6, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
 $config->group->package->chat->privs['client-delete']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 7, 'depend' => array('admin-xuanxuan'), 'recommend' => array());
+
+$config->group->package->jenkins = new stdclass();
+$config->group->package->jenkins->order  = 25;
+$config->group->package->jenkins->subset = 'repo';
 
 $config->group->package->systemSetting = new stdclass();
 $config->group->package->systemSetting->order  = 5;
@@ -2944,6 +2956,7 @@ $config->group->package->reviewcl->privs['reviewcl-view']                      =
 $config->group->package->reviewcl->privs['reviewcl-waterfallplusBrowse']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewsetting-version']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array());
 $config->group->package->reviewcl->privs['reviewsetting-waterfallplusVersion'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array());
+$config->group->package->reviewcl->privs['reviewcl-setCategory']               = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->process = new stdclass();
 $config->group->package->process->order  = 25;
@@ -3784,6 +3797,10 @@ $config->group->package->deletePrompt->subset = 'ai';
 $config->group->package->deletePrompt->privs  = array();
 $config->group->package->deletePrompt->privs['ai-promptDelete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('admin-index', 'ai-prompts', 'ai-promptView'), 'recommend' => array());
 
+$config->group->package->resource = new stdclass();
+$config->group->package->resource->order  = 2200;
+$config->group->package->resource->subset = 'ops';
+
 $config->group->package->manageServiceProvider = new stdclass();
 $config->group->package->manageServiceProvider->order  = 2300;
 $config->group->package->manageServiceProvider->subset = 'ops';
@@ -3825,12 +3842,12 @@ $config->group->package->manageRepo = new stdclass();
 $config->group->package->manageRepo->order  = 2440;
 $config->group->package->manageRepo->subset = 'repo';
 $config->group->package->manageRepo->privs  = array();
-$config->group->package->manageRepo->privs['repo-create']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array('repo-edit', 'repo-import'));
 $config->group->package->manageRepo->privs['repo-createRepo']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-maintain'), 'recommend' => array('repo-edit', 'repo-import'));
-$config->group->package->manageRepo->privs['repo-edit']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-maintain'), 'recommend' => array('repo-create'));
-$config->group->package->manageRepo->privs['repo-apiGetRepoByUrl'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-maintain'), 'recommend' => array());
-$config->group->package->manageRepo->privs['repo-import']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-maintain'), 'recommend' => array('repo-create'));
-$config->group->package->manageRepo->privs['repo-createBranch']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-maintain'), 'recommend' => array());
+$config->group->package->manageRepo->privs['repo-create']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-maintain'), 'recommend' => array('repo-edit', 'repo-import'));
+$config->group->package->manageRepo->privs['repo-edit']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-maintain'), 'recommend' => array('repo-create'));
+$config->group->package->manageRepo->privs['repo-apiGetRepoByUrl'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-maintain'), 'recommend' => array());
+$config->group->package->manageRepo->privs['repo-import']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-maintain'), 'recommend' => array('repo-create'));
+//$config->group->package->manageRepo->privs['repo-createBranch']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-maintain'), 'recommend' => array());
 
 $config->group->package->deleteRepo = new stdclass();
 $config->group->package->deleteRepo->order  = 2500;

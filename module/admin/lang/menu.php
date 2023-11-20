@@ -187,26 +187,41 @@ $lang->admin->menuList->dev['menuOrder']['25'] = 'entry';
 if(helper::hasFeature('devops'))
 {
     //$lang->admin->menuList->platform['subMenu']['environment'] = array('link' => "{$lang->devops->environment}|gitlab|browse|", 'subModule' => 'gitlab,jenkins,sonarqube,gitea,gogs', 'alias' => 'create,edit,import');
-    $lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|host|browse|", 'subModule' => 'host,account,serverroom,ops,tree');
+    $lang->admin->menuList->platform['subMenu']['resource']    = array('link' => "{$lang->devops->resource}|host|browse|", 'subModule' => 'host,account,serverroom,ops,tree,domain,service');
     $lang->admin->menuList->platform['subMenu']['setrules']    = array('link' => "{$lang->devops->rules}|repo|setrules|");
 
-    $lang->admin->menuList->platform['tabMenu']['resource']['host']       = array('link' => "{$lang->devops->host}|host|browse|", 'alias' => 'create,edit,view,treemap,changestatus,group', 'subModule' => 'tree');
-    $lang->admin->menuList->platform['tabMenu']['resource']['serverroom'] = array('link' => "{$lang->devops->serverroom}|serverroom|browse|", 'alias' => 'create,edit,view');
-    $lang->admin->menuList->platform['tabMenu']['resource']['account']    = array('link' => "{$lang->devops->account}|account|browse|", 'alias' => 'create,edit,view');
+    $lang->admin->menuList->platform['tabMenu']['resource']['host']       = array('link' => "{$lang->devops->host}|host|browse|", 'alias' => 'create,edit,browse,view,treemap,changestatus,group', 'subModule' => 'tree');
+    $lang->admin->menuList->platform['tabMenu']['resource']['serverroom'] = array('link' => "{$lang->devops->serverroom}|serverroom|browse|", 'alias' => 'create,edit,view,browse');
+    $lang->admin->menuList->platform['tabMenu']['resource']['service']    = array('link' => "{$lang->devops->service}|service|browse|", 'alias' => 'create,edit,view,browse,manage');
+    $lang->admin->menuList->platform['tabMenu']['resource']['account']    = array('link' => "{$lang->devops->account}|account|browse|", 'alias' => 'create,edit,view,browse');
+    $lang->admin->menuList->platform['tabMenu']['resource']['domain']     = array('link' => "{$lang->devops->domain}|domain|browse|", 'alias' => 'create,edit,view,browse');
     $lang->admin->menuList->platform['tabMenu']['resource']['provider']   = array('link' => "{$lang->devops->provider}|ops|provider|", 'alias' => 'provider');
     $lang->admin->menuList->platform['tabMenu']['resource']['city']       = array('link' => "{$lang->devops->city}|ops|city|", 'alias' => 'city');
     $lang->admin->menuList->platform['tabMenu']['resource']['cpuBrand']   = array('link' => "{$lang->devops->cpuBrand}|ops|cpuBrand|", 'alias' => 'cpubrand');
     $lang->admin->menuList->platform['tabMenu']['resource']['os']         = array('link' => "{$lang->devops->os}|ops|os|", 'alias' => 'os');
+    $lang->admin->menuList->platform['tabMenu']['resource']['stage']      = array('link' => "{$lang->devops->stage}|ops|stage|", 'alias' => 'stage');
 
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['5']  = 'host';
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['10'] = 'serverroom';
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['15'] = 'account';
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['20'] = 'provider';
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['25'] = 'city';
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['30'] = 'cpuBrand';
-    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['35'] = 'os';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['10']  = 'host';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['15'] = 'serverroom';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['20'] = 'service';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['25'] = 'account';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['30'] = 'domain';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['35'] = 'provider';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['40'] = 'city';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['45'] = 'cpuBrand';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['50'] = 'os';
+    $lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['55'] = 'stage';
 
-    //$lang->admin->menuList->platform['menuOrder']['5']  = 'dashboard';
+    if($config->edition === 'open')
+    {
+        unset($lang->admin->menuList->platform['tabMenu']['resource']['domain']);
+        unset($lang->admin->menuList->platform['tabMenu']['resource']['service']);
+        unset($lang->admin->menuList->platform['tabMenu']['resource']['stage']);
+        unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['20']);
+        unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['30']);
+        unset($lang->admin->menuList->platform['tabMenu']['menuOrder']['resource']['55']);
+    }
+
     //$lang->admin->menuList->platform['menuOrder']['15'] = 'environment';
     $lang->admin->menuList->platform['menuOrder']['20'] = 'resource';
     $lang->admin->menuList->platform['menuOrder']['25'] = 'setrules';
@@ -280,7 +295,8 @@ if($config->vision == 'lite')
 
 if($config->inQuickon && helper::hasFeature('devops'))
 {
-    $lang->admin->menuList->platform['subMenu']['dashboard'] = array('link' => "{$lang->dashboard}|system|dashboard|");
+    $dashboard = is_object($lang->dashboard) ? $lang->dashboard->common : $lang->dashboard;
+    $lang->admin->menuList->platform['subMenu']['dashboard'] = array('link' => "{$dashboard}|system|dashboard|");
     $lang->admin->menuList->platform['menuOrder']['5']       = 'dashboard';
 
     $lang->admin->menuList->system['subMenu']['backup'] = array('link' => "{$lang->backup->common}|system|browsebackup|", 'alias' => 'restorebackup');
