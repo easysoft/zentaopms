@@ -404,6 +404,8 @@ class aiModel extends model
             ->set('deleted')->eq($deleted)
             ->where('id')->eq($appID)
             ->exec();
+
+        $this->loadModel('action')->create('miniProgram', $appID, 'deleted');
         return !dao::isError();
     }
 
@@ -425,6 +427,8 @@ class aiModel extends model
             ->data($data)
             ->where('id')->eq($appID)
             ->exec();
+
+        $this->loadModel('action')->create('miniProgram', $appID, $published === '1' ? 'published' : 'unpublished');
         return !dao::isError();
     }
 
@@ -480,7 +484,9 @@ class aiModel extends model
                 ->data($data)
                 ->exec();
             if(dao::isError()) return false;
-            return $this->dao->lastInsertID();
+            $appID = $this->dao->lastInsertID();
+            $this->loadModel('action')->create('miniProgram', $appID, 'created');
+            return $appID;
         }
 
         $this->dao->update(TABLE_MINIPROGRAM)
@@ -488,6 +494,7 @@ class aiModel extends model
             ->where('id')->eq($appID)
             ->exec();
         if(dao::isError()) return false;
+        $this->loadModel('action')->create('miniProgram', $appID, 'edited');
         return $appID;
     }
 
@@ -513,6 +520,8 @@ class aiModel extends model
                 ->data($field)
                 ->exec();
         }
+
+        $this->loadModel('action')->create('miniProgram', $appID, 'edited');
     }
 
     /**

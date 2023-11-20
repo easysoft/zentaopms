@@ -117,7 +117,8 @@
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?= html::a($this->createLink('ai', 'miniPrograms'), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn'"); ?>
-        <?= "<div class='divider'></div>"; ?>
+        <?php if($miniProgram->deleted !== '1'): ?>
+          <?= "<div class='divider'></div>"; ?>
         <?php if($miniProgram->published === '1'): ?>
           <button class="btn" onclick="openDisableDialog(event)" title="<?= $lang->ai->prompts->action->disable; ?>">
             <i class="icon-ban-circle icon-sm"></i> <?= $lang->ai->prompts->action->disable; ?>
@@ -143,6 +144,7 @@
             <i class="icon-trash icon-sm"></i> <?= $lang->ai->prompts->action->delete; ?>
           </button>
         <?php endif; ?>
+      <?php endif; ?>
       </div>
     </div>
   </div>
