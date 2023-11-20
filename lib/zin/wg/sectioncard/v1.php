@@ -5,7 +5,7 @@ namespace zin;
 class sectionCard extends wg
 {
     protected static array $defineBlocks = array(
-        'title' => array('map' => 'entityLabel'),
+        'title' => array('map' => 'entityLabel')
     );
 
     private function title(string $text): wg
@@ -23,7 +23,7 @@ class sectionCard extends wg
         (
             setClass('py-2', 'pl-3'),
             $this->title($item->prop('title')),
-            $item->children(),
+            $item->children()
         );
     }
 
@@ -44,7 +44,7 @@ class sectionCard extends wg
             (
                 setClass('py-1'),
                 $this->children()
-            ),
+            )
         );
     }
 }

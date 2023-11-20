@@ -8,11 +8,12 @@ class section extends wg
         'title?: string',         // 标题
         'content?: string|array', // 内容
         'useHtml?: bool=false',   // 内容是否解析 HTML 标签
+        'required?: bool=false'   // 标题上是否显示必填标记
     );
 
     protected static array $defineBlocks = array(
         'subtitle' => array(),
-        'actions'  => array(),
+        'actions'  => array()
     );
 
     protected function onAddChild($child)
@@ -28,14 +29,34 @@ class section extends wg
     {
         $title       = $this->prop('title');
         $actionsView = $this->block('actions');
+        $required    = $this->prop('required');
 
-        if(empty($actionsView)) return div(setClass('article-h1', 'mb-2'), $title);
+        if(empty($actionsView))
+        {
+            return div
+            (
+                setClass('article-h1', 'mb-2', 'inline-flex'),
+                $required ? h::label
+                (
+                    setClass('form-label required mr-1'),
+                ) : null,
+                $title
+            );
+        }
 
         return div
         (
             setClass('flex', 'items-center', 'mb-2'),
-            div(setClass('article-h1'), $title),
-            $actionsView,
+            div
+            (
+                setClass('article-h1', 'inline-flex'),
+                $required ? h::label
+                (
+                    setClass('form-label required mr-1'),
+                ) : null,
+                $title
+            ),
+            $actionsView
         );
     }
 
@@ -46,7 +67,7 @@ class section extends wg
         return div
         (
             setClass('article-content'),
-            $useHtml ? html($content) : $content,
+            $useHtml ? html($content) : $content
         );
 
     }

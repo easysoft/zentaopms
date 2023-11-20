@@ -35,7 +35,7 @@ class select extends wg
         'disabled?: bool',
         'multiple?: bool',
         'items?: array',
-        'size?: int',
+        'size?: int'
     );
 
     /**

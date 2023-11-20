@@ -10,7 +10,7 @@ class monaco extends wg
         'options?:array',
         'diffContent?:array',
         'onMouseDown?:string',
-        'onMouseMouse?:string',
+        'onMouseMouse?:string'
     );
 
     protected static array $defaultProps = array(
@@ -18,7 +18,7 @@ class monaco extends wg
         'options' => array(),
         'diffContent' => array(),
         'onMouseDown' => '',
-        'onMouseMouse' => '',
+        'onMouseMouse' => ''
     );
     public static function getPageJS(): string|false
     {
@@ -49,7 +49,7 @@ class monaco extends wg
             jsVar('vsPath', $vsPath),
             jsVar('clientLang', $clientLang),
             h::import($app->getWebRoot() . 'js/monaco-editor/min/vs/loader.js'),
-            setId($id),
+            setId($id)
         );
     }
 }

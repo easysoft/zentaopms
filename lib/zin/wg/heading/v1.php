@@ -62,11 +62,15 @@ class heading extends wg
 
         $moduleName = $app->rawModule;
         $methodName = $app->rawMethod;
-        if(in_array("$moduleName-$methodName", is_array($config->excludeDropmenuList) ? $config->excludeDropmenuList : array())) return null;
+        if(in_array("$moduleName-$methodName", $config->excludeDropmenuList)) return null;
 
-        if(in_array($app->tab, is_array($config->hasDropmenuApps) ? $config->hasDropmenuApps : array()))
+        if(in_array($app->tab, $config->hasDropmenuApps))
         {
-            $module = $app->tab == 'qa' ? 'product' : $app->tab;
+            $module = $app->tab;
+            if($app->tab == 'qa') $module = 'product';
+            if($app->tab == 'bi') $module = 'dimension';
+
+            if($app->tab == 'qa' && $moduleName == 'caselib') $module = 'caselib';
             return new dropmenu(set::tab($module));
         }
 

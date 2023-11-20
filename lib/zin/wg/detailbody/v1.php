@@ -12,7 +12,7 @@ class detailBody extends wg
         'main' => array('map' => 'sectionList'),
         'side' => array('map' => 'detailSide'),
         'bottom' => array('map' => 'history,fileList'),
-        'floating' => array('map' => 'floatToolbar'),
+        'floating' => array('map' => 'floatToolbar')
     );
 
     public static function getPageCSS(): string|false
@@ -44,7 +44,7 @@ class detailBody extends wg
                     setClass('col gap-1 grow'),
                     $main,
                     $bottom,
-                    center(setClass('pt-6'), $floating),
+                    empty($floating) ? null : center(setClass('pt-6'), $floating)
                 ),
                 $side
             );
@@ -67,15 +67,15 @@ class detailBody extends wg
                     (
                         setClass('col grow'),
                         $main,
-                        $bottom,
+                        $bottom
                     ),
                     div
                     (
                         setClass('w-1'),
-                        setStyle('background', 'var(--zt-page-bg)'),
+                        setStyle('background', 'var(--zt-page-bg)')
                     ),
-                    $side,
-                ),
+                    $side
+                )
             )
         );
     }

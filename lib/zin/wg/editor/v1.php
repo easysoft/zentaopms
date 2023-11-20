@@ -8,7 +8,7 @@ class editor extends wg
 {
     protected static array $defineProps = array(
         'createInput?: bool=true',        // 是否创建一个隐藏的 input 存储编辑器内容
-        'uploadUrl?: string=""',          // 图片上传链接
+        'uploadUrl?: string',             // 图片上传链接
         'placeholder?: string=""',        // 占位文本
         'fullscreenable?: bool=true',     // 是否可全屏
         'resizable?: bool=true',          // 是否可自适应
@@ -17,7 +17,8 @@ class editor extends wg
         'hideMenubar?: bool=false',       // 是否隐藏 menubar
         'bubbleMenu?: bool=false',        // 是否启用菜单冒泡
         'menubarMode?: string="compact"', // 菜单栏模式
-        'value?: string'                  // 内容
+        'value?: string',                 // 内容
+        'uid?: string'                    // 图片上传uid
     );
 
     public static function getPageCSS(): string|false
@@ -27,17 +28,16 @@ class editor extends wg
 
     public static function getPageJS(): string|false
     {
-        global $app;
-        $jsFile = $app->getWebRoot() . 'js/zeneditor/tiptap-component.esm.js';
-        // $jsFile = 'https://zui-dist.oop.cc/zeneditor/tiptap-component.esm.js';
+        // global $app;
+        // $jsFile = $app->getWebRoot() . 'js/zeneditor/tiptap-component.esm.js';
+        $jsFile = 'https://zui-dist.oop.cc/zeneditor/tiptap-component.esm.js';
         return '$.getLib("' . $jsFile . '", {type: "module", root: false}, () => {document.body.dataset.loadedEditor = true;});';
     }
 
-    protected function getDefaultValue(): array
+    protected function created()
     {
-        return array(
-            'uploadUrl' => helper::createLink('file', 'ajaxUpload', 'uid=' . uniqid()), //uploadUrl默认值
-        );
+        if(empty($this->prop('uid'))) $this->setProp('uid', $this->gid);
+        $this->setDefaultProps(array('uploadUrl' => helper::createLink('file', 'ajaxUpload', 'uid=' . $this->prop('uid'))));
     }
 
     protected function build(): wg
@@ -46,16 +46,13 @@ class editor extends wg
         (
             setTag('tiptap-editor'),
             setClass('form-control', 'p-0'),
-            $this->prop('size') === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
+            $this->prop('size') === 'full' ? setStyle('height', '100%') : setClass('h-auto')
         );
 
-        $props        = $this->props->pick(array('createInput', 'uploadUrl', 'placeholder', 'fullscreenable', 'resizable', 'exposeEditor', 'size', 'hideMenubar', 'bubbleMenu', 'menubarMode', 'collaborative', 'hocuspocus', 'docName', 'username', 'userColor'));
-        $defaultValue = $this->getDefaultValue();
+        $props = $this->props->pick(array('createInput', 'uploadUrl', 'placeholder', 'fullscreenable', 'resizable', 'exposeEditor', 'size', 'hideMenubar', 'bubbleMenu', 'menubarMode', 'collaborative', 'hocuspocus', 'docName', 'username', 'userColor'));
         foreach($props as $key => $value)
         {
-            $allowedCondition = $value === true || (is_string($value) && !empty($value));
-            if(!$allowedCondition && !isset($defaultValue[$key])) continue;
-            $editor->add(set(uncamelize($key), $allowedCondition ? $value : $defaultValue[$key]));
+            if($value === true || (is_string($value) && !empty($value))) $editor->add(set(uncamelize($key), $value));
         }
 
         $customProps = $this->getRestProps();
@@ -68,7 +65,7 @@ class editor extends wg
 
         return div
         (
-            setClass('editor-container p-px'),
+            setClass('editor-container p-px mt-px rounded ring -ring-offset-1'),
             $props['size'] === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
             $editor,
             textarea
@@ -77,6 +74,12 @@ class editor extends wg
                 set::rows(1),
                 set::size($props['size'])
             ),
+            input
+            (
+                set::name('uid'),
+                set::value($this->prop('uid')),
+                setClass('hidden')
+            )
         );
     }
 }

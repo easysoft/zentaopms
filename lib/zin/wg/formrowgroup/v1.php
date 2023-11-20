@@ -9,12 +9,12 @@ class formRowGroup extends formRow
 {
     protected static array $defineProps = array(
         'title: array',
-        'items: array',
+        'items?: array'
     );
 
     protected static array $defineBlocks = array(
         'prefix' => array(),
-        'suffix' => array(),
+        'suffix' => array()
     );
 
     public static function getPageCSS(): string|false
@@ -32,10 +32,10 @@ class formRowGroup extends formRow
                 $this->block('prefix'),
                 setClass('row-group-title font-black px-3 py-1'),
                 $this->prop('title'),
-                $this->block('suffix'),
+                $this->block('suffix')
             ),
             set($this->getRestProps()),
-            $this->prop('items'),
+            $this->prop('items')
         );
     }
 }

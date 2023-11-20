@@ -1075,6 +1075,14 @@ function searchToggle(): searchToggle
 }
 
 /**
+ * Zentao search form widget.
+ */
+function searchForm(): searchForm
+{
+    return createWg('searchForm', func_get_args());
+}
+
+/**
  * Zentao program menu widget.
  *
  * ?array  programs
@@ -1726,6 +1734,14 @@ function mindmap(): mindmap
 }
 
 /**
+ * Treemap widget.
+ */
+function treemap(): treemap
+{
+    return createWg('treemap', func_get_args());
+}
+
+/**
  * Image cutter widget.
  */
 function imgCutter(): imgCutter
@@ -1766,4 +1782,36 @@ function gantt(): gantt
 function roadMap(): roadMap
 {
     return createWg('roadmap', func_get_args());
+}
+
+/**
+ * Progress bar widget.
+ */
+function progressBar(): progressBar
+{
+    return createWg('progressBar', func_get_args());
+}
+
+/**
+ * Progress circle widget.
+ */
+function progressCircle(): progressCircle
+{
+    return createWg('progressCircle', func_get_args());
+}
+
+/**
+ * Filter widget.
+ */
+function filter(): filter
+{
+    return createWg('filter', func_get_args());
+}
+
+/**
+ * Result filter widget.
+ */
+function resultFilter(): resultFilter
+{
+    return createWg('resultFilter', func_get_args());
 }

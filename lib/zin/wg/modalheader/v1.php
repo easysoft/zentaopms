@@ -45,7 +45,7 @@ class modalHeader extends wg
             $title ? div
             (
                 $title,
-                set::className($this->prop('titleClass')),
+                set::className($this->prop('titleClass'))
             ) : null,
             ($entityText || $entityID) ? entityLabel
             (
@@ -53,7 +53,7 @@ class modalHeader extends wg
                 setClass('pl-2'),
                 $entityText ? set::text($entityText) : null,
                 $entityID ? set::entityID($entityID) : null,
-                set::reverse(true),
+                set::reverse(true)
             ) : null,
             $this->block('suffix')
         );

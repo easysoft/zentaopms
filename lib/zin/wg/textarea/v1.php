@@ -12,7 +12,7 @@ class textarea extends wg
         'placeholder?: string',
         'rows?: int',
         'cols?: int',
-        'value?: string',
+        'value?: string'
     );
 
     protected static array $defaultProps = array(

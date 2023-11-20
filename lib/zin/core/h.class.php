@@ -238,8 +238,8 @@ class h extends wg
         $args  = func_get_args();
         $funcName  = array_shift($args);
 
-        $funcArgs   = [];
-        $directives = [];
+        $funcArgs   = array();
+        $directives = array();
         foreach($args as $arg)
         {
             if(isDirective($arg)) $directives[] = $arg;
@@ -304,8 +304,8 @@ class h extends wg
     protected static function splitRawCode($children)
     {
         $children = \zin\utils\flat($children);
-        $code = [];
-        $args = [];
+        $code = array();
+        $args = array();
         foreach($children as $key => $child)
         {
             if(is_string($child)) $code[] = $child;

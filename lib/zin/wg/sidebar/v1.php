@@ -8,7 +8,7 @@ class sidebar extends wg
         'side?:string="left"',
         'width?:string|number=40',
         'maxWidth?:string|number=400',
-        'minWidth?:string|number',
+        'minWidth?:string|number=160',
         'showToggle?:bool=true',
         'parent?:string',
         'preserve?:string'
@@ -28,7 +28,7 @@ class sidebar extends wg
             width($width),
             setData(array('zui' => 'sidebar', 'side' => $side, 'toggleBtn' => $showToggle, 'preserve' => $preserve, 'parent' => $parent, 'maxWidth' => $maxWidth, 'minWidth' => $minWidth)),
             set($this->getRestProps()),
-            $this->children(),
+            $this->children()
         );
     }
 }

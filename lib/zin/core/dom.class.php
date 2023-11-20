@@ -132,6 +132,8 @@ class dom
      */
     public function build()
     {
+        if($this->wg->removed) return array();
+
         if($this->buildList !== null && $this->buildListInner === $this->renderInner) return $this->buildList;
 
         if(empty($this->selectors) && !empty($this->dataCommands))
@@ -169,8 +171,10 @@ class dom
      */
     public function renderJson(): object
     {
-        $list   = $this->build();
         $output = new stdClass();
+        if($this->wg->removed) return $output;
+
+        $list   = $this->build();
         foreach($list as $name => $item)
         {
             $output->$name = static::renderItemToJson($item);
@@ -197,6 +201,8 @@ class dom
      */
     public function renderHtml(): string
     {
+        if($this->wg->removed) return '';
+
         $list = $this->build();
         if(empty($list)) return '';
 
@@ -218,8 +224,10 @@ class dom
      */
     public function renderList(): array
     {
-        $list   = $this->build();
         $output = array();
+        if($this->wg->removed) return $output;
+
+        $list   = $this->build();
         foreach($list as $name => $item)
         {
             if(is_array($item) && count($item) === 1) $item = $item[0];
@@ -344,7 +352,7 @@ class dom
         $results = array();
         foreach($list as $item)
         {
-            if(!($item instanceof dom) || in_array($item->wg->gid, $filteredList)) continue;
+            if(!($item instanceof dom) || $item->wg->removed || in_array($item->wg->gid, $filteredList)) continue;
 
             if($item->wg->isMatch($selector))
             {

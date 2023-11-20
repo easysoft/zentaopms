@@ -48,7 +48,7 @@ class formBatchItem extends wg
         'ditto?: bool',                 // 是否显示同上按钮。
         'defaultDitto?:string="on"',    // 同上按钮的默认值。
         'hidden?: bool=false',          // 是否隐藏
-        'readonly?: bool=false',        // 是否只读
+        'readonly?: bool=false'         // 是否只读
     );
 
     /**
@@ -67,15 +67,15 @@ class formBatchItem extends wg
             if(is_string($control))  $control = array('type' => $control, 'name' => $name);
             else if(empty($control)) $control = array();
 
-            if(!isset($control['type'])) $control['type']        = 'text';
-            if($required !== null)       $control['required']    = $required;
-            if($name !== null)           $control['name']        = $name;
-            if($value !== null)          $control['value']       = $value;
-            if($disabled !== null)       $control['disabled']    = $disabled;
-            if($multiple !== null)       $control['multiple']    = $multiple;
-            if($items !== null)          $control['items']       = $items;
-            if($placeholder !== null)    $control['placeholder'] = $placeholder;
-            if($readonly !== null)       $control['readonly']    = $readonly;
+            if(!isset($control['required']) && $required !== null) $control['required']    = $required;
+            if(!isset($control['type']))                           $control['type']        = 'text';
+            if($name !== null)                                     $control['name']        = $name;
+            if($value !== null)                                    $control['value']       = $value;
+            if($disabled !== null)                                 $control['disabled']    = $disabled;
+            if($multiple !== null)                                 $control['multiple']    = $multiple;
+            if($items !== null)                                    $control['items']       = $items;
+            if($placeholder !== null)                              $control['placeholder'] = $placeholder;
+            if($readonly !== null)                                 $control['readonly']    = $readonly;
         }
 
         $asIndex = $control['type'] === 'index';

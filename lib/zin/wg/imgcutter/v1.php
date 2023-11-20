@@ -17,7 +17,7 @@ class imgCutter extends wg
         'fixedRatio?: boolean',
         'onSizeError?: callable',
         'ready: callable',
-        'handleBtnClick: callable',
+        'handleBtnClick: callable'
     );
 
     protected function build(): array
@@ -51,7 +51,7 @@ class imgCutter extends wg
 
         return array(
             $imgCutter,
-            zui::imgCutter(set($props)),
+            zui::imgCutter(set($props))
         );
     }
 }

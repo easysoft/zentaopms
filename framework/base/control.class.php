@@ -988,7 +988,7 @@ class baseControl
 
         \zin\zin::$data = (array)$this->view;
         \zin\zin::$data['zinDebug'] = array();
-        if($this->config->debug && $this->config->debug >= 2)
+        if($this->config->debug && $this->config->debug >= 2 && $this->config->installed)
         {
             \zin\zin::$data['zinDebug']['trace'] = $this->app->loadClass('trace')->getTrace();
         }
@@ -998,10 +998,16 @@ class baseControl
          * Use extract and ob functions to eval the codes in $viewFile.
          */
         extract(\zin\zin::$data);
+
+        /* 将 hooks 文件添加到当前 context 中。 */
+        if(!empty($hookFiles)) \zin\context::current()->addHookFiles($hookFiles);
+
         ob_start();
         include $viewFile;
+
         if(!\zin\zin::$rendered) \zin\render();
         $content = ob_get_clean();
+
         ob_start();
         echo $content;
 

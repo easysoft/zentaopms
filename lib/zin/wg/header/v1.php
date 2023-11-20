@@ -18,6 +18,11 @@ class header extends wg
         'toolbar'         => array('map' => 'btn')
     );
 
+    public static function getPageJS(): string|false
+    {
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+    }
+
     protected function buildHeading()
     {
         if($this->hasBlock('heading')) return $this->block('heading');
@@ -46,9 +51,11 @@ class header extends wg
                 static::visionSwitcher()
             );
         }
+        $appendToolbar = data('appendToolbar');
         return h::div
         (
             set::id('toolbar'),
+            $appendToolbar ? html($appendToolbar) : null,
             $toolbar
         );
     }
@@ -102,7 +109,7 @@ class header extends wg
             $items[] = array
             (
                 'active' => $currentVision == $vision,
-                'url' => createLink('my', 'ajaxSwitchVision', "vision=$vision"),
+                'url' => "javascript:selectVision(\"$vision\")",
                 'data-type' => 'ajax',
                 'text' => isset($lang->visionList[$vision]) ? $lang->visionList[$vision] : $vision,
             );
@@ -116,6 +123,7 @@ class header extends wg
                 set::text($lang->visionList[$currentVision]),
                 set::caret(false)
             ),
+
             set::id('versionMenu'),
             set::trigger('hover'),
             set::placement('bottom'),
@@ -146,7 +154,8 @@ class header extends wg
                 'title'     => empty($user->realname) ? $user->account : $user->realname,
                 'titleClass' => 'text-lg',
                 'subtitle'  => $noRole ? null : $lang->user->roleList[$user->role],
-                'data-toggle' => 'iframeModal',
+                // 'style'     => array('padding-left' => 0),
+                'data-toggle' => 'modal',
                 'data-size' => 700,
                 'data-id'   => 'profile',
                 'leading'   => array('html' => userAvatar(set::user($user))->render(), 'className' => 'center mr-1')
@@ -159,10 +168,9 @@ class header extends wg
                 'url' => createLink('my', 'profile', '', '', true),
                 'icon' => 'account',
                 'text' => $lang->profile,
-                'class' => 'iframe',
-                'data-toggle' => 'iframeModal',
+                'data-toggle' => 'modal',
                 'data-size' => 700,
-                'data-id'   => 'profile',
+                'data-id'   => 'profile'
             );
 
             if($app->config->vision === 'rnd')
@@ -171,17 +179,17 @@ class header extends wg
                 {
                     $items[] = array
                     (
-                        'url' => createLink('tutorial', 'start', '', '', true),
+                        'url' => createLink('tutorial', 'start'),
                         'icon' => 'guide',
                         'text' => $lang->tutorialAB,
-                        'class' => 'iframe',
+                        'class' => '800',
                         'outerClass' => 'user-tutorial',
                         'data-width' => 700,
                         'data-class-name' => 'modal-inverse',
                         'data-headerless' => true,
                         'data-backdrop' => true,
                         'data-keyboard' => true,
-                        'data-toggle' => 'iframeModal'
+                        'data-toggle' => 'modal'
                     );
                 }
 
@@ -190,9 +198,8 @@ class header extends wg
                     'url' => createLink('my', 'preference', 'showTip=false', '', true),
                     'icon' => 'controls',
                     'text' => $lang->preference,
-                    'class' => 'iframe',
                     'data-width' => 700,
-                    'data-toggle' => 'iframeModal'
+                    'data-toggle' => 'modal'
                 );
             }
 
@@ -203,7 +210,7 @@ class header extends wg
                     'url' => createLink('my', 'changepassword', '', '', true),
                     'icon' => 'cog-outline',
                     'text' => $lang->changePassword,
-                    'data-toggle' => 'iframeModal',
+                    'data-toggle' => 'modal',
                     'data-size' => 'sm'
                 );
             }
@@ -234,12 +241,12 @@ class header extends wg
         $helpItems = array();
         $manualUrl = ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme'];
         $helpItems[] = array('text' => $lang->manual, 'url' => $manualUrl, 'attrs' => array('data-app' => 'help'));
-        $helpItems[] = array('text' => $lang->changeLog, 'url' => createLink('misc', 'changeLog'), 'data-width' => 800, 'data-toggle' => 'iframeModal', 'data-headerless' => true, 'data-keyboard' => true, 'data-backdrop' => true);
+        $helpItems[] = array('text' => $lang->changeLog, 'url' => createLink('misc', 'changeLog'), 'data-toggle' => 'modal');
         $items[] = array('text' => $lang->help, 'icon' => 'help', 'items' => $helpItems);
 
         /* printClientLink */
 
-        $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'), 'data-toggle' => 'iframeModal', 'data-width' => 1050, 'data-headerless' => true, 'data-keyboard' => true, 'data-backdrop' => true);
+        $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'), 'data-toggle' => 'modal');
         $items[] = array('type' => 'html', 'className' => 'menu-item', 'html' => $lang->designedByAIUX);
 
         $items[] = array('type' => 'divider');
@@ -250,7 +257,7 @@ class header extends wg
         }
         else
         {
-            $items[] = array('text' => $lang->logout, 'url' => createLink('user', 'logout'), 'target' => '_top', 'icon' => 'exit');
+            $items[] = array('text' => $lang->logout, 'url' => "javascript:$.apps.logout()", 'icon' => 'exit');
         }
 
         return dropdown
@@ -340,7 +347,7 @@ class header extends wg
                 case 'doc':
                     $params              = "objectType=&objectID=0&libID=0";
                     $createMethod        = 'selectLibType';
-                    $item['data-toggle'] = 'iframeModal';
+                    $item['data-toggle'] = 'modal';
                     break;
                 case 'project':
                     if($config->vision == 'lite')
@@ -349,12 +356,9 @@ class header extends wg
                     }
                     else if(!defined('TUTORIAL'))
                     {
-                        $isOnlyBody          = true;
                         $params              = "programID=0&from=global";
                         $createMethod        = 'createGuide';
-                        $item['data-width']  = '50%';
-                        $item['class']       = 'iframe';
-                        $item['data-toggle'] = 'iframeModal';
+                        $item['data-toggle'] = 'modal';
                     }
                     else
                     {
@@ -407,15 +411,13 @@ class header extends wg
                     break;
                 case 'kanbanspace':
                     $isOnlyBody          = true;
-                    $item['class']       = 'iframe';
+                    $item['data-toggle'] = 'modal';
                     $item['data-width']  = '75%';
-                    $item['data-toggle'] = 'iframeModal';
                     break;
                 case 'kanban':
                     $isOnlyBody          = true;
-                    $item['class']       = 'iframe';
+                    $item['data-toggle'] = 'modal';
                     $item['data-width']  = '75%';
-                    $item['data-toggle'] = 'iframeModal';
                     break;
             }
 

@@ -7,7 +7,7 @@ class dynamic extends wg
     protected static array $defineProps = array(
         'dynamics?: array',
         'users?: array',
-        'className?: string',
+        'className?: string'
     );
 
     public static function getPageCSS(): string|false
@@ -42,13 +42,13 @@ class dynamic extends wg
         {
             $objectLabel[] = span
             (
-                $dynamic->objectLabel,
+                $dynamic->objectLabel
             );
             $objectID = $dynamic->objectID && strpos(',module,chartgroup,', ",$dynamic->objectType,") !== false && strpos(',created,edited,moved,', "$dynamic->action") !== false ? trim($dynamic->extra, ',') : $dynamic->objectID;
             $objectLabel[] = $objectID ? span
             (
                 setClass('label light-outline mx-2 font-sm'),
-                $objectID,
+                $objectID
             ) : null;
 
             if(($config->edition == 'max' && strpos($config->action->assetType, ",{$dynamic->objectType},") !== false) && empty($dynamic->objectName))
@@ -83,7 +83,7 @@ class dynamic extends wg
                 span
                 (
                     setClass('dynamic-tag p-1 text-gray'),
-                    isset($dynamic->time) ? $dynamic->time : $dynamic->date,
+                    isset($dynamic->time) ? $dynamic->time : $dynamic->date
                 ),
                 div
                 (
@@ -97,7 +97,7 @@ class dynamic extends wg
                             setClass('text-gray px-1'),
                             $dynamicLabel
                         ),
-                        $objectLabel,
+                        $objectLabel
                     ),
                     $dynamicClass == 'trophy' ?
                     div
@@ -106,7 +106,7 @@ class dynamic extends wg
                         h::img
                         (
                             set::src('static/svg/trophy.svg'),
-                            setClass('ml-2'),
+                            setClass('ml-2')
                         )
                     ) : null
                 )
@@ -123,7 +123,7 @@ class dynamic extends wg
         $dynamicListView = h::ul
         (
             setClass('dynamic dynamic-tag-left pt-0 overflow-hidden has-time'),
-            setClass($this->prop('className')),
+            setClass($this->prop('className'))
         );
 
         foreach($dynamics as $dynamic)

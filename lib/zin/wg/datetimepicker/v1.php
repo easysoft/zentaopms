@@ -68,7 +68,7 @@ class datetimePicker extends wg
             set::_map(array('value' => 'defaultValue', 'formID' => 'id')),
             set($props),
             set::_props($restProps),
-            $this->children(),
+            $this->children()
         );
     }
 }

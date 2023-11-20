@@ -20,7 +20,7 @@ class docMenu extends wg
         'spaceType?: string',
         'objectType?: string',
         'objectID?: int=0',
-        'hover?: bool=true',
+        'hover?: bool=true'
     );
 
     public static function getPageCSS(): string|false
@@ -35,7 +35,7 @@ class docMenu extends wg
 
     private function buildLink($item, $releaseID = 0): string
     {
-        $url = $item->url;
+        $url = zget($item, 'url', '');
         if(!empty($url)) return $url;
         if(in_array($item->type, array('apiLib', 'docLib')))
         {
@@ -61,11 +61,6 @@ class docMenu extends wg
             $methodName = 'showFiles';
             $linkParams = "type={$objectType}&objectID={$item->objectID}";
         }
-        else if(in_array($item->type, array('text', 'word', 'ppt', 'excel')))
-        {
-            $methodName = 'view';
-            $linkParams = "docID={$this->moduleID}";
-        }
         else if($objectType == 'execution')
         {
             $moduleName = 'execution';
@@ -82,7 +77,7 @@ class docMenu extends wg
                 $type       = in_array(strtolower($item->type), $this->mineTypes) ? strtolower($item->type) : 'mine';
                 $linkParams = "type={$type}&libID={$this->libID}&moduleID={$moduleID}";
             }
-            if($item->type == 'module' && $item->object == 'api')
+            if($item->type == 'module' && !empty($item->object) && $item->object == 'api')
             {
                 $linkParams = str_replace(array('browseType=&', 'param=0'), array('browseType=byrelease&', "param={$this->release}"), $linkParams);
             }
@@ -93,10 +88,11 @@ class docMenu extends wg
             if($this->currentModule == 'doc')
             {
                 $linkParams = str_replace(array('browseType=&', 'param=0'), array('browseType=byrelease&', "param={$releaseID}"), $linkParams);
-                if($this->rawMethod == 'view') $linkParams = "libID={$this->libID}&moduleID=0&browseType=byrelease&orderBy=&status,id_desc&param={$releaseID}";
             }
             else
             {
+                $moduleName = 'api';
+                $methodName = 'index';
                 $linkParams = "libID={$this->libID}&moduleID=0&apiID=0&version=0&release={$releaseID}";
             }
         }
@@ -119,17 +115,20 @@ class docMenu extends wg
             $itemID = 0;
             if(!in_array(strtolower($setting->type), $this->mineTypes)) $itemID = $setting->id ? $setting->id : $parentID;
 
+            $moduleName = ($setting->type == 'apiLib' || (isset($setting->objectType) && $setting->objectType == 'api')) ? 'api' : 'doc';
+
             $item = array(
                 'key'         => $itemID,
                 'text'        => $setting->name,
+                'hint'        => $setting->name,
                 'icon'        => $this->getIcon($setting),
                 'url'         => $this->buildLink($setting),
-                'attrs'       => array('data-app' => $this->tab),
+                'titleAttrs'  => array('data-app' => $this->tab),
                 'data-id'     => $itemID,
-                'data-lib'    => in_array($setting->type, array('docLib', 'apiLib')) ? $itemID : $setting->libID,
+                'data-lib'    => in_array($setting->type, array('docLib', 'apiLib')) ? $itemID : zget($setting, 'libID', ''),
                 'data-type'   => $setting->type,
                 'data-parent' => $setting->parentID,
-                'data-module' => $this->currentModule,
+                'data-module' => $moduleName,
                 'active'      => zget($setting, 'active', $itemID == $activeKey),
                 'actions'     => $this->getActions($setting)
             );
@@ -194,7 +193,7 @@ class docMenu extends wg
                 $items[] = array(
                     'text'  => $treeTitle,
                     'icon'  => $treeIcon,
-                    'class' => 'project-tree-title ' . ($index > 0 ? 'border-t mt-2 pt-2' : ''),
+                    'class' => 'project-tree-title ' . ($index > 0 ? 'border-t mt-2 pt-2' : '')
                 );
 
                 $items = array_merge($items, $this->buildMenuTree($modules, $this->libID));
@@ -212,23 +211,30 @@ class docMenu extends wg
             global $lang;
             $versionTitle = $lang->build->common;
             $versionBtn = array(
-                'key'      => 'version',
-                'text'     => $versionTitle,
-                'type'     => 'dropdown',
-                'dropdown' => array(
+                'key'       => 'version',
+                'text'      => $versionTitle,
+                'hint'      => $versionTitle,
+                'className' => 'versions-list',
+                'type'      => 'dropdown',
+                'dropdown'  => array(
                     'placement' => 'bottom-end',
-                    'items'     => array(),
+                    'items'     => array()
                 )
             );
 
             foreach($item->versions as $version)
             {
-                if($version->id == $this->release) $versionBtn['text'] = $version->version;
+                if($version->id == $this->release)
+                {
+                    $versionBtn['text'] = $version->version;
+                    $versionBtn['hint'] = $version->version;
+                }
 
                 $versionBtn['dropdown']['items'][] = array(
                     'text'   => $version->version,
-                    'href'   => $this->buildLink($item, $version->id),
-                    'active' => $version->id == $this->release,
+                    'hint'   => $version->version,
+                    'url'    => $this->buildLink($item, $version->id),
+                    'active' => $version->id == $this->release
                 );
             }
         }
@@ -246,7 +252,7 @@ class docMenu extends wg
                     'caret'    => false,
                     'dropdown' => array(
                         'placement' => 'bottom-end',
-                        'items'     => $actions,
+                        'items'     => $actions
                     )
                 );
             }
@@ -263,8 +269,9 @@ class docMenu extends wg
         $menus = array();
         if(in_array($item->type, array('docLib', 'apiLib')))
         {
-            $itemID = $item->id ? $item->id : $item->parentID;
-            if(hasPriv($this->currentModule, 'addCatalog'))
+            $itemID     = $item->id ? $item->id : $item->parentID;
+            $moduleName = $item->type == 'docLib' ? 'doc' : 'api';
+            if(hasPriv($moduleName, 'addCatalog'))
             {
                 $menus[] = array(
                     'key'     => 'adddirectory',
@@ -274,32 +281,33 @@ class docMenu extends wg
                 );
             }
 
-            if(hasPriv($this->currentModule, 'editCatalog'))
+            if(hasPriv($moduleName, 'editLib'))
             {
                 $menus[] = array(
                     'key'         => 'editlib',
                     'icon'        => 'edit',
                     'text'        => $this->lang->doc->libDropdown['editLib'],
                     'data-toggle' => 'modal',
-                    'data-url'    => createlink($this->currentModule, 'editlib', "libID={$itemID}"),
+                    'data-url'    => createlink($moduleName, 'editLib', "libID={$itemID}")
                 );
             }
 
-            if(hasPriv($this->currentModule, 'deleteCatalog'))
+            if(hasPriv($moduleName, 'deleteLib'))
             {
                 $menus[] = array(
                     'key'          => 'dellib',
                     'icon'         => 'trash',
                     'text'         => $this->lang->doc->libDropdown['deleteLib'],
-                    'class'        => 'ajax-submit',
-                    'data-url'     => createLink($this->currentModule, 'deleteLib', "libID={$itemID}"),
-                    'data-confirm' => $this->lang->doc->confirmDeleteLib,
+                    'innerClass'   => 'ajax-submit',
+                    'data-url'     => createLink($moduleName, 'deleteLib', "libID={$itemID}"),
+                    'data-confirm' => $this->lang->{$moduleName}->confirmDeleteLib
                 );
             }
         }
         elseif($item->type == 'module')
         {
-            if(hasPriv($this->currentModule, 'addCatalog'))
+            $moduleName = $item->objectType == 'api' ? 'api' : 'doc';
+            if(hasPriv($moduleName, 'addCatalog'))
             {
                 $menus[] = array(
                     'key'     => 'adddirectory',
@@ -315,7 +323,7 @@ class docMenu extends wg
                 );
             }
 
-            if(hasPriv($this->currentModule, 'editCatalog'))
+            if(hasPriv($moduleName, 'editCatalog'))
             {
                 $menus[] = array(
                     'key'  => 'editmodule',
@@ -323,19 +331,19 @@ class docMenu extends wg
                     'text' => $this->lang->doc->libDropdown['editModule'],
                     'link' => '',
                     'data-toggle' => 'modal',
-                    'data-url'    => createlink($this->currentModule, 'editCatalog', "moduleID={$item->id}&type=" . ($this->rawModule == 'api' ? 'api' : 'doc')),
+                    'data-url'    => createlink($moduleName, 'editCatalog', "moduleID={$item->id}&type=" . ($this->rawModule == 'api' ? 'api' : 'doc'))
                 );
             }
 
-            if(hasPriv($this->currentModule, 'deleteCatalog'))
+            if(hasPriv($moduleName, 'deleteCatalog'))
             {
                 $menus[] = array(
                     'key'          => 'delmodule',
                     'icon'         => 'trash',
                     'text'         => $this->lang->doc->libDropdown['delModule'],
-                    'class'        => 'ajax-submit',
-                    'data-url'     => createLink($this->currentModule, 'deleteCatalog', "rootID={$item->parentID}&moduleID={$item->id}"),
-                    'data-confirm' => $this->lang->api->confirmDeleteLib,
+                    'innerClass'   => 'ajax-submit',
+                    'data-url'     => createLink($moduleName, 'deleteCatalog', "moduleID={$item->id}"),
+                    'data-confirm' => $this->lang->doc->confirmDeleteModule
                 );
             }
         }
@@ -394,23 +402,28 @@ class docMenu extends wg
                 ? a
                 (
                     setClass('btn'),
-                    setStyle('background', '#EEF5FF'),
+                    setStyle('background', 'rgb(var(--color-primary-50-rgb))'),
                     setStyle('box-shadow', 'none'),
                     set('data-app', $app->tab),
                     set('data-size', 'sm'),
                     set('data-toggle', 'modal'),
                     set::href($settingLink),
-                    $settingText
+                    span
+                    (
+                        setClass('text-primary'),
+                        $settingText
+                    )
                 )
-                : null,
+                : null
         );
     }
 
     protected function build(): wg
     {
         $this->setMenuTreeProps();
-        $title    = $this->getTitle();
-        $menuLink = $this->prop('menuLink', '');
+        $title     = $this->getTitle();
+        $menuLink  = $this->prop('menuLink', '');
+        $treeProps = set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover')));
 
         return div
             (
@@ -419,28 +432,29 @@ class docMenu extends wg
                     set::id('docDropmenu'),
                     set::menuID('docDropmenuMenu'),
                     set::text($title),
-                    set::url($menuLink),
+                    set::url($menuLink)
                 ) : null,
                 div
                 (
                     setClass('module-menu rounded shadow-sm bg-white col rounded-sm'),
                     $title && empty($menuLink) ? h::header
                     (
-                        setClass('h-10 flex items-center pl-4 flex-none gap-3'),
+                        setClass('h-10 flex items-center pl-4 flex-none gap-3 clip mr-4'),
                         span
                         (
+                            set::title($title),
                             setClass('module-title text-lg font-semibold'),
                             html($title)
-                        ),
+                        )
                     ) : null,
                     h::main
                     (
                         setClass($menuLink ? 'pt-3' : ''),
                         setClass('col flex-auto overflow-y-auto overflow-x-hidden pl-4 pr-1'),
-                        zui::tree(set($this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'hover'))))
+                        zui::tree(set::_tag('ul'), $treeProps)
                     ),
                     $this->buildBtns()
-                ),
+                )
         );
     }
 }

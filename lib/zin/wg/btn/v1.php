@@ -39,7 +39,8 @@ class btn extends wg
 
         if(empty($url))
         {
-            $props['type'] = $this->prop('btnType');
+            $props['tagName'] = 'button';
+            $props['type']    = $this->prop('btnType');
             if(!isset($props['data-target'])) $props['data-target'] = $target;
             return $props;
         }
@@ -95,7 +96,7 @@ class btn extends wg
         $children  = $this->getChildren();
         $classList = $this->getClassList();
 
-        return button
+        return new h
         (
             set($props),
             setClass($classList),

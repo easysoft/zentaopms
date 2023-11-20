@@ -47,7 +47,7 @@ class actionItem extends wg
             $icon ? icon($icon) : null,
             empty($text) ? null : span($text, setClass('text', $textClass)),
             $this->children(),
-            $trailingIcon ? icon($trailingIcon) : null,
+            $trailingIcon ? icon($trailingIcon) : null
         );
     }
 
@@ -122,7 +122,7 @@ class actionItem extends wg
             span($text, setClass('text', $textClass)),
             $badge,
             $this->children(),
-            $trailingIcon ? icon($trailingIcon) : null,
+            $trailingIcon ? icon($trailingIcon) : null
         );
     }
 

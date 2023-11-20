@@ -76,7 +76,7 @@ class formSettingBtn extends wg
                     (
                         btn(set::text($lang->save), setClass('primary'), on::click('onSubmitFormtSetting')),
                         btn(set::text($lang->cancel), set::btnType('button'), on::click('cancelFormSetting'), set('data-url', $cancelLink)),
-                        btn(set::text($lang->restore), setClass('text-primary ghost'), set::href('#'), set('data-url', $customLink), on::click('revertDefaultFields')),
+                        btn(set::text($lang->restore), setClass('text-primary ghost'), set::href('#'), set('data-url', $customLink), on::click('revertDefaultFields'))
                     )),
                     to::headingActions(array(btn(set::icon('close'), setClass('ghost'), set::size('sm'), on::click('closeCustomPopupMenu')))),
                     $this->buildCustomFields($customFields)

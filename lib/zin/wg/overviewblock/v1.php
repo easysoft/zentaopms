@@ -23,18 +23,13 @@ class overviewBlock extends wg
         'groups?: array'
     );
 
-    public static function getPageCSS(): string|false
-    {
-        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
-    }
-
     protected function buildCard($card): wg
     {
-        $class = 'text-2xl text-center leading-relaxed num ' . (!empty($card->class) ? $card->class : '');
+        $class = array('text-2xl text-center leading-relaxed num', $card->class);
 
         return col
         (
-            setClass('card justify-center w-1/2'),
+            setClass('justify-center w-1/2'),
             empty($card->url) ? span
             (
                 setClass($class),
@@ -56,7 +51,11 @@ class overviewBlock extends wg
     protected function buildCards($group): wg
     {
         $cards = array();
-        foreach($group->cards as $card) $cards[] = $this->buildCard($card);
+        foreach($group->cards as $index => $card)
+        {
+            if($index > 0) $cards[] = divider(setClass('h-10 self-center'));
+            $cards[] = $this->buildCard($card);
+        }
 
         return row
         (

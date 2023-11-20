@@ -38,7 +38,7 @@ class dropmenu extends wg
         'text?:     string',            // 选择按钮上显示的文本。
         'cache?:    bool|int=true',     // 是否启用缓存。
         'data?:     array',             // 手动指定数据。
-        'menuID?:   string',            // 指定下拉菜单的ID。
+        'menuID?:   string'             // 指定下拉菜单的ID。
     );
 
     /**
@@ -76,6 +76,9 @@ class dropmenu extends wg
             $object = data($tab);
             if(isset($object->id)) $objectID = $object->id;
         }
+        if($method == 'showerrornone' && empty($object) && empty($objectID)) return array();
+
+        if($module == 'testcase' && $method == 'view' && data('isLibCase')) $tab = 'caselib';
 
         $branchMenu = null;
         if(($tab == 'product' || $tab == 'qa') and in_array($module, $app->config->hasBranchMenuModules))
@@ -85,7 +88,10 @@ class dropmenu extends wg
                 $product = $app->control->loadModel('product')->getByID((int)$objectID);
                 if($product->type != 'normal')
                 {
-                    $branchID = data('branchID');
+                    $branchID = '';
+                    if(!is_null(data('branch')))   $branchID = data('branch');
+                    if(!is_null(data('branchID'))) $branchID = data('branchID');
+                    $app->control->loadModel('branch');
 
                     /* Get current branch name. */
                     $branchName = '';
@@ -100,9 +106,9 @@ class dropmenu extends wg
                     }
                     elseif($branchID > 0)
                     {
-                        $branchName = $app->control->loadModel('branch')->getById((int)$branchID);
+                        $branchName = $app->control->branch->getByID((string)$branchID);
                     }
-
+                    if($module == 'testtask' && $method == 'browse') $extra = data('type');
                     $branchURL  = createLink('branch', 'ajaxGetDropMenu', "objectID=$objectID&branch=$branchID&module=$module&method=$method&extra=$extra");
                     $branchMenu = zui::dropmenu
                         (
@@ -117,13 +123,30 @@ class dropmenu extends wg
             }
         }
 
+        if($module == 'testtask' && in_array($method, array('cases', 'view', 'report', 'groupcase', 'linkcase')) && $app->tab == 'qa')
+        {
+            $testtaskUrl  = createLink('testtask', 'ajaxGetDropMenu', data('switcherParams'));
+            $testtaskMenu = zui::dropmenu
+                (
+                    setID('testtask-dropmenu'),
+                    set('_id', 'testtask-dropmenu'),
+                    set('_props', array('data-fetcher' => $testtaskUrl)),
+                    set('data', $data),
+                    set(array('fetcher' => $testtaskUrl, 'text' => data('switcherText'), 'defaultValue' => data('switcherObjectID'))),
+                    set($this->getRestProps())
+                );
+        }
+
         if($tab == 'admin')
         {
+            if($method == 'register') return array();
             $currentMenuKey = $app->control->loadModel('admin')->getMenuKey();
-            $text           = $lang->admin->menuList->{$currentMenuKey}['name'];
+            $text           = isset($lang->admin->menuList->{$currentMenuKey}) ? $lang->admin->menuList->{$currentMenuKey}['name'] : $currentMenuKey;
             $url            = createLink('admin', 'ajaxGetDropMenu', "currentMenuKey={$currentMenuKey}");
             $menuID         = 'admin-menu';
         }
+
+        if($tab == 'caselib') $objectID = data('libID');
 
         if(empty($url) && empty($data)) $url = createLink($tab, 'ajaxGetDropMenu', "objectID=$objectID&module=$module&method=$method&extra=$extra");
         if(empty($text) && !empty($tab) && !empty($objectID))
@@ -132,14 +155,23 @@ class dropmenu extends wg
             $text   = $object ? $object->name : '';
         }
 
-        return array(zui::dropmenu
+        /* 如果是产品的 1.5 级导航，把当前产品的类型存入 session 以供后面使用。*/
+        /* If the tab is product, save the product type to session. */
+        if($tab == 'product' && $object) $app->session->set('currentProductType', $object->type);
+
+        return array
         (
-            setID($menuID),
-            set('_id', $id),
-            set('_props', array('data-fetcher' => $url)),
-            set('data', $data),
-            set(array('fetcher' => $url, 'text' => $text, 'defaultValue' => $objectID, 'cache' => $cache)),
-            set($this->getRestProps())
-        ), $branchMenu);
+            zui::dropmenu
+            (
+                setID($menuID),
+                set('_id', $id),
+                set('_props', array('data-fetcher' => $url)),
+                set('data', $data),
+                set(array('fetcher' => $url, 'text' => $text, 'defaultValue' => $objectID, 'cache' => $cache)),
+                set($this->getRestProps())
+            ),
+            $branchMenu,
+            isset($testtaskMenu) ? $testtaskMenu : null
+        );
     }
 }

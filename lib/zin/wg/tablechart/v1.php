@@ -48,6 +48,7 @@ class tableChart extends wg
 
         shuffle($colorList);
 
+        $tableTR = array();
         foreach($datas as $data)
         {
             $color = current($colorList);

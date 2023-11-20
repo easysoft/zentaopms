@@ -43,28 +43,25 @@ class backBtn extends btn
         global $app;
 
         $backs = array(
-            'task'           => 'execution-task,my-work,my-contribute,',
-            'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,productplan-view',
-            'bug'            => 'bug-browse,project-bug,my-work,my-contribute,',
-            'testcase'       => 'testcase-browse,project-testcase,my-work,my-contribute,',
+            'task'           => 'execution-task,my-work,my-contribute,execution-tree',
+            'story'          => 'product-browse,projectstory-story,execution-story,my-work,my-contribute,productplan-view,build-view,projectbuild-view,',
+            'bug'            => 'bug-browse,project-bug,my-work,my-contribute,execution-bug,',
+            'testcase'       => 'testcase-browse,project-testcase,my-work,my-contribute,execution-testcase,testtask-cases,testsuite-view,product-browse,',
             'testsuite'      => 'testsuite-browse,testsuite-view,',
             'testtask'       => 'testtask-browse,testtask-cases,',
-            'testreport'     => 'testreport-browse,project-testreport',
+            'testreport'     => 'testreport-browse,project-testreport,execution-testreport,',
             'tree'           => 'product-browse,project-browse,execution-task,bug-browse,projectstory-story',
-            'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace',
+            'doc'            => 'doc-mySpace,doc-productSpace,doc-projectSpace,doc-teamSpace,doc-view',
             'design'         => 'design-browse',
-            'release'        => 'release-browse,release-view',
+            'release'        => 'release-browse,release-view,product-roadmap',
             'projectrelease' => 'projectrelease-browse',
             'build'          => 'execution-build,build-view',
             'projectbuild'   => 'projectbuild-browse,projectbuild-view',
             'mr'             => 'mr-browse',
-            'repo'           => 'repo-browse,repo-log',
+            'repo'           => 'repo-log,repo-browse',
             'compile'        => 'compile-browse',
             'store'          => 'store-browse',
-            'space'          => 'space-browse',
-            'instance'       => 'space-browse',
-            'artifactrepo'   => 'artifactrepo-browse',
-            'job'            => 'job-browse',
+            'space'          => 'space-browse'
         );
 
         $props = parent::getProps();

@@ -17,7 +17,7 @@ class page extends pageBase
         'heading'  => array('map' => 'heading'),
         'dropmenu' => array('map' => 'dropmenu'),
         'main'     => array('map' => 'main'),
-        'footer'   => array(),
+        'footer'   => array()
     );
 
     protected function buildHeader(): array|wg
@@ -48,7 +48,7 @@ class page extends pageBase
         (
             $this->buildHeader(),
             new main($this->children()),
-            $this->block('footer'),
+            $this->block('footer')
         );
     }
 }

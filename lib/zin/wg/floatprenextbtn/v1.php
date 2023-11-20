@@ -6,7 +6,7 @@ class floatPreNextBtn extends wg
 {
     protected static array $defineProps = array(
         'preLink?:string',
-        'nextLink?:string',
+        'nextLink?:string'
     );
 
     public static function getPageCSS(): string|false
@@ -20,6 +20,7 @@ class floatPreNextBtn extends wg
     }
     protected function build(): wg|array
     {
+        global $app;
         $preLink  = $this->prop('preLink');
         $nextLink = $this->prop('nextLink');
 
@@ -29,16 +30,18 @@ class floatPreNextBtn extends wg
             (
                 setID('preButton'),
                 set::url($preLink),
-                setClass('float-btn fixed left-0 z-10'),
-                set::icon('angle-left')
+                setClass('float-btn fixed z-10'),
+                set::icon('angle-left'),
+                set('data-app', $app->tab)
             ) : null,
             !empty($nextLink) ? btn
             (
                 setID('nextButton'),
                 set::url($nextLink),
-                setClass('float-btn fixed right-0 z-10'),
-                set::icon('angle-right')
-            ) : null,
+                setClass('float-btn fixed z-10'),
+                set::icon('angle-right'),
+                set('data-app', $app->tab)
+            ) : null
         );
     }
 }

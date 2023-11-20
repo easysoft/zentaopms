@@ -28,7 +28,7 @@ class formLabel extends wg
             set('for', $for),
             set($this->getRestProps()),
             html($text),
-            $this->children(),
+            $this->children()
         );
     }
 }

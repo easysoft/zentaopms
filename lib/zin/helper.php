@@ -50,6 +50,15 @@ function createWg($name, $args): wg
     return class_exists($wgName) ? (new $wgName($args)) : $wgName($args);
 }
 
+function requireWg(string $name, string $wgVer = '')
+{
+    $name = strtolower($name);
+
+    if(!$wgVer) $wgVer = getWgVer($name);
+
+    require_once __DIR__ . DS . 'wg' . DS . $name . DS . "v$wgVer.php";
+}
+
 if(!function_exists('str_contains'))
 {
     /**
@@ -117,6 +126,30 @@ else
     function str_ends_with($haystack, $needle)
     {
         return \str_ends_with($haystack, $needle);
+    }
+}
+
+if(!function_exists('array_is_list'))
+{
+    /**
+     * Checks whether a given array is a list.
+     *
+     * @param array $array
+     * @return bool
+     */
+    function array_is_list(array $array)
+    {
+        if ($array === []) {
+            return true;
+        }
+        return array_keys($array) === range(0, count($array) - 1);
+    }
+}
+else
+{
+    function array_is_list(array $array)
+    {
+        return \array_is_list($array);
     }
 }
 

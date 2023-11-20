@@ -117,13 +117,14 @@ class navbar extends wg
         $currentModule = $app->rawModule;
         $currentMethod = $app->rawMethod;
 
-        if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule  = WIZARD_MODULE;
-        if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod  = WIZARD_METHOD;
+        if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule = WIZARD_MODULE;
+        if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod = WIZARD_METHOD;
 
-        $menu       = \customModel::getMainMenu();
-        $tab        = $app->tab;
-        $activeMenu = '';
-        $items      = array();
+        $menu         = \customModel::getMainMenu();
+        $tab          = $app->tab;
+        $activeMenu   = '';
+        $activeMenuID = data('activeMenuID');
+        $items        = array();
         foreach ($menu as $menuItem)
         {
             if(isset($menuItem->hidden) and $menuItem->hidden and (!isset($menuItem->tutorial) or !$menuItem->tutorial)) continue;
@@ -182,6 +183,7 @@ class navbar extends wg
                 }
 
                 $dataApp = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? $tab : null;
+                if($isActive && $activeMenuID) $isActive = $menuItem->name == $activeMenuID;
                 if($isActive && empty($activeMenu)) $activeMenu = $menuItem->name;
                 else $isActive = false;
 
@@ -259,11 +261,7 @@ class navbar extends wg
             }
             else
             {
-                $items[] = array(
-                    'class'  => $class,
-                    'text'   => $menuItem->text,
-                    'active' => $isActive,
-                );
+                $items[] = array('class' => $class, 'text' => $menuItem->text, 'active' => $isActive);
             }
         }
 

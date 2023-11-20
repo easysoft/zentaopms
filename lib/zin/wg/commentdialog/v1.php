@@ -10,7 +10,7 @@ class commentDialog extends wg
         'url?:string',
         'name?:string="comment"',
         'method?:string="post"',
-        'load?: bool|string',
+        'load?: bool|string'
     );
 
     protected function build(): wg

@@ -49,7 +49,8 @@ class formPanel extends panel
         'labelWidth?: int',                            // 标签宽度，单位为像素。
         'batch?: bool',                                // 是否为批量操作表单。
         'shadow?: bool=false',                         // 是否显示阴影层。
-        'width?: string'                               // 最大宽度。
+        'width?: string',                              // 最大宽度。
+        'customFields?: array'                         // 自定义表单项。
     );
 
     /**
@@ -157,7 +158,7 @@ class formPanel extends panel
                 set($this->props->pick(array_keys(formBatch::definedPropsList()))),
                 $this->children(),
                 jsVar('formBatch', true),
-                $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null,
+                $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null
             );
         }
 
@@ -166,7 +167,7 @@ class formPanel extends panel
             set::className($this->prop('formClass')),
             set($this->props->pick(array_keys(form::definedPropsList()))),
             $this->children(),
-            $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null,
+            $hiddenFields ? jsVar('hiddenFields', $hiddenFields) : null
         );
     }
 

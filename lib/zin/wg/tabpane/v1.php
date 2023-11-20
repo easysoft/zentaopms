@@ -8,13 +8,13 @@ class tabPane extends wg
         'key: string',
         'title?: string',
         'active?: bool=false',
-        'param?: string',
+        'param?: string'
     );
 
     protected static array $defineBlocks = array(
         'prefix'  => array(),
         'suffix'  => array(),
-        'divider' => false,
+        'divider' => false
     );
 
     protected function build(): wg

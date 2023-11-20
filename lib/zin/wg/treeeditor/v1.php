@@ -35,11 +35,10 @@ class treeEditor extends wg
 
     private function buildTree(array $items): array
     {
-        $canUpdateOrder = $this->prop('canUpdateOrder');
-        $canEdit        = $this->prop('canEdit');
-        $canDelete      = $this->prop('canDelete');
-        $canSplit       = $this->prop('canSplit');
-        $editType       = $this->prop('type');
+        $canEdit   = $this->prop('canEdit');
+        $canDelete = $this->prop('canDelete');
+        $canSplit  = $this->prop('canSplit');
+        $editType  = $this->prop('type');
 
         foreach($items as $key => $item)
         {
@@ -66,7 +65,7 @@ class treeEditor extends wg
 
             if(!empty($item['children']))
             {
-                $item['items'] = $this->buildTree($item['children']);
+                $item['items'] = !empty($item['children']['url']) ? $item['children'] : $this->buildTree($item['children']);
                 unset($item['children']);
             }
             unset($item['type']);

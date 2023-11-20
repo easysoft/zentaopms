@@ -29,7 +29,7 @@ class formGroup extends wg
 
     protected function build(): wg
     {
-        list($name, $label, $labelClass, $labelProps, $labelWidth, $required, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items, $placeholder, $readonly) = $this->prop(['name', 'label', 'labelClass', 'labelProps', 'labelWidth', 'required', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'readonly']);
+        list($name, $label, $labelClass, $labelProps, $labelWidth, $required, $tip, $tipClass, $tipProps, $control, $width, $strong, $value, $disabled, $items, $placeholder, $readonly, $multiple) = $this->prop(['name', 'label', 'labelClass', 'labelProps', 'labelWidth', 'required', 'tip', 'tipClass', 'tipProps', 'control', 'width', 'strong', 'value', 'disabled', 'items', 'placeholder', 'readonly', 'multiple']);
 
         if($required === 'auto') $required = isFieldRequired($name);
 
@@ -45,6 +45,7 @@ class formGroup extends wg
             if($items !== null)       $control['items']       = $items;
             if($placeholder !== null) $control['placeholder'] = $placeholder;
             if($readonly !== null)    $control['readonly']    = $readonly;
+            if($multiple !== null)    $control['multiple']    = $multiple;
         }
 
         return div

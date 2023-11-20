@@ -45,7 +45,7 @@ class timePicker extends wg
         'placeholder?: string',             // 选择框上的占位文本。
         'format?: string',                  // 日期格式，默认 hh:mm。
         'icon?: string|array="time"',       // 在输入框右侧显示的图标。
-        'onInvalid?: function',             // 日期值无效时的回调函数。
+        'onInvalid?: function'              // 日期值无效时的回调函数。
     );
     /**
      * Build the widget.
@@ -68,7 +68,7 @@ class timePicker extends wg
             set::_map(array('value' => 'defaultValue', 'formID' => 'id')),
             set($props),
             set::_props($restProps),
-            $this->children(),
+            $this->children()
         );
     }
 }

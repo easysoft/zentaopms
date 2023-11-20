@@ -106,7 +106,7 @@ class dragUl extends wg
         (
             setClass('drag-ul'),
             set($this->getRestProps()),
-            $this->children(),
+            $this->children()
         );
 
         $ul->setProp('data-zin-gid', $ul->gid);

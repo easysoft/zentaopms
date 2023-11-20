@@ -45,7 +45,7 @@ class severityLabel extends wg
             set($this->getRestProps()),
             setClass($isIcon ? 'severity' : 'severity severity-label'),
             set('data-severity', $level),
-            $text
+            $isIcon ? '' : $text
         );
     }
 }

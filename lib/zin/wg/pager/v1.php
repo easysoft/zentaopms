@@ -31,7 +31,9 @@ class pager extends wg
         $props['recTotal']    = $pager->recTotal;
         $props['recPerPage']  = $pager->recPerPage;
         $props['linkCreator'] = createLink($pager->moduleName, $pager->methodName, $params);
-        $props['items']       = array
+
+        $items = $this->prop('items');
+        $props['items']       = $items ? $items : array
         (
             $type == 'short' ? null : array('type' => 'info', 'text' => $lang->pager->totalCountAB),
             $type == 'short' ? null : array('type' => 'size-menu', 'text' => $lang->pager->pageSizeAB),
@@ -39,7 +41,7 @@ class pager extends wg
             array('type' => 'link', 'hint' => $lang->pager->previousPage, 'page' => 'prev', 'icon' => 'icon-angle-left'),
             array('type' => 'info', 'text' => '{page}/{pageTotal}'),
             array('type' => 'link', 'hint' => $lang->pager->nextPage, 'page' => 'next', 'icon' => 'icon-angle-right'),
-            array('type' => 'link', 'hint' => $lang->pager->lastPage, 'page' => 'last', 'icon' => 'icon-last-page'),
+            array('type' => 'link', 'hint' => $lang->pager->lastPage, 'page' => 'last', 'icon' => 'icon-last-page')
         );
 
         $this->setProp($props);

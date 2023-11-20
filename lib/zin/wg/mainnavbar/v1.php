@@ -31,7 +31,7 @@ class mainNavbar extends nav
     protected static array $defineBlocks = array
     (
         'left' => array('map' => 'dropdown'),
-        'right' => array('map' => 'toolbar'),
+        'right' => array('map' => 'toolbar')
     );
 
     /**
@@ -97,9 +97,14 @@ class mainNavbar extends nav
      * @access protected
      * @return wg
      */
-    protected function build(): h
+    protected function build(): wg
     {
-        if(!$this->prop('items')) return div();
+        global $app, $config;
+
+        $moduleName = $app->rawModule;
+        $methodName = $app->rawMethod;
+
+        if(!$this->prop('items') && !in_array("$moduleName-$methodName", $config->hasMainNavBar)) return wg();
 
         $leftBlock  = $this->block('left');
         $rightBlock = $this->block('right');
@@ -129,24 +134,24 @@ class mainNavbar extends nav
     {
         global $app, $config;
 
-        if(!isset($config->excludeSwitcherList)) $config->excludeSwitcherList = array();
-        if(!isset($config->hasSwitcherModules))  $config->hasSwitcherModules  = array();
-
         $moduleName = $app->rawModule;
         $methodName = $app->rawMethod;
 
         if(in_array("$moduleName-$methodName", is_array($config->excludeSwitcherList) ? $config->excludeSwitcherList : array())) return null;
 
-        if(in_array($moduleName, is_array($config->hasSwitcherModules) ? $config->hasSwitcherModules : array()))
+        if(in_array($moduleName, is_array($config->hasSwitcherModules) ? $config->hasSwitcherModules : array()) || in_array("$moduleName-$methodName", is_array($config->hasSwitcherMethods) ? $config->hasSwitcherMethods : array()))
         {
-            $fetcher = createLink($moduleName, 'ajaxGetDropMenu', data('switcherParams'));
+            $ajaxMethod = 'ajaxSwitcherMenu';
+            if($moduleName == 'testcase' && $app->tab == 'project') $moduleName = 'project';
+            if($moduleName == 'testtask') $ajaxMethod = 'ajaxGetDropMenu';
+            $fetcher = createLink($moduleName, $ajaxMethod, data('switcherParams'));
             return array(zui::dropmenu
                 (
                     setID("{$moduleName}-menu"),
                     set('_id', 'switcher'),
                     set('data', data('data')),
                     set('_props', array('data-fetcher' => $fetcher)),
-                    set(array('fetcher' => createLink($moduleName, 'ajaxGetDropMenu', data('switcherParams')), 'text' => data('switcherText'), 'defaultValue' => data('switcherObjectID'))),
+                    set(array('fetcher' => createLink($moduleName, $ajaxMethod, data('switcherParams')), 'text' => data('switcherText'), 'defaultValue' => data('switcherObjectID'))),
                     set($this->getRestProps())
                 ));
         }

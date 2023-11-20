@@ -6,9 +6,9 @@ class globalSearch extends wg
 {
     protected static array $defineProps = array(
         'commonSearchText?: string',
-        'commonSearchUrl: string',
-        'searchItems: array',
-        'searchFunc: callable'
+        'commonSearchUrl?: string',
+        'searchItems?: array',
+        'searchFunc?: callable'
     );
 
     public static function getPageJS(): string|false
@@ -26,16 +26,13 @@ class globalSearch extends wg
         unset($lang->searchObjects['all']);
 
         $searchItems = array();
-        foreach($lang->searchObjects as $key => $module)
-        {
-            $searchItems[] = array('key' => $key, 'text' => $module);
-        }
+        foreach($lang->searchObjects as $key => $module) $searchItems[] = array('key' => $key, 'text' => $module);
 
         $this->setDefaultProps(array(
             'commonSearchText' => $lang->searchAB,
             'commonSearchKey' => 'all',
             'searchItems' => $searchItems,
-            'searchFunc' => jsRaw('window.globalSearch'),
+            'searchFunc' => jsRaw('window.globalSearch')
         ));
 
         $input = inputGroup
@@ -44,13 +41,13 @@ class globalSearch extends wg
             input
             (
                 setID('globalSearchInput'),
-                set::placeholder($lang->index->pleaseInput),
+                set::placeholder($lang->index->pleaseInput)
             ),
             btn
             (
                 set::icon('search'),
-                set::type('primary'),
-            ),
+                set::type('primary')
+            )
         );
         $input->setProp('data-zin-id', $input->gid);
         $props = array_merge

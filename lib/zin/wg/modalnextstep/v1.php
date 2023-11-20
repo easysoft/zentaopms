@@ -6,7 +6,7 @@ class modalNextStep extends wg
 {
     protected static array $defineProps = array(
         'tip: string',
-        'items: array',
+        'items: array'
     );
 
     public static function getPageCSS(): string|false
@@ -29,7 +29,7 @@ class modalNextStep extends wg
                 center
                 (
                     setClass('w-8 h-8 rounded-full success'),
-                    icon(setClass('text-xl font-bold'), 'check'),
+                    icon(setClass('text-xl font-bold'), 'check')
                 ),
                 span
                 (
@@ -37,7 +37,7 @@ class modalNextStep extends wg
                     $tip
                 )
             ),
-            set::footerActions($items),
+            set::footerActions($items)
         );
     }
 }

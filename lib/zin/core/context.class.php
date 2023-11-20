@@ -17,6 +17,16 @@ require_once dirname(__DIR__) . DS . 'utils' . DS . 'flat.func.php';
 
 class context extends \zin\utils\dataset
 {
+    public function addHookFiles()
+    {
+        return $this->addToList('hookFiles', \zin\utils\flat(func_get_args()));
+    }
+
+    public function getHookFiles()
+    {
+        return $this->getList('hookFiles');
+    }
+
     public function addImport()
     {
         return $this->addToList('import', func_get_args());
@@ -68,7 +78,7 @@ class context extends \zin\utils\dataset
     public function getEventsBindings()
     {
         $wgs   = $this->getList('wgWithEvents');
-        $codes = [];
+        $codes = array();
         foreach($wgs as $wg)
         {
             if(!method_exists($wg, 'buildEvents')) continue;

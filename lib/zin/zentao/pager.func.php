@@ -10,7 +10,7 @@ namespace zin;
  * @param ?array $userSetting
  * @return array
  */
-function usePager(string|array $pagerName = 'pager', string $extra = '', ?array $userSetting = null): array
+function usePager(string|array $pagerName = 'pager', string $extra = '', ?array $userSetting = null): ?array
 {
     if(is_array($pagerName))
     {

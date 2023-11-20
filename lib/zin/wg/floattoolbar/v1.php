@@ -14,7 +14,7 @@ class floatToolbar extends wg
     protected static array $defineBlocks = array(
         'prefix' => array(),
         'main'   => array(),
-        'suffix' => array(),
+        'suffix' => array()
     );
 
     private function buildDivider(wg|array|null $wg1, wg|array|null $wg2): wg|null
@@ -90,7 +90,7 @@ class floatToolbar extends wg
             $this->buildDivider($prefixBtns, $mainBtns),
             $mainBtns,
             $this->buildDivider($mainBtns, $suffixBtns),
-            $suffixBtns,
+            $suffixBtns
         );
     }
 }
