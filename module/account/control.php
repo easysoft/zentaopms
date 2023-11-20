@@ -84,18 +84,15 @@ class account extends control
      * @access public
      * @return void
      */
-    public function edit($id, $from = 'parent')
+    public function edit(int $id, string $from = 'parent')
     {
         if($_POST)
         {
-            $changes = $this->account->update($id);
+            $account = $this->accountZen->buildDataForEdit();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($changes)
-            {
-                $actionID = $this->loadModel('action')->create('account', $id, 'Edited');
-                $this->action->logHistory($actionID, $changes);
-            }
+            $changes = $this->account->update($id, $account);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse'), 'closeModal' => true));
         }
@@ -103,10 +100,6 @@ class account extends control
         $this->view->title   = $this->lang->account->edit;
         $this->view->account = $this->account->getById($id);
         $this->view->rooms   = $this->loadModel('serverroom')->getPairs();
-        $this->view->from    = $from;
-
-        $this->view->position[] = html::a($this->createLink('account', 'browse'), $this->lang->account->common);
-        $this->view->position[] = $this->lang->account->edit;
 
         $this->display();
     }

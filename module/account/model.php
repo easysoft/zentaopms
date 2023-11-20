@@ -18,7 +18,7 @@ class accountModel extends model
      * @access public
      * @return object
      */
-    public function getByID($id)
+    public function getByID(int $id): object|false
     {
         return $this->dao->select('*')->from(TABLE_ACCOUNT)->where('id')->eq($id)->fetch();
     }
@@ -113,26 +113,29 @@ class accountModel extends model
      * Update one account.
      *
      * @param  int    $id
+     * @param  object $account
      * @access public
-     * @return void
+     * @return bool
      */
-    public function update($id)
+    public function update(int $id, object $account): bool
     {
-        $now        = helper::now();
         $oldAccount = $this->getByID($id);
-        $newAccount = fixer::input('post')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', $now)
-            ->get();
-
-        $this->dao->update(TABLE_ACCOUNT)->data($newAccount)->autoCheck()
+        $this->dao->update(TABLE_ACCOUNT)->data($account)->autoCheck()
             ->batchCheck($this->config->account->edit->requiredFields, 'notempty')
-            ->checkIf($newAccount->email, 'email', 'email')
-            ->checkIf($newAccount->mobile, 'mobile', 'mobile')
+            ->checkIf($account->email, 'email', 'email')
+            ->checkIf($account->mobile, 'mobile', 'mobile')
             ->where('id')->eq($id)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldAccount, $newAccount);
+        if(!dao::isError())
+        {
+            $changes = common::createChanges($oldAccount, $account);
+            if(empty($changes)) return true;
+
+            $actionID = $this->loadModel('action')->create('account', $id, 'Edited');
+            $this->action->logHistory($actionID, $changes);
+            return true;
+        }
         return false;
     }
 }

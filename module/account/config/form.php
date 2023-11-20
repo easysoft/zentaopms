@@ -11,3 +11,5 @@ $config->account->form->create['mobile']   = array('type' => 'string', 'required
 $config->account->form->create['type']     = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
 $config->account->form->create['status']   = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
 $config->account->form->create['extra']    = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
+
+$config->account->form->edit = $config->account->form->create;;

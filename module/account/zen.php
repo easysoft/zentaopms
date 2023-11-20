@@ -19,8 +19,21 @@ class accountZen extends account
      */
     protected function buildDataForCreate(): object
     {
-        return form::data()->setDefault('createdBy', $this->app->user->account)
-            ->setDefault('createdDate', helper::now())
+        return form::data()->add('createdBy', $this->app->user->account)
+            ->add('createdDate', helper::now())
+            ->get();
+    }
+
+    /**
+     * Build account data for edit method.
+     *
+     * @access protected
+     * @return object
+     */
+    protected function buildDataForEdit(): object
+    {
+        return form::data()->add('editedBy', $this->app->user->account)
+            ->add('editedDate', helper::now())
             ->get();
     }
 }
