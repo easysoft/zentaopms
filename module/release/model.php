@@ -411,7 +411,7 @@ class releaseModel extends model
             }
             elseif($notify == 'SC' && !empty($release->build))
             {
-                $stories  = implode(',', $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll());
+                $stories  = implode(',', $this->dao->select('id,stories')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchPairs('id', 'stories'));
                 $stories .= ',' . $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($release->id)->fetch('stories');
                 $stories  = trim(str_replace(',,', ',', $stories), ',');
                 if(empty($stories)) continue;
@@ -992,13 +992,13 @@ class releaseModel extends model
      * Get the story list linked with the release.
      *
      * @param  string $storyIdList
-     * @param  int    $branch
+     * @param  string $branch
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getStoryList(string $storyIdList, int $branch, string $orderBy = '', object $pager = null): array
+    public function getStoryList(string $storyIdList, string $branch, string $orderBy = '', object $pager = null): array
     {
         $stories = $this->dao->select("t1.*,t2.id as buildID, t2.name as buildName, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on("FIND_IN_SET(t1.id, t2.stories)")
@@ -1006,12 +1006,12 @@ class releaseModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!empty($storyIdList))->groupBy('t1.id')->fi()
             ->beginIF($orderBy)->orderBy($orderBy)->fi()
-            ->page($pager)
+            ->page($pager, 't1.id')
             ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
-        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->eq($branch)->fetchPairs('story', 'stage');
+        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->in($branch)->fetchPairs('story', 'stage');
         foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
 
         return $stories;
@@ -1071,35 +1071,5 @@ class releaseModel extends model
         }
 
         return !dao::isError();
-    }
-
-    /**
-     * 获取导出的需求列表数据。
-     * Get the data of stories for export.
-     *
-     * @access public
-     * @return array
-     */
-    public function getStoryForExport(): array
-    {
-        $queryCondition = $this->session->storyQueryCondition ? $this->session->storyQueryCondition : '1=1';
-        return $this->dbh->query($queryCondition . " ORDER BY " . strtr($this->session->storyOrderBy, '_', ' '))->fetchAll();
-    }
-
-    /**
-     * 获取导出的bug列表数据。
-     * Get the data of bugs for export.
-     *
-     * @param  string $type bug|leftBug
-     * @access public
-     * @return array
-     */
-    public function getBugForExport($type = 'bug'): array
-    {
-        $queryName      = $type == 'bug' ? 'linkedBugQueryCondition' : 'leftBugsQueryCondition';
-        $queryCondition = $this->session->$queryName ? $this->session->$queryName : '1=1';
-        return $this->dao->select('id, title')->from(TABLE_BUG)->where($queryCondition)
-            ->beginIF($this->session->bugOrderBy !== false)->orderBy($this->session->bugOrderBy)->fi()
-            ->fetchAll('id');
     }
 }
