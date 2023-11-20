@@ -2164,9 +2164,13 @@ class baseRouter
         }
 
         /* 合并Hook文件。Cycle the hook methods and merge hook codes. */
-        $hookedMethods    = array_keys($hookCodes);
+        $hookedMethods     = array_keys($hookCodes);
         $mainTargetCodes   = file($mainTargetFile);
         $mergedTargetCodes = file($tmpTargetFile);
+
+        /* 如果已经合并，不需要再合并了。 If merged by other thread, return directly. */
+        if(!$mergedTargetCodes) return;
+
         foreach($hookedMethods as $method)
         {
             /* 通过反射获得hook脚本对应的方法所在的文件和起止行数。Reflection the hooked method to get it's defined position. */
@@ -3202,7 +3206,8 @@ class baseRouter
         if(!$this->config->debug) return true;
         if(!class_exists('dao')) return;
 
-        $sqlLog = $this->getLogRoot() . 'sql.' . date('Ymd') . '.log.php';
+        $runMode = PHP_SAPI == 'cli' ? '_cli' : '';
+        $sqlLog = $this->getLogRoot() . "sql$runMode." . date('Ymd') . '.log.php';
         if(!is_file($sqlLog)) file_put_contents($sqlLog, "<?php\n die();\n?" . ">\n");
 
         if(!is_writable($sqlLog)) return false;
