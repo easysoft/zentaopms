@@ -44,6 +44,6 @@ window.onPageRender = function(info)
         const dtable = zui.DTable.query('#table-gitlab-binduser');
 
         /* Clear saved formData. */
-        if(dtable) dtable.$.data.formData = {};
+        if(dtable) dtable.$.resetFormData();
     }
 };
