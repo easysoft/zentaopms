@@ -53,7 +53,7 @@ foreach($stories as $storyID => $story)
 
 formBatchPanel
 (
-    set::id('dataform'),
+    setID('dataform'),
     set::title($lang->story->batchToTask),
     set::items($fields),
     set::maxRows(count($data)),

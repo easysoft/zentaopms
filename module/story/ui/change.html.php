@@ -55,7 +55,7 @@ $formItems['reviewer'] = formGroup
             setClass('input-group-addon'),
             checkbox
             (
-                set::id('needNotReview'),
+                setID('needNotReview'),
                 set::name('needNotReview'),
                 set::checked($needReview),
                 set::text($lang->story->needNotReview),
@@ -96,7 +96,7 @@ $formItems['title'] = formGroup
             setClass('input-group-addon'),
             checkbox
             (
-                set::id('relievedTwins'),
+                setID('relievedTwins'),
                 set::name('relievedTwins'),
                 set::value(1),
                 $lang->story->relievedTwinsRelation
@@ -174,8 +174,8 @@ if($this->config->vision != 'or') $formItems['affected'] = $getAffectedTabs($sto
 $formActions = formRow
 (
     setClass('form-actions form-group no-label'),
-    btn(setClass('primary'), set::id('saveButton'), $lang->save),
-    btn(setClass('secondary'), set::id('saveDraftButton'), $lang->story->doNotSubmit),
+    btn(setClass('primary'), setID('saveButton'), $lang->save),
+    btn(setClass('secondary'), setID('saveDraftButton'), $lang->story->doNotSubmit),
     backBtn($lang->goback)
 );
 
@@ -183,7 +183,7 @@ formPanel
 (
     on::click('#saveButton', 'customSubmit'),
     on::click('#saveDraftButton', 'customSubmit'),
-    set::id('dataform'),
+    setID('dataform'),
     set::actions(false),
     $formTitle,
     $formItems,
