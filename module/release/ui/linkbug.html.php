@@ -20,7 +20,8 @@ searchForm
 (
     set::module('bug'),
     set::simple(true),
-    set::show(true)
+    set::show(true),
+    set::onSearch(jsRaw("window.onSearchLinks.bind(null, '{$type}')"))
 );
 
 dtable
@@ -41,6 +42,7 @@ dtable
             'data-url'  => createLink($buildModule, 'linkBug', "releaseID={$release->id}&browseType={$browseType}&param={$param}&type={$type}")
         ))
     )),
+    set::extraHeight('+144'),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(createLink($buildModule, 'view', "releaseID=$release->id&type=$type"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
     set::footPager(usePager())
 );

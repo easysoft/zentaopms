@@ -89,39 +89,39 @@ if(common::hasPriv($releaseModule, 'export') && ($summary || count($bugs) || cou
 
 $decodeParam  = helper::safe64Decode($param);
 $linkStoryBtn = $linkBugBtn = $linkLeftBtn = null;
+jsVar('linkParams', $decodeParam);
+jsVar('releaseModule', $releaseModule);
+
 if($canBeChanged)
 {
     if(common::hasPriv($releaseModule, 'linkStory'))
     {
-        $linkStoryBtn = btn(set(array(
-            'text'     => $lang->release->linkStory,
-            'icon'     => 'link',
-            'data-url' => createLink($releaseModule, 'linkStory', "releaseID={$release->id}" . ($link == 'true' && $type == 'story' ? $decodeParam : '&browseType=story')),
-            'class'    => 'link',
-            'type'     => 'primary',
-            'onclick'  => 'showLink(this)'
-        )));
+        $linkStoryBtn = btn
+            (
+                set::text($lang->release->linkStory),
+                set::icon('link'),
+                set::type('primary'),
+                bind::click("window.showLink('story')")
+            );
     }
 
     if(common::hasPriv($releaseModule, 'linkBug'))
     {
-        $linkBugBtn = btn(set(array(
-            'text'     => $lang->release->linkBug,
-            'icon'     => 'bug',
-            'data-url' => createLink($releaseModule, 'linkBug', "releaseID={$release->id}" . ($link == 'true' && $type == 'bug' ? $decodeParam : '&browseType=bug')),
-            'class'    => 'link',
-            'type'     => 'primary',
-            'onclick'  => 'showLink(this)'
-        )));
+        $linkBugBtn = btn
+            (
+                set::text($lang->release->linkBug),
+                set::icon('bug'),
+                set::type('primary'),
+                bind::click("window.showLink('bug')")
+            );
 
-        $linkLeftBtn = btn(set(array(
-            'text'     => $lang->release->linkBug,
-            'icon'     => 'bug',
-            'data-url' => createLink($releaseModule, 'linkBug', "releaseID={$release->id}". ($link == 'true' && $type == 'leftBug' ? $decodeParam . '&type=leftBug' : '&browseType=leftBug&param=0&type=leftBug')),
-            'class'    => 'link',
-            'type'     => 'primary',
-            'onclick'  => 'showLink(this)'
-        )));
+        $linkLeftBtn = btn
+            (
+                set::text($lang->release->linkBug),
+                set::icon('bug'),
+                set::type('primary'),
+                bind::click("window.showLink('leftBug')")
+            );
     }
 }
 
@@ -154,6 +154,7 @@ detailBody
                     set::checkable($canBatchUnlinkStory || $canBatchCloseStory),
                     set::sortLink(createLink($releaseModule, 'view', "releaseID={$release->id}&type=story&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
+                    set::extraHeight('+144'),
                     set::footToolbar($storyFootToolbar),
                     set::footPager(usePager('storyPager', '', array('recPerPage' => $storyPager->recPerPage, 'recTotal' => $storyPager->recTotal, 'linkCreator' => createLink($releaseModule, 'view', "releaseID={$release->id}&type=story&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$storyPager->recTotal}&recPerPage={recPerPage}&page={page}")))),
                     set::checkInfo(jsRaw('function(checkedIDList){return window.setStoryStatistics(this, checkedIDList);}'))
@@ -181,6 +182,7 @@ detailBody
                     set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
                     set::sortLink(createLink($releaseModule, 'view', "releaseID={$release->id}&type=bug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
+                    set::extraHeight('+144'),
                     set::footToolbar($bugFootToolbar),
                     set::footPager(usePager('bugPager', '', array('recPerPage' => $bugPager->recPerPage, 'recTotal' => $bugPager->recTotal, 'linkCreator' => createLink($releaseModule, 'view', "releaseID={$release->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$bugPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
                 )
@@ -207,6 +209,7 @@ detailBody
                     set::checkable($canBatchUnlinkBug || $canBatchCloseBug),
                     set::sortLink(createLink($releaseModule, 'view', "releaseID={$release->id}&type=leftBug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
                     set::orderBy($orderBy),
+                    set::extraHeight('+144'),
                     set::footToolbar($leftBugFootToolbar),
                     set::footPager(usePager('leftBugPager', '', array('recPerPage' => $leftBugPager->recPerPage, 'recTotal' => $leftBugPager->recTotal, 'linkCreator' => createLink($releaseModule, 'view', "releaseID={$release->id}&type=bug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$leftBugPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
                 )
