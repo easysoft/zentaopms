@@ -771,17 +771,28 @@ class searchModel extends model
             }
         }
 
-        $scoreColumn = "(MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE))";
-        $stmt = $this->dao->select("*, {$scoreColumn} as score")
+        $orderBy        = 'score_desc, editedDate_desc';
+        $scoreColumn    = "*, (MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE)) as score";
+        $whereCondition = "(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})";
+
+        if($this->config->db->driver == 'dm')
+        {
+            $whereCondition = preg_replace("/\b(AND|OR)\b/", "", $likeCondition, 1);
+            if(!$whereCondition) $whereCondition = '1=1';
+
+            $scoreColumn    = '*';
+            $orderBy        = 'editedDate_desc';
+        }
+        $stmt = $this->dao->select($scoreColumn)
             ->from(TABLE_SEARCHINDEX)
-            ->where("(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})")
+            ->where("($whereCondition)")
             ->andWhere('((vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObject)
             ->markRight(1)
             ->orWhere('(objectType')->in($filterObject)
             ->markRight(2)
             ->andWhere('addedDate')->le(helper::now())
-            ->orderBy('score_desc, editedDate_desc')
+            ->orderBy($orderBy)
             ->query();
 
         $idListGroup = array();
