@@ -446,13 +446,11 @@ $lang->ai->miniPrograms->field                    = new stdClass();
 $lang->ai->miniPrograms->field->name              = 'Field name';
 $lang->ai->miniPrograms->field->duplicatedNameTip = 'This name is already used, please try another name';
 $lang->ai->miniPrograms->field->type              = 'control type';
-$lang->ai->miniPrograms->field->typeList          = array('single-line text', 'multi-line text', 'single selection', 'multi-selection');
+$lang->ai->miniPrograms->field->typeList          = array('text' => 'single-line text', 'textarea' => 'multi-line text', 'radio' => 'single selection', 'checkbox' => 'multi-selection');
 $lang->ai->miniPrograms->field->placeholder       = 'Fill hints';
 $lang->ai->miniPrograms->field->required          = 'Required';
-$lang->ai->miniPrograms->field->isRequired        = 'Yes';
-$lang->ai->miniPrograms->field->isNotRequired     = 'No';
+$lang->ai->miniPrograms->field->requiredOptions   = array('No', 'Yes');
 $lang->ai->miniPrograms->field->add               = 'New field';
-$lang->ai->miniPrograms->field->addTitle          = 'New field';
 $lang->ai->miniPrograms->field->addTip            = 'Please click here to add field information';
 $lang->ai->miniPrograms->field->edit              = 'Edit field';
 $lang->ai->miniPrograms->field->configuration     = 'Field Configuration area';
@@ -473,6 +471,19 @@ $lang->ai->miniPrograms->field->default = array(
     'Objective',
     'As a <Role>, I hope to <Objective> in <Scene>.'
 );
+
+$lang->ai->miniPrograms->statuses = array(
+    ''            => 'all',
+    'draft'       => 'unpublished',
+    'active'      => 'published',
+    'createdByMe' => 'Created by me'
+);
+
+$lang->ai->miniPrograms->publishedOptions   = array('unpublished', 'published');
+$lang->ai->miniPrograms->optionName         = 'Option name';
+$lang->ai->miniPrograms->promptTemplate     = 'Prompt template';
+$lang->ai->miniPrograms->fieldConfiguration = 'Field configuration';
+$lang->ai->miniPrograms->summary            = 'There are %s small programs on this page.';
 
 $lang->ai->miniPrograms->field->emptyNameWarning      = 'Field name cannot be empty';
 $lang->ai->miniPrograms->field->duplicatedNameWarning = 'Duplicate field name';

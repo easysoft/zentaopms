@@ -146,13 +146,14 @@ class ai extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $order = common::appendOrder($orderBy);
+        $categoryList = array_merge($this->lang->ai->miniPrograms->categoryList, $this->ai->getCustomCategory());
 
         $programs = $this->ai->getMiniPrograms($category, $status, $order, $pager);
         foreach($programs as $program)
         {
             $program->canPublish     = empty($program->published) && $this->ai->canPublishMiniProgram($program);
             $program->createdByLabel = $this->loadModel('user')->getById($program->createdBy, 'account')->realname;
-            $program->categoryLabel  = $this->lang->ai->miniPrograms->categoryList[$program->category];
+            $program->categoryLabel  = $categoryList[$program->category];
             $program->publishedLabel = $program->published === '1'
                 ? $this->lang->ai->miniPrograms->statuses['active']
                 : $this->lang->ai->miniPrograms->statuses['draft'];
@@ -161,7 +162,7 @@ class ai extends control
         $this->view->title        = $this->lang->ai->miniPrograms->common;
         $this->view->miniPrograms = $programs;
         $this->view->category     = $category;
-        $this->view->categoryList = $this->ai->getCustomCategory();;
+        $this->view->categoryList = $categoryList;
         $this->view->status       = $status;
         $this->view->orderBy      = $orderBy;
         $this->view->pager        = $pager;
@@ -268,6 +269,21 @@ class ai extends control
         }
         $this->view->categoryList = $this->ai->getCustomCategory();
         $this->view->title = $this->lang->ai->miniPrograms->common;
+        $this->display();
+    }
+
+    public function miniProgramView($id)
+    {
+        $miniProgram = $this->ai->getMiniProgramByID($id);
+
+        $this->view->miniProgram = $miniProgram;
+        $this->view->categoryList = array_merge($this->lang->ai->miniPrograms->categoryList, $this->ai->getCustomCategory());
+        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('miniProgram', $id);
+        $this->view->actions     = $this->loadModel('action')->getList('miniProgram', $id);
+        $this->view->fields      = $this->ai->getMiniProgramFields($id);
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title       = "{$this->lang->ai->miniPrograms->common}#{$miniProgram->id} $miniProgram->name";
+
         $this->display();
     }
 

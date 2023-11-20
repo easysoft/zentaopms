@@ -11,8 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php'; ?>
 <?php
-  $list = array_merge($lang->ai->miniPrograms->categoryList, $categoryList);
-  $finalList = array_merge($list, $lang->ai->miniPrograms->allCategories);
+  $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
 ?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
@@ -30,7 +29,7 @@
     ?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php echo html::a($this->createLink('ai', 'createMiniProgram'), "<i class='icon icon-plus'></i> " . $lang->ai->miniPrograms->create, '', "class='btn btn-primary'"); ?>
+    <?= html::a($this->createLink('ai', 'createMiniProgram'), "<i class='icon icon-plus'></i> " . $lang->ai->miniPrograms->create, '', "class='btn btn-primary'"); ?>
   </div>
 </div>
 <div class="modal fade" id="disable-miniprogram">
@@ -88,14 +87,14 @@
   <div class="side-col" id="sidebar">
     <div class="cell">
       <ul id="modules" class="tree" data-ride="tree" data-name="tree-modules">
-        <?php foreach ($list as $key => $value): ?>
+        <?php foreach ($categoryList as $key => $value): ?>
           <li <?php if($category == $key) echo 'class="active"'; ?>>
             <a href="<?= $this->createLink('ai', 'miniPrograms', "category=$key"); ?>"><?= $value; ?></a>
           </li>
         <?php endforeach; ?>
       </ul>
       <div class="text-center">
-        <a class="btn btn-info btn-wide" href="<?= $this->createLink('ai', 'editMiniProgramCategory'); ?>"><?= $lang->ai->MaintenanceGroup; ?></a>
+        <a class="btn btn-info btn-wide" href="<?= $this->createLink('ai', 'editMiniProgramCategory'); ?>"><?= $lang->ai->maintenanceGroup; ?></a>
       </div>
     </div>
   </div>
@@ -112,14 +111,14 @@
             <th class="c-createdby"><?= $lang->prompt->createdBy; ?></th>
             <th class="c-createddate"><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->prompt->createdDate); ?></th>
             <th class="c-publisheddate"><?php common::printOrderLink('publishedDate', $orderBy, $vars, $lang->ai->miniPrograms->latestPublishedDate); ?></th>
-            <th class="c-actions" style="width: 160px;"><?php echo $lang->actions; ?></th>
+            <th class="c-actions" style="width: 160px;"><?= $lang->actions; ?></th>
           </tr>
         </thead>
         <tbody>
           <?php foreach ($miniPrograms as $miniProgram) : ?>
             <tr>
               <td class="c-id"><?= $miniProgram->id; ?></td>
-              <td class="c-name"><?= $miniProgram->name; ?></td>
+              <td class="c-name"><a href="<?= $this->createLink('ai', 'miniProgramView', "id={$miniProgram->id}"); ?>"><?= $miniProgram->name; ?></a></td>
               <td class="c-status"><?= $miniProgram->publishedLabel; ?></td>
               <td class="c-category"><?= $miniProgram->categoryLabel; ?></td>
               <td class="c-createdby"><?= $miniProgram->createdByLabel; ?></td>
@@ -157,7 +156,7 @@
         </tbody>
       </table>
       <div class='table-footer'>
-          <div class="table-statistic"><?php echo sprintf($lang->ai->miniPrograms->summary, count($miniPrograms));?></div>
+          <div class="table-statistic"><?= sprintf($lang->ai->miniPrograms->summary, count($miniPrograms));?></div>
           <?php $pager->show('right', 'pagerjs');?>
         </div>
     </div>

@@ -10,7 +10,7 @@
 </template>
 <div id="mainMenu">
   <div class="btn-toolbar" style="padding-bottom: 2px;">
-    <a href="javascript:history.go(-1)" class="btn btn-secondary">
+    <a href="<?= $this->createLink('ai', 'miniPrograms'); ?>" class="btn btn-secondary">
       <i class="icon icon-back icon-sm"></i> <?php echo $lang->goback; ?>
     </a>
     <div class="divider"></div>
@@ -45,7 +45,7 @@
           </div>
           <div class="form-actions">
             <button type="submit" class="btn btn-wide btn-primary"><?= $lang->save; ?></button>
-            <a type="button" class="btn btn-wide" href="javascript:history.go(-1)"><?= $lang->goback; ?></a>
+            <a type="button" class="btn btn-wide" href="<?= $this->createLink('ai', 'miniPrograms'); ?>"><?= $lang->goback; ?></a>
           </div>
         </div>
       </div>

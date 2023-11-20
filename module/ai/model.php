@@ -335,7 +335,7 @@ class aiModel extends model
 
     public function updateCustomCategory()
     {
-        $data = array_filter($_POST['custom']);
+        $data = array_filter($_POST);
         if(empty($data)) return;
 
         $this->dao->delete()
@@ -459,6 +459,7 @@ class aiModel extends model
         $data = fixer::input('post')->get();
         $data->editedBy    = $this->app->user->account;
         $data->editedDate  = helper::now();
+        $data->published   = '0';
         if(empty($appID))
         {
             $data->createdBy   = $this->app->user->account;

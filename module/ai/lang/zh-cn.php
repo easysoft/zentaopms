@@ -442,30 +442,28 @@ $lang->ai->miniPrograms->placeholder->input   = '请输入';
 
 $lang->ai->miniPrograms->deleteFieldTip = '您确定删除该字段吗？';
 
-$lang->ai->miniPrograms->field                    = new stdClass();
-$lang->ai->miniPrograms->field->name              = '字段名称';
-$lang->ai->miniPrograms->field->duplicatedNameTip = '该名称已使用，请尝试其他名称';
-$lang->ai->miniPrograms->field->type              = '控件类型';
-$lang->ai->miniPrograms->field->typeList          = array('单行文本', '多行文本', '单选', '多选');
-$lang->ai->miniPrograms->field->placeholder       = '填写提示';
-$lang->ai->miniPrograms->field->required          = '是否必填';
-$lang->ai->miniPrograms->field->isRequired        = '是';
-$lang->ai->miniPrograms->field->isNotRequired     = '否';
-$lang->ai->miniPrograms->field->add               = '新增字段';
-$lang->ai->miniPrograms->field->addTitle          = '新增字段';
-$lang->ai->miniPrograms->field->addTip            = '请点击此处以添加字段信息';
-$lang->ai->miniPrograms->field->edit              = '编辑字段';
-$lang->ai->miniPrograms->field->configuration     = '字段配置区';
-$lang->ai->miniPrograms->field->debug             = '调试区';
-$lang->ai->miniPrograms->field->preview           = '预览区';
-$lang->ai->miniPrograms->field->option            = '选项';
-$lang->ai->miniPrograms->field->contentDebugging  = '内容调试';
+$lang->ai->miniPrograms->field                      = new stdClass();
+$lang->ai->miniPrograms->field->name                = '字段名称';
+$lang->ai->miniPrograms->field->duplicatedNameTip   = '该名称已使用，请尝试其他名称';
+$lang->ai->miniPrograms->field->type                = '控件类型';
+$lang->ai->miniPrograms->field->typeList            = array('text' => '单行文本', 'textarea' => '多行文本', 'radio' => '单选', 'checkbox' => '多选');
+$lang->ai->miniPrograms->field->placeholder         = '填写提示';
+$lang->ai->miniPrograms->field->required            = '是否必填';
+$lang->ai->miniPrograms->field->requiredOptions     = array('否', '是');
+$lang->ai->miniPrograms->field->add                 = '新增字段';
+$lang->ai->miniPrograms->field->addTip              = '请点击此处以添加字段信息';
+$lang->ai->miniPrograms->field->edit                = '编辑字段';
+$lang->ai->miniPrograms->field->configuration       = '字段配置区';
+$lang->ai->miniPrograms->field->debug               = '调试区';
+$lang->ai->miniPrograms->field->preview             = '预览区';
+$lang->ai->miniPrograms->field->option              = '选项';
+$lang->ai->miniPrograms->field->contentDebugging    = '内容调试';
 $lang->ai->miniPrograms->field->contentDebuggingTip = '请在此处输入字段进行调试。';
-$lang->ai->miniPrograms->field->prompterDesign    = '提词设计';
-$lang->ai->miniPrograms->field->prompterDesignTip = '输入“<>”符号可引用已配置的字段，“<>”前后采用空格进行间隔。';
-$lang->ai->miniPrograms->field->prompterPreview   = '提词预览';
-$lang->ai->miniPrograms->field->generateResult    = '生成结果';
-$lang->ai->miniPrograms->field->resultPreview     = '结果预览';
+$lang->ai->miniPrograms->field->prompterDesign      = '提词设计';
+$lang->ai->miniPrograms->field->prompterDesignTip   = '输入“<>”符号可引用已配置的字段，“<>”前后采用空格进行间隔。';
+$lang->ai->miniPrograms->field->prompterPreview     = '提词预览';
+$lang->ai->miniPrograms->field->generateResult      = '生成结果';
+$lang->ai->miniPrograms->field->resultPreview       = '结果预览';
 
 $lang->ai->miniPrograms->field->default = array(
     '角色',
@@ -485,7 +483,11 @@ $lang->ai->miniPrograms->statuses = array(
     'createdByMe' => '由我创建'
 );
 
-$lang->ai->miniPrograms->summary = '本页共 %s 个小程序。';
+$lang->ai->miniPrograms->publishedOptions   = array('未发布', '已发布');
+$lang->ai->miniPrograms->optionName         = '选项名称';
+$lang->ai->miniPrograms->promptTemplate     = '提词模板';
+$lang->ai->miniPrograms->fieldConfiguration = '字段配置';
+$lang->ai->miniPrograms->summary            = '本页共 %s 个小程序。';
 
 $lang->ai->models = new stdclass();
 $lang->ai->models->title          = '语言模型配置';
