@@ -331,7 +331,12 @@
             const props = info.data.props;
             if(typeof props !== 'object') return;
             const component = $target.zui(info.name);
-            if(typeof component === 'object' && typeof component.render === 'function') component.render(props);
+            if(typeof component === 'object' && typeof component.render === 'function')
+            {
+                beforeUpdate($target, info, options);
+                component.render(props);
+                afterUpdate($target, info, options);
+            }
             return;
         }
 
