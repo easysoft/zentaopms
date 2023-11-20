@@ -20,8 +20,8 @@ $canBatchReview             = hasPriv('testcase', 'batchReview') && !$isOnlyScen
 $canBatchDelete             = hasPriv('testcase', 'batchDelete') && !$isOnlyScene;
 $canBatchChangeType         = hasPriv('testcase', 'batchChangeType') && !$isOnlyScene;
 $canBatchConfirmStoryChange = hasPriv('testcase', 'batchConfirmStoryChange') && !$isOnlyScene;
-$canBatchChangeBranch       = hasPriv('testcase', 'batchChangeBranch') && !$isOnlyScene && $product->type != 'normal';
-$canBatchChangeModule       = hasPriv('testcase', 'batchChangeModule') && !empty($productID) && ($product->type == 'normal' || $branch !== 'all');
+$canBatchChangeBranch       = hasPriv('testcase', 'batchChangeBranch') && !$isOnlyScene && isset($product->type) && $product->type != 'normal';
+$canBatchChangeModule       = hasPriv('testcase', 'batchChangeModule') && !empty($productID) && ((isset($product->type) && $product->type == 'normal') || $branch !== 'all');
 $canBatchChangeScene        = hasPriv('testcase', 'batchChangeScene') && !$isOnlyScene;
 $canImportToLib             = hasPriv('testcase', 'importToLib') && !$isOnlyScene;
 $canGroupBatch              = ($canBatchRun || $canBatchEdit || $canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirmStoryChange);
@@ -142,7 +142,7 @@ dtable
     set::footPager(usePager()),
     set::emptyTip($lang->testcase->noCase),
     set::createTip($lang->testcase->create),
-    set::createLink($canModify && hasPriv('testcase', 'create') ? createLink('testcase', 'create', "productID={$product->id}&branch={$branch}&moduleID={$initModule}" . ($app->tab == 'project' ? "&from=project&param={$projectID}" : '')) : ''),
+    set::createLink($canModify && hasPriv('testcase', 'create') ? createLink('testcase', 'create', "productID={$productID}&branch={$branch}&moduleID={$initModule}" . ($app->tab == 'project' ? "&from=project&param={$projectID}" : '')) : ''),
     set::customData(array('isOnlyScene' => $isOnlyScene, 'pageSummary' => $summary, 'modules' => $modulePairs))
 );
 
