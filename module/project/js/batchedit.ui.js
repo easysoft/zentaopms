@@ -7,12 +7,12 @@
  */
 function batchComputeWorkDays()
 {
-    if($(this).closest('tr').find('div[data-longtime="1"]').length > 0) return false;
+    const $tr = $(this).closest('tr');
+    if($tr.find('div[data-longtime="1"]').length > 0) return false;
 
-    const index     = $(this).attr('name').replace(/(begin\[)|(end\[)|(\])/g, '');
-    const beginDate = $('[name=begin\\[' + index + '\\]').val();
-    const endDate   = $('[name=end\\[' + index + '\\]').val();
-    $('[name=days\\[' + index + '\\]').val(computeDaysDelta(beginDate, endDate));
+    const beginDate = $tr.find('[name^=begin]').val();
+    const endDate   = $tr.find('[name^=end]').val();
+    $tr.find('[name^=days]').val(computeDaysDelta(beginDate, endDate));
 }
 
 window.renderRowData = function($row, index, row)
