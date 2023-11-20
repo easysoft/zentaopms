@@ -64,7 +64,7 @@ class testreport extends control
             {
                 $products = $this->product->getPairs();
             }
-            if(empty($products) and !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testreport&objectID=$objectID")));
+            if(empty($products) && !isInModal() && (helper::isAjaxRequest('zin') || helper::isAjaxRequest('fetch'))) $this->locate($this->createLink('product', 'showErrorNone', "moduleName={$tab}&activeMenu=testreport&objectID=$objectID"));
         }
         else
         {
