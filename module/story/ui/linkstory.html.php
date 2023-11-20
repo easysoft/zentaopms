@@ -40,7 +40,7 @@ searchForm
 
 dtable
 (
-    set::id('linkStories'),
+    setID('linkStories'),
     set::userMap($users),
     set::cols($cols),
     set::data($data),

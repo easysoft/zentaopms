@@ -33,7 +33,7 @@ $versions = array();
 for($i = $story->version; $i >= 1; $i --) $versions[] = array('text' => "#{$i}", 'url' => inlink('view', "storyID={$story->id}&version=$i&param=0&storyType={$story->type}"));
 
 $menus = $this->story->buildOperateMenu($story, 'view', $project ? $project : null);
-foreach($menus['dropMenus'] as $dropMenuKey => $dropItems) menu(set::id($dropMenuKey), setClass('menu dropdown-menu'), set::items($dropItems));
+foreach($menus['dropMenus'] as $dropMenuKey => $dropItems) menu(setID($dropMenuKey), setClass('menu dropdown-menu'), set::items($dropItems));
 
 /* Get module items. */
 $moduleTitle = '';
@@ -107,7 +107,7 @@ if($story->type == 'story')
                 set::title($task->name),
                 (isset($execution->type) && $execution->type == 'kanban' && $isInModal) ? span(setClass('muted title'), $executionName) : a(set::href($executionLink), setClass('muted title'), $executionName),
                 label(setClass('circle size-sm'), $task->id),
-                common::hasPriv('task', 'view') ? a(set::href($this->createLink('task', 'view', "taskID=$task->id")), setClass('title'), set('data-toggle', 'modal'), $task->name) : span(setClass('title'), $task->name),
+                common::hasPriv('task', 'view') ? a(set::href($this->createLink('task', 'view', "taskID=$task->id")), setClass('title'), setData(array('toggle' => 'modal')), $task->name) : span(setClass('title'), $task->name),
                 label(setClass("status-{$task->status} size-sm"), $this->lang->task->statusList[$task->status])
             );
         }
@@ -262,13 +262,13 @@ detailBody
                     ) : null,
                     item
                     (
-                        set::id('source'),
+                        setID('source'),
                         set::name($lang->story->source),
                         zget($lang->story->sourceList, $story->source, '')
                     ),
                     item
                     (
-                        set::id('sourceNoteBox'),
+                        setID('sourceNoteBox'),
                         set::name($lang->story->sourceNote),
                         $story->sourceNote
                     ),
@@ -396,9 +396,9 @@ detailBody
                             setClass('twins'),
                             $branch ? label(setClass($labelClass . ' circle branch size-sm'), set::title($branch), $branch) : null,
                             label(setClass('circle size-sm'), $twin->id),
-                            common::hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "id={$twin->id}")), setClass('title'), set::title($twin->title), set('data-toggle', 'modal'), $twin->title) : span(setClass('title'), $twin->title),
+                            common::hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "id={$twin->id}")), setClass('title'), set::title($twin->title), setData(array('toggle' => 'modal')), $twin->title) : span(setClass('title'), $twin->title),
                             label(setClass('size-sm'), set::title($stage), $stage),
-                            common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink hidden size-xs"), on::click('unlinkTwins'), set('data-id', $twin->id), icon('unlink')) : null
+                            common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink hidden size-xs"), on::click('unlinkTwins'), setData(array('id' => $twin->id)), icon('unlink')) : null
                         );
                     }, $twins))
                 )
@@ -421,11 +421,11 @@ detailBody
                             setClass('relateStories'),
                             set::title($relation->title),
                             label(setClass('circle size-sm'), $relation->id),
-                            $canViewStory ? a(set::href(helper::createLink('story', 'view', "id={$relation->id}&version=0&param=0&storyType=$relationType")), setClass('title'), set('data-toggle', 'modal'), $relation->title) : span(setClass('title'), $relation->title),
+                            $canViewStory ? a(set::href(helper::createLink('story', 'view', "id={$relation->id}&version=0&param=0&storyType=$relationType")), setClass('title'), setData(array('toggle' => 'modal')), $relation->title) : span(setClass('title'), $relation->title),
                             $canLinkStory ? a(set('url', helper::createLink('story', 'linkStory', "storyID=$story->id&type=remove&linkedID={$relation->id}&browseType=&queryID=0&storyType=$story->type")), setClass('unlink unlinkStory hidden'), icon('link')) : null
                         );
                     }, $relations)),
-                    !common::hasPriv($story->type, 'linkStory') ? null : h::li(a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")), set('data-toggle', 'modal'), set('data-size', 'lg'), set::id('linkButton'), setClass('btn secondary size-sm'), icon('plus'), $lang->story->link . ($story->type == 'story' ? $lang->story->requirement : $lang->story->story)))
+                    !common::hasPriv($story->type, 'linkStory') ? null : h::li(a(set::href(helper::createLink('story', 'linkStory', "storyID=$story->id&type=linkStories&linkedID=0&browseType=&queryID=0&storyType=$story->type")), setData(array('toggle' => 'modal', 'size' => 'lg')), setID('linkButton'), setClass('btn secondary size-sm'), icon('plus'), $lang->story->link . ($story->type == 'story' ? $lang->story->requirement : $lang->story->story)))
                 )
             ) : null,
             $story->type == 'story' && common::hasPriv('story', 'tasks') ? tabPane
@@ -452,7 +452,7 @@ detailBody
                             (
                                 set::title($fromBug->title),
                                 label(setClass('circle size-sm'), $fromBug->id),
-                                common::hasPriv('bug', 'view') ? a(set::href($this->createLink('bug', 'view', "bugID=$fromBug->id")), setClass('title'), set('data-toggle', 'modal'), set::title($fromBug->title), $fromBug->title) : span(setClass('title'), $fromBug->title)
+                                common::hasPriv('bug', 'view') ? a(set::href($this->createLink('bug', 'view', "bugID=$fromBug->id")), setClass('title'), setData(array('toggle' => 'modal')), set::title($fromBug->title), $fromBug->title) : span(setClass('title'), $fromBug->title)
                             )
                         )
                     ) : null,
@@ -468,7 +468,7 @@ detailBody
                                 (
                                     set::title($bug->title),
                                     label(setClass('circle size-sm'), $bug->id),
-                                    common::hasPriv('bug', 'view') ? a(set::href(helper::createLink('bug', 'view', "bugID=$bug->id")), setClass('title'), set('data-toggle', 'modal'), set::title($bug->title), $bug->title) : span(setClass('title'), $bug->title),
+                                    common::hasPriv('bug', 'view') ? a(set::href(helper::createLink('bug', 'view', "bugID=$bug->id")), setClass('title'), setData(array('toggle' => 'modal')), set::title($bug->title), $bug->title) : span(setClass('title'), $bug->title),
                                     label(setClass("status-{$bug->status} size-sm"), $lang->bug->statusList[$bug->status])
                                 );
                             }, $bugs))
@@ -486,7 +486,7 @@ detailBody
                                 (
                                     set::title($case->title),
                                     label(setClass('circle size-sm'), $case->id),
-                                    common::hasPriv('testcase', 'view') ? a(set::href(helper::createLink('testcase', 'view', "caseID=$case->id")), setClass('title'), set('data-toggle', 'modal'), set::title($case->title), $case->title) : span(setClass('title'), $case->title)
+                                    common::hasPriv('testcase', 'view') ? a(set::href(helper::createLink('testcase', 'view', "caseID=$case->id")), setClass('title'), setData(array('toggle' => 'modal')), set::title($case->title), $case->title) : span(setClass('title'), $case->title)
                                 );
                             }, $cases))
                         )
@@ -505,7 +505,7 @@ detailBody
                                 (
                                     set::title($build->name),
                                     label(setClass('circle size-sm'), $build->id),
-                                    common::hasPriv('build', 'view') ? a(set::href(helper::createLink('build', 'view', "buildID=$build->id")), setClass('title'), set('data-app', $tab), set::title($build->name), $build->name) : span(setClass('title'), $build->name)
+                                    common::hasPriv('build', 'view') ? a(set::href(helper::createLink('build', 'view', "buildID=$build->id")), setClass('title'), setData(array('app' => $tab)), set::title($build->name), $build->name) : span(setClass('title'), $build->name)
                                 );
                             }, $builds))
                         )
@@ -525,7 +525,7 @@ detailBody
                                 (
                                     set::title($release->name),
                                     label(setClass('circle size-sm'), $release->id),
-                                    common::hasPriv($releaseModule, 'view') ? a(set::href(helper::createLink($releaseModule, 'view', "releaseID=$release->id")), setClass('title'), set('data-app', $tab), set::title($release->name), $release->name) : span(setClass('title'), $release->name)
+                                    common::hasPriv($releaseModule, 'view') ? a(set::href(helper::createLink($releaseModule, 'view', "releaseID=$release->id")), setClass('title'), setData(array('app' => $tab)), set::title($release->name), $release->name) : span(setClass('title'), $release->name)
                                 );
                             }, $releases))
                         )
@@ -544,7 +544,7 @@ detailBody
                                 (
                                     set::title($storyTitle),
                                     label(setClass('circle size-sm'), $storyID),
-                                    $hasPriv ? a(set::href(helper::createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type")), setClass('title'), set('data-toggle', 'modal'), set::title($storyTitle), $storyTitle) : span(setClass('title'), $storyTitle)
+                                    $hasPriv ? a(set::href(helper::createLink('story', 'view', "storyID=$storyID&version=0&param=0&storyType=$story->type")), setClass('title'), setData(array('toggle' => 'modal')), set::title($storyTitle), $storyTitle) : span(setClass('title'), $storyTitle)
                                 );
                             }, array_keys($story->linkStoryTitles), array_values($story->linkStoryTitles)))
                         )
@@ -566,7 +566,7 @@ detailBody
                                         set::href(helper::createLink('mr', 'view', "MRID=$MRID")),
                                         setClass('title'),
                                         set::title($linkMRTitle),
-                                        set('data-app', 'devops'),
+                                        setData(array('app', 'devops')),
                                         $linkMRTitle
                                     ) : span(setClass('title'), $linkMRTitle)
                                 );
@@ -590,7 +590,7 @@ detailBody
                                         set::href(helper::createLink('repo', 'revision', "repoID={$commit->repo}&objectID=0&revision={$commit->revision}")),
                                         setClass('title'),
                                         set::title($commit->comment),
-                                        set('data-app', 'devops'),
+                                        setData(array('app' => 'devops')),
                                         $commit->comment
                                     ) : span(setClass('title'), $commit->comment)
                                 );
@@ -607,7 +607,7 @@ if(isset($libs))
 {
     modal
     (
-        set::id('importToLib'),
+        setID('importToLib'),
         set::title($lang->story->importToLib),
         form
         (
