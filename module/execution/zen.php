@@ -404,7 +404,7 @@ class executionZen extends execution
         $this->view->title           = $this->lang->execution->testcase;
         $this->view->executionID     = $executionID;
         $this->view->productID       = $productID;
-        $this->view->product         = $this->product->getByID((int) $productID);
+        $this->view->product         = $this->loadModel('product')->getByID((int)$productID);
         $this->view->orderBy         = $orderBy;
         $this->view->pager           = $pager;
         $this->view->type            = $type;
