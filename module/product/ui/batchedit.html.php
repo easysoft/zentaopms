@@ -38,10 +38,7 @@ $fieldNameList = array_keys($items);
 $productData   = array();
 foreach($products as $product)
 {
-    foreach($fieldNameList as $fieldName)
-    {
-        $productData[$product->id][$fieldName] = zget($product, $fieldName, $fieldName == 'productIdList' ? $product->id : '');
-    }
+    foreach($fieldNameList as $fieldName) $productData[$product->id][$fieldName] = zget($product, $fieldName, $fieldName == 'productIdList' ? $product->id : '');
 }
 
 formBatchPanel
