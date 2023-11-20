@@ -368,7 +368,7 @@ class aiModel extends model
      */
     public function getMiniPrograms($category = '', $status = '', $order = 'createdDate_desc', $pager = null)
     {
-        return $this->dao->select('*')
+        $progarms = $this->dao->select('*')
             ->from(TABLE_MINIPROGRAM)
             ->where('deleted')->eq('0')
             ->beginIF(!empty($category))->andWhere('category')->eq($category)->fi()
@@ -378,6 +378,8 @@ class aiModel extends model
             ->orderBy($order)
             ->page($pager)
             ->fetchAll();
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'miniProgram');
+        return $progarms;
     }
 
     public function getMiniProgramFields($appID)

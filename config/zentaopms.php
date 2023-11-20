@@ -535,6 +535,7 @@ $config->objectTables['solution']     = TABLE_SOLUTION;
 $config->objectTables['artifactrepo'] = TABLE_ARTIFACTREPO;
 $config->objectTables['prompt']       = TABLE_PROMPT;
 $config->objectTables['metric']       = TABLE_METRIC;
+$config->objectTables['miniProgram']  = TABLE_MINIPROGRAM;
 
 $config->newFeatures      = array('aiChat', 'aiPrompts');
 $config->disabledFeatures = '';
