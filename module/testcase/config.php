@@ -83,9 +83,9 @@ $config->testcase->search['params']['lib']          = array('operator' => '=',  
 
 $config->testcase->search['params']['lastRunner']     = array('operator' => '=', 'control' => 'select', 'values' => 'users');
 $config->testcase->search['params']['lastRunResult']  = array('operator' => '=', 'control' => 'select', 'values' => array_diff($lang->testcase->resultList, array('n/a' => $lang->testcase->resultList['n/a'])) + array('null' => $lang->testcase->unexecuted));
-$config->testcase->search['params']['lastRunDate']    = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
-$config->testcase->search['params']['openedDate']     = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
-$config->testcase->search['params']['lastEditedDate'] = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
+$config->testcase->search['params']['lastRunDate']    = array('operator' => '=', 'control' => 'date',  'values' => '');
+$config->testcase->search['params']['openedDate']     = array('operator' => '=', 'control' => 'date',  'values' => '');
+$config->testcase->search['params']['lastEditedDate'] = array('operator' => '=', 'control' => 'date',  'values' => '');
 
 global $app;
 $config->testcase->search['module']          = 'testcase';

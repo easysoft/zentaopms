@@ -13,6 +13,6 @@ $config->productplan->search['params']['id']     = array('operator' => '=',     
 $config->productplan->search['params']['title']  = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->productplan->search['params']['branch'] = array('operator' => 'include', 'control' => 'select', 'values' => '');
 $config->productplan->search['params']['status'] = array('operator' => '=',       'control' => 'select', 'values' => $lang->productplan->statusList);
-$config->productplan->search['params']['begin']  = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->productplan->search['params']['end']    = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->productplan->search['params']['begin']  = array('operator' => '=',       'control' => 'date',  'values' => '');
+$config->productplan->search['params']['end']    = array('operator' => '=',       'control' => 'date',  'values' => '');
 

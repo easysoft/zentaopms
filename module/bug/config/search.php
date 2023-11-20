@@ -79,11 +79,11 @@ $config->bug->search['params']['lastEditedBy']  = array('operator' => '=',      
 $config->bug->search['params']['mailto']        = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 $config->bug->search['params']['openedBuild']   = array('operator' => 'include', 'control' => 'select', 'values' => 'builds');
 $config->bug->search['params']['resolvedBuild'] = array('operator' => '=',       'control' => 'select', 'values' => 'builds');
-$config->bug->search['params']['openedDate']    = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->bug->search['params']['assignedDate']  = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->bug->search['params']['resolvedDate']  = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->bug->search['params']['closedDate']    = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->bug->search['params']['lastEditedDate']= array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->bug->search['params']['deadline']      = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
-$config->bug->search['params']['activatedDate'] = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
+$config->bug->search['params']['openedDate']    = array('operator' => '=',       'control' => 'date',  'values' => '');
+$config->bug->search['params']['assignedDate']  = array('operator' => '=',       'control' => 'date',  'values' => '');
+$config->bug->search['params']['resolvedDate']  = array('operator' => '=',       'control' => 'date',  'values' => '');
+$config->bug->search['params']['closedDate']    = array('operator' => '=',       'control' => 'date',  'values' => '');
+$config->bug->search['params']['lastEditedDate']= array('operator' => '=',       'control' => 'date',  'values' => '');
+$config->bug->search['params']['deadline']      = array('operator' => '=',       'control' => 'date',  'values' => '');
+$config->bug->search['params']['activatedDate'] = array('operator' => '=',       'control' => 'date',  'values' => '');
 

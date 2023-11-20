@@ -102,4 +102,4 @@ $config->trash->search['fields']['date']       = $lang->action->dateAB;
 $config->trash->search['params']['objectName'] = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->trash->search['params']['objectID']   = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->trash->search['params']['actor']      = array('operator' => '=', 'control' => 'select',  'values' => 'users');
-$config->trash->search['params']['date']       = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
+$config->trash->search['params']['date']       = array('operator' => '=', 'control' => 'date',  'values' => '');

@@ -47,9 +47,9 @@ $config->api->search['params']['title']      = array('operator' => 'include', 'c
 $config->api->search['params']['id']         = array('operator' => '=',       'control' => 'input',  'values' => '');
 $config->api->search['params']['lib']        = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->api->search['params']['addedBy']    = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->api->search['params']['addedDate']  = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
+$config->api->search['params']['addedDate']  = array('operator' => '=', 'control' => 'date',  'values' => '');
 $config->api->search['params']['editedBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->api->search['params']['editedDate'] = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
+$config->api->search['params']['editedDate'] = array('operator' => '=', 'control' => 'date',  'values' => '');
 $config->api->search['params']['path']       = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->api->search['params']['method']     = array('operator' => '=',       'control' => 'select', 'values' => $lang->api->methodOptions);
 $config->api->search['params']['status']     = array('operator' => '=',       'control' => 'select', 'values' => $lang->api->statusOptions);

@@ -27,6 +27,6 @@ $config->host->search['params']['status']      = array('operator' => '=', 'contr
 $config->host->search['params']['osName']      = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->host->search['params']['osVersion']   = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->host->search['params']['createdBy']   = array('operator' => '=', 'control' => 'select',  'values' => 'users');
-$config->host->search['params']['createdDate'] = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
+$config->host->search['params']['createdDate'] = array('operator' => '=', 'control' => 'date',  'values' => '');
 $config->host->search['params']['editedBy']    = array('operator' => '=', 'control' => 'select',  'values' => 'users');
-$config->host->search['params']['editedDate']  = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');
+$config->host->search['params']['editedDate']  = array('operator' => '=', 'control' => 'date',  'values' => '');

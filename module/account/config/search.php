@@ -20,6 +20,6 @@ $config->account->search['params']['account']     =  array('operator' => 'includ
 $config->account->search['params']['email']       =  array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->account->search['params']['mobile']      =  array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->account->search['params']['createdBy']   =  array('operator' => '=', 'control' => 'select',  'values' => 'users');
-$config->account->search['params']['createdDate'] =  array('operator' => '=', 'control' => 'input',   'values' => '', 'class' => 'date');
+$config->account->search['params']['createdDate'] =  array('operator' => '=', 'control' => 'date',  'values' => '');
 $config->account->search['params']['editedBy']    =  array('operator' => '=', 'control' => 'select',  'values' => 'users');
-$config->account->search['params']['editedDate']  =  array('operator' => '=', 'control' => 'input',   'values' => '', 'class' => 'date');
+$config->account->search['params']['editedDate']  =  array('operator' => '=', 'control' => 'date',  'values' => '');
