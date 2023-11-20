@@ -661,21 +661,37 @@ class treeModel extends model
             if($startModule) $startModulePath = $startModule->path . '%';
         }
 
+        $executionModules = $this->getTaskTreeModules($rootID, true, 'bug');
+
         /* Get module according to product. */
-        $productNum = count($products);
         $moduleName = strpos(',project,execution,', ",$tab,") !== false ? $this->app->tab  : 'bug';
         $methodName = strpos(',project,execution,', ",$tab,") !== false ? 'bug' : 'browse';
         $param      = strpos(',project,execution,', ",$tab,") !== false ? "{$tab}ID={$rootID}&" : '';
 
         $modules = array();
-        foreach($products as $id => $product)
+        foreach($products as $productID => $product)
         {
-            $module = new stdclass();
-            $module->id     = uniqid();
-            $module->parent = 0;
-            $module->name   = is_object($product) ? $product->name : $product;
-            $module->url    = helper::createLink($moduleName, $methodName, "{$param}productID=$id");
-            $modules[] = $module;
+            $data = new stdclass();
+            $data->id     = uniqid();
+            $data->parent = 0;
+            $data->name   = is_object($product) ? $product->name : $product;
+            $data->url    = helper::createLink($moduleName, $methodName, "{$param}productID=$productID");
+            $modules[] = $data;
+
+            if(empty($branchGroups[$productID])) $branchGroups[$productID]['0'] = '';
+            foreach($branchGroups[$productID] as $branch => $branchName)
+            {
+                $query = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = $productID and type = 'bug' and branch = '$branch') OR (root = $productID and type = 'story' and branch = '$branch'))")
+                    ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
+                    ->andWhere('deleted')->eq(0)
+                    ->orderBy('grade desc, `order`, type')
+                    ->get();
+                $stmt = $this->app->dbQuery($query);
+                while($module = $stmt->fetch())
+                {
+                    if(isset($executionModules[$module->id])) $modules[] = $this->buildTree($module, 'bug', $data->id, $userFunc, $extra, $branch);
+                }
+            }
         }
 
         return $modules;
@@ -933,7 +949,7 @@ class treeModel extends model
             $extra['branchID'] = $branch;
         }
 
-        if($type != 'case') $parent = (int)$parent;
+        if($type != 'case' && $type != 'bug') $parent = (int)$parent;
         return call_user_func($userFunc, $type, $module, $parent, $extra);
     }
 
@@ -1246,12 +1262,12 @@ class treeModel extends model
      *
      * @param  string $type
      * @param  object $module
-     * @param  int    $parent
+     * @param  string $parent
      * @param  array  $extra
      * @access public
      * @return object
      */
-    public function createBugLink(string $type, object $module, int $parent, array $extra = array())
+    public function createBugLink(string $type, object $module, string $parent, array $extra = array())
     {
         $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'bug';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'bug' : 'browse';
@@ -1266,8 +1282,8 @@ class treeModel extends model
         if($this->app->tab == 'project')   $param = "projectID={$projectID}&productID={$module->root}&branch={$branchID}&orderBy={$orderBy}&build={$build}&type={$extraType}&param={$module->id}";
 
         $data = new stdclass();
-        $data->id     = $parent ? uniqid() : $module->id;
-        $data->parent = $parent ? $parent : $module->parent;
+        $data->id     = $module->id;
+        $data->parent = $parent && empty($module->parent) ? $parent : $module->parent;
         $data->name   = $module->name;
         $data->url    = helper::createLink($moduleName, $methodName, $param);
 
