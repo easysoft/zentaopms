@@ -49,6 +49,7 @@ if(!isInModal())
     );
 }
 
+$objectType = $object->type == 'project' ? 'project' : 'execution';
 dtable
 (
     set::groupDivider(true),
@@ -60,7 +61,7 @@ dtable
     set::showToolbarOnChecked(false),
     set::footToolbar($footToolbar),
     set::footPager(usePager(array(
-        'linkCreator' => helper::createLink($object->type, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&recPerPage={recPerPage}&page={page}&extra=$extra")
+        'linkCreator' => helper::createLink($objectType, 'linkStory', "objectID={$object->id}&browseType={$browseType}&param={$param}&recPerPage={recPerPage}&page={page}&extra=$extra")
     )))
 );
 
