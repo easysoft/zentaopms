@@ -65,7 +65,7 @@ detailHeader
 
 detailBody
 (
-    set::id('dataform'),
+    setID('dataform'),
     set::isForm(true),
     $canEditContent ? set::actions(array
     (
@@ -107,7 +107,7 @@ detailBody
             (
                 picker
                 (
-                    set::id('reviewer'),
+                    setID('reviewer'),
                     set::name('reviewer[]'),
                     set::items($fields['reviewer']['options']),
                     set::value($fields['reviewer']['default']),
@@ -119,7 +119,7 @@ detailBody
                     setClass('input-group-addon'),
                     checkbox
                     (
-                        set::id('needNotReview'),
+                        setID('needNotReview'),
                         set::name('needNotReview'),
                         set::checked(empty($fields['reviewer']['default'])),
                         set::value(1),
@@ -159,9 +159,9 @@ detailBody
                         setClass('twins'),
                         $branch ? label(setClass($labelClass . ' circle branch size-sm'), set::title($branch), $branch) : null,
                         label(setClass('circle size-sm'), $twin->id),
-                        common::hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "id={$twin->id}")), setClass('title'), set::title($twin->title), set('data-toggle', 'modal'), $twin->title) : span(setClass('title'), $twin->title),
+                        common::hasPriv('story', 'view') ? a(set::href($this->createLink('story', 'view', "id={$twin->id}")), setClass('title'), set::title($twin->title), setData(array('toggle' => 'modal')), $twin->title) : span(setClass('title'), $twin->title),
                         label(setClass('size-sm'), set::title($stage), $stage),
-                        common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink size-xs"), on::click('unlinkTwins'), set('data-id', $twin->id), icon('unlink')) : null
+                        common::hasPriv('story', 'relieved') ? a(set::title($lang->story->relievedTwins), setClass("relievedTwins unlink size-xs"), on::click('unlinkTwins'), setData(array('id' => $twin->id)), icon('unlink')) : null
                     );
                 }, $twins))
             )
@@ -197,7 +197,7 @@ detailBody
                 (
                     picker
                     (
-                        set::id('product'),
+                        setID('product'),
                         set::name('product'),
                         set::items($fields['product']['options']),
                         set::value($fields['product']['default']),
@@ -209,7 +209,7 @@ detailBody
                         setClass($product->type == 'normal' ? 'hidden' : ''),
                         $product->type != 'normal' ? picker
                         (
-                            set::id('branch'),
+                            setID('branch'),
                             set::name('branch'),
                             set::items($fields['branch']['options']),
                             set::value($fields['branch']['default']),
@@ -230,7 +230,7 @@ detailBody
                 (
                     span
                     (
-                        set('id', 'moduleIdBox'),
+                        setID('moduleIdBox'),
                         picker
                         (
                             set::name('module'),
@@ -238,7 +238,7 @@ detailBody
                             set::value($fields['module']['default'])
                         )
                     ),
-                    count($moduleOptionMenu) == 1 ? btn(set::url($this->createLink('tree', 'browse', "rootID={$story->product}&view=story&currentModuleID=0&branch={$story->branch}")), set('data-toggle', 'modal'), $lang->tree->manage) : null,
+                    count($moduleOptionMenu) == 1 ? btn(set::url($this->createLink('tree', 'browse', "rootID={$story->product}&view=story&currentModuleID=0&branch={$story->branch}")), setData(array('toggle' => 'modal')), $lang->tree->manage) : null,
                     count($moduleOptionMenu) == 1 ? btn(set('onclick', "loadProductModules({$story->product})"), setClass('refresh'), icon('refresh')) : null
                 )
             ),
@@ -256,10 +256,10 @@ detailBody
                 (
                     span
                     (
-                        set::id('planIdBox'),
+                        setID('planIdBox'),
                         picker(setID('plan'), set::name($multiplePlan ? 'plan[]' : 'plan'), set::items($fields['plan']['options']), set::value($fields['parent']['default']), set::multiple($multiplePlan)),
                     ),
-                    empty($plans) ? btn(set::url($this->createLink('productplan', 'create', "productID={$story->product}&branch={$story->branch}")), set('data-toggle', 'modal'), icon('plus')) : null,
+                    empty($plans) ? btn(set::url($this->createLink('productplan', 'create', "productID={$story->product}&branch={$story->branch}")), setData(array('toggle' => 'modal')), icon('plus')) : null,
                     empty($plans) ? btn(set('onclick', "loadProductPlans({$story->product})"), setClass('refresh'), icon('refresh')) : null
                 )
             ),
@@ -334,13 +334,13 @@ detailBody
                     (
                         set('url', createLink('my', 'managecontacts', 'listID=0&mode=new')),
                         set('title', $lang->user->contacts->manage),
-                        set('data-toggle', 'modal'),
+                        setData(array('toggle' => 'modal')),
                         icon('cog')
                     ),
                     isset($contactList) ? null : btn
                     (
-                        set('id', 'refreshMailto'),
-                        set('class', 'text-black'),
+                        setID('refreshMailto'),
+                        setClass('text-black'),
                         icon('refresh')
                     )
                 )
@@ -370,7 +370,7 @@ detailBody
                 set::name($lang->story->reviewers),
                 picker
                 (
-                    set::id('reviewer'),
+                    setID('reviewer'),
                     set::name('reviewer[]'),
                     set::items($fields['reviewer']['options']),
                     set::value($fields['reviewer']['default']),
@@ -404,18 +404,16 @@ detailBody
                 ($story->type == 'story' && common::hasPriv('story', 'linkStories')) ? btn
                 (
                     setClass('secondary'),
-                    set::id('linkStoriesLink'),
-                    set('data-toggle', 'modal'),
-                    set('data-size', 'lg'),
+                    setID('linkStoriesLink'),
+                    setData(array('toggle' => 'modal', 'size' => 'lg')),
                     on::click('linkStories'),
                     $lang->story->linkStoriesAB
                 ) : null,
                 ($story->type == 'requirement' && common::hasPriv('requirement', 'linkRequirements')) ? btn
                 (
                     setClass('secondary'),
-                    set::id('linkStoriesLink'),
-                    set('data-toggle', 'modal'),
-                    set('data-size', 'lg'),
+                    setID('linkStoriesLink'),
+                    setData(array('toggle' => 'modal', 'size' => 'lg')),
                     on::click('linkStories'),
                     $lang->story->linkRequirementsAB
                 ) : null
@@ -438,7 +436,7 @@ detailBody
                         );
                     }, array_keys($story->linkStoryTitles), array_values($story->linkStoryTitles)))
                 ) : null,
-                div(set::id('linkStoriesBox'))
+                div(setID('linkStoriesBox'))
             )
         )
     )
