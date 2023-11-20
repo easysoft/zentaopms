@@ -14,7 +14,7 @@ namespace zin;
 featureBar
 (
     set::current($browseType),
-    set::linkParams("programID={$programID}&status={key}"),
+    set::linkParams("programID={$programID}&status={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     checkbox
     (
         set::rootClass('ml-2'),
@@ -89,16 +89,16 @@ if(!empty($projectStats))
                 if($count > 2) continue;
 
                 $memberAvatars[] = div
+                (
+                    setClass('avatar circle size-sm'),
+                    set::title($users[$member]),
+                    avatar
                     (
-                        setClass('avatar circle size-sm'),
-                        set::title($users[$member]),
-                        avatar
-                        (
-                            set::size('sm'),
-                            set::text($users[$member]),
-                            set::src(zget($usersAvatar, $member, ''))
-                        )
-                    );
+                        set::size('sm'),
+                        set::text($users[$member]),
+                        set::src(zget($usersAvatar, $member, ''))
+                    )
+                );
                 $count ++;
             }
         }
@@ -126,165 +126,165 @@ if(!empty($projectStats))
         }
 
         $projectCards[] = div
+        (
+            setClass('col'),
+            set('data-id', $project->id),
+            div
             (
-                setClass('col'),
-                set('data-id', $project->id),
+                setClass('panel'),
                 div
                 (
-                    setClass('panel'),
+                    setClass('panel-heading'),
+                    span
+                    (
+                        setClass('label project-type-label'),
+                        setClass(in_array($project->model, array('waterfall', 'waterfallplus')) ? 'warning-pale ring-warning' : 'secondary-pale ring-secondary'),
+                        icon($project->model == 'scrum' ? 'sprint' : $project->model)
+                    ),
+                    a
+                    (
+                        setClass('project-name'),
+                        set::href(createLink('project', 'index', "projectID={$project->id}")),
+                        set::title($project->name),
+                        h::strong($project->name)
+                    ),
+                    span
+                    (
+                        setClass("project-status label rounded-full {$statusLabel}"),
+                        $lang->project->statusList[$status]
+                    )
+                ),
+                div
+                (
+                    setClass('panel-body'),
                     div
                     (
-                        setClass('panel-heading'),
+                        setClass('project-infos pl-8'),
                         span
                         (
-                            setClass('label project-type-label'),
-                            setClass(in_array($project->model, array('waterfall', 'waterfallplus')) ? 'warning-pale ring-warning' : 'secondary-pale ring-secondary'),
-                            icon($project->model == 'scrum' ? 'sprint' : $project->model)
-                        ),
-                        a
-                        (
-                            setClass('project-name'),
-                            set::href(createLink('project', 'index', "projectID={$project->id}")),
-                            set::title($project->name),
-                            h::strong($project->name)
+                            set::title($budgetTitle),
+                            setClass('label lighter mr-2'),
+                            $budgetTitle
                         ),
                         span
                         (
-                            setClass("project-status label rounded-full {$statusLabel}"),
-                            $lang->project->statusList[$status]
+                            set::title($project->date),
+                            setClass('label lighter mr-2'),
+                            setClass($status == 'delay' ? 'text-danger' : ''),
+                            $project->date
                         )
                     ),
                     div
                     (
-                        setClass('panel-body'),
+                        setClass('project-detail pl-8 pt-2'),
                         div
                         (
-                            setClass('project-infos pl-8'),
-                            span
-                            (
-                                set::title($budgetTitle),
-                                setClass('label lighter mr-2'),
-                                $budgetTitle
-                            ),
-                            span
-                            (
-                                set::title($project->date),
-                                setClass('label lighter mr-2'),
-                                setClass($status == 'delay' ? 'text-danger' : ''),
-                                $project->date
-                            )
-                        ),
-                        div
-                        (
-                            setClass('project-detail pl-8 pt-2'),
+                            setClass('row'),
                             div
                             (
-                                setClass('row'),
+                                setClass('w-1/3'),
                                 div
                                 (
-                                    setClass('w-1/3'),
-                                    div
+                                    span
                                     (
-                                        span
-                                        (
-                                            setClass('statistics-title'),
-                                            $lang->projectCommon . $lang->project->progress
-                                        )
-                                    ),
-                                    div
-                                    (
-                                        setClass('pl-4'),
-                                        set('data-zui', 'ProgressCircle'),
-                                        set('data-percent', $project->hours->progress),
-                                        set('data-size', 24),
-                                        set('data-circle-color', 'var(--color-success-500)')
+                                        setClass('statistics-title'),
+                                        $lang->projectCommon . $lang->project->progress
                                     )
                                 ),
                                 div
                                 (
-                                    setClass('w-1/3'),
-                                    span
-                                    (
-                                        setClass('statistics-title'),
-                                        $lang->project->leftTasks
-                                    ),
-                                    span
-                                    (
-                                        setClass('leftTasks'),
-                                        set::title($project->leftTasks),
-                                        $project->leftTasks
-                                    )
-                                ),
-                                div
+                                    setClass('pl-4'),
+                                    set('data-zui', 'ProgressCircle'),
+                                    set('data-percent', $project->hours->progress),
+                                    set('data-size', 24),
+                                    set('data-circle-color', 'var(--color-success-500)')
+                                )
+                            ),
+                            div
+                            (
+                                setClass('w-1/3'),
+                                span
                                 (
-                                    setClass('w-1/3'),
-                                    span
+                                    setClass('statistics-title'),
+                                    $lang->project->leftTasks
+                                ),
+                                span
+                                (
+                                    setClass('leftTasks'),
+                                    set::title($project->leftTasks),
+                                    $project->leftTasks
+                                )
+                            ),
+                            div
+                            (
+                                setClass('w-1/3'),
+                                span
+                                (
+                                    setClass('statistics-title'),
+                                    $lang->project->leftHours
+                                ),
+                                span
+                                (
+                                    setClass('totalLeft'),
+                                    set::title(empty($project->hours->totalLeft) ? '— ' : $project->hours->totalLeft . 'h'),
+                                    empty($project->hours->totalLeft) ? '— ' : $project->hours->totalLeft . 'h'
+                                )
+                            )
+                        )
+                    ),
+                    div
+                    (
+                        setClass('project-footer pt-2'),
+                        div
+                        (
+                            setClass('project-team'),
+                            div
+                            (
+                                setClass('project-members avatar-group gap-4'),
+                                $memberAvatars,
+                                $project->teamCount > 4 ? span
+                                (
+                                    '…'
+                                ) : null,
+                                $project->teamCount > 3 ? div
+                                (
+                                    setClass('avatar size-sm circle'),
+                                    set::title($users[$lastMember]),
+                                    avatar
                                     (
-                                        setClass('statistics-title'),
-                                        $lang->project->leftHours
-                                    ),
-                                    span
-                                    (
-                                        setClass('totalLeft'),
-                                        set::title(empty($project->hours->totalLeft) ? '— ' : $project->hours->totalLeft . 'h'),
-                                        empty($project->hours->totalLeft) ? '— ' : $project->hours->totalLeft . 'h'
+                                        set::size('sm'),
+                                        set::text($users[$lastMember]),
+                                        set::src(zget($usersAvatar, $lastMember, ''))
                                     )
+                                ) : null,
+                                a
+                                (
+                                    setClass('project-members-total pl-2 mt-1'),
+                                    set::href(createLink('project', 'team', "projectID={$project->id}")),
+                                    sprintf($lang->project->teamSumCount, $project->teamCount)
                                 )
                             )
                         ),
                         div
                         (
-                            setClass('project-footer pt-2'),
-                            div
+                            setClass('project-actions'),
+                            $actionItems ? dropdown
                             (
-                                setClass('project-team'),
-                                div
+                                set::caret(false),
+                                btn
                                 (
-                                    setClass('project-members avatar-group gap-4'),
-                                    $memberAvatars,
-                                    $project->teamCount > 4 ? span
-                                    (
-                                        '…'
-                                    ) : null,
-                                    $project->teamCount > 3 ? div
-                                    (
-                                        setClass('avatar size-sm circle'),
-                                        set::title($users[$lastMember]),
-                                        avatar
-                                        (
-                                            set::size('sm'),
-                                            set::text($users[$lastMember]),
-                                            set::src(zget($usersAvatar, $lastMember, ''))
-                                        )
-                                    ) : null,
-                                    a
-                                    (
-                                        setClass('project-members-total pl-2 mt-1'),
-                                        set::href(createLink('project', 'team', "projectID={$project->id}")),
-                                        sprintf($lang->project->teamSumCount, $project->teamCount)
-                                    )
-                                )
-                            ),
-                            div
-                            (
-                                setClass('project-actions'),
-                                $actionItems ? dropdown
-                                (
-                                    set::caret(false),
-                                    btn
-                                    (
-                                        setClass('ghost btn square btn-default'),
-                                        set::icon('ellipsis-v')
-                                    ),
-                                    set::placement('left-end'),
-                                    set::menu(array('class' => 'flex p-2 project-menu-actions')),
-                                    set::items($actionItems)
-                                ) : null
-                            )
+                                    setClass('ghost btn square btn-default'),
+                                    set::icon('ellipsis-v')
+                                ),
+                                set::placement('left-end'),
+                                set::menu(array('class' => 'flex p-2 project-menu-actions')),
+                                set::items($actionItems)
+                            ) : null
                         )
                     )
                 )
-            );
+            )
+        );
     }
 }
 
