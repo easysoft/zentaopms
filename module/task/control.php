@@ -325,6 +325,7 @@ class task extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound, 'load' => $this->createLink('execution', 'all')));
         }
+        if(!$this->loadModel('common')->checkPrivByObject('execution', $task->execution)) return print(js::error($this->lang->execution->accessDenied) . js::locate($this->createLink('execution', 'all')));
 
         /* 为视图设置常用的公共变量和设置菜单为任务所属执行. Set common variables to view and set menu to the execution of the task. */
         $this->taskZen->commonAction($taskID);

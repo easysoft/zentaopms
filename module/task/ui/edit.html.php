@@ -27,6 +27,7 @@ jsVar('page', 'edit');
 jsVar('confirmChangeExecution', $lang->task->confirmChangeExecution);
 jsVar('teamMemberError', $lang->task->error->teamMember);
 jsVar('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));
+jsVar('confirmRecord', $lang->task->confirmRecord);
 jsVar('estimateNotEmpty', sprintf($lang->error->gt, $lang->task->estimate, '0'));
 jsVar('leftNotEmpty', sprintf($lang->error->gt, $lang->task->left, '0'));
 jsVar('requiredFields', $config->task->edit->requiredFields);
