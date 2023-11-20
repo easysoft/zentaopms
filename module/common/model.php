@@ -3847,7 +3847,7 @@ EOT;
                     if(!common::hasPriv($moduleName, $action)) continue;
                 }
 
-                if(false === $this->{$moduleName}->isClickable($data, $action)) continue;
+                if(method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) continue;
 
                 if($menu == 'suffixActions' && !empty($actionData['text']) && empty($actionData['showText'])) $actionData['text'] = '';
 

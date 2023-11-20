@@ -24,18 +24,6 @@ class accountModel extends model
     }
 
     /**
-     * Get accounts by id list.
-     *
-     * @param  int    $idList
-     * @access public
-     * @return array
-     */
-    public function getByIdList($idList)
-    {
-        return $this->dao->select('*')->from(TABLE_ACCOUNT)->where('id')->in($idList)->fetchAll('id');
-    }
-
-    /**
      * Get account list.
      *
      * @param  string $browseType
@@ -83,7 +71,7 @@ class accountModel extends model
      * @access public
      * @return array
      */
-    public function getPairs()
+    public function getPairs(): array
     {
         return $this->dao->select('id,name')->from(TABLE_ACCOUNT)->where('deleted')->eq('0')->fetchPairs();
     }

@@ -111,13 +111,10 @@ class account extends control
      * @access public
      * @return void
      */
-    public function view($id)
+    public function view(int $id)
     {
         $this->view->title      = $this->lang->account->view;
-        $this->view->position[] = html::a($this->createLink('account', 'browse'), $this->lang->account->common);
-        $this->view->position[] = $this->lang->account->view;
-
-        $this->view->account       = $this->account->getById($id);
+        $this->view->account    = $this->account->getById($id);
         $this->view->rooms      = $this->loadModel('serverroom')->getPairs();
         $this->view->actions    = $this->loadModel('action')->getList('account', $id);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
@@ -132,7 +129,7 @@ class account extends control
      * @access public
      * @return void
      */
-    public function delete($id)
+    public function delete(int $id)
     {
         $this->account->delete(TABLE_ACCOUNT, $id);
 
@@ -149,39 +146,4 @@ class account extends control
         }
         return $this->send($response);
     }
-
-    /**
-     * Change account status.
-     *
-     * @param  int    $id
-     * @param  int    $accountID
-     * @param  int    $status
-     * @access public
-     * @return void
-     */
-    public function changeStatus($id, $accountID, $status)
-    {
-        $accountStatus = $status == 'offline' ? 'online' : 'offline';
-        if($_SERVER['REQUEST_METHOD'] == 'POST')
-        {
-            $postData = fixer::input('post')->get();
-            if(empty($postData->reason))
-            {
-                $reasonKey = $accountStatus . 'Reason';
-                $errTip = $this->lang->account->{$reasonKey};
-                dao::$errors['submit'][] = sprintf($this->lang->error->notempty, $errTip);
-                return print(js::error(dao::getError()));
-            }
-
-            $this->account->updateStatus($accountID, $accountStatus);
-
-            $this->loadModel('action')->create('account', $id, $accountStatus, $postData->reason);
-            if(isInModal()) return print(js::reload('parent.parent'));
-            return print(js::reload('parent'));
-        }
-
-        $this->view->title = $this->lang->account->{$accountStatus};
-        $this->display();
-    }
-
 }
