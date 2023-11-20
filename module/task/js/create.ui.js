@@ -285,7 +285,7 @@ function setStoryRelated()
  */
 function setPreview()
 {
-    if(!$("input[name='story']").val())
+    if(parseFloat($("input[name='story']").val()) == 0)
     {
         $('#preview').addClass('hidden');
         $('.title-group.required > div').removeAttr('id', 'copyStory-input').addClass('.required');
