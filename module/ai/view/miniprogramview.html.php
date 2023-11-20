@@ -11,7 +11,58 @@
  */
 ?>
 <?php include '../../common/view/header.html.php'; ?>
-
+<?php js::set('miniProgramID', $miniProgram->id); ?>
+<div class="modal fade" id="disable-miniprogram">
+  <div class="modal-dialog" style="width: 480px;">
+    <div class="modal-content">
+      <div class="modal-header" style="border-bottom: none; padding-left: 12px; display: flex; align-items: center;">
+        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12.0159" cy="12.0163" r="12" transform="rotate(0.0777774 12.0159 12.0163)" fill="#FFA34D" />
+          <path d="M12.4516 14.621C12.8867 14.6215 13.3224 14.1498 13.3231 13.6775L13.6588 7.42006C13.6595 6.94777 13.661 6.00319 12.3559 6.0016C11.1595 6.00013 11.0495 6.8265 11.0486 7.41686L11.3655 13.6751C11.5823 14.1476 12.0166 14.6204 12.4516 14.621ZM12.4499 15.8017C11.7973 15.8009 11.1439 16.3905 11.1426 17.217C11.1416 17.9254 11.6843 18.6345 12.4456 18.6354C13.2069 18.6363 13.7516 18.0467 13.7528 17.2202C13.7541 16.3936 13.1024 15.8025 12.4499 15.8017Z" fill="white" />
+        </svg>
+        <span style="padding-left: 16px;"><?= $lang->ai->miniPrograms->disableTip; ?></span>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: center; border-top: none; padding-top: 0;">
+        <button type="button" class="btn btn-primary" onclick="publishMiniProgram('0')" data-dismiss="modal"><?= $lang->confirm; ?></button>
+        <button type="button" class="btn" data-dismiss="modal"><?= $lang->cancel; ?></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="delete-miniprogram">
+  <div class="modal-dialog" style="width: 480px;">
+    <div class="modal-content">
+      <div class="modal-header" style="border-bottom: none; padding-left: 12px; display: flex; align-items: center;">
+        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12.0159" cy="12.0163" r="12" transform="rotate(0.0777774 12.0159 12.0163)" fill="#FFA34D" />
+          <path d="M12.4516 14.621C12.8867 14.6215 13.3224 14.1498 13.3231 13.6775L13.6588 7.42006C13.6595 6.94777 13.661 6.00319 12.3559 6.0016C11.1595 6.00013 11.0495 6.8265 11.0486 7.41686L11.3655 13.6751C11.5823 14.1476 12.0166 14.6204 12.4516 14.621ZM12.4499 15.8017C11.7973 15.8009 11.1439 16.3905 11.1426 17.217C11.1416 17.9254 11.6843 18.6345 12.4456 18.6354C13.2069 18.6363 13.7516 18.0467 13.7528 17.2202C13.7541 16.3936 13.1024 15.8025 12.4499 15.8017Z" fill="white" />
+        </svg>
+        <span style="padding-left: 16px;"><?= $lang->ai->miniPrograms->deleteTip; ?></span>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: center; border-top: none; padding-top: 0;">
+        <button type="button" class="btn btn-primary" onclick="deleteMiniProgram('1')" data-dismiss="modal"><?= $lang->confirm; ?></button>
+        <button type="button" class="btn" data-dismiss="modal"><?= $lang->cancel; ?></button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="publish-miniprogram">
+  <div class="modal-dialog" style="width: 480px;">
+    <div class="modal-content">
+      <div class="modal-header" style="border-bottom: none; padding-left: 12px; display: flex; align-items: center;">
+        <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12.0159" cy="12.0163" r="12" transform="rotate(0.0777774 12.0159 12.0163)" fill="#FFA34D" />
+          <path d="M12.4516 14.621C12.8867 14.6215 13.3224 14.1498 13.3231 13.6775L13.6588 7.42006C13.6595 6.94777 13.661 6.00319 12.3559 6.0016C11.1595 6.00013 11.0495 6.8265 11.0486 7.41686L11.3655 13.6751C11.5823 14.1476 12.0166 14.6204 12.4516 14.621ZM12.4499 15.8017C11.7973 15.8009 11.1439 16.3905 11.1426 17.217C11.1416 17.9254 11.6843 18.6345 12.4456 18.6354C13.2069 18.6363 13.7516 18.0467 13.7528 17.2202C13.7541 16.3936 13.1024 15.8025 12.4499 15.8017Z" fill="white" />
+        </svg>
+        <span style="padding-left: 16px;"><?= $lang->ai->miniPrograms->publishTip; ?></span>
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: center; border-top: none; padding-top: 0;">
+        <button type="button" class="btn btn-primary" onclick="publishMiniProgram('1')" data-dismiss="modal"><?= $lang->confirm; ?></button>
+        <button type="button" class="btn" data-dismiss="modal"><?= $lang->cancel; ?></button>
+      </div>
+    </div>
+  </div>
+</div>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?= html::a(helper::createLink('ai', 'miniPrograms'), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'"); ?>
@@ -63,6 +114,37 @@
       </div>
     </div>
     <div class="cell"><?php include '../../common/view/action.html.php'; ?></div>
+    <div class='main-actions'>
+      <div class="btn-toolbar">
+        <?= html::a($this->createLink('ai', 'miniPrograms'), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn'"); ?>
+        <?= "<div class='divider'></div>"; ?>
+        <?php if($miniProgram->published === '1'): ?>
+          <button class="btn" onclick="openDisableDialog(event)" title="<?= $lang->ai->prompts->action->disable; ?>">
+            <i class="icon-ban-circle icon-sm"></i> <?= $lang->ai->prompts->action->disable; ?>
+          </button>
+        <?php else: ?>
+          <a class='btn' title='<?= $lang->ai->prompts->action->edit; ?>' href='<?= $this->createLink('ai', 'createMiniProgram', "appID=$miniProgram->id"); ?>'>
+            <i class='icon-edit icon-sm'></i> <?= $lang->ai->prompts->action->edit; ?>
+          </a>
+          <button
+            class="btn iframe"
+            data-toggle="modal"
+            data-width="800"
+            data-height="600"
+            title="<?= $lang->ai->prompts->action->test; ?>"
+            data-iframe="<?= $this->createLink('ai', 'testMiniProgram', "appID={$miniProgram->id}&onlybody=yes"); ?>"
+          >
+            <i class="icon-menu-backend icon-sm"></i> <?= $lang->ai->prompts->action->test; ?>
+          </button>
+          <button class="btn" onclick="openPublishDialog(event)" title="<?= $lang->ai->prompts->action->publish; ?>">
+            <i class="icon-publish icon-sm"></i> <?= $lang->ai->prompts->action->publish; ?>
+          </button>
+          <button class="btn" onclick="openDeleteDialog(event)" title="<?= $lang->ai->prompts->action->delete; ?>">
+            <i class="icon-trash icon-sm"></i> <?= $lang->ai->prompts->action->delete; ?>
+          </button>
+        <?php endif; ?>
+      </div>
+    </div>
   </div>
   <div class="side-col col-4">
     <div class="cell">
