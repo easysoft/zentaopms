@@ -367,7 +367,8 @@ foreach($groupMetrics as $key => $metrics)
 
 div
 (
-    setClass('side'),
+    setClass('side sidebar sidebar-left'),
+    setStyle('overflow', 'visible'),
     div
     (
         setClass('canvas'),
@@ -384,6 +385,16 @@ div
         (
             setClass('metric-tree'),
             $metricTrees
+        )
+    ),
+    div
+    (
+        on::click('.sidebar-gutter', 'window.toggleCollapsed()'),
+        setClass('sidebar-gutter gutter gutter-horz'),
+        button
+        (
+            setClass('gutter-toggle'),
+            span(setClass('chevron-left'))
         )
     )
 );
@@ -490,6 +501,7 @@ $metricBoxs = div
 div
 (
     setClass('main'),
+    setStyle('flex', 'auto'),
     div
     (
         setClass('canvas'),

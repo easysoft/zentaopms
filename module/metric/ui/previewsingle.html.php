@@ -252,7 +252,8 @@ $sideTitle = $scope == 'filter' ? sprintf($lang->metric->filter->filterTotal, co
 $star = (!empty($current->collector) and strpos($current->collector, ',' . $app->user->account . ',') !== false) ? 'star' : 'star-empty';
 div
 (
-    setClass('side'),
+    setClass('side sidebar sidebar-left'),
+    setStyle('overflow', 'visible'),
     div
     (
         setClass('canvas'),
@@ -270,11 +271,22 @@ div
             setClass('metric-tree'),
             $fnGenerateSide($groupMetrics, $current, $viewType, $scope, $lang)
         )
+    ),
+    div
+    (
+        on::click('.sidebar-gutter', 'window.toggleCollapsed()'),
+        setClass('sidebar-gutter gutter gutter-horz'),
+        button
+        (
+            setClass('gutter-toggle'),
+            span(setClass('chevron-left'))
+        )
     )
 );
 div
 (
     setClass('main'),
+    setStyle('flex', 'auto'),
     empty($current) ? div(setClass('canvas')) :
     div
     (

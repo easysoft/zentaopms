@@ -430,6 +430,11 @@ window.collectMetric = function(id)
     });
 }
 
+window.toggleCollapsed = function()
+{
+    $('.sidebar').toggleClass('is-collapsed');
+}
+
 window.renderCheckedLabel = function()
 {
     var $content =  $('.checked-label-content');
