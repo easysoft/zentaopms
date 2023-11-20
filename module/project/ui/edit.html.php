@@ -176,6 +176,7 @@ formPanel
     on::change('#parent', 'setParentProgram'),
     on::change('#begin, [name=delta]', 'computeEndDate'),
     on::change('#begin, #end', 'computeWorkDays'),
+    on::change('#begin, #end, #parent', 'checkDate'),
     on::change('[name^=products]', 'productChange'),
     on::change('[name^=branch]', 'branchChange'),
     on::change('[name=future]', 'toggleBudget'),
@@ -355,6 +356,18 @@ formPanel
                 set::inline(true),
                 set::items($lang->project->endList)
             )
+        )
+    ),
+    formRow
+    (
+        setID('dateTip'),
+        setClass('hidden'),
+        formGroup
+        (
+            set::label(''),
+            span(setID('beginLess'), setClass('text-warning hidden'), html($lang->project->beginLessThanParent)),
+            span(setID('endGreater'), setClass('text-warning hidden'), html($lang->project->endGreatThanParent)),
+            a(setClass('underline text-warning'), set::href('javascript:;'), on::click("ignoreTip('dateTip')"), $lang->project->ignore)
         )
     ),
     formRow

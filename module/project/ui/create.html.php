@@ -163,6 +163,7 @@ formPanel
     on::change('[name=multiple]', 'toggleMultiple'),
     on::change('[name=future]', 'toggleBudget'),
     on::change('[name=newProduct]', 'addProduct'),
+    $config->systemMode != 'light' ? on::change('#begin, #end, #parent', 'checkDate') : null,
     formRow
     (
         formGroup
@@ -340,6 +341,18 @@ formPanel
                 set::inline(true),
                 set::items($lang->project->endList)
             )
+        )
+    ),
+    formRow
+    (
+        setID('dateTip'),
+        setClass('hidden'),
+        formGroup
+        (
+            set::label(''),
+            span(setID('beginLess'), setClass('text-warning hidden'), html($lang->project->beginLessThanParent)),
+            span(setID('endGreater'), setClass('text-warning hidden'), html($lang->project->endGreatThanParent)),
+            a(setClass('underline text-warning'), set::href('javascript:;'), on::click("ignoreTip('dateTip')"), $lang->project->ignore)
         )
     ),
     formGroup
