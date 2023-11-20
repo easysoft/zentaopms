@@ -114,7 +114,7 @@ else
     $storyEmptyPreTip = span
     (
         setClass('input-control-prefix'),
-        span($lang->task->noticeLinkStory)
+        span($lang->task->noticeLinkStoryNoProduct)
     );
 }
 $storyPreviewBtn = span
