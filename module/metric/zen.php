@@ -239,7 +239,9 @@ class metricZen extends metric
         {
             if(strpos(strtoupper($field), ' AS ') !== false)
             {
-                $extractField = explode(' AS ', $field);
+                $pos = strpos(strtoupper($field), ' AS ');
+                $tag = substr($field, $pos, 4);
+                $extractField = explode($tag, $field);
                 $pureField    = end($extractField);
                 $aliasField   = $pureField;
             }
