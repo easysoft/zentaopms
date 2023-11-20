@@ -28,27 +28,27 @@ $getMergeData = function($data)
                 {
                     $productGroups[] = div
                     (
-                        set::className('sprintItem mb-2'),
-                        checkbox(set::id("sprints-{$line->id}-{$productID}-{$sprint->id}"), set::name("sprints[$line->id][$productID][]"), set::text($sprint->name), set::value($sprint->id), set('data-on', 'change'), set('data-call', 'changeSprints'), set('data-params', 'event'), set('data-line', $line->id), set('data-product', $productID), set('data-begin', $sprint->begin), set('data-end', $sprint->end), set('data-status', $sprint->status), set('data-pm', $sprint->PM)),
-                        input(set::className('hidden'), set::name("sprintIdList[$line->id][$productID][$sprint->id]"), set::value($sprint->id))
+                        setClass('sprintItem mb-2'),
+                        checkbox(setID("sprints-{$line->id}-{$productID}-{$sprint->id}"), set::name("sprints[$line->id][$productID][]"), set::text($sprint->name), set::value($sprint->id), setData(array('on' => 'change', 'call' => 'changeSprints', 'params' => 'event', 'line' => $line->id, 'product' => $productID, 'begin' => $sprint->begin, 'end' => $sprint->end, 'status' => $sprint->status, 'pm' => $sprint->PM))),
+                        input(setClass('hidden'), set::name("sprintIdList[$line->id][$productID][$sprint->id]"), set::value($sprint->id))
                     );
                 }
             }
             $lineGroups[] = div
             (
-                set::className('flex mb-2'),
+                setClass('flex mb-2'),
                 cell
                 (
                     set::width('1/2'),
-                    set::className('productItem p-4 overflow-hidden'),
+                    setClass('productItem p-4 overflow-hidden'),
                     set::style(array('background-color' => 'var(--color-gray-50)')),
-                    checkbox(set::id("products-{$line->id}-{$productID}"), set::name("products[{$line->id}][]"), set::text($product->name), set::value($productID), set('data-on', 'change'), set('data-call', 'changeProducts'), set('data-params', 'event'), set('data-line', $line->id), set('data-productid', $productID), set('data-begin', $product->createdDate), set('data-programid', $product->program)),
-                    input(set::className('hidden'), set::name("productIdList[$line->id][$productID]"), set::value($productID))
+                    checkbox(setID("products-{$line->id}-{$productID}"), set::name("products[{$line->id}][]"), set::text($product->name), set::value($productID), setData(array('on' => 'change', 'call' => 'changeProducts', 'params' => 'event', 'line' => $line->id, 'productid' => $productID, 'begin' => $product->createdDate, 'programid' => $product->program))),
+                    input(setClass('hidden'), set::name("productIdList[$line->id][$productID]"), set::value($productID))
                 ),
                 cell
                 (
                     set::width('1/2'),
-                    set::className('p-4 overflow-hidden'),
+                    setClass('p-4 overflow-hidden'),
                     set::style(array('background-color' => 'var(--color-gray-50)')),
                     $productGroups
                 )
@@ -56,21 +56,21 @@ $getMergeData = function($data)
         }
         $checkBoxGroup[] = div
         (
-            set::className('flex'),
+            setClass('flex'),
             cell
             (
                 set::width('1/3'),
-                set::className('productList px-4 flex items-center border-t mr-2 overflow-hidden'),
+                setClass('productList px-4 flex items-center border-t mr-2 overflow-hidden'),
                 set::style(array('background-color' => 'var(--color-gray-50)')),
-                checkbox(set::id("productLines{$line->id}"),set::name("productLines[$line->id][]"), set::text($line->name), set::value($line->id), set('data-on', 'change'), set('data-call', 'changeLines'), set('data-params', 'event'))
+                checkbox(setID("productLines{$line->id}"), set::name("productLines[$line->id][]"), set::text($line->name), set::value($line->id), setData(array('on' => 'change', 'call' => 'changeLines', 'params' => 'event'))),
             ),
             cell
             (
                 set::flex('1'),
-                set::className('productList'),
+                setClass('productList'),
                 div
                 (
-                    set::className('scroll-handle'),
+                    setClass('scroll-handle'),
                     $lineGroups
                 )
             )
@@ -79,32 +79,32 @@ $getMergeData = function($data)
 
     return div
     (
-        set::className('flex mt-4'),
+        setClass('flex mt-4'),
         cell
         (
-            set::id('source'),
+            setID('source'),
             set::width('1/2'),
-            set::className('border p-4 overflow-hidden'),
+            setClass('border p-4 overflow-hidden'),
             div
             (
-                set::className('flex mb-4'),
+                setClass('flex mb-4'),
                 cell
                 (
                     set::width('1/3'),
-                    set::className('item checkbox-primary px-4 overflow-hidden mr-3'),
-                    checkbox(set::id('checkAllLines'), set::text($lang->upgrade->allLines), set('data-on', 'change'), set('data-call', 'changeAllLines'))
+                    setClass('item checkbox-primary px-4 overflow-hidden mr-3'),
+                    checkbox(setID('checkAllLines'), set::text($lang->upgrade->allLines), setData(array('on' => 'change', 'call' => 'changeAllLines')))
                 ),
                 cell
                 (
                     set::width('1/3'),
-                    set::className('item checkbox-primary px-4 overflow-hidden'),
-                    checkbox(set::id('checkAllProducts'), set::text($lang->productCommon), set('data-on', 'change'), set('data-call', 'changeAllProducts'))
+                    setClass('item checkbox-primary px-4 overflow-hidden'),
+                    checkbox(setID('checkAllProducts'), set::text($lang->productCommon), setData(array('on' => 'change', 'call' => 'changeAllProducts')))
                 ),
                 cell
                 (
                     set::width('1/3'),
-                    set::className('item checkbox-primary px-4 overflow-hidden'),
-                    checkbox(set::id('checkAllSprints'), set::text($lang->projectCommon), set('data-on', 'change'), set('data-call', 'changeAllSprints'))
+                    setClass('item checkbox-primary px-4 overflow-hidden'),
+                    checkbox(setID('checkAllSprints'), set::text($lang->projectCommon), setData(array('on' => 'change', 'call' => 'changeAllSprints')))
                 ),
             ),
             div
@@ -115,8 +115,8 @@ $getMergeData = function($data)
         cell
         (
             set::width('1/2'),
-            set::className('border ml-4 p-4'),
-            set::id('programBox'), $createProgram($data)
+            setClass('border ml-4 p-4'),
+            setID('programBox'), $createProgram($data)
         )
     );
 };

@@ -16,10 +16,10 @@ jsVar('confirmLink', inlink('license', 'agree=true'));
 
 div
 (
-    set::id('main'),
+    setID('main'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
         setClass('px-1 mt-2 mx-auto'),
         width('1200px'),
         panel

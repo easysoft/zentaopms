@@ -20,7 +20,7 @@ foreach($lang->upgrade->mergeModes as $mode => $label)
         h::input
         (
             set::type('radio'),
-            set::id("projectType_{$mode}"),
+            setID("projectType_{$mode}"),
             set::name('projectType'),
             set::value($mode),
             $mode == 'project' ? set('checked', 'checked') : ''
@@ -42,10 +42,10 @@ set::zui(true);
 
 div
 (
-    set::id('main'),
+    setID('main'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
         formPanel
         (
             setClass('bg-canvas'),
