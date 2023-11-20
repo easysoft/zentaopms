@@ -34,7 +34,7 @@ featureBar
 (
     set::current($currentObjectType),
     set::linkParams("objectType={key}&type={$type}&byQuery=&queryID=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
-    li(searchToggle(set::module('trash')), setClass($currentObjectType != 'all' ? '' : 'hidden', $byQuery ? 'active' : ''))
+    $currentObjectType != 'all' ? li(searchToggle(set::module('trash')), setClass($byQuery ? 'active' : '')) : null
 );
 
 toolbar
@@ -78,5 +78,3 @@ dtable
     set::userMap($users),
     set::footPager(usePager())
 );
-
-jsVar('window.afterPageUpdate', jsRaw("(target,info) => info.name === 'featureBar' && !$(target).find('.active>.search-form-toggle').length && zui.updateSearchForm('trash');"));
