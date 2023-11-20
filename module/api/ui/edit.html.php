@@ -156,9 +156,7 @@ $parseTree = function($data, $typeList, $level = 0) use (&$parseTree)
     $tbody[] = h::tr
     (
         setClass('input-row'),
-        set('data-level', $level + 1),
-        set('data-key', $data['key']),
-        set('data-parent', isset($data['parent']) ? $data['parent'] : 0),
+        setData(array('level' => $level + 1, 'key' => $data['key'], 'parent' => isset($data['parent']) ? $data['parent'] : 0)),
         h::td
         (
             $level ? setStyle('padding-left', ($level + 1) * 10 . 'px') : null,
@@ -232,9 +230,7 @@ else
     $apiParams[] = h::tr
     (
         setClass('input-row'),
-        set('data-level', 1),
-        set('data-key', 'origin'),
-        set('data-parent', '0'),
+        setData(array('level' => 1, 'key' => 'origin', 'parent' => '0')),
         h::td
         (
             input
@@ -297,9 +293,7 @@ else
     $apiResponse[] = h::tr
     (
         setClass('input-row'),
-        set('data-level', 1),
-        set('data-key', 'origin'),
-        set('data-parent', '0'),
+        setData(array('level' => 1, 'key' => 'origin', 'parent' => '0')),
         h::td
         (
             input
@@ -456,7 +450,7 @@ formPanel
     ),
     formGroup
     (
-        set::id('form-header'),
+        setID('form-header'),
         setClass('params-group'),
         set::label($lang->api->header),
         h::table
@@ -488,7 +482,7 @@ formPanel
     ),
     formGroup
     (
-        set::id('form-query'),
+        setID('form-query'),
         setClass('params-group'),
         set::label($lang->api->query),
         h::table
@@ -520,7 +514,7 @@ formPanel
     ),
     formGroup
     (
-        set::id('form-paramsType'),
+        setID('form-paramsType'),
         setClass('params-group'),
         set::label($lang->struct->type),
         radioList
@@ -533,7 +527,7 @@ formPanel
     ),
     formGroup
     (
-        set::id('form-params'),
+        setID('form-params'),
         setClass('params-group'),
         set::label($lang->api->params),
         h::table
@@ -580,7 +574,7 @@ formPanel
     ),
     formGroup
     (
-        set::id('form-response'),
+        setID('form-response'),
         setClass('response'),
         set::label($lang->api->response),
         h::table

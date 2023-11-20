@@ -255,12 +255,12 @@ div
                         (
                             set::url(createLink('api', 'delete', "apiID=$api->id")),
                             setClass('btn ghost ajax-submit'),
-                            set('data-confirm', $lang->api->confirmDelete),
+                            setData(array('confirm' => $lang->api->confirmDelete)),
                             icon('trash')
                         ) : null,
                         btn
                         (
-                            set::id('hisTrigger'),
+                            setID('hisTrigger'),
                             set::url('###)'),
                             setClass('btn ghost'),
                             icon('clock')
@@ -270,8 +270,8 @@ div
             ),
             div
             (
-                set::className('panel-body'),
-                set::id('content'),
+                setClass('panel-body'),
+                setID('content'),
                 h2($api->title),
                 div(setClass('desc'), html($api->desc)),
                 $apiHeader,
@@ -286,7 +286,7 @@ div
         ),
         panel
         (
-            set::id('history'),
+            setID('history'),
             setClass('hidden'),
             history
             (
