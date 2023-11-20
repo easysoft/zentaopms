@@ -145,8 +145,6 @@ class cron extends control
         $execId = mt_rand();
         if($restart) $this->cron->restartCron($execId);
 
-        $this->loadModel('common');
-
         while(true)
         {
             /* Only one scheduler and max 4 consumers. */
@@ -295,6 +293,8 @@ class cron extends control
      */
     public function schedule($execId)
     {
+        $this->loadModel('common');
+
         dao::$cache = array();
 
         $this->cron->updateTime('scheduler', $execId);
@@ -383,6 +383,8 @@ class cron extends control
 
         unset($_SESSION['company']);
         unset($this->app->company);
+
+        $this->loadModel('common');
         $this->common->setCompany();
         $this->common->loadConfigFromDB();
 
@@ -415,7 +417,7 @@ class cron extends control
         $this->dao->update(TABLE_QUEUE)->set('status')->eq('done')->where('id')->eq($task->id)->exec();
         $this->dao->update(TABLE_CRON)->set('lastTime')->eq(date(DT_DATETIME1))->where('id')->eq($task->cron)->exec();
 
-        $log = date('G:i:s') . " execute\ncronId: {$task->cron}\nexecId: $execId\noutput: taskId:{$task->id}.\ncommand: {$task->command}.\nreturn : $return.\noutput : $output\n\n";
+        $log = date('G:i:s') . " execute\ncronId: {$task->cron}\nexecId: $execId\ntaskId: {$task->id}\ncommand: {$task->command}\nreturn : $return\noutput : $output\n\n";
         $this->cron->logCron($log);
 
         return true;
