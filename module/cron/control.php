@@ -137,6 +137,7 @@ class cron extends control
     {
         if(empty($this->config->global->cron)) return;
 
+        /* Run as daemon. */
         ignore_user_abort(true);
         set_time_limit(0);
         session_write_close();
@@ -148,10 +149,10 @@ class cron extends control
 
         while(true)
         {
+            /* Only one scheduler and max 4 consumers. */
             $roles = $this->applyExecRoles($execId);
             if(empty($roles))
             {
-                $this->cron->logCron('exit');
                 ignore_user_abort(false);
                 return;
             }
@@ -226,7 +227,7 @@ class cron extends control
 
     /**
      * 检查该execId是否可以进行调度(最近1分钟没有其他进程在调度).
-     * Check the execId can schedule(No other execId scheduled 10 minutes ago).
+     * Check the execId can schedule(No other execId scheduled 1 minutes ago).
      *
      * @param  int    $execId
      * @access protected
@@ -243,7 +244,7 @@ class cron extends control
 
     /**
      * 检查该execId是否可以执行任务(最多允许1个调度进程，4个执行进程).
-     * Check the execId can exec(1 scheduler, 4 consumer).
+     * Check the execId can exec(1 scheduler, 4 consumers).
      *
      * @param  int    $execId
      * @access protected
@@ -276,7 +277,6 @@ class cron extends control
                     $this->dao->delete()->from(TABLE_CONFIG)->where('id')->eq($setting->id)->exec();
                 }
             }
-
         }
 
         if(in_array($scheduler['execId'], array(0, $execId)) || $scheduler['lastTime'] < $expirDate) $roles[] = 'scheduler';

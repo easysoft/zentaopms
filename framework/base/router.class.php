@@ -2063,9 +2063,13 @@ class baseRouter
         }
 
         /* 合并Hook文件。Cycle the hook methods and merge hook codes. */
-        $hookedMethods    = array_keys($hookCodes);
+        $hookedMethods     = array_keys($hookCodes);
         $mainTargetCodes   = file($mainTargetFile);
         $mergedTargetCodes = file($tmpTargetFile);
+
+        /* 如果已经合并，不需要再合并了。 If merged by other thread, return directly. */
+        if(!$mergedTargetCodes) return;
+
         foreach($hookedMethods as $method)
         {
             /* 通过反射获得hook脚本对应的方法所在的文件和起止行数。Reflection the hooked method to get it's defined position. */
