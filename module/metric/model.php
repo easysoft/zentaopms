@@ -91,6 +91,11 @@ class metricModel extends model
         return $groupMetrics;
     }
 
+    public function getMetricsByIDList($metricIDList)
+    {
+        return $this->metricTao->fetchMetricsByIDList($metricIDList);
+    }
+
     /**
      * 获取旧度量项列表。
      * Get old metric list.

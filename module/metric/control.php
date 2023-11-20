@@ -238,6 +238,17 @@ class metric extends control
         return $this->send($optionList);
     }
 
+    public function ajaxGetMetricSideTree()
+    {
+        $metricIDList = explode(',', $_POST['metricIDList']);
+        $checkedList  = explode(',', $_POST['checkedList']);
+        $metrics = $this->metric->getMetricsByIDList($metricIDList);
+
+        $this->view->groupMetrics = $this->metric->groupMetricByObject($metrics);
+        $this->view->checkedList  = $checkedList;
+        $this->display();
+    }
+
     public function ajaxGetMultipleMetricBox($metricID)
     {
         $metric = $this->metric->getByID($metricID);

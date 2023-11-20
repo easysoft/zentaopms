@@ -43,6 +43,14 @@ class metricTao extends metricModel
         return $metrics;
     }
 
+    protected function fetchMetricsByIDList($metricIDList)
+    {
+        return $this->dao->select('*')->from(TABLE_METRIC)
+            ->where('deleted')->eq(0)
+            ->andWhere('id')->in($metricIDList)
+            ->fetchAll();
+    }
+
     /**
      * 根据度量项编码获取度量项数据。
      * Fetch metric by code.

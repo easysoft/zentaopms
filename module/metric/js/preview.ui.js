@@ -161,12 +161,17 @@ window.renderCheckList = function(metrics)
 {
     $('.side .metric-tree').empty();
 
-    var metricsHtml = metrics.map(function(metric){
-        var isChecked = window.isMetricChecked(metric.id);
-        return window.generateCheckItem(metric.name, metric.id, metric.scope, isChecked);
-    }).join('');
-
-    $('.side .metric-tree').html(metricsHtml);
+    var ids     = metrics.map(obj => obj.id).join(',');
+    var checked = window.checkedList.map(obj => obj.id).join(',');
+    $.post($.createLink('metric', 'ajaxGetMetricSideTree'),
+    {
+        'metricIDList': ids,
+        'checkedList' : checked
+    },
+    function(resp)
+    {
+        $('.side .metric-tree').html(resp);
+    });
 }
 
 window.updateCheckList = function(id, name, isChecked)
@@ -191,7 +196,7 @@ window.ajaxGetMetrics = function(scope, filters = '', callback)
 {
     $.get($.createLink('metric', 'ajaxGetMetrics', 'scope=' + scope + '&filters=' + filters), function(resp){
         var metrics = JSON.parse(resp);
-        var total = metrics.length;
+        var total   = metrics.length;
 
         window.renderCheckList(metrics);
 
