@@ -199,8 +199,6 @@ detailBody
                         set::icon('link'),
                         set::text($lang->productplan->linkStory),
                         bind::click("window.showLink('story')")
-                        // set::url(inlink('linkStory', "planID={$plan->id}" . (($link == 'true' && $type == 'story') ? $decodeParam : "&browseType=&param=") . "&orderBy={$orderBy}")),
-                        // setData(array('load' => 'target', 'target' => '#stories'))
                     ) : null
                 ),
                 dtable
@@ -243,8 +241,6 @@ detailBody
                         set::icon('link'),
                         set::text($lang->productplan->linkBug),
                         bind::click("window.showLink('bug')")
-                        // set::url(inlink('linkBug', "planID={$plan->id}" . (($link == 'true' && $type == 'bug') ? $decodeParam : "&browseType=&param=") . "&orderBy={$orderBy}")),
-                        // setData(array('load' => 'target', 'target' => '#bugs'))
                     ) : null
                 ),
                 dtable

@@ -33,7 +33,7 @@ window.showLink = function(type, params, onlyUpdateTable)
     const url = $.createLink('productplan', type === 'story' ? 'linkStory' : 'linkBug', 'planID=' + planID + (params || '&browseType=&param='));
     if(onlyUpdateTable)
     {
-        loadComponent($('#' + (type === 'story' ? 'stories' : 'bugs')).find('.dtable').attr('id'), {url: url, component: 'dtable'});
+        loadComponent($('#' + (type === 'story' ? 'stories' : 'bugs')).find('.dtable').attr('id'), {url: url, component: 'dtable', partial: true});
         return;
     }
     loadTarget({url: url, target: type === 'story' ? 'stories' : 'bugs'});
