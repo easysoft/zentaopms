@@ -130,11 +130,9 @@ formPanel
     formGroup
     (
         set::label($lang->productplan->desc),
-        editor
-        (
-            set::name('desc'),
-            set::rows(10)
-        )
+        set::name('desc'),
+        set::control('editor'),
+        set::rows(10)
     ),
     formHidden('product', $product->id)
 );
