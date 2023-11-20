@@ -2359,7 +2359,7 @@ class pivotModel extends model
             $connectSQL .= " where $whereStr";
         }
 
-        $columnSQL = "select * from ($sql) tt" . $connectSQL;
+        $columnSQL = "select * from ($sql limit 9999999) tt" . $connectSQL;
         $rows = $this->dao->query($columnSQL)->fetchAll();
 
         $cols = array();
