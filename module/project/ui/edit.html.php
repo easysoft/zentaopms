@@ -3,6 +3,10 @@ namespace zin;
 
 jsVar('model', $project->model);
 jsVar('labelClass', $config->project->labelClass);
+jsVar('currencySymbol', $lang->project->currencySymbol);
+jsVar('parentBudget', $lang->project->parentBudget);
+jsVar('budgetUnitLabel', $lang->project->tenThousandYuan);
+jsVar('budgetUnitValue', $config->project->budget->tenThousand);
 jsVar('LONG_TIME', LONG_TIME);
 jsVar('longTime', $lang->project->longTime);
 jsVar('weekend', $config->execution->weekend);
@@ -174,6 +178,7 @@ formPanel
     on::click('.project-stageBy-0', 'changeStageBy(0)'),
     on::click('.project-stageBy-1', 'changeStageBy(1)'),
     on::change('#parent', 'setParentProgram'),
+    on::change('#parent, #budget', "checkBudget({$project->id})"),
     on::change('#begin, [name=delta]', 'computeEndDate'),
     on::change('#begin, #end', 'computeWorkDays'),
     on::change('#begin, #end, #parent', 'checkDate'),
@@ -283,7 +288,7 @@ formPanel
     (
         formGroup
         (
-            set::width('1/4'),
+            set::width('1/3'),
             set::name('budget'),
             set::value($project->budget),
             set::label($lang->project->budget),
@@ -304,6 +309,17 @@ formPanel
             setClass('items-center'),
             set::control(array('type' => 'checkList', 'inline' => true)),
             set::items(array('1' => $lang->project->future))
+        )
+    ),
+    formRow
+    (
+        setID('budgetTip'),
+        setClass('hidden'),
+        formGroup
+        (
+            set::label(''),
+            span(setClass('text-warning'), html($lang->project->budgetOverrun)),
+            a(setClass('underline text-warning'), set::href('javascript:;'), on::click("ignoreTip('budgetTip')"), $lang->project->ignore)
         )
     ),
     formRow
