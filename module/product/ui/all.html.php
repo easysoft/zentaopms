@@ -119,7 +119,7 @@ toolbar
     ) : null
 );
 
-$canBatchEdit = common::hasPriv('product', 'batchEdit');
+$canBatchEdit = hasPriv('product', 'batchEdit');
 dtable
 (
     set::id('products'),
