@@ -394,10 +394,13 @@ $lang->devops->oss          = '对象存储';
 $lang->devops->host         = '主机';
 $lang->devops->account      = '账号';
 $lang->devops->serverroom   = '机房';
+$lang->devops->deploy       = '上线';
 $lang->devops->provider     = '服务商';
 $lang->devops->cpuBrand     = 'CPU品牌';
 $lang->devops->city         = '城市';
 $lang->devops->os           = '系统版本';
+$lang->devops->stage        = '阶段';
+$lang->devops->service      = '服务';
 
 $lang->admin->module      = '功能配置';
 $lang->admin->system      = '系统';
