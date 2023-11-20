@@ -1,11 +1,9 @@
 const DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
 
-window.ignoreTips = {
-    'beyondBudgetTip' : false,
-    'dateTip'         : false
-};
-
-var batchEditDateTips = new Array();
+const ignoreTips = {
+    budgetTip: false,
+    dateTip: false
+}
 
 /**
  * 处理项目类型改变的交互。
@@ -103,8 +101,6 @@ function computeWorkDays()
             $('#delta' + days).prop('checked', true);
         }
     }
-
-    outOfDateTip();
 }
 
 /**
@@ -258,84 +254,58 @@ function budgetOverrunTips()
 }
 
 /**
- *The date is out of the range of the parent project set, and a prompt is given.
+ * The date is out of the range of the parent project set, and a prompt is given.
  *
- * @param  string $currentID
  * @access public
  * @return void
  */
-function outOfDateTip(currentID)
+function checkDate()
 {
-    if(window.ignoreTips['dateTip']) return;
-    if(typeof(systemMode) != 'undefined' && systemMode == 'light') return;
-    if(batchEditDateTips.includes(Number(currentID))) return;
+    if(ignoreTips['dateTip']) return;
 
-    var end   = currentID ? $('#ends\\[' + currentID + '\\]').val() : $('#end').val();
-    var begin = currentID ? $('#begins\\[' + currentID + '\\]').val() : $('#begin').val();
-    if($('#dateTip.text-remind').length > 0) $('#dateTip').closest('.form-row').remove();
-    if(currentID) $('#dateTip\\[' + currentID + '\\]').remove();
+    const begin = $('#begin').zui('datePicker').$.value;
+    const end   = $('#end').zui('datePicker').$.value;
+    if(!begin || !end) return;
 
-    if(end == longTime) end = LONG_TIME;
-    if(end.length > 0 && begin.length > 0)
+    const selectedProgramID = $('[name=parent]').val();
+    if(selectedProgramID == 0 || selectedProgramID == undefined)
     {
-        var selectedProgramID = currentID ? $("[name='parents\[" + currentID + "\]']").val() : $('#parent').val();
-
-        if(selectedProgramID == 0 || selectedProgramID == undefined) return;
-
-        if(typeof(projectID) == 'undefined') projectID = 0;
-        projectID = currentID ? $('#projectIdList\\['+ currentID + '\\]').val() : projectID;
-        $.get($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=project&objectID=' + projectID + '&selectedProgramID=' + selectedProgramID), function(data)
-        {
-            var data         = JSON.parse(data);
-            var parentEnd    = new Date(data.selectedProgramEnd);
-            var parentBegin  = new Date(data.selectedProgramBegin);
-            var projectEnd   = new Date(end);
-            var projectBegin = new Date(begin);
-
-            var beginLessThanParentTip = beginLessThanParent + data.selectedProgramBegin;
-            var endGreatThanParentTip  = endGreatThanParent + data.selectedProgramEnd;
-
-            if(projectBegin >= parentBegin && projectEnd <= parentEnd) return;
-
-            var dateTip = "";
-            if(projectBegin < parentBegin)
-            {
-                dateTip = currentID ? beginLessThanParentTip + "'><p>" + beginLessThanParentTip : beginLessThanParentTip;
-            }
-            else if(projectEnd > parentEnd)
-            {
-                dateTip = currentID ? endGreatThanParentTip + "'><p>" + endGreatThanParentTip : endGreatThanParentTip;
-            }
-
-            if(currentID)
-            {
-                $("#projects\\[" + currentID + "\\]").after("<tr><td colspan='5'></td><td class='c-name' colspan='3'><span id='dateTip" + currentID + "' class='text-remind' title='" + dateTip + "</p><p id='ignore' onclick='ignoreTip(this," + currentID + ")'>" + ignore + "</p></span></td></tr>");
-                $('#dateTip'+ currentID).parent().css('line-height', '0')
-            }
-            else
-            {
-                $('#begin').closest('.form-row').after("<div class='form-row' id='dateTipBox'><div class='form-group'><div class='input-group'><span id='dateTip' class='text-remind'><p>" + dateTip + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></div></div></div>");
-            }
-        });
+        $('#dateTip, #beginLess, #endGreater').addClass('hidden');
+        return;
     }
+
+    if(typeof(projectID) == 'undefined') projectID = 0;
+    $.get($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=project&objectID=' + projectID + '&selectedProgramID=' + selectedProgramID), function(response)
+    {
+        const data         = JSON.parse(response);
+        const parentEnd    = new Date(data.selectedProgramEnd);
+        const parentBegin  = new Date(data.selectedProgramBegin);
+        const projectEnd   = new Date(end);
+        const projectBegin = new Date(begin);
+
+        if(projectBegin >= parentBegin && projectEnd <= parentEnd)
+        {
+            $('#dateTip, #beginLess, #endGreater').addClass('hidden');
+            return;
+        }
+
+        $('#dateTip').removeClass('hidden').find('#beginLess').toggleClass('hidden', projectBegin >= parentBegin).find('.parentBegin').text(data.selectedProgramBegin);
+        $('#dateTip').removeClass('hidden').find('#endGreater').toggleClass('hidden', projectEnd <= parentEnd).find('.parentEnd').text(data.selectedProgramEnd);
+    });
 }
 
 /**
- * Make this prompt no longer appear.
+ * 忽略提示信息。
+ * Ignore tips.
  *
- * @param  string  $obj
- * @param  string  $currentID
+ * @param  string $tip
  * @access public
  * @return void
  */
-window.ignoreTip = function(obj, currentID)
+function ignoreTip(tip)
 {
-    var parentID = obj.parentNode.id;
-    currentID ? $('#dateTip' + currentID).parent().parent().remove() : $('#' + parentID).closest('.form-row').remove();
-
-    if(parentID == 'dateTip') window.ignoreTips['dateTip'] = true;
-    if(parentID == 'dateTip' + currentID) batchEditDateTips.push(currentID);
-    if(parentID == 'beyondBudgetTip') window.ignoreTips['beyondBudgetTip'] = true;
+    $('#' + tip).remove();
+    ignoreTips[tip] = true;
 }
 
 /**
