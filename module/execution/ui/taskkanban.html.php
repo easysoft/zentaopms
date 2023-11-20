@@ -32,7 +32,7 @@ foreach($kanbanGroup as $index => $group)
     foreach($group['data']['cols'] as $colIndex => $col)
     {
         $colPairs[$col['id']] = $col['type'];
-        if($col['parent'] != '-1') $groupCols[$groupID][$col['id']] = $col['title'];
+        if(isset($col['parent']) && $col['parent'] != '-1') $groupCols[$groupID][$col['id']] = $col['title'];
     }
 
     $kanbanGroup[$index] = $group;
@@ -229,7 +229,7 @@ div
     (
         set::key('kanban'),
         set::items($kanbanGroup),
-        set::height('calc(100vh - 80px)')
+        set::height('calc(100vh - 120px)')
     )
 );
 
