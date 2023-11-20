@@ -310,7 +310,7 @@ if($config->vision == 'lite')
     $lang->admin->menuList->feature['menuOrder']['15'] = 'project';
 }
 
-if($config->inQuickon)
+if($config->inQuickon && helper::hasFeature('devops'))
 {
     $dashboard = is_object($lang->dashboard) ? $lang->dashboard->common : $lang->dashboard;
     $lang->admin->menuList->platform['subMenu']['dashboard'] = array('link' => "{$dashboard}|system|dashboard|");
