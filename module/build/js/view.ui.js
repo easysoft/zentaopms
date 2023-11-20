@@ -28,11 +28,22 @@ $(document).off('click','.dtable-footer .batch-btn').on('click', '.dtable-footer
     window.appendLinkBtn();
 });
 
-window.showLink = function(obj)
+window.showLink = function(type, params, onlyUpdateTable)
 {
-    var $this  = $(obj);
-    var idName = $this.data('type') == 'story' ? '#story' : '#bug';
-    $(idName).load($this.data('linkurl'));
+    const url = $.createLink(buildModule, type === 'story' ? 'linkStory' : 'linkBug', 'buildID=' + buildID + (params || '&browseType=&param='));
+    if(onlyUpdateTable)
+    {
+        loadComponent($('#' + type).find('.dtable').attr('id'), {url: url, component: 'dtable', partial: true});
+        return;
+    }
+    loadTarget({url: url, target: type});
+};
+
+window.onSearchLinks = function(type, result)
+{
+    const params = $.parseLink(result.load).vars[3];
+    showLink(type, params ? atob(params[1]) : null, true);
+    return false;
 };
 
 $(document).on('click', '.linkObjectBtn', function()
@@ -60,8 +71,7 @@ $(document).on('click', '.linkObjectBtn', function()
     $.ajaxSubmit({"url": $(this).data('url'), "data": postData});
 });
 
-if(initLink == 'true')
+$(function()
 {
-    var idName = type == 'story' ? '#story' : '#bug';
-    window.showLink($(idName).find('.link'));
-}
+    if(initLink == 'true') window.showLink(type, linkParams);
+});
