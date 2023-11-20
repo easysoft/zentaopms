@@ -43,15 +43,15 @@ toolbar
             'data-type' => 'bycard'
         ))
     ))),
-    item(set(array
+    hasPriv('project', 'export') ? item(set(array
     (
         'icon'        => 'export',
         'text'        => $lang->project->export,
         'class'       => 'ghost export',
         'url'         => createLink('project', 'export', "status={$browseType}&orderBy={$orderBy}"),
         'data-toggle' => 'modal'
-    ))),
-    item(set(array
+    ))) : null,
+    hasPriv('project', 'create') ? item(set(array
     (
         'icon'          => 'plus',
         'text'          => $lang->project->create,
@@ -59,13 +59,14 @@ toolbar
         'url'           => commonModel::isTutorialMode() ? createLink('project', 'create', 'mode=scrum&programID=0') : createLink('project', 'createGuide'),
         'data-toggle'   => 'modal',
         'data-position' => 'center'
-    )))
+    ))) : null
 );
 
 /* zin: Define the sidebar in main content. */
 sidebar
 (
-    moduleMenu(set(array(
+    moduleMenu(set(array
+    (
         'modules'     => $programTree,
         'activeKey'   => $programID,
         'closeLink'   => $this->createLink('project', 'browse', "programID=0&browseType={$browseType}"),
@@ -73,13 +74,15 @@ sidebar
     )))
 );
 
-$canBatchEdit = common::hasPriv('project', 'batchEdit');
+$canBatchEdit = hasPriv('project', 'batchEdit');
 $footToolbar  = array();
 if($canBatchEdit)
 {
-    $footToolbar['items'][] = array(
+    $footToolbar['items'][] = array
+    (
         'type'  => 'btn-group',
-        'items' => array(
+        'items' => array
+        (
             array('text' => $lang->edit, 'className' => 'btn size-sm batch-btn', 'btnType' => 'secondary', 'data-url' => createLink('project', 'batchEdit'))
         )
     );
