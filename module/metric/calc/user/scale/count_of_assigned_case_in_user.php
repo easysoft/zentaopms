@@ -27,7 +27,7 @@ class count_of_assigned_case_in_user extends baseCalc
         return $this->dao->select('t1.assignedTo')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
-            ->andWhere('t3.deleted')->eq(0)
+            ->where('t3.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.status')->ne('done')
             ->query();
