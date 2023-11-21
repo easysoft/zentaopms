@@ -138,13 +138,14 @@ class customModel extends model
     }
 
     /**
+     * 解析选择或删除项的参数字符串。
      * Parse the param string for select or delete items.
      *
-     * @param  string    $paramString     lang=xxx&module=story&section=sourceList&key=customer and so on.
+     * @param  string $paramString lang=xxx&module=story&section=sourceList&key=customer and so on.
      * @access public
      * @return array
      */
-    public function parseItemParam($paramString)
+    public function parseItemParam(string $paramString): array
     {
         /* Parse the param string into array. */
         parse_str($paramString, $params);
@@ -152,7 +153,11 @@ class customModel extends model
         /* Init fields not set in the param string. */
         $fields = 'lang,module,section,key,vision';
         $fields = explode(',', $fields);
-        foreach($fields as $field) if(!isset($params[$field])) $params[$field] = '';
+        foreach($fields as $field)
+        {
+            if(isset($params[$field])) continue;
+            $params[$field] = '';
+        }
 
         return $params;
     }
