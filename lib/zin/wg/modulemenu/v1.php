@@ -159,7 +159,7 @@ class moduleMenu extends wg
         return a
         (
             set('href', $closeLink),
-            setData($titleAttrs),
+            $titleAttrs ? setData($titleAttrs) : null,
             icon('close', setStyle('color', 'var(--color-slate-600)'))
         );
     }
