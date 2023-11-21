@@ -14,10 +14,10 @@ set::zui(true);
 
 div
 (
-    set::id('main'),
+    setID('main'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
         formPanel
         (
             zui::width('800px'),

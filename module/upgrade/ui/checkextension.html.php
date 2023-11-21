@@ -37,10 +37,10 @@ foreach($extensionsName as $extension => $extensionName)
 
 div
 (
-    set::id('main'),
+    setID('main'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
         set::className('bg-white p-4'),
         set::style(array('margin' => '50px auto 0', 'width' => '800px')),
         div
