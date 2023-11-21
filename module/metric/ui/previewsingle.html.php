@@ -21,7 +21,7 @@ $fnGenerateSide = function() use($groupMetrics, $current, $viewType, $scope, $la
 
         $metricList[] = li
             (
-                set::class('metric-group'),
+                set::className('metric-group'),
                 $lang->metric->objectList[$key]
             );
 
