@@ -16,10 +16,11 @@ $tree = array();
 foreach($categories as $id => $category)
 {
     $tree[] = array(
-        'id'     => $id,
-        'parent' => 0,
-        'name'   => $category,
-        'key'    => 'storeTree-' . $id,
+        'id'        => $id,
+        'parent'    => 0,
+        'name'      => $category,
+        'key'       => 'storeTree-' . $id,
+        'className' => "store-tree-$id"
     );
 }
 jsVar('tree', $tree);

@@ -9,12 +9,12 @@ window.treeClick = function(info)
     if (info.item.items && info.item.items.length > 0) return;
     if(checkedCategories[info.item.id] != undefined)
     {
-        $('#' + info.item.id).parent().removeClass('selected');
+        $('.store-tree-' + info.item.id + ' > .listitem').removeClass('active');
         delete checkedCategories[info.item.id];
     }
     else
     {
-        $('#' + info.item.id).parent().addClass('selected');
+        $('.store-tree-' + info.item.id + ' > .listitem').addClass('active');
         checkedCategories[info.item.id] = true;
     }
 
