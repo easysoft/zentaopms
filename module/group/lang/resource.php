@@ -82,11 +82,6 @@ $lang->moduleOrder[245] = 'gitea';
 $lang->moduleOrder[250] = 'holiday';
 
 $lang->resource = new stdclass();
-/* Index module. */
-$lang->resource->index = new stdclass();
-$lang->resource->index->index = 'index';
-
-$lang->index->methodOrder[0] = 'index';
 
 /* My module. */
 $lang->resource->my = new stdclass();
@@ -98,14 +93,12 @@ $lang->resource->my->audit           = 'audit';
 $lang->resource->my->contribute      = 'contributeAction';
 $lang->resource->my->project         = 'project';
 $lang->resource->my->uploadAvatar    = 'uploadAvatar';
-$lang->resource->my->preference      = 'preference';
 $lang->resource->my->dynamic         = 'dynamicAction';
 $lang->resource->my->editProfile     = 'editProfile';
 $lang->resource->my->manageContacts  = 'manageContacts';
 $lang->resource->my->deleteContacts  = 'deleteContacts';
 $lang->resource->my->score           = 'score';
 $lang->resource->my->team            = 'team';
-$lang->resource->my->doc             = 'doc';
 $lang->resource->my->execution       = 'execution';
 
 $lang->my->methodOrder[1]  = 'index';
@@ -395,7 +388,6 @@ $lang->stage->methodOrder[35] = 'plusBrowse';
 $lang->resource->program = new stdclass();
 $lang->resource->program->browse                  = 'browse';
 $lang->resource->program->kanban                  = 'kanbanAction';
-$lang->resource->program->view                    = 'view';
 $lang->resource->program->product                 = 'product';
 $lang->resource->program->create                  = 'create';
 $lang->resource->program->edit                    = 'edit';
@@ -628,7 +620,7 @@ $lang->resource->productplan->batchUnlinkStory  = 'batchUnlinkStory';
 $lang->resource->productplan->linkBug           = 'linkBug';
 $lang->resource->productplan->unlinkBug         = 'unlinkBug';
 $lang->resource->productplan->batchUnlinkBug    = 'batchUnlinkBug';
-$lang->resource->productplan->batchEdit         = 'batchEdit';
+$lang->resource->productplan->batchEdit         = 'batchEditAction';
 $lang->resource->productplan->start             = 'start';
 $lang->resource->productplan->finish            = 'finish';
 $lang->resource->productplan->close             = 'close';
@@ -1326,7 +1318,6 @@ $lang->repo->methodOrder[45]  = 'log';
 $lang->repo->methodOrder[50]  = 'revision';
 $lang->repo->methodOrder[55]  = 'blame';
 $lang->repo->methodOrder[60]  = 'download';
-$lang->repo->methodOrder[65]  = 'setRules';
 $lang->repo->methodOrder[70]  = 'apiGetRepoByUrl';
 $lang->repo->methodOrder[75]  = 'downloadCode';
 $lang->repo->methodOrder[80]  = 'linkStory';

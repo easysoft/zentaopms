@@ -454,6 +454,8 @@ class groupModel extends model
      * Update privilege of a group.
      *
      * @param  int    $groupID
+     * @param  string $nav
+     * @param  string $version
      * @access public
      * @return bool
      */
