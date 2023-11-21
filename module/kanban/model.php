@@ -1743,7 +1743,7 @@ class kanbanModel extends model
             if($cardIdList)
             {
                 $cardsData = $this->buildExecutionCards($cardsData, $column, $lane->type, $cardIdList, $objectGroup, $searchValue, $menus);
-                $columnsData[$column->id]['cards'] = count($cardsData[$column->lane][$column->id]);
+                $columnsData[$column->id]['cards'] = empty($cardsData[$column->lane][$column->id]) ? 0 : count($cardsData[$column->lane][$column->id]);
             }
         }
 
