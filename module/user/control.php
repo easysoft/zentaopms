@@ -82,7 +82,7 @@ class user extends control
 
         /* Get user, totos. */
         $account = $user->account;
-        $todos   = $this->todo->getList($type, $account, $status, 0, $pager, $sort);
+        $todos   = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);
         $date    = (int)$type == 0 ? helper::today() : $type;
         $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
         $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
@@ -483,7 +483,7 @@ class user extends control
         $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
         $this->view->user         = $user;
         $this->view->groups       = $this->loadModel('group')->getByAccount($account);
-        $this->view->deptPath     = $this->dept->getParents($user->dept);
+        $this->view->deptPath     = $this->loadModel('dept')->getParents($user->dept);
         $this->view->personalData = $this->user->getPersonalData($user->account);
         $this->view->userList     = $this->user->setUserList($users, $userID);
 
@@ -554,7 +554,7 @@ class user extends control
         $position[] = $this->lang->user->create;
         $this->view->title     = $title;
         $this->view->position  = $position;
-        $this->view->depts     = $this->dept->getOptionMenu();
+        $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
         $this->view->groupList = $groupList;
         $this->view->roleGroup = $roleGroup;
         $this->view->deptID    = $deptID;
@@ -613,7 +613,7 @@ class user extends control
         $this->view->showFields   = join(',', $showFields);
 
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchCreate;
-        $this->view->depts      = $this->dept->getOptionMenu();
+        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
         $this->view->deptID     = $deptID;
         $this->view->groupList  = $groupList;
         $this->view->roleGroup  = $roleGroup;
@@ -654,7 +654,7 @@ class user extends control
         $this->view->title      = $title;
         $this->view->position   = $position;
         $this->view->user       = $user;
-        $this->view->depts      = $this->dept->getOptionMenu();
+        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
         $this->view->userGroups = implode(',', array_keys($userGroups));
         $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
         $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->where('project')->eq(0)->fetchPairs('id', 'name');
@@ -701,7 +701,7 @@ class user extends control
         $this->view->showFields   = join(',', $showFields);
 
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchEdit;
-        $this->view->depts      = $this->dept->getOptionMenu();
+        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
         $this->view->rand       = $this->user->updateSessionRandom();
         $this->view->visionList = $this->user->getVisionList();
 
