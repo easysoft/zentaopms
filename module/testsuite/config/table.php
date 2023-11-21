@@ -162,10 +162,20 @@ $config->testsuite->linkcase->dtable->fieldList['status'] = $config->testcase->d
 
 $config->testsuite->linkcase->dtable->fieldList['id']['name'] = 'id';
 
-$config->testsuite->linkcase->dtable->fieldList['version']['name']  = 'version';
-$config->testsuite->linkcase->dtable->fieldList['version']['title'] = $lang->testsuite->linkVersion;
-$config->testsuite->linkcase->dtable->fieldList['version']['type']  = 'text';
-$config->testsuite->linkcase->dtable->fieldList['version']['group'] = 'version';
+$config->testsuite->linkcase->dtable->fieldList['title']['link']['params'] = 'caseID={id}';
+$config->testsuite->linkcase->dtable->fieldList['title']['data-toggle']    = 'modal';
+$config->testsuite->linkcase->dtable->fieldList['title']['data-size']      = 'lg';
+
+$config->testsuite->linkcase->dtable->fieldList['pri']['type']         = 'control';
+$config->testsuite->linkcase->dtable->fieldList['pri']['control']      = 'picker';
+$config->testsuite->linkcase->dtable->fieldList['pri']['controlItems'] = $lang->testcase->priList;
+
+$config->testsuite->linkcase->dtable->fieldList['version']['name']         = 'version';
+$config->testsuite->linkcase->dtable->fieldList['version']['title']        = $lang->testsuite->linkVersion;
+$config->testsuite->linkcase->dtable->fieldList['version']['type']         = 'control';
+$config->testsuite->linkcase->dtable->fieldList['version']['control']      = 'picker';
+$config->testsuite->linkcase->dtable->fieldList['version']['group']        = 'version';
+$config->testsuite->linkcase->dtable->fieldList['version']['controlItems'] = array(1 => 1);
 
 $config->testsuite->linkcase->dtable->fieldList['openedBy'] = $config->testcase->dtable->fieldList['openedBy'];
 unset($config->testsuite->linkcase->dtable->fieldList['title']['nestedToggle']);
