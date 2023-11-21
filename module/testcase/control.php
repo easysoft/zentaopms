@@ -149,51 +149,35 @@ class testcase extends control
         $sort  = common::appendOrder($orderBy);
 
         $cases  = array();
-        $scenes = array();
-        $browseType = ($browseType == 'bymodule' and $this->session->caseBrowseType == 'all') ? $this->session->caseBrowseType : $browseType;
-        if($browseType == 'all')
+        $pager->pageID = $pageID;   // 场景和用例混排，$pageID 可能大于场景分页后的总页数。在 pager 构造函数中会被设为 1，这里要重新赋值。
+
+        $scenes = $this->testcase->getSceneGroups($productID, $branch, $moduleID, $caseType, $sort, $pager);   // 获取包含子场景和用例的顶级场景树。
+
+        if(!$this->cookie->onlyScene)
         {
-            $pager->pageID = $pageID;   // 场景和用例混排，$pageID 可能大于场景分页后的总页数。在 pager 构造函数中会被设为 1，这里要重新赋值。
+            $recPerPage = $pager->recPerPage;
+            $sceneTotal = $pager->recTotal;
+            $sceneCount = count($scenes);
 
-            $scenes = $this->testcase->getSceneGroups($productID, $branch, $moduleID, $caseType, $sort, $pager);   // 获取包含子场景和用例的顶级场景树。
-
-            if(!$this->cookie->onlyScene)
+            /* 场景条数小于每页记录数，继续获取用例。 */
+            if($sceneCount < $recPerPage)
             {
-                $recPerPage = $pager->recPerPage;
-                $sceneTotal = $pager->recTotal;
-                $sceneCount = count($scenes);
+                /* 重置 $pager 属性，只获取需要的用例条数。*/
+                $pager->recTotal   = 0;
+                $pager->pageID     = 1; // 查询用例时的分页起始偏移量单独计算，每次查询的页码都设为 1 即可，后面会重新设置页码。
+                $pager->recPerPage = $recPerPage - $sceneCount; // 可能存在场景没排满一页，需要用例补全的情况。这里只查询需要补全的记录数。
 
-                /* 场景条数小于每页记录数，继续获取用例。 */
-                if($sceneCount < $recPerPage)
-                {
-                    /* 重置 $pager 属性，只获取需要的用例条数。*/
-                    $pager->recTotal   = 0;
-                    $pager->pageID     = 1; // 查询用例时的分页起始偏移量单独计算，每次查询的页码都设为 1 即可，后面会重新设置页码。
-                    $pager->recPerPage = $recPerPage - $sceneCount; // 可能存在场景没排满一页，需要用例补全的情况。这里只查询需要补全的记录数。
+                if($sceneCount == 0) $pager->offset = $recPerPage * ($pageID - 1) - $sceneTotal;   // 场景数为 0 表示本页查询只显示用例，需要计算用例分页的起始偏移量。
 
-                    if($sceneCount == 0) $pager->offset = $recPerPage * ($pageID - 1) - $sceneTotal;   // 场景数为 0 表示本页查询只显示用例，需要计算用例分页的起始偏移量。
-
-                    $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, $pager);
-                    $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
-                }
-                else
-                {
-                    /* 场景和用例混排，总记录数需要合并后显示，这里是为了获取用例的总记录数。*/
-                    $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, $pager);
-                    $cases = array();
-                }
-
-                /* 合并场景和用例的总记录数，并重新计算总页数和当前页码。*/
-                $pager->recTotal  += $sceneTotal;
-                $pager->recPerPage = $recPerPage;
-                $pager->pageTotal  = ceil($pager->recTotal / $recPerPage);
-                $pager->pageID     = $pageID;
+                $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, $pager);
+                $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
             }
-        }
-        else
-        {
-            $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, $pager);
-            $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+
+            /* 合并场景和用例的总记录数，并重新计算总页数和当前页码。*/
+            $pager->recTotal  += $sceneTotal;
+            $pager->recPerPage = $recPerPage;
+            $pager->pageTotal  = ceil($pager->recTotal / $recPerPage);
+            $pager->pageID     = $pageID;
         }
 
         $sceneCount = count($scenes);
