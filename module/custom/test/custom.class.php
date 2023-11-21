@@ -84,19 +84,19 @@ class customTest
     }
 
     /**
+     * 解析选择或删除项的参数字符串。
      * Test parse the param string for select or delete items.
      *
-     * @param  string    $paramString
+     * @param  string $paramString lang=xxx&module=story&section=sourceList&key=customer and so on.
      * @access public
      * @return array
      */
-    public function parseItemParamTest($paramString)
+    public function parseItemParamTest(string $paramString): array
     {
-        $objects = $this->objectModel->parseItemParam($paramString);
+        $params = $this->objectModel->parseItemParam($paramString);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $params;
     }
 
     /**
