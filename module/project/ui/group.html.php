@@ -17,7 +17,8 @@ jsVar('confirmDelete', $lang->group->confirmDelete);
 /* zin: Define the feature bar on main menu. */
 featureBar
 (
-    set::current('all'),
+    set::linkParams("projectID={$projectID}&programID={$programID}"),
+    set::current('all')
 );
 
 /* zin: Define the toolbar on main menu. */
