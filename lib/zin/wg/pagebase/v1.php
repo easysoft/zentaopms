@@ -64,7 +64,8 @@ class pageBase extends wg
         $themeName  = $app->cookie->theme;
         $zuiPath    = $config->zin->zuiPath;
 
-        $jsConfig->zin = (isset($config->zin->mode) && $config->zin->mode) ? $config->zin->mode : true;
+        $zinMode       = isset($config->zin->mode) ? $config->zin->mode : '';
+        $jsConfig->zin = !empty($zinMode) ? $zinMode : true;
 
         $headImports = array();
         if($zui)
@@ -74,10 +75,15 @@ class pageBase extends wg
             $headImports[] = h::importJs($zuiPath . 'zui.zentao.umd.cjs', setID('zuiJS'));
             $headImports[] = h::jsCall('$.setLibRoot', $zuiPath);
 
-            if(isset($config->zin->extraCSS) && $config->zin->extraCSS) $headImports[] = h::importCss($webRoot . 'js/zui3/' . $config->zin->extraCSS);
+            $extraCSS = isset($config->zin->extraCSS) ? $config->zin->extraCSS : '';
+            if(!empty($extraCSS)) $headImports[] = h::importCss($webRoot . 'js/zui3/' . $extraCSS);
         }
         $headImports[] = h::jsVar('window.config', $jsConfig, setID('configJS'));
-        if($zui) $headImports[] = h::importJs($webRoot . 'js/zui3/zin.js', setID('zinJS'));
+        if($zui)
+        {
+            $extraJS = isset($config->zin->extraJS) ? $config->zin->extraJS : 'zin.js';
+            if(!empty($extraJS)) $headImports[] = h::importJs($webRoot . 'js/zui3/' . $extraJS);
+        }
 
         if($config->debug)
         {
