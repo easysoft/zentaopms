@@ -595,13 +595,12 @@ class todoZen extends todo
     {
         $confirmNote = 'confirm' . ucfirst($todo->type);
         $confirmURL  = $this->createLink($todo->type, 'view', "id=$todo->objectID");
-        $okTarget    = isonlybody() ? 'parent' : 'window.parent.$.apps.open';
         if($todo->type == 'bug')   $app = 'qa';
         if($todo->type == 'task')  $app = 'execution';
         if($todo->type == 'story') $app = 'product';
         $cancelURL = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
 
-        return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
+        return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => $confirmURL, 'canceled' => $cancelURL)));
     }
 
     /**

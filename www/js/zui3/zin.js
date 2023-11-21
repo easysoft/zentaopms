@@ -716,7 +716,11 @@
         if(typeof target === 'string' && target[0] !== '#' && target[0] !== '.') target = `#${target}`;
         const modal = zui.Modal.query(target);
         if(!modal) return;
-        modal.render(options).then((result) => {if(result && callback) callback(modal.dialog);});
+
+        $.ajaxSubmit({url: options.url, 'method': 'get', headers: {'X-ZIN-MODAL': true}, onComplete: (data, error) =>
+        {
+            if(error) modal.render(options).then((result) => {if(result && callback) callback(modal.dialog);});
+        }})
     }
 
     function loadTarget(url, target, options)

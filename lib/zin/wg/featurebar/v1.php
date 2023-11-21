@@ -10,7 +10,6 @@ class featureBar extends wg
         'items?:array',
         'current?:string',
         'link?:string',
-        'current?:string',
         'linkParams?:string=""',
         'module?:string',
         'method?:string',
@@ -40,23 +39,25 @@ class featureBar extends wg
         $rawItems = \customModel::getFeatureMenu($currentModule, $currentMethod);
         if(!is_array($rawItems)) return null;
 
-        $current  = $this->prop('current', data('browseType'));
-        $pager    = data('pager');
-        $recTotal = $pager ? $pager->recTotal : data('recTotal');
-        $items    = array();
-        $link     = $this->prop('link');
-        $loadID   = $this->prop('loadID');
-        $load     = $this->prop('load');
-        $tab      = $this->prop('app');
+        $current    = $this->prop('current', data('browseType'));
+        $pager      = data('pager');
+        $recTotal   = $pager ? $pager->recTotal : data('recTotal');
+        $items      = array();
+        $loadID     = $this->prop('loadID');
+        $load       = $this->prop('load');
+        $tab        = $this->prop('app');
+        $commonLink = $this->prop('link');
+        $itemLink   = $this->prop('itemLink');
 
         data('activeFeature', $current);
 
-        if(empty($link)) $link = createLink($app->rawModule, $app->rawMethod, $this->prop('linkParams'));
+        if(empty($commonLink)) $commonLink = createLink($app->rawModule, $app->rawMethod, $this->prop('linkParams'));
 
         foreach($rawItems as $item)
         {
             if(isset($item->hidden)) continue;
 
+            $link     = ($itemLink && isset($itemLink[$item->name])) ? $itemLink[$item->name] : $commonLink;
             $isActive = $item->name == $current;
 
             $moreSelects = array();
