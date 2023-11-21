@@ -2,6 +2,11 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testreport.class.php';
+
+zdTable('testreport')->gen(2);
+zdTable('testtask')->gen(30);
+zdTable('user')->gen(1);
+
 su('admin');
 
 /**
