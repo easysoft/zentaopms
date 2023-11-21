@@ -66,8 +66,8 @@ if($canBatchAction)
 
         menu
         (
-            set::id('navStatus'),
-            set::className('dropdown-menu'),
+            setID('navStatus'),
+            setClass('dropdown-menu'),
             set::items(array_values($items))
         );
 

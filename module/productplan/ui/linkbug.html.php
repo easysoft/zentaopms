@@ -25,7 +25,7 @@ searchForm
 
 dtable
 (
-    set::id('unlinkBugList'),
+    setID('unlinkBugList'),
     set::userMap($users),
     set::checkable(true),
     set::cols($cols),

@@ -203,7 +203,7 @@ detailBody
                 ),
                 dtable
                 (
-                    set::id('storyDTable'),
+                    setID('storyDTable'),
                     set::userMap($users),
                     set::bordered(true),
                     set::cols($storyCols),
@@ -245,7 +245,7 @@ detailBody
                 ),
                 dtable
                 (
-                    set::id('bugDTable'),
+                    setID('bugDTable'),
                     set::userMap($users),
                     set::bordered(true),
                     set::cols($bugCols),
