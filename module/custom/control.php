@@ -91,24 +91,6 @@ class custom extends control
     }
 
     /**
-     * Set working mode function.
-     *
-     * @access public
-     * @return void
-     */
-    public function working()
-    {
-        if($_POST)
-        {
-            $this->loadModel('setting')->setItem('system.common.global.flow', $this->post->flow);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
-        }
-
-        $this->view->title      = $this->lang->custom->working;
-        $this->display();
-    }
-
-    /**
      * Set Required.
      *
      * @param  string $moduleName
