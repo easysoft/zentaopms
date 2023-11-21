@@ -346,17 +346,40 @@ class aiModel extends model
 
         foreach($data as $key => $value)
         {
-            $lang = new stdClass();
-            $lang->module  = 'ai';
-            $lang->section = 'miniProgram';
-            $lang->value   = $value;
-            $lang->key     = is_numeric($key) ? uniqid('custom-') : $key;
-            $lang->owner   = 'system';
-            $lang->vision  = '';
+            if(is_string($value))
+            {
+                $category = new stdClass();
+                $category->module  = 'ai';
+                $category->section = 'miniProgram';
+                $category->owner   = 'system';
+                $category->vision  = '';
+                $category->key   = $key;
+                $category->value = $value;
 
-            $this->dao->insert(TABLE_CONFIG)
-                ->data($lang)
-                ->exec();
+                $this->dao->insert(TABLE_CONFIG)
+                    ->data($category)
+                    ->exec();
+
+                continue;
+            }
+
+            if(is_array($value))
+            {
+                foreach($value as $v)
+                {
+                    $category = new stdClass();
+                    $category->module  = 'ai';
+                    $category->section = 'miniProgram';
+                    $category->owner   = 'system';
+                    $category->vision  = '';
+                    $category->key     = uniqid('custom-');
+                    $category->value   = $v;
+
+                    $this->dao->insert(TABLE_CONFIG)
+                        ->data($category)
+                        ->exec();
+                }
+            }
         }
     }
 
