@@ -67,8 +67,9 @@ $config->repo->dtable->fieldList['actions']['list']['reportView']['url']        
 
 $config->repo->dtable->fieldList['actions']['list']['delete']['icon']         = 'trash';
 $config->repo->dtable->fieldList['actions']['list']['delete']['hint']         = $lang->repo->delete;
-$config->repo->dtable->fieldList['actions']['list']['delete']['data-confirm'] = $this->lang->repo->notice->delete;
+$config->repo->dtable->fieldList['actions']['list']['delete']['data-confirm'] = $lang->repo->notice->delete;
 $config->repo->dtable->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
+$config->repo->dtable->fieldList['actions']['list']['delete']['url']          = helper::createLink('repo', 'delete', 'repoID={id}');
 
 $config->repo->repoDtable = new stdclass();
 
