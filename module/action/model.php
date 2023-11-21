@@ -927,21 +927,29 @@ class actionModel extends model
     }
 
     /**
+     * 打印一个对象的所有操作记录。
      * Print actions of an object.
      *
-     * @param  object    $action
-     * @param  string   $desc
+     * @param  object $action
+     * @param  string $desc
      * @access public
      * @return void
      */
-    public function renderAction($action, $desc = '')
+    public function renderAction(object $action, string $desc = '')
     {
-        if(!isset($action->objectType) || !isset($action->action)) return;
+        if(!isset($action->objectType) || !isset($action->action)) return false;
 
         $objectType = $action->objectType;
         $actionType = strtolower($action->action);
 
         /**
+         *
+         * 设置操作的描述。
+         *
+         * 1. 如果模块中定义了操作的描述，使用模块中定义的。
+         * 2. 如果模块中没有定义，使用公共的操作描述。
+         * 3. 如果公共的操作描述中没有定义，使用默认的操作描述。
+         *
          * Set the desc string of this action.
          *
          * 1. If the module of this action has defined desc of this actionType, use it.
@@ -950,39 +958,39 @@ class actionModel extends model
          */
         if(empty($desc))
         {
-            if($action->objectType == 'story' && $action->action == 'reviewed' && strpos($action->extra, ',') !== false)
+            if(($action->objectType == 'story' or $action->objectType == 'demand') && $action->action == 'reviewed' && strpos($action->extra, ',') !== false)
             {
-                $desc = $this->lang->$objectType->action->rejectreviewed;
+                $desc = $this->lang->{$objectType}->action->rejectreviewed;
             }
             elseif($action->objectType == 'productplan' && in_array($action->action, array('startedbychild','finishedbychild','closedbychild','activatedbychild', 'createchild')))
             {
-                $desc = $this->lang->$objectType->action->changebychild;
+                $desc = $this->lang->{$objectType}->action->changebychild;
             }
             elseif($action->objectType == 'module' && in_array($action->action, array('created', 'moved', 'deleted')))
             {
-                $desc = $this->lang->$objectType->action->{$action->action};
+                $desc = $this->lang->{$objectType}->action->{$action->action};
             }
             elseif(strpos('createmr,editmr,removemr', $action->action) !== false && strpos($action->extra, '::') !== false)
             {
                 $mrAction = str_replace('mr', '', $action->action) . 'Action';
                 list($mrDate, $mrActor, $mrLink) = explode('::', $action->extra);
 
-                if(isonlybody()) $mrLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
+                if(isInModal()) $mrLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
 
                 $this->app->loadLang('mr');
-                $desc = sprintf($this->lang->mr->$mrAction, $mrDate, $mrActor, $mrLink);
+                $desc = sprintf($this->lang->mr->{$mrAction}, $mrDate, $mrActor, $mrLink);
             }
-            elseif($this->config->edition == 'max' && strpos($this->config->action->assetType, ",{$action->objectType},") !== false && $action->action == 'approved')
+            elseif(in_array($this->config->edition, array('max', 'ipd')) && strpos($this->config->action->assetType, ",{$action->objectType},") !== false && $action->action == 'approved')
             {
                 $desc = empty($this->lang->action->approve->{$action->extra}) ? '' : $this->lang->action->approve->{$action->extra};
             }
-            elseif(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
+            elseif(isset($this->lang->{$objectType}) && isset($this->lang->{$objectType}->action->{$actionType}))
             {
-                $desc = $this->lang->$objectType->action->$actionType;
+                $desc = $this->lang->{$objectType}->action->{$actionType};
             }
-            elseif($action->objectType == 'instance' && isset($this->lang->action->desc->$actionType))
+            elseif($action->objectType == 'instance' && isset($this->lang->action->desc->{$actionType}))
             {
-                $desc  = $this->lang->action->desc->$actionType;
+                $desc  = $this->lang->action->desc->{$actionType};
                 $extra = json_decode($action->extra);
                 if($actionType == 'adjustmemory')
                 {
@@ -991,7 +999,6 @@ class actionModel extends model
                 }
                 if(!empty($extra))
                 {
-                    if(empty($extra->data)) $extra->data = new stdclass();
                     $action->oldName    = zget($extra->data, 'oldName', '');
                     $action->newName    = zget($extra->data, 'newName', '');
                     $action->oldVersion = zget($extra->data, 'oldVersion', '');
@@ -1004,15 +1011,15 @@ class actionModel extends model
                     $action->extra = '';
 
                     if(!empty($extra->result->code) && $extra->result->code != 200 && !empty($extra->result->message)) $action->comment = $extra->result->message;
-                    if(is_string($extra->result) && $extra->result != 'fail' && !empty($extra->message))
+                    if(is_string($extra->result) && $extra->result != 'fail')
                     {
                         $action->comment = "\n" . $extra->message;
                     }
                 }
             }
-            elseif(isset($this->lang->action->desc->$actionType))
+            elseif(isset($this->lang->action->desc->{$actionType}))
             {
-                $desc = $this->lang->action->desc->$actionType;
+                $desc = $this->lang->action->desc->{$actionType};
             }
             else
             {
@@ -1023,11 +1030,13 @@ class actionModel extends model
         $action->date = substr($action->date, 0, 19);
         if($this->app->getViewType() == 'mhtml') $action->date = date('m-d H:i', strtotime($action->date));
 
+        /* 遍历actions, 替换变量。 */
         /* Cycle actions, replace vars. */
         foreach($action as $key => $value)
         {
             if($key == 'history') continue;
 
+            /* 如果desc是数组，替换变量。 */
             /* Desc can be an array or string. */
             if(is_array($desc))
             {
@@ -1043,19 +1052,20 @@ class actionModel extends model
             }
             else
             {
-                if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->$objectType->snapshot->defaultSnapName;
+                if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->{$objectType}->snapshot->defaultSnapName;
 
                 $desc = str_replace('$' . $key, $value, $desc);
             }
         }
 
+        /* 如果desc是数组，处理extra。 */
         /* If the desc is an array, process extra. Please bug/lang. */
         if(!is_array($desc)) return $desc;
 
         $extra = strtolower($action->extra);
 
         /* Fix bug #741. */
-        if(isset($desc['extra'])) $desc['extra'] = $this->lang->$objectType->{$desc['extra']};
+        if(isset($desc['extra'])) $desc['extra'] = $this->lang->{$objectType}->{$desc['extra']};
 
         $actionDesc = '';
         if(isset($desc['extra'][$extra]))
@@ -1067,12 +1077,12 @@ class actionModel extends model
             $actionDesc = str_replace('$extra', $action->extra, $desc['main']);
         }
 
-        if($action->objectType == 'story' && $action->action == 'reviewed')
+        if(($action->objectType == 'story' or $action->objectType == 'demand') && $action->action == 'reviewed')
         {
             if(strpos($action->extra, ',') !== false)
             {
                 list($extra, $reason) = explode(',', $extra);
-                $desc['reason'] = $this->lang->$objectType->{$desc['reason']};
+                $desc['reason'] = $this->lang->{$objectType}->{$desc['reason']};
                 $actionDesc = str_replace(array('$extra', '$reason'), array($desc['extra'][$extra], $desc['reason'][$reason]), $desc['main']);
             }
 
@@ -1088,7 +1098,7 @@ class actionModel extends model
             if(!empty($extra) && strpos($extra, '|') !== false)
             {
                 list($operate, $storyID) = explode('|', $extra);
-                $desc['operate'] = $this->lang->$objectType->{$desc['operate']};
+                $desc['operate'] = $this->lang->{$objectType}->{$desc['operate']};
                 $link = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$storyID"), "#$storyID ") : "#$storyID";
                 $actionDesc = str_replace(array('$extra', '$operate'), array($link, $desc['operate'][$operate]), $desc['main']);
             }
@@ -1109,6 +1119,68 @@ class actionModel extends model
             $actionDesc  = str_replace('$extra', zget($moduleNames, $action->objectID), $desc['main']);
         }
         return $actionDesc;
+    }
+
+    /**
+     * 格式化操作备注。
+     * Format action comment.
+     *
+     * @param string $comment
+     * @access public
+     * @return string
+     */
+    public function formatActionComment($comment): string
+    {
+        if(str_contains($comment, '<pre class="prettyprint lang-html">'))
+        {
+            $before   = explode('<pre class="prettyprint lang-html">', $comment);
+            $after    = explode('</pre>', $before[1]);
+            $htmlCode = $after[0];
+            return $before[0] . htmlspecialchars($htmlCode) . $after[1];
+        }
+
+        return strip_tags($comment) === $comment
+            ? nl2br($comment)
+            : $comment;
+    }
+
+    /**
+     * 构建操作记录列表，便于前端组件进行渲染。
+     * Build action list for render by frontend component.
+     *
+     * @param array $actions
+     * @param array $users
+     * @param bool  $commentEditable
+     * @access public
+     * @return array
+     */
+    public function buildActionList(array $actions, array $users = null, $commentEditable = true): array
+    {
+        if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
+
+        $list = array();
+        foreach($actions as $action)
+        {
+            $item = new stdClass();
+            if(strlen(trim(($action->comment))) !== 0)
+            {
+                $item->comment         = $this->formatActionComment($action->comment);
+                $item->commentEditable = $commentEditable && end($actions) == $action && $action->actor == $this->app->user->account && common::hasPriv('action', 'editComment');
+            }
+
+            if($action->action === 'assigned' || $action->action === 'toaudit') $action->extra = zget($users, $action->extra);
+            $action->actor = zget($users, $action->actor);
+            if(str_contains($action->actor, ':')) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
+
+            if(!empty($action->history)) $item->historyChanges = $this->renderChanges($action->objectType, $action->history);
+
+            $item->id      = $action->id;
+            $item->action  = $action->action;
+            $item->content = $this->renderAction($action);
+
+            $list[] = $item;
+        }
+        return $list;
     }
 
     /**
