@@ -34,7 +34,7 @@ class buildTao extends buildModel
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on("FIND_IN_SET(t1.id,t3.build)")
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
             ->where('1=1')
-            ->beginIF(!empty($shadows))->andWhere('t1.id')->notIN($shadows)->fi()
+            ->beginIf(!empty($shadows))->andWhere('t1.id')->notIN($shadows)->fi()
             ->beginIF(strpos($params, 'hasdeleted') === false)->andWhere('t1.deleted')->eq(0)->fi()
             ->beginIF(strpos($params, 'hasproject') !== false)->andWhere('t1.project')->ne(0)->fi()
             ->beginIF(strpos($params, 'singled') !== false)->andWhere('t1.execution')->ne(0)->fi()
