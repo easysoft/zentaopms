@@ -22,13 +22,14 @@ class user extends control
     public $referer = '';
 
     /**
-     * View a user.
+     * 查看用户详情。
+     * View user details.
      *
-     * @param  string $userID
+     * @param  int    $userID
      * @access public
      * @return void
      */
-    public function view($userID)
+    public function view(int $userID)
     {
         $this->locate($this->createLink('user', 'todo', "userID=$userID&type=all"));
     }
