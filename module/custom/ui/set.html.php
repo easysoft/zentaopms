@@ -407,7 +407,9 @@ else
 
         foreach($fieldList as $key => $value)
         {
-            $system = isset($dbFields[$key]) ? $dbFields[$key]->system : 1;
+            $system   = isset($dbFields[$key]) ? $dbFields[$key]->system : 1;
+            $keyLabel = $key === '' ? 'NULL' : $key;
+            if($key == 0) $keyLabel = '0';
 
             $formItems[] = formRow
             (
@@ -426,7 +428,7 @@ else
                 formGroup
                 (
                     set::width('1/2'),
-                    set::label($key === '' ? 'NULL' : $key),
+                    set::label($keyLabel),
                     set::name('values[]'),
                     set::value(isset($dbFields[$key]) ? $dbFields[$key]->value : $value),
                     set::readonly(empty($key))
