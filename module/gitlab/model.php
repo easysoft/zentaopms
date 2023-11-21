@@ -3033,4 +3033,22 @@ class gitlabModel extends model
 
         return true;
     }
+
+    /**
+     * Get data by api graphql.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $query
+     * @access public
+     * @return object|null
+     */
+    public function apiGetByGraphql(int $gitlabID, array $query)
+    {
+        static $gitlab;
+        if(empty($gitlab)) $gitlab = $this->getByID($gitlabID);
+        if(!$gitlab) return array();
+
+        $url = rtrim($gitlab->url, '/') . '/api/graphql' . "?private_token={$gitlab->token}";
+        return json_decode(commonModel::http($url, $query));
+    }
 }
