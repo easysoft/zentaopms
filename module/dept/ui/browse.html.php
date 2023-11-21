@@ -10,48 +10,23 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('editLinkTemp', createLink('dept', 'edit', "deptID={id}"));
-jsVar('deleteLinkTemp', createLink('dept', 'delete', "deptID={id}"));
-jsVar('deleteTip', $lang->dept->confirmDelete);
-
-$deptActions = array();
-if(hasPriv('dept', 'edit'))
+$processTreeAction = function($tree) use (&$processTreeAction)
 {
-    $deptAction = array();
-    $deptAction['key']  = 'edit';
-    $deptAction['icon'] = 'edit';
-    $deptAction['hint'] = $lang->dept->edit;
-    $deptAction['onClick'] = jsRaw('window.operateDept');
+    $canEditDept   = hasPriv('dept', 'edit');
+    $canDeleteDept = hasPriv('dept', 'delete');
+    foreach($tree as $node)
+    {
+        $actions = array();
+        if($canEditDept)                          $actions[] = array('key' => 'edit',   'icon' => 'edit',  'hint' => $lang->dept->edit,   'onClick' => jsRaw('window.operateDept'));
+        if(empty($node->items) && $canDeleteDept) $actions[] = array('key' => 'delete', 'icon' => 'trash', 'hint' => $lang->dept->delete, 'onClick' => jsRaw('window.operateDept'));
+        if(!empty($node->items)) $node->items = $processTreeAction($node->items);
+        $node->actions = $actions;
+    }
 
-    $deptActions[] = $deptAction;
-}
-if(hasPriv('dept', 'delete'))
-{
-    $deptAction = array();
-    $deptAction['key']  = 'delete';
-    $deptAction['icon'] = 'trash';
-    $deptAction['hint'] = $lang->dept->delete;
-    $deptAction['onClick'] = jsRaw('window.operateDept');
+    return $tree;
+};
 
-    $deptActions[] = $deptAction;
-}
-
-sidebar
-(
-    width('400px'),
-    set::showToggle(false),
-    panel
-    (
-        set::title($title),
-        tree
-        (
-            set::id('deptTree'),
-            set::items($tree),
-            set::hover(true),
-            set::itemActions($deptActions)
-        )
-    )
-);
+$tree = $processTreeAction($tree);
 
 $parentNames = array();
 foreach($parentDepts as $dept)
@@ -86,8 +61,9 @@ foreach($sons as $dept)
         set::value($dept->name)
     );
 }
+
 $emptyInputs = array();
-for($i = 0; $i < \DEPT::NEW_CHILD_COUNT ; $i ++)
+for($i = 0; $i < 10; $i ++)
 {
     $emptyInputs[] = formGroup
     (
@@ -96,6 +72,27 @@ for($i = 0; $i < \DEPT::NEW_CHILD_COUNT ; $i ++)
         set::value('')
     );
 }
+
+jsVar('editLinkTemp', createLink('dept', 'edit', "deptID={id}"));
+jsVar('deleteLinkTemp', createLink('dept', 'delete', "deptID={id}"));
+jsVar('deleteTip', $lang->dept->confirmDelete);
+
+sidebar
+(
+    width('400px'),
+    set::showToggle(false),
+    panel
+    (
+        set::title($title),
+        tree
+        (
+            set::id('deptTree'),
+            set::items($tree),
+            set::hover(true),
+            set::itemActions($deptActions)
+        )
+    )
+);
 
 panel
 (
@@ -147,4 +144,3 @@ panel
 );
 
 render();
-
