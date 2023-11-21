@@ -22,21 +22,6 @@ class user extends control
     public $referer = '';
 
     /**
-     * Construct
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct($module = '', $method = '')
-    {
-        parent::__construct($module, $method);
-        $this->loadModel('company')->setMenu();
-        $this->loadModel('dept');
-        $this->loadModel('todo');
-        $this->app->loadLang('project');
-    }
-
-    /**
      * View a user.
      *
      * @param  string $userID
