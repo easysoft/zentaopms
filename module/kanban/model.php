@@ -1444,10 +1444,6 @@ class kanbanModel extends model
                     ->andWhere('action')->eq('opened')
                     ->fetchPairs();
             }
-            elseif($fromType == 'execution')
-            {
-                $executionProgress = $this->loadModel('project')->computeProgress($objects);
-            }
 
             /* Data for constructing the card. */
             foreach($objectCards as $objectID => $cardsInfo)
@@ -1473,7 +1469,7 @@ class kanbanModel extends model
                             if($delay > 0) $objectCard->delay = $delay;
                         }
                         $objectCard->execType = $object->type;
-                        $objectCard->progress = isset($executionProgress[$objectID]->progress) ? $executionProgress[$objectID]->progress : 0;
+                        $objectCard->progress = $object->progress;
 
                         $parentExecutions  = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($object->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
                         $objectCard->title = implode('/', $parentExecutions);
