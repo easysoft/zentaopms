@@ -1298,4 +1298,132 @@ class repoZen extends repo
         }
         return $diffs;
     }
+
+    /**
+     * 获取代码同步本地的日志。
+     * Get sync log.
+     *
+     * @param  object    $repo
+     * @access protected
+     * @return string
+     */
+    protected function syncLocalCommit(object $repo): string
+    {
+        $logFile = realPath($this->app->getTmpRoot() . $this->config->repo->repoSyncLog->logFilePrefix . strtolower($repo->SCM) . ".{$repo->name}.log");
+        if($logFile)
+        {
+            $content  = file($logFile);
+            foreach($content as $line)
+            {
+                if($this->repo->strposAry($line, $this->config->repo->repoSyncLog->fatal) !== false) return $line;
+                if($this->repo->strposAry($line, $this->config->repo->repoSyncLog->failed) !== false) return $line;
+            }
+
+            $lastLine = $content[count($content) - 1];
+            if($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->done) === false)
+            {
+                if($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->emptyRepo) !== false)
+                {
+                    @unlink($logFile);
+                }
+                elseif($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->total) !== false)
+                {
+                    $logContent = file_get_contents($logFile);
+                    if($this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCount) !== false and $this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCompress) !== false)
+                    {
+                        @unlink($logFile);
+                    }
+                    else
+                    {
+                        return $this->config->repo->repoSyncLog->one;
+                    }
+                }
+                else
+                {
+                    return $this->config->repo->repoSyncLog->one;
+                }
+            }
+            else
+            {
+                @unlink($logFile);
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * 获取需要同步的分支。
+     * Get sync branches.
+     *
+     * @param  object    $repo
+     * @param  string    $branchID
+     * @access protected
+     * @return array
+     */
+    protected function getSyncBranches(object $repo, string &$branchID = ''): array
+    {
+        $branches = array();
+        if(in_array($repo->SCM, $this->config->repo->gitTypeList))
+        {
+            $branches = $this->scm->branch();
+            if($branches)
+            {
+                /* Init branchID. */
+                if($this->cookie->syncBranch) $branchID = $this->cookie->syncBranch;
+                if(!isset($branches[$branchID])) $branchID = '';
+                if(empty($branchID)) $branchID = 'master';
+
+                /* Get unsynced branches. */
+                unset($branches['master']);
+                if($branchID != 'master')
+                {
+                    foreach($branches as $branch)
+                    {
+                        unset($branches[$branch]);
+                        if($branch == $branchID) break;
+                    }
+                }
+
+                $this->repo->setRepoBranch($branchID);
+                helper::setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+            }
+        }
+
+        return $branches;
+    }
+
+    /**
+     * 获取同步结果。
+     * Get sync result.
+     *
+     * @param  object    $repo
+     * @param  array     $branches
+     * @param  string    $branchID
+     * @param  int       $commitCount
+     * @access protected
+     * @return string
+     */
+    protected function checkSyncResult(object $repo, array $branches, string $branchID, int $commitCount): string
+    {
+        if(empty($commitCount) && !$repo->synced)
+        {
+            if(in_array($repo->SCM, $this->config->repo->gitTypeList))
+            {
+                if($branchID) $this->repo->saveExistCommits4Branch($repo->id, $branchID);
+                helper::setcookie("syncBranch", reset($branches));
+
+                if($branchID) $this->repo->fixCommit($repo->id);
+            }
+
+            if(empty($branchID))
+            {
+                $this->repo->markSynced($repo->id);
+                return $this->config->repo->repoSyncLog->finish;
+            }
+        }
+
+        $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repo->id)->exec();
+        return $type == 'batch' ?  $commitCount : $this->config->repo->repoSyncLog->finish;
+    }
 }
