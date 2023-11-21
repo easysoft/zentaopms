@@ -22,6 +22,7 @@ class testreport extends control
     public $products = array();
 
     /**
+     * 构造函数。
      * Construct
      *
      * @param  string $moduleName
@@ -249,7 +250,7 @@ class testreport extends control
     public function view(int $reportID, string $tab = 'basic', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         $report = $this->testreport->getById($reportID);
-        if(!$report) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->notFount, 'load' => array('alert' => $this->lang->error->notFount, 'locate' => $this->createLink('qa', 'index'))));
+        if(!$report) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound, 'load' => array('alert' => $this->lang->notFound, 'locate' => array('load' => true))));
 
         /* Set session. */
         $this->session->project = $report->project;
@@ -277,7 +278,7 @@ class testreport extends control
         }
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
