@@ -3072,7 +3072,7 @@ EOF;
      * @access public
      * @return string|array
      */
-    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = true)
+    public static function http(string $url, string|array|null $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true): string|array
     {
         global $lang, $app;
         if(!extension_loaded('curl'))
@@ -3154,23 +3154,19 @@ EOF;
             $logFile = $app->getLogRoot() . 'saas' . $runMode . '.' . date('Ymd') . '.log.php';
             if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
 
-            $fh = fopen($logFile, 'a');
-            if($fh)
+            $saasLog  = date('Ymd H:i:s') . ': ' . $app->getURI() . "\n";
+            $saasLog .= "{$requestType} url:    {$url}\n";
+            if(!empty($data)) $saasLog .= 'data:   ' . print_r($data, true) . "\n";
+            $saasLog .= 'results:' . print_r($response, true) . "\n";
+
+            if(!empty($errors))
             {
-                fwrite($fh, date('Ymd H:i:s') . ': ' . $app->getURI() . "\n");
-                fwrite($fh, "{$requestType} url:    " . $url . "\n");
-                if(!empty($data)) fwrite($fh, 'data:   ' . print_r($data, true) . "\n");
-                fwrite($fh, 'results:' . print_r($response, true) . "\n");
-
-                if(!empty($errors))
-                {
-                    fwrite($fh, 'errno: ' . $errno . "\n");
-                    fwrite($fh, 'errors: ' . $errors . "\n");
-                    fwrite($fh, 'info: ' . print_r($info, true) . "\n");
-                }
-
-                fclose($fh);
+                $saasLog .= "errno: {$errno}\n";
+                $saasLog .= "errors: {$errors}\n";
+                $saasLog .= 'info: ' . print_r($info, true) . "\n";
             }
+
+            file_put_contents($logFile, $sassLog, FILE_APPEND);
         }
 
         if($errors) commonModel::$requestErrors[] = $errors;

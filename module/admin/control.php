@@ -13,6 +13,26 @@ declare(strict_types=1);
 class admin extends control
 {
     /**
+     * The gogs constructor.
+     *
+     * @param string $moduleName
+     * @param string $methodName
+     */
+    public function __construct(string $moduleName = '', string $methodName = '')
+    {
+        parent::__construct($moduleName, $methodName);
+
+        if(!isset($this->config->global->sn))
+        {
+            $sn = $this->setting->computeSN();
+            $this->loadModel('setting')->setItem('system.common.global.sn', $sn);
+
+            if(!isset($this->config->global)) $this->config->global = new stdclass();
+            $this->config->global->sn = $sn;
+        }
+    }
+
+    /**
      * 后台首页。
      * Background homepage.
      *
@@ -33,22 +53,18 @@ class admin extends control
         if(!$community or $community == 'na')
         {
             $this->view->bind    = false;
-            $this->view->account = false;
             $this->view->ignore  = $community == 'na';
         }
         else
         {
             $this->view->bind    = true;
-            $this->view->account = $community;
             $this->view->ignore  = false;
         }
 
         $this->view->title       = $this->lang->admin->common;
         $this->view->zentaoData  = $this->admin->getZentaoData();
         $this->view->dateUsed    = $this->admin->genDateUsed();
-        $this->view->langNotCN   = common::checkNotCN();
         $this->view->hasInternet = $this->admin->checkInternet();
-        $this->view->isIntranet  = helper::isIntranet();
         $this->display();
     }
 
@@ -63,9 +79,7 @@ class admin extends control
     {
         if(helper::isIntranet()) return $this->send(array('result' => 'fail'));
 
-        $hasInternet = $this->admin->checkInternet();
-
-        if($hasInternet)
+        if($this->admin->checkInternet())
         {
             $lastSyncDate = !empty($this->config->zentaoWebsite->lastSyncDate) ? $this->config->zentaoWebsite->lastSyncDate : '';
             $nextWeek     = date('Y-m-d', strtotime('-7 days'));
