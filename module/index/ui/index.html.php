@@ -11,7 +11,7 @@ if(trim($config->visions, ',') == 'lite')
 else
 {
     $version     = $config->version;
-    $versionName = $lang->pmsName . $config->version;
+    $versionName = ($config->inQuickon ? 'DevOps' : '') . $lang->pmsName . $config->version;
 }
 
 $scoreNotice = '';
@@ -30,6 +30,7 @@ jsVar('browserMessage', $browserMessage);
 jsVar('pollTime',    (!empty($config->message->browser->turnon) && isset($config->message->browser->pollTime)) ? $config->message->browser->pollTime : 600);
 jsVar('turnon',      empty($config->message->browser->turnon) ? 0 : 1);
 jsVar('runnable',    $this->loadModel('cron')->runnable());
+jsVar('showFeatures', $showFeatures);
 
 set::zui(true);
 set::bodyClass($this->cookie->hideMenu ? 'hide-menu' : 'show-menu');

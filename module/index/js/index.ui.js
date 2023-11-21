@@ -356,9 +356,10 @@ function getAppCode(urlOrModuleName)
     if(link.hash && link.hash.indexOf('app=') === 0) return link.hash.substr(4);
 
     /* Handling special situations */
-    var moduleName      = link.moduleName;
-    var methodName      = link.methodName;
-    if(moduleName === 'index' && methodName === 'index') return 'my';
+    var moduleName        = link.moduleName;
+    var methodName        = link.methodName;
+    var moduleMethodLower = (moduleName + '-' + methodName).toLowerCase();
+    if (moduleMethodLower === 'index-index') return 'my';
     if(moduleName === 'tutorial' && methodName === 'wizard')
     {
         moduleName = link.vars[0][1];
@@ -440,7 +441,7 @@ function getAppCode(urlOrModuleName)
             return 'execution';
         }
     }
-    if(moduleName === 'search' && methodLowerCase === 'buildindex') return 'admin';
+    if(['search-buildindex', 'ai-adminindex'].includes(moduleMethodLower)) return 'admin';
 
     code = navGroup[moduleName] || moduleName || urlOrModuleName;
     return apps.map[code] ? code : '';
@@ -730,6 +731,20 @@ function changeAppsTheme(theme)
     });
 }
 
+/**
+ * Check if link1 and link2 are same link.
+ *
+ * @param {string} link1
+ * @param {string} link2
+ * @returns {boolean}
+ */
+function isSameLink(link1, link2)
+{
+    link2 = link2 || location;
+    if(typeof link2 === 'object') link2 = link2.href + link2.hash;
+    return $.parseLink(link1).url === $.parseLink(link2).url;
+}
+
 initAppsMenu();
 /* Refresh more menu on window resize */
 $(window).on('resize', refreshMenu);
@@ -888,6 +903,11 @@ window.startCron = function(restart)
     if(typeof(restart) == 'undefined') restart = 0;
     $.ajax({type:"GET", timeout:100, url:$.createLink('cron', 'ajaxExec', 'restart=' + restart)});
 }
+
+//$(function()
+//{
+//    if(showFeatures && vision == 'rnd') loadModal($.createLink('misc', 'features'));
+//})
 
 turnon ? browserNotify() : ping();
 if(runnable) startCron();
