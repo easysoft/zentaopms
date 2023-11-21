@@ -3223,4 +3223,70 @@ class repoModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 根据路径获取gitlab文件列表。
+     * Get gitlab files by path.
+     *
+     * @param  object $repo
+     * @param  string $path
+     * @param  string $branch
+     * @access public
+     * @return array
+     */
+    public function getGitlabFilesByPath(object $repo, string $path = '', string $branch = ''): array
+    {
+        if(!$branch) $branch = $this->cookie->branch;
+
+        $fullPath = trim(str_replace($repo->client, '', $repo->codePath), '/');
+        $query    = array('query' => 'query { project(fullPath: "' . $fullPath . '") {repository {tree(path: "' . trim($path, '/') . '", ref: "' . $branch . '") {trees {nodes {name path}} blobs {nodes {name path}}}}}}');
+        $response = $this->loadModel('gitlab')->apiGetByGraphql($repo->serviceHost, $query);
+        if(!isset($response->data->project->repository)) return array();
+
+        $folderList = $response->data->project->repository->tree->trees->nodes;
+        $fileList   = $response->data->project->repository->tree->blobs->nodes;
+
+        $files    = array();
+        $folders  = array();
+        $dirList  = array();
+        $fileSort = $dirSort = array(); // Use it to sort array.
+
+        foreach($fileList as $file)
+        {
+            $base64Name = base64_encode($file->path);
+
+            $fileInfo = new stdclass();
+            $fileInfo->id   = $base64Name;
+            $fileInfo->name = $file->name;
+            $fileInfo->text = $file->name;
+            $fileInfo->path = $file->path;
+            $fileInfo->key  = $base64Name;
+            $fileInfo->kind = 'file';
+
+            $files[]    = $fileInfo;
+            $fileSort[] = $file->name;
+        }
+
+        foreach($folderList as $dir)
+        {
+            $base64Name = base64_encode($dir->path);
+
+            $folder = new stdclass();
+            $folder->id   = $base64Name;
+            $folder->name = $dir->name;
+            $folder->text = $dir->name;
+            $folder->path = $dir->path;
+            $folder->key  = $base64Name;
+            $folder->kind = 'dir';
+            $folder->items = array('url' => helper::createLink('repo', 'ajaxGetFiles', "repoID={$repo->id}&branch={$branch}&path=" . helper::safe64Encode($dir->path)));
+
+            $dirList[] = $dir->name;
+            $folders[] = $folder;
+            $dirSort[] = $dir->name;
+        }
+        array_multisort($fileSort, SORT_ASC, $files);
+        array_multisort($dirSort, SORT_ASC, $folders);
+
+        return array_merge($folders, $files);
+    }
 }
