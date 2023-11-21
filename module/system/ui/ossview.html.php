@@ -25,7 +25,7 @@ panel
             set::name($lang->system->oss->appURL),
             a
             (
-                set::id('ossVisitUrl'),
+                setID('ossVisitUrl'),
                 set::target('_blank'),
                 $lang->system->visit
             )
@@ -35,7 +35,7 @@ panel
             set::name($lang->system->oss->user),
             span
             (
-                set::id('ossAdmin')
+                setID('ossAdmin')
             )
         ),
         item
@@ -44,7 +44,7 @@ panel
             h::input
             (
                 setClass('hidden'),
-                set::id('ossPassword'),
+                setID('ossPassword'),
                 set::value(zget($ossAccount, 'password', ''))
             ),
             btn
@@ -69,7 +69,7 @@ panel
             h::input
             (
                 setClass('hidden'),
-                set::id('ossSK'),
+                setID('ossSK'),
                 set::value(zget($ossAccount, 'password', ''))
             ),
             btn

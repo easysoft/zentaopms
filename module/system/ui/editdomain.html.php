@@ -13,7 +13,7 @@ namespace zin;
 formPanel
 (
     set::title($lang->system->domain->config),
-    set::id('domainForm'),
+    setID('domainForm'),
     formRow
     (
         formGroup
@@ -83,13 +83,13 @@ formPanel
             btn
             (
                 $lang->system->verify,
-                set::id('validateCertBtn'),
+                setID('validateCertBtn'),
                 on::click('checkCert')
             ),
             h::span
             (
                 setClass('tips-git leading-8 ml-2'),
-                set::id('validateMsg')
+                setID('validateMsg')
             )
         )
     )
