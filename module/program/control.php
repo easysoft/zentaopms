@@ -45,6 +45,8 @@ class program extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $this->program->refreshStats(); // Refresh stats fields of projects.
+
         $programs = $this->programZen->getProgramsByType($status, $orderBy, $param, $pager);
         $PMList   = $this->programZen->getPMListByPrograms($programs);
 
@@ -53,16 +55,15 @@ class program extends control
         $this->config->program->search['actionURL'] = $actionURL;
         $this->loadModel('search')->setSearchParams($this->config->program->search);
 
-        $this->view->title        = $this->lang->program->browse;
-        $this->view->programs     = $programs;
-        $this->view->status       = $status;
-        $this->view->orderBy      = $orderBy;
-        $this->view->pager        = $pager;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->usersAvatar  = $this->user->getAvatarPairs('');
-        $this->view->PMList       = $PMList;
-        $this->view->progressList = $this->program->getProgressList();
-        $this->view->param        = $param;
+        $this->view->title       = $this->lang->program->browse;
+        $this->view->programs    = $programs;
+        $this->view->status      = $status;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->usersAvatar = $this->user->getAvatarPairs('');
+        $this->view->PMList      = $PMList;
+        $this->view->param       = $param;
 
         $this->display();
     }

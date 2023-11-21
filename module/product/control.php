@@ -587,6 +587,9 @@ class product extends control
 
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->product->refreshStats(); // Refresh stats fields of products.
+
         $productStatList = $this->product->getStats(array_keys($products), $orderBy, $pager, 'story', $programID);
 
         /* Generate root program list. */

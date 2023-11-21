@@ -244,7 +244,7 @@ class projectModel extends model
      * @access public
      * @return object[]
      */
-    public function getOverviewList(string $status = '', int $projectID = 0, string $orderBy = 'id_desc', int $limit = 15, string $excludedModel = ''): array
+    public function getOverviewList(string $status = '', int $projectID = 0, string $orderBy = 'id_desc', int $limit = 10, string $excludedModel = ''): array
     {
         /* Get project list by query. */
         $projects = $this->projectTao->fetchProjectListByQuery($status, $projectID, $orderBy, $limit, $excludedModel);
@@ -256,24 +256,15 @@ class projectModel extends model
             $projects = array($projectID => $projects[$projectID]);
         }
 
-        /* Get team members under the project. */
-        $projectIdList = array_keys($projects);
-        $teamCount     = $this->projectTao->fetchMemberCountByIdList($projectIdList);
-
-        /* Get all consumed and all estimate under the project. */
-        $hours = $this->projectTao->fetchTaskEstimateByIdList($projectIdList, 'consumed,estimate');
-
         /* Get bug, task and story summary under the project. */
-        $bugSummary   = $this->projectTao->getTotalBugByProject($projectIdList);
-        $taskSummary  = $this->projectTao->getTotalTaskByProject($projectIdList);
-        $storySummary = $this->projectTao->getTotalStoriesByProject($projectIdList);
+        $projectIdList = array_keys($projects);
+        $bugSummary    = $this->projectTao->getTotalBugByProject($projectIdList);
+        $taskSummary   = $this->projectTao->getTotalTaskByProject($projectIdList);
+        $storySummary  = $this->projectTao->getTotalStoriesByProject($projectIdList);
 
         /* Set project attribute. */
         foreach($projects as $projectID => $project)
         {
-            $project->teamCount     = zget($teamCount, $projectID, 0);
-            $project->consumed      = isset($hours[$projectID])        ? round((float)$hours[$projectID]->consumed, 1) : 0;
-            $project->estimate      = isset($hours[$projectID])        ? round((float)$hours[$projectID]->estimate, 1) : 0;
             $project->leftBugs      = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->leftBugs             : 0;
             $project->allBugs       = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->allBugs              : 0;
             $project->doneBugs      = isset($bugSummary[$projectID])   ? $bugSummary[$projectID]->doneBugs             : 0;
@@ -2495,13 +2486,13 @@ class projectModel extends model
 
         $project->budget      = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
         $project->statusTitle = $this->processStatus('project', $project);
-        $project->estimate    = $project->hours->totalEstimate . $this->lang->project->workHourUnit;
-        $project->consume     = $project->hours->totalConsumed . $this->lang->project->workHourUnit;
-        $project->surplus     = $project->hours->totalLeft     . $this->lang->project->workHourUnit;
-        $project->progress    = $project->hours->progress;
+        $project->estimate    = $project->estimate . $this->lang->project->workHourUnit;
+        $project->consume     = $project->consumed . $this->lang->project->workHourUnit;
+        $project->surplus     = $project->left     . $this->lang->project->workHourUnit;
+        $project->progress    = $project->progress;
         $project->end         = $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;
         $project->hasProduct  = zget($this->lang->project->projectTypeList, $project->hasProduct);
-        $project->invested    = !empty($this->config->execution->defaultWorkhours) ? round($project->hours->totalConsumed / $this->config->execution->defaultWorkhours, 2) : 0;
+        $project->invested    = !empty($this->config->execution->defaultWorkhours) ? round($project->consumed / $this->config->execution->defaultWorkhours, 2) : 0;
 
         if($project->PM)
         {

@@ -880,26 +880,7 @@ class productModel extends model
         $projects = $this->getProjectListByProduct($productID, $browseType, $branch, $involved, $orderBy, $pager);
         if(empty($projects)) return array();
 
-        $projectKeys = array_keys($projects);
-
-        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
-            ->from(TABLE_TASK)
-            ->where('project')->in($projectKeys)
-            ->andWhere('parent')->lt(1)
-            ->andWhere('deleted')->eq(0)
-            ->fetchGroup('project', 'id');
-        $hours = $this->loadModel('program')->computeProjectHours($tasks);
-
-        /* Get the number of project teams. */
-        $teams = $this->dao->select('t1.root,t1.account')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in($projectKeys)
-            ->andWhere('t1.type')->eq('project')
-            ->andWhere('t2.deleted')->eq(0)
-            ->fetchGroup('root', 'account');
-
-        return $this->program->appendStatToProjects($projects, 'hours,teamCount', array('hours' => $hours, 'teams' => $teams));
+        return $this->program->appendStatToProjects($projects);
     }
 
     /**
@@ -1066,44 +1047,22 @@ class productModel extends model
 
         if(empty($productIdList)) return array();
 
-        /* Get stats data. */
-        $products          = $this->getStatsProducts($productIdList, $programID == 0, $orderBy, $pager);
-        $unclosedStory     = $this->loadModel('story')->getUnClosedTotal();
-        $finishClosedStory = $this->story->getFinishClosedTotal();
+        $stats = $this->getStatsProducts($productIdList, $programID == 0, $orderBy, $pager);
 
-        $modules = array('plans', 'releases', 'latestReleases', 'bugs', 'unResolved', 'activeBugs', 'fixedBugs', 'closedBugs', 'thisWeekBugs', 'assignToNull');
-        foreach($modules as $module) $$module = $this->productTao->getStatisticByType($productIdList, $module);
 
-        list($stories, $requirements) = $this->getStatsStoriesAndRequirements($productIdList, $storyType);
+        $latestReleases       = $this->productTao->getStatisticByType($productIdList, 'latestReleases');
         $executionCountPairs  = $this->productTao->getExecutionCountPairs($productIdList);
         $coveragePairs        = $this->getCaseCoveragePairs($productIdList);
-        $projectsPairs        = $this->productTao->getProjectCountPairs($productIdList);
 
-        /* Render statistic result to each product. */
-        $stats = array();
-        foreach($products as $productID => $product)
+        foreach($stats as $productID => $product)
         {
-            foreach($modules as $field) $product->$field = zget($$field, $productID, 0);
 
-            $product->stories                 = zget($stories, $product->id, array());
-            $product->stories['finishClosed'] = zget($finishClosedStory, $product->id, 0);
-            $product->stories['unclosed']     = zget($unclosedStory, $product->id, 0);
-            $product->activeStories           = zget($product->stories, 'active', 0);
-            $product->requirements            = zget($requirements, $product->id, array());
             $product->executions              = zget($executionCountPairs, $product->id, 0);
             $product->coverage                = zget($coveragePairs, $product->id, 0);
-            $product->projects                = zget($projectsPairs, $product->id, 0);
 
             $latestRelease = isset($latestReleases[$product->id]) ? $latestReleases[$product->id][0] : null;
             $product->latestRelease     = $latestRelease ? $latestRelease->name : '';
             $product->latestReleaseDate = $latestRelease ? $latestRelease->date : '';
-
-            /* Calculate product progress. */
-            $closedTotal       = $product->stories['closed'] + $product->requirements['closed'];
-            $allTotal          = array_sum($product->stories) + array_sum($product->requirements);
-            $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);
-
-            $stats[$productID] = $product;
         }
 
         return $stats;
@@ -1494,35 +1453,14 @@ class productModel extends model
      */
     public function formatDataForList(object $product, array $users): object
     {
-        $totalStories = $product->stories['closed'] + $product->stories['unclosed'];
-        $totalBugs    = $product->unResolved + $product->fixedBugs;
+         $product->type               = 'product';
+         $product->productLine        = $product->lineName;
+         $product->PO                 = !empty($product->PO) ? zget($users, $product->PO) : '';
+         $product->testCaseCoverage   = $product->coverage;
+         $product->storyCompleteRate  = $totalStories == 0 ? 0 : round($product->finishedStories / $totalStories, 3) * 100;
+         $product->bugFixedRate       = ($product->unresolvedBugs + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unresolvedBugs + $product->fixedBugs), 3) * 100;
 
-        $item = new stdClass();
-        $item->type              = 'product';
-        $item->id                = $product->id;
-        $item->name              = $product->name;
-        $item->productLine       = $product->lineName;
-        $item->PO                = !empty($product->PO) ? zget($users, $product->PO) : '';
-        $item->createdDate       = $product->createdDate;
-        $item->createdBy         = $product->createdBy;
-        $item->draftStories      = $product->stories['draft'];
-        $item->activeStories     = $product->stories['active'];
-        $item->changingStories   = $product->stories['changing'];
-        $item->reviewingStories  = $product->stories['reviewing'];
-        $item->totalStories      = $totalStories;
-        $item->storyCompleteRate = ($totalStories == 0 ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100);
-        $item->plans             = $product->plans;
-        $item->execution         = $product->executions;
-        $item->testCaseCoverage  = $product->coverage;
-        $item->totalActivatedBugs= $product->activeBugs;
-        $item->totalBugs         = $product->bugs;
-        $item->bugFixedRate      = ($totalBugs == 0 ? 0 : round($product->fixedBugs / $totalBugs, 3) * 100);
-        $item->releases          = $product->releases;
-        $item->latestReleaseDate = $product->latestReleaseDate;
-        $item->latestRelease     = $product->latestRelease;
-        if(isset($product->actions)) $item->actions = $product->actions;
-
-        return $item;
+        return $product;
     }
 
     /**
@@ -2172,5 +2110,4 @@ class productModel extends model
         /* 4. Clear actions older than 30 days. */
         $this->loadModel('action')->cleanActions();
     }
-
 }
