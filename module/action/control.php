@@ -384,13 +384,15 @@ class action extends control
                 if(!array_intersect(array_keys($story->executions), $executions) and !in_array($story->product, $products) and empty($story->lib)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
             }
 
-            $actionID = $this->action->create($objectType, $objectID, 'Commented', $this->post->comment);
+            $actionID = $this->action->create($objectType, $objectID, 'Commented', $this->post->actioncomment);
+            if(!$actionID) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 return $this->send(array('status' => 'success', 'data' => $actionID));
             }
 
-            return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $objectType, 'objectID' => $objectID))));
+            return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $objectType, 'objectID' => $objectID, 'actionID' => $actionID))));
         }
 
         $this->view->title      = $this->lang->action->create;
