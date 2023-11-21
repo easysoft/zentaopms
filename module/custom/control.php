@@ -68,6 +68,7 @@ class custom extends control
     }
 
     /**
+     * 还原默认语言项。删除相关项。
      * Restore the default lang. Delete the related items.
      *
      * @param  string $module
@@ -77,13 +78,13 @@ class custom extends control
      */
     public function restore(string $module, string $field)
     {
-        if($module == 'user' and $field == 'contactField')
+        if($module == 'user' && $field == 'contactField')
         {
-            $this->loadModel('setting')->deleteItems("module=$module&key=$field");
+            $this->loadModel('setting')->deleteItems("module={$module}&key={$field}");
         }
         else
         {
-            $this->custom->deleteItems("module=$module&section=$field");
+            $this->custom->deleteItems("module={$module}&section={$field}");
         }
 
         return $this->sendSuccess(array('load' => true));
