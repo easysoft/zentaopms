@@ -60,7 +60,7 @@ elseif($suffix == 'binary')
             set('data-link', $this->repo->createLink('download', "repoID=$repoID&path=" . $this->repo->encodePath($entry) . "&fromRevision=$revision")),
             icon('download'),
             on::click('downloadCode'),
-            set::title($this->lang->repo->download),
+            set::title($this->lang->repo->download)
         )
     );
 }
@@ -73,7 +73,7 @@ else
         'autoIndent'           => true,
         'contextmenu'          => true,
         'automaticLayout'      => true,
-        'EditorMinimapOptions' => array('enabled' => false),
+        'EditorMinimapOptions' => array('enabled' => false)
     );
     if($type == 'diff') $options = array(
         'language'             => $lang,
@@ -82,7 +82,7 @@ else
         'contextmenu'          => true,
         'automaticLayout'      => true,
         'renderSideBySide'     => false,
-        'EditorMinimapOptions' => array('enabled' => false),
+        'EditorMinimapOptions' => array('enabled' => false)
     );
     $wg = monaco
     (
@@ -114,14 +114,14 @@ $logWg = div
             btn
             (
                 setClass('ghost text-black bg-light bg-opacity-50'),
-                set::icon('ellipsis-v rotate-90'),
+                set::icon('ellipsis-v rotate-90')
             ),
             set::items
             (
                 $dropMenus
-            ),
-        ) : '',
-    ),
+            )
+        ) : ''
+    )
 );
 
 $relatedWg = div
@@ -140,8 +140,8 @@ $relatedWg = div
                 set::key('tab1'),
                 set::title(''),
                 tableData()
-            ),
-        ),
+            )
+        )
     ),
     div(set::className('table-empty-tip'), p($this->lang->repo->notRelated))
 );

@@ -18,7 +18,12 @@ $footToolbar = array('items' => array
     array('text' => $lang->mr->linkStory, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('mr', 'linkStory', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy=$orderBy"))
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary', 'data-type' => 'stories'));
 
-div(setID('searchFormPanel'), set('data-module', 'story'), searchToggle(set::open(true), set::module('story')));
+searchForm
+(
+    set::module('story'),
+    set::simple(true),
+    set::show(true)
+);
 
 div
 (
@@ -47,7 +52,7 @@ dtable
     set::footToolbar($footToolbar),
     set::sortLink(jsRaw('createSortLink')),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(inlink('link', "MRID={$MRID}&type=story"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
-    set::footPager(usePager()),
+    set::footPager(usePager())
 );
 
 render();
