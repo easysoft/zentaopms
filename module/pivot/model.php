@@ -2056,7 +2056,7 @@ class pivotModel extends model
         switch($type)
         {
             case 'user':
-                $options = $this->loadModel('user')->getPairs();
+                $options = $this->loadModel('user')->getPairs('noletter');
                 break;
             case 'product':
                 $options = $this->loadModel('product')->getPairs();
