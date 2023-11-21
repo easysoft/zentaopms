@@ -257,8 +257,8 @@ class cron extends control
             {
                 if($setting->value > $expirDate)
                 {
-                    if($setting->key == strval($execId)) $roles[] = 'consumer';
                     $consumerCount ++;
+                    if($consumer < $this->config->cron->maxConsumer && $setting->key == strval($execId)) $roles[] = 'consumer';
                 }
                 else
                 {
@@ -268,7 +268,7 @@ class cron extends control
         }
 
         if(in_array($scheduler['execId'], array(0, $execId)) || $scheduler['lastTime'] < $expirDate) $roles[] = 'scheduler';
-        if($consumerCount < 4) $roles[] = 'consumer';
+        if($consumerCount < $this->config->cron->maxConsumer) $roles[] = 'consumer';
 
         return $roles;
     }
