@@ -322,6 +322,7 @@ class repo extends control
         $entry    = urldecode($entry);
         $pathInfo = helper::mbPathinfo($entry);
 
+        if($repo->SCM == 'Gitlab') $repo = $this->repo->processGitService($repo, true);
         if($this->app->tab == 'execution') $this->view->executionID = $objectID;
         $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
         $this->view->dropMenus   = $this->repoZen->getBranchAndTagItems($repo, $this->cookie->repoBranch);
