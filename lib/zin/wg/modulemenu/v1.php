@@ -146,7 +146,11 @@ class moduleMenu extends wg
 
     private function buildCloseBtn(): wg|null
     {
-        $closeLink = $this->prop('closeLink');
+        $closeLink  = $this->prop('closeLink');
+        $tab        = $this->prop('app');
+        $titleAttrs = array();
+        if($tab)        $titleAttrs['app']  = $tab;
+        if(isInModal()) $titleAttrs['load'] = 'modal';
         if(!$closeLink) return null;
 
         $activeKey = $this->prop('activeKey');
@@ -155,7 +159,7 @@ class moduleMenu extends wg
         return a
         (
             set('href', $closeLink),
-            isInModal() ? set('data-load', 'modal') : null,
+            setData($titleAttrs),
             icon('close', setStyle('color', 'var(--color-slate-600)'))
         );
     }
