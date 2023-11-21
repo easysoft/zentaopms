@@ -12,7 +12,14 @@ declare(strict_types=1);
  */
 class user extends control
 {
-    public $referer;
+    /**
+     * 来源地址。
+     * Origin url.
+     *
+     * @var    array
+     * @access public
+     */
+    public $referer = '';
 
     /**
      * Construct
