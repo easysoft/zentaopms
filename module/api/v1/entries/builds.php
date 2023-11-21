@@ -23,8 +23,8 @@ class buildsEntry extends entry
         if(empty($projectID)) $projectID = $this->param('project', 0);
         if(empty($projectID)) return $this->sendError(400, "Need project id.");
 
-        $control = $this->loadController('project', 'build');
-        $control->build($projectID, $this->param('type', 'all'), $this->param('param', 0), $this->param('order', 't1.date_desc,t1.id_desc'));
+        $control = $this->loadController('projectbuild', 'browse');
+        $control->browse($projectID, $this->param('type', 'all'), $this->param('param', 0), $this->param('order', 't1.date_desc,t1.id_desc'));
         $data = $this->getData();
 
         if(!isset($data->status)) return $this->sendError(400, 'error');
