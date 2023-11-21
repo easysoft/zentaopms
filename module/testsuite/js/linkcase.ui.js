@@ -9,7 +9,7 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     checkedList.forEach((id) =>
     {
         form.append('cases[]', id);
-        form.append('versions[' + id + ']', $('#versions' + id).val());
+        form.append('versions[' + id + ']', $("[name='version\[" + id + "\]']").val());
     });
 
     if($(this).hasClass('ajax-btn'))
