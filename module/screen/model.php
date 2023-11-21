@@ -237,7 +237,7 @@ class screenModel extends model
 
         list($component, $typeChanged) = $this->initComponent($chart, $type, $component);
 
-        if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted === '1'))
+        if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
         {
             $component->option = new stdclass();
             if($type == 'chart')
