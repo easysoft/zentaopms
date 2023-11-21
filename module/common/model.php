@@ -41,6 +41,10 @@ class commonModel extends model
     {
         global $app;
         $rawModule = $app->rawModule;
+        $rawMethod = strtolower($app->rawMethod);
+
+        if($rawModule == 'marketresearch' and strpos($rawMethod, 'task') !== false)  $rawModule = 'task';
+        if($rawModule == 'marketresearch' and strpos($rawMethod, 'stage') !== false) $rawModule = 'execution';
 
         if($rawModule == 'task' or $rawModule == 'effort')
         {
@@ -312,6 +316,7 @@ class commonModel extends model
 
         $required   = $app->dbQuery("SELECT * FROM " . TABLE_WORKFLOWRULE . " WHERE `type` = 'system' and `rule` = 'notempty'")->fetch();
         $fields     = $app->control->loadModel('flow')->getExtendFields($module, $method);
+        $fields     = (new self())->loadModel('flow')->getExtendFields($module, $method);
         $formConfig = array();
         $type       = 'string';
         foreach($fields as $fieldObject)
@@ -482,7 +487,7 @@ class commonModel extends model
                 {
                     if(!commonModel::isTutorialMode())
                     {
-                        echo '<li class="user-tutorial">' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
+                        echo '<li class="user-tutorial">' . html::a(helper::createLink('tutorial', 'start', '', '', true), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
                     }
 
                     echo '<li>' . html::a(helper::createLink('my', 'preference', 'showTip=false', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='700'") . '</li>';
@@ -909,6 +914,7 @@ class commonModel extends model
 
         if(!in_array($tab, array('program', 'product', 'project')))
         {
+            if(!isset($lang->mainNav->$tab)) return;
             $nav = $lang->mainNav->$tab;
             list(, $currentModule, $currentMethod,) = explode('|', $nav);
             if($tab == 'execution') $currentMethod = 'all';
@@ -979,6 +985,9 @@ class commonModel extends model
         global $config;
 
         $app->loadLang('my');
+
+        /* Ensure user has latest rights set. */
+        $app->user->rights = $app->control->loadModel('user')->authorize($app->user->account);
 
         $menuOrder = $lang->mainNav->menuOrder;
         ksort($menuOrder);
@@ -1084,6 +1093,27 @@ class commonModel extends model
                         $currentModule = $module;
                         $currentMethod = $method;
                         if(!isset($menu['target'])) break; // Try to jump to the method without opening a new window.
+                    }
+                }
+            }
+
+            /* Check whether the homeMenu of this group have permissions. If yes, point to them. */
+            if($display == false and isset($lang->$group->homeMenu))
+            {
+                foreach($lang->$group->homeMenu as $menu)
+                {
+                    if(!isset($menu['link'])) continue;
+
+                    $linkPart = explode('|', $menu['link']);
+                    if(count($linkPart) < 3) continue;
+                    list($label, $module, $method) = $linkPart;
+
+                    if(common::hasPriv($module, $method))
+                    {
+                        $display       = true;
+                        $currentModule = $module;
+                        $currentMethod = $method;
+                        if(!isset($menu['target'])) break;
                     }
                 }
             }
@@ -1306,6 +1336,7 @@ class commonModel extends model
             $class = $key == $searchObject ? "class='selected'" : '';
             if($key == 'program')    $key = 'program-product';
             if($key == 'deploystep') $key = 'deploy-viewstep';
+            if($key == 'practice')   $key = 'traincourse-practiceview';
 
             echo "<li $class><a href='javascript:$.setSearchType(\"$key\");' data-value='{$key}'>{$value}</a></li>";
         }
@@ -1690,9 +1721,6 @@ EOF;
 
         global $app, $lang, $config;
 
-        /* Add data-app attribute. */
-        if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
-
         /* Judge the $method of $module clickable or not, default is clickable. */
         $clickable = true;
         if(is_bool($extraEnabled))
@@ -1710,6 +1738,10 @@ EOF;
                 $clickable = call_user_func_array(array($modelClass, 'isClickable'), array($object, $method));
             }
         }
+
+        /* Add data-app attribute. */
+        if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
+        if($onlyBody && strpos($misc, 'data-toggle') === false && $clickable && !isonlybody()) $misc .= ' data-toggle="modal"';
 
         /* Set module and method, then create link to it. */
         if(strtolower($module) == 'story'    and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
@@ -2075,7 +2107,7 @@ EOF;
             if(strtolower($key) == 'closeddate'       and $value == '') continue;
             if(strtolower($key) == 'actualcloseddate' and $value == '') continue;
 
-            if(isset($old->$key))
+            if(isset($old->$key) && is_string($old->$key))
             {
                 if($config->edition != 'open' && isset($dateFields[$key])) $old->$key = formatTime($old->$key);
 
@@ -2454,8 +2486,8 @@ EOF;
          * The following pages can be allowed to open in non-iframe, so ignore these pages.
          */
         $module    = $this->app->getModuleName();
-        $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-uploadimages|report-annualdata|misc-captcha|execution-printkanban|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|screen-view|zanode-create|';
-        
+        $whitelist = '|index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|';
+
         if(strpos($whitelist, "|{$module}|") !== false || strpos($whitelist, "|{$module}-{$method}|") !== false) return true;
 
         /**
@@ -2482,11 +2514,12 @@ EOF;
      */
     public static function hasPriv($module, $method, $object = null, $vars = '')
     {
-        global $app, $lang;
+        global $app, $lang, $config;
         $module = strtolower($module);
         $method = strtolower($method);
         parse_str($vars, $params);
 
+        if($config->vision == 'or' and $module == 'story') $module = 'requirement';
         if(empty($app->user)) return false;
         if(empty($params['storyType']) and $module == 'story' and !empty($app->params['storyType']) and strpos(",story,requirement,", ",{$app->params['storyType']},") !== false) $module = $app->params['storyType'];
         if($module == 'story' and !empty($params['storyType']) and strpos(",story,requirement,", ",{$params['storyType']},") !== false) $module = $params['storyType'];
@@ -3539,7 +3572,12 @@ EOF;
         foreach($postData as $key => $value)
         {
             if(!is_array($value) or strpos($this->config->$objectType->excludeCheckFields, ",$key,") !== false) continue;
-            if(isset($value[$index]) and !empty($value[$index]) and $value[$index] != 'ditto') return true;
+            if(isset($value[$index]) and !empty($value[$index]) and $value[$index] != 'ditto')
+            {
+                /* Judgment of multi-select fields. */
+                if(is_array($value[$index]) and join(',', $value[$index]) == '') continue;
+                return true;
+            }
         }
 
         return false;

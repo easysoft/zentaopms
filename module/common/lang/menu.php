@@ -503,7 +503,7 @@ $lang->devops->homeMenu->apps = array('link' => "{$lang->app->common}|space|brow
 //$lang->devops->homeMenu->app         = array('link' => "{$lang->app->common}|app|serverlink|%s");
 
 $lang->devops->menu = new stdclass();
-$lang->devops->menu->code    = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
+$lang->devops->menu->code    = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
 $lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
 $lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
 
