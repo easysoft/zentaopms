@@ -52,7 +52,7 @@ $fnGenerateProgramRowData = function($programID, $program) use ($config, $users)
     if(!isset($program['programName']) || $config->systemMode != 'ALM') return null;
 
     /* ALM mode with more data. */
-    $totalStories = $program['finishClosedStories'] + $program['unclosedStories'];
+    $totalStories = $program['totalStories'];
     $pmName       = '';
     if(!empty($program['programPM']))
     {
@@ -70,9 +70,9 @@ $fnGenerateProgramRowData = function($programID, $program) use ($config, $users)
     $item->PM                   = $pmName;
     $item->createdDate          = '';
     $item->createdBy            = '';
-    $item->totalUnclosedStories = $program['unclosedStories'];
+    $item->totalUnclosedStories = $totalStories - $program['closedStories'];
     $item->totalStories         = $totalStories;
-    $item->closedStoryRate      = ($totalStories == 0 ? 0 : round($program['finishClosedStories'] / $totalStories, 3) * 100);
+    $item->closedStoryRate      = ($totalStories == 0 ? 0 : round($program['closedStories'] / $totalStories, 3) * 100);
     $item->totalPlans           = $program['plans'];
     $item->totalProjects        = 0;
     $item->totalExecutions      = 0;
@@ -125,8 +125,6 @@ $fnGenerateLineRowData = function($programID, $lineID, $line) use ($config, &$li
 /* Closure for generating product row data. */
 $fnGenerateProductRowData = function($lineID, $product) use ($users)
 {
-    $totalStories = $product->stories['finishClosed'] + $product->stories['unclosed'];
-
     $item = new stdClass();
     $item->type                 = 'product';
     $item->id                   = $product->id;
@@ -135,15 +133,15 @@ $fnGenerateProductRowData = function($lineID, $product) use ($users)
     $item->PM                   = !empty($product->PO) ? zget($users, $product->PO) : '';
     $item->createdDate          = $product->createdDate;
     $item->createdBy            = $product->createdBy;
-    $item->totalUnclosedStories = $product->stories['unclosed'];
-    $item->totalStories         = $totalStories;
-    $item->closedStoryRate      = empty($totalStories) ? 0 : round($product->stories['finishClosed'] / $totalStories, 3) * 100;
+    $item->totalUnclosedStories = $product->totalStories - $product->closedStories;
+    $item->totalStories         = $product->totalStories;
+    $item->closedStoryRate      = empty($product->totalStories) ? 0 : round($product->closedStories / $product->totalStories, 3) * 100;
     $item->totalPlans           = $product->plans;
     $item->totalProjects        = $product->projects;
     $item->totalExecutions      = $product->executions;
     $item->testCaseCoverage     = $product->coverage;
-    $item->totalActivatedBugs   = $product->activeBugs;
-    $item->totalBugs            = $product->bugs;
+    $item->totalActivatedBugs   = $product->unresolvedBugs;
+    $item->totalBugs            = $product->totalBugs;
     $item->fixedRate            = empty($item->totalBugs) ? 0 : round($product->fixedBugs / $item->totalBugs, 3) * 100;
     $item->totalReleases        = $product->releases;
     $item->latestReleaseDate    = $product->latestReleaseDate;

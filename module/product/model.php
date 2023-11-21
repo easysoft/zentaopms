@@ -1050,11 +1050,13 @@ class productModel extends model
         $stats = $this->getStatsProducts($productIdList, $programID == 0, $orderBy, $pager);
 
         $latestReleases       = $this->productTao->getStatisticByType($productIdList, 'latestReleases');
+        $projectCountPairs    = $this->productTao->getProjectCountPairs($productIdList);
         $executionCountPairs  = $this->productTao->getExecutionCountPairs($productIdList);
         $coveragePairs        = $this->getCaseCoveragePairs($productIdList);
 
         foreach($stats as $product)
         {
+            $product->projects   = zget($projectCountPairs, $product->id, 0);
             $product->executions = zget($executionCountPairs, $product->id, 0);
             $product->coverage   = zget($coveragePairs, $product->id, 0);
 
