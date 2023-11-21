@@ -85,23 +85,36 @@ $lang->misc->noticeRepair = "<h5>普通用户请联系管理员进行修复</h5>
     </ol>";
 
 $lang->misc->feature = new stdclass();
-$lang->misc->feature->lastest        = '最新版本';
-$lang->misc->feature->detailed       = '详情';
-$lang->misc->feature->introduction   = '新功能介绍';
-$lang->misc->feature->tutorial       = '新手引导教程';
-$lang->misc->feature->tutorialImage  = 'theme/default/images/main/tutorial.png';
-$lang->misc->feature->youngBlueTheme = '全新青春蓝主题';
-$lang->misc->feature->youngBlueImage = 'theme/default/images/main/new_theme.png';
-$lang->misc->feature->visions        = "不同场景界面切换";
-$lang->misc->feature->nextStep       = '下一步';
-$lang->misc->feature->close          = '关闭';
-$lang->misc->feature->downloadFile   = '下载新版本功能介绍文档';
-$lang->misc->feature->tutorialDesc   = "<p>禅道15系列新增了多项功能，您可以通过“<strong>新手引导教程</strong>”快速了解禅道的基本使用方法。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-新手引导</span>]，点击新手引导，即可进入新手引导教程。</p>";
-$lang->misc->feature->themeDesc      = "<p>禅道15系列上线了全新的“青春蓝”主题，页面呈现更加美观，体验更加友好。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-主题-青春蓝</span>]，点击青春蓝，即可设置成功。</p>";
-$lang->misc->feature->visionsDesc    = "<p>从16.5开始增加了界面概念，用户可以在<span style='color:#0c60e1'>[研发综合界面]</span>中处理研发事务、在<span style='color:#0c60e1'>[运营管理界面]</span>处理日常办公事务。</p><p>在头像右侧即可查看当前所处界面，点击当前界面名称可查看和切换其他的界面。</p>";
-$lang->misc->feature->visionsImage   = 'theme/default/images/main/visions.png';
+$lang->misc->feature->lastest           = '最新版本';
+$lang->misc->feature->detailed          = '详情';
+$lang->misc->feature->introduction      = '新功能介绍';
+$lang->misc->feature->tutorial          = '新手引导教程';
+$lang->misc->feature->tutorialImage     = 'theme/default/images/main/tutorial.png';
+$lang->misc->feature->youngBlueTheme    = '全新青春蓝主题';
+$lang->misc->feature->youngBlueImage    = 'theme/default/images/main/new_theme.png';
+$lang->misc->feature->visions           = "不同场景界面切换";
+$lang->misc->feature->nextStep          = '下一页';
+$lang->misc->feature->prevStep          = '上一页';
+$lang->misc->feature->close             = '开始体验';
+$lang->misc->feature->learnMore         = '了解更多';
+$lang->misc->feature->downloadFile      = '下载新版本功能介绍文档';
+$lang->misc->feature->tutorialDesc      = "<p>禅道15系列新增了多项功能，您可以通过“<strong>新手引导教程</strong>”快速了解禅道的基本使用方法。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-新手引导</span>]，点击新手引导，即可进入新手引导教程。</p>";
+$lang->misc->feature->themeDesc         = "<p>禅道15系列上线了全新的“青春蓝”主题，页面呈现更加美观，体验更加友好。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-主题-青春蓝</span>]，点击青春蓝，即可设置成功。</p>";
+$lang->misc->feature->visionsDesc       = "<p>从16.5开始增加了界面概念，用户可以在<span style='color:#0c60e1'>[研发综合界面]</span>中处理研发事务、在<span style='color:#0c60e1'>[运营管理界面]</span>处理日常办公事务。</p><p>在头像右侧即可查看当前所处界面，点击当前界面名称可查看和切换其他的界面。</p>";
+$lang->misc->feature->visionsImage      = 'theme/default/images/main/visions.png';
+$lang->misc->feature->aiPrompts         = 'AI提词功能';
+$lang->misc->feature->aiPromptsImage    = 'theme/default/images/main/ai_prompts.svg';
+$lang->misc->feature->promptDesign      = '设计AI提词';
+$lang->misc->feature->promptDesignImage = 'theme/default/images/main/prompt_design.svg';
+$lang->misc->feature->promptExec        = '执行AI提词';
+$lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec.svg';
+$lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
+$lang->misc->releaseDate['18.8']        = '2023-09-28';
+$lang->misc->releaseDate['18.7']        = '2023-08-29';
+$lang->misc->releaseDate['18.6']        = '2023-08-15';
+$lang->misc->releaseDate['18.5']        = '2023-07-05';
 $lang->misc->releaseDate['18.4']        = '2023-06-14';
 $lang->misc->releaseDate['18.4.beta1']  = '2023-05-31';
 $lang->misc->releaseDate['18.4.alpha1'] = '2023-04-21';
@@ -202,6 +215,10 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['18.8'][]        = array('title' => 'BI中新增了度量项功能和应用巡检报告大屏，DevOps平台版增加了配置向导，需求与市场管理界面中增加了市场管理功能，客户端导航及个人中心全新改版。', 'desc' => '');
+$lang->misc->feature->all['18.7'][]        = array('title' => 'DevOps新增了云原生平台、制品库和应用管理功能，优化了导航结构和相关UI交互。同时，新增了AI提词设计器功能，支持与大语言模型对接，支持自定义AI应用等。', 'desc' => '');
+$lang->misc->feature->all['18.6'][]        = array('title' => '优化了常用列表性能和BI功能的细节，并完善了瀑布项目的功能细节。修复Bug。', 'desc' => '');
+$lang->misc->feature->all['18.5'][]        = array('title' => '学堂课程支持从云端导入，支持课程中PDF文件的预览，同时还优化了常用列表的加载速度，修复了多处Bug。', 'desc' => '');
 $lang->misc->feature->all['18.4'][]        = array('title' => '本次发布优化了核心列表的性能，兼容达梦数据库，修复了多处Bug。', 'desc' => '');
 $lang->misc->feature->all['18.4.beta1'][]  = array('title' => '解Bug。', 'desc' => '');
 $lang->misc->feature->all['18.4.alpha1'][] = array('title' => '优化权限、文档交互体验，测试新增场景概念，用例支持xmind导入，并对BI模块中的大屏、透视表、图表、数据表进行了全面升级。', 'desc' => '');
