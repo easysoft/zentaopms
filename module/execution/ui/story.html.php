@@ -225,7 +225,7 @@ modal
             set::text($lang->execution->next),
             set::btnType('submit'),
             set::type('primary'),
-            setData(array('dismiss' => 'primary'))
+            setData(array('dismiss' => 'modal'))
         )
     )
 );
