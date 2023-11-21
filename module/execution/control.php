@@ -2728,19 +2728,22 @@ class execution extends control
         if(strpos($sort, 'rawID_') !== false) $sort = str_replace('rawID_', 'id_', $sort);
         if(strpos($sort, 'nameCol_') !== false) $sort = str_replace('nameCol_', 'name_', $sort);
 
-        $this->view->title          = $this->lang->execution->allExecutions;
-        $this->view->executionStats = $this->execution->getStatData(0, $status, $productID, 0, false, $queryID, $sort, $pager);
-        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject(0);
-        $this->view->productID      = $productID;
-        $this->view->pager          = $pager;
-        $this->view->orderBy        = $orderBy;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
-        $this->view->projects       = array('') + $this->project->getPairsByProgram();
-        $this->view->status         = $status;
-        $this->view->from           = $from;
-        $this->view->param          = $param;
-        $this->view->showBatchEdit  = $this->cookie->showExecutionBatchEdit;
-        $this->view->avatarList     = $this->user->getAvatarPairs('');
+        $executionStats = $this->execution->getStatData(0, $status, $productID, 0, false, $queryID, $sort, $pager);
+
+        $this->view->title            = $this->lang->execution->allExecutions;
+        $this->view->executionStats   = $executionStats;
+        $this->view->allExecutionsNum = $this->execution->getExecutionCounts(0, 'all');
+        $this->view->productList      = $this->loadModel('product')->getProductPairsByProject(0);
+        $this->view->productID        = $productID;
+        $this->view->pager            = $pager;
+        $this->view->orderBy          = $orderBy;
+        $this->view->users            = $this->loadModel('user')->getPairs('noletter', '', 0, array_unique(array_column($executionStats, 'PM')));
+        $this->view->projects         = array('') + $this->project->getPairsByProgram();
+        $this->view->status           = $status;
+        $this->view->from             = $from;
+        $this->view->param            = $param;
+        $this->view->showBatchEdit    = $this->cookie->showExecutionBatchEdit;
+        $this->view->avatarList       = $this->user->getAvatarPairs('');
 
         $this->display();
     }

@@ -3055,4 +3055,27 @@ class executionTest
         if(dao::isError()) return dao::getError();
         return implode(',', $executions);
     }
+
+    /**
+     * function getExecutionCounts test by execution
+     *
+     * @param  int    $projectID
+     * @param  string $browseType
+     * @access public
+     * @return int
+     */
+    public function getExecutionCountsTest(int $projectID = 0, string $browseType = 'all'): int
+    {
+        $count = $this->executionModel->getExecutionCounts($projectID, $browseType);
+
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error[0];
+        }
+        else
+        {
+            return $count;
+        }
+    }
 }
