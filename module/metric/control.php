@@ -67,7 +67,7 @@ class metric extends control
             $resultHeader = $this->metricZen->getViewTableHeader($metric);
             $resultData   = $this->metricZen->getViewTableData($metric, $result);
         }
-
+        
         $this->view->metrics       = $metrics;
         $this->view->groupMetrics  = $groupMetrics;
         $this->view->current       = $current;
@@ -80,6 +80,7 @@ class metric extends control
         $this->view->filtersBase64 = $filtersBase64;
         $this->view->resultHeader  = $resultHeader;
         $this->view->resultData    = $resultData;
+        $this->view->tableWidth    = $this->metricZen->getViewTableWidth($resultHeader);
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
         $this->display();

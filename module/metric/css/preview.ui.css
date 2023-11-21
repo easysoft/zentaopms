@@ -48,8 +48,8 @@
 i.star-empty {color: var(--color-slate-400);}
 i.star {color: var(--color-warning-300);}
 
-.table-and-chart .table-side {flex: 0 0 480px;}
-.table-and-chart .chart-side {flex: 0 0 calc(100% - 480px);}
+.table-and-chart .table-side {flex-shrink: 1; max-width: 50%;}
+.table-and-chart .chart-side {flex-grow: 1;}
 .table-and-chart .chart-center {display:flex; justify-content: center; align-items: center;}
 
 .icon-18 {font-size: 18px;}

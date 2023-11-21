@@ -350,6 +350,7 @@ div
             div
             (
                 setClass('table-side'),
+                setStyle(array('flex-basis' => $tableWidth . 'px')),
                 div
                 (
                     $resultData ? dtable
