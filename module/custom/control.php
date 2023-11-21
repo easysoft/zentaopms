@@ -91,7 +91,8 @@ class custom extends control
     }
 
     /**
-     * Set Required.
+     * 设置表单必填字段。
+     * Set the required fields.
      *
      * @param  string $moduleName
      * @access public
