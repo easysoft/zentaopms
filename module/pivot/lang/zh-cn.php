@@ -103,7 +103,7 @@ $lang->pivot->singleColor[] = 'F6BD0F';
 $lang->pivot->projectDeviation = "{$lang->execution->common}偏差报表";
 $lang->pivot->productSummary   = $lang->productCommon . '汇总表';
 $lang->pivot->bugCreate        = 'Bug创建表';
-$lang->pivot->bugAssign        = 'Bug指派表';
+$lang->pivot->bugAssign        = '未解决Bug指派表';
 $lang->pivot->workload         = '员工负载表';
 $lang->pivot->workloadAB       = '工作负载';
 $lang->pivot->bugOpenedDate    = 'Bug创建时间';
@@ -122,7 +122,7 @@ $lang->pivotList->staff   = new stdclass();
 $lang->pivotList->product->lists[10] = $lang->productCommon . '汇总表|pivot|productsummary';
 $lang->pivotList->project->lists[10] = "{$lang->execution->common}偏差报表|pivot|projectdeviation";
 $lang->pivotList->test->lists[10]    = 'Bug创建表|pivot|bugcreate';
-$lang->pivotList->test->lists[13]    = 'Bug指派表|pivot|bugassign';
+$lang->pivotList->test->lists[13]    = '未解决Bug指派表|pivot|bugassign';
 $lang->pivotList->staff->lists[10]   = '员工负载表|pivot|workload';
 
 $lang->pivot->id            = '编号';
