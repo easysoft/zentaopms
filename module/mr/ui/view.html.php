@@ -258,10 +258,7 @@ panel
                 cell
                 (
                     setClass('cell cell-history'),
-                    history
-                    (
-                        set::commentUrl(createLink('action', 'comment', array('objectType' => 'mr', 'objectID' => $MR->id))),
-                    )
+                    history(set::objectID($MR->id))
                 ),
             ),
             cell

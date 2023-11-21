@@ -70,10 +70,7 @@ detailBody
             )
         ),
     ),
-    history
-    (
-        set::commentUrl(createLink('action', 'comment', array('objectType' => 'account', 'objectID' => $account->id))),
-    ),
+    history(),
     floatToolbar
     (
         set::object($account),
