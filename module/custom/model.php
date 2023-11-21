@@ -124,15 +124,17 @@ class customModel extends model
     }
 
     /**
+     * 删除自定义项。
      * Delete items.
      *
-     * @param  string   $paramString    see parseItemParam();
+     * @param  string $paramString    see parseItemParam();
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteItems($paramString)
+    public function deleteItems($paramString): bool
     {
         $this->prepareSQL($this->parseItemParam($paramString), 'delete')->exec();
+        return !dao::isError();
     }
 
     /**
