@@ -167,11 +167,9 @@ formPanel
     formGroup
     (
         set::label($lang->testtask->desc),
-        editor
-        (
-            set::name('desc'),
-            set::rows(10)
-        )
+        set::control('editor'),
+        set::name('desc'),
+        set::rows(10)
     ),
     formGroup
     (
