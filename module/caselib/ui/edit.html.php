@@ -24,6 +24,7 @@ formPanel
     formGroup
     (
         set::label($lang->caselib->desc),
+        set::required(strpos(",{$this->config->caselib->edit->requiredFields},", ",desc,") !== false),
         editor
         (
             set::name('desc'),

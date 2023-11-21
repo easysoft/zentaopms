@@ -87,6 +87,7 @@ class caselibModel extends model
         $oldLib = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('id')->eq($lib->id)->fetch();
 
         $this->lang->testsuite->name = $this->lang->caselib->name;
+        $this->lang->testsuite->desc = $this->lang->caselib->desc;
 
         $this->dao->update(TABLE_TESTSUITE)->data($lib, 'uid')
             ->autoCheck()

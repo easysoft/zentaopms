@@ -24,6 +24,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->testreport->startEnd),
+            set::required(strpos(",{$this->config->testreport->edit->requiredFields},", ",begin,") !== false || strpos(",{$this->config->testreport->edit->requiredFields},", ",end,") !== false),
             inputGroup
             (
                 datePicker
@@ -96,6 +97,7 @@ formPanel
         formGroup
         (
             set::label($lang->testreport->members),
+            set::required(strpos(",{$this->config->testreport->edit->requiredFields},", ",members,") !== false),
             picker
             (
                 set::multiple(true),
@@ -152,6 +154,7 @@ formPanel
         formGroup
         (
             set::label($lang->testreport->report),
+            set::required(strpos(",{$this->config->testreport->edit->requiredFields},", ",report,") !== false),
             editor
             (
                 set::name('report'),
