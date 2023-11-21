@@ -100,14 +100,15 @@ class customTest
     }
 
     /**
+     * 创建一个DAO对象来选择或删除一条或多条记录。
      * Test create a DAO object to select or delete one or more records.
      *
-     * @param  string  $paramString
+     * @param  string $paramString
      * @param  string $method
      * @access public
      * @return array|int
      */
-    public function prepareSQLTest($paramString, $method = 'select')
+    public function prepareSQLTest(string $paramString, string $method = 'select'): array|int
     {
         $params  = $this->objectModel->parseItemParam($paramString);
         if($method == 'delete')
