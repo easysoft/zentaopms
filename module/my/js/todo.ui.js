@@ -20,6 +20,22 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 });
 
 /**
+ * Get checked items.
+ *
+ * @access public
+ * @return array
+ */
+function getCheckedItems()
+{
+    var checkedItems = [];
+    $('#todoForm [name^=todoIDList]:checked').each(function(index, ele)
+    {
+        checkedItems.push($(ele).val());
+    });
+    return checkedItems;
+};
+
+/**
  * 计算表格任务信息的统计。
  * Set todo summary for table footer.
  *

@@ -161,7 +161,7 @@ class my extends control
         $feedbackCount = 0;
         $isBiz         = $this->config->edition == 'biz' ? 1 : 0;
 
-        if($isBiz or $isMax)
+        if($this->config->edition != 'open')
         {
             $feedbacks     = $this->loadModel('feedback')->getList('assigntome', 'id_desc', $pager);
             $feedbackCount = $pager->recTotal;
@@ -1519,6 +1519,7 @@ EOF;
      * @param  string $type
      * @param  int    $recTotal
      * @param  string $date
+     * @param  string $direction
      * @access public
      * @return void
      */

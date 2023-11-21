@@ -385,13 +385,6 @@ $config->my->requirement->dtable->fieldList['estimate']['type']     = 'count';
 $config->my->requirement->dtable->fieldList['estimate']['group']    = 'openedBy';
 $config->my->requirement->dtable->fieldList['estimate']['sortType'] = true;
 
-$config->my->requirement->dtable->fieldList['stage']['name']     = 'stage';
-$config->my->requirement->dtable->fieldList['stage']['title']    = $lang->story->stageAB;
-$config->my->requirement->dtable->fieldList['stage']['type']     = 'category';
-$config->my->requirement->dtable->fieldList['stage']['map']      = $lang->story->stageList;
-$config->my->requirement->dtable->fieldList['stage']['group']    = 'openedBy';
-$config->my->requirement->dtable->fieldList['stage']['sortType'] = true;
-
 $config->my->requirement->dtable->fieldList['actions']['name']     = 'actions';
 $config->my->requirement->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->my->requirement->dtable->fieldList['actions']['type']     = 'actions';

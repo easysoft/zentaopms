@@ -49,7 +49,7 @@ foreach($reviewList as $review)
     if(isset($lang->$type->statusList)) $statusList = $lang->$type->statusList;
     if($type == 'attend')               $statusList = $lang->attend->reviewStatusList;
 
-    if(!in_array($type, array('story', 'testcase', 'feedback', 'review')) && !$isOAObject)
+    if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review')) && !$isOAObject)
     {
         if($rawMethod == 'audit') $statusList = $lang->approval->nodeList;
 
@@ -73,7 +73,7 @@ foreach($reviewList as $review)
     $params = "id=$review->id";
 
     if($isOAObject) $method = 'view';
-    if(!in_array($module, array('story', 'testcase', 'feedback'))) $method = 'approvalreview';
+    if(!in_array($module, array('demand', 'story', 'testcase', 'feedback'))) $method = 'approvalreview';
 
     if($module == 'review')
     {
