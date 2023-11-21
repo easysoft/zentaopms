@@ -300,7 +300,7 @@ class testreport extends control
      * @access public
      * @return void
      */
-    public function delete($reportID)
+    public function delete(int $reportID)
     {
         $testreport = $this->testreport->getByID($reportID);
         $locateLink = $this->session->reportList ? $this->session->reportList : inlink('browse', "productID={$testreport->product}");
