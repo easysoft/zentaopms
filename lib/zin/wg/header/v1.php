@@ -148,29 +148,30 @@ class header extends wg
             $noRole = empty($user->role) || !isset($lang->user->roleList[$user->role]);
             $items[] = array
             (
-                'url'       => createLink('my', 'profile', '', '', true),
+                'url'          => createLink('my', 'profile', '', '', true),
                 'leadingClass' => 'row items-center gap-2 px-2 py-1 text-inherit',
-                'icon' => ' hidden',
-                'title'     => empty($user->realname) ? $user->account : $user->realname,
-                'titleClass' => 'text-lg',
-                'subtitle'  => $noRole ? null : $lang->user->roleList[$user->role],
-                // 'style'     => array('padding-left' => 0),
-                'data-toggle' => 'modal',
-                'data-size' => 700,
-                'data-id'   => 'profile',
-                'leading'   => array('html' => userAvatar(set::user($user))->render(), 'className' => 'center mr-1')
+                'icon'         => ' hidden',
+                'title'        => empty($user->realname) ? $user->account : $user->realname,
+                'titleClass'   => 'text-lg',
+                'subtitle'     => $noRole ? null : $lang->user->roleList[$user->role],
+                'innerClass'   => 'open-in-parent',
+                'data-toggle'  => 'modal',
+                'data-size'    => 700,
+                'data-id'      => 'profile',
+                'leading'      => array('html' => userAvatar(set::user($user))->render(), 'className' => 'center mr-1')
             );
 
             $items[] = array('type' => 'divider');
 
             $items[] = array
             (
-                'url' => createLink('my', 'profile', '', '', true),
-                'icon' => 'account',
-                'text' => $lang->profile,
+                'url'         => createLink('my', 'profile', '', '', true),
+                'icon'        => 'account',
+                'text'        => $lang->profile,
+                'innerClass'  => 'open-in-parent',
                 'data-toggle' => 'modal',
-                'data-size' => 700,
-                'data-id'   => 'profile'
+                'data-size'   => 700,
+                'data-id'     => 'profile'
             );
 
             if($app->config->vision === 'rnd')
@@ -179,26 +180,28 @@ class header extends wg
                 {
                     $items[] = array
                     (
-                        'url' => createLink('tutorial', 'start'),
-                        'icon' => 'guide',
-                        'text' => $lang->tutorialAB,
-                        'class' => '800',
-                        'outerClass' => 'user-tutorial',
-                        'data-width' => 700,
+                        'url'             => createLink('tutorial', 'start'),
+                        'icon'            => 'guide',
+                        'text'            => $lang->tutorialAB,
+                        'class'           => '800',
+                        'outerClass'      => 'user-tutorial',
+                        'data-width'      => 700,
                         'data-class-name' => 'modal-inverse',
                         'data-headerless' => true,
-                        'data-backdrop' => true,
-                        'data-keyboard' => true,
-                        'data-toggle' => 'modal'
+                        'data-backdrop'   => true,
+                        'data-keyboard'   => true,
+                        'innerClass'      => 'open-in-parent',
+                        'data-toggle'     => 'modal'
                     );
                 }
 
                 $items[] = array
                 (
-                    'url' => createLink('my', 'preference', 'showTip=false', '', true),
-                    'icon' => 'controls',
-                    'text' => $lang->preference,
-                    'data-width' => 700,
+                    'url'         => createLink('my', 'preference', 'showTip=false', '', true),
+                    'icon'        => 'controls',
+                    'text'        => $lang->preference,
+                    'data-width'  => 700,
+                    'innerClass'  => 'open-in-parent',
                     'data-toggle' => 'modal'
                 );
             }
@@ -207,11 +210,12 @@ class header extends wg
             {
                 $items[] = array
                 (
-                    'url' => createLink('my', 'changepassword', '', '', true),
-                    'icon' => 'cog-outline',
-                    'text' => $lang->changePassword,
+                    'url'         => createLink('my', 'changepassword', '', '', true),
+                    'icon'        => 'cog-outline',
+                    'text'        => $lang->changePassword,
+                    'innerClass'  => 'open-in-parent',
                     'data-toggle' => 'modal',
-                    'data-size' => 'sm'
+                    'data-size'   => 'sm'
                 );
             }
 
@@ -241,12 +245,12 @@ class header extends wg
         $helpItems = array();
         $manualUrl = ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme'];
         $helpItems[] = array('text' => $lang->manual, 'url' => $manualUrl, 'attrs' => array('data-app' => 'help'));
-        $helpItems[] = array('text' => $lang->changeLog, 'url' => createLink('misc', 'changeLog'), 'data-toggle' => 'modal');
+        $helpItems[] = array('text' => $lang->changeLog, 'url' => createLink('misc', 'changeLog'), 'data-toggle' => 'modal', 'innerClass' => 'open-in-parent');
         $items[] = array('text' => $lang->help, 'icon' => 'help', 'items' => $helpItems);
 
         /* printClientLink */
 
-        $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'), 'data-toggle' => 'modal');
+        $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'), 'data-toggle' => 'modal', 'innerClass' => 'open-in-parent');
         $items[] = array('type' => 'html', 'className' => 'menu-item', 'html' => $lang->designedByAIUX);
 
         $items[] = array('type' => 'divider');

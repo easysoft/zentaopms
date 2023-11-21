@@ -528,6 +528,27 @@
         document.title = title;
     }
 
+    /**
+     * Logout current user.
+     *
+     * @param {string} url
+     */
+    function logout(url)
+    {
+        if(!url) url = getLastApp().appUrl;
+        $.get($.createLink('user', 'logout', 'referer=' + btoa(url)), function(data)
+        {
+            let load = $.createLink('user', 'login');
+            try
+            {
+                data = JSON.parse(data);
+                if(data.load) load = data.load;
+            }
+            catch (error) {}
+            location.href = load;
+        });
+    }
+
     /* Bind helper methods to global object "$.apps" */
     $.apps = window.apps =
     {
@@ -541,7 +562,8 @@
         getAppCode: getAppCodeFromUrl,
         getLastApp: getLastApp,
         openedApps: openedApps,
-        appsMap:    appsMap
+        appsMap:    appsMap,
+        logout:     logout
     };
 
     /**
