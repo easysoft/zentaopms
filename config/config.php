@@ -189,8 +189,9 @@ $config->cloud->api->switchChannel = false;
 
 /* Set zin config. */
 $config->zin = new stdClass();
-$config->zin->mode     = 'compatible';     // 启用兼容 18.x 模式。
-$config->zin->extraCSS = 'compatible.css'; // 额外的 CSS 样式文件。
+$config->zin->mode     = 'compatible';        // 启用兼容 18.x 模式。
+$config->zin->extraCSS = 'compatible.css';    // 额外的 CSS 样式文件。
+$config->zin->extraJS  = 'zin.compatible.js'; // 额外的 JS 文件。
 
 /* 配置参数过滤。Filter param settings. */
 $filterConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'filter.php';

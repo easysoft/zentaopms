@@ -572,3 +572,4 @@ $config->hasBranchMenuModules = array('product', 'story', 'release', 'bug', 'tes
 $config->excludeDropmenuList  = array('program-browse', 'product-all', 'product-index', 'execution-all', 'project-browse', 'product-batchedit', 'admin-index', 'product-create', 'project-create', 'execution-create', 'program-create', 'execution-batchedit');
 $config->hasSwitcherModules   = array('design');
 $config->excludeSwitcherList  = array();
+$config->hasMainNavBar        = array();
