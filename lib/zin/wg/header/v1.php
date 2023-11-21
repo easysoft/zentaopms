@@ -295,6 +295,7 @@ class header extends wg
 
         /* Initialize the default values. */
         $showCreateList = $needPrintDivider = false;
+        $modalClass     = (isset($config->zin->mode) && $config->zin->mode == 'compatible') ? 'open-in-parent' : null;
 
         /* Get default product id. */
         $productID = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
@@ -352,6 +353,7 @@ class header extends wg
                 case 'doc':
                     $params              = "objectType=&objectID=0&libID=0";
                     $createMethod        = 'selectLibType';
+                    $item['innerClass']  = $modalClass;
                     $item['data-toggle'] = 'modal';
                     break;
                 case 'project':
@@ -363,6 +365,7 @@ class header extends wg
                     {
                         $params              = "programID=0&from=global";
                         $createMethod        = 'createGuide';
+                        $item['innerClass']  = $modalClass;
                         $item['data-toggle'] = 'modal';
                     }
                     else
@@ -416,11 +419,13 @@ class header extends wg
                     break;
                 case 'kanbanspace':
                     $isOnlyBody          = true;
+                    $item['innerClass']  = $modalClass;
                     $item['data-toggle'] = 'modal';
                     $item['data-width']  = '75%';
                     break;
                 case 'kanban':
                     $isOnlyBody          = true;
+                    $item['innerClass']  = $modalClass;
                     $item['data-toggle'] = 'modal';
                     $item['data-width']  = '75%';
                     break;
