@@ -63,7 +63,7 @@ foreach($sons as $dept)
 }
 
 $emptyInputs = array();
-for($i = 0; $i < 10; $i ++)
+for($i = 0; $i < $config->dept->newChildCount; $i ++)
 {
     $emptyInputs[] = formGroup
     (
