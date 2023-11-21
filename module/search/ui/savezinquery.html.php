@@ -1,42 +1,55 @@
 <?php
 namespace zin;
 
-form
+if(isInModal())
+{
+    set::size('sm');
+    set::title($lang->search->saveCondition);
+    set::bodyClass('pb-7');
+}
+
+formBase
 (
-    set::actions(array()),
-    set::formClass('save-search-form-container'),
+    set::actions(false),
     set::action($_SERVER['REQUEST_URI']),
-    set::method('post'),
-    div
+    row
     (
-        setClass('flex flex-row justify-between items-center mr-2 save-query-form'),
-        input
+        setClass('items-start gap-4 pt-1'),
+        formGroup
         (
-            set::id('title'),
-            set::name('title'),
-            set::type('text'),
-            set::className('form-control w-5/12'),
-            set::placeholder($lang->search->setCondName)
+            setClass('flex-auto'),
+            inputGroup
+            (
+                input
+                (
+                    set::name('title'),
+                    set::type('text'),
+                    set::placeholder($lang->search->setCondName)
+                ),
+                inputGroupAddon
+                (
+                    checkbox
+                    (
+                        set::name('common'),
+                        set::value(1),
+                        $lang->search->setCommon
+                    )
+                ),
+                $onMenuBar == 'yes' ? inputGroupAddon
+                (
+                    checkbox
+                    (
+                        set::name('onMenuBar'),
+                        $lang->search->onMenuBar
+                    )
+                ) : null
+            )
         ),
-        checkbox
+        btn
         (
-            set::id('common'),
-            set::name('common'),
-            set::value(1),
-            set::className('w-3/12'),
-            $lang->search->setCommon
-        ),
-        checkbox
-        (
-            set::id('onMenuBar'),
-            set::name('onMenuBar'),
-            set::className('w-3/12'),
-            $lang->search->onMenuBar
-        ),
-        btn(
-            setClass('w-1/12 primary'),
+            set::type('primary'),
             set::btnType('submit'),
-            set('data-type', 'submit'),
+            set::className('btn-wide'),
             $lang->save
         ),
         input

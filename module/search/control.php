@@ -171,7 +171,7 @@ class search extends control
             if(preg_match("/^{$this->config->moduleVar}=\w+\&{$this->config->methodVar}=\w+/", $query) == 0) return;
         }
 
-        return print(json_encode(array('load' => $actionURL)));
+        return print(json_encode(array('result' => 'success', 'load' => $actionURL)));
     }
 
     /**
@@ -214,7 +214,7 @@ class search extends control
 
         if($_POST)
         {
-            $queryID = $this->search->saveZinQuery();
+            $queryID = $this->search->saveQuery();
             if(!$queryID) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $data     = fixer::input('post')->get();
@@ -225,7 +225,7 @@ class search extends control
                 echo 'success';
                 return;
             }
-            return $this->send(array('closeModal' => true, 'callback' => 'setTimeout(() => $(\'#searchFormPanel form button[type="submit"]\').trigger("click"), 300)'));
+            return $this->send(array('closeModal' => true, 'callback' => array('name' => 'zui.SearchForm.addQuery', 'params' => array(array('module' => $module, 'id' => $queryID, 'text' => $data->title)))));
         }
 
         $this->view->module    = $module;
@@ -259,7 +259,7 @@ class search extends control
         if(!commonModel::hasPriv('search', 'deleteQuery')) $this->loadModel('common')->deny('search', 'deleteQuery', false);
         $this->search->deleteQuery($queryID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        echo $this->send(array('result' => 'success', 'load' => true));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
