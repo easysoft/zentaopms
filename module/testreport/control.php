@@ -87,7 +87,7 @@ class testreport extends control
         if(strpos('product|execution|project', $objectType) === false) return $this->send(array('result' => 'fail', 'message' => 'Type Error!'));
 
         $objectID = $this->testreportZen->commonAction($objectID, $objectType);
-        $object   = $this->$objectType->getById($objectID);
+        $object   = $this->{$objectType}->getById($objectID);
         if($extra) $task = $this->testtask->getByID($extra);
 
         $reports = $this->testreportZen->getReportsForBrowse($objectID, $objectType, $extra, $orderBy, $recTotal, $recPerPage, $pageID);
