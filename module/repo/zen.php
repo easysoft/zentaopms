@@ -1210,4 +1210,92 @@ class repoZen extends repo
 
         return $error;
     }
+
+    /**
+     * 跳转到版本库的diff页面。
+     * Redirect to diff page.
+     *
+     * @param  int       $repoID
+     * @param  int       $objectID
+     * @param  string    $arrange
+     * @param  bool      $isBranchOrTag
+     * @param  string    $file
+     * @access protected
+     * @return void
+     */
+    protected function locateDiffPage(int $repoID, int $objectID, string $arrange, bool $isBranchOrTag, string $file)
+    {
+        $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
+        $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
+
+        if($this->post->arrange)
+        {
+            $arrange = $this->post->arrange;
+            helper::setcookie('arrange', $arrange);
+        }
+        if($this->post->encoding)      $encoding      = $this->post->encoding;
+        if($this->post->isBranchOrTag) $isBranchOrTag = $this->post->isBranchOrTag;
+
+        return $this->locate($this->repo->createLink('diff', "repoID={$repoID}&objectID={$objectID}&entry={$file}&oldrevision={$oldRevision}&newRevision={$newRevision}&showBug=&encoding={$encoding}&isBranchOrTag={$isBranchOrTag}"));
+    }
+
+    /**
+     * 设置对比信息的编码格式。
+     * Set encoding for diff.
+     *
+     * @param  array     $diffs
+     * @param  string    $encoding
+     * @access protected
+     * @return array
+     */
+    protected function encodingDiff(array $diffs, string $encoding): array
+    {
+        foreach($diffs as $diff)
+        {
+            $diff->fileName = helper::convertEncoding($diff->fileName, $encoding);
+            if(empty($diff->contents)) continue;
+
+            foreach($diff->contents as $content)
+            {
+                if(empty($content->lines)) continue;
+
+                foreach($content->lines as $lines)
+                {
+                    if(empty($lines->line)) continue;
+                    $lines->line = helper::convertEncoding($lines->line, $encoding);
+                }
+            }
+        }
+
+        return $diffs;
+    }
+
+    /**
+     * 获取并列展示的对比信息。
+     * Get appose diff.
+     *
+     * @param  array     $diffs
+     * @access protected
+     * @return array
+     */
+    protected function getApposeDiff(array $diffs): array
+    {
+        foreach($diffs as $diffFile)
+        {
+            if(empty($diffFile->contents)) continue;
+            foreach($diffFile->contents as $content)
+            {
+                $old = array();
+                $new = array();
+                foreach($content->lines as $line)
+                {
+                    if($line->type != 'new') $old[$line->oldlc] = $line->line;
+                    if($line->type != 'old') $new[$line->newlc] = $line->line;
+                }
+                $content->old = $old;
+                $content->new = $new;
+            }
+        }
+        return $diffs;
+    }
 }

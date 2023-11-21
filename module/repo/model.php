@@ -3289,4 +3289,25 @@ class repoModel extends model
 
         return array_merge($folders, $files);
     }
+
+    /**
+     * 查询提交记录的版本号。
+     * Get history revision.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  bool   $withCommit
+     * @param  string $condition
+     * @access public
+     * @return string|false
+     */
+    public function getHistoryRevision(int $repoID, string $revision, bool $withCommit = false, string $condition = 'eq'): string|false
+    {
+        $field = $withCommit ? 'revision, commit' : 'revision';
+        return $this->dao->select($field)->from(TABLE_REPOHISTORY)
+            ->where('repo')->eq($repoID)
+            ->beginIF($condition != 'lt')->andWhere('revision')->eq($revision)->fi()
+            ->beginIF($condition == 'lt')->andWhere('revision')->lt($revision)->fi()
+            ->fetch($withCommit ? '' : 'revision');
+    }
 }
