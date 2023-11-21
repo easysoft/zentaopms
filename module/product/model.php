@@ -1455,7 +1455,7 @@ class productModel extends model
          $product->productLine        = $product->lineName;
          $product->PO                 = !empty($product->PO) ? zget($users, $product->PO) : '';
          $product->testCaseCoverage   = $product->coverage;
-         $product->storyCompleteRate  = $totalStories == 0 ? 0 : round($product->finishedStories / $totalStories, 3) * 100;
+         $product->storyCompleteRate  = $product->totalStories == 0 ? 0 : round($product->finishedStories / $product->totalStories, 3) * 100;
          $product->bugFixedRate       = ($product->unresolvedBugs + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unresolvedBugs + $product->fixedBugs), 3) * 100;
 
         return $product;
