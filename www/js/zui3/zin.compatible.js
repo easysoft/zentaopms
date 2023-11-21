@@ -1076,9 +1076,14 @@
         }
 
         var appCode = options.app;
+        console.log('> handleClickLinkIn18', {appCode, options, url})
         if(url)
         {
-            if(appCode === 'help') return $.apps.openUrl(url, {app: appCode});
+            if(appCode === 'help')
+            {
+                e.preventDefault();
+                return $.apps.openUrl(url, {app: appCode});
+            }
             var urlInfo = $.parseLink(url);
             if(urlInfo.external || (urlInfo.moduleName === 'file' && urlInfo.methodName === 'download')) return;
             if(urlInfo.moduleName === 'index' && urlInfo.methodName === 'index')
@@ -1109,9 +1114,12 @@
         if(!iframeContainer) return;
 
         var customEvent;
-        if(typeof Event === 'function') {
+        if(typeof Event === 'function')
+        {
             customEvent = new Event(event.type, {bubbles: true});
-        } else {
+        }
+        else
+        {
             customEvent = document.createEvent('Event');
             customEvent.initEvent(event.type, true, true);
         }
