@@ -183,10 +183,8 @@ else
                 formGroup
                 (
                     set::label($lang->doc->keywords),
-                    input
-                    (
-                        set::name('keywords')
-                    )
+                    set::control('input'),
+                    set::name('keywords')
                 ),
                 formGroup
                 (

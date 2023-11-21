@@ -10,7 +10,7 @@ $(function()
 
         if(requiredFields.indexOf('content') >= 0)
         {
-            if($('[name="content"]').val() == '')
+            if($('input[name="content"]').val() == '')
             {
                 zui.Modal.alert(contentNotEmpty);
                 return false;
