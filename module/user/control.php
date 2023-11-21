@@ -35,10 +35,11 @@ class user extends control
     }
 
     /**
-     * Todos of a user.
+     * 查看某个用户的待办。
+     * View user's todo.
      *
-     * @param  string $userID
-     * @param  string $type         the todo type, today|lastweek|thisweek|all|undone, or a date.
+     * @param  int    $userID
+     * @param  string $type       the todo type, all|before|future|thisWeek|thisMonth|thisYear|assignedToOther|cycle
      * @param  string $status
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -47,45 +48,37 @@ class user extends control
      * @access public
      * @return void
      */
-    public function todo($userID, $type = 'today', $status = 'all', $orderBy = 'date,status,begin', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function todo(int $userID, string $type = 'today', string $status = 'all', string $orderBy = 'date,status,begin', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $user = $this->user->getById($userID, 'id');
-        if(empty($user)) return print(js::error($this->lang->notFound) . js::locate($this->createLink('my', 'team')));
-        if($user->deleted == 1) return print(js::error($this->lang->user->noticeHasDeleted) . js::locate('back'));
+        if(empty($user)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('my', 'team'))));
+        if($user->deleted) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->user->noticeHasDeleted, 'locate' => array('back' => true))));
 
         /* Set this url to session. */
         $uri = $this->app->getURI(true);
         $this->session->set('todoList', $uri, 'my');
-        $this->session->set('bugList',  $uri, 'qa');
-        $this->session->set('taskList', $uri, 'execution');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
-        /* Get user, totos. */
-        $account = $user->account;
-        $todos   = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);
-        $date    = (int)$type == 0 ? helper::today() : $type;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
-        if(!isset($users[$userID])) return print(js::error($this->lang->user->error->noAccess) . js::locate('back'));
+        /* Get users and todos. */
+        $todos  = $this->loadModel('todo')->getList($type, $user->account, $status, 0, $pager, $sort);
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->user->error->noAccess, 'locate' => array('back' => true))));
 
-        /* set menus. */
-        $this->view->userList = $this->user->setUserList($users, $userID);
-
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->todo;
-        $this->view->tabID      = 'todo';
-        $this->view->date       = $date;
-        $this->view->todos      = $todos;
-        $this->view->user       = $user;
-        $this->view->type       = $type;
-        $this->view->status     = $status;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
+        $this->view->title   = $this->lang->user->common . $this->lang->colon . $this->lang->user->todo;
+        $this->view->users   = $users;
+        $this->view->todos   = $todos;
+        $this->view->user    = $user;
+        $this->view->type    = $type;
+        $this->view->status  = $status;
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
 
         $this->display();
     }
