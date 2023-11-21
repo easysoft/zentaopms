@@ -4,6 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testreport.class.php';
 
 zdTable('testreport')->gen(10);
+zdTable('case')->gen(10);
+zdTable('testrun')->gen(10);
 zdTable('user')->gen(1);
 
 su('admin');

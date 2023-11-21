@@ -153,7 +153,7 @@ class testreportModel extends model
 
     /**
      * 获取测试报告的用例列表。
-     * Get caseID list.
+     * Get case id list.
      *
      * @param  int    $reportID
      * @access public
