@@ -2057,6 +2057,7 @@ class storyModel extends model
             ->add('id', $storyID)
             ->add('status', 'closed')
             ->add('stage', 'closed')
+            ->setDefault('assignedTo',     'closed')
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('closedDate',     $now)
@@ -3867,6 +3868,7 @@ class storyModel extends model
         $stories  = $this->dao->select('t2.id, t2.status')->from(TABLE_RELATION)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t2.id=t1.AID')
             ->where('t1.BType')->eq('requirement')
+            ->andWhere('t1.BID')->eq($parentID->BID)
             ->andWhere('t2.status')->ne('closed')
             ->andWhere('t2.type')->eq('story')
             ->fetchPairs();
