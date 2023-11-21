@@ -46,6 +46,10 @@ js::set('showFeatures',  $showFeatures);
 <?php if($config->vision == 'lite' or $config->vision == 'or'):?>
 #searchbox .dropdown-menu.show-quick-go.with-active {min-height: 180px;}
 <?php endif;?>
+
+<?php if($config->inQuickon):?>
+#poweredBy {width: 50%;}
+<?php endif;?>
 </style>
 <?php if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') === false):?>
 <div id='menu'>
