@@ -22,7 +22,7 @@ if($result == 'success')
         $checkList[] = checkbox
         (
             on::click('checkFileClick'),
-            set::id($file),
+            setID($file),
             set::name("files[$file]"),
             set::text($file),
             set::checked(true)
@@ -32,10 +32,10 @@ if($result == 'success')
 
 div
 (
-    set::id('main'),
+    setID('main'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
         formPanel
         (
             setClass('bg-canvas'),
@@ -53,7 +53,7 @@ div
                 checkbox
                 (
                     on::click('checkAllClick'),
-                    set::id('checkAll'),
+                    setID('checkAll'),
                     set::name('checkAll'),
                     set::text($lang->upgrade->fileName),
                     set::checked(true)

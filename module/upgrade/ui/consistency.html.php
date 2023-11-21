@@ -14,10 +14,10 @@ set::zui(true);
 
 div
 (
-    set::id('main'),
+    setID('main'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
         panel
         (
             set::style(array('margin' => '0 auto')),
@@ -25,28 +25,28 @@ div
             set::title($lang->upgrade->consistency),
             div
             (
-                set::className('border p-4 mb-4'),
+                setClass('border p-4 mb-4'),
                 set::style(array('background-color' => 'var(--color-gray-100)')),
                 div
                 (
-                    set::className('article-h3 mb-2'),
+                    setClass('article-h3 mb-2'),
                     $lang->upgrade->noticeSQL
                 ),
                 div
                 (
-                    set::className('text-danger leading-loose'),
+                    setClass('text-danger leading-loose'),
                     html("SET @@sql_mode= '';<br />"),
                     html(nl2br($alterSQL))
                 )
             ),
             div
             (
-                set::className('text-center'),
+                setClass('text-center'),
                 btn
                 (
                     on::click('loadCurrentPage'),
                     set::type('primary'),
-                    set::className('px-10'),
+                    setClass('px-10'),
                     $lang->refresh
                 )
             )

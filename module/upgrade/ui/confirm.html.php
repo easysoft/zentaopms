@@ -15,10 +15,10 @@ jsVar('writable', $writable);
 
 div
 (
-    set::id('main'),
+    setID('main'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
         formPanel
         (
             setClass('upgrade-confirm'),
@@ -28,7 +28,7 @@ div
             set::title($lang->upgrade->confirm),
             div
             (
-                set::className('border p-4 mb-4'),
+                setClass('border p-4 mb-4'),
                 set::style(array('background-color' => 'var(--color-gray-100)')),
                 div(html(nl2br($confirm)))
             ),
@@ -46,7 +46,7 @@ div
 
 modal
 (
-    set::id('progress'),
+    setID('progress'),
     set::title('1%'),
     div
     (
