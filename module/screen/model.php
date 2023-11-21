@@ -392,10 +392,12 @@ class screenModel extends model
 
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
 
-            $fields     = json_decode($chart->fields);
-            $dimensions = array($settings['xaxis'][0]['field']);
-            $sourceData = array();
-            $clientLang = $this->app->getClientLang();
+            $fields       = json_decode($chart->fields, true);
+            $dimensions   = array($settings['xaxis'][0]['field']);
+            $sourceData   = array();
+            $clientLang   = $this->app->getClientLang();
+            $xLabelValues = $this->processXLabel($xLabels, $fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+
             foreach($yStats as $index => $dataList)
             {
                 $field     = zget($fields, $metrics[$index]);
@@ -406,6 +408,7 @@ class screenModel extends model
 
                 foreach($dataList as $valueField => $value)
                 {
+                    $valueField = $xLabelValues[$valueField];
                     if(empty($sourceData[$valueField]))
                     {
                         $sourceData[$valueField] = new stdclass();
@@ -441,10 +444,12 @@ class screenModel extends model
 
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
 
-            $fields     = json_decode($chart->fields);
-            $dimensions = array($settings['xaxis'][0]['field']);
-            $sourceData = array();
-            $clientLang = $this->app->getClientLang();
+            $fields       = json_decode($chart->fields, true);
+            $dimensions   = array($settings['xaxis'][0]['field']);
+            $sourceData   = array();
+            $clientLang   = $this->app->getClientLang();
+            $xLabelValues = $this->processXLabel($xLabels, $fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+
             foreach($yStats as $index => $dataList)
             {
                 $field     = zget($fields, $metrics[$index]);
@@ -455,6 +460,7 @@ class screenModel extends model
 
                 foreach($dataList as $valueField => $value)
                 {
+                    $valueField = $xLabelValues[$valueField];
                     if(empty($sourceData[$valueField]))
                     {
                         $sourceData[$valueField] = new stdclass();
@@ -544,11 +550,13 @@ class screenModel extends model
 
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
 
-            $fields         = json_decode($chart->fields);
+            $fields         = json_decode($chart->fields, true);
             $radarIndicator = array();
             $seriesData     = array();
             $max            = 0;
             $clientLang     = $this->app->getClientLang();
+            $xLabelValues   = $this->processXLabel($xLabels, $fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+
             foreach($yStats as $index => $dataList)
             {
                 $field     = zget($fields, $metrics[$index]);
@@ -574,7 +582,7 @@ class screenModel extends model
                 foreach($dataList as $valueField => $value)
                 {
                     $indicator = new stdclass();
-                    $indicator->name   = $valueField;
+                    $indicator->name   = $xLabelValues[$valueField];
                     $indicator->max    = $max;
                     $radarIndicator[]  = $indicator;;
                 }
@@ -763,6 +771,28 @@ class screenModel extends model
         }
 
         return $screenFilters;
+    }
+
+    /**
+     * Process xLabel with lang
+     *
+     * @param  array   $xLabel
+     * @param  string  $type
+     * @param  string  $object
+     * @param  string  $field
+     * @access public
+     * @return array
+     */
+    public function processXLabel($xLabels, $type, $object, $field)
+    {
+        $options = $this->getSysOptions($type, $object, $field);
+        $xLabelValues = array();
+        foreach($xLabels as $index => $label)
+        {
+            $xLabelValues[$label] = isset($options[$label]) ? $options[$label] : $label;
+        }
+
+        return $xLabelValues;
     }
 
     /**
