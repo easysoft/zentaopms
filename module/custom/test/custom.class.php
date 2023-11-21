@@ -68,19 +68,19 @@ class customTest
     }
 
     /**
+     * 删除自定义项。
      * Test delete items.
      *
-     * @param  string   $paramString
+     * @param  string     $paramString
      * @access public
-     * @return int
+     * @return array|bool
      */
-    public function deleteItemsTest($paramString)
+    public function deleteItemsTest($paramString): array|bool
     {
-        $objects = $this->objectModel->deleteItems($paramString);
+        $result = $this->objectModel->deleteItems($paramString);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $result;
     }
 
     /**
