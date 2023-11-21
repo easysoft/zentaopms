@@ -150,6 +150,7 @@ class testcase extends control
 
         $cases  = array();
         $scenes = array();
+        $browseType = ($browseType == 'bymodule' and $this->session->caseBrowseType == 'all') ? $this->session->caseBrowseType : $browseType;
         if($browseType == 'all')
         {
             $pager->pageID = $pageID;   // 场景和用例混排，$pageID 可能大于场景分页后的总页数。在 pager 构造函数中会被设为 1，这里要重新赋值。
