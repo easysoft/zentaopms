@@ -128,8 +128,8 @@ class space extends control
         $defaultApp = '';
         foreach($pagedApps->apps as $app)
         {
-            if(in_array($app->id, array(29,51,52,53,54,142))) continue;
-            if(!$appID and $app->alias == 'GitLab') $defaultApp = $app->id;
+            if(strpos($app->name, 'zentao') === 0 || strpos($app->name, 'zdoo') === 0 || strpos($app->name, 'xuanxuan') === 0) continue;
+            if(!$appID && $app->alias == 'GitLab') $defaultApp = $app->id;
 
             $apps[$app->id] = $app->alias;
         }
