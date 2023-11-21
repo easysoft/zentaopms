@@ -522,9 +522,6 @@ class user extends control
      */
     public function create($deptID = 0)
     {
-        $this->lang->user->menu      = $this->lang->company->menu;
-        $this->lang->user->menuOrder = $this->lang->company->menuOrder;
-
         if(!empty($_POST))
         {
             if(strtolower($_POST['account']) == 'guest')
@@ -550,10 +547,7 @@ class user extends control
             if($group->role) $roleGroup[$group->role] = $group->id;
         }
 
-        $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->create;
-        $position[] = $this->lang->user->create;
-        $this->view->title     = $title;
-        $this->view->position  = $position;
+        $this->view->title     = $this->lang->user->create;
         $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
         $this->view->groupList = $groupList;
         $this->view->roleGroup = $roleGroup;
@@ -594,9 +588,6 @@ class user extends control
             if($group->role) $roleGroup[$group->role] = $group->id;
         }
 
-        $this->lang->user->menu      = $this->lang->company->menu;
-        $this->lang->user->menuOrder = $this->lang->company->menuOrder;
-
         /* Set custom. */
         foreach(explode(',', $this->config->user->availableBatchCreateFields) as $field)
         {
@@ -612,7 +603,7 @@ class user extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = join(',', $showFields);
 
-        $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchCreate;
+        $this->view->title      = $this->lang->user->batchCreate;
         $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
         $this->view->deptID     = $deptID;
         $this->view->groupList  = $groupList;
@@ -633,8 +624,6 @@ class user extends control
      */
     public function edit($userID)
     {
-        $this->lang->user->menu      = $this->lang->company->menu;
-        $this->lang->user->menuOrder = $this->lang->company->menuOrder;
         if(!empty($_POST))
         {
             $this->user->update($userID);
@@ -649,10 +638,7 @@ class user extends control
         $user       = $this->user->getById($userID, 'id');
         $userGroups = $this->loadModel('group')->getByAccount($user->account, count($userVisionList) > 1 ? true : false);
 
-        $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->edit;
-        $position[] = $this->lang->user->edit;
-        $this->view->title      = $title;
-        $this->view->position   = $position;
+        $this->view->title      = $this->lang->user->edit;
         $this->view->user       = $user;
         $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
         $this->view->userGroups = implode(',', array_keys($userGroups));
@@ -682,9 +668,6 @@ class user extends control
         }
         if(isset($_POST['users'])) $this->view->users = $this->dao->select('*')->from(TABLE_USER)->where('id')->in($this->post->users)->orderBy('id')->fetchAll('id');
 
-        $this->lang->user->menu      = $this->lang->company->menu;
-        $this->lang->user->menuOrder = $this->lang->company->menuOrder;
-
         /* Set custom. */
         foreach(explode(',', $this->config->user->availableBatchEditFields) as $field)
         {
@@ -700,7 +683,7 @@ class user extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = join(',', $showFields);
 
-        $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchEdit;
+        $this->view->title      = $this->lang->user->batchEdit;
         $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
         $this->view->rand       = $this->user->updateSessionRandom();
         $this->view->visionList = $this->user->getVisionList();
