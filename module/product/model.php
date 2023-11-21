@@ -1049,16 +1049,14 @@ class productModel extends model
 
         $stats = $this->getStatsProducts($productIdList, $programID == 0, $orderBy, $pager);
 
-
         $latestReleases       = $this->productTao->getStatisticByType($productIdList, 'latestReleases');
         $executionCountPairs  = $this->productTao->getExecutionCountPairs($productIdList);
         $coveragePairs        = $this->getCaseCoveragePairs($productIdList);
 
-        foreach($stats as $productID => $product)
+        foreach($stats as $product)
         {
-
-            $product->executions              = zget($executionCountPairs, $product->id, 0);
-            $product->coverage                = zget($coveragePairs, $product->id, 0);
+            $product->executions = zget($executionCountPairs, $product->id, 0);
+            $product->coverage   = zget($coveragePairs, $product->id, 0);
 
             $latestRelease = isset($latestReleases[$product->id]) ? $latestReleases[$product->id][0] : null;
             $product->latestRelease     = $latestRelease ? $latestRelease->name : '';
