@@ -64,7 +64,7 @@ class testreportModel extends model
      * 通过 id 获取测试报告。
      * Get report by id.
      *
-     * @param  int    $reportID
+     * @param  int          $reportID
      * @access public
      * @return object|false
      */
