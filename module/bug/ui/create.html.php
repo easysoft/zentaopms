@@ -335,6 +335,7 @@ formPanel
         formGroup
         (
             set::label($lang->bug->steps),
+            set::required(strpos(",{$this->config->bug->create->requiredFields},", ",steps,") !== false),
             editor
             (
                 set::name('steps'),

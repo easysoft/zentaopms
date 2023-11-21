@@ -117,6 +117,7 @@ detailBody
         section
         (
             set::title($lang->testcase->precondition),
+            set::required(strpos(",{$this->config->testcase->edit->requiredFields},", ",precondition,") !== false),
             formGroup
             (
                 textarea
@@ -195,6 +196,7 @@ detailBody
             item
             (
                 set::name($lang->testcase->module),
+                set::required(strpos(",{$this->config->testcase->edit->requiredFields},", ",module,") !== false),
                 formGroup
                 (
                     inputGroup
@@ -232,6 +234,7 @@ detailBody
             !$isLibCase ? item
             (
                 set::name($lang->testcase->story),
+                set::required(strpos(",{$this->config->testcase->edit->requiredFields},", ",story,") !== false),
                 formGroup
                 (
                     setID('storyIdBox'),
@@ -290,6 +293,7 @@ detailBody
             item
             (
                 set::name($lang->testcase->stage),
+                set::required(strpos(",{$this->config->testcase->edit->requiredFields},", ",stage,") !== false),
                 formGroup
                 (
                     picker
@@ -304,6 +308,7 @@ detailBody
             item
             (
                 set::name($lang->testcase->pri),
+                set::required(strpos(",{$this->config->testcase->edit->requiredFields},", ",pri,") !== false),
                 formGroup
                 (
                     priPicker
@@ -317,6 +322,7 @@ detailBody
             item
             (
                 set::name($lang->testcase->status),
+                set::required(strpos(",{$this->config->testcase->edit->requiredFields},", ",status,") !== false),
                 !$forceNotReview && $case->status == 'wait' ? $lang->testcase->statusList[$case->status] :
                 formGroup
                 (
@@ -324,6 +330,7 @@ detailBody
                     (
                         set::name('status'),
                         set::items($lang->testcase->statusList),
+                        set::required(strpos(",{$this->config->testcase->edit->requiredFields},", ",status,") !== false),
                         set::value($case->status)
                     )
                 )
@@ -331,6 +338,7 @@ detailBody
             item
             (
                 set::name($lang->testcase->keywords),
+                set::required(strpos(",{$this->config->testcase->edit->requiredFields},", ",keywords,") !== false),
                 formGroup
                 (
                     input
