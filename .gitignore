@@ -36,6 +36,7 @@ test/www
 .scannerwork
 bin/roadrunner/rr
 rr
+build/*.gz
 
 **/test/model/data/*.yaml
 **/test/model/data/sql/*.sql

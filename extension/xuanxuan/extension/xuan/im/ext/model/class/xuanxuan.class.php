@@ -86,6 +86,18 @@ class xuanxuanIm extends imModel
         }
         $server = rtrim($server, '/');
 
+        /* Try to fix server url when server is still localhost. */
+        $serverURLComponents = parse_url($server);
+        if(!empty($serverURLComponents['host']) && in_array($serverURLComponents['host'], array('127.0.0.1', 'localhost', '::1')))
+        {
+            $loginURL = $this->loadModel('setting')->getItem("owner=system&module=im&section=loginurl&key={$this->app->session->userID}");
+            if(!empty($loginURL))
+            {
+                $loginURLComponents = parse_url($loginURL);
+                if(!empty($loginURLComponents['host'])) $server = substr_replace($server, $loginURLComponents['host'], strpos($server, $serverURLComponents['host']), strlen($serverURLComponents['host']));
+            }
+        }
+
         return $server;
     }
 
