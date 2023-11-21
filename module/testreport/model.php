@@ -204,12 +204,12 @@ class testreportModel extends model
             ->orderBy('date')
             ->fetchAll('id');
 
-        $failResults = 0;
-        $runCasesNum = array();
-        foreach($results as $result) $runCasesNum[$result->run] = $result->caseResult;
-        foreach($runCasesNum as $lastResult) if($lastResult == 'fail') $failResults++;
+        $failResults     = 0;
+        $runCasesResults = array();
+        foreach($results as $result) $runCasesResults[$result->run] = $result->caseResult;
+        foreach($runCasesResults as $lastResult) if($lastResult == 'fail') $failResults++;
 
-        return sprintf($this->lang->testreport->caseSummary, $caseCount, count($runCasesNum), count($results), $failResults);
+        return sprintf($this->lang->testreport->caseSummary, $caseCount, count($runCasesResults), count($results), $failResults);
     }
 
     /**
