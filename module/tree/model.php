@@ -1332,7 +1332,7 @@ class treeModel extends model
         $data->id     = $parent ? uniqid() : $module->id;
         $data->parent = $parent ? $parent : $module->parent;
         $data->name   = $module->name;
-        $data->url    = html::a(helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}"), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
+        $data->url    = helper::createLink('testtask', 'cases', "taskID=$extra&type=byModule&module={$module->id}");
 
         return $data;
     }
