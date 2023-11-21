@@ -1309,7 +1309,7 @@ class project extends control
      */
     public function activate(int $projectID)
     {
-        $project   = $this->project->getByID($projectID);
+        $project = $this->project->getByID($projectID);
 
         if(!empty($_POST))
         {

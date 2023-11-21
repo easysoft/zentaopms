@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$linkParams = "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type={key}" . ($type == 'bysearch' ? '' : "&param=$param");
+$linkParams = "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type={key}" . ($type == 'bysearch' ? '' : "&param=$param") . "&recTotal={$pager->recTotal}&recPerpage={$pager->recPerPage}";
 featureBar
 (
     set::current($type),
@@ -29,14 +29,16 @@ toolbar
         'url'   => createLink('bug', 'export', "productID={$productID}&orderBy=$orderBy&browseType=&projectID={$project->id}"),
         'data-toggle' => 'modal'
     ))) : null,
-    $canCreate ? item(set(array
+    $canCreate ? item
     (
-        'text' => $lang->bug->create,
-        'icon' => 'plus',
-        'type' => 'primary',
-        'url'  => createLink('bug', 'create', "productID={$productID}&branch={$branchID}&extras=projectID={$project->id}")
-    )),
-    setData('app', 'project')
+        set(array
+        (
+            'text' => $lang->bug->create,
+            'icon' => 'plus',
+            'type' => 'primary',
+            'url'  => createLink('bug', 'create', "productID={$productID}&branch={$branchID}&extras=projectID={$project->id}")
+        )),
+        setData('app', 'project')
     ) : null
 );
 
@@ -51,7 +53,7 @@ sidebar
     )))
 );
 
-$canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
+$canBatchAssignTo = hasPriv('bug', 'batchAssignTo');
 
 $config->bug->dtable->fieldList['module']['map']    = $modulePairs;
 $config->bug->dtable->fieldList['story']['map']     = $stories;
