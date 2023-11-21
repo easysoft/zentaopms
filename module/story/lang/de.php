@@ -270,11 +270,11 @@ $lang->story->sourceList['bug']        = 'Bug';
 $lang->story->sourceList['forum']      = 'Forum';
 $lang->story->sourceList['other']      = 'Andere';
 
-$lang->story->priList[''] = '';
-$lang->story->priList[1]  = '1';
-$lang->story->priList[2]  = '2';
-$lang->story->priList[3]  = '3';
-$lang->story->priList[4]  = '4';
+$lang->story->priList[0] = '';
+$lang->story->priList[1] = '1';
+$lang->story->priList[2] = '2';
+$lang->story->priList[3] = '3';
+$lang->story->priList[4] = '4';
 
 $lang->story->changeList = array();
 $lang->story->changeList['no']  = 'Cancel';
