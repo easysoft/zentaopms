@@ -22,15 +22,17 @@ jsVar('pageExecSummary', $lang->execution->pageExecSummary);
 jsVar('checkedExecSummary', $lang->execution->checkedExecSummary);
 
 $footToolbar = array();
-$canBatchEdit         = common::hasPriv('execution', 'batchEdit');
-$canBatchChangeStatus = common::hasPriv('execution', 'batchChangeStatus');
+$canBatchEdit         = hasPriv('execution', 'batchEdit');
+$canBatchChangeStatus = hasPriv('execution', 'batchChangeStatus');
 $canBatchAction       = $canBatchEdit || $canBatchChangeStatus;
 if($canBatchAction)
 {
     $editClass = $canBatchEdit ? 'batch-btn' : 'disabled';
-    $footToolbar['items'][] = array(
+    $footToolbar['items'][] = array
+    (
         'type'  => 'btn-group',
-        'items' => array(
+        'items' => array
+        (
             array('text' => $lang->edit, 'className' => "secondary size-sm {$editClass}", 'btnType' => 'primary', 'data-url' => createLink('execution', 'batchEdit')),
         )
     );
@@ -56,6 +58,12 @@ $fnGenerateCols = function() use ($config, $project)
     if(in_array($project->model, array('waterfall', 'waterfallplus')))
     {
         $fieldList['actions']['actionsMap']['edit']['url'] = createLink('programplan', 'edit', "stageID={rawID}&projectID={projectID}");
+    }
+
+    if(!$this->cookie->showTask)
+    {
+        $fieldList['name']['type'] = 'title';
+        unset($fieldList['name']['nestedToggle']);
     }
 
     return array_values($fieldList);
@@ -126,12 +134,7 @@ dtable
     set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.id.indexOf('pid') > -1;}")),
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(this, checkedIDList);}")),
     set::footToolbar($footToolbar),
-    set::footPager(
-        usePager
-        (
-            array('linkCreator' => helper::createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}"))
-        )
-    ),
+    set::footPager(usePager(array('linkCreator' => createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")))),
     set::emptyTip($lang->execution->noExecution),
     set::createTip($isStage ? $lang->programplan->create : $lang->execution->create),
     set::createLink(hasPriv('execution', 'create') ? $createLink : '')
