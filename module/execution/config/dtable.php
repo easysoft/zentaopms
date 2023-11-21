@@ -209,7 +209,7 @@ $config->execution->importBug->dtable->fieldList['taskPri']['type']         = 'h
 $config->execution->importBug->dtable->fieldList['taskPri']['width']        = 68;
 $config->execution->importBug->dtable->fieldList['taskPri']['sortType']     = false;
 $config->execution->importBug->dtable->fieldList['taskPri']['type']         = 'control';
-$config->execution->importBug->dtable->fieldList['taskPri']['control']      = 'select';
+$config->execution->importBug->dtable->fieldList['taskPri']['control']      = 'picker';
 $config->execution->importBug->dtable->fieldList['taskPri']['controlItems'] = $lang->task->priList;
 
 $config->execution->importBug->dtable->fieldList['assignedTo']['title']    = $lang->bug->assignedTo;
