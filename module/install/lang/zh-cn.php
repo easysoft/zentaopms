@@ -24,6 +24,7 @@ $lang->install->keepInstalling   = '继续安装当前版本';
 $lang->install->seeLatestRelease = '看看最新的版本';
 $lang->install->welcome          = '欢迎使用禅道项目管理软件！';
 $lang->install->license          = '禅道项目管理软件授权协议';
+$lang->install->devopsDesc       = 'DevOps平台底层基于Docker、K8s等云原生技术构建，内置应用市场，支持快速安装代码库、流水线、制品库等工具，轻松构建DevOps工具链。';
 $lang->install->desc             = <<<EOT
 禅道项目管理软件(ZenTaoPMS)是一款国产的，基于<a href='http://zpl.pub/page/zplv12.html' target='_blank'>ZPL</a>或<a href='https://www.gnu.org/licenses/agpl-3.0.en.html' target='_blank'>AGPL</a>双授权协议，开源免费的项目管理软件，它集产品管理、项目管理、测试管理于一体，同时还包含了事务管理、组织管理等诸多功能，是中小型企业项目管理的首选。
 
@@ -271,6 +272,11 @@ $lang->install->groupList['LITEPROJECT']['name']  = '项目管理';
 $lang->install->groupList['LITEPROJECT']['desc']  = '运营管理界面用户分组';
 $lang->install->groupList['LITETEAM']['name']     = '团队成员';
 $lang->install->groupList['LITETEAM']['desc']     = '运营管理界面用户分组';
+
+$lang->install->groupList['IPDPRODUCTPLAN']['name'] = '产品规划人员';
+$lang->install->groupList['IPDDEMAND']['name']      = '需求分析人员';
+$lang->install->groupList['IPDPMT']['name']         = 'PMT团队人员';
+$lang->install->groupList['IPDADMIN']['name']       = '管理人员';
 
 $lang->install->cronList[''] = '监控定时任务';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = '更新燃尽图';
