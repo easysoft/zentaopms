@@ -28,7 +28,7 @@ class taskModel extends model
 
         if(strpos($this->config->task->activate->requiredFields, 'comment') !== false && !$comment)
         {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
+            dao::$errors['comment'] = sprintf($this->lang->error->notempty, $this->lang->comment);
             return false;
         }
 
@@ -331,6 +331,14 @@ class taskModel extends model
      */
     public function afterUpdate(object $oldTask, object $task): void
     {
+        /* Update children task. */
+        if(isset($task->execution) && $task->execution != $oldTask->execution)
+        {
+            $newExecution  = $this->loadModel('execution')->getByID((int)$task->execution);
+            $task->project = $newExecution->project;
+            $this->dao->update(TABLE_TASK)->set('execution')->eq($task->execution)->set('module')->eq($task->module)->set('project')->eq($task->project)->where('parent')->eq($task->id)->exec();
+        }
+
         /* Multi-task change to normal task. */
         if($task->mode == 'single') $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
 
@@ -2720,8 +2728,9 @@ class taskModel extends model
         }
 
         $requiredFields = $this->taskTao->getRequiredFields4Edit($task);
-        $this->taskTao->doUpdate($task, $oldTask, $requiredFields);
+        if(dao::isError()) return false;
 
+        $this->taskTao->doUpdate($task, $oldTask, $requiredFields);
         if(dao::isError()) return false;
 
         $this->afterUpdate($oldTask, $task);

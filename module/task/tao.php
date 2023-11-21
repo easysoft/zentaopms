@@ -548,14 +548,6 @@ class taskTao extends taskModel
         $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
         if($this->isNoStoryExecution($execution)) $task->story = 0;
 
-        /* Update children task. */
-        if(isset($task->execution) && $task->execution != $oldTask->execution)
-        {
-            $newExecution  = $this->loadModel('execution')->getByID((int)$task->execution);
-            $task->project = $newExecution->project;
-            $this->dao->update(TABLE_TASK)->set('execution')->eq($task->execution)->set('module')->eq($task->module)->set('project')->eq($task->project)->where('parent')->eq($task->id)->exec();
-        }
-
         /* Set the datetime and operator when the task is modified. */
         if(empty($task->lastEditedDate) || empty($task->lastEditedBy))
         {
@@ -867,22 +859,16 @@ class taskTao extends taskModel
      * @access protected
      * @return string
      */
-    protected function getRequiredFields4Edit(object $task): string
+    protected function getRequiredFields4Edit(object $task): string|bool
     {
         $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
 
         $requiredFields = ',' . $this->config->task->edit->requiredFields . ',';
         if($this->isNoStoryExecution($execution)) $requiredFields = str_replace(',story,', ',', $requiredFields);
 
-        if($task->status != 'cancel' && strpos($requiredFields, ',estimate,') !== false)
-        {
-            if(empty($task->estimate)) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->task->estimate);
-            $requiredFields = str_replace(',estimate,', ',', $requiredFields);
-        }
-
         if(strpos(',doing,pause,', $task->status) && empty($task->left))
         {
-            dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]);
+            dao::$errors['left'] = sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]);
             return false;
         }
 

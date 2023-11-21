@@ -411,16 +411,19 @@ detailBody
             (
                 set::name($lang->task->estimate),
                 set::required(strpos(",{$this->config->task->edit->requiredFields},", ",estimate,") !== false),
-                inputControl
+                formGroup
                 (
-                    input
+                    inputControl
                     (
-                        set::name('estimate'),
-                        set::value($task->estimate),
-                        !empty($task->team) ? set::readonly(true) : null
-                    ),
-                    to::suffix($lang->task->suffixHour),
-                    set::suffixWidth(20)
+                        input
+                        (
+                            set::name('estimate'),
+                            set::value($task->estimate),
+                            !empty($task->team) ? set::readonly(true) : null
+                        ),
+                        to::suffix($lang->task->suffixHour),
+                        set::suffixWidth(20)
+                    )
                 )
             ),
             item
@@ -448,16 +451,19 @@ detailBody
             item
             (
                 set::name($lang->task->left),
-                inputControl
+                formGroup
                 (
-                    input
+                    inputControl
                     (
-                        set::name('left'),
-                        set::value($task->left),
-                        !empty($task->team) ? set::readonly(true) : null
-                    ),
-                    to::suffix($lang->task->suffixHour),
-                    set::suffixWidth(20)
+                        input
+                        (
+                            set::name('left'),
+                            set::value($task->left),
+                            !empty($task->team) ? set::readonly(true) : null
+                        ),
+                        to::suffix($lang->task->suffixHour),
+                        set::suffixWidth(20)
+                    )
                 )
             )
         ),
