@@ -139,9 +139,10 @@ class header extends wg
 
         if(!isset($app->user)) return;
 
-        $user    = $app->user;
-        $isGuest = $user->account == 'guest';
-        $items   = array();
+        $user       = $app->user;
+        $isGuest    = $user->account == 'guest';
+        $items      = array();
+        $modalClass = (isset($config->zin->mode) && $config->zin->mode == 'compatible') ? 'open-in-parent' : null;
 
         if(!$isGuest)
         {
@@ -154,7 +155,7 @@ class header extends wg
                 'title'        => empty($user->realname) ? $user->account : $user->realname,
                 'titleClass'   => 'text-lg',
                 'subtitle'     => $noRole ? null : $lang->user->roleList[$user->role],
-                'innerClass'   => 'open-in-parent',
+                'innerClass'   => $modalClass,
                 'data-toggle'  => 'modal',
                 'data-size'    => 700,
                 'data-id'      => 'profile',
@@ -168,7 +169,7 @@ class header extends wg
                 'url'         => createLink('my', 'profile', '', '', true),
                 'icon'        => 'account',
                 'text'        => $lang->profile,
-                'innerClass'  => 'open-in-parent',
+                'innerClass'  => $modalClass,
                 'data-toggle' => 'modal',
                 'data-size'   => 700,
                 'data-id'     => 'profile'
@@ -190,7 +191,7 @@ class header extends wg
                         'data-headerless' => true,
                         'data-backdrop'   => true,
                         'data-keyboard'   => true,
-                        'innerClass'      => 'open-in-parent',
+                        'innerClass'      => $modalClass,
                         'data-toggle'     => 'modal'
                     );
                 }
@@ -201,7 +202,7 @@ class header extends wg
                     'icon'        => 'controls',
                     'text'        => $lang->preference,
                     'data-width'  => 700,
-                    'innerClass'  => 'open-in-parent',
+                    'innerClass'  => $modalClass,
                     'data-toggle' => 'modal'
                 );
             }
@@ -213,7 +214,7 @@ class header extends wg
                     'url'         => createLink('my', 'changepassword', '', '', true),
                     'icon'        => 'cog-outline',
                     'text'        => $lang->changePassword,
-                    'innerClass'  => 'open-in-parent',
+                    'innerClass'  => $modalClass,
                     'data-toggle' => 'modal',
                     'data-size'   => 'sm'
                 );
@@ -245,12 +246,12 @@ class header extends wg
         $helpItems = array();
         $manualUrl = ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme'];
         $helpItems[] = array('text' => $lang->manual, 'url' => $manualUrl, 'attrs' => array('data-app' => 'help'));
-        $helpItems[] = array('text' => $lang->changeLog, 'url' => createLink('misc', 'changeLog'), 'data-toggle' => 'modal', 'innerClass' => 'open-in-parent');
+        $helpItems[] = array('text' => $lang->changeLog, 'url' => createLink('misc', 'changeLog'), 'data-toggle' => 'modal', 'innerClass' => $modalClass);
         $items[] = array('text' => $lang->help, 'icon' => 'help', 'items' => $helpItems);
 
         /* printClientLink */
 
-        $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'), 'data-toggle' => 'modal', 'innerClass' => 'open-in-parent');
+        $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'), 'data-toggle' => 'modal', 'innerClass' => $modalClass);
         $items[] = array('type' => 'html', 'className' => 'menu-item', 'html' => $lang->designedByAIUX);
 
         $items[] = array('type' => 'divider');
