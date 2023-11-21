@@ -365,6 +365,7 @@ formPanel
     (
         set::label($lang->execution->days),
         set::width('1/2'),
+        set::required(strpos(",{$this->config->execution->create->requiredFields},", ",days,") !== false),
         inputGroup
         (
             setClass('has-suffix'),
@@ -417,45 +418,37 @@ formPanel
         (
             set::width('1/4'),
             set::label($lang->execution->PM),
-            picker
-            (
-                set::name('PM'),
-                set::items($pmUsers),
-                set::value(empty($copyExecution) ? '' : $copyExecution->PM)
-            )
+            set::control('picker'),
+            set::name('PM'),
+            set::items($pmUsers),
+            set::value(empty($copyExecution) ? '' : $copyExecution->PM)
         ),
         formGroup
         (
             set::width('1/4'),
             set::label($lang->execution->PO),
-            picker
-            (
-                set::name('PO'),
-                set::items($poUsers),
-                set::value(empty($copyExecution) ? '' : $copyExecution->PO)
-            )
+            set::control('picker'),
+            set::name('PO'),
+            set::items($poUsers),
+            set::value(empty($copyExecution) ? '' : $copyExecution->PO)
         ),
         formGroup
         (
             set::width('1/4'),
             set::label($lang->execution->QD),
-            picker
-            (
-                set::name('QD'),
-                set::items($qdUsers),
-                set::value(empty($copyExecution) ? '' : $copyExecution->QD)
-            )
+            set::control('picker'),
+            set::name('QD'),
+            set::items($qdUsers),
+            set::value(empty($copyExecution) ? '' : $copyExecution->QD)
         ),
         formGroup
         (
             set::width('1/4'),
             set::label($lang->execution->RD),
-            picker
-            (
-                set::name('RD'),
-                set::items($rdUsers),
-                set::value(empty($copyExecution) ? '' : $copyExecution->RD)
-            )
+            set::control('picker'),
+            set::name('RD'),
+            set::items($rdUsers),
+            set::value(empty($copyExecution) ? '' : $copyExecution->RD)
         )
     ),
     formGroup

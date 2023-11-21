@@ -70,18 +70,18 @@ if(!empty($needProcess['updateFile']))
         col
         (
             setClass('w-full justify-center text-center'),
-            set::id('resultBox')
+            setID('resultBox')
         )
     );
 }
 
 div
 (
-    set::id('main'),
+    setID('main'),
     setClass('pt-8'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
         setClass('canvas px-1 mt-8 mx-auto pb-8'),
         width('800px'),
         col
@@ -108,7 +108,7 @@ div
                 btn
                 (
                     setClass('px-8'),
-                    set::id('tohome'),
+                    setID('tohome'),
                     set::target('_self'),
                     set::url('index.php'),
                     set::type('primary'),

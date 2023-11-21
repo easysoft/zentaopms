@@ -121,6 +121,7 @@ formPanel
     formGroup
     (
         set::label($lang->productplan->desc),
+        set::required(strpos(",{$this->config->productplan->edit->requiredFields},", ",desc,") !== false),
         editor
         (
             set::name('desc'),

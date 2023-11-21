@@ -52,11 +52,10 @@ foreach($repoList as $repo)
     if(is_object($repo->lastSubmitTime)) $repo->lastSubmitTime = $repo->lastSubmitTime->time;
 }
 
-$config->repo->dtable->fieldList['name']['link']                     = $this->createLink('repo', 'browse', "repoID={id}&branchID=&objectID={$objectID}");
-$config->repo->dtable->fieldList['actions']['list']['edit']['url']   = $this->createLink('repo', 'edit', "repoID={id}&objectID={$objectID}");
-$config->repo->dtable->fieldList['actions']['list']['delete']['url'] = $this->createLink('repo', 'delete', "repoID={id}&objectID={$objectID}&confirm=yes");
+$config->repo->dtable->fieldList['name']['link']                   = $this->createLink('repo', 'browse', "repoID={id}&branchID=&objectID={$objectID}");
+$config->repo->dtable->fieldList['actions']['list']['edit']['url'] = $this->createLink('repo', 'edit', "repoID={id}&objectID={$objectID}");
 
-$repos = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
+$repos         = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
 $queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bySearch&param={queryID}");
 
 \zin\featureBar

@@ -76,6 +76,7 @@ formPanel
     formGroup
     (
         set::label($lang->release->desc),
+        set::required(strpos(",{$this->config->release->edit->requiredFields},", ",desc,") !== false),
         editor
         (
             set::name('desc'),

@@ -72,11 +72,7 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $exec
                 'help',
                 setID('methodTip'),
                 setClass('ml-2 text-gray'),
-                set('data-toggle', 'tooltip'),
-                set('data-title', $lang->programplan->methodTip),
-                set('data-placement', 'right'),
-                set('data-type', 'white'),
-                set('data-class-name', 'text-gray border border-light')
+                setData(array('toggle' => 'tooltip', 'title' => $lang->programplan->methodTip, 'placement' => 'right', 'type' => 'white', 'class-name' => 'text-gray border border-light')),
             );
 
     $items[] = tooltip(
@@ -84,7 +80,7 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $exec
         set::title($lang->programplan->methodTip),
         set::placement('right'),
         set::type('white'),
-        set::className('text-darker border border-light')
+        setClass('text-darker border border-light')
     );
 
     return div
@@ -249,12 +245,12 @@ featureBar(li
 
 toolbar
 (
-    btn(setClass('btn primary open-url'), set::icon('back'), set('data-back', 'APP'), $lang->goback)
+    btn(setClass('btn primary open-url'), set::icon('back'), setData(array('back', 'APP')), $lang->goback)
 );
 
 formBatchPanel
 (
-    set::id('dataform'),
+    setID('dataform'),
     set::onRenderRow(jsRaw('window.onRenderRow')),
     to::headingActions(array($fnGenerateSubPlanManageFields())),
     set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'createFields')),

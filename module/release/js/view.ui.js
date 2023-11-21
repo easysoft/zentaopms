@@ -89,32 +89,43 @@ window.unlinkObject = function(objectType, objectID)
     }
 }
 
-window.showLink = function(obj)
+window.showLink = function(type, params, onlyUpdateTable)
 {
-    let link        = $(obj).data('url');
-    let $tabContent = $(obj);
 
-    if($(obj).hasClass('link'))
-    {
-        $tabContent = $(obj).closest('.tab-pane');
-    }
-    else
-    {
-        link = $(obj).find('.link').data('url');
-    }
-    $tabContent.load(link);
-};
-
-if(initLink == 'true')
-{
-    let idName = '#finishedStory';
+    let relatedParams = 'releaseID=' + releaseID + (params || '&browseType=&param=');
+    let idName        = 'finishedStory';
     if(type == 'bug')
     {
-        idName = '#resolvedBug';
+        idName         = 'resolvedBug';
+        relatedParams += '&type=bug';
     }
     else if(type == 'leftBug')
     {
-        idName = '#leftBug';
+        idName         = 'leftBug';
+        relatedParams += '&type=leftBug';
     }
-    window.showLink($(idName));
-}
+
+    const url = $.createLink(releaseModule, type === 'story' ? 'linkStory' : 'linkBug', relatedParams);
+    if(onlyUpdateTable)
+    {
+        loadComponent($('#' + idName).find('.dtable').attr('id'), {url: url, component: 'dtable', partial: true});
+        return;
+    }
+
+    loadTarget({url: url, target: idName});
+};
+
+$(function()
+{
+    if(initLink == 'true')
+    {
+        window.showLink(type, linkParams);
+    }
+})
+
+window.onSearchLinks = function(type, result)
+{
+    const params = $.parseLink(result.load).vars[3];
+    showLink(type, params ? atob(params[1]) : null, true);
+    return false;
+};

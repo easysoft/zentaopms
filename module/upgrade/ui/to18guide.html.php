@@ -72,10 +72,10 @@ foreach($config->custom->allFeatures as $feature)
 
 div
 (
-    set::id('main'),
+    setID('main'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
         formPanel
         (
             setClass('bg-canvas'),
@@ -150,7 +150,7 @@ div
                             btn
                             (
                                 on::click('selectUsage'),
-                                set::id('light'),
+                                setID('light'),
                                 set::btnType('submit'),
                                 setClass('px-4'),
                                 $lang->custom->useLight
@@ -161,7 +161,7 @@ div
                             btn
                             (
                                 on::click('selectUsage'),
-                                set::id('ALM'),
+                                setID('ALM'),
                                 set::btnType('submit'),
                                 setClass('px-4'),
                                 $lang->custom->useALM

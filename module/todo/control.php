@@ -343,20 +343,9 @@ class todo extends control
         }
 
         $this->todo->delete(TABLE_TODO, $todoID);
-
-        if(helper::isAjaxRequest())
-        {
-            $response = array('result' => 'success', 'message' => '', 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo'));
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            return $this->send($response);
-        }
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
@@ -389,7 +378,7 @@ class todo extends control
             if($todo->type == 'story') $app = 'product';
 
             $cancelURL = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
-            return $this->send(array('result' => 'success', 'open' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'url' => array('url' => $confirmURL, 'app' => $app), 'canceled' => $cancelURL), 'closeModal' => true));
+            return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->todo->{$confirmNote}, $todo->objectID), 'confirmed' => array('url' => $confirmURL, 'app' => $app), 'canceled' => array('url' => $cancelURL)), 'closeModal' => true));
         }
 
         if(defined('RUN_MODE') && RUN_MODE == 'api')

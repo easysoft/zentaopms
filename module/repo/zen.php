@@ -835,40 +835,33 @@ class repoZen extends repo
      * 为git类型版本库设置分支和tag。
      * Set branch or tag for git.
      *
-     * @param  object     $repo
-     * @param  string     $branchID
-     * @param  array|bool $branchInfo
-     * @param  array|bool $tagInfo
+     * @param  object    $repo
+     * @param  string    $branchID
      * @access protected
      * @return array
      */
-    protected function setBranchTag(object $repo, string $branchID, array|bool $branchInfo = false, array|bool $tagInfo = false): array
+    protected function setBranchTag(object $repo, string $branchID): array
     {
-        $repoID   = $repo->id;
-        $branches = $tags = $branchesAndTags = array();
         if(in_array($repo->SCM, $this->config->repo->gitTypeList))
         {
+            if($repo->SCM == 'Gitlab') list($branchInfo, $tagInfo) = $this->getBrowseInfo($repo);
+
             $scm = $this->app->loadClass('scm');
             $scm->setEngine($repo);
             $branches = isset($branchInfo) && $branchInfo !== false ? $branchInfo : $scm->branch();
             $initTags = isset($tagInfo) && $tagInfo !== false ? $tagInfo : $scm->tags('');
             foreach($initTags as $tag) $tags[$tag] = $tag;
-            $branchesAndTags = $branches + $tags;
 
-            if(empty($branchID) and $this->cookie->repoBranch and $this->session->repoID == $repoID) $branchID = $this->cookie->repoBranch;
+            if(empty($branchID) and $this->cookie->repoBranch && $this->session->repoID == $repo->id) $branchID = $this->cookie->repoBranch;
+            if(!isset($branches[$branchID]) && !isset($tags[$branchID])) $branchID = (string)key($branches);
             if($branchID) $this->repo->setRepoBranch($branchID);
-            if(!isset($branchesAndTags[$branchID]))
-            {
-                $branchID = (string)key($branches);
-                $this->repo->setRepoBranch($branchID);
-            }
 
-            return array($branchID, $branches, $tags, $branchesAndTags);
+            return array($branchID, $branches, $tags);
         }
         else
         {
             $this->repo->setRepoBranch('');
-            return array('', array(), array(), array());
+            return array('', array(), array());
         }
     }
 

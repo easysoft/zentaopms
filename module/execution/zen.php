@@ -53,7 +53,7 @@ class executionZen extends execution
         }
         $tree       = $moduleID ? $this->tree->getByID($moduleID) : '';
         $showModule = !empty($this->config->execution->bug->showModule) ? $this->config->execution->bug->showModule : '';
-        $build      = !empty($build) ? $this->loadModel('build')->getById($build) : null;
+        $build      = !empty($build) ? $this->loadModel('build')->getById((int)$build) : null;
 
         /* Assign. */
         $this->view->title           = $execution->name . $this->lang->colon . $this->lang->execution->bug;

@@ -52,8 +52,10 @@ class metric extends control
         {
             $metrics = $this->metric->getList($scope, 'released');
         }
+        $groupMetrics = $this->metric->groupMetricByObject($metrics);
+
         $current = $this->metric->getByID($metricID);
-        if(empty($current)) $current = current($metrics);
+        if(empty($current) and $groupMetrics) $current = current(current($groupMetrics));
 
         $resultHeader = array();
         $resultData   = array();
@@ -67,6 +69,7 @@ class metric extends control
         }
 
         $this->view->metrics       = $metrics;
+        $this->view->groupMetrics  = $groupMetrics;
         $this->view->current       = $current;
         $this->view->metricList    = $this->lang->metric->metricList;
         $this->view->scope         = $scope;
@@ -235,6 +238,17 @@ class metric extends control
         foreach($options as $value => $option) $optionList[] = array('value' => $value, 'text' => $option, 'keys' => $option);
 
         return $this->send($optionList);
+    }
+
+    public function ajaxGetMetricSideTree()
+    {
+        $metricIDList = explode(',', $_POST['metricIDList']);
+        $checkedList  = explode(',', $_POST['checkedList']);
+        $metrics = $this->metric->getMetricsByIDList($metricIDList);
+
+        $this->view->groupMetrics = $this->metric->groupMetricByObject($metrics);
+        $this->view->checkedList  = $checkedList;
+        $this->display();
     }
 
     public function ajaxGetMultipleMetricBox($metricID)

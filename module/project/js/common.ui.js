@@ -215,41 +215,46 @@ window.toggleMultiple = function(e)
 }
 
 /**
- * Append prompt when the budget exceeds the parent project set.
+ * 检查项目预算是否超出父项目集剩余预算。
+ * Check if the project budget exceeds the remaining budget of the parent program.
  *
- * @param  int    $projectID
+ * @param  int    projectID
  * @access public
  * @return void
  */
-function budgetOverrunTips()
+function checkBudget(projectID)
 {
-    if(window.ignoreTips['beyondBudgetTip']) return;
+    if(ignoreTips['budgetTip']) return;
 
-    var selectedProgramID = $('#parent').val();
-    var budget            = $('#budget').val();
-
-    if(selectedProgramID == 0)
+    const programID = $('[name=parent]').val();
+    if(programID == 0)
     {
-        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').parent().parent().remove();
+        $('#budget').removeAttr('placeholder');
+        $('#budgetTip').addClass('hidden');
         return false;
     }
 
     if(typeof(projectID) == 'undefined') projectID = 0;
-    $.get($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + selectedProgramID), function(data)
+
+    $.get($.createLink('project', 'ajaxGetProjectFormInfo', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + programID), function(response)
     {
-        var data = JSON.parse(data);
+        const data = JSON.parse(response);
         if(typeof(data.availableBudget) == 'undefined') return;
 
-        var tip = "";
-        if(budget != 0 && budget !== null && budget > data.availableBudget) tip = "<tr><td></td><td colspan='2'><span id='beyondBudgetTip' class='text-remind'><p>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget.toFixed(2) + "</p><p id='ignore' onclick='ignoreTip(this)'>" + ignore + "</p></span></td></tr>"
-        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').parent().parent().remove();
-        $('#budgetBox').parent().parent().after(tip);
-        $('#beyondBudgetTip').parent().css('line-height', '0');
+        const budget = $('#budget').val() * budgetUnitValue;
+        if(budget != 0 && budget !== null && budget > data.availableBudget)
+        {
+            const currency = currencySymbol[data.budgetUnit];
+            const availableBudget = (data.availableBudget / budgetUnitValue).toFixed(2);
+            $('#budget').attr('placeholder', parentBudget + currency + availableBudget);
+            $('#budgetTip').removeClass('hidden');
+            $('#budgetTip').find('#currency').text(currency);
+            $('#budgetTip').find('#parentBudget').text(availableBudget);
+            $('#budgetTip').find('#budgetUnit').text(budgetUnitLabel);
+            return;
+        }
 
-        var placeholder = '';
-        if(selectedProgramID) placeholder = parentBudget + currencySymbol[data.budgetUnit] + data.availableBudget.toFixed(2);
-        if($('#budget').attr('placeholder')) $('#budget').removeAttr('placeholder')
-        $('#budget').attr('placeholder', placeholder);
+        $('#budgetTip').addClass('hidden');
     });
 }
 

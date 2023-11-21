@@ -30,7 +30,7 @@ modalHeader
 
 formPanel
 (
-    set::id('editForm'),
+    setID('editForm'),
     set::ajax(array('beforeSubmit' => jsRaw("editStage"))),
     set::submitBtnText($lang->save),
     formGroup
@@ -97,7 +97,7 @@ formPanel
                 setClass('flex self-center w-full'),
                 $enableOptionalAttr ? picker
                 (
-                    set::id('attribute'),
+                    setID('attribute'),
                     set::name('attribute'),
                     set::items($typeList),
                     set::value($plan->attribute),

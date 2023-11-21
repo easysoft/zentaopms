@@ -279,7 +279,7 @@ window.budgetOverrunTips = function(e)
     if(window.ignoreTips['beyondBudgetTip']) return;
 
     var selectedProgramID = $('#parent').zui('picker').$.state.value;
-    var budget            = $('#budget').zui('picker').$.state.value;
+    var budget            = $('#budget').val();
     if(selectedProgramID == 0)
     {
         if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').closest('.form-row').remove();

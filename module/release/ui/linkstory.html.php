@@ -22,12 +22,13 @@ searchForm
 (
     set::module('story'),
     set::simple(true),
-    set::show(true)
+    set::show(true),
+    set::onSearch(jsRaw("window.onSearchLinks.bind(null, 'story')"))
 );
 
 dtable
 (
-    set::id('unlinkStoryList'),
+    setID('unlinkStoryList'),
     set::userMap($users),
     set::cols($cols),
     set::data($allStories),
@@ -42,6 +43,7 @@ dtable
             'data-url'  => createLink($buildModule, 'linkStory', "releaseID={$release->id}&browseType={$browseType}&param={$param}"),
         ))
     )),
+    set::extraHeight('+144'),
     set::footer(array('checkbox', 'toolbar', array('html' => html::a(createLink($buildModule, 'view', "releaseID={$release->id}&type=story"), $lang->goback, '', "class='btn size-sm'")), 'flex', 'pager')),
     set::footPager(usePager()),
 );

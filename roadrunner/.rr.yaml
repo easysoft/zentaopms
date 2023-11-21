@@ -7,6 +7,7 @@ service:
     exec_timeout: 0
     restart_sec: 1
     relay: pipes
+    user: "nobody"
 
   cron_consumer:
     command: php consumer.php
@@ -14,3 +15,4 @@ service:
     exec_timeout: 0
     restart_sec: 1
     relay: pipes
+    user: "nobody"

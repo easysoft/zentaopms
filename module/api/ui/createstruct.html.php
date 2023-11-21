@@ -29,7 +29,7 @@ formPanel
     ),
     formGroup
     (
-        set::id('form-paramsType'),
+        setID('form-paramsType'),
         setClass('params-group struct'),
         set::label($lang->struct->type),
         radioList
@@ -42,7 +42,7 @@ formPanel
     ),
     formGroup
     (
-        set::id('form-params'),
+        setID('form-params'),
         setClass('params-group struct'),
         set::label($lang->api->params),
         h::table
@@ -77,9 +77,7 @@ formPanel
             h::tr
             (
                 setClass('input-row'),
-                set('data-level', 1),
-                set('data-key', 'origin'),
-                set('data-parent', '0'),
+                setData(array('level' => 1, 'key' => 'origin', 'parent' => '0')),
                 h::td
                 (
                     input()

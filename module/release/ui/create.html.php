@@ -96,11 +96,9 @@ formPanel
     formGroup
     (
         set::label($lang->release->desc),
-        editor
-        (
-            set::name('desc'),
-            set::rows('10')
-        )
+        set::name('desc'),
+        set::control('editor'),
+        set::rows('10')
     ),
     formGroup
     (

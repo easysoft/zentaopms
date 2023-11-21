@@ -12,23 +12,34 @@ namespace zin;
 
 $currentID = $current->id ?? 0;
 
-$fnGenerateSide = function() use($metrics, $current, $viewType, $scope, $filtersBase64)
+$fnGenerateSide = function() use($groupMetrics, $current, $viewType, $scope, $lang, $filtersBase64)
 {
     $metricList = array();
-    foreach($metrics as $key => $metric)
+    foreach($groupMetrics as $key => $metrics)
     {
-        $class = $metric->id == $current->id ? 'metric-current' : '';
-        $params = "scope=$scope&viewType=$viewType&metricID={$metric->id}";
-        if(!empty($filtersBase64)) $params .= "&filtersBase64={$filtersBase64}";
+        if(empty($metrics)) continue;
 
         $metricList[] = li
             (
-                set::className($class . ' metric-item font-medium'),
-                a(
-                    $metric->name,
-                    set::href(helper::createLink('metric', 'preview', $params))
-                )
+                set::class('metric-group'),
+                $lang->metric->objectList[$key]
             );
+
+        foreach($metrics as $metric)
+        {
+            $class = $metric->id == $current->id ? 'metric-current' : '';
+            $params = "scope=$scope&viewType=$viewType&metricID={$metric->id}";
+            if(!empty($filtersBase64)) $params .= "&filtersBase64={$filtersBase64}";
+
+            $metricList[] = li
+                (
+                    set::className($class . ' metric-item font-medium'),
+                    a(
+                        $metric->name,
+                        set::href(helper::createLink('metric', 'preview', $params))
+                    )
+                );
+        }
     }
 
     return ul($metricList);
@@ -241,7 +252,8 @@ $sideTitle = $scope == 'filter' ? sprintf($lang->metric->filter->filterTotal, co
 $star = (!empty($current->collector) and strpos($current->collector, ',' . $app->user->account . ',') !== false) ? 'star' : 'star-empty';
 div
 (
-    setClass('side'),
+    setClass('side sidebar sidebar-left'),
+    setStyle('overflow', 'visible'),
     div
     (
         setClass('canvas'),
@@ -257,13 +269,24 @@ div
         div
         (
             setClass('metric-tree'),
-            $fnGenerateSide($metrics, $current, $viewType, $scope)
+            $fnGenerateSide($groupMetrics, $current, $viewType, $scope, $lang)
+        )
+    ),
+    div
+    (
+        on::click('.sidebar-gutter', 'window.toggleCollapsed()'),
+        setClass('sidebar-gutter gutter gutter-horz'),
+        button
+        (
+            setClass('gutter-toggle'),
+            span(setClass('chevron-left'))
         )
     )
 );
 div
 (
     setClass('main'),
+    setStyle('flex', 'auto'),
     empty($current) ? div(setClass('canvas')) :
     div
     (

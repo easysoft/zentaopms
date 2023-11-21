@@ -335,25 +335,40 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
 };
 
 
-$metricCheckItems = array();
-foreach($metrics as $key => $metric)
+$metricTrees = array();
+foreach($groupMetrics as $key => $metrics)
 {
-    $class  = $metric->id == $current->id ? 'metric-current' : '';
-    $class .= ' font-medium checkbox';
-    $metricCheckItems[] = item
-    (
-        set::text($metric->name),
-        set::value($metric->id),
-        set::scope($metric->scope),
-        set::typeClass($class),
-        set::checked($metric->id == $current->id),
-        bind::change('window.handleCheckboxChange($element)')
-    );
+    if(empty($metrics)) continue;
+    $metricCheckItems = array();
+    foreach($metrics as $metric)
+    {
+        $class  = $metric->id == $current->id ? 'metric-current' : '';
+        $class .= ' font-medium checkbox';
+        $metricCheckItems[] = item
+            (
+                set::text($metric->name),
+                set::value($metric->id),
+                set::scope($metric->scope),
+                set::typeClass($class),
+                set::checked($metric->id == $current->id),
+                bind::change('window.handleCheckboxChange($element)')
+            );
+    }
+    $metricTrees[] = div(setClass('check-list-title') ,$this->lang->metric->objectList[$key]);
+    $metricTrees[] = checkList
+        (
+            set::className('check-list-metric'),
+            set::primary(true),
+            set::name('metric'),
+            set::inline(false),
+            $metricCheckItems
+        );
 }
 
 div
 (
-    setClass('side'),
+    setClass('side sidebar sidebar-left'),
+    setStyle('overflow', 'visible'),
     div
     (
         setClass('canvas'),
@@ -369,14 +384,17 @@ div
         div
         (
             setClass('metric-tree'),
-            checkList
-            (
-                set::className('check-list-metric'),
-                set::primary(true),
-                set::name('metric'),
-                set::inline(false),
-                $metricCheckItems
-            )
+            $metricTrees
+        )
+    ),
+    div
+    (
+        on::click('.sidebar-gutter', 'window.toggleCollapsed()'),
+        setClass('sidebar-gutter gutter gutter-horz'),
+        button
+        (
+            setClass('gutter-toggle'),
+            span(setClass('chevron-left'))
         )
     )
 );
@@ -483,6 +501,7 @@ $metricBoxs = div
 div
 (
     setClass('main'),
+    setStyle('flex', 'auto'),
     div
     (
         setClass('canvas'),

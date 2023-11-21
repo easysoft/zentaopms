@@ -876,7 +876,7 @@ class taskTao extends taskModel
 
         if($task->status != 'cancel' && strpos($requiredFields, ',estimate,') !== false)
         {
-            if(strlen(trim($task->estimate)) == 0) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->task->estimate);
+            if(empty($task->estimate)) dao::$errors['estimate'] = sprintf($this->lang->error->notempty, $this->lang->task->estimate);
             $requiredFields = str_replace(',estimate,', ',', $requiredFields);
         }
 

@@ -14,38 +14,38 @@ set::zui(true);
 
 div
 (
-    set::id('main'),
+    setID('main'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
         panel
         (
             set::style(array('margin' => '0 auto', 'width' => '600px')),
             div
             (
-                set::className('article-h1 mb-4'),
+                setClass('article-h1 mb-4'),
                 icon
                 (
                     'exclamation-sign',
                     set::size('2x'),
-                    set::className('text-danger mr-2')
+                    setClass('text-danger mr-2')
                 ),
                 $lang->upgrade->warnning
             ),
             div
             (
                 set::style(array('background-color' => 'var(--color-gray-100)')),
-                set::className('p-5 mb-4 space-y-2'),
+                setClass('p-5 mb-4 space-y-2'),
                 html($lang->upgrade->warnningContent)
             ),
             div
             (
-                set::className('text-center'),
+                setClass('text-center'),
                 btn
                 (
                     on::click("self.location.href='" . createLink('upgrade', 'consistency') . "'"),
                     set::type('primary'),
-                    set::className('px-10'),
+                    setClass('px-10'),
                     set('disabled', 'disabled'),
                     $lang->upgrade->common
                 )

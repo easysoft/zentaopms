@@ -229,7 +229,7 @@ $lang->project->unlinkExecutionMember  = "The user participated in %s executions
 $lang->project->unlinkExecutionMembers = "The team members you are removing are also in the execution team of this {$lang->projectCommon}. Do you want to remove them from the execution team too?";
 $lang->project->productTip             = "After clicking New {$lang->productCommon}, the {$lang->projectCommon} will not be linked to the selected {$lang->productCommon}.";
 $lang->project->noDevStage             = "There is no R&D stage under this {$lang->projectCommon}, or you do not have access permissions. The creation of builds is not supported at the moment.";
-$lang->project->budgetOverrun          = "The {$lang->projectCommon}'s budget exceeds the remaining budget of the parent program:";
+$lang->project->budgetOverrun          = "The {$lang->projectCommon}'s budget exceeds the remaining budget of the parent program: <strong id='currency'></strong><strong id='parentBudget'></strong><strong id='budgetUnit'></strong>. ";
 $lang->project->disabledInputTip       = 'Please cancel %s first';
 $lang->project->linkRepoFailed         = "Failed to link {$lang->projectCommon}s and code repositories.";
 $lang->project->unLinkProductTip       = 'Are you sure you want to unlink %s? (Does not affect linked requirements)';
