@@ -75,20 +75,12 @@ class history extends wg
 
     protected function build(): wg
     {
-        global $config;
-
         list($panel, $objectID, $objectType, $title, $actions, $commentUrl, $editCommentUrl, $commentBtn) = $this->prop(array('panel', 'objectID', 'objectType', 'title', 'actions', 'commentUrl', 'editCommentUrl', 'commentBtn'));
-
-        if(isset($config->zin->mode) && $config->zin->mode == 'compatible')
-        {
-            if(is_null($commentUrl)) $commentUrl = createLink('action', 'commentZin', "objectType=$objectType&objectID=$objectID");
-            if(is_null($editCommentUrl)) $editCommentUrl = createLink('action', 'editCommentZin', 'actionID={actionID}');
-        }
 
         return zui::historyPanel
         (
             $panel ? set::className('canvas py-1 px-2') : null,
-            set::objectID($objectID),
+            set::objectID((int)$objectID),
             set::objectType($objectType),
             set::actions($actions),
             set::title($title),
