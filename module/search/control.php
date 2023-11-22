@@ -131,6 +131,7 @@ class search extends control
     }
 
     /**
+     * 删除搜索查询。
      * Delete current search query.
      *
      * @param  int    $queryID
