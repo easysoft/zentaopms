@@ -71,14 +71,14 @@ class user extends control
         $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
         if(!isset($users[$userID])) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->user->error->noAccess, 'locate' => array('back' => true))));
 
-        $this->view->title   = $this->lang->user->common . $this->lang->colon . $this->lang->user->todo;
-        $this->view->users   = $users;
-        $this->view->todos   = $todos;
-        $this->view->user    = $user;
-        $this->view->type    = $type;
-        $this->view->status  = $status;
-        $this->view->orderBy = $orderBy;
-        $this->view->pager   = $pager;
+        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->todo;
+        $this->view->deptUsers = $users;
+        $this->view->todos     = $todos;
+        $this->view->user      = $user;
+        $this->view->type      = $type;
+        $this->view->status    = $status;
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
 
         $this->display();
     }
