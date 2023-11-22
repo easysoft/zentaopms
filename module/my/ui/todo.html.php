@@ -101,7 +101,7 @@ dtable
     set::createLink($canCreate ? createLink('todo', 'create') : ''),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    set::footer(array('checkbox', 'toolbar', hasPriv('todo', 'import2Today') && $importFuture ? jsRaw('window.generateHtml') : '', 'checkedInfo', 'flex', 'pager'))
+    set::footer(array('checkbox', 'toolbar', hasPriv('todo', 'import2Today') && $type != 'today' ? jsRaw('window.generateHtml') : '', 'checkedInfo', 'flex', 'pager'))
 );
 
 render();

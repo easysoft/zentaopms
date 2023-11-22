@@ -260,6 +260,7 @@ EOF;
     }
 
     /**
+     * 待办列表。
      * My todos.
      *
      * @param  string $type
@@ -272,10 +273,8 @@ EOF;
      * @access public
      * @return void
      */
-    public function todo($type = 'before', $userID = '', $status = 'all', $orderBy = "date_desc,status,begin", $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function todo(string $type = 'before', string $userID = '', string $status = 'all', string $orderBy = "date_desc,status,begin", int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        if($type == 'before') $status = 'undone';
-
         /* Save session. */
         $uri = $this->app->getURI(true);
         $this->session->set('todoList',     $uri, 'my');
@@ -285,7 +284,7 @@ EOF;
         $this->session->set('testtaskList', $uri, 'my');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -293,26 +292,22 @@ EOF;
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
 
-        /* The title and position. */
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
-
-        /* Append id for second sort. */
+        /* Append id for second sort, get todos and tasks. */
         $sort = common::appendOrder($orderBy);
-
+        if($type == 'before') $status = 'undone';
         $todos = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);
         $tasks = $this->loadModel('task')->getUserSuspendedTasks($account);
 
-        $waitCount  = 0;
-        $doingCount = 0;
+        $count = array('wait' => 0, 'doing' => 0);
         foreach($todos as $key => $todo)
         {
-            if($todo->type == 'task' and isset($tasks[$todo->objectID])) unset($todos[$key]);
-            if($todo->status == 'wait')  $waitCount ++;
-            if($todo->status == 'doing') $doingCount ++;
+            if($todo->type == 'task' && isset($tasks[$todo->objectID])) unset($todos[$key]);
+            if($todo->status == 'wait' || $todo->status == 'doing')  $count[$todo->status] ++;
             if($todo->date == '2030-01-01') $todo->date = $this->lang->todo->future;
         }
 
         /* Assign. */
+        $this->view->title        = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
         $this->view->todos        = $todos;
         $this->view->date         = (int)$type == 0 ? date(DT_DATE1) : date(DT_DATE1, strtotime($type));
         $this->view->type         = $type;
@@ -322,9 +317,8 @@ EOF;
         $this->view->account      = $this->app->user->account;
         $this->view->times        = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time         = date::now();
-        $this->view->waitCount    = $waitCount;
-        $this->view->doingCount   = $doingCount;
-        $this->view->importFuture = ($type != 'today');
+        $this->view->waitCount    = $count['wait'];
+        $this->view->doingCount   = $count['doing'];
         $this->view->pager        = $pager;
         $this->view->orderBy      = $orderBy;
         $this->display();
