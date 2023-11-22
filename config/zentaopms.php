@@ -231,6 +231,7 @@ $config->openMethods[] = 'feedback.mergeproductmodule';
 $config->openMethods[] = 'zanode.nodelist';
 $config->openMethods[] = 'action.restorestages';
 $config->openMethods[] = 'action.commentzin';
+$config->openMethods[] = 'action.editcommentzin';
 $config->openMethods[] = 'execution.browse';
 $config->openMethods[] = 'testcase.showimport';
 $config->openMethods[] = 'testsuite.index';
