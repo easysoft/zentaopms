@@ -328,71 +328,47 @@ class action extends control
      */
     public function comment($objectType, $objectID)
     {
-        if(strtolower($objectType) == 'task')
-        {
-            $task       = $this->loadModel('task')->getById($objectID);
-            $executions = explode(',', $this->app->user->view->sprints);
-            if(!in_array($task->execution, $executions)) return print(js::error($this->lang->error->accessDenied));
-        }
-        elseif(strtolower($objectType) == 'story')
-        {
-            $story      = $this->loadModel('story')->getById($objectID);
-            $executions = explode(',', $this->app->user->view->sprints);
-            $products   = explode(',', $this->app->user->view->products);
-            if(!array_intersect(array_keys($story->executions), $executions) and !in_array($story->product, $products) and empty($story->lib)) return print(js::error($this->lang->error->accessDenied));
-        }
-
-        $actionID = $this->action->create($objectType, $objectID, 'Commented', $this->post->comment);
-        if(defined('RUN_MODE') && RUN_MODE == 'api')
-        {
-            return $this->send(array('status' => 'success', 'data' => $actionID));
-        }
-        elseif(in_array($objectType, $this->config->action->newPageModule))
-        {
-            return $this->send(array('result' => 'success', 'closeModal' => true, 'load' => true));
-        }
-        else
-        {
-            echo js::reload('parent');
-        }
-    }
-
-    /**
-     * 评论。
-     * Comment.
-     *
-     * @param  string $objectType
-     * @param  int    $objectID
-     * @access public
-     * @return void
-     */
-    public function commentZin(string $objectType, int $objectID)
-    {
         if(!empty($_POST))
         {
+            $isInZinPage = isInModal() || in_array($objectType, $this->config->action->newPageModule);
             if(strtolower($objectType) == 'task')
             {
                 $task       = $this->loadModel('task')->getById($objectID);
                 $executions = explode(',', $this->app->user->view->sprints);
-                if(!in_array($task->execution, $executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+                if(!in_array($task->execution, $executions))
+                {
+                    if($isInZinPage) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+                    return print(js::error($this->lang->error->accessDenied));
+                }
             }
             elseif(strtolower($objectType) == 'story')
             {
                 $story      = $this->loadModel('story')->getById($objectID);
                 $executions = explode(',', $this->app->user->view->sprints);
                 $products   = explode(',', $this->app->user->view->products);
-                if(!array_intersect(array_keys($story->executions), $executions) and !in_array($story->product, $products) and empty($story->lib)) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+                if(!array_intersect(array_keys($story->executions), $executions) and !in_array($story->product, $products) and empty($story->lib))
+                {
+                    if($isInZinPage) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+                    return print(js::error($this->lang->error->accessDenied));
+                }
             }
 
-            $actionID = $this->action->create($objectType, $objectID, 'Commented', $this->post->actioncomment);
-            if(!$actionID) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
-
+            $actionID = $this->action->create($objectType, $objectID, 'Commented', isset($this->post->actioncomment) ? $this->post->actioncomment : $this->post->comment);
+            if(empty($actionID))
+            {
+                if($isInZinPage) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+                return print(js::error($this->lang->error->accessDenied));
+            }
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 return $this->send(array('status' => 'success', 'data' => $actionID));
             }
 
-            return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $objectType, 'objectID' => $objectID, 'actionID' => $actionID))));
+            if($isInZinPage)
+            {
+                return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $objectType, 'objectID' => (int)$objectID))));
+            }
+            echo js::reload('parent');
         }
 
         $this->view->title      = $this->lang->action->create;
@@ -410,62 +386,27 @@ class action extends control
      */
     public function editComment($actionID)
     {
-        if(strlen(trim(strip_tags($this->post->lastComment, '<img>'))) != 0)
-        {
-            $this->action->updateComment($actionID);
-        }
-        else
-        {
-            dao::$errors['submit'][] = $this->lang->action->historyEdit;
-            return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        }
-
-        $action = $this->action->getById($actionID);
-        if(in_array($action->objectType, $this->config->action->newPageModule))
-        {
-            return $this->send(array('status' => 'success', 'closeModal' => true, 'load' => true));
-        }
-        return $this->send(array('result' => 'success', 'locate' => 'reload', 'load' => true, 'closeModal' => true));
-    }
-
-    /**
-     * 编辑评论。
-     * Edit comment.
-     *
-     * @param  int    $actionID
-     * @access public
-     * @return void
-     */
-    public function editCommentZin(int $actionID)
-    {
-        $action = $this->action->getById($actionID);
-
         if(!empty($_POST))
         {
-            /* 获取表单内的数据。 */
-            /* Get form data. */
-            $commentData = form::data($this->config->action->form->editComment)->get();
-
-            $error = false;
-
-            /* 判断是否符合更新的条件。 */
-            /* Determine whether the update conditions are met. */
-            if(strlen(trim(strip_tags($commentData->lastComment, '<img>'))) != 0)
+            if(strlen(trim(strip_tags($this->post->lastComment, '<img>'))) != 0)
             {
-                $error = $this->action->updateComment($actionID, $commentData->lastComment, $commentData->uid);
+                $this->action->updateComment($actionID);
             }
-
-            if(!$error)
+            else
             {
-                /* 不符合更新条件，返回错误。 */
-                /* The update conditions are not met and an error is returned. */
                 dao::$errors['submit'][] = $this->lang->action->historyEdit;
                 return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             }
 
             $action = $this->action->getById($actionID);
-            return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $action->objectType, 'objectID' => $action->objectID))));
+            if(isInModal() || in_array($action->objectType, $this->config->action->newPageModule))
+            {
+                return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $action->objectType, 'objectID' => (int)$action->objectID))));
+            }
+            return $this->send(array('result' => 'success', 'locate' => 'reload', 'load' => true, 'closeModal' => true));
         }
+
+        $action = $this->action->getById($actionID);
 
         $this->view->title      = $this->lang->action->editComment;
         $this->view->actionID   = $actionID;

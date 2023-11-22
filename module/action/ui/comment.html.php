@@ -18,11 +18,8 @@ set::title($title);
 
 form
 (
-    set::url('action', 'commentZin', "objectType=$objectType&objectID=$objectID"),
     setClass('comment-form'),
-    editor
-    (
-        set::name('actioncomment')
-    ),
-    set::actions($actions)
+    set::url('action', 'comment', "objectType=$objectType&objectID=$objectID"),
+    set::actions($actions),
+    editor(set::name('comment'))
 );
