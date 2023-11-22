@@ -19,7 +19,7 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function __construct($module = '', $method = '')
+    public function __construct(string $module = '', string $method = '')
     {
         parent::__construct($module, $method);
         if($this->app->getMethodName() != 'turnon' and empty($this->config->global->editor)) $this->locate($this->createLink('dev', 'editor'));
@@ -31,7 +31,7 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function index($type = 'editor')
+    public function index(string $type = 'editor')
     {
         $this->app->loadLang('dev');
         $this->view->title      = $this->lang->editor->common;
@@ -47,7 +47,7 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function extend($moduleDir = '')
+    public function extend(string $moduleDir = '')
     {
         if(!isset($this->lang->{$moduleDir}->common)) $this->app->loadLang($moduleDir);
 
@@ -73,7 +73,7 @@ class editor extends control
         $extension   = 'php';
         if($filePath)
         {
-            $filePath = realpath($filePath);
+            $filePath = realpath(helper::safe64Decode($filePath));
             if(strpos(strtolower($filePath), strtolower($this->app->getBasePath())) !== 0) return print($this->lang->editor->editFileError);
             if($action == 'extendOther' and file_exists($filePath)) $this->view->showContent = file_get_contents($filePath);
 

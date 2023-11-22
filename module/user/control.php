@@ -758,7 +758,7 @@ class user extends control
             $canModifyDIR = false;
             $folderPath   = $this->app->tmpRoot;
         }
-        elseif(!is_dir($this->app->dataRoot) or substr(sprintf('%o', @fileperms($this->app->dataRoot)), -4) != '0777')
+        elseif(!is_dir($this->app->dataRoot) or substr(decoct(fileperms($this->app->dataRoot)), -4) != '0777')
         {
             $canModifyDIR = false;
             $folderPath   = $this->app->dataRoot;

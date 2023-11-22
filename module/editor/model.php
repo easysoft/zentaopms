@@ -18,7 +18,7 @@ class editorModel extends model
      * @access public
      * @return array
      */
-    public function getModuleFiles($moduleName)
+    public function getModuleFiles(string $moduleName): array
     {
         $allModules = array();
         $modulePath = $this->app->getModulePath('', $moduleName);
@@ -130,12 +130,13 @@ class editorModel extends model
      * @access public
      * @return array
      */
-    public function analysis($fileName)
+    public function analysis(string $fileName): array
     {
         $classMethod = array();
         $class       = $this->getClassNameByPath($fileName);
         if(strpos($fileName, 'model.php') !== false) $class .= 'Model';
         if(!class_exists($class)) include $fileName;
+
         $reflection = new ReflectionClass($class);
         foreach($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method)
         {
@@ -144,6 +145,7 @@ class editorModel extends model
             if($methodName == '__construct') continue;
             $classMethod[$fileName . DS . $methodName] = $methodName;
         }
+
         return $classMethod;
     }
 
@@ -155,7 +157,7 @@ class editorModel extends model
      * @access public
      * @return string
      */
-    public function printTree($files, $isRoot = true)
+    public function printTree(array $files, bool $isRoot = true) : array|false
     {
         if(empty($files) or !is_array($files)) return false;
 
@@ -197,9 +199,9 @@ class editorModel extends model
      *
      * @param  string    $filePath
      * @access public
-     * @return string
+     * @return object
      */
-    public function addLink4Dir($filePath)
+    public function addLink4Dir(string $filePath): object
     {
         $tree        = new stdclass();
         $fileName    = basename($filePath);
@@ -249,9 +251,9 @@ class editorModel extends model
      * @param  string    $filePath
      * @param  string    $file
      * @access public
-     * @return string
+     * @return object
      */
-    public function addLink4File($filePath, $file)
+    public function addLink4File(string $filePath, string $file): object
     {
         $tree = new stdClass();
         $tree->id   = md5($file);
@@ -562,7 +564,7 @@ EOD;
      * @access public
      * @return string
      */
-    public function getClassNameByPath($filePath)
+    public function getClassNameByPath(string $filePath): string
     {
         $className = '';
         if(strpos($filePath, DS . 'module' . DS) !== false)

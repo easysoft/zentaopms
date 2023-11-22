@@ -15,7 +15,7 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function getTables()
+    public function getTables(): array
     {
         $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
         $tables = array();
@@ -241,7 +241,7 @@ class devModel extends model
      * @access public
      * @return array
      */
-    public function getModules()
+    public function getModules(): array
     {
         $moduleList = glob($this->app->getModuleRoot() . '*');
         $modules = array();
@@ -1080,11 +1080,11 @@ class devModel extends model
      * Get tree by type.
      *
      * @param  string $currentObject
-     * @param  string $type module|table
+     * @param  string $type          module|table
      * @access public
      * @return array
      */
-    public function getTree($currentObject, $type)
+    public function getTree(string $currentObject, string $type): array
     {
         $tree = array();
         if(!in_array($type, array('module', 'table'))) return $tree;
