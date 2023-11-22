@@ -18,7 +18,7 @@ window.renderCell = function(result, info)
 
     if(info.col.name == 'actions' && defaultKey == info.row.data.key)
     {
-        result[0][1].disabled = true;
+        result[0]['props']['items'][1]['disabled'] = true;
         return result;
     }
 
