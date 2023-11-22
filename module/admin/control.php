@@ -174,7 +174,8 @@ class admin extends control
     }
 
     /**
-     * Account safe.
+     * 系统安全设置。
+     * System security Settings.
      *
      * @access public
      * @return void
@@ -183,15 +184,17 @@ class admin extends control
     {
         if($_POST)
         {
-            $data = fixer::input('post')->get();
+            $data = form::data()->get();
             $this->loadModel('setting')->setItems('system.common.safe', $data);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
+
         $this->view->title = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->set;
         $this->display();
     }
 
     /**
+
      * Check weak user.
      *
      * @access public
