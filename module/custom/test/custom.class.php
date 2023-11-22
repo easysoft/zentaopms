@@ -283,21 +283,18 @@ class customTest
     }
 
     /**
+     * 设置需求概念。
      * Test set UR and SR concept.
      *
-     * @param  array  $SRName
+     * @param  array      $data
      * @access public
-     * @return int
+     * @return bool|array
      */
-    public function setURAndSRTest($SRName)
+    public function setURAndSRTest(array $data): bool|array
     {
-        $_POST = $SRName;
-        $objects = $this->objectModel->setURAndSR();
+        $objects = $this->objectModel->setURAndSR($data);
 
         if(dao::isError()) return dao::getError();
-
-        unset($_POST);
-
         return $objects;
     }
 
