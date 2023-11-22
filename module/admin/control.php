@@ -13,26 +13,6 @@ declare(strict_types=1);
 class admin extends control
 {
     /**
-     * The gogs constructor.
-     *
-     * @param string $moduleName
-     * @param string $methodName
-     */
-    public function __construct(string $moduleName = '', string $methodName = '')
-    {
-        parent::__construct($moduleName, $methodName);
-
-        if(!isset($this->config->global->sn))
-        {
-            $sn = $this->setting->computeSN();
-            $this->loadModel('setting')->setItem('system.common.global.sn', $sn);
-
-            if(!isset($this->config->global)) $this->config->global = new stdclass();
-            $this->config->global->sn = $sn;
-        }
-    }
-
-    /**
      * 后台首页。
      * Background homepage.
      *
