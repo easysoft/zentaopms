@@ -191,17 +191,18 @@ class custom extends control
     }
 
     /**
+     * 编辑需求概念。
      * Edit story concept.
-     * @param  int    $key
      *
+     * @param  int    $key
      * @access public
      * @return void
      */
-    public function editStoryConcept($key = 0)
+    public function editStoryConcept(int $key = 0)
     {
         if($_POST)
         {
-            $result = $this->custom->updateURAndSR($key);
+            $result = $this->custom->updateURAndSR($key, '', $_POST);
             if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -209,14 +210,10 @@ class custom extends control
         }
 
         $lang = $this->app->getClientLang();
-        $URSR = $this->dao->select('`value`')->from(TABLE_LANG)
-            ->where('lang')->eq($lang)
-            ->andWhere('module')->eq('custom')
-            ->andWhere('section')->eq('URSRList')
-            ->andWhere('`key`')->eq($key)
-            ->fetch('value');
+        $URSR = $this->custom->getURSRConcept($key, $lang);
 
         $this->view->URSR = json_decode($URSR);
+
         $this->display();
     }
 
