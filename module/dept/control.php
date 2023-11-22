@@ -58,7 +58,8 @@ class dept extends control
     {
         if(!empty($_POST))
         {
-            $deptIDList = $this->dept->manageChild($_POST['parentDeptID'], $_POST['depts']);
+            $formData   = form::data($this->config->dept->form->manage)->get();
+            $deptIDList = $this->dept->manageChild($formData->parentDeptID, $formData->depts);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'idList' => $deptIDList));
         }
     }
@@ -103,27 +104,30 @@ class dept extends control
      *
      * @param  int    $deptID
      * @access public
-     * @return string
+     * @return void
      */
-    public function delete(int $deptID): string
+    public function delete(int $deptID)
     {
-        /* Check this dept when delete. */
-        $sons  = $this->dept->getSons($deptID);
-        $users = $this->dept->getUsers('all', $deptID);
+        /* 部门下有子部门的无法被删除。 */
+        $sons = $this->dept->getSons($deptID);
         if($sons)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasSons));
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->dept->error->hasSons}');"));
         }
+
+        /* 部门下有人员的无法被删除。 */
+        $users = $this->dept->getUsers('all', $deptID);
         if($users)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasUsers));
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->dept->error->hasUsers}');"));
         }
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
         $this->dept->deleteDept($deptID);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'status' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
