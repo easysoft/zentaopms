@@ -19,7 +19,7 @@ formPanel
 (
     on::change('#selectTask', 'changeTesttask'),
     set::title($lang->testreport->create),
-    formRow
+    !empty($taskPairs) ? formRow
     (
         formGroup
         (
@@ -31,7 +31,7 @@ formPanel
             set::items($taskPairs),
             set::value($objectID)
         )
-    ),
+    ) : null,
     formRow
     (
         formGroup

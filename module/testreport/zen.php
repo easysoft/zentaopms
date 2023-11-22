@@ -202,9 +202,9 @@ class testreportZen extends testreport
             if($task->build != 'trunk') $buildIdList[$task->build] = $task->build;
         }
 
-        $task      = $objectID ? $this->testtask->getByID($objectID) : key($tasks);
-        $begin     = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $task->begin;
-        $end       = !empty($end) ? date("Y-m-d", strtotime($end)) : $task->end;
+        $task      = $objectID ? $this->testtask->getByID($extra) : key($tasks);
+        $begin     = !empty($begin) ? date("Y-m-d", strtotime($begin)) : (string)$task->begin;
+        $end       = !empty($end) ? date("Y-m-d", strtotime($end)) : (string)$task->end;
         $builds    = $this->build->getByList($buildIdList);
         $bugs      = $this->testreport->getBugs4Test($builds, $productIdList, $begin, $end, 'execution');
         $execution = $this->execution->getById($executionID);
