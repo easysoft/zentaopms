@@ -3166,7 +3166,7 @@ EOF;
                 $saasLog .= 'info: ' . print_r($info, true) . "\n";
             }
 
-            file_put_contents($logFile, $sassLog, FILE_APPEND);
+            file_put_contents($logFile, $saasLog, FILE_APPEND);
         }
 
         if($errors) commonModel::$requestErrors[] = $errors;
