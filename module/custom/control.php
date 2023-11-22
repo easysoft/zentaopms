@@ -129,24 +129,6 @@ class custom extends control
     }
 
     /**
-     * Set score display switch
-     *
-     * @access public
-     * @return void
-     */
-    public function score()
-    {
-        if($_POST)
-        {
-            $this->loadModel('setting')->setItem('system.common.global.scoreStatus', $this->post->score);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
-        }
-
-        $this->view->title      = $this->lang->custom->score;
-        $this->display();
-    }
-
-    /**
      * Timezone.
      *
      * @access public
