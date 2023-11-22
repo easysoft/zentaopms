@@ -529,18 +529,19 @@ class customModel extends model
     }
 
     /**
+     * 获取必填字段。
      * Get required fields by config.
      *
-     * @param  object    $moduleConfig
+     * @param  object $moduleConfig
      * @access public
      * @return array
      */
-    public function getRequiredFields($moduleConfig)
+    public function getRequiredFields(object $moduleConfig): array
     {
         $requiredFields = array();
         foreach($moduleConfig as $method => $subConfig)
         {
-            if(is_object($subConfig) and isset($subConfig->requiredFields)) $requiredFields[$method] = trim(str_replace(' ', '', $subConfig->requiredFields));
+            if(is_object($subConfig) && isset($subConfig->requiredFields)) $requiredFields[$method] = trim(str_replace(' ', '', $subConfig->requiredFields));
         }
 
         return $requiredFields;
