@@ -77,10 +77,10 @@ class dept extends control
         {
             /* 获取表单提交内容。 */
             $formData = form::data($this->config->dept->form->edit)->setDefault('id', $deptID)->get();
+            $this->dept->update($formData);
 
-            $this->dept->update($deptID);
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->dept->successSave, 'closeModal' => true, 'load' => true));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'status' => 'success', 'message' => $this->lang->dept->successSave, 'closeModal' => true, 'load' => true));
         }
 
         /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */

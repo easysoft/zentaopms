@@ -155,25 +155,29 @@ class deptModel extends model
     }
 
     /**
-     * Update dept.
+     * 更新部门信息。
+     * Update a dept.
      *
-     * @param  int    $deptID
+     * @param  object $dept
      * @access public
-     * @return void
+     * @return bool
      */
-    public function update($deptID)
+    public function update(object $dept): bool
     {
-        $dept   = fixer::input('post')->get();
-        $self   = $this->fetchByID($deptID);
-        $parent = $this->fetchByID($this->post->parent);
-        $childs = $this->getAllChildId($deptID);
-        $dept->grade = $parent ? $parent->grade + 1 : 1;
-        $dept->path  = $parent ? $parent->path . $deptID . ',' : ',' . $deptID . ',';
-        $this->dao->update(TABLE_DEPT)->data($dept)->autoCheck()->check('name', 'notempty')->where('id')->eq($deptID)->exec();
-        $this->dao->update(TABLE_DEPT)->set('grade = grade + 1')->where('id')->in($childs)->andWhere('id')->ne($deptID)->exec();
-        $this->dao->update(TABLE_DEPT)->set('manager')->eq($this->post->manager)->where('id')->in($childs)->andWhere('manager')->eq('')->exec();
-        $this->dao->update(TABLE_DEPT)->set('manager')->eq($this->post->manager)->where('id')->in($childs)->andWhere('manager')->eq($self->manager)->exec();
+        $oldDept = $this->fetchByID($dept->id);
+
+        /* 更新当前部门的信息。 */
+        $this->dao->update(TABLE_DEPT)->data($dept)->autoCheck()->batchCheck($this->config->dept->edit->requiredFields, 'notempty')->where('id')->eq($dept->id)->exec();
+        if(dao::isError()) return false;
+
+        /* 变更当前部门的子部门负责人。 */
+        $childs = $this->getAllChildId($dept->id);
+        $this->dao->update(TABLE_DEPT)->set('manager')->eq($dept->manager)->where('id')->in($childs)->andWhere('manager', true)->eq('')->orWhere('manager')->eq($oldDept->manager)->markRight(1)->exec();
+
+        /* 整理部门的path和grade。 */
         $this->fixDeptPath();
+
+        return !dao::isError();
     }
 
     /**
