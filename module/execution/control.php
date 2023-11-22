@@ -764,7 +764,7 @@ class execution extends control
         $chartData    = $this->execution->buildBurnData($executionID, $dateList, $burnBy, $executionEnd);
 
         $allDateList = date::getDateList($execution->begin, $endDate, 'Y-m-d', $type, $this->config->execution->weekend);
-        $dayList     = array_fill(1, floor(count($allDateList) / $this->config->execution->maxBurnDay) + 5, '');
+        $dayList     = array_fill(1, (int)floor(count($allDateList) / $this->config->execution->maxBurnDay) + 5, '');
         foreach($dayList as $key => $val) $dayList[$key] = $this->lang->execution->interval . ($key + 1) . $this->lang->day;
 
         unset($this->lang->TRActions);
