@@ -49,10 +49,12 @@ class admin extends control
         $this->view->langNotCN   = common::checkNotCN();
         $this->view->hasInternet = $this->admin->checkInternet();
         $this->view->isIntranet  = helper::isIntranet();
+
         $this->display();
     }
 
     /**
+     * 获取禅道官网数据。
      * Get zentao.net data by api.
      *
      * @access public
@@ -81,21 +83,6 @@ class admin extends control
         }
 
         return $this->send(array('result' => 'success'));
-    }
-
-    /**
-     * Ignore notice of register and bind.
-     *
-     * @access public
-     * @return void
-     */
-    public function ignore()
-    {
-        $account = $this->app->user->account;
-        $this->loadModel('setting');
-        $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
-        $this->setting->setItem("$account.common.global.community", 'na');
-        echo js::locate(inlink('index'), 'parent');
     }
 
     /**
