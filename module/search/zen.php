@@ -2,6 +2,16 @@
 declare(strict_types=1);
 class searchZen extends search
 {
+    /**
+     * 设置列表 session，方便返回。
+     * Set list in session, for come back search index page.
+     *
+     * @param  string    $uri
+     * @param  string    $words
+     * @param  string    $type
+     * @access protected
+     * @return void
+     */
     protected function setSessionForIndex(string $uri, string $words, string $type): void
     {
         /* 设置列表 session. */
