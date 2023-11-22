@@ -1031,6 +1031,7 @@ class repoZen extends repo
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs(array($product->id), 'all', '');
 
         unset($this->config->bug->search['fields']['product']);
+        unset($this->config->bug->search['params']['product']);
         if($product->type == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);

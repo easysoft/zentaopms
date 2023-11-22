@@ -283,6 +283,7 @@ class repo extends control
     }
 
     /**
+     * 删除代码库。
      * Delete repo.
      *
      * @param  int    $repoID
@@ -301,6 +302,7 @@ class repo extends control
     }
 
     /**
+     * 用编辑器查看代码库文件。
      * View repo file with monaco editor.
      *
      * @param  int    $repoID
@@ -342,6 +344,7 @@ class repo extends control
     }
 
     /**
+     * 查看代码文件。
      * View repo file.
      *
      * @param  int    $repoID
