@@ -61,6 +61,7 @@ class my extends control
     }
 
     /**
+     * 日程列表。
      * My calendar.
      *
      * @access public
