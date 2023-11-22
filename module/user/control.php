@@ -320,36 +320,36 @@ class user extends control
     }
 
     /**
-     * User executions.
+     * 查看某个用户的执行。
+     * View user's executions.
      *
      * @param  int    $userID
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function execution($userID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function execution(int $userID, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $uri = $this->app->getURI(true);
-        $this->session->set('executionList', $uri, 'execution');
+        $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
-        $user    = $this->user->getById($userID, 'id');
-        $account = $user->account;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        $user   = $this->user->getById($userID, 'id');
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Set the menus. */
         $this->loadModel('project');
-        $this->view->userList = $this->user->setUserList($users, $userID);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->execution;
-        $this->view->tabID      = 'project';
-        $this->view->executions = $this->user->getObjects($account, 'execution', 'all', $orderBy, $pager);
+        $this->view->executions = $this->user->getObjects($user->account, 'execution', 'all', $orderBy, $pager);
+        $this->view->deptUsers  = $users;
         $this->view->user       = $user;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
