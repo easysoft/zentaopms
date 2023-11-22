@@ -84,30 +84,32 @@ class user extends control
     }
 
     /**
-     * Story of a user.
+     * 查看某个用户的需求。
+     * View user's stories.
      *
      * @param  int    $userID
      * @param  string $storyType
      * @param  string $type
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function story($userID, $storyType = 'story', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story(int $userID, string $storyType = 'story', string $type = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. */
         $this->session->set('storyList', $this->app->getURI(true), 'product');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $user    = $this->user->getById($userID, 'id');
-        $account = $user->account;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        $user   = $this->user->getById($userID, 'id');
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
@@ -118,15 +120,15 @@ class user extends control
         if($storyType == 'requirement') $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
 
         /* Assign. */
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
-        $this->view->stories    = $this->story->getUserStories($account, $type, $sort, $pager, $storyType, false, 'all');
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->storyType  = $storyType;
-        $this->view->orderBy    = $orderBy;
-        $this->view->type       = $type;
-        $this->view->user       = $user;
-        $this->view->pager      = $pager;
-        $this->view->userList   = $this->user->setUserList($users, $userID);
+        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
+        $this->view->stories   = $this->story->getUserStories($user->account, $type, $sort, $pager, $storyType, false, 'all');
+        $this->view->users     = $this->user->getPairs('noletter');
+        $this->view->deptUsers = $users;
+        $this->view->user      = $user;
+        $this->view->storyType = $storyType;
+        $this->view->type      = $type;
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
 
         $this->display();
     }
