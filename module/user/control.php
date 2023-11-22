@@ -344,9 +344,6 @@ class user extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Set the menus. */
-        $this->loadModel('project');
-
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->execution;
         $this->view->executions = $this->user->getObjects($user->account, 'execution', 'all', $orderBy, $pager);
         $this->view->deptUsers  = $users;
