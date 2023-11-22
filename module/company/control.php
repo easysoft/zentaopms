@@ -12,7 +12,8 @@
 class company extends control
 {
     /**
-     * Construct function, load dept and user models auto.
+     * 初始化函数，自动加载dept模块。
+     * Construct function, load dept model auto.
      *
      * @access public
      * @return void
@@ -24,6 +25,7 @@ class company extends control
     }
 
     /**
+     * 首页，跳转到公司人员浏览页面。
      * Index page, header to browse.
      *
      * @access public
@@ -31,35 +33,32 @@ class company extends control
      */
     public function index()
     {
-        $this->locate($this->createLink('company', 'browse'));
+        $this->locate(inlink('browse'));
     }
 
     /**
+     * 浏览公司部门和人员。
      * Browse departments and users of a company.
      *
-     * @param  int    $param
-     * @param  string $type
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string     $browseType
+     * @param  string|int $param
+     * @param  string     $type
+     * @param  string     $orderBy
+     * @param  int        $recTotal
+     * @param  int        $recPerPage
+     * @param  int        $pageID
      * @access public
      * @return void
      */
-    public function browse($browseType = 'inside', $param = 0, $type = 'bydept', $orderBy = 'id_asc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(string $browseType = 'inside', string|int $param = 0, string $type = 'bydept', string $orderBy = 'id_asc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->lang->navGroup->company = 'admin';
-
-        $this->loadModel('search');
-
         $deptID = $type == 'bydept' ? (int)$param : 0;
-        $this->company->setMenu($deptID);
 
         /* Save session. */
         $this->session->set('userList', $this->app->getURI(true), 'admin');
 
         /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Append id for second sort. */
@@ -67,33 +66,21 @@ class company extends control
 
         /* Build the search form. */
         $queryID   = $type == 'bydept' ? 0 : (int)$param;
-        $actionURL = $this->createLink('company', 'browse', "browseType=all&param=myQueryID&type=bysearch");
+        $actionURL = inlink('browse', "browseType=all&param=myQueryID&type=bysearch");
         $this->company->buildSearchForm($queryID, $actionURL);
 
         /* Get users. */
         $users = $this->company->getUsers($browseType, $type, $queryID, $deptID, $sort, $pager);
 
-        /* Process the sql, get the conditon partion, save it to session. */
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'user', true);
-
-        /* Remove passwd. */
-        foreach($users as $user) unset($user->password);
-
-        /* Assign. */
         $this->view->title       = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
-        $this->view->users       = $users;
-        // $this->view->searchForm  = $this->fetch('search', 'buildForm', $this->config->company->browse->search);
+        $this->view->users       = array_map(function($user){unset($user->password);return $user;}, $users);
         $this->view->deptTree    = $this->dept->getTreeMenu(0, array('deptModel', 'createMemberLink'));
-        $this->view->parentDepts = $this->dept->getParents($deptID);
-        $this->view->dept        = $this->dept->getById($deptID);
         $this->view->orderBy     = $orderBy;
         $this->view->deptID      = $deptID;
         $this->view->pager       = $pager;
         $this->view->param       = $param;
         $this->view->type        = $type;
         $this->view->browseType  = $browseType;
-        $this->view->companies   = $this->company->getOutsideCompanies();
-
         $this->display();
     }
 
@@ -123,34 +110,27 @@ class company extends control
     {
         if(!empty($_POST))
         {
-            /* Init company data. */
             $company = form::data($this->config->company->form->edit)
                 ->stripTags('name')
                 ->setIF($this->post->website == 'http://', 'website', '')
                 ->setIF($this->post->backyard == 'http://', 'backyard', '')
                 ->get();
 
-            /* Update company. */
-            $this->company->update($company);
-
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(!$this->company->update($this->app->company->id, $company)) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Reset company in session. */
-            $company = $this->loadModel('company')->getFirst();
-            $this->session->set('company', $company);
+            $this->session->set('company', $this->company->getFirst());
 
             return $this->sendSuccess(array('load' => true));
         }
 
-        /* Set menu. */
-        $this->company->setMenu();
-
         $this->view->title    = $this->lang->company->common . $this->lang->colon . $this->lang->company->edit;
-        $this->view->company  = $this->company->getById($this->app->company->id);
+        $this->view->company  = $this->company->getByID($this->app->company->id);
         $this->display();
     }
 
     /**
+     * 访问公司主页。
      * View a company.
      *
      * @access public
@@ -158,9 +138,8 @@ class company extends control
      */
     public function view()
     {
-        $this->company->setMenu();
-        $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->view;
-        $this->view->company    = $this->company->getById($this->app->company->id);
+        $this->view->title   = $this->lang->company->common . $this->lang->colon . $this->lang->company->view;
+        $this->view->company = $this->company->getByID($this->app->company->id);
         $this->display();
     }
 

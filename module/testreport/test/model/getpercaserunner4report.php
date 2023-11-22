@@ -1,13 +1,14 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testreport.class.php';
 
 zdTable('testreport')->gen(100);
-zdTable('testresult')->config('testresult')->gen(100);
-zdTable('testrun')->gen(50);
-zdTable('testtask')->gen(30);
-zdTable('user')->gen(300);
+zdTable('testresult')->config('testresult')->gen(90);
+zdTable('testrun')->gen(20);
+zdTable('testtask')->gen(10);
+zdTable('user')->gen(10);
 
 su('admin');
 

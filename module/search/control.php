@@ -14,17 +14,19 @@ class search extends control
     public $search;
 
     /**
+     * 构建搜索表单。
      * Build search form.
      *
      * @param  string $module
-     * @param  array  $fields
+     * @param  string $fields
      * @param  array  $params
      * @param  string $actionURL
      * @param  int    $queryID
+     * @param  string $formName
      * @access public
      * @return void
      */
-    public function buildForm($module = '', $fields = '', $params = '', $actionURL = '', $queryID = 0, $formName = '')
+    public function buildForm(string $module = '', string $fields = '', string $params = '', string $actionURL = '', int $queryID = 0, string $formName = '')
     {
         $module       = empty($module) ? $this->session->searchParams['module'] : $module;
         $searchParams = $module . 'searchParams';

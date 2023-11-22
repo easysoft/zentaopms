@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of custom module of ZenTaoCMS.
  *
@@ -528,18 +529,19 @@ class customModel extends model
     }
 
     /**
+     * 获取必填字段。
      * Get required fields by config.
      *
-     * @param  object    $moduleConfig
+     * @param  object $moduleConfig
      * @access public
      * @return array
      */
-    public function getRequiredFields($moduleConfig)
+    public function getRequiredFields(object $moduleConfig): array
     {
         $requiredFields = array();
         foreach($moduleConfig as $method => $subConfig)
         {
-            if(is_object($subConfig) and isset($subConfig->requiredFields)) $requiredFields[$method] = trim(str_replace(' ', '', $subConfig->requiredFields));
+            if(is_object($subConfig) && isset($subConfig->requiredFields)) $requiredFields[$method] = trim(str_replace(' ', '', $subConfig->requiredFields));
         }
 
         return $requiredFields;
@@ -697,13 +699,15 @@ class customModel extends model
     }
 
     /**
+     * 保存表单必填字段设置。
      * Save required fields.
      *
-     * @param  int    $moduleName
+     * @param  string $moduleName product|story|productplan|release|execution|task|bug|testcase|testsuite|testtask|testreport|caselib|doc|user|project|build
+     * @param  array  $data
      * @access public
      * @return void
      */
-    public function saveRequiredFields($moduleName)
+    public function saveRequiredFields(string $moduleName, array $data): void
     {
         if(isset($this->config->system->$moduleName))   unset($this->config->system->$moduleName);
         if(isset($this->config->personal->$moduleName)) unset($this->config->personal->$moduleName);
@@ -711,7 +715,6 @@ class customModel extends model
         $this->loadModel($moduleName);
         $systemFields = $this->getRequiredFields($this->config->$moduleName);
 
-        $data = fixer::input('post')->get();
         $requiredFields = array();
         if(!empty($systemFields))
         {
@@ -730,28 +733,25 @@ class customModel extends model
                 $systemField = implode(',', $systemFieldList);
 
                 /* Keep the original required fields when the fields is empty. */
-                if(!isset($data->requiredFields[$method]))
+                if(!isset($data['requiredFields'][$method]))
                 {
                     $requiredFields[$method]['requiredFields'] = $systemField;
                     continue;
                 }
 
-                $fields       = implode(',', $data->requiredFields[$method]);
+                $fields       = implode(',', $data['requiredFields'][$method]);
                 $systemFields = array_reverse(explode(',', $systemField));
                 foreach($systemFields as $field)
                 {
                     $field = trim($field);
-                    if(strpos(",$fields,", ",$field,") === false) $fields = "$field,$fields";
+                    if(strpos(",$fields,", ",$field,") === false) $fields = "{$field},{$fields}";
                 }
 
                 $requiredFields[$method]['requiredFields'] = trim($fields, ',');
             }
         }
 
-        $vision = $this->config->vision;
-
-        $this->loadModel('setting');
-        $this->setting->setItems("system.{$moduleName}@$vision", $requiredFields);
+        $this->loadModel('setting')->setItems("system.{$moduleName}@{$this->config->vision}", $requiredFields);
     }
 
     /**

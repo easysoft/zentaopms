@@ -23,9 +23,17 @@ toolbar
     (
         btn
         (
+            set::icon('cog-outline'),
+            setClass('btn ghost'),
+            set::url(createLink('custom', 'set', 'module=user&field=roleList')),
+            setData(array('app' => 'admin')),
+            $lang->company->manageRole
+        ),
+        btn
+        (
             setClass('btn primary create-user-btn'),
             set::icon('plus'),
-            set::url(helper::createLink('user', 'create', "deptID={$deptID}")),
+            set::url(createLink('user', 'create', "deptID={$deptID}")),
             $lang->user->create
         ),
         dropdown
@@ -35,9 +43,8 @@ toolbar
             (
                 array
                 (
-                    array('text' => $lang->user->create,      'url' => helper::createLink('user', 'create', "deptID={$deptID}"), 'className' => '.create-user-btn
-'),
-                    array('text' => $lang->user->batchCreate, 'url' => helper::createLink('user', 'batchCreate', "deptID={$deptID}"))
+                    array('text' => $lang->user->create,      'url' => createLink('user', 'create', "deptID={$deptID}"), 'className' => '.create-user-btn'),
+                    array('text' => $lang->user->batchCreate, 'url' => createLink('user', 'batchCreate', "deptID={$deptID}"))
                 )
             ),
             set::placement('bottom-end')

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of dept module of ZenTaoPMS.
  *
@@ -46,7 +47,7 @@ class deptModel extends model
      */
     public function buildMenuQuery($rootDeptID)
     {
-        $rootDept = $this->getByID($rootDeptID);
+        $rootDept = $this->fetchByID($rootDeptID);
         if(!$rootDept)
         {
             $rootDept = new stdclass();
@@ -154,25 +155,29 @@ class deptModel extends model
     }
 
     /**
-     * Update dept.
+     * 更新部门信息。
+     * Update a dept.
      *
-     * @param  int    $deptID
+     * @param  object $dept
      * @access public
-     * @return void
+     * @return bool
      */
-    public function update($deptID)
+    public function update(object $dept): bool
     {
-        $dept   = fixer::input('post')->get();
-        $self   = $this->getById($deptID);
-        $parent = $this->getById($this->post->parent);
-        $childs = $this->getAllChildId($deptID);
-        $dept->grade = $parent ? $parent->grade + 1 : 1;
-        $dept->path  = $parent ? $parent->path . $deptID . ',' : ',' . $deptID . ',';
-        $this->dao->update(TABLE_DEPT)->data($dept)->autoCheck()->check('name', 'notempty')->where('id')->eq($deptID)->exec();
-        $this->dao->update(TABLE_DEPT)->set('grade = grade + 1')->where('id')->in($childs)->andWhere('id')->ne($deptID)->exec();
-        $this->dao->update(TABLE_DEPT)->set('manager')->eq($this->post->manager)->where('id')->in($childs)->andWhere('manager')->eq('')->exec();
-        $this->dao->update(TABLE_DEPT)->set('manager')->eq($this->post->manager)->where('id')->in($childs)->andWhere('manager')->eq($self->manager)->exec();
+        $oldDept = $this->fetchByID($dept->id);
+
+        /* 更新当前部门的信息。 */
+        $this->dao->update(TABLE_DEPT)->data($dept)->autoCheck()->batchCheck($this->config->dept->edit->requiredFields, 'notempty')->where('id')->eq($dept->id)->exec();
+        if(dao::isError()) return false;
+
+        /* 变更当前部门的子部门负责人。 */
+        $childs = $this->getAllChildId($dept->id);
+        $this->dao->update(TABLE_DEPT)->set('manager')->eq($dept->manager)->where('id')->in($childs)->andWhere('manager', true)->eq('')->orWhere('manager')->eq($oldDept->manager)->markRight(1)->exec();
+
+        /* 整理部门的path和grade。 */
         $this->fixDeptPath();
+
+        return !dao::isError();
     }
 
     /**
@@ -266,7 +271,7 @@ class deptModel extends model
     {
         if($deptID == 0) return array();
 
-        $dept = $this->getById($deptID);
+        $dept = $this->fetchByID($deptID);
         if(empty($dept)) return array();
 
         $childs = $this->dao->select('id')->from(TABLE_DEPT)->where('path')->like($dept->path . '%')->fetchPairs();
@@ -311,7 +316,7 @@ class deptModel extends model
      */
     public function manageChild($parentDeptID, $childs)
     {
-        $parentDept = $this->getByID($parentDeptID);
+        $parentDept = $this->fetchByID($parentDeptID);
         if($parentDept)
         {
             $grade      = $parentDept->grade + 1;

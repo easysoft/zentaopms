@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of action module of ZenTaoPMS.
  *
@@ -568,7 +569,7 @@ class actionModel extends model
             {
                 if($actionType == 'restoredsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $value == 'defaultSnap') $value = $this->lang->{$objectType}->snapshot->defaultSnapName;
 
-                $desc = str_replace('$' . $key, $value, $desc);
+                $desc = str_replace('$' . $key, (string)$value, $desc);
             }
         }
 
@@ -777,7 +778,7 @@ class actionModel extends model
 
         $condition = "({$condition})";
 
-        $actions = $this->actionTao->getActionListByCondition($condition, $date, $period, $begin, $end, $direction, $account, $beginDate, $productID, $projectID, $executionID, $executions, $actionCondition, $orderBy, $limit);
+        $actions = $this->actionTao->getActionListByCondition($condition, $date, $period, $begin, $end, $direction, $account, $beginDate, $productID, (string)$projectID, $executionID, $executions, $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');

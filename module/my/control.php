@@ -37,23 +37,23 @@ class my extends control
     }
 
     /**
+     * 积分列表。
      * Get score list
      *
-     * @param int $recTotal
-     * @param int $recPerPage
-     * @param int $pageID
-     *
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
-     * @return mixed
+     * @return void
      */
-    public function score($recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function score(int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
         $scores = $this->loadModel('score')->getListByAccount($this->app->user->account, $pager);
 
         $this->view->title      = $this->lang->score->common;
-        $this->view->user       = $this->loadModel('user')->getById($this->app->user->account);
+        $this->view->user       = $this->user->getById($this->app->user->account);
         $this->view->pager      = $pager;
         $this->view->scores     = $scores;
 
@@ -61,6 +61,7 @@ class my extends control
     }
 
     /**
+     * 日程列表。
      * My calendar.
      *
      * @access public
@@ -72,24 +73,25 @@ class my extends control
     }
 
     /**
+     * 待处理列表。
      * My work view.
      *
-     * @param  string     $mode
-     * @param  string     $type
-     * @param  string|int $param
-     * @param  string     $orderBy
-     * @param  int        $recTotal
-     * @param  int        $recPerPage
-     * @param  int        $pageID
+     * @param  string $mode
+     * @param  string $type
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function work($mode = 'task', $type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function work(string $mode = 'task', string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if($mode == 'testcase' && $type == 'assignedTo') $type = 'assigntome';
 
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
-        echo $this->fetch('my', $mode, "type=$type&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('my', $mode, "type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         //$this->showWorkCount($recTotal, $recPerPage, $pageID);
     }
 
@@ -234,26 +236,27 @@ EOF;
     }
 
     /**
+     * 贡献列表。
      * My contribute view.
      *
-     * @param  string     $mode
-     * @param  string     $type
-     * @param  string|int $param
-     * @param  string     $orderBy
-     * @param  int        $recTotal
-     * @param  int        $recPerPage
-     * @param  int        $pageID
+     * @param  string $mode
+     * @param  string $type
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function contribute($mode = 'task', $type = 'openedBy', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function contribute(string $mode = 'task', string $type = 'openedBy', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if(($mode == 'issue' || $mode == 'risk') && $type == 'openedBy') $type = 'createdBy';
         if($mode == 'testtask' && $type == 'openedBy') $type = 'done';
         if(($mode == 'doc' || $mode == 'testcase') && $type == 'openedBy') $type = 'openedbyme';
 
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
-        echo $this->fetch('my', $mode, "type=$type&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('my', $mode, "type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
 
     /**
@@ -287,7 +290,7 @@ EOF;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         if(empty($userID)) $userID = $this->app->user->id;
-        $user    = $this->loadModel('user')->getById($userID, 'id');
+        $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
 
         /* The title and position. */
@@ -315,7 +318,7 @@ EOF;
         $this->view->type         = $type;
         $this->view->status       = $status;
         $this->view->user         = $user;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users        = $this->user->getPairs('noletter');
         $this->view->account      = $this->app->user->account;
         $this->view->times        = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time         = date::now();
@@ -533,7 +536,7 @@ EOF;
         $this->view->summary    = $summary;
         $this->view->type       = $type;
         $this->view->kanbanList = $this->execution->getPairs(0, 'kanban');
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users      = $this->user->getPairs('noletter');
         $this->view->pager      = $pager;
         $this->view->mode       = 'task';
         $this->view->orderBy    = $orderBy;
@@ -826,7 +829,7 @@ EOF;
         $PMList = $this->user->getListByAccounts($accounts, 'account');
 
         $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->project;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users       = $this->user->getPairs('noletter');
         $this->view->projects    = $projects;
         $this->view->PMList      = $PMList;
         $this->view->pager       = $pager;
@@ -904,7 +907,7 @@ EOF;
 
         $this->view->title      = $this->lang->my->issue;
         $this->view->mode       = 'issue';
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->users      = $this->user->getPairs('noclosed|noletter');
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->type       = $type;
@@ -957,7 +960,7 @@ EOF;
 
         $this->view->title      = $this->lang->my->risk;
         $this->view->risks      = $risks;
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->users      = $this->user->getPairs('noclosed|noletter');
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->type       = $type;
@@ -1007,7 +1010,7 @@ EOF;
         }
 
         $this->view->title       = $this->lang->review->common;
-        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->users       = $this->user->getPairs('noclosed|noletter');
         $this->view->reviewList  = $reviewList;
         $this->view->recTotal    = $recTotal;
         $this->view->recPerPage  = $recPerPage;
@@ -1056,7 +1059,7 @@ EOF;
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->auditplan;
         $this->view->browseType = $browseType;
         $this->view->auditplans = $auditplans;
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->users      = $this->user->getPairs('noclosed|noletter');
         $this->view->pager      = $pager;
         $this->view->orderBy    = $orderBy;
         $this->view->param      = $param;
@@ -1093,7 +1096,7 @@ EOF;
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->nc;
         $this->view->browseType = $browseType;
         $this->view->ncs        = $ncList;
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->users      = $this->user->getPairs('noclosed|noletter');
         $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->pager      = $pager;
         $this->view->orderBy    = $orderBy;
@@ -1136,8 +1139,8 @@ EOF;
         $this->view->meetings   = $this->meeting->getListByUser($browseType, $orderBy, $queryID, $pager);
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
-        $this->view->users      = $this->loadModel('user')->getPairs('all,noletter');
+        $this->view->depts      = $this->dept->getOptionMenu();
+        $this->view->users      = $this->user->getPairs('all,noletter');
         $this->view->queryID    = $queryID;
         $this->view->mode       = 'myMeeting';
         $this->view->projects   = array(0 => '') + $this->loadModel('project')->getPairsByProgram(0, 'all', true);
@@ -1232,8 +1235,8 @@ EOF;
         $this->view->stories     = $stories;
         $this->view->tasks       = $tasks;
         $this->view->tickets     = $tickets;
-        $this->view->depts       = $this->loadModel('dept')->getOptionMenu();
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
+        $this->view->depts       = $this->dept->getOptionMenu();
+        $this->view->users       = $this->user->getPairs('noletter|nodeleted|noclosed');
         $this->view->projects    = $this->loadModel('project')->getPairsByProgram(0, 'noclosed');
         $this->view->allProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
         $this->view->modulePairs = $this->tree->getModulePairs(0, 'feedback');
@@ -1277,7 +1280,7 @@ EOF;
 
         $this->view->title      = $this->lang->ticket->browse;
         $this->view->products   = $this->loadModel('feedback')->getGrantProducts();
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted|noletter');
+        $this->view->users      = $this->user->getPairs('noclosed|nodeleted|noletter');
         $this->view->tickets    = $tickets;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
@@ -1575,7 +1578,7 @@ EOF;
         $this->view->dateGroups = $dateGroups;
         $this->view->direction  = $direction;
         $this->view->recTotal   = $recTotal;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->users      = $this->user->getPairs('noletter|nodeleted');
         $this->display();
     }
 
@@ -1589,7 +1592,7 @@ EOF;
     {
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
-            $result = $this->loadModel('user')->uploadAvatar();
+            $result = $this->user->uploadAvatar();
             return $this->send(array('result' => 'success', 'callback' => "loadModal('" . helper::createLink('user', 'cropavatar', "image={$result['fileID']}") . "', 'profile');"));
         }
     }
@@ -1603,7 +1606,6 @@ EOF;
      */
     public function unbind($confirm = 'no')
     {
-        $this->loadModel('user');
         if($confirm == 'no')
         {
             return print(js::confirm($this->lang->user->confirmUnbind, $this->createLink('my', 'unbind', "confirm=yes")));
@@ -1628,7 +1630,7 @@ EOF;
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.vision", $vision);
         $this->config->vision = $vision;
 
-        $_SESSION['user']->rights = $this->loadModel('user')->authorize($this->app->user->account);
+        $_SESSION['user']->rights = $this->user->authorize($this->app->user->account);
 
         return $this->send(array('result' => 'success', 'load' => helper::createLink('index', 'index')));
     }

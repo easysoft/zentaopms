@@ -69,43 +69,51 @@ $config->my->todo->dtable->fieldList['pri']['name']  = 'pri';
 $config->my->todo->dtable->fieldList['pri']['title'] = $lang->priAB;
 $config->my->todo->dtable->fieldList['pri']['type']  = 'pri';
 $config->my->todo->dtable->fieldList['pri']['group'] = 'pri';
+$config->my->todo->dtable->fieldList['pri']['flex']  = 1;
 
 $config->my->todo->dtable->fieldList['date']['name']  = 'date';
 $config->my->todo->dtable->fieldList['date']['title'] = $lang->todo->date;
 $config->my->todo->dtable->fieldList['date']['type']  = 'date';
 $config->my->todo->dtable->fieldList['date']['group'] = 'date';
+$config->my->todo->dtable->fieldList['date']['flex']  = 1;
 
 $config->my->todo->dtable->fieldList['begin']['name']  = 'begin';
 $config->my->todo->dtable->fieldList['begin']['title'] = $lang->todo->beginAB;
 $config->my->todo->dtable->fieldList['begin']['type']  = 'time';
 $config->my->todo->dtable->fieldList['begin']['group'] = 'date';
+$config->my->todo->dtable->fieldList['begin']['flex']  = 1;
 
 $config->my->todo->dtable->fieldList['end']['name']  = 'end';
 $config->my->todo->dtable->fieldList['end']['title'] = $lang->todo->endAB;
 $config->my->todo->dtable->fieldList['end']['type']  = 'time';
 $config->my->todo->dtable->fieldList['end']['group'] = 'date';
+$config->my->todo->dtable->fieldList['end']['flex']  = 1;
 
 $config->my->todo->dtable->fieldList['status']['name']      = 'status';
 $config->my->todo->dtable->fieldList['status']['title']     = $lang->todo->status;
 $config->my->todo->dtable->fieldList['status']['type']      = 'status';
 $config->my->todo->dtable->fieldList['status']['statusMap'] = $lang->todo->statusList;
 $config->my->todo->dtable->fieldList['status']['group']     = 'status';
+$config->my->todo->dtable->fieldList['status']['flex']      = 1;
 
 $config->my->todo->dtable->fieldList['type']['name']  = 'type';
 $config->my->todo->dtable->fieldList['type']['title'] = $lang->todo->type;
 $config->my->todo->dtable->fieldList['type']['type']  = 'category';
 $config->my->todo->dtable->fieldList['type']['map']   = $lang->todo->typeList;
 $config->my->todo->dtable->fieldList['type']['group'] = 'status';
+$config->my->todo->dtable->fieldList['type']['flex']  = 2;
 
 $config->my->todo->dtable->fieldList['assignedBy']['name']  = 'assignedBy';
 $config->my->todo->dtable->fieldList['assignedBy']['title'] = $lang->todo->assignedBy;
 $config->my->todo->dtable->fieldList['assignedBy']['type']  = 'user';
 $config->my->todo->dtable->fieldList['assignedBy']['group'] = 'assignedBy';
+$config->my->todo->dtable->fieldList['assignedBy']['flex']  = 1;
 
 $config->my->todo->dtable->fieldList['assignedTo']['name']  = 'assignedTo';
 $config->my->todo->dtable->fieldList['assignedTo']['title'] = $lang->todo->assignedTo;
 $config->my->todo->dtable->fieldList['assignedTo']['type']  = 'user';
 $config->my->todo->dtable->fieldList['assignedTo']['group'] = 'assignedBy';
+$config->my->todo->dtable->fieldList['assignedTo']['flex']  = 1;
 
 $config->my->todo->dtable->fieldList['actions']['name']     = 'actions';
 $config->my->todo->dtable->fieldList['actions']['title']    = $lang->actions;

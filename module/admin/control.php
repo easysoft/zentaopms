@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of admin module of ZenTaoPMS.
  *
@@ -12,26 +13,6 @@
 class admin extends control
 {
     /**
-     * The gogs constructor.
-     * @param string $moduleName
-     * @param string $methodName
-     */
-    public function __construct($moduleName = '', $methodName = '')
-    {
-        parent::__construct($moduleName, $methodName);
-
-        if(!isset($this->config->global->sn))
-        {
-            $this->loadModel('setting');
-            $this->setting->setItem('system.common.global.sn', $this->setting->computeSN());
-
-            if(!isset($this->config->global)) $this->config->global = new stdclass();
-            $this->config->global->sn = $this->setting->getItem('owner=system&module=common&section=global&key=sn');
-        }
-    }
-
-    /**
-     * Index page.
      *
      * @access public
      * @return void
@@ -40,6 +21,12 @@ class admin extends control
     {
         set_time_limit(0);
 
+        /* 设置1.5级导航信息。*/
+        /* Set the 1.5 nav. */
+        $this->admin->setMenu();
+
+        /* 处理社区登记。*/
+        /* Process community registration. */
         $community = zget($this->config->global, 'community', '');
         if(!$community or $community == 'na')
         {
@@ -53,7 +40,6 @@ class admin extends control
             $this->view->account = $community;
             $this->view->ignore  = false;
         }
-        $this->admin->setMenu();
 
         $this->view->title       = $this->lang->admin->common;
         $this->view->zentaoData  = $this->admin->getZentaoData();
@@ -155,6 +141,7 @@ class admin extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->admin->registerNotice->success, 'load' => $locate));
         }
 
+        $this->adminZen->initSN();
         $this->view->title    = $this->lang->admin->registerNotice->caption;
         $this->view->register = $this->admin->getRegisterInfo();
         $this->view->sn       = $this->config->global->sn;
@@ -193,6 +180,7 @@ class admin extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->admin->bind->success, 'load' => $locate));
         }
 
+        $this->adminZen->initSN();
         $this->view->title = $this->lang->admin->bind->caption;
         $this->view->sn    = $this->config->global->sn;
         $this->view->from  = $from;
@@ -213,7 +201,7 @@ class admin extends control
             $this->loadModel('setting')->setItems('system.common.safe', $data);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
-        
+
         $this->view->title  = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->set;
         $this->view->gdInfo = function_exists('gd_info') ? gd_info() : array();
         $this->display();

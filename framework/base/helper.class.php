@@ -857,18 +857,18 @@ class baseHelper
     /**
      * Send a cookie.
      *
-     * @param string      $name
-     * @param string      $value
-     * @param int|null    $expire
-     * @param string|null $path
-     * @param string      $domain
-     * @param bool|null   $secure
-     * @param bool        $httponly
+     * @param string          $name
+     * @param string|int|bool $value
+     * @param int|null        $expire
+     * @param string|null     $path
+     * @param string          $domain
+     * @param bool|null       $secure
+     * @param bool            $httponly
      * @static
      * @access public
      * @return bool
      */
-    public static function setcookie(string $name, string $value = '', int $expire = null, string $path = null, string $domain = '', bool $secure = null, bool $httponly = true)
+    public static function setcookie(string $name, string|int|bool $value = '', int $expire = null, string $path = null, string $domain = '', bool $secure = null, bool $httponly = true)
     {
         if(defined('RUN_MODE') && RUN_MODE == 'test') return;
 
@@ -877,6 +877,7 @@ class baseHelper
         if($path   === null) $path   = $config->webRoot;
         if($secure === null) $secure = $config->cookieSecure;
 
+        $value          = (string)$value;
         $_COOKIE[$name] = $value;
 
         if(isset($app->worker))

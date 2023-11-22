@@ -9,6 +9,7 @@
  * @version     $Id: model.php 5086 2013-07-10 02:25:22Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
+
 ?>
 <?php
 class companyModel extends model
@@ -41,10 +42,11 @@ class companyModel extends model
     }
 
     /**
+     * 获取第一家公司。
      * Get the first company.
      *
      * @access public
-     * @return void
+     * @return object
      */
     public function getFirst()
     {
@@ -52,32 +54,33 @@ class companyModel extends model
     }
 
     /**
+     * 根据id获取公司信息。
      * Get company info by id.
      *
      * @param  int    $companyID
      * @access public
      * @return object
      */
-    public function getByID($companyID = '')
+    public function getByID(int $companyID)
     {
-        return $this->dao->findById((int)$companyID)->from(TABLE_COMPANY)->fetch();
+        return $this->dao->findById($companyID)->from(TABLE_COMPANY)->fetch();
     }
 
     /**
+     * 获取用户。
      * Get users.
      *
-     * @param  string $browseType
-     * @param  string $type
-     * @param  int    $queryID
-     * @param  int    $deptID
-     * @param  string $sort
-     * @param  object $pager
+     * @param  string     $browseType
+     * @param  string     $type
+     * @param  string|int $queryID
+     * @param  int        $deptID
+     * @param  string     $sort
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getUsers($browseType = 'inside', $type = '', $queryID = 0, $deptID = 0, $sort = '', $pager = null)
+    public function getUsers(string $browseType = 'inside', string $type = '', string|int $queryID = 0, int $deptID = 0, string $sort = '', object $pager = null): array
     {
-        /* Get users. */
         if($type == 'bydept')
         {
             $childDeptIds = $this->loadModel('dept')->getAllChildID($deptID);
@@ -134,13 +137,13 @@ class companyModel extends model
      * 更新公司信息。
      * Update a company.
      *
+     * @param  int    $companyID
      * @param  object $compnay
      * @access public
-     * @return void
+     * @return bool
      */
-    public function update($company): void
+    public function update(int $companyID, object $company): bool
     {
-        $companyID = $this->app->company->id;
         $this->dao->update(TABLE_COMPANY)
             ->data($company)
             ->autoCheck()
@@ -148,6 +151,8 @@ class companyModel extends model
             ->batchCheck('name', 'unique', "id != '$companyID'")
             ->where('id')->eq($companyID)
             ->exec();
+
+        return !dao::isError();
     }
 
     /**

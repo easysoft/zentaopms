@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 class testreportTest
 {
     public function __construct()
@@ -216,14 +217,14 @@ class testreportTest
      * 测试获取测试报告的 bugs。
      * Get bugs for test.
      *
-     * @param  string             $buildIdList
+     * @param  array              $buildIdList
      * @param  int                $product
      * @param  int                $taskID
      * @param  string             $type
      * @access public
      * @return array|string|false
      */
-    public function getBugs4TestTest(string $buildIdList, int $productID, int $taskID, string $type = 'build'): array|string|false
+    public function getBugs4TestTest(array $buildIdList, int $productID, int $taskID, string $type = 'build'): array|string|false
     {
         $task    = $this->testtask->getByID($taskID);
         $builds  = $this->build->getByList($buildIdList);
