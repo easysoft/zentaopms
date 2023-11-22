@@ -117,7 +117,7 @@ class user extends control
 
         /* Modify story title. */
         $this->loadModel('story');
-        if($storyType == 'requirement') $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+        if($storyType == 'requirement') $this->lang->story->title = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
 
         /* Assign. */
         $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
