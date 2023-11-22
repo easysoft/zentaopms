@@ -64,18 +64,27 @@ class search extends control
     }
 
     /**
-     * Build query
+     * 构建搜索查询。
+     * Build search query.
      *
      * @access public
      * @return void
      */
     public function buildQuery()
     {
+        /* 将查询 sql 和 表单名字设置 session。*/
+        /* Set query sql and form name in session. */
         $this->search->buildQuery();
 
         $actionURL = $this->post->actionURL;
         $parsedURL = parse_url($actionURL);
+
+        /* 查询链接中有 host 直接返回。*/
+        /* If action url has host, return. */
         if(isset($parsedURL['host'])) return;
+
+        /* 检查查询链接。*/
+        /* Check action url. */
         if($this->config->requestType != 'GET')
         {
             $path = $parsedURL['path'];
