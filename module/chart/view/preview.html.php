@@ -63,7 +63,6 @@
           <form method='post'>
             <?php echo $chartTree;?>
             <div class='btn-toolbar'>
-              <?php echo html::selectAll();?>
               <?php echo html::submitButton($lang->chart->preview, '', 'btn btn-primary');?>
             </div>
           </form>

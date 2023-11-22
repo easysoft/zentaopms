@@ -29,6 +29,9 @@ class chart extends control
 
         if(!empty($_POST))
         {
+            $chartChecked = count($this->post->charts);
+            if($chartChecked > $this->config->chart->chartMaxChecked) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->chart->chartMaxChecked, $this->config->chart->chartMaxChecked)));
+
             $charts = array();
             foreach($this->post->charts as $value)
             {

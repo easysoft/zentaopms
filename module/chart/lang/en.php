@@ -23,6 +23,7 @@ $lang->chart->groupWeek = 'Week %s,%s';
 
 $lang->chart->noChart         = 'No Chart';
 $lang->chart->noChartSelected = 'Please select one chart.';
+$lang->chart->chartMaxChecked = 'You can only select up to %s charts.';
 
 $lang->chart->aggList = array();
 $lang->chart->aggList['count']    = 'Count';
