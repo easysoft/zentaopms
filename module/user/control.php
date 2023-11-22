@@ -355,7 +355,8 @@ class user extends control
     }
 
     /**
-     * User issues.
+     * 查看某人的问题。
+     * View user's issues.
      *
      * @param  int    $userID
      * @param  string $type
