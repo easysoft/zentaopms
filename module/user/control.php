@@ -430,27 +430,26 @@ class user extends control
     }
 
     /**
-     * The profile of a user.
+     * 查看某个用户的档案。
+     * View user's archives.
      *
      * @param  int    $userID
      * @access public
      * @return void
      */
-    public function profile($userID = '')
+    public function profile(int $userID = 0)
     {
-        if(empty($userID)) $userID = $this->app->user->id;
-
-        $user    = $this->user->getById($userID, 'id');
-        $account = $user->account;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        $user   = $userID ? $this->user->getById($userID, 'id') : $this->app->user;
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
         $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
-        $this->view->user         = $user;
-        $this->view->groups       = $this->loadModel('group')->getByAccount($account);
+        $this->view->groups       = $this->loadModel('group')->getByAccount($user->account);
         $this->view->deptPath     = $this->loadModel('dept')->getParents($user->dept);
         $this->view->personalData = $this->user->getPersonalData($user->account);
-        $this->view->userList     = $this->user->setUserList($users, $userID);
+        $this->view->deptUsers    = $users;
+        $this->view->user         = $user;
 
         $this->display();
     }
