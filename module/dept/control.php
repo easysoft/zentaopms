@@ -64,34 +64,36 @@ class dept extends control
     }
 
     /**
-     * Edit dept.
+     * 编辑部门。
+     * Edit a dept.
      *
      * @param  int    $deptID
      * @access public
      * @return void
      */
-    public function edit($deptID)
+    public function edit(int $deptID)
     {
         if(!empty($_POST))
         {
+            /* 获取表单提交内容。 */
+            $formData = form::data($this->config->dept->form->edit)->setDefault('id', $deptID)->get();
+
             $this->dept->update($deptID);
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->dept->successSave, 'closeModal' => true, 'load' => true));
         }
 
-        $dept  = $this->dept->getById($deptID);
-        $users = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted|all', $dept->manager, $this->config->maxCount);
+        /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
+        $optionMenu = $this->dept->getOptionMenu();
+        $childs     = $this->dept->getAllChildId($deptID);
+        foreach($childs as $childModuleID) unset($optionMenu[$childModuleID]);
+
+        $dept = $this->dept->fetchByID($deptID);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["manager"] = $this->config->user->moreLink;
 
-        $this->view->optionMenu = $this->dept->getOptionMenu();
-
-        $this->view->dept  = $dept;
-        $this->view->users = $users;
-
-        /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
-        $childs = $this->dept->getAllChildId($deptID);
-        foreach($childs as $childModuleID) unset($this->view->optionMenu[$childModuleID]);
-
+        $this->view->dept       = $dept;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted|all', $dept->manager, $this->config->maxCount);;
+        $this->view->optionMenu = $optionMenu;
         $this->display();
     }
 
