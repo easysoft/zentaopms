@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of custom of ZenTaoPMS.
  *
@@ -35,8 +36,8 @@ class custom extends control
      * 设置对象字段的语言项。
      * Set the language items of the object fields.
      *
-     * @param  string $module todo|story|task|bug|testcase|testtask|user|project
-     * @param  string $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|deleted|unitList
+     * @param  string $module todo|story|task|bug|testcase|testtask|user|project|block
+     * @param  string $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|deleted|unitList|closed
      * @param  string $lang   all|zh-cn|zh-tw|en|de|fr
      * @access public
      * @return void
@@ -94,7 +95,7 @@ class custom extends control
      * 设置表单必填字段。
      * Set the required fields.
      *
-     * @param  string $moduleName
+     * @param  string $moduleName product|story|productplan|release|execution|task|bug|testcase|testsuite|testtask|testreport|caselib|doc|user|project|build
      * @access public
      * @return void
      */
@@ -104,7 +105,7 @@ class custom extends control
 
         if($this->server->request_method == 'POST')
         {
-            $this->custom->saveRequiredFields($moduleName);
+            $this->custom->saveRequiredFields($moduleName, $_POST);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('required', "moduleName=$moduleName")));
         }
 
