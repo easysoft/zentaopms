@@ -153,7 +153,7 @@ class execution extends control
         $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml' || $this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $tasks = $this->execution->getTasks($productID, $executionID, $this->executions, $browseType, $queryID, $moduleID, $sort, $pager);
+        $tasks = $this->execution->getTasks((int)$productID, $executionID, $this->executions, $browseType, $queryID, (int)$moduleID, $sort, $pager);
 
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
