@@ -583,6 +583,27 @@ class customModel extends model
     }
 
     /**
+     * 获取需求概念。
+     * Get UR and SR concept.
+     *
+     * @param  int          $key
+     * @param  string       $lang
+     * @access public
+     * @return string|false
+     */
+    public function getURSRConcept(int $key, string $lang = ''): string|false
+    {
+        if(empty($lang)) $lang = $this->app->getClientLang();
+
+        return $this->dao->select('`value`')->from(TABLE_LANG)
+            ->where('lang')->eq($lang)
+            ->andWhere('module')->eq('custom')
+            ->andWhere('section')->eq('URSRList')
+            ->andWhere('`key`')->eq($key)
+            ->fetch('value');
+    }
+
+    /**
      * Get UR and SR pairs.
      *
      * @access public
@@ -818,28 +839,30 @@ class customModel extends model
     }
 
     /**
+     * 编辑需求概念。
      * Edit UR and SR concept.
      *
      * @param  int    $key
-     * @param  string $lang    zh-cn|zh-tw|en|fr|de
+     * @param  string $lang zh-cn|zh-tw|en|fr|de
+     * @param  array  $data
      * @access public
      * @return bool
      */
-    public function updateURAndSR($key = 0, $lang = '')
+    public function updateURAndSR(int $key = 0, string $lang = '', array $data = array()): bool
     {
         if(empty($lang)) $lang = $this->app->getClientLang();
-        $data = fixer::input('post')->get();
+        if(empty($data['SRName']) || empty($data['URName'])) return false;
 
-        if(empty($data->SRName) || empty($data->URName)) return false;
-
-        $oldValue = $this->dao->select('*')->from(TABLE_LANG)->where('`key`')->eq($key)->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($lang)->andWhere('module')->eq('custom')->fetch('value');
+        $oldValue = $this->getURSRConcept($key, $lang);
         $oldValue = json_decode($oldValue);
+
+        if(!$oldValue) return false;
 
         $URSRList = new stdclass();
         $URSRList->defaultSRName = zget($oldValue, 'defaultSRName', $oldValue->SRName);
         $URSRList->defaultURName = zget($oldValue, 'defaultURName', $oldValue->URName);
-        $URSRList->SRName        = empty($data->SRName) ? $URSRList->defaultSRName : $data->SRName;
-        $URSRList->URName        = empty($data->URName) ? $URSRList->defaultURName : $data->URName;
+        $URSRList->SRName        = empty($data['SRName']) ? $URSRList->defaultSRName : $data['SRName'];
+        $URSRList->URName        = empty($data['URName']) ? $URSRList->defaultURName : $data['URName'];
 
         $value = json_encode($URSRList);
         $this->dao->update(TABLE_LANG)->set('value')->eq($value)
