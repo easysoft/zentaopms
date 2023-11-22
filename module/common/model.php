@@ -3585,7 +3585,7 @@ EOF;
             if(!$varsReplaced) break;
         }
 
-        if(!$varsReplaced and strpos("|program|product|project|execution|qa|", "|{$tab}|") !== false)
+        if(!$varsReplaced and strpos("|program|product|project|execution|qa|safe|", "|{$tab}|") !== false)
         {
             $isTutorialMode = common::isTutorialMode();
             $currentModule  = $isTutorialMode ? $app->moduleName : $app->rawModule;
