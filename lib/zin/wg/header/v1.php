@@ -366,6 +366,7 @@ class header extends wg
                         $params              = "programID=0&from=global";
                         $createMethod        = 'createGuide';
                         $item['innerClass']  = $modalClass;
+                        $item['data-type']   = 'ajax';
                         $item['data-toggle'] = 'modal';
                     }
                     else

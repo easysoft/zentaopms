@@ -1032,15 +1032,15 @@
                 if(!modalTrigger)
                 {
                     delete options.toggle;
+                    options.type = options.type || 'iframe';
+                    options.context = window;
                     if(url) options.url = url; else url = options.url;
-                    if(url && !url.includes('onlybody'))
+                    if(options.type === 'iframe' && url && !url.includes('onlybody'))
                     {
                         if(url.includes('?')) url += '&onlybody=yes';
                         else url += '?onlybody=yes';
                         options.url = url;
                     }
-                    options.type = 'iframe';
-                    options.context = window;
                     modalTrigger = new window.parent.$.zui.ModalTrigger(options);
                     $link.data('zui.modaltrigger', modalTrigger);
                 }
