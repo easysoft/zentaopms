@@ -359,4 +359,20 @@ class customTest
         }
         return $this->objectModel->hasWaterfallplusData();
     }
+
+    /**
+     * 获取需求概念。
+     * Get UR and SR concept.
+     *
+     * @param  int    $key
+     * @access public
+     * @return array
+     */
+    public function getURSRConceptTest(int $key): array
+    {
+        $concept = $this->objectModel->getURSRConcept($key);
+
+        if(dao::isError()) return dao::getError();
+        return json_decode($concept, true);
+    }
 }
