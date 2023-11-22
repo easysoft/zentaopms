@@ -241,8 +241,8 @@ class job extends control
         }
 
         $repoList             = $this->repo->getList($this->projectID);
-        $repoPairs            = array(0 => '', $repo->id => $repo->name);
-        $gitlabRepos          = array(0 => '');
+        $repoPairs            = array($repo->id => $repo->name);
+        $gitlabRepos          = array();
         $repoTypes[$repo->id] = $repo->SCM;
         foreach($repoList as $repo)
         {
