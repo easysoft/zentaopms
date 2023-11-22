@@ -46,7 +46,7 @@ class deptModel extends model
      */
     public function buildMenuQuery($rootDeptID)
     {
-        $rootDept = $this->getByID($rootDeptID);
+        $rootDept = $this->fetchByID($rootDeptID);
         if(!$rootDept)
         {
             $rootDept = new stdclass();
@@ -163,8 +163,8 @@ class deptModel extends model
     public function update($deptID)
     {
         $dept   = fixer::input('post')->get();
-        $self   = $this->getById($deptID);
-        $parent = $this->getById($this->post->parent);
+        $self   = $this->fetchByID($deptID);
+        $parent = $this->fetchByID($this->post->parent);
         $childs = $this->getAllChildId($deptID);
         $dept->grade = $parent ? $parent->grade + 1 : 1;
         $dept->path  = $parent ? $parent->path . $deptID . ',' : ',' . $deptID . ',';
@@ -266,7 +266,7 @@ class deptModel extends model
     {
         if($deptID == 0) return array();
 
-        $dept = $this->getById($deptID);
+        $dept = $this->fetchByID($deptID);
         if(empty($dept)) return array();
 
         $childs = $this->dao->select('id')->from(TABLE_DEPT)->where('path')->like($dept->path . '%')->fetchPairs();
@@ -311,7 +311,7 @@ class deptModel extends model
      */
     public function manageChild($parentDeptID, $childs)
     {
-        $parentDept = $this->getByID($parentDeptID);
+        $parentDept = $this->fetchByID($parentDeptID);
         if($parentDept)
         {
             $grade      = $parentDept->grade + 1;
