@@ -2899,21 +2899,17 @@ class userModel extends model
     }
 
     /**
-     * Get vision list.
+     * 获取可用的界面列表。
+     * Get available vision list.
      *
      * @access public
      * @return array
      */
-    public function getVisionList()
+    public function getVisionList(): array
     {
+        $visions    = array_flip(array_unique(array_filter(explode(',', trim($this->config->visions, ',')))));
         $visionList = $this->lang->visionList;
-
-        foreach($visionList as $visionKey => $visionName)
-        {
-            if(strpos($this->config->visions, ",{$visionKey},") === false) unset($visionList[$visionKey]);
-        }
-
-        return $visionList;
+        return array_intersect_key($visionList, $visions);
     }
 
     /**
