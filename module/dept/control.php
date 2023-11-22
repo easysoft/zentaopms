@@ -3,11 +3,10 @@ declare(strict_types=1);
 /**
  * The control file of dept module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
- * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dept
- * @version     $Id: control.php 4157 2013-01-20 07:09:42Z wwccss $
  * @link        http://www.zentao.net
  */
 class dept extends control
@@ -131,7 +130,8 @@ class dept extends control
     }
 
     /**
-     * Ajax get users
+     * 获取部门下的用户列表。
+     * Ajax get dept users.
      *
      * @param  int    $dept
      * @param  string $user
@@ -139,9 +139,12 @@ class dept extends control
      * @access public
      * @return void
      */
-    public function ajaxGetUsers($dept, $user = '', $key = 'account')
+    public function ajaxGetUsers(int $dept, string $user = '', string $key = 'account')
     {
+        $items = array();
         $users = $this->dept->getDeptUserPairs($dept, $key);
-        return print(html::select('user', $users, $user, "class='form-control chosen'"));
+        foreach($users as $userID => $userName) $items[] = array('text' => $userName, 'value' => $userID);
+
+        return print(json_encode($items));
     }
 }
