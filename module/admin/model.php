@@ -389,7 +389,8 @@ class adminModel extends model
                     }
                 }
             }
-            elseif(!empty($menu['link']) and strpos($menu['link'], '|') !== false)
+            
+            if(!empty($menu['link']) and strpos($menu['link'], '|') !== false)
             {
                 list($module, $method) = explode('|', $menu['link']);
                 $menu['link'] = helper::createLink($module, $method);

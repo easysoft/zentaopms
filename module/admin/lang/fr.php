@@ -159,7 +159,7 @@ $lang->admin->safe->resetPWDList[0] = 'Off';
 $lang->admin->safe->noticeMode     = "Le mot de passe sera vérifié lors de la création et de la modification des coordonnées de l'utilisateur, et du changement de mot de passe.";
 $lang->admin->safe->noticeWeakMode = "Le mot de passe sera vérifié lors de la connexion au système, de la création et de la modification des coordonnées de l'utilisateur, et du changement de mot de passe.";
 $lang->admin->safe->noticeStrong   = "Le mot de passe est d'autant plus sécurisé qu'il est long, qu'il contient plus de lettres, de chiffres ou de caractères spéciaux, et que les lettres du mot de passe sont peu répétitives !";
-$lang->admin->safe->noticeGd       = 'Your server does not have GD module installed, you cannot use the Captcha function, Please use it after installation.';
+$lang->admin->safe->noticeGd       = 'Your server does not have GD module installed or enabled FreeType support, you cannot use the Captcha function, Please use it after installation.';
 
 $lang->admin->menuSetting['system']['name']    = 'System';
 $lang->admin->menuSetting['system']['desc']    = 'System elements configuration, such as backup, chat, security etc.';
@@ -183,6 +183,8 @@ $lang->admin->menuSetting['convert']['name']   = 'Data Import';
 $lang->admin->menuSetting['convert']['desc']   = 'Data import from third-party systems.';
 $lang->admin->menuSetting['platform']['name']  = 'DevOps';
 $lang->admin->menuSetting['platform']['desc']  = 'Settings of DevOps elements such as resources and environment.';
+$lang->admin->menuSetting['ai']['name']        = 'AI Configurations';
+$lang->admin->menuSetting['ai']['desc']        = 'Support configuration and management of AI auto-suggestions, AI mini-programs, and large language models.';
 
 $lang->admin->updateDynamics   = 'Dynamics';
 $lang->admin->updatePatch      = 'Patch';
@@ -205,5 +207,10 @@ $lang->admin->productFeature['max'][] = 'Project Metrics';
 $lang->admin->productFeature['max'][] = 'Asset Library';
 $lang->admin->productFeature['max'][] = 'QA Plan';
 $lang->admin->productFeature['max'][] = 'Opportunity/Risk/Issues Management';
+
+$lang->admin->ai = new stdclass();
+$lang->admin->ai->model        = 'Language Models';
+$lang->admin->ai->conversation = 'Conversations';
+$lang->admin->ai->prompt       = 'Prompts';
 
 include dirname(__FILE__) . '/menu.php';

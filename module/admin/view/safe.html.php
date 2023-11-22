@@ -16,7 +16,7 @@
 .notice {color:#2667E3; margin-left: 12px;}
 </style>
 <?php js::set('adminLang', $lang->admin);?>
-<?php js::set('loadedGD', extension_loaded('gd'));?>
+<?php js::set('loadedGD', extension_loaded('gd') && !empty($gdInfo['FreeType Support']));?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -73,7 +73,7 @@
           <tr>
             <th><?php echo $lang->admin->safe->loginCaptcha?></th>
             <td><?php echo html::radio('loginCaptcha', $lang->admin->safe->loginCaptchaList, isset($config->safe->loginCaptcha) ? $config->safe->loginCaptcha : 0)?></td>
-            <td class='notice'><?php if(!extension_loaded('gd')) echo $lang->admin->safe->noticeGd;?></td>
+            <td class='notice'><?php if(!extension_loaded('gd') || empty($gdInfo['FreeType Support'])) echo $lang->admin->safe->noticeGd;?></td>
           </tr>
           <tr>
             <td colspan='3' class='text-center form-actions'>
