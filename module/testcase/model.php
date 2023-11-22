@@ -1906,14 +1906,14 @@ class testcaseModel extends model
             }
             elseif($product && $product->type == 'normal')
             {
-                $branches = array(0 => '');
+                $branches = array('0' => '');
             }
         }
 
         $treeMenu = array();
         foreach($branches as $branchID => $branch)
         {
-            $scenes = $this->getScenesForMenu($productID, $moduleID, $startScene, $branchID, $currentScene);
+            $scenes = $this->getScenesForMenu($productID, $moduleID, $startScene, (string)$branchID, $currentScene);
             foreach($scenes as $scene)
             {
                 $branchName = !empty($product) && $product->type != 'normal' && $scene->branch === BRANCH_MAIN ? $this->lang->branch->main : $branch;
