@@ -68,23 +68,21 @@ class companyModel extends model
      * 获取用户。
      * Get users.
      *
-     * @param  string|int  $browseType
+     * @param  string      $browseType
      * @param  string      $type
-     * @param  int         $queryID
+     * @param  string|int  $queryID
      * @param  int         $deptID
      * @param  string      $sort
-     * @param  object|null $pager
+     * @param  object      $pager
      * @access public
      * @return array
      */
-    public function getUsers(string $browseType = 'inside', string $type = '', string|int $queryID = 0, int $deptID = 0, string $sort = '', object|null $pager = null): array
+    public function getUsers(string $browseType = 'inside', string $type = '', string|int $queryID = 0, int $deptID = 0, string $sort = '', object $pager = null): array
     {
-        $users = array();
-        /* Get users. */
         if($type == 'bydept')
         {
             $childDeptIds = $this->loadModel('dept')->getAllChildID($deptID);
-            $users = $this->dept->getUsers($browseType, $childDeptIds, $pager, $sort);
+            return $this->dept->getUsers($browseType, $childDeptIds, $pager, $sort);
         }
         else
         {
@@ -101,9 +99,8 @@ class companyModel extends model
                     $this->session->set('userQuery', ' 1 = 1');
                 }
             }
-            $users = $this->loadModel('user')->getByQuery($browseType, $this->session->userQuery, $pager, $sort);
+            return $this->loadModel('user')->getByQuery($browseType, $this->session->userQuery, $pager, $sort);
         }
-        return $users;
     }
 
     /**
