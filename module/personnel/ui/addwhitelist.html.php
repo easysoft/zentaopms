@@ -26,7 +26,11 @@ foreach($appendUsers as $account => $realname)
 }
 
 $userItems = array();
-foreach($members as $member) $userItems[] = array('value' => $member->account, 'text' => $member->realname);
+foreach($members as $member)
+{
+    $userItems[] = array('value' => $member->account, 'text' => $member->realname);
+    unset($users[$user->account]);
+}
 jsVar('userItems', $userItems);
 
 dropmenu(set::objectID($objectID));
