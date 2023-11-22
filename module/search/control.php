@@ -102,6 +102,7 @@ class search extends control
     }
 
     /**
+     * 保存搜索查询。
      * Save search query.
      *
      * @param  string  $module
@@ -109,22 +110,19 @@ class search extends control
      * @access public
      * @return void
      */
-    public function saveQuery($module, $onMenuBar = 'no')
+    public function saveQuery(string $module, string $onMenuBar = 'no')
     {
         if($_POST)
         {
             $queryID = $this->search->saveQuery();
             if(!$queryID) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $data     = fixer::input('post')->get();
-            $shortcut = empty($data->onMenuBar) ? 0 : 1;
-
             if($this->viewType == 'json')
             {
                 echo 'success';
                 return;
             }
-            return $this->send(array('closeModal' => true, 'callback' => array('name' => 'zui.SearchForm.addQuery', 'params' => array(array('module' => $module, 'id' => $queryID, 'text' => $data->title)))));
+            return $this->send(array('closeModal' => true, 'callback' => array('name' => 'zui.SearchForm.addQuery', 'params' => array(array('module' => $module, 'id' => $queryID, 'text' => $this->post->title)))));
         }
 
         $this->view->module    = $module;
