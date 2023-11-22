@@ -297,6 +297,7 @@ class custom extends control
     }
 
     /**
+     * 看板关闭设置。
      * Set whether the kanban is read-only.
      *
      * @access public
@@ -307,10 +308,11 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem("system.common.CRKanban", $this->post->kanban);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title = $this->lang->custom->kanban;
+
         $this->display();
     }
 
