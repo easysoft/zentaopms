@@ -194,7 +194,7 @@ class admin extends control
     }
 
     /**
-
+     * 弱口令扫描。
      * Check weak user.
      *
      * @access public
@@ -202,8 +202,8 @@ class admin extends control
      */
     public function checkWeak()
     {
-        $this->view->title      = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->checkWeak;
-        $this->view->weakUsers  = $this->loadModel('user')->getWeakUsers();
+        $this->view->title     = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->checkWeak;
+        $this->view->weakUsers = $this->loadModel('user')->getWeakUsers();
         $this->display();
     }
 
