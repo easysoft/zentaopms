@@ -294,7 +294,7 @@ class editorModel extends model
      * @access public
      * @return string
      */
-    public function getExtendLink($filePath, $action, $isExtends = '')
+    public function getExtendLink(string $filePath, string $action, string $isExtends = ''): string
     {
         return inlink('edit', "filePath=" . helper::safe64Encode($filePath) . "&action=$action&isExtends=$isExtends");
     }
@@ -355,7 +355,7 @@ class editorModel extends model
      * @access public
      * @return string
      */
-    public function extendModel($filePath)
+    public function extendModel(string $filePath): string
     {
         $className = basename(dirname(dirname($filePath)));
         if(!class_exists($className)) helper::import(dirname($filePath));
@@ -419,7 +419,7 @@ EOD;
      * @access public
      * @return string
      */
-    public function newControl($filePath)
+    public function newControl(string $filePath): string
     {
         $className  = $this->getClassNameByPath($filePath);
         $methodName = basename($filePath, '.php');
@@ -443,34 +443,25 @@ EOD;
      * @access public
      * @return string
      */
-    public function getParam($className, $methodName, $ext = '')
+    public function getParam(string $className, string $methodName, string $ext = ''): string
     {
-        $method = new ReflectionMethod($className . $ext, $methodName);
-        $methodParam = '';
-        foreach ($method->getParameters() as $param)
+        $method       = new ReflectionMethod($className . $ext, $methodName);
+        $methodParams = array();
+        foreach($method->getParameters() as $param)
         {
-            $methodParam .= '$' . $param->getName();
+            $methodParam = '$' . $param->getName();
             if($param->isOptional())
             {
                 $defaultParam = $param->getDefaultValue();
-                if(is_string($defaultParam))
-                {
-                    $methodParam .= "='$defaultParam', ";
-                }
-                else
-                {
-                    if(is_array($defaultParam) and empty($defaultParam)) $defaultParam = 'array()';
-                    if(is_null($defaultParam)) $defaultParam = 'null';
-                    $methodParam .= "=$defaultParam, ";
-                }
+                if(is_string($defaultParam))                         $defaultParam = "'$defaultParam'";
+                if(is_array($defaultParam) and empty($defaultParam)) $defaultParam = 'array()';
+                if(is_null($defaultParam))                           $defaultParam = 'null';
+                $methodParam .= "=$defaultParam";
             }
-            else
-            {
-                $methodParam .= ', ';
-            }
+            $methodParams[] = $methodParam;
         }
-        $methodParam = rtrim($methodParam, ', ');
-        return $methodParam;
+
+        return implode(', ', $methodParams);
     }
 
     /**
@@ -482,7 +473,7 @@ EOD;
      * @access public
      * @return string
      */
-    public function getMethodCode($className, $methodName, $ext = '')
+    public function getMethodCode(string $className, string $methodName, string $ext = ''): string
     {
         $method    = new ReflectionMethod($className . $ext, $methodName);
         $fileName  = $method->getFileName();

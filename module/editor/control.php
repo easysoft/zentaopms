@@ -66,58 +66,32 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function edit($filePath = '', $action = '', $isExtends = '')
+    public function edit(string $filePath = '', string $action = '', string $isExtends = '')
     {
         $this->view->safeFilePath = $filePath;
         $fileContent = '';
         $extension   = 'php';
         if($filePath)
         {
-            $filePath = realpath(helper::safe64Decode($filePath));
+            $filePath = helper::safe64Decode($filePath);
             if(strpos(strtolower($filePath), strtolower($this->app->getBasePath())) !== 0) return print($this->lang->editor->editFileError);
             if($action == 'extendOther' and file_exists($filePath)) $this->view->showContent = file_get_contents($filePath);
 
-            if($action == 'edit' or $action == 'override')
+            if(($action == 'edit' or $action == 'override') && !file_exists($filePath)) $filePath = '';
+            if($action == 'extendControl' and empty($isExtends))
             {
-                if(file_exists($filePath))
-                {
-                    $fileContent = file_get_contents($filePath);
-                    if($action == 'override')
-                    {
-                        $fileContent = str_replace("'../../", '$this->app->getModuleRoot() . \'', $fileContent);
-                        $fileContent = str_replace(array('\'./', '"./'), array('\'../../view/', '"../../view'), $fileContent);
-                    }
-                }
-                else
-                {
-                    $filePath = '';
-                }
-            }
-            elseif($action == 'extendModel')
-            {
-                $fileContent = $this->editor->extendModel($filePath);
-            }
-            elseif($action == 'extendControl')
-            {
-                $okUrl = $this->editor->getExtendLink($filePath, 'extendControl', 'yes');
+                $okUrl     = $this->editor->getExtendLink($filePath, 'extendControl', 'yes');
                 $cancelUrl = $this->editor->getExtendLink($filePath, 'extendControl', 'no');
-                if(!$isExtends) return print(js::confirm($this->lang->editor->extendConfirm, $okUrl, $cancelUrl));
-                $fileContent = $this->editor->extendControl($filePath, $isExtends);
-            }
-            elseif($action == 'newPage')
-            {
-                $fileContent = $this->editor->newControl($filePath);
-            }
-            elseif(strrpos(basename($filePath), '.php') !== false and empty($fileContent))
-            {
-                $fileContent = "<?php\n";
+                return print(js::confirm($this->lang->editor->extendConfirm, $okUrl, $cancelUrl));
             }
 
-            $fileName  = basename($filePath);
+            $fileContent = $this->editorZen->buildContentByAction($filePath, $action, $isExtends);
+            $fileName    = basename($filePath);
             if(strpos($fileName, '.') !== false) $extension = substr($fileName, strpos($fileName, '.') + 1);
             if(strtolower($action) == 'newjs')  $extension = 'js';
             if(strtolower($action) == 'newcss') $extension = 'css';
         }
+
         $this->view->fileContent   = $fileContent;
         $this->view->filePath      = $filePath;
         $this->view->fileExtension = $extension;

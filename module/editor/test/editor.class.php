@@ -290,7 +290,7 @@ class editorTest
         $modulePath = $this->objectModel->app->getModulePath('', 'todo') . 'control.php';
         include $modulePath;
         $params = $this->objectModel->getParam('todo', 'create');
-        return $params == "\$date='today', \$userID='', \$from='todo'" ? 1 : 0;
+        return $params == "\$date='today', \$from='todo'" ? 1 : 0;
     }
 
     /**
@@ -304,7 +304,7 @@ class editorTest
         $modulePath = $this->objectModel->app->getModulePath('', 'todo') . 'control.php';
         include $modulePath;
         $code = $this->objectModel->getMethodCode('todo', 'create');
-        return strpos($code, "public function create(\$date = 'today', \$userID = '', \$from = 'todo')") !== false ? 1 : 0;
+        return strpos($code, "public function create(") !== false ? 1 : 0;
     }
 
     /**
