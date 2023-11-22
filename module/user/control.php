@@ -366,30 +366,27 @@ class user extends control
      * @access public
      * @return void
      */
-    public function issue($userID, $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function issue(int $userID, string $type = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $uri = $this->app->getURI(true);
-        $this->session->set('issueList', $uri, 'project');
+        $this->session->set('issueList', $this->app->getURI(true), 'project');
 
-        $user    = $this->user->getById($userID, 'id');
-        $account = $user->account;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        $user   = $this->user->getById($userID, 'id');
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Set the menus. */
-        $this->view->userList = $this->user->setUserList($users, $userID);
-
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->issue;
-        $this->view->issues     = $this->loadModel('issue')->getUserIssues($type, 0, $account, $orderBy, $pager);
-        $this->view->user       = $user;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->type       = $type;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
+        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->issue;
+        $this->view->issues    = $this->loadModel('issue')->getUserIssues($type, 0, $user->account, $orderBy, $pager);
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->deptUsers = $users;
+        $this->view->user      = $user;
+        $this->view->type      = $type;
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
 
         $this->display();
     }
