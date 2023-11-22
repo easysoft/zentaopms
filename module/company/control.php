@@ -209,6 +209,7 @@ class company extends control
     }
 
     /**
+     * Ajax获取外部公司。
      * Ajax get outside company.
      *
      * @access public

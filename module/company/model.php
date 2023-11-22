@@ -106,15 +106,15 @@ class companyModel extends model
     }
 
     /**
+     * 获取外部公司。
      * Get outside companies.
      *
      * @access public
      * @return array
      */
-    public function getOutsideCompanies()
+    public function getOutsideCompanies(): array
     {
-        $companies = $this->dao->select('id, name')->from(TABLE_COMPANY)->where('id')->ne(1)->fetchPairs();
-        return $companies;
+        return $this->dao->select('id, name')->from(TABLE_COMPANY)->where('id')->ne(1)->fetchPairs();
     }
 
     /**
