@@ -696,6 +696,7 @@ class mr extends control
         $stories = $this->mr->getLinkList($MRID, $product->id, 'story', $type == 'story' ? $orderBy : '', $storyPager);
         $bugs    = $this->mr->getLinkList($MRID, $product->id, 'bug',   $type == 'bug'   ? $orderBy : '', $bugPager);
         $tasks   = $this->mr->getLinkList($MRID, $product->id, 'task',  $type == 'task'  ? $orderBy : '', $taskPager);
+        $builds  = $this->loadModel('build')->getBuildPairs($product->id);
 
         $this->view->title        = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->link;
         $this->view->MR           = $MR;
@@ -711,6 +712,7 @@ class mr extends control
         $this->view->bugPager     = $bugPager;
         $this->view->taskPager    = $taskPager;
         $this->view->type         = $type;
+        $this->view->builds       = $builds;
         $this->view->orderBy      = $orderBy;
         $this->view->link         = $link;
         $this->view->param        = $param;
