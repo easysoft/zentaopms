@@ -779,27 +779,29 @@ class customModel extends model
     }
 
     /**
+     * 设置需求概念。
      * Set UR and SR concept.
      *
+     * @param  array  $data
      * @access public
      * @return bool
      */
-    public function setURAndSR()
+    public function setURAndSR(array $data): bool
     {
-        $data   = fixer::input('post')->get();
         $lang   = $this->app->getClientLang();
         $maxKey = $this->dao->select('max(cast(`key` as SIGNED)) as maxKey')->from(TABLE_LANG)
             ->where('section')->eq('URSRList')
             ->andWhere('module')->eq('custom')
             ->andWhere('lang')->eq($lang)
             ->fetch('maxKey');
+
         $maxKey = $maxKey ? $maxKey : 1;
 
         /* If has custom UR and SR name. */
-        foreach($data->SRName as $key => $SRName)
+        foreach($data['SRName'] as $key => $SRName)
         {
-            if(isset($data->URName))  $URName = zget($data->URName, $key, '');
-            if(!isset($data->URName)) $URName = $this->lang->URCommon;
+            if(isset($data['URName']))  $URName = zget($data['URName'], $key, '');
+            if(!isset($data['URName'])) $URName = $this->lang->URCommon;
             if(!$URName || !$SRName) continue;
 
             $URSRList = new stdclass();
