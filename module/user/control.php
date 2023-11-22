@@ -259,7 +259,8 @@ class user extends control
     }
 
     /**
-     * User's test case.
+     * 查看某个用户的测试用例。
+     * View user's test cases.
      *
      * @param  int    $userID
      * @param  string $type
@@ -270,20 +271,20 @@ class user extends control
      * @access public
      * @return void
      */
-    public function testcase($userID, $type = 'case2Him', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase(int $userID, string $type = 'case2Him', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session, load lang. */
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
         $this->app->loadLang('testcase');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $user    = $this->user->getById($userID, 'id');
-        $account = $user->account;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        $user   = $this->user->getById($userID, 'id');
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
@@ -292,32 +293,28 @@ class user extends control
         $cases = array();
         if($type == 'case2Him')
         {
-            $cases = $this->loadModel('testcase')->getByAssignedTo($account, $auto = '', $sort, $pager);
+            $cases = $this->loadModel('testcase')->getByAssignedTo($user->account, '', $sort, $pager);
         }
         elseif($type == 'caseByHim')
         {
-            $cases = $this->loadModel('testcase')->getByOpenedBy($account, $auto = '', $sort, $pager);
+            $cases = $this->loadModel('testcase')->getByOpenedBy($user->account, '', $sort, $pager);
         }
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'case2Him' ? false : true);
 
         /* Process case for check story changed. */
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
         $cases = $this->testcase->appendData($cases);
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'case2Him' ? false : true);
-
         /* Assign. */
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testCase;
-        $this->view->user       = $user;
-        $this->view->cases      = $cases;
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->tabID      = 'test';
-        $this->view->type       = $type;
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->userList   = $this->user->setUserList($users, $userID);
+        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->testCase;
+        $this->view->users     = $this->user->getPairs('noletter');
+        $this->view->cases     = $cases;
+        $this->view->deptUsers = $users;
+        $this->view->user      = $user;
+        $this->view->type      = $type;
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
 
         $this->display();
     }

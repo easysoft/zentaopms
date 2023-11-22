@@ -23,6 +23,7 @@ $cols['id']['checkbox']        = false;
 $cols['title']['nestedToggle'] = false;
 $cols['title']['data-toggle']  = 'modal';
 $cols['title']['data-size']    = 'lg';
+$cols['type']['flex']          = false;
 $cols['status']['statusMap']['changed'] = $lang->story->changed;
 
 $cols = array_map(function($col)
