@@ -557,7 +557,7 @@ class actionModel extends model
                 }
                 else
                 {
-                    $desc['main'] = str_replace('$' . $key, $value, $desc['main']);
+                    $desc['main'] = str_replace('$' . $key, (string)$value, $desc['main']);
                 }
             }
             else
