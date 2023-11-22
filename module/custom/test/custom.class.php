@@ -224,33 +224,31 @@ class customTest
     }
 
     /**
+     * 保存表单必填字段设置。
      * Test save required fields.
      *
-     * @param  string  $moduleName
-     * @param  string  $requiredFields
-     * @param  string  $fieldsType
+     * @param  string       $moduleName product|story|productplan|release|execution|task|bug|testcase|testsuite|testtask|testreport|caselib|doc|user|project|build
+     * @param  array        $requiredFields
+     * @param  string       $fieldsType
      * @access public
-     * @return object
+     * @return array|object
      */
-    public function saveRequiredFieldsTest($moduleName, $requiredFields, $fieldsType)
+    public function saveRequiredFieldsTest(string $moduleName, array $requiredFields, string $fieldsType): array|object
     {
-        global $app, $tester;
+        global $app;
         $app->loadLang($moduleName);
 
-        $_POST = $requiredFields;
-        $this->objectModel->saveRequiredFields($moduleName);
-
-        $objects = $tester->dao->select('`value`')->from(TABLE_CONFIG)
+        $this->objectModel->saveRequiredFields($moduleName, $requiredFields);
+        $objects = $this->objectModel->dao->select('`value`')->from(TABLE_CONFIG)
             ->where('`owner`')->eq('system')
             ->andWhere('`module`')->eq($moduleName)
             ->andWhere('`key`')->eq('requiredFields')
             ->andWhere('`section`')->eq($fieldsType)
             ->fetch();
 
-        unset($_POST);
-
         if(dao::isError()) return dao::getError();
 
+        $this->objectModel->loadModel('setting')->deleteItems("owner=system&module={$moduleName}&key=requiredFields&vision={$app->config->vision}");
         return $objects;
     }
 
