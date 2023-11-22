@@ -134,7 +134,15 @@ class customTest
         return $objects;
     }
 
-    public function getRequiredFieldsTest($moduleConfig)
+    /**
+     * 获取必填字段。
+     * Test get required fields.
+     *
+     * @param  object $moduleConfig
+     * @access public
+     * @return array
+     */
+    public function getRequiredFieldsTest(object $moduleConfig): array
     {
         $objects = $this->objectModel->getRequiredFields($moduleConfig);
 
