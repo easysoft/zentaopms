@@ -151,6 +151,7 @@ class custom extends control
     }
 
     /**
+     * 需求概念列表。
      * Browse story concept.
      *
      * @access public
@@ -158,9 +159,9 @@ class custom extends control
      */
     public function browseStoryConcept()
     {
-        $this->view->title      = $this->lang->custom->browseStoryConcept;
-        $this->view->URSRList   = $this->custom->getURSRList();
-        $this->view->module     = 'product';
+        $this->view->title    = $this->lang->custom->browseStoryConcept;
+        $this->view->URSRList = $this->custom->getURSRList();
+        $this->view->module   = 'product';
 
         $this->display();
     }
