@@ -9,6 +9,7 @@
  * @version     $Id: model.php 5086 2013-07-10 02:25:22Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
+
 ?>
 <?php
 class companyModel extends model
@@ -64,24 +65,26 @@ class companyModel extends model
     }
 
     /**
+     * 获取用户。
      * Get users.
      *
-     * @param  string $browseType
-     * @param  string $type
-     * @param  int    $queryID
-     * @param  int    $deptID
-     * @param  string $sort
-     * @param  object $pager
+     * @param  string|int  $browseType
+     * @param  string      $type
+     * @param  int         $queryID
+     * @param  int         $deptID
+     * @param  string      $sort
+     * @param  object|null $pager
      * @access public
      * @return array
      */
-    public function getUsers($browseType = 'inside', $type = '', $queryID = 0, $deptID = 0, $sort = '', $pager = null)
+    public function getUsers(string $browseType = 'inside', string $type = '', string|int $queryID = 0, int $deptID = 0, string $sort = '', object|null $pager = null): array
     {
+        $users = array();
         /* Get users. */
         if($type == 'bydept')
         {
             $childDeptIds = $this->loadModel('dept')->getAllChildID($deptID);
-            return $this->dept->getUsers($browseType, $childDeptIds, $pager, $sort);
+            $users = $this->dept->getUsers($browseType, $childDeptIds, $pager, $sort);
         }
         else
         {
@@ -98,8 +101,9 @@ class companyModel extends model
                     $this->session->set('userQuery', ' 1 = 1');
                 }
             }
-            return $this->loadModel('user')->getByQuery($browseType, $this->session->userQuery, $pager, $sort);
+            $users = $this->loadModel('user')->getByQuery($browseType, $this->session->userQuery, $pager, $sort);
         }
+        return $users;
     }
 
     /**
