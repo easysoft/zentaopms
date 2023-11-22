@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/testreport.class.php';
 
@@ -22,7 +23,7 @@ cid=1
 
 */
 $taskID   = array(1, 0);
-$reportID = '1';
+$reportID = 1;
 
 $testreport = new testreportTest();
 r($testreport->getResultSummaryTest($taskID[0], $reportID)) && p() && e('共有<strong>4</strong>个用例，共执行<strong>4</strong>个用例，产生了<strong>4</strong>个结果，失败的用例有<strong>2</strong>个。'); //正常查询
