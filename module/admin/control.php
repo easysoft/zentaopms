@@ -208,6 +208,7 @@ class admin extends control
     }
 
     /**
+     * ZDOO集成。
      * Config sso for ranzhi.
      *
      * @access public
@@ -217,15 +218,10 @@ class admin extends control
     {
         if(!empty($_POST))
         {
-            $ssoConfig = new stdclass();
-            $ssoConfig->turnon   = $this->post->turnon;
-            $ssoConfig->redirect = $this->post->redirect;
-            $ssoConfig->addr     = $this->post->addr;
-            $ssoConfig->code     = trim($this->post->code);
-            $ssoConfig->key      = trim($this->post->key);
+            $data = form::data()->get();
+            if(!$data->turnon) $data->redirect = $data->turnon;
+            $this->loadModel('setting')->setItems('system.sso', $data);
 
-            if(!$ssoConfig->turnon) $ssoConfig->redirect = $ssoConfig->turnon;
-            $this->loadModel('setting')->setItems('system.sso', $ssoConfig);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('sso')));
         }
@@ -233,8 +229,7 @@ class admin extends control
         $this->loadModel('sso');
         if(!isset($this->config->sso)) $this->config->sso = new stdclass();
 
-        $this->view->title      = $this->lang->admin->sso;
-
+        $this->view->title    = $this->lang->admin->sso;
         $this->view->turnon   = isset($this->config->sso->turnon)   ? $this->config->sso->turnon   : 1;
         $this->view->redirect = isset($this->config->sso->redirect) ? $this->config->sso->redirect : 0;
         $this->view->addr     = isset($this->config->sso->addr)     ? $this->config->sso->addr     : '';
