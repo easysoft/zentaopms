@@ -635,9 +635,9 @@ class actionTao extends actionModel
      * @param  string     $direction
      * @param  string     $account
      * @param  string     $beginDate
-     * @param  string     $productID
-     * @param  string     $projectID
-     * @param  string     $executionID
+     * @param  string|int $productID
+     * @param  string|int $projectID
+     * @param  string|int $executionID
      * @param  array      $executions
      * @param  string     $actionCondition
      * @param  string     $orderBy
@@ -645,7 +645,7 @@ class actionTao extends actionModel
      * @access protected
      * @return array|bool
      */
-    protected function getActionListByCondition(string $condition, string $date, string $period, string $begin, string $end, string $direction, string $account, string $beginDate, string $productID, string $projectID, string $executionID, array $executions, string $actionCondition, string $orderBy, int $limit = 50): array|bool
+    protected function getActionListByCondition(string $condition, string $date, string $period, string $begin, string $end, string $direction, string $account, string $beginDate, string|int $productID, string|int $projectID, string|int $executionID, array $executions, string $actionCondition, string $orderBy, int $limit = 50): array|bool
     {
         $actionTable = in_array($period, $this->config->action->latestDateList) ? TABLE_ACTIONRECENT : TABLE_ACTION;
 
