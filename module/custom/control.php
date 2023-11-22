@@ -167,6 +167,7 @@ class custom extends control
     }
 
     /**
+     * 设置需求概念。
      * Set story concept.
      *
      * @access public
@@ -176,7 +177,7 @@ class custom extends control
     {
         if($_POST)
         {
-            $result = $this->custom->setURAndSR();
+            $result = $this->custom->setURAndSR($_POST);
             if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -185,6 +186,7 @@ class custom extends control
 
         if(!common::hasPriv('custom', 'setDefaultConcept')) unset($this->config->custom->browseStoryConcept->dtable->fieldList['default']);
         $this->view->title = $this->lang->custom->setStoryConcept;
+
         $this->display();
     }
 
