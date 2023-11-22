@@ -525,17 +525,16 @@ EOF;
      * @access public
      * @return void
      */
-    public function bug($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. load Lang. */
         $this->loadModel('bug');
-        $this->app->loadLang('bug');
-        $queryID  = ($type == 'bySearch') ? (int)$param : 0;
+        $queryID  = $type == 'bySearch' ? $param : 0;
         if($type != 'bySearch')            $this->session->set('myBugType', $type);
         if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
@@ -551,9 +550,8 @@ EOF;
         {
             $bugs = $this->bug->getUserBugs($this->app->user->account, $type, $sort, 0, $pager, 0, $queryID);
         }
-
-        $bugs = $this->bug->batchAppendDelayedDays($bugs);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
+        $bugs = $this->bug->batchAppendDelayedDays($bugs);
 
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bySearch&queryID=myQueryID");
         $this->my->buildBugSearchForm($queryID, $actionURL);
