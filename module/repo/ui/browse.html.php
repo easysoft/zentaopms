@@ -83,6 +83,7 @@ if($fileName) $breadcrumbItems[] = h::span($fileName);
         (
             set::id('repoDropmenu'),
             set::text($repo->name),
+            set::objectID($repo->id),
             set::url(createLink('repo', 'ajaxGetDropMenu', "repoID={$repo->id}&module=repo&method=browse&projectID={$objectID}"))
         ) : null,
         ($repo->SCM != 'Subversion' && ($branches || $tags)) ? dropmenu
