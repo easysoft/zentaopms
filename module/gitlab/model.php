@@ -3049,6 +3049,6 @@ class gitlabModel extends model
         if(!$gitlab) return array();
 
         $url = rtrim($gitlab->url, '/') . '/api/graphql' . "?private_token={$gitlab->token}";
-        return json_decode(commonModel::http($url, $query));
+        return json_decode(commonModel::http($url, $query, array(CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1)));
     }
 }
