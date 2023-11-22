@@ -388,9 +388,11 @@ EOF;
     }
 
     /**
+     * 用户需求列表。
      * My requirements.
      *
      * @param  string $type
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -398,14 +400,13 @@ EOF;
      * @access public
      * @return void
      */
-    public function requirement($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function requirement(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. */
-        $this->loadModel('story');
         if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
@@ -413,8 +414,9 @@ EOF;
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'productTitle') !== false) $sort = str_replace('productTitle', 'product', $sort);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
-        $queryID = ($type == 'bysearch') ? (int)$param : 0;
+        $queryID = ($type == 'bysearch') ? $param : 0;
 
+        $this->loadModel('story');
         if($type == 'assignedBy')
         {
             $stories = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'requirement');
@@ -425,23 +427,21 @@ EOF;
         }
         else
         {
-            $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement', false, 'all');
+            $stories = $this->story->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement', false, 'all');
         }
-
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
+
+        foreach($stories as $story) $story->estimate = $story->estimate . $this->config->hourUnit;
 
          /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=requirement&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildRequirementSearchForm($queryID, $actionURL, $currentMethod);
 
-        foreach($stories as $story) $story->estimate = $story->estimate . $this->config->hourUnit;
-
         /* Assign. */
         $this->view->title    = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->stories  = $stories;
         $this->view->users    = $this->user->getPairs('noletter');
-        $this->view->projects = $this->loadModel('project')->getPairsByProgram();
         $this->view->type     = $type;
         $this->view->param    = $param;
         $this->view->mode     = 'requirement';
