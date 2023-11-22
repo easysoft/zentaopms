@@ -663,36 +663,38 @@ class customModel extends model
     }
 
     /**
+     * 获取需求概念列表。
      * Get UR and SR list.
      *
      * @access public
      * @return array
      */
-    public function getURSRList()
+    public function getURSRList(): array
     {
         $this->app->loadLang('custom');
         $lang = $this->app->getClientLang();
 
-        $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
+        $URSRDataList = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
             ->where('lang')->eq($lang)
             ->andWhere('module')->eq('custom')
             ->andWhere('section')->eq('URSRList')
             ->fetchAll();
-        if(empty($langData))
+
+        if(empty($URSRDataList))
         {
-            $URSR     = $this->loadModel('setting')->getURSR();
-            $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)->where('`key`')->eq($URSR)->andWhere('module')->eq('custom')->andWhere('section')->eq('URSRList')->fetchAll();
+            $URSR         = $this->loadModel('setting')->getURSR();
+            $URSRDataList = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)->where('`key`')->eq($URSR)->andWhere('module')->eq('custom')->andWhere('section')->eq('URSRList')->fetchAll();
         }
 
         $URSRList = array();
-        foreach($langData as $content)
+        foreach($URSRDataList as $URSRData)
         {
-            $value = json_decode($content->value);
-            $URSRList[$content->key] = new stdclass();
-            $URSRList[$content->key]->key    = $content->key;
-            $URSRList[$content->key]->SRName = $value->SRName;
-            $URSRList[$content->key]->URName = $value->URName;
-            $URSRList[$content->key]->system = $content->system;
+            $value = json_decode($URSRData->value);
+            $URSRList[$URSRData->key] = new stdclass();
+            $URSRList[$URSRData->key]->key    = $URSRData->key;
+            $URSRList[$URSRData->key]->SRName = $value->SRName;
+            $URSRList[$URSRData->key]->URName = $value->URName;
+            $URSRList[$URSRData->key]->system = $URSRData->system;
         }
 
         return $URSRList;
