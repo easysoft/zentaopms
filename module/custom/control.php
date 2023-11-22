@@ -255,6 +255,7 @@ class custom extends control
     }
 
     /**
+     * 执行关闭设置。
      * Set whether the closed execution is read-only.
      *
      * @access public
@@ -265,7 +266,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem("system.common.CRExecution@{$this->config->vision}", $this->post->execution);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title  = $this->lang->custom->executionCommon;
