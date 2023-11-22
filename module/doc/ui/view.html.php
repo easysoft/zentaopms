@@ -256,6 +256,7 @@ $toggleTreeBtn = isset($outlineTree) ? btn
     (
         setID('outlineToggle'),
         setClass('btn ghost'),
+        setStyle('background', '#FFF'),
         icon('menu-arrow-right'),
         on::click('toggleOutline')
     ) : null;
