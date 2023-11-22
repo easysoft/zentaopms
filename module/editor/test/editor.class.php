@@ -372,6 +372,20 @@ class editorTest
     }
 
     /**
+     * Test for save method.
+     *
+     * @param  string    $filePath
+     * @access public
+     * @return string|bool
+     */
+    public function saveTest(string $filePath): string|bool
+    {
+        $_POST['fileContent'] = "<?php\n";
+
+        return $this->objectModel->save($filePath);
+    }
+
+    /**
      * Test for get class name by path.
      *
      * @access public

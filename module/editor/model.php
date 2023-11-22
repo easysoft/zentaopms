@@ -302,13 +302,12 @@ class editorModel extends model
     /**
      * Get api link.
      *
-     * @param  int    $filePath
-     * @param  int    $action
-     * @param  string $type
+     * @param  string    $filePath
+     * @param  string    $action
      * @access public
      * @return string
      */
-    public function getAPILink($filePath, $action)
+    public function getAPILink(string $filePath, string $action): string
     {
         return helper::createLink('api', 'debug', "filePath=" . helper::safe64Encode($filePath) . "&action=$action");
     }
@@ -318,25 +317,25 @@ class editorModel extends model
      *
      * @param  string    $filePath
      * @access public
-     * @return string
+     * @return string|bool
      */
-    public function save($filePath)
+    public function save(string $filePath): string|bool
     {
         /* Reduce expiration time for check safe file. */
         $this->config->safeFileTimeout = 15 * 60;
         $statusFile = $this->loadModel('common')->checkSafeFile();
-        if($statusFile) return sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile));
+        if($statusFile) return dao::$errors[] = sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile));
 
         $dirPath     = dirname($filePath);
         $extFilePath = substr($filePath, 0, strpos($filePath, DS . 'ext' . DS) + 4);
         if(!is_dir($dirPath) and is_writable($extFilePath)) mkdir($dirPath, 0777, true);
         if(!is_dir($dirPath))
         {
-            if(is_dir($extFilePath)) return sprintf($this->lang->editor->notWritable, $extFilePath);
-            return sprintf($this->lang->editor->notExists, $extFilePath);
+            if(is_dir($extFilePath)) return dao::$errors[] = sprintf($this->lang->editor->notWritable, $extFilePath);
+            return dao::$errors[] = sprintf($this->lang->editor->notExists, $extFilePath);
         }
-        if(!is_writable($dirPath)) return sprintf($this->lang->editor->notWritable, $extFilePath);
-        if(strpos(strtolower(realpath($dirPath)), strtolower($this->app->getBasePath())) !== 0) return $this->lang->editor->editFileError;
+        if(!is_writable($dirPath)) return dao::$errors[] = sprintf($this->lang->editor->notWritable, $extFilePath);
+        if(strpos(strtolower(realpath($dirPath)), strtolower($this->app->getBasePath())) !== 0) return dao::$errors[] = $this->lang->editor->editFileError;
 
         $fileContent = $this->post->fileContent;
         $evils       = array('eval', 'exec', 'passthru', 'proc_open', 'shell_exec', 'system', '$$', 'include', 'require', 'assert', 'javascript', 'onclick');
@@ -528,7 +527,7 @@ EOD;
             if(strpos($editName, '.php') !== false) return $extPath . 'lang' . DS . basename($editName, ".{$fileExtension}") . DS . $fileName;
             return $extPath . $fileExtension . DS . basename($editName, ".{$fileExtension}") . DS . $fileName;
         default:
-            if(empty($fileName)) return dao::$error[] = $this->lang->editor->emptyFileName;
+            if(empty($fileName)) return dao::$errors[] = $this->lang->editor->emptyFileName;
 
             $action = strtolower(str_replace('new', '', $action));
             if($action == 'hook')   return $extPath . 'view' . DS . $fileName;

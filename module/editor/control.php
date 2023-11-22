@@ -129,7 +129,7 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function save($filePath = '', $action = '')
+    public function save(string $filePath = '', string $action = '')
     {
         if($filePath and $_POST)
         {
@@ -147,7 +147,7 @@ class editor extends control
             if($action != 'edit' and $action != 'newPage' and file_exists($filePath) and !$this->post->override) return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->repeatFile));
 
             $result = $this->editor->save($filePath);
-            if(is_string($result)) return $this->send(array('result' => 'fail', 'message' => $result));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success', 'load' => inlink('edit', "filePath=" . helper::safe64Encode($filePath) . "&action=edit"), 'callback' => 'reloadExtendWin()'));
         }
