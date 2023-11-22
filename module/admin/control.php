@@ -49,7 +49,6 @@ class admin extends control
         $this->view->langNotCN   = common::checkNotCN();
         $this->view->hasInternet = $this->admin->checkInternet();
         $this->view->isIntranet  = helper::isIntranet();
-
         $this->display();
     }
 
@@ -86,9 +85,10 @@ class admin extends control
     }
 
     /**
+     * 登记禅道社区。
      * Register zentao.
      *
-     * @param  string $from
+     * @param  string $from admin|mail
      * @access public
      * @return void
      */
@@ -131,6 +131,7 @@ class admin extends control
         }
 
         $this->adminZen->initSN();
+
         $this->view->title    = $this->lang->admin->registerNotice->caption;
         $this->view->register = $this->admin->getRegisterInfo();
         $this->view->sn       = $this->config->global->sn;
@@ -139,9 +140,10 @@ class admin extends control
     }
 
     /**
+     * 绑定禅道账号。
      * Bind zentao.
      *
-     * @param  string $from
+     * @param  string $from admin|mail
      * @access public
      * @return void
      */
@@ -170,6 +172,7 @@ class admin extends control
         }
 
         $this->adminZen->initSN();
+
         $this->view->title = $this->lang->admin->bind->caption;
         $this->view->sn    = $this->config->global->sn;
         $this->view->from  = $from;
@@ -190,7 +193,7 @@ class admin extends control
             $this->loadModel('setting')->setItems('system.common.safe', $data);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
-        $this->view->title      = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->set;
+        $this->view->title = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->set;
         $this->display();
     }
 
