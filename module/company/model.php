@@ -42,10 +42,11 @@ class companyModel extends model
     }
 
     /**
+     * 获取第一家公司。
      * Get the first company.
      *
      * @access public
-     * @return void
+     * @return object
      */
     public function getFirst()
     {
@@ -136,13 +137,13 @@ class companyModel extends model
      * 更新公司信息。
      * Update a company.
      *
+     * @param  int    $companyID
      * @param  object $compnay
      * @access public
-     * @return void
+     * @return bool
      */
-    public function update($company): void
+    public function update(int $companyID, object $company): bool
     {
-        $companyID = $this->app->company->id;
         $this->dao->update(TABLE_COMPANY)
             ->data($company)
             ->autoCheck()
@@ -150,6 +151,8 @@ class companyModel extends model
             ->batchCheck('name', 'unique', "id != '$companyID'")
             ->where('id')->eq($companyID)
             ->exec();
+
+        return !dao::isError();
     }
 
     /**

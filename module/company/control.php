@@ -110,30 +110,22 @@ class company extends control
     {
         if(!empty($_POST))
         {
-            /* Init company data. */
             $company = form::data($this->config->company->form->edit)
                 ->stripTags('name')
                 ->setIF($this->post->website == 'http://', 'website', '')
                 ->setIF($this->post->backyard == 'http://', 'backyard', '')
                 ->get();
 
-            /* Update company. */
-            $this->company->update($company);
-
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(!$this->company->update($this->app->company->id, $company)) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Reset company in session. */
-            $company = $this->loadModel('company')->getFirst();
-            $this->session->set('company', $company);
+            $this->session->set('company', $this->company->getFirst());
 
             return $this->sendSuccess(array('load' => true));
         }
 
-        /* Set menu. */
-        $this->company->setMenu();
-
         $this->view->title    = $this->lang->company->common . $this->lang->colon . $this->lang->company->edit;
-        $this->view->company  = $this->company->getById($this->app->company->id);
+        $this->view->company  = $this->company->getByID($this->app->company->id);
         $this->display();
     }
 
