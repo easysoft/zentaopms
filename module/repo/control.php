@@ -100,7 +100,7 @@ class repo extends control
         $repoList = empty($repoList) ? array() : $repoList[$pageID - 1];
 
         /* Get success jobs of sonarqube.*/
-        $sonarRepoList = $this->loadModel('job')->getSonarqubeByRepo(array_keys($repoList));
+        $sonarRepoList = $this->loadModel('job')->getSonarqubeByRepo(helper::arrayColumn($repoList, 'id'));
         $successJobs   = $this->loadModel('compile')->getSuccessJobs(helper::arrayColumn($sonarRepoList, 'id'));
 
         $products = $this->loadModel('product')->getPairs('all', 0, '', 'all');

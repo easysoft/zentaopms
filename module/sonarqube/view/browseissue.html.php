@@ -37,7 +37,7 @@
 <div id='mainContent' class='main-row'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='sonarqubeIssueList' class='table has-sort-head table-fixed'>
-      <?php $vars = "sonarqubeID={$sonarqubeID}&projectKey={$projectKey}&search={$search}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+      <?php $vars = "sonarqubeID={$sonarqubeID}&projectKey={$projectKey}&search={$search}&orderBy=%s&recTotal={$pager->recTotal}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
           <th class='c-message text-left'><?php common::printOrderLink('message', $orderBy, $vars, $lang->sonarqube->issue->message);?></th>
