@@ -1132,25 +1132,23 @@ class user extends control
     }
 
     /**
-     * User dynamic.
+     * 查看某个用户的动态。
+     * View dynamic of a user.
      *
      * @param  int    $userID
      * @param  string $period
      * @param  int    $recTotal
-     * @param  string $date
-     * @param  string $direction     next|pre
+     * @param  int    $date
+     * @param  string $direction    next|pre
      * @access public
      * @return void
      */
-    public function dynamic($userID = '', $period = 'today', $recTotal = 0, $date = '', $direction = 'next')
+    public function dynamic(int $userID, string $period = 'today', int $recTotal = 0, int $date = 0, string $direction = 'next')
     {
-        $user    = $this->user->getById($userID, 'id');
-        $account = $user->account;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
-
-        /* set menus. */
-        $this->view->userList = $this->user->setUserList($users, $userID);
+        $user   = $this->user->getById($userID, 'id');
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -1168,19 +1166,19 @@ class user extends control
 
         /* Append id for second sort. */
         $orderBy    = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $date       = empty($date) ? '' : date('Y-m-d', $date);
-        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
+        $date       = $date ? date('Y-m-d', $date) : '';
+        $actions    = $this->loadModel('action')->getDynamic($user->account, $period, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
 
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
-        $this->view->type       = $period;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->recTotal   = $recTotal;
-        $this->view->user       = $user;
         $this->view->dateGroups = $dateGroups;
-        $this->view->direction  = $direction;
+        $this->view->deptUsers  = $users;
+        $this->view->user       = $user;
+        $this->view->period     = $period;
+        $this->view->recTotal   = $recTotal;
         $this->display();
     }
 
