@@ -276,6 +276,7 @@ class custom extends control
     }
 
     /**
+     * 产品关闭设置。
      * Set whether the closed product is read-only.
      *
      * @access public
@@ -286,11 +287,11 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.CRProduct', $this->post->product);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->sendSuccess(array('load' => true));
         }
 
-        $this->view->title      = $this->lang->custom->productName;
-        $this->view->module     = 'product';
+        $this->view->title  = $this->lang->custom->productName;
+        $this->view->module = 'product';
 
         $this->display();
     }
