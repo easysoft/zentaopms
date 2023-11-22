@@ -37,18 +37,18 @@ class my extends control
     }
 
     /**
+     * 积分列表。
      * Get score list
      *
-     * @param int $recTotal
-     * @param int $recPerPage
-     * @param int $pageID
-     *
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
-     * @return mixed
+     * @return void
      */
-    public function score($recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function score(int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
         $scores = $this->loadModel('score')->getListByAccount($this->app->user->account, $pager);
 
