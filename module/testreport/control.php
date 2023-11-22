@@ -22,6 +22,7 @@ class testreport extends control
     public $products = array();
 
     /**
+     * 构造函数。
      * Construct
      *
      * @param  string $moduleName
@@ -29,7 +30,7 @@ class testreport extends control
      * @access public
      * @return void
      */
-    public function __construct($moduleName = '', $methodName = '')
+    public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
         $this->loadModel('project');
@@ -47,22 +48,17 @@ class testreport extends control
         /* Get product data. */
         $products = array();
         $objectID = 0;
-        $tab      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? $this->app->tab : 'qa';
+        $tab      = $this->app->tab == 'project' || $this->app->tab == 'execution' ? $this->app->tab : 'qa';
         if(!isInModal())
         {
-            if($this->app->tab == 'project')
+            if($tab == 'qa')
             {
-                $objectID = $this->session->project;
-                $products  = $this->product->getProducts($objectID, 'all', '', false);
-            }
-            elseif($this->app->tab == 'execution')
-            {
-                $objectID = $this->session->execution;
-                $products = $this->product->getProducts($objectID, 'all', '', false);
+                $products = $this->product->getPairs();
             }
             else
             {
-                $products = $this->product->getPairs();
+                $objectID = $this->session->{$tab};
+                $products = $this->product->getProducts($objectID, 'all', '', false);
             }
             if(empty($products) && !isInModal() && (helper::isAjaxRequest('zin') || helper::isAjaxRequest('fetch'))) $this->locate($this->createLink('product', 'showErrorNone', "moduleName={$tab}&activeMenu=testreport&objectID=$objectID"));
         }
@@ -92,7 +88,7 @@ class testreport extends control
         if(strpos('product|execution|project', $objectType) === false) return $this->send(array('result' => 'fail', 'message' => 'Type Error!'));
 
         $objectID = $this->testreportZen->commonAction($objectID, $objectType);
-        $object   = $this->$objectType->getById($objectID);
+        $object   = $this->{$objectType}->getById($objectID);
         if($extra) $task = $this->testtask->getByID($extra);
 
         $reports = $this->testreportZen->getReportsForBrowse($objectID, $objectType, $extra, $orderBy, $recTotal, $recPerPage, $pageID);
@@ -254,7 +250,7 @@ class testreport extends control
     public function view(int $reportID, string $tab = 'basic', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1)
     {
         $report = $this->testreport->getById($reportID);
-        if(!$report) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->notFount, 'load' => array('alert' => $this->lang->error->notFount, 'locate' => $this->createLink('qa', 'index'))));
+        if(!$report) return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound, 'load' => array('alert' => $this->lang->notFound, 'locate' => array('load' => true))));
 
         /* Set session. */
         $this->session->project = $report->project;
@@ -282,7 +278,7 @@ class testreport extends control
         }
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
@@ -304,7 +300,7 @@ class testreport extends control
      * @access public
      * @return void
      */
-    public function delete($reportID)
+    public function delete(int $reportID)
     {
         $testreport = $this->testreport->getByID($reportID);
         $locateLink = $this->session->reportList ? $this->session->reportList : inlink('browse', "productID={$testreport->product}");

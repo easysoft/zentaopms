@@ -12,277 +12,52 @@
 class custom extends control
 {
     /**
-     * Index
+     * Index.
      *
      * @access public
      * @return void
      */
     public function index()
     {
-        if($this->config->vision == 'lite') return print(js::locate(inlink('execution')));
+        if($this->config->vision == 'lite') return $this->locate(inlink('execution'));
 
-        if(common::hasPriv('custom', 'set'))       return print(js::locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields))));
-        if(common::hasPriv('custom', 'product'))   return print(js::locate(inlink('product')));
-        if(common::hasPriv('custom', 'execution')) return print(js::locate(inlink('execution')));
+        if(common::hasPriv('custom', 'set'))       return $this->locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields)));
+        if(common::hasPriv('custom', 'product'))   return $this->locate(inlink('product'));
+        if(common::hasPriv('custom', 'execution')) return $this->locate(inlink('execution'));
 
         foreach($this->lang->custom->system as $sysObject)
         {
-            if(common::hasPriv('custom', $sysObject)) return print(js::locate(inlink($sysObject)));
+            if(common::hasPriv('custom', $sysObject)) return $this->locate(inlink($sysObject));
         }
     }
 
     /**
-     * Custom
+     * 设置对象字段的语言项。
+     * Set the language items of the object fields.
      *
-     * @param  string $module
-     * @param  string $field
-     * @param  string $lang
+     * @param  string $module todo|story|task|bug|testcase|testtask|user|project
+     * @param  string $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|deleted|unitList
+     * @param  string $lang   all|zh-cn|zh-tw|en|de|fr
      * @access public
      * @return void
      */
     public function set(string $module = 'story', string $field = 'priList', string $lang = '')
     {
         if(empty($lang)) $lang = $this->app->getClientLang();
-        if($module == 'user' and $field == 'priList') $field = 'statusList';
-        if($module == 'block' and $field == 'priList')$field = 'closed';
+        if($module == 'user' && $field == 'priList') $field = 'statusList';
+        if($module == 'block' && $field == 'priList')$field = 'closed';
         $currentLang = $this->app->getClientLang();
 
-        $this->app->loadLang($module);
-        if($lang == 'all')
-        {
-            $fieldList = array();
-            $items     = $this->custom->getItems("lang=all&module=$module&section=$field&vision={$this->config->vision}");
-            foreach($items as $key => $item)
-            {
-                $fieldList[$key] = $item->value;
-            }
-        }
-        else
-        {
-            $fieldList = zget($this->lang->$module, $field, '');
-        }
-
-        if($module == 'project' and $field == 'unitList')
-        {
-            $this->app->loadConfig($module);
-            $unitList = zget($this->config->$module, 'unitList', '');
-            $this->view->unitList        = explode(',', $unitList);
-            $this->view->defaultCurrency = zget($this->config->$module, 'defaultCurrency', 'CNY');
-        }
-        if(($module == 'story' or $module == 'demand') and $field == 'reviewRules')
-        {
-            $this->app->loadConfig($module);
-            $this->view->reviewRule     = zget($this->config->$module, 'reviewRules', 'allpass');
-            $this->view->users          = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-            $this->view->superReviewers = zget($this->config->$module, 'superReviewers', '');
-        }
-        if(($module == 'story' or $module == 'testcase' or $module == 'demand') and $field == 'review')
-        {
-            $this->app->loadConfig($module);
-            $this->loadModel('user');
-
-            if($module == 'story' or $module == 'demand')
-            {
-                $this->view->depts            = $this->loadModel('dept')->getDeptPairs();
-
-                $this->view->forceReviewRoles = zget($this->config->$module, 'forceReviewRoles', '');
-                $this->view->forceReviewDepts = zget($this->config->$module, 'forceReviewDepts', '');
-
-                $this->view->forceNotReviewRoles = zget($this->config->$module, 'forceNotReviewRoles', '');
-                $this->view->forceNotReviewDepts = zget($this->config->$module, 'forceNotReviewDepts', '');
-            }
-
-            $this->view->users          = $module == 'story' ? $this->user->getCanCreateStoryUsers() : $this->user->getPairs('noclosed|nodeleted');
-            $this->view->needReview     = zget($this->config->$module, 'needReview', 1);
-            $this->view->forceReview    = zget($this->config->$module, 'forceReview', '');
-            $this->view->forceNotReview = zget($this->config->$module, 'forceNotReview', '');
-        }
-        if($module == 'bug' and $field == 'longlife')
-        {
-            $this->app->loadConfig('bug');
-            $this->view->longlife = $this->config->bug->longlife;
-        }
-        if($module == 'block' and $field == 'closed')
-        {
-            $this->loadModel('block');
-            $closedBlock = isset($this->config->block->closed) ? $this->config->block->closed : '';
-
-            $this->view->blockPairs  = $this->block->getClosedBlockPairs($closedBlock);
-            $this->view->closedBlock = $closedBlock;
-        }
-        if($module == 'user' and $field == 'deleted')
-        {
-            $this->app->loadConfig('user');
-            $this->view->showDeleted = isset($this->config->user->showDeleted) ? $this->config->user->showDeleted : '0';
-        }
+        $this->customZen->assignVarsForSet($module, $field, $lang, $currentLang);
 
         if(strtolower($this->server->request_method) == "post")
         {
-            $postArray = fixer::input('post');
-            $keys      = array();
-            if(isset($postArray->data->keys))
-            {
-                foreach($postArray->data->keys as $key)
-                {
-                    if($module == 'testtask' and $field == 'typeList' and empty($key)) continue;
-                    if($key && in_array($key, $keys)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->custom->notice->repeatKey, $key)));
-                    $keys[] = $key;
-                }
-            }
-
-            if($module == 'project' and $field == 'unitList')
-            {
-                $data = fixer::input('post')->join('unitList', ',')->get();
-                if(empty($data->unitList)) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->currencyNotEmpty));
-                if(empty($data->defaultCurrency)) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->defaultNotEmpty));
-                $this->loadModel('setting')->setItems("system.$module", $data);
-            }
-            elseif(($module == 'story' or $module == 'demand') and $field == 'review')
-            {
-                $data = fixer::input('post')
-                    ->setDefault('forceReview', '')
-                    ->setDefault('forceNotReview', '')
-                    ->setDefault('forceReviewRoles', '')
-                    ->setDefault('forceNotReviewRoles', '')
-                    ->setDefault('forceReviewDepts', '')
-                    ->setDefault('forceNotReviewDepts', '')
-                    ->join('forceReview', ',')
-                    ->join('forceReviewRoles', ',')
-                    ->join('forceReviewDepts', ',')
-                    ->join('forceNotReview', ',')
-                    ->join('forceNotReviewRoles', ',')
-                    ->join('forceNotReviewDepts', ',')
-                    ->get();
-
-                foreach($data as $key => $value)
-                {
-                    if($key == 'needReview') continue;
-                    if(strpos($key, 'Not')  and $data->needReview == 0) $data->$key = '';
-                    if(!strpos($key, 'Not') and $data->needReview == 1) $data->$key = '';
-                }
-
-                $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
-            }
-            elseif(($module == 'story' or $module == 'demand') and $field == 'reviewRules')
-            {
-                $data = fixer::input('post')->setDefault('superReviewers', '')->join('superReviewers', ',')->get();
-                $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
-            }
-            elseif($module == 'testcase' and $field == 'review')
-            {
-                $review = fixer::input('post')->get();
-                if($review->needReview)  $data = fixer::input('post')->setDefault('forceNotReview', '')->join('forceNotReview', ',')->remove('forceReview')->get();
-                if(!$review->needReview) $data = fixer::input('post')->setDefault('forceReview', '')->join('forceReview', ',')->remove('forceNotReview')->get();
-                $this->loadModel('setting')->setItems("system.$module", $data);
-
-                $reviewCase = isset($review->reviewCase) ? $review->reviewCase : 0;
-                if($review->needReview == 0 and $reviewCase)
-                {
-                    $waitCases = $this->loadModel('testcase')->getByStatus(0, 0, 'all', 'wait');
-                    $this->testcase->batchReview(array_keys($waitCases), 'pass');
-                }
-            }
-            elseif($module == 'bug' and $field == 'longlife')
-            {
-                $this->loadModel('setting')->setItems('system.bug', fixer::input('post')->get());
-            }
-            elseif($module == 'block' and $field == 'closed')
-            {
-                $data = fixer::input('post')->join('closed', ',')->get();
-                $this->loadModel('setting')->setItem('system.block.closed', zget($data, 'closed', ''));
-            }
-            elseif($module == 'user' and $field == 'contactField')
-            {
-                $data = fixer::input('post')->join('contactField', ',')->get();
-                if(!isset($data->contactField)) $data->contactField = '';
-                $this->loadModel('setting')->setItem('system.user.contactField', $data->contactField);
-            }
-            elseif($module == 'user' and $field == 'deleted')
-            {
-                $data = fixer::input('post')->get();
-                $this->loadModel('setting')->setItem('system.user.showDeleted', $data->showDeleted);
-            }
-            else
-            {
-                if(!$this->post->keys) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->custom->key));
-                $lang = $_POST['lang'];
-                $oldCustoms = $this->custom->getItems("lang=$lang&module=$module&section=$field");
-                foreach($_POST['keys'] as $index => $key)
-                {
-                    if(!empty($key)) $key = trim($key);
-                    /* Invalid key. It should be numbers. (It includes severityList in bug module and priList in story, task, bug, testcasea, testtask and todo module.) */
-                    if($field == 'priList' or $field == 'severityList')
-                    {
-                        if(!is_numeric($key) or $key > 255) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidNumberKey));
-                    }
-                    if(!empty($key) and !isset($oldCustoms[$key]) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_A-Z_0-9]+$/')) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStringKey));
-
-                    /* The length of roleList in user module is less than 10. check it when saved. */
-                    if($module == 'user' and $field == 'roleList' and strlen($key) > 10) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['ten']));
-
-                    /* The length of typeList in todo module is less than 15. check it when saved. */
-                    if($module == 'todo' and $field == 'typeList' and strlen($key) > 15) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['fifteen']));
-
-                    /* The length of sourceList in story module and typeList in task module is less than 20, check it when saved. */
-                    if(($module == 'story' and $field == 'sourceList') or ($module == 'task' and $field == 'typeList'))
-                    {
-                        if(strlen($key) > 20) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['twenty']));
-                    }
-
-                    /* The length of stageList in testcase module is less than 255, check it when saved. */
-                    if($module == 'testcase' and $field == 'stageList' and strlen($key) > 255) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['twoHundred']));
-
-                    /* The length of field that in bug and testcase module and reasonList in story and task module is less than 30, check it when saved. */
-                    if(in_array($module, array('bug', 'testcase')) or (in_array($module, array('story', 'task')) and $field == 'reasonList'))
-                    {
-                        if(strlen($key) > 30) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['thirty']));
-                    }
-                }
-
-                $this->custom->deleteItems("lang=$lang&module=$module&section=$field&vision={$this->config->vision}");
-                if($lang == 'all') $this->custom->deleteItems("lang=$currentLang&module=$module&section=$field&vision={$this->config->vision}");
-
-                $data     = fixer::input('post')->get();
-                $emptyKey = false;
-                foreach($data->keys as $index => $key)
-                {
-                    if(!$key && $emptyKey) continue;
-
-                    //if(!$system and (!$value or !$key)) continue; //Fix bug #951.
-
-                    $value  = $data->values[$index];
-                    $system = $data->systems[$index];
-                    if($key and trim($value) === '') return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->valueEmpty)); // Fix bug #23538.
-
-                    $this->custom->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
-
-                    if(!$key) $emptyKey = true;
-                }
-            }
+            $this->customZen->setFieldListForSet($module, $field);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->sendSuccess(array('load' => $this->createLink('custom', 'set', "module=$module&field=$field&lang=" . ($lang == 'all' ? $lang : ''))));
         }
 
-        /* Check whether the current language has been customized. */
-        $lang = str_replace('_', '-', $lang);
-        $dbFields = $this->custom->getItems("lang=$lang&module=$module&section=$field&vision={$this->config->vision}");
-        if(empty($dbFields)) $dbFields = $this->custom->getItems("lang=" . ($lang == $currentLang ? 'all' : $currentLang) . "&module=$module&section=$field");
-        if($dbFields)
-        {
-            $dbField = reset($dbFields);
-            if($lang != $dbField->lang)
-            {
-                $lang = str_replace('-', "_", $dbField->lang);
-                foreach($fieldList as $key => $value)
-                {
-                    if(isset($dbFields[$key]) and $value != $dbFields[$key]->value) $fieldList[$key] = $dbFields[$key]->value;
-                }
-            }
-        }
-
         $this->view->title       = $this->lang->custom->common . $this->lang->colon . $this->lang->$module->common;
-        $this->view->fieldList   = $fieldList;
-        $this->view->dbFields    = $dbFields;
         $this->view->field       = $field;
         $this->view->lang2Set    = str_replace('_', '-', $lang);
         $this->view->module      = $module;
@@ -293,6 +68,7 @@ class custom extends control
     }
 
     /**
+     * 还原默认语言项。删除相关项。
      * Restore the default lang. Delete the related items.
      *
      * @param  string $module
@@ -302,38 +78,21 @@ class custom extends control
      */
     public function restore(string $module, string $field)
     {
-        if($module == 'user' and $field == 'contactField')
+        if($module == 'user' && $field == 'contactField')
         {
-            $this->loadModel('setting')->deleteItems("module=$module&key=$field");
+            $this->loadModel('setting')->deleteItems("module={$module}&key={$field}");
         }
         else
         {
-            $this->custom->deleteItems("module=$module&section=$field");
+            $this->custom->deleteItems("module={$module}&section={$field}");
         }
 
         return $this->sendSuccess(array('load' => true));
     }
 
     /**
-     * Set working mode function.
-     *
-     * @access public
-     * @return void
-     */
-    public function working()
-    {
-        if($_POST)
-        {
-            $this->loadModel('setting')->setItem('system.common.global.flow', $this->post->flow);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
-        }
-
-        $this->view->title      = $this->lang->custom->working;
-        $this->display();
-    }
-
-    /**
-     * Set Required.
+     * 设置表单必填字段。
+     * Set the required fields.
      *
      * @param  string $moduleName
      * @access public

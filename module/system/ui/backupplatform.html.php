@@ -16,7 +16,7 @@ modalHeader(set::title($lang->system->backup->backup));
 formPanel
 (
     on::click('#startBackup', 'startBackup'),
-    set::id('backupForm'),
+    setID('backupForm'),
     formGroup
     (
         set::label($lang->comment),

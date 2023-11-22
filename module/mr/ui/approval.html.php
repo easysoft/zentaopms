@@ -45,7 +45,4 @@ formPanel
         set::rows('6')
     )
 );
-history();
-
-render();
-
+history(set::objectID($MR->id));

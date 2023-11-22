@@ -118,7 +118,7 @@ $formItems['spec'] = formGroup
 (
     set::width('full'),
     set::label($fields['spec']['title']),
-    set::required($fields['spec']['required']),
+    set::required(strpos(",{$this->config->story->change->requiredFields},", ",spec,") !== false),
     set::tip($lang->story->specTemplate),
     editor
     (

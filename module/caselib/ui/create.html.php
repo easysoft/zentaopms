@@ -31,10 +31,8 @@ formPanel
     formGroup
     (
         set::label($lang->caselib->desc),
-        editor
-        (
-            set::name('desc')
-        )
+        set::control('editor'),
+        set::name('desc')
     )
 );
 

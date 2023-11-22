@@ -33,6 +33,7 @@ class searchForm extends wg
         'simple?: boolean',             // 是否为简单模式，不包含保存搜索条件和已保存的查询条件侧边栏。
         'setting?: array',              // 默认配置。
         'url?: string',                 // 配置加载地址，默认为 search-buildForm-module。
+        'searchUrl?: string',           // 搜索时提交表单的 URL。
         'searchLoader?: string|array'   // 搜索时 loadPage 参数。
     );
 
@@ -44,6 +45,12 @@ class searchForm extends wg
      */
     protected function build(): wg
     {
+        global $config;
+        if(isset($config->zin->mode) && $config->zin->mode == 'compatible')
+        {
+            if(!$this->hasProp('url'))        $this->setProp('url', createLink('search', 'buildZinForm', 'module=' . $this->prop('module')));
+            if(!$this->hasProp('searchUrl'))  $this->setProp('searchUrl', createLink('search', 'buildZinQuery'));
+        }
         return zui::searchForm(inherit($this));
     }
 }

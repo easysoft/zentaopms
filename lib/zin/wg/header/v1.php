@@ -139,38 +139,40 @@ class header extends wg
 
         if(!isset($app->user)) return;
 
-        $user    = $app->user;
-        $isGuest = $user->account == 'guest';
-        $items   = array();
+        $user       = $app->user;
+        $isGuest    = $user->account == 'guest';
+        $items      = array();
+        $modalClass = (isset($config->zin->mode) && $config->zin->mode == 'compatible') ? 'open-in-parent' : null;
 
         if(!$isGuest)
         {
             $noRole = empty($user->role) || !isset($lang->user->roleList[$user->role]);
             $items[] = array
             (
-                'url'       => createLink('my', 'profile', '', '', true),
+                'url'          => createLink('my', 'profile', '', '', true),
                 'leadingClass' => 'row items-center gap-2 px-2 py-1 text-inherit',
-                'icon' => ' hidden',
-                'title'     => empty($user->realname) ? $user->account : $user->realname,
-                'titleClass' => 'text-lg',
-                'subtitle'  => $noRole ? null : $lang->user->roleList[$user->role],
-                // 'style'     => array('padding-left' => 0),
-                'data-toggle' => 'modal',
-                'data-size' => 700,
-                'data-id'   => 'profile',
-                'leading'   => array('html' => userAvatar(set::user($user))->render(), 'className' => 'center mr-1')
+                'icon'         => ' hidden',
+                'title'        => empty($user->realname) ? $user->account : $user->realname,
+                'titleClass'   => 'text-lg',
+                'subtitle'     => $noRole ? null : $lang->user->roleList[$user->role],
+                'innerClass'   => $modalClass,
+                'data-toggle'  => 'modal',
+                'data-size'    => 700,
+                'data-id'      => 'profile',
+                'leading'      => array('html' => userAvatar(set::user($user))->render(), 'className' => 'center mr-1')
             );
 
             $items[] = array('type' => 'divider');
 
             $items[] = array
             (
-                'url' => createLink('my', 'profile', '', '', true),
-                'icon' => 'account',
-                'text' => $lang->profile,
+                'url'         => createLink('my', 'profile', '', '', true),
+                'icon'        => 'account',
+                'text'        => $lang->profile,
+                'innerClass'  => $modalClass,
                 'data-toggle' => 'modal',
-                'data-size' => 700,
-                'data-id'   => 'profile'
+                'data-size'   => 700,
+                'data-id'     => 'profile'
             );
 
             if($app->config->vision === 'rnd')
@@ -179,26 +181,28 @@ class header extends wg
                 {
                     $items[] = array
                     (
-                        'url' => createLink('tutorial', 'start'),
-                        'icon' => 'guide',
-                        'text' => $lang->tutorialAB,
-                        'class' => '800',
-                        'outerClass' => 'user-tutorial',
-                        'data-width' => 700,
+                        'url'             => createLink('tutorial', 'start'),
+                        'icon'            => 'guide',
+                        'text'            => $lang->tutorialAB,
+                        'class'           => '800',
+                        'outerClass'      => 'user-tutorial',
+                        'data-width'      => 700,
                         'data-class-name' => 'modal-inverse',
                         'data-headerless' => true,
-                        'data-backdrop' => true,
-                        'data-keyboard' => true,
-                        'data-toggle' => 'modal'
+                        'data-backdrop'   => true,
+                        'data-keyboard'   => true,
+                        'innerClass'      => $modalClass,
+                        'data-toggle'     => 'modal'
                     );
                 }
 
                 $items[] = array
                 (
-                    'url' => createLink('my', 'preference', 'showTip=false', '', true),
-                    'icon' => 'controls',
-                    'text' => $lang->preference,
-                    'data-width' => 700,
+                    'url'         => createLink('my', 'preference', 'showTip=false', '', true),
+                    'icon'        => 'controls',
+                    'text'        => $lang->preference,
+                    'data-width'  => 700,
+                    'innerClass'  => $modalClass,
                     'data-toggle' => 'modal'
                 );
             }
@@ -207,11 +211,12 @@ class header extends wg
             {
                 $items[] = array
                 (
-                    'url' => createLink('my', 'changepassword', '', '', true),
-                    'icon' => 'cog-outline',
-                    'text' => $lang->changePassword,
+                    'url'         => createLink('my', 'changepassword', '', '', true),
+                    'icon'        => 'cog-outline',
+                    'text'        => $lang->changePassword,
+                    'innerClass'  => $modalClass,
                     'data-toggle' => 'modal',
-                    'data-size' => 'sm'
+                    'data-size'   => 'sm'
                 );
             }
 
@@ -241,12 +246,12 @@ class header extends wg
         $helpItems = array();
         $manualUrl = ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme'];
         $helpItems[] = array('text' => $lang->manual, 'url' => $manualUrl, 'attrs' => array('data-app' => 'help'));
-        $helpItems[] = array('text' => $lang->changeLog, 'url' => createLink('misc', 'changeLog'), 'data-toggle' => 'modal');
+        $helpItems[] = array('text' => $lang->changeLog, 'url' => createLink('misc', 'changeLog'), 'data-toggle' => 'modal', 'innerClass' => $modalClass);
         $items[] = array('text' => $lang->help, 'icon' => 'help', 'items' => $helpItems);
 
         /* printClientLink */
 
-        $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'), 'data-toggle' => 'modal');
+        $items[] = array('text' => $lang->aboutZenTao, 'icon' => 'about', 'url' => createLink('misc', 'about'), 'data-toggle' => 'modal', 'innerClass' => $modalClass);
         $items[] = array('type' => 'html', 'className' => 'menu-item', 'html' => $lang->designedByAIUX);
 
         $items[] = array('type' => 'divider');
@@ -290,6 +295,7 @@ class header extends wg
 
         /* Initialize the default values. */
         $showCreateList = $needPrintDivider = false;
+        $modalClass     = (isset($config->zin->mode) && $config->zin->mode == 'compatible') ? 'open-in-parent' : null;
 
         /* Get default product id. */
         $productID = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
@@ -347,6 +353,7 @@ class header extends wg
                 case 'doc':
                     $params              = "objectType=&objectID=0&libID=0";
                     $createMethod        = 'selectLibType';
+                    $item['innerClass']  = $modalClass;
                     $item['data-toggle'] = 'modal';
                     break;
                 case 'project':
@@ -358,6 +365,7 @@ class header extends wg
                     {
                         $params              = "programID=0&from=global";
                         $createMethod        = 'createGuide';
+                        $item['innerClass']  = $modalClass;
                         $item['data-toggle'] = 'modal';
                     }
                     else
@@ -411,11 +419,13 @@ class header extends wg
                     break;
                 case 'kanbanspace':
                     $isOnlyBody          = true;
+                    $item['innerClass']  = $modalClass;
                     $item['data-toggle'] = 'modal';
                     $item['data-width']  = '75%';
                     break;
                 case 'kanban':
                     $isOnlyBody          = true;
+                    $item['innerClass']  = $modalClass;
                     $item['data-toggle'] = 'modal';
                     $item['data-width']  = '75%';
                     break;

@@ -322,6 +322,7 @@ class repo extends control
         $entry    = urldecode($entry);
         $pathInfo = helper::mbPathinfo($entry);
 
+        if($repo->SCM == 'Gitlab') $repo = $this->repo->processGitService($repo, true);
         if($this->app->tab == 'execution') $this->view->executionID = $objectID;
         $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
         $this->view->dropMenus   = $this->repoZen->getBranchAndTagItems($repo, $this->cookie->repoBranch);
@@ -539,32 +540,33 @@ class repo extends control
         $this->scm->setEngine($repo);
         $log = $this->scm->log('', $revision, $revision);
 
-        $history = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('revision')->eq($log[0]->revision)->andWhere('repo')->eq($repoID)->fetch();
-        if($history)
+        $revision = $this->repo->getHistoryRevision($repoID, $log[0]->revision);
+        if($revision)
         {
             if(in_array($repo->SCM, $this->config->repo->gitTypeList))
             {
-                $thisAndPrevRevisions = $this->scm->exec("rev-list -n 2 {$history->revision} --");
+                $thisAndPrevRevisions = $this->scm->exec("rev-list -n 2 {$revision} --");
 
                 array_shift($thisAndPrevRevisions);
                 if($thisAndPrevRevisions) $oldRevision = array_shift($thisAndPrevRevisions);
             }
             else
             {
-                $oldRevision = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('revision')->lt($history->revision)->andWhere('repo')->eq($repoID)->orderBy('revision_desc')->limit(1)->fetch('revision');
+                $oldRevision = $this->repo->getHistoryRevision($repoID, $revision, false, 'lt');
             }
         }
 
         if(empty($oldRevision))
         {
             $oldRevision = '^';
-            if($history and in_array($repo->SCM, $this->config->repo->gitTypeList)) $oldRevision = "{$history->revision}^";
+            if($revision and in_array($repo->SCM, $this->config->repo->gitTypeList)) $oldRevision = "{$revision}^";
         }
 
         $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&oldrevision=$oldRevision&newRevision={$log[0]->revision}"));
     }
 
     /**
+     * 代码blame信息。
      * Blame repo file.
      *
      * @param  int    $repoID
@@ -575,13 +577,14 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function blame($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $encoding = '')
+    public function blame(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $encoding = '')
     {
         $this->commonAction($repoID, $objectID);
 
         if($this->get->repoPath) $entry = $this->get->repoPath;
         if($repoID == 0) $repoID = $this->session->repoID;
         $repo  = $this->repo->getByID($repoID);
+
         $file  = $entry;
         $entry = $this->repo->decodePath($entry);
 
@@ -596,7 +599,7 @@ class repo extends control
             if($encoding != 'utf-8') $blames[$i]['content'] = helper::convertEncoding($blame['content'], $encoding);
         }
 
-        $log = in_array($repo->SCM, $this->config->repo->gitTypeList) ? $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->eq($revision)->andWhere('repo')->eq($repo->id)->fetch() : '';
+        $log = in_array($repo->SCM, $this->config->repo->gitTypeList) ? $this->repo->getHistoryRevision($repo->id, $revision, true) : '';
 
         $this->view->title        = $this->lang->repo->common;
         $this->view->repoID       = $repoID;
@@ -607,14 +610,14 @@ class repo extends control
         $this->view->entry        = $entry;
         $this->view->file         = $file;
         $this->view->encoding     = str_replace('-', '_', $encoding);
-        $this->view->historys     = in_array($repo->SCM, $this->config->repo->gitTypeList) ? $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repo->id)->fetchPairs() : '';
-        $this->view->revisionName = ($log and in_array($repo->SCM, $this->config->repo->gitTypeList)) ? $this->repo->getGitRevisionName($log->revision, $log->commit) : $revision;
+        $this->view->revisionName = ($log && in_array($repo->SCM, $this->config->repo->gitTypeList)) ? $this->repo->getGitRevisionName($log->revision, $log->commit) : $revision;
         $this->view->blames       = $blames;
         $this->display();
     }
 
     /**
-     * Show diff.
+     * 代码diff信息。
+     * Show repo diff.
      *
      * @param  int    $repoID
      * @param  int    $objectID
@@ -627,125 +630,51 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function diff($repoID, $objectID = 0, $entry = '', $oldRevision = '', $newRevision = '', $showBug = 'false', $encoding = '', $isBranchOrTag = false)
+    public function diff(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', string $showBug = 'false', string $encoding = '', bool $isBranchOrTag = false)
     {
+        $newRevision = strtr($newRevision, '*', '-');
+        $oldRevision = strtr($oldRevision, '*', '-');
+        $oldRevision = urldecode(urldecode($oldRevision)); //Fix error.
         if($isBranchOrTag)
         {
-            $oldRevision = strtr($oldRevision, '*', '-');
-            $newRevision = strtr($newRevision, '*', '-');
-            if($isBranchOrTag)
-            {
-                $oldRevision = urldecode(helper::safe64Decode($oldRevision));
-                $newRevision = urldecode(helper::safe64Decode($newRevision));
-            }
-        }
-        else
-        {
-            $oldRevision = urldecode(urldecode($oldRevision)); //Fix error.
+            $oldRevision = urldecode(helper::safe64Decode($oldRevision));
+            $newRevision = urldecode(helper::safe64Decode($newRevision));
         }
 
         $this->commonAction($repoID, $objectID);
+        $repo  = $this->repo->getByID($repoID);
 
         if($this->get->repoPath) $entry = $this->get->repoPath;
         $file  = $entry;
-        $repo  = $this->repo->getByID($repoID);
         $entry = $this->repo->decodePath($entry);
 
-        if($repo->SCM == 'Git' and !is_dir($repo->path))
-        {
-            $error = sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path);
-            return print(js::error($error) . js::locate($this->repo->createLink('maintain')));
-        }
-
-        $pathInfo = pathinfo($entry);
-        $suffix   = '';
-        if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]);
+        if($repo->SCM == 'Git' && !is_dir($repo->path)) return $this->sendError(sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path), $this->repo->createLink('maintain'));
 
         $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';
-        if($this->server->request_method == 'POST')
-        {
-            $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
-            $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
+        if($this->server->request_method == 'POST') return $this->repoZen->locateDiffPage($repoID, $objectID, $arrange, $isBranchOrTag, $file);
 
-            if($this->post->arrange)
-            {
-                $arrange = $this->post->arrange;
-                helper::setcookie('arrange', $arrange);
-            }
-            if($this->post->encoding)      $encoding      = $this->post->encoding;
-            if($this->post->isBranchOrTag) $isBranchOrTag = $this->post->isBranchOrTag;
-
-            $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($entry) . "&oldrevision=$oldRevision&newRevision=$newRevision&showBug=&encoding=$encoding&isBranchOrTag=$isBranchOrTag"));
-        }
-
-        $info     = new stdClass();
         $diffs    = array();
         $encoding = empty($encoding) ? $repo->encoding : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
         if($oldRevision !== '')
         {
             $this->scm->setEngine($repo);
-            $info  = $this->scm->info($entry, $newRevision);
             $diffs = $this->scm->diff($entry, $oldRevision, $newRevision, 'yes', $isBranchOrTag ? 'isBranchOrTag': '');
         }
-        foreach($diffs as $diff)
-        {
-            if($encoding != 'utf-8')
-            {
-                $diff->fileName = helper::convertEncoding($diff->fileName, $encoding);
-                if(empty($diff->contents)) continue;
-                foreach($diff->contents as $content)
-                {
-                    if(empty($content->lines)) continue;
-                    foreach($content->lines as $lines)
-                    {
-                        if(empty($lines->line)) continue;
-                        $lines->line = helper::convertEncoding($lines->line, $encoding);
-                    }
-                }
-            }
-        }
 
-        /* When arrange is appose then adjust data for show them easy.*/
-        if($arrange == 'appose')
-        {
+        if($encoding != 'utf-8') $diffs = $this->repoZen->encodingDiff($diffs, $encoding);
+        if($arrange == 'appose') $diffs = $this->repoZen->getApposeDiff($diffs);
 
-            foreach($diffs as $diffFile)
-            {
-                if(empty($diffFile->contents)) continue;
-                foreach($diffFile->contents as $content)
-                {
-                    $old = array();
-                    $new = array();
-                    foreach($content->lines as $line)
-                    {
-                        if($line->type != 'new') $old[$line->oldlc] = $line->line;
-                        if($line->type != 'old') $new[$line->newlc] = $line->line;
-                    }
-                    $content->old = $old;
-                    $content->new = $new;
-                }
-            }
-        }
-
-        $this->view->type        = 'diff';
-        $this->view->showBug     = $showBug;
-        $this->view->entry       = urldecode($entry);
-        $this->view->suffix      = $suffix;
-        $this->view->file        = $file;
-        $this->view->repoID      = $repoID;
-        $this->view->branchID    = (string) $this->cookie->repoBranch;
-        $this->view->objectID    = $objectID;
-        $this->view->repo        = $repo;
-        $this->view->encoding    = str_replace('-', '_', $encoding);
-        $this->view->arrange     = $arrange;
-        $this->view->diffs       = $diffs;
-        $this->view->newRevision = $newRevision;
-        $this->view->oldRevision = $oldRevision;
-        $this->view->revision    = $newRevision;
-        $this->view->historys    = in_array($repo->SCM, $this->config->repo->gitTypeList) ? $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in("$oldRevision,$newRevision")->andWhere('repo')->eq($repo->id)->fetchPairs() : '';
-        $this->view->info        = $info;
-
+        $this->view->entry         = urldecode($entry);
+        $this->view->encoding      = str_replace('-', '_', $encoding);
+        $this->view->file          = $file;
+        $this->view->repoID        = $repoID;
+        $this->view->branchID      = (string) $this->cookie->repoBranch;
+        $this->view->objectID      = $objectID;
+        $this->view->repo          = $repo;
+        $this->view->diffs         = $diffs;
+        $this->view->newRevision   = $newRevision;
+        $this->view->oldRevision   = $oldRevision;
         $this->view->isBranchOrTag = $isBranchOrTag;
         $this->view->title         = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->diff;
 
@@ -753,6 +682,7 @@ class repo extends control
     }
 
     /**
+     * 代码下载。
      * Download repo file.
      *
      * @param  int    $repoID
@@ -764,7 +694,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function download($repoID, $path, $fromRevision = 'HEAD', $toRevision = '', $type = 'file', $isBranchOrTag = false)
+    public function download(int $repoID, string $path, string $fromRevision = 'HEAD', string $toRevision = '', string $type = 'file', bool $isBranchOrTag = false)
     {
         if($this->get->repoPath) $path = $this->get->repoPath;
         $entry = $this->repo->decodePath($path);
@@ -790,8 +720,9 @@ class repo extends control
 
         $fileName = basename(urldecode($entry));
         if($type != 'file') $fileName .= "r$fromRevision--r$toRevision.patch";
+
         $extension = ltrim(strrchr($fileName, '.'), '.');
-        $this->fetch('file', 'sendDownHeader', array("fileName" => $fileName, "fileType" => $extension,  "content" => $content));
+        $this->fetch('file', 'sendDownHeader', array("fileName" => $fileName, "fileType" => $extension, "content" => $content));
     }
 
     /**
@@ -823,7 +754,8 @@ class repo extends control
     }
 
     /**
-     * Show sync comment.
+     * 显示提交同步进度。
+     * Show sync commit.
      *
      * @param  int    $repoID
      * @param  int    $objectID  projectID|executionID
@@ -831,16 +763,15 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function showSyncCommit($repoID = 0, $objectID = 0, $branch = '')
+    public function showSyncCommit(int $repoID = 0, int $objectID = 0, string $branch = '')
     {
         $this->commonAction($repoID, $objectID);
 
         if($repoID == 0) $repoID = $this->session->repoID;
         if($branch) $branch = base64_decode(helper::safe64Decode($branch));
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->showSyncCommit;
-
         $latestInDB = $this->repo->getLatestCommit($repoID);
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->showSyncCommit;
         $this->view->version    = $latestInDB ? (int)$latestInDB->commit : 1;
         $this->view->repoID     = $repoID;
         $this->view->repo       = $this->repo->getByID($repoID);
@@ -851,6 +782,7 @@ class repo extends control
     }
 
     /**
+     * 根据提交信息关联需求。
      * Link story to commit.
      *
      * @param  int    $repoID
@@ -898,6 +830,7 @@ class repo extends control
     }
 
     /**
+     * 根据提交信息关联Bug。
      * Link bug to commit.
      *
      * @param  int    $repoID
@@ -945,6 +878,7 @@ class repo extends control
     }
 
     /**
+     * 根据提交信息关联任务。
      * Link task to commit.
      *
      * @param  int    $repoID
@@ -999,6 +933,7 @@ class repo extends control
     }
 
     /**
+     * 取消提交信息的关联记录。
      * Unlink object and commit revision.
      *
      * @param  int    $repoID
@@ -1008,7 +943,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function unlink($repoID, $revision, $objectType, $objectID)
+    public function unlink(int $repoID, string $revision, string $objectType, int $objectID)
     {
         $this->repo->unlink($repoID, $revision, $objectType, $objectID);
 
@@ -1042,9 +977,7 @@ class repo extends control
         $gitlab     = empty($server) ? array_shift($gitlabList) : $this->gitlab->getById($server);
 
         $repoList = $gitlab ? $this->repoZen->getGitlabNotExistRepos($gitlab) : array();
-
         $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
-
 
         $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->importAction;
         $this->view->gitlabPairs = $this->gitlab->getPairs();
@@ -1056,6 +989,7 @@ class repo extends control
     }
 
     /**
+     * 获取代码对比编辑器内容。
      * Get diff editor content by ajax.
      *
      * @param  int    $repoID
@@ -1063,12 +997,12 @@ class repo extends control
      * @param  string $entry
      * @param  string $oldRevision
      * @param  string $newRevision
-     * @param  string $showBug
+     * @param  string $showBug     // Used for biz.
      * @param  string $encoding
      * @access public
      * @return void
      */
-    public function ajaxGetDiffEditorContent($repoID, $objectID = 0, $entry = '', $oldRevision = '', $newRevision = '', $showBug = 'false', $encoding = '')
+    public function ajaxGetDiffEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', string $showBug = 'false', string $encoding = '')
     {
         if(!$entry) $entry = (string) $this->cookie->repoCodePath;
 
@@ -1106,6 +1040,7 @@ class repo extends control
     }
 
     /**
+     * 获取代码详情的编辑器内容。
      * Get editor content by ajax.
      *
      * @param  int    $repoID
@@ -1117,7 +1052,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetEditorContent($repoID, $objectID = 0, $entry = '', $revision = 'HEAD', $showBug = 'false', $encoding = '')
+    public function ajaxGetEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $showBug = 'false', string $encoding = '')
     {
         if(!$entry) $entry = (string) $this->cookie->repoCodePath;
 
@@ -1130,6 +1065,7 @@ class repo extends control
         $info = $this->scm->info($entry, $revision);
         $path = $entry ? $info->path : '';
         if($info->kind == 'dir') $this->locate($this->repo->createLink('browse', "repoID=$repoID&branchID=&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision"));
+
         $content  = $this->scm->cat($entry, $revision);
         $entry    = urldecode($entry);
         $pathInfo = pathinfo($entry);
@@ -1152,17 +1088,11 @@ class repo extends control
         $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
         $this->view->type        = 'view';
         $this->view->showBug     = $showBug;
-        $this->view->encoding    = str_replace('-', '_', $encoding);
         $this->view->repoID      = $repoID;
-        $this->view->branchID    = $this->cookie->repoBranch;
-        $this->view->objectID    = $objectID;
-        $this->view->repo        = $repo;
         $this->view->revision    = $revision;
         $this->view->oldRevision = '';
         $this->view->file        = $file;
         $this->view->entry       = $entry;
-        $this->view->path        = $entry;
-        $this->view->info        = $info;
         $this->view->suffix      = $suffix;
         $this->view->content     = $content ? $content : '';
         $this->view->pathInfo    = $pathInfo;
@@ -1171,6 +1101,7 @@ class repo extends control
     }
 
     /**
+     * 异步同步代码提交记录。
      * Ajax sync comment.
      *
      * @param  int    $repoID
@@ -1178,136 +1109,38 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxSyncCommit($repoID = 0, $type = 'batch')
+    public function ajaxSyncCommit(int $repoID = 0, string $type = 'batch')
     {
         set_time_limit(0);
         $repo = $this->repo->getByID($repoID);
-        if(empty($repo)) return;
+        if(empty($repo)) return print($this->config->repo->repoSyncLog->finish);
         if($repo->synced) return print($this->config->repo->repoSyncLog->finish);
 
         if(in_array($repo->SCM, array('Gitea', 'Gogs')))
         {
-            $logFile = realPath($this->app->getTmpRoot() . $this->config->repo->repoSyncLog->logFilePrefix . strtolower($repo->SCM) . ".{$repo->name}.log");
-            if($logFile)
-            {
-                $content  = file($logFile);
-                foreach($content as $line)
-                {
-                    if($this->repo->strposAry($line, $this->config->repo->repoSyncLog->fatal) !== false) return print($line);
-                    if($this->repo->strposAry($line, $this->config->repo->repoSyncLog->failed) !== false) return print($line);
-                }
-
-                $lastLine = $content[count($content) - 1];
-                if($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->done) === false)
-                {
-                    if($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->emptyRepo) !== false)
-                    {
-                        @unlink($logFile);
-                    }
-                    elseif($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->total) !== false)
-                    {
-                        $logContent = file_get_contents($logFile);
-                        if($this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCount) !== false and $this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCompress) !== false)
-                        {
-                            @unlink($logFile);
-                        }
-                        else
-                        {
-                            return print($this->config->repo->repoSyncLog->one);
-                        }
-                    }
-                    else
-                    {
-                        return print($this->config->repo->repoSyncLog->one);
-                    }
-                }
-                else
-                {
-                    @unlink($logFile);
-                }
-            }
+            $syncLog = $this->repoZen->syncLocalCommit($repo);
+            if($syncLog) return print($syncLog);
         }
 
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
 
         $branchID = '';
-        if(in_array($repo->SCM, $this->config->repo->gitTypeList) and empty($branchID))
-        {
-            $branches = $this->scm->branch();
-            if($branches)
-            {
-                /* Init branchID. */
-                if($this->cookie->syncBranch) $branchID = $this->cookie->syncBranch;
-                if(!isset($branches[$branchID])) $branchID = '';
-                if(empty($branchID)) $branchID = 'master';
-
-                /* Get unsynced branches. */
-                unset($branches['master']);
-                if($branchID != 'master')
-                {
-                    foreach($branches as $branch)
-                    {
-                        unset($branches[$branch]);
-                        if($branch == $branchID) break;
-                    }
-                }
-
-                $this->repo->setRepoBranch($branchID);
-                helper::setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-            }
-        }
+        $branches = $this->repoZen->getSyncBranches($repo, $branchID);
 
         $logs    = array();
         $version = 1;
         if($repo->SCM != 'Gitlab')
         {
-            $latestInDB = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
-                ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
-                ->where('t1.repo')->eq($repoID)
-                ->beginIF($repo->SCM == 'Git' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-                ->beginIF($repo->SCM == 'Gitlab' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-                ->orderBy('t1.time')
-                ->limit(1)
-                ->fetch();
+            $latestInDB = $this->repo->getLatestCommit($repoID, false);
 
             $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
             $revision = $version == 1 ? 'HEAD' : (in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')) ? $latestInDB->commit : $latestInDB->revision);
-            if($type == 'batch')
-            {
-                $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branchID);
-            }
-            else
-            {
-                $logs = $this->scm->getCommits($revision, 0, $branchID);
-            }
+            $logs     = $this->scm->getCommits($revision, $type == 'batch' ? $this->config->repo->batchNum : 0, $branchID);
         }
 
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branchID);
-        if(empty($commitCount))
-        {
-            if(!$repo->synced)
-            {
-                if(in_array($repo->SCM, $this->config->repo->gitTypeList))
-                {
-                    if($branchID) $this->repo->saveExistCommits4Branch($repo->id, $branchID);
-
-                    $branchID = reset($branches);
-                    setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
-
-                    if($branchID) $this->repo->fixCommit($repoID);
-                }
-
-                if(empty($branchID))
-                {
-                    $this->repo->markSynced($repoID);
-                    return print($this->config->repo->repoSyncLog->finish);
-                }
-            }
-        }
-
-        $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repoID)->exec();
-        echo $type == 'batch' ?  $commitCount : $this->config->repo->repoSyncLog->finish;
+        echo $this->repoZen->checkSyncResult($repo, $branches, $branchID, $commitCount);
     }
 
     /**

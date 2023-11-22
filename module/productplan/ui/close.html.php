@@ -24,7 +24,7 @@ formPanel
         set::required(true),
         select
         (
-            set::id('closedReasonBox'),
+            setID('closedReasonBox'),
             set::name('closedReason'),
             set::strong(false),
             set::items($lang->productplan->closedReasonList),

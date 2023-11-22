@@ -68,46 +68,47 @@ class customTest
     }
 
     /**
+     * 删除自定义项。
      * Test delete items.
      *
-     * @param  string   $paramString
+     * @param  string     $paramString
      * @access public
-     * @return int
+     * @return array|bool
      */
-    public function deleteItemsTest($paramString)
+    public function deleteItemsTest($paramString): array|bool
     {
-        $objects = $this->objectModel->deleteItems($paramString);
+        $result = $this->objectModel->deleteItems($paramString);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $result;
     }
 
     /**
+     * 解析选择或删除项的参数字符串。
      * Test parse the param string for select or delete items.
      *
-     * @param  string    $paramString
+     * @param  string $paramString lang=xxx&module=story&section=sourceList&key=customer and so on.
      * @access public
      * @return array
      */
-    public function parseItemParamTest($paramString)
+    public function parseItemParamTest(string $paramString): array
     {
-        $objects = $this->objectModel->parseItemParam($paramString);
+        $params = $this->objectModel->parseItemParam($paramString);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $params;
     }
 
     /**
+     * 创建一个DAO对象来选择或删除一条或多条记录。
      * Test create a DAO object to select or delete one or more records.
      *
-     * @param  string  $paramString
+     * @param  string $paramString
      * @param  string $method
      * @access public
      * @return array|int
      */
-    public function prepareSQLTest($paramString, $method = 'select')
+    public function prepareSQLTest(string $paramString, string $method = 'select'): array|int
     {
         $params  = $this->objectModel->parseItemParam($paramString);
         if($method == 'delete')

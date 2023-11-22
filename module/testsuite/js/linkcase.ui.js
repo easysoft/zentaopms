@@ -9,7 +9,7 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
     checkedList.forEach((id) =>
     {
         form.append('cases[]', id);
-        form.append('versions[' + id + ']', $('#versions' + id).val());
+        form.append('versions[' + id + ']', $("[name='version\[" + id + "\]']").val());
     });
 
     if($(this).hasClass('ajax-btn'))
@@ -47,14 +47,10 @@ window.renderCell = function(result, info)
     }
     if(info.col.name == 'version' && result[0])
     {
-        const testcase = info.row.data;
-        let html = "<select name='versions[" + testcase.id + "]' id='versions" + testcase.id + "' class='form-control' style='width:60px'>";
-        for(i = 1; i <= testcase.version; i++)
-        {
-            html += "<option value='" + i + "'>" + i + "</option>";
-        }
-        html += "</select>";
-        result[0] = {html};
+        if(info.row.data.version == 1) return result;
+        let versions = [];
+        for(i = 1; i <= info.row.data.version; i++) versions.push({'text': i, 'value': i});
+        result[0].children.props.items = versions;
     }
     return result;
 }

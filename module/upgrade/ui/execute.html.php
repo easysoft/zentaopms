@@ -14,17 +14,17 @@ set::zui(true);
 
 div
 (
-    set::id('main'),
+    setID('main'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
         panel
         (
             set::style(array('margin' => '0 auto')),
             zui::width('800px'),
             div
             (
-                set::className('article-h1 mb-4'),
+                setClass('article-h1 mb-4'),
                 icon
                 (
                     'close',
@@ -45,7 +45,7 @@ div
             ) : null,
             in_array($result, array('fail', 'sqlFail')) ? div
             (
-                set::className('mt-4'),
+                setClass('mt-4'),
                 $result == 'sqlFail' ? $lang->upgrade->afterExec : $lang->upgrade->afterDeleted,
                 btn
                 (

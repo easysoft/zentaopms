@@ -674,6 +674,7 @@ class storyTao extends storyModel
         $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify,reviewer,URS,region,lane,branches,plans,modules,uploadImage')
             ->autoCheck()
             ->checkIF(!empty($story->notifyEmail), 'notifyEmail', 'email')
+            ->batchCheck($this->config->story->create->requiredFields, 'notempty')
             ->checkFlow()
             ->exec();
         if(dao::isError()) return false;

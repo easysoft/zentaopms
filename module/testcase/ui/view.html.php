@@ -51,8 +51,6 @@ $app->loadLang('product');
 $productLink = $case->product && hasPriv('product', 'view') ? $this->createLink('product', 'view', "productID={$case->product}") : '';
 $branchLink  = $case->branch  && hasPriv('testcase', 'browse') ? $this->createLink('testcase', 'browse', "productID={$case->product}&branch={$case->branch}") : '';
 
-\a();
-
 $fromCaseItem      = array();
 $libItem           = array();
 $productItem       = array();
@@ -309,6 +307,8 @@ foreach(explode(',', $case->reviewedBy) as $account)
 $reviewedBy = trim($reviewedBy);
 
 $isInModal = isAjaxRequest('modal');
+$versions  = array();
+for($i = $case->version; $i >= 1; $i --) $versions[] = array('text' => "#{$i}", 'url' => inlink('view', "caseID={$case->id}&version={$i}"), 'active' => $i == $version);
 detailHeader
 (
     to::title
@@ -318,7 +318,13 @@ detailHeader
             set::entityID($case->id),
             set::level(1),
             span(setStyle('color', $case->color), $case->title)
-        )
+        ),
+        count($versions) > 1 ? dropdown
+        (
+            btn(setClass('btn-link'), "#{$version}"),
+            set::items($versions)
+        ) : null,
+        $case->deleted ? span(setClass('label danger'), $lang->case->deleted) : null
     ),
     $isInModal ? to::prefix('') : null,
     !$isInModal ? to::suffix

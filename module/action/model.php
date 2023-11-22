@@ -638,7 +638,7 @@ class actionModel extends model
      * @access public
      * @return string
      */
-    public function formatActionComment($comment): string
+    public function formatActionComment(string $comment): string
     {
         if(str_contains($comment, '<pre class="prettyprint lang-html">'))
         {
@@ -704,10 +704,7 @@ class actionModel extends model
     public function printAction(object $action, string $desc = '')
     {
         $content = $this->renderAction($action, $desc);
-        if(is_string($content))
-        {
-            echo $content;
-        }
+        if(is_string($content)) echo $content;
         return;
     }
 
@@ -1551,7 +1548,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function processDynamicForAPI($dynamics): array
+    public function processDynamicForAPI(array $dynamics): array
     {
         /* 获取用户列表。 */
         /* Get user list. */

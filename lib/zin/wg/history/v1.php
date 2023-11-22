@@ -20,6 +20,7 @@ class history extends wg
         'actions?: array',              // 操作列表数据。
         'users?: array',                // 用户 Map 数据。
         'commentUrl?: string',          // 备注对话框 URL。
+        'editCommentUrl?: string',      // 修改备注对话框 URL。
         'title?: string|array',         // 标题。
         'commentBtn?: string|array'     // 是否允许添加备注。
     );
@@ -74,7 +75,15 @@ class history extends wg
 
     protected function build(): wg
     {
-        list($panel, $objectID, $objectType, $title, $actions, $commentUrl, $commentBtn) = $this->prop(array('panel', 'objectID', 'objectType', 'title', 'actions', 'commentUrl', 'commentBtn'));
+        global $config;
+
+        list($panel, $objectID, $objectType, $title, $actions, $commentUrl, $editCommentUrl, $commentBtn) = $this->prop(array('panel', 'objectID', 'objectType', 'title', 'actions', 'commentUrl', 'editCommentUrl', 'commentBtn'));
+
+        if(isset($config->zin->mode) && $config->zin->mode == 'compatible')
+        {
+            if(is_null($commentUrl)) $commentUrl = createLink('action', 'commentZin', "objectType=$objectType&objectID=$objectID");
+            if(is_null($editCommentUrl)) $editCommentUrl = createLink('action', 'editCommentZin', 'actionID={actionID}');
+        }
 
         return zui::historyPanel
         (
@@ -84,6 +93,7 @@ class history extends wg
             set::actions($actions),
             set::title($title),
             set::commentUrl($commentUrl),
+            set::editCommentUrl($editCommentUrl),
             set::commentBtn($commentBtn),
             set($this->getRestProps())
         );

@@ -13,11 +13,13 @@ function changeEngine(event)
 
     var repos     = engine == 'gitlab' ? gitlabRepos : repoPairs;
     var repoItems = [];
+    var repoID    = 0;
     for(i in repos)
     {
+        if(repoID == 0) repoID = i;
         repoItems.push({'text': repos[i], 'value': i});
     }
-    zui.Picker.query('#repo').render({items: repoItems});
+    zui.Picker.query('#repo').render({items: repoItems, value: repoID});
 
     if(engine == 'gitlab')
     {
@@ -36,6 +38,8 @@ function changeEngine(event)
         if(engine == 'jenkins' || frame != 'sonarqube') items.push({'text': frameList[frame], 'value': frame});
     }
     zui.Picker.query('#frame').render({items: items});
+
+    changeRepo();
 }
 
 function changeFrame(event)
@@ -56,7 +60,7 @@ function changeFrame(event)
 
 function changeRepo(event)
 {
-    const repoID = $(event.target).val();
+    const repoID = $('input[name="repo"]').val();
     if(repoID <= 0) return;
 
     var link = $.createLink('repo', 'ajaxLoadProducts', 'repoID=' + repoID);

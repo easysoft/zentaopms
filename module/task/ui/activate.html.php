@@ -330,7 +330,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->task->assignedTo),
-            set::required($isMultiple),
+            set::required($isMultiple || strpos(",{$this->config->task->activate->requiredFields},", ',assignedTo,')),
             inputGroup
             (
                 picker
@@ -339,6 +339,7 @@ formPanel
                     set::name('assignedTo'),
                     set::items($isMultiple ? $teamMembers : $members),
                     set::value($isMultiple ? '' : $task->finishedBy),
+                    set::required(strpos(",{$this->config->task->activate->requiredFields},", ',assignedTo,') !== false),
                     on::change('setTeamUser')
                 ),
                 $modalTeamBtn
@@ -350,11 +351,9 @@ formPanel
     formGroup
     (
         set::label($lang->comment),
-        editor
-        (
-            set::name('comment'),
-            set::rows('5')
-        )
+        set::control('editor'),
+        set::name('comment'),
+        set::rows('5')
     ),
     modalTrigger
     (

@@ -3,7 +3,7 @@ window.programMenuOnClick = function(data, url)
     location.href = url.replace('%d', data.item.key);
 }
 
-window.renderReleaseCountCell = function(result, {col, row})
+window.renderCell = function(result, {col, row})
 {
     if(col.name === 'name')
     {

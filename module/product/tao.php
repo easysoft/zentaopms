@@ -804,41 +804,10 @@ class productTao extends productModel
         $data = $type == 'program' ? $programStructure[$product->program] : $programStructure[$product->program][$product->line];
         foreach($this->config->product->statisticFields as $key => $fields)
         {
-            /* Get the total number of requirements and stories. */
-            if(strpos('stories|requirements', $key) !== false)
-            {
-                $totalObjects = 0;
-                foreach($product->$key as $status => $number) if(isset($this->lang->story->statusList[$status])) $totalObjects += $number;
-
-                $fieldType = $key == 'stories' ? 'Stories' : 'Requirements';
-                if(!isset($data['total' . $fieldType])) $data['total' . $fieldType] = 0;
-                $data['total' . $fieldType] += $totalObjects;
-            }
-            elseif($key == 'bugs')
-            {
-                $fieldType = 'Bugs';
-            }
-
             foreach($fields as $field)
             {
                 if(!isset($data[$field])) $data[$field] = 0;
-
-                $status = $field;
-                if(strpos($field, 'Requirements') !== false or strpos($field, 'Stories') !== false or $field == 'unResolvedBugs')
-                {
-                    $length = strpos($field, $fieldType);
-                    $status = substr($field, 0, $length);
-                }
-
-                if(strpos('requirements|stories', $key) !== false)
-                {
-                    $objects = $product->$key;
-                    $data[$field] += $objects[$status];
-                }
-                else
-                {
-                    $data[$field] += $product->$status;
-                }
+                $data[$field] += $product->$field;
             }
         }
 

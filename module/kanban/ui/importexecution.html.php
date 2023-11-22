@@ -26,9 +26,9 @@ featureBar
 (
     inputGroup
     (
-        span(set::className('input-group-addon'), $lang->kanban->selectedProduct),
+        span(setClass('input-group-addon'), $lang->kanban->selectedProduct),
         picker(set::name('project'), set::items($projects), set::value($selectedProjectID), set::style(array('width' => '200px')), set('data-on', 'change'), set('data-call', 'changeProject'), set::required(true)),
-        span(set::className('input-group-addon'), $lang->kanban->selectedLane),
+        span(setClass('input-group-addon'), $lang->kanban->selectedLane),
         picker(set::name('lane'), set::items($lanePairs), set::style(array('width' => '200px')), set::required(true))
     )
 );
@@ -50,9 +50,9 @@ unset($config->execution->dtable->fieldList['actions']);
 
 formBase
 (
-    set::id('linkForm'),
+    setID('linkForm'),
     set::actions(''),
-    set::className('mt-2'),
+    setClass('mt-2'),
     dtable
     (
         set::fixedLeftWidth('0.33'),

@@ -64,7 +64,7 @@ class testreportModel extends model
      * 通过 id 获取测试报告。
      * Get report by id.
      *
-     * @param  int    $reportID
+     * @param  int          $reportID
      * @access public
      * @return object|false
      */
@@ -153,7 +153,7 @@ class testreportModel extends model
 
     /**
      * 获取测试报告的用例列表。
-     * Get caseID list.
+     * Get case id list.
      *
      * @param  int    $reportID
      * @access public
@@ -204,12 +204,12 @@ class testreportModel extends model
             ->orderBy('date')
             ->fetchAll('id');
 
-        $failResults = 0;
-        $runCasesNum = array();
-        foreach($results as $result) $runCasesNum[$result->run] = $result->caseResult;
-        foreach($runCasesNum as $lastResult) if($lastResult == 'fail') $failResults++;
+        $failResults     = 0;
+        $runCasesResults = array();
+        foreach($results as $result) $runCasesResults[$result->run] = $result->caseResult;
+        foreach($runCasesResults as $lastResult) if($lastResult == 'fail') $failResults++;
 
-        return sprintf($this->lang->testreport->caseSummary, $caseCount, count($runCasesNum), count($results), $failResults);
+        return sprintf($this->lang->testreport->caseSummary, $caseCount, count($runCasesResults), count($results), $failResults);
     }
 
     /**

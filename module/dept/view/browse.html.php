@@ -53,7 +53,7 @@
                     if($sonDept->order > $maxOrder) $maxOrder = $sonDept->order;
                     echo html::input("depts[id$sonDept->id]", $sonDept->name, "class='form-control'");
                 }
-                for($i = 0; $i < DEPT::NEW_CHILD_COUNT ; $i ++) echo html::input("depts[]", '', "class='form-control'");
+                for($i = 0; $i < $config->dept->newChildCount; $i ++) echo html::input("depts[]", '', "class='form-control'");
                ?>
               </td>
               <td></td>

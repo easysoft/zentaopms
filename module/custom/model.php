@@ -124,25 +124,28 @@ class customModel extends model
     }
 
     /**
+     * 删除自定义项。
      * Delete items.
      *
-     * @param  string   $paramString    see parseItemParam();
+     * @param  string $paramString    see parseItemParam();
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteItems($paramString)
+    public function deleteItems($paramString): bool
     {
         $this->prepareSQL($this->parseItemParam($paramString), 'delete')->exec();
+        return !dao::isError();
     }
 
     /**
+     * 解析选择或删除项的参数字符串。
      * Parse the param string for select or delete items.
      *
-     * @param  string    $paramString     lang=xxx&module=story&section=sourceList&key=customer and so on.
+     * @param  string $paramString lang=xxx&module=story&section=sourceList&key=customer and so on.
      * @access public
      * @return array
      */
-    public function parseItemParam($paramString)
+    public function parseItemParam(string $paramString): array
     {
         /* Parse the param string into array. */
         parse_str($paramString, $params);
@@ -150,20 +153,25 @@ class customModel extends model
         /* Init fields not set in the param string. */
         $fields = 'lang,module,section,key,vision';
         $fields = explode(',', $fields);
-        foreach($fields as $field) if(!isset($params[$field])) $params[$field] = '';
+        foreach($fields as $field)
+        {
+            if(isset($params[$field])) continue;
+            $params[$field] = '';
+        }
 
         return $params;
     }
 
     /**
+     * 创建一个DAO对象来选择或删除一条或多条记录。
      * Create a DAO object to select or delete one or more records.
      *
-     * @param  array  $params     the params parsed by parseItemParam() method.
-     * @param  string $method     select|delete.
+     * @param  array  $params the params parsed by parseItemParam() method.
+     * @param  string $method select|delete.
      * @access public
      * @return object
      */
-    public function prepareSQL($params, $method = 'select')
+    public function prepareSQL(array $params, string $method = 'select'): object
     {
         return $this->dao->$method('*')->from(TABLE_LANG)->where('1 = 1')
             ->beginIF($params['lang'])->andWhere('lang')->in($params['lang'])->fi()

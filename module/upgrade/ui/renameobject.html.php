@@ -37,11 +37,11 @@ $items[] = array
 
 div
 (
-    set::id('main'),
+    setID('main'),
     div
     (
-        set::id('mainContent'),
-        set::className('bg-white'),
+        setID('mainContent'),
+        setClass('bg-white'),
         set::style(array('margin' => '50px auto 0', 'width' => '1200px')),
         formBatchPanel
         (

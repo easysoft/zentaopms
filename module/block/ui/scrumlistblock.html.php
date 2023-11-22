@@ -15,10 +15,10 @@ jsVar('delayInfo', $lang->project->delayInfo);
 
 foreach($executionStats as $scrum)
 {
-    $scrum->totalEstimate = zget($scrum->hours, 'totalEstimate', 0) . $lang->execution->workHourUnit;
-    $scrum->totalConsumed = zget($scrum->hours, 'totalConsumed', 0) . $lang->execution->workHourUnit;
-    $scrum->totalLeft     = zget($scrum->hours, 'totalLeft', 0)     . $lang->execution->workHourUnit;
-    $scrum->progress      = zget($scrum->hours, 'progress', 0);
+    $scrum->totalEstimate = zget($scrum, 'estimate', 0) . $lang->execution->workHourUnit;
+    $scrum->totalConsumed = zget($scrum, 'consumed', 0) . $lang->execution->workHourUnit;
+    $scrum->totalLeft     = zget($scrum, 'left', 0)     . $lang->execution->workHourUnit;
+    $scrum->progress      = zget($scrum, 'progress', 0);
 }
 
 if(!$longBlock)

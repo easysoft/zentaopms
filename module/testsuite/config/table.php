@@ -98,6 +98,7 @@ $config->testsuite->testcase->dtable->fieldList['id']['type']  = 'checkID';
 $config->testsuite->testcase->dtable->fieldList['title']['name']  = 'title';
 $config->testsuite->testcase->dtable->fieldList['title']['title'] = $lang->testcase->title;
 $config->testsuite->testcase->dtable->fieldList['title']['type']  = 'title';
+$config->testsuite->testcase->dtable->fieldList['title']['link']  = array('module' => 'testcase', 'method' => 'view', 'params' => 'caseID={id}&version={caseVersion}');
 
 $config->testsuite->testcase->dtable->fieldList['pri']['name']  = 'pri';
 $config->testsuite->testcase->dtable->fieldList['pri']['title'] = $lang->testcase->pri;
@@ -162,10 +163,16 @@ $config->testsuite->linkcase->dtable->fieldList['status'] = $config->testcase->d
 
 $config->testsuite->linkcase->dtable->fieldList['id']['name'] = 'id';
 
-$config->testsuite->linkcase->dtable->fieldList['version']['name']  = 'version';
-$config->testsuite->linkcase->dtable->fieldList['version']['title'] = $lang->testsuite->linkVersion;
-$config->testsuite->linkcase->dtable->fieldList['version']['type']  = 'text';
-$config->testsuite->linkcase->dtable->fieldList['version']['group'] = 'version';
+$config->testsuite->linkcase->dtable->fieldList['title']['link']['params'] = 'caseID={id}';
+$config->testsuite->linkcase->dtable->fieldList['title']['data-toggle']    = 'modal';
+$config->testsuite->linkcase->dtable->fieldList['title']['data-size']      = 'lg';
+
+$config->testsuite->linkcase->dtable->fieldList['version']['name']         = 'version';
+$config->testsuite->linkcase->dtable->fieldList['version']['title']        = $lang->testsuite->linkVersion;
+$config->testsuite->linkcase->dtable->fieldList['version']['type']         = 'control';
+$config->testsuite->linkcase->dtable->fieldList['version']['control']      = 'picker';
+$config->testsuite->linkcase->dtable->fieldList['version']['group']        = 'version';
+$config->testsuite->linkcase->dtable->fieldList['version']['controlItems'] = array(1 => 1);
 
 $config->testsuite->linkcase->dtable->fieldList['openedBy'] = $config->testcase->dtable->fieldList['openedBy'];
 unset($config->testsuite->linkcase->dtable->fieldList['title']['nestedToggle']);

@@ -81,7 +81,7 @@ if($doc->keywords)
         {
             $keywordsLabel[] = span
             (
-                setClass('label secondary-outline'),
+                setClass('label secondary-outline ml-2'),
                 $keywords
             );
         }

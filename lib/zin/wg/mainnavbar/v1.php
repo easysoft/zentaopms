@@ -139,7 +139,7 @@ class mainNavbar extends nav
 
         if(in_array("$moduleName-$methodName", is_array($config->excludeSwitcherList) ? $config->excludeSwitcherList : array())) return null;
 
-        if(in_array($moduleName, is_array($config->hasSwitcherModules) ? $config->hasSwitcherModules : array()) || in_array("$moduleName-$methodName", is_array($config->hasSwitcherMethods) ? $config->hasSwitcherMethods : array()))
+        if(in_array($moduleName, (isset($config->hasSwitcherModules) && is_array($config->hasSwitcherModules)) ? $config->hasSwitcherModules : array()) || in_array("$moduleName-$methodName", (isset($config->hasSwitcherMethods) && is_array($config->hasSwitcherMethods)) ? $config->hasSwitcherMethods : array()))
         {
             $ajaxMethod = 'ajaxSwitcherMenu';
             if($moduleName == 'testcase' && $app->tab == 'project') $moduleName = 'project';

@@ -21,7 +21,7 @@ $fnGenerateSide = function() use($groupMetrics, $current, $viewType, $scope, $la
 
         $metricList[] = li
             (
-                set::class('metric-group'),
+                set::className('metric-group'),
                 $lang->metric->objectList[$key]
             );
 
@@ -350,6 +350,7 @@ div
             div
             (
                 setClass('table-side'),
+                setStyle(array('flex-basis' => $tableWidth . 'px')),
                 div
                 (
                     $resultData ? dtable

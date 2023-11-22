@@ -45,10 +45,8 @@ formPanel
     formGroup
     (
         set::label($lang->comment),
-        editor
-        (
-            set::name('comment')
-        )
+        set::control('editor'),
+        set::name('comment')
     )
 );
 hr();

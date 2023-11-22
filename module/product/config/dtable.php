@@ -98,12 +98,12 @@ $config->product->dtable->fieldList['testCaseCoverage']['type']     = 'progress'
 $config->product->dtable->fieldList['testCaseCoverage']['sortType'] = false;
 $config->product->dtable->fieldList['testCaseCoverage']['border']   = 'right';
 
-$config->product->dtable->fieldList['unResolvedBugs']['name']     = 'unResolvedBugs';
-$config->product->dtable->fieldList['unResolvedBugs']['title']    = $lang->product->activatedBug;
-$config->product->dtable->fieldList['unResolvedBugs']['minWidth'] = 64;
-$config->product->dtable->fieldList['unResolvedBugs']['type']     = 'number';
-$config->product->dtable->fieldList['unResolvedBugs']['sortType'] = false;
-$config->product->dtable->fieldList['unResolvedBugs']['align']    = 'center';
+$config->product->dtable->fieldList['unresolvedBugs']['name']     = 'unresolvedBugs';
+$config->product->dtable->fieldList['unresolvedBugs']['title']    = $lang->product->activatedBug;
+$config->product->dtable->fieldList['unresolvedBugs']['minWidth'] = 64;
+$config->product->dtable->fieldList['unresolvedBugs']['type']     = 'number';
+$config->product->dtable->fieldList['unresolvedBugs']['sortType'] = false;
+$config->product->dtable->fieldList['unresolvedBugs']['align']    = 'center';
 
 $config->product->dtable->fieldList['bugFixedRate']['name']     = 'bugFixedRate';
 $config->product->dtable->fieldList['bugFixedRate']['title']    = $lang->product->bugFixedRate;
@@ -240,13 +240,13 @@ $config->product->all->dtable->fieldList['plans']['show']     = true;
 $config->product->all->dtable->fieldList['plans']['sortType'] = false;
 $config->product->all->dtable->fieldList['plans']['group']    = 'g5';
 
-$config->product->all->dtable->fieldList['execution']['name']     = 'execution';
-$config->product->all->dtable->fieldList['execution']['title']    = $lang->execution->common;
-$config->product->all->dtable->fieldList['execution']['width']    = 64;
-$config->product->all->dtable->fieldList['execution']['type']     = 'number';
-$config->product->all->dtable->fieldList['execution']['show']     = true;
-$config->product->all->dtable->fieldList['execution']['sortType'] = false;
-$config->product->all->dtable->fieldList['execution']['group']    = 'g6';
+$config->product->all->dtable->fieldList['executions']['name']     = 'executions';
+$config->product->all->dtable->fieldList['executions']['title']    = $lang->execution->common;
+$config->product->all->dtable->fieldList['executions']['width']    = 64;
+$config->product->all->dtable->fieldList['executions']['type']     = 'number';
+$config->product->all->dtable->fieldList['executions']['show']     = true;
+$config->product->all->dtable->fieldList['executions']['sortType'] = false;
+$config->product->all->dtable->fieldList['executions']['group']    = 'g6';
 
 $config->product->all->dtable->fieldList['testCaseCoverage']['name']     = 'testCaseCoverage';
 $config->product->all->dtable->fieldList['testCaseCoverage']['title']    = $lang->product->testCaseCoverage;
@@ -257,14 +257,14 @@ $config->product->all->dtable->fieldList['testCaseCoverage']['show']     = true;
 $config->product->all->dtable->fieldList['testCaseCoverage']['sortType'] = false;
 $config->product->all->dtable->fieldList['testCaseCoverage']['group']    = 'g7';
 
-$config->product->all->dtable->fieldList['totalActivatedBugs']['name']     = 'totalActivatedBugs';
-$config->product->all->dtable->fieldList['totalActivatedBugs']['title']    = $lang->product->activatedBug;
-$config->product->all->dtable->fieldList['totalActivatedBugs']['width']    = 64;
-$config->product->all->dtable->fieldList['totalActivatedBugs']['minWidth'] = 86;
-$config->product->all->dtable->fieldList['totalActivatedBugs']['type']     = 'number';
-$config->product->all->dtable->fieldList['totalActivatedBugs']['show']     = true;
-$config->product->all->dtable->fieldList['totalActivatedBugs']['sortType'] = false;
-$config->product->all->dtable->fieldList['totalActivatedBugs']['group']    = 'g8';
+$config->product->all->dtable->fieldList['unresolvedBugs']['name']     = 'unresolvedBugs';
+$config->product->all->dtable->fieldList['unresolvedBugs']['title']    = $lang->product->activatedBug;
+$config->product->all->dtable->fieldList['unresolvedBugs']['width']    = 64;
+$config->product->all->dtable->fieldList['unresolvedBugs']['minWidth'] = 86;
+$config->product->all->dtable->fieldList['unresolvedBugs']['type']     = 'number';
+$config->product->all->dtable->fieldList['unresolvedBugs']['show']     = true;
+$config->product->all->dtable->fieldList['unresolvedBugs']['sortType'] = false;
+$config->product->all->dtable->fieldList['unresolvedBugs']['group']    = 'g8';
 
 $config->product->all->dtable->fieldList['totalBugs']['name']     = 'totalBugs';
 $config->product->all->dtable->fieldList['totalBugs']['title']    = $lang->product->totalBugs;

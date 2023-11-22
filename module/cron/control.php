@@ -116,64 +116,6 @@ class cron extends control
     }
 
     /**
-     * Schedule cron task by RoadRunner.
-     *
-     * @access public
-     * @return void
-     */
-    public function rrSchedule()
-    {
-        if('cli' !== PHP_SAPI) return;
-
-        set_time_limit(0);
-        session_write_close();
-
-        $this->loadModel('common');
-
-        $execId = mt_rand();
-        while(true)
-        {
-            dao::$cache = array();
-            if(empty($this->config->global->cron) || !$this->canSchedule($execId))
-            {
-                sleep(60);
-                continue;
-            }
-
-            $this->schedule($execId);
-            sleep(30);
-        }
-    }
-
-    /**
-     * Consume cron task by RoadRunner.
-     *
-     * @access public
-     * @return void
-     */
-    public function rrConsume()
-    {
-        if('cli' !== PHP_SAPI) return;
-
-        set_time_limit(0);
-        session_write_close();
-
-        $this->loadModel('common');
-
-        while(true)
-        {
-            if(empty($this->config->global->cron))
-            {
-                sleep(60);
-                continue;
-            }
-
-            $this->execTasks(mt_rand());
-            sleep(10);
-        }
-    }
-
-    /**
      * 使用Ajax请求执行定时任务.
      * Ajax execute cron.
      *
@@ -315,8 +257,8 @@ class cron extends control
             {
                 if($setting->value > $expirDate)
                 {
-                    if($setting->key == strval($execId)) $roles[] = 'consumer';
                     $consumerCount ++;
+                    if($consumer < $this->config->cron->maxConsumer && $setting->key == strval($execId)) $roles[] = 'consumer';
                 }
                 else
                 {
@@ -326,7 +268,7 @@ class cron extends control
         }
 
         if(in_array($scheduler['execId'], array(0, $execId)) || $scheduler['lastTime'] < $expirDate) $roles[] = 'scheduler';
-        if($consumerCount < 4) $roles[] = 'consumer';
+        if($consumerCount < $this->config->cron->maxConsumer) $roles[] = 'consumer';
 
         return $roles;
     }

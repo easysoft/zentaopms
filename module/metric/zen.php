@@ -397,7 +397,7 @@ class metricZen extends metric
 
         if(!$result) return array
         (
-            array('name' => 'value', 'title' => $this->lang->metric->value),
+            array('name' => 'value', 'title' => $this->lang->metric->value, 'width' => 96),
             array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime, 'width' => 150)
         );
 
@@ -413,6 +413,17 @@ class metricZen extends metric
         if(in_array('date', $fieldList)) $header[] = array('name' => 'calcTime', 'title' => $this->lang->metric->calcTime, 'width' => 128);
 
         return $header;
+    }
+
+    protected function getViewTableWidth($headers)
+    {
+        $width = 0;
+        foreach($headers as $header)
+        {
+            $width += isset($header['width']) ? $header['width'] : 160;
+        }
+    
+        return $width;
     }
 
     /**

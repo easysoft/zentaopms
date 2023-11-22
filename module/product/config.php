@@ -46,11 +46,10 @@ $config->product->report->planLabels = array();
 $config->product->report->planLabels[] = '';
 
 $config->product->statisticFields = array();
-$config->product->statisticFields['requirements'] = array('draftRequirements', 'activeRequirements', 'changingRequirements', 'reviewingRequirements', 'closedRequirements');
-$config->product->statisticFields['stories']      = array('draftStories', 'activeStories', 'changingStories', 'reviewingStories', 'closedStories', 'finishClosedStories', 'unclosedStories');
-$config->product->statisticFields['bugs']         = array('unResolvedBugs', 'closedBugs', 'fixedBugs');
-$config->product->statisticFields['plans']        = array('plans');
-$config->product->statisticFields['releases']     = array('releases');
+$config->product->statisticFields['stories']  = array('draftStories', 'activeStories', 'changingStories', 'reviewingStories', 'closedStories', 'finishedStories', 'totalStories');
+$config->product->statisticFields['bugs']     = array('unresolvedBugs', 'closedBugs', 'fixedBugs');
+$config->product->statisticFields['plans']    = array('plans');
+$config->product->statisticFields['releases'] = array('releases');
 
 $config->product->skipRedirectMethod = ',create,index,showerrornone,ajaxgetdropmenu,kanban,all,manageline,export,ajaxgetplans,';
 $config->product->memberFields       = array('PO', 'QD', 'RD', 'feedback', 'ticket', 'createdBy;');

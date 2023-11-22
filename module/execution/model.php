@@ -1635,14 +1635,11 @@ class executionModel extends model
         $parentList = array();
         $emptyHour  = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
         $today      = helper::today();
-        $hours      = $this->loadModel('project')->computeProgress($executions);
         $burns      = $this->getBurnData($executions);
         foreach($executions as $execution)
         {
             $execution->productName = isset($productList[$execution->id]) ? trim($productList[$execution->id]->productName, ',') : '';
             $execution->end         = date(DT_DATE1, strtotime($execution->end));
-            $execution->hours       = isset($hours[$execution->id]) ? $hours[$execution->id] : (object)$emptyHour;
-            $execution->teamCount   = isset($memberGroup[$execution->id]) ? $memberGroup[$execution->id]->teams : 0;
 
             if(isset($executions[$execution->parent])) $executions[$execution->parent]->isParent = 1;
             if(empty($productID) && !empty($productList[$execution->id])) $execution->product = trim($productList[$execution->id]->product, ',');
@@ -4684,10 +4681,6 @@ class executionModel extends model
             $execution->project       = $execution->projectName;
             $execution->parent        = ($execution->parent && $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
             $execution->isParent      = !empty($execution->isParent) or !empty($execution->tasks);
-            $execution->progress      = $execution->hours->progress;
-            $execution->totalEstimate = $execution->hours->totalEstimate;
-            $execution->totalConsumed = $execution->hours->totalConsumed;
-            $execution->totalLeft     = $execution->hours->totalLeft;
             $execution->actions       = array();
             foreach($this->config->projectExecution->dtable->fieldList['actions'][$execution->projectModel] as $actionKey)
             {

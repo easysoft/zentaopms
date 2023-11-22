@@ -39,7 +39,7 @@ formPanel
     ),
     formRow
     (
-        set::id('otherLaneBox'),
+        setID('otherLaneBox'),
         formGroup
         (
             set::label($lang->kanbanlane->otherlane),

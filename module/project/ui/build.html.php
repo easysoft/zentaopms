@@ -37,14 +37,11 @@ featureBar
 
 /* zin: Define the toolbar on main menu. */
 $canCreateBuild = hasPriv('projectbuild', 'create') && common::canModify('project', $project);
-if($canCreateBuild) $createItem = array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->build->create, 'url' => $this->createLink('projectbuild', 'create', "projectID={$project->id}"));
-toolbar
-(
-    !empty($createItem) ? item(set($createItem)) : null
-);
+
+if($canCreateBuild) toolbar(item(set(array('icon' => 'plus', 'class' => 'primary', 'text' => $lang->build->create, 'url' => createLink('projectbuild', 'create', "projectID={$project->id}")))));
 
 jsVar('projectID', $project->id);
-jsVar('changeProductLink', helper::createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type=product&param={productID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('changeProductLink', createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type=product&param={productID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('scmPathTip', $lang->build->scmPath);
 jsVar('filePathTip', $lang->build->filePath);
 jsVar('integratedTip', $lang->build->integrated);
@@ -59,12 +56,7 @@ dtable
     set::sortLink(createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::getCellSpan(jsRaw('window.getCellSpan')),
-    set::footPager(
-        usePager
-        (
-            array('linkCreator' => helper::createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage)
-        )
-    ),
+    set::footPager(usePager(array('linkCreator' => createLink($app->rawModule, $app->rawMethod, "projectID={$project->id}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage))),
     set::emptyTip($lang->build->noBuild),
     set::createTip($lang->build->create),
     set::createLink($canCreateBuild ? createLink('projectbuild', 'create', "projectID={$project->id}") : '')

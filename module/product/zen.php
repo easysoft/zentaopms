@@ -434,15 +434,7 @@ class productZen extends product
         {
             $product->line              = zget($lines, $product->line, '');
             $product->manager           = zget($users, $product->PO, '');
-            $product->draftStories      = (int)$product->stories['draft'];
-            $product->activeStories     = (int)$product->stories['active'];
-            $product->changedStories    = (int)$product->stories['changing'];
-            $product->reviewingStories  = (int)$product->stories['reviewing'];
-            $product->closedStories     = (int)$product->stories['closed'];
-            $product->totalStories      = $product->activeStories + $product->changedStories + $product->draftStories + $product->closedStories + $product->reviewingStories;
             $product->storyCompleteRate = ($product->totalStories == 0 ? 0 : round($product->closedStories / $product->totalStories, 3) * 100) . '%';
-            $product->unResolvedBugs    = (int)$product->unResolved;
-            $product->assignToNullBugs  = (int)$product->assignToNull;
             $product->bugFixedRate      = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
             $product->program           = $product->programName;
         }

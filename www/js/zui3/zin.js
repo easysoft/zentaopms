@@ -636,7 +636,12 @@
             const newOptions = window.beforePageLoad(options);
             if(newOptions) $.extend(options, newOptions);
         }
-        if(DEBUG) console.log('[APP] ', 'load:', options.url);
+        if(DEBUG)
+        {
+            console.groupCollapsed('[APP] ', 'load:', options.url);
+            console.trace('options', options);
+            console.groupEnd();
+        }
         fetchContent(options.url, options.selector, options);
     }
 

@@ -18,7 +18,7 @@ foreach($repoes as $repoID => $repo)
     $repoItems[] = checkbox
     (
         on::change('checkRepo'),
-        set::id("repoes[{$repoID}]"),
+        setID("repoes[{$repoID}]"),
         set::name("repoes[{$repoID}]"),
         set::text($repo)
     );
@@ -26,10 +26,10 @@ foreach($repoes as $repoID => $repo)
 
 div
 (
-    set::id('main'),
+    setID('main'),
     div
     (
-        set::id('mainContent'),
+        setID('mainContent'),
         setClass('px-1 mt-2 mx-auto'),
         width('1200px'),
         panel
@@ -59,7 +59,7 @@ div
                                 checkbox
                                 (
                                     on::change('checkAllRepoes'),
-                                    set::id('checkAllRepoes'),
+                                    setID('checkAllRepoes'),
                                     set::name('checkAllRepoes'),
                                     set::text($lang->upgrade->repo)
                                 )

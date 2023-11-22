@@ -128,6 +128,7 @@ formPanel
     formGroup
     (
         set::label($lang->testtask->desc),
+        set::required(strpos(",{$this->config->testtask->edit->requiredFields},", ",desc,") !== false),
         editor
         (
             set::name('desc'),

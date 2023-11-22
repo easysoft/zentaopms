@@ -51,9 +51,7 @@ foreach($programs as $program)
     $program->budget    = !empty($program->budget) ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;
     $parents[$program->parent][] = $program->id;
 
-    /* Progress. */
-    if(isset($progressList[$program->id])) $program->progress = round($progressList[$program->id]);
-
+    $program->progress = round($program->progress);
     $program->isParent = false;
     if($program->parent > 0 and isset($programs[$program->parent])) $programs[$program->parent]->isParent = true;
     if($program->parent > 0 and !isset($programs[$program->parent]))
@@ -78,7 +76,8 @@ foreach($programs as $program)
     }
 
     /* Set invested hours. */
-    if(!isset($program->invested)) $program->invested = 0;
+    $program->invested = !empty($this->config->execution->defaultWorkhours) ? round($program->consumed / $this->config->execution->defaultWorkhours, 2) : 0;
+
     if(!is_null($program->end) && str_contains($program->end, LONG_TIME)) $program->end = $lang->program->longTime;
 
     /* Actions. */

@@ -27,8 +27,7 @@ formPanel
             setClass('primary-pale'),
             set::icon('copy'),
             set::url('#copyKanbanModal'),
-            set('data-destoryOnHide', true),
-            set('data-toggle', 'modal'),
+            setData(array('destoryOnHide' => true, 'toggle' => 'modal')),
             $lang->kanban->copy . $lang->kanban->common
         )
     ),
@@ -48,7 +47,7 @@ formPanel
     ),
     formRow
     (
-        set::id('WIPCountBox'),
+        setID('WIPCountBox'),
         formGroup
         (
             set::label($lang->kanban->WIPCount),
@@ -63,7 +62,7 @@ formPanel
     ),
     formRow
     (
-        set::id('spaceBox'),
+        setID('spaceBox'),
         formGroup
         (
             set::width('1/2'),
@@ -79,7 +78,7 @@ formPanel
     ),
     formRow
     (
-        set::id('nameBox'),
+        setID('nameBox'),
         formGroup
         (
             set::width('1/2'),
@@ -90,8 +89,8 @@ formPanel
     ),
     formRow
     (
-        set::id('ownerBox'),
-        set::className($type == 'private' ? 'hidden' : ''),
+        setID('ownerBox'),
+        setClass($type == 'private' ? 'hidden' : ''),
         formGroup
         (
             set::width('1/2'),
@@ -106,10 +105,10 @@ formPanel
                 ),
                 span
                 (
-                    set('class', 'input-group-addon'),
+                    setClass('input-group-addon'),
                     a
                     (
-                        set('id', 'allUsers'),
+                        setID('allUsers'),
                         set('href', 'javascript:;'),
                         $lang->kanban->allUsers
                     )
@@ -119,8 +118,8 @@ formPanel
     ),
     formRow
     (
-        set::id('teamBox'),
-        set::className($type == 'private' ? 'hidden' : ''),
+        setID('teamBox'),
+        setClass($type == 'private' ? 'hidden' : ''),
         formGroup
         (
             set::label($lang->kanban->team),
@@ -135,7 +134,7 @@ formPanel
     ),
     formRow
     (
-        set::id('fixedColBox'),
+        setID('fixedColBox'),
         formGroup
         (
             setClass('items-center'),
@@ -149,10 +148,10 @@ formPanel
             ),
             div
             (
-                set::className('flex items-center ml-8 py-1'),
+                setClass('flex items-center ml-8 py-1'),
                 set::style(array('padding-left' => '1px')),
                 span($lang->kanban->colWidth),
-                input(set::type('number'), set::min($config->colWidth), set::name('colWidth'), set::className('w-16 size-sm mx-1'), set::value(isset($copyKanban->colWidth) ? $copyKanban->colWidth : $config->colWidth)),
+                input(set::type('number'), set::min($config->colWidth), set::name('colWidth'), setClass('w-16 size-sm mx-1'), set::value(isset($copyKanban->colWidth) ? $copyKanban->colWidth : $config->colWidth)),
                 span('px')
             ),
             div
@@ -165,7 +164,7 @@ formPanel
     ),
     formRow
     (
-        set::id('autoColBox'),
+        setID('autoColBox'),
         set::style(array('margin-top' => '0px')),
         formGroup
         (
@@ -180,12 +179,12 @@ formPanel
             ),
             div
             (
-                set::className('flex items-center ml-5 py-1'),
+                setClass('flex items-center ml-5 py-1'),
                 span($lang->kanban->colWidth),
-                input(set::type('number'), set::min($config->minColWidth), set::name('minColWidth'), set::className('w-16 size-sm mx-1'), set::value(isset($copyKanban->minColWidth) ? $copyKanban->minColWidth : $config->minColWidth)),
+                input(set::type('number'), set::min($config->minColWidth), set::name('minColWidth'), setClass('w-16 size-sm mx-1'), set::value(isset($copyKanban->minColWidth) ? $copyKanban->minColWidth : $config->minColWidth)),
                 span('px'),
-                span('~', set::className('mx-1')),
-                input(set::type('number'), set::min($config->maxColWidth), set::name('maxColWidth'), set::className('w-16 size-sm mx-1'), set::value(isset($copyKanban->maxColWidth) ? $copyKanban->maxColWidth : $config->maxColWidth)),
+                span('~', setClass('mx-1')),
+                input(set::type('number'), set::min($config->maxColWidth), set::name('maxColWidth'), setClass('w-16 size-sm mx-1'), set::value(isset($copyKanban->maxColWidth) ? $copyKanban->maxColWidth : $config->maxColWidth)),
                 span('px')
             ),
             div
@@ -228,7 +227,7 @@ formPanel
     ),
     formRow
     (
-        set::id('archiveBox'),
+        setID('archiveBox'),
         formGroup
         (
             set::label($lang->kanban->archive),
@@ -243,7 +242,7 @@ formPanel
     ),
     formRow
     (
-        set::id('manageProgressBox'),
+        setID('manageProgressBox'),
         formGroup
         (
             set::label($lang->kanban->manageProgress),
@@ -258,7 +257,7 @@ formPanel
     ),
     formRow
     (
-        set::id('alignmentBox'),
+        setID('alignmentBox'),
         formGroup
         (
             set::label($lang->kanban->alignment),
@@ -273,7 +272,7 @@ formPanel
     ),
     formRow
     (
-        set::id('descBox'),
+        setID('descBox'),
         formGroup
         (
             set::label($lang->kanban->desc),
@@ -286,8 +285,8 @@ formPanel
     ),
     formRow
     (
-        set::id('whitelistBox'),
-        set::className($type != 'private' ? 'hidden' : ''),
+        setID('whitelistBox'),
+        setClass($type != 'private' ? 'hidden' : ''),
         formGroup
         (
             set::label($lang->whitelist),
@@ -299,8 +298,8 @@ formPanel
                 set::value(isset($copyKanban->whitelist) ? $copyKanban->whitelist : '')
             )
         ),
-        input(set::className('hidden'), set::name('copyKanbanID'), set::value($copyKanbanID)),
-        input(set::className('hidden'), set::name('copyRegion'), set::value($copyRegion))
+        input(setClass('hidden'), set::name('copyKanbanID'), set::value($copyKanbanID)),
+        input(setClass('hidden'), set::name('copyRegion'), set::value($copyRegion))
     )
 );
 
@@ -310,11 +309,11 @@ if($copyKanbanID != 0)
     $kanbanList[] = cell
     (
         set::width('1/3'),
-        set::className('p-2'),
+        setClass('p-2'),
         div
         (
-            set::className('copy-card p-2 border rounded-md text-danger'),
-            icon('cancel', set::className('pr-2')),
+            setClass('copy-card p-2 border rounded-md text-danger'),
+            icon('cancel', setClass('pr-2')),
             $lang->kanban->cancelCopy
         )
     );
@@ -327,15 +326,12 @@ if(!empty($kanbans))
         $kanbanList[] = cell
             (
                 set::width('1/3'),
-                set::className('p-2'),
+                setClass('p-2'),
                 div
                 (
-                    set('data-on', 'click'),
-                    set('data-call', 'clickCopyCard'),
-                    set('data-params', 'event'),
-                    set('data-id', $id),
-                    set::className('copy-card p-2 border rounded-md'),
-                    icon('kanban', set::className('pr-2')),
+                    setData(array('on' => 'click', 'call' => 'clickCopyCard', 'params' => 'event', 'id' => $id)),
+                    setClass('copy-card p-2 border rounded-md'),
+                    icon('kanban', setClass('pr-2')),
                     $name
                 )
             );
@@ -349,7 +345,7 @@ else
             icon('exclamation-sign icon-2x pl-2 text-warning'),
             span
             (
-                set::className('font-bold ml-2'),
+                setClass('font-bold ml-2'),
                 $lang->kanban->copyNoKanban
             )
         );
@@ -359,12 +355,12 @@ modalTrigger
 (
     modal
     (
-        set::id('copyKanbanModal'),
+        setID('copyKanbanModal'),
         to::header
         (
             span
             (
-                set::className('copy-title article-h1'),
+                setClass('copy-title article-h1'),
                 $lang->kanban->copyTitle,
             ),
             span
@@ -381,7 +377,7 @@ modalTrigger
         ),
         div
         (
-            set::id('copyKanbans'),
+            setID('copyKanbans'),
             setClass('flex flex-wrap'),
             $kanbanList
         )

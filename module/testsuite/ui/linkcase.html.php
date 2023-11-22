@@ -48,6 +48,7 @@ dtable
     set::cols($config->testsuite->linkcase->dtable->fieldList),
     set::fixedLeftWidth('33%'),
     set::checkable(true),
+    set::plugins(array('form')),
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager())

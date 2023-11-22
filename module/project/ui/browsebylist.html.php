@@ -10,6 +10,9 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('langManDay',    $lang->program->manDay);
+jsVar('langPostponed', $lang->project->statusList['delay']);
+
 /* zin: Define the feature bar on main menu. */
 featureBar
 (
@@ -108,6 +111,7 @@ dtable
     set::sortLink(createLink('project', 'browse', "programID=$programID&browseType=$browseType&param=$param&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
     set::customCols(true),
+    set::onRenderCell(jsRaw('window.renderCell')),
     set::emptyTip($lang->project->empty),
     set::createTip($lang->project->create),
     set::createLink(hasPriv('project', 'create') ? createLink('project', 'createGuide') : ''),

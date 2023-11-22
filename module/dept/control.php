@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of dept module of ZenTaoPMS.
  *
@@ -11,41 +12,28 @@
  */
 class dept extends control
 {
-    const NEW_CHILD_COUNT = 10;
-
     /**
-     * Construct function, set menu.
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct($moduleName = '', $methodName = '')
-    {
-        parent::__construct($moduleName, $methodName);
-        $this->loadModel('company')->setMenu();
-    }
-
-    /**
-     * Browse a department.
+     * 部门结构维护页面。
+     * Department management page.
      *
      * @param  int    $deptID
      * @access public
      * @return void
      */
-    public function browse($deptID = 0)
+    public function browse(int $deptID = 0)
     {
-        $parentDepts = $this->dept->getParents($deptID);
         $this->view->title       = $this->lang->dept->manage . $this->lang->colon . $this->app->company->name;
         $this->view->deptID      = $deptID;
-        $this->view->depts       = $this->dept->getTreeMenu($rootDeptID = 0, array('deptmodel', 'createManageLink'));
-        $this->view->parentDepts = $parentDepts;
+        $this->view->depts       = $this->dept->getTreeMenu(0, array('deptmodel', 'createManageLink'));
         $this->view->sons        = $this->dept->getSons($deptID);
         $this->view->tree        = $this->dept->getDataStructure();
+        $this->view->parentDepts = $this->dept->getParents($deptID);
         $this->display();
     }
 
     /**
-     * Update the departments order.
+     * 部门结构排序。
+     * Sort of departments.
      *
      * @access public
      * @return void
@@ -55,12 +43,13 @@ class dept extends control
         if(!empty($_POST))
         {
             $this->dept->updateOrder($_POST['orders']);
-            return print(js::reload('parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
     }
 
     /**
-     * Manage childs.
+     * 修改子部门结构。
+     * Update child departments.
      *
      * @access public
      * @return void
@@ -70,8 +59,7 @@ class dept extends control
         if(!empty($_POST))
         {
             $deptIDList = $this->dept->manageChild($_POST['parentDeptID'], $_POST['depts']);
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $deptIDList));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'idList' => $deptIDList));
         }
     }
 

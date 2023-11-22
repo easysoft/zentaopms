@@ -30,8 +30,9 @@ window.changeReview = function(e)
 
 window.changeUnit = function()
 {
-    const defaultCurrency = $('#defaultCurrency').val();
-    $('#defaultCurrency').empty().append('<option></option>');
+    const defaultCurrency      = $('[name=defaultCurrency]').val();
+    let   defaultCurrencyItems = new Array();
+    let   index                = 0;
     $('[name^=unitList]').each(function()
     {
         if($(this).prop('checked'))
@@ -40,11 +41,15 @@ window.changeUnit = function()
             const firstStr = $(this).val() + '">';
 
             text = text.substring(text.lastIndexOf(firstStr) + firstStr.length, text.lastIndexOf('<'));
-            $('#defaultCurrency').append("<option value='" + $(this).val() + "'>" + text + '</option>');
-                                                                                }
+            defaultCurrencyItems[index] = {'value': $(this).val(), 'text': text};
+
+            index ++;
+        }
     });
 
-     $('#defaultCurrency').val(defaultCurrency);
+    let $defaultCurrencyPicker = $('[name=defaultCurrency]').zui('picker');
+    $defaultCurrencyPicker.render({items: defaultCurrencyItems});
+    $defaultCurrencyPicker.$.setValue(defaultCurrency);
 }
 
 window.savaTestcaseReview = function()

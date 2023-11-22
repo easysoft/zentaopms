@@ -32,7 +32,7 @@ searchForm
 
 dtable
 (
-    set::id('unlinkStoryList'),
+    setID('unlinkStoryList'),
     set::userMap($users),
     set::cols($cols),
     set::data(array_values($allStories)),

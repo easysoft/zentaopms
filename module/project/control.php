@@ -325,6 +325,8 @@ class project extends control
         $actionURL = $this->createLink('project', 'browse', "&programID=$programID&browseType=bySearch&queryID=myQueryID");
         $this->project->buildSearchForm($queryID, $actionURL);
 
+        $this->loadModel('program')->refreshStats(); // Refresh stats fields of projects.
+
         $programTitle = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=project&key=programTitle");
         $projectStats = $this->program->getProjectStats($programID, $browseType, $queryID, $orderBy, $programTitle, false, $pager);
 
@@ -1311,7 +1313,7 @@ class project extends control
      */
     public function activate(int $projectID)
     {
-        $project   = $this->project->getByID($projectID);
+        $project = $this->project->getByID($projectID);
 
         if(!empty($_POST))
         {

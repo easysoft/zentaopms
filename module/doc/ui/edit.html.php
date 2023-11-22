@@ -136,11 +136,9 @@ form
             (
                 strpos($config->doc->officeTypes, $doc->type) === false ? setClass('hidden') : null,
                 set::label($lang->doc->keywords),
-                input
-                (
-                    set::name('keywords'),
-                    set::value($doc->keywords)
-                )
+                set::control('input'),
+                set::name('keywords'),
+                set::value($doc->keywords)
             ),
             formGroup
             (

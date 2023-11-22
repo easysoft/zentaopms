@@ -294,17 +294,6 @@ class programTest
     }
 
     /**
-     * Get progress list.
-     *
-     * @access public
-     * @return array
-     */
-    public function getProgressListTest()
-    {
-        return $this->program->getProgressList();
-    }
-
-    /**
      * Test save state.
      *
      * @param  int    $programID

@@ -287,8 +287,8 @@ class programModel extends model
         $programs = $this->getTopPairs('noclosed');
 
         /* Group data by product. */
-        list($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, $hours, $projectHours) = $this->getKanbanStatisticData($programs);
-        $productGroup = $this->processProductsForKanban($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, $hours, $projectHours);
+        list($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions) = $this->getKanbanStatisticData($programs);
+        $productGroup = $this->processProductsForKanban($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions);
 
         /* Group data by program. */
         $kanbanGroup           = array();
@@ -359,20 +359,7 @@ class programModel extends model
         $executionPairs = array();
         foreach($doingExecutions as $execution) $executionPairs[$execution->id] = $execution->id;
 
-        /* Compute executions and projects progress. */
-        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason, execution')
-            ->from(TABLE_TASK)
-            ->where('(execution')->in($executionPairs)
-            ->orWhere('project')->in($projectIdList)
-            ->markRight(1)
-            ->andWhere('parent')->lt(1)
-            ->andWhere('deleted')->eq(0)
-            ->fetchGroup('execution', 'id');
-
-        $hours        = $this->computeProjectHours($tasks);
-        $projectHours = $this->getProgressList();
-
-        return array($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, $hours, $projectHours);
+        return array($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions);
     }
 
     /**
@@ -384,12 +371,10 @@ class programModel extends model
      * @param  array  $releaseGroup
      * @param  array  $projectGroup
      * @param  array  $doingExecutions
-     * @param  array  $hours
-     * @param  array  $projectHours
      * @access public
      * @return array
      */
-    public function processProductsForKanban(array $productGroup, array $planGroup, array $releaseGroup, array $projectGroup, array $doingExecutions, array $hours, array $projectHours): array
+    public function processProductsForKanban(array $productGroup, array $planGroup, array $releaseGroup, array $projectGroup, array $doingExecutions): array
     {
         if(empty($productGroup)) return $productGroup;
 
@@ -414,14 +399,10 @@ class programModel extends model
                     $status    = $project->status == 'wait' ? 'wait' : 'doing';
                     $execution = zget($doingExecutions, $project->id, array());
 
-                    if(!empty($execution))
-                    {
-                        $execution->hours = zget($hours, $execution->id, array());
-                        if(helper::diffDate($today, $execution->end) > 0) $execution->delay = 1;
-                    }
+                    if(!empty($execution) && helper::diffDate($today, $execution->end) > 0) $execution->delay = 1;
 
                     $project->execution = $execution;
-                    $project->hours['progress'] = zget($projectHours, $project->id, array());
+                    $project->hours = array('progress' => $project->progress);
 
                     /* Convert predefined HTML entities to characters. */
                     $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
@@ -527,67 +508,18 @@ class programModel extends model
     }
 
     /**
-     * 根据按照项目分组的任务，统计各个项目的工时和进度
-     * Compute hours and progress for project or execution.
-     *
-     * @param  array $tasks
-     * @access public
-     * @return array
-     */
-    public function computeProjectHours(array $tasks): array
-    {
-        if(empty($tasks)) return array();
-
-        $hours = array();
-        foreach($tasks as $projectID => $projectTasks)
-        {
-            /* Init hour. */
-            $hour = new stdclass();
-            $hour->totalConsumed = 0;
-            $hour->totalEstimate = 0;
-            $hour->totalLeft     = 0;
-
-            /* Compute totalEstimate, totalConsumed, totalLeft to them. */
-            foreach($projectTasks as $task)
-            {
-                $hour->totalConsumed += $task->consumed;
-                $hour->totalEstimate += $task->estimate;
-                if(strpos('|cancel|closed|done|', "|{$task->status}|") === false) $hour->totalLeft += (float)$task->left;
-            }
-            $hours[$projectID] = $hour;
-        }
-
-        /* 计算进度。四舍五入totalEstimate, totalConsumed, totalLeft. */
-        $progressList = $this->loadModel('project')->getWaterfallProgress(array_keys($hours));
-        foreach($hours as $projectID => $hour)
-        {
-            $hour->totalEstimate = round($hour->totalEstimate, 1) ;
-            $hour->totalConsumed = round($hour->totalConsumed, 1);
-            $hour->totalLeft     = round($hour->totalLeft, 1);
-            $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
-            $hour->progress      = zget($progressList, $projectID, ($hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0)) ;
-        }
-
-        return $hours;
-    }
-
-    /**
-     * 将工时、团队人数、剩余任务数、团队成员等统计信息，追加到对应的项目中。
+     * 将团队成员等统计信息，追加到对应的项目中。
      * Append statistics fields to projects.
      *
      * @param  array  $projects
-     * @param  string $appendFields  hours,teamCount,leftTasks,teamMembers
-     * @param  array  $data          array keys are hours, teams and leftTasks.
+     * @param  array  $teams         array keys are hours, teams and leftTasks.
      * @access public
      * @return array
      */
-    public function appendStatToProjects(array $projects, string $appendFields = '', array $data = array()): array
+    public function appendStatToProjects(array $projects, array $teams = array()): array
     {
         if(empty($projects)) return array();
-        if(empty($appendFields) || empty($data)) return $projects;
 
-        $appendFields = explode(',', $appendFields);
-        $emptyHour    = json_decode(json_encode(array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0)));
         /* Process projects. */
         $stats = array();
         foreach($projects as $projectID => $project)
@@ -601,20 +533,16 @@ class programModel extends model
                 if($delay > 0) $project->delay = $delay;
             }
 
-            /* Merge the hours. */
-            if(in_array('hours', $appendFields))
-            {
-                $project->hours = $emptyHour;
-                if(isset($data['hours'])) $project->hours = zget($data['hours'], $project->id, $emptyHour);
-            }
-
-            /* Merge the team and left tasks. */
-            if(in_array('teamCount',   $appendFields)) $project->teamCount   = isset($data['teams'][$project->id]) ? count($data['teams'][$project->id]) : 0;
-            if(in_array('teamMembers', $appendFields)) $project->teamMembers = isset($data['teams'][$project->id]) ? array_keys($data['teams'][$project->id]) : array();
-            if(in_array('leftTasks',   $appendFields)) $project->leftTasks   = isset($data['leftTasks'][$project->id]) ? $data['leftTasks'][$project->id]->tasks : '—';
+            /* Merge project team. */
+	    if(!empty($teams))
+	    {
+                $project->teamCount   = isset($teams[$project->id]) ? count($teams[$project->id]) : 0;
+                $project->teamMembers = isset($teams[$project->id]) ? array_keys($teams[$project->id]) : array();
+	    }
 
             $stats[$projectID] = $project;
         }
+
         return $stats;
     }
 
@@ -726,59 +654,6 @@ class programModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
-    }
-
-    /**
-     * 计算项目和项目集的进度。
-     * Get program and project progress list.
-     *
-     * @access public
-     * @return array
-     */
-    public function getProgressList(): array
-    {
-        $totalProgress = array();
-        $projectCount  = array();
-        $userPRJCount  = array();
-        $progressList  = array();
-        $programPairs  = $this->getPairs();
-        $projectStats  = $this->getProjectStats(0, 'all', 0, 'id_desc', '', true);
-
-        /* Add program progress. */
-        foreach(array_keys($programPairs) as $programID)
-        {
-            $totalProgress[$programID] = 0;
-            $projectCount[$programID]  = 0;
-            $userPRJCount[$programID]  = 0;
-            $progressList[$programID]  = 0;
-
-            foreach($projectStats as $project)
-            {
-                if(strpos($project->path, ',' . $programID . ',') === false) continue;
-
-                /* The number of projects under this program that the user can view. */
-                if(strpos(',' . $this->app->user->view->projects . ',', ',' . $project->id . ',') !== false) $userPRJCount[$programID] ++;
-
-                $totalProgress[$programID] += $project->hours->progress;
-                $projectCount[$programID] ++;
-            }
-
-            if(empty($projectCount[$programID])) continue;
-
-            /* Program progress can't see when this user don't have all projects priv. */
-            if(!$this->app->user->admin && $userPRJCount[$programID] != $projectCount[$programID])
-            {
-                unset($progressList[$programID]);
-                continue;
-            }
-
-            $progressList[$programID] = round($totalProgress[$programID] / $projectCount[$programID]);
-        }
-
-        /* Add project progress. */
-        foreach($projectStats as $project) $progressList[$project->id] = $project->hours->progress;
-
-        return $progressList;
     }
 
     /**
@@ -1324,44 +1199,10 @@ class programModel extends model
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProjectStats($browseType);
 
-        /* Init vars. */
         $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $programTitle, $queryAll, $pager);
         if(empty($projects)) return array();
 
-        $projectKeys = array_keys($projects);
-        $executions  = $this->loadModel('project')->getExecutionList($projectKeys);
-
-        /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */
-        $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason, execution')
-            ->from(TABLE_TASK)
-            ->where('project')->in($projectKeys)
-            ->andWhere('execution')->in(array_keys($executions))
-            ->andWhere('parent')->lt(1)
-            ->andWhere('deleted')->eq(0)
-            ->fetchGroup('project', 'id');
-        $hours = $this->computeProjectHours($tasks);
-
-        /* Get the number of left tasks. */
-        $leftTasks = array();
-        if($this->cookie->projectType && $this->cookie->projectType == 'bycard')
-        {
-            $leftTasks = $this->dao->select('t2.parent as project, count(*) as tasks')->from(TABLE_TASK)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-                ->where('t1.execution')->in(array_keys($executions))
-                ->andWhere('t1.status')->notIn('cancel,closed')
-                ->groupBy('t2.parent')
-                ->fetchAll('project');
-        }
-
-        /* Get the members of project teams. */
-        $teamMembers = $this->dao->select('t1.root,t1.account')->from(TABLE_TEAM)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
-            ->where('t1.root')->in($projectKeys)
-            ->andWhere('t1.type')->eq('project')
-            ->andWhere('t2.deleted')->eq(0)
-            ->fetchGroup('root', 'account');
-
-        $stats = $this->appendStatToProjects($projects, 'hours,teamCount,teamMembers,leftTasks', array('hours' => $hours, 'teams' => $teamMembers, 'leftTasks' => $leftTasks));
+        $stats = $this->appendStatToProjects($projects);
         foreach($stats as $project) $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES); //  Convert predefined HTML entities to characters.
 
         return $stats;
@@ -1570,13 +1411,30 @@ class programModel extends model
         }
 
         /* 1. Get summary and members of executions to be refreshed. */
-        $summary = $this->dao->select('execution, SUM(t1.estimate) AS totalEstimate, SUM(t1.consumed) AS totalConsumed, SUM(t1.`left`) AS totalLeft')->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('t1.id, execution, t1.estimate, t1.consumed, t1.`left`, t1.status')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.parent')->le(0) // Ignore child task.
+            ->andWhere('t1.parent')->ge(0) // Ignore parent task.
             ->beginIF(!empty($projects))->andWhere('t1.project')->in(array_keys($projects))->fi()
-            ->groupBy('execution')
-            ->fetchAll();
+            ->fetchAll('id');
+
+        $summary = array();
+        foreach($tasks as $task)
+        {
+            if(empty($task->execution)) continue;
+            if(!isset($summary[$task->execution]))
+            {
+                $summary[$task->execution] = new stdclass();
+                $summary[$task->execution]->totalEstimate = 0;
+                $summary[$task->execution]->totalConsumed = 0;
+                $summary[$task->execution]->totalLeft     = 0;
+            }
+
+            $summary[$task->execution]->execution      = $task->execution;
+            $summary[$task->execution]->totalEstimate += $task->estimate;
+            $summary[$task->execution]->totalConsumed += $task->consumed;
+            $summary[$task->execution]->totalLeft     += ($task->status == 'closed' or $task->status == 'cancel') ? 0 : $task->left;
+        }
 
         $teamMembers = $this->dao->select('t1.root, COUNT(1) AS members')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
@@ -1606,27 +1464,13 @@ class programModel extends model
                 $stats[$nodeID]['totalEstimate'] += $execution->totalEstimate;
                 $stats[$nodeID]['totalConsumed'] += $execution->totalConsumed;
                 $stats[$nodeID]['totalLeft']     += $execution->totalLeft;
+
+                // Check $execution->execution and $nodeID(path) is not deleted.
                 if(empty($projectsPairs[$execution->execution]) && empty($projectsPairs[$nodeID]))
                 {
                     $stats[$nodeID]['totalConsumedNotDel'] += $execution->totalConsumed;
                     $stats[$nodeID]['totalLeftNotDel']     += $execution->totalLeft;
                 }
-            }
-        }
-
-        $this->loadModel('project');
-        foreach($projects as $projectID => $project)
-        {
-            if($project->model != 'waterfall') continue;
-
-            $projectStats = $this->project->getWaterfallPVEVAC($projectID);
-            $stats[$projectID]['totalEstimate'] = $projectStats['PV'];
-            $stats[$projectID]['totalConsumed'] = $projectStats['AC'];
-            $stats[$projectID]['totalLeft']     = $projectStats['left'];
-            if(empty($project->deleted))
-            {
-                $stats[$projectID]['totalConsumedNotDel'] = $projectStats['AC'];
-                $stats[$projectID]['totalLeftNotDel']     = $projectStats['left'];
             }
         }
 
@@ -1645,14 +1489,14 @@ class programModel extends model
                 ->set('progress')->eq($progress)
                 ->set('teamCount')->eq($project['teamCount'])
                 ->set('estimate')->eq($project['totalEstimate'])
-                ->set('consumed')->eq($project['totalConsumed'])
-                ->set('left')->eq($project['totalLeft'])
+                ->set('consumed')->eq($project['totalConsumedNotDel'])
+                ->set('left')->eq($project['totalLeftNotDel'])
                 ->where('id')->eq($projectID)
                 ->exec();
         }
 
         /* 5. Update programStatsTime. */
-        $projectList = $this->dao->select('id,progress,path')->from(TABLE_PROJECT)
+        $projectList = $this->dao->select('id,progress,path,consumed,`left`')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('parent')->ne(0)
             ->andWhere('deleted')->eq(0)
@@ -1665,19 +1509,18 @@ class programModel extends model
             foreach($path as $programID)
             {
                 if($programID == $projectID) continue;
-                $programProgress[$programID][] = $project->progress;
+
+                if(!isset($programProgress[$programID])) $programProgress[$programID] = array('consumed' => 0, 'left' => 0);
+                $programProgress[$programID]['consumed'] += $project->consumed;
+                $programProgress[$programID]['left']     += $project->left;
             }
         }
 
-        foreach($programProgress as $programID => $progress)
+        foreach($programProgress as $programID => $hours)
         {
-            $count = count($progress);
-            $sum = array_sum($progress);
-            $average = round($sum / $count, 2);
-            $this->dao->update(TABLE_PROJECT)
-                ->set('progress')->eq($average)
-                ->where('id')->eq($programID)
-                ->exec();
+            $progress = ($hours['consumed'] + $hours['left']) ? floor($hours['consumed'] / ($hours['consumed'] + $hours['left']) * 1000) / 1000 * 100 : 0;
+
+            $this->dao->update(TABLE_PROJECT)->set('progress')->eq($progress)->where('id')->eq($programID)->exec();
         }
 
         /* 6. Update projectStatsTime in config. */

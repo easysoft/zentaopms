@@ -983,28 +983,30 @@ class repoModel extends model
      * Get latest commit.
      *
      * @param  int    $repoID
+     * @param  bool   $checkCount
      * @access public
      * @return object
      */
-    public function getLatestCommit($repoID)
+    public function getLatestCommit($repoID, $checkCount = true)
     {
-        $count = $this->dao->select('count(DISTINCT t1.id) as count')->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
-            ->where('t1.repo')->eq($repoID)
-            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-            ->fetch('count');
-
+        $repo        = $this->fetchByID($repoID);
+        $branchID    = (string)$this->cookie->repoBranch;
         $lastComment = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
-            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->beginIF($repo->SCM != 'Subversion' && $branchID)->andWhere('t2.branch')->eq($branchID)->fi()
             ->orderBy('t1.time desc')
-            ->limit(1)
             ->fetch();
-        if(empty($lastComment)) return null;
+        if(empty($lastComment)) return new stdclass();
+        if(!$checkCount) return $lastComment;
 
-        $repo = $this->getByID($repoID);
-        if($repo->SCM == 'Git' and $lastComment->commit != $count)
+        $count = $this->dao->select('count(DISTINCT t1.id) as count')->from(TABLE_REPOHISTORY)->alias('t1')
+            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
+            ->where('t1.repo')->eq($repoID)
+            ->beginIF($repo->SCM != 'Subversion' && $branchID)->andWhere('t2.branch')->eq($branchID)->fi()
+            ->fetch('count');
+
+        if($repo->SCM == 'Git' && $lastComment->commit != $count)
         {
             $this->fixCommit($repo->id);
             $lastComment->commit = $count;
@@ -3288,5 +3290,26 @@ class repoModel extends model
         array_multisort($dirSort, SORT_ASC, $folders);
 
         return array_merge($folders, $files);
+    }
+
+    /**
+     * 查询提交记录的版本号。
+     * Get history revision.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  bool   $withCommit
+     * @param  string $condition
+     * @access public
+     * @return string|false
+     */
+    public function getHistoryRevision(int $repoID, string $revision, bool $withCommit = false, string $condition = 'eq'): string|false
+    {
+        $field = $withCommit ? 'revision, commit' : 'revision';
+        return $this->dao->select($field)->from(TABLE_REPOHISTORY)
+            ->where('repo')->eq($repoID)
+            ->beginIF($condition != 'lt')->andWhere('revision')->eq($revision)->fi()
+            ->beginIF($condition == 'lt')->andWhere('revision')->lt($revision)->fi()
+            ->fetch($withCommit ? '' : 'revision');
     }
 }

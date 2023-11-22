@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of user module of ZenTaoPMS.
  *
@@ -11,40 +12,34 @@
  */
 class user extends control
 {
-    public $referer;
+    /**
+     * 来源地址。
+     * Origin url.
+     *
+     * @var    array
+     * @access public
+     */
+    public $referer = '';
 
     /**
-     * Construct
+     * 查看用户详情。
+     * View user details.
      *
+     * @param  int    $userID
      * @access public
      * @return void
      */
-    public function __construct($module = '', $method = '')
-    {
-        parent::__construct($module, $method);
-        $this->loadModel('company')->setMenu();
-        $this->loadModel('dept');
-        $this->loadModel('todo');
-        $this->app->loadLang('project');
-    }
-
-    /**
-     * View a user.
-     *
-     * @param  string $userID
-     * @access public
-     * @return void
-     */
-    public function view($userID)
+    public function view(int $userID)
     {
         $this->locate($this->createLink('user', 'todo', "userID=$userID&type=all"));
     }
 
     /**
-     * Todos of a user.
+     * 查看某个用户的待办。
+     * View user's todo.
      *
-     * @param  string $userID
-     * @param  string $type         the todo type, today|lastweek|thisweek|all|undone, or a date.
+     * @param  int    $userID
+     * @param  string $type       the todo type, all|before|future|thisWeek|thisMonth|thisYear|assignedToOther|cycle
      * @param  string $status
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -53,45 +48,37 @@ class user extends control
      * @access public
      * @return void
      */
-    public function todo($userID, $type = 'today', $status = 'all', $orderBy = 'date,status,begin', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function todo(int $userID, string $type = 'today', string $status = 'all', string $orderBy = 'date,status,begin', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $user = $this->user->getById($userID, 'id');
-        if(empty($user)) return print(js::error($this->lang->notFound) . js::locate($this->createLink('my', 'team')));
-        if($user->deleted == 1) return print(js::error($this->lang->user->noticeHasDeleted) . js::locate('back'));
+        if(empty($user)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('my', 'team'))));
+        if($user->deleted) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->user->noticeHasDeleted, 'locate' => array('back' => true))));
 
         /* Set this url to session. */
         $uri = $this->app->getURI(true);
         $this->session->set('todoList', $uri, 'my');
-        $this->session->set('bugList',  $uri, 'qa');
-        $this->session->set('taskList', $uri, 'execution');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
-        /* Get user, totos. */
-        $account = $user->account;
-        $todos   = $this->todo->getList($type, $account, $status, 0, $pager, $sort);
-        $date    = (int)$type == 0 ? helper::today() : $type;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
-        if(!isset($users[$userID])) return print(js::error($this->lang->user->error->noAccess) . js::locate('back'));
+        /* Get users and todos. */
+        $todos  = $this->loadModel('todo')->getList($type, $user->account, $status, 0, $pager, $sort);
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->user->error->noAccess, 'locate' => array('back' => true))));
 
-        /* set menus. */
-        $this->view->userList = $this->user->setUserList($users, $userID);
-
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->todo;
-        $this->view->tabID      = 'todo';
-        $this->view->date       = $date;
-        $this->view->todos      = $todos;
-        $this->view->user       = $user;
-        $this->view->type       = $type;
-        $this->view->status     = $status;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
+        $this->view->title   = $this->lang->user->common . $this->lang->colon . $this->lang->user->todo;
+        $this->view->users   = $users;
+        $this->view->todos   = $todos;
+        $this->view->user    = $user;
+        $this->view->type    = $type;
+        $this->view->status  = $status;
+        $this->view->orderBy = $orderBy;
+        $this->view->pager   = $pager;
 
         $this->display();
     }
@@ -475,7 +462,7 @@ class user extends control
         $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
         $this->view->user         = $user;
         $this->view->groups       = $this->loadModel('group')->getByAccount($account);
-        $this->view->deptPath     = $this->dept->getParents($user->dept);
+        $this->view->deptPath     = $this->loadModel('dept')->getParents($user->dept);
         $this->view->personalData = $this->user->getPersonalData($user->account);
         $this->view->userList     = $this->user->setUserList($users, $userID);
 
@@ -514,9 +501,6 @@ class user extends control
      */
     public function create($deptID = 0)
     {
-        $this->lang->user->menu      = $this->lang->company->menu;
-        $this->lang->user->menuOrder = $this->lang->company->menuOrder;
-
         if(!empty($_POST))
         {
             if(strtolower($_POST['account']) == 'guest')
@@ -542,11 +526,8 @@ class user extends control
             if($group->role) $roleGroup[$group->role] = $group->id;
         }
 
-        $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->create;
-        $position[] = $this->lang->user->create;
-        $this->view->title     = $title;
-        $this->view->position  = $position;
-        $this->view->depts     = $this->dept->getOptionMenu();
+        $this->view->title     = $this->lang->user->create;
+        $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
         $this->view->groupList = $groupList;
         $this->view->roleGroup = $roleGroup;
         $this->view->deptID    = $deptID;
@@ -586,9 +567,6 @@ class user extends control
             if($group->role) $roleGroup[$group->role] = $group->id;
         }
 
-        $this->lang->user->menu      = $this->lang->company->menu;
-        $this->lang->user->menuOrder = $this->lang->company->menuOrder;
-
         /* Set custom. */
         foreach(explode(',', $this->config->user->availableBatchCreateFields) as $field)
         {
@@ -604,8 +582,8 @@ class user extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = join(',', $showFields);
 
-        $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchCreate;
-        $this->view->depts      = $this->dept->getOptionMenu();
+        $this->view->title      = $this->lang->user->batchCreate;
+        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
         $this->view->deptID     = $deptID;
         $this->view->groupList  = $groupList;
         $this->view->roleGroup  = $roleGroup;
@@ -625,8 +603,6 @@ class user extends control
      */
     public function edit($userID)
     {
-        $this->lang->user->menu      = $this->lang->company->menu;
-        $this->lang->user->menuOrder = $this->lang->company->menuOrder;
         if(!empty($_POST))
         {
             $this->user->update($userID);
@@ -641,12 +617,9 @@ class user extends control
         $user       = $this->user->getById($userID, 'id');
         $userGroups = $this->loadModel('group')->getByAccount($user->account, count($userVisionList) > 1 ? true : false);
 
-        $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->edit;
-        $position[] = $this->lang->user->edit;
-        $this->view->title      = $title;
-        $this->view->position   = $position;
+        $this->view->title      = $this->lang->user->edit;
         $this->view->user       = $user;
-        $this->view->depts      = $this->dept->getOptionMenu();
+        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
         $this->view->userGroups = implode(',', array_keys($userGroups));
         $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
         $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->where('project')->eq(0)->fetchPairs('id', 'name');
@@ -674,9 +647,6 @@ class user extends control
         }
         if(isset($_POST['users'])) $this->view->users = $this->dao->select('*')->from(TABLE_USER)->where('id')->in($this->post->users)->orderBy('id')->fetchAll('id');
 
-        $this->lang->user->menu      = $this->lang->company->menu;
-        $this->lang->user->menuOrder = $this->lang->company->menuOrder;
-
         /* Set custom. */
         foreach(explode(',', $this->config->user->availableBatchEditFields) as $field)
         {
@@ -692,8 +662,8 @@ class user extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = join(',', $showFields);
 
-        $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchEdit;
-        $this->view->depts      = $this->dept->getOptionMenu();
+        $this->view->title      = $this->lang->user->batchEdit;
+        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
         $this->view->rand       = $this->user->updateSessionRandom();
         $this->view->visionList = $this->user->getVisionList();
 

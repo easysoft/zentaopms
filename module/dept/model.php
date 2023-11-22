@@ -471,8 +471,7 @@ class deptModel extends model
                 $node->text        = $node->name;
                 if(isset($tree[$deptID]))
                 {
-                    $node->items   = $tree[$deptID];
-                    $node->actions = array('delete' => false);
+                    $node->items = $tree[$deptID];
                     unset($tree[$deptID]);
                 }
                 $tree[$node->parent][] = $node;

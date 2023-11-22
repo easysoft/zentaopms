@@ -64,6 +64,7 @@ formPanel
         isset($fields['branch']) && $type == 'story' ? null : formGroup
         (
             set::label($lang->story->module),
+            set::required(strpos(",{$this->config->story->create->requiredFields},", ",module,") !== false),
             inputGroup
             (
                 setID('moduleIdBox'),
@@ -118,6 +119,7 @@ formPanel
         (
             set::width('1/4'),
             set::label($lang->story->module),
+            set::required(strpos(",{$this->config->story->create->requiredFields},", ",module,") !== false),
             inputGroup
             (
                 setID('moduleIdBox'),
@@ -127,6 +129,7 @@ formPanel
         formGroup
         (
             set::label($lang->story->plan),
+            set::required(strpos(",{$this->config->story->create->requiredFields},", ",plan,") !== false),
             inputGroup
             (
                 setID('planIdBox'),
@@ -156,6 +159,7 @@ formPanel
         (
             set::width('1/2'),
             set::label($lang->story->planAB),
+            set::required(strpos(",{$this->config->story->create->requiredFields},", ",plan,") !== false),
             inputGroup
             (
                 span
@@ -362,21 +366,21 @@ formPanel
     formGroup
     (
         set::label($lang->story->spec),
+        set::required(strpos(",{$this->config->story->create->requiredFields},", ",spec,") !== false),
         editor
         (
             set::name('spec'),
             set::placeholder($lang->story->specTemplate . "\n" . $lang->noticePasteImg),
-            set::required($fields['spec']['required']),
             html($fields['spec']['default'])
         )
     ),
     formGroup
     (
         set::label($lang->story->verify),
+        set::required(strpos(",{$this->config->story->create->requiredFields},", ",verify,") !== false),
         editor
         (
             set::name('verify'),
-            set::required($fields['verify']['required']),
             html($fields['verify']['default'])
         )
     ),
@@ -425,6 +429,7 @@ isset($fields['branches']) && $type == 'story' ? formRow
     (
         set::width('1/4'),
         set::label($lang->story->module),
+        set::required(strpos(",{$this->config->story->create->requiredFields},", ",module,") !== false),
         inputGroup
         (
             setID('moduleIdBox'),
@@ -434,6 +439,7 @@ isset($fields['branches']) && $type == 'story' ? formRow
     formGroup
     (
         set::label($lang->story->plan),
+        set::required(strpos(",{$this->config->story->create->requiredFields},", ",plan,") !== false),
         inputGroup
         (
             setID('planIdBox'),
