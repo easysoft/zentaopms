@@ -183,6 +183,7 @@ class search extends control
     }
 
     /**
+     * 建立索引。
      * Build All index.
      *
      * @param  string  $mode    show|build
