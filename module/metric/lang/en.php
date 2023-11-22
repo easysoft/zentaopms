@@ -115,7 +115,6 @@ $lang->metric->featureBar['preview']['dept']      = 'Team';
 $lang->metric->featureBar['preview']['user']      = 'Individual';
 $lang->metric->featureBar['preview']['program']   = 'Program';
 $lang->metric->featureBar['preview']['system']    = 'System';
-$lang->metric->featureBar['preview']['code']      = 'Code Repository';
 $lang->metric->featureBar['preview']['pipeline']  = 'Pipeline';
 
 $lang->metric->more        = 'More';
