@@ -218,13 +218,14 @@ class custom extends control
     }
 
     /**
+     * 设置默认需求概念。
      * Set story concept.
      *
      * @param  int   $key
      * @access public
      * @return void
      */
-    public function setDefaultConcept($key = 0)
+    public function setDefaultConcept(int $key = 0)
     {
         $this->loadModel('setting')->setItem('system.custom.URSR', $key);
         return $this->sendSuccess(array('load' => inlink('browsestoryconcept')));
