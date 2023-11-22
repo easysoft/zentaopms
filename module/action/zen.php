@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 class actionZen extends action
 {
     /**
@@ -31,7 +32,7 @@ class actionZen extends action
 
         return $preferredType;
     }
-    
+
     /**
      * 保存当前页面的URL到Session中。
      * Save the current page URL to the session.
@@ -129,7 +130,7 @@ class actionZen extends action
         if(!empty($productList[$trash->objectID]))    $trash->product   = $productList[$trash->objectID]->productTitle . ($productList[$trash->objectID]->productDeleted ? "<span class='label danger ml-2'>{$this->lang->story->deleted}</span>" : '');
         if(!empty($executionList[$trash->execution])) $trash->execution = $executionList[$trash->execution]->name      . ($executionList[$trash->execution]->deleted     ? "<span class='label danger ml-2'>{$this->lang->execution->deleted}</span>" : '');
     }
-    
+
     /**
      * 获取重复的名称和代号。
      * Get the repeated name and code.
@@ -165,7 +166,7 @@ class actionZen extends action
 
     /**
      * 检查操作记录是否存在。
-     * Check if the action record exists.   
+     * Check if the action record exists.
      *
      * @param  int    $actionID
      * @access public

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of test task module of ZenTaoPMS.
  *
