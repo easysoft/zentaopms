@@ -12,6 +12,8 @@ namespace zin;
 
 $processTreeAction = function($tree) use (&$processTreeAction)
 {
+    global $lang;
+
     $canEditDept   = hasPriv('dept', 'edit');
     $canDeleteDept = hasPriv('dept', 'delete');
     foreach($tree as $node)
@@ -88,8 +90,7 @@ sidebar
         (
             set::id('deptTree'),
             set::items($tree),
-            set::hover(true),
-            set::itemActions($deptActions)
+            set::hover(true)
         )
     )
 );
