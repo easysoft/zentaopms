@@ -451,9 +451,11 @@ EOF;
     }
 
     /**
+     * 任务列表。
      * My tasks
      *
      * @param  string $type
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -461,28 +463,24 @@ EOF;
      * @access public
      * @return void
      */
-    public function task($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function task(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('task');
-        $this->loadModel('execution');
-        $queryID  = ($type == 'bySearch') ? (int)$param : 0;
-
         /* Save session. */
         if($type != 'bySearch')            $this->session->set('myTaskType', $type);
         if($this->app->viewType != 'json') $this->session->set('taskList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $realOrder = $orderBy;
-        if(strpos($orderBy, 'estimateLabel') !== false || strpos($orderBy, 'consumedLabel') !== false || strpos($orderBy, 'leftLabel') !== false) $realOrder = str_replace('Label', '', $realOrder);
-
         /* append id for second sort. */
-        $sort = common::appendOrder($realOrder);
+        $sort = common::appendOrder($orderBy);
+        if(strpos($orderBy, 'estimateLabel') !== false || strpos($orderBy, 'consumedLabel') !== false || strpos($orderBy, 'leftLabel') !== false) $sort = str_replace('Label', '', $sort);
 
         /* Get tasks. */
+        $this->loadModel('task');
+        $queryID = $type == 'bySearch' ? $param : 0;
         if($type == 'assignedBy')
         {
             $tasks = $this->my->getAssignedByMe($this->app->user->account, 0, $pager, $sort, 'task');
@@ -495,30 +493,8 @@ EOF;
         {
             $tasks = $this->task->getUserTasks($this->app->user->account, $type, 0, $pager, $sort, $queryID);
         }
-
         $summary = $this->loadModel('execution')->summary($tasks);
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0) $parents[$task->parent] = $task->parent;
-            $task->estimateLabel = $task->estimate . $this->lang->execution->workHourUnit;
-            $task->consumedLabel = $task->consumed . $this->lang->execution->workHourUnit;
-            $task->leftLabel     = $task->left     . $this->lang->execution->workHourUnit;
-            $task->status        = !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed')) ? $this->lang->my->storyChanged : $task->status;
-            if($task->parent)
-            {
-                if(isset($tasks[$task->parent]))
-                {
-                    $tasks[$task->parent]->hasChild = true;
-                }
-                else
-                {
-                    $task->parent = 0;
-                }
-            }
-        }
-
-        /* Get the story language configuration. */
-        $this->app->loadLang('story');
+        $tasks   = $this->myZen->buildTaskData($tasks);
 
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=task&browseType=bySearch&queryID=myQueryID");
         $this->my->buildTaskSearchForm($queryID, $actionURL);

@@ -29,6 +29,7 @@ $footToolbar = array('items' => array
     $canBatchClose ? array('text' => $lang->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('task', 'batchClose')) : null
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
+if($type == 'bySearch') $type = $this->session->myTaskType;
 if($type == 'assignedTo') unset($config->my->task->dtable->fieldList['assignedTo']);
 if($type == 'openedBy')   unset($config->my->task->dtable->fieldList['openedBy']);
 if($type == 'finishedBy') unset($config->my->task->dtable->fieldList['finishedBy']);
