@@ -106,13 +106,15 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function newPage($filePath)
+    public function newPage(string $filePath)
     {
         $filePath = helper::safe64Decode($filePath);
         if($_POST)
         {
             $saveFilePath = $this->editor->getSavePath($filePath, 'newMethod');
-            $extendLink   = $this->editor->getExtendLink($saveFilePath, 'newPage');
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $extendLink = $this->editor->getExtendLink($saveFilePath, 'newPage');
             if(file_exists($saveFilePath) and !$this->post->override) return $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm('{$this->lang->editor->repeatPage}').then((res) => {if(res) loadPage('{$extendLink}');});"));
             return $this->send(array('result' => 'success', 'load' => $extendLink));
         }
@@ -137,7 +139,11 @@ class editor extends control
             $fileName = empty($_POST['fileName']) ? '' : trim($this->post->fileName);
             if($action != 'edit' and empty($fileName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->emptyFileName));
 
-            if($action != 'edit' and $action != 'newPage') $filePath = $this->editor->getSavePath($filePath, $action);
+            if($action != 'edit' and $action != 'newPage')
+            {
+                $filePath = $this->editor->getSavePath($filePath, $action);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
             if($action != 'edit' and $action != 'newPage' and file_exists($filePath) and !$this->post->override) return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->repeatFile));
 
             $result = $this->editor->save($filePath);

@@ -494,29 +494,22 @@ EOD;
      * @access public
      * @return string
      */
-    public function getSavePath($filePath, $action)
+    public function getSavePath(string $filePath, string $action): string
     {
-        $fileExtension  = 'php';
         $sourceFileName = basename($filePath);
+
+        $fileExtension = 'php';
         if(strrpos($sourceFileName, '.') !== false) $fileExtension = substr($sourceFileName, strrpos($sourceFileName, '.') + 1);
+        if(strtolower($action) == 'newjs')  $fileExtension = 'js';
+        if(strtolower($action) == 'newcss') $fileExtension = 'css';
 
         $fileName   = empty($_POST['fileName']) ? '' : trim($this->post->fileName);
         $moduleName = $this->getClassNameByPath($filePath);
-
         $methodName = '';
-        if(strtolower($action) == 'newjs')
-        {
-            if($fileExtension != 'js') $fileExtension = 'js';
-            $methodName = basename($filePath);
-        }
-        if(strtolower($action) == 'newcss')
-        {
-            if($fileExtension != 'css') $fileExtension = 'css';
-            $methodName = basename($filePath);
-        }
-
-        $extPath    = $this->app->getExtensionRoot() . 'custom' . DS . $moduleName . DS . 'ext' . DS;
+        if(str_contains('|newjs|newcss|', '|' . strtolower($action) . '|')) $methodName = basename($filePath);
         if($fileName and (strpos($fileName, '.' . $fileExtension) !== (strlen($fileName) - strlen($fileExtension) - 1))) $fileName .= '.' . $fileExtension;
+
+        $extPath = $this->app->getExtensionRoot() . 'custom' . DS . $moduleName . DS . 'ext' . DS;
         switch($action)
         {
         case 'extendModel':
@@ -535,7 +528,7 @@ EOD;
             if(strpos($editName, '.php') !== false) return $extPath . 'lang' . DS . basename($editName, ".{$fileExtension}") . DS . $fileName;
             return $extPath . $fileExtension . DS . basename($editName, ".{$fileExtension}") . DS . $fileName;
         default:
-            if(empty($fileName)) return print(js::error($this->lang->editor->emptyFileName));
+            if(empty($fileName)) return dao::$error[] = $this->lang->editor->emptyFileName;
 
             $action = strtolower(str_replace('new', '', $action));
             if($action == 'hook')   return $extPath . 'view' . DS . $fileName;
