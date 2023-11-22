@@ -210,80 +210,50 @@ class search extends control
     }
 
     /**
+     * 全局搜索结果页面。
      * Global search results home page.
      *
-     * @param  int $recTotal
-     * @param  int $pageID
+     * @param  int    $recTotal
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function index($recTotal = 0, $pageID = 1)
+    public function index(int $recTotal = 0, int $pageID = 1)
     {
         $this->lang->admin->menu->search = "{$this->lang->search->common}|search|index";
 
+        /* 获取搜索的关键词。*/
+        /* Get the words. */
         if(empty($words)) $words = $this->get->words;
         if(empty($words)) $words = $this->post->words;
-        if(empty($words) and ($recTotal != 0 or $pageID != 1)) $words = $this->session->searchIngWord;
+        if(empty($words) && ($recTotal != 0 || $pageID != 1)) $words = $this->session->searchIngWord;
         $words = strip_tags(strtolower($words));
 
+        /* 获取搜索类型。*/
+        /* Get the type. */
         if(empty($type)) $type = $this->get->type;
         if(empty($type)) $type = $this->post->type;
-        if(empty($type) and ($recTotal != 0 or $pageID != 1)) $type = $this->session->searchIngType;
+        if(empty($type) && ($recTotal != 0 || $pageID != 1)) $type = $this->session->searchIngType;
         if(is_array($type)) $type = array_filter(array_unique($type));
         $type = (empty($type) || (is_array($type) && in_array('all', $type))) ? 'all' : $type;
 
+        /* 开始搜索时记录当时的时间。*/
+        $begin = time();
+
         $this->app->loadClass('pager', $static = true);
-        $begin   = time();
         $pager   = new pager(0, $this->config->search->recPerPage, $pageID);
         $results = $this->search->getList($words, $type, $pager);
 
-        $typeCount = $this->search->getListCount();
-        $typeList  = array('all' => $this->lang->search->modules['all']);
-        foreach($typeCount as $objectType => $count)
-        {
-            if(!isset($this->lang->search->modules[$objectType])) continue;
-            if($this->config->systemMode == 'light' and $objectType == 'program') continue;
-            if(!helper::hasFeature('devops') && in_array($objectType, array('deploy', 'service', 'deploystep'))) continue;
-
-            $typeList[$objectType] = $this->lang->search->modules[$objectType];
-        }
-
-        /* Set session. */
         $uri  = inlink('index', "recTotal=$pager->recTotal&pageID=$pager->pageID");
         $uri .= strpos($uri, '?') === false ? '?' : '&';
         $uri .= 'words=' . $words;
-        $this->session->set('bugList',         $uri, 'qa');
-        $this->session->set('buildList',       $uri, 'execution');
-        $this->session->set('caseList',        $uri, 'qa');
-        $this->session->set('docList',         $uri, 'doc');
-        $this->session->set('productList',     $uri, 'product');
-        $this->session->set('productPlanList', $uri, 'product');
-        $this->session->set('programList',     $uri, 'program');
-        $this->session->set('projectList',     $uri, 'project');
-        $this->session->set('executionList',   $uri, 'execution');
-        $this->session->set('releaseList',     $uri, 'product');
-        $this->session->set('storyList',       $uri, 'product');
-        $this->session->set('taskList',        $uri, 'execution');
-        $this->session->set('testtaskList',    $uri, 'qa');
-        $this->session->set('todoList',        $uri, 'my');
-        $this->session->set('effortList',      $uri, 'my');
-        $this->session->set('reportList',      $uri, 'qa');
-        $this->session->set('testsuiteList',   $uri, 'qa');
-        $this->session->set('issueList',       $uri, 'project');
-        $this->session->set('riskList',        $uri, 'project');
-        $this->session->set('opportunityList', $uri, 'project');
-        $this->session->set('trainplanList',   $uri, 'project');
-        $this->session->set('caselibList',     $uri, 'qa');
-        $this->session->set('searchIngWord',   $words);
-        $this->session->set('searchIngType',   $type);
+        $this->searchZen->setSessionForIndex($uri, $words, $type);
 
-        if(strpos($this->server->http_referer, 'search') === false) $this->session->set('referer', $this->server->http_referer);
-
+        $this->view->title      = $this->lang->search->index;
         $this->view->results    = $results;
         $this->view->consumed   = time() - $begin;
-        $this->view->title      = $this->lang->search->index;
         $this->view->type       = $type;
-        $this->view->typeList   = $typeList;
+        $this->view->typeList   = $this->searchZen->getTypeList();
         $this->view->pager      = $pager;
         $this->view->words      = $words;
         $this->view->referer    = $this->session->referer;
