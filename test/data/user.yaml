@@ -138,7 +138,7 @@ fields:
     note: "版本"
     range: rnd
     prefix: ""
-    postfix: ",lite"
+    postfix: ",lite,or"
     loop: 0
     format: ""
   - field: ip

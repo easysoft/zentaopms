@@ -45,6 +45,7 @@ $storyCols['actions']['list']['unlink']['url']          = $this->createLink('mr'
 $stories = initTableData($stories, $storyCols);
 
 $bugCols = $config->release->dtable->bug->fieldList;
+$bugCols['resolvedBuild']['map'] = $builds;
 $bugCols['actions'] = $actionMenu;
 $bugCols['actions']['list']['unlink']['data-confirm'] = $lang->productplan->confirmUnlinkBug;
 $bugCols['actions']['list']['unlink']['url']          = $this->createLink('mr', 'unlink', "MRID=$MR->id&productID=$product->id&type=bug&linkID={id}&confirm=yes");
