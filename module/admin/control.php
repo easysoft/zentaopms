@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of admin module of ZenTaoPMS.
  *
@@ -11,25 +12,6 @@
  */
 class admin extends control
 {
-    /**
-     * The gogs constructor.
-     * @param string $moduleName
-     * @param string $methodName
-     */
-    public function __construct($moduleName = '', $methodName = '')
-    {
-        parent::__construct($moduleName, $methodName);
-
-        if(!isset($this->config->global->sn))
-        {
-            $this->loadModel('setting');
-            $this->setting->setItem('system.common.global.sn', $this->setting->computeSN());
-
-            if(!isset($this->config->global)) $this->config->global = new stdclass();
-            $this->config->global->sn = $this->setting->getItem('owner=system&module=common&section=global&key=sn');
-        }
-    }
-
     /**
      * Index page.
      * @access public
@@ -154,6 +136,7 @@ class admin extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->admin->registerNotice->success, 'load' => $locate));
         }
 
+        $this->adminZen->initSN();
         $this->view->title    = $this->lang->admin->registerNotice->caption;
         $this->view->register = $this->admin->getRegisterInfo();
         $this->view->sn       = $this->config->global->sn;
@@ -192,6 +175,7 @@ class admin extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->admin->bind->success, 'load' => $locate));
         }
 
+        $this->adminZen->initSN();
         $this->view->title = $this->lang->admin->bind->caption;
         $this->view->sn    = $this->config->global->sn;
         $this->view->from  = $from;

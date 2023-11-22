@@ -17,6 +17,25 @@ class adminZen extends admin
     const EXT_MANAGER_VERSION = '1.3';
 
     /**
+     * 初始化sn。
+     * Init sn.
+     *
+     * @access public
+     * @return void
+     */
+    public function initSN(): void
+    {
+        if(!isset($this->config->global->sn))
+        {
+            $this->loadModel('setting');
+            $this->setting->setItem('system.common.global.sn', $this->setting->computeSN());
+
+            if(!isset($this->config->global)) $this->config->global = new stdclass();
+            $this->config->global->sn = $this->setting->getItem('owner=system&module=common&section=global&key=sn');
+        }
+    }
+
+    /**
      * Sync extensions from zentao official website by api.
      *
      * @param  string $type         plugin|patch
