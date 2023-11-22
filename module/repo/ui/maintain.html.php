@@ -62,7 +62,7 @@ $queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&orderBy=&rec
 (
     set::current('all'),
     set::queryMenuLinkCallback(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink)),
-    li(searchToggle(set::open($type == 'bySearch')))
+    li(searchToggle(set::module('repo'), set::open($type == 'bySearch')))
 );
 
 toolBar
