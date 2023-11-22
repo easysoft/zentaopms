@@ -21,7 +21,6 @@ $cols = array();
 foreach($config->user->defaultFields['todo'] as $field) $cols[$field] = $config->my->todo->dtable->fieldList[$field];
 $cols['id']['checkbox'] = false;
 $cols['name']['link']   = array('module' => 'todo', 'method' => 'view', 'params' => "id={id}&from=company");
-$cols['type']['type']   = 'html';
 $cols['type']['align']  = 'center';
 
 $cols = array_map(function($col)
@@ -58,6 +57,7 @@ div
         set::data(array_values($todos)),
         set::orderBy($orderBy),
         set::sortLink(inlink('todo', "userID={$user->id}&type={$type}&status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+        set::emptyTip($lang->my->noTodo),
         set::footer(array(array('html' => $summary, 'className' => "text-dark"), 'flex', 'pager')),
         set::footPager(usePager())
     )
