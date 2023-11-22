@@ -19,7 +19,10 @@ function changeEngine(event)
         if(repoID == 0) repoID = i;
         repoItems.push({'text': repos[i], 'value': i});
     }
-    zui.Picker.query('#repo').render({items: repoItems, value: repoID});
+
+    const picker = $('#repo').zui('picker');
+    picker.render({items: repoItems});
+    picker.$.setValue(repoID);
 
     if(engine == 'gitlab')
     {
