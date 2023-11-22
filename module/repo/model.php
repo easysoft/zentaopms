@@ -3238,23 +3238,17 @@ class repoModel extends model
      */
     public function getGitlabFilesByPath(object $repo, string $path = '', string $branch = ''): array
     {
-        if(!$branch) $branch = $this->cookie->branch;
-
-        $fullPath = trim(str_replace($repo->client, '', $repo->codePath), '/');
-        $query    = array('query' => 'query { project(fullPath: "' . $fullPath . '") {repository {tree(path: "' . trim($path, '/') . '", ref: "' . $branch . '") {trees {nodes {name path}} blobs {nodes {name path}}}}}}');
-        $response = $this->loadModel('gitlab')->apiGetByGraphql($repo->serviceHost, $query);
-        if(!isset($response->data->project->repository)) return array();
-
-        $folderList = $response->data->project->repository->tree->trees->nodes;
-        $fileList   = $response->data->project->repository->tree->blobs->nodes;
+        $fileList   = $this->getTreeByGraphql($repo, $path, $branch, 'blobs');
+        $folderList = $this->getTreeByGraphql($repo, $path, $branch, 'trees');
+        if(empty($fileList) && empty($folderList)) return array();
 
         $files    = array();
         $folders  = array();
-        $dirList  = array();
         $fileSort = $dirSort = array(); // Use it to sort array.
 
         foreach($fileList as $file)
         {
+            if(in_array($file->name, $fileSort)) continue;
             $base64Name = base64_encode($file->path);
 
             $fileInfo = new stdclass();
@@ -3271,6 +3265,7 @@ class repoModel extends model
 
         foreach($folderList as $dir)
         {
+            if(in_array($dir->name, $dirSort)) continue;
             $base64Name = base64_encode($dir->path);
 
             $folder = new stdclass();
@@ -3282,7 +3277,6 @@ class repoModel extends model
             $folder->kind = 'dir';
             $folder->items = array('url' => helper::createLink('repo', 'ajaxGetFiles', "repoID={$repo->id}&branch={$branch}&path=" . helper::safe64Encode($dir->path)));
 
-            $dirList[] = $dir->name;
             $folders[] = $folder;
             $dirSort[] = $dir->name;
         }
@@ -3290,6 +3284,40 @@ class repoModel extends model
         array_multisort($dirSort, SORT_ASC, $folders);
 
         return array_merge($folders, $files);
+    }
+
+    /**
+     * 通过Graphql获取GitLab文件列表。
+     * Get GitLab files by Graphql.
+     *
+     * @param  object $repo
+     * @param  string $path
+     * @param  string $branch
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getTreeByGraphql(object $repo, string $path = '', string $branch = '', string $type = 'blobs'): array
+    {
+        if(!$branch) $branch = $this->cookie->branch;
+
+        $this->loadModel('gitlab');
+        $fileList    = array();
+        $endCursor   = '';
+        $hasNextPage = true;
+        $fullPath    = trim(str_replace($repo->client, '', $repo->codePath), '/');
+        while($hasNextPage)
+        {
+            $query    = array('query' => 'query { project(fullPath: "' . $fullPath . '") {repository {tree(path: "' . trim($path, '/') . '", ref: "' . $branch . '") {' . $type . '(after: "' . $endCursor . '") {pageInfo {endCursor hasNextPage} nodes {name path}}}}}}');
+            $response = $this->gitlab->apiGetByGraphql($repo->serviceHost, $query);
+
+            if(!$endCursor && !isset($response->data->project->repository)) return array();
+
+            $fileList    = array_merge($fileList, $response->data->project->repository->tree->{$type}->nodes);
+            $hasNextPage = $response->data->project->repository->tree->{$type}->pageInfo->hasNextPage;
+            $endCursor   = $response->data->project->repository->tree->{$type}->pageInfo->endCursor;
+        }
+        return $fileList;
     }
 
     /**
