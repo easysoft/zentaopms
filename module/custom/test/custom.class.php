@@ -217,18 +217,18 @@ class customTest
     }
 
     /**
+     * 获取需求概念列表。
      * Test get UR and SR list.
      *
      * @access public
      * @return array
      */
-    public function getURSRListTest()
+    public function getURSRListTest(): array
     {
-        $objects = $this->objectModel->getURSRList();
+        $URSRList = $this->objectModel->getURSRList();
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $URSRList;
     }
 
     /**
