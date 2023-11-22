@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 class testreportTest
 {
     public function __construct()
