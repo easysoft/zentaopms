@@ -236,26 +236,27 @@ EOF;
     }
 
     /**
+     * 贡献列表。
      * My contribute view.
      *
-     * @param  string     $mode
-     * @param  string     $type
-     * @param  string|int $param
-     * @param  string     $orderBy
-     * @param  int        $recTotal
-     * @param  int        $recPerPage
-     * @param  int        $pageID
+     * @param  string $mode
+     * @param  string $type
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function contribute($mode = 'task', $type = 'openedBy', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function contribute(string $mode = 'task', string $type = 'openedBy', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if(($mode == 'issue' || $mode == 'risk') && $type == 'openedBy') $type = 'createdBy';
         if($mode == 'testtask' && $type == 'openedBy') $type = 'done';
         if(($mode == 'doc' || $mode == 'testcase') && $type == 'openedBy') $type = 'openedbyme';
 
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][$mode];
-        echo $this->fetch('my', $mode, "type=$type&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('my', $mode, "type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
 
     /**
