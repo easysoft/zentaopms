@@ -13,6 +13,12 @@ namespace zin;
 jsvar('backup', $lang->backup->common);
 jsvar('rmPHPHeader', $lang->backup->rmPHPHeader);
 jsvar('restore', $lang->backup->restore);
+jsvar('startBackup', $lang->backup->backup);
+jsvar('getSpaceLoading', $lang->backup->getSpaceLoading);
+jsvar('confirmRestore', $lang->backup->confirmRestore);
+jsvar('backupTimeout', $lang->backup->error->timeout);
+jsvar('alertTips', $lang->backup->insufficientDisk);
+jsvar('backupError', empty($backupError) ? '' : $backupError);
 
 featureBar
 (
@@ -45,7 +51,7 @@ if(common::hasPriv('backup', 'setting') and common::hasPriv('backup', 'backup'))
             ([
                 'text'      => $lang->backup->backup,
                 'icon'      => 'copy',
-                'class'     => 'btn primary backup',
+                'class'     => 'btn primary backup load-indicator',
                 'data-link' => $backupLink,
                 'onClick'   => 'backup(this);'
             ]))
