@@ -2006,11 +2006,12 @@ class actionModel extends model
      * @access public
      * @return int
      */
-    public function getDynamicCount(): int
+    public function getDynamicCount($period = 'all'): int
     {
         $condition = $this->session->actionQueryCondition ? $this->session->actionQueryCondition : '1=1';
 
-        return $this->dao->select('count(1) as count')->from(TABLE_ACTION)
+        $table = $this->actionTao->getActionTable($period);
+        return $this->dao->select('count(1) as count')->from($table)
             ->where($condition)
             ->fetch('count');
     }
