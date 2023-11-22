@@ -53,27 +53,28 @@ class companyModel extends model
     }
 
     /**
+     * 根据id获取公司信息。
      * Get company info by id.
      *
      * @param  int    $companyID
      * @access public
      * @return object
      */
-    public function getByID($companyID = '')
+    public function getByID(int $companyID)
     {
-        return $this->dao->findById((int)$companyID)->from(TABLE_COMPANY)->fetch();
+        return $this->dao->findById($companyID)->from(TABLE_COMPANY)->fetch();
     }
 
     /**
      * 获取用户。
      * Get users.
      *
-     * @param  string      $browseType
-     * @param  string      $type
-     * @param  string|int  $queryID
-     * @param  int         $deptID
-     * @param  string      $sort
-     * @param  object      $pager
+     * @param  string     $browseType
+     * @param  string     $type
+     * @param  string|int $queryID
+     * @param  int        $deptID
+     * @param  string     $sort
+     * @param  object     $pager
      * @access public
      * @return array
      */

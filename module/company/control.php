@@ -138,6 +138,7 @@ class company extends control
     }
 
     /**
+     * 访问公司主页。
      * View a company.
      *
      * @access public
@@ -145,9 +146,8 @@ class company extends control
      */
     public function view()
     {
-        $this->company->setMenu();
-        $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->company->view;
-        $this->view->company    = $this->company->getById($this->app->company->id);
+        $this->view->title   = $this->lang->company->common . $this->lang->colon . $this->lang->company->view;
+        $this->view->company = $this->company->getByID($this->app->company->id);
         $this->display();
     }
 

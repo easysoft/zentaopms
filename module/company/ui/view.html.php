@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
 detailHeader
 (
     to::prefix(''),
@@ -18,13 +19,13 @@ detailHeader
         (
             setClass('btn primary'),
             set::icon('edit'),
-            set::url(helper::createLink('company', 'edit')),
-            set('data-toggle', 'modal'),
-            set('data-size', 'sm'),
+            set::url(inlink('edit')),
+            setData(array('toggle' => 'modal', 'size' => 'sm')),
             $lang->edit
         )
     )
 );
+
 detailBody
 (
     sectionList
@@ -76,4 +77,3 @@ detailBody
 );
 
 render();
-
