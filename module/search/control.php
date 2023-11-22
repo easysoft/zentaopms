@@ -1,4 +1,7 @@
 <?php
+
+use function zin\wg;
+
 /**
  * The control file of search module of ZenTaoPMS.
  *
@@ -31,44 +34,33 @@ class search extends control
         $module       = empty($module) ? $this->session->searchParams['module'] : $module;
         $searchParams = $module . 'searchParams';
         $searchForm   = $module . 'Form';
-        $queryID      = (empty($module) and empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
-        $fields       = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
-        $params       = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
-        $actionURL    = empty($actionURL) ? $_SESSION[$searchParams]['actionURL'] : $actionURL;
-        $style        = isset($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : '';
-        $onMenuBar    = isset($_SESSION[$searchParams]['onMenuBar']) ? $_SESSION[$searchParams]['onMenuBar'] : '';
+
+        $fields = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
+        $params = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
 
         $_SESSION['searchParams']['module'] = $module;
         if(empty($_SESSION[$searchForm])) $this->search->initSession($module, $fields, $params);
 
-        if(in_array($module, $this->config->search->searchObject) and $this->session->objectName)
+        if(in_array($module, $this->config->search->searchObject) && $this->session->objectName)
         {
             $space = common::checkNotCN() ? ' ' : '';
             $this->lang->search->common = $this->lang->search->common . $space . $this->session->objectName;
         }
 
         $this->view->module       = $module;
-        $this->view->groupItems   = $this->config->search->groupItems;
-        $this->view->searchFields = $fields;
-        $this->view->actionURL    = $actionURL;
+        $this->view->actionURL    = empty($actionURL) ? $_SESSION[$searchParams]['actionURL'] : $actionURL;
+        $this->view->fields       = $fields;
         $this->view->fieldParams  = $this->search->setDefaultParams($fields, $params);
         $this->view->queries      = $this->search->getQueryList($module);
-        $this->view->queryID      = $queryID;
-        $this->view->style        = empty($style) ? 'full' : $style;
-        $this->view->onMenuBar    = empty($onMenuBar) ? 'no' : $onMenuBar;
+        $this->view->queryID      = (empty($module) && empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
+        $this->view->style        = !empty($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : 'full';
+        $this->view->onMenuBar    = !empty($_SESSION[$searchParams]['onMenuBar']) ? $_SESSION[$searchParams]['onMenuBar'] : 'no';
         $this->view->formSession  = $_SESSION[$module . 'Form'];
-        $this->view->fields       = $fields;
         $this->view->formName     = $formName;
 
-        if($module == 'program')
-        {
-            $this->view->options = $this->search->setOptions($fields, $this->view->fieldParams, $this->view->queries);
-            $this->render();
-        }
-        else
-        {
-            $this->display();
-        }
+        if($module == 'program') $this->view->options = $this->search->setOptions($fields, $this->view->fieldParams, $this->view->queries);
+
+        $this->display();
     }
 
     /**
