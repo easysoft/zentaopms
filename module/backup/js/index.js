@@ -10,7 +10,7 @@ $(function()
         var that = this;
         $(that).toggleClass('loading');
         $(that).text(getSpaceLoading);
-        link = createLink('backup', 'ajaxGetkDiskSpace');
+        link = createLink('backup', 'ajaxGetDiskSpace');
         $.get(link, function(data)
         {
             $(that).toggleClass('loading');

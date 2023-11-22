@@ -437,21 +437,19 @@ class backupModel extends model
      *
      * @param  int    $backupPath
      * @access public
-     * @return int
+     * @return string
      */
-    public function getkDiskSpace($backupPath)
+    public function getDiskSpace($backupPath)
     {
         $nofile        = strpos($this->config->backup->setting, 'nofile') !== false;
         $diskFreeSpace = disk_free_space($backupPath);
         $backFileSize  = 0;
 
-        $zfile = $this->app->loadClass('zfile');
-
         if(!$nofile)
         {
             $appRoot      = $this->app->getAppRoot();
-            $appRootSize  = $this->getZentaoSize($appRoot);
-            $backFileSize = $appRootSize - $zfile->getDirSize($appRoot . 'tmp') - $zfile->getDirSize($appRoot . 'www/course');
+            $appRootSize  = $this->getDirSize($appRoot);
+            $backFileSize = $appRootSize - $this->getDirSize($appRoot . 'tmp') - $this->getDirSize($appRoot . 'www/data/course');
         }
 
         $backSqlSize = $this->dao->select('sum(data_length+index_length) as size')
@@ -464,26 +462,21 @@ class backupModel extends model
     }
 
     /**
-     * Get zentao size.
+     * Get directory size.
      *
-     * @param  string $appRoot
+     * @param  string $dir
      * @access public
      * @return int
      */
-    public function getZentaoSize($appRoot)
+    public function getDirSize($dir)
     {
+        if(!file_exists($dir)) return 0;
         $totalSize = 0;
-        $tmpDir    = realPath($appRoot . 'tmp/');
-        $dataDir   = realPath($appRoot . 'www/data/');
-        $iterator  = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($appRoot, RecursiveDirectoryIterator::SKIP_DOTS));
+        $iterator  = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS));
 
         foreach($iterator as $file)
         {
-            $filePath = $file->getRealPath();
-            if(strpos($filePath, $tmpDir) !== 0 and strpos($filePath, $dataDir) !== 0)
-            {
-                $totalSize += $file->getSize();
-            }
+            $totalSize += $file->getSize();
         }
         return $totalSize;
     }

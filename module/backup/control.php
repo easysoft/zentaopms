@@ -87,11 +87,11 @@ class backup extends control
      * @access public
      * @return void
      */
-    public function ajaxGetkDiskSpace()
+    public function ajaxGetDiskSpace()
     {
         set_time_limit(0);
         session_write_close();
-        $diskSapce = $this->backup->getkDiskSpace($this->backupPath);
+        $diskSapce = $this->backup->getDiskSpace($this->backupPath);
         $diskSapce = explode(',', $diskSapce);
 
         $space = new stdclass();
