@@ -13,7 +13,9 @@ declare(strict_types=1);
 class admin extends control
 {
     /**
-     * Index page.
+     * 后台首页。
+     * Background homepage.
+     *
      * @access public
      * @return void
      */
@@ -21,6 +23,12 @@ class admin extends control
     {
         set_time_limit(0);
 
+        /* 设置1.5级导航信息。*/
+        /* Set the 1.5 nav. */
+        $this->admin->setMenu();
+
+        /* 处理社区登记。*/
+        /* Process community registration. */
         $community = zget($this->config->global, 'community', '');
         if(!$community or $community == 'na')
         {
@@ -34,7 +42,6 @@ class admin extends control
             $this->view->account = $community;
             $this->view->ignore  = false;
         }
-        $this->admin->setMenu();
 
         $this->view->title       = $this->lang->admin->common;
         $this->view->zentaoData  = $this->admin->getZentaoData();

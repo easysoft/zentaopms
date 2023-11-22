@@ -20,10 +20,10 @@ class adminZen extends admin
      * 初始化sn。
      * Init sn.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function initSN(): void
+    protected function initSN(): void
     {
         if(!isset($this->config->global->sn))
         {
@@ -41,10 +41,10 @@ class adminZen extends admin
      * @param  string $type         plugin|patch
      * @param  int    $limit
      * @param  bool   $hasInternet
-     * @access public
+     * @access protected
      * @return bool
      */
-    public function syncExtensions(string $type = 'plugin', int $limit = 5): bool
+    protected function syncExtensions(string $type = 'plugin', int $limit = 5): bool
     {
         $searchType = $type == 'plugin' ? 'byModule,offcial' : 'byModule';
         $param      = $type == 'plugin' ? '' : 'MTIxOA==';
@@ -66,10 +66,10 @@ class adminZen extends admin
      * Sync public classes from zentao official website by api.
      *
      * @param  int    $limit
-     * @access public
+     * @access protected
      * @return bool
      */
-    public function syncPublicClasses(int $limit = 3): bool
+    protected function syncPublicClasses(int $limit = 3): bool
     {
         $apiURL  = $this->config->admin->videoAPIURL;
         $data    = $this->fetchAPI($apiURL);
@@ -95,10 +95,10 @@ class adminZen extends admin
      * Sync dynamics from zentao official website by API.
      *
      * @param  int    $limit
-     * @access public
+     * @access protected
      * @return bool
      */
-    public function syncDynamics(int $limit = 2): bool
+    protected function syncDynamics(int $limit = 2): bool
     {
         $apiURL   = $this->config->admin->downloadAPIURL;
         $data     = $this->fetchAPI($apiURL);
@@ -129,10 +129,10 @@ class adminZen extends admin
      * Fetch data from an API.
      *
      * @param  string $url
-     * @access public
+     * @access protected
      * @return bool|array|object
      */
-    public function fetchAPI(string $url): bool|array|object
+    protected function fetchAPI(string $url): bool|array|object
     {
         $version = $this->loadModel('upgrade')->getOpenVersion(str_replace('.', '_', $this->config->version));
         $version = str_replace('_', '.', $version);
