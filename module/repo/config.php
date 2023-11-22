@@ -161,11 +161,9 @@ $config->repo->fileExt["yaml"]             = array('.yaml', '.yml');
 
 $config->repo->search['module'] = 'repo';
 $config->repo->search['fields']['name']     = $lang->repo->name;
-$config->repo->search['fields']['id']       = $lang->repo->id;
 $config->repo->search['fields']['product']  = $lang->repo->product;
 $config->repo->search['fields']['projects'] = $lang->repo->projects;
 $config->repo->search['fields']['SCM']      = $lang->repo->SCM;
-$config->repo->search['fields']['desc']     = $lang->repo->desc;
 
 $config->repo->search['params']['name']     = array('operator' => 'include', 'control' => 'input', 'values' => '');
 $config->repo->search['params']['product']  = array('operator' => 'include', 'control' => 'select', 'values' => '');
