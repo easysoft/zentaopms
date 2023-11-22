@@ -189,14 +189,17 @@ class productplanModel extends model
         $branchQuery = '';
         if($branch !== '' && $branch != 'all')
         {
-            $branchQuery .= '(';
-            $branchCount = count(explode(',', $branch));
-            foreach(explode(',', $branch) as $index => $branchID)
+            if(is_int($branch)) $branchQuery = "t1.branch = '$branch'";
+            if(is_string($branch)) $branch = array_unique(array_filter(explode(',', trim($branch, ','))));
+            if(is_array($branch) && !empty($branch))
             {
-                $branchQuery .= "FIND_IN_SET('$branchID', t1.branch)";
-                if($index < $branchCount - 1) $branchQuery .= ' OR ';
+                if(count($branch) == 1) $branchQuery = "t1.branch = '" + current($branch) + "'";
+                if(count($branch) > 1)
+                {
+                    foreach($branch as $key => $branchID) $branch[$key] = "FIND_IN_SET('$branchID', t1.branch)";
+                    $branchQuery = '(' . implode(' OR ', $branch) . ')';
+                }
             }
-            $branchQuery .= ')';
         }
 
         $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.type as productType,t1.branch')->from(TABLE_PRODUCTPLAN)->alias('t1')
