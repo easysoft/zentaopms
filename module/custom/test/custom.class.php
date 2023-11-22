@@ -299,35 +299,23 @@ class customTest
     }
 
     /**
+     * 编辑需求概念。
      * Test edit UR and SR concept.
      *
      * @param  int    $key
-     * @param  string $SRName
+     * @param  array  $data
      * @access public
-     * @return object
+     * @return array
      */
-    public function updateURAndSRTest($key = 0, $SRName = '')
+    public function updateURAndSRTest(int $key = 0, array $data = array()): array
     {
-        global $app, $tester;
-
-        $_POST['URName'] = '用户需求';
-        $_POST['SRName'] = $SRName;
-        $this->objectModel->updateURAndSR($key);
-
+        $this->objectModel->updateURAndSR($key, '', $data);
         if(dao::isError()) return dao::getError();
 
-        $lang = $app->getClientLang();
+        $concept = $this->objectModel->getURSRConcept($key);
 
-        $objects = $tester->dao->select('`value`')->from(TABLE_LANG)
-            ->where('`key`')->eq($key)
-            ->andWhere('section')->eq('URSRList')
-            ->andWhere('lang')->eq($lang)
-            ->andWhere('module')->eq('custom')
-            ->fetch();
-
-        unset($_POST);
-
-        return $objects;
+        if(!$concept) return array();
+        return json_decode($concept, true);
     }
 
     public function setStoryRequirementTest()
