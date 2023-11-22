@@ -755,7 +755,7 @@ class user extends control
             $canModifyDIR = false;
             $folderPath   = $this->app->tmpRoot;
         }
-        elseif(!is_dir($this->app->dataRoot) or substr(base_convert(@fileperms($this->app->dataRoot), 10, 8), -4) != '0777')
+        elseif(!is_dir($this->app->dataRoot) or substr(sprintf('%o', @fileperms($this->app->dataRoot)), -4) != '0777')
         {
             $canModifyDIR = false;
             $folderPath   = $this->app->dataRoot;
@@ -933,7 +933,7 @@ class user extends control
         }
         else
         {
-            helper::setcookie('tab', false, time(), $this->config->webRoot);
+            helper::setcookie('tab', '', time(), $this->config->webRoot);
             $loginExpired = !(preg_match("/(m=|\/)(index)(&f=|-)(index)(&|-|\.)?/", strtolower($this->referer), $output) or $this->referer == $this->config->webRoot or empty($this->referer) or preg_match("/\/www\/$/", strtolower($this->referer), $output));
 
             $this->loadModel('misc');
@@ -1003,9 +1003,9 @@ class user extends control
     public function logout($referer = 0)
     {
         if(isset($this->app->user->id)) $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
-        helper::setcookie('za', false, time() - 3600, $this->config->webRoot);
-        helper::setcookie('zp', false, time() - 3600, $this->config->webRoot);
-        helper::setcookie('tab', false, time() - 3600, $this->config->webRoot);
+        helper::setcookie('za', '', time() - 3600, $this->config->webRoot);
+        helper::setcookie('zp', '', time() - 3600, $this->config->webRoot);
+        helper::setcookie('tab', '', time() - 3600, $this->config->webRoot);
 
         $_SESSION = array();
         session_destroy();
