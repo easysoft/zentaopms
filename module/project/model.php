@@ -285,10 +285,11 @@ class projectModel extends model
      * Get waterfall project progress.
      *
      * @param  array  $projectIdList
+     * @param  string $mode waterfall|research
      * @access public
      * @return array
      */
-    public function getWaterfallProgress(array $projectIdList): array
+    public function getWaterfallProgress(array $projectIdList, string $mode = 'waterfall'): array
     {
         /* Get stage list. */
         $stageGroup = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
@@ -297,7 +298,7 @@ class projectModel extends model
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.project')->in($projectIdList)
-            ->andWhere('t2.model')->eq('waterfall')
+            ->andWhere('t2.model')->eq($mode)
             ->fetchGroup('project', 'id');
 
         /* Get hours information. */
@@ -1729,7 +1730,9 @@ class projectModel extends model
     public function updateProducts(int $projectID, array $products = array()): bool
     {
         $this->loadModel('user');
-        $members = array_keys($this->getTeamMembers($projectID));
+        $teams        = array_keys($this->getTeamMembers($projectID));
+        $stakeholders = array_keys($this->loadModel('stakeholder')->getStakeHolderPairs($projectID));
+        $members      = array_merge($teams, $stakeholders);
 
         /* Link products of other programs. */
         if(!empty($_POST['otherProducts'])) return $this->linkOtherProducts($projectID, $members);
@@ -2001,7 +2004,11 @@ class projectModel extends model
         /* Get execution of the status is doing. */
         $executions        = $this->loadModel('execution')->getStatData(0, 'doing', 0, 0, false, 'hasParentName|skipParent');
         $projectExecutions = array();
-        foreach($executions as $execution) $projectExecutions[$execution->project][$execution->id] = $execution;
+        foreach($executions as $execution)
+        {
+            if(!empty($execution->projectName)) $execution->projectName = htmlspecialchars_decode($execution->projectName);
+            $doingExecutions[$execution->project][$execution->id] = $execution;
+        }
 
         /* The execution is sorted in reverse order by execution ID. */
         $ongoingExecutions = array();
@@ -2194,7 +2201,7 @@ class projectModel extends model
             {
                 foreach($planStory as $id => $story)
                 {
-                    if($story->status == 'draft' or $story->status == 'reviewing')
+                    if($story->status != 'active')
                     {
                         unset($planStory[$id]);
                         continue;

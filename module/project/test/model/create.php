@@ -47,6 +47,7 @@ $project->PM         = 'admin';
 $project->type       = 'project';
 $project->model      = 'scrum';
 $project->multiple   = 1;
+$project->openedBy   = 'user1';
 $project->hasProduct = 1;
 
 $postData = new stdclass();

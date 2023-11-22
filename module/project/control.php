@@ -567,7 +567,7 @@ class project extends control
         $projectID = $this->project->setMenu($projectID);
         $project   = $this->project->getById($projectID);
 
-        if(empty($project) || strpos('scrum,waterfall,kanban,agileplus,waterfallplus', $project->model) === false)
+        if(empty($project) || strpos('scrum,waterfall,kanban,agileplus,waterfallplus,ipd', $project->model) === false)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->send(array('result' => 'fail', 'message' => $this->lang->notFound, 'load' => $this->createLink('project', 'browse')));
@@ -748,6 +748,11 @@ class project extends control
         $this->project->setMenu($projectID);
 
         if(!$projectID) return $this->send(array('result' => 'fail', 'locate' => inlink('browse')));
+        if(!$project->multiple)
+        {
+            $executionID = $this->execution->getNoMultipleID($projectID);
+            return print(js::locate($this->createLink('execution', 'task', "executionID=$executionID")));
+        }
         if(!empty($project->model) and $project->model == 'kanban' and !(defined('RUN_MODE') and RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'locate' => inlink('index', "projectID=$projectID")));
 
         /* Load pager and get tasks. */
@@ -1508,11 +1513,7 @@ class project extends control
     public function ajaxGetExecutions(int $projectID, string $mode = '', string $type = 'all')
     {
         $executions = array();
-        if($projectID)
-        {
-            $project    = $this->project->getByID($projectID);
-            $executions = (array)$this->loadModel('execution')->getPairs($projectID, $type, $mode);
-        }
+        if($projectID) $executions = (array)$this->loadModel('execution')->getPairs($projectID, $type, $mode);
 
         $items = array();
         foreach($executions as $id => $name)

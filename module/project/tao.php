@@ -110,8 +110,8 @@ class projectTao extends projectModel
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck('begin,end')
             ->check('end',  'gt', $project->begin)
-            ->check('name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '{$project->parent}' and `model`   = '{$project->model}' and `deleted` = '0'")
-            ->check('code', 'unique', "id != $projectID and `type` = 'project' and `model`  = '{$project->model}'  and `deleted` = '0'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = '$project->parent' and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($projectID)
             ->exec();
@@ -133,8 +133,8 @@ class projectTao extends projectModel
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchCheck($this->config->project->create->requiredFields, 'notempty')
-            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent    and `model`   = '{$project->model}' and `deleted` = '0'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model`  = '{$project->model}' and `deleted` = '0'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = " . $this->dao->sqlobj->quote($project->parent) . " and `model` =  " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model` = " . $this->dao->sqlobj->quote($project->model) . " and `deleted` = '0'")
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
             ->checkFlow()
             ->exec();
@@ -638,6 +638,9 @@ class projectTao extends projectModel
         foreach($projects as $project)
         {
             if(!str_contains('wait,doing,closed', $project->status)) continue;
+
+            /* Convert predefined HTML entities to characters. */
+            $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
 
             $projectPath = explode(',', trim($project->path, ','));
             $topProgram  = !empty($project->parent) ? $projectPath[0] : $project->parent;
