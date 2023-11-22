@@ -242,7 +242,7 @@ class testreportModel extends model
 
         /* Set case result language item. */
         $this->app->loadLang('testcase');
-        foreach($datas as $result => $data) $data->name = isset($this->lang->testcase->resultList[$result])? $this->lang->testcase->resultList[$result] : $this->lang->testtask->unexecuted;
+        foreach($datas as $result => $data) $data->name = isset($this->lang->testcase->resultList[$result]) ? $this->lang->testcase->resultList[$result] : $this->lang->testtask->unexecuted;
 
         return $datas;
     }
