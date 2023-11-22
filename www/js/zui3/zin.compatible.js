@@ -1013,9 +1013,17 @@
 
         if(!$link.length || $link.hasClass('ajax-submit') || $link.hasClass('not-open-url') || ($link.attr('target') || '')[0] === '_') return;
 
+        if($link.hasClass('disabled') || $link.prop('disabled'))
+        {
+            e.preventDefault();
+            return;
+        }
+
         const options = $link.dataset();
         let url = options.url || $link.attr('href');
         if(url && (url.indexOf('javascript:') === 0 || url[0] === '#')) return;
+        if(!url && $link.is('a') && !options.back && !options.load) return;
+
         if(options.toggle)
         {
             if(options.toggle === 'iframeModal' || (options.toggle === 'modal' && $link.hasClass('open-in-parent')) )
@@ -1076,7 +1084,6 @@
         }
 
         var appCode = options.app;
-        console.log('> handleClickLinkIn18', {appCode, options, url})
         if(url)
         {
             if(appCode === 'help')
