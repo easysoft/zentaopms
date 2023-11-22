@@ -107,7 +107,7 @@ $lang->action->objectTypes['project']          = $lang->projectCommon;
 $lang->action->objectTypes['execution']        = $lang->executionCommon;
 $lang->action->objectTypes['task']             = 'Aufgabe';
 $lang->action->objectTypes['build']            = 'Build';
-$lang->action->objectTypes['job']              = 'Job';
+$lang->action->objectTypes['job']              = 'Pipeline';
 $lang->action->objectTypes['bug']              = 'Bug';
 $lang->action->objectTypes['case']             = 'Fälle';
 $lang->action->objectTypes['caseresult']       = 'Fallergebnisse';
@@ -167,7 +167,11 @@ $lang->action->objectTypes['privpackage']      = 'Priv Package';
 $lang->action->objectTypes['serverroom']       = 'IDC';
 $lang->action->objectTypes['account']          = 'Account';
 $lang->action->objectTypes['host']             = 'Host';
+$lang->action->objectTypes['deploy']           = 'Deploy';
+$lang->action->objectTypes['service']          = 'Service';
+$lang->action->objectTypes['domain']           = 'Domain';
 $lang->action->objectTypes['artifactrepo']     = 'Artifact Repo';
+$lang->action->objectTypes['prompt']           = 'Prompt';
 $lang->action->objectTypes['metric']           = 'Metric';
 
 /* Used to describe operation history. */
@@ -295,6 +299,10 @@ $lang->action->desc->releaseddoc = '$date, <strong>$actor</strong> released <str
 $lang->action->desc->collected   = '$date, <strong>$actor</strong> collected <strong>$extra</strong>.' . "\n";
 $lang->action->desc->uncollected = '$date, <strong>$actor</strong> uncollected <strong>$extra</strong>.' . "\n";
 
+/* AI prompts related actions. */
+$lang->action->desc->published   = '$date, published by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->unpublished = '$date, unpublished by <strong>$actor</strong>.' . "\n";
+
 /* 用来描述应用的历史操作记录。*/
 $lang->action->desc->install                 = '$date, installed by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->uninstall               = '$date, uninstalled by <strong>$actor</strong>.' . "\n";
@@ -316,6 +324,9 @@ $lang->action->desc->saveautorestoresettings = '$date, updated by <strong>$actor
 $lang->action->desc->autobackup              = '$date, backed up of system' . "\n";
 $lang->action->desc->autorestore             = '$date, restored by system.' . "\n";
 $lang->action->desc->deleteexpiredbackup     = '$date, deleted the expired automatic backups by system.' . "\n";
+
+$lang->action->desc->delist  = '$date, delist by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->publish = '$date, publish by <strong>$actor</strong>.' . "\n";
 
 /* Used to display dynamic information. */
 $lang->action->label = new stdclass();
@@ -435,6 +446,7 @@ $lang->action->label->estimated               = 'estimated';
 $lang->action->label->reviewpassed            = 'Pass';
 $lang->action->label->reviewrejected          = 'Reject';
 $lang->action->label->reviewclarified         = 'Clarify';
+$lang->action->label->reviewreverted          = 'Revert';
 $lang->action->label->commitsummary           = 'Commit Summary';
 $lang->action->label->updatetrainee           = 'Update Trainee';
 $lang->action->label->setdefaultbranch        = 'Set default branch';

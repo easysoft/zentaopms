@@ -325,4 +325,15 @@ class action extends control
         $actions = $this->action->buildActionList($actions);
         return $this->send($actions);
     }
+    
+    /**
+     * Clear dynamic records older than one month.
+     *
+     * @access public
+     * @return void
+     */
+    public function cleanActions()
+    {
+        $this->action->cleanActions();
+    }
 }

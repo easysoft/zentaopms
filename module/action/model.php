@@ -91,6 +91,9 @@ class actionModel extends model
 
         $this->saveIndex($objectType, $objectID, $actionType);
 
+        $changeFunc = 'after' . ucfirst($objectType);
+        if(method_exists($this, $changeFunc)) call_user_func_array(array($this, $changeFunc), array($action, $actionID));
+
         return $actionID;
     }
 
@@ -130,7 +133,7 @@ class actionModel extends model
     {
         /* 处理项目、执行、产品、计划相关。 */
         /* Process project, execution, product, plan related. */
-        if(in_array($objectType, array('project', 'execution', 'product', 'program')))
+        if(in_array($objectType, array('project', 'execution', 'product', 'program', 'marketresearch')))
         {
             list($product, $project, $execution) = $this->actionTao->getNoFilterRequiredRelation($objectType, $objectID);
             return array('product' => ',' . implode(',', $product) . ',', 'project' => $project, 'execution' => $execution);
@@ -183,18 +186,20 @@ class actionModel extends model
             if($actionName == 'importedcard') $this->actionTao->processActionExtra(TABLE_KANBAN, $action, 'name', 'kanban', 'view', true);
             if($actionName == 'createchildren') $this->actionTao->processCreateChildrenActionExtra($action);
             if($actionName == 'createrequirements') $this->actionTao->processCreateRequirementsActionExtra($action);
+            if($actionName == 'deletechildrendemand') $this->actionTao->processActionExtra(TABLE_DEMAND, $action, 'title', 'demand', 'view');
             if($actionName == 'buildopened') $this->actionTao->processActionExtra(TABLE_BUILD, $action, 'name', 'build', 'view');
             if($actionName == 'fromlib' && $action->objectType == 'case') $this->actionTao->processActionExtra(TABLE_TESTSUITE, $action, 'name', 'caselib', 'browse');
             if($actionName == 'changedbycharter' && $action->objectType == 'story') $this->actionTao->processActionExtra(TABLE_CHARTER, $action, 'name', 'charter', 'view');
             if(($actionName == 'finished' && $objectType == 'todo') || ($actionName == 'closed' && in_array($action->objectType, array('story', 'demand'))) || ($actionName == 'resolved' && $action->objectType == 'bug')) $this->actionTao->processAppendLinkByExtra($action);
 
-            if(in_array($actionName, array('totask', 'linkchildtask', 'unlinkchildrentask', 'linkparenttask', 'unlinkparenttask', 'deletechildrentask')) && $action->objectType != 'feedback') $this->actionTao->processActionExtra(TABLE_TASK, $action, 'name', 'task', 'view');;
+            if(in_array($actionName, array('totask', 'linkchildtask', 'unlinkchildrentask', 'linkparenttask', 'unlinkparenttask', 'deletechildrentask', 'converttotask')) && $action->objectType != 'feedback') $this->actionTao->processActionExtra(TABLE_TASK, $action, 'name', 'task', 'view');;
             if(in_array($actionName, array('linkchildstory', 'unlinkchildrenstory', 'linkparentstory', 'unlinkparentstory', 'deletechildrenstory'))) $this->actionTao->processActionExtra(TABLE_STORY, $action, 'title', 'story', 'view');
             if(in_array($actionName, array('testtaskopened', 'testtaskstarted', 'testtaskclosed'))) $this->actionTao->processActionExtra(TABLE_TESTTASK, $action, 'name', 'testtask', 'view');
             if(in_array($actionName, array('importfromstorylib', 'importfromrisklib', 'importfromissuelib', 'importfromopportunitylib')) && in_array($this->config->edition, array('max', 'ipd'))) $this->actionTao->processActionExtra(TABLE_ASSETLIB, $action, 'name', 'assetlib', $action->objectType);
             if(in_array($actionName, array('opened', 'managed', 'edited')) && in_array($objectType, array('execution', 'project'))) $this->processExecutionAndProjectActionExtra($action);
-            if(in_array($actionName, array('linkstory', 'unlinkstory', 'createchildrenstory'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'story', 'view');
+            if(in_array($actionName, array('linkstory', 'unlinkstory', 'createchildrenstory', 'linkur', 'unlinkur'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'story', 'view');
             if(in_array($actionName, array('linkbug', 'unlinkbug'))) $this->actionTao->processLinkStoryAndBugActionExtra($action, 'bug', 'view');
+            if($actionName == 'repocreated') $action->extra = str_replace("class='iframe'", 'data-app="devops"', $action->extra);
 
             $action->history = zget($histories, $actionID, array());
             if($actionName == 'svncommited') array_map(function($history) {if($history->field == 'subversion') $history->diff = str_replace('+', '%2B', $history->diff);}, $action->history);
@@ -353,7 +358,7 @@ class actionModel extends model
 
         $extra      = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
         $table      = $this->config->objectTables[$objectType];
-        $nameField  = isset($this->config->action->objectNameFields[$objectType]) ? 't2.' . "`{$this->config->action->objectNameFields[$objectType]}`" : '';
+        $nameField  = isset($this->config->action->objectNameFields[$objectType]) ? 't2.' . '`' . $this->config->action->objectNameFields[$objectType] . '`' : '';
         $trashQuery = $this->session->trashQuery;
         $trashQuery = str_replace(array('`objectID`', '`actor`', '`date`'), array('t1.`objectID`', 't1.`actor`', 't1.`date`'), $trashQuery);
         if($nameField) $trashQuery = preg_replace("/`objectName`/", $nameField, $trashQuery);

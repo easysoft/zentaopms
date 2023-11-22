@@ -61,6 +61,7 @@ $config->action->objectNameFields['instance']     = 'name';
 $config->action->objectNameFields['space']        = 'name';
 $config->action->objectNameFields['solution']     = 'name';
 $config->action->objectNameFields['artifactrepo'] = 'name';
+$config->action->objectNameFields['prompt']       = 'name';
 
 $config->action->commonImgSize = 870;
 
@@ -103,3 +104,6 @@ $config->trash->search['params']['objectName'] = array('operator' => 'include', 
 $config->trash->search['params']['objectID']   = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->trash->search['params']['actor']      = array('operator' => '=', 'control' => 'select',  'values' => 'users');
 $config->trash->search['params']['date']       = array('operator' => '=', 'control' => 'date',  'values' => '');
+
+$config->action->newPageModule  = array('repo', 'mr', 'host', 'account', 'serverroom', 'instance', 'store', 'space', 'domain', 'service', 'gitlab', 'gitea', 'gogs', 'sonarqube', 'jenkins', 'nexus');
+$config->action->latestDateList = array('today', 'yesterday', 'thisWeek', 'lastWeek', 'thisMonth');

@@ -107,7 +107,7 @@ $lang->action->objectTypes['project']          = $lang->projectCommon;
 $lang->action->objectTypes['execution']        = '执行';
 $lang->action->objectTypes['task']             = '任务';
 $lang->action->objectTypes['build']            = '版本';
-$lang->action->objectTypes['job']              = '构建';
+$lang->action->objectTypes['job']              = '流水线';
 $lang->action->objectTypes['bug']              = 'Bug';
 $lang->action->objectTypes['case']             = '用例';
 $lang->action->objectTypes['caseresult']       = '用例结果';
@@ -167,7 +167,11 @@ $lang->action->objectTypes['privpackage']      = '权限包';
 $lang->action->objectTypes['serverroom']       = '机房';
 $lang->action->objectTypes['account']          = '账号';
 $lang->action->objectTypes['host']             = '主机';
+$lang->action->objectTypes['deploy']           = '发布';
+$lang->action->objectTypes['service']          = '服务';
+$lang->action->objectTypes['domain']           = '域名';
 $lang->action->objectTypes['artifactrepo']     = '制品库';
+$lang->action->objectTypes['prompt']           = '提词';
 $lang->action->objectTypes['metric']           = '度量';
 
 /* 用来描述操作历史记录。*/
@@ -294,6 +298,10 @@ $lang->action->desc->releaseddoc = '$date, 由 <strong>$actor</strong> 发布 <s
 /* 用来描述文档收藏或取消收藏时的历史操作记录。*/
 $lang->action->desc->collected   = '$date, 由 <strong>$actor</strong> 收藏 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->uncollected = '$date, 由 <strong>$actor</strong> 取消收藏 <strong>$extra</strong>。' . "\n";
+
+/* AI 提词历史操作记录。 */
+$lang->action->desc->published   = '$date, 由 <strong>$actor</strong> 发布。' . "\n";
+$lang->action->desc->unpublished = '$date, 由 <strong>$actor</strong> 下架。' . "\n";
 
 /* 用来描述应用的历史操作记录。*/
 $lang->action->desc->install                 = '$date, 由 <strong>$actor</strong> 安装。' . "\n";
@@ -438,6 +446,7 @@ $lang->action->label->estimated               = '估算了';
 $lang->action->label->reviewpassed            = '确认通过';
 $lang->action->label->reviewrejected          = '拒绝了';
 $lang->action->label->reviewclarified         = '有待明确';
+$lang->action->label->reviewreverted          = '撤销变更';
 $lang->action->label->commitsummary           = '提交了培训总结';
 $lang->action->label->updatetrainee           = '更新了培训人员';
 $lang->action->label->setdefaultbranch        = '设置了默认分支';
