@@ -1091,15 +1091,16 @@ class customModel extends model
     }
 
     /**
-     * Check for assetlib data.
+     * 检查系统中是否有资产库数据。
+     * Check whether there is assetlib data in the system.
      *
      * @access public
      * @return int
      */
-    public function hasAssetlibData()
+    public function hasAssetlibData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd'))) return $this->dao->select('*')->from(TABLE_ASSETLIB)->where('deleted')->eq(0)->count();
-        return false;
+        return 0;
     }
 
     /**
