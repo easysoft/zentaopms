@@ -31,31 +31,6 @@ function changeType(event)
     $('#commiter').closest('.form-row').toggleClass('hidden', type != 'inside');
 }
 
-function changeAddCompany(event)
-{
-    const checked = $(event.target).prop('checked');
-    if(checked)
-    {
-        const $inputGroup = $('[name="company"]').closest('.picker-box');
-        if($inputGroup.length == 0) return;
-        $('[name="company"]').zui('picker').destroy();
-        $inputGroup.replaceWith("<input name='newCompany' id='newCompany' class='form-control'/>");
-    }
-    else
-    {
-        const link = $.createLink('company', 'ajaxGetOutsideCompany');
-        $.post(link, function(data)
-        {
-            var $companyPicker = $('#company').replaceWith('<div id="companyPicker" class="form-group-wrapper picker-box"></div>');
-            if(data)
-            {
-                data = JSON.parse(data);
-                new zui.Picker('#companyPicker', {name: 'company', items: data});
-            }
-        })
-    }
-}
-
 function clickSubmit()
 {
     if(!password1Encrypted || !password2Encrypted)

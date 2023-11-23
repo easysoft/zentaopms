@@ -17,7 +17,6 @@ formPanel
     set::id('createUser'),
     on::change('input[name=type]', 'changeType'),
     on::change('input[name=role]', 'changeRole'),
-    on::change('#addCompany', 'changeAddCompany'),
     on::change('input[name^=visions]', 'changeVision'),
     on::change('#password1,#password2,#verifyPassword', 'changePassword'),
     on::click('button[type=submit]', 'clickSubmit'),
