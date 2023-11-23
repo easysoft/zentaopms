@@ -40,6 +40,7 @@ featureBar
             set::placeholder($lang->product->common),
             set::items($products),
             set::value($productID),
+            set::required(true),
             on::change('changeItem')
         )
     ) : null,
@@ -53,6 +54,7 @@ featureBar
             set::placeholder($lang->project->common),
             set::items($projects),
             set::value($projectID),
+            set::required(true),
             on::change('changeItem')
         )
     ),
@@ -66,6 +68,7 @@ featureBar
             set::placeholder($lang->execution->common),
             set::items($executions),
             set::value($executionID),
+            set::required(true),
             on::change('changeItem')
         )
     ),
