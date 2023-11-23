@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The ai mini programs view file of ai module of ZenTaoPMS.
  *
@@ -11,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php'; ?>
 <?php
-  $finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
+$finalList = array_merge($categoryList, $lang->ai->miniPrograms->allCategories);
 ?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
@@ -103,8 +104,8 @@
       <table class="main-table table has-sort-head table-fixed">
         <thead>
           <tr>
-            <?php $vars = "category=$category&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
-            <th class="c-id" style="width: 70px;"><?php common::printOrderLink('id', $orderBy, $vars, 'ID');?></th>
+            <?php $vars = "category=$category&status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+            <th class="c-id" style="width: 70px;"><?php common::printOrderLink('id', $orderBy, $vars, 'ID'); ?></th>
             <th class="c-name" style="width: 30%;"><?= $lang->prompt->name; ?></th>
             <th class="c-status"><?= $lang->prompt->status; ?></th>
             <th class="c-category"><?= $lang->prompt->module; ?></th>
@@ -127,9 +128,9 @@
               <td class="c-actions">
                 <?php $isPublished = $miniProgram->published === '1'; ?>
                 <?php
-                  echo $isPublished
-                    ? "<button class='btn' disabled title='{$lang->ai->prompts->action->edit}'><i class='icon-edit text-primary'></i></button>"
-                    : "<a class='btn' title='{$lang->ai->prompts->action->edit}' href='{$this->createLink('ai', 'createMiniProgram', "appID=$miniProgram->id")}'><i class='icon-edit text-primary'></i></a>";
+                echo $isPublished
+                  ? "<button class='btn' disabled title='{$lang->ai->prompts->action->edit}'><i class='icon-edit text-primary'></i></button>"
+                  : "<a class='btn' title='{$lang->ai->prompts->action->edit}' href='{$this->createLink('ai', 'createMiniProgram', "appID=$miniProgram->id")}'><i class='icon-edit text-primary'></i></a>";
                 ?>
                 <button
                   class="btn iframe"
@@ -156,9 +157,9 @@
         </tbody>
       </table>
       <div class='table-footer'>
-          <div class="table-statistic"><?= sprintf($lang->ai->miniPrograms->summary, count($miniPrograms));?></div>
-          <?php $pager->show('right', 'pagerjs');?>
-        </div>
+        <div class="table-statistic"><?= sprintf($lang->ai->miniPrograms->summary, count($miniPrograms)); ?></div>
+        <?php $pager->show('right', 'pagerjs'); ?>
+      </div>
     </div>
   </div>
 </div>

@@ -155,6 +155,7 @@ $lang->kanban->common     = '看板';
 $lang->qa->common         = '測試';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = '文檔';
+$lang->ai->miniProgram    = '小程式';
 $lang->repo->common       = '代碼庫';
 $lang->repo->codeRepo     = '代碼庫';
 $lang->report->common     = '统计';

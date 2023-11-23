@@ -135,6 +135,45 @@ class ai extends control
         $this->display();
     }
 
+    public function square($category = 'discovery', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $collectedIDs = null;
+
+        if($category === 'collection')
+        {
+            $collectedIDs = $this->ai->getCollectedMiniProgramIDs($this->app->user->id, $pager);
+            $miniPrograms = $this->ai->getMiniProgramsByID($collectedIDs);
+        }
+        else if($category === 'discovery')
+        {
+            
+        }
+        else if($category === 'latest')
+        {
+            $miniPrograms = $this->ai->getMiniPrograms('', 'active', 'createdDate_desc', $pager);
+        }
+        else
+        {
+            $miniPrograms = $this->ai->getMiniPrograms($category, 'active', 'createdDate_desc', $pager);
+        }
+
+        $this->view->collectedIDs = empty($collectedIDs) ? $this->ai->getCollectedMiniProgramIDs($this->app->user->id) : $collectedIDs;
+        $this->view->category      = $category;
+        $this->view->categoryList  = array_merge($this->lang->ai->miniPrograms->squareCategories, $this->lang->ai->miniPrograms->categoryList, $this->ai->getCustomCategory());
+        $this->view->pager         = $pager;
+        $this->view->miniPrograms  = $miniPrograms ?: array();
+        $this->view->title         = $this->lang->ai->miniPrograms->common;
+        $this->display();
+    }
+
+    public function collectMiniProgram($appID, $delete = 'false')
+    {
+        $this->ai->collectMiniProgram($this->app->user->id, $appID, $delete);
+        return $this->send(array('status' => ($delete === 'true' ? '0' : '1')));
+    }
+
     /**
      * List mini programs.
      *

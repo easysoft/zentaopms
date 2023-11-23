@@ -310,7 +310,22 @@ class aiModel extends model
     }
 
     /**
-     * Get mini program by app id.
+     * Get mini programs by appid.
+     *
+     * @param array $id
+     * @access public
+     * @return object
+     */
+    public function getMiniProgramsByID($ids)
+    {
+        return $this->dao->select('*')
+            ->from(TABLE_MINIPROGRAM)
+            ->where('id')->in($ids)
+            ->fetchAll();
+    }
+
+    /**
+     * Get mini program by appid.
      *
      * @param string $id
      * @access public
@@ -322,6 +337,40 @@ class aiModel extends model
             ->from(TABLE_MINIPROGRAM)
             ->where('id')->eq($id)
             ->fetch();
+    }
+
+    public function getCollectedMiniProgramIDs($userID, $pager = null)
+    {
+        $programs = $this->dao->select('*')
+            ->from(TABLE_MINIPROGRAMSTAR)
+            ->where('userID')->eq($userID)
+            ->orderBy('createdDate_desc')
+            ->page($pager)
+            ->fetchAll('appID');
+        return array_keys($programs);
+    }
+
+    public function collectMiniProgram($userID, $appID, $delete = 'false')
+    {
+        if($delete === 'true')
+        {
+            $this->dao->delete()
+                ->from(TABLE_MINIPROGRAMSTAR)
+                ->where('userID')->eq($userID)
+                ->andWhere('appID')->eq($appID)
+                ->exec();
+            return !dao::isError();
+        }
+
+        $data = new stdClass();
+        $data->appID = $appID;
+        $data->userID = $userID;
+        $data->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_MINIPROGRAMSTAR)
+            ->data($data)
+            ->exec();
+        return !dao::isError();
     }
 
     public function getCustomCategory()
@@ -401,7 +450,7 @@ class aiModel extends model
             ->orderBy($order)
             ->page($pager)
             ->fetchAll();
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'miniProgram');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'miniprogram');
         return $progarms;
     }
 

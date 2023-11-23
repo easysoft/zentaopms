@@ -181,6 +181,7 @@ $lang->kanban->common     = '看板';
 $lang->qa->common         = '测试';
 $lang->devops->common     = 'DevOps';
 $lang->doc->common        = '文档';
+$lang->ai->miniProgram    = '小程序';
 $lang->repo->common       = '代码库';
 $lang->repo->codeRepo     = '代码库';
 $lang->bi->common         = 'BI';
