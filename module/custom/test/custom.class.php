@@ -321,27 +321,6 @@ class customTest
     }
 
     /**
-     * Check for waterfallplus project data..
-     *
-     * @param  string $param deleteproject
-     * @access public
-     * @return int
-     */
-    public function hasWaterfallplusDataTest($param = '')
-    {
-        if($param == 'deleteproject')
-        {
-            global $tester;
-            $tester->dao->update(TABLE_PROJECT)
-                ->set('deleted')->eq(1)
-                ->where('type')->eq('project')
-                ->andWhere('model')->eq('waterfallplus')
-                ->exec();
-        }
-        return $this->objectModel->hasWaterfallplusData();
-    }
-
-    /**
      * 获取需求概念。
      * Get UR and SR concept.
      *
@@ -415,6 +394,21 @@ class customTest
     public function hasWaterfallDataTest(): int|array
     {
         $count = $this->objectModel->hasWaterfallData();
+
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 检查系统中是否有融合瀑布项目数据。
+     * Check whether there is waterfallplus project data in the system.
+     *
+     * @access public
+     * @return int|array
+     */
+    public function hasWaterfallplusDataTest(): int|array
+    {
+        $count = $this->objectModel->hasWaterfallplusData();
 
         if(dao::isError()) return dao::getError();
         return $count;
