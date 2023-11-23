@@ -29,9 +29,9 @@ class deptModel extends model
      * Get all department names.
      *
      * @access public
-     * @return array|false
+     * @return array
      */
-    public function getDeptPairs(): array|false
+    public function getDeptPairs(): array
     {
         return $this->dao->select('id,name')->from(TABLE_DEPT)->fetchPairs();
     }
@@ -40,11 +40,11 @@ class deptModel extends model
      * 获取下一级部门的部门信息。
      * Get sons of a department.
      *
-     * @param  int         $deptID
+     * @param  int    $deptID
      * @access public
-     * @return array|false
+     * @return array
      */
-    public function getSons(int $deptID): array|false
+    public function getSons(int $deptID): array
     {
         return $this->dao->select('*')->from(TABLE_DEPT)->where('parent')->eq($deptID)->orderBy('`order`')->fetchAll();
     }
@@ -53,11 +53,11 @@ class deptModel extends model
      * 获取当前部门以及父级部门的部门信息。
      * Get parents.
      *
-     * @param  int         $deptID
+     * @param  int    $deptID
      * @access public
-     * @return array|false
+     * @return array
      */
-    public function getParents(int $deptID): array|false
+    public function getParents(int $deptID): array
     {
         if(!$deptID) return array();
         $path = $this->dao->select('path')->from(TABLE_DEPT)->where('id')->eq($deptID)->fetch('path');
@@ -73,9 +73,9 @@ class deptModel extends model
      *
      * @param  int         $rootDeptID
      * @access public
-     * @return array|false
+     * @return array
      */
-    public function getChildDepts(int $rootDeptID): array|false
+    public function getChildDepts(int $rootDeptID): array
     {
         $rootDept = $this->fetchByID($rootDeptID);
         $rootPath = !empty($rootDept) ? $rootDept->path : '';
@@ -194,7 +194,7 @@ class deptModel extends model
 
         /* 变更当前部门的子部门负责人。 */
         $childs = $this->getAllChildID($dept->id);
-        $this->dao->update(TABLE_DEPT)->set('manager')->eq($dept->manager)->where('id')->in($childs)->andWhere('manager', true)->eq('')->orWhere('manager')->eq($oldDept->manager)->markRight(1)->exec();
+        if(!empty($dept->manager)) $this->dao->update(TABLE_DEPT)->set('manager')->eq($dept->manager)->where('id')->in($childs)->andWhere('manager', true)->eq('')->orWhere('manager')->eq($oldDept->manager)->markRight(1)->exec();
 
         /* 整理部门的path和grade。 */
         $this->fixDeptPath();
@@ -311,14 +311,14 @@ class deptModel extends model
      * 获取部门下对应的用户列表。
      * Get users of a deparment.
      *
-     * @param  string      $browseType inside|outside|all
-     * @param  array       $depts
-     * @param  string      $orderBy
-     * @param  object      $pager
+     * @param  string $browseType inside|outside|all
+     * @param  array  $depts
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
-     * @return array|false
+     * @return array
      */
-    public function getUsers(string $browseType = 'inside', array $depts = array(), string $orderBy = 'id', object $pager = null): array|false
+    public function getUsers(string $browseType = 'inside', array $depts = array(), string $orderBy = 'id', object $pager = null): array
     {
         return $this->dao->select('*')->from(TABLE_USER)
             ->where('deleted')->eq(0)
@@ -334,17 +334,15 @@ class deptModel extends model
      * 获取指定部门下的用户列表。
      * Get user pairs of a department.
      *
-     * @param  int         $deptID
-     * @param  string      $key     id|account
-     * @param  string      $type    inside|outside
-     * @param  string      $params  all
+     * @param  int    $deptID
+     * @param  string $key     id|account
+     * @param  string $type    inside|outside
+     * @param  string $params  all
      * @access public
-     * @return array|false
+     * @return array
      */
-    public function getDeptUserPairs(int $deptID = 0, string $key = 'account', string $type = 'inside', string $params = ''): array|false
+    public function getDeptUserPairs(int $deptID = 0, string $key = 'account', string $type = 'inside', string $params = ''): array
     {
-        if(!$deptID) return array();
-
         $childDepts = $this->getAllChildID($deptID);
         $keyField   = $key == 'id' ? 'id' : 'account';
         $type       = $type == 'outside' ? 'outside' : 'inside';

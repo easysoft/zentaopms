@@ -29,10 +29,10 @@ $count      = array('0', '1');
 $orderBy    = array('id', 'account');
 
 $dept = new deptTest();
-r($dept->getUsersTest($browseType[0], $deptIDList[0], $count[0], $orderBy[0])) && p('101:account,dept,realname') && e('test2,11,测试2');   //全部用户查询 
-r($dept->getUsersTest($browseType[1], $deptIDList[0], $count[0], $orderBy[0])) && p('')                          && e('0');                //外部用户查询
-r($dept->getUsersTest($browseType[0], $deptIDList[1], $count[0], $orderBy[0])) && p('9:account,dept,realname')   && e('user19,2,用户19');  //根据部门查询用户
-r($dept->getUsersTest($browseType[0], $deptIDList[2], $count[0], $orderBy[1])) && p('0:account,dept,realname')   && e('user40,5,用户40');  //根据account排序
-r($dept->getUsersTest($browseType[0], $deptIDList[0], $count[1], $orderBy[0])) && p()                            && e('200');              //全部用户查询统计
-r($dept->getUsersTest($browseType[1], $deptIDList[0], $count[1], $orderBy[0])) && p()                            && e('0');                //外部用户查询统计
-r($dept->getUsersTest($browseType[0], $deptIDList[1], $count[1], $orderBy[0])) && p()                            && e('10');               //根据部门查询用户统计
+r($dept->getUsersTest($browseType[0], array(), $count[0], $orderBy[0])) && p('101:account,dept,realname')               && e('test2,11,测试2');   //全部用户查询
+r($dept->getUsersTest($browseType[1], array(), $count[0], $orderBy[0])) && p('')                                        && e('0');                //外部用户查询
+r($dept->getUsersTest($browseType[0], array($deptIDList[1]), $count[0], $orderBy[0])) && p('9:account,dept,realname')   && e('user19,2,用户19');  //根据部门查询用户
+r($dept->getUsersTest($browseType[0], array($deptIDList[2]), $count[0], $orderBy[1])) && p('0:account,dept,realname')   && e('user40,5,用户40');  //根据account排序
+r($dept->getUsersTest($browseType[0], array(), $count[1], $orderBy[0])) && p()                                          && e('200');              //全部用户查询统计
+r($dept->getUsersTest($browseType[1], array(), $count[1], $orderBy[0])) && p()                                          && e('0');                //外部用户查询统计
+r($dept->getUsersTest($browseType[0], array($deptIDList[1]), $count[1], $orderBy[0])) && p()                            && e('10');               //根据部门查询用户统计

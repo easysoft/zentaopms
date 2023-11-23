@@ -18,8 +18,8 @@ pid=1
 
 */
 
-$deptIDList = array('0', '1', '2');
-$userFunc   = array('deptmodel', 'createManageLink');
+$deptIDList = array(0, 1, 2);
+$userFunc   = array('deptmodel', 'createMemberLink');
 
 $dept = new deptTest();
 r($dept->getTreeMenuTest($deptIDList[0], $userFunc)) && p('0:name') && e('产品部1');    //全部部门树结构查询
