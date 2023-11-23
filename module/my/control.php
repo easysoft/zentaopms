@@ -980,6 +980,7 @@ EOF;
      */
     public function auditplan(string $browseType = 'myChecking', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        /* Set session. */
         $this->session->set('auditplanList', $this->app->getURI(true));
 
         /* Set the pager. */
@@ -1009,9 +1010,11 @@ EOF;
     }
 
     /**
+     * 不符合项列表。
      * My ncs.
      *
      * @param  string $browseType
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -1019,15 +1022,18 @@ EOF;
      * @access public
      * @return void
      */
-    public function nc($browseType = 'assignedToMe', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function nc(string $browseType = 'assignedToMe', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('nc');
+        /* Set session. */
         $this->session->set('ncList', $this->app->getURI(true));
 
+        $this->app->loadLang('nc');
+
         /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
-        $pager  = pager::init($recTotal, $recPerPage, $pageID);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
         $status = $this->app->rawMethod == 'contribute' ? '' : 'active';
         $ncList = $browseType == 'assignedBy' ? $this->my->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'nc') : $this->my->getNcList($browseType, $orderBy, $pager, $status);
 
