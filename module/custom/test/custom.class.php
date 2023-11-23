@@ -404,4 +404,19 @@ class customTest
         if(dao::isError()) return dao::getError();
         return $count;
     }
+
+    /**
+     * 检查系统中是否有瀑布项目数据。
+     * Check if there is waterfall project data in the system.
+     *
+     * @access public
+     * @return int|array
+     */
+    public function hasWaterfallDataTest(): int|array
+    {
+        $count = $this->objectModel->hasWaterfallData();
+
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
 }
