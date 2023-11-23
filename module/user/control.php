@@ -496,7 +496,7 @@ class user extends control
                 ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
                 ->get();
 
-            $this->userZen->checkBeforeCreate($user);
+            $this->userZen->checkBeforeCreateOrEdit($user);
 
             $userID = $this->user->create($user);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
