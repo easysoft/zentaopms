@@ -175,6 +175,10 @@ class model extends baseModel
                 if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);
             }
         }
+        elseif(strpos($misc, 'disabled') !== false)
+        {
+            $enabled = false;
+        }
         else
         {
             if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);

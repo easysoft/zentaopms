@@ -851,6 +851,7 @@ class baseRouter
         $account = isset($_SESSION['user']) ? $_SESSION['user']->account : '';
         if(empty($account) and isset($_POST['account'])) $account = $_POST['account'];
         if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
+        if(empty($account))                              $account = $this->cookie->za;
 
         $vision = '';
         if($this->config->installed and validater::checkAccount($account))
@@ -870,6 +871,7 @@ class baseRouter
         }
 
         [$defaultVision] = explode(',', trim((string) $this->config->visions, ','));
+        if($defaultVision != 'lite' && $defaultVision != 'or') $defaultVision = 'rnd';
         if($vision and !str_contains((string) $this->config->visions, ",{$vision},")) $vision = $defaultVision;
 
         $this->config->vision = $vision ?: $defaultVision;
@@ -1782,7 +1784,7 @@ class baseRouter
             $modulePath = $this->getExtensionRoot() . 'saas' . DS . $moduleName . DS;
             if(is_dir($modulePath) and (file_exists($modulePath . 'control.php') or file_exists($modulePath . 'model.php'))) return $modulePath;
 
-            /* 1. 最后尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
+            /* 1. 尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
             $modulePath = $this->getExtensionRoot() . 'custom' . DS . $moduleName . DS;
             if(is_dir($modulePath) and (file_exists($modulePath . 'control.php') or file_exists($modulePath . 'model.php'))) return $modulePath;
 
@@ -1804,7 +1806,7 @@ class baseRouter
             $modulePath = $this->getExtensionRoot() . 'xuan' . DS . $moduleName . DS;
             if(is_dir($modulePath) and (file_exists($modulePath . 'control.php') or file_exists($modulePath . 'model.php'))) return $modulePath;
 
-            /* 5. 如果通用版本里有此模块，优先使用。 If module is in the open edition, use it. */
+            /* 5. 使用通用版本里的模块。 If module is in the open edition, use it. */
             return $this->getModuleRoot($appName) . $moduleName . DS;
         }
     }
@@ -1869,6 +1871,7 @@ class baseRouter
         }
         if($checkedModule[$var]) return true;
         if(!$exit) return false;
+        if(!$var) return false;
         $this->triggerError("'$var' illegal. ", __FILE__, __LINE__, true);
     }
 
@@ -3618,6 +3621,7 @@ class ztSessionHandler
     public function getSessionFile(string $id): string
     {
         if(!empty($this->sessionFile)) return $this->sessionFile;
+        if(!preg_match('/^\w+$/', $id)) return false;
 
         $sessionID = $id;
         if($this->tagID) $sessionID = md5($id . $this->tagID);
@@ -3666,6 +3670,7 @@ class ztSessionHandler
     public function read(string $id): string|false
     {
         $sessFile = $this->getSessionFile($id);
+        if(!$sessFile) return false;
         if(file_exists($sessFile)) return file_get_contents($sessFile);
 
         if($this->tagID and file_exists($this->rawFile))
@@ -3688,6 +3693,7 @@ class ztSessionHandler
     public function write(string $id, string $sessData): bool
     {
         $sessFile = $this->getSessionFile($id);
+        if(!$sessFile) return false;
         if(md5_file($sessFile) == md5($sessData)) return true;
 
         if(file_put_contents($sessFile, $sessData, LOCK_EX))
