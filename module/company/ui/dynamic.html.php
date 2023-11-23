@@ -155,7 +155,7 @@ else
 
 panel
 (
-    set::id('companyDynamic'),
+    setID('companyDynamic'),
     $content
 );
 
@@ -165,8 +165,8 @@ if(!empty($firstAction))
     $lastDate  = substr($lastAction->originalDate, 0, 10);
     $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
     $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
-    $preLink   = $hasPre ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal=0&date=" . strtotime($firstDate) . "&direction=pre&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy") : 'javascript:;';
-    $nextLink  = $hasNext ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal=0&date=" . strtotime($lastDate) . "&direction=next&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy") : 'javascript:;';
+    $preLink   = $hasPre ? inlink('dynamic', "browseType={$browseType}&param={$param}&recTotal=0&date=" . strtotime($firstDate) . "&direction=pre&userID={$userID}&productID={$productID}&projectID={$projectID}&executionID={$executionID}&orderBy={$orderBy}") : 'javascript:;';
+    $nextLink  = $hasNext ? inlink('dynamic', "browseType={$browseType}&param={$param}&recTotal=0&date=" . strtotime($lastDate) . "&direction=next&userID={$userID}&productID={$productID}&projectID={$projectID}&executionID={$executionID}&orderBy={$orderBy}") : 'javascript:;';
 
     if($hasPre || $hasNext)
     {

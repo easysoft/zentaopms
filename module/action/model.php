@@ -740,7 +740,7 @@ class actionModel extends model
         $actionCondition = $this->getActionCondition();
         if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions'])) return array();
 
-        $condition = "`objectType` IN ('doc', 'doclib')" . $condition = '1=1'? '' : "OR ({$condition})";
+        $condition = "`objectType` IN ('doc', 'doclib')" . ($condition = '1=1'? '' : "OR ({$condition})") . " OR `objectType` NOT IN ('program', 'effort', 'execution')";
 
         $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
         $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
@@ -776,7 +776,7 @@ class actionModel extends model
         $actions = $this->actionTao->getActionListByCondition($condition, $date, $period, $begin, $end, $direction, $account, $beginDate, $productID, $projectID, $executionID, $executions, $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
+        $this->loadModel('common')->saveQueryCondition($condition, 'action', false);
         return $this->transformActions($actions);
     }
 
