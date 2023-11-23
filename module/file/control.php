@@ -110,6 +110,19 @@ class file extends control
     }
 
     /**
+     * Preview a file.
+     *
+     * @param  int    $fileID
+     * @param  string $mouse
+     * @access public
+     * @return void
+     */
+    public function preview($fileID, $mouse = '')
+    {
+        return print($this->fetch('file', 'download', "fileID=$fileID&mouse=$mouse"));
+    }
+
+    /**
      * Down a file.
      *
      * @param  int    $fileID
@@ -572,7 +585,7 @@ class file extends control
      */
     public function read($fileID)
     {
-        if(!$this->loadModel('user')->isLogon()) return print(js::locate($this->createLink('user', 'login')));
+        if(!($this->app->company->guest and $this->app->user->account == 'guest') and !$this->loadModel('user')->isLogon()) return print(js::locate($this->createLink('user', 'login')));
         $file = $this->file->getById($fileID);
         if(empty($file) or !$this->file->fileExists($file)) return false;
 

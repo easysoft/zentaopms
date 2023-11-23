@@ -32,6 +32,7 @@ $lang->file->exportRange   = "Datenbereich";
 $lang->file->defaultTPL    = "Standardvorlage";
 $lang->file->setExportTPL  = "Einstellungen";
 $lang->file->preview       = "Vorschau";
+$lang->file->previewFile   = "Vorschau des Anhangs";
 $lang->file->addFile       = 'Hinzufügen';
 $lang->file->beginUpload   = 'Upload';
 $lang->file->uploadSuccess = 'Hochgeladen!';

@@ -32,6 +32,7 @@ $lang->file->exportRange   = "导出范围";
 $lang->file->defaultTPL    = "默认模板";
 $lang->file->setExportTPL  = "设置";
 $lang->file->preview       = "预览";
+$lang->file->previewFile   = "预览附件";
 $lang->file->addFile       = '添加文件';
 $lang->file->beginUpload   = '开始上传';
 $lang->file->uploadSuccess = '上传成功';

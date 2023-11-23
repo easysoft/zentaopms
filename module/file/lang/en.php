@@ -32,6 +32,7 @@ $lang->file->exportRange   = "Data";
 $lang->file->defaultTPL    = "Default";
 $lang->file->setExportTPL  = "Settings";
 $lang->file->preview       = "Preview";
+$lang->file->previewFile   = "Preview File";
 $lang->file->addFile       = 'Add';
 $lang->file->beginUpload   = 'Click to Upload';
 $lang->file->uploadSuccess = 'Uploaded!';
