@@ -1111,7 +1111,7 @@ class commonModel extends model
             }
             else
             {
-                $item->url = helper::createLink($currentModule, $currentMethod, $vars, '', 0, 0, 1);
+                $item->url = helper::createLink($currentModule, $currentMethod, $vars, '', false, 0, 1);
             }
 
             $items[] = $item;
