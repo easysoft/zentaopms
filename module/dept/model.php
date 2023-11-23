@@ -3,77 +3,118 @@ declare(strict_types=1);
 /**
  * The model file of dept module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
- * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dept
- * @version     $Id: model.php 4210 2013-01-22 01:06:12Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
-?>
-<?php
 class deptModel extends model
 {
     /**
+     * 根据部门ID获取部门信息。
      * Get a department by id.
      *
-     * @param  int    $deptID
+     * @param  int          $deptID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByID($deptID)
+    public function getByID(int $deptID): object|false
     {
         return $this->dao->findById($deptID)->from(TABLE_DEPT)->fetch();
     }
 
     /**
+     * 获取所有部门名称。
      * Get all department names.
      *
-     * @param  int   $deptID
      * @access public
-     * @return object
+     * @return array|false
      */
-    public function getDeptPairs($deptID = 0)
+    public function getDeptPairs(): array|false
     {
         return $this->dao->select('id,name')->from(TABLE_DEPT)->fetchPairs();
     }
 
     /**
-     * Build the query.
+     * 获取下一级部门的部门信息。
+     * Get sons of a department.
      *
-     * @param  int    $rootDeptID
+     * @param  int         $deptID
      * @access public
-     * @return string
+     * @return array|false
      */
-    public function buildMenuQuery($rootDeptID)
+    public function getSons(int $deptID): array|false
     {
-        $rootDept = $this->fetchByID($rootDeptID);
-        if(!$rootDept)
-        {
-            $rootDept = new stdclass();
-            $rootDept->path = '';
-        }
-
-        return $this->dao->select('*')->from(TABLE_DEPT)
-            ->beginIF($rootDeptID > 0)->where('path')->like($rootDept->path . '%')->fi()
-            ->orderBy('grade desc, `order`')
-            ->get();
+        return $this->dao->select('*')->from(TABLE_DEPT)->where('parent')->eq($deptID)->orderBy('`order`')->fetchAll();
     }
 
     /**
+     * 获取当前部门以及父级部门的部门信息。
+     * Get parents.
+     *
+     * @param  int         $deptID
+     * @access public
+     * @return array|false
+     */
+    public function getParents(int $deptID): array|false
+    {
+        if(!$deptID) return array();
+        $path = $this->dao->select('path')->from(TABLE_DEPT)->where('id')->eq($deptID)->fetch('path');
+        $path = substr($path, 1, -1);
+        if(empty($path)) return array();
+
+        return $this->dao->select('*')->from(TABLE_DEPT)->where('id')->in($path)->orderBy('grade')->fetchAll();
+    }
+
+    /**
+     * 获取所有子级部门的部门信息。
+     * Get child departments info.
+     *
+     * @param  int         $rootDeptID
+     * @access public
+     * @return array|false
+     */
+    public function getChildDepts(int $rootDeptID): array|false
+    {
+        $rootDept = $this->fetchByID($rootDeptID);
+        $rootPath = !empty($rootDept) ? $rootDept->path : '';
+
+        return $this->dao->select('*')->from(TABLE_DEPT)
+            ->beginIF($rootPath)->where('path')->like("{$rootPath}%")->fi()
+            ->orderBy('grade desc, `order`')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 获取所有自己部门的ID。
+     * Get all childs.
+     *
+     * @param  int    $deptID
+     * @access public
+     * @return array
+     */
+    public function getAllChildID(int $deptID): array
+    {
+        $dept = $this->fetchByID($deptID);
+        if(!$dept) return array();
+
+        $childs = $this->dao->select('id')->from(TABLE_DEPT)->where('path')->like($dept->path . '%')->fetchPairs();
+        return array_keys($childs);
+    }
+
+    /**
+     * 获取带层级结构的部门列表。
      * Get option menu of departments.
      *
      * @param  int    $rootDeptID
      * @access public
      * @return array
      */
-    public function getOptionMenu($rootDeptID = 0)
+    public function getOptionMenu(int $rootDeptID = 0)
     {
         $deptMenu = array();
-        $stmt = $this->app->dbQuery($this->buildMenuQuery($rootDeptID));
-        $depts = array();
-        while($dept = $stmt->fetch()) $depts[$dept->id] = $dept;
-
+        $depts    = $this->getChildDepts($rootDeptID);
         foreach($depts as $dept)
         {
             $parentDepts = explode(',', $dept->path);
@@ -86,29 +127,10 @@ class deptModel extends model
             $deptName = rtrim($deptName, '/');
             $deptName .= "|$dept->id\n";
 
-            if(isset($deptMenu[$dept->id]) and !empty($deptMenu[$dept->id]))
-            {
-                if(isset($deptMenu[$dept->parent]))
-                {
-                    $deptMenu[$dept->parent] .= $deptName;
-                }
-                else
-                {
-                    $deptMenu[$dept->parent] = $deptName;;
-                }
-                $deptMenu[$dept->parent] .= $deptMenu[$dept->id];
-            }
-            else
-            {
-                if(isset($deptMenu[$dept->parent]) and !empty($deptMenu[$dept->parent]))
-                {
-                    $deptMenu[$dept->parent] .= $deptName;
-                }
-                else
-                {
-                    $deptMenu[$dept->parent] = $deptName;
-                }
-            }
+            if(!isset($deptMenu[$dept->parent])) $deptMenu[$dept->parent] = '';
+
+            $deptMenu[$dept->parent] .= $deptName;
+            if(!empty($deptMenu[$dept->id])) $deptMenu[$dept->parent] .= $deptMenu[$dept->id];
         }
 
         krsort($deptMenu);
@@ -127,6 +149,7 @@ class deptModel extends model
     }
 
     /**
+     * 获取部门树形结构所需的数据。
      * Get the treemenu of departments.
      *
      * @param  int    $rootDeptID
@@ -138,9 +161,8 @@ class deptModel extends model
     public function getTreeMenu(int $rootDeptID = 0, array $userFunc = array(), int $param = 0): array
     {
         $deptMenu = array();
-        $data     = new stdclass();
-        $stmt     = $this->app->dbQuery($this->buildMenuQuery($rootDeptID));
-        while($dept = $stmt->fetch())
+        $depts    = $this->getChildDepts($rootDeptID);
+        foreach($depts as $dept)
         {
             $data = new stdclass();
             $data->id     = $dept->id;
@@ -181,199 +203,127 @@ class deptModel extends model
     }
 
     /**
-     * Create the manage link.
-     *
-     * @param  object    $dept
-     * @access public
-     * @return string
-     */
-    public function createManageLink($dept)
-    {
-        $linkHtml  = $dept->name;
-        if(common::hasPriv('dept', 'edit')) $linkHtml .= ' ' . html::a(helper::createLink('dept', 'edit', "deptid={$dept->id}"), $this->lang->edit, '', 'data-toggle="modal" data-type="ajax"');
-        if(common::hasPriv('dept', 'browse')) $linkHtml .= ' ' . html::a(helper::createLink('dept', 'browse', "deptid={$dept->id}"), $this->lang->dept->manageChild);
-        if(common::hasPriv('dept', 'delete')) $linkHtml .= ' ' . html::a(helper::createLink('dept', 'delete', "deptid={$dept->id}"), $this->lang->delete, 'hiddenwin');
-        if(common::hasPriv('dept', 'updateOrder')) $linkHtml .= ' ' . html::input("orders[$dept->id]", $dept->order, 'style="width:30px;text-align:center"');
-        return $linkHtml;
-    }
-
-    /**
+     * 生成用户列表页面部门的跳转链接。
      * Create the member link.
      *
-     * @param  int    $dept
+     * @param  object $dept
      * @access public
      * @return string
      */
-    public function createMemberLink($dept)
+    public function createMemberLink(object $dept): string
     {
         return helper::createLink('company', 'browse', "browseType=inside&dept={$dept->id}");
     }
 
     /**
-     * Create the traingoal member link.
-     *
-     * @param  int    $dept
-     * @access public
-     * @return string
-     */
-    public function traingoalMemberLink($dept, $planID)
-    {
-        $linkHtml = html::a(helper::createLink('traingoal', 'browse', "goalID={$planID}&type=company&dept={$dept->id}&"), $dept->name, '_self', "id='dept{$dept->id}'");
-        return $linkHtml;
-    }
-
-    /**
+     * 生成权限成员维护页面部门的跳转链接。
      * Create the group manage members link.
      *
-     * @param  int    $dept
+     * @param  object $dept
      * @param  int    $groupID
      * @access public
      * @return string
      */
-    public function createGroupManageMemberLink($dept, $groupID)
+    public function createGroupManageMemberLink(object $dept, int $groupID): string
     {
         return helper::createLink('group', 'managemember', "groupID=$groupID&deptID={$dept->id}");
     }
 
     /**
+     * 生成维护管理对象页面部门的跳转链接。
      * Create the group manage program admin link.
      *
-     * @param  int    $dept
+     * @param  object $dept
      * @param  int    $groupID
      * @access public
      * @return string
      */
-    public function createManageProjectAdminLink($dept, $groupID)
+    public function createManageProjectAdminLink(object $dept, int $groupID): string
     {
         return helper::createLink('group', 'manageProjectAdmin', "groupID=$groupID&deptID={$dept->id}");
     }
 
     /**
-     * Get sons of a department.
-     *
-     * @param  int    $deptID
-     * @access public
-     * @return array
-     */
-    public function getSons($deptID)
-    {
-        return $this->dao->select('*')->from(TABLE_DEPT)->where('parent')->eq($deptID)->orderBy('`order`')->fetchAll();
-    }
-
-    /**
-     * Get all childs.
-     *
-     * @param  int    $deptID
-     * @access public
-     * @return array
-     */
-    public function getAllChildId($deptID)
-    {
-        if($deptID == 0) return array();
-
-        $dept = $this->fetchByID($deptID);
-        if(empty($dept)) return array();
-
-        $childs = $this->dao->select('id')->from(TABLE_DEPT)->where('path')->like($dept->path . '%')->fetchPairs();
-        return array_keys($childs);
-    }
-
-    /**
-     * Get parents.
-     *
-     * @param  int    $deptID
-     * @access public
-     * @return array
-     */
-    public function getParents($deptID)
-    {
-        if($deptID == 0) return array();
-        $path = $this->dao->select('path')->from(TABLE_DEPT)->where('id')->eq($deptID)->fetch('path');
-        $path = substr($path, 1, -1);
-        if(empty($path)) return array();
-        return $this->dao->select('*')->from(TABLE_DEPT)->where('id')->in($path)->orderBy('grade')->fetchAll();
-    }
-
-    /**
+     * 部门排序。
      * Update order.
      *
-     * @param  int    $orders
+     * @param  array  $orders
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateOrder($orders)
+    public function updateOrder($orders): bool
     {
         foreach($orders as $deptID => $order) $this->dao->update(TABLE_DEPT)->set('`order`')->eq($order)->where('id')->eq($deptID)->exec();
+        return !dao::isError();
     }
 
     /**
+     * 新增或者编辑部门。
      * Manage childs.
      *
      * @param  int    $parentDeptID
-     * @param  string $childs
+     * @param  array  $childs
+     * @param  int    $maxOrder
      * @access public
      * @return array
      */
-    public function manageChild(int $parentDeptID, $childs)
+    public function manageChild(int $parentDeptID, array $childs, int $maxOrder = 0): array
     {
         $parentDept = $this->fetchByID($parentDeptID);
-        if($parentDept)
-        {
-            $grade      = $parentDept->grade + 1;
-            $parentPath = $parentDept->path;
-        }
-        else
-        {
-            $grade      = 1;
-            $parentPath = ',';
-        }
+        $grade      = $parentDept ? ($parentDept->grade + 1) : 1;
+        $parentPath = $parentDept ? $parentDept->path : ',';
 
-        $i = 1;
+        $index      = 1;
         $deptIDList = array();
         foreach($childs as $deptID => $deptName)
         {
             if(empty($deptName)) continue;
             if(is_numeric($deptID))
             {
+                /* 处理新插入的部门数据。 */
                 $dept = new stdclass();
                 $dept->name   = strip_tags($deptName);
                 $dept->parent = $parentDeptID;
                 $dept->grade  = $grade;
-                $dept->order  = $this->post->maxOrder + $i * 10;
+                $dept->order  = $maxOrder + $index * 10;
                 $this->dao->insert(TABLE_DEPT)->data($dept)->exec();
+
                 $deptID       = $this->dao->lastInsertID();
                 $deptIDList[] = $deptID;
-                $childPath    = $parentPath . "$deptID,";
+                $index ++;
+
+                $childPath = $parentPath . "$deptID,";
                 $this->dao->update(TABLE_DEPT)->set('path')->eq($childPath)->where('id')->eq($deptID)->exec();
-                $i++;
             }
             else
             {
+                /* 处理可能发生的变更名称。 */
                 $deptID = str_replace('id', '', $deptID);
                 $this->dao->update(TABLE_DEPT)->set('name')->eq(strip_tags($deptName))->where('id')->eq($deptID)->exec();
             }
         }
 
+        /* 返回新增的部门ID。 */
         return $deptIDList;
     }
 
     /**
+     * 获取部门下对应的用户列表。
      * Get users of a deparment.
      *
-     * @param  string  $browseType inside|outside|all
-     * @param  int     $deptID
-     * @param  object  $pager
-     * @param  string  $orderBy
+     * @param  string      $browseType inside|outside|all
+     * @param  array       $depts
+     * @param  string      $orderBy
+     * @param  object      $pager
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function getUsers($browseType = 'inside', $deptID = 0, $pager = null, $orderBy = 'id')
+    public function getUsers(string $browseType = 'inside', array $depts = array(), string $orderBy = 'id', object $pager = null): array|false
     {
         return $this->dao->select('*')->from(TABLE_USER)
             ->where('deleted')->eq(0)
-            ->beginIF($browseType == 'inside')->andWhere('type')->eq('inside')->fi()
-            ->beginIF($browseType == 'outside')->andWhere('type')->eq('outside')->fi()
-            ->beginIF($deptID)->andWhere('dept')->in($deptID)->fi()
+            ->beginIF($browseType == 'inside' || $browseType == 'outside')->andWhere('type')->eq($browseType)->fi()
+            ->beginIF($depts)->andWhere('dept')->in($depts)->fi()
             ->beginIF($this->config->vision)->andWhere("CONCAT(',', visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -381,17 +331,20 @@ class deptModel extends model
     }
 
     /**
+     * 获取指定部门下的用户列表。
      * Get user pairs of a department.
      *
-     * @param  int    $deptID
-     * @param  string $key     id|account
-     * @param  string $type    inside|outside
-     * @param  string $params  all
+     * @param  int         $deptID
+     * @param  string      $key     id|account
+     * @param  string      $type    inside|outside
+     * @param  string      $params  all
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function getDeptUserPairs($deptID = 0, $key = 'account', $type = 'inside', $params = '')
+    public function getDeptUserPairs(int $deptID = 0, string $key = 'account', string $type = 'inside', string $params = ''): array|false
     {
+        if(!$deptID) return array();
+
         $childDepts = $this->getAllChildID($deptID);
         $keyField   = $key == 'id' ? 'id' : 'account';
         $type       = $type == 'outside' ? 'outside' : 'inside';
@@ -400,13 +353,13 @@ class deptModel extends model
             ->where('deleted')->eq(0)
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF($childDepts)->andWhere('dept')->in($childDepts)->fi()
-            ->beginIF($deptID === '0')->andWhere('dept')->eq($deptID)->fi()
             ->beginIF($this->config->vision)->andWhere("CONCAT(',', visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->orderBy('account')
             ->fetchPairs();
     }
 
     /**
+     * 整理部门的path和grade。
      * Fix dept path.
      *
      * @access public
@@ -415,8 +368,8 @@ class deptModel extends model
     public function fixDeptPath()
     {
         /* Get all depts grouped by parent. */
-        $groupDepts = $this->dao->select('id, parent')->from(TABLE_DEPT)->fetchGroup('parent', 'id');
         $depts      = array();
+        $groupDepts = $this->dao->select('id, parent')->from(TABLE_DEPT)->fetchGroup('parent', 'id');
 
         /* Cycle the groupDepts until it has no item any more. */
         while(count($groupDepts) > 0)
@@ -450,22 +403,23 @@ class deptModel extends model
         }
 
         /* Save depts to database. */
-        foreach($depts as $dept)
-        {
-            $this->dao->update(TABLE_DEPT)->data($dept)->where('id')->eq($dept->id)->exec();
-        }
+        foreach($depts as $dept) $this->dao->update(TABLE_DEPT)->data($dept)->where('id')->eq($dept->id)->exec();
+
+        return !dao::isError();
     }
 
     /**
-     * Get data structure
+     * 获取带有层级关系的部门结构。
+     * Get data structure.
+     *
      * @access public
      * @return array
      */
-    public function getDataStructure()
+    public function getDataStructure(): array
     {
+        $tree       = array();
         $users      = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted|all');
         $treeGroups = $this->dao->select('*')->from(TABLE_DEPT)->orderBy('grade_desc,`order`')->fetchGroup('parent', 'id');
-        $tree       = array();
         foreach($treeGroups as $parent => $groups)
         {
             foreach($groups as $deptID => $node)
@@ -491,13 +445,13 @@ class deptModel extends model
      * 删除部门。
      * Delete dept.
      *
+     * @param  int    $deptID
      * @access public
-     * @return array
+     * @return bool
      */
-    public function deleteDept($deptID): bool
+    public function deleteDept(int $deptID): bool
     {
         $this->dao->delete()->from(TABLE_DEPT)->where('id')->eq($deptID)->exec();
-
         return !dao::isError();
     }
 }
