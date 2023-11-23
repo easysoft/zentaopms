@@ -15,14 +15,14 @@ class testcaseZen extends testcase
      * 设置列表页面的 cookie。
      * Set browse cookie.
      *
-     * @param  int       $productID
-     * @param  string    $branch
-     * @param  string    $browseType
-     * @param  int       $param
+     * @param  int         $productID
+     * @param  string|bool $branch
+     * @param  string      $browseType
+     * @param  int         $param
      * @access protected
      * @return void
      */
-    protected function setBrowseCookie(string $productID, string $branch, string $browseType, string $param): void
+    protected function setBrowseCookie(int $productID, string|bool $branch, string $browseType, string $param): void
     {
         helper::setcookie('preProductID', $productID);
         helper::setcookie('preBranch', $branch);
@@ -41,19 +41,21 @@ class testcaseZen extends testcase
      * 设置列表页面的 session。
      * Set Browse session.
      *
-     * @param  int       $productID
-     * @param  int       $moduleID
-     * @param  string    $browseType
-     * @param  string    $orderBy
+     * @param  int         $productID
+     * @param  string|bool $branch
+     * @param  int         $moduleID
+     * @param  string      $browseType
+     * @param  string      $orderBy
      * @access protected
      * @return void
      */
-    protected function setBrowseSession(int $productID, int $moduleID, string $browseType, string $orderBy): void
+    protected function setBrowseSession(int $productID, string|bool $branch, int $moduleID, string $browseType, string $orderBy): void
     {
         if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
 
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
         $this->session->set('productID', $productID);
+        $this->session->set('branch', $branch, 'qa');
         $this->session->set('moduleID', $moduleID);
         $this->session->set('browseType', $browseType);
         $this->session->set('orderBy', $orderBy);
@@ -65,14 +67,13 @@ class testcaseZen extends testcase
      * 设置列表页面的导航。
      * Set menu in browse.
      *
-     * @param  int       $productID
-     * @param  string    $branch
-     * @param  string    $browseType
-     * @param  int       $projectID
+     * @param  int         $productID
+     * @param  string|bool $branch
+     * @param  int         $projectID
      * @access protected
      * @return void
      */
-    protected function setBrowseMenu(int $productID, string $branch, string $browseType, int $projectID): void
+    protected function setBrowseMenu(int $productID, string|bool $branch, int $projectID): void
     {
         /* 在不同的应用中，设置不同的导航。 */
         /* Set menu, save session. */
@@ -100,19 +101,18 @@ class testcaseZen extends testcase
      * 设置菜单。
      * Set menu.
      *
-     * @param  int       $projectID
-     * @param  int       $executionID
-     * @param  int       $productID
-     * @param  string    $branch
-     * @param  string    $case
+     * @param  int        $projectID
+     * @param  int        $executionID
+     * @param  int        $productID
+     * @param  string|int $branch
      * @access protected
      * @return void
      */
-    protected function setMenu(int $projectID, int $executionID, int $productID, string $branch)
+    protected function setMenu(int $projectID, int $executionID, int $productID, string|int $branch)
     {
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($projectID);
         if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($executionID);
-        if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->tab == 'qa') $this->testcase->setMenu($productID, $branch);
 
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
@@ -768,7 +768,7 @@ class testcaseZen extends testcase
             $this->view->executionID = $executionID;
         }
 
-        if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $case->product, $case->branch);
+        if($this->app->tab == 'qa') $this->testcase->setMenu($case->product, $case->branch);
     }
 
     /**
@@ -806,6 +806,7 @@ class testcaseZen extends testcase
         $this->view->isLibCase = false;
         $this->view->product   = $product;
         $this->view->products  = $this->products;
+        $this->view->branch    = $this->cookie->preBranch;
 
         $this->assignBranchForEdit($case, $executionID);
         $this->assignStoriesForEdit($case);

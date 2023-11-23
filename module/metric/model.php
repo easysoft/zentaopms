@@ -1486,18 +1486,19 @@ class metricModel extends model
      * 获取度量项的收集周期。
      * Get collect cycle of metric.
      *
-     * @param  array  $results
+     * @param  array|object $record
      * @access public
      * @return string|null
      */
-    public function getMetricCycle($results)
+    public function getMetricCycle($record)
     {
-        $firstRecord = (object)current($results);
+        $record = (object)$record;
 
-        foreach($this->config->metric->dateList as $date)
-        {
-            if(isset($firstRecord->$date)) return $date;
-        }
+        if(isset($record->year) && !isset($record->month) && !isset($record->week)) return 'year';
+        if(isset($record->year, $record->month) && !isset($record->day)) return 'month';
+        if(isset($record->year, $record->month, $record->day)) return 'day';
+        if(isset($record->year, $record->week)) return 'week';
+
         return null;
     }
 }

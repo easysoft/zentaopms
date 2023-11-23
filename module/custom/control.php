@@ -317,6 +317,7 @@ class custom extends control
     }
 
     /**
+     * 流程设置。
      * Set flow.
      *
      * @access public
@@ -326,13 +327,14 @@ class custom extends control
     {
         if($_POST)
         {
-            $this->custom->setConcept();
+            $this->custom->setConcept($_POST['sprintConcept']);
             if($this->config->edition != 'max') $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title = $this->lang->custom->flow;
+
         $this->display();
     }
 

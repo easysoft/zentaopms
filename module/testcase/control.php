@@ -93,15 +93,15 @@ class testcase extends control
         /* 把访问的产品ID等状态信息保存到session和cookie中。*/
         /* Save the product id user last visited to session and cookie. */
         $productID  = $this->app->tab != 'project' ? $this->product->checkAccess($productID, $this->products) : $productID;
-        $branch     = ($this->cookie->preBranch !== '' && $branch === '') ? $this->cookie->preBranch : $branch;
+        $branch     = $this->cookie->preBranch && $this->cookie->preBranch !== '' && $branch === '' ? $this->cookie->preBranch : $branch;
         $browseType = strtolower($browseType);
-        $moduleID   = ($browseType == 'bymodule') ? $param : 0;
-        $suiteID    = ($browseType == 'bysuite')  ? $param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? $this->cookie->caseSuite : 0) : 0);
-        $queryID    = ($browseType == 'bysearch') ? $param : 0;
+        $moduleID   = $browseType == 'bymodule' ? $param : 0;
+        $suiteID    = $browseType == 'bysuite'  ? $param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? $this->cookie->caseSuite : 0) : 0);
+        $queryID    = $browseType == 'bysearch' ? $param : 0;
 
-        $this->testcaseZen->setBrowseCookie((string)$productID, $branch, $browseType, (string)$param);
-        $this->testcaseZen->setBrowseSession($productID, $moduleID, $browseType, $orderBy);
-        $this->testcaseZen->setBrowseMenu($productID, $branch, $browseType, $projectID);
+        $this->testcaseZen->setBrowseCookie($productID, $branch, $browseType, (string)$param);
+        $this->testcaseZen->setBrowseSession($productID, $branch, $moduleID, $browseType, $orderBy);
+        $this->testcaseZen->setBrowseMenu($productID, $branch, $projectID);
         $this->testcaseZen->buildBrowseSearchForm($productID, $branch, $queryID, $projectID);
         $this->testcaseZen->assignCasesAndScenesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID);
         $this->testcaseZen->assignModuleTreeForBrowse($productID, $branch, $projectID);
@@ -137,7 +137,7 @@ class testcase extends control
         /* 设置菜单。 */
         /* Set menu. */
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu((int)$this->session->project);
-        if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->tab == 'qa') $this->testcase->setMenu($productID, $branch);
 
         /* 展示变量. */
         /* Show the variables. */
@@ -322,7 +322,7 @@ class testcase extends control
 
         /* 设置菜单。 */
         /* Set menu. */
-        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
+        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($productID, $branch);
 
         /* 指派产品、分支、需求、自定义字段等变量. */
         /* Assign the variables about product, branches, story and custom fields. */
@@ -741,7 +741,7 @@ class testcase extends control
 
         /* 设置导航。*/
         /* Set menu. */
-        $this->testcase->setMenu($this->products, $case->product, $case->branch);
+        $this->testcase->setMenu($case->product, $case->branch);
 
         /* 构建搜索表单。*/
         /* Build the search form. */
@@ -1139,7 +1139,7 @@ class testcase extends control
 
         /* 设置菜单。 */
         /* Set menu. */
-        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
+        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($productID, $branch);
 
         $browseType = strtolower($browseType);
 
@@ -1191,7 +1191,7 @@ class testcase extends control
             return $this->testcaseZen->responseAfterShowImport($productID, $branch, $maxImport, $tmpFile);
         }
 
-        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
+        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($productID, $branch);
 
         /* Get imported data. */
         if(!empty($maxImport) && file_exists($tmpFile))
@@ -1755,7 +1755,7 @@ class testcase extends control
 
         /* Set menu. */
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu(null);
-        if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->tab == 'qa') $this->testcase->setMenu($productID, $branch);
 
         $product  = $this->product->getByID($productID);
         $branches = (isset($product->type) && $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();

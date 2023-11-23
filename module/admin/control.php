@@ -237,6 +237,7 @@ class admin extends control
     }
 
     /**
+     * 系统功能配置。
      * Set closed features config.
      *
      * @access public
@@ -244,26 +245,26 @@ class admin extends control
      */
     public function setModule()
     {
+        $this->loadModel('setting');
+
         if($_POST)
         {
+            $data = form::data()->get();
             $closedFeatures = '';
-            if(isset($_POST['module']))
+            foreach($data->module as $module => $checked)
             {
-                foreach($this->post->module as $module => $checked)
-                {
-                    if($module == 'myScore') continue;
-                    if(!$checked) $closedFeatures .= "$module,";
-                }
+                if($module == 'myScore') continue;
+                if(!$checked) $closedFeatures .= "$module,";
             }
-            $closedFeatures = rtrim($closedFeatures, ',');
-            $this->loadModel('setting')->setItem('system.common.closedFeatures', $closedFeatures);
-            $this->setting->setItem('system.common.global.scoreStatus', $this->post->module['myScore']);
-            $this->setting->setItem('system.custom.URAndSR', $this->post->module['productUR']);
+
+            $this->setting->setItem('system.common.closedFeatures', rtrim($closedFeatures, ','));
+            $this->setting->setItem('system.common.global.scoreStatus', $data->module['myScore']);
+            $this->setting->setItem('system.custom.URAndSR', $data->module['productUR']);
             $this->loadModel('custom')->processMeasrecordCron();
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => '$.apps.updateAppMenu'));
         }
         $this->view->title            = $this->lang->admin->setModuleIndex;
-        $this->view->closedFeatures   = $this->loadModel('setting')->getItem('owner=system&module=common&section=&key=closedFeatures');
+        $this->view->closedFeatures   = $this->setting->getItem('owner=system&module=common&section=&key=closedFeatures');
         $this->view->useScore         = $this->setting->getItem('owner=system&module=common&global&key=scoreStatus');
         $this->view->disabledFeatures = $this->setting->getItem('owner=system&module=common&section=&key=disabledFeatures');
         $this->display();

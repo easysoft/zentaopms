@@ -15,18 +15,15 @@ declare(strict_types=1);
 class testcaseModel extends model
 {
     /**
+     * 设置菜单。
      * Set menu.
      *
-     * @param  array  $products
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $moduleID
-     * @param  int    $suiteID
-     * @param  string $orderBy
+     * @param  int        $productID
+     * @param  int|string $branch
      * @access public
      * @return void
      */
-    public function setMenu($products, $productID, $branch = 0, $moduleID = 0, $suiteID = 0, $orderBy = 'id_desc')
+    public function setMenu(int $productID, int|string $branch = 0): void
     {
         $this->loadModel('qa')->setMenu($productID, $branch);
     }

@@ -263,23 +263,16 @@ class customTest
     /**
      * Test set product and project and sprint concept.
      *
-     * @param  int    $sprintConcept
+     * @param  string    $sprintConcept
      * @access public
-     * @return object
+     * @return int|array
      */
-    public function setConceptTest($sprintConcept)
+    public function setConceptTest(string $sprintConcept): int|array
     {
-        global $tester;
-
-        $_POST['sprintConcept'] = $sprintConcept;
-        $this->objectModel->setConcept();
-
+        $this->objectModel->setConcept($sprintConcept);
         if(dao::isError()) return dao::getError();
-        $objects = $tester->dao->select('`id`')->from(TABLE_BLOCK)->where('source')->eq('execution')->fetch();
 
-        unset($_POST);
-
-        return $objects;
+        return $this->objectModel->loadModel('setting')->getItem('owner=system&module=custom&key=sprintConcept');
     }
 
     /**
