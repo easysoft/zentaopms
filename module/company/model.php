@@ -90,22 +90,6 @@ class companyModel extends model
     }
 
     /**
-     * Get company-user pairs.
-     *
-     * @access public
-     * @return array
-     */
-    public function getCompanyUserPairs()
-    {
-        $pairs = $this->dao->select("t1.account, CONCAT_WS('/', t2.name, t1.realname)")->from(TABLE_USER)->alias('t1')
-            ->leftJoin(TABLE_COMPANY)->alias('t2')
-            ->on('t1.company = t2.id')
-            ->fetchPairs();
-
-        return $pairs;
-    }
-
-    /**
      * 更新公司信息。
      * Update a company.
      *
