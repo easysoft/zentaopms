@@ -957,11 +957,11 @@ class blockZen extends block
             }
             elseif(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
             {
-                $project->pv = isset($PVGroup[$projectID]['value']) ? $PVGroup[$projectID]['value'] * 100 : 0;
-                $project->ev = isset($EVGroup[$projectID]['value']) ? $EVGroup[$projectID]['value'] * 100 : 0;
-                $project->ac = isset($ACGroup[$projectID]['value']) ? $ACGroup[$projectID]['value'] * 100 : 0;
-                $project->sv = isset($SVGroup[$projectID]['value']) ? $SVGroup[$projectID]['value'] * 100 : 0;
-                $project->cv = isset($CVGroup[$projectID]['value']) ? $CVGroup[$projectID]['value'] * 100 : 0;
+                $project->pv = isset($PVGroup[$projectID]['value']) ? (int)$PVGroup[$projectID]['value'] * 100 : 0;
+                $project->ev = isset($EVGroup[$projectID]['value']) ? (int)$EVGroup[$projectID]['value'] * 100 : 0;
+                $project->ac = isset($ACGroup[$projectID]['value']) ? (int)$ACGroup[$projectID]['value'] * 100 : 0;
+                $project->sv = isset($SVGroup[$projectID]['value']) ? (int)$SVGroup[$projectID]['value'] * 100 : 0;
+                $project->cv = isset($CVGroup[$projectID]['value']) ? (int)$CVGroup[$projectID]['value'] * 100 : 0;
             }
             if($project->end != LONG_TIME) $project->remainingDays = helper::diffDate($project->end, $today);
         }
