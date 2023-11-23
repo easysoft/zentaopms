@@ -1186,6 +1186,7 @@ EOF;
     }
 
     /**
+     * 团队列表。
      * My team.
      *
      * @param  string $orderBy
@@ -1195,12 +1196,12 @@ EOF;
      * @access public
      * @return void
      */
-    public function team($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function team(string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
         $this->lang->navGroup->my = 'system';
 
         /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Append id for second sort. */
@@ -1216,7 +1217,6 @@ EOF;
         $this->view->deptID     = $deptID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-
         $this->display();
     }
 
