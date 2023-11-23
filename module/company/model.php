@@ -112,6 +112,7 @@ class companyModel extends model
     }
 
     /**
+     * 搭建搜索表单。
      * Build search form.
      *
      * @param  int    $queryID
@@ -119,7 +120,7 @@ class companyModel extends model
      * @access public
      * @return void
      */
-    public function buildSearchForm($queryID, $actionURL)
+    public function buildSearchForm(int $queryID, string $actionURL): void
     {
         $this->config->company->browse->search['actionURL'] = $actionURL;
         $this->config->company->browse->search['queryID']   = $queryID;
