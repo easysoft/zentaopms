@@ -669,7 +669,7 @@ class execution extends control
         }
         else
         {
-            $builds = $this->loadModel('build')->getExecutionBuilds($executionID, $type, $param, $orderBy, $pager);
+            $builds = $this->loadModel('build')->getExecutionBuilds($executionID, $type, (string)$param, $orderBy, $pager);
         }
 
         /* Set view data. */
