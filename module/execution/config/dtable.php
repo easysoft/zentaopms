@@ -11,14 +11,14 @@ $config->execution->dtable->fieldList['rawID']['checkbox'] = true;
 $config->execution->dtable->fieldList['rawID']['width']    = '80';
 $config->execution->dtable->fieldList['rawID']['required'] = true;
 
-$config->execution->dtable->fieldList['name']['title']        = $lang->execution->name;
-$config->execution->dtable->fieldList['name']['name']         = 'nameCol';
-$config->execution->dtable->fieldList['name']['fixed']        = 'left';
-$config->execution->dtable->fieldList['name']['type']         = 'nestedTitle';
-$config->execution->dtable->fieldList['name']['sortType']     = true;
-$config->execution->dtable->fieldList['name']['minWidth']     = '356';
-$config->execution->dtable->fieldList['name']['nestedToggle'] = true;
-$config->execution->dtable->fieldList['name']['required']     = true;
+$config->execution->dtable->fieldList['nameCol']['title']        = $lang->execution->name;
+$config->execution->dtable->fieldList['nameCol']['name']         = 'nameCol';
+$config->execution->dtable->fieldList['nameCol']['fixed']        = 'left';
+$config->execution->dtable->fieldList['nameCol']['type']         = 'nestedTitle';
+$config->execution->dtable->fieldList['nameCol']['sortType']     = true;
+$config->execution->dtable->fieldList['nameCol']['minWidth']     = '356';
+$config->execution->dtable->fieldList['nameCol']['nestedToggle'] = true;
+$config->execution->dtable->fieldList['nameCol']['required']     = true;
 
 if(isset($config->setCode) and $config->setCode == 1)
 {
