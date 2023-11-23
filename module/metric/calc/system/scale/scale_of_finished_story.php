@@ -38,6 +38,7 @@ class scale_of_finished_story extends baseCalc
 
     public function getResult($options = array())
     {
-        return $this->filterByOptions($this->result, $options);
+        $records = $this->getRecords(array('value'));
+        return $this->filterByOptions($records, $options);
     }
 }
