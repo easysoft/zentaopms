@@ -304,7 +304,6 @@ class user extends control
 
         /* Process case for check story changed. */
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
-        $cases = $this->testcase->appendData($cases);
 
         /* Assign. */
         $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->testCase;
@@ -1170,9 +1169,10 @@ class user extends control
         /* Append id for second sort. */
         $orderBy    = $direction == 'next' ? 'date_desc' : 'date_asc';
         $date       = $date ? date('Y-m-d', $date) : '';
-        $actions    = $this->loadModel('action')->getDynamic($user->account, $period, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
-        $dateGroups = $this->action->buildDateGroup($actions, $direction);
+        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
+        $dateGroups = $this->action->buildDateGroup($actions, $direction, $period);
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
+
 
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
@@ -1318,17 +1318,16 @@ class user extends control
     {
         $params = base64_decode($this->get->params);
         parse_str($params, $parsedParams);
-        $users = $this->user->getPairs($parsedParams['params'], $parsedParams['usersToAppended']);
+        $users = $this->user->getPairs(zget($parsedParams, 'params', ''), zget($parsedParams, 'usersToAppended', ''));
 
         $search   = $this->get->search;
         $limit    = $this->get->limit;
         $index    = 0;
         $newUsers = array();
-        if(empty($search)) return array();
         foreach($users as $account => $realname)
         {
             if($index >= $limit) break;
-            if(stripos($account, $search) === false and stripos($realname, $search) === false) continue;
+            if($search && stripos($account, $search) === false and stripos($realname, $search) === false) continue;
             $index ++;
             $newUsers[$account] = $realname;
         }
