@@ -1,15 +1,19 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/custom.class.php';
-su('admin');
-
 /**
 
 title=测试 customModel->updateURAndSR();
+timeout=0
 cid=1
 
 */
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/custom.class.php';
+
+zdTable('lang')->config('lang')->gen(5);
+zdTable('user')->gen(5);
+su('admin');
 
 $key    = array(1, 0);
 $SRName = array('', '软件需求', '软件需求1');
