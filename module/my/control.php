@@ -1221,6 +1221,7 @@ EOF;
     }
 
     /**
+     * 编辑个人信息。
      * Edit profile
      *
      * @access public
@@ -1228,7 +1229,7 @@ EOF;
      */
     public function editProfile()
     {
-        if($this->app->user->account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest', 'load' => array('alter' => 'guest', 'back' => true)));
+        if($this->app->user->account == 'guest') return print(js::alert('guest') . js::locate('back'));
 
         if(!empty($_POST))
         {
@@ -1243,9 +1244,6 @@ EOF;
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('my', 'profile')));
         }
 
-        $this->app->loadConfig('user');
-        $this->app->loadLang('user');
-
         $userGroups = $this->loadModel('group')->getByAccount($this->app->user->account);
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
@@ -1253,7 +1251,6 @@ EOF;
         $this->view->rand       = $this->user->updateSessionRandom();
         $this->view->userGroups = implode(',', array_keys($userGroups));
         $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->fetchPairs('id', 'name');
-
         $this->display();
     }
 
