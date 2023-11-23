@@ -473,4 +473,24 @@ class customTest
         if(dao::isError()) return dao::getError();
         return $count;
     }
+
+    /**
+     * 检查系统中是否有机会数据。
+     * Check if there is opportunity data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasScrumOpportunityDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->objectModel->config->edition;
+
+        $this->objectModel->config->edition = $edition;
+        $count = $this->objectModel->hasScrumOpportunityData();
+
+        $this->objectModel->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
 }
