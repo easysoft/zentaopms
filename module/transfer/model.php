@@ -677,7 +677,7 @@ class transferModel extends model
                 }
 
                 /* if value = 0 or value = 0000:00:00 set value = ''. */
-                if($value == '0' or empty($value) or  substr($value, 0, 4) == '0000') $rows[$id]->$field = '';
+                if(is_string($value) and ($value == '0' or substr($value, 0, 4) == '0000')) $rows[$id]->$field = '';
             }
         }
 
@@ -814,10 +814,8 @@ class transferModel extends model
     {
         $modelDatas = $this->getQueryDatas($model);
 
-        if(isset($fieldList['files']) or property_exists($fieldList, 'files'))
-        {
-            $modelDatas = $this->getFiles($model, $modelDatas);
-        }
+        if(is_object($fieldList)) $fieldList = (array) $fieldList;
+        if(isset($fieldList['files'])) $modelDatas = $this->getFiles($model, $modelDatas);
 
         $rows = !empty($_POST['rows']) ? $_POST['rows'] : '';
         if($rows)
@@ -894,6 +892,11 @@ class transferModel extends model
             return $modelDatas;
         }
 
+        /* Fetch the scene's cases. */
+        if($model == 'testcase') $queryCondition = preg_replace("/AND\s+t[0-9]\.scene\s+=\s+'0'/i", '', $queryCondition);
+
+        $checkedItem = $this->post->checkedItem ? $this->post->checkedItem : $this->cookie->checkedItem;
+
         if($onlyCondition and $queryCondition)
         {
             $table = zget($this->config->objectTables, $model);
@@ -901,7 +904,7 @@ class transferModel extends model
             if($model == 'story') $queryCondition = str_replace('story', 'id', $queryCondition);
             $modelDatas = $this->dao->select('*')->from($table)->alias('t1')
                 ->where($queryCondition)
-                ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
+                ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($checkedItem)->fi()
                 ->fetchAll('id');
         }
         elseif($queryCondition)
@@ -911,7 +914,7 @@ class transferModel extends model
             preg_match_all('/[`"]' . $this->config->db->prefix . $model .'[`"] AS ([\w]+) /', $queryCondition, $matches);
             if(isset($matches[1][0])) $selectKey = "{$matches[1][0]}.id";
 
-            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN(" . ($this->cookie->checkedItem ? $this->cookie->checkedItem : '0') . ")" : ''));
+            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN(" . ($checkedItem ? $checkedItem : '0') . ")" : ''));
             while($row = $stmt->fetch())
             {
                 if($selectKey !== 't1.id' and isset($row->$model) and isset($row->id)) $row->id = $row->$model;
@@ -1453,6 +1456,7 @@ class transferModel extends model
                 {
                     if(!empty($values[$selected])) $options = array($selected => $values[$selected]);
                     if(empty($options) and is_array($values)) $options = array_slice($values, 0, 1, true);
+                    if(!isset($options['']) and !in_array($field, $this->config->transfer->requiredFields)) $options[''] = '';
                 }
 
                 if($control == 'select')       $html .= '<td>' . html::select("$name", $options, $selected, "class='form-control picker-select nopicker' data-field='{$field}' data-index='{$row}'") . '</td>';
@@ -1501,6 +1505,7 @@ class transferModel extends model
                 else $html .= '<td>' . html::input("$name", $selected, "class='form-control autocomplete='off'") . '</td>';
             }
 
+            if(in_array($model, $this->config->transfer->actionModule)) $html .= '<td><a onclick="delItem(this)"><i class="icon-close"></i></a></td>';
             $html .= '</tr>' . "\n";
         }
 

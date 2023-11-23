@@ -206,7 +206,8 @@ class transfer extends control
 
         $fieldList = $this->transfer->initFieldList($model, $fields, false);
 
-        if(empty($fieldList[$field]['values'])) $fieldList[$field]['values'] = array();
+        if(empty($fieldList[$field]['values'])) $fieldList[$field]['values'] = array('' => '');
+        if(!in_array($field, $this->config->transfer->requiredFields)) $fieldList[$field]['values'][''] = '';
 
         $multiple = $fieldList[$field]['control'] == 'multiple' ? 'multiple' : '';
 
