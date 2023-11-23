@@ -1205,18 +1205,19 @@ class customModel extends model
     }
 
     /**
-     * Verify whether there is scrum process data.
+     * 检查系统中是否有项目活动数据。
+     * Check whether there is project activity data in the system.
      *
      * @access public
-     * @return bool
+     * @return int
      */
-    public function hasScrumProcessData()
+    public function hasScrumProcessData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
             return $this->dao->select('id')->from(TABLE_PROGRAMACTIVITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
         }
-        return false;
+        return 0;
     }
 
     /**
