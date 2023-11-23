@@ -373,6 +373,14 @@ class baseRouter
     public $zinErrors = array();
 
     /**
+     * 是否将mysql的错误作为异常抛出。
+     * Whether to throw mysql error as exception.
+     *
+     * @var bool
+     */
+    public $throwError = false;
+
+    /**
      * 构造方法, 设置路径，类，超级变量等。注意：
      * 1.应该使用createApp()方法实例化router类；
      * 2.如果$appRoot为空，框架会根据$appName计算应用路径。
