@@ -341,7 +341,7 @@ class admin extends control
      * 获取验证码。
      * Get the verification code.
      *
-     * @param  string $type
+     * @param  string $type mobile|email
      * @access public
      * @return void
      */
@@ -389,6 +389,7 @@ class admin extends control
     }
 
     /**
+     * 重置密码设置。
      * Reset password setting.
      *
      * @access public
@@ -398,7 +399,8 @@ class admin extends control
     {
         if($_POST)
         {
-            $this->loadModel('setting')->setItem('system.common.resetPWDByMail', $this->post->resetPWDByMail);
+            $resetPWDByMail = form::data()->get()->resetPWDByMail;
+            $this->loadModel('setting')->setItem('system.common.resetPWDByMail', (string)$resetPWDByMail);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 

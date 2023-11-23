@@ -21,3 +21,6 @@ $config->admin->form->setmodule['module'] = array('type'=> 'array', 'required' =
 
 $config->admin->form->log = array();
 $config->admin->form->log['days'] = array('type' => 'int', 'required' => true, 'default' => 30);
+
+$config->admin->form->resetpwdsetting = array();
+$config->admin->form->resetpwdsetting['resetPWDByMail'] = array('type' => 'int', 'required' => true, 'default' => 0);
