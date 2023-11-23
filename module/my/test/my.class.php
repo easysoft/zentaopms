@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 class myTest
 {
     public function __construct()
@@ -210,4 +211,22 @@ class myTest
         return $objects;
     }
 
+    /**
+     * 测试获取流程键值对。
+     * Test get flow paris.
+     *
+     * @access public
+     * @return array|string
+     */
+    public function getFlowPairsTest()
+    {
+        $flows = $this->objectModel->getFlowPairs();
+
+        if(dao::isError()) return dao::getError();
+
+        $return = '';
+        foreach($flows as $module => $name) $return .= "{$module}:{$name},";
+
+        return trim($return, ',');
+    }
 }

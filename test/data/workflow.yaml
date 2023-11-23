@@ -4,12 +4,7 @@ author: automated export
 version: "1.0"
 fields:
   - field: id
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
+    range: 1-100000
   - field: parent
     note: ""
     prefix: ""
@@ -25,12 +20,7 @@ fields:
     loopfix: ""
     format: ""
   - field: type
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
+    range: flow
   - field: navigator
     note: ""
     prefix: ""
@@ -95,12 +85,7 @@ fields:
     loopfix: ""
     format: ""
   - field: buildin
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
+    range: 0
   - field: administrator
     note: ""
     prefix: ""
@@ -130,12 +115,10 @@ fields:
     loopfix: ""
     format: ""
   - field: createdDate
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY/MM/DD"
   - field: editedBy
     note: ""
     prefix: ""
@@ -144,9 +127,7 @@ fields:
     loopfix: ""
     format: ""
   - field: editedDate
-    note: ""
-    prefix: ""
-    postfix: ""
-    loop: 0
-    loopfix: ""
-    format: ""
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YY/MM/DD"

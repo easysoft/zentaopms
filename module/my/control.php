@@ -912,10 +912,11 @@ EOF;
     }
 
     /**
+     * 评审列表。
      * My audits.
      *
      * @param  string $browseType
-     * @param  string $param
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -923,7 +924,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function audit($browseType = 'all', $param = 0, $orderBy = 'time_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function audit(string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
@@ -942,11 +943,11 @@ EOF;
             $reviewList = $this->my->getReviewingList($browseType, $orderBy, $pager);
         }
 
-        $this->view->flows = array();
+        $flows = array();
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
             $this->app->loadLang('approval');
-            $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');
+            $flows = $this->my->getFlowPairs();
         }
 
         $this->view->title       = $this->lang->review->common;
@@ -960,6 +961,7 @@ EOF;
         $this->view->pager       = $pager;
         $this->view->param       = $param;
         $this->view->mode        = 'audit';
+        $this->view->flows       = $flows;
         $this->display();
     }
 

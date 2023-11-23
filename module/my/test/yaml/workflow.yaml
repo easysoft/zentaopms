@@ -1,0 +1,18 @@
+title: table zt_workflow
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: app
+    range: 1-10000
+    prefix: "app"
+  - field: module
+    range: 1-10000
+    prefix: "module"
+  - field: type
+    range: 1-10000
+    prefix: "type"
+  - field: name
+    range: 1-10000
+    prefix: "名称"
+  - field: buildin
+    range: 0{4},1{1}
