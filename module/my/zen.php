@@ -81,9 +81,9 @@ class myZen extends my
      *
      * @param  array     $feedbacks
      * @access protected
-     * @return array
+     * @return void
      */
-    protected function assignRelatedData(array $feedbacks) : array
+    protected function assignRelatedData(array $feedbacks) : void
     {
         $storyIdList = $bugIdList = $todoIdList = $taskIdList = $ticketIdList = array();
         foreach($feedbacks as $feedback)
@@ -100,11 +100,11 @@ class myZen extends my
         $tasks   = $taskIdList   ? $this->loadModel('task')->getByIdList($taskIdList) : array();
         $tickets = $ticketIdList ? $this->loadModel('ticket')->getByList($ticketIdList) : array();
 
-        $this->view->bugs        = $bugs;
-        $this->view->todos       = $todos;
-        $this->view->stories     = $stories;
-        $this->view->tasks       = $tasks;
-        $this->view->tickets     = $tickets;
+        $this->view->bugs    = $bugs;
+        $this->view->todos   = $todos;
+        $this->view->stories = $stories;
+        $this->view->tasks   = $tasks;
+        $this->view->tickets = $tickets;
     }
 
     /**
