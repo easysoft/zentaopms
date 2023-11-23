@@ -9,7 +9,6 @@
  * @version     $Id: model.php 5086 2013-07-10 02:25:22Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-
 ?>
 <?php
 class companyModel extends model
@@ -21,7 +20,7 @@ class companyModel extends model
      * @access public
      * @return object
      */
-    public function getFirst()
+    public function getFirst(): object
     {
         return $this->dao->select('*')->from(TABLE_COMPANY)->orderBy('id')->limit(1)->fetch();
     }
