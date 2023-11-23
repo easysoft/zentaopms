@@ -347,7 +347,7 @@ class testtask extends control
         /* Check if user have permission to access the product to which the testtask belongs. */
         $productID = $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
-        $this->testtaskZen->setMenu($productID, $testtask->branch, $testtask->project, $testtask->execution);
+        $this->testtaskZen->setMenu($productID, (string)$testtask->branch, $testtask->project, $testtask->execution);
 
         /* 预处理部分变量供后面使用。*/
         /* Prepare variables. */
