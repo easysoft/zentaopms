@@ -133,7 +133,7 @@ class actionItem extends wg
         return h::create
         (
             $outerTag,
-            setClass(($type !== 'item' && $type !== 'divider') ? 'nav-item' : '', "$name-$type", $outerClass),
+            setClass(($type !== 'item' && $type !== 'divider' && $type != 'text') ? 'nav-item' : '', "$name-$type", $outerClass),
             set($outerProps),
             $this->buildItem()
         );
