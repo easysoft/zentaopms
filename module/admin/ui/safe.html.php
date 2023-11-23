@@ -82,7 +82,7 @@ div
                     (
                         set::name('mode'),
                         set::items($lang->admin->safe->modeList),
-                        set::value(isset($config->safe->mode) ? $config->safe->mode : 0,),
+                        set::value(isset($config->safe->mode) ? $config->safe->mode : 0),
                         set::inline(true)
                     ),
                     span
@@ -159,7 +159,7 @@ div
                 set::name('changeWeak'),
                 set::control('radioListInline'),
                 set::items($lang->admin->safe->modifyPasswordList),
-                set::value(isset($config->safe->changeWeak) ? $config->safe->changeWeak : 0,)
+                set::value(isset($config->safe->changeWeak) ? $config->safe->changeWeak : 0)
             )
         ),
         formRow
@@ -170,7 +170,7 @@ div
                 set::name('modifyPasswordFirstLogin'),
                 set::control('radioListInline'),
                 set::items($lang->admin->safe->modifyPasswordList),
-                set::value(isset($config->safe->modifyPasswordFirstLogin) ? $config->safe->modifyPasswordFirstLogin : 0,)
+                set::value(isset($config->safe->modifyPasswordFirstLogin) ? $config->safe->modifyPasswordFirstLogin : 0)
             )
         ),
         formRow
@@ -184,7 +184,7 @@ div
                     (
                         set::name('loginCaptcha'),
                         set::items($lang->admin->safe->loginCaptchaList),
-                        set::value(isset($config->safe->loginCaptcha) ? $config->safe->loginCaptcha : 0,),
+                        set::value(isset($config->safe->loginCaptcha) ? $config->safe->loginCaptcha : 0),
                         set::inline(true),
                         set::disabled(!extension_loaded('gd'))
                     ),
