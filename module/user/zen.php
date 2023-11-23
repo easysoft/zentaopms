@@ -6,12 +6,13 @@ class userZen extends user
      * Check before creating a user.
      *
      * @param  object $user
+     * @param  bool   $canNoPassword
      * @access public
      * @return bool
      */
-    public function checkBeforeCreate(object $user): bool
+    public function checkBeforeCreateOrEdit(object $user, bool $canNoPassword = false): bool
     {
-        $this->checkPassword($user);
+        $this->checkPassword($user, $canNoPassword);
 
         if(strtolower($user->account) == 'guest') dao::$errors['account'][] = sprintf($this->lang->user->error->reserved, $user->account);
         if(empty($user->verifyPassword) || $user->verifyPassword != md5($this->app->user->password . $this->session->rand)) dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
