@@ -1355,6 +1355,7 @@ class user extends control
      */
     public function ajaxGetGroup($visions, $i = 0, $selected = '')
     {
+        if(!$visions) $visions = $this->config->vision;
         $visions   = explode(',', $visions);
         $groupList = $this->user->getGroupsByVisions($visions);
         if($i)
