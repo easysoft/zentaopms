@@ -389,4 +389,19 @@ class customTest
 
         return $this->objectModel->dao->select('status')->from(TABLE_CRON)->where('command')->like('%methodName=execCrontabQueue')->fetch('status');
     }
+
+    /**
+     * 检查系统中是否有用户需求数据。
+     * Check if there is requirement data in the system.
+     *
+     * @access public
+     * @return int|array
+     */
+    public function hasProductURDataTest(): int|array
+    {
+        $count = $this->objectModel->hasProductURData();
+
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
 }
