@@ -289,8 +289,7 @@ class admin extends control
             return print(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
         }
 
-        $this->view->title      = $this->lang->admin->certifyEmail;
-
+        $this->view->title = $this->lang->admin->certifyEmail;
         $this->view->email = helper::safe64Decode($email);
         $this->display();
     }
@@ -312,8 +311,7 @@ class admin extends control
             return print(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
         }
 
-        $this->view->title      = $this->lang->admin->certifyMobile;
-
+        $this->view->title  = $this->lang->admin->certifyMobile;
         $this->view->mobile = helper::safe64Decode($mobile);
         $this->display();
     }
@@ -334,14 +332,14 @@ class admin extends control
             return print(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
         }
 
-        $this->view->title      = $this->lang->admin->ztCompany;
-
+        $this->view->title  = $this->lang->admin->ztCompany;
         $this->view->fields = explode(',', $fields);
         $this->display();
     }
 
     /**
-     * Ajax send code.
+     * 获取验证码。
+     * Get the verification code.
      *
      * @param  string $type
      * @access public
@@ -353,6 +351,7 @@ class admin extends control
     }
 
     /**
+     * 设置日志保存天数。
      * Set save days of log.
      *
      * @access public
@@ -362,9 +361,10 @@ class admin extends control
     {
         if($_POST)
         {
-            if(!validater::checkInt($this->post->days)) return $this->send(array('result' => 'fail', 'message' => array('days' => sprintf($this->lang->admin->notice->int, $this->lang->admin->days))));
+            $days = form::data()->get()->days;
+            if(!validater::checkInt($days)) return $this->send(array('result' => 'fail', 'message' => array('days' => sprintf($this->lang->admin->notice->int, $this->lang->admin->days))));
 
-            $this->loadModel('setting')->setItem('system.admin.log.saveDays', $this->post->days);
+            $this->loadModel('setting')->setItem('system.admin.log.saveDays', (string)$days);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
