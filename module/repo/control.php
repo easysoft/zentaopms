@@ -99,7 +99,7 @@ class repo extends control
         $repoList = empty($repoList) ? array() : $repoList[$pageID - 1];
 
         /* Get success jobs of sonarqube.*/
-        $sonarRepoList = $this->loadModel('job')->getSonarqubeByRepo(array_keys($repoList));
+        $sonarRepoList = $this->loadModel('job')->getSonarqubeByRepo(helper::arrayColumn($repoList, 'id'));
         $successJobs   = $this->loadModel('compile')->getSuccessJobs(helper::arrayColumn($sonarRepoList, 'id'));
 
         $products = $this->loadModel('product')->getPairs('all', 0, '', 'all');
@@ -283,6 +283,7 @@ class repo extends control
     }
 
     /**
+     * 删除代码库。
      * Delete repo.
      *
      * @param  int    $repoID
@@ -301,6 +302,7 @@ class repo extends control
     }
 
     /**
+     * 用编辑器查看代码库文件。
      * View repo file with monaco editor.
      *
      * @param  int    $repoID
@@ -342,6 +344,7 @@ class repo extends control
     }
 
     /**
+     * 查看代码文件。
      * View repo file.
      *
      * @param  int    $repoID

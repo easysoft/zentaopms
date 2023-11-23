@@ -173,7 +173,7 @@ class metricZen extends metric
      * 根据度量项计算的结果，构建可插入表的度量数据。
      * Build measurements that can be inserted into tables based on the results of the measurements computed.
      *
-     * @param  array    $calcList
+     * @param  array     $calcList
      * @access protected
      * @return array
      */
@@ -184,27 +184,18 @@ class metricZen extends metric
         foreach($calcList as $code => $calc)
         {
             $results = $calc->getResult();
-
             if(!is_array($results) || count($results) == 0) continue;
 
-            $record = (object)current($results);
+            $system = (int)$this->metric->isSystemMetric($results);
 
-            $system = 1;
-            foreach($this->config->metric->excludeGlobal as $exclude)
-            {
-                if(isset($record->$exclude))
-                {
-                    $system = 0;
-                    break;
-                }
-            }
+            $cycle = $this->metric->getMetricCycle($results);
+            $this->metric->clearOutDatedRecords($code, $cycle);
 
             foreach($results as $record)
             {
                 $record = (object)$record;
 
                 if(empty($record->value)) $record->value = 0;
-
                 $record->metricID   = $calc->id;
                 $record->metricCode = $code;
                 $record->date       = $now;

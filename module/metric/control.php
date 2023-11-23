@@ -166,7 +166,6 @@ class metric extends control
                 $this->metricZen->calcMetric($rows, $calcGroup->calcList);
 
                 $records = $this->metricZen->prepareMetricRecord($calcGroup->calcList);
-
                 $this->metric->insertMetricLib($records);
             }
             catch(Exception $e)

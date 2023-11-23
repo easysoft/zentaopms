@@ -345,20 +345,14 @@ class metricModel extends model
      */
     public function getExecutableMetric()
     {
-        $currentWeek = date('w');
-        $currentDay  = date('d');
-        $now         = date('H:i');
-
         $metricList = $this->dao->select('id,code,time')
             ->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
             ->fetchAll();
 
         $excutableMetrics = array();
-        foreach($metricList as $metric)
-        {
-            $excutableMetrics[$metric->id] = $metric->code;
-        }
+        foreach($metricList as $metric) $excutableMetrics[$metric->id] = $metric->code;
+
         return $excutableMetrics;
     }
 
@@ -371,6 +365,56 @@ class metricModel extends model
             ->exec();
 
         return dao::isError();
+    }
+
+    /**
+     * 根据度量项收集周期来清理过期的度量库数据。
+     * Clear outdated metric records by cycle.
+     *
+     * @param  string $code
+     * @param  string $cycle
+     * @access public
+     * @return array
+     */
+    public function clearOutDatedRecords($code, $cycle)
+    {
+        $year    = date('Y');
+        $month   = date('n');
+        $week    = date('W');
+        $day     = date('j');
+
+        if($cycle == 'year')
+        {
+            $this->dao->delete()->from(TABLE_METRICLIB)
+                ->where('metricCode')->eq($code)
+                ->andWhere('year')->eq($year)
+                ->exec();
+        }
+        elseif($cycle == 'month')
+        {
+            $this->dao->delete()->from(TABLE_METRICLIB)
+                ->where('metricCode')->eq($code)
+                ->andWhere('year')->eq($year)
+                ->andWhere('month')->eq($month)
+                ->exec();
+        }
+        elseif($cycle == 'week')
+        {
+            $this->dao->delete()->from(TABLE_METRICLIB)
+                ->where('metricCode')->eq($code)
+                ->andWhere('year')->eq($year)
+                ->andWhere('week')->eq($week)
+                ->exec();
+        }
+        elseif($cycle == 'day')
+        {
+            $this->dao->delete()->from(TABLE_METRICLIB)
+                ->where('metricCode')->eq($code)
+                ->andWhere('year')->eq($year)
+                ->andWhere('month')->eq($month)
+                ->andWhere('day')->eq($day)
+                ->exec();
+        }
     }
 
     /**
@@ -1417,5 +1461,43 @@ class metricModel extends model
         if(strpos($str, "\r") !== false)   $str = str_replace("\r",   $replace, $str);
 
         return $str;
+    }
+
+    /**
+     * 判断是否是按系统统计的度量项。
+     * Determine whether it is metric in system.
+     *
+     * @param  array  $results
+     * @access public
+     * @return bool
+     */
+    public function isSystemMetric($results)
+    {
+        $firstRecord = (object)current($results);
+
+        foreach($this->config->metric->excludeGlobal as $exclude)
+        {
+            if(isset($firstRecord->$exclude)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * 获取度量项的收集周期。
+     * Get collect cycle of metric.
+     *
+     * @param  array  $results
+     * @access public
+     * @return string|null
+     */
+    public function getMetricCycle($results)
+    {
+        $firstRecord = (object)current($results);
+
+        foreach($this->config->metric->dateList as $date)
+        {
+            if(isset($firstRecord->$date)) return $date;
+        }
+        return null;
     }
 }

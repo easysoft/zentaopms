@@ -260,6 +260,7 @@ EOF;
     }
 
     /**
+     * 待办列表。
      * My todos.
      *
      * @param  string $type
@@ -272,10 +273,8 @@ EOF;
      * @access public
      * @return void
      */
-    public function todo($type = 'before', $userID = '', $status = 'all', $orderBy = "date_desc,status,begin", $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function todo(string $type = 'before', string $userID = '', string $status = 'all', string $orderBy = "date_desc,status,begin", int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        if($type == 'before') $status = 'undone';
-
         /* Save session. */
         $uri = $this->app->getURI(true);
         $this->session->set('todoList',     $uri, 'my');
@@ -285,7 +284,7 @@ EOF;
         $this->session->set('testtaskList', $uri, 'my');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -293,26 +292,22 @@ EOF;
         $user    = $this->user->getById($userID, 'id');
         $account = $user->account;
 
-        /* The title and position. */
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
-
-        /* Append id for second sort. */
+        /* Append id for second sort, get todos and tasks. */
         $sort = common::appendOrder($orderBy);
-
+        if($type == 'before') $status = 'undone';
         $todos = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);
         $tasks = $this->loadModel('task')->getUserSuspendedTasks($account);
 
-        $waitCount  = 0;
-        $doingCount = 0;
+        $count = array('wait' => 0, 'doing' => 0);
         foreach($todos as $key => $todo)
         {
-            if($todo->type == 'task' and isset($tasks[$todo->objectID])) unset($todos[$key]);
-            if($todo->status == 'wait')  $waitCount ++;
-            if($todo->status == 'doing') $doingCount ++;
+            if($todo->type == 'task' && isset($tasks[$todo->objectID])) unset($todos[$key]);
+            if($todo->status == 'wait' || $todo->status == 'doing')  $count[$todo->status] ++;
             if($todo->date == '2030-01-01') $todo->date = $this->lang->todo->future;
         }
 
         /* Assign. */
+        $this->view->title        = $this->lang->my->common . $this->lang->colon . $this->lang->my->todo;
         $this->view->todos        = $todos;
         $this->view->date         = (int)$type == 0 ? date(DT_DATE1) : date(DT_DATE1, strtotime($type));
         $this->view->type         = $type;
@@ -322,18 +317,19 @@ EOF;
         $this->view->account      = $this->app->user->account;
         $this->view->times        = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
         $this->view->time         = date::now();
-        $this->view->waitCount    = $waitCount;
-        $this->view->doingCount   = $doingCount;
-        $this->view->importFuture = ($type != 'today');
+        $this->view->waitCount    = $count['wait'];
+        $this->view->doingCount   = $count['doing'];
         $this->view->pager        = $pager;
         $this->view->orderBy      = $orderBy;
         $this->display();
     }
 
     /**
+     * 需求列表。
      * My stories.
      *
      * @param  string $type
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -341,14 +337,13 @@ EOF;
      * @access public
      * @return void
      */
-    public function story($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('story');
         /* Save session. */
         if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
@@ -356,8 +351,9 @@ EOF;
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'planTitle') !== false) $sort = str_replace('planTitle', 'plan', $sort);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
-        $queryID = ($type == 'bysearch') ? (int)$param : 0;
+        $queryID = $type == 'bysearch' ? $param : 0;
 
+        $this->loadModel('story');
         if($type == 'assignedBy')
         {
             $stories = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'story');
@@ -368,23 +364,21 @@ EOF;
         }
         else
         {
-            $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story', false, 'all');
+            $stories = $this->story->getUserStories($this->app->user->account, $type, $sort, $pager, 'story', false, 'all');
         }
-
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
+
+        foreach($stories as $story) $story->estimate = $story->estimate . $this->config->hourUnit;
 
          /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=story&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildStorySearchForm($queryID, $actionURL, $currentMethod);
 
-        foreach($stories as $story) $story->estimate = $story->estimate . $this->config->hourUnit;
-
         /* Assign. */
         $this->view->title    = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->stories  = $stories;
         $this->view->users    = $this->user->getPairs('noletter');
-        $this->view->projects = $this->loadModel('project')->getPairsByProgram();
         $this->view->type     = $type;
         $this->view->param    = $param;
         $this->view->mode     = 'story';
@@ -394,9 +388,11 @@ EOF;
     }
 
     /**
+     * 用户需求列表。
      * My requirements.
      *
      * @param  string $type
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -404,14 +400,13 @@ EOF;
      * @access public
      * @return void
      */
-    public function requirement($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function requirement(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. */
-        $this->loadModel('story');
         if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
@@ -419,8 +414,9 @@ EOF;
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'productTitle') !== false) $sort = str_replace('productTitle', 'product', $sort);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
-        $queryID = ($type == 'bysearch') ? (int)$param : 0;
+        $queryID = ($type == 'bysearch') ? $param : 0;
 
+        $this->loadModel('story');
         if($type == 'assignedBy')
         {
             $stories = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $sort, 'requirement');
@@ -431,23 +427,21 @@ EOF;
         }
         else
         {
-            $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement', false, 'all');
+            $stories = $this->story->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement', false, 'all');
         }
-
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
+
+        foreach($stories as $story) $story->estimate = $story->estimate . $this->config->hourUnit;
 
          /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=requirement&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildRequirementSearchForm($queryID, $actionURL, $currentMethod);
 
-        foreach($stories as $story) $story->estimate = $story->estimate . $this->config->hourUnit;
-
         /* Assign. */
         $this->view->title    = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->stories  = $stories;
         $this->view->users    = $this->user->getPairs('noletter');
-        $this->view->projects = $this->loadModel('project')->getPairsByProgram();
         $this->view->type     = $type;
         $this->view->param    = $param;
         $this->view->mode     = 'requirement';
@@ -457,9 +451,11 @@ EOF;
     }
 
     /**
+     * 任务列表。
      * My tasks
      *
      * @param  string $type
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -467,28 +463,24 @@ EOF;
      * @access public
      * @return void
      */
-    public function task($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function task(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('task');
-        $this->loadModel('execution');
-        $queryID  = ($type == 'bySearch') ? (int)$param : 0;
-
         /* Save session. */
         if($type != 'bySearch')            $this->session->set('myTaskType', $type);
         if($this->app->viewType != 'json') $this->session->set('taskList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $realOrder = $orderBy;
-        if(strpos($orderBy, 'estimateLabel') !== false || strpos($orderBy, 'consumedLabel') !== false || strpos($orderBy, 'leftLabel') !== false) $realOrder = str_replace('Label', '', $realOrder);
-
         /* append id for second sort. */
-        $sort = common::appendOrder($realOrder);
+        $sort = common::appendOrder($orderBy);
+        if(strpos($orderBy, 'estimateLabel') !== false || strpos($orderBy, 'consumedLabel') !== false || strpos($orderBy, 'leftLabel') !== false) $sort = str_replace('Label', '', $sort);
 
         /* Get tasks. */
+        $this->loadModel('task');
+        $queryID = $type == 'bySearch' ? $param : 0;
         if($type == 'assignedBy')
         {
             $tasks = $this->my->getAssignedByMe($this->app->user->account, 0, $pager, $sort, 'task');
@@ -501,30 +493,8 @@ EOF;
         {
             $tasks = $this->task->getUserTasks($this->app->user->account, $type, 0, $pager, $sort, $queryID);
         }
-
         $summary = $this->loadModel('execution')->summary($tasks);
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0) $parents[$task->parent] = $task->parent;
-            $task->estimateLabel = $task->estimate . $this->lang->execution->workHourUnit;
-            $task->consumedLabel = $task->consumed . $this->lang->execution->workHourUnit;
-            $task->leftLabel     = $task->left     . $this->lang->execution->workHourUnit;
-            $task->status        = !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed')) ? $this->lang->my->storyChanged : $task->status;
-            if($task->parent)
-            {
-                if(isset($tasks[$task->parent]))
-                {
-                    $tasks[$task->parent]->hasChild = true;
-                }
-                else
-                {
-                    $task->parent = 0;
-                }
-            }
-        }
-
-        /* Get the story language configuration. */
-        $this->app->loadLang('story');
+        $tasks   = $this->myZen->buildTaskData($tasks);
 
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=task&browseType=bySearch&queryID=myQueryID");
         $this->my->buildTaskSearchForm($queryID, $actionURL);
@@ -555,17 +525,16 @@ EOF;
      * @access public
      * @return void
      */
-    public function bug($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. load Lang. */
         $this->loadModel('bug');
-        $this->app->loadLang('bug');
-        $queryID  = ($type == 'bySearch') ? (int)$param : 0;
+        $queryID  = $type == 'bySearch' ? $param : 0;
         if($type != 'bySearch')            $this->session->set('myBugType', $type);
         if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
@@ -581,9 +550,8 @@ EOF;
         {
             $bugs = $this->bug->getUserBugs($this->app->user->account, $type, $sort, 0, $pager, 0, $queryID);
         }
-
-        $bugs = $this->bug->batchAppendDelayedDays($bugs);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
+        $bugs = $this->bug->batchAppendDelayedDays($bugs);
 
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bySearch&queryID=myQueryID");
         $this->my->buildBugSearchForm($queryID, $actionURL);

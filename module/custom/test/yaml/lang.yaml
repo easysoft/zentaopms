@@ -1,0 +1,18 @@
+title: zt_lang
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: lang
+    range: 'zh-cn'
+  - field: module
+    range: 'custom'
+  - field: section
+    range: 'URSRList'
+  - field: key
+    range: 1-100
+  - field: value
+    range: '`{"SRName":"\\\u8f6f\\\u4ef6\\\u9700\\\u6c42","URName":"\\\u7528\\\u6237\\\u9700\\\u6c42"}`,`{"SRName":"\\\u7814\\\u53d1\\\u9700\\\u6c42","URName":"\\\u7528\\\u6237\\\u9700\\\u6c42"}`,`{"SRName":"\\\u8f6f\\\u9700","URName":"\\\u7528\\\u9700"}`,`{"SRName":"\\\u6545\\\u4e8b","URName":"\\\u53f2\\\u8bd7"}`,`{"SRName":"\\\u9700\\\u6c42","URName":"\\\u7528\\\u6237\\\u9700\\\u6c42"}`'
+  - field: system
+    range: 1{4},0

@@ -15,4 +15,7 @@ pid=1
 */
 
 $editor = new editorTest();
-r($editor->printTreeTest()) && p() && e(1);    //获取todo模块的文件列表
+$tree   = $editor->printTreeTest();
+r($tree[0]->title) && p() && e('todo');                      //检查文件树的title字段。
+r($tree[0]->items[0]->title) && p() && e('model.php');       //检查文件树items字段第一项的title字段
+r($tree[0]->items[0]->items[0]->name) && p() && e('create'); //检查文件数items字段第一项的items字段的name字段

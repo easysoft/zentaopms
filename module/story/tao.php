@@ -308,6 +308,7 @@ class storyTao extends storyModel
             $story->parent = '-1';
             foreach($relationGroups[$story->id] as $SRID => $SRStory)
             {
+                if(empty($SRStory)) continue;
                 $SRStory->parent = $story->id;
                 $story->children[$SRID] = $SRStory;
             }

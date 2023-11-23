@@ -650,9 +650,9 @@ class actionTao extends actionModel
      * @param  string     $direction
      * @param  string     $account
      * @param  string     $beginDate
-     * @param  string     $productID
-     * @param  string     $projectID
-     * @param  string     $executionID
+     * @param  string|int $productID
+     * @param  string|int $projectID
+     * @param  string|int $executionID
      * @param  array      $executions
      * @param  string     $actionCondition
      * @param  string     $orderBy
@@ -660,7 +660,7 @@ class actionTao extends actionModel
      * @access protected
      * @return array|bool
      */
-    protected function getActionListByCondition(string $condition, string $date, string $period, string $begin, string $end, string $direction, string $account, string $beginDate, string $productID, string $projectID, string $executionID, array $executions, string $actionCondition, string $orderBy, int $limit = 50): array|bool
+    protected function getActionListByCondition(string $condition, string $date, string $period, string $begin, string $end, string $direction, string $account, string $beginDate, string|int $productID, string|int $projectID, string|int $executionID, array $executions, string $actionCondition, string $orderBy, int $limit = 50): array|bool
     {
         $actionTable = in_array($period, $this->config->action->latestDateList) ? TABLE_ACTIONRECENT : TABLE_ACTION;
 
@@ -672,11 +672,11 @@ class actionTao extends actionModel
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
             ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
-            ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
+            ->beginIF(is_numeric($productID) && $productID)->andWhere('product')->like("%,$productID,%")->fi()
             ->andWhere('1=1', true)
-            ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
+            ->beginIF(is_numeric($projectID) && $projectID)->andWhere('project')->eq($projectID)->fi()
             ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
-            ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
+            ->beginIF(is_numeric($executionID) && $executionID)->andWhere('execution')->eq($executionID)->fi()
             ->markRight(1)
             /* lite模式下需要排除的一些类型。 */
             /* Types excluded from Lite. */
@@ -690,6 +690,19 @@ class actionTao extends actionModel
             ->orderBy($orderBy)
             ->limit($limit)
             ->fetchAll();
+    }
+
+    /**
+     * 根据条件获取动态表。
+     * Get action table by condition.
+     *
+     * @param  string    $period
+     * @access protected
+     * @return string
+     */
+    protected function getActionTable(string $period): string
+    {
+        return in_array($period, $this->config->action->latestDateList) ? TABLE_ACTIONRECENT : TABLE_ACTION;
     }
 
     /**

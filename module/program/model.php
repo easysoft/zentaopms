@@ -520,6 +520,19 @@ class programModel extends model
     {
         if(empty($projects)) return array();
 
+        /* Get the number of left tasks. */
+        $leftTasks  = array();
+        $executions = $this->loadModel('project')->getExecutionList(array_keys($projects));
+        if($this->cookie->projectType && $this->cookie->projectType == 'bycard')
+        {
+            $leftTasks = $this->dao->select('t2.parent as project, count(*) as tasks')->from(TABLE_TASK)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+                ->where('t1.execution')->in(array_keys($executions))
+                ->andWhere('t1.status')->notIn('cancel,closed')
+                ->groupBy('t2.parent')
+                ->fetchAll('project');
+        }
+
         /* Process projects. */
         $stats = array();
         foreach($projects as $projectID => $project)
@@ -534,11 +547,14 @@ class programModel extends model
             }
 
             /* Merge project team. */
-	    if(!empty($teams))
-	    {
+            $project->teamCount   = 0;
+            $project->teamMembers = array();
+            $project->leftTasks   = isset($data['leftTasks'][$project->id]) ? $data['leftTasks'][$project->id]->tasks : '—';
+            if(!empty($teams))
+            {
                 $project->teamCount   = isset($teams[$project->id]) ? count($teams[$project->id]) : 0;
                 $project->teamMembers = isset($teams[$project->id]) ? array_keys($teams[$project->id]) : array();
-	    }
+            }
 
             $stats[$projectID] = $project;
         }

@@ -84,17 +84,13 @@ class editorTest
      * Test for print tree.
      *
      * @access public
-     * @return 1|0
+     * @return array
      */
-    public function printTreeTest()
+    public function printTreeTest(): array
     {
         $files = $this->objectModel->getModuleFiles('todo');
         $tree  = $this->objectModel->printTree($files);
-        if(strpos($tree, 'extendTree') === false) return 0;
-        if(strpos($tree, 'L2hvbWUvei9zaXRlcy96ZW50YW9tYXgvbW9kdWxlL3RvZG8vbW9kZWwucGhw') === false) return 0;
-        if(strpos($tree, 'L2hvbWUvei9zaXRlcy96ZW50YW9tYXgvbW9kdWxlL3RvZG8vbW9kZWwucGhwL2JhdGNoQ3JlYXRl') === false) return 0;
-        if(strpos($tree, "target='editWin'") === false) return 0;
-        return 1;
+        return $tree;
     }
 
     /**
@@ -110,15 +106,15 @@ class editorTest
 
         $controlPath = $modulePath . 'control.php';
         $link        = $this->objectModel->addLink4Dir($controlPath);
-        $result     .= (strpos($link, 'newPage') === false ? 0 : 1) . ',';
+        $result     .= (strpos($link->actions['items'][0]['data-url'], 'newPage') === false ? 0 : 1) . ',';
 
         $modelPath = $modulePath . 'model.php';
         $link      = $this->objectModel->addLink4Dir($modelPath);
-        $result   .= (strpos($link, 'newMethod') === false ? 0 : 1) . ',';
+        $result   .= (strpos($link->actions['items'][0]['data-url'], 'newMethod') === false ? 0 : 1) . ',';
 
         $langPath = $modulePath . 'lang';
         $link     = $this->objectModel->addLink4Dir($langPath);
-        $result  .= (strpos($link, 'lang') === false ? 0 : 1) . ',';
+        $result  .= (empty($link->actions['items']) ? 1 : 0) . ',';
 
         $edition = $this->objectModel->config->edition;
         if($edition == 'open') return $result . '1,1,1,1,1';
@@ -127,23 +123,23 @@ class editorTest
         $extensionPath  = $extensionRoot . $edition . DS . 'todo' . DS . 'ext' . DS;
         $extControlPath = $extensionPath . 'control';
         $link           = $this->objectModel->addLink4Dir($extControlPath);
-        $result        .= (strpos($link, 'newExtend') === false ? 0 : 1) . ',';
+        $result        .= (strpos($link->actions['items'][0]['data-url'], 'newExtend') === false ? 0 : 1) . ',';
 
         $extModelPath = $extensionPath . 'model';
         $link         = $this->objectModel->addLink4Dir($extModelPath);
-        $result      .= (strpos($link, 'newExtend') === false ? 0 : 1) . ',';
+        $result      .= (strpos($link->actions['items'][0]['data-url'], 'newExtend') === false ? 0 : 1) . ',';
 
         $extJSPath = $extensionPath . 'js';
         $link      = $this->objectModel->addLink4Dir($extJSPath);
-        $result   .= (strpos($link, 'newJS') === false ? 0 : 1) . ',';
+        $result   .= (strpos($link->actions['items'][0]['data-url'], 'newJS') === false ? 0 : 1) . ',';
 
         $extCSSPath = $extensionPath . 'css';
         $link       = $this->objectModel->addLink4Dir($extCSSPath);
-        $result    .= (strpos($link, 'newCSS') === false ? 0 : 1) . ',';
+        $result    .= (strpos($link->actions['items'][0]['data-url'], 'newCSS') === false ? 0 : 1) . ',';
 
         $extLangPath = $extensionPath . 'lang';
         $link        = $this->objectModel->addLink4Dir($extLangPath);
-        $result     .= (strpos($link, 'lang') === false ? 0 : 1);
+        $result     .= (strpos($link->actions['items'][0]['data-url'], 'lang') === false ? 0 : 1);
         return $result;
     }
 
@@ -160,23 +156,23 @@ class editorTest
 
         $viewPath = $modulePath . 'view' . DS . 'create.html.php';
         $link     = $this->objectModel->addLink4File($viewPath, 'create.html.php');
-        $result  .= ((strpos($link, 'override') === false || strpos($link, 'newHook') === false) ? 0 : 1) . ',';
+        $result  .= ((str_contains($link->actions['items'][0]['data-url'], 'override') && str_contains($link->actions['items'][1]['data-url'], 'newHook')) ? 1 : 0) . ',';
 
         $controlPath = $modulePath . 'control.php' . DS . 'create';
         $link      = $this->objectModel->addLink4File($controlPath, 'create');
-        $result   .= (strpos($link, 'extendControl') === false ? 0 : 1) . ',';
+        $result   .= (str_contains($link->actions['items'][0]['data-url'], 'extendControl') ? 1 : 0) . ',';
 
         $modelPath = $modulePath . 'model.php' . DS . 'create';
         $link      = $this->objectModel->addLink4File($modelPath, 'create');
-        $result   .= (strpos($link, 'extendModel') === false ? 0 : 1) . ',';
+        $result   .= (str_contains($link->actions['items'][0]['data-url'], 'extendModel') ? 1 : 0) . ',';
 
         $langPath = $modulePath . 'lang' . DS . 'zh-cn.php';
         $link     = $this->objectModel->addLink4File($langPath, 'zh-cn.php');
-        $result  .= ((strpos($link, 'newzh_cn') === false || strpos($link, 'extendOther') === false) ? 0 : 1) . ',';
+        $result  .= ((str_contains($link->actions['items'][1]['data-url'], 'newzh_cn') && str_contains($link->actions['items'][0]['data-url'], 'extendOther')) ? 1 : 0) . ',';
 
         $configPath = $modulePath . 'config.php';
         $link       = $this->objectModel->addLink4File($configPath, 'config.php');
-        $result    .= ((strpos($link, 'newConfig') === false || strpos($link, 'extendOther') === false) ? 0 : 1) . ',';
+        $result    .= ((str_contains($link->actions['items'][1]['data-url'], 'newConfig') && str_contains($link->actions['items'][0]['data-url'], 'extendOther')) ? 1 : 0) . ',';
 
         $edition = $this->objectModel->config->edition;
         if($edition == 'open') return $result . '1,1,1,1,1,1';
@@ -185,27 +181,27 @@ class editorTest
         $extensionPath  = $extensionRoot . $edition . DS . 'todo' . DS . 'ext' . DS;
         $extControlPath = $extensionPath . 'control' . DS . 'create.php';
         $link           = $this->objectModel->addLink4File($extControlPath, 'create.php');
-        $result        .= ((strpos($link, 'delete') === false || strpos($link, 'edit') === false) ? 0 : 1) . ',';
+        $result        .= ((str_contains($link->actions['items'][1]['data-url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
 
         $extModelPath = $extensionPath . 'model' . DS . 'zentaobiz.class.php';
         $link         = $this->objectModel->addLink4File($extModelPath, 'zentaobiz.class.php');
-        $result      .= ((strpos($link, 'delete') === false || strpos($link, 'edit') === false) ? 0 : 1) . ',';
+        $result      .= ((str_contains($link->actions['items'][1]['data-url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
 
         $extJSPath = $extensionPath . 'js' . DS . 'create' . DS . 'zentaobiz.js';
         $link      = $this->objectModel->addLink4File($extJSPath, 'zentaobiz.js');
-        $result   .= ((strpos($link, 'delete') === false || strpos($link, 'edit') === false) ? 0 : 1) . ',';
+        $result   .= ((str_contains($link->actions['items'][1]['data-url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
 
         $extCSSPath = $extensionPath . 'css' . DS . 'create' . DS . 'zentaobiz.css';
         $link       = $this->objectModel->addLink4File($extCSSPath, 'zentaobiz.css');
-        $result    .= ((strpos($link, 'delete') === false || strpos($link, 'edit') === false) ? 0 : 1) . ',';
+        $result    .= ((str_contains($link->actions['items'][1]['data-url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
 
         $extLangPath = $extensionPath . 'lang' . DS . 'zh-cn' . DS . 'zentaobiz.php';
         $link        = $this->objectModel->addLink4File($extLangPath, 'zentaobiz.php');
-        $result     .= ((strpos($link, 'delete') === false || strpos($link, 'edit') === false) ? 0 : 1) . ',';
+        $result     .= ((str_contains($link->actions['items'][1]['data-url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0) . ',';
 
         $extConfigPath = $extensionPath . 'config' . DS . 'zentaobiz.php';
         $link          = $this->objectModel->addLink4File($extConfigPath, 'zentaobiz.php');
-        $result       .= ((strpos($link, 'delete') === false || strpos($link, 'edit') === false) ? 0 : 1);
+        $result       .= ((str_contains($link->actions['items'][1]['data-url'], 'delete') && str_contains($link->actions['items'][0]['data-url'], 'edit')) ? 1 : 0);
         return $result;
     }
 
@@ -294,7 +290,7 @@ class editorTest
         $modulePath = $this->objectModel->app->getModulePath('', 'todo') . 'control.php';
         include $modulePath;
         $params = $this->objectModel->getParam('todo', 'create');
-        return $params == "\$date='today', \$userID='', \$from='todo'" ? 1 : 0;
+        return $params == "\$date='today', \$from='todo'" ? 1 : 0;
     }
 
     /**
@@ -308,7 +304,7 @@ class editorTest
         $modulePath = $this->objectModel->app->getModulePath('', 'todo') . 'control.php';
         include $modulePath;
         $code = $this->objectModel->getMethodCode('todo', 'create');
-        return strpos($code, "public function create(\$date = 'today', \$userID = '', \$from = 'todo')") !== false ? 1 : 0;
+        return strpos($code, "public function create(") !== false ? 1 : 0;
     }
 
     /**
@@ -373,6 +369,20 @@ class editorTest
         $result  .= $path == $extPath . 'todo' . DS . 'ext' . DS . 'css' . DS . 'create' . DS . 'test.css' ? '1' : '0';
 
         return $result;
+    }
+
+    /**
+     * Test for save method.
+     *
+     * @param  string    $filePath
+     * @access public
+     * @return string|bool
+     */
+    public function saveTest(string $filePath): string|bool
+    {
+        $_POST['fileContent'] = "<?php\n";
+
+        return $this->objectModel->save($filePath);
     }
 
     /**

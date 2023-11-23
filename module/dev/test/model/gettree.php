@@ -19,11 +19,13 @@ pid=1
 */
 
 global $tester;
-$tester->loadModel('dev');
+$devModel = $tester->loadModel('dev');
+$devModel->app->moduleName = 'dev';
+$devModel->app->methodName = 'index';
 
 $activeList = array('', 'index', 'zt_todo');
 $typeList   = array('', 'tree', 'module', 'table');
-r($tester->dev->getTree($activeList[0], $typeList[0])) && p() && e('0');                  // 测试传入空值的情况
-r($tester->dev->getTree($activeList[0], $typeList[1])) && p() && e('0');                  // 测试传入错误类型的情况
-r($tester->dev->getTree($activeList[1], $typeList[2])) && p('0:key,active') && e('my,1'); // 测试获取type=module模块树，并检查高亮情况
-r($tester->dev->getTree($activeList[2], $typeList[3])) && p('0:key,active') && e('my,1'); // 测试获取type=table模块树，并检查高亮情况
+r($devModel->getTree($activeList[0], $typeList[0])) && p() && e('0');                  // 测试传入空值的情况
+r($devModel->getTree($activeList[0], $typeList[1])) && p() && e('0');                  // 测试传入错误类型的情况
+r($devModel->getTree($activeList[1], $typeList[2])) && p('0:key,active') && e('my,1'); // 测试获取type=module模块树，并检查高亮情况
+r($devModel->getTree($activeList[2], $typeList[3])) && p('0:key,active') && e('my,1'); // 测试获取type=table模块树，并检查高亮情况

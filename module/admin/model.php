@@ -20,9 +20,9 @@ class adminModel extends model
      * @param  string $url
      * @param  string $formvars
      * @access public
-     * @return void
+     * @return string
      */
-    public function postAPI($url, $formvars = '')
+    public function postAPI(string $url, string $formvars = ''): string
     {
         return common::http($url, $formvars);
     }

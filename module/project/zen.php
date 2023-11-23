@@ -332,13 +332,13 @@ class projectZen extends project
                     $productPlans[$productID] = array();
                     if(isset($plans[$productID][BRANCH_MAIN]))
                     {
-                        foreach($plans[$productID][BRANCH_MAIN] as $plan) $productPlans[$productID][] = array('text' => $plan->title, 'value' => $plan->id);
+                        foreach($plans[$productID][BRANCH_MAIN] as $plan) $productPlans[$productID][$plan->id] = array('text' => $plan->title, 'value' => $plan->id);
                     }
                 }
 
                 if(!empty($plans[$productID][$branchID]))
                 {
-                    foreach($plans[$productID][$branchID] as $plan) $productPlans[$productID][] = array('text' => $plan->title, 'value' => $plan->id);
+                    foreach($plans[$productID][$branchID] as $plan) $productPlans[$productID][$plan->id] = array('text' => $plan->title, 'value' => $plan->id);
                 }
 
                 if(!empty($projectStories[$productID][$branchID]) || !empty($projectBranches[$productID][$branchID]))
@@ -348,16 +348,30 @@ class projectZen extends project
                     array_push($unmodifiableBranches, $branchID);
                 }
             }
+            if(!empty($linkedProduct->plans))
+            {
+                foreach($linkedProduct->plans as $linkedPlans)
+                {
+                    $planList = explode(',', $linkedPlans);
+                    $planList = array_filter($planList);
+                    foreach($planList as $planID)
+                    {
+                        if(isset($plans[$productID][$planID])) continue;
+                        $productPlans[$productID][$planID] = array('text' => '', 'value' => $planID);
+                    }
+                }
+            }
         }
 
         $productPlansOrder = array();
         foreach($productPlans as $productID => $plan)
         {
-            $orderPlans    = $this->loadModel('productPlan')->getByIDList(array_keys($plan));
-            $orderPlans    = $this->productPlan->relationBranch($orderPlans);
+            $orderPlans    = $this->loadModel('productplan')->getByIDList(array_keys($plan));
+            $orderPlans    = $this->productplan->relationBranch($orderPlans);
             $orderPlansMap = array_keys($orderPlans);
             foreach($orderPlansMap as $planMapID)
             {
+                if(empty($plan['title'])) $productPlans[$productID][$planMapID]['text'] = $orderPlans[$planMapID]->title;
                 $productPlansOrder[$productID][$planMapID] = $productPlans[$productID][$planMapID];
             }
         }

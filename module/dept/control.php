@@ -3,11 +3,10 @@ declare(strict_types=1);
 /**
  * The control file of dept module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2015 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
- * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dept
- * @version     $Id: control.php 4157 2013-01-20 07:09:42Z wwccss $
  * @link        http://www.zentao.net
  */
 class dept extends control
@@ -58,7 +57,8 @@ class dept extends control
     {
         if(!empty($_POST))
         {
-            $deptIDList = $this->dept->manageChild($_POST['parentDeptID'], $_POST['depts']);
+            $formData   = form::data($this->config->dept->form->manage)->get();
+            $deptIDList = $this->dept->manageChild($formData->parentDeptID, $formData->depts);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'idList' => $deptIDList));
         }
     }
@@ -103,31 +103,35 @@ class dept extends control
      *
      * @param  int    $deptID
      * @access public
-     * @return string
+     * @return void
      */
-    public function delete(int $deptID): string
+    public function delete(int $deptID)
     {
-        /* Check this dept when delete. */
-        $sons  = $this->dept->getSons($deptID);
-        $users = $this->dept->getUsers('all', $deptID);
+        /* 部门下有子部门的无法被删除。 */
+        $sons = $this->dept->getSons($deptID);
         if($sons)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasSons));
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->dept->error->hasSons}');"));
         }
+
+        /* 部门下有人员的无法被删除。 */
+        $users = $this->dept->getUsers('all', $deptID);
         if($users)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasUsers));
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->dept->error->hasUsers}');"));
         }
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
         $this->dept->deleteDept($deptID);
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'status' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 
     /**
-     * Ajax get users
+     * 获取部门下的用户列表。
+     * Ajax get dept users.
      *
      * @param  int    $dept
      * @param  string $user
@@ -135,9 +139,12 @@ class dept extends control
      * @access public
      * @return void
      */
-    public function ajaxGetUsers($dept, $user = '', $key = 'account')
+    public function ajaxGetUsers(int $dept, string $user = '', string $key = 'account')
     {
+        $items = array();
         $users = $this->dept->getDeptUserPairs($dept, $key);
-        return print(html::select('user', $users, $user, "class='form-control chosen'"));
+        foreach($users as $userID => $userName) $items[] = array('text' => $userName, 'value' => $userID);
+
+        return print(json_encode($items));
     }
 }

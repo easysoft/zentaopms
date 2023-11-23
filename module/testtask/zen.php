@@ -6,14 +6,14 @@ class testtaskZen extends testtask
      * 根据不同情况设置菜单。
      * Set menu according to different situations.
      *
-     * @param  int       $productID
-     * @param  int       $branch
-     * @param  int       $projectID
-     * @param  int       $executionID
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  int        $projectID
+     * @param  int        $executionID
      * @access protected
      * @return void
      */
-    protected function setMenu(int $productID, int $branch, int $projectID, int $executionID)
+    protected function setMenu(int $productID, int|string $branch, int $projectID, int $executionID)
     {
         if($this->app->tab == 'project')
         {
@@ -87,7 +87,7 @@ class testtaskZen extends testtask
         $searchConfig['params']['scene']['values']   = $this->testcase->getSceneMenu($product->id);
         $searchConfig['params']['product']['values'] = array($product->id => $product->name);
 
-        $build = $this->loadModel('build')->getByID($task->build);
+        $build = $this->loadModel('build')->getByID((int)$task->build);
         if($build)
         {
             $searchConfig['params']['story']['values'] = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($build->stories)->fetchPairs();
@@ -286,7 +286,7 @@ class testtaskZen extends testtask
         $this->view->title          = $product->name . $this->lang->colon . $this->lang->testtask->cases;
         $this->view->runs           = $this->loadModel('testcase')->appendData($runs, 'run');
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst|noletter');
-        $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($product->id, 'case', 0, array('treeModel', 'createTestTaskLink'), $testtask->id, $testtask->branch);
+        $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($product->id, 'case', 0, array('treeModel', 'createTestTaskLink'), (string)$testtask->id, $testtask->branch ? $testtask->branch : '0');
         $this->view->automation     = $this->loadModel('zanode')->getAutomationByProduct($product->id);
         $this->view->suiteName      = $browseType == 'bysuite' ? zget($suites, $param, $this->lang->testtask->browseBySuite) : $this->lang->testtask->browseBySuite;
         $this->view->canBeChanged   = common::canBeChanged('testtask', $testtask);
@@ -367,7 +367,7 @@ class testtaskZen extends testtask
         $productID   = $productID;
         $projectID   = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
         $executionID = $task->execution;
-        $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, $projectID);
+        $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, '0', $projectID);
         if($executionID && !isset($executions[$executionID]))
         {
             $execution = $this->loadModel('execution')->getById($executionID);

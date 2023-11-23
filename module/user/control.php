@@ -117,7 +117,7 @@ class user extends control
 
         /* Modify story title. */
         $this->loadModel('story');
-        if($storyType == 'requirement') $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+        if($storyType == 'requirement') $this->lang->story->title = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
 
         /* Assign. */
         $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->story;
@@ -134,48 +134,50 @@ class user extends control
     }
 
     /**
-     * Tasks of a user.
+     * 查看某个用户的任务。
+     * View user's tasks.
      *
      * @param  int    $userID
      * @param  string $type
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function task($userID, $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function task(int $userID, string $type = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save the session. */
         $this->session->set('taskList', $this->app->getURI(true), 'execution');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $user    = $this->user->getById($userID, 'id');
-        $account = $user->account;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        $user   = $this->user->getById($userID, 'id');
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'Label') !== false) $sort = str_replace('Label', '', $sort);
 
         /* Assign. */
-        $this->view->userList = $this->user->setUserList($users, $userID);
-        $this->view->title    = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
-        $this->view->tabID    = 'task';
-        $this->view->tasks    = $this->loadModel('task')->getUserTasks($account, $type, 0, $pager, $sort);
-        $this->view->type     = $type;
-        $this->view->orderBy  = $orderBy;
-        $this->view->user     = $user;
-        $this->view->pager    = $pager;
+        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->task;
+        $this->view->tasks     = $this->loadModel('task')->getUserTasks($user->account, $type, 0, $pager, $sort);
+        $this->view->deptUsers = $users;
+        $this->view->user      = $user;
+        $this->view->type      = $type;
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
         $this->display();
     }
 
     /**
-     * User bugs.
+     * 查看某个用户的 bug。
+     * View user's bugs.
      *
      * @param  int    $userID
      * @param  string $type
@@ -186,40 +188,38 @@ class user extends control
      * @access public
      * @return void
      */
-    public function bug($userID, $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug(int $userID, string $type = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save the session. */
         $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $user    = $this->user->getById($userID, 'id');
-        $account = $user->account;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
-
-        /* Set menu. */
-        $this->view->userList = $this->user->setUserList($users, $userID);
+        $user   = $this->user->getById($userID, 'id');
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
         /* Load the lang of bug module. */
         $this->app->loadLang('bug');
 
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
-        $this->view->tabID      = 'bug';
-        $this->view->bugs       = $this->loadModel('bug')->getUserBugs($account, $type, $orderBy, 0, $pager);
-        $this->view->type       = $type;
-        $this->view->user       = $user;
-        $this->view->orderBy    = $orderBy;
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->pager      = $pager;
+        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->bug;
+        $this->view->bugs      = $this->loadModel('bug')->getUserBugs($user->account, $type, $orderBy, 0, $pager);
+        $this->view->users     = $this->user->getPairs('noletter');
+        $this->view->deptUsers = $users;
+        $this->view->user      = $user;
+        $this->view->type      = $type;
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
 
         $this->display();
     }
 
     /**
-     * User's testtask
+     * 查看某个用户的测试单。
+     * View user's test tasks.
      *
      * @param  int    $userID
      * @param  string $orderBy
@@ -229,43 +229,38 @@ class user extends control
      * @access public
      * @return void
      */
-    public function testtask($userID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testtask(int $userID, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-
-        $user    = $this->user->getById($userID, 'id');
-        $account = $user->account;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
-
-        /* Set menu. */
-        $this->view->userList = $this->user->setUserList($users, $userID);
-
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
         $this->session->set('buildList', $this->app->getURI(true), 'execution');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $user   = $this->user->getById($userID, 'id');
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
         $this->app->loadLang('testcase');
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
 
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testTask;
-        $this->view->tasks      = $this->loadModel('testtask')->getByUser($account, $pager, $sort);
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->user       = $user;
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
+        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->testTask;
+        $this->view->tasks     = $this->loadModel('testtask')->getByUser($user->account, $pager, $sort);
+        $this->view->deptUsers = $users;
+        $this->view->user      = $user;
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
         $this->display();
     }
 
     /**
-     * User's test case.
+     * 查看某个用户的测试用例。
+     * View user's test cases.
      *
      * @param  int    $userID
      * @param  string $type
@@ -276,20 +271,20 @@ class user extends control
      * @access public
      * @return void
      */
-    public function testcase($userID, $type = 'case2Him', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase(int $userID, string $type = 'case2Him', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session, load lang. */
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
         $this->app->loadLang('testcase');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $user    = $this->user->getById($userID, 'id');
-        $account = $user->account;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        $user   = $this->user->getById($userID, 'id');
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
@@ -298,67 +293,60 @@ class user extends control
         $cases = array();
         if($type == 'case2Him')
         {
-            $cases = $this->loadModel('testcase')->getByAssignedTo($account, $auto = '', $sort, $pager);
+            $cases = $this->loadModel('testcase')->getByAssignedTo($user->account, '', $sort, $pager);
         }
         elseif($type == 'caseByHim')
         {
-            $cases = $this->loadModel('testcase')->getByOpenedBy($account, $auto = '', $sort, $pager);
+            $cases = $this->loadModel('testcase')->getByOpenedBy($user->account, '', $sort, $pager);
         }
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'case2Him' ? false : true);
 
         /* Process case for check story changed. */
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
         $cases = $this->testcase->appendData($cases);
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'case2Him' ? false : true);
-
         /* Assign. */
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testCase;
-        $this->view->user       = $user;
-        $this->view->cases      = $cases;
-        $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->tabID      = 'test';
-        $this->view->type       = $type;
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->userList   = $this->user->setUserList($users, $userID);
+        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->testCase;
+        $this->view->users     = $this->user->getPairs('noletter');
+        $this->view->cases     = $cases;
+        $this->view->deptUsers = $users;
+        $this->view->user      = $user;
+        $this->view->type      = $type;
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
 
         $this->display();
     }
 
     /**
-     * User executions.
+     * 查看某个用户的执行。
+     * View user's executions.
      *
      * @param  int    $userID
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function execution($userID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function execution(int $userID, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $uri = $this->app->getURI(true);
-        $this->session->set('executionList', $uri, 'execution');
+        $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
-        $user    = $this->user->getById($userID, 'id');
-        $account = $user->account;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        $user   = $this->user->getById($userID, 'id');
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-
-        /* Set the menus. */
-        $this->loadModel('project');
-        $this->view->userList = $this->user->setUserList($users, $userID);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->execution;
-        $this->view->tabID      = 'project';
-        $this->view->executions = $this->user->getObjects($account, 'execution', 'all', $orderBy, $pager);
+        $this->view->executions = $this->user->getObjects($user->account, 'execution', 'all', $orderBy, $pager);
+        $this->view->deptUsers  = $users;
         $this->view->user       = $user;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
@@ -367,7 +355,8 @@ class user extends control
     }
 
     /**
-     * User issues.
+     * 查看某个用户的问题。
+     * View user's issues.
      *
      * @param  int    $userID
      * @param  string $type
@@ -378,36 +367,34 @@ class user extends control
      * @access public
      * @return void
      */
-    public function issue($userID, $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function issue(int $userID, string $type = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $uri = $this->app->getURI(true);
-        $this->session->set('issueList', $uri, 'project');
+        $this->session->set('issueList', $this->app->getURI(true), 'project');
 
-        $user    = $this->user->getById($userID, 'id');
-        $account = $user->account;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        $user   = $this->user->getById($userID, 'id');
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Set the menus. */
-        $this->view->userList = $this->user->setUserList($users, $userID);
-
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->issue;
-        $this->view->issues     = $this->loadModel('issue')->getUserIssues($type, 0, $account, $orderBy, $pager);
-        $this->view->user       = $user;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->type       = $type;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
+        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->issue;
+        $this->view->issues    = $this->loadModel('issue')->getUserIssues($type, 0, $user->account, $orderBy, $pager);
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->deptUsers = $users;
+        $this->view->user      = $user;
+        $this->view->type      = $type;
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
 
         $this->display();
     }
 
     /**
-     * User risks.
+     * 查看某个用户的风险。
+     * View user's risks.
      *
      * @param  int    $userID
      * @param  string $type
@@ -418,79 +405,78 @@ class user extends control
      * @access public
      * @return void
      */
-    public function risk($userID, $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function risk(int $userID, string $type = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $uri = $this->app->getURI(true);
-        $this->session->set('riskList', $uri, 'project');
+        $this->session->set('riskList', $this->app->getURI(true), 'project');
 
-        $user    = $this->user->getById($userID, 'id');
-        $account = $user->account;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        $user   = $this->user->getById($userID, 'id');
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        /* Set the menus. */
-        $this->view->userList = $this->user->setUserList($users, $userID);
-
-        $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->risk;
-        $this->view->risks      = $this->loadModel('risk')->getUserRisks($type, $account, $orderBy, $pager);
-        $this->view->user       = $user;
-        $this->view->type       = $type;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
+        $this->view->title     = $this->lang->user->common . $this->lang->colon . $this->lang->user->risk;
+        $this->view->risks     = $this->loadModel('risk')->getUserRisks($type, $user->account, $orderBy, $pager);
+        $this->view->deptUsers = $users;
+        $this->view->user      = $user;
+        $this->view->type      = $type;
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
 
         $this->display();
     }
 
     /**
-     * The profile of a user.
+     * 查看某个用户的档案。
+     * View user's archives.
      *
      * @param  int    $userID
      * @access public
      * @return void
      */
-    public function profile($userID = '')
+    public function profile(int $userID = 0)
     {
-        if(empty($userID)) $userID = $this->app->user->id;
-
-        $user    = $this->user->getById($userID, 'id');
-        $account = $user->account;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        $user   = $userID ? $this->user->getById($userID, 'id') : $this->app->user;
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
         $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
-        $this->view->user         = $user;
-        $this->view->groups       = $this->loadModel('group')->getByAccount($account);
+        $this->view->groups       = $this->loadModel('group')->getByAccount($user->account);
         $this->view->deptPath     = $this->loadModel('dept')->getParents($user->dept);
         $this->view->personalData = $this->user->getPersonalData($user->account);
-        $this->view->userList     = $this->user->setUserList($users, $userID);
+        $this->view->deptUsers    = $users;
+        $this->view->user         = $user;
 
         $this->display();
     }
 
     /**
-     * Set the referer.
+     * 设置来源地址。
+     * Set referer.
      *
-     * @param  string   $referer
+     * @param  string $referer
      * @access public
      * @return void
      */
-    public function setReferer($referer = '')
+    public function setReferer(string $referer = '')
     {
         $this->referer = $this->server->http_referer ? $this->server->http_referer: '';
         if(!empty($referer)) $this->referer = helper::safe64Decode($referer);
         if($this->post->referer) $this->referer = $this->post->referer;
 
-        /* Build zentao link regular. */
+        /* 构建禅道链接的正则表达式。*/
+        /* Build zentao link regular expression. */
         $webRoot = $this->config->webRoot;
         $linkReg = $webRoot . 'index.php?' . $this->config->moduleVar . '=\w+&' . $this->config->methodVar . '=\w+';
         if($this->config->requestType == 'PATH_INFO') $linkReg = $webRoot . '\w+' . $this->config->requestFix . '\w+';
         $linkReg = str_replace(array('/', '.', '?', '-'), array('\/', '\.', '\?', '\-'), $linkReg);
 
-        /* Check zentao link by regular. */
+        /* 检查来源地址是否为禅道链接。*/
+        /* Check zentao link by regular expression. */
         $this->referer = preg_match('/^' . $linkReg . '/', $this->referer) ? $this->referer : $webRoot;
     }
 
@@ -757,7 +743,7 @@ class user extends control
             $canModifyDIR = false;
             $folderPath   = $this->app->tmpRoot;
         }
-        elseif(!is_dir($this->app->dataRoot) or substr(sprintf('%o', @fileperms($this->app->dataRoot)), -4) != '0777')
+        elseif(!is_dir($this->app->dataRoot) or substr(decoct(fileperms($this->app->dataRoot)), -4) != '0777')
         {
             $canModifyDIR = false;
             $folderPath   = $this->app->dataRoot;
@@ -1149,25 +1135,23 @@ class user extends control
     }
 
     /**
-     * User dynamic.
+     * 查看某个用户的动态。
+     * View dynamic of a user.
      *
      * @param  int    $userID
      * @param  string $period
      * @param  int    $recTotal
-     * @param  string $date
-     * @param  string $direction     next|pre
+     * @param  int    $date
+     * @param  string $direction    next|pre
      * @access public
      * @return void
      */
-    public function dynamic($userID = '', $period = 'today', $recTotal = 0, $date = '', $direction = 'next')
+    public function dynamic(int $userID, string $period = 'today', int $recTotal = 0, int $date = 0, string $direction = 'next')
     {
-        $user    = $this->user->getById($userID, 'id');
-        $account = $user->account;
-        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
-
-        /* set menus. */
-        $this->view->userList = $this->user->setUserList($users, $userID);
+        $user   = $this->user->getById($userID, 'id');
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users  = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
+        if(!isset($users[$userID])) $users[$userID] = $user->realname;
 
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -1185,19 +1169,19 @@ class user extends control
 
         /* Append id for second sort. */
         $orderBy    = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $date       = empty($date) ? '' : date('Y-m-d', $date);
-        $actions    = $this->loadModel('action')->getDynamic($account, $period, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
+        $date       = $date ? date('Y-m-d', $date) : '';
+        $actions    = $this->loadModel('action')->getDynamic($user->account, $period, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
 
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->dynamic;
-        $this->view->type       = $period;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->recTotal   = $recTotal;
-        $this->view->user       = $user;
         $this->view->dateGroups = $dateGroups;
-        $this->view->direction  = $direction;
+        $this->view->deptUsers  = $users;
+        $this->view->user       = $user;
+        $this->view->period     = $period;
+        $this->view->recTotal   = $recTotal;
         $this->display();
     }
 

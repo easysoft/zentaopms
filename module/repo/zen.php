@@ -995,7 +995,7 @@ class repoZen extends repo
         $linkedStories = $this->repo->getRelationByCommit($repoID, $revision, 'story');
         if($browseType == 'bySearch')
         {
-            $allStories = $this->loadModel('story')->getBySearch($product->id, 0, $queryID, $orderBy, 0, 'story', array_keys($linkedStories), $pager);
+            $allStories = $this->loadModel('story')->getBySearch($product->id, 0, $queryID, $orderBy, 0, 'story', array_keys($linkedStories), '', $pager);
         }
         else
         {
@@ -1031,6 +1031,7 @@ class repoZen extends repo
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs(array($product->id), 'all', '');
 
         unset($this->config->bug->search['fields']['product']);
+        unset($this->config->bug->search['params']['product']);
         if($product->type == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);

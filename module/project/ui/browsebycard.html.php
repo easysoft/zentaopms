@@ -195,7 +195,7 @@ if(!empty($projectStats))
                                 (
                                     setClass('pl-4'),
                                     set('data-zui', 'ProgressCircle'),
-                                    set('data-percent', $project->hours->progress),
+                                    set('data-percent', $project->progress),
                                     set('data-size', 24),
                                     set('data-circle-color', 'var(--color-success-500)')
                                 )
@@ -226,8 +226,8 @@ if(!empty($projectStats))
                                 span
                                 (
                                     setClass('totalLeft'),
-                                    set::title(empty($project->hours->totalLeft) ? '— ' : $project->hours->totalLeft . 'h'),
-                                    empty($project->hours->totalLeft) ? '— ' : $project->hours->totalLeft . 'h'
+                                    set::title(empty($project->left) ? '— ' : $project->left . 'h'),
+                                    empty($project->left) ? '— ' : $project->left . 'h'
                                 )
                             )
                         )

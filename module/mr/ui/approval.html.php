@@ -24,6 +24,7 @@ formPanel
         set::label($lang->compile->result),
         a
         (
+            setClass('self-center'),
             set::href($compileUrl),
             set::target('_blank'),
             $lang->compile->statusList[$MR->compileStatus]

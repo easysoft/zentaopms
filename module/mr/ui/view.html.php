@@ -27,7 +27,14 @@ $suffixActions = array();
 foreach($config->mr->view->operateList as $operate)
 {
     if(!common::hasPriv('mr', $operate == 'reject' ? 'approval' : $operate)) continue;
+    if($operate == 'reopen' && (!$MR->synced || $rawMR->state != 'closed')) continue;
+
     $action = $config->mr->actionList[$operate];
+    if($operate === 'edit' || $operate === 'delete')
+    {
+        $suffixActions[] = $action;
+        continue;
+    }
 
     if($operate == 'accept' && ($MR->approvalStatus != 'approved' || $compileNotSuccess)) $action['disabled'] = true;
     if($operate == 'accept' && ($rawMR->state != 'opened' || $rawMR->has_conflicts)) $action['disabled'] = true;
@@ -42,16 +49,10 @@ foreach($config->mr->view->operateList as $operate)
             if($rawMR->has_conflicts || $compileNotSuccess || $MR->approvalStatus == 'approved') $action['disabled'] = true;
         }
     }
-    if($operate == 'reopen' && (!$MR->synced || $rawMR->state != 'closed')) continue;
 
     if($operate == 'delete' && !$projectOwner && !$this->app->user->admin) $action['disabled'] = true;
     if($operate == 'edit' && !$projectEdit && !$this->app->user->admin) $action['disabled'] = true;
 
-    if($operate === 'edit' || $operate === 'delete')
-    {
-        $suffixActions[] = $action;
-        continue;
-    }
     $mainActions[] = $action;
 }
 

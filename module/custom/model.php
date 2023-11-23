@@ -583,6 +583,27 @@ class customModel extends model
     }
 
     /**
+     * 获取需求概念。
+     * Get UR and SR concept.
+     *
+     * @param  int          $key
+     * @param  string       $lang
+     * @access public
+     * @return string|false
+     */
+    public function getURSRConcept(int $key, string $lang = ''): string|false
+    {
+        if(empty($lang)) $lang = $this->app->getClientLang();
+
+        return $this->dao->select('`value`')->from(TABLE_LANG)
+            ->where('lang')->eq($lang)
+            ->andWhere('module')->eq('custom')
+            ->andWhere('section')->eq('URSRList')
+            ->andWhere('`key`')->eq($key)
+            ->fetch('value');
+    }
+
+    /**
      * Get UR and SR pairs.
      *
      * @access public
@@ -663,36 +684,38 @@ class customModel extends model
     }
 
     /**
+     * 获取需求概念列表。
      * Get UR and SR list.
      *
      * @access public
      * @return array
      */
-    public function getURSRList()
+    public function getURSRList(): array
     {
         $this->app->loadLang('custom');
         $lang = $this->app->getClientLang();
 
-        $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
+        $URSRDataList = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
             ->where('lang')->eq($lang)
             ->andWhere('module')->eq('custom')
             ->andWhere('section')->eq('URSRList')
             ->fetchAll();
-        if(empty($langData))
+
+        if(empty($URSRDataList))
         {
-            $URSR     = $this->loadModel('setting')->getURSR();
-            $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)->where('`key`')->eq($URSR)->andWhere('module')->eq('custom')->andWhere('section')->eq('URSRList')->fetchAll();
+            $URSR         = $this->loadModel('setting')->getURSR();
+            $URSRDataList = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)->where('`key`')->eq($URSR)->andWhere('module')->eq('custom')->andWhere('section')->eq('URSRList')->fetchAll();
         }
 
         $URSRList = array();
-        foreach($langData as $content)
+        foreach($URSRDataList as $URSRData)
         {
-            $value = json_decode($content->value);
-            $URSRList[$content->key] = new stdclass();
-            $URSRList[$content->key]->key    = $content->key;
-            $URSRList[$content->key]->SRName = $value->SRName;
-            $URSRList[$content->key]->URName = $value->URName;
-            $URSRList[$content->key]->system = $content->system;
+            $value = json_decode($URSRData->value);
+            $URSRList[$URSRData->key] = new stdclass();
+            $URSRList[$URSRData->key]->key    = $URSRData->key;
+            $URSRList[$URSRData->key]->SRName = $value->SRName;
+            $URSRList[$URSRData->key]->URName = $value->URName;
+            $URSRList[$URSRData->key]->system = $URSRData->system;
         }
 
         return $URSRList;
@@ -777,27 +800,29 @@ class customModel extends model
     }
 
     /**
+     * 设置需求概念。
      * Set UR and SR concept.
      *
+     * @param  array  $data
      * @access public
      * @return bool
      */
-    public function setURAndSR()
+    public function setURAndSR(array $data): bool
     {
-        $data   = fixer::input('post')->get();
         $lang   = $this->app->getClientLang();
         $maxKey = $this->dao->select('max(cast(`key` as SIGNED)) as maxKey')->from(TABLE_LANG)
             ->where('section')->eq('URSRList')
             ->andWhere('module')->eq('custom')
             ->andWhere('lang')->eq($lang)
             ->fetch('maxKey');
+
         $maxKey = $maxKey ? $maxKey : 1;
 
         /* If has custom UR and SR name. */
-        foreach($data->SRName as $key => $SRName)
+        foreach($data['SRName'] as $key => $SRName)
         {
-            if(isset($data->URName))  $URName = zget($data->URName, $key, '');
-            if(!isset($data->URName)) $URName = $this->lang->URCommon;
+            if(isset($data['URName']))  $URName = zget($data['URName'], $key, '');
+            if(!isset($data['URName'])) $URName = $this->lang->URCommon;
             if(!$URName || !$SRName) continue;
 
             $URSRList = new stdclass();
@@ -814,28 +839,30 @@ class customModel extends model
     }
 
     /**
+     * 编辑需求概念。
      * Edit UR and SR concept.
      *
      * @param  int    $key
-     * @param  string $lang    zh-cn|zh-tw|en|fr|de
+     * @param  string $lang zh-cn|zh-tw|en|fr|de
+     * @param  array  $data
      * @access public
      * @return bool
      */
-    public function updateURAndSR($key = 0, $lang = '')
+    public function updateURAndSR(int $key = 0, string $lang = '', array $data = array()): bool
     {
         if(empty($lang)) $lang = $this->app->getClientLang();
-        $data = fixer::input('post')->get();
+        if(empty($data['SRName']) || empty($data['URName'])) return false;
 
-        if(empty($data->SRName) || empty($data->URName)) return false;
-
-        $oldValue = $this->dao->select('*')->from(TABLE_LANG)->where('`key`')->eq($key)->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($lang)->andWhere('module')->eq('custom')->fetch('value');
+        $oldValue = $this->getURSRConcept($key, $lang);
         $oldValue = json_decode($oldValue);
+
+        if(!$oldValue) return false;
 
         $URSRList = new stdclass();
         $URSRList->defaultSRName = zget($oldValue, 'defaultSRName', $oldValue->SRName);
         $URSRList->defaultURName = zget($oldValue, 'defaultURName', $oldValue->URName);
-        $URSRList->SRName        = empty($data->SRName) ? $URSRList->defaultSRName : $data->SRName;
-        $URSRList->URName        = empty($data->URName) ? $URSRList->defaultURName : $data->URName;
+        $URSRList->SRName        = empty($data['SRName']) ? $URSRList->defaultSRName : $data['SRName'];
+        $URSRList->URName        = empty($data['URName']) ? $URSRList->defaultURName : $data['URName'];
 
         $value = json_encode($URSRList);
         $this->dao->update(TABLE_LANG)->set('value')->eq($value)

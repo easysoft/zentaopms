@@ -167,6 +167,7 @@ class custom extends control
     }
 
     /**
+     * 设置需求概念。
      * Set story concept.
      *
      * @access public
@@ -176,7 +177,7 @@ class custom extends control
     {
         if($_POST)
         {
-            $result = $this->custom->setURAndSR();
+            $result = $this->custom->setURAndSR($_POST);
             if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -185,21 +186,23 @@ class custom extends control
 
         if(!common::hasPriv('custom', 'setDefaultConcept')) unset($this->config->custom->browseStoryConcept->dtable->fieldList['default']);
         $this->view->title = $this->lang->custom->setStoryConcept;
+
         $this->display();
     }
 
     /**
+     * 编辑需求概念。
      * Edit story concept.
-     * @param  int    $key
      *
+     * @param  int    $key
      * @access public
      * @return void
      */
-    public function editStoryConcept($key = 0)
+    public function editStoryConcept(int $key = 0)
     {
         if($_POST)
         {
-            $result = $this->custom->updateURAndSR($key);
+            $result = $this->custom->updateURAndSR($key, '', $_POST);
             if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->URSREmpty));
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -207,25 +210,22 @@ class custom extends control
         }
 
         $lang = $this->app->getClientLang();
-        $URSR = $this->dao->select('`value`')->from(TABLE_LANG)
-            ->where('lang')->eq($lang)
-            ->andWhere('module')->eq('custom')
-            ->andWhere('section')->eq('URSRList')
-            ->andWhere('`key`')->eq($key)
-            ->fetch('value');
+        $URSR = $this->custom->getURSRConcept($key, $lang);
 
         $this->view->URSR = json_decode($URSR);
+
         $this->display();
     }
 
     /**
+     * 设置默认需求概念。
      * Set story concept.
      *
      * @param  int   $key
      * @access public
      * @return void
      */
-    public function setDefaultConcept($key = 0)
+    public function setDefaultConcept(int $key = 0)
     {
         $this->loadModel('setting')->setItem('system.custom.URSR', $key);
         return $this->sendSuccess(array('load' => inlink('browsestoryconcept')));
@@ -255,6 +255,7 @@ class custom extends control
     }
 
     /**
+     * 执行关闭设置。
      * Set whether the closed execution is read-only.
      *
      * @access public
@@ -265,7 +266,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem("system.common.CRExecution@{$this->config->vision}", $this->post->execution);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title  = $this->lang->custom->executionCommon;
@@ -275,6 +276,7 @@ class custom extends control
     }
 
     /**
+     * 产品关闭设置。
      * Set whether the closed product is read-only.
      *
      * @access public
@@ -285,16 +287,17 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.CRProduct', $this->post->product);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->sendSuccess(array('load' => true));
         }
 
-        $this->view->title      = $this->lang->custom->productName;
-        $this->view->module     = 'product';
+        $this->view->title  = $this->lang->custom->productName;
+        $this->view->module = 'product';
 
         $this->display();
     }
 
     /**
+     * 看板关闭设置。
      * Set whether the kanban is read-only.
      *
      * @access public
@@ -305,10 +308,11 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem("system.common.CRKanban", $this->post->kanban);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title = $this->lang->custom->kanban;
+
         $this->display();
     }
 

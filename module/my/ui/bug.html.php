@@ -31,6 +31,7 @@ $canBatchClose    = common::hasPriv('bug', 'batchClose')   && strtolower($type) 
 $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
 $canBatchAction   = $canBatchEdit || $canBatchConfirm || $canBatchClose || $canBatchAssignTo;
 
+if($type == 'bySearch')       $type = $this->session->myBugType;
 if($type == 'openedBy')       unset($config->bug->dtable->fieldList['openedBy']);
 if($type == 'assignedTo')     unset($config->bug->dtable->fieldList['assignedTo']);
 if($type == 'resolvedBy')     unset($config->bug->dtable->fieldList['resolvedBy']);

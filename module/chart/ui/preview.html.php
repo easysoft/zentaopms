@@ -43,7 +43,6 @@ div
         $treeMenu ? div
         (
             setClass('flex bg-canvas gap-4 px-4 pb-4'),
-            btn($lang->selectAll, on::click("$('#moduleMenu ul').zui('tree').$.toggleAllChecked()")),
             btn($lang->chart->preview, setClass('primary'), on::click('previewCharts'))
         ) : null,
         $config->edition == 'open' ? div

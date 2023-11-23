@@ -51,7 +51,6 @@ div
     (
         set::_className('shadown-none'),
         set::extraHeight('+.dtable-sub-nav'),
-        set::userMap($users),
         set::bordered(true),
         set::cols($cols),
         set::data(array_values($tasks)),

@@ -31,26 +31,23 @@ class admin extends control
         if(!$community or $community == 'na')
         {
             $this->view->bind    = false;
-            $this->view->account = false;
             $this->view->ignore  = $community == 'na';
         }
         else
         {
             $this->view->bind    = true;
-            $this->view->account = $community;
             $this->view->ignore  = false;
         }
 
         $this->view->title       = $this->lang->admin->common;
         $this->view->zentaoData  = $this->admin->getZentaoData();
         $this->view->dateUsed    = $this->admin->genDateUsed();
-        $this->view->langNotCN   = common::checkNotCN();
         $this->view->hasInternet = $this->admin->checkInternet();
-        $this->view->isIntranet  = helper::isIntranet();
         $this->display();
     }
 
     /**
+     * 获取禅道官网数据。
      * Get zentao.net data by api.
      *
      * @access public
@@ -60,9 +57,7 @@ class admin extends control
     {
         if(helper::isIntranet()) return $this->send(array('result' => 'ignore'));
 
-        $hasInternet = $this->admin->checkInternet();
-
-        if($hasInternet)
+        if($this->admin->checkInternet())
         {
             $lastSyncDate = !empty($this->config->zentaoWebsite->lastSyncDate) ? $this->config->zentaoWebsite->lastSyncDate : '';
             $nextWeek     = date('Y-m-d', strtotime('-7 days'));
@@ -82,24 +77,10 @@ class admin extends control
     }
 
     /**
-     * Ignore notice of register and bind.
-     *
-     * @access public
-     * @return void
-     */
-    public function ignore()
-    {
-        $account = $this->app->user->account;
-        $this->loadModel('setting');
-        $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
-        $this->setting->setItem("$account.common.global.community", 'na');
-        echo js::locate(inlink('index'), 'parent');
-    }
-
-    /**
+     * 登记禅道社区。
      * Register zentao.
      *
-     * @param  string $from
+     * @param  string $from admin|mail
      * @access public
      * @return void
      */
@@ -142,6 +123,7 @@ class admin extends control
         }
 
         $this->adminZen->initSN();
+
         $this->view->title    = $this->lang->admin->registerNotice->caption;
         $this->view->register = $this->admin->getRegisterInfo();
         $this->view->sn       = $this->config->global->sn;
@@ -150,9 +132,10 @@ class admin extends control
     }
 
     /**
+     * 绑定禅道账号。
      * Bind zentao.
      *
-     * @param  string $from
+     * @param  string $from admin|mail
      * @access public
      * @return void
      */
@@ -181,6 +164,7 @@ class admin extends control
         }
 
         $this->adminZen->initSN();
+
         $this->view->title = $this->lang->admin->bind->caption;
         $this->view->sn    = $this->config->global->sn;
         $this->view->from  = $from;
@@ -188,7 +172,8 @@ class admin extends control
     }
 
     /**
-     * Account safe.
+     * 系统安全设置。
+     * System security Settings.
      *
      * @access public
      * @return void
@@ -197,17 +182,17 @@ class admin extends control
     {
         if($_POST)
         {
-            $data = fixer::input('post')->get();
+            $data = form::data()->get();
             $this->loadModel('setting')->setItems('system.common.safe', $data);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
-        $this->view->title  = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->set;
-        $this->view->gdInfo = function_exists('gd_info') ? gd_info() : array();
+        $this->view->title = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->set;
         $this->display();
     }
 
     /**
+     * 弱口令扫描。
      * Check weak user.
      *
      * @access public
@@ -215,12 +200,13 @@ class admin extends control
      */
     public function checkWeak()
     {
-        $this->view->title      = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->checkWeak;
-        $this->view->weakUsers  = $this->loadModel('user')->getWeakUsers();
+        $this->view->title     = $this->lang->admin->safe->common . $this->lang->colon . $this->lang->admin->safe->checkWeak;
+        $this->view->weakUsers = $this->loadModel('user')->getWeakUsers();
         $this->display();
     }
 
     /**
+     * ZDOO集成。
      * Config sso for ranzhi.
      *
      * @access public
@@ -230,15 +216,10 @@ class admin extends control
     {
         if(!empty($_POST))
         {
-            $ssoConfig = new stdclass();
-            $ssoConfig->turnon   = $this->post->turnon;
-            $ssoConfig->redirect = $this->post->redirect;
-            $ssoConfig->addr     = $this->post->addr;
-            $ssoConfig->code     = trim($this->post->code);
-            $ssoConfig->key      = trim($this->post->key);
+            $data = form::data()->get();
+            if(!$data->turnon) $data->redirect = $data->turnon;
+            $this->loadModel('setting')->setItems('system.sso', $data);
 
-            if(!$ssoConfig->turnon) $ssoConfig->redirect = $ssoConfig->turnon;
-            $this->loadModel('setting')->setItems('system.sso', $ssoConfig);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('sso')));
         }
@@ -246,8 +227,7 @@ class admin extends control
         $this->loadModel('sso');
         if(!isset($this->config->sso)) $this->config->sso = new stdclass();
 
-        $this->view->title      = $this->lang->admin->sso;
-
+        $this->view->title    = $this->lang->admin->sso;
         $this->view->turnon   = isset($this->config->sso->turnon)   ? $this->config->sso->turnon   : 1;
         $this->view->redirect = isset($this->config->sso->redirect) ? $this->config->sso->redirect : 0;
         $this->view->addr     = isset($this->config->sso->addr)     ? $this->config->sso->addr     : '';

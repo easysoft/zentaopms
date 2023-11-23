@@ -18,7 +18,7 @@ class editorModel extends model
      * @access public
      * @return array
      */
-    public function getModuleFiles($moduleName)
+    public function getModuleFiles(string $moduleName): array
     {
         $allModules = array();
         $modulePath = $this->app->getModulePath('', $moduleName);
@@ -51,7 +51,7 @@ class editorModel extends model
      * @access public
      * @return array
      */
-    public function getExtensionFiles($moduleName)
+    public function getExtensionFiles(string $moduleName): array
     {
         $extensionList = array();
         foreach($this->config->editor->extSort as $ext)
@@ -98,9 +98,9 @@ class editorModel extends model
      *
      * @param  string    $extensionFullDir
      * @access public
-     * @return string
+     * @return array
      */
-    public function getTwoGradeFiles($extensionFullDir)
+    public function getTwoGradeFiles(string $extensionFullDir): array
     {
         $fileList = array();
         $langDirs = scandir($extensionFullDir);
@@ -130,12 +130,13 @@ class editorModel extends model
      * @access public
      * @return array
      */
-    public function analysis($fileName)
+    public function analysis(string $fileName): array
     {
         $classMethod = array();
         $class       = $this->getClassNameByPath($fileName);
         if(strpos($fileName, 'model.php') !== false) $class .= 'Model';
         if(!class_exists($class)) include $fileName;
+
         $reflection = new ReflectionClass($class);
         foreach($reflection->getMethods(ReflectionMethod::IS_PUBLIC) as $method)
         {
@@ -144,6 +145,7 @@ class editorModel extends model
             if($methodName == '__construct') continue;
             $classMethod[$fileName . DS . $methodName] = $methodName;
         }
+
         return $classMethod;
     }
 
@@ -155,7 +157,7 @@ class editorModel extends model
      * @access public
      * @return string
      */
-    public function printTree($files, $isRoot = true)
+    public function printTree(array $files, bool $isRoot = true) : array|false
     {
         if(empty($files) or !is_array($files)) return false;
 
@@ -197,9 +199,9 @@ class editorModel extends model
      *
      * @param  string    $filePath
      * @access public
-     * @return string
+     * @return object
      */
-    public function addLink4Dir($filePath)
+    public function addLink4Dir(string $filePath): object
     {
         $tree        = new stdclass();
         $fileName    = basename($filePath);
@@ -249,9 +251,9 @@ class editorModel extends model
      * @param  string    $filePath
      * @param  string    $file
      * @access public
-     * @return string
+     * @return object
      */
-    public function addLink4File($filePath, $file)
+    public function addLink4File(string $filePath, string $file): object
     {
         $tree = new stdClass();
         $tree->id   = md5($file);
@@ -292,7 +294,7 @@ class editorModel extends model
      * @access public
      * @return string
      */
-    public function getExtendLink($filePath, $action, $isExtends = '')
+    public function getExtendLink(string $filePath, string $action, string $isExtends = ''): string
     {
         return inlink('edit', "filePath=" . helper::safe64Encode($filePath) . "&action=$action&isExtends=$isExtends");
     }
@@ -300,13 +302,12 @@ class editorModel extends model
     /**
      * Get api link.
      *
-     * @param  int    $filePath
-     * @param  int    $action
-     * @param  string $type
+     * @param  string    $filePath
+     * @param  string    $action
      * @access public
      * @return string
      */
-    public function getAPILink($filePath, $action)
+    public function getAPILink(string $filePath, string $action): string
     {
         return helper::createLink('api', 'debug', "filePath=" . helper::safe64Encode($filePath) . "&action=$action");
     }
@@ -316,25 +317,25 @@ class editorModel extends model
      *
      * @param  string    $filePath
      * @access public
-     * @return string
+     * @return string|bool
      */
-    public function save($filePath)
+    public function save(string $filePath): string|bool
     {
         /* Reduce expiration time for check safe file. */
         $this->config->safeFileTimeout = 15 * 60;
         $statusFile = $this->loadModel('common')->checkSafeFile();
-        if($statusFile) return sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile));
+        if($statusFile) return dao::$errors[] = sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile));
 
         $dirPath     = dirname($filePath);
         $extFilePath = substr($filePath, 0, strpos($filePath, DS . 'ext' . DS) + 4);
         if(!is_dir($dirPath) and is_writable($extFilePath)) mkdir($dirPath, 0777, true);
         if(!is_dir($dirPath))
         {
-            if(is_dir($extFilePath)) return sprintf($this->lang->editor->notWritable, $extFilePath);
-            return sprintf($this->lang->editor->notExists, $extFilePath);
+            if(is_dir($extFilePath)) return dao::$errors[] = sprintf($this->lang->editor->notWritable, $extFilePath);
+            return dao::$errors[] = sprintf($this->lang->editor->notExists, $extFilePath);
         }
-        if(!is_writable($dirPath)) return sprintf($this->lang->editor->notWritable, $extFilePath);
-        if(strpos(strtolower(realpath($dirPath)), strtolower($this->app->getBasePath())) !== 0) return $this->lang->editor->editFileError;
+        if(!is_writable($dirPath)) return dao::$errors[] = sprintf($this->lang->editor->notWritable, $extFilePath);
+        if(strpos(strtolower(realpath($dirPath)), strtolower($this->app->getBasePath())) !== 0) return dao::$errors[] = $this->lang->editor->editFileError;
 
         $fileContent = $this->post->fileContent;
         $evils       = array('eval', 'exec', 'passthru', 'proc_open', 'shell_exec', 'system', '$$', 'include', 'require', 'assert', 'javascript', 'onclick');
@@ -353,7 +354,7 @@ class editorModel extends model
      * @access public
      * @return string
      */
-    public function extendModel($filePath)
+    public function extendModel(string $filePath): string
     {
         $className = basename(dirname(dirname($filePath)));
         if(!class_exists($className)) helper::import(dirname($filePath));
@@ -373,10 +374,11 @@ EOD;
      * Extend control.php and get file content.
      *
      * @param  string    $filePath
+     * @param  string    $isExtends
      * @access public
      * @return string
      */
-    public function extendControl($filePath, $isExtends)
+    public function extendControl(string $filePath, string $isExtends): string
     {
         $className = basename(dirname(dirname($filePath)));
         if(!class_exists($className)) helper::import(dirname($filePath));
@@ -417,7 +419,7 @@ EOD;
      * @access public
      * @return string
      */
-    public function newControl($filePath)
+    public function newControl(string $filePath): string
     {
         $className  = $this->getClassNameByPath($filePath);
         $methodName = basename($filePath, '.php');
@@ -441,34 +443,25 @@ EOD;
      * @access public
      * @return string
      */
-    public function getParam($className, $methodName, $ext = '')
+    public function getParam(string $className, string $methodName, string $ext = ''): string
     {
-        $method = new ReflectionMethod($className . $ext, $methodName);
-        $methodParam = '';
-        foreach ($method->getParameters() as $param)
+        $method       = new ReflectionMethod($className . $ext, $methodName);
+        $methodParams = array();
+        foreach($method->getParameters() as $param)
         {
-            $methodParam .= '$' . $param->getName();
+            $methodParam = '$' . $param->getName();
             if($param->isOptional())
             {
                 $defaultParam = $param->getDefaultValue();
-                if(is_string($defaultParam))
-                {
-                    $methodParam .= "='$defaultParam', ";
-                }
-                else
-                {
-                    if(is_array($defaultParam) and empty($defaultParam)) $defaultParam = 'array()';
-                    if(is_null($defaultParam)) $defaultParam = 'null';
-                    $methodParam .= "=$defaultParam, ";
-                }
+                if(is_string($defaultParam))                         $defaultParam = "'$defaultParam'";
+                if(is_array($defaultParam) and empty($defaultParam)) $defaultParam = 'array()';
+                if(is_null($defaultParam))                           $defaultParam = 'null';
+                $methodParam .= "=$defaultParam";
             }
-            else
-            {
-                $methodParam .= ', ';
-            }
+            $methodParams[] = $methodParam;
         }
-        $methodParam = rtrim($methodParam, ', ');
-        return $methodParam;
+
+        return implode(', ', $methodParams);
     }
 
     /**
@@ -480,7 +473,7 @@ EOD;
      * @access public
      * @return string
      */
-    public function getMethodCode($className, $methodName, $ext = '')
+    public function getMethodCode(string $className, string $methodName, string $ext = ''): string
     {
         $method    = new ReflectionMethod($className . $ext, $methodName);
         $fileName  = $method->getFileName();
@@ -501,29 +494,22 @@ EOD;
      * @access public
      * @return string
      */
-    public function getSavePath($filePath, $action)
+    public function getSavePath(string $filePath, string $action): string
     {
-        $fileExtension  = 'php';
         $sourceFileName = basename($filePath);
+
+        $fileExtension = 'php';
         if(strrpos($sourceFileName, '.') !== false) $fileExtension = substr($sourceFileName, strrpos($sourceFileName, '.') + 1);
+        if(strtolower($action) == 'newjs')  $fileExtension = 'js';
+        if(strtolower($action) == 'newcss') $fileExtension = 'css';
 
         $fileName   = empty($_POST['fileName']) ? '' : trim($this->post->fileName);
         $moduleName = $this->getClassNameByPath($filePath);
-
         $methodName = '';
-        if(strtolower($action) == 'newjs')
-        {
-            if($fileExtension != 'js') $fileExtension = 'js';
-            $methodName = basename($filePath);
-        }
-        if(strtolower($action) == 'newcss')
-        {
-            if($fileExtension != 'css') $fileExtension = 'css';
-            $methodName = basename($filePath);
-        }
-
-        $extPath    = $this->app->getExtensionRoot() . 'custom' . DS . $moduleName . DS . 'ext' . DS;
+        if(str_contains('|newjs|newcss|', '|' . strtolower($action) . '|')) $methodName = basename($filePath);
         if($fileName and (strpos($fileName, '.' . $fileExtension) !== (strlen($fileName) - strlen($fileExtension) - 1))) $fileName .= '.' . $fileExtension;
+
+        $extPath = $this->app->getExtensionRoot() . 'custom' . DS . $moduleName . DS . 'ext' . DS;
         switch($action)
         {
         case 'extendModel':
@@ -542,15 +528,15 @@ EOD;
             if(strpos($editName, '.php') !== false) return $extPath . 'lang' . DS . basename($editName, ".{$fileExtension}") . DS . $fileName;
             return $extPath . $fileExtension . DS . basename($editName, ".{$fileExtension}") . DS . $fileName;
         default:
-            if(empty($fileName)) return print(js::error($this->lang->editor->emptyFileName));
+            if(empty($fileName)) return dao::$errors[] = $this->lang->editor->emptyFileName;
 
             $action = strtolower(str_replace('new', '', $action));
-            if($action == 'hook')   return $extPath . 'view' . DS . $fileName;
-            if($action == 'method') return $extPath . basename($filePath, ".{$fileExtension}") . DS . $fileName;
+            if($action == 'method') return $extPath  . basename($filePath, ".{$fileExtension}") . DS . $fileName;
             if($action == 'extend') return $filePath . DS . $fileName;
-            if($action == 'config') return $extPath . 'config' . DS . $fileName;
-            if($action == 'js')     return $extPath . 'js'  . DS . $methodName . DS . $fileName;
-            if($action == 'css')    return $extPath . 'css' . DS . $methodName . DS . $fileName;
+            if($action == 'hook')   return $extPath  . 'view'   . DS . $fileName;
+            if($action == 'config') return $extPath  . 'config' . DS . $fileName;
+            if($action == 'js')     return $extPath  . 'js'     . DS . $methodName . DS . $fileName;
+            if($action == 'css')    return $extPath  . 'css'    . DS . $methodName . DS . $fileName;
             return $extPath . 'lang' . DS . str_replace('_', '-', $action) . DS . $fileName;
         }
     }
@@ -562,7 +548,7 @@ EOD;
      * @access public
      * @return string
      */
-    public function getClassNameByPath($filePath)
+    public function getClassNameByPath(string $filePath): string
     {
         $className = '';
         if(strpos($filePath, DS . 'module' . DS) !== false)

@@ -314,7 +314,7 @@ class deptModel extends model
      * @access public
      * @return array
      */
-    public function manageChild($parentDeptID, $childs)
+    public function manageChild(int $parentDeptID, $childs)
     {
         $parentDept = $this->fetchByID($parentDeptID);
         if($parentDept)

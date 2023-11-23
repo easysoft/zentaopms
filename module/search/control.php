@@ -1,4 +1,7 @@
 <?php
+
+use function zin\wg;
+
 /**
  * The control file of search module of ZenTaoPMS.
  *
@@ -31,59 +34,57 @@ class search extends control
         $module       = empty($module) ? $this->session->searchParams['module'] : $module;
         $searchParams = $module . 'searchParams';
         $searchForm   = $module . 'Form';
-        $queryID      = (empty($module) and empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
-        $fields       = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
-        $params       = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
-        $actionURL    = empty($actionURL) ? $_SESSION[$searchParams]['actionURL'] : $actionURL;
-        $style        = isset($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : '';
-        $onMenuBar    = isset($_SESSION[$searchParams]['onMenuBar']) ? $_SESSION[$searchParams]['onMenuBar'] : '';
+
+        $fields = empty($fields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $fields;
+        $params = empty($params) ? json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $params;
 
         $_SESSION['searchParams']['module'] = $module;
         if(empty($_SESSION[$searchForm])) $this->search->initSession($module, $fields, $params);
 
-        if(in_array($module, $this->config->search->searchObject) and $this->session->objectName)
+        if(in_array($module, $this->config->search->searchObject) && $this->session->objectName)
         {
             $space = common::checkNotCN() ? ' ' : '';
             $this->lang->search->common = $this->lang->search->common . $space . $this->session->objectName;
         }
 
         $this->view->module       = $module;
-        $this->view->groupItems   = $this->config->search->groupItems;
-        $this->view->searchFields = $fields;
-        $this->view->actionURL    = $actionURL;
+        $this->view->actionURL    = empty($actionURL) ? $_SESSION[$searchParams]['actionURL'] : $actionURL;
+        $this->view->fields       = $fields;
         $this->view->fieldParams  = $this->search->setDefaultParams($fields, $params);
         $this->view->queries      = $this->search->getQueryList($module);
-        $this->view->queryID      = $queryID;
-        $this->view->style        = empty($style) ? 'full' : $style;
-        $this->view->onMenuBar    = empty($onMenuBar) ? 'no' : $onMenuBar;
+        $this->view->queryID      = (empty($module) && empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
+        $this->view->style        = !empty($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : 'full';
+        $this->view->onMenuBar    = !empty($_SESSION[$searchParams]['onMenuBar']) ? $_SESSION[$searchParams]['onMenuBar'] : 'no';
         $this->view->formSession  = $_SESSION[$module . 'Form'];
-        $this->view->fields       = $fields;
         $this->view->formName     = $formName;
 
-        if($module == 'program')
-        {
-            $this->view->options = $this->search->setOptions($fields, $this->view->fieldParams, $this->view->queries);
-            $this->render();
-        }
-        else
-        {
-            $this->display();
-        }
+        if($module == 'program') $this->view->options = $this->search->setOptions($fields, $this->view->fieldParams, $this->view->queries);
+
+        $this->display();
     }
 
     /**
-     * Build query
+     * 构建搜索查询。
+     * Build search query.
      *
      * @access public
      * @return void
      */
     public function buildQuery()
     {
+        /* 将查询 sql 和 表单名字设置 session。*/
+        /* Set query sql and form name in session. */
         $this->search->buildQuery();
 
         $actionURL = $this->post->actionURL;
         $parsedURL = parse_url($actionURL);
+
+        /* 查询链接中有 host 直接返回。*/
+        /* If action url has host, return. */
         if(isset($parsedURL['host'])) return;
+
+        /* 检查查询链接。*/
+        /* Check action url. */
         if($this->config->requestType != 'GET')
         {
             $path = $parsedURL['path'];
@@ -101,6 +102,7 @@ class search extends control
     }
 
     /**
+     * 保存搜索查询。
      * Save search query.
      *
      * @param  string  $module
@@ -108,22 +110,19 @@ class search extends control
      * @access public
      * @return void
      */
-    public function saveQuery($module, $onMenuBar = 'no')
+    public function saveQuery(string $module, string $onMenuBar = 'no')
     {
         if($_POST)
         {
             $queryID = $this->search->saveQuery();
             if(!$queryID) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $data     = fixer::input('post')->get();
-            $shortcut = empty($data->onMenuBar) ? 0 : 1;
-
             if($this->viewType == 'json')
             {
                 echo 'success';
                 return;
             }
-            return $this->send(array('closeModal' => true, 'callback' => array('name' => 'zui.SearchForm.addQuery', 'params' => array(array('module' => $module, 'id' => $queryID, 'text' => $data->title)))));
+            return $this->send(array('closeModal' => true, 'callback' => array('name' => 'zui.SearchForm.addQuery', 'params' => array(array('module' => $module, 'id' => $queryID, 'text' => $this->post->title)))));
         }
 
         $this->view->module    = $module;
@@ -132,6 +131,7 @@ class search extends control
     }
 
     /**
+     * 删除搜索查询。
      * Delete current search query.
      *
      * @param  int    $queryID
@@ -183,6 +183,7 @@ class search extends control
     }
 
     /**
+     * 建立索引。
      * Build All index.
      *
      * @param  string  $mode    show|build
@@ -209,80 +210,50 @@ class search extends control
     }
 
     /**
+     * 全局搜索结果页面。
      * Global search results home page.
      *
-     * @param  int $recTotal
-     * @param  int $pageID
+     * @param  int    $recTotal
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function index($recTotal = 0, $pageID = 1)
+    public function index(int $recTotal = 0, int $pageID = 1)
     {
         $this->lang->admin->menu->search = "{$this->lang->search->common}|search|index";
 
+        /* 获取搜索的关键词。*/
+        /* Get the words. */
         if(empty($words)) $words = $this->get->words;
         if(empty($words)) $words = $this->post->words;
-        if(empty($words) and ($recTotal != 0 or $pageID != 1)) $words = $this->session->searchIngWord;
+        if(empty($words) && ($recTotal != 0 || $pageID != 1)) $words = $this->session->searchIngWord;
         $words = strip_tags(strtolower($words));
 
+        /* 获取搜索类型。*/
+        /* Get the type. */
         if(empty($type)) $type = $this->get->type;
         if(empty($type)) $type = $this->post->type;
-        if(empty($type) and ($recTotal != 0 or $pageID != 1)) $type = $this->session->searchIngType;
+        if(empty($type) && ($recTotal != 0 || $pageID != 1)) $type = $this->session->searchIngType;
         if(is_array($type)) $type = array_filter(array_unique($type));
         $type = (empty($type) || (is_array($type) && in_array('all', $type))) ? 'all' : $type;
 
+        /* 开始搜索时记录当时的时间。*/
+        $begin = time();
+
         $this->app->loadClass('pager', $static = true);
-        $begin   = time();
         $pager   = new pager(0, $this->config->search->recPerPage, $pageID);
         $results = $this->search->getList($words, $type, $pager);
 
-        $typeCount = $this->search->getListCount();
-        $typeList  = array('all' => $this->lang->search->modules['all']);
-        foreach($typeCount as $objectType => $count)
-        {
-            if(!isset($this->lang->search->modules[$objectType])) continue;
-            if($this->config->systemMode == 'light' and $objectType == 'program') continue;
-            if(!helper::hasFeature('devops') && in_array($objectType, array('deploy', 'service', 'deploystep'))) continue;
-
-            $typeList[$objectType] = $this->lang->search->modules[$objectType];
-        }
-
-        /* Set session. */
         $uri  = inlink('index', "recTotal=$pager->recTotal&pageID=$pager->pageID");
         $uri .= strpos($uri, '?') === false ? '?' : '&';
         $uri .= 'words=' . $words;
-        $this->session->set('bugList',         $uri, 'qa');
-        $this->session->set('buildList',       $uri, 'execution');
-        $this->session->set('caseList',        $uri, 'qa');
-        $this->session->set('docList',         $uri, 'doc');
-        $this->session->set('productList',     $uri, 'product');
-        $this->session->set('productPlanList', $uri, 'product');
-        $this->session->set('programList',     $uri, 'program');
-        $this->session->set('projectList',     $uri, 'project');
-        $this->session->set('executionList',   $uri, 'execution');
-        $this->session->set('releaseList',     $uri, 'product');
-        $this->session->set('storyList',       $uri, 'product');
-        $this->session->set('taskList',        $uri, 'execution');
-        $this->session->set('testtaskList',    $uri, 'qa');
-        $this->session->set('todoList',        $uri, 'my');
-        $this->session->set('effortList',      $uri, 'my');
-        $this->session->set('reportList',      $uri, 'qa');
-        $this->session->set('testsuiteList',   $uri, 'qa');
-        $this->session->set('issueList',       $uri, 'project');
-        $this->session->set('riskList',        $uri, 'project');
-        $this->session->set('opportunityList', $uri, 'project');
-        $this->session->set('trainplanList',   $uri, 'project');
-        $this->session->set('caselibList',     $uri, 'qa');
-        $this->session->set('searchIngWord',   $words);
-        $this->session->set('searchIngType',   $type);
+        $this->searchZen->setSessionForIndex($uri, $words, $type);
 
-        if(strpos($this->server->http_referer, 'search') === false) $this->session->set('referer', $this->server->http_referer);
-
+        $this->view->title      = $this->lang->search->index;
         $this->view->results    = $results;
         $this->view->consumed   = time() - $begin;
-        $this->view->title      = $this->lang->search->index;
         $this->view->type       = $type;
-        $this->view->typeList   = $typeList;
+        $this->view->typeList   = $this->searchZen->getTypeList();
         $this->view->pager      = $pager;
         $this->view->words      = $words;
         $this->view->referer    = $this->session->referer;

@@ -19,7 +19,7 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function __construct($module = '', $method = '')
+    public function __construct(string $module = '', string $method = '')
     {
         parent::__construct($module, $method);
         if($this->app->getMethodName() != 'turnon' and empty($this->config->global->editor)) $this->locate($this->createLink('dev', 'editor'));
@@ -31,7 +31,7 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function index($type = 'editor')
+    public function index(string $type = 'editor')
     {
         $this->app->loadLang('dev');
         $this->view->title      = $this->lang->editor->common;
@@ -47,7 +47,7 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function extend($moduleDir = '')
+    public function extend(string $moduleDir = '')
     {
         if(!isset($this->lang->{$moduleDir}->common)) $this->app->loadLang($moduleDir);
 
@@ -66,58 +66,32 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function edit($filePath = '', $action = '', $isExtends = '')
+    public function edit(string $filePath = '', string $action = '', string $isExtends = '')
     {
         $this->view->safeFilePath = $filePath;
         $fileContent = '';
         $extension   = 'php';
         if($filePath)
         {
-            $filePath = realpath($filePath);
+            $filePath = helper::safe64Decode($filePath);
             if(strpos(strtolower($filePath), strtolower($this->app->getBasePath())) !== 0) return print($this->lang->editor->editFileError);
             if($action == 'extendOther' and file_exists($filePath)) $this->view->showContent = file_get_contents($filePath);
 
-            if($action == 'edit' or $action == 'override')
+            if(($action == 'edit' or $action == 'override') && !file_exists($filePath)) $filePath = '';
+            if($action == 'extendControl' and empty($isExtends))
             {
-                if(file_exists($filePath))
-                {
-                    $fileContent = file_get_contents($filePath);
-                    if($action == 'override')
-                    {
-                        $fileContent = str_replace("'../../", '$this->app->getModuleRoot() . \'', $fileContent);
-                        $fileContent = str_replace(array('\'./', '"./'), array('\'../../view/', '"../../view'), $fileContent);
-                    }
-                }
-                else
-                {
-                    $filePath = '';
-                }
-            }
-            elseif($action == 'extendModel')
-            {
-                $fileContent = $this->editor->extendModel($filePath);
-            }
-            elseif($action == 'extendControl')
-            {
-                $okUrl = $this->editor->getExtendLink($filePath, 'extendControl', 'yes');
+                $okUrl     = $this->editor->getExtendLink($filePath, 'extendControl', 'yes');
                 $cancelUrl = $this->editor->getExtendLink($filePath, 'extendControl', 'no');
-                if(!$isExtends) return print(js::confirm($this->lang->editor->extendConfirm, $okUrl, $cancelUrl));
-                $fileContent = $this->editor->extendControl($filePath, $isExtends);
-            }
-            elseif($action == 'newPage')
-            {
-                $fileContent = $this->editor->newControl($filePath);
-            }
-            elseif(strrpos(basename($filePath), '.php') !== false and empty($fileContent))
-            {
-                $fileContent = "<?php\n";
+                return print(js::confirm($this->lang->editor->extendConfirm, $okUrl, $cancelUrl));
             }
 
-            $fileName  = basename($filePath);
+            $fileContent = $this->editorZen->buildContentByAction($filePath, $action, $isExtends);
+            $fileName    = basename($filePath);
             if(strpos($fileName, '.') !== false) $extension = substr($fileName, strpos($fileName, '.') + 1);
             if(strtolower($action) == 'newjs')  $extension = 'js';
             if(strtolower($action) == 'newcss') $extension = 'css';
         }
+
         $this->view->fileContent   = $fileContent;
         $this->view->filePath      = $filePath;
         $this->view->fileExtension = $extension;
@@ -132,13 +106,15 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function newPage($filePath)
+    public function newPage(string $filePath)
     {
         $filePath = helper::safe64Decode($filePath);
         if($_POST)
         {
             $saveFilePath = $this->editor->getSavePath($filePath, 'newMethod');
-            $extendLink   = $this->editor->getExtendLink($saveFilePath, 'newPage');
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $extendLink = $this->editor->getExtendLink($saveFilePath, 'newPage');
             if(file_exists($saveFilePath) and !$this->post->override) return $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm('{$this->lang->editor->repeatPage}').then((res) => {if(res) loadPage('{$extendLink}');});"));
             return $this->send(array('result' => 'success', 'load' => $extendLink));
         }
@@ -153,7 +129,7 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function save($filePath = '', $action = '')
+    public function save(string $filePath = '', string $action = '')
     {
         if($filePath and $_POST)
         {
@@ -163,11 +139,15 @@ class editor extends control
             $fileName = empty($_POST['fileName']) ? '' : trim($this->post->fileName);
             if($action != 'edit' and empty($fileName)) return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->emptyFileName));
 
-            if($action != 'edit' and $action != 'newPage') $filePath = $this->editor->getSavePath($filePath, $action);
+            if($action != 'edit' and $action != 'newPage')
+            {
+                $filePath = $this->editor->getSavePath($filePath, $action);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
             if($action != 'edit' and $action != 'newPage' and file_exists($filePath) and !$this->post->override) return $this->send(array('result' => 'fail', 'message' => $this->lang->editor->repeatFile));
 
             $result = $this->editor->save($filePath);
-            if(is_string($result)) return $this->send(array('result' => 'fail', 'message' => $result));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success', 'load' => inlink('edit', "filePath=" . helper::safe64Encode($filePath) . "&action=edit"), 'callback' => 'reloadExtendWin()'));
         }
@@ -180,7 +160,7 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function delete($filePath = '')
+    public function delete(string $filePath = '')
     {
         $filePath = helper::safe64Decode($filePath);
 
@@ -192,11 +172,11 @@ class editor extends control
     /**
      * Switch editor feature.
      *
-     * @param  int    $status     1|0
+     * @param  string    $status     1|0
      * @access public
      * @return void
      */
-    public function turnon($status)
+    public function turnon(string $status)
     {
         $this->loadModel('setting')->setItem('system.common.global.editor', $status);
 

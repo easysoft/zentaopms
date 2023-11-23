@@ -23,6 +23,7 @@ foreach($config->user->defaultFields['bug'] as $field) $cols[$field] = $config->
 $cols['id']['checkbox'] = false;
 $cols['title']['data-toggle'] = 'modal';
 $cols['title']['data-size']   = 'lg';
+$cols['resolution']['flex']   = false;
 
 $cols = array_map(function($col)
 {

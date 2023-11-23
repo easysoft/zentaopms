@@ -14,11 +14,11 @@ include './featurebar.html.php';
 
 /* zin: Define the feature bar on main menu. */
 $dynamicNavs = array();
-foreach($lang->user->featureBar['dynamic'] as $period => $label)
+foreach($lang->user->featureBar['dynamic'] as $key => $label)
 {
-    $dynamicNavs[$period] = array('text' => $label, 'url' => inlink('dynamic', "userID={$user->id}&type={$period}"));
+    $dynamicNavs[$key] = array('text' => $label, 'url' => inlink('dynamic', "userID={$user->id}&period={$key}"));
 }
-if(isset($dynamicNavs[$type])) $dynamicNavs[$type]['active'] = true;
+if(isset($dynamicNavs[$period])) $dynamicNavs[$period]['active'] = true;
 
 $content = null;
 if(empty($dateGroups))
@@ -64,7 +64,7 @@ else
                 div
                 (
                     setClass('flex-auto px-4 alert actions-box'),
-                    setClass($type == 'today' ? 'border-secondary' : ''),
+                    setClass($period == 'today' ? 'border-secondary' : ''),
                     dynamic
                     (
                         set::dynamics($actions),
@@ -97,8 +97,8 @@ if(!empty($firstAction))
     $lastDate  = substr($lastAction->originalDate, 0, 10);
     $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
     $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
-    $preLink   = $hasPre ? inlink('dynamic', "useID={$user->id}&type={$type}&recTotal={$recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
-    $nextLink  = $hasNext ? inlink('dynamic', "useID={$user->id}&type={$type}&recTotal={$recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
+    $preLink   = $hasPre ? inlink('dynamic', "userID={$user->id}&period={$period}&recTotal={$recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
+    $nextLink  = $hasNext ? inlink('dynamic', "userID={$user->id}&period={$period}&recTotal={$recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
 
     if($hasPre || $hasNext)
     {

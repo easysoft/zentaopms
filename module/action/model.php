@@ -562,7 +562,7 @@ class actionModel extends model
                 }
                 else
                 {
-                    $desc['main'] = str_replace('$' . $key, $value, $desc['main']);
+                    $desc['main'] = str_replace('$' . $key, (string)$value, $desc['main']);
                 }
             }
             else
@@ -778,7 +778,7 @@ class actionModel extends model
 
         $condition = "({$condition})";
 
-        $actions = $this->actionTao->getActionListByCondition($condition, $date, $period, $begin, $end, $direction, $account, $beginDate, $productID, (string)$projectID, $executionID, $executions, $actionCondition, $orderBy, $limit);
+        $actions = $this->actionTao->getActionListByCondition($condition, $date, $period, $begin, $end, $direction, $account, $beginDate, $productID, $projectID, $executionID, $executions, $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
@@ -2022,11 +2022,12 @@ class actionModel extends model
      * @access public
      * @return int
      */
-    public function getDynamicCount(): int
+    public function getDynamicCount($period = 'all'): int
     {
         $condition = $this->session->actionQueryCondition ? $this->session->actionQueryCondition : '1=1';
 
-        return $this->dao->select('count(1) as count')->from(TABLE_ACTION)
+        $table = $this->actionTao->getActionTable($period);
+        return $this->dao->select('count(1) as count')->from($table)
             ->where($condition)
             ->fetch('count');
     }
