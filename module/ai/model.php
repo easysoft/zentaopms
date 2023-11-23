@@ -162,7 +162,8 @@ class aiModel extends model
             $logFile = $app->getLogRoot() . 'saas.' . date('Ymd') . '.log.php';
             if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
             $fh = @fopen($logFile, 'a');
-            if($fh) {
+            if($fh)
+            {
                 fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . ' AI Request' . "\n");
                 fwrite($fh, "postData:    " . print_r($data, true) . "\n");
                 fwrite($fh, "results:" . print_r($result, true) . "\n");
@@ -286,7 +287,8 @@ class aiModel extends model
             {
                 function json_last_error_msg()
                 {
-                    switch (json_last_error()) {
+                    switch (json_last_error())
+                    {
                         case JSON_ERROR_DEPTH:
                             return 'Maximum stack depth exceeded';
                         case JSON_ERROR_STATE_MISMATCH:
@@ -310,9 +312,26 @@ class aiModel extends model
     }
 
     /**
+     * Get popular mini programIDs.
+     *
+     * @param pager $pager
+     * @access public
+     * @return array
+     */
+    public function getPopularMiniProgramIDs($pager = null)
+    {
+        $paris = $this->dao->select('appID, COUNT(*) AS count')->from(TABLE_MINIPROGRAMSTAR)
+            ->groupBy('appID')
+            ->orderBy('count_desc')
+            ->page($pager)
+            ->fetchPairs();
+        return array_keys($paris);
+    }
+
+    /**
      * Get mini programs by appid.
      *
-     * @param array $id
+     * @param array $ids
      * @access public
      * @return object
      */
@@ -339,6 +358,14 @@ class aiModel extends model
             ->fetch();
     }
 
+    /**
+     * Get collected mini programIDs
+     *
+     * @param string $userID
+     * @param pager $pager
+     * @access public
+     * @return array
+     */
     public function getCollectedMiniProgramIDs($userID, $pager = null)
     {
         $programs = $this->dao->select('*')
@@ -350,6 +377,15 @@ class aiModel extends model
         return array_keys($programs);
     }
 
+    /**
+     * Collect mini program.
+     *
+     * @param string $userID
+     * @param string $appID
+     * @param string $delete
+     * @access public
+     * @return bool
+     */
     public function collectMiniProgram($userID, $appID, $delete = 'false')
     {
         if($delete === 'true')
@@ -373,7 +409,13 @@ class aiModel extends model
         return !dao::isError();
     }
 
-    public function getCustomCategory()
+    /**
+     * Get custom categories.
+     *
+     * @access public
+     * @return array
+     */
+    public function getCustomCategories()
     {
         return $this->dao->select('`key`,`value`')
             ->from(TABLE_CONFIG)
@@ -382,7 +424,13 @@ class aiModel extends model
             ->fetchPairs();
     }
 
-    public function updateCustomCategory()
+    /**
+     * Update custom categories.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateCustomCategories()
     {
         $data = array_filter($_POST);
         if(empty($data)) return;
@@ -435,6 +483,10 @@ class aiModel extends model
     /**
      * Get not deleted mini programs.
      *
+     * @param string $category
+     * @param string $status
+     * @param string $order
+     * @param pager  $pager
      * @access public
      * @return array
      */
@@ -454,6 +506,13 @@ class aiModel extends model
         return $progarms;
     }
 
+    /**
+     * Get mini program fields by appid.
+     *
+     * @param string $appID
+     * @access public
+     * @return array
+     */
     public function getMiniProgramFields($appID)
     {
         return $this->dao->select('*')
@@ -513,7 +572,8 @@ class aiModel extends model
      */
     public function canPublishMiniProgram($program)
     {
-        $isNotEmpty = function ($str) {
+        $isNotEmpty = function ($str)
+        {
             return isset($str) && strlen(strval($str)) > 0;
         };
 
@@ -570,6 +630,13 @@ class aiModel extends model
         return $appID;
     }
 
+    /**
+     * Save mini program fields.
+     *
+     * @param string $appID
+     * @access public
+     * @return void
+     */
     public function saveMiniProgramFields($appID)
     {
         $data = fixer::input('post')->get();
@@ -647,7 +714,8 @@ class aiModel extends model
         if(empty($response)) return false;
 
         /* Extract text response choices. */
-        if(isset($response->choices) && count($response->choices) > 0) {
+        if(isset($response->choices) && count($response->choices) > 0)
+        {
             $texts = array();
             foreach($response->choices as $choice) $texts[] = $choice->text;
             return $texts;
@@ -1103,7 +1171,8 @@ class aiModel extends model
         $supplement = '';
         $supplementTypes = array();
 
-        foreach($sources as $source) {
+        foreach($sources as $source)
+        {
             $objectName = $source[0];
             $objectKey  = $source[1];
 

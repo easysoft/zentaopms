@@ -135,6 +135,16 @@ class ai extends control
         $this->display();
     }
 
+    /**
+     * Mini program square.
+     *
+     * @param string $category
+     * @param int    $recTotal
+     * @param int    $recPerPage
+     * @param int    $pageID
+     * @access public
+     * @return void
+     */
     public function square($category = 'discovery', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->app->loadClass('pager', true);
@@ -148,7 +158,8 @@ class ai extends control
         }
         else if($category === 'discovery')
         {
-            
+            $popularIDs = $this->ai->getPopularMiniProgramIDs($pager);
+            $miniPrograms = $this->ai->getMiniProgramsByID($popularIDs);
         }
         else if($category === 'latest')
         {
@@ -161,13 +172,21 @@ class ai extends control
 
         $this->view->collectedIDs = empty($collectedIDs) ? $this->ai->getCollectedMiniProgramIDs($this->app->user->id) : $collectedIDs;
         $this->view->category      = $category;
-        $this->view->categoryList  = array_merge($this->lang->ai->miniPrograms->squareCategories, $this->lang->ai->miniPrograms->categoryList, $this->ai->getCustomCategory());
+        $this->view->categoryList  = array_merge($this->lang->ai->miniPrograms->squareCategories, $this->lang->ai->miniPrograms->categoryList, $this->ai->getCustomCategories());
         $this->view->pager         = $pager;
         $this->view->miniPrograms  = $miniPrograms ?: array();
         $this->view->title         = $this->lang->ai->miniPrograms->common;
         $this->display();
     }
 
+    /**
+     * Collect mini program by appid.
+     *
+     * @param string $appID
+     * @param string $delete
+     * @access public
+     * @return void
+     */
     public function collectMiniProgram($appID, $delete = 'false')
     {
         $this->ai->collectMiniProgram($this->app->user->id, $appID, $delete);
@@ -185,7 +204,7 @@ class ai extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $order = common::appendOrder($orderBy);
-        $categoryList = array_merge($this->lang->ai->miniPrograms->categoryList, $this->ai->getCustomCategory());
+        $categoryList = array_merge($this->lang->ai->miniPrograms->categoryList, $this->ai->getCustomCategories());
 
         $programs = $this->ai->getMiniPrograms($category, $status, $order, $pager);
         foreach($programs as $program)
@@ -208,14 +227,20 @@ class ai extends control
         $this->display();
     }
 
+    /**
+     * Edit mini program category.
+     *
+     * @access public
+     * @return void
+     */
     public function editMiniProgramCategory()
     {
         if(!empty($_POST))
         {
-            $this->ai->updateCustomCategory();
+            $this->ai->updateCustomCategories();
         }
 
-        $this->view->categoryList = $this->ai->getCustomCategory();
+        $this->view->categoryList = $this->ai->getCustomCategories();
         $this->view->title        = $this->lang->ai->miniPrograms->common;
         $this->display();
     }
@@ -250,6 +275,13 @@ class ai extends control
         $this->sendError(dao::getError());
     }
 
+    /**
+     * Test mini program.
+     *
+     * @param string $appID
+     * @access public
+     * @return void
+     */
     public function testMiniProgram($appID)
     {
         if(!empty($_POST))
@@ -306,17 +338,24 @@ class ai extends control
             $this->view->iconName = 'writinghand';
             $this->view->iconTheme = 7;
         }
-        $this->view->categoryList = $this->ai->getCustomCategory();
+        $this->view->categoryList = $this->ai->getCustomCategories();
         $this->view->title = $this->lang->ai->miniPrograms->common;
         $this->display();
     }
 
+    /**
+     * Mini program view.
+     *
+     * @param string $id
+     * @access public
+     * @return void
+     */
     public function miniProgramView($id)
     {
         $miniProgram = $this->ai->getMiniProgramByID($id);
 
         $this->view->miniProgram = $miniProgram;
-        $this->view->categoryList = array_merge($this->lang->ai->miniPrograms->categoryList, $this->ai->getCustomCategory());
+        $this->view->categoryList = array_merge($this->lang->ai->miniPrograms->categoryList, $this->ai->getCustomCategories());
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('miniProgram', $id);
         $this->view->actions     = $this->loadModel('action')->getList('miniProgram', $id);
         $this->view->fields      = $this->ai->getMiniProgramFields($id);
@@ -760,7 +799,8 @@ class ai extends control
             $output = array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $e->getMessage()));
 
             /* Audition shall quit on such exception. */
-            if(isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60) {
+            if(isset($_SESSION['auditPrompt']) && time() - $_SESSION['auditPrompt']['time'] < 10 * 60)
+            {
                 $output['locate'] = $this->inlink('promptAudit', "promptID=$promptId&objectId=$objectId&exit=true");
             }
             return $this->send($output);
@@ -808,14 +848,16 @@ class ai extends control
      */
     public function promptAudit($promptId, $objectId, $exit = false)
     {
-        if(!empty($exit)) {
+        if(!empty($exit))
+        {
             unset($_SESSION['auditPrompt']);
             return $this->send(array('result' => 'success', 'locate' => $this->inlink('promptview', "promptID=$promptId") . '#app=admin'));
         }
 
         $prompt = $this->ai->getPromptByID($promptId);
 
-        if($_POST) {
+        if($_POST)
+        {
             $data = fixer::input('post')->get();
 
             $originalPrompt = clone $prompt;
@@ -906,7 +948,8 @@ class ai extends control
         {
             $data   = fixer::input('post')->get();
             $method = $data->method;
-            switch ($method) {
+            switch ($method)
+            {
                 case 'create':
                     $this->ai->createRoleTemplate($data->role, $data->characterization);
                     break;
