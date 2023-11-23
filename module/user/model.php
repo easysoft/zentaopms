@@ -417,6 +417,30 @@ class userModel extends model
     }
 
     /**
+     * 创建用户组。
+     * Create user group.
+     *
+     * @param  array  $groups
+     * @param  string $account
+     * @access public
+     * @return bool
+     */
+    public function createUserGroup(array $groups, string $account): bool
+    {
+        $userGroup = new stdclass();
+        $userGroup->account = $account;
+        $userGroup->project = '';
+
+        foreach($groups as $group)
+        {
+            $userGroup->group = $group;
+            $this->dao->replace(TABLE_USERGROUP)->data($userGroup)->exec();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
      * Batch create users.
      *
      * @param  int    $users
