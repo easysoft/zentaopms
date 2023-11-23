@@ -33,7 +33,7 @@ class companyModel extends model
      * @access public
      * @return object
      */
-    public function getByID(int $companyID)
+    public function getByID(int $companyID): object
     {
         return $this->dao->findById($companyID)->from(TABLE_COMPANY)->fetch();
     }
