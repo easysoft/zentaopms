@@ -18,5 +18,6 @@ $deptID = '2';
 
 $dept = new deptTest();
 $result = $dept->createMemberLinkTest($deptID);
-$expect = 'creatememberlink.php?m=company&f=browse&browseType=inside&dept=2';
+$expect = helper::createLink('company', 'browse', "browseType=inside&dept={$deptID}");
+
 r(strpos($result, $expect) !== false) && p() && e('1');  //获取创建的用户链接
