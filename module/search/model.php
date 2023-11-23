@@ -255,6 +255,7 @@ class searchModel extends model
         $formSessionName = $module . 'Form';
         if(isset($_SESSION[$formSessionName]))
         {
+            $_SESSION[$formSessionName] = $this->convertFormFrom20To18($_SESSION[$formSessionName]);
             for($i = 1; $i <= $this->config->search->groupItems; $i ++)
             {
                 if(!isset($_SESSION[$formSessionName][$i - 1])) continue;
@@ -649,7 +650,8 @@ class searchModel extends model
                 if(common::hasPriv($module, 'view')) $allowedObject[] = $objectType;
 
                 if($module == 'caselib'    and common::hasPriv('caselib', 'view'))     $allowedObject[] = $objectType;
-                if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedobject[] = $objectType;
+                if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedObject[] = $objectType;
+                if($module == 'practice'   and common::haspriv('traincourse', 'practiceView')) $allowedObject[] = $objectType;
             }
         }
 
@@ -802,6 +804,11 @@ class searchModel extends model
             {
                 $module = 'deploy';
                 $method = 'viewstep';
+            }
+            elseif($module == 'practice')
+            {
+                $module = 'traincourse';
+                $method = 'practiceview';
             }
 
             if(strpos($linkProjectModules, ",$module,") !== false)
