@@ -160,19 +160,15 @@ class metricTao extends metricModel
         $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
         $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
 
-        $date = '';
-        if(empty($query))
-        {
-            // 如果二者为空，说明最终需要的数据只有两列，而这作为全局数据的标记，所以要取所有的数据，而不是最后一次生成的
-            if(empty($scopeList) and empty($dateList))
-            {
-                $date = date('Y-m-d H:i:s', 0);
-            }
-            else
-            {
-                $date = helper::today();
-            }
-        }
+        /**
+         * 如果没有传入筛选参数
+         *   如果范围和日期列为空，说明最终需要的数据只有两列，而这作为全局数据的标记，所以要取所有的数据，否则只取今天之前的数据。
+         * 如果传入了筛选参数，则按照筛选参数进行筛选。
+         * If no filtering parameters are passed in
+         *   If the range and date columns are empty, only two columns of data are needed at the end, and this serves as a marker for global data, so get all the data, otherwise only the data before today.
+         * If filtering parameters are passed in, filter according to the filtering parameters.
+         */
+        $date = empty($query) ? (empty($scopeList) && empty($dateList) ? date('Y-m-d H:i:s', 0) : helper::today()) : '';
 
         $scope     = $this->processRecordQuery($query, 'scope');
         $dateBegin = $this->processRecordQuery($query, 'dateBegin', 'date');
