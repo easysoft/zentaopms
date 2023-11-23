@@ -141,7 +141,7 @@ class searchModel extends model
                 }
                 elseif($this->post->$fieldName == 'dept')
                 {
-                    $allDepts = $this->loadModel('dept')->getAllChildId($value);
+                    $allDepts = $this->loadModel('dept')->getAllChildID($value);
                     $condition = helper::dbIN($allDepts);
                 }
                 elseif($this->post->$fieldName == 'scene')

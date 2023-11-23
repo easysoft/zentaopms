@@ -84,7 +84,7 @@ class dept extends control
 
         /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
         $optionMenu = $this->dept->getOptionMenu();
-        $childs     = $this->dept->getAllChildId($deptID);
+        $childs     = $this->dept->getAllChildID($deptID);
         foreach($childs as $childModuleID) unset($optionMenu[$childModuleID]);
 
         $dept = $this->dept->fetchByID($deptID);

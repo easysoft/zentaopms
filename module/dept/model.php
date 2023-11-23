@@ -193,7 +193,7 @@ class deptModel extends model
         if(dao::isError()) return false;
 
         /* 变更当前部门的子部门负责人。 */
-        $childs = $this->getAllChildId($dept->id);
+        $childs = $this->getAllChildID($dept->id);
         $this->dao->update(TABLE_DEPT)->set('manager')->eq($dept->manager)->where('id')->in($childs)->andWhere('manager', true)->eq('')->orWhere('manager')->eq($oldDept->manager)->markRight(1)->exec();
 
         /* 整理部门的path和grade。 */
