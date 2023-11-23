@@ -409,6 +409,7 @@ class admin extends control
     }
 
     /**
+     * 表引擎。
      * Show table engine.
      *
      * @access public
@@ -416,7 +417,7 @@ class admin extends control
      */
     public function tableEngine()
     {
-        $this->view->title = $this->lang->admin->tableEngine;
+        $this->view->title        = $this->lang->admin->tableEngine;
         $this->view->tableEngines = $this->dao->getTableEngines();
         $this->display();
     }
