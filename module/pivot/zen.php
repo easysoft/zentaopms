@@ -101,6 +101,7 @@ class pivotZen extends pivot
             $pivots = $this->dao->select('*')->from(TABLE_PIVOT)
                 ->where("FIND_IN_SET($group->id, `group`)")
                 ->andWhere('stage')->ne('draft')
+                ->andWhere('deleted')->eq('0')
                 ->orderBy('id_desc')
                 ->fetchAll();
             if($pivots)
