@@ -778,25 +778,28 @@ class customModel extends model
     }
 
     /**
+     * 设置产品、项目和迭代概念。
      * Set product and project and sprint concept.
      *
+     * @param  string $sprintConcept
      * @access public
-     * @return void
+     * @return bool
      */
-    public function setConcept()
+    public function setConcept(string $sprintConcept): bool
     {
         $this->loadModel('setting');
-        $this->setting->setItem('system.custom.sprintConcept', $this->post->sprintConcept);
-        $this->setting->setItem('system.custom.productProject', '0_' . $this->post->sprintConcept);
+        $this->setting->setItem('system.custom.sprintConcept', $sprintConcept);
+        $this->setting->setItem('system.custom.productProject', '0_' . $sprintConcept);
 
         /* Change block title. */
         $oldConfig = isset($this->config->custom->sprintConcept) ? $this->config->custom->sprintConcept : '0';
-        $newConfig = $this->post->sprintConcept;
+        $newConfig = $sprintConcept;
 
         foreach($this->config->executionCommonList as $executionCommonList)
         {
             $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$executionCommonList[$oldConfig]}', '{$executionCommonList[$newConfig]}')")->where('dashboard')->eq('execution')->exec();
         }
+        return !dao::isError();
     }
 
     /**
