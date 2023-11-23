@@ -899,13 +899,15 @@ class customModel extends model
     }
 
     /**
-     * Compute features.
+     * 计算启用和不启用的功能。
+     * Compute the enabled and disabled features.
      *
      * @access public
      * @return array
      */
-    public function computeFeatures()
+    public function computeFeatures(): array
     {
+        /* Check that the project features are enabled. */
         $disabledFeatures = array('program', 'productLine');
         foreach($this->config->custom->dataFeatures as $feature)
         {
@@ -930,6 +932,7 @@ class customModel extends model
         if(!isset($disabledFeatures['scrum'])) $disabledFeatures['scrum'] = array();
         $disabledFeatures['scrum'][] = 'scrumMeasrecord';
 
+        /* Check that the scrum project features are enabled. */
         $enabledScrumFeatures  = array();
         $disabledScrumFeatures = array();
         if(in_array($this->config->edition, array('max', 'ipd')))
@@ -1019,7 +1022,7 @@ class customModel extends model
         $disabledFeatures = '';
         if($mode == 'light')
         {
-            /* Check whether the product or project data in tge system is empty. */
+            /* Check whether the product or project data in the system is empty. */
             foreach($this->config->custom->dataFeatures as $feature)
             {
                 $function = 'has' . ucfirst($feature) . 'Data';
