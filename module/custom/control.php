@@ -417,6 +417,7 @@ class custom extends control
     }
 
     /**
+     * 获取自定义列。
      * Ajax get custom fields.
      *
      * @param  string $module
@@ -425,7 +426,7 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function ajaxGetCustomFields($module, $section, $key)
+    public function ajaxGetCustomFields(string $module, string $section, string $key)
     {
         return print($this->loadModel('setting')->getItem("owner={$this->app->user->account}&module={$module}&section={$section}&key={$key}"));
     }
