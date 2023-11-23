@@ -15,17 +15,6 @@
 class companyModel extends model
 {
     /**
-     * Get company list.
-     *
-     * @access public
-     * @return void
-     */
-    public function getList()
-    {
-        return $this->dao->select('*')->from(TABLE_COMPANY)->fetchAll();
-    }
-
-    /**
      * 获取第一家公司。
      * Get the first company.
      *
