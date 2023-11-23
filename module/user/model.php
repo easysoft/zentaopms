@@ -679,6 +679,37 @@ class userModel extends model
     }
 
     /**
+     * 检查用户名是否发生变化。
+     * Check if the account changed.
+     *
+     * @param  string $oldAccount
+     * @param  string $newAccount
+     * @access public
+     * @return bool
+     */
+    public function checkAccountChange(string $oldAccount, string $newAccount): bool
+    {
+        if($oldAccount == $newAccount) return true;
+
+        /* 更新用户组和用户视图。*/
+        /* Update the user group and user view. */
+        $this->dao->update(TABLE_USERGROUP)->set('account')->eq($newAccount)->where('account')->eq($oldAccount)->exec();
+        $this->dao->update(TABLE_USERVIEW)->set('account')->eq($newAccount)->where('account')->eq($oldAccount)->exec();
+
+        /* 如果旧用户名是公司管理员，则更新公司管理员。*/
+        /* If the old account is company admin, update the company admin. */
+        if(strpos($this->app->company->admins, ',' . $oldAccount . ',') !== false)
+        {
+            $admins = str_replace(',' . $oldAccount . ',', ',' . $newAccount . ',', $this->app->company->admins);
+            $this->dao->update(TABLE_COMPANY)->set('admins')->eq($admins)->where('id')->eq($this->app->company->id)->exec();
+            if(dao::isError()) return false;
+
+            $this->app->user->account = $newAccount;
+        }
+        return !dao::isError();
+    }
+
+    /**
      * update session random.
      *
      * @access public
