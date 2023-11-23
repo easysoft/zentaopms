@@ -114,5 +114,9 @@ $(function()
     });
 });
 
+function delItem(val)
+{
+    $(val).parents('tr').remove();
+}
 </script>
 <?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>
