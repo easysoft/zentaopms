@@ -465,25 +465,6 @@ class metricZen extends metric
     }
 
     /**
-     * 获取表格的宽度，设置其 flex-basis 属性。
-     * Get width for dtable.
-     *
-     * @param  array     $headers
-     * @access protected
-     * @return int
-     */
-    protected function getViewTableWidth($headers)
-    {
-        $width = 0;
-        foreach($headers as $header)
-        {
-            $width += isset($header['width']) ? $header['width'] : 96;
-        }
-
-        return $width;
-    }
-
-    /**
      * 对 headers 进行分组满足表头合并单元格, 返回经过分组的 headers 和 data。
      * Return grouped headers and data for table headers merges cell.
      *
