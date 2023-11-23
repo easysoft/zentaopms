@@ -611,16 +611,17 @@ class actionTao extends actionModel
     public function processEffortCondition(string &$condition, string $period, string $begin, string $end, string $beginDate): void
     {
         $efforts = $this->dao->select('id')->from(TABLE_EFFORT)
-            ->where($condition)
+            ->where('NOT ' . $condition)
             ->beginIF($period != 'all')
             ->beginIF($begin)->andWhere('date')->gt($begin)->fi()
             ->beginIF($end)->andWhere('date')->lt($end)->fi()
             ->fi()
             ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
             ->fetchPairs();
+
         $efforts = !empty($efforts) ? implode(',', $efforts) : 0;
 
-        $condition .= " OR (`objectID` IN ({$efforts}) AND `objectType` = 'effort')";
+        $condition .= " OR (`objectID` NOT IN ({$efforts}) AND `objectType` = 'effort')";
     }
 
     /**

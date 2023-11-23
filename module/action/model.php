@@ -740,7 +740,7 @@ class actionModel extends model
         $actionCondition = $this->getActionCondition();
         if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions'])) return array();
 
-        $condition = "`objectType` IN ('doc', 'doclib') OR ({$condition})";
+        $condition = "`objectType` IN ('doc', 'doclib')" . $condition = '1=1'? '' : "OR ({$condition})";
 
         $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
         $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
