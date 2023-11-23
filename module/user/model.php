@@ -710,6 +710,33 @@ class userModel extends model
     }
 
     /**
+     * 检查权限组是否发生变化。
+     * Check if the group changed.
+     *
+     * @param  object $user
+     * @access public
+     * @return bool
+     */
+    public function checkGroupChange(object $user): bool
+    {
+        $oldGroups = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($user->account)->fetchPairs();
+        $newGroups = array_unique(array_filter($user->group));
+
+        sort($oldGroups);
+        sort($newGroups);
+
+        if(join(',', $oldGroups) == join(',', $newGroups)) return true;
+
+        /* 如果权限组发生变化，则删除原有的权限组，重新创建并更新用户视图。*/
+        /* If the group changed, delete the old group, create new group and update user view. */
+        $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($user->account)->exec();
+        if($newGroups) $this->createUserGroup($newGroups, $user->account);
+        $this->computeUserView($user->account, true);
+
+        return !dao::isError();
+    }
+
+    /**
      * update session random.
      *
      * @access public
