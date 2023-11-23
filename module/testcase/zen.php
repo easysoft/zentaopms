@@ -22,7 +22,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function setBrowseCookie(string $productID, string $branch, string $browseType, string $param): void
+    protected function setBrowseCookie(int $productID, string|bool $branch, string $browseType, string $param): void
     {
         helper::setcookie('preProductID', $productID);
         helper::setcookie('preBranch', $branch);
@@ -100,15 +100,14 @@ class testcaseZen extends testcase
      * 设置菜单。
      * Set menu.
      *
-     * @param  int       $projectID
-     * @param  int       $executionID
-     * @param  int       $productID
-     * @param  string    $branch
-     * @param  string    $case
+     * @param  int        $projectID
+     * @param  int        $executionID
+     * @param  int        $productID
+     * @param  string|int $branch
      * @access protected
      * @return void
      */
-    protected function setMenu(int $projectID, int $executionID, int $productID, string $branch)
+    protected function setMenu(int $projectID, int $executionID, int $productID, string|int $branch)
     {
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($projectID);
         if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($executionID);

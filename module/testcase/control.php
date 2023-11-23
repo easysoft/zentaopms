@@ -99,7 +99,7 @@ class testcase extends control
         $suiteID    = ($browseType == 'bysuite')  ? $param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? $this->cookie->caseSuite : 0) : 0);
         $queryID    = ($browseType == 'bysearch') ? $param : 0;
 
-        $this->testcaseZen->setBrowseCookie((string)$productID, $branch, $browseType, (string)$param);
+        $this->testcaseZen->setBrowseCookie($productID, $branch, $browseType, (string)$param);
         $this->testcaseZen->setBrowseSession($productID, $moduleID, $browseType, $orderBy);
         $this->testcaseZen->setBrowseMenu($productID, $branch, $browseType, $projectID);
         $this->testcaseZen->buildBrowseSearchForm($productID, $branch, $queryID, $projectID);
