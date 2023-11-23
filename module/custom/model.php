@@ -1126,12 +1126,13 @@ class customModel extends model
     }
 
     /**
-     * Check for risk data.
+     * 检查系统中是否有敏捷项目的风险数据。
+     * Check whether there is scrum risk data in the system.
      *
      * @access public
-     * @return bool
+     * @return int
      */
-    public function hasScrumRiskData()
+    public function hasScrumRiskData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
@@ -1142,7 +1143,7 @@ class customModel extends model
                 ->andWhere('t2.model')->eq('scrum')
                 ->count();
         }
-        return false;
+        return 0;
     }
 
     /**
