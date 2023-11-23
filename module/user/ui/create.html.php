@@ -61,7 +61,7 @@ formPanel
                     (
                         set::id('addCompany'),
                         set::name('new[]'),
-                        set::value('0'),
+                        set::value('1'),
                         set::text($lang->company->create)
                     )
                 )
