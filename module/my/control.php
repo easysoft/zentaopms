@@ -628,65 +628,46 @@ EOF;
     }
 
     /**
+     * 用例列表。
      * My test case.
      *
-     * @param  string     $type      assigntome|openedbyme
-     * @param  string|int $param
-     * @param  string     $orderBy
-     * @param  int        $recTotal
-     * @param  int        $recPerPage
-     * @param  int        $pageID
+     * @param  string $type      assigntome|openedbyme
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function testcase($type = 'assigntome', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase(string $type = 'assigntome', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('testcase');
-        $this->loadModel('testtask');
-
         /* Save session. */
         $uri = $this->app->getURI(true);
         $this->session->set('caseList', $uri, 'qa');
         $this->session->set('bugList',  $uri . "#app={$this->app->tab}", 'qa');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
-        $queryID = ($type == 'bysearch') ? (int)$param : 0;
+        $queryID = ($type == 'bysearch') ? $param : 0;
 
         $cases = array();
-        if($type == 'assigntome') $cases = $this->testcase->getByAssignedTo($this->app->user->account, $auto = 'skip|run', $sort, $pager);
-        if($type == 'openedbyme') $cases = $this->testcase->getByOpenedBy($this->app->user->account, $auto = 'skip', $sort, $pager);
+        if($type == 'assigntome') $cases = $this->loadModel('testcase')->getByAssignedTo($this->app->user->account, 'skip|run', $sort, $pager);
+        if($type == 'openedbyme') $cases = $this->loadModel('testcase')->getByOpenedBy($this->app->user->account, 'skip', $sort, $pager);
         if($type == 'bysearch' and $this->app->rawMethod == 'contribute') $cases = $this->my->getTestcasesBySearch($queryID, 'contribute', $orderBy, $pager);
         if($type == 'bysearch' and $this->app->rawMethod == 'work')       $cases = $this->my->getTestcasesBySearch($queryID, 'work', $orderBy, $pager);
-
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
-        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
-        $cases = $this->testcase->appendData($cases, $type == 'assigntome' ? 'run' : 'case');
+        $cases = $this->myZen->buildCaseData($cases, $type);
 
         /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=testcase&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildTestCaseSearchForm($queryID, $actionURL, $currentMethod);
-
-        $failCount = 0;
-        foreach($cases as $case)
-        {
-            if($case->lastRunResult && $case->lastRunResult != 'pass') $failCount ++;
-            if($case->needconfirm)
-            {
-                $case->status = $this->lang->story->changed;
-            }
-            else if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and !$case->needconfirm)
-            {
-                $case->status = $this->lang->testcase->changed;
-            }
-            if(!$case->lastRunResult) $case->lastRunResult = $this->lang->testcase->unexecuted;
-        }
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestCase;
@@ -694,7 +675,6 @@ EOF;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->tabID      = 'test';
         $this->view->type       = $type;
-        $this->view->failCount  = $failCount;
         $this->view->param      = $param;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;

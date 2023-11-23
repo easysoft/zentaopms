@@ -15,11 +15,11 @@ class myZen extends my
      * 构造任务数据。
      * Build task data.
      *
-     * @param  array  $tasks
-     * @access public
+     * @param  array     $tasks
+     * @access protected
      * @return array
      */
-    public function buildTaskData(array $tasks): array
+    protected function buildTaskData(array $tasks): array
     {
         foreach($tasks as $task)
         {
@@ -41,6 +41,38 @@ class myZen extends my
             }
         }
         return $tasks;
+    }
+
+    /**
+     * 构造用例数据。
+     * Build case data.
+     *
+     * @param  array     $cases
+     * @param  string    $type  assigntome|openedbyme
+     * @access protected
+     * @return array
+     */
+    protected function buildCaseData(array $cases, string $type): array
+    {
+        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
+        $cases = $this->loadModel('testcase')->appendData($cases, $type == 'assigntome' ? 'run' : 'case');
+
+        $failCount = 0;
+        foreach($cases as $case)
+        {
+            if($case->lastRunResult && $case->lastRunResult != 'pass') $failCount ++;
+            if($case->needconfirm)
+            {
+                $case->status = $this->lang->story->changed;
+            }
+            else if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and !$case->needconfirm)
+            {
+                $case->status = $this->lang->testcase->changed;
+            }
+            if(!$case->lastRunResult) $case->lastRunResult = $this->lang->testcase->unexecuted;
+        }
+        $this->view->failCount = $failCount;
+        return $cases;
     }
 }
 
