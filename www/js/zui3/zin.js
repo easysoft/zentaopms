@@ -691,7 +691,13 @@
             target = urlInfo.moduleName ? `table-${urlInfo.moduleName}-${urlInfo.methodName}` : ($('.dtable').attr('id') || 'dtable');
         }
         if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
-        return loadComponent(target, $.extend({component: 'dtable', url: url, selector: `dtable/${target}:component,#featureBar>*${$('#moduleMenu').length ? ',#moduleMenu' : ''}`}, options));
+        const selectors = [`dtable/${target}`];
+        if(!$(target).closest('.modal').length)
+        {
+            selectors.push('#featureBar>*');
+            if($('#moduleMenu').length) selectors.push('#moduleMenu');
+        }
+        return loadComponent(target, $.extend({component: 'dtable', url: url, selector: selectors.join(',')}, options));
     }
 
     /**
