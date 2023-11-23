@@ -26,7 +26,7 @@
     <span class='input-group-addon'><?php echo $lang->kanban->selectedKanban;?></span>
     <?php echo html::select('kanban', $kanbanPairs, $selectedKanbanID, "onchange='reloadObjectList(this.value)' class='form-control chosen' data-drop_direction='down'");?>
     <span class='input-group-addon'><?php echo $lang->kanban->selectedLane;?></span>
-    <?php echo html::select('lane', $lanePairs, '', "onchange='setTargetLane(this.value)' class='form-control chosen' data-drop_direction='down'");?>
+    <?php echo html::select('lane', $lanePairs, '', "onchange='setTargetLane(this.value)' class='form-control chosen' data-drop_direction='down' data-width='250'");?>
   </div>
   <?php if($cards2Imported):?>
   <form class='main-table' method='post' data-ride='table' target='hiddenwin' id='importCardForm'>
