@@ -1143,6 +1143,7 @@ EOF;
     }
 
     /**
+     * 工单列表。
      * My ticket.
      *
      * @param  string $browseType
@@ -1154,23 +1155,20 @@ EOF;
      * @access public
      * @return void
      */
-    public function ticket($browseType = 'assignedtome', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function ticket(string $browseType = 'assignedtome', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('ticket');
-        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
-
-        $this->session->set('ticketList', $this->app->getURI(true), 'feedback');
+        $this->session->set('ticketList', $this->app->getURI(true), 'ticket');
 
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-
+        $pager   = pager::init($recTotal, $recPerPage, $pageID);
+        $queryID = $browseType == 'bysearch' ? $param : 0;
         if($browseType != 'bysearch')
         {
-            $tickets = $this->ticket->getList($browseType, $orderBy, $pager);
+            $tickets = $this->loadModel('ticket')->getList($browseType, $orderBy, $pager);
         }
         else
         {
-            $tickets = $this->ticket->getBySearch($queryID, $orderBy, $pager);
+            $tickets = $this->loadModel('ticket')->getBySearch($queryID, $orderBy, $pager);
         }
 
         $actionURL = $this->createLink('my', 'work', "mode=ticket&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
