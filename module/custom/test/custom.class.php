@@ -356,4 +356,20 @@ class customTest
         if(dao::isError()) return dao::getError();
         return json_decode($concept, true);
     }
+
+    /**
+     * 根据管理模式禁用相关功能。
+     * Disable related features based on the management mode.
+     *
+     * @param  string       $mode
+     * @access public
+     * @return array|string
+     */
+    public function disableFeaturesByModeTest(string $mode): array|string
+    {
+        $this->objectModel->disableFeaturesByMode($mode);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->loadModel('setting')->getItem('oner=system&module=common&key=disabledFeatures');
+    }
 }
