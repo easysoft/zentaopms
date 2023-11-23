@@ -372,4 +372,21 @@ class customTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->loadModel('setting')->getItem('oner=system&module=common&key=disabledFeatures');
     }
+
+    /**
+     * 处理定时任务。
+     * Process measrecord cron.
+     *
+     * @param  string $disabledFeatures
+     * @access public
+     * @return array|string
+     */
+    public function processMeasrecordCronTest(string $disabledFeatures): array|string
+    {
+        $this->objectModel->loadModel('setting')->setItem('system.common.disabledFeatures', $disabledFeatures);
+        $this->objectModel->processMeasrecordCron();
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('status')->from(TABLE_CRON)->where('command')->like('%methodName=execCrontabQueue')->fetch('status');
+    }
 }
