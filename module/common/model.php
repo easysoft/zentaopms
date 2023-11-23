@@ -89,11 +89,13 @@ class commonModel extends model
             ->andWhere('status')->eq('wait')
             ->orderBy('id_desc')
             ->fetchPairs();
-        $now = helper::now();
-        $this->dao->update(TABLE_PROGRAM)->set('status')->eq('doing')->set('realBegan')->eq($now)->where('id')->in($waitList)->exec();
+
+        $this->dao->update(TABLE_PROGRAM)->set('status')->eq('doing')->set('realBegan')->eq(helper::now())->where('id')->in($waitList)->exec();
+
+        $this->loadModel('action');
         foreach($waitList as $programID)
         {
-            $this->loadModel('action')->create('program', $programID, 'syncprogram');
+            $this->action->create('program', $programID, 'syncprogram');
         }
     }
 
