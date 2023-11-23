@@ -100,7 +100,7 @@ class testcase extends control
         $queryID    = ($browseType == 'bysearch') ? $param : 0;
 
         $this->testcaseZen->setBrowseCookie($productID, $branch, $browseType, (string)$param);
-        $this->testcaseZen->setBrowseSession($productID, $moduleID, $browseType, $orderBy);
+        $this->testcaseZen->setBrowseSession($productID, $branch, $moduleID, $browseType, $orderBy);
         $this->testcaseZen->setBrowseMenu($productID, $branch, $browseType, $projectID);
         $this->testcaseZen->buildBrowseSearchForm($productID, $branch, $queryID, $projectID);
         $this->testcaseZen->assignCasesAndScenesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID);

@@ -15,10 +15,10 @@ class testcaseZen extends testcase
      * 设置列表页面的 cookie。
      * Set browse cookie.
      *
-     * @param  int       $productID
-     * @param  string    $branch
-     * @param  string    $browseType
-     * @param  int       $param
+     * @param  int         $productID
+     * @param  string|bool $branch
+     * @param  string      $browseType
+     * @param  int         $param
      * @access protected
      * @return void
      */
@@ -41,19 +41,21 @@ class testcaseZen extends testcase
      * 设置列表页面的 session。
      * Set Browse session.
      *
-     * @param  int       $productID
-     * @param  int       $moduleID
-     * @param  string    $browseType
-     * @param  string    $orderBy
+     * @param  int         $productID
+     * @param  string|bool $branch
+     * @param  int         $moduleID
+     * @param  string      $browseType
+     * @param  string      $orderBy
      * @access protected
      * @return void
      */
-    protected function setBrowseSession(int $productID, int $moduleID, string $browseType, string $orderBy): void
+    protected function setBrowseSession(int $productID, string|bool $branch, int $moduleID, string $browseType, string $orderBy): void
     {
         if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
 
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
         $this->session->set('productID', $productID);
+        $this->session->set('branch', $branch);
         $this->session->set('moduleID', $moduleID);
         $this->session->set('browseType', $browseType);
         $this->session->set('orderBy', $orderBy);
@@ -805,6 +807,7 @@ class testcaseZen extends testcase
         $this->view->isLibCase = false;
         $this->view->product   = $product;
         $this->view->products  = $this->products;
+        $this->view->branch    = $this->cookie->preBranch;
 
         $this->assignBranchForEdit($case, $executionID);
         $this->assignStoriesForEdit($case);
