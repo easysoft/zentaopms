@@ -2471,6 +2471,7 @@ class kanbanModel extends model
             ->setDefault('team', '')
             ->setDefault('whitelist', '')
             ->setDefault('displayCards', 0)
+            ->setIF(!$this->post->fluidBoard, 'minColWidth', 0)
             ->setIF($this->post->import == 'off', 'object', '')
             ->cleanINT('space')
             ->join('whitelist', ',')
@@ -2501,7 +2502,7 @@ class kanbanModel extends model
             ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
             ->checkIF(!$kanban->fluidBoard, 'colWidth', 'ge', $this->config->minColWidth)
             ->batchCheckIF($kanban->fluidBoard, 'minColWidth', 'ge', $this->config->minColWidth)
-            ->checkIF($kanban->minColWidth >= $this->config->minColWidth and $kanban->fluidBoard, 'maxColWidth', 'gt', $kanban->minColWidth)
+            ->checkIF($kanban->fluidBoard && $kanban->minColWidth >= $this->config->minColWidth, 'maxColWidth', 'gt', $kanban->minColWidth)
             ->check('name', 'unique', "space = {$kanban->space}")
             ->exec();
 
