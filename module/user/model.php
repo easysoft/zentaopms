@@ -307,88 +307,51 @@ class userModel extends model
     }
 
     /**
+     * 添加一个用户。
      * Create a user.
      *
+     * @param  object $user
      * @access public
-     * @return int
+     * @return bool|int
      */
-    public function create()
+    public function create(object $user): bool|int
     {
-        $_POST['account'] = trim($_POST['account']);
-        if(strtolower($_POST['account']) == 'guest') return false;
+        $this->dao->begin();
 
-        $user = fixer::input('post')
-            ->setDefault('join', null)
-            ->setDefault('type', 'inside')
-            ->setDefault('company', 0)
-            ->setDefault('visions', '')
-            ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
-            ->setIF($this->post->password1 == false, 'password', '')
-            ->setIF($this->post->email != false, 'email', trim($this->post->email))
-            ->join('visions', ',')
-            ->remove('new, group, password1, password2, verifyPassword, passwordStrength,passwordLength, verifyRand')
-            ->get();
+        if(!empty($user->new)) $user->company = $this->createCompany($user->newCompany);
 
-        $this->checkPassword();
+        if($user->type == 'outside') $this->config->user->create->requiredFields = trim(str_replace(array(',dept,', ',commiter,'), '', ',' . $this->config->user->create->requiredFields . ','), ',');
 
-        if(empty($_POST['verifyPassword']) || $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
-
-        if(isset($_POST['new']))
-        {
-            if(!empty($user->company))
-            {
-                $company = new stdClass();
-                $company->name = $user->company;
-                $this->dao->insert(TABLE_COMPANY)->data($company)->exec();
-
-                $user->company = $this->dao->lastInsertID();
-            }
-            else
-            {
-                dao::$errors['company'][] = $this->lang->user->error->companyEmpty;
-                return false;
-            }
-        }
-
-        if(dao::isError()) return false;
-
-        if($user->type == 'outside')
-        {
-            $requiredFieldList = explode(',', $this->config->user->create->requiredFields);
-            if(in_array('dept', $requiredFieldList))     unset($requiredFieldList[array_search('dept', $requiredFieldList)]);
-            if(in_array('commiter', $requiredFieldList)) unset($requiredFieldList[array_search('commiter', $requiredFieldList)]);
-            $this->config->user->create->requiredFields = implode(',', $requiredFieldList);
-        }
-
-        $this->dao->insert(TABLE_USER)->data($user)
-            ->autoCheck()
+        $this->dao->insert(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,verifyRand,passwordLength,passwordStrength')
             ->batchCheck($this->config->user->create->requiredFields, 'notempty')
-            ->check('account', 'unique')
-            ->check('account', 'account')
-            ->checkIF($this->post->email != '', 'email', 'email')
+            ->checkIF($user->account, 'account', 'unique')
+            ->checkIF($user->account, 'account', 'account')
+            ->checkIF($user->email, 'email', 'email')
+            ->autoCheck()
             ->exec();
-
-        if(dao::isError()) return false;
+        if(dao::isError())
+        {
+            $this->dao->rollback();
+            return false;
+        }
 
         $userID = $this->dao->lastInsertID();
 
-        /* Set usergroup for account. */
-        if(!empty(array_filter($_POST['group'])))
-        {
-            foreach($this->post->group as $groupID)
-            {
-                $data          = new stdclass();
-                $data->account = $this->post->account;
-                $data->group   = $groupID;
-                $data->project = '';
-                $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
-            }
-        }
+        $groups = array_filter($user->group);
+        if($groups) $this->createUserGroup($groups, $user->account);
 
         $this->computeUserView($user->account);
         $this->loadModel('action')->create('user', $userID, 'Created');
         $this->loadModel('mail');
         if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
+
+        if(dao::isError())
+        {
+            $this->dao->rollback();
+            return false;
+        }
+
+        $this->dao->commit();
 
         return $userID;
     }
