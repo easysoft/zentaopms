@@ -818,41 +818,41 @@ EOF;
     }
 
     /**
+     * 问题列表。
      * My issues.
      *
-     * @access public
      * @param  string $type
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @access public
      * @return void
      */
-    public function issue($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function issue(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        /* Set session. */
+        $this->app->session->set('issueList', $this->app->getURI(true), 'project');
+
         /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build the search form. */
         $browseType = strtolower($type);
-        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
+        $queryID    = $browseType == 'bysearch' ? $param : 0;
         $actionURL  = $this->createLink('my', $this->app->rawMethod, "mode=issue&type=bySearch&param=myQueryID");
         $this->loadModel('issue')->buildSearchForm($actionURL, $queryID);
 
-        $this->app->session->set('issueList', $this->app->getURI(true), 'project');
-
-        $this->view->title      = $this->lang->my->issue;
-        $this->view->mode       = 'issue';
-        $this->view->users      = $this->user->getPairs('noclosed|noletter');
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->type       = $type;
-        $this->view->param      = $param;
-        $this->view->issues     = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager,  $orderBy, 'issue') : $this->loadModel('issue')->getUserIssues($type, $queryID, $this->app->user->account, $orderBy, $pager);
-
+        $this->view->title       = $this->lang->my->issue;
+        $this->view->mode        = 'issue';
+        $this->view->users       = $this->user->getPairs('noclosed|noletter');
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->view->type        = $type;
+        $this->view->param       = $param;
+        $this->view->issues      = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager,  $orderBy, 'issue') : $this->loadModel('issue')->getUserIssues($type, $queryID, $this->app->user->account, $orderBy, $pager);
         $this->view->projectList = $this->loadModel('project')->getPairsByProgram();
-
         $this->display();
     }
 
