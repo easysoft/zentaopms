@@ -432,21 +432,6 @@ class custom extends control
     }
 
     /**
-     * Custom menu view
-     *
-     * @param  string $module
-     * @param  string $method
-     * @access public
-     * @return void
-     */
-    public function ajaxMenu($module = 'main', $method = '')
-    {
-        $this->view->module = $module;
-        $this->view->method = $method;
-        $this->display();
-    }
-
-    /**
      * Ajax set menu
      *
      * @param  string $module
