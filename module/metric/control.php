@@ -74,7 +74,7 @@ class metric extends control
             $resultData   = $this->metricZen->getViewTableData($metric, $result);
         }
 
-        include 'test/groupData/' . 'notime1.php';
+        //include 'test/groupData/' . 'notime1.php';
 
         list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
 

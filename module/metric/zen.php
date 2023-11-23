@@ -486,6 +486,8 @@ class metricZen extends metric
         elseif($headerLength == 3)
         {
         }
+
+        return array($header, $data);
     }
 
     protected function getNoTimeTable($data)
