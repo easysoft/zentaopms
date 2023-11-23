@@ -179,11 +179,13 @@ class metricZen extends metric
      */
     protected function prepareMetricRecord($calcList)
     {
-        $now     = helper::now();
+        $options = array('year' => date('Y'), 'month' => date('n'), 'week' => date('W'), 'day' => date('j'));
+
+        $now = helper::now();
         $records = array();
         foreach($calcList as $code => $calc)
         {
-            $results = $calc->getResult();
+            $results = $calc->getResult($options);
             if(!is_array($results) || count($results) == 0) continue;
 
             $system = (int)$this->metric->isSystemMetric($results);
