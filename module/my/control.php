@@ -652,14 +652,14 @@ EOF;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Append id for second sort. */
-        $sort = common::appendOrder($orderBy);
-        $queryID = ($type == 'bysearch') ? $param : 0;
+        $sort    = common::appendOrder($orderBy);
+        $queryID = $type == 'bysearch' ? $param : 0;
 
         $cases = array();
         if($type == 'assigntome') $cases = $this->loadModel('testcase')->getByAssignedTo($this->app->user->account, 'skip|run', $sort, $pager);
         if($type == 'openedbyme') $cases = $this->loadModel('testcase')->getByOpenedBy($this->app->user->account, 'skip', $sort, $pager);
-        if($type == 'bysearch' and $this->app->rawMethod == 'contribute') $cases = $this->my->getTestcasesBySearch($queryID, 'contribute', $orderBy, $pager);
-        if($type == 'bysearch' and $this->app->rawMethod == 'work')       $cases = $this->my->getTestcasesBySearch($queryID, 'work', $orderBy, $pager);
+        if($type == 'bysearch' && $this->app->rawMethod == 'contribute') $cases = $this->my->getTestcasesBySearch($queryID, 'contribute', $orderBy, $pager);
+        if($type == 'bysearch' && $this->app->rawMethod == 'work')       $cases = $this->my->getTestcasesBySearch($queryID, 'work', $orderBy, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         $cases = $this->myZen->buildCaseData($cases, $type);
@@ -687,7 +687,8 @@ EOF;
     }
 
     /**
-     * doc page of my.
+     * 文档列表。
+     * Doc page of my.
      *
      * @param  string $type
      * @param  int    $param
@@ -698,27 +699,23 @@ EOF;
      * @access public
      * @return void
      */
-    public function doc($type = 'openedbyme', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function doc(string $type = 'openedbyme', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session, load lang. */
         $uri = $this->app->getURI(true);
-        $this->loadModel('doc');
-        if($this->app->viewType != 'json') $this->session->set('docList', $uri, 'doc');
-
-        $queryID = ($type == 'bySearch') ? (int)$param : 0;
-
         $this->session->set('productList',   $uri, 'product');
         $this->session->set('executionList', $uri, 'execution');
         $this->session->set('projectList',   $uri, 'project');
+        if($this->app->viewType != 'json') $this->session->set('docList', $uri, 'doc');
 
         /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Append id for second sort. */
-        $sort = common::appendOrder($orderBy);
-
-        $docs = $this->doc->getDocsByBrowseType($type, $queryID, 0, $sort, $pager);
+        $sort    = common::appendOrder($orderBy);
+        $queryID = $type == 'bySearch' ? $param : 0;
+        $docs    = $this->loadModel('doc')->getDocsByBrowseType($type, $queryID, 0, $sort, $pager);
 
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=doc&browseType=bySearch&queryID=myQueryID");
         $this->loadModel('doc')->buildSearchForm(0, array(), $queryID, $actionURL, 'contribute');
