@@ -92,7 +92,6 @@ class metric extends control
         $this->view->filters       = $filters;
         $this->view->filtersBase64 = $filtersBase64;
         $this->view->pager         = $pager;
-        $this->view->tableWidth    = $this->metricZen->getViewTableWidth($resultHeader);
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
         $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);

@@ -410,22 +410,6 @@ class metricZen extends metric
     }
 
     /**
-     * 获取度量数据表的宽度。
-     * Get width of result table in view.
-     *
-     * @param  array     $headers
-     * @access protected
-     * @return int
-     */
-    protected function getViewTableWidth($headers)
-    {
-        $width = 0;
-        foreach($headers as $header) $width += isset($header['width']) ? $header['width'] : 160;
-
-        return $width;
-    }
-
-    /**
      * 获取度量数据表的数据。
      * Get data of result table.
      *
@@ -456,12 +440,28 @@ class metricZen extends metric
                 $row->scopeID = $record[$scope];
             }
             $row->value = is_numeric($record['value']) ? round((float)$record['value'], 2) : $record['value'];
-            if(isset($record['date'])) $row->calcTime = date("Y-m-d", strtotime($record['date']));
+            if(isset($record['date'])) $row->calcTime = date("Y-m-d H:i", strtotime($record['date']));
 
             $tableData[] = $row;
         }
 
         return $tableData;
+    }
+
+    /**
+     * 获取度量数据表的宽度。
+     * Get width of result table in view.
+     *
+     * @param  array     $headers
+     * @access protected
+     * @return int
+     */
+    protected function getViewTableWidth($headers)
+    {
+        $width = 0;
+        foreach($headers as $header) $width += isset($header['width']) ? $header['width'] : 160;
+
+        return $width;
     }
 
     /**
@@ -485,6 +485,13 @@ class metricZen extends metric
         }
         elseif($headerLength == 3)
         {
+            if(in_array('scope', array_column($header, 'name')))
+            {
+            }
+            else
+            {
+                //return $this->getTimeTable($data);
+            }
         }
 
         return array($header, $data);
@@ -509,7 +516,7 @@ class metricZen extends metric
         {
             $time     = $dataInfo->calcTime;
             $year     = substr($time, 0, 4);
-            $monthDay = substr($time, 5);
+            $monthDay = substr($time, 5, 5);
 
             $name                = "time{$time}";
             $groupHeader[]       = array('name' => $name, 'title' => $monthDay, 'headerGroup' => $year, 'align' => 'center');
@@ -517,6 +524,10 @@ class metricZen extends metric
         }
 
         return array($groupHeader, $groupData);
+    }
+
+    protected function getTimeTable($data)
+    {
     }
 
     /**

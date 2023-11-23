@@ -1179,6 +1179,7 @@ class metricModel extends model
     public function getEchartSeries($head, $datas, $x, $y, $type)
     {
         $headLength = count($head);
+        $xAxisData = array_unique(array_column($datas, $x));
         $series = array();
 
         if($headLength <= 3)
@@ -1201,7 +1202,7 @@ class metricModel extends model
             foreach($groupedData as $scope => $groups)
             {
                 $seriesData = array();
-                foreach($xAxis['data'] as $date)
+                foreach($xAxisData as $date)
                 {
                     $value = 0;
                     foreach($groups as $group)
