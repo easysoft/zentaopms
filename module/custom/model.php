@@ -1018,22 +1018,25 @@ class customModel extends model
     }
 
     /**
-     * Set features to disable.
+     * 根据管理模式禁用相关功能。
+     * Disable related features based on the management mode.
      *
-     * @param  int    $mode
+     * @param  string $mode
      * @access public
      * @return void
      */
-    public function disableFeaturesByMode($mode)
+    public function disableFeaturesByMode(string $mode)
     {
         $disabledFeatures = '';
         if($mode == 'light')
         {
+            /* Check whether the product or project data in tge system is empty. */
             foreach($this->config->custom->dataFeatures as $feature)
             {
                 $function = 'has' . ucfirst($feature) . 'Data';
                 if(!$this->$function())
                 {
+                    /* If the data is empty, this feature is disabled. */
                     $disabledFeatures .= "$feature,";
                     if(strpos($feature, 'scrum') === 0) $disabledFeatures .= 'agileplus' . substr($feature, 5) . ',';
                 }
@@ -1041,6 +1044,7 @@ class customModel extends model
             $disabledFeatures .= 'scrumMeasrecord,agileplusMeasrecord,productTrack,productRoadmap';
         }
 
+        /* Save the features that are disable to the config. */
         $disabledFeatures = rtrim($disabledFeatures, ',');
         $this->loadModel('setting')->setItem('system.common.disabledFeatures', $disabledFeatures);
 
@@ -1206,6 +1210,7 @@ class customModel extends model
     }
 
     /**
+     * 处理定时任务。
      * Process measrecord cron.
      *
      * @access public
@@ -1222,16 +1227,18 @@ class customModel extends model
         $hasWaterfallPlus           = strpos(",{$disabledFeatures},",  ',waterfallplus,')       === false;
         $hasScrumMeasrecord         = strpos(",{$disabledFeatures},",  ',scrumMeasrecord,')     === false;
         $hasAgilePlusMeasrecord     = strpos(",{$disabledFeatures},",  ',agileMeasrecord,')     === false;
-        $hasWaterfallMeasrecord     = (strpos(",{$disabledFeatures},", ',waterfallMeasrecord,') === false and $hasWaterfall);
-        $hasWaterfallPlusMeasrecord = (strpos(",{$disabledFeatures},", ',waterfallplusMeasrecord,') === false and $hasWaterfallPlus);
+        $hasWaterfallMeasrecord     = (strpos(",{$disabledFeatures},", ',waterfallMeasrecord,') === false && $hasWaterfall);
+        $hasWaterfallPlusMeasrecord = (strpos(",{$disabledFeatures},", ',waterfallplusMeasrecord,') === false && $hasWaterfallPlus);
 
+        /* Determine whether the cron is enabled based on whether the feature is disabled. */
         $cronStatus = 'normal';
-        if(!$hasScrumMeasrecord and !$hasAgilePlusMeasrecord and !$hasWaterfallMeasrecord and $hasWaterfallPlusMeasrecord) $cronStatus = 'stop';
+        if(!$hasScrumMeasrecord && !$hasAgilePlusMeasrecord && !$hasWaterfallMeasrecord && !$hasWaterfallPlusMeasrecord) $cronStatus = 'stop';
 
+        /* Update the status of the cron. */
         $this->loadModel('cron');
         $cron = $this->dao->select('id,status')->from(TABLE_CRON)->where('command')->like('%methodName=initCrontabQueue')->fetch();
-        if($cron and $cron->status != $cronStatus) $this->cron->changeStatus($cron->id, $cronStatus);
+        if($cron && $cron->status != $cronStatus) $this->cron->changeStatus($cron->id, $cronStatus);
         $cron = $this->dao->select('id,status')->from(TABLE_CRON)->where('command')->like('%methodName=execCrontabQueue')->fetch();
-        if($cron and $cron->status != $cronStatus) $this->cron->changeStatus($cron->id, $cronStatus);
+        if($cron && $cron->status != $cronStatus) $this->cron->changeStatus($cron->id, $cronStatus);
     }
 }
