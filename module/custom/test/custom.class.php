@@ -433,4 +433,24 @@ class customTest
         if(dao::isError()) return dao::getError();
         return $count;
     }
+
+    /**
+     * 检查系统中是否有敏捷项目的问题数据。
+     * Check if there is scrum issue data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasScrumIssueDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->objectModel->config->edition;
+
+        $this->objectModel->config->edition = $edition;
+        $count = $this->objectModel->hasScrumIssueData();
+
+        $this->objectModel->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
 }
