@@ -74,6 +74,7 @@ class editor extends control
         if($filePath)
         {
             $filePath = helper::safe64Decode($filePath);
+            $filePath = realpath($filePath);
             if(strpos(strtolower($filePath), strtolower($this->app->getBasePath())) !== 0) return print($this->lang->editor->editFileError);
             if($action == 'extendOther' and file_exists($filePath)) $this->view->showContent = file_get_contents($filePath);
 
