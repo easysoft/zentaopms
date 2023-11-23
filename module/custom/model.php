@@ -955,9 +955,9 @@ class customModel extends model
      * process project priv within a program set.
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function processProjectAcl(): void
+    public function processProjectAcl(): bool
     {
         list($projectGroup, $programPM, $stakeholders) = $this->customTao->getDataForUpdateProjectAcl();
 
@@ -1002,6 +1002,8 @@ class customModel extends model
                 $this->action->logHistory($actionID, $changes);
             }
         }
+
+        return !dao::isError();
     }
 
     /**
