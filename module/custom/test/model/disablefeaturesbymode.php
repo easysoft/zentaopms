@@ -5,6 +5,7 @@ include dirname(__FILE__, 2) . '/custom.class.php';
 
 zdTable('project')->gen(5);
 zdTable('product')->gen(5);
+zdTable('story')->gen(0);
 zdTable('user')->gen(5);
 su('admin');
 
