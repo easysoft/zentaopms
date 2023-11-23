@@ -51,7 +51,7 @@ $collectLink = $this->createLink('doc', 'collect', "objectID=$doc->id&objectType
 $starBtn     = "<a data-url='$collectLink' title='{$lang->doc->collect}' class='ajax-submit btn btn-link'>" . html::image("static/svg/{$star}.svg", "class='$star'") . '</a>';
 
 /* 导入资产库的按钮. */
-if($config->vision == 'rnd' and $config->edition == 'max' and $app->tab == 'project')
+if($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition == 'ipd') and $app->tab == 'project')
 {
     $canImportToPracticeLib  = (common::hasPriv('doc', 'importToPracticeLib')  and helper::hasFeature('practicelib'));
     $canImportToComponentLib = (common::hasPriv('doc', 'importToComponentLib') and helper::hasFeature('componentlib'));
@@ -155,7 +155,7 @@ $contentDom = div
                     on::click('fullScreen')
                 ),
                 common::hasPriv('doc', 'collect') ? html($starBtn) : null,
-                ($config->vision == 'rnd' and $config->edition == 'max' and $app->tab == 'project') ? $importLibBtn : null,
+                ($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition == 'ipd') and $app->tab == 'project') ? $importLibBtn : null,
                 common::hasPriv('doc', 'edit') ? btn
                 (
                     set::url(createLink('doc', 'edit', "docID=$doc->id")),

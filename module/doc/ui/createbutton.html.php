@@ -13,7 +13,7 @@ namespace zin;
 $createButton  = $emptyCreateBtn = null;
 $typeID        = empty($lib) ? $objectID : zget($lib, (string)$lib->type, 0);
 $createType    = empty($lib) ? '' : $lib->type;
-$templateParam = $this->config->edition == 'max' ? '&from=template' : '';
+$templateParam = ($config->edition == 'max' or $config->edition == 'ipd') ? '&from=template' : '';
 $buttonItems   = array();
 foreach($lang->doc->createList as $typeKey => $typeName)
 {

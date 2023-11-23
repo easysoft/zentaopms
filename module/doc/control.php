@@ -369,11 +369,13 @@ class doc extends control
             $doclib   = $this->loadModel('doc')->getLibById($libID);
             $canVisit = true;
 
+            if(!empty($doclib->groups)) $groupAccounts = $this->loadModel('group')->getGroupAccounts(explode(',', $doclib->groups));
+
             switch($objectType)
             {
                 case 'custom':
                     $account = (string)$this->app->user->account;
-                    if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, $account) === false and $doclib->addedBy !== $account) $canVisit = false;
+                    if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, $account) === false and $doclib->addedBy !== $account and !(isset($groupAccounts) and in_array($account, $groupAccounts, true))) $canVisit = false;
                     break;
                 case 'product':
                     $canVisit = $this->loadModel('product')->checkPriv($doclib->product);
@@ -602,7 +604,7 @@ class doc extends control
         elseif($objectType == 'execution')
         {
             $execution = $this->loadModel('execution')->getById($objectID);
-            $objects   = $this->execution->getPairs($execution->project, 'all', "multiple,leaf,noprefix");
+            $objects   = $this->execution->resetExecutionSorts($objects, array(), array(), $execution->project);
         }
         elseif($objectType == 'product')
         {
@@ -678,6 +680,7 @@ class doc extends control
     public function deleteFile($docID, $fileID, $confirm = 'no')
     {
         $this->loadModel('file');
+        $this->loadModel('action');
         if($confirm == 'no')
         {
             return print(js::confirm($this->lang->file->confirmDelete, inlink('deleteFile', "docID=$docID&fileID=$fileID&confirm=yes")));
@@ -685,17 +688,17 @@ class doc extends control
         else
         {
             $docContent = $this->dao->select('t1.*')->from(TABLE_DOCCONTENT)->alias('t1')
-                                    ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id and t1.version=t2.version')
-                                    ->where('t2.id')->eq($docID)
-                                    ->fetch();
+                ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id and t1.version=t2.version')
+                ->where('t2.id')->eq($docID)
+                ->fetch();
             unset($docContent->id);
-            $docContent->files   = trim(str_replace(",{$fileID},", ',', ",{$docContent->files},"), ',');
+            $docContent->files = trim(str_replace(",{$fileID},", ',', ",{$docContent->files},"), ',');
             $docContent->version += 1;
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
             $this->dao->update(TABLE_DOC)->set('version')->eq($docContent->version)->where('id')->eq($docID)->exec();
 
             $file = $this->file->getById($fileID);
-            $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $extra = $file->title);
+            if(in_array($file->extension, $this->config->file->imageExtensions)) $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $extra = $file->title);
             return print(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
         }
     }
@@ -1104,6 +1107,7 @@ class doc extends control
         $objectType = isset($lib->type) ? $lib->type : 'custom';
         $type       = $objectType == 'execution' && $this->app->tab != 'execution' ? 'project' : $objectType;
         $objectID   = zget($doc, $type, 0);
+        if($objectType == 'custom') $this->lang->doc->menu->custom['alias'] = 'teamspace,view';
         list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $doc->lib, $appendLib);
 
         /* Get doc. */
@@ -1416,7 +1420,7 @@ class doc extends control
         if($this->config->vision == 'lite')         unset($spaceList['api'], $spaceList['product'], $typeList['api']);
 
         $products = $this->loadModel('product')->getPairs();
-        $projects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc', 'kanban');
+        $projects = $this->project->getPairsByProgram(0, 'all', false, 'order_asc');
 
         $this->view->spaceList  = $spaceList;
         $this->view->typeList   = $typeList;

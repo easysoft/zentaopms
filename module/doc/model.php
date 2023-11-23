@@ -209,6 +209,7 @@ class docModel extends model
             ->add('vision', $this->config->vision)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
+            ->add('vision', $this->config->vision)
             ->remove('uid,contactListMenu,libType')
             ->get();
 
@@ -421,6 +422,7 @@ class docModel extends model
             $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
                 ->where('objectType')->eq('doc')
                 ->andWhere('objectID')->in($hasPrivDocIdList)
+                ->andWhere('templateType')->eq('')
                 ->andWhere('actor')->eq($this->app->user->account)
                 ->andWhere('action')->eq('edited')
                 ->fetchAll('objectID');
@@ -429,6 +431,7 @@ class docModel extends model
                 ->where('t1.deleted')->eq(0)
                 ->andWhere($query)
                 ->andWhere('t1.lib')->in($allLibIDList)
+                ->andWhere('t1.templateType')->eq('')
                 ->andWhere('t1.vision')->in($this->config->vision)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('t1.addedBy', 1)->eq($this->app->user->account)
@@ -448,6 +451,7 @@ class docModel extends model
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('t1.addedBy')->eq($this->app->user->account)
                 ->andWhere('t1.vision')->in($this->config->vision)
+                ->andWhere('t1.templateType')->eq('')
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll('id');
@@ -477,6 +481,7 @@ class docModel extends model
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
                 ->andWhere('id')->in($hasPrivDocIdList)
+                ->andWhere('templateType')->eq('')
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('lib')->in($allLibIDList)
                 ->andWhere('vision')->in($this->config->vision)
@@ -490,6 +495,7 @@ class docModel extends model
                 ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc && t2.action='collect'")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne('')
+                ->andWhere('t1.templateType')->eq('')
                 ->andWhere('t1.id')->in($hasPrivDocIdList)
                 ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('t2.actor')->eq($this->app->user->account)
@@ -618,6 +624,7 @@ class docModel extends model
         $docs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('templateType')->eq('')
             ->andWhere('id')->in($docIdList)
             ->beginIF($browseType == 'all')->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")->fi()
             ->beginIF($browseType == 'draft')->andWhere('status')->eq('draft')->andWhere('addedBy')->eq($this->app->user->account)->fi()
@@ -746,6 +753,7 @@ class docModel extends model
         $modules = $module && $mode == 'children' ? $this->loadModel('tree')->getAllChildID($module) : $module;
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
             ->where('vision')->eq($this->config->vision)
+            ->andWhere('templateType')->eq('')
             ->beginIF(!empty($modules))->andWhere('module')->in($modules)->fi()
             ->beginIF($mode == 'normal')->andWhere('deleted')->eq(0)->fi()
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
@@ -820,10 +828,12 @@ class docModel extends model
             $this->dao->update(TABLE_DOC)->set('version')->eq($doc->version)->where('id')->eq($doc->id)->exec();
         }
 
-        $doc->title       = isset($docContent->title) ? $docContent->title : '';
-        $doc->digest      = isset($docContent->digest) ? $docContent->digest : '';
-        $doc->content     = isset($docContent->content) ? $docContent->content : '';
-        $doc->contentType = isset($docContent->type) ? $docContent->type : '';
+        $doc->title          = isset($docContent->title) ? $docContent->title : '';
+        $doc->digest         = isset($docContent->digest) ? $docContent->digest : '';
+        $doc->content        = isset($docContent->content) ? $docContent->content : '';
+        $doc->contentType    = isset($docContent->type) ? $docContent->type : '';
+        $doc->contentVersion = isset($docContent->version) ? $docContent->version : $version;
+
 
         if($doc->type != 'url' and $doc->contentType != 'markdown') $doc = $this->loadModel('file')->replaceImgURL($doc, 'content,draft');
         if($setImgSize) $doc->content = $this->file->setImgSize($doc->content);
@@ -848,12 +858,11 @@ class docModel extends model
      */
     public function getByIdList($docIdList = array())
     {
-        return $this->dao->select('*,t1.id as docID,t1.type as docType,t2.type as contentType')->from(TABLE_DOC)->alias('t1')
+        return $this->dao->select('*,t1.id as docID,t1.type as docType,t1.version as docVersion,t2.type as contentType')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc and t1.version=t2.version')
             ->where('t1.id')->in($docIdList)
             ->andWhere('deleted')->eq(0)
-            ->fetchAll('id');
-
+            ->fetchAll('docID');
     }
 
     /**
@@ -959,6 +968,7 @@ class docModel extends model
             ->setDefault('mailto', '')
             ->add('editedBy', $account)
             ->add('editedDate', $now)
+            ->setIF(strpos(",$oldDoc->editedList,", ",$account,") === false, 'editedList', $oldDoc->editedList . ",$account")
             ->cleanInt('project,product,execution,lib,module')
             ->join('groups', ',')
             ->join('users', ',')
