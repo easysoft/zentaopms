@@ -514,14 +514,11 @@ class user extends control
             if($group->role) $roleGroup[$group->role] = $group->id;
         }
 
-        $visionList = $this->user->getVisionList();
-        $visions    = array_map(function($key, $value){return ['text' => $value, 'value' => $key];}, array_keys($visionList), array_values($visionList));
-
         $this->view->title     = $this->lang->user->create;
         $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
         $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
         $this->view->rand      = $this->user->updateSessionRandom();
-        $this->view->visions   = $visions;
+        $this->view->visions   = $this->user->getVisionList();
         $this->view->groupList = $groupList;
         $this->view->roleGroup = $roleGroup;
         $this->view->deptID    = $deptID;
