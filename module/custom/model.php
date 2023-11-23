@@ -1079,12 +1079,13 @@ class customModel extends model
     }
 
     /**
-     * Check for waterfallplus project data.
+     * 检查系统中是否有融合项目数据。
+     * Check whether there is waterfallplus project data in the system.
      *
      * @access public
      * @return int
      */
-    public function hasWaterfallplusData()
+    public function hasWaterfallplusData(): int
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('waterfallplus')->andWhere('deleted')->eq('0')->count();
     }
