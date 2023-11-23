@@ -93,8 +93,8 @@ class design extends control
         $this->app->loadClass('pager', true);
         $pager   = pager::init(0, $recPerPage, $pageID);
 
-        if(!$project->hasProduct) unset($this->config->design->dtable->fieldList['product']);
-        if($project->hasProduct) $this->config->design->dtable->fieldList['product']['map'] = $this->view->products;
+        if(isset($project->hasProduct) && !$project->hasProduct) unset($this->config->design->dtable->fieldList['product']);
+        if(isset($project->hasProduct) && $project->hasProduct) $this->config->design->dtable->fieldList['product']['map'] = $this->view->products;
         if(!helper::hasFeature('devops')) $this->config->design->dtable->fieldList['actions']['menu'] = array('edit', 'delete');
 
         $this->view->title     = $this->lang->design->common . $this->lang->colon . $this->lang->design->browse;

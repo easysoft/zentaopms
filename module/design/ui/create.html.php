@@ -16,7 +16,7 @@ jsVar('type', strtolower($type));
 
 /* Cannot show product field in no-product project. */
 $productRow = '';
-if($project->hasProduct)
+if(isset($project->hasProduct) && $project->hasProduct)
 {
     $productRow = formRow(
         formGroup
