@@ -15,22 +15,6 @@
 class companyModel extends model
 {
     /**
-     * Set menu.
-     *
-     * @param  int    $dept
-     * @access public
-     * @return void
-     */
-    public function setMenu($dept = 0)
-    {
-        /*
-        common::setMenuVars($this->lang->company->menu, 'name', array($this->app->company->name));
-        common::setMenuVars($this->lang->company->menu, 'addUser', array($dept));
-        common::setMenuVars($this->lang->company->menu, 'batchAddUser', array($dept));
-         */
-    }
-
-    /**
      * Get company list.
      *
      * @access public
