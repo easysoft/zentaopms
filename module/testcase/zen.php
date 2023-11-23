@@ -55,7 +55,7 @@ class testcaseZen extends testcase
 
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
         $this->session->set('productID', $productID);
-        $this->session->set('branch', $branch);
+        $this->session->set('branch', $branch, 'qa');
         $this->session->set('moduleID', $moduleID);
         $this->session->set('browseType', $browseType);
         $this->session->set('orderBy', $orderBy);
@@ -67,14 +67,13 @@ class testcaseZen extends testcase
      * 设置列表页面的导航。
      * Set menu in browse.
      *
-     * @param  int       $productID
-     * @param  string    $branch
-     * @param  string    $browseType
-     * @param  int       $projectID
+     * @param  int         $productID
+     * @param  string|bool $branch
+     * @param  int         $projectID
      * @access protected
      * @return void
      */
-    protected function setBrowseMenu(int $productID, string $branch, string $browseType, int $projectID): void
+    protected function setBrowseMenu(int $productID, string|bool $branch, int $projectID): void
     {
         /* 在不同的应用中，设置不同的导航。 */
         /* Set menu, save session. */
