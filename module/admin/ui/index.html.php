@@ -87,7 +87,7 @@ foreach($lang->admin->menuList as $menuKey => $menu)
 
     $settingItems[] = div
     (
-        setClass('pb-4 pr-4 w-1/5 h-32'),
+        setClass('pb-4 pr-4 h-32 w-1/' . ($config->vision == 'lite' ? 3 : 5)),
         col
         (
             setClass('setting-box cursor-pointer border border-hover rounded-md px-2 py-1 h-full'),
