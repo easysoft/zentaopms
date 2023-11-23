@@ -6,7 +6,7 @@ fields:
   - field: visions
     note: "版本"
     range: rnd
-    prefix: ",ipd,"
+    prefix: ",or,"
     postfix: ",lite"
     loop: 0
     format: ""

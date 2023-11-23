@@ -18,9 +18,9 @@ class companyModel extends model
      * Get the first company.
      *
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getFirst(): object
+    public function getFirst(): object|bool
     {
         return $this->dao->select('*')->from(TABLE_COMPANY)->orderBy('id')->limit(1)->fetch();
     }
@@ -31,9 +31,9 @@ class companyModel extends model
      *
      * @param  int    $companyID
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getByID(int $companyID): object
+    public function getByID(int $companyID): object|bool
     {
         return $this->dao->findById($companyID)->from(TABLE_COMPANY)->fetch();
     }
