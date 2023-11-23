@@ -481,46 +481,50 @@ class user extends control
     }
 
     /**
-     * Create a suer.
+     * 添加一个用户。
+     * Create a user.
      *
      * @param  int    $deptID
      * @access public
      * @return void
      */
-    public function create($deptID = 0)
+    public function create(int $deptID = 0)
     {
         if(!empty($_POST))
         {
-            if(strtolower($_POST['account']) == 'guest')
-            {
-                return $this->send(array('result' => 'fail', 'message' => str_replace('ID ', '', sprintf($this->lang->user->error->reserved, $_POST['account']))));
-            }
+            $user = form::data($this->config->user->form->create)
+                ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
+                ->get();
 
-            $userID = $this->user->create();
+            $this->userZen->checkBeforeCreate($user);
+
+            $userID = $this->user->create($user);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $userID));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('company', 'browse')));
         }
 
-        $groups = $this->dao->select('id, name, role, vision')
-            ->from(TABLE_GROUP)
-            ->fetchAll();
         $groupList = array();
         $roleGroup = array();
+        $groups    = $this->dao->select('id, name, role, vision')->from(TABLE_GROUP)->fetchAll();
         foreach($groups as $group)
         {
-            if($group->vision == 'rnd') $groupList[$group->id] = $group->name;
+            if($group->vision == $this->config->vision) $groupList[$group->id] = $group->name;
             if($group->role) $roleGroup[$group->role] = $group->id;
         }
 
+        $visionList = $this->user->getVisionList();
+        $visions    = array_map(function($key, $value){return ['text' => $value, 'value' => $key];}, array_keys($visionList), array_values($visionList));
+
         $this->view->title     = $this->lang->user->create;
+        $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
         $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
+        $this->view->rand      = $this->user->updateSessionRandom();
+        $this->view->visions   = $visions;
         $this->view->groupList = $groupList;
         $this->view->roleGroup = $roleGroup;
         $this->view->deptID    = $deptID;
-        $this->view->rand      = $this->user->updateSessionRandom();
-        $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
 
         $this->display();
     }
