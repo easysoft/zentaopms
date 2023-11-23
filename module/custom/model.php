@@ -1163,12 +1163,13 @@ class customModel extends model
     }
 
     /**
-     * Verify whether there is scrum meeting data.
+     * 检查系统中是否有敏捷项目的会议数据。
+     * Check whether there is scrum meeting data in the system.
      *
      * @access public
-     * @return bool
+     * @return int
      */
-    public function hasScrumMeetingData()
+    public function hasScrumMeetingData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
@@ -1179,7 +1180,7 @@ class customModel extends model
                 ->andWhere('t2.deleted')->eq('0')
                 ->count();
         }
-        return false;
+        return 0;
     }
 
     /**
