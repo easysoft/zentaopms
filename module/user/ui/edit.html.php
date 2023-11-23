@@ -117,7 +117,6 @@ formPanel
                 input
                 (
                     set::name('newCompany'),
-                    set::value(''),
                     setClass('hidden')
                 ),
                 checkbox
@@ -125,7 +124,7 @@ formPanel
                     on::change('toggleNew'),
                     set::id('new'),
                     set::name('new'),
-                    set::value(0),
+                    set::value(1),
                     set::text($lang->company->create),
                     set::rootClass('btn'),
                     width('96px')
@@ -217,7 +216,7 @@ formPanel
             checkList
             (
                 set::name('visions[]'),
-                set::items($visionList),
+                set::items($visions),
                 set::value($user->visions),
                 set::inline(true)
             )
