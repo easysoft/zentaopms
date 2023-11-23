@@ -699,31 +699,43 @@ class metricModel extends model
      * Build date cell.
      *
      * @param  object $row
+     * @param  array  $object
      * @access public
      * @return string
      */
-    public function buildDateCell($row)
+    public function buildDateCell($row, $record)
     {
-        extract((array)$row);
+        extract($record);
 
+        $date = $dateString = $dateType = false;
         if(isset($year, $month, $day))
         {
-            return "{$year}-{$month}-{$day}";
+            $date     = $dateString = "{$year}-{$month}-{$day}";
+            $dateType = 'day';
         }
         elseif(isset($year, $week))
         {
-            return sprintf($this->lang->metric->weekCell, $year, $week);
+            $date       = sprintf($this->lang->metric->weekCell, $year, $week);
+            $dateString = "{$year}-{$week}";
+            $dateType   = 'week';
         }
         elseif(isset($year, $month))
         {
-            return $year . $this->lang->year . $month . $this->lang->month;
+            $date       = $year . $this->lang->year . $month . $this->lang->month;
+            $dateString = "{$year}-{$month}";
+            $dateType   = 'month';
         }
         elseif(isset($year))
         {
-            return $year . $this->lang->year;
+            $date       = $year . $this->lang->year;
+            $dateString = $year;
+            $dateType   = 'year';
         }
 
-        return false;
+        $row->date       = $date;
+        $row->dateString = $dateString;
+        $row->dateType   = $dateType;
+        return $row;
     }
 
     public function checkCalcExists($metric)
