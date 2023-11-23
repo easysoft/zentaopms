@@ -1104,12 +1104,13 @@ class customModel extends model
     }
 
     /**
-     * Check for issue data.
+     * 检查系统中是否有敏捷项目的问题数据。
+     * Check whether there is scrum issue data in the system.
      *
      * @access public
-     * @return bool|int
+     * @return int
      */
-    public function hasScrumIssueData()
+    public function hasScrumIssueData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
@@ -1120,7 +1121,8 @@ class customModel extends model
                 ->andWhere('t2.model')->eq('scrum')
                 ->count();
         }
-        return false;
+
+        return 0;
     }
 
     /**
