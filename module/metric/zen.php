@@ -188,7 +188,8 @@ class metricZen extends metric
 
             $system = (int)$this->metric->isSystemMetric($results);
 
-            $cycle = $this->metric->getMetricCycle($results);
+            $firstRecord = (object)current($results);
+            $cycle = $this->metric->getMetricCycle($firstRecord);
             $this->metric->clearOutDatedRecords($code, $cycle);
 
             foreach($results as $record)
