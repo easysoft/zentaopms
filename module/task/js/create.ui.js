@@ -285,15 +285,16 @@ function setStoryRelated()
  */
 function setPreview()
 {
-    if(parseFloat($("input[name='story']").val()) == 0)
+    let storyID = $("input[name='story']").val() ? $("input[name='story']").val() : 0;
+    if(parseFloat(storyID) == 0)
     {
         $('#preview').addClass('hidden');
         $('.title-group.required > div').removeAttr('id', 'copyStory-input').addClass('.required');
     }
     else
     {
-        var storyLink = $.createLink('execution', 'storyView', "storyID=" + $("[name='story']").val());
-        var concat    = storyLink.indexOf('?') < 0 ? '?' : '&';
+        let storyLink = $.createLink('execution', 'storyView', "storyID=" + storyID);
+        let concat    = storyLink.indexOf('?') < 0 ? '?' : '&';
 
         if(storyLink.indexOf("onlybody=yes") < 0) storyLink = storyLink + concat + 'onlybody=yes';
 
