@@ -135,7 +135,7 @@ class programplanModel extends model
      * 获取甘特图页面数据。
      * Get gantt data.
      *
-     * @param  int     $executionID
+     * @param  int     $projectID
      * @param  int     $productID
      * @param  int     $baselineID
      * @param  string  $selectCustom
@@ -143,9 +143,9 @@ class programplanModel extends model
      * @access public
      * @return string|array
      */
-    public function getDataForGantt(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): string|array
+    public function getDataForGantt(int $projectID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): string|array
     {
-        $plans = $this->getStage($executionID, $productID, 'all', 'order');
+        $plans = $this->getStage($projectID, $productID, 'all', 'order');
 
         /* Set plan baseline data. */
         if($baselineID)
@@ -176,6 +176,9 @@ class programplanModel extends model
 
         /* Set task for gantt view. */
         $this->programplanTao->setTask($tasks, $plans, $selectCustom, $datas, $stageIndex);
+
+        /* Build data for ipd. */
+        if($project->model == 'ipd' and $datas) $datas = $this->programplanTao->buildGanttData4IPD($datas, $projectID, $productID, $selectCustom, $reviewDeadline);
 
         /* Calculate the progress of the phase. */
         foreach($stageIndex as $index => $stage)
@@ -698,7 +701,7 @@ class programplanModel extends model
                 $this->dao->update(TABLE_PROJECT)->data($plan)
                     ->autoCheck()
                     ->batchCheck($this->config->programplan->edit->requiredFields, 'notempty')
-                    ->checkIF($plan->percent != '' and $setPercent, 'percent', 'float')
+                    ->checkIF(!empty($plan->percent) and $setPercent, 'percent', 'float')
                     ->where('id')->eq($stageID)
                     ->exec();
 
@@ -745,7 +748,7 @@ class programplanModel extends model
                 $this->dao->insert(TABLE_PROJECT)->data($plan)
                     ->autoCheck()
                     ->batchCheck($this->config->programplan->create->requiredFields, 'notempty')
-                    ->checkIF($plan->percent != '' and $setPercent, 'percent', 'float')
+                    ->checkIF(!empty($data->percent) and $setPercent, 'percent', 'float')
                     ->exec();
 
                 if(!dao::isError())
@@ -753,6 +756,9 @@ class programplanModel extends model
                     $stageID = $this->dao->lastInsertID();
                     if($stageID)  $stageID = (int)$stageID;
                     if(!$stageID) dao::$errors['name'] = $this->lang->fail;
+
+                    /* Ipd project create default review points. */
+                    if($project->model == 'ipd' && $this->config->edition == 'ipd' && !$parentID) $this->loadModel('review')->createDefaultPoint($projectID, $productID, $data->attribute);
 
                     if($plan->type == 'kanban')
                     {
@@ -849,10 +855,9 @@ class programplanModel extends model
         {
             $path['path']  = $parent->path . "{$stage->id},";
             $path['grade'] = $parent->grade + 1;
-
-            $children = $this->execution->getChildExecutions($planID);
         }
 
+        $children = $this->execution->getChildExecutions($planID);
         $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($stage->id)->exec();
 
         if(!empty($children))
@@ -889,7 +894,7 @@ class programplanModel extends model
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
             $plan->planDuration = $this->getDuration($plan->begin, $plan->end);
-            $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
+            if(isset($plan->realBegan) && isset($plan->realEnd)) $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
         }
 
         if($planChanged) $plan->version = $oldPlan->version + 1;
@@ -1151,7 +1156,6 @@ class programplanModel extends model
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
             ->where('t2.product')->eq($productID)
             ->andWhere('t1.project')->eq($projectID)
-            ->andWhere('t1.type')->eq('stage')
             ->andWhere('t1.milestone')->eq(1)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.begin asc,path')
@@ -1209,7 +1213,7 @@ class programplanModel extends model
         if(empty($stage) || empty($stage->path)) return false;
 
         $project = $this->loadModel('project')->getByID($stage->project);
-        if(empty($stage) or empty($stage->path) or (!in_array($project->model, array('waterfall','waterfallplus','ipd')))) return false;
+        if(empty($stage) or empty($stage->path) or (!in_array($project->model, array('waterfall','waterfallplus','ipd','research')))) return false;
 
         $action       = strtolower($action);
         $parentIdList = explode(',', trim($stage->path, ','));
@@ -1392,5 +1396,36 @@ class programplanModel extends model
         if(dao::isError()) return false;
 
         return $stageAttribute;
+    }
+
+    /**
+     * Get five days ago.
+     *
+     * @param  string $date
+     * @param  int    $date
+     * @access public
+     * @return string
+     */
+    public function getReviewDeadline(string $date, int $counter = 5)
+    {
+        if(helper::isZeroDate($date)) return '';
+
+        $weekend_days = [6, 7];
+
+        $timestamp = strtotime($date);
+        $i         = 0;
+        $this->loadModel('holiday');
+        while($i < $counter)
+        {
+            $timestamp   = strtotime('-1 day', $timestamp);
+            $weekday     = date('N', $timestamp);
+            $currentDate = date('Y-m-d', $timestamp);
+            if(!in_array($weekday, $weekend_days) and !$this->holiday->isHoliday($currentDate))
+            {
+                $i ++;
+            }
+        }
+
+        return date('Y-m-d', $timestamp);
     }
 }

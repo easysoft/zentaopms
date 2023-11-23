@@ -56,15 +56,19 @@ class programplanTao extends programplanModel
      */
     protected function getParentStages(int $executionID, int $planID, int $productID): array|false
     {
-        $parentStage = $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)
-            ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.product')->eq($productID)
-            ->andWhere('t2.project')->eq($executionID)
-            ->andWhere('t2.type')->eq('stage')
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.path')->notlike("%,$planID,%")
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
-            ->orderBy('t2.id desc')
+        $parentStage = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
+            ->beginIF($productID)
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
+            ->fi()
+            ->where('t1.project')->eq($executionID)
+            ->beginIF($productID)
+            ->andWhere('t2.product')->eq($productID)
+            ->fi()
+            ->andWhere('t1.type')->eq('stage')
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.path')->notlike("%,$planID,%")
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->orderBy('t1.id desc')
             ->fetchPairs();
 
         if(dao::isError()) return false;
@@ -100,6 +104,7 @@ class programplanTao extends programplanModel
         {
             if($parent->status != 'closed')
             {
+                if($project->model == 'ipd' and $parent->parent == $project->id) return array('newParent' => null, 'parentAction' => '');
                 $newParent    = $this->execution->buildExecutionByStatus('closed');
                 $parentAction = 'closedbychild';
             }
@@ -300,9 +305,11 @@ class programplanTao extends programplanModel
             if(isset($plans[$plan->parent])) $plans[$plan->parent]->isParent = true;
         }
 
+        $reviewDeadline = array();
         foreach($plans as $plan)
         {
             $planIdList[$plan->id] = $plan->id;
+            reviewDeadline[$plan->id]['stageEnd'] = $plan->end;
 
             $start     = helper::isZeroDate($plan->begin) ? '' : $plan->begin;
             $end       = helper::isZeroDate($plan->end)   ? '' : $plan->end;
@@ -361,10 +368,11 @@ class programplanTao extends programplanModel
      * @param  string  $selectCustom
      * @param  array   $datas
      * @param  array   $stageIndex
+     * @param  array   $reviewDeadline
      * @access protected
      * @return void
      */
-    protected function setTask(array $tasks, array $plans, string $selectCustom, array &$datas, array &$stageIndex): void
+    protected function setTask(array $tasks, array $plans, string $selectCustom, array &$datas, array &$stageIndex, array $reviewDeadline): void
     {
         $taskPri   = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";
         $today     = helper::today();
@@ -381,8 +389,19 @@ class programplanTao extends programplanModel
             $realBegan = helper::isZeroDate($task->realStarted) ? '' : $task->realStarted;
             $realEnd   = (in_array($task->status, array('done', 'closed')) and !helper::isZeroDate($task->finishedDate)) ? $task->finishedDate : '';
 
-            $start = $realBegan ? $realBegan : $estStart;
-            $end   = $realEnd   ? $realEnd   : $estEnd;
+            /* Get lastest task deadline. */
+            $taskExecutionID = $execution->parent ? $execution->parent : $execution->id;
+            if(isset($reviewDeadline[$taskExecutionID]['taskEnd']))
+            {
+                $reviewDeadline[$taskExecutionID]['taskEnd'] = $task->deadline > $reviewDeadline[$taskExecutionID]['taskEnd'] ? $task->deadline : $reviewDeadline[$taskExecutionID]['taskEnd'];
+            }
+            else
+            {
+                $reviewDeadline[$taskExecutionID]['taskEnd'] = $task->deadline;
+            }
+
+            $start = $estStart;
+            $end   = $estEnd;
             if(empty($start) and $execution) $start = $execution->begin;
             if(empty($end)   and $execution) $end   = $execution->end;
             if($start > $end) $end = $start;
@@ -505,7 +524,7 @@ class programplanTao extends programplanModel
             ->where('1 = 1')
             ->beginIF(!in_array($projectModel, array('waterfallplus', 'ipd')))->andWhere('t1.type')->eq('stage')->fi()
             ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
-            ->beginIF($browseType == 'all')->andWhere('t1.project')->eq($executionID)->fi()
+            ->beginIF($browseType == 'all' || $browseType == 'leaf')->andWhere('t1.project')->eq($executionID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('t1.parent')->eq($executionID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t1.deleted')->eq('0')
@@ -606,4 +625,96 @@ class programplanTao extends programplanModel
         return $totalPercent;
     }
 
+    /**
+     * 构建IPD版本的甘特图数据。
+     * Build gantt's data for ipd edition. 
+     * 
+     * @param  array     $datas 
+     * @param  int       $projectID 
+     * @param  int       $productID 
+     * @param  string    $selectCustom 
+     * @param  array     $reviewDeadline 
+     * @access protected
+     * @return void
+     */
+    protected function buildGanttData4IPD(array $datas, int $projectID, int $productID, string $selectCustom, array $reviewDeadline)
+    {
+        $this->loadModel('review');
+        $reviewPoints = $this->dao->select('t1.*, t2.status, t2.lastReviewedDate,t2.id as reviewID')->from(TABLE_OBJECT)->alias('t1')
+        ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
+        ->where('t1.deleted')->eq('0')
+        ->andWhere('t1.project')->eq($projectID)
+        ->andWhere('t1.product')->eq($productID)
+        ->fetchAll('id');
+
+        foreach($datas['data'] as $plan)
+        {
+            if($plan->type != 'plan') continue;
+
+            foreach($reviewPoints as $id => $point)
+            {
+                if(!isset($this->config->stage->ipdReviewPoint->{$plan->attribute})) continue;
+                if(!isset($point->status)) $point->status = '';
+
+                $categories = $this->config->stage->ipdReviewPoint->{$plan->attribute};
+                if(in_array($point->category, $categories))
+                {
+                    if($point->end and !helper::isZeroDate($point->end))
+                    {
+                        $end = $point->end;
+                    }
+                    else
+                    {
+                        $end = $reviewDeadline[$plan->id]['stageEnd'];
+                        if(strpos($point->category, "TR") !== false)
+                        {
+                            if(isset($reviewDeadline[$plan->id]['taskEnd']) and !helper::isZeroDate($reviewDeadline[$plan->id]['taskEnd']))
+                            {
+                                $end = $reviewDeadline[$plan->id]['taskEnd'];
+                            }
+                            else
+                            {
+                                $end = $this->getReviewDeadline($end);
+                            }
+                        }
+                        elseif(strpos($point->category, "DCP") !== false)
+                        {
+                            $end = $this->getReviewDeadline($end, 2);
+                        }
+                    }
+
+                    $data = new stdclass();
+                    $data->id            = $plan->id . '-' . $point->category . '-' . $point->id;
+                    $data->reviewID      = $point->reviewID;
+                    $data->type          = 'point';
+                    $data->text          = "<i class='icon-seal'></i> " . $point->title;
+                    $data->name          = $point->title;
+                    $data->attribute     = '';
+                    $data->milestone     = '';
+                    $data->owner_id      = '';
+                    $data->rawStatus     = $point->status;
+                    $data->status        = $point->status ? zget($this->lang->review->statusList, $point->status) : $this->lang->programplan->wait;
+                    $data->status        = "<span class='status-{$point->status}'>" . $data->status . '</span>';
+                    $data->begin         = $end;
+                    $data->deadline      = $end;
+                    $data->realBegan     = $point->createdDate;
+                    $data->realEnd       = $point->lastReviewedDate;;
+                    $data->parent        = $plan->id;
+                    $data->open          = true;
+                    $data->start_date    = $end;
+                    $data->endDate       = $end;
+                    $data->duration      = 1;
+                    $data->color         = isset($this->lang->programplan->reviewColorList[$point->status]) ? $this->lang->programplan->reviewColorList[$point->status] : '#FC913F';
+                    $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
+                    $data->textColor     = $this->lang->execution->gantt->stage->textColor;
+                    $data->bar_height    = $this->lang->execution->gantt->bar_height;
+
+                    if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
+
+                    if($selectCustom && strpos($selectCustom, "point") !== false && !$plan->parent) $datas['data'][$data->id] = $data;
+                }
+            }
+        }
+
+    }
 }

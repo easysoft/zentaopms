@@ -116,6 +116,7 @@ class programplanZen extends programplan
         $this->view->title              = $this->lang->programplan->edit;
         $this->view->isCreateTask       = $this->programplan->isCreateTask($plan->id);
         $this->view->plan               = $plan;
+        $this->view->project            = $this->project->getByID($plan->project);
         $this->view->parentStageList    = $this->programplan->getParentStageList($this->session->project, $plan->id, $plan->product);
         $this->view->enableOptionalAttr = empty($parentStage) || (!empty($parentStage) && $parentStage->attribute == 'mix');
         $this->view->isTopStage         = $this->programplan->isTopStage($plan->id);
@@ -275,6 +276,12 @@ class programplanZen extends programplan
      */
     protected function buildBrowseView(int $projectID, int $productID, array $stages, string $type, string $orderBy): void
     {
+        $project = $this->project->getByID($projectID);
+        if($project->model == 'ipd' and $this->config->edition == 'ipd')
+        {
+            $this->view->reviewPoints = $this->loadModel('review')->getReviewPointByProject($projectID);
+        }
+
         $this->view->title       = $this->lang->programplan->browse;
         $this->view->projectID   = $projectID;
         $this->view->productID   = $productID;
@@ -282,7 +289,7 @@ class programplanZen extends programplan
         $this->view->ganttType   = $type;
         $this->view->stages      = $stages;
         $this->view->orderBy     = $orderBy;
-        $this->view->project     = $this->loadModel('project')->getByID($projectID);
+        $this->view->project     = $project;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->product     = $this->loadModel('product')->getByID($productID);
         $this->view->productList = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', '', false);

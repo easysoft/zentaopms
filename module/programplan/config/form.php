@@ -43,11 +43,11 @@ $config->programplan->form->create['PM']         = array('label' => $lang->progr
 $config->programplan->form->create['percent']    = array('label' => $lang->programplan->percent,   'type' => 'array', 'control' => 'number',   'required' => false, 'default' => 0,      'options' => array());
 $config->programplan->form->create['attribute']  = array('label' => $lang->programplan->attribute, 'type' => 'array', 'control' => 'picker',   'required' => false, 'default' => 0,      'options' => $lang->stage->typeList);
 $config->programplan->form->create['acl']        = array('label' => $lang->programplan->acl,       'type' => 'array', 'control' => 'picker',   'required' => false, 'default' => 'open', 'options' => $lang->execution->aclList);
-$config->programplan->form->create['milestone']  = array('label' => $lang->programplan->milestone, 'type' => 'array', 'control' => 'radioList','required' => false, 'default' => 0,      'options' => $lang->programplan->milestoneList);
 $config->programplan->form->create['begin']      = array('label' => $lang->programplan->begin,     'type' => 'array', 'control' => 'date',     'required' => true,  'default' => '');
 $config->programplan->form->create['end']        = array('label' => $lang->programplan->end,       'type' => 'array', 'control' => 'date',     'required' => true,  'default' => '');
 $config->programplan->form->create['realBegan']  = array('label' => $lang->programplan->realBegan, 'type' => 'array', 'control' => 'date',     'required' => false, 'default' => '');
 $config->programplan->form->create['realEnd']    = array('label' => $lang->programplan->realEnd,   'type' => 'array', 'control' => 'date',     'required' => false, 'default' => '');
+$config->programplan->form->create['milestone']  = array('label' => $lang->programplan->milestone, 'type' => 'array', 'control' => 'radioList','required' => false, 'default' => 0,      'options' => $lang->programplan->milestoneList);
 $config->programplan->form->create['desc']       = array('label' => $lang->programplan->desc,      'type' => 'array', 'control' => 'textarea', 'required' => false, 'default' => '');
 
 $config->programplan->form->updateDateByGantt['id']        = array('required' => false, 'type' => 'int',    'default' => 0);
