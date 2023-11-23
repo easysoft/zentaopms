@@ -394,6 +394,29 @@ class userModel extends model
     }
 
     /**
+     * 创建一个外部公司。
+     * Create a outside company.
+     *
+     * @param  string $companyName
+     * @access public
+     * @return int
+     */
+    public function createCompany(string $companyName): int
+    {
+        if(empty($companyName))
+        {
+            dao::$errors['company'][] = $this->lang->user->error->companyEmpty;
+            return 0;
+        }
+
+        $company = new stdClass();
+        $company->name = $companyName;
+        $this->dao->insert(TABLE_COMPANY)->data($company)->exec();
+
+        return $this->dao->lastInsertID();
+    }
+
+    /**
      * Batch create users.
      *
      * @param  int    $users
