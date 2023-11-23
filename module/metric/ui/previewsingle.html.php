@@ -311,7 +311,7 @@ div
                     $groupData ? dtable
                     (
                         set::bordered(true),
-                        set::footPager(usePager('dtablePager')),
+                        ($metricRecordType == 'scope' || $metricRecordType == 'scope-date') ? set::footPager(usePager('dtablePager')) : null,
                         set::cols($groupHeader),
                         set::data(array_values($groupData)),
                         $headerGroup ? set::plugins(array('header-group')) : null,
