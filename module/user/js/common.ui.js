@@ -1,3 +1,13 @@
+function toggleNew(event)
+{
+    const checked     = $(event.target).prop('checked');
+    const $company    = $('[name="company"]').closest('.picker-box');
+    const $newCompany = $('#newCompany');
+
+    $company.toggleClass('hidden', checked);
+    $newCompany.toggleClass('hidden', !checked);
+}
+
 window.switchAccount = function(account)
 {
     link = $.createLink('user', method, 'account=' + account);
