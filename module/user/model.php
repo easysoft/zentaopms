@@ -368,7 +368,7 @@ class userModel extends model
     {
         if(empty($companyName))
         {
-            dao::$errors['company'][] = $this->lang->user->error->companyEmpty;
+            dao::$errors['newCompany'][] = sprintf($this->lang->error->notempty, $this->lang->user->company);
             return 0;
         }
 

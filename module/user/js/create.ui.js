@@ -39,7 +39,7 @@ function changeAddCompany(event)
         const $inputGroup = $('[name="company"]').closest('.picker-box');
         if($inputGroup.length == 0) return;
         $('[name="company"]').zui('picker').destroy();
-        $inputGroup.replaceWith("<input name='company' id='company' class='form-control'/>");
+        $inputGroup.replaceWith("<input name='newCompany' id='newCompany' class='form-control'/>");
     }
     else
     {
