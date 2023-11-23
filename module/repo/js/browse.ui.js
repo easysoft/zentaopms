@@ -21,6 +21,50 @@ window.renderCell = function(result, {col, row})
     return result;
 };
 
+window.afterRender = function()
+{
+    if(repo.SCM != 'Gitlab') return;
+
+    const dtable  = $('#table-repo-browse').zui('dtable');
+    const oldData = dtable.options.data;;
+    if(oldData.length == 0) return;
+
+     // 如果正在加载提交信息或已经加载提交信息，直接返回
+    if(dtable.isLoadingCommits || dtable.isLoadedAllCommits) return;
+
+    // 设置正在加载提交信息
+    dtable.isLoadingCommits = true;
+
+    // 获取下一个需要加载提交信息的行
+    const nextCommitRowIndex = oldData.findIndex(row => !row.revision);
+    if(nextCommitRowIndex < 0) {
+        // 如果没有需要加载提交信息的行，设置已经加载提交信息
+        dtable.isLoadedAllCommits = true;
+        return;
+    }
+
+    const nextCommitRow = oldData[nextCommitRowIndex];
+    $.post(
+        $.createLink('repo', 'ajaxGetFileCommitInfo'),
+        {repoID: repo.id, branch: branch, path: nextCommitRow.path}
+    ).then(rowData =>
+    {
+        const commit = JSON.parse(rowData);
+
+        // 取消设置正在加载提交信息
+        dtable.isLoadingCommits = false;
+
+        // 合并行数据和提交信息
+        oldData[nextCommitRowIndex].date     = commit.authoredDate;
+        oldData[nextCommitRowIndex].account  = commit.author ? commit.author.username : commit.authorName;
+        oldData[nextCommitRowIndex].comment  = commit.message;
+        oldData[nextCommitRowIndex].revision = commit.sha;
+
+        // 重新渲染表格
+        dtable.render({data: oldData});
+    });
+}
+
 /**
  * commit表格渲染跳转链接。
  * Render jump link of version.
@@ -50,7 +94,7 @@ window.renderCommentCell = function(result, {col, row})
 /* Open download page when downZip btn click. */
 $('.downloadZip-btn').on('click', function()
 {
-    var link = $.createLink('repo', 'downloadCode', 'repoID=' + repoID + '&branch=' + branch);
+    var link = $.createLink('repo', 'downloadCode', 'repoID=' + repo.id + '&branch=' + branch);
     window.open(link);
 })
 
@@ -224,17 +268,6 @@ $('.copy-btn').on('click', function()
         $(that).tooltip('hide');
     }, 2000)
 })
-
-/* 此方法在页面被替换时执行。 */
-// function onPageUnmount()
-// {
-//     /* 删除全局变量。 */
-//     delete window.canRowCheckable;
-//     delete window.diffClick;
-//     delete window.checkedChange;
-//     delete window.renderCommentCell;
-//     delete window.renderCell;
-// }
 
 window.afterPageUpdate = function()
 {

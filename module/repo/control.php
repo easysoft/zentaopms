@@ -1735,4 +1735,17 @@ class repo extends control
         if($path) $path = helper::safe64Decode($path);
         echo json_encode($this->repo->getGitlabFilesByPath($repo, $path, $branch));
     }
+
+    /**
+     * 获取文件最后一次提交信息。
+     * Get file last commit info.
+     *
+     * @access public
+     * @return object
+     */
+    public function ajaxGetFileCommitInfo()
+    {
+        $repo = $this->repo->getByID($this->post->repoID);
+        echo json_encode($this->loadModel('gitlab')->getFileLastCommit($repo, $this->post->path, $this->post->branch));
+    }
 }

@@ -237,10 +237,12 @@ toolbar
     ) : null
 );
 
+jsVar('tableData', $tableData);
 dtable
 (
     set::cols($config->repo->repoDtable->fieldList),
     set::data($tableData),
+    set::afterRender(jsRaw('window.afterRender')),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::canRowCheckable(jsRaw('function(rowID){return false;}')),
     set::footPager()
@@ -250,8 +252,8 @@ dtable
 $encodePath  = $this->repo->encodePath($path);
 $diffLink    = $this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $encodePath . "&oldrevision={oldRevision}&newRevision={newRevision}");
 
+jsVar('repo',     $repo);
 jsVar('appTab',   $app->tab);
-jsVar('repoID',   $repoID);
 jsVar('branch',   $branchID);
 jsVar('diffLink', $diffLink);
 jsVar('sortLink', helper::createLink('repo', 'browse', "repoID={$repoID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
