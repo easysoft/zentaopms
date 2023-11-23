@@ -413,4 +413,24 @@ class customTest
         if(dao::isError()) return dao::getError();
         return $count;
     }
+
+    /**
+     * 检查系统中是否有资产库数据。
+     * Check if there is assetlib data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasAssetlibDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->objectModel->config->edition;
+
+        $this->objectModel->config->edition = $edition;
+        $count = $this->objectModel->hasAssetlibData();
+
+        $this->objectModel->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
 }
