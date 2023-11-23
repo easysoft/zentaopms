@@ -29,13 +29,19 @@ class metric extends control
      * @param  string $scope
      * @param  string $viewType
      * @param  int    $metricID
-     * @param  string $filters
+     * @param  string $filtersBase64
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function preview($scope = 'project', $viewType = 'single', $metricID = 0, $filtersBase64 = '')
+    public function preview($scope = 'project', $viewType = 'single', $metricID = 0, $filtersBase64 = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $this->metric->processScopeList('released');
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $filters = array();
         if($scope == 'filter')
@@ -62,12 +68,19 @@ class metric extends control
         if(!empty($current))
         {
             $metric = $this->metric->getByID($current->id);
-            $result = $this->metric->getResultByCode($metric->code, array(), 'cron');
+            $result = $this->metric->getResultByCode($metric->code, array(), 'cron', $pager);
 
             $resultHeader = $this->metricZen->getViewTableHeader($metric);
             $resultData   = $this->metricZen->getViewTableData($metric, $result);
         }
-        
+
+        //include 'test/groupData/' . 'notime1.php';
+
+        list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
+        $this->view->groupHeader   = $groupHeader;
+        $this->view->groupData     = $groupData;
+        $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
+
         $this->view->metrics       = $metrics;
         $this->view->groupMetrics  = $groupMetrics;
         $this->view->current       = $current;
@@ -78,11 +91,11 @@ class metric extends control
         $this->view->recTotal      = count($metrics);
         $this->view->filters       = $filters;
         $this->view->filtersBase64 = $filtersBase64;
-        $this->view->resultHeader  = $resultHeader;
-        $this->view->resultData    = $resultData;
+        $this->view->pager         = $pager;
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($resultHeader);
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
+        $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
         $this->display();
     }
 

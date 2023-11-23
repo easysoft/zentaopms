@@ -321,27 +321,6 @@ class customTest
     }
 
     /**
-     * Check for waterfallplus project data..
-     *
-     * @param  string $param deleteproject
-     * @access public
-     * @return int
-     */
-    public function hasWaterfallplusDataTest($param = '')
-    {
-        if($param == 'deleteproject')
-        {
-            global $tester;
-            $tester->dao->update(TABLE_PROJECT)
-                ->set('deleted')->eq(1)
-                ->where('type')->eq('project')
-                ->andWhere('model')->eq('waterfallplus')
-                ->exec();
-        }
-        return $this->objectModel->hasWaterfallplusData();
-    }
-
-    /**
      * 获取需求概念。
      * Get UR and SR concept.
      *
@@ -355,5 +334,223 @@ class customTest
 
         if(dao::isError()) return dao::getError();
         return json_decode($concept, true);
+    }
+
+    /**
+     * 根据管理模式禁用相关功能。
+     * Disable related features based on the management mode.
+     *
+     * @param  string       $mode
+     * @access public
+     * @return array|string
+     */
+    public function disableFeaturesByModeTest(string $mode): array|string
+    {
+        $this->objectModel->disableFeaturesByMode($mode);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->loadModel('setting')->getItem('oner=system&module=common&key=disabledFeatures');
+    }
+
+    /**
+     * 处理定时任务。
+     * Process measrecord cron.
+     *
+     * @param  string $disabledFeatures
+     * @access public
+     * @return array|string
+     */
+    public function processMeasrecordCronTest(string $disabledFeatures): array|string
+    {
+        $this->objectModel->loadModel('setting')->setItem('system.common.disabledFeatures', $disabledFeatures);
+        $this->objectModel->processMeasrecordCron();
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->dao->select('status')->from(TABLE_CRON)->where('command')->like('%methodName=execCrontabQueue')->fetch('status');
+    }
+
+    /**
+     * 检查系统中是否有用户需求数据。
+     * Check if there is requirement data in the system.
+     *
+     * @access public
+     * @return int|array
+     */
+    public function hasProductURDataTest(): int|array
+    {
+        $count = $this->objectModel->hasProductURData();
+
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 检查系统中是否有瀑布项目数据。
+     * Check if there is waterfall project data in the system.
+     *
+     * @access public
+     * @return int|array
+     */
+    public function hasWaterfallDataTest(): int|array
+    {
+        $count = $this->objectModel->hasWaterfallData();
+
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 检查系统中是否有融合瀑布项目数据。
+     * Check whether there is waterfallplus project data in the system.
+     *
+     * @access public
+     * @return int|array
+     */
+    public function hasWaterfallplusDataTest(): int|array
+    {
+        $count = $this->objectModel->hasWaterfallplusData();
+
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 检查系统中是否有资产库数据。
+     * Check if there is assetlib data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasAssetlibDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->objectModel->config->edition;
+
+        $this->objectModel->config->edition = $edition;
+        $count = $this->objectModel->hasAssetlibData();
+
+        $this->objectModel->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 检查系统中是否有敏捷项目的问题数据。
+     * Check if there is scrum issue data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasScrumIssueDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->objectModel->config->edition;
+
+        $this->objectModel->config->edition = $edition;
+        $count = $this->objectModel->hasScrumIssueData();
+
+        $this->objectModel->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 检查系统中是否有敏捷项目的风险数据。
+     * Check if there is scrum risk data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasScrumRiskDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->objectModel->config->edition;
+
+        $this->objectModel->config->edition = $edition;
+        $count = $this->objectModel->hasScrumRiskData();
+
+        $this->objectModel->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 检查系统中是否有机会数据。
+     * Check if there is opportunity data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasScrumOpportunityDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->objectModel->config->edition;
+
+        $this->objectModel->config->edition = $edition;
+        $count = $this->objectModel->hasScrumOpportunityData();
+
+        $this->objectModel->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 检查系统中是否有会议数据。
+     * Check if there is meeting data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasScrumMeetingDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->objectModel->config->edition;
+
+        $this->objectModel->config->edition = $edition;
+        $count = $this->objectModel->hasScrumMeetingData();
+
+        $this->objectModel->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 检查系统中是否有审计数据。
+     * Check if there is auditplan data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasScrumAuditplanDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->objectModel->config->edition;
+
+        $this->objectModel->config->edition = $edition;
+        $count = $this->objectModel->hasScrumAuditplanData();
+
+        $this->objectModel->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
+
+    /**
+     * 检查系统中是否有项目活动数据。
+     * Check if there is project activity data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasScrumProcessDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->objectModel->config->edition;
+
+        $this->objectModel->config->edition = $edition;
+        $count = $this->objectModel->hasScrumProcessData();
+
+        $this->objectModel->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
     }
 }

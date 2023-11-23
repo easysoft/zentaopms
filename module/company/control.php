@@ -25,7 +25,7 @@ class company extends control
     }
 
     /**
-     * 首页，跳转到公司人员浏览页面。
+     * 首页，跳转到公司部门和人员浏览页面。
      * Index page, header to browse.
      *
      * @access public
@@ -72,15 +72,15 @@ class company extends control
         /* Get users. */
         $users = $this->company->getUsers($browseType, $type, $queryID, $deptID, $sort, $pager);
 
-        $this->view->title       = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
-        $this->view->users       = array_map(function($user){unset($user->password);return $user;}, $users);
-        $this->view->deptTree    = $this->dept->getTreeMenu(0, array('deptModel', 'createMemberLink'));
-        $this->view->orderBy     = $orderBy;
-        $this->view->deptID      = $deptID;
-        $this->view->pager       = $pager;
-        $this->view->param       = $param;
-        $this->view->type        = $type;
-        $this->view->browseType  = $browseType;
+        $this->view->title      = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;
+        $this->view->users      = array_map(function($user){unset($user->password);return $user;}, $users);
+        $this->view->deptTree   = $this->dept->getTreeMenu(0, array('deptModel', 'createMemberLink'));
+        $this->view->orderBy    = $orderBy;
+        $this->view->deptID     = $deptID;
+        $this->view->pager      = $pager;
+        $this->view->param      = $param;
+        $this->view->type       = $type;
+        $this->view->browseType = $browseType;
         $this->display();
     }
 
@@ -124,8 +124,8 @@ class company extends control
             return $this->sendSuccess(array('load' => true));
         }
 
-        $this->view->title    = $this->lang->company->common . $this->lang->colon . $this->lang->company->edit;
-        $this->view->company  = $this->company->getByID($this->app->company->id);
+        $this->view->title   = $this->lang->company->common . $this->lang->colon . $this->lang->company->edit;
+        $this->view->company = $this->company->getByID($this->app->company->id);
         $this->display();
     }
 
@@ -164,6 +164,7 @@ class company extends control
     {
         $this->loadModel('action');
 
+        /* Save session.*/
         $this->companyZen->saveUriIntoSession();
 
         /* Append id for second sort. */
@@ -192,19 +193,19 @@ class company extends control
         if(empty($recTotal)) $recTotal = !(empty($date) && $browseType == 'all') ? array_sum(array_map('count', $dateGroups)) : $this->action->getDynamicCount();
 
         /* Assign.*/
-        $this->view->title        = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
-        $this->view->recTotal     = $recTotal;
-        $this->view->browseType   = $browseType;
-        $this->view->account      = $account;
-        $this->view->productID    = $productID;
-        $this->view->projectID    = $projectID;
-        $this->view->executionID  = $executionID;
-        $this->view->queryID      = $queryID;
-        $this->view->orderBy      = $orderBy;
-        $this->view->userID       = $userID;
-        $this->view->param        = $param;
-        $this->view->dateGroups   = $dateGroups;
-        $this->view->direction    = $direction;
+        $this->view->title       = $this->lang->company->common . $this->lang->colon . $this->lang->company->dynamic;
+        $this->view->recTotal    = $recTotal;
+        $this->view->browseType  = $browseType;
+        $this->view->account     = $account;
+        $this->view->productID   = $productID;
+        $this->view->projectID   = $projectID;
+        $this->view->executionID = $executionID;
+        $this->view->queryID     = $queryID;
+        $this->view->orderBy     = $orderBy;
+        $this->view->userID      = $userID;
+        $this->view->param       = $param;
+        $this->view->dateGroups  = $dateGroups;
+        $this->view->direction   = $direction;
         $this->display();
     }
 

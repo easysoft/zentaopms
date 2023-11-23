@@ -2450,31 +2450,16 @@ class repoModel extends model
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
 
-        $paths = array();
-        $files = $scm->engine->tree($path, 0);
-        if(empty($files)) $files = array();
-        foreach($files as $file)
-        {
-            $paths[] = $file->path;
-        }
+        $files = $this->getGitlabFilesByPath($repo, $path, $branch);
 
-        $requests = array();
-        foreach($paths as $path)
-        {
-            $requests[]['url'] = $scm->engine->getCommitsByPath($path, '', '', 1, 1, true);
-        }
-        $this->app->loadClass('requests', true);
-        $commits = requests::request_multiple($requests);
 
         foreach($files as $key => $file)
         {
-            $files[$key]->kind = $file->type == 'tree' ? 'dir' : 'file';
-
-            $commit = isset($commits[$key]->body) ? json_decode($commits[$key]->body) : array();
-            $files[$key]->revision = isset($commit[0]->id) ? $commit[0]->id : '';
-            $files[$key]->comment  = isset($commit[0]->title) ? $commit[0]->title : '';
-            $files[$key]->account  = isset($commit[0]->committer_name) ? $commit[0]->committer_name : '';
-            $files[$key]->date     = isset($commit[0]->committed_date) ? $commit[0]->committed_date : '';
+            //$commit = $this->gitlab->getFileLastCommit($repo, $file->path, $branch);
+            $files[$key]->revision = ''; // $commit->sha;
+            $files[$key]->comment  = ''; // $commit->message;
+            $files[$key]->account  = ''; // !empty($commit->authorName) ? $commit->authorName : zget($commit->author, 'name');
+            $files[$key]->date     = ''; // $commit->authoredDate;
         }
         return $files;
     }
@@ -3252,7 +3237,7 @@ class repoModel extends model
             $base64Name = base64_encode($file->path);
 
             $fileInfo = new stdclass();
-            $fileInfo->id   = $base64Name;
+            $fileInfo->id   = $file->sha;
             $fileInfo->name = $file->name;
             $fileInfo->text = $file->name;
             $fileInfo->path = $file->path;
@@ -3269,7 +3254,7 @@ class repoModel extends model
             $base64Name = base64_encode($dir->path);
 
             $folder = new stdclass();
-            $folder->id   = $base64Name;
+            $folder->id   = $dir->sha;
             $folder->name = $dir->name;
             $folder->text = $dir->name;
             $folder->path = $dir->path;
@@ -3308,7 +3293,7 @@ class repoModel extends model
         $fullPath    = trim(str_replace($repo->client, '', $repo->codePath), '/');
         while($hasNextPage)
         {
-            $query    = array('query' => 'query { project(fullPath: "' . $fullPath . '") {repository {tree(path: "' . trim($path, '/') . '", ref: "' . $branch . '") {' . $type . '(after: "' . $endCursor . '") {pageInfo {endCursor hasNextPage} nodes {name path}}}}}}');
+            $query    = array('query' => 'query { project(fullPath: "' . $fullPath . '") {repository {tree(path: "' . trim($path, '/') . '", ref: "' . $branch . '") {' . $type . '(after: "' . $endCursor . '") {pageInfo {endCursor hasNextPage} nodes {sha name path}}}}}}');
             $response = $this->gitlab->apiGetByGraphql($repo->serviceHost, $query);
 
             if(!$endCursor && !isset($response->data->project->repository)) return array();

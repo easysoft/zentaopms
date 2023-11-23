@@ -3073,4 +3073,24 @@ class gitlabModel extends model
         $url = rtrim($gitlab->url, '/') . '/api/graphql' . "?private_token={$gitlab->token}";
         return json_decode(commonModel::http($url, $query, array(CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1)));
     }
+
+    /**
+     * 获取文件最后一次提交信息。
+     * Get file last commit info.
+     *
+     * @param  int    $repo
+     * @param  int    $path
+     * @param  string $branch
+     * @access public
+     * @return object|null
+     */
+    public function getFileLastCommit(object $repo, string $path, string $branch = 'HEAD'): object|null
+    {
+        $fullPath = trim(str_replace($repo->client, '', $repo->codePath), '/');
+        $query    = array('query' => 'query {project(fullPath: "' . $fullPath . '") {repository {tree(path: "' . trim($path, '/') . '", ref: "' . $branch . '") {lastCommit {sha message author {name username} authorName authoredDate}}}}}');
+        $response = $this->apiGetByGraphql($repo->serviceHost, $query);
+        if(!isset($response->data->project->repository->tree->lastCommit)) return null;
+
+        return $response->data->project->repository->tree->lastCommit;
+    }
 }

@@ -9,46 +9,18 @@
  * @version     $Id: model.php 5086 2013-07-10 02:25:22Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-
 ?>
 <?php
 class companyModel extends model
 {
     /**
-     * Set menu.
-     *
-     * @param  int    $dept
-     * @access public
-     * @return void
-     */
-    public function setMenu($dept = 0)
-    {
-        /*
-        common::setMenuVars($this->lang->company->menu, 'name', array($this->app->company->name));
-        common::setMenuVars($this->lang->company->menu, 'addUser', array($dept));
-        common::setMenuVars($this->lang->company->menu, 'batchAddUser', array($dept));
-         */
-    }
-
-    /**
-     * Get company list.
-     *
-     * @access public
-     * @return void
-     */
-    public function getList()
-    {
-        return $this->dao->select('*')->from(TABLE_COMPANY)->fetchAll();
-    }
-
-    /**
      * 获取第一家公司。
      * Get the first company.
      *
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getFirst()
+    public function getFirst(): object|bool
     {
         return $this->dao->select('*')->from(TABLE_COMPANY)->orderBy('id')->limit(1)->fetch();
     }
@@ -59,9 +31,9 @@ class companyModel extends model
      *
      * @param  int    $companyID
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getByID(int $companyID)
+    public function getByID(int $companyID): object|bool
     {
         return $this->dao->findById($companyID)->from(TABLE_COMPANY)->fetch();
     }
@@ -118,22 +90,6 @@ class companyModel extends model
     }
 
     /**
-     * Get company-user pairs.
-     *
-     * @access public
-     * @return array
-     */
-    public function getCompanyUserPairs()
-    {
-        $pairs = $this->dao->select("t1.account, CONCAT_WS('/', t2.name, t1.realname)")->from(TABLE_USER)->alias('t1')
-            ->leftJoin(TABLE_COMPANY)->alias('t2')
-            ->on('t1.company = t2.id')
-            ->fetchPairs();
-
-        return $pairs;
-    }
-
-    /**
      * 更新公司信息。
      * Update a company.
      *
@@ -156,6 +112,7 @@ class companyModel extends model
     }
 
     /**
+     * 搭建搜索表单。
      * Build search form.
      *
      * @param  int    $queryID
@@ -163,7 +120,7 @@ class companyModel extends model
      * @access public
      * @return void
      */
-    public function buildSearchForm($queryID, $actionURL)
+    public function buildSearchForm(int $queryID, string $actionURL): void
     {
         $this->config->company->browse->search['actionURL'] = $actionURL;
         $this->config->company->browse->search['queryID']   = $queryID;

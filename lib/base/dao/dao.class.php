@@ -1670,7 +1670,6 @@ class baseSQL
      */
     public static function factory($table = '')
     {
-        dao::$errors = array(); /* Reset dao::errors before CRUD to prevent from last CRUD disturb new CRUD. */
         return new sql($table);
     }
 

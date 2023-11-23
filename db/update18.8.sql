@@ -92,3 +92,15 @@ REPLACE INTO `zt_chart`(`id`, `name`, `dimension`, `type`, `group`, `dataset`, `
 REPLACE INTO `zt_chart`(`id`, `name`, `dimension`, `type`, `group`, `dataset`, `desc`, `settings`, `filters`, `step`, `fields`, `langs`, `sql`, `stage`, `builtin`, `objects`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `deleted`) VALUES (20015, '使用数据分析-上线时间', 1, 'card', '58', '0', ' ', '{\"value\": {\"type\": \"value\", \"field\": \"date\", \"agg\": \"value\"}, \"title\": {\"type\": \"text\", \"name\": \"\"}, \"type\": \"value\"}', '[]', 0, ' ', NULL, 'select `value` as date from zt_config where `owner` = \'system\' and `key` = \'installedDate\'', 'published', 1, ' ', 'system', '2023-08-16 15:32:10', 'admin', '2023-08-16 15:32:17', 0);
 
 UPDATE `zt_cron` SET `type` = 'zentao' WHERE `command` = 'moduleName=metric&methodName=updateMetricLib';
+
+CREATE TABLE `zt_queue` (
+  `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
+  `cron` mediumint NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `command` text NOT NULL,
+  `status` enum('wait','doing','done') NOT NULL DEFAULT 'wait',
+  `execId` int DEFAULT NULL,
+  `createdDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

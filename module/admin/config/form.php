@@ -18,3 +18,9 @@ $config->admin->form->sso['key']      = array('type' => 'string', 'required' => 
 
 $config->admin->form->setmodule = array();
 $config->admin->form->setmodule['module'] = array('type'=> 'array', 'required' => true, 'default' => array('myScore' => 0, 'productRoadmap' => 1, 'productTrack' => 1, 'productUR' => 1, 'otherDevops' => 1, 'otherKanban' => 1));
+
+$config->admin->form->log = array();
+$config->admin->form->log['days'] = array('type' => 'int', 'required' => true, 'default' => 30);
+
+$config->admin->form->resetpwdsetting = array();
+$config->admin->form->resetpwdsetting['resetPWDByMail'] = array('type' => 'int', 'required' => true, 'default' => 0);

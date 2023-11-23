@@ -339,7 +339,8 @@ class custom extends control
     }
 
     /**
-     * Set Mode.
+     * 模式管理。
+     * Mode management.
      *
      * @access public
      * @return void
@@ -347,12 +348,13 @@ class custom extends control
     public function mode()
     {
         $mode = zget($this->config->global, 'mode', 'light');
-        if($this->post->mode and $this->post->mode != $mode) // If mode value change.
+        if($this->post->mode && $this->post->mode != $mode) // If mode value change.
         {
-            $mode    = fixer::input('post')->get('mode');
+            $mode    = $this->post->mode;
             $program = isset($_POST['program']) ? $_POST['program'] : 0;
 
-            if($mode == 'light' and empty($program)) $program = $this->loadModel('program')->createDefaultProgram();
+            /* Create the program to which the project in light mode belongs. */
+            if($mode == 'light' && empty($program)) $program = $this->loadModel('program')->createDefaultProgram();
 
             $this->loadModel('setting')->setItem('system.common.global.mode', $mode);
             $this->setting->setItem('system.common.global.defaultProgram', $program);
@@ -361,7 +363,8 @@ class custom extends control
 
             if($mode == 'light') $this->custom->processProjectAcl();
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModel' => true));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->sendSuccess(array('load' => true, 'closeModel' => true));
         }
 
         list($disabledFeatures, $enabledScrumFeatures, $disabledScrumFeatures) = $this->custom->computeFeatures();

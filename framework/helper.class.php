@@ -387,7 +387,7 @@ class helper extends baseHelper
                 return $value ? (string)$value : null;
             case 'string':
             default:
-                return (string)$value;
+                return trim((string)$value);
         }
     }
 

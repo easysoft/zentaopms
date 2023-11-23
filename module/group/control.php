@@ -20,7 +20,6 @@ class group extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        $this->loadModel('company')->setMenu();
         $this->loadModel('user');
         $this->appendResourcePackages();
     }

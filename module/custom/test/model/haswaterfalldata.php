@@ -2,7 +2,7 @@
 <?php
 /**
 
-title=测试 customModel->hasWaterfallplusData();
+title=测试 customModel->hasWaterfallData();
 timeout=0
 cid=1
 
@@ -16,10 +16,10 @@ zdTable('user')->gen(5);
 su('admin');
 
 $customTester = new customTest();
-r($customTester->hasWaterfallplusDataTest()) && p() && e('0'); // 测试系统中无融合瀑布项目数据
+r($customTester->hasWaterfallDataTest()) && p() && e('0'); // 测试系统中无瀑布项目数据
 
 $projectTable = zdTable('project');
-$projectTable->model->range('waterfallplus');
+$projectTable->model->range('waterfall');
 $projectTable->deleted->range('0');
 $projectTable->gen(5);
-r($customTester->hasWaterfallplusDataTest()) && p() && e('5'); // 测试系统中有融合瀑布项目数据
+r($customTester->hasWaterfallDataTest()) && p() && e('5'); // 测试系统中有瀑布项目数据

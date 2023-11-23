@@ -271,6 +271,7 @@ class admin extends control
     }
 
     /**
+     * 认证邮箱。
      * Certify ztEmail.
      *
      * @param  string $email
@@ -287,13 +288,13 @@ class admin extends control
             return print(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
         }
 
-        $this->view->title      = $this->lang->admin->certifyEmail;
-
+        $this->view->title = $this->lang->admin->certifyEmail;
         $this->view->email = helper::safe64Decode($email);
         $this->display();
     }
 
     /**
+     * 认证手机。
      * Certify ztMobile.
      *
      * @param  string $mobile
@@ -310,13 +311,13 @@ class admin extends control
             return print(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
         }
 
-        $this->view->title      = $this->lang->admin->certifyMobile;
-
+        $this->view->title  = $this->lang->admin->certifyMobile;
         $this->view->mobile = helper::safe64Decode($mobile);
         $this->display();
     }
 
     /**
+     * 认证公司。
      * Set ztCompany.
      *
      * @access public
@@ -332,16 +333,16 @@ class admin extends control
             return print(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
         }
 
-        $this->view->title      = $this->lang->admin->ztCompany;
-
+        $this->view->title  = $this->lang->admin->ztCompany;
         $this->view->fields = explode(',', $fields);
         $this->display();
     }
 
     /**
-     * Ajax send code.
+     * 获取验证码。
+     * Get the verification code.
      *
-     * @param  string $type
+     * @param  string $type mobile|email
      * @access public
      * @return void
      */
@@ -351,6 +352,7 @@ class admin extends control
     }
 
     /**
+     * 设置日志保存天数。
      * Set save days of log.
      *
      * @access public
@@ -360,9 +362,10 @@ class admin extends control
     {
         if($_POST)
         {
-            if(!validater::checkInt($this->post->days)) return $this->send(array('result' => 'fail', 'message' => array('days' => sprintf($this->lang->admin->notice->int, $this->lang->admin->days))));
+            $days = form::data()->get()->days;
+            if(!validater::checkInt($days)) return $this->send(array('result' => 'fail', 'message' => array('days' => sprintf($this->lang->admin->notice->int, $this->lang->admin->days))));
 
-            $this->loadModel('setting')->setItem('system.admin.log.saveDays', $this->post->days);
+            $this->loadModel('setting')->setItem('system.admin.log.saveDays', (string)$days);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
@@ -374,6 +377,7 @@ class admin extends control
     }
 
     /**
+     * 删除过期日志。
      * Delete logs older than save days.
      *
      * @access public
@@ -387,6 +391,7 @@ class admin extends control
     }
 
     /**
+     * 重置密码设置。
      * Reset password setting.
      *
      * @access public
@@ -396,7 +401,8 @@ class admin extends control
     {
         if($_POST)
         {
-            $this->loadModel('setting')->setItem('system.common.resetPWDByMail', $this->post->resetPWDByMail);
+            $resetPWDByMail = form::data()->get()->resetPWDByMail;
+            $this->loadModel('setting')->setItem('system.common.resetPWDByMail', (string)$resetPWDByMail);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
@@ -405,6 +411,7 @@ class admin extends control
     }
 
     /**
+     * 表引擎。
      * Show table engine.
      *
      * @access public
@@ -412,12 +419,13 @@ class admin extends control
      */
     public function tableEngine()
     {
-        $this->view->title = $this->lang->admin->tableEngine;
+        $this->view->title        = $this->lang->admin->tableEngine;
         $this->view->tableEngines = $this->dao->getTableEngines();
         $this->display();
     }
 
     /**
+     * 更换表引擎为InnoDB。
      * Ajax change table engine.
      *
      * @access public
@@ -467,7 +475,7 @@ class admin extends control
                 if($dbProcess->db != $this->config->db->name) continue;
                 if(!empty($dbProcess->Info) and strpos($dbProcess->Info, " {$thisTable} ") !== false)
                 {
-                    $response['message'] = sprintf($this->lang->upgrade->changingTable, $thisTable);
+                    $response['message'] = sprintf($this->lang->admin->changingTable, $thisTable);
                     return $this->send($response);
                 }
             }
@@ -495,6 +503,7 @@ class admin extends control
     }
 
     /**
+     * 设置1.5级后台下拉菜单。
      * AJAX: Get drop menu.
      *
      * @param  string $currentMenuKey
@@ -504,6 +513,7 @@ class admin extends control
     public function ajaxGetDropMenu($currentMenuKey = '')
     {
         $this->admin->checkPrivMenu();
+
         $data = array();
         foreach($this->lang->admin->menuList as $menuKey => $menuGroup)
         {

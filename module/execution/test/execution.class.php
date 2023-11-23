@@ -3057,25 +3057,25 @@ class executionTest
     }
 
     /**
-     * function getExecutionCounts test by execution
+     * 测试通过执行ID列表获取执行的子级ID列表组。
+     * Test get the children id list of the execution group by the parent id list.
      *
-     * @param  int    $projectID
-     * @param  string $browseType
+     * @param  string       $parentIdList
      * @access public
-     * @return int
+     * @return string|array
      */
-    public function getExecutionCountsTest(int $projectID = 0, string $browseType = 'all'): int
+    public function getChildIdGroupTest(string $parentIdList): string|array
     {
-        $count = $this->executionModel->getExecutionCounts($projectID, $browseType);
+        $executions = $this->executionModel->getChildIdGroup(explode(',', $parentIdList));
 
-        if(dao::isError())
+        if(dao::isError()) return dao::getError();
+        $return = '';
+        foreach($executions as $parentID => $children)
         {
-            $error = dao::getError();
-            return $error[0];
+            $return .= "{$parentID}:";
+            foreach($children as $child) $return .= "{$child->id},";
+            $return = trim($return, ',') . ';';
         }
-        else
-        {
-            return $count;
-        }
+        return $return;
     }
 }

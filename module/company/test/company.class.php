@@ -31,7 +31,7 @@ class companyTest
 
         foreach($param as $key => $value) $object->{$key} = $value;
 
-        $this->objectModel->update($object);
+        $this->objectModel->update($objectID, $object);
 
         $change = $tester->dbh->query("select * from zt_company WHERE id = $objectID")->fetch();
 
@@ -44,32 +44,6 @@ class companyTest
         else
         {
             return $change;
-        }
-    }
-
-    /**
-     * function getList test by company
-     *
-     * @param  string $count
-     * @access public
-     * @return array
-     */
-    public function getListTest($count)
-    {
-        $object = $this->objectModel->getList();
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        elseif($count == 1)
-        {
-            return count($object);
-        }
-        else
-        {
-            return $object;
         }
     }
 
@@ -167,31 +141,4 @@ class companyTest
             return $object;
         }
     }
-
-    /**
-     * function getCompanyUserPairs test by company
-     *
-     * @param  string $count
-     * @access public
-     * @return array
-     */
-    public function getCompanyUserPairsTest($count)
-    {
-        $object = $this->objectModel->getCompanyUserPairs();
-
-        if(dao::isError())
-        {
-            $error = dao::getError();
-            return $error;
-        }
-        elseif($count == 1)
-        {
-            return count($object);
-        }
-        else
-        {
-            return $object;
-        }
-    }
-
 }

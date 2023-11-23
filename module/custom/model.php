@@ -1018,22 +1018,25 @@ class customModel extends model
     }
 
     /**
-     * Set features to disable.
+     * 根据管理模式禁用相关功能。
+     * Disable related features based on the management mode.
      *
-     * @param  int    $mode
+     * @param  string $mode
      * @access public
      * @return void
      */
-    public function disableFeaturesByMode($mode)
+    public function disableFeaturesByMode(string $mode)
     {
         $disabledFeatures = '';
         if($mode == 'light')
         {
+            /* Check whether the product or project data in tge system is empty. */
             foreach($this->config->custom->dataFeatures as $feature)
             {
                 $function = 'has' . ucfirst($feature) . 'Data';
                 if(!$this->$function())
                 {
+                    /* If the data is empty, this feature is disabled. */
                     $disabledFeatures .= "$feature,";
                     if(strpos($feature, 'scrum') === 0) $disabledFeatures .= 'agileplus' . substr($feature, 5) . ',';
                 }
@@ -1041,6 +1044,7 @@ class customModel extends model
             $disabledFeatures .= 'scrumMeasrecord,agileplusMeasrecord,productTrack,productRoadmap';
         }
 
+        /* Save the features that are disable to the config. */
         $disabledFeatures = rtrim($disabledFeatures, ',');
         $this->loadModel('setting')->setItem('system.common.disabledFeatures', $disabledFeatures);
 
@@ -1051,57 +1055,62 @@ class customModel extends model
     }
 
     /**
-     * Check for URStory data.
+     * 检查系统中是否有用户需求数据。
+     * Check whether there is requirement data in the system.
      *
      * @access public
      * @return int
      */
-    public function hasProductURData()
+    public function hasProductURData(): int
     {
         return $this->dao->select('*')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->count();
     }
 
     /**
-     * Check for waterfall project data.
+     * 检查系统中是否有瀑布项目数据。
+     * Check whether there is waterfall project data in the system.
      *
      * @access public
      * @return int
      */
-    public function hasWaterfallData()
+    public function hasWaterfallData(): int
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('waterfall')->andWhere('deleted')->eq('0')->count();
     }
 
     /**
-     * Check for waterfallplus project data.
+     * 检查系统中是否有融合项目数据。
+     * Check whether there is waterfallplus project data in the system.
      *
      * @access public
      * @return int
      */
-    public function hasWaterfallplusData()
+    public function hasWaterfallplusData(): int
     {
         return $this->dao->select('*')->from(TABLE_PROJECT)->where('model')->eq('waterfallplus')->andWhere('deleted')->eq('0')->count();
     }
 
     /**
-     * Check for assetlib data.
+     * 检查系统中是否有资产库数据。
+     * Check whether there is assetlib data in the system.
      *
      * @access public
      * @return int
      */
-    public function hasAssetlibData()
+    public function hasAssetlibData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd'))) return $this->dao->select('*')->from(TABLE_ASSETLIB)->where('deleted')->eq(0)->count();
-        return false;
+        return 0;
     }
 
     /**
-     * Check for issue data.
+     * 检查系统中是否有敏捷项目的问题数据。
+     * Check whether there is scrum issue data in the system.
      *
      * @access public
-     * @return bool|int
+     * @return int
      */
-    public function hasScrumIssueData()
+    public function hasScrumIssueData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
@@ -1112,16 +1121,18 @@ class customModel extends model
                 ->andWhere('t2.model')->eq('scrum')
                 ->count();
         }
-        return false;
+
+        return 0;
     }
 
     /**
-     * Check for risk data.
+     * 检查系统中是否有敏捷项目的风险数据。
+     * Check whether there is scrum risk data in the system.
      *
      * @access public
-     * @return bool
+     * @return int
      */
-    public function hasScrumRiskData()
+    public function hasScrumRiskData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
@@ -1132,31 +1143,33 @@ class customModel extends model
                 ->andWhere('t2.model')->eq('scrum')
                 ->count();
         }
-        return false;
+        return 0;
     }
 
     /**
-     * Verify whether there is scrum opportunity data
+     * 检查系统中是否有机会数据。
+     * Check whether there is opportunity data in the system.
      *
      * @access public
-     * @return bool
+     * @return int
      */
-    public function hasScrumOpportunityData()
+    public function hasScrumOpportunityData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
             return $this->dao->select('id')->from(TABLE_OPPORTUNITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
         }
-        return false;
+        return 0;
     }
 
     /**
-     * Verify whether there is scrum meeting data.
+     * 检查系统中是否有敏捷项目的会议数据。
+     * Check whether there is scrum meeting data in the system.
      *
      * @access public
-     * @return bool
+     * @return int
      */
-    public function hasScrumMeetingData()
+    public function hasScrumMeetingData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
@@ -1167,16 +1180,17 @@ class customModel extends model
                 ->andWhere('t2.deleted')->eq('0')
                 ->count();
         }
-        return false;
+        return 0;
     }
 
     /**
-     * Verify whether there is scrum auditplan data.
+     * 检查系统中是否有敏捷项目的审计数据。
+     * Check whether there is scrum auditplan data in the system.
      *
      * @access public
-     * @return bool
+     * @return int
      */
-    public function hasScrumAuditplanData()
+    public function hasScrumAuditplanData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
@@ -1187,25 +1201,27 @@ class customModel extends model
                 ->andWhere('t2.deleted')->eq('0')
                 ->count();
         }
-        return false;
+        return 0;
     }
 
     /**
-     * Verify whether there is scrum process data.
+     * 检查系统中是否有项目活动数据。
+     * Check whether there is project activity data in the system.
      *
      * @access public
-     * @return bool
+     * @return int
      */
-    public function hasScrumProcessData()
+    public function hasScrumProcessData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
             return $this->dao->select('id')->from(TABLE_PROGRAMACTIVITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
         }
-        return false;
+        return 0;
     }
 
     /**
+     * 处理定时任务。
      * Process measrecord cron.
      *
      * @access public
@@ -1222,16 +1238,18 @@ class customModel extends model
         $hasWaterfallPlus           = strpos(",{$disabledFeatures},",  ',waterfallplus,')       === false;
         $hasScrumMeasrecord         = strpos(",{$disabledFeatures},",  ',scrumMeasrecord,')     === false;
         $hasAgilePlusMeasrecord     = strpos(",{$disabledFeatures},",  ',agileMeasrecord,')     === false;
-        $hasWaterfallMeasrecord     = (strpos(",{$disabledFeatures},", ',waterfallMeasrecord,') === false and $hasWaterfall);
-        $hasWaterfallPlusMeasrecord = (strpos(",{$disabledFeatures},", ',waterfallplusMeasrecord,') === false and $hasWaterfallPlus);
+        $hasWaterfallMeasrecord     = (strpos(",{$disabledFeatures},", ',waterfallMeasrecord,') === false && $hasWaterfall);
+        $hasWaterfallPlusMeasrecord = (strpos(",{$disabledFeatures},", ',waterfallplusMeasrecord,') === false && $hasWaterfallPlus);
 
+        /* Determine whether the cron is enabled based on whether the feature is disabled. */
         $cronStatus = 'normal';
-        if(!$hasScrumMeasrecord and !$hasAgilePlusMeasrecord and !$hasWaterfallMeasrecord and $hasWaterfallPlusMeasrecord) $cronStatus = 'stop';
+        if(!$hasScrumMeasrecord && !$hasAgilePlusMeasrecord && !$hasWaterfallMeasrecord && !$hasWaterfallPlusMeasrecord) $cronStatus = 'stop';
 
+        /* Update the status of the cron. */
         $this->loadModel('cron');
         $cron = $this->dao->select('id,status')->from(TABLE_CRON)->where('command')->like('%methodName=initCrontabQueue')->fetch();
-        if($cron and $cron->status != $cronStatus) $this->cron->changeStatus($cron->id, $cronStatus);
+        if($cron && $cron->status != $cronStatus) $this->cron->changeStatus($cron->id, $cronStatus);
         $cron = $this->dao->select('id,status')->from(TABLE_CRON)->where('command')->like('%methodName=execCrontabQueue')->fetch();
-        if($cron and $cron->status != $cronStatus) $this->cron->changeStatus($cron->id, $cronStatus);
+        if($cron && $cron->status != $cronStatus) $this->cron->changeStatus($cron->id, $cronStatus);
     }
 }
