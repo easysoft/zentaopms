@@ -737,6 +737,7 @@ EOF;
     }
 
     /**
+     * 我的项目列表。
      * My projects.
      *
      * @param  string  $status doing|wait|suspended|closed|openedbyme
@@ -747,9 +748,8 @@ EOF;
      * @access public
      * @return void
      */
-    public function project($status = 'doing', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function project(string $status = 'doing', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
-        $this->loadModel('program');
         $this->app->loadLang('project');
 
         $uri = $this->app->getURI(true);
@@ -757,7 +757,7 @@ EOF;
         $this->app->session->set('projectList', $uri, 'my');
 
         /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get PM id list. */
@@ -765,7 +765,7 @@ EOF;
         $projects = $this->user->getObjects($this->app->user->account, 'project', $status, $orderBy, $pager);
         foreach($projects as $project)
         {
-            if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
+            if(!empty($project->PM) && !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
         }
         $PMList = $this->user->getListByAccounts($accounts, 'account');
 
