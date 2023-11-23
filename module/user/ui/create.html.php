@@ -54,16 +54,20 @@ formPanel
                     set::items($companies),
                     set::value('')
                 ),
-                span
+                input
                 (
-                    set('class', 'input-group-addon'),
-                    checkbox
-                    (
-                        set::id('addCompany'),
-                        set::name('new[]'),
-                        set::value('1'),
-                        set::text($lang->company->create)
-                    )
+                    set::name('newCompany'),
+                    setClass('hidden')
+                ),
+                checkbox
+                (
+                    on::change('toggleNew'),
+                    set::id('new'),
+                    set::name('new'),
+                    set::value(1),
+                    set::text($lang->company->create),
+                    set::rootClass('btn'),
+                    width('96px')
                 )
             )
         )
