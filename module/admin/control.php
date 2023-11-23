@@ -273,6 +273,7 @@ class admin extends control
     }
 
     /**
+     * 认证邮箱。
      * Certify ztEmail.
      *
      * @param  string $email
@@ -295,6 +296,7 @@ class admin extends control
     }
 
     /**
+     * 认证手机。
      * Certify ztMobile.
      *
      * @param  string $mobile
@@ -317,6 +319,7 @@ class admin extends control
     }
 
     /**
+     * 认证公司。
      * Set ztCompany.
      *
      * @access public
@@ -376,6 +379,7 @@ class admin extends control
     }
 
     /**
+     * 删除过期日志。
      * Delete logs older than save days.
      *
      * @access public
@@ -423,6 +427,7 @@ class admin extends control
     }
 
     /**
+     * 更换表引擎为InnoDB。
      * Ajax change table engine.
      *
      * @access public
@@ -472,7 +477,7 @@ class admin extends control
                 if($dbProcess->db != $this->config->db->name) continue;
                 if(!empty($dbProcess->Info) and strpos($dbProcess->Info, " {$thisTable} ") !== false)
                 {
-                    $response['message'] = sprintf($this->lang->upgrade->changingTable, $thisTable);
+                    $response['message'] = sprintf($this->lang->admin->changingTable, $thisTable);
                     return $this->send($response);
                 }
             }
@@ -500,6 +505,7 @@ class admin extends control
     }
 
     /**
+     * 设置1.5级后台下拉菜单。
      * AJAX: Get drop menu.
      *
      * @param  string $currentMenuKey
@@ -509,6 +515,7 @@ class admin extends control
     public function ajaxGetDropMenu($currentMenuKey = '')
     {
         $this->admin->checkPrivMenu();
+
         $data = array();
         foreach($this->lang->admin->menuList as $menuKey => $menuGroup)
         {
