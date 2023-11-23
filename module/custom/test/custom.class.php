@@ -533,4 +533,24 @@ class customTest
         if(dao::isError()) return dao::getError();
         return $count;
     }
+
+    /**
+     * 检查系统中是否有项目活动数据。
+     * Check if there is project activity data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasScrumProcessDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->objectModel->config->edition;
+
+        $this->objectModel->config->edition = $edition;
+        $count = $this->objectModel->hasScrumProcessData();
+
+        $this->objectModel->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
 }
