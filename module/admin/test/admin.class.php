@@ -32,39 +32,6 @@ class adminTest
         return $objects;
     }
 
-
-    /**
-     * Get status of zentaopms.
-     * @access public
-     * @return void
-     */
-    public function getStatOfPMSTest()
-    {
-        $objects = $this->objectModel->getStatOfPMS();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getStatOfCompanyTest($companyID)
-    {
-        $objects = $this->objectModel->getStatOfCompany($companyID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getStatOfSysTest()
-    {
-        $objects = $this->objectModel->getStatOfSys();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function registerByAPITest()
     {
         $objects = $this->objectModel->registerByAPI();

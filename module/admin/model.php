@@ -15,7 +15,8 @@ declare(strict_types=1);
 class adminModel extends model
 {
     /**
-     * Post data form  API.
+     * 提交API数据表单。
+     * Post data form API.
      *
      * @param  string $url
      * @param  string $formvars
@@ -25,39 +26,6 @@ class adminModel extends model
     public function postAPI(string $url, string $formvars = ''): string
     {
         return common::http($url, $formvars);
-    }
-
-    /**
-     * Get status of zentaopms.
-     *
-     * @access public
-     * @return void
-     */
-    public function getStatOfPMS()
-    {
-        $sql    = "SHOW TABLE STATUS";
-        $tables = $this->dbh->query($sql)->fetchALL();
-    }
-
-    /**
-     * Get state of company.
-     *
-     * @param  int    $companyID
-     * @access public
-     * @return void
-     */
-    public function getStatOfCompany($companyID)
-    {
-    }
-
-    /**
-     * Get system info.
-     *
-     * @access public
-     * @return void
-     */
-    public function getStatOfSys()
-    {
     }
 
     /**
