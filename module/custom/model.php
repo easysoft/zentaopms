@@ -1055,12 +1055,13 @@ class customModel extends model
     }
 
     /**
-     * Check for URStory data.
+     * 检查系统中是否有用户需求数据。
+     * Check whether there is requirement data in the system.
      *
      * @access public
      * @return int
      */
-    public function hasProductURData()
+    public function hasProductURData(): int
     {
         return $this->dao->select('*')->from(TABLE_STORY)->where('type')->eq('requirement')->andWhere('deleted')->eq('0')->count();
     }
