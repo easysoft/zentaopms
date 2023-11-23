@@ -15960,6 +15960,17 @@ CREATE TABLE IF NOT EXISTS `zt_miniprogramfield` (
   FOREIGN KEY (`appID`) REFERENCES `zt_miniprogram`(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `zt_miniprogramstar` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `appID` mediumint(8) unsigned NOT NULL,
+  `userID` mediumint(8) unsigned NOT NULL,
+  `createdDate` datetime NOT NULL,
+  UNIQUE (`appID`, `userID`),
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`appID`) REFERENCES `zt_miniprogram`(`id`),
+  FOREIGN KEY (`userID`) REFERENCES `zt_user`(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 ALTER TABLE `zt_ticket` ADD `subStatus` varchar(30) NOT NULL DEFAULT '';
 
 -- DROP TABLE IF EXISTS `zt_market`;
