@@ -582,4 +582,24 @@ class customTest
         if(dao::isError()) return dao::getError();
         return $this->objectModel->loadModel('project')->getByID($projectID);
     }
+
+    /**
+     * 计算启用和不启用的功能。
+     * Compute the enabled and disabled features.
+     *
+     * @param  string $edition open|ipd|max
+     * @access public
+     * @return array
+     */
+    public function computeFeaturesTest(string $edition): array
+    {
+        $oldEdition = $this->objectModel->config->edition;
+
+        $this->objectModel->config->edition = $edition;
+        $features = $this->objectModel->computeFeatures();
+
+        $this->objectModel->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $features;
+    }
 }
