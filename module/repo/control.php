@@ -1,4 +1,7 @@
 <?php
+
+use zin\on;
+
 /**
  * The control file of repo module of ZenTaoPMS.
  *
@@ -1147,6 +1150,7 @@ class repo extends control
     }
 
     /**
+     * 异步同步代码分支提交记录。
      * Ajax sync git branch comment.
      *
      * @param  int    $repoID
@@ -1154,7 +1158,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxSyncBranchCommit($repoID = 0, $branch = '')
+    public function ajaxSyncBranchCommit(int $repoID = 0, string $branch = '')
     {
         set_time_limit(0);
         $repo = $this->repo->getByID($repoID);
@@ -1165,7 +1169,7 @@ class repo extends control
         $this->scm->setEngine($repo);
 
         $this->repo->setRepoBranch($branch);
-        helper::setcookie("syncBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        helper::setcookie("syncBranch", $branch);
 
         $latestInDB = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
@@ -1196,47 +1200,15 @@ class repo extends control
     }
 
     /**
-     * Ajax show side logs.
-     *
-     * @param  int    $repoID
-     * @param  string $path
-     * @param  int    $objectID
-     * @param  string $type
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @access public
-     * @return void
-     */
-    public function ajaxSideCommits($repoID, $path, $objectID = 0,  $type = 'dir', $recTotal = 0, $recPerPage = 10, $pageID = 1)
-    {
-        if($this->get->repoPath) $path = $this->get->repoPath;
-        $this->app->loadClass('pager', true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $repo      = $this->repo->getByID($repoID);
-        $path      = $this->repo->decodePath($path);
-        $revisions = $this->repo->getCommits($repo, $path, 'HEAD', $type, $pager);
-
-        $this->view->repo       = $this->repo->getByID($repoID);
-        $this->view->revisions  = $revisions;
-        $this->view->pager      = $pager;
-        $this->view->repoID     = $repoID;
-        $this->view->objectID   = $objectID;
-        $this->view->logType    = $type;
-        $this->view->path       = urldecode($path);
-        $this->display();
-    }
-
-    /**
-     * Ajax get svn tags
+     * 获取SVN目录。
+     * Ajax get svn dir.
      *
      * @param  int    $repoID
      * @param  string $path
      * @access public
-     * @return void
+     * @return object
      */
-    public function ajaxGetSVNDirs($repoID, $path = '')
+    public function ajaxGetSVNDirs(int $repoID, string $path = '')
     {
         $repo = $this->repo->getByID($repoID);
         if($repo->SCM != 'Subversion') return print(json_encode(array()));
@@ -1256,10 +1228,11 @@ class repo extends control
             foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $this->repo->encodePath($dirPath);
         }
 
-        return print(json_encode($dirs));
+        echo json_encode($dirs);
     }
 
     /**
+     * 获取1.5级导航数据。
      * Ajax get drop menu.
      *
      * @param  int    $repoID
@@ -1295,31 +1268,7 @@ class repo extends control
     }
 
     /**
-     * Create new product select options by remove shadow products if remove project.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxFilterShadowProducts()
-    {
-        $postData = fixer::input('post')
-            ->setDefault('products', array())
-            ->setDefault('projectID', 0)
-            ->setDefault('objectID', 0)
-            ->get();
-
-        $shadowProduct    = $this->loadModel('product')->getShadowProductByProject($postData->projectID);
-        $selectedProducts = array_diff($postData->products, array($shadowProduct->id)); // Remove shadow product.
-
-        $products           = $postData->objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
-        $linkedProducts     = $this->loadModel('product')->getByIdList($postData->products);
-        $linkedProductPairs = array_combine(array_keys($linkedProducts), helper::arrayColumn($linkedProducts, 'name'));
-        $products           = $products + $linkedProductPairs;
-
-        return print (html::select('product[]', $products, $selectedProducts, "class='form-control chosen' multiple"));
-    }
-
-    /**
+     * 根据产品ID获取项目列表。
      * Get projects list by product id list by ajax.
      *
      * @access public
@@ -1327,13 +1276,7 @@ class repo extends control
      */
     public function ajaxProjectsOfProducts()
     {
-        $postData = fixer::input('post')
-            ->setDefault('products', array())
-            ->setDefault('projects', array())
-            ->get();
-        $productIds = $postData->products ? explode(',', $postData->products) : array();
-        $projectIds = $postData->projects ? explode(',', $postData->projects) : array();
-
+        $productIds = $this->post->products ? explode(',', $this->post->products) : array();
         if(empty($productIds))
         {
             $products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
@@ -1342,19 +1285,16 @@ class repo extends control
         /* Get all projects that can be accessed. */
         $accessProjects = $this->loadModel('product')->getProjectPairsByProductIDList($productIds);
 
-        $selectedProjects = array_intersect(array_keys($accessProjects), $projectIds);
-
         $options = array();
         foreach($accessProjects as $projectID => $project)
         {
             $options[] = array('text' => $project, 'value' => $projectID);
         }
         return print(json_encode($options));
-        $name = isset($postData->number) ? "projects[{$postData->number}][]" : 'projects[]';
-        return print (html::select($name, $accessProjects, $selectedProjects, "class='form-control chosen' multiple"));
     }
 
     /**
+     * 获取服务器下拉列表数据。
      * Ajax get hosts.
      *
      * @param  int    $scm
@@ -1363,8 +1303,7 @@ class repo extends control
      */
     public function ajaxGetHosts($scm)
     {
-        $scm   = strtolower($scm);
-        $hosts = $this->loadModel($scm)->getPairs();
+        $hosts = $this->loadModel(strtolower($scm))->getPairs();
 
         $options = array();
         foreach($hosts as $hostID => $host)
@@ -1375,6 +1314,7 @@ class repo extends control
     }
 
     /**
+     * 获取各个服务器下的项目。
      * Ajax get projects by server.
      *
      * @param  int    $serverID
@@ -1390,6 +1330,7 @@ class repo extends control
     }
 
     /**
+     * 获取Gitea项目。
      * Ajax get gitea projects.
      *
      * @param  string $gitlabID
@@ -1411,6 +1352,7 @@ class repo extends control
     }
 
     /**
+     * 获取Gogs项目。
      * Ajax get gogs projects.
      *
      * @param  string $gitlabID
@@ -1432,6 +1374,7 @@ class repo extends control
     }
 
     /**
+     * 获取Gitlab项目。
      * Ajax get gitlab projects.
      *
      * @param  string $gitlabID
@@ -1457,6 +1400,7 @@ class repo extends control
     }
 
     /**
+     * 根据服务器ID获取分组。
      * Ajax get groups by server.
      *
      * @param  int    $serverID
@@ -1476,39 +1420,14 @@ class repo extends control
     }
 
     /**
-     * Ajax get branch drop menu.
-     *
-     * @param  int    $repoID
-     * @param  string $branchID
-     * @param  int    $objectID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetBranchDropMenu($repoID, $branchID, $objectID)
-    {
-        $repo     = $this->repo->getByID($repoID);
-        $branches = $this->repo->getBranches($repo);
-        if($branchID) $branchID = base64_decode($branchID);
-
-        $branchesHtml = "<div class='table-row'><div class='table-col col-left'><div class='list-group' style='margin-bottom: 0;'>";
-        foreach($branches as $id => $branchName)
-        {
-            $selected = $id == $branchID ? 'selected' : '';
-            $branchesHtml .= html::a($this->createLink('repo', 'browse', "repoID=$repoID&branchID=$branchID&objectID=$objectID"), $branchName, '', "class='$selected' data-app='{$this->app->tab}'");
-        }
-        $branchesHtml .= '</div></div></div>';
-
-        return print($branchesHtml);
-    }
-
-    /**
+     * 根据代码库ID获取产品列表。
      * Ajax:: Load product by repoID.
      *
      * @param  int    $repoID
      * @access public
      * @return void
      */
-    public function ajaxLoadProducts($repoID)
+    public function ajaxLoadProducts(int $repoID)
     {
         $productPairs = $this->repo->getProductsByRepo($repoID);
 
@@ -1522,6 +1441,7 @@ class repo extends control
     }
 
     /**
+     * 根据Url获取代码库信息。
      * API: get repo by url.
      *
      * @param  string $type  gitlab
@@ -1543,6 +1463,7 @@ class repo extends control
     }
 
     /**
+     * 获取DevOps指令配置。
      * API: get rules.
      *
      * @access public
@@ -1554,20 +1475,7 @@ class repo extends control
     }
 
     /**
-     * Ajax get executions.
-     *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @access public
-     * @return void
-     */
-    public function ajaxGetExecutions($productID, $branch = 0)
-    {
-        $executions = $this->repo->getExecutionPairs($productID, $branch);
-        echo html::select('execution', $executions, '', 'class="form-control chosen"');
-    }
-
-    /**
+     * 下载代码。
      * Download zip code.
      *
      * @param  int    $repoID
@@ -1575,12 +1483,12 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function downloadCode($repoID = 0, $branch = '')
+    public function downloadCode(int $repoID, string $branch = '')
     {
         $savePath = $this->app->getDataRoot() . 'repo';
         if(!is_dir($savePath))
         {
-            if(!is_writable($this->app->getDataRoot())) return print(js::alert(sprintf($this->lang->repo->error->noWritable, dirname($savePath))) . js::close());
+            if(!is_writable($this->app->getDataRoot())) return $this->sendError(sprintf($this->lang->repo->error->noWritable, dirname($savePath)), true));
             mkdir($savePath, 0777, true);
         }
 
@@ -1593,49 +1501,7 @@ class repo extends control
     }
 
     /**
-     * Ajax get branches and tags.
-     *
-     * @param  int    $repoID
-     * @param  string $oldRevision
-     * @param  string $newRevision
-     * @access public
-     * @return void
-     */
-    public function ajaxGetBranchesAndTags($repoID, $oldRevision = '0', $newRevision = 'HEAD')
-    {
-        $branchesAndTags = $this->repo->getBranchesAndTags($repoID, $oldRevision, $newRevision);
-        return print(json_encode($branchesAndTags));
-    }
-
-    /**
-     * Get file tree by ajax.
-     *
-     * @param  int    $repoID
-     * @param  string $branch
-     * @access public
-     * @return string
-     */
-    public function ajaxGetFileTree($repoID, $branch = '')
-    {
-        $branch = base64_decode($branch);
-        $repo   = $this->repo->getByID($repoID);
-        $files  = $this->repo->getFileTree($repo, $branch);
-        return print($files);
-    }
-
-    /**
-     * Ajax sync rename record.
-     *
-     * @param  int    $repoID
-     * @access public
-     * @return void
-     */
-    public function ajaxSyncRenameRecord($repoID)
-    {
-        $this->repo->insertDeleteRecord($repoID);
-    }
-
-    /**
+     * 根据代码库和提交获取关联信息的标题列表。
      * Get relation by commit.
      *
      * @param  int    $repoID
@@ -1643,21 +1509,22 @@ class repo extends control
      * @access public
      * @return object
      */
-    public function ajaxGetCommitRelation($repoID, $commit)
+    public function ajaxGetCommitRelation(int $repoID, string $commit)
     {
         $titleList = $this->repo->getRelationByCommit($repoID, $commit);
         return $this->send(array('titleList' => $titleList));
     }
 
     /**
+     * 根据对象ID和对象类型获取关联信息。
      * Get relation story, task, bug info.
      *
      * @param  int    $objectID
-     * @param  string $objectType
+     * @param  string $objectType  story|task|bug
      * @access public
      * @return void
      */
-    public function ajaxGetRelationInfo($objectID, $objectType = 'story')
+    public function ajaxGetRelationInfo(int $objectID, string $objectType = 'story')
     {
         $this->app->loadLang('release');
         $this->view->object     = $this->loadModel($objectType)->getById($objectID);
@@ -1669,6 +1536,7 @@ class repo extends control
     }
 
     /**
+     * 通过行号和版本获取代码库的提交信息。
      * Ajax get commit info.
      *
      * @access public
@@ -1695,32 +1563,11 @@ class repo extends control
             }
             $line--;
         }
-        if($returnType == 'json') return $this->send(array('result' => 'success', 'blames' => $blames));
-
-        $commits = $this->scm->getCommits($revision, 1);
-        if(!empty($commits['commits'][$revision]))
-        {
-            $commit = $commits['commits'][$revision];
-
-            $objects = $this->repo->getLinkedObjects($commit->comment);
-            $stories = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('id')->in($objects['stories'])->fetchPairs();
-            $tasks   = $this->dao->select('id,name')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('id')->in($objects['tasks'])->fetchPairs();
-            $bugs    = $this->dao->select('id,title')->from(TABLE_BUG)->where('deleted')->eq(0)->andWhere('id')->in($objects['bugs'])->fetchPairs();
-
-            $this->view->repoID  = $this->post->repoID;
-            $this->view->commit  = $commit;
-            $this->view->stories = $stories;
-            $this->view->tasks   = $tasks;
-            $this->view->bugs    = $bugs;
-            $this->display();
-        }
-        else
-        {
-            echo '';
-        }
+        return $this->send(array('result' => 'success', 'blames' => $blames));
     }
 
     /**
+     * 获取Gitlab的文件信息。
      * Get gitlab files.
      *
      * @param  int    $repoID
