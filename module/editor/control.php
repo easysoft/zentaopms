@@ -160,7 +160,7 @@ class editor extends control
      * @access public
      * @return void
      */
-    public function delete($filePath = '')
+    public function delete(string $filePath = '')
     {
         $filePath = helper::safe64Decode($filePath);
 
@@ -172,11 +172,11 @@ class editor extends control
     /**
      * Switch editor feature.
      *
-     * @param  int    $status     1|0
+     * @param  string    $status     1|0
      * @access public
      * @return void
      */
-    public function turnon($status)
+    public function turnon(string $status)
     {
         $this->loadModel('setting')->setItem('system.common.global.editor', $status);
 

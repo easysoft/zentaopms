@@ -51,7 +51,7 @@ class editorModel extends model
      * @access public
      * @return array
      */
-    public function getExtensionFiles($moduleName)
+    public function getExtensionFiles(string $moduleName): array
     {
         $extensionList = array();
         foreach($this->config->editor->extSort as $ext)
@@ -98,9 +98,9 @@ class editorModel extends model
      *
      * @param  string    $extensionFullDir
      * @access public
-     * @return string
+     * @return array
      */
-    public function getTwoGradeFiles($extensionFullDir)
+    public function getTwoGradeFiles(string $extensionFullDir): array
     {
         $fileList = array();
         $langDirs = scandir($extensionFullDir);
@@ -374,10 +374,11 @@ EOD;
      * Extend control.php and get file content.
      *
      * @param  string    $filePath
+     * @param  string    $isExtends
      * @access public
      * @return string
      */
-    public function extendControl($filePath, $isExtends)
+    public function extendControl(string $filePath, string $isExtends): string
     {
         $className = basename(dirname(dirname($filePath)));
         if(!class_exists($className)) helper::import(dirname($filePath));
@@ -530,12 +531,12 @@ EOD;
             if(empty($fileName)) return dao::$errors[] = $this->lang->editor->emptyFileName;
 
             $action = strtolower(str_replace('new', '', $action));
-            if($action == 'hook')   return $extPath . 'view' . DS . $fileName;
-            if($action == 'method') return $extPath . basename($filePath, ".{$fileExtension}") . DS . $fileName;
+            if($action == 'method') return $extPath  . basename($filePath, ".{$fileExtension}") . DS . $fileName;
             if($action == 'extend') return $filePath . DS . $fileName;
-            if($action == 'config') return $extPath . 'config' . DS . $fileName;
-            if($action == 'js')     return $extPath . 'js'  . DS . $methodName . DS . $fileName;
-            if($action == 'css')    return $extPath . 'css' . DS . $methodName . DS . $fileName;
+            if($action == 'hook')   return $extPath  . 'view'   . DS . $fileName;
+            if($action == 'config') return $extPath  . 'config' . DS . $fileName;
+            if($action == 'js')     return $extPath  . 'js'     . DS . $methodName . DS . $fileName;
+            if($action == 'css')    return $extPath  . 'css'    . DS . $methodName . DS . $fileName;
             return $extPath . 'lang' . DS . str_replace('_', '-', $action) . DS . $fileName;
         }
     }
