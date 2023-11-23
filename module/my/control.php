@@ -1053,23 +1053,21 @@ EOF;
     }
 
     /**
+     * 会议列表。
      * My meeting list.
      *
-     * @param  string     $browseType
-     * @param  string|int $param
-     * @param  string     $orderBy
-     * @param  int        $recTotal
-     * @param  int        $recPerPage
-     * @param  int        $pageID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function myMeeting($browseType = 'futureMeeting', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function myMeeting(string $browseType = 'futureMeeting', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('meeting');
-
-        $uri = $this->app->getURI(true);
-        $this->session->set('meetingList', $uri, 'my');
+        $this->session->set('meetingList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1077,9 +1075,9 @@ EOF;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Build the search form. */
-        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+        $queryID   = $browseType == 'bysearch' ? $param : 0;
         $actionURL = $this->createLink('my', 'work', "mode=myMeeting&browseType=bysearch&param=myQueryID");
-        $this->meeting->buildSearchForm($queryID, $actionURL);
+        $this->loadModel('meeting')->buildSearchForm($queryID, $actionURL);
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myMeeting;
         $this->view->browseType = $browseType;
@@ -1093,7 +1091,6 @@ EOF;
         $this->view->projects   = array(0 => '') + $this->loadModel('project')->getPairsByProgram(0, 'all', true);
         $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
         $this->view->rooms      = $this->loadModel('meetingroom')->getPairs();
-
         $this->display();
     }
 
