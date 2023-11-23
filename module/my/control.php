@@ -515,6 +515,7 @@ EOF;
     }
 
     /**
+     * bug 列表。
      * My bugs.
      *
      * @param  string $type
@@ -574,9 +575,11 @@ EOF;
     }
 
     /**
+     * 测试单列表。
      * My test task.
      *
-     * @param  string $type wait|done
+     * @param  string $type       wait|done
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -584,7 +587,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function testtask($type = 'wait', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testtask(string $type = 'wait', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -599,21 +602,14 @@ EOF;
             $this->session->set('buildList',    $uri, 'execution');
         }
 
-        $this->app->loadLang('testcase');
-        $this->app->loadLang('project');
-
         /* Append id for second sort. */
-        $sort = common::appendOrder($orderBy);
-
-        $waitCount    = 0;
-        $testingCount = 0;
-        $blockedCount = 0;
-        $tasks        = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type);
-        foreach($tasks as $key => $task)
+        $this->app->loadLang('project');
+        $sort  = common::appendOrder($orderBy);
+        $count = array('wait' => 0, 'doing' => 0, 'blocked' => 0);
+        $tasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type);
+        foreach($tasks as $task)
         {
-            if($task->status == 'wait')    $waitCount ++;
-            if($task->status == 'doing')   $testingCount ++;
-            if($task->status == 'blocked') $blockedCount ++;
+            if($task->status == 'wait' || $task->status == 'doing' || $task->status == 'blocked') $count[$task->status] ++;
             if($task->build == 'trunk' || empty($task->buildName)) $task->buildName = $this->lang->trunk;
             if(empty($task->executionMultiple)) $task->executionName = $task->projectName . "({$this->lang->project->disableExecution})";
         }
@@ -621,9 +617,9 @@ EOF;
         $this->view->title        = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestTask;
         $this->view->tasks        = $tasks;
         $this->view->type         = $type;
-        $this->view->waitCount    = $waitCount;
-        $this->view->testingCount = $testingCount;
-        $this->view->blockedCount = $blockedCount;
+        $this->view->waitCount    = $count['wait'];
+        $this->view->testingCount = $count['doing'];
+        $this->view->blockedCount = $count['blocked'];
         $this->view->mode         = 'testtask';
         $this->view->pager        = $pager;
         $this->view->param        = $param;
