@@ -1,14 +1,12 @@
 <?php
-
-use zin\on;
-
+declare(strict_types=1);
 /**
  * The control file of repo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2012 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang, Jinyong Zhu
  * @package     repo
- * @version     $Id$
  * @link        http://www.zentao.net
  */
 class repo extends control
@@ -1301,7 +1299,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetHosts($scm)
+    public function ajaxGetHosts(string $scm)
     {
         $hosts = $this->loadModel(strtolower($scm))->getPairs();
 
@@ -1321,7 +1319,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProjects($serverID)
+    public function ajaxGetProjects(int $serverID)
     {
         $server         = $this->loadModel('pipeline')->getByID($serverID);
         $getProjectFunc = 'ajaxGet' . $server->type . 'Projects';
@@ -1338,7 +1336,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetGiteaProjects($giteaID)
+    public function ajaxGetGiteaProjects(int $giteaID)
     {
         $projects = $this->loadModel('gitea')->apiGetProjects($giteaID);
 
@@ -1360,7 +1358,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetGogsProjects($gogsID)
+    public function ajaxGetGogsProjects(int $gogsID)
     {
         $projects = $this->loadModel('gogs')->apiGetProjects($gogsID);
 
@@ -1382,7 +1380,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetGitlabProjects($gitlabID, $projectIdList = '', $filter = '')
+    public function ajaxGetGitlabProjects(int $gitlabID, string $projectIdList = '', string $filter = '')
     {
         $projects = $this->repo->getGitlabProjects($gitlabID, $projectIdList, $filter);
 
@@ -1488,7 +1486,7 @@ class repo extends control
         $savePath = $this->app->getDataRoot() . 'repo';
         if(!is_dir($savePath))
         {
-            if(!is_writable($this->app->getDataRoot())) return $this->sendError(sprintf($this->lang->repo->error->noWritable, dirname($savePath)), true));
+            if(!is_writable($this->app->getDataRoot())) return $this->sendError(sprintf($this->lang->repo->error->noWritable, dirname($savePath)), true);
             mkdir($savePath, 0777, true);
         }
 
