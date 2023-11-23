@@ -966,6 +966,7 @@ EOF;
     }
 
     /**
+     * 质量保证计划列表。
      * My auditplans.
      *
      * @param  string $browseType
@@ -977,24 +978,22 @@ EOF;
      * @access public
      * @return void
      */
-    public function auditplan($browseType = 'myChecking', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function auditplan(string $browseType = 'myChecking', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('auditplan');
-        $this->loadModel('process');
-        $this->loadModel('pssp');
         $this->session->set('auditplanList', $this->app->getURI(true));
 
         /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager  = pager::init($recTotal, $recPerPage, $pageID);
 
-        $auditplans = $this->auditplan->getList(0, $browseType, $param, $orderBy, $pager);
+        $auditplans = $this->loadModel('auditplan')->getList(0, $browseType, $param, $orderBy, $pager);
 
+        $this->app->loadLang('process');
         $this->view->executions      = $this->loadModel('execution')->getPairs();
         $this->view->projects        = $this->loadModel('project')->getPairs();
         $this->view->processTypeList = $this->lang->process->classify;
-        $this->view->processes       = $this->pssp->getProcesses();
+        $this->view->processes       = $this->loadModel('pssp')->getProcesses();
         $this->view->activities      = $this->pssp->getActivityPairs();
         $this->view->outputs         = $this->pssp->getOutputPairs();
 
