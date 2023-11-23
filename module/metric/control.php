@@ -77,6 +77,9 @@ class metric extends control
         //include 'test/groupData/' . 'notime1.php';
 
         list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
+        $this->view->groupHeader   = $groupHeader;
+        $this->view->groupData     = $groupData;
+        $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
 
         $this->view->metrics       = $metrics;
         $this->view->groupMetrics  = $groupMetrics;
@@ -90,11 +93,9 @@ class metric extends control
         $this->view->filtersBase64 = $filtersBase64;
         $this->view->pager         = $pager;
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($resultHeader);
-        $this->view->groupHeader   = $groupHeader;
-        $this->view->groupData     = $groupData;
-        $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
+        $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
         $this->display();
     }
 
