@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of common module of ZenTaoPMS.
  *
@@ -37,7 +38,7 @@ class commonModel extends model
      * @access public
      * @return void
      */
-    public function syncPPEStatus($objectID)
+    public function syncPPEStatus(int $objectID)
     {
         global $app;
         $rawModule = $app->rawModule;
@@ -78,7 +79,7 @@ class commonModel extends model
      * @access public
      * @return void
      */
-    public function syncProgramStatus($project)
+    public function syncProgramStatus(object $project)
     {
         if($project->parent == 0) return;
 
@@ -106,7 +107,7 @@ class commonModel extends model
      * @access public
      * @return object  $project
      */
-    public function syncProjectStatus($execution)
+    public function syncProjectStatus(object $execution): object
     {
         $projectID = $execution->project;
         $project   = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
@@ -125,6 +126,7 @@ class commonModel extends model
             $actionType = $project->multiple ? 'syncproject' : 'syncmultipleproject';
             $this->loadModel('action')->create('project', $projectID, $actionType);
         }
+
         return $project;
     }
 
@@ -135,22 +137,21 @@ class commonModel extends model
      * @access public
      * @return object|false $parentExecution
      */
-    public function syncExecutionByChild($execution)
+    public function syncExecutionByChild(object $execution)
     {
         if($execution->grade == 1) return false;
 
-        $parentExecutionID = $execution->parent;
         $today = helper::today();
-        $parentExecution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($parentExecutionID)->fetch();
+        $parentExecution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($execution->parent)->fetch();
 
         if($execution->deleted == '0' and $execution->status == 'doing' and in_array($parentExecution->status, array('wait', 'closed')))
         {
             $this->dao->update(TABLE_EXECUTION)
                  ->set('status')->eq('doing')
                  ->beginIf(helper::isZeroDate($parentExecution->realBegan))->set('realBegan')->eq($today)->fi()
-                 ->where('id')->eq($parentExecutionID)
+                 ->where('id')->eq($execution->parent)
                  ->exec();
-            $this->loadModel('action')->create('execution', $parentExecutionID, 'syncexecutionbychild');
+            $this->loadModel('action')->create('execution', $execution->parent, 'syncexecutionbychild');
         }
 
         $project = $this->loadModel('project')->getByID($execution->project);
@@ -166,7 +167,7 @@ class commonModel extends model
      * @access public
      * @return object $execution
      */
-    public function syncExecutionStatus($taskID)
+    public function syncExecutionStatus(int $taskID): object
     {
         $execution = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.id=t2.execution')
