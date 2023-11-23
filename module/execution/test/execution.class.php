@@ -3055,4 +3055,27 @@ class executionTest
         if(dao::isError()) return dao::getError();
         return implode(',', $executions);
     }
+
+    /**
+     * 测试通过执行ID列表获取执行的子级ID列表组。
+     * Test get the children id list of the execution group by the parent id list.
+     *
+     * @param  string       $parentIdList
+     * @access public
+     * @return string|array
+     */
+    public function getChildIdGroupTest(string $parentIdList): string|array
+    {
+        $executions = $this->executionModel->getChildIdGroup(explode(',', $parentIdList));
+
+        if(dao::isError()) return dao::getError();
+        $return = '';
+        foreach($executions as $parentID => $children)
+        {
+            $return .= "{$parentID}:";
+            foreach($children as $child) $return .= "{$child->id},";
+            $return = trim($return, ',') . ';';
+        }
+        return $return;
+    }
 }

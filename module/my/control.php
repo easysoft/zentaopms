@@ -784,19 +784,19 @@ EOF;
     }
 
     /**
+     * 我的执行列表。
      * My executions.
-     * @param  string  $type undone|done
+     *
+     * @param  string  $type       undone|done
      * @param  string  $orderBy
      * @param  int     $recTotal
      * @param  int     $recPerPage
      * @param  int     $pageID
-     *
      * @access public
      * @return void
      */
-    public function execution($type = 'undone', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function execution(string $type = 'undone', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
-        $this->app->loadLang('project');
         $this->app->loadLang('execution');
 
         /* Set the pager. */
@@ -804,15 +804,11 @@ EOF;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $executions  = $this->user->getObjects($this->app->user->account, 'execution', $type, $orderBy, $pager);
-        $parentGroup = $this->dao->select('parent, id')->from(TABLE_PROJECT)
-            ->where('parent')->in(array_keys($executions))
-            ->andWhere('type')->in('stage,kanban,sprint')
-            ->fetchGroup('parent', 'id');
 
         $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
         $this->view->tabID       = 'project';
         $this->view->executions  = $executions;
-        $this->view->parentGroup = $parentGroup;
+        $this->view->parentGroup = $this->loadModel('execution')->getChildIdGroup(array_keys($executions));
         $this->view->type        = $type;
         $this->view->pager       = $pager;
         $this->view->orderBy     = $orderBy;

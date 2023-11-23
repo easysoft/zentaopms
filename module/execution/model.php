@@ -4985,4 +4985,17 @@ class executionModel extends model
     {
         return $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in($executionIdList)->fetchPairs();
     }
+
+    /**
+     * 通过执行ID列表获取执行的子级ID列表组。
+     * Get the children id list of the execution group by the parent id list.
+     *
+     * @param  array  $executionIdList
+     * @access public
+     * @return array
+     */
+    public function getChildIdGroup(array $parentIdList): array
+    {
+        return $this->dao->select('id,parent')->from(TABLE_EXECUTION)->where('parent')->in($parentIdList)->andWhere('type')->in('stage,kanban,sprint')->fetchGroup('parent', 'id');
+    }
 }
