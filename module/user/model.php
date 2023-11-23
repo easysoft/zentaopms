@@ -895,44 +895,6 @@ class userModel extends model
     }
 
     /**
-     * Check the passwds posted.
-     *
-     * @param  bool   $canNoPassword
-     * @access public
-     * @return bool
-     */
-    public function checkPassword($canNoPassword = false)
-    {
-        $_POST['password1'] = trim($_POST['password1']);
-        $_POST['password2'] = trim($_POST['password2']);
-        if(!$canNoPassword and empty($_POST['password1'])) dao::$errors['password1'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
-        if(!empty($_POST['password1']))
-        {
-            if(isset($this->config->safe->mode) && ($this->post->passwordStrength < $this->config->safe->mode)) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, $this->config->safe->mode, $this->lang->user->weakPassword);
-
-            if(isset($_POST['passwordLength']) && $this->post->passwordLength < 6 && empty(dao::$errors['password1'])) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, 0, $this->lang->user->weakPassword);
-
-            if($this->post->password1 != $this->post->password2) dao::$errors['password1'][] = $this->lang->error->passwordsame;
-
-            if(!empty($this->config->safe->changeWeak))
-            {
-                if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
-
-                if(strpos(",{$this->config->safe->weak},", ",{$this->post->password1},") !== false) dao::$errors['password1'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
-
-                $weaks = array();
-                foreach(explode(',', $this->config->safe->weak) as $weak)
-                {
-                    $weak = md5(trim($weak));
-                    $weaks[$weak] = $weak;
-                }
-                if(isset($weaks[substr($this->post->password1, 0, 32)])) dao::$errors['password1'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
-            }
-        }
-        return !dao::isError();
-    }
-
-    /**
      * Identify a user.
      *
      * @param   string $account     the user account
