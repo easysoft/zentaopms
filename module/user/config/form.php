@@ -1,6 +1,28 @@
 <?php
 global $lang;
 $config->user->form = new stdclass();
+$config->user->form->create = common::formConfig('user', 'create');
+$config->user->form->create['type']             = array('required' => true,  'type' => 'string', 'default' => 'inside');
+$config->user->form->create['company']          = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->user->form->create['new']              = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->user->form->create['newCompany']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->create['dept']             = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->user->form->create['account']          = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->create['password1']        = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->create['password2']        = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->create['visions']          = array('required' => true,  'type' => 'array',  'default' => $config->vision, 'filter' => 'join');
+$config->user->form->create['realname']         = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->create['join']             = array('required' => false, 'type' => 'date',   'default' => null);
+$config->user->form->create['role']             = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->create['group']            = array('required' => false, 'type' => 'array',  'default' => []);
+$config->user->form->create['email']            = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->create['commiter']         = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->create['gender']           = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->create['verifyPassword']   = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->create['verifyRand']       = array('required' => true,  'type' => 'int',    'default' => 0);
+$config->user->form->create['passwordLength']   = array('required' => true,  'type' => 'int',    'default' => 0);
+$config->user->form->create['passwordStrength'] = array('required' => true,  'type' => 'int',    'default' => 0);
+
 $config->user->form->batchCreate = common::formConfig('user', 'batchCreate');
 $config->user->form->batchCreate['dept']     = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->user->form->batchCreate['company']  = array('required' => false, 'type' => 'int',    'default' => 0);
