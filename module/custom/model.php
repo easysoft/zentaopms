@@ -1147,18 +1147,19 @@ class customModel extends model
     }
 
     /**
-     * Verify whether there is scrum opportunity data
+     * 检查系统中是否有机会数据。
+     * Check whether there is opportunity data in the system.
      *
      * @access public
-     * @return bool
+     * @return int
      */
-    public function hasScrumOpportunityData()
+    public function hasScrumOpportunityData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
             return $this->dao->select('id')->from(TABLE_OPPORTUNITY)->where('execution')->ne('0')->andWhere('deleted')->eq('0')->count();
         }
-        return false;
+        return 0;
     }
 
     /**
