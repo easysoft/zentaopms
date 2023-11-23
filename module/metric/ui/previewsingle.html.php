@@ -138,7 +138,7 @@ toolbar
     */
 );
 
-$metricRecordType = $this->metric->getMetricRecordType($resultHeader);
+$metricRecordType = $this->metric->getMetricRecordType($groupHeader);
 
 $fnGenerateQueryForm = function() use($metricRecordType, $current)
 {
@@ -353,12 +353,13 @@ div
                 setStyle(array('flex-basis' => $tableWidth . 'px')),
                 div
                 (
-                    $resultData ? dtable
+                    $groupData ? dtable
                     (
                         set::bordered(true),
-                        set::cols($resultHeader),
-                        set::data(array_values($resultData)),
                         set::footPager(usePager()),
+                        set::cols($groupHeader),
+                        set::data(array_values($groupData)),
+                        set::plugins(array('header-group')),
                         set::onRenderCell(jsRaw('window.renderDTableCell'))
                     ) : null
                 )

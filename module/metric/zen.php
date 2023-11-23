@@ -421,7 +421,7 @@ class metricZen extends metric
     {
         $width = 0;
         foreach($headers as $header) $width += isset($header['width']) ? $header['width'] : 160;
-    
+
         return $width;
     }
 
@@ -456,12 +456,84 @@ class metricZen extends metric
                 $row->scopeID = $record[$scope];
             }
             $row->value = is_numeric($record['value']) ? round((float)$record['value'], 2) : $record['value'];
-            if(isset($record['date'])) $row->calcTime = date("Y-m-d H:i", strtotime($record['date']));
+            if(isset($record['date'])) $row->calcTime = date("Y-m-d", strtotime($record['date']));
 
             $tableData[] = $row;
         }
 
         return $tableData;
+    }
+
+    /**
+     * 获取表格的宽度，设置其 flex-basis 属性。
+     * Get width for dtable.
+     *
+     * @param  array     $headers
+     * @access protected
+     * @return int
+     */
+    protected function getViewTableWidth($headers)
+    {
+        $width = 0;
+        foreach($headers as $header)
+        {
+            $width += isset($header['width']) ? $header['width'] : 96;
+        }
+
+        return $width;
+    }
+
+    /**
+     * 对 headers 进行分组满足表头合并单元格, 返回经过分组的 headers 和 data。
+     * Return grouped headers and data for table headers merges cell.
+     *
+     * @param  array     $header
+     * @param  array     $data
+     * @access protected
+     * @return array
+     */
+    protected function getGroupTable($header, $data)
+    {
+        if(!$header or !$data) return array(array(), array());
+
+        $headerLength = count($header);
+
+        if($headerLength == 2)
+        {
+            return $this->getNoTimeTable($data);
+        }
+        elseif($headerLength == 3)
+        {
+        }
+    }
+
+    protected function getNoTimeTable($data)
+    {
+        $groupHeader = array();
+        $groupData   = array(array());
+        usort($data, function($a, $b) {
+            $dateA = strtotime($a->calcTime);
+            $dateB = strtotime($b->calcTime);
+
+            if ($dateA == $dateB) {
+                return 0;
+            }
+
+            return ($dateA > $dateB) ? -1 : 1;
+        });
+
+        foreach($data as $dataInfo)
+        {
+            $time     = $dataInfo->calcTime;
+            $year     = substr($time, 0, 4);
+            $monthDay = substr($time, 5);
+
+            $name                = "time{$time}";
+            $groupHeader[]       = array('name' => $name, 'title' => $monthDay, 'headerGroup' => $year, 'align' => 'center');
+            $groupData[0][$name] = $dataInfo->value;
+        }
+
+        return array($groupHeader, $groupData);
     }
 
     /**
