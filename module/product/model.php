@@ -1608,10 +1608,12 @@ class productModel extends model
         $launchedStory = $this->dao->select('product, count(1) as launched')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('status')->eq('launched')
+            ->groupBy('product')
             ->fetchPairs('product', 'launched');
         $developingStory = $this->dao->select('product, count(1) as developing')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('status')->eq('developing')
+            ->groupBy('product')
             ->fetchPairs('product', 'developing');
         foreach($products as $productID => $product)
         {
