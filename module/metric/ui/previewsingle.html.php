@@ -354,10 +354,10 @@ div
                     $groupData ? dtable
                     (
                         set::bordered(true),
-                        set::footPager(usePager()),
+                        set::footPager(usePager('dtablePager')),
                         set::cols($groupHeader),
                         set::data(array_values($groupData)),
-                        set::plugins(array('header-group')),
+                        $headerGroup ? set::plugins(array('header-group')) : null,
                         set::onRenderCell(jsRaw('window.renderDTableCell'))
                     ) : null
                 )

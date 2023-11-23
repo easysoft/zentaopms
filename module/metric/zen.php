@@ -490,7 +490,7 @@ class metricZen extends metric
             }
             else
             {
-                //return $this->getTimeTable($data);
+                return $this->getTimeTable($data);
             }
         }
 
@@ -501,7 +501,8 @@ class metricZen extends metric
     {
         $groupHeader = array();
         $groupData   = array(array());
-        usort($data, function($a, $b) {
+        usort($data, function($a, $b)
+        {
             $dateA = strtotime($a->calcTime);
             $dateB = strtotime($b->calcTime);
 
@@ -515,7 +516,7 @@ class metricZen extends metric
         foreach($data as $dataInfo)
         {
             $time     = $dataInfo->calcTime;
-            $year     = substr($time, 0, 4);
+            $year     = substr($time, 0, 4) . $this->lang->year;
             $monthDay = substr($time, 5, 5);
 
             $name                = "time{$time}";
@@ -528,6 +529,30 @@ class metricZen extends metric
 
     protected function getTimeTable($data)
     {
+        $groupHeader = array();
+        $groupData   = array(array());
+        usort($data, function($a, $b)
+        {
+            $dateA = strtotime($a->date);
+            $dateB = strtotime($b->date);
+
+            if ($dateA == $dateB) {
+                return 0;
+            }
+
+            return ($dateA > $dateB) ? -1 : 1;
+        });
+
+        foreach($data as $dataInfo)
+        {
+            $year = substr($dataInfo->date, 0, 4) . $this->lang->year;
+
+            $name                = "year{$year}";
+            $groupHeader[]       = array('name' => $name, 'title' => $year, 'align' => 'center');
+            $groupData[0][$name] = $dataInfo->value;
+        }
+
+        return array($groupHeader, $groupData);
     }
 
     /**
