@@ -951,28 +951,15 @@ class customModel extends model
     }
 
     /**
+     * 处理项目权限为继承项目集的项目权限。
      * process project priv within a program set.
      *
      * @access public
      * @return void
      */
-    public function processProjectAcl()
+    public function processProjectAcl(): void
     {
-        $projectGroup = $this->dao->select('id,parent,whitelist,acl')->from(TABLE_PROJECT)
-            ->where('parent')->ne('0')
-            ->andwhere('type')->eq('project')
-            ->andWhere('acl')->eq('program')
-            ->fetchGroup('parent', 'id');
-
-        $programPM = $this->dao->select("id,PM")->from(TABLE_PROGRAM)
-            ->where('id')->in(array_keys($projectGroup))
-            ->andWhere('type')->eq('program')
-            ->fetchPairs();
-
-        $stakeholders = $this->dao->select('*')->from(TABLE_STAKEHOLDER)
-            ->where('objectType')->eq('program')
-            ->andWhere('objectID')->in(array_keys($projectGroup))
-            ->fetchGroup('objectID', 'user');
+        list($projectGroup, $programPM, $stakeholders) = $this->customTao->getDataForUpdateProjectAcl();
 
         $projectIDList = array();
         foreach($projectGroup as $projects) $projectIDList = array_merge($projectIDList, array_keys($projects));

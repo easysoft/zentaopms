@@ -553,4 +553,18 @@ class customTest
         if(dao::isError()) return dao::getError();
         return $count;
     }
+
+    /**
+     * 获取更新项目权限的数据。
+     * Get data for update project acl.
+     *
+     * @param  string $key
+     * @access public
+     * @return array
+     */
+    public function getDataForUpdateProjectAclTest(string $key): array
+    {
+        list($projectGroup, $programPM, $stakeholders) = $this->objectModel->getDataForUpdateProjectAcl();
+        return ${$key};
+    }
 }
