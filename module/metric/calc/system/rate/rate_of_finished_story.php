@@ -24,7 +24,7 @@ class rate_of_finished_story extends baseCalc
 
     public $fieldList = array('t1.status', 't1.closedReason');
 
-    public $result = array();
+    public $result = array('finished' => 0, 'valid' => 0);
 
     public function calculate($row)
     {

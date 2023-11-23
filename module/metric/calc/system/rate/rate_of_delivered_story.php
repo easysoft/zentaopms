@@ -24,7 +24,7 @@ class rate_of_delivered_story extends baseCalc
 
     public $fieldList = array('t1.closedReason', 't1.stage');
 
-    public $result = array();
+    public $result = array('valid' => 0, 'delivered' => 0);
 
     public function calculate($row)
     {
