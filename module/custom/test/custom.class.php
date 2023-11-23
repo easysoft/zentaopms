@@ -493,4 +493,24 @@ class customTest
         if(dao::isError()) return dao::getError();
         return $count;
     }
+
+    /**
+     * 检查系统中是否有会议数据。
+     * Check if there is meeting data in the system.
+     *
+     * @param  string    $edition
+     * @access public
+     * @return int|array
+     */
+    public function hasScrumMeetingDataTest(string $edition): int|array
+    {
+        $oldEdition = $this->objectModel->config->edition;
+
+        $this->objectModel->config->edition = $edition;
+        $count = $this->objectModel->hasScrumMeetingData();
+
+        $this->objectModel->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $count;
+    }
 }
