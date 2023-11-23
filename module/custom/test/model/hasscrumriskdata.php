@@ -27,10 +27,10 @@ r($customTester->hasScrumRiskDataTest($editionList[0])) && p() && e('0'); // 测
 r($customTester->hasScrumRiskDataTest($editionList[1])) && p() && e('0'); // 测试ipd版中无风险数据
 r($customTester->hasScrumRiskDataTest($editionList[2])) && p() && e('0'); // 测试旗舰版中无风险数据
 
-$assetlibTable = zdTable('risk');
-$assetlibTable->deleted->range('0');
-$assetlibTable->project->range('1-5');
-$assetlibTable->gen(5);
+$riskTable = zdTable('risk');
+$riskTable->deleted->range('0');
+$riskTable->project->range('1-5');
+$riskTable->gen(5);
 r($customTester->hasScrumRiskDataTest($editionList[0])) && p() && e('0'); // 测试开源版中有风险数据
 r($customTester->hasScrumRiskDataTest($editionList[1])) && p() && e('5'); // 测试ipd版中有风险数据
 r($customTester->hasScrumRiskDataTest($editionList[2])) && p() && e('5'); // 测试旗舰版中有风险数据

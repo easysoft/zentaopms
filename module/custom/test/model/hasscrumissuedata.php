@@ -27,10 +27,10 @@ r($customTester->hasScrumIssueDataTest($editionList[0])) && p() && e('0'); // �
 r($customTester->hasScrumIssueDataTest($editionList[1])) && p() && e('0'); // 测试ipd版中无问题数据
 r($customTester->hasScrumIssueDataTest($editionList[2])) && p() && e('0'); // 测试旗舰版中无问题数据
 
-$assetlibTable = zdTable('issue');
-$assetlibTable->deleted->range('0');
-$assetlibTable->project->range('1-5');
-$assetlibTable->gen(5);
+$issueTable = zdTable('issue');
+$issueTable->deleted->range('0');
+$issueTable->project->range('1-5');
+$issueTable->gen(5);
 r($customTester->hasScrumIssueDataTest($editionList[0])) && p() && e('0'); // 测试开源版中有问题数据
 r($customTester->hasScrumIssueDataTest($editionList[1])) && p() && e('5'); // 测试ipd版中有问题数据
 r($customTester->hasScrumIssueDataTest($editionList[2])) && p() && e('5'); // 测试旗舰版中有问题数据
