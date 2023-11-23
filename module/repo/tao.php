@@ -79,5 +79,27 @@ class repoTao extends repoModel
         $pattern = "/^[a-zA-Z0-9_\-\.]+$/";
         return preg_match($pattern, $repo->name);
     }
+
+    /**
+     * 根据条件获取版本库列表。
+     * Get repo list by condition.
+     *
+     * @param  string    $repoQuery
+     * @param  string    $SCM
+     * @param  string    $orderBy
+     * @param  object    $pager
+     * @access protected
+     * @return array
+     */
+    protected function getListByCondition(string $repoQuery, string $SCM, string $orderBy = 'id_desc', object $pager = null): array
+    {
+        return $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq('0')
+            ->beginIF(!empty($repoQuery))->andWhere($repoQuery)->fi()
+            ->beginIF($SCM)->andWhere('SCM')->in($SCM)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
 }
 
