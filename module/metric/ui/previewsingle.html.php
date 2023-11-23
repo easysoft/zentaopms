@@ -358,6 +358,7 @@ div
                         set::bordered(true),
                         set::cols($resultHeader),
                         set::data(array_values($resultData)),
+                        set::footPager(usePager()),
                         set::onRenderCell(jsRaw('window.renderDTableCell'))
                     ) : null
                 )

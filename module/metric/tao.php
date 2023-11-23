@@ -138,12 +138,14 @@ class metricTao extends metricModel
      * 请求度量数据。
      * Fetch metric data.
      *
-     * @param  string $code
-     * @param  array  $fieldList
+     * @param  string      $code
+     * @param  array       $fieldList
+     * @param  array       $query
+     * @param  object|null $pager
      * @access protected
      * @return array
      */
-    protected function fetchMetricRecords(string $code, array $fieldList, array $query = array()): array
+    protected function fetchMetricRecords(string $code, array $fieldList, array $query = array(), object|null $pager = null): array
     {
         $dataFieldStr = implode(', ', $fieldList);
         if(!empty($dataFieldStr)) $dataFieldStr .= ', ';
@@ -211,6 +213,7 @@ class metricTao extends metricModel
             ->beginIF(empty($query))->andWhere('date')->gt($date)->fi()
             ->beginIF(!empty($scopeList))->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
             ->beginIF(empty($scopeList))->orderBy("date desc, year desc, month desc, week desc, day desc")->fi()
+            ->page($pager)
             ->fetchAll();
 
         return $records;

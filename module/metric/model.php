@@ -281,12 +281,14 @@ class metricModel extends model
      * 根据代号获取计算实时度量项的结果。
      * Get result of calculate metric by code.
      *
-     * @param  string $code
-     * @param  array  $options e.g. array('product' => '1,2,3', 'year' => '2023')
+     * @param  string      $code
+     * @param  array       $options e.g. array('product' => '1,2,3', 'year' => '2023')
+     * @param  string      $type
+     * @param  object|null $pager
      * @access public
      * @return array
      */
-    public function getResultByCode($code, $options = array(), $type = 'realtime')
+    public function getResultByCode($code, $options = array(), $type = 'realtime', $pager = null)
     {
         if($type == 'cron')
         {
@@ -295,7 +297,7 @@ class metricModel extends model
 
             if($metric->scope != 'system') $dataFields[] = $metric->scope;
 
-            return $this->metricTao->fetchMetricRecords($code, $dataFields, $options);
+            return $this->metricTao->fetchMetricRecords($code, $dataFields, $options, $pager);
         }
 
         $metric = $this->metricTao->fetchMetricByCode($code);
