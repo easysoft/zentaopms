@@ -567,4 +567,19 @@ class customTest
         list($projectGroup, $programPM, $stakeholders) = $this->objectModel->getDataForUpdateProjectAcl();
         return ${$key};
     }
+
+    /**
+     * 处理项目权限为继承项目集的项目权限。
+     * process project priv within a program set.
+     *
+     * @access public
+     * @return array|object
+     */
+    public function processProjectAclTest(int $projectID): array|object
+    {
+        $this->objectModel->processProjectAcl();
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->loadModel('project')->getByID($projectID);
+    }
 }
