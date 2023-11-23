@@ -584,36 +584,43 @@ class user extends control
     }
 
     /**
+     * 编辑一个用户。
      * Edit a user.
      *
-     * @param  string|int $userID   the int user id or account
+     * @param  int    $userID
      * @access public
      * @return void
      */
-    public function edit($userID)
+    public function edit(int $userID)
     {
         if(!empty($_POST))
         {
-            $this->user->update($userID);
+            $user = form::data($this->config->user->form->edit)
+                ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
+                ->add('id', $userID)
+                ->get();
+
+            $this->userZen->checkBeforeCreateOrEdit($user, true);
+
+            $this->user->update($user);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $link = $this->session->userList ? $this->session->userList : $this->createLink('company', 'browse');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
-        $userVisionList = $this->user->getVisionList();
-
-        $user       = $this->user->getById($userID, 'id');
-        $userGroups = $this->loadModel('group')->getByAccount($user->account, count($userVisionList) > 1 ? true : false);
+        $user        = $this->user->getById($userID, 'id');
+        $userVisions = explode(',', trim($user->visions, ','));
+        $userGroups  = $this->loadModel('group')->getByAccount($user->account, count($userVisions) > 1);
 
         $this->view->title      = $this->lang->user->edit;
-        $this->view->user       = $user;
-        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
-        $this->view->userGroups = implode(',', array_keys($userGroups));
         $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
-        $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->where('project')->eq(0)->fetchPairs('id', 'name');
+        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
+        $this->view->groups     = $this->user->getGroupsByVisions($userVisions);
         $this->view->rand       = $this->user->updateSessionRandom();
-        $this->view->visionList = $userVisionList;
+        $this->view->visions    = $this->user->getVisionList();
+        $this->view->userGroups = array_keys($userGroups);
+        $this->view->user       = $user;
 
         $this->display();
     }
