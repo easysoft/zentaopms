@@ -666,11 +666,13 @@ class productModel extends model
         if($browseType == 'unplan')         return $this->story->getByPlan($productID, $queryID, $modules, '', $type, $sort, $pager);
         if($browseType == 'allstory')       return $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
         if($browseType == 'bymodule')       return $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, true, '', $pager);
-        if($browseType == 'bysearch')       return $this->story->getBySearch($productID, $branch, $queryID, $sort, 0, $type, '', $pager);
+        if($browseType == 'bysearch')       return $this->story->getBySearch($productID, $branch, $queryID, $sort, 0, $type, '', '', $pager);
         if($browseType == 'willclose')      return $this->story->get2BeClosed($productID, $branch, $modules, $type, $sort, $pager);
 
         if($browseType == 'developingstory') return $this->story->getByStatus($productID, $branch, $modules, 'developing', $type, $sort, $pager);
         if($browseType == 'launchedstory')   return $this->story->getByStatus($productID, $branch, $modules, 'launched', $type, $sort, $pager);
+
+        if($browseType == 'fromfeedback')   return $this->story->getFeedbackStories($productID, $branch, $modules, $type, $sort, $pager);
 
         if($browseType == 'unclosed')
         {
@@ -847,6 +849,7 @@ class productModel extends model
      */
     public function getProjectListByProduct(int $productID, string $browseType = 'all', string $branch = '0', bool $involved = false, string $orderBy = 'order_desc', object|null $pager = null): array
     {
+        $branch = $branch ? $branch : 0;
         if(!$involved) $projectList = $this->productTao->fetchAllProductProjects($productID, $browseType, $branch, $orderBy, $pager);
         if($involved)  $projectList = $this->productTao->fetchInvolvedProductProjects($productID, $browseType, $branch, $orderBy, $pager);
 
@@ -1371,18 +1374,14 @@ class productModel extends model
      * Show accessDenied response.
      *
      * @param  string  $tips
-     * @access private
+     * @access public
      * @return void
      */
     public function accessDenied(string $tips): bool
     {
         if(commonModel::isTutorialMode()) return true;
 
-        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        $link      = helper::createLink('product', 'all');
-        if($this->server->http_referer && strpos($this->server->http_referer, $loginLink) !== false) $link = helper::createLink('product', 'all');
-
-        return $this->app->control->sendError($tips, $link);
+        return $this->app->control->sendError($tips, helper::createLink('product', 'all'));
     }
 
     /**
@@ -1600,10 +1599,28 @@ class productModel extends model
         foreach($products as $product) $programIdList[] = $product->program;
         $programs = $this->loadModel('program')->getBaseDataList(array_unique($programIdList));
 
-        foreach($products as $product)
+        $finishClosedStory = $this->dao->select('product, count(1) as finish')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('closed')
+            ->andWhere('closedReason')->eq('done')
+            ->groupBy('product')
+            ->fetchPairs('product', 'finish');
+        $launchedStory = $this->dao->select('product, count(1) as launched')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('launched')
+            ->fetchPairs('product', 'launched');
+        $developingStory = $this->dao->select('product, count(1) as developing')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('developing')
+            ->fetchPairs('product', 'developing');
+        foreach($products as $productID => $product)
         {
             $product->programName = isset($programs[$product->program]) ? $programs[$product->program]->name : '';
             $product->programPM   = isset($programs[$product->program]) ? $programs[$product->program]->PM : '';
+
+            $products[$productID]->finishClosedStories = isset($finishClosedStory[$productID]) ? $finishClosedStory[$productID] : 0;
+            $products[$productID]->launchedStories     = isset($launchedStory[$productID]) ? $launchedStory[$productID] : 0;
+            $products[$productID]->developingStories   = isset($developingStory[$productID]) ? $developingStory[$productID] : 0;
         }
 
         return $products;
@@ -1716,14 +1733,14 @@ class productModel extends model
             $programStructure[$product->program][$product->line]['products'][$product->id] = $product;
 
             /* Generate line data. */
-            if($product->line)
+            if($product->line && $this->config->vision != 'or')
             {
                 $programStructure[$product->program][$product->line]['lineName'] = $product->lineName;
                 $programStructure[$product->program][$product->line] = $this->productTao->statisticProductData('line', $programStructure, $product);
             }
 
             /* Generate program data. */
-            if($product->program)
+            if($product->program && $this->config->vision != 'or')
             {
                 $programStructure[$product->program]['programName'] = $product->programName;
                 $programStructure[$product->program]['programPM']   = $product->programPM;
@@ -1927,13 +1944,13 @@ class productModel extends model
     {
         $branchID    = $branch ? "%s" : 'all';
         $branchParam = $branch ? "&branch=%s" : '';
+        $extraParam  = $extra  ? "&extras=$extra" : '';
         $params      = explode(',', $extra);
         $method      = strtolower($method);
 
         if($module == 'project'    && $method == 'bug')         return helper::createLink($module, $method,       "projectID={$params[0]}&productID=%s{$branchParam}");
         if($module == 'bug'        && $method == 'view')        return helper::createLink('bug',   'browse',      "productID=%s&branch={$branchID}&extra=$extra");
         if($module == 'bug'        && $method == 'report')      return helper::createLink('bug',   'browse',      "productID=%s{$branchParam}");
-        if($module == 'testreport' && $method == 'edit')        return helper::createLink($module, 'browse',      "objectID=%s");
         if($module == 'qa'         && $method == 'index')       return helper::createLink('bug',   'browse',      "productID=%s{$branchParam}");
         if($module == 'story'      && $method == 'report')      return helper::createLink($module, $method,       "productID=%s&branch={$branchID}&extra=$extra");
         if($module == 'testcase'   && $method == 'browse')      return helper::createLink($module, $method,       "productID=%s&branch={$branchID}" . ($extra ? "&browseType=$extra" : ''));
@@ -1945,12 +1962,13 @@ class productModel extends model
         if($module == 'project'    && $method == 'testcase')    return helper::createLink($module, $method,       "projectID={$params[0]}&productID=%s&branch={$branchID}&browseType={$params[1]}");
         if($module == 'testtask'   && $method == 'browseunits') return helper::createLink($module, 'browseUnits', "productID=%s&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1" . ($this->app->tab == 'project' ? "&projectID={$this->session->project}" : ''));
 
-        if($module == 'execution' && in_array($method, array('bug', 'testcase')))        return helper::createLink($module,    $method,  "executionID={$params[0]}&productID=%s{$branchParam}");
-        if($module == 'product'   && in_array($method, array('doc', 'view')))            return helper::createLink($module,    $method,  "productID=%s");
-        if($module == 'product'   && in_array($method, array('create', 'showimport')))   return helper::createLink($module,    'browse', "productID=%s&type=$extra");
-        if($module == 'product'   && in_array($method, array('browse', 'index', 'all'))) return helper::createLink($module,    'browse', "productID=%s&branch={$branchID}&browseType=&param=0&$extra");
-        if($module == 'ticket'    && in_array($method, array('browse', 'view', 'edit'))) return helper::createLink('ticket',   'browse', "browseType=byProduct&productID=%s");
-        if($module == 'feedback'  && $this->config->vision == 'lite')                    return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
+        if($module == 'execution'  && in_array($method, array('bug', 'testcase')))        return helper::createLink($module,    $method,  "executionID={$params[0]}&productID=%s{$branchParam}");
+        if($module == 'product'    && in_array($method, array('doc', 'view')))            return helper::createLink($module,    $method,  "productID=%s");
+        if($module == 'product'    && in_array($method, array('create', 'showimport')))   return helper::createLink($module,    'browse', "productID=%s&type=$extra");
+        if($module == 'product'    && in_array($method, array('browse', 'index', 'all'))) return helper::createLink($module,    'browse', "productID=%s&branch={$branchID}&browseType=&param=0&$extra");
+        if($module == 'ticket'     && in_array($method, array('browse', 'view', 'edit'))) return helper::createLink('ticket',   'browse', "browseType=byProduct&productID=%s");
+        if($module == 'testreport' && in_array($method, array('edit', 'browse')))         return helper::createLink($module,    'browse', "objectID=%s");
+        if($module == 'feedback'   && $this->config->vision == 'lite')                    return helper::createLink('feedback', 'browse', "browseType=byProduct&productID=%s");
 
         if($module == 'design')      return helper::createLink('design',      'browse', "productID=%s");
         if($module == 'execution')   return helper::createLink('execution',   $method,  "objectID=$extra&productID=%s");
@@ -1977,7 +1995,7 @@ class productModel extends model
         }
         if($module == 'story' and $this->config->vision == 'or') return helper::createLink('story', 'create', "productID=%s&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID0&todoID=0&extra=&storyType=requirement");
 
-        return helper::createLink($module, $method, "productID=%s{$branchParam}");
+        return helper::createLink($module, $method, "productID=%s{$branchParam}{$extraParam}");
     }
 
     /**
