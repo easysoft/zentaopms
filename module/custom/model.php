@@ -1184,12 +1184,13 @@ class customModel extends model
     }
 
     /**
-     * Verify whether there is scrum auditplan data.
+     * 检查系统中是否有敏捷项目的审计数据。
+     * Check whether there is scrum auditplan data in the system.
      *
      * @access public
-     * @return bool
+     * @return int
      */
-    public function hasScrumAuditplanData()
+    public function hasScrumAuditplanData(): int
     {
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
@@ -1200,7 +1201,7 @@ class customModel extends model
                 ->andWhere('t2.deleted')->eq('0')
                 ->count();
         }
-        return false;
+        return 0;
     }
 
     /**
