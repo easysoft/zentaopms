@@ -409,13 +409,18 @@ class metricZen extends metric
         return $header;
     }
 
+    /**
+     * 获取度量数据表的宽度。
+     * Get width of result table in view.
+     *
+     * @param  array     $headers
+     * @access protected
+     * @return int
+     */
     protected function getViewTableWidth($headers)
     {
         $width = 0;
-        foreach($headers as $header)
-        {
-            $width += isset($header['width']) ? $header['width'] : 160;
-        }
+        foreach($headers as $header) $width += isset($header['width']) ? $header['width'] : 160;
     
         return $width;
     }
