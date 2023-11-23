@@ -505,22 +505,13 @@ class user extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('company', 'browse')));
         }
 
-        $groupList = array();
-        $roleGroup = array();
-        $groups    = $this->dao->select('id, name, role, vision')->from(TABLE_GROUP)->fetchAll();
-        foreach($groups as $group)
-        {
-            if($group->vision == $this->config->vision) $groupList[$group->id] = $group->name;
-            if($group->role) $roleGroup[$group->role] = $group->id;
-        }
+        $this->userZen->prepareRolesAndGroups();
 
         $this->view->title     = $this->lang->user->create;
         $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
         $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
         $this->view->rand      = $this->user->updateSessionRandom();
         $this->view->visions   = $this->user->getVisionList();
-        $this->view->groupList = $groupList;
-        $this->view->roleGroup = $roleGroup;
         $this->view->deptID    = $deptID;
 
         $this->display();

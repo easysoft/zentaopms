@@ -2,6 +2,28 @@
 class userZen extends user
 {
     /**
+     * 构建职位和权限组数据。
+     * Prepare roles and groups data.
+     *
+     * @access public
+     * @return void
+     */
+    public function prepareRolesAndGroups(): void
+    {
+        $groupList = array();
+        $roleGroup = array();
+        $groups    = $this->dao->select('id, name, role, vision')->from(TABLE_GROUP)->fetchAll();
+        foreach($groups as $group)
+        {
+            if($group->vision == $this->config->vision) $groupList[$group->id] = $group->name;
+            if($group->role) $roleGroup[$group->role] = $group->id;
+        }
+
+        $this->view->groupList = $groupList;
+        $this->view->roleGroup = $roleGroup;
+    }
+
+    /**
      * 创建用户前的检查。
      * Check before creating a user.
      *
