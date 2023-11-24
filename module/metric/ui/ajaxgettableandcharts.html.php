@@ -16,14 +16,17 @@ div
     div
     (
         setClass('table-side'),
+        setStyle(array('flex-basis' => $tableWidth . 'px')),
         div
         (
-            $resultData ? dtable
+            $groupData ? dtable
             (
                 $viewType == 'multiple' ? set::height(310) : null,
                 set::bordered(true),
-                set::cols($resultHeader),
-                set::data(array_values($resultData)),
+                set::cols($groupHeader),
+                set::data(array_values($groupData)),
+                ($metricRecordType == 'scope' || $metricRecordType == 'scope-date') ? set::footPager(usePager('dtablePager')) : null,
+                $headerGroup ? set::plugins(array('header-group')) : null,
                 set::onRenderCell(jsRaw('window.renderDTableCell'))
             ) : null
         )

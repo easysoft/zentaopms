@@ -276,11 +276,11 @@ class metric extends control
         $this->view->groupData     = $groupData;
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
         $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
+        $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
 
         $this->view->metric        = $metric;
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
-        $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
 
         $this->display();
     }
@@ -292,10 +292,15 @@ class metric extends control
         $resultHeader = $this->metricZen->getViewTableHeader($metric);
         $resultData   = $this->metricZen->getViewTableData($metric, $result);
 
+        list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
+        $this->view->groupHeader   = $groupHeader;
+        $this->view->groupData     = $groupData;
+        $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
+        $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
+        $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);
+
         $this->view->viewType      = $viewType;
         $this->view->metric        = $metric;
-        $this->view->resultHeader  = $resultHeader;
-        $this->view->resultData    = $resultData;
         $this->view->chartTypeList = $this->metric->getChartTypeList($resultHeader);
         $this->view->echartOptions = $this->metric->getEchartsOptions($resultHeader, $resultData);
 
