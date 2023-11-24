@@ -8,17 +8,17 @@ class customTest
     }
 
     /**
+     * 设置自定义语言项。
      * Test set value of an item.
      *
-     * @param  string      $path
-     * @param  string      $value
+     * @param  string           $path  zh-cn.story.soucreList.customer.1
+     * @param  string           $value
      * @access public
-     * @return object|int
+     * @return object|array|bool
      */
-    public function setItemTest($path, $value = '')
+    public function setItemTest(string $path, string $value = ''): object|array|bool
     {
         $objects = $this->objectModel->setItem($path, $value);
-
         if(dao::isError()) return dao::getError();
 
         $level = substr_count($path, '.');
@@ -28,8 +28,7 @@ class customTest
             if($level == 3) list($lang, $module, $section, $key) = explode('.', $path);
             if($level == 4) list($lang, $module, $section, $key, $system) = explode('.', $path);
 
-            global $tester;
-            $objects = $tester->dao->select('*')->from(TABLE_LANG)->where('`lang`')->eq($lang)->andWhere('`module`')->eq($module)->andWhere('`key`')->eq($key)->fetch();
+            $objects = $this->objectModel->dao->select('*')->from(TABLE_LANG)->where('`lang`')->eq($lang)->andWhere('`module`')->eq($module)->andWhere('`key`')->eq($key)->fetch();
         }
 
         return $objects;
