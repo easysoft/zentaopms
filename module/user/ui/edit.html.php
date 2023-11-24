@@ -255,16 +255,9 @@ formPanel
     formRow
     (
         setClass('hidden'),
-        formGroup
-        (
-            set::name('passwordLength'),
-            set::value(0)
-        ),
-        formGroup
-        (
-            set::name('verifyRand'),
-            set::value($rand)
-        )
+        input(set::name('verifyRand'), set::value($rand)),
+        input(set::name('passwordLength'), set::value(0)),
+        input(set::name('passwordStrength'), set::value(0))
     )
 );
 
