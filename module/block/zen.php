@@ -573,6 +573,7 @@ class blockZen extends block
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.execution=t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.execution=t5.project')
             ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.auto')->ne('unit')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t1.product = t5.product')
