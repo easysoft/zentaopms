@@ -597,13 +597,31 @@ class metricZen extends metric
             $year  = substr($dataInfo->dateString, 0, 4) . $this->lang->year;
             $week  = sprintf($this->lang->metric->week, substr($dataInfo->dateString, 5, 2));
 
-            $name                = "year{$year}month{$week}";
+            $name                = "year{$year}week{$week}";
             $groupHeader[]       = array('name' => $name, 'title' => $week, 'headerGroup' => $year, 'align' => 'center');
             $groupData[0][$name] = $dataInfo->value;
         }
 
         return array($groupHeader, $groupData);
 
+    }
+
+    protected function getTableByDay($data)
+    {
+        $groupHeader = array();
+        $groupData   = array(array());
+
+        foreach($data as $dataInfo)
+        {
+            $year  = substr($dataInfo->dateString, 0, 4) . $this->lang->year;
+            $day   = substr($dataInfo->dateString, 5, 5);
+
+            $name                = "year{$year}day{$day}";
+            $groupHeader[]       = array('name' => $name, 'title' => $day, 'headerGroup' => $year, 'align' => 'center');
+            $groupData[0][$name] = $dataInfo->value;
+        }
+
+        return array($groupHeader, $groupData);
     }
 
     /**
