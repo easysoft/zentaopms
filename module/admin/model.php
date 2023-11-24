@@ -96,6 +96,7 @@ class adminModel extends model
     }
 
     /**
+     * 设置后台二级导航。
      * Set admin menu.
      *
      * @access public
@@ -310,10 +311,9 @@ class adminModel extends model
      */
     public function getMenuKey()
     {
-        $moduleName  = $this->app->rawModule;
-        $methodName  = $this->app->rawMethod;
-        $firstParam  = $this->app->rawParams ? reset($this->app->rawParams) : '';
-        $secondParam = $this->app->rawParams ? next($this->app->rawParams)  : '';
+        $moduleName = $this->app->rawModule;
+        $methodName = $this->app->rawMethod;
+        $firstParam = $this->app->rawParams ? reset($this->app->rawParams) : '';
 
         foreach($this->config->admin->menuGroup as $menuKey => $menuGroup)
         {
@@ -366,12 +366,13 @@ class adminModel extends model
     }
 
     /**
+     * 检查网络。
      * Check internet.
      *
      * @access public
      * @return bool
      */
-    public function checkInternet()
+    public function checkInternet(): bool
     {
         $timeout = 1;
         $curl    = curl_init();
@@ -388,12 +389,13 @@ class adminModel extends model
     }
 
     /**
+     * 获取禅道使用时长。
      * Get date used object.
      *
      * @access public
      * @return object
      */
-    public function genDateUsed()
+    public function genDateUsed(): object
     {
         $firstUseDate = $this->dao->select('date')->from(TABLE_ACTION)
             ->where('date')->gt('1970-01-01')

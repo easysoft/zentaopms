@@ -19,4 +19,3 @@ r($admin->checkWeakTest('user3')) && p() && e('1'); //测试密码与手机相�
 r($admin->checkWeakTest('user4')) && p() && e('1'); //测试密码与电话相同
 r($admin->checkWeakTest('user5')) && p() && e('1'); //测试密码与生日相同
 r($admin->checkWeakTest('user6')) && p() && e('0'); //测试使用复杂密码
-

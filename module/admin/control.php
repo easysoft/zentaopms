@@ -23,8 +23,8 @@ class admin extends control
     {
         set_time_limit(0);
 
-        /* 设置1.5级导航信息。*/
-        /* Set the 1.5 nav. */
+        /* 设置导航信息。*/
+        /* Set the nav. */
         $this->admin->setMenu();
 
         /* 处理社区登记。*/
