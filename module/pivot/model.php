@@ -1602,7 +1602,8 @@ class pivotModel extends model
         {
             foreach($settings['columns'] as $column)
             {
-                if($column['showOrigin']) $column['slice'] = 'noSlice';
+                $columnShowOrigin = zget($column, 'showOrigin', false);
+                if($columnShowOrigin) $column['slice'] = 'noSlice';
 
                 $stat   = $column['stat'];
                 $field  = $column['field'];
@@ -1610,7 +1611,7 @@ class pivotModel extends model
                 $uuName = $field . $number;
                 $number ++;
 
-                if($column['showOrigin'])
+                if($columnShowOrigin)
                 {
                     $columnSQL = "select $groupList, tt.`$field` from ($sql) tt" . $connectSQL . $orderSQL;
                 }
@@ -1640,14 +1641,14 @@ class pivotModel extends model
                 $columnRows = $this->dao->query($columnSQL)->fetchAll();
 
                 $rowcount = array_fill(0, count($columnRows), 1);
-                if($showOrigin && !$column['showOrigin'])
+                if($showOrigin && !$columnShowOrigin)
                 {
                     $countSQL = "select $groupList, count(tt.`$field`) as rowCount from ($sql) tt" . $connectSQL . $groupSQL . $orderSQL;
                     $countRows = $this->dao->query($countSQL)->fetchAll();
                     foreach($countRows as $key => $countRow) $rowcount[$key] = $countRow->rowCount;
                 }
 
-                $cols = $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs, $column['showOrigin']);
+                $cols = $this->getTableHeader($columnRows, $column, $fields, $cols, $sql, $langs, $columnShowOrigin);
                 if($slice != 'noSlice') $columnRows = $this->processSliceData($columnRows, $groups, $slice, $uuName);
                 $columnRows = $this->processShowData($columnRows, $groups, $column, $showColTotal, $uuName);
 

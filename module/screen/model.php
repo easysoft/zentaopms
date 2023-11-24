@@ -139,53 +139,31 @@ class screenModel extends model
     }
 
     /**
+     * 为新的大屏构建图表数据。
      * Generate chartData of new screen.
      *
      * @param  object $screen
-     * @param  string $year
-     * @param  string $dept
-     * @param  string $account
      * @access public
      * @return object
      */
-    public function genNewChartData($screen, $year, $dept, $account)
+    public function genNewChartData(object $screen): object
     {
-        $this->loadModel('pivot');
         $scheme = json_decode($screen->scheme);
-
         foreach($scheme->componentList as $component)
         {
-            if(!empty($component->isGroup))
+            $list = !empty($component->isGroup) ? $component->groupList : array($component);
+            foreach($list as $groupComponent)
             {
-                foreach($component->groupList as $key => $groupComponent)
-                {
-                    if(isset($groupComponent->key) and $groupComponent->key === 'Select') $groupComponent = $this->buildSelect($groupComponent);
-                }
-            }
-            else
-            {
-                if(isset($component->key) and $component->key === 'Select') $component = $this->buildSelect($component);
+                if(isset($groupComponent->key) && $groupComponent->key === 'Select') $groupComponent = $this->buildSelect($groupComponent);
             }
         }
 
-        foreach($scheme->componentList as $index => $component)
-        {
-            if(!empty($component->isGroup))
-            {
-                foreach($component->groupList as $key => $groupComponent)
-                {
-                    $groupComponent = $this->getLatestChart($groupComponent);
-                }
-            }
-            elseif($component)
-            {
-                $component = $this->getLatestChart($component);
-            }
-            else
-            {
-                unset($scheme->componentList[$index]);
-            }
-        }
+        /** Fileter chart. */
+        $list = array();
+        array_map(function($component)use(&$list){
+            !empty($component->isGroup) ? array_merge($list, $component->groupList) : array_push($list, $component);
+        }, array_filter($scheme->componentList));
+        foreach($list as $component) $component = $this->getLatestChart($component);
 
         return $scheme;
     }
@@ -363,11 +341,11 @@ class screenModel extends model
 
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
 
-            $fields       = json_decode($chart->fields, true);
+            $fields       = json_decode($chart->fields);
             $dimensions   = array($settings['xaxis'][0]['field']);
             $sourceData   = array();
             $clientLang   = $this->app->getClientLang();
-            $xLabelValues = $this->processXLabel($xLabels, $fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+            $xLabelValues = $this->processXLabel($xLabels, $fields->$group->type, $fields->$group->object, $fields->$group->field);
 
             foreach($yStats as $index => $dataList)
             {
@@ -415,7 +393,7 @@ class screenModel extends model
 
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
 
-            $fields       = json_decode($chart->fields, true);
+            $fields       = json_decode($chart->fields);
             $dimensions   = array($settings['xaxis'][0]['field']);
             $sourceData   = array();
             $clientLang   = $this->app->getClientLang();
