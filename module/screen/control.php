@@ -50,18 +50,18 @@ class screen extends control
         }
 
         $lang     = (strpos($this->app->getClientLang(), 'zh') !== false) ? 'zh' : 'en';
-        $version  = ($this->config->edition == 'biz' or $this->config->edition == 'max') ? 'biz' : 'pms';
+        $version  = ($this->config->edition == 'biz' || $this->config->edition == 'max') ? 'biz' : 'pms';
         $imageURL = "static/images/bi_guide_{$version}_{$lang}.png";
 
-        $moduleKey   = $version . 'Guide';
-        $guides      = $this->setting->getItem("owner=system&module=bi&key={$moduleKey}");
-        $haveSeen    = explode(',', $guides);
-        $afterSeen   = array_merge($haveSeen, array($this->app->user->account));
+        $moduleKey = $version . 'Guide';
+        $guides    = $this->setting->getItem("owner=system&module=bi&key={$moduleKey}");
+        $haveSeen  = explode(',', $guides);
+        $afterSeen = array_merge($haveSeen, array($this->app->user->account));
         $this->setting->setItem("system.bi.{$moduleKey}", implode(',', array_unique($afterSeen)));
 
-        $this->view->showGuide  = in_array($this->app->user->account, $haveSeen) ? false : true;
-        $this->view->imageURL   = $imageURL;
-        $this->view->version    = $version;
+        $this->view->showGuide = in_array($this->app->user->account, $haveSeen) ? false : true;
+        $this->view->imageURL  = $imageURL;
+        $this->view->version   = $version;
     }
 
     /**
