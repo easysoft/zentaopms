@@ -519,6 +519,7 @@ class custom extends control
     }
 
     /**
+     * 设置是否限制任务开始和结束时间。
      * Set whether the task begin and end date is limited to the execution begin and end date.
      *
      * @access public
@@ -529,11 +530,11 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.limitTaskDate', $this->post->limitTaskDate);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->sendSuccess(array('load' => true));
         }
 
-        $this->view->title      = $this->lang->custom->beginAndEndDate;
-        $this->view->module     = 'task';
+        $this->view->title  = $this->lang->custom->beginAndEndDate;
+        $this->view->module = 'task';
 
         $this->display();
     }
