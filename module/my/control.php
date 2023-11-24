@@ -1346,6 +1346,7 @@ EOF;
     }
 
     /**
+     * 构建联系人列表。
      * Build contact lists.
      *
      * @param  string $dropdownName
@@ -1353,7 +1354,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function buildContactLists($dropdownName = 'mailto', $attr = '')
+    public function buildContactLists(string $dropdownName = 'mailto', string $attr = '')
     {
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
         $this->view->dropdownName = $dropdownName;
