@@ -2082,7 +2082,7 @@ EOF;
             {
                 if($config->edition != 'open' && isset($dateFields[$key])) $old->$key = formatTime($old->$key);
 
-                if($value != stripslashes($old->$key))
+                if($value != stripslashes((string)$old->$key))
                 {
                     $diff = '';
                     if(substr_count($value, "\n") > 1     or
