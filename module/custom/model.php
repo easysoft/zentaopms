@@ -95,13 +95,14 @@ class customModel extends model
     }
 
     /**
-     * Get some items
+     * 获取自定义语言项。
+     * Get value of custom items.
      *
-     * @param  string   $paramString    see parseItemParam();
+     * @param  string $paramString see parseItemParam();
      * @access public
-     * @return void
+     * @return array
      */
-    public function getItems($paramString)
+    public function getItems(string $paramString): array
     {
         return $this->prepareSQL($this->parseItemParam($paramString), 'select')->orderBy('lang,id')->fetchAll('key');
     }
