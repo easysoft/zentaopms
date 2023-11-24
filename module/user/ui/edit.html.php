@@ -45,6 +45,7 @@ formPanel
         )
     ),
     set::formClass('border-0'),
+    on::change('input[name=type]', 'changeType'),
     on::click('button[type="submit"]', 'computePassword'),
     on::change('input[name^=visions]', 'changeVision'),
     formRow
@@ -140,7 +141,6 @@ formPanel
             set::label($lang->user->type),
             radioList
             (
-                on::change('changeType'),
                 set::inline(true),
                 set::name('type'),
                 set::items($lang->user->typeList),
