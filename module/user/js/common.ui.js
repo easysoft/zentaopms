@@ -1,3 +1,23 @@
+let password1Encrypted = false;
+let password2Encrypted = false;
+let verifyEncrypted    = false;
+
+/**
+ * 密码改变时标记密码未加密。
+ * Mark password unencrypted when password changes.
+ *
+ * @param  event  event
+ * @access public
+ * @return void
+ */
+function changePassword(event)
+{
+    const targetID = $(event.target).attr('id');
+    if(targetID == 'password1')      password1Encrypted = false;
+    if(targetID == 'password2')      password2Encrypted = false;
+    if(targetID == 'verifyPassword') verifyEncrypted    = false;
+}
+
 function toggleNew(event)
 {
     const checked     = $(event.target).prop('checked');

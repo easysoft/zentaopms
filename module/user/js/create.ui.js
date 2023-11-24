@@ -1,26 +1,3 @@
-$(function()
-{
-    password1Encrypted = false;
-    password2Encrypted = false;
-    passwordStrength   = 0;
-})
-
-function changePassword(event)
-{
-    if($(event.target).attr('id') == 'password1')
-    {
-        password1Encrypted = false;
-    }
-    if($(event.target).attr('id') == 'password2')
-    {
-        password2Encrypted = false;
-    }
-    if($(event.target).attr('id') == 'verifyPassword')
-    {
-        verifyEncrypted = false;
-    }
-}
-
 function changeType(event)
 {
     const type = $(event.target).val();
