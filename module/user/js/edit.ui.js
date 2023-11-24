@@ -49,18 +49,18 @@ function computePassword()
 }
 
 /**
- * Show or hide companies based on user type.
+ * 根据用户类型切换控件的显示和隐藏。
+ * Toggle the display of controls according to the user type.
  *
- * @param  event  $event
+ * @param  event  event
  * @access public
  * @return void
  */
 function changeType(event)
 {
-    let $typeGroup = event != undefined ? $(event.target).closest('.form-group') : $('input[name="type"]').closest('.form-group');
-    let type       = $typeGroup.find('input[type="radio"]:checked').val();
+    const isInside = $(event.target).val() == 'inside';
 
-    $('[name=company]').closest('.form-group').toggleClass('hidden', type == 'inside');
-    $('[name=dept]').closest('.form-row').toggleClass('hidden', type != 'inside');
-    $('#commiter').closest('.form-row').toggleClass('hidden', type != 'inside');
+    $('[name="company"]').closest('.form-group').toggleClass('hidden', isInside);
+    $('[name="dept"]').closest('.form-row').toggleClass('hidden', !isInside);
+    $('#commiter').closest('.form-group').toggleClass('hidden', !isInside);
 }
