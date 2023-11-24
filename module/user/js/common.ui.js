@@ -82,31 +82,29 @@ window.switchAccount = function(account)
 };
 
 /**
- * Update groups when visions change.
+ * 更改界面类型时更新权限组。
+ * Update group when change vision.
  *
- * @param  event  $event
+ * @param  event  event
  * @access public
  * @return void
  */
 function changeVision(event)
 {
-    var visions = [];
+    let visions = [];
     $('input[name="visions[]"]:checked').each(function()
     {
         visions.push($(this).val());
     });
 
-    const link  = $.createLink('user', 'ajaxGetGroup', 'visions=' + visions);
-    $.get(link, function(data)
+    const link = $.createLink('user', 'ajaxGetGroup', 'visions=' + visions);
+    $.get(link, function(response)
     {
-        let group        = $('[name^="group"]').val();
-        let $groupPicker = $('[name^="group"]').zui('picker');
-        if(data)
-        {
-            data = JSON.parse(data);
-            $groupPicker.render({items: data});
-            $groupPicker.$.changeState({value: group});
-        }
+        const data   = JSON.parse(response);
+        const group  = $('[name^="group"]').val();
+        const $group = $('[name^="group"]').zui('picker');
+        $group.render({items: data});
+        $group.$.setValue(group);
     });
 }
 
