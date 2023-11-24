@@ -164,6 +164,16 @@ class baseDAO
     static public $cache = array();
 
     /**
+     * 实时记录日志设置，并设置记录文件。
+     * Open real time log and set real time file.
+     *
+     * @var array
+     * @access public
+     */
+    static public $realTimeLog  = false;
+    static public $realTimeFile = '';
+
+    /**
      * 构造方法。
      * The construct method.
      *
@@ -756,6 +766,9 @@ class baseDAO
 
         try
         {
+            /* Real-time save log. */
+            if($this->realTimeLog && $this->realTimeFile) file_put_contents($this->realTimeFile, $sql, FILE_APPEND);
+
             $method = $this->method;
             $this->reset();
 
@@ -859,6 +872,9 @@ class baseDAO
 
         try
         {
+            /* Real-time save log. */
+            if($this->realTimeLog && $this->realTimeFile) file_put_contents($this->realTimeFile, $sql, FILE_APPEND);
+
             if($this->table) unset(dao::$cache[$this->table]);
             $this->reset();
 

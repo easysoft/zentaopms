@@ -106,6 +106,8 @@ class upgradeModel extends model
         $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
 
         /* Get total sqls and write in tmp file. */
+        dao::$realTimeLog  = true;
+        dao::$realTimeFile = $this->getLogFile();
         if(is_writable($this->app->getTmpRoot()))
         {
             file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', '0-0');
@@ -248,6 +250,7 @@ class upgradeModel extends model
         $xxsqls      = zget($execConfig, 'xxsqls', '');
         $xxfunctions = zget($execConfig, 'xxfunctions', '');
 
+        $this->saveLogs("Upgrade to {$version}");
         foreach(array_filter(explode(',', $functions)) as $function) $this->executeUpgradeMethod($function, zget($params, $function, array()));
 
         $needExecXX = !$executedXuanxuan;
@@ -271,16 +274,16 @@ class upgradeModel extends model
      */
     public function executeUpgradeMethod($method, $params)
     {
-        $this->saveLogs("Run Method {$function}");
+        $this->saveLogs("Run Method {$method}");
 
         $class = $this;
-        if(str_contains($functions, '-'))
+        if(str_contains($method, '-'))
         {
-            list($className, $function) = explode('-', $function);
-            $class= $this->loadModel($className);
+            list($className, $method) = explode('-', $method);
+            $class = $this->loadModel($className);
         }
 
-        return call_user_func_array(array($class, $function), $params);
+        return call_user_func_array(array($class, $method), $params);
     }
 
     /**
@@ -867,8 +870,6 @@ class upgradeModel extends model
      */
     public function updateCompany()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
-
         /* Get user defined constants. */
         $constants     = get_defined_constants(true);
         $userConstants = $constants['user'];
@@ -1044,7 +1045,6 @@ class upgradeModel extends model
      */
     public function updateUBB()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->app->loadClass('ubb', true);
 
         $bugs = $this->dao->select('id, steps')->from(TABLE_BUG)->fetchAll();
@@ -1054,13 +1054,11 @@ class upgradeModel extends model
         {
             $bug->steps = ubb::parseUBB($bug->steps);
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bug->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
         foreach($userTemplates as $template)
         {
             $template->content = ubb::parseUBB($template->content);
             $this->dao->update($this->config->db->prefix . 'userTPL')->data($template)->where('id')->eq($template->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
     }
 
@@ -1072,7 +1070,6 @@ class upgradeModel extends model
      */
     public function updateNL1_2()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $tasks     = $this->dao->select('id, `desc`')->from(TABLE_TASK)->fetchAll();
         $stories   = $this->dao->select('story, version, spec')->from($this->config->db->prefix . 'storySpec')->fetchAll();
         $todos     = $this->dao->select('id, `desc`')->from(TABLE_TODO)->fetchAll();
@@ -1082,27 +1079,23 @@ class upgradeModel extends model
         {
             $task->desc = nl2br($task->desc);
             $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($task->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
         foreach($stories as $story)
         {
             $story->spec = nl2br($story->spec);
             $this->dao->update($this->config->db->prefix . 'storySpec')->data($story)->where('story')->eq($story->story)->andWhere('version')->eq($story->version)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         foreach($todos as $todo)
         {
             $todo->desc = nl2br($todo->desc);
             $this->dao->update(TABLE_TODO)->data($todo)->where('id')->eq($todo->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         foreach($testTasks as $testtask)
         {
             $testtask->desc = nl2br($testtask->desc);
             $this->dao->update($this->config->db->prefix . 'testTask')->data($testtask)->where('id')->eq($testtask->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
     }
 
@@ -1114,7 +1107,6 @@ class upgradeModel extends model
      */
     public function updateNL1_3()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $products = $this->dao->select('id, `desc`')->from(TABLE_PRODUCT)->fetchAll();
         $plans    = $this->dao->select('id, `desc`')->from($this->config->db->prefix . 'productPlan')->fetchAll();
         $releases = $this->dao->select('id, `desc`')->from(TABLE_RELEASE)->fetchAll();
@@ -1126,21 +1118,18 @@ class upgradeModel extends model
         {
             $product->desc = nl2br($product->desc);
             $this->dao->update(TABLE_PRODUCT)->data($product)->where('id')->eq($product->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         foreach($plans as $plan)
         {
             $plan->desc = nl2br($plan->desc);
             $this->dao->update($this->config->db->prefix . 'productPlan')->data($plan)->where('id')->eq($plan->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         foreach($releases as $release)
         {
             $release->desc = nl2br($release->desc);
             $this->dao->update(TABLE_RELEASE)->data($release)->where('id')->eq($release->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         foreach($projects as $project)
@@ -1150,14 +1139,12 @@ class upgradeModel extends model
             $project->lastEditedBy   = $account;
             $project->lastEditedDate = helper::now();
             $this->dao->update(TABLE_PROJECT)->data($project)->where('id')->eq($project->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         foreach($builds as $build)
         {
             $build->desc = nl2br($build->desc);
             $this->dao->update(TABLE_BUILD)->data($build)->where('id')->eq($build->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
     }
 
@@ -1169,8 +1156,6 @@ class upgradeModel extends model
      */
     public function updateTasks()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
-
         /* Get all actions of tasks. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->eq('task')
@@ -1231,23 +1216,14 @@ class upgradeModel extends model
 
                 /* Update action type. */
                 $this->dao->update(TABLE_ACTION)->set('action')->eq($action->action)->where('id')->eq($action->id)->exec();
-                $this->saveLogs($this->dao->get());
             }
         }
 
         /* Update db. */
-        foreach($tasks as $task)
-        {
-            $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($task->id)->exec();
-            $this->saveLogs($this->dao->get());
-        }
+        foreach($tasks as $task) $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($task->id)->exec();
 
         $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy, assignedDate = finishedDate')->where('status')->eq('done')->exec();
-        $this->saveLogs($this->dao->get());
         $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy, assignedDate = canceledDate')->where('status')->eq('cancel')->exec();
-        $this->saveLogs($this->dao->get());
-
-        /* Update action name. */
     }
 
     /**
@@ -1258,7 +1234,6 @@ class upgradeModel extends model
      */
     public function updateActivatedCountOfBug()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $bugActivatedActions = $this->dao->select('*')->from(TABLE_ACTION)->where('action')->eq('activated')->andWhere('objectType')->eq('bug')->fetchAll();
         if(!empty($bugActivatedActions))
         {
@@ -1267,11 +1242,7 @@ class upgradeModel extends model
                 if(!isset($counts[$action->objectID]))  $counts[$action->objectID] = 0;
                 $counts[$action->objectID] ++;
             }
-            foreach($counts as $key => $count)
-            {
-                $this->dao->update(TABLE_BUG)->set('activatedCount')->eq($count)->where('id')->eq($key)->exec();
-                $this->saveLogs($this->dao->get());
-            }
+            foreach($counts as $key => $count) $this->dao->update(TABLE_BUG)->set('activatedCount')->eq($count)->where('id')->eq($key)->exec();
         }
     }
 
@@ -1283,7 +1254,6 @@ class upgradeModel extends model
      */
     public function updateCases()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $results = $this->dao->select('`case`, date, caseResult')->from($this->config->db->prefix . 'testResult')->orderBy('id desc')->fetchGroup('case');
         foreach($results as $result)
         {
@@ -1292,7 +1262,6 @@ class upgradeModel extends model
                 ->set('lastResult')->eq($result[0]->caseResult)
                 ->where('id')->eq($result[0]->case)
                 ->exec();
-            $this->saveLogs($this->dao->get());
         }
     }
 
@@ -1304,10 +1273,8 @@ class upgradeModel extends model
      */
     public function updateProjectType()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $projects = $this->dao->select('root')->from(TABLE_MODULE)->where('type')->eq('task')->fetchPairs('root');
         $this->dao->update(TABLE_PROJECT)->set('type')->eq('waterfall')->where('id')->in($projects)->exec();
-        $this->saveLogs($this->dao->get());
         return true;
     }
 
@@ -1319,7 +1286,6 @@ class upgradeModel extends model
      */
     public function updateEstimatePriv()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $privTable = $this->config->db->prefix . 'groupPriv';
         $groups = $this->dao->select('*')->from($privTable)
             ->where('module')->eq('task')
@@ -1332,42 +1298,36 @@ class upgradeModel extends model
                 ->andWhere('module')->eq('task')
                 ->andWhere('method')->eq('recordEstimate')
                 ->exec();
-            $this->saveLogs($this->dao->get());
             $this->dao->insert($privTable)
                 ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
                 ->set('method')->eq('recordEstimate')
                 ->exec();
-            $this->saveLogs($this->dao->get());
 
             $this->dao->delete()->from($privTable)
                 ->where('`group`')->eq($group->group)
                 ->andWhere('module')->eq('task')
                 ->andWhere('method')->eq('editEstimate')
                 ->exec();
-            $this->saveLogs($this->dao->get());
             $this->dao->insert($privTable)
                 ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
                 ->set('method')->eq('editEstimate')
                 ->exec();
-            $this->saveLogs($this->dao->get());
 
             $this->dao->delete()->from($privTable)
                 ->where('`group`')->eq($group->group)
                 ->andWhere('module')->eq('task')
                 ->andWhere('method')->eq('deleteEstimate')
                 ->exec();
-            $this->saveLogs($this->dao->get());
             $this->dao->insert($privTable)
                 ->set('company')->eq($group->company)
                 ->set('`group`')->eq($group->group)
                 ->set('module')->eq('task')
                 ->set('method')->eq('deleteEstimate')
                 ->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -1380,8 +1340,6 @@ class upgradeModel extends model
      */
     public function updateAction()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
-
         /* Get projects and tasks from action table. */
         $projects = $this->dao->select('id')->from(TABLE_PROJECT)->fetchPairs('id');
         $tasks    = $this->dao->select('id, project')->from(TABLE_TASK)->fetchPairs('id');
@@ -1398,7 +1356,6 @@ class upgradeModel extends model
         {
             $productList = isset($projectProducts[$projectID]) ? join(',', array_keys($projectProducts[$projectID])) : '';
             $this->dao->update(TABLE_ACTION)->set('product')->eq($productList)->where('objectType')->eq('project')->andWhere('objectID')->eq($projectID)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         /* Process task actions. */
@@ -1414,11 +1371,9 @@ class upgradeModel extends model
                 $productList = isset($projectProducts[$projectID]) ? join(',', array_keys($projectProducts[$projectID])) : '';
             }
             $this->dao->update(TABLE_ACTION)->set('product')->eq($productList)->where('objectType')->eq('task')->andWhere('objectID')->eq($taskID)->andWhere('project')->eq($projectID)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         $this->dao->update(TABLE_ACTION)->set("product = concat(',',product,',')")->exec();
-        $this->saveLogs($this->dao->get());
         return true;
     }
 
@@ -1430,19 +1385,15 @@ class upgradeModel extends model
      */
     public function setOrderData()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
-
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->orderBy('code')->fetchAll('id');
         foreach(array_keys($products) as $key => $productID)
         {
             $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq(($key + 1) * 10)->where('id')->eq($productID)->exec();
-            $this->saveLogs($this->dao->get());
         }
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('iscat')->eq(0)->andWhere('deleted')->eq(0)->orderBy('status, id desc')->fetchAll('id');
         foreach(array_keys($projects) as $key => $projectID)
         {
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq(($key + 1) * 10)->where('id')->eq($projectID)->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -1455,12 +1406,10 @@ class upgradeModel extends model
      */
     public function updateTaskAssignedTo()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->update(TABLE_TASK)->set('assignedTo')->eq('closed')
             ->where('status')->eq('closed')
             ->andWhere('assignedTo')->eq('')
             ->exec();
-        $this->saveLogs($this->dao->get());
         return true;
     }
 
@@ -1606,7 +1555,6 @@ class upgradeModel extends model
      */
     public function addPriv4_0_1()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $privTable = $this->config->db->prefix . 'groupPriv';
         $oldPriv = $this->dao->select('*')->from($privTable)
             ->where('module')->eq('company')
@@ -1621,7 +1569,6 @@ class upgradeModel extends model
                 ->set('method')->eq('view')
                 ->set('`group`')->eq($item->group)
                 ->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         $oldPriv = $this->dao->select('*')->from($privTable)
@@ -1637,7 +1584,6 @@ class upgradeModel extends model
                 ->set('method')->eq('batchFinish')
                 ->set('`group`')->eq($item->group)
                 ->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         return true;
@@ -1651,7 +1597,6 @@ class upgradeModel extends model
      */
     public function addPriv4_1()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $privTable = $this->config->db->prefix . 'groupPriv';
         $oldPriv = $this->dao->select('*')->from($privTable)
             ->where('module')->eq('tree')
@@ -1666,7 +1611,6 @@ class upgradeModel extends model
                 ->set('method')->eq('browseTask')
                 ->set('`group`')->eq($item->group)
                 ->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         return true;
@@ -1680,7 +1624,6 @@ class upgradeModel extends model
      */
     public function addPriv8_1()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $privTable = $this->config->db->prefix . 'grouppriv';
 
         $oldPriv = $this->dao->select('*')->from($privTable)
@@ -1694,13 +1637,11 @@ class upgradeModel extends model
                 ->set('method')->eq('linkBugs')
                 ->set('`group`')->eq($item->group)
                 ->exec();
-            $this->saveLogs($this->dao->get());
             $this->dao->replace($privTable)
                 ->set('module')->eq('bug')
                 ->set('method')->eq('unlinkBug')
                 ->set('`group`')->eq($item->group)
                 ->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         $oldPriv = $this->dao->select('*')->from($privTable)
@@ -1714,13 +1655,11 @@ class upgradeModel extends model
                 ->set('method')->eq('linkStory')
                 ->set('`group`')->eq($item->group)
                 ->exec();
-            $this->saveLogs($this->dao->get());
             $this->dao->replace($privTable)
                 ->set('module')->eq('story')
                 ->set('method')->eq('unlinkStory')
                 ->set('`group`')->eq($item->group)
                 ->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         $oldPriv = $this->dao->select('*')->from($privTable)
@@ -1734,13 +1673,11 @@ class upgradeModel extends model
                 ->set('method')->eq('linkCases')
                 ->set('`group`')->eq($item->group)
                 ->exec();
-            $this->saveLogs($this->dao->get());
             $this->dao->replace($privTable)
                 ->set('module')->eq('testcase')
                 ->set('method')->eq('unlinkCase')
                 ->set('`group`')->eq($item->group)
                 ->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         return true;
@@ -1754,7 +1691,6 @@ class upgradeModel extends model
      */
     public function addPriv12_3_3()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $privTable = $this->config->db->prefix . 'grouppriv';
 
         $oldPriv = $this->dao->select('*')->from($privTable)
@@ -1768,7 +1704,6 @@ class upgradeModel extends model
                 ->set('method')->eq('start')
                 ->set('`group`')->eq($item->group)
                 ->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         return true;
@@ -1782,7 +1717,6 @@ class upgradeModel extends model
      */
     public function addPriv8_2_beta()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $privTable = $this->config->db->prefix . 'grouppriv';
 
         /* Change product-all priv. */
@@ -1790,7 +1724,6 @@ class upgradeModel extends model
         foreach($groups as $group)
         {
             $this->dao->replace($privTable)->set('module')->eq('product')->set('method')->eq('all')->set('`group`')->eq($group)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         /* Change project-all priv. */
@@ -1798,7 +1731,6 @@ class upgradeModel extends model
         foreach($groups as $group)
         {
             $this->dao->replace($privTable)->set('module')->eq('project')->set('method')->eq('all')->set('`group`')->eq($group)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         /* Add kanban and tree priv. */
@@ -1806,9 +1738,7 @@ class upgradeModel extends model
         foreach($groups as $group)
         {
             $this->dao->replace($privTable)->set('module')->eq('project')->set('method')->eq('kanban')->set('`group`')->eq($group)->exec();
-            $this->saveLogs($this->dao->get());
             $this->dao->replace($privTable)->set('module')->eq('project')->set('method')->eq('tree')->set('`group`')->eq($group)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         /* Change manageContacts priv. */
@@ -1816,7 +1746,6 @@ class upgradeModel extends model
         foreach($groups as $group)
         {
             $this->dao->replace($privTable)->set('module')->eq('my')->set('method')->eq('manageContacts')->set('`group`')->eq($group)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         /* Change deleteContacts priv. */
@@ -1824,7 +1753,6 @@ class upgradeModel extends model
         foreach($groups as $group)
         {
             $this->dao->replace($privTable)->set('module')->eq('my')->set('method')->eq('deleteContacts')->set('`group`')->eq($group)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         /* Change batchChangeModule priv. */
@@ -1837,7 +1765,6 @@ class upgradeModel extends model
         foreach($oldPriv as $item)
         {
             $this->dao->replace($privTable)->set('module')->eq($item->module)->set('method')->eq('batchChangeModule')->set('`group`')->eq($item->group)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         return true;
@@ -1894,20 +1821,13 @@ class upgradeModel extends model
      */
     public function adjustConfigSectionAndKey()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->update(TABLE_CONFIG)->set('`key`')->eq('productProject')->where('`key`')->eq('productproject')->andWhere('module')->eq('custom')->exec();
-        $this->saveLogs($this->dao->get());
 
         $this->dao->update(TABLE_CONFIG)->set('section')->eq('bugBrowse')->where('section')->eq('bugbrowse')->andWhere('module')->eq('datatable')->exec();
-        $this->saveLogs($this->dao->get());
         $this->dao->update(TABLE_CONFIG)->set('section')->eq('productBrowse')->where('section')->eq('productbrowse')->andWhere('module')->eq('datatable')->exec();
-        $this->saveLogs($this->dao->get());
         $this->dao->update(TABLE_CONFIG)->set('section')->eq('projectTask')->where('section')->eq('projecttask')->andWhere('module')->eq('datatable')->exec();
-        $this->saveLogs($this->dao->get());
         $this->dao->update(TABLE_CONFIG)->set('section')->eq('testcaseBrowse')->where('section')->eq('testcasebrowse')->andWhere('module')->eq('datatable')->exec();
-        $this->saveLogs($this->dao->get());
         $this->dao->update(TABLE_CONFIG)->set('section')->eq('testtaskCases')->where('section')->eq('testtaskcases')->andWhere('module')->eq('datatable')->exec();
-        $this->saveLogs($this->dao->get());
 
         return true;
     }
@@ -1921,7 +1841,6 @@ class upgradeModel extends model
      */
     public function toLowerTable($build = 'basic')
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $results    = $this->dao->query("show Variables like '%table_names'")->fetchAll();
         $hasLowered = false;
         foreach($results as $result)
@@ -1950,19 +1869,15 @@ class upgradeModel extends model
             if(isset($tablesExists[$upgradebak]))
             {
                 $this->dao->query("DROP TABLE `$upgradebak`");
-                $this->saveLogs($this->dao->get());
             }
             if(isset($tablesExists[$newTable]))
             {
                 $this->dao->query("RENAME TABLE `$newTable` TO `$upgradebak`");
-                $this->saveLogs($this->dao->get());
             }
 
             $tempTable = $oldTable . '_zentaotmp';
             $this->dao->query("RENAME TABLE `$oldTable` TO `$tempTable`");
-            $this->saveLogs($this->dao->get());
             $this->dao->query("RENAME TABLE `$tempTable` TO `$newTable`");
-            $this->saveLogs($this->dao->get());
         }
 
         return true;
@@ -1976,14 +1891,12 @@ class upgradeModel extends model
      */
     public function processTaskFinish()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->update(TABLE_TASK)
             ->set('finishedBy = lastEditedBy')
             ->set('finishedDate = lastEditedDate')
             ->where('status')->in('done,closed')
             ->andWhere('finishedBy')->eq('')
             ->exec();
-        $this->saveLogs($this->dao->get());
 
         return true;
     }
@@ -1996,7 +1909,6 @@ class upgradeModel extends model
      */
     public function processImport2TaskBugs()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $bugs = $this->dao->select('t1.id')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.toTask = t2.id')
             ->where('t1.toTask')->ne(0)
@@ -2005,7 +1917,6 @@ class upgradeModel extends model
             ->fetchPairs();
 
         $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->in($bugs)->exec();
-        $this->saveLogs($this->dao->get());
 
         return true;
     }
@@ -2018,13 +1929,10 @@ class upgradeModel extends model
      */
     public function deleteCompany()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $privTable = $this->config->db->prefix . 'groupPriv';
         /* Delete priv that is not in this company. Prevent conflict when delete company's field.*/
         $this->dao->delete()->from($privTable)->where('company')->ne($this->app->company->id)->exec();
-        $this->saveLogs($this->dao->get());
         $this->dao->exec("ALTER TABLE " . $privTable . " DROP `company`;");
-        $this->saveLogs($this->dao->get());
 
         /* Delete config that don't conform to the rules. Prevent conflict when delete company's field.*/
         $rows    = $this->dao->select('*')->from(TABLE_CONFIG)->orderBy('id desc')->fetchAll('id');
@@ -2043,7 +1951,6 @@ class upgradeModel extends model
         if($delList) $this->dao->delete()->from(TABLE_CONFIG)->where('id')->in($delList)->exec();
 
         $this->dao->exec("ALTER TABLE " . TABLE_CONFIG . " DROP `company`;");
-        $this->saveLogs($this->dao->get());
 
         return true;
     }
@@ -2056,7 +1963,6 @@ class upgradeModel extends model
      */
     public function mergeProjectGoalAndDesc()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)->fetchAll('id');
         foreach($projects as $id => $project)
         {
@@ -2066,7 +1972,6 @@ class upgradeModel extends model
                 ->set('`desc`')->eq($project->desc . '<br />' . $project->goal)
                 ->where('id')->eq($id)
                 ->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -2079,11 +1984,8 @@ class upgradeModel extends model
      */
     public function fixBugOSInfo()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->update(TABLE_BUG)->set('os')->eq('android')->where('os')->eq('andriod')->exec();
-        $this->saveLogs($this->dao->get());
         $this->dao->update(TABLE_BUG)->set('os')->eq('osx')->where('os')->eq('mac')->exec();
-        $this->saveLogs($this->dao->get());
     }
 
     /**
@@ -2094,7 +1996,6 @@ class upgradeModel extends model
      */
     public function fixTaskFinishedBy()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $tasks = $this->dao->select('t1.id,t2.actor,t2.date')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_ACTION)->alias('t2')
             ->on('t1.id = t2.objectID')
@@ -2114,7 +2015,6 @@ class upgradeModel extends model
                 ->set('finishedDate')->eq($task->date)
                 ->where('id')->eq($taskID)
                 ->exec();
-            $this->saveLogs($this->dao->get());
         }
     }
 
@@ -2126,7 +2026,6 @@ class upgradeModel extends model
      */
     public function fixDataIndex()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $savePath = $this->loadModel('file')->savePath;
         foreach(glob($savePath . '*') as $childDir)
         {
@@ -2143,13 +2042,11 @@ class upgradeModel extends model
      */
     public function initOrder()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $dataList = $this->dao->select('id')->from(TABLE_PRODUCT)->orderBy('code_desc')->fetchAll();
         $i = 1;
         foreach($dataList as $data)
         {
             $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($i++)->where('id')->eq($data->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         $dataList = $this->dao->select('id')->from(TABLE_PROJECT)->orderBy('code_desc')->fetchAll();
@@ -2157,7 +2054,6 @@ class upgradeModel extends model
         foreach($dataList as $data)
         {
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($i++)->where('id')->eq($data->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         return true;
@@ -2171,7 +2067,6 @@ class upgradeModel extends model
      */
     public function adjustOrder7_3()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->loadModel('product')->fixOrder();
         $this->loadModel('execution')->fixOrder();
 
@@ -2186,7 +2081,6 @@ class upgradeModel extends model
      */
     public function adjustPriv7_4_beta()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $groups = $this->dao->select('id')->from(TABLE_GROUP)->where('name')->ne('guest')->fetchPairs('id', 'id');
         foreach($groups as $groupID)
         {
@@ -2195,7 +2089,6 @@ class upgradeModel extends model
             $groupPriv->module = 'my';
             $groupPriv->method = 'unbind';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         return true;
@@ -2209,7 +2102,6 @@ class upgradeModel extends model
      */
     public function adjustDocModule()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->app->loadLang('doc');
         $productDocModules = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('productdoc')->orderBy('grade,id')->fetchAll('id');
         $allProductIdList  = $this->dao->select('id,name,acl,whitelist,createdBy')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchAll('id');
@@ -2225,7 +2117,6 @@ class upgradeModel extends model
             $lib->users   = $product->createdBy;
             if($product->acl == 'custom') $lib->groups = $product->whitelist;
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-            $this->saveLogs($this->dao->get());
             $libID = $this->dao->lastInsertID();
 
             $relation = array();
@@ -2236,7 +2127,6 @@ class upgradeModel extends model
                 $module->root = $libID;
                 $module->type = 'doc';
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
-                $this->saveLogs($this->dao->get());
 
                 $newModuleID = $this->dao->lastInsertID();
                 $relation[$moduleID] = $newModuleID;
@@ -2248,21 +2138,17 @@ class upgradeModel extends model
 
                 $newPaths = join(',', $newPaths);
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->set('parent')->eq($relation[$module->parent])->where('id')->eq($newModuleID)->exec();
-                $this->saveLogs($this->dao->get());
                 $this->dao->update(TABLE_DOC)->set('module')->eq($newModuleID)->where('product')->eq($productID)->andWhere('module')->eq($moduleID)->andWhere('lib')->eq('product')->exec();
-                $this->saveLogs($this->dao->get());
             }
             $this->dao->update(TABLE_DOC)->set('lib')->eq($libID)->where('product')->eq($productID)->exec();
         }
         $this->dao->delete()->from(TABLE_MODULE)->where('id')->in(array_keys($productDocModules))->exec();
-        $this->saveLogs($this->dao->get());
 
         $projectDocModules = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('projectdoc')->orderBy('grade,id')->fetchAll('id');
         $allProjectIdList  = $this->dao->select('id,name,acl,whitelist')->from(TABLE_PROJECT)->where('deleted')->eq('0')->fetchAll('id');
         foreach($allProjectIdList as $projectID => $project)
         {
             $this->dao->delete()->from(TABLE_DOCLIB)->where('project')->eq($projectID)->exec();
-            $this->saveLogs($this->dao->get());
 
             $lib = new stdclass();
             $lib->project = $projectID;
@@ -2274,7 +2160,6 @@ class upgradeModel extends model
             $lib->users = join(',', $teams);
             if($project->acl == 'custom') $lib->groups = $project->whitelist;
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-            $this->saveLogs($this->dao->get());
             $libID = $this->dao->lastInsertID();
 
             $docLibs = $this->dao->select('id,users')->from(TABLE_DOCLIB)->alias('t1')
@@ -2287,7 +2172,6 @@ class upgradeModel extends model
                 $docUsers = $teams + explode(',', $lib->users);
                 $docUsers = array_unique($docUsers);
                 $this->dao->update(TABLE_DOCLIB)->set('users')->eq(join(',', $docUsers))->where('id')->eq($lib->id)->exec();
-                $this->saveLogs($this->dao->get());
             }
 
             $relation = array();
@@ -2297,7 +2181,6 @@ class upgradeModel extends model
                 $module->root = $libID;
                 $module->type = 'doc';
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
-                $this->saveLogs($this->dao->get());
 
                 $newModuleID = $this->dao->lastInsertID();
                 $relation[$moduleID] = $newModuleID;
@@ -2310,15 +2193,11 @@ class upgradeModel extends model
                 $newPaths = join(',', $newPaths);
                 $newPaths = ",$newPaths,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($newPaths)->where('id')->eq($newModuleID)->exec();
-                $this->saveLogs($this->dao->get());
                 $this->dao->update(TABLE_DOC)->set('module')->eq($newModuleID)->where('project')->eq($projectID)->andWhere('module')->eq($moduleID)->exec();
-                $this->saveLogs($this->dao->get());
             }
             $this->dao->update(TABLE_DOC)->set('lib')->eq($libID)->where('project')->eq($projectID)->exec();
-            $this->saveLogs($this->dao->get());
         }
         $this->dao->delete()->from(TABLE_MODULE)->where('id')->in(array_keys($projectDocModules))->exec();
-        $this->saveLogs($this->dao->get());
 
         return true;
     }
@@ -2344,7 +2223,6 @@ class upgradeModel extends model
                 preg_match_all('/"data\/upload\/.*1\/([0-9]{6}\/[^"]+)"/', $action->comment, $output);
                 foreach($output[1] as $path)$files[$path] = $path;
                 $this->dao->update(TABLE_FILE)->set('objectType')->eq($action->objectType)->set('objectID')->eq($action->objectID)->set('extra')->eq('editor')->where('pathname')->in($files)->exec();
-                $this->saveLogs($this->dao->get());
             }
             if(count($comments) < $limit)
             {
@@ -2404,11 +2282,7 @@ class upgradeModel extends model
                     foreach($output[1] as $path)$files[$path] = $path;
                 }
             }
-            if($files)
-            {
-                $this->dao->update(TABLE_FILE)->set('objectType')->eq($type)->set('objectID')->eq($objectID)->set('extra')->eq('editor')->where('pathname')->in($files)->exec();
-                $this->saveLogs($this->dao->get());
-            }
+            if($files) $this->dao->update(TABLE_FILE)->set('objectType')->eq($type)->set('objectID')->eq($objectID)->set('extra')->eq('editor')->where('pathname')->in($files)->exec();
         }
         if(count($objects) < $limit)
         {
@@ -2442,7 +2316,6 @@ class upgradeModel extends model
      */
     public function moveDocContent()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $descDoc = $this->dao->query('DESC ' .  TABLE_DOC)->fetchAll();
         $processFields = 0;
         foreach($descDoc as $field)
@@ -2452,7 +2325,6 @@ class upgradeModel extends model
         if($processFields < 3) return true;
 
         $this->dao->exec('TRUNCATE TABLE ' . TABLE_DOCCONTENT);
-        $this->saveLogs($this->dao->get());
         $stmt = $this->dao->select('id,title,digest,content,url')->from(TABLE_DOC)->query();
         $fileGroups = $this->dao->select('id,objectID')->from(TABLE_FILE)->where('objectType')->eq('doc')->fetchGroup('objectID', 'id');
         while($doc = $stmt->fetch())
@@ -2468,14 +2340,10 @@ class upgradeModel extends model
             $docContent->type     = 'html';
             if(isset($fileGroups[$doc->id])) $docContent->files = join(',', array_keys($fileGroups[$doc->id]));
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
-            $this->saveLogs($this->dao->get());
         }
         $this->dao->exec('ALTER TABLE ' . TABLE_DOC . ' DROP `digest`');
-        $this->saveLogs($this->dao->get());
         $this->dao->exec('ALTER TABLE ' . TABLE_DOC . ' DROP `content`');
-        $this->saveLogs($this->dao->get());
         $this->dao->exec('ALTER TABLE ' . TABLE_DOC . ' DROP `url`');
-        $this->saveLogs($this->dao->get());
         return true;
     }
 
@@ -2487,7 +2355,6 @@ class upgradeModel extends model
      */
     public function adjustPriv8_3()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $docPrivGroups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('doc')->andWhere('method')->eq('index')->fetchPairs('group', 'group');
         foreach($docPrivGroups as $groupID)
         {
@@ -2496,15 +2363,12 @@ class upgradeModel extends model
             $data->module = 'doc';
             $data->method = 'allLibs';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-            $this->saveLogs($this->dao->get());
 
             $data->method = 'showFiles';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-            $this->saveLogs($this->dao->get());
 
             $data->method = 'objectLibs';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -2517,12 +2381,9 @@ class upgradeModel extends model
      */
     public function renameMainLib()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->app->loadLang('doc');
         $this->dao->update(TABLE_DOCLIB)->set('name')->eq($this->lang->doclib->main['product'])->where('product')->gt(0)->andWhere('main')->eq(1)->exec();
-        $this->saveLogs($this->dao->get());
         $this->dao->update(TABLE_DOCLIB)->set('name')->eq($this->lang->doclib->main['project'])->where('project')->gt(0)->andWhere('main')->eq(1)->exec();
-        $this->saveLogs($this->dao->get());
         return true;
     }
 
@@ -2534,7 +2395,6 @@ class upgradeModel extends model
      */
     public function adjustPriv8_4()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('branch')->andWhere('method')->eq('manage')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
@@ -2543,7 +2403,6 @@ class upgradeModel extends model
             $data->module = 'branch';
             $data->method = 'sort';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-            $this->saveLogs($this->dao->get());
         }
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('story')->andWhere('method')->eq('tasks')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
@@ -2553,11 +2412,9 @@ class upgradeModel extends model
             $data->module = 'story';
             $data->method = 'bugs';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-            $this->saveLogs($this->dao->get());
 
             $data->method = 'cases';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -2570,7 +2427,6 @@ class upgradeModel extends model
      */
     public function adjustPriv9_0()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('testtask')->andWhere('method')->eq('results')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
@@ -2579,7 +2435,6 @@ class upgradeModel extends model
             $data->module = 'testcase';
             $data->method = 'bugs';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-            $this->saveLogs($this->dao->get());
         }
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('mail')->andWhere('method')->eq('delete')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
@@ -2589,7 +2444,6 @@ class upgradeModel extends model
             $data->module = 'mail';
             $data->method = 'resend';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -2603,7 +2457,6 @@ class upgradeModel extends model
     public function fixProjectProductData()
     {
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('product')->eq(0)->exec();
-        $this->saveLogs($this->dao->get());
         return true;
     }
 
@@ -2615,7 +2468,6 @@ class upgradeModel extends model
      */
     public function addBugDeadlineToCustomFields()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $createFieldsItems = $this->dao->select('id, value')->from(TABLE_CONFIG)
             ->where('module')->eq('bug')
             ->andWhere('section')->eq('custom')
@@ -2631,13 +2483,11 @@ class upgradeModel extends model
         {
             $value = empty($createFieldsItem->value) ? 'deadline' : $createFieldsItem->value . ",deadline";
             $this->dao->update(TABLE_CONFIG)->set('value')->eq($value)->where('id')->eq($createFieldsItem->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
         foreach($batchEditFieldsItems as $batchEditFieldsItem)
         {
             $value = empty($batchEditFieldsItem->value) ? 'deadline' : $batchEditFieldsItem->value . ",deadline";
             $this->dao->update(TABLE_CONFIG)->set('value')->eq($value)->where('id')->eq($batchEditFieldsItem->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         return true;
@@ -2651,7 +2501,6 @@ class upgradeModel extends model
      */
     public function adjustPriv9_0_1()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('testcase')->andWhere('method')->eq('edit')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
@@ -2663,7 +2512,6 @@ class upgradeModel extends model
             {
                 $data->method = $method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-                $this->saveLogs($this->dao->get());
             }
 
             $data->module = 'testsuite';
@@ -2672,7 +2520,6 @@ class upgradeModel extends model
             {
                 $data->method = $method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-                $this->saveLogs($this->dao->get());
             }
         }
 
@@ -2687,7 +2534,6 @@ class upgradeModel extends model
             {
                 $data->method = $method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-                $this->saveLogs($this->dao->get());
             }
         }
 
@@ -2702,7 +2548,6 @@ class upgradeModel extends model
             {
                 $data->method = $method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-                $this->saveLogs($this->dao->get());
             }
         }
         return true;
@@ -2716,7 +2561,6 @@ class upgradeModel extends model
      */
     public function adjustPriv9_2()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('testsuite')->andWhere('method')->eq('createCase')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
@@ -2728,7 +2572,6 @@ class upgradeModel extends model
             {
                 $data->method = $method;
                 $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-                $this->saveLogs($this->dao->get());
             }
         }
 
@@ -2740,7 +2583,6 @@ class upgradeModel extends model
             $data->module = 'product';
             $data->method = 'build';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('custom')->andWhere('method')->eq('flow')->fetchPairs('group', 'group');
@@ -2751,7 +2593,6 @@ class upgradeModel extends model
             $data->module = 'custom';
             $data->method = 'working';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -2764,7 +2605,6 @@ class upgradeModel extends model
      */
     public function adjustPriv9_4()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('bug')->andWhere('method')->eq('activate')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
@@ -2773,7 +2613,6 @@ class upgradeModel extends model
             $data->module = 'bug';
             $data->method = 'batchActivate';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -2786,7 +2625,6 @@ class upgradeModel extends model
      */
     public function addPriv11_4()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('story')->andWhere('method')->eq('edit')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
@@ -2795,7 +2633,6 @@ class upgradeModel extends model
             $data->module = 'story';
             $data->method = 'assignTo';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -2808,7 +2645,6 @@ class upgradeModel extends model
      */
     public function addPriv11_5()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('bug')->andWhere('method')->eq('setPublic')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
@@ -2817,7 +2653,6 @@ class upgradeModel extends model
             $data->module = 'user';
             $data->method = 'setPublicTemplate';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -2830,7 +2665,6 @@ class upgradeModel extends model
      */
     public function addUniqueKey4Stage()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $stmt     = $this->dao->select('story,branch')->from(TABLE_STORYSTAGE)->orderBy('story,branch')->query();
         $preStage = '';
         while($stage = $stmt->fetch())
@@ -2839,7 +2673,6 @@ class upgradeModel extends model
             $preStage = "{$stage->story}_{$stage->branch}";
         }
         $this->dao->exec("ALTER TABLE " . TABLE_STORYSTAGE . " ADD UNIQUE `story_branch` (`story`, `branch`)");
-        $this->saveLogs($this->dao->get());
         return true;
     }
 
@@ -2865,6 +2698,17 @@ class upgradeModel extends model
         $errors = static::$errors;
         static::$errors = array();
         return $errors;
+    }
+
+    /**
+     * Get upgrade log file.
+     *
+     * @access public
+     * @return string
+     */
+    public function getLogFile()
+    {
+        return $this->app->getTmpRoot() . 'log/upgrade.' . date('Ymd') . '.log.php';
     }
 
     /**
@@ -2920,14 +2764,12 @@ class upgradeModel extends model
      */
     public function processCustomMenus()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->loadModel('setting')->setItem('system.common.global.flow', 'full');
         $customMenus = $this->dao->select('*')->from(TABLE_CONFIG)->where('section')->eq('customMenu')->fetchAll();
 
         foreach($customMenus as $customMenu)
         {
             $this->dao->update(TABLE_CONFIG)->set('`key`')->eq("full_{$customMenu->key}")->where('id')->eq($customMenu->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         return !dao::isError();
@@ -2941,7 +2783,6 @@ class upgradeModel extends model
      */
     public function initProjectStoryOrder()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $storyGroup = $this->dao->select('t1.*')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->orderBy('t2.pri_desc,t1.story_asc')
@@ -2953,7 +2794,6 @@ class upgradeModel extends model
             foreach($stories as $storyID => $projectStory)
             {
                 $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('project')->eq($projectID)->andWhere('story')->eq($storyID)->exec();
-                $this->saveLogs($this->dao->get());
                 $order++;
             }
         }
@@ -2968,7 +2808,6 @@ class upgradeModel extends model
      */
     public function fixDatatableColsConfig()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $config = $this->dao->select('*')->from(TABLE_CONFIG)
             ->where('module')->eq('datatable')
             ->andWhere('section')->eq('projectTask')
@@ -2984,7 +2823,6 @@ class upgradeModel extends model
                 if($col->id == 'actions' and $col->width == 'auto') $col->width =  '180px';
             }
             $this->dao->update(TABLE_CONFIG)->set('value')->eq(json_encode($cols))->where('id')->eq($datatableCols->id)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         return true;
@@ -2998,7 +2836,6 @@ class upgradeModel extends model
      */
     public function addLimitedGroup()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $limitedGroup = $this->dao->select('*')->from(TABLE_GROUP)->where('`role`')->eq('limited')->fetch();
         if(empty($limitedGroup))
         {
@@ -3007,7 +2844,6 @@ class upgradeModel extends model
             $group->role = 'limited';
             $group->desc = 'For limited user';
             $this->dao->insert(TABLE_GROUP)->data($group)->exec();
-            $this->saveLogs($this->dao->get());
 
             $groupID = $this->dao->lastInsertID();
         }
@@ -3021,13 +2857,11 @@ class upgradeModel extends model
             ->andWhere('method')->eq('limited')
             ->fetchPairs('group', 'group');
         $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq('my')->andWhere('method')->eq('limited')->exec();
-        $this->saveLogs($this->dao->get());
 
         $limitedUsers = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($limitedGroups)->fetchPairs('account', 'account');
         foreach($limitedUsers as $limitedUser)
         {
             $this->dao->replace(TABLE_USERGROUP)->set('account')->eq($limitedUser)->set('`group`')->eq($groupID)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         $groupPriv = new stdclass();
@@ -3035,7 +2869,6 @@ class upgradeModel extends model
         $groupPriv->module = 'my';
         $groupPriv->method = 'limited';
         $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-        $this->saveLogs($this->dao->get());
 
         return true;
     }
@@ -3048,13 +2881,11 @@ class upgradeModel extends model
      */
     public function changeLimitedName()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->app->loadLang('install');
         $this->dao->update(TABLE_GROUP)->set('name')->eq($this->lang->install->groupList['LIMITED']['name'])
             ->set('desc')->eq($this->lang->install->groupList['LIMITED']['desc'])
             ->where('role')->eq('limited')
             ->exec();
-        $this->saveLogs($this->dao->get());
 
         return true;
     }
@@ -3067,7 +2898,6 @@ class upgradeModel extends model
      */
     public function adjustPriv9_7()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('method')->eq('edit')->andWhere('module')->in('story,task,bug,testcase')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
@@ -3076,7 +2906,6 @@ class upgradeModel extends model
             $groupPriv->module = 'action';
             $groupPriv->method = 'comment';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -3089,7 +2918,6 @@ class upgradeModel extends model
      */
     public function changeStoryWidth()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $projectCustom = $this->dao->select('*')->from(TABLE_CONFIG)->where('section')->eq('projectTask')->andWhere('`key`')->in('cols,tablecols')->fetchAll('id');
         foreach($projectCustom as $configID => $projectTask)
         {
@@ -3099,7 +2927,6 @@ class upgradeModel extends model
                 if($field->id == 'story') $field->width = '40px';
             }
             $this->dao->update(TABLE_CONFIG)->set('value')->eq(json_encode($fields))->where('id')->eq($configID)->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -3112,7 +2939,6 @@ class upgradeModel extends model
      */
     public function changeTeamFields()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $desc   = $this->dao->query('DESC ' . TABLE_TEAM)->fetchAll();
         $fields = array();
         foreach($desc as $field)
@@ -3123,15 +2949,10 @@ class upgradeModel extends model
         if(isset($fields['root'])) return true;
 
         $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " CHANGE `project` `root` MEDIUMINT(8) UNSIGNED NOT NULL DEFAULT '0'");
-        $this->saveLogs($this->dao->get());
         $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " ADD `type` ENUM('project', 'task') NOT NULL DEFAULT 'project' AFTER `root`");
-        $this->saveLogs($this->dao->get());
         $this->dao->exec("UPDATE " . TABLE_TEAM . " SET `root` = `task`, `type` = 'task' WHERE `task` > '0'");
-        $this->saveLogs($this->dao->get());
         $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " DROP PRIMARY KEY");
-        $this->saveLogs($this->dao->get());
         $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " DROP `task`");
-        $this->saveLogs($this->dao->get());
         return true;
     }
 
@@ -3143,9 +2964,7 @@ class upgradeModel extends model
      */
     public function moveData2Notify()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->exec('TRUNCATE TABLE ' . TABLE_NOTIFY);
-        $this->saveLogs($this->dao->get());
 
         $mailQueueTable = '`' . $this->config->db->prefix . 'mailqueue`';
         $syncBeginDate  = date('Y-m-d', time() - 15 * 24 * 3600);
@@ -3164,7 +2983,6 @@ class upgradeModel extends model
             $notify->status      = $mailQueue->status;
             $notify->failReason  = $mailQueue->failReason;
             $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         $webhookDataTable = '`' . $this->config->db->prefix . 'webhookdatas`';
@@ -3180,7 +2998,6 @@ class upgradeModel extends model
             $notify->createdDate = $webhookData->createdDate;
             $notify->status      = $webhookData->status;
             $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         return true;
@@ -3202,7 +3019,6 @@ class upgradeModel extends model
             $groupPriv->module = 'todo';
             $groupPriv->method = 'createcycle';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('mail')->orWhere('module')->eq('webhook')->fetchPairs('group', 'group');
@@ -3213,7 +3029,6 @@ class upgradeModel extends model
             $groupPriv->module = 'message';
             $groupPriv->method = 'index';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('project')->andWhere('method')->eq('linkStory')->fetchPairs('group', 'group');
@@ -3224,7 +3039,6 @@ class upgradeModel extends model
             $groupPriv->module = 'project';
             $groupPriv->method = 'importPlanStories';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -3237,7 +3051,6 @@ class upgradeModel extends model
      */
     public function fixTaskFinishedInfo()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $stmt = $this->dao->select('t1.id as historID,t2.objectType,t2.objectID,t2.actor')->from(TABLE_HISTORY)->alias('t1')
             ->leftJoin(TABLE_ACTION)->alias('t2')->on('t1.action=t2.id')
             ->where('t1.field')->eq('finishedBy')
@@ -3248,9 +3061,7 @@ class upgradeModel extends model
         while($action = $stmt->fetch())
         {
             $this->dao->update(TABLE_HISTORY)->set('`new`')->eq($action->actor)->where('id')->eq($action->historID)->exec();
-            $this->saveLogs($this->dao->get());
             $this->dao->update(TABLE_TASK)->set('`finishedBy`')->eq($action->actor)->where('id')->eq($action->objectID)->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -3263,7 +3074,6 @@ class upgradeModel extends model
      */
     public function fixTaskAssignedTo()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $minParent = $this->dao->select('parent')->from(TABLE_TASK)->where('parent')->ne(0)->orderBy('parent')->limit(1)->fetch();
         if(empty($minParent)) return true;
 
@@ -3314,12 +3124,10 @@ class upgradeModel extends model
             $stmt = $this->dao->update(TABLE_TASK)->set('assignedTo')->eq('closed');
             if($lastChild) $stmt->set('assignedDate')->eq($lastChild->assignedDate);
             $stmt->where('id')->eq($parentTask->id)->exec();
-            $this->saveLogs($this->dao->get());
 
             if(empty($parentTask->closedBy) && !empty($lastChild->closedBy))
             {
                 $this->dao->update(TABLE_TASK)->set('closedBy')->eq($lastChild->closedBy)->set('closedDate')->eq($lastChild->closedDate)->set('closedReason')->eq($lastChild->closedReason)->where('id')->eq($parentTask->id)->exec();
-                $this->saveLogs($this->dao->get());
             }
         }
 
@@ -3338,12 +3146,10 @@ class upgradeModel extends model
                 $stmt = $this->dao->update(TABLE_TASK)->set('assignedTo')->eq('closed');
                 if(!empty($parent)) $stmt->set('assignedDate')->eq($parent->assignedDate);
                 $stmt->where('id')->eq($childTask->id)->exec();
-                $this->saveLogs($this->dao->get());
 
                 if(empty($childTask->closedBy) && !empty($parent->closedBy))
                 {
                     $this->dao->update(TABLE_TASK)->set('closedBy')->eq($parent->closedBy)->set('closedDate')->eq($parent->closedDate)->set('closedReason')->eq($parent->closedReason)->where('id')->eq($childTask->id)->exec();
-                    $this->saveLogs($this->dao->get());
                 }
             }
         }
@@ -3359,7 +3165,6 @@ class upgradeModel extends model
      */
     public function fixProjectClosedInfo()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $stmt = $this->dao->select('t1.id as historID, t2.id, t2.objectType,t2.objectID,t2.actor,t2.date')->from(TABLE_HISTORY)->alias('t1')
             ->leftJoin(TABLE_ACTION)->alias('t2')->on('t1.action=t2.id')
             ->where('t1.field')->eq('status')
@@ -3370,11 +3175,8 @@ class upgradeModel extends model
         while($action = $stmt->fetch())
         {
             $this->dao->insert(TABLE_HISTORY)->set('`new`')->eq($action->actor)->set('`field`')->eq('closedBy')->set('`action`')->eq($action->id)->exec();
-            $this->saveLogs($this->dao->get());
             $this->dao->insert(TABLE_HISTORY)->set('`new`')->eq($action->date)->set('`old`')->eq('0000-00-00 00:00:00')->set('`field`')->eq('closedDate')->set('`action`')->eq($action->id)->exec();
-            $this->saveLogs($this->dao->get());
             $this->dao->update(TABLE_HISTORY)->set('`new`')->eq('closed')->where('`action`')->eq($action->id)->andWhere('field')->eq('status')->exec();
-            $this->saveLogs($this->dao->get());
             $this->dao->update(TABLE_PROJECT)
                 ->set('`status`')->eq('closed')
                 ->set('`closedBy`')->eq($action->actor)
@@ -3382,7 +3184,6 @@ class upgradeModel extends model
                 ->where('id')->eq($action->objectID)
                 ->andWhere('status')->eq('done')
                 ->exec();
-            $this->saveLogs($this->dao->get());
         }
         return !dao::isError();
     }
@@ -3395,10 +3196,8 @@ class upgradeModel extends model
      */
     public function resetProductLine()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $deletedLines = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq('1')->fetchPairs('id', 'id');
         $this->dao->update(TABLE_PRODUCT)->set('line')->eq(0)->where('line')->in($deletedLines)->exec();
-        $this->saveLogs($this->dao->get());
         return !dao::isError();
     }
 
@@ -3410,7 +3209,6 @@ class upgradeModel extends model
      */
     public function addUniqueKeyToTeam()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $members = $this->dao->select('root, type, account')->from(TABLE_TEAM)->groupBy('root, type, account')->having('count(*)')->gt(1)->fetchAll();
 
         foreach($members as $member)
@@ -3427,10 +3225,8 @@ class upgradeModel extends model
                 ->andWhere('account')->eq($member->account)
                 ->andWhere('id')->ne($maxID)
                 ->exec();
-            $this->saveLogs($this->dao->get());
         }
         $this->dao->exec("ALTER TABLE " . TABLE_TEAM . " ADD UNIQUE `team` (`root`, `type`, `account`)");
-        $this->saveLogs($this->dao->get());
         return !dao::isError();
     }
 
@@ -3442,7 +3238,6 @@ class upgradeModel extends model
      */
     public function adjustPriv10_0_alpha()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('my')->andWhere('method')->eq('todo')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
@@ -3451,7 +3246,6 @@ class upgradeModel extends model
             $groupPriv->module = 'my';
             $groupPriv->method = 'calendar';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -3464,7 +3258,6 @@ class upgradeModel extends model
      */
     public function fixProjectStatisticBlock()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $block = $this->dao->select('*')->from(TABLE_BLOCK)->where('module')->eq('my')->andWhere('source')->eq('project')->andWhere('block')->eq('statistic')->fetch();
         if($block)
         {
@@ -3473,7 +3266,6 @@ class upgradeModel extends model
             {
                 $blockParams->type = 'undone';
                 $this->dao->update(TABLE_BLOCK)->set('params')->eq(helper::jsonEncode($blockParams))->where('id')->eq($block->id)->exec();
-                $this->saveLogs($this->dao->get());
                 return !dao::isError();
             }
         }
@@ -3488,7 +3280,6 @@ class upgradeModel extends model
      */
     public function fixStorySpecTitle()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $stories = $this->dao->select('t1.id, t1.title')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story && t1.title != t2.title && t1.version = t2.version')
             ->where('t2.version')->eq(1)
@@ -3497,7 +3288,6 @@ class upgradeModel extends model
         foreach($stories as $story => $title)
         {
             $this->dao->update(TABLE_STORYSPEC)->set('title')->eq($title)->where('story')->eq($story)->andWhere('version')->eq(1)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         return !dao::isError();
@@ -3511,7 +3301,6 @@ class upgradeModel extends model
      */
     public function removeUnlinkPriv()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->delete()->from(TABLE_GROUPPRIV)
             ->where('((module')->eq('story')
             ->andWhere('method')->eq('unlinkStory')
@@ -3523,7 +3312,6 @@ class upgradeModel extends model
             ->andWhere('method')->eq('unlinkCase')
             ->markRight(2)
             ->exec();
-        $this->saveLogs($this->dao->get());
 
         return !dao::isError();
     }
@@ -3534,12 +3322,10 @@ class upgradeModel extends model
      */
     public function changeTaskParentValue()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->gt(0)->fetchGroup('parent');
         if($tasks)
         {
             $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->in(array_keys($tasks))->exec();
-            $this->saveLogs($this->dao->get());
         }
         return !dao::isError();
     }
@@ -3552,7 +3338,6 @@ class upgradeModel extends model
      */
     public function removeCustomMenu()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $customMenuMain = $this->dao->select('*')->from(TABLE_CONFIG)->where('module')->eq('common')->andWhere('section')->eq('customMenu')->andWhere("(`key`='full_main' OR `key`='onlyTask_main' OR `key`='onlyStory_main' OR `key`='onlyTest_main')")->fetchAll('id');
         foreach($customMenuMain as $mainMenu)
         {
@@ -3566,15 +3351,12 @@ class upgradeModel extends model
                         ->andWhere('section')->eq('customMenu')
                         ->andWhere('owner')->eq($mainMenu->owner)
                         ->exec();
-                    $this->saveLogs($this->dao->get());
                 }
             }
         }
 
         $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('common')->andWhere('section')->eq('customMenu')->andWhere('`key`')->eq('full_project')->exec();
-        $this->saveLogs($this->dao->get());
         $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('common')->andWhere('section')->eq('customMenu')->andWhere('`key`')->eq('onlyTask_project')->exec();
-        $this->saveLogs($this->dao->get());
         return !dao::isError();
     }
 
@@ -3586,7 +3368,6 @@ class upgradeModel extends model
      */
     public function initUserView()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->delete()->from(TABLE_USERVIEW)->exec();
         return true;
     }
@@ -3599,7 +3380,6 @@ class upgradeModel extends model
      */
     public function initXuanxuan()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->loadModel('setting');
         $keyID = $this->dao->select('id')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('xuanxuan')->andWhere('`key`')->eq('key')->fetch('id');
         if($keyID)
@@ -3608,7 +3388,6 @@ class upgradeModel extends model
             if($existKey) $this->dao->delete()->from(TABLE_CONFIG)->where('id')->eq($existKey)->exec();
 
             $this->dao->update(TABLE_CONFIG)->set('module')->eq('common')->set('section')->eq('xuanxuan')->where('id')->eq($keyID)->exec();
-            $this->saveLogs($this->dao->get());
             $this->setting->setItem('system.common.xuanxuan.turnon', '0');
             $this->setting->setItem('system.common.xxserver.noticed', '1');
         }
@@ -3625,7 +3404,6 @@ class upgradeModel extends model
     public function processDocLibAcl()
     {
         $this->dao->update(TABLE_DOCLIB)->set('acl')->eq('default')->where('type')->in('product,project')->andWhere('acl')->in('open,private')->exec();
-        $this->saveLogs($this->dao->get());
         return !dao::isError();
     }
 
@@ -3637,7 +3415,6 @@ class upgradeModel extends model
      */
     public function updateXX_11_5()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('admin')->andWhere('method')->eq('xuanxuan')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
@@ -3646,13 +3423,11 @@ class upgradeModel extends model
             $groupPriv->module = 'setting';
             $groupPriv->method = 'xuanxuan';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         try
         {
             $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('setting')->where('module')->eq('admin')->andWhere('method')->eq('downloadxxd')->exec();
-            $this->saveLogs($this->dao->get());
         }
         catch(PDOException $e){}
         return true;
@@ -3712,7 +3487,6 @@ class upgradeModel extends model
      */
     public function adjustPriv11_6_2()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('method')->eq('index')->andWhere('module')->in('message')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
@@ -3721,7 +3495,6 @@ class upgradeModel extends model
             $groupPriv->module = 'message';
             $groupPriv->method = 'browser';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -3734,7 +3507,6 @@ class upgradeModel extends model
      */
     public function adjustPriv11_6_4()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
 
         $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->set('method')->eq('browse')->where('module')->eq('testsuite')->andWhere('method')->eq('library')->exec();
         $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->set('method')->eq('create')->where('module')->eq('testsuite')->andWhere('method')->eq('createLib')->exec();
@@ -3749,7 +3521,6 @@ class upgradeModel extends model
             $groupPriv->module = 'caselib';
             $groupPriv->method = 'edit';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('testsuite')->andWhere('method')->eq('delete')->fetchPairs('group', 'group');
@@ -3760,7 +3531,6 @@ class upgradeModel extends model
             $groupPriv->module = 'caselib';
             $groupPriv->method = 'delete';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
         }
         return true;
     }
@@ -3773,8 +3543,6 @@ class upgradeModel extends model
      */
     public function fixGroupAcl()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
-
         $groups = $this->dao->select('*')->from(TABLE_GROUP)->fetchAll();
         foreach($groups as $group)
         {
@@ -3816,8 +3584,6 @@ class upgradeModel extends model
      */
     public function adjustPriv11_7()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
-
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('editor')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
@@ -3826,7 +3592,6 @@ class upgradeModel extends model
             $groupPriv->module = 'dev';
             $groupPriv->method = 'editor';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('translate')->fetchPairs('group', 'group');
@@ -3837,7 +3602,6 @@ class upgradeModel extends model
             $groupPriv->module = 'dev';
             $groupPriv->method = 'translate';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq('translate')->exec();
@@ -3854,8 +3618,6 @@ class upgradeModel extends model
      */
     public function fixBugTypeList()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
-
         $customedTypeList4All = $this->dao->select('*')->from(TABLE_LANG)
             ->where('lang')->eq("all")
             ->andWhere('module')->eq('bug')
@@ -3910,8 +3672,6 @@ class upgradeModel extends model
      */
     public function rmEditorAndTranslateDir()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
-
         $zfile      = $this->app->loadClass('zfile');
         $moduleRoot = $this->app->getModuleRoot();
 
@@ -3932,7 +3692,6 @@ class upgradeModel extends model
      */
     public function setConceptSetted()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $conceptSetted = $this->dao->select('*')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('`key`')->eq('conceptSetted')->fetchAll();
 
         if(empty($conceptSetted))
@@ -3966,8 +3725,6 @@ class upgradeModel extends model
      */
     public function adjustPriv12_0()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
-
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('file')->andWhere('method')->eq('delete')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
@@ -3976,7 +3733,6 @@ class upgradeModel extends model
             $groupPriv->module = 'doc';
             $groupPriv->method = 'deleteFile';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         return true;
@@ -4059,20 +3815,17 @@ class upgradeModel extends model
     {
         /* Get imported cases and cases version is null. */
         $errorCasePairs = $this->dao->select('id,fromCaseID,fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->ne(0)->andWhere('fromCaseVersion')->eq(0)->fetchPairs('id', 'fromCaseID');
-        $this->saveLogs($this->dao->get());
         if(empty($errorCasePairs)) return true;
 
         /* Get from case versions by from cases. */
         $fromCaseIdList   = array_unique(array_values($errorCasePairs));
         $fromCaseVersions = $this->dao->select('id,version')->from(TABLE_CASE)->where('id')->in($fromCaseIdList)->fetchPairs('id', 'version');
-        $this->saveLogs($this->dao->get());
 
         /* Fix fromCaseVersion field. */
         foreach($errorCasePairs as $caseID => $fromCaseID)
         {
             $fromCaseVersion = zget($fromCaseVersions, $fromCaseID, 1);
             $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($fromCaseVersion)->where('id')->eq($caseID)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         return true;
@@ -4086,8 +3839,6 @@ class upgradeModel extends model
      */
     public function adjustPriv12_5()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
-
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('custom')->andWhere('method')->eq('set')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
@@ -4096,11 +3847,9 @@ class upgradeModel extends model
             $groupPriv->module = 'custom';
             $groupPriv->method = 'product';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
 
             $groupPriv->method = 'project';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('task')->andWhere('method')->eq('create')->fetchPairs('group', 'group');
@@ -4111,7 +3860,6 @@ class upgradeModel extends model
             $groupPriv->module = 'story';
             $groupPriv->method = 'batchToTask';
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
-            $this->saveLogs($this->dao->get());
         }
 
         return true;
@@ -4303,7 +4051,7 @@ class upgradeModel extends model
      */
     public function saveLogs($log)
     {
-        $logFile = $this->app->getTmpRoot() . 'log/upgrade.' . date('Ymd') . '.log.php';
+        $logFile = $this->getLogFile();
         $log     = date('Y-m-d H:i:s') . ' ' . trim($log) . "\n";
         if(!file_exists($logFile)) $log = "<?php\ndie();\n?" . ">\n" . $log;
 
@@ -8849,7 +8597,6 @@ class upgradeModel extends model
      */
     public function convertDocCollect()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
         $desc   = $this->dao->query('DESC ' . TABLE_DOC)->fetchAll();
         $fields = array();
         foreach($desc as $field)
@@ -8890,8 +8637,6 @@ class upgradeModel extends model
      */
     public function setURSwitchStatus()
     {
-        $this->saveLogs('Run Method ' . __FUNCTION__);
-
         if(is_numeric($this->fromVersion[0]) and version_compare($this->fromVersion, '18.2', '>=')) return true;
         if(strpos($this->fromVersion, 'biz') !== false and version_compare($this->fromVersion, 'biz8.2', '>=')) return true;
         if(strpos($this->fromVersion, 'max') !== false and version_compare($this->fromVersion, 'max4.2', '>=')) return true;
