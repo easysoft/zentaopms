@@ -1482,6 +1482,7 @@ EOF;
     }
 
     /**
+     * 上传头像。
      * Upload avatar.
      *
      * @access public
