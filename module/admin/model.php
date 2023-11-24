@@ -71,16 +71,16 @@ class adminModel extends model
     }
 
     /**
+     * 弱口令扫描。
      * Check weak.
      *
      * @param  object    $user
      * @access public
      * @return bool
      */
-    public function checkWeak($user)
+    public function checkWeak(object $user): bool
     {
         $weaks = array();
-
         foreach(explode(',', $this->config->safe->weak) as $weak)
         {
             $weak = md5(trim($weak));

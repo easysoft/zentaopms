@@ -5,7 +5,7 @@ class adminTest
     {
         global $tester;
         $this->objectModel = $tester->loadModel('admin');
-        $this->user = $tester->loadModel('user');
+        $this->user        = $tester->loadModel('user');
     }
 
     /**
@@ -24,20 +24,20 @@ class adminTest
     }
 
     /**
-     * Check weak.
+     * 测试弱口令扫描。
+     * Test check weak.
      *
-     * @param  object    $user
+     * @param  string  $account
      * @access public
      * @return bool
      */
-    public function checkWeakTest($account)
+    public function checkWeakTest(string $account): bool
     {
-        $user = $this->user->getById($account);
-        $objects = $this->objectModel->checkWeak($user);
-
+        $user   = $this->user->getById($account);
+        $result = $this->objectModel->checkWeak($user);
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $result;
     }
 
     public function getMenuKeyTest($moduleName, $methodName, $params = array())

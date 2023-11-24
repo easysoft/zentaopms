@@ -1,0 +1,24 @@
+title: zt_user
+author: Qiyu Xie
+version: "1.0"
+fields:
+- field: account
+  note: "用户名"
+  fields:
+  - field: account1
+    range: user{6}
+  - field: account2
+    range: "1-6"
+- field: password
+  note: "密码"
+  range: "123456,user2,18812341234,88881234,`1995-01-01`,123Qwe!@#"
+  format: md5
+- field: phone
+  note: "手机"
+  range: "18812341234"
+- field: mobile
+  note: "电话"
+  range: "88881234"
+- field: birthday
+  note: "生日"
+  range: "`1995-01-01`"
