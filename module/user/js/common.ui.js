@@ -103,6 +103,13 @@ function changeVision(event)
     });
 }
 
+/**
+ * 计算密码强度。
+ *
+ * @param  string password
+ * @access public
+ * @return int
+ */
 function computePasswordStrength(password)
 {
     if(password.length == 0) return 0;
