@@ -27,7 +27,6 @@
 {
     let config        = window.config;
     const isIndexPage = config.currentModule === 'index' && config.currentMethod === 'index';
-    if(isIndexPage) return;
 
     const DEBUG       = config.debug;
     const currentCode = window.name.substring(4);
@@ -1248,6 +1247,8 @@
 
     $(() =>
     {
+        if(isIndexPage) return;
+
         initZinbar();
 
         if(window.defaultAppUrl) loadPage(window.defaultAppUrl);
