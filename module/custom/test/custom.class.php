@@ -8,22 +8,6 @@ class customTest
     }
 
     /**
-     * Test get all custom lang.
-     *
-     * @access public
-     * @return int
-     */
-    public function getAllLangTest()
-    {
-        $objects = $this->objectModel->getAllLang();
-
-        if(dao::isError()) return dao::getError();
-        $counts = count($objects);
-
-        return $counts;
-    }
-
-    /**
      * Test set value of an item.
      *
      * @param  string      $path
@@ -620,5 +604,24 @@ class customTest
         $this->objectModel->config->vision = $oldVision;
         if(dao::isError()) return dao::getError();
         return $allCustomLang;
+    }
+
+    /**
+     * 获取自定义语言项。
+     * Get custom lang.
+     *
+     * @access public
+     * @return array|false
+     */
+    public function getAllLangTest(): array|false
+    {
+        $oldVision = $this->objectModel->config->vision;
+
+        $this->objectModel->config->vision = 'rnd';
+        $processedLang = $this->objectModel->getCustomLang();
+
+        $this->objectModel->config->vision = $oldVision;
+        if(dao::isError()) return dao::getError();
+        return $processedLang;
     }
 }
