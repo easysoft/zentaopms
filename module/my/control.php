@@ -1418,15 +1418,17 @@ EOF;
     }
 
     /**
+     * 我的动态列表。
      * My dynamic.
      *
      * @param  string $type
      * @param  int    $recTotal
      * @param  string $date
+     * @param  string $direction
      * @access public
      * @return void
      */
-    public function dynamic($type = 'today', $recTotal = 0, $date = '', $direction = 'next')
+    public function dynamic(string $type = 'today', int $recTotal = 0, string $date = '', string $direction = 'next')
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -1462,17 +1464,14 @@ EOF;
         $this->session->set('opportunityList',    $uri, 'project');
 
         /* Append id for second sort. */
-        $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
-
-        /* The header and position. */
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->dynamic;
-
-        $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
+        $orderBy    = $direction == 'next' ? 'date_desc' : 'date_asc';
+        $date       = empty($date) ? '' : date('Y-m-d', $date);
+        $actions    = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, 50, 'all', 'all', 'all', $date, $direction);
         $dateGroups = $this->action->buildDateGroup($actions, $direction);
         if(empty($recTotal)) $recTotal = count($dateGroups) < 2 ? count($dateGroups, 1) - count($dateGroups) : $this->action->getDynamicCount();
 
         /* Assign. */
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->dynamic;
         $this->view->type       = $type;
         $this->view->orderBy    = $orderBy;
         $this->view->dateGroups = $dateGroups;
