@@ -106,13 +106,13 @@ class searchModel extends model
      * 初始化搜索表单，并且保存到 session。
      * Init the search session for the first time search.
      *
-     * @param  string $module
-     * @param  object $fields
-     * @param  object $fieldParams
+     * @param  string       $module
+     * @param  object|array $fields
+     * @param  object|array $fieldParams
      * @access public
      * @return array
      */
-    public function initSession(string $module, object $fields, object $fieldParams): array
+    public function initSession(string $module, object|array $fields, object|array $fieldParams): array
     {
         if(is_object($fields)) $fields = get_object_vars($fields);
         $formSessionName = $module . 'Form';
@@ -134,6 +134,7 @@ class searchModel extends model
     }
 
     /**
+     * 设置默认的搜索参数。
      * Set default params for selection.
      *
      * @param  array  $fields
@@ -141,56 +142,27 @@ class searchModel extends model
      * @access public
      * @return array
      */
-    public function setDefaultParams($fields, $params)
+    public function setDefaultParams(array $fields, array $params): array
     {
-        $hasProduct   = false;
-        $hasExecution = false;
-        $hasUser      = false;
-
-        $appendUsers     = array();
-        $module          = $_SESSION['searchParams']['module'];
-        $formSessionName = $module . 'Form';
-        if(isset($_SESSION[$formSessionName]))
-        {
-            for($i = 1; $i <= $this->config->search->groupItems; $i ++)
-            {
-                if(!isset($_SESSION[$formSessionName][$i - 1])) continue;
-
-                $fieldName = $_SESSION[$formSessionName][$i - 1]['field'];
-                if(isset($params[$fieldName]) and $params[$fieldName]['values'] == 'users')
-                {
-                    if($_SESSION[$formSessionName][$i - 1]['value']) $appendUsers[] = $_SESSION[$formSessionName][$i - 1]['value'];
-                }
-            }
-        }
-
         $fields = array_keys($fields);
-        foreach($fields as $fieldName)
-        {
-            if(empty($params[$fieldName])) continue;
-            if($params[$fieldName]['values'] == 'products')   $hasProduct   = true;
-            if($params[$fieldName]['values'] == 'users')      $hasUser      = true;
-            if($params[$fieldName]['values'] == 'executions') $hasExecution = true;
-        }
 
-        if($hasUser)
-        {
-            $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers, $this->config->maxCount);
-            $users['$@me'] = $this->lang->search->me;
-        }
-        if($hasProduct) $products = $this->loadModel('product')->getPairs('', $this->session->project);
-        if($hasExecution) $executions = $this->loadModel('execution')->getPairs($this->session->project);
+        list($users, $products, $executions) = $this->searchTao->getParamValues($fields, $params);
 
         foreach($fields as $fieldName)
         {
             if(!isset($params[$fieldName])) $params[$fieldName] = array('operator' => '=', 'control' => 'input', 'values' => '');
+
             if($params[$fieldName]['values'] == 'users')
             {
                 if(!empty($this->config->user->moreLink)) $this->config->moreLinks["field{$fieldName}"] = $this->config->user->moreLink;
                 $params[$fieldName]['values'] = $users;
             }
+
             if($params[$fieldName]['values'] == 'products')   $params[$fieldName]['values'] = $products;
             if($params[$fieldName]['values'] == 'executions') $params[$fieldName]['values'] = $executions;
+
+            /* 处理数组。*/
+            /* Process array value. */
             if(is_array($params[$fieldName]['values']))
             {
                 /* For build right sql when key is 0 and is not null.  e.g. confirmed field. */

@@ -214,4 +214,56 @@ class searchTao extends searchModel
         }
         return $where;
     }
+
+    /**
+     * 如果搜索框的选项是users，products, executions, 获取相对应的列表。
+     * Get user, product and execution value of the param.
+     *
+     * @param  array $fields
+     * @access public
+     * @return array
+     */
+    public function getParamValues(array $fields, array $params): array
+    {
+        $hasProduct   = false;
+        $hasExecution = false;
+        $hasUser      = false;
+        foreach($fields as $fieldName)
+        {
+            if(empty($params[$fieldName])) continue;
+            if($params[$fieldName]['values'] == 'products')   $hasProduct   = true;
+            if($params[$fieldName]['values'] == 'users')      $hasUser      = true;
+            if($params[$fieldName]['values'] == 'executions') $hasExecution = true;
+        }
+
+        /* 将用户的值追加到获取到的用户列表。*/
+        $appendUsers     = array();
+        $module          = $_SESSION['searchParams']['module'];
+        $formSessionName = $module . 'Form';
+        if(isset($_SESSION[$formSessionName]))
+        {
+            for($i = 1; $i <= $this->config->search->groupItems; $i ++)
+            {
+                if(!isset($_SESSION[$formSessionName][$i - 1])) continue;
+
+                $fieldName = $_SESSION[$formSessionName][$i - 1]['field'];
+                if(isset($params[$fieldName]) and $params[$fieldName]['values'] == 'users')
+                {
+                    if($_SESSION[$formSessionName][$i - 1]['value']) $appendUsers[] = $_SESSION[$formSessionName][$i - 1]['value'];
+                }
+            }
+        }
+
+        $users = $products = $executions = array();
+        if($hasUser)
+        {
+            $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers, $this->config->maxCount);
+            $users['$@me'] = $this->lang->search->me;
+        }
+
+        if($hasProduct)   $products   = $this->loadModel('product')->getPairs('', $this->session->project);
+        if($hasExecution) $executions = $this->loadModel('execution')->getPairs($this->session->project);
+
+        return array($users, $products, $executions);
+    }
 }
