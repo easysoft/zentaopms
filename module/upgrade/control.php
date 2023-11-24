@@ -122,7 +122,6 @@ class upgrade extends control
         if (!is_writable($this->app->getTmpRoot())) $writable = false;
         if(file_exists($this->app->getTmpRoot() . 'upgradeSqlLines')) @unlink($this->app->getTmpRoot() . 'upgradeSqlLines');
         $confirmSql = $this->upgrade->getConfirm($fromVersion);
-        $confirmSql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $confirmSql);
 
         $this->session->set('step', '');
         $this->view->title       = $this->lang->upgrade->confirm;
@@ -164,6 +163,7 @@ class upgrade extends control
         $rawFromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
         if(strpos($fromVersion, 'lite') !== false) $rawFromVersion = $this->config->upgrade->liteVersion[$fromVersion];
         if(strpos($fromVersion, 'ipd') !== false)  $rawFromVersion = $this->config->upgrade->ipdVersion[$fromVersion];
+        $this->dao->begin();
         $this->upgrade->execute($rawFromVersion);
 
         if(!$this->upgrade->isError())
@@ -920,7 +920,7 @@ class upgrade extends control
     {
         set_time_limit(0);
         $alterSQL = $this->upgrade->checkConsistency();
-        $alterSQL = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $alterSQL);
+        $alterSQL = str_replace('ENGINE=MyISAM', 'ENGINE=InnoDB', $alterSQL);
         if(empty($alterSQL))
         {
             if(!$netConnect) $this->locate(inlink('selectVersion'));

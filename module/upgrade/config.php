@@ -976,3 +976,5 @@ $config->upgrade->recoveryActions->testcase->review['open']     = 'normal';
 $config->upgrade->recoveryActions->testcase->review['position'] = 'browseandview';
 
 $config->upgrade->missedFlowFieldVersions = array('max4_4_alpha1', 'max4_4_beta1', 'max4_4', 'max4_5', 'biz8_4_alpha1', 'biz8_4_beta1', 'biz8_4', 'biz8_5');
+
+include dirname(__FILE__) . DS . 'config' . DS . 'upgradeflow.php';

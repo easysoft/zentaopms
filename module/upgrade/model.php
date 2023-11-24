@@ -15,6 +15,10 @@ class upgradeModel extends model
 {
     static $errors = array();
 
+    public $fromVersion = '';
+
+    public $fromEdition = '';
+
     /**
      * Construct
      *
@@ -91,6 +95,9 @@ class upgradeModel extends model
 
         $fromEdition = $this->getEditionByVersion($fromVersion);
 
+        $this->fromVersion = $fromVersion;
+        $this->fromEdition = $fromEdition;
+
         /* If the 'current openVersion' is not equal the 'from openVersion', must update structure. */
         $currentVersion  = str_replace('.', '_', $this->config->version);
 
@@ -110,13 +117,13 @@ class upgradeModel extends model
         foreach($versions as $openVersion => $chargedVersions)
         {
             $executedXuanxuan = false;
+            if($openVersion == '10_1') $executedXuanxuan = true;
+            if($openVersion == '16_4' && !empty($this->config->isINT)) $executedXuanxuan = true;
 
             /* Execute open. */
-            if(str_replace('_', '.', $openVersion) == '10.1') $executedXuanxuan = true;
-
             $this->saveLogs("Execute $openVersion");
             $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)));
-            $this->executeOpen($openVersion, $fromEdition, $executedXuanxuan, $fromVersion);
+            $this->executeOpen($openVersion, $executedXuanxuan);
 
             /* Execute pro. */
             foreach($chargedVersions['pro'] as $proVersion)
@@ -154,570 +161,23 @@ class upgradeModel extends model
                 $this->addSubStatus();
             }
         }
+
+        $this->loadModel('program')->refreshStats(true);
+        $this->loadModel('product')->refreshStats(true);
+        $this->deletePatch();
     }
 
     /**
      * Process data for open source.
      *
      * @param  string $openVersion
-     * @param  string $fromEdition
      * @param  bool   $executedXuanxuan
-     * @param  string $fromVersion
      * @access public
      * @return void
      */
-    public function executeOpen($openVersion, $fromEdition, $executedXuanxuan, $fromVersion)
+    public function executeOpen($openVersion, $executedXuanxuan)
     {
-        switch($openVersion)
-        {
-            case '1_0beta':
-                $this->updateCompany();
-                break;
-            case '1_2':
-                $this->updateUBB();
-                $this->updateNL1_2();
-                break;
-            case '1_3':
-                $this->updateNL1_3();
-                $this->updateTasks();
-                break;
-            case '2_2':
-                $this->updateCases();
-                $this->updateActivatedCountOfBug();
-                break;
-            case '3_0_beta1':
-                $this->updateAction();
-                $this->setOrderData();
-                break;
-            case '3_3':
-                $this->updateTaskAssignedTo();
-                break;
-            case '4_0_beta2':
-                $this->updateProjectType();
-                $this->updateEstimatePriv();
-                break;
-            case '4_0_1':
-                $this->addPriv4_0_1();
-                break;
-            case '4_1':
-                $this->addPriv4_1();
-                $this->processTaskFinish();
-                $this->deleteCompany();
-                break;
-            case '5_2_1':
-                $this->mergeProjectGoalAndDesc();
-                break;
-            case '6_0_beta1':
-                $this->toLowerTable();
-                $this->fixBugOSInfo();
-                $this->fixTaskFinishedBy();
-                break;
-            case '6_0':
-                $this->fixDataIndex();
-                break;
-            case '7_1':
-                $this->initOrder();
-                break;
-            case '7_3':
-                $this->adjustPriv7_4_beta();
-                break;
-            case '8_0_1':
-                $this->addPriv8_1();
-                break;
-            case '8_1_3':
-                $this->addPriv8_2_beta();
-                $this->adjustConfigSectionAndKey();
-                break;
-            case '8_2_6':
-                $this->adjustDocModule();
-                $this->moveDocContent();
-                $this->adjustPriv8_3();
-                break;
-            case '8_3_1':
-                $this->renameMainLib();
-                $this->adjustPriv8_4();
-                break;
-            case '9_0_beta':
-                $this->adjustPriv9_0();
-                break;
-            case '9_0':
-                $this->fixProjectProductData();
-                break;
-            case '9_0_1':
-                $this->addBugDeadlineToCustomFields();
-                $this->adjustPriv9_0_1();
-                break;
-            case '9_1_2':
-                $this->processCustomMenus();
-                $this->adjustPriv9_2();
-                break;
-            case '9_4':
-                $this->adjustPriv9_4();
-                break;
-            case '9_5_1':
-                $this->initProjectStoryOrder();
-                break;
-            case '9_6':
-                $this->fixDatatableColsConfig();
-                break;
-            case '9_6_1':
-                $this->addLimitedGroup();
-                break;
-            case '9_6_3':
-                $this->changeLimitedName();
-                $this->adjustPriv9_7();
-                $this->changeStoryWidth();
-                break;
-            case '9_7':
-                $this->changeTeamFields();
-                $this->moveData2Notify();
-                break;
-            case '9_8':
-                $this->fixTaskFinishedInfo();
-                break;
-            case '9_8_1':
-                $this->fixTaskAssignedTo();
-                $this->fixProjectClosedInfo();
-                $this->resetProductLine();
-                break;
-            case '9_8_2':
-                $this->addUniqueKeyToTeam();
-                break;
-            case '9_8_3':
-                $this->adjustPriv10_0_alpha();
-                break;
-            case '10_0_alpha':
-                $this->fixProjectStatisticBlock();
-                break;
-            case '10_0':
-                $this->fixStorySpecTitle();
-                $this->removeUnlinkPriv();//Remove unlink privilege for story, bug and testcase module.
-                break;
-            case '10_1':
-                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
-                $this->execSQL($xuanxuanSql);
-                $executedXuanxuan = true;
-            case '10_3_1':
-                $this->removeCustomMenu();
-                break;
-            case '10_4':
-                $this->changeTaskParentValue();
-                break;
-            case '10_6':
-                if(!$executedXuanxuan)
-                {
-                    $this->saveLogs('Execute 10_6');
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.1.0.sql';
-                    $this->execSQL($xuanxuanSql);
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.2.0.sql';
-                    $this->execSQL($xuanxuanSql);
-                }
-                $this->initXuanxuan();
-                break;
-            case '11_1':
-                if(empty($this->config->isINT))
-                {
-                    if(!$executedXuanxuan)
-                    {
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
-                        $this->execSQL($xuanxuanSql);
-                    }
-                    $this->dao->update(TABLE_CONFIG)->set('value')->eq('off')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('0')->exec();
-                    $this->dao->update(TABLE_CONFIG)->set('value')->eq('on')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('1')->exec();
-                }
-                break;
-            case '11_2':
-                $this->processDocLibAcl();
-                break;
-            case '11_3':
-                $this->addPriv11_4();
-                break;
-            case '11_4_1':
-                $this->addPriv11_5();
-                if(empty($this->config->isINT))
-                {
-                    if(!$executedXuanxuan)
-                    {
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.4.0.sql';
-                        $this->execSQL($xuanxuanSql);
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.0.sql';
-                        $this->execSQL($xuanxuanSql);
-                    }
-                    $this->updateXX_11_5();
-                }
-                break;
-            case '11_6_1':
-                $this->adjustWebhookType();
-                $this->adjustPriv11_6_2();
-                break;
-            case '11_6_3':
-                $this->adjustPriv11_6_4();
-                break;
-            case '11_6_5':
-                $this->fixGroupAcl();
-                $this->fixBugTypeList();
-                $this->adjustPriv11_7();
-                $this->rmEditorAndTranslateDir();
-                $this->setConceptSetted();
-
-                if(empty($this->config->isINT))
-                {
-                    if(!$executedXuanxuan)
-                    {
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.7.sql';
-                        $this->execSQL($xuanxuanSql);
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.0.0-beta.1.sql';
-                        $this->execSQL($xuanxuanSql);
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.0-beta3.sql';
-                        $this->execSQL($xuanxuanSql);
-                    }
-                }
-                break;
-            case '11_7':
-                $this->adjustPriv12_0();
-                break;
-            case '12_0_1':
-                $this->importRepoFromConfig();
-                break;
-            case '12_1':
-                if(empty($this->config->isINT))
-                {
-                    if(!$executedXuanxuan)
-                    {
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
-                        $this->execSQL($xuanxuanSql);
-                    }
-                }
-                break;
-            case '12_3_3':
-                $this->addPriv12_3_3();
-                $this->processImport2TaskBugs();  //Code for task #7552
-                break;
-            case '12_4_2':
-                $this->fixFromCaseVersion();
-                $this->initStoryOfPlan();
-                break;
-            case '12_4_4':
-                $this->adjustPriv12_5();
-                break;
-            case '12_5_3':
-                $this->adjustWhitelistOfProject();
-                $this->adjustWhitelistOfProduct();
-                $this->adjustPriv15_0();
-                break;
-            case '15_0_rc1':
-                $this->adjustUserView();
-                break;
-            case '15_0_rc3':
-                if(empty($this->config->isINT))
-                {
-                    if(!$executedXuanxuan)
-                    {
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.3.sql';
-                        $this->execSQL($xuanxuanSql);
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.0.sql';
-                        $this->execSQL($xuanxuanSql);
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.0.beta2.sql';
-                        $this->execSQL($xuanxuanSql);
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.0.beta3.sql';
-                        $this->execSQL($xuanxuanSql);
-                    }
-                }
-                $this->updateLibType();
-                $this->updateRunCaseStatus();
-                $this->fix4TaskLinkProject();
-                $this->fixExecutionTeam();
-                break;
-            case '15_0':
-                $this->adjustBugOfProject();
-                $this->processBuildTable();
-                $this->updateProductVersion();
-                break;
-            case '15_0_2':
-                $this->uniqueProjectAdmin();
-                break;
-            case '15_2':
-                $this->processGitlabRepo();
-                $this->processStoryFileType();
-                $this->processProductDoc();
-                $this->adjustPriv15_3();
-                break;
-            case '15_3':
-                $this->adjustBugRequired();
-                $this->processTesttaskDate();
-                $this->processDocTempContent();
-                break;
-            case '15_4':
-                if(empty($this->config->isINT))
-                {
-                    if(!$executedXuanxuan)
-                    {
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.2.sql';
-                        $this->execSQL($xuanxuanSql);
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.4.sql';
-                        $this->execSQL($xuanxuanSql);
-                    }
-                }
-                break;
-            case '15_5':
-                $this->addDefaultKanbanPri();
-                break;
-            case '15_7_1':
-                $this->updateObjectBranch();
-                $this->updateProjectStories();
-                $this->updateProjectLinkedBranch();
-                break;
-            case '16_0_beta1':
-                $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, commonModel::getSysURL() . $this->app->config->webRoot . 'api.php/v1', '16.0');
-                break;
-            case '16_1':
-                $this->moveKanbanData();
-                break;
-            case '16_2':
-                $this->updateSpaceTeam();
-                $this->updateDocField();
-                break;
-            case '16_4':
-                set_time_limit(0);
-                $this->updateActivatedDate();
-
-                if(!empty($this->config->isINT))
-                {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
-                    $this->execSQL($xuanxuanSql);
-                    $executedXuanxuan = true;
-                }
-                else
-                {
-                    if(!$executedXuanxuan)
-                    {
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.6.sql';
-                        $this->execSQL($xuanxuanSql);
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.1.sql';
-                        $this->execSQL($xuanxuanSql);
-                    }
-                }
-
-                switch($fromEdition)
-                {
-                    case 'open':
-                        $this->execSQL($this->getUpgradeFile('proinstall'));
-                    case 'pro':
-                        $this->execSQL($this->getUpgradeFile('bizinstall'));
-                    case 'biz':
-                        $this->execSQL($this->getUpgradeFile('maxinstall'));
-                        $this->execSQL($this->getUpgradeFile('functions'));
-                }
-
-                $this->updateGroup4Lite();
-                break;
-            case '16_5':
-                $this->updateProjectStatus();
-                $this->updateStoryReviewer($fromVersion);
-
-                if($this->config->edition == 'max') $this->moveResult2Node();
-                break;
-            case '17_0_beta1':
-                if(!$executedXuanxuan)
-                {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.5.sql';
-                    $this->execSQL($xuanxuanSql);
-                }
-
-                if($this->config->edition != 'open') $this->processViewFields();
-                break;
-            case '17_0_beta2':
-                $this->changeStoryNeedReview();
-                break;
-            case '17_0':
-                $this->replaceSetLanePriv();
-                $this->updateProjectData();
-
-                if($this->config->edition != 'open') $this->processFlowPosition();
-                break;
-            case '17_1':
-                if(!$executedXuanxuan)
-                {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.6.sql';
-                    $this->execSQL($xuanxuanSql);
-                    $this->xuanAddMessageIndexColumns();
-                    $this->xuanReindexMessages();
-                    $this->xuanUpdateLastReadMessageIndex();
-                    $this->xuanFixChatsWithoutLastRead();
-                }
-                $this->moveProjectAdmins();
-                $this->addStoryViewPriv();
-                break;
-            case '17_2':
-                if($this->config->edition == 'max') $this->addReviewIssusApprovalData();
-                break;
-            case '17_3':
-                $this->processBugLinkBug();
-                break;
-            case '17_4':
-                $this->rebuildFULLTEXT();
-                $this->updateSearchIndex();
-                if(!$executedXuanxuan)
-                {
-                    $table  = $this->config->db->prefix . 'im_chat';
-                    $exists = $this->checkFieldsExists($table, 'adminInvite');
-                    if(!$exists)
-                    {
-                        $this->dbh->query("ALTER TABLE $table ADD `adminInvite` enum('0','1') NOT NULL DEFAULT '0' AFTER `mergedChats`");
-                    }
-                }
-
-                if($this->config->edition != 'open')
-                {
-                    $this->processCreatedInfo();
-                    $this->processCreatedBy();
-                    $this->updateApproval();
-                    $this->addDefaultRuleToWorkflow();
-                    $this->processReviewLinkages();
-                    $this->addFlowActions('biz7.4');
-                    $this->addFlowFields('biz7.4');
-                }
-                break;
-            case '17_5':
-                $this->updateOSAndBrowserOfBug();
-                $this->addURPriv();
-                $this->updateStoryStatus();
-                if(strpos($fromVersion, 'max') !== false) $this->syncCase2Project();
-                break;
-            case '17_6':
-                $this->updateStoryFile();
-                $this->convertTaskteam();
-                $this->convertEstToEffort();
-                $this->fixWeeklyReport();
-                $this->xuanSetOwnedByForGroups();
-                $this->xuanRecoverCreatedDates();
-                $this->xuanSetPartitionedMessageIndex();
-                break;
-            case '17_6_1':
-                $this->updateProductView();
-                break;
-            case '17_6_2':
-                if(!$executedXuanxuan)
-                {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.4.sql';
-                    $this->execSQL($xuanxuanSql);
-                }
-                if($this->config->edition != 'open') $this->processFeedbackModule();
-                break;
-            case '17_8':
-                if(!$executedXuanxuan)
-                {
-                    $table  = $this->config->db->prefix . 'user';
-                    $clientStatusExists = $this->checkFieldsExists($table, 'clientStatus');
-                    $clientLangExists   = $this->checkFieldsExists($table, 'clientLang');
-                    $pinyinExists       = $this->checkFieldsExists($table, 'pinyin');
-
-                    if(!$clientStatusExists) $this->dbh->query("ALTER TABLE $table ADD `clientStatus` varchar(10) NOT NULL DEFAULT 'zh-cn' AFTER `deleted`");
-                    if(!$clientLangExists)   $this->dbh->query("ALTER TABLE $table ADD `clientLang` enum('0','1') enum('online','away','busy','offline','meeting') NOT NULL DEFAULT 'offline' AFTER `deleted`");
-                    if(!$pinyinExists)       $this->dbh->query("ALTER TABLE $table ADD `pinyin` varchar(255) NOT NULL DEFAULT '' AFTER `realname`");
-
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.5.sql';
-                    $this->execSQL($xuanxuanSql);
-                }
-                $this->xuanSetMuteForHiddenGroups();
-                $this->xuanNotifyGroupHiddenUsers();
-                $this->initShadowBuilds();
-                break;
-            case '18_0_beta1':
-                if(!$executedXuanxuan)
-                {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.6.sql';
-                    $this->execSQL($xuanxuanSql);
-                }
-
-                if($this->config->edition == 'max') $this->initReviewEfforts();
-                break;
-            case '18_0_beta3':
-                $this->updateMyBlocks();
-                break;
-            case '18_1':
-                $this->insertMixStage();
-                break;
-            case '18_2':
-                $this->loadModel('setting')->setSN();
-                break;
-            case '18_3':
-                $this->changeBookToCustomLib();
-                $this->createDefaultDimension();
-                $this->convertDocCollect();
-                $this->addBIUpdateMark();
-
-                if($this->config->edition != 'open')
-                {
-                    $this->processDataset();
-                    $this->processChart();
-                    $this->processReport();
-                    $this->processDashboard();
-                }
-                break;
-            case '18_4_alpha1':
-                if($this->config->edition != 'open') $this->processDataset();
-                $this->setURSwitchStatus($fromVersion);
-                break;
-            case '18_4_beta1':
-                if($this->config->edition != 'open')
-                {
-                    $this->processDeployStepAction();
-                    $this->updateBISQL();
-                    $this->checkPivotSQL();
-                }
-                break;
-            case '18_4':
-                if(!$executedXuanxuan)
-                {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan7.1.sql';
-                    $this->execSQL($xuanxuanSql);
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan7.2.beta.sql';
-                    $this->execSQL($xuanxuanSql);
-                }
-
-                if($this->config->edition != 'open' and in_array($fromVersion, $this->config->upgrade->missedFlowFieldVersions))
-                {
-                    $this->fixMissedFlowField();
-                }
-                break;
-            case '18_5':
-                $fromVersion = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=version');
-                $ipdinstall  = false;
-
-                if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.5', '<='))             $ipdinstall = true;
-                if(strpos($fromVersion, 'pro') !== false)                                                   $ipdinstall = true;
-                if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.5', '<=')) $ipdinstall = true;
-                if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.5', '<=')) $ipdinstall = true;
-                if($ipdinstall) $this->execSQL($this->getUpgradeFile('ipdinstall'));
-
-                if($fromVersion == 'ipd1.0.beta1') $this->execSQL($this->getUpgradeFile('ipd1.0.beta1'));
-
-                $this->loadModel('product')->refreshStats(true);
-                $this->loadModel('program')->refreshStats(true);
-                $this->updatePivotFieldsType();
-
-                if(in_array($fromVersion, array('18.5', 'biz8.5', 'max4.5'))) $this->addCreateAction4Story();
-                break;
-            case '18_6':
-                $this->removeProductLineRequired();
-                break;
-            case '18_7':
-                if(in_array($this->config->edition, array('max', 'ipd'))) $this->processOldMetrics();
-                $this->processHistoryDataForMetric();
-                $this->loadModel('metric')->updateMetricDate();
-                break;
-            case '18_8':
-                /* Upgrade members for testtask. */
-                $this->upgradeTesttaskMembers();
-                $this->loadModel('program')->refreshStats(true);
-                $this->deleteGeneralReportBlock();
-                /* Stop old cron. */
-                touch($this->app->getCacheRoot() . 'restartcron');
-                break;
-        }
-
-        $this->deletePatch();
+        $this->executeByConfig($openVersion, $executedXuanxuan);
         return true;
     }
 
@@ -730,36 +190,10 @@ class upgradeModel extends model
      */
     public function executePro($proVersion)
     {
-        switch($proVersion)
-        {
-            case 'pro1_1_1':
-                $this->execSQL($this->getUpgradeFile('pro1.1'));
-                break;
-            case 'pro3_2_1':
-                $this->recordFinished();
-                break;
-            case 'pro3_3':
-                $this->toLowerTable('pro');
-                break;
-            case 'pro4_0':
-                $this->fixRepo();
-                break;
-            case 'pro7_0_beta':
-                $this->fixReport();
-                break;
-            case 'pro8_3':
-                $this->execSQL($this->getUpgradeFile('pro8.2')); //Fix bug #1752.
-                break;
-            case 'pro8_8':
-                $this->checkURAndSR();
-                break;
-            case 'pro10_0_2':
-                $this->fixReportLang();
-                break;
-            case 'pro10_2':
-                $this->addDefaultKanbanPri();
-                break;
-        }
+        if($proVersion == 'pro1_1_1') $this->execSQL($this->getUpgradeFile('pro1.1'));
+        if($proVersion == 'pro8_3')   $this->execSQL($this->getUpgradeFile('pro8.2')); //Fix bug #1752.
+
+        $this->executeByConfig($proVersion);
     }
 
     /**
@@ -772,88 +206,7 @@ class upgradeModel extends model
      */
     public function executeBiz($bizVersion, $executedXuanxuan)
     {
-        switch($bizVersion)
-        {
-            case 'biz2_3_1':
-                $this->adjustFeedbackViewData();
-                break;
-            case 'biz3_0':
-                if(!empty($this->config->isINT) and !$executedXuanxuan)
-                {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
-                    $this->execSQL($xuanxuanSql);
-                    $this->dao->update(TABLE_CONFIG)->set('value')->eq('off')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('0')->exec();
-                    $this->dao->update(TABLE_CONFIG)->set('value')->eq('on')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('1')->exec();
-                }
-                break;
-            case 'biz3_2_1':
-                if(!empty($this->config->isINT))
-                {
-                    if(!$executedXuanxuan)
-                    {
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.4.0.sql';
-                        $this->execSQL($xuanxuanSql);
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.0.sql';
-                        $this->execSQL($xuanxuanSql);
-                    }
-                    $this->updateXX_11_5();
-                }
-                break;
-            case 'biz3_4':
-                $this->importBuildinModules();
-                break;
-            case 'biz3_5_alpha':
-                $this->addSubStatus();
-            case 'biz3_5_beta':
-                $this->processSubTables();
-                break;
-            case 'biz3_6':
-                $this->addDefaultActions();
-                $this->importCaseLibModule();
-                $this->deleteBuildinFields();
-                break;
-            case 'biz3_6_1':
-                $this->addWorkflowActions();
-                $this->processWorkflowLayout();
-                $this->processWorkflowLabel();
-                $this->processWorkflowCondition();
-                if(!empty($this->config->isINT) and !$executedXuanxuan)
-                {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
-                    $this->execSQL($xuanxuanSql);
-                }
-                break;
-            case 'biz3_7':
-                $this->processWorkflowFields();
-                break;
-            case 'biz3_7_2':
-                $this->processFlowStatus();
-                break;
-            case 'biz4_0_1':
-                $this->addMailtoFields();
-                break;
-            case 'biz4_0_3':
-                $this->updateAttendStatus();
-                $this->initView4WorkflowDatasource();
-                break;
-            case 'biz5_0':
-                $this->adjustPrivBiz5_0_1();
-                break;
-            case 'biz5_0_1':
-                $this->updateWorkflow4Execution();
-                break;
-            case 'biz5_2':
-                $this->addDefaultKanbanPri();
-                break;
-            case 'biz5_3_1':
-                $this->processFeedbackField();
-                $this->addFileFields();
-                $this->addReportActions();
-                break;
-            case 'biz6_4':
-                $this->importLiteModules();
-                break;
-        }
+        $this->executeByConfig($bizVersion, $executedXuanxuan);
     }
 
     /**
@@ -865,12 +218,7 @@ class upgradeModel extends model
      */
     public function executeMax($maxVersion)
     {
-        switch($maxVersion)
-        {
-            case 'max2_2':
-                $this->addDefaultKanbanPri();
-                break;
-        }
+        $this->executeByConfig($maxVersion);
     }
 
     /**
@@ -882,6 +230,57 @@ class upgradeModel extends model
      */
     public function executeIpd($ipdVersion)
     {
+    }
+
+    /**
+     * Execute upgrade methods by config.
+     *
+     * @param  string  $version
+     * @param  bool    $executedXuanxuan
+     * @access public
+     * @return void
+     */
+    public function executeByConfig($version, $executedXuanxuan = false)
+    {
+        $execConfig  = zget($this->config->upgrade->execFlow, $version, array());
+        $functions   = zget($execConfig, 'functions', '');
+        $params      = zget($execConfig, 'params', array());
+        $xxsqls      = zget($execConfig, 'xxsqls', '');
+        $xxfunctions = zget($execConfig, 'xxfunctions', '');
+
+        foreach(array_filter(explode(',', $functions)) as $function) $this->executeUpgradeMethod($function, zget($params, $function, array()));
+
+        $needExecXX = !$executedXuanxuan;
+        if($openVersion == '10_1') $needExecXX = true;
+        if($openVersion == '16_4' && !empty($this->config->isINT)) $needExecXX = true;
+
+        if($needExecXX)
+        {
+            foreach(array_filter(explode(',', $xxsqls)) as $sqlFile) $this->execSQL($sqlFile);
+            foreach(array_filter(explode(',', $xxfunctions)) as $function) $this->executeUpgradeMethod($function, zget($params, $function, array()));
+        }
+    }
+
+    /**
+     * Execute single upgrade method.
+     *
+     * @param  string $method
+     * @param  array  $params
+     * @access public
+     * @return void
+     */
+    public function executeUpgradeMethod($method, $params)
+    {
+        $this->saveLogs("Run Method {$function}");
+
+        $class = $this;
+        if(str_contains($functions, '-'))
+        {
+            list($className, $function) = explode('-', $function);
+            $class= $this->loadModel($className);
+        }
+
+        return call_user_func_array(array($class, $function), $params);
     }
 
     /**
@@ -2124,10 +1523,12 @@ class upgradeModel extends model
         if(!file_exists($sqlFile)) return false;
 
         $this->saveLogs('Run Method ' . __FUNCTION__);
-        $mysqlVersion = $this->loadModel('install')->getDatabaseVersion();
-        $ignoreCode   = '|1050|1054|1060|1091|1061|';
 
-        $sqls = $this->parseToSqls($sqlFile);
+        static $mysqlVersion;
+        if($mysqlVersion === null) $mysqlVersion = $this->loadModel('install')->getDatabaseVersion();
+
+        $ignoreCode = '|1050|1054|1060|1091|1061|';
+        $sqls       = $this->parseToSqls($sqlFile);
         foreach($sqls as $sql)
         {
             if(empty($sql)) continue;
@@ -6602,10 +6003,10 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function updateStoryReviewer($fromVersion)
+    public function updateStoryReviewer()
     {
         $isOldVersion = false;
-        $fromVersion  = str_replace('_', '.', $fromVersion);
+        $fromVersion  = str_replace('_', '.', $this->fromVersion);
         if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '12.5.3', '<='))
         {
             $isOldVersion = true;
@@ -7463,6 +6864,8 @@ class upgradeModel extends model
      */
     public function syncCase2Project()
     {
+        if(strpos($this->fromVersion, 'max') === false) return;
+
         $linkStoryCases   = $this->dao->select('id, story, version, product')->from(TABLE_CASE)->where('story')->ne('0')->fetchAll('id');
         $linkProjectCases = $this->dao->select('`case`, project')->from(TABLE_PROJECTCASE)->where('`case`')->ne('0')->andWhere('project')->ne('0')->fetchGroup('case', 'project');
 
@@ -9482,17 +8885,16 @@ class upgradeModel extends model
     /**
      * Set UR switch status in feature switch.
      *
-     * @param  string  $fromVersion
      * @access public
      * @return bool
      */
-    public function setURSwitchStatus($fromVersion)
+    public function setURSwitchStatus()
     {
         $this->saveLogs('Run Method ' . __FUNCTION__);
 
-        if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.2', '>=')) return true;
-        if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.2', '>=')) return true;
-        if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.2', '>=')) return true;
+        if(is_numeric($this->fromVersion[0]) and version_compare($this->fromVersion, '18.2', '>=')) return true;
+        if(strpos($this->fromVersion, 'biz') !== false and version_compare($this->fromVersion, 'biz8.2', '>=')) return true;
+        if(strpos($this->fromVersion, 'max') !== false and version_compare($this->fromVersion, 'max4.2', '>=')) return true;
 
         $URSwitchStatus = $this->loadModel('setting')->getItem("owner=system&module=custom&key=URAndSR");
         if(!$URSwitchStatus)
@@ -9545,6 +8947,12 @@ class upgradeModel extends model
         }
     }
 
+    /**
+     * Check pivot SQL.
+     *
+     * @access public
+     * @return void
+     */
     public function checkPivotSQL()
     {
         $this->loadModel('pivot');
@@ -9583,6 +8991,8 @@ class upgradeModel extends model
      */
     public function fixMissedFlowField()
     {
+        if($this->config->edition == 'open' || !in_array($this->fromVersion, $this->config->upgrade->missedFlowFieldVersions)) return;
+
         $this->loadModel('workflow');
         $this->loadModel('workflowaction');
         $this->loadModel('workflowlayout');
@@ -9747,6 +9157,8 @@ class upgradeModel extends model
      */
     public function addCreateAction4Story()
     {
+        if(!in_array($this->fromVersion, array('18_5', 'biz8_5', 'max4_5'))) return;
+
         $stories = $this->dao->select('id,product,openedBy,openedDate,vision')->from(TABLE_STORY)->where('openedDate')->ge('2023-07-12')->fetchAll('id');
         foreach($stories as $story)
         {
@@ -9849,11 +9261,23 @@ class upgradeModel extends model
         return !dao::isError();
     }
 
+    /**
+     * Alias for processHistoryOfStory.
+     *
+     * @access public
+     * @return void
+     */
     public function processHistoryDataForMetric()
     {
         $this->processHistoryOfStory();
     }
 
+    /**
+     * Process history of story.
+     *
+     * @access public
+     * @return void
+     */
     public function processHistoryOfStory()
     {
         $linked2releaseActions = $this->dao->select('objectID, extra, max(`date`) as date, action')
@@ -9928,5 +9352,94 @@ class upgradeModel extends model
         $this->dao->delete()->from(TABLE_BLOCK)->where('block')->eq('waterfallgeneralreport')->exec();
 
         return true;
+    }
+
+    /**
+     * Sync xuanxuan https config.
+     *
+     * @access public
+     * @return void
+     */
+    public function syncXXHttpsConfig()
+    {
+        $this->dao->update(TABLE_CONFIG)->set('value')->eq('off')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('0')->exec();
+        $this->dao->update(TABLE_CONFIG)->set('value')->eq('on')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('1')->exec();
+        return true;
+    }
+
+    /**
+     * Create demo API.
+     *
+     * @access public
+     * @return void
+     */
+    public function createDemoAPI()
+    {
+        $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, commonModel::getSysURL() . $this->app->config->webRoot . 'api.php/v1', '16.0');
+        return true;
+    }
+
+    /**
+     * Complete the database for different edition.
+     *
+     * @access public
+     * @return void
+     */
+    public function completionAllSQL()
+    {
+        switch($this->fromEdition)
+        {
+            case 'open':
+                $this->execSQL($this->getUpgradeFile('proinstall'));
+            case 'pro':
+                $this->execSQL($this->getUpgradeFile('bizinstall'));
+            case 'biz':
+                $this->execSQL($this->getUpgradeFile('maxinstall'));
+                $this->execSQL($this->getUpgradeFile('functionss'));
+        }
+    }
+
+    /**
+     * Add adminInvite field for xuanxuan.
+     *
+     * @access public
+     * @return void
+     */
+    public function addAdminInviteField()
+    {
+        $table  = $this->config->db->prefix . 'im_chat';
+        $exists = $this->checkFieldsExists($table, 'adminInvite');
+        if(!$exists) $this->dbh->exec("ALTER TABLE $table ADD `adminInvite` enum('0','1') NOT NULL DEFAULT '0' AFTER `mergedChats`");
+    }
+
+    /**
+     * Insetall IPD.
+     *
+     * @access public
+     * @return void
+     */
+    public function insetallIPD()
+    {
+        $fromVersion = $this->fromVersion;
+        $ipdinstall  = false;
+
+        if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '18.5', '<='))             $ipdinstall = true;
+        if(strpos($fromVersion, 'pro') !== false)                                                   $ipdinstall = true;
+        if(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz8.5', '<=')) $ipdinstall = true;
+        if(strpos($fromVersion, 'max') !== false and version_compare($fromVersion, 'max4.5', '<=')) $ipdinstall = true;
+        if($ipdinstall) $this->execSQL($this->getUpgradeFile('ipdinstall'));
+
+        if($fromVersion == 'ipd1.0.beta1') $this->execSQL($this->getUpgradeFile('ipd1.0.beta1'));
+    }
+
+    /**
+     * Stop old cron.
+     *
+     * @access public
+     * @return void
+     */
+    public function stopOldCron()
+    {
+        touch($this->app->getCacheRoot() . 'restartcron');
     }
 }

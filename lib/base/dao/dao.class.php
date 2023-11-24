@@ -293,6 +293,18 @@ class baseDAO
     }
 
     /**
+     * 检查是否在事务内。
+     * Check in transaction.
+     *
+     * @access public
+     * @return bool
+     */
+    public function inTransaction()
+    {
+        $this->dbh->inTransaction();
+    }
+
+    /**
      * 事务回滚。
      * Roll back
      *
