@@ -297,36 +297,9 @@ class repoTest
         return $objects;
     }
 
-    public function getPreAndNextTest($repo, $entry, $revision = 'HEAD', $fileType = 'dir', $method = 'view')
-    {
-        $objects = $this->objectModel->getPreAndNext($repo, $entry, $revision, $fileType, $method);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function createLinkTest($method, $params = '', $viewType = '', $onlybody = false)
     {
         $objects = $this->objectModel->createLink($method, $params, $viewType, $onlybody);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function setBackSessionTest($type = 'list', $withOtherModule = false)
-    {
-        $objects = $this->objectModel->setBackSession($type, $withOtherModule);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function setRepoBranchTest($branch)
-    {
-        $objects = $this->objectModel->setRepoBranch($branch);
 
         if(dao::isError()) return dao::getError();
 
@@ -363,15 +336,6 @@ class repoTest
     public function decodePathTest($path = '')
     {
         $objects = $this->objectModel->decodePath($path);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function isBinaryTest($content, $suffix = '')
-    {
-        $objects = $this->objectModel->isBinary($content, $suffix);
 
         if(dao::isError()) return dao::getError();
 

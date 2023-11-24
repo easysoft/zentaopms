@@ -369,7 +369,7 @@ class repo extends control
         }
 
         $this->commonAction($repoID, $objectID);
-        $this->repo->setBackSession('view', true);
+        $this->repoZen->setBackSession('view', true);
         $this->session->set('storyList', inlink('view',  "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"), 'product');
 
         return print($this->fetch('repo', 'monaco', "repoID=$repoID&objectID=$objectID&entry=$entry&revision=$revision&showBug=$showBug&encoding=$encoding"));
@@ -484,7 +484,7 @@ class repo extends control
     public function log(int $repoID = 0, int $objectID = 0, string $entry = '', string $revision = 'HEAD', string $type = 'dir', int $recTotal = 0, int $recPerPage = 50, int $pageID = 1)
     {
         if($this->get->repoPath) $entry = $this->get->repoPath;
-        $this->repo->setBackSession('log', true);
+        $this->repoZen->setBackSession('log', true);
         if($repoID == 0) $repoID = $this->session->repoID;
 
         $repo  = $this->repo->getByID($repoID);
@@ -1078,7 +1078,7 @@ class repo extends control
 
         $suffix   = '';
         if(isset($pathInfo["extension"])) $suffix = strtolower($pathInfo["extension"]);
-        if(!$suffix or (!array_key_exists($suffix, $this->config->program->suffix) and strpos($this->config->repo->images, "|$suffix|") === false)) $suffix = $this->repo->isBinary($content, $suffix) ? 'binary' : 'c';
+        if(!$suffix or (!array_key_exists($suffix, $this->config->program->suffix) and strpos($this->config->repo->images, "|$suffix|") === false)) $suffix = $this->repoZen->isBinary($content, $suffix) ? 'binary' : 'c';
 
         if(strpos($this->config->repo->images, "|$suffix|") !== false)
         {
@@ -1166,7 +1166,7 @@ class repo extends control
 
         $this->scm->setEngine($repo);
 
-        $this->repo->setRepoBranch($branch);
+        $this->repoZen->setRepoBranch($branch);
         helper::setcookie("syncBranch", $branch);
 
         $latestInDB = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')

@@ -854,13 +854,13 @@ class repoZen extends repo
 
             if(empty($branchID) and $this->cookie->repoBranch && $this->session->repoID == $repo->id) $branchID = $this->cookie->repoBranch;
             if(!isset($branches[$branchID]) && !isset($tags[$branchID])) $branchID = (string)key($branches);
-            if($branchID) $this->repo->setRepoBranch($branchID);
+            if($branchID) $this->setRepoBranch($branchID);
 
             return array($branchID, $branches, $tags);
         }
         else
         {
-            $this->repo->setRepoBranch('');
+            $this->setRepoBranch('');
             return array('', array(), array());
         }
     }
@@ -900,7 +900,7 @@ class repoZen extends repo
      */
     protected function setBrowseSession(): void
     {
-        $this->repo->setBackSession('list', true);
+        $this->setBackSession('list', true);
 
         session_start();
         $this->session->set('revisionList', $this->app->getURI(true));
@@ -1386,7 +1386,7 @@ class repoZen extends repo
                     }
                 }
 
-                $this->repo->setRepoBranch($branchID);
+                $this->setRepoBranch($branchID);
                 helper::setcookie("syncBranch", $branchID, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             }
         }
@@ -1426,5 +1426,67 @@ class repoZen extends repo
 
         $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repo->id)->exec();
         return $type == 'batch' ?  $commitCount : $this->config->repo->repoSyncLog->finish;
+    }
+
+    /**
+     * 设置返回链接。
+     * Set back session.
+     *
+     * @param  string $type
+     * @param  bool   $withOtherModule
+     * @access public
+     * @return void
+     */
+    public function setBackSession(string $type = 'list', bool $withOtherModule = false)
+    {
+        session_start();
+        $uri = $this->app->getURI(true);
+        if(!empty($_GET) and $this->config->requestType == 'PATH_INFO') $uri .= (strpos($uri, '?') === false ? '?' : '&') . http_build_query($_GET);
+
+        $backKey = 'repo' . ucfirst(strtolower($type));
+        $this->session->set($backKey, $uri);
+
+        if($type == 'list') unset($_SESSION['repoView']);
+        if($withOtherModule)
+        {
+            $this->session->set('bugList', $uri, 'qa');
+            $this->session->set('taskList', $uri, 'execution');
+        }
+        session_write_close();
+    }
+
+    /**
+     * 设置代码库分支。
+     * Set repo branch.
+     *
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function setRepoBranch(string $branch)
+    {
+        helper::setcookie("repoBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+        $_COOKIE['repoBranch'] = $branch;
+    }
+
+    /**
+     * 检查是否是二进制文件。
+     * Check content is binary.
+     *
+     * @param  string $content
+     * @param  string $suffix
+     * @access public
+     * @return bool
+     */
+    public function isBinary(string $content, string $suffix = ''): bool
+    {
+        if(strpos($this->config->repo->binary, "|$suffix|") !== false) return true;
+
+        $blk = substr($content, 0, 512);
+        return (
+            substr_count($blk, "^\r\n")/512 > 0.3 ||
+            substr_count($blk, "^ -~")/512 > 0.3 ||
+            substr_count($blk, "\x00") > 0
+        );
     }
 }

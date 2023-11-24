@@ -1229,26 +1229,29 @@ class repoModel extends model
     }
 
     /**
+     * 更新代码库的提交次数。
      * Update commit count.
      *
      * @param  int    $repoID
      * @param  int    $count
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateCommitCount($repoID, $count)
+    public function updateCommitCount(int $repoID, int $count): bool
     {
-        return $this->dao->update(TABLE_REPO)->set('commits')->eq($count)->where('id')->eq($repoID)->exec();
+        $this->dao->update(TABLE_REPO)->set('commits')->eq($count)->where('id')->eq($repoID)->exec();
+        return !dao::isError();
     }
 
     /**
-     * Get unsync commits
+     * 获取未同步的提交。
+     * Get unsync commits.
      *
      * @param  object $repo
      * @access public
      * @return array
      */
-    public function getUnsyncedCommits($repo)
+    public function getUnsyncedCommits(object $repo): array
     {
         $repoID   = $repo->id;
         $lastInDB = $this->getLatestCommit($repoID);
@@ -1282,89 +1285,18 @@ class repoModel extends model
     }
 
     /**
-     * Get pre and next revision.
-     *
-     * @param  object $repo
-     * @param  string $entry
-     * @param  string $revision
-     * @param  string $fileType
-     * @param  string $method
-     *
-     * @access public
-     * @return object
-     */
-    public function getPreAndNext($repo, $entry, $revision = 'HEAD', $fileType = 'dir', $method = 'view')
-    {
-        $entry  = ltrim($entry, '/');
-        $entry  = $repo->prefix . '/' . $entry;
-        $repoID = $repo->id;
-
-        if($method == 'view')
-        {
-            $revisions = $this->dao->select('DISTINCT t1.revision,t1.commit')->from(TABLE_REPOHISTORY)->alias('t1')
-                ->leftJoin(TABLE_REPOFILES)->alias('t2')->on('t1.id=t2.revision')
-                ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t1.id=t3.revision')
-                ->where('t1.repo')->eq($repoID)
-                ->beginIF($this->cookie->repoBranch)->andWhere('t3.branch')->eq($this->cookie->repoBranch)->fi()
-                ->andWhere('t2.path')->eq("$entry")
-                ->orderBy('commit desc')
-                ->fetchPairs();
-        }
-        else
-        {
-            $revisions = $this->dao->select('DISTINCT t1.revision,t1.commit')->from(TABLE_REPOHISTORY)->alias('t1')
-                ->leftJoin(TABLE_REPOFILES)->alias('t2')->on('t1.id=t2.revision')
-                ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t1.id=t3.revision')
-                ->where('t1.repo')->eq($repoID)
-                ->beginIF($this->cookie->repoBranch)->andWhere('t3.branch')->eq($this->cookie->repoBranch)->fi()
-                ->beginIF($entry == '/')->andWhere('t2.revision = t1.id')->fi()
-                ->beginIF($fileType == 'dir' && $entry != '/')
-                ->andWhere('t2.parent', true)->like(rtrim($entry, '/') . "/%")
-                ->orWhere('t2.parent')->eq(rtrim($entry, '/'))
-                ->markRight(1)
-                ->fi()
-                ->beginIF($fileType == 'file' && $entry != '/')->andWhere('t2.path')->eq($entry)->fi()
-                ->orderBy('commit desc')
-                ->fetchPairs();
-        }
-
-        $preRevision  = false;
-        $preAndNext   = new stdclass();
-        $preAndNext->pre  = '';
-        $preAndNext->next = '';
-        foreach($revisions as $version => $commit)
-        {
-            /* Get next object. */
-            if($preRevision === true)
-            {
-                $preAndNext->next = $version;
-                break;
-            }
-
-            /* Get pre object. */
-            if($revision == $version)
-            {
-                if($preRevision) $preAndNext->pre = $preRevision;
-                $preRevision = true;
-            }
-            if($preRevision !== true) $preRevision = $version;
-        }
-        return $preAndNext;
-    }
-
-    /**
-     * Create link for repo
+     * 生成链接。
+     * Create link for repo.
      *
      * @param  string $method
      * @param  string $params
      * @param  string $viewType
-     * @param  bool   $onlybody
      * @access public
      * @return string
      */
-    public function createLink($method, $params = '', $viewType = '', $onlybody = false)
+    public function createLink(string $method, string $params = '', string $viewType = '')
     {
-        if($this->config->requestType == 'GET') return helper::createLink('repo', $method, $params, $viewType, $onlybody);
+        if($this->config->requestType == 'GET') return helper::createLink('repo', $method, $params, $viewType);
 
         $parsedParams = array();
         parse_str($params, $parsedParams);
@@ -1381,7 +1313,7 @@ class repoModel extends model
         }
 
         $params = http_build_query($parsedParams);
-        $link   = helper::createLink('repo', $method, $params, $viewType, $onlybody);
+        $link   = helper::createLink('repo', $method, $params, $viewType);
         if(empty($pathParams)) return $link;
 
         $link .= strpos($link, '?') === false ? '?' : '&';
@@ -1390,128 +1322,77 @@ class repoModel extends model
     }
 
     /**
-     * Set back session/
-     *
-     * @param  string $type
-     * @param  bool   $withOtherModule
-     * @access public
-     * @return void
-     */
-    public function setBackSession($type = 'list', $withOtherModule = false)
-    {
-        session_start();
-        $uri = $this->app->getURI(true);
-        if(!empty($_GET) and $this->config->requestType == 'PATH_INFO') $uri .= (strpos($uri, '?') === false ? '?' : '&') . http_build_query($_GET);
-
-        $backKey = 'repo' . ucfirst(strtolower($type));
-        $this->session->set($backKey, $uri);
-
-        if($type == 'list') unset($_SESSION['repoView']);
-        if($withOtherModule)
-        {
-            $this->session->set('bugList', $uri, 'qa');
-            $this->session->set('taskList', $uri, 'execution');
-        }
-        session_write_close();
-    }
-
-    /**
-     * Set repo branch.
-     *
-     * @param  string $branch
-     * @access public
-     * @return void
-     */
-    public function setRepoBranch($branch)
-    {
-        helper::setcookie("repoBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-        $_COOKIE['repoBranch'] = $branch;
-    }
-
-    /**
+     * 更新代码库的同步状态。
      * Mark synced status.
      *
      * @param  int    $repoID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function markSynced($repoID)
+    public function markSynced(int $repoID): bool
     {
         $this->fixCommit($repoID);
         $this->dao->update(TABLE_REPO)->set('synced')->eq(1)->where('id')->eq($repoID)->exec();
+        return !dao::isError();
     }
 
     /**
+     * 更新提交记录的排序。
      * Fix commit.
      *
      * @param  int    $repoID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function fixCommit($repoID)
+    public function fixCommit(int $repoID): bool
     {
-        $stmt = $this->dao->select('DISTINCT t1.id,t1.`time`')->from(TABLE_REPOHISTORY)->alias('t1')
+        $historyList = $this->dao->select('DISTINCT t1.id,t1.`time`')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
             ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->orderBy('time')
             ->query();
 
-        $i = 1;
-        while($repoHistory = $stmt->fetch())
+        foreach($historyList as $i => $repoHistory)
         {
-            $this->dao->update(TABLE_REPOHISTORY)->set('`commit`')->eq($i)->where('id')->eq($repoHistory->id)->exec();
             $i++;
+
+            $this->dao->update(TABLE_REPOHISTORY)->set('`commit`')->eq($i)->where('id')->eq($repoHistory->id)->exec();
         }
+
+        return !dao::isError();
     }
 
     /**
+     * 转义代码库文件路径。
      * Encode repo path.
      *
      * @param  string $path
      * @access public
      * @return string
      */
-    public function encodePath($path = '')
+    public function encodePath(string $path = ''): string
     {
         if(empty($path)) return $path;
         return helper::safe64Encode(urlencode($path));
     }
 
     /**
+     * 解析代码库文件路径。
      * Decode repo path.
      *
      * @param  string $path
      * @access public
      * @return string
      */
-    public function decodePath($path = '')
+    public function decodePath(string $path = ''): string
     {
         if(empty($path)) return $path;
         return trim(urldecode(helper::safe64Decode($path)), '/');
     }
 
     /**
-     * Check content is binary.
-     *
-     * @param  string $content
-     * @param  string $suffix
-     * @access public
-     * @return bool
-     */
-    public function isBinary($content, $suffix = '')
-    {
-        if(strpos($this->config->repo->binary, "|$suffix|") !== false) return true;
-
-        $blk = substr($content, 0, 512);
-        return (
-            substr_count($blk, "^\r\n")/512 > 0.3 ||
-            substr_count($blk, "^ -~")/512 > 0.3 ||
-            substr_count($blk, "\x00") > 0
-        );
-    }
-
-    /**
+     * 删除客户端代码工具生成的版本文件。
      * remove client version file.
      *
      * @access public
