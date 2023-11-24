@@ -13,38 +13,19 @@ declare(strict_types=1);
 class customModel extends model
 {
     /**
+     * 获取自定义语言项。
      * Get all custom lang.
      *
      * @access public
-     * @return array
+     * @return array|false
      */
-    public function getAllLang()
+    public function getAllLang(): array|false
     {
-        $currentLang = $this->app->getClientLang();
-
-        try
-        {
-            $sql  = $this->dao->select('*')->from(TABLE_LANG)->where('`lang`')->in("$currentLang,all")->andWhere('vision')->eq($this->config->vision)->orderBy('lang,id')->get();
-            $stmt = $this->app->dbQuery($sql);
-
-            $allCustomLang = array();
-            while($row = $stmt->fetch())
-            {
-                /* Replace common lang for menu. */
-                if(strpos($row->module, 'Menu') !== false or strpos($row->section, 'featureBar-') !== false or $row->section == 'mainNav' or strpos($row->section, 'moreSelects-') !== false)
-                {
-                    $row->value = strtr($row->value, $this->config->custom->commonLang);
-                }
-                $allCustomLang[$row->id] = $row;
-            }
-        }
-        catch(PDOException $e)
-        {
-            return false;
-        }
+        $currentLang   = $this->app->getClientLang();
+        $allCustomLang = $this->customTao->getCustomLang();
+        if(!$allCustomLang) return false;
 
         $sectionLang = array();
-
         foreach($allCustomLang as $customLang)
         {
             $sectionLang[$customLang->module][$customLang->section][$customLang->lang] = $customLang->lang;
@@ -53,10 +34,10 @@ class customModel extends model
         $processedLang = array();
         foreach($allCustomLang as $customLang)
         {
-            if(isset($sectionLang[$customLang->module][$customLang->section]['all']) and isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) and $customLang->lang == 'all') continue;
+            if(isset($sectionLang[$customLang->module][$customLang->section]['all']) && isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) && $customLang->lang == 'all') continue;
 
-
-            if(strpos($customLang->section, 'featureBar-') !== false or strpos($customLang->section, 'moreSelects-') !== false)
+            /* Process list featureBar and more language. */
+            if(strpos($customLang->section, 'featureBar-') !== false || strpos($customLang->section, 'moreSelects-') !== false)
             {
                 $sections = explode('-', $customLang->section);
                 $sections = array_reverse($sections);
@@ -75,7 +56,6 @@ class customModel extends model
                 $processedLang[$customLang->module][$customLang->section][$customLang->key] = $customLang->value;
             }
         }
-
 
         return $processedLang;
     }

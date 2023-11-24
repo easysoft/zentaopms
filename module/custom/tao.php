@@ -38,4 +38,40 @@ class customTao extends customModel
 
         return array($projectGroup, $programPM, $stakeholders);
     }
+
+    /**
+     * 获取自定义语言项。
+     * Get custom lang.
+     *
+     * @access protected
+     * @return array|false
+     */
+    protected function getCustomLang(): array|false
+    {
+        $currentLang   = $this->app->getClientLang();
+        $allCustomLang = array();
+
+        try
+        {
+            $sql  = $this->dao->select('*')->from(TABLE_LANG)->where('`lang`')->in("$currentLang,all")->andWhere('vision')->eq($this->config->vision)->orderBy('lang,id')->get();
+            $stmt = $this->app->dbQuery($sql);
+
+            $allCustomLang = array();
+            while($row = $stmt->fetch())
+            {
+                /* Replace common lang for menu. */
+                if(strpos($row->module, 'Menu') !== false || strpos($row->section, 'featureBar-') !== false || $row->section == 'mainNav' || strpos($row->section, 'moreSelects-') !== false)
+                {
+                    $row->value = strtr($row->value, $this->config->custom->commonLang);
+                }
+                $allCustomLang[$row->id] = $row;
+            }
+        }
+        catch(PDOException $e)
+        {
+            return false;
+        }
+
+        return $allCustomLang;
+    }
 }
