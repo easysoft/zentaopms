@@ -1,5 +1,0 @@
-<<<<<<< HEAD:www/static/js/index-d8f27665.js
-import{u as a}from"./useTargetData.hook-838ee754.js";import{j as n,d as r,f as t,o,m as s,c,L as _,ab as i}from"./index.js";import"./chartEditStore-4a2e985d.js";import"./plugin-0cb23d25.js";import"./icon-050c9201.js";const p={key:0,class:"go-chart-configurations-setting"},m=r({__name:"index",setup(d){const{targetData:e}=a();return(u,l)=>t(e)?(o(),s("div",p,[(o(),c(_(t(e).chartConfig.conKey),{optionData:t(e).option},null,8,["optionData"]))])):i("",!0)}});var D=n(m,[["__scopeId","data-v-2210075d"]]);export{D as default};
-=======
-import{u as a}from"./useTargetData.hook-c238e796.js";import{j as n,d as r,f as t,o,m as s,c,L as _,ab as i}from"./index.js";import"./chartEditStore-0e1d468b.js";import"./plugin-251acf01.js";import"./icon-7caa9069.js";const p={key:0,class:"go-chart-configurations-setting"},m=r({__name:"index",setup(d){const{targetData:e}=a();return(u,l)=>t(e)?(o(),s("div",p,[(o(),c(_(t(e).chartConfig.conKey),{optionData:t(e).option},null,8,["optionData"]))])):i("",!0)}});var D=n(m,[["__scopeId","data-v-2210075d"]]);export{D as default};
->>>>>>> * Fix bug of waterpolo in screen.:www/static/js/index-98562bf7.js
