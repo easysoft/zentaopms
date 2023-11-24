@@ -1363,6 +1363,7 @@ EOF;
     }
 
     /**
+     * 查看我的个人档案。
      * View my profile.
      *
      * @access public
@@ -1372,8 +1373,6 @@ EOF;
     {
         if($this->app->user->account == 'guest') return print(js::alert('guest') . js::locate('back'));
 
-        $this->app->loadConfig('user');
-        $this->app->loadLang('user');
         $user = $this->user->getById($this->app->user->account);
 
         $this->view->title        = $this->lang->my->common . $this->lang->colon . $this->lang->my->profile;
