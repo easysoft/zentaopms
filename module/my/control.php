@@ -1384,12 +1384,13 @@ EOF;
     }
 
     /**
+     * 查看个性化设置。
      * User preference setting.
      *
      * @access public
      * @return void
      */
-    public function preference($showTip = true)
+    public function preference(string $showTip = 'true')
     {
         $this->loadModel('setting');
 
