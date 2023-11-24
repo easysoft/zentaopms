@@ -446,6 +446,7 @@ class custom extends control
     }
 
     /**
+     * 设置代号。
      * Set code.
      *
      * @access public
@@ -456,7 +457,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.setCode', $this->post->code);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title = $this->lang->custom->code;
