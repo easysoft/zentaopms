@@ -51,7 +51,6 @@ formPanel
                     set::control('picker'),
                     set::name('company'),
                     set::items($companies),
-                    set::value('')
                 ),
                 input
                 (
@@ -90,7 +89,6 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->account),
             set::name('account'),
-            set::value('')
         )
     ),
     formRow
@@ -111,7 +109,6 @@ formPanel
             set::label($lang->user->password2),
             set::control('password'),
             set::name('password2'),
-            set::value('')
         )
     ),
     formRow
@@ -138,7 +135,6 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->realname),
             set::name('realname'),
-            set::value('')
         )
     ),
     formRow
@@ -161,7 +157,6 @@ formPanel
             set::control('picker'),
             set::name('role'),
             set::items($lang->user->roleList),
-            set::value(''),
             set::placeholder($lang->user->placeholder->role)
         )
     ),
@@ -184,7 +179,6 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->email),
             set::name('email'),
-            set::value('')
         )
     ),
     formRow
@@ -194,7 +188,6 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->commiter),
             set::name('commiter'),
-            set::value()
         )
     ),
     formRow
@@ -221,7 +214,6 @@ formPanel
             set::control('password'),
             set::required(true),
             set::name('verifyPassword'),
-            set::value(''),
             set::placeholder($lang->user->placeholder->verify)
         )
     ),

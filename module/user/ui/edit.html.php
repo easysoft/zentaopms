@@ -195,7 +195,6 @@ formPanel
             set::label($lang->user->password2),
             set::control('password'),
             set::name('password2'),
-            set::value('')
         )
     ),
     formRow
@@ -250,7 +249,6 @@ formPanel
             set::label($lang->user->verifyPassword),
             set::control('password'),
             set::name('verifyPassword'),
-            set::value(''),
             set::placeholder($lang->user->placeholder->verify)
         )
     ),
