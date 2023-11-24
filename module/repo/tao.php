@@ -101,5 +101,25 @@ class repoTao extends repoModel
             ->page($pager)
             ->fetchAll('id');
     }
-}
 
+    /**
+     * 获取代码库分支的最后提交时间。
+     * Get the last commit time of repo branch.
+     *
+     * @param  int       $repoID
+     * @param  string    $revision
+     * @param  string    $branch
+     * @access protected
+     * @return string
+     */
+    protected function getLatestCommitTime(int $repoID, string $revision, string $branch): string
+    {
+        return $this->dao->select('time')->from(TABLE_REPOHISTORY)->alias('t1')
+            ->beginIF($branch)->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')->fi()
+            ->where('t1.repo')->eq($repoID)
+            ->beginIF($revision != 'HEAD')->andWhere('t1.revision')->eq($revision)->fi()
+            ->beginIF($branch)->andWhere('t2.branch')->eq($branch)->fi()
+            ->orderBy('time desc')
+            ->fetch('time');
+    }
+}

@@ -868,6 +868,7 @@ class repoModel extends model
     }
 
     /**
+     * 获取代码库的提交列表。
      * Get commits.
      *
      * @param  object $repo
@@ -880,36 +881,25 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getCommits($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = 0, $end = 0)
+    public function getCommits(object $repo, string $entry, string $revision = 'HEAD', string $type = 'dir', object|null $pager = null, string $begin = '', string $end = ''): array
     {
         if(!isset($repo->id)) return array();
         if($repo->SCM == 'Gitlab') return $this->loadModel('gitlab')->getCommits($repo, $entry, $revision, $type, $pager, $begin, $end);
 
-        $entry = ltrim($entry, '/');
-        $entry = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
-
-        $repoID       = $repo->id;
-        $revisionTime = $this->dao->select('time')->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
-            ->where('t1.repo')->eq($repoID)
-            ->beginIF($revision != 'HEAD')->andWhere('t1.revision')->eq($revision)->fi()
-            ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-            ->orderBy('time desc')
-            ->limit(1)
-            ->fetch('time');
-
+        $entry         = ltrim($entry, '/');
+        $entry         = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
+        $revisionTime  = $this->repoTao->getLatestCommitTime($repo->id, $revision, $repo->SCM == 'Subversion' ? '' : (string)$this->cookie->repoBranch);
+        $hasBranch     = $repo->SCM != 'Subversion' && $this->cookie->repoBranch;
         $historyIdList = array();
-
-        if($entry != '/' and !empty($entry))
+        if($entry != '/' && !empty($entry))
         {
             $historyIdList = $this->dao->select('DISTINCT t2.id,t2.`time`')->from(TABLE_REPOFILES)->alias('t1')
                 ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
-                ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
-                ->where('1=1')
-                ->andWhere('t1.repo')->eq($repo->id)
+                ->beginIF($hasBranch)->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')->fi()
+                ->where('t1.repo')->eq($repo->id)
                 ->beginIF($revisionTime)->andWhere('t2.`time`')->le($revisionTime)->fi()
                 ->andWhere('left(t2.`comment`, 12)')->ne('Merge branch')
-                ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t3.branch')->eq($this->cookie->repoBranch)->fi()
+                ->beginIF($hasBranch)->andWhere('t3.branch')->eq($this->cookie->repoBranch)->fi()
                 ->beginIF($type == 'dir')
                 ->andWhere('t1.parent', true)->like(rtrim($entry, '/') . "/%")
                 ->orWhere('t1.parent')->eq(rtrim($entry, '/'))
@@ -922,16 +912,16 @@ class repoModel extends model
         }
 
         $comments = $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
-            ->where('t1.repo')->eq($repoID)
-            ->beginIF($revisionTime)->andWhere('t1.`time`')->le($revisionTime)->fi()
+            ->beginIF($hasBranch)->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')->fi()
+            ->where('t1.repo')->eq($repo->id)
             ->andWhere('left(t1.`comment`, 12)')->ne('Merge branch')
-            ->beginIF($repo->SCM != 'Subversion' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-            ->beginIF($entry != '/' and !empty($entry))->andWhere('t1.id')->in($historyIdList)->fi()
+            ->beginIF($revisionTime)->andWhere('t1.`time`')->le($revisionTime)->fi()
+            ->beginIF($hasBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->beginIF($entry != '/' && !empty($entry))->andWhere('t1.id')->in($historyIdList)->fi()
             ->beginIF($begin)->andWhere('t1.time')->ge($begin)->fi()
             ->beginIF($end)->andWhere('t1.time')->le($end)->fi()
             ->orderBy('time desc');
-        if($entry == '/' or empty($entry)) $comments->page($pager, 't1.id');
+        if($entry == '/' || empty($entry)) $comments->page($pager, 't1.id');
         $comments = $comments->fetchAll('revision');
 
         foreach($comments as $repoComment)
@@ -944,6 +934,7 @@ class repoModel extends model
     }
 
     /**
+     * 获取最后一次提交的信息。
      * Get latest commit.
      *
      * @param  int    $repoID
@@ -951,7 +942,7 @@ class repoModel extends model
      * @access public
      * @return object
      */
-    public function getLatestCommit($repoID, $checkCount = true)
+    public function getLatestCommit(int $repoID, bool $checkCount = true): object
     {
         $repo        = $this->fetchByID($repoID);
         $branchID    = (string)$this->cookie->repoBranch;
@@ -980,19 +971,20 @@ class repoModel extends model
     }
 
     /**
+     * 从数据库中获取提交记录。
      * Get revisions from db.
      *
      * @param  int    $repoID
-     * @param  string $limit
+     * @param  int    $limit
      * @param  string $maxRevision
      * @param  string $minRevision
      * @access public
      * @return array
      */
-    public function getRevisionsFromDB($repoID, $limit = '', $maxRevision = '', $minRevision = '')
+    public function getRevisionsFromDB(int $repoID, int $limit = 0, string $maxRevision = '', string $minRevision = ''): array
     {
         $revisions = $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
+            ->beginIF($this->cookie->repoBranch)->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')->fi()
             ->where('t1.repo')->eq($repoID)
             ->beginIF(!empty($maxRevision))->andWhere('t1.revision')->le($maxRevision)->fi()
             ->beginIF(!empty($minRevision))->andWhere('t1.revision')->ge($minRevision)->fi()
@@ -1000,6 +992,7 @@ class repoModel extends model
             ->orderBy('t1.revision desc')
             ->beginIF(!empty($limit))->limit($limit)->fi()
             ->fetchAll('revision');
+
         $commiters = $this->loadModel('user')->getCommiters();
         foreach($revisions as $revision)
         {
@@ -1010,6 +1003,7 @@ class repoModel extends model
     }
 
     /**
+     * 获取代码提交记录。
      * Get history.
      *
      * @param  int    $repoID
@@ -1017,10 +1011,10 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getHistory($repoID, $revisions)
+    public function getHistory(int $repoID, array $revisions): array
     {
         return $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
+            ->beginIF($this->cookie->repoBranch)->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')->fi()
             ->where('t1.repo')->eq($repoID)
             ->andWhere('t1.revision')->in($revisions)
             ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
@@ -1028,6 +1022,7 @@ class repoModel extends model
     }
 
     /**
+     * 查询提交记录的名称。
      * Get git revisionName.
      *
      * @param  string $revision
@@ -1035,13 +1030,14 @@ class repoModel extends model
      * @access public
      * @return string
      */
-    public function getGitRevisionName($revision, $commit)
+    public function getGitRevisionName(string $revision, int $commit): string
     {
         if(empty($commit)) return substr($revision, 0, 10);
         return substr($revision, 0, 10) . '<span title="' . sprintf($this->lang->repo->commitTitle, $commit) . '"> (' . $commit . ') </span>';
     }
 
     /**
+     * 获取缓存文件位置。
      * Get cache file.
      *
      * @param  int    $repoID
@@ -1050,7 +1046,7 @@ class repoModel extends model
      * @access public
      * @return string
      */
-    public function getCacheFile($repoID, $path, $revision)
+    public function getCacheFile(int $repoID, string $path, string $revision): string
     {
         $cachePath = $this->app->getCacheRoot() . '/repo/' . $repoID;
         if(!is_dir($cachePath)) mkdir($cachePath, 0777, true);
@@ -1059,13 +1055,14 @@ class repoModel extends model
     }
 
     /**
+     * 查询代码库关联的产品列表。
      * Get products by repoID.
      *
      * @param  int    $repoID
      * @access public
      * @return array
      */
-    public function getProductsByRepo($repoID)
+    public function getProductsByRepo(int $repoID): array
     {
         $repo = $this->getByID($repoID);
         if(empty($repo)) return array();
@@ -1077,6 +1074,7 @@ class repoModel extends model
     }
 
     /**
+     * 保存代码提交信息并返回保存数量。
      * Save commit.
      *
      * @param  int    $repoID
@@ -1086,7 +1084,7 @@ class repoModel extends model
      * @access public
      * @return int
      */
-    public function saveCommit($repoID, $logs, $version, $branch = '')
+    public function saveCommit(int $repoID, array $logs, int $version, string $branch = ''): int
     {
         $count = 0;
         if(empty($logs)) return $count;
@@ -1130,18 +1128,17 @@ class repoModel extends model
                     }
                 }
                 $revisionPairs[$commit->revision] = $commit->revision;
-                $version++;
-                $count++;
+                $version ++;
+                $count ++;
             }
-            else
-            {
-                dao::getError();
-            }
+
+            dao::$errors = array();
         }
         return $count;
     }
 
     /**
+     * 保存单个提交信息。
      * Save One Commit.
      *
      * @param  int    $repoID
@@ -1151,7 +1148,7 @@ class repoModel extends model
      * @access public
      * @return int
      */
-    public function saveOneCommit($repoID, $commit, $version, $branch = '')
+    public function saveOneCommit(int $repoID, object $commit, int $version, string $branch = ''): int
     {
         $existsRevision  = $this->dao->select('id,revision')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($commit->revision)->fetch();
         if($existsRevision)
@@ -1160,14 +1157,10 @@ class repoModel extends model
             return $version;
         }
 
-        $history = new stdclass();
-        $history->repo      = $repoID;
-        $history->revision  = $commit->revision;
-        $history->committer = $commit->committer;
-        $history->time      = $commit->time;
-        $history->commit    = $version;
-        $history->comment   = htmlSpecialString($commit->comment);
-        $this->dao->insert(TABLE_REPOHISTORY)->data($history)->exec();
+        $commit->repo    = $repoID;
+        $commit->commit  = $version;
+        $commit->comment = htmlSpecialString($commit->comment);
+        $this->dao->insert(TABLE_REPOHISTORY)->data($commit)->exec();
         if(!dao::isError())
         {
             $commitID = $this->dao->lastInsertID();
@@ -1198,25 +1191,24 @@ class repoModel extends model
                     $this->dao->insert(TABLE_REPOFILES)->data($repoFile)->exec();
                 }
             }
-            $version++;
-        }
-        else
-        {
-            dao::getError();
+
+            $version ++;
         }
 
+        dao::$errors = array();
         return $version;
     }
 
     /**
+     * 保存已存在的分支日志。
      * Save exists log branch.
      *
      * @param  int    $repoID
      * @param  string $branch
      * @access public
-     * @return void
+     * @return bool
      */
-    public function saveExistCommits4Branch($repoID, $branch)
+    public function saveExistCommits4Branch(int $repoID, string $branch): bool
     {
         $lastBranchLog = $this->dao->select('t1.time')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
@@ -1232,6 +1224,8 @@ class repoModel extends model
         {
             $this->dao->REPLACE(TABLE_REPOBRANCH)->set('repo')->eq($repoID)->set('revision')->eq($log->id)->set('branch')->eq($branch)->exec();
         }
+
+        return !dao::isError();
     }
 
     /**
