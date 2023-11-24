@@ -33,7 +33,6 @@ class gitlabWebhookEntry extends baseEntry
         $token   = isset($headers['X-Gitlab-Token']) ? $headers['X-Gitlab-Token'] : '';
         if(empty($event) || empty($token)) return;
 
-        $this->repo->handleWebhook($event, $token, $this->requestBody, $repo);
+        $this->repo->handleWebhook($event, $this->requestBody, $repo);
     }
-
 }

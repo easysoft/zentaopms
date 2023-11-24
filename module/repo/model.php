@@ -1785,15 +1785,16 @@ class repoModel extends model
     }
 
     /**
-     * Build URL.
+     * 构造git和svn的展示链接。
+     * Build url for git and svn.
      *
      * @param  string $methodName
      * @param  string $url
-     * @param  int    $revision
+     * @param  string $revision
      * @access public
      * @return string
      */
-    public function buildURL($methodName, $url, $revision, $scm = 'svn')
+    public function buildURL(string $methodName, string $url, int $revision, string $scm = 'svn'): string
     {
         $buildedURL  = helper::createLink($scm, $methodName, "url=&revision=$revision", 'html');
         $buildedURL .= strpos($buildedURL, '?') === false ? '?' : '&';
@@ -1803,14 +1804,15 @@ class repoModel extends model
     }
 
     /**
-     * Process git service repo.
+     * 处理代码库信息，增加代码路径和api路径。
+     * Process git service, add code path and api path.
      *
-     * @param  object    $repo
-     * @param  bool      $getCodePath
+     * @param  object $repo
+     * @param  bool   $getCodePath
      * @access public
      * @return object
      */
-    public function processGitService($repo, $getCodePath = false)
+    public function processGitService(object $repo, bool $getCodePath = false): object
     {
         $service = $this->loadModel('pipeline')->getByID($repo->serviceHost);
         if($repo->SCM == 'Gitlab')
@@ -1833,13 +1835,15 @@ class repoModel extends model
     }
 
     /**
+     * 通过服务器ID和项目ID获取代码库列表。
      * Get repositories which scm is GitLab and specified gitlabID and projectID.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
      * @return array
      */
-    public function getRepoListByClient($gitlabID, $projectID = 0)
+    public function getRepoListByClient(int $gitlabID, int $projectID = 0): array
     {
         $server = $this->loadModel('pipeline')->getByID($gitlabID);
         return $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
@@ -1851,119 +1855,74 @@ class repoModel extends model
     }
 
     /**
+     * 处理webhook请求。
      * Handle received GitLab webhook.
      *
      * @param  string $event
-     * @param  string $token
-     * @param  string $data
+     * @param  object $data
      * @param  object $repo
      * @access public
-     * @return void
+     * @return bool
      */
-    public function handleWebhook($event, $token, $data, $repo)
+    public function handleWebhook(string $event, object $data, object $repo): bool
     {
-        if($event == 'Push Hook' or $event == 'Merge Request Hook')
+        if($event != 'Push Hook' && $event != 'Merge Request Hook') return false;
+
+        /* Update code commit history. */
+        $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
+        if($repo->SCM != 'Gitlab') return $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
+
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+
+        $jobs = zget($commentGroup, $repo->id, array());
+
+        $accountPairs  = array();
+        $userList      = $this->loadModel('gitlab')->apiGetUsers($repo->gitService);
+        $acountIDPairs = $this->gitlab->getUserIdAccountPairs($repo->gitService);
+        foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
+
+        foreach($data->commits as $commit)
         {
-            /* Update code commit history. */
-            $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
-            if($repo->SCM == 'Gitlab')
+            $log = new stdclass();
+            $log->revision = $commit->id;
+            $log->msg      = $commit->message;
+            $log->author   = $commit->author->name;
+            $log->date     = date("Y-m-d H:i:s", strtotime($commit->timestamp));
+            $log->files    = array();
+
+            $diffs = $scm->engine->getFilesByCommit($log->revision);
+            if(!empty($diffs))
             {
-                $scm = $this->app->loadClass('scm');
-                $scm->setEngine($repo);
+                foreach($diffs as $diff) $log->files[$diff->action][] = $diff->path;
+            }
 
-                $this->loadModel('repo');
-                $jobs = zget($commentGroup, $repo->id, array());
+            $objects = $this->parseComment($log->msg);
+            $this->saveAction2PMS($objects, $log, $repo->path, $repo->encoding, 'git', $accountPairs);
 
-                $accountPairs  = array();
-                $userList      = $this->loadModel('gitlab')->apiGetUsers($repo->gitService);
-                $acountIDPairs = $this->gitlab->getUserIdAccountPairs($repo->gitService);
-                foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
-
-                foreach($data->commits as $commit)
+            foreach($jobs as $job)
+            {
+                foreach(explode(',', $job->comment) as $comment)
                 {
-                    $log = new stdclass();
-                    $log->revision = $commit->id;
-                    $log->msg      = $commit->message;
-                    $log->author   = $commit->author->name;
-                    $log->date     = date("Y-m-d H:i:s", strtotime($commit->timestamp));
-                    $log->files    = array();
-
-                    $diffs = $scm->engine->getFilesByCommit($log->revision);
-                    if(!empty($diffs))
-                    {
-                        foreach($diffs as $diff) $log->files[$diff->action][] = $diff->path;
-                    }
-
-                    $objects = $this->repo->parseComment($log->msg);
-                    $this->repo->saveAction2PMS($objects, $log, $repo->path, $repo->encoding, 'git', $accountPairs);
-
-                    foreach($jobs as $job)
-                    {
-                        foreach(explode(',', $job->comment) as $comment)
-                        {
-                            if(strpos($log->msg, $comment) !== false) $this->loadModel('job')->exec($job->id);
-                        }
-                    }
+                    if(strpos($log->msg, $comment) !== false) $this->loadModel('job')->exec($job->id);
                 }
             }
-            else
-            {
-                $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
-            }
         }
+
+        return !dao::isError();
     }
 
     /**
-     * Get products which scm is GitLab by projects.
-     *
-     * @param  array $projectIDs
-     * @return array
-     */
-    public function getGitlabProductsByProjects($projectIDs)
-    {
-        return $this->dao->select('path,product')->from(TABLE_REPO)->where('deleted')->eq('0')
-            ->andWhere('SCM')->eq('Gitlab')
-            ->andWhere('path')->in($projectIDs)
-            ->fetchPairs('path', 'product');
-    }
-
-    /**
-     * Get execution pairs.
-     *
-     * @param  int    $product
-     * @param  int    $branch
-     * @access public
-     * @return array
-     */
-    public function getExecutionPairs($product, $branch = 0)
-    {
-        $pairs      = array();
-        $executions = $this->loadModel('execution')->getList(0, 'all', 'undone', 0, $product, $branch);
-        $parents    = $this->dao->select('distinct parent,parent')->from(TABLE_EXECUTION)->where('type')->eq('stage')->andWhere('grade')->gt(1)->andWhere('deleted')->eq(0)->fetchPairs();
-        foreach($executions as $execution)
-        {
-            if(!empty($parents[$execution->id]) or ($execution->type == 'stage' and in_array($execution->attribute, array('request', 'design', 'review')))) continue;
-
-            if($execution->type == 'stage' and $execution->grade > 1)
-            {
-                $parentExecutions = $this->dao->select('id,name')->from(TABLE_EXECUTION)->where('id')->in(trim($execution->path, ','))->andWhere('type')->in('stage,kanban,sprint')->orderBy('grade')->fetchPairs();
-                $execution->name  = implode('/', $parentExecutions);
-            }
-            $pairs[$execution->id] = $execution->name;
-        }
-        return $pairs;
-    }
-
-    /**
+     * 获取代码库的clone地址。
      * Get clone url.
      *
      * @param  object $repo
      * @access public
      * @return object
      */
-    public function getCloneUrl($repo)
+    public function getCloneUrl(object $repo): object
     {
-        if(empty($repo)) return null;
+        if(empty($repo)) return new stdclass();
 
         $url = new stdClass();
         if($repo->SCM == 'Subversion')

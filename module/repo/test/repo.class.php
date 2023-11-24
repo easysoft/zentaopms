@@ -531,27 +531,9 @@ class repoTest
         return $objects;
     }
 
-    public function getGitlabProductsByProjectsTest($projectIDs)
-    {
-        $objects = $this->objectModel->getGitlabProductsByProjects($projectIDs);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function syncCommitTest($repoID, $branchID)
     {
         $objects = $this->objectModel->syncCommit($repoID, $branchID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getExecutionPairsTest($product, $branch = 0)
-    {
-        $objects = $this->objectModel->getExecutionPairs($product, $branch);
 
         if(dao::isError()) return dao::getError();
 

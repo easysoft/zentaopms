@@ -126,7 +126,7 @@ class gitModel extends model
      */
     public function updateCommit($repo, $commentGroup, $printLog = true)
     {
-        if($repo->SCM == 'Gitlab') return;
+        if($repo->SCM == 'Gitlab') return false;
 
         /* Load module and print log. */
         $this->loadModel('repo');
@@ -236,6 +236,7 @@ class gitModel extends model
         $this->repo->updateCommitCount($repo->id, $commits);
         $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repo->id)->exec();
         if($printLog) $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
+        return !dao::isError();
     }
 
     /**
