@@ -77,7 +77,7 @@ class myModel extends model
             ->orderBy('t1.order_asc')
             ->fetchAll('id');
 
-        list($summaryStories, $plans, $releases, $executions) = $this->getProductRelatedDate(array_keys($products));
+        list($summaryStories, $plans, $releases, $executions) = $this->getProductRelatedData(array_keys($products));
 
         $allCount      = count($products);
         $unclosedCount = 0;
@@ -116,7 +116,7 @@ class myModel extends model
      * @access private
      * @return array
      */
-    private function getProductRelatedDate(array $productKeys): array
+    private function getProductRelatedData(array $productKeys): array
     {
         $storyGroups = $this->dao->select('id,product,status,stage,estimate')
             ->from(TABLE_STORY)
