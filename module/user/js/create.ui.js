@@ -1,11 +1,19 @@
+/**
+ * 根据用户类型切换控件的显示和隐藏。
+ * Toggle the display of controls according to the user type.
+ *
+ * @param  event  event
+ * @access public
+ * @return void
+ */
 function changeType(event)
 {
-    const type = $(event.target).val();
+    const isInside = $(event.target).val() == 'inside';
 
-    $('#companyBox').toggleClass('hidden', type == 'inside');
-    $('[name="dept"]').closest('.form-row').toggleClass('hidden', type != 'inside');
-    $('[name="join"]').closest('.form-row').toggleClass('hidden', type != 'inside');
-    $('#commiter').closest('.form-row').toggleClass('hidden', type != 'inside');
+    $('[name="company"]').closest('.form-row').toggleClass('hidden', isInside);
+    $('[name="dept"]').closest('.form-row').toggleClass('hidden', !isInside);
+    $('[name="join"]').closest('.form-row').toggleClass('hidden', !isInside);
+    $('#commiter').closest('.form-row').toggleClass('hidden', !isInside);
 }
 
 function clickSubmit()
