@@ -432,129 +432,7 @@ class custom extends control
     }
 
     /**
-     * Ajax set menu
-     *
-     * @param  string $module
-     * @param  string $method
-     * @param  string $menus
-     * @access public
-     * @return void
-     */
-    public function ajaxSetMenu($module = 'main', $method = '', $menus = '')
-    {
-        if($_POST)
-        {
-            if(!empty($_POST['menus']))  $menus  = $_POST['menus'];
-            if(!empty($_POST['module'])) $module = $_POST['module'];
-            if(!empty($_POST['method'])) $method = $_POST['method'];
-        }
-        elseif(!empty($menus))
-        {
-            $menus = header::safe64Decode($menus);
-        }
-
-        if(empty($menus)) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->saveFail));
-
-        if(is_array($menus))
-        {
-            foreach($menus as $menu)
-            {
-                $menu = json_decode($menu);
-                $this->custom->saveCustomMenu($menu->value, $menu->module, isset($menu->method) ? $menu->method : '');
-            }
-        }
-        else
-        {
-            $this->custom->saveCustomMenu($menus, $module, $method);
-        }
-
-        return $this->send(array('result' => 'success'));
-    }
-
-    /**
-     * Ajax get menu
-     *
-     * @param  string $module
-     * @param  string $method
-     * @param  string $type
-     * @access public
-     * @return void
-     */
-    public function ajaxGetMenu($module = 'main', $method = '', $type = '')
-    {
-        if($this->config->global->flow == 'full')     $this->loadModel('execution')->setMenu(array(), 0);
-        if($type === 'all')
-        {
-            $menu = array();
-            $menu['main'] = customModel::getModuleMenu('main', true);
-            if($method)
-            {
-                $this->app->loadLang($module);
-                customModel::mergeFeatureBar($module, $method);
-                /* Mark search query item. */
-                if(isset($this->lang->$module->featureBar[$method]))
-                {
-                    foreach($this->lang->$module->featureBar[$method] as $barKey => $barValue)
-                    {
-                        if(strpos($barKey, 'QUERY') === 0)$this->lang->$module->featureBar[$method][$barKey] = "<i class='icon icon-search'></i> " . $barValue;
-                    }
-                }
-            }
-            if($module !== 'main')
-            {
-                $menu['module']  = array();
-                $menu['feature'] = array();
-                if(!isset($this->config->custom->noModuleMenu[$module]))
-                {
-                    $menu['module']  = customModel::getModuleMenu($module, true);
-                    $menu['feature'] = customModel::getFeatureMenu($module, $method);
-                }
-                $menu['moduleName'] = $module;
-                $menu['methodName'] = $method;
-            }
-        }
-        else
-        {
-            $menu = !empty($method) ? customModel::getFeatureMenu($module, $method) : customModel::getModuleMenu($module, true);
-        }
-        return print(str_replace("'", '\u0027', json_encode(array('result' => $menu ? 'success' : 'fail', 'menu' => $menu))));
-    }
-
-    /**
-     * Ajax restore menu.
-     *
-     * @param  string $confirm
-     * @access public
-     * @return void
-     */
-    public function ajaxRestoreMenu($setPublic = 0, $confirm = 'no')
-    {
-        if($confirm == 'no') return print(js::confirm($this->lang->custom->confirmRestore, inlink('ajaxRestoreMenu', "setPublic=$setPublic&confirm=yes")));
-
-        $account = $this->app->user->account;
-        $this->loadModel('setting')->deleteItems("owner={$account}&module=common&section=customMenu");
-        if($setPublic) $this->setting->deleteItems("owner=system&module=common&section=customMenu");
-        return print(js::reload('parent.parent'));
-    }
-
-    /**
-     * Ajax set doc setting.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxSetDoc()
-    {
-        if($this->server->request_method == 'POST')
-        {
-            $data = fixer::input('post')->join('showLibs', ',')->get();
-            if(isset($data->showLibs)) $data = $data->showLibs;
-            $this->loadModel('setting')->setItem("{$this->app->user->account}.doc.custom.showLibs", $data);
-            return print(js::reload('parent'));
-        }
-    }
-
-    /**
+     * 重置必填字段。
      * Reset required.
      *
      * @param  string $module
@@ -568,6 +446,7 @@ class custom extends control
     }
 
     /**
+     * 设置代号。
      * Set code.
      *
      * @access public
@@ -578,7 +457,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.setCode', $this->post->code);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title = $this->lang->custom->code;
@@ -587,8 +466,8 @@ class custom extends control
     }
 
     /**
-     * Set stage percent.
-     *
+     * 设置是否启用工作量占比。
+     * Set whether to enable the workload percent.
      * @access public
      * @return void
      */
@@ -597,7 +476,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.setPercent', $this->post->percent);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title = $this->lang->stage->percent;
@@ -606,8 +485,10 @@ class custom extends control
     }
 
     /**
+     * 设置每日可用工时和休息日。
      * Set hours and weekend
      *
+     * @param  string $type hours|weekend
      * @access public
      * @return void
      */
@@ -615,32 +496,30 @@ class custom extends control
     {
         if($_POST)
         {
-            $data = fixer::input('post')->get();
-            $type = $data->type;
+            $data = $_POST;
+            $type = $_POST['type'];
 
-            unset($data->type);
-            if($data->weekend != 1) unset($data->restDay);
+            unset($data['type']);
+            if($data['weekend'] != 1) unset($data['restDay']);
 
             $this->loadModel('setting')->setItems('system.execution', $data);
-
-            $response = new stdclass();
-            $response->result  = 'success';
-            $response->load    = inLink('hours', "type=$type");
-            $response->message = $this->lang->saveSuccess;
-            return $this->send($response);
+            return $this->sendSuccess(array('load' => inLink('hours', "type={$type}")));
         }
 
         $this->app->loadConfig('execution');
+
         $this->view->title     = $this->lang->workingHour;
         $this->view->type      = $type;
         $this->view->weekend   = $this->config->execution->weekend;
         $this->view->workhours = $this->config->execution->defaultWorkhours;
         $this->view->restDay   = zget($this->config->execution, 'restDay', 0);
         $this->view->module    = 'setDate';
+
         $this->display();
     }
 
     /**
+     * 设置是否限制任务开始和结束时间。
      * Set whether the task begin and end date is limited to the execution begin and end date.
      *
      * @access public
@@ -651,11 +530,11 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.limitTaskDate', $this->post->limitTaskDate);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->sendSuccess(array('load' => true));
         }
 
-        $this->view->title      = $this->lang->custom->beginAndEndDate;
-        $this->view->module     = 'task';
+        $this->view->title  = $this->lang->custom->beginAndEndDate;
+        $this->view->module = 'task';
 
         $this->display();
     }

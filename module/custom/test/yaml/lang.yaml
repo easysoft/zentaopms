@@ -7,12 +7,12 @@ fields:
   - field: lang
     range: 'zh-cn'
   - field: module
-    range: 'custom'
+    range: 'custom{5}common{2},myMenu,mySubMenu,my'
   - field: section
-    range: 'URSRList'
+    range: 'URSRList{5},[],mainNav,menu,work,`featureBar-todo`'
   - field: key
-    range: 1-100
+    range: "1-5,executionCommon,my,index,task,all"
   - field: value
-    range: '`{"SRName":"\\\u8f6f\\\u4ef6\\\u9700\\\u6c42","URName":"\\\u7528\\\u6237\\\u9700\\\u6c42"}`,`{"SRName":"\\\u7814\\\u53d1\\\u9700\\\u6c42","URName":"\\\u7528\\\u6237\\\u9700\\\u6c42"}`,`{"SRName":"\\\u8f6f\\\u9700","URName":"\\\u7528\\\u9700"}`,`{"SRName":"\\\u6545\\\u4e8b","URName":"\\\u53f2\\\u8bd7"}`,`{"SRName":"\\\u9700\\\u6c42","URName":"\\\u7528\\\u6237\\\u9700\\\u6c42"}`'
+    range: '`{"SRName":"\\\u8f6f\\\u4ef6\\\u9700\\\u6c42","URName":"\\\u7528\\\u6237\\\u9700\\\u6c42"}`,`{"SRName":"\\\u7814\\\u53d1\\\u9700\\\u6c42","URName":"\\\u7528\\\u6237\\\u9700\\\u6c42"}`,`{"SRName":"\\\u8f6f\\\u9700","URName":"\\\u7528\\\u9700"}`,`{"SRName":"\\\u6545\\\u4e8b","URName":"\\\u53f2\\\u8bd7"}`,`{"SRName":"\\\u9700\\\u6c42","URName":"\\\u7528\\\u6237\\\u9700\\\u6c42"}`,执行,地盘1,仪表盘1,任务1,指派给我1'
   - field: system
-    range: 1{4},0
+    range: 1{4},0,1{5}

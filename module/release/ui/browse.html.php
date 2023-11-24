@@ -33,10 +33,12 @@ jsVar('showBranch', $showBranch);
 jsVar('type', $type);
 
 if($showBranch) $config->release->dtable->fieldList['branch']['map'] = $branchPairs;
+$cols     = $config->release->dtable->fieldList;
+$releases = initTableData($releases, $cols, $this->release);
 dtable
 (
-    set::cols(array_values($config->release->dtable->fieldList)),
-    set::data(array_values($releases)),
+    set::cols(array_values($cols)),
+    set::data($releases),
     set::plugins(array('cellspan')),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::getCellSpan(jsRaw('window.getCellSpan')),

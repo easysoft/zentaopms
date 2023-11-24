@@ -57,49 +57,6 @@ $fnGenerateQueryForm = function() use($metricRecordType, $metric, $metricID)
         );
     }
 
-    if($metricRecordType == 'system')
-    {
-        $formGroups[] = formGroup
-        (
-            setClass('query-inline'),
-            set::width('360px'),
-            set::label($this->lang->metric->calcTime),
-            inputGroup
-            (
-                datePicker
-                (
-                    set::name('calcBegin'),
-                    set('id', 'calcBegin' . $metricID)
-                ),
-                $this->lang->metric->to,
-                datePicker
-                (
-                    set::name('calcEnd'),
-                    set('id', 'calcEnd' . $metricID)
-                )
-            )
-        );
-    }
-    else
-    {
-        $formGroups[] = formGroup
-        (
-            setClass('query-inline'),
-            set::width('200px'),
-            set::label($this->lang->metric->calcTime),
-            inputGroup
-            (
-                datePicker
-                (
-                    set::name('calcTime'),
-                    set('id', 'calcTime' . $metricID),
-                    set::required(true),
-                    set::value(helper::today())
-                )
-            )
-        );
-    }
-
     return form
     (
         set::id('queryForm' . $metricID),
@@ -107,7 +64,7 @@ $fnGenerateQueryForm = function() use($metricRecordType, $metric, $metricID)
         (
             set::width('full'),
             $formGroups,
-            formGroup
+            !empty($formGroups) ? formGroup
             (
                 setClass('query-btn'),
                 btn
@@ -116,7 +73,7 @@ $fnGenerateQueryForm = function() use($metricRecordType, $metric, $metricID)
                     set::text($this->lang->metric->query->action),
                     set::onclick("window.handleQueryClick($metricID, 'multiple')")
                 )
-            )
+            ) : null
         ),
         set::actions(array())
     );
@@ -188,6 +145,7 @@ div
                     set::bordered(true),
                     set::cols($resultHeader),
                     set::data(array_values($resultData)),
+                    ($metricRecordType == 'scope' || $metricRecordType == 'scope-date') ? set::footPager(usePager('dtablePager')) : null,
                     set::onRenderCell(jsRaw('window.renderDTableCell'))
                 ) : null
             )

@@ -188,7 +188,7 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
         (
             set::width('full'),
             $formGroups,
-            formGroup
+            !empty($formGroups) ? formGroup
             (
                 setClass('query-btn'),
                 btn
@@ -197,7 +197,7 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
                     set::text($this->lang->metric->query->action),
                     set::onclick("window.handleQueryClick($current->id, 'single')")
                 )
-            )
+            ) : null
         ),
         set::actions(array())
     );

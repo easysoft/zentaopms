@@ -49,6 +49,35 @@ class bugZen extends bug
     }
 
     /**
+     * 检查 bug 编辑时的必填项。
+     * Check required fields when edit bug.
+     *
+     * @param  object    $bug
+     * @access protected
+     * @return bool
+     */
+    protected function checkRquiredForEdit(object $bug): bool
+    {
+        $requiredFields = explode(',', $this->config->bug->edit->requiredFields);
+        $editErrors         = array();
+        /* Check required fields. */
+        foreach($requiredFields as $requiredField)
+        {
+            if(isset($this->config->bug->form->edit[$requiredField])
+                && (!isset($bug->{$requiredField}) || (isset($bug->{$requiredField}) && strlen(trim((string)$bug->{$requiredField})) == 0)))
+            {
+                $fieldName = isset($this->config->bug->form->edit[$requiredField]) && $this->config->bug->form->edit[$requiredField]['type'] != 'array' ? $requiredField : "{$requiredField}[]";
+                $editErrors[$fieldName] = sprintf($this->lang->error->notempty, zget($this->lang->bug, $requiredField));
+            }
+        }
+
+        if(!empty($bug->resolvedBy) && empty($bug->resolution)) $editErrors['resolution'] = sprintf($this->lang->error->notempty, $this->lang->bug->resolution);
+        if($bug->resolution == 'duplicate' && empty($bug->duplicateBug)) $editErrors['duplicateBug'] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
+        if(!empty($editErrors)) dao::$errors = $editErrors;
+        return true;
+    }
+
+    /**
      * 检查解决bug时表单数据的完整性。
      * Check the integrity of form data when resolving bug.
      *

@@ -1255,15 +1255,17 @@ EOF;
     }
 
     /**
-     * Change password
+     * 修改密码。
+     * Change password.
      *
      * @access public
      * @return void
      */
     public function changePassword()
     {
+        if($this->app->user->account == 'guest') return print(js::alert('guest') . js::locate('back'));
+
         $this->app->loadLang('admin');
-        if($this->app->user->account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest', 'load' => array('alter' => 'guest', 'back' => true)));
 
         $isonlybody = isInModal();
         if(!$isonlybody) unset($this->lang->my->menu);
@@ -1272,7 +1274,7 @@ EOF;
         {
             $this->user->updatePassword($this->app->user->id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            if($isonlybody) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('index', 'index')));
         }
 
@@ -1284,6 +1286,7 @@ EOF;
     }
 
     /**
+     * 管理联系人。
      * Manage contacts.
      *
      * @param  int    $listID
@@ -1305,12 +1308,15 @@ EOF;
         $list     = $listID ? $this->user->getContactListByID($listID) : null;
         $userList = !empty($list->userList) ? $list->userList : '';
 
-        $mode  = 'create';
-        $label = $this->lang->my->createContacts;
         if($list)
         {
             $mode  = $list->account == $this->app->user->account ? 'edit' : 'view';
             $label = $list->account == $this->app->user->account ? $this->lang->my->manageContacts : $this->lang->my->viewContacts;
+        }
+        else
+        {
+            $mode  = 'create';
+            $label = $this->lang->my->createContacts;
         }
 
         $userParams = empty($this->config->user->showDeleted) ? 'noletter|noempty|noclosed|noclosed|nodeleted' : 'noletter|noempty|noclosed|noclosed';
@@ -1326,6 +1332,7 @@ EOF;
     }
 
     /**
+     * 删除一个联系人列表。
      * Delete a contact list.
      *
      * @param  int    $listID
@@ -1339,6 +1346,7 @@ EOF;
     }
 
     /**
+     * 构建联系人列表。
      * Build contact lists.
      *
      * @param  string $dropdownName
@@ -1346,7 +1354,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function buildContactLists($dropdownName = 'mailto', $attr = '')
+    public function buildContactLists(string $dropdownName = 'mailto', string $attr = '')
     {
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
         $this->view->dropdownName = $dropdownName;
@@ -1355,6 +1363,7 @@ EOF;
     }
 
     /**
+     * 查看我的个人档案。
      * View my profile.
      *
      * @access public
@@ -1364,8 +1373,6 @@ EOF;
     {
         if($this->app->user->account == 'guest') return print(js::alert('guest') . js::locate('back'));
 
-        $this->app->loadConfig('user');
-        $this->app->loadLang('user');
         $user = $this->user->getById($this->app->user->account);
 
         $this->view->title        = $this->lang->my->common . $this->lang->colon . $this->lang->my->profile;
@@ -1377,12 +1384,13 @@ EOF;
     }
 
     /**
+     * 查看个性化设置。
      * User preference setting.
      *
      * @access public
      * @return void
      */
-    public function preference($showTip = true)
+    public function preference(string $showTip = 'true')
     {
         $this->loadModel('setting');
 

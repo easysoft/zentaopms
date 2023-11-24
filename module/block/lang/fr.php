@@ -142,7 +142,7 @@ $lang->block->titleList['statistic']      = "{$lang->projectCommon} Statistic";
 
 $lang->block->default['scrumproject'][] = array('title' => "{$lang->projectCommon} Overview",   'module' => 'scrumproject', 'code' => 'scrumoverview',  'width' => '2');
 $lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCommon} List",     'module' => 'scrumproject', 'code' => 'scrumlist',      'width' => '2', 'params' => array('type' => 'undone', 'count' => '20', 'orderBy' => 'id_desc'));
-$lang->block->default['scrumproject'][] = array('title' => 'Test Request',                      'module' => 'scrumproject', 'code' => 'scrumtest',      'width' => '2', 'params' => array('type' => 'wait', 'count' => '15', 'orderBy' => 'id_desc'));
+$lang->block->default['scrumproject'][] = array('title' => 'Test Requests of Waiting',          'module' => 'scrumproject', 'code' => 'scrumtest',      'width' => '2', 'params' => array('type' => 'wait', 'count' => '15', 'orderBy' => 'id_desc'));
 $lang->block->default['scrumproject'][] = array('title' => "{$lang->executionCommon} Overview", 'module' => 'scrumproject', 'code' => 'sprint',         'width' => '1');
 $lang->block->default['scrumproject'][] = array('title' => 'Dynamic',                           'module' => 'scrumproject', 'code' => 'projectdynamic', 'width' => '1');
 

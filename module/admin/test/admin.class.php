@@ -4,49 +4,9 @@ class adminTest
     public function __construct()
     {
         global $tester;
-        global $config;
-        global $app;
         $this->objectModel = $tester->loadModel('admin');
         $this->user = $tester->loadModel('user');
-        $this->communityConfig = $app->loadConfig('community');
-        $this->adminConfig = $config->admin;
     }
-
-    public function getSecretKeyTest()
-    {
-        $objects = $this->objectModel->getSecretKey();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * Get signature.
-     *
-     * @param  array    $params
-     * @access public
-     * @return string
-     */
-    public function getSignatureTest()
-    {
-        $params['u'] = $this->communityConfig;
-        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequet';
-
-        $apiConfig = $this->objectModel->getApiConfig();
-        $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
-
-        $objects = $this->objectModel->getSignature($params);
-
-        if(dao::isError()) return dao::getError();
-
-        if($objects){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
 
     public function getApiConfigTest()
     {

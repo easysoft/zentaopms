@@ -51,7 +51,7 @@ class searchModel extends model
         /* Init vars. */
         $module       = $this->session->searchParams['module'];
         $searchParams = $module . 'searchParams';
-        $searchFields = json_decode($_SESSION[$searchParams]['searchFields'], true);
+        $searchFields = json_decode($_SESSION[$searchParams]['searchFields']);
         $fieldParams  = json_decode($_SESSION[$searchParams]['fieldParams']);
         $groupItems   = $this->config->search->groupItems;
         $groupAndOr   = strtoupper($this->post->groupAndOr);
@@ -106,13 +106,13 @@ class searchModel extends model
      * 初始化搜索表单，并且保存到 session。
      * Init the search session for the first time search.
      *
-     * @param  string   $module
-     * @param  array    $fields
-     * @param  array    $fieldParams
+     * @param  string $module
+     * @param  object $fields
+     * @param  object $fieldParams
      * @access public
-     * @return void
+     * @return array
      */
-    public function initSession($module, $fields, $fieldParams)
+    public function initSession(string $module, object $fields, object $fieldParams): array
     {
         if(is_object($fields)) $fields = get_object_vars($fields);
         $formSessionName = $module . 'Form';

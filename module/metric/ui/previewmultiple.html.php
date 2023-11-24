@@ -224,8 +224,6 @@ toolbar
     */
 );
 
-$metricRecordType = $this->metric->getMetricRecordType($resultHeader);
-
 $fnGenerateQueryForm = function() use($metricRecordType, $current)
 {
     if(!$metricRecordType) return null;
@@ -276,7 +274,7 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
         (
             set::width('full'),
             $formGroups,
-            formGroup
+            !empty($formGroups) ? formGroup
             (
                 setClass('query-btn'),
                 btn
@@ -285,7 +283,7 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
                     set::text($this->lang->metric->query->action),
                     set::onclick("window.handleQueryClick($current->id, 'multiple')")
                 )
-            )
+            ) : null
         ),
         set::actions(array())
     );
@@ -422,7 +420,7 @@ $metricBoxs = div
                     set::bordered(true),
                     set::cols($resultHeader),
                     set::data(array_values($resultData)),
-                    set::footPager(usePager()),
+                    ($metricRecordType == 'scope' || $metricRecordType == 'scope-date') ? set::footPager(usePager('dtablePager')) : null,
                     set::onRenderCell(jsRaw('window.renderDTableCell'))
                 ) : null
             )

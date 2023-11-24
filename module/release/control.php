@@ -314,8 +314,9 @@ class release extends control
             $fileName = $this->post->fileName;
             if(empty($fileName)) return $this->sendError(array('fileName' => sprintf($this->lang->error->notempty, $this->lang->release->fileName)));
 
-            $html = '';
-            if($type == 'story' or $type == 'all')   $html .= $this->releaseZen->buildStoryDataForExport($release);
+            $html    = '';
+            $release = $this->release->getByID($releaseID, true);
+            if($type == 'story' || $type == 'all')   $html .= $this->releaseZen->buildStoryDataForExport($release);
             if($type == 'bug' || $type == 'all')     $html .= $this->releaseZen->buildBugDataForExport($release);
             if($type == 'leftbug' || $type == 'all') $html .= $this->releaseZen->buildLeftBugDataForExport($release);
 

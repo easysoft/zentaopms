@@ -303,7 +303,16 @@ class releaseZen extends release
         $html .= "<h3>{$this->lang->release->stories}</h3>";
         $this->loadModel('story');
 
-        if(!empty($release->stories))
+        $stories = $this->release->getStoryList($release->stories, (int)$release->branch);
+        foreach($stories as $story) $story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>";
+
+        $fields = array('id' => $this->lang->story->id, 'title' => $this->lang->story->title);
+        $rows   = $stories;
+
+        $html .= '<table><tr>';
+        foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+        $html .= '</tr>';
+        foreach($rows as $row)
         {
             $stories = $this->story->getByList($release->stories);
             foreach($stories as $story) $story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>";
@@ -344,7 +353,16 @@ class releaseZen extends release
         $html .= "<h3>{$this->lang->release->bugs}</h3>";
         $this->loadModel('bug');
 
-        if(!empty($release->bugs))
+        $bugs = $this->release->getBugList($release->bugs);
+        foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
+
+        $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
+        $rows   = $bugs;
+
+        $html .= '<table><tr>';
+        foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+        $html .= '</tr>';
+        foreach($rows as $row)
         {
             $bugs = $this->bug->getByIdList($release->bugs);
             foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
@@ -384,7 +402,16 @@ class releaseZen extends release
         $html .= "<h3>{$this->lang->release->generatedBugs}</h3>";
         $this->loadModel('bug');
 
-        if(!empty($release->leftBugs))
+        $bugs = $this->release->getBugList($release->leftBugs);
+        foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
+
+        $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
+        $rows   = $bugs;
+
+        $html .= '<table><tr>';
+        foreach($fields as $fieldLabel) $html .= "<th><nobr>$fieldLabel</nobr></th>\n";
+        $html .= '</tr>';
+        foreach($rows as $row)
         {
             $bugs = $this->bug->getByIdList($release->bugs);
             foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";

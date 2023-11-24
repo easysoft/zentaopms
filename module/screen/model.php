@@ -20,6 +20,7 @@ class screenModel extends model
     public $filter;
 
     /**
+     * 初始化函数。
      * Construct function.
      *
      * @access public
@@ -40,47 +41,52 @@ class screenModel extends model
     }
 
     /**
+     * 获取大屏列表。
      * Get screen list.
      *
-     * @param  int $dimensionID
+     * @param  int    $dimensionID
      * @access public
      * @return array
      */
-    public function getList($dimensionID)
+    public function getList(int $dimensionID): array
     {
         return $this->dao->select('*')->from(TABLE_SCREEN)->where('dimension')->eq($dimensionID)->andWhere('deleted')->eq('0')->fetchAll('id');
     }
 
     /**
+     * 通过id获取大屏信息。
      * Get screen by id.
      *
-     * @param  int $screenID
-     * @param  int $year
-     * @param  int $dept
-     * @param  string $account
+     * @param  int         $screenID
+     * @param  int         $year
+     * @param  int         $dept
+     * @param  string      $account
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getByID($screenID, $year = '', $dept = '', $account = '')
+    public function getByID(int $screenID, int $year = 0, int $dept = 0, string $account = ''): object|bool
     {
         $screen = $this->dao->select('*')->from(TABLE_SCREEN)->where('id')->eq($screenID)->fetch();
-        if(!isset($screen->scheme) or empty($screen->scheme)) $screen->scheme = file_get_contents(__DIR__ . '/json/screen.json');
+        if(!$screen) return false;
+
+        if(empty($screen->scheme)) $screen->scheme = file_get_contents(__DIR__ . '/json/screen.json');
         $screen->chartData = $this->genChartData($screen, $year, $dept, $account);
 
         return $screen;
     }
 
     /**
+     * 构建大屏图表数据。
      * Generate chartData of screen.
      *
      * @param  object $screen
-     * @param  string $year
-     * @param  string $dept
+     * @param  int    $year
+     * @param  int    $dept
      * @param  string $account
      * @access public
      * @return object
      */
-    public function genChartData($screen, $year, $dept, $account)
+    public function genChartData(object $screen, int $year, int $dept, string $account): object
     {
         $this->filter = new stdclass();
         $this->filter->screen  = $screen->id;
@@ -89,7 +95,7 @@ class screenModel extends model
         $this->filter->account = $account;
         $this->filter->charts  = array();
 
-        if(!$screen->builtin or in_array($screen->id, $this->config->screen->builtinScreen)) return $this->genNewChartData($screen, $year, $dept, $account);
+        if(!$screen->builtin || in_array($screen->id, $this->config->screen->builtinScreen)) return $this->genNewChartData($screen, $year, $dept, $account);
 
         $config = new stdclass();
         $config->width            = 1300;

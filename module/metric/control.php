@@ -74,7 +74,7 @@ class metric extends control
             $resultData   = $this->metricZen->getViewTableData($metric, $result);
         }
 
-        //include 'test/groupData/' . 'time-month.php';
+        //include 'test/groupData/' . 'time-day.php';
 
         list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
         $this->view->groupHeader   = $groupHeader;
