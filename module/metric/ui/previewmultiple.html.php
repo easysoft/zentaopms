@@ -420,7 +420,7 @@ $metricBoxs = div
                     set::bordered(true),
                     set::cols($resultHeader),
                     set::data(array_values($resultData)),
-                    set::footPager(usePager()),
+                    ($metricRecordType == 'scope' || $metricRecordType == 'scope-date') ? set::footPager(usePager('dtablePager')) : null,
                     set::onRenderCell(jsRaw('window.renderDTableCell'))
                 ) : null
             )

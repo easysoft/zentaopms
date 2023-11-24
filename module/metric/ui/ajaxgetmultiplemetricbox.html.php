@@ -145,6 +145,7 @@ div
                     set::bordered(true),
                     set::cols($resultHeader),
                     set::data(array_values($resultData)),
+                    ($metricRecordType == 'scope' || $metricRecordType == 'scope-date') ? set::footPager(usePager('dtablePager')) : null,
                     set::onRenderCell(jsRaw('window.renderDTableCell'))
                 ) : null
             )
