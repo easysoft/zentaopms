@@ -41,9 +41,8 @@ class screen extends control
     public function checkShowGuide()
     {
         $this->app->loadLang('admin');
-        $this->loadModel('setting');
 
-        $isUpdate = $this->setting->getItem("owner=system&module=bi&key=update2BI");
+        $isUpdate = $this->loadModel('setting')->getItem("owner=system&module=bi&key=update2BI");
         if(empty($isUpdate))
         {
             $this->view->showGuide = false;

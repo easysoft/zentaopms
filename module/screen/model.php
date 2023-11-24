@@ -20,6 +20,7 @@ class screenModel extends model
     public $filter;
 
     /**
+     * 初始化函数。
      * Construct function.
      *
      * @access public
@@ -40,13 +41,14 @@ class screenModel extends model
     }
 
     /**
+     * 获取大屏列表。
      * Get screen list.
      *
-     * @param  int $dimensionID
+     * @param  int    $dimensionID
      * @access public
      * @return array
      */
-    public function getList($dimensionID)
+    public function getList(int $dimensionID): array
     {
         return $this->dao->select('*')->from(TABLE_SCREEN)->where('dimension')->eq($dimensionID)->andWhere('deleted')->eq('0')->fetchAll('id');
     }
