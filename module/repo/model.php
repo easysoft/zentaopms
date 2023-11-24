@@ -2942,7 +2942,7 @@ class repoModel extends model
         while($hasNextPage)
         {
             $query    = array('query' => 'query { project(fullPath: "' . $fullPath . '") {repository {tree(path: "' . trim($path, '/') . '", ref: "' . $branch . '") {' . $type . '(after: "' . $endCursor . '") {pageInfo {endCursor hasNextPage} nodes {sha name path}}}}}}');
-            $response = $this->gitlab->apiGetByGraphql($repo->serviceHost, $query);
+            $response = $this->gitlab->apiGetByGraphql((int)$repo->serviceHost, $query);
 
             if(!$endCursor && !isset($response->data->project->repository)) return array();
 

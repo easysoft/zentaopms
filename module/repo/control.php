@@ -441,7 +441,7 @@ class repo extends control
 
         /* Get files info. */
         $base64BranchID = helper::safe64Encode(base64_encode($branchID));
-        $infos          = $this->repoZen->getFilesInfo($repo, $path, $branchID, $refresh, $revision, $lastRevision, $base64BranchID, $objectID);
+        $infos          = $this->repoZen->getFilesInfo($repo, $path, $branchID, (int)$refresh, $revision, $lastRevision, $base64BranchID, $objectID);
 
         /* Synchronous commit only in root path. */
         if(in_array($repo->SCM, $this->config->repo->gitTypeList) && $repo->SCM != 'Gitlab' && empty($path) && $infos && empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));

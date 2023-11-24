@@ -64,6 +64,38 @@ class repoTest
         }
     }
 
+    public function linkTest(int $repoID, string $revision, string $type, string $from, array $links)
+    {
+        if($type == 'story') $_POST['stories'] = $links;
+        if($type == 'bug')   $_POST['bugs'] = $links;
+        if($type == 'task')  $_POST['tasks'] = $links;
+
+        $this->objectModel->link($repoID, $revision, $type, $from);
+        if(dao::isError()) return dao::getError();
+
+        $revisionInfo = $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
+        $relations    = array();
+        foreach($links as $linkID)
+        {
+            $relations[] = $this->objectModel->dao->select('*')->from(TABLE_RELATION)
+                ->where('AType')->eq('revision')
+                ->andWhere('AID')->eq($revisionInfo->id)
+                ->andWhere('BID')->eq($linkID)
+                ->andWhere('relation')->eq('commit')
+                ->andWhere('BType')->eq($type)
+                ->fetch();
+        }
+        return $relations;
+    }
+
+    public function unlinkTest(int $repoID, string $revision, string $objectType, int $objectID)
+    {
+        $this->objectModel->unlink($repoID, $revision, $objectType, $objectID);
+        if(dao::isError()) return dao::getError();
+
+        return 'success';
+    }
+
     public function getListBySCMTest($scm, $type = 'all')
     {
         $objects = $this->objectModel->getListBySCM($scm, $type = 'all');
