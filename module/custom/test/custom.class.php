@@ -602,4 +602,23 @@ class customTest
         if(dao::isError()) return dao::getError();
         return $features;
     }
+
+    /**
+     * 获取自定义语言项。
+     * Get custom lang.
+     *
+     * @access public
+     * @return array|false
+     */
+    public function getCustomLangTest(): array|false
+    {
+        $oldVision = $this->objectModel->config->vision;
+
+        $this->objectModel->config->vision = 'rnd';
+        $allCustomLang = $this->objectModel->getCustomLang();
+
+        $this->objectModel->config->vision = $oldVision;
+        if(dao::isError()) return dao::getError();
+        return $allCustomLang;
+    }
 }
