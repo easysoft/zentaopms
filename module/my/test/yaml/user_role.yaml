@@ -1,0 +1,6 @@
+title: table zt_user
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: role
+    range: "[],qa,po,pm"

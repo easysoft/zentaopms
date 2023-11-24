@@ -229,4 +229,27 @@ class myTest
 
         return trim($return, ',');
     }
+
+    /**
+     * 测试设置菜单。
+     * Test set menu.
+     *
+     * @param  string $account
+     * @access public
+     * @return array|string
+     */
+    public function setMenuTest(string $account): array|string
+    {
+        su($account);
+
+        $this->objectModel->setMenu();
+
+        if(dao::isError()) return dao::getError();
+
+         global $tester;
+        $return = '';
+        foreach($tester->lang->my->menuOrder as $order => $menuName) $return .= "{$order}:{$menuName},";
+
+        return trim($return, ',');
+    }
 }
