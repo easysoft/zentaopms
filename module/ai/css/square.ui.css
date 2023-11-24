@@ -78,8 +78,12 @@
     white-space: nowrap;
 }
 
-.table-footer {
+.pager-container {
     margin-top: 8px;
+    display: flex;
+    justify-content: flex-end;
+    background: #fff;
+    padding: 12px;
 }
 
 .btn-star {
