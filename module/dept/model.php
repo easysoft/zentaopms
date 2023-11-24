@@ -436,7 +436,7 @@ class deptModel extends model
         }
 
         krsort($tree);
-        return array_pop($tree);
+        return $tree ? array_pop($tree) : array();
     }
 
     /**
