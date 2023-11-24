@@ -155,12 +155,6 @@ class execution extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $tasks = $this->execution->getTasks((int)$productID, $executionID, $this->executions, $browseType, $queryID, (int)$moduleID, $sort, $pager);
 
-        /* Build the search form. */
-        $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
-        $this->config->execution->search['onMenuBar'] = 'yes';
-        if(!$execution->multiple) unset($this->config->execution->search['fields']['execution']);
-        $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL);
-
         /* team member pairs. */
         $memberPairs = array();
         foreach($this->view->teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
@@ -191,6 +185,13 @@ class execution extends control
         $showAllModule = empty($this->config->execution->task->allModule) ? '' : 'allModule';
         $showModule    = !empty($this->config->execution->task->showModule) ? $this->config->execution->task->showModule : '';
 
+        /* Build the search form. */
+        $modules   = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, $showModule);
+        $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
+        $this->config->execution->search['onMenuBar'] = 'yes';
+        if(!$execution->multiple) unset($this->config->execution->search['fields']['execution']);
+        $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL, $modules);
+
         $this->view->title       = $execution->name . $this->lang->colon . $this->lang->execution->task;
         $this->view->tasks       = $tasks;
         $this->view->pager       = $pager;
@@ -199,7 +200,7 @@ class execution extends control
         $this->view->status      = $status;
         $this->view->param       = $param;
         $this->view->moduleID    = $moduleID;
-        $this->view->modules     = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, $showAllModule);
+        $this->view->modules     = $modules; 
         $this->view->modulePairs = $this->tree->getModulePairs($executionID, 'task', $showModule);
         $this->view->moduleTree  = $this->tree->getTaskTreeMenu($executionID, $productID, 0, array('treeModel', 'createTaskLink'), $showModule);
         $this->view->memberPairs = $memberPairs;
@@ -1014,7 +1015,7 @@ class execution extends control
         $this->view->title               = $this->app->tab == 'execution' ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
         $this->view->allProducts         = array_filter($this->executionZen->getAllProductsForCreate($project));
-        $this->view->allProjects         = $this->project->getPairsByModel('all', 'noclosed,multiple');
+        $this->view->allProjects         = $this->project->getPairsByModel('scrum,agileplus,waterfall,waterfallplus,kanban', 'noclosed,multiple');
         $this->view->multiBranchProducts = $this->loadModel('product')->getMultiBranchPairs();
         $this->view->products            = $products;
         $this->view->teams               = $this->execution->getCanCopyObjects($projectID);
@@ -2738,7 +2739,7 @@ class execution extends control
         $this->view->productID        = $productID;
         $this->view->pager            = $pager;
         $this->view->orderBy          = $orderBy;
-        $this->view->users            = $this->loadModel('user')->getPairs('noletter', '', 0, array_unique(array_column($executionStats, 'PM')));
+        $this->view->users            = $this->loadModel('user')->getPairs('noletter');
         $this->view->projects         = array('') + $this->project->getPairsByProgram();
         $this->view->status           = $status;
         $this->view->from             = $from;
@@ -2854,10 +2855,7 @@ class execution extends control
             {
                 $execution->PM            = zget($users, $execution->PM);
                 $execution->status        = isset($execution->delay) ? $executionLang->delayed : $this->processStatus('execution', $execution);
-                $execution->totalEstimate = $execution->hours->totalEstimate;
-                $execution->totalConsumed = $execution->hours->totalConsumed;
-                $execution->totalLeft     = $execution->hours->totalLeft;
-                $execution->progress      = $execution->hours->progress . '%';
+                $execution->progress     .= '%';
                 $execution->name          = isset($execution->title) ? $execution->title : $execution->name;
                 if($this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $execution->method = zget($executionLang->typeList, $execution->type);
 

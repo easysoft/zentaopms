@@ -106,10 +106,11 @@ class executionModel extends model
         if($execution->type == 'kanban') $this->executionTao->setKanbanMenu();
 
         /* Check execution permission. */
-        $executions = $this->getPairs(0, 'all', 'nocode');
+        $executions = $this->fetchPairs($execution->project, 'all');
         if(!$executionID && $this->session->execution) $executionID = $this->session->execution;
-        if(!$executionID || !in_array($executionID, array_keys($executions))) $executionID = key($executions);
-        if($executions && (!isset($executions[$executionID]) || !$this->checkPriv($executionID))) return $this->accessDenied();
+        if(!$executionID) $executionID = key($executions);
+        if($execution->multiple and !isset($executions[$executionID])) $executionID = key($executions);
+        if($execution->multiple and $executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) return $this->accessDenied();
 
         /* Replaces the iterated language with the stage. */
         if($execution->type == 'stage')
@@ -161,8 +162,8 @@ class executionModel extends model
         if(isset($this->lang->execution->menu->storyGroup)) unset($this->lang->execution->menu->storyGroup);
         if(isset($this->lang->execution->menu->story['dropMenu']) && $this->app->getMethodName() == 'storykanban')
         {
-            unset($this->lang->execution->menu->story['dropMenu']);
-            $this->lang->execution->menu->story['link'] = str_replace(array($this->lang->common->story, 'story'), array($this->lang->SRCommon, 'storykanban'), $this->lang->execution->menu->story['link']);
+            $this->lang->execution->menu->story['link']            = str_replace(array($this->lang->common->story, 'story'), array($this->lang->SRCommon, 'storykanban'), $this->lang->execution->menu->story['link']);
+            $this->lang->execution->menu->story['dropMenu']->story = str_replace('execution|story', 'execution|storykanban', $this->lang->execution->menu->story['dropMenu']->story);
         }
     }
 
@@ -1352,7 +1353,7 @@ class executionModel extends model
                 ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-                ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
+                ->beginIF(!$this->app->user->admin and isset($this->app->user->view))->andWhere('t2.id')->in($this->app->user->view->sprints)->fi() 
                 ->beginIF(!$withChildren)->andWhere('grade')->eq(1)->fi()
                 ->orderBy('order_desc')
                 ->page($pager)
@@ -1369,7 +1370,7 @@ class executionModel extends model
                 ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+                ->beginIF(!$this->app->user->admin and isset($this->app->user->view))->andWhere('id')->in($this->app->user->view->sprints)->fi()
                 ->beginIF(!$withChildren)->andWhere('grade')->eq(1)->fi()
                 ->orderBy('order_desc')
                 ->page($pager)
