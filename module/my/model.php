@@ -209,12 +209,13 @@ class myModel extends model
     }
 
     /**
+     * 获取我的概述。
      * Get overview.
      *
      * @access public
      * @return object
      */
-    public function getOverview()
+    public function getOverview(): object
     {
         $inAdminGroup = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
             ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group=t2.id')
@@ -223,11 +224,10 @@ class myModel extends model
             ->fetch();
 
         $overview = new stdclass();
-        if(!empty($inAdminGroup) or $this->app->user->admin)
+        if(!empty($inAdminGroup) || $this->app->user->admin)
         {
             $allConsumed      = 0;
             $thisYearConsumed = 0;
-
             $projects         = $this->loadModel('project')->getOverviewList('all', 0, 'id_desc', 0);
             $projectsConsumed = $this->project->getProjectsConsumed(array_keys($projects), 'THIS_YEAR');
             foreach($projects as $project)

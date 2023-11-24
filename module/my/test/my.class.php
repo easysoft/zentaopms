@@ -42,18 +42,19 @@ class myTest
     }
 
     /**
-     * Function getOverview test by my
+     * 测试获取我的项目总览。
+     * Test get project overview list.
      *
      * @access public
-     * @return object
+     * @return object|array
      */
-    public function getOverviewTest()
+    public function getOverviewTest(): object|array
     {
-        $objects = $this->objectModel->getOverview();
+        $object = $this->objectModel->getOverview();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
     /**
