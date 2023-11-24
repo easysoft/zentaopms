@@ -52,12 +52,13 @@ class adminModel extends model
     }
 
     /**
+     * 获取禅道官网配置信息。
      * Get api config.
      *
      * @access public
      * @return object
      */
-    public function getApiConfig()
+    public function getApiConfig(): object
     {
         if(!$this->session->apiConfig or time() - $this->session->apiConfig->serverTime > $this->session->apiConfig->expiredTime)
         {

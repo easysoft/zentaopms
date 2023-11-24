@@ -8,13 +8,19 @@ class adminTest
         $this->user = $tester->loadModel('user');
     }
 
-    public function getApiConfigTest()
+    /**
+     * 测试获取配置信息是否成功。
+     * Test get api config.
+     *
+     * @access public
+     * @return string
+     */
+    public function getApiConfigTest(): string
     {
         $objects = $this->objectModel->getApiConfig();
+        if(empty($objects)) return 'Fail';
 
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return 'Success';
     }
 
     /**
