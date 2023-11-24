@@ -941,7 +941,7 @@ class baseControl
             $modulePath   = $this->app->getModulePath($this->appName, $moduleName);
             $viewType     = $this->viewType == 'mhtml' ? 'html' : $this->viewType;
             $mainViewFile = $modulePath . 'ui' . DS . $this->devicePrefix . strtolower($methodName) . '.' . $viewType . '.php';
-            return $this->render($moduleName, $methodName);
+            if($moduleName != 'screen' || $methodName != 'view') return $this->render($moduleName, $methodName);
         }
 
         if(empty($this->output)) $this->parse($moduleName, $methodName);
