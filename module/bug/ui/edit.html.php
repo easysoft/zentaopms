@@ -480,6 +480,7 @@ detailBody
             item
             (
                 set::name($lang->bug->openedBuild),
+                set::required(strpos(",{$config->bug->edit->requiredFields},", ',openedBuild,') !== false),
                 formGroup
                 (
                     inputGroup

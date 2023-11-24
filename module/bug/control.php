@@ -267,6 +267,8 @@ class bug extends control
         {
             $formData = form::data($this->config->bug->form->edit);
             $bug      = $this->bugZen->prepareEditExtras($formData, $oldBug);
+            $this->bugZen->checkRquiredForEdit($bug);
+
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = array();

@@ -8,7 +8,7 @@ $config->bug->create  = new stdclass();
 $config->bug->edit    = new stdclass();
 $config->bug->resolve = new stdclass();
 $config->bug->create->requiredFields  = 'title,openedBuild';
-$config->bug->edit->requiredFields    = 'title';
+$config->bug->edit->requiredFields    = 'title,openedBuild';
 $config->bug->resolve->requiredFields = 'resolution';
 
 $config->bug->actions = new stdclass();
