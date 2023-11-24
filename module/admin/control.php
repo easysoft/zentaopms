@@ -86,7 +86,7 @@ class admin extends control
      * @access public
      * @return void
      */
-    public function register($from = 'admin')
+    public function register(string $from = 'admin')
     {
         if($_POST)
         {
@@ -141,7 +141,7 @@ class admin extends control
      * @access public
      * @return void
      */
-    public function bind($from = 'admin')
+    public function bind(string $from = 'admin')
     {
         if($_POST)
         {
@@ -280,7 +280,7 @@ class admin extends control
      * @access public
      * @return void
      */
-    public function certifyZtEmail($email = '')
+    public function certifyZtEmail(string $email = '')
     {
         if($_POST)
         {
@@ -303,7 +303,7 @@ class admin extends control
      * @access public
      * @return void
      */
-    public function certifyZtMobile($mobile = '')
+    public function certifyZtMobile(string $mobile = '')
     {
         if($_POST)
         {
@@ -322,10 +322,11 @@ class admin extends control
      * 认证公司。
      * Set ztCompany.
      *
+     * @param  string $fields
      * @access public
      * @return void
      */
-    public function ztCompany($fields = 'company')
+    public function ztCompany(string $fields = 'company')
     {
         if($_POST)
         {
@@ -348,7 +349,7 @@ class admin extends control
      * @access public
      * @return void
      */
-    public function ajaxSendCode($type)
+    public function ajaxSendCode(string $type)
     {
         return print($this->adminZen->sendCodeByAPI($type));
     }
@@ -512,7 +513,7 @@ class admin extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($currentMenuKey = '')
+    public function ajaxGetDropMenu(string $currentMenuKey = '')
     {
         $this->admin->checkPrivMenu();
 

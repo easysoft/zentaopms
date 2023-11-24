@@ -181,7 +181,7 @@ class adminZen extends admin
      * @access protected
      * @return string
      */
-    protected function sendCodeByAPI($type): string
+    protected function sendCodeByAPI(string $type): string
     {
         $apiConfig = $this->admin->getApiConfig();
         $module    = $type == 'mobile' ? 'sms' : 'mail';
@@ -203,7 +203,7 @@ class adminZen extends admin
      * @access protected
      * @return string
      */
-    protected function certifyByAPI($type): string
+    protected function certifyByAPI(string $type): string
     {
         $apiConfig = $this->admin->getApiConfig();
         $module    = $type == 'mobile' ? 'sms' : 'mail';
