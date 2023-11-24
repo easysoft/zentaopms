@@ -425,6 +425,20 @@ class aiModel extends model
     }
 
     /**
+     * Get used custom categories.
+     *
+     * @access public
+     * @return array
+     */
+    public function getUsedCustomCategories()
+    {
+        $categories = $this->dao->select('distinct `category`')
+            ->from(TABLE_MINIPROGRAM)
+            ->fetchAll('category');
+        return array_keys($categories);
+    }
+
+    /**
      * Update custom categories.
      *
      * @access public

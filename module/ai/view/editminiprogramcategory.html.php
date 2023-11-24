@@ -38,7 +38,7 @@
                 <div class="category-input"><input type="text" name="<?= $key; ?>" value="<?= $value; ?>" class="form-control"></div>
                 <div class="category-actions">
                   <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(event)"><i class="icon icon-plus"></i></button>
-                  <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(event)"><i class="icon icon-close"></i></button>
+                  <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(event)" <?= in_array($key, $usedCustomCategories) ? 'disabled' :  ''; ?>><i class="icon icon-close"></i></button>
                 </div>
               </div>
             <?php endforeach; ?>

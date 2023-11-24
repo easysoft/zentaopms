@@ -145,11 +145,19 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function square($category = 'discovery', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function square($category = '', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $collectedIDs = null;
+
+        if($category === '')
+        {
+            $collectedIDs = $this->ai->getCollectedMiniProgramIDs($this->app->user->id);
+            $category = empty($collectedIDs)
+                ? 'discovery'
+                : 'collection';
+        }
 
         if($category === 'collection')
         {
@@ -170,12 +178,20 @@ class ai extends control
             $miniPrograms = $this->ai->getMiniPrograms($category, 'active', 'createdDate_desc', $pager);
         }
 
+        $usedCustomCategories = $this->ai->getUsedCustomCategories();
+        $categoryList = array_merge($this->lang->ai->miniPrograms->categoryList, $this->ai->getCustomCategories());
+        $usedCustomCategoryList = array();
+        foreach($categoryList as $key => $value)
+        {
+            if(in_array($key, $usedCustomCategories)) $usedCustomCategoryList[$key] = $value;
+        }
+
         $this->view->collectedIDs = empty($collectedIDs) ? $this->ai->getCollectedMiniProgramIDs($this->app->user->id) : $collectedIDs;
-        $this->view->category      = $category;
-        $this->view->categoryList  = array_merge($this->lang->ai->miniPrograms->squareCategories, $this->lang->ai->miniPrograms->categoryList, $this->ai->getCustomCategories());
-        $this->view->pager         = $pager;
-        $this->view->miniPrograms  = $miniPrograms ?: array();
-        $this->view->title         = $this->lang->ai->miniPrograms->common;
+        $this->view->category     = $category;
+        $this->view->categoryList = array_merge($this->lang->ai->miniPrograms->squareCategories, $usedCustomCategoryList);
+        $this->view->pager        = $pager;
+        $this->view->miniPrograms = $miniPrograms ?: array();
+        $this->view->title        = $this->lang->ai->miniPrograms->common;
         $this->display();
     }
 
@@ -240,8 +256,9 @@ class ai extends control
             $this->ai->updateCustomCategories();
         }
 
-        $this->view->categoryList = $this->ai->getCustomCategories();
-        $this->view->title        = $this->lang->ai->miniPrograms->common;
+        $this->view->usedCustomCategories = $this->ai->getUsedCustomCategories();
+        $this->view->categoryList         = $this->ai->getCustomCategories();
+        $this->view->title                = $this->lang->ai->miniPrograms->common;
         $this->display();
     }
 

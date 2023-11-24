@@ -7,7 +7,7 @@ $navItems = array();
 
 if(count($categoryList) <= 9)
 {
-    foreach($category as $key => $value)
+    foreach($categoryList as $key => $value)
     {
         $isActive = $category === $key;
         $navItems[] = array(
