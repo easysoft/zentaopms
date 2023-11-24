@@ -1519,13 +1519,14 @@ EOF;
     }
 
     /**
+     * Ajax: 切换界面.
      * Switch vision by ajax.
      *
      * @param  string $vision
      * @access public
      * @return void
      */
-    public function ajaxSwitchVision($vision)
+    public function ajaxSwitchVision(string $vision)
     {
         $_SESSION['vision'] = $vision;
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.vision", $vision);
