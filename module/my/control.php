@@ -1286,6 +1286,7 @@ EOF;
     }
 
     /**
+     * 管理联系人。
      * Manage contacts.
      *
      * @param  int    $listID
@@ -1307,12 +1308,15 @@ EOF;
         $list     = $listID ? $this->user->getContactListByID($listID) : null;
         $userList = !empty($list->userList) ? $list->userList : '';
 
-        $mode  = 'create';
-        $label = $this->lang->my->createContacts;
         if($list)
         {
             $mode  = $list->account == $this->app->user->account ? 'edit' : 'view';
             $label = $list->account == $this->app->user->account ? $this->lang->my->manageContacts : $this->lang->my->viewContacts;
+        }
+        else
+        {
+            $mode  = 'create';
+            $label = $this->lang->my->createContacts;
         }
 
         $userParams = empty($this->config->user->showDeleted) ? 'noletter|noempty|noclosed|noclosed|nodeleted' : 'noletter|noempty|noclosed|noclosed';
