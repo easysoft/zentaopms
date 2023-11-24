@@ -19,7 +19,7 @@ formPanel
     on::change('input[name=role]', 'changeRole'),
     on::change('input[name^=visions]', 'changeVision'),
     on::change('#password1,#password2,#verifyPassword', 'changePassword'),
-    on::click('button[type=submit]', 'clickSubmit'),
+    on::click('button[type=submit]', 'encryptPassword'),
     set::title($title),
     formRow
     (

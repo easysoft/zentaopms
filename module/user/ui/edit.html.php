@@ -46,9 +46,9 @@ formPanel
     ),
     set::formClass('border-0'),
     on::change('input[name=type]', 'changeType'),
-    on::click('button[type="submit"]', 'computePassword'),
     on::change('input[name^=visions]', 'changeVision'),
     on::change('#password1, #password, #verifyPassword', 'changePassword'),
+    on::click('button[type="submit"]', 'encryptPassword'),
     formRow
     (
         formGroup
