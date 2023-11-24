@@ -767,7 +767,7 @@ class baseDAO
         try
         {
             /* Real-time save log. */
-            if($this->realTimeLog && $this->realTimeFile) file_put_contents($this->realTimeFile, $sql, FILE_APPEND);
+            if(dao::$realTimeLog && dao::$realTimeFile) file_put_contents(dao::$realTimeFile, $sql . "\n", FILE_APPEND);
 
             $method = $this->method;
             $this->reset();
@@ -873,7 +873,7 @@ class baseDAO
         try
         {
             /* Real-time save log. */
-            if($this->realTimeLog && $this->realTimeFile) file_put_contents($this->realTimeFile, $sql, FILE_APPEND);
+            if(dao::$realTimeLog && dao::$realTimeFile) file_put_contents(dao::$realTimeFile, $sql . "\n", FILE_APPEND);
 
             if($this->table) unset(dao::$cache[$this->table]);
             $this->reset();

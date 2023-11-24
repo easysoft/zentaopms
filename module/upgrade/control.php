@@ -168,6 +168,9 @@ class upgrade extends control
 
         if(!$this->upgrade->isError())
         {
+            $this->loadModel('setting')->updateVersion($this->config->version);
+            $this->dao->commit();
+
             $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
 
             /* Delete all patch actions if upgrade success. */

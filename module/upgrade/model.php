@@ -106,8 +106,8 @@ class upgradeModel extends model
         $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
 
         /* Get total sqls and write in tmp file. */
-        dao::$realTimeLog  = true;
         dao::$realTimeFile = $this->getLogFile();
+        if(file_exists(dao::$realTimeFile)) unlink(dao::$realTimeFile);
         if(is_writable($this->app->getTmpRoot()))
         {
             file_put_contents($this->app->getTmpRoot() . 'upgradeSqlLines', '0-0');
@@ -250,7 +250,6 @@ class upgradeModel extends model
         $xxsqls      = zget($execConfig, 'xxsqls', '');
         $xxfunctions = zget($execConfig, 'xxfunctions', '');
 
-        $this->saveLogs("Upgrade to {$version}");
         foreach(array_filter(explode(',', $functions)) as $function) $this->executeUpgradeMethod($function, zget($params, $function, array()));
 
         $needExecXX = !$executedXuanxuan;
@@ -283,7 +282,9 @@ class upgradeModel extends model
             $class = $this->loadModel($className);
         }
 
-        return call_user_func_array(array($class, $method), $params);
+        dao::$realTimeLog = true;
+        call_user_func_array(array($class, $method), $params);
+        dao::$realTimeLog = false;
     }
 
     /**
@@ -4055,9 +4056,7 @@ class upgradeModel extends model
         $log     = date('Y-m-d H:i:s') . ' ' . trim($log) . "\n";
         if(!file_exists($logFile)) $log = "<?php\ndie();\n?" . ">\n" . $log;
 
-        static $fh;
-        if(empty($fh)) $fh = fopen($logFile, 'a');
-        fwrite($fh, $log);
+        file_put_contents($logFile, $log, FILE_APPEND);
     }
 
     /**
