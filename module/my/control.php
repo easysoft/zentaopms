@@ -1332,6 +1332,7 @@ EOF;
     }
 
     /**
+     * 删除一个联系人列表。
      * Delete a contact list.
      *
      * @param  int    $listID
