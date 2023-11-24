@@ -185,6 +185,7 @@ class searchModel extends model
     }
 
     /**
+     * 获取查询。
      * Get a query.
      *
      * @param  int    $queryID
@@ -200,11 +201,14 @@ class searchModel extends model
         $query->form = htmlspecialchars_decode($query->form, ENT_QUOTES);
         $query->sql  = htmlspecialchars_decode($query->sql, ENT_QUOTES);
 
+        /* 如果搜索表单中值有变量，把表单值放到post 表单，重新生成 query。*/
+        /* If form has variable, regenerate query. */
         $hasDynamic  = str_contains($query->form, '$');
         $query->form = unserialize($query->form);
         if($hasDynamic)
         {
             $_POST = $query->form;
+
             $this->buildQuery();
             $querySessionName = $query->form['module'] . 'Query';
             $query->sql = $_SESSION[$querySessionName];
@@ -268,17 +272,16 @@ class searchModel extends model
     }
 
     /**
+     * 获取一个查询。
      * Get a query.
      *
-     * @param  int    $queryID
+     * @param  int          $queryID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getByID($queryID)
+    public function getByID(int $queryID): object|false
     {
-        $query = $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
-        if(!$query) return false;
-        return $query;
+        return $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
     }
 
     /**
