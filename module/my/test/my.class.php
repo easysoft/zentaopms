@@ -9,13 +9,14 @@ class myTest
     }
 
     /**
-     * Function getProducts test by my
+     * 测试获取我的产品。
+     * Test get my products.
      *
      * @param  string $type
      * @access public
-     * @return object
+     * @return object|array
      */
-    public function getProductsTest($type)
+    public function getProductsTest(string $type): object|array
     {
         $objects = $this->objectModel->getProducts($type);
 

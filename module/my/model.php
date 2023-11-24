@@ -59,13 +59,14 @@ class myModel extends model
     }
 
     /**
+     * 获取我的产品。
      * Get my charged products.
      *
-     * @param  string $type     undone|ownbyme
+     * @param  string $type undone|ownbyme
      * @access public
      * @return object
      */
-    public function getProducts($type = 'undone')
+    public function getProducts(string $type = 'undone'): object
     {
         $products = $this->dao->select('t1.*, t2.name as programName')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
@@ -75,62 +76,8 @@ class myModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->orderBy('t1.order_asc')
             ->fetchAll('id');
-        $productKeys = array_keys($products);
 
-        $storyGroups = $this->dao->select('id,product,status,stage,estimate')
-            ->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('product')->in($productKeys)
-            ->groupBy('product')
-            ->fetchGroup('product', 'id');
-        $summaryStories = array();
-        foreach($storyGroups as $productID => $stories)
-        {
-            $summaryStory = new stdclass();
-            $summaryStory->total = count($stories);
-
-            $finishedTotal = 0;
-            $leftTotal     = 0;
-            $estimateCount = 0;
-            foreach($stories as $story)
-            {
-                $estimateCount += $story->estimate;
-                ($story->status == 'closed' or $story->stage == 'released' or $story->stage == 'closed') ? $finishedTotal ++ : $leftTotal ++;
-            }
-
-            $summaryStory->finishedTotal = $finishedTotal;
-            $summaryStory->leftTotal     = $leftTotal;
-            $summaryStory->estimateCount = $estimateCount;
-            $summaryStory->finishedRate  = $summaryStory->total == 0 ? 0 : ($finishedTotal / $summaryStory->total) * 100;
-            $summaryStories[$productID]  = $summaryStory;
-        }
-
-        $plans = $this->dao->select('product, count(*) AS count')
-            ->from(TABLE_PRODUCTPLAN)
-            ->where('deleted')->eq(0)
-            ->andWhere('product')->in($productKeys)
-            ->andWhere('end')->gt(helper::now())
-            ->groupBy('product')
-            ->fetchPairs();
-        $releases = $this->dao->select('product, count(*) AS count')
-            ->from(TABLE_RELEASE)
-            ->where('deleted')->eq(0)
-            ->andWhere('product')->in($productKeys)
-            ->groupBy('product')
-            ->fetchPairs();
-        $executions = $this->dao->select('t1.product,t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->where('t1.product')->in($productKeys)
-            ->andWhere('t2.type')->in('stage,sprint')
-            ->andWhere('t2.deleted')->eq(0)
-            ->orderBy('t1.project')
-            ->fetchAll('product');
-        $this->loadModel('execution');
-        foreach($executions as $productID => $execution)
-        {
-            $execution = $this->execution->getById($execution->id);
-            $executions[$productID]->progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($execution->totalConsumed / ($execution->totalConsumed + $execution->totalLeft) * 1000) / 1000 * 100 : 0;
-        }
+        list($summaryStories, $plans, $releases, $executions) = $this->getProductRelatedDate(array_keys($products));
 
         $allCount      = count($products);
         $unclosedCount = 0;
@@ -159,6 +106,62 @@ class myModel extends model
         $data->unclosedCount = $unclosedCount;
         $data->products      = array_values($products);
         return $data;
+    }
+
+    /**
+     * 获取产品相关统计。
+     * Get product related data.
+     *
+     * @param  array   $productKeys
+     * @access private
+     * @return array
+     */
+    private function getProductRelatedDate(array $productKeys): array
+    {
+        $storyGroups = $this->dao->select('id,product,status,stage,estimate')
+            ->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in($productKeys)
+            ->groupBy('product')
+            ->fetchGroup('product', 'id');
+        $summaryStories = array();
+        foreach($storyGroups as $productID => $stories)
+        {
+            $summaryStory = new stdclass();
+            $summaryStory->total = count($stories);
+
+            $finishedTotal = 0;
+            $leftTotal     = 0;
+            $estimateCount = 0;
+            foreach($stories as $story)
+            {
+                $estimateCount += $story->estimate;
+                $story->status == 'closed' || $story->stage == 'released' || $story->stage == 'closed' ? $finishedTotal ++ : $leftTotal ++;
+            }
+
+            $summaryStory->finishedTotal = $finishedTotal;
+            $summaryStory->leftTotal     = $leftTotal;
+            $summaryStory->estimateCount = $estimateCount;
+            $summaryStory->finishedRate  = $summaryStory->total == 0 ? 0 : ($finishedTotal / $summaryStory->total) * 100;
+            $summaryStories[$productID]  = $summaryStory;
+        }
+
+        $plans      = $this->dao->select('product, count(*) AS count')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->in($productKeys)->andWhere('end')->gt(helper::now())->groupBy('product')->fetchPairs();
+        $releases   = $this->dao->select('product, count(*) AS count')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('product')->in($productKeys)->groupBy('product')->fetchPairs();
+        $executions = $this->dao->select('t1.product,t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.product')->in($productKeys)
+            ->andWhere('t2.type')->in('stage,sprint')
+            ->andWhere('t2.deleted')->eq(0)
+            ->orderBy('t1.project')
+            ->fetchAll('product');
+        $this->loadModel('execution');
+        foreach($executions as $productID => $execution)
+        {
+            $execution = $this->execution->getById($execution->id);
+            $executions[$productID]->progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($execution->totalConsumed / ($execution->totalConsumed + $execution->totalLeft) * 1000) / 1000 * 100 : 0;
+        }
+        return array($summaryStories, $plans, $releases, $executions);
     }
 
     /**
