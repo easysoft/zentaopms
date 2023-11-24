@@ -18,16 +18,6 @@ function changePassword(event)
     if(targetID == 'verifyPassword') verifyEncrypted    = false;
 }
 
-function toggleNew(event)
-{
-    const checked     = $(event.target).prop('checked');
-    const $company    = $('[name="company"]').closest('.picker-box');
-    const $newCompany = $('#newCompany');
-
-    $company.toggleClass('hidden', checked);
-    $newCompany.toggleClass('hidden', !checked);
-}
-
 /**
  * 加密密码并记录密码强度和长度。
  * Encrypt password and record password strength and length.
@@ -71,15 +61,15 @@ function encryptPassword()
     }
 }
 
-window.switchAccount = function(account)
+function toggleNew(event)
 {
-    link = $.createLink('user', method, 'account=' + account);
-    if(method == 'dynamic') link = $.createLink('user', method, 'account=' + account + '&period=' + pageParams.period);
-    if(method == 'todo')    link = $.createLink('user', method, 'account=' + account + '&type=' + pageParams.type);
-    if(method == 'story')   link = $.createLink('user', method, 'account=' + account + '&storyType=' + pageParams.storyType);
+    const checked     = $(event.target).prop('checked');
+    const $company    = $('[name="company"]').closest('.picker-box');
+    const $newCompany = $('#newCompany');
 
-    loadPage(link);
-};
+    $company.toggleClass('hidden', checked);
+    $newCompany.toggleClass('hidden', !checked);
+}
 
 /**
  * 更改界面类型时更新权限组。
@@ -146,6 +136,16 @@ function computePasswordStrength(password)
 
     return strength;
 }
+
+window.switchAccount = function(account)
+{
+    link = $.createLink('user', method, 'account=' + account);
+    if(method == 'dynamic') link = $.createLink('user', method, 'account=' + account + '&period=' + pageParams.period);
+    if(method == 'todo')    link = $.createLink('user', method, 'account=' + account + '&type=' + pageParams.type);
+    if(method == 'story')   link = $.createLink('user', method, 'account=' + account + '&storyType=' + pageParams.storyType);
+
+    loadPage(link);
+};
 
 window.beforePageLoad = function(options)
 {
