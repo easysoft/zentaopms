@@ -48,6 +48,7 @@ formPanel
     on::change('input[name=type]', 'changeType'),
     on::click('button[type="submit"]', 'computePassword'),
     on::change('input[name^=visions]', 'changeVision'),
+    on::change('#password1, #password, #verifyPassword', 'changePassword'),
     formRow
     (
         formGroup
@@ -183,14 +184,12 @@ formPanel
     (
         formGroup
         (
-            on::change('password1Change'),
             set::width('1/2'),
             set::label($lang->user->password),
             password(set::checkStrength(true))
         ),
         formGroup
         (
-            on::change('password2Change'),
             set::width('1/2'),
             set::label($lang->user->password2),
             set::control('password'),
