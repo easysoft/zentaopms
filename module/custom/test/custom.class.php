@@ -35,19 +35,19 @@ class customTest
     }
 
     /**
-     * Test get some items
+     * 获取自定义语言项。
+     * Get value of custom items.
      *
-     * @param  string   $paramString
+     * @param  string $paramString
      * @access public
      * @return array
      */
-    public function getItemsTest($paramString)
+    public function getItemsTest(string $paramString): array
     {
-        $objects = $this->objectModel->getItems($paramString);
+        $items = $this->objectModel->getItems($paramString);
 
         if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $items;
     }
 
     /**
