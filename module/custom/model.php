@@ -61,18 +61,19 @@ class customModel extends model
     }
 
     /**
+     * 设置自定义语言项。
      * Set value of an item.
      *
-     * @param  string      $path     zh-cn.story.soucreList.customer.1
-     * @param  string      $value
+     * @param  string $path     zh-cn.story.soucreList.customer.1
+     * @param  string $value
      * @access public
-     * @return void
+     * @return bool
      */
-    public function setItem($path, $value = '')
+    public function setItem(string $path, string $value = ''): bool
     {
-        $level    = substr_count($path, '.');
-        $section  = '';
-        $system   = 1;
+        $level   = substr_count($path, '.');
+        $section = '';
+        $system  = 1;
 
         if($level <= 1) return false;
         if($level == 2) list($lang, $module, $key) = explode('.', $path);
@@ -88,8 +89,9 @@ class customModel extends model
         $item->system  = $system;
 
         if(!$this->app->upgrading) $item->vision = $this->config->vision;
-
         $this->dao->replace(TABLE_LANG)->data($item)->exec();
+
+        return !dao::isError();
     }
 
     /**
