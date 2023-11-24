@@ -26,12 +26,13 @@ class myTest
     }
 
     /**
-     * Function getDoingProjects test by my
+     * 测试获取我的进行中的项目。
+     * Test get my doing projects.
      *
      * @access public
      * @return object
      */
-    public function getDoingProjectsTest()
+    public function getDoingProjectsTest(): object|array
     {
         $objects = $this->objectModel->getDoingProjects();
 

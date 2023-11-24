@@ -165,14 +165,14 @@ class myModel extends model
     }
 
     /**
+     * 获取进行中的我的项目。
      * Get my projects.
      *
      * @access public
      * @return object
      */
-    public function getDoingProjects()
+    public function getDoingProjects(): object
     {
-        $data = new stdClass();
         $doingProjects = $this->loadModel('project')->getOverviewList('doing');
         $maxCount      = 5;
         $myProjects    = array();
@@ -185,7 +185,7 @@ class myModel extends model
             }
             if(count($myProjects) >= $maxCount) break;
         }
-        if(count($myProjects) < $maxCount and !empty($doingProjects))
+        if(count($myProjects) < $maxCount && !empty($doingProjects))
         {
             foreach($doingProjects as $key => $project)
             {
@@ -198,10 +198,11 @@ class myModel extends model
         {
             $workhour = $this->project->getWorkhour($project->id);
             $project->progress = ($workhour->totalConsumed + $workhour->totalLeft) ? round($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 100, 1) : 0;
-            $project->delay    = (helper::diffDate(helper::today(), $project->end) > 0);
+            $project->delay    = helper::diffDate(helper::today(), $project->end) > 0;
             $project->link     = common::hasPriv('project', 'view') ? helper::createLink('project', 'view', "projectID={$project->id}") : '';
         }
 
+        $data = new stdClass();
         $data->doingCount = count($myProjects);
         $data->projects   = array_values($myProjects);
         return $data;
