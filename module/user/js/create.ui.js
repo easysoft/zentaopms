@@ -42,21 +42,16 @@ function clickSubmit()
 }
 
 /**
- * Change group when change role.
+ * 根据职位更改权限组。
+ * Change the permission group according to the role.
  *
- * @param  role $role
+ * @param  role   $role
  * @access public
  * @return void
  */
 function changeRole(event)
 {
-    var role = $(event.target).val();
-    if(role && roleGroup[role])
-    {
-        $('[name^="group"]').zui('picker').$.setValue(roleGroup[role]);
-    }
-    else
-    {
-        $('[name^="group"]').zui('picker').$.setValue('');
-    }
+    const role  = $(event.target).val();
+    const group = role && roleGroup[role] ? roleGroup[role] : '';
+    $('[name^="group"]').zui('picker').$.setValue(group);
 }
