@@ -169,13 +169,14 @@ class screenModel extends model
     }
 
     /**
+     * 获取最新的图表。
      * Get the latest chart.
      *
-     * @param  object  $component
+     * @param  object $component
      * @access public
-     * @return void
+     * @return object
      */
-    public function getLatestChart($component)
+    public function getLatestChart(object $component): object
     {
         if(isset($component->key) and $component->key === 'Select') return $component;
         $chartID = zget($component->chartConfig, 'sourceID', '');
