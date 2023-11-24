@@ -14,6 +14,7 @@
 class myModel extends model
 {
     /**
+     * 设置菜单。
      * Set menu.
      *
      * @access public
@@ -23,7 +24,7 @@ class myModel extends model
     {
         /* Adjust the menu order according to the user role. */
         $flowModule = $this->config->global->flow . '_my';
-        $customMenu = isset($this->config->customMenu->$flowModule) ? $this->config->customMenu->$flowModule : array();
+        $customMenu = isset($this->config->customMenu->{$flowModule}) ? $this->config->customMenu->{$flowModule} : array();
 
         if(empty($customMenu))
         {
@@ -31,9 +32,9 @@ class myModel extends model
             if($role == 'qa')
             {
                 $taskOrder = '15';
-                $bugOrder  = '20';
-
                 unset($this->lang->my->menuOrder[$taskOrder]);
+
+                $bugOrder = '20';
                 $this->lang->my->menuOrder[32] = 'task';
                 $this->lang->my->dividerMenu = str_replace(',task,', ',' . $this->lang->my->menuOrder[$bugOrder] . ',', $this->lang->my->dividerMenu);
             }
