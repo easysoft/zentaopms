@@ -899,13 +899,15 @@ class customModel extends model
     }
 
     /**
-     * Compute features.
+     * 计算启用和不启用的功能。
+     * Compute the enabled and disabled features.
      *
      * @access public
      * @return array
      */
-    public function computeFeatures()
+    public function computeFeatures(): array
     {
+        /* Check that the project features are enabled. */
         $disabledFeatures = array('program', 'productLine');
         foreach($this->config->custom->dataFeatures as $feature)
         {
@@ -930,6 +932,7 @@ class customModel extends model
         if(!isset($disabledFeatures['scrum'])) $disabledFeatures['scrum'] = array();
         $disabledFeatures['scrum'][] = 'scrumMeasrecord';
 
+        /* Check that the scrum project features are enabled. */
         $enabledScrumFeatures  = array();
         $disabledScrumFeatures = array();
         if(in_array($this->config->edition, array('max', 'ipd')))
@@ -951,28 +954,15 @@ class customModel extends model
     }
 
     /**
+     * 处理项目权限为继承项目集的项目权限。
      * process project priv within a program set.
      *
      * @access public
-     * @return void
+     * @return bool
      */
-    public function processProjectAcl()
+    public function processProjectAcl(): bool
     {
-        $projectGroup = $this->dao->select('id,parent,whitelist,acl')->from(TABLE_PROJECT)
-            ->where('parent')->ne('0')
-            ->andwhere('type')->eq('project')
-            ->andWhere('acl')->eq('program')
-            ->fetchGroup('parent', 'id');
-
-        $programPM = $this->dao->select("id,PM")->from(TABLE_PROGRAM)
-            ->where('id')->in(array_keys($projectGroup))
-            ->andWhere('type')->eq('program')
-            ->fetchPairs();
-
-        $stakeholders = $this->dao->select('*')->from(TABLE_STAKEHOLDER)
-            ->where('objectType')->eq('program')
-            ->andWhere('objectID')->in(array_keys($projectGroup))
-            ->fetchGroup('objectID', 'user');
+        list($projectGroup, $programPM, $stakeholders) = $this->customTao->getDataForUpdateProjectAcl();
 
         $projectIDList = array();
         foreach($projectGroup as $projects) $projectIDList = array_merge($projectIDList, array_keys($projects));
@@ -1015,6 +1005,8 @@ class customModel extends model
                 $this->action->logHistory($actionID, $changes);
             }
         }
+
+        return !dao::isError();
     }
 
     /**
@@ -1030,7 +1022,7 @@ class customModel extends model
         $disabledFeatures = '';
         if($mode == 'light')
         {
-            /* Check whether the product or project data in tge system is empty. */
+            /* Check whether the product or project data in the system is empty. */
             foreach($this->config->custom->dataFeatures as $feature)
             {
                 $function = 'has' . ucfirst($feature) . 'Data';

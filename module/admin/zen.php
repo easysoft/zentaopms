@@ -144,4 +144,162 @@ class adminZen extends admin
         if($result->status != 'success') return false;
         if(isset($result->data)) return json_decode($result->data);
     }
+
+    /**
+     * 注册禅道账号。
+     * Register zentao by API.
+     *
+     * @access protected
+     * @return string
+     */
+    protected function registerByAPI(): string
+    {
+        $apiConfig = $this->admin->getApiConfig();
+        $apiURL    = $this->config->admin->apiRoot . "/user-apiRegister.json?HTTP_X_REQUESTED_WITH=XMLHttpRequest&{$apiConfig->sessionVar}={$apiConfig->sessionID}";
+        return common::http($apiURL, $_POST);
+    }
+
+    /**
+     * 绑定禅道账号。
+     * Login zentao by API.
+     *
+     * @access protected
+     * @return string
+     */
+    protected function bindByAPI(): string
+    {
+        $apiConfig = $this->admin->getApiConfig();
+        $apiURL    = $this->config->admin->apiRoot . "/user-bindChanzhi.json?HTTP_X_REQUESTED_WITH=XMLHttpRequest&{$apiConfig->sessionVar}={$apiConfig->sessionID}";
+        return common::http($apiURL, $_POST);
+    }
+
+    /**
+     * 发送验证码。
+     * Send code by API.
+     *
+     * @param  string    $type mobile|email
+     * @access protected
+     * @return string
+     */
+    protected function sendCodeByAPI($type): string
+    {
+        $apiConfig = $this->admin->getApiConfig();
+        $module    = $type == 'mobile' ? 'sms' : 'mail';
+        $apiURL    = $this->config->admin->apiRoot . "/{$module}-apiSendCode.json";
+
+        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
+        if(isset($this->config->global->community) and $this->config->global->community != 'na') $this->post->set('account', $this->config->global->community);
+
+        $param = http_build_query($params);
+        return common::http($apiURL . '?' . $param, $_POST);
+    }
+
+    /**
+     * 认证手机或邮箱。
+     * Certify by API.
+     *
+     * @param  string    $type mobile|email
+     * @access protected
+     * @return string
+     */
+    protected function certifyByAPI($type): string
+    {
+        $apiConfig = $this->admin->getApiConfig();
+        $module    = $type == 'mobile' ? 'sms' : 'mail';
+        $apiURL    = $this->config->admin->apiRoot . "/{$module}-apiCertify.json";
+
+        $params['u'] = $this->config->global->community;
+        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
+        $params['k'] = $this->admin->getSignature($params);
+
+        $param = http_build_query($params);
+        return common::http($apiURL . '?' . $param, $_POST);
+    }
+
+    /**
+     * 认证公司。
+     * Set company by API.
+     *
+     * @access protected
+     * @return string
+     */
+    protected function setCompanyByAPI(): string
+    {
+        $apiConfig = $this->admin->getApiConfig();
+        $apiURL    = $this->config->admin->apiRoot . "/user-apiSetCompany.json";
+
+        $params['u'] = $this->config->global->community;
+        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+        $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
+        $params['k'] = $this->admin->getSignature($params);
+
+        $param = http_build_query($params);
+        return common::http($apiURL . '?' . $param, $_POST);
+    }
+
+    /**
+     * 获取禅道社区注册信息。
+     * Get register information.
+     *
+     * @access protected
+     * @return object
+     */
+    protected function getRegisterInfo(): object
+    {
+        $register = new stdclass();
+        $register->company = $this->app->company->name;
+        $register->email   = $this->app->user->email;
+        return $register;
+    }
+
+    /**
+     * 获取禅道官网数据。
+     * Get zentao.net data.
+     *
+     * @access protected
+     * @return object
+     */
+    protected function getZentaoData(): object
+    {
+        $data = new stdclass();
+        $data->hasData  = true;
+        $data->dynamics = array();
+        $data->classes  = array();
+        $data->plugins  = array();
+        $data->patches  = array();
+
+        $zentaoData = !empty($this->config->zentaoWebsite) ? $this->config->zentaoWebsite : null;
+        if(empty($zentaoData))
+        {
+            $data->hasData = false;
+            if($this->config->edition == 'open')
+            {
+                $data->plugins = array(
+                    $this->config->admin->plugins[27],
+                    $this->config->admin->plugins[26],
+                    $this->config->admin->plugins[30]
+                );
+            }
+            else
+            {
+                $data->plugins = array(
+                    $this->config->admin->plugins[198],
+                    $this->config->admin->plugins[194],
+                    $this->config->admin->plugins[203]
+                );
+            }
+        }
+        else
+        {
+            if(!empty($zentaoData->dynamic))     $data->dynamics = json_decode($zentaoData->dynamic);
+            if(!empty($zentaoData->publicClass)) $data->classes  = json_decode($zentaoData->publicClass);
+            if(!empty($zentaoData->plugin))      $data->plugins  = json_decode($zentaoData->plugin);
+            if(!empty($zentaoData->patch))       $data->patches  = json_decode($zentaoData->patch);
+            if(common::checkNotCN()) array_pop($data->plugins);
+        }
+
+        return $data;
+    }
 }

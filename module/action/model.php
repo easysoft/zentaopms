@@ -745,7 +745,7 @@ class actionModel extends model
         $actionCondition = $this->getActionCondition();
         if(!$actionCondition && !$this->app->user->admin && isset($this->app->user->rights['acls']['actions'])) return array();
 
-        $condition = "`objectType` IN ('doc', 'doclib')" . $condition = '1=1'? '' : "OR ({$condition})";
+        $condition = "`objectType` IN ('doc', 'doclib')" . ($condition = '1=1'? '' : "OR ({$condition})") . " OR `objectType` NOT IN ('program', 'effort', 'execution')";
 
         $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
         $condition .= " OR (`objectID` in ($programCondition) AND `objectType` = 'program')";
@@ -781,7 +781,7 @@ class actionModel extends model
         $actions = $this->actionTao->getActionListByCondition($condition, $date, $period, $begin, $end, $direction, $account, $beginDate, $productID, $projectID, $executionID, $executions, $actionCondition, $orderBy, $limit);
         if(!$actions) return array();
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
+        $this->loadModel('common')->saveQueryCondition($condition, 'action', false);
         return $this->transformActions($actions);
     }
 
@@ -1951,28 +1951,31 @@ class actionModel extends model
         /* 验证用户的产品/项目/执行权限。 */
         /* Verify user's product/project/execution permissions。*/
         $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-        if($productID == 'all')   $grantedProducts   = empty($aclViews) || !empty($aclViews['product'])   ? $this->app->user->view->products : '0';
-        if($projectID == 'all')   $grantedProjects   = empty($aclViews) || !empty($aclViews['project'])   ? $this->app->user->view->projects : '0';
-        if($executionID == 'all') $grantedExecutions = empty($aclViews) || !empty($aclViews['execution']) ? $this->app->user->view->sprints  : '0';
+        if($productID == 'all' || $productID == 0)     $grantedProducts   = empty($aclViews) || !empty($aclViews['product'])   ? $this->app->user->view->products : '0';
+        if($projectID == 'all' || $projectID == 0)     $grantedProjects   = empty($aclViews) || !empty($aclViews['project'])   ? $this->app->user->view->projects : '0';
+        if($executionID == 'all' || $executionID == 0) $grantedExecutions = empty($aclViews) || !empty($aclViews['execution']) ? $this->app->user->view->sprints  : '0';
         if(empty($grantedProducts)) $grantedProducts = '0';
 
         /* If product is selected, show related projects and executions. */
-        if(is_numeric($productID))
+        if($productID && is_numeric($productID))
         {
+            $productID  = (int)$productID;
             $projects   = $this->loadModel('product')->getProjectPairsByProduct($productID);
             $executions = $this->product->getExecutionPairsByProduct($productID) + array(0 => 0);
 
             $grantedProjects   = isset($grantedProjects) ? array_intersect(array_keys($projects), explode(',', $grantedProjects)) : array_keys($projects);
             $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), explode(',', $grantedExecutions)) : array_keys($executions);
         }
+
         /* If project is selected, show related products and executions. */
-        if(is_numeric($projectID))
+        if($projectID && is_numeric($projectID))
         {
+            $projectID  = (int)$projectID;
             $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
             $executions = $this->loadModel('execution')->fetchPairs($projectID) + array(0 => 0);
 
-            $grantedProducts   = isset($grantedProducts) ? array_intersect(array_keys($products), explode(',', $grantedProducts)) : array_keys($products);
-            $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), explode(',', $grantedExecutions)) : array_keys($executions);
+            $grantedProducts   = isset($grantedProducts) ? array_intersect(array_keys($products), is_array($grantedProducts) ? $grantedProducts : explode(',', $grantedProducts)) : array_keys($products);
+            $grantedExecutions = isset($grantedExecutions) ? array_intersect(array_keys($executions), is_array($grantedExecutions) ? $grantedExecutions : explode(',', $grantedExecutions)) : array_keys($executions);
         }
 
         /* 组建产品/项目/执行搜索条件。 */

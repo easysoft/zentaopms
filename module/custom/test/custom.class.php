@@ -553,4 +553,53 @@ class customTest
         if(dao::isError()) return dao::getError();
         return $count;
     }
+
+    /**
+     * 获取更新项目权限的数据。
+     * Get data for update project acl.
+     *
+     * @param  string $key
+     * @access public
+     * @return array
+     */
+    public function getDataForUpdateProjectAclTest(string $key): array
+    {
+        list($projectGroup, $programPM, $stakeholders) = $this->objectModel->getDataForUpdateProjectAcl();
+        return ${$key};
+    }
+
+    /**
+     * 处理项目权限为继承项目集的项目权限。
+     * process project priv within a program set.
+     *
+     * @access public
+     * @return array|object
+     */
+    public function processProjectAclTest(int $projectID): array|object
+    {
+        $this->objectModel->processProjectAcl();
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->loadModel('project')->getByID($projectID);
+    }
+
+    /**
+     * 计算启用和不启用的功能。
+     * Compute the enabled and disabled features.
+     *
+     * @param  string $edition open|ipd|max
+     * @access public
+     * @return array
+     */
+    public function computeFeaturesTest(string $edition): array
+    {
+        $oldEdition = $this->objectModel->config->edition;
+
+        $this->objectModel->config->edition = $edition;
+        $features = $this->objectModel->computeFeatures();
+
+        $this->objectModel->config->edition = $oldEdition;
+        if(dao::isError()) return dao::getError();
+        return $features;
+    }
 }

@@ -19,6 +19,6 @@ $groupIDList = array('2', '12');
 
 $dept = new deptTest();
 $result = $dept->createGroupManageMemberLinkTest($deptIDList[0], $groupIDList[0]);
-$expect = 'creategroupmanagememberlink.php?m=group&f=managemember&groupID=2&deptID=2';
+$expect = helper::createLink('group', 'managemember', "groupID={$groupIDList[0]}&deptID={$deptIDList[0]}");
 
 r(strpos($result, $expect) !== false) && p() && e('1'); // 测试权限分组2开发部链接生成是否正确

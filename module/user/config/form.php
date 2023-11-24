@@ -38,6 +38,38 @@ $config->user->form->batchCreate['gender']   = array('required' => false, 'type'
 $config->user->form->batchCreate['password'] = array('required' => true,  'type' => 'string', 'default' => '');
 $config->user->form->batchCreate['join']     = array('required' => false, 'type' => 'date',   'default' => null);
 
+$config->user->form->edit = common::formConfig('user', 'edit');
+$config->user->form->edit['type']             = array('required' => true,  'type' => 'string', 'default' => 'inside');
+$config->user->form->edit['company']          = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->user->form->edit['new']              = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->user->form->edit['newCompany']       = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['dept']             = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->user->form->edit['account']          = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->edit['password1']        = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->edit['password2']        = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->edit['visions']          = array('required' => true,  'type' => 'array',  'default' => $config->vision, 'filter' => 'join');
+$config->user->form->edit['realname']         = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->edit['join']             = array('required' => false, 'type' => 'date',   'default' => null);
+$config->user->form->edit['role']             = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['group']            = array('required' => false, 'type' => 'array',  'default' => []);
+$config->user->form->edit['email']            = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['commiter']         = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['gender']           = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['mobile']           = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['phone']            = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['qq']               = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['dingding']         = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['weixin']           = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['skype']            = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['whatsapp']         = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['slack']            = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['address']          = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['zipcode']          = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['verifyPassword']   = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->edit['verifyRand']       = array('required' => true,  'type' => 'int',    'default' => 0);
+$config->user->form->edit['passwordLength']   = array('required' => true,  'type' => 'int',    'default' => 0);
+$config->user->form->edit['passwordStrength'] = array('required' => true,  'type' => 'int',    'default' => 0);
+
 $config->user->form->batchEdit = array();
 $config->user->form->batchEdit['dept']     = array('required' => false, 'type' => 'int',    'width' => '200px', 'name' => 'dept',     'label' => $lang->user->dept,     'control' => array('type' => 'picker', 'required' => true), 'default' => 0, 'ditto' => true);
 $config->user->form->batchEdit['account']  = array('required' => true,  'type' => 'string', 'width' => '160px', 'name' => 'account',  'label' => $lang->user->account,  'control' => 'text',   'default' => '', 'filter' => 'trim', 'base' => true);

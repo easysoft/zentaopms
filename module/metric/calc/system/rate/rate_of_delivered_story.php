@@ -24,7 +24,7 @@ class rate_of_delivered_story extends baseCalc
 
     public $fieldList = array('t1.closedReason', 't1.stage');
 
-    public $result = array();
+    public $result = array('valid' => 0, 'delivered' => 0);
 
     public function calculate($row)
     {
@@ -37,7 +37,7 @@ class rate_of_delivered_story extends baseCalc
 
     public function getResult($options = array())
     {
-        $this->result = $this->result['valid'] ? round($this->result['delivered'] / $this->result['valid'], 4) : 0;
+        $this->result = !empty($this->result['valid']) ? round($this->result['delivered'] / $this->result['valid'], 4) : 0;
         $records = array(array('value' => $this->result));
         return $this->filterByOptions($records, $options);
 

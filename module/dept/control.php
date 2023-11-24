@@ -23,7 +23,6 @@ class dept extends control
     {
         $this->view->title       = $this->lang->dept->manage . $this->lang->colon . $this->app->company->name;
         $this->view->deptID      = $deptID;
-        $this->view->depts       = $this->dept->getTreeMenu(0, array('deptmodel', 'createManageLink'));
         $this->view->sons        = $this->dept->getSons($deptID);
         $this->view->tree        = $this->dept->getDataStructure();
         $this->view->parentDepts = $this->dept->getParents($deptID);
@@ -58,7 +57,7 @@ class dept extends control
         if(!empty($_POST))
         {
             $formData   = form::data($this->config->dept->form->manage)->get();
-            $deptIDList = $this->dept->manageChild($formData->parentDeptID, $formData->depts);
+            $deptIDList = $this->dept->manageChild($formData->parentDeptID, $formData->depts, $formData->maxOrder);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'idList' => $deptIDList));
         }
     }
@@ -85,7 +84,7 @@ class dept extends control
 
         /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
         $optionMenu = $this->dept->getOptionMenu();
-        $childs     = $this->dept->getAllChildId($deptID);
+        $childs     = $this->dept->getAllChildID($deptID);
         foreach($childs as $childModuleID) unset($optionMenu[$childModuleID]);
 
         $dept = $this->dept->fetchByID($deptID);

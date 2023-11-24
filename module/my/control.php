@@ -912,10 +912,11 @@ EOF;
     }
 
     /**
+     * 评审列表。
      * My audits.
      *
      * @param  string $browseType
-     * @param  string $param
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -923,7 +924,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function audit($browseType = 'all', $param = 0, $orderBy = 'time_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function audit(string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
@@ -942,11 +943,11 @@ EOF;
             $reviewList = $this->my->getReviewingList($browseType, $orderBy, $pager);
         }
 
-        $this->view->flows = array();
+        $flows = array();
         if(in_array($this->config->edition, array('max', 'ipd')))
         {
             $this->app->loadLang('approval');
-            $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');
+            $flows = $this->my->getFlowPairs();
         }
 
         $this->view->title       = $this->lang->review->common;
@@ -960,10 +961,12 @@ EOF;
         $this->view->pager       = $pager;
         $this->view->param       = $param;
         $this->view->mode        = 'audit';
+        $this->view->flows       = $flows;
         $this->display();
     }
 
     /**
+     * 质量保证计划列表。
      * My auditplans.
      *
      * @param  string $browseType
@@ -975,24 +978,23 @@ EOF;
      * @access public
      * @return void
      */
-    public function auditplan($browseType = 'myChecking', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function auditplan(string $browseType = 'myChecking', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('auditplan');
-        $this->loadModel('process');
-        $this->loadModel('pssp');
+        /* Set session. */
         $this->session->set('auditplanList', $this->app->getURI(true));
 
         /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager  = pager::init($recTotal, $recPerPage, $pageID);
 
-        $auditplans = $this->auditplan->getList(0, $browseType, $param, $orderBy, $pager);
+        $auditplans = $this->loadModel('auditplan')->getList(0, $browseType, $param, $orderBy, $pager);
 
+        $this->app->loadLang('process');
         $this->view->executions      = $this->loadModel('execution')->getPairs();
         $this->view->projects        = $this->loadModel('project')->getPairs();
         $this->view->processTypeList = $this->lang->process->classify;
-        $this->view->processes       = $this->pssp->getProcesses();
+        $this->view->processes       = $this->loadModel('pssp')->getProcesses();
         $this->view->activities      = $this->pssp->getActivityPairs();
         $this->view->outputs         = $this->pssp->getOutputPairs();
 
@@ -1008,9 +1010,11 @@ EOF;
     }
 
     /**
+     * 不符合项列表。
      * My ncs.
      *
      * @param  string $browseType
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -1018,15 +1022,18 @@ EOF;
      * @access public
      * @return void
      */
-    public function nc($browseType = 'assignedToMe', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function nc(string $browseType = 'assignedToMe', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('nc');
+        /* Set session. */
         $this->session->set('ncList', $this->app->getURI(true));
 
+        $this->app->loadLang('nc');
+
         /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
-        $pager  = pager::init($recTotal, $recPerPage, $pageID);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
         $status = $this->app->rawMethod == 'contribute' ? '' : 'active';
         $ncList = $browseType == 'assignedBy' ? $this->my->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'nc') : $this->my->getNcList($browseType, $orderBy, $pager, $status);
 
@@ -1046,23 +1053,21 @@ EOF;
     }
 
     /**
+     * 会议列表。
      * My meeting list.
      *
-     * @param  string     $browseType
-     * @param  string|int $param
-     * @param  string     $orderBy
-     * @param  int        $recTotal
-     * @param  int        $recPerPage
-     * @param  int        $pageID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function myMeeting($browseType = 'futureMeeting', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function myMeeting(string $browseType = 'futureMeeting', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('meeting');
-
-        $uri = $this->app->getURI(true);
-        $this->session->set('meetingList', $uri, 'my');
+        $this->session->set('meetingList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1070,9 +1075,9 @@ EOF;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Build the search form. */
-        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+        $queryID   = $browseType == 'bysearch' ? $param : 0;
         $actionURL = $this->createLink('my', 'work', "mode=myMeeting&browseType=bysearch&param=myQueryID");
-        $this->meeting->buildSearchForm($queryID, $actionURL);
+        $this->loadModel('meeting')->buildSearchForm($queryID, $actionURL);
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myMeeting;
         $this->view->browseType = $browseType;
@@ -1086,12 +1091,12 @@ EOF;
         $this->view->projects   = array(0 => '') + $this->loadModel('project')->getPairsByProgram(0, 'all', true);
         $this->view->executions = array(0 => '') + $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
         $this->view->rooms      = $this->loadModel('meetingroom')->getPairs();
-
         $this->display();
     }
 
     /**
-     * Feedback .
+     * 反馈列表。
+     * Feedback list.
      *
      * @param  string $browseType
      * @param  int    $param
@@ -1102,66 +1107,24 @@ EOF;
      * @access public
      * @return void
      */
-    public function feedback($browseType = 'assigntome', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function feedback(string $browseType = 'assigntome', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('feedback');
+        $this->session->set('feedbackList', $this->app->getURI(true), 'feedback');
+
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
+        $this->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $feedbacks = $browseType != 'bysearch' ?$this->loadModel('feedback')->getList($browseType, $orderBy, $pager) : $this->loadModel('feedback')->getBySearch($queryID, $orderBy, $pager);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'workFeedback');
+
+        $this->myZen->assignRelatedData($feedbacks);
+        $this->myZen->buildSearchFormForFeedback($queryID, $orderBy);
 
         $this->loadModel('datatable');
         $this->lang->datatable->moduleSetting  = str_replace($this->lang->module, $this->lang->feedback->moduleAB, $this->lang->datatable->moduleSetting);
         $this->lang->datatable->showModule     = str_replace($this->lang->module, $this->lang->feedback->moduleAB, $this->lang->datatable->showModule);
         $this->lang->datatable->showModuleList = str_replace($this->lang->module, $this->lang->feedback->moduleAB, $this->lang->datatable->showModuleList);
-
-        $this->session->set('feedbackList', $this->app->getURI(true), 'feedback');
-
-        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
-        $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-
-        if($browseType != 'bysearch')
-        {
-            $feedbacks = $this->feedback->getList($browseType, $orderBy, $pager);
-        }
-        else
-        {
-            $feedbacks = $this->feedback->getBySearch($queryID, $orderBy, $pager);
-        }
-
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'workFeedback');
-
-        $storyIdList = $bugIdList = $todoIdList = $taskIdList = $ticketIdList = array();
-        foreach($feedbacks as $feedback)
-        {
-            if($feedback->solution == 'tobug')   $bugIdList[]    = $feedback->result;
-            if($feedback->solution == 'tostory') $storyIdList[]  = $feedback->result;
-            if($feedback->solution == 'totodo')  $todoIdList[]   = $feedback->result;
-            if($feedback->solution == 'totask')  $taskIdList[]   = $feedback->result;
-            if($feedback->solution == 'ticket')  $ticketIdList[] = $feedback->result;
-        }
-        $bugs    = $bugIdList    ? $this->loadModel('bug')->getByIdList($bugIdList) : array();
-        $stories = $storyIdList  ? $this->loadModel('story')->getByList($storyIdList) : array();
-        $todos   = $todoIdList   ? $this->loadModel('todo')->getByList($todoIdList) : array();
-        $tasks   = $taskIdList   ? $this->loadModel('task')->getByIdList($taskIdList) : array();
-        $tickets = $ticketIdList ? $this->loadModel('ticket')->getByList($ticketIdList) : array();
-
-        $products = $this->loadModel('product')->getPairs();
-
-        $this->config->feedback->search['module']    = 'workFeedback';
-        $this->config->feedback->search['actionURL'] = inlink('work', "mode=feedback&browseType=bysearch&param=myQueryID&orderBy=$orderBy");
-        $this->config->feedback->search['queryID']   = $queryID;
-        $this->config->feedback->search['onMenuBar'] = 'no';
-        $this->config->feedback->search['params']['product']['values']     = $products;
-        $this->config->feedback->search['params']['module']['values']      = $this->loadModel('tree')->getOptionMenu(0, $viewType = 'feedback', $startModuleID = 0);
-        $this->config->feedback->search['params']['processedBy']['values'] = $this->feedback->getFeedbackPairs('admin');
-
-        unset($this->config->feedback->search['fields']['assignedTo']);
-        unset($this->config->feedback->search['fields']['closedBy']);
-        unset($this->config->feedback->search['fields']['closedDate']);
-        unset($this->config->feedback->search['fields']['closedReason']);
-        unset($this->config->feedback->search['fields']['processedBy']);
-        unset($this->config->feedback->search['fields']['processedDate']);
-        unset($this->config->feedback->search['fields']['solution']);
-
-        $this->loadModel('search')->setSearchParams($this->config->feedback->search);
 
         $this->view->title       = $this->lang->my->feedback;
         $this->view->mode        = 'feedback';
@@ -1170,21 +1133,17 @@ EOF;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
         $this->view->param       = $param;
-        $this->view->bugs        = $bugs;
-        $this->view->todos       = $todos;
-        $this->view->stories     = $stories;
-        $this->view->tasks       = $tasks;
-        $this->view->tickets     = $tickets;
         $this->view->depts       = $this->dept->getOptionMenu();
         $this->view->users       = $this->user->getPairs('noletter|nodeleted|noclosed');
         $this->view->projects    = $this->loadModel('project')->getPairsByProgram(0, 'noclosed');
         $this->view->allProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
         $this->view->modulePairs = $this->tree->getModulePairs(0, 'feedback');
-        $this->view->modules     = $this->tree->getOptionMenu(0, $viewType = 'feedback', 0);
+        $this->view->modules     = $this->tree->getOptionMenu(0, 'feedback', 0);
         $this->display();
     }
 
     /**
+     * 工单列表。
      * My ticket.
      *
      * @param  string $browseType
@@ -1196,23 +1155,20 @@ EOF;
      * @access public
      * @return void
      */
-    public function ticket($browseType = 'assignedtome', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function ticket(string $browseType = 'assignedtome', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->loadModel('ticket');
-        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
-
-        $this->session->set('ticketList', $this->app->getURI(true), 'feedback');
+        $this->session->set('ticketList', $this->app->getURI(true), 'ticket');
 
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
-
+        $pager   = pager::init($recTotal, $recPerPage, $pageID);
+        $queryID = $browseType == 'bysearch' ? $param : 0;
         if($browseType != 'bysearch')
         {
-            $tickets = $this->ticket->getList($browseType, $orderBy, $pager);
+            $tickets = $this->loadModel('ticket')->getList($browseType, $orderBy, $pager);
         }
         else
         {
-            $tickets = $this->ticket->getBySearch($queryID, $orderBy, $pager);
+            $tickets = $this->loadModel('ticket')->getBySearch($queryID, $orderBy, $pager);
         }
 
         $actionURL = $this->createLink('my', 'work', "mode=ticket&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
@@ -1230,6 +1186,7 @@ EOF;
     }
 
     /**
+     * 团队列表。
      * My team.
      *
      * @param  string $orderBy
@@ -1239,12 +1196,12 @@ EOF;
      * @access public
      * @return void
      */
-    public function team($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function team(string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
         $this->lang->navGroup->my = 'system';
 
         /* Set the pager. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Append id for second sort. */
@@ -1260,11 +1217,11 @@ EOF;
         $this->view->deptID     = $deptID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-
         $this->display();
     }
 
     /**
+     * 编辑个人信息。
      * Edit profile
      *
      * @access public
@@ -1272,7 +1229,7 @@ EOF;
      */
     public function editProfile()
     {
-        if($this->app->user->account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest', 'load' => array('alter' => 'guest', 'back' => true)));
+        if($this->app->user->account == 'guest') return print(js::alert('guest') . js::locate('back'));
 
         if(!empty($_POST))
         {
@@ -1287,9 +1244,6 @@ EOF;
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('my', 'profile')));
         }
 
-        $this->app->loadConfig('user');
-        $this->app->loadLang('user');
-
         $userGroups = $this->loadModel('group')->getByAccount($this->app->user->account);
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
@@ -1297,7 +1251,6 @@ EOF;
         $this->view->rand       = $this->user->updateSessionRandom();
         $this->view->userGroups = implode(',', array_keys($userGroups));
         $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->fetchPairs('id', 'name');
-
         $this->display();
     }
 

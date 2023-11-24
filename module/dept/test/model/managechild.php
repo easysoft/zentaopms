@@ -26,7 +26,7 @@ $count        = array('0', '1');
 $dept = new deptTest();
 r($dept->manageChildTest($parentDeptID, $depts, $count[0]))           && p('1') && e('32'); //三级部门下添加四级部门
 r($dept->manageChildTest($parentDeptID, $depts, $count[1]))           && p()    && e('3');   //三级部门下添加四级部门统计
-r($dept->manageChildTest('', $depts, $count[0]))                      && p('1') && e('38'); //无父级部门下添加子级部门
-r($dept->manageChildTest('', $depts, $count[1]))                      && p()    && e('3');   //无父级部门下添加子级部门统计
+r($dept->manageChildTest(0, $depts, $count[0]))                      && p('1') && e('38'); //无父级部门下添加子级部门
+r($dept->manageChildTest(0, $depts, $count[1]))                      && p()    && e('3');   //无父级部门下添加子级部门统计
 r($dept->manageChildTest($parentDeptID, $depts = array(), $count[0])) && p()    && e('0');   //无部门名称
 

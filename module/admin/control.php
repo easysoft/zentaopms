@@ -40,7 +40,7 @@ class admin extends control
         }
 
         $this->view->title       = $this->lang->admin->common;
-        $this->view->zentaoData  = $this->admin->getZentaoData();
+        $this->view->zentaoData  = $this->adminZen->getZentaoData();
         $this->view->dateUsed    = $this->admin->genDateUsed();
         $this->view->hasInternet = $this->admin->checkInternet();
         $this->display();
@@ -88,7 +88,7 @@ class admin extends control
     {
         if($_POST)
         {
-            $response = $this->admin->registerByAPI();
+            $response = $this->adminZen->registerByAPI();
             $response = json_decode($response);
             if($response->result == 'fail')
             {
@@ -125,7 +125,7 @@ class admin extends control
         $this->adminZen->initSN();
 
         $this->view->title    = $this->lang->admin->registerNotice->caption;
-        $this->view->register = $this->admin->getRegisterInfo();
+        $this->view->register = $this->adminZen->getRegisterInfo();
         $this->view->sn       = $this->config->global->sn;
         $this->view->from     = $from;
         $this->display();
@@ -143,7 +143,7 @@ class admin extends control
     {
         if($_POST)
         {
-            $response = $this->admin->bindByAPI();
+            $response = $this->adminZen->bindByAPI();
             $response = json_decode($response);
 
             if($response->result == 'fail') return $this->send($response);
@@ -282,7 +282,7 @@ class admin extends control
     {
         if($_POST)
         {
-            $response = $this->admin->certifyByAPI('mail');
+            $response = $this->adminZen->certifyByAPI('mail');
             $response = json_decode($response);
             if($response->result == 'fail') return print(js::alert($response->message));
             return print(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
@@ -305,7 +305,7 @@ class admin extends control
     {
         if($_POST)
         {
-            $response = $this->admin->certifyByAPI('mobile');
+            $response = $this->adminZen->certifyByAPI('mobile');
             $response = json_decode($response);
             if($response->result == 'fail') return print(js::alert($response->message));
             return print(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
@@ -327,7 +327,7 @@ class admin extends control
     {
         if($_POST)
         {
-            $response = $this->admin->setCompanyByAPI();
+            $response = $this->adminZen->setCompanyByAPI();
             $response = json_decode($response);
             if($response->result == 'fail') return print(js::alert($response->message));
             return print(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
@@ -348,7 +348,7 @@ class admin extends control
      */
     public function ajaxSendCode($type)
     {
-        return print($this->admin->sendCodeByAPI($type));
+        return print($this->adminZen->sendCodeByAPI($type));
     }
 
     /**

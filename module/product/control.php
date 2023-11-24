@@ -101,6 +101,8 @@ class product extends control
         $this->view->branchID     = $branch;
         $this->view->branchStatus = $this->loadModel('branch')->getByID($branch, 0, 'status');
         $this->view->pager        = $pager;
+        $this->view->involved     = $involved;
+        $this->view->orderBy      = $orderBy;
         $this->display();
     }
 

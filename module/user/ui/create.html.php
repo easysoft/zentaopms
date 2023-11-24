@@ -12,29 +12,11 @@ namespace zin;
 
 jsVar('roleGroup', $roleGroup);
 
-$visionList       = $this->user->getVisionList();
-$showVisionList   = count($visionList) > 1;
-$passwordStrength = zget($lang->user->placeholder->passwordStrength, !empty($config->safe->mode) ? $config->safe->mode : 0, '');
-
-$visionsCheckbox = array();
-foreach($visionList as $key => $label)
-{
-    $visionsCheckbox[] = checkbox
-    (
-        set::id("visions$key"),
-        set::name('visions[]'),
-        set::text($label),
-        set::value($key),
-        set::checked($key == 'rnd')
-    );
-}
-
 formPanel
 (
     set::id('createUser'),
     on::change('input[name=type]', 'changeType'),
     on::change('input[name=role]', 'changeRole'),
-    on::change('#addCompany', 'changeAddCompany'),
     on::change('input[name^=visions]', 'changeVision'),
     on::change('#password1,#password2,#verifyPassword', 'changePassword'),
     on::click('button[type=submit]', 'clickSubmit'),
@@ -71,16 +53,20 @@ formPanel
                     set::items($companies),
                     set::value('')
                 ),
-                span
+                input
                 (
-                    set('class', 'input-group-addon'),
-                    checkbox
-                    (
-                        set::id('addCompany'),
-                        set::name('new[]'),
-                        set::value('0'),
-                        set::text($lang->company->create)
-                    )
+                    set::name('newCompany'),
+                    setClass('hidden')
+                ),
+                checkbox
+                (
+                    on::change('toggleNew'),
+                    set::id('new'),
+                    set::name('new'),
+                    set::value(1),
+                    set::text($lang->company->create),
+                    set::rootClass('btn'),
+                    width('96px')
                 )
             )
         )
@@ -114,9 +100,7 @@ formPanel
             set::width('1/2'),
             set::label($lang->user->password),
             set::required(true),
-            password(set::checkStrength(true)),
-            set::tip($passwordStrength),
-            set::tipClass('form-tip')
+            password(set::checkStrength(true))
         )
     ),
     formRow
@@ -135,10 +119,16 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::className('flex gap-4 items-center ' . ($showVisionList ? '' : 'hide')),
+            set::className('flex gap-4 items-center ' . (count($visions) > 1 ? '' : 'hide')),
             set::label($lang->user->visions),
             set::required(true),
-            $visionsCheckbox
+            checkList
+            (
+                set::inline(true),
+                set::name('visions[]'),
+                set::items($visions),
+                set::value($config->vision)
+            )
         )
     ),
     formRow
@@ -172,8 +162,7 @@ formPanel
             set::name('role'),
             set::items($lang->user->roleList),
             set::value(''),
-            set::tip($lang->user->placeholder->role),
-            set::tipClass('form-tip')
+            set::placeholder($lang->user->placeholder->role)
         )
     ),
     common::hasPriv('group', 'managemember') ? formRow
@@ -185,8 +174,7 @@ formPanel
             set::control(array("type" => "picker","multiple" => true)),
             set::name('group[]'),
             set::items($groupList),
-            set::tip($lang->user->placeholder->group),
-            set::tipClass('form-tip')
+            set::placeholder($lang->user->placeholder->group)
         )
     ) : null,
     formRow

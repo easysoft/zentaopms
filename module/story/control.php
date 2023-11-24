@@ -478,7 +478,7 @@ class story extends control
         $uri     = $this->app->getURI(true);
         $tab     = $this->app->tab;
         $story   = $this->story->getById($storyID, $version, true);
-        $product = $this->product->getByID($story->product);
+        $product = $this->product->getByID((int)$story->product);
 
         if($tab == 'product' and !empty($product->shadow)) return $this->send(array('result' => 'success', 'load' => "{$uri}##app=project"));
         if(!$story) return $this->send(array('result' => 'success', 'message' => $this->lang->notFound, 'load' => $this->createLink($this->config->vision == 'lite' ? 'project' : 'product', 'all')));

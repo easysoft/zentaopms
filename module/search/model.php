@@ -40,6 +40,7 @@ class searchModel extends model
     }
 
     /**
+     * 构建查询语句。
      * Build the query to execute.
      *
      * @access public
@@ -48,20 +49,18 @@ class searchModel extends model
     public function buildQuery()
     {
         /* Init vars. */
-        $where        = '';
-        $groupItems   = $this->config->search->groupItems;
-        $groupAndOr   = strtoupper($this->post->groupAndOr);
         $module       = $this->session->searchParams['module'];
         $searchParams = $module . 'searchParams';
-        $searchFields = json_decode($_SESSION[$searchParams]['searchFields']);
+        $searchFields = json_decode($_SESSION[$searchParams]['searchFields'], true);
         $fieldParams  = json_decode($_SESSION[$searchParams]['fieldParams']);
-        $scoreNum     = 0;
+        $groupItems   = $this->config->search->groupItems;
+        $groupAndOr   = strtoupper($this->post->groupAndOr);
+        if($groupAndOr != 'AND' && $groupAndOr != 'OR') $groupAndOr = 'AND';
 
-        if($groupAndOr != 'AND' and $groupAndOr != 'OR') $groupAndOr = 'AND';
+        $queryForm = $this->initSession($module, $searchFields, $fieldParams);
 
-        $queryForm    = $this->initSession($module, $searchFields, $fieldParams);
-        $queryForm[6] = array('groupAndOr' => strtolower($groupAndOr));
-
+        $scoreNum = 0;
+        $where    = '';
         for($i = 1; $i <= $groupItems * 2; $i ++)
         {
             /* The and or between two groups. */
@@ -75,126 +74,23 @@ class searchModel extends model
             $operatorName = "operator$i";
             $valueName    = "value$i";
 
-            /* Fix bug #2704. */
             $field = $this->post->$fieldName;
             if(empty($field)) continue;
-            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'input' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
-            if($field == 'id' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
-            $queryForm[$formIndex]['field'] = $field;
-
-            /* Set and or. */
-            $andOr = strtoupper($this->post->$andOrName);
-            if($andOr != 'AND' and $andOr != 'OR') $andOr = 'AND';
-            $queryForm[$formIndex]['andOr'] = strtolower($andOr);
-
-            /* Set operator. */
-            $operator = $this->post->$operatorName;
-            if(!isset($this->lang->search->operators[$operator])) $operator = '=';
-            $queryForm[$formIndex]['operator'] = $operator;
-
-            /* Skip empty values. */
             if($this->post->$valueName == false) continue;
-            if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
-            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'select' and $this->post->$valueName === 'null') $this->post->$valueName = '';   // Null is special, stands to empty if control is select. Fix bug #3279.
-            $value = addcslashes(trim($this->post->$valueName), '%');
-            $queryForm[$formIndex]['value'] = $value;
+
+            /* 如果是输入框，并且输入框的值为'0'，或者 id 的值为'0'，将值设置为zero。*/
+            if(isset($fieldParams->$field) && $fieldParams->$field->control == 'input' && $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
+            if($field == 'id' && $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
+
+            /* set queryForm. */
+            list($andOr, $operator, $value) = $this->searchTao->processQueryFormDatas($fieldParams, $field, $andOrName, $operatorName, $valueName);
+            $queryForm[$formIndex] = array('field' => $field, 'andOr' => strtolower($andOr), 'operator' => $operator, 'value' => $value);
+
+            /* Set where. */
+            $where = $this->searchTao->setWhere($where, $field, $operator, $value, $andOr);
 
             $scoreNum += 1;
-
-
-            /* Set condition. */
-            $condition = '';
-            if($operator == "include")
-            {
-                if($this->post->$fieldName == 'module')
-                {
-                    $allModules = $this->loadModel('tree')->getAllChildId($value);
-                    if($allModules) $condition = helper::dbIN($allModules);
-                }
-                else
-                {
-                    $condition = ' LIKE ' . $this->dbh->quote("%$value%");
-                }
-            }
-            elseif($operator == "notinclude")
-            {
-                if($this->post->$fieldName == 'module')
-                {
-                    $allModules = $this->loadModel('tree')->getAllChildId($value);
-                    if($allModules)
-                    {
-                        if(count($allModules) > 1) $condition = " NOT " . helper::dbIN($allModules);
-                        else $condition = " !" . helper::dbIN($allModules);
-                    }
-                }
-                else
-                {
-                    $condition = ' NOT LIKE ' . $this->dbh->quote("%$value%");
-                }
-            }
-            elseif($operator == 'belong')
-            {
-                if($this->post->$fieldName == 'module')
-                {
-                    $allModules = $this->loadModel('tree')->getAllChildId($value);
-                    if($allModules) $condition = helper::dbIN($allModules);
-                }
-                elseif($this->post->$fieldName == 'dept')
-                {
-                    $allDepts = $this->loadModel('dept')->getAllChildId($value);
-                    $condition = helper::dbIN($allDepts);
-                }
-                elseif($this->post->$fieldName == 'scene')
-                {
-                    $allScenes = $value === '0' ? array() : ($value === '' ? array(0) : $this->loadModel('testcase')->getAllChildId($value));
-                    if(count($allScenes)) $condition = helper::dbIN($allScenes);
-                }
-                else
-                {
-                    $condition = ' = ' . $this->dbh->quote($value) . ' ';
-                }
-            }
-            else
-            {
-                if($operator == 'between' and !isset($this->config->search->dynamic[$value])) $operator = '=';
-                $condition = $operator . ' ' . $this->dbh->quote($value) . ' ';
-
-                if($operator == '=' and $this->post->$fieldName == 'id' and preg_match('/^[0-9]+(,[0-9]*)+$/', $value) and !preg_match('/[\x7f-\xff]+/', $value))
-                {
-                    $values = array_filter(explode(',', trim($this->dbh->quote($value), "'")));
-                    foreach($values as $value) $value = "'" . $value . "'";
-
-                    $value     = implode(',', $values);
-                    $operator  = 'IN';
-                    $condition = $operator . ' (' . $value . ') ';
-                }
-            }
-
-            /* Processing query criteria. */
-            if($operator == '=' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
-            {
-                $condition  = '`' . $this->post->$fieldName . "` >= '$value' AND `" . $this->post->$fieldName . "` <= '$value 23:59:59'";
-                $where     .= " $andOr ($condition)";
-            }
-            elseif($operator == '!=' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
-            {
-                $condition  = '`' . $this->post->$fieldName . "` < '$value' OR `" . $this->post->$fieldName . "` > '$value 23:59:59'";
-                $where     .= " $andOr ($condition)";
-            }
-            elseif($operator == '<=' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
-            {
-                $where .= " $andOr " . '`' . $this->post->$fieldName . "` <= '$value 23:59:59'";
-            }
-            elseif($operator == '>' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
-            {
-                $where .= " $andOr " . '`' . $this->post->$fieldName . "` > '$value 23:59:59'";
-            }
-            elseif($condition)
-            {
-                $where .= " $andOr " . '`' . $this->post->$fieldName . '` ' . $condition;
-            }
         }
-
         $where .=" ))";
         $where  = $this->replaceDynamic($where);
 
@@ -207,6 +103,7 @@ class searchModel extends model
     }
 
     /**
+     * 初始化搜索表单，并且保存到 session。
      * Init the search session for the first time search.
      *
      * @param  string   $module
@@ -220,7 +117,7 @@ class searchModel extends model
         if(is_object($fields)) $fields = get_object_vars($fields);
         $formSessionName = $module . 'Form';
 
-        $queryForm       = array();
+        $queryForm = array();
         for($i = 1; $i <= $this->config->search->groupItems * 2; $i ++)
         {
             $currentField  = key($fields);

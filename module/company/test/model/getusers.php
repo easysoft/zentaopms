@@ -7,6 +7,7 @@ su('admin');
 zdTable('company')->gen(1);
 zdTable('user')->config('user')->gen(1000);
 zdTable('userquery')->config('userquery')->gen(3);
+zdTable('dept')->gen(10);
 
 /**
 
@@ -20,7 +21,7 @@ pid=1
 查询外部部人员统计       >> 1
 根据部门查询人员         >> admin,admin,1
 type未传值按部门查询人员 >> 999
-根据部门查询人员统计     >> 999
+根据部门查询人员统计     >> 10
 根据查询条件查询         >> admin,admin
 根据查询条件'查询统计    >> 999
 根据account降序排序      >> user99,用户99

@@ -56,7 +56,7 @@ class companyModel extends model
         if($type == 'bydept')
         {
             $childDeptIds = $this->loadModel('dept')->getAllChildID($deptID);
-            return $this->dept->getUsers($browseType, $childDeptIds, $pager, $sort);
+            return $this->dept->getUsers($browseType, $childDeptIds, $sort, $pager);
         }
         else
         {

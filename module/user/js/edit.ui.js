@@ -64,12 +64,3 @@ function changeType(event)
     $('[name=dept]').closest('.form-row').toggleClass('hidden', type != 'inside');
     $('#commiter').closest('.form-row').toggleClass('hidden', type != 'inside');
 }
-
-function toggleNew(event)
-{
-    const $company    = $('[name="company"]').closest('.picker-box');
-    const $newCompany = $('#newCompany');
-
-    $company.toggleClass('hidden', $(event.target).prop('checked'));
-    $newCompany.toggleClass('hidden', !$(event.target).prop('checked'));
-}

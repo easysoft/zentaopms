@@ -20,4 +20,3 @@ $deptID = '11';
 
 $dept = new deptTest();
 r($dept->deleteTest($deptID)) && p() && e('10'); //删除后统计数量
-

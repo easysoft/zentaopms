@@ -15,78 +15,6 @@ declare(strict_types=1);
 class adminModel extends model
 {
     /**
-     * Post data form  API.
-     *
-     * @param  string $url
-     * @param  string $formvars
-     * @access public
-     * @return string
-     */
-    public function postAPI(string $url, string $formvars = ''): string
-    {
-        return common::http($url, $formvars);
-    }
-
-    /**
-     * Get status of zentaopms.
-     *
-     * @access public
-     * @return void
-     */
-    public function getStatOfPMS()
-    {
-        $sql    = "SHOW TABLE STATUS";
-        $tables = $this->dbh->query($sql)->fetchALL();
-    }
-
-    /**
-     * Get state of company.
-     *
-     * @param  int    $companyID
-     * @access public
-     * @return void
-     */
-    public function getStatOfCompany($companyID)
-    {
-    }
-
-    /**
-     * Get system info.
-     *
-     * @access public
-     * @return void
-     */
-    public function getStatOfSys()
-    {
-    }
-
-    /**
-     * Register zentao by API.
-     *
-     * @access public
-     * @return void
-     */
-    public function registerByAPI()
-    {
-        $apiConfig = $this->getApiConfig();
-        $apiURL    = $this->config->admin->apiRoot . "/user-apiRegister.json?HTTP_X_REQUESTED_WITH=XMLHttpRequest&{$apiConfig->sessionVar}={$apiConfig->sessionID}";
-        return $this->postAPI($apiURL, $_POST);
-    }
-
-    /**
-     * Login zentao by API.
-     *
-     * @access public
-     * @return void
-     */
-    public function bindByAPI()
-    {
-        $apiConfig = $this->getApiConfig();
-        $apiURL    = $this->config->admin->apiRoot . "/user-bindChanzhi.json?HTTP_X_REQUESTED_WITH=XMLHttpRequest&{$apiConfig->sessionVar}={$apiConfig->sessionID}";
-        return $this->postAPI($apiURL, $_POST);
-    }
-
-    /**
      * Get secret key.
      *
      * @access public
@@ -105,69 +33,6 @@ class adminModel extends model
         $result = common::http($apiURL . '?' . http_build_query($params));
         $result = json_decode($result);
         return $result;
-    }
-
-    /**
-     * Send code by API.
-     *
-     * @param  string    $type
-     * @access public
-     * @return string
-     */
-    public function sendCodeByAPI($type)
-    {
-        $apiConfig = $this->getApiConfig();
-        $module    = $type == 'mobile' ? 'sms' : 'mail';
-        $apiURL    = $this->config->admin->apiRoot . "/{$module}-apiSendCode.json";
-
-        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
-        $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
-        if(isset($this->config->global->community) and $this->config->global->community != 'na') $this->post->set('account', $this->config->global->community);
-
-        $param = http_build_query($params);
-        return $this->postAPI($apiURL . '?' . $param, $_POST);
-    }
-
-    /**
-     * Certify by API.
-     *
-     * @param  string    $type
-     * @access public
-     * @return string
-     */
-    public function certifyByAPI($type)
-    {
-        $apiConfig = $this->getApiConfig();
-        $module    = $type == 'mobile' ? 'sms' : 'mail';
-        $apiURL    = $this->config->admin->apiRoot . "/{$module}-apiCertify.json";
-
-        $params['u'] = $this->config->global->community;
-        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
-        $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
-        $params['k'] = $this->getSignature($params);
-
-        $param = http_build_query($params);
-        return $this->postAPI($apiURL . '?' . $param, $_POST);
-    }
-
-    /**
-     * Set company by API.
-     *
-     * @access public
-     * @return string
-     */
-    public function setCompanyByAPI()
-    {
-        $apiConfig = $this->getApiConfig();
-        $apiURL    = $this->config->admin->apiRoot . "/user-apiSetCompany.json";
-
-        $params['u'] = $this->config->global->community;
-        $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
-        $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
-        $params['k'] = $this->getSignature($params);
-
-        $param = http_build_query($params);
-        return $this->postAPI($apiURL . '?' . $param, $_POST);
     }
 
     /**
@@ -200,20 +65,6 @@ class adminModel extends model
             $this->session->set('apiConfig', $config);
         }
         return $this->session->apiConfig;
-    }
-
-    /**
-     * Get register information.
-     *
-     * @access public
-     * @return object
-     */
-    public function getRegisterInfo()
-    {
-        $register = new stdclass();
-        $register->company = $this->app->company->name;
-        $register->email   = $this->app->user->email;
-        return $register;
     }
 
     /**
@@ -551,53 +402,5 @@ class adminModel extends model
 
         if($firstUseDate) $firstUseDate = substr($firstUseDate, 0, 10);
         return helper::getDateInterval($firstUseDate);
-    }
-
-    /**
-     * Get zentao.net data.
-     *
-     * @access public
-     * @return object
-     */
-    public function getZentaoData()
-    {
-        $data = new stdclass();
-        $data->hasData  = true;
-        $data->dynamics = array();
-        $data->classes  = array();
-        $data->plugins  = array();
-        $data->patches  = array();
-
-        $zentaoData = !empty($this->config->zentaoWebsite) ? $this->config->zentaoWebsite : null;
-        if(empty($zentaoData))
-        {
-            $data->hasData = false;
-            if($this->config->edition == 'open')
-            {
-                $data->plugins = array(
-                    $this->config->admin->plugins[27],
-                    $this->config->admin->plugins[26],
-                    $this->config->admin->plugins[30]
-                );
-            }
-            else
-            {
-                $data->plugins = array(
-                    $this->config->admin->plugins[198],
-                    $this->config->admin->plugins[194],
-                    $this->config->admin->plugins[203]
-                );
-            }
-        }
-        else
-        {
-            if(!empty($zentaoData->dynamic))     $data->dynamics = json_decode($zentaoData->dynamic);
-            if(!empty($zentaoData->publicClass)) $data->classes  = json_decode($zentaoData->publicClass);
-            if(!empty($zentaoData->plugin))      $data->plugins  = json_decode($zentaoData->plugin);
-            if(!empty($zentaoData->patch))       $data->patches  = json_decode($zentaoData->patch);
-            if(common::checkNotCN()) array_pop($data->plugins);
-        }
-
-        return $data;
     }
 }

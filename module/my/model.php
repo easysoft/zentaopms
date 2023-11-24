@@ -1518,4 +1518,16 @@ class myModel extends model
         }
         return $reviewList;
     }
+
+    /**
+     * 获取工作流键值对。
+     * Get flow paris.
+     *
+     * @access public
+     * @return array
+     */
+    public function getFlowPairs(): array
+    {
+        return $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs();
+    }
 }

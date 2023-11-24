@@ -128,6 +128,19 @@ class navbar extends wg
         foreach ($menu as $menuItem)
         {
             if(isset($menuItem->hidden) and $menuItem->hidden and (!isset($menuItem->tutorial) or !$menuItem->tutorial)) continue;
+            if(isset($menuItem->class) && strpos($menuItem->class, 'automation-menu'))
+            {
+                if($menuItem->divider) $items[] = array('type' => 'divider');
+                $items[] = array
+                    (
+                        'class'   => $menuItem->class,
+                        'text'    => $menuItem->text,
+                        'type'    => 'text',
+                        'tagName' => 'span',
+                    );
+                continue;
+
+            }
             if(empty($menuItem->link)) continue;
 
             if($menuItem->divider) $items[] = array('type' => 'divider');

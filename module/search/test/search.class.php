@@ -8,6 +8,23 @@ class searchTest
     }
 
     /**
+     * Test set search params.
+     *
+     * @param  array $searchConfig
+     * @access public
+     * @return array
+     */
+    public function setSearchParams(array $searchConfig): array
+    {
+        $this->objectModel->setSearchParams($searchConfig);
+
+        $module = $searchConfig['module'];
+        $searchParamsName = $module . 'searchParams';
+
+        return $_SESSION[$searchParamsName];
+    }
+
+    /**
      * Test get query.
      *
      * @param  int    $queryID

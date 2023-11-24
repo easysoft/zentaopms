@@ -96,25 +96,17 @@ class deptTest
     /**
      * function update test by dept
      *
-     * @param  string $deptID
-     * @param  array  $param
+     * @param  object $dept
      * @access public
      * @return array
      */
-    public function updateTest($deptID, $param = array())
+    public function updateTest($dept)
     {
         global $tester;
 
-        $createFields = array('parent' => '', 'name' => '', 'manager' => '');
+        $this->objectModel->update($dept);
 
-        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
-        foreach($param as $key => $value) $_POST[$key] = $value;
-
-        $this->objectModel->update($deptID);
-
-        unset($_POST);
-
-        $objects = $tester->dao->select('*')->from(TABLE_DEPT)->where('id')->eq($deptID)->fetchAll('id');
+        $objects = $tester->dao->select('*')->from(TABLE_DEPT)->where('id')->eq($dept->id)->fetchAll('id');
 
         if(dao::isError()) return dao::getError();
 
@@ -298,7 +290,7 @@ class deptTest
      */
     public function getUsersTest($browseType = 'inside', $deptID = 0, $count = 0, $orderBy = 'id', $pager = null)
     {
-        $objects = $this->objectModel->getUsers($browseType, $deptID, $pager, $orderBy);
+        $objects = $this->objectModel->getUsers($browseType, $deptID, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
         if($count == '1')  return count($objects);

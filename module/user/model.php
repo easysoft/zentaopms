@@ -307,90 +307,99 @@ class userModel extends model
     }
 
     /**
+     * 添加一个用户。
      * Create a user.
      *
+     * @param  object $user
      * @access public
-     * @return int
+     * @return bool|int
      */
-    public function create()
+    public function create(object $user): bool|int
     {
-        $_POST['account'] = trim($_POST['account']);
-        if(strtolower($_POST['account']) == 'guest') return false;
+        $this->dao->begin();
 
-        $user = fixer::input('post')
-            ->setDefault('join', null)
-            ->setDefault('type', 'inside')
-            ->setDefault('company', 0)
-            ->setDefault('visions', '')
-            ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
-            ->setIF($this->post->password1 == false, 'password', '')
-            ->setIF($this->post->email != false, 'email', trim($this->post->email))
-            ->join('visions', ',')
-            ->remove('new, group, password1, password2, verifyPassword, passwordStrength,passwordLength, verifyRand')
-            ->get();
+        if(!empty($user->new)) $user->company = $this->createCompany($user->newCompany);
 
-        $this->checkPassword();
+        if($user->type == 'outside') $this->config->user->create->requiredFields = trim(str_replace(array(',dept,', ',commiter,'), '', ',' . $this->config->user->create->requiredFields . ','), ',');
 
-        if(empty($_POST['verifyPassword']) || $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
-
-        if(isset($_POST['new']))
-        {
-            if(!empty($user->company))
-            {
-                $company = new stdClass();
-                $company->name = $user->company;
-                $this->dao->insert(TABLE_COMPANY)->data($company)->exec();
-
-                $user->company = $this->dao->lastInsertID();
-            }
-            else
-            {
-                dao::$errors['company'][] = $this->lang->user->error->companyEmpty;
-                return false;
-            }
-        }
-
-        if(dao::isError()) return false;
-
-        if($user->type == 'outside')
-        {
-            $requiredFieldList = explode(',', $this->config->user->create->requiredFields);
-            if(in_array('dept', $requiredFieldList))     unset($requiredFieldList[array_search('dept', $requiredFieldList)]);
-            if(in_array('commiter', $requiredFieldList)) unset($requiredFieldList[array_search('commiter', $requiredFieldList)]);
-            $this->config->user->create->requiredFields = implode(',', $requiredFieldList);
-        }
-
-        $this->dao->insert(TABLE_USER)->data($user)
-            ->autoCheck()
+        $this->dao->insert(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,verifyRand,passwordLength,passwordStrength')
             ->batchCheck($this->config->user->create->requiredFields, 'notempty')
-            ->check('account', 'unique')
-            ->check('account', 'account')
-            ->checkIF($this->post->email != '', 'email', 'email')
+            ->checkIF($user->account, 'account', 'unique')
+            ->checkIF($user->account, 'account', 'account')
+            ->checkIF($user->email, 'email', 'email')
+            ->autoCheck()
             ->exec();
-
-        if(dao::isError()) return false;
+        if(dao::isError())
+        {
+            $this->dao->rollback();
+            return false;
+        }
 
         $userID = $this->dao->lastInsertID();
 
-        /* Set usergroup for account. */
-        if(!empty(array_filter($_POST['group'])))
-        {
-            foreach($this->post->group as $groupID)
-            {
-                $data          = new stdclass();
-                $data->account = $this->post->account;
-                $data->group   = $groupID;
-                $data->project = '';
-                $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
-            }
-        }
-
+        /* 创建用户组，更新用户视图并记录日志。*/
+        /* Create user group, update user view and save log. */
+        $groups = array_filter($user->group);
+        if($groups) $this->createUserGroup($groups, $user->account);
         $this->computeUserView($user->account);
         $this->loadModel('action')->create('user', $userID, 'Created');
-        $this->loadModel('mail');
-        if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
+
+        if(dao::isError())
+        {
+            $this->dao->rollback();
+            return false;
+        }
+
+        $this->dao->commit();
 
         return $userID;
+    }
+
+    /**
+     * 创建一个外部公司。
+     * Create a outside company.
+     *
+     * @param  string $companyName
+     * @access public
+     * @return int
+     */
+    public function createCompany(string $companyName): int
+    {
+        if(empty($companyName))
+        {
+            dao::$errors['newCompany'][] = sprintf($this->lang->error->notempty, $this->lang->user->company);
+            return 0;
+        }
+
+        $company = new stdClass();
+        $company->name = $companyName;
+        $this->dao->insert(TABLE_COMPANY)->data($company)->exec();
+
+        return $this->dao->lastInsertID();
+    }
+
+    /**
+     * 创建用户组。
+     * Create user group.
+     *
+     * @param  array  $groups
+     * @param  string $account
+     * @access public
+     * @return bool
+     */
+    public function createUserGroup(array $groups, string $account): bool
+    {
+        $userGroup = new stdclass();
+        $userGroup->account = $account;
+        $userGroup->project = '';
+
+        foreach($groups as $group)
+        {
+            $userGroup->group = $group;
+            $this->dao->replace(TABLE_USERGROUP)->data($userGroup)->exec();
+        }
+
+        return !dao::isError();
     }
 
     /**
@@ -543,129 +552,128 @@ class userModel extends model
     }
 
     /**
+     * 更新一个用户。
      * Update a user.
      *
-     * @param  int    $userID
+     * @param  object $user
      * @access public
-     * @return void
+     * @return bool
      */
-    public function update($userID)
+    public function update(object $user): bool
     {
-        $_POST['account'] = trim($_POST['account']);
-        if(!$this->checkPassword(true)) return false;
+        $this->dao->begin();
 
-        $oldUser = $this->getById($userID, 'id');
-
-        $userID = $oldUser->id;
-        $user   = fixer::input('post')
-            ->setDefault('join', null)
-            ->setDefault('company', 0)
-            ->setDefault('visions', '')
-            ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
-            ->setIF($this->post->email != false, 'email', trim($this->post->email))
-            ->join('visions', ',')
-            ->remove('new, password1, password2, group, verifyPassword, passwordStrength,passwordLength, verifyRand, newCompany')
-            ->get();
-
-        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
-        {
-            dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
-            return false;
-        }
-
-        if(isset($_POST['new']))
-        {
-            if(empty($_POST['newCompany']))
-            {
-                dao::$errors['newCompany'][] = $this->lang->user->error->companyEmpty;
-                return false;
-            }
-
-            $company = new stdClass();
-            $company->name = $_POST['newCompany'];
-            $this->dao->insert(TABLE_COMPANY)->data($company)->exec();
-
-            $user->company = $this->dao->lastInsertID();
-        }
+        if(!empty($user->new)) $user->company = $this->createCompany($user->newCompany);
 
         $requiredFields = array();
         foreach(explode(',', $this->config->user->edit->requiredFields) as $field)
         {
-            if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $requiredFields[$field] = $field;
+            /* 根据后台自定义的必填项和可用联系方式过滤必填字段。*/
+            /* Filter required fields by the custom required fields and contact fields. */
+            if(!isset($this->lang->user->contactFieldList[$field]) || strpos(",{$this->config->user->contactField},", ",{$field},") !== false) $requiredFields[$field] = $field;
         }
         $requiredFields = join(',', $requiredFields);
 
-        $this->dao->update(TABLE_USER)->data($user)
-            ->autoCheck()
+        $this->dao->update(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,verifyRand,passwordLength,passwordStrength')
             ->batchCheck($requiredFields, 'notempty')
-            ->check('account', 'unique', "id != '$userID'")
-            ->check('account', 'account')
-            ->checkIF($this->post->email  != '', 'email',  'email')
-            ->checkIF($this->post->phone  != '', 'phone',  'phone')
-            ->checkIF($this->post->mobile != '', 'mobile', 'mobile')
-            ->where('id')->eq((int)$userID)
+            ->checkIF($user->account, 'account', 'unique', "id != '$user->id'")
+            ->checkIF($user->account, 'account', 'account')
+            ->checkIF($user->email, 'email',  'email')
+            ->checkIF($user->phone, 'phone',  'phone')
+            ->checkIF($user->mobile, 'mobile', 'mobile')
+            ->autoCheck()
+            ->where('id')->eq($user->id)
             ->exec();
-        if(dao::isError()) return false;
-
-        /* If account changed, update the privilege. */
-        if($this->post->account != $oldUser->account)
+        if(dao::isError())
         {
-            $this->dao->update(TABLE_USERGROUP)->set('account')->eq($this->post->account)->where('account')->eq($oldUser->account)->exec();
-            $this->dao->update(TABLE_USERVIEW)->set('account')->eq($this->post->account)->where('account')->eq($oldUser->account)->exec();
-            if(strpos($this->app->company->admins, ',' . $oldUser->account . ',') !== false)
-            {
-                $admins = str_replace(',' . $oldUser->account . ',', ',' . $this->post->account . ',', $this->app->company->admins);
-                $this->dao->update(TABLE_COMPANY)->set('admins')->eq($admins)->where('id')->eq($this->app->company->id)->exec();
-                if(!dao::isError()) $this->app->user->account = $this->post->account;
-            }
+            $this->dao->rollBack();
+            return false;
         }
 
-        $oldGroups = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->fetchPairs('group', 'group');
-        $newGroups = zget($_POST, 'group', array());
+        $oldUser = $this->getById($user->id, 'id');
+
+        /* 更新用户组和用户视图并记录积分和日志。*/
+        /* Update user group and user view, and save log and score. */
+        $this->checkAccountChange($oldUser->account, $user->account);
+        $this->checkGroupChange($user);
+        $this->loadModel('score')->create('user', 'editProfile');
+        $this->loadModel('action')->create('user', $user->id, 'edited');
+
+        if(dao::isError())
+        {
+            $this->dao->rollBack();
+            return false;
+        }
+
+        $this->dao->commit();
+
+        /* 更新当前用户的信息。*/
+        if($user->account == $this->app->user->account)
+        {
+            if(!empty($user->password)) $this->app->user->password = $user->password;
+            if(!empty($user->realname)) $this->app->user->realname = $user->realname;
+            $this->app->user->role = $user->role;
+        }
+
+        return true;
+    }
+
+    /**
+     * 检查用户名是否发生变化。
+     * Check if the account changed.
+     *
+     * @param  string $oldAccount
+     * @param  string $newAccount
+     * @access public
+     * @return bool
+     */
+    public function checkAccountChange(string $oldAccount, string $newAccount): bool
+    {
+        if($oldAccount == $newAccount) return true;
+
+        /* 更新用户组和用户视图。*/
+        /* Update the user group and user view. */
+        $this->dao->update(TABLE_USERGROUP)->set('account')->eq($newAccount)->where('account')->eq($oldAccount)->exec();
+        $this->dao->update(TABLE_USERVIEW)->set('account')->eq($newAccount)->where('account')->eq($oldAccount)->exec();
+
+        /* 如果旧用户名是公司管理员，则更新公司管理员。*/
+        /* If the old account is company admin, update the company admin. */
+        if(strpos($this->app->company->admins, ',' . $oldAccount . ',') !== false)
+        {
+            $admins = str_replace(',' . $oldAccount . ',', ',' . $newAccount . ',', $this->app->company->admins);
+            $this->dao->update(TABLE_COMPANY)->set('admins')->eq($admins)->where('id')->eq($this->app->company->id)->exec();
+            if(dao::isError()) return false;
+
+            $this->app->user->account = $newAccount;
+        }
+        return !dao::isError();
+    }
+
+    /**
+     * 检查权限组是否发生变化。
+     * Check if the group changed.
+     *
+     * @param  object $user
+     * @access public
+     * @return bool
+     */
+    public function checkGroupChange(object $user): bool
+    {
+        $oldGroups = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($user->account)->fetchPairs();
+        $newGroups = array_unique(array_filter($user->group));
+
         sort($oldGroups);
         sort($newGroups);
 
-        /* If change group then reset usergroup. */
-        if(join(',', $oldGroups) != join(',', $newGroups))
-        {
-            /* Reset usergroup for account. */
-            $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->exec();
+        if(join(',', $oldGroups) == join(',', $newGroups)) return true;
 
-            /* Set usergroup for account. */
-            if(isset($_POST['group']))
-            {
-                foreach($this->post->group as $groupID)
-                {
-                    $data          = new stdclass();
-                    $data->account = $this->post->account;
-                    $data->group   = $groupID;
-                    $data->project = '';
-                    $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
-                }
-            }
+        /* 如果权限组发生变化，则删除原有的权限组，重新创建并更新用户视图。*/
+        /* If the group changed, delete the old group, create new group and update user view. */
+        $this->dao->delete()->from(TABLE_USERGROUP)->where('account')->eq($user->account)->exec();
+        if($newGroups) $this->createUserGroup($newGroups, $user->account);
+        $this->computeUserView($user->account, true);
 
-            /* Compute user view. */
-            $this->computeUserView($this->post->account, true);
-        }
-
-        if(!dao::isError())
-        {
-            if($user->account == $this->app->user->account)
-            {
-                if(!empty($user->password)) $this->app->user->password = $user->password;
-                if(!empty($user->realname)) $this->app->user->realname = $user->realname;
-            }
-            $this->loadModel('score')->create('user', 'editProfile');
-            $this->loadModel('action')->create('user', $userID, 'edited');
-            $this->loadModel('mail');
-            if($this->config->mail->mta == 'sendcloud' and $user->email != $oldUser->email)
-            {
-                $this->mail->syncSendCloud('delete', $oldUser->email);
-                $this->mail->syncSendCloud('sync', $user->email, $user->realname);
-            }
-        }
-
-        if($_POST['account'] == $this->app->user->account and $user->role != $_SESSION['user']->role) $_SESSION['user']->role = $user->role;
+        return !dao::isError();
     }
 
     /**
@@ -844,44 +852,6 @@ class userModel extends model
 
         $password = substr($this->post->password1, 0, 32);
         $this->dao->update(TABLE_USER)->set('password')->eq($password)->autoCheck()->where('account')->eq($this->post->account)->exec();
-        return !dao::isError();
-    }
-
-    /**
-     * Check the passwds posted.
-     *
-     * @param  bool   $canNoPassword
-     * @access public
-     * @return bool
-     */
-    public function checkPassword($canNoPassword = false)
-    {
-        $_POST['password1'] = trim($_POST['password1']);
-        $_POST['password2'] = trim($_POST['password2']);
-        if(!$canNoPassword and empty($_POST['password1'])) dao::$errors['password1'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
-        if(!empty($_POST['password1']))
-        {
-            if(isset($this->config->safe->mode) && ($this->post->passwordStrength < $this->config->safe->mode)) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, $this->config->safe->mode, $this->lang->user->weakPassword);
-
-            if(isset($_POST['passwordLength']) && $this->post->passwordLength < 6 && empty(dao::$errors['password1'])) dao::$errors['password1'][] = zget($this->lang->user->placeholder->passwordStrengthCheck, 0, $this->lang->user->weakPassword);
-
-            if($this->post->password1 != $this->post->password2) dao::$errors['password1'][] = $this->lang->error->passwordsame;
-
-            if(!empty($this->config->safe->changeWeak))
-            {
-                if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
-
-                if(strpos(",{$this->config->safe->weak},", ",{$this->post->password1},") !== false) dao::$errors['password1'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
-
-                $weaks = array();
-                foreach(explode(',', $this->config->safe->weak) as $weak)
-                {
-                    $weak = md5(trim($weak));
-                    $weaks[$weak] = $weak;
-                }
-                if(isset($weaks[substr($this->post->password1, 0, 32)])) dao::$errors['password1'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
-            }
-        }
         return !dao::isError();
     }
 

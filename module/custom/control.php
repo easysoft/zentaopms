@@ -382,6 +382,7 @@ class custom extends control
     }
 
     /**
+     * 保存自定义字段。
      * Ajax save custom fields.
      *
      * @param  string $module
@@ -390,20 +391,20 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function ajaxSaveCustomFields($module, $section, $key)
+    public function ajaxSaveCustomFields(string $module, string $section, string $key)
     {
         $account = $this->app->user->account;
         if($this->server->request_method == 'POST')
         {
             $fields = $this->post->fields;
             if(is_array($fields)) $fields = implode(',', $fields);
-            $this->loadModel('setting')->setItem("$account.$module.$section.$key", $fields);
-            if(in_array($module, array('story', 'task', 'testcase')) and $section == 'custom' and in_array($key, array('createFields', 'batchCreateFields'))) return;
-            if($module == 'bug' and $section == 'custom' and $key == 'batchCreateFields') return;
+            $this->loadModel('setting')->setItem("{$account}.{$module}.{$section}.{$key}", $fields);
+            if(in_array($module, array('story', 'task', 'testcase')) && $section == 'custom' && in_array($key, array('createFields', 'batchCreateFields'))) return;
+            if($module == 'bug' && $section == 'custom' && $key == 'batchCreateFields') return;
         }
         else
         {
-            $this->loadModel('setting')->deleteItems("owner=$account&module=$module&section=$section&key=$key");
+            $this->loadModel('setting')->deleteItems("owner={$account}&module={$module}&section={$section}&key={$key}");
         }
 
         $this->loadModel('common')->loadConfigFromDB();
@@ -416,6 +417,7 @@ class custom extends control
     }
 
     /**
+     * 获取自定义列。
      * Ajax get custom fields.
      *
      * @param  string $module
@@ -424,24 +426,9 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function ajaxGetCustomFields($module, $section, $key)
+    public function ajaxGetCustomFields(string $module, string $section, string $key)
     {
         return print($this->loadModel('setting')->getItem("owner={$this->app->user->account}&module={$module}&section={$section}&key={$key}"));
-    }
-
-    /**
-     * Custom menu view
-     *
-     * @param  string $module
-     * @param  string $method
-     * @access public
-     * @return void
-     */
-    public function ajaxMenu($module = 'main', $method = '')
-    {
-        $this->view->module = $module;
-        $this->view->method = $method;
-        $this->display();
     }
 
     /**
