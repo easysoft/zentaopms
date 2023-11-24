@@ -293,17 +293,17 @@ class releaseZen extends release
      * 构造导出的需求列表数据。
      * Build the story list data for export.
      *
-     * @param  string    $html
+     * @param  object    $release
      * @access protected
      * @return string
      */
-    protected function buildStoryDataForExport(): string
+    protected function buildStoryDataForExport(object $release): string
     {
         $html  = '';
         $html .= "<h3>{$this->lang->release->stories}</h3>";
         $this->loadModel('story');
 
-        $stories = $this->release->getStoryForExport();
+        $stories = $this->release->getStoryList($release->stories, (int)$release->branch);
         foreach($stories as $story) $story->title = "<a href='" . common::getSysURL() . $this->createLink('story', 'view', "storyID=$story->id") . "' target='_blank'>$story->title</a>";
 
         $fields = array('id' => $this->lang->story->id, 'title' => $this->lang->story->title);
@@ -331,16 +331,17 @@ class releaseZen extends release
      * 构造导出的解决的Bug列表数据。
      * Build the resolved bug list data for export.
      *
+     * @param  object    $release
      * @access protected
      * @return string
      */
-    protected function buildBugDataForExport(): string
+    protected function buildBugDataForExport(object $release): string
     {
         $html  = '';
         $html .= "<h3>{$this->lang->release->bugs}</h3>";
         $this->loadModel('bug');
 
-        $bugs = $this->release->getBugForExport('leftBug');
+        $bugs = $this->release->getBugList($release->bugs);
         foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
 
         $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);
@@ -367,15 +368,16 @@ class releaseZen extends release
     /**
      * 构造导出的遗留的Bug列表数据。
      *
+     * @param  object    $release
      * @access protected
      * @return string
      */
-    protected function buildLeftBugDataForExport(): string
+    protected function buildLeftBugDataForExport(object $release): string
     {
         $html  = '';
         $html .= "<h3>{$this->lang->release->generatedBugs}</h3>";
 
-        $bugs = $this->release->getBugForExport('leftBug');
+        $bugs = $this->release->getBugList($release->leftBugs);
         foreach($bugs as $bug) $bug->title = "<a href='" . common::getSysURL() . $this->createLink('bug', 'view', "bugID=$bug->id") . "' target='_blank'>$bug->title</a>";
 
         $fields = array('id' => $this->lang->bug->id, 'title' => $this->lang->bug->title);

@@ -301,10 +301,11 @@ class release extends control
      * 导出需求列表和Bug列表。
      * Export story list and bug list.
      *
+     * @param  int    $releaseID
      * @access public
      * @return void
      */
-    public function export()
+    public function export(int $releaseID)
     {
         if(!empty($_POST))
         {
@@ -312,10 +313,11 @@ class release extends control
             $fileName = $this->post->fileName;
             if(empty($fileName)) return $this->sendError(array('fileName' => sprintf($this->lang->error->notempty, $this->lang->release->fileName)));
 
-            $html = '';
-            if($type == 'story' or $type == 'all')   $html .= $this->releaseZen->buildStoryDataForExport();
-            if($type == 'bug' || $type == 'all')     $html .= $this->releaseZen->buildBugDataForExport();
-            if($type == 'leftbug' || $type == 'all') $html .= $this->releaseZen->buildLeftBugDataForExport();
+            $html    = '';
+            $release = $this->release->getByID($releaseID, true);
+            if($type == 'story' || $type == 'all')   $html .= $this->releaseZen->buildStoryDataForExport($release);
+            if($type == 'bug' || $type == 'all')     $html .= $this->releaseZen->buildBugDataForExport($release);
+            if($type == 'leftbug' || $type == 'all') $html .= $this->releaseZen->buildLeftBugDataForExport($release);
 
             $html = "<html><head><meta charset='utf-8'><title>{$fileName}</title><style>table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}</style></head><body>$html</body></html>";
             $this->loadModel('file')->sendDownHeader($fileName, 'html', $html);
