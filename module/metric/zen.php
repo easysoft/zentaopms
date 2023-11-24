@@ -487,7 +487,7 @@ class metricZen extends metric
         {
             if(in_array('scope', array_column($header, 'name')))
             {
-                //return $this->getObjectTable($data);
+                return $this->getNoTimeObjectTable($header, $data);
             }
             else
             {
@@ -524,9 +524,66 @@ class metricZen extends metric
             $year     = substr($time, 0, 4) . $this->lang->year;
             $monthDay = substr($time, 5, 5);
 
-            $name                = "time{$time}";
+            $name                = $time;
             $groupHeader[]       = array('name' => $name, 'title' => $monthDay, 'headerGroup' => $year, 'align' => 'center');
             $groupData[0][$name] = $dataInfo->value;
+        }
+
+        return array($groupHeader, $groupData);
+    }
+
+    protected function getNoTimeObjectTable($header, $data)
+    {
+        $groupHeader = array();
+        $groupData   = array();
+
+        $field = current($header)['name'];
+        $title = current($header)['title'];
+
+        $groupHeader[] = array('name' => $field, 'title' => $title);
+        usort($data, function($a, $b)
+        {
+            $dateA = strtotime($a->calcTime);
+            $dateB = strtotime($b->calcTime);
+
+            if ($dateA == $dateB) {
+                return 0;
+            }
+
+            return ($dateA > $dateB) ? -1 : 1;
+        });
+
+        $times   = array();
+        $objects = array();
+        foreach($data as $dataInfo)
+        {
+            $time   = substr($dataInfo->calcTime, 0, 10);
+            $object = $dataInfo->scope;
+            $value  = $dataInfo->value;
+
+            if(!isset($times[$time]))     $times[$time] = $time;
+            if(!isset($objects[$object])) $objects[$object] = array();
+            $objects[$object][$time] = $value;
+        }
+        /* e.g $times = array('2023-10-14', '2023-10-15'), $objects = array('object1' => array('2023-10-14' => 2, '2023-10-15 => 3)) */
+
+        foreach($times as $time)
+        {
+            $year     = substr($time, 0, 4) . $this->lang->year;
+            $monthDay = substr($time, 5, 5);
+
+            $groupHeader[] = array('name' => $time, 'title' => $monthDay, 'headerGroup' => $year, 'align' => 'center');
+        }
+
+        foreach($objects as $object => $datas)
+        {
+            $objectData = array('scope' => $object);
+            foreach($times as $time)
+            {
+                $objectData[$time] = isset($datas[$time]) ? $datas[$time] : 0;
+            }
+
+            $groupData[] = $objectData;
         }
 
         return array($groupHeader, $groupData);
@@ -547,13 +604,7 @@ class metricZen extends metric
         });
 
         $dateType = current($data)->dateType; // dateType: year|month|week|day
-        $func     = 'getTableBy' . ucfirst($dateType);
 
-        return $this->$func($data);
-    }
-
-    protected function getTableByYear($data)
-    {
         $groupHeader = array();
         $groupData   = array(array());
 
@@ -561,63 +612,30 @@ class metricZen extends metric
         {
             $year = substr($dataInfo->dateString, 0, 4) . $this->lang->year;
 
-            $name                = "year{$year}";
-            $groupHeader[]       = array('name' => $name, 'title' => $year, 'align' => 'center');
-            $groupData[0][$name] = $dataInfo->value;
-        }
+            if($dateType == 'year')
+            {
+                $name          = "year{$year}";
+                $groupHeader[] = array('name' => $name, 'title' => $year, 'align' => 'center');
+            }
+            elseif($dateType == 'month')
+            {
+                $month         = substr($dataInfo->dateString, 5, 2) . $this->lang->month;
+                $name          = "year{$year}month{$month}";
+                $groupHeader[] = array('name' => $name, 'title' => $month, 'headerGroup' => $year, 'align' => 'center');
+            }
+            elseif($dateType == 'week')
+            {
+                $week          = sprintf($this->lang->metric->week, substr($dataInfo->dateString, 5, 2));
+                $name          = "year{$year}week{$week}";
+                $groupHeader[] = array('name' => $name, 'title' => $week, 'headerGroup' => $year, 'align' => 'center');
+            }
+            elseif($dateType == 'day')
+            {
+                $day           = substr($dataInfo->dateString, 5, 5);
+                $name          = "year{$year}day{$day}";
+                $groupHeader[] = array('name' => $name, 'title' => $day, 'headerGroup' => $year, 'align' => 'center');
+            }
 
-        return array($groupHeader, $groupData);
-    }
-
-    protected function getTableByMonth($data)
-    {
-        $groupHeader = array();
-        $groupData   = array(array());
-
-        foreach($data as $dataInfo)
-        {
-            $year  = substr($dataInfo->dateString, 0, 4) . $this->lang->year;
-            $month = substr($dataInfo->dateString, 5, 2) . $this->lang->month;
-
-            $name                = "year{$year}month{$month}";
-            $groupHeader[]       = array('name' => $name, 'title' => $month, 'headerGroup' => $year, 'align' => 'center');
-            $groupData[0][$name] = $dataInfo->value;
-        }
-
-        return array($groupHeader, $groupData);
-    }
-
-    protected function getTableByWeek($data)
-    {
-        $groupHeader = array();
-        $groupData   = array(array());
-
-        foreach($data as $dataInfo)
-        {
-            $year  = substr($dataInfo->dateString, 0, 4) . $this->lang->year;
-            $week  = sprintf($this->lang->metric->week, substr($dataInfo->dateString, 5, 2));
-
-            $name                = "year{$year}week{$week}";
-            $groupHeader[]       = array('name' => $name, 'title' => $week, 'headerGroup' => $year, 'align' => 'center');
-            $groupData[0][$name] = $dataInfo->value;
-        }
-
-        return array($groupHeader, $groupData);
-
-    }
-
-    protected function getTableByDay($data)
-    {
-        $groupHeader = array();
-        $groupData   = array(array());
-
-        foreach($data as $dataInfo)
-        {
-            $year  = substr($dataInfo->dateString, 0, 4) . $this->lang->year;
-            $day   = substr($dataInfo->dateString, 5, 5);
-
-            $name                = "year{$year}day{$day}";
-            $groupHeader[]       = array('name' => $name, 'title' => $day, 'headerGroup' => $year, 'align' => 'center');
             $groupData[0][$name] = $dataInfo->value;
         }
 

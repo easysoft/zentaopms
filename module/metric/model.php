@@ -1479,6 +1479,26 @@ class metricModel extends model
     }
 
     /**
+     * 判断 header 是否有分组（合并单元格）。
+     * Judge header whether there are merges cell.
+     *
+     * @param  array     $header
+     * @access protected
+     * @return array
+     */
+    protected function isHeaderGroup($header)
+    {
+        if(!$header) return false;
+
+        foreach($header as $head)
+        {
+            if(isset($head['headerGroup'])) return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 判断是否是按系统统计的度量项。
      * Determine whether it is metric in system.
      *

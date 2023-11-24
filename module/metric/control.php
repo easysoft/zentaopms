@@ -74,13 +74,13 @@ class metric extends control
             $resultData   = $this->metricZen->getViewTableData($metric, $result);
         }
 
-        //include 'test/groupData/' . 'time-day.php';
+        //include 'test/groupData/' . 'object.php';
 
         list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
         $this->view->groupHeader   = $groupHeader;
         $this->view->groupData     = $groupData;
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
-        $this->view->headerGroup   = isset(current($groupHeader)['headerGroup']);
+        $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
 
         $this->view->metrics       = $metrics;
         $this->view->groupMetrics  = $groupMetrics;
