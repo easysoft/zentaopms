@@ -54,19 +54,22 @@ class screenModel extends model
     }
 
     /**
+     * 通过id获取大屏信息。
      * Get screen by id.
      *
-     * @param  int $screenID
-     * @param  int $year
-     * @param  int $dept
-     * @param  string $account
+     * @param  int         $screenID
+     * @param  int         $year
+     * @param  int         $dept
+     * @param  string      $account
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getByID($screenID, $year = '', $dept = '', $account = '')
+    public function getByID(int $screenID, int $year = 0, int $dept = 0, string $account = ''): object|bool
     {
         $screen = $this->dao->select('*')->from(TABLE_SCREEN)->where('id')->eq($screenID)->fetch();
-        if(!isset($screen->scheme) or empty($screen->scheme)) $screen->scheme = file_get_contents(__DIR__ . '/json/screen.json');
+        if(!$screen) return false;
+
+        if(empty($screen->scheme)) $screen->scheme = file_get_contents(__DIR__ . '/json/screen.json');
         $screen->chartData = $this->genChartData($screen, $year, $dept, $account);
 
         return $screen;

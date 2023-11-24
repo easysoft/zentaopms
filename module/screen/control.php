@@ -79,7 +79,7 @@ class screen extends control
     {
         if($screenID == 3)
         {
-            echo $this->fetch('report', 'annualData', "year=$year&dept=$dept&account=$account");
+            echo $this->fetch('report', 'annualData', "year={$year}&dept={$dept}&account={$account}");
             return;
         }
 
