@@ -634,7 +634,7 @@ class repoModel extends model
         }
 
         /* Get project products. */
-        $projectProductIds = in_array($type array('project', 'execution')) ? $this->loadModel('product')->getProductIDByProject($projectID, false) : array();
+        $projectProductIds = in_array($type, array('project', 'execution')) ? $this->loadModel('product')->getProductIDByProject($projectID, false) : array();
 
         /* Get repo data for dropmenu. */
         $repoPairs = array();
