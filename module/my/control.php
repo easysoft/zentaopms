@@ -1255,15 +1255,17 @@ EOF;
     }
 
     /**
-     * Change password
+     * 修改密码。
+     * Change password.
      *
      * @access public
      * @return void
      */
     public function changePassword()
     {
+        if($this->app->user->account == 'guest') return print(js::alert('guest') . js::locate('back'));
+
         $this->app->loadLang('admin');
-        if($this->app->user->account == 'guest') return $this->send(array('result' => 'fail', 'message' => 'guest', 'load' => array('alter' => 'guest', 'back' => true)));
 
         $isonlybody = isInModal();
         if(!$isonlybody) unset($this->lang->my->menu);
@@ -1272,7 +1274,7 @@ EOF;
         {
             $this->user->updatePassword($this->app->user->id);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+            if($isonlybody) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('index', 'index')));
         }
 
