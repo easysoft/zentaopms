@@ -485,8 +485,10 @@ class custom extends control
     }
 
     /**
+     * 设置每日可用工时和休息日。
      * Set hours and weekend
      *
+     * @param  string $type hours|weekend
      * @access public
      * @return void
      */
@@ -494,28 +496,25 @@ class custom extends control
     {
         if($_POST)
         {
-            $data = fixer::input('post')->get();
-            $type = $data->type;
+            $data = $_POST;
+            $type = $_POST['type'];
 
-            unset($data->type);
-            if($data->weekend != 1) unset($data->restDay);
+            unset($data['type']);
+            if($data['weekend'] != 1) unset($data['restDay']);
 
             $this->loadModel('setting')->setItems('system.execution', $data);
-
-            $response = new stdclass();
-            $response->result  = 'success';
-            $response->load    = inLink('hours', "type=$type");
-            $response->message = $this->lang->saveSuccess;
-            return $this->send($response);
+            return $this->sendSuccess(array('load' => inLink('hours', "type={$type}")));
         }
 
         $this->app->loadConfig('execution');
+
         $this->view->title     = $this->lang->workingHour;
         $this->view->type      = $type;
         $this->view->weekend   = $this->config->execution->weekend;
         $this->view->workhours = $this->config->execution->defaultWorkhours;
         $this->view->restDay   = zget($this->config->execution, 'restDay', 0);
         $this->view->module    = 'setDate';
+
         $this->display();
     }
 
