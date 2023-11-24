@@ -15,17 +15,18 @@ declare(strict_types=1);
 class adminModel extends model
 {
     /**
+     * 获取密钥。
      * Get secret key.
      *
      * @access public
      * @return object
      */
-    public function getSecretKey()
+    public function getSecretKey(): object
     {
         $apiConfig = $this->getApiConfig();
         $apiURL    = $this->config->admin->apiRoot . "/user-secretKey.json";
 
-        $params['u']   = $this->config->global->community;
+        $params['u'] = $this->config->global->community;
         $params['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
         $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
         $params['k'] = $this->getSignature($params);
@@ -36,13 +37,14 @@ class adminModel extends model
     }
 
     /**
+     * 获取签名。
      * Get signature.
      *
      * @param  array    $params
      * @access public
      * @return string
      */
-    public function getSignature($params)
+    public function getSignature(array $params): string
     {
         unset($params['u']);
         $privateKey = $this->config->global->ztPrivateKey;
