@@ -432,6 +432,7 @@ class custom extends control
     }
 
     /**
+     * 重置必填字段。
      * Reset required.
      *
      * @param  string $module
