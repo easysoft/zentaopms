@@ -274,7 +274,7 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
         (
             set::width('full'),
             $formGroups,
-            formGroup
+            !empty($formGroups) ? formGroup
             (
                 setClass('query-btn'),
                 btn
@@ -283,7 +283,7 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
                     set::text($this->lang->metric->query->action),
                     set::onclick("window.handleQueryClick($current->id, 'multiple')")
                 )
-            )
+            ) : null
         ),
         set::actions(array())
     );
