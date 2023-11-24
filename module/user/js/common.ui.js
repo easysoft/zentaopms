@@ -61,14 +61,19 @@ function encryptPassword()
     }
 }
 
+/**
+ * 添加或编辑一个用户时切换显示选择所属公司或添加公司的输入框。
+ * Toggle display company picker or input when add or edit a user.
+ *
+ * @param  event  event
+ * @access public
+ * @return void
+ */
 function toggleNew(event)
 {
-    const checked     = $(event.target).prop('checked');
-    const $company    = $('[name="company"]').closest('.picker-box');
-    const $newCompany = $('#newCompany');
-
-    $company.toggleClass('hidden', checked);
-    $newCompany.toggleClass('hidden', !checked);
+    const checked = $(event.target).prop('checked');
+    $('[name="company"]').closest('.picker-box').toggleClass('hidden', checked);
+    $('#newCompany').toggleClass('hidden', !checked);
 }
 
 /**
