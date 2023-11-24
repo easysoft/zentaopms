@@ -1412,13 +1412,14 @@ class repoModel extends model
     }
 
     /**
+     * 替换提交记录中的链接。
      * Replace comment link.
      *
      * @param  string $comment
      * @access public
      * @return string
      */
-    public function replaceCommentLink($comment)
+    public function replaceCommentLink(string $comment): string
     {
         $rules   = $this->processRules();
         $storyReg = '/' . $rules['storyReg'] . '/i';
@@ -1443,6 +1444,7 @@ class repoModel extends model
     }
 
     /**
+     * 解析提交记录中的链接。
      * Add link.
      *
      * @param  array  $matches
@@ -1450,9 +1452,10 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function addLink($matches, $method)
+    public function addLink(array $matches, string $method): array
     {
-        if(empty($matches)) return null;
+        if(empty($matches)) return array();
+
         $replaceLines = array();
         foreach($matches[3] as $i => $idList)
         {
@@ -1462,88 +1465,33 @@ class repoModel extends model
             {
                 $links .= html::a(helper::createLink($method, 'view', "id=$id"), $id) . $matches[6][$i];
             }
+
             $replaceLines[$matches[0][$i]] = rtrim($links, $matches[6][$i]);
         }
         return $replaceLines;
     }
 
     /**
+     * 解析git和svn的注释，从中提取对象id列表。
      * Parse the comment of git and svn, extract object id list from it.
      *
-     * @param  string    $comment
+     * @param  string $comment
      * @access public
      * @return array
      */
-    public function parseComment($comment)
+    public function parseComment(string $comment): array
     {
         $rules   = $this->processRules();
         $stories = array();
-        $tasks   = array();
-        $bugs    = array();
         $actions = array();
 
-        preg_match_all("/{$rules['startTaskReg']}/i", $comment, $matches);
-        if($matches[0])
-        {
-            foreach($matches[4] as $i => $idList)
-            {
-                preg_match_all('/\d+/', $idList, $idMatches);
-                foreach($idMatches[0] as $id)
-                {
-                    $tasks[$id] = $id;
-                    $actions['task'][$id]['start']['consumed'] = $matches[11][$i];
-                    $actions['task'][$id]['start']['left']     = $matches[17][$i];
-                }
-            }
-        }
-
-        preg_match_all("/{$rules['effortTaskReg']}/i", $comment, $matches);
-        if($matches[0])
-        {
-            foreach($matches[4] as $i => $idList)
-            {
-                preg_match_all('/\d+/', $idList, $idMatches);
-                foreach($idMatches[0] as $id)
-                {
-                    $tasks[$id] = $id;
-                    $actions['task'][$id]['effort']['consumed'] = $matches[11][$i];
-                    $actions['task'][$id]['effort']['left']     = $matches[17][$i];
-                }
-            }
-        }
-
-        preg_match_all("/{$rules['finishTaskReg']}/i", $comment, $matches);
-        if($matches[0])
-        {
-            foreach($matches[4] as $i => $idList)
-            {
-                preg_match_all('/\d+/', $idList, $idMatches);
-                foreach($idMatches[0] as $id)
-                {
-                    $tasks[$id] = $id;
-                    $actions['task'][$id]['finish']['consumed'] = $matches[11][$i];
-                }
-            }
-        }
-
-        preg_match_all("/{$rules['resolveBugReg']}/i", $comment, $matches);
-        if($matches[0])
-        {
-            foreach($matches[4] as $i => $idList)
-            {
-                preg_match_all('/\d+/', $idList, $idMatches);
-                foreach($idMatches[0] as $id)
-                {
-                    $bugs[$id] = $id;
-                    $actions['bug'][$id]['resolve'] = array();
-                }
-            }
-        }
+        $tasks = $this->repoTao->parseTaskComment($comment, $rules, $actions);
+        $bugs  = $this->repoTao->parseBugComment($comment, $rules, $actions);
 
         preg_match_all("/{$rules['taskReg']}/i", $comment, $matches);
         if($matches[0])
         {
-            foreach($matches[3] as $i => $idList)
+            foreach($matches[3] as $idList)
             {
                 preg_match_all('/\d+/', $idList, $idMatches);
                 foreach($idMatches[0] as $id) $tasks[$id] = $id;
@@ -1553,7 +1501,7 @@ class repoModel extends model
         preg_match_all("/{$rules['bugReg']}/i", $comment, $matches);
         if($matches[0])
         {
-            foreach($matches[3] as $i => $idList)
+            foreach($matches[3] as $idList)
             {
                 preg_match_all('/\d+/', $idList, $idMatches);
                 foreach($idMatches[0] as $id) $bugs[$id] = $id;
@@ -1563,7 +1511,7 @@ class repoModel extends model
         preg_match_all("/{$rules['storyReg']}/i", $comment, $matches);
         if($matches[0])
         {
-            foreach($matches[3] as $i => $idList)
+            foreach($matches[3] as $idList)
             {
                 preg_match_all('/\d+/', $idList, $idMatches);
                 foreach($idMatches[0] as $id) $stories[$id] = $id;
@@ -1574,23 +1522,25 @@ class repoModel extends model
     }
 
     /**
-     * Iconv Comment.
+     * 转码提交注释信息。
+     * Convert encoding of comment.
      *
      * @param  string $comment
      * @param  string $encodings
      * @access public
      * @return string
      */
-    public function iconvComment($comment, $encodings)
+    public function iconvComment(string $comment, string $encodings): string
     {
         /* Get encodings. */
         if($encodings == '') return $comment;
-        $encodings = explode(',', $encodings);
 
         /* Try convert. */
+        $encodings = explode(',', $encodings);
         foreach($encodings as $encoding)
         {
             if($encoding == 'utf-8') continue;
+
             $result = helper::convertEncoding($comment, $encoding);
             if($result) return $result;
         }
@@ -1599,12 +1549,13 @@ class repoModel extends model
     }
 
     /**
+     * 解析提交指令规则。
      * Process rules to REG.
      *
      * @access public
      * @return array
      */
-    public function processRules()
+    public function processRules(): array
     {
         if(is_string($this->config->repo->rules)) $this->config->repo->rules = json_decode($this->config->repo->rules, true);
         $rules = $this->config->repo->rules;
@@ -1650,28 +1601,22 @@ class repoModel extends model
     }
 
     /**
+     * 保存提交信息到系统。
      * Save action to pms.
      *
-     * @param  array    $objects
-     * @param  object   $log
-     * @param  string   $repoRoot
-     * @param  string   $encodings
-     * @param  string   $scm
-     * @param  array    $gitlabAccountPairs
+     * @param  array  $objects
+     * @param  object $log
+     * @param  string $repoRoot
+     * @param  string $encodings
+     * @param  string $scm
+     * @param  array  $gitlabAccountPairs
      * @access public
-     * @return void
+     * @return bool
      */
-    public function saveAction2PMS($objects, $log, $repoRoot = '', $encodings = 'utf-8', $scm = 'svn', $gitlabAccountPairs = array())
+    public function saveAction2PMS(array $objects, object $log, string $repoRoot = '', string $encodings = 'utf-8', string $scm = 'svn', array $gitlabAccountPairs = array()): bool
     {
-        if(isset($gitlabAccountPairs[$log->author]) and $gitlabAccountPairs[$log->author])
-        {
-            $log->author = $gitlabAccountPairs[$log->author];
-        }
-        else
-        {
-            $commiters   = $this->loadModel('user')->getCommiters('account');
-            $log->author = zget($commiters, $log->author);
-        }
+        $commiters   = $this->loadModel('user')->getCommiters('account');
+        $log->author = zget($gitlabAccountPairs, $log->author, zget($commiters, $log->author));
 
         if(isset($this->app->user))
         {
@@ -1687,6 +1632,7 @@ class repoModel extends model
 
         $this->loadModel('action');
         $actions = $objects['actions'];
+        $changes = $this->createActionChanges($log, $repoRoot, $scm);
         if(isset($actions['task']))
         {
             $this->loadModel('task');
@@ -1700,171 +1646,29 @@ class repoModel extends model
                 $action->objectID   = $taskID;
                 $action->product    = $productsAndExecutions[$taskID]['product'];
                 $action->execution  = $productsAndExecutions[$taskID]['execution'];
-                foreach($taskActions as $taskAction => $params)
-                {
-                    $_POST = array();
-                    foreach($params as $field => $param) $this->post->set($field, $param);
 
-                    if($taskAction == 'start' and $task->status == 'wait')
-                    {
-                        $this->post->set('consumed', $this->post->consumed + $task->consumed);
-                        $this->post->set('realStarted', date('Y-m-d'));
-                        $changes = $this->task->start($taskID);
-                        foreach($this->createActionChanges($log, $repoRoot, $scm) as $change) $changes[] = $change;
-                        if($changes)
-                        {
-                            $action->action = $this->post->left == 0 ? 'finished' : 'started';
-                            $this->saveRecord($action, $changes);
-                        }
-                    }
-                    elseif($taskAction == 'effort' and in_array($task->status, array('wait', 'pause', 'doing')))
-                    {
-                        unset($_POST['consumed']);
-                        unset($_POST['left']);
-
-                        $_POST['id'][1]         = 1;
-                        $_POST['dates'][1]      = date('Y-m-d');
-                        $_POST['consumed'][1]   = $params['consumed'];
-                        $_POST['left'][1]       = $params['left'];
-                        $_POST['objectType'][1] = 'task';
-                        $_POST['objectID'][1]   = $taskID;
-                        $_POST['work'][1]       = str_replace('<br />', "\n", $action->comment);
-                        if($this->config->edition != 'open')
-                        {
-                            $this->loadModel('effort')->batchCreate();
-                        }
-                        else
-                        {
-                            $this->task->recordWorkhour($taskID);
-                        }
-
-                        $action->action     = $scm == 'svn' ? 'svncommited' : 'gitcommited';
-                        $action->objectType = 'task';
-                        $action->objectID   = $taskID;
-                        $action->product    = $productsAndExecutions[$taskID]['product'];
-                        $action->execution  = $productsAndExecutions[$taskID]['execution'];
-
-                        $changes = $this->createActionChanges($log, $repoRoot, $scm);
-                        $this->saveRecord($action, $changes);
-                    }
-                    elseif($taskAction == 'finish' and in_array($task->status, array('wait', 'pause', 'doing')))
-                    {
-                        $this->post->set('finishedDate', date('Y-m-d'));
-                        $this->post->set('realStarted', date('Y-m-d'));
-                        $this->post->set('currentConsumed', $this->post->consumed);
-                        $this->post->set('consumed', $this->post->consumed + $task->consumed);
-                        $changes = $this->task->finish($taskID, 'DEVOPS');
-                        foreach($this->createActionChanges($log, $repoRoot, $scm) as $change) $changes[] = $change;
-                        if($changes)
-                        {
-                            $action->action = 'finished';
-                            $this->saveRecord($action, $changes);
-                        }
-                    }
-                }
-                unset($objects['tasks'][$taskID]);
+                $objects['tasks'] = $this->setTaskByCommit($task, $objects['tasks'], $taskActions, $action, $changes, $scm);
             }
         }
-        if(isset($actions['bug']))
-        {
-            $this->loadModel('bug');
-            $productsAndExecutions = $this->getBugProductsAndExecutions($objects['bugs']);
-            foreach($actions['bug'] as $bugID => $bugActions)
-            {
-                $bug = $this->bug->getByID($bugID);
-                if(empty($bug)) continue;
 
-                $action->objectType = 'bug';
-                $action->objectID   = $bugID;
-                $action->product    = $productsAndExecutions[$bugID]->product;
-                $action->execution  = $productsAndExecutions[$bugID]->execution;
-                foreach($bugActions as $bugAction => $params)
-                {
-                    $_POST = array();
-                    if($bugAction == 'resolve' and $bug->status == 'active')
-                    {
-                        $this->post->set('resolvedBuild', 'trunk');
-                        $this->post->set('resolution', 'fixed');
-                        $changes = $this->bug->resolve($bugID);
-                        foreach($this->createActionChanges($log, $repoRoot, $scm) as $change) $changes[] = $change;
-                        if($changes)
-                        {
-                            $action->action = 'resolved';
-                            $action->extra  = 'fixed';
-                            $this->saveRecord($action, $changes);
-                        }
-                    }
-                }
-                unset($objects['bugs'][$bugID]);
-            }
-        }
+        if(isset($actions['bug'])) $objects['bugs'] = $this->setBugStatusByCommit($objects['bugs'], $actions, $action, $changes);
 
         $action->action = $scm == 'svn' ? 'svncommited' : 'gitcommited';
-        $changes = $this->createActionChanges($log, $repoRoot, $scm);
-
-        if($objects['stories'])
-        {
-            $stories = $this->loadModel('story')->getByList($objects['stories']);
-            foreach($objects['stories'] as $storyID)
-            {
-                $storyID = (int)$storyID;
-                if(!isset($stories[$storyID])) continue;
-
-                $action->objectType = 'story';
-                $action->objectID   = $storyID;
-                $action->product    = $stories[$storyID]->product;
-                $action->execution  = 0;
-
-                $this->saveRecord($action, $changes);
-            }
-        }
-
-        if($objects['tasks'])
-        {
-            $productsAndExecutions = $this->getTaskProductsAndExecutions($objects['tasks']);
-            foreach($objects['tasks'] as $taskID)
-            {
-                $taskID = (int)$taskID;
-                if(!isset($productsAndExecutions[$taskID])) continue;
-
-                $action->objectType = 'task';
-                $action->objectID   = $taskID;
-                $action->product    = $productsAndExecutions[$taskID]['product'];
-                $action->execution  = $productsAndExecutions[$taskID]['execution'];
-
-                $this->saveRecord($action, $changes);
-            }
-        }
-
-        if($objects['bugs'])
-        {
-            $productsAndExecutions = $this->getBugProductsAndExecutions($objects['bugs']);
-            foreach($objects['bugs'] as $bugID)
-            {
-                $bugID = (int)$bugID;
-                if(!isset($productsAndExecutions[$bugID])) continue;
-
-                $action->objectType = 'bug';
-                $action->objectID   = $bugID;
-                $action->product    = $productsAndExecutions[$bugID]->product;
-                $action->execution  = $productsAndExecutions[$bugID]->execution;
-
-                $this->saveRecord($action, $changes);
-            }
-        }
+        $this->saveObjectToPms($objects, $action, $changes);
 
         if(isset($this->app->user)) $this->app->user->account = $account;
     }
 
     /**
+     * 保存commit触发的操作日志信息。
      * Save an action to pms.
      *
      * @param  object $action
-     * @param  object $log
+     * @param  array  $changes
      * @access public
      * @return bool
      */
-    public function saveRecord($action, $changes)
+    public function saveRecord(object $action, array $changes): bool
     {
         /* Remove sql error. */
         dao::getError();
@@ -1894,17 +1698,20 @@ class repoModel extends model
                 $this->loadModel('action')->logHistory($actionID, $changes);
             }
         }
+
+        return !dao::isError();
     }
 
     /**
+     * 从日志中为设置变更信息。
      * Create changes for action from a log.
      *
-     * @param  object    $log
-     * @param  string    $repoRoot
+     * @param  object $log
+     * @param  string $repoRoot
      * @access public
      * @return array
      */
-    public function createActionChanges($log, $repoRoot, $scm = 'svn')
+    public function createActionChanges(object $log, string $repoRoot, string $scm = 'svn'): array
     {
         if(!$log->files) return array();
         $diff = '';
@@ -1936,13 +1743,14 @@ class repoModel extends model
     }
 
     /**
+     * 根据任务列表获取产品和执行。
      * Get products and executions of tasks.
      *
-     * @param  array    $tasks
+     * @param  array  $tasks
      * @access public
      * @return array
      */
-    public function getTaskProductsAndExecutions($tasks)
+    public function getTaskProductsAndExecutions(array $tasks): array
     {
         $records = array();
         $products = $this->dao->select('t1.id,t1.execution,t2.product')->from(TABLE_TASK)->alias('t1')
@@ -1962,13 +1770,14 @@ class repoModel extends model
     }
 
     /**
+     * 根据bug列表获取产品和执行。
      * Get products and executions of bugs.
      *
-     * @param  array    $bugs
+     * @param  array  $bugs
      * @access public
      * @return array
      */
-    public function getBugProductsAndExecutions($bugs)
+    public function getBugProductsAndExecutions(array $bugs): array
     {
         $records = $this->dao->select('id, execution, product')->from(TABLE_BUG)->where('id')->in($bugs)->fetchAll('id');
         foreach($records as $record) $record->product = ",{$record->product},";
@@ -3163,5 +2972,189 @@ class repoModel extends model
             ->beginIF($condition != 'lt')->andWhere('revision')->eq($revision)->fi()
             ->beginIF($condition == 'lt')->andWhere('revision')->lt($revision)->fi()
             ->fetch($withCommit ? '' : 'revision');
+    }
+
+    /**
+     * 根据提交信息设置任务信息。
+     * Set task by commit.
+     *
+     * @param  object $task
+     * @param  array  $tasks
+     * @param  array  $taskActions
+     * @param  object $action
+     * @param  array  $changes
+     * @param  string $scm
+     * @access public
+     * @return array
+     */
+    public function setTaskByCommit(object $task, array $tasks, array $taskActions, object $action, array $changes, string $scm): array
+    {
+        $this->loadModel('task');
+        foreach($taskActions as $taskAction => $params)
+        {
+            $_POST = array();
+            foreach($params as $field => $param) $this->post->set($field, $param);
+
+            if($taskAction == 'start' and $task->status == 'wait')
+            {
+                $this->post->set('consumed', $this->post->consumed + $task->consumed);
+                $this->post->set('realStarted', date('Y-m-d'));
+                $taskChanges = $this->task->start($task->id) + $changes;
+                if($taskChanges)
+                {
+                    $action->action = $this->post->left == 0 ? 'finished' : 'started';
+                    $this->saveRecord($action, $taskChanges);
+                }
+            }
+            elseif($taskAction == 'effort' and in_array($task->status, array('wait', 'pause', 'doing')))
+            {
+                $action->action = $scm == 'svn' ? 'svncommited' : 'gitcommited';
+                $this->saveEffortForCommit($task->id, $params, $action, $changes);
+            }
+            elseif($taskAction == 'finish' and in_array($task->status, array('wait', 'pause', 'doing')))
+            {
+                $this->post->set('finishedDate', date('Y-m-d'));
+                $this->post->set('realStarted', date('Y-m-d'));
+                $this->post->set('currentConsumed', $this->post->consumed);
+                $this->post->set('consumed', $this->post->consumed + $task->consumed);
+                $taskChanges = $this->task->finish($task->id, 'DEVOPS') + $changes;
+                if($taskChanges)
+                {
+                    $action->action = 'finished';
+                    $this->saveRecord($action, $taskChanges);
+                }
+            }
+        }
+
+        unset($tasks[$task->id]);
+        return $tasks;
+    }
+
+    /**
+     * 根据提交信息设置工时。
+     * Set effort by commit message.
+     *
+     * @param  int    $taskID
+     * @param  array  $params
+     * @param  object $action
+     * @param  array  $changes
+     * @access public
+     * @return bool
+     */
+    public function saveEffortForCommit(int $taskID, array $params, object $action, array $changes): bool
+    {
+        unset($_POST['consumed']);
+        unset($_POST['left']);
+
+        $_POST['id'][1]         = 1;
+        $_POST['dates'][1]      = date('Y-m-d');
+        $_POST['consumed'][1]   = $params['consumed'];
+        $_POST['left'][1]       = $params['left'];
+        $_POST['objectType'][1] = 'task';
+        $_POST['objectID'][1]   = $taskID;
+        $_POST['work'][1]       = str_replace('<br />', "\n", $action->comment);
+        if($this->config->edition != 'open')
+        {
+            $this->loadModel('effort')->batchCreate();
+        }
+        else
+        {
+            $this->loadModel('task')->recordWorkhour($taskID);
+        }
+
+        $this->saveRecord($action, $changes);
+        return !dao::isError();
+    }
+
+    /**
+     * 根据提交信息设置Bug状态。
+     * Set bug status by commit.
+     *
+     * @param  array  $bugs
+     * @param  array  $actions
+     * @param  object $action
+     * @param  array  $changes
+     * @access public
+     * @return array
+     */
+    public function setBugStatusByCommit(array $bugs, array $actions, object $action, array $changes): array
+    {
+        $this->loadModel('bug');
+        $productsAndExecutions = $this->getBugProductsAndExecutions($bugs);
+        foreach($actions['bug'] as $bugID => $bugActions)
+        {
+            $bug = $this->bug->getByID($bugID);
+            if(empty($bug)) continue;
+
+            $action->objectType = 'bug';
+            $action->objectID   = $bugID;
+            $action->product    = $productsAndExecutions[$bugID]->product;
+            $action->execution  = $productsAndExecutions[$bugID]->execution;
+            foreach($bugActions as $bugAction => $params)
+            {
+                $_POST = array();
+                if($bugAction == 'resolve' && $bug->status == 'active')
+                {
+                    $this->post->set('resolvedBuild', 'trunk');
+                    $this->post->set('resolution', 'fixed');
+                    $changes = $this->bug->resolve($bugID);
+                    foreach($changes as $change) $changes[] = $change;
+                    if($changes)
+                    {
+                        $action->action = 'resolved';
+                        $action->extra  = 'fixed';
+                        $this->saveRecord($action, $changes);
+                    }
+                }
+            }
+
+            unset($bugs[$bugID]);
+        }
+
+        return $bugs;
+    }
+
+    /**
+     * 保存提交信息关联的日志。
+     * Save commit linkage log.
+     *
+     * @param  array  $objects
+     * @param  object $action
+     * @param  array  $changes
+     * @access public
+     * @return bool
+     */
+    public function saveObjectToPms(array $objects, object $action, array $changes): bool
+    {
+        foreach(array('stories', 'tasks', 'bugs') as $objectType)
+        {
+            if($objects[$objectType])
+            {
+                $objectList = array();
+                if($objectType == 'stories')
+                {
+                    $objectList = $this->loadModel('story')->getByList($objects[$objectType]);
+                }
+                else
+                {
+                    $objectList = $this->getTaskProductsAndExecutions($objects[$objectType]);
+                }
+
+                foreach($objects[$objectType] as $objectID)
+                {
+                    $objectID = (int)$objectID;
+                    if(!isset($objectList[$objectID])) continue;
+
+                    $action->objectType = $objectType;
+                    $action->objectID   = $objectID;
+                    $action->product    = $objectType == 'stories' ? $objectList[$objectID]->product : $objectList[$objectID]['product'];
+                    $action->execution  = $objectType == 'stories' ? 0 : $objectList[$objectID]['execution'];
+
+                    $this->saveRecord($action, $changes);
+                }
+            }
+        }
+
+        return !dao::isError();
     }
 }
