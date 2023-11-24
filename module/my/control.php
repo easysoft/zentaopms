@@ -1498,13 +1498,14 @@ EOF;
     }
 
     /**
-     * Unbind ranzhi
+     * 取消与然之的绑定。
+     * Unbind ranzhi.
      *
      * @param  string $confirm
      * @access public
      * @return void
      */
-    public function unbind($confirm = 'no')
+    public function unbind(string $confirm = 'no')
     {
         if($confirm == 'no')
         {
