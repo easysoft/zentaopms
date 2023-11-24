@@ -509,10 +509,10 @@ class metricZen extends metric
         $groupHeader = array();
         $groupData   = array();
 
-        $field = current($header)['name'];
-        $title = current($header)['title'];
+        $headerField = current($header)['name'];
+        $headerTitle = current($header)['title'];
 
-        $groupHeader[] = array('name' => $field, 'title' => $title);
+        $groupHeader[] = array('name' => $headerField, 'title' => $headerTitle);
         $sortField = $dateType == 'day' ? 'calcTime' : 'dateString';
         usort($data, function($a, $b) use($sortField)
         {
@@ -568,7 +568,7 @@ class metricZen extends metric
 
         foreach($objects as $object => $datas)
         {
-            $objectData = array($field => $object);
+            $objectData = array($headerField => $object);
             foreach($times as $time)
             {
                 $objectData[$time] = isset($datas[$time]) ? $datas[$time] : 0;
