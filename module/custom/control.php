@@ -466,8 +466,8 @@ class custom extends control
     }
 
     /**
-     * Set stage percent.
-     *
+     * 设置是否启用工作量占比。
+     * Set whether to enable the workload percent.
      * @access public
      * @return void
      */
@@ -476,7 +476,7 @@ class custom extends control
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.common.setPercent', $this->post->percent);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+            return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title = $this->lang->stage->percent;
