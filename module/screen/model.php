@@ -76,16 +76,17 @@ class screenModel extends model
     }
 
     /**
+     * 构建大屏图表数据。
      * Generate chartData of screen.
      *
      * @param  object $screen
-     * @param  string $year
-     * @param  string $dept
+     * @param  int    $year
+     * @param  int    $dept
      * @param  string $account
      * @access public
      * @return object
      */
-    public function genChartData($screen, $year, $dept, $account)
+    public function genChartData(object $screen, int $year, int $dept, string $account): object
     {
         $this->filter = new stdclass();
         $this->filter->screen  = $screen->id;
@@ -94,7 +95,7 @@ class screenModel extends model
         $this->filter->account = $account;
         $this->filter->charts  = array();
 
-        if(!$screen->builtin or in_array($screen->id, $this->config->screen->builtinScreen)) return $this->genNewChartData($screen, $year, $dept, $account);
+        if(!$screen->builtin || in_array($screen->id, $this->config->screen->builtinScreen)) return $this->genNewChartData($screen, $year, $dept, $account);
 
         $config = new stdclass();
         $config->width            = 1300;
