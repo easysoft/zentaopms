@@ -40,7 +40,17 @@ class adminTest
         return $result;
     }
 
-    public function getMenuKeyTest($moduleName, $methodName, $params = array())
+    /**
+     * 测试获取页面导航索引。
+     * Test get menu key.
+     *
+     * @param string $moduleName
+     * @param string $methodName
+     * @param array  $params
+     * @access public
+     * @return array
+     */
+    public function getMenuKeyTest(string $moduleName, string $methodName, array $params = array()): string
     {
         global $app;
         $app->rawModule = $moduleName;

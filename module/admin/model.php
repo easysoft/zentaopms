@@ -102,7 +102,7 @@ class adminModel extends model
      * @access public
      * @return void
      */
-    public function setMenu()
+    public function setMenu(): void
     {
         $this->checkPrivMenu();
 
@@ -336,12 +336,13 @@ class adminModel extends model
     }
 
     /**
+     * 获取页面所在的导航索引。
      * Get menu key
      *
      * @access public
      * @return string
      */
-    public function getMenuKey()
+    public function getMenuKey(): string
     {
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
@@ -365,7 +366,7 @@ class adminModel extends model
                 }
             }
         }
-        return null;
+        return '';
     }
 
     /**
