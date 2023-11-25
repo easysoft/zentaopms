@@ -23,6 +23,7 @@ $config->user->form->create['passwordLength']   = array('required' => true,  'ty
 $config->user->form->create['passwordStrength'] = array('required' => true,  'type' => 'int',    'default' => 0);
 
 $config->user->form->batchCreate = common::formConfig('user', 'batchCreate');
+$config->user->form->batchCreate['type']       = array('required' => true,  'type' => 'string', 'default' => 'inside');
 $config->user->form->batchCreate['dept']       = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->user->form->batchCreate['company']    = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->user->form->batchCreate['new']        = array('required' => false, 'type' => 'int',    'default' => 0);
