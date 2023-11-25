@@ -759,10 +759,8 @@ class screenModel extends model
     public function processXLabel(array $xLabels, string $type, string $object, string $field): array
     {
         $options = $this->getSysOptions($type, $object, $field);
-        foreach($xLabels as $label)
-        {
-            $xLabelValues[$label] = isset($options[$label]) ? $options[$label] : $label;
-        }
+        $xLabelValues = array();
+        foreach($xLabels as $label) $xLabelValues[$label] = isset($options[$label]) ? $options[$label] : $label;
 
         return $xLabelValues;
     }
