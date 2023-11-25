@@ -621,7 +621,7 @@ class customModel extends model
     }
 
     /**
-     * 获取用需求概念集合。
+     * 获取用需概念集合。
      * Get UR pairs.
      *
      * @access public
@@ -647,12 +647,13 @@ class customModel extends model
     }
 
     /**
+     * 获取软需概念集合。
      * Get SR pairs.
      *
      * @access public
      * @return array
      */
-    public function getSRPairs()
+    public function getSRPairs(): array
     {
         $URSRList = $this->dao->select('`key`,`value`')->from(TABLE_LANG)->where('module')->eq('custom')->andWhere('section')->eq('URSRList')->andWhere('lang')->eq($this->app->clientLang)->fetchPairs();
         if(empty($URSRList))
