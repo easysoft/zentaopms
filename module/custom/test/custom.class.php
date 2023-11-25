@@ -715,4 +715,18 @@ class customTest
 
         return customModel::setMenuByConfig($allMenu, $customMenuMap, $module);
     }
+
+    /**
+     * 获取模块菜单数据，如果模块是'main'则返回主菜单。
+     * Get module menu data, if module is 'main' then return main menu.
+     *
+     * @param  string $module
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function getModuleMenuTest(string $module = 'main'): array
+    {
+        return customModel::getModuleMenu($module);
+    }
 }
