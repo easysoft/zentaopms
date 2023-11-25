@@ -377,7 +377,7 @@ class commonModel extends model
      * @access public
      * @return bool
      */
-    public function isOpenMethod($module, $method): bool
+    public function isOpenMethod(string $module, string $method): bool
     {
         if(in_array("$module.$method", $this->config->openMethods)) return true;
 
@@ -448,196 +448,21 @@ class commonModel extends model
     }
 
     /**
-     * Create menu item link
-     *
-     * @param object $menuItem
-     *
-     * @static
-     * @access public
-     * @return string
-     */
-    public static function createMenuLink($menuItem)
-    {
-        $link = $menuItem->link;
-        if(is_array($menuItem->link))
-        {
-            $vars = isset($menuItem->link['vars']) ? $menuItem->link['vars'] : '';
-            if(isset($menuItem->tutorial) and $menuItem->tutorial)
-            {
-                if(!empty($vars)) $vars = helper::safe64Encode($vars);
-                $link = helper::createLink('tutorial', 'wizard', "module={$menuItem->link['module']}&method={$menuItem->link['method']}&params=$vars");
-            }
-            else
-            {
-                $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars);
-            }
-        }
-        return $link;
-    }
-
-    /**
-     * Create sub menu by settings in lang files.
-     *
-     * @param  object   $items
-     * @param  mixed    $replace
-     * @static
-     * @access public
-     * @return array
-     */
-    public static function createDropMenu($items, $replace)
-    {
-        $dropMenu = array();
-        foreach($items as $dropMenuKey => $dropMenuLink)
-        {
-            if(is_array($dropMenuLink) and isset($dropMenuLink['link'])) $dropMenuLink = $dropMenuLink['link'];
-            if(is_array($replace))
-            {
-                $dropMenuLink = vsprintf($dropMenuLink, $replace);
-            }
-            else
-            {
-                $dropMenuLink = sprintf($dropMenuLink, $replace);
-            }
-            list($dropMenuName, $dropMenuModule, $dropMenuMethod, $dropMenuParams) = explode('|', $dropMenuLink);
-
-            $link = array();
-            $link['module'] = $dropMenuModule;
-            $link['method'] = $dropMenuMethod;
-            $link['vars']   = $dropMenuParams;
-
-            $dropMenuItem     = isset($items->$dropMenuKey) ? $items->$dropMenuKey : array();
-            $menu            = new stdclass();
-            $menu->name      = $dropMenuKey;
-            $menu->link      = $link;
-            $menu->text      = $dropMenuName;
-            $menu->subModule = isset($dropMenuItem['subModule']) ? $dropMenuItem['subModule'] : '';
-            $menu->alias     = isset($dropMenuItem['alias'])     ? $dropMenuItem['alias'] : '';
-            $menu->hidden    = false;
-            $dropMenu[$dropMenuKey] = $menu;
-        }
-
-        return $dropMenu;
-    }
-
-    /**
-     * Print admin dropMenu.
-     *
-     * @param  string    $dropMenu
-     * @static
-     * @access public
-     * @return void
-     */
-    public static function printAdminDropMenu($dropMenu)
-    {
-        global $app, $lang;
-        $currentModule = $app->getModuleName();
-        $currentMethod = $app->getMethodName();
-        if(isset($lang->admin->dropMenuOrder->$dropMenu))
-        {
-            ksort($lang->admin->dropMenuOrder->$dropMenu);
-            foreach($lang->admin->dropMenuOrder->$dropMenu as $type)
-            {
-                if(isset($lang->admin->dropMenu->$dropMenu->$type))
-                {
-                    $subModule = '';
-                    $alias     = '';
-                    $link      = $lang->admin->dropMenu->$dropMenu->$type;
-                    if(is_array($lang->admin->dropMenu->$dropMenu->$type))
-                    {
-                        $dropMenuType = $lang->admin->dropMenu->$dropMenu->$type;
-                        if(isset($dropMenuType['subModule'])) $subModule = $dropMenuType['subModule'];
-                        if(isset($dropMenuType['alias']))     $alias     = $dropMenuType['alias'];
-                        if(isset($dropMenuType['link']))      $link      = $dropMenuType['link'];
-                    }
-
-                    list($text, $moduleName, $methodName)= explode('|', $link);
-                    if(!common::hasPriv($moduleName, $methodName)) continue;
-
-                    $active = ($currentModule == $moduleName and $currentMethod == $methodName) ? 'btn-active-text' : '';
-                    if($subModule and strpos(",{$subModule}," , ",{$currentModule},") !== false) $active = 'btn-active-text';
-                    if($alias and $currentModule == $moduleName and strpos(",$alias,", ",$currentMethod,") !== false) $active = 'btn-active-text';
-                    echo html::a(helper::createLink($moduleName, $methodName), "<span class='text'>$text</span>", '', "class='btn btn-link {$active}' id='{$type}Tab'");
-                }
-            }
-        }
-    }
-
-    /**
-     * Print the main nav.
-     *
-     * @param  string $moduleName
-     *
-     * @static
-     * @access public
-     * @return void
-     */
-    public static function printMainNav($moduleName)
-    {
-        $items = common::getMainNavList($moduleName);
-        foreach($items as $item)
-        {
-            if($item == 'divider')
-            {
-                echo "<li class='divider'></li>";
-            }
-            else
-            {
-                $active = $item->active ? ' class="active"' : '';
-                echo "<li$active>" . html::a($item->url, $item->title) . '</li>';
-            }
-        }
-    }
-
-    /**
-     * Print upper left corner home button.
-     *
-     * @param  string $tab
-     * @static
-     * @access public
-     * @return void
-     */
-    public static function printHomeButton($tab)
-    {
-        global $lang, $app;
-
-        if(!$tab) return;
-        if($tab == 'admin' and $app->control and method_exists($app->control, 'loadModel')) $app->control->loadModel('admin')->setMenu();
-        $icon = zget($lang->navIcons, $tab, '');
-
-        if(!in_array($tab, array('program', 'product', 'project')))
-        {
-            $nav = $lang->mainNav->$tab;
-            list(, $currentModule, $currentMethod,) = explode('|', $nav);
-            if($tab == 'execution') $currentMethod = 'all';
-        }
-        else
-        {
-            $currentModule = $tab;
-            if($tab == 'program' or $tab == 'project') $currentMethod = 'browse';
-            if($tab == 'product') $currentMethod = 'all';
-        }
-
-        $btnTitle  = isset($lang->db->custom['common']['mainNav'][$tab]) ? $lang->db->custom['common']['mainNav'][$tab] : $lang->$tab->common;
-        $commonKey = $tab . 'Common';
-        if(isset($lang->$commonKey) and $tab != 'execution') $btnTitle = $lang->$commonKey;
-
-        $link      = helper::createLink($currentModule, $currentMethod);
-        $className = $tab == 'devops' ? 'btn num' : 'btn';
-        $html      = $link ? html::a($link, "$icon $btnTitle", '', "class='$className' style='padding-top: 2px'") : "$icon $btnTitle";
-
-        echo "<div class='btn-group header-btn'>" . $html . '</div>';
-    }
-
-    /**
      * Format the date to YYYY-mm-dd, format the datetime to YYYY-mm-dd HH:ii:ss.
      *
-     * @param  int    $date
+     * @param  string $date
      * @param  string $type date|datetime|''
      * @access public
      * @return string
      */
-    public function formatDate($date, $type = '')
+    public function formatDate(string $date, string $type = '')
     {
+        if(helper::isZeroDate($date))
+        {
+            if($type == 'date')     return '0000-00-00';
+            if($type == 'datetime') return '0000-00-00 00:00:00';
+        }
+
         $datePattern     = '\w{4}(\/|-)\w{1,2}(\/|-)\w{1,2}';
         $datetimePattern = $datePattern . ' \w{1,2}\:\w{1,2}\:\w{1,2}';
 
@@ -646,12 +471,6 @@ class commonModel extends model
             if(!preg_match("/$datePattern/", $date) and !preg_match("/$datetimePattern/", $date)) return $date;
             if(preg_match("/$datePattern/", $date) === 1)     $type = 'date';
             if(preg_match("/$datetimePattern/", $date) === 1) $type = 'datetime';
-        }
-
-        if(helper::isZeroDate($date))
-        {
-            if($type == 'date')     return '0000-00-00';
-            if($type == 'datetime') return '0000-00-00 00:00:00';
         }
 
         if($type == 'date')     $format = 'Y-m-d';
