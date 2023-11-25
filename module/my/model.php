@@ -365,7 +365,7 @@ class myModel extends model
      * @access private
      * @return array
      */
-    private function getTaskAssignedByMe(object $pager = null, string $orderBy = 'id_desc', array $objectIdList = array())
+    private function getTaskAssignedByMe(object $pager = null, string $orderBy = 'id_desc', array $objectIdList = array()): array
     {
         $orderBy    = strpos($orderBy, 'pri_') !== false ? str_replace('pri_', 'priOrder_', $orderBy) : 't1.' . $orderBy;
         $objectList = $this->dao->select("t1.*, t3.id as project, t2.name as executionName, t2.multiple as executionMultiple, t3.name as projectName, t2.type as executionType, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_TASK)->alias('t1')
