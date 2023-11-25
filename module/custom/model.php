@@ -531,37 +531,39 @@ class customModel extends model
     }
 
     /**
-     * Get module fields.
+     * 获取表单必填字段。
+     * Get form required fields.
      *
      * @param  string $moduleName
      * @param  string $method
      * @access public
      * @return array
      */
-    public function getFormFields($moduleName, $method = '')
+    public function getFormFields(string $moduleName, string $method = ''): array
     {
         $fields       = array();
-        $moduleLang   = $this->lang->$moduleName;
+        $moduleLang   = $this->lang->{$moduleName};
         $customFields = $this->config->custom->fieldList;
         if(isset($customFields[$moduleName]))
         {
             $fieldList = isset($customFields[$moduleName][$method]) ? $customFields[$moduleName][$method] : $customFields[$moduleName];
             if(!is_string($fieldList)) return $fields;
 
-            if($moduleName == 'user' and $method == 'edit') $this->app->loadConfig('user');
+            if($moduleName == 'user' && $method == 'edit') $this->app->loadConfig('user');
             foreach(explode(',', $fieldList) as $fieldName)
             {
-                if($moduleName == 'user' and $method == 'edit' and strpos($this->config->user->contactField, $fieldName) === false) continue;
+                if($moduleName == 'user' && $method == 'edit' && strpos($this->config->user->contactField, $fieldName) === false) continue;
                 if($fieldName == 'comment') $fields[$fieldName] = $this->lang->comment;
-                if(isset($moduleLang->$fieldName) and is_string($moduleLang->$fieldName)) $fields[$fieldName] = $moduleLang->$fieldName;
+                if(isset($moduleLang->{$fieldName}) && is_string($moduleLang->{$fieldName})) $fields[$fieldName] = $moduleLang->$fieldName;
 
                 if($moduleName == 'program')
                 {
                     $fieldKey = substr($method, 0, 3) . ucfirst($fieldName);
-                    if(isset($moduleLang->$fieldKey) and is_string($moduleLang->$fieldKey)) $fields[$fieldName] = $moduleLang->$fieldKey;
+                    if(isset($moduleLang->{$fieldKey}) && is_string($moduleLang->{$fieldKey})) $fields[$fieldName] = $moduleLang->$fieldKey;
                 }
             }
         }
+
         return $fields;
     }
 
