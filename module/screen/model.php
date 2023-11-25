@@ -749,23 +749,17 @@ class screenModel extends model
     /**
      * Process xLabel with lang
      *
-     * @param  array   $xLabel
-     * @param  string  $type
-     * @param  string  $object
-     * @param  string  $field
+     * @param  array  $xLabel
+     * @param  string $type
+     * @param  string $object
+     * @param  string $field
      * @access public
      * @return array
      */
-    public function processXLabel($xLabels, $type, $object, $field)
+    public function processXLabel(array $xLabels, string $type, string $object, string $field): array
     {
         $options = $this->getSysOptions($type, $object, $field);
-        $xLabelValues = array();
-        foreach($xLabels as $index => $label)
-        {
-            $xLabelValues[$label] = isset($options[$label]) ? $options[$label] : $label;
-        }
-
-        return $xLabelValues;
+        return array_map(function($label)use($options){return isset($options[$label]) ? $options[$label] : $label;}, $xLabels);
     }
 
     /**
