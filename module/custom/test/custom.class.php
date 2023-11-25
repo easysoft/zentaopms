@@ -146,18 +146,18 @@ class customTest
     }
 
     /**
-     * Test get UR and SR pairs.
+     * 获取需求概念集合。
+     * Get UR and SR pairs.
      *
      * @access public
      * @return array
      */
-    public function getURSRPairsTest()
+    public function getURSRPairsTest(): array
     {
-        $objects = $this->objectModel->getURSRPairs();
-
+        $URSRPairs = $this->objectModel->getURSRPairs();
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $URSRPairs;
     }
 
     /**
