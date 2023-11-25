@@ -1275,12 +1275,28 @@ class metricModel extends model
      * @access public
      * @return array|false
      */
-    public function getEchartsOptions(array $head, array $datas, string $chartType = 'line'): array|false
+    public function getEchartsOptions(array $header, array $datas, string $chartType = 'line'): array|false
     {
-        if(!$head || !$datas) return false;
-        if($chartType == 'pie') return $this->getPieEchartsOptions($head, $datas);
+        if(!$header || !$datas) return false;
+        //if($chartType == 'pie') return $this->getPieEchartsOptions($head, $datas);
 
-        list($x, $y) = $this->getEchartXY($head);
+        $headLength = count($header);
+        if($headLength == 2)
+        {
+            return $this->getTimeOptions($header, $datas, $chartType);
+        }
+        elseif($headLength == 3)
+        {
+            if(in_array('scope', array_column($header, 'name')))
+            {
+            }
+            else
+            {
+                return $this->getTimeOptions($header, $datas, $chartType);
+            }
+        }
+
+        list($x, $y) = $this->getEchartXY($header);
         if(!$x || !$y) return false;
 
         $cmp = function($a, $b) use ($x) {
@@ -1295,8 +1311,8 @@ class metricModel extends model
         $yAxis = array('type' => 'value');
 
         $type   = in_array($chartType, array('barX', 'barY')) ? 'bar' : $chartType;
-        $series = $this->getEchartSeries($head, $datas, $x, $y, $type);
-        $legend = $this->getEchartLegend($head, $series);
+        $series = $this->getEchartSeries($header, $datas, $x, $y, $type);
+        $legend = $this->getEchartLegend($header, $series);
 
         $options = array();
         $options['xAxis']  = $xAxis;
@@ -1304,6 +1320,47 @@ class metricModel extends model
         $options['legend'] = $legend;
         $options['series'] = $series;
 
+
+        return $options;
+    }
+
+    public function getTimeOptions($header, $datas, $chartType)
+    {
+        $headLength = count($header);
+
+        if($headLength == 2)
+        {
+            $x = $header[1]['name'];
+            $y = $header[0]['name'];
+        }
+        elseif($headLength == 3)
+        {
+            $x = $header[0]['name'];
+            $y = $header[1]['name'];
+        }
+
+        usort($datas, function($a, $b) use ($x)
+        {
+            $keyA = $a->$x;
+            $keyB = $b->$x;
+
+            if($keyA == $keyB) return 0;
+
+            return $keyA > $keyB ? -1 : 1;
+        });
+
+        $xAxis = array('type' => 'category', 'data' => array_unique(array_column($datas, $x)));
+        $yAxis = array('type' => 'value');
+
+        $type   = in_array($chartType, array('barX', 'barY')) ? 'bar' : $chartType;
+        $series = $this->getEchartSeries($header, $datas, $x, $y, $type);
+        $legend = $this->getEchartLegend($header, $series);
+
+        $options = array();
+        $options['xAxis']  = $xAxis;
+        $options['yAxis']  = $yAxis;
+        $options['legend'] = $legend;
+        $options['series'] = $series;
 
         return $options;
     }
