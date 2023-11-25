@@ -10,27 +10,15 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('batchCreateCount', $config->user->batchCreate);
 jsVar('passwordStrengthList', $lang->user->passwordStrengthList);
-h::jsCall('$.getLib', 'md5.js', array('root' => $this->app->getWebRoot() . 'js/'));
-
-$visibleFields = array();
-foreach(explode(',', $showFields) as $field)
-{
-    if($field && strpos(",{$config->user->availableBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
-}
-
-foreach(explode(',', $config->user->create->requiredFields) as $field)
-{
-    if($field && strpos(",{$config->user->availableBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
-}
 
 formBatchPanel
 (
-    set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchCreateFields')),
     set::title($lang->user->batchCreate),
-    on::change('[data-name="new"]', 'toggleNew'),
-    on::keyup('[data-name="password"]', 'togglePasswordStrength'),
+    set::customFields(array('list' => $listFields, 'show' => $showFields, 'key' => 'batchCreateFields')),
+    on::change('[data-name="new"]', 'batchToggleNew'),
+    on::keyup('[data-name="password"]', 'batchTogglePasswordStrength'),
+    on::click('button[type=submit]', 'encryptPassword'),
     to::titleSuffix
     (
         div
@@ -38,9 +26,9 @@ formBatchPanel
             setClass('text-base font-medium'),
             radioList
             (
-                on::change('changeType'),
+                on::change('batchChangeType'),
                 set::name('type'),
-                set::value('inside'),
+                set::value($type),
                 set::inline(true),
                 set::items($lang->user->typeList)
             )
@@ -60,9 +48,9 @@ formBatchPanel
         set::control('picker'),
         set::width('200px'),
         set::items($depts),
-        set::value($deptID),
+        set::value($deptID ? $deptID : ''),
         set::ditto(true),
-        set::hidden(zget($visibleFields, 'dept', true, false))
+        set::hidden(!in_array('dept', $showFields) || $type != 'inside')
     ),
     formBatchItem
     (
@@ -70,7 +58,7 @@ formBatchPanel
         set::control('inputGroup'),
         set::width('240px'),
         set::name('companyItem'),
-        set::hidden(true),
+        set::hidden($type == 'inside'),
         inputGroup
         (
             set::id('companyBox'),
@@ -78,19 +66,17 @@ formBatchPanel
             (
                 set::name('company'),
                 set::items($companies),
-                set::value('')
             ),
             input
             (
                 set::name('newCompany'),
-                set::value(''),
                 setClass('hidden')
             ),
             checkbox
             (
                 set::id('new'),
                 set::name('new'),
-                set::value(0),
+                set::value(1),
                 set::text($lang->company->create),
                 set::rootClass('btn'),
                 width('96px')
@@ -102,7 +88,7 @@ formBatchPanel
         set::name('account'),
         set::label($lang->user->account),
         set::control('input'),
-        set::width('160px'),
+        set::width('140px'),
         set::required(true)
     ),
     formBatchItem
@@ -110,18 +96,17 @@ formBatchPanel
         set::name('realname'),
         set::label($lang->user->realname),
         set::control('input'),
-        set::value(''),
         set::width('96px'),
         set::required(true)
     ),
-    count($visionList) > 1 ? formBatchItem
+    count($visions) > 1 ? formBatchItem
     (
         set::name('visions'),
         set::label($lang->user->visions),
-        set::items($visionList),
+        set::items($visions),
         set::control(array('type' => 'picker', 'multiple' => true)),
         set::width('200px'),
-        set::value(isset($visionList[$this->config->vision]) ? $this->config->vision : key($visionList)),
+        set::value($config->vision),
         set::ditto(true),
         set::required(true)
     ) : '',
@@ -132,17 +117,15 @@ formBatchPanel
         set::control('picker'),
         set::width('200px'),
         set::items($lang->user->roleList),
-        set::value(''),
         set::ditto(true)
     ),
     formBatchItem
     (
         set::name('group'),
         set::label($lang->user->group),
-        set::control(array("type" => "picker","multiple" => true)),
+        set::control(array('type' => 'picker', 'multiple' => true)),
         set::items($groupList),
         set::width('200px'),
-        set::value(''),
         set::ditto(true)
     ),
     formBatchItem
@@ -151,7 +134,7 @@ formBatchPanel
         set::label($lang->user->email),
         set::control('input'),
         set::width('160px'),
-        set::hidden(zget($visibleFields, 'email', true, false))
+        set::hidden(!in_array('email', $showFields))
     ),
     formBatchItem
     (
@@ -160,8 +143,8 @@ formBatchPanel
         set::control('radioListInline'),
         set::items($lang->user->genderList),
         set::value('m'),
-        set::width('160px'),
-        set::hidden(zget($visibleFields, 'gender', true, false))
+        set::width('100px'),
+        set::hidden(!in_array('gender', $showFields))
     ),
     formBatchItem
     (
@@ -173,7 +156,6 @@ formBatchPanel
             input
             (
                 set::name('password'),
-                set::value(''),
                 set::placeholder(zget($lang->user->placeholder->passwordStrength, $config->safe->mode, ''))
             ),
             span
@@ -181,7 +163,7 @@ formBatchPanel
                 setClass('input-group-addon passwordStrength hidden')
             )
         ),
-        set::width('200px'),
+        set::width('160px'),
         set::required(true)
     ),
     formBatchItem
@@ -189,79 +171,80 @@ formBatchPanel
         set::name('commiter'),
         set::label($lang->user->commiter),
         set::control('input'),
-        set::width('160px'),
-        set::hidden(zget($visibleFields, 'commiter', true, false))
+        set::width('120px'),
+        set::hidden(!in_array('commiter', $showFields) || $type != 'inside')
     ),
     formBatchItem
     (
         set::name('join'),
         set::label($lang->user->join),
         set::control('date'),
-        set::width('160px')
+        set::width('120px'),
+        set::hidden(!in_array('join', $showFields) || $type != 'inside')
     ),
     formBatchItem
     (
         set::name('skype'),
         set::label($lang->user->skype),
         set::control('input'),
-        set::width('160px'),
-        set::hidden(zget($visibleFields, 'skype', true, false))
+        set::width('120px'),
+        set::hidden(!in_array('skype', $showFields))
     ),
     formBatchItem
     (
         set::name('qq'),
         set::label($lang->user->qq),
         set::control('input'),
-        set::width('160px'),
-        set::hidden(zget($visibleFields, 'qq', true, false))
+        set::width('120px'),
+        set::hidden(!in_array('qq', $showFields))
     ),
     formBatchItem
     (
         set::name('dingding'),
         set::label($lang->user->dingding),
         set::control('input'),
-        set::width('160px'),
-        set::hidden(zget($visibleFields, 'dingding', true, false))
+        set::width('120px'),
+        set::hidden(!in_array('dingding', $showFields))
     ),
     formBatchItem
     (
         set::name('weixin'),
         set::label($lang->user->weixin),
         set::control('input'),
-        set::width('160px'),
-        set::hidden(zget($visibleFields, 'weixin', true, false))
+        set::width('120px'),
+        set::hidden(!in_array('weixin', $showFields))
     ),
     formBatchItem
     (
         set::name('mobile'),
         set::label($lang->user->mobile),
         set::control('input'),
-        set::width('160px'),
-        set::hidden(zget($visibleFields, 'mobile', true, false))
+        set::width('120px'),
+        set::hidden(!in_array('mobile', $showFields))
     ),
     formBatchItem
     (
         set::name('slack'),
         set::label($lang->user->slack),
         set::control('input'),
-        set::width('160px'),
-        set::hidden(zget($visibleFields, 'slack', true, false))
+        set::width('120px'),
+        set::hidden(!in_array('slack', $showFields))
     ),
     formBatchItem
     (
         set::name('whatsapp'),
         set::label($lang->user->whatsapp),
         set::control('input'),
-        set::width('160px'),
-        set::hidden(zget($visibleFields, 'whatsapp', true, false))
+        set::width('120px'),
+        set::hidden(!in_array('whatsapp', $showFields))
     ),
     formBatchItem
     (
         set::name('phone'),
         set::label($lang->user->phone),
         set::control('input'),
-        set::width('160px'),
-        set::hidden(zget($visibleFields, 'phone', true, false))
+        set::width('120px'),
+        set::hidden(!in_array('phone', $showFields))
     ),
     formBatchItem
     (
@@ -269,15 +252,15 @@ formBatchPanel
         set::label($lang->user->address),
         set::control('input'),
         set::width('160px'),
-        set::hidden(zget($visibleFields, 'address', true, false))
+        set::hidden(!in_array('address', $showFields))
     ),
     formBatchItem
     (
         set::name('zipcode'),
         set::label($lang->user->zipcode),
         set::control('input'),
-        set::width('160px'),
-        set::hidden(zget($visibleFields, 'zipcode', true, false))
+        set::width('120px'),
+        set::hidden(!in_array('zipcode', $showFields))
     ),
     div
     (
@@ -290,21 +273,14 @@ formBatchPanel
             set::labelClass('w-10 mr-2'),
             set::control('password'),
             set::name('verifyPassword'),
-            set::value(''),
             set::required(true)
         )
     ),
-    formGroup
+    formRow
     (
         setClass('hidden'),
-        set::name('verifyRand'),
-        set::value($rand)
-    ),
-    formGroup
-    (
-        setClass('hidden'),
-        set::name('userType'),
-        set::value('inside')
+        input(set::name('verifyRand'), set::value($rand)),
+        input(set::name('userType'), set::value($type)),
     )
 );
 
