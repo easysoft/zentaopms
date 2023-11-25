@@ -321,11 +321,12 @@ class searchModel extends model
      *
      * @param  int    $queryID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function deleteQuery(int $queryID): void
+    public function deleteQuery(int $queryID): bool
     {
         $this->dao->delete()->from(TABLE_USERQUERY)->where('id')->eq($queryID)->andWhere('account')->eq($this->app->user->account)->exec();
+        return !dao::isError();
     }
 
     /**
