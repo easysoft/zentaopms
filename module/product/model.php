@@ -1109,10 +1109,8 @@ class productModel extends model
             $projectLatestExecutions[$projectID] = current($executions);
         }
 
-        $hourList = $this->loadModel('project')->computeProgress($latestExecutionList);
-
         /* Build result. */
-        $statsData = array($productList, $planList, $projectList, $executionList, $projectProduct, $projectLatestExecutions, $hourList, $releaseList);
+        $statsData = array($productList, $planList, $projectList, $executionList, $projectProduct, $projectLatestExecutions, $releaseList);
         /* Convert predefined HTML entities to characters. */
         $statsData = $this->convertHtmlSpecialChars($statsData);
 
