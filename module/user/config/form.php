@@ -19,7 +19,6 @@ $config->user->form->create['email']            = array('required' => false, 'ty
 $config->user->form->create['commiter']         = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->create['gender']           = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->create['verifyPassword']   = array('required' => true,  'type' => 'string', 'default' => '');
-$config->user->form->create['verifyRand']       = array('required' => true,  'type' => 'int',    'default' => 0);
 $config->user->form->create['passwordLength']   = array('required' => true,  'type' => 'int',    'default' => 0);
 $config->user->form->create['passwordStrength'] = array('required' => true,  'type' => 'int',    'default' => 0);
 
@@ -77,7 +76,6 @@ $config->user->form->edit['slack']            = array('required' => false, 'type
 $config->user->form->edit['address']          = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->edit['zipcode']          = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->edit['verifyPassword']   = array('required' => true,  'type' => 'string', 'default' => '');
-$config->user->form->edit['verifyRand']       = array('required' => true,  'type' => 'int',    'default' => 0);
 $config->user->form->edit['passwordLength']   = array('required' => true,  'type' => 'int',    'default' => 0);
 $config->user->form->edit['passwordStrength'] = array('required' => true,  'type' => 'int',    'default' => 0);
 

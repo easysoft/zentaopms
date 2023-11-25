@@ -325,7 +325,7 @@ class userModel extends model
             $requiredFields = trim(str_replace(array(',dept,', ',commiter,'), '', ',' . $requiredFields . ','), ',');
         }
 
-        $this->dao->insert(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,verifyRand,passwordLength,passwordStrength')
+        $this->dao->insert(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,passwordLength,passwordStrength')
             ->batchCheck($requiredFields, 'notempty')
             ->checkIF($user->account, 'account', 'unique')
             ->checkIF($user->account, 'account', 'account')
@@ -474,7 +474,7 @@ class userModel extends model
         /* Remove unavailable contact fields from available fields. */
         $requiredFields = implode(',', array_diff($requiredFields, $unAvailableContactFields));
 
-        $this->dao->update(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,verifyRand,passwordLength,passwordStrength')
+        $this->dao->update(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,passwordLength,passwordStrength')
             ->batchCheck($requiredFields, 'notempty')
             ->checkIF($user->account, 'account', 'unique', "id != '$user->id'")
             ->checkIF($user->account, 'account', 'account')
