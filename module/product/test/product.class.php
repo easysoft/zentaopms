@@ -810,6 +810,7 @@ class productTest
      */
     public function getStatsTest(array $productIdList)
     {
+        $this->objectModel->refreshStats(true);
         $objects = $this->objectModel->getStats($productIdList);
 
         if(dao::isError()) return dao::getError();
