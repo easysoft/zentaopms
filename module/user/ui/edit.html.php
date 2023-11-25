@@ -255,11 +255,12 @@ formPanel
     formRow
     (
         setClass('hidden'),
-        input(set::name('verifyRand'), set::value($rand)),
         input(set::name('passwordLength'), set::value(0)),
         input(set::name('passwordStrength'), set::value(0))
     )
 );
+
+formHidden('verifyRand', $rand);
 
 render();
 
