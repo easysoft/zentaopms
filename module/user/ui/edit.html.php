@@ -70,7 +70,7 @@ formPanel
     ),
     formRow
     (
-        setClass($user->type == 'inside' ? '' : 'hidden'),
+        $user->type == 'inside' ? null : setClass('hidden'),
         formGroup
         (
             set::width('1/2'),
@@ -105,7 +105,7 @@ formPanel
         ),
         formGroup
         (
-            setClass($user->type == 'inside' ? 'hidden' : ''),
+            $user->type == 'inside' ? null : setClass('hidden'),
             set::width('1/2'),
             set::label($lang->user->company),
             inputGroup
@@ -198,9 +198,9 @@ formPanel
     ),
     formRow
     (
-        setClass($user->type == 'inside' ? '' : 'hidden'),
         formGroup
         (
+            $user->type == 'inside' ? null : setClass('hidden'),
             set::width('1/2'),
             set::label($lang->user->commiter),
             set::name('commiter'),

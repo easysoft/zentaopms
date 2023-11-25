@@ -32,14 +32,14 @@ formPanel
                 set::inline(true),
                 set::name('type'),
                 set::items($lang->user->typeList),
-                set::value('inside')
+                set::value($type)
             )
         )
     ),
     formRow
     (
         set::id('companyBox'),
-        set::className('hidden'),
+        $type == 'inside' ? set::className('hidden') : null,
         formGroup
         (
             set::width('1/2'),
@@ -72,6 +72,7 @@ formPanel
     ),
     formRow
     (
+        $type == 'inside' ? null : setClass('hidden'),
         formGroup
         (
             set::width('1/2'),
@@ -139,6 +140,7 @@ formPanel
     ),
     formRow
     (
+        $type == 'inside' ? null : setClass('hidden'),
         formGroup
         (
             set::width('1/2'),
@@ -183,6 +185,7 @@ formPanel
     ),
     formRow
     (
+        $type == 'inside' ? null : setClass('hidden'),
         formGroup
         (
             set::width('1/2'),
