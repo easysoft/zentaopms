@@ -161,18 +161,18 @@ class customTest
     }
 
     /**
+     * 获取用需求概念集合。
      * Test get UR pairs.
      *
      * @access public
      * @return array
      */
-    public function getURPairsTest()
+    public function getURPairsTest(): array
     {
-        $objects = $this->objectModel->getURPairs();
-
+        $URPairs = $this->objectModel->getURPairs();
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $URPairs;
     }
 
     /**
