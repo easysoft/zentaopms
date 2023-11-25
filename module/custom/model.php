@@ -428,13 +428,14 @@ class customModel extends model
     }
 
     /**
+     * 获取模块菜单数据，如果模块是'main'则返回主菜单。
      * Get module menu data, if module is 'main' then return main menu.
+     *
      * @param  string $module
-     * @param  bool   $rebuild
      * @access public
      * @return array
      */
-    public static function getModuleMenu($module = 'main', $rebuild = false)
+    public static function getModuleMenu($module = 'main'): array
     {
         global $app, $lang, $config;
 
@@ -449,9 +450,7 @@ class customModel extends model
         if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
         if($module == 'my' && empty($config->global->scoreStatus)) unset($allMenu->score);
 
-        $menu = static::setMenuByConfig($allMenu, $customMenu, $module);
-
-        return $menu;
+        return static::setMenuByConfig($allMenu, $customMenu, $module);
     }
 
     /**
