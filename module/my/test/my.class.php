@@ -58,12 +58,13 @@ class myTest
     }
 
     /**
-     * Function getContribute test by my
+     * 测试获取我的贡献。
+     * Test get my contribute.
      *
      * @access public
      * @return object
      */
-    public function getContributeTest()
+    public function getContributeTest(): object|array
     {
         $objects = $this->objectModel->getContribute();
 

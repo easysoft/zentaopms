@@ -251,23 +251,23 @@ class myModel extends model
     }
 
     /**
-     * Get contribute
+     * 获取我的贡献。
+     * Get my contribute.
      *
      * @access public
      * @return object
      */
     public function getContribute()
     {
-        $account    = $this->app->user->account;
+        $account = $this->app->user->account;
+        $inTeam  = $this->dao->select('root')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('account')->eq($account)->fetchPairs('root', 'root');
+
         $contribute = new stdclass();
-
-        $contribute->myTaskTotal       = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
-        $contribute->myStoryTotal      = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
-        $contribute->myBugTotal        = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
-        $contribute->docCreatedTotal   = (int)$this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('addedBy')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->fetch('count');
-        $contribute->ownerProductTotal = (int)$this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)->where('PO')->eq($this->app->user->account)->andWhere('deleted')->eq('0')->fetch('count');
-
-        $inTeam = $this->dao->select('root')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('account')->eq($this->app->user->account)->fetchPairs('root', 'root');
+        $contribute->myTaskTotal          = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($account)->andWhere('deleted')->eq(0)->fetch('count');
+        $contribute->myStoryTotal         = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($account)->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
+        $contribute->myBugTotal           = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($account)->andWhere('deleted')->eq(0)->fetch('count');
+        $contribute->docCreatedTotal      = (int)$this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('addedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $contribute->ownerProductTotal    = (int)$this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)->where('PO')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
         $contribute->involvedProjectTotal = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('project')
