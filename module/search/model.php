@@ -307,13 +307,11 @@ class searchModel extends model
         if($this->post->onMenuBar) $query->shortcut = '1';
         $this->dao->insert(TABLE_USERQUERY)->data($query)->autoCheck()->check('title', 'notempty')->exec();
 
-        if(!dao::isError())
-        {
-            $queryID = $this->dao->lastInsertID();
-            if(!dao::isError()) $this->loadModel('score')->create('search', 'saveQuery', $queryID);
-            return $queryID;
-        }
-        return false;
+        if(dao::isError()) return false;
+
+        $queryID = $this->dao->lastInsertID();
+        $this->loadModel('score')->create('search', 'saveQuery', $queryID);
+        return $queryID;
     }
 
     /**
@@ -323,7 +321,7 @@ class searchModel extends model
      * @access public
      * @return void
      */
-    public function deleteQuery($queryID)
+    public function deleteQuery(int $queryID): void
     {
         $this->dao->delete()->from(TABLE_USERQUERY)->where('id')->eq($queryID)->andWhere('account')->eq($this->app->user->account)->exec();
     }
@@ -337,17 +335,9 @@ class searchModel extends model
      */
     public function getQueryPairs($module)
     {
-        $queries = $this->dao->select('id, title')
-            ->from(TABLE_USERQUERY)
-            ->where('module')->eq($module)
-            ->andWhere('account', true)->eq($this->app->user->account)
-            ->orWhere('common')->eq(1)
-            ->markRight(1)
-            ->orderBy('id_desc')
-            ->fetchPairs();
-        if(!$queries) return array('' => $this->lang->search->myQuery);
-        $queries = array('' => $this->lang->search->myQuery) + $queries;
-        return $queries;
+        $queries = $this->dao->select('id, title')->from(TABLE_USERQUERY)->where('module')->eq($module)->andWhere('account', true)->eq($this->app->user->account)->orWhere('common')->eq(1)->markRight(1)->orderBy('id_desc')->fetchPairs();
+
+        return array('' => $this->lang->search->myQuery) + $queries;
     }
 
     /**
