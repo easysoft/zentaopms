@@ -338,53 +338,63 @@ class screenModel extends model
      * @param  object        $component
      * @param  array         $filters
      * @access public
-     * @return object|string
+     * @return void
      */
-    public function getChartOption(object $chart, object $component, array $filters): object|string
+    public function getChartOption(object $chart, object $component, array $filters): void
     {
         $type = $component->type ? : 'default';
         switch($type)
         {
             case 'line':
-                return $this->getLineChartOption($component, $chart, $filters);
+                $this->getLineChartOption($component, $chart, $filters);
+                break;
             case 'cluBarY':
             case 'stackedBarY':
             case 'cluBarX':
             case 'stackedBar':
             case 'bar':
-                return $this->getBarChartOption($component, $chart, $filters);
+                $this->getBarChartOption($component, $chart, $filters);
+                break;
             case 'piecircle':
-                return $this->buildPieCircleChart($component, $chart);
+                $this->buildPieCircleChart($component, $chart);
+                break;
             case 'pie':
-                return $this->getPieChartOption($component, $chart, $filters);
+                $this->getPieChartOption($component, $chart, $filters);
+                break;
             case 'table':
-                return $this->getTableChartOption($component, $chart, $filters);
+                $this->getTableChartOption($component, $chart, $filters);
+                break;
             case 'radar':
-                return $this->getRadarChartOption($component, $chart, $filters);
+                $this->getRadarChartOption($component, $chart, $filters);
+                break;
             case 'card':
-                return $this->buildCardChart($component, $chart);
+                $this->buildCardChart($component, $chart);
+                break;
             case 'waterpolo':
-                return $this->buildWaterPolo($component, $chart);
+                $this->buildWaterPolo($component, $chart);
+                break;
             default:
-                return '';
+                break;
         }
     }
 
     /**
+     * 获取条形图配置。
      * Get bar chart option.
      *
      * @param  object $component
      * @param  object $chart
+     * @param  array  $filters
      * @access public
-     * @return object
+     * @return void
      */
-    public function getBarChartOption($component, $chart, $filters = '')
+    public function getBarChartOption(object $component, object $chart, array $filters = array()): void
     {
         if($chart->sql)
         {
             $settings = json_decode($chart->settings, true);
-            $langs    = json_decode($chart->langs, true);
-            $settings = $settings[0];
+            $langs    = json_decode($chart->langs,    true);
+            $settings = current($settings);
 
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
 
@@ -396,11 +406,10 @@ class screenModel extends model
 
             foreach($yStats as $index => $dataList)
             {
-                $field     = zget($fields, $metrics[$index]);
-                $fieldName = $field->name;
-                if(isset($langs[$field->field]) and !empty($langs[$field->field][$clientLang])) $fieldName = $langs[$field->field][$clientLang];
+                $fieldConfig = zget($fields, $metrics[$index]);
+                $fieldName   = $langs[$fieldConfig->field][$clientLang] ?? $fieldConfig->name;
                 $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
-                $dimensions[] = $field;
+                array_push($dimensions, $field);
 
                 foreach($dataList as $valueField => $value)
                 {
@@ -417,9 +426,7 @@ class screenModel extends model
             $component->option->dataset->source     = array_values($sourceData);
         }
 
-        $component = $this->setComponentDefaults($component);
-
-        return $component;
+        $this->setComponentDefaults($component);
     }
 
     /**
