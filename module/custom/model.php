@@ -166,216 +166,41 @@ class customModel extends model
     }
 
     /**
+     * 通过配置文件设置菜单。
      * Build menu data from config
-     * @param  object          $allMenu
-     * @param  string | array  $customMenu
+     *
+     * @param  object|array $allMenu
+     * @param  string|array $customMenu
+     * @param  string       $module
      * @access public
      * @return array
      */
-    public static function setMenuByConfig($allMenu, $customMenu, $module = '')
+    public static function setMenuByConfig(object|array $allMenu, string|array $customMenu, string $module = ''): array
     {
         global $app, $lang, $config;
-        $menu           = array();
-        $menuModuleName = $module;
-        $order          = 1;
-        $customMenuMap  = array();
-        $tab            = $app->tab;
-        $isTutorialMode = commonModel::isTutorialMode();
 
-        if($customMenu)
-        {
-            if(is_string($customMenu))
-            {
-                $customMenuItems = explode(',', $customMenu);
-                foreach($customMenuItems as $customMenuItem)
-                {
-                    $item = new stdclass();
-                    $item->name   = $customMenuItem;
-                    $item->order  = $order++;
-                    $item->hidden = false;
-                    $customMenuMap[$item->name] = $item;
-                }
-                foreach($allMenu as $name => $item)
-                {
-                    if(!isset($customMenuMap[$name]))
-                    {
-                        $item = new stdclass();
-                        $item->name   = $name;
-                        $item->hidden = true;
-                        $item->order  = $order++;
-                        $customMenuMap[$name] = $item;
-                    }
-                }
-            }
-            elseif(is_array($customMenu))
-            {
-                foreach($customMenu as $customMenuItem)
-                {
-                    if(!isset($customMenuItem->order)) $customMenuItem->order = $order;
-                    $customMenuMap[$customMenuItem->name] = $customMenuItem;
-                    $order++;
-                }
-            }
-        }
-        elseif($module)
-        {
-            $menuOrder = ($module == 'main' and isset($lang->menuOrder)) ? $lang->menuOrder : (isset($lang->menu->{$module}['menuOrder']) ? $lang->menu->{$module}['menuOrder'] : array());
-            if($menuOrder)
-            {
-                ksort($menuOrder);
-                foreach($menuOrder as $name)
-                {
-                    /* If menu is removed, delete the menuOrder. */
-                    if(!isset($allMenu->$name)) continue;
+        $tab = $app->tab;
+        list($customMenuMap, $order) = static::buildCustomMenuMap($allMenu, $customMenu, $module);
 
-                    $item = new stdclass();
-                    $item->name   = $name;
-                    $item->hidden = false;
-                    $item->order  = $order++;
-                    $customMenuMap[$name] = $item;
-                }
-            }
-        }
-
-        /* Merge fileMenu and customMenu. */
+        /* Merge fileMenu && customMenu. */
         foreach($customMenuMap as $name => $item)
         {
-            if(is_object($allMenu) and !isset($allMenu->$name)) $allMenu->$name = $item;
-            if(is_array($allMenu)  and !isset($allMenu[$name])) $allMenu[$name] = $item;
+            if(is_object($allMenu) && !isset($allMenu->{$name})) $allMenu->{$name} = $item;
+            if(is_array($allMenu)  && !isset($allMenu[$name]))   $allMenu[$name]   = $item;
         }
 
-        foreach($allMenu as $name => $item)
-        {
-            if(is_object($item)) $item = (array)$item;
-
-            $label     = '';
-            $module    = '';
-            $method    = '';
-            $class     = '';
-            $subModule = '';
-            $subMenu   = '';
-            $dropMenu  = '';
-            $alias     = '';
-            $exclude   = '';
-            $divider   = false;
-
-            $link = (is_array($item) and isset($item['link'])) ? $item['link'] : $item;
-            /* The variable of item has not link and is not link then ignore it. */
-            if(!is_string($link)) continue;
-
-            $label   = $link;
-            $hasPriv = true;
-            if(strpos($link, '|') !== false)
-            {
-                $link = explode('|', $link);
-                list($label, $module, $method) = $link;
-
-                $params  = empty($link[3]) ? '' :  $link[3];
-                $hasPriv = commonModel::hasPriv($module, $method, null, $params);
-
-                /* Fix bug #20464 */
-                if(isset($vars)) unset($vars);
-                if(!$hasPriv and is_array($item) and isset($item['subMenu']))
-                {
-                    foreach($item['subMenu'] as $subMenu)
-                    {
-                        if(!isset($subMenu['link']) or strpos($subMenu['link'], '|') === false) continue;
-                        if(strpos("|program|product|project|execution|qa|", "|{$app->tab}|") === false and strpos($subMenu['link'], '%s') !== false) continue;
-                        list($subLabel, $module, $method) = explode('|', $subMenu['link']);
-                        if(count(explode('|', $subMenu['link'])) > 3) list($subLabel, $module, $method, $vars) = explode('|', $subMenu['link']);
-
-                        $hasPriv = commonModel::hasPriv($module, $method);
-                        if($hasPriv) break;
-                    }
-                }
-
-                if($module == 'execution' and $method == 'more') $hasPriv = true;
-                if($module == 'project' and $method == 'other')  $hasPriv = true;
-                if(!$hasPriv and isset($vars)) unset($vars);
-            }
-
-            if($isTutorialMode || $hasPriv)
-            {
-                $itemLink = '';
-                if($module && $method)
-                {
-                    $itemLink = array('module' => $module, 'method' => $method);
-                    if(isset($link[3])) $itemLink['vars'] = $link[3];
-                    if(isset($vars))    $itemLink['vars'] = $vars;
-                    if(is_array($item) and isset($item['target'])) $itemLink['target'] = $item['target'];
-                }
-
-                if(is_array($item))
-                {
-                    if(isset($item['class']))     $class     = $item['class'];
-                    if(isset($item['subModule'])) $subModule = $item['subModule'];
-                    if(isset($item['subMenu']))   $subMenu   = $item['subMenu'];
-                    if(isset($item['dropMenu']))  $dropMenu  = $item['dropMenu'];
-                    if(isset($item['alias']))     $alias     = $item['alias'];
-                    if(isset($item['exclude']))   $exclude   = $item['exclude'];
-                    if(isset($item['divider']))   $divider   = $item['divider'];
-                }
-
-                $hidden = isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
-
-                if(is_array($item) and (isset($item['subMenu']) or isset($item['dropMenu'])))
-                {
-                    foreach(array('subMenu', 'dropMenu') as $key)
-                    {
-                        if(!isset($item[$key])) continue;
-                        foreach($item[$key] as $subItem)
-                        {
-                            if(isset($subItem->link['module']) && isset($subItem->link['method']))
-                            {
-                                $subItem->hidden = !common::hasPriv($subItem->link['module'], $subItem->link['method']);
-                            }
-                        }
-                        if(isset($customMenuMap[$name]->$key))
-                        {
-                            foreach($customMenuMap[$name]->$key as $subItem)
-                            {
-                                if(isset($subItem->hidden) && isset($item[$key][$subItem->name])) $item[$key][$subItem->name]->hidden = $subItem->hidden;
-                            }
-                        }
-                    }
-                }
-
-                if(strpos($name, 'QUERY') === 0 and !isset($customMenuMap[$name])) $hidden = false;
-
-                $menuItem = new stdclass();
-                $menuItem->name  = $name;
-                $menuItem->link  = $itemLink;
-                $menuItem->text  = $label;
-                $menuItem->order = (isset($customMenuMap[$name]) && isset($customMenuMap[$name]->order) ? $customMenuMap[$name]->order : $order++);
-                if($hidden)   $menuItem->hidden    = $hidden;
-                if($class)    $menuItem->class     = $class;
-                if($subModule)$menuItem->subModule = $subModule;
-                if($subMenu)  $menuItem->subMenu   = $subMenu;
-                if($dropMenu) $menuItem->dropMenu  = $dropMenu;
-                if($alias)    $menuItem->alias     = $alias;
-                if($exclude)  $menuItem->exclude   = $exclude;
-                if($divider)  $menuItem->divider   = $divider;
-                if($isTutorialMode) $menuItem->tutorial = true;
-
-                /* Hidden menu by config in mobile. */
-                if($app->viewType == 'mhtml' and isset($config->custom->moblieHidden[$menuModuleName]) and in_array($name, $config->custom->moblieHidden[$menuModuleName])) $menuItem->hidden = 1;
-
-                while(isset($menu[$menuItem->order])) $menuItem->order++;
-                $menu[$menuItem->order] = $menuItem;
-            }
-        }
-
+        $menu = static::buildMenuItems($allMenu, $customMenuMap, $module, $order);
         ksort($menu, SORT_NUMERIC);
 
-        /* Set divider in main and module menu. */
-        if(!isset($lang->$tab->menuOrder)) $lang->$tab->menuOrder = array();
-        ksort($lang->$tab->menuOrder, SORT_NUMERIC);
+        /* Set divider in main && module menu. */
+        if(!isset($lang->{$tab}->menuOrder)) $lang->{$tab}->menuOrder = array();
+        ksort($lang->{$tab}->menuOrder, SORT_NUMERIC);
 
-        $group = 0;
+        $group         = 0;
         $dividerOrders = array();
-        foreach($lang->$tab->menuOrder as $name)
+        foreach($lang->{$tab}->menuOrder as $name)
         {
-            if(isset($lang->$tab->dividerMenu) and strpos($lang->$tab->dividerMenu, ",{$name},") !== false) $group++;
+            if(isset($lang->{$tab}->dividerMenu) && strpos($lang->{$tab}->dividerMenu, ",{$name},") !== false) $group++;
             $dividerOrders[$name] = $group;
         }
 
@@ -383,7 +208,7 @@ class customModel extends model
         $group   = 0;
         foreach($menu as $item)
         {
-            if($menuModuleName == 'main' and isset($dividerOrders[$item->name]) and $dividerOrders[$item->name] > $group)
+            if($module == 'main' && isset($dividerOrders[$item->name]) && $dividerOrders[$item->name] > $group)
             {
                 $menu[$item->order]->divider = $isFirst ? false : true;
                 $group = $dividerOrders[$item->name];
@@ -396,6 +221,210 @@ class customModel extends model
         }
 
         return array_values($menu);
+    }
+
+    /**
+     * 构造自定义导航数据。
+     * Build custom menu data.
+     *
+     * @param  array|string $customMenu
+     * @param  string       $module
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function buildCustomMenuMap(object|array $allMenu, array|string $customMenu = '', string $module = ''): array
+    {
+        global $lang;
+        $customMenuMap = array();
+        $order         = 1;
+        if($customMenu)
+        {
+            if(is_string($customMenu))
+            {
+                $customMenuItems = explode(',', $customMenu);
+                foreach($customMenuItems as $customMenuItem)
+                {
+                    $item = new stdclass();
+                    $item->name   = $customMenuItem;
+                    $item->order  = $order ++;
+                    $item->hidden = false;
+                    $customMenuMap[$item->name] = $item;
+                }
+                foreach($allMenu as $name => $item)
+                {
+                    if(!isset($customMenuMap[$name]))
+                    {
+                        $item = new stdclass();
+                        $item->name   = $name;
+                        $item->hidden = true;
+                        $item->order  = $order ++;
+                        $customMenuMap[$name] = $item;
+                    }
+                }
+            }
+            elseif(is_array($customMenu))
+            {
+                foreach($customMenu as $customMenuItem)
+                {
+                    if(!isset($customMenuItem->order)) $customMenuItem->order = $order;
+                    $customMenuMap[$customMenuItem->name] = $customMenuItem;
+                    $order ++;
+                }
+            }
+        }
+        elseif($module)
+        {
+            $menuOrder = ($module == 'main' && isset($lang->menuOrder)) ? $lang->menuOrder : (isset($lang->menu->{$module}['menuOrder']) ? $lang->menu->{$module}['menuOrder'] : array());
+            if($menuOrder)
+            {
+                ksort($menuOrder);
+                foreach($menuOrder as $name)
+                {
+                    /* If menu is removed, delete the menuOrder. */
+                    if(!isset($allMenu->$name)) continue;
+
+                    $item = new stdclass();
+                    $item->name   = $name;
+                    $item->hidden = false;
+                    $item->order  = $order ++;
+                    $customMenuMap[$name] = $item;
+                }
+            }
+        }
+
+        return array($customMenuMap, $order);
+    }
+
+    /**
+     * 构造菜单数据。
+     * Build menu data.
+     *
+     * @param  object|array $allMenu
+     * @param  array        $customMenuMap
+     * @param  string       $menuModuleName
+     * @param  int          $order
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function buildMenuItems(object|array $allMenu, array $customMenuMap, string $menuModuleName, int $order = 1): array
+    {
+        global $config, $app;
+
+        $menu           = array();
+        $isTutorialMode = commonModel::isTutorialMode();
+        $module         = $menuModuleName;
+        foreach($allMenu as $name => $item)
+        {
+            if(is_object($item)) $item = (array)$item;
+
+            /* The variable of item has not link && is not link then ignore it. */
+            $link = (is_array($item) && isset($item['link'])) ? $item['link'] : $item;
+            if(!is_string($link)) continue;
+
+            $subMenu = array();
+            $label   = $link;
+            $hasPriv = true;
+            if(strpos($link, '|') !== false)
+            {
+                $link = explode('|', $link);
+                list($label, $module, $method) = $link;
+                $hasPriv = commonModel::hasPriv($module, $method, null, zget($link, 3, ''));
+
+                /* Fix bug #20464 */
+                if(isset($vars)) unset($vars);
+                if(!$hasPriv && is_array($item) && isset($item['subMenu']))
+                {
+                    foreach($item['subMenu'] as $subMenu)
+                    {
+                        if(!isset($subMenu['link']) || strpos($subMenu['link'], '|') === false) continue;
+                        if(strpos("|program|product|project|execution|qa|", "|{$app->tab}|") === false && strpos($subMenu['link'], '%s') !== false) continue;
+                        list($subLabel, $module, $method) = explode('|', $subMenu['link']);
+                        if(count(explode('|', $subMenu['link'])) > 3) list($subLabel, $module, $method, $vars) = explode('|', $subMenu['link']);
+                        $hasPriv = commonModel::hasPriv($module, $method);
+                        if($hasPriv) break;
+                    }
+                }
+                if($module == 'execution' && $method == 'more') $hasPriv = true;
+                if($module == 'project' && $method == 'other')  $hasPriv = true;
+                if(!$hasPriv && isset($vars)) unset($vars);
+            }
+
+            if($isTutorialMode || $hasPriv)
+            {
+                $itemLink = '';
+                if($module && $method)
+                {
+                    $itemLink = array('module' => $module, 'method' => $method);
+                    if(isset($link[3])) $itemLink['vars'] = $link[3];
+                    if(isset($vars))    $itemLink['vars'] = $vars;
+                    if(is_array($item) && isset($item['target'])) $itemLink['target'] = $item['target'];
+                }
+
+                /* Process menu item's order and hidden attirbute. */
+                $menuItem = static::buildMenuItem($item, $customMenuMap, $name, $label, $itemLink, $isTutorialMode, $subMenu);
+                $menuItem->order = (isset($customMenuMap[$name]) && isset($customMenuMap[$name]->order) ? $customMenuMap[$name]->order : $order ++);
+                if($app->viewType == 'mhtml' && isset($config->custom->moblieHidden[$menuModuleName]) && in_array($name, $config->custom->moblieHidden[$menuModuleName])) $menuItem->hidden = 1; // Hidden menu by config in mobile.
+                while(isset($menu[$menuItem->order])) $menuItem->order ++;
+                $menu[$menuItem->order] = $menuItem;
+            }
+        }
+        return $menu;
+    }
+
+    /**
+     * 构造菜单数据项。
+     * Build menu item.
+     *
+     * @param  array|string $item
+     * @param  int          $customMenuMap
+     * @param  string       $name
+     * @param  string       $label
+     * @param  string|array $itemLink
+     * @param  bool         $isTutorialMode
+     * @param  array        $subMenu
+     * @static
+     * @access public
+     * @return object
+     */
+    public static function buildMenuItem(array|string $item, $customMenuMap, string $name = '', string $label = '', string|array $itemLink = '', bool $isTutorialMode = false, array $subMenu = array()): object
+    {
+        if(is_array($item) && (isset($item['subMenu']) || isset($item['dropMenu'])))
+        {
+            foreach(array('subMenu', 'dropMenu') as $key)
+            {
+                if(!isset($item[$key])) continue;
+                foreach($item[$key] as $subItem)
+                {
+                    if(isset($subItem->link['module']) && isset($subItem->link['method'])) $subItem->hidden = !common::hasPriv($subItem->link['module'], $subItem->link['method']);
+                }
+                if(isset($customMenuMap[$name]->$key))
+                {
+                    foreach($customMenuMap[$name]->$key as $subItem)
+                    {
+                        if(isset($subItem->hidden) && isset($item[$key][$subItem->name])) $item[$key][$subItem->name]->hidden = $subItem->hidden;
+                    }
+                }
+            }
+        }
+
+        $menuItem = new stdclass();
+        $menuItem->name  = $name;
+        $menuItem->link  = $itemLink;
+        $menuItem->text  = $label;
+        if($isTutorialMode) $menuItem->tutorial = true;
+
+        $attrList = array('class', 'subModule', 'dropMenu', 'alias', 'exclude', 'divider');
+        $hidden   = strpos($name, 'QUERY') === 0 && !isset($customMenuMap[$name]) ? false : isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
+        foreach($attrList as $attr)
+        {
+            if(!empty($item[$attr])) $menuItem->$attr = $item[$attr];
+        }
+        if($hidden)  $menuItem->hidden  = $hidden;
+        if($subMenu) $menuItem->subMenu = $subMenu;
+
+        return $menuItem;
     }
 
     /**
