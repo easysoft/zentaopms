@@ -512,38 +512,6 @@ class customModel extends model
     }
 
     /**
-     * Save custom menu to config
-     * @param  string $menu
-     * @param  string $module
-     * @param  string $method
-     * @access public
-     * @return void
-     */
-    public function saveCustomMenu($menu, $module, $method = '')
-    {
-        $account    = $this->app->user->account;
-        $settingKey = '';
-
-        $setPublic = $this->post->setPublic;
-        if(!is_string($menu)) $menu = json_encode($menu);
-
-        $flow = $this->config->global->flow;
-        if(empty($method))
-        {
-            $settingKey = "common.customMenu.{$flow}_{$module}";
-        }
-        else
-        {
-            $settingKey = "common.customMenu.{$flow}_feature_{$module}_{$method}";
-        }
-
-        $this->loadModel('setting')->setItem($account . '.' . $settingKey, $menu);
-        if($setPublic) $this->setting->setItem('system.' . $settingKey, $menu);
-
-        $this->loadModel('score')->create('ajax', 'customMenu');
-    }
-
-    /**
      * 获取必填字段。
      * Get required fields by config.
      *

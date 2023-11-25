@@ -108,15 +108,6 @@ class customTest
         return $objects;
     }
 
-    public function saveCustomMenuTest($menu, $module, $method = '')
-    {
-        $objects = $this->objectModel->saveCustomMenu($menu, $module, $method);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * 获取必填字段。
      * Test get required fields.
