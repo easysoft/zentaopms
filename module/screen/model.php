@@ -768,11 +768,14 @@ class screenModel extends model
     /**
      * Get system options.
      *
-     * @param string $type
+     * @param  string $type
+     * @param  string $object
+     * @param  string $field
+     * @param  string $sql
      * @access public
      * @return array
      */
-    public function getSysOptions($type, $object = '', $field = '', $sql = '')
+    public function getSysOptions(string $type, string $object = '', string $field = '', string $sql = ''): array
     {
         $options = array();
         switch($type)
@@ -823,11 +826,11 @@ class screenModel extends model
                         ->orderBy("tt.`$field` desc")
                         ->fetchPairs();
                 }
+                break;
 
         }
 
-        $options = array_filter($options);
-        return $options;
+        return array_filter($options);
     }
 
     /**
