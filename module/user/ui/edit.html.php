@@ -105,7 +105,7 @@ formPanel
         ),
         formGroup
         (
-            $user->type == 'inside' ? null : setClass('hidden'),
+            $user->type == 'inside' ? setClass('hidden') : null,
             set::width('1/2'),
             set::label($lang->user->company),
             inputGroup
