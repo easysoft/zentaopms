@@ -318,12 +318,15 @@ class userModel extends model
     {
         $this->dao->begin();
 
-        if($user->type == 'outside' && $user->new) $user->company = $this->createCompany($user->newCompany);
-
-        if($user->type == 'outside') $this->config->user->create->requiredFields = trim(str_replace(array(',dept,', ',commiter,'), '', ',' . $this->config->user->create->requiredFields . ','), ',');
+        $requiredFields = $this->config->user->create->requiredFields;
+        if($user->type == 'outside')
+        {
+            if($user->new) $user->company = $this->createCompany($user->newCompany);
+            $requiredFields = trim(str_replace(array(',dept,', ',commiter,'), '', ',' . $requiredFields . ','), ',');
+        }
 
         $this->dao->insert(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,verifyRand,passwordLength,passwordStrength')
-            ->batchCheck($this->config->user->create->requiredFields, 'notempty')
+            ->batchCheck($requiredFields, 'notempty')
             ->checkIF($user->account, 'account', 'unique')
             ->checkIF($user->account, 'account', 'account')
             ->checkIF($user->email, 'email', 'email')
