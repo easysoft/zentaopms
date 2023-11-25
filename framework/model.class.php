@@ -112,6 +112,19 @@ class model extends baseModel
     }
 
     /**
+     * 回滚数据库操作。
+     * Rollback database operation.
+     *
+     * @access public
+     * @return false
+     */
+    public function rollback(): bool
+    {
+        $this->dao->rollback();
+        return false;
+    }
+
+    /**
      * Build menu of a module.
      *
      * @param  string $moduleName
