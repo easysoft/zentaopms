@@ -42,7 +42,13 @@ formBatchPanel
         set::name('id'),
         set::label($lang->user->abbr->id),
         set::control('index'),
-        set::width('38px')
+        set::width('38px'),
+    ),
+    formBatchItem
+    (
+        set::name('type'),
+        set::value($type),
+        set::hidden(true)
     ),
     formBatchItem
     (
@@ -278,14 +284,9 @@ formBatchPanel
             set::name('verifyPassword'),
             set::required(true)
         )
-    ),
-    formRow
-    (
-        setClass('hidden'),
-        input(set::name('verifyRand'), set::value($rand)),
-        input(set::name('userType'), set::value($type)),
     )
 );
 
-render();
+formHidden('verifyRand', $rand);
 
+render();
