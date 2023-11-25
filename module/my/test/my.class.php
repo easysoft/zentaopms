@@ -292,4 +292,22 @@ class myTest
         if(dao::isError()) return dao::getError();
         return $tester->config->bug->search;
     }
+
+    /**
+     * 测试构建风险搜索表单。
+     * Test build risk search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildRiskSearchFormTest(int $queryID, string $actionURL): array
+    {
+        $this->objectModel->buildRiskSearchForm($queryID, $actionURL);
+
+        if(dao::isError()) return dao::getError();
+        global $tester;
+        return $tester->config->risk->search;
+    }
 }

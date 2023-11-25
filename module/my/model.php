@@ -605,6 +605,7 @@ class myModel extends model
     }
 
     /*
+     * 构建风险搜索表单。
      * Build risk search form.
      *
      * @param  int    $queryID
@@ -613,7 +614,7 @@ class myModel extends model
      * @access public
      * @return void
      */
-    public function buildRiskSearchForm($queryID, $actionURL, $type)
+    public function buildRiskSearchForm(int $queryID, string $actionURL): void
     {
         $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
@@ -632,6 +633,7 @@ class myModel extends model
 
         $this->config->risk->search['params']['project']['values'] = array('') + $projects;
 
+        if(!isset($this->config->risk->search['fields'])) $this->config->risk->search['fields'] = array();
         unset($this->config->risk->search['fields']['module']);
 
         $this->loadModel('search')->setSearchParams($this->config->risk->search);
