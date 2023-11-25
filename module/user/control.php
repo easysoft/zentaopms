@@ -534,7 +534,7 @@ class user extends control
         {
             $users = form::batchData($this->config->user->form->batchCreate)->get();
             $this->userZen->checkBeforeBatchCreate($users, $this->post->verifyPassword);
-            $userIdList = $this->user->batchCreate($users, $this->post->userType);
+            $userIdList = $this->user->batchCreate($users);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $userIdList));
