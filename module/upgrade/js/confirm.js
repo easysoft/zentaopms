@@ -13,26 +13,3 @@ $(function()
         }
     });
 })
-
-function updateProgressInterval() {
-    interval = setInterval(function ()
-    {
-        updateProgress();
-    }, 100);
-}
-
-function updateProgress()
-{
-    var url = createLink('upgrade', 'ajaxGetProgress');
-    $.ajax(
-    {
-        url:url,
-        success:function(result)
-        {
-            var progress = parseInt(result);
-            $("#progress .progress-bar").css('width', progress + '%');
-            $('.title').text(result + '%');
-            if(result >= 100) clearInterval(interval);
-        }
-    });
-}
