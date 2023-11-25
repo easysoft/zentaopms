@@ -109,6 +109,7 @@ class myTest
     }
 
     /**
+     * 测试通过搜索获取用例。
      * Get testcases by search.
      *
      * @param  int    $queryID
@@ -117,16 +118,9 @@ class myTest
      * @access public
      * @return array
      */
-    public function getTestcasesBySearchTest($queryID, $type, $orderBy)
+    public function getTestcasesBySearchTest(int $queryID, string $type, string $orderBy): array
     {
-        global $tester;
-        $recTotal = 0;
-        $recPerPage = 20;
-        $pageID = 0;
-        $tester->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $objects = $this->objectModel->getTestcasesBySearch($query, $type, $orderBy, $pager);
+        $objects = $this->objectModel->getTestcasesBySearch($queryID, $type, $orderBy, null);
 
         if(dao::isError()) return dao::getError();
 

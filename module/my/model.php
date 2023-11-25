@@ -415,6 +415,7 @@ class myModel extends model
     }
 
     /**
+     * 通过搜索获取用例。
      * Get testcases by search.
      *
      * @param  int    $queryID
@@ -424,7 +425,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getTestcasesBySearch($queryID, $type, $orderBy, $pager)
+    public function getTestcasesBySearch(int $queryID, string $type, string $orderBy, string $pager): array
     {
         $queryName = $type == 'contribute' ? 'contributeTestcaseQuery' : 'workTestcaseQuery';
         $queryForm = $type == 'openedbyme' ? 'contributeTestcaseForm' : 'workTestcaseForm';
@@ -443,19 +444,20 @@ class myModel extends model
         }
         else
         {
-            if($this->session->$queryName  == false) $this->session->set($queryName, ' 1 = 1');
+            if($this->session->{$queryName} == false) $this->session->set($queryName, ' 1 = 1');
         }
 
-        $myTestcaseQuery = $this->session->$queryName;
+        $myTestcaseQuery = $this->session->{$queryName};
         $myTestcaseQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $myTestcaseQuery);
-
         if($type == 'contribute')
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')
                 ->where($myTestcaseQuery)
                 ->andWhere('t1.openedBy')->eq($this->app->user->account)
                 ->andWhere('t1.deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll('id');
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
         }
         else
         {
@@ -464,7 +466,9 @@ class myModel extends model
                 ->where($myTestcaseQuery)
                 ->andWhere('t2.assignedTo')->eq($this->app->user->account)
                 ->andWhere('t1.deleted')->eq(0)
-                ->orderBy($orderBy)->page($pager)->fetchAll('id');
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
         }
         return $cases;
     }

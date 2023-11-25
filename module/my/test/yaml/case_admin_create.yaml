@@ -1,0 +1,7 @@
+title: zt_case
+desc: case data.
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: openedBy
+    range: admin,test1
