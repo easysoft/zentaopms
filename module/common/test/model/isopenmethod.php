@@ -5,7 +5,7 @@ su('admin');
 
 /**
 
-title=测试 commonModel->syncExecutionStatus();
+title=测试 commonModel->isOpenMethod();
 timeout=0
 cid=1
 

@@ -405,7 +405,7 @@ class commonModel extends model
      * @access public
      * @return mixed
      */
-    public function deny($module, $method, $reload = true)
+    public function deny(string $module, string $method, bool $reload = true)
     {
         if($reload)
         {
