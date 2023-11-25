@@ -757,4 +757,22 @@ class customTest
     {
         return customModel::getFeatureMenu($module, $method);
     }
+
+    /**
+     * 将查询条件合并到筛选标签中。
+     * Merge shortcut query in featureBar.
+     *
+     * @param  string     $module
+     * @param  string     $method
+     * @static
+     * @access public
+     * @return array|null
+     */
+    public static function mergeFeatureBarTest(string $module, string $method): array|null
+    {
+        global $lang;
+        customModel::mergeFeatureBar($module, $method);
+
+        return isset($lang->$module->featureBar[$method]) ? $lang->$module->featureBar[$method] : null;
+    }
 }
