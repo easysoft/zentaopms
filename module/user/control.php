@@ -485,10 +485,11 @@ class user extends control
      * Create a user.
      *
      * @param  int    $deptID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function create(int $deptID = 0)
+    public function create(int $deptID = 0, $type = 'inside')
     {
         if(!empty($_POST))
         {
@@ -513,6 +514,7 @@ class user extends control
         $this->view->rand      = $this->user->updateSessionRandom();
         $this->view->visions   = $this->user->getVisionList();
         $this->view->deptID    = $deptID;
+        $this->view->type      = $type;
 
         $this->display();
     }
