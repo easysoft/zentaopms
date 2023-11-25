@@ -1282,7 +1282,7 @@ class metricModel extends model
         return $options;
     }
 
-    public function getTimeOptions($header, $datas, $type)
+    public function getTimeOptions($header, $data, $type)
     {
         $headLength = count($header);
 
@@ -1297,7 +1297,7 @@ class metricModel extends model
             $y = $header[1]['name'];
         }
 
-        usort($datas, function($a, $b) use ($x)
+        usort($data, function($a, $b) use ($x)
         {
             $keyA = $a->$x;
             $keyB = $b->$x;
@@ -1307,10 +1307,15 @@ class metricModel extends model
             return $keyA > $keyB ? -1 : 1;
         });
 
-        $xAxis = array('type' => 'category', 'data' => array_unique(array_column($datas, $x)));
+        $xTime = array_column($data, $x);
+        foreach($xTime as $key => $time)
+        {
+            $xTime[$key] = substr($time, 0, 10);
+        }
+        $xAxis = array('type' => 'category', 'data' => $xTime);
         $yAxis = array('type' => 'value');
 
-        $series = array('type' => $type, 'data' => array_column($datas, $y));
+        $series = array('type' => $type, 'data' => array_column($data, $y));
         $legend = $this->getEchartLegend($series);
 
         $options = array();
