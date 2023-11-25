@@ -192,7 +192,13 @@ js::set('data', json_encode($tasks));
   <div class="side-col" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
+      <?php if(!$moduleTree):?>
+      <hr class="space">
+      <div class="text-center text-muted"><?php echo $lang->task->noModule;?></div>
+      <hr class="space">
+      <?php else:?>
       <?php echo $moduleTree;?>
+      <?php endif;?>
       <div class="text-center">
         <?php common::printLink('tree', 'browsetask', "rootID=$executionID&productID=0", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
