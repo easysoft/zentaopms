@@ -640,16 +640,17 @@ class myModel extends model
     }
 
     /**
+     * 通过搜索获取风险。
      * Get risks by search.
      *
      * @param  int    $queryID
      * @param  string $type
      * @param  string $orderBy
-     * @param  int    $pager
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getRisksBySearch($queryID, $type, $orderBy, $pager)
+    public function getRisksBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
     {
         $queryName = $type == 'contribute' ? 'contributeRiskQuery' : 'workRiskQuery';
         if($queryID && $queryID != 'myQueryID')
@@ -667,10 +668,10 @@ class myModel extends model
         }
         else
         {
-            if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
+            if($this->session->{$queryName} == false) $this->session->set($queryName, ' 1 = 1');
         }
 
-        $riskQuery = $this->session->$queryName;
+        $riskQuery = $this->session->{$queryName};
 
         if($type == 'contribute')
         {
@@ -696,7 +697,6 @@ class myModel extends model
                 ->page($pager)
                 ->fetchAll('id');
         }
-
         return $risks;
     }
 

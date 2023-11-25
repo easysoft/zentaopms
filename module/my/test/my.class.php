@@ -310,4 +310,23 @@ class myTest
         global $tester;
         return $tester->config->risk->search;
     }
+
+    /**
+     * 通过搜索获取风险。
+     * Get risks by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getRisksBySearchTest(int $queryID, string $type, string $orderBy): array
+    {
+        $objects = $this->objectModel->getRisksBySearch($queryID, $type, $orderBy , null);
+
+        if(dao::isError()) return dao::getError();
+
+        return array_keys($objects);
+    }
 }
