@@ -30,7 +30,7 @@ class admin extends control
         /* 处理社区登记。*/
         /* Process community registration. */
         $community = zget($this->config->global, 'community', '');
-        if(!$community or $community == 'na')
+        if(!$community || $community == 'na')
         {
             $this->view->bind    = false;
             $this->view->ignore  = $community == 'na';
@@ -457,9 +457,9 @@ class admin extends control
                 if($mysqlVersion < 5.6) continue;
             }
 
-            if($thisTable and empty($nextTable)) $nextTable = $table;
+            if($thisTable && empty($nextTable)) $nextTable = $table;
             if(empty($thisTable)) $thisTable = $table;
-            if($thisTable and $nextTable) break;
+            if($thisTable && $nextTable) break;
         }
 
         if(empty($thisTable))
@@ -476,7 +476,7 @@ class admin extends control
             foreach($dbProcesses as $dbProcess)
             {
                 if($dbProcess->db != $this->config->db->name) continue;
-                if(!empty($dbProcess->Info) and strpos($dbProcess->Info, " {$thisTable} ") !== false)
+                if(!empty($dbProcess->Info) && strpos($dbProcess->Info, " {$thisTable} ") !== false)
                 {
                     $response['message'] = sprintf($this->lang->admin->changingTable, $thisTable);
                     return $this->send($response);
@@ -520,7 +520,7 @@ class admin extends control
         $data = array();
         foreach($this->lang->admin->menuList as $menuKey => $menuGroup)
         {
-            if($this->config->vision == 'lite' and !in_array($menuKey, $this->config->admin->liteMenuList)) continue;
+            if($this->config->vision == 'lite' && !in_array($menuKey, $this->config->admin->liteMenuList)) continue;
             $data[] = array(
                 'id'        => $menuKey,
                 'name'      => $menuKey,
