@@ -318,7 +318,7 @@ class userModel extends model
     {
         $this->dao->begin();
 
-        if(!empty($user->new)) $user->company = $this->createCompany($user->newCompany);
+        if($user->type == 'outside' && $user->new) $user->company = $this->createCompany($user->newCompany);
 
         if($user->type == 'outside') $this->config->user->create->requiredFields = trim(str_replace(array(',dept,', ',commiter,'), '', ',' . $this->config->user->create->requiredFields . ','), ',');
 
@@ -453,7 +453,7 @@ class userModel extends model
     {
         $this->dao->begin();
 
-        if(!empty($user->new)) $user->company = $this->createCompany($user->newCompany);
+        if($user->type == 'outside' && $user->new) $user->company = $this->createCompany($user->newCompany);
 
         $requiredFields = array();
         foreach(explode(',', $this->config->user->edit->requiredFields) as $field)
