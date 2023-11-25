@@ -8,7 +8,9 @@
  */
 function batchChangeType(event)
 {
+    const type     = $(event.target).val();
     const isInside = type == 'inside';
+    $('input[data-name="type"]').val(type);
     $('[data-name="companyItem"]').toggleClass('hidden', isInside);
     $('[data-name="dept"], [data-name="join"]').toggleClass('hidden', !isInside);
     $('#userType').val(type);
