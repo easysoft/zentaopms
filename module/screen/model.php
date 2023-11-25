@@ -163,7 +163,7 @@ class screenModel extends model
         array_map(function($component)use(&$list){
             !empty($component->isGroup) ? array_merge($list, $component->groupList) : array_push($list, $component);
         }, array_filter($scheme->componentList));
-        foreach($list as $component) $component = $this->getLatestChart($component);
+        foreach($list as $component) $this->getLatestChart($component);
 
         return $scheme;
     }
@@ -174,93 +174,80 @@ class screenModel extends model
      *
      * @param  object $component
      * @access public
-     * @return object
+     * @return void
      */
-    public function getLatestChart(object $component): object
+    public function getLatestChart(object $component): void
     {
-        if(isset($component->key) and $component->key === 'Select') return $component;
+        if(isset($component->key) && $component->key === 'Select') return;
         $chartID = zget($component->chartConfig, 'sourceID', '');
-        if(!$chartID) return $component;
+        if(!$chartID) return;
 
         $type  = $component->chartConfig->package == 'Tables' ? 'pivot' : 'chart';
         $table = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
         $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
 
-        return $this->genComponentData($chart, $type, $component);
+        $this->genComponentData($chart, $type, $component);
     }
 
     /**
+     * 构建组件数据。
      * Generate a component of screen.
      *
      * @param  object $chart
      * @param  string $type
      * @param  object $component
+     * @param  string $filters
      * @access public
-     * @return object
+     * @return void
      */
-    public function genComponentData($chart, $type = 'chart', $component = null, $filters = '')
+    public function genComponentData(object $chart, string $type = 'chart', object $component = null, string $filters = ''): void
     {
         $chart = clone($chart);
-        if($type == 'pivot' and $chart)
+        if($type == 'pivot' && $chart)
         {
             $chart = $this->loadModel('pivot')->processPivot($chart);
             $chart->settings = json_encode($chart->settings);
         }
 
-        if(empty($filters) and !empty($chart->filters))
+        if(empty($filters) && !empty($chart->filters))
         {
-            if($type == 'pivot')
-            {
-                list($sql, $filters) = $this->loadModel($type)->getFilterFormat($chart->sql, json_decode($chart->filters, true));
-                $chart->sql = $sql;
-            }
-            else
-            {
-                $filters = $this->loadModel($type)->getFilterFormat(json_decode($chart->filters, true));
-            }
+            $params = array(json_decode($chart->filters, true));
+            if($type == 'pivot') array_unshift($params, $chart->sql);
+            $result = call_user_func_array(array($this->loadModel($type), 'getFilterFormat'), $params);
+
+            list($chart->sql, $filters) = isset($result[0]) ? $result : array($chart->sql, $result);
         }
 
-        list($component, $typeChanged) = $this->initComponent($chart, $type, $component);
+        list($component) = $this->initComponent($chart, $type, $component);
+        $this->completeComponent($chart, $type, $filters, $component);
+    }
 
+    /**
+     * 补充组件信息。
+     * Complete component info.
+     *
+     * @param  object $chart
+     * @param  string $type
+     * @param  array  $filters
+     * @param  object $component
+     * @access public
+     * @return void
+     */
+    public function completeComponent(object $chart, string $type, array $filters, object $component): void
+    {
         if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
         {
-            $component->option = new stdclass();
-            if($type == 'chart')
-            {
-                $component->option->title = new stdclass();
-                $component->option->title->text = sprintf($this->lang->screen->noChartData, $chart->name);
-                $component->option->title->left = 'center';
-                $component->option->title->top  = '50%';
-
-                $component->option->xAxis = new stdclass();
-                $component->option->xAxis->show = false;
-                $component->option->yAxis = new stdclass();
-                $component->option->yAxis->show = false;
-            }
-            elseif($type == 'pivot')
-            {
-                $component->option->ineffective = 1;
-                $component->option->header      = array();
-                $component->option->align       = array('center');
-                $component->option->headerBGC   = 'transparent';
-                $component->option->oddRowBGC   = 'transparent';
-                $component->option->evenRowBGC  = 'transparent';
-                $component->option->columnWidth = array();
-                $component->option->rowspan     = array();
-                $component->option->colspan     = array();
-                $component->option->rowNum      = 1;
-                $component->option->dataset     = array(array(sprintf($this->lang->screen->noPivotData, $chart->name)));
-            }
-            return $component;
+            $this->completeComponentShowInfo($chart, $component, $type);
+            return;
         }
 
-        $component = $this->getChartOption($chart, $component, $filters);
+        $this->getChartOption($chart, $component, $filters);
 
         $component->chartConfig->dataset  = $component->option->dataset;
         $component->chartConfig->fields   = json_decode($chart->fields);
         $component->chartConfig->filters  = $this->getChartFilters($chart);
 
-        if($type == 'chart' && (!$chart->builtin or in_array($chart->id, $this->config->screen->builtinChart)))
+        if($type == 'chart' && (!$chart->builtin || in_array($chart->id, $this->config->screen->builtinChart)))
         {
             if(!empty($component->option->series))
             {
@@ -270,20 +257,77 @@ class screenModel extends model
                     $component->option->radar->indicator = $component->option->dataset->radarIndicator;
                     $defaultSeries[0]->data = $component->option->dataset->seriesData;
 
-                    $legends = array();
-                    foreach($component->option->dataset->seriesData as $seriesData) $legends[] = $seriesData->name;
-                    $component->option->legend->data = $legends;
+                    $component->option->legend->data = array_map(function($item){return $item->name;}, $component->option->dataset->seriesData);
                 }
                 else
                 {
-                    $series = array();
-                    for($i = 1; $i < count($component->option->dataset->dimensions); $i ++) $series[] = $defaultSeries[0];
-                    $component->option->series = $series;
+                    $component->option->series = array_pad([], count($component->option->dataset->dimensions), $defaultSeries[0]);
                 }
             }
         }
+    }
 
-        return $component;
+    /**
+     * 补充组件展示信息。
+     * Complete component chart info.
+     *
+     * @param  object $chart
+     * @param  object $component
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    private function completeComponentShowInfo(object $chart, object $component, string $type): void
+    {
+        $component->option = new stdclass();
+        if($type == 'chart') $this->completeChartShowInfo($chart, $component);
+        if($type == 'pivot') $this->completePivotShowInfo($chart, $component);
+    }
+
+    /**
+     * 补充图表展示信息。
+     * Complete chart show info.
+     *
+     * @param  object $chart
+     * @param  object $component
+     * @access public
+     * @return void
+     */
+    private function completeChartShowInfo(object $chart, object $component): void
+    {
+        $component->option->title = new stdclass();
+        $component->option->title->text = sprintf($this->lang->screen->noChartData, $chart->name);
+        $component->option->title->left = 'center';
+        $component->option->title->top  = '50%';
+
+        $component->option->xAxis = new stdclass();
+        $component->option->xAxis->show = false;
+        $component->option->yAxis = new stdclass();
+        $component->option->yAxis->show = false;
+    }
+
+    /**
+     * 补充透视表展示信息。
+     * Complete pivot show info.
+     *
+     * @param  object $chart
+     * @param  object $component
+     * @access public
+     * @return void
+     */
+    private function completePivotShowInfo(object $chart, object $component): void
+    {
+        $component->option->ineffective = 1;
+        $component->option->header      = array();
+        $component->option->align       = array('center');
+        $component->option->headerBGC   = 'transparent';
+        $component->option->oddRowBGC   = 'transparent';
+        $component->option->evenRowBGC  = 'transparent';
+        $component->option->columnWidth = array();
+        $component->option->rowspan     = array();
+        $component->option->colspan     = array();
+        $component->option->rowNum      = 1;
+        $component->option->dataset     = array(array(sprintf($this->lang->screen->noPivotData, $chart->name)));
     }
 
     /**
