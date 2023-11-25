@@ -697,7 +697,7 @@ window.genLineBarOption = function(chartType, datas)
         series: datas.series,
     };
 
-    var dataLength = datas.series.data.length;
+    var dataLength = Array.isArray(datas.series) ? datas.series[0].data.length : datas.series.data.length;
     if(dataLength > 15) option.dataZoom = window.genDataZoom(dataLength, 15, chartType == 'barY' ? 'y' : 'x');
 
     return option;
