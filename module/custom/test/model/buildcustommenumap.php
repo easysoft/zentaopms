@@ -16,6 +16,6 @@ zdTable('user')->gen(5);
 su('admin');
 
 $customTester  = new customTest();
-r($customTester->buildCustomMenuMapTest()) && p() && e('0'); // 获取自定义菜单
+r($customTester->buildCustomMenuMapTest()) && p('main:name') && e('main'); // 获取自定义菜单
 
 zdTable('lang')->gen(0);
