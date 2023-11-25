@@ -403,151 +403,49 @@ class userModel extends model
     }
 
     /**
+     * 批量创建用户。
      * Batch create users.
      *
-     * @param  int    $users
+     * @param  array  $users
+     * @param  string $type     inside 内部人员|outside 外部人员
      * @access public
-     * @return array
+     * @return bool|array
      */
-    public function batchCreate()
+    public function batchCreate(array $users, string $type): bool|array
     {
-        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
+        $this->loadModel('action');
 
-        $users    = fixer::input('post')->get();
-        $data     = array();
-        $accounts = array();
-        for($i = 1; $i < $this->config->user->batchCreate; $i++)
-        {
-            if(!empty($users->account[$i])) $users->account[$i] = trim($users->account[$i]);
-            if($users->account[$i] != '')
-            {
-                if(strtolower($users->account[$i]) == 'guest') dao::$errors["account{$i}"][] = $this->lang->user->error->reserved;
-                $account = $this->dao->select('account')->from(TABLE_USER)->where('account')->eq($users->account[$i])->fetch();
-                if($account) dao::$errors["account[{$i}]"][] = $this->lang->user->error->accountDupl;
-                if(in_array($users->account[$i], $accounts)) dao::$errors["account[{$i}]"][] = $this->lang->user->error->accountDupl;
-                if(!validater::checkAccount($users->account[$i])) dao::$errors["account[{$i}]"][] = $this->lang->user->error->account;
+        $this->dao->begin();
 
-                if($users->email[$i] and !validater::checkEmail($users->email[$i])) dao::$errors["email[{$i}]"][] = $this->lang->user->error->mail;
-                $users->password[$i] = $this->post->password[$i];
-                if(!validater::checkReg($users->password[$i], '|(.){6,}|')) dao::$errors["password[{$i}]"][] = $this->lang->user->error->password;
-
-                /* Check weak and common weak password. */
-                if(isset($this->config->safe->mode) and $this->computePasswordStrength($users->password[$i]) < $this->config->safe->mode) dao::$errors["password[{$i}]"][] = $this->lang->user->error->weakPassword;
-                if(!empty($this->config->safe->changeWeak))
-                {
-                    if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
-                    if(strpos(",{$this->config->safe->weak},", ",{$users->password[$i]},") !== false) dao::$errors["password[{$i}]"][] = sprintf($this->lang->user->error->dangerPassword, $this->config->safe->weak);
-                }
-
-                $data[$i] = new stdclass();
-                if($users->userType == 'outside')
-                {
-                    $data[$i]->company    = isset($users->new[$i]) ? $users->newCompany[$i] : $users->company[$i];
-                    $data[$i]->newCompany = isset($users->new[$i]) ? true : false;
-                    $data[$i]->type       = 'outside';
-                    $data[$i]->dept       = 0;
-                    $data[$i]->join       = null;
-                }
-                else
-                {
-                    $data[$i]->dept = $users->dept[$i];
-                    $data[$i]->join = empty($users->join[$i]) ? null : ($users->join[$i]);
-                    $data[$i]->type = 'inside';
-                }
-                $data[$i]->account  = $users->account[$i];
-                $data[$i]->realname = $users->realname[$i];
-                $data[$i]->role     = $users->role[$i];
-                $data[$i]->group    = $users->group[$i];
-                $data[$i]->email    = $users->email[$i];
-                $data[$i]->gender   = $users->gender[$i];
-                $data[$i]->password = md5(trim($users->password[$i]));
-                $data[$i]->commiter = $users->commiter[$i];
-                $data[$i]->skype    = $users->skype[$i];
-                $data[$i]->qq       = $users->qq[$i];
-                $data[$i]->dingding = $users->dingding[$i];
-                $data[$i]->weixin   = $users->weixin[$i];
-                $data[$i]->mobile   = $users->mobile[$i];
-                $data[$i]->slack    = $users->slack[$i];
-                $data[$i]->whatsapp = $users->whatsapp[$i];
-                $data[$i]->phone    = $users->phone[$i];
-                $data[$i]->address  = $users->address[$i];
-                $data[$i]->zipcode  = $users->zipcode[$i];
-                $data[$i]->visions  = is_array($users->visions[$i]) ? join(',', $users->visions[$i]) : $users->visions[$i];
-
-                /* Check required fields. */
-                foreach(explode(',', $this->config->user->create->requiredFields) as $field)
-                {
-                    $field = trim($field);
-                    if(empty($field)) continue;
-
-                    if(!isset($data[$i]->$field)) continue;
-                    if(!empty($data[$i]->$field)) continue;
-
-                    dao::$errors["{$field}[{$i}]"][] = sprintf($this->lang->error->notempty, $this->lang->user->$field);
-                }
-
-                /* Change for append field, such as feedback. */
-                if(!empty($this->config->user->batchAppendFields))
-                {
-                    $appendFields = explode(',', $this->config->user->batchAppendFields);
-                    foreach($appendFields as $appendField)
-                    {
-                        if(empty($appendField)) continue;
-                        if(!isset($users->$appendField)) continue;
-                        $fieldList = $users->$appendField;
-                        $data[$i]->$appendField = $fieldList[$i];
-                    }
-                }
-
-                $accounts[$i] = $data[$i]->account;
-            }
-        }
-        if(dao::isError()) return false;
-
-        $this->loadModel('mail');
         $userIdList = array();
-        foreach($data as $user)
+        foreach($users as $user)
         {
-            if($user->type == 'outside' and $user->newCompany)
-            {
-                $company = new stdClass();
-                $company->name = $user->company;
-                $this->dao->insert(TABLE_COMPANY)->data($company)->exec();
+            if(empty($user->account)) continue;
 
-                $user->company = $this->dao->lastInsertID();
-            }
-            unset($user->newCompany);
+            $user->type     = $type;
+            $user->password = md5($user->password);
 
-            if(is_array($user->group))
-            {
-                foreach($user->group as $group)
-                {
-                    $groups = new stdClass();
-                    $groups->account = $user->account;
-                    $groups->group   = $group;
-                    $groups->project = '';
-                    $this->dao->replace(TABLE_USERGROUP)->data($groups)->exec();
-                }
-            }
-            unset($user->group);
-            $this->dao->insert(TABLE_USER)->data($user)->autoCheck()
-                ->checkIF($user->email  != '', 'email',  'email')
-                ->checkIF($user->phone  != '', 'phone',  'phone')
-                ->checkIF($user->mobile != '', 'mobile', 'mobile')
-                ->exec();
-            if(dao::isError()) return false;
+            if($user->type == 'outside' && $user->new) $user->company = $this->createCompany($user->newCompany);
 
-            /* Fix bug #2941 */
-            $userID       = $this->dao->lastInsertID();
-            $userIdList[] = $userID;
-            $this->loadModel('action')->create('user', $userID, 'Created');
+            $this->dao->insert(TABLE_USER)->data($user, 'new,newCompany,group')->exec();
+            if(dao::isError()) return $this->rollback();
 
-            if(dao::isError()) return false;
+            $userID = $this->dao->lastInsertID();
 
+            /* 创建用户组，更新用户视图并记录日志。*/
+            /* Create user group, update user view and save log. */
+            $groups = array_filter($user->group);
+            if($groups) $this->createUserGroup($groups, $user->account);
             $this->computeUserView($user->account);
-            if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
+            $this->action->create('user', $userID, 'Created');
 
+            if(dao::isError()) return $this->rollback();
+
+            $userIdList[] = $userID;
         }
+
+        $this->dao->commit();
+
         return $userIdList;
     }
 
