@@ -10,12 +10,14 @@ declare(strict_types=1);
  */
 namespace zin;
 
+jsVar('roleGroup', $roleGroup);
 jsVar('passwordStrengthList', $lang->user->passwordStrengthList);
 
 formBatchPanel
 (
     set::title($lang->user->batchCreate),
     set::customFields(array('list' => $listFields, 'show' => $showFields, 'key' => 'batchCreateFields')),
+    on::change('input[name^=role]', 'batchChangeRole'),
     on::change('[data-name="new"]', 'batchToggleNew'),
     on::keyup('[data-name="password"]', 'batchTogglePasswordStrength'),
     on::click('button[type=submit]', 'encryptPassword'),
