@@ -496,7 +496,36 @@ class commonModel extends model
     }
 
     /**
-     * 获取顶部一级导航。
+     * 创建菜单项链接。
+     * Create menu item link
+     *
+     * @param object $menuItem
+     *
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function createMenuLink(object $menuItem): string
+    {
+        $link = $menuItem->link;
+        if(is_array($menuItem->link))
+        {
+            $vars = isset($menuItem->link['vars']) ? $menuItem->link['vars'] : '';
+            if(isset($menuItem->tutorial) and $menuItem->tutorial)
+            {
+                if(!empty($vars)) $vars = helper::safe64Encode($vars);
+                $link = helper::createLink('tutorial', 'wizard', "module={$menuItem->link['module']}&method={$menuItem->link['method']}&params=$vars");
+            }
+            else
+            {
+                $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars);
+            }
+        }
+        return $link;
+    }
+
+    /**
+     * 获取左侧一级导航。
      * Get main nav items list
      *
      * @param  string $moduleName
