@@ -485,7 +485,7 @@ class metricZen extends metric
         }
         elseif($headerLength == 3)
         {
-            if(in_array('scope', array_column($header, 'name')))
+            if($this->metric->isObjectMetric($header))
             {
                 return $this->getObjectTable($header, $data);
             }
