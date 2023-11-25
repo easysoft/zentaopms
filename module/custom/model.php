@@ -466,13 +466,15 @@ class customModel extends model
     }
 
     /**
-     * Get feature menu
-     * @param  string $module
-     * @param  string $method
+     * 获取模块的筛选标签。
+     * Get feature menu.
+     *
+     * @param  string     $module
+     * @param  string     $method
      * @access public
-     * @return array
+     * @return array|null
      */
-    public static function getFeatureMenu($module, $method)
+    public static function getFeatureMenu(string $module, string $method): array|null
     {
         global $app, $lang, $config;
         $app->loadLang($module);
