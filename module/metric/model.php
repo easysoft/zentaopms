@@ -1202,7 +1202,7 @@ class metricModel extends model
      * @access public
      * @return bool
      */
-    public function isObjectMetric($header)
+    public function isObjectMetric(array $header): bool
     {
         return in_array('scope', array_column($header, 'name'));
     }
@@ -1211,9 +1211,9 @@ class metricModel extends model
      * 获取一个echarts的配置项。
      * Get options of echarts by head and data.
      *
-     * @param  array    $head 表头
-     * @param  array    $data 数据
-     * @param  string   $chartType 图表类型 barX|barY|line|pie
+     * @param  array       $head 表头
+     * @param  array       $data 数据
+     * @param  string      $chartType 图表类型 barX|barY|line|pie
      * @access public
      * @return array|false
      */
@@ -1221,7 +1221,7 @@ class metricModel extends model
     {
         if(!$header || !$data) return false;
         $type = in_array($chartType, array('barX', 'barY')) ? 'bar' : $chartType;
-        //if($chartType == 'pie') return $this->getPieEchartsOptions($head, $datas);
+        if($type == 'pie') return $this->getPieEchartsOptions($header, $data);
 
         $headLength = count($header);
         if($headLength == 2)
@@ -1245,7 +1245,16 @@ class metricModel extends model
         }
     }
 
-    public function getObjectOptions($data, $type)
+    /**
+     * 获取一个 对象属性度量的 echart options。
+     * Get options of echarts by data.
+     *
+     * @param  array  $data 数据
+     * @param  string $type 类型 line|bar
+     * @access public
+     * @return array
+     */
+    public function getObjectOptions(array $data, string $type): array
     {
         $dateField = !isset(current($data)->dateString) ? 'calcTime' : 'dateString';
         usort($data, function($a, $b) use ($dateField)
@@ -1296,20 +1305,18 @@ class metricModel extends model
         return $options;
     }
 
-    public function getTimeOptions($header, $data, $type)
+    /**
+     * 获取一个 时间属性度量的 echart options。
+     * Get options of echarts by head and data.
+     *
+     * @param  array  $head 表头
+     * @param  string $type 类型 line|bar
+     * @access public
+     * @return array
+     */
+    public function getTimeOptions(array $header, array $data, string $type): array
     {
-        $headLength = count($header);
-
-        if($headLength == 2)
-        {
-            $x = $header[1]['name'];
-            $y = $header[0]['name'];
-        }
-        elseif($headLength == 3)
-        {
-            $x = $header[0]['name'];
-            $y = $header[1]['name'];
-        }
+        list($x, $y) = $this->getEchartXY($header);
 
         usort($data, function($a, $b) use ($x)
         {
@@ -1345,17 +1352,14 @@ class metricModel extends model
      * 获取一个echarts pie的配置项。
      * Get options of echarts pie by head and data.
      *
-     * @param  array    $head 表头
-     * @param  array    $datas 数据
+     * @param  array  $head  表头
+     * @param  array  $datas 数据
      * @access public
-     * @return array|false
+     * @return array
      */
-    public function getPieEchartsOptions(array $head, array $datas): array|false
+    public function getPieEchartsOptions(array $header, array $datas): array
     {
-        if(!$head || !$datas) return false;
-
-        list($x, $y) = $this->getEchartXY($head);
-        if(!$x || !$y) return false;
+        list($x, $y) = $this->getEchartXY($header);
 
         $seriesData = array();
         foreach($datas as $data)
@@ -1369,10 +1373,44 @@ class metricModel extends model
         return $options;
     }
 
-    public function getChartTypeList($head)
+    /**
+     * 获取图表 x轴 和 y轴的字段。
+     * Get echart x and y field.
+     *
+     * @param  array  $header 表头
+     * @access public
+     * @return array
+     */
+    public function getEchartXY(array $header): array
+    {
+        $x = $y = '';
+        $headLength = count($header);
+        if($headLength == 2)
+        {
+            $x = $header[1]['name'];
+            $y = $header[0]['name'];
+        }
+        elseif($headLength == 3)
+        {
+            $x = $header[0]['name'];
+            $y = $header[1]['name'];
+        }
+
+        return array($x, $y);
+    }
+
+    /**
+     * 获取一个图表可选的类型。
+     * Get a echart typeList.
+     *
+     * @param  array  $header 表头
+     * @access public
+     * @return array
+     */
+    public function getChartTypeList(array $header): array
     {
         $chartTypeList = $this->lang->metric->chartTypeList;
-        if($this->isObjectMetric($head)) unset($chartTypeList['pie']);
+        if($this->isObjectMetric($header)) unset($chartTypeList['pie']);
 
         return $chartTypeList;
     }
