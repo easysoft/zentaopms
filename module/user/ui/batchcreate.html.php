@@ -12,6 +12,7 @@ namespace zin;
 
 jsVar('roleGroup', $roleGroup);
 jsVar('passwordStrengthList', $lang->user->passwordStrengthList);
+h::jsCall('$.getLib', 'md5.js', array('root' => $this->app->getWebRoot() . 'js/'));
 
 formBatchPanel
 (
