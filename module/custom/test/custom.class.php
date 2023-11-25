@@ -285,15 +285,6 @@ class customTest
         return json_decode($concept, true);
     }
 
-    public function setStoryRequirementTest()
-    {
-        $objects = $this->objectModel->setStoryRequirement();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * 获取需求概念。
      * Get UR and SR concept.

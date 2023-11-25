@@ -868,26 +868,6 @@ class customModel extends model
     }
 
     /**
-     * Set story or requirement.
-     *
-     * @access public
-     * @return void
-     */
-    public function setStoryRequirement()
-    {
-        if(!isset($_POST['storyRequirement'])) return true;
-        $this->loadModel('setting')->setItem('system.custom.storyRequirement', $this->post->storyRequirement);
-
-        $oldIndex = isset($this->config->custom->storyRequirement) ? $this->config->custom->storyRequirement : '0';
-        $newIndex = $this->post->storyRequirement;
-
-        foreach($this->config->storyCommonList as $commonList)
-        {
-            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$commonList[$oldIndex]}', '{$commonList[$newIndex]}')")->where('source')->eq('product')->exec();
-        }
-    }
-
-    /**
      * 计算启用和不启用的功能。
      * Compute the enabled and disabled features.
      *
