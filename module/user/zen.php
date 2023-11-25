@@ -24,6 +24,64 @@ class userZen extends user
     }
 
     /**
+     * 构建自定义字段。
+     * Prepare custom fields.
+     *
+     * @param  string $method
+     * @param  string $requiredMethod
+     * @access public
+     * @return void
+     */
+    public function prepareCustomFields(string $method, string $requiredMethod): void
+    {
+        $availableField = 'available' . ucfirst($method) . 'Fields';
+        $showField      = $method . 'Fields';
+
+        /* 获取所有的联系方式字段。*/
+        /* Get all contact fields. */
+        $allContactFields = array_keys($this->lang->user->contactFieldList);
+        /* 获取可用的联系方式字段，转为数组并去空、去重。*/
+        /* Get available contact fields, convert to array and remove empty and duplicate. */
+        $availableContactFields = array_unique(array_filter(explode(',', trim($this->config->user->contactField, ','))));
+        /* 获取不可用的联系方式字段。*/
+        /* Get unavailable contact fields. */
+        $unAvailableContactFields = array_diff($allContactFields, $availableContactFields);
+        /* 从配置文件获取所有可用字段，转为数组并去空、去重。*/
+        /* Get all available fields from config file, convert to array and remove empty and duplicate. */
+        $availableFields = array_unique(array_filter(explode(',', trim($this->config->user->$availableField, ','))));
+        /* 从可用字段中去除不可用的联系方式字段。*/
+        /* Remove unavailable contact fields from available fields. */
+        $availableFields = array_diff($availableFields, $unAvailableContactFields);
+
+        /* 获取可以显示的字段。*/
+        /* Get fields that can be displayed. */
+        $listFields = array();
+        foreach($availableFields as $field) $listFields[$field] = $this->lang->user->$field;
+
+        /* 从配置文件获取必填项字段，转为数组并去空、去重。*/
+        /* Get required fields from config file, convert to array and remove empty and duplicate. */
+        $requiredFields = array_unique(array_filter(explode(',', trim($this->config->user->$requiredMethod->requiredFields, ','))));
+        /* 从数据库中获取应该显示的字段。*/
+        /* Get fields that should be displayed from database. */
+        $showFields = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=user&section=custom&key={$showField}");
+        /* 从配置文件中获取应该显示的字段。*/
+        /* Get fields that should be displayed from config file. */
+        if(!$showFields) $showFields = $this->config->user->custom->$showField;
+        /* 把应该显示的字段转为数组并去空、去重。*/
+        /* Convert fields that should be displayed to array and remove empty and duplicate. */
+        $showFields = array_unique(array_filter(explode(',', trim($showFields, ','))));
+        /* 把应该显示的字段和必填项字段合并，确保自定义字段面板中必填项字段是被勾选中的。*/
+        /* Merge fields that should be displayed and required fields to ensure that required fields are checked in the custom field panel. */
+        $showFields = array_merge($showFields, $requiredFields);
+        /* 把应该显示的字段和可用字段取交集。*/
+        /* Get the intersection of fields that should be displayed and available fields. */
+        $showFields = array_intersect($showFields, $availableFields);
+
+        $this->view->listFields = $listFields;
+        $this->view->showFields = $showFields;
+    }
+
+    /**
      * 创建用户前的检查。
      * Check before creating a user.
      *
