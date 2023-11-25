@@ -668,4 +668,24 @@ class customTest
 
         return customModel::buildMenuItems($allMenu, $customMenuMap, $module);
     }
+
+    /**
+     * 构造菜单数据项。
+     * Build menu item.
+     *
+     * @static
+     * @access public
+     * @return object
+     */
+    public static function buildMenuItemTest(): object
+    {
+        global $config, $lang;
+
+        $flowModule = $config->global->flow . '_main';
+        $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
+        if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
+        $customMenuMap = customModel::buildCustomMenuMap($customMenu, 'main')[0];
+
+        return customModel::buildMenuItem('', $customMenuMap);
+    }
 }
