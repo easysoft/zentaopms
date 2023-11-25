@@ -589,19 +589,21 @@ class customModel extends model
     }
 
     /**
+     * 获取需求概念集合。
      * Get UR and SR pairs.
      *
      * @access public
      * @return array
      */
-    public function getURSRPairs()
+    public function getURSRPairs(): array
     {
-        $lang = $this->app->getClientLang();
+        $lang     = $this->app->getClientLang();
         $langData = $this->dao->select('`key`, `value`, `system`')->from(TABLE_LANG)
             ->where('lang')->eq($lang)
             ->andWhere('module')->eq('custom')
             ->andWhere('section')->eq('URSRList')
             ->fetchAll();
+
         if(empty($langData))
         {
             $URSR     = $this->loadModel('setting')->getURSR();
