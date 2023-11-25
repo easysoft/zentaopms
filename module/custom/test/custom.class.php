@@ -742,4 +742,19 @@ class customTest
     {
         return customModel::getMainMenu();
     }
+
+    /**
+     * 获取模块的筛选标签。
+     * Get feature menu.
+     *
+     * @param  string     $module
+     * @param  string     $method
+     * @static
+     * @access public
+     * @return array|null
+     */
+    public static function getFeatureMenuTest(string $module, string $method): array|null
+    {
+        return customModel::getFeatureMenu($module, $method);
+    }
 }
