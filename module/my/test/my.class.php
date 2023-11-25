@@ -329,4 +329,24 @@ class myTest
 
         return array_keys($objects);
     }
+
+    /**
+     * 测试构建需求搜索表单。
+     * Test build story search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildStorySearchFormTest(int $queryID, string $actionURL): array
+    {
+        global $tester;
+        $tester->app->rawModule = 'my';
+        $tester->app->rawMethod = 'story';
+        $this->objectModel->buildStorySearchForm($queryID, $actionURL);
+
+        if(dao::isError()) return dao::getError();
+        return $tester->config->product->search;
+    }
 }

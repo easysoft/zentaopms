@@ -701,15 +701,15 @@ class myModel extends model
     }
 
     /**
+     * 构建需求搜索表单。
      * Build Story search form.
      *
      * @param  int    $queryID
      * @param  string $actionURL
-     * @param  string $type
      * @access public
      * @return void
      */
-    public function buildStorySearchForm($queryID, $actionURL, $type)
+    public function buildStorySearchForm(int $queryID, string $actionURL): void
     {
         $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
