@@ -520,58 +520,37 @@ class user extends control
     }
 
     /**
+     * 批量添加用户。
      * Batch create users.
      *
      * @param  int    $deptID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function batchCreate($deptID = 0)
+    public function batchCreate(int $deptID = 0, $type = 'inside')
     {
         if(!empty($_POST))
         {
-            $userIdList = $this->user->batchCreate();
+            $users = form::batchData($this->config->user->form->batchCreate)->get();
+            $this->userZen->checkBeforeBatchCreate($users, $this->post->verifyPassword);
+            $userIdList = $this->user->batchCreate($users, $this->post->userType);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $userIdList));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('company', 'browse')));
         }
 
-        $groups = $this->dao->select('id, name, role')
-            ->from(TABLE_GROUP)
-            ->where('vision')->eq($this->config->vision)
-            ->fetchAll();
-        $groupList = array();
-        $roleGroup = array();
-        foreach($groups as $group)
-        {
-            $groupList[$group->id] = $group->name;
-            if($group->role) $roleGroup[$group->role] = $group->id;
-        }
+        $this->userZen->prepareRolesAndGroups();
+        $this->userZen->prepareCustomFields('batchCreate', 'create');
 
-        /* Set custom. */
-        foreach(explode(',', $this->config->user->availableBatchCreateFields) as $field)
-        {
-            if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $customFields[$field] = $this->lang->user->$field;
-        }
-
-        $batchCreateFields = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=user&section=custom&key=batchCreateFields");
-        if(!$batchCreateFields) $batchCreateFields = $this->config->user->custom->batchCreateFields;
-        foreach(explode(',', $batchCreateFields) as $field)
-        {
-            if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $showFields[$field] = $field;
-        }
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = join(',', $showFields);
-
-        $this->view->title      = $this->lang->user->batchCreate;
-        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
-        $this->view->deptID     = $deptID;
-        $this->view->groupList  = $groupList;
-        $this->view->roleGroup  = $roleGroup;
-        $this->view->rand       = $this->user->updateSessionRandom();
-        $this->view->visionList = $this->user->getVisionList();
-        $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
+        $this->view->title     = $this->lang->user->batchCreate;
+        $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
+        $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
+        $this->view->rand      = $this->user->updateSessionRandom();
+        $this->view->visions   = $this->user->getVisionList();
+        $this->view->deptID    = $deptID;
+        $this->view->type      = $type;
 
         $this->display();
     }
