@@ -491,24 +491,28 @@ class screenModel extends model
     }
 
     /**
+     * 获取饼图配置。
      * Get pie chart option.
      *
      * @param  object $component
      * @param  object $chart
+     * @param  array  $filters
      * @access public
-     * @return object
+     * @return void
      */
-    public function getPieChartOption($component, $chart, $filters = '')
+    public function getPieChartOption(object $component, object $chart, array $filters = array()): void
     {
         if($chart->sql)
         {
             $settings = json_decode($chart->settings, true);
-            $settings = $settings[0];
+            $settings = current($settings);
 
             $options = $this->loadModel('chart')->genPie(json_decode($chart->fields, true), $settings, $chart->sql, $filters);
+            $groupField = $settings['group'][0]['field'];
+            $metricField = $settings['metric'][0]['field'];
 
-            if($settings['group'][0]['field'] == $settings['metric'][0]['field']) $settings['group'][0]['field'] = $settings['group'][0]['field'] . '1';
-            $dimensions = array($settings['group'][0]['field'], $settings['metric'][0]['field']);
+            if($groupField == $metricField) $groupField .= '1';
+            $dimensions = array($groupField, $metricField);
             $sourceData = array();
             foreach($options['series'] as $dataList)
             {
@@ -519,7 +523,7 @@ class screenModel extends model
                     if(empty($sourceData[$fieldValue]))
                     {
                         $sourceData[$fieldValue] = new stdclass();
-                        $sourceData[$fieldValue]->{$settings['group'][0]['field']} = (string)$fieldValue;
+                        $sourceData[$fieldValue]->{$groupField} = (string)$fieldValue;
                     }
                     $sourceData[$fieldValue]->{$field} = $data['value'];
                 }
@@ -531,7 +535,7 @@ class screenModel extends model
             $component->option->dataset->source     = array_values($sourceData);
         }
 
-        return $this->setComponentDefaults($component);
+        $this->setComponentDefaults($component);
     }
 
     /**
