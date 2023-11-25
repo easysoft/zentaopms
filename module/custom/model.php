@@ -489,6 +489,7 @@ class customModel extends model
     }
 
     /**
+     * 将查询条件合并到筛选标签中。
      * Merge shortcut query in featureBar.
      *
      * @param  string $module
@@ -496,7 +497,7 @@ class customModel extends model
      * @access public
      * @return void
      */
-    public static function mergeFeatureBar($module, $method)
+    public static function mergeFeatureBar(string $module, string $method): void
     {
         global $lang, $app;
         if(!isset($lang->$module->featureBar[$method])) return;
