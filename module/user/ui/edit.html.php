@@ -263,4 +263,3 @@ formPanel
 formHidden('verifyRand', $rand);
 
 render();
-
