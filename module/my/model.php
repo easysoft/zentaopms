@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The model file of dashboard module of ZenTaoPMS.
  *
@@ -474,6 +475,7 @@ class myModel extends model
     }
 
     /**
+     * 构建任务搜索表单。
      * Build search form for task page of work.
      *
      * @param  int    $queryID
@@ -481,7 +483,7 @@ class myModel extends model
      * @access public
      * @return void
      */
-    public function buildTaskSearchForm($queryID, $actionURL)
+    public function buildTaskSearchForm(int $queryID, string $actionURL): void
     {
         $rawMethod = $this->app->rawMethod;
         $this->loadModel('execution');

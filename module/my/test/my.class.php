@@ -260,4 +260,22 @@ class myTest
         global $tester;
         return $tester->config->testcase->search;
     }
+
+    /**
+     * 测试构建任务搜索表单。
+     * Test build task search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildTaskSearchFormTest(int $queryID, string $actionURL): array
+    {
+        $this->objectModel->buildTaskSearchForm($queryID, $actionURL);
+
+        if(dao::isError()) return dao::getError();
+        global $tester;
+        return $tester->config->execution->search;
+    }
 }
