@@ -248,4 +248,22 @@ class myTest
 
         return trim($return, ',');
     }
+
+    /**
+     * 测试构建用例搜索表单。
+     * Test build testcase search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildTestcaseSearchFormTest(int $queryID, string $actionURL): array
+    {
+        $this->objectModel->buildTestcaseSearchForm($queryID, $actionURL);
+
+        if(dao::isError()) return dao::getError();
+        global $tester;
+        return $tester->config->testcase->search;
+    }
 }

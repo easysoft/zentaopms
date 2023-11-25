@@ -382,15 +382,15 @@ class myModel extends model
     }
 
     /**
+     * 构建用例搜索表单。
      * Build case search form.
      *
      * @param  int    $queryID
      * @param  string $actionURL
-     * @param  string $type
      * @access public
      * @return void
      */
-    public function buildTestCaseSearchForm($queryID, $actionURL, $type)
+    public function buildTestCaseSearchForm(int $queryID, string $actionURL): void
     {
         $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
