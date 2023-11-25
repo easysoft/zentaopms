@@ -176,18 +176,18 @@ class customTest
     }
 
     /**
+     * 获取软需概念集合。
      * Test get SR pairs.
      *
      * @access public
      * @return array
      */
-    public function getSRPairsTest()
+    public function getSRPairsTest(): array
     {
-        $objects = $this->objectModel->getSRPairs();
-
+        $SRPairs = $this->objectModel->getSRPairs();
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $SRPairs;
     }
 
     /**
