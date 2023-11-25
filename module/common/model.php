@@ -15,6 +15,7 @@ class commonModel extends model
     public static $requestErrors = array();
 
     /**
+     * 设置用户配置信息。
      * Set config of user.
      *
      * @access public
@@ -32,6 +33,7 @@ class commonModel extends model
     }
 
     /**
+     * 同步执行、项目、项目集的状态。
      * Set the status of execution, project, and program to doing.
      *
      * @param  int    $objectID
@@ -73,6 +75,7 @@ class commonModel extends model
     }
 
    /**
+     * 项目开始时，设置项目所属的项目集的状态为进行中。
      * Set the status of the program to which theproject is linked as Ongoing.
      *
      * @param  object   $project
@@ -101,6 +104,7 @@ class commonModel extends model
     }
 
     /**
+     * 执行开始时，设置执行所属的项目和项目所属的项目集的状态为进行中。
      * Set the status of the project to which the execution is linked as Ongoing.
      *
      * @param  object  $execution
@@ -131,6 +135,7 @@ class commonModel extends model
     }
 
     /**
+     * 子阶段开始时，设置子阶段所属的父阶段和项目的状态为进行中。
      * Set the status of the execution to which the sub execution is linked as Ongoing.
      *
      * @param  object $execution
@@ -161,6 +166,7 @@ class commonModel extends model
     }
 
     /**
+     * 任务开始时，设置任务所属的执行、项目和项目所属的项目集的状态为进行中。
      * Set the status of the execution to which the task is linked as Ongoing.
      *
      * @param  int    $taskID
@@ -191,6 +197,7 @@ class commonModel extends model
     }
 
     /**
+     * 设置HTTP标头。
      * Set the header info.
      *
      * @access public
@@ -230,6 +237,7 @@ class commonModel extends model
     }
 
     /**
+     * 设置公司信息。
      * Set the company.
      *
      * First, search company by the http host. If not found, search by the default domain. Last, use the first as the default.
@@ -254,6 +262,7 @@ class commonModel extends model
     }
 
     /**
+     * 设置用户信息。
      * Set the user info.
      *
      * @access public
@@ -286,6 +295,7 @@ class commonModel extends model
     }
 
     /**
+     * 设置审批配置。
      * Set approval config.
      *
      * @access public
@@ -329,6 +339,7 @@ class commonModel extends model
     }
 
     /**
+     * 从数据库加载配置信息。
      * Load configs from database and save it to config->system and config->personal.
      *
      * @access public
@@ -350,6 +361,7 @@ class commonModel extends model
     }
 
     /**
+     * 从数据库加载自定义信息。
      * Load custom lang from db.
      *
      * @access public
@@ -370,6 +382,7 @@ class commonModel extends model
     }
 
     /**
+     * 判断哪些方法不需要鉴权。
      * Judge a method of one module is open or not.
      *
      * @param  string $module
@@ -397,6 +410,7 @@ class commonModel extends model
     }
 
     /**
+     * 拒绝访问的页面。
      * Deny access.
      *
      * @param  string  $module
@@ -432,6 +446,7 @@ class commonModel extends model
     }
 
     /**
+     * 输出运行信息。
      * Print the run info.
      *
      * @param mixed $startTime  the start time.
@@ -448,6 +463,7 @@ class commonModel extends model
     }
 
     /**
+     * 格式化日期，将日期格式化为YYYY-mm-dd，将日期时间格式化为YYYY-mm-dd HH:ii:ss。
      * Format the date to YYYY-mm-dd, format the datetime to YYYY-mm-dd HH:ii:ss.
      *
      * @param  string $date
@@ -480,6 +496,7 @@ class commonModel extends model
     }
 
     /**
+     * 获取顶部一级导航。
      * Get main nav items list
      *
      * @param  string $moduleName
@@ -488,7 +505,7 @@ class commonModel extends model
      * @access public
      * @return array
      */
-    public static function getMainNavList($moduleName)
+    public static function getMainNavList(string $moduleName): array
     {
         global $lang;
         global $app;
