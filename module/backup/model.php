@@ -309,10 +309,10 @@ class backupModel extends model
      * @access public
      * @return string
      */
-    public function getBackupPath()
+    public function getBackupPath(): string
     {
         $backupPath = empty($this->config->backup->settingDir) ? $this->app->getTmpRoot() . 'backup' . DS : $this->config->backup->settingDir;
-        return rtrim(str_replace('\\', '/', $backupPath), '/') . '/';
+        return rtrim(str_replace(DS, '/', $backupPath), '/') . '/';
     }
 
     /**

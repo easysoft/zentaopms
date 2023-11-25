@@ -16,10 +16,12 @@ class backup extends control
     /**
      * __construct
      *
+     * @param  string $moduleName
+     * @param  string $methodName
      * @access public
      * @return void
      */
-    public function __construct($moduleName = '', $methodName = '')
+    public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
 
