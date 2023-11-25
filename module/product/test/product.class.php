@@ -672,6 +672,7 @@ class productTest
      */
     public function getProjectStatsByProductTest(int $productID, string $browseType = 'all', string $branch = '', bool $involved = false, string $orderBy = 'order_desc', object|null $pager = null): array
     {
+        $this->objectModel->loadModel('program')->refreshStats(true);
         $objects = $this->objectModel->getProjectStatsByProduct($productID, $browseType, $branch, $involved, $orderBy, $pager);
 
         $projects = array();
@@ -679,10 +680,10 @@ class productTest
         {
             $project = new stdclass();
             $project->id            = $object->id;
-            $project->totalConsumed = $object->hours->totalConsumed;
-            $project->totalEstimate = $object->hours->totalEstimate;
-            $project->totalLeft     = $object->hours->totalLeft;
-            $project->progress      = $object->hours->progress;
+            $project->totalConsumed = $object->consumed;
+            $project->totalEstimate = $object->estimate;
+            $project->totalLeft     = $object->left;
+            $project->progress      = $object->progress;
             $project->teamCount     = $object->teamCount;
             $projects[$project->id] = $project;
         }
