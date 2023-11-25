@@ -109,7 +109,6 @@ class adminModel extends model
         $menuKey = $this->getMenuKey();
         if(empty($menuKey)) return;
 
-        $this->setSwitcher($menuKey);
         if(isset($this->lang->admin->menuList->$menuKey))
         {
             if(isset($this->lang->admin->menuList->{$menuKey}['subMenu']))
@@ -367,35 +366,6 @@ class adminModel extends model
             }
         }
         return '';
-    }
-
-    /**
-     * Set switcher.
-     *
-     * @param  string $currentMenuKey
-     * @access public
-     * @return string
-     */
-    public function setSwitcher($currentMenuKey = 'system')
-    {
-        if(empty($currentMenuKey)) return null;
-
-        $currentMenu = $this->lang->admin->menuList->$currentMenuKey;
-        $output      = "<div class='btn-group header-btn'>";
-        $output     .= "<button class='btn pull-right btn-link' data-toggle='dropdown'>";
-        $output     .= "<span class='text'>{$currentMenu['name']}</span> ";
-        $output     .= "<span class='caret'></span></button>";
-        $output     .= "<ul class='dropdown-menu menu-hover-primary menu-active-primary' id='adminMenu'>";
-        foreach($this->lang->admin->menuList as $menuKey => $menuGroup)
-        {
-            if($this->config->vision == 'lite' && !in_array($menuKey, $this->config->admin->liteMenuList)) continue;
-            $class = $menuKey == $currentMenuKey ? "active" : '';
-            if($menuGroup['disabled']) $class .= ' disabled not-clear-menu';
-            $output .= "<li class='$class'>" . html::a($menuGroup['disabled'] ? '###' : $menuGroup['link'], "<img src='{$this->config->webRoot}static/svg/admin-{$menuKey}.svg'/>" . $menuGroup['name']) . "</li>";
-        }
-        $output .= "</ul></div>";
-
-        $this->lang->switcherMenu = $output;
     }
 
     /**
