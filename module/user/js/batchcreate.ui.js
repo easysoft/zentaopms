@@ -6,6 +6,21 @@ function batchChangeType(event)
     $('#userType').val(type);
 }
 
+/**
+ * 根据职位更改权限组。
+ * Change the permission group according to the role.
+ *
+ * @param  role   $role
+ * @access public
+ * @return void
+ */
+function batchChangeRole(event)
+{
+    const role  = $(event.target).val();
+    const group = role && roleGroup[role] ? roleGroup[role] : '';
+    $(event.target).closest('tr').find('[name^="group"]').zui('picker').$.setValue(group);
+}
+
 function batchToggleNew(event)
 {
     const $currentRow = $(event.target).closest('tr');
