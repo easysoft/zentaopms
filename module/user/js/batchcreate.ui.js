@@ -1,3 +1,11 @@
+/**
+ * 根据用户类型切换控件的显示和隐藏。
+ * Toggle the display of controls according to the user type.
+ *
+ * @param  event  event
+ * @access public
+ * @return void
+ */
 function batchChangeType(event)
 {
     const isInside = type == 'inside';
@@ -21,6 +29,14 @@ function batchChangeRole(event)
     $(event.target).closest('tr').find('[name^="group"]').zui('picker').$.setValue(group);
 }
 
+/**
+ * 切换显示选择所属公司或添加公司的输入框。
+ * Toggle display company picker or input when add or edit a user.
+ *
+ * @param  event  event
+ * @access public
+ * @return void
+ */
 function batchToggleNew(event)
 {
     const $currentRow = $(event.target).closest('tr');
@@ -29,7 +45,8 @@ function batchToggleNew(event)
 }
 
 /**
- * Toggle checkbox and check password strength.
+ * 切换显示密码强度。
+ * Toggle display password strength.
  *
  * @param  event  event
  * @access public
