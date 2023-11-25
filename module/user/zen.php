@@ -34,10 +34,10 @@ class userZen extends user
      */
     public function checkBeforeCreateOrEdit(object $user, bool $canNoPassword = false): bool
     {
-        $this->checkPassword($user, $canNoPassword);
-
         if(strtolower($user->account) == 'guest') dao::$errors['account'][] = sprintf($this->lang->user->error->reserved, $user->account);
-        if(empty($user->verifyPassword) || $user->verifyPassword != md5($this->app->user->password . $this->session->rand)) dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
+
+        $this->checkPassword($user, $canNoPassword);
+        $this->checkVerifyPassword($user->verifyPassword);
 
         return !dao::isError();
     }
@@ -86,6 +86,21 @@ class userZen extends user
             foreach(explode(',', $this->config->safe->weak) as $weak) $weaks[$weak] = md5(trim($weak));
             if(isset($weaks[substr($user->password1, 0, 32)])) dao::$errors['password1'] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
         }
+
+        return !dao::isError();
+    }
+
+    /**
+     * 检查当前用户密码是否正确。
+     * Check if the current user password is correct.
+     *
+     * @param  string $verifyPassword
+     * @access public
+     * @return bool
+     */
+    public function checkVerifyPassword(string $verifyPassword): bool
+    {
+        if(empty($verifyPassword) || $verifyPassword != md5($this->app->user->password . $this->session->rand)) dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
 
         return !dao::isError();
     }
