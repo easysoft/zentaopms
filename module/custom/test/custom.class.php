@@ -729,4 +729,17 @@ class customTest
     {
         return customModel::getModuleMenu($module);
     }
+
+    /**
+     * 获取主菜单数据。
+     * Get main menu data.
+     *
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function getMainMenuTest(): array
+    {
+        return customModel::getMainMenu();
+    }
 }
