@@ -433,7 +433,7 @@ class metricZen extends metric
             $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
 
             $row = new stdclass();
-            if(!empty($dateList))  $row = $this->metric->buildDateCell($row, $record);
+            if(!empty($dateList)) $row = $this->metric->buildDateCell($row, $record);
             if($scope != 'system')
             {
                 $row->scope   = isset($objectPairs[$record[$scope]]) ? $objectPairs[$record[$scope]] : $record[$scope];

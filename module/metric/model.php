@@ -707,7 +707,8 @@ class metricModel extends model
     {
         extract($record);
 
-        $date = $dateString = $dateType = false;
+        $date = $dateString =  false;
+        $dateType = 'day';
         if(isset($year, $month, $day))
         {
             $date     = $dateString = "{$year}-{$month}-{$day}";
@@ -1439,6 +1440,26 @@ class metricModel extends model
         if(in_array('week', $dateFields)) return 'week';
         if(in_array('month', $dateFields)) return 'month';
         if(in_array('year', $dateFields)) return 'year';
+
+        return 'day';
+    }
+
+    /**
+     * 获取度量数据的日期类型。
+     * Get date type of metric data.
+     *
+     * @param  array    $dateFields
+     * @access public
+     * @return string
+     */
+    public function getDateByDateType(string $dateType): string
+    {
+        if($dateType == 'day')   $sub = '-7 days';
+        if($dateType == 'week')  $sub = '-1 month';
+        if($dateType == 'month') $sub = '-1 year';
+        if($dateType == 'year')  $sub = '-3 years';
+
+        return date('Y-m-d', strtotime($sub));
     }
 
     /**
