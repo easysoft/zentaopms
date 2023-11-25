@@ -623,4 +623,22 @@ class customTest
         if(dao::isError()) return dao::getError();
         return $processedLang;
     }
+
+    /**
+     * 构造自定义导航数据。
+     * Build custom menu data.
+     *
+     * @access public
+     * @return array
+     */
+    public static function buildCustomMenuMapTest(): array
+    {
+        global $config;
+
+        $flowModule = $config->global->flow . '_main';
+        $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
+        if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
+
+        return customModel::buildCustomMenuMap($customMenu, 'main')[0];
+    }
 }
