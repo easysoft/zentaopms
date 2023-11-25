@@ -32,6 +32,25 @@ class userModel extends model
     }
 
     /**
+     * 根据用户 id 列表获取用户。
+     * Get users by id list.
+     *
+     * @param  array  $idList
+     * @access public
+     * @return array
+     */
+    public function getByIdList(array $idList): array
+    {
+        if(!$idList) return array();
+
+        return $this->dao->select('*')->from(TABLE_USER)
+            ->where('deleted')->eq('0')
+            ->andWhere('id')->in($idList)
+            ->orderBy('id')
+            ->fetchAll('id');
+    }
+
+    /**
      * Get inside users list of current company.
      *
      * @param  string $params
