@@ -62,18 +62,18 @@ class adminTest
     }
 
     /**
-     * Get the authorized link
+     * 测试获取有权限的链接。
+     * Test get the authorized link.
      *
-     * @param mixed $menuKey
+     * @param  string $menuKey
      * @access public
      * @return array
      */
-    public function getHasPrivLinkTest($menuKey)
+    public function getHasPrivLinkTest(string $menuKey): array
     {
         global $lang;
-        $subMenuList = $lang->admin->menuList->$menuKey['subMenu'];
-        $link        = array();
-        foreach($subMenuList as $subMenu)
+        $link = array();
+        foreach($lang->admin->menuList->$menuKey['subMenu'] as $subMenu)
         {
             $link = $this->objectModel->getHasPrivLink($subMenu);
             if(!empty($link)) return $link;

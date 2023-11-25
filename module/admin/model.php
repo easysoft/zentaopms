@@ -301,13 +301,14 @@ class adminModel extends model
     }
 
     /**
+     * 获取有权限的链接。
      * Get the authorized link.
      *
      * @param  array  $menu
      * @access public
      * @return array
      */
-    public function getHasPrivLink($menu)
+    public function getHasPrivLink(array $menu): array
     {
         $link = array();
         if(!empty($menu['link']))
