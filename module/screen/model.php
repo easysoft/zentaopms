@@ -539,67 +539,61 @@ class screenModel extends model
     }
 
     /**
+     * 获取雷达图配置。
      * Get radar chart option.
      *
      * @param  object $component
      * @param  object $chart
+     * @param  array  $filters
      * @access public
-     * @return object
+     * @return void
      */
-    public function getRadarChartOption($component, $chart, $filters = '')
+    public function getRadarChartOption(object $component, object $chart, array $filters = array()): void
     {
-        $indicator  = array();
-        $seriesData = array();
         if($chart->sql)
         {
             $settings = json_decode($chart->settings, true);
-            $langs    = json_decode($chart->langs, true);
-            $settings = $settings[0];
+            $langs    = json_decode($chart->langs,    true);
+            $settings = current($settings);
 
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
 
-            $fields         = json_decode($chart->fields, true);
+            $fields         = json_decode($chart->fields);
             $radarIndicator = array();
             $seriesData     = array();
             $max            = 0;
             $clientLang     = $this->app->getClientLang();
-            $xLabelValues   = $this->processXLabel($xLabels, $fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+            $xLabelValues   = $this->processXLabel($xLabels, $fields->{$group}->type, $fields->{$group}->object, $fields->{$group}->field);
 
             foreach($yStats as $index => $dataList)
             {
-                $field     = zget($fields, $metrics[$index]);
-                $fieldName = $field->name;
-
-                if(isset($langs[$field->field]) and !empty($langs[$field->field][$clientLang])) $fieldName = $langs[$field->field][$clientLang];
-                $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
+                $fieldConfig = zget($fields, $metrics[$index]);
+                $fieldName   = $langs[$fieldConfig->field][$clientLang] ?? $fieldConfig->name;
+                $field       = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
 
                 $seriesData[$index] = new stdclass();
                 $seriesData[$index]->name = $field;
 
-                $values = array();
-                foreach($dataList as $valueField => $value)
-                {
-                    $values[] = (float)$value;
-                    $max = $max < $value ? (float)$value : (float)$max;
-                }
+                $values = array_map(function($value){return (float)$value;}, $dataList);
+                $max = max($values);
                 $seriesData[$index]->value = $values;
             }
 
             if(!empty($dataList))
             {
-                foreach($dataList as $valueField => $value)
+                foreach(array_keys($dataList) as $valueField)
                 {
                     $indicator = new stdclass();
                     $indicator->name   = $xLabelValues[$valueField];
                     $indicator->max    = $max;
-                    $radarIndicator[]  = $indicator;;
+                    $radarIndicator[]  = $indicator;
                 }
             }
             $component->option->dataset->radarIndicator = $radarIndicator;
             $component->option->dataset->seriesData     = $seriesData;
         }
 
-        return $this->setComponentDefaults($component);
+        $this->setComponentDefaults($component);
     }
 
 
