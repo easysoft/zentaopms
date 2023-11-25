@@ -402,7 +402,7 @@ class screenModel extends model
             $dimensions   = array($settings['xaxis'][0]['field']);
             $sourceData   = array();
             $clientLang   = $this->app->getClientLang();
-            $xLabelValues = $this->processXLabel($xLabels, $fields->$group->type, $fields->$group->object, $fields->$group->field);
+            $xLabelValues = $this->processXLabel($xLabels, $fields->{$group}->type, $fields->{$group}->object, $fields->{$group}->field);
 
             foreach($yStats as $index => $dataList)
             {
@@ -430,20 +430,22 @@ class screenModel extends model
     }
 
     /**
+     * 获取折线图配置。
      * Get line chart option.
      *
      * @param  object $component
      * @param  object $chart
+     * @param  array  $filters
      * @access public
-     * @return object
+     * @return void
      */
-    public function getLineChartOption($component, $chart, $filters = '')
+    public function getLineChartOption(object $component, object $chart, array $filters = array()): void
     {
         if($chart->sql)
         {
             $settings = json_decode($chart->settings, true);
             $langs    = json_decode($chart->langs, true);
-            $settings = $settings[0];
+            $settings = current($settings);
 
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
 
@@ -451,13 +453,12 @@ class screenModel extends model
             $dimensions   = array($settings['xaxis'][0]['field']);
             $sourceData   = array();
             $clientLang   = $this->app->getClientLang();
-            $xLabelValues = $this->processXLabel($xLabels, $fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+            $xLabelValues = $this->processXLabel($xLabels, $fields->{$group}->type, $fields->{$group}->object, $fields->{$group}->field);
 
             foreach($yStats as $index => $dataList)
             {
-                $field     = zget($fields, $metrics[$index]);
-                $fieldName = $field->name;
-                if(isset($langs[$field->field]) and !empty($langs[$field->field][$clientLang])) $fieldName = $langs[$field->field][$clientLang];
+                $fieldConfig = zget($fields, $metrics[$index]);
+                $fieldName   = $langs[$fieldConfig->field][$clientLang] ?? $fieldConfig->name;
                 $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
                 $dimensions[] = $field;
 
@@ -486,7 +487,7 @@ class screenModel extends model
             $component->option->dataset->source     = array_values($sourceData);
         }
 
-        return $this->setComponentDefaults($component);
+        $this->setComponentDefaults($component);
     }
 
     /**
