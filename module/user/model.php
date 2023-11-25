@@ -501,7 +501,7 @@ class userModel extends model
             ->autoCheck()
             ->where('id')->eq($user->id)
             ->exec();
-        if(dao::isError()) $this->rollBack();
+        if(dao::isError()) return $this->rollBack();
 
         $oldUser = $this->getById($user->id, 'id');
 
@@ -512,7 +512,7 @@ class userModel extends model
         $this->loadModel('score')->create('user', 'editProfile');
         $this->loadModel('action')->create('user', $user->id, 'edited');
 
-        if(dao::isError()) $this->rollBack();
+        if(dao::isError()) return $this->rollBack();
 
         $this->dao->commit();
 
