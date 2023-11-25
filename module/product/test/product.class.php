@@ -27,6 +27,7 @@ class productTest
 
         su($user);
         $this->objectModel = $tester->loadModel('product');
+        $this->objectModel->config->global->syncProduct = '';
         $tester->app->loadClass('dao');
     }
 
