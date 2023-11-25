@@ -421,11 +421,10 @@ class userModel extends model
      * Batch create users.
      *
      * @param  array  $users
-     * @param  string $type     inside 内部人员|outside 外部人员
      * @access public
      * @return bool|array
      */
-    public function batchCreate(array $users, string $type): bool|array
+    public function batchCreate(array $users): bool|array
     {
         $this->loadModel('action');
 
@@ -436,7 +435,6 @@ class userModel extends model
         {
             if(empty($user->account)) continue;
 
-            $user->type     = $type;
             $user->password = md5($user->password);
 
             if($user->type == 'outside' && $user->new) $user->company = $this->createCompany($user->newCompany);
