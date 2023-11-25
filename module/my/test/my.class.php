@@ -74,18 +74,19 @@ class myTest
     }
 
     /**
-     * Function getActions test by my
+     * 获取我的最新动态。
+     * Test get my latest actions.
      *
      * @access public
      * @return array
      */
-    public function getActionsTest()
+    public function getActionsTest(): array
     {
         $objects = $this->objectModel->getActions();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return array_column($objects, 'id');
     }
 
     /**

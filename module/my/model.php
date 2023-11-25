@@ -284,17 +284,15 @@ class myModel extends model
     }
 
     /**
+     * 获取我的最新动态。
      * Get latest actions.
      *
      * @access public
      * @return array
      */
-    public function getActions()
+    public function getActions(): array
     {
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 50, 1);
-
-        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager);
+        $actions = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', 50);
         $users   = $this->loadModel('user')->getList();
 
         $simplifyUsers = array();
