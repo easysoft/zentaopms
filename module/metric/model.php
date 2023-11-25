@@ -1165,92 +1165,20 @@ class metricModel extends model
         return implode('-', $type);
     }
 
-    public function getEchartXY($head)
-    {
-        $x = $y = '';
-        $headLength = count($head);
-
-        if($headLength == 2)
-        {
-            $x = $head[1]['name'];
-            $y = $head[0]['name'];
-        }
-        elseif($headLength == 3)
-        {
-            $x = $head[0]['name'];
-            $y = $head[1]['name'];
-        }
-        elseif($headLength == 4)
-        {
-            $x = $head[1]['name'];
-            $y = $head[2]['name'];
-        }
-
-        return array($x, $y);
-    }
-
-    public function getEchartSeries($head, $datas, $x, $y, $type)
-    {
-        $headLength = count($head);
-        $xAxisData = array_unique(array_column($datas, $x));
-        $series = array();
-
-        if($headLength <= 3)
-        {
-            $series = array('type' => $type, 'data' => array_column($datas, $y));
-        }
-        elseif($headLength == 4)
-        {
-            $groupedData = array();
-            foreach($datas as $data)
-            {
-                $scope = $data->scope;
-                $date  = $data->date;
-                $value = $data->value;
-
-                if(!isset($groupedData[$scope])) $groupedData[$scope] = array();
-                $groupedData[$scope][] = array('value' => $value, 'date' => $date);
-            }
-
-            foreach($groupedData as $scope => $groups)
-            {
-                $seriesData = array();
-                foreach($xAxisData as $date)
-                {
-                    $value = 0;
-                    foreach($groups as $group)
-                    {
-                        if($group['date'] == $date)
-                        {
-                            $value = $group['value'];
-                            break;
-                        }
-                    }
-                    $seriesData[] = $value;
-                }
-
-                $series[] = array('type' => $type, 'name' => $scope, 'data' => $seriesData);
-            }
-        }
-
-        return $series;
-    }
-
     /**
      * 获取一个echarts的legend配置。
      * Get lengend options of echarts by head and series.
      *
-     * @param  array    $head
      * @param  array    $series
+     * @param  string   $range object|time
      * @access public
      * @return array
      */
-    public function getEchartLegend($head, $series)
+    public function getEchartLegend(array $series, string $range = 'time')
     {
-        $headLength = count($head);
         $legend = array('type' => 'scroll');
 
-        if($headLength == 4)
+        if($range == 'object')
         {
             $selectedScope = array();
             foreach($series as $index => $se)
@@ -1270,49 +1198,80 @@ class metricModel extends model
      * Get options of echarts by head and data.
      *
      * @param  array    $head 表头
-     * @param  array    $datas 数据
+     * @param  array    $data 数据
      * @param  string   $chartType 图表类型 barX|barY|line|pie
      * @access public
      * @return array|false
      */
-    public function getEchartsOptions(array $header, array $datas, string $chartType = 'line'): array|false
+    public function getEchartsOptions(array $header, array $data, string $chartType = 'line'): array|false
     {
-        if(!$header || !$datas) return false;
+        if(!$header || !$data) return false;
+        $type = in_array($chartType, array('barX', 'barY')) ? 'bar' : $chartType;
         //if($chartType == 'pie') return $this->getPieEchartsOptions($head, $datas);
 
         $headLength = count($header);
         if($headLength == 2)
         {
-            return $this->getTimeOptions($header, $datas, $chartType);
+            return $this->getTimeOptions($header, $data, $type);
         }
         elseif($headLength == 3)
         {
             if(in_array('scope', array_column($header, 'name')))
             {
+                return $this->getObjectOptions($data, $type);
             }
             else
             {
-                return $this->getTimeOptions($header, $datas, $chartType);
+                return $this->getTimeOptions($header, $data, $type);
             }
         }
+        elseif($headLength == 4)
+        {
+            return $this->getObjectOptions($data, $type);
+        }
+    }
 
-        list($x, $y) = $this->getEchartXY($header);
-        if(!$x || !$y) return false;
+    public function getObjectOptions($data, $type)
+    {
+        $dateField = !isset(current($data)->dateString) ? 'calcTime' : 'dateString';
+        usort($data, function($a, $b) use ($dateField)
+        {
+            $keyA = $a->$dateField;
+            $keyB = $b->$dateField;
 
-        $cmp = function($a, $b) use ($x) {
-            $keyA = $a->$x;
-            $keyB = $b->$x;
+            if($keyA == $keyB) return 0;
 
             return $keyA > $keyB ? -1 : 1;
-        };
-        usort($datas, $cmp);
+        });
 
-        $xAxis = array('type' => 'category', 'data' => array_unique(array_column($datas, $x)));
-        $yAxis = array('type' => 'value');
+        $times   = array();
+        $objects = array();
+        foreach($data as $dataInfo)
+        {
+            $time   = substr($dataInfo->$dateField, 0, 10);
+            $object = $dataInfo->scope;
+            $value  = $dataInfo->value;
 
-        $type   = in_array($chartType, array('barX', 'barY')) ? 'bar' : $chartType;
-        $series = $this->getEchartSeries($header, $datas, $x, $y, $type);
-        $legend = $this->getEchartLegend($header, $series);
+            if(!isset($times[$time]))     $times[$time] = $time;
+            if(!isset($objects[$object])) $objects[$object] = array();
+            $objects[$object][$time] = $value;
+        }
+
+        $xAxis  = array('type' => 'category', 'data' => $times);
+        $yAxis  = array('type' => 'value');
+        $series = array();
+        foreach($objects as $object => $datas)
+        {
+            $seriesData = array();
+            foreach($times as $time)
+            {
+                $seriesData[] = isset($datas[$time]) ? $datas[$time] : 0;
+            }
+
+            $series[] = array('type' => $type, 'name' => $object, 'data' => $seriesData);
+        }
+
+        $legend = $this->getEchartLegend($series, 'object');
 
         $options = array();
         $options['xAxis']  = $xAxis;
@@ -1320,11 +1279,10 @@ class metricModel extends model
         $options['legend'] = $legend;
         $options['series'] = $series;
 
-
         return $options;
     }
 
-    public function getTimeOptions($header, $datas, $chartType)
+    public function getTimeOptions($header, $datas, $type)
     {
         $headLength = count($header);
 
@@ -1352,9 +1310,8 @@ class metricModel extends model
         $xAxis = array('type' => 'category', 'data' => array_unique(array_column($datas, $x)));
         $yAxis = array('type' => 'value');
 
-        $type   = in_array($chartType, array('barX', 'barY')) ? 'bar' : $chartType;
-        $series = $this->getEchartSeries($header, $datas, $x, $y, $type);
-        $legend = $this->getEchartLegend($header, $series);
+        $series = array('type' => $type, 'data' => array_column($datas, $y));
+        $legend = $this->getEchartLegend($series);
 
         $options = array();
         $options['xAxis']  = $xAxis;

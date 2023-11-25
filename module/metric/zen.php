@@ -530,7 +530,7 @@ class metricZen extends metric
         $objects  = array();
         foreach($data as $dataInfo)
         {
-            $time   = $dataInfo->$dateField;
+            $time   = substr($dataInfo->$dateField, 0, 10);
             $object = $dataInfo->scope;
             $value  = $dataInfo->value;
 
