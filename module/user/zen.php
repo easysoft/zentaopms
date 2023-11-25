@@ -12,10 +12,10 @@ class userZen extends user
     {
         $groupList = array();
         $roleGroup = array();
-        $groups    = $this->dao->select('id, name, role, vision')->from(TABLE_GROUP)->fetchAll();
+        $groups    = $this->dao->select('id, name, role, vision')->from(TABLE_GROUP)->where('vision')->eq($this->config->vision)->fetchAll();
         foreach($groups as $group)
         {
-            if($group->vision == $this->config->vision) $groupList[$group->id] = $group->name;
+            $groupList[$group->id] = $group->name;
             if($group->role) $roleGroup[$group->role] = $group->id;
         }
 
