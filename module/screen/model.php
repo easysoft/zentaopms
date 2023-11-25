@@ -680,92 +680,70 @@ class screenModel extends model
      *
      * @param object $chart
      * @access public
-     * @return void
+     * @return array
      */
-    public function getChartFilters($chart)
+    public function getChartFilters(object $chart): array
     {
         $filters = json_decode($chart->filters, true);
-        $fields  = json_decode($chart->fields, true);
+        $fields  = json_decode($chart->fields,  true);
 
-        if(empty($filters)) return array();
-
-        $this->loadModel('pivot');
-
-        $screenFilters = array();
-        foreach($filters as $filter)
-        {
-            $isQuery = (isset($filter['from']) and $filter['from'] == 'query');
-
-            if($isQuery)
-            {
-                if($filter['type'] == 'date' or $filter['type'] == 'datetime')
-                {
-                    if(isset($filter['default']))
-                    {
-                        $default = $this->pivot->processDateVar($filter['default']);
-
-                        $filter['default'] = empty($default) ? null : strtotime($default) * 1000;
-                    }
-                }
-
-                if($filter['type'] == 'select')
-                {
-                    $options = $this->getSysOptions($filter['typeOption']);
-                    $screenOptions = array();
-                    foreach($options as $value => $label)
-                    {
-                        $screenOptions[] = array('label' => $label, 'value' => $value);
-                    }
-                    $filter['options'] = $screenOptions;
-                }
-
-                $screenFilters[] = $filter;
-                continue;
-            }
-
-            if($filter['type'] == 'date' or $filter['type'] == 'datetime')
-            {
-                if(isset($filter['default']))
-                {
-                    $default = $filter['default'];
-                    $begin   = $default['begin'];
-                    $end     = $default['end'];
-
-                    if(empty($begin) and empty($end))
-                    {
-                        $filter['default'] = null;
-                    }
-                    elseif(empty($begin) or empty($end))
-                    {
-                        $filter['default'] = empty($begin) ? strtotime($end) * 1000 : strtotime($begin) * 1000;
-                    }
-                    else
-                    {
-                        $filter['default'] = array(strtotime($begin) * 1000, strtotime($end) * 1000);
-                    }
-                }
-                else
-                {
-                    $filter['default'] = null;
-                }
-            }
-
-            if($filter['type'] == 'select')
+        return !empty($filters) ? array_map(function($filter)use($fields, $chart){
+            $isQuery = (isset($filter['from']) && $filter['from'] == 'query');
+            if($isQuery) $this->setIsQueryScreenFilters($filter);
+            if(!$isQuery && ($filter['type'] == 'date' || $filter['type'] == 'datetime')) $this->setDefaultByDate($filter);
+            if(!$isQuery && $filter['type'] == 'select')
             {
                 $field = zget($fields, $filter['field']);
                 $options = $this->getSysOptions($field['type'], $field['object'], $field['field'], $chart->sql);
-                $screenOptions = array();
-                foreach($options as $value => $label)
-                {
-                    $screenOptions[] = array('label' => $label, 'value' => $value);
-                }
-                $filter['options'] = $screenOptions;
+                $filter['options'] = array_map(function($item, $index){return array('label' => $item, 'value' => $index);}, $options, array_keys($options));
             }
 
-            $screenFilters[] = $filter;
+            return $filter;
+        }, $filters) : array();
+    }
+
+    /**
+     * Set screen filters when is query.
+     *
+     * @param  array  $filter
+     * @access public
+     * @return void
+     */
+    public function setIsQueryScreenFilters(array &$filter): void
+    {
+        if($filter['type'] == 'date' || $filter['type'] == 'datetime')
+        {
+            if(isset($filter['default']))
+            {
+                $default = $this->loadModel('pivot')->processDateVar($filter['default']);
+                $filter['default'] = empty($default) ? null : strtotime($default) * 1000;
+            }
         }
 
-        return $screenFilters;
+        if($filter['type'] == 'select')
+        {
+            $options = $this->getSysOptions($filter['typeOption']);
+            $filter['options'] = array_map(function($item, $index){return array('label' => $item, 'value' => $index);}, $options, array_keys($options));
+        }
+    }
+
+    /**
+     * Set default by date.
+     *
+     * @param  array  $filter
+     * @access public
+     * @return void
+     */
+    public function setDefaultByDate(array &$filter): void
+    {
+        $filter['default'] = null;
+
+        if(isset($filter['default']))
+        {
+            extract($filter['default']);
+            if(empty($begin) || empty($end))   $filter['default'] = empty($begin) ? strtotime($end) * 1000 : strtotime($begin) * 1000;
+            if(!empty($begin) || !empty($end)) $filter['default'] = array(strtotime($begin) * 1000, strtotime($end) * 1000);
+        }
     }
 
     /**
