@@ -272,4 +272,24 @@ class myTest
         global $tester;
         return $tester->config->execution->search;
     }
+
+    /**
+     * 测试构建 bug 搜索表单。
+     * Test build bug search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildBugSearchFormTest(int $queryID, string $actionURL): array
+    {
+        global $tester;
+        $tester->app->rawModule = 'my';
+        $tester->app->rawMethod = 'bug';
+        $this->objectModel->buildBugSearchForm($queryID, $actionURL);
+
+        if(dao::isError()) return dao::getError();
+        return $tester->config->bug->search;
+    }
 }

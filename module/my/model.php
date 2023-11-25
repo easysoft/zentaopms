@@ -568,6 +568,7 @@ class myModel extends model
     }
 
     /**
+     * 构建 bug 搜索表单。
      * Build search form for bug page of work.
      *
      * @param  int    $queryID
@@ -575,7 +576,7 @@ class myModel extends model
      * @access public
      * @return void
      */
-    public function buildBugSearchForm($queryID, $actionURL)
+    public function buildBugSearchForm(int $queryID, string $actionURL): void
     {
         $rawMethod = $this->app->rawMethod;
         $this->loadModel('bug');
