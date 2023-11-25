@@ -807,16 +807,17 @@ class upgrade extends control
     /**
      * Ajax get progress.
      *
+     * @param  int    $offset
      * @access public
      * @return void
      */
-    public function ajaxGetProgress()
+    public function ajaxGetProgress($offset = 0)
     {
         $tmpProgressFile = $this->app->getTmpRoot() . 'upgradeSqlLines';
         $upgradeLogFile  = $this->upgrade->getLogFile();
 
         $progress = 1;
-        if(file_exists($tmpProgressFile))
+        if(file_exists($tmpProgressFile) && $offset != 0)
         {
             $sqlLines = file_get_contents($tmpProgressFile);
             if(empty($sqlLines)) $progress = $this->session->upgradeProgress ? $this->session->upgradeProgress : 1;
@@ -828,9 +829,6 @@ class upgrade extends control
             $this->session->set('upgradeProgress', $progress);
         }
 
-        $offset = $this->session->logOffset ? $this->session->logOffset : 0;
-        if($offset == 'finished') $offset = 0;
-
         $log  = !file_exists($upgradeLogFile) ? '' : file_get_contents($upgradeLogFile, false, null, $offset);
         $size = 10 * 1024;
         if(!empty($log) && mb_strlen($log) > $size)
@@ -840,16 +838,8 @@ class upgrade extends control
             $position = strpos($left, "\n");
             if($position !== false) $log .= substr($left, 0, $position + 1);
         }
-        $log     = trim($log);
-        $offset += strlen($log);
-        if(empty($logSize) && $progress == 100)
-        {
-            @unlink($this->app->getTmpRoot() . 'upgradeSqlLines');
-            $this->session->set('upgradeProgress', 1);
-            $offset = 'finished';
-        }
-        $this->session->set('logOffset', $offset);
-        return print(json_encode(array('log' => str_replace("\n", "<br />", $log) . ($log ? '<br />' : ''), 'progress' => $progress, 'offset' => $offset)));
+        $log = trim($log);
+        return print(json_encode(array('log' => str_replace("\n", "<br />", $log) . ($log ? '<br />' : ''), 'progress' => $progress, 'offset' => $offset + strlen($log))));
 
     }
 

@@ -9043,18 +9043,13 @@ class upgradeModel extends model
             ->markRight(1)
             ->fetchAll();
 
-        $this->dao->begin();
         foreach($releasedStorys as $releasedStory)
         {
             $story = $releasedStory->id;
             $date  = $releasedStory->date;
 
-            $this->dao->update(TABLE_STORY)
-                ->set('releasedDate')->eq($date)
-                ->where('id')->eq($story)
-                ->exec();
+            $this->dao->update(TABLE_STORY)->set('releasedDate')->eq($date)->where('id')->eq($story)->exec();
         }
-        $this->dao->commit();
     }
 
     /**
@@ -9162,7 +9157,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function insetallIPD()
+    public function installIPD()
     {
         $fromVersion = $this->fromVersion;
         $ipdinstall  = false;
