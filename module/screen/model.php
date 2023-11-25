@@ -331,17 +331,19 @@ class screenModel extends model
     }
 
     /**
+     * 获取图表配置。
      * Get chart option.
      *
-     * @param  object $chart
-     * @param  object $component
-     * @param  array  $filters
+     * @param  object        $chart
+     * @param  object        $component
+     * @param  array         $filters
      * @access public
-     * @return object
+     * @return object|string
      */
-    public function getChartOption($chart, $component, $filters = '')
+    public function getChartOption(object $chart, object $component, array $filters): object|string
     {
-        switch($component->type)
+        $type = $component->type ? : 'default';
+        switch($type)
         {
             case 'line':
                 return $this->getLineChartOption($component, $chart, $filters);
