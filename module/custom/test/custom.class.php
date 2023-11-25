@@ -641,4 +641,31 @@ class customTest
 
         return customModel::buildCustomMenuMap($customMenu, 'main')[0];
     }
+
+    /**
+     * 构造菜单数据。
+     * Build menu data.
+     *
+     * @param  string $module main|product|my and so on
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function buildMenuItemsTest(string $module = 'main'): array
+    {
+        global $config, $lang;
+
+        $allMenu = new stdclass();
+        if($module == 'main' and !empty($lang->menu)) $allMenu = $lang->menu;
+        if($module != 'main' and isset($lang->menu->$module) and isset($lang->menu->{$module}['subMenu'])) $allMenu = $lang->menu->{$module}['subMenu'];
+        if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
+        if($module == 'my' && empty($config->global->scoreStatus)) unset($allMenu->score);
+
+        $flowModule = $config->global->flow . '_main';
+        $customMenu = isset($config->customMenu->$flowModule) ? $config->customMenu->$flowModule : array();
+        if(!empty($customMenu) && is_string($customMenu) && substr($customMenu, 0, 1) === '[') $customMenu = json_decode($customMenu);
+        $customMenuMap = customModel::buildCustomMenuMap($customMenu, 'main')[0];
+
+        return customModel::buildMenuItems($allMenu, $customMenuMap, $module);
+    }
 }
