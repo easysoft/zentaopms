@@ -239,18 +239,17 @@ class commonModel extends model
      */
     public function setCompany()
     {
-        $httpHost = $this->server->http_host;
-
         if($this->session->company)
         {
             $this->app->company = $this->session->company;
         }
         else
         {
-            $company = $this->loadModel('company')->getFirst();
+            $httpHost = $this->server->http_host;
+            $company  = $this->loadModel('company')->getFirst();
             if(!$company) $this->app->triggerError(sprintf($this->lang->error->companyNotFound, $httpHost), __FILE__, __LINE__, true);
             $this->session->set('company', $company);
-            $this->app->company  = $company;
+            $this->app->company = $company;
         }
     }
 
@@ -294,8 +293,7 @@ class commonModel extends model
      */
     public function setApproval()
     {
-        $this->config->openedApproval = false;
-        if(($this->config->edition == 'max' or $this->config->edition == 'ipd') && $this->config->vision == 'rnd') $this->config->openedApproval = true;
+        $this->config->openedApproval = (in_array($this->config->edition, array('max', 'ipd'))) && ($this->config->vision == 'rnd');
     }
 
     /**
@@ -379,7 +377,7 @@ class commonModel extends model
      * @access public
      * @return bool
      */
-    public function isOpenMethod($module, $method)
+    public function isOpenMethod($module, $method): bool
     {
         if(in_array("$module.$method", $this->config->openMethods)) return true;
 
@@ -389,15 +387,11 @@ class commonModel extends model
         {
             if(stripos($method, 'ajax') !== false) return true;
             if($module == 'block') return true;
-            if($module == 'index' and $method == 'app') return true;
-            if($module == 'my' and $method == 'guidechangetheme') return true;
-            if($module == 'misc' and $method == 'downloadclient') return true;
-            if($module == 'misc' and $method == 'changelog')  return true;
-            if($module == 'tutorial' and $method == 'start')  return true;
-            if($module == 'tutorial' and $method == 'index')  return true;
-            if($module == 'tutorial' and $method == 'quit')   return true;
-            if($module == 'tutorial' and $method == 'wizard') return true;
-            if($module == 'product' and $method == 'showerrornone') return true;
+            if($module == 'index'    and $method == 'app') return true;
+            if($module == 'my'       and $method == 'guidechangetheme') return true;
+            if($module == 'product'  and $method == 'showerrornone') return true;
+            if($module == 'misc'     and in_array($method, array('downloadclient', 'changelog'))) return true;
+            if($module == 'tutorial' and in_array($method, array('start', 'index', 'quit', 'wizard'))) return true;
         }
         return false;
     }
