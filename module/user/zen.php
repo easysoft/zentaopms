@@ -101,6 +101,58 @@ class userZen extends user
     }
 
     /**
+     * 批量创建用户前的检查。
+     * Check before batch creating users.
+     *
+     * @param  array  $users
+     * @param  string $verifyPassword
+     * @access public
+     * @return bool
+     */
+    public function checkBeforeBatchCreate(array $users, string $verifyPassword): bool
+    {
+        if(!$users) return true;
+
+        $accounts = array_map(function($user){return $user->account;}, $users);
+        $accounts = $this->dao->select('account')->from(TABLE_USER)->where('account')->in($accounts)->fetchPairs();
+
+        foreach($users as $key => $user)
+        {
+            if(empty($user->account))
+            {
+                unset($users[$key]);
+                continue;
+            }
+
+            if(strtolower($user->account) == 'guest') dao::$errors["account[{$key}]"][] = $this->lang->user->error->reserved;
+            if(isset($accounts[$user->account])) dao::$errors["account[{$key}]"][] = sprintf($this->lang->error->unique, $this->lang->user->account, $user->account);
+            if(!validater::checkAccount($user->account)) dao::$errors["account[{$key}]"][] = sprintf($this->lang->error->account, $this->lang->user->account);
+            if(!validater::checkReg($user->password, '|(.){6,}|')) dao::$errors["password[{$key}]"][] = $this->lang->user->error->password;
+            if($user->email and !validater::checkEmail($user->email)) dao::$errors["email[{$key}]"][] = sprintf($this->lang->error->email, $this->lang->user->email);
+            if($user->phone and !validater::checkPhone($user->phone)) dao::$errors["phone[{$key}]"][] = sprintf($this->lang->error->phone, $this->lang->user->phone);
+            if($user->mobile and !validater::checkMobile($user->mobile)) dao::$errors["mobile[{$key}]"][] = sprintf($this->lang->error->mobile, $this->lang->user->mobile);
+
+            /* 检查密码强度是否符合安全设置。*/
+            /* Check if the password strength meets the security settings. */
+            if(isset($this->config->safe->mode) && $this->user->computePasswordStrength($user->password) < $this->config->safe->mode) dao::$errors["password[{$key}]"][] = $this->lang->user->error->weakPassword;
+
+            /* 检查明文的弱密码。*/
+            /* Check the weak password in clear text. */
+            if(!empty($this->config->safe->changeWeak))
+            {
+                if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
+                if(strpos(",{$this->config->safe->weak},", ",{$user->password},") !== false) dao::$errors["password[{$key}]"][] = sprintf($this->lang->user->error->dangerPassword, $this->config->safe->weak);
+            }
+
+            $accounts[$user->account] = $user->account;
+        }
+
+        $this->checkVerifyPassword($verifyPassword);
+
+        return !dao::isError();
+    }
+
+    /**
      * 检查密码强度。
      * Check the posted password.
      *
