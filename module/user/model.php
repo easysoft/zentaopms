@@ -329,11 +329,7 @@ class userModel extends model
             ->checkIF($user->email, 'email', 'email')
             ->autoCheck()
             ->exec();
-        if(dao::isError())
-        {
-            $this->dao->rollback();
-            return false;
-        }
+        if(dao::isError()) return $this->rollback();
 
         $userID = $this->dao->lastInsertID();
 
@@ -344,11 +340,7 @@ class userModel extends model
         $this->computeUserView($user->account);
         $this->loadModel('action')->create('user', $userID, 'Created');
 
-        if(dao::isError())
-        {
-            $this->dao->rollback();
-            return false;
-        }
+        if(dao::isError()) return $this->rollback();
 
         $this->dao->commit();
 
@@ -482,11 +474,7 @@ class userModel extends model
             ->autoCheck()
             ->where('id')->eq($user->id)
             ->exec();
-        if(dao::isError())
-        {
-            $this->dao->rollBack();
-            return false;
-        }
+        if(dao::isError()) $this->rollBack();
 
         $oldUser = $this->getById($user->id, 'id');
 
@@ -497,11 +485,7 @@ class userModel extends model
         $this->loadModel('score')->create('user', 'editProfile');
         $this->loadModel('action')->create('user', $user->id, 'edited');
 
-        if(dao::isError())
-        {
-            $this->dao->rollBack();
-            return false;
-        }
+        if(dao::isError()) $this->rollBack();
 
         $this->dao->commit();
 
