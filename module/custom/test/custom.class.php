@@ -126,23 +126,23 @@ class customTest
     }
 
     /**
-     * Test get module fields.
+     * 获取表单必填字段。
+     * Test get form required fields.
      *
      * @param  string $moduleName
      * @param  string $method
      * @access public
      * @return array
      */
-    public function getFormFieldsTest($moduleName, $method = '')
+    public function getFormFieldsTest($moduleName, $method = ''): array
     {
         global $app;
         $app->loadLang($moduleName);
 
-        $objects = $this->objectModel->getFormFields($moduleName, $method);
-
+        $fields = $this->objectModel->getFormFields($moduleName, $method);
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $fields;
     }
 
     /**
