@@ -458,14 +458,21 @@ class userModel extends model
 
         if($user->type == 'outside' && $user->new) $user->company = $this->createCompany($user->newCompany);
 
-        $requiredFields = array();
-        foreach(explode(',', $this->config->user->edit->requiredFields) as $field)
-        {
-            /* 根据后台自定义的必填项和可用联系方式过滤必填字段。*/
-            /* Filter required fields by the custom required fields and contact fields. */
-            if(!isset($this->lang->user->contactFieldList[$field]) || strpos(",{$this->config->user->contactField},", ",{$field},") !== false) $requiredFields[$field] = $field;
-        }
-        $requiredFields = join(',', $requiredFields);
+        /* 获取所有的联系方式字段。*/
+        /* Get all contact fields. */
+        $allContactFields = array_keys($this->lang->user->contactFieldList);
+        /* 获取可用的联系方式字段，转为数组并去空、去重。*/
+        /* Get available contact fields, convert to array and remove empty and duplicate. */
+        $availableContactFields = array_unique(array_filter(explode(',', trim($this->config->user->contactField, ','))));
+        /* 获取不可用的联系方式字段。*/
+        /* Get unavailable contact fields. */
+        $unAvailableContactFields = array_diff($allContactFields, $availableContactFields);
+        /* 从配置文件获取必填项字段，转为数组并去空、去重。*/
+        /* Get required fields from config file, convert to array and remove empty and duplicate. */
+        $requiredFields = array_unique(array_filter(explode(',', trim($this->config->user->edit->requiredFields, ','))));
+        /* 从必填项字段中去除不可用的联系方式字段。*/
+        /* Remove unavailable contact fields from available fields. */
+        $requiredFields = implode(',', array_diff($requiredFields, $unAvailableContactFields));
 
         $this->dao->update(TABLE_USER)->data($user, 'new,newCompany,password1,password2,group,verifyPassword,verifyRand,passwordLength,passwordStrength')
             ->batchCheck($requiredFields, 'notempty')
