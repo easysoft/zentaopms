@@ -1202,4 +1202,24 @@ class productTest
 
         return $this->objectModel->getRoadmapOfPlans($orderedPlans, $parentPlans, $branch, $count);
     }
+
+    /**
+     * 激活产品。
+     * Activate a product.
+     *
+     * @param  int $productID
+     * @access public
+     * @return array|false
+     */
+    public function activateTest(int $productID): array|false
+    {
+        $product = $this->objectModel->getByID($productID);
+        if(!$product) return false;
+
+        $product->status = 'normal';
+        $changes = $this->objectModel->activate($productID, $product);
+        if(dao::isError()) return dao::getError();
+
+        return $changes;
+    }
 }
