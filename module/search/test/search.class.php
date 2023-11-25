@@ -25,13 +25,14 @@ class searchTest
     }
 
     /**
+     * 测试获取查询。
      * Test get query.
      *
      * @param  int    $queryID
      * @access public
      * @return array
      */
-    public function getQueryTest($queryID)
+    public function getQueryTest(int $queryID)
     {
         $objects = $this->objectModel->getQuery($queryID);
 
@@ -64,6 +65,31 @@ class searchTest
 
         return $objects;
     }
+
+    /**
+     * 保存查询的测试。
+     * Test save query.
+     *
+     * @param  string  $module
+     * @param  string  $title
+     * @param  string  $where
+     * @param  array  $queryForm
+     * @access public
+     * @return object|array
+     */
+    public function saveQueryTest(string $module, string $title, string $where, array $queryForm): object|array
+    {
+        $_POST['module'] = $module;
+        $_POST['title']  = $title;
+        $_SESSION[$module . 'Query'] = $where;
+        $_SESSION[$module . 'Form']  = $queryForm;
+
+        $queryID = $this->objectModel->saveQuery();
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->getByID($queryID);
+    }
+
 
     /**
      * Test delete query.
