@@ -422,11 +422,11 @@ class myModel extends model
      * @param  int    $queryID
      * @param  string $type
      * @param  string $orderBy
-     * @param  int    $pager
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getTestcasesBySearch(int $queryID, string $type, string $orderBy, string $pager): array
+    public function getTestcasesBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
     {
         $queryName = $type == 'contribute' ? 'contributeTestcaseQuery' : 'workTestcaseQuery';
         $queryForm = $type == 'openedbyme' ? 'contributeTestcaseForm' : 'workTestcaseForm';
@@ -515,6 +515,7 @@ class myModel extends model
     }
 
     /**
+     * 通过搜索获取任务。
      * Get tasks by search.
      *
      * @param  string $account
@@ -525,20 +526,17 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getTasksBySearch($account, $limit = 0, $pager = null, $orderBy = 'id_desc', $queryID = 0)
+    public function getTasksBySearch(string $account, int $limit = 0, object $pager = null, string $orderBy = 'id_desc', int $queryID = 0): array
     {
         $moduleName = $this->app->rawMethod == 'work' ? 'workTask' : 'contributeTask';
         $queryName  = $moduleName . 'Query';
         $formName   = $moduleName . 'Form';
 
-        $taskIDList = array();
+        $taskIdList = array();
         if($moduleName == 'contributeTask')
         {
-            $tasksAssignedByMe = $this->getAssignedByMe($account, '', $orderBy, 'task');
-            foreach($tasksAssignedByMe as $taskID => $task)
-            {
-                $taskIDList[$taskID] = $taskID;
-            }
+            $tasksAssignedByMe = $this->getAssignedByMe($account, null, $orderBy, 'task');
+            $taskIdList        = array_keys($tasksAssignedByMe);
         }
 
         if($queryID)
@@ -556,58 +554,10 @@ class myModel extends model
         }
         else
         {
-            if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
+            if($this->session->{$queryName} == false) $this->session->set($queryName, ' 1 = 1');
         }
 
-        $query = $this->session->$queryName;
-
-        $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
-        $query = str_replace('t1.`project`', 't2.`project`', $query);
-
-        $assignedToMatches   = array();
-        $assignedToCondition = '';
-        $operatorAndAccount  = '';
-        if(strpos($query, '`assignedTo`') !== false)
-        {
-            preg_match("/`assignedTo`\s+(([^']*) ('([^']*)'))/", $query, $assignedToMatches);
-            $assignedToCondition = $assignedToMatches[0];
-            $operatorAndAccount  = $assignedToMatches[1];
-            $query = str_replace("t1.$assignedToMatches[0]", "(t1.$assignedToCondition or (t1.mode = 'multi' and t5.`account` $operatorAndAccount and t1.status != 'closed' and t5.status != 'done') )", $query);
-        }
-
-        $orderBy = str_replace('pri_', 'priOrder_', $orderBy);
-        $tasks   = $this->dao->select("t1.*, t4.id as project, t2.id as executionID, t2.name as executionName, t2.multiple as executionMultiple, t4.name as projectName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")
-            ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
-            ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t2.project = t4.id")
-            ->leftJoin(TABLE_TASKTEAM)->alias('t5')->on("t1.id = t5.task")
-            ->where($query)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('(t2.status')->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)
-            ->beginIF($moduleName == 'workTask')
-            ->beginIF(!empty($assignedToMatches))->andWhere("(t1.$assignedToCondition or (t1.mode = 'multi' and t5.`account` $operatorAndAccount and t1.status != 'closed' and t5.status != 'done') )")->fi()
-            ->beginIF(empty($assignedToMatches))->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
-            ->andWhere('t1.status')->notin('closed,cancel')
-            ->fi()
-            ->beginIF($moduleName == 'contributeTask')
-            ->andWhere('t1.openedBy', 1)->eq($account)
-            ->orWhere('t1.closedBy')->eq($account)
-            ->orWhere('t1.canceledBy')->eq($account)
-            ->orWhere('t1.finishedby', 1)->eq($account)
-            ->orWhere('t5.status')->eq("done")
-            ->orWhere('t1.id')->in($taskIDList)
-            ->markRight(1)
-            ->fi()
-            ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
-            ->beginIF($this->config->vision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
-            ->orderBy($orderBy)
-            ->beginIF($limit > 0)->limit($limit)->fi()
-            ->page($pager, 't1.id')
-            ->fetchAll('id');
-
+        $tasks = $this->myTao->fetchTasksBySearch($this->session->{$queryName}, $moduleName, $account, $taskIdList, $orderBy, $limit, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
 
         $taskTeam = $this->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($tasks))->fetchGroup('task');
@@ -721,7 +671,7 @@ class myModel extends model
 
         if($type == 'contribute')
         {
-            $assignedByMe = $this->getAssignedByMe($this->app->user->account, '', $orderBy, 'risk');
+            $assignedByMe = $this->getAssignedByMe($this->app->user->account, null, $orderBy, 'risk');
             $risks = $this->dao->select('*')->from(TABLE_RISK)
                 ->where($riskQuery)
                 ->andWhere('deleted')->eq('0')
@@ -817,7 +767,7 @@ class myModel extends model
         $storyIDList = array();
         if($type == 'contribute')
         {
-            $storiesAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', $orderBy, 'story');
+            $storiesAssignedByMe = $this->getAssignedByMe($this->app->user->account, null, $orderBy, 'story');
             $storyIdList         = !empty($storiesAssignedByMe) ? array_keys($storiesAssignedByMe) : array();
 
             $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
@@ -959,7 +909,7 @@ class myModel extends model
         $requirementIDList = array();
         if($type == 'contribute')
         {
-            $requirementsAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', $orderBy, 'requirement');
+            $requirementsAssignedByMe = $this->getAssignedByMe($this->app->user->account, null, $orderBy, 'requirement');
             foreach($requirementsAssignedByMe as $requirementID => $requirement)
             {
                 $requirementIDList[$requirementID] = $requirementID;

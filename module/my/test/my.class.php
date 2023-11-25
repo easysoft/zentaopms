@@ -128,6 +128,7 @@ class myTest
     }
 
     /**
+     * 通过搜索获取任务。
      * Get tasks by search.
      *
      * @param  string $account
@@ -135,20 +136,13 @@ class myTest
      * @access public
      * @return array
      */
-    public function getTasksBySearchTest($account, $limit = 0)
+    public function getTasksBySearchTest(string $account, int $limit = 0): array
     {
-        global $tester;
-        $recTotal = 0;
-        $recPerPage = 20;
-        $pageID = 0;
-        $tester->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $objects = $this->objectModel->getTasksBySearch($account, $limit, $pager);
+        $objects = $this->objectModel->getTasksBySearch($account, $limit, null);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return array_keys($objects);
     }
 
     /**
