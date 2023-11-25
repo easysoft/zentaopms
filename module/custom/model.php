@@ -454,14 +454,15 @@ class customModel extends model
     }
 
     /**
-     * Get main menu data
-     * @param  bool $rebuild
+     * 获取主菜单数据。
+     * Get main menu data.
+     *
      * @access public
      * @return array
      */
-    public static function getMainMenu($rebuild = false)
+    public static function getMainMenu(): array
     {
-        return static::getModuleMenu('main', $rebuild);
+        return static::getModuleMenu('main');
     }
 
     /**
