@@ -1644,8 +1644,8 @@ EOF;
                 if($value != stripslashes((string)$old->$key))
                 {
                     $diff = '';
-                    if(substr_count($value, "\n") > 1     or
-                        substr_count($old->$key, "\n") > 1 or
+                    if(substr_count((string)$value, "\n") > 1     or
+                        substr_count((string)$old->$key, "\n") > 1 or
                         strpos('name,title,desc,spec,steps,content,digest,verify,report,definition,analysis,summary,prevention,resolution,outline,schedule,minutes', strtolower($key)) !== false)
                     {
                         $diff = commonModel::diff($old->$key, $value);
