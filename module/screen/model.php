@@ -602,20 +602,21 @@ class screenModel extends model
      *
      * @param  object $component
      * @param  object $chart
+     * @param  array  $filters
      * @access public
-     * @return object
+     * @return void
      */
-    public function getTableChartOption($component, $chart, $filters = '')
+    public function getTableChartOption(object $component, object $chart, array $filters = array()): void
     {
         if($chart->sql)
         {
             $settings = json_decode($chart->settings, true);
-            $fields   = json_decode($chart->fields, true);
-            $langs    = json_decode($chart->langs, true);
+            $fields   = json_decode($chart->fields,   true);
+            $langs    = json_decode($chart->langs,    true);
             list($options, $config) = $this->loadModel('pivot')->genSheet($fields, $settings, $chart->sql, $filters, $langs);
 
             $colspan = array();
-            if($options->columnTotal and $options->columnTotal == 'sum' and !empty($options->array))
+            if($options->columnTotal && $options->columnTotal == 'sum' && !empty($options->array))
             {
                 $optionsData = $options->array;
                 $count       = count($optionsData);
@@ -633,45 +634,45 @@ class screenModel extends model
                 $colspan[$count - 1][0] = count($options->groups);
             }
 
-            $dataset = array();
-            foreach($options->array as $data) $dataset[] = array_values($data);
+            $dataset = array_map(function($data){return array_values($data);}, $options->array);
 
             foreach($config as $i => $data)
             {
                 foreach($data as $j => $rowspan)
                 {
-                    for($k = 1; $k < $rowspan; $k ++)
-                    {
-                        unset($dataset[$i + $k][$j]);
-                    }
+                    for($k = 1; $k < $rowspan; $k ++) unset($dataset[$i + $k][$j]);
                 }
             }
 
-            $align   = array();
-            $headers = array();
-            foreach($options->cols as $cols)
-            {
-                $count  = 1;
-                $header = array();
-                foreach($cols as $data)
-                {
-                    $header[] = $data;
-                    if($count == 1) $align[] = 'center';
-                }
-                $headers[] = $header;
-                $count ++;
-            }
-
-            if(!isset($component->chartConfig->tableInfo)) $component->chartConfig->tableInfo = new stdclass();
-            $component->option->header      = $component->chartConfig->tableInfo->header      = $headers;
-            $component->option->align       = $component->chartConfig->tableInfo->align       = $align;
-            $component->option->columnWidth = $component->chartConfig->tableInfo->columnWidth = array();
-            $component->option->rowspan     = $component->chartConfig->tableInfo->rowspan     = $config;
-            $component->option->colspan     = $component->chartConfig->tableInfo->colspan     = $colspan;
-            $component->option->dataset     = $dataset;
+            $this->setComponentTableInfo($component, $options->cols, $dataset, $config, $colspan);
         }
 
-        return $this->setComponentDefaults($component);
+        $this->setComponentDefaults($component);
+    }
+
+    /**
+     * 设置组件表格信息。
+     * Set component table info.
+     *
+     * @param  object  $component
+     * @param  array   $cols
+     * @param  array   $dataset
+     * @param  array   $config
+     * @param  array   $colspan
+     * @access private
+     * @return void
+     */
+    public function setComponentTableInfo(object $component, array $cols, array $dataset, array $config, array $colspan): void
+    {
+        $align = array_map(function(){return 'center';}, current($cols));
+
+        if(!isset($component->chartConfig->tableInfo)) $component->chartConfig->tableInfo = new stdclass();
+        $component->option->header      = $component->chartConfig->tableInfo->header      = $cols;
+        $component->option->align       = $component->chartConfig->tableInfo->align       = $align;
+        $component->option->columnWidth = $component->chartConfig->tableInfo->columnWidth = array();
+        $component->option->rowspan     = $component->chartConfig->tableInfo->rowspan     = $config;
+        $component->option->colspan     = $component->chartConfig->tableInfo->colspan     = $colspan;
+        $component->option->dataset     = $dataset;
     }
 
     /**
