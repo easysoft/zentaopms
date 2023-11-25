@@ -285,6 +285,7 @@ class searchModel extends model
     }
 
     /**
+     * 保存当前的查询。
      * Save current query to db.
      *
      * @access public
@@ -315,6 +316,7 @@ class searchModel extends model
     }
 
     /**
+     * 删除保存的查询。
      * Delete current query from db.
      *
      * @param  int    $queryID
@@ -327,13 +329,14 @@ class searchModel extends model
     }
 
     /**
+     * 获取id,title 的键值对。
      * Get title => id pairs of a user.
      *
-     * @param  string    $module
+     * @param  string $module
      * @access public
      * @return array
      */
-    public function getQueryPairs($module)
+    public function getQueryPairs(string $module): array
     {
         $queries = $this->dao->select('id, title')->from(TABLE_USERQUERY)->where('module')->eq($module)->andWhere('account', true)->eq($this->app->user->account)->orWhere('common')->eq(1)->markRight(1)->orderBy('id_desc')->fetchPairs();
 
@@ -341,15 +344,16 @@ class searchModel extends model
     }
 
     /**
+     * 获取查询列表。
      * Get query list.
      *
-     * @param  string    $module
+     * @param  string $module
      * @access public
      * @return array
      */
-    public function getQueryList($module)
+    public function getQueryList(string $module): array
     {
-        $queries = $this->dao->select('id, account, title')
+        return $this->dao->select('id, account, title')
             ->from(TABLE_USERQUERY)
             ->where('module')->eq($module)
             ->andWhere('account', true)->eq($this->app->user->account)
@@ -357,9 +361,6 @@ class searchModel extends model
             ->markRight(1)
             ->orderBy('id_desc')
             ->fetchAll();
-
-        if(!$queries) return array();
-        return $queries;
     }
 
     /**
