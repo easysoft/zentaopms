@@ -137,7 +137,7 @@ class commonModel extends model
      * @access public
      * @return object|false $parentExecution
      */
-    public function syncExecutionByChild(object $execution)
+    public function syncExecutionByChild(object $execution): object|false
     {
         if($execution->grade == 1) return false;
 
