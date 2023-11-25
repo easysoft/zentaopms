@@ -90,27 +90,18 @@ class myTest
     }
 
     /**
-     * Function getAssignedByMe test by my
+     * 获取由我指派的数据。
+     * Test get assigned by me.
      *
-     * @param string $account
-     * @param int    $limit
-     * @param int    $pager
-     * @param string $orderBy
-     * @param int    $projectID
-     * @param string $objectType
+     * @param  string $account
+     * @param  string $orderBy
+     * @param  string $objectType
      * @access public
      * @return int
      */
-    public function getAssignedByMeTest($account, $limit, $pager, $orderBy, $projectID, $objectType)
+    public function getAssignedByMeTest(string $account, string $orderBy, string $objectType)
     {
-        global $tester;
-        $recTotal = 0;
-        $recPerPage = 20;
-        $pageID = 0;
-        $tester->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $objects = $this->objectModel->getAssignedByMe($account, $limit, $pager, $orderBy, $objectType);
+        $objects = $this->objectModel->getAssignedByMe($account, null, $orderBy, $objectType);
 
         if(dao::isError()) return dao::getError();
 

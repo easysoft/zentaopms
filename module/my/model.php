@@ -314,91 +314,70 @@ class myModel extends model
     }
 
     /**
+     * 获取由我指派的对象。
      * Get assigned by me objects.
      *
-     * @param string $account
-     * @param int    $limit
-     * @param string $orderBy
-     * @param int    $pager
-     * @param int    $projectID
-     * @param string $objectType
+     * @param  string $account
+     * @param  int    $pager
+     * @param  string $orderBy
+     * @param  string $objectType
      * @access public
      * @return array
      */
-    public function getAssignedByMe($account, $limit = 0, $pager = null, $orderBy = "id_desc", $objectType = '')
+    public function getAssignedByMe(string $account, object $pager = null, string $orderBy = 'id_desc', string $objectType = ''): array
     {
-        $module = $objectType == 'requirement' ? 'story' : $objectType;
-        $this->loadModel($module);
-
-        $objectIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
+        $module       = $objectType == 'requirement' ? 'story' : $objectType;
+        $objectIdList = $this->dao->select('objectID')->from(TABLE_ACTION)
             ->where('actor')->eq($account)
             ->andWhere('objectType')->eq($module)
             ->andWhere('action')->eq('assigned')
-            ->fetchAll('objectID');
-        if(empty($objectIDList)) return array();
+            ->fetchPairs('objectID');
+        if(empty($objectIdList)) return array();
 
-        if($objectType == 'task')
+        if($objectType == 'task') return $this->getTaskAssignedByMe($pager, $orderBy, $objectIdList);
+        if($objectType == 'requirement' || $objectType == 'story' || $objectType == 'bug') return $this->myTao->getProductRelatedAssignedByMe($objectIdList, $objectType, $module, $orderBy, $pager);
+        if($objectType == 'risk' || $objectType == 'issue' || $objectType == 'nc')
         {
-            $orderBy    = strpos($orderBy, 'pri_') !== false ? str_replace('pri_', 'priOrder_', $orderBy) : 't1.' . $orderBy;
-            $objectList = $this->dao->select("t1.*, t3.id as project, t2.name as executionName, t2.multiple as executionMultiple, t3.name as projectName, t2.type as executionType, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from($this->config->objectTables[$module])->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
-                ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id")
+            return $this->dao->select('t1.*')->from($this->config->objectTables[$module])->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t1.id')->in(array_keys($objectIDList))
-                ->orderBy($orderBy)
-                ->page($pager, 't1.id')
-                ->fetchAll('id');
-        }
-        elseif($objectType == 'requirement' or $objectType == 'story' or $objectType == 'bug')
-        {
-            $nameField  = $objectType == 'bug' ? 'productName' : 'productTitle';
-            $orderBy    = strpos($orderBy, 'priOrder') !== false || strpos($orderBy, 'severityOrder') !== false || strpos($orderBy, $nameField) !== false ? $orderBy : "t1.$orderBy";
-            $select     = "t1.*, t2.name AS {$nameField}, t2.shadow AS shadow, " . (strpos($orderBy, 'severity') !== false ? "IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder" : "IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder");
-            $objectList = $this->dao->select($select)->from($this->config->objectTables[$module])->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on("t1.product = t2.id")
-                ->where('t1.deleted')->eq(0)
-                ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t1.id')->in(array_keys($objectIDList))
-                ->beginIF($objectType == 'requirement' or $objectType == 'story')->andWhere('t1.type')->eq($objectType)->fi()
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
-        }
-        elseif($objectType == 'risk' or $objectType == 'issue' or $objectType == 'nc')
-        {
-            $objectList = $this->dao->select('t1.*')->from($this->config->objectTables[$module])->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
-                ->where('t1.deleted')->eq(0)
-                ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t1.id')->in(array_keys($objectIDList))
+                ->andWhere('t1.id')->in($objectIdList)
                 ->orderBy('t1.' . $orderBy)
                 ->page($pager)
                 ->fetchAll('id');
         }
-        else
-        {
-            $objectList = $this->dao->select('*')->from($this->config->objectTables[$module])
-                ->where('deleted')->eq(0)
-                ->andWhere('id')->in(array_keys($objectIDList))
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
-        }
+        return $this->dao->select('*')->from($this->config->objectTables[$module])
+            ->where('deleted')->eq(0)
+            ->andWhere('id')->in($objectIdList)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
 
-        if($objectType == 'task')
-        {
-            if($objectList) return $this->loadModel('task')->processTasks($objectList);
-            return $objectList;
-        }
-
-        if($objectType == 'requirement' or $objectType == 'story')
-        {
-            $planList = array();
-            foreach($objectList as $story) $planList[$story->plan] = $story->plan;
-            $planPairs = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('id')->in($planList)->fetchPairs('id');
-            foreach($objectList as $story) $story->planTitle = zget($planPairs, $story->plan, '');
-        }
+    /**
+     * 获取由我指派的任务。
+     * Get tasks assigned by me.
+     *
+     * @param  object $pager
+     * @param  string $orderBy
+     * @param  array  $objectIdList
+     * @access private
+     * @return array
+     */
+    private function getTaskAssignedByMe(object $pager = null, string $orderBy = 'id_desc', array $objectIdList = array())
+    {
+        $orderBy    = strpos($orderBy, 'pri_') !== false ? str_replace('pri_', 'priOrder_', $orderBy) : 't1.' . $orderBy;
+        $objectList = $this->dao->select("t1.*, t3.id as project, t2.name as executionName, t2.multiple as executionMultiple, t3.name as projectName, t2.type as executionType, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t2.project = t3.id")
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.id')->in($objectIdList)
+            ->orderBy($orderBy)
+            ->page($pager, 't1.id')
+            ->fetchAll('id');
+        if($objectList) return $this->loadModel('task')->processTasks($objectList);
         return $objectList;
     }
 
@@ -549,7 +528,7 @@ class myModel extends model
         $taskIDList = array();
         if($moduleName == 'contributeTask')
         {
-            $tasksAssignedByMe = $this->getAssignedByMe($account, 0, '', $orderBy, 'task');
+            $tasksAssignedByMe = $this->getAssignedByMe($account, '', $orderBy, 'task');
             foreach($tasksAssignedByMe as $taskID => $task)
             {
                 $taskIDList[$taskID] = $taskID;
@@ -736,7 +715,7 @@ class myModel extends model
 
         if($type == 'contribute')
         {
-            $assignedByMe = $this->getAssignedByMe($this->app->user->account, '', '', $orderBy, 'risk');
+            $assignedByMe = $this->getAssignedByMe($this->app->user->account, '', $orderBy, 'risk');
             $risks = $this->dao->select('*')->from(TABLE_RISK)
                 ->where($riskQuery)
                 ->andWhere('deleted')->eq('0')
@@ -832,7 +811,7 @@ class myModel extends model
         $storyIDList = array();
         if($type == 'contribute')
         {
-            $storiesAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', '', $orderBy, 'story');
+            $storiesAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', $orderBy, 'story');
             $storyIdList         = !empty($storiesAssignedByMe) ? array_keys($storiesAssignedByMe) : array();
 
             $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
@@ -974,7 +953,7 @@ class myModel extends model
         $requirementIDList = array();
         if($type == 'contribute')
         {
-            $requirementsAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', '', $orderBy, 'requirement');
+            $requirementsAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', $orderBy, 'requirement');
             foreach($requirementsAssignedByMe as $requirementID => $requirement)
             {
                 $requirementIDList[$requirementID] = $requirementID;
