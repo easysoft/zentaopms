@@ -9,6 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('updateTimeTip', $lang->metric->updateTimeTip);
 
 div
 (
