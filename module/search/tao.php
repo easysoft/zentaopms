@@ -301,25 +301,38 @@ class searchTao extends searchModel
         $words = str_replace('"', '', $against);
         $words = str_pad($words, 5, '_');
 
-        $allowedObject = array();
+        return array($words, $againstCond, $likeCondition);
+    }
+
+    /**
+     * 获取允许的模块。
+     * Get allowed objects.
+     *
+     * @param  string|array $type
+     * @access protected
+     * @return array
+     */
+    protected function getAllowedObjects(string|array $type): array
+    {
+        $allowedObjects = array();
         if($type != 'all')
         {
-            foreach($type as $module) $allowedObject[] = $module;
+            foreach($type as $module) $allowedObjects[] = $module;
+
+            return $allowedObjects;
         }
-        else
+
+        if($this->config->systemMode == 'light') unset($this->config->search->fields->program);
+
+        foreach($this->config->search->fields as $objectType => $fields)
         {
-            if($this->config->systemMode == 'light') unset($this->config->search->fields->program);
+            $module = $objectType;
+            if($module == 'case') $module = 'testcase';
 
-            foreach($this->config->search->fields as $objectType => $fields)
-            {
-                $module = $objectType;
-                if($module == 'case') $module = 'testcase';
-
-                if(common::hasPriv($module, 'view')) $allowedObject[] = $objectType;
-                if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedobject[] = $objectType;
-            }
+            if(common::hasPriv($module, 'view')) $allowedObjects[] = $objectType;
+            if($module == 'deploystep' && common::haspriv('deploy',  'viewstep')) $allowedobjects[] = $objectType;
         }
 
-        return array($words, $againstCond, $likeCondition, $allowedObject);
+        return $allowedObjects;
     }
 }

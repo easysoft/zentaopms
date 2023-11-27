@@ -467,29 +467,28 @@ class searchModel extends model
     /**
      * Get counts of keyword search results.
      *
-     * @param  string    $keywords
-     * @param  string    $type
+     * @param  string $keywords
+     * @param  string $type
      * @access public
      * @return array
      */
-    public function getListCount($keywords = '', $type = 'all')
+    public function getListCount(array|string $type = 'all')
     {
-        list($words, $againstCond, $likeCondition, $allowedObject) = $this->searchTao->getSqlParams($keywords, $type);
+        $allowedObjects = $this->searchTao->getAllowedObjects($type);
 
         $filterObject = array();
-        foreach($allowedObject as $index => $object)
+        foreach($allowedObjects as $index => $object)
         {
             if(strpos(',feedback,ticket,', ",$object,") !== false)
             {
-                unset($allowedObject[$index]);
+                unset($allowedObjects[$index]);
                 $filterObject[] = $object;
             }
         }
 
-        $typeCount = $this->dao->select("objectType, count(*) as objectCount")
-            ->from(TABLE_SEARCHINDEX)
+        $typeCount = $this->dao->select("objectType, count(*) AS objectCount")->from(TABLE_SEARCHINDEX)
             ->where('((vision')->eq($this->config->vision)
-            ->andWhere('objectType')->in($allowedObject)
+            ->andWhere('objectType')->in($allowedObjects)
             ->markRight(1)
             ->orWhere('(objectType')->in($filterObject)
             ->markRight(2)
@@ -511,14 +510,15 @@ class searchModel extends model
      */
     public function getList(string $keywords, array|string $type, object $pager = null): array
     {
-        list($words, $againstCond, $likeCondition, $allowedObject) = $this->searchTao->getSqlParams($keywords, $type);
+        list($words, $againstCond, $likeCondition) = $this->searchTao->getSqlParams($keywords, $type);
+        $allowedObjects = $this->searchTao->getAllowedObjects($type);
 
         $filterObject = array();
-        foreach($allowedObject as $index => $object)
+        foreach($allowedObjects as $index => $object)
         {
             if(strpos(',feedback,ticket,', ",$object,") !== false)
             {
-                unset($allowedObject[$index]);
+                unset($allowedObjects[$index]);
                 $filterObject[] = $object;
             }
         }
@@ -528,7 +528,7 @@ class searchModel extends model
             ->from(TABLE_SEARCHINDEX)
             ->where("(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})")
             ->andWhere('((vision')->eq($this->config->vision)
-            ->andWhere('objectType')->in($allowedObject)
+            ->andWhere('objectType')->in($allowedObjects)
             ->markRight(1)
             ->orWhere('(objectType')->in($filterObject)
             ->markRight(2)
