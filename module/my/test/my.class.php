@@ -343,4 +343,24 @@ class myTest
         if(dao::isError()) return dao::getError();
         return $tester->config->product->search;
     }
+
+    /**
+     * 测试构建用户需求搜索表单。
+     * Test build requirement search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildRequirementSearchFormTest(int $queryID, string $actionURL): array
+    {
+        global $tester;
+        $tester->app->rawModule = 'my';
+        $tester->app->rawMethod = 'requirement';
+        $this->objectModel->buildRequirementSearchForm($queryID, $actionURL);
+
+        if(dao::isError()) return dao::getError();
+        return $tester->config->product->search;
+    }
 }

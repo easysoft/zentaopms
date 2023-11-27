@@ -772,15 +772,15 @@ class myModel extends model
     }
 
     /**
+     * 构建用户需求搜索表单。
      * Build Requirement search form.
      *
      * @param  int    $queryID
      * @param  string $actionURL
-     * @param  string $type
      * @access public
      * @return void
      */
-    public function buildRequirementSearchForm($queryID, $actionURL, $type)
+    public function buildRequirementSearchForm(int $queryID, string $actionURL): void
     {
         $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
@@ -789,21 +789,20 @@ class myModel extends model
             ->fetchPairs();
 
         $productIdList = array_keys($products);
-        $branchParam   = '';
         $queryName     = $this->app->rawMethod . 'Requirement';
         $this->app->loadConfig('product');
         $this->config->product->search['module']                      = $queryName;
         $this->config->product->search['queryID']                     = $queryID;
         $this->config->product->search['actionURL']                   = $actionURL;
         $this->config->product->search['params']['product']['values'] = $products;
-        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
+        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs($productIdList);
 
         $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
         $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
         $this->config->product->search['fields']['title'] = $this->lang->story->title;
+
         unset($this->config->product->search['fields']['plan']);
         unset($this->config->product->search['fields']['stage']);
-
         unset($this->config->product->search['fields']['module']);
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
