@@ -1043,18 +1043,18 @@ class myModel extends model
     }
 
     /**
+     * 获取待评审的用例。
      * Get reviewing cases.
      *
-     * @param  string $orderBy
-     * @param  bool   $checkExists
+     * @param  string     $orderBy
+     * @param  bool       $checkExists
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function getReviewingCases($orderBy = 'id_desc', $checkExists = false)
+    public function getReviewingCases(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
         if(!common::hasPriv('testcase', 'review')) return array();
 
-        $this->app->loadLang('testcase');
         $stmt = $this->dao->select('*')->from(TABLE_CASE)
             ->where('deleted')->eq('0')
             ->andWhere('status')->eq('wait')
