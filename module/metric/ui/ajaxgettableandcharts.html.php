@@ -53,6 +53,7 @@ div
             (
                 set::xAxis($echartOptions['xAxis']),
                 set::yAxis($echartOptions['yAxis']),
+                set::legend($echartOptions['legend']),
                 set::series($echartOptions['series'])
             )->size('100%', '100%') : null
         )
