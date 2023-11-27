@@ -24,3 +24,4 @@ $config->index->appGroup['user']        = 'admin';
 
 $config->index->oldPages = array();
 $config->index->oldPages[] = 'screen-view';
+$config->index->oldPages[] = 'screen-burn';

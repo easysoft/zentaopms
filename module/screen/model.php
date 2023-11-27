@@ -67,6 +67,7 @@ class screenModel extends model
     public function getByID(int $screenID, int $year = 0, int $dept = 0, string $account = ''): object|bool
     {
         $screen = $this->dao->select('*')->from(TABLE_SCREEN)->where('id')->eq($screenID)->fetch();
+        if($screen->id == 5) return $screen;
         if(!$screen) return false;
 
         if(empty($screen->scheme)) $screen->scheme = file_get_contents(__DIR__ . '/json/screen.json');
