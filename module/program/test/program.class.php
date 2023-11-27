@@ -564,4 +564,19 @@ class programTest
 
         return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('project')->beginIF(!empty($projectIdList))->andWhere('id')->in($projectIdList)->fi()->fetchAll('id');
     }
+
+    /**
+     * 更新项目集的进度。
+     * Update program progress.
+     *
+     * @access public
+     * @return array
+     */
+    public function updateProcessTest(): array
+    {
+        $this->program->updateProcess();
+        if(dao::isError()) return dao::getError();
+
+        return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('program')->fetchAll('id');
+    }
 }
