@@ -17,9 +17,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: project
-    note: "所属项目"
-    range: 0
   - field: branch
     note: "分支/平台"
     range: 0
