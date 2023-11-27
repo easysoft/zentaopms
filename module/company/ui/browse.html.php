@@ -67,7 +67,7 @@ sidebar
     )))
 );
 $footToolbar = common::hasPriv('user', 'batchEdit') ? array(
-    'items' => array(array('text' => $lang->edit, 'className' => 'secondary open-url', 'data-load' => 'post', 'data-url' => createLink('user', 'batchEdit'), 'data-data-map' => 'userIdList[]: #userList~checkedIDList')),
+    'items' => array(array('text' => $lang->edit, 'className' => 'secondary open-url', 'data-load' => 'post', 'data-url' => createLink('user', 'batchEdit', "deptID={$deptID}&type={$browseType}"), 'data-data-map' => 'userIdList[]: #userList~checkedIDList')),
     'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')
 ) : null;
 
