@@ -600,115 +600,51 @@ class userModel extends model
     }
 
     /**
-     * Batch edit user.
+     * 批量编辑用户。
+     * Batch update user.
      *
+     * @param  array  $users
      * @access public
-     * @return void
+     * @return bool
      */
-    public function batchEdit()
+    public function batchUpdate(array $users): bool
     {
-        $data = fixer::input('post')->get();
-        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) return dao::$errors['verifyPassword'] = $this->lang->user->error->verifyPassword;
-
-        $oldUsers     = $this->dao->select('id,account,email')->from(TABLE_USER)->where('id')->in(array_keys($data->account))->fetchAll('id');
-        $accountGroup = $this->dao->select('id,account')->from(TABLE_USER)->where('account')->in($data->account)->fetchGroup('account', 'id');
-
-        $accounts = array();
-        foreach($data->account as $id => $account)
-        {
-            $users[$id]['account']  = trim($account);
-            $users[$id]['realname'] = $data->realname[$id];
-            $users[$id]['commiter'] = $data->commiter[$id];
-            $users[$id]['email']    = $data->email[$id];
-            $users[$id]['type']     = $data->type[$id];
-            $users[$id]['join']     = $data->join[$id];
-            $users[$id]['skype']    = $data->skype[$id];
-            $users[$id]['qq']       = $data->qq[$id];
-            $users[$id]['dingding'] = $data->dingding[$id];
-            $users[$id]['weixin']   = $data->weixin[$id];
-            $users[$id]['mobile']   = $data->mobile[$id];
-            $users[$id]['slack']    = $data->slack[$id];
-            $users[$id]['whatsapp'] = $data->whatsapp[$id];
-            $users[$id]['phone']    = $data->phone[$id];
-            $users[$id]['address']  = $data->address[$id];
-            $users[$id]['zipcode']  = $data->zipcode[$id];
-            $users[$id]['visions']  = !empty($data->visions[$id]) ? join(',', $data->visions[$id]) : '';
-            $users[$id]['dept']     = $data->dept[$id] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $data->dept[$id];
-            $users[$id]['role']     = $data->role[$id] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : 0) : $data->role[$id];
-
-            /* Check required fields. */
-            foreach(explode(',', $this->config->user->edit->requiredFields) as $field)
-            {
-                $field = trim($field);
-                if(empty($field)) continue;
-
-                if(!isset($users[$id][$field])) continue;
-                if(!empty($users[$id][$field])) continue;
-
-                dao::$errors["{$field}[{$id}]"][] = sprintf($this->lang->error->notempty, $this->lang->user->$field);
-                return false;
-            }
-
-            if(!empty($this->config->user->batchAppendFields))
-            {
-                $appendFields = explode(',', $this->config->user->batchAppendFields);
-                foreach($appendFields as $appendField)
-                {
-                    if(empty($appendField)) continue;
-                    if(!isset($data->$appendField)) continue;
-                    $fieldList = $data->$appendField;
-                    $users[$id][$appendField] = $fieldList[$id];
-                }
-            }
-
-            if(isset($accountGroup[$account]) and count($accountGroup[$account]) > 1) return dao::$errors["account[{$id}]"][] = sprintf($this->lang->ser->error->accountDupl, $id);
-            if(in_array($account, $accounts)) return dao::$errors["account[{$id}]"][] = sprintf($this->lang->user->error->accountDupl, $id);
-            if(!validater::checkAccount($users[$id]['account'])) return dao::$errors["account[{$id}]"][] = sprintf($this->lang->user->error->account, $id);
-            if($users[$id]['realname'] == '') return dao::$errors["realname[{$id}]"][] = sprintf($this->lang->user->error->realname, $id);
-            if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) return dao::$errors["email[{$id}]"][] = sprintf($this->lang->user->error->mail, $id);
-
-            $accounts[$id] = $account;
-            $prev['dept']  = $users[$id]['dept'];
-            $prev['role']  = $users[$id]['role'];
-        }
-
-        $this->loadModel('mail');
         $this->loadModel('action');
+
+        $accounts = array_map(function($user){return $user->account;}, $users);
+        $oldUsers = $this->dao->select('*')->from(TABLE_USER)->where('account')->in($accounts)->fetchAll('id');
+
+        $this->dao->begin();
+
         foreach($users as $id => $user)
         {
-            $this->dao->update(TABLE_USER)->data($user)
-                ->autoCheck()
-                ->checkIF($user['email']  != '', 'email',  'email')
-                ->checkIF($user['phone']  != '', 'phone',  'phone')
-                ->checkIF($user['mobile'] != '', 'mobile', 'mobile')
-                ->where('id')->eq((int)$id)
-                ->exec();
-            if(dao::isError()) return false;
+            $this->dao->update(TABLE_USER)->data($user)->where('id')->eq($id)->exec();
+            if(dao::isError()) return $this->rollback();
 
-            $this->action->create('user', $id, 'edited');
-
+            /* 更新用户组和用户视图并记录日志。*/
+            /* Update user group and user view, and save log and score. */
             $oldUser = $oldUsers[$id];
-            if($this->config->mail->mta == 'sendcloud' and $user['email'] != $oldUser->email)
+            $changes = common::createChanges($user, $oldUser);
+            if($changes)
             {
-                $this->mail->syncSendCloud('delete', $oldUser->email);
-                $this->mail->syncSendCloud('sync', $user['email'], $user['realname']);
+                $actionID = $this->action->create('user', $id, 'edited');
+                $this->action->logHistory($actionID, $changes);
             }
 
-            if($this->app->user->account == $user['account'] and !empty($user['realname'])) $this->app->user->realname = $user['realname'];
+            if(dao::isError()) return $this->rollback();
 
-            if($user['account'] != $oldUser->account)
+            /* 更新当前用户的信息。*/
+            /* Update current user's info. */
+            if($user->account == $this->app->user->account)
             {
-                $oldAccount = $oldUser->account;
-                $this->dao->update(TABLE_USERGROUP)->set('account')->eq($user['account'])->where('account')->eq($oldAccount)->exec();
-                $this->dao->update(TABLE_USERVIEW)->set('account')->eq($user['account'])->where('account')->eq($oldAccount)->exec();
-                if(strpos($this->app->company->admins, ',' . $oldAccount . ',') !== false)
-                {
-                    $admins = str_replace(',' . $oldAccount . ',', ',' . $user['account'] . ',', $this->app->company->admins);
-                    $this->dao->update(TABLE_COMPANY)->set('admins')->eq($admins)->where('id')->eq($this->app->company->id)->exec();
-                }
-                if(!dao::isError() and $this->app->user->account == $oldAccount) $this->app->user->account = $users['account'];
+                $this->app->user->realname = $user->realname;
+                $this->app->user->role     = $user->role;
             }
         }
+
+        $this->dao->commit();
+
+        return true;
     }
 
     /**
