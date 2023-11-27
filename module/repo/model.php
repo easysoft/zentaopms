@@ -2166,90 +2166,8 @@ class repoModel extends model
             ->fetchAll();
     }
 
-    /**
-     * Insert delete record.
-     *
-     * @param  int    $repoID
-     * @access public
-     * @return void
-     */
-    public function insertDeleteRecord($repoID)
-    {
-        set_time_limit(0);
-        $repo = $this->loadModel('repo')->getByID($repoID);
-        if(empty($repo)) return false;
-
-        $scm = $this->app->loadClass('scm');
-        $scm->setEngine($repo);
-
-        $values = '';
-        if($repo->SCM == 'Gitlab')
-        {
-            $renameRevisions = $this->dao->select('t1.revision as revisionID,t2.revision')->from(TABLE_REPOFILES)->alias('t1')
-                ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
-                ->where('t1.action')->eq('R')
-                ->andWhere('t1.repo')->eq($repoID)
-                ->andWhere('t1.oldPath')->eq('')
-                ->orderBy('t2.time desc')
-                ->fetchAll('revisionID');
-
-            foreach($renameRevisions as $revision)
-            {
-                $files = $scm->getFilesByCommit($revision->revision);
-                foreach($files as $file)
-                {
-                    if($file->action != 'R') continue;
-                    $parentPath = dirname($file->oldPath) == '\\' ? '/' : dirname($file->oldPath);
-                    $values    .= "($repoID,{$revision->revisionID},'{$file->oldPath}','','$parentPath','{$file->type}','D'),";
-
-                    $this->dao->update(TABLE_REPOFILES)->set('oldPath')->eq($file->oldPath)->where('revision')->eq($revision->revisionID)->andWhere('path')->eq($file->path)->exec();
-                }
-            }
-        }
-        else
-        {
-            $branchGroups = $this->dao->select('t1.id as fileID,t1.revision as revisionID,t2.revision,t3.branch')->from(TABLE_REPOFILES)->alias('t1')
-                ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
-                ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t3.revision=t2.id')
-                ->where('t1.action')->eq('R')
-                ->andWhere('t1.repo')->eq($repoID)
-                ->andWhere('t1.oldPath')->eq('')
-                ->orderBy('t2.time desc')
-                ->fetchGroup('branch');
-
-            $revisionPairs = $this->dao->select('revision,id')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->fetchPairs();
-
-            foreach($branchGroups as $branch => $group)
-            {
-                $firstCommit = end($group);
-                $commits     = $scm->getCommits($firstCommit->revision, 0, $branch);
-                foreach($commits['files'] as $revision => $commit)
-                {
-                    if(!isset($revisionPairs[$revision])) continue;
-                    $revisionID = $revisionPairs[$revision];
-
-                    foreach($commit as $file)
-                    {
-                        if(!$file->oldPath) continue;
-                        $parentPath = dirname($file->oldPath) == '\\' ? '/' : dirname($file->oldPath);
-                        $values    .= "($repoID,$revisionID,'{$file->oldPath}','','$parentPath','{$file->type}','D'),";
-
-                        $this->dao->update(TABLE_REPOFILES)->set('oldPath')->eq($file->oldPath)->where('revision')->eq($revisionID)->andWhere('path')->eq($file->path)->exec();
-                    }
-                }
-            }
-        }
-
-        if($values)
-        {
-            $sql    = 'INSERT INTO ' . TABLE_REPOFILES . ' (`repo`,`revision`,`path`,`oldPath`,`parent`,`type`,`action`) VALUES ' . trim($values, ',');
-            $this->dao->exec($sql);
-        }
-
-        $this->loadModel('setting')->setItem('system.repo.synced', $this->config->repo->synced . ',' . $repoID);
-    }
-
     /*
+     * 移除没有权限的项目。
      * Remove projects without privileges.
      *
      * @param  array   $productIDList
@@ -2257,7 +2175,7 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function filterProject($productIDList, $projectIDList = array())
+    public function filterProject(array $productIDList, array $projectIDList = array()): array
     {
         /* Get all projects that can be accessed. */
         $accessProjects = array();
@@ -2273,24 +2191,24 @@ class repoModel extends model
     }
 
     /**
+     * 更新代码提交历史。
      * Update commit history.
      *
      * @param  int    $repoID
      * @param  int    $branchID
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateCommit($repoID, $objectID = 0, $branchID = 0)
+    public function updateCommit(int $repoID, int $objectID = 0, int $branchID = 0): bool
     {
         $repo = $this->getByID($repoID);
-        if($repo->SCM == 'Gitlab') return;
+        if($repo->SCM == 'Gitlab') return true;
+
         /* Update code commit history. */
         $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repoID));
-
         if(in_array($repo->SCM, $this->config->repo->gitTypeList))
         {
             $branch = $this->cookie->repoBranch;
-
             if($branchID)
             {
                 $currentBranches = $this->getBranches($repo, false, 'database');
@@ -2303,23 +2221,25 @@ class repoModel extends model
             $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
             $_COOKIE['repoBranch'] = $branch;
         }
+
         if($repo->SCM == 'Subversion') $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
+        return !dao::isError();
     }
 
     /**
+     * 移除已经删除的分支。
      * Delete the deleted branch.
      *
-     * @param int   $repoID
-     * @param array $latestBranches
+     * @param  int    $repoID
+     * @param  array  $latestBranches
      * @access public
      * @return bool
      */
-    public function checkDeletedBranches($repoID, $latestBranches)
+    public function checkDeletedBranches(int $repoID, array $latestBranches): bool
     {
         if(empty($latestBranches)) return false;
 
         $currentBranches = $this->dao->select('branch')->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->groupBy('branch')->fetchPairs('branch');
-
         $deletedBranches = array_diff($currentBranches, $latestBranches);
         foreach($deletedBranches as $deletedBranch)
         {
@@ -2361,12 +2281,11 @@ class repoModel extends model
      * Get gitlab projects.
      *
      * @param  int    $gitlabID
-     * @param  string $projectIdList
      * @param  string $filter
      * @access public
      * @return array
      */
-    public function getGitlabProjects(int $gitlabID, string $projectIdList = '', string $filter = ''): array
+    public function getGitlabProjects(int $gitlabID, string $filter = ''): array
     {
         $showAll = ($filter == 'ALL' and common::hasPriv('repo', 'create')) ? true : false;
         if($this->app->user->admin or $showAll)
@@ -2455,24 +2374,6 @@ class repoModel extends model
             $options[] = array('text' => $group->username, 'value' => $group->id);
         }
         return $options;
-    }
-
-    /**
-     * Check str in array.
-     *
-     * @param  string $str
-     * @param  array  $checkAry
-     * @access public
-     * @return bool
-     */
-    public function strposAry($str, $checkAry)
-    {
-        foreach($checkAry as $check)
-        {
-            if(mb_strpos($str, $check) !== false) return true;
-        }
-
-        return false;
     }
 
     /**

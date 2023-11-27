@@ -1302,21 +1302,21 @@ class repoZen extends repo
             $content  = file($logFile);
             foreach($content as $line)
             {
-                if($this->repo->strposAry($line, $this->config->repo->repoSyncLog->fatal) !== false) return $line;
-                if($this->repo->strposAry($line, $this->config->repo->repoSyncLog->failed) !== false) return $line;
+                if($this->strposAry($line, $this->config->repo->repoSyncLog->fatal) !== false) return $line;
+                if($this->strposAry($line, $this->config->repo->repoSyncLog->failed) !== false) return $line;
             }
 
             $lastLine = $content[count($content) - 1];
-            if($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->done) === false)
+            if($this->strposAry($lastLine, $this->config->repo->repoSyncLog->done) === false)
             {
-                if($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->emptyRepo) !== false)
+                if($this->strposAry($lastLine, $this->config->repo->repoSyncLog->emptyRepo) !== false)
                 {
                     @unlink($logFile);
                 }
-                elseif($this->repo->strposAry($lastLine, $this->config->repo->repoSyncLog->total) !== false)
+                elseif($this->strposAry($lastLine, $this->config->repo->repoSyncLog->total) !== false)
                 {
                     $logContent = file_get_contents($logFile);
-                    if($this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCount) !== false and $this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCompress) !== false)
+                    if($this->strposAry($logContent, $this->config->repo->repoSyncLog->finishCount) !== false and $this->repo->strposAry($logContent, $this->config->repo->repoSyncLog->finishCompress) !== false)
                     {
                         @unlink($logFile);
                     }
@@ -1474,5 +1474,24 @@ class repoZen extends repo
             substr_count($blk, "^ -~")/512 > 0.3 ||
             substr_count($blk, "\x00") > 0
         );
+    }
+
+    /**
+     * 检查字符串是否在数组元素中。
+     * Check str in array.
+     *
+     * @param  string $str
+     * @param  array  $checkAry
+     * @access public
+     * @return bool
+     */
+    public function strposAry(string $str, array $checkAry): bool
+    {
+        foreach($checkAry as $check)
+        {
+            if(mb_strpos($str, $check) !== false) return true;
+        }
+
+        return false;
     }
 }

@@ -1382,7 +1382,7 @@ class repo extends control
      */
     public function ajaxGetGitlabProjects(int $gitlabID, string $projectIdList = '', string $filter = '')
     {
-        $projects = $this->repo->getGitlabProjects($gitlabID, $projectIdList, $filter);
+        $projects = $this->repo->getGitlabProjects($gitlabID, $filter);
 
         if(!$projects) return print('[]');
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
