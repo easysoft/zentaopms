@@ -579,4 +579,19 @@ class programTest
 
         return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('program')->fetchAll('id');
     }
+
+    /**
+     * 刷新项目集的统计数据。
+     * Refresh stats fields(estimate,consumed,left,progress) of program, project, execution.
+     *
+     * @access public
+     * @return array
+     */
+    public function refreshStatsTest(): array
+    {
+        $this->program->refreshStats(true);
+        if(dao::isError()) return dao::getError();
+
+        return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('program')->fetchAll('id');
+    }
 }
