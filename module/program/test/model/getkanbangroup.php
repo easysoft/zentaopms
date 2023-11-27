@@ -1,8 +1,14 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=测试 programModel::getKanbanGroup();
+timeout=0
+cid=1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/program.class.php';
-su('admin');
 
 $program = zdTable('project');
 $program->id->range('1-3');
@@ -23,18 +29,14 @@ zdTable('projectproduct')->gen(0);
 zdTable('productplan')->gen(0);
 zdTable('release')->gen(0);
 zdTable('team')->gen(0);
+zdTable('user')->gen(5);
+su('admin');
 
-/**
-
-title=测试 programModel::getKanbanGroup();
-timeout=0
-cid=1
-
-*/
+global $app;
+$app->rawModule = 'program';
 
 $programTester = new programTest();
-
-$kanbanGroup = $programTester->getKanbanGroupTest();
+$kanbanGroup   = $programTester->getKanbanGroupTest();
 
 r(count($kanbanGroup['my']))     && p('')       && e('2');       //查看当前用户负责的项目集看板数量
 r(count($kanbanGroup['others'])) && p('')       && e('1');       //查看当前用户其他的项目集看板数量
