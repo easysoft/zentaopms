@@ -153,6 +153,31 @@ class userZen extends user
     }
 
     /**
+     * 批量编辑用户前的检查。
+     * Check before batch editing users.
+     *
+     * @param  array  $users
+     * @param  string $verifyPassword
+     * @access public
+     * @return bool
+     */
+    public function checkBeforeBatchEdit(array $users, string $verifyPassword): bool
+    {
+        if(!$users) return true;
+
+        foreach($users as $key => $user)
+        {
+            if($user->email and !validater::checkEmail($user->email)) dao::$errors["email[{$key}]"][] = sprintf($this->lang->error->email, $this->lang->user->email);
+            if($user->phone and !validater::checkPhone($user->phone)) dao::$errors["phone[{$key}]"][] = sprintf($this->lang->error->phone, $this->lang->user->phone);
+            if($user->mobile and !validater::checkMobile($user->mobile)) dao::$errors["mobile[{$key}]"][] = sprintf($this->lang->error->mobile, $this->lang->user->mobile);
+        }
+
+        $this->checkVerifyPassword($verifyPassword);
+
+        return !dao::isError();
+    }
+
+    /**
      * 检查密码强度。
      * Check the posted password.
      *
