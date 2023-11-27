@@ -18,7 +18,7 @@ class backupModel extends model
      * @access public
      * @return object
      */
-    public function backSQL($backupFile)
+    public function backSQL(string $backupFile): object
     {
         $zdb = $this->app->loadClass('zdb');
         return $zdb->dump($backupFile);
@@ -31,7 +31,7 @@ class backupModel extends model
      * @access public
      * @return object
      */
-    public function backFile($backupFile)
+    public function backFile(string $backupFile): object
     {
         $zfile  = $this->app->loadClass('zfile');
 
@@ -60,7 +60,7 @@ class backupModel extends model
      * @access public
      * @return object
      */
-    public function backCode($backupFile)
+    public function backCode(string $backupFile): object
     {
         $zfile  = $this->app->loadClass('zfile');
         $return = new stdclass();
@@ -198,39 +198,21 @@ class backupModel extends model
      * @access public
      * @return bool
      */
-    public function addFileHeader($fileName)
+    public function addFileHeader(string $fileName): bool
     {
-        $firstline = false;
-        $die       = "<?php die();?" . ">\n";
-        $fileSize  = filesize($fileName);
+        $die     = "<?php die();?" . ">\n";
+        $tmpFile = $fileName . '.tmp';
 
-        $fh    = fopen($fileName, 'c+');
-        $delta = strlen($die);
-        while(true)
+        file_put_contents($tmpFile, $die);
+        $fh = fopen($fileName, 'r');
+        while(!feof($fh))
         {
-            $offset = ftell($fh);
-            $line   = fread($fh, 1024 * 1024);
-            if(!$firstline)
-            {
-                $line = $die . $line;
-                $firstline = true;
-            }
-            else
-            {
-                $line = $compensate . $line;
-            }
-
-            $compensate = fread($fh, $delta);
-            fseek($fh, $offset);
-            fwrite($fh, $line);
-
-            if(ftell($fh) >= $fileSize)
-            {
-                fwrite($fh, $compensate);
-                break;
-            }
+            $line = fgets($fh);
+            file_put_contents($tmpFile, $line, FILE_APPEND);
         }
         fclose($fh);
+        rename($tmpFile, $fileName);
+
         return true;
     }
 
@@ -241,38 +223,22 @@ class backupModel extends model
      * @access public
      * @return bool
      */
-    public function removeFileHeader($fileName)
+    public function removeFileHeader(string $fileName): bool
     {
-        $firstline = false;
-        $die       = "<?php die();?" . ">\n";
-        $fileSize  = filesize($fileName);
-
-        $fh = fopen($fileName, 'c+');
-        while(true)
+        $tmpFile = $fileName . '.tmp';
+        $fh      = fopen($fileName, 'r');
+        $lineID  = 0;
+        while(!feof($fh))
         {
-            $offset = ftell($fh);
-            if($firstline and $delta) fseek($fh, $offset + $delta);
-            $line = fread($fh, 1024 * 1024);
-            if(!$firstline)
-            {
-                $firstline    = true;
-                $beforeLength = strlen($line);
-                $line         = str_replace($die, '', $line);
-                $afterLength  = strlen($line);
-                $delta        = $beforeLength - $afterLength;
-                if($delta == 0)
-                {
-                    fclose($fh);
-                    return true;
-                }
-            }
-            fseek($fh, $offset);
-            fwrite($fh, $line);
+            $line    = fgets($fh);
+            $lineID += 1;
+            if($lineID == 1) continue;
 
-            if(ftell($fh) >= $fileSize - $delta) break;
+            file_put_contents($tmpFile, $line, FILE_APPEND);
         }
-        ftruncate($fh, ($fileSize - $delta));
         fclose($fh);
+        rename($tmpFile, $fileName);
+
         return true;
     }
 
@@ -348,10 +314,9 @@ class backupModel extends model
      * @access public
      * @return string
      */
-    public function getTmpLogFile($backupFile)
+    public function getTmpLogFile(string $backupFile): string
     {
-        $backupDir  = dirname($backupFile);
-        return $backupDir . DS . basename($backupFile) . '.tmp.summary';
+        return $backupFile . '.tmp.summary';
     }
 
     /**
@@ -405,7 +370,7 @@ class backupModel extends model
      * @access public
      * @return bool
      */
-    public function processSummary($file, $count, $size, $errorFiles = array(), $allCount = 0, $action = 'add')
+    public function processSummary(string $file, int $count, int $size, array $errorFiles = array(), int $allCount = 0, string $action = 'add'): bool
     {
         $backupPath = dirname($file);
         $fileName   = basename($file);

@@ -62,68 +62,36 @@ class backup extends control
      * @access public
      * @return void
      */
-    public function backup($reload = 'no')
+    public function backup(string $reload = 'no')
     {
         if($reload == 'yes') session_write_close();
+
         set_time_limit(0);
-        $nofile = strpos($this->config->backup->setting, 'nofile') !== false;
-        $nosafe = strpos($this->config->backup->setting, 'nosafe') !== false;
 
         $fileName = date('YmdHis') . mt_rand(0, 9);
-        $backFileName = "{$this->backupPath}{$fileName}.sql";
-        if(!$nosafe) $backFileName .= '.php';
-        $result = $this->backup->backSQL($backFileName);
-
-        if(!$result->result)
+        $result   = $this->backupZen->backupSQL($fileName);
+        if($result['result'] == 'fail')
         {
-            if($reload == 'yes') return print(sprintf($this->lang->backup->error->noWritable, $this->backupPath));
-            printf($this->lang->backup->error->noWritable, $this->backupPath);
+            if($reload == 'yes') return print($result['message']);
+            printf($result['message']);
         }
-        if(!$nosafe) $this->backup->addFileHeader($backFileName);
 
-        if(!$nofile)
+        $result = $this->backupZen->backupFile($fileName);
+        if($result['result'] == 'fail')
         {
-            $backFileName = "{$this->backupPath}{$fileName}.file";
+            if($reload == 'yes') return print($result['message']);
+            printf($result['message']);
+        }
 
-            $result = $this->backup->backFile($backFileName);
-
-            if(!$result->result)
-            {
-                if($reload == 'yes') return print(sprintf($this->lang->backup->error->backupFile, $result->error));
-                printf($this->lang->backup->error->backupFile, $result->error);
-            }
-
-            $backFileName = "{$this->backupPath}{$fileName}.code";
-
-            $result = $this->backup->backCode($backFileName);
-            if(!$result->result)
-            {
-                if($reload == 'yes') return print(sprintf($this->lang->backup->error->backupCode, $result->error));
-                printf($this->lang->backup->error->backupCode, $result->error);
-            }
+        $result = $this->backupZen->backupCode($fileName);
+        if($result['result'] == 'fail')
+        {
+            if($reload == 'yes') return print($result['message']);
+            printf($result['message']);
         }
 
         /* Delete expired backup. */
-        $backupFiles = glob("{$this->backupPath}*.*");
-        if(!empty($backupFiles))
-        {
-            $time  = time();
-            $zfile = $this->app->loadClass('zfile');
-            foreach($backupFiles as $file)
-            {
-                /* Only delete backup file. */
-                $fileName = basename($file);
-                if(!preg_match('/[0-9]+\.(sql|file|code)/', $fileName)) continue;
-
-                /* Remove before holdDays file. */
-                if($time - filemtime($file) > $this->config->backup->holdDays * 24 * 3600)
-                {
-                    $rmFunc = is_file($file) ? 'removeFile' : 'removeDir';
-                    $zfile->{$rmFunc}($file);
-                    if($rmFunc == 'removeDir') $this->backup->processSummary($file, 0, 0, array(), 0, 'delete');
-                }
-            }
-        }
+        $this->backupZen->removeExpiredFiles();
 
         if($reload == 'yes') return print($this->lang->backup->success->backup);
         echo $this->lang->backup->success->backup . "\n";

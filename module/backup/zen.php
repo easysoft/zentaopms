@@ -11,6 +11,13 @@ declare(strict_types=1);
  */
 class backupZen extends backup
 {
+    /**
+     * 获取备份文件列表
+     * Get backup files list.
+     *
+     * @access protected
+     * @return array
+     */
     protected function getBackupList(): array
     {
         $backupPath = $this->backup->getBackupPath();
@@ -37,6 +44,90 @@ class backupZen extends backup
         krsort($backupList);
 
         return $backupList;
+    }
+
+    /**
+     * 备份SQL文件
+     * backupSQL
+     *
+     * @param  string    $fileName
+     * @access protected
+     * @return array
+     */
+    protected function backupSQL(string $fileName): array
+    {
+        $backFileName = "{$this->backupPath}{$fileName}.sql";
+        if(str_contains($this->config->backup->setting, 'nosafe')) $backFileName .= '.php';
+
+        $result = $this->backup->backSQL($backFileName);
+        if(!$result->result) return array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noWritable, $this->backupPath));
+
+        if(!$nosafe) $this->backup->addFileHeader($backFileName);
+        return array('result' => 'success');
+    }
+
+    /**
+     * 备份附件
+     * Backup appendix file.
+     *
+     * @param  string    $fileName
+     * @access protected
+     * @return array
+     */
+    protected function backupFile(string $fileName): array
+    {
+        if(str_contains($this->config->backup->setting, 'nofile')) array('result' => 'success');
+
+        $result = $this->backup->backFile("{$this->backupPath}{$fileName}.file");
+        if(!$result->result) return array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->backupFile, $result->error));
+        return array('result' => 'success');
+    }
+
+    /**
+     * 备份代码
+     * Backup code
+     *
+     * @param  string    $fileName
+     * @access protected
+     * @return array
+     */
+    protected function backupCode(string $fileName): array
+    {
+        if(str_contains($this->config->backup->setting, 'nofile')) array('result' => 'success');
+
+        $result = $this->backup->backCode("{$this->backupPath}{$fileName}.code");
+        if(!$result->result) return array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->backupCode, $result->error));
+        return array('result' => 'success');
+    }
+
+    /**
+     * 删除过期文件。
+     * Remove expired backup files.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function removeExpiredFiles()
+    {
+        $backupFiles = glob("{$this->backupPath}*.*");
+        if(empty($backupFiles)) return;
+
+        $time  = time();
+        $zfile = $this->app->loadClass('zfile');
+        foreach($backupFiles as $file)
+        {
+            /* Only delete backup file. */
+            $fileName = basename($file);
+            if(!preg_match('/[0-9]+\.(sql|file|code)/', $fileName)) continue;
+
+            /* Remove before holdDays file. */
+            if($time - filemtime($file) > $this->config->backup->holdDays * 24 * 3600)
+            {
+                $rmFunc = is_file($file) ? 'removeFile' : 'removeDir';
+                $zfile->{$rmFunc}($file);
+                if($rmFunc == 'removeDir') $this->backup->processSummary($file, 0, 0, array(), 0, 'delete');
+            }
+        }
     }
 }
 
