@@ -445,4 +445,23 @@ class myTest
         if($return === true) return 'exist';
         return !empty($return) ? implode(',', array_column($return, 'id')) : 'empty';
     }
+
+    /**
+     * 测试获取审批中的审批。
+     * Test get reviewing approvals.
+     *
+     * @param  string           $orderBy
+     * @param  bool             $checkExist
+     * @access public
+     * @return int|string|array
+     */
+    public function getReviewingApprovalsTest(string $orderBy, bool $checkExist): int|string|array
+    {
+        $return = $this->objectModel->getReviewingApprovals($orderBy, $checkExist);
+
+        if(dao::isError()) return dao::getError();
+
+        if($return === true) return 'exist';
+        return !empty($return) ? implode(',', array_column($return, 'id')) : 'empty';
+    }
 }

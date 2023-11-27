@@ -1079,14 +1079,15 @@ class myModel extends model
     }
 
     /**
+     * 获取待评审的审批。
      * Get reviewing approvals.
      *
      * @param  string $orderBy
      * @param  bool   $checkExists
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function getReviewingApprovals($orderBy = 'id_desc', $checkExists = false)
+    public function getReviewingApprovals(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
         if(!common::hasPriv('review', 'assess')) return array();
         if($this->config->edition != 'max') return array();
