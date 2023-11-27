@@ -368,10 +368,12 @@ class execution extends control
 
         $this->execution->setMenu($executionID);
 
-        /* Get users, products and executions.*/
+        /* Get users, products, executions, project and projects.*/
         $users      = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $products   = $this->loadModel('product')->getProductPairsByProject($executionID);
         $executions = !empty($products) ? $this->execution->getPairsByProduct(array_keys($products)) : $executions[$executionID] = $execution->name;
+        $project    = $this->loadModel('project')->getByID($execution->project);
+        !empty($products) ? $projects = $this->product->getProjectPairsByProductIDList(array_keys($products)) : $projects[$project->id] = $project->name;
 
         /* Set browseType, productID, moduleID and queryID. */
         $browseType = strtolower($browseType);
@@ -385,7 +387,7 @@ class execution extends control
         $bugs = $this->executionZen->getImportBugs($executionID, array_keys($products), $browseType, $queryID, $pager);
 
         /* Build the search form. */
-        $this->executionZen->buildImportBugSearchForm($execution, $queryID, $products, $executions);
+        $this->executionZen->buildImportBugSearchForm($execution, $queryID, $products, $executions, $projects);
 
         /* Assign. */
         $this->view->title       = $executions[$executionID] . $this->lang->colon . $this->lang->execution->importBug;
@@ -2819,7 +2821,8 @@ class execution extends control
             }
 
             $users = $this->loadModel('user')->getPairs('noletter');
-            $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, false, 'hasParentName', $orderBy);
+            $executionStats = $this->execution->getStatData($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, false, 'withchild', $orderBy);
+            $executionStats = $this->flattenObjectArray($executionStats);
             foreach($executionStats as $i => $execution)
             {
                 $execution->PM            = zget($users, $execution->PM);
@@ -2829,6 +2832,7 @@ class execution extends control
                 $execution->totalLeft     = $execution->hours->totalLeft;
                 $execution->progress      = $execution->hours->progress . '%';
                 $execution->name          = isset($execution->title) ? $execution->title : $execution->name;
+                if(isset($executionStats[$execution->parent])) $execution->name = $executionStats[$execution->parent]->name . '/' . $execution->name;
                 if($this->app->tab == 'project' and ($project->model == 'agileplus' or $project->model == 'waterfallplus')) $execution->method = zget($executionLang->typeList, $execution->type);
 
                 if($this->post->exportType == 'selected')
@@ -2837,6 +2841,7 @@ class execution extends control
                     if(strpos(",$checkedItem,", ",{$execution->id},") === false) unset($executionStats[$i]);
                 }
             }
+
             if($this->config->edition != 'open') list($fields, $executionStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $executionStats);
 
             $this->post->set('fields', $fields);
@@ -3173,5 +3178,27 @@ class execution extends control
         $this->view->executions  = $this->execution->getList($projectID, 'kanban');
 
         $this->display();
+    }
+
+    /**
+     * Flatten Object Array.
+     *
+     * @param  array  $array
+     * @access public
+     * @return void
+     */
+    public function flattenObjectArray(array $array = array())
+    {
+        $result = array();
+
+        foreach ($array as $key => $object) {
+            $result[$object->id] = $object;
+
+            if (isset($object->children) && is_array($object->children)) {
+                $result = array_replace($result, $this->flattenObjectArray($object->children));
+            }
+        }
+
+        return $result;
     }
 }
