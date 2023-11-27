@@ -594,4 +594,18 @@ class programTest
 
         return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('program')->fetchAll('id');
     }
+
+    /**
+     * 该项目集下是否有未关闭的子项目集或项目。
+     * Judge whether there is an unclosed programs or projects.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return int
+     */
+    public function hasUnfinishedChildrenTest(int $programID): int
+    {
+        $program = $this->program->getByID($programID);
+        return $this->program->hasUnfinishedChildren($program);
+    }
 }
