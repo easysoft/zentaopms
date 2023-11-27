@@ -880,9 +880,9 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function buildGroup($component)
+    public function buildGroup(object $component): void
     {
-        return $this->setComponentDefaults($component);
+        $this->setComponentDefaults($component);
     }
 
     /**
