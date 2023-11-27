@@ -24,7 +24,6 @@ jsVar('diffLink', $diffLink);
 jsVar('appTab', $app->tab);
 
 /* Prepare breadcrumb navigation data. */
-$base64BranchID    = $branchID ? helper::safe64Encode(base64_encode($branchID)) : '';
 $breadcrumbItems   = array();
 $breadcrumbItems[] = h::a
 (
