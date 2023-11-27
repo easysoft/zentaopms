@@ -551,7 +551,7 @@ class repoModel extends model
 
         if(!isset($repos[$this->session->repoID])) $this->session->set('repoID', key($repos));
 
-        return $this->session->repoID;
+        return (int)$this->session->repoID;
     }
 
     /**
