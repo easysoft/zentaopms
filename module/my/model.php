@@ -733,16 +733,17 @@ class myModel extends model
     }
 
     /**
+     * 通过搜索获取需求。
      * Get stories by search.
      *
      * @param  int    $queryID
      * @param  string $type
      * @param  string $orderBy
-     * @param  int    $pager
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getStoriesBySearch($queryID, $type, $orderBy, $pager)
+    public function getStoriesBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
     {
         $queryName = $type == 'contribute' ? 'contributeStoryQuery' : 'workStoryQuery';
         $queryForm = $type == 'contribute' ? 'contributeStoryForm' : 'workStoryForm';
@@ -761,54 +762,13 @@ class myModel extends model
         }
         else
         {
-            if($this->session->$queryName  == false) $this->session->set($queryName, ' 1 = 1');
+            if($this->session->{$queryName}  == false) $this->session->set($queryName, ' 1 = 1');
         }
 
-        $myStoryQuery = $this->session->$queryName;
+        $myStoryQuery = $this->session->{$queryName};
         $myStoryQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $myStoryQuery);
 
-        $storyIDList = array();
-        if($type == 'contribute')
-        {
-            $storiesAssignedByMe = $this->getAssignedByMe($this->app->user->account, null, $orderBy, 'story');
-            $storyIdList         = !empty($storiesAssignedByMe) ? array_keys($storiesAssignedByMe) : array();
-
-            $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.plan')
-                ->leftJoin(TABLE_PRODUCTPLAN)->alias('t4')->on('t3.plan = t4.id')
-                ->leftJoin(TABLE_STORYREVIEW)->alias('t5')->on('t1.id = t5.story')
-                ->where($myStoryQuery)
-                ->andWhere('t1.type')->eq('story')
-                ->andWhere('t1.openedBy',1)->eq($this->app->user->account)
-                ->orWhere('t5.reviewer')->eq($this->app->user->account)
-                ->orWhere('t1.closedBy')->eq($this->app->user->account)
-                ->orWhere('t1.id')->in($storyIdList)
-                ->markRight(1)
-                ->andWhere('t1.deleted')->eq(0)
-                ->orderBy($orderBy)
-                ->page($pager, 't1.id')
-                ->fetchAll('id');
-        }
-        else
-        {
-            $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.plan')
-                ->leftJoin(TABLE_PRODUCTPLAN)->alias('t4')->on('t3.plan = t4.id')
-                ->leftJoin(TABLE_STORYREVIEW)->alias('t5')->on('t1.id = t5.story')
-                ->where($myStoryQuery)
-                ->andWhere('t1.type')->eq('story')
-                ->andWhere('t1.assignedTo',1)->eq($this->app->user->account)
-                ->orWhere("(t5.reviewer = '{$this->app->user->account}' and t1.status in('reviewing','changing'))")
-                ->markRight(1)
-                ->andWhere('t1.product')->ne('0')
-                ->andWhere('t1.deleted')->eq(0)
-                ->orderBy($orderBy)
-                ->page($pager, 't1.id')
-                ->fetchAll('id');
-        }
-        return $stories;
+        return $this->myTao->fetchStoriesBySearch($myStoryQuery, $type, $orderBy, $pager, $type == 'contribute' ? $this->getAssignedByMe($this->app->user->account, null, $orderBy, 'story') : array());
     }
 
     /**

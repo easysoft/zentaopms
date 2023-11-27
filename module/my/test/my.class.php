@@ -146,28 +146,22 @@ class myTest
     }
 
     /**
-     * Get stories by search.
+     * 测试通过搜索获取 需求。
+     * Test get stories by search.
      *
-     * @param  int    $queryID
-     * @param  string $type
-     * @param  string $orderBy
+     * @param  int          $queryID
+     * @param  string       $type
+     * @param  string       $orderBy
      * @access public
-     * @return array
+     * @return string|array
      */
-    public function getStoriesBySearchTest($queryID, $type, $orderBy)
+    public function getStoriesBySearchTest(int $queryID, string $type, string $orderBy): string|array
     {
-        global $tester;
-        $recTotal = 0;
-        $recPerPage = 1;
-        $pageID = 0;
-        $tester->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $objects = $this->objectModel->getStoriesBySearch($queryID, $type, $orderBy, $pager);
+        $objects = $this->objectModel->getStoriesBySearch($queryID, $type, $orderBy, null);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', array_keys($objects));
     }
 
     /**

@@ -5,3 +5,5 @@ version: "1.0"
 fields:
   - field: assignedTo
     range: admin,user1,user2
+  - field: type
+    range: story{4},requirement
