@@ -114,7 +114,7 @@ formBatchPanel
         set::label($lang->user->visions),
         set::items($visions),
         set::control(array('type' => 'picker', 'multiple' => true)),
-        set::width('200px'),
+        set::width('240px'),
         set::value($config->vision),
         set::ditto(true),
         set::required(true)
@@ -124,7 +124,7 @@ formBatchPanel
         set::name('role'),
         set::label($lang->user->role),
         set::control('picker'),
-        set::width('200px'),
+        set::width('160px'),
         set::items($lang->user->roleList),
         set::ditto(true)
     ),
