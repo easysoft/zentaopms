@@ -1187,34 +1187,31 @@ class myModel extends model
     }
 
     /**
+     * 获取评审中的OA。
      * Get reviewing OA.
      *
-     * @param  string $orderBy
-     * @param  bool   $checkExists
+     * @param  string     $orderBy
+     * @param  bool       $checkExists
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function getReviewingOA($orderBy = 'status', $checkExists = false)
+    public function getReviewingOA(string $orderBy = 'status', bool $checkExists = false): array|bool
     {
         if($this->config->edition == 'open') return array();
-
-        $users   = $this->loadModel('user')->getPairs('noletter');
-        $account = $this->app->user->account;
 
         /* Get dept info. */
         $allDeptList = $this->loadModel('dept')->getPairs('', 'dept');
         $allDeptList['0'] = '/';
         $managedDeptList = array();
-        $tmpDept = $this->dept->getDeptManagedByMe($account);
+        $tmpDept = $this->dept->getDeptManagedByMe($this->app->user->account);
         foreach($tmpDept as $d) $managedDeptList[$d->id] = $d->name;
 
         $oa = array();
-        if(common::hasPriv('attend',   'review'))                                         $oa['attend']   = $this->getReviewingAttends($allDeptList, $managedDeptList);
-        if(common::hasPriv('leave',    'review') and common::hasPriv('leave',    'view')) $oa['leave']    = $this->getReviewingLeaves($allDeptList, $managedDeptList, $orderBy);
-        if(common::hasPriv('overtime', 'review') and common::hasPriv('overtime', 'view')) $oa['overtime'] = $this->getReviewingOvertimes($allDeptList, $managedDeptList, $orderBy);
-        if(common::hasPriv('makeup',   'review') and common::hasPriv('makeup',   'view')) $oa['makeup']   = $this->getReviewingMakeups($allDeptList, $managedDeptList, $orderBy);
-        if(common::hasPriv('lieu',     'review') and common::hasPriv('lieu',     'view')) $oa['lieu']     = $this->getReviewingLieus($allDeptList, $managedDeptList, $orderBy);
-
+        if(common::hasPriv('attend',   'review'))                                        $oa['attend']   = $this->getReviewingAttends($allDeptList, $managedDeptList);
+        if(common::hasPriv('leave',    'review') && common::hasPriv('leave',    'view')) $oa['leave']    = $this->getReviewingLeaves($allDeptList, $managedDeptList, $orderBy);
+        if(common::hasPriv('overtime', 'review') && common::hasPriv('overtime', 'view')) $oa['overtime'] = $this->getReviewingOvertimes($allDeptList, $managedDeptList, $orderBy);
+        if(common::hasPriv('makeup',   'review') && common::hasPriv('makeup',   'view')) $oa['makeup']   = $this->getReviewingMakeups($allDeptList, $managedDeptList, $orderBy);
+        if(common::hasPriv('lieu',     'review') && common::hasPriv('lieu',     'view')) $oa['lieu']     = $this->getReviewingLieus($allDeptList, $managedDeptList, $orderBy);
         if($checkExists)
         {
             foreach($oa as $type => $reviewings)
@@ -1224,6 +1221,7 @@ class myModel extends model
         }
 
         $reviewList = array();
+        $users      = $this->loadModel('user')->getPairs('noletter');
         foreach($oa as $type => $reviewings)
         {
             foreach($reviewings as $object)
@@ -1245,7 +1243,6 @@ class myModel extends model
                 $reviewList[] = $review;
             }
         }
-
         return $reviewList;
     }
 
