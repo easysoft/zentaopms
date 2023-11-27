@@ -37,8 +37,10 @@ class job extends control
     }
 
     /**
+     * 流水线列表。
      * Browse job.
      *
+     * @param  int    $repoID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -46,14 +48,14 @@ class job extends control
      * @access public
      * @return void
      */
-    public function browse($repoID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(int $repoID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('ci');
+        $this->app->loadLang('compile');
 
         if($repoID)
         {
-            $repos = $this->loadModel('repo')->getRepoPairs('devops');
-            if(empty($repos)) $this->locate($this->repo->createLink('create'));
+            $this->jobZen->checkRepoEmpty();
             $repoID = $this->repo->saveState($repoID);
 
             /* Set session. */
@@ -67,36 +69,7 @@ class job extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $products = $this->loadModel('product')->getPairs();
-
-        $this->app->loadLang('compile');
-        $jobList = $this->job->getList($repoID, $orderBy, $pager);
-        $this->loadModel('gitlab');
-        foreach($jobList as $job)
-        {
-            $job->canExec = true;
-
-            if($job->engine == 'gitlab')
-            {
-                $pipeline = json_decode($job->pipeline);
-                $branch   = $this->gitlab->apiGetSingleBranch($job->server, $pipeline->project, $pipeline->reference);
-                if($branch and isset($branch->can_push) and !$branch->can_push) $job->canExec = false;
-                /* query buildSpec */
-                if(is_numeric($job->pipeline))  $job->pipeline = $this->loadModel('gitlab')->getProjectName($job->server, $job->pipeline);
-                if(isset($pipeline->reference)) $job->pipeline = $this->loadModel('gitlab')->getProjectName($job->server, $pipeline->project);
-            }
-            elseif($job->engine == 'jenkins')
-            {
-                if(strpos($job->pipeline, '/job/') !== false) $job->pipeline = trim(str_replace('/job/', '/', $job->pipeline), '/');
-            }
-
-            $job->lastExec    = $job->lastExec ? $job->lastExec : '';
-            $job->triggerType = $this->job->getTriggerConfig($job);
-            $job->buildSpec   = urldecode($job->pipeline) . '@' . $job->jenkinsName;
-            $job->engine      = zget($this->lang->job->engineList, $job->engine);
-            $job->frame       = zget($this->lang->job->frameList, $job->frame);
-            $job->productName = zget($products, $job->product, '');
-        }
+        $jobList = $this->jobZen->getJobList($repoID, $orderBy, $pager);
 
         $this->view->title   = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
         $this->view->repoID  = $repoID;
