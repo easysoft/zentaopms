@@ -983,20 +983,21 @@ class searchModel extends model
     }
 
     /**
+     * 在文中标记关键词。
      * Mark keywords in content.
      *
-     * @param  string    $content
-     * @param  string    $keywords
+     * @param  string $content
+     * @param  string $keywords
      * @access public
-     * @return void
+     * @return string
      */
-    public function markKeywords($content, $keywords)
+    public function markKeywords(string $content, string $keywords): string
     {
         $words = explode(' ', trim($keywords, ' '));
-        $markedWords = array();
         $leftMark  = '|0000';
         $rightMark = '0000|';
 
+        $markedWords = array();
         foreach($words as $key => $word)
         {
             if(preg_match('/^\|[0-9]+\|$/', $word))
