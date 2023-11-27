@@ -43,9 +43,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: mode
-    note: "模式"
-    range: ''
   - field: shortcut
     note: "显示在菜单栏"
     range: 0,1
