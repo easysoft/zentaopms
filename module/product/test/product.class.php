@@ -1257,4 +1257,20 @@ class productTest
 
         return $productBugs;
     }
+
+    /**
+     * 获取产品的统计数据。
+     * Get summary of products to be refreshed.
+     *
+     * @param  array  $productIdList
+     * @access public
+     * @return array
+     */
+    public function getProductStatsTest(array $productIdList): array
+    {
+        $products = $this->objectModel->getProductStats($productIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $products;
+    }
 }
