@@ -548,4 +548,20 @@ class programTest
 
         return $summary;
     }
+
+    /**
+     * 更新项目集的统计数据。
+     * Update stats of program.
+     *
+     * @param  array  $projectIdList
+     * @access public
+     * @return array
+     */
+    public function updateStatsTest(array $projectIdList): array
+    {
+        $this->program->updateStats($projectIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('project')->beginIF(!empty($projectIdList))->andWhere('id')->in($projectIdList)->fi()->fetchAll('id');
+    }
 }
