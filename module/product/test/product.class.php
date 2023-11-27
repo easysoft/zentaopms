@@ -1273,4 +1273,19 @@ class productTest
 
         return $products;
     }
+
+    /**
+     * 刷新产品的统计信息。
+     * Refresh stats info of products.
+     *
+     * @access public
+     * @return array
+     */
+    public function refreshStatsTest(): array
+    {
+        $this->objectModel->refreshStats(true);
+        if(dao::isError()) return dao::getError();
+
+        return $this->objectModel->getProducts();
+    }
 }
