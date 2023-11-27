@@ -153,7 +153,7 @@ class gitea extends control
     public function delete($giteaID)
     {
         $oldGitea = $this->loadModel('pipeline')->getByID($giteaID);
-        $actionID = $this->pipeline->delete($giteaID, 'gitea');
+        $actionID = $this->pipeline->deleteByObject($giteaID, 'gitea');
         if(!$actionID)
         {
             $response['result']   = 'fail';

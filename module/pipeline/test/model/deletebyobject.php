@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试 pipelineModel->delete();
+title=测试 pipelineModel->deleteByObject();
 cid=1
 pid=1
 
