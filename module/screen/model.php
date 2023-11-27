@@ -960,43 +960,42 @@ class screenModel extends model
      *
      * @param  object $component
      * @access public
-     * @return object
+     * @return void
      */
-    public function buildChart($component)
+    public function buildChart(object $component): void
     {
         $chart = $this->dao->select('*')->from(TABLE_CHART)->where('id')->eq($component->sourceID)->fetch();
         switch($chart->type)
         {
             case 'card':
-                return $this->buildCardChart($component, $chart);
+                $this->buildCardChart($component, $chart);
                 break;
             case 'line':
-                return $this->buildLineChart($component, $chart);
+                $this->buildLineChart($component, $chart);
                 break;
             case 'bar':
-                return $this->buildBarChart($component, $chart);
+                $this->buildBarChart($component, $chart);
                 break;
             case 'piecircle':
-                return $this->buildPieCircleChart($component, $chart);
+                $this->buildPieCircleChart($component, $chart);
                 break;
             case 'pie':
-                if($chart->builtin == '0') return $this->getPieChartOption($component, $chart, $filters);
-                return $this->buildPieChart($component, $chart);
+                $chart->builtin == '0' ? $this->getPieChartOption($component, $chart) : $this->buildPieChart($component, $chart);
                 break;
             case 'radar':
-                return $this->buildRadarChart($component, $chart);
+                $this->buildRadarChart($component, $chart);
                 break;
             case 'funnel':
-                return $this->buildFunnelChart($component, $chart);
+                $this->buildFunnelChart($component, $chart);
                 break;
             case 'table':
-                return $this->buildTableChart($component, $chart);
+                $this->buildTableChart($component, $chart);
                 break;
             case 'cluBarY':
             case 'stackedBarY':
             case 'cluBarX':
             case 'stackedBar':
-                return $this->getBarChartOption($component, $chart);
+                $this->getBarChartOption($component, $chart);
                 break;
         }
     }
