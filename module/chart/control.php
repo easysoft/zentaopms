@@ -29,11 +29,11 @@ class chart extends control
         $charts = array();
         if($_POST)
         {
-            $chartChecked = count($this->post->charts);
-            if($chartChecked > $this->config->chart->chartMaxChecked) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->chart->chartMaxChecked, $this->config->chart->chartMaxChecked)));
-
             if($this->post->charts)
             {
+                $chartChecked = count($this->post->charts);
+                if($chartChecked > $this->config->chart->chartMaxChecked) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->chart->chartMaxChecked, $this->config->chart->chartMaxChecked)));
+
                 /* 选中多个图表查看。*/
                 /* Select multiple charts to view. */
                 $charts = $this->getChartsToView($this->post->charts);
