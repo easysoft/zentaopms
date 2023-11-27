@@ -560,13 +560,6 @@ class searchModel extends model
             $results = $results[$pager->pageID - 1];
         }
 
-        $idListGroup = array();
-        foreach($results as $record)
-        {
-            $module = $record->objectType == 'case' ? 'testcase' : $record->objectType;
-            $idListGroup[$module][$record->objectID] = $record->objectID;
-        }
-
         $objectList = array();
         $linkProjectModules = ',task,bug,testcase,build,release,testtask,testsuite,testreport,trainplan,';
         foreach($idListGroup as $module => $idList)
