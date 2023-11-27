@@ -72,7 +72,7 @@ class mr extends control
         $repoList = $this->loadModel('repo')->getListBySCM('Gitlab,Gitea,Gogs');
         if(empty($repoList)) $this->locate($this->loadModel('repo')->createLink('create'));
 
-        if(!isset($repoList[$repoID]) $repoID = key($repoList);
+        if(!isset($repoList[$repoID])) $repoID = key($repoList);
         $repoID = $this->repo->saveState($repoID, $objectID);
         $repo   = $repoList[$repoID];
 
