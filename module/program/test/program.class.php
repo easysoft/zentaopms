@@ -532,4 +532,20 @@ class programTest
         $object = $this->program->getByID($objectID);
         return $this->program->buildActions($object);
     }
+
+    /**
+     * 获取任务的统计数据。
+     * Get task stats.
+     *
+     * @param  array $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getTaskStatsTest(array $projectIdList): array
+    {
+        $summary = $this->program->getTaskStats($projectIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $summary;
+    }
 }
