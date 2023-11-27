@@ -1976,26 +1976,22 @@ class productModel extends model
             }
         }
 
-        $finishClosedStory = $this->dao->select('product, count(1) as finish')->from(TABLE_STORY)
+        $productStories = $this->dao->select("product,
+            COUNT(CASE WHEN status = 'closed' AND closedReason = 'done' THEN 1 END) AS finishClosed,
+            COUNT(CASE WHEN status = 'launched' THEN 1 END) AS launched,
+            COUNT(CASE WHEN status = 'developing' THEN 1 END) AS developing")
+            ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
-            ->andWhere('status')->eq('closed')
-            ->andWhere('closedReason')->eq('done')
             ->groupBy('product')
-            ->fetchPairs('product', 'finish');
+            ->fetchAll('product');
 
-        $launchedStory = $this->dao->select('product, count(1) as launched')->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('status')->eq('launched')
-            ->fetchPairs('product', 'launched');
-        $developingStory = $this->dao->select('product, count(1) as developing')->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->andWhere('status')->eq('developing')
-            ->fetchPairs('product', 'developing');
         foreach($products as $productID => $product)
         {
-            $products[$productID]->finishClosedStories = isset($finishClosedStory[$productID]) ? $finishClosedStory[$productID] : 0;
-            $products[$productID]->launchedStories     = isset($launchedStory[$productID]) ? $launchedStory[$productID] : 0;
-            $products[$productID]->developingStories   = isset($developingStory[$productID]) ? $developingStory[$productID] : 0;
+            $productStory = isset($productStories[$productID]) ? $productStories[$productID] : null;
+
+            $products[$productID]->finishClosedStories = $productStory ? $productStory->finishClosed : 0;
+            $products[$productID]->launchedStories     = $productStory ? $productStory->launched : 0;
+            $products[$productID]->developingStories   = $productStory ? $productStory->developing : 0;
         }
 
         return $products;
