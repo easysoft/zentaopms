@@ -892,13 +892,11 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function setComponentDefaults($component)
+    public function setComponentDefaults(object $component): void
     {
         if(!isset($component->styles))  $component->styles  = json_decode('{"filterShow": false, "hueRotate": 0, "saturate": 1, "contrast": 1, "brightness": 1, "opacity": 1, "rotateZ": 0, "rotateX": 0, "rotateY": 0, "skewX": 0, "skewY": 0, "blendMode": "normal", "animations": []}');
         if(!isset($component->status))  $component->status  = json_decode('{"lock": false, "hide": false}');
         if(!isset($component->request)) $component->request = json_decode('{ "requestDataType": 0, "requestHttpType": "get", "requestUrl": "", "requestIntervalUnit": "second", "requestContentType": 0, "requestParamsBodyType": "none", "requestSQLContent": { "sql": "select * from  where" }, "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {} } }');
-
-        return $component;
     }
 
     /**
