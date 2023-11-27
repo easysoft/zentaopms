@@ -10,19 +10,34 @@ declare(strict_types=1);
  */
 namespace zin;
 
+h::jsCall('$.getLib', 'md5.js', array('root' => $this->app->getWebRoot() . 'js/'));
+
 $items = array();
 $items['id'] = array('name' => 'id', 'label' => $lang->idAB, 'control' => 'index', 'width' => '60px');
 $items = array_merge($items, $config->user->form->batchEdit);
 $items['dept']['items']    = $depts;
-$items['visions']['items'] = $visionList;
+$items['company']['items'] = $companies;
+$items['visions']['items'] = $visions;
+
+if($type == 'inside')
+{
+    $items['company']['hidden'] = true;
+}
+else
+{
+    $items['dept']['hidden']     = true;
+    $items['commiter']['hidden'] = true;
+    $items['join']['hidden']     = true;
+}
 
 formBatchPanel
 (
-    set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
     set::title($lang->user->batchEdit),
+    set::customFields(array('list' => $listFields, 'show' => $showFields, 'key' => 'batchEditFields')),
     set::mode('edit'),
     set::items($items),
     set::data(array_values($users)),
+    on::click('button[type=submit]', 'encryptPassword'),
     div
     (
         setClass('form-grid'),
@@ -34,11 +49,11 @@ formBatchPanel
             set::labelClass('w-10 mr-2'),
             set::control('password'),
             set::name('verifyPassword'),
-            set::value(''),
             set::required(true)
         )
     )
 );
+
 formHidden('verifyRand', $rand);
 
 render();
