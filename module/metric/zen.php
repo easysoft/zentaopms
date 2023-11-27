@@ -174,12 +174,13 @@ class metricZen extends metric
      * Build measurements that can be inserted into tables based on the results of the measurements computed.
      *
      * @param  array     $calcList
+     * @param  bool      $isFirstGenerate
      * @access protected
      * @return array
      */
-    protected function prepareMetricRecord($calcList)
+    protected function prepareMetricRecord($calcList, $isFirstGenerate = false)
     {
-        $options = array('year' => date('Y'), 'month' => date('n'), 'week' => date('W'), 'day' => date('j'));
+        $options = $isFirstGenerate ? array() : array('year' => date('Y'), 'month' => date('n'), 'week' => date('W'), 'day' => date('j'));
 
         $now = helper::now();
         $records = array();
