@@ -850,6 +850,7 @@ class repoZen extends repo
             $scm->setEngine($repo);
             $branches = isset($branchInfo) && $branchInfo !== false ? $branchInfo : $scm->branch();
             $initTags = isset($tagInfo) && $tagInfo !== false ? $tagInfo : $scm->tags('');
+            $tags     = array();
             foreach($initTags as $tag) $tags[$tag] = $tag;
 
             if(empty($branchID) and $this->cookie->repoBranch && $this->session->repoID == $repo->id) $branchID = $this->cookie->repoBranch;

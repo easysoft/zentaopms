@@ -2664,6 +2664,7 @@ EOF;
 
         if($errors) commonModel::$requestErrors[] = $errors;
 
+        if(!$response) $response = '';
         return $httpCode ? array($response, $httpCode, 'body' => $body, 'header' => $newHeader, 'errno' => $errno, 'info' => $info, 'response' => $response) : $response;
     }
 

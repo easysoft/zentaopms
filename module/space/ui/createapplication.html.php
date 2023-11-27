@@ -24,12 +24,15 @@ jsVar('jenkinsPasswordTips', $lang->jenkins->tips);
 jsVar('sonarqubeAccountTips', $lang->sonarqube->placeholder->account);
 jsVar('apps', $apps);
 jsVar('appID', $appID);
-jsVar('pgList', $pgList);
-jsVar('mysqlList', $mysqlList);
 jsVar('defaultApp', $defaultApp);
-jsVar('showVersion', $showVersion);
 jsVar('externalApps', $config->space->zentaoApps);
-jsVar('resourceAlert', $lang->instance->notices['notEnoughResource']);
+if($config->inQuickon)
+{
+    jsVar('pgList', $pgList);
+    jsVar('mysqlList', $mysqlList);
+    jsVar('showVersion', $showVersion);
+    jsVar('resourceAlert', $lang->instance->notices['notEnoughResource']);
+}
 
 if($config->inQuickon)
 {

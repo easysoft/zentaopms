@@ -121,35 +121,39 @@ class space extends control
 
         $this->app->loadLang('sonarqube');
         $this->app->loadLang('jenkins');
-        $this->loadModel('cne');
 
-        $pagedApps  = $this->loadModel('store')->searchApps('', '', array(), 1, 10000);
         $apps       = array();
         $defaultApp = '';
-        foreach($pagedApps->apps as $app)
+        if($this->config->inQuickon)
         {
-            if(strpos($app->name, 'zentao') === 0 || strpos($app->name, 'zdoo') === 0 || strpos($app->name, 'xuanxuan') === 0) continue;
-            if(!$appID && $app->alias == 'GitLab') $defaultApp = $app->id;
+            $this->loadModel('cne');
+            $pagedApps  = $this->loadModel('store')->searchApps('', '', array(), 1, 10000);
+            foreach($pagedApps->apps as $app)
+            {
+                if(strpos($app->name, 'zentao') === 0 || strpos($app->name, 'zdoo') === 0 || strpos($app->name, 'xuanxuan') === 0) continue;
+                if(!$appID && $app->alias == 'GitLab') $defaultApp = $app->id;
 
-            $apps[$app->id] = $app->alias;
+                $apps[$app->id] = $app->alias;
+            }
+
+            $mysqlList   = $this->cne->sharedDBList('mysql');
+            $pgList      = $this->cne->sharedDBList('postgresql');
+            $versionList = $this->store->getVersionPairs($appID);
+            $cloudApp    = $this->loadModel('store')->getAppInfo($appID);
+            $showDb      = !empty($cloudApp) && ((!empty($cloudApp->dependencies->mysql) && $mysqlList) || (!empty($cloudApp->dependencies->postgresql) && $pgList));
+
+            $this->view->pgList      = $pgList;
+            $this->view->mysqlList   = $mysqlList;
+            $this->view->versionList = $versionList;
+            $this->view->showDb      = $showDb;
+            $this->view->thirdDomain = $this->loadModel('instance')->randThirdDomain();
         }
 
-        $mysqlList   = $this->cne->sharedDBList('mysql');
-        $pgList      = $this->cne->sharedDBList('postgresql');
-        $versionList = $this->store->getVersionPairs($appID);
-        $cloudApp    = $this->loadModel('store')->getAppInfo($appID);
-        $showDb      = !empty($cloudApp) && ((!empty($cloudApp->dependencies->mysql) && $mysqlList) || (!empty($cloudApp->dependencies->postgresql) && $pgList));
-
-        $this->view->title       = $this->lang->space->install;
-        $this->view->apps        = $apps;
-        $this->view->appID       = $appID;
-        $this->view->defaultApp  = $defaultApp;
-        $this->view->pgList      = $pgList;
-        $this->view->mysqlList   = $mysqlList;
-        $this->view->versionList = $versionList;
-        $this->view->showDb      = $showDb;
-        $this->view->addType     = empty($appID) ? 'external' : 'store';
-        $this->view->thirdDomain = $this->loadModel('instance')->randThirdDomain();
+        $this->view->apps       = $apps;
+        $this->view->defaultApp = $defaultApp;
+        $this->view->title      = $this->lang->space->install;
+        $this->view->appID      = $appID;
+        $this->view->addType    = empty($appID) ? 'external' : 'store';
         $this->display();
     }
 
