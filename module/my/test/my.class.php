@@ -464,4 +464,23 @@ class myTest
         if($return === true) return 'exist';
         return !empty($return) ? implode(',', array_column($return, 'id')) : 'empty';
     }
+
+    /**
+     * 测试获取审批中的审批。
+     * Test get reviewing flows.
+     *
+     * @param  string           $orderBy
+     * @param  bool             $checkExist
+     * @access public
+     * @return int|string|array
+     */
+    public function getReviewingFlowsTest(string $orderBy, bool $checkExist): int|string|array
+    {
+        $return = $this->objectModel->getReviewingFlows($orderBy, $checkExist);
+
+        if(dao::isError()) return dao::getError();
+
+        if($return === true) return 'exist';
+        return !empty($return) ? implode(',', array_column($return, 'id')) : 'empty';
+    }
 }

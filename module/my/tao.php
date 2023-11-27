@@ -215,4 +215,45 @@ class myTao extends myModel
          }
          return $requirements;
     }
+
+    /**
+     * 构建待审批的审批数据。
+     * Build the data of the approval to be approved.
+     *
+     * @param  array     $objectGroup
+     * @param  array     $flows
+     * @param  array     $objectNameFields
+     * @access protected
+     * @return array
+     */
+    protected function buildReviewingFlows(array $objectGroup, array $flows, array $objectNameFields): array
+    {
+        $approvalList = array();
+        foreach($objectGroup as $objectType => $objects)
+        {
+            $title           = '';
+            $titleFieldName  = zget($objectNameFields, $objectType, '');
+            $openedDateField = 'openedDate';
+            if(in_array($objectType, array('product', 'productplan', 'release', 'build', 'testtask'))) $openedDateField = 'createdDate';
+            if(in_array($objectType, array('testsuite', 'caselib')))$openedDateField = 'addedDate';
+            if(empty($titleFieldName) && isset($flows[$objectType]))
+            {
+                if(!empty($flows[$objectType]->titleField)) $titleFieldName = $flows[$objectType]->titleField;
+                if(empty($flows[$objectType]->titleField)) $title = $flows[$objectType]->name;
+                $openedDateField = 'createdDate';
+            }
+
+            foreach($objects as $object)
+            {
+                $data = new stdclass();
+                $data->id     = $object->id;
+                $data->title  = empty($titleFieldName) || !isset($object->$titleFieldName) ? $title . " #{$object->id}" : $object->{$titleFieldName};
+                $data->type   = $objectType;
+                $data->time   = $object->{$openedDateField};
+                $data->status = 'doing';
+                $approvalList[] = $data;
+            }
+        }
+        return $approvalList;
+    }
 }

@@ -1116,69 +1116,43 @@ class myModel extends model
     }
 
     /**
+     * 获取审批中的工作流设置。
      * Get reviewing for flows setting.
      *
      * @param  string $objectType
      * @param  string $orderBy
      * @param  bool   $checkExists
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function getReviewingFlows($objectType = 'all', $orderBy = 'id_desc', $checkExists = false)
+    public function getReviewingFlows($objectType = 'all', $orderBy = 'id_desc', $checkExists = false): array|bool
     {
         if($this->config->edition != 'max') return array();
 
         $stmt = $this->dao->select('t2.objectType,t2.objectID')->from(TABLE_APPROVALNODE)->alias('t1')
-            ->leftJoin(TABLE_APPROVALOBJECT)->alias('t2')
-            ->on('t2.approval = t1.approval')
+            ->leftJoin(TABLE_APPROVALOBJECT)->alias('t2')->on('t2.approval = t1.approval')
             ->where('t2.objectType')->ne('review')
             ->beginIF($objectType != 'all')->andWhere('t2.objectType')->eq($objectType)->fi()
             ->andWhere('t1.account')->eq($this->app->user->account)
             ->andWhere('t1.status')->eq('doing')
+            ->orderBy($orderBy)
             ->query();
         $objectIdList = array();
         while($object = $stmt->fetch()) $objectIdList[$object->objectType][$object->objectID] = $object->objectID;
         if($checkExists) return array_keys($objectIdList);
 
-        $flows = $this->dao->select('module,`table`,name,titleField')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectIdList))->andWhere('buildin')->eq(0)->fetchAll('module');
+        $flows       = $this->dao->select('module,`table`,name,titleField')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectIdList))->andWhere('buildin')->eq(0)->fetchAll('module');
         $objectGroup = array();
         foreach($objectIdList as $objectType => $idList)
         {
             $table = zget($this->config->objectTables, $objectType, '');
-            if(empty($table) and isset($flows[$objectType])) $table = $flows[$objectType]->table;
-            if(empty($table)) continue;
+            if(empty($table) && isset($flows[$objectType])) $table = $flows[$objectType]->table;
 
-            $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->fetchAll('id');
+            if(!empty($table)) $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->fetchAll('id');
         }
 
         $this->app->loadConfig('action');
-        $approvalList = array();
-        foreach($objectGroup as $objectType => $objects)
-        {
-            $title = '';
-            $titleFieldName  = zget($this->config->action->objectNameFields, $objectType, '');
-            $openedDateField = 'openedDate';
-            if(in_array($objectType, array('product', 'productplan', 'release', 'build', 'testtask'))) $openedDateField = 'createdDate';
-            if(in_array($objectType, array('testsuite', 'caselib')))$openedDateField = 'addedDate';
-            if(empty($titleFieldName) and isset($flows[$objectType]))
-            {
-                if(!empty($flows[$objectType]->titleField)) $titleFieldName = $flows[$objectType]->titleField;
-                if(empty($flows[$objectType]->titleField)) $title = $flows[$objectType]->name;
-                $openedDateField = 'createdDate';
-            }
-
-            foreach($objects as $object)
-            {
-                $data = new stdclass();
-                $data->id     = $object->id;
-                $data->title  = (empty($titleFieldName) or !isset($object->$titleFieldName)) ? $title . " #{$object->id}" : $object->$titleFieldName;
-                $data->type   = $objectType;
-                $data->time   = $object->$openedDateField;
-                $data->status = 'doing';
-                $approvalList[] = $data;
-            }
-        }
-        return $approvalList;
+        return $this->myTao->buildApprovalList($objectGroup, $flows, $this->config->action->objectNameFields);
     }
 
     /**
