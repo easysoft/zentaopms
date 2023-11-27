@@ -1000,8 +1000,8 @@ class myModel extends model
      * 获取待审批的需求。
      * Get reviewing stories.
      *
-     * @param  string $orderBy
-     * @param  bool   $checkExists
+     * @param  string     $orderBy
+     * @param  bool       $checkExists
      * @access public
      * @return array|bool
      */
@@ -1082,8 +1082,8 @@ class myModel extends model
      * 获取待评审的审批。
      * Get reviewing approvals.
      *
-     * @param  string $orderBy
-     * @param  bool   $checkExists
+     * @param  string     $orderBy
+     * @param  bool       $checkExists
      * @access public
      * @return array|bool
      */
