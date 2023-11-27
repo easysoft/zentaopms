@@ -123,8 +123,8 @@ function getEditingField($fieldTr)
     if(isTextType)
     {
         const type = $fieldTr.find('input.field-type').length ? 'text' : 'textarea';
-        const placeholder = $fieldTr.find('input[type="text"]').prop('placeholder');
-        const required = $fieldTr.find('input[type="text"]').closest('td').hasClass('required');
+        const placeholder = $fieldTr.find('.field-type').prop('placeholder');
+        const required = $fieldTr.find('.field-type').closest('td').hasClass('required');
         return [true, { name, type, placeholder, required }];
     }
 
