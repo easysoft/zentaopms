@@ -92,5 +92,7 @@ fields:
   - field: multiple
     note: "有无迭代"
     range: 1
+  - field: category
+    range: ''
   - field: deleted
     range: 0
