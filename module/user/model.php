@@ -503,25 +503,30 @@ class userModel extends model
             ->exec();
         if(dao::isError()) return $this->rollBack();
 
-        $oldUser = $this->getById($user->id, 'id');
-
         /* 更新用户组和用户视图并记录积分和日志。*/
         /* Update user group and user view, and save log and score. */
+        $oldUser = $this->getById($user->id, 'id');
         $this->checkAccountChange($oldUser->account, $user->account);
         $this->checkGroupChange($user);
         $this->loadModel('score')->create('user', 'editProfile');
-        $this->loadModel('action')->create('user', $user->id, 'edited');
+        $changes = common::createChanges($user, $oldUser);
+        if($changes)
+        {
+            $actionID = $this->action->create('user', $user->id, 'edited');
+            $this->action->logHistory($actionID, $changes);
+        }
 
         if(dao::isError()) return $this->rollBack();
 
         $this->dao->commit();
 
         /* 更新当前用户的信息。*/
+        /* Update current user's info. */
         if($user->account == $this->app->user->account)
         {
             if(!empty($user->password)) $this->app->user->password = $user->password;
-            if(!empty($user->realname)) $this->app->user->realname = $user->realname;
-            $this->app->user->role = $user->role;
+            $this->app->user->realname = $user->realname;
+            $this->app->user->role     = $user->role;
         }
 
         return true;
