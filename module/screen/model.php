@@ -1096,9 +1096,9 @@ class screenModel extends model
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return object
+     * @return void
      */
-    public function buildLineChart($component, $chart)
+    public function buildLineChart(object $component, object $chart): void
     {
         if(!$chart->settings)
         {
@@ -1108,22 +1108,21 @@ class screenModel extends model
             $component->chartConfig = json_decode('{"key":"LineCommon","chartKey":"VLineCommon","conKey":"VCLineCommon","title":"折线图","category":"Lines","categoryName":"折线图","package":"Charts","chartFrame":"echarts","image":"/static/png/line-e714bc74.png"}');
             $component->option      = json_decode('{"legend":{"show":true,"top":"5%","textStyle":{"color":"#B9B8CE"}},"xAxis":{"type":"category"},"yAxis":{"show":true,"axisLine":{"show":true},"type":"value"},"backgroundColor":"rgba(0,0,0,0)"}');
 
-            return $this->setComponentDefaults($component);
+            $this->setComponentDefaults($component);
         }
         else
         {
             if($chart->sql)
             {
                 $settings = json_decode($chart->settings);
-                if($settings and isset($settings->xaxis))
+                if($settings && isset($settings->xaxis))
                 {
                     $dimensions = array($settings->xaxis[0]->name);
                     foreach($settings->yaxis as $yaxis) $dimensions[] = $yaxis->name;
 
                     $sourceData = array();
 
-                    $sql     = $this->setFilterSQL($chart);
-                    $results = $this->dao->query($sql)->fetchAll();
+                    $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
                     foreach($results as $result)
                     {
                         $key   = $settings->xaxis[0]->name;
@@ -1143,7 +1142,7 @@ class screenModel extends model
                 }
             }
 
-            return $this->setComponentDefaults($component);
+            $this->setComponentDefaults($component);
         }
     }
 
