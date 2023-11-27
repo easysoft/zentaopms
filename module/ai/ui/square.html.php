@@ -13,7 +13,7 @@ if(count($categoryList) <= 9)
         $navItems[] = array(
             'text'   => $value,
             'active' => $isActive,
-            'url'    => createLink('ai', 'square', "category=$key"),
+            'url'    => createLink('ai', 'square', "category=$key#app=ai"),
             'badge'  => $isActive ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null,
             'props'  => array('data-id' => $key)
         );
@@ -27,7 +27,7 @@ else
         $navItems[] = array(
             'text'   => $value,
             'active' => $isActive,
-            'url'    => createLink('ai', 'square', "category=$key"),
+            'url'    => createLink('ai', 'square', "category=$key#app=ai"),
             'badge'  => $isActive ? array('text' => $pager->recTotal, 'class' => 'size-sm rounded-full white') : null,
             'props'  => array('data-id' => $key)
         );
@@ -40,7 +40,7 @@ else
         $subItems[] = array(
             'text'   => $value,
             'active' => $key === $category,
-            'url'    => createLink('ai', 'square', "category=$key"),
+            'url'    => createLink('ai', 'square', "category=$key#app=ai"),
             'attrs'  => array('data-id' => $key)
         );
     }
