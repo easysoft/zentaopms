@@ -299,6 +299,8 @@ $config->openMethods[] = 'store.browse';
 $config->openMethods[] = 'store.appview';
 $config->openMethods[] = 'system.editdomain';
 $config->openMethods[] = 'doc.uploaddocs';
+$filter->testreport->default->cookie['preBranch']    = 'reg::word';
+
 $config->openMethods[] = 'cron.schedule';
 $config->openMethods[] = 'cron.consume';
 
