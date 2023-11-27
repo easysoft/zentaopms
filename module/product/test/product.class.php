@@ -1241,4 +1241,20 @@ class productTest
 
         return $productStories;
     }
+
+    /**
+     * 获取产品下bug的统计数据。
+     * Get bug statistic data.
+     *
+     * @param  array  $productIdList
+     * @access public
+     * @return array
+     */
+    public function getBugStatsTest(array $productIdList): array
+    {
+        $productBugs = $this->objectModel->getBugStats($productIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $productBugs;
+    }
 }
