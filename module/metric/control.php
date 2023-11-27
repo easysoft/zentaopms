@@ -60,7 +60,7 @@ class metric extends control
         }
         $groupMetrics = $this->metric->groupMetricByObject($metrics);
 
-        $current = $this->metric->getByID($metricID);
+        $current = $this->metric->getByID((int)$metricID);
         if(empty($current) and $groupMetrics) $current = current(current($groupMetrics));
 
         $resultHeader = array();
@@ -68,13 +68,14 @@ class metric extends control
         if(!empty($current))
         {
             $metric = $this->metric->getByID($current->id);
-            $result = $this->metric->getResultByCode($metric->code, array(), 'cron', $pager);
+            $result = $this->metric->getResultByCode($metric->code, $_POST, 'cron', $pager);
 
             $resultHeader = $this->metricZen->getViewTableHeader($metric);
             $resultData   = $this->metricZen->getViewTableData($metric, $result);
         }
 
         list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
+        //a($groupHeader);a($groupData);
         $this->view->groupHeader   = $groupHeader;
         $this->view->groupData     = $groupData;
         $this->view->dateType      = $this->metric->getDateTypeByCode($metric->code);
