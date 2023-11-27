@@ -1,6 +1,6 @@
 .panel {width: 1000px; margin: auto; padding-bottom: 32px;}
 .panel .panel-heading {justify-content: flex-start; padding: 24px 16px; gap: 0.125rem;}
 .panel .panel-body {padding: 0px 16px;}
-.panel .panel-body .table.bordered > thead {background-color: var(--color-slate-100); color: var(--color-slate-900);}
+.panel .panel-body .table.bordered > thead {background-color: var(--color-gray-100); color: var(--color-gray-900);}
 .table.bordered > * > tr > td {text-align: center;}
 .table.bordered > * > tr > td:first-child {text-align: left;}

@@ -1,4 +1,4 @@
 #percentForm .percent-box, #percentForm .percent-tip {margin-left: 32px;}
 #percentForm .form-row .form-group {padding-left: 8rem;}
 #percentForm .form-row .form-label {width: 8rem;}
-#percentForm .percent-box .form-label {font-weight: 600; color: var(--color-slate-900);}
+#percentForm .percent-box .form-label {font-weight: 600; color: var(--color-gray-900);}

@@ -6,7 +6,7 @@ body {background: #1183fb linear-gradient(-90deg, #0a48d1 0%, #1183fb 100%); bac
 #loginPanel > .header > h2 {font-size: 16px; margin: 0; line-height: 32px; max-width: 83%;}
 #loginPanel > .header > .actions {position: absolute; right: 20px; top: 20px;}
 #loginPanel > .footer {background: #eee; padding: 20px; color: #838a9d;}
-#loginPanel > .footer a {display: inline-block; margin-left: 5px; color: var(--color-slate-900);}
+#loginPanel > .footer a {display: inline-block; margin-left: 5px; color: var(--color-gray-900);}
 #loginPanel > .footer a:hover {color: var(--color-primary-500);}
 #loginPanel > .loginBody {margin: 20px 0;}
 #loginPanel > .loginBody .loginExpired {margin-bottom: 8px;}

@@ -1,4 +1,4 @@
-.tabs .nav-tabs>.nav-item>a {font-size: 14px; font-weight: 800; padding: 0; padding-right: 0; color: var(--color-slate-800);}
+.tabs .nav-tabs>.nav-item>a {font-size: 14px; font-weight: 800; padding: 0; padding-right: 0; color: var(--color-gray-800);}
 .tabs .nav-tabs>.nav-item>a:after {border-width: 0;}
 .tabs .nav-tabs>.nav-item>a:before {background: none;}
 .tabs .nav-tabs>.nav-item>a.active {color: var(--color-primary-500);}

@@ -1,9 +1,9 @@
-#stepsTable {font-size:13px; color: var(--color-slate-800);}
+#stepsTable {font-size:13px; color: var(--color-gray-800);}
 #stepsTable .steps-header {background-color: rgba(var(--color-gray-100-rgb), 0.7);}
-#stepsTable .steps-header > * {font-size:13px; color: var(--color-slate-700); padding: 8px; width: 50%;}
+#stepsTable .steps-header > * {font-size:13px; color: var(--color-gray-700); padding: 8px; width: 50%;}
 #stepsTable .steps-header > .steps {padding-left: 32px;}
 #stepsTable .steps-body .step .step-id {padding-left: 16px;}
-#stepsTable .step-id > span {font-size:13px; color: var(--color-slate-500);}
+#stepsTable .step-id > span {font-size:13px; color: var(--color-gray-500);}
 #stepsTable .steps-body .step > * {padding: 8px; word-break: break-all;}
 .step-change-view-btn {cursor: pointer;}
 .linkCaseTitles, .linkBugTitles {overflow: hidden; white-space: nowrap;}
