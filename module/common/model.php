@@ -536,9 +536,7 @@ class commonModel extends model
      */
     public static function getMainNavList(string $moduleName): array
     {
-        global $lang;
-        global $app;
-        global $config;
+        global $lang, $app, $config;
 
         $app->loadLang('my');
 
@@ -570,7 +568,7 @@ class commonModel extends model
             if(common::hasPriv($currentModule, $currentMethod)) $display = true;
 
             /* 2. 如果没有资产库落地页的权限，则查看是否有资产库其他方法的权限. */
-            if($currentModule == 'assetlib' && !$display) list($display, $currentMethod) = commonTao::setAssetLibMenu($display, $currentMethod);
+            if($currentModule == 'assetlib' && !$display) list($display, $currentMethod) = commonTao::setAssetLibMenu($display, $currentModule, $currentMethod);
 
             /* 3. 可以个性化设置的导航，如果没有落地页的权限，则查看是否有其他落地页的权限。 */
             $moduleLinkList = $currentModule . 'LinkList';
@@ -614,24 +612,15 @@ class commonModel extends model
     }
 
     /**
-     * Print the main menu.
+     * Get active main menu.
      *
-     * @param  bool   $printHtml
      * @static
      * @access public
      * @return string
      */
-    public static function printMainMenu(bool $printHtml = true): string
+    public static function getActiveMainMenu(): string
     {
-        global $app, $lang, $config;
-
-        /* Set main menu by app tab and module. */
-        static::replaceMenuLang();
-        static::setMainMenu();
-        static::checkMenuVarsReplaced();
-
-        $activeMenu = '';
-        $tab = $app->tab;
+        global $app;
 
         $isTutorialMode = commonModel::isTutorialMode();
         $currentModule = $app->rawModule;
@@ -643,166 +632,67 @@ class commonModel extends model
         /* Print all main menus. */
         $menu = customModel::getMainMenu();
 
-        $menuHtml = "<ul class='nav nav-default'>\n";
+        $activeMenu = '';
         foreach($menu as $menuItem)
         {
             if(isset($menuItem->hidden) and $menuItem->hidden and (!isset($menuItem->tutorial) or !$menuItem->tutorial)) continue;
             if(empty($menuItem->link)) continue;
-            if($menuItem->divider) $menuHtml .= "<li class='divider'></li>";
 
             /* Init the these vars. */
             $alias     = isset($menuItem->alias) ? $menuItem->alias : '';
             $subModule = isset($menuItem->subModule) ? explode(',', $menuItem->subModule) : array();
-            $class     = isset($menuItem->class) ? $menuItem->class : '';
             $exclude   = isset($menuItem->exclude) ? $menuItem->exclude : '';
 
-            $active = '';
-            if($menuItem->name == $currentModule and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false)
-            {
-                $activeMenu = $menuItem->name;
-                $active = 'active';
-            }
-            if($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false)
-            {
-                $activeMenu = $menuItem->name;
-                $active = 'active';
-            }
+            if($menuItem->name == $currentModule and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false) $activeMenu = $menuItem->name;
 
-            if($menuItem->link['module'] == 'execution' and $menuItem->link['method'] == 'more')
+            if($subModule and in_array($currentModule, $subModule) and strpos(",$exclude,", ",$currentModule-$currentMethod,") === false) $activeMenu = $menuItem->name;
+
+            if($menuItem->link)
             {
-                $executionID = $menuItem->link['vars'];
-                $menuHtml .= commonModel::buildMoreButton((int)$executionID, false);
-            }
-            elseif($menuItem->link['module'] == 'app' and $menuItem->link['method'] == 'serverlink')
-            {
-                $menuHtml .= commonModel::buildAppButton(false);
-            }
-            else
-            {
-                if($menuItem->link)
+                $module = '';
+                $method = '';
+
+                if(is_array($menuItem->link))
                 {
-                    $target = '';
-                    $module = '';
-                    $method = '';
-                    $link   = commonModel::createMenuLink($menuItem);
+                    if(isset($menuItem->link['module'])) $module = $menuItem->link['module'];
+                    if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
+                }
 
-                    if($menuItem->link['module'] == 'project' and $menuItem->link['method'] == 'other') $link = 'javascript:void(0);';
+                if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false) and strpos(",$exclude,", ",$currentMethod,") === false) $activeMenu = $menuItem->name;
 
-                    if(is_array($menuItem->link))
+                /* Print drop menus. */
+                if(isset($menuItem->dropMenu))
+                {
+                    foreach($menuItem->dropMenu as $dropMenuName => $dropMenuItem)
                     {
-                        if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
-                        if(isset($menuItem->link['module'])) $module = $menuItem->link['module'];
-                        if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
-                    }
-                    if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false) and strpos(",$exclude,", ",$currentMethod,") === false)
-                    {
-                        $activeMenu = $menuItem->name;
-                        $active = 'active';
-                    }
+                        if(empty($dropMenuItem)) continue;
+                        if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
 
-                    $label    = $menuItem->text;
-                    $dropMenu = '';
-                    $misc     = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? "data-app='$tab'" : '';
+                        /* Parse drop menu link. */
+                        $dropMenuLink = zget($dropMenuItem, 'link', $dropMenuItem);
 
-                    /* Print drop menus. */
-                    if(isset($menuItem->dropMenu))
-                    {
-                        foreach($menuItem->dropMenu as $dropMenuName => $dropMenuItem)
+                        list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
+                        if(!common::hasPriv($subModule, $subMethod)) continue;
+
+                        $activeMainMenu = false;
+                        if($currentModule == strtolower($subModule) and $currentMethod == strtolower($subMethod))
                         {
-                            if(empty($dropMenuItem)) continue;
-                            if(isset($dropMenuItem->hidden) and $dropMenuItem->hidden) continue;
-
-                            /* Parse drop menu link. */
-                            $dropMenuLink = zget($dropMenuItem, 'link', $dropMenuItem);
-
-                            list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
-                            if(!common::hasPriv($subModule, $subMethod)) continue;
-
-                            $subLink = helper::createLink($subModule, $subMethod, $subParams);
-
-                            $subActive = '';
-                            $activeMainMenu = false;
-                            if($currentModule == strtolower($subModule) and $currentMethod == strtolower($subMethod))
-                            {
-                                $activeMainMenu = true;
-                            }
-                            else
-                            {
-                                $subModule  = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
-                                $subExclude = isset($dropMenuItem['exclude']) ? $dropMenuItem['exclude'] : $exclude;
-                                if($subModule and in_array($currentModule, $subModule) and strpos(",$subExclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
-                            }
-
-                            if($activeMainMenu)
-                            {
-                                $activeMenu = $dropMenuName;
-                                $active     = 'active';
-                                $subActive  = 'active';
-                                $label      = $subLabel;
-                            }
-                            $dropMenu .= "<li class='$subActive' data-id='$dropMenuName'>" . html::a($subLink, $subLabel, '', "data-app='$tab'") . '</li>';
+                            $activeMainMenu = true;
+                        }
+                        else
+                        {
+                            $subModule  = isset($dropMenuItem['subModule']) ? explode(',', $dropMenuItem['subModule']) : array();
+                            $subExclude = isset($dropMenuItem['exclude']) ? $dropMenuItem['exclude'] : $exclude;
+                            if($subModule and in_array($currentModule, $subModule) and strpos(",$subExclude,", ",$currentModule-$currentMethod,") === false) $activeMainMenu = true;
                         }
 
-                        if(empty($dropMenu)) continue;
-
-                        $label    .= "<span class='caret'></span>";
-                        $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
-
-                        $menuHtml .= "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
+                        if($activeMainMenu) $activeMenu = $dropMenuName;
                     }
-                    else
-                    {
-                        $menuHtml .= "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . "</li>\n";
-                    }
-                }
-                else
-                {
-                    $menuHtml .= "<li class='$class $active' data-id='$menuItem->name'>$menuItem->text</li>\n";
                 }
             }
         }
 
-        $menuHtml .= "</ul>\n";
-
-        if($printHtml) echo $menuHtml;
         return $activeMenu;
-    }
-
-    /**
-     * Print the search box.
-     *
-     * @static
-     * @access public
-     * @return void
-     */
-    public static function printSearchBox()
-    {
-        global $lang;
-        global $config;
-
-        $searchObject = 'bug';
-        echo "<div class='input-group-btn'>";
-        echo html::hidden('searchType', $searchObject);
-        echo "<ul id='searchTypeMenu' class='dropdown-menu'>";
-
-        $searchObjects = $lang->searchObjects;
-        if($config->systemMode == 'light') unset($searchObjects['program']);
-        if(!helper::hasFeature('devops'))
-        {
-            if(isset($searchObjects['deploy']))     unset($searchObjects['deploy']);
-            if(isset($searchObjects['service']))    unset($searchObjects['service']);
-            if(isset($searchObjects['deploystep'])) unset($searchObjects['deploystep']);
-        }
-
-        foreach($searchObjects as $key => $value)
-        {
-            $class = $key == $searchObject ? "class='selected'" : '';
-            if($key == 'program')    $key = 'program-product';
-            if($key == 'deploystep') $key = 'deploy-viewstep';
-
-            echo "<li $class><a href='javascript:$.setSearchType(\"$key\");' data-value='{$key}'>{$value}</a></li>";
-        }
-        echo '</ul></div>';
     }
 
     /**
