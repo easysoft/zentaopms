@@ -643,26 +643,24 @@ class user extends control
     }
 
     /**
+     * 删除一个用户。
      * Delete a user.
      *
      * @param  int    $userID
-     * @param  string $confirm  yes|no
      * @access public
      * @return void
      */
-    public function delete($userID)
+    public function delete(int $userID)
     {
         $user = $this->user->getByID($userID, 'id');
         if($this->app->user->admin and $this->app->user->account == $user->account) return;
+
         if($_POST)
         {
             if($this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) return $this->send(array('result' => 'fail', 'message' => array('verifyPassword' => $this->lang->user->error->verifyPassword)));
 
             $this->user->delete(TABLE_USER, $userID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $this->loadModel('mail');
-            if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('delete', $user->email);
 
             /* if ajax request, send result. */
             if($this->viewType == 'json') return $this->send(array('result' => 'success'));
