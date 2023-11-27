@@ -465,24 +465,24 @@ class searchModel extends model
     }
 
     /**
+     * 获取可访问的有索引的模块。
      * Get counts of keyword search results.
      *
-     * @param  string $keywords
-     * @param  string $type
+     * @param  string|array $type
      * @access public
      * @return array
      */
-    public function getListCount(array|string $type = 'all')
+    public function getListCount(array|string $type = 'all'): array
     {
         $allowedObjects = $this->searchTao->getAllowedObjects($type);
 
-        $filterObject = array();
+        $filterObjects = array();
         foreach($allowedObjects as $index => $object)
         {
             if(strpos(',feedback,ticket,', ",$object,") !== false)
             {
                 unset($allowedObjects[$index]);
-                $filterObject[] = $object;
+                $filterObjects[] = $object;
             }
         }
 
@@ -494,7 +494,7 @@ class searchModel extends model
             ->markRight(2)
             ->andWhere('addedDate')->le(helper::now())
             ->groupBy('objectType')
-            ->fetchPairs('objectType', 'objectCount');
+            ->fetchPairs();
         arsort($typeCount);
         return $typeCount;
     }
