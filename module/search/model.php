@@ -435,13 +435,14 @@ class searchModel extends model
     }
 
     /**
-      Replace dynamic account and date.
+     * 替换日期和用户变量。
+     * Replace dynamic account and date.
      *
      * @param  string $query
      * @access public
      * @return string
      */
-    public function replaceDynamic($query)
+    public function replaceDynamic(string $query): string
     {
         $this->app->loadClass('date');
         $lastWeek  = date::getLastWeek();
