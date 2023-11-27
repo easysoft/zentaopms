@@ -1003,11 +1003,11 @@ class screenModel extends model
     /**
      * Set SQL filter
      *
-     * @param object $chart
+     * @param  object $chart
      * @access public
      * @return string
      */
-    public function setFilterSQL($chart)
+    public function setFilterSQL(object $chart): string
     {
         if(isset($this->filter->charts[$chart->id]))
         {
@@ -1020,7 +1020,7 @@ class screenModel extends model
                         $conditions[] = $field . " = '" . $this->filter->$key . "'";
                         break;
                     case 'dept':
-                        if($this->filter->dept and !$this->filter->account)
+                        if($this->filter->dept && !$this->filter->account)
                         {
                             $accountField = $this->filter->charts[$chart->id]['account'];
                             $users = $this->dao->select('account')->from(TABLE_USER)->alias('t1')
@@ -1028,8 +1028,7 @@ class screenModel extends model
                                 ->on('t1.dept = t2.id')
                                 ->where('t2.path')->like(',' . $this->filter->dept . ',%')
                                 ->fetchPairs('account');
-                            $accounts = array();
-                            foreach($users as $account) $accounts[] = "'" . $account . "'";
+                            $accounts = array_map(function($account){return "'" . $account . "'";}, $users);
 
                             $conditions[] = $accountField . ' IN (' . implode(',', $accounts) . ')';
                         }
