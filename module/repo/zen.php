@@ -600,39 +600,24 @@ class repoZen extends repo
      * @param  object    $repo
      * @param  string    $path
      * @param  string    $branchID
-     * @param  int       $refresh
-     * @param  string    $revision
-     * @param  object    $lastRevision
      * @param  string    $base64BranchID
      * @param  int       $objectID
      * @access protected
      * @return array
      */
-    protected function getFilesInfo(object $repo, string $path, string $branchID, int $refresh, string $revision, object $lastRevision, string $base64BranchID, int $objectID): array
+    protected function getFilesInfo(object $repo, string $path, string $branchID, string $base64BranchID, int $objectID): array
     {
         if($repo->SCM == 'Gitlab')
         {
-            $cacheFile        = $this->repo->getCacheFile($repo->id, $path, $branchID);
-            $cacheRefreshTime = isset($lastRevision->time) ? date('Y-m-d H:i', strtotime($lastRevision->time)) : date('Y-m-d H:i');
-            $this->scm->setEngine($repo);
-            if($refresh or !$cacheFile or !file_exists($cacheFile) or filemtime($cacheFile) < strtotime($cacheRefreshTime))
-            {
-                $infos = $this->repo->getFileList($repo, $branchID, $path);
+            $_COOKIE['repoBranch'] = $branchID ? $branchID : $this->cookie->repoBranch;
 
-                if($cacheFile && !empty($infos))
-                {
-                    if(!file_exists($cacheFile . '.lock'))
-                    {
-                        touch($cacheFile . '.lock');
-                        file_put_contents($cacheFile, serialize($infos));
-                        unlink($cacheFile . '.lock');
-                    }
-                }
-            }
-            else
+            $infos = $this->repo->getGitlabFilesByPath($repo, $path, $branchID);
+            foreach($infos as &$file)
             {
-                $infos = unserialize(file_get_contents($cacheFile));
-                if(empty($infos)) unlink($cacheFile);
+                $file->revision = '';
+                $file->comment  = '';
+                $file->account  = '';
+                $file->date     = '';
             }
         }
         else

@@ -441,7 +441,7 @@ class repo extends control
 
         /* Get files info. */
         $base64BranchID = helper::safe64Encode(base64_encode($branchID));
-        $infos          = $this->repoZen->getFilesInfo($repo, $path, $branchID, (int)$refresh, $revision, $lastRevision, $base64BranchID, $objectID);
+        $infos          = $this->repoZen->getFilesInfo($repo, $path, $branchID, $base64BranchID, $objectID);
 
         /* Synchronous commit only in root path. */
         if(in_array($repo->SCM, $this->config->repo->gitTypeList) && $repo->SCM != 'Gitlab' && empty($path) && $infos && empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
@@ -1542,25 +1542,13 @@ class repo extends control
      */
     public function ajaxGetCommitInfo()
     {
-        $line       = $this->post->line;
-        $repo       = $this->repo->getByID($this->post->repoID);
-        $entry      = $this->repo->decodePath($this->post->entry);
-        $revision   = $this->post->revision;
-        $returnType = $this->post->returnType ? $this->post->returnType : 'view';
+        $repo  = $this->repo->getByID((int)$this->post->repoID);
+        $entry = $this->repo->decodePath($this->post->entry);
 
         $this->scm->setEngine($repo);
         $blames = $this->scm->blame($entry, $this->post->revision);
         if(!$blames) $blames =$this->scm->blame($entry, $this->post->sourceRevision);
 
-        while($line > 0)
-        {
-            if(isset($blames[$line]['revision']))
-            {
-                $revision = $blames[$line]['revision'];
-                break;
-            }
-            $line--;
-        }
         return $this->send(array('result' => 'success', 'blames' => $blames));
     }
 
@@ -1590,7 +1578,7 @@ class repo extends control
      */
     public function ajaxGetFileCommitInfo()
     {
-        $repo = $this->repo->getByID($this->post->repoID);
+        $repo = $this->repo->getByID((int)$this->post->repoID);
         echo json_encode($this->loadModel('gitlab')->getFileLastCommit($repo, $this->post->path, $this->post->branch));
     }
 }

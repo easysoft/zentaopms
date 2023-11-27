@@ -26,6 +26,8 @@ window.afterRender = function()
     if(repo.SCM != 'Gitlab') return;
 
     const dtable  = $('#table-repo-browse').zui('dtable');
+    if(!dtable) return;
+
     const oldData = dtable.options.data;;
     if(oldData.length == 0) return;
 
