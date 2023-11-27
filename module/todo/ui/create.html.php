@@ -290,27 +290,17 @@ formPanel
         setClass('cycle-config hidden'),
         formGroup
         (
-            set
-            (
-                array(
-                    'label' => $lang->todo->generate,
-                    'class' => 'have-fix highlight-suffix',
-                    'width' => $isInModal ? '3/5' : '1/3'
-                )
-            ),
+            set::label($lang->todo->generate),
+            set::class('have-fix highlight-suffix'),
+            set::width($isInModal ? '3/5' : '1/3'),
             inputControl
             (
                 set::prefix($lang->todo->advance),
                 set::prefixWidth('42'),
                 input
                 (
-                    set
-                    (
-                        array(
-                            'class' => 'before-days',
-                            'name'  => 'config[beforeDays]'
-                        )
-                    )
+                    setClass('before-days'),
+                    set::name('config[beforeDays]')
                 ),
                 to::suffix($lang->todo->cycleDay),
                 set::suffixWidth('30')
@@ -427,35 +417,21 @@ formPanel
             (
                 picker
                 (
-                    set
-                    (
-                        array(
-                            'id'       => 'begin',
-                            'name'     => 'begin',
-                            'required' => true,
-                            'items'    => $times,
-                            'value'    => date('Y-m-d') != $date ? $timesKeys[0] : $time
-                        )
-                    ),
+                    set::id('begin'),
+                    set::name('begin'),
+                    set::required(true),
+                    set::items($times),
+                    set::value(date('Y-m-d') != $date ? $timesKeys[0] : $time),
                     on::change('selectNext()')
                 ),
-                span
-                (
-                    setClass('input-group-addon ring-0'),
-                    $lang->todo->timespanTo
-                ),
+                inputGroupAddon($lang->todo->timespanTo),
                 picker
                 (
-                    set
-                    (
-                        array(
-                            'id'       => 'end',
-                            'name'     => 'end',
-                            'required' => true,
-                            'items'    => $times,
-                            'value'    => date('Y-m-d') != $date ? $timesKeys[3] : $defaultEnd
-                        )
-                    ),
+                    set::id('end'),
+                    set::name('end'),
+                    set::required(true),
+                    set::items($times),
+                    set::value(date('Y-m-d') != $date ? $timesKeys[3] : $defaultEnd),
                     on::change('verifyEndTime')
                 )
             )
