@@ -4,7 +4,7 @@ declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/my.class.php';
 
-zdTable('action')->config('action_assigned')->gen('30');
+zdTable('action')->config('action_assigned')->gen('30', true, false);
 zdTable('bug')->gen('10');
 zdTable('task')->gen('10');
 zdTable('story')->gen('10');
