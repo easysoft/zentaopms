@@ -31,4 +31,4 @@ r($dept->updateTest((object)$parentDept)) && p('16:name|parent|path|manager', '|
 r($dept->updateTest((object)$childDept))  && p('18:name|parent|path|manager', '|')  && e('子级部门修改|1|,1,18,|dev2'); //修改子级
 r($dept->updateTest((object)$noParent))   && p('17:id,name')                        && e('17,无父级部门');               //不输入上级部门
 r($dept->updateTest((object)$noName))     && p('19:id,name')                        && e('19,二级部门9');               //部门名称为空
-r($dept->updateTest((object)$noManager))  && p('20:name|parent|path', '|')  && e('无负责人部门|1|,1,20,');  //无负责人
+r($dept->updateTest((object)$noManager))  && p('20:name|parent|path', '|')          && e('无负责人部门|1|,1,20,');  //无负责人

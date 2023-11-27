@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试 datatableModel::getSetting();
+title=测试 datatableModel::formatFields();
 timeout=0
 cid=1
 

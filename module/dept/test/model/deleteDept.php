@@ -8,7 +8,7 @@ zdTable('dept')->gen(11);
 
 /**
 
-title=测试 deptModel->delete();
+title=测试 deptModel->deleteDept();
 cid=1
 pid=1
 
