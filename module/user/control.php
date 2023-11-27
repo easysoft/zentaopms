@@ -455,32 +455,6 @@ class user extends control
     }
 
     /**
-     * 设置来源地址。
-     * Set referer.
-     *
-     * @param  string $referer
-     * @access public
-     * @return void
-     */
-    public function setReferer(string $referer = '')
-    {
-        $this->referer = $this->server->http_referer ? $this->server->http_referer: '';
-        if(!empty($referer)) $this->referer = helper::safe64Decode($referer);
-        if($this->post->referer) $this->referer = $this->post->referer;
-
-        /* 构建禅道链接的正则表达式。*/
-        /* Build zentao link regular expression. */
-        $webRoot = $this->config->webRoot;
-        $linkReg = $webRoot . 'index.php?' . $this->config->moduleVar . '=\w+&' . $this->config->methodVar . '=\w+';
-        if($this->config->requestType == 'PATH_INFO') $linkReg = $webRoot . '\w+' . $this->config->requestFix . '\w+';
-        $linkReg = str_replace(array('/', '.', '?', '-'), array('\/', '\.', '\?', '\-'), $linkReg);
-
-        /* 检查来源地址是否为禅道链接。*/
-        /* Check zentao link by regular expression. */
-        $this->referer = preg_match('/^' . $linkReg . '/', $this->referer) ? $this->referer : $webRoot;
-    }
-
-    /**
      * 添加一个用户。
      * Create a user.
      *
