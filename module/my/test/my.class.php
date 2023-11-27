@@ -521,4 +521,22 @@ class myTest
         if($return === true) return 'exist';
         return !empty($return) ? implode(',', array_column($return, 'id')) : 'empty';
     }
+
+    /**
+     * 测试获取审批列表。
+     * Test get reviewed list.
+     *
+     * @param  string       $browseType
+     * @param  string       $orderBy
+     * @access public
+     * @return string|array
+     */
+    public function getReviewedListTest(string $browseType, string $orderBy): string|array
+    {
+        $return = $this->objectModel->getReviewedList($browseType, $orderBy);
+
+        if(dao::isError()) return dao::getError();
+
+        return implode(',', array_column($return, 'id'));
+    }
 }

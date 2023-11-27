@@ -1247,6 +1247,7 @@ class myModel extends model
     }
 
     /**
+     * 获取评审列表。
      * Get reviewed list.
      *
      * @param  string $browseType
@@ -1255,17 +1256,15 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getReviewedList($browseType, $orderBy = 'time_desc', $pager = null)
+    public function getReviewedList(string $browseType, string $orderBy = 'time_desc', object $pager = null): array
     {
-        $field = $orderBy;
+        $field     = $orderBy;
         $direction = 'asc';
         if(strpos($orderBy, '_') !== false) list($field, $direction) = explode('_', $orderBy);
 
-        $actionField = '';
-        if($field == 'time')    $actionField = 'date';
-        if($field == 'type')    $actionField = 'objectType';
-        if($field == 'id')      $actionField = 'objectID';
-        if(empty($actionField)) $actionField = 'date';
+        $actionField = 'date';
+        if($field == 'type') $actionField = 'objectType';
+        if($field == 'id')   $actionField = 'objectID';
         $orderBy = $actionField . '_' . $direction;
 
         $condition = "(`action` = 'reviewed' or `action` = 'approvalreview')";
@@ -1285,34 +1284,40 @@ class myModel extends model
             ->groupBy('objectType,objectID')
             ->page($pager)
             ->fetchPairs();
-        $actions = $this->dao->select('objectType,objectID,actor,action,`date`,extra')->from(TABLE_ACTION)
-            ->where('id')->in($actionIdList)
-            ->orderBy($orderBy)
-            ->fetchAll();
+
         $objectTypeList = array();
+        $actions        = $this->dao->select('objectType,objectID,actor,action,`date`,extra')->from(TABLE_ACTION)->where('id')->in($actionIdList)->orderBy($orderBy)->fetchAll();
         foreach($actions as $action) $objectTypeList[$action->objectType][] = $action->objectID;
 
-        $flows = ($this->config->edition == 'open') ? array() : $this->dao->select('module,`table`,name,titleField')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectTypeList))->andWhere('buildin')->eq(0)->fetchAll('module');
+        $flows       = $this->config->edition == 'open' ? array() : $this->dao->select('module,`table`,name,titleField')->from(TABLE_WORKFLOW)->where('module')->in(array_keys($objectTypeList))->andWhere('buildin')->eq(0)->fetchAll('module');
         $objectGroup = array();
         foreach($objectTypeList as $objectType => $idList)
         {
             $table = zget($this->config->objectTables, $objectType, '');
-            if(empty($table) and isset($flows[$objectType])) $table = $flows[$objectType]->table;
+            if(empty($table) && isset($flows[$objectType])) $table = $flows[$objectType]->table;
             if(empty($table)) continue;
 
             $objectGroup[$objectType] = $this->dao->select('*')->from($table)->where('id')->in($idList)->fetchAll('id');
         }
 
-        foreach($objectGroup as $objectType => $idList)
-        {
-            $moduleName = $objectType;
-            if($objectType == 'case') $moduleName = 'testcase';
-            $this->app->loadLang($moduleName);
-        }
-        $users = $this->loadModel('user')->getPairs('noletter');
+        return $this->buildReviewedList($objectGroup, $actions, $flows);
+    }
 
+    /**
+     * 构建评审列表。
+     * Build reviewed list.
+     *
+     * @param  array   $objectGroup
+     * @param  array   $actions
+     * @param  array   $flows
+     * @access private
+     * @return array
+     */
+    private function buildReviewedList(array $objectGroup, array $actions, array $flows): array
+    {
         $this->app->loadConfig('action');
         $reviewList = array();
+        $users      = $this->loadModel('user')->getPairs('noletter');
         foreach($actions as $action)
         {
             $objectType = $action->objectType;
@@ -1324,7 +1329,7 @@ class myModel extends model
             $review->type   = $objectType;
             $review->time   = substr($action->date, 0, 19);
             $review->result = strtolower($action->extra);
-            $review->status = $objectType == 'attend' ? $object->reviewStatus : ((isset($object->status) and !isset($flows[$objectType])) ? $object->status : 'done');
+            $review->status = $objectType == 'attend' ? $object->reviewStatus : (isset($object->status) && !isset($flows[$objectType]) ? $object->status : 'done');
             if(strpos($review->result, ',') !== false) list($review->result) = explode(',', $review->result);
 
             if($objectType == 'story')    $review->storyType = $object->type;
@@ -1345,16 +1350,15 @@ class myModel extends model
             }
             else
             {
-                $title = '';
+                $title          = '';
                 $titleFieldName = zget($this->config->action->objectNameFields, $objectType, '');
-                if(empty($titleFieldName) and isset($flows[$objectType]))
+                if(empty($titleFieldName) && isset($flows[$objectType]))
                 {
                     if(!empty($flows[$objectType]->titleField)) $titleFieldName = $flows[$objectType]->titleField;
                     if(empty($flows[$objectType]->titleField)) $title = $flows[$objectType]->name;
                 }
-                $review->title = (empty($titleFieldName) or !isset($object->$titleFieldName)) ? $title . " #{$object->id}" : $object->$titleFieldName;
+                $review->title = empty($titleFieldName) || !isset($object->{$titleFieldName}) ? "{$title} #{$object->id}" : $object->{$titleFieldName};
             }
-
             $reviewList[] = $review;
         }
         return $reviewList;
