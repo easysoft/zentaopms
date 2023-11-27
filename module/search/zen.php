@@ -12,7 +12,7 @@ class searchZen extends search
      * @access protected
      * @return void
      */
-    protected function setSessionForIndex(string $uri, string $words, string $type): void
+    protected function setSessionForIndex(string $uri, string $words, string|array $type): void
     {
         /* 设置列表 session. */
         /* Set session. */

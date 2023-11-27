@@ -266,4 +266,60 @@ class searchTao extends searchModel
 
         return array($users, $products, $executions);
     }
+
+    /**
+     * 获取 sql 语句的参数。
+     * Get list sql params.
+     *
+     * @param  string    $keywords
+     * @param  string    $type
+     * @access protected
+     * @return array
+     */
+    protected function getSqlParams(string $keywords, string|array $type): array
+    {
+        $spliter = $this->app->loadClass('spliter');
+        $words   = explode(' ', self::unify($keywords, ' '));
+
+        $against     = '';
+        $againstCond = '';
+        foreach($words as $word)
+        {
+            /* 将 utf-8 字符串拆分为单词，为每个单词计算 unicode. */
+            $splitedWords = $spliter->utf8Split($word);
+            $trimmedWord   = trim($splitedWords['words']);
+            $against     .= '"' . $trimmedWord . '" ';
+            $againstCond .= '(+"' . $trimmedWord . '") ';
+
+            if(is_numeric($word) && strpos($word, '.') === false and strlen($word) == 5) $againstCond .= "(-\" $word \") ";
+        }
+
+        $likeCondition = '';
+        /* Assisted lookup by like condition when only one word. */
+        if(count($words) == 1 and strpos($words[0], ' ') === false and !is_numeric($words[0])) $likeCondition = "OR title like '%{$trimmedWord}%' OR content like '%{$trimmedWord}%'";
+
+        $words = str_replace('"', '', $against);
+        $words = str_pad($words, 5, '_');
+
+        $allowedObject = array();
+        if($type != 'all')
+        {
+            foreach($type as $module) $allowedObject[] = $module;
+        }
+        else
+        {
+            if($this->config->systemMode == 'light') unset($this->config->search->fields->program);
+
+            foreach($this->config->search->fields as $objectType => $fields)
+            {
+                $module = $objectType;
+                if($module == 'case') $module = 'testcase';
+
+                if(common::hasPriv($module, 'view')) $allowedObject[] = $objectType;
+                if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedobject[] = $objectType;
+            }
+        }
+
+        return array($words, $againstCond, $likeCondition, $allowedObject);
+    }
 }

@@ -465,63 +465,6 @@ class searchModel extends model
     }
 
     /**
-     * Get list sql params.
-     *
-     * @param  string    $keywords
-     * @param  string    $type
-     * @access protected
-     * @return array
-     */
-    protected function getSqlParams($keywords, $type)
-    {
-        $spliter = $this->app->loadClass('spliter');
-        $words   = explode(' ', self::unify($keywords, ' '));
-
-        $against     = '';
-        $againstCond = '';
-
-        foreach($words as $word)
-        {
-            $splitedWords = $spliter->utf8Split($word);
-            $trimmedWord   = trim($splitedWords['words']);
-            $against     .= '"' . $trimmedWord . '" ';
-            $againstCond .= '(+"' . $trimmedWord . '") ';
-
-            if(is_numeric($word) and strpos($word, '.') === false and strlen($word) == 5) $againstCond .= "(-\" $word \") ";
-        }
-
-        $likeCondition = '';
-        /* Assisted lookup by like condition when only one word. */
-        if(count($words) == 1 and strpos($words[0], ' ') === false and !is_numeric($words[0])) $likeCondition = "OR title like '%{$trimmedWord}%' OR content like '%{$trimmedWord}%'";
-
-        $words = str_replace('"', '', $against);
-        $words = str_pad($words, 5, '_');
-
-        $allowedObject = array();
-
-        if($type != 'all')
-        {
-            foreach($type as $module) $allowedObject[] = $module;
-        }
-        else
-        {
-            if($this->config->systemMode == 'light') unset($this->config->search->fields->program);
-
-            foreach($this->config->search->fields as $objectType => $fields)
-            {
-                $module = $objectType;
-                if($module == 'case') $module = 'testcase';
-                if(common::hasPriv($module, 'view')) $allowedObject[] = $objectType;
-
-                if($module == 'caselib'    and common::hasPriv('caselib', 'view'))     $allowedObject[] = $objectType;
-                if($module == 'deploystep' and common::haspriv('deploy',  'viewstep')) $allowedobject[] = $objectType;
-            }
-        }
-
-        return array($words, $againstCond, $likeCondition, $allowedObject);
-    }
-
-    /**
      * Get counts of keyword search results.
      *
      * @param  string    $keywords
@@ -531,7 +474,7 @@ class searchModel extends model
      */
     public function getListCount($keywords = '', $type = 'all')
     {
-        list($words, $againstCond, $likeCondition, $allowedObject) = $this->getSqlParams($keywords, $type);
+        list($words, $againstCond, $likeCondition, $allowedObject) = $this->searchTao->getSqlParams($keywords, $type);
 
         $filterObject = array();
         foreach($allowedObject as $index => $object)
@@ -566,9 +509,9 @@ class searchModel extends model
      * @access public
      * @return array
      */
-    public function getList($keywords, $type, $pager = null)
+    public function getList(string $keywords, array|string $type, object $pager = null): array
     {
-        list($words, $againstCond, $likeCondition, $allowedObject) = $this->getSqlParams($keywords, $type);
+        list($words, $againstCond, $likeCondition, $allowedObject) = $this->searchTao->getSqlParams($keywords, $type);
 
         $filterObject = array();
         foreach($allowedObject as $index => $object)
@@ -1234,14 +1177,15 @@ class searchModel extends model
     }
 
     /**
+     * 将特殊符号替换成统一的符号。
      * Unified processing of search keywords.
      *
-     * @param  string    $string
-     * @param  string    $to
+     * @param  string $string
+     * @param  string $to
      * @access public
-     * @return void
+     * @return string
      */
-    public static function unify($string, $to = ',')
+    public static function unify(string $string, string $to = ','): string
     {
         $labels = array('_', '、', ' ', '-', '\n', '?', '@', '&', '%', '~', '`', '+', '*', '/', '\\', '。', '，');
         $string = str_replace($labels, $to, $string);
