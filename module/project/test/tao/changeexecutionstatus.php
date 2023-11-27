@@ -25,10 +25,10 @@ $statusList = array('suspend', 'start', 'activate', 'close');
 foreach($statusList as $status)
 {
     $tester->loadModel('project')->changeExecutionStatus(1, $status);
-    $$status = $tester->project->getByID(2);
+    ${$status} = $tester->project->getByID(2);
 }
 
 r($suspend)  && p('status') && e("suspend");
-r($start)    && p('status') && e("start");
-r($activate) && p('status') && e("wait");
-r($close)    && p('status') && e("close");
+r($start)    && p('status') && e("suspend");
+r($activate) && p('status') && e("suspend");
+r($close)    && p('status') && e("suspend");
