@@ -809,26 +809,27 @@ class myModel extends model
     }
 
     /**
+     * 构建工单搜索表单。
      * Build ticket search form.
      *
-     * @param  string    $queryID
-     * @param  string    $actionURL
+     * @param  int    $queryID
+     * @param  string $actionURL
      * @access public
-     * @return mixed
+     * @return void
      */
-    public function buildTicketSearchForm($queryID, $actionURL)
+    public function buildTicketSearchForm(int $queryID, string $actionURL): void
     {
         $this->loadModel('ticket');
-        $this->app->loadConfig('ticket');
 
-        $this->config->ticket->search['module'] = 'workTicket';
+        $grantProducts = array();
+        if($this->config->edition != 'open') $grantProducts = $this->loadModel('feedback')->getGrantProducts();
+
+        $this->config->ticket->search['module']    = 'workTicket';
         $this->config->ticket->search['queryID']   = $queryID;
         $this->config->ticket->search['actionURL'] = $actionURL;
-        $this->config->ticket->search['params']['product']['values'] = $this->loadModel('feedback')->getGrantProducts();
+        $this->config->ticket->search['params']['product']['values'] = $grantProducts;
         $this->config->ticket->search['params']['module']['values']  = $this->loadModel('tree')->getAllModulePairs();
-        $grantProducts = $this->loadModel('feedback')->getGrantProducts();
-        $productIDlist = array_keys($grantProducts);
-        $this->config->ticket->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs($productIDlist, 'all', 'releasetag');
+        $this->config->ticket->search['params']['openedBuild']['values'] = $this->loadModel('build')->getBuildPairs(array_keys($grantProducts), 'all', 'releasetag');
 
         $this->loadModel('search')->setSearchParams($this->config->ticket->search);
     }

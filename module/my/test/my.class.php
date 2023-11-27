@@ -363,4 +363,29 @@ class myTest
         if(dao::isError()) return dao::getError();
         return $tester->config->product->search;
     }
+
+    /**
+     * 测试构建工单搜索表单。
+     * Test build ticket search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return array
+     */
+    public function buildTicketSearchFormTest(int $queryID, string $actionURL): array
+    {
+        global $tester;
+        if(!isset($tester->config->ticket))
+        {
+            $tester->config->ticket = new stdclass();
+            $tester->config->ticket->search = array();
+            $tester->config->ticket->search['fields'] = array();
+        }
+        if(!isset($tester->config->ticket->search)) $tester->config->ticket->search = array();
+        $this->objectModel->buildTicketSearchForm($queryID, $actionURL);
+
+        if(dao::isError()) return dao::getError();
+        return $tester->config->ticket->search;
+    }
 }
