@@ -688,20 +688,18 @@ class user extends control
     }
 
     /**
-     * Unbind Ranzhi
+     * 解除一个用户和 ZDOO 的绑定。
+     * Unbind a user from ZDOO.
      *
-     * @param  string $userID
-     * @param  string $confirm
+     * @param  int    $userID
      * @access public
      * @return void
      */
-    public function unbind($userID, $confirm = 'no')
+    public function unbind(int $userID)
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->user->confirmUnbind, $this->createLink('user', 'unbind', "userID=$userID&confirm=yes")));
-
         $user = $this->user->getById($userID, 'id');
         $this->user->unbind($user->account);
-        return print(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse'), 'parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
 
