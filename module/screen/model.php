@@ -1333,11 +1333,10 @@ class screenModel extends model
         {
             if($chart->sql)
             {
+                $sourceData = array();
                 $settings = json_decode($chart->settings);
                 if($settings && isset($settings->metric))
                 {
-                    $sourceData = array();
-
                     $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
                     $group   = $settings->group[0]->field;
 
@@ -1369,9 +1368,9 @@ class screenModel extends model
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return object
+     * @return void
      */
-    public function buildWaterPolo($component, $chart)
+    public function buildWaterPolo(object $component, object $chart): void
     {
         if(!$chart->settings)
         {
@@ -1381,7 +1380,7 @@ class screenModel extends model
             $component->chartConfig = json_decode('{"key":"WaterPolo","chartKey":"VWaterPolo","conKey":"VCWaterPolo","title":"水球图","category":"Mores","categoryName":"更多","package":"Charts","chartFrame":"common","image":"water_WaterPolo.png"}');
             $component->option      = json_decode('{"type":"nomal","series":[{"type":"liquidFill","radius":"90%","roseType":false}],"backgroundColor":"rgba(0,0,0,0)"}');
 
-            return $this->setComponentDefaults($component);
+            $this->setComponentDefaults($component);
         }
         else
         {
@@ -1389,17 +1388,16 @@ class screenModel extends model
             {
                 $settings   = json_decode($chart->settings);
                 $sourceData = 0;
-                if($settings and isset($settings->metric))
+                if($settings && isset($settings->metric))
                 {
-                    $sql        = $this->setFilterSQL($chart);
-                    $result     = $this->dao->query($sql)->fetch();
+                    $result     = $this->dao->query($this->setFilterSQL($chart))->fetch();
                     $group      = $settings->group[0]->field;
                     $sourceData = zget($result, $group, 0);
                 }
                 $component->option->dataset = $sourceData;
             }
 
-            return $this->setComponentDefaults($component);
+            $this->setComponentDefaults($component);
         }
     }
 
