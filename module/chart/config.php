@@ -7,3 +7,5 @@ $config->chart->dateConvert['year']  = 'YEAR';
 $config->chart->dateConvert['month'] = 'MONTH';
 $config->chart->dateConvert['week']  = 'YEARWEEK';
 $config->chart->dateConvert['day']   = 'DATE';
+
+$config->chart->chartMaxChecked = 6;

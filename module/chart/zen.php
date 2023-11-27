@@ -6,10 +6,10 @@ class chartZen extends chart
      * Get the charts to view by chartList.
      *
      * @param  array  $chartList
-     * @access public
+     * @access protected
      * @return array
      */
-    public function getChartsToView(array $chartList): array
+    protected function getChartsToView(array $chartList): array
     {
         $charts = array();
         foreach($chartList as $chart)
@@ -33,10 +33,10 @@ class chartZen extends chart
      * @param  int    $groupID
      * @param  int    $chartID
      * @param  array  $filterValues
-     * @access public
+     * @access protected
      * @return object|null
      */
-    public function getChartToFilter(int $groupID, int $chartID, array $filterValues): object|null
+    protected function getChartToFilter(int $groupID, int $chartID, array $filterValues): object|null
     {
         $chart = $this->chart->getByID($chartID);
         if(!$chart) return null;

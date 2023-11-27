@@ -12,6 +12,7 @@
 class chart extends control
 {
     /**
+     * 预览图表。
      * Preview charts of a group.
      *
      * @param  int    $dimensionID
@@ -30,6 +31,7 @@ class chart extends control
         {
             $chartChecked = count($this->post->charts);
             if($chartChecked > $this->config->chart->chartMaxChecked) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->chart->chartMaxChecked, $this->config->chart->chartMaxChecked)));
+
             if($this->post->charts)
             {
                 /* 选中多个图表查看。*/
