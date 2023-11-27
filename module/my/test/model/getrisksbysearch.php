@@ -5,7 +5,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/my.class.php';
 
 zdTable('risk')->gen('20');
-zdTable('userquery')->config('userquery')->gen('10');
+zdTable('userquery')->config('userquery')->gen('1');
 zdTable('user')->gen('1');
 
 su('admin');
@@ -19,7 +19,7 @@ pid=1
 */
 
 $my      = new myTest();
-$queryID = array(0, 5);
+$queryID = array(0, 1);
 $type    = array('work', 'contribute');
 $orderBy = array('id_desc', 'id_asc');
 

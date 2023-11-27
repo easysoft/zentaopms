@@ -4,6 +4,6 @@ author: Mengyi Liu
 version: "1.0"
 fields:
   - field: sql
-    range: "deleted='0'"
+    range: "deleted='0',t1.id like '%1%'"
   - field: module
-    range: task,bug,story,testcase,risk
+    range: risk,story
