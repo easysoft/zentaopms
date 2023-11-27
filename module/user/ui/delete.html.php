@@ -24,7 +24,6 @@ formPanel
         set::label($lang->user->verifyPassword),
         set::control('password'),
         set::name('verifyPassword'),
-        set::value(''),
         set::required(true),
         set::placeholder($lang->user->placeholder->verify)
     ),
