@@ -1315,9 +1315,9 @@ class screenModel extends model
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return object
+     * @return void
      */
-    public function buildPieCircleChart($component, $chart)
+    public function buildPieCircleChart(object $component, object $chart): void
     {
         if(!$chart->settings)
         {
@@ -1327,20 +1327,19 @@ class screenModel extends model
             $component->chartConfig = json_decode('{"key":"PieCircle","chartKey":"VPieCircle","conKey":"VCPieCircle","title":"饼图","category":"Pies","categoryName":"饼图","package":"Charts","chartFrame":"echarts","image":"/static/png/pie-circle-258fcce7.png"}');
             $component->option      = json_decode('{"type":"nomal","series":[{"type":"pie","radius":"70%","roseType":false}],"backgroundColor":"rgba(0,0,0,0)"}');
 
-            return $this->setComponentDefaults($component);
+            $this->setComponentDefaults($component);
         }
         else
         {
             if($chart->sql)
             {
                 $settings = json_decode($chart->settings);
-                if($settings and isset($settings->metric))
+                if($settings && isset($settings->metric))
                 {
                     $sourceData = array();
 
-                    $sql     = $this->setFilterSQL($chart);
-                    $results = $this->dao->query($sql)->fetchAll();
-                    $group = $settings->group[0]->field;
+                    $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
+                    $group   = $settings->group[0]->field;
 
                     $groupCount = array();
                     foreach($results as $result)
@@ -1354,13 +1353,13 @@ class screenModel extends model
 
                     foreach($groupCount as $groupValue => $groupCount) $sourceData[$groupValue] = $groupCount;
                 }
-                $doneData = round((array_sum($sourceData) != 0 and !empty($sourceData['done'])) ? $sourceData['done'] / array_sum($sourceData) : 0, 4);
+                $doneData = round((array_sum($sourceData) != 0 && !empty($sourceData['done'])) ? $sourceData['done'] / array_sum($sourceData) : 0, 4);
                 $component->option->dataset = $doneData;
                 $component->option->series[0]->data[0]->value  = array($doneData);
                 $component->option->series[0]->data[1]->value  = array(1 - $doneData);
             }
 
-            return $this->setComponentDefaults($component);
+            $this->setComponentDefaults($component);
         }
     }
 
