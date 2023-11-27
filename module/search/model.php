@@ -490,7 +490,7 @@ class searchModel extends model
             ->where('((vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObjects)
             ->markRight(1)
-            ->orWhere('(objectType')->in($filterObject)
+            ->orWhere('(objectType')->in($filterObjects)
             ->markRight(2)
             ->andWhere('addedDate')->le(helper::now())
             ->groupBy('objectType')
@@ -500,11 +500,12 @@ class searchModel extends model
     }
 
     /**
+     * 获取搜索结果。
      * get search results of keywords.
      *
-     * @param  string    $keywords
-     * @param  string    $type
-     * @param  object    $pager
+     * @param  string $keywords
+     * @param  string $type
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -513,13 +514,13 @@ class searchModel extends model
         list($words, $againstCond, $likeCondition) = $this->searchTao->getSqlParams($keywords, $type);
         $allowedObjects = $this->searchTao->getAllowedObjects($type);
 
-        $filterObject = array();
+        $filterObjects = array();
         foreach($allowedObjects as $index => $object)
         {
             if(strpos(',feedback,ticket,', ",$object,") !== false)
             {
                 unset($allowedObjects[$index]);
-                $filterObject[] = $object;
+                $filterObjects[] = $object;
             }
         }
 
@@ -530,7 +531,7 @@ class searchModel extends model
             ->andWhere('((vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObjects)
             ->markRight(1)
-            ->orWhere('(objectType')->in($filterObject)
+            ->orWhere('(objectType')->in($filterObjects)
             ->markRight(2)
             ->andWhere('addedDate')->le(helper::now())
             ->orderBy('score_desc, editedDate_desc')
