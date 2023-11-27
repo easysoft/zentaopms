@@ -955,14 +955,15 @@ class myModel extends model
     }
 
     /**
+     * 获取待评审的需求池需求。
      * Get reviewing demands.
      *
-     * @param  string $orderBy
-     * @param  bool   $checkExists
+     * @param  string    $orderBy
+     * @param  bool      $checkExists
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function getReviewingDemands($orderBy = 'id_desc', $checkExists = false)
+    public function getReviewingDemands(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
         if(!common::hasPriv('demand', 'review')) return array();
 
@@ -991,7 +992,6 @@ class myModel extends model
         }
 
         $actions = $this->dao->select('objectID, `date`')->from(TABLE_ACTION)->where('objectType')->eq('demand')->andWhere('objectID')->in(array_keys($demands))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
-
         foreach($actions as $demandID => $date) $demands[$demandID]->time = $date;
         return array_values($demands);
     }
