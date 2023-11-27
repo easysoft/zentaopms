@@ -757,14 +757,15 @@ class searchModel extends model
     }
 
     /**
+     * 获取结果显示的摘要。
      * Get summary of results.
      *
-     * @param  string    $content
-     * @param  string    $words
+     * @param  string $content
+     * @param  string $words
      * @access public
      * @return string
      */
-    public function getSummary($content, $words)
+    public function getSummary(string $content, string $words): string
     {
         $length = $this->config->search->summaryLength;
         if(strlen($content) <= $length) return $this->decode($this->markKeywords($content, $words));
@@ -789,9 +790,7 @@ class searchModel extends model
 
         $content = str_replace('<span class', ' <spanclass', $content);
         $content = explode(' ', $content);
-
         $pos     = array_search(str_replace('<span class', '<spanclass', $needle), $content);
-
         $start   = max(0, $pos - ($length / 2));
         $summary = join(' ', array_slice($content, $start, $length));
         $summary = str_replace(' <spanclass', '<span class', $summary);
