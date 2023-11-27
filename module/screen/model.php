@@ -1194,9 +1194,9 @@ class screenModel extends model
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return object
+     * @return void
      */
-    public function buildBarChart($component, $chart)
+    public function buildBarChart(object $component, object $chart): void
     {
         if(!$chart->settings)
         {
@@ -1206,23 +1206,21 @@ class screenModel extends model
             $component->chartConfig = json_decode('{"key": "BarCrossrange", "chartKey": "VBarCrossrange", "conKey": "VCBarCrossrange", "title": "横向柱状图", "category": "Bars", "categoryName": "柱状图", "package": "Charts", "chartFrame": "echarts", "image": "/static/png/bar_y-05067169.png" }');
             $component->option      = json_decode('{"xAxis": { "show": true, "type": "category" }, "yAxis": { "show": true, "axisLine": { "show": true }, "type": "value" }, "series": [], "backgroundColor": "rgba(0,0,0,0)"}');
 
-            return $this->setComponentDefaults($component);
+            $this->setComponentDefaults($component);
         }
         else
         {
             if($chart->sql)
             {
                 $settings = json_decode($chart->settings);
-                if($settings and isset($settings->xaxis))
+                if($settings && isset($settings->xaxis))
                 {
                     $dimensions = array($settings->xaxis[0]->name);
                     foreach($settings->yaxis as $yaxis) $dimensions[] = $yaxis->name;
 
                     $sourceData = array();
 
-                    $sql     = $this->setFilterSQL($chart);
-                    $results = $this->dao->query($sql)->fetchAll();
-
+                    $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
                     foreach($results as $result)
                     {
                         $key   = $settings->xaxis[0]->name;
@@ -1234,20 +1232,14 @@ class screenModel extends model
 
                             foreach($settings->yaxis as $yaxis)
                             {
-                                $valueField = $yaxis->field;
                                 if(!isset($sourceData[$result->$field][$yaxis->name])) $sourceData[$result->$field][$yaxis->name] = 0;
-                                $sourceData[$result->$field][$yaxis->name] += $result->$valueField;
+                                $sourceData[$result->$field][$yaxis->name] += $result->{$yaxis->field};
                             }
                         }
                         else
                         {
                             $row = array($key => $result->$field);
-
-                            foreach($settings->yaxis as $yaxis)
-                            {
-                                $field = $yaxis->field;
-                                $row[$yaxis->name] = $result->$field;
-                            }
+                            foreach($settings->yaxis as $yaxis) $row[$yaxis->name] = $result->{$yaxis->field};
                             $sourceData[] = $row;
                         }
                     }
@@ -1257,7 +1249,7 @@ class screenModel extends model
                 }
             }
 
-            return $this->setComponentDefaults($component);
+            $this->setComponentDefaults($component);
         }
     }
 
