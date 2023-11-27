@@ -835,6 +835,7 @@ class myModel extends model
     }
 
     /**
+     * 通过搜索获取用户需求。
      * Get requirements by search.
      *
      * @param  int    $queryID
@@ -844,7 +845,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getRequirementsBySearch($queryID, $type, $orderBy, $pager)
+    public function getRequirementsBySearch(int $queryID, string $type, string $orderBy, object $pager = null): array
     {
         $queryName = $type == 'contribute' ? 'contributeRequirementQuery' : 'workRequirementQuery';
         $queryForm = $type == 'contribute' ? 'contributeRequirementForm' : 'workRequirementForm';
@@ -863,52 +864,16 @@ class myModel extends model
         }
         else
         {
-            if($this->session->$queryName  == false) $this->session->set($queryName, ' 1 = 1');
+            if($this->session->{$queryName} == false) $this->session->set($queryName, ' 1 = 1');
         }
 
-        $myRequirementQuery = $this->session->$queryName;
+        $myRequirementQuery = $this->session->{$queryName};
         $myRequirementQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $myRequirementQuery);
 
-        $requirementIDList = array();
-        if($type == 'contribute')
-        {
-            $requirementsAssignedByMe = $this->getAssignedByMe($this->app->user->account, null, $orderBy, 'requirement');
-            foreach($requirementsAssignedByMe as $requirementID => $requirement)
-            {
-                $requirementIDList[$requirementID] = $requirementID;
-            }
+        $requirementsAssignedByMe = $type == 'contribute' ? $this->getAssignedByMe($this->app->user->account, null, $orderBy, 'requirement') : array();
+        $requirementIdList        = array_keys($requirementsAssignedByMe);
 
-            $requirements = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle")->from(TABLE_STORY)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story')
-                ->where($myRequirementQuery)
-                ->andWhere('t1.type')->eq('requirement')
-                ->andWhere('t1.openedBy',1)->eq($this->app->user->account)
-                ->orWhere('t1.closedBy')->eq($this->app->user->account)
-                ->orWhere('t3.reviewer')->eq($this->app->user->account)
-                ->orWhere('t1.id')->in($requirementIDList)
-                ->markRight(1)
-                ->andWhere('t1.deleted')->eq(0)
-                ->orderBy($orderBy)
-                ->page($pager, 't1.id')
-                ->fetchAll('id');
-        }
-        else
-        {
-            $requirements = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle")->from(TABLE_STORY)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story')
-                ->where($myRequirementQuery)
-                ->andWhere('t1.type')->eq('requirement')
-                ->andWhere('t1.assignedTo',1)->eq($this->app->user->account)
-                ->orWhere('t3.reviewer')->eq($this->app->user->account)
-                ->markRight(1)
-                ->andWhere('t1.deleted')->eq(0)
-                ->orderBy($orderBy)
-                ->page($pager, 't1.id')
-                ->fetchAll('id');
-        }
-        return $requirements;
+        return $this->myTao->fetchRequirementsBySearch($myRequirementQuery, $type, $orderBy, $pager, $requirementIdList, 'requirement');
     }
 
     /**

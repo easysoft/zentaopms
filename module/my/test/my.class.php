@@ -165,28 +165,22 @@ class myTest
     }
 
     /**
-     * Get requirements by search.
+     * 测试通过搜索获取用户需求。
+     * Test get requirements by search.
      *
-     * @param  int    $queryID
-     * @param  string $type
-     * @param  string $orderBy
+     * @param  int          $queryID
+     * @param  string       $type
+     * @param  string       $orderBy
      * @access public
-     * @return array
+     * @return string|array
      */
-    public function getRequirementsBySearchTest($queryID, $type, $orderBy)
+    public function getRequirementsBySearchTest(int $queryID, string $type, string $orderBy): string|array
     {
-        global $tester;
-        $recTotal = 0;
-        $recPerPage = 1;
-        $pageID = 0;
-        $tester->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $objects = $this->objectModel->getRequirementsBySearch($queryID, $type, $orderBy, $pager);
+        $objects = $this->objectModel->getRequirementsBySearch($queryID, $type, $orderBy);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', array_keys($objects));
     }
 
     /**

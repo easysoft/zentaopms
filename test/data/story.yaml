@@ -24,9 +24,6 @@ fields:
     postfix: ""
     loop: 0
     format: ""
-  - field: project
-    note: "所属项目"
-    range: 0
   - field: module
     note: "所属模块"
     range: 1821-10000
