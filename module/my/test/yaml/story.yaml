@@ -6,4 +6,4 @@ fields:
   - field: assignedTo
     range: admin,user1,user2
   - field: type
-    range: story{4},requirement
+    range: story{3},requirement{2}

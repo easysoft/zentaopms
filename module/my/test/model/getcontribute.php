@@ -40,7 +40,7 @@ $ownerProductTotal    = $my->getContributeTest()->ownerProductTotal;
 $involvedProjectTotal = $my->getContributeTest()->involvedProjectTotal;
 
 r($myTaskTotal)          && p() && e('5');  //myTaskTotal数据获取
-r($myStoryTotal)         && p() && e('6');  //myStoryTotal数据获取
+r($myStoryTotal)         && p() && e('4');  //myStoryTotal数据获取
 r($myBugTotal)           && p() && e('20'); //myBugTotal数据获取
 r($docCreatedTotal)      && p() && e('20'); //docCreatedTotal数据获取
 r($ownerProductTotal)    && p() && e('10'); //ownerProductTotal数据获取
