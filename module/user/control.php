@@ -673,20 +673,18 @@ class user extends control
     }
 
     /**
+     * 解锁一个用户。
      * Unlock a user.
      *
      * @param  int    $userID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function unlock($userID, $confirm = 'no')
+    public function unlock(int $userID)
     {
-        if($confirm == 'no') return print(js::confirm($this->lang->user->confirmUnlock, $this->createLink('user', 'unlock', "userID=$userID&confirm=yes")));
-
         $user = $this->user->getById($userID, 'id');
         $this->user->cleanLocked($user->account);
-        return print(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse'), 'parent'));
+        return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
