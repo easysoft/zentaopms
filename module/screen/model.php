@@ -220,7 +220,7 @@ class screenModel extends model
             list($chart->sql, $filters) = isset($result[0]) ? $result : array($chart->sql, $result);
         }
 
-        list($component) = $this->initComponent($chart, $type, $component);
+        $this->initComponent($chart, $type, $component);
         $this->completeComponent($chart, $type, $filters, $component);
     }
 
@@ -1545,9 +1545,8 @@ class screenModel extends model
      * @access public
      * @return void
      */
-    public function initComponent($chart, $type, $component = null)
+    public function initComponent(object $chart, string $type, object $component)
     {
-        if(!$component) $component = new stdclass();
         if(!$chart) return $component;
 
         $settings = is_string($chart->settings) ? json_decode($chart->settings) : $chart->settings;
@@ -1556,7 +1555,7 @@ class screenModel extends model
         if(!isset($component->sourceID)) $component->sourceID = $chart->id;
         if(!isset($component->title))    $component->title    = $chart->name;
 
-        if($type == 'chart') $chartType = ($chart->builtin and !in_array($chart->id, $this->config->screen->builtinChart)) ? $chart->type : $settings[0]->type;
+        if($type == 'chart') $chartType = ($chart->builtin && !in_array($chart->id, $this->config->screen->builtinChart)) ? $chart->type : current($settings)->type;
         if($type == 'pivot') $chartType = 'table';
         $component->type = $chartType;
 
@@ -1567,23 +1566,23 @@ class screenModel extends model
         {
             foreach($this->config->screen->chartConfig as $type => $chartConfig)
             {
-                $chartConfig = json_decode($chartConfig, true);
-                if($chartConfig['key'] == $component->chartConfig->key) $componentType = $type;
+                $chartConfig = json_decode($chartConfig);
+                if($chartConfig->key == $component->chartConfig->key) $componentType = $type;
             }
 
             $typeChanged = $chartType != $componentType;
         }
 
         // New component type or change component type.
-        if(!isset($component->chartConfig) or $typeChanged)
+        if(!isset($component->chartConfig) || $typeChanged)
         {
             $chartConfig = json_decode(zget($this->config->screen->chartConfig, $chartType));
-            if(empty($chartConfig)) return null;
+            if(empty($chartConfig)) return;
 
             $component->chartConfig = $chartConfig;
         }
 
-        if(!isset($component->option) or $typeChanged)
+        if(!isset($component->option) || $typeChanged)
         {
             $component->option = json_decode(zget($this->config->screen->chartOption, $component->type));
             $component->option->dataset = new stdclass();
@@ -1592,8 +1591,6 @@ class screenModel extends model
         if(!isset($component->option->dataset)) $component->option->dataset = new stdclass();
         $component->chartConfig->title    = $chart->name;
         $component->chartConfig->sourceID = $component->sourceID;
-
-        return array($component, $typeChanged);
     }
 
     /**
