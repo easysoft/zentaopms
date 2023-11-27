@@ -261,7 +261,7 @@ class admin extends control
 
             $this->setting->setItem('system.common.closedFeatures', rtrim($closedFeatures, ','));
             $this->setting->setItem('system.common.global.scoreStatus', $data->module['myScore']);
-            $this->setting->setItem('system.custom.URAndSR', $data->module['productUR']);
+            $this->loadModel('setting')->setItem('system.custom.URAndSR', $this->config->edition == 'ipd' ? 1 : $data->module['productUR']);
             $this->loadModel('custom')->processMeasrecordCron();
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => '$.apps.updateAppMenu'));
         }
