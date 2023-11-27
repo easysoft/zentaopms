@@ -789,24 +789,30 @@ class task extends control
      * 批量关闭任务。
      * Batch close tasks.
      *
-     * @param  string $skipTaskIdList
+     * @param  string $confirm yes|no
      * @access public
      * @return void
      */
-    public function batchClose(string $skipTaskIdList = '')
+    public function batchClose(string $confirm = 'no')
     {
         $skipTasks      = array();
         $parentTasks    = array();
-        $skipTaskIdList = explode(',', $skipTaskIdList);
-        $taskIdList     = $this->post->taskIdList ? array_unique($this->post->taskIdList) : $skipTaskIdList;
-        if(!empty($taskIdList))
+        $taskIdList     = $this->post->taskIdList ? array_unique($this->post->taskIdList) : array();
+        if(!empty($taskIdList) || $confirm == 'yes')
         {
+            if(!isset($_POST['taskIdList']) && !empty($_SESSION['batchCloseTaskIDList']))
+            {
+                $taskIdList = explode(',', $this->session->batchCloseTaskIDList);
+                unset($_SESSION['batchCloseTaskIDList']);
+            }
+            if($taskIdList) $taskIdList = array_unique($taskIdList);
+
             $tasks = $this->task->getByIdList($taskIdList);
             foreach($tasks as $taskID => $task)
             {
                 if($task->status == 'closed') continue;
 
-                if(empty($skipTaskIdList) && !in_array($task->status, array('done', 'cancel')))
+                if($confirm == 'no' && !in_array($task->status, array('done', 'cancel')))
                 {
                     $skipTasks[$taskID] = $taskID;
                     continue;
@@ -826,7 +832,7 @@ class task extends control
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
-        return $this->send($this->taskZen->responseAfterBatchClose($skipTasks, $parentTasks, $skipTaskIdList));
+        return $this->send($this->taskZen->responseAfterBatchClose($skipTasks, $parentTasks, $confirm));
     }
 
     /**
@@ -1076,6 +1082,7 @@ class task extends control
         if($_POST)
         {
             $this->loadModel('file');
+            if($type == 'bysearch') $this->config->task->dtable->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getAllModulePairs');
 
             /* Create field lists. */
             $fields = $this->taskZen->getExportFields($allExportFields);
