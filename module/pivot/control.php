@@ -289,6 +289,7 @@ class pivot extends control
         $pivotID    = $post->id;
         $settings   = $post->settings;
         $filters    = isset($_POST['searchFilters']) ? $_POST['searchFilters'] : (isset($_POST['filters']) ? $post->filters : array());
+        $page       = isset($_POST['page']) ? $_POST['page'] : 0;
         $filterType = 'result';
 
         $pivot = $this->pivot->getById($pivotID);
@@ -314,7 +315,7 @@ class pivot extends control
             list($data, $configs) = $this->pivot->genSheet($fields, $settings, $sql, $filterFormat, $langs);
         }
 
-        $this->pivot->buildPivotTable($data, $configs, $fields, $sql);
+        $this->pivot->buildPivotTable($data, $configs, $page);
     }
 
 }

@@ -2198,21 +2198,71 @@ class pivotModel extends model
     }
 
     /**
+     * 通过合并单元格的数据对透视表进行分页
+     * Page pivot by configs merge cell data.
+     *
+     * @param  array $configs
+     * @param  int   $page
+     * @param  bool  $useColumnTotal
+     * @static
+     * @access public
+     * @return bool
+     */
+    public function pagePivot($configs, $page, $useColumnTotal)
+    {
+        // 当前在第几页
+        $nowPage   = 1;
+        // 一共多少行
+        $pageCount = 0;
+        // 当前页目前多少行
+        $nowCount  = 0;
+        // 记录当前第几个分组(项)，共有多少行
+        $itemRow   = array(0 => 0);
+        // 目标分页的起始行和结束行
+        $start = $end = -1;
+        foreach($configs as $key => $config)
+        {
+            if($nowPage == $page and $start == -1)   $start = $pageCount;
+            if($nowPage == $page + 1 and $end == -1) $end   = $pageCount;
+
+            $pageCount += $config[0];
+            $nowCount  += $config[0];
+            $itemRow[]  = $pageCount;
+            // 如果当前页超过了50行，换一页
+            if($nowCount >= $this->config->pivot->recPerPage)
+            {
+                $nowCount = 0;
+                if(isset($configs[$key + 1])) $nowPage += 1;
+            }
+        }
+        if($start == -1) $start = 0;
+        if($end == -1)   $end   = $pageCount;
+
+        // 获得当前页面有多少"项"
+        $endKey    = array_search($end, $itemRow);
+        $startKey  = array_search($start, $itemRow);
+        $itemCount = $endKey - $startKey;
+        // 如果是最后一页且使用了显示列的汇总，项数-1，
+        if($page == $nowPage and $useColumnTotal) $itemCount --;
+        return array($start, $end - 1, $itemCount, $nowPage);
+    }
+
+    /**
      * Build table use data and rowspan.
      *
      * @param  object $data
      * @param  array  $configs
-     * @param  array  $fields
+     * @param  int    $page
      * @access public
      * @return void
      *
      */
-    public function buildPivotTable($data, $configs, $fields = array(), $sql = '')
+    public function buildPivotTable($data, $configs, $page = 0)
     {
         $width = 128;
 
         /* Init table. */
-        $table  = "<table class='reportData table table-condensed table-striped table-bordered table-fixed datatable' style='width: auto; min-width: 100%' data-fixed-left-width='400'>";
+        $table  = "<div class='reportData'><table class='table table-condensed table-striped table-bordered table-fixed datatable' style='width: auto; min-width: 100%' data-fixed-left-width='400'>";
 
         $showOrigins = array();
         $hasShowOrigin = false;
@@ -2224,7 +2274,6 @@ class pivotModel extends model
             $showOrigins = array_merge($showOrigins, $colShowOrigin);
             if($col->showOrigin) $hasShowOrigin = true;
         }
-
 
         /* Init table thead. */
         $table .= "<thead>";
@@ -2250,10 +2299,17 @@ class pivotModel extends model
         /* Init table tbody. */
         $table .= "<tbody>";
         $rowCount = 0;
+
+        $useColumnTotal = !empty($data->columnTotal) and $data->columnTotal === 'sum';
+        if($page) list($start, $end, $itemCount, $pageTotal) = $this->pagePivot($configs, $page, $useColumnTotal);
+
         for($i = 0; $i < count($data->array); $i ++)
         {
             $rowCount ++;
-            if(!empty($data->columnTotal) and $data->columnTotal === 'sum' and $rowCount == count($data->array)) continue;
+
+            if($page and ($i < $start or $i > $end)) continue;
+
+            if($useColumnTotal and $rowCount == count($data->array)) continue;
 
             $line   = array_values($data->array[$i]);
             $table .= "<tr class='text-center'>";
@@ -2282,8 +2338,8 @@ class pivotModel extends model
             $table .= "</tr>";
         }
 
-        /* Add column total. */
-        if(!empty($data->columnTotal) and $data->columnTotal === 'sum' and !empty($data->array))
+        /* Add column total. 如果分页了，只在最后一页展示 */
+        if($useColumnTotal and !empty($data->array) and (!$page or $page == $pageTotal))
         {
             $table .= "<tr class='text-center'>";
             $table .= "<td colspan='" . count($data->groups) . "'>{$this->lang->pivot->step2->total}</td>";
@@ -2297,7 +2353,37 @@ class pivotModel extends model
         }
 
         $table .= "</tbody>";
-        $table .= "</table>";
+        $table .= "</table></div>";
+
+        if($page)
+        {
+            $recTotal     = $end - $start + 1;
+            $itemCountTip = sprintf($this->lang->pivot->recTotalTip, $itemCount);
+
+            $leftPage  = $page - 1;
+            $rightPage = $page + 1;
+            $leftPageClass  = $page == 1 ? 'disabled' : '';
+            $rightPageClass = $page == $pageTotal ? 'disabled' : '';
+
+            if($recTotal) $table .= "<div class='table-footer'>
+                <ul class='pager'>
+                  <li><div class='pager-label recTotal'>{$itemCountTip}</div></li>
+                  <li class='pager-item-left first-page $leftPageClass' onclick='queryPivotByPager(this)'>
+                    <a class='pager-item' data-page='1' href='javascript:;'><i class='icon icon-first-page'></i></a>
+                  </li>
+                  <li class='pager-item-left left-page $leftPageClass' onclick='queryPivotByPager(this)'>
+                    <a class='pager-item' data-page='{$leftPage}' href='javascript:;'><i class='icon icon-angle-left'></i></a>
+                  </li>
+                  <li><div class='pager-label page-number'><strong>{$page}/{$pageTotal}</strong></div></li>
+                  <li class='pager-item-right right-page $rightPageClass' onclick='queryPivotByPager(this)'>
+                    <a class='pager-item' data-page='{$rightPage}' href='javascript:;'><i class='icon icon-angle-right'></i></a>
+                  </li>
+                  <li class='pager-item-right last-page $rightPageClass' onclick='queryPivotByPager(this)'>
+                    <a class='pager-item' data-page='{$pageTotal}' href='javascript:;'><i class='icon icon-last-page'></i></a>
+                  </li>
+                </ul>
+              </div>";
+        }
 
         echo $table;
     }

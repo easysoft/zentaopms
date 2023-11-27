@@ -76,6 +76,7 @@ $lang->pivot->showPivot   = 'Show Pivot';
 $lang->pivot->showOrigin  = 'Show Origin Data';
 
 $lang->pivot->showOriginItem = 'Show origin item';
+$lang->pivot->recTotalTip    = '<strong> %s </strong> items in total';
 
 $lang->pivot->showOriginPlaceholder = new stdclass();
 $lang->pivot->showOriginPlaceholder->slice    = 'No need to configure';

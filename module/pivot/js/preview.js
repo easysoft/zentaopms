@@ -23,7 +23,6 @@ function expandTree()
 
 function getQueryInfo()
 {
-    // if not use JSON.parse(JSON.stringify()), edit pivotInfo also affects pivot. If click btn-query-origin, pivot setting also have summary field.
     var pivotInfo = JSON.parse(JSON.stringify(pivot));
     pivotInfo.searchFilters = JSON.parse(JSON.stringify(pivotInfo.filters));
     pivotInfo.step = 4;
@@ -82,6 +81,7 @@ function initQueryBtn()
     $('.btn-query').click(function()
     {
         var pivotInfo = getQueryInfo();
+        pivotInfo.page = 1;
         refreshPivot(pivotInfo);
     });
 }
@@ -98,8 +98,19 @@ function initOriginQueryBtn()
     {
         var pivotInfo = getQueryInfo();
         pivotInfo.settings['summary'] = 'notuse';
+        pivotInfo.page = 1;
         refreshPivot(pivotInfo, true);
     });
+}
+
+function queryPivotByPager(obj)
+{
+    var pivotInfo  = JSON.parse(JSON.stringify(pivot));
+    pivotInfo.page = $(obj).find('a').data('page');
+
+    var isOrigin = $('.btn-query-origin').hasClass('hidden');
+    if(isOrigin) pivotInfo.settings['summary'] = 'notuse';
+    refreshPivot(pivotInfo, isOrigin);
 }
 
 function refreshPivot(pivotInfo, isOrigin = false)
@@ -107,7 +118,7 @@ function refreshPivot(pivotInfo, isOrigin = false)
     $.post(createLink('pivot', 'ajaxGetPivot'), pivotInfo,function(resp)
     {
         var myDatagrid = $('#datagirdInfo');
-        myDatagrid.find('.reportData').remove();
+        myDatagrid.empty();
         myDatagrid.append(resp);
 
         if(isOrigin)

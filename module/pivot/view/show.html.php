@@ -62,7 +62,7 @@
     <div id="filterMargin" class='hidden'></div>
     <div id='datagirdInfo' class='datagrid'>
       <?php $sql = $this->loadModel('chart')->parseSqlVars($pivot->sql, $pivot->filters);?>
-      <?php $this->pivot->buildPivotTable($data, $configs, json_decode(json_encode($pivot->fieldSettings), true), $sql);?>
+      <?php $this->pivot->buildPivotTable($data, $configs, 1);?>
     </div>
   </div>
   <?php endif;?>

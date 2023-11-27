@@ -4,10 +4,10 @@
 .main-position {position: relative;}
 .child-position {position: absolute; right: 0;}
 .parent-position {padding-right: 160px;}
-.datagrid {overflow: auto; max-height: 500px;}
-@media (max-width: 1366px) {.datagrid {max-height: 500px;}}
-@media (min-width: 1366px) and (max-width: 1919px) {.datagrid {max-height: 650px;}}
-@media (min-width: 1920px) {.datagrid {max-height: 800px;}}
+.reportData {overflow: auto; max-height: 500px;}
+@media (max-width: 1366px) {.reportData {max-height: 500px;}}
+@media (min-width: 1366px) and (max-width: 1919px) {.reportData {max-height: 650px;}}
+@media (min-width: 1920px) {.reportData {max-height: 800px;}}
 
 .reportData thead {position: sticky; background-color: #fff; top: -1px;}
 .heading-padding, .datagrid-padding {padding-left: 6px; padding-right: 6px;}
