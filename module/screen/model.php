@@ -1051,9 +1051,9 @@ class screenModel extends model
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return object
+     * @return void
      */
-    public function buildCardChart($component, $chart)
+    public function buildCardChart(object $component, object $chart): void
     {
         if(!$chart->settings)
         {
@@ -1062,31 +1062,20 @@ class screenModel extends model
         else
         {
             $value = 0;
-
             if($chart->sql)
             {
                 $settings = json_decode($chart->settings);
-                if($settings and isset($settings->value))
+                if($settings && isset($settings->value))
                 {
                     $field   = $settings->value->field;
                     $sql     = $this->setFilterSQL($chart);
                     $results = $this->dao->query($sql)->fetchAll();
 
-                    if($settings->value->type === 'value')
+                    if($settings->value->type === 'value') $value = count($results) ? 0 : current($results)->$field;
+                    if($settings->value->agg  === 'count') $value = count($results);
+                    if($settings->value->agg  === 'sum')
                     {
-                        $value = empty($results[0]) ? 0 : $results[0]->$field;
-                    }
-                    if($settings->value->agg === 'count')
-                    {
-                        $value = count($results);
-                    }
-                    elseif($settings->value->agg === 'sum')
-                    {
-                        foreach($results as $result)
-                        {
-                            $value += (float)$result->$field;
-                        }
-
+                        foreach($results as $result) $value += (float)$result->$field;
                         $value = round($value);
                     }
                 }
@@ -1098,7 +1087,7 @@ class screenModel extends model
             $component->option->dataset = (string)$value;
         }
 
-        return $this->setComponentDefaults($component);
+        $this->setComponentDefaults($component);
     }
 
     /**
