@@ -170,7 +170,8 @@ div
             div
             (
                 setID('poweredby'),
-                ($unsafeSites && !empty($unsafeSites[$zentaoDirName])) ? div(a(setClass('showNotice'), set::href('###'), on::click('showNotice'), $lang->user->notice4Safe)) : null
+                ($unsafeSites && !empty($unsafeSites[$zentaoDirName])) ? div(a(setClass('showNotice'), set::href('###'), on::click('showNotice'), $lang->user->notice4Safe)) : null,
+                $config->checkVersion ? h::iframe(setID('updater'), setClass('hidden'), set::src(createLink('misc', 'checkUpdate', "sn=$sn"))) : null
             )
         )
     )
