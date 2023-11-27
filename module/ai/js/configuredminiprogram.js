@@ -404,7 +404,7 @@ function createFieldTypeView(formData)
         return $td;
     }
 
-    const options = formData.getAll('option[]');
+    const options = Array.from(formData.getAll('option[]')).filter(x => !!x);
     const $picker = $(`<div class="picker"><input type="text" class="field-type" /></div>`);
     if(type === 'checkbox') $picker.attr('data-multi', 'true');
     $picker.picker({ list: options.map(option => ({ text: option, value: option })) });
