@@ -44,7 +44,7 @@ class count_of_delivered_story_in_product extends baseCalc
 
     public function getResult($options = array())
     {
-        $records = $this->getRecords(array('value'));
+        $records = $this->result;
         return $this->filterByOptions($records, $options);
     }
 }
