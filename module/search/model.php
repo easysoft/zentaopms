@@ -737,18 +737,19 @@ class searchModel extends model
     }
 
     /**
+     * 将 unicode 转换为对应的字。
      * Transfer unicode to words.
      *
-     * @param  string    $string
+     * @param  string $string
      * @access public
-     * @return void
+     * @return string
      */
-    public function decode($string)
+    public function decode(string $string): string
     {
         static $dict;
         if(empty($dict))
         {
-            $dict = $this->dao->select("concat(`key`, ' ') as `key`, value")->from(TABLE_SEARCHDICT)->fetchPairs();
+            $dict = $this->dao->select("concat(`key`, ' ') AS `key`, value")->from(TABLE_SEARCHDICT)->fetchPairs();
             $dict['|'] = '';
         }
         if(strpos($string, ' ') === false) return zget($dict, $string . ' ');
