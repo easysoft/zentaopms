@@ -1409,7 +1409,7 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function buildRadarChart($component, $chart)
+    public function buildRadarChart(object $component, object $chart): void
     {
         if(!$chart->settings)
         {
@@ -1419,27 +1419,21 @@ class screenModel extends model
             $component->chartConfig = json_decode('{"key":"Radar","chartKey":"VRadar","conKey":"VCRadar","title":"雷达图","category":"Mores","categoryName":"更多","package":"Charts","chartFrame":"common","image":"/static/png/radar-91567f95.png"}');
             $component->option      = json_decode('{"radar":{"indicator":[{"name":"数据1","max":6500},{"name":"数据2","max":16000},{"name":"数据3","max":30000},{"name":"数据4","max":38000},{"name":"数据5","max":52000}]},"series":[{"name":"radar","type":"radar","areaStyle":{"opacity":0.1},"data":[{"name":"data1","value":[4200,3000,20000,35000,50000]}]}],"backgroundColor":"rgba(0,0,0,0)"}');
 
-            return $this->setComponentDefaults($component);
+            $this->setComponentDefaults($component);
         }
         else
         {
-            $indicator  = array();
-            $seriesData = array();
+            $indicator = $seriesData = array();
             if($chart->sql)
             {
                 $settings = json_decode($chart->settings);
-                if($settings and isset($settings->metric))
+                if($settings && isset($settings->metric))
                 {
-                    $sql     = $this->setFilterSQL($chart);
-                    $results = $this->dao->query($sql)->fetchAll();
+                    $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
                     $group   = $settings->group[0]->field;
 
                     $metrics = array();
-                    foreach($settings->metric as $metric)
-                    {
-                        $metrics[$metric->key] = array('field' => $metric->field, 'name' => $metric->name, 'value' => 0);
-                    }
-
+                    foreach($settings->metric as $metric) $metrics[$metric->key] = array('field' => $metric->field, 'name' => $metric->name, 'value' => 0);
 
                     foreach($results as $result)
                     {
@@ -1449,15 +1443,13 @@ class screenModel extends model
                             $metrics[$result->$group]['value'] += $result->$field;
                         }
                     }
+
                     $max = 0;
-                    foreach($metrics as $data)
-                    {
-                        if($data['value'] > $max) $max = $data['value'];
-                    }
+                    foreach($metrics as $data) $max = $data['value'] > $max ? $data['value'] : $max;
 
                     $data  = array('name' => '', 'value' => array());
                     $value = array();
-                    foreach($metrics as $key => $metric)
+                    foreach($metrics as $metric)
                     {
                         $indicator[]     = array('name' => $metric['name'], 'max' => $max);
                         $data['value'][] = $metric['value'];
@@ -1472,7 +1464,7 @@ class screenModel extends model
                 $component->option->series[0]->data[0]->value = $value;
             }
 
-            return $this->setComponentDefaults($component);
+            $this->setComponentDefaults($component);
         }
     }
 
