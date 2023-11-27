@@ -812,9 +812,11 @@ class chartModel extends model
     }
 
     /**
+     * 在sql中将变量解析为空字符串。
      * Parse variables to null string in sql.
      *
-     * @param string $sql
+     * @param  string $sql
+     * @param  array  $filters
      * @access public
      * @return string
      */
