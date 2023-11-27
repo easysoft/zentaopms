@@ -904,9 +904,9 @@ class screenModel extends model
      *
      * @param  object $component
      * @access public
-     * @return object
+     * @return void
      */
-    public function buildSelect($component)
+    public function buildSelect(object $component): void
     {
         switch($component->type)
         {
@@ -921,21 +921,15 @@ class screenModel extends model
                 $component->option->dataset = $options;
 
                 $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen. "&year=' + value + '&dept=" . $this->filter->dept . "&account=" . $this->filter->account . "')";
-                $component->option->onChange = "window.location.href = $url";
                 break;
             case 'dept':
                 $component->option->value = (string)$this->filter->dept;
 
                 $options = array(array('label' => $this->lang->screen->allDepts, 'value' => '0'));
                 $depts = $this->dao->select('id,name')->from(TABLE_DEPT)->where('grade')->eq(1)->fetchAll();
-                foreach($depts as $dept)
-                {
-                    $options[] = array('label' => $dept->name, 'value' => $dept->id);
-                }
-                $component->option->dataset = $options;
+                $component->option->dataset = array_map(function($dept)use(&$options){array_push($options, array('label' => $dept->name, 'value' => $dept->id));}, $depts);
 
                 $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen . "&year=" . $this->filter->year . "&dept=' + value + '&account=')";
-                $component->option->onChange = "window.location.href = $url";
                 break;
             case 'account':
                 $component->option->value = $this->filter->account;
@@ -943,20 +937,14 @@ class screenModel extends model
                 $options = array(array('label' => $this->lang->screen->allUsers, 'value' => ''));
                 $depts   = array();
                 if($this->filter->dept) $depts = $this->dao->select('id')->from(TABLE_DEPT)->where('path')->like(',' . $this->filter->dept . ',%')->fetchPairs();
-                $users = $this->dao->select('account,realname')->from(TABLE_USER)
-                    ->where('deleted')->eq(0)
-                    ->beginIF($this->filter->dept)->andWhere('dept')->in($depts)->fi()
-                    ->fetchAll();
-                foreach($users as $user)
-                {
-                    $options[] = array('label' => $user->realname, 'value' => $user->account);
-                }
-                $component->option->dataset = $options;
+                $users = $this->dao->select('account,realname')->from(TABLE_USER)->where('deleted')->eq(0)->beginIF($this->filter->dept)->andWhere('dept')->in($depts)->fi()->fetchAll();
+                $component->option->dataset = array_map(function($user)use(&$options){array_push($options, array('label' => $user->realname, 'value' => $user->account));}, $users);
 
                 $url = "createLink('screen', 'view', 'screenID=" . $this->filter->screen . "&year=" . $this->filter->year . "&dept=" . $this->filter->dept . "&account=' + value)";
-                $component->option->onChange = "window.location.href = $url";
                 break;
         }
+
+        if(isset($url)) $component->option->onChange = "window.location.href = {$url}";
 
         foreach($component->filterCharts as $chart)
         {
@@ -964,7 +952,7 @@ class screenModel extends model
             $this->filter->charts[$chart->chart][$component->type] = $chart->field;
         }
 
-        return $this->setComponentDefaults($component);
+        $this->setComponentDefaults($component);
     }
 
     /**
