@@ -18,3 +18,12 @@ window.operateDept = function(event, item, index)
         $button.addClass('ajax-submit');
     }
 }
+
+window.onSort = function(event, orders, parentKey)
+{
+    const url  = $.createLink('dept', 'updateOrder');
+    const form = new FormData();
+    form.append('orders', orders);
+
+    $.ajaxSubmit({url, data:form});
+}

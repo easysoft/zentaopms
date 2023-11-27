@@ -40,7 +40,7 @@ class dept extends control
     {
         if(!empty($_POST))
         {
-            $this->dept->updateOrder($_POST['orders']);
+            $this->dept->updateOrder(explode(',', $_POST['orders']));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
     }

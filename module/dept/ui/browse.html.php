@@ -16,9 +16,11 @@ $processTreeAction = function($tree) use (&$processTreeAction)
 
     $canEditDept   = hasPriv('dept', 'edit');
     $canDeleteDept = hasPriv('dept', 'delete');
+    $canSortDept   = hasPriv('dept', 'updateOrder');
     foreach($tree as $node)
     {
         $actions = array();
+        if($canSortDept)                          $actions[] = array('key' => 'sort',   'icon' => 'move',  'hint' => $lang->dept->order,  'onClick' => jsRaw('window.operateDept'));
         if($canEditDept)                          $actions[] = array('key' => 'edit',   'icon' => 'edit',  'hint' => $lang->dept->edit,   'onClick' => jsRaw('window.operateDept'));
         if(empty($node->items) && $canDeleteDept) $actions[] = array('key' => 'delete', 'icon' => 'trash', 'hint' => $lang->dept->delete, 'onClick' => jsRaw('window.operateDept'));
         if(!empty($node->items)) $node->items = $processTreeAction($node->items);
@@ -90,7 +92,9 @@ sidebar
         (
             set::id('deptTree'),
             set::items($tree),
-            set::hover(true)
+            set::hover(true),
+            set::sortable(array('handle' => '.icon-move')),
+            set::onSort(jsRaw('window.onSort'))
         )
     )
 );
