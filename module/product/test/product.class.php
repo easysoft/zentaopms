@@ -55,6 +55,8 @@ class productTest
         $createFields['desc']           = '';
         $createFields['acl']            = 'open';
         $createFields['whitelist']      = '';
+        $createFields['subStatus']      = '';
+        $createFields['PMT']            = '';
         $createFields['createdBy']      = $this->objectModel->app->user->account;
         $createFields['createdDate']    = helper::now();
         $createFields['createdVersion'] = $this->objectModel->config->version;
@@ -1216,9 +1218,10 @@ class productTest
      */
     public function activateTest(int $productID): array|false
     {
-        $product = $this->objectModel->getByID($productID);
-        if(!$product) return false;
+        $oldProduct = $this->objectModel->getByID($productID);
+        if(!$oldProduct) return false;
 
+        $product = new stdClass();
         $product->status = 'normal';
         $changes = $this->objectModel->activate($productID, $product);
         if(dao::isError()) return dao::getError();

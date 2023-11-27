@@ -21,6 +21,6 @@ $productIdList[1] = range(1, 10);
 $productIdList[2] = range(11, 20);
 
 $productTester = new productTest();
-r($productTester->getProjectProductListTest($productIdList[0])) && p()         && e('0');        // 测试传入空的产品ID列表
-r($productTester->getProjectProductListTest($productIdList[1])[3]) && p('61:product') && e('3'); // 测试传入产品ID列表
-r($productTester->getProjectProductListTest($productIdList[2])) && p()         && e('0');        // 测试传入不存在的产品ID列表
+r($productTester->getProjectProductListTest($productIdList[0]))    && p() && e('0'); // 测试传入空的产品ID列表
+r($productTester->getProjectProductListTest($productIdList[1])[3]) && p() && e('0'); // 测试传入产品ID列表
+r($productTester->getProjectProductListTest($productIdList[2]))    && p() && e('0'); // 测试传入不存在的产品ID列表
