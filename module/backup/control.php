@@ -48,30 +48,7 @@ class backup extends control
         $this->loadModel('action');
 
         $backups = array();
-        if(empty($this->view->error))
-        {
-            $sqlFiles = glob("{$this->backupPath}*.sql*");
-            if(!empty($sqlFiles))
-            {
-                foreach($sqlFiles as $file)
-                {
-                    $fileName   = basename($file);
-                    $backupFile = new stdclass();
-                    $backupFile->time  = filemtime($file);
-                    $backupFile->name  = substr($fileName, 0, strpos($fileName, '.'));
-                    $backupFile->files[$file] = $this->backup->getBackupSummary($file);
-
-                    $fileBackup = $this->backup->getBackupFile($backupFile->name, 'file');
-                    if($fileBackup) $backupFile->files[$fileBackup] = $this->backup->getBackupSummary($fileBackup);
-
-                    $codeBackup = $this->backup->getBackupFile($backupFile->name, 'code');
-                    if($codeBackup) $backupFile->files[$codeBackup] = $this->backup->getBackupSummary($codeBackup);
-
-                    $backups[$backupFile->name] = $backupFile;
-                }
-            }
-        }
-        krsort($backups);
+        if(empty($this->view->error)) $backups = $this->backupZen->getBackupList();
 
         $this->view->title   = $this->lang->backup->common;
         $this->view->backups = $backups;

@@ -281,9 +281,9 @@ class backupModel extends model
      *
      * @param  string    $backup
      * @access public
-     * @return int
+     * @return array
      */
-    public function getBackupSummary($backup)
+    public function getBackupSummary(string $backup): array
     {
         $zfile = $this->app->loadClass('zfile');
         if(is_file($backup))
@@ -300,7 +300,7 @@ class backupModel extends model
         if(!file_exists($summaryFile)) return array();
 
         $summary = json_decode(file_get_contents(dirname($backup) . DS . 'summary'), true);
-        return isset($summary[basename($backup)]) ? $summary[basename($backup)] : array();
+        return zget($summary, basename($backup), array());
     }
 
     /**
@@ -318,23 +318,23 @@ class backupModel extends model
     /**
      * Get backup file.
      *
-     * @param  string    $name
-     * @param  string    $type
+     * @param  string  $name
+     * @param  string  $type   sql|file|code
      * @access public
-     * @return string
+     * @return string|false
      */
-    public function getBackupFile($name, $type)
+    public function getBackupFile(string $name, string $type): string|false
     {
         $backupPath = $this->getBackupPath();
         if($type == 'sql')
         {
-            if(file_exists($backupPath . $name . ".{$type}")) return $backupPath . $name . ".{$type}";
+            if(file_exists($backupPath . $name . ".{$type}"))     return $backupPath . $name . ".{$type}";
             if(file_exists($backupPath . $name . ".{$type}.php")) return $backupPath . $name . ".{$type}.php";
         }
         else
         {
-            if(file_exists($backupPath . $name . ".{$type}")) return $backupPath . $name . ".{$type}";
-            if(file_exists($backupPath . $name . ".{$type}.zip")) return $backupPath . $name . ".{$type}.zip";
+            if(file_exists($backupPath . $name . ".{$type}"))         return $backupPath . $name . ".{$type}";
+            if(file_exists($backupPath . $name . ".{$type}.zip"))     return $backupPath . $name . ".{$type}.zip";
             if(file_exists($backupPath . $name . ".{$type}.zip.php")) return $backupPath . $name . ".{$type}.zip.php";
         }
 
