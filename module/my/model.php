@@ -1156,14 +1156,15 @@ class myModel extends model
     }
 
     /**
+     * 获取评审中的反馈。
      * Get reviewing feedbacks.
      *
-     * @param  string $orderBy
-     * @param  bool   $checkExists
+     * @param  string     $orderBy
+     * @param  bool       $checkExists
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function getReviewingFeedbacks($orderBy = 'id_desc', $checkExists = false)
+    public function getReviewingFeedbacks(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
         if(!common::hasPriv('feedback', 'review')) return array();
         if($this->config->edition == 'open') return array();
