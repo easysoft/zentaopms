@@ -97,6 +97,7 @@ class screenModel extends model
         $this->filter->charts  = array();
 
         if(!$screen->builtin || in_array($screen->id, $this->config->screen->builtinScreen)) return $this->genNewChartData($screen, $year, $dept, $account);
+        if($screen->id == 5) return new stdclass();
 
         $config = new stdclass();
         $config->width            = 1300;
@@ -841,7 +842,7 @@ class screenModel extends model
      * @access public
      * @return array
      */
-    public function buildComponentList(array $componentList): array
+    public function buildComponentList(array|object $componentList): array
     {
         return array_map(function($component){$this->buildComponent($component);return $component;}, array_filter($componentList));
     }
@@ -1497,37 +1498,39 @@ class screenModel extends model
      * @access public
      * @return array
      */
-    public function getBurnData()
+    public function getBurnData(): array
     {
-        $type = 'withdelay';
-        $this->loadModel('execution');
-        $executions    = $this->execution->getList(0, 'sprint', 'doing') + $this->execution->getList(0, 'stage', 'doing');
+        $type       = 'withdelay';
+        $executions = $this->loadModel('execution')->getList(0, 'sprint', 'doing') + $this->execution->getList(0, 'stage', 'doing');
 
         $executionData = array();
 
-        foreach($executions as $executionID => $execution)
+        foreach(array_keys($executions) as $executionID)
         {
             $execution = $this->execution->getByID($executionID);
 
             /* Splice project name for the execution name. */
-            $execution->name = $this->loadModel('project')->getByID($execution->project)->name . '--' . $execution->name;
+            $project = $this->loadModel('project')->getByID($execution->project);
+            if(!$project) continue;
+
+            $execution->name = $project->name . '--' . $execution->name;
 
             /* Get date list. */
-            if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
-                or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
-                or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
-                and strpos($type, 'delay') === false)
+            if(((strpos('closed,suspended', $execution->status) === false && helper::today() > $execution->end)
+                || ($execution->status == 'closed'    && substr($execution->closedDate, 0, 10) > $execution->end)
+                || ($execution->status == 'suspended' && $execution->suspendedDate > $execution->end))
+                && strpos($type, 'delay') === false)
                 $type .= ',withdelay';
 
             $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
             $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
-            $endDate  = (strpos($type, 'withdelay') !== false and $deadline > $execution->end) ? $deadline : $execution->end;
-            list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $deadline);
+            $endDate  = (strpos($type, 'withdelay') !== false && $deadline > $execution->end) ? $deadline : $execution->end;
+            list($dateList) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $deadline);
 
             $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
-            $chartData = $this->execution->buildBurnData($executionID, $dateList, 'left', $executionEnd);
-
+            $chartData    = $this->execution->buildBurnData($executionID, $dateList, 'left', $executionEnd);
             $execution->chartData = $chartData;
+
             $executionData[$executionID] = $execution;
         }
         return $executionData;
