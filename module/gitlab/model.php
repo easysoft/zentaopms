@@ -154,7 +154,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function getGitLabListByAccount($account = '')
+    public function getListByAccount($account = '')
     {
         if(!$account) $account = $this->app->user->account;
 

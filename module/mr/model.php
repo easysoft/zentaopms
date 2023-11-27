@@ -153,7 +153,7 @@ class mrModel extends model
     {
         $allProjects = array();
         $allGroups   = array();
-        $gitlabUsers = $this->loadModel('gitlab')->getGitLabListByAccount();
+        $gitlabUsers = $this->loadModel('gitlab')->getListByAccount();
         if(!$this->app->user->admin and !isset($gitlabUsers[$hostID])) return array();
 
         $minProject = $maxProject = 0;
