@@ -173,5 +173,135 @@ class commonTao extends commonModel
 
         return $preAndNextObject;
     }
-}
 
+    /**
+     * 查看当前用户是否有资产库下其他方法的权限。
+     * Check if current user has other methods permissions under the asset library.
+     *
+     * @param  bool      $display
+     * @param  string    $currentModule
+     * @param  string    $currentMethod
+     * @access protected
+     * @return array
+     */
+    protected static function setAssetLibMenu(bool $display, string $currentModule, string $currentMethod): array
+    {
+        $methodList = array('caselib', 'issuelib', 'risklib', 'opportunitylib', 'practicelib', 'componentlib');
+        foreach($methodList as $method)
+        {
+            if(common::hasPriv($currentModule, $method))
+            {
+                $display       = true;
+                $currentMethod = $method;
+                break;
+            }
+        }
+
+        return array($display, $currentMethod);
+    }
+
+    /**
+     * 查看当前用户是否有其他个性化设置导航的权限。
+     * Check if current user has other methods permissions under the preference menu.
+     *
+     * @param  bool      $display
+     * @param  string    $currentModule
+     * @param  string    $currentMethod
+     * @access protected
+     * @return array
+     */
+    protected static function setPreferenceMenu(bool $display, string $currentModule, string $currentMethod): array
+    {
+        global $app;
+        global $lang;
+        $app->loadLang('my');
+
+        $moduleLinkList = $currentModule . 'LinkList';
+
+        foreach($lang->my->$moduleLinkList as $key => $linkList)
+        {
+            $moduleMethodList = explode('-', $key);
+            $method           = $moduleMethodList[1];
+            if(common::hasPriv($currentModule, $method))
+            {
+                $display       = true;
+                $currentMethod = $method;
+                break;
+            }
+        }
+
+        return array($display, $currentMethod);
+    }
+
+    /**
+     * 非个性化设置的导航，查看当前用户是否有该应用下其他方法的权限。
+     * For non-personalized settings navigation, check if current user has other methods permissions under the application.
+     *
+     * @param  bool      $display
+     * @param  string    $currentModule
+     * @param  string    $currentMethod
+     * @access protected
+     * @return array
+     */
+    protected static function setOtherMenu(bool $display, string $currentModule, string $currentMethod): array
+    {
+        global $lang;
+
+        foreach($lang->$currentModule->menu as $menu)
+        {
+            if(!isset($menu['link'])) continue;
+
+            $linkPart = explode('|', $menu['link']);
+            if(!isset($linkPart[2])) continue;
+            $method = $linkPart[2];
+
+            /* Skip some pages that do not require permissions.*/
+            if($currentModule == 'report' and $method == 'annualData') continue;
+            if($currentModule == 'my' and $currentMethod == 'team') continue;
+
+            if(common::hasPriv($currentModule, $method))
+            {
+                $display       = true;
+                $currentMethod = $method;
+                if(!isset($menu['target'])) break; // Try to jump to the method without opening a new window.
+            }
+        }
+
+        return array($display, $currentMethod);
+    }
+
+    /**
+     * 基于导航的所属应用，查看当前用户是否有该应用下其他方法的权限。
+     * Based on the navigation of the application, check if current user has other methods permissions under the application.
+     *
+     * @param  string    $group
+     * @param  bool      $display
+     * @param  string    $currentModule
+     * @param  string    $currentMethod
+     * @access protected
+     * @return array
+     */
+    protected static function setMenuByGroup(string $group, bool $display, string $currentModule, string $currentMethod): array
+    {
+        global $lang;
+
+        foreach($lang->$group->menu as $menu)
+        {
+            if(!isset($menu['link'])) continue;
+
+            $linkPart = explode('|', $menu['link']);
+            if(count($linkPart) < 3) continue;
+            list(, $module, $method) = $linkPart;
+
+            if(common::hasPriv($module, $method))
+            {
+                $display       = true;
+                $currentModule = $module;
+                $currentMethod = $method;
+                if(!isset($menu['target'])) break; // Try to jump to the method without opening a new window.
+            }
+        }
+
+        return array($display, $currentModule, $currentMethod);
+    }
+}

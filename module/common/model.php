@@ -551,7 +551,7 @@ class commonModel extends model
 
         foreach($menuOrder as $key => $group)
         {
-            if($group != 'my' && !empty($app->user->rights['acls']['views']) && !isset($app->user->rights['acls']['views'][$group])) continue;
+            if($group != 'my' && !empty($app->user->rights['acls']['views']) && !isset($app->user->rights['acls']['views'][$group])) continue; // 后台权限分组中没有给导航视图
 
             $nav = $lang->mainNav->$group;
             list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
@@ -564,91 +564,23 @@ class commonModel extends model
                 $printDivider = false;
             }
 
-            /**
-             * Judge the module display or not.
-             *
-             */
             $display = false;
 
-            /* 1. The default rule. */
+            /* 1. 有权限则展示导航. */
             if(common::hasPriv($currentModule, $currentMethod)) $display = true;
 
-            /* 2. If the module is assetLib, need judge more methods. */
-            if($currentModule == 'assetlib' && !$display)
-            {
-                $methodList = array('caselib', 'issuelib', 'risklib', 'opportunitylib', 'practicelib', 'componentlib');
-                foreach($methodList as $method)
-                {
-                    if(common::hasPriv($currentModule, $method))
-                    {
-                        $display       = true;
-                        $currentMethod = $method;
-                        break;
-                    }
-                }
-            }
+            /* 2. 如果没有资产库落地页的权限，则查看是否有资产库其他方法的权限. */
+            if($currentModule == 'assetlib' && !$display) list($display, $currentMethod) = commonTao::setAssetLibMenu($display, $currentMethod);
 
-            /* Check whether other preference item under the module have permissions. If yes, point to other methods. */
+            /* 3. 可以个性化设置的导航，如果没有落地页的权限，则查看是否有其他落地页的权限。 */
             $moduleLinkList = $currentModule . 'LinkList';
-            if(!$display and isset($lang->my->$moduleLinkList) and $config->vision != 'or')
-            {
-                foreach($lang->my->$moduleLinkList as $key => $linkList)
-                {
-                    $moduleMethodList = explode('-', $key);
-                    $method           = $moduleMethodList[1];
-                    if(common::hasPriv($currentModule, $method))
-                    {
-                        $display       = true;
-                        $currentMethod = $method;
-                        break;
-                    }
-                }
-            }
+            if(!$display and isset($lang->my->$moduleLinkList) and $config->vision != 'or') list($display, $currentMethod) = commonTao::setPreferenceMenu($display, $currentModule, $currentMethod);
 
-            /* Check whether other methods under the module have permissions. If yes, point to other methods. */
-            if($display == false and isset($lang->$currentModule->menu) and !in_array($currentModule, array('program', 'product', 'project', 'execution', 'demandpool')))
-            {
-                foreach($lang->$currentModule->menu as $menu)
-                {
-                    if(!isset($menu['link'])) continue;
+            /* 4. 不可以个性化设置的导航，如果没有落地页的权限，则查看是否有对应app下其他方法的权限. */
+            if(!$display and isset($lang->$currentModule->menu) and !in_array($currentModule, array('program', 'product', 'project', 'execution', 'demandpool'))) list($display, $currentMethod) = commonTao::setOtherMenu($display, $currentModule, $currentMethod);
 
-                    $linkPart = explode('|', $menu['link']);
-                    if(!isset($linkPart[2])) continue;
-                    $method = $linkPart[2];
-
-                    /* Skip some pages that do not require permissions.*/
-                    if($currentModule == 'report' and $method == 'annualData') continue;
-                    if($currentModule == 'my' and $currentMethod == 'team') continue;
-
-                    if(common::hasPriv($currentModule, $method))
-                    {
-                        $display       = true;
-                        $currentMethod = $method;
-                        if(!isset($menu['target'])) break; // Try to jump to the method without opening a new window.
-                    }
-                }
-            }
-
-            /* Check whether the menu of this group have permissions. If yes, point to them. */
-            if($display == false and isset($lang->$group->menu))
-            {
-                foreach($lang->$group->menu as $menu)
-                {
-                    if(!isset($menu['link'])) continue;
-
-                    $linkPart = explode('|', $menu['link']);
-                    if(count($linkPart) < 3) continue;
-                    list(, $module, $method) = $linkPart;
-
-                    if(common::hasPriv($module, $method))
-                    {
-                        $display       = true;
-                        $currentModule = $module;
-                        $currentMethod = $method;
-                        if(!isset($menu['target'])) break; // Try to jump to the method without opening a new window.
-                    }
-                }
-            }
+            /* 5. 如果以上权限都没有，则最后查看是否有该应用下任意一个顶部一级导航的权限。 */
+            if(!$display and isset($lang->$group->menu)) list($display, $currentModule, $currentMethod) = commonTao::setMenuByGroup($group, $display, $currentModule, $currentMethod);
 
             if(!$display) continue;
 
@@ -678,7 +610,6 @@ class commonModel extends model
 
         /* Fix bug 14574. */
         if(end($items) == 'divider') array_pop($items);
-
         return $items;
     }
 
