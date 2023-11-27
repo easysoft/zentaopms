@@ -1008,15 +1008,14 @@ class block extends control
                 ->where('project')->in(array_keys($projects))
                 ->andWhere('deleted')->eq('0')
                 ->andWhere('type')->in('sprint,stage,kanban')
-                ->groupBy('project')
-                ->orderBy('id_desc')
+                ->orderBy('id_asc')
                 ->fetchAll('project');
 
             foreach($projects as $projectID => $project)
             {
                 if(in_array($project->model, array('scrum', 'kanban', 'agileplus')))
                 {
-                    $project->execution = zget($projectExecutions, $projectID, array());
+                    $project->execution = zget($projectExecutions, $projectID, null);
                 }
                 elseif(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
                 {
