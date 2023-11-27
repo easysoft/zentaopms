@@ -534,6 +534,8 @@ class user extends control
         {
             $users = form::batchData($this->config->user->form->batchCreate)->get();
             $this->userZen->checkBeforeBatchCreate($users, $this->post->verifyPassword);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $userIdList = $this->user->batchCreate($users);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -598,42 +600,44 @@ class user extends control
     }
 
     /**
-     * Batch edit user.
+     * 批量编辑用户。
+     * Batch edit users.
      *
      * @param  int    $deptID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function batchEdit($deptID = 0)
+    public function batchEdit(int $deptID = 0, string $type = 'inside')
     {
-        if(empty($_POST)) return $this->send(array('result' => 'success', 'load' => $this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID=$deptID")));
-        if(!empty($_POST['account']))
+        if($this->post->account)
         {
-            $this->user->batchEdit();
+            $users = form::batchData($this->config->user->form->batchEdit)->get();
+            $this->userZen->checkBeforeBatchEdit($users, $this->post->verifyPassword);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID=$deptID")));
-        }
-        if(isset($_POST['users'])) $this->view->users = $this->dao->select('*')->from(TABLE_USER)->where('id')->in($this->post->users)->orderBy('id')->fetchAll('id');
 
-        /* Set custom. */
-        foreach(explode(',', $this->config->user->availableBatchEditFields) as $field)
+            $this->user->batchUpdate($users, $type);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $locate = $this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID={$deptID}&browseType={$type}");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate));
+        }
+
+        if(!$this->post->userIdList)
         {
-            if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $customFields[$field] = $this->lang->user->$field;
+            $locate = $this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID={$deptID}&browseType={$type}");
+            $this->locate($locate);
         }
 
-        $batchEditFields = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=user&section=custom&key=batchEditFields");
-        if(!$batchEditFields) $batchEditFields = $this->config->user->custom->batchEditFields;
-        foreach(explode(',', $batchEditFields) as $field)
-        {
-            if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $showFields[$field] = $field;
-        }
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = join(',', $showFields);
+        $this->userZen->prepareCustomFields('batchEdit', 'edit');
 
-        $this->view->title      = $this->lang->user->batchEdit;
-        $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
-        $this->view->rand       = $this->user->updateSessionRandom();
-        $this->view->visionList = $this->user->getVisionList();
+        $this->view->title     = $this->lang->user->batchEdit;
+        $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
+        $this->view->depts     = $this->loadModel('dept')->getOptionMenu();
+        $this->view->users     = $this->user->getByIdList($this->post->userIdList);
+        $this->view->rand      = $this->user->updateSessionRandom();
+        $this->view->visions   = $this->user->getVisionList();
+        $this->view->type      = $type;
 
         $this->display();
     }
