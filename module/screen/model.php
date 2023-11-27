@@ -842,7 +842,7 @@ class screenModel extends model
      */
     public function buildComponentList(array $componentList): array
     {
-        return array_map(function($component){return $this->buildComponent($component);}, array_filter($componentList));
+        return array_map(function($component){$this->buildComponent($component);return $component;}, array_filter($componentList));
     }
 
     /**
@@ -850,18 +850,27 @@ class screenModel extends model
      *
      * @param  object $component
      * @access public
-     * @return object
+     * @return void
      */
-    public function buildComponent($component)
+    public function buildComponent(object $component): void
     {
         /* If chart is builtin, build it. */
-        if(isset($component->sourceID) and $component->sourceID) return $this->buildChart($component);
-        if(isset($component->key) and $component->key === 'Select') return $this->buildSelect($component);
-
-        if(empty($component->isGroup)) return $this->setComponentDefaults($component);
-
-        $component->groupList = $this->buildComponentList($component->groupList);
-        return $this->buildGroup($component);
+        if(isset($component->sourceID) && $component->sourceID)
+        {
+            $this->buildChart($component);
+        }
+        elseif(isset($component->key) && $component->key === 'Select')
+        {
+            $this->buildSelect($component);
+        }elseif(empty($component->isGroup))
+        {
+            $this->setComponentDefaults($component);
+        }
+        else
+        {
+            $component->groupList = $this->buildComponentList($component->groupList);
+            $this->buildGroup($component);
+        }
     }
 
     /**
