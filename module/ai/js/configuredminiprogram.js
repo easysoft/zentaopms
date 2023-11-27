@@ -244,7 +244,7 @@ function showFieldNameErrorIfExist($required, form)
     $form.find('.text-danger.help-text').remove();
     $form.find('.has-error').removeClass('has-error');
 
-    if(!name)
+    if(!name.trim())
     {
         $required
             .addClass('has-error')
