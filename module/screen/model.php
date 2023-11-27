@@ -1474,9 +1474,9 @@ class screenModel extends model
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return object
+     * @return void
      */
-    public function buildFunnelChart($component, $chart)
+    public function buildFunnelChart(object $component, object $chart): void
     {
         if(!$chart->settings)
         {
@@ -1486,7 +1486,7 @@ class screenModel extends model
             $component->chartConfig = json_decode('{"key":"Funnel","chartKey":"VFunnel","conKey":"VCFunnel","title":"漏斗图","category":"Mores","categoryName":"更多","package":"Charts","chartFrame":"echarts","image":"/static/png/funnel-d032fdf6.png"}');
             $component->option      = json_decode('{"dataset":{"dimensions":["product","dataOne"],"source":[{"product":"data1","dataOne":20},{"product":"data2","dataOne":40},{"product":"data3","dataOne":60},{"product":"data4","dataOne":80},{"product":"data5","dataOne":100}]},"series":[{"name":"Funnel","type":"funnel","gap":5,"label":{"show":true,"position":"inside","fontSize":12}}],"backgroundColor":"rgba(0,0,0,0)"}');
 
-            return $this->setComponentDefaults($component);
+            $this->setComponentDefaults($component);
         }
     }
 
