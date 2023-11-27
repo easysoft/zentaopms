@@ -1152,9 +1152,9 @@ class screenModel extends model
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return object
+     * @return void
      */
-    public function buildTableChart($component, $chart)
+    public function buildTableChart(object $component, object $chart): void
     {
         if(!$chart->settings)
         {
@@ -1164,40 +1164,27 @@ class screenModel extends model
             $component->chartConfig = json_decode('{"key":"TableScrollBoard","chartKey":"VTableScrollBoard","conKey":"VCTableScrollBoard","title":"轮播列表","category":"Tables","categoryName":"表格","package":"Tables","chartFrame":"common","image":"/static/png/table_scrollboard-fb642e78.png"}');
             $component->option      = json_decode('{"header":["列1","列2","列3"],"dataset":[["行1列1","行1列2","行1列3"],["行2列1","行2列2","行2列3"],["行3列1","行3列2","行3列3"]],"rowNum":2,"waitTime":2,"headerHeight":35,"carousel":"single","headerBGC":"#00BAFF","oddRowBGC":"#003B51","evenRowBGC":"#0A2732"}');
 
-            return $this->setComponentDefaults($component);
+            $this->setComponentDefaults($component);
         }
         else
         {
             if($chart->sql)
             {
                 $settings = json_decode($chart->settings);
-                if($settings and isset($settings->column))
+                if($settings && isset($settings->column))
                 {
-                    $header  = array();
-                    $dataset = array();
-                    foreach($settings->column as $column)
-                    {
-                        $header[$column->field] = $column->name;
-                    }
+                    $header = $dataset = array();
+                    foreach($settings->column as $column) $header[$column->field] = $column->name;
 
-                    $sql     = $this->setFilterSQL($chart);
-                    $results = $this->dao->query($sql)->fetchAll();
-                    foreach($results as $result)
-                    {
-                        $row = array();
-                        foreach($header as $field => $name)
-                        {
-                            $row[] = $result->$field;
-                        }
-                        $dataset[] = $row;
-                    }
+                    $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
+                    foreach($results as $result) $dataset[] = array_map(function($field)use($result){return $result->$field;}, array_keys($header));
 
                     $component->option->header  = array_values($header);
                     $component->option->dataset = $dataset;
                 }
             }
 
-            return $this->setComponentDefaults($component);
+            $this->setComponentDefaults($component);
         }
     }
 
