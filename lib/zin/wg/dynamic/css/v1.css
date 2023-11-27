@@ -8,8 +8,8 @@
 .dynamic > li.trophy > div:after {background-color: unset;}
 .dynamic > li + li:after {position: absolute; top: -12px; bottom: 20px; left: -13px; z-index: 1; display: block; content: ' '; border-left: 2px solid #eee;}
 .dynamic > li > div:after {opacity: 1}
-.dynamic > li:before {top: 12px; left: -20px; width: 16px; height: 16px; background-color: var(--color-slate-100); border: none;}
-.dynamic > li.trophy:before {background: url('static/svg/trophy.svg') no-repeat; width: 18px; height: 18px; background-size: 100%; left: -21px; top: 13px; background-color: var(--color-slate-100);}
+.dynamic > li:before {top: 12px; left: -20px; width: 16px; height: 16px; background-color: var(--color-gray-100); border: none;}
+.dynamic > li.trophy:before {background: url('static/svg/trophy.svg') no-repeat; width: 18px; height: 18px; background-size: 100%; left: -21px; top: 13px; background-color: var(--color-gray-100);}
 .dynamic > li > div {display: block; padding: 3px 0px; line-height: 20px}
 .dynamic > li .dynamic-text {padding: 2px 5px;}
 .dynamic > li.trophy .dynamic-text {background: #fff;}

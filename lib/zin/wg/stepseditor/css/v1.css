@@ -1,8 +1,8 @@
 .steps-editor {width: 100%}
-.steps-editor-header {padding-right: 24px; color: var(--color-slate-700);}
+.steps-editor-header {padding-right: 24px; color: var(--color-gray-700);}
 .steps-editor-row {position: relative; display: flex; align-items: stretch; min-height: 32px; --tw-ring-color: rgba(var(--color-border-strong-rgb), 1); box-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color); margin-top: 1px; z-index: 1;}
 .steps-editor-row.is-focus {z-index: 100;}
-.steps-editor-header .steps-editor-row {border-radius: 2px 2px 0 0; background-color: var(--color-slate-100);}
+.steps-editor-header .steps-editor-row {border-radius: 2px 2px 0 0; background-color: var(--color-gray-100);}
 .steps-editor-col {flex: none; display: flex; align-items: stretch;}
 .steps-editor-header .steps-editor-col {padding: 0 12px; align-items: center;}
 .steps-editor-col-step {width: 50%;}
@@ -16,14 +16,14 @@
 .steps-editor-step-text {padding: 6px 12px 6px 6px;; flex: auto; border: none; min-height: 32px; background: none; border-radius: 0; resize: none}
 .steps-editor-step-text {outline: none;}
 .steps-editor-body .steps-editor-col-add > div + div::before {content: ' '; position: absolute; display: block; border-left: 1px solid var(--color-border-strong); top: 4px; bottom: 4px; left: 0; opacity: .7;}
-.steps-editor .btn-action {color: var(--color-slate-600);}
+.steps-editor .btn-action {color: var(--color-gray-600);}
 .steps-editor .btn-action:hover {color: var(--color-primary-500);}
 .steps-editor-col-delete {width: 24px; height: 100%; display: flex; align-items: center; justify-content: center; position: absolute; right: -24px; top: 0}
 .steps-editor-row .form-control {background: inherit;}
 .steps-editor-row {background: var(--color-canvas);}
 .steps-editor-row[data-level="1"] {margin-top: 7px;}
 .steps-editor-body > .steps-editor-row:first-child {margin-top: 1px;}
-.steps-editor-step-move {color: var(--color-slate-600); width: 24px; display: flex; justify-content: center; align-items: center; border-right: 1px solid var(--color-border-strong); cursor: move;}
+.steps-editor-step-move {color: var(--color-gray-600); width: 24px; display: flex; justify-content: center; align-items: center; border-right: 1px solid var(--color-border-strong); cursor: move;}
 .steps-editor-drag-ghost {position: absolute; left: 0; top: 0; bottom: 0; opacity: 0; right: 0; pointer-events: none;}
 .steps-editor-step-move:hover {color: var(--color-primary-500)}
 .steps-editor-col-step::before {display: block; content: ' '; position: absolute; left: -90px; top: 0; bottom: 0; width: 90px;}

@@ -4,7 +4,7 @@
 #mrMenu menu.nav {border-bottom: 1px solid #ddd}
 #mrMenu .nav-item>a.active {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px; margin-bottom: -1px;}
 
-.detail-title {color: var(--color-slate-900); font-weight: 600; font-size: 1rem; line-height: 1.5rem;}
+.detail-title {color: var(--color-gray-900); font-weight: 600; font-size: 1rem; line-height: 1.5rem;}
 .detail-content .btn-active-text {padding-top: 5px;}
 .detail-content p {margin: 0 0 10px;}
 blockquote {padding: 10px 20px; margin: 0 0 20px; font-size: 16.25px; border-left: 5px solid #eee;}

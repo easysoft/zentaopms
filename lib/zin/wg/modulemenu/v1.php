@@ -156,7 +156,7 @@ class moduleMenu extends wg
         (
             set('href', $closeLink),
             isInModal() ? set('data-load', 'modal') : null,
-            icon('close', setStyle('color', 'var(--color-slate-600)'))
+            icon('close', setStyle('color', 'var(--color-gray-600)'))
         );
     }
 
