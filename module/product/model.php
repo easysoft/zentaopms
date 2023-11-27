@@ -1976,13 +1976,14 @@ class productModel extends model
     }
 
     /**
+     * 刷新产品的统计信息。
      * Refresh stats info of products.
      *
-     * @param  bool $refreshAll
+     * @param  bool   $refreshAll
      * @access public
      * @return void
      */
-    public function refreshStats($refreshAll = false)
+    public function refreshStats(bool $refreshAll = false): void
     {
         $updateTime = zget($this->app->config->global, 'productStatsTime', '');
         $now        = helper::now();
@@ -1993,7 +1994,7 @@ class productModel extends model
          */
         $productActions = array();
         $products       = array();
-        if($updateTime < date('Y-m-d', strtotime('-14 days')) or $refreshAll)
+        if($updateTime < date('Y-m-d', strtotime('-14 days')) || $refreshAll)
         {
             $products = $this->dao->select('id')->from(TABLE_PRODUCT)->fetchPairs('id');
         }
@@ -2007,93 +2008,12 @@ class productModel extends model
 
             foreach($productActions as $productAction)
             {
-                foreach(explode(',', trim($productAction, ',')) as $product)
-                {
-                    $products[$product] = $product;
-                }
+                foreach(explode(',', trim($productAction, ',')) as $product) $products[$product] = $product;
             }
         }
 
-        /* 1. Get summary and members of products to be refreshed. */
-        $stories = $this->dao->select('product, status, `closedReason`, count(id) AS c')
-            ->from(TABLE_STORY)
-            ->where('deleted')->eq(0)
-            ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
-            ->andWhere('type')->eq('story')
-            ->groupBy('product, status, `closedReason`')
-            ->fetchAll();
-        $productStories = array();
-        foreach($stories as $story)
-        {
-            if(!isset($productStories[$story->product])) $productStories[$story->product] = array('draft' => 0, 'active' => 0, 'changing' => 0, 'reviewing' => 0, 'finished' => 0, 'closed' => 0, 'total' => 0);
-            if($story->status == 'draft')     $productStories[$story->product]['draft']     += $story->c;
-            if($story->status == 'active')    $productStories[$story->product]['active']    += $story->c;
-            if($story->status == 'changing')  $productStories[$story->product]['changing']  += $story->c;
-            if($story->status == 'reviewing') $productStories[$story->product]['reviewing'] += $story->c;
-            if($story->status == 'closed')    $productStories[$story->product]['closed']    += $story->c;
-            $productStories[$story->product]['total'] += $story->c;
-
-            if($story->status == 'closed' && $story->closedReason == 'done') $productStories[$story->product]['finished'] += $story->c;
-        }
-
-        $bugs = $this->dao->select('product,status,resolution, count(id) AS c')
-            ->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
-            ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
-            ->groupBy('product, status, resolution')
-            ->fetchAll();
-        $productBugs = array();
-        foreach($bugs as $bug)
-        {
-            if(!isset($productBugs[$bug->product])) $productBugs[$bug->product] = array('unresolved' => 0, 'fixed' => 0, 'closed' => 0, 'total' => 0);
-            if($bug->status == 'active' || ($bug->status != 'closed' && $bug->resolution == 'postponed')) $productBugs[$bug->product]['unresolved'] += $bug->c;
-
-            if($bug->status == 'closed' && $bug->resolution == 'fixed') $productBugs[$bug->product]['fixed']  += $bug->c;
-            if($bug->status == 'closed')                                $productBugs[$bug->product]['closed'] += $bug->c;
-            $productBugs[$bug->product]['total'] += $bug->c;
-        }
-
-        $plans = $this->dao->select('product, count(id) AS c')
-            ->from(TABLE_PRODUCTPLAN)
-            ->where('deleted')->eq(0)
-            ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
-            ->andWhere('end')->gt(helper::now())
-            ->groupBy('product')
-            ->fetchPairs();
-
-        $releases = $this->dao->select('product, count(id) AS c')
-            ->from(TABLE_RELEASE)
-            ->where('deleted')->eq(0)
-            ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
-            ->groupBy('product')
-            ->fetchPairs();
-
-        /* If products is empty, get all products. */
-        if(empty($products)) $products = $this->dao->select('id')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchPairs();
-
-        $stats = array();
-        foreach($products as $productID)
-        {
-            $product = new stdclass();
-
-            $product->draftStories     = isset($productStories[$productID]) ? $productStories[$productID]['draft']     : 0;
-            $product->activeStories    = isset($productStories[$productID]) ? $productStories[$productID]['active']    : 0;
-            $product->changingStories  = isset($productStories[$productID]) ? $productStories[$productID]['changing']  : 0;
-            $product->reviewingStories = isset($productStories[$productID]) ? $productStories[$productID]['reviewing'] : 0;
-            $product->closedStories    = isset($productStories[$productID]) ? $productStories[$productID]['closed']    : 0;
-            $product->finishedStories  = isset($productStories[$productID]) ? $productStories[$productID]['finished']  : 0;
-            $product->totalStories     = isset($productStories[$productID]) ? $productStories[$productID]['total']     : 0;
-
-            $product->unresolvedBugs = isset($productBugs[$productID]) ? $productBugs[$productID]['unresolved'] : 0;
-            $product->closedBugs     = isset($productBugs[$productID]) ? $productBugs[$productID]['closed']     : 0;
-            $product->fixedBugs      = isset($productBugs[$productID]) ? $productBugs[$productID]['fixed']      : 0;
-            $product->totalBugs      = isset($productBugs[$productID]) ? $productBugs[$productID]['total']      : 0;
-
-            $product->plans        = isset($plans[$productID])    ? $plans[$productID]    : 0;
-            $product->releases     = isset($releases[$productID]) ? $releases[$productID] : 0;
-
-            $stats[$productID] = $product;
-        }
+        /* 1. Get summary of products to be refreshed. */
+        $stats = $this->productTao->getProductStats($products);
 
         /* 2. Refresh stats to db. */
         foreach($stats as $productID=> $product)

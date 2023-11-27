@@ -813,4 +813,128 @@ class productTao extends productModel
 
         return $data;
     }
+
+    /**
+     * 获取产品的统计数据。
+     * Get summary of products to be refreshed.
+     *
+     * @param  array     $productIdList
+     * @access protected
+     * @return array
+     */
+    protected function getProductStats(array $productIdList): array
+    {
+        $productStories = $this->getStoryStats($productIdList);
+        $productBugs    = $this->getBugStats($productIdList);
+
+        $plans = $this->dao->select('product, count(id) AS c')
+            ->from(TABLE_PRODUCTPLAN)
+            ->where('deleted')->eq(0)
+            ->beginIF(!empty($productIdList))->andWhere('product')->in($productIdList)->fi()
+            ->andWhere('end')->gt(helper::now())
+            ->groupBy('product')
+            ->fetchPairs();
+
+        $releases = $this->dao->select('product, count(id) AS c')
+            ->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->beginIF(!empty($productIdList))->andWhere('product')->in($productIdList)->fi()
+            ->groupBy('product')
+            ->fetchPairs();
+
+        /* If products is empty, get all products. */
+        if(empty($productIdList)) $productIdList = $this->dao->select('id')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchPairs();
+
+        $stats = array();
+        foreach($productIdList as $productID)
+        {
+            $product = new stdclass();
+
+            $product->draftStories     = isset($productStories[$productID]) ? $productStories[$productID]['draft']     : 0;
+            $product->activeStories    = isset($productStories[$productID]) ? $productStories[$productID]['active']    : 0;
+            $product->changingStories  = isset($productStories[$productID]) ? $productStories[$productID]['changing']  : 0;
+            $product->reviewingStories = isset($productStories[$productID]) ? $productStories[$productID]['reviewing'] : 0;
+            $product->closedStories    = isset($productStories[$productID]) ? $productStories[$productID]['closed']    : 0;
+            $product->finishedStories  = isset($productStories[$productID]) ? $productStories[$productID]['finished']  : 0;
+            $product->totalStories     = isset($productStories[$productID]) ? $productStories[$productID]['total']     : 0;
+
+            $product->unresolvedBugs = isset($productBugs[$productID]) ? $productBugs[$productID]['unresolved'] : 0;
+            $product->closedBugs     = isset($productBugs[$productID]) ? $productBugs[$productID]['closed']     : 0;
+            $product->fixedBugs      = isset($productBugs[$productID]) ? $productBugs[$productID]['fixed']      : 0;
+            $product->totalBugs      = isset($productBugs[$productID]) ? $productBugs[$productID]['total']      : 0;
+
+            $product->plans        = isset($plans[$productID])    ? $plans[$productID]    : 0;
+            $product->releases     = isset($releases[$productID]) ? $releases[$productID] : 0;
+
+            $stats[$productID] = $product;
+        }
+
+        return $stats;
+    }
+
+    /**
+     * 获取产品下需求的统计数据。
+     * Get story statistic data.
+     *
+     * @param  array     $productIdList
+     * @access protected
+     * @return array
+     */
+    protected function getStoryStats(array $productIdList): array
+    {
+        $stories = $this->dao->select('product, status, `closedReason`, count(id) AS c')
+            ->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->beginIF(!empty($productIdList))->andWhere('product')->in($productIdList)->fi()
+            ->andWhere('type')->eq('story')
+            ->groupBy('product, status, `closedReason`')
+            ->fetchAll();
+
+        $productStories = array();
+        foreach($stories as $story)
+        {
+            if(!isset($productStories[$story->product])) $productStories[$story->product] = array('draft' => 0, 'active' => 0, 'changing' => 0, 'reviewing' => 0, 'finished' => 0, 'closed' => 0, 'total' => 0);
+            if($story->status == 'draft')     $productStories[$story->product]['draft']     += $story->c;
+            if($story->status == 'active')    $productStories[$story->product]['active']    += $story->c;
+            if($story->status == 'changing')  $productStories[$story->product]['changing']  += $story->c;
+            if($story->status == 'reviewing') $productStories[$story->product]['reviewing'] += $story->c;
+            if($story->status == 'closed')    $productStories[$story->product]['closed']    += $story->c;
+            $productStories[$story->product]['total'] += $story->c;
+
+            if($story->status == 'closed' && $story->closedReason == 'done') $productStories[$story->product]['finished'] += $story->c;
+        }
+
+        return $productStories;
+    }
+
+    /**
+     * 获取产品下bug的统计数据。
+     * Get bug statistic data.
+     *
+     * @param  array     $productIdList
+     * @access protected
+     * @return array
+     */
+    protected function getBugStats(array $productIdList): array
+    {
+        $bugs = $this->dao->select('product,status,resolution, count(id) AS c')
+            ->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->beginIF(!empty($productIdList))->andWhere('product')->in($productIdList)->fi()
+            ->groupBy('product, status, resolution')
+            ->fetchAll();
+
+        $productBugs = array();
+        foreach($bugs as $bug)
+        {
+            if(!isset($productBugs[$bug->product])) $productBugs[$bug->product] = array('unresolved' => 0, 'fixed' => 0, 'closed' => 0, 'total' => 0);
+            if($bug->status == 'active' || ($bug->status != 'closed' && $bug->resolution == 'postponed')) $productBugs[$bug->product]['unresolved'] += $bug->c;
+
+            if($bug->status == 'closed' && $bug->resolution == 'fixed') $productBugs[$bug->product]['fixed']  += $bug->c;
+            if($bug->status == 'closed')                                $productBugs[$bug->product]['closed'] += $bug->c;
+            $productBugs[$bug->product]['total'] += $bug->c;
+        }
+
+        return $productBugs;
+    }
 }
