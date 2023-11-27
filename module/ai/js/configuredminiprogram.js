@@ -191,6 +191,9 @@ function handleEditFieldClick(event)
         $modalBody.find('input[value="0"]').attr('checked', 'checked');
         $modalBody.find('input[value="1"]').removeAttr('checked');
     }
+
+    $modal.find('.input-group').first().find('button').last().attr('disabled', 'disabled');
+
     $('#edit-field-modal .text-danger').remove();
     $modal.modal('show', 'fit');
 }
