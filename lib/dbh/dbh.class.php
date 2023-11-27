@@ -265,7 +265,7 @@ class dbh
      */
     public function tableExits($tableName)
     {
-        $tableName = str_replace("'", "", $tableName);
+        $tableName = str_replace(array("'", '`'), "", $tableName);
         $sql = "SHOW TABLES FROM {$this->config->name} like '{$tableName}'";
         switch($this->config->driver)
         {
