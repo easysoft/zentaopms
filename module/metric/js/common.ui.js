@@ -38,8 +38,16 @@ window.renderDTableCell = function(result, {row, col})
         cellWidth[col] = Math.floor(cellWidth[col] / colsWidth * width);
     });
 
-
-    var html = `<span class="cell-ellipsis" style="width: ${cellWidth[col.name] - 24}px;" title="${row.data[col.name]}">${row.data[col.name]}</span>`;
+    if(Array.isArray(row.data[col.name]))
+    {
+        var value = row.data[col.name][0];
+        var title = updateTimeTip.replace('%s', row.data[col.name][1]);
+    }
+    else
+    {
+         var title = value = row.data[col.name];
+    }
+    var html  = `<span class="cell-ellipsis" style="width: ${cellWidth[col.name] - 24}px;" title="${title}">${value}</span>`;
     result[0] = {html: html};
 
     return result;

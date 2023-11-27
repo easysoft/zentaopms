@@ -10,8 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('resultHeader',       isset($resultHeader) ? $resultHeader : array());
-jsVar('resultData',         isset($resultData)   ? $resultData   : array());
+jsVar('updateTimeTip',      $lang->metric->updateTimeTip);
 jsVar('objectList',         $lang->metric->objectList);
 jsVar('current',            $current);
 jsVar('maxSelectNum',       $config->metric->maxSelectNum);

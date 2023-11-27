@@ -112,6 +112,7 @@ $lang->metric->saveSqlMeasSuccess = "查询成功，测试结果：%s";
 $lang->metric->monthText          = "%s号";
 $lang->metric->errorDateRange     = "开始日期不能大于结束日期";
 $lang->metric->errorCalcTimeRange = "采集开始时间不能大于采集结束时间";
+$lang->metric->updateTimeTip      = "更新快照时间：%s";
 
 $lang->metric->noDesc    = "暂无描述";
 $lang->metric->noFormula = "暂无计算规则";

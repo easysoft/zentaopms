@@ -531,13 +531,14 @@ class metricZen extends metric
         $objects  = array();
         foreach($data as $dataInfo)
         {
-            $time   = substr($dataInfo->$dateField, 0, 10);
+            $time     = substr($dataInfo->$dateField, 0, 10);
+            $calcTime = $dataInfo->calcTime;
             $object = $dataInfo->scope;
             $value  = $dataInfo->value;
 
             if(!isset($times[$time]))     $times[$time] = $time;
             if(!isset($objects[$object])) $objects[$object] = array();
-            $objects[$object][$time] = $value;
+            $objects[$object][$time] = array($value, $calcTime);
         }
         /* e.g $times = array('2023-10-14', '2023-10-15'), $objects = array('object1' => array('2023-10-14' => 2, '2023-10-15 => 3)) */
 
@@ -630,7 +631,7 @@ class metricZen extends metric
                 $groupHeader[] = array('name' => $name, 'title' => $day, 'headerGroup' => $year, 'align' => 'center');
             }
 
-            $groupData[0][$name] = $dataInfo->value;
+            $groupData[0][$name] = array($dataInfo->value, $dataInfo->calcTime);
         }
 
         return array($groupHeader, $groupData);
