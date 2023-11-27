@@ -39,6 +39,9 @@ fields:
   - field: subStatus
     note: "子状态"
     range: 0
+  - field: PMT
+    note: "产品管理团队"
+    range: ''
   - field: desc
     note: "产品描述"
     fields:

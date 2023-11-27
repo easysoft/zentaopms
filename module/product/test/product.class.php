@@ -1225,4 +1225,20 @@ class productTest
 
         return $changes;
     }
+
+    /**
+     * 获取产品下需求的统计数据。
+     * Get story statistic data.
+     *
+     * @param  array  $productIdList
+     * @access public
+     * @return array
+     */
+    public function getStoryStatsTest(array $productIdList): array
+    {
+        $productStories = $this->objectModel->getStoryStats($productIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $productStories;
+    }
 }
