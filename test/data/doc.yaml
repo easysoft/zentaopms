@@ -167,9 +167,6 @@ fields:
   - field: draft
     note: "草稿内容"
     range: ''
-  - field: collector
-    note: "收藏者"
-    range: ''
   - field: version
     note: "版本号"
     range: 2{10},1{890}
