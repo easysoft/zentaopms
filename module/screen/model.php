@@ -836,19 +836,13 @@ class screenModel extends model
     /**
      * Build component list.
      *
-     * @param  array $componentList
+     * @param  array  $componentList
      * @access public
      * @return array
      */
-    public function buildComponentList($componentList)
+    public function buildComponentList(array $componentList): array
     {
-        $components = array();
-        foreach($componentList as $component)
-        {
-            if($component) $components[] = $this->buildComponent($component);
-        }
-
-        return $components;
+        return array_map(function($component){return $this->buildComponent($component);}, array_filter($componentList));
     }
 
     /**
