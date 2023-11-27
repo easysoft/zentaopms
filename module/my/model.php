@@ -997,19 +997,20 @@ class myModel extends model
     }
 
     /**
+     * 获取待审批的需求。
      * Get reviewing stories.
      *
      * @param  string $orderBy
      * @param  bool   $checkExists
      * @access public
-     * @return array
+     * @return array|bool
      */
-    public function getReviewingStories($orderBy = 'id_desc', $checkExists = false)
+    public function getReviewingStories(string $orderBy = 'id_desc', bool $checkExists = false): array|bool
     {
         if(!common::hasPriv('story', 'review')) return array();
 
         $this->app->loadLang('story');
-        $stmt = $this->dao->select("t1.*")->from(TABLE_STORY)->alias('t1')
+        $stmt = $this->dao->select('t1.*')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version')
             ->where('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
@@ -1036,7 +1037,7 @@ class myModel extends model
             $stories[$story->id] = $story;
         }
 
-        $actions = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('objectID')->in(array_keys($stories))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs('objectID', 'date');
+        $actions = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('objectID')->in(array_keys($stories))->andWhere('action')->eq('submitreview')->orderBy('`date`')->fetchPairs();
         foreach($actions as $storyID => $date) $stories[$storyID]->time = $date;
         return array_values($stories);
     }

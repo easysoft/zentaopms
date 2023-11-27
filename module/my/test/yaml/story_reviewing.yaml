@@ -1,0 +1,11 @@
+title: zt_story
+desc: story data.
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: status
+    range: active,reviewing
+  - field: version
+    range: 1
+  - field: type
+    range: story{3},requirement{2}
