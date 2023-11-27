@@ -1261,7 +1261,7 @@ class screenModel extends model
      * @access public
      * @return object
      */
-    public function buildPieChart($component, $chart)
+    public function buildPieChart(object $component, object $chart): void
     {
         if(!$chart->settings)
         {
@@ -1271,20 +1271,19 @@ class screenModel extends model
             $component->chartConfig = json_decode('{"key":"PieCommon","chartKey":"VPieCommon","conKey":"VCPieCommon","title":"饼图","category":"Pies","categoryName":"饼图","package":"Charts","chartFrame":"echarts","image":"/static/png/pie-9620f191.png"}');
             $component->option      = json_decode('{"type":"nomal","series":[{"type":"pie","radius":"70%","roseType":false}],"backgroundColor":"rgba(0,0,0,0)"}');
 
-            return $this->setComponentDefaults($component);
+            $this->setComponentDefaults($component);
         }
         else
         {
             if($chart->sql)
             {
+                $sourceData = array();
                 $settings = json_decode($chart->settings);
-                if($settings and isset($settings->metric))
+                if($settings && isset($settings->metric))
                 {
                     $dimensions = array($settings->group[0]->name, $settings->metric[0]->field);
-                    $sourceData = array();
 
-                    $sql     = $this->setFilterSQL($chart);
-                    $results = $this->dao->query($sql)->fetchAll();
+                    $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
                     $group = $settings->group[0]->field;
 
                     $groupCount = array();
@@ -1298,10 +1297,7 @@ class screenModel extends model
                     }
                     arsort($groupCount);
 
-                    foreach($groupCount as $groupValue => $groupCount)
-                    {
-                        $sourceData[] = array($settings->group[0]->name => $groupValue, $settings->metric[0]->field => $groupCount);
-                    }
+                    foreach($groupCount as $groupValue => $groupCount) $sourceData[] = array($settings->group[0]->name => $groupValue, $settings->metric[0]->field => $groupCount);
                 }
                 if(empty($sourceData)) $dimensions = array();
 
@@ -1309,7 +1305,7 @@ class screenModel extends model
                 $component->option->dataset->source     = $sourceData;
             }
 
-            return $this->setComponentDefaults($component);
+            $this->setComponentDefaults($component);
         }
     }
 
