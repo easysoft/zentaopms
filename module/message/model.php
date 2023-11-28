@@ -45,17 +45,18 @@ class messageModel extends model
     }
 
     /**
+     * 获取对象操作。
      * Get object actions.
      *
      * @access public
      * @return array
      */
-    public function getObjectActions()
+    public function getObjectActions(): array
     {
         $objectActions = array();
         foreach($this->config->message->objectTypes as $objectType => $actions)
         {
-            foreach($actions as $action) $objectActions[$objectType][$action] = $this->lang->message->label->$action;
+            foreach($actions as $action) $objectActions[$objectType][$action] = $this->lang->message->label->{$action};
         }
         return $objectActions;
     }

@@ -49,12 +49,13 @@ class messageTest
     }
 
     /**
-     * Get object actions.
+     * 测试获取对象操作。
+     * Test get object actions.
      *
      * @access public
      * @return void
      */
-    public function getObjectActionsTest()
+    public function getObjectActionsTest(): array
     {
         $objects = $this->objectModel->getObjectActions();
 
