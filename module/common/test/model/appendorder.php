@@ -5,7 +5,7 @@ su('admin');
 
 /**
 
-title=测试 commonModel::diff();
+title=测试 commonModel->appendOrder();
 timeout=0
 cid=1
 
