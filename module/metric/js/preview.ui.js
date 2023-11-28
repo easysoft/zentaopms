@@ -160,6 +160,13 @@ window.handleDateLabelClick = function(evt)
     $(evt).addClass('selected');
 }
 
+window.handleCalcDateClick = function(evt)
+{
+    $form = $(evt).closest('form');
+    $form.find('.query-calc-date button.btn').removeClass('selected');
+    $(evt).addClass('selected');
+}
+
 window.handleDatePickerChange = function(evt)
 {
     $form = $(evt).closest('form');
@@ -453,6 +460,12 @@ window.getFormData = function($form)
         formData.append('dateLabel', $selectedDate.attr('key'));
         formData.delete('dateBegin');
         formData.delete('dateEnd');
+    }
+
+    var $calcDate = $form.find('.query-calc-date button.selected');
+    if($calcDate.length)
+    {
+        formData.append('calcDate', $calcDate.attr('key'));
     }
 
     return formData;

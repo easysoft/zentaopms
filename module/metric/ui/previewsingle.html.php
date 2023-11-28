@@ -157,6 +157,30 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current, $dateLabels, 
         );
     }
 
+    if($metricRecordType == 'scope' || $metricRecordType == 'system')
+    {
+        $btnLabels = array();
+        foreach($this->lang->metric->query->dayLabels as $key => $label)
+        {
+            $active = $key == '7' ? ' selected' : '';
+            $btnLabels[] = btn
+            (
+                setClass("$active default w-16 p-0"),
+                set::key($key),
+                $label
+            );
+        }
+        $formGroups[] = formGroup
+        (
+            setClass('query-calc-date query-inline w-64'),
+            btngroup
+            (
+                $btnLabels
+            ),
+            on::click('.query-calc-date button.btn', 'window.handleCalcDateClick(target)'),
+        );
+    }
+
     if($metricRecordType == 'date' || $metricRecordType == 'scope-date')
     {
         $btnLabels = array();
@@ -183,7 +207,6 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current, $dateLabels, 
         $formGroups[] = formGroup
         (
             setClass('query-inline w-80'),
-            // set::label($this->lang->metric->date),
             inputGroup
             (
                 datePicker
@@ -210,7 +233,6 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current, $dateLabels, 
     (
         set::id('queryForm' . $current->id),
         setClass('ml-4'),
-        set('date-type', $dateType),
         formRow
         (
             set::width('max'),

@@ -97,4 +97,4 @@ i.star {color: var(--color-warning-300);}
 .query-inline>label {justify-content: flex-start !important;}
 .query-btn {padding-left: 20px !important;}
 .picker-nowrap .picker-multi-selections {flex-wrap: nowrap !important; overflow: hidden !important;}
-.query-date .selected {background-color: var(--color-primary-50); color: var(--color-primary-600);}
+.query-date .selected,.query-calc-date .selected {background-color: var(--color-primary-50); color: var(--color-primary-600);}

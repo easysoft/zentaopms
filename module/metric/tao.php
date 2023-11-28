@@ -240,6 +240,8 @@ class metricTao extends metricModel
         $dateEnd   = $this->processRecordQuery($query, 'dateEnd', 'date');
         list($dateBegin, $dateEnd) = $this->processRecordQuery($query, 'dateLabel', 'date');
 
+        $calcDate  = $this->processRecordQuery($query, 'calcDate', 'date');
+
         $yearBegin  = empty($dateBegin) ? '' : $dateBegin->year;
         $yearEnd    = empty($dateEnd)   ? '' : $dateEnd->year;
         $monthBegin = empty($dateBegin) ? '' : $dateBegin->month;
@@ -252,10 +254,11 @@ class metricTao extends metricModel
         $scopeKey   = current($scopeList);
         $scopeValue = $scope;
 
+        $fieldList = array_merge($fieldList, array('id', 'value', 'date'));
         $wrapFields = array_map(fn($value) => "`$value`", $fieldList);
         $dataFieldStr = implode(',', $wrapFields);
 
-        $records =  $this->dao->select("id,`value`,`date`,{$dataFieldStr}")
+        $records =  $this->dao->select($dataFieldStr)
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
             ->beginIF($metricScope != 'system')->andWhere($metricScope)->in($objectList)->fi()
@@ -268,6 +271,7 @@ class metricTao extends metricModel
             ->beginIF(!empty($dateEnd)   and $dateType == 'week')->andWhere('CONCAT(`year`, `week`)')->le($weekEnd)->fi()
             ->beginIF(!empty($dateBegin) and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->ge($dayBegin)->fi()
             ->beginIF(!empty($dateEnd)   and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->le($dayEnd)->fi()
+            ->beginIF(!empty($calcDate))->andWhere('date')->ge($calcDate)->fi()
             ->beginIF(!empty($scopeList))->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
             ->beginIF(empty($scopeList))->orderBy("date desc, year desc, month desc, week desc, day desc")->fi()
             ->fetchAll();
