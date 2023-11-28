@@ -12,7 +12,8 @@
 class message extends control
 {
     /**
-     * Index
+     * 主页。
+     * Index.
      *
      * @access public
      * @return void
