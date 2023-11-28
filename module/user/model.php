@@ -1416,27 +1416,6 @@ class userModel extends model
     }
 
     /**
-     * Get data in JSON.
-     *
-     * @param  object    $user
-     * @access public
-     * @return array
-     */
-    public function getDataInJSON($user)
-    {
-        $newUser = new stdclass();
-        foreach($user as $key => $value) $newUser->$key = $value;
-        unset($newUser->password);
-        unset($newUser->deleted);
-        $newUser->company = $this->app->company->name;
-
-        /* App client will use session id as token. */
-        $newUser->token = session_id();
-
-        return array('user' => $newUser);
-    }
-
-    /**
      * Get weak users.
      *
      * @access public

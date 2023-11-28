@@ -193,6 +193,25 @@ class userZen extends user
     }
 
     /**
+     * 获取一个用户用于 json 格式返回给前台。
+     * Get a user for json format to return to the front end.
+     *
+     * @param  object $user
+     * @access public
+     * @return object
+     */
+    public function getUserForJSON(object $user): object
+    {
+        unset($user->password);
+        unset($user->deleted);
+
+        $user->token   = session_id(); // App client will use session id as token.
+        $user->company = $this->app->company->name;
+
+        return $user;
+    }
+
+    /**
      * 构建职位和权限组数据。
      * Prepare roles and groups data.
      *
