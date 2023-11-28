@@ -805,7 +805,7 @@ class commonModel extends model
      * @access public
      * @return bool
      */
-    public static function judgeSuhosinSetting($countInputVars)
+    public static function judgeSuhosinSetting(int $countInputVars): bool
     {
         if(extension_loaded('suhosin'))
         {
@@ -832,9 +832,8 @@ class commonModel extends model
      */
     public function getPreAndNextObject(string $type, int $objectID): object
     {
-        $queryCondition    = $type . 'QueryCondition';
-        $typeOnlyCondition = $type . 'OnlyCondition';
-        $queryCondition    = $this->session->$queryCondition;
+        $queryCondition = $type . 'QueryCondition';
+        $queryCondition = $this->session->$queryCondition;
 
         $preAndNextObject       = new stdClass();
         $preAndNextObject->pre  = '';
