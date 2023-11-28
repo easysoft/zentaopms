@@ -33,15 +33,14 @@ class message extends control
     }
 
     /**
-     * Browser Setting
+     * 浏览器设置。
+     * Browser setting.
      *
      * @access public
      * @return void
      */
     public function browser()
     {
-        $browserConfig = $this->config->message->browser;
-
         if($_POST)
         {
             $response['result']  = 'success';
@@ -54,20 +53,12 @@ class message extends control
             $browserConfig->pollTime = $data->pollTime;
 
             $this->loadModel('setting')->setItems('system.message.browser', $browserConfig);
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
-
-            $response['callback'] = "top.window.location.href = $.createLink('message', 'browser')";
-            return $this->send($response);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
-        $this->view->title = $this->lang->message->browser;
-
-        $this->view->browserConfig = $browserConfig;
+        $this->view->title         = $this->lang->message->browser;
+        $this->view->browserConfig = $this->config->message->browser;
         $this->display();
     }
 
