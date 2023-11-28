@@ -1004,6 +1004,7 @@ class commonModel extends model
     }
 
     /**
+     * 检查升级验证文件是否创建，给出升级的提示。
      * Check upgrade's status file is ok or not.
      *
      * @access public
@@ -1030,6 +1031,7 @@ class commonModel extends model
     }
 
     /**
+     * 禅道鉴权核心方法，如果用户没有当前模块、方法的权限，则跳转到登录页面或者拒绝页面。
      * Check the user has permission to access this method, if not, locate to the login page or deny page.
      *
      * @access public
@@ -1047,13 +1049,13 @@ class commonModel extends model
                 $method = $this->app->rawMethod;
             }
 
-            $beforeValidMethods = array(
+            $openMethods = array(
                 'user'    => array('deny', 'logout'),
                 'my'      => array('changepassword'),
                 'message' => array('ajaxgetmessage'),
             );
 
-            if(!empty($this->app->user->modifyPassword) and (!isset($beforeValidMethods[$module]) or !in_array($method, $beforeValidMethods[$module]))) return helper::header('location', helper::createLink('my', 'changePassword'));
+            if(!empty($this->app->user->modifyPassword) and (!isset($openMethods[$module]) or !in_array($method, $openMethods[$module]))) return helper::header('location', helper::createLink('my', 'changePassword'));
             if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
             if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
             if($this->isOpenMethod($module, $method)) return true;
@@ -1062,7 +1064,7 @@ class commonModel extends model
             {
                 if($this->app->tab == 'project')
                 {
-                    $this->resetProjectPriv();
+                    $this->resetProjectPriv(); // 项目目管理员有项目的所有操作权限。
                     if(commonModel::hasPriv($module, $method)) return true;
                 }
 
