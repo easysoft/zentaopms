@@ -92,22 +92,26 @@ class message extends control
     }
 
     /**
+     * Ajax: 获取消息。
      * Ajax get message.
      *
+     * @param  string $windowBlur
      * @access public
      * @return void
      */
-    public function ajaxGetMessage($windowBlur = false)
+    public function ajaxGetMessage(string $windowBlur = 'false')
     {
         if($this->config->message->browser->turnon == 0) return;
 
+        $todos        = $this->message->getNoticeTodos();
         $waitMessages = $this->message->getMessages('wait');
-        $todos = $this->message->getNoticeTodos();
-        if(empty($waitMessages) and empty($todos)) return;
+        if(empty($waitMessages) && empty($todos)) return;
+
+        $windowBlur = !empty($windowBlur) && $windowBlur != 'false';
 
         $messages = '';
-        $newline  = $windowBlur ? "\n" : '<br />';
         $idList   = array();
+        $newline  = $windowBlur ? "\n" : '<br />';
         foreach($waitMessages as $message)
         {
             $messages .= $message->data . $newline;
