@@ -30,19 +30,17 @@ class messageModel extends model
     }
 
     /**
-     * Get objectTypes
+     * 获取对象类型。
+     * Get object types.
      *
      * @access public
      * @return array
      */
-    public function getObjectTypes()
+    public function getObjectTypes(): array
     {
         $this->app->loadLang('action');
         $objectTypes = array();
-        foreach($this->config->message->objectTypes as $objectType => $actions)
-        {
-            $objectTypes[$objectType] = $this->lang->action->objectTypes[$objectType];
-        }
+        foreach($this->config->message->objectTypes as $objectType => $actions) $objectTypes[$objectType] = $this->lang->action->objectTypes[$objectType];
         return $objectTypes;
     }
 

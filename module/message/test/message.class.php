@@ -33,12 +33,13 @@ class messageTest
     }
 
     /**
+     * 获取对象类型。
      * Get objectTypes.
      *
      * @access public
      * @return void
      */
-    public function getObjectTypesTest()
+    public function getObjectTypesTest(): array
     {
         $objects = $this->objectModel->getObjectTypes();
 
