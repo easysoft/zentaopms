@@ -901,6 +901,7 @@ class commonModel extends model
     }
 
     /**
+     * 批量创建时，移除名称重复的对象。
      * Remove duplicate for story, task, bug, case, doc.
      *
      * @param  string       $type  e.g. story task bug case doc.
@@ -944,6 +945,7 @@ class commonModel extends model
     }
 
     /**
+     * 追加排序字段。
      * Append order by.
      *
      * @param  string $orderBy
@@ -951,7 +953,7 @@ class commonModel extends model
      * @access public
      * @return string
      */
-    public static function appendOrder($orderBy, $append = 'id')
+    public static function appendOrder(string $orderBy, string $append = 'id'): string
     {
         if(empty($orderBy)) return $append;
 
@@ -961,14 +963,15 @@ class commonModel extends model
     }
 
     /**
+     * 检查字段是否存在。
      * Check field exists
      *
-     * @param  string    $table
-     * @param  string    $field
+     * @param  string $table
+     * @param  string $field
      * @access public
      * @return bool
      */
-    public function checkField($table, $field)
+    public function checkField(string $table, string $field): bool
     {
         $fields   = $this->dao->descTable($table);
         $hasField = false;
@@ -984,6 +987,7 @@ class commonModel extends model
     }
 
     /**
+     * 检查验证文件是否正确创建。
      * Check safe file.
      *
      * @access public
