@@ -801,6 +801,7 @@ class user extends control
     }
 
     /**
+     * 重置密码。
      * Reset password.
      *
      * @access public
@@ -813,29 +814,33 @@ class user extends control
             $resetFileName = $this->app->getBasePath() . 'tmp' . DIRECTORY_SEPARATOR . uniqid('reset_') . '.txt';
             $this->session->set('resetFileName', $resetFileName);
         }
-
-        $resetFileName = $this->session->resetFileName;
-
-        $needCreateFile = false;
-        if(!file_exists($resetFileName) or (time() - filemtime($resetFileName)) > 60 * 2) $needCreateFile = true;
+        $resetFileName  = $this->session->resetFileName;
+        $needCreateFile = !file_exists($resetFileName) || (time() - filemtime($resetFileName)) > 60 * 2;
 
         if($_POST)
         {
             if($needCreateFile) return $this->send(array('result' => 'success', 'load' => true));
 
-            $result = $this->user->resetPassword();
+            $user = form::data($this->config->user->form->reset)
+                ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
+                ->get();
+            $this->userZen->checkPassword($user);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $result = $this->user->resetPassword($user);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->resetFail));
 
             $referer = helper::safe64Encode($this->createLink('index', 'index'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->user->resetSuccess, 'locate' => $this->createLink('user', 'logout', 'referer=' . $referer)));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->user->resetSuccess, 'locate' => inlink('logout', 'referer=' . $referer)));
         }
 
-        /* Remove the real path for security reason. */
+        /* 移除真实路径以确保安全。*/
+        /* Remove the real path to ensure security. */
         $resetFileName = str_replace($this->app->getBasePath(), '', $resetFileName);
 
         $this->view->title          = $this->lang->user->resetPassword;
-        $this->view->status         = 'reset';
+        $this->view->rand           = $this->user->updateSessionRandom();
         $this->view->needCreateFile = $needCreateFile;
         $this->view->resetFileName  = $resetFileName;
 
