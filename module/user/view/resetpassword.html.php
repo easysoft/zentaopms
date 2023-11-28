@@ -34,7 +34,7 @@ include '../../common/view/header.lite.html.php';
                 </span>
               </div>
               <div class='form-group'>
-                <label for='password2'><?php echo $lang->user->password2AB;?></label>
+                <label for='password2'><?php echo $lang->user->abbr->password2;?></label>
                 <?php echo html::password('password2', '', "class='form-control' required placeholder='{$lang->user->placeholder->loginPassword}'");?>
               </div>
               <tr>

@@ -17,8 +17,8 @@ $lang->user->company          = 'Company';
 $lang->user->dept             = 'Department';
 $lang->user->account          = 'Account';
 $lang->user->password         = 'Password';
+$lang->user->password1        = 'Password';
 $lang->user->password2        = 'Repeat Password';
-$lang->user->password2AB      = 'Repeat Password';
 $lang->user->role             = 'Role';
 $lang->user->group            = 'Privilege Group';
 $lang->user->realname         = 'Name';
@@ -40,10 +40,8 @@ $lang->user->dingding         = 'DingDing';
 $lang->user->slack            = 'Slack';
 $lang->user->whatsapp         = 'WhatsApp';
 $lang->user->address          = 'Address';
-$lang->user->addressAB        = 'Address';
 $lang->user->zipcode          = 'ZipCode';
 $lang->user->join             = 'Joined';
-$lang->user->joinAB           = 'Joined';
 $lang->user->priv             = 'Privilege';
 $lang->user->visits           = 'Visits';
 $lang->user->visions          = 'Version Type';
@@ -83,7 +81,10 @@ $lang->user->resetPWD         = 'Reset Password';
 $lang->user->resetTitle       = 'Admin reset the password';
 
 $lang->user->abbr = new stdclass();
-$lang->user->abbr->id = 'ID';
+$lang->user->abbr->id        = 'ID';
+$lang->user->abbr->password2 = 'Repeat Password';
+$lang->user->abbr->address   = 'Address';
+$lang->user->abbr->join      = 'Joined';
 
 $lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';
@@ -296,7 +297,7 @@ $lang->user->resetSuccess     = "Reset! Please use your new password to login.";
 $lang->user->noticeDelete     = 'Do you want to delete "%s" from ZenTao?';
 $lang->user->noticeHasDeleted = "This user has been deleted. If you want to view it, please go to the Admin-System-Data-Recycle to restore it.";
 $lang->user->noticeResetFile  = "<h5>Contact the Administrator to reset your password.</h5>
-    <h5>If you are, please login your Zentao host and create a file named <span> '%s' </span>.</h5>
+    <h5>If you are, please login your Zentao host and create a file named <span> %s </span>.</h5>
     <p>Note:</p>
     <ol>
     <li>Keep the file empty.</li>
