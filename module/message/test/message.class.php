@@ -86,23 +86,32 @@ class messageTest
     }
 
     /**
-     * Save notice.
+     * 测试存储提示消息。
+     * Test save notice.
      *
-     * @param  int    $objectType
-     * @param  int    $objectID
-     * @param  int    $actionType
-     * @param  int    $actionID
-     * @param  string $actor
+     * @param  string       $objectType
+     * @param  int          $objectID
+     * @param  string       $actionType
+     * @param  int          $actionID
+     * @param  string       $actor
      * @access public
-     * @return void
+     * @return object|array
      */
-    public function saveNoticeTest($objectType, $objectID, $actionType, $actionID, $actor = '')
+    public function saveNoticeTest(string $objectType, int $objectID, string $actionType, int $actionID, string $actor = ''): object|array
     {
-        $objects = $this->objectModel->saveNotice($objectType, $objectID, $actionType, $actionID, $actor = '');
+        global $tester;
+        if($actor == 'empty')
+        {
+            $actor = '';
+            $tester->app->user->account = '';
+        }
+        $result = $this->objectModel->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+
+        if($result) $notify = $tester->dao->select('*')->from(TABLE_NOTIFY)->orderBy('id_desc')->fetch();
+        return !empty($notify) ? $notify : array();
     }
 
     /**

@@ -122,16 +122,18 @@ class messageModel extends model
     }
 
     /**
+     * 存储提示消息。
      * Save notice.
      *
      * @param  string $objectType
      * @param  int    $objectID
      * @param  string $actionType
      * @param  int    $actionID
+     * @param  string $actor
      * @access public
-     * @return void
+     * @return bool
      */
-    public function saveNotice($objectType, $objectID, $actionType, $actionID, $actor = '')
+    public function saveNotice(string $objectType, int $objectID, string $actionType, int $actionID, string $actor = ''): bool
     {
         if(empty($actor)) $actor = $this->app->user->account;
         if(empty($actor)) return false;
@@ -142,8 +144,7 @@ class messageModel extends model
         $field  = $this->config->action->objectNameFields[$objectType];
         $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
         $toList = $this->getToList($object, $objectType, $actionID);
-        if(empty($toList)) return false;
-        if($toList == $actor) return false;
+        if(empty($toList) || $toList == $actor) return false;
 
         $this->app->loadConfig('mail');
         $sysURL = zget($this->config->mail, 'domain', common::getSysURL());
@@ -152,11 +153,11 @@ class messageModel extends model
         if($isonlybody) unset($_GET['onlybody']);
 
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
-        $moduleName = $objectType == 'kanbancard' ? 'kanban' : $objectType;
+        if($objectType == 'kanbancard') $moduleName = 'kanban';
         $space      = common::checkNotCN() ? ' ' : '';
-        $data       = $user->realname . $space . $this->lang->action->label->$actionType . $space . $this->lang->action->objectTypes[$objectType];
+        $data       = $user->realname . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
         $dataID     = $objectType == 'kanbancard' ? $object->kanban : $objectID;
-        $url        = helper::createLink($moduleName, 'view', "id=$dataID");
+        $url        = helper::createLink($moduleName, 'view', "id={$dataID}");
         $data      .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
 
         if($isonlybody) $_GET['onlybody'] = 'yes';
@@ -171,6 +172,7 @@ class messageModel extends model
         $notify->createdDate = helper::now();
 
         $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+        return true;
     }
 
     /**
