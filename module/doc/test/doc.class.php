@@ -675,4 +675,20 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $libs;
     }
+
+    /**
+     * 检查是否有权限访问文档库。
+     * Check priv for lib.
+     *
+     * @param  string $type     lib|doc
+     * @param  int    $objectID
+     * @param  string $extra    notdoc
+     * @access public
+     * @return bool
+     */
+    public function checkPrivLibTest(string $type, int $objectID, string $extra = ''): bool
+    {
+        $object = $type == 'lib' ? $this->objectModel->getLibByID($objectID) : $this->objectModel->getByID($objectID);
+        return $this->objectModel->checkPrivLib($object, $extra);
+    }
 }
