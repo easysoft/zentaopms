@@ -334,6 +334,22 @@ class userZen extends user
     }
 
     /**
+     * 用户被锁定时的响应。
+     * Response when user is locked.
+     *
+     * @param  string $viewType
+     * @access public
+     * @return array
+     */
+    public function responseForLocked(string $viewType): array
+    {
+        $message = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
+        if($viewType == 'json') return array('status' => 'failed', 'reason' => $message);
+
+        return array('result' => 'fail', 'message' => $message);
+    }
+
+    /**
      * 设置来源地址。
      * Set referer.
      *
