@@ -112,3 +112,9 @@ $config->user->form->reset['passwordStrength'] = array('required' => false, 'typ
 $config->user->form->forgetPassword = array();
 $config->user->form->forgetPassword['account'] = array('required' => true, 'type' => 'string', 'default' => '');
 $config->user->form->forgetPassword['email']   = array('required' => true, 'type' => 'string', 'default' => '');
+
+$config->user->form->resetPassword = array();
+$config->user->form->resetPassword['password1']        = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->resetPassword['password2']        = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->resetPassword['passwordLength']   = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->user->form->resetPassword['passwordStrength'] = array('required' => false, 'type' => 'int',    'default' => 0);
