@@ -539,4 +539,25 @@ class myTest
 
         return implode(',', array_column($return, 'id'));
     }
+
+    /**
+     * 测试获取审批类型列表。
+     * Test get reviewing type list.
+     *
+     * @param  string       $account
+     * @access public
+     * @return string|array
+     */
+    public function getReviewingTypeListTest(string $account): string|array
+    {
+        su($account);
+
+        $menu = $this->objectModel->getReviewingTypeList();
+
+        if(dao::isError()) return dao::getError();
+
+        $return = '';
+        foreach($menu as $menuKey => $menuName) $return .= "{$menuKey}:{$menuName},";
+        return trim($return, ',');
+    }
 }
