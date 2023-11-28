@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 class projectreleaseTest
 {
     public function __construct()
@@ -79,5 +80,23 @@ class projectreleaseTest
 
         $return = "project:{$release->project} branch:{$release->branch} build:{$release->build} branchName:{$release->branchName} buildInfos:" . implode(',', array_column($release->buildInfos, 'name'));
         return $return;
+    }
+
+    /**
+     * 测试获取项目的最新发布。
+     * Test get last release.
+     *
+     * @param  object    $release
+     * @param  string    $action
+     * @access public
+     * @return int|array
+     */
+    public function isClickableTest(object $release, string $action): int|array
+    {
+        $isClickable = $this->objectModel->isClickable($release, $action);
+
+        if(dao::isError()) return dao::getError();
+
+        return $isClickable ? 1 : 2;
     }
 }

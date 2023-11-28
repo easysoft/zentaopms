@@ -95,15 +95,16 @@ class projectreleaseModel extends model
     }
 
     /**
-     * Judge btn is clickable or not.
+     * 判断按钮是否可以点击。
+     * Judge button is clickable or not.
      *
-     * @param  int    $release
+     * @param  object $release
      * @param  string $action
      * @static
      * @access public
      * @return bool
      */
-    public static function isClickable($release, $action)
+    public static function isClickable(object $release, string $action): bool
     {
         $action = strtolower($action);
 
