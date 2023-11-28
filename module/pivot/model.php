@@ -58,16 +58,17 @@ class pivotModel extends model
     }
 
     /**
-     * Process date vars in sql.
+     * 构建sql的时间查询。
+     * Build sql date query.
      *
      * @param  string $var
      * @param  string $type
      * @access public
      * @return string
      */
-    public function processDateVar($var, $type = 'date')
+    public function processDateVar(string $var, string $type = 'date'): string
     {
-        if(empty($var)) return null;
+        if(empty($var)) return '';
 
         $format = $type == 'datetime' ? 'Y-m-d H:i:s' : 'Y-m-d';
         switch($var)
