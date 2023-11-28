@@ -9,13 +9,11 @@ title=测试 commonModel->checkField();
 timeout=0
 cid=1
 
-- 正序追加name排序 @status_asc,name_asc
-
-- 倒序追加name排序 @status_desc,name_desc
-
-- 正序追加id排序 @account_asc,id_asc
-
-- 倒序追加id排序 @account_desc,id_desc
+- 查看需求表中的id字段是否存在 @1
+- 查看需求表中的tester字段是否存在 @0
+- 查看任务表中的name字段是否存在 @1
+- 查看任务表中的title字段是否存在 @0
+- 查看任务表中的空字段是否存在 @0
 
 */
 

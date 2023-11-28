@@ -1507,6 +1507,7 @@ class commonModel extends model
     }
 
     /**
+     * 检查RESTful API调用是否合法。
      * Check an entry of new API.
      *
      * @access public
@@ -1530,6 +1531,7 @@ class commonModel extends model
     }
 
     /**
+     * 检查旧版API调用是否合法。
      * Check an entry.
      *
      * @access public
@@ -1593,13 +1595,14 @@ class commonModel extends model
     }
 
     /**
+     * 检查Token是否合法。
      * Check token of an entry.
      *
      * @param  object $entry
      * @access public
      * @return bool
      */
-    public function checkEntryToken($entry)
+    public function checkEntryToken(object $entry): bool
     {
         parse_str($this->server->query_String, $queryString);
         unset($queryString['token']);
@@ -1626,19 +1629,21 @@ class commonModel extends model
     }
 
     /**
+     * 检查当前语言项是否为中文。
      * Check Not CN Lang.
      *
      * @static
      * @access public
      * @return bool
      */
-    public static function checkNotCN()
+    public static function checkNotCN(): bool
     {
         global $app;
         return strpos('|zh-cn|zh-tw|', '|' . $app->getClientLang() . '|') === false;
     }
 
     /**
+     * 检查对象是否可被修改。
      * Check the object can be changed.
      *
      * @param  string $module
@@ -1647,7 +1652,7 @@ class commonModel extends model
      * @access public
      * @return bool
      */
-    public static function canBeChanged($module, $object = null)
+    public static function canBeChanged(string $module, object $object = null): bool
     {
         if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
 

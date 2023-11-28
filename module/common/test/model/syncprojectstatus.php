@@ -3,8 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
-zdTable('project')->gen(100);
-zdTable('project')->config('execution')->gen(200, false);
+zdTable('project')->config('execution')->gen(200);
 
 /**
 
