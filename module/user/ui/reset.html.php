@@ -15,8 +15,17 @@ $content = $needCreateFile ? div
     setClass('create-file cell flex justify-center mt-24'),
     panel
     (
-        setClass('create-file-panel w-full'),
-        set::title($lang->user->resetPassword),
+        setClass('create-file-panel w-full size-lg'),
+        set::title($lang->user->resetPwdByAdmin),
+        set::titleClass('text-lg'),
+        !empty($config->resetPWDByMail) ? to::headingActions
+        (
+            a
+            (
+                set::href(inlink('forgetPassword')),
+                $lang->user->resetPwdByMail
+            )
+        ) : null,
         cell
         (
             setClass('alert-info p-4 mb-6'),
@@ -46,9 +55,17 @@ $content = $needCreateFile ? div
     formPanel
     (
         setClass('reset-form w-full'),
-        set::title($lang->user->resetPassword),
+        set::title($lang->user->resetPwdByAdmin),
         on::change('#password1,#password2', 'changePassword'),
         on::click('button[type=submit]', 'encryptPassword'),
+        !empty($config->resetPWDByMail) ? to::headingActions
+        (
+            a
+            (
+                set::href(inlink('forgetPassword')),
+                $lang->user->resetPwdByMail
+            )
+        ) : null,
         formRow
         (
             formGroup
