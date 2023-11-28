@@ -140,22 +140,6 @@ class groupZen extends group
             }
         }
 
-        /* Subsets in resource but not in package. */
-        $this->group->sortResource();
-        foreach($this->lang->resource as $module => $methodList)
-        {
-            foreach($methodList as $method => $methodLang)
-            {
-                if(isset($privs["$module-$method"])) continue;
-
-                if(!isset($subsets[$module]))
-                {
-                    $subsets[$module]  = isset($this->lang->$module) && isset($this->lang->$module->common) ? $this->lang->$module->common : $module;
-                    $packages[$module] = array('other' => $this->lang->group->other);
-                }
-            }
-        }
-
         $this->view->title    = $this->lang->company->common . $this->lang->colon . $this->lang->group->managePriv;
         $this->view->groups   = $this->group->getPairs();
         $this->view->subsets  = $subsets;
