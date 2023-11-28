@@ -3448,4 +3448,71 @@ class docModel extends model
 
         return $editors;
     }
+
+    /**
+     * 构造搜索表单。
+     * Build search form.
+     *
+     * @param  string  $libID
+     * @param  array   $libs
+     * @param  int     $queryID
+     * @param  string  $actionURL
+     * @param  string  $type       mine|product|project|execution|custom
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm(int $libID, array $libs, int $queryID, string $actionURL, string $type): void
+    {
+        $this->loadModel('product');
+        if($this->app->rawMethod == 'contribute')
+        {
+            $this->config->doc->search['module'] = 'contributeDoc';
+            $this->config->doc->search['params']['project']['values']   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc', $this->config->vision == 'rnd' ? 'kanban' : '') + array('all' => $this->lang->doc->allProjects);
+            $this->config->doc->search['params']['execution']['values'] = $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf,noprefix,withobject') + array('all' => $this->lang->doc->allExecutions);
+            $this->config->doc->search['params']['lib']['values']       = $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
+            $this->config->doc->search['params']['product']['values']   = $this->product->getPairs() + array('all' => $this->lang->doc->allProduct);
+
+            unset($this->config->doc->search['fields']['module'], $this->config->doc->search['params']['module']);
+        }
+        else
+        {
+            if(!isset($libs[$libID])) $libs[$libID] = $this->getLibByID($libID);
+
+            $libPairs  = array();
+            $queryName = $type . 'libDoc';
+            foreach($libs as $lib)
+            {
+                if(empty($lib)) continue;
+                if($lib->type == 'api') continue;
+                $libPairs[$lib->id] = $lib->name;
+            }
+
+            if($type == 'project')
+            {
+                $this->config->doc->search['params']['execution']['values'] = $this->loadModel('execution')->getPairs($this->session->project, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
+            }
+            else
+            {
+                if($type == 'mine' || $type == 'createdby')
+                {
+                    unset($this->config->doc->search['fields']['addedBy'], $this->config->doc->search['params']['addedBy']);
+                    if($type == 'mine') unset($this->config->doc->search['fields']['editedBy'], $this->config->doc->search['params']['editedBy']);
+                }
+                unset($this->config->doc->search['fields']['execution'], $this->config->doc->search['params']['execution']);
+            }
+
+            if(in_array($type, array('view', 'collect', 'createdby', 'editedby'))) $libPairs = $this->getLibs('all', 'withObject');
+
+            $this->config->doc->search['module'] = $queryName;
+            $this->config->doc->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->doclib->all);
+            unset($this->config->doc->search['fields']['product'], $this->config->doc->search['params']['product']);
+            unset($this->config->doc->search['fields']['module'], $this->config->doc->search['params']['module']);
+        }
+
+        unset($this->config->doc->search['params']['status']['values']['']);
+        $this->config->doc->search['actionURL'] = $actionURL;
+        $this->config->doc->search['queryID']   = $queryID;
+
+        $this->loadModel('search')->setSearchParams($this->config->doc->search);
+    }
 }
