@@ -1,35 +1,34 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
-su('admin');
-
 /**
 
 title=测试 docModel->getLibsByObject();
+timeout=0
 cid=1
-pid=1
-
-all类型查询 >> 0
-api类型查询 >> 0
-product类型查询 >> 产品主库;execution
-project类型查询 >> 0
-execution类型查询 >> 迭代主库;execution
-custom类型查询 >> 自定义库;execution
-book类型查询 >> execution
 
 */
-global $tester;
-$doc = $tester->loadModel('doc');
 
-$types        = array('all', 'api', 'product', 'project', 'execution', 'custom', 'book');
-$objectIDList = array('1', '117', '217', '901');
-$appendLib    = '701';
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/doc.class.php';
 
-r($doc->getLibsByObject($types[0], $objectIDList[0], '', $appendLib)) && p()                    && e('0');                 //all类型查询
-r($doc->getLibsByObject($types[1], $objectIDList[0], '', $appendLib)) && p()                    && e('0');                 //api类型查询
-r($doc->getLibsByObject($types[2], $objectIDList[0], '', $appendLib)) && p('1:name;701:type')   && e('产品主库;execution');//product类型查询
-r($doc->getLibsByObject($types[3], $objectIDList[1], '', $appendLib)) && p()                    && e('0');                 //project类型查询
-r($doc->getLibsByObject($types[4], $objectIDList[2], '', $appendLib)) && p('307:name;701:type') && e('迭代主库;execution');//execution类型查询
-r($doc->getLibsByObject($types[5], $objectIDList[3], '', $appendLib)) && p('900:name;701:type') && e('自定义库;execution');//custom类型查询
-r($doc->getLibsByObject($types[6], $objectIDList[3], '', $appendLib)) && p('701:type')          && e('execution');         //book类型查询
+zdTable('project')->config('execution')->gen(10);
+zdTable('product')->config('product')->gen(5);
+zdTable('doclib')->config('doclib')->gen(30);
+zdTable('user')->gen(5);
+su('admin');
+
+$typeList     = array('mine', 'project', 'execution', 'product', 'custom');
+$objectIdList = array(0, 11, 101, 1);
+$appendLibs   = array(0, 1);
+
+$docTester = new docTest();
+r($docTester->getLibsByObjectTest($typeList[0], $objectIdList[0], $appendLibs[0])) && p('11:type,name') && e('mine,我的文档库11');        // 获取我的文档库
+r($docTester->getLibsByObjectTest($typeList[1], $objectIdList[1], $appendLibs[0])) && p('1:type,name')  && e('api,项目接口库1');          // 获取项目文档库
+r($docTester->getLibsByObjectTest($typeList[2], $objectIdList[2], $appendLibs[0])) && p('20:type,name') && e('execution,执行文档主库20'); // 获取执行文档库
+r($docTester->getLibsByObjectTest($typeList[3], $objectIdList[3], $appendLibs[0])) && p('4:type,name')  && e('api,产品接口库4');          // 获取产品文档库
+r($docTester->getLibsByObjectTest($typeList[4], $objectIdList[0], $appendLibs[0])) && p('6:type,name')  && e('custom,自定义文档库6');     // 获取自定义文档库
+r($docTester->getLibsByObjectTest($typeList[0], $objectIdList[0], $appendLibs[1])) && p('1:type,name')  && e('api,项目接口库1');          // 获取我的文档库和id=1的文档库
+r($docTester->getLibsByObjectTest($typeList[1], $objectIdList[1], $appendLibs[1])) && p('1:type,name')  && e('api,项目接口库1');          // 获取项目文档库和id=1的文档库
+r($docTester->getLibsByObjectTest($typeList[2], $objectIdList[2], $appendLibs[1])) && p('1:type,name')  && e('api,项目接口库1');          // 获取执行文档库和id=1的文档库
+r($docTester->getLibsByObjectTest($typeList[3], $objectIdList[3], $appendLibs[1])) && p('1:type,name')  && e('api,项目接口库1');          // 获取产品文档库和id=1的文档库
+r($docTester->getLibsByObjectTest($typeList[4], $objectIdList[0], $appendLibs[1])) && p('1:type,name')  && e('api,项目接口库1');          // 获取自定义文档库和id=1的文档库

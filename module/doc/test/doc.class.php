@@ -657,4 +657,22 @@ class docTest
     {
         return $this->objectModel->buildQuery($type, $queryID);
     }
+
+    /**
+     * 通过对象ID获取文档库。
+     * Get libs by object.
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  int    $appendLib
+     * @access public
+     * @return array
+     */
+    public function getLibsByObjectTest(string $type, int $objectID, int $appendLib = 0): array
+    {
+        $libs = $this->objectModel->getLibsByObject($type, $objectID, $appendLib);
+
+        if(dao::isError()) return dao::getError();
+        return $libs;
+    }
 }
