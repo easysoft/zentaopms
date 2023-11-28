@@ -304,4 +304,53 @@ class commonTao extends commonModel
 
         return array($display, $currentModule, $currentMethod);
     }
+
+    /**
+     * 判断用户是否在项目、产品、计划、执行的管理员中。
+     * Check if the user is in the administrator of the project, product, plan, and execution.
+     *
+     * @param  string    $module
+     * @access protected
+     * @return bool
+     */
+    protected static function isProjectAdmin(string $module): bool
+    {
+        global $app, $lang;
+
+        $inProject = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'project');
+        if($inProject and $app->session->project and (strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false or strpos(",{$app->user->rights['projects']},", ',all,') !== false)) return true;
+
+        $inProduct = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'product');
+        if($inProduct and $app->session->product and (strpos(",{$app->user->rights['products']},", ",{$app->session->product},") !== false or strpos(",{$app->user->rights['products']},", ',all,') !== false)) return true;
+
+        $inProgram = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'program');
+        if($inProgram and $app->session->program and (strpos(",{$app->user->rights['programs']},", ",{$app->session->program},") !== false or strpos(",{$app->user->rights['programs']},", ',all,') !== false)) return true;
+
+        $inExecution = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'execution');
+        if($inExecution and $app->session->execution and (strpos(",{$app->user->rights['executions']},", ",{$app->session->execution},") !== false or strpos(",{$app->user->rights['executions']},", ',all,') !== false)) return true;
+
+        return false;
+    }
+
+    /**
+     * 获取需求模块下，真实请求的模块和方法。
+     * Get the real module and method of the request under the requirement module.
+     *
+     * @param  string    $module
+     * @param  string    $method
+     * @param  array     $params
+     * @access protected
+     * @return array
+     */
+    protected static function getStoryModuleAndMethod(string $module, string $method, array $params): array
+    {
+        global $app;
+        if(empty($params['storyType']) and $module == 'story' and !empty($app->params['storyType']) and strpos(",story,requirement,", ",{$app->params['storyType']},") !== false) $module = $app->params['storyType'];
+        if($module == 'story' and !empty($params['storyType']) and strpos(",story,requirement,", ",{$params['storyType']},") !== false) $module = $params['storyType'];
+        if($module == 'product' and $method == 'browse' and !empty($app->params['storyType']) and $app->params['storyType'] == 'requirement') $method = 'requirement';
+        if($module == 'product' and $method == 'browse' and !empty($params['storyType']) and $params['storyType'] == 'requirement') $method = 'requirement';
+        if($module == 'story' and $method == 'linkrequirements') $module = 'requirement';
+
+        return array($module, $method);
+    }
 }

@@ -1156,17 +1156,18 @@ class commonModel extends model
     }
 
     /**
+     * 检查用户是否有当前模块、方法的权限。
      * Check the user has permission of one method of one module.
      *
      * @param  string $module
      * @param  string $method
-     * @param  object $object
+     * @param  mixed  $object
      * @param  string $vars
      * @static
      * @access public
      * @return bool
      */
-    public static function hasPriv($module, $method, $object = null, $vars = '')
+    public static function hasPriv(string $module, string $method, mixed $object = null, string $vars = '')
     {
         global $app, $lang;
         $module = strtolower($module);
@@ -1174,11 +1175,7 @@ class commonModel extends model
         parse_str($vars, $params);
 
         if(empty($app->user)) return false;
-        if(empty($params['storyType']) and $module == 'story' and !empty($app->params['storyType']) and strpos(",story,requirement,", ",{$app->params['storyType']},") !== false) $module = $app->params['storyType'];
-        if($module == 'story' and !empty($params['storyType']) and strpos(",story,requirement,", ",{$params['storyType']},") !== false) $module = $params['storyType'];
-        if($module == 'product' and $method == 'browse' and !empty($app->params['storyType']) and $app->params['storyType'] == 'requirement') $method = 'requirement';
-        if($module == 'product' and $method == 'browse' and !empty($params['storyType']) and $params['storyType'] == 'requirement') $method = 'requirement';
-        if($module == 'story' and $method == 'linkrequirements') $module = 'requirement';
+        list($module, $method) = commonTao::getStoryModuleAndMethod($module, $method, $params);
 
         /* If the user is doing a tutorial, have all tutorial privileges. */
         if(commonModel::isTutorialMode())
@@ -1194,26 +1191,16 @@ class commonModel extends model
         /* Check the parent object is closed. */
         if(!empty($method) and strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
 
-        /* Check the method is openMethod. */
-        if(in_array("$module.$method", $app->config->openMethods)) return true;
-
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) or strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
+
+        /* Check the method is openMethod. */
+        if(in_array("$module.$method", $app->config->openMethods)) return true;
 
         /* If is the program/project/product/execution admin, have all program privileges. */
         if($app->config->vision != 'lite')
         {
-            $inProject = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'project');
-            if($inProject and $app->session->project and (strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false or strpos(",{$app->user->rights['projects']},", ',all,') !== false)) return true;
-
-            $inProduct = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'product');
-            if($inProduct and $app->session->product and (strpos(",{$app->user->rights['products']},", ",{$app->session->product},") !== false or strpos(",{$app->user->rights['products']},", ',all,') !== false)) return true;
-
-            $inProgram = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'program');
-            if($inProgram and $app->session->program and (strpos(",{$app->user->rights['programs']},", ",{$app->session->program},") !== false or strpos(",{$app->user->rights['programs']},", ',all,') !== false)) return true;
-
-            $inExecution = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'execution');
-            if($inExecution and $app->session->execution and (strpos(",{$app->user->rights['executions']},", ",{$app->session->execution},") !== false or strpos(",{$app->user->rights['executions']},", ',all,') !== false)) return true;
+            if(commonTao::isProjectAdmin($module)) return true;
         }
 
         /* If not super admin, check the rights. */
@@ -1223,9 +1210,7 @@ class commonModel extends model
         /* White list of import method. */
         $canImport = isset($rights[$module]['import']) && commonModel::hasDBPriv($object, $module, 'import');
         if(in_array($module, $app->config->importWhiteList) && $method == 'showimport' && $canImport)
-        {
             return true;
-        }
 
         if(isset($rights[$module][$method]))
         {
