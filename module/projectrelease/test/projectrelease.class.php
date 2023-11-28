@@ -72,7 +72,7 @@ class projectreleaseTest
     {
         global $tester;
         $release     = $tester->dao->findById($releaseID)->from(TABLE_RELEASE)->fetch();
-        $branchGroup = $tester->loadModel('branch')->getByProducts(explode(',', $release->product));
+        $branchGroup = $tester->loadModel('branch')->getByProducts(explode(',', (string)$release->product));
         $builds      = $tester->dao->select("id, project, product, branch, execution, name, scmPath, filePath")->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
         $this->objectModel->processRelease($release, $branchGroup, $builds);
 
