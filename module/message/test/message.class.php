@@ -124,7 +124,7 @@ class messageTest
      * @access public
      * @return string|array
      */
-    public function getToListTest(string $objectType, string $objectID, int $actionID): string|array
+    public function getToListTest(string $objectType, int $objectID, int $actionID): string|array
     {
         global $tester;
         $table  = $tester->config->objectTables[$objectType];
