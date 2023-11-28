@@ -15,6 +15,7 @@ class projectrelease extends control
     public $products = array();
 
     /**
+     * 构造函数，自动加载模块。
      * Construct function, load module auto.
      *
      * @param  string $moduleName
@@ -22,10 +23,9 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function __construct($moduleName = '', $methodName = '')
+    public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        $products = array();
         $this->loadModel('product');
         $this->loadModel('release');
         $this->loadModel('project');
