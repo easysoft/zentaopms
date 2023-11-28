@@ -1349,13 +1349,14 @@ class commonModel extends model
     }
 
     /**
+     * 检查IP是否在白名单中。
      * Check whether IP in white list.
      *
      * @param  string $ipWhiteList
      * @access public
      * @return bool
      */
-    public function checkIP($ipWhiteList = '')
+    public function checkIP(string $ipWhiteList = ''): bool
     {
         $ip = helper::getRemoteIp();
 
@@ -1428,12 +1429,13 @@ class commonModel extends model
     }
 
     /**
+     * 获取禅道的完整URL。
      * Get the full url of the system.
      *
      * @access public
      * @return string
      */
-    public static function getSysURL()
+    public static function getSysURL(): string
     {
         if(defined('RUN_MODE') && RUN_MODE == 'test') return '';
 
@@ -1445,16 +1447,19 @@ class commonModel extends model
     }
 
     /**
+     * 检查当前是否为新手教程模式。
      * Check whether view type is tutorial
+     *
      * @access public
      * @return bool
      */
-    public static function isTutorialMode()
+    public static function isTutorialMode(): bool
     {
-        return (isset($_SESSION['tutorialMode']) and $_SESSION['tutorialMode']);
+        return !empty($_SESSION['tutorialMode']);
     }
 
     /**
+     * 将数组中的值转为拼音, 以便搜索。
      * Convert items to Pinyin.
      *
      * @param  array    $items
@@ -1462,7 +1467,7 @@ class commonModel extends model
      * @access public
      * @return array
      */
-    public static function convert2Pinyin($items)
+    public static function convert2Pinyin($items): array
     {
         global $app;
         static $allConverted = array();
