@@ -11,14 +11,15 @@ class projectreleaseTest
      * 测试获取项目发布列表。
      * Test get list of releases.
      *
-     * @param  int    $projectID
-     * @param  string $type
+     * @param  int          $projectID
+     * @param  string       $type
+     * @param  string       $orderBy
      * @access public
      * @return array|string
      */
-    public function getListTest(int $projectID, string $type = 'all'): array|string
+    public function getListTest(int $projectID, string $type = 'all', string $orderBy = 't1.date_desc'): array|string
     {
-        $objects = $this->objectModel->getList($projectID, $type);
+        $objects = $this->objectModel->getList($projectID, $type, $orderBy);
 
         if(dao::isError()) return dao::getError();
 
