@@ -379,8 +379,8 @@ class programTest
     public function processProductsForKanbanTest(): array
     {
         $programs = $this->program->getTopPairs('noclosed');
-        list($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, $hours, $projectHours) = $this->program->getKanbanStatisticData($programs);
-        return $this->program->processProductsForKanban($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, $hours, $projectHours);
+        list($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, ) = $this->program->getKanbanStatisticData($programs);
+        return $this->program->processProductsForKanban($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions);
     }
 
     /**
