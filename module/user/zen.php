@@ -292,6 +292,20 @@ class userZen extends user
     }
 
     /**
+     * 重新加载语言项。
+     * Reload language items.
+     *
+     * @param  string $lang
+     * @access public
+     * @return void
+     */
+    public function reloadLang(string $lang): void
+    {
+        $this->app->setClientLang($lang);
+        $this->app->loadLang('user');
+    }
+
+    /**
      * 设置来源地址。
      * Set referer.
      *
