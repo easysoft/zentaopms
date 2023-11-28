@@ -12,7 +12,7 @@ namespace zin;
 
 if(empty($config->notMd5Pwd)) h::import($config->webRoot . 'js/md5.js', 'js');
 
-$resetLink     = (isset($this->config->resetPWDByMail) and $this->config->resetPWDByMail) ? inlink('forgetPassword') : inlink('reset');
+$resetLink     = empty($this->config->resetPWDByMail) ? inlink('reset') : inlink('forgetPassword');
 $zentaoDirName = basename($this->app->getBasePath());
 $clientLang    = $app->getClientLang();
 $langItems     = array();
@@ -142,7 +142,7 @@ div
                         set::actions(array
                         (
                             array('text' => $lang->login, 'id' => 'submit', 'class' => 'primary'),
-                            array('text' => $lang->user->resetPassword, 'class' => 'resetPassword', 'url' => $resetLink)
+                            array('text' => $lang->user->forgetPassword, 'class' => 'resetPassword', 'url' => $resetLink)
                         ))
                     )
                 )
