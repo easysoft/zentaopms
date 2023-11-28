@@ -48,7 +48,7 @@ class projectreleaseTest
      * 测试获取项目已经发布的版本。
      * Test get released builds from project.
      *
-     * @param  int    $projectID
+     * @param  int          $projectID
      * @access public
      * @return string|array
      */
@@ -64,7 +64,7 @@ class projectreleaseTest
      * 测试项目发布信息，包括分支名称、版本信息等。
      * Test process release.
      *
-     * @param  int               $releaseID
+     * @param  int          $releaseID
      * @access public
      * @return string|array
      */
