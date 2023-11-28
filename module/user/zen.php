@@ -306,6 +306,34 @@ class userZen extends user
     }
 
     /**
+     * 用户已登录时的响应。
+     * Response when user has logged in.
+     *
+     * @param  string $referer
+     * @param  string $viewType
+     * @param  string $loginLink
+     * @param  string $denyLink
+     * @param  string $locateReferer
+     * @param  string $locateWebRoot
+     * @access public
+     * @return array
+     */
+    public function responseForLogon(string $referer, string $viewType, string $loginLink, string $denyLink, string $locateReferer, string $locateWebRoot): array
+    {
+        /* 以 json 格式返回用户数据。*/
+        /* Return user data in json format. */
+        if($viewType == 'json') return array('status' => 'success', 'user' => $this->getUserForJSON($this->app->user));
+
+        /* 来源网址不满足条件时跳转到首页。*/
+        /* Jump to home page if the referer does not meet the conditions. */
+        if(!$referer || strpos($referer, $loginLink) !== false || strpos($referer, $denyLink) !== false || strpos($referer, 'ajax') !== false || strpos($referer, 'block') !== false) return array('result' => 'success', 'locate' => $locateWebRoot);
+
+        /* 跳转到来源网址。*/
+        /* Jump to the referer. */
+        return array('result' => 'success', 'locate' => $locateReferer);
+    }
+
+    /**
      * 设置来源地址。
      * Set referer.
      *
