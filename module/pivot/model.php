@@ -23,28 +23,24 @@ class pivotModel extends model
         $this->loadBIDAO();
     }
 
-    /**
+    /*
+     * 获取透视表。
      * Get pivot.
      *
-     * @param  int    $pivotID
+     * @param  int         $pivotID
      * @access public
-     * @return object
+     * @return object|bool
      */
-    public function getByID($pivotID)
+    public function getByID(int $pivotID): object|bool
     {
         $pivot = $this->dao->select('*')->from(TABLE_PIVOT)->where('id')->eq($pivotID)->fetch();
         if(!$pivot) return false;
 
-        if(!empty($pivot->fields) and $pivot->fields != 'null')
+        $pivot->fieldSettings = array();
+        if(!empty($pivot->fields) && $pivot->fields != 'null')
         {
             $pivot->fieldSettings = json_decode($pivot->fields);
-            $pivot->fields        = array();
-
-            foreach($pivot->fieldSettings as $field => $settings) $pivot->fields[] = $field;
-        }
-        else
-        {
-            $pivot->fieldSettings = array();
+            $pivot->fields        = array_keys(get_object_vars($pivot->fieldSettings));
         }
 
         if(!empty($pivot->filters))
