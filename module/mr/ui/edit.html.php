@@ -84,7 +84,7 @@ formPanel
         set::label($lang->mr->reviewer),
         set::control('picker'),
         set::items($users),
-        set::value($assignee)
+        set::value($MR->assignee)
     ),
     formRow
     (
@@ -137,8 +137,6 @@ formPanel
         (
             set::name('repoID'),
             set::label($lang->devops->repo),
-            set::control('picker'),
-            set::items($repoList),
             set::value($MR->repoID)
         )
     )

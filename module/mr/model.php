@@ -1,12 +1,12 @@
 <?php
+//declare(strict_types=1);
 /**
  * The model file of mr module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      dingguodong <dingguodong@easycorp.ltd>
  * @package     mr
- * @version     $Id$
  * @link        http://www.zentao.net
  */
 class mrModel extends model
@@ -2118,5 +2118,32 @@ class mrModel extends model
         if($action == 'delete') return $MR->canDelete != 'disabled';
 
         return true;
+    }
+
+    /**
+     * 根据ID删除合并请求。
+     * Delete MR by ID.
+     *
+     * @param  int    $id
+     * @access public
+     * @return bool
+     */
+    public function deleteByID(int $id): bool
+    {
+        $MR = $this->getByID($id);
+        if(!$MR) return false;
+
+        if($MR->synced)
+        {
+           $res = $this->apiDeleteMR($MR->hostID, $MR->targetProject, $MR->mriid);
+           if(isset($res->message)) dao::$errors[] = $this->convertApiError($res->message);
+           if(dao::isError()) return false;
+        }
+
+        $this->dao->delete()->from(TABLE_MR)->where('id')->eq($id)->exec();
+
+        $this->loadModel('action')->create('mr', $id, 'deleted', '', $MR->title);
+        $this->createMRLinkedAction($id, 'removemr');
+        return !dao::isError();
     }
 }
