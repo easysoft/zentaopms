@@ -63,7 +63,8 @@ class message extends control
     }
 
     /**
-     * Setting
+     * 消息设置。
+     * Message setting.
      *
      * @access public
      * @return void
@@ -76,18 +77,14 @@ class message extends control
             $data->messageSetting = !empty($data->messageSetting) ? json_encode($data->messageSetting) : '';
             $data->blockUser      = !empty($data->blockUser) && is_array($data->blockUser) ? implode(',', $data->blockUser) : zget($data, 'blockUser', '');
             $this->loadModel('setting')->setItem('system.message.setting', $data->messageSetting);
-            $this->loadModel('setting')->setItem('system.message.blockUser', $data->blockUser);
+            $this->setting->setItem('system.message.blockUser', $data->blockUser);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
-
-        $this->loadModel('webhook');
-        $this->loadModel('action');
-
-        $this->view->title      = $this->lang->message->setting;
 
         $users = $this->loadModel('user')->getPairs('noletter,noclosed');
         unset($users['']);
 
+        $this->view->title         = $this->lang->message->setting;
         $this->view->users         = $users;
         $this->view->objectTypes   = $this->message->getObjectTypes();
         $this->view->objectActions = $this->message->getObjectActions();
