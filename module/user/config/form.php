@@ -19,8 +19,8 @@ $config->user->form->create['email']            = array('required' => false, 'ty
 $config->user->form->create['commiter']         = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->create['gender']           = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->create['verifyPassword']   = array('required' => true,  'type' => 'string', 'default' => '');
-$config->user->form->create['passwordLength']   = array('required' => true,  'type' => 'int',    'default' => 0);
-$config->user->form->create['passwordStrength'] = array('required' => true,  'type' => 'int',    'default' => 0);
+$config->user->form->create['passwordLength']   = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->user->form->create['passwordStrength'] = array('required' => false, 'type' => 'int',    'default' => 0);
 
 $config->user->form->batchCreate = common::formConfig('user', 'batchCreate');
 $config->user->form->batchCreate['type']       = array('required' => true,  'type' => 'string', 'default' => 'inside');
@@ -56,8 +56,8 @@ $config->user->form->edit['new']              = array('required' => false, 'type
 $config->user->form->edit['newCompany']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->edit['dept']             = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->user->form->edit['account']          = array('required' => true,  'type' => 'string', 'default' => '');
-$config->user->form->edit['password1']        = array('required' => true,  'type' => 'string', 'default' => '');
-$config->user->form->edit['password2']        = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->edit['password1']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->user->form->edit['password2']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->edit['visions']          = array('required' => true,  'type' => 'array',  'default' => $config->vision, 'filter' => 'join');
 $config->user->form->edit['realname']         = array('required' => true,  'type' => 'string', 'default' => '');
 $config->user->form->edit['join']             = array('required' => false, 'type' => 'date',   'default' => null);
@@ -77,8 +77,8 @@ $config->user->form->edit['slack']            = array('required' => false, 'type
 $config->user->form->edit['address']          = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->edit['zipcode']          = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->edit['verifyPassword']   = array('required' => true,  'type' => 'string', 'default' => '');
-$config->user->form->edit['passwordLength']   = array('required' => true,  'type' => 'int',    'default' => 0);
-$config->user->form->edit['passwordStrength'] = array('required' => true,  'type' => 'int',    'default' => 0);
+$config->user->form->edit['passwordLength']   = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->user->form->edit['passwordStrength'] = array('required' => false, 'type' => 'int',    'default' => 0);
 
 $config->user->form->batchEdit = array();
 $config->user->form->batchEdit['dept']     = array('required' => false, 'type' => 'int',    'width' => '200px', 'name' => 'dept',     'label' => $lang->user->dept,     'control' => array('type' => 'picker', 'required' => true), 'default' => 0, 'ditto' => true);
@@ -102,7 +102,8 @@ $config->user->form->batchEdit['slack']    = array('required' => false, 'type' =
 $config->user->form->batchEdit['address']  = array('required' => false, 'type' => 'string', 'width' => '160px', 'name' => 'address',  'label' => $lang->user->address,  'control' => 'text',      'default' => '');
 $config->user->form->batchEdit['zipcode']  = array('required' => false, 'type' => 'string', 'width' => '120px', 'name' => 'zipcode',  'label' => $lang->user->zipcode,  'control' => 'text',      'default' => '');
 
-$config->user->form = new stdclass();
-$config->user->form->reset['account']   = array('required' => true, 'type' => 'string', 'default' => '');
-$config->user->form->reset['password1'] = array('required' => true, 'type' => 'string', 'default' => '');
-$config->user->form->reset['password2'] = array('required' => true, 'type' => 'string', 'default' => '');
+$config->user->form->reset['account']          = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->reset['password1']        = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->reset['password2']        = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->reset['passwordLength']   = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->user->form->reset['passwordStrength'] = array('required' => false, 'type' => 'int',    'default' => 0);
