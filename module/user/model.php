@@ -687,21 +687,20 @@ class userModel extends model
     }
 
     /**
+     * 重置密码。
      * Reset password.
      *
+     * @param  object $user
      * @access public
      * @return bool
      */
-    public function resetPassword()
+    public function resetPassword(object $user): bool
     {
-        $_POST['account'] = trim($_POST['account']);
-        if(!$this->checkPassword()) return false;
-
-        $user = $this->getById($this->post->account);
+        $user = $this->getById($user->account);
         if(!$user) return false;
 
-        $password = substr($this->post->password1, 0, 32);
-        $this->dao->update(TABLE_USER)->set('password')->eq($password)->autoCheck()->where('account')->eq($this->post->account)->exec();
+        $this->dao->update(TABLE_USER)->set('password')->eq($user->password)->where('account')->eq($user->account)->exec();
+
         return !dao::isError();
     }
 
