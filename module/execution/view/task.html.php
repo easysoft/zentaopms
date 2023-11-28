@@ -211,7 +211,7 @@ js::set('data', json_encode($tasks));
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->task->noTask;?></span>
-        <?php if($canBeChanged and common::hasPriv('task', 'create') and empty($allTasks)):?>
+        <?php if($canBeChanged and common::hasPriv('task', 'create') && !$hasTasks):?>
         <?php echo html::a($taskCreateLink, "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>

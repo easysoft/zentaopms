@@ -202,7 +202,6 @@ class execution extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get tasks. */
-        $allTasks = $this->task->getExecutionTasks($executionID);
         $tasks    = $this->execution->getTasks($productID, $executionID, $this->executions, $browseType, $queryID, $moduleID, $sort, $pager);
         if(empty($tasks) and $pageID > 1)
         {
@@ -235,7 +234,7 @@ class execution extends control
 
         /* Assign. */
         $this->view->tasks        = $tasks;
-        $this->view->allTasks     = $allTasks;
+        $this->view->hasTasks     = !empty($tasks) || !empty($this->task->getExecutionTasks($executionID));
         $this->view->summary      = $this->execution->summary($tasks);
         $this->view->tabID        = 'task';
         $this->view->pager        = $pager;
