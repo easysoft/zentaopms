@@ -53,7 +53,6 @@ $content = $needCreateFile ? div
             (
                 set::label($lang->user->account),
                 set::name('account'),
-                set::value(''),
                 set::required(true)
             )
         ),
@@ -73,7 +72,6 @@ $content = $needCreateFile ? div
                 set::label($lang->user->password2),
                 set::control('password'),
                 set::name('password2'),
-                set::value(''),
                 set::required(true)
             )
         ),

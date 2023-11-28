@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$app->loadLang('productplan');
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu
 (
@@ -42,17 +43,17 @@ $fileInfo     = $entry ? pathinfo($entry) : array();
 $showBug      = isset($showBug) ? $showBug : true;
 $objectID     = isset($objectID) ? $objectID : 0;
 $tree         = $this->repo->getFileTree($repo, '', $diffs);
-$diffLink     = $this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&oldrevision={oldRevision}&newRevision={newRevision}");
+$diffLink     = $this->repo->createLink('diff', "repoID={$MR->repoID}&objectID=$objectID&entry=&oldrevision={oldRevision}&newRevision={newRevision}");
 
 jsVar('diffs', $diffs);
 jsVar('tree', $tree);
 jsVar('file', $currentEntry);
 jsVar('entry', $entry);
 jsVar('diffLink', $diffLink);
-jsVar('urlParams', "repoID=$repoID&objectID=$objectID&entry=%s&oldRevision=$oldRevision&newRevision=$newRevision&showBug=$showBug&encoding=$encoding");
+jsVar('urlParams', "repoID={$MR->repoID}&objectID=$objectID&entry=%s&oldRevision=$oldRevision&newRevision=$newRevision&showBug=$showBug&encoding=$encoding");
 
 $dropMenus = array();
-if(common::hasPriv('repo', 'download')) $dropMenus[] = array('text' => $this->lang->repo->downloadDiff, 'icon' => 'download', 'url' => $this->repo->createLink('download', "repoID=$repoID&path=$currentEntry&fromRevision=$oldRevision&toRevision=$newRevision&type=path"), 'target' => '_self');
+if(common::hasPriv('repo', 'download')) $dropMenus[] = array('text' => $this->lang->repo->downloadDiff, 'icon' => 'download', 'url' => $this->repo->createLink('download', "repoID={$MR->repoID}&path=$currentEntry&fromRevision=$oldRevision&toRevision=$newRevision&type=path"), 'target' => '_self');
 
 $dropMenus[] = array('text' => $this->lang->repo->viewDiffList['inline'], 'icon' => 'snap-house', 'id' => 'inline', 'class' => 'inline-appose');
 $dropMenus[] = array('text' => $this->lang->repo->viewDiffList['appose'], 'icon' => 'col-archive', 'id' => 'appose', 'class' => 'inline-appose');

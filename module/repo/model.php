@@ -2758,4 +2758,33 @@ class repoModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 获取并列展示的对比信息。
+     * Get appose diff.
+     *
+     * @param  array     $diffs
+     * @access protected
+     * @return array
+     */
+    protected function getApposeDiff(array $diffs): array
+    {
+        foreach($diffs as $diffFile)
+        {
+            if(empty($diffFile->contents)) continue;
+            foreach($diffFile->contents as $content)
+            {
+                $old = array();
+                $new = array();
+                foreach($content->lines as $line)
+                {
+                    if($line->type != 'new') $old[$line->oldlc] = $line->line;
+                    if($line->type != 'old') $new[$line->newlc] = $line->line;
+                }
+                $content->old = $old;
+                $content->new = $new;
+            }
+        }
+        return $diffs;
+    }
 }

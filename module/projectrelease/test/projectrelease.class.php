@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 class projectreleaseTest
 {
     public function __construct()
@@ -11,14 +12,15 @@ class projectreleaseTest
      * 测试获取项目发布列表。
      * Test get list of releases.
      *
-     * @param  int    $projectID
-     * @param  string $type
+     * @param  int          $projectID
+     * @param  string       $type
+     * @param  string       $orderBy
      * @access public
      * @return array|string
      */
-    public function getListTest(int $projectID, string $type = 'all'): array|string
+    public function getListTest(int $projectID, string $type = 'all', string $orderBy = 't1.date_desc'): array|string
     {
-        $objects = $this->objectModel->getList($projectID, $type);
+        $objects = $this->objectModel->getList($projectID, $type, $orderBy);
 
         if(dao::isError()) return dao::getError();
 
@@ -46,7 +48,7 @@ class projectreleaseTest
      * 测试获取项目已经发布的版本。
      * Test get released builds from project.
      *
-     * @param  int    $projectID
+     * @param  int          $projectID
      * @access public
      * @return string|array
      */
@@ -62,7 +64,7 @@ class projectreleaseTest
      * 测试项目发布信息，包括分支名称、版本信息等。
      * Test process release.
      *
-     * @param  int               $releaseID
+     * @param  int          $releaseID
      * @access public
      * @return string|array
      */
@@ -70,7 +72,7 @@ class projectreleaseTest
     {
         global $tester;
         $release     = $tester->dao->findById($releaseID)->from(TABLE_RELEASE)->fetch();
-        $branchGroup = $tester->loadModel('branch')->getByProducts(explode(',', $release->product));
+        $branchGroup = $tester->loadModel('branch')->getByProducts(explode(',', (string)$release->product));
         $builds      = $tester->dao->select("id, project, product, branch, execution, name, scmPath, filePath")->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
         $this->objectModel->processRelease($release, $branchGroup, $builds);
 
@@ -78,5 +80,23 @@ class projectreleaseTest
 
         $return = "project:{$release->project} branch:{$release->branch} build:{$release->build} branchName:{$release->branchName} buildInfos:" . implode(',', array_column($release->buildInfos, 'name'));
         return $return;
+    }
+
+    /**
+     * 测试获取项目的最新发布。
+     * Test get last release.
+     *
+     * @param  object    $release
+     * @param  string    $action
+     * @access public
+     * @return int|array
+     */
+    public function isClickableTest(object $release, string $action): int|array
+    {
+        $isClickable = $this->objectModel->isClickable($release, $action);
+
+        if(dao::isError()) return dao::getError();
+
+        return $isClickable ? 1 : 2;
     }
 }

@@ -8,11 +8,11 @@ class projectreleaseZen extends projectrelease
      *
      * @param  int    $projectID
      * @param  int    $productID
-     * @param  int    $branch
+     * @param  string $branch
      * @access public
      * @return void
      */
-    protected function commonAction(int $projectID = 0, int $productID = 0, int $branch = 0)
+    protected function commonAction(int $projectID = 0, int $productID = 0, string $branch = '')
     {
         /* 获取当前项目的所有产品。*/
         /* Get product list by project. */

@@ -676,283 +676,128 @@ class user extends control
         return $this->send(array('result' => 'success', 'load' => true));
     }
 
-
     /**
-     * User login, identify him and authorize him.
+     * 用户登录。
+     * User login.
      *
-     * @param string $referer
-     * @param string $from
-     *
+     * @param  string $referer
      * @access public
      * @return void
      */
-    public function login($referer = '', $from = '')
+    public function login(string $referer = '')
     {
-        /* Check if you can operating on the folder. */
-        $canModifyDIR = true;
-        if($this->user->checkTmp() === false)
-        {
-            $canModifyDIR = false;
-            $folderPath   = $this->app->tmpRoot;
-        }
-        elseif(!is_dir($this->app->dataRoot) or substr(decoct(fileperms($this->app->dataRoot)), -4) != '0777')
-        {
-            $canModifyDIR = false;
-            $folderPath   = $this->app->dataRoot;
-        }
+        $viewType = $this->app->getViewType();
 
-        if(!$canModifyDIR)
-        {
-            if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
-            {
-                return print(sprintf($this->lang->user->mkdirWin, $folderPath, $folderPath));
-            }
-            else
-            {
-                return print(sprintf($this->lang->user->mkdirLinux, $folderPath, $folderPath, $folderPath, $folderPath));
-            }
-        }
+        /* 重新加载语言项。*/
+        /* Reload lang. */
+        if($viewType == 'json' && $this->get->lang && $this->get->lang != $this->app->getClientLang()) $this->userZen->reloadLang($this->get->lang);
 
-        $this->setReferer($referer);
+        /* 检查缓存目录和数据目录访问权限。如果不能访问，终止程序并输出提示信息。*/
+        /* Check the access permissions of the cache directory and data directory. If you cannot access, terminate the program and output the prompt message. */
+        $this->userZen->checkDirPermission();
 
-        $loginLink = $this->createLink('user', 'login');
-        $denyLink  = $this->createLink('user', 'deny');
+        /* 设置来源网址。*/
+        /* Set referer. */
+        $this->referer = $this->userZen->setReferer($referer);
 
-        /* Reload lang by lang of get when viewType is json. */
-        if($this->app->getViewType() == 'json' and $this->get->lang and $this->get->lang != $this->app->getClientLang())
-        {
-            $this->app->setClientLang($this->get->lang);
-            $this->app->loadLang('user');
-        }
+        /* 预处理变量。*/
+        /* Prepare variables. */
+        $loginLink     = inlink('login');
+        $denyLink      = inlink('deny');
+        $locateWebRoot = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
+        $locateReferer = $this->referer;
+        if(helper::isWithTID() && strpos($locateReferer, 'tid=') === false) $locateReferer .= (strpos($locateReferer, '?') === false ? '?' : '&') . "tid={$this->get->tid}";
 
-        /* If user is logon, back to the referer. */
-        if($this->user->isLogon())
-        {
-            if($this->app->getViewType() == 'json')
-            {
-                $data = $this->user->getDataInJSON($this->app->user);
-                return print(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
-            }
+        /* 如果用户已经登录则返回相关信息。*/
+        /* If user has logon, return related info. */
+        if($this->user->isLogon()) return $this->send($this->userZen->responseForLogon($this->referer, $viewType, $loginLink, $denyLink, $locateReferer, $locateWebRoot));
 
-            $response['result'] = 'success';
-            if(strpos($this->referer, $loginLink) === false and
-               strpos($this->referer, $denyLink)  === false and
-               strpos($this->referer, 'ajax') === false and
-               strpos($this->referer, 'block')  === false and $this->referer
-            )
-            {
-                $response['locate'] = $this->referer;
-                if(helper::isWithTID() and strpos($response['locate'], 'tid=') === false) $response['locate'] .= (strpos($response['locate'], '?') === false ? '?' : '&') . "tid={$this->get->tid}";
-                return $this->send($response);
-            }
-            else
-            {
-                $response['locate'] = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
-                return $this->send($response);
-            }
-        }
+        /* 处理登录逻辑。*/
+        /* Process login. */
+        $result = $this->userZen->login($this->referer, $viewType, $loginLink, $denyLink, $locateReferer, $locateWebRoot);
+        if($result) return $this->send($result);
 
-        /* Passed account and password by post or get. */
-        if(!empty($_POST) or (isset($_GET['account']) and isset($_GET['password'])))
-        {
-            $account  = '';
-            $password = '';
-            if($this->post->account)  $account  = $this->post->account;
-            if($this->get->account)   $account  = $this->get->account;
-            if($this->post->password) $password = $this->post->password;
-            if($this->get->password)  $password = $this->get->password;
+        helper::setcookie('tab', '', time());
+        $loginExpired = !(preg_match("/(m=|\/)(index)(&f=|-)(index)(&|-|\.)?/", strtolower($this->referer), $output) || $this->referer == $this->config->webRoot || empty($this->referer) || preg_match("/\/www\/$/", strtolower($this->referer), $output));
 
-            $account = trim($account);
-            if($this->user->checkLocked($account))
-            {
-                $response['result']  = 'fail';
-                $response['message'] = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
-                if($this->app->getViewType() == 'json') return print(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $response['message']))));
-                return $this->send($response);
-            }
-
-            if((!empty($this->config->safe->loginCaptcha) and strtolower($this->post->captcha) != strtolower($this->session->captcha) and $this->app->getViewType() != 'json'))
-            {
-                $response['result']  = 'fail';
-                $response['message'] = $this->lang->user->errorCaptcha;
-                return $this->send($response);
-            }
-
-            $user = $this->user->identify($account, $password);
-
-            if($user)
-            {
-                /* Set user group, rights, view and award login score. */
-                $user = $this->user->login($user);
-
-                /* Go to the referer. */
-                if($this->post->referer and strpos($this->post->referer, $loginLink) === false and strpos($this->post->referer, $denyLink) === false and strpos($this->post->referer, 'block') === false)
-                {
-                    if($this->app->getViewType() == 'json')
-                    {
-                        $data = $this->user->getDataInJSON($user);
-                        return print(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
-                    }
-
-                    /* Get the module and method of the referer. */
-                    $module = $this->config->default->module;
-                    $method = $this->config->default->method;
-                    if($this->config->requestType == 'PATH_INFO')
-                    {
-                        $requestFix = $this->config->requestFix;
-
-                        $path = substr($this->post->referer, strrpos($this->post->referer, '/') + 1);
-                        $path = rtrim($path, '.html');
-                        if($path and strpos($path, $requestFix) !== false) list($module, $method) = explode($requestFix, $path);
-                    }
-                    else
-                    {
-                        $url   = html_entity_decode($this->post->referer);
-                        $param = substr($url, strrpos($url, '?') + 1);
-
-                        if(strpos($param, '&') !== false) list($module, $method) = explode('&', $param);
-                        $module = str_replace('m=', '', $module);
-                        $method = str_replace('f=', '', $method);
-                    }
-
-                    /* Check parsed name of module and method from referer. */
-                    if(empty($module) or !$this->app->checkModuleName($module, $exit = false) or
-                       empty($method) or !$this->app->checkMethodName($module, $exit = false))
-                    {
-                        $module = $this->config->default->module;
-                        $method = $this->config->default->method;
-                    }
-
-                    $response['result']  = 'success';
-                    if(common::hasPriv($module, $method))
-                    {
-                        $response['locate'] = $this->post->referer;
-                        if(helper::isWithTID() and strpos($response['locate'], 'tid=') === false) $response['locate'] .= (strpos($response['locate'], '?') === false ? '?' : '&') . "tid={$this->get->tid}";
-                        return $this->send($response);
-                    }
-                    else
-                    {
-                        $response['locate'] = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
-                        return $this->send($response);
-                    }
-                }
-                else
-                {
-                    if($this->app->getViewType() == 'json')
-                    {
-                        $data = $this->user->getDataInJSON($user);
-                        return print(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
-                    }
-
-                    $response['locate']  = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
-                    $response['result']  = 'success';
-                    return $this->send($response);
-                }
-            }
-            else
-            {
-                $response['result']  = 'fail';
-                $fails = $this->user->failPlus($account);
-                if($this->app->getViewType() == 'json') return print(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $this->lang->user->loginFailed))));
-                $remainTimes = $this->config->user->failTimes - $fails;
-                if($remainTimes <= 0)
-                {
-                    $response['message'] = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
-                    return $this->send($response);
-                }
-                elseif($remainTimes <= 3)
-                {
-                    $response['message'] = sprintf($this->lang->user->lockWarning, $remainTimes);
-                    return $this->send($response);
-                }
-
-                $response['message'] = $this->lang->user->loginFailed;
-                if(dao::isError()) $response['message'] = dao::getError();
-                return $this->send($response);
-            }
-        }
-        else
-        {
-            helper::setcookie('tab', '', time(), $this->config->webRoot);
-            $loginExpired = !(preg_match("/(m=|\/)(index)(&f=|-)(index)(&|-|\.)?/", strtolower($this->referer), $output) or $this->referer == $this->config->webRoot or empty($this->referer) or preg_match("/\/www\/$/", strtolower($this->referer), $output));
-
-            $this->loadModel('misc');
-            $this->loadModel('extension');
-            $this->view->title        = $this->lang->user->login;
-            $this->view->referer      = $this->referer;
-            $this->view->s            = zget($this->config->global, 'sn', '');
-            $this->view->keepLogin    = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
-            $this->view->rand         = $this->user->updateSessionRandom();
-            $this->view->unsafeSites  = $this->misc->checkOneClickPackage();
-            $this->view->plugins      = $this->extension->getExpiringPlugins(true);
-            $this->view->loginExpired = $loginExpired;
-            $this->display();
-        }
+        $this->view->title        = $this->lang->user->login;
+        $this->view->plugins      = $this->loadModel('extension')->getExpiringPlugins(true);
+        $this->view->unsafeSites  = $this->loadModel('misc')->checkOneClickPackage();
+        $this->view->rand         = $this->user->updateSessionRandom();
+        $this->view->keepLogin    = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
+        $this->view->sn           = zget($this->config->global, 'sn', '');
+        $this->view->referer      = $this->referer;
+        $this->view->loginExpired = $loginExpired;
+        $this->display();
     }
 
     /**
+     * 拒绝访问页面。
      * Deny page.
      *
      * @param  string $module
      * @param  string $method
-     * @param  string $refererBeforeDeny    the referer of the denied page.
+     * @param  string $referer the referer of the denied page.
      * @access public
      * @return void
      */
-    public function deny($module, $method, $refererBeforeDeny = '')
+    public function deny(string $module, string $method, string $referer = '')
     {
-        $this->setReferer();
-        $this->view->title             = $this->lang->user->deny;
-        $this->view->module            = $module;
-        $this->view->method            = $method;
-        $this->view->denyPage          = $this->referer;        // The denied page.
-        $this->view->refererBeforeDeny = $refererBeforeDeny;    // The referer of the denied page.
-        if($module == 'requirement') $this->app->loadLang('story');
-        if($module != 'requirement') $this->app->loadLang($module);
+        $this->userZen->setReferer();
+
+        $module = strtolower($module);
+        $method = strtolower($method);
 
         $this->app->loadLang('my');
+        $this->app->loadLang($module == 'requirement' ? 'story' : $module);
 
-        /* Check deny type. */
-        $rights  = $this->app->user->rights['rights'];
-        $acls    = $this->app->user->rights['acls'];
-
-        $module  = strtolower($module);
-        $method  = strtolower($method);
-
+        /* 判断禁止访问的类型。*/
+        /* Judge the type of deny. */
         $denyType = 'nopriv';
+        $rights   = $this->app->user->rights['rights'];
+        $acls     = $this->app->user->rights['acls'];
         if(isset($rights[$module][$method]))
         {
             $menu = isset($this->lang->navGroup->$module) ? $this->lang->navGroup->$module : $module;
             $menu = strtolower($menu);
 
             if(!isset($acls['views'][$menu])) $denyType = 'noview';
+
             $this->view->menu = $menu;
         }
 
+        $this->view->title    = $this->lang->user->deny;
+        $this->view->module   = $module;
+        $this->view->method   = $method;
+        $this->view->denyPage = $this->referer; // The denied page.
+        $this->view->referer  = $referer;       // The referer of the denied page.
         $this->view->denyType = $denyType;
 
         $this->display();
     }
 
     /**
-     * Logout.
+     * 退出登录。
+     * User logout.
      *
+     * @param  string $referer
      * @access public
      * @return void
      */
-    public function logout($referer = 0)
+    public function logout(string $referer = '')
     {
-        if(isset($this->app->user->id)) $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
-        helper::setcookie('za', '', time() - 3600, $this->config->webRoot);
-        helper::setcookie('zp', '', time() - 3600, $this->config->webRoot);
-        helper::setcookie('tab', '', time() - 3600, $this->config->webRoot);
+        if(!empty($this->app->user->id)) $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
 
-        $_SESSION = array();
+        helper::setcookie('za',  '', time() - 3600);
+        helper::setcookie('zp',  '', time() - 3600);
+        helper::setcookie('tab', '', time() - 3600);
+
+        $_SESSION = array();    // Clear session in roadrunner.
         session_destroy();
 
         if($this->app->getViewType() == 'json') return $this->send(array('status' => 'success'));
-        $vars = !empty($referer) ? "referer=$referer" : '';
-        return $this->send(array('result' => 'success', 'load' => $this->createLink('user', 'login', $vars)));
+
+        return $this->send(array('result' => 'success', 'load' => inlink('login', !empty($referer) ? "referer=$referer" : '')));
     }
 
     /**

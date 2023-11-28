@@ -21,6 +21,7 @@ dropmenu
 $hasNoConflict     = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->hasNoConflict;
 $sourceDisabled    = ($MR->status == 'merged' && $MR->removeSourceBranch == '1') ? 'disabled' : '';
 $compileNotSuccess = !empty($compile->id) && $compile->status != 'success';
+$branchPath        = $sourceProject->path_with_namespace . '-' . $MR->sourceBranch;
 
 $mainActions   = array();
 $suffixActions = array();
@@ -132,7 +133,6 @@ detailHeader
     )
 );
 
-
 panel
 (
     div
@@ -208,18 +208,18 @@ panel
                         h::a
                         (
                             setClass('font-normal ml-2 mr-2'),
-                            set::href($sourceProjectURL),
+                            set::href($sourceBranch ? zget($sourceBranch, 'web_url', '') : ''),
                             set::target('_blank'),
                             set::disabled($sourceDisabled),
-                            $sourceProjectName . ':' . $MR->sourceBranch
+                            $sourceProject->name_with_namespace . ':' . $MR->sourceBranch
                         ),
                         $lang->mr->to,
                         h::a
                         (
                             setClass('font-normal ml-2 mr-2'),
-                            set::href($targetProjectURL),
+                            set::href($targetBranch ? zget($targetBranch, 'web_url', '') : ''),
                             set::target('_blank'),
-                            $targetProjectName . ':' . $MR->targetBranch
+                            $targetProject->name_with_namespace . ':' . $MR->targetBranch
                         )
                     ),
                     tableData
@@ -254,13 +254,14 @@ panel
                 cell
                 (
                     setClass('cell mb-2'),
-                    html(sprintf($lang->mr->commandDocument, $httpRepoURL, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch))
+                    html(sprintf($lang->mr->commandDocument, $sourceProject->http_url_to_repo, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch))
                 ),
                 cell
                 (
                     setClass('cell cell-history'),
                     history
                     (
+                        set::objectID($MR->id),
                         set::commentUrl(createLink('action', 'comment', array('objectType' => 'mr', 'objectID' => $MR->id)))
                     )
                 )
@@ -291,5 +292,3 @@ div
         set::suffix($suffixActions)
     )
 );
-
-render();

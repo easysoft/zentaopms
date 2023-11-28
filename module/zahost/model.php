@@ -525,46 +525,6 @@ class zahostModel extends model
     }
 
     /**
-     * Build test task menu.
-     *
-     * @param  object $host
-     * @param  string $type
-     * @access public
-     * @return string
-     */
-    public function buildOperateMenu($host, $type = 'view')
-    {
-        $function = 'buildOperate' . ucfirst($type) . 'Menu';
-        return $this->$function($host);
-    }
-
-    /**
-     * Build test task view menu.
-     *
-     * @param  object $host
-     * @access public
-     * @return string
-     */
-    public function buildOperateViewMenu($host)
-    {
-        if($host->deleted) return '';
-        $nodeList = $this->loadModel('zanode')->getListByHost($host->id);
-        $disabled = '';
-        $title    = !empty($nodeList) ? $this->lang->zahost->undeletedNotice : $this->lang->zahost->delete;
-        if($nodeList) $disabled = 'disabled';
-
-        $menu   = '';
-        $params = "hostID=$host->id";
-
-        $menu  .= $this->buildMenu('zahost', 'browseImage', $params, $host, 'view', 'mirror', '', 'iframe', true, '', $this->lang->zahost->image->browseImage);
-        $menu  .= "<div class='divider'></div>";
-        $menu  .= $this->buildMenu('zahost', 'edit',   $params, $host, 'view');
-        $menu  .= $this->buildMenu('zahost', 'delete', $params, $host, 'view', 'trash', 'hiddenwin', $disabled, true, '', $title);
-
-        return $menu;
-    }
-
-    /**
      * Get image pairs by host.
      *
      * @param  int    $hostID

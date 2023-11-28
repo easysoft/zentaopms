@@ -891,9 +891,9 @@ class screenModel extends model
      */
     public function setComponentDefaults(object $component): void
     {
-        if(!isset($component->styles))  $component->styles  = $this->config->screen->chart->default->styles;
-        if(!isset($component->status))  $component->status  = $this->config->screen->chart->default->status;
-        if(!isset($component->request)) $component->request = $this->config->screen->chart->default->request;
+        if(!isset($component->styles))  $component->styles  = $this->config->screen->chart->default->config->styles;
+        if(!isset($component->status))  $component->status  = $this->config->screen->chart->default->config->status;
+        if(!isset($component->request)) $component->request = $this->config->screen->chart->default->config->request;
     }
 
     /**
@@ -1052,33 +1052,27 @@ class screenModel extends model
      */
     public function buildCardChart(object $component, object $chart): void
     {
-        if(!$chart->settings)
-        {
-            $component->option->dataset = '?';
-        }
-        else
+        $component->option->dataset = '?';
+        if($chart->settings)
         {
             $value = 0;
             if($chart->sql)
             {
                 $settings = json_decode($chart->settings);
+                $value = '?';
                 if($settings && isset($settings->value))
                 {
                     $field   = $settings->value->field;
-                    $sql     = $this->setFilterSQL($chart);
-                    $results = $this->dao->query($sql)->fetchAll();
+                    $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
 
                     if($settings->value->type === 'value') $value = count($results) ? 0 : current($results)->$field;
                     if($settings->value->agg  === 'count') $value = count($results);
                     if($settings->value->agg  === 'sum')
                     {
+                        $value = 0;
                         foreach($results as $result) $value += (float)$result->$field;
                         $value = round($value);
                     }
-                }
-                else
-                {
-                    $value = '?';
                 }
             }
             $component->option->dataset = (string)$value;
@@ -1088,6 +1082,7 @@ class screenModel extends model
     }
 
     /**
+     * 构建折线图。
      * Build line chart.
      *
      * @param  object $component
@@ -1099,12 +1094,7 @@ class screenModel extends model
     {
         if(!$chart->settings)
         {
-            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
-            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
-            $component->key         = "LineCommon";
-            $component->chartConfig = json_decode('{"key":"LineCommon","chartKey":"VLineCommon","conKey":"VCLineCommon","title":"折线图","category":"Lines","categoryName":"折线图","package":"Charts","chartFrame":"echarts","image":"/static/png/line-e714bc74.png"}');
-            $component->option      = json_decode('{"legend":{"show":true,"top":"5%","textStyle":{"color":"#B9B8CE"}},"xAxis":{"type":"category"},"yAxis":{"show":true,"axisLine":{"show":true},"type":"value"},"backgroundColor":"rgba(0,0,0,0)"}');
-
+            $this->screenTao->setChartDefault('line', $component);
             $this->setComponentDefaults($component);
         }
         else
@@ -1118,8 +1108,7 @@ class screenModel extends model
                     foreach($settings->yaxis as $yaxis) $dimensions[] = $yaxis->name;
 
                     $sourceData = array();
-
-                    $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
+                    $results    = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
                     foreach($results as $result)
                     {
                         $key   = $settings->xaxis[0]->name;
@@ -1138,12 +1127,12 @@ class screenModel extends model
                     $component->option->dataset->source     = $sourceData;
                 }
             }
-
             $this->setComponentDefaults($component);
         }
     }
 
     /**
+     * 构建表格图。
      * Build table chart
      *
      * @param  object $component
@@ -1155,12 +1144,7 @@ class screenModel extends model
     {
         if(!$chart->settings)
         {
-            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
-            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
-            $component->key         = "TableScrollBoard";
-            $component->chartConfig = json_decode('{"key":"TableScrollBoard","chartKey":"VTableScrollBoard","conKey":"VCTableScrollBoard","title":"轮播列表","category":"Tables","categoryName":"表格","package":"Tables","chartFrame":"common","image":"/static/png/table_scrollboard-fb642e78.png"}');
-            $component->option      = json_decode('{"header":["列1","列2","列3"],"dataset":[["行1列1","行1列2","行1列3"],["行2列1","行2列2","行2列3"],["行3列1","行3列2","行3列3"]],"rowNum":2,"waitTime":2,"headerHeight":35,"carousel":"single","headerBGC":"#00BAFF","oddRowBGC":"#003B51","evenRowBGC":"#0A2732"}');
-
+            $this->screenTao->setChartDefault('table', $component);
             $this->setComponentDefaults($component);
         }
         else
@@ -1186,6 +1170,7 @@ class screenModel extends model
     }
 
     /**
+     * 构建条形图。
      * Build bar chart.
      *
      * @param  object $component
@@ -1197,12 +1182,7 @@ class screenModel extends model
     {
         if(!$chart->settings)
         {
-            $component->request     = json_decode('{"requestDataType": 0, "requestHttpType": "get", "requestUrl": "", "requestIntervalUnit": "second", "requestContentType": 0, "requestParamsBodyType": "none", "requestSQLContent": { "sql": "select * from  where" }, "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {}}}');
-            $component->events      = json_decode('{"baseEvent": {}, "advancedEvents": {}}');
-            $component->key         = "BarCrossrange";
-            $component->chartConfig = json_decode('{"key": "BarCrossrange", "chartKey": "VBarCrossrange", "conKey": "VCBarCrossrange", "title": "横向柱状图", "category": "Bars", "categoryName": "柱状图", "package": "Charts", "chartFrame": "echarts", "image": "/static/png/bar_y-05067169.png" }');
-            $component->option      = json_decode('{"xAxis": { "show": true, "type": "category" }, "yAxis": { "show": true, "axisLine": { "show": true }, "type": "value" }, "series": [], "backgroundColor": "rgba(0,0,0,0)"}');
-
+            $this->screenTao->setChartDefault('bar', $component);
             $this->setComponentDefaults($component);
         }
         else
@@ -1251,23 +1231,19 @@ class screenModel extends model
     }
 
     /**
+     * 构建饼图。
      * Build pie chart.
      *
      * @param  object $component
      * @param  object $chart
      * @access public
-     * @return object
+     * @return void
      */
     public function buildPieChart(object $component, object $chart): void
     {
         if(!$chart->settings)
         {
-            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
-            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
-            $component->key         = "PieCommon";
-            $component->chartConfig = json_decode('{"key":"PieCommon","chartKey":"VPieCommon","conKey":"VCPieCommon","title":"饼图","category":"Pies","categoryName":"饼图","package":"Charts","chartFrame":"echarts","image":"/static/png/pie-9620f191.png"}');
-            $component->option      = json_decode('{"type":"nomal","series":[{"type":"pie","radius":"70%","roseType":false}],"backgroundColor":"rgba(0,0,0,0)"}');
-
+            $this->screenTao->setChartDefault('pie', $component);
             $this->setComponentDefaults($component);
         }
         else
@@ -1307,6 +1283,7 @@ class screenModel extends model
     }
 
     /**
+     * 构建环形饼图。
      * Build piecircle chart.
      *
      * @param  object $component
@@ -1318,12 +1295,7 @@ class screenModel extends model
     {
         if(!$chart->settings)
         {
-            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
-            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
-            $component->key         = "PieCircle";
-            $component->chartConfig = json_decode('{"key":"PieCircle","chartKey":"VPieCircle","conKey":"VCPieCircle","title":"饼图","category":"Pies","categoryName":"饼图","package":"Charts","chartFrame":"echarts","image":"/static/png/pie-circle-258fcce7.png"}');
-            $component->option      = json_decode('{"type":"nomal","series":[{"type":"pie","radius":"70%","roseType":false}],"backgroundColor":"rgba(0,0,0,0)"}');
-
+            $this->screenTao->setChartDefault('piecircle', $component);
             $this->setComponentDefaults($component);
         }
         else
@@ -1360,6 +1332,7 @@ class screenModel extends model
     }
 
     /**
+     * 构建水球图。
      * Build water polo chart.
      *
      * @param  object $component
@@ -1371,12 +1344,7 @@ class screenModel extends model
     {
         if(!$chart->settings)
         {
-            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
-            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
-            $component->key         = "PieCircle";
-            $component->chartConfig = json_decode('{"key":"WaterPolo","chartKey":"VWaterPolo","conKey":"VCWaterPolo","title":"水球图","category":"Mores","categoryName":"更多","package":"Charts","chartFrame":"common","image":"water_WaterPolo.png"}');
-            $component->option      = json_decode('{"type":"nomal","series":[{"type":"liquidFill","radius":"90%","roseType":false}],"backgroundColor":"rgba(0,0,0,0)"}');
-
+            $this->screenTao->setChartDefault('waterpolo', $component);  
             $this->setComponentDefaults($component);
         }
         else
@@ -1399,6 +1367,7 @@ class screenModel extends model
     }
 
     /**
+     * 构建雷达图。
      * Build radar chart.
      *
      * @param  object $component
@@ -1410,12 +1379,7 @@ class screenModel extends model
     {
         if(!$chart->settings)
         {
-            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
-            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
-            $component->key         = "Radar";
-            $component->chartConfig = json_decode('{"key":"Radar","chartKey":"VRadar","conKey":"VCRadar","title":"雷达图","category":"Mores","categoryName":"更多","package":"Charts","chartFrame":"common","image":"/static/png/radar-91567f95.png"}');
-            $component->option      = json_decode('{"radar":{"indicator":[{"name":"数据1","max":6500},{"name":"数据2","max":16000},{"name":"数据3","max":30000},{"name":"数据4","max":38000},{"name":"数据5","max":52000}]},"series":[{"name":"radar","type":"radar","areaStyle":{"opacity":0.1},"data":[{"name":"data1","value":[4200,3000,20000,35000,50000]}]}],"backgroundColor":"rgba(0,0,0,0)"}');
-
+            $this->screenTao->setChartDefault('radar', $component);
             $this->setComponentDefaults($component);
         }
         else
@@ -1466,6 +1430,7 @@ class screenModel extends model
     }
 
     /**
+     * 构建漏斗图。
      * Build funnel chart.
      *
      * @param  object $component
@@ -1477,17 +1442,13 @@ class screenModel extends model
     {
         if(!$chart->settings)
         {
-            $component->request     = json_decode('{"requestDataType":0,"requestHttpType":"get","requestUrl":"","requestIntervalUnit":"second","requestContentType":0,"requestParamsBodyType":"none","requestSQLContent":{"sql":"select * from  where"},"requestParams":{"Body":{"form-data":{},"x-www-form-urlencoded":{},"json":"","xml":""},"Header":{},"Params":{}}}');
-            $component->events      = json_decode('{"baseEvent":{},"advancedEvents":{}}');
-            $component->key         = "Funnel";
-            $component->chartConfig = json_decode('{"key":"Funnel","chartKey":"VFunnel","conKey":"VCFunnel","title":"漏斗图","category":"Mores","categoryName":"更多","package":"Charts","chartFrame":"echarts","image":"/static/png/funnel-d032fdf6.png"}');
-            $component->option      = json_decode('{"dataset":{"dimensions":["product","dataOne"],"source":[{"product":"data1","dataOne":20},{"product":"data2","dataOne":40},{"product":"data3","dataOne":60},{"product":"data4","dataOne":80},{"product":"data5","dataOne":100}]},"series":[{"name":"Funnel","type":"funnel","gap":5,"label":{"show":true,"position":"inside","fontSize":12}}],"backgroundColor":"rgba(0,0,0,0)"}');
-
+            $this->screenTao->setChartDefault('funnel', $component);
             $this->setComponentDefaults($component);
         }
     }
 
     /**
+     * 获取燃尽图数据。
      * Get burn data.
      *
      * @access public
@@ -1540,10 +1501,14 @@ class screenModel extends model
      * @access public
      * @return void
      */
-    public function initComponent(object $chart, string $type, object $component)
+    public function initComponent(object $chart, string $type, object $component): void
     {
-        if(!$component) return new stdclass();
-        if(!$chart) return $component;
+        if(!$component)
+        {
+            $component = new stdclass();
+            return;
+        }
+        if(!$chart) return;
 
         $settings = is_string($chart->settings) ? json_decode($chart->settings) : $chart->settings;
 
@@ -1557,7 +1522,6 @@ class screenModel extends model
 
         $typeChanged = false;
 
-        // Get type is changed or not.
         if(isset($component->chartConfig))
         {
             foreach($this->config->screen->chartConfig as $type => $chartConfig)
@@ -1565,7 +1529,6 @@ class screenModel extends model
                 $chartConfig = json_decode($chartConfig);
                 if($chartConfig->key == $component->chartConfig->key) $componentType = $type;
             }
-
             $typeChanged = $chartType != $componentType;
         }
 

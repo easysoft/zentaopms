@@ -61,21 +61,14 @@ class mr extends control
             $this->loadModel('execution')->setMenu($objectID);
         }
 
-        /* Save current URI to session. */
-        $this->session->set('mrList', $this->app->getURI(true), 'repo');
-
         if($this->app->tab == 'execution' && $objectID) return print($this->fetch('mr', 'browseByExecution', "repoID={$repoID}&mode={$mode}&param={$param}&objectID={$objectID}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}"));
 
-        $this->app->loadClass('pager', true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
         $repoList = $this->loadModel('repo')->getListBySCM('Gitlab,Gitea,Gogs');
-        if(empty($repoList)) $this->locate($this->loadModel('repo')->createLink('create'));
+        if(empty($repoList)) $this->locate($this->repo->createLink('create'));
 
         if(!isset($repoList[$repoID])) $repoID = key($repoList);
         $repoID = $this->repo->saveState($repoID, $objectID);
         $repo   = $repoList[$repoID];
-
         $this->loadModel('ci')->setMenu($repo->id);
 
         if($param == 'assignee' || $param == 'creator')
@@ -83,26 +76,14 @@ class mr extends control
             $mode  = $param;
             $param = $this->app->user->account;
         }
+
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => array($repo->serviceProject => $repo->serviceProject));
         $MRList         = $this->mr->getList($mode, $param, $orderBy, $filterProjects, $repoID, 0, $pager);
-
-        if($repo->SCM == 'Gitlab')
-        {
-            $projectIds = array();
-            foreach($MRList as $MR)
-            {
-                $projectIds[$MR->sourceProject] = $MR->sourceProject;
-                $projectIds[$MR->targetProject] = $MR->targetProject;
-            }
-            $projects = $this->mr->getGitlabProjects($repo->serviceHost, $projectIds);
-        }
-        else
-        {
-            $projects = $this->mr->getAllProjects($repoID, $repo->SCM);
-        }
-
-        /* Sync GitLab MR to ZenTao Database. */
-        $MRList = $this->mr->batchSyncMR($MRList, array($repoID => $repo));
+        $MRList         = $this->mr->batchSyncMR($MRList, array($repoID => $repo));
+        $projects       = $this->mrZen->getAllProjects($repo, $MRList);
 
         /* Check whether Mr is linked with the product. */
         foreach($MRList as $MR)
@@ -111,27 +92,22 @@ class mr extends control
             $MR->linkButton  = empty($product) ? false : true;
         }
 
-        /* Load lang from compile module */
-        $this->app->loadLang('compile');
-        $openIDList = $this->app->user->admin ? array() : $this->loadModel(strtolower($repo->SCM))->getListByAccount($this->app->user->account);
-
-        if($this->app->tab == 'execution') $this->view->executionID = $objectID;
         $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
         $this->view->MRList     = $MRList;
         $this->view->projects   = $projects;
         $this->view->pager      = $pager;
         $this->view->mode       = $mode;
         $this->view->param      = $param;
-        $this->view->repoID     = $repoID;
         $this->view->objectID   = $objectID;
         $this->view->repo       = $repo;
         $this->view->orderBy    = $orderBy;
-        $this->view->openIDList = $openIDList;
+        $this->view->openIDList = $this->app->user->admin ? array() : $this->loadModel(strtolower($repo->SCM))->getListByAccount($this->app->user->account);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
     /**
+     * 获取执行下合并请求列表.
      * Browse mr for execution.
      *
      * @param  int    $repoID
@@ -145,7 +121,7 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function browseByExecution($repoID = 0, $mode = 'status', $param = 'opened', $executionID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browseByExecution(int $repoID = 0, string $mode = 'status', string $param = 'opened', int $executionID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if($param == 'assignee' || $param == 'creator')
         {
@@ -169,20 +145,7 @@ class mr extends control
             $repoPairs[$repo->id] = $repo->name;
             if($repoID && $repoID != $repo->id) continue;
 
-            if($repo->SCM == 'Gitlab')
-            {
-                $projectIds = array();
-                foreach($MRList as $MR)
-                {
-                    $projectIds[$MR->sourceProject] = $MR->sourceProject;
-                    $projectIds[$MR->targetProject] = $MR->targetProject;
-                }
-                $projects += $this->mr->getGitlabProjects($repo->serviceHost, $projectIds);
-            }
-            else
-            {
-                $projects += $this->mr->getAllProjects($repoID, $repo->SCM);
-            }
+            $projects += $this->mrZen->getAllProjects($repo, $MRList);
         }
 
         $openIDList = array();
@@ -211,6 +174,7 @@ class mr extends control
     }
 
     /**
+     * 创建合并请求.
      * Create MR function.
      *
      * @param  int    $repoID
@@ -245,7 +209,6 @@ class mr extends control
             }
         }
 
-        $this->app->loadLang('compile');
         $this->view->title       = $this->lang->mr->create;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->repo        = $repo;
@@ -258,12 +221,14 @@ class mr extends control
     }
 
     /**
+     * 编辑合并请求。
      * Edit MR function.
      *
+     * @param  int    $MRID
      * @access public
      * @return void
      */
-    public function edit($MRID)
+    public function edit(int $MRID)
     {
         if($_POST)
         {
@@ -276,24 +241,12 @@ class mr extends control
         $this->view->title = $this->lang->mr->edit;
         $this->view->MR    = $MR;
         $this->view->rawMR = isset($rawMR) ? $rawMR : false;
-        if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
-
-        $host       = $this->loadModel('pipeline')->getByID($MR->hostID);
-        $scm        = $host->type;
-        $branchList = $this->loadModel($scm)->getBranches($MR->hostID, $MR->targetProject);
-
-        $MR->canDeleteBranch = true;
-        $branchPrivs = $this->loadModel($scm)->apiGetBranchPrivs($MR->hostID, $MR->sourceProject);
-        foreach($branchPrivs as $priv)
-        {
-            if($MR->canDeleteBranch and $priv->name == $MR->sourceBranch) $MR->canDeleteBranch = false;
-        }
-
-        $targetBranchList = array();
-        foreach($branchList as $branch) $targetBranchList[$branch] = $branch;
+        if(!isset($rawMR->id) || empty($rawMR)) return $this->display();
 
         /* Fetch user list both in Zentao and current GitLab project. */
-        $gitUsers    = $this->$scm->getUserAccountIdPairs($MR->hostID);
+        $host     = $this->loadModel('pipeline')->getByID($MR->hostID);
+        $scm      = $host->type;
+        $gitUsers = $this->$scm->getUserAccountIdPairs($MR->hostID);
 
         /* Check permissions. */
         if(!$this->app->user->admin and $scm == 'gitlab')
@@ -301,152 +254,98 @@ class mr extends control
             $groupIDList = array(0 => 0);
             $groups      = $this->$scm->apiGetGroups($MR->hostID, 'name_asc', 'developer');
             foreach($groups as $group) $groupIDList[] = $group->id;
+
             $sourceProject = $this->$scm->apiGetSingleProject($MR->hostID, $MR->sourceProject);
             $isDeveloper   = $this->$scm->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
 
-            if(!isset($gitUsers[$this->app->user->account]) or !$isDeveloper) return print(js::alert($this->lang->mr->errorLang[3]) . js::locate($this->createLink('mr', 'browse')));
+            if(!isset($gitUsers[$this->app->user->account]) || !$isDeveloper) return $this->sendError($this->lang->mr->errorLang[3], $this->createLink('mr', 'browse'));
         }
 
-        /* Import lang for required modules. */
-        $this->loadModel('repo');
-        $this->loadModel('job');
-        $this->loadModel('compile');
-
-        $repoList    = array();
-        $rawRepoList = $this->repo->getRepoListByClient($MR->hostID, $MR->sourceProject);
-        foreach($rawRepoList as $rawRepo) $repoList[$rawRepo->id] = "[$rawRepo->id] $rawRepo->name";
-
-        $jobList = array();
-        if($MR->repoID)
-        {
-            $rawJobList = $this->job->getListByRepoID($MR->repoID);
-            foreach($rawJobList as $rawJob) $jobList[$rawJob->id] = "[$rawJob->id] $rawJob->name";
-
-            $this->view->repo = $this->repo->getByID($MR->repoID);
-        }
-
-        $this->view->repoList = $repoList;
-        $this->view->jobList  = !empty($MR->repoID) ? $jobList : array();
-
-        $this->view->title            = $this->lang->mr->edit;
-        $this->view->MR               = $MR;
-        $this->view->host             = $host;
-        $this->view->targetBranchList = $targetBranchList;
-        $this->view->users            = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->assignee         = $MR->assignee;
-        $this->view->reviewer         = zget($gitUsers, $MR->reviewer, '');
-
-        $this->display();
+        $this->view->host = $host;
+        $this->meZen->assignEditData($MR, $scm);
     }
 
     /**
+     * 删除合并请求。
      * Delete a MR.
      *
      * @param  int    $MRID
      * @access public
      * @return void
      */
-    public function delete($MRID)
+    public function delete(int $MRID)
     {
-        $MR = $this->mr->getByID($MRID);
-        if($MR->synced)
-        {
-           $res = $this->mr->apiDeleteMR($MR->hostID, $MR->targetProject, $MR->mriid);
-           if(isset($res->message)) return print(js::alert($this->mr->convertApiError($res->message)));
-        }
-        $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
+        $this->mr->deleteByID($MRID);
 
-        $this->loadModel('action')->create('mr', $MRID, 'deleted', '', $MR->title);
-        $this->mr->createMRLinkedAction($MRID, 'removemr');
-
+        if(dao::isError()) return $this->sendError(dao::getError());
         return $this->send(array('result' => 'success', 'load' => true));
     }
 
     /**
+     * 合并请求详情。
      * View a MR.
      *
-     * @param  int $MRID
+     * @param  int    $MRID
      * @access public
      * @return void
      */
-    public function view($MRID)
+    public function view(int $MRID)
     {
         $MR = $this->mr->getByID($MRID);
         if(!$MR) return $this->locate($this->createLink('mr', 'browse'));
-        if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
-        if($MR->synced and (!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR))) return $this->display();
 
-        $host = $this->loadModel('pipeline')->getByID($MR->hostID);
-        $scm  = $host->type;
-        $this->loadModel($scm);
-        $this->loadModel('job');
+        if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
+        if($MR->synced && (!isset($rawMR->id) || empty($rawMR))) return $this->display();
 
         /* Sync MR from GitLab to ZentaoPMS. */
-        $MR = $this->mr->apiSyncMR($MR);
-        $sourceProject = $this->$scm->apiGetSingleProject($MR->hostID, $MR->sourceProject);
-        $targetProject = $this->$scm->apiGetSingleProject($MR->hostID, $MR->targetProject);
-        $sourceBranch  = $this->$scm->apiGetSingleBranch($MR->hostID, $MR->sourceProject, $MR->sourceBranch);
-        $targetBranch  = $this->$scm->apiGetSingleBranch($MR->hostID, $MR->targetProject, $MR->targetBranch);
+        $MR   = $this->mr->apiSyncMR($MR);
+        $host = $this->loadModel('pipeline')->getByID($MR->hostID);
 
-        $projectOwner = $projectEdit = false;
-        if(isset($MR->hostID) and !$this->app->user->admin)
+        $projectOwner  = $projectEdit = false;
+        $sourceProject = $this->loadModel($host->type)->apiGetSingleProject($MR->hostID, $MR->sourceProject);
+        if(isset($MR->hostID) && !$this->app->user->admin)
         {
-            $openID = $this->$scm->getUserIDByZentaoAccount($MR->hostID, $this->app->user->account);
-            if(!$projectOwner and isset($sourceProject->owner->id) and $sourceProject->owner->id == $openID) $projectOwner = true;
+            $openID = $this->{$host->type}->getUserIDByZentaoAccount($MR->hostID, $this->app->user->account);
+            if(!$projectOwner && isset($sourceProject->owner->id) && $sourceProject->owner->id == $openID) $projectOwner = true;
         }
 
-        if($scm == 'gitlab')
+        if($host->type == 'gitlab')
         {
-            $gitUsers    = $this->gitlab->getUserAccountIdPairs($MR->hostID);
             $groupIDList = array(0 => 0);
             $groups      = $this->gitlab->apiGetGroups($MR->hostID, 'name_asc', 'developer');
             foreach($groups as $group) $groupIDList[] = $group->id;
-            $isDeveloper = $this->gitlab->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
 
+            $isDeveloper = $this->gitlab->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
+            $gitUsers    = $this->gitlab->getUserAccountIdPairs($MR->hostID);
             if(isset($gitUsers[$this->app->user->account]) && $isDeveloper) $projectEdit = true;
         }
-        elseif($scm == 'gitea')
+        elseif($host->type == 'gitea')
         {
-            $projectEdit = (isset($sourceProject->allow_merge_commits) and $sourceProject->allow_merge_commits == true) ? true : false;
+            $projectEdit = (isset($sourceProject->allow_merge_commits) && $sourceProject->allow_merge_commits == true) ? true : false;
         }
-        elseif($scm == 'gogs')
+        elseif($host->type == 'gogs')
         {
-            $projectEdit = (isset($sourceProject->permissions->push) and $sourceProject->permissions->push) ? true : false;
+            $projectEdit = (isset($sourceProject->permissions->push) && $sourceProject->permissions->push) ? true : false;
         }
 
-        $this->view->sourceProjectName = $sourceProject->name_with_namespace;
-        $this->view->targetProjectName = $targetProject->name_with_namespace;
-        $this->view->sourceProjectURL  = isset($sourceBranch->web_url) ? $sourceBranch->web_url : '';
-        $this->view->targetProjectURL  = isset($targetBranch->web_url) ? $targetBranch->web_url : '';
-
-        /* Those variables are used to render $lang->mr->commandDocument. */
-        $this->view->httpRepoURL = $sourceProject->http_url_to_repo;
-        $this->view->branchPath  = $sourceProject->path_with_namespace . '-' . $MR->sourceBranch;
-
-        /* Get mr linked list. */
         $this->app->loadLang('productplan');
-        $product  = $this->mr->getMRProduct($MR);
-
-        $this->view->compile      = $this->loadModel('compile')->getById($MR->compileID);
-        $this->view->compileJob   = $MR->jobID ? $this->job->getById($MR->jobID) : false;
-        $this->view->projectOwner = $projectOwner;
-        $this->view->projectEdit  = $projectEdit;
-
-        $this->view->title   = $this->lang->mr->view;
-        $this->view->MR      = $MR;
-        $this->view->rawMR   = isset($rawMR) ? $rawMR : false;
-        $this->view->product = $product;
-        $this->view->repoID  = $MR->repoID;
-        $this->view->stories = $this->mr->getLinkList($MR->id, zget($product, 'id', 0), 'story');
-        $this->view->bugs    = $this->mr->getLinkList($MR->id, zget($product, 'id', 0), 'bug');
-        $this->view->tasks   = $this->mr->getLinkList($MR->id, zget($product, 'id', 0), 'task');
-        $this->view->actions = $this->loadModel('action')->getList('mr', $MRID);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed');
-
+        $this->view->title         = $this->lang->mr->view;
+        $this->view->MR            = $MR;
+        $this->view->rawMR         = isset($rawMR) ? $rawMR : false;
+        $this->view->actions       = $this->loadModel('action')->getList('mr', $MRID);
+        $this->view->compile       = $this->loadModel('compile')->getById($MR->compileID);
+        $this->view->compileJob    = $MR->jobID ? $this->loadModel('job')->getById($MR->jobID) : false;
+        $this->view->projectOwner  = $projectOwner;
+        $this->view->projectEdit   = $projectEdit;
+        $this->view->sourceProject = $sourceProject;
+        $this->view->targetProject = $this->{$host->type}->apiGetSingleProject($MR->hostID, $MR->targetProject);
+        $this->view->sourceBranch  = $this->{$host->type}->apiGetSingleBranch($MR->hostID, $MR->sourceProject, $MR->sourceBranch);
+        $this->view->targetBranch  = $this->{$host->type}->apiGetSingleBranch($MR->hostID, $MR->targetProject, $MR->targetBranch);
         $this->display();
     }
 
     /**
+     * 定时任务，从GitLab API同步合并请求状态到禅道数据库，默认5分钟执行一次。
      * Crontab sync MR from GitLab API to Zentao database, default time 5 minutes to execute once.
      *
      * @access public
@@ -467,13 +366,14 @@ class mr extends control
     }
 
     /**
+     * 通过合并请求。
      * Accept a MR.
      *
      * @param  int    $MRID
      * @access public
      * @return void
      */
-    public function accept($MRID)
+    public function accept(int $MRID)
     {
         $MR = $this->mr->getByID($MRID);
 
@@ -487,6 +387,7 @@ class mr extends control
                 return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->needCI, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
             }
         }
+
         if(isset($MR->needApproved) and $MR->needApproved == '1')
         {
             if($MR->approvalStatus != 'approved')
@@ -506,43 +407,36 @@ class mr extends control
         if(isset($rawMR->message))
         {
             $errorMessage = $this->mr->convertApiError($rawMR->message);
-            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->sudo, $errorMessage)));
+            return $this->sendError(sprintf($this->lang->mr->apiError->sudo, $errorMessage));
         }
 
         return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->mergeFailed, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
     }
 
     /**
+     * 获取合并请求的对比信息。
      * View diff between MR source and target branches.
      *
      * @param  int    $MRID
      * @access public
      * @return void
      */
-    public function diff($MRID, $encoding = '')
+    public function diff(int $MRID, string $encoding = '')
     {
-        $this->app->loadLang('productplan');
-        $this->app->loadLang('bug');
-        $this->app->loadLang('task');
-
         $encoding = empty($encoding) ? 'utf-8' : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding)); /* Revert $config->requestFix in $encoding. */
 
         $MR = $this->mr->getByID($MRID);
         $this->view->title = $this->lang->mr->viewDiff;
         $this->view->MR    = $MR;
-
-        $rawMR = null;
         if($MR->synced)
         {
             $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
-            if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
+            if(!isset($rawMR->id) || empty($rawMR)) return $this->display();
         }
-        $this->view->rawMR = $rawMR;
 
         $diffs   = $this->mr->getDiffs($MR, $encoding);
         $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';
-
         if($this->server->request_method == 'POST')
         {
             if($this->post->arrange)
@@ -553,49 +447,25 @@ class mr extends control
             if($this->post->encoding) $encoding = $this->post->encoding;
         }
 
-        if($arrange == 'appose')
-        {
-            foreach($diffs as $diffFile)
-            {
-                if(empty($diffFile->contents)) continue;
-                foreach($diffFile->contents as $content)
-                {
-                    $old = array();
-                    $new = array();
-                    foreach($content->lines as $line)
-                    {
-                        if($line->type != 'new') $old[$line->oldlc] = $line->line;
-                        if($line->type != 'old') $new[$line->newlc] = $line->line;
-                    }
-                    $content->old = $old;
-                    $content->new = $new;
-                }
-            }
-        }
-
-        $this->view->repo         = $this->loadModel('repo')->getByID($MR->repoID);
-        $this->view->repoID       = $MR->repoID;
-        $this->view->diffs        = $diffs;
-        $this->view->encoding     = $encoding;
-        $this->view->arrange      = $arrange;
-        $this->view->sourceBranch = $MR->sourceBranch;
-        $this->view->targetBranch = $MR->targetBranch;
-        $this->view->oldRevision  = $MR->targetBranch;
-        $this->view->newRevision  = $MR->sourceBranch;
+        $this->view->repo        = $this->loadModel('repo')->getByID($MR->repoID);
+        $this->view->diffs       = $arrange == 'appose' ? $this->repo->getApposeDiff($diffs) : $diffs;
+        $this->view->encoding    = $encoding;
+        $this->view->oldRevision = $MR->targetBranch;
+        $this->view->newRevision = $MR->sourceBranch;
         $this->display();
     }
 
     /**
+     * 审核合并请求。
      * Approval for this MR.
      *
      * @param  int    $MRID
      * @param  string $action
      * @return void
      */
-    public function approval($MRID, $action = 'approve')
+    public function approval(int $MRID, string $action = 'approve')
     {
         $MR = $this->mr->getByID($MRID);
-
         if($_POST)
         {
             $comment = $this->post->comment;
@@ -607,25 +477,26 @@ class mr extends control
         if(!empty($MR->compileStatus))
         {
             $showCompileResult = true;
-            $this->app->loadLang('compile'); /* Import lang. */
             $this->view->compileUrl = $this->createLink('job', 'view', "jobID={$MR->jobID}&compileID={$MR->compileID}");
         }
-        $this->view->showCompileResult = $showCompileResult;
 
-        $this->view->MR      = $MR;
-        $this->view->action  = $action;
-        $this->view->actions = $this->loadModel('action')->getList('mr', $MRID);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->MR                = $MR;
+        $this->view->action            = $action;
+        $this->view->actions           = $this->loadModel('action')->getList('mr', $MRID);
+        $this->view->users             = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->showCompileResult = $showCompileResult;
         $this->display();
     }
 
     /**
+     * 关闭合并请求。
      * Close this MR.
      *
-     * @param  int $MRID
+     * @param  int    $MRID
+     * @access public
      * @return void
      */
-    public function close($MRID)
+    public function close(int $MRID)
     {
         $MR = $this->mr->getByID($MRID);
         $result = $this->mr->close($MR);
@@ -634,12 +505,14 @@ class mr extends control
     }
 
     /**
+     * 重新打开合并请求。
      * Reopen this MR.
      *
-     * @param  int $MRID
+     * @param  int    $MRID
+     * @access public
      * @return void
      */
-    public function reopen($MRID)
+    public function reopen(int $MRID)
     {
         $MR = $this->mr->getByID($MRID);
         return $this->send($this->mr->reopen($MR));

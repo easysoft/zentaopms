@@ -283,29 +283,6 @@ class testsuiteModel extends model
     }
 
     /**
-     * 创建测试套件菜单。
-     * Build testsuite menu.
-     *
-     * @param  object $suite
-     * @param  string $type
-     * @access public
-     * @return string
-     */
-    public function buildOperateMenu(object $suite, string $type = 'view'): string
-    {
-        $menu   = '';
-        $params = "suiteID=$suite->id";
-
-        if($type == 'view') $menu .= $this->buildFlowMenu('testsuite', $suite, $type, 'direct');
-
-        $menu .= $this->buildMenu('testsuite', 'linkCase', $params, $suite, $type, 'link', '', '', '', '', $this->lang->testsuite->linkCase);
-        $menu .= $this->buildMenu('testsuite', 'edit',     $params, $suite, $type);
-        $menu .= $this->buildMenu('testsuite', 'delete',   $params, $suite, $type, 'trash', 'hiddenwin');
-
-        return $menu;
-    }
-
-    /**
      * 判断操作是否可以点击。
      * Judge an action is clickable or not.
      *

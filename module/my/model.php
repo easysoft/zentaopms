@@ -877,6 +877,7 @@ class myModel extends model
     }
 
     /**
+     * 为菜单获取待评审的类型。
      * Get reviewing type list for menu.
      *
      * @access public
@@ -893,19 +894,20 @@ class myModel extends model
         if($this->getReviewingOA('status', true))         $typeList[] = 'oa';
         $typeList = array_merge($typeList, $this->getReviewingFlows('all', 'id_desc', true));
 
-        $flows = ($this->config->edition == 'open') ? array() : $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('module')->in($typeList)->andWhere('buildin')->eq(0)->fetchPairs('module', 'name');
+        $flows = $this->config->edition == 'open' ? array() : $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('module')->in($typeList)->andWhere('buildin')->eq(0)->fetchPairs('module', 'name');
         $menu  = new stdclass();
         $menu->all = $this->lang->my->featureBar['audit']['all'];
         foreach($typeList as $type)
         {
             $this->app->loadLang($type);
-            $menu->$type = isset($this->lang->my->featureBar['audit'][$type]) ? $this->lang->my->featureBar['audit'][$type] : zget($flows, $type);
+            $menu->{$type} = isset($this->lang->my->featureBar['audit'][$type]) ? $this->lang->my->featureBar['audit'][$type] : zget($flows, $type);
         }
 
         return $menu;
     }
 
     /**
+     * 获取我的审批列表。
      * Get reviewing list for me.
      *
      * @param  string $browseType
@@ -914,17 +916,16 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getReviewingList($browseType, $orderBy = 'time_desc', $pager = null)
+    public function getReviewingList(string $browseType, string $orderBy = 'time_desc', object $pager = null): array
     {
         $reviewList = array();
-        if($browseType == 'all' or $browseType == 'demand')   $reviewList = array_merge($reviewList, $this->getReviewingDemands());
-        if($browseType == 'all' or $browseType == 'story')    $reviewList = array_merge($reviewList, $this->getReviewingStories());
-        if($browseType == 'all' or $browseType == 'testcase') $reviewList = array_merge($reviewList, $this->getReviewingCases());
-        if($browseType == 'all' or $browseType == 'project')  $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
-        if($browseType == 'all' or $browseType == 'feedback') $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
-        if($browseType == 'all' or $browseType == 'oa')       $reviewList = array_merge($reviewList, $this->getReviewingOA());
-        if($browseType == 'all' or !in_array($browseType, array('story', 'testcase', 'feedback', 'oa'))) $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
-
+        if($browseType == 'all' || $browseType == 'demand')   $reviewList = array_merge($reviewList, $this->getReviewingDemands());
+        if($browseType == 'all' || $browseType == 'story')    $reviewList = array_merge($reviewList, $this->getReviewingStories());
+        if($browseType == 'all' || $browseType == 'testcase') $reviewList = array_merge($reviewList, $this->getReviewingCases());
+        if($browseType == 'all' || $browseType == 'project')  $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
+        if($browseType == 'all' || $browseType == 'feedback') $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
+        if($browseType == 'all' || $browseType == 'oa')       $reviewList = array_merge($reviewList, $this->getReviewingOA());
+        if($browseType == 'all' || !in_array($browseType, array('story', 'testcase', 'feedback', 'oa'))) $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
         if(empty($reviewList)) return array();
 
         $field     = $orderBy;
@@ -935,8 +936,8 @@ class myModel extends model
         $reviewGroup = array();
         foreach($reviewList as $review)
         {
-            if(!isset($review->$field)) $field = 'time';
-            $reviewGroup[$review->$field][] = $review;
+            if(!isset($review->{$field})) $field = 'time';
+            $reviewGroup[$review->{$field}][] = $review;
         }
         if($direction == 'asc')  ksort($reviewGroup);
         if($direction == 'desc') krsort($reviewGroup);
@@ -945,11 +946,14 @@ class myModel extends model
         foreach($reviewGroup as $reviews) $reviewList = array_merge($reviewList, $reviews);
 
         /* Pager. */
-        $pager->setRecTotal(count($reviewList));
-        $pager->setPageTotal();
-        $pager->setPageID($pager->pageID);
-        $reviewList = array_chunk($reviewList, $pager->recPerPage);
-        $reviewList = $reviewList[$pager->pageID - 1];
+        if(!is_null($pager))
+        {
+            $pager->setRecTotal(count($reviewList));
+            $pager->setPageTotal();
+            $pager->setPageID($pager->pageID);
+            $reviewList = array_chunk($reviewList, $pager->recPerPage);
+            $reviewList = $reviewList[$pager->pageID - 1];
+        }
 
         return $reviewList;
     }

@@ -667,7 +667,7 @@ class repo extends control
         }
 
         if($encoding != 'utf-8') $diffs = $this->repoZen->encodingDiff($diffs, $encoding);
-        if($arrange == 'appose') $diffs = $this->repoZen->getApposeDiff($diffs);
+        if($arrange == 'appose') $diffs = $this->repo->getApposeDiff($diffs);
 
         $this->view->entry         = urldecode($entry);
         $this->view->encoding      = str_replace('-', '_', $encoding);

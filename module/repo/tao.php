@@ -233,7 +233,7 @@ class repoTao extends repoModel
             {
                 if($path === '') continue;
 
-                $parentID = $parent == '' ? 0 : $files[$parent]['id'];
+                $parentID = $parent == '' ? '0' : $files[$parent]['id'];
                 $parent  .= $parent == '' ? $path : '/' . $path;
                 if(!isset($files[$parent]))
                 {
@@ -259,11 +259,11 @@ class repoTao extends repoModel
      * Build tree.
      *
      * @param  array  $files
-     * @param  int    $parent
+     * @param  string $parent
      * @access public
      * @return array
      */
-    public function buildTree(array $files = array(), int $parent = 0): array
+    public function buildTree(array $files = array(), string $parent = '0'): array
     {
         $treeList = array();
         $key      = 0;

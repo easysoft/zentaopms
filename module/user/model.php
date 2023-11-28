@@ -687,21 +687,20 @@ class userModel extends model
     }
 
     /**
+     * 重置密码。
      * Reset password.
      *
+     * @param  object $user
      * @access public
      * @return bool
      */
-    public function resetPassword()
+    public function resetPassword(object $user): bool
     {
-        $_POST['account'] = trim($_POST['account']);
-        if(!$this->checkPassword()) return false;
-
-        $user = $this->getById($this->post->account);
+        $user = $this->getById($user->account);
         if(!$user) return false;
 
-        $password = substr($this->post->password1, 0, 32);
-        $this->dao->update(TABLE_USER)->set('password')->eq($password)->autoCheck()->where('account')->eq($this->post->account)->exec();
+        $this->dao->update(TABLE_USER)->set('password')->eq($user->password)->where('account')->eq($user->account)->exec();
+
         return !dao::isError();
     }
 
@@ -1413,27 +1412,6 @@ class userModel extends model
     public function deleteContactList($listID)
     {
         return $this->dao->delete()->from(TABLE_USERCONTACT)->where('id')->eq($listID)->exec();
-    }
-
-    /**
-     * Get data in JSON.
-     *
-     * @param  object    $user
-     * @access public
-     * @return array
-     */
-    public function getDataInJSON($user)
-    {
-        $newUser = new stdclass();
-        foreach($user as $key => $value) $newUser->$key = $value;
-        unset($newUser->password);
-        unset($newUser->deleted);
-        $newUser->company = $this->app->company->name;
-
-        /* App client will use session id as token. */
-        $newUser->token = session_id();
-
-        return array('user' => $newUser);
     }
 
     /**

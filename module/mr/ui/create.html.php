@@ -178,7 +178,7 @@ formPanel
             'text'     => $lang->goback,
             'class'    => 'btn',
             'data-app' => $app->tab,
-            'url'      => createLink('mr', 'browse', "repoID=" . ($executionID ? 0 : $repoID) . "&mode=status&param=opened&objectID={$executionID}")
+            'url'      => createLink('mr', 'browse', "repoID=" . ($executionID ? 0 : $repo->id) . "&mode=status&param=opened&objectID={$executionID}")
         )
     ))
 );

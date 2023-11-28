@@ -34,10 +34,15 @@ foreach($config->doc->dtable->fieldList as $colName => $col)
 
 
 $params        = "libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}";
+$sortParams    = "libID={$libID}&moduleID={$moduleID}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
 $tableData     = empty($docs) ? array() : initTableData($docs, $cols);
 $createDocLink = '';
 if($browseType != 'bysearch' && $libID && common::hasPriv('doc', 'create')) $createDocLink = createLink('doc', 'create', "objectType={$type}&objectID={$objectID}&libID={$lib->id}&moduleID={$moduleID}&type=html{$templateParam}");
-if($app->rawMethod == 'myspace') $params = "type={$type}&" . $params;
+if($app->rawMethod == 'myspace')
+{
+    $sortParams = "type={$type}&" . $sortParams;
+    $params     = "type={$type}&" . $params;
+}
 $docContent = dtable
 (
     set::userMap($users),
@@ -48,5 +53,7 @@ $docContent = dtable
     set::emptyTip($lang->doc->noDoc),
     set::createLink($createDocLink),
     set::createTip($lang->doc->create),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('doc', $app->rawMethod, $sortParams)),
     set::footPager(usePager(array('linkCreator' => helper::createLink('doc', $app->rawMethod, $params))))
 );

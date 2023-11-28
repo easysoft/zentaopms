@@ -15,6 +15,7 @@ class projectrelease extends control
     public $products = array();
 
     /**
+     * 构造函数，自动加载模块。
      * Construct function, load module auto.
      *
      * @param  string $moduleName
@@ -22,10 +23,9 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function __construct($moduleName = '', $methodName = '')
+    public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        $products = array();
         $this->loadModel('product');
         $this->loadModel('release');
         $this->loadModel('project');
@@ -58,7 +58,7 @@ class projectrelease extends control
         if($projectID)   $this->project->setMenu($projectID);
         if($executionID) $this->loadModel('execution')->setMenu($executionID, $this->app->rawModule, $this->app->rawMethod);
 
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $releases = $this->projectrelease->getList($projectID, $type, $orderBy, $pager);
@@ -79,8 +79,8 @@ class projectrelease extends control
         $execution = $this->loadModel('execution')->getByID($executionID);
 
         $this->view->title       = (isset($project->name) ? $project->name : $execution->name) . $this->lang->colon . $this->lang->release->browse;
-        $this->view->products    = $this->loadModel('product')->getProductPairsByProject($projectID);
-        $this->view->pageSummary = $this->loadModel('release')->getPageSummary($releases, $type);
+        $this->view->products    = $this->product->getProductPairsByProject($projectID);
+        $this->view->pageSummary = $this->release->getPageSummary($releases, $type);
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
         $this->view->type        = $type;
@@ -253,6 +253,7 @@ class projectrelease extends control
     }
 
     /**
+     * 导出项目发布到 HTML。
      * Export the stories of release to HTML.
      *
      * @access public

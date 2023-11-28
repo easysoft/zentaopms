@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$app->loadLang('compile');
 modalHeader
 (
     set::title(''),
