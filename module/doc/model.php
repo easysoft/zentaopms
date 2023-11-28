@@ -1204,6 +1204,7 @@ class docModel extends model
     }
 
     /**
+     * 检查是否有权限访问文档库/文档。
      * Check priv for lib.
      *
      * @param  object $object
@@ -1211,17 +1212,19 @@ class docModel extends model
      * @access public
      * @return bool
      */
-    public function checkPrivLib($object, $extra = '')
+    public function checkPrivLib(object $object, string $extra = ''): bool
     {
         if(empty($object)) return false;
 
-        if($object->type == 'mine' and $object->addedBy == $this->app->user->account) return true;
-        if($this->app->user->admin and $object->type != 'mine') return true;
+        /* Only the creator can access the document library under my space. */
+        if($object->type == 'mine' && $object->addedBy == $this->app->user->account) return true;
+        if($this->app->user->admin && $object->type != 'mine') return true;
         if($object->acl == 'open') return true;
 
+        /* When view a document, check whether current user has permission to access the document library. */
         $account = ',' . $this->app->user->account . ',';
-        if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
-        if(isset($object->users) and strpos(",{$object->users},", $account) !== false) return true;
+        if(isset($object->addedBy) && $object->addedBy == $this->app->user->account) return true;
+        if(isset($object->users) && strpos(",{$object->users},", $account) !== false) return true;
 
         if(!empty($object->groups))
         {
@@ -1235,6 +1238,7 @@ class docModel extends model
         $isProjectLib = $object->project && !$object->execution;
         if($isProjectLib && $object->acl == 'default' && $this->loadModel('project')->checkPriv($object->project)) return true;
 
+        /* The user has permission to access the owning document library that can access the document. */
         if(strpos($extra, 'notdoc') !== false)
         {
             static $extraDocLibs;
@@ -1242,11 +1246,12 @@ class docModel extends model
             if(isset($extraDocLibs[$object->id])) return true;
         }
 
-        if($object->acl == 'default' and (!empty($object->product) or !empty($object->execution)))
+        /* If the acl is default, the document library cannot be accessed without object permission. */
+        if($object->acl == 'default' && (!empty($object->product) || !empty($object->execution)))
         {
             $acls = $this->app->user->rights['acls'];
-            if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
-            if(!empty($object->execution) and !empty($acls['sprints']) and !in_array($object->execution, $acls['sprints'])) return false;
+            if(!empty($object->product) && !empty($acls['products']) && !in_array($object->product, $acls['products'])) return false;
+            if(!empty($object->execution) && !empty($acls['sprints']) && !in_array($object->execution, $acls['sprints'])) return false;
             if(!empty($object->execution)) return $this->loadModel('execution')->checkPriv($object->execution);
             if(!empty($object->product)) return $this->loadModel('product')->checkPriv($object->product);
         }
