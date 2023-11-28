@@ -62,7 +62,8 @@ class messageModel extends model
     }
 
     /**
-     * Check send.
+     * 发送消息。
+     * Send messages.
      *
      * @param  string $objectType
      * @param  int    $objectID
@@ -73,7 +74,7 @@ class messageModel extends model
      * @access public
      * @return void
      */
-    public function send($objectType, $objectID, $actionType, $actionID, $actor = '', $extra = '')
+    public function send(string $objectType, int $objectID, string $actionType, int $actionID, string $actor = '', string $extra = ''): void
     {
         if(commonModel::isTutorialMode()) return;
 
@@ -84,22 +85,15 @@ class messageModel extends model
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
-            if(isset($actions[$objectType]) and in_array($actionType, $actions[$objectType]))
+            if(isset($actions[$objectType]) && in_array($actionType, $actions[$objectType]))
             {
                 /* If it is an api call, get the request method set by the user. */
                 global $config;
                 $requestType = $config->requestType;
-                if(defined('RUN_MODE') and RUN_MODE == 'api')
+                if(defined('RUN_MODE') && RUN_MODE == 'api')
                 {
                     $configRoot = $this->app->getConfigRoot();
-                    if(file_exists($configRoot . 'my.php'))
-                    {
-                        include $configRoot . 'my.php';
-                    }
-                    else
-                    {
-                        include $configRoot . 'config.php';
-                    }
+                    include file_exists($configRoot . 'my.php') ? $configRoot . 'my.php' : $configRoot . 'config.php';
                 }
 
                 if($objectType == 'feedback')
@@ -111,25 +105,19 @@ class messageModel extends model
                     $this->loadModel('mail')->sendmail($objectID, $actionID);
                 }
 
-                if(defined('RUN_MODE') and RUN_MODE == 'api') $config->requestType = $requestType;
+                if(defined('RUN_MODE') && RUN_MODE == 'api') $config->requestType = $requestType;
             }
         }
 
         if(isset($messageSetting['webhook']))
         {
             $actions = $messageSetting['webhook']['setting'];
-            if(isset($actions[$objectType]) and in_array($actionType, $actions[$objectType]))
-            {
-                $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID, $actor);
-            }
+            if(isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID, $actor);
         }
         if(isset($messageSetting['message']))
         {
             $actions = $messageSetting['message']['setting'];
-            if(isset($actions[$objectType]) and in_array($actionType, $actions[$objectType]))
-            {
-                $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
-            }
+            if(isset($actions[$objectType]) && in_array($actionType, $actions[$objectType])) $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
         }
     }
 

@@ -65,23 +65,24 @@ class messageTest
     }
 
     /**
-     * Check send.
+     * 测试发送方法。
+     * Test send.
      *
-     * @param  int    $objectType
+     * @param  string $objectType
      * @param  int    $objectID
-     * @param  int    $actionType
+     * @param  string $actionType
      * @param  int    $actionID
      * @param  string $actor
      * @access public
-     * @return void
+     * @return array
      */
-    public function sendTest($objectType, $objectID, $actionType, $actionID, $actor = '')
+    public function sendTest(string $objectType, int $objectID, string $actionType, int $actionID, string $actor = ''): array
     {
-        $objects = $this->objectModel->send($objectType, $objectID, $actionType, $actionID, $actor = '');
+        $this->objectModel->send($objectType, $objectID, $actionType, $actionID, $actor);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return array();
     }
 
     /**
