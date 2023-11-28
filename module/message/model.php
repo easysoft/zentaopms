@@ -136,7 +136,7 @@ class messageModel extends model
     public function saveNotice(string $objectType, int $objectID, string $actionType, int $actionID, string $actor = ''): bool
     {
         if(empty($actor)) $actor = $this->app->user->account;
-        if(empty($actor)) return false;
+        if(empty($actor) || !$objectID) return false;
 
         $this->loadModel('action');
         $user   = $this->loadModel('user')->getById($actor);
@@ -176,23 +176,24 @@ class messageModel extends model
     }
 
     /**
+     * 获取抄送给的人员。
      * Get toList.
      *
-     * @param  object    $object
-     * @param  string    $objectType
-     * @param  int       $actionID
+     * @param  object $object
+     * @param  string $objectType
+     * @param  int    $actionID
      * @access public
      * @return string
      */
-    public function getToList($object, $objectType, $actionID = 0)
+    public function getToList(object $object, string $objectType, int $actionID = 0): string
     {
         $toList = '';
         if(!empty($object->assignedTo)) $toList = $object->assignedTo;
-        if(empty($toList) and $objectType == 'todo') $toList = $object->account;
-        if(empty($toList) and $objectType == 'testtask') $toList = $object->owner;
-        if(empty($toList) and $objectType == 'meeting') $toList = $object->host . $object->participant;
-        if(empty($toList) and $objectType == 'mr') $toList = $object->createdBy . ',' . $object->assignee;
-        if(empty($toList) and $objectType == 'release')
+        if(empty($toList) && $objectType == 'todo') $toList = $object->account;
+        if(empty($toList) && $objectType == 'testtask') $toList = $object->owner;
+        if(empty($toList) && $objectType == 'meeting') $toList = $object->host . $object->participant;
+        if(empty($toList) && $objectType == 'mr') $toList = $object->createdBy . ',' . $object->assignee;
+        if(empty($toList) && $objectType == 'release')
         {
             /* Get notifiy persons. */
             $notifyPersons = array();
@@ -200,8 +201,9 @@ class messageModel extends model
 
             if(!empty($notifyPersons)) $toList = implode(',', $notifyPersons);
         }
-        if(empty($toList) and $objectType == 'task' and $object->mode == 'multi')
+        if(empty($toList) && $objectType == 'task' && $object->mode == 'multi')
         {
+            /* Get task team members. */
             $teamMembers = $this->loadModel('task')->getMultiTaskMembers($object->id);
             $toList      = array_filter($teamMembers, function($account){
                 return $account != $this->app->user->account;
@@ -210,8 +212,8 @@ class messageModel extends model
         }
 
         if($toList == 'closed') $toList = '';
-        if($objectType == 'feedback' and $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
-        if($objectType == 'story' and $actionID)
+        if($objectType == 'feedback' && $object->status == 'replied') $toList = ',' . $object->openedBy . ',';
+        if($objectType == 'story' && $actionID)
         {
             $action = $this->loadModel('action')->getById($actionID);
             list($toList, $ccList) = $this->loadModel($objectType)->getToAndCcList($object, $action->action);

@@ -1,0 +1,21 @@
+title: zt_taskteam
+desc: "任务团队"
+author: Mengyi Liu
+version: "1.0"
+fields:
+- field: task
+  range: 8{3},9{3}
+- field: left
+  range: 1-10
+- field: estimate
+  range: 1-10
+- field: consumed
+  range: 0
+- field: account
+  fields:
+      - field: account1
+        range: admin,user{2}
+      - field: account2
+        range: "[],1-2"
+- field: status
+  range: "wait{4},done{2}"

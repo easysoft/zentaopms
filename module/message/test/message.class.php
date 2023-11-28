@@ -115,22 +115,25 @@ class messageTest
     }
 
     /**
-     * Get toList.
+     * 测试获取要发送的人列表。
+     * Test get toList.
      *
-     * @param  int    $objectType
+     * @param  string        $objectType
+     * @param  int           $objectID
+     * @param  int           $actionID
      * @access public
-     * @return void
+     * @return string|array
      */
-    public function getToListTest($objectType)
+    public function getToListTest(string $objectType, string $objectID, int $actionID): string|array
     {
         global $tester;
-        $table   = $tester->config->objectTables[$objectType];
-        $object  = $tester->dao->select('*')->from($table)->where('id')->eq('1')->fetch();
-        $objects = $this->objectModel->getToList($object, $objectType);
+        $table  = $tester->config->objectTables[$objectType];
+        $object = $tester->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
+        $toList = $this->objectModel->getToList($object, $objectType, $actionID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return trim($toList, ',');
     }
 
     /**
