@@ -253,6 +253,7 @@ class projectrelease extends control
     }
 
     /**
+     * 导出项目发布到 HTML。
      * Export the stories of release to HTML.
      *
      * @access public
