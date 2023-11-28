@@ -8,18 +8,14 @@ window.afterPageUpdate = function($target, info, options)
         chartList.push({value: key, text: chartTypeList[key]});
     }
     window.filterChecked = {};
-    window.scrollToItem();
-    window.renderDTable(current.id, resultHeader, resultData);
-    window.renderChart(current.id, resultHeader, resultData);
-    if(viewType == 'multiple') window.renderCheckedLabel();
+
+    if(viewType == 'multiple')
+    {
+        window.renderCheckedLabel();
+        $(window).on('resize', window.renderCheckedLabel);
+    }
     if(viewType == 'single') window.addTitle2Star();
-    $(window).on('resize', window.renderCheckedLabel);
     window.initFilterPanel();
-}
-window.scrollToItem = function()
-{
-    var item = $('.metric-tree').find('.metric-' + current.id);
-    item.scrollIntoView();
 }
 
 window.addTitle2Star = function()
@@ -60,14 +56,6 @@ window.handleNavMenuClick = function($el)
         $el.addClass('active');
         $el.append(`<span class="label size-sm rounded-full white">${total}</span>`);
     })
-}
-
-window.handleQueryClick = function(id)
-{
-    var $form = id ? $('#queryForm' + id) : $('#queryForm');
-    var check = window.validateForm($form);
-    if(!check) return;
-    window.ajaxGetRecords(id, 'filter');
 }
 
 window.handleFilterCheck = function()
@@ -123,28 +111,36 @@ window.handleFilterClick = function()
     loadPage($.createLink('metric', 'preview', 'scope=filter&viewType=' + viewType + '&metricID=0&filtersBase64=' + filterBase64));
 }
 
-window.handleChartTypeChange = function($el)
+window.handleChartTypeChange = function(metricID, viewType = 'single')
 {
     if(viewType == 'single')
     {
         var chartType = $('[name=chartType]').val();
-
-        window.renderChart(current.id, resultHeader, resultData, chartType, false);
     }
     else
     {
-        var $metricBox = $($el.base.closest('.metricBox'));
-        var metricID   = $metricBox.attr('metric-id');
-        var chartType  = $metricBox.find('[name=chartType]').val();
-
-        $.get($.createLink('metric', 'ajaxGetTableData', 'metricID=' + metricID), function(resp)
-        {
-            var data = JSON.parse(resp);
-            if(data) {
-                window.renderChart(metricID, data.header, data.data, chartType, false);
-            }
-        });
+        var chartType = $('#metricBox' + metricID).find('[name=chartType]').val();
     }
+
+    var $form = $('#queryForm' + metricID);
+    var formData = window.getFormData($form);
+
+    $.post($.createLink('metric', 'ajaxGetEchartsOptions', 'metricID=' + metricID + '&chartType=' + chartType), formData, function(resp)
+    {
+        var datas = JSON.parse(resp);
+        if(!datas) return;
+
+        if(chartType == 'pie')
+        {
+            var options = window.genPieOption(datas);
+        }
+        else
+        {
+            var options = window.genLineBarOption(chartType, datas);
+        }
+
+        window.renderChart(metricID, viewType, options);
+    });
 }
 
 window.handleRemoveLabel = function(id)
@@ -153,6 +149,33 @@ window.handleRemoveLabel = function(id)
     if(!checkedItem) return;
 
     window.updateCheckAction(checkedItem.id, checkedItem.name, false);
+}
+
+window.handleDateLabelClick = function(evt)
+{
+    $form = $(evt).closest('form');
+    $form.find('.query-date button.btn').removeClass('selected');
+    $form.find('.query-date-picker input[name="dateBegin"]').zui('datepicker').$.setValue('');
+    $form.find('.query-date-picker input[name="dateEnd"]').zui('datepicker').$.setValue('');
+    $(evt).addClass('selected');
+}
+
+window.handleCalcDateClick = function(evt)
+{
+    $form = $(evt).closest('form');
+    $form.find('.query-calc-date button.btn').removeClass('selected');
+    $(evt).addClass('selected');
+}
+
+window.handleDatePickerChange = function(evt)
+{
+    $form = $(evt).closest('form');
+    var dateBegin = $form.find('.query-date-picker input[name="dateBegin"]').zui('datepicker').$.value;
+    var dateEnd   = $form.find('.query-date-picker input[name="dateEnd"]').zui('datepicker').$.value;
+    if(dateBegin.length && dateEnd.length)
+    {
+        $form.find('.query-date button.btn').removeClass('selected');
+    }
 }
 /* 事件处理函数结束。 */
 
@@ -163,14 +186,19 @@ window.isMetricChecked = function(id)
 
 window.renderCheckList = function(metrics)
 {
-    $('.side .check-list-metric').empty();
+    $('.side .metric-tree').empty();
 
-    var metricsHtml = metrics.map(function(metric){
-        var isChecked = window.isMetricChecked(metric.id);
-        return window.generateCheckItem(metric.name, metric.id, metric.scope, isChecked);
-    }).join('');
-
-    $('.side .check-list-metric').html(metricsHtml);
+    var ids     = metrics.map(obj => obj.id).join(',');
+    var checked = window.checkedList.map(obj => obj.id).join(',');
+    $.post($.createLink('metric', 'ajaxGetMetricSideTree'),
+    {
+        'metricIDList': ids,
+        'checkedList' : checked
+    },
+    function(resp)
+    {
+        $('.side .metric-tree').html(resp);
+    });
 }
 
 window.updateCheckList = function(id, name, isChecked)
@@ -195,7 +223,7 @@ window.ajaxGetMetrics = function(scope, filters = '', callback)
 {
     $.get($.createLink('metric', 'ajaxGetMetrics', 'scope=' + scope + '&filters=' + filters), function(resp){
         var metrics = JSON.parse(resp);
-        var total = metrics.length;
+        var total   = metrics.length;
 
         window.renderCheckList(metrics);
 
@@ -263,19 +291,6 @@ window.initFilterPanel = function()
     }
 }
 
-window.renderDTable = function(metricID = current.id, header = resultHeader, data = resultData)
-{
-    var $currentBox = $('#metricBox' + metricID);
-    if(viewType == 'single') $currentBox = $('.table-and-chart-single');
-
-    if(!$currentBox.find('.dtable').length) return;
-    $currentBox.find('.dtable').remove();
-    $currentBox.find('.table-side').append('<div class="dtable"></div>');
-
-    window.initDTable($currentBox.find('.dtable'), header, data);
-    if(viewType == 'multiple') window.initQueryForm(metricID, $currentBox.find('.metric-name'), header, data);
-}
-
 window.getMetricRecordType = function(recordRow)
 {
     if(!recordRow) return false;
@@ -286,69 +301,7 @@ window.getMetricRecordType = function(recordRow)
     return type.join('-');
 }
 
-window.initQueryForm = function(id, $el, header = resultHeader, data = resultData)
-{
-    var $form = id ? $('#queryForm' + id) : $('#queryForm');
-    var formData = window.getFormData($form);
-
-    $el.siblings('form#queryForm' + id).remove();
-    var $form = $('#queryFormTpl').clone();
-    $form.attr('id', 'queryForm' + id);
-    $form.removeClass('hidden');
-    $form.find('script').remove();
-
-    var recordType = window.getMetricRecordType(data.length ? data[0] : false);
-
-    if(!recordType) return;
-
-    $el.after($form);
-
-    if(recordType == 'scope' || recordType == 'scope-date')
-    {
-        var scope = $('.metric-tree .checkbox-primary input#metric' + id).attr('scope');
-        $form.find('.query-scope').removeClass('hidden');
-        $form.find('.query-scope #scope').attr('id', 'scope' + id);
-        $form.find('.query-scope label').text(queryScopeLang[scope]);
-        var scopeUnique = {};
-        var scopeItems = [];
-        data.forEach(function(item) {
-            if(scopeUnique[item.scopeID]) return;
-            scopeUnique[item.scopeID] = item.scope;
-            scopeItems.push({text: item.scope, value: item.scopeID});
-        });
-        zui.create("picker","#scope" + id,{"multiple":10,"name":"scope","required":false,"items":scopeItems, "defaultValue": formData.get('scope'),"emptyValue":""});
-    }
-    if(recordType == 'date' || recordType == 'scope-date')
-    {
-        $form.find('.query-date-range').removeClass('hidden');
-        $form.find('.query-date-range #dateBegin').attr('id', 'dateBegin' + id);
-        $form.find('.query-date-range #dateEnd').attr('id', 'dateEnd' + id);
-        zui.create("datePicker","#dateBegin" + id,{"multiple":false,"icon":"calendar","name":"dateBegin", "defaultValue": formData.get('dateBegin')})
-        zui.create("datePicker","#dateEnd" + id,{"multiple":false,"icon":"calendar","name":"dateEnd", "defaultValue": formData.get('dateEnd')})
-    }
-
-    if(recordType == 'system')
-    {
-        $form.find('.query-calc-time-range').removeClass('hidden');
-        $form.find('.query-calc-time-range #calcBegin').attr('id', 'calcBegin' + id);
-        $form.find('.query-calc-time-range #calcEnd').attr('id', 'calcEnd' + id);
-        zui.create("datePicker","#calcBegin" + id,{"multiple":false,"icon":"calendar","name":"calcBegin", "defaultValue": formData.get('calcBegin')})
-        zui.create("datePicker","#calcEnd" + id,{"multiple":false,"icon":"calendar","name":"calcEnd", "defaultValue": formData.get('calcEnd')})
-    }
-    else
-    {
-        $form.find('.query-calc-time').removeClass('hidden');
-        $form.find('.query-calc-time #calcTime').attr('id', 'calcTime' + id);
-        zui.create("datePicker","#calcTime" + id,{"multiple":false,"icon":"calendar","name":"calcTime", "defaultValue": formData.get('calcTime')})
-    }
-
-    $form.find('.query-btn button').attr('onclick', 'window.handleQueryClick(' + id + ')');
-
-    $form.find('.form-group.hidden').remove();
-
-}
-
-window.renderChart = function(metricID = current.id, header = resultHeader, data = resultData, chartType = 'line', initPicker = true)
+window.renderChart = function(metricID, viewType, options)
 {
     var $currentBox = $('#metricBox' + metricID);
     if(viewType == 'single') $currentBox = $('.table-and-chart-single');
@@ -358,143 +311,7 @@ window.renderChart = function(metricID = current.id, header = resultHeader, data
     $currentBox.find('.chart').remove();
     $currentBox.find('.chart-side').append('<div class="' + classes + '"></div>');
 
-    if(initPicker) window.initPicker($currentBox.find('.chart-type'), window.chartList, header.length);
-    window.initChart($currentBox.find('.chart')[0], header, data, chartType);
-}
-
-window.initDTable = function($obj, head, data)
-{
-    var height = 310;
-    var width  = 480;
-    if(viewType == 'single') height = $('.table-side').height();
-    if(!head || !data) return;
-
-    var commonWidth = {
-        scope: 160,
-        date: 96,
-        value: 96,
-        calcTime: 128,
-    };
-
-    var cols = head.map(function(col){ return col.name; });
-
-    var cellWidth = {};
-    cols.forEach(function(col) {
-        if(commonWidth[col]) {
-            cellWidth[col] = commonWidth[col];
-        }
-    });
-
-    colsWidth = Object.values(cellWidth).reduce((a, b) => a + b, 0);
-    Object.keys(cellWidth).forEach(function(col) {
-        cellWidth[col] = Math.floor(cellWidth[col] / colsWidth * width);
-    });
-
-    new zui.DTable($obj,{
-        responsive: true,
-        bordered: true,
-        scrollbarHover: true,
-        height: height,
-        cols: head,
-        data: data,
-        // footPager: pager,
-        // footer: ['pager'],
-        onRenderCell: function(result, {row, col})
-        {
-            var html = `<span class="cell-ellipsis" style="width: ${cellWidth[col.name] - 24}px;" title="${row.data[col.name]}">${row.data[col.name]}</span>`;
-            result[0] = {html: html};
-
-            return result;
-        }
-    });
-}
-
-window.initChart = function($obj, head, data, chartType)
-{
-    if(!data.length) return;
-    if(chartType == 'pie') return window.initPieChart($obj, head, data);
-    if(head.length == 2) {
-        var x = head[1].name;
-        var y = head[0].name;
-    }
-    else if(head.length == 3)
-    {
-        var x = head[0].name;
-        var y = head[1].name;
-    }
-    else if(head.length == 4) {
-        var x = head[1].name;
-        var y = head[2].name;
-    }
-    if(!x || !y) return;
-
-    var type  = (chartType == 'barX' || chartType == 'barY') ? 'bar' : chartType;
-
-    data.sort(function(a, b) {
-        return a[x] > b[x] ? -1 : 1;
-    });
-
-    var xAxis = {
-        type: 'category',
-        data: data.map(item => item[x])
-    };
-    if(head.length == 2) xAxis.data = xAxis.data.map(item => item.slice(0, 10));
-    xAxis.data = [...new Set(xAxis.data)];
-    var yAxis = {type: 'value'};
-
-    if(head.length <= 3) {
-        var series = [{
-            data: data.map(item => item[y]),
-            type: type
-        }];
-    }
-    else if(head.length == 4) {
-        var series = [];
-
-        var groupedData = data.reduce((accumulator, currentValue) => {
-            var scope = currentValue.scope;
-            var date  = currentValue.date;
-            var value = currentValue.value;
-
-            var group = accumulator.find(item => item.scope === scope);
-            if (group) {
-                group.date.push({date: date, value: value});
-            } else {
-                accumulator.push({ scope, date: [{date: date, value: value}] });
-            }
-            return accumulator;
-        }, []);
-
-        var selectedScope = {};
-
-        for(key in groupedData) {
-            var scope = groupedData[key].scope;
-            var dates = groupedData[key].date;
-
-            var seriesData = [];
-            xAxis.data.forEach(function(date) {
-                seriesData.push(dates.find(item => item.date === date) ? dates.find(item => item.date === date).value : 0);
-            });
-
-            series.push({data: seriesData, type: type, name: scope});
-            selectedScope[scope] = false;
-        }
-
-        selectedScope[Object.keys(selectedScope)[0]] = true;
-    }
-
-    var option = window.genLineBarOption(chartType, xAxis, yAxis, series, selectedScope);
-    window.renderEchart($obj, option);
-}
-
-window.initPieChart = function($obj, head, data)
-{
-    var x = head[0].name;
-    var y = head[1].name;
-    var datas = data.map(item => ({name: item[x], value: item[y]}));
-
-    var option = window.genPieOption(datas);
-    window.renderEchart($obj, option);
+    window.renderEchart($currentBox.find('.chart')[0], options);
 }
 
 window.renderEchart = function($obj, option)
@@ -502,23 +319,6 @@ window.renderEchart = function($obj, option)
     $.getLib(config.webRoot + 'js/echarts/echarts.common.min.js', {root: false}, function() {
         var myChart = echarts.init($obj);
         option && myChart.setOption(option);
-    });
-}
-
-window.initPicker = function($obj, items, headLength = 3)
-{
-    if(headLength != 3) {
-        items = items.filter(item => item.value != 'pie');
-    }
-    if($obj.zui('picker')) {
-        $obj.zui('picker').destroy();
-    }
-    new zui.Picker($obj, {
-        items,
-        defaultValue: 'line',
-        name: 'chartType',
-        required: true,
-        onChange: function() { window.handleChartTypeChange(this) },
     });
 }
 
@@ -571,45 +371,42 @@ window.updateMetricBoxs = function(id, isChecked)
     }
     else
     {
-        var label = window.checkedList.find(function(checked){return checked.id == id});
-        var tpl   = $("#metricBox-tpl").html();
-        var data  = {
-            id: label.id,
-            name: label.name,
-        };
-        var html = $(zui.formatString(tpl, data));
-
-        $('.table-and-charts').append(html);
-
-        window.ajaxGetRecords(id, 'add');
+        window.appendMetricBox(id);
     }
 }
 
 /**
- * 多选添加一个度量项到展示区，或者使用筛选器更新一个度量项的展示内容。
- * Add a metricBox or use filter to change metricBox.
+ * 多选添加一个度量项到展示区。
+ * Add a metricBox.
  *
- * @param  string mode add|filter
  * @access public
  * @return void
  */
-window.ajaxGetRecords = function(id, mode = 'add')
+window.appendMetricBox = function(id, mode = 'add')
 {
-    var $form = id ? $('#queryForm' + id) : $('#queryForm');
+    $.get($.createLink('metric', 'ajaxGetMultipleMetricBox', 'metricID=' + id), function(resp)
+    {
+        $('.table-and-charts').append(resp);
+    });
+}
+
+window.handleQueryClick = function(id, viewType = 'single')
+{
+    var $form = $('#queryForm' + id);
+    var check = window.validateForm($form);
+    if(!check) return;
+
     var formData = window.getFormData($form);
 
-    id = id ?? current.id;
-
-    $.post($.createLink('metric', 'ajaxGetTableData', 'metricID=' + id),formData, function(resp)
+    $.post($.createLink('metric', 'ajaxGetTableAndCharts', 'metricID=' + id + '&viewType=' + viewType), formData, function(resp)
     {
-        var data = JSON.parse(resp);
-        if(data)
+        if(viewType == 'multiple')
         {
-            var chartType = viewType == 'multiple' ? $('#metricBox' + id).find('[name=chartType]').val() : $('[name=chartType]').val();
-            window.renderDTable(id, data.header, data.data);
-
-            var initPicker = (mode == 'add');
-            window.renderChart(id, data.header, data.data, chartType, initPicker);
+            $('#metricBox' + id).find('.table-and-chart').replaceWith(resp);
+        }
+        else
+        {
+            $('.table-and-chart-single').replaceWith(resp);
         }
     });
 }
@@ -621,17 +418,10 @@ window.validateForm = function($form)
 
     var dateBegin = formObj.dateBegin?.length ? new Date(formObj.dateBegin) : false;
     var dateEnd   = formObj.dateEnd?.length ? new Date(formObj.dateEnd) : false;
-    var calcBegin = formObj.calcBegin?.length ? new Date(formObj.calcBegin) : false;
-    var calcEnd   = formObj.calcEnd?.length ? new Date(formObj.calcEnd) : false;
 
     if(dateBegin && dateEnd && dateBegin > dateEnd)
     {
         zui.Messager.show(errorDateRange, {type: 'danger', time: 2000});
-        return false;
-    }
-    if(calcBegin && calcEnd && calcBegin > calcEnd)
-    {
-        zui.Messager.show(errorCalcTimeRange, {type: 'danger', time: 2000});
         return false;
     }
     return true;
@@ -639,13 +429,43 @@ window.validateForm = function($form)
 
 window.getFormData = function($form)
 {
+    var $dateBegin    = $form.find('.query-date-picker input[name="dateBegin"]');
+    var $dateEnd      = $form.find('.query-date-picker input[name="dateEnd"]');
+    var $selectedDate = $form.find('.query-date button.selected');
+
+    var dateBeginValue = $dateBegin.length ? $dateBegin.zui('datepicker').$.value : '';
+    var dateEndValue   = $dateEnd.length ? $dateEnd.zui('datepicker').$.value : '';
+
+    if(!$selectedDate.length && $dateBegin.length && $dateEnd.length && (!dateBeginValue.length || !dateEndValue.length))
+    {
+        var buttons = $form.find('.query-date button');
+        $(buttons[0]).addClass('selected');
+        $form.find('.query-date-picker input[name="dateBegin"]').zui('datepicker').$.setValue('');
+        $form.find('.query-date-picker input[name="dateEnd"]').zui('datepicker').$.setValue('');
+    }
+
     var formSerialize = $form.serialize();
     var formObj = window.parseSerialize(formSerialize);
 
     var formData = new FormData();
     for(var key in formObj)
     {
-        formData.append(key, formObj[key]);
+        var value = formObj[key];
+        if(key.startsWith('scope')) key = 'scope';
+        formData.append(key, value);
+    }
+
+    if($selectedDate.length)
+    {
+        formData.append('dateLabel', $selectedDate.attr('key'));
+        formData.delete('dateBegin');
+        formData.delete('dateEnd');
+    }
+
+    var $calcDate = $form.find('.query-calc-date button.selected');
+    if($calcDate.length)
+    {
+        formData.append('calcDate', $calcDate.attr('key'));
     }
 
     return formData;
@@ -658,6 +478,11 @@ window.collectMetric = function(id)
         var result = JSON.parse(resp);
         $('.metric-collect').find('i').attr('class', result.collect ? 'icon icon-star star' : 'icon icon-star-empty star-empty');
     });
+}
+
+window.toggleCollapsed = function()
+{
+    $('.sidebar').toggleClass('is-collapsed');
 }
 
 window.renderCheckedLabel = function()
@@ -865,7 +690,7 @@ window.deactiveNavMenu = function()
     $(itemSelector).find('span.label').remove();
 }
 
-window.genPieOption = function(data)
+window.genPieOption = function(datas)
 {
     var option = {
         tooltip: {
@@ -880,7 +705,7 @@ window.genPieOption = function(data)
             {
                 type: 'pie',
                 radius: '50%',
-                data: data,
+                data: datas.data,
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,
@@ -895,24 +720,16 @@ window.genPieOption = function(data)
     return option;
 }
 
-window.genLineBarOption = function(chartType, xAxis, yAxis, series, selectedScope = null)
+window.genLineBarOption = function(chartType, datas)
 {
-    var legend = {left: '16', right: '16', type: 'scroll'};
-    if(selectedScope)
-    {
-        legend.selector = true;
-        legend.selected = selectedScope;
-    }
-
     var option = {
         grid: {
-            top: '48',
-            left: '16',
-            right: '16',
+            left: '10%',
+            right: '10%',
             bottom: '15%',
             containLabel: true
         },
-        legend: legend,
+        legend: datas.legend,
         tooltip: {
             trigger: 'axis',
             axisPointer: {
@@ -925,12 +742,12 @@ window.genLineBarOption = function(chartType, xAxis, yAxis, series, selectedScop
             extraCssText: 'max-height:60%;overflow-y:scroll',//最大高度以及超出处理
             enterable:true//鼠标可以进入tooltip区域，使用滚动条
         },
-        xAxis: chartType == 'barY' ? yAxis : xAxis,
-        yAxis: chartType == 'barY' ? xAxis : yAxis,
-        series: series,
+        xAxis: chartType == 'barY' ? datas.yAxis : datas.xAxis,
+        yAxis: chartType == 'barY' ? datas.xAxis : datas.yAxis,
+        series: datas.series,
     };
 
-    var dataLength = series[0].data.length;
+    var dataLength = Array.isArray(datas.series) ? datas.series[0].data.length : datas.series.data.length;
     if(dataLength > 15) option.dataZoom = window.genDataZoom(dataLength, 15, chartType == 'barY' ? 'y' : 'x');
 
     return option;

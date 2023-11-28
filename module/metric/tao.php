@@ -44,6 +44,39 @@ class metricTao extends metricModel
     }
 
     /**
+     * 根据编号获取度项。
+     * Fetch metric by id.
+     *
+     * @param  string       $code
+     * @param  array|string $fields
+     * @access protected
+     * @return mixed
+     */
+    protected function fetchMetricByID($code, $fields = '*')
+    {
+        if(is_array($fields)) $fields = implode(',', $fields);
+
+        $metric = $this->dao->select($fields)->from(TABLE_METRIC)->where('code')->eq($code)->fetch();
+        return $metric->scope;
+    }
+
+    /**
+     * 根据编号列表获取度项。
+     * Fetch metric list by id list.
+     *
+     * @param  array     $metricIDList
+     * @access protected
+     * @return array
+     */
+    protected function fetchMetricsByIDList($metricIDList)
+    {
+        return $this->dao->select('*')->from(TABLE_METRIC)
+            ->where('deleted')->eq(0)
+            ->andWhere('id')->in($metricIDList)
+            ->fetchAll();
+    }
+
+    /**
      * 根据度量项编码获取度量项数据。
      * Fetch metric by code.
      *
@@ -127,47 +160,87 @@ class metricTao extends metricModel
     }
 
     /**
+     * 获取范围对象类型以构建分页对象。
+     * Get object list with page.
+     *
+     * @param string  $code
+     * @param string  $scope
+     * @param object  $pager
+     * @access protected
+     * @return array|false
+     */
+    protected function getObjectsWithPager($code, $scope, $pager)
+    {
+        if($scope == 'system') return false;
+
+        $scopeObjects = $this->dao->select($scope)->from(TABLE_METRICLIB)->where('metricCode')->eq($code)->fetchPairs();
+        if($scope == 'product')
+        {
+            $objects = $this->dao->select('id')->from(TABLE_PRODUCT)
+                ->where('deleted')->eq(0)
+                ->andWhere('shadow')->eq(0)
+                ->andWhere('id')->in($scopeObjects)
+                ->page($pager)
+                ->fetchPairs();
+        }
+        elseif($scope == 'project')
+        {
+            $objects = $this->dao->select('id')->from(TABLE_PROJECT)
+                ->where('deleted')->eq(0)
+                ->andWhere('type')->eq('project')
+                ->andWhere('id')->in($scopeObjects)
+                ->page($pager)
+                ->fetchPairs();
+        }
+        elseif($scope == 'execution')
+        {
+            $objects = $this->dao->select('id')->from(TABLE_EXECUTION)
+                ->where('deleted')->eq(0)
+                ->andWhere('type')->in('sprint,stage,kanban')
+                ->andWhere('id')->in($scopeObjects)
+                ->page($pager)
+                ->fetchPairs();
+        }
+        elseif($scope == 'user')
+        {
+            $objects = $this->dao->select('account')->from(TABLE_USER)
+                ->where('deleted')->eq('0')
+                ->andWhere('account')->in($scopeObjects)
+                ->page($pager)
+                ->fetchPairs();
+        }
+
+        return $objects;
+    }
+
+    /**
      * 请求度量数据。
      * Fetch metric data.
      *
-     * @param  string $code
-     * @param  array  $fieldList
+     * @param  string      $code
+     * @param  array       $fieldList
+     * @param  array       $query
+     * @param  object|null $pager
      * @access protected
      * @return array
      */
-    protected function fetchMetricRecords(string $code, array $fieldList, array $query = array()): array
+    protected function fetchMetricRecords(string $code, array $fieldList, array $query = array(), object|null $pager = null): array
     {
-        $dataFieldStr = implode(', ', $fieldList);
-        if(!empty($dataFieldStr)) $dataFieldStr .= ', ';
+        $metricScope = $this->fetchMetricByID($code, 'scope');
+        $objectList  = $this->getObjectsWithPager($code, $metricScope, $pager);
 
-        $record = $this->dao->select("id, {$dataFieldStr} value, date")
-            ->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
-            ->fetch();
-        if(!$record) return array();
-
-        $fieldList = array_keys((array)($record));
         $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
         $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
 
-        /**
-         * 如果没有传入筛选参数
-         *   如果范围和日期列为空，说明最终需要的数据只有两列，而这作为全局数据的标记，所以要取所有的数据，否则只取今天之前的数据。
-         * 如果传入了筛选参数，则按照筛选参数进行筛选。
-         * If no filtering parameters are passed in
-         *   If the range and date columns are empty, only two columns of data are needed at the end, and this serves as a marker for global data, so get all the data, otherwise only the data before today.
-         * If filtering parameters are passed in, filter according to the filtering parameters.
-         */
-        $date = empty($query) ? (empty($scopeList) && empty($dateList) ? date('Y-m-d H:i:s', 0) : helper::today()) : '';
+        $dateType = $this->getDateType($dateList);
+        $query['dateType'] = $dateType;
 
         $scope     = $this->processRecordQuery($query, 'scope');
         $dateBegin = $this->processRecordQuery($query, 'dateBegin', 'date');
         $dateEnd   = $this->processRecordQuery($query, 'dateEnd', 'date');
-        $calcTime  = $this->processRecordQuery($query, 'calcTime');
-        $calcBegin = $this->processRecordQuery($query, 'calcBegin');
-        $calcEnd   = $this->processRecordQuery($query, 'calcEnd');
+        list($dateBegin, $dateEnd) = $this->processRecordQuery($query, 'dateLabel', 'date');
 
-        $dateType = empty($dateList) ? '' : $this->getDateType($dateList);
+        $calcDate  = $this->processRecordQuery($query, 'calcDate', 'date');
 
         $yearBegin  = empty($dateBegin) ? '' : $dateBegin->year;
         $yearEnd    = empty($dateEnd)   ? '' : $dateEnd->year;
@@ -181,9 +254,14 @@ class metricTao extends metricModel
         $scopeKey   = current($scopeList);
         $scopeValue = $scope;
 
-        $records =  $this->dao->select("id, {$dataFieldStr} value, date")
+        $fieldList = array_merge($fieldList, array('id', 'value', 'date'));
+        $wrapFields = array_map(fn($value) => "`$value`", $fieldList);
+        $dataFieldStr = implode(',', $wrapFields);
+
+        $records =  $this->dao->select($dataFieldStr)
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
+            ->beginIF($metricScope != 'system')->andWhere($metricScope)->in($objectList)->fi()
             ->beginIF(!empty($scope))->andWhere($scopeKey)->in($scopeValue)->fi()
             ->beginIF(!empty($dateBegin) and $dateType == 'year')->andWhere('`year`')->ge($yearBegin)->fi()
             ->beginIF(!empty($dateEnd)   and $dateType == 'year')->andWhere('`year`')->le($yearEnd)->fi()
@@ -193,10 +271,7 @@ class metricTao extends metricModel
             ->beginIF(!empty($dateEnd)   and $dateType == 'week')->andWhere('CONCAT(`year`, `week`)')->le($weekEnd)->fi()
             ->beginIF(!empty($dateBegin) and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->ge($dayBegin)->fi()
             ->beginIF(!empty($dateEnd)   and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->le($dayEnd)->fi()
-            ->beginIF(!empty($calcTime))->andWhere('left(date, 10)')->eq($calcTime)->fi()
-            ->beginIF(!empty($calcBegin))->andWhere('left(date, 10)')->ge($calcBegin)->fi()
-            ->beginIF(!empty($calcEnd))->andWhere('left(date, 10)')->le($calcEnd)->fi()
-            ->beginIF(empty($query))->andWhere('date')->gt($date)->fi()
+            ->beginIF(!empty($calcDate))->andWhere('date')->ge($calcDate)->fi()
             ->beginIF(!empty($scopeList))->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
             ->beginIF(empty($scopeList))->orderBy("date desc, year desc, month desc, week desc, day desc")->fi()
             ->fetchAll();

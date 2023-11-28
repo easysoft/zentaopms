@@ -111,7 +111,7 @@ class dataset
     {
         return $this->dao->select($fieldList)
             ->from(TABLE_RELEASE)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on("CONCAT(',', t2.id, ',') LIKE CONCAT('%', t1.project, '%')")
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
@@ -260,9 +260,7 @@ class dataset
             ->andWhere('t4.type')->in('sprint,stage,kanban')
             ->andWhere('t5.deleted')->eq(0) // 已删除的项目
             ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('or', t5.vision)")
             ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t5.vision)")
             ->query();
     }
 
@@ -288,9 +286,7 @@ class dataset
             ->andWhere('t4.deleted')->eq(0)
             ->andWhere('t4.type')->eq('project')
             ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('or', t4.vision)")
             ->andWhere("NOT FIND_IN_SET('lite', t1.vision)")
-            ->andWhere("NOT FIND_IN_SET('lite', t4.vision)")
             ->query();
     }
 
@@ -607,14 +603,6 @@ class dataset
             ->query();
     }
 
-    /**
-     * 统计合并请求信息。
-     * Get mr list.
-     *
-     * @param  string $fieldList
-     * @access public
-     * @return PDOStatement
-     */
     public function getMRs($fieldList)
     {
         return $this->dao->select($fieldList)->from(TABLE_MR)->alias('t1')

@@ -21,6 +21,7 @@ $lang->metric->date          = "Date";
 $lang->metric->metricData    = "Metric Data";
 $lang->metric->system        = "System";
 $lang->metric->weekCell      = "%s,Week %s";
+$lang->metric->week          = "Week %s";
 $lang->metric->create        = "Create " . $this->lang->metric->common;
 $lang->metric->edit          = "Edit " . $this->lang->metric->common;
 $lang->metric->view          = 'View' . $this->lang->metric->common;
@@ -51,8 +52,18 @@ $lang->metric->testMetric    = 'Test Metric';
 $lang->metric->calcTime      = 'Calculate Time';
 $lang->metric->to            = 'to';
 
+$lang->metric->placeholder = new stdclass();
+$lang->metric->placeholder->select    = "Please select";
+$lang->metric->placeholder->project   = "All Projects";
+$lang->metric->placeholder->product   = "All Products";
+$lang->metric->placeholder->execution = "All Executions";
+$lang->metric->placeholder->dept      = "All Teams";
+$lang->metric->placeholder->user      = "All Users";
+$lang->metric->placeholder->program   = "All Program Sets";
+
 $lang->metric->query = new stdclass();
 $lang->metric->query->action = 'query';
+
 $lang->metric->query->scope = array();
 $lang->metric->query->scope['project']   = 'Project';
 $lang->metric->query->scope['product']   = 'Product';
@@ -60,6 +71,30 @@ $lang->metric->query->scope['execution'] = 'Execution';
 $lang->metric->query->scope['dept']      = 'Dept';
 $lang->metric->query->scope['user']      = 'User';
 $lang->metric->query->scope['program']   = 'Program';
+
+$lang->metric->query->yearLabels = array();
+$lang->metric->query->yearLabels['3']   = '3 years';
+$lang->metric->query->yearLabels['5']   = '5 years';
+$lang->metric->query->yearLabels['10']  = '10 years';
+$lang->metric->query->yearLabels['all'] = 'All';
+
+$lang->metric->query->monthLabels = array();
+$lang->metric->query->monthLabels['6']   = '6 months';
+$lang->metric->query->monthLabels['12']  = '12 months';
+$lang->metric->query->monthLabels['24']  = '24 months';
+$lang->metric->query->monthLabels['36']  = '36 months';
+
+$lang->metric->query->weekLabels = array();
+$lang->metric->query->weekLabels['4']  = '4 weeks';
+$lang->metric->query->weekLabels['8']  = '8 weeks';
+$lang->metric->query->weekLabels['12'] = '12 weeks';
+$lang->metric->query->weekLabels['16'] = '16 weeks';
+
+$lang->metric->query->dayLabels = array();
+$lang->metric->query->dayLabels['7']  = '7 days';
+$lang->metric->query->dayLabels['14'] = '14 days';
+$lang->metric->query->dayLabels['21'] = '21 days';
+$lang->metric->query->dayLabels['28'] = '28 days';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = 'Single view';
@@ -98,7 +133,6 @@ $lang->metric->implementAction = 'Implement Metric';
 $lang->metric->deleteAction    = 'Delete Metric';
 $lang->metric->delistAction    = 'Delist Metric';
 $lang->metric->detailsAction   = 'Metric Detail';
-$lang->metric->updateMetricLib = 'Update Metric Lib';
 
 $lang->metric->stageList = array();
 $lang->metric->stageList['wait']     = "Not Released";
@@ -115,8 +149,8 @@ $lang->metric->featureBar['preview']['dept']      = 'Team';
 $lang->metric->featureBar['preview']['user']      = 'Individual';
 $lang->metric->featureBar['preview']['program']   = 'Program';
 $lang->metric->featureBar['preview']['system']    = 'System';
-// $lang->metric->featureBar['preview']['code']      = 'Code Repository';
-// $lang->metric->featureBar['preview']['pipeline']  = 'Pipeline';
+$lang->metric->featureBar['preview']['code']      = 'Code Repository';
+$lang->metric->featureBar['preview']['pipeline']  = 'Pipeline';
 
 $lang->metric->more        = 'More';
 $lang->metric->collect     = 'My Collect';
@@ -131,12 +165,11 @@ $lang->metric->oldMetric->dayNames = array(1 => 'Monday', 2 => 'Tuesday', 3 => '
 $lang->metric->moreSelects = array();
 
 $lang->metric->unitList = array();
-$lang->metric->unitList['count']      = 'Count';
-$lang->metric->unitList['measure']    = 'Man-hour';
-$lang->metric->unitList['hour']       = 'Hour';
-$lang->metric->unitList['day']        = 'Day';
-$lang->metric->unitList['manday']     = 'Man-day';
-$lang->metric->unitList['percentage'] = 'Percentage';
+$lang->metric->unitList['count']   = 'Count';
+$lang->metric->unitList['measure'] = 'Man-hour';
+$lang->metric->unitList['hour']    = 'Hour';
+$lang->metric->unitList['day']     = 'Day';
+$lang->metric->unitList['manday']  = 'Man-day';
 
 $lang->metric->afterCreateList = array();
 $lang->metric->afterCreateList['back']      = 'Back to List Page';
@@ -165,8 +198,8 @@ $lang->metric->scopeList['project']   = "Project";
 $lang->metric->scopeList['execution'] = "Execution";
 $lang->metric->scopeList['dept']      = "Team";
 $lang->metric->scopeList['user']      = "Individual";
-// $lang->metric->scopeList['code']      = "Code Repository";
-// $lang->metric->scopeList['pipeline']  = "Pipeline";
+$lang->metric->scopeList['code']      = "Code Repository";
+$lang->metric->scopeList['pipeline']  = "Pipeline";
 $lang->metric->scopeList['other']     = "Other";
 
 global $config;
@@ -208,7 +241,6 @@ if(in_array($config->edition, array('max', 'ipd')))
     $lang->metric->objectList['risk']        = "Risk";
     $lang->metric->objectList['issue']       = "Issue";
 }
-
 $lang->metric->objectList['review'] = "Review";
 $lang->metric->objectList['other']  = "Other";
 

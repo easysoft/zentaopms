@@ -32,7 +32,7 @@ $buildItems = function($items): array
                 !empty($item['attr']) && is_array($item['attr']) ? set($item['attr']) : null,
                 $item['text']
             ) : $item['text'],
-            set::collapse(!empty($item['text'])),
+            set::collapse(!empty($item['text']))
         );
     }
 
@@ -104,7 +104,7 @@ $fnGenerateDataDisplay = function() use($resultData, $resultHeader, $lang, $metr
         (
             set::height(400),
             set::cols($resultHeader),
-            set::data($resultData),
+            set::data($resultData)
         );
 };
 
@@ -113,7 +113,7 @@ if(!$this->metric->checkCalcExists($metric))
     $metricDataSection = section
     (
         set::title($lang->metric->metricData),
-        set::content($lang->metric->noCalc),
+        set::content($lang->metric->noCalc)
     );
 }
 else
@@ -121,7 +121,7 @@ else
     $metricDataSection = section
     (
         set::title($lang->metric->metricData),
-        $fnGenerateDataDisplay($resultData, $resultHeader, $lang, $metric),
+        $fnGenerateDataDisplay($resultData, $resultHeader, $lang, $metric)
     );
 }
 
@@ -142,9 +142,12 @@ detailBody
             set::content(empty(trim($metric->definition)) ? $lang->metric->noFormula : $metric->definition),
             set::useHtml(true)
         ),
-        $metricDataSection,
+        $metricDataSection
     ),
-    history(),
+    history
+    (
+        set::commentUrl(createLink('action', 'comment', array('objectType' => 'metric', 'objectID' => $metric->id)))
+    ),
     floatToolbar
     (
         isAjaxRequest('modal') ? null : to::prefix(backBtn(set::icon('back'), $lang->goback)),
@@ -178,7 +181,7 @@ detailBody
                 )
             )
         ),
-        $oldMetricTabs,
+        $oldMetricTabs
     )
 );
 

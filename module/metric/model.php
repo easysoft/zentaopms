@@ -1,4 +1,7 @@
 <?php
+
+use function zin\wg;
+
 /**
  * The model file of metric module of ZenTaoPMS.
  *
@@ -58,6 +61,43 @@ class metricModel extends model
         $metrics = $this->processOldMetrics($metrics);
 
         return $metrics;
+    }
+
+    public function groupMetricByObject($metrics)
+    {
+        $groupMetrics = array_fill_keys(array_keys($this->lang->metric->objectList), array());
+        foreach($metrics as $metric)
+        {
+            $group = isset($groupMetrics[$metric->object]) ? $metric->object : 'other';
+            $groupMetrics[$group][] = $metric;
+        }
+
+        $purposes = array_keys($this->lang->metric->purposeList);
+        foreach($groupMetrics as $key => $metrics)
+        {
+            if(empty($metrics))
+            {
+                unset($groupMetrics[$key]);
+                continue;
+            }
+
+            usort($metrics, function($a, $b) use ($purposes) {
+                $aIndex = array_search($a->purpose, $purposes);
+                $bIndex = array_search($b->purpose, $purposes);
+
+                if($aIndex === $bIndex) return 0;
+                return ($aIndex < $bIndex) ? -1 : 1;
+            });
+
+            $groupMetrics[$key] = $metrics;
+        }
+
+        return $groupMetrics;
+    }
+
+    public function getMetricsByIDList($metricIDList)
+    {
+        return $this->metricTao->fetchMetricsByIDList($metricIDList);
     }
 
     /**
@@ -136,7 +176,7 @@ class metricModel extends model
             $metric->oldUnit     = $oldMetric->unit;
             $metric->collectType = $oldMetric->collectType;
             $metric->collectConf = $oldMetric->collectConf;
-        $metric->execTime    = $oldMetric->execTime;
+            $metric->execTime    = $oldMetric->execTime;
         }
 
         return $metric;
@@ -212,24 +252,79 @@ class metricModel extends model
     }
 
     /**
-     * 根据代号获取计算实时度量项的结果。
-     * Get result of calculate metric by code.
+     * 获取度量数据的日期字段。
+     * Get date field of metric data.
      *
      * @param  string $code
-     * @param  array  $options e.g. array('product' => '1,2,3', 'year' => '2023')
+     * @access protected
+     * @return array
+     */
+    protected function getMetricRecordDateField(string $code): array
+    {
+        $record = $this->dao->select("year, month, week, day")
+            ->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->fetch();
+
+        if(!$record) return array();
+
+        $dataFields = array();
+        $recordKeys = array_keys((array)$record);
+        foreach($recordKeys as $recordKey)
+        {
+            if(!empty($record->$recordKey)) $dataFields[] = $recordKey;
+        }
+
+        return $dataFields;
+    }
+
+    /**
+     * 设置默认的度量数据筛选参数。
+     * Set default options of metric data.
+     *
+     * @param  array $options
+     * @param  array $dataFields
      * @access public
      * @return array
      */
-    public function getResultByCode($code, $options = array(), $type = 'realtime')
+    public function setDefaultOptions(array $options, array $dataFields): array
+    {
+        if(!empty($options)) return $options;
+
+        $dateType = $this->getDateType($dataFields);
+
+        if($dateType != 'nodate')
+        {
+            $dateLabels  = $this->getDateLabels($dateType);
+            $defaultDate = $this->getDefaultDate($dateLabels);
+            $options = array('dateType' => $dateType, 'dateLabel' => $defaultDate);
+        }
+
+        return $options;
+    }
+
+    /**
+     * 根据代号获取计算实时度量项的结果。
+     * Get result of calculate metric by code.
+     *
+     * @param  string      $code
+     * @param  array       $options e.g. array('product' => '1,2,3', 'year' => '2023')
+     * @param  string      $type
+     * @param  object|null $pager
+     * @access public
+     * @return array
+     */
+    public function getResultByCode($code, $options = array(), $type = 'realtime', $pager = null)
     {
         if($type == 'cron')
         {
             $metric     = $this->metricTao->fetchMetricByCode($code);
             $dataFields = $this->getMetricRecordDateField($code);
+            $options    = $this->setDefaultOptions($options, $dataFields);
 
             if($metric->scope != 'system') $dataFields[] = $metric->scope;
 
-            return $this->metricTao->fetchMetricRecords($code, $dataFields, $options);
+            return $this->metricTao->fetchMetricRecords($code, $dataFields, $options, $pager);
         }
 
         $metric = $this->metricTao->fetchMetricByCode($code);
@@ -279,20 +374,14 @@ class metricModel extends model
      */
     public function getExecutableMetric()
     {
-        $currentWeek = date('w');
-        $currentDay  = date('d');
-        $now         = date('H:i');
-
         $metricList = $this->dao->select('id,code,time')
             ->from(TABLE_METRIC)
             ->where('deleted')->eq('0')
             ->fetchAll();
 
         $excutableMetrics = array();
-        foreach($metricList as $metric)
-        {
-            $excutableMetrics[$metric->id] = $metric->code;
-        }
+        foreach($metricList as $metric) $excutableMetrics[$metric->id] = $metric->code;
+
         return $excutableMetrics;
     }
 
@@ -305,6 +394,70 @@ class metricModel extends model
             ->exec();
 
         return dao::isError();
+    }
+
+    /**
+     * 根据度量项收集周期来清理过期的度量库数据。
+     * Clear outdated metric records by cycle.
+     *
+     * @param  string $code
+     * @param  string $cycle
+     * @access public
+     * @return array
+     */
+    public function clearOutDatedRecords($code, $cycle)
+    {
+        $year    = date('Y');
+        $month   = date('n');
+        $week    = date('W');
+        $day     = date('j');
+
+        if($cycle == 'year')
+        {
+            $this->dao->delete()->from(TABLE_METRICLIB)
+                ->where('metricCode')->eq($code)
+                ->andWhere('year')->eq($year)
+                ->exec();
+        }
+        elseif($cycle == 'month')
+        {
+            $this->dao->delete()->from(TABLE_METRICLIB)
+                ->where('metricCode')->eq($code)
+                ->andWhere('year')->eq($year)
+                ->andWhere('month')->eq($month)
+                ->exec();
+        }
+        elseif($cycle == 'week')
+        {
+            $this->dao->delete()->from(TABLE_METRICLIB)
+                ->where('metricCode')->eq($code)
+                ->andWhere('year')->eq($year)
+                ->andWhere('week')->eq($week)
+                ->exec();
+        }
+        elseif($cycle == 'day')
+        {
+            $this->dao->delete()->from(TABLE_METRICLIB)
+                ->where('metricCode')->eq($code)
+                ->andWhere('year')->eq($year)
+                ->andWhere('month')->eq($month)
+                ->andWhere('day')->eq($day)
+                ->exec();
+        }
+    }
+
+    /**
+     * 是否为第一次生成度量数据。
+     * Whether it is the first time to generate metric data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isFirstGenerate(): bool
+    {
+        $record = $this->dao->select('id')->from(TABLE_METRICLIB)->fetch();
+
+        return !$record;
     }
 
     /**
@@ -547,7 +700,7 @@ class metricModel extends model
                 $objectPairs = $this->loadModel('dept')->getDeptPairs();
                 break;
             case 'user':
-                $objectPairs = $this->loadModel('user')->getPairs('noletter|noclosed');
+                $objectPairs = $this->loadModel('user')->getPairs('noletter');
                 break;
             case 'program':
                 $objectPairs = $this->dao->select('id, name')->from(TABLE_PROGRAM)
@@ -587,31 +740,44 @@ class metricModel extends model
      * Build date cell.
      *
      * @param  object $row
+     * @param  array  $object
      * @access public
      * @return string
      */
-    public function buildDateCell($row)
+    public function buildDateCell($row, $record)
     {
-        extract((array)$row);
+        extract($record);
 
+        $date = $dateString =  false;
+        $dateType = 'day';
         if(isset($year, $month, $day))
         {
-            return "{$year}-{$month}-{$day}";
+            $date     = $dateString = "{$year}-{$month}-{$day}";
+            $dateType = 'day';
         }
         elseif(isset($year, $week))
         {
-            return sprintf($this->lang->metric->weekCell, $year, $week);
+            $date       = sprintf($this->lang->metric->weekCell, $year, $week);
+            $dateString = "{$year}-{$week}";
+            $dateType   = 'week';
         }
         elseif(isset($year, $month))
         {
-            return $year . $this->lang->year . $month . $this->lang->month;
+            $date       = $year . $this->lang->year . $month . $this->lang->month;
+            $dateString = "{$year}-{$month}";
+            $dateType   = 'month';
         }
         elseif(isset($year))
         {
-            return $year . $this->lang->year;
+            $date       = $year . $this->lang->year;
+            $dateString = $year;
+            $dateType   = 'year';
         }
 
-        return false;
+        $row->date       = $date;
+        $row->dateString = $dateString;
+        $row->dateType   = $dateType;
+        return $row;
     }
 
     public function checkCalcExists($metric)
@@ -901,7 +1067,7 @@ class metricModel extends model
         }
         elseif($optionType == 'user')
         {
-            $options = $this->loadModel('user')->getPairs('noletter|noclosed');
+            $options = $this->loadModel('user')->getPairs('noletter');
         }
         elseif(strpos($optionType, '.') !== false)
         {
@@ -1023,19 +1189,271 @@ class metricModel extends model
      * 获取度量项的数据类型。
      * Get data type of metric.
      *
-     * @param  object    $tableData
+     * @param  array    $tableData
      * @access public
      * @return string|false
      */
-    public function getMetricRecordType(object|bool $tableData): string|false
+    public function getMetricRecordType(array|bool $tableData): string|false
     {
         if(!$tableData) return false;
+        $fields = array_column($tableData, 'name');
+
         $type = array();
-        if(isset($tableData->scope)) $type[] = 'scope';
-        if(isset($tableData->date)) $type[] = 'date';
+        if(in_array('scope', $fields)) $type[] = 'scope';
+        if(in_array('date', $fields)) $type[] = 'date';
 
         if(empty($type)) $type[] = 'system';
         return implode('-', $type);
+    }
+
+    /**
+     * 获取一个echarts的legend配置。
+     * Get lengend options of echarts by head and series.
+     *
+     * @param  array    $series
+     * @param  string   $range object|time
+     * @access public
+     * @return array
+     */
+    public function getEchartLegend(array $series, string $range = 'time')
+    {
+        $legend = array('type' => 'scroll');
+
+        if($range == 'object')
+        {
+            $selectedScope = array();
+            foreach($series as $index => $se)
+            {
+                $selectedScope[$se['name']] = $index == 0 ? true : false;
+            }
+
+            $legend['selector'] = true;
+            $legend['selected'] = $selectedScope;
+        }
+
+        return $legend;
+    }
+
+    /**
+     * 通过header来判断一个度量项有没有对象的概念。
+     * Judge whether a metric has the concept of an object.
+     *
+     * header 通过 metric 模块的 getViewTableHeader 方法取得
+     * @param  array    $header 表头
+     * @access public
+     * @return bool
+     */
+    public function isObjectMetric(array $header): bool
+    {
+        return in_array('scope', array_column($header, 'name'));
+    }
+
+    /**
+     * 获取一个echarts的配置项。
+     * Get options of echarts by head and data.
+     *
+     * @param  array       $head 表头
+     * @param  array       $data 数据
+     * @param  string      $chartType 图表类型 barX|barY|line|pie
+     * @access public
+     * @return array|false
+     */
+    public function getEchartsOptions(array $header, array $data, string $chartType = 'line'): array|false
+    {
+        if(!$header || !$data) return false;
+        $type = in_array($chartType, array('barX', 'barY')) ? 'bar' : $chartType;
+        if($type == 'pie') return $this->getPieEchartsOptions($header, $data);
+
+        $headLength = count($header);
+        if($headLength == 2)
+        {
+            return $this->getTimeOptions($header, $data, $type);
+        }
+        elseif($headLength == 3)
+        {
+            if($this->isObjectMetric($header))
+            {
+                return $this->getObjectOptions($data, $type);
+            }
+            else
+            {
+                return $this->getTimeOptions($header, $data, $type);
+            }
+        }
+        elseif($headLength == 4)
+        {
+            return $this->getObjectOptions($data, $type);
+        }
+    }
+
+    /**
+     * 获取一个 对象属性度量的 echart options。
+     * Get options of echarts by data.
+     *
+     * @param  array  $data 数据
+     * @param  string $type 类型 line|bar
+     * @access public
+     * @return array
+     */
+    public function getObjectOptions(array $data, string $type): array
+    {
+        $dateField = !isset(current($data)->dateString) ? 'calcTime' : 'dateString';
+        usort($data, function($a, $b) use ($dateField)
+        {
+            $keyA = $a->$dateField;
+            $keyB = $b->$dateField;
+
+            if($keyA == $keyB) return 0;
+
+            return $keyA > $keyB ? -1 : 1;
+        });
+
+        $times   = array();
+        $objects = array();
+        foreach($data as $dataInfo)
+        {
+            $time   = substr($dataInfo->$dateField, 0, 10);
+            $object = $dataInfo->scope;
+            $value  = $dataInfo->value;
+
+            if(!isset($times[$time]))     $times[$time] = $time;
+            if(!isset($objects[$object])) $objects[$object] = array();
+            $objects[$object][$time] = $value;
+        }
+
+        $xAxis  = array('type' => 'category', 'data' => $times);
+        $yAxis  = array('type' => 'value');
+        $series = array();
+        foreach($objects as $object => $datas)
+        {
+            $seriesData = array();
+            foreach($times as $time)
+            {
+                $seriesData[] = isset($datas[$time]) ? $datas[$time] : 0;
+            }
+
+            $series[] = array('type' => $type, 'name' => $object, 'data' => $seriesData);
+        }
+
+        $legend = $this->getEchartLegend($series, 'object');
+
+        $options = array();
+        $options['xAxis']  = $xAxis;
+        $options['yAxis']  = $yAxis;
+        $options['legend'] = $legend;
+        $options['series'] = $series;
+
+        return $options;
+    }
+
+    /**
+     * 获取一个 时间属性度量的 echart options。
+     * Get options of echarts by head and data.
+     *
+     * @param  array  $head 表头
+     * @param  string $type 类型 line|bar
+     * @access public
+     * @return array
+     */
+    public function getTimeOptions(array $header, array $data, string $type): array
+    {
+        list($x, $y) = $this->getEchartXY($header);
+
+        usort($data, function($a, $b) use ($x)
+        {
+            $keyA = $a->$x;
+            $keyB = $b->$x;
+
+            if($keyA == $keyB) return 0;
+
+            return $keyA > $keyB ? -1 : 1;
+        });
+
+        $xTime = array_column($data, $x);
+        foreach($xTime as $key => $time)
+        {
+            $xTime[$key] = substr($time, 0, 10);
+        }
+        $xAxis = array('type' => 'category', 'data' => $xTime);
+        $yAxis = array('type' => 'value');
+
+        $series = array('type' => $type, 'data' => array_column($data, $y));
+        $legend = $this->getEchartLegend($series);
+
+        $options = array();
+        $options['xAxis']  = $xAxis;
+        $options['yAxis']  = $yAxis;
+        $options['legend'] = $legend;
+        $options['series'] = $series;
+
+        return $options;
+    }
+
+    /**
+     * 获取一个echarts pie的配置项。
+     * Get options of echarts pie by head and data.
+     *
+     * @param  array  $head  表头
+     * @param  array  $datas 数据
+     * @access public
+     * @return array
+     */
+    public function getPieEchartsOptions(array $header, array $datas): array
+    {
+        list($x, $y) = $this->getEchartXY($header);
+
+        $seriesData = array();
+        foreach($datas as $data)
+        {
+            $seriesData[] = array('name' => $data->$x, 'value' => $data->$y);
+        }
+
+        $options = array();
+        $options['data'] = $seriesData;
+
+        return $options;
+    }
+
+    /**
+     * 获取图表 x轴 和 y轴的字段。
+     * Get echart x and y field.
+     *
+     * @param  array  $header 表头
+     * @access public
+     * @return array
+     */
+    public function getEchartXY(array $header): array
+    {
+        $x = $y = '';
+        $headLength = count($header);
+        if($headLength == 2)
+        {
+            $x = $header[1]['name'];
+            $y = $header[0]['name'];
+        }
+        elseif($headLength == 3)
+        {
+            $x = $header[0]['name'];
+            $y = $header[1]['name'];
+        }
+
+        return array($x, $y);
+    }
+
+    /**
+     * 获取一个图表可选的类型。
+     * Get a echart typeList.
+     *
+     * @param  array  $header 表头
+     * @access public
+     * @return array
+     */
+    public function getChartTypeList(array $header): array
+    {
+        $chartTypeList = $this->lang->metric->chartTypeList;
+        if($this->isObjectMetric($header)) unset($chartTypeList['pie']);
+
+        return $chartTypeList;
     }
 
     /**
@@ -1048,7 +1466,8 @@ class metricModel extends model
     public function updateMetricDate()
     {
         $now = helper::now();
-        $this->dao->update(TABLE_METRIC)->set('createdDate')->eq($now)->where('deleted')->eq(0)->andWhere('createdDate is null')->exec();
+        $metricIDList = $this->dao->select('id')->from(TABLE_METRIC)->where('deleted')->eq('0')->fetchPairs();
+        foreach($metricIDList as $metricID) $this->dao->update(TABLE_METRIC)->set('createdDate')->eq($now)->exec();
     }
 
     /**
@@ -1097,8 +1516,32 @@ class metricModel extends model
      * @access public
      * @return object|string|false
      */
-    public function processRecordQuery(array $query, string $key, string $type = 'common'): object|string|false
+    public function processRecordQuery(array $query, string $key, string $type = 'common'): object|array|string|false
     {
+        if($key == 'dateLabel')
+        {
+            if(isset($query[$key]))
+            {
+                $dateType  = $query['dateType'];
+                $dateLabel = $query['dateLabel'];
+
+                if($dateLabel == 'all') $dateStr = '1970-01-01';
+                if(is_numeric($dateLabel)) $dateStr = date('Y-m-d', strtotime('-' . ((int)$dateLabel - 1) . " {$dateType}s"));
+
+                $query['dateBegin'] = $dateStr;
+                $query['dateEnd']   = date('Y-m-d');
+            }
+
+            $begin = $this->processRecordQuery($query, 'dateBegin', 'date');
+            $end   = $this->processRecordQuery($query, 'dateEnd', 'date');
+            return array($begin, $end);
+        }
+
+        if($key == 'calcDate' && isset($query[$key]))
+        {
+            return date('Y-m-d', strtotime("-{$query[$key]} days"));
+        }
+
         if(!isset($query[$key]) || empty($query[$key])) return false;
 
         if($type == 'date')
@@ -1120,30 +1563,31 @@ class metricModel extends model
     }
 
     /**
-     * 获取度量数据的日期字段。
-     * Get date field of metric data.
+     * 获取度量数据的日期类型。
+     * Get date type of metric data.
      *
-     * @param  string $code
+     * @param  array    $dateFields
      * @access public
-     * @return array
+     * @return string
      */
-    public function getMetricRecordDateField(string $code): array
+    public function getDateType(array $dateFields): string
     {
-        $record = $this->dao->select("year, month, week, day")
-            ->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
-            ->fetch();
+        $dateList = array_intersect($dateFields, $this->config->metric->dateList);
 
-        if(!$record) return array();
+        if(in_array('day',   $dateList)) return 'day';
+        if(in_array('week',  $dateList)) return 'week';
+        if(in_array('month', $dateList)) return 'month';
+        if(in_array('year',  $dateList)) return 'year';
 
-        $dataFields = array();
-        $recordKeys = array_keys((array)$record);
-        foreach($recordKeys as $recordKey)
-        {
-            if(!empty($record->$recordKey)) $dataFields[] = $recordKey;
-        }
+        return 'nodate';
+    }
 
-        return $dataFields;
+    public function getDateTypeByCode(string $code)
+    {
+        $dataFields = $this->getMetricRecordDateField($code);
+        $dateType   = $this->getDateType($dataFields);
+
+        return $dateType;
     }
 
     /**
@@ -1154,12 +1598,14 @@ class metricModel extends model
      * @access public
      * @return string
      */
-    public function getDateType(array $dateFields): string
+    public function getDateByDateType(string $dateType): string
     {
-        if(in_array('day', $dateFields)) return 'day';
-        if(in_array('week', $dateFields)) return 'week';
-        if(in_array('month', $dateFields)) return 'month';
-        if(in_array('year', $dateFields)) return 'year';
+        if($dateType == 'day')   $sub = '-7 days';
+        if($dateType == 'week')  $sub = '-1 month';
+        if($dateType == 'month') $sub = '-1 year';
+        if($dateType == 'year')  $sub = '-3 years';
+
+        return date('Y-m-d', strtotime($sub));
     }
 
     /**
@@ -1197,5 +1643,97 @@ class metricModel extends model
         if(strpos($str, "\r") !== false)   $str = str_replace("\r",   $replace, $str);
 
         return $str;
+    }
+
+    /**
+     * 判断 header 是否有分组（合并单元格）。
+     * Judge header whether there are merges cell.
+     *
+     * @param  array     $header
+     * @access protected
+     * @return array
+     */
+    protected function isHeaderGroup($header)
+    {
+        if(!$header) return false;
+
+        foreach($header as $head)
+        {
+            if(isset($head['headerGroup'])) return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 判断是否是按系统统计的度量项。
+     * Determine whether it is metric in system.
+     *
+     * @param  array  $results
+     * @access public
+     * @return bool
+     */
+    public function isSystemMetric($results)
+    {
+        $firstRecord = (object)current($results);
+
+        foreach($this->config->metric->excludeGlobal as $exclude)
+        {
+            if(isset($firstRecord->$exclude)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * 获取度量项的收集周期。
+     * Get collect cycle of metric.
+     *
+     * @param  array|object $record
+     * @access public
+     * @return string|null
+     */
+    public function getMetricCycle($record)
+    {
+        $record = (object)$record;
+
+        if(isset($record->year) && !isset($record->month) && !isset($record->week)) return 'year';
+        if(isset($record->year, $record->month) && !isset($record->day)) return 'month';
+        if(isset($record->year, $record->month, $record->day)) return 'day';
+        if(isset($record->year, $record->week)) return 'week';
+
+        return null;
+    }
+
+    /**
+     * 获取日期标签。
+     * Get date labels.
+     *
+     * @param  string    $dateType
+     * @access public
+     * @return array|false
+     */
+    public function getDateLabels(string $dateType): array|false
+    {
+        if($dateType == 'nodate') return array();
+        $objectKey = "{$dateType}Labels";
+
+        return $this->lang->metric->query->$objectKey;
+    }
+
+    /**
+     * 获取默认选中的日期。
+     * Get default selected date.
+     *
+     * @param  array $dateLabels
+     * @param  array $filters
+     * @access public
+     * @return string
+     */
+    public function getDefaultDate(array $dateLabels, array $filters = array()): string
+    {
+        $defaultDate = '';
+
+        $dates = array_keys($dateLabels);
+        return (string)current($dates);
     }
 }

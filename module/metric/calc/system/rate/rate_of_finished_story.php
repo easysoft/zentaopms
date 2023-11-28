@@ -24,7 +24,7 @@ class rate_of_finished_story extends baseCalc
 
     public $fieldList = array('t1.status', 't1.closedReason');
 
-    public $result = array();
+    public $result = array('finished' => 0, 'valid' => 0);
 
     public function calculate($row)
     {
@@ -37,7 +37,7 @@ class rate_of_finished_story extends baseCalc
 
     public function getResult($options = array())
     {
-        $this->result = $this->result['valid'] ? round($this->result['finished'] / $this->result['valid'], 4) : 0;
+        $this->result = !empty($this->result['valid']) ? round($this->result['finished'] / $this->result['valid'], 4) : 0;
         $records = array(array('value' => $this->result));
         return $this->filterByOptions($records, $options);
 

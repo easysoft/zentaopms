@@ -20,7 +20,7 @@ $afterEdit = $isDisabled ? '' : formGroup
     set::label($lang->metric->afterCreate),
     set::control(array('type' => 'radioList', 'inline' => true)),
     set::items($lang->metric->afterCreateList),
-    set::value('implement'),
+    set::value('implement')
 );
 
 formPanel
@@ -41,7 +41,7 @@ formPanel
             set::items($lang->metric->scopeList),
             set::value($metric->scope),
             set::required(true),
-            set::disabled($isDisabled),
+            set::disabled($isDisabled)
         ),
         formGroup
         (
@@ -51,7 +51,7 @@ formPanel
             set::items($lang->metric->objectList),
             set::value($metric->object),
             set::required(true),
-            set::disabled($isDisabled),
+            set::disabled($isDisabled)
         ),
         formGroup
         (
@@ -61,15 +61,15 @@ formPanel
             set::items($lang->metric->purposeList),
             set::value($metric->purpose),
             set::required(true),
-            set::disabled($isDisabled),
-        ),
+            set::disabled($isDisabled)
+        )
     ),
     formGroup
     (
         set::label($lang->metric->name),
         set::name('name'),
         set::value($metric->name),
-        set::required(true),
+        set::required(true)
     ),
     formGroup
     (
@@ -77,7 +77,7 @@ formPanel
         set::name('code'),
         set::value($metric->code),
         set::required(true),
-        set::disabled($isDisabled),
+        set::disabled($isDisabled)
     ),
     formRow
     (
@@ -97,7 +97,7 @@ formPanel
                         set::name('unit'),
                         set::items($lang->metric->unitList),
                         set::value($isCustomUnit ? '' : $metric->unit),
-                        set::disabled($isDisabled),
+                        set::disabled($isDisabled)
                     )
                 ),
                 div
@@ -108,7 +108,7 @@ formPanel
                         set::name('customUnit'),
                         set::text($lang->metric->customUnit),
                         set::checked($isCustomUnit),
-                        set::disabled($isDisabled),
+                        set::disabled($isDisabled)
                     )
                 )
             )
@@ -127,7 +127,7 @@ formPanel
                 div
                 (
                     setClass('grow'),
-                    input(set::name('addunit'), set::value($isCustomUnit ? $metric->unit : '')),
+                    input(set::name('addunit'), set::value($isCustomUnit ? $metric->unit : ''))
                 ),
                 div
                 (
@@ -136,7 +136,7 @@ formPanel
                     (
                         set::name('customUnit'),
                         set::text($lang->metric->customUnit),
-                        set::checked($isCustomUnit),
+                        set::checked($isCustomUnit)
                     )
                 )
             )
@@ -149,7 +149,7 @@ formPanel
         set::control(array('type' => 'textarea', 'rows' => 3)),
         set::name('desc'),
         set::value($metric->desc),
-        set::placeholder($lang->metric->descTip),
+        set::placeholder($lang->metric->descTip)
     ),
     formGroup
     (
@@ -158,8 +158,8 @@ formPanel
         set::name('definition'),
         set::value($metric->definition),
         set::placeholder($lang->metric->definitionTip),
-        set::disabled($isDisabled),
+        set::disabled($isDisabled)
     ),
     $afterEdit,
-    set::submitBtnText($lang->save),
+    set::submitBtnText($lang->save)
 );

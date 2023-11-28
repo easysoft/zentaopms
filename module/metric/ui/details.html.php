@@ -25,7 +25,7 @@ $buildItems = function($items): array
                 !empty($item['attr']) && is_array($item['attr']) ? set($item['attr']) : null,
                 html($item['text'])
             ) : html($item['text']),
-            set::collapse(!empty($item['text'])),
+            set::collapse(!empty($item['text']))
         );
     }
 
@@ -40,8 +40,8 @@ detailHeader
         (
             set::level(1),
             set::text($lang->metric->details)
-        ),
-    ),
+        )
+    )
 );
 
 panel
@@ -58,14 +58,14 @@ panel
 
                 $lang->metric->legendBasicInfo,
                 setClass('gray-pale text-md font-bold')
-            ),
+            )
         ),
         div
         (
             tableData
             (
-                $buildItems($legendBasic),
-            ),
+                $buildItems($legendBasic)
+            )
         ),
         h1
         (
@@ -74,16 +74,16 @@ panel
             (
                 $lang->metric->legendCreateInfo,
                 setClass('gray-pale text-md font-bold')
-            ),
+            )
         ),
         div
         (
             tableData
             (
-                $buildItems($createEditInfo),
-            ),
-        ),
-    ),
+                $buildItems($createEditInfo)
+            )
+        )
+    )
 );
 
 render();
