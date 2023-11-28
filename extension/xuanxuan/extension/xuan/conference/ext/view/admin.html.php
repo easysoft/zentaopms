@@ -2,7 +2,7 @@
 /**
  * The admin view file of conference module of XXB.
  *
- * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd., www.zentao.net)
  * @license     ZOSL (https://zpl.pub/page/zoslv1.html)
  * @author      Wenrui LI <liwenrui@easycorp.ltd>
  * @package     conference
@@ -11,6 +11,7 @@
  */
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
+<?php js::set('hasDetached', extCommonModel::ilMethod('conference', 'detachedConference'))?>
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'>
     <div class='cell'>
@@ -59,6 +60,22 @@
             <td></td>
           </tr>
           <tr class='edit-row common-row'>
+            <th class="w-120px"><?php echo $lang->conference->detachedConference;?></th>
+            <td class="w-400px">
+              <?php if($type != 'edit'): ?>
+                <div class="checkbox-primary disabled <?php if($detachedConference && extCommonModel::ilMethod('conference', 'detachedConference')) echo 'checked';?>">
+                  <label id="detachedConferenceTip"><?php echo $lang->conference->detachedConferenceTip;?></label>
+                </div>
+              <?php else: ?>
+                <div class="checkbox-primary">
+                  <input type='hidden' value='0' name='detachedConference'>
+                  <input type="checkbox" name="detachedConference" id='detachedConference' value="true" <?php if($detachedConference && extCommonModel::ilMethod('conference', 'detachedConference')) echo 'checked';?> <?php if($type != 'edit' || !extCommonModel::ilMethod('conference', 'detachedConference') || $backendType == 'owt') echo 'disabled';?>>
+                  <label id="detachedConferenceTip" for='detachedConference'><?php echo $lang->conference->detachedConferenceTip;?></label>
+                </div>
+              <?php endif; ?>
+            </td>
+          </tr>
+          <tr class='edit-row common-row'>
             <th class="w-120px"><?php echo $lang->conference->serverAddr;?></th>
             <td class="w-400px code">
               <?php if($type == 'edit'): ?>
@@ -82,7 +99,6 @@
               </div>
               <?php endif; ?>
             </td>
-            <td></td>
           </tr>
           <tr class='edit-row common-row'>
             <th class="w-120px"><?php echo $lang->conference->apiPort;?></th>
@@ -149,9 +165,9 @@
           <a href="https://www.xuanim.com/page/download.html" target="_blank"><?php echo $lang->conference->download;?></a>
           <hr>
           <h4><?php echo $lang->conference->srsSetupTitle;?></h4>
-          <a href="https://www.xuanim.com/book/xuanxuanserver/273.html" target="_blank"><?php echo $lang->conference->setupDoc;?></a>
+          <a href="https://www.zentao.net/book/zentaopms/1158.html" target="_blank"><?php echo $lang->conference->setupDoc;?></a>
           <br>
-          <a href="https://www.xuanim.com/book/xxbservice/274.html" target="_blank"><?php echo $lang->conference->configDoc;?></a>
+          <a href="https://www.zentao.net/book/zentaopms/1159.html" target="_blank"><?php echo $lang->conference->configDoc;?></a>
           <hr>
           <h4><?php echo $lang->conference->owtSetupTitle;?></h4>
           <a href="https://www.xuanim.com/book/xuanxuanserver/237.html" target="_blank"><?php echo $lang->conference->setupDoc;?></a>
@@ -161,11 +177,6 @@
       </form>
     </div>
     <div class="tab-pane fade <?php echo $type == 'video' ? 'active in' : '';?>" id="videoContent">
-      <div class='main-header'>
-        <div class='heading'>
-          <strong><?php echo $lang->conference->video?></strong>
-        </div>
-      </div>
       <form method='post' id='ajaxForm' class='form-ajax' action=<?php echo $this->createLink("conference", 'admin', 'type=video');?>>
         <table class='table table-form'>
           <tr>
@@ -193,25 +204,36 @@
     </div>
   </div>
 </div>
+<div class="modal fade" id="detachedConferenceCheckModal">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-header">
+      <strong>
+        <?php echo $lang->conference->detachedConference;?>
+      </strong>
+    </div>
+    <div class="modal-body">
+      <?php echo $lang->conference->detachedConferencewarning;?>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo $lang->cancel;?></button>
+      <button type="button" class="btn btn-primary" id="detachedConferenceConfirmButton"><?php echo $lang->confirm;?></button>
+    </div>
+  </div>
+</div>
 <style>
+.tab-content .tab-pane {padding: 0;}
+.tab-content .tab-pane form {padding: 20px 0;}
 .edit-row {display: none}
 #conference-admin-form.conference-enabled .edit-row {display: table-row}
 .srs-selected .owt-row {display: none!important}
 .owt-selected .srs-row {display: none!important}
-#videoContent, #serverContent{padding-top:0px;}
-.tab-content .main-header {margin-bottom:20px;}
 </style>
 <script>
 $(function()
 {
-    let owtPort = '3004';
-    let srsPort = '1985';
-    $('.side-col .nav a[data-toggle=tab]').click(function()
-    {
-        $(this).parent().find('a').removeClass('active');
-        $(this).addClass('active');
-    });
-    $.setAjaxForm('#conference-admin-form');
+    var owtPort = '3004';
+    var srsPort = '1985';
+
     $('#enabled').on('change', function()
     {
         $('#conference-admin-form').toggleClass('conference-enabled', $('#enabled').is(':checked'));
@@ -226,6 +248,7 @@ $(function()
             document.getElementById('apiPortTip').innerHTML = '<?php echo $lang->conference->apiPortOwtTip;?>';
             srsPort = document.getElementById('apiPort').value;
             document.getElementById('apiPort').value = owtPort;
+            document.getElementById('detachedConference').toggleAttribute('disabled', true);
         }
         if(e.target.value == 'srs')
         {
@@ -235,7 +258,33 @@ $(function()
             document.getElementById('apiPortTip').innerHTML = '<?php echo $lang->conference->apiPortSrsTip;?>';
             owtPort = document.getElementById('apiPort').value;
             document.getElementById('apiPort').value = srsPort;
+            if(hasDetached)
+            {
+              document.getElementById('detachedConference').toggleAttribute('disabled', false);
+            }
         }
+    });
+    $("#submit").click(function(event)
+    {
+      event.preventDefault();
+      var conferenceAdminFormData = new FormData(document.getElementById('conference-admin-form'));
+      var isDetachedConferenceEnable = conferenceAdminFormData.getAll('detachedConference').reduce((previousValue, currentValue) => previousValue || (currentValue === 'true'), false);
+      if(isDetachedConferenceEnable)
+      {
+        $('#detachedConferenceCheckModal').modal('show', 'fit')
+      }
+      else
+      {
+        $.setAjaxForm('#conference-admin-form');
+        document.getElementById("conference-admin-form").requestSubmit();
+      }
+    });
+    $('#detachedConferenceConfirmButton').on('click', function()
+    {
+      $('#detachedConferenceCheckModal').modal('hide');
+      $("#conference-admin-form").off( "submit");
+      $.setAjaxForm('#conference-admin-form');
+      document.getElementById("conference-admin-form").requestSubmit();
     });
 });
 </script>
