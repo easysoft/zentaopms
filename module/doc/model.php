@@ -2813,9 +2813,10 @@ class docModel extends model
     }
 
     /**
+     * 通过搜索获取文档列表数据。
      * Get docs by search.
      *
-     * @param  string $type product|project|execution|custom|book
+     * @param  string $type     product|project|execution|custom|book
      * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $queryID
@@ -2824,7 +2825,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy = 'id_desc', $pager = null)
+    public function getDocsBySearch(string $type, int $objectID, int $libID, int $queryID, string $orderBy = 'id_desc', object $pager = null): array
     {
         $query     = $this->buildQuery($type, $queryID);
         $libs      = $this->getLibsByObject($type, $objectID);
@@ -2840,8 +2841,8 @@ class docModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        $docs = $this->processCollector($docs);
-        return $docs;
+
+        return $this->processCollector($docs);
     }
 
     /**
