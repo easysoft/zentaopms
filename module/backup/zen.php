@@ -129,5 +129,52 @@ class backupZen extends backup
             }
         }
     }
-}
 
+    /**
+     * 还原SQL
+     * Restore SQL
+     *
+     * @param  string    $fileName
+     * @access protected
+     * @return array
+     */
+    protected function restoreSQL(string $fileName): array
+    {
+        $backupFile = $this->backup->getBackupFile($fileName, 'sql');
+        if(empty($backupFile)) return array('result' => 'success');
+
+        $extension = substr($backupFile, -3);
+        if($extension == 'php') $this->backup->removeFileHeader($backupFile);
+
+        $result = $this->backup->restoreSQL($backupFile);
+
+        if($extension == 'php') $this->backup->addFileHeader($backupFile);
+
+        if(!$result->result) return array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreSQL, $result->error));
+        return array('result' => 'success');
+    }
+
+    /**
+     * 还原附件
+     * Restore File.
+     *
+     * @param  string    $fileName
+     * @access protected
+     * @return array
+     */
+    protected function restoreFile(string $fileName): array
+    {
+        $backupFile = $this->backup->getBackupFile($fileName, 'file');
+        if(empty($backupFile)) return array('result' => 'success');
+
+        $extension = substr($backupFile, -3);
+        if($extension == 'php') $this->backup->removeFileHeader($backupFile);
+
+        $result = $this->backup->restoreFile($fileBackup);
+
+        if($extension == 'php') $this->backup->addFileHeader($backupFile);
+
+        if(!$result->result) return array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreFile, $result->error));
+        return array('result' => 'success');
+    }
+}
