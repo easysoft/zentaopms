@@ -9,7 +9,7 @@ class messageTest
      * @access public
      * @return void
      */
-    public function __construct(): void
+    public function __construct()
     {
          global $tester;
          $this->objectModel = $tester->loadModel('message');
