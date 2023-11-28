@@ -799,184 +799,29 @@ class searchModel extends model
     }
 
     /**
+     * 检查查询到的结果的权限。
      * Check product and project priv.
      *
-     * @param  array    $results
-     * @param  array    $objectPairs
+     * @param  array  $results
+     * @param  array  $objectPairs
      * @access public
      * @return array
      */
-    public function checkPriv($results, $objectPairs = array())
+    public function checkPriv(array $results, array $objectPairs = array()): array
     {
         if($this->app->user->admin) return $results;
 
-        $this->loadModel('doc');
-        $products       = $this->app->user->view->products;
-        $shadowProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs('id');
-        $programs       = $this->app->user->view->programs;
-        $projects       = $this->app->user->view->projects;
-        $executions     = $this->app->user->view->sprints;
+        $products   = $this->app->user->view->products;
+        $executions = $this->app->user->view->sprints;
 
-        $objectPairs = array();
-        $total       = count($results);
-        if(empty($objectPairs))
-        {
-            foreach($results as $record) $objectPairs[$record->objectType][$record->objectID] = $record->id;
-        }
-
+        if(empty($objectPairs)) foreach($results as $record) $objectPairs[$record->objectType][$record->objectID] = $record->id;
         foreach($objectPairs as $objectType => $objectIdList)
         {
-            $objectProducts = array();
-            $objectExecutions = array();
             if(!isset($this->config->objectTables[$objectType])) continue;
+
             $table = $this->config->objectTables[$objectType];
-            if(strpos(',bug,case,testcase,productplan,release,story,testtask,', ",$objectType,") !== false)
-            {
-               $objectProducts = $this->dao->select('id,product')->from($table)->where('id')->in(array_keys($objectIdList))->fetchGroup('product', 'id');
-            }
-            elseif(strpos(',build,task,testreport,', ",$objectType,") !== false)
-            {
-               $objectExecutions = $this->dao->select('id,execution')->from($table)->where('id')->in(array_keys($objectIdList))->fetchGroup('execution', 'id');
-            }
-            elseif($objectType == 'effort')
-            {
-                $efforts = $this->dao->select('id,product,execution')->from($table)->where('id')->in(array_keys($objectIdList))->fetchAll();
-                foreach($efforts as $effort)
-                {
-                    $objectExecutions[$effort->execution][$effort->id] = $effort;
-                    $effortProducts = explode(',', trim($effort->product, ','));
-                    foreach($effortProducts as $effortProduct) $objectProducts[$effortProduct][$effort->id] = $effort;
-                }
-            }
-            elseif($objectType == 'product')
-            {
-                foreach($objectIdList as $productID => $recordID)
-                {
-                    if(strpos(",$products,", ",$productID,") === false) unset($results[$recordID]);
-                    if(in_array($productID, $shadowProducts)) unset($results[$recordID]);
-                }
-            }
-            elseif($objectType == 'program')
-            {
-                foreach($objectIdList as $programID => $recordID)
-                {
-                    if(strpos(",$programs,", ",$programID,") === false) unset($results[$recordID]);
-                }
-            }
-            elseif($objectType == 'project')
-            {
-                foreach($objectIdList as $projectID => $recordID)
-                {
-                    if(strpos(",$projects,", ",$projectID,") === false) unset($results[$recordID]);
-                }
-            }
-            elseif($objectType == 'execution')
-            {
-                foreach($objectIdList as $executionID => $recordID)
-                {
-                    if(strpos(",$executions,", ",$executionID,") === false) unset($results[$recordID]);
-                }
-            }
-            elseif($objectType == 'doc')
-            {
-                $objectDocs = $this->dao->select('*')->from($table)->where('id')->in(array_keys($objectIdList))
-                    ->andWhere('deleted')->eq(0)
-                    ->fetchAll('id');
-                $privLibs = array();
-                foreach($objectIdList as $docID => $recordID)
-                {
-                    if(!isset($objectDocs[$docID]) or !$this->doc->checkPrivDoc($objectDocs[$docID]))
-                    {
-                        unset($results[$recordID]);
-                        continue;
-                    }
-
-                    $objectDoc = $objectDocs[$docID];
-                    $privLibs[$objectDoc->lib] = $objectDoc->lib;
-                }
-
-                $libs = $this->doc->getLibs('all');
-                $objectDocLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('id')->in($privLibs)
-                    ->andWhere('id')->in(array_keys($libs))
-                    ->andWhere('deleted')->eq(0)
-                    ->fetchPairs('id', 'id');
-                foreach($objectDocs as $docID => $doc)
-                {
-                    $libID = $doc->lib;
-                    if(!isset($objectDocLibs[$libID]))
-                    {
-                        $recordID = $objectIdList[$docID];
-                        unset($results[$recordID]);
-                    }
-                }
-            }
-            elseif($objectType == 'todo')
-            {
-                $objectTodos = $this->dao->select('id')->from($table)->where('id')->in(array_keys($objectIdList))->andWhere("private")->eq(1)->andWhere('account')->ne($this->app->user->account)->fetchPairs('id', 'id');
-                foreach($objectTodos as $todoID)
-                {
-                    if(isset($objectIdList[$todoID]))
-                    {
-                        $recordID = $objectIdList[$todoID];
-                        unset($results[$recordID]);
-                    }
-                }
-            }
-            elseif($objectType == 'testsuite')
-            {
-                $objectSuites = $this->dao->select('id')->from($table)->where('id')->in(array_keys($objectIdList))
-                    ->andWhere("type")->eq('private')
-                    ->andWhere('deleted')->eq(0)
-                    ->fetchPairs('id', 'id');
-                foreach($objectSuites as $suiteID)
-                {
-                    if(isset($objectIdList[$suiteID]))
-                    {
-                        $recordID = $objectIdList[$suiteID];
-                        unset($results[$recordID]);
-                    }
-                }
-            }
-            elseif(strpos(',feedback,ticket,', ",$objectType,") !== false)
-            {
-                $grantProducts = $this->loadModel('feedback')->getGrantProducts();
-                $objects       = $this->dao->select('*')->from($table)->where('id')->in(array_keys($objectIdList))->fetchAll('id');
-                foreach($objects as $objectID => $object)
-                {
-                    if($objectType == 'feedback' and $object->openedBy == $this->app->user->account) continue;
-                    if(isset($grantProducts[$object->product])) continue;
-                    if(isset($objectIdList[$objectID]))
-                    {
-                        $recordID = $objectIdList[$objectID];
-                        unset($results[$recordID]);
-                    }
-                }
-            }
-
-            foreach($objectProducts as $productID => $idList)
-            {
-                if(empty($productID)) continue;
-                if(strpos(",$products,", ",$productID,") === false)
-                {
-                    foreach($idList as $object)
-                    {
-                        $recordID = $objectIdList[$object->id];
-                        unset($results[$recordID]);
-                    }
-                }
-            }
-            foreach($objectExecutions as $executionID => $idList)
-            {
-                if(empty($executionID)) continue;
-                if(strpos(",$executions,", ",$executionID,") === false)
-                {
-                    foreach($idList as $object)
-                    {
-                        $recordID = $objectIdList[$object->id];
-                        unset($results[$recordID]);
-                    }
-                }
-            }
+            $results = $this->searchTao->checkObjectPriv($objectType, $table, $results, $objectIdList, $products, $executions);
+            $results = $this->searchTao->checkRelatedObjectPriv($objectType, $table, $results, $objectIdList, $products, $executions);
         }
         return $results;
     }

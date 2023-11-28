@@ -335,4 +335,293 @@ class searchTao extends searchModel
 
         return $allowedObjects;
     }
+
+    /**
+     * 检查产品的权限。
+     * Check product prividge.
+     *
+     * @param  array   $results
+     * @param  array   $objectIdList
+     * @param  array   $products
+     * @access private
+     * @return array
+     */
+    private function checkProductPriv(array $results, array $objectIdList, array $products): array
+    {
+        $shadowProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs('id');
+        foreach($objectIdList as $productID => $recordID)
+        {
+            if(strpos(",$products,", ",$productID,") === false) unset($results[$recordID]);
+            if(in_array($productID, $shadowProducts)) unset($results[$recordID]);
+        }
+
+        return $results;
+    }
+
+    /**
+     * 检查项目集的权限。
+     * Check program priviledge.
+     *
+     * @param  array   $results
+     * @param  array   $objectIdList
+     * @access private
+     * @return array
+     */
+    private function checkProgramPriv(array $results, array $objectIdList): array
+    {
+        $programs = $this->app->user->view->programs;
+        foreach($objectIdList as $programID => $recordID)
+        {
+            if(strpos(",$programs,", ",$programID,") === false) unset($results[$recordID]);
+        }
+        return $results;
+    }
+
+    /**
+     * 检查项目的权限。
+     * Check project priviledge.
+     *
+     * @param  array   $results
+     * @param  array   $objectIdList
+     * @access private
+     * @return array
+     */
+    private function checkProjectPriv(array $results, array $objectIdList): array
+    {
+        $projects = $this->app->user->view->projects;
+        foreach($objectIdList as $projectID => $recordID)
+        {
+            if(strpos(",$projects,", ",$projectID,") === false) unset($results[$recordID]);
+        }
+        return $results;
+    }
+
+    /**
+     * 检查执行的权限。
+     * Check execution priviledge.
+     *
+     * @param  array   $results
+     * @param  array   $objectIdList
+     * @param  array   $executions
+     * @access private
+     * @return array
+     */
+    private function checkExecutionPriv(array $results, array $objectIdList, array $executions): array
+    {
+        foreach($objectIdList as $executionID => $recordID)
+        {
+            if(strpos(",$executions,", ",$executionID,") === false) unset($results[$recordID]);
+        }
+        return $results;
+    }
+
+    /**
+     * 检查文档的权限。
+     * Check doc priviledge.
+     *
+     * @param  array   $results
+     * @param  array   $objectIdList
+     * @param  string  $table
+     * @access private
+     * @return array
+     */
+    private function checkDocPriv(array $results, array $objectIdList, string $table): array
+    {
+        $this->loadModel('doc');
+        $objectDocs = $this->dao->select('*')->from($table)->where('id')->in(array_keys($objectIdList))->andWhere('deleted')->eq('0')->fetchAll('id');
+
+        $privLibs = array();
+        foreach($objectIdList as $docID => $recordID)
+        {
+            if(!isset($objectDocs[$docID]) || !$this->doc->checkPrivDoc($objectDocs[$docID]))
+            {
+                unset($results[$recordID]);
+                continue;
+            }
+
+            $objectDoc = $objectDocs[$docID];
+            $privLibs[$objectDoc->lib] = $objectDoc->lib;
+        }
+
+        $libs = $this->doc->getLibs('all');
+        $objectDocLibs = $this->dao->select('id')->from(TABLE_DOCLIB)->where('id')->in($privLibs)->andWhere('id')->in(array_keys($libs))->andWhere('deleted')->eq('0')->fetchPairs();
+        foreach($objectDocs as $docID => $doc)
+        {
+            if(!isset($objectDocLibs[$doc->lib]))
+            {
+                $recordID = $objectIdList[$docID];
+                unset($results[$recordID]);
+            }
+        }
+        return $results;
+    }
+
+    /**
+     * 检查待办的权限。
+     * Check todo priviledge.
+     *
+     * @param  array   $results
+     * @param  array   $objectIdList
+     * @param  string  $table
+     * @access private
+     * @return array
+     */
+    private function checkTodoPriv(array $results, array $objectIdList, string $table): array
+    {
+        $objectTodos = $this->dao->select('id')->from($table)->where('id')->in(array_keys($objectIdList))->andWhere("private")->eq(1)->andWhere('account')->ne($this->app->user->account)->fetchPairs();
+        foreach($objectTodos as $todoID)
+        {
+            if(isset($objectIdList[$todoID]))
+            {
+                $recordID = $objectIdList[$todoID];
+                unset($results[$recordID]);
+            }
+        }
+        return $results;
+    }
+
+    /**
+     * 检查套件的权限。
+     * Check testsuite Priviledge.
+     *
+     * @param  array   $results
+     * @param  array   $objectIdList
+     * @param  string  $table
+     * @access private
+     * @return array
+     */
+    private function checkTestsuitePriv(array $results, array $objectIdList, string $table): array
+    {
+        $objectSuites = $this->dao->select('id')->from($table)->where('id')->in(array_keys($objectIdList))->andWhere('type')->eq('private')->andWhere('deleted')->eq('0')->fetchPairs();
+        foreach($objectSuites as $suiteID)
+        {
+            if(isset($objectIdList[$suiteID]))
+            {
+                $recordID = $objectIdList[$suiteID];
+                unset($results[$recordID]);
+            }
+        }
+        return $results;
+    }
+
+    /**
+     * 检查反馈和工单的权限。
+     * Check feedback and ticket priviledge.
+     *
+     * @param  string  $objectType
+     * @param  array   $results
+     * @param  array   $objectIdList
+     * @param  string  $table
+     * @access private
+     * @return array
+     */
+    private function checkFeedbackAndTicketPriv(string $objectType, array $results, array $objectIdList, string $table): array
+    {
+        $grantProducts = $this->loadModel('feedback')->getGrantProducts();
+        $objects       = $this->dao->select('*')->from($table)->where('id')->in(array_keys($objectIdList))->fetchAll('id');
+        foreach($objects as $objectID => $object)
+        {
+            if($objectType == 'feedback' && $object->openedBy == $this->app->user->account) continue;
+            if(isset($grantProducts[$object->product])) continue;
+
+            if(isset($objectIdList[$objectID]))
+            {
+                $recordID = $objectIdList[$objectID];
+                unset($results[$recordID]);
+            }
+        }
+        return $results;
+    }
+
+    /**
+     * 检查搜索到的模块的权限。
+     * Check the priviledge of the object.
+     *
+     * @param  string    $objectType
+     * @param  string    $table
+     * @param  array     $results
+     * @param  array     $objectIdList
+     * @param  array     $products
+     * @param  array     $executions
+     * @access protected
+     * @return array
+     */
+    protected function checkObjectPriv(string $objectType, string $table, array $results, array $objectIdList, array $products, array $executions): array
+    {
+        if($objectType == 'product')   return $this->checkProductPriv($results, $objectIdList, $products);
+        if($objectType == 'program')   return $this->checkProgramPriv($results, $objectIdList);
+        if($objectType == 'project')   return $this->checkProjectPriv($results, $objectIdList);
+        if($objectType == 'execution') return $this->checkExecutionPriv($results, $objectIdList, $executions);
+        if($objectType == 'doc')       return $this->checkDocPriv($results, $objectIdList, $table);
+        if($objectType == 'todo')      return $this->checkTodoPriv($results, $objectIdList, $table);
+        if($objectType == 'testsuite') return $this->checkTestsuitePriv($results, $objectIdList, $table);
+        if(strpos(',feedback,ticket,', ",$objectType,") !== false) return $this->checkFeedbackAndTicketPriv($objectType, $results, $objectIdList, $table);
+
+        return $results;
+    }
+
+    /**
+     * 检查各个模块所属的产品或者执行的权限。
+     * Check related object priviledge.
+     *
+     * @param  string    $objectType
+     * @param  string    $table
+     * @param  array     $results
+     * @param  array     $objectIdList
+     * @param  array     $products
+     * @param  array     $executions
+     * @access protected
+     * @return array
+     */
+    protected function checkRelatedObjectPriv(string $objectType, string $table, array $results, array $objectIdList, array $products, array $executions): array
+    {
+        $objectProducts   = array();
+        $objectExecutions = array();
+        if(strpos(',bug,case,testcase,productplan,release,story,testtask,', ",$objectType,") !== false)
+        {
+           $objectProducts = $this->dao->select('id, product')->from($table)->where('id')->in(array_keys($objectIdList))->fetchGroup('product', 'id');
+        }
+        elseif(strpos(',build,task,testreport,', ",$objectType,") !== false)
+        {
+           $objectExecutions = $this->dao->select('id, execution')->from($table)->where('id')->in(array_keys($objectIdList))->fetchGroup('execution', 'id');
+        }
+        elseif($objectType == 'effort')
+        {
+            $efforts = $this->dao->select('id, product, execution')->from($table)->where('id')->in(array_keys($objectIdList))->fetchAll();
+            foreach($efforts as $effort)
+            {
+                $objectExecutions[$effort->execution][$effort->id] = $effort;
+
+                $effortProducts = explode(',', trim($effort->product, ','));
+                foreach($effortProducts as $effortProduct) $objectProducts[$effortProduct][$effort->id] = $effort;
+            }
+        }
+
+        foreach($objectProducts as $productID => $idList)
+        {
+            if(empty($productID)) continue;
+            if(strpos(",$products,", ",$productID,") === false)
+            {
+                foreach($idList as $object)
+                {
+                    $recordID = $objectIdList[$object->id];
+                    unset($results[$recordID]);
+                }
+            }
+        }
+
+        foreach($objectExecutions as $executionID => $idList)
+        {
+            if(empty($executionID)) continue;
+            if(strpos(",$executions,", ",$executionID,") === false)
+            {
+                foreach($idList as $object)
+                {
+                    $recordID = $objectIdList[$object->id];
+                    unset($results[$recordID]);
+                }
+            }
+        }
+        return $results;
+    }
 }
