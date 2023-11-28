@@ -624,4 +624,23 @@ class docTest
         $this->objectModel->buildSearchForm($libID, $libs, $queryID, '', $type);
         return $this->objectModel->config->doc->search;
     }
+
+    /**
+     * 通过搜索获取文档列表数据。
+     * Get docs by search.
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function getDocsBySearchTest(string $type, int $objectID, int $libID, int $queryID): array
+    {
+        $docs = $this->objectModel->getDocsBySearch($type, $objectID, $libID, $queryID);
+        if(dao::isError()) return dao::getError();
+
+        return $docs;
+    }
 }
