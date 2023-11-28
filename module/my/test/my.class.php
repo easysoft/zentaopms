@@ -560,4 +560,28 @@ class myTest
         foreach($menu as $menuKey => $menuName) $return .= "{$menuKey}:{$menuName},";
         return trim($return, ',');
     }
+
+    /**
+     * 测试获取审批类型列表。
+     * Test get reviewing list.
+     *
+     * @param  string       $account
+     * @param  string       $browseType
+     * @param  string       $orderBy
+     * @param  object       $pager
+     * @access public
+     * @return string|array
+     */
+    public function getReviewingListTest(string $account, string $browseType, string $orderBy, object $pager = null): string|array
+    {
+        su($account);
+
+        $reviewList = $this->objectModel->getReviewingList($browseType, $orderBy, $pager);
+
+        if(dao::isError()) return dao::getError();
+
+        $return = '';
+        foreach($reviewList as $review) $return .= "{$review->type},{$review->id};";
+        return trim($return, ',');
+    }
 }
