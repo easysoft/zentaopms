@@ -1531,18 +1531,19 @@ class docModel extends model
     }
 
     /**
+     * 通过对象ID获取文档库。
      * Get libs by object.
      *
      * @param  string $type
      * @param  int    $objectID
-     * @param  string $mode
      * @param  int    $appendLib
      * @access public
      * @return array
      */
-    public function getLibsByObject(string $type, int $objectID, string $mode = '', int $appendLib = 0)
+    public function getLibsByObject(string $type, int $objectID, int $appendLib = 0): array
     {
-        if($type == 'custom' or $type == 'mine')
+        if(!in_array($type, array('mine', 'custom', 'product', 'project', 'execution'))) return array();
+        if(in_array($type, array('mine', 'custom')))
         {
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
@@ -1553,15 +1554,8 @@ class docModel extends model
                 ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
         }
-        elseif($type != 'product' and $type != 'project' and $type != 'execution')
-        {
-            return false;
-        }
         else
         {
-            $executionIDList = array();
-            if($type == 'project') $executionIDList = $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple,leaf');
-
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
@@ -1570,6 +1564,9 @@ class docModel extends model
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
+
+            $executionIDList = array();
+            if($type == 'project') $executionIDList = $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple,leaf');
             if($executionIDList)
             {
                 $objectLibs += $this->dao->select('*')->from(TABLE_DOCLIB)
@@ -1583,17 +1580,6 @@ class docModel extends model
             }
         }
 
-        if($type == 'product')
-        {
-            $hasProject = $this->dao->select('DISTINCT t1.product, count(t1.project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.product')->eq($objectID)
-                ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
-                ->andWhere('t2.deleted')->eq(0)
-                ->groupBy('product')
-                ->fetchPairs('product', 'projectCount');
-        }
-
         $libs = array();
         foreach($objectLibs as $lib)
         {
@@ -1602,7 +1588,6 @@ class docModel extends model
 
         $itemCounts = $this->statLibCounts(array_keys($libs));
         foreach($libs as $libID => $lib) $libs[$libID]->allCount = $itemCounts[$libID];
-
         return $libs;
     }
 
@@ -2752,7 +2737,7 @@ class docModel extends model
             $this->loadModel($type);
             $objects  = $this->getOrderedObjects($type, 'merge', $objectID);
             $objectID =  method_exists($this->$type, 'saveState') ? $this->{$type}->saveState($objectID, $objects) : $this->{$type}->checkAccess($objectID, $objects);
-            $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
+            $libs     = $this->getLibsByObject($type, $objectID, $appendLib);
             if(($libID == 0 || !isset($libs[$libID])) && !empty($libs)) $libID = reset($libs)->id;
             if($this->app->tab != 'doc' && isset($libs[$libID]))
             {
@@ -2766,7 +2751,7 @@ class docModel extends model
         }
         else
         {
-            $libs = $this->getLibsByObject($type, 0, '', $appendLib);
+            $libs = $this->getLibsByObject($type, 0, $appendLib);
             if(($libID == 0 || !isset($libs[$libID])) && !empty($libs)) $libID = reset($libs)->id;
             if(isset($libs[$libID])) $objectDropdown['text'] = zget($libs[$libID], 'name', '');
 
