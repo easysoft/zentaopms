@@ -1209,8 +1209,7 @@ class commonModel extends model
 
         /* White list of import method. */
         $canImport = isset($rights[$module]['import']) && commonModel::hasDBPriv($object, $module, 'import');
-        if(in_array($module, $app->config->importWhiteList) && $method == 'showimport' && $canImport)
-            return true;
+        if(in_array($module, $app->config->importWhiteList) && $method == 'showimport' && $canImport) return true;
 
         if(isset($rights[$module][$method]))
         {
@@ -1221,7 +1220,7 @@ class commonModel extends model
             if($module == 'my' and $method == 'team') $menu = 'system'; // Fix bug #18642.
             $menu = strtolower($menu);
             if($menu != 'qa' and !isset($lang->$menu->menu)) return true;
-            if(($menu == 'my' and $method != 'team')or $menu == 'index' or $module == 'tree') return true;
+            if(($menu == 'my' and $method != 'team') or $menu == 'index' or $module == 'tree') return true;
             if($module == 'company' and $method == 'dynamic') return true;
             if($module == 'action' and $method == 'editcomment') return true;
             if($module == 'action' and $method == 'comment') return true;
@@ -1235,13 +1234,14 @@ class commonModel extends model
     }
 
     /**
+     * 如果用户是项目管理员，则重设项目的权限。
      * Reset project priv.
      *
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function resetProjectPriv($projectID = 0)
+    public function resetProjectPriv(int $projectID = 0)
     {
         /* Get user program priv. */
         if(empty($projectID) and $this->session->project) $projectID = $this->session->project;
@@ -1295,16 +1295,17 @@ class commonModel extends model
     }
 
     /**
+     * 受限用户只能编辑自己相关的数据。
      * Check db priv.
      *
-     * @param  object $object
+     * @param  mixed  $object
      * @param  string $module
      * @param  string $method
      * @static
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function hasDBPriv($object, $module = '', $method = '')
+    public static function hasDBPriv(mixed $object, string $module = '', string $method = ''): bool
     {
         global $app;
 
@@ -1327,21 +1328,22 @@ class commonModel extends model
         }
         if(empty($app->user->rights['rights']['my']['limited']) && !$limitedExecution) return true;
 
-        if(!empty($method) && strpos($method, 'batch')  === 0) return false;
-        if(!empty($method) && strpos($method, 'link')   === 0) return false;
-        if(!empty($method) && strpos($method, 'create') === 0) return false;
-        if(!empty($method) && strpos($method, 'import') === 0) return false;
+        if(strpos($method, 'batch')  === 0) return false;
+        if(strpos($method, 'link')   === 0) return false;
+        if(strpos($method, 'create') === 0) return false;
+        if(strpos($method, 'import') === 0) return false;
 
         if(empty($object)) return true;
 
-        if(!empty($object->openedBy)     && $object->openedBy     == $app->user->account) return true;
-        if(!empty($object->addedBy)      && $object->addedBy      == $app->user->account) return true;
-        if(!empty($object->account)      && $object->account      == $app->user->account) return true;
-        if(!empty($object->assignedTo)   && $object->assignedTo   == $app->user->account) return true;
-        if(!empty($object->finishedBy)   && $object->finishedBy   == $app->user->account) return true;
-        if(!empty($object->canceledBy)   && $object->canceledBy   == $app->user->account) return true;
-        if(!empty($object->closedBy)     && $object->closedBy     == $app->user->account) return true;
-        if(!empty($object->lastEditedBy) && $object->lastEditedBy == $app->user->account) return true;
+        $account = $app->user->account;
+        if(!empty($object->openedBy))     return $object->openedBy     == $account;
+        if(!empty($object->addedBy))      return $object->addedBy      == $account;
+        if(!empty($object->account))      return $object->account      == $account;
+        if(!empty($object->assignedTo))   return $object->assignedTo   == $account;
+        if(!empty($object->finishedBy))   return $object->finishedBy   == $account;
+        if(!empty($object->canceledBy))   return $object->canceledBy   == $account;
+        if(!empty($object->closedBy))     return $object->closedBy     == $account;
+        if(!empty($object->lastEditedBy)) return $object->lastEditedBy == $account;
 
         return false;
     }
