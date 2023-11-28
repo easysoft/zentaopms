@@ -12,6 +12,7 @@
 class doc extends control
 {
     /**
+     * 构造函数，加载通用模块。
      * Construct function, load user, tree, action auto.
      *
      * @access public
