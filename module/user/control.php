@@ -801,8 +801,8 @@ class user extends control
     }
 
     /**
-     * 重置密码。
-     * Reset password.
+     * 管理员重置密码。
+     * Admin reset password.
      *
      * @access public
      * @return void
