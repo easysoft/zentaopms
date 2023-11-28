@@ -226,6 +226,9 @@ class metricTao extends metricModel
      */
     protected function fetchMetricRecords(string $code, array $fieldList, array $query = array(), object|null $pager = null): array
     {
+        $metricScope = $this->fetchMetricByID($code, 'scope');
+        $objectList  = $this->getObjectsWithPager($code, $metricScope, $pager);
+
         $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
         $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
 
