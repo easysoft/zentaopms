@@ -57,7 +57,7 @@ class backupZen extends backup
     protected function backupSQL(string $fileName): array
     {
         $backFileName = "{$this->backupPath}{$fileName}.sql";
-        if(str_contains($this->config->backup->setting, 'nosafe')) $backFileName .= '.php';
+        if(!str_contains($this->config->backup->setting, 'nosafe')) $backFileName .= '.php';
 
         $result = $this->backup->backSQL($backFileName);
         if(!$result->result) return array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noWritable, $this->backupPath));
@@ -76,7 +76,7 @@ class backupZen extends backup
      */
     protected function backupFile(string $fileName): array
     {
-        if(str_contains($this->config->backup->setting, 'nofile')) array('result' => 'success');
+        if(str_contains($this->config->backup->setting, 'nofile')) return array('result' => 'success');
 
         $result = $this->backup->backFile("{$this->backupPath}{$fileName}.file");
         if(!$result->result) return array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->backupFile, $result->error));
@@ -93,7 +93,7 @@ class backupZen extends backup
      */
     protected function backupCode(string $fileName): array
     {
-        if(str_contains($this->config->backup->setting, 'nofile')) array('result' => 'success');
+        if(str_contains($this->config->backup->setting, 'nofile')) return array('result' => 'success');
 
         $result = $this->backup->backCode("{$this->backupPath}{$fileName}.code");
         if(!$result->result) return array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->backupCode, $result->error));
@@ -170,7 +170,7 @@ class backupZen extends backup
         $extension = substr($backupFile, -3);
         if($extension == 'php') $this->backup->removeFileHeader($backupFile);
 
-        $result = $this->backup->restoreFile($fileBackup);
+        $result = $this->backup->restoreFile($backupFile);
 
         if($extension == 'php') $this->backup->addFileHeader($backupFile);
 

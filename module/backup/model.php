@@ -130,19 +130,9 @@ class backupModel extends model
      * @access public
      * @return object
      */
-    public function restoreSQL($backupFile)
+    public function restoreSQL(string $backupFile): object
     {
-        $zdb    = $this->app->loadClass('zdb');
-        $nosafe = strpos($this->config->backup->setting, 'nosafe') !== false;
-
-        $backupDir    = dirname($backupFile);
-        $fileName     = date('YmdHis') . mt_rand(0, 9);
-        $backFileName = "{$backupDir}/{$fileName}.sql";
-        if(!$nosafe) $backFileName .= '.php';
-
-        $result = $this->backSQL($backFileName);
-        if($result->result and !$nosafe) $this->addFileHeader($backFileName);
-
+        $zdb       = $this->app->loadClass('zdb');
         $allTables = $zdb->getAllTables();
         foreach($allTables as $tableName => $tableType)
         {
@@ -163,7 +153,7 @@ class backupModel extends model
      * @access public
      * @return object
      */
-    public function restoreFile($backupFile)
+    public function restoreFile(string $backupFile): object
     {
         $return = new stdclass();
         $return->result = true;
@@ -204,11 +194,12 @@ class backupModel extends model
         $tmpFile = $fileName . '.tmp';
 
         file_put_contents($tmpFile, $die);
-        $fh = fopen($fileName, 'r');
+        $fh     = fopen($fileName, 'r');
+        $length = 2 * 1024 * 1024;
         while(!feof($fh))
         {
-            $line = fgets($fh);
-            file_put_contents($tmpFile, $line, FILE_APPEND);
+            $buff = fread($fh, $length);
+            file_put_contents($tmpFile, $buff, FILE_APPEND);
         }
         fclose($fh);
         rename($tmpFile, $fileName);
@@ -227,14 +218,19 @@ class backupModel extends model
     {
         $tmpFile = $fileName . '.tmp';
         $fh      = fopen($fileName, 'r');
-        $lineID  = 0;
+        $length  = 2 * 1024 * 1024;
+        $readedFirstLine = false;
         while(!feof($fh))
         {
-            $line    = fgets($fh);
-            $lineID += 1;
-            if($lineID == 1) continue;
+            if(!$readedFirstLine)
+            {
+                fgets($fh);
+                $readedFirstLine = true;
+                continue;
+            }
 
-            file_put_contents($tmpFile, $line, FILE_APPEND);
+            $buff = fread($fh, $length);
+            file_put_contents($tmpFile, $buff, FILE_APPEND);
         }
         fclose($fh);
         rename($tmpFile, $fileName);
@@ -326,7 +322,7 @@ class backupModel extends model
      * @access public
      * @return array
      */
-    public function getBackupDirProgress($backup)
+    public function getBackupDirProgress(string $backup): array
     {
         $tmpLogFile = $this->getTmpLogFile($backup);
         if(file_exists($tmpLogFile)) return json_decode(file_get_contents($tmpLogFile), true);
@@ -340,7 +336,7 @@ class backupModel extends model
      * @access public
      * @return string
      */
-    public function processFileSize($fileSize)
+    public function processFileSize(int $fileSize): string
     {
         $bit = 'KB';
         $fileSize = round($fileSize / 1024, 2);

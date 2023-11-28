@@ -15,7 +15,7 @@ window.backup = function(e)
         },
     });
 
-    $('#waiting .modal-body #backupType').html(backup);
+    $('#waiting .modal-body #backupType').html(backupLang);
 
     zui.Modal.open({id: 'waiting', size: 'sm', backdrop: false});
     $('#waiting').addClass('show');
@@ -36,3 +36,19 @@ window.getCellSpan = function(cell)
         return {rowSpan: cell.row.data.rowspan};
     }
 }
+
+$(document).off('click', '.rmPHPHeader').on('click', '.rmPHPHeader', function(data)
+{
+    zui.Modal.open({id: 'waiting', size: 'sm', backdrop: false});
+    $('#waiting').addClass('show');
+    $('#waiting .modal-body #backupType').html(rmPHPHeaderLang);
+    $('#waiting .modal-body #message').empty();
+})
+
+$(document).off('click', '.restore').on('click', '.restore', function(data)
+{
+    zui.Modal.open({id: 'waiting', size: 'sm', backdrop: false});
+    $('#waiting').addClass('show');
+    $('#waiting .modal-body #backupType').html(restoreLang);
+    $('#waiting .modal-body #message').empty();
+});
