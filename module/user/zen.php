@@ -212,6 +212,79 @@ class userZen extends user
     }
 
     /**
+     * 登录。
+     * Login.
+     *
+     * @param  string $referer
+     * @param  string $viewType
+     * @param  string $loginLink
+     * @param  string $denyLink
+     * @param  string $locateReferer
+     * @param  string $locateWebRoot
+     * @access public
+     * @return array
+     */
+    public function login(string $referer = '', string $viewType = '', string $loginLink = '', string $denyLink = '', string $locateReferer = '', string $locateWebRoot = ''): array
+    {
+        if(empty($_POST) && (!isset($_GET['account']) || !isset($_GET['password']))) return array();
+
+        /* 预处理账号和密码。*/
+        /* Preprocess account and password. */
+        $account  = '';
+        $password = '';
+        if($this->post->account)  $account  = trim($this->post->account);
+        if($this->post->password) $password = trim($this->post->password);
+        if($this->get->account)   $account  = trim($this->get->account);
+        if($this->get->password)  $password = trim($this->get->password);
+
+        if(!$account) return array();
+
+        /* 如果用户被锁定返回相关信息。*/
+        /* Return related information if the user is locked. */
+        if($this->user->checkLocked($account)) return $this->responseForLocked($viewType);
+
+        /* 如果开启了登录验证码检查验证码是否正确。*/
+        /* Check if the login captcha is correct if the login captcha is enabled. */
+        if((!empty($this->config->safe->loginCaptcha) && strtolower($this->post->captcha) != strtolower($this->session->captcha) && $viewType != 'json')) return array('result' => 'fail', 'message' => $this->lang->user->errorCaptcha);
+
+        /* 验证账号和密码。*/
+        /* Verify account and password. */
+        $user = $this->user->identify($account, $password);
+
+        /* 登录失败返回错误信息。*/
+        /* Return error message if login failed. */
+        if(!$user) return $this->responseForLoginfail($viewType, $account);
+
+        /* 获取用户所属权限组、权限和视图，并发放登录积分。*/
+        /* Get user's group, privilege and view, and give login points. */
+        $user = $this->user->login($user);
+
+        /* 以 json 格式返回用户数据。*/
+        /* Return user data in json format. */
+        if($viewType == 'json') return array('status' => 'success', 'user' => $this->getUserForJSON($user));
+
+        /* 来源网址不满足条件时跳转到首页。*/
+        /* Jump to home page if the referer does not meet the conditions. */
+        if(!$referer || strpos($referer, $loginLink) !== false || strpos($referer, $denyLink) !== false || strpos($referer, 'ajax') !== false || strpos($referer, 'block') !== false) return array('result' => 'success', 'locate' => $locateWebRoot);
+
+        /* 解析来源网址包含的模块和方法。*/
+        /* Parse the module and method contained in the referer. */
+        list($module, $method) = $this->parseLoginModuleAndMethod($referer);
+
+        /* 如果模块和方法为空或者不合法则跳转到首页。*/
+        /* Jump to home page if the module and method are empty or illegal. */
+        if(empty($module) || empty($method) || !$this->app->checkModuleName($module, false) || !$this->app->checkMethodName($module, false)) return array('result' => 'success', 'locate' => $locateWebRoot);
+
+        /* 如果有模块和方法的访问权限则跳转到来源网址。*/
+        /* Jump to the referer if there is access to the module and method. */
+        if(common::hasPriv($module, $method)) return array('result' => 'success', 'locate' => $locateReferer);
+
+        /* 跳转到首页。*/
+        /* Jump to home page. */
+        return array('result' => 'success', 'locate' => $locateWebRoot);
+    }
+
+    /**
      * 解析来源网址包含的模块和方法。
      * Parse the module and method contained in the referer.
      *
