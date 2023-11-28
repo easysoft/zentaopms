@@ -624,4 +624,246 @@ class searchTao extends searchModel
         }
         return $results;
     }
+
+    /**
+     * 将搜索到的结果分页。
+     * Set results in pages.
+     *
+     * @param  array     $results
+     * @param  object    $pager
+     * @access protected
+     * @return array
+     */
+    protected function setResultsInPage(array $results, object $pager): array
+    {
+        $pager->setRecTotal(count($results));
+        $pager->setPageTotal();
+        $pager->setPageID($pager->pageID);
+
+        $results = array_chunk($results, $pager->recPerPage, true);
+        return $results[$pager->pageID - 1];
+    }
+
+    /**
+     * 获取搜索到的结果对应的内容。
+     * Get object list.
+     *
+     * @param  array     $idListGroup
+     * @access protected
+     * @return array
+     */
+    protected function getObjectList(array $idListGroup): array
+    {
+        $objectList = array();
+        foreach($idListGroup as $module => $idList)
+        {
+            if(!isset($this->config->objectTables[$module])) continue;
+
+            $fields = '';
+            if($module == 'issue')     $fields = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? 'id,project,owner,lib' : 'id,project,owner';
+            if($module == 'project')   $fields = 'id,model';
+            if($module == 'execution') $fields = 'id,type,project';
+            if($module == 'story' || $module == 'requirement') $fields = ($this->config->edition == 'max' || $this->config->edition == 'ipd') ? 'id,type,lib' : 'id,type';
+            if(($module == 'risk' || $module == 'opportunity') && ($this->config->edition == 'max' || $this->config->edition == 'ipd')) $fields = 'id,lib';
+            if($module == 'doc' && ($this->config->edition == 'max' || $this->config->edition == 'ipd')) $fields = 'id,assetLib,assetLibType';
+
+            if(empty($fields)) continue;
+
+            $table = $this->config->objectTables[$module];
+            $objectList[$module] = $this->dao->select($fields)->from($table)->where('id')->in($idList)->fetchAll('id');
+        }
+        return $objectList;
+    }
+
+    /**
+     * 处理搜索结果。
+     * Process results.
+     *
+     * @param  array     $results
+     * @param  array     $objectList
+     * @param  string    $words
+     * @access protected
+     * @return array
+     */
+    protected function processResults(array $results, array $objectList, string $words): array
+    {
+        foreach($results as $record)
+        {
+            $record->title   = str_replace('</span> ', '</span>', $this->decode($this->markKeywords($record->title, $words)));
+            $record->title   = str_replace('_', '', $record->title);
+            $record->summary = str_replace('</span> ', '</span>', $this->getSummary($record->content, $words));
+            $record->summary = str_replace('_', '', $record->summary);
+
+            $record = $this->processRecord($record, $objectList);
+        }
+
+        return $results;
+    }
+
+    /**
+     * 处理搜索的记录。
+     * Process record.
+     *
+     * @param  object   $record
+     * @param  array   $objectList
+     * @access private
+     * @return object
+     */
+    private function processRecord(object $record, array $objectList): object
+    {
+        $module = $record->objectType == 'case' ? 'testcase' : $record->objectType;
+        $method = 'view';
+        if($module == 'deploystep')
+        {
+            $module = 'deploy';
+            $method = 'viewstep';
+        }
+
+        $linkProjectModules = ',task,bug,testcase,build,release,testtask,testsuite,testreport,trainplan,';
+        if(strpos($linkProjectModules, ",$module,") !== false && !isset($this->config->objectTables[$record->objectType])) return $record;
+
+        if($module == 'issue')     return $this->processIssueRecord($record, $objectList);
+        if($module == 'project')   return $this->processProjectRecord($record, $objectList);
+        if($module == 'execution') return $this->processExecutionRecord($record, $objectList);
+        if($module == 'story' || $module == 'requirement') return $this->processStoryRecord($record, $module, $objectList);
+        if(($module == 'risk' || $module == 'opportunity') && ($this->config->edition == 'max' || $this->config->edition == 'ipd')) return $this->processRiskRecord($record, $module, $objectList);
+        if($module == 'doc' && ($this->config->edition == 'max' || $this->config->edition == 'ipd')) return $this->processDocRecord($record, $objectList);
+
+        $record->url = helper::createLink($module, $method, "id={$record->objectID}");
+        return $record;
+    }
+
+    /**
+     * 处理搜索到的问题记录的链接和类型。
+     * Process issue record url and extra type.
+     *
+     * @param  object  $record
+     * @param  array   $objectList
+     * @access private
+     * @return object
+     */
+    private function processIssueRecord(object $record, array $objectList): object
+    {
+        $issue = $objectList['issue'][$record->objectID];
+        $module = !empty($issue->lib) ? 'assetlib' : 'issue';
+        $method = !empty($issue->lib) ? 'issueView' : 'view';
+
+        $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->project);
+        $record->extraType = empty($issue->owner) ? 'commonIssue' : 'stakeholderIssue';
+        return $record;
+    }
+
+    /**
+     * 处理搜索到的项目的链接。
+     * processProjectRecord
+     *
+     * @param  object   $record
+     * @param  array   $objectList
+     * @access private
+     * @return object
+     */
+    private function processProjectRecord(object $record, array $objectList): object
+    {
+        $projectModel = $objectList['project'][$record->objectID]->model;
+        $method       = $projectModel == 'kanban' ? 'index' : 'view';
+        $record->url  = helper::createLink('project', $method, "id={$record->objectID}");
+        return $record;
+    }
+
+    /**
+     * 处理执行记录的链接和类型。
+     * Process execution record url and extra type.
+     *
+     * @param  object  $record
+     * @param  array   $objectList
+     * @access private
+     * @return object
+     */
+    private function processExecutionRecord(object $record, array $objectList): object
+    {
+        $execution         = $objectList['execution'][$record->objectID];
+        $method            = $execution->type == 'kanban' ? 'kanban' : 'view';
+        $record->url       = helper::createLink('execution', $method, "id={$record->objectID}");
+        $record->extraType = empty($execution->type) ? '' : $execution->type;
+        return $record;
+    }
+
+    /**
+     * 处理需求记录的链接。
+     * Process story record url.
+     *
+     * @param  object  $record
+     * @param  string  $module
+     * @param  array   $objectList
+     * @access private
+     * @return object
+     */
+    private function processStoryRecord(object $record, string $module, array $objectList): object
+    {
+        $story  = $objectList[$module][$record->objectID];
+        $module = 'story';
+        $method = 'view';
+        if(!empty($story->lib))
+        {
+            $module = 'assetlib';
+            $method = 'storyView';
+        }
+
+        $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
+
+        if($this->config->vision == 'lite') $record->url = helper::createLink('projectstory', $method, "storyID={$record->objectID}", '', false, 0, true);
+
+        $record->extraType = zget($story, 'type', '');
+
+        return $record;
+    }
+
+    /**
+     * 处理文档记录的链接。
+     * Process doc record url.
+     *
+     * @param  object  $record
+     * @param  array   $objectList
+     * @param  string  $module
+     * @access private
+     * @return object
+     */
+    private function processDocRecord(object $record, array $objectList, string $module): object
+    {
+        $doc = $objectList['doc'][$record->objectID];
+        $module = 'doc';
+        $method = 'view';
+        if(!empty($doc->assetLib))
+        {
+            $module = 'assetlib';
+            $method = $doc->assetLibType == 'practice' ? 'practiceView' : 'componentView';
+        }
+
+        $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
+        return $record;
+    }
+
+    /**
+     * 处理风险记录的链接。
+     * Process risk record url.
+     *
+     * @param  object  $record
+     * @param  string  $module
+     * @param  array   $objectList
+     * @access private
+     * @return object
+     */
+    private function processRiskRecord(object $record, string $module, array $objectList): object
+    {
+        $object = $objectList[$module][$record->objectID];
+        $method = 'view';
+        if(!empty($object->lib))
+        {
+            $method = $module == 'risk' ? 'riskView' : 'opportunityView';
+            $module = 'assetlib';
+        }
+
+        $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
+        return $record;
+    }
 }

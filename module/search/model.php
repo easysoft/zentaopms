@@ -517,16 +517,14 @@ class searchModel extends model
         $filterObjects = array();
         foreach($allowedObjects as $index => $object)
         {
-            if(strpos(',feedback,ticket,', ",$object,") !== false)
-            {
-                unset($allowedObjects[$index]);
-                $filterObjects[] = $object;
-            }
+            if(strpos(',feedback,ticket,', ",$object,") === false) continue;
+
+            unset($allowedObjects[$index]);
+            $filterObjects[] = $object;
         }
 
         $scoreColumn = "(MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE))";
-        $stmt = $this->dao->select("*, {$scoreColumn} as score")
-            ->from(TABLE_SEARCHINDEX)
+        $stmt = $this->dao->select("*, {$scoreColumn} as score")->from(TABLE_SEARCHINDEX)
             ->where("(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})")
             ->andWhere('((vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObjects)
@@ -537,139 +535,24 @@ class searchModel extends model
             ->orderBy('score_desc, editedDate_desc')
             ->query();
 
-        $idListGroup = array();
         $results     = array();
+        $idListGroup = array();
         while($record = $stmt->fetch())
         {
+            $results[$record->id] = $record;
+
             $module = $record->objectType == 'case' ? 'testcase' : $record->objectType;
             $idListGroup[$module][$record->objectID] = $record->objectID;
-
-            $results[$record->id] = $record;
         }
 
         $results = $this->checkPriv($results, $idListGroup);
         if(empty($results)) return $results;
 
         /* Reset pager total and get this page data. */
-        if($pager)
-        {
-            $pager->setRecTotal(count($results));
-            $pager->setPageTotal();
-            $pager->setPageID($pager->pageID);
-            $results = array_chunk($results, $pager->recPerPage, true);
-            $results = $results[$pager->pageID - 1];
-        }
+        if($pager) $this->searchTao->setResultsInPage($results, $pager);
 
-        $objectList = array();
-        $linkProjectModules = ',task,bug,testcase,build,release,testtask,testsuite,testreport,trainplan,';
-        foreach($idListGroup as $module => $idList)
-        {
-            if(!isset($this->config->objectTables[$module])) continue;
-            $table = $this->config->objectTables[$module];
-
-            $fields = '';
-            if($module == 'issue') $fields = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? 'id,project,owner,lib' : 'id,project,owner';
-            if($module == 'project') $fields = 'id,model';
-            if($module == 'execution')$fields = 'id,type,project';
-            if($module == 'story' or $module == 'requirement') $fields = ($this->config->edition == 'max' or $this->config->edition == 'ipd') ? 'id,type,lib' : 'id,type';
-            if(($module == 'risk' or $module == 'opportunity') and ($this->config->edition == 'max' or $this->config->edition == 'ipd')) $fields = 'id,lib';
-            if($module == 'doc' and ($this->config->edition == 'max' or $this->config->edition == 'ipd')) $fields = 'id,assetLib,assetLibType';
-
-            if(empty($fields)) continue;
-
-            $objectList[$module] = $this->dao->select($fields)->from($table)->where('id')->in($idList)->fetchAll('id');
-        }
-
-        foreach($results as $record)
-        {
-            $record->title   = str_replace('</span> ', '</span>', $this->decode($this->markKeywords($record->title, $words)));
-            $record->title   = str_replace('_', '', $record->title);
-            $record->summary = str_replace('</span> ', '</span>', $this->getSummary($record->content, $words));
-            $record->summary = str_replace('_', '', $record->summary);
-
-            $module = $record->objectType == 'case' ? 'testcase' : $record->objectType;
-            $method = 'view';
-            if($module == 'deploystep')
-            {
-                $module = 'deploy';
-                $method = 'viewstep';
-            }
-
-            if(strpos($linkProjectModules, ",$module,") !== false)
-            {
-                if(!isset($this->config->objectTables[$record->objectType])) continue;
-                $record->url = helper::createLink($module, $method, "id={$record->objectID}");
-            }
-            elseif($module == 'issue')
-            {
-                $issue = $objectList['issue'][$record->objectID];
-                if(!empty($issue->lib))
-                {
-                    $module = 'assetlib';
-                    $method = 'issueView';
-                }
-
-                $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->project);
-                $record->extraType = empty($issue->owner) ? 'commonIssue' : 'stakeholderIssue';
-            }
-            elseif($module == 'project')
-            {
-                $projectModel = $objectList['project'][$record->objectID]->model;
-                $method       = $projectModel == 'kanban' ? 'index' : 'view';
-                $record->url  = helper::createLink('project', $method, "id={$record->objectID}");
-            }
-            elseif($module == 'execution')
-            {
-                $execution         = $objectList['execution'][$record->objectID];
-                $method            = $execution->type == 'kanban' ? 'kanban' : $method;
-                $record->url       = helper::createLink('execution', $method, "id={$record->objectID}");
-                $record->extraType = empty($execution->type) ? '' : $execution->type;
-            }
-            elseif($module == 'story' or $module == 'requirement')
-            {
-                $story  = $objectList[$module][$record->objectID];
-                $module = 'story';
-                if(!empty($story->lib))
-                {
-                    $module = 'assetlib';
-                    $method = 'storyView';
-                }
-
-                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
-
-                if($this->config->vision == 'lite') $record->url = helper::createLink('projectstory', $method, "storyID={$record->objectID}", '', false, 0, true);
-
-                $record->extraType = isset($story->type) ? $story->type : '';
-            }
-            elseif(($module == 'risk' or $module == 'opportunity') and ($this->config->edition == 'max'  or $this->config->edition == 'ipd'))
-            {
-                $object = $objectList[$module][$record->objectID];
-                if(!empty($object->lib))
-                {
-                    $method = $module == 'risk' ? 'riskView' : 'opportunityView';
-                    $module = 'assetlib';
-                }
-
-                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
-            }
-            elseif($module == 'doc' and ($this->config->edition == 'max' or $this->config->edition == 'ipd'))
-            {
-                $doc = $objectList['doc'][$record->objectID];
-                if(!empty($doc->assetLib))
-                {
-                    $module = 'assetlib';
-                    $method = $doc->assetLibType == 'practice' ? 'practiceView' : 'componentView';
-                }
-
-                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
-            }
-            else
-            {
-                $record->url = helper::createLink($module, $method, "id={$record->objectID}");
-            }
-        }
-
-        return $results;
+        $objectList = $this->searchTao->getobjectList($idListGroup);
+        return $this->processResults($results, $objectList, $words);
     }
 
     /**
