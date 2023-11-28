@@ -643,4 +643,18 @@ class docTest
 
         return $docs;
     }
+
+    /**
+     * 构造搜索条件。
+     * Build search query.
+     *
+     * @param  string $type
+     * @param  int    $queryID
+     * @access public
+     * @return string
+     */
+    public function buildQueryTest(string $type, int $queryID): string
+    {
+        return $this->objectModel->buildQuery($type, $queryID);
+    }
 }
