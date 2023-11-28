@@ -1551,39 +1551,4 @@ class screenModel extends model
         $component->chartConfig->title    = $chart->name;
         $component->chartConfig->sourceID = $component->sourceID;
     }
-
-    /**
-     * Check if the Chart is in use.
-     *
-     * @param  int    $chartID
-     * @param  string $type
-     * @access public
-     * @return bool
-     */
-    public function checkIFChartInUse(int $chartID, string $type = 'chart'): bool
-    {
-        static $screenList = array();
-        if(empty($screenList)) $screenList = $this->dao->select('scheme')->from(TABLE_SCREEN)->where('deleted')->eq(0)->andWhere('status')->eq('published')->fetchAll();
-
-        foreach($screenList as $screen)
-        {
-            $scheme = json_decode($screen->scheme);
-            if(empty($scheme->componentList)) continue;
-
-            foreach($scheme->componentList as $component)
-            {
-                $list = !empty($component->isGroup) ? $component->groupList : array($component);
-                foreach($list as $groupComponent)
-                {
-                    if(!isset($groupComponent->chartConfig)) continue;
-
-                    $sourceID   = zget($groupComponent->chartConfig, 'sourceID', '');
-                    $sourceType = zget($groupComponent->chartConfig, 'package', '') == 'Tables' ? 'pivot' : 'chart';
-
-                    if($chartID == $sourceID && $type == $sourceType) return true;
-                }
-            }
-        }
-        return false;
-    }
 }

@@ -46,11 +46,7 @@ class pivotModel extends model
         if(!empty($pivot->filters))
         {
             $filters = json_decode($pivot->filters, true);
-            foreach($filters as $key => $filter)
-            {
-                if(empty($filter['default'])) continue;
-                $filters[$key]['default'] = $this->processDateVar($filter['default']);
-            }
+            $this->pivotTao->setFilterDefault($filters);
             $pivot->filters = $filters;
         }
 
@@ -82,6 +78,7 @@ class pivotModel extends model
     }
 
     /**
+     * 构建透视表的信息。
      * Process sql and correct type.
      *
      * @param  object|array $pivots
@@ -89,47 +86,85 @@ class pivotModel extends model
      * @access public
      * @return object|array
      */
-    public function processPivot($pivots, $isObject = true)
+    public function processPivot(object|array $pivots, bool $isObject = true): object|array
     {
         if($isObject) $pivots = array($pivots);
 
-        $this->loadModel('screen');
         $screenList = $this->dao->select('scheme')->from(TABLE_SCREEN)->where('deleted')->eq(0)->andWhere('status')->eq('published')->fetchAll();
-        foreach($pivots as $index => $pivot)
+        foreach($pivots as $pivot) $this->completePivot($pivot, $screenList);
+
+        if($isObject && $pivot->stage == 'published') $this->processFieldSettings($pivot);
+
+        return $isObject ? $pivot : $pivots;
+    }
+
+    /**
+     * 补充透视表的信息。
+     * Complete pivot.
+     *
+     * @param  object $pivot
+     * @param  array  $screenList
+     * @access public
+     * @return void
+     */
+    public function completePivot(object $pivot, array $screenList): void
+    {
+        if(!empty($pivot->sql))      $pivot->sql      = trim(str_replace(';', '', $pivot->sql));
+        if(!empty($pivot->settings)) $pivot->settings = json_decode($pivot->settings, true);
+
+        if(empty($pivot->type))
         {
-            if(!empty($pivot->sql))      $pivots[$index]->sql = trim(str_replace(';', '', $pivot->sql));
-            if(!empty($pivot->settings)) $pivots[$index]->settings = json_decode($pivot->settings, true);
-
-            if(empty($pivot->type))
+            $pivot->names = array();
+            $pivot->descs = array();
+            if(!empty($pivot->name))
             {
-                $pivot->names = '';
-                $pivot->descs = '';
-                if(!empty($pivot->name))
-                {
-                    $pivotNames   = json_decode($pivot->name, true);
-                    $pivot->name  = zget($pivotNames, $this->app->getClientLang(), '');
-                    $pivot->names = $pivotNames;
-
-                    if(!$pivot->name)
-                    {
-                        $pivotNames  = array_filter($pivotNames);
-                        $pivot->name = reset($pivotNames);
-                    }
-                }
-
-                if(!empty($pivot->desc))
-                {
-                    $pivotDescs   = json_decode($pivot->desc, true);
-                    $pivot->desc  = zget($pivotDescs, $this->app->getClientLang(), '');
-                    $pivot->descs = $pivotDescs;
-                }
-                $pivots[$index]->used = $this->screen->checkIFChartInUse($pivot->id, 'pivot', $screenList);
+                $pivotNames   = json_decode($pivot->name, true);
+                $pivot->name  = zget($pivotNames, $this->app->getClientLang(), '') ? : reset($pivotNames);
+                $pivot->names = $pivotNames;
             }
 
-            if($isObject and $pivots[$index]->stage == 'published') $pivots[$index] = $this->processFieldSettings($pivots[$index]);
-        }
+            if(!empty($pivot->desc))
+            {
+                $pivotDescs   = json_decode($pivot->desc, true);
+                $pivot->desc  = zget($pivotDescs, $this->app->getClientLang(), '');
+                $pivot->descs = $pivotDescs;
+            }
 
-        return $isObject ? reset($pivots) : $pivots;
+            $pivot->used = $this->checkIFChartInUse($pivot->id, 'pivot', $screenList);
+        }
+    }
+
+    /**
+     * 检测图表是否在使用。
+     * Check if the Chart is in use.
+     *
+     * @param  int    $chartID
+     * @param  string $type
+     * @access public
+     * @return bool
+     */
+    public function checkIFChartInUse(int $chartID, string $type = 'chart', array $screenList): bool
+    {
+        foreach($screenList as $screen)
+        {
+            $scheme = json_decode($screen->scheme);
+            if(empty($scheme->componentList)) continue;
+
+            foreach($scheme->componentList as $component)
+            {
+                $list = !empty($component->isGroup) ? $component->groupList : array($component);
+                foreach($list as $groupComponent)
+                {
+                    if(!isset($groupComponent->chartConfig)) continue;
+
+                    $sourceID   = zget($groupComponent->chartConfig, 'sourceID', '');
+                    $sourceType = zget($groupComponent->chartConfig, 'package', '') == 'Tables' ? 'pivot' : 'chart';
+
+                    if($chartID == $sourceID && $type == $sourceType) return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -161,12 +196,7 @@ class pivotModel extends model
 
         if(!empty($filters))
         {
-            foreach($filters as $index => $filter)
-            {
-                if(empty($filter['default'])) continue;
-
-                $filters[$index]['default'] = $this->processDateVar($filter['default']);
-            }
+            $this->pivotTao->setFilterDefault($filters);
         }
         $querySQL = $this->chart->parseSqlVars($sql, $filters);
 
@@ -2298,7 +2328,6 @@ class pivotModel extends model
         $sql = preg_replace("/= *'\!/U", "!='", $sql);
         return $sql;
     }
-
 }
 
 /**
