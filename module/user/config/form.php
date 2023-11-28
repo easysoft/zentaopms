@@ -7,11 +7,11 @@ $config->user->form->create['company']          = array('required' => false, 'ty
 $config->user->form->create['new']              = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->user->form->create['newCompany']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->create['dept']             = array('required' => false, 'type' => 'int',    'default' => 0);
-$config->user->form->create['account']          = array('required' => true,  'type' => 'string');
-$config->user->form->create['password1']        = array('required' => true,  'type' => 'string');
-$config->user->form->create['password2']        = array('required' => true,  'type' => 'string');
+$config->user->form->create['account']          = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->create['password1']        = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->create['password2']        = array('required' => true,  'type' => 'string', 'default' => '');
 $config->user->form->create['visions']          = array('required' => true,  'type' => 'array',  'default' => $config->vision, 'filter' => 'join');
-$config->user->form->create['realname']         = array('required' => true,  'type' => 'string');
+$config->user->form->create['realname']         = array('required' => true,  'type' => 'string', 'default' => '');
 $config->user->form->create['join']             = array('required' => false, 'type' => 'date',   'default' => null);
 $config->user->form->create['role']             = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->create['group']            = array('required' => false, 'type' => 'array',  'default' => []);
@@ -102,7 +102,7 @@ $config->user->form->batchEdit['slack']    = array('required' => false, 'type' =
 $config->user->form->batchEdit['address']  = array('required' => false, 'type' => 'string', 'width' => '160px', 'name' => 'address',  'label' => $lang->user->address,  'control' => 'text',      'default' => '');
 $config->user->form->batchEdit['zipcode']  = array('required' => false, 'type' => 'string', 'width' => '120px', 'name' => 'zipcode',  'label' => $lang->user->zipcode,  'control' => 'text',      'default' => '');
 
-$config->user->form->reset = array();
-$config->user->form->reset['account']   = array('required' => true, 'type' => 'string');
-$config->user->form->reset['password1'] = array('required' => true, 'type' => 'string');
-$config->user->form->reset['password2'] = array('required' => true, 'type' => 'string');
+$config->user->form = new stdclass();
+$config->user->form->reset['account']   = array('required' => true, 'type' => 'string', 'default' => '');
+$config->user->form->reset['password1'] = array('required' => true, 'type' => 'string', 'default' => '');
+$config->user->form->reset['password2'] = array('required' => true, 'type' => 'string', 'default' => '');
