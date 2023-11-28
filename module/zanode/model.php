@@ -975,26 +975,6 @@ class zanodemodel extends model
     }
 
     /**
-     * Build operateMenu for browse view.
-     *
-     * @param  object $node
-     * @access public
-     * @return string
-     */
-    public function buildOperateMenu($node)
-    {
-        if($node->deleted) return '';
-
-        $menu   = '';
-        $params = "id=$node->id";
-
-        $menu .= $this->buildMenu('zanode', 'edit',   $params, $node, 'view');
-        $menu .= $this->buildMenu('zanode', 'destroy', $params, $node, 'view', 'trash', 'hiddenwin', '', false, '', ' ');
-
-        return $menu;
-    }
-
-    /**
      * 获取宿主机中zagent、nginx、websockify、novnc的运行及安装状态.
      * Get service status from host.
      *
