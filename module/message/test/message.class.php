@@ -1,19 +1,35 @@
 <?php
+declare(strict_types=1);
 class messageTest
 {
-    public function __construct()
+    /**
+     * 构造函数。
+     * Construct function.
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct(): void
     {
          global $tester;
          $this->objectModel = $tester->loadModel('message');
     }
 
-    public function getMessagesTest($status)
+    /**
+     * 测试获取消息。
+     * Test get messages.
+     *
+     * @param  string       $status
+     * @access public
+     * @return string|array
+     */
+    public function getMessagesTest(string $status): string|array
     {
         $objects = $this->objectModel->getMessages($status);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', array_keys($objects));
     }
 
     /**
@@ -96,7 +112,7 @@ class messageTest
     public function getToListTest($objectType)
     {
         global $tester;
-        $table   = $tester->config->objectTables[$objectType]; 
+        $table   = $tester->config->objectTables[$objectType];
         $object  = $tester->dao->select('*')->from($table)->where('id')->eq('1')->fetch();
         $objects = $this->objectModel->getToList($object, $objectType);
 

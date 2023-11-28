@@ -12,7 +12,15 @@ declare(strict_types=1);
  */
 class messageModel extends model
 {
-    public function getMessages($status = '')
+    /**
+     * 获取消息。
+     * Get messages.
+     *
+     * @param  string $status
+     * @access public
+     * @return array
+     */
+    public function getMessages(string $status = ''): array
     {
         return $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('objectType')->eq('message')
