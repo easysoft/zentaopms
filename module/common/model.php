@@ -698,14 +698,14 @@ class commonModel extends model
     /**
      * Create changes of one object.
      *
-     * @param mixed  $old        the old object
-     * @param mixed  $new        the new object
-     * @param string $moduleName
+     * @param  mixed  $old        the old object
+     * @param  mixed  $new        the new object
+     * @param  string $moduleName
      * @static
      * @access public
      * @return array
      */
-    public static function createChanges($old, $new, $moduleName = '')
+    public static function createChanges(mixed $old, mixed $new, string $moduleName = ''): array
     {
         global $app, $config;
 
@@ -746,21 +746,10 @@ class commonModel extends model
         $changes = array();
         foreach($new as $key => $value)
         {
+            $key = strtolower($key);
             if(is_object($value) || is_array($value) || is_null($value)) continue;
-            if(strtolower($key) == 'lastediteddate')  continue;
-            if(strtolower($key) == 'lasteditedby')    continue;
-            if(strtolower($key) == 'assigneddate')    continue;
-            if(strtolower($key) == 'editedby')        continue;
-            if(strtolower($key) == 'editeddate')      continue;
-            if(strtolower($key) == 'editingdate')     continue;
-            if(strtolower($key) == 'uid')             continue;
-            if(strtolower($key) == 'finisheddate'     and $value == '') continue;
-            if(strtolower($key) == 'canceleddate'     and $value == '') continue;
-            if(strtolower($key) == 'hangupeddate'     and $value == '') continue;
-            if(strtolower($key) == 'lastcheckeddate'  and $value == '') continue;
-            if(strtolower($key) == 'activateddate'    and $value == '') continue;
-            if(strtolower($key) == 'closeddate'       and $value == '') continue;
-            if(strtolower($key) == 'actualcloseddate' and $value == '') continue;
+            if(in_array($key, array('lastediteddate', 'lasteditedby', 'assigneddate', 'editedby', 'editeddate', 'editingdate', 'uid'))) continue;
+            if(in_array($key, array('finisheddate', 'canceleddate', 'hangupeddate', 'lastcheckeddate', 'activateddate', 'closeddate', 'actualcloseddate')) and $value == '') continue;
 
             if(isset($old->$key))
             {
@@ -791,7 +780,7 @@ class commonModel extends model
      * @access public
      * @return string
      */
-    public static function diff($text1, $text2)
+    public static function diff(string $text1, string $text2): string
     {
         $text1 = str_replace('&nbsp;', '', trim($text1));
         $text2 = str_replace('&nbsp;', '', trim($text2));
