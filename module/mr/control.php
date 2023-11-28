@@ -519,29 +519,19 @@ class mr extends control
     }
 
     /**
+     * 获取合并请求的关联信息。
      * link MR list.
      *
      * @param  int    $MRID
      * @param  string $type
      * @param  string $orderBy
-     * @param  string $link
      * @param  string $param
-     * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @return void
      */
-    public function link($MRID, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function link(int $MRID, string $type = 'story', string $orderBy = 'id_desc', string $param = '', int $recPerPage = 20, int $pageID = 1)
     {
-        $this->app->loadLang('productplan');
-        $this->app->loadLang('bug');
-        $this->app->loadLang('task');
-        $this->app->loadLang('release');
-
-        $this->app->loadModuleConfig('release');
-        $this->app->loadModuleConfig('task');
-        $this->app->loadModuleConfig('repo');
-
         $MR       = $this->mr->getByID($MRID);
         $product  = $this->mr->getMRProduct($MR);
 
@@ -556,134 +546,98 @@ class mr extends control
         $tasks   = $this->mr->getLinkList($MRID, $product->id, 'task',  $type == 'task'  ? $orderBy : '', $taskPager);
         $builds  = $this->loadModel('build')->getBuildPairs($product->id);
 
-        $this->view->title        = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->link;
-        $this->view->MR           = $MR;
-        $this->view->repoID       = $MR->repoID;
-        $this->view->canBeChanged = true;
-        $this->view->modulePairs  = $this->loadModel('tree')->getOptionMenu($product->id, 'story');
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->stories      = $stories;
-        $this->view->bugs         = $bugs;
-        $this->view->tasks        = $tasks;
-        $this->view->product      = $product;
-        $this->view->storyPager   = $storyPager;
-        $this->view->bugPager     = $bugPager;
-        $this->view->taskPager    = $taskPager;
-        $this->view->type         = $type;
-        $this->view->builds       = $builds;
-        $this->view->orderBy      = $orderBy;
-        $this->view->link         = $link;
-        $this->view->param        = $param;
+        $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->link;
+        $this->view->MR         = $MR;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->stories    = $stories;
+        $this->view->bugs       = $bugs;
+        $this->view->tasks      = $tasks;
+        $this->view->product    = $product;
+        $this->view->storyPager = $storyPager;
+        $this->view->bugPager   = $bugPager;
+        $this->view->taskPager  = $taskPager;
+        $this->view->type       = $type;
+        $this->view->builds     = $builds;
+        $this->view->orderBy    = $orderBy;
+        $this->view->param      = $param;
         $this->display();
     }
 
     /**
+     * 获取合并请求可关联的需求列表。
      * Link story to mr.
      *
-     * @param int    $MRID
-     * @param int    $productID
-     * @param string $browseType
-     * @param int    $param
-     * @param string $orderBy
-     * @param int    $recTotal
-     * @param int    $recPerPage
-     * @param int    $pageID
+     * @param  int    $MRID
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkStory($MRID, $productID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function linkStory(int $MRID, int $productID = 0, string $browseType = '', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 10, int $pageID = 1)
     {
         if(!empty($_POST['stories']))
         {
             $this->mr->link($MRID, $productID, 'story');
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $link = inlink('link', "MRID=$MRID&type=story&orderBy=$orderBy");
             return $this->send(array('result' => 'success', 'callback' => "loadTable('$link', 'storyTable')", 'closeModal' => true));
         }
 
         $this->loadModel('story');
-        $this->app->loadLang('release');
-        $this->app->loadLang('release');
-        $this->app->loadModuleConfig('release');
-        $this->app->loadLang('productplan');
-
         $product = $this->loadModel('product')->getById($productID);
-        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'story');
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
-        $storyStatusList = $this->lang->story->statusList;
-        unset($storyStatusList['closed']);
-        $queryID         = ($browseType == 'bySearch') ? (int) $param : 0;
 
-        unset($this->config->product->search['fields']['product']);
-        $this->config->product->search['actionURL']                   = $this->createLink('mr', 'linkStory', "MRID={$MRID}&productID={$productID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
-        $this->config->product->search['queryID']                     = $queryID;
-        $this->config->product->search['style']                       = 'simple';
-        $this->config->product->search['params']['product']['values'] = array($product) + array('all' => $this->lang->product->allProductsOfProject);
-        $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getForProducts(array($productID => $productID));
-        $this->config->product->search['params']['module']['values']  = $modules;
-        $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
-
-        if($product->type == 'normal')
-        {
-            unset($this->config->product->search['fields']['branch']);
-            unset($this->config->product->search['params']['branch']);
-        }
-        else
-        {
-            $this->product->setMenu($productID, 0);
-            $this->config->product->search['fields']['branch']           = $this->lang->product->branch;
-            $this->config->product->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($productID, 'noempty');
-        }
-        $this->loadModel('search')->setSearchParams($this->config->product->search);
-
-        $MR             = $this->mr->getByID($MRID);
-        $relatedStories = $this->mr->getCommitedLink($MR, 'story');
+        $queryID = ($browseType == 'bySearch') ? (int) $param : 0;
+        $this->mrZen->buildLinkStorySearchForm($MRID, $product, $orderBy, $queryID);
 
         $linkedStories = $this->mr->getLinkList($MRID, $product->id, 'story');
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($productID, 0, $queryID, $orderBy, '', 'story', array_keys($linkedStories), '', $pager);
+            $allStories = $this->story->getBySearch($productID, 0, $queryID, $orderBy, 0, 'story', array_keys($linkedStories), $pager);
         }
         else
         {
             $allStories = $this->story->getProductStories($productID, 0, '0', 'draft,reviewing,active,changing', 'story', $orderBy, false, array_keys($linkedStories), $pager);
         }
 
-        $this->view->modules        = $modules;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
-        $this->view->allStories     = $allStories;
-        $this->view->relatedStories = $relatedStories;
-        $this->view->product        = $product;
-        $this->view->MRID           = $MRID;
-        $this->view->browseType     = $browseType;
-        $this->view->param          = $param;
-        $this->view->orderBy        = $orderBy;
-        $this->view->pager          = $pager;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->allStories = $allStories;
+        $this->view->product    = $product;
+        $this->view->MRID       = $MRID;
+        $this->view->browseType = $browseType;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
         $this->display();
     }
 
     /**
+     * 获取合并请求可关联的Bug列表。
      * Link bug to mr.
      *
-     * @param int    $MRID
-     * @param int    $productID
-     * @param string $browseType
-     * @param int    $param
-     * @param string $orderBy
-     * @param int    $recTotal
-     * @param int    $recPerPage
-     * @param int    $pageID
+     * @param  int    $MRID
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function linkBug($MRID, $productID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function linkBug(int $MRID, int $productID = 0, string $browseType = '', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 10, int $pageID = 1)
     {
         if(!empty($_POST['bugs']))
         {
@@ -696,69 +650,39 @@ class mr extends control
         }
 
         $this->loadModel('bug');
-        $this->app->loadLang('release');
-        $this->app->loadModuleConfig('release');
-        $this->app->loadLang('productplan');
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
-
         $product = $this->loadModel('product')->getById($productID);
-        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'bug');
+        $this->mrZen->buildLinkBugSearchForm($MRID, $product, $orderBy, $queryID);
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
-        $this->config->bug->search['actionURL']                         = $this->createLink('mr', 'linkBug', "MRID={$MRID}&productID={$productID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
-        $this->config->bug->search['queryID']                           = $queryID;
-        $this->config->bug->search['style']                             = 'simple';
-        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($productID => $productID));
-        $this->config->bug->search['params']['module']['values']        = $modules;
-        $this->config->bug->search['params']['execution']['values']     = $this->product->getExecutionPairsByProduct($productID);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'releasetag');
-        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
-
-        unset($this->config->bug->search['fields']['product']);
-        if($product->type == 'normal')
-        {
-            unset($this->config->bug->search['fields']['branch']);
-            unset($this->config->bug->search['params']['branch']);
-        }
-        else
-        {
-            $this->product->setMenu($productID, 0);
-            $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
-            $this->config->bug->search['params']['branch']['values'] = $this->loadModel('branch')->getPairs($productID, 'noempty');
-        }
-        $this->loadModel('search')->setSearchParams($this->config->bug->search);
-
-        $MR          = $this->mr->getByID($MRID);
-        $relatedBugs = $this->mr->getCommitedLink($MR, 'bug');
 
         $linkedBugs = $this->mr->getLinkList($MRID, $product->id, 'bug');
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($productID, 0, $queryID, $orderBy, array_keys($linkedBugs), $pager);
+            $allBugs = $this->bug->getBySearch('bug', $productID, 0, 0, 0, $queryID, implode(',', array_keys($linkedBugs)), $orderBy, $pager);
         }
         else
         {
             $allBugs = $this->bug->getActiveBugs($productID, 0, '0', array_keys($linkedBugs), $pager, $orderBy);
         }
 
-        $this->view->modules     = $modules;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->allBugs     = $allBugs;
-        $this->view->relatedBugs = $relatedBugs;
-        $this->view->product     = $product;
-        $this->view->MRID        = $MRID;
-        $this->view->browseType  = $browseType;
-        $this->view->param       = $param;
-        $this->view->orderBy     = $orderBy;
-        $this->view->pager       = $pager;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->allBugs    = $allBugs;
+        $this->view->product    = $product;
+        $this->view->MRID       = $MRID;
+        $this->view->browseType = $browseType;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
         $this->display();
     }
 
     /**
+     * 获取合并请求可关联的任务列表。
      * Link task to mr.
      *
      * @param int    $MRID
@@ -772,49 +696,30 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function linkTask($MRID, $productID = 0, $browseType = 'unclosed', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function linkTask(int $MRID, int $productID = 0, string $browseType = 'unclosed', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 10, int $pageID = 1)
     {
         if(!empty($_POST['tasks']))
         {
             $this->mr->link($MRID, $productID, 'task');
-
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $link = inlink('link', "MRID=$MRID&type=task&orderBy=$orderBy");
             return $this->send(array('result' => 'success', 'callback' => "loadTable('$link', 'taskTable')", 'closeModal' => true));
         }
 
-        $this->loadModel('execution');
-        $this->loadModel('product');
-        $this->app->loadLang('task');
-        $this->app->loadModuleConfig('repo');
-
         /* Set browse type. */
         $browseType = strtolower($browseType);
-        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
-
-        $product = $this->loadModel('product')->getById($productID);
-        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'task');
-
-        /* Load pager. */
-        $this->app->loadClass('pager', true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        /* Build search form. */
-        $this->config->execution->search['actionURL']                     = $this->createLink('mr', 'linkTask', "MRID={$MRID}&productID={$productID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
-        $this->config->execution->search['queryID']                       = $queryID;
-        $this->config->execution->search['params']['module']['values']    = $modules;
-        $this->config->execution->search['params']['execution']['values'] = $this->product->getExecutionPairsByProduct($productID);
-        $this->loadModel('search')->setSearchParams($this->config->execution->search);
-
-        $MR           = $this->mr->getByID($MRID);
-        $relatedTasks = $this->mr->getCommitedLink($MR, 'task');
-        $linkedTasks  = $this->mr->getLinkList($MRID, $product->id, 'task');
+        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
+        $product    = $this->loadModel('product')->getById($productID);
 
         /* Get executions by product. */
         $productExecutions   = $this->product->getExecutionPairsByProduct($productID);
         $productExecutionIDs = array_filter(array_keys($productExecutions));
-        $this->config->execution->search['params']['execution']['values'] = array_filter($productExecutions);
+
+        $this->loadModel('execution');
+        $this->mrZen->buildLinkTaskSearchForm($MRID, $product, $orderBy, $queryID, $productExecutions);
+
+        $linkedTasks = $this->mr->getLinkList($MRID, $product->id, 'task');
 
         /* Get tasks by executions. */
         $allTasks = array();
@@ -830,230 +735,73 @@ class mr extends control
             if(in_array($task->id, $linkedTaskIDs)) unset($allTasks[$key]);
         }
 
-        /* Page the records. */
-        $pager->setRecTotal(count($allTasks));
-        $pager->setPageTotal();
-        if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
-        $count    = 1;
-        $limitMin = ($pager->pageID - 1) * $pager->recPerPage;
-        $limitMax = $pager->pageID * $pager->recPerPage;
-        foreach($allTasks as $key => $task)
-        {
-            if($count <= $limitMin or $count > $limitMax) unset($allTasks[$key]);
+        $this->mrZen->processLinkTaskPager($recTotal, $recPerPage, $pageID, $allTasks);
 
-            $count ++;
-        }
-
-        $this->view->modules      = $modules;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->allTasks     = $allTasks;
-        $this->view->relatedTasks = $relatedTasks;
-        $this->view->product      = $product;
-        $this->view->MRID         = $MRID;
-        $this->view->browseType   = $browseType;
-        $this->view->param        = $param;
-        $this->view->orderBy      = $orderBy;
-        $this->view->pager        = $pager;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->product    = $product;
+        $this->view->MRID       = $MRID;
+        $this->view->browseType = $browseType;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
         $this->display();
     }
 
     /**
+     * 解除合并请求关联的对象。
      * UnLink an mr link.
      *
-     * @param int    $MRID
-     * @param int    $productID
-     * @param string $type
-     * @param int    $linkID
-     * @param string $confirm
+     * @param  int    $MRID
+     * @param  int    $productID
+     * @param  string $type
+     * @param  int    $linkID
      * @access public
-     * @return mix
+     * @return void
      */
-    public function unlink($MRID, $productID, $type, $linkID)
+    public function unlink(int $MRID, int $productID, string $type, int $linkID)
     {
-        $this->app->loadLang('productplan');
-
         $this->mr->unlink($MRID, $productID, $type, $linkID);
 
-        /* if ajax request, send result. */
-        if($this->server->ajax)
+        if(dao::isError())
         {
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-            }
-            else
-            {
-                $link = inlink('link', "MRID=$MRID&type=$type");
-                $response['result']  = 'success';
-                $response['message'] = '';
-                $response['load']    = $link;
-            }
-            return $this->send($response);
+            $response['result']  = 'fail';
+            $response['message'] = dao::getError();
         }
-        return print(js::reload('parent'));
+        else
+        {
+            $link = inlink('link', "MRID=$MRID&type=$type");
+            $response['result']  = 'success';
+            $response['message'] = '';
+            $response['load']    = $link;
+        }
+        return $this->send($response);
     }
 
     /**
-     * Add a review for this review.
-     *
-     * @param  int    $repoID
-     * @param  int    $mr
-     * @param  int    $v1
-     * @param  int    $v2
-     * @access public
-     * @return void
-     */
-    public function addReview($repoID, $mr, $v1, $v2)
-    {
-        /* Handle the exception that when $repoID is empty. */
-        if($repoID == "0") $this->send(array());
-
-        $this->loadModel('repo');
-        if(!empty($_POST))
-        {
-            $v1 = helper::safe64Decode($v1);
-            $v2 = helper::safe64Decode($v2);
-            if($this->post->reviewType == 'bug')  $result = $this->mr->saveBug($repoID, $mr, $v1, $v2);
-            if($this->post->reviewType == 'task') $result = $this->mr->saveTask($repoID, $mr, $v1, $v2);
-            if($result['result'] == 'fail') return print(json_encode($result));
-
-            $objectID = $result['id'];
-            $repo     = $this->repo->getByID($repoID);
-            /* Handle the exception that when $repo is empty. */
-            if(empty($repo) or empty($result)) $this->send(json_encode(array()));
-
-            $location = sprintf($this->lang->repo->reviewLocation, $this->post->entry ? base64_decode($this->post->entry) : '', $repo->SCM != 'Subversion' ? substr($v2, 0, 10) : $v2, $this->post->begin, $this->post->end);
-            $link     = $this->createLink('mr', 'diff', "mr=$mr") . '#L' . $this->post->begin;
-
-            $actionID = $this->loadModel('action')->create($this->post->reviewType, $objectID, 'repoCreated', '', html::a($link, $location));
-            $this->loadModel('mail')->sendmail($objectID, $actionID);
-
-            echo json_encode($result);
-        }
-    }
-
-    /**
-     * AJAX: Get MR target projects.
-     *
-     * @param  int    $hostID
-     * @param  int    $projectID
-     * @param  string $scm
-     * @access public
-     * @return void
-     */
-    public function ajaxGetMRTargetProjects($hostID, $projectID, $scm = 'gitlab')
-    {
-        $this->loadModel($scm);
-
-        if($scm != 'gitlab') $projectID = urldecode(base64_decode($projectID));
-        /* First step: get forks. Only get first level forks(not recursively). */
-        $projects = $scm == 'gitlab' ? $this->$scm->apiGetForks($hostID, $projectID) : array();
-
-        /* Second step: get project itself. */
-        $projects[] = $this->$scm->apiGetSingleProject($hostID, $projectID, true);
-
-        /* Last step: find its upstream recursively. */
-        $project = $this->$scm->apiGetUpstream($hostID, $projectID);
-        if(!empty($project)) $projects[] = $project;
-
-        if(!empty($project) and isset($project->id))
-        {
-            $project = $this->$scm->apiGetUpstream($hostID, $project->id);
-            if(!empty($project)) $projects[] = $project;
-        }
-
-        if($scm == 'gitlab')
-        {
-            $groupIDList = array(0 => 0);
-            $groups      = $this->$scm->apiGetGroups($hostID, 'name_asc', 'developer');
-            foreach($groups as $group) $groupIDList[] = $group->id;
-            foreach($projects as $key => $project)
-            {
-                if(!$this->$scm->checkUserAccess($hostID, 0, $project, $groupIDList, 'developer')) unset($projects[$key]);
-            }
-
-            if(!$projects) return $this->send(array('message' => array()));
-        }
-
-        $options = "<option value=''></option>";
-        foreach($projects as $project)
-        {
-            if($scm == 'gitlab')
-            {
-                $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
-            }
-            else
-            {
-                $options .= "<option value='{$project->full_name}' data-name='{$project->full_name}'>{$project->full_name}</option>";
-            }
-        }
-
-        $this->send($options);
-    }
-
-    /**
-     * AJAX: Get repo list.
-     *
-     * @param  int $hostID
-     * @param  int $projectID
-     * @return void
-     */
-    public function ajaxGetRepoList($hostID, $projectID)
-    {
-        $host = $this->loadModel('pipeline')->getByID($hostID);
-        if($host->type != 'gitlab') $projectID = urldecode(base64_decode($projectID));
-
-        $repoList = $this->loadModel('repo')->getRepoListByClient($hostID, $projectID);
-
-        if(!$repoList) return $this->send(array('message' => array()));
-        $options = "<option value=''></option>";
-        foreach($repoList as $repo) $options .= "<option value='{$repo->id}' data-name='{$repo->name}'>[{$repo->id}] {$repo->name}</option>";
-        $this->send($options);
-    }
-
-    /**
+     * 获取构建列表。
      * AJAX: Get job list.
      *
      * @param  int $repoID
      * @return void
      */
-    public function ajaxGetJobList($repoID)
+    public function ajaxGetJobList(int $repoID)
     {
-        $this->loadModel('job');
-        $jobList = $this->job->getListByRepoID($repoID);
-
+        $jobList = $this->loadModel('job')->getListByRepoID($repoID);
         if(!$jobList) return $this->send(array('message' => array()));
+
         $options = "<option value=''></option>";
         foreach($jobList as $job) $options .= "<option value='{$job->id}' data-name='{$job->name}'>[{$job->id}] {$job->name}</option>";
         $this->send($options);
    }
 
    /**
-    * AJAX: Get compile list.
-    *
-    * @param  int $jobID
-    * @return void
-    */
-   public function ajaxGetCompileList($jobID)
-   {
-        $this->loadModel('compile');
-        $compileList = $this->compile->getListByJobID($jobID);
-
-        if(!$compileList) return $this->send(array('message' => array()));
-        $options = "<option value=''></option>";
-        foreach($compileList as $compile) $options .= "<option value='{$compile->id}' data-name='{$compile->name}'>[{$compile->id}] [{$this->lang->compile->statusList[$compile->status]}] {$compile->name}</option>";
-        $this->send($options);
-   }
-
-   /**
+    * 检查是否有相同的合并请求。
     * Ajax check same opened mr for source branch.
     *
     * @param  int    $hostID
     * @access public
     * @return void
     */
-   public function ajaxCheckSameOpened($hostID)
+   public function ajaxCheckSameOpened(int $hostID)
    {
        $sourceProject = $this->post->sourceProject;
        $sourceBranch  = $this->post->sourceBranch;
@@ -1061,26 +809,26 @@ class mr extends control
        $targetBranch  = $this->post->targetBranch;
 
        $result = $this->mr->checkSameOpened($hostID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-       return print(json_encode($result));
+       echo json_encode($result);
    }
 
    /**
+    * 获取分支权限。
     * Ajax get branch pivs.
     *
-    * @param  int        $hostID
-    * @param  int|string $project
+    * @param  int    $hostID
+    * @param  string $project
     * @access public
     * @return void
     */
-   public function ajaxGetBranchPivs($hostID, $project)
+   public function ajaxGetBranchPivs(int $hostID, string $project)
    {
         $host = $this->loadModel('pipeline')->getByID($hostID);
-        $scm  = $host->type;
-        if(in_array($scm, array('gitea', 'gogs'))) $project = urldecode(base64_decode($project));
+        if(in_array($host->type, array('gitea', 'gogs'))) $project = urldecode(base64_decode($project));
 
         $branchPrivs = array();
-        $branches    = $this->loadModel($scm)->apiGetBranchPrivs($hostID, $project);
+        $branches    = $this->loadModel($host->type)->apiGetBranchPrivs($hostID, $project);
         foreach($branches as $branch) $branchPrivs[$branch->name] = $branch->name;
-        return print(json_encode($branchPrivs));
+        echo json_encode($branchPrivs);
    }
 }

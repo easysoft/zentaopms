@@ -10,7 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$repoName = $this->dao->select('name')->from(TABLE_REPO)->where('id')->eq($MR->repoID)->fetch('name');
+$this->loadModel('task');
+$this->loadModel('release');
+$app->loadLang('productplan');
+$app->loadLang('bug');
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu
@@ -22,7 +25,7 @@ dropmenu
 
 jsVar('type', $type);
 jsVar('orderBy', $orderBy);
-jsVar('sortLink', createLink('mr', 'link', "MRID={$MR->id}&type={type}&orderBy={orderBy}&recTotal=&recPerPage=&pageID="));
+jsVar('sortLink', createLink('mr', 'link', "MRID={$MR->id}&type={type}&orderBy={orderBy}"));
 
 $actionMenu = array();
 $actionMenu['title'] = $lang->actions;
