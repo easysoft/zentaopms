@@ -44,9 +44,6 @@ class message extends control
     {
         if($_POST)
         {
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-
             $data = fixer::input('post')->get();
 
             $browserConfig = new stdclass();
