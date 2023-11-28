@@ -2721,69 +2721,52 @@ class docModel extends model
     }
 
     /**
+     * 设置文档的导航。
      * Set doc menu by type.
      *
-     * @param  string $type
+     * @param  string $type     mine|project|execution|product|custom
      * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $appendLib
      * @access public
      * @return array
      */
-    public function setMenuByType($type, $objectID, $libID, $appendLib = 0)
+    public function setMenuByType(string $type, int $objectID, int $libID, int $appendLib = 0): array
     {
         if(empty($type))
         {
             $doclib   = $this->getLibById($libID);
             $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
-            $objectID = $type == 'custom' ? 0 : $doclib->$type;
+            $objectID = isset($doclib->{$type}) ? $doclib->{$type} : 0;
         }
-        if($this->app->tab == 'doc' and $type == 'execution') $type = 'project';
 
+        $type           = $this->app->tab == 'doc' && $type == 'execution' ? 'project' : $type;
         $objectDropdown = array('text' => '', 'link' => '');
         $appendObject   = $objectID;
         if(in_array($type, array('project', 'product', 'execution')))
         {
-            $table  = $this->config->objectTables[$type];
-            $object = $this->dao->select('id,name,status,deleted')->from($table)->where('id')->eq($objectID)->fetch();
-
-            if(empty($object))
-            {
-                $param = ($type == 'project' and $this->config->vision == 'lite') ? 'model=kanban' : '';
-                $methodName = ($type == 'project' and $this->config->vision != 'lite') ? 'createGuide' : 'create';
-                return helper::createLink($type, $methodName, $param);
-            }
-
-            $objects  = $this->getOrderedObjects($type, 'merge', $objectID);
+            $object = $this->dao->select('id,name,status,deleted')->from($this->config->objectTables[$type])->where('id')->eq($objectID)->fetch();
+            if(empty($object)) return helper::createLink($type, $type == 'project' && $this->config->vision != 'lite' ? 'createGuide' : 'create', $type == 'project' && $this->config->vision == 'lite' ? 'model=kanban' : '');
 
             $this->loadModel($type);
-            if(method_exists($this->$type, 'saveState'))
-            {
-                $objectID = $this->loadModel($type)->saveState($objectID, $objects);
-            }
-            else
-            {
-                $objectID = $this->loadModel($type)->checkAccess($objectID, $objects);
-            }
-
-            $libs = $this->getLibsByObject($type, $objectID, '', $appendLib);
-            if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
-
-            $objectTitle = zget($objects, $objectID, '');
-            if($this->app->tab != 'doc' and isset($libs[$libID]))
+            $objects  = $this->getOrderedObjects($type, 'merge', $objectID);
+            $objectID =  method_exists($this->$type, 'saveState') ? $this->{$type}->saveState($objectID, $objects) : $this->{$type}->checkAccess($objectID, $objects);
+            $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
+            if(($libID == 0 || !isset($libs[$libID])) && !empty($libs)) $libID = reset($libs)->id;
+            if($this->app->tab != 'doc' && isset($libs[$libID]))
             {
                 $objectDropdown['text'] = zget($libs[$libID], 'name', '');
             }
             else
             {
-                $objectDropdown['text'] = $objectTitle;
+                $objectDropdown['text'] = zget($objects, $objectID, '');
                 $objectDropdown['link'] = $this->getDropMenuLink($type, $appendObject);
             }
         }
         else
         {
             $libs = $this->getLibsByObject($type, 0, '', $appendLib);
-            if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
+            if(($libID == 0 || !isset($libs[$libID])) && !empty($libs)) $libID = reset($libs)->id;
             if(isset($libs[$libID])) $objectDropdown['text'] = zget($libs[$libID], 'name', '');
 
             $object     = new stdclass();
@@ -2793,16 +2776,15 @@ class docModel extends model
         $tab = strpos(',my,doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
         if($type == 'mine')   $type = 'my';
         if($type == 'custom') $type = 'team';
-        if($tab == 'doc' and !common::hasPriv('doc', $type . 'Space')) return helper::createLink('user', 'deny', "module=doc&method={$type}Space");
-        if($tab != 'doc' and method_exists($type . 'Model', 'setMenu'))
+        if($tab == 'doc' && !common::hasPriv('doc', $type . 'Space')) return helper::createLink('user', 'deny', "module=doc&method={$type}Space");
+        if($tab != 'doc' && method_exists($type . 'Model', 'setMenu'))
         {
             $this->loadModel($type)->setMenu($objectID);
         }
-        elseif($tab == 'doc' and isset($this->lang->doc->menu->{$type}['alias']))
+        elseif($tab == 'doc' && isset($this->lang->doc->menu->{$type}['alias']))
         {
             $this->lang->doc->menu->{$type}['alias'] .= ',' . $this->app->rawMethod;
         }
-
         return array($libs, $libID, $object, $objectID, $objectDropdown);
     }
 
