@@ -1158,14 +1158,15 @@ class user extends control
     }
 
     /**
-     * Refresh random for login
+     * 刷新用于登录的随机数。
+     * Refresh random for login.
      *
      * @access public
      * @return void
      */
     public function refreshRandom()
     {
-        $rand = (string)$this->user->updateSessionRandom();
-        echo $rand;
+        $rand = $this->user->updateSessionRandom();
+        echo (string)$rand;
     }
 }
