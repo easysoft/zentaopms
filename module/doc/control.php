@@ -30,14 +30,14 @@ class doc extends control
     }
 
     /**
-     * Go to browse page.
+     * 文档仪表盘。
+     * Document dashboard.
      *
      * @access public
      * @return void
      */
     public function index()
     {
-        $this->view->title = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
         echo $this->fetch('block', 'dashboard', 'dashboard=doc');
     }
 
