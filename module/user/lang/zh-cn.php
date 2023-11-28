@@ -324,7 +324,7 @@ $lang->user->mkdirLinux = <<<EOT
     </td></tr></table></body></html>
 EOT;
 
-$lang->user->jumping = "<span id='time'>10</span>秒钟后页面将自动跳转登录页。 <a href='%s' class='btn primary size-xs' type='button'>立即跳转</a>";
+$lang->user->jumping = "<span id='time'>10</span>秒钟后页面将自动跳转登录页。 <a href='%s' id='redirect' class='btn primary'>立即跳转</a>";
 
 $lang->user->zentaoapp = new stdclass();
 $lang->user->zentaoapp->logout = '退出登录';
