@@ -76,6 +76,7 @@ window.safeSubmit = function(e)
             {
                 zui.Modal.alert(data.message);
                 if($('.captchaBox').length == 1) refreshCaptcha($('.captchaBox .input-group .input-group-addon img'));
+                clearTimeout(timeoutID);
                 return false;
             }
 

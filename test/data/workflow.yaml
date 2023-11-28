@@ -78,12 +78,9 @@ fields:
     loopfix: ""
     format: ""
   - field: order
-    note: ""
-    prefix: ""
-    postfix: ""
+    note: "排序"
+    range: 1-1000
     loop: 0
-    loopfix: ""
-    format: ""
   - field: buildin
     range: 0
   - field: administrator

@@ -1,4 +1,14 @@
 <?php
+declare(strict_types=1);
+/**
+ * The control file of mr module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Yanyi Cao <caoyanyi@easycorp.ltd>
+ * @package     mr
+ * @link        https://www.zentao.net
+ */
 class mr extends control
 {
     /**
@@ -6,7 +16,7 @@ class mr extends control
      * @param string $moduleName
      * @param string $methodName
      */
-    public function __construct($moduleName = '', $methodName = '')
+    public function __construct(string $moduleName = '', string $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
 
@@ -25,6 +35,7 @@ class mr extends control
     }
 
     /**
+     * 获取合并请求列表.
      * Browse mr.
      *
      * @param  int    $repoID
@@ -38,14 +49,14 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function browse($repoID = 0, $mode = 'status', $param = 'opened', $objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse(int $repoID = 0, string $mode = 'status', string $param = 'opened', int $objectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if($this->app->tab == 'execution')
         {
             $this->session->set('execution', $objectID);
             $execution = $this->loadModel('execution')->getByID($objectID);
             $features = $this->execution->getExecutionFeatures($execution);
-            if(!$features['devops']) return print($this->locate($this->createLink('execution', 'task', "objectID=$executionID")));
+            if(!$features['devops']) return $this->locate($this->createLink('execution', 'task', "objectID=$executionID"));
 
             $this->loadModel('execution')->setMenu($objectID);
         }
@@ -58,20 +69,13 @@ class mr extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $repoCount = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
-            ->andWhere('SCM')->in(array('Gitlab', 'Gitea', 'Gogs'))
-            ->andWhere('synced')->eq(1)
-            ->orderBy('id')
-            ->count();
-        if($repoCount == 0) $this->locate($this->loadModel('repo')->createLink('create'));
+        $repoList = $this->loadModel('repo')->getListBySCM('Gitlab,Gitea,Gogs');
+        if(empty($repoList)) $this->locate($this->loadModel('repo')->createLink('create'));
 
-        $repoID = $this->loadModel('repo')->saveState($repoID, $objectID);
-        $repo   = $this->repo->getByID($repoID);
-        if(!in_array(strtolower($repo->SCM), $this->config->mr->gitServiceList))
-        {
-            $repoID = $this->dao->select('id')->from(TABLE_REPO)->where('deleted')->eq('0')->andWhere('SCM')->in(array('Gitlab', 'Gitea', 'Gogs'))->andWhere('synced')->eq(1)->orderBy('id')->fetch('id');
-            $repo   = $this->repo->getByID($repoID);
-        }
+        if(!isset($repoList[$repoID])) $repoID = key($repoList);
+        $repoID = $this->repo->saveState($repoID, $objectID);
+        $repo   = $repoList[$repoID];
+
         $this->loadModel('ci')->setMenu($repo->id);
 
         if($param == 'assignee' || $param == 'creator')
@@ -109,23 +113,7 @@ class mr extends control
 
         /* Load lang from compile module */
         $this->app->loadLang('compile');
-
-        $openIDList = array();
-        if(!$this->app->user->admin)
-        {
-            if($repo->SCM == 'Gitlab')
-            {
-                $openIDList = $this->loadModel('gitlab')->getGitLabListByAccount($this->app->user->account);
-            }
-            elseif($repo->SCM == 'Gitea')
-            {
-                $openIDList = $this->loadModel('gitea')->getGiteaListByAccount($this->app->user->account);
-            }
-            elseif($repo->SCM == 'Gogs')
-            {
-                $openIDList = $this->loadModel('gogs')->getGogsListByAccount($this->app->user->account);
-            }
-        }
+        $openIDList = $this->app->user->admin ? array() : $this->loadModel(strtolower($repo->SCM))->getListByAccount($this->app->user->account);
 
         if($this->app->tab == 'execution') $this->view->executionID = $objectID;
         $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
@@ -200,9 +188,9 @@ class mr extends control
         $openIDList = array();
         if(!$this->app->user->admin)
         {
-            $openIDList += $this->loadModel('gitlab')->getGitLabListByAccount($this->app->user->account);
-            $openIDList += $this->loadModel('gitea')->getGiteaListByAccount($this->app->user->account);
-            $openIDList += $this->loadModel('gogs')->getGogsListByAccount($this->app->user->account);
+            $openIDList += $this->loadModel('gitlab')->getListByAccount($this->app->user->account);
+            $openIDList += $this->loadModel('gitea')->getListByAccount($this->app->user->account);
+            $openIDList += $this->loadModel('gogs')->getListByAccount($this->app->user->account);
         }
 
         $this->view->title       = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;

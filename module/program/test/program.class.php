@@ -379,8 +379,8 @@ class programTest
     public function processProductsForKanbanTest(): array
     {
         $programs = $this->program->getTopPairs('noclosed');
-        list($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, $hours, $projectHours) = $this->program->getKanbanStatisticData($programs);
-        return $this->program->processProductsForKanban($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, $hours, $projectHours);
+        list($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions, ) = $this->program->getKanbanStatisticData($programs);
+        return $this->program->processProductsForKanban($productGroup, $planGroup, $releaseGroup, $projectGroup, $doingExecutions);
     }
 
     /**
@@ -531,5 +531,81 @@ class programTest
     {
         $object = $this->program->getByID($objectID);
         return $this->program->buildActions($object);
+    }
+
+    /**
+     * 获取任务的统计数据。
+     * Get task stats.
+     *
+     * @param  array $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getTaskStatsTest(array $projectIdList): array
+    {
+        $summary = $this->program->getTaskStats($projectIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $summary;
+    }
+
+    /**
+     * 更新项目集的统计数据。
+     * Update stats of program.
+     *
+     * @param  array  $projectIdList
+     * @access public
+     * @return array
+     */
+    public function updateStatsTest(array $projectIdList): array
+    {
+        $this->program->updateStats($projectIdList);
+        if(dao::isError()) return dao::getError();
+
+        return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('project')->beginIF(!empty($projectIdList))->andWhere('id')->in($projectIdList)->fi()->fetchAll('id');
+    }
+
+    /**
+     * 更新项目集的进度。
+     * Update program progress.
+     *
+     * @access public
+     * @return array
+     */
+    public function updateProcessTest(): array
+    {
+        $this->program->updateProcess();
+        if(dao::isError()) return dao::getError();
+
+        return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('program')->fetchAll('id');
+    }
+
+    /**
+     * 刷新项目集的统计数据。
+     * Refresh stats fields(estimate,consumed,left,progress) of program, project, execution.
+     *
+     * @access public
+     * @return array
+     */
+    public function refreshStatsTest(): array
+    {
+        $this->program->refreshStats(true);
+        if(dao::isError()) return dao::getError();
+
+        return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('program')->fetchAll('id');
+    }
+
+    /**
+     * 该项目集下是否有未关闭的子项目集或项目。
+     * Judge whether there is an unclosed programs or projects.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return int
+     */
+    public function hasUnfinishedChildrenTest(int $programID): int
+    {
+        $program = $this->program->getByID($programID);
+        return $this->program->hasUnfinishedChildren($program);
     }
 }

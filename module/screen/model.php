@@ -95,6 +95,7 @@ class screenModel extends model
         $this->filter->account = $account;
         $this->filter->charts  = array();
 
+        if($screen->id == 5) return new stdclass();
         if(!$screen->builtin || in_array($screen->id, $this->config->screen->builtinScreen)) return $this->genNewChartData($screen, $year, $dept, $account);
 
         $config = new stdclass();
@@ -152,10 +153,7 @@ class screenModel extends model
         foreach($scheme->componentList as $component)
         {
             $list = !empty($component->isGroup) ? $component->groupList : array($component);
-            foreach($list as $groupComponent)
-            {
-                if(isset($groupComponent->key) && $groupComponent->key === 'Select') $groupComponent = $this->buildSelect($groupComponent);
-            }
+            foreach($list as $groupComponent) isset($groupComponent->key) && $groupComponent->key === 'Select' && $this->buildSelect($groupComponent);
         }
 
         /** Fileter chart. */
@@ -186,7 +184,7 @@ class screenModel extends model
         $table = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
         $chart = $this->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
 
-        $this->genComponentData($chart, $type, $component);
+        $this->genComponentData($chart, $component, $type);
     }
 
     /**
@@ -196,11 +194,11 @@ class screenModel extends model
      * @param  object $chart
      * @param  string $type
      * @param  object $component
-     * @param  string $filters
+     * @param  array  $filters
      * @access public
      * @return void
      */
-    public function genComponentData(object $chart, string $type = 'chart', object $component = null, string $filters = ''): void
+    public function genComponentData(object $chart, object $component, string $type = 'chart', array $filters = array()): void
     {
         $chart = clone($chart);
         if($type == 'pivot' && $chart)
@@ -218,7 +216,7 @@ class screenModel extends model
             list($chart->sql, $filters) = isset($result[0]) ? $result : array($chart->sql, $result);
         }
 
-        list($component) = $this->initComponent($chart, $type, $component);
+        $this->initComponent($chart, $type, $component);
         $this->completeComponent($chart, $type, $filters, $component);
     }
 
@@ -334,9 +332,9 @@ class screenModel extends model
      * 获取图表配置。
      * Get chart option.
      *
-     * @param  object        $chart
-     * @param  object        $component
-     * @param  array         $filters
+     * @param  object $chart
+     * @param  object $component
+     * @param  array  $filters
      * @access public
      * @return void
      */
@@ -444,7 +442,7 @@ class screenModel extends model
         if($chart->sql)
         {
             $settings = json_decode($chart->settings, true);
-            $langs    = json_decode($chart->langs, true);
+            $langs    = json_decode($chart->langs,    true);
             $settings = current($settings);
 
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
@@ -460,7 +458,7 @@ class screenModel extends model
                 $fieldConfig = zget($fields, $metrics[$index]);
                 $fieldName   = $langs[$fieldConfig->field][$clientLang] ?? $fieldConfig->name;
                 $field = $fieldName . '(' . zget($this->lang->chart->aggList, $aggs[$index]) . ')';
-                $dimensions[] = $field;
+                array_push($dimensions, $field);
 
                 foreach($dataList as $valueField => $value)
                 {
@@ -516,7 +514,6 @@ class screenModel extends model
             $sourceData = array();
             foreach($options['series'] as $dataList)
             {
-                $field = $settings['metric'][0]['field'];
                 foreach($dataList['data'] as $data)
                 {
                     $fieldValue = $data['name'];
@@ -525,7 +522,7 @@ class screenModel extends model
                         $sourceData[$fieldValue] = new stdclass();
                         $sourceData[$fieldValue]->{$groupField} = (string)$fieldValue;
                     }
-                    $sourceData[$fieldValue]->{$field} = $data['value'];
+                    $sourceData[$fieldValue]->{$metricField} = $data['value'];
                 }
             }
 
@@ -758,8 +755,8 @@ class screenModel extends model
      */
     public function processXLabel(array $xLabels, string $type, string $object, string $field): array
     {
-        $options = $this->getSysOptions($type, $object, $field);
         $xLabelValues = array();
+        $options      = $this->getSysOptions($type, $object, $field);
         foreach($xLabels as $label) $xLabelValues[$label] = isset($options[$label]) ? $options[$label] : $label;
 
         return $xLabelValues;
@@ -802,7 +799,7 @@ class screenModel extends model
             case 'option':
                 if($field)
                 {
-                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
+                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "{$object}.php";
                     if(is_file($path))
                     {
                         include $path;
@@ -840,7 +837,7 @@ class screenModel extends model
      * @access public
      * @return array
      */
-    public function buildComponentList(array $componentList): array
+    public function buildComponentList(array|object $componentList): array
     {
         return array_map(function($component){$this->buildComponent($component);return $component;}, array_filter($componentList));
     }
@@ -878,7 +875,7 @@ class screenModel extends model
      *
      * @param  object $component
      * @access public
-     * @return object
+     * @return void
      */
     public function buildGroup(object $component): void
     {
@@ -890,13 +887,13 @@ class screenModel extends model
      *
      * @param  object $component
      * @access public
-     * @return object
+     * @return void
      */
     public function setComponentDefaults(object $component): void
     {
-        if(!isset($component->styles))  $component->styles  = json_decode('{"filterShow": false, "hueRotate": 0, "saturate": 1, "contrast": 1, "brightness": 1, "opacity": 1, "rotateZ": 0, "rotateX": 0, "rotateY": 0, "skewX": 0, "skewY": 0, "blendMode": "normal", "animations": []}');
-        if(!isset($component->status))  $component->status  = json_decode('{"lock": false, "hide": false}');
-        if(!isset($component->request)) $component->request = json_decode('{ "requestDataType": 0, "requestHttpType": "get", "requestUrl": "", "requestIntervalUnit": "second", "requestContentType": 0, "requestParamsBodyType": "none", "requestSQLContent": { "sql": "select * from  where" }, "requestParams": { "Body": { "form-data": {}, "x-www-form-urlencoded": {}, "json": "", "xml": "" }, "Header": {}, "Params": {} } }');
+        if(!isset($component->styles))  $component->styles  = $this->config->screen->chart->default->styles;
+        if(!isset($component->status))  $component->status  = $this->config->screen->chart->default->status;
+        if(!isset($component->request)) $component->request = $this->config->screen->chart->default->request;
     }
 
     /**
@@ -1496,37 +1493,39 @@ class screenModel extends model
      * @access public
      * @return array
      */
-    public function getBurnData()
+    public function getBurnData(): array
     {
-        $type = 'withdelay';
-        $this->loadModel('execution');
-        $executions    = $this->execution->getList(0, 'sprint', 'doing') + $this->execution->getList(0, 'stage', 'doing');
+        $type       = 'withdelay';
+        $executions = $this->loadModel('execution')->getList(0, 'sprint', 'doing') + $this->execution->getList(0, 'stage', 'doing');
 
         $executionData = array();
 
-        foreach($executions as $executionID => $execution)
+        foreach(array_keys($executions) as $executionID)
         {
             $execution = $this->execution->getByID($executionID);
 
             /* Splice project name for the execution name. */
-            $execution->name = $this->loadModel('project')->getByID($execution->project)->name . '--' . $execution->name;
+            $project = $this->loadModel('project')->getByID($execution->project);
+            if(!$project) continue;
+
+            $execution->name = $project->name . '--' . $execution->name;
 
             /* Get date list. */
-            if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
-                or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
-                or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
-                and strpos($type, 'delay') === false)
+            if(((strpos('closed,suspended', $execution->status) === false && helper::today() > $execution->end)
+                || ($execution->status == 'closed'    && substr($execution->closedDate, 0, 10) > $execution->end)
+                || ($execution->status == 'suspended' && $execution->suspendedDate > $execution->end))
+                && strpos($type, 'delay') === false)
                 $type .= ',withdelay';
 
             $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
             $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
-            $endDate  = (strpos($type, 'withdelay') !== false and $deadline > $execution->end) ? $deadline : $execution->end;
-            list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $deadline);
+            $endDate  = (strpos($type, 'withdelay') !== false && $deadline > $execution->end) ? $deadline : $execution->end;
+            list($dateList) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $deadline);
 
             $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
-            $chartData = $this->execution->buildBurnData($executionID, $dateList, 'left', $executionEnd);
-
+            $chartData    = $this->execution->buildBurnData($executionID, $dateList, 'left', $executionEnd);
             $execution->chartData = $chartData;
+
             $executionData[$executionID] = $execution;
         }
         return $executionData;
@@ -1541,9 +1540,9 @@ class screenModel extends model
      * @access public
      * @return void
      */
-    public function initComponent($chart, $type, $component = null)
+    public function initComponent(object $chart, string $type, object $component)
     {
-        if(!$component) $component = new stdclass();
+        if(!$component) return new stdclass();
         if(!$chart) return $component;
 
         $settings = is_string($chart->settings) ? json_decode($chart->settings) : $chart->settings;
@@ -1552,7 +1551,7 @@ class screenModel extends model
         if(!isset($component->sourceID)) $component->sourceID = $chart->id;
         if(!isset($component->title))    $component->title    = $chart->name;
 
-        if($type == 'chart') $chartType = ($chart->builtin and !in_array($chart->id, $this->config->screen->builtinChart)) ? $chart->type : $settings[0]->type;
+        if($type == 'chart') $chartType = ($chart->builtin && !in_array($chart->id, $this->config->screen->builtinChart)) ? $chart->type : current($settings)->type;
         if($type == 'pivot') $chartType = 'table';
         $component->type = $chartType;
 
@@ -1563,23 +1562,23 @@ class screenModel extends model
         {
             foreach($this->config->screen->chartConfig as $type => $chartConfig)
             {
-                $chartConfig = json_decode($chartConfig, true);
-                if($chartConfig['key'] == $component->chartConfig->key) $componentType = $type;
+                $chartConfig = json_decode($chartConfig);
+                if($chartConfig->key == $component->chartConfig->key) $componentType = $type;
             }
 
             $typeChanged = $chartType != $componentType;
         }
 
         // New component type or change component type.
-        if(!isset($component->chartConfig) or $typeChanged)
+        if(!isset($component->chartConfig) || $typeChanged)
         {
             $chartConfig = json_decode(zget($this->config->screen->chartConfig, $chartType));
-            if(empty($chartConfig)) return null;
+            if(empty($chartConfig)) return;
 
             $component->chartConfig = $chartConfig;
         }
 
-        if(!isset($component->option) or $typeChanged)
+        if(!isset($component->option) || $typeChanged)
         {
             $component->option = json_decode(zget($this->config->screen->chartOption, $component->type));
             $component->option->dataset = new stdclass();
@@ -1588,8 +1587,6 @@ class screenModel extends model
         if(!isset($component->option->dataset)) $component->option->dataset = new stdclass();
         $component->chartConfig->title    = $chart->name;
         $component->chartConfig->sourceID = $component->sourceID;
-
-        return array($component, $typeChanged);
     }
 
     /**
@@ -1598,9 +1595,9 @@ class screenModel extends model
      * @param  int    $chartID
      * @param  string $type
      * @access public
-     * @return void
+     * @return bool
      */
-    public function checkIFChartInUse($chartID, $type = 'chart')
+    public function checkIFChartInUse(int $chartID, string $type = 'chart'): bool
     {
         static $screenList = array();
         if(empty($screenList)) $screenList = $this->dao->select('scheme')->from(TABLE_SCREEN)->where('deleted')->eq(0)->andWhere('status')->eq('published')->fetchAll();
@@ -1612,27 +1609,16 @@ class screenModel extends model
 
             foreach($scheme->componentList as $component)
             {
-                if(!empty($component->isGroup))
+                $list = !empty($component->isGroup) ? $component->groupList : array($component);
+                foreach($list as $groupComponent)
                 {
-                    foreach($component->groupList as $key => $groupComponent)
-                    {
-                        if(!isset($groupComponent->chartConfig)) continue;
+                    if(!isset($groupComponent->chartConfig)) continue;
 
-                        $sourceID   = zget($groupComponent->chartConfig, 'sourceID', '');
-                        $sourceType = zget($groupComponent->chartConfig, 'package', '') == 'Tables' ? 'pivot' : 'chart';
+                    $sourceID   = zget($groupComponent->chartConfig, 'sourceID', '');
+                    $sourceType = zget($groupComponent->chartConfig, 'package', '') == 'Tables' ? 'pivot' : 'chart';
 
-                        if($chartID == $sourceID and $type == $sourceType) return true;
-                    }
+                    if($chartID == $sourceID && $type == $sourceType) return true;
                 }
-                else
-                {
-                    if(!isset($component->chartConfig)) continue;
-
-                    $sourceID   = zget($component->chartConfig, 'sourceID', '');
-                    $sourceType = zget($component->chartConfig, 'package', '') == 'Tables' ? 'pivot' : 'chart';
-                    if($chartID == $sourceID and $type == $sourceType) return true;
-                }
-
             }
         }
         return false;

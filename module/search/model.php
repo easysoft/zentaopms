@@ -490,7 +490,7 @@ class searchModel extends model
             ->where('((vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObjects)
             ->markRight(1)
-            ->orWhere('(objectType')->in($filterObject)
+            ->orWhere('(objectType')->in($filterObjects)
             ->markRight(2)
             ->andWhere('addedDate')->le(helper::now())
             ->groupBy('objectType')
@@ -500,11 +500,12 @@ class searchModel extends model
     }
 
     /**
+     * 获取搜索结果。
      * get search results of keywords.
      *
-     * @param  string    $keywords
-     * @param  string    $type
-     * @param  object    $pager
+     * @param  string $keywords
+     * @param  string $type
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -513,13 +514,13 @@ class searchModel extends model
         list($words, $againstCond, $likeCondition) = $this->searchTao->getSqlParams($keywords, $type);
         $allowedObjects = $this->searchTao->getAllowedObjects($type);
 
-        $filterObject = array();
+        $filterObjects = array();
         foreach($allowedObjects as $index => $object)
         {
             if(strpos(',feedback,ticket,', ",$object,") !== false)
             {
                 unset($allowedObjects[$index]);
-                $filterObject[] = $object;
+                $filterObjects[] = $object;
             }
         }
 
@@ -530,7 +531,7 @@ class searchModel extends model
             ->andWhere('((vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObjects)
             ->markRight(1)
-            ->orWhere('(objectType')->in($filterObject)
+            ->orWhere('(objectType')->in($filterObjects)
             ->markRight(2)
             ->andWhere('addedDate')->le(helper::now())
             ->orderBy('score_desc, editedDate_desc')
@@ -557,13 +558,6 @@ class searchModel extends model
             $pager->setPageID($pager->pageID);
             $results = array_chunk($results, $pager->recPerPage, true);
             $results = $results[$pager->pageID - 1];
-        }
-
-        $idListGroup = array();
-        foreach($results as $record)
-        {
-            $module = $record->objectType == 'case' ? 'testcase' : $record->objectType;
-            $idListGroup[$module][$record->objectID] = $record->objectID;
         }
 
         $objectList = array();
@@ -743,18 +737,19 @@ class searchModel extends model
     }
 
     /**
+     * 将 unicode 转换为对应的字。
      * Transfer unicode to words.
      *
-     * @param  string    $string
+     * @param  string $string
      * @access public
-     * @return void
+     * @return string
      */
-    public function decode($string)
+    public function decode(string $string): string
     {
         static $dict;
         if(empty($dict))
         {
-            $dict = $this->dao->select("concat(`key`, ' ') as `key`, value")->from(TABLE_SEARCHDICT)->fetchPairs();
+            $dict = $this->dao->select("concat(`key`, ' ') AS `key`, value")->from(TABLE_SEARCHDICT)->fetchPairs();
             $dict['|'] = '';
         }
         if(strpos($string, ' ') === false) return zget($dict, $string . ' ');
@@ -762,14 +757,15 @@ class searchModel extends model
     }
 
     /**
+     * 获取结果显示的摘要。
      * Get summary of results.
      *
-     * @param  string    $content
-     * @param  string    $words
+     * @param  string $content
+     * @param  string $words
      * @access public
      * @return string
      */
-    public function getSummary($content, $words)
+    public function getSummary(string $content, string $words): string
     {
         $length = $this->config->search->summaryLength;
         if(strlen($content) <= $length) return $this->decode($this->markKeywords($content, $words));
@@ -794,9 +790,7 @@ class searchModel extends model
 
         $content = str_replace('<span class', ' <spanclass', $content);
         $content = explode(' ', $content);
-
         $pos     = array_search(str_replace('<span class', '<spanclass', $needle), $content);
-
         $start   = max(0, $pos - ($length / 2));
         $summary = join(' ', array_slice($content, $start, $length));
         $summary = str_replace(' <spanclass', '<span class', $summary);
@@ -988,20 +982,21 @@ class searchModel extends model
     }
 
     /**
+     * 在文中标记关键词。
      * Mark keywords in content.
      *
-     * @param  string    $content
-     * @param  string    $keywords
+     * @param  string $content
+     * @param  string $keywords
      * @access public
-     * @return void
+     * @return string
      */
-    public function markKeywords($content, $keywords)
+    public function markKeywords(string $content, string $keywords): string
     {
         $words = explode(' ', trim($keywords, ' '));
-        $markedWords = array();
         $leftMark  = '|0000';
         $rightMark = '0000|';
 
+        $markedWords = array();
         foreach($words as $key => $word)
         {
             if(preg_match('/^\|[0-9]+\|$/', $word))

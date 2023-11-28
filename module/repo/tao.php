@@ -212,4 +212,87 @@ class repoTao extends repoModel
 
         return $bugs;
     }
+
+    /**
+     * 构造文件树结构。
+     * Build file tree.
+     *
+     * @param  array  $allFiles
+     * @access public
+     * @return array
+     */
+    public function buildFileTree(array $allFiles = array()): array
+    {
+        $files = array();
+        $id    = 0;
+        foreach($allFiles as $file)
+        {
+            $fileName = explode('/', $file);
+            $parent   = '';
+            foreach($fileName as $path)
+            {
+                if($path === '') continue;
+
+                $parentID = $parent == '' ? 0 : $files[$parent]['id'];
+                $parent  .= $parent == '' ? $path : '/' . $path;
+                if(!isset($files[$parent]))
+                {
+                    $id++;
+
+                    $id = $this->encodePath($parent);
+                    $files[$parent] = array(
+                        'id'     => str_replace('=', '-', $id),
+                        'parent' => $parentID,
+                        'name'   => $path,
+                        'path'   => $parent,
+                        'key'    => $id,
+                    );
+                }
+            }
+        }
+
+        sort($files);
+        return $this->buildTree($files);
+    }
+
+    /**
+     * Build tree.
+     *
+     * @param  array  $files
+     * @param  int    $parent
+     * @access public
+     * @return array
+     */
+    public function buildTree(array $files = array(), int $parent = 0): array
+    {
+        $treeList = array();
+        $key      = 0;
+        $pathName = array();
+        $fileName = array();
+
+        foreach($files as $key => $file)
+        {
+            if ($file['parent'] === $parent)
+            {
+                $treeList[$key] = $file;
+                $fileName[$key] = $file['name'];
+                /* Default value is '~', because his ascii code is large in string. */
+                $pathName[$key] = '~';
+
+                $children = $this->buildTree($files, $file['id']);
+
+                if($children)
+                {
+                    $treeList[$key]['children'] = $children;
+                    $fileName[$key] = '';
+                    $pathName[$key] = $file['path'];
+                }
+
+                $key++;
+            }
+        }
+
+        array_multisort($pathName, SORT_ASC, $fileName, SORT_ASC, $treeList);
+        return $treeList;
+    }
 }

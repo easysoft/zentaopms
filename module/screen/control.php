@@ -176,7 +176,7 @@ class screen extends control
                 }
             }
 
-            $chartData = $this->screen->genComponentData($chart, $type, null, $filterFormat);
+            $chartData = $this->screen->genComponentData($chart, null, $type, $filterFormat);
             print(json_encode($chartData));
         }
     }
