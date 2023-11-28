@@ -153,57 +153,52 @@ class apiModel extends model
 
         if(dao::isError()) return false;
 
-        return $id;
+        $this->loadModel('action')->create('apistruct', $id, 'Created');
+
+        return true;
     }
 
     /**
      * Update a struct.
      *
-     * @param  int    $id
+     * @param  object $formData
      * @access public
      * @return array
      */
-    public function updateStruct($id)
+    public function updateStruct($formData)
     {
-        $old = $this->dao->findByID($id)->from(TABLE_APISTRUCT)->fetch();
-
-        $now  = helper::now();
-        $data = fixer::input('post')
-            ->trim('name')
-            ->skipSpecial('attribute')
-            ->add('lib', $old->lib)
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', $now)
-            ->stripTags($this->config->api->editor->editstruct['id'], $this->config->allowedTags)
-            ->remove('undefined')
-            ->get();
-
-        unset($data->addedBy);
-        unset($data->addedDate);
-
-        $data->version = $old->version + 1;
+        $oldData = $this->dao->findByID($formData->id)->from(TABLE_APISTRUCT)->fetch();
 
         $this->dao->update(TABLE_APISTRUCT)
-            ->data($data)->autoCheck()
+            ->data($formData)->autoCheck()
             ->batchCheck($this->config->api->struct->requiredFields, 'notempty')
-            ->where('id')->eq($id)
+            ->where('id')->eq($formData->id)
             ->exec();
 
         if(dao::isError()) return false;
 
         /* Create a struct version */
         $version = array(
-            'name'      => $data->name,
-            'type'      => $data->type,
-            'desc'      => $data->desc,
-            'version'   => $data->version,
-            'attribute' => $data->attribute,
-            'addedBy'   => $data->editedBy,
-            'addedDate' => $data->editedDate
+            'name'      => $formData->name,
+            'type'      => $formData->type,
+            'desc'      => $formData->desc,
+            'version'   => $formData->version,
+            'attribute' => $formData->attribute,
+            'addedBy'   => $formData->editedBy,
+            'addedDate' => $formData->editedDate
         );
         $this->dao->insert(TABLE_APISTRUCT_SPEC)->data($version)->exec();
 
-        return common::createChanges($old, $data);
+        if(dao::isError()) return false;
+
+        $changes = common::createChanges($oldData, $formData);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('apistruct', $formData->id, 'Edited');
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        return true;
     }
 
     /**
