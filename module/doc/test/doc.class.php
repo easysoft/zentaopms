@@ -606,4 +606,22 @@ class docTest
 
         return 'noerror';
     }
+
+    /**
+     * 构造搜索表单。
+     * Build search form.
+     *
+     * @param  int    $libID
+     * @param  array  $libIdList
+     * @param  int    $queryID
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function buildSearchFormTest(int $libID, array $libIdList, int $queryID, string $type): array
+    {
+        $libs = $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($libIdList)->fetchAll('id');
+        $this->objectModel->buildSearchForm($libID, $libs, $queryID, '', $type);
+        return $this->objectModel->config->doc->search;
+    }
 }
