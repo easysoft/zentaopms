@@ -90,13 +90,10 @@ class admin extends control
             $nextWeek   = date('Y-m-d', strtotime('-7 days'));
             $zentaoData = $this->loadModel('block')->getZentaoData($nextWeek);
 
-            if(empty($zentaoData))
-            {
-                $this->admin->setExtensionsByAPI('plugin', 6);
-                $this->admin->setExtensionsByAPI('patch', 5);
-                $this->admin->setDynamicsByAPI(3);
-                $this->admin->setPublicClassByAPI(3);
-            }
+            if(empty($zentaoData['plugin']))      $this->admin->setExtensionsByAPI('plugin', 6);
+            if(empty($zentaoData['patch']))       $this->admin->setExtensionsByAPI('patch', 5);
+            if(empty($zentaoData['news']))        $this->admin->setDynamicsByAPI(3);
+            if(empty($zentaoData['publicclass'])) $this->admin->setPublicClassByAPI(3);
         }
 
         return $this->send(array('result' => 'success'));
