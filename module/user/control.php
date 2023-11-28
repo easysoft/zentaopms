@@ -777,24 +777,27 @@ class user extends control
     }
 
     /**
-     * Logout.
+     * 退出登录。
+     * User logout.
      *
+     * @param  string $referer
      * @access public
      * @return void
      */
-    public function logout($referer = 0)
+    public function logout(string $referer = '')
     {
-        if(isset($this->app->user->id)) $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
-        helper::setcookie('za', '', time() - 3600, $this->config->webRoot);
-        helper::setcookie('zp', '', time() - 3600, $this->config->webRoot);
-        helper::setcookie('tab', '', time() - 3600, $this->config->webRoot);
+        if(!empty($this->app->user->id)) $this->loadModel('action')->create('user', $this->app->user->id, 'logout');
 
-        $_SESSION = array();
+        helper::setcookie('za',  '', time() - 3600);
+        helper::setcookie('zp',  '', time() - 3600);
+        helper::setcookie('tab', '', time() - 3600);
+
+        $_SESSION = array();    // Clear session in roadrunner.
         session_destroy();
 
         if($this->app->getViewType() == 'json') return $this->send(array('status' => 'success'));
-        $vars = !empty($referer) ? "referer=$referer" : '';
-        return $this->send(array('result' => 'success', 'load' => $this->createLink('user', 'login', $vars)));
+
+        return $this->send(array('result' => 'success', 'load' => inlink('login', !empty($referer) ? "referer=$referer" : '')));
     }
 
     /**
