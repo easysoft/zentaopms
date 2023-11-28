@@ -2,6 +2,38 @@
 class userZen extends user
 {
     /**
+     * 检查缓存目录和数据目录访问权限。如果不能访问，终止程序并输出提示信息。
+     * Check the access permissions of the cache directory and data directory. If you cannot access, terminate the program and output the prompt message.
+     *
+     * @access public
+     * @return void
+     */
+    public function checkDirPermission(): void
+    {
+        $canModifyDIR = true;
+        if($this->user->checkTmp() === false)
+        {
+            $canModifyDIR = false;
+            $folderPath   = $this->app->tmpRoot;
+        }
+        elseif(!is_dir($this->app->dataRoot) || substr(decoct(fileperms($this->app->dataRoot)), -4) != '0777')
+        {
+            $canModifyDIR = false;
+            $folderPath   = $this->app->dataRoot;
+        }
+
+        if(!$canModifyDIR)
+        {
+            $lang    = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $this->lang->user->mkdirWin : $this->lang->user->mkdirLinux;
+            $message = sprintf($lang, $folderPath, $folderPath, $folderPath, $folderPath);
+
+            if($_POST) $this->send(array('result' => 'fail', 'message' => array('size' => 'md', 'message' => array('html' => str_replace("\n", '<br>', strip_tags($message))))));
+
+            helper::end($message);
+        }
+    }
+
+    /**
      * 创建用户前的检查。
      * Check before creating a user.
      *
