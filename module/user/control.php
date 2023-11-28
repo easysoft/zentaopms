@@ -839,7 +839,7 @@ class user extends control
         /* Remove the real path to ensure security. */
         $resetFileName = str_replace($this->app->getBasePath(), '', $resetFileName);
 
-        $this->view->title          = $this->lang->user->resetPassword;
+        $this->view->title          = $this->lang->user->resetPwdByAdmin;
         $this->view->rand           = $this->user->updateSessionRandom();
         $this->view->needCreateFile = $needCreateFile;
         $this->view->resetFileName  = $resetFileName;
