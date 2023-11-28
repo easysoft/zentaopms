@@ -1,0 +1,27 @@
+title: zt_doclib.
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: "项目接口库{3},产品接口库{2},自定义文档库{5},我的文档库{5},项目文档主库,项目库,项目文档主库{2},执行文档主库{6},产品文档主库{5}"
+    - field: name2
+      range: 1-100
+  - field: type
+    range: "api{5},custom{5},mine{5},project{4},execution{6},product{5}"
+  - field: product
+    range: "0{3},1,2,0{20},1,2,3,4,5"
+  - field: project
+    range: "11,60,61,0{12},11{2},60,61,11{5},60,0{5}"
+  - field: execution
+    range: "0{19},101,102,103,104,105,106,0{5}"
+  - field: acl
+    range: 'default'
+  - field: main
+    range: "0{15},1,0,1{13}"
+  - field: addedBy
+    range: "admin"

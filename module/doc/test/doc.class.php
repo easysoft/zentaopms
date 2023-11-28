@@ -3,8 +3,11 @@ class docTest
 {
     public function __construct()
     {
-         global $tester;
+         global $tester, $app;
          $this->objectModel = $tester->loadModel('doc');
+
+         $app->rawModule = 'doc';
+         $app->rawMethod = 'index';
     }
 
     /**
@@ -546,10 +549,20 @@ class docTest
         return $objects;
     }
 
-    public function setMenuByTypeTest($type, $objectID, $libID, $appendLib = 0)
+    /**
+     * 设置文档的导航。
+     * Set doc menu by type.
+     *
+     * @param  string $type      mine|project|execution|product|custom
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  int    $appendLib
+     * @access public
+     * @return array
+     */
+    public function setMenuByTypeTest(string $type, int $objectID, int $libID, int $appendLib = 0): array
     {
-        $objects = $this->objectModel->setMenuByType($type, $objectID, $libID, $appendLib = 0);
-
+        $objects = $this->objectModel->setMenuByType($type, $objectID, $libID, $appendLib);
         if(dao::isError()) return dao::getError();
 
         return $objects;
