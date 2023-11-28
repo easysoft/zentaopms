@@ -98,6 +98,7 @@ $lang->dataview->objects['testrun']     = '测试执行';
 $lang->dataview->objects['testcase']    = '测试用例';
 $lang->dataview->objects['testresult']  = '执行结果';
 $lang->dataview->objects['casemodule']  = '用例模块';
+$lang->dataview->objects['feedback']    = '反馈';
 $lang->dataview->objects['action']      = '动态';
 $lang->dataview->objects['effort']      = '日志';
 
