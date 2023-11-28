@@ -612,6 +612,7 @@ class commonModel extends model
     }
 
     /**
+     * 获取高亮的顶部一级导航。
      * Get active main menu.
      *
      * @static
@@ -696,6 +697,7 @@ class commonModel extends model
     }
 
     /**
+     * 当对象编辑后，比较前后差异。
      * Create changes of one object.
      *
      * @param  mixed  $old        the old object
@@ -772,6 +774,7 @@ class commonModel extends model
     }
 
     /**
+     * 比较两个字符串的差异。
      * Diff two string. (see phpt)
      *
      * @param string $text1
@@ -798,6 +801,7 @@ class commonModel extends model
     }
 
     /**
+     * 判断post数据大小是否超过Suhosin设置大小。
      * Judge Suhosin Setting whether the actual size of post data is large than the setting size.
      *
      * @param  int    $countInputVars
@@ -823,6 +827,7 @@ class commonModel extends model
     }
 
     /**
+     * 获取详情页面上一页和下一页的对象。
      * Get the previous and next object.
      *
      * @param  string $type     story|task|bug|case
@@ -849,6 +854,7 @@ class commonModel extends model
     }
 
     /**
+     * 保存列表页的查询条件到session中，用于其他页面返回、导出等操作。
      * Save one executed query.
      *
      * @param  string    $sql
@@ -857,7 +863,7 @@ class commonModel extends model
      * @access public
      * @return void
      */
-    public function saveQueryCondition($sql, $objectType, $onlyCondition = true)
+    public function saveQueryCondition(string $sql, string $objectType, bool $onlyCondition = true)
     {
         /* Set the query condition session. */
         if($onlyCondition)
