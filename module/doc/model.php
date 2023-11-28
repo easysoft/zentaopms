@@ -1083,6 +1083,7 @@ class docModel extends model
     }
 
     /**
+     * 构造搜索条件。
      * Build search query.
      *
      * @param  string $type
@@ -1090,7 +1091,7 @@ class docModel extends model
      * @access public
      * @return string
      */
-    public function buildQuery($type, $queryID = 0)
+    public function buildQuery(string $type, int $queryID = 0): string
     {
         $queryName = $type . 'libDocQuery';
         $queryForm = $type . 'libDocForm';
