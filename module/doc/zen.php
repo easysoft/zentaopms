@@ -182,4 +182,112 @@ class docZen extends doc
         $path   = implode(':', $path);
         return array("{$prefix}{$libID}:{$path}" => true);
     }
+
+    /**
+     * 构造搜索表单。
+     * Build search form.
+     *
+     * @param  string    $libID
+     * @param  array     $libs
+     * @param  int       $queryID
+     * @param  string    $actionURL
+     * @param  string    $type       mine|view|collect|createdBy|product|project|execution|custom
+     * @access protected
+     * @return void
+     */
+    protected function buildSearchForm(int $libID, array $libs, int $queryID, string $actionURL, string $type): void
+    {
+        $this->loadModel('product');
+        if($this->app->rawMethod == 'contribute')
+        {
+            $this->config->doc->search['module'] = 'contributeDoc';
+            $this->config->doc->search['params']['project']['values']   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc', $this->config->vision == 'rnd' ? 'kanban' : '') + array('all' => $this->lang->doc->allProjects);
+            $this->config->doc->search['params']['execution']['values'] = $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf,noprefix,withobject') + array('all' => $this->lang->doc->allExecutions);
+            $this->config->doc->search['params']['lib']['values']       = $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
+            $this->config->doc->search['params']['product']['values']   = $this->product->getPairs() + array('all' => $this->lang->doc->allProduct);
+
+            unset($this->config->doc->search['fields']['module'], $this->config->doc->search['params']['module']);
+        }
+        else
+        {
+            if(!isset($libs[$libID])) $libs[$libID] = $this->doc->getLibByID($libID);
+
+            $libPairs  = array();
+            $queryName = $type . 'libDoc';
+            foreach($libs as $lib)
+            {
+                if(empty($lib)) continue;
+                if($lib->type == 'api') continue;
+                $libPairs[$lib->id] = $lib->name;
+            }
+
+            if($type == 'project')
+            {
+                $this->config->doc->search['params']['execution']['values'] = $this->loadModel('execution')->getPairs($this->session->project, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
+            }
+            else
+            {
+                if($type == 'mine' || $type == 'createdby')
+                {
+                    unset($this->config->doc->search['fields']['addedBy'], $this->config->doc->search['params']['addedBy']);
+                    if($type == 'mine') unset($this->config->doc->search['fields']['editedBy'], $this->config->doc->search['params']['editedBy']);
+                }
+                unset($this->config->doc->search['fields']['execution'], $this->config->doc->search['params']['execution']);
+            }
+
+            if(in_array($type, array('view', 'collect', 'createdby', 'editedby'))) $libPairs = $this->doc->getLibs('all', 'withObject');
+
+            $this->config->doc->search['module'] = $queryName;
+            $this->config->doc->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->doclib->all);
+            unset($this->config->doc->search['fields']['product'], $this->config->doc->search['params']['product']);
+            unset($this->config->doc->search['fields']['module'], $this->config->doc->search['params']['module']);
+        }
+
+        unset($this->config->doc->search['params']['status']['values']['']);
+        $this->config->doc->search['actionURL'] = $actionURL;
+        $this->config->doc->search['queryID']   = $queryID;
+
+        $this->loadModel('search')->setSearchParams($this->config->doc->search);
+    }
+
+    /**
+     * 展示我的空间相关变量。
+     * Show my space related variables.
+     *
+     * @param  string    $type
+     * @param  int       $objectID
+     * @param  int       $libID
+     * @param  int       $moduleID
+     * @param  string    $browseType
+     * @param  int       $param
+     * @param  string    $orderBy
+     * @param  array     $docs
+     * @param  object    $pager
+     * @param  array     $libs
+     * @param  string    $objectDropdown
+     * @access protected
+     * @return void
+     */
+    protected function assignVarsForMySpace(string $type, int $objectID, int $libID, int $moduleID, string $browseType, int $param, string $orderBy, array $docs, object $pager, array $libs, string $objectDropdown): void
+    {
+        $this->view->title             = $this->lang->doc->common;
+        $this->view->type              = $type;
+        $this->view->libID             = $libID;
+        $this->view->moduleID          = $moduleID;
+        $this->view->browseType        = $browseType;
+        $this->view->param             = $param;
+        $this->view->orderBy           = $orderBy;
+        $this->view->docs              = $docs;
+        $this->view->pager             = $pager;
+        $this->view->objectDropdown    = $objectDropdown;
+        $this->view->objectID          = 0;
+        $this->view->libType           = 'lib';
+        $this->view->spaceType         = 'mine';
+        $this->view->users             = $this->user->getPairs('noletter');
+        $this->view->lib               = $this->doc->getLibById($libID);
+        $this->view->libTree           = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID, 0, $browseType);
+        $this->view->canExport         = ($this->config->edition != 'open' && common::hasPriv('doc', 'mine2export') && $type == 'mine');
+        $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy={$orderBy}&param=0";
+        $this->view->defaultNestedShow = $this->getDefacultNestedShow($libID, $moduleID, $type);
+    }
 }

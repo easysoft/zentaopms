@@ -42,29 +42,30 @@ class doc extends control
     }
 
     /**
+     * 我的空间。
      * My space.
      *
-     * @param string $type mine|view|collect|createdBy
-     * @param int    $libID
-     * @param int    $moduleID
-     * @param string $browseType all|draft|bysearch
-     * @param int    $param
-     * @param string $orderBy
-     * @param int    $recTotal
-     * @param int    $recPerPage
-     * @param int    $pageID
+     * @param  string $type       mine|view|collect|createdBy
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  string $browseType all|draft|bysearch
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function mySpace($type = 'mine', $libID = 0, $moduleID = 0, $browseType = 'all', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function mySpace(string $type = 'mine', int $libID = 0, int $moduleID = 0, string $browseType = 'all', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $browseType = strtolower($browseType);
         $type       = strtolower($type);
 
-        if(empty($orderBy) and $type == 'mine') $orderBy = 'status,editedDate_desc';
-        if(empty($orderBy) and ($type == 'view' or $type == 'collect')) $orderBy = 'status,date_desc';
-        if(empty($orderBy) and ($type == 'createdby')) $orderBy = 'status,addedDate_desc';
-        if(empty($orderBy) and ($type == 'editedby')) $orderBy = 'status,editedDate_desc';
+        if(empty($orderBy) && $type == 'mine') $orderBy = 'status,editedDate_desc';
+        if(empty($orderBy) && ($type == 'view' || $type == 'collect')) $orderBy = 'status,date_desc';
+        if(empty($orderBy) && ($type == 'createdby')) $orderBy = 'status,addedDate_desc';
+        if(empty($orderBy) && ($type == 'editedby')) $orderBy = 'status,editedDate_desc';
 
         /* Save session, load module. */
         $uri = $this->app->getURI(true);
@@ -83,12 +84,11 @@ class doc extends control
         $objectDropdown = "<div id='sidebarHeader'><div class='title' title='{$objectTitle}'>{$objectTitle}</div></div>";
 
         /* Build the search form. */
-        $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
-        $params     = "libID=$libID&moduleID=$moduleID&browseType=bySearch&param=myQueryID&orderBy=$orderBy";
-        if($this->app->rawMethod == 'myspace') $params = "type=$type&$params";
+        $queryID    = $browseType == 'bysearch' ? $param : 0;
+        $params     = "libID={$libID}&moduleID={$moduleID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}";
+        if($this->app->rawMethod == 'myspace') $params = "type={$type}&{$params}";
         $actionURL  = $this->createLink('doc', $this->app->rawMethod, $params);
-
-        $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
+        $this->docZen->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -96,10 +96,12 @@ class doc extends control
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
+
+        /* Get doc list data. */
         $docs = array();
         if($type == 'mine')
         {
-            if($browseType != 'bysearch' and !$libID)
+            if($browseType != 'bysearch' && !$libID)
             {
                 $docs = array();
             }
@@ -108,31 +110,12 @@ class doc extends control
                 $docs = $browseType == 'bysearch' ? $this->doc->getDocsBySearch('mine', 0, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
             }
         }
-        elseif($type == 'view' or $type == 'collect' or $type == 'createdby' or $type == 'editedby')
+        elseif(in_array($type, array('view', 'collect', 'createdby', 'editedby')))
         {
             $docs = $this->doc->getMineList($type, $browseType, $orderBy, $pager, $queryID);
         }
 
-        $this->view->title             = $this->lang->doc->common;
-        $this->view->moduleID          = $moduleID;
-        $this->view->docs              = $docs;
-        $this->view->users             = $this->user->getPairs('noletter');
-        $this->view->orderBy           = $orderBy;
-        $this->view->browseType        = $browseType;
-        $this->view->param             = $param;
-        $this->view->libID             = $libID;
-        $this->view->lib               = $this->doc->getLibById($libID);
-        $this->view->libTree           = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID, 0, $browseType);
-        $this->view->pager             = $pager;
-        $this->view->type              = $type;
-        $this->view->objectID          = 0;
-        $this->view->canExport         = ($this->config->edition != 'open' and common::hasPriv('doc', 'mine2export') and $type == 'mine');
-        $this->view->libType           = 'lib';
-        $this->view->objectDropdown    = $objectDropdown;
-        $this->view->spaceType         = 'mine';
-        $this->view->linkParams        = "objectID=$objectID&%s&browseType=&orderBy=$orderBy&param=0";
-        $this->view->defaultNestedShow = $this->docZen->getDefacultNestedShow($libID, $moduleID, $type);
-
+        $this->docZen->assignVarsForMySpace($type, $objectID, $libID, $moduleID, $browseType, $param, $orderBy, $docs, $pager, $libs, $objectDropdown);
         $this->display();
     }
 
@@ -1225,7 +1208,7 @@ class doc extends control
         }
         else
         {
-            $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
+            $this->docZen->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
         }
 
         /* Load pager. */
