@@ -212,6 +212,41 @@ class userZen extends user
     }
 
     /**
+     * 解析来源网址包含的模块和方法。
+     * Parse the module and method contained in the referer.
+     *
+     * @param  string $referer
+     * @access public
+     * @return array
+     */
+    public function parseLoginModuleAndMethod(string $referer): array
+    {
+        $module = '';
+        $method = '';
+
+        /* Get the module and method of the referer. */
+        if($this->config->requestType == 'PATH_INFO')
+        {
+            $requestFix = $this->config->requestFix;
+
+            $path = substr($referer, strrpos($referer, '/') + 1);
+            $path = rtrim($path, '.html');
+            if($path && strpos($path, $requestFix) !== false) list($module, $method) = explode($requestFix, $path);
+        }
+        else
+        {
+            $url   = html_entity_decode($referer);
+            $param = substr($url, strrpos($url, '?') + 1);
+
+            if(strpos($param, '&') !== false) list($module, $method) = explode('&', $param);
+            $module = str_replace('m=', '', $module);
+            $method = str_replace('f=', '', $method);
+        }
+
+        return array($module, $method);
+    }
+
+    /**
      * 构建职位和权限组数据。
      * Prepare roles and groups data.
      *
