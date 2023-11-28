@@ -101,3 +101,8 @@ $config->user->form->batchEdit['whatsapp'] = array('required' => false, 'type' =
 $config->user->form->batchEdit['slack']    = array('required' => false, 'type' => 'string', 'width' => '120px', 'name' => 'slack',    'label' => $lang->user->slack,    'control' => 'text',      'default' => '');
 $config->user->form->batchEdit['address']  = array('required' => false, 'type' => 'string', 'width' => '160px', 'name' => 'address',  'label' => $lang->user->address,  'control' => 'text',      'default' => '');
 $config->user->form->batchEdit['zipcode']  = array('required' => false, 'type' => 'string', 'width' => '120px', 'name' => 'zipcode',  'label' => $lang->user->zipcode,  'control' => 'text',      'default' => '');
+
+$config->user->form = new stdclass();
+$config->user->form->reset['account']   = array('required' => true, 'type' => 'string', 'default' => '');
+$config->user->form->reset['password1'] = array('required' => true, 'type' => 'string', 'default' => '');
+$config->user->form->reset['password2'] = array('required' => true, 'type' => 'string', 'default' => '');
