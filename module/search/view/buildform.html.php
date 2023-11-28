@@ -195,11 +195,7 @@ foreach($fieldParams as $fieldName => $param)
 
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO'>";
-                if(isset($config->moreLinks["field{$currentField}"]))
-                {
-                    $selected = $formSession["value$fieldNO"];
-                    if(!isset($param['values'][$selected])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
-                }
+                if(isset($config->moreLinks["field{$currentField}"])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
                 if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect picker-select' data-max_drop_width='0'");
 
                 if($param['control'] == 'input')
