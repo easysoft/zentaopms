@@ -848,6 +848,7 @@ class user extends control
     }
 
     /**
+     * 忘记密码。
      * Forget password.
      *
      * @access public
@@ -855,34 +856,28 @@ class user extends control
      */
     public function forgetPassword()
     {
-        $this->app->loadLang('admin');
-        $this->loadModel('mail');
-
         if(!empty($_POST))
         {
-            /* Check account and email. */
-            $account = $_POST['account'];
-            $email   = $_POST['email'];
-            if(empty($account)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->accountEmpty));
-            if(empty($email)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->emailEmpty));
+            $data = form::data($this->config->user->form->forgetPassword)->get();
 
-            $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($account)->fetch();
-            if(empty($user)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->noUser));
-            if(empty($user->email)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->noEmail));
+            $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($data->account)->fetch();
+            if(empty($user)) return $this->send(array('result' => 'fail', 'message' => array('account' => $this->lang->user->error->noUser)));
+            if(empty($user->email)) return $this->send(array('result' => 'fail', 'message' => array('email' => $this->lang->user->error->noEmail)));
 
-            if($user->email != $email) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->errorEmail));
+            if($user->email != $data->email) return $this->send(array('result' => 'fail', 'message' => array('email' => $this->lang->user->error->errorEmail)));
             if(!$this->config->mail->turnon) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->emailSetting));
 
             $code = uniqid();
-            $this->dao->update(TABLE_USER)->set('resetToken')->eq(json_encode(array('code' => $code, 'endTime' => strtotime("+{$this->config->user->resetPasswordTimeout} minutes"))))->where('account')->eq($account)->exec();
+            $this->dao->update(TABLE_USER)->set('resetToken')->eq(json_encode(array('code' => $code, 'endTime' => strtotime("+{$this->config->user->resetPasswordTimeout} minutes"))))->where('account')->eq($user->account)->exec();
 
-            $result = $this->mail->send($account, $this->lang->user->resetPWD, sprintf($this->lang->mail->forgetPassword, commonModel::getSysURL() . inlink('resetPassword', 'code=' . $code)), '', true, array(), true);
-            if(strstr($result, 'ERROR')) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->sendMailFail), true);
+            $this->loadModel('mail');
+            $result = $this->mail->send($user->account, $this->lang->user->resetPWD, sprintf($this->lang->mail->forgetPassword, commonModel::getSysURL() . inlink('resetPassword', 'code=' . $code)), '', true, array(), true);
+            if(strstr($result, 'ERROR')) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->sendMailFail));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->user->sendEmailSuccess));
         }
 
-        $this->view->title = $this->lang->user->resetPassword;
+        $this->view->title = $this->lang->user->resetPwdByMail;
         $this->display();
     }
 
