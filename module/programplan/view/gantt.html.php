@@ -859,5 +859,12 @@ $(function()
     {
         return validateResources(id);
     });
+
+    gantt.attachEvent("onRowDragStart", function(id, target, e) {
+        //any custom logic here
+        var task = gantt.getTask(id);
+        if(task.type != 'task') return false;
+        return true;
+    });
 });
 </script>
