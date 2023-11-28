@@ -77,6 +77,9 @@ class metric extends control
         list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
         $this->view->groupHeader   = $groupHeader;
         $this->view->groupData     = $groupData;
+        $this->view->dateType      = $this->metric->getDateTypeByCode($metric->code);
+        $this->view->dateLabels    = $this->metric->getDateLabels($this->view->dateType);
+        $this->view->defaultDate   = $this->metric->getDefaultDate($this->view->dateLabels);
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
         $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
 
@@ -161,7 +164,6 @@ class metric extends control
         // 开启调试模式
         $this->config->debug = 2;
 
-        $this->metric->clearMetricLib();
         $calcList = $this->metric->getCalcInstanceList();
         $classifiedCalcGroup = $this->metric->classifyCalc($calcList);
 
@@ -181,6 +183,10 @@ class metric extends control
                 $this->metric->insertMetricLib($records);
             }
             catch(Exception $e)
+            {
+                a($e->getMessage());
+            }
+            catch(Error $e)
             {
                 a($e->getMessage());
             }
@@ -273,6 +279,9 @@ class metric extends control
         list($groupHeader, $groupData) = $this->metricZen->getGroupTable($resultHeader, $resultData);
         $this->view->groupHeader   = $groupHeader;
         $this->view->groupData     = $groupData;
+        $this->view->dateType      = $this->metric->getDateTypeByCode($metric->code);
+        $this->view->dateLabels    = $this->metric->getDateLabels($this->view->dateType);
+        $this->view->defaultDate   = $this->metric->getDefaultDate($this->view->dateLabels);
         $this->view->tableWidth    = $this->metricZen->getViewTableWidth($groupHeader);
         $this->view->headerGroup   = $this->metric->isHeaderGroup($groupHeader);
         $this->view->metricRecordType = $this->metric->getMetricRecordType($resultHeader);

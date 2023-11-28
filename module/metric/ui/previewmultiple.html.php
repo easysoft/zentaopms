@@ -224,7 +224,7 @@ toolbar
     */
 );
 
-$fnGenerateQueryForm = function() use($metricRecordType, $current)
+$fnGenerateQueryForm = function() use($metricRecordType, $current, $dateLabels, $defaultDate)
 {
     if(!$metricRecordType) return null;
     $formGroups = array();
@@ -234,45 +234,71 @@ $fnGenerateQueryForm = function() use($metricRecordType, $current)
     {
         $formGroups[] = formGroup
         (
-            setClass('query-inline picker-nowrap'),
-            set::width('248px'),
+            setClass('query-inline picker-nowrap w-40'),
             set::label($this->lang->metric->query->scope[$current->scope]),
-            set::name('scope'),
+            set::name('scope_' . $current->id),
             set::control(array('type' => 'picker', 'multiple' => true)),
-            set::items($objectPairs)
+            set::items($objectPairs),
+            set::placeholder($this->lang->metric->placeholder->{$current->scope})
         );
     }
 
     if($metricRecordType == 'date' || $metricRecordType == 'scope-date')
     {
+        $btnLabels = array();
+        foreach($dateLabels as $key => $label)
+        {
+            $active = $key == $defaultDate ? ' selected' : '';
+            $btnLabels[] = btn
+            (
+                setClass("$active default w-16 p-0"),
+                set::key($key),
+                $label
+            );
+        }
         $formGroups[] = formGroup
         (
-            setClass('query-inline'),
-            set::width('360px'),
-            set::label($this->lang->metric->date),
+            setClass('query-date query-inline w-64'),
+            btngroup
+            (
+                $btnLabels
+            ),
+            on::click('.query-date button.btn', 'window.handleDateLabelClick(target)'),
+        );
+
+        $formGroups[] = formGroup
+        (
+            setClass('query-inline w-80'),
+            // set::label($this->lang->metric->date),
             inputGroup
             (
                 datePicker
                 (
+                    setClass('query-date-picker'),
                     set::name('dateBegin'),
-                    set('id', 'dateBegin')
+                    set('id', 'dateBegin' . $current->id),
+                    set::placeholder($this->lang->metric->placeholder->select)
                 ),
                 $this->lang->metric->to,
                 datePicker
                 (
+                    setClass('query-date-picker'),
                     set::name('dateEnd'),
-                    set('id', 'dateEnd')
+                    set('id', 'dateEnd' . $current->id),
+                    set::placeholder($this->lang->metric->placeholder->select)
                 )
-            )
+            ),
+            on::change('.query-date-picker', 'window.handleDatePickerChange(target)'),
         );
     }
 
     return form
     (
         set::id('queryForm' . $current->id),
+        setClass('ml-4'),
         formRow
         (
-            set::width('full'),
+            set::width('max'),
             $formGroups,
             !empty($formGroups) ? formGroup
             (

@@ -277,6 +277,32 @@ class metricModel extends model
 
         return $dataFields;
     }
+
+    /**
+     * 设置默认的度量数据筛选参数。
+     * Set default options of metric data.
+     *
+     * @param  array $options
+     * @param  array $dataFields
+     * @access public
+     * @return array
+     */
+    public function setDefaultOptions(array $options, array $dataFields): array
+    {
+        if(!empty($options)) return $options;
+
+        $dateType = $this->getDateType($dataFields);
+
+        if($dateType != 'nodate')
+        {
+            $dateLabels  = $this->getDateLabels($dateType);
+            $defaultDate = $this->getDefaultDate($dateLabels);
+            $options = array('dateType' => $dateType, 'dateLabel' => $defaultDate);
+        }
+
+        return $options;
+    }
+
     /**
      * 根据代号获取计算实时度量项的结果。
      * Get result of calculate metric by code.
@@ -294,6 +320,7 @@ class metricModel extends model
         {
             $metric     = $this->metricTao->fetchMetricByCode($code);
             $dataFields = $this->getMetricRecordDateField($code);
+            $options    = $this->setDefaultOptions($options, $dataFields);
 
             if($metric->scope != 'system') $dataFields[] = $metric->scope;
 
@@ -417,6 +444,20 @@ class metricModel extends model
                 ->andWhere('day')->eq($day)
                 ->exec();
         }
+    }
+
+    /**
+     * 是否为第一次生成度量数据。
+     * Whether it is the first time to generate metric data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isFirstGenerate(): bool
+    {
+        $record = $this->dao->select('id')->from(TABLE_METRICLIB)->fetch();
+
+        return !$record;
     }
 
     /**
@@ -1475,8 +1516,27 @@ class metricModel extends model
      * @access public
      * @return object|string|false
      */
-    public function processRecordQuery(array $query, string $key, string $type = 'common'): object|string|false
+    public function processRecordQuery(array $query, string $key, string $type = 'common'): object|array|string|false
     {
+        if($key == 'dateLabel')
+        {
+            if(isset($query[$key]))
+            {
+                $dateType  = $query['dateType'];
+                $dateLabel = $query['dateLabel'];
+
+                if($dateLabel == 'all') $dateStr = '1970-01-01';
+                if(is_numeric($dateLabel)) $dateStr = date('Y-m-d', strtotime('-' . ((int)$dateLabel - 1) . " {$dateType}s"));
+
+                $query['dateBegin'] = $dateStr;
+                $query['dateEnd']   = date('Y-m-d');
+            }
+
+            $begin = $this->processRecordQuery($query, 'dateBegin', 'date');
+            $end   = $this->processRecordQuery($query, 'dateEnd', 'date');
+            return array($begin, $end);
+        }
+
         if(!isset($query[$key]) || empty($query[$key])) return false;
 
         if($type == 'date')
@@ -1507,12 +1567,22 @@ class metricModel extends model
      */
     public function getDateType(array $dateFields): string
     {
-        if(in_array('day', $dateFields)) return 'day';
-        if(in_array('week', $dateFields)) return 'week';
-        if(in_array('month', $dateFields)) return 'month';
-        if(in_array('year', $dateFields)) return 'year';
+        $dateList = array_intersect($dateFields, $this->config->metric->dateList);
 
-        return 'day';
+        if(in_array('day',   $dateList)) return 'day';
+        if(in_array('week',  $dateList)) return 'week';
+        if(in_array('month', $dateList)) return 'month';
+        if(in_array('year',  $dateList)) return 'year';
+
+        return 'nodate';
+    }
+
+    public function getDateTypeByCode(string $code)
+    {
+        $dataFields = $this->getMetricRecordDateField($code);
+        $dateType   = $this->getDateType($dataFields);
+
+        return $dateType;
     }
 
     /**
@@ -1627,5 +1697,38 @@ class metricModel extends model
         if(isset($record->year, $record->week)) return 'week';
 
         return null;
+    }
+
+    /**
+     * 获取日期标签。
+     * Get date labels.
+     *
+     * @param  string    $dateType
+     * @access public
+     * @return array|false
+     */
+    public function getDateLabels(string $dateType): array|false
+    {
+        if($dateType == 'nodate') return array();
+        $objectKey = "{$dateType}Labels";
+
+        return $this->lang->metric->query->$objectKey;
+    }
+
+    /**
+     * 获取默认选中的日期。
+     * Get default selected date.
+     *
+     * @param  array $dateLabels
+     * @param  array $filters
+     * @access public
+     * @return string
+     */
+    public function getDefaultDate(array $dateLabels, array $filters = array()): string
+    {
+        $defaultDate = '';
+
+        $dates = array_keys($dateLabels);
+        return (string)current($dates);
     }
 }

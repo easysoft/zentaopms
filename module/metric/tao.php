@@ -226,40 +226,16 @@ class metricTao extends metricModel
      */
     protected function fetchMetricRecords(string $code, array $fieldList, array $query = array(), object|null $pager = null): array
     {
-        $metricScope = $this->fetchMetricByID($code, 'scope');
-        $objectList  = $this->getObjectsWithPager($code, $metricScope, $pager);
-
-        $dataFieldStr = implode(', ', $fieldList);
-        if(!empty($dataFieldStr)) $dataFieldStr .= ', ';
-
-        $record = $this->dao->select("id, {$dataFieldStr} value, date")
-            ->from(TABLE_METRICLIB)
-            ->where('metricCode')->eq($code)
-            ->fetch();
-        if(!$record) return array();
-
-        $fieldList = array_keys((array)($record));
         $scopeList = array_intersect($fieldList, $this->config->metric->scopeList);
         $dateList  = array_intersect($fieldList, $this->config->metric->dateList);
-        $dateType  = $this->getDateType($dateList);
 
-        /**
-         * 如果没有传入筛选参数，则按照 dateType 字段提供一个默认范围的数据：最近7天/4周/6月/3年。
-         * 如果传入了筛选参数，则按照筛选参数进行筛选。
-         * If no filtering parameters are passed in
-         *   If the range and date columns are empty, only two columns of data are needed at the end, and this serves as a marker for global data, so get all the data, otherwise only the data before today.
-         * If filtering parameters are passed in, filter according to the filtering parameters.
-         */
-        $date = empty($query) ? $this->getDateByDateType($dateType) : '';
+        $dateType = $this->getDateType($dateList);
+        $query['dateType'] = $dateType;
 
         $scope     = $this->processRecordQuery($query, 'scope');
         $dateBegin = $this->processRecordQuery($query, 'dateBegin', 'date');
         $dateEnd   = $this->processRecordQuery($query, 'dateEnd', 'date');
-        $calcTime  = $this->processRecordQuery($query, 'calcTime');
-        $calcBegin = $this->processRecordQuery($query, 'calcBegin');
-        $calcEnd   = $this->processRecordQuery($query, 'calcEnd');
-
-        $dateType = empty($dateList) ? '' : $this->getDateType($dateList);
+        list($dateBegin, $dateEnd) = $this->processRecordQuery($query, 'dateLabel', 'date');
 
         $yearBegin  = empty($dateBegin) ? '' : $dateBegin->year;
         $yearEnd    = empty($dateEnd)   ? '' : $dateEnd->year;
@@ -273,7 +249,10 @@ class metricTao extends metricModel
         $scopeKey   = current($scopeList);
         $scopeValue = $scope;
 
-        $records =  $this->dao->select("id, {$dataFieldStr} value, date")
+        $wrapFields = array_map(fn($value) => "`$value`", $fieldList);
+        $dataFieldStr = implode(',', $wrapFields);
+
+        $records =  $this->dao->select("id,`value`,`date`,{$dataFieldStr}")
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
             ->beginIF($metricScope != 'system')->andWhere($metricScope)->in($objectList)->fi()
@@ -286,10 +265,6 @@ class metricTao extends metricModel
             ->beginIF(!empty($dateEnd)   and $dateType == 'week')->andWhere('CONCAT(`year`, `week`)')->le($weekEnd)->fi()
             ->beginIF(!empty($dateBegin) and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->ge($dayBegin)->fi()
             ->beginIF(!empty($dateEnd)   and $dateType == 'day')->andWhere('CONCAT(`year`, `month`, `day`)')->le($dayEnd)->fi()
-            ->beginIF(!empty($calcTime))->andWhere('left(date, 10)')->eq($calcTime)->fi()
-            ->beginIF(!empty($calcBegin))->andWhere('left(date, 10)')->ge($calcBegin)->fi()
-            ->beginIF(!empty($calcEnd))->andWhere('left(date, 10)')->le($calcEnd)->fi()
-            ->beginIF(empty($query))->andWhere('date')->gt($date)->fi()
             ->beginIF(!empty($scopeList))->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
             ->beginIF(empty($scopeList))->orderBy("date desc, year desc, month desc, week desc, day desc")->fi()
             ->fetchAll();
