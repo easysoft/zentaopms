@@ -732,44 +732,45 @@ class user extends control
     }
 
     /**
+     * 拒绝访问页面。
      * Deny page.
      *
      * @param  string $module
      * @param  string $method
-     * @param  string $refererBeforeDeny    the referer of the denied page.
+     * @param  string $referer the referer of the denied page.
      * @access public
      * @return void
      */
-    public function deny($module, $method, $refererBeforeDeny = '')
+    public function deny(string $module, string $method, string $referer = '')
     {
-        $this->setReferer();
-        $this->view->title             = $this->lang->user->deny;
-        $this->view->module            = $module;
-        $this->view->method            = $method;
-        $this->view->denyPage          = $this->referer;        // The denied page.
-        $this->view->refererBeforeDeny = $refererBeforeDeny;    // The referer of the denied page.
-        if($module == 'requirement') $this->app->loadLang('story');
-        if($module != 'requirement') $this->app->loadLang($module);
+        $this->userZen->setReferer();
+
+        $module = strtolower($module);
+        $method = strtolower($method);
 
         $this->app->loadLang('my');
+        $this->app->loadLang($module == 'requirement' ? 'story' : $module);
 
-        /* Check deny type. */
-        $rights  = $this->app->user->rights['rights'];
-        $acls    = $this->app->user->rights['acls'];
-
-        $module  = strtolower($module);
-        $method  = strtolower($method);
-
+        /* 判断禁止访问的类型。*/
+        /* Judge the type of deny. */
         $denyType = 'nopriv';
+        $rights   = $this->app->user->rights['rights'];
+        $acls     = $this->app->user->rights['acls'];
         if(isset($rights[$module][$method]))
         {
             $menu = isset($this->lang->navGroup->$module) ? $this->lang->navGroup->$module : $module;
             $menu = strtolower($menu);
 
             if(!isset($acls['views'][$menu])) $denyType = 'noview';
+
             $this->view->menu = $menu;
         }
 
+        $this->view->title    = $this->lang->user->deny;
+        $this->view->module   = $module;
+        $this->view->method   = $method;
+        $this->view->denyPage = $this->referer; // The denied page.
+        $this->view->referer  = $referer;       // The referer of the denied page.
         $this->view->denyType = $denyType;
 
         $this->display();
