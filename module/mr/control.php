@@ -186,7 +186,10 @@ class mr extends control
     {
         if($_POST)
         {
-            $result = $this->mr->create();
+            $MR = form::data($this->config->mr->form->create)
+                ->setIF($this->post->needCI == 0, 'jobID', 0)
+                ->get();
+            $result = $this->mr->create($MR);
             return $this->send($result);
         }
 
@@ -236,7 +239,7 @@ class mr extends control
             return $this->send($result);
         }
 
-        $MR = $this->mr->getByID($MRID);
+        $MR = $this->mr->fetchByID($MRID);
         if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
         $this->view->title = $this->lang->mr->edit;
         $this->view->MR    = $MR;
@@ -291,7 +294,7 @@ class mr extends control
      */
     public function view(int $MRID)
     {
-        $MR = $this->mr->getByID($MRID);
+        $MR = $this->mr->fetchByID($MRID);
         if(!$MR) return $this->locate($this->createLink('mr', 'browse'));
 
         if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
@@ -375,7 +378,7 @@ class mr extends control
      */
     public function accept(int $MRID)
     {
-        $MR = $this->mr->getByID($MRID);
+        $MR = $this->mr->fetchByID($MRID);
 
         /* Judge that if this MR can be accepted. */
         if(isset($MR->needCI) and $MR->needCI == '1')
@@ -426,7 +429,7 @@ class mr extends control
         $encoding = empty($encoding) ? 'utf-8' : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding)); /* Revert $config->requestFix in $encoding. */
 
-        $MR = $this->mr->getByID($MRID);
+        $MR = $this->mr->fetchByID($MRID);
         $this->view->title = $this->lang->mr->viewDiff;
         $this->view->MR    = $MR;
         if($MR->synced)
@@ -465,7 +468,7 @@ class mr extends control
      */
     public function approval(int $MRID, string $action = 'approve')
     {
-        $MR = $this->mr->getByID($MRID);
+        $MR = $this->mr->fetchByID($MRID);
         if($_POST)
         {
             $comment = $this->post->comment;
@@ -498,7 +501,7 @@ class mr extends control
      */
     public function close(int $MRID)
     {
-        $MR = $this->mr->getByID($MRID);
+        $MR = $this->mr->fetchByID($MRID);
         $result = $this->mr->close($MR);
 
         return $this->send($result);
@@ -514,7 +517,7 @@ class mr extends control
      */
     public function reopen(int $MRID)
     {
-        $MR = $this->mr->getByID($MRID);
+        $MR = $this->mr->fetchByID($MRID);
         return $this->send($this->mr->reopen($MR));
     }
 
@@ -532,7 +535,7 @@ class mr extends control
      */
     public function link(int $MRID, string $type = 'story', string $orderBy = 'id_desc', string $param = '', int $recPerPage = 20, int $pageID = 1)
     {
-        $MR       = $this->mr->getByID($MRID);
+        $MR       = $this->mr->fetchByID($MRID);
         $product  = $this->mr->getMRProduct($MR);
 
         /* Load pager. */

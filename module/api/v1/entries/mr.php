@@ -21,13 +21,12 @@ class mrEntry extends baseEntry
     {
         $fields = 'repoID,jobID,sourceBranch,targetBranch,diffs,mergeStatus';
         $this->batchSetPost($fields);
-        $postData = fixer::input('post')->get();
 
         $this->loadController('mr', 'create');
         $MRID = $this->loadModel('mr')->apiCreate();
         if(dao::isError()) $this->sendError(400, dao::getError());
 
-        $MR = $this->mr->getByID($MRID);
+        $MR = $this->mr->fetchByID($MRID);
         return $this->send(201, $MR);
     }
 }

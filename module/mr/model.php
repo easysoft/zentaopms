@@ -1,5 +1,5 @@
 <?php
-//declare(strict_types=1);
+declare(strict_types=1);
 /**
  * The model file of mr module of ZenTaoPMS.
  *
@@ -11,31 +11,9 @@
  */
 class mrModel extends model
 {
-    /**
-     * The construct method, to do some auto things.
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->loadModel('gitlab');
-    }
 
     /**
-     * Get a MR by id.
-     *
-     * @param  int    $id
-     * @access public
-     * @return object
-     */
-    public function getByID($id)
-    {
-        return $this->dao->findByID($id)->from(TABLE_MR)->fetch();
-    }
-
-    /**
+     * 获取合并请求列表.
      * Get MR list of gitlab project.
      *
      * @param  string     $mode
@@ -48,7 +26,7 @@ class mrModel extends model
      * @access public
      * @return array
      */
-    public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $filterProjects = array(), $repoID = 0, $objectID = 0, $pager = null)
+    public function getList(string $mode = 'all', string $param = 'all', string $orderBy = 'id_desc', array $filterProjects = array(), int $repoID = 0, int $objectID = 0, object $pager = null): array
     {
         /* If filterProjects equals false,it means no permission. */
         if($filterProjects === false) return array();
@@ -65,7 +43,7 @@ class mrModel extends model
             if($filterProjectSql) $filterProjectSql = '(' . substr($filterProjectSql, 0, -3) . ')'; // Remove last or.
         }
 
-        $MRList = $this->dao->select('*')
+        return $this->dao->select('*')
             ->from(TABLE_MR)
             ->where('deleted')->eq('0')
             ->beginIF($mode == 'status' and $param != 'all')->andWhere('status')->eq($param)->fi()
@@ -77,27 +55,27 @@ class mrModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-
-        return $MRList;
     }
 
     /**
-     * Get gitlab pairs.
+     * 根据代码库ID获取合并请求列表.
+     * Get MR list by repoID.
      *
      * @access public
      * @return array
      */
-    public function getPairs($repoID)
+    public function getPairs(int $repoID): array
     {
-        $MR = $this->dao->select('id,title')
+        return $this->dao->select('id,title')
             ->from(TABLE_MR)
             ->where('deleted')->eq('0')
             ->andWhere('repoID')->eq($repoID)
-            ->orderBy('id')->fetchPairs('id', 'title');
-        return $MR;
+            ->orderBy('id')
+            ->fetchPairs('id', 'title');
     }
 
     /**
+     * 获取所有服务器的项目。如果不是管理员，则项目成员的角色应高于来宾。
      * Get all gitlab server projects. If not an administrator, the role of project member should be higher than guest.
      *
      * @param  int    $repoID
@@ -105,7 +83,7 @@ class mrModel extends model
      * @access public
      * @return array
      */
-    public function getAllProjects($repoID = 0, $scm = 'Gitlab')
+    public function getAllProjects(int $repoID = 0, string $scm = 'Gitlab'): array
     {
         $hostID = $this->dao->select('hostID')->from(TABLE_MR)
             ->where('deleted')->eq('0')
@@ -116,32 +94,35 @@ class mrModel extends model
     }
 
     /**
+     * 获取Gitea服务器的项目.
      * Get gitea projects.
      *
      * @param  int    $hostID
      * @access public
      * @return array
      */
-    public function getGiteaProjects($hostID = 0)
+    public function getGiteaProjects(int $hostID = 0): array
     {
         $projects = $this->loadModel('gitea')->apiGetProjects($hostID);
         return array($hostID => helper::arrayColumn($projects, null, 'full_name'));
     }
 
     /**
+     * 获取Gogs服务器的项目.
      * Get gogs projects.
      *
      * @param  int    $hostID
      * @access public
      * @return array
      */
-    public function getGogsProjects($hostID = 0)
+    public function getGogsProjects(int $hostID = 0): array
     {
         $projects = $this->loadModel('gogs')->apiGetProjects($hostID);
         return array($hostID => helper::arrayColumn($projects, null, 'full_name'));
     }
 
     /**
+     * 获取Gitlab服务器的项目.
      * Get gitlab projects.
      *
      * @param  int    $hostID
@@ -149,14 +130,13 @@ class mrModel extends model
      * @access public
      * @return array
      */
-    public function getGitlabProjects($hostID = 0, $projectIds = array())
+    public function getGitlabProjects(int $hostID = 0, array $projectIds = array()): array
     {
-        $allProjects = array();
-        $allGroups   = array();
         $gitlabUsers = $this->loadModel('gitlab')->getListByAccount();
         if(!$this->app->user->admin and !isset($gitlabUsers[$hostID])) return array();
 
-        $minProject = $maxProject = 0;
+        $allProjects = $allGroups  = array();
+        $minProject  = $maxProject = 0;
         /* Mysql string to int. */
         $projectCount = $this->dao->select('min(sourceProject + 0) as minSource, MAX(sourceProject + 0) as maxSource,MIN(targetProject) as minTarget,MAX(targetProject) as maxTarget')->from(TABLE_MR)
             ->where('deleted')->eq('0')
@@ -168,17 +148,13 @@ class mrModel extends model
             $maxProject = max($projectCount->maxSource, $projectCount->maxTarget);
         }
 
+        $allProjects[$hostID] = $this->gitlab->apiGetProjects($hostID, 'false', $minProject, $maxProject);
         if($projectIds)
         {
-            foreach($projectIds as $projectID)
+            foreach($allProjects[$hostID] as $index => $project)
             {
-                $project = $this->gitlab->apiGetSingleProject($hostID, $projectID);
-                if(isset($project->id)) $allProjects[$hostID][] = $project;
+                if(!in_array($project->id, $projectIds)) unset($allProjects[$hostID][$index]);
             }
-        }
-        else
-        {
-            $allProjects[$hostID] = $this->gitlab->apiGetProjects($hostID, 'false', $minProject, $maxProject);
         }
 
         /* If not an administrator, need to obtain group member information. */
@@ -193,7 +169,7 @@ class mrModel extends model
         $allProjectPairs = array();
         foreach($allProjects as $hostID => $projects)
         {
-            foreach($projects as $key => $project)
+            foreach($projects as $project)
             {
                 if($this->gitlab->checkUserAccess($hostID, 0, $project, $allGroups[$hostID], 'reporter') == false) continue;
                 $project->isDeveloper = $this->gitlab->checkUserAccess($hostID, 0, $project, $allGroups[$hostID], 'developer');
@@ -206,29 +182,15 @@ class mrModel extends model
     }
 
     /**
-     * Create MR function.
+     * 创建本地合并请求。
+     * Create a local merge request.
      *
+     * @param  object $MR
      * @access public
-     * @return int|bool|object
+     * @return bool
      */
-    public function create()
+    public function createMR(object $MR): bool
     {
-        $MR = fixer::input('post')
-            ->setDefault('jobID', 0)
-            ->setDefault('repoID', 0)
-            ->setDefault('sourceProject,targetProject', 0)
-            ->setDefault('sourceBranch,targetBranch', '')
-            ->setDefault('removeSourceBranch','0')
-            ->setDefault('needCI', 0)
-            ->setDefault('squash', 0)
-            ->setIF($this->post->needCI == 0, 'jobID', 0)
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::now())
-            ->get();
-
-        $result = $this->checkSameOpened($MR->hostID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
-        if($result['result'] == 'fail') return $result;
-
         /* Exec Job */
         if(isset($MR->jobID) && $MR->jobID)
         {
@@ -245,6 +207,24 @@ class mrModel extends model
             ->batchCheck($this->config->mr->create->requiredFields, 'notempty')
             ->checkIF($MR->needCI, 'jobID',  'notempty')
             ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * 创建合并请求。
+     * Create MR function.
+     *
+     * @param  object $MR
+     * @access public
+     * @return array
+     */
+    public function create(object $MR): array
+    {
+        $result = $this->checkSameOpened($MR->hostID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
+        if($result['result'] == 'fail') return $result;
+
+        $this->createMR($MR);
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         $MRID = $this->dao->lastInsertId();
@@ -394,7 +374,7 @@ class mrModel extends model
             ->setDefault('editedDate', helper::now())
             ->setIF($this->post->needCI == 0, 'jobID', 0)
             ->get();
-        $oldMR = $this->getByID($MRID);
+        $oldMR = $this->fetchByID($MRID);
 
         if($oldMR->sourceProject == $oldMR->targetProject and $oldMR->sourceBranch == $MR->targetBranch) dao::$errors['targetBranch'] = $this->lang->mr->errorLang[1];
         $this->dao->update(TABLE_MR)->data($MR)->checkIF($MR->needCI, 'jobID',  'notempty');
@@ -428,7 +408,7 @@ class mrModel extends model
             ->autoCheck()
             ->exec();
 
-        $MR = $this->getByID($MRID);
+        $MR = $this->fetchByID($MRID);
         $this->linkObjects($MR);
         $changes = common::createChanges($oldMR, $MR);
         $actionID = $this->loadModel('action')->create('mr', $MRID, 'edited');
@@ -687,6 +667,7 @@ class mrModel extends model
     }
 
     /**
+     * 创建远程合并请求。
      * Create MR by API.
      *
      * @link   https://docs.gitlab.com/ee/api/merge_requests.html#create-mr
@@ -696,7 +677,7 @@ class mrModel extends model
      * @access public
      * @return object
      */
-    public function apiCreateMR($hostID, $projectID, $MR)
+    public function apiCreateMR(int $hostID, int $projectID, object $MR): object
     {
         $host = $this->loadModel('pipeline')->getByID($hostID);
 
@@ -1836,7 +1817,7 @@ class mrModel extends model
         if($type == 'task')  $links = $this->post->tasks;
 
         /* Get link action text. */
-        $MR             = $this->getByID($MRID);
+        $MR             = $this->fetchByID($MRID);
         $users          = $this->loadModel('user')->getPairs('noletter');
         $MRCreateAction = $MR->createdDate . '::' . zget($users, $MR->createdBy) . '::' . helper::createLink('mr', 'view', "mr={$MR->id}");
 
@@ -1971,13 +1952,14 @@ class mrModel extends model
     }
 
     /**
+     * 获取合并请求的产品。
      * Get mr product.
      *
-     * @param object $MR
+     * @param  object $MR
      * @access public
-     * @return mix
+     * @return object
      */
-    public function getMRProduct($MR)
+    public function getMRProduct(object $MR): object
     {
         $product = new stdclass();
         $product->id = 0;
@@ -1993,7 +1975,7 @@ class mrModel extends model
             $productID = array_shift($products);
         }
 
-        if($productID) $product = $this->loadModel('product')->getById($productID);
+        if($productID) $product = $this->loadModel('product')->getById((int)$productID);
         return $product;
     }
 
@@ -2130,7 +2112,7 @@ class mrModel extends model
      */
     public function deleteByID(int $id): bool
     {
-        $MR = $this->getByID($id);
+        $MR = $this->fetchByID($id);
         if(!$MR) return false;
 
         if($MR->synced)
