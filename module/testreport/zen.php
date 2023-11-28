@@ -279,9 +279,16 @@ class testreportZen extends testreport
                 $this->view->{$key} = $value;
             }
         }
+
         if($method == 'create')
         {
-            $this->view->members = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($reportData['tasks']))->fetchPairs('lastRunner', 'lastRunner');
+            /* Get testtasks members. */
+            $tasks       = array_keys($reportData['tasks']);
+            $taskMembers = '';
+            foreach($tasks as $testtask) $taskMembers .= ',' . $testtask->members;
+            $taskMembers = explode(',', $taskMembers);
+            $members     = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
+            $this->view->members = array_merge($members, $taskMembers);
         }
 
         $this->view->storySummary = $this->product->summary($reportData['stories']);
@@ -419,7 +426,7 @@ class testreportZen extends testreport
     protected function buildReportBugData(array $tasks, array $productIdList, string $begin, string $end, array $builds): array
     {
         /* Get activated bugs. */
-        $buildIdList   = array_keys($builds);
+        $buildIdList   = array_keys($builds) + array_keys($this->testreport->getChildBuilds($builds));
         $activatedBugs = $this->bug->getActivatedBugs($productIdList, $begin, $end, $buildIdList);
 
         /* Get stage and handle groups. */

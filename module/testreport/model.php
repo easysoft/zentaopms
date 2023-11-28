@@ -300,8 +300,12 @@ class testreportModel extends model
         $bugIdList = '';
         if(is_array($builds))
         {
-            foreach($builds as $build) $bugIdList .= $build->bugs . ',';
+            $childBuilds = $this->getChildBuilds($builds);
+            foreach($builds as $build)           $bugIdList .= $build->bugs . ',';
+            foreach($childBuilds as $childBuild) $bugIdList .= $childBuild->bugs . ',';
         }
+
+        $bugIdList = array_unique(array_filter(explode(',', $bugIdList)));
         return $this->dao->select('*')->from(TABLE_BUG)->where('deleted')->eq(0)
             ->andWhere('product')->in($product)
             ->andWhere('openedDate')->lt("{$begin} 23:59:59")
@@ -323,9 +327,12 @@ class testreportModel extends model
     public function getStories4Test(array $builds): array
     {
         $storyIdList = '';
-        foreach($builds as $build) $storyIdList .= $build->stories . ',';
+        $childBuilds = $this->getChildBuilds($builds);
+        foreach($builds as $build)           $storyIdList .= $build->stories . ',';
+        foreach($childBuilds as $childBuild) $storyIdList .= $childBuild->stories . ',';
 
-        return $this->dao->select('*')->from(TABLE_STORY)->where('deleted')->eq('0')->andWhere('id')->in(trim($storyIdList, ','))->fetchAll('id');
+        $storyIdList = array_unique(array_filter(explode(',', $storyIdList)));
+        return $this->dao->select('*')->from(TABLE_STORY)->where('deleted')->eq('0')->andWhere('id')->in($storyIdList)->fetchAll('id');
     }
 
     /**
@@ -359,5 +366,23 @@ class testreportModel extends model
     public function isClickable(object $report, string $action): bool
     {
         return true;
+    }
+
+    /**
+     * Get child builds.
+     *
+     * @param  array  $builds
+     * @access public
+     * @return array
+     */
+    public function getChildBuilds(array $builds)
+    {
+        $childBuildIdList = '';
+        foreach($builds as $build) $childBuildIdList .= $build->builds . ',';
+
+        $childBuildIdList = array_unique(array_filter(explode(',', $childBuildIdList)));
+        if(empty($childBuildIdList)) return array();
+
+        return $this->dao->select('id,name,bugs,stories')->from(TABLE_BUILD)->where('id')->in($childBuildIdList)->fetchAll('id');
     }
 }
