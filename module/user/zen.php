@@ -350,6 +350,28 @@ class userZen extends user
     }
 
     /**
+     * 登录失败时的响应。
+     * Response when login failed.
+     *
+     * @param  string $viewType
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function responseForLoginFail(string $viewType, string $account): array
+    {
+        if($viewType == 'json') return array('status' => 'failed', 'reason' => $this->lang->user->loginFailed);
+
+        $remainTimes = $this->config->user->failTimes - $this->user->failPlus($account);
+        if($remainTimes <= 0) return array('result' => 'fail', 'message' => sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes));
+        if($remainTimes <= 3) return array('result' => 'fail', 'message' => sprintf($this->lang->user->lockWarning, $remainTimes));
+
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+        return array('result' => 'fail', 'message' => $this->lang->user->loginFailed);
+    }
+
+    /**
      * 设置来源地址。
      * Set referer.
      *
