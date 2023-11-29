@@ -691,4 +691,16 @@ class docTest
         $object = $type == 'lib' ? $this->objectModel->getLibByID($objectID) : $this->objectModel->getByID($objectID);
         return $this->objectModel->checkPrivLib($object, $extra);
     }
+
+    /**
+     * 获取有权限访问的文档库。
+     * Get grant libs by doc.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPrivLibsByDocTest(): array
+    {
+        return $this->objectModel->getPrivLibsByDoc();
+    }
 }
