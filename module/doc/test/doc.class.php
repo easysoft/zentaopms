@@ -703,4 +703,17 @@ class docTest
     {
         return $this->objectModel->getPrivLibsByDoc();
     }
+
+    /**
+     * 通过ID获取文档库信息。
+     * Get library by id.
+     *
+     * @param  int          $libID
+     * @access public
+     * @return object|false
+     */
+    public function getLibByIdTest(int $libID): object|bool
+    {
+        return $this->objectModel->getLibByID($libID);
+    }
 }
