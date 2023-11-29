@@ -8,6 +8,7 @@ class searchTest
     }
 
     /**
+     * 设置搜索参数的测试用例。
      * Test set search params.
      *
      * @param  array $searchConfig
@@ -22,6 +23,42 @@ class searchTest
         $searchParamsName = $module . 'searchParams';
 
         return $_SESSION[$searchParamsName];
+    }
+
+    /**
+     * 测试生成查询表单和查询语句。
+     * Test build query.
+     *
+     * @param  array  $searchConfig
+     * @param  array  $postDatas
+     * @param  string $return
+     * @access public
+     * @return array|string
+     */
+    public function buildQueryTest(array $searchConfig, array $postDatas, string $return = 'form'): array|string
+    {
+        $this->objectModel->setSearchParams($searchConfig);
+
+        $module = $searchConfig['module'];
+        $_SESSION['searchParams']['module'] = $module;
+
+        $_POST['module'] = $module;
+
+        foreach($postDatas as $postData)
+        {
+            foreach($postData as $postKey => $postValue) $_POST[$postKey] = $postValue;
+        }
+
+        $this->objectModel->buildQuery();
+
+        if($return == 'form')
+        {
+            $formSessionName = $module . 'Form';
+            return $_SESSION[$formSessionName];
+        }
+
+        $querySessionName = $module . 'Query';
+        return $_SESSION[$querySessionName];
     }
 
     /**
