@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 class reportTest
 {
     public function __construct()
@@ -9,13 +10,14 @@ class reportTest
     }
 
     /**
+     * 测试计算每项数据的百分比。
      * Test compute percent of every item.
      *
-     * @param  array  $datas
+     * @param  array       $datas
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function computePercentTest($datas)
+    public function computePercentTest(array $datas): string|array
     {
         $objects = $this->objectModel->computePercent($datas);
 

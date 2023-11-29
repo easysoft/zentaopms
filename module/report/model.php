@@ -27,17 +27,20 @@ class reportModel extends model
     }
 
     /**
+     * 计算每项数据的百分比。
      * Compute percent of every item.
      *
-     * @param  array    $datas
+     * @param  array  $datas
      * @access public
      * @return array
      */
-    public function computePercent($datas)
+    public function computePercent(array $datas): array
     {
+        /* Get data total. */
         $sum = 0;
         foreach($datas as $data) $sum += $data->value;
 
+        /* Compute percent, and get total percent. */
         $totalPercent = 0;
         foreach($datas as $i => $data)
         {
