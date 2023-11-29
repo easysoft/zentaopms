@@ -11,7 +11,7 @@ $config->program->form->create['PM']         = array('type' => 'string',   'cont
 $config->program->form->create['budget']     = array('type' => 'string',   'control' => 'text',       'required' => false, 'default' => '');
 $config->program->form->create['budgetUnit'] = array('type' => 'string',   'control' => 'text',       'required' => false, 'default' => 'CNY');
 $config->program->form->create['begin']      = array('type' => 'date',     'control' => 'datepicker', 'required' => true,  'default' => '');
-$config->program->form->create['end']        = array('type' => 'date',     'control' => 'datepicker', 'required' => true,  'default' => '');
+$config->program->form->create['end']        = array('type' => 'date',     'control' => 'datepicker', 'required' => false, 'default' => '');
 $config->program->form->create['desc']       = array('type' => 'string',   'control' => 'editor',     'required' => false, 'default' => '');
 $config->program->form->create['status']     = array('type' => 'string',   'control' => 'text',       'required' => false, 'default' => 'wait');
 $config->program->form->create['acl']        = array('type' => 'string',   'control' => 'radio',      'required' => false, 'default' => '');
