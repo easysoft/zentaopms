@@ -1043,14 +1043,15 @@ class user extends control
     }
 
     /**
-     * Ajax print templates.
+     * AJAX: 打印用户模板。
+     * AJAX: Print user templates.
      *
-     * @param  int    $type
+     * @param  string $type
      * @param  string $link
      * @access public
      * @return void
      */
-    public function ajaxPrintTemplates($type, $link = '')
+    public function ajaxPrintTemplates(string $type, string $link = '')
     {
         $this->view->link      = $link;
         $this->view->type      = $type;
@@ -1059,30 +1060,35 @@ class user extends control
     }
 
     /**
-     * Save current template.
+     * AJAX: 保存一个用户模板。
+     * AJAX: Save a user template.
      *
+     * @param  string $type
      * @access public
-     * @return string
+     * @return void
      */
-    public function ajaxSaveTemplate($type)
+    public function ajaxSaveTemplate(string $type)
     {
         $this->user->saveUserTemplate($type);
-        if(dao::isError()) echo js::error(dao::getError(), $full = false);
-        return print($this->fetch('user', 'ajaxPrintTemplates', "type=$type"));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'load' => inlink('ajaxPrintTemplates', "type=$type")));
     }
 
     /**
-     * Delete a user template.
+     * AJAX：删除一个用户模板。
+     * AJAX: Delete a user template.
      *
      * @param  int    $templateID
      * @access public
      * @return void
      */
-    public function ajaxDeleteTemplate($templateID)
+    public function ajaxDeleteTemplate(int $templateID)
     {
-        $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)
+        $this->dao->delete()->from(TABLE_USERTPL)
+            ->where('id')->eq($templateID)
             ->beginIF(!$this->app->user->admin)->andWhere('account')->eq($this->app->user->account)->fi()
             ->exec();
+        return $this->send(array('result' => 'success'));
     }
 
     /**
