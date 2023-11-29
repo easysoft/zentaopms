@@ -150,14 +150,13 @@ div
                             a(
                                 set('href', $resetLink),
                                 set('class', 'resetPassword'),
-                                $lang->user->resetPassword
+                                $lang->user->forgetPassword
                             )
                         ),
                         formHidden('referer', $referer),
                         set::actions(array
                         (
-                            array('text' => $lang->login, 'id' => 'submit', 'class' => 'primary'),
-                            array('text' => $lang->user->forgetPassword, 'class' => 'resetPassword', 'url' => $resetLink)
+                            array('text' => $lang->login, 'id' => 'submit', 'class' => 'primary')
                         ))
                     )
                 )
