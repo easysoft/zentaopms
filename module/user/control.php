@@ -1037,7 +1037,7 @@ class user extends control
      */
     public function ajaxGetContactList()
     {
-        $contactList = $this->user->getContactLists($this->app->user->account, 'withnote');
+        $contactList = $this->user->getContactLists();
 
         $items = array();
         foreach($contactList as $contactID => $contactName) $items[] = array('text' => $contactName, 'value' => $contactID);

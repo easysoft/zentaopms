@@ -1258,28 +1258,26 @@ class userModel extends model
     }
 
     /**
-     * Get contact list of a user.
+     * 获取某个用户可以查看的联系人列表。
+     * Get the contact list of a user.
      *
      * @param  string $account
-     * @param  string $params  withempty|withnote
      * @param  string $mode    pairs|list
      * @access public
      * @return array
      */
-    public function getContactLists(string $account, string $params = '', string $mode = 'pairs'): array
+    public function getContactLists(string $account = '', string $mode = 'pairs'): array
     {
+        if(!$account) $account = $this->app->user->account;
+
         $this->dao->select('*')->from(TABLE_USERCONTACT)
             ->where('account')->eq($account)
             ->orWhere('public')->eq(1)
             ->orderBy('public, id_desc');
 
-        $contacts = $mode == 'pairs' ? $this->dao->fetchPairs('id', 'listName') : $this->dao->fetchAll();
-        if(empty($contacts)) return array();
+        if($mode == 'pairs') return $this->dao->fetchPairs('id', 'listName');
 
-        if(strpos($params, 'withempty') !== false) $contacts = array('' => '') + $contacts;
-        if(strpos($params, 'withnote')  !== false) $contacts = array('' => $this->lang->user->contacts->common) + $contacts;
-
-        return $contacts;
+        return $this->dao->fetchAll();
     }
 
     /**
