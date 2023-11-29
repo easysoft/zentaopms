@@ -1006,24 +1006,6 @@ class user extends control
     }
 
     /**
-     * Get user for ajax
-     *
-     * @param  string $requestID
-     * @param  string $assignedTo
-     * @access public
-     * @return void
-     */
-    public function ajaxGetUser($taskID = '', $assignedTo = '')
-    {
-        $users = $this->user->getPairs('noletter, noclosed');
-        $html = "<form method='post' target='hiddenwin' action='" . $this->createLink('task', 'assignedTo', "taskID=$taskID&assignedTo=$assignedTo") . "'>";
-        $html .= html::select('assignedTo', $users, $assignedTo);
-        $html .= html::submitButton('', '', 'btn btn-primary');
-        $html .= '</form>';
-        echo $html;
-    }
-
-    /**
      * AJAX: 获取联系人列表人员。
      * AJAX: get users from a contact list.
      *
