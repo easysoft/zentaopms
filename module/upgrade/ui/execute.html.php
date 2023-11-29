@@ -43,17 +43,38 @@ div
                     implode("\n", $errors)
                 )
             ) : null,
-            in_array($result, array('fail', 'sqlFail')) ? div
+            formPanel
             (
-                setClass('mt-4'),
-                $result == 'sqlFail' ? $lang->upgrade->afterExec : $lang->upgrade->afterDeleted,
-                btn
+                on::click('button[type=submit]', "submitConfirm"),
+                set::width('800px'),
+                input
                 (
-                    on::click('location.reload();'),
-                    $lang->refresh
-                )
-            ) : null
+                    set::type('hidden'),
+                    set::name('fromVersion'),
+                    set::value($fromVersion)
+                ),
+            )
         )
+    )
+);
+
+modal
+(
+    setID('progress'),
+    set::title('1%'),
+    div
+    (
+        setClass('progress'),
+        div
+        (
+            setClass('progress-bar'),
+            set('role', 'progressbar'),
+            set('style', '"width: 1%')
+        )
+    ),
+    div
+    (
+        setID('logBox')
     )
 );
 

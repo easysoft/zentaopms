@@ -57,6 +57,10 @@ modal
             set('role', 'progressbar'),
             set('style', '"width: 1%')
         )
+    ),
+    div
+    (
+        setID('logBox')
     )
 );
 

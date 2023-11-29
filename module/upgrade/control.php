@@ -121,7 +121,6 @@ class upgrade extends control
         if (!is_writable($this->app->getTmpRoot())) $writable = false;
         if(file_exists($this->app->getTmpRoot() . 'upgradeSqlLines')) @unlink($this->app->getTmpRoot() . 'upgradeSqlLines');
         $confirmSql = $this->upgrade->getConfirm($fromVersion);
-        $confirmSql = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $confirmSql);
 
         $this->session->set('step', '');
         $this->view->title    = $this->lang->upgrade->confirm;
@@ -129,7 +128,7 @@ class upgrade extends control
         $this->view->writable = $writable;
 
         /* When sql is empty then skip it. */
-        if(empty($this->view->confirm)) $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
+        if(empty($confirmSql)) $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
 
         if($_POST) $this->locate(inlink('execute', "fromVersion={$fromVersion}"));
 
@@ -161,11 +160,15 @@ class upgrade extends control
         $rawFromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
         if(strpos($fromVersion, 'lite') !== false) $rawFromVersion = $this->config->upgrade->liteVersion[$fromVersion];
         if(strpos($fromVersion, 'ipd') !== false)  $rawFromVersion = $this->config->upgrade->ipdVersion[$fromVersion];
+        $this->dao->begin();
         $this->upgrade->execute($rawFromVersion);
 
         if(!$this->upgrade->isError())
         {
-            $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
+            $this->loadModel('setting')->updateVersion($this->config->version);
+            $this->dao->commit();
+
+            $systemMode = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
 
             /* Delete all patch actions if upgrade success. */
             $this->loadModel('action')->deleteByType('patch');
@@ -175,10 +178,10 @@ class upgrade extends control
 
             if($systemMode == 'classic')
             {
-                $this->loadModel('setting')->setItem('system.common.global.mode', 'light');
+                $this->setting->setItem('system.common.global.mode', 'light');
 
                 $programID = $this->loadModel('program')->createDefaultProgram();
-                $this->loadModel('setting')->setItem('system.common.global.defaultProgram', $programID);
+                $this->setting->setItem('system.common.global.defaultProgram', $programID);
 
                 /* Set default program for product and project with no program. */
                 $this->upgrade->relateDefaultProgram($programID);
@@ -203,7 +206,7 @@ class upgrade extends control
             }
             if(version_compare($openVersion, '15_0_rc1', '>=') and $systemMode == 'new')
             {
-                $this->loadModel('setting')->setItem('system.common.global.mode', 'ALM');
+                $this->setting->setItem('system.common.global.mode', 'ALM');
                 if(empty($this->config->URAndSR)) $this->setting->setItem('system.common.closedFeatures', 'productUR');
                 $selectMode = false;
             }
@@ -211,10 +214,10 @@ class upgrade extends control
 
             if($this->config->edition == 'ipd' && strpos($fromVersion, 'ipd') === false)
             {
-                $this->loadModel('setting')->setItem('system.common.global.mode', 'PLM');
-                $this->loadModel('setting')->setItem('system.custom.URAndSR', '1');
-                $this->loadModel('setting')->setItem('system.common.closedFeatures', '');
-                $this->loadModel('setting')->setItem('system.common.disabledFeatures', '');
+                $this->setting->setItem('system.common.global.mode', 'PLM');
+                $this->setting->setItem('system.custom.URAndSR', '1');
+                $this->setting->setItem('system.common.closedFeatures', '');
+                $this->setting->setItem('system.common.disabledFeatures', '');
                 $this->upgrade->addORPriv();
             }
 
@@ -227,8 +230,9 @@ class upgrade extends control
             $this->locate(inlink('afterExec', "fromVersion={$fromVersion}"));
         }
 
-        $this->view->result = 'sqlFail';
-        $this->view->errors = $this->upgrade->getError();
+        $this->view->result      = 'sqlFail';
+        $this->view->fromVersion = $fromVersion;
+        $this->view->errors      = $this->upgrade->getError();
         $this->display();
     }
 
@@ -809,22 +813,39 @@ class upgrade extends control
     /**
      * Ajax get progress.
      *
+     * @param  int    $offset
      * @access public
      * @return void
      */
-    public function ajaxGetProgress()
+    public function ajaxGetProgress($offset = 0)
     {
         $tmpProgressFile = $this->app->getTmpRoot() . 'upgradeSqlLines';
-        if(!file_exists($tmpProgressFile)) return print(1);
-        $sqlLines = file_get_contents($tmpProgressFile);
-        if(empty($sqlLines)) return print($this->session->upgradeProgress ? $this->session->upgradeProgress : 1);
-        if($sqlLines == 'completed') return print(100);
+        $upgradeLogFile  = $this->upgrade->getLogFile();
 
-        $sqlLines = explode('-', $sqlLines);
-        $progress = round((int)$sqlLines[1] / (int)$sqlLines[0] * 100);
-        if($progress > 95) $progress = 100;
-        $this->session->set('upgradeProgress', $progress);
-        return print($progress);
+        $progress = 1;
+        if(file_exists($tmpProgressFile) && $offset != 0)
+        {
+            $sqlLines = file_get_contents($tmpProgressFile);
+            if(empty($sqlLines)) $progress = $this->session->upgradeProgress ? $this->session->upgradeProgress : 1;
+            if($sqlLines == 'completed') $progress = 100;
+
+            $sqlLines = explode('-', $sqlLines);
+            $progress = round((int)$sqlLines[1] / (int)$sqlLines[0] * 100);
+            if($progress > 95) $progress = 100;
+            $this->session->set('upgradeProgress', $progress);
+        }
+
+        $log  = !file_exists($upgradeLogFile) ? '' : file_get_contents($upgradeLogFile, false, null, $offset);
+        $size = 10 * 1024;
+        if(!empty($log) && mb_strlen($log) > $size)
+        {
+            $left     = mb_substr($log, $size);
+            $log      = mb_substr($log, 0, $size);
+            $position = strpos($left, "\n");
+            if($position !== false) $log .= substr($left, 0, $position + 1);
+        }
+        $log = trim($log);
+        return print(json_encode(array('log' => str_replace("\n", "<br />", $log) . ($log ? '<br />' : ''), 'progress' => $progress, 'offset' => $offset + strlen($log))));
     }
 
     /**
@@ -935,7 +956,7 @@ class upgrade extends control
     {
         set_time_limit(0);
         $alterSQL = $this->upgrade->checkConsistency();
-        $alterSQL = str_replace('ENGINE=InnoDB', 'ENGINE=MyISAM', $alterSQL);
+        $alterSQL = str_replace('ENGINE=MyISAM', 'ENGINE=InnoDB', $alterSQL);
         if(empty($alterSQL))
         {
             if(!$netConnect) $this->locate(inlink('selectVersion'));
