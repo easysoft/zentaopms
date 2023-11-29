@@ -4296,10 +4296,11 @@ class taskModel extends model
      * Build task browse action menu.
      *
      * @param  object $task
+     * @param  object $execution
      * @access public
      * @return string
      */
-    public function buildOperateBrowseMenu($task, $execution = '')
+    public function buildOperateBrowseMenu($task, $execution)
     {
         $menu   = '';
         $params = "taskID=$task->id";
@@ -4644,14 +4645,14 @@ class taskModel extends model
      *
      * @param  array  $tasks
      * @param  array  $users
-     * @param  int    $executionID
+     * @param  object $execution
      * @param  bool   $showBranch
      * @param  array  $branchGroups
      * @param  array  $modulePairs
      * @access public
      * @return array
      */
-    public function generateRow($tasks, $users, $executionID, $showBranch, $branchGroups, $modulePairs)
+    public function generateRow($tasks, $users, $execution, $showBranch, $branchGroups, $modulePairs)
     {
         $userFields = array('assignedTo', 'openedBy', 'closedBy', 'lastEditedBy', 'finishedBy');
         $dateFields = array('assignedDate', 'openedDate', 'deadline', 'finishedDate', 'closedDate', 'lastEditedDate', 'canceledDate', 'activatedDate', 'estStarted', 'realStarted', 'replacetypeDate');
@@ -4661,7 +4662,7 @@ class taskModel extends model
 
         foreach($tasks as $task)
         {
-            $task->actions    = '<div class="c-actions">' . $this->buildOperateBrowseMenu($task) . '</div>';
+            $task->actions    = '<div class="c-actions">' . $this->buildOperateBrowseMenu($task, $execution) . '</div>';
             $task->assignedTo = $this->printAssignedHtml($task, $users, false);
 
             $taskName  = '';
@@ -4746,7 +4747,7 @@ class taskModel extends model
 
             if(!empty($children))
             {
-                $rows = array_merge($rows, $this->generateRow($children, $users, $executionID, $showBranch, $branchGroups, $modulePairs));
+                $rows = array_merge($rows, $this->generateRow($children, $users, $execution, $showBranch, $branchGroups, $modulePairs));
             }
         }
         return $rows;

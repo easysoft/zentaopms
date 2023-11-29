@@ -133,7 +133,8 @@ class execution extends control
         /* Set browse type. */
         $browseType = strtolower($status);
 
-        $execution   = $this->commonAction($executionID, $status);
+        $execution = $this->commonAction($executionID, $status);
+        if($this->config->systemMode == 'PLM') $execution->ipdStage = $this->execution->canStageStart($execution);
         $executionID = $execution->id;
 
         if($execution->type == 'kanban' and $this->config->vision != 'lite' and $this->app->getViewType() != 'json') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
