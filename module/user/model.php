@@ -1318,18 +1318,6 @@ class userModel extends model
     }
 
     /**
-     * Get user account and realname pairs from a contact list.
-     *
-     * @param  string|array    $accountList
-     * @access public
-     * @return array
-     */
-    public function getContactUserPairs($accountList)
-    {
-        return $this->dao->select('account, realname')->from(TABLE_USER)->where('account')->in($accountList)->fetchPairs();
-    }
-
-    /**
      * Create a contact list.
      *
      * @access public
