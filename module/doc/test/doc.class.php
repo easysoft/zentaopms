@@ -716,4 +716,22 @@ class docTest
     {
         return $this->objectModel->getLibByID($libID);
     }
+
+    /**
+     * 获取有权限查看的文档ID列表。
+     * Get grant doc id list.
+     *
+     * @param  array $libIdList
+     * @param  int    $moduleID
+     * @param  string $mode     all|normal|children
+     * @access public
+     * @return string
+     */
+    public function getPrivDocsTest(array $libIdList = array(), int $moduleID = 0, string $mode = 'normal'): string
+    {
+        $docs = $this->objectModel->getPrivDocs($libIdList, $moduleID, $mode);
+
+        if(dao::isError()) return dao::getError();
+        return implode(',', $docs);
+    }
 }
