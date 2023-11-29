@@ -22,9 +22,8 @@ div
         (
             $groupData ? dtable
             (
-                $viewType == 'multiple' ? set::height(310) : null,
+                $viewType == 'multiple' ? set::height(310) : set::height(jsRaw('window.getTableHeight')),
                 set::bordered(true),
-                set::height(jsRaw('window.getTableHeight')),
                 set::cols($groupHeader),
                 set::data(array_values($groupData)),
                 ($metricRecordType == 'scope' || $metricRecordType == 'scope-date') ? set::footPager(usePager('dtablePager')) : null,
