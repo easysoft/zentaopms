@@ -130,7 +130,7 @@ class pivotModel extends model
                 $pivot->descs = $pivotDescs;
             }
 
-            $pivot->used = $this->checkIFChartInUse($pivot->id, 'pivot', $screenList);
+            $pivot->used = $this->checkIFChartInUse($pivot->id, $screenList, 'pivot');
         }
     }
 
@@ -143,7 +143,7 @@ class pivotModel extends model
      * @access public
      * @return bool
      */
-    public function checkIFChartInUse(int $chartID, string $type = 'chart', array $screenList): bool
+    public function checkIFChartInUse(int $chartID, array $screenList, string $type = 'chart'): bool
     {
         foreach($screenList as $screen)
         {

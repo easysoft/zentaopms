@@ -1154,7 +1154,7 @@ class screenModel extends model
                     $field   = $settings->value->field;
                     $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
 
-                    if($settings->value->type === 'value') $value = count($results) ? 0 : current($results)->$field;
+                    if($settings->value->type === 'value') $value = !count($results) ? 0 : current($results)->$field;
                     if($settings->value->agg  === 'count') $value = count($results);
                     if($settings->value->agg  === 'sum')
                     {
