@@ -977,16 +977,17 @@ class user extends control
         $this->display();
     }
 
-	/**
-     * crop avatar
+    /**
+     * 裁剪头像。
+     * Crop avatar.
      *
-     * @param  int    $image
+     * @param  int    $imageID
      * @access public
      * @return void
      */
-    public function cropAvatar($image)
+    public function cropAvatar(int $imageID)
     {
-        $image = $this->loadModel('file')->getByID($image);
+        $image = $this->loadModel('file')->getByID($imageID);
 
         if(!empty($_POST))
         {
@@ -996,10 +997,9 @@ class user extends control
             $this->app->user->avatar = $image->webPath;
             $this->session->set('user', $this->app->user);
             $this->dao->update(TABLE_USER)->set('avatar')->eq($image->webPath)->where('account')->eq($this->app->user->account)->exec();
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('" . helper::createLink('my', 'profile') . "', 'profile', {}, window.updateUserAvatar);"));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('" . $this->createLink('my', 'profile') . "', 'profile', {}, window.updateUserAvatar);"));
         }
 
-        $this->view->user  = $this->user->getById($this->app->user->account);
         $this->view->title = $this->lang->user->cropAvatar;
         $this->view->image = $image;
         $this->display();

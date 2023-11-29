@@ -1494,7 +1494,7 @@ EOF;
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             $result = $this->user->uploadAvatar();
-            return $this->send(array('result' => 'success', 'callback' => "loadModal('" . helper::createLink('user', 'cropavatar', "image={$result['fileID']}") . "', 'profile');"));
+            return $this->send(array('result' => 'success', 'callback' => "loadModal('" . $this->createLink('user', 'cropavatar', "imageID={$result['fileID']}") . "', 'profile');"));
         }
     }
 
