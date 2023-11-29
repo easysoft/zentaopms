@@ -61,6 +61,19 @@ class searchTest
         return $_SESSION[$querySessionName];
     }
 
+    public function setDefaultParamsTest(array $fields, array $params): array
+    {
+        global $tester;
+        $tester->session->set('project', 0);
+
+        $params = $this->objectModel->setDefaultParams($fields, $params);
+
+        $paramValues = array();
+        foreach($params as $field => $param) $paramValues[$field] = $param['values'];
+
+        return $paramValues;
+    }
+
     /**
      * 测试初始化 session。
      * Test init session function.
