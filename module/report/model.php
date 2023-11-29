@@ -14,6 +14,7 @@
 class reportModel extends model
 {
     /**
+     * 构造函数。
      * Construct.
      *
      * @access public
