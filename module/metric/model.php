@@ -1537,8 +1537,9 @@ class metricModel extends model
             return array($begin, $end);
         }
 
-        if($key == 'calcDate' && isset($query[$key]))
+        if($key == 'calcDate')
         {
+            if(!isset($query[$key]) && $query['dateType'] == 'nodate') $query['calcDate'] = 7;
             return date('Y-m-d', strtotime("-{$query[$key]} days"));
         }
 
