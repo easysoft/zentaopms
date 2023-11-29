@@ -34,13 +34,12 @@ class api extends control
      * @param  int    $apiID
      * @param  int    $version
      * @param  int    $release
-     * @param  int    $appendLib
      * @param  string $browseType
      * @param  int    $param
      * @access public
      * @return void
      */
-    public function index(int $libID = 0, int $moduleID = 0, int $apiID = 0, int $version = 0, int $release = 0, int $appendLib = 0, string $browseType = '', int $param = 0)
+    public function index(int $libID = 0, int $moduleID = 0, int $apiID = 0, int $version = 0, int $release = 0, string $browseType = '', int $param = 0)
     {
         /* Get an api doc. */
         if($apiID > 0)
@@ -50,7 +49,7 @@ class api extends control
             return;
         }
 
-        /* 空间类型。 */
+        /* 设置空间类型。 */
         $this->session->set('spaceType', 'api', 'doc');
         /* 详情页返回上一页用的链接。 */
         $this->session->set('structList', inLink('index', "libID=$libID&moduleID=$moduleID"), 'doc');
@@ -59,58 +58,19 @@ class api extends control
         $this->setMenu($libID);
         $objectType = $this->objectType;
         $objectID   = $this->objectID;
-        if($libID)
-        {
-            $lib = $this->doc->getLibById($libID);
-            if($objectType == 'nolink' && !$objectID && ($lib->product || $lib->project))
-            {
-                $objectType = $lib->product ? 'product' : 'project';
-                $objectID   = $lib->product ? $lib->product : $lib->project;
-            }
-        }
-        $appendLib = (!empty($lib) && $lib->deleted == '1') ? $libID : 0;
 
-        /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
-        if(empty($libs) && $objectType != 'nolink')
-        {
-            $objectType = 'nolink';
-            $objectID   = 0;
-            $libs       = $this->doc->getApiLibs($appendLib, 'nolink');
-        }
-
-        if(empty($libs))
-        {
-            list($normalObjects, $closedObjects) = $this->api->getOrderedObjects();
-
-            if(!empty($normalObjects))
-            {
-                $objectType = key($normalObjects);
-                $objectID   = key($normalObjects[$objectType]);
-                $libs       = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
-            }
-            elseif(!empty($closedObjects))
-            {
-                $objectType = key($closedObjects);
-                $objectID   = key($closedObjects[$objectType]);
-                $libs       = $this->doc->getApiLibs($appendLib, $objectType, $objectID);
-            }
-        }
-
-        if(!$libID && !empty($libs))
-        {
-            /* 如果没有libID 但是有lib列表，则取一个当libID。 */
-            $lib        = current($libs);
-            $libID      = $lib->id;
-            $objectType = $lib->product ? 'product' : ($lib->project ? 'project' : '');
-            $objectID   = $lib->product ? $lib->product : $lib->project;
-        }
+        /* 获取文档目录列表和当前选中的文档目录. */
+        $libs       = $this->doc->getApiLibs($libID, $objectType, $objectID);
+        $lib        = $libID ? zget($libs, $libID) : current($libs);
+        $libID      = $lib->id;
+        $objectType = $lib->product ? 'product' : ($lib->project ? 'project' : 'unlink');
+        $objectID   = $lib->product ? $lib->product : $lib->project;
 
         /* Build the search form. */
         $browseType = $release ? 'byrelease' : $browseType;
         $param      = $release ? $release : $param;
         $queryID    = $browseType == 'bySearch' ? (int)$param : 0;
-        $actionURL  = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&appendLib=0&browseType=bySearch&param=myQueryID");
+        $actionURL  = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&browseType=bySearch&param=myQueryID");
         $this->api->buildSearchForm($lib, $queryID, $actionURL, $libs);
 
         $this->view->title             = $this->lang->api->pageTitle;
@@ -122,9 +82,9 @@ class api extends control
         $this->view->objectID          = $objectID;
         $this->view->moduleID          = $moduleID;
         $this->view->version           = $version;
-        $this->view->libTree           = $this->doc->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType, (int)$param);
         $this->view->apiList           = $browseType == 'bySearch' ? $this->api->getApiListBySearch($libID, $queryID, '', array_keys($libs)) : $this->api->getListByModuleId($libID, $moduleID, $release);
-        $this->view->objectDropdown    = isset($libs[$libID]) ? $this->generateLibsDropMenu($libs[$libID], $release) : '';
+        $this->view->libTree           = $this->doc->getLibTree($libID, $libs, 'api', $moduleID, $objectID, $browseType, (int)$param);
+        $this->view->objectDropdown    = isset($libs[$libID]) ? $this->apiZen->generateLibsDropMenu($libs[$libID], $release) : '';
         $this->view->spaceType         = 'api';
         $this->view->linkParams        = '%s';
         $this->view->defaultNestedShow = $this->apiZen->getDefacultNestedShow($libID, $moduleID);
@@ -150,69 +110,35 @@ class api extends control
             setCookie("docSpaceParam", '', $this->config->cookieLife, $this->config->webRoot, '', false, true);
         }
 
-        /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs($libID, $this->objectType, $this->objectID);
-        $api  = $this->api->getLibById($apiID, $version, $release);
-        if($api)
-        {
-            $moduleID  = $api->module;
-            $libID     = $api->lib;
-            $api->desc = htmlspecialchars_decode($api->desc);
-        }
+        /* 获取文档目录列表和当前选中的文档目录. */
+        $libs      = $this->doc->getApiLibs($libID, $this->objectType, $this->objectID);
+        $api       = $this->api->getLibById($apiID, $version, $release);
+        $libID     = $api->lib;
+        $lib       = zget($libs, $libID);
+        $api->desc = htmlspecialchars_decode($api->desc);
 
-        /* Crumbs links array. */
-        $lib  = zget($libs, $libID);
-        $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'unlink');
-
-        $methodName = $type != 'unlink' ? $type . 'Space' : 'index';
-        if($this->app->tab == 'doc') $methodName = 'index';
-
+        /* 生成一些必要的参数。 */
+        $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'unlink');
+        $objectID   = $lib->product ? $lib->product : $lib->project;
         $linkObject = zget($lib, $type, 0);
-        $linkParams = "libID=$lib->id";
-        if($methodName != 'index') $linkParams = "objectID=$linkObject&$linkParams";
+        $spaceType  = 'api';
+        $moduleID   = $api->module;
+        $linkParams = "libID=%s";
+        if($this->app->tab != 'doc' && $type != 'unlink') $linkParams = "objectID=$linkObject&$linkParams";
 
-        $spaceType = 'api';
-        $objectID  = $this->objectID;
-        if($this->cookie->docSpaceParam) $docParam = json_decode($this->cookie->docSpaceParam);
-        if(isset($docParam) and !(in_array($docParam->type, array('product', 'project')) and $docParam->objectID == 0))
-        {
-            $docParam   = json_decode($this->cookie->docSpaceParam);
-            $type       = $docParam->type;
-            $objectID   = $docParam->objectID;
-            $libID      = $docParam->libID;
-            $moduleID   = $docParam->moduleID;
-            $browseType = $docParam->browseType;
-            $param      = $docParam->param;
-            $spaceType  = $docParam->type;
-            list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, $libID);
+        /* 解析cookie并获取左侧目录树。 */
+        $this->apiZen->parseDocSpaceParam($libs, $libID, $type, $objectID, $moduleID, $spaceType, $release);
 
-            $libTree = $this->doc->getLibTree($libID, $libs, $type, $moduleID, $objectID, $browseType, $param);
-        }
-        else
-        {
-            $objectDropdown = $this->generateLibsDropMenu($libs[$libID], $release);
-            $libTree = $this->doc->getLibTree($libID, $libs, 'api', $moduleID);
-        }
-
-        $this->view->title             = $this->lang->api->pageTitle;
-        $this->view->isRelease         = $release > 0;
-        $this->view->release           = $release;
-        $this->view->version           = $version;
-        $this->view->libID             = $libID;
-        $this->view->apiID             = $apiID;
-        $this->view->api               = $api;
-        $this->view->typeList          = $this->api->getTypeList($api->lib);
-        $this->view->moduleID          = $moduleID;
-        $this->view->type              = $type;
-        $this->view->objectType        = $type;
-        $this->view->objectID          = $objectID;
-        $this->view->users             = $this->user->getPairs('noclosed,noletter');
-        $this->view->actions           = $apiID ? $this->action->getList('api', $apiID) : array();
-        $this->view->libTree           = $libTree;
-        $this->view->objectDropdown    = $objectDropdown;
-        $this->view->spaceType         = $spaceType;
-        $this->view->linkParams        = $linkParams;
-        $this->view->defaultNestedShow = $this->apiZen->getDefacultNestedShow($libID, $moduleID);
+        $this->view->title      = $this->lang->api->pageTitle;
+        $this->view->isRelease  = $release > 0;
+        $this->view->release    = $release;
+        $this->view->version    = $version;
+        $this->view->apiID      = $apiID;
+        $this->view->api        = $api;
+        $this->view->linkParams = $linkParams;
+        $this->view->typeList   = $this->api->getTypeList($api->lib);
+        $this->view->users      = $this->user->getPairs('noclosed,noletter');
+        $this->view->actions    = $apiID ? $this->action->getList('api', $apiID) : array();
         $this->display();
     }
 
@@ -231,7 +157,7 @@ class api extends control
 
         $libs = $this->doc->getApiLibs();
 
-        $this->lang->modulePageNav = $this->generateLibsDropMenu($libs[$libID]);
+        $this->lang->modulePageNav = $this->apiZen->generateLibsDropMenu($libs[$libID]);
 
         /* Append id for second sort. */
         $sort     = common::appendOrder($orderBy);
@@ -741,40 +667,7 @@ class api extends control
         }
     }
 
-    /**
-     * Generate api doc index page dropMenu
-     *
-     * @param  object $lib
-     * @param  int    $version
-     * @access public
-     * @return string
-     */
-    private function generateLibsDropMenu($lib, $version = 0)
-    {
-        if(empty($lib)) return '';
 
-        $objectTitle = $this->lang->api->noLinked;
-        $objectType  = 'nolink';
-        $objectID    = 0;
-        if($lib->product)
-        {
-            $objectType = 'product';
-            $objectID   = $lib->product;
-            $product    = $this->loadModel('product')->getByID($objectID);
-            $objectTitle = zget($product, 'name', '');
-        }
-        elseif($lib->project)
-        {
-            $objectType  = 'project';
-            $objectID    = $lib->project;
-            $project     = $this->loadModel('project')->getByID($objectID);
-            $objectTitle = zget($project, 'name', '');
-        }
-
-        $objectDropdown['text'] = $objectTitle;
-        $objectDropdown['link'] = helper::createLink('api', 'ajaxGetDropMenu', "objectType=$objectType&objectID=$objectID&libID=$lib->id&version=$version");
-        return $objectDropdown;
-    }
 
     /**
      * Return session to the client.
