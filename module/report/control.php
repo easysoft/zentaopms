@@ -33,7 +33,8 @@ class report extends control
     }
 
     /**
-     * The index of report, goto project deviation.
+     * 报告主页，跳转到年度数据。
+     * The index of report, goto aunnual data.
      *
      * @access public
      * @return void
