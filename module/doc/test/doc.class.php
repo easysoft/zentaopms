@@ -754,4 +754,21 @@ class docTest
         return $docs;
     }
 
+    /**
+     * 获取当前文档库下的文档列表数据。
+     * Get doc list by libID.
+     *
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  string $browseType all|draft
+     * @access public
+     * @return array
+     */
+    public function getDocsTest(int $libID, int $moduleID, string $browseType): array
+    {
+        $docs = $this->objectModel->getDocs($libID, $moduleID, $browseType, 'id_desc');
+
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
 }
