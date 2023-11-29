@@ -156,7 +156,8 @@ class screenModel extends model
             foreach($list as $groupComponent) isset($groupComponent->key) && $groupComponent->key === 'Select' && $this->buildSelect($groupComponent);
         }
 
-        /** Fileter chart. */
+        /* 过滤图表和构建图表。 */
+        /* Filter chart. */
         $list = array();
         array_map(function($component)use(&$list){
             !empty($component->isGroup) ? array_merge($list, $component->groupList) : array_push($list, $component);
@@ -176,6 +177,8 @@ class screenModel extends model
      */
     public function getLatestChart(object $component): void
     {
+        /* 不存在的chartID或者为select的组件不需要构建。 */
+        /* If chartID is empty or component is select, it doesn't need to build. */
         if(isset($component->key) && $component->key === 'Select') return;
         $chartID = zget($component->chartConfig, 'sourceID', '');
         if(!$chartID) return;
@@ -233,18 +236,24 @@ class screenModel extends model
      */
     public function completeComponent(object $chart, string $type, array $filters, object $component): void
     {
+        /* 处理图表为空，stage值为draft和被删除的情况。 */
+        /* Process chart is empty, stage is draft or deleted. */
         if(empty($chart) || ($chart->stage == 'draft' || $chart->deleted == '1'))
         {
             $this->completeComponentShowInfo($chart, $component, $type);
             return;
         }
 
+        /* 根据图表类型获取图表配置。 */
+        /* Get chart option by chart type. */
         $this->getChartOption($chart, $component, $filters);
 
         $component->chartConfig->dataset  = $component->option->dataset;
         $component->chartConfig->fields   = json_decode($chart->fields);
         $component->chartConfig->filters  = $this->getChartFilters($chart);
 
+        /* 处理非内置图表。 */
+        /* Process non-builtin chart. */
         if($type == 'chart' && (!$chart->builtin || in_array($chart->id, $this->config->screen->builtinChart)))
         {
             if(!empty($component->option->series))
@@ -252,6 +261,8 @@ class screenModel extends model
                 $defaultSeries = $component->option->series;
                 if($component->type == 'radar')
                 {
+                    /* 处理雷达图。 */
+                    /* Process radar chart. */
                     $component->option->radar->indicator = $component->option->dataset->radarIndicator;
                     $defaultSeries[0]->data = $component->option->dataset->seriesData;
 
@@ -259,6 +270,8 @@ class screenModel extends model
                 }
                 else
                 {
+                    /* 填充长度。 */
+                    /* Fill length. */
                     $component->option->series = array_pad([], count($component->option->dataset->dimensions), $defaultSeries[0]);
                 }
             }
@@ -293,11 +306,15 @@ class screenModel extends model
      */
     private function completeChartShowInfo(object $chart, object $component): void
     {
+        /* 设置图表的title信息。 */
+        /* Set chart title info. */
         $component->option->title = new stdclass();
         $component->option->title->text = sprintf($this->lang->screen->noChartData, $chart->name);
         $component->option->title->left = 'center';
         $component->option->title->top  = '50%';
 
+        /* 初始化x和y轴。 */
+        /* Init x and y axis. */
         $component->option->xAxis = new stdclass();
         $component->option->xAxis->show = false;
         $component->option->yAxis = new stdclass();
@@ -390,18 +407,23 @@ class screenModel extends model
     {
         if($chart->sql)
         {
+            /* 获取图表配置。 */
+            /* Get chart settings. */
             $settings = json_decode($chart->settings, true);
             $langs    = json_decode($chart->langs,    true);
             $settings = current($settings);
 
+            /* 获取图表需要展示的内容。 */
+            /* Get chart data. */
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
-
             $fields       = json_decode($chart->fields);
             $dimensions   = array($settings['xaxis'][0]['field']);
             $sourceData   = array();
             $clientLang   = $this->app->getClientLang();
             $xLabelValues = $this->processXLabel($xLabels, $fields->{$group}->type, $fields->{$group}->object, $fields->{$group}->field);
 
+            /* 处理数据。 */
+            /* Process data. */
             foreach($yStats as $index => $dataList)
             {
                 $fieldConfig = zget($fields, $metrics[$index]);
@@ -424,6 +446,8 @@ class screenModel extends model
             $component->option->dataset->source     = array_values($sourceData);
         }
 
+        /* 设置组件默认属性。 */
+        /* Set component default attributes. */
         $this->setComponentDefaults($component);
     }
 
@@ -441,18 +465,23 @@ class screenModel extends model
     {
         if($chart->sql)
         {
+            /* 获取图表配置。 */
+            /* Get chart settings. */
             $settings = json_decode($chart->settings, true);
             $langs    = json_decode($chart->langs,    true);
             $settings = current($settings);
 
+            /* 获取图表需要展示的内容。 */
+            /* Get chart data. */
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
-
             $fields       = json_decode($chart->fields);
             $dimensions   = array($settings['xaxis'][0]['field']);
             $sourceData   = array();
             $clientLang   = $this->app->getClientLang();
             $xLabelValues = $this->processXLabel($xLabels, $fields->{$group}->type, $fields->{$group}->object, $fields->{$group}->field);
 
+            /* 处理数据。 */
+            /* Process data. */
             foreach($yStats as $index => $dataList)
             {
                 $fieldConfig = zget($fields, $metrics[$index]);
@@ -472,6 +501,7 @@ class screenModel extends model
                 }
             }
 
+            /* 填充空数据。 */
             /* Completing empty values. */
             foreach($sourceData as $lineData)
             {
@@ -485,6 +515,8 @@ class screenModel extends model
             $component->option->dataset->source     = array_values($sourceData);
         }
 
+        /* 设置组件默认属性。 */
+        /* Set component default attributes. */
         $this->setComponentDefaults($component);
     }
 
@@ -502,13 +534,19 @@ class screenModel extends model
     {
         if($chart->sql)
         {
+            /* 获取图表配置。 */
+            /* Get chart settings. */
             $settings = json_decode($chart->settings, true);
             $settings = current($settings);
 
+            /* 获取图表需要展示的内容。 */
+            /* Get chart data. */
             $options = $this->loadModel('chart')->genPie(json_decode($chart->fields, true), $settings, $chart->sql, $filters);
             $groupField = $settings['group'][0]['field'];
             $metricField = $settings['metric'][0]['field'];
 
+            /* 处理数据。 */
+            /* Process data. */
             if($groupField == $metricField) $groupField .= '1';
             $dimensions = array($groupField, $metricField);
             $sourceData = array();
@@ -549,12 +587,16 @@ class screenModel extends model
     {
         if($chart->sql)
         {
+            /* 获取图表配置。 */
+            /* Get chart settings. */
             $settings = json_decode($chart->settings, true);
             $langs    = json_decode($chart->langs,    true);
             $settings = current($settings);
 
             list($group, $metrics, $aggs, $xLabels, $yStats) = $this->loadModel('chart')->getMultiData($settings, $chart->sql, $filters);
 
+            /* 获取需要展示的内容。 */
+            /* Get chart data. */
             $fields         = json_decode($chart->fields);
             $radarIndicator = array();
             $seriesData     = array();
@@ -562,6 +604,8 @@ class screenModel extends model
             $clientLang     = $this->app->getClientLang();
             $xLabelValues   = $this->processXLabel($xLabels, $fields->{$group}->type, $fields->{$group}->object, $fields->{$group}->field);
 
+            /* 处理数据。 */
+            /* Process data. */
             foreach($yStats as $index => $dataList)
             {
                 $fieldConfig = zget($fields, $metrics[$index]);
@@ -595,6 +639,7 @@ class screenModel extends model
 
 
     /**
+     * 获取表格图表配置。
      * Get table chart option.
      *
      * @param  object $component
@@ -607,11 +652,15 @@ class screenModel extends model
     {
         if($chart->sql)
         {
+            /* 获取图表配置。 */
+            /* Get chart settings. */
             $settings = json_decode($chart->settings, true);
             $fields   = json_decode($chart->fields,   true);
             $langs    = json_decode($chart->langs,    true);
             list($options, $config) = $this->loadModel('pivot')->genSheet($fields, $settings, $chart->sql, $filters, $langs);
 
+            /* 处理数据。 */
+            /* Process data. */
             $colspan = array();
             if($options->columnTotal && $options->columnTotal == 'sum' && !empty($options->array))
             {
@@ -633,6 +682,8 @@ class screenModel extends model
 
             $dataset = array_map(function($data){return array_values($data);}, $options->array);
 
+            /* 处理单元格合并后的数据。 */
+            /* Process data after merge cells. */
             foreach($config as $i => $data)
             {
                 foreach($data as $j => $rowspan)
@@ -673,6 +724,7 @@ class screenModel extends model
     }
 
     /**
+     * 获取组件的过滤条件。
      * Get chart filters
      *
      * @param object $chart
@@ -700,6 +752,7 @@ class screenModel extends model
     }
 
     /**
+     * 当查询的时候设置过滤条件。
      * Set screen filters when is query.
      *
      * @param  array  $filter
@@ -725,6 +778,7 @@ class screenModel extends model
     }
 
     /**
+     * 根据时间设置默认值。
      * Set default by date.
      *
      * @param  array  $filter
@@ -744,6 +798,7 @@ class screenModel extends model
     }
 
     /**
+     * 根据语言处理横坐标。
      * Process xLabel with lang
      *
      * @param  array  $xLabel
@@ -763,6 +818,7 @@ class screenModel extends model
     }
 
     /**
+     * 获取系统配置。
      * Get system options.
      *
      * @param  string $type
@@ -799,6 +855,8 @@ class screenModel extends model
             case 'option':
                 if($field)
                 {
+                    /* 引入dataview下的相关文件。 */
+                    /* Include related files in dataview. */
                     $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "{$object}.php";
                     if(is_file($path))
                     {
@@ -810,6 +868,8 @@ class screenModel extends model
             case 'object':
                 if($field)
                 {
+                    /* 查询相关字段的值。 */
+                    /* Get field value. */
                     $table = zget($this->config->objectTables, $object, '');
                     if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
                 }
@@ -817,6 +877,8 @@ class screenModel extends model
             default:
                 if($field && $sql)
                 {
+                    /* 通过sql查询展示字段。 */
+                    /* Get field by sql. */
                     $cols = $this->dao->query("select tt.`$field` from ($sql) tt group by tt.`$field` order by tt.`$field` desc")->fetchAll();
                     foreach($cols as $col) $options[$col->$field] = $col->$field;
                 }
@@ -828,6 +890,7 @@ class screenModel extends model
     }
 
     /**
+     * 构建组件列表。
      * Build component list.
      *
      * @param  array  $componentList
@@ -836,10 +899,13 @@ class screenModel extends model
      */
     public function buildComponentList(array|object $componentList): array
     {
+        /* 清楚空数据并且为重构每个组件。 */
+        /* Clear empty data and rebuild each component. */
         return array_map(function($component){$this->buildComponent($component);return $component;}, array_filter($componentList));
     }
 
     /**
+     * 构建组件。
      * Build component.
      *
      * @param  object $component
@@ -848,15 +914,21 @@ class screenModel extends model
      */
     public function buildComponent(object $component): void
     {
+        /* 如果是内置图表，构建图表。 */
         /* If chart is builtin, build it. */
         if(isset($component->sourceID) && $component->sourceID)
         {
             $this->buildChart($component);
         }
+        /* 如果是select图表，构建select相关图表。 */
+        /* If chart is select, build select chart. */
         elseif(isset($component->key) && $component->key === 'Select')
         {
             $this->buildSelect($component);
-        }elseif(empty($component->isGroup))
+        }
+        /* 如果当前组件不是组件集合，设置默认值。 */
+        /* If current component is not group, set default value. */
+        elseif(empty($component->isGroup))
         {
             $this->setComponentDefaults($component);
         }
@@ -868,6 +940,7 @@ class screenModel extends model
     }
 
     /**
+     * 构建图表组。
      * Build chart group.
      *
      * @param  object $component
@@ -880,6 +953,7 @@ class screenModel extends model
     }
 
     /**
+     * 设置组件的默认值。
      * Set component defaults.
      *
      * @param  object $component
@@ -894,6 +968,7 @@ class screenModel extends model
     }
 
     /**
+     * 构建选择框。
      * Build select.
      *
      * @param  object $component
@@ -907,9 +982,13 @@ class screenModel extends model
             case 'year':
                 $component->option->value = $this->filter->year;
 
+                /* 只查询从2009年开始的数据。 */
+                /* Only query data from 2009. */
                 $begin = $this->dao->select('YEAR(MIN(date)) year')->from(TABLE_ACTION)->where('date')->notZeroDate()->fetch('year');
                 if($begin < 2009) $begin = 2009;
 
+                /* 构建年份数据。 */
+                /* Build year data. */
                 $options = array();
                 for($year = date('Y'); $year >= $begin; $year--) $options[] = array('label' => $year, 'value' => $year);
                 $component->option->dataset = $options;
@@ -919,6 +998,8 @@ class screenModel extends model
             case 'dept':
                 $component->option->value = (string)$this->filter->dept;
 
+                /* 构建部门数据。 */
+                /* Build dept data. */
                 $options = array(array('label' => $this->lang->screen->allDepts, 'value' => '0'));
                 $depts = $this->dao->select('id,name')->from(TABLE_DEPT)->where('grade')->eq(1)->fetchAll();
                 $component->option->dataset = array_map(function($dept)use(&$options){array_push($options, array('label' => $dept->name, 'value' => $dept->id));}, $depts);
@@ -928,6 +1009,8 @@ class screenModel extends model
             case 'account':
                 $component->option->value = $this->filter->account;
 
+                /* 构建用户数据。 */
+                /* Build user data. */
                 $options = array(array('label' => $this->lang->screen->allUsers, 'value' => ''));
                 $depts   = array();
                 if($this->filter->dept) $depts = $this->dao->select('id')->from(TABLE_DEPT)->where('path')->like(',' . $this->filter->dept . ',%')->fetchPairs();
@@ -940,6 +1023,8 @@ class screenModel extends model
 
         if(isset($url)) $component->option->onChange = "window.location.href = {$url}";
 
+        /* 设置全区图表类型数据。 */
+        /* Set filter chart type data. */
         foreach($component->filterCharts as $chart)
         {
             if(!isset($this->filter->charts[$chart->chart])) $this->filter->charts[$chart->chart] = array();
@@ -950,6 +1035,7 @@ class screenModel extends model
     }
 
     /**
+     * 构建图表。
      * Build chart.
      *
      * @param  object $component
@@ -974,6 +1060,8 @@ class screenModel extends model
                 $this->buildPieCircleChart($component, $chart);
                 break;
             case 'pie':
+                /* 通过判断是否是内置图表调用不同的方法。 */
+                /* Call different methods by judging whether it is a builtin chart. */
                 $chart->builtin == '0' ? $this->getPieChartOption($component, $chart) : $this->buildPieChart($component, $chart);
                 break;
             case 'radar':
@@ -995,7 +1083,8 @@ class screenModel extends model
     }
 
     /**
-     * Set SQL filter
+     * 设置sql过滤条件。
+     * Set SQL filter.
      *
      * @param  object $chart
      * @access public
@@ -1016,6 +1105,8 @@ class screenModel extends model
                     case 'dept':
                         if($this->filter->dept && !$this->filter->account)
                         {
+                            /* 根据部门查询用户。 */
+                            /* Query users by dept. */
                             $accountField = $this->filter->charts[$chart->id]['account'];
                             $users = $this->dao->select('account')->from(TABLE_USER)->alias('t1')
                                 ->leftJoin(TABLE_DEPT)->alias('t2')
@@ -1040,6 +1131,7 @@ class screenModel extends model
     }
 
     /**
+     * 构建卡片图表。
      * Build card chart.
      *
      * @param  object $component
@@ -1089,6 +1181,8 @@ class screenModel extends model
      */
     public function buildLineChart(object $component, object $chart): void
     {
+        /* 如果没有设置图表配置，设置默认值。 */
+        /* Set default value if chart settings is empty. */
         if(!$chart->settings)
         {
             $this->screenTao->setChartDefault('line', $component);
@@ -1104,6 +1198,8 @@ class screenModel extends model
                     $dimensions = array($settings->xaxis[0]->name);
                     foreach($settings->yaxis as $yaxis) $dimensions[] = $yaxis->name;
 
+                    /* 通过sql查询数据，并且处理数据。 */
+                    /* Query data by sql and process data. */
                     $sourceData = array();
                     $results    = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
                     foreach($results as $result)
@@ -1139,6 +1235,8 @@ class screenModel extends model
      */
     public function buildTableChart(object $component, object $chart): void
     {
+        /* 如果没有设置图表配置，设置默认值。 */
+        /* Set default value if chart settings is empty. */
         if(!$chart->settings)
         {
             $this->screenTao->setChartDefault('table', $component);
@@ -1154,6 +1252,8 @@ class screenModel extends model
                     $header = $dataset = array();
                     foreach($settings->column as $column) $header[$column->field] = $column->name;
 
+                    /* 通过sql查询数据，并且处理数据。 */
+                    /* Query data by sql and process data. */
                     $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
                     foreach($results as $result) $dataset[] = array_map(function($field)use($result){return $result->$field;}, array_keys($header));
 
@@ -1177,6 +1277,8 @@ class screenModel extends model
      */
     public function buildBarChart(object $component, object $chart): void
     {
+        /* 如果没有设置图表配置，设置默认值。 */
+        /* Set default value if chart settings is empty. */
         if(!$chart->settings)
         {
             $this->screenTao->setChartDefault('bar', $component);
@@ -1194,6 +1296,8 @@ class screenModel extends model
 
                     $sourceData = array();
 
+                    /* 通过sql查询数据，并且处理数据。 */
+                    /* Query data by sql and process data. */
                     $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
                     foreach($results as $result)
                     {
@@ -1238,6 +1342,8 @@ class screenModel extends model
      */
     public function buildPieChart(object $component, object $chart): void
     {
+        /* 如果没有设置图表配置，设置默认值。 */
+        /* Set default value if chart settings is empty. */
         if(!$chart->settings)
         {
             $this->screenTao->setChartDefault('pie', $component);
@@ -1253,6 +1359,8 @@ class screenModel extends model
                 {
                     $dimensions = array($settings->group[0]->name, $settings->metric[0]->field);
 
+                    /* 通过sql查询数据，并且处理数据。 */
+                    /* Query data by sql and process data. */
                     $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
                     $group = $settings->group[0]->field;
 
@@ -1290,6 +1398,8 @@ class screenModel extends model
      */
     public function buildPieCircleChart(object $component, object $chart): void
     {
+        /* 如果没有设置图表配置，设置默认值。 */
+        /* Set default value if chart settings is empty. */
         if(!$chart->settings)
         {
             $this->screenTao->setChartDefault('piecircle', $component);
@@ -1303,6 +1413,8 @@ class screenModel extends model
                 $settings = json_decode($chart->settings);
                 if($settings && isset($settings->metric))
                 {
+                    /* 通过sql查询数据，并且处理数据。 */
+                    /* Query data by sql and process data. */
                     $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
                     $group   = $settings->group[0]->field;
 
@@ -1339,6 +1451,8 @@ class screenModel extends model
      */
     public function buildWaterPolo(object $component, object $chart): void
     {
+        /* 如果没有设置图表配置，设置默认值。 */
+        /* Set default value if chart settings is empty. */
         if(!$chart->settings)
         {
             $this->screenTao->setChartDefault('waterpolo', $component);  
@@ -1352,6 +1466,8 @@ class screenModel extends model
                 $sourceData = 0;
                 if($settings && isset($settings->metric))
                 {
+                    /* 通过sql查询数据，并且处理数据。 */
+                    /* Query data by sql and process data. */
                     $result     = $this->dao->query($this->setFilterSQL($chart))->fetch();
                     $group      = $settings->group[0]->field;
                     $sourceData = zget($result, $group, 0);
@@ -1374,6 +1490,8 @@ class screenModel extends model
      */
     public function buildRadarChart(object $component, object $chart): void
     {
+        /* 如果没有设置图表配置，设置默认值。 */
+        /* Set default value if chart settings is empty. */
         if(!$chart->settings)
         {
             $this->screenTao->setChartDefault('radar', $component);
@@ -1385,36 +1503,9 @@ class screenModel extends model
             if($chart->sql)
             {
                 $settings = json_decode($chart->settings);
-                if($settings && isset($settings->metric))
-                {
-                    $results = $this->dao->query($this->setFilterSQL($chart))->fetchAll();
-                    $group   = $settings->group[0]->field;
-
-                    $metrics = array();
-                    foreach($settings->metric as $metric) $metrics[$metric->key] = array('field' => $metric->field, 'name' => $metric->name, 'value' => 0);
-
-                    foreach($results as $result)
-                    {
-                        if(isset($metrics[$result->$group]))
-                        {
-                            $field = $metrics[$result->$group]['field'];
-                            $metrics[$result->$group]['value'] += $result->$field;
-                        }
-                    }
-
-                    $max = 0;
-                    foreach($metrics as $data) $max = $data['value'] > $max ? $data['value'] : $max;
-
-                    $data  = array('name' => '', 'value' => array());
-                    $value = array();
-                    foreach($metrics as $metric)
-                    {
-                        $indicator[]     = array('name' => $metric['name'], 'max' => $max);
-                        $data['value'][] = $metric['value'];
-                        $value[]         = $metric['value'];
-                    }
-                    $seriesData[] = $data;
-                }
+                /* 通过sql查询数据，并且处理数据。 */
+                /* Query data by sql and process data. */
+                if($settings && isset($settings->metric)) $value = $this->screenTao->processRadarData($this->setFilterSQL($chart), $settings, $indicator, $seriesData);
 
                 $component->option->dataset->radarIndicator   = $indicator;
                 $component->option->radar->indicator          = $indicator;
@@ -1454,6 +1545,8 @@ class screenModel extends model
     public function getBurnData(): array
     {
         $type       = 'withdelay';
+        /* 获取所有正在进行的执行和阶段。 */
+        /* Get all sprint and stage which are doing. */
         $executions = $this->loadModel('execution')->getList(0, 'sprint', 'doing') + $this->execution->getList(0, 'stage', 'doing');
 
         $executionData = array();
@@ -1462,24 +1555,31 @@ class screenModel extends model
         {
             $execution = $this->execution->getByID($executionID);
 
-            /* Splice project name for the execution name. */
+            /* 如果执行的项目不存在，跳过。 */
             $project = $this->loadModel('project')->getByID($execution->project);
             if(!$project) continue;
 
+            /* 更新执行的名称格式为"{执行所属的项目名称}-{执行名称}"。 */
+            /* Update execution name format to "{project name}-{execution name}". */
             $execution->name = $project->name . '--' . $execution->name;
 
-            /* Get date list. */
+            /* 过滤数据。 */
+            /* Filter data. */
             if(((strpos('closed,suspended', $execution->status) === false && helper::today() > $execution->end)
                 || ($execution->status == 'closed'    && substr($execution->closedDate, 0, 10) > $execution->end)
                 || ($execution->status == 'suspended' && $execution->suspendedDate > $execution->end))
                 && strpos($type, 'delay') === false)
                 $type .= ',withdelay';
 
+            /* 处理执行的截止日期。 */
+            /* Process execution deadline. */
             $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
             $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
             $endDate  = (strpos($type, 'withdelay') !== false && $deadline > $execution->end) ? $deadline : $execution->end;
             list($dateList) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $deadline);
 
+            /* 处理执行的延迟日期。 */
+            /* Process execution delay date. */
             $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
             $chartData    = $this->execution->buildBurnData($executionID, $dateList, 'left', $executionEnd);
             $chartData['baseLine']  = json_encode($chartData['baseLine']);
@@ -1493,6 +1593,7 @@ class screenModel extends model
     }
 
     /**
+     * 初始化图表。
      * Init component.
      *
      * @param  object $chart
@@ -1503,6 +1604,8 @@ class screenModel extends model
      */
     public function initComponent(object $chart, string $type, object $component): void
     {
+        /* 如果组件或者图表配置不存在，返回空对象。 */
+        /* If component or chart config is not exist, return empty object. */
         if(!$component)
         {
             $component = new stdclass();
@@ -1512,10 +1615,14 @@ class screenModel extends model
 
         $settings = is_string($chart->settings) ? json_decode($chart->settings) : $chart->settings;
 
+        /* 设置组件的默认值。 */
+        /* Set component defaults. */
         if(!isset($component->id))       $component->id       = $chart->id;
         if(!isset($component->sourceID)) $component->sourceID = $chart->id;
         if(!isset($component->title))    $component->title    = $chart->name;
 
+        /* 设置图表类型。 */
+        /* Set chart type. */
         if($type == 'chart') $chartType = ($chart->builtin && !in_array($chart->id, $this->config->screen->builtinChart)) ? $chart->type : current($settings)->type;
         if($type == 'pivot') $chartType = 'table';
         $component->type = $chartType;
@@ -1532,7 +1639,8 @@ class screenModel extends model
             $typeChanged = $chartType != $componentType;
         }
 
-        // New component type or change component type.
+        /* 修改图表配置。 */
+        /* Modify chart config. */
         if(!isset($component->chartConfig) || $typeChanged)
         {
             $chartConfig = json_decode(zget($this->config->screen->chartConfig, $chartType));
