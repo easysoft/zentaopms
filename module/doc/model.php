@@ -288,22 +288,26 @@ class docModel extends model
     /**
      * Update api lib.
      *
-     * @param  int   $id
+     * @param  int       $id
+     * @param  object    $formData
      * @access public
      * @return array|int
      */
-    public function updateApiLib($id)
+    public function updateApiLib($id, $formData = null)
     {
         $oldLib = $this->getLibByID($id);
 
-        $data = fixer::input('post')
-            ->trim('name')
-            ->add('product', $oldLib->product)
-            ->add('project', $oldLib->project)
-            ->join('groups', ',')
-            ->join('users', ',')
-            ->remove('uid,contactListMenu,type')
-            ->get();
+        if(!$formData)
+        {
+            $formData = fixer::input('post')
+                ->trim('name')
+                ->add('product', $oldLib->product)
+                ->add('project', $oldLib->project)
+                ->join('groups', ',')
+                ->join('users', ',')
+                ->remove('uid,contactListMenu')
+                ->get();
+        }
 
         $this->app->loadLang('api');
 
@@ -313,22 +317,22 @@ class docModel extends model
         $this->lang->doclib->project = $this->lang->api->project;
         $this->lang->doclib->product = $this->lang->api->product;
 
-        $this->checkApiLibName($data, $this->post->type, $id);
+        $this->checkApiLibName($formData, $formData->type, $id);
 
         if(dao::isError()) return false;
 
-        $data->type = static::DOC_TYPE_API;
-        $this->dao->update(TABLE_DOCLIB)->data($data)->autoCheck()
+        $formData->type = static::DOC_TYPE_API;
+        $this->dao->update(TABLE_DOCLIB)->data($formData, 'type')->autoCheck()
             ->batchCheck($this->config->api->editlib->requiredFields, 'notempty')
             ->where('id')->eq($id)
             ->exec();
 
-        $changes = array();
-        if(!dao::isError())
+        if(dao::isError()) return false;
+
+        $changes  = common::createChanges($oldLib, $formData);
+        if($changes)
         {
-            $this->loadModel('action');
-            $changes  = common::createChanges($oldLib, $data);
-            $actionID = $this->action->create('docLib', $id, 'Edited');
+            $actionID = $this->loadModel('action')->create('docLib', $id, 'Edited');
             $this->action->logHistory($actionID, $changes);
         }
         return $changes;

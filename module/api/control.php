@@ -346,9 +346,10 @@ class api extends control
     }
 
     /**
+     * 创建一个接口文档库。
      * Create a api doc library.
      *
-     * @param  string $type project|product
+     * @param  string $type     project|product
      * @param  int    $objectID
      * @access public
      * @return void
@@ -357,6 +358,7 @@ class api extends control
     {
         if(!empty($_POST))
         {
+            /* 组装formData。 */
             $formData = form::data($this->config->api->form->createLib)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
             $formData->product   = $formData->libType == 'product' && !empty($formData->product)   ? $formData->product   : 0;
             $formData->project   = $formData->libType == 'project' && !empty($formData->project)   ? $formData->project   : 0;
@@ -388,35 +390,34 @@ class api extends control
     }
 
     /**
+     * 编辑一个接口文档库。
      * Edit an api doc library
      *
-     * @param  int     $id
+     * @param  int    $id
      * @access public
      * @return void
      */
-    public function editLib($id)
+    public function editLib(int $id)
     {
+        $lib = $this->doc->getLibById($id);
+
         if(!empty($_POST))
         {
-            $this->doc->updateApiLib($id);
+            /* 组装formData。 */
+            $formData = form::data($this->config->api->form->editLib)->add('id', $id)->get();
+            $formData->product   = $lib->product;
+            $formData->project   = $lib->project;
+            $formData->execution = $lib->execution;
+
+            $this->doc->updateApiLib($id, $formData);
 
             if(dao::isError()) return $this->sendError(dao::getError());
-
             return $this->sendSuccess(array('message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
-        $lib  = $this->doc->getLibById($id);
-        $type = 'nolink';
-        if(!empty($lib->product))
-        {
-            $type = 'product';
-            $this->view->object = $this->loadModel('product')->getByID($lib->product);
-        }
-        if(!empty($lib->project))
-        {
-            $type = 'project';
-            $this->view->object = $this->loadModel('project')->getById($lib->project);
-        }
+        $type   = $lib->product ? 'product' : ($lib->project ? 'project' : 'nolink');
+        $object = $lib->product ? $this->loadModel('product')->getByID($lib->product) : $this->loadModel('project')->getById($lib->project);
+
         if($type != 'nolink') $this->lang->api->aclList['default'] = sprintf($this->lang->doclib->aclList['default'], $this->lang->{$type}->common);
         if($type == 'nolink') unset($this->lang->api->aclList['default']);
 
@@ -426,7 +427,6 @@ class api extends control
         $this->view->users    = $this->user->getPairs('nocode|noclosed');
         $this->view->projects = $this->loadModel('project')->getPairsByModel();
         $this->view->products = $this->loadModel('product')->getPairs();
-
         $this->display();
     }
 
