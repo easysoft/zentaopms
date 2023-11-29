@@ -233,7 +233,7 @@ class doc extends control
                 $actionID = $this->action->create('docLib', $libID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            $docLib   = $this->doc->getLibById($libID);
+            $docLib   = $this->doc->getLibByID($libID);
             $objectID = 0;
             if(strpos('product,project,execution', $docLib->type) !== false)
             {
@@ -523,7 +523,7 @@ class doc extends control
             $link     = $this->createLink('doc', 'view', "docID={$docID}");
             $oldLib   = $doc->lib;
             $doc      = $this->doc->getById($docID);
-            $lib      = $this->doc->getLibById($doc->lib);
+            $lib      = $this->doc->getLibByID($doc->lib);
             $objectID = zget($lib, $lib->type, 0);
             if(!$this->doc->checkPrivDoc($doc))
             {
@@ -922,7 +922,7 @@ class doc extends control
      */
     public function ajaxGetWhitelist($doclibID, $acl = '', $control = '', $docID = 0)
     {
-        $doclib        = $this->doc->getLibById($doclibID);
+        $doclib        = $this->doc->getLibByID($doclibID);
         $doc           = $docID ? $this->doc->getById($docID) : null;
         $users         = $this->user->getPairs('noletter|noempty|noclosed');
         $selectedUser  = $docID ? $doc->users : $doclib->users;
@@ -1059,7 +1059,7 @@ class doc extends control
             return print(js::error($this->lang->notFound) . js::locate($this->inlink('index')));
         }
 
-        $lib = $this->doc->getLibById($doc->lib);
+        $lib = $this->doc->getLibByID($doc->lib);
         if(!empty($lib) and $lib->deleted == '1') $appendLib = $doc->id;
 
         $objectType = isset($lib->type) ? $lib->type : 'custom';
@@ -1194,7 +1194,7 @@ class doc extends control
 
         $libID   = (int)$libID;
         $title   = $type == 'custom' ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
-        $lib     = $this->doc->getLibById($libID);
+        $lib     = $this->doc->getLibByID($libID);
         $libType = isset($lib->type) && $lib->type == 'api' ? 'api' : 'lib';
 
         /* Build the search form. */

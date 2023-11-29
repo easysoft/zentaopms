@@ -23,13 +23,14 @@ class docModel extends model
     const DOC_TYPE_REST = 'restapi';
 
     /**
+     * 通过ID获取文档库信息。
      * Get library by id.
      *
-     * @param  int $libID
+     * @param  int         $libID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getLibById($libID)
+    public function getLibByID(int $libID): object|bool
     {
         return $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch();
     }
@@ -287,7 +288,7 @@ class docModel extends model
      */
     public function updateApiLib($id)
     {
-        $oldLib = $this->getLibById($id);
+        $oldLib = $this->getLibByID($id);
 
         $data = fixer::input('post')
             ->trim('name')
@@ -337,7 +338,7 @@ class docModel extends model
     public function updateLib($libID)
     {
         $libID  = (int)$libID;
-        $oldLib = $this->getLibById($libID);
+        $oldLib = $this->getLibByID($libID);
         $lib    = fixer::input('post')
             ->setDefault('users', '')
             ->setDefault('groups', '')
@@ -1275,7 +1276,7 @@ class docModel extends model
         if($object->status == 'normal' and $this->app->user->admin) return true;
 
         static $libs = array();
-        if(!isset($libs[$object->lib])) $libs[$object->lib] = $this->getLibById($object->lib);
+        if(!isset($libs[$object->lib])) $libs[$object->lib] = $this->getLibByID($object->lib);
         if(!$this->checkPrivLib($libs[$object->lib])) return false;
         if(in_array($object->acl, array('open', 'public'))) return true;
 
@@ -2727,7 +2728,7 @@ class docModel extends model
     {
         if(empty($type))
         {
-            $doclib   = $this->getLibById($libID);
+            $doclib   = $this->getLibByID($libID);
             $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
             $objectID = isset($doclib->{$type}) ? $doclib->{$type} : 0;
         }
