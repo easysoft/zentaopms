@@ -123,7 +123,7 @@ class api extends control
         $linkObject = zget($lib, $type, 0);
         $spaceType  = 'api';
         $moduleID   = $api->module;
-        $linkParams = "libID=%s";
+        $linkParams = "%s";
         if($this->app->tab != 'doc' && $type != 'nolink') $linkParams = "objectID=$linkObject&$linkParams";
 
         /* 解析cookie并获取左侧目录树。 */
@@ -432,17 +432,18 @@ class api extends control
 
 
     /**
+     * 删除一个接口文档库。
      * Delete api library.
      *
      * @param  int    $libID
      * @access public
      * @return void
      */
-    public function deleteLib($libID)
+    public function deleteLib(int $libID)
     {
         $this->doc->delete(TABLE_DOCLIB, $libID);
-        if(isInModal()) return $this->send(array('result' => 'success', 'load' => $this->createLink('api', 'index'), 'closeModal' => true, 'app' => $this->app->tab));
 
+        if(isInModal()) return $this->send(array('result' => 'success', 'load' => $this->createLink('api', 'index'), 'closeModal' => true, 'app' => $this->app->tab));
         return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true, 'app' => $this->app->tab));
     }
 
