@@ -786,4 +786,22 @@ class docTest
         if(dao::isError()) return dao::getError();
         return implode(';', $docIdList);
     }
+
+    /**
+     * 获取我的空间下的文档列表数据。
+     * Get doc list under the my space.
+     *
+     * @param  string $type
+     * @param  string $browseType
+     * @param  string $query
+     * @access public
+     * @return array
+     */
+    public function getMySpaceDocsTest(string $type, string $browseType, string $query = ''): array
+    {
+        $docs = $this->objectModel->getMySpaceDocs($type, $browseType, 'id_desc', $query);
+
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
 }
