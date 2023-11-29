@@ -22,7 +22,7 @@ $config->program->form->edit['name']      = array('type' => 'string',   'control
 $config->program->form->edit['PM']        = array('type' => 'string',   'control' => 'picker',     'required' => false, 'default' => 0);
 $config->program->form->edit['budget']    = array('type' => 'string',   'control' => 'text',       'required' => false, 'default' => '');
 $config->program->form->edit['begin']     = array('type' => 'date',     'control' => 'datepicker', 'required' => true,  'default' => '');
-$config->program->form->edit['end']       = array('type' => 'date',     'control' => 'datepicker', 'required' => true,  'default' => '');
+$config->program->form->edit['end']       = array('type' => 'date',     'control' => 'datepicker', 'required' => false, 'default' => '');
 $config->program->form->edit['desc']      = array('type' => 'string',   'control' => 'editor',     'required' => false, 'default' => '');
 $config->program->form->edit['acl']       = array('type' => 'string',   'control' => 'radio',      'required' => false, 'default' => '');
 $config->program->form->edit['whitelist'] = array('type' => 'array',    'control' => 'picker',     'required' => false, 'default' => '', 'filter' => 'join');

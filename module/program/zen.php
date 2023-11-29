@@ -71,7 +71,11 @@ class programZen extends program
         $oldProgram   = $this->program->fetchByID($programID);
         $fields       = $this->config->program->form->edit;
         $editorFields = array_keys(array_filter(array_map(function($config){return $config['control'] == 'editor';}, $fields)));
-        foreach(explode(',', trim($this->config->program->edit->requiredFields, ',')) as $field) $fields[$field]['required'] = true;
+        foreach(explode(',', trim($this->config->program->edit->requiredFields, ',')) as $field)
+        {
+            if($field == 'end') continue;
+            $fields[$field]['required'] = true;
+        }
 
         $this->app->loadConfig('project');
         $program = form::data($fields)
