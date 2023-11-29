@@ -1006,21 +1006,26 @@ class user extends control
     }
 
     /**
-     * AJAX: 获取联系人列表人员。
-     * AJAX: get users from a contact list.
+     * AJAX: 获取某个联系人列表中包含的用户。
+     * AJAX: Get users in a contact list.
      *
      * @param  int    $contactListID
      * @access public
-     * @return string
+     * @return void
      */
     public function ajaxGetContactUsers(int $contactListID)
     {
-        $list  = $contactListID ? $this->user->getContactListByID($contactListID) : '';
-        $users = $this->user->getContactUserPairs($list ? $list->userList : '');
+        if(!$contactListID) return $this->send(array());
 
-        $items = array();
-        foreach($users as $userID => $userName) $items[] = array('text' => $userName, 'value' => $userID);
-        return print(json_encode($items));
+        $list = $this->user->getContactListByID($contactListID);
+        if(!$list) return $this->send(array());
+
+        $accountList = array_filter(array_unique(explode(',', $list->userList)));
+        if(!$accountList) return $this->send(array());
+
+        $users = $this->user->getListByAccounts($accountList);
+        $items = array_map(function($user){return array('text' => $user->realname, 'value' => $user->account);}, $users);
+        return $this->send(array_values($items));
     }
 
     /**
