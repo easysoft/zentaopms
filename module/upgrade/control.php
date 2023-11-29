@@ -146,7 +146,8 @@ class upgrade extends control
         session_write_close();
         $this->session->set('step', '');
 
-        $this->view->title = $this->lang->upgrade->result;
+        $this->view->title       = $this->lang->upgrade->result;
+        $this->view->fromVersion = $fromVersion;
 
         $result = $this->upgrade->deleteFiles();
         if($result)
@@ -230,9 +231,8 @@ class upgrade extends control
             $this->locate(inlink('afterExec', "fromVersion={$fromVersion}"));
         }
 
-        $this->view->result      = 'sqlFail';
-        $this->view->fromVersion = $fromVersion;
-        $this->view->errors      = $this->upgrade->getError();
+        $this->view->result = 'sqlFail';
+        $this->view->errors = $this->upgrade->getError();
         $this->display();
     }
 

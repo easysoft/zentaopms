@@ -9173,7 +9173,7 @@ class upgradeModel extends model
             $this->setting->setItem('system.block.closed', $closedBlocks);
         }
 
-        $this->dao->delete()->from(TABLE_BLOCK)->where('block')->eq('waterfallgeneralreport')->exec();
+        $this->dao->delete()->from(TABLE_BLOCK)->where('code')->eq('waterfallgeneralreport')->exec();
 
         return true;
     }
