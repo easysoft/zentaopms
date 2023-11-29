@@ -18,11 +18,6 @@ class header extends wg
         'toolbar'         => array('map' => 'btn')
     );
 
-    public static function getPageJS(): string|false
-    {
-        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-    }
-
     protected function buildHeading()
     {
         if($this->hasBlock('heading')) return $this->block('heading');

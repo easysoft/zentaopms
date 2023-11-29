@@ -996,7 +996,7 @@ class user extends control
             $this->app->user->avatar = $image->webPath;
             $this->session->set('user', $this->app->user);
             $this->dao->update(TABLE_USER)->set('avatar')->eq($image->webPath)->where('account')->eq($this->app->user->account)->exec();
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('" . $this->createLink('my', 'profile') . "', 'profile', {}, window.updateUserAvatar);"));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('" . $this->createLink('my', 'profile') . "', 'profile', {}, $.apps.updateUserToolbar);"));
         }
 
         $this->view->title = $this->lang->user->cropAvatar;
