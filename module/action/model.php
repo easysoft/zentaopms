@@ -2038,4 +2038,16 @@ class actionModel extends model
         $this->dao->delete()->from(TABLE_ACTIONRECENT)->where('date')->lt($lastMonth)->exec();
         return !dao::isError();
     }
+
+    /**
+     * 获取最早的动态记录。
+     * Get the first action.
+     *
+     * @access public
+     * @return object|bool
+     */
+    public function getFirstAction(): object|bool
+    {
+        return $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id')->limit(1)->fetch();
+    }
 }

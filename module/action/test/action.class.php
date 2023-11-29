@@ -755,4 +755,20 @@ class actionTest
 
         return count($objects);
     }
+
+    /**
+     * 测试获取第一条动态。
+     * Test get first action.
+     *
+     * @access public
+     * @return array|object
+     */
+    public function getFirstActionTest(): array|object
+    {
+        $object = $this->objectModel->getFirstAction();
+
+        if(dao::isError()) return dao::getError();
+
+        return $object;
+    }
 }
