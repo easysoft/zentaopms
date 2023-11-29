@@ -382,8 +382,8 @@ $lang->project->ipdTitle           = "集成产品开发";
 $lang->project->scrumTitle         = "敏捷开发全流程{$lang->projectCommon}管理";
 $lang->project->waterfallTitle     = "瀑布式{$lang->projectCommon}管理";
 $lang->project->kanbanTitle        = "专业研发看板{$lang->projectCommon}管理";
-$lang->project->agileplusTitle     = "敏捷+看板{$lang->projectCommon}管理";
-$lang->project->waterfallplusTitle = "瀑布+敏捷+看板{$lang->projectCommon}管理";
+$lang->project->agileplusTitle     = "Scrum+看板{$lang->projectCommon}管理";
+$lang->project->waterfallplusTitle = "瀑布+Scrum+看板{$lang->projectCommon}管理";
 $lang->project->moreModelTitle     = '更多模型敬请期待...';
 
 $lang->project->empty                  = "暂时没有{$lang->projectCommon}";

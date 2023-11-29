@@ -378,8 +378,8 @@ $lang->project->ipdTitle           = "Integrated Product Development";
 $lang->project->scrumTitle         = 'Agile Development Management';
 $lang->project->waterfallTitle     = "Waterfall {$lang->projectCommon} Management";
 $lang->project->kanbanTitle        = "Kanban {$lang->projectCommon} Management";
-$lang->project->agileplusTitle     = "Agile + Kanban {$lang->projectCommon} Management";
-$lang->project->waterfallplusTitle = "Waterfall + Agile + Kanban {$lang->projectCommon} Management";
+$lang->project->agileplusTitle     = "Scrum + Kanban {$lang->projectCommon} Management";
+$lang->project->waterfallplusTitle = "Waterfall + Scrum + Kanban {$lang->projectCommon} Management";
 $lang->project->moreModelTitle     = 'Please look forward to more models...';
 
 $lang->project->empty                  = "No {$lang->projectCommon}.";
