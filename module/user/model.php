@@ -1030,26 +1030,31 @@ class userModel extends model
     }
 
     /**
+     * 根据界面类型获取权限组。
      * Get groups by visions.
      *
-     * @param  array $visions
+     * @param  string|array $visions
      * @access public
      * @return array
      */
-    public function getGroupsByVisions($visions)
+    public function getGroupsByVisions(string|array $visions): array
     {
-        if(!is_array($visions)) return array();
+        if(is_string($visions)) $visions = array_unique(array_filter(explode(',', $visions)));
+        if(!$visions) return array();
+
         $groups = $this->dao->select('id, name, vision')->from(TABLE_GROUP)
             ->where('project')->eq(0)
             ->andWhere('vision')->in($visions)
             ->fetchAll('id');
 
-        $visionList = $this->getVisionList();
+        $visionCount = count($visions);
+        $visionList  = $this->getVisionList();
 
-        foreach($groups as $key => $group)
+        foreach($groups as $id => $group)
         {
-            $groups[$key] = $group->name;
-            if(count($visions) > 1) $groups[$key] = $visionList[$group->vision] . ' / ' . $group->name;
+            $groups[$id] = $group->name;
+
+            if($visionCount > 1) $groups[$id] = $visionList[$group->vision] . ' / ' . $group->name;
         }
 
         return $groups;
