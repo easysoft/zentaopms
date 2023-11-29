@@ -557,14 +557,13 @@ class user extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
-        $user        = $this->user->getById($userID, 'id');
-        $userVisions = explode(',', trim($user->visions, ','));
-        $userGroups  = $this->loadModel('group')->getByAccount($user->account, count($userVisions) > 1);
+        $user       = $this->user->getById($userID, 'id');
+        $userGroups = $this->loadModel('group')->getByAccount($user->account, true);
 
         $this->view->title      = $this->lang->user->edit;
         $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
         $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
-        $this->view->groups     = $this->user->getGroupsByVisions($userVisions);
+        $this->view->groups     = $this->user->getGroupsByVisions($user->visions);
         $this->view->rand       = $this->user->updateSessionRandom();
         $this->view->visions    = $this->user->getVisionList();
         $this->view->userGroups = array_keys($userGroups);
