@@ -54,12 +54,13 @@
             if(DEBUG) console.log('[APP]', 'update:', {code, url, title});
             return state;
         },
-        isOldPage:      () => false,
-        reloadApp:      function(_code, url){loadPage(url);},
-        openApp:        function(url, options){loadPage(url, options);},
-        goBack:         function(){history.go(-1);},
-        changeAppsLang: changeAppLang,
-        changeAppsTheme: changeAppTheme
+        isOldPage:         () => false,
+        reloadApp:         function(_code, url){loadPage(url);},
+        openApp:           function(url, options){loadPage(url, options);},
+        goBack:            function(){history.go(-1);},
+        changeAppsLang:    changeAppLang,
+        changeAppsTheme:   changeAppTheme,
+        updateUserToolbar: function(){loadPage({selector: '#toolbar', partial: true, target: '#toolbar'})},
     }, parent.window.$.apps);
 
     const renderMap =
@@ -95,7 +96,7 @@
 
     function initZinbar()
     {
-        if(!DEBUG || isIndexPage) return;
+        if(!DEBUG || DEBUG < 3 || isIndexPage) return;
         let $bar = $('#zinbar');
         if($bar.length) return;
 

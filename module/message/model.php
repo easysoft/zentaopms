@@ -224,12 +224,13 @@ class messageModel extends model
     }
 
     /**
+     * 获取提示待办。
      * Get notice todos.
      *
      * @access public
      * @return array
      */
-    public function getNoticeTodos()
+    public function getNoticeTodos(): array
     {
         $todos    = $this->loadModel('todo')->getList('today', $this->app->user->account, 'wait');
         $notices  = array();
@@ -237,21 +238,23 @@ class messageModel extends model
         $interval = 60;
         if($todos)
         {
-            $begins[1]  = date('Hi', strtotime($now));
-            $ends[1]    = date('Hi', strtotime("+$interval seconds $now"));
-            $begins[10] = date('Hi', strtotime("+10 minute $now"));
-            $ends[10]   = date('Hi', strtotime("+10 minute $interval seconds $now"));
-            $begins[30] = date('Hi', strtotime("+30 minute $now"));
-            $ends[30]   = date('Hi', strtotime("+30 minute $interval seconds $now"));
+            /* Set date array. */
+            $begins[1]  = (int)date('Hi', strtotime($now));
+            $begins[10] = (int)date('Hi', strtotime("+10 minute {$now}"));
+            $begins[30] = (int)date('Hi', strtotime("+30 minute {$now}"));
+            $ends[1]    = (int)date('Hi', strtotime("+{$interval} seconds {$now}"));
+            $ends[10]   = (int)date('Hi', strtotime("+10 minute {$interval} seconds {$now}"));
+            $ends[30]   = (int)date('Hi', strtotime("+30 minute {$interval} seconds {$now}"));
             foreach($todos as $todo)
             {
                 if(empty($todo->begin)) continue;
-                $time = str_replace(':', '', $todo->begin);
+                $time = (int)str_replace(':', '', $todo->begin);
 
                 $lastTime = 0;
-                if((int)$time > (int)$begins[1]  and (int)$time <= (int)$ends[1])  $lastTime = 1;
-                if((int)$time > (int)$begins[10] and (int)$time <= (int)$ends[10]) $lastTime = 10;
-                if((int)$time > (int)$begins[30] and (int)$time <= (int)$ends[30]) $lastTime = 30;
+                if($time > $begins[1]  && $time <= $ends[1])  $lastTime = 1;
+                if($time > $begins[10] && $time <= $ends[10]) $lastTime = 10;
+                if($time > $begins[30] && $time <= $ends[30]) $lastTime = 30;
+                /* If the todo needs to be reminded, add it to notices array. */
                 if($lastTime)
                 {
                     $notice = new stdclass();

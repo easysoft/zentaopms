@@ -1030,26 +1030,31 @@ class userModel extends model
     }
 
     /**
+     * 根据界面类型获取权限组。
      * Get groups by visions.
      *
-     * @param  array $visions
+     * @param  string|array $visions
      * @access public
      * @return array
      */
-    public function getGroupsByVisions($visions)
+    public function getGroupsByVisions(string|array $visions): array
     {
-        if(!is_array($visions)) return array();
+        if(is_string($visions)) $visions = array_unique(array_filter(explode(',', $visions)));
+        if(!$visions) return array();
+
         $groups = $this->dao->select('id, name, vision')->from(TABLE_GROUP)
             ->where('project')->eq(0)
             ->andWhere('vision')->in($visions)
             ->fetchAll('id');
 
-        $visionList = $this->getVisionList();
+        $visionCount = count($visions);
+        $visionList  = $this->getVisionList();
 
-        foreach($groups as $key => $group)
+        foreach($groups as $id => $group)
         {
-            $groups[$key] = $group->name;
-            if(count($visions) > 1) $groups[$key] = $visionList[$group->vision] . ' / ' . $group->name;
+            $groups[$id] = $group->name;
+
+            if($visionCount > 1) $groups[$id] = $visionList[$group->vision] . ' / ' . $group->name;
         }
 
         return $groups;
@@ -1258,28 +1263,26 @@ class userModel extends model
     }
 
     /**
-     * Get contact list of a user.
+     * 获取某个用户可以查看的联系人列表。
+     * Get the contact list of a user.
      *
      * @param  string $account
-     * @param  string $params  withempty|withnote
      * @param  string $mode    pairs|list
      * @access public
      * @return array
      */
-    public function getContactLists(string $account, string $params = '', string $mode = 'pairs'): array
+    public function getContactLists(string $account = '', string $mode = 'pairs'): array
     {
+        if(!$account) $account = $this->app->user->account;
+
         $this->dao->select('*')->from(TABLE_USERCONTACT)
             ->where('account')->eq($account)
             ->orWhere('public')->eq(1)
             ->orderBy('public, id_desc');
 
-        $contacts = $mode == 'pairs' ? $this->dao->fetchPairs('id', 'listName') : $this->dao->fetchAll();
-        if(empty($contacts)) return array();
+        if($mode == 'pairs') return $this->dao->fetchPairs('id', 'listName');
 
-        if(strpos($params, 'withempty') !== false) $contacts = array('' => '') + $contacts;
-        if(strpos($params, 'withnote')  !== false) $contacts = array('' => $this->lang->user->contacts->common) + $contacts;
-
-        return $contacts;
+        return $this->dao->fetchAll();
     }
 
     /**
@@ -1317,18 +1320,6 @@ class userModel extends model
     public function getContactListByID($listID)
     {
         return $this->dao->select('*')->from(TABLE_USERCONTACT)->where('id')->eq($listID)->fetch();
-    }
-
-    /**
-     * Get user account and realname pairs from a contact list.
-     *
-     * @param  string|array    $accountList
-     * @access public
-     * @return array
-     */
-    public function getContactUserPairs($accountList)
-    {
-        return $this->dao->select('account, realname')->from(TABLE_USER)->where('account')->in($accountList)->fetchPairs();
     }
 
     /**

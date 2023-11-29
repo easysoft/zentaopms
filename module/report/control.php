@@ -12,6 +12,7 @@
 class report extends control
 {
     /**
+     * 项目ID。
      * The projectID.
      *
      * @var float
@@ -20,6 +21,7 @@ class report extends control
     public $projectID = 0;
 
     /**
+     * 构造函数。
      * Construct.
      *
      * @access public
@@ -31,7 +33,8 @@ class report extends control
     }
 
     /**
-     * The index of report, goto project deviation.
+     * 报告主页，跳转到年度数据。
+     * The index of report, goto aunnual data.
      *
      * @access public
      * @return void
@@ -42,6 +45,7 @@ class report extends control
     }
 
     /**
+     * 发送每日提醒邮件。
      * Send daily reminder mail.
      *
      * @access public
@@ -49,40 +53,25 @@ class report extends control
      */
     public function remind()
     {
-        $bugs = $tasks = $todos = $testTasks = array();
-        if($this->config->report->dailyreminder->bug)      $bugs  = $this->report->getUserBugs();
-        if($this->config->report->dailyreminder->task)     $tasks = $this->report->getUserTasks();
-        if($this->config->report->dailyreminder->todo)     $todos = $this->report->getUserTodos();
-        if($this->config->report->dailyreminder->testTask) $testTasks = $this->report->getUserTestTasks();
-
-        $reminder = array();
-
-        $users = array_unique(array_merge(array_keys($bugs), array_keys($tasks), array_keys($todos), array_keys($testTasks)));
-        if(!empty($users)) foreach($users as $user) $reminder[$user] = new stdclass();
-
-        if(!empty($bugs))  foreach($bugs as $user => $bug)   $reminder[$user]->bugs  = $bug;
-        if(!empty($tasks)) foreach($tasks as $user => $task) $reminder[$user]->tasks = $task;
-        if(!empty($todos)) foreach($todos as $user => $todo) $reminder[$user]->todos = $todo;
-        if(!empty($testTasks)) foreach($testTasks as $user => $testTask) $reminder[$user]->testTasks = $testTask;
-
+        /* Check mail turnon, if the system doesn't turn on the e-mail function, return the tip. */
         $this->loadModel('mail');
-
-        /* Check mail turnon.*/
         if(!$this->config->mail->turnon)
         {
             echo "You should turn on the Email feature first.\n";
             return false;
         }
 
+        /* Get reminder, and send email. */
+        $reminder = $this->reportZen->getReminder();
         foreach($reminder as $user => $mail)
         {
             /* Reset $this->output. */
             $this->clear();
 
             $mailTitle  = $this->lang->report->mailTitle->begin;
-            $mailTitle .= isset($mail->bugs)  ? sprintf($this->lang->report->mailTitle->bug,  count($mail->bugs))  : '';
-            $mailTitle .= isset($mail->tasks) ? sprintf($this->lang->report->mailTitle->task, count($mail->tasks)) : '';
-            $mailTitle .= isset($mail->todos) ? sprintf($this->lang->report->mailTitle->todo, count($mail->todos)) : '';
+            $mailTitle .= isset($mail->bugs)      ? sprintf($this->lang->report->mailTitle->bug,      count($mail->bugs))      : '';
+            $mailTitle .= isset($mail->tasks)     ? sprintf($this->lang->report->mailTitle->task,     count($mail->tasks))     : '';
+            $mailTitle .= isset($mail->todos)     ? sprintf($this->lang->report->mailTitle->todo,     count($mail->todos))     : '';
             $mailTitle .= isset($mail->testTasks) ? sprintf($this->lang->report->mailTitle->testTask, count($mail->testTasks)) : '';
             $mailTitle  = rtrim($mailTitle, ',');
 
@@ -92,11 +81,11 @@ class report extends control
 
             $oldViewType = $this->viewType;
             if($oldViewType == 'json') $this->viewType = 'html';
-            $mailContent = $this->parse('report', 'dailyreminder');
-            $this->viewType == $oldViewType;
+            $mailContent    = $this->parse('report', 'dailyreminder');
+            $this->viewType = $oldViewType;
 
             /* Send email.*/
-            echo date('Y-m-d H:i:s') . " sending to $user, ";
+            echo date('Y-m-d H:i:s') . " sending to {$user}, ";
             $this->mail->send($user, $mailTitle, $mailContent, '', true);
             if($this->mail->isError())
             {

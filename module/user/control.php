@@ -557,14 +557,13 @@ class user extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
-        $user        = $this->user->getById($userID, 'id');
-        $userVisions = explode(',', trim($user->visions, ','));
-        $userGroups  = $this->loadModel('group')->getByAccount($user->account, count($userVisions) > 1);
+        $user       = $this->user->getById($userID, 'id');
+        $userGroups = $this->loadModel('group')->getByAccount($user->account, true);
 
         $this->view->title      = $this->lang->user->edit;
         $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
         $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
-        $this->view->groups     = $this->user->getGroupsByVisions($userVisions);
+        $this->view->groups     = $this->user->getGroupsByVisions($user->visions);
         $this->view->rand       = $this->user->updateSessionRandom();
         $this->view->visions    = $this->user->getVisionList();
         $this->view->userGroups = array_keys($userGroups);
@@ -977,95 +976,82 @@ class user extends control
         $this->display();
     }
 
-	/**
-     * crop avatar
+    /**
+     * 裁剪头像。
+     * Crop avatar.
      *
-     * @param  int    $image
+     * @param  int    $imageID
      * @access public
      * @return void
      */
-    public function cropAvatar($image)
+    public function cropAvatar(int $imageID)
     {
-        $image = $this->loadModel('file')->getByID($image);
+        $image = $this->loadModel('file')->getByID($imageID);
 
         if(!empty($_POST))
         {
-            $size = fixer::input('post')->get();
+            $size = form::data($this->config->user->form->cropAvatar)->get();
             $this->file->cropImage($image->realPath, $image->realPath, $size->left, $size->top, $size->right - $size->left, $size->bottom - $size->top, $size->scaled ? $size->scaleWidth : 0, $size->scaled ? $size->scaleHeight : 0);
 
             $this->app->user->avatar = $image->webPath;
             $this->session->set('user', $this->app->user);
             $this->dao->update(TABLE_USER)->set('avatar')->eq($image->webPath)->where('account')->eq($this->app->user->account)->exec();
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('" . helper::createLink('my', 'profile') . "', 'profile', {}, window.updateUserAvatar);"));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('" . $this->createLink('my', 'profile') . "', 'profile', {}, $.apps.updateUserToolbar);"));
         }
 
-        $this->view->user  = $this->user->getById($this->app->user->account);
         $this->view->title = $this->lang->user->cropAvatar;
         $this->view->image = $image;
         $this->display();
     }
 
     /**
-     * Get user for ajax
-     *
-     * @param  string $requestID
-     * @param  string $assignedTo
-     * @access public
-     * @return void
-     */
-    public function ajaxGetUser($taskID = '', $assignedTo = '')
-    {
-        $users = $this->user->getPairs('noletter, noclosed');
-        $html = "<form method='post' target='hiddenwin' action='" . $this->createLink('task', 'assignedTo', "taskID=$taskID&assignedTo=$assignedTo") . "'>";
-        $html .= html::select('assignedTo', $users, $assignedTo);
-        $html .= html::submitButton('', '', 'btn btn-primary');
-        $html .= '</form>';
-        echo $html;
-    }
-
-    /**
-     * AJAX: 获取联系人列表人员。
-     * AJAX: get users from a contact list.
+     * AJAX: 获取某个联系人列表中包含的用户。
+     * AJAX: Get users in a contact list.
      *
      * @param  int    $contactListID
      * @access public
-     * @return string
+     * @return void
      */
     public function ajaxGetContactUsers(int $contactListID)
     {
-        $list  = $contactListID ? $this->user->getContactListByID($contactListID) : '';
-        $users = $this->user->getContactUserPairs($list ? $list->userList : '');
+        if(!$contactListID) return $this->send(array());
 
-        $items = array();
-        foreach($users as $userID => $userName) $items[] = array('text' => $userName, 'value' => $userID);
-        return print(json_encode($items));
+        $list = $this->user->getContactListByID($contactListID);
+        if(!$list) return $this->send(array());
+
+        $accountList = array_filter(array_unique(explode(',', $list->userList)));
+        if(!$accountList) return $this->send(array());
+
+        $users = $this->user->getListByAccounts($accountList);
+        $items = array_map(function($user){return array('text' => $user->realname, 'value' => $user->account);}, $users);
+        return $this->send(array_values($items));
+
     }
 
     /**
-     * Ajax: 获取联系人列表。
-     * Ajax get contact list.
+     * Ajax: 获取当前用户可以查看的联系人列表。
+     * Ajax: Get contact lists that current user can view.
      *
      * @access public
-     * @return string
+     * @return void
      */
     public function ajaxGetContactList()
     {
-        $contactList = $this->user->getContactLists($this->app->user->account, 'withnote');
-
-        $items = array();
-        foreach($contactList as $contactID => $contactName) $items[] = array('text' => $contactName, 'value' => $contactID);
-        return print(json_encode($items));
+        $lists = $this->user->getContactLists();
+        $items = array_map(function($id, $name){return array('text' => $name, 'value' => $id);}, array_keys($lists), $lists);
+        return $this->send($items);
     }
 
     /**
-     * Ajax print templates.
+     * AJAX: 打印用户模板。
+     * AJAX: Print user templates.
      *
-     * @param  int    $type
+     * @param  string $type
      * @param  string $link
      * @access public
      * @return void
      */
-    public function ajaxPrintTemplates($type, $link = '')
+    public function ajaxPrintTemplates(string $type, string $link = '')
     {
         $this->view->link      = $link;
         $this->view->type      = $type;
@@ -1074,30 +1060,35 @@ class user extends control
     }
 
     /**
-     * Save current template.
+     * AJAX: 保存一个用户模板。
+     * AJAX: Save a user template.
      *
+     * @param  string $type
      * @access public
-     * @return string
+     * @return void
      */
-    public function ajaxSaveTemplate($type)
+    public function ajaxSaveTemplate(string $type)
     {
         $this->user->saveUserTemplate($type);
-        if(dao::isError()) echo js::error(dao::getError(), $full = false);
-        return print($this->fetch('user', 'ajaxPrintTemplates', "type=$type"));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'load' => inlink('ajaxPrintTemplates', "type=$type")));
     }
 
     /**
-     * Delete a user template.
+     * AJAX：删除一个用户模板。
+     * AJAX: Delete a user template.
      *
      * @param  int    $templateID
      * @access public
      * @return void
      */
-    public function ajaxDeleteTemplate($templateID)
+    public function ajaxDeleteTemplate(int $templateID)
     {
-        $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)
+        $this->dao->delete()->from(TABLE_USERTPL)
+            ->where('id')->eq($templateID)
             ->beginIF(!$this->app->user->admin)->andWhere('account')->eq($this->app->user->account)->fi()
             ->exec();
+        return $this->send(array('result' => 'success'));
     }
 
     /**
@@ -1129,27 +1120,19 @@ class user extends control
     }
 
     /**
-     * Ajax get group by vision.
+     * AJAX: 根据界面类型获取权限组。
+     * AJAX: Get groups by vision.
      *
-     * @param  string  $visions rnd|lite
-     * @param  int     $i
-     * @param  string  $selected
+     * @param  string  $visions rnd|lite|rnd,lite
      * @access public
      * @return string
      */
-    public function ajaxGetGroup($visions, $i = 0, $selected = '')
+    public function ajaxGetGroups(string $visions)
     {
-        if(!$visions) $visions = $this->config->vision;
-        $visions   = explode(',', $visions);
-        $groupList = $this->user->getGroupsByVisions($visions);
-        if($i)
-        {
-            if($i > 1) $groupList = $groupList + array('ditto' => $this->lang->user->ditto);
-            return print(html::select("group[$i][]", $groupList, $selected, 'size=3 multiple=multiple class="form-control chosen"'));
-        }
-        $items = array();
-        foreach($groupList as $groupID => $groupName) $items[] = array('text' => $groupName, 'value' => $groupID, 'keys' => $groupName);
-        return print(json_encode($items));
+        if(!$visions) $visions = array($this->config->vision);
+        $groups = $this->user->getGroupsByVisions($visions);
+        $items  = array_map(function($groupID, $groupName){return array('text' => $groupName, 'value' => $groupID);}, array_keys($groups), $groups);
+        return $this->send($items);
     }
 
     /**

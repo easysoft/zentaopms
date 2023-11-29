@@ -691,4 +691,84 @@ class docTest
         $object = $type == 'lib' ? $this->objectModel->getLibByID($objectID) : $this->objectModel->getByID($objectID);
         return $this->objectModel->checkPrivLib($object, $extra);
     }
+
+    /**
+     * 获取有权限访问的文档库。
+     * Get grant libs by doc.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPrivLibsByDocTest(): array
+    {
+        return $this->objectModel->getPrivLibsByDoc();
+    }
+
+    /**
+     * 通过ID获取文档库信息。
+     * Get library by id.
+     *
+     * @param  int          $libID
+     * @access public
+     * @return object|false
+     */
+    public function getLibByIdTest(int $libID): object|bool
+    {
+        return $this->objectModel->getLibByID($libID);
+    }
+
+    /**
+     * 获取有权限查看的文档ID列表。
+     * Get grant doc id list.
+     *
+     * @param  array $libIdList
+     * @param  int    $moduleID
+     * @param  string $mode     all|normal|children
+     * @access public
+     * @return string
+     */
+    public function getPrivDocsTest(array $libIdList = array(), int $moduleID = 0, string $mode = 'normal'): string
+    {
+        $docs = $this->objectModel->getPrivDocs($libIdList, $moduleID, $mode);
+
+        if(dao::isError()) return dao::getError();
+        return implode(',', $docs);
+    }
+
+    /**
+     * 处理文档的收藏者信息。
+     * Process collector to account.
+     *
+     * @param  array  $docIdList
+     * @access public
+     * @return array
+     */
+    public function processCollectorTest(array $docIdList): array
+    {
+        $docs = array();
+        if(!empty($docIdList)) $docs = $this->objectModel->getByIdList($docIdList);
+
+        $docs = $this->objectModel->processCollector($docs);
+
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
+
+    /**
+     * 获取当前文档库下的文档列表数据。
+     * Get doc list by libID.
+     *
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  string $browseType all|draft
+     * @access public
+     * @return array
+     */
+    public function getDocsTest(int $libID, int $moduleID, string $browseType): array
+    {
+        $docs = $this->objectModel->getDocs($libID, $moduleID, $browseType, 'id_desc');
+
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
 }

@@ -624,7 +624,7 @@ class testtask extends control
         $this->view->title        = $testtask->name . $this->lang->colon . $this->lang->close;
         $this->view->actions      = $this->loadModel('action')->getList('testtask', $taskID);
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|nodeleted|qdfirst');
-        $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
+        $this->view->contactLists = $this->user->getContactLists();
         $this->view->testtask     = $testtask;
         $this->display();
     }

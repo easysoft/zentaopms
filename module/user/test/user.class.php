@@ -624,18 +624,6 @@ class userTest
     }
 
     /**
-     * Test get contact user pairs.
-     *
-     * @param  array $accountList
-     * @access public
-     * @return void
-     */
-    public function getContactUserPairsTest($accountList)
-    {
-        return $this->objectModel->getContactUserPairs($accountList);
-    }
-
-    /**
      * Test create contact list.
      *
      * @param  string $listName

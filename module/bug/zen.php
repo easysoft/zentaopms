@@ -1147,7 +1147,7 @@ class bugZen extends bug
         $this->view->releasedBuilds        = $this->loadModel('release')->getReleasedBuilds($bug->productID, $bug->branch);
         $this->view->resultFiles           = (!empty($resultID) and !empty($stepIdList)) ? $this->loadModel('file')->getByObject('stepResult', $resultID, str_replace('_', ',', $stepIdList)) : array();
         $this->view->product               = $currentProduct;
-        $this->view->contactList           = $this->loadModel('user')->getContactLists($this->app->user->account, 'withnote');
+        $this->view->contactList           = $this->loadModel('user')->getContactLists();
         $this->view->projectID             = isset($projectID) ? $projectID : $bug->projectID;
         $this->view->executionID           = isset($executionID) ? $executionID : (!empty($bug->execution->id) ? $bug->execution->id : '');
     }
@@ -1262,7 +1262,7 @@ class bugZen extends bug
         $this->view->cases          = $this->loadModel('testcase')->getPairsByProduct($bug->product, array(0, $bug->branch));
         $this->view->users          = $this->user->getPairs('noclosed', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->actions        = $this->loadModel('action')->getList('bug', $bug->id);
-        $this->view->contactList    = $this->loadModel('user')->getContactLists($this->app->user->account, 'withnote');
+        $this->view->contactList    = $this->loadModel('user')->getContactLists();
         $this->view->assignedToList = $assignedToList;
         $this->view->execution      = $this->loadModel('execution')->getByID($bug->execution);
     }

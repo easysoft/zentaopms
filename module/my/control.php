@@ -1324,7 +1324,7 @@ EOF;
         $users      = $this->user->getPairs($userParams, $mode == 'new' ? '' : $userList, $this->config->maxCount);
 
         $this->view->title = $this->lang->my->common . $this->lang->colon . $label;
-        $this->view->lists = $this->user->getContactLists($this->app->user->account, '', 'list');
+        $this->view->lists = $this->user->getContactLists($this->app->user->account, 'list');
         $this->view->users = $users;
         $this->view->mode  = $mode;
         $this->view->label = $label;
@@ -1357,7 +1357,7 @@ EOF;
      */
     public function buildContactLists(string $dropdownName = 'mailto', string $attr = '')
     {
-        $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
+        $this->view->contactLists = $this->user->getContactLists();
         $this->view->dropdownName = $dropdownName;
         $this->view->attr         = $attr;
         $this->display();
@@ -1494,7 +1494,7 @@ EOF;
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             $result = $this->user->uploadAvatar();
-            return $this->send(array('result' => 'success', 'callback' => "loadModal('" . helper::createLink('user', 'cropavatar', "image={$result['fileID']}") . "', 'profile');"));
+            return $this->send(array('result' => 'success', 'callback' => "loadModal('" . $this->createLink('user', 'cropavatar', "imageID={$result['fileID']}") . "', 'profile');"));
         }
     }
 

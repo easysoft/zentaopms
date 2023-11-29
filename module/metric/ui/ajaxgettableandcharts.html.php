@@ -22,7 +22,7 @@ div
         (
             $groupData ? dtable
             (
-                $viewType == 'multiple' ? set::height(310) : null,
+                $viewType == 'multiple' ? set::height(310) : set::height(jsRaw('window.getTableHeight')),
                 set::bordered(true),
                 set::cols($groupHeader),
                 set::data(array_values($groupData)),

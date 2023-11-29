@@ -730,6 +730,18 @@ function changeAppsTheme(theme)
     });
 }
 
+function updateUserToolbar()
+{
+    $.each(apps.openedMap, function(_code, app)
+    {
+        if(app.iframe && app.iframe.contentWindow && app.iframe.contentWindow.loadPage)
+        {
+            app.iframe.contentWindow.loadPage({selector: '#toolbar', partial: true, target: '#toolbar'});
+        }
+    });
+}
+
+
 initAppsMenu();
 /* Refresh more menu on window resize */
 $(window).on('resize', refreshMenu);
@@ -808,7 +820,8 @@ $.apps = $.extend(apps,
     getAppCode:     getAppCode,
     updateAppsMenu: updateAppsMenu,
     changeAppsLang: changeAppsLang,
-    changeAppsTheme: changeAppsTheme
+    changeAppsTheme: changeAppsTheme,
+    updateUserToolbar: updateUserToolbar
 });
 
 window.notifyMessage = function(data)

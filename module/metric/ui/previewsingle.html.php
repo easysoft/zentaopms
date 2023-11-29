@@ -360,6 +360,7 @@ div
                     $groupData ? dtable
                     (
                         set::bordered(true),
+                        set::height(jsRaw('window.getTableHeight')),
                         set::cols($groupHeader),
                         set::data(array_values($groupData)),
                         ($metricRecordType == 'scope' || $metricRecordType == 'scope-date') ? set::footPager(usePager('dtablePager')) : null,

@@ -1,26 +1,30 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
 /**
 
 title=测试 docModel->getDocs();
+timeout=0
 cid=1
-pid=1
-
-正常获取文档库下的文档 >> 1,文档标题1
-获取文档目录下的文档 >> 2,3622
-libID为空查询 >> 900
 
 */
-global $tester;
-$doc = $tester->loadModel('doc');
 
-$libIDlist    = array('1', '2', '');
-$moduleIDList = array('0','3621', '3622');
-$orderBy      = 'id_desc';
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/doc.class.php';
 
-r($doc->getDocs($libIDlist[0], $moduleIDList[0], $orderBy))        && p('1:lib,title')  && e('1,文档标题1');//正常获取文档库下的文档
-r($doc->getDocs($libIDlist[1], $moduleIDList, $orderBy))           && p('2:lib,module') && e('2,3622');     //获取文档目录下的文档
-r(count($doc->getDocs($libIDlist[2], $moduleIDList[0], $orderBy))) && p()               && e('900');          //libID为空查询
+zdTable('doc')->config('doc')->gen(50);
+zdTable('user')->gen(5);
+su('admin');
+
+$libIdList   = array(0, 11);
+$modules     = array(0, 1);
+$browseTypes = array('all', 'draft');
+
+$docTester = new docTest();
+r($docTester->getDocsTest($libIdList[0], $modules[0], $browseTypes[0])) && p()                     && e('0');                  // 获取libID=0、moduleID=0、browseType=all的文档列表
+r($docTester->getDocsTest($libIdList[0], $modules[0], $browseTypes[1])) && p()                     && e('0');                  // 获取libID=0、moduleID=0、browseType=draft的文档列表
+r($docTester->getDocsTest($libIdList[0], $modules[1], $browseTypes[0])) && p()                     && e('0');                  // 获取libID=0、moduleID=1、browseType=all的文档列表
+r($docTester->getDocsTest($libIdList[0], $modules[1], $browseTypes[1])) && p()                     && e('0');                  // 获取libID=0、moduleID=1、browseType=draft的文档列表
+r($docTester->getDocsTest($libIdList[1], $modules[0], $browseTypes[0])) && p('1:lib,module,title') && e('11,0,我的文档1');     // 获取libID=11、moduleID=0、browseType=all的文档列表
+r($docTester->getDocsTest($libIdList[1], $modules[0], $browseTypes[1])) && p('6:lib,module,title') && e('11,1,我的草稿文档6'); // 获取libID=11、moduleID=0、browseType=draft的文档列表
+r($docTester->getDocsTest($libIdList[1], $modules[1], $browseTypes[0])) && p('6:lib,module,title') && e('11,1,我的草稿文档6'); // 获取libID=11、moduleID=1、browseType=all的文档列表
+r($docTester->getDocsTest($libIdList[1], $modules[1], $browseTypes[1])) && p('6:lib,module,title') && e('11,1,我的草稿文档6'); // 获取libID=11、moduleID=1、browseType=draft的文档列表

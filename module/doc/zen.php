@@ -217,7 +217,7 @@ class docZen extends doc
         $this->view->libType           = 'lib';
         $this->view->spaceType         = 'mine';
         $this->view->users             = $this->user->getPairs('noletter');
-        $this->view->lib               = $this->doc->getLibById($libID);
+        $this->view->lib               = $this->doc->getLibByID($libID);
         $this->view->libTree           = $this->doc->getLibTree($type != 'mine' ? 0 : $libID, $libs, 'mine', $moduleID, 0, $browseType);
         $this->view->canExport         = ($this->config->edition != 'open' && common::hasPriv('doc', 'mine2export') && $type == 'mine');
         $this->view->linkParams        = "objectID={$objectID}&%s&browseType=&orderBy={$orderBy}&param=0";

@@ -109,6 +109,8 @@ function computeEndDate(delta)
         $end.$.setDate('');
         $end.render({disabled: true});
         outOfDateTip();
+        $('#end').addClass('hidden');
+        $('#end').next().removeClass('hidden');
         return false;
     }
 
@@ -121,9 +123,13 @@ function computeEndDate(delta)
         delta = (weekend == 2) ? (delta - 2) : (delta - 1);
     }
 
+    $('#end').removeClass('hidden');
+    $('#end').next().addClass('hidden');
+
     const endDate = zui.formatDate(zui.addDate(beginDate, delta - 1), 'yyyy-MM-dd');
-    $end.$.setDate(endDate);
+    $end.$.setValue(endDate);
     computeWorkDays();
+
 }
 
 /**

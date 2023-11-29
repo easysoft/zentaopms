@@ -1,4 +1,3 @@
-#mainContent .panel-body {padding: 0;}
 #mainContent .tab-pane li {height: 2rem; line-height: 2rem; cursor: pointer;}
 #mainContent .tab-pane li.active {background-color: var(--color-gray-100);}
 #mainContent .tab-pane li {color: rgba(var(--color-black-rgb),var(--tw-text-opacity));}

@@ -23,13 +23,14 @@ class docModel extends model
     const DOC_TYPE_REST = 'restapi';
 
     /**
+     * 通过ID获取文档库信息。
      * Get library by id.
      *
-     * @param  int $libID
+     * @param  int         $libID
      * @access public
-     * @return object
+     * @return object|false
      */
-    public function getLibById($libID)
+    public function getLibByID(int $libID): object|bool
     {
         return $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch();
     }
@@ -155,12 +156,13 @@ class docModel extends model
     }
 
     /**
+     * 获取有权限访问的文档库。
      * Get grant libs by doc.
      *
      * @access public
      * @return array
      */
-    public function getPrivLibsByDoc()
+    public function getPrivLibsByDoc(): array
     {
         static $libs;
         if($libs === null)
@@ -233,26 +235,29 @@ class docModel extends model
     }
 
     /**
-     * creat a api doc library.
+     * Creat a api doc library.
      *
-     * @return int
-     * @author thanatos thanatos915@163.com
+     * @param  object $formData
+     * @access public
+     * @return void
      */
-    public function createApiLib()
+    public function createApiLib(object $formData = null)
     {
-        $libType = $this->post->libType;
-
-        $data = fixer::input('post')
-            ->trim('name')
-            ->join('groups', ',')
-            ->join('users', ',')
-            ->setForce('product', ($libType == 'product' and !empty($_POST['product'])) ? $this->post->product : 0)
-            ->setForce('project', ($libType == 'project' and !empty($_POST['project'])) ? $this->post->project : 0)
-            ->setForce('execution', ($libType == 'project' and !empty($_POST['execution'])) ? $this->post->execution : 0)
-            ->add('addedBy', $this->app->user->account)
-            ->add('addedDate', helper::now())
-            ->remove('uid,contactListMenu,libType')
-            ->get();
+        if(!$formData)
+        {
+            $libType = $this->post->libType;
+            $formData = fixer::input('post')
+                ->trim('name')
+                ->join('groups', ',')
+                ->join('users', ',')
+                ->setForce('product', ($libType == 'product' and !empty($_POST['product'])) ? $this->post->product : 0)
+                ->setForce('project', ($libType == 'project' and !empty($_POST['project'])) ? $this->post->project : 0)
+                ->setForce('execution', ($libType == 'project' and !empty($_POST['execution'])) ? $this->post->execution : 0)
+                ->add('addedBy', $this->app->user->account)
+                ->add('addedDate', helper::now())
+                ->remove('uid,contactListMenu')
+                ->get();
+        }
 
         $this->app->loadLang('api');
 
@@ -262,19 +267,22 @@ class docModel extends model
         $this->lang->doclib->project = $this->lang->api->project;
         $this->lang->doclib->product = $this->lang->api->product;
 
-        if($libType == 'product') $this->config->api->createlib->requiredFields .= ',product';
-        if($libType == 'project') $this->config->api->createlib->requiredFields .= ',project';
+        if($formData->libType == 'product') $this->config->api->createlib->requiredFields .= ',product';
+        if($formData->libType == 'project') $this->config->api->createlib->requiredFields .= ',project';
 
-        $this->checkApiLibName($data, $libType);
+        $this->checkApiLibName($formData, $formData->libType);
 
         if(dao::isError()) return false;
 
-        $data->type = static::DOC_TYPE_API;
-        $this->dao->insert(TABLE_DOCLIB)->data($data)->autoCheck()
+        $formData->type = static::DOC_TYPE_API;
+        $this->dao->insert(TABLE_DOCLIB)->data($formData, 'libType')->autoCheck()
             ->batchCheck($this->config->api->createlib->requiredFields, 'notempty')
             ->exec();
 
-        return $this->dao->lastInsertID();
+        $libID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('doclib', $libID, 'created');
+
+        return !dao::isError();
     }
 
     /**
@@ -286,7 +294,7 @@ class docModel extends model
      */
     public function updateApiLib($id)
     {
-        $oldLib = $this->getLibById($id);
+        $oldLib = $this->getLibByID($id);
 
         $data = fixer::input('post')
             ->trim('name')
@@ -336,7 +344,7 @@ class docModel extends model
     public function updateLib($libID)
     {
         $libID  = (int)$libID;
-        $oldLib = $this->getLibById($libID);
+        $oldLib = $this->getLibByID($libID);
         $lib    = fixer::input('post')
             ->setDefault('users', '')
             ->setDefault('groups', '')
@@ -601,20 +609,22 @@ class docModel extends model
     }
 
     /**
-     * Get docs.
+     * 获取当前文档库下的文档列表数据。
+     * Get doc list by libID.
      *
-     * @param  int|string $libID
-     * @param  int        $module
-     * @param  string     $orderBy
-     * @param  object     $pager
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  string $browseType all|draft
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getDocs($libID, $module, $browseType, $orderBy, $pager = null)
+    public function getDocs(int $libID, int $moduleID, string $browseType, string $orderBy, object $pager = null): array
     {
-        if(empty($libID) and $browseType != 'all') return array();
+        if(empty($libID) && $browseType != 'all') return array();
 
-        $docIdList = $this->getPrivDocs($libID, $module, 'children');
+        $docIdList = $this->getPrivDocs(array($libID), $moduleID, 'children');
         $docs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
@@ -624,8 +634,8 @@ class docModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        $docs = $this->processCollector($docs);
-        return $docs;
+
+        return $this->processCollector($docs);
     }
 
     /**
@@ -733,17 +743,19 @@ class docModel extends model
     }
 
     /**
-     * Get priv docs.
+     * 获取有权限查看的文档ID列表。
+     * Get grant doc id list.
      *
-     * @param  int    $libID
-     * @param  int    $module
-     * @param  string $mode normal|all
+     * @param  array  $libIdList
+     * @param  int    $moduleID
+     * @param  string $mode normal|all|chidren
      * @access public
      * @return array
      */
-    public function getPrivDocs($libIdList = array(), $module = 0, $mode = 'normal')
+    public function getPrivDocs(array $libIdList = array(), int $moduleID = 0, string $mode = 'normal'): array
     {
-        $modules = $module && $mode == 'children' ? $this->loadModel('tree')->getAllChildID($module) : $module;
+        $modules = $moduleID && $mode == 'children' ? $this->loadModel('tree')->getAllChildID($moduleID) : $moduleID;
+
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
             ->where('vision')->eq($this->config->vision)
             ->beginIF(!empty($modules))->andWhere('module')->in($modules)->fi()
@@ -1274,7 +1286,7 @@ class docModel extends model
         if($object->status == 'normal' and $this->app->user->admin) return true;
 
         static $libs = array();
-        if(!isset($libs[$object->lib])) $libs[$object->lib] = $this->getLibById($object->lib);
+        if(!isset($libs[$object->lib])) $libs[$object->lib] = $this->getLibByID($object->lib);
         if(!$this->checkPrivLib($libs[$object->lib])) return false;
         if(in_array($object->acl, array('open', 'public'))) return true;
 
@@ -2726,7 +2738,7 @@ class docModel extends model
     {
         if(empty($type))
         {
-            $doclib   = $this->getLibById($libID);
+            $doclib   = $this->getLibByID($libID);
             $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
             $objectID = isset($doclib->{$type}) ? $doclib->{$type} : 0;
         }
@@ -2900,7 +2912,7 @@ class docModel extends model
             $showDoc = $showDoc === '0' ? 0 : 1;
             if($this->app->rawMethod == 'view' and $module->type != 'api' and $showDoc)
             {
-                $docIDList = $this->getPrivDocs($rootID, $module->id);
+                $docIDList = $this->getPrivDocs(array($rootID), $module->id);
                 $docs      = $this->dao->select('*, title as name')->from(TABLE_DOC)
                     ->where('id')->in($docIDList)
                     ->andWhere('deleted')->eq(0)
@@ -2975,7 +2987,7 @@ class docModel extends model
             $showDoc = $showDoc === '0' ? 0 : 1;
             if($this->app->rawMethod == 'view' and $lib->type != 'apiLib' and $showDoc)
             {
-                $docIDList = $this->getPrivDocs($lib->id);
+                $docIDList = $this->getPrivDocs(array($lib->id));
                 $docs      = $this->dao->select('*, title as name')->from(TABLE_DOC)
                     ->where('id')->in($docIDList)
                     ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
@@ -3313,18 +3325,19 @@ class docModel extends model
     }
 
     /**
+     * 处理文档的收藏者信息。
      * Process collector to account.
      *
      * @param  array    $docs
      * @access public
      * @return array
      */
-    public function processCollector($docs)
+    public function processCollector($docs): array
     {
         $actionGroup = $this->dao->select('*')->from(TABLE_DOCACTION)->where('doc')->in(array_keys($docs))->andWhere('action')->eq('collect')->fetchGroup('doc', 'actor');
         foreach($docs as $docID => $doc)
         {
-            $doc->collector   = '';
+            $doc->collector = '';
             if(isset($actionGroup[$docID])) $doc->collector = ',' . implode(',', array_keys($actionGroup[$docID])) . ',';
         }
         return $docs;
@@ -3372,7 +3385,7 @@ class docModel extends model
     public function getDynamic($pager = null)
     {
         $allLibs          = $this->getLibs('hasApi');
-        $hasPrivDocIdList = $this->getPrivDocs('', 0, 'all');
+        $hasPrivDocIdList = $this->getPrivDocs(array(), 0, 'all');
         $apiList          = $this->loadModel('api')->getPrivApis();
 
         $actions = $this->dao->select('*')->from(TABLE_ACTION)

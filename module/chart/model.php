@@ -30,9 +30,9 @@ class chartModel extends model
      *
      * @param  int    $dimensionID
      * @access public
-     * @return int
+     * @return int|string
      */
-    public function getFirstGroup(int $dimensionID): int
+    public function getFirstGroup(int $dimensionID): int|string
     {
         return $this->dao->select('id')->from(TABLE_MODULE)
             ->where('deleted')->eq('0')
