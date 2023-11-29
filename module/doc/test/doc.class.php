@@ -771,4 +771,19 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $docs;
     }
+
+    /**
+     * 获取编辑过的文档ID列表。
+     * Get the list of doc id list that have been edited.
+     *
+     * @access public
+     * @return string|array
+     */
+    public function getEditedDocIdListTest(): string|array
+    {
+        $docIdList = $this->objectModel->getEditedDocIdList();
+
+        if(dao::isError()) return dao::getError();
+        return implode(';', $docIdList);
+    }
 }
