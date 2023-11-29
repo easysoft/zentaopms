@@ -153,4 +153,28 @@ class messageTest
 
         return implode(',', array_keys($objects));
     }
+
+    /**
+     * 测试获取浏览器通知的相关配置信息。
+     * Test get browser message config.
+     *
+     * @param  string $turnon
+     * @param  string $pollTime
+     * @access public
+     * @return array
+     */
+    public function getBrowserMessageConfigTest(string $turnon, string $pollTime): array
+    {
+        global $tester;
+        if(!isset($tester->config->message)) $tester->config->message = new stdclass();
+        if(!isset($tester->config->message->browser)) $tester->config->message->browser = new stdclass();
+        $tester->config->message->browser->turnon   = $turnon;
+        $tester->config->message->browser->pollTime = $pollTime;
+        $settings = $this->objectModel->getBrowserMessageConfig();
+
+        if(dao::isError()) return dao::getError();
+        unset($tester->config->message->browser->turnon);
+        unset($tester->config->message->browser->pollTime);
+        return $settings;
+    }
 }
