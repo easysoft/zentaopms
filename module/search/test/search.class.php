@@ -25,6 +25,21 @@ class searchTest
     }
 
     /**
+     * 测试初始化 session。
+     * Test init session function.
+     *
+     * @param  string $module
+     * @param  array  $fields
+     * @param  array  $fieldParams
+     * @access public
+     * @return array
+     */
+    public function initSessionTest(string $module, array $fields, array $fieldParams): array
+    {
+        return $this->objectModel->initSession($module, $fields, $fieldParams);
+    }
+
+    /**
      * 测试获取查询。
      * Test get query.
      *
