@@ -734,4 +734,24 @@ class docTest
         if(dao::isError()) return dao::getError();
         return implode(',', $docs);
     }
+
+    /**
+     * 处理文档的收藏者信息。
+     * Process collector to account.
+     *
+     * @param  array  $docIdList
+     * @access public
+     * @return array
+     */
+    public function processCollectorTest(array $docIdList): array
+    {
+        $docs = array();
+        if(!empty($docIdList)) $docs = $this->objectModel->getByIdList($docIdList);
+
+        $docs = $this->objectModel->processCollector($docs);
+
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
+
 }

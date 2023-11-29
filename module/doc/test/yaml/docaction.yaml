@@ -1,0 +1,17 @@
+title: zt_docaction.
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: doc
+    range: 1-10
+  - field: action
+    range: collect
+  - field: actor
+    range: admin,user1,user2
+  - field: date
+    range: "(-2w):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"

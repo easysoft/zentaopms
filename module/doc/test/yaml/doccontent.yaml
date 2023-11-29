@@ -1,0 +1,10 @@
+title: zt_doccontent.
+author: Shujie Tian
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: doc
+    range: 1-100
+  - field: version
+    range: 1
