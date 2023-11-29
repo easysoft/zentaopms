@@ -33,7 +33,8 @@ class mrZen extends mr
                 $projectIds[$MR->sourceProject] = $MR->sourceProject;
                 $projectIds[$MR->targetProject] = $MR->targetProject;
             }
-            $projects += $this->mr->getGitlabProjects($repo->serviceHost, $projectIds);
+
+            $projects += $this->mr->getGitlabProjects((int)$repo->serviceHost, $projectIds);
         }
         else
         {
