@@ -1778,7 +1778,10 @@ class bugModel extends model
         $relatedObjectIdList = array();
         $relatedObjects      = array();
 
-        foreach($bugs as $bug) $relatedObjectIdList[$bug->$object]  = $bug->$object;
+        foreach($bugs as $bug)
+        {
+            if(is_numeric($bug->$object)) $relatedObjectIdList[$bug->$object] = $bug->$object;
+        }
 
         if($object == 'openedBuild' or $object == 'resolvedBuild') $object = 'build';
 
