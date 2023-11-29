@@ -2356,6 +2356,7 @@ class baseSQL
      */
     public function quote($value)
     {
+        if($value === null) return 'NULL';
         if($this->magicQuote) $value = stripslashes($value);
         return $this->dbh->quote((string)$value);
     }
