@@ -31,11 +31,14 @@ function encryptPassword()
 
     /* 加密当前登录用户的密码。*/
     /* Encrypt password of current user. */
-    const password = $('input#verifyPassword').val().trim();
-    if(password && !verifyEncrypted)
+    if($('input#verifyPassword').length > 0)
     {
-        $('input#verifyPassword').val(md5(md5(password) + rand));
-        verifyEncrypted = true;
+        const password = $('input#verifyPassword').val().trim();
+        if(password && !verifyEncrypted)
+        {
+            $('input#verifyPassword').val(md5(md5(password) + rand));
+            verifyEncrypted = true;
+        }
     }
 
     if($('#password1').length == 0 || $('#password2').length == 0) return;

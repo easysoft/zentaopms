@@ -150,6 +150,33 @@ window.handleRemoveLabel = function(id)
 
     window.updateCheckAction(checkedItem.id, checkedItem.name, false);
 }
+
+window.handleDateLabelClick = function(evt)
+{
+    $form = $(evt).closest('form');
+    $form.find('.query-date button.btn').removeClass('selected');
+    $form.find('.query-date-picker input[name="dateBegin"]').zui('datepicker').$.setValue('');
+    $form.find('.query-date-picker input[name="dateEnd"]').zui('datepicker').$.setValue('');
+    $(evt).addClass('selected');
+}
+
+window.handleCalcDateClick = function(evt)
+{
+    $form = $(evt).closest('form');
+    $form.find('.query-calc-date button.btn').removeClass('selected');
+    $(evt).addClass('selected');
+}
+
+window.handleDatePickerChange = function(evt)
+{
+    $form = $(evt).closest('form');
+    var dateBegin = $form.find('.query-date-picker input[name="dateBegin"]').zui('datepicker').$.value;
+    var dateEnd   = $form.find('.query-date-picker input[name="dateEnd"]').zui('datepicker').$.value;
+    if(dateBegin.length && dateEnd.length)
+    {
+        $form.find('.query-date button.btn').removeClass('selected');
+    }
+}
 /* 事件处理函数结束。 */
 
 window.isMetricChecked = function(id)
@@ -391,17 +418,10 @@ window.validateForm = function($form)
 
     var dateBegin = formObj.dateBegin?.length ? new Date(formObj.dateBegin) : false;
     var dateEnd   = formObj.dateEnd?.length ? new Date(formObj.dateEnd) : false;
-    var calcBegin = formObj.calcBegin?.length ? new Date(formObj.calcBegin) : false;
-    var calcEnd   = formObj.calcEnd?.length ? new Date(formObj.calcEnd) : false;
 
     if(dateBegin && dateEnd && dateBegin > dateEnd)
     {
         zui.Messager.show(errorDateRange, {type: 'danger', time: 2000});
-        return false;
-    }
-    if(calcBegin && calcEnd && calcBegin > calcEnd)
-    {
-        zui.Messager.show(errorCalcTimeRange, {type: 'danger', time: 2000});
         return false;
     }
     return true;
@@ -409,13 +429,43 @@ window.validateForm = function($form)
 
 window.getFormData = function($form)
 {
+    var $dateBegin    = $form.find('.query-date-picker input[name="dateBegin"]');
+    var $dateEnd      = $form.find('.query-date-picker input[name="dateEnd"]');
+    var $selectedDate = $form.find('.query-date button.selected');
+
+    var dateBeginValue = $dateBegin.length ? $dateBegin.zui('datepicker').$.value : '';
+    var dateEndValue   = $dateEnd.length ? $dateEnd.zui('datepicker').$.value : '';
+
+    if(!$selectedDate.length && $dateBegin.length && $dateEnd.length && (!dateBeginValue.length || !dateEndValue.length))
+    {
+        var buttons = $form.find('.query-date button');
+        $(buttons[0]).addClass('selected');
+        $form.find('.query-date-picker input[name="dateBegin"]').zui('datepicker').$.setValue('');
+        $form.find('.query-date-picker input[name="dateEnd"]').zui('datepicker').$.setValue('');
+    }
+
     var formSerialize = $form.serialize();
     var formObj = window.parseSerialize(formSerialize);
 
     var formData = new FormData();
     for(var key in formObj)
     {
-        formData.append(key, formObj[key]);
+        var value = formObj[key];
+        if(key.startsWith('scope')) key = 'scope';
+        formData.append(key, value);
+    }
+
+    if($selectedDate.length)
+    {
+        formData.append('dateLabel', $selectedDate.attr('key'));
+        formData.delete('dateBegin');
+        formData.delete('dateEnd');
+    }
+
+    var $calcDate = $form.find('.query-calc-date button.selected');
+    if($calcDate.length)
+    {
+        formData.append('calcDate', $calcDate.attr('key'));
     }
 
     return formData;

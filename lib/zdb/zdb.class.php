@@ -246,24 +246,35 @@ class zdb
             fwrite($fp, $backupSql);
             if($tableType != 'table') continue;
 
-            $rows = $this->dbh->query("select * from `$table`");
+            $rows     = $this->dbh->query("select * from `$table`");
+            $count    = 0;
+            $values   = array();
+            $batchNum = 100;
             while($row = $rows->fetch(PDO::FETCH_ASSOC))
             {
-                /* Create key sql for insert. */
-                $keys = array_keys($row);
-                $keys = array_map('addslashes', $keys);
-                $keys = join('`,`', $keys);
-                $keys = "`" . $keys . "`";
-
                 /* Create a value sql. */
                 $value = array_values($row);
                 $value = array_map('addslashes', $value);
                 $value = join("','", $value);
                 $value = "'" . $value . "'";
-                $sql   = "INSERT INTO `$table`($keys) VALUES (" . $value . ");\n";
 
-                /* Write sql code. */
-                fwrite($fp, $sql);
+                $count += 1;
+                $values[] = "({$value})";
+
+                if($count % $batchNum == 0)
+                {
+                    /* Create key sql for insert. */
+                    $keys = array_keys($row);
+                    $keys = array_map('addslashes', $keys);
+                    $keys = join('`,`', $keys);
+                    $keys = "`" . $keys . "`";
+
+                    $sql = "INSERT INTO `$table`($keys) VALUES " . implode(",\n", $values) . ";\n";
+
+                    /* Write sql code. */
+                    fwrite($fp, $sql);
+                    $values = array();
+                }
             }
         }
         fclose($fp);

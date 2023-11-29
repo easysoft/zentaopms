@@ -73,7 +73,7 @@ div
         ),
         h::tr
         (
-            h::th($lang->user->joinAB),
+            h::th($lang->user->abbr->join),
             h::td(formatTime($user->join)),
             h::th($lang->user->priv),
             h::td(trim($groupName))
@@ -100,7 +100,7 @@ div
         (
             h::th($lang->user->zipcode),
             h::td($user->zipcode),
-            h::th($lang->user->addressAB),
+            h::th($lang->user->abbr->address),
             h::td(set::title($user->address), $user->address)
         )
     ),

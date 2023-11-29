@@ -17,8 +17,8 @@ $lang->user->company          = 'Company';
 $lang->user->dept             = 'Department';
 $lang->user->account          = 'Account';
 $lang->user->password         = 'Password';
+$lang->user->password1        = 'Password';
 $lang->user->password2        = 'Repeat Password';
-$lang->user->password2AB      = 'Repeat Password';
 $lang->user->role             = 'Role';
 $lang->user->group            = 'Privilege Group';
 $lang->user->realname         = 'Name';
@@ -40,10 +40,8 @@ $lang->user->dingding         = 'DingDing';
 $lang->user->slack            = 'Slack';
 $lang->user->whatsapp         = 'WhatsApp';
 $lang->user->address          = 'Address';
-$lang->user->addressAB        = 'Address';
 $lang->user->zipcode          = 'ZipCode';
 $lang->user->join             = 'Joined';
-$lang->user->joinAB           = 'Joined';
 $lang->user->priv             = 'Privilege';
 $lang->user->visits           = 'Visits';
 $lang->user->visions          = 'Version Type';
@@ -54,7 +52,7 @@ $lang->user->ditto            = 'Ditto';
 $lang->user->originalPassword = 'Old Password';
 $lang->user->newPassword      = 'New Password';
 $lang->user->verifyPassword   = 'Password';
-$lang->user->resetPassword    = 'Forgot Password?';
+$lang->user->forgetPassword   = 'Forgotten Password?';
 $lang->user->score            = 'Score';
 $lang->user->name             = 'Name';
 $lang->user->type             = 'User Type';
@@ -80,10 +78,14 @@ $lang->user->identity         = 'Identity';
 $lang->user->switchVision     = 'Switch to %s';
 $lang->user->submit           = 'Submit';
 $lang->user->resetPWD         = 'Reset Password';
-$lang->user->resetTitle       = 'Admin reset the password';
+$lang->user->resetPwdByAdmin  = 'Reset password via admin';
+$lang->user->resetPwdByMail   = 'Reset password via email';
 
 $lang->user->abbr = new stdclass();
-$lang->user->abbr->id = 'ID';
+$lang->user->abbr->id        = 'ID';
+$lang->user->abbr->password2 = 'Repeat Password';
+$lang->user->abbr->address   = 'Address';
+$lang->user->abbr->join      = 'Joined';
 
 $lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';
@@ -296,7 +298,7 @@ $lang->user->resetSuccess     = "Reset! Please use your new password to login.";
 $lang->user->noticeDelete     = 'Do you want to delete "%s" from ZenTao?';
 $lang->user->noticeHasDeleted = "This user has been deleted. If you want to view it, please go to the Admin-System-Data-Recycle to restore it.";
 $lang->user->noticeResetFile  = "<h5>Contact the Administrator to reset your password.</h5>
-    <h5>If you are, please login your Zentao host and create a file named <span> '%s' </span>.</h5>
+    <h5>If you are, please login your Zentao host and create a file named <span> %s </span>.</h5>
     <p>Note:</p>
     <ol>
     <li>Keep the file empty.</li>
@@ -322,7 +324,7 @@ $lang->user->mkdirLinux = <<<EOT
     </td></tr></table></body></html>
 EOT;
 
-$lang->user->jumping = "This page will redirect to the previous page in <span id='time'>3</span> seconds. <a href='%s' class='btn primary size-xs' type='button'>Redirect Now</a>";
+$lang->user->jumping = "This page will redirect to the previous page in <span id='time'>10</span> seconds. <a href='%s' id='redirect' class='btn primary'>Redirect Now</a>";
 
 $lang->user->zentaoapp = new stdclass();
 $lang->user->zentaoapp->logout = 'Logout';

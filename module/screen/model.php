@@ -817,11 +817,8 @@ class screenModel extends model
             default:
                 if($field && $sql)
                 {
-                    $options = $this->dao->select("tt.`$field`,tt.`$field`")
-                        ->from("($sql)")->alias('tt')
-                        ->groupBy("tt.`$field`")
-                        ->orderBy("tt.`$field` desc")
-                        ->fetchPairs();
+                    $cols = $this->dao->query("select tt.`$field` from ($sql) tt group by tt.`$field` order by tt.`$field` desc")->fetchAll();
+                    foreach($cols as $col) $options[$col->$field] = $col->$field;
                 }
                 break;
 
@@ -1485,6 +1482,9 @@ class screenModel extends model
 
             $executionEnd = strpos($type, 'withdelay') !== false ? $execution->end : '';
             $chartData    = $this->execution->buildBurnData($executionID, $dateList, 'left', $executionEnd);
+            $chartData['baseLine']  = json_encode($chartData['baseLine']);
+            $chartData['burnLine']  = json_encode($chartData['burnLine']);
+            if(isset($chartData['delayLine'])) $chartData['delayLine'] = json_encode($chartData['delayLine']);
             $execution->chartData = $chartData;
 
             $executionData[$executionID] = $execution;
@@ -1550,40 +1550,5 @@ class screenModel extends model
         if(!isset($component->option->dataset)) $component->option->dataset = new stdclass();
         $component->chartConfig->title    = $chart->name;
         $component->chartConfig->sourceID = $component->sourceID;
-    }
-
-    /**
-     * Check if the Chart is in use.
-     *
-     * @param  int    $chartID
-     * @param  string $type
-     * @access public
-     * @return bool
-     */
-    public function checkIFChartInUse(int $chartID, string $type = 'chart'): bool
-    {
-        static $screenList = array();
-        if(empty($screenList)) $screenList = $this->dao->select('scheme')->from(TABLE_SCREEN)->where('deleted')->eq(0)->andWhere('status')->eq('published')->fetchAll();
-
-        foreach($screenList as $screen)
-        {
-            $scheme = json_decode($screen->scheme);
-            if(empty($scheme->componentList)) continue;
-
-            foreach($scheme->componentList as $component)
-            {
-                $list = !empty($component->isGroup) ? $component->groupList : array($component);
-                foreach($list as $groupComponent)
-                {
-                    if(!isset($groupComponent->chartConfig)) continue;
-
-                    $sourceID   = zget($groupComponent->chartConfig, 'sourceID', '');
-                    $sourceType = zget($groupComponent->chartConfig, 'package', '') == 'Tables' ? 'pivot' : 'chart';
-
-                    if($chartID == $sourceID && $type == $sourceType) return true;
-                }
-            }
-        }
-        return false;
     }
 }

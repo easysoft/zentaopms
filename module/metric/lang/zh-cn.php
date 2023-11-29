@@ -52,8 +52,18 @@ $lang->metric->testMetric    = '测试度量';
 $lang->metric->calcTime      = '采集时间';
 $lang->metric->to            = '至';
 
+$lang->metric->placeholder = new stdclass();
+$lang->metric->placeholder->select    = "请选择";
+$lang->metric->placeholder->project   = "全部项目";
+$lang->metric->placeholder->product   = "全部产品";
+$lang->metric->placeholder->execution = "全部执行";
+$lang->metric->placeholder->dept      = "全部团队";
+$lang->metric->placeholder->user      = "全部用户";
+$lang->metric->placeholder->program   = "全部项目集";
+
 $lang->metric->query = new stdclass();
 $lang->metric->query->action = '查询';
+
 $lang->metric->query->scope = array();
 $lang->metric->query->scope['project']   = '项目';
 $lang->metric->query->scope['product']   = '产品';
@@ -61,6 +71,30 @@ $lang->metric->query->scope['execution'] = '执行';
 $lang->metric->query->scope['dept']      = '团队';
 $lang->metric->query->scope['user']      = '姓名';
 $lang->metric->query->scope['program']   = '项目集';
+
+$lang->metric->query->yearLabels = array();
+$lang->metric->query->yearLabels['3']   = '近3年';
+$lang->metric->query->yearLabels['5']   = '近5年';
+$lang->metric->query->yearLabels['10']  = '近10年';
+$lang->metric->query->yearLabels['all'] = '全部';
+
+$lang->metric->query->monthLabels = array();
+$lang->metric->query->monthLabels['6']   = '近6个月';
+$lang->metric->query->monthLabels['12']  = '近12个月';
+$lang->metric->query->monthLabels['24']  = '近24个月';
+$lang->metric->query->monthLabels['36']  = '近36个月';
+
+$lang->metric->query->weekLabels = array();
+$lang->metric->query->weekLabels['4']  = '近4周';
+$lang->metric->query->weekLabels['8']  = '近8周';
+$lang->metric->query->weekLabels['12'] = '近12周';
+$lang->metric->query->weekLabels['16'] = '近16周';
+
+$lang->metric->query->dayLabels = array();
+$lang->metric->query->dayLabels['7']  = '近7天';
+$lang->metric->query->dayLabels['14'] = '近14天';
+$lang->metric->query->dayLabels['21'] = '近21天';
+$lang->metric->query->dayLabels['28'] = '近28天';
 
 $lang->metric->viewType = new stdclass();
 $lang->metric->viewType->single   = '单独查看';
@@ -78,6 +112,7 @@ $lang->metric->saveSqlMeasSuccess = "查询成功，测试结果：%s";
 $lang->metric->monthText          = "%s号";
 $lang->metric->errorDateRange     = "开始日期不能大于结束日期";
 $lang->metric->errorCalcTimeRange = "采集开始时间不能大于采集结束时间";
+$lang->metric->updateTimeTip      = "更新快照时间：%s";
 
 $lang->metric->noDesc    = "暂无描述";
 $lang->metric->noFormula = "暂无计算规则";

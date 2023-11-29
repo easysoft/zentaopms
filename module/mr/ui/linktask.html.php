@@ -10,17 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$app->loadModuleConfig('repo');
+
 jsVar('orderBy',  $orderBy);
 jsVar('sortLink', createLink('mr', 'linkTask', "MRID=$MRID&productID=$product->id&browseType=$browseType&param=$param&orderBy={orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
-
-detailHeader
-(
-    to::prefix(''),
-    to::title
-    (
-        $lang->repo->linkTask
-    )
-);
 
 $footToolbar = array('items' => array
 (

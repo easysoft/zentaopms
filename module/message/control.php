@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of message of ZenTaoPMS.
  *
@@ -12,7 +13,8 @@
 class message extends control
 {
     /**
-     * Index
+     * 主页。
+     * Index.
      *
      * @access public
      * @return void
@@ -32,20 +34,16 @@ class message extends control
     }
 
     /**
-     * Browser Setting
+     * 浏览器设置。
+     * Browser setting.
      *
      * @access public
      * @return void
      */
     public function browser()
     {
-        $browserConfig = $this->config->message->browser;
-
         if($_POST)
         {
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-
             $data = fixer::input('post')->get();
 
             $browserConfig = new stdclass();
@@ -53,25 +51,18 @@ class message extends control
             $browserConfig->pollTime = $data->pollTime;
 
             $this->loadModel('setting')->setItems('system.message.browser', $browserConfig);
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
-                return $this->send($response);
-            }
-
-            $response['callback'] = "top.window.location.href = $.createLink('message', 'browser')";
-            return $this->send($response);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
 
-        $this->view->title = $this->lang->message->browser;
-
-        $this->view->browserConfig = $browserConfig;
+        $this->view->title         = $this->lang->message->browser;
+        $this->view->browserConfig = $this->config->message->browser;
         $this->display();
     }
 
     /**
-     * Setting
+     * 消息设置。
+     * Message setting.
      *
      * @access public
      * @return void
@@ -84,18 +75,14 @@ class message extends control
             $data->messageSetting = !empty($data->messageSetting) ? json_encode($data->messageSetting) : '';
             $data->blockUser      = !empty($data->blockUser) && is_array($data->blockUser) ? implode(',', $data->blockUser) : zget($data, 'blockUser', '');
             $this->loadModel('setting')->setItem('system.message.setting', $data->messageSetting);
-            $this->loadModel('setting')->setItem('system.message.blockUser', $data->blockUser);
+            $this->setting->setItem('system.message.blockUser', $data->blockUser);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
         }
-
-        $this->loadModel('webhook');
-        $this->loadModel('action');
-
-        $this->view->title      = $this->lang->message->setting;
 
         $users = $this->loadModel('user')->getPairs('noletter,noclosed');
         unset($users['']);
 
+        $this->view->title         = $this->lang->message->setting;
         $this->view->users         = $users;
         $this->view->objectTypes   = $this->message->getObjectTypes();
         $this->view->objectActions = $this->message->getObjectActions();
@@ -103,22 +90,26 @@ class message extends control
     }
 
     /**
+     * Ajax: 获取消息。
      * Ajax get message.
      *
+     * @param  string $windowBlur
      * @access public
      * @return void
      */
-    public function ajaxGetMessage($windowBlur = false)
+    public function ajaxGetMessage(string $windowBlur = 'false')
     {
         if($this->config->message->browser->turnon == 0) return;
 
+        $todos        = $this->message->getNoticeTodos();
         $waitMessages = $this->message->getMessages('wait');
-        $todos = $this->message->getNoticeTodos();
-        if(empty($waitMessages) and empty($todos)) return;
+        if(empty($waitMessages) && empty($todos)) return;
+
+        $windowBlur = !empty($windowBlur) && $windowBlur != 'false';
 
         $messages = '';
-        $newline  = $windowBlur ? "\n" : '<br />';
         $idList   = array();
+        $newline  = $windowBlur ? "\n" : '<br />';
         foreach($waitMessages as $message)
         {
             $messages .= $message->data . $newline;

@@ -612,6 +612,7 @@ class commonModel extends model
     }
 
     /**
+     * 获取高亮的顶部一级导航。
      * Get active main menu.
      *
      * @static
@@ -696,16 +697,17 @@ class commonModel extends model
     }
 
     /**
+     * 当对象编辑后，比较前后差异。
      * Create changes of one object.
      *
-     * @param mixed  $old        the old object
-     * @param mixed  $new        the new object
-     * @param string $moduleName
+     * @param  mixed  $old        the old object
+     * @param  mixed  $new        the new object
+     * @param  string $moduleName
      * @static
      * @access public
      * @return array
      */
-    public static function createChanges($old, $new, $moduleName = '')
+    public static function createChanges(mixed $old, mixed $new, string $moduleName = ''): array
     {
         global $app, $config;
 
@@ -746,21 +748,10 @@ class commonModel extends model
         $changes = array();
         foreach($new as $key => $value)
         {
+            $key = strtolower($key);
             if(is_object($value) || is_array($value) || is_null($value)) continue;
-            if(strtolower($key) == 'lastediteddate')  continue;
-            if(strtolower($key) == 'lasteditedby')    continue;
-            if(strtolower($key) == 'assigneddate')    continue;
-            if(strtolower($key) == 'editedby')        continue;
-            if(strtolower($key) == 'editeddate')      continue;
-            if(strtolower($key) == 'editingdate')     continue;
-            if(strtolower($key) == 'uid')             continue;
-            if(strtolower($key) == 'finisheddate'     and $value == '') continue;
-            if(strtolower($key) == 'canceleddate'     and $value == '') continue;
-            if(strtolower($key) == 'hangupeddate'     and $value == '') continue;
-            if(strtolower($key) == 'lastcheckeddate'  and $value == '') continue;
-            if(strtolower($key) == 'activateddate'    and $value == '') continue;
-            if(strtolower($key) == 'closeddate'       and $value == '') continue;
-            if(strtolower($key) == 'actualcloseddate' and $value == '') continue;
+            if(in_array($key, array('lastediteddate', 'lasteditedby', 'assigneddate', 'editedby', 'editeddate', 'editingdate', 'uid'))) continue;
+            if(in_array($key, array('finisheddate', 'canceleddate', 'hangupeddate', 'lastcheckeddate', 'activateddate', 'closeddate', 'actualcloseddate')) and $value == '') continue;
 
             if(isset($old->$key))
             {
@@ -783,6 +774,7 @@ class commonModel extends model
     }
 
     /**
+     * 比较两个字符串的差异。
      * Diff two string. (see phpt)
      *
      * @param string $text1
@@ -791,7 +783,7 @@ class commonModel extends model
      * @access public
      * @return string
      */
-    public static function diff($text1, $text2)
+    public static function diff(string $text1, string $text2): string
     {
         $text1 = str_replace('&nbsp;', '', trim($text1));
         $text2 = str_replace('&nbsp;', '', trim($text2));
@@ -809,6 +801,7 @@ class commonModel extends model
     }
 
     /**
+     * 判断post数据大小是否超过Suhosin设置大小。
      * Judge Suhosin Setting whether the actual size of post data is large than the setting size.
      *
      * @param  int    $countInputVars
@@ -816,7 +809,7 @@ class commonModel extends model
      * @access public
      * @return bool
      */
-    public static function judgeSuhosinSetting($countInputVars)
+    public static function judgeSuhosinSetting(int $countInputVars): bool
     {
         if(extension_loaded('suhosin'))
         {
@@ -834,6 +827,7 @@ class commonModel extends model
     }
 
     /**
+     * 获取详情页面上一页和下一页的对象。
      * Get the previous and next object.
      *
      * @param  string $type     story|task|bug|case
@@ -843,9 +837,8 @@ class commonModel extends model
      */
     public function getPreAndNextObject(string $type, int $objectID): object
     {
-        $queryCondition    = $type . 'QueryCondition';
-        $typeOnlyCondition = $type . 'OnlyCondition';
-        $queryCondition    = $this->session->$queryCondition;
+        $queryCondition = $type . 'QueryCondition';
+        $queryCondition = $this->session->$queryCondition;
 
         $preAndNextObject       = new stdClass();
         $preAndNextObject->pre  = '';
@@ -861,6 +854,7 @@ class commonModel extends model
     }
 
     /**
+     * 保存列表页的查询条件到session中，用于其他页面返回、导出等操作。
      * Save one executed query.
      *
      * @param  string    $sql
@@ -869,7 +863,7 @@ class commonModel extends model
      * @access public
      * @return void
      */
-    public function saveQueryCondition($sql, $objectType, $onlyCondition = true)
+    public function saveQueryCondition(string $sql, string $objectType, bool $onlyCondition = true)
     {
         /* Set the query condition session. */
         if($onlyCondition)
@@ -907,6 +901,7 @@ class commonModel extends model
     }
 
     /**
+     * 批量创建时，移除名称重复的对象。
      * Remove duplicate for story, task, bug, case, doc.
      *
      * @param  string       $type  e.g. story task bug case doc.
@@ -950,6 +945,7 @@ class commonModel extends model
     }
 
     /**
+     * 追加排序字段。
      * Append order by.
      *
      * @param  string $orderBy
@@ -957,7 +953,7 @@ class commonModel extends model
      * @access public
      * @return string
      */
-    public static function appendOrder($orderBy, $append = 'id')
+    public static function appendOrder(string $orderBy, string $append = 'id'): string
     {
         if(empty($orderBy)) return $append;
 
@@ -967,14 +963,15 @@ class commonModel extends model
     }
 
     /**
+     * 检查字段是否存在。
      * Check field exists
      *
-     * @param  string    $table
-     * @param  string    $field
+     * @param  string $table
+     * @param  string $field
      * @access public
      * @return bool
      */
-    public function checkField($table, $field)
+    public function checkField(string $table, string $field): bool
     {
         $fields   = $this->dao->descTable($table);
         $hasField = false;
@@ -990,6 +987,7 @@ class commonModel extends model
     }
 
     /**
+     * 检查验证文件是否正确创建。
      * Check safe file.
      *
      * @access public
@@ -1006,6 +1004,7 @@ class commonModel extends model
     }
 
     /**
+     * 检查升级验证文件是否创建，给出升级的提示。
      * Check upgrade's status file is ok or not.
      *
      * @access public
@@ -1032,6 +1031,7 @@ class commonModel extends model
     }
 
     /**
+     * 禅道鉴权核心方法，如果用户没有当前模块、方法的权限，则跳转到登录页面或者拒绝页面。
      * Check the user has permission to access this method, if not, locate to the login page or deny page.
      *
      * @access public
@@ -1049,13 +1049,13 @@ class commonModel extends model
                 $method = $this->app->rawMethod;
             }
 
-            $beforeValidMethods = array(
+            $openMethods = array(
                 'user'    => array('deny', 'logout'),
                 'my'      => array('changepassword'),
                 'message' => array('ajaxgetmessage'),
             );
 
-            if(!empty($this->app->user->modifyPassword) and (!isset($beforeValidMethods[$module]) or !in_array($method, $beforeValidMethods[$module]))) return helper::header('location', helper::createLink('my', 'changePassword'));
+            if(!empty($this->app->user->modifyPassword) and (!isset($openMethods[$module]) or !in_array($method, $openMethods[$module]))) return helper::header('location', helper::createLink('my', 'changePassword'));
             if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
             if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
             if($this->isOpenMethod($module, $method)) return true;
@@ -1064,7 +1064,7 @@ class commonModel extends model
             {
                 if($this->app->tab == 'project')
                 {
-                    $this->resetProjectPriv();
+                    $this->resetProjectPriv(); // 项目目管理员有项目的所有操作权限。
                     if(commonModel::hasPriv($module, $method)) return true;
                 }
 
@@ -1156,17 +1156,18 @@ class commonModel extends model
     }
 
     /**
+     * 检查用户是否有当前模块、方法的权限。
      * Check the user has permission of one method of one module.
      *
      * @param  string $module
      * @param  string $method
-     * @param  object $object
+     * @param  mixed  $object
      * @param  string $vars
      * @static
      * @access public
      * @return bool
      */
-    public static function hasPriv($module, $method, $object = null, $vars = '')
+    public static function hasPriv(string $module, string $method, mixed $object = null, string $vars = '')
     {
         global $app, $lang;
         $module = strtolower($module);
@@ -1174,11 +1175,7 @@ class commonModel extends model
         parse_str($vars, $params);
 
         if(empty($app->user)) return false;
-        if(empty($params['storyType']) and $module == 'story' and !empty($app->params['storyType']) and strpos(",story,requirement,", ",{$app->params['storyType']},") !== false) $module = $app->params['storyType'];
-        if($module == 'story' and !empty($params['storyType']) and strpos(",story,requirement,", ",{$params['storyType']},") !== false) $module = $params['storyType'];
-        if($module == 'product' and $method == 'browse' and !empty($app->params['storyType']) and $app->params['storyType'] == 'requirement') $method = 'requirement';
-        if($module == 'product' and $method == 'browse' and !empty($params['storyType']) and $params['storyType'] == 'requirement') $method = 'requirement';
-        if($module == 'story' and $method == 'linkrequirements') $module = 'requirement';
+        list($module, $method) = commonTao::getStoryModuleAndMethod($module, $method, $params);
 
         /* If the user is doing a tutorial, have all tutorial privileges. */
         if(commonModel::isTutorialMode())
@@ -1194,26 +1191,16 @@ class commonModel extends model
         /* Check the parent object is closed. */
         if(!empty($method) and strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
 
-        /* Check the method is openMethod. */
-        if(in_array("$module.$method", $app->config->openMethods)) return true;
-
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) or strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
+
+        /* Check the method is openMethod. */
+        if(in_array("$module.$method", $app->config->openMethods)) return true;
 
         /* If is the program/project/product/execution admin, have all program privileges. */
         if($app->config->vision != 'lite')
         {
-            $inProject = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'project');
-            if($inProject and $app->session->project and (strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false or strpos(",{$app->user->rights['projects']},", ',all,') !== false)) return true;
-
-            $inProduct = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'product');
-            if($inProduct and $app->session->product and (strpos(",{$app->user->rights['products']},", ",{$app->session->product},") !== false or strpos(",{$app->user->rights['products']},", ',all,') !== false)) return true;
-
-            $inProgram = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'program');
-            if($inProgram and $app->session->program and (strpos(",{$app->user->rights['programs']},", ",{$app->session->program},") !== false or strpos(",{$app->user->rights['programs']},", ',all,') !== false)) return true;
-
-            $inExecution = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'execution');
-            if($inExecution and $app->session->execution and (strpos(",{$app->user->rights['executions']},", ",{$app->session->execution},") !== false or strpos(",{$app->user->rights['executions']},", ',all,') !== false)) return true;
+            if(commonTao::isProjectAdmin($module)) return true;
         }
 
         /* If not super admin, check the rights. */
@@ -1222,10 +1209,7 @@ class commonModel extends model
 
         /* White list of import method. */
         $canImport = isset($rights[$module]['import']) && commonModel::hasDBPriv($object, $module, 'import');
-        if(in_array($module, $app->config->importWhiteList) && $method == 'showimport' && $canImport)
-        {
-            return true;
-        }
+        if(in_array($module, $app->config->importWhiteList) && $method == 'showimport' && $canImport) return true;
 
         if(isset($rights[$module][$method]))
         {
@@ -1236,7 +1220,7 @@ class commonModel extends model
             if($module == 'my' and $method == 'team') $menu = 'system'; // Fix bug #18642.
             $menu = strtolower($menu);
             if($menu != 'qa' and !isset($lang->$menu->menu)) return true;
-            if(($menu == 'my' and $method != 'team')or $menu == 'index' or $module == 'tree') return true;
+            if(($menu == 'my' and $method != 'team') or $menu == 'index' or $module == 'tree') return true;
             if($module == 'company' and $method == 'dynamic') return true;
             if($module == 'action' and $method == 'editcomment') return true;
             if($module == 'action' and $method == 'comment') return true;
@@ -1250,13 +1234,14 @@ class commonModel extends model
     }
 
     /**
+     * 如果用户是项目管理员，则重设项目的权限。
      * Reset project priv.
      *
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function resetProjectPriv($projectID = 0)
+    public function resetProjectPriv(int $projectID = 0)
     {
         /* Get user program priv. */
         if(empty($projectID) and $this->session->project) $projectID = $this->session->project;
@@ -1310,16 +1295,17 @@ class commonModel extends model
     }
 
     /**
+     * 受限用户只能编辑自己相关的数据。
      * Check db priv.
      *
-     * @param  object $object
+     * @param  mixed  $object
      * @param  string $module
      * @param  string $method
      * @static
      * @access public
-     * @return void
+     * @return bool
      */
-    public static function hasDBPriv($object, $module = '', $method = '')
+    public static function hasDBPriv(mixed $object, string $module = '', string $method = ''): bool
     {
         global $app;
 
@@ -1342,33 +1328,35 @@ class commonModel extends model
         }
         if(empty($app->user->rights['rights']['my']['limited']) && !$limitedExecution) return true;
 
-        if(!empty($method) && strpos($method, 'batch')  === 0) return false;
-        if(!empty($method) && strpos($method, 'link')   === 0) return false;
-        if(!empty($method) && strpos($method, 'create') === 0) return false;
-        if(!empty($method) && strpos($method, 'import') === 0) return false;
+        if(strpos($method, 'batch')  === 0) return false;
+        if(strpos($method, 'link')   === 0) return false;
+        if(strpos($method, 'create') === 0) return false;
+        if(strpos($method, 'import') === 0) return false;
 
         if(empty($object)) return true;
 
-        if(!empty($object->openedBy)     && $object->openedBy     == $app->user->account) return true;
-        if(!empty($object->addedBy)      && $object->addedBy      == $app->user->account) return true;
-        if(!empty($object->account)      && $object->account      == $app->user->account) return true;
-        if(!empty($object->assignedTo)   && $object->assignedTo   == $app->user->account) return true;
-        if(!empty($object->finishedBy)   && $object->finishedBy   == $app->user->account) return true;
-        if(!empty($object->canceledBy)   && $object->canceledBy   == $app->user->account) return true;
-        if(!empty($object->closedBy)     && $object->closedBy     == $app->user->account) return true;
-        if(!empty($object->lastEditedBy) && $object->lastEditedBy == $app->user->account) return true;
+        $account = $app->user->account;
+        if(!empty($object->openedBy))     return $object->openedBy     == $account;
+        if(!empty($object->addedBy))      return $object->addedBy      == $account;
+        if(!empty($object->account))      return $object->account      == $account;
+        if(!empty($object->assignedTo))   return $object->assignedTo   == $account;
+        if(!empty($object->finishedBy))   return $object->finishedBy   == $account;
+        if(!empty($object->canceledBy))   return $object->canceledBy   == $account;
+        if(!empty($object->closedBy))     return $object->closedBy     == $account;
+        if(!empty($object->lastEditedBy)) return $object->lastEditedBy == $account;
 
         return false;
     }
 
     /**
+     * 检查IP是否在白名单中。
      * Check whether IP in white list.
      *
      * @param  string $ipWhiteList
      * @access public
      * @return bool
      */
-    public function checkIP($ipWhiteList = '')
+    public function checkIP(string $ipWhiteList = ''): bool
     {
         $ip = helper::getRemoteIp();
 
@@ -1441,12 +1429,13 @@ class commonModel extends model
     }
 
     /**
+     * 获取禅道的完整URL。
      * Get the full url of the system.
      *
      * @access public
      * @return string
      */
-    public static function getSysURL()
+    public static function getSysURL(): string
     {
         if(defined('RUN_MODE') && RUN_MODE == 'test') return '';
 
@@ -1458,16 +1447,19 @@ class commonModel extends model
     }
 
     /**
+     * 检查当前是否为新手教程模式。
      * Check whether view type is tutorial
+     *
      * @access public
      * @return bool
      */
-    public static function isTutorialMode()
+    public static function isTutorialMode(): bool
     {
-        return (isset($_SESSION['tutorialMode']) and $_SESSION['tutorialMode']);
+        return !empty($_SESSION['tutorialMode']);
     }
 
     /**
+     * 将数组中的值转为拼音, 以便搜索。
      * Convert items to Pinyin.
      *
      * @param  array    $items
@@ -1475,7 +1467,7 @@ class commonModel extends model
      * @access public
      * @return array
      */
-    public static function convert2Pinyin($items)
+    public static function convert2Pinyin($items): array
     {
         global $app;
         static $allConverted = array();
@@ -1515,6 +1507,7 @@ class commonModel extends model
     }
 
     /**
+     * 检查RESTful API调用是否合法。
      * Check an entry of new API.
      *
      * @access public
@@ -1538,6 +1531,7 @@ class commonModel extends model
     }
 
     /**
+     * 检查旧版API调用是否合法。
      * Check an entry.
      *
      * @access public
@@ -1601,13 +1595,14 @@ class commonModel extends model
     }
 
     /**
+     * 检查Token是否合法。
      * Check token of an entry.
      *
      * @param  object $entry
      * @access public
      * @return bool
      */
-    public function checkEntryToken($entry)
+    public function checkEntryToken(object $entry): bool
     {
         parse_str($this->server->query_String, $queryString);
         unset($queryString['token']);
@@ -1634,19 +1629,21 @@ class commonModel extends model
     }
 
     /**
+     * 检查当前语言项是否为中文。
      * Check Not CN Lang.
      *
      * @static
      * @access public
      * @return bool
      */
-    public static function checkNotCN()
+    public static function checkNotCN(): bool
     {
         global $app;
         return strpos('|zh-cn|zh-tw|', '|' . $app->getClientLang() . '|') === false;
     }
 
     /**
+     * 检查对象是否可被修改。
      * Check the object can be changed.
      *
      * @param  string $module
@@ -1655,7 +1652,7 @@ class commonModel extends model
      * @access public
      * @return bool
      */
-    public static function canBeChanged($module, $object = null)
+    public static function canBeChanged(string $module, object $object = null): bool
     {
         if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
 

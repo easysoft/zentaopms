@@ -1,19 +1,30 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/doc.class.php';
-su('admin');
-
 /**
 
 title=测试 docModel->setMenuByType();
+timeout=0
 cid=1
-pid=1
-
-
 
 */
 
-$doc = new docTest();
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/doc.class.php';
+zdTable('project')->config('execution')->gen(10);
+zdTable('product')->config('product')->gen(5);
+zdTable('doclib')->config('doclib')->gen(30);
+zdTable('user')->gen(5);
+su('admin');
 
-r($doc->setMenuByTypeTest()) && p() && e();
+$typeList     = array('', 'mine', 'project', 'execution', 'product', 'custom');
+$objectIdList = array(0, 11, 101, 1);
+$libIdList    = array(0, 11, 16, 20, 26, 6);
+$appendList   = array(0, 1);
+
+$docTester = new docTest();
+r($docTester->setMenuByTypeTest($typeList[0], $objectIdList[0], $libIdList[1], $appendList[0])[0]) && p('11:type,name') && e('mine,我的文档库11');        // 测试空数据
+r($docTester->setMenuByTypeTest($typeList[1], $objectIdList[0], $libIdList[1], $appendList[0])[0]) && p('11:type,name') && e('mine,我的文档库11');        // 设置我的文档库导航
+r($docTester->setMenuByTypeTest($typeList[2], $objectIdList[1], $libIdList[2], $appendList[0])[0]) && p('16:type,name') && e('project,项目文档主库16');   // 设置项目文档库导航
+r($docTester->setMenuByTypeTest($typeList[3], $objectIdList[2], $libIdList[3], $appendList[0])[0]) && p('20:type,name') && e('execution,执行文档主库20'); // 设置执行文档库导航
+r($docTester->setMenuByTypeTest($typeList[4], $objectIdList[3], $libIdList[4], $appendList[0])[0]) && p('26:type,name') && e('product,产品文档主库26');   // 设置产品文档库导航
+r($docTester->setMenuByTypeTest($typeList[5], $objectIdList[0], $libIdList[5], $appendList[0])[0]) && p('6:type,name')  && e('custom,自定义文档库6');     // 设置自定义文档库导航

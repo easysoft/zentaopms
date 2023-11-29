@@ -801,7 +801,8 @@ class user extends control
     }
 
     /**
-     * Reset password.
+     * 管理员重置密码。
+     * Admin reset password.
      *
      * @access public
      * @return void
@@ -813,29 +814,33 @@ class user extends control
             $resetFileName = $this->app->getBasePath() . 'tmp' . DIRECTORY_SEPARATOR . uniqid('reset_') . '.txt';
             $this->session->set('resetFileName', $resetFileName);
         }
-
-        $resetFileName = $this->session->resetFileName;
-
-        $needCreateFile = false;
-        if(!file_exists($resetFileName) or (time() - filemtime($resetFileName)) > 60 * 2) $needCreateFile = true;
+        $resetFileName  = $this->session->resetFileName;
+        $needCreateFile = !file_exists($resetFileName) || (time() - filemtime($resetFileName)) > 60 * 2;
 
         if($_POST)
         {
             if($needCreateFile) return $this->send(array('result' => 'success', 'load' => true));
 
-            $result = $this->user->resetPassword();
+            $user = form::data($this->config->user->form->reset)
+                ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
+                ->get();
+            $this->userZen->checkPassword($user);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $result = $this->user->resetPassword($user);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(!$result) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->resetFail));
 
             $referer = helper::safe64Encode($this->createLink('index', 'index'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->user->resetSuccess, 'locate' => $this->createLink('user', 'logout', 'referer=' . $referer)));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->user->resetSuccess, 'locate' => inlink('logout', 'referer=' . $referer)));
         }
 
-        /* Remove the real path for security reason. */
+        /* 移除真实路径以确保安全。*/
+        /* Remove the real path to ensure security. */
         $resetFileName = str_replace($this->app->getBasePath(), '', $resetFileName);
 
-        $this->view->title          = $this->lang->user->resetPassword;
-        $this->view->status         = 'reset';
+        $this->view->title          = $this->lang->user->resetPwdByAdmin;
+        $this->view->rand           = $this->user->updateSessionRandom();
         $this->view->needCreateFile = $needCreateFile;
         $this->view->resetFileName  = $resetFileName;
 
@@ -843,6 +848,7 @@ class user extends control
     }
 
     /**
+     * 忘记密码。
      * Forget password.
      *
      * @access public
@@ -850,48 +856,43 @@ class user extends control
      */
     public function forgetPassword()
     {
-        $this->app->loadLang('admin');
-        $this->loadModel('mail');
-
         if(!empty($_POST))
         {
-            /* Check account and email. */
-            $account = $_POST['account'];
-            $email   = $_POST['email'];
-            if(empty($account)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->accountEmpty));
-            if(empty($email)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->emailEmpty));
+            $data = form::data($this->config->user->form->forgetPassword)->get();
 
-            $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($account)->fetch();
-            if(empty($user)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->noUser));
-            if(empty($user->email)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->noEmail));
+            $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($data->account)->fetch();
+            if(empty($user)) return $this->send(array('result' => 'fail', 'message' => array('account' => $this->lang->user->error->noUser)));
+            if(empty($user->email)) return $this->send(array('result' => 'fail', 'message' => array('email' => $this->lang->user->error->noEmail)));
+            if($user->email != $data->email) return $this->send(array('result' => 'fail', 'message' => array('email' => $this->lang->user->error->errorEmail)));
 
-            if($user->email != $email) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->errorEmail));
+            $this->loadModel('mail');
             if(!$this->config->mail->turnon) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->emailSetting));
 
             $code = uniqid();
-            $this->dao->update(TABLE_USER)->set('resetToken')->eq(json_encode(array('code' => $code, 'endTime' => strtotime("+{$this->config->user->resetPasswordTimeout} minutes"))))->where('account')->eq($account)->exec();
+            $this->dao->update(TABLE_USER)->set('resetToken')->eq(json_encode(array('code' => $code, 'endTime' => strtotime("+{$this->config->user->resetPasswordTimeout} minutes"))))->where('account')->eq($user->account)->exec();
 
-            $result = $this->mail->send($account, $this->lang->user->resetPWD, sprintf($this->lang->mail->forgetPassword, commonModel::getSysURL() . inlink('resetPassword', 'code=' . $code)), '', true, array(), true);
-            if(strstr($result, 'ERROR')) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->sendMailFail), true);
+            $result = $this->mail->send($user->account, $this->lang->user->resetPWD, sprintf($this->lang->mail->forgetPassword, commonModel::getSysURL() . inlink('resetPassword', 'code=' . $code)), '', true, array(), true);
+            if(strstr($result, 'ERROR')) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->sendMailFail));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->user->sendEmailSuccess));
         }
 
-        $this->view->title = $this->lang->user->resetPassword;
+        $this->view->title = $this->lang->user->resetPwdByMail;
         $this->display();
     }
 
     /**
-     * Reset password.
+     * 邮箱重置密码。
+     * Reset password by email.
      *
-     * @param  string  $code
+     * @param  string $code
      * @access public
      * @return void
      */
-    public function resetPassword($code)
+    public function resetPassword(string $code)
     {
         $expired = true;
-        $user    = $this->dao->select('account, resetToken')->from(TABLE_USER)->where('resetToken')->like('%"' . $code . '"%')->fetch();
+        $user    = $this->dao->select('account, resetToken')->from(TABLE_USER)->where('resetToken')->like('%"code":"' . $code . '"%')->fetch();
         if($user)
         {
             $resetToken = json_decode($user->resetToken);
@@ -901,32 +902,26 @@ class user extends control
         if(!empty($_POST))
         {
             if($expired) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->linkExpired));
-            $_POST['account'] = $user->account;
 
-            $this->user->resetPassword();
-            if(dao::isError())
-            {
-                if(empty($_POST['password2'])) dao::$errors['password2'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
+            $user = form::data($this->config->user->form->resetPassword)
+                ->add('account', $user->account)
+                ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
+                ->get();
 
-                $response['result']  = 'fail';
-                $response['message'] = dao::getError();
+            $this->userZen->checkPassword($user);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-                return $this->send($response);
-            }
+            $this->user->resetPassword($user);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->dao->update(TABLE_USER)->set('resetToken')->eq('')->where('account')->eq($this->post->account)->exec();
+            $this->dao->update(TABLE_USER)->set('resetToken')->eq('')->where('account')->eq($user->account)->exec();
 
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            $response['load']    = inlink('login');
-
-            return $this->send($response);
+            return $this->send(array('result' => 'fail', 'message' => $this->lang->saveSuccess, 'load' => inlink('login')));
         }
 
         $this->view->title   = $this->lang->user->resetPWD;
-        $this->view->expired = $expired;
-        $this->view->user    = empty($user) ? '' : $user;
         $this->view->rand    = $this->user->updateSessionRandom();
+        $this->view->expired = $expired;
 
         $this->display();
     }
@@ -1158,14 +1153,15 @@ class user extends control
     }
 
     /**
-     * Refresh random for login
+     * 刷新用于登录的随机数。
+     * Refresh random for login.
      *
      * @access public
      * @return void
      */
     public function refreshRandom()
     {
-        $rand = (string)$this->user->updateSessionRandom();
-        echo $rand;
+        $rand = $this->user->updateSessionRandom();
+        echo (string)$rand;
     }
 }

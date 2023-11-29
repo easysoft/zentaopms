@@ -9,10 +9,11 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('updateTimeTip', $lang->metric->updateTimeTip);
 
 $metricID = $metric->id;
 
-$fnGenerateQueryForm = function() use($metricRecordType, $metric, $metricID)
+$fnGenerateQueryForm = function() use($metricRecordType, $metric, $metricID, $dateLabels, $defaultDate)
 {
     if(!$metricRecordType) return null;
     $formGroups = array();
@@ -22,45 +23,95 @@ $fnGenerateQueryForm = function() use($metricRecordType, $metric, $metricID)
     {
         $formGroups[] = formGroup
         (
-            setClass('query-inline picker-nowrap'),
-            set::width('248px'),
+            setClass('query-inline picker-nowrap w-40'),
             set::label($this->lang->metric->query->scope[$metric->scope]),
-            set::name('scope'),
+            set::name('scope_' . $metricID),
             set::control(array('type' => 'picker', 'multiple' => true)),
-            set::items($objectPairs)
+            set::items($objectPairs),
+            set::placeholder($this->lang->metric->placeholder->{$metric->scope})
+        );
+    }
+
+    if($metricRecordType == 'scope' || $metricRecordType == 'system')
+    {
+        $btnLabels = array();
+        foreach($this->lang->metric->query->dayLabels as $key => $label)
+        {
+            $active = $key == '7' ? ' selected' : '';
+            $btnLabels[] = btn
+            (
+                setClass("$active default w-16 p-0"),
+                set::key($key),
+                $label
+            );
+        }
+        $formGroups[] = formGroup
+        (
+            setClass('query-calc-date query-inline w-64'),
+            btngroup
+            (
+                $btnLabels
+            ),
+            on::click('.query-calc-date button.btn', 'window.handleCalcDateClick(target)'),
         );
     }
 
     if($metricRecordType == 'date' || $metricRecordType == 'scope-date')
     {
+        $btnLabels = array();
+        foreach($dateLabels as $key => $label)
+        {
+            $active = $key == $defaultDate ? ' selected' : '';
+            $btnLabels[] = btn
+            (
+                setClass("$active default w-16 p-0"),
+                set::key($key),
+                $label
+            );
+        }
         $formGroups[] = formGroup
         (
-            setClass('query-inline'),
-            set::width('360px'),
-            set::label($this->lang->metric->date),
+            setClass('query-date query-inline w-64'),
+            btngroup
+            (
+                $btnLabels
+            ),
+            on::click('.query-date button.btn', 'window.handleDateLabelClick(target)'),
+        );
+
+        $formGroups[] = formGroup
+        (
+            setClass('query-inline w-80'),
+            // set::label($this->lang->metric->date),
             inputGroup
             (
                 datePicker
                 (
+                    setClass('query-date-picker'),
                     set::name('dateBegin'),
-                    set('id', 'dateBegin' . $metricID)
+                    set('id', 'dateBegin' . $metricID),
+                    set::placeholder($this->lang->metric->placeholder->select)
                 ),
                 $this->lang->metric->to,
                 datePicker
                 (
+                    setClass('query-date-picker'),
                     set::name('dateEnd'),
-                    set('id', 'dateEnd' . $metricID)
+                    set('id', 'dateEnd' . $metricID),
+                    set::placeholder($this->lang->metric->placeholder->select)
                 )
-            )
+            ),
+            on::change('.query-date-picker', 'window.handleDatePickerChange(target)'),
         );
     }
 
     return form
     (
         set::id('queryForm' . $metricID),
+        setClass('ml-4'),
         formRow
         (
-            set::width('full'),
+            set::width('max'),
             $formGroups,
             !empty($formGroups) ? formGroup
             (

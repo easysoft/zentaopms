@@ -88,7 +88,7 @@ class doc extends control
         $params     = "libID={$libID}&moduleID={$moduleID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}";
         if($this->app->rawMethod == 'myspace') $params = "type={$type}&{$params}";
         $actionURL  = $this->createLink('doc', $this->app->rawMethod, $params);
-        $this->docZen->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
+        $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1208,7 +1208,7 @@ class doc extends control
         }
         else
         {
-            $this->docZen->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
+            $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
         }
 
         /* Load pager. */

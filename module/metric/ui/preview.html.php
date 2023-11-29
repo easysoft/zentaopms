@@ -10,8 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('resultHeader',       isset($resultHeader) ? $resultHeader : array());
-jsVar('resultData',         isset($resultData)   ? $resultData   : array());
+jsVar('updateTimeTip',      $lang->metric->updateTimeTip);
 jsVar('objectList',         $lang->metric->objectList);
 jsVar('current',            $current);
 jsVar('maxSelectNum',       $config->metric->maxSelectNum);
@@ -27,6 +26,7 @@ jsVar('errorDateRange',     $lang->metric->errorDateRange);
 jsVar('errorCalcTimeRange', $lang->metric->errorCalcTimeRange);
 jsVar('queryScopeLang',     $lang->metric->query->scope);
 jsVar('collectStar',        $lang->metric->collectStar);
+jsVar('dateType',           $dateType);
 // jsVar('pager',              usePager());
 
 if($scope == 'collect' and empty($current))

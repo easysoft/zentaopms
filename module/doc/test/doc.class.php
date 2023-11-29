@@ -3,8 +3,11 @@ class docTest
 {
     public function __construct()
     {
-         global $tester;
+         global $tester, $app;
          $this->objectModel = $tester->loadModel('doc');
+
+         $app->rawModule = 'doc';
+         $app->rawMethod = 'index';
     }
 
     /**
@@ -546,10 +549,20 @@ class docTest
         return $objects;
     }
 
-    public function setMenuByTypeTest($type, $objectID, $libID, $appendLib = 0)
+    /**
+     * 设置文档的导航。
+     * Set doc menu by type.
+     *
+     * @param  string $type      mine|project|execution|product|custom
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  int    $appendLib
+     * @access public
+     * @return array
+     */
+    public function setMenuByTypeTest(string $type, int $objectID, int $libID, int $appendLib = 0): array
     {
-        $objects = $this->objectModel->setMenuByType($type, $objectID, $libID, $appendLib = 0);
-
+        $objects = $this->objectModel->setMenuByType($type, $objectID, $libID, $appendLib);
         if(dao::isError()) return dao::getError();
 
         return $objects;
@@ -592,5 +605,90 @@ class docTest
         }
 
         return 'noerror';
+    }
+
+    /**
+     * 构造搜索表单。
+     * Build search form.
+     *
+     * @param  int    $libID
+     * @param  array  $libIdList
+     * @param  int    $queryID
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function buildSearchFormTest(int $libID, array $libIdList, int $queryID, string $type): array
+    {
+        $libs = $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($libIdList)->fetchAll('id');
+        $this->objectModel->buildSearchForm($libID, $libs, $queryID, '', $type);
+        return $this->objectModel->config->doc->search;
+    }
+
+    /**
+     * 通过搜索获取文档列表数据。
+     * Get docs by search.
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function getDocsBySearchTest(string $type, int $objectID, int $libID, int $queryID): array
+    {
+        $docs = $this->objectModel->getDocsBySearch($type, $objectID, $libID, $queryID);
+        if(dao::isError()) return dao::getError();
+
+        return $docs;
+    }
+
+    /**
+     * 构造搜索条件。
+     * Build search query.
+     *
+     * @param  string $type
+     * @param  int    $queryID
+     * @access public
+     * @return string
+     */
+    public function buildQueryTest(string $type, int $queryID): string
+    {
+        return $this->objectModel->buildQuery($type, $queryID);
+    }
+
+    /**
+     * 通过对象ID获取文档库。
+     * Get libs by object.
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  int    $appendLib
+     * @access public
+     * @return array
+     */
+    public function getLibsByObjectTest(string $type, int $objectID, int $appendLib = 0): array
+    {
+        $libs = $this->objectModel->getLibsByObject($type, $objectID, $appendLib);
+
+        if(dao::isError()) return dao::getError();
+        return $libs;
+    }
+
+    /**
+     * 检查是否有权限访问文档库。
+     * Check priv for lib.
+     *
+     * @param  string $type     lib|doc
+     * @param  int    $objectID
+     * @param  string $extra    notdoc
+     * @access public
+     * @return bool
+     */
+    public function checkPrivLibTest(string $type, int $objectID, string $extra = ''): bool
+    {
+        $object = $type == 'lib' ? $this->objectModel->getLibByID($objectID) : $this->objectModel->getByID($objectID);
+        return $this->objectModel->checkPrivLib($object, $extra);
     }
 }

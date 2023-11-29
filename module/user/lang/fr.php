@@ -17,8 +17,8 @@ $lang->user->company          = 'Entreprise';
 $lang->user->dept             = 'Compartiment';
 $lang->user->account          = 'Compte';
 $lang->user->password         = 'Mot de Passe';
+$lang->user->password1        = 'Mot de Passe';
 $lang->user->password2        = 'Répétez Password';
-$lang->user->password2AB      = 'Repeat Password';
 $lang->user->role             = 'Rôle';
 $lang->user->group            = 'Groupe de Privilèges';
 $lang->user->realname         = 'Nom';
@@ -40,10 +40,8 @@ $lang->user->dingding         = 'DingDing';
 $lang->user->slack            = 'Slack';
 $lang->user->whatsapp         = 'WhatsApp';
 $lang->user->address          = 'Adresse';
-$lang->user->addressAB        = 'Adresse';
 $lang->user->zipcode          = 'Code Postal';
 $lang->user->join             = 'Ajouté le';
-$lang->user->joinAB           = 'Ajouté le';
 $lang->user->priv             = 'Autorité';
 $lang->user->visits           = 'Nb Visites';
 $lang->user->visions          = 'Version Type';
@@ -54,7 +52,7 @@ $lang->user->ditto            = 'Ditto';
 $lang->user->originalPassword = 'Ancien Password';
 $lang->user->newPassword      = 'Nouveau Password';
 $lang->user->verifyPassword   = 'Mot de Passe';
-$lang->user->resetPassword    = 'Password oublié ?';
+$lang->user->forgetPassword   = 'Password oublié ?';
 $lang->user->score            = 'Score';
 $lang->user->name             = 'Name';
 $lang->user->type             = 'User Type';
@@ -80,10 +78,14 @@ $lang->user->identity         = 'Identity';
 $lang->user->switchVision     = 'Switch to %s';
 $lang->user->submit           = 'Submit';
 $lang->user->resetPWD         = 'Reset Password';
-$lang->user->resetTitle       = 'Admin reset the password';
+$lang->user->resetPwdByAdmin  = 'Reset password via admin';
+$lang->user->resetPwdByMail   = 'Reset password via email';
 
 $lang->user->abbr = new stdclass();
-$lang->user->abbr->id = 'ID';
+$lang->user->abbr->id          = 'ID';
+$lang->user->abbr->password2AB = 'Répétez Password';
+$lang->user->abbr->addressAB   = 'Adresse';
+$lang->user->abbr->joinAB      = 'Ajouté le';
 
 $lang->user->legendBasic        = 'Informations de Base';
 $lang->user->legendContribution = 'Contribution';
@@ -322,7 +324,7 @@ $lang->user->mkdirLinux = <<<EOT
     </td></tr></table></body></html>
 EOT;
 
-$lang->user->jumping = "This page will redirect to the previous page in <span id='time'>3</span> seconds. <a href='%s' class='btn primary size-xs' type='button'>Redirect Now</a>";
+$lang->user->jumping = "This page will redirect to the previous page in <span id='time'>10</span> seconds. <a href='%s' id='redirect' class='btn primary'>Redirect Now</a>";
 
 $lang->user->zentaoapp = new stdclass();
 $lang->user->zentaoapp->logout = 'Logout';

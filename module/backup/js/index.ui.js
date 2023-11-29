@@ -10,7 +10,7 @@ window.backup = function(e)
 
             setTimeout(function()
             {
-                location.href = $.createLink('backup', 'index');
+                loadPage($.createLink('backup', 'index'));
             }, 2000);
         },
     });

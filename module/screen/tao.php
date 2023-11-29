@@ -10,7 +10,7 @@ class screenTao extends screenModel
      * @param object $component
      * @return void
      */
-    public function setChartDefault(string $type, object $component): void
+    protected function setChartDefault(string $type, object $component): void
     {
         $chartConfig = $this->config->screen->chart->default->{$type};
         foreach(get_object_vars($chartConfig) as $key => $value) $component->{$key} = $value;

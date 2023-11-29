@@ -19,25 +19,23 @@ div
         set::id('mainContent'),
         formPanel
         (
+            setStyle(array('width' => '500px', 'margin-top' => '100px')),
+            set::title($lang->user->resetPwdByMail),
+            set::actions(array()),
             to::headingActions
             (
                 a
                 (
                     set::href(inlink('reset')),
-                    $lang->user->resetTitle
+                    $lang->user->resetPwdByAdmin
                 )
             ),
-            set::title($lang->admin->resetPWDByMail),
-            setClass('forget-password'),
-            set::actions(array()),
             formRow
             (
                 formGroup
                 (
-                    setClass('flex-wrap'),
                     set::label($lang->user->account),
                     set::name('account'),
-                    set::value(''),
                     set::required(true),
                     set::placeholder($lang->user->placeholder->loginAccount)
                 )
@@ -48,7 +46,6 @@ div
                 (
                     set::label($lang->user->email),
                     set::name('email'),
-                    set::value(''),
                     set::required(true),
                     set::placeholder($lang->user->placeholder->email)
                 )

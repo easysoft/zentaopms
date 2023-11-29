@@ -1,0 +1,20 @@
+<?php
+global $app;
+$config->mr->form = new stdclass();
+$config->mr->form->create = common::formConfig('mr', 'create');
+$config->mr->form->create['hostID']             = array('type' => 'int',    'required' => true);
+$config->mr->form->create['sourceProject']      = array('type' => 'int',    'required' => true);
+$config->mr->form->create['targetProject']      = array('type' => 'int',    'required' => true);
+$config->mr->form->create['sourceBranch']       = array('type' => 'string', 'required' => true);
+$config->mr->form->create['targetBranch']       = array('type' => 'string', 'required' => true);
+$config->mr->form->create['title']              = array('type' => 'string', 'required' => true);
+$config->mr->form->create['assignee']           = array('type' => 'string', 'required' => true);
+$config->mr->form->create['repoID']             = array('type' => 'int',    'required' => true);
+$config->mr->form->create['executionID']        = array('type' => 'int',    'required' => false, 'default' => 0);
+$config->mr->form->create['needCI']             = array('type' => 'int',    'required' => false, 'default' => 0);
+$config->mr->form->create['removeSourceBranch'] = array('type' => 'int',    'required' => false, 'default' => 0);
+$config->mr->form->create['squash']             = array('type' => 'int',    'required' => false, 'default' => 0);
+$config->mr->form->create['jobID']              = array('type' => 'int',    'required' => false, 'default' => 0);
+$config->mr->form->create['description']        = array('type' => 'string', 'required' => false, 'default' => '');
+$config->mr->form->create['createdBy']          = array('type' => 'string', 'required' => false, 'default' => $app->user->account);
+$config->mr->form->create['createdDate']        = array('type' => 'string', 'required' => false, 'default' => helper::now());

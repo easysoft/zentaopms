@@ -93,7 +93,8 @@ i.star {color: var(--color-warning-300);}
 
 .cell-ellipsis {display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
-.query-inline {padding-left: 80px !important;}
-.query-inline>label {justify-content: flex-start !important; width: 80px !important;}
+.query-inline {padding-left: 8px !important;}
+.query-inline>label {justify-content: flex-start !important;}
 .query-btn {padding-left: 20px !important;}
 .picker-nowrap .picker-multi-selections {flex-wrap: nowrap !important; overflow: hidden !important;}
+.query-date .selected,.query-calc-date .selected {background-color: var(--color-primary-50); color: var(--color-primary-600);}

@@ -1083,6 +1083,7 @@ class docModel extends model
     }
 
     /**
+     * 构造搜索条件。
      * Build search query.
      *
      * @param  string $type
@@ -1090,7 +1091,7 @@ class docModel extends model
      * @access public
      * @return string
      */
-    public function buildQuery($type, $queryID = 0)
+    public function buildQuery(string $type, int $queryID = 0): string
     {
         $queryName = $type . 'libDocQuery';
         $queryForm = $type . 'libDocForm';
@@ -1203,6 +1204,7 @@ class docModel extends model
     }
 
     /**
+     * 检查是否有权限访问文档库/文档。
      * Check priv for lib.
      *
      * @param  object $object
@@ -1210,17 +1212,19 @@ class docModel extends model
      * @access public
      * @return bool
      */
-    public function checkPrivLib($object, $extra = '')
+    public function checkPrivLib(object $object, string $extra = ''): bool
     {
         if(empty($object)) return false;
 
-        if($object->type == 'mine' and $object->addedBy == $this->app->user->account) return true;
-        if($this->app->user->admin and $object->type != 'mine') return true;
+        /* Only the creator can access the document library under my space. */
+        if($object->type == 'mine' && $object->addedBy == $this->app->user->account) return true;
+        if($this->app->user->admin && $object->type != 'mine') return true;
         if($object->acl == 'open') return true;
 
+        /* When view a document, check whether current user has permission to access the document library. */
         $account = ',' . $this->app->user->account . ',';
-        if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
-        if(isset($object->users) and strpos(",{$object->users},", $account) !== false) return true;
+        if(isset($object->addedBy) && $object->addedBy == $this->app->user->account) return true;
+        if(isset($object->users) && strpos(",{$object->users},", $account) !== false) return true;
 
         if(!empty($object->groups))
         {
@@ -1234,6 +1238,7 @@ class docModel extends model
         $isProjectLib = $object->project && !$object->execution;
         if($isProjectLib && $object->acl == 'default' && $this->loadModel('project')->checkPriv($object->project)) return true;
 
+        /* The user has permission to access the owning document library that can access the document. */
         if(strpos($extra, 'notdoc') !== false)
         {
             static $extraDocLibs;
@@ -1241,11 +1246,12 @@ class docModel extends model
             if(isset($extraDocLibs[$object->id])) return true;
         }
 
-        if($object->acl == 'default' and (!empty($object->product) or !empty($object->execution)))
+        /* If the acl is default, the document library cannot be accessed without object permission. */
+        if($object->acl == 'default' && (!empty($object->product) || !empty($object->execution)))
         {
             $acls = $this->app->user->rights['acls'];
-            if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
-            if(!empty($object->execution) and !empty($acls['sprints']) and !in_array($object->execution, $acls['sprints'])) return false;
+            if(!empty($object->product) && !empty($acls['products']) && !in_array($object->product, $acls['products'])) return false;
+            if(!empty($object->execution) && !empty($acls['sprints']) && !in_array($object->execution, $acls['sprints'])) return false;
             if(!empty($object->execution)) return $this->loadModel('execution')->checkPriv($object->execution);
             if(!empty($object->product)) return $this->loadModel('product')->checkPriv($object->product);
         }
@@ -1530,18 +1536,19 @@ class docModel extends model
     }
 
     /**
+     * 通过对象ID获取文档库。
      * Get libs by object.
      *
      * @param  string $type
      * @param  int    $objectID
-     * @param  string $mode
      * @param  int    $appendLib
      * @access public
      * @return array
      */
-    public function getLibsByObject(string $type, int $objectID, string $mode = '', int $appendLib = 0)
+    public function getLibsByObject(string $type, int $objectID, int $appendLib = 0): array
     {
-        if($type == 'custom' or $type == 'mine')
+        if(!in_array($type, array('mine', 'custom', 'product', 'project', 'execution'))) return array();
+        if(in_array($type, array('mine', 'custom')))
         {
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
@@ -1552,15 +1559,8 @@ class docModel extends model
                 ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
         }
-        elseif($type != 'product' and $type != 'project' and $type != 'execution')
-        {
-            return false;
-        }
         else
         {
-            $executionIDList = array();
-            if($type == 'project') $executionIDList = $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple,leaf');
-
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
                 ->andWhere('vision')->eq($this->config->vision)
@@ -1569,6 +1569,9 @@ class docModel extends model
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->orderBy('`order` asc, id_asc')
                 ->fetchAll('id');
+
+            $executionIDList = array();
+            if($type == 'project') $executionIDList = $this->loadModel('execution')->getPairs($objectID, 'all', 'multiple,leaf');
             if($executionIDList)
             {
                 $objectLibs += $this->dao->select('*')->from(TABLE_DOCLIB)
@@ -1582,17 +1585,6 @@ class docModel extends model
             }
         }
 
-        if($type == 'product')
-        {
-            $hasProject = $this->dao->select('DISTINCT t1.product, count(t1.project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
-                ->where('t1.product')->eq($objectID)
-                ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
-                ->andWhere('t2.deleted')->eq(0)
-                ->groupBy('product')
-                ->fetchPairs('product', 'projectCount');
-        }
-
         $libs = array();
         foreach($objectLibs as $lib)
         {
@@ -1601,7 +1593,6 @@ class docModel extends model
 
         $itemCounts = $this->statLibCounts(array_keys($libs));
         foreach($libs as $libID => $lib) $libs[$libID]->allCount = $itemCounts[$libID];
-
         return $libs;
     }
 
@@ -2721,69 +2712,52 @@ class docModel extends model
     }
 
     /**
+     * 设置文档的导航。
      * Set doc menu by type.
      *
-     * @param  string $type
+     * @param  string $type     mine|project|execution|product|custom
      * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $appendLib
      * @access public
      * @return array
      */
-    public function setMenuByType($type, $objectID, $libID, $appendLib = 0)
+    public function setMenuByType(string $type, int $objectID, int $libID, int $appendLib = 0): array
     {
         if(empty($type))
         {
             $doclib   = $this->getLibById($libID);
             $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
-            $objectID = $type == 'custom' ? 0 : $doclib->$type;
+            $objectID = isset($doclib->{$type}) ? $doclib->{$type} : 0;
         }
-        if($this->app->tab == 'doc' and $type == 'execution') $type = 'project';
 
+        $type           = $this->app->tab == 'doc' && $type == 'execution' ? 'project' : $type;
         $objectDropdown = array('text' => '', 'link' => '');
         $appendObject   = $objectID;
         if(in_array($type, array('project', 'product', 'execution')))
         {
-            $table  = $this->config->objectTables[$type];
-            $object = $this->dao->select('id,name,status,deleted')->from($table)->where('id')->eq($objectID)->fetch();
-
-            if(empty($object))
-            {
-                $param = ($type == 'project' and $this->config->vision == 'lite') ? 'model=kanban' : '';
-                $methodName = ($type == 'project' and $this->config->vision != 'lite') ? 'createGuide' : 'create';
-                return helper::createLink($type, $methodName, $param);
-            }
-
-            $objects  = $this->getOrderedObjects($type, 'merge', $objectID);
+            $object = $this->dao->select('id,name,status,deleted')->from($this->config->objectTables[$type])->where('id')->eq($objectID)->fetch();
+            if(empty($object)) return helper::createLink($type, $type == 'project' && $this->config->vision != 'lite' ? 'createGuide' : 'create', $type == 'project' && $this->config->vision == 'lite' ? 'model=kanban' : '');
 
             $this->loadModel($type);
-            if(method_exists($this->$type, 'saveState'))
-            {
-                $objectID = $this->loadModel($type)->saveState($objectID, $objects);
-            }
-            else
-            {
-                $objectID = $this->loadModel($type)->checkAccess($objectID, $objects);
-            }
-
-            $libs = $this->getLibsByObject($type, $objectID, '', $appendLib);
-            if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
-
-            $objectTitle = zget($objects, $objectID, '');
-            if($this->app->tab != 'doc' and isset($libs[$libID]))
+            $objects  = $this->getOrderedObjects($type, 'merge', $objectID);
+            $objectID =  method_exists($this->$type, 'saveState') ? $this->{$type}->saveState($objectID, $objects) : $this->{$type}->checkAccess($objectID, $objects);
+            $libs     = $this->getLibsByObject($type, $objectID, $appendLib);
+            if(($libID == 0 || !isset($libs[$libID])) && !empty($libs)) $libID = reset($libs)->id;
+            if($this->app->tab != 'doc' && isset($libs[$libID]))
             {
                 $objectDropdown['text'] = zget($libs[$libID], 'name', '');
             }
             else
             {
-                $objectDropdown['text'] = $objectTitle;
+                $objectDropdown['text'] = zget($objects, $objectID, '');
                 $objectDropdown['link'] = $this->getDropMenuLink($type, $appendObject);
             }
         }
         else
         {
-            $libs = $this->getLibsByObject($type, 0, '', $appendLib);
-            if(($libID == 0 or !isset($libs[$libID])) and !empty($libs)) $libID = reset($libs)->id;
+            $libs = $this->getLibsByObject($type, 0, $appendLib);
+            if(($libID == 0 || !isset($libs[$libID])) && !empty($libs)) $libID = reset($libs)->id;
             if(isset($libs[$libID])) $objectDropdown['text'] = zget($libs[$libID], 'name', '');
 
             $object     = new stdclass();
@@ -2793,16 +2767,15 @@ class docModel extends model
         $tab = strpos(',my,doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
         if($type == 'mine')   $type = 'my';
         if($type == 'custom') $type = 'team';
-        if($tab == 'doc' and !common::hasPriv('doc', $type . 'Space')) return helper::createLink('user', 'deny', "module=doc&method={$type}Space");
-        if($tab != 'doc' and method_exists($type . 'Model', 'setMenu'))
+        if($tab == 'doc' && !common::hasPriv('doc', $type . 'Space')) return helper::createLink('user', 'deny', "module=doc&method={$type}Space");
+        if($tab != 'doc' && method_exists($type . 'Model', 'setMenu'))
         {
             $this->loadModel($type)->setMenu($objectID);
         }
-        elseif($tab == 'doc' and isset($this->lang->doc->menu->{$type}['alias']))
+        elseif($tab == 'doc' && isset($this->lang->doc->menu->{$type}['alias']))
         {
             $this->lang->doc->menu->{$type}['alias'] .= ',' . $this->app->rawMethod;
         }
-
         return array($libs, $libID, $object, $objectID, $objectDropdown);
     }
 
@@ -2831,9 +2804,10 @@ class docModel extends model
     }
 
     /**
+     * 通过搜索获取文档列表数据。
      * Get docs by search.
      *
-     * @param  string $type product|project|execution|custom|book
+     * @param  string $type     product|project|execution|custom|book
      * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $queryID
@@ -2842,7 +2816,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy = 'id_desc', $pager = null)
+    public function getDocsBySearch(string $type, int $objectID, int $libID, int $queryID, string $orderBy = 'id_desc', object $pager = null): array
     {
         $query     = $this->buildQuery($type, $queryID);
         $libs      = $this->getLibsByObject($type, $objectID);
@@ -2858,8 +2832,8 @@ class docModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        $docs = $this->processCollector($docs);
-        return $docs;
+
+        return $this->processCollector($docs);
     }
 
     /**
@@ -3465,5 +3439,72 @@ class docModel extends model
         }
 
         return $editors;
+    }
+
+    /**
+     * 构造搜索表单。
+     * Build search form.
+     *
+     * @param  string  $libID
+     * @param  array   $libs
+     * @param  int     $queryID
+     * @param  string  $actionURL
+     * @param  string  $type       mine|product|project|execution|custom
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm(int $libID, array $libs, int $queryID, string $actionURL, string $type): void
+    {
+        $this->loadModel('product');
+        if($this->app->rawMethod == 'contribute')
+        {
+            $this->config->doc->search['module'] = 'contributeDoc';
+            $this->config->doc->search['params']['project']['values']   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc', $this->config->vision == 'rnd' ? 'kanban' : '') + array('all' => $this->lang->doc->allProjects);
+            $this->config->doc->search['params']['execution']['values'] = $this->loadModel('execution')->getPairs(0, 'sprint,stage', 'multiple,leaf,noprefix,withobject') + array('all' => $this->lang->doc->allExecutions);
+            $this->config->doc->search['params']['lib']['values']       = $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
+            $this->config->doc->search['params']['product']['values']   = $this->product->getPairs() + array('all' => $this->lang->doc->allProduct);
+
+            unset($this->config->doc->search['fields']['module'], $this->config->doc->search['params']['module']);
+        }
+        else
+        {
+            if(!isset($libs[$libID])) $libs[$libID] = $this->getLibByID($libID);
+
+            $libPairs  = array();
+            $queryName = $type . 'libDoc';
+            foreach($libs as $lib)
+            {
+                if(empty($lib)) continue;
+                if($lib->type == 'api') continue;
+                $libPairs[$lib->id] = $lib->name;
+            }
+
+            if($type == 'project')
+            {
+                $this->config->doc->search['params']['execution']['values'] = $this->loadModel('execution')->getPairs($this->session->project, 'sprint,stage', 'multiple,leaf,noprefix') + array('all' => $this->lang->doc->allExecutions);
+            }
+            else
+            {
+                if($type == 'mine' || $type == 'createdby')
+                {
+                    unset($this->config->doc->search['fields']['addedBy'], $this->config->doc->search['params']['addedBy']);
+                    if($type == 'mine') unset($this->config->doc->search['fields']['editedBy'], $this->config->doc->search['params']['editedBy']);
+                }
+                unset($this->config->doc->search['fields']['execution'], $this->config->doc->search['params']['execution']);
+            }
+
+            if(in_array($type, array('view', 'collect', 'createdby', 'editedby'))) $libPairs = $this->getLibs('all', 'withObject');
+
+            $this->config->doc->search['module'] = $queryName;
+            $this->config->doc->search['params']['lib']['values'] = $libPairs + array('all' => $this->lang->doclib->all);
+            unset($this->config->doc->search['fields']['product'], $this->config->doc->search['params']['product']);
+            unset($this->config->doc->search['fields']['module'], $this->config->doc->search['params']['module']);
+        }
+
+        unset($this->config->doc->search['params']['status']['values']['']);
+        $this->config->doc->search['actionURL'] = $actionURL;
+        $this->config->doc->search['queryID']   = $queryID;
+
+        $this->loadModel('search')->setSearchParams($this->config->doc->search);
     }
 }

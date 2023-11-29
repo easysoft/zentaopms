@@ -107,7 +107,8 @@ formPanel
         formGroup
         (
             set::width('1/2'),
-            set::label($lang->user->password2),
+            set::label($lang->user->abbr->password2),
+            set::required(true),
             set::control('password'),
             set::name('password2'),
         )

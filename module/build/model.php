@@ -837,7 +837,7 @@ class buildModel extends model
     public function buildActionList(object $build, int $executionID = 0, string $from = 'execution'): array
     {
         $actions     = array();
-        $executionID = $executionID ? $executionID : $build->execution;
+        $executionID = $executionID ? $executionID : (int)$build->execution;
         $execution   = $this->loadModel('execution')->fetchByID($executionID);
 
         $module = $from == 'projectbuild' ? 'projectbuild' : 'build';
