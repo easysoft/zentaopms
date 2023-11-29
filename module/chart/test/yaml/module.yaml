@@ -1,0 +1,30 @@
+title: zt_module
+author: Qiyu Xie
+version: "1.0"
+fields:
+  - field: id
+    range: 1-100
+  - field: root
+    range: 1
+  - field: branch
+    range: 0
+  - field: name
+    range: "产品,项目,测试,需求,发布,项目,任务,迭代,成本,工期,需求,Bug"
+  - field: parent
+    range: 0{3},1{2},2{6},3{1}
+  - field: path
+    range: "`,1,`,`,2,`,`,3,`,`,1,4,`,`,1,5,`,`,2,6,`,`,2,7,`,`,2,8,`,`,2,9,`,`,2,10,`,`,2,11,`,`,3,12,`"
+  - field: grade
+    range: 1{3},2{9}
+  - field: order
+    range: "10,20,30,10,20,10,20,30,40,50,60,10"
+  - field: type
+    range: chart
+  - field: owner
+    range: "system{3},[]{9}"
+  - field: collector
+    range: "product,project,test,[]{9}"
+  - field: short
+    range: []
+  - field: deleted
+    range: 0
