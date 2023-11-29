@@ -398,7 +398,7 @@ class repoModel extends model
             }
         }
 
-        if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
+        if($data->encrypt == 'base64') $data->password = base64_encode((string)$data->password);
         $this->dao->update(TABLE_REPO)->data($data, 'serviceToken')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
             ->batchCheckIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
@@ -413,7 +413,7 @@ class repoModel extends model
 
         if($data->SCM == 'Gitlab')
         {
-            $this->loadModel('gitlab')->updateCodePath($data->serviceHost, $data->serviceProject, $repo->id);
+            $this->loadModel('gitlab')->updateCodePath($data->serviceHost, (int)$data->serviceProject, $repo->id);
             $data->path = $this->getByID($id)->path;
             $this->updateCommitDate($repo->id);
         }
@@ -484,7 +484,7 @@ class repoModel extends model
 
             $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
 
-            $this->action->create($type, $linkID, 'linked2revision', '', $revisionID, $committer);
+            $this->action->create($type, (int)$linkID, 'linked2revision', '', $revisionID, $committer);
         }
         return !dao::isError();
     }
@@ -2111,7 +2111,7 @@ class repoModel extends model
             ->fetchGroup('type', 'id');
 
         $stories = empty($relationList['story']) ? array() : $this->loadModel('story')->getByList(array_keys($relationList['story']));
-        $bugs    = empty($relationList['bug'])   ? array() : $this->loadModel('bug')->getByList(array_keys($relationList['bug']));
+        $bugs    = empty($relationList['bug'])   ? array() : $this->loadModel('bug')->getByIdList(array_keys($relationList['bug']));
         $tasks   = empty($relationList['task'])  ? array() : $this->loadModel('task')->getByIdList(array_keys($relationList['task']));
 
         $titleList = array();
@@ -2180,7 +2180,7 @@ class repoModel extends model
         $accessProjects = array();
         foreach($productIDList as $productID)
         {
-            $projects       = $this->loadModel('product')->getProjectPairsByProduct($productID);
+            $projects       = $this->loadModel('product')->getProjectPairsByProduct((int)$productID);
             $accessProjects = $accessProjects + $projects;
         }
 
