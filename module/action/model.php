@@ -907,7 +907,7 @@ class actionModel extends model
         /* Get the list of elements that need to be verified. */
         $shadowProducts   = $this->dao->select('id')->from(TABLE_PRODUCT)->where('shadow')->eq(1)->fetchPairs();
         $projectMultiples = $this->dao->select('id,type,multiple')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
-        $docList          = $this->loadModel('doc')->getPrivDocs('', 0, 'all');
+        $docList          = $this->loadModel('doc')->getPrivDocs(array(), 0, 'all');
         $apiList          = $this->loadModel('api')->getPrivApis();
         $docLibList       = $this->doc->getLibs('hasApi');
         foreach($actions as $i => $action)

@@ -235,26 +235,29 @@ class docModel extends model
     }
 
     /**
-     * creat a api doc library.
+     * Creat a api doc library.
      *
-     * @return int
-     * @author thanatos thanatos915@163.com
+     * @param  object $formData
+     * @access public
+     * @return void
      */
-    public function createApiLib()
+    public function createApiLib(object $formData = null)
     {
-        $libType = $this->post->libType;
-
-        $data = fixer::input('post')
-            ->trim('name')
-            ->join('groups', ',')
-            ->join('users', ',')
-            ->setForce('product', ($libType == 'product' and !empty($_POST['product'])) ? $this->post->product : 0)
-            ->setForce('project', ($libType == 'project' and !empty($_POST['project'])) ? $this->post->project : 0)
-            ->setForce('execution', ($libType == 'project' and !empty($_POST['execution'])) ? $this->post->execution : 0)
-            ->add('addedBy', $this->app->user->account)
-            ->add('addedDate', helper::now())
-            ->remove('uid,contactListMenu,libType')
-            ->get();
+        if(!$formData)
+        {
+            $libType = $this->post->libType;
+            $formData = fixer::input('post')
+                ->trim('name')
+                ->join('groups', ',')
+                ->join('users', ',')
+                ->setForce('product', ($libType == 'product' and !empty($_POST['product'])) ? $this->post->product : 0)
+                ->setForce('project', ($libType == 'project' and !empty($_POST['project'])) ? $this->post->project : 0)
+                ->setForce('execution', ($libType == 'project' and !empty($_POST['execution'])) ? $this->post->execution : 0)
+                ->add('addedBy', $this->app->user->account)
+                ->add('addedDate', helper::now())
+                ->remove('uid,contactListMenu')
+                ->get();
+        }
 
         $this->app->loadLang('api');
 
@@ -264,19 +267,22 @@ class docModel extends model
         $this->lang->doclib->project = $this->lang->api->project;
         $this->lang->doclib->product = $this->lang->api->product;
 
-        if($libType == 'product') $this->config->api->createlib->requiredFields .= ',product';
-        if($libType == 'project') $this->config->api->createlib->requiredFields .= ',project';
+        if($formData->libType == 'product') $this->config->api->createlib->requiredFields .= ',product';
+        if($formData->libType == 'project') $this->config->api->createlib->requiredFields .= ',project';
 
-        $this->checkApiLibName($data, $libType);
+        $this->checkApiLibName($formData, $formData->libType);
 
         if(dao::isError()) return false;
 
-        $data->type = static::DOC_TYPE_API;
-        $this->dao->insert(TABLE_DOCLIB)->data($data)->autoCheck()
+        $formData->type = static::DOC_TYPE_API;
+        $this->dao->insert(TABLE_DOCLIB)->data($formData, 'libType')->autoCheck()
             ->batchCheck($this->config->api->createlib->requiredFields, 'notempty')
             ->exec();
 
-        return $this->dao->lastInsertID();
+        $libID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('doclib', $libID, 'created');
+
+        return !dao::isError();
     }
 
     /**
@@ -2906,7 +2912,7 @@ class docModel extends model
             $showDoc = $showDoc === '0' ? 0 : 1;
             if($this->app->rawMethod == 'view' and $module->type != 'api' and $showDoc)
             {
-                $docIDList = $this->getPrivDocs($rootID, $module->id);
+                $docIDList = $this->getPrivDocs(array($rootID), $module->id);
                 $docs      = $this->dao->select('*, title as name')->from(TABLE_DOC)
                     ->where('id')->in($docIDList)
                     ->andWhere('deleted')->eq(0)
@@ -2981,7 +2987,7 @@ class docModel extends model
             $showDoc = $showDoc === '0' ? 0 : 1;
             if($this->app->rawMethod == 'view' and $lib->type != 'apiLib' and $showDoc)
             {
-                $docIDList = $this->getPrivDocs($lib->id);
+                $docIDList = $this->getPrivDocs(array($lib->id));
                 $docs      = $this->dao->select('*, title as name')->from(TABLE_DOC)
                     ->where('id')->in($docIDList)
                     ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
@@ -3379,7 +3385,7 @@ class docModel extends model
     public function getDynamic($pager = null)
     {
         $allLibs          = $this->getLibs('hasApi');
-        $hasPrivDocIdList = $this->getPrivDocs('', 0, 'all');
+        $hasPrivDocIdList = $this->getPrivDocs(array(), 0, 'all');
         $apiList          = $this->loadModel('api')->getPrivApis();
 
         $actions = $this->dao->select('*')->from(TABLE_ACTION)

@@ -63,7 +63,7 @@ class api extends control
         $libs       = $this->doc->getApiLibs($libID, $objectType, $objectID);
         $lib        = $libID ? zget($libs, $libID) : current($libs);
         $libID      = $lib->id;
-        $objectType = $lib->product ? 'product' : ($lib->project ? 'project' : 'unlink');
+        $objectType = $lib->product ? 'product' : ($lib->project ? 'project' : 'nolink');
         $objectID   = $lib->product ? $lib->product : $lib->project;
 
         /* Build the search form. */
@@ -118,13 +118,13 @@ class api extends control
         $api->desc = htmlspecialchars_decode($api->desc);
 
         /* 生成一些必要的参数。 */
-        $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'unlink');
+        $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'nolink');
         $objectID   = $lib->product ? $lib->product : $lib->project;
         $linkObject = zget($lib, $type, 0);
         $spaceType  = 'api';
         $moduleID   = $api->module;
         $linkParams = "libID=%s";
-        if($this->app->tab != 'doc' && $type != 'unlink') $linkParams = "objectID=$linkObject&$linkParams";
+        if($this->app->tab != 'doc' && $type != 'nolink') $linkParams = "objectID=$linkObject&$linkParams";
 
         /* 解析cookie并获取左侧目录树。 */
         $this->apiZen->parseDocSpaceParam($libs, $libID, $type, $objectID, $moduleID, $spaceType, $release);
@@ -154,10 +154,6 @@ class api extends control
     public function releases(int $libID, string $orderBy = 'id')
     {
         $this->app->loadLang('custom');
-
-        $libs = $this->doc->getApiLibs();
-
-        $this->lang->modulePageNav = $this->apiZen->generateLibsDropMenu($libs[$libID]);
 
         /* Append id for second sort. */
         $sort     = common::appendOrder($orderBy);
@@ -333,6 +329,7 @@ class api extends control
     }
 
     /**
+     * 删除一条数据结构。
      * Delete a struct.
      *
      * @param  int    $libID
@@ -356,24 +353,28 @@ class api extends control
      * @access public
      * @return void
      */
-    public function createLib($type = 'product', $objectID = 0)
+    public function createLib(string $type = 'product', int $objectID = 0)
     {
         if(!empty($_POST))
         {
-            $libID = $this->doc->createApiLib();
+            $formData = form::data($this->config->api->form->createLib)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
+            $formData->product   = $formData->libType == 'product' && !empty($formData->product)   ? $formData->product   : 0;
+            $formData->project   = $formData->libType == 'project' && !empty($formData->project)   ? $formData->project   : 0;
+            $formData->execution = $formData->libType == 'project' && !empty($formData->execution) ? $formData->execution : 0;
+
+            $this->doc->createApiLib($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            /* Record action for create api library. */
-            $this->action->create('doclib', $libID, 'created');
             if(helper::isAjaxRequest('modal')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
 
             /* Set locate object data. */
             setCookie("objectType", $this->post->libType, $this->config->cookieLife, $this->config->webRoot);
-            setCookie("objectID", $this->post->libType == 'project' ? $this->post->project : $this->post->product, $this->config->cookieLife, $this->config->webRoot);
+            setCookie("objectID",   $this->post->libType == 'project' ? $this->post->project : $this->post->product, $this->config->cookieLife, $this->config->webRoot);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('api', 'index', "libID=$libID"), 'closeModal' => true));
         }
 
+        /* 设置默认访问控制的语言项。 */
         $defaultAclLang = in_array($type, array('product', 'product')) ? $this->lang->{$type}->common : $this->lang->product->common;
         $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $defaultAclLang);
 
@@ -383,7 +384,6 @@ class api extends control
         $this->view->users    = $this->user->getPairs('nocode|noclosed');
         $this->view->projects = $this->loadModel('project')->getPairsByModel('all');
         $this->view->products = $this->loadModel('product')->getPairs();
-
         $this->display();
     }
 
