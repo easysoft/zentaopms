@@ -118,3 +118,16 @@ $config->user->form->resetPassword['password1']        = array('required' => tru
 $config->user->form->resetPassword['password2']        = array('required' => true,  'type' => 'string', 'default' => '');
 $config->user->form->resetPassword['passwordLength']   = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->user->form->resetPassword['passwordStrength'] = array('required' => false, 'type' => 'int',    'default' => 0);
+
+$config->user->form->cropAvatar = array();
+$config->user->form->cropAvatar['originWidth']  = array('required' => false, 'type' => 'int',  'default' => 0);
+$config->user->form->cropAvatar['originHeight'] = array('required' => false, 'type' => 'int',  'default' => 0);
+$config->user->form->cropAvatar['scaleWidth']   = array('required' => false, 'type' => 'int',  'default' => 0);
+$config->user->form->cropAvatar['scaleHeight']  = array('required' => false, 'type' => 'int',  'default' => 0);
+$config->user->form->cropAvatar['width']        = array('required' => false, 'type' => 'int',  'default' => 0);
+$config->user->form->cropAvatar['height']       = array('required' => false, 'type' => 'int',  'default' => 0);
+$config->user->form->cropAvatar['left']         = array('required' => false, 'type' => 'int',  'default' => 0);
+$config->user->form->cropAvatar['top']          = array('required' => false, 'type' => 'int',  'default' => 0);
+$config->user->form->cropAvatar['right']        = array('required' => false, 'type' => 'int',  'default' => 0);
+$config->user->form->cropAvatar['bottom']       = array('required' => false, 'type' => 'int',  'default' => 0);
+$config->user->form->cropAvatar['scaled']       = array('required' => false, 'type' => 'bool', 'default' => false);

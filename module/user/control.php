@@ -991,7 +991,7 @@ class user extends control
 
         if(!empty($_POST))
         {
-            $size = fixer::input('post')->get();
+            $size = form::data($this->config->user->form->cropAvatar)->get();
             $this->file->cropImage($image->realPath, $image->realPath, $size->left, $size->top, $size->right - $size->left, $size->bottom - $size->top, $size->scaled ? $size->scaleWidth : 0, $size->scaled ? $size->scaleHeight : 0);
 
             $this->app->user->avatar = $image->webPath;
