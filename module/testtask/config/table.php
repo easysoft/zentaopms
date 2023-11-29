@@ -35,6 +35,11 @@ $config->testtask->dtable->fieldList['owner']['title']   = $lang->testtask->owne
 $config->testtask->dtable->fieldList['owner']['type']    = 'user';
 $config->testtask->dtable->fieldList['owner']['group']   = 'user';
 
+$config->testtask->dtable->fieldList['members']['name']  = 'members';
+$config->testtask->dtable->fieldList['members']['title'] = $lang->testtask->members;
+$config->testtask->dtable->fieldList['members']['type']  = 'text';
+$config->testtask->dtable->fieldList['members']['group'] = 'user';
+
 $config->testtask->dtable->fieldList['begin']['name']  = 'begin';
 $config->testtask->dtable->fieldList['begin']['title'] = $lang->testtask->begin;
 $config->testtask->dtable->fieldList['begin']['type']  = 'date';

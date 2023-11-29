@@ -194,3 +194,14 @@ function toggleCheckChildItem(event)
     var $resultSteps = $target.closest('.resultSteps');
     $resultSteps.find('.check-all input[type=checkbox]').prop('checked', $resultSteps.find('.check-item input[type=checkbox]').length == $resultSteps.find('.check-item input[type=checkbox]:checked').length);
 }
+
+function setExecutionByBuild()
+{
+    const buildID = $('[name=build]').val();
+    link = $.createLink('testtask', 'ajaxGetExecutionByBuild', 'buildID=' + buildID);
+    $.get(link, function(data)
+    {
+
+        $('[name="execution"]').zui('picker').$.setValue(data);
+    });
+}

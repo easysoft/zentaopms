@@ -22,6 +22,7 @@ $config->testtask->form->create['desc']        = array('required' => false, 'typ
 $config->testtask->form->create['mailto']      = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->testtask->form->create['createdBy']   = array('required' => false, 'type' => 'string', 'default' => $account);
 $config->testtask->form->create['createdDate'] = array('required' => false, 'type' => 'date',   'default' => $now);
+$config->testtask->form->create['members']     = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 
 $config->testtask->form->edit = array();
 $config->testtask->form->edit['product']     = array('required' => true,  'type' => 'int',    'default' => '');
@@ -38,6 +39,7 @@ $config->testtask->form->edit['pri']         = array('required' => false, 'type'
 $config->testtask->form->edit['desc']        = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
 $config->testtask->form->edit['mailto']      = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
 $config->testtask->form->edit['deleteFiles'] = array('required' => false, 'type' => 'array',  'default' => array(), 'filter' => 'join');
+$config->testtask->form->edit['members']     = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 
 $config->testtask->form->start = array();
 $config->testtask->form->start['status']    = array('required' => true,  'type' => 'string', 'default' => 'doing');

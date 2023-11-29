@@ -107,10 +107,19 @@ class testtask extends control
         /* Query the testtasks from the database. */
         $testtasks = $this->testtask->getProductTasks($productID, $branch, $type, $beginTime, $endTime, $sort, $pager);
 
+        /* Process testtask members. */
+        $users = $this->loadModel('user')->getPairs('noclosed|noletter');
+        foreach($testtasks as $testtask)
+        {
+            $members = array();
+            foreach(explode(',', $testtask->members) as $member) $members[] = zget($users, $member);
+            $testtask->members = implode(',', array_unique($members));
+        }
+
         $this->testtaskZen->prepareSummaryForBrowse($testtasks);
 
         $this->view->title     = $product->name . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->users     = $users;
         $this->view->tasks     = $testtasks;
         $this->view->product   = $product;
         $this->view->branch    = $branch;
@@ -198,6 +207,14 @@ class testtask extends control
                 $execution = $this->loadModel('execution')->fetchByID($formData->execution);
                 $formData->project = $execution->project;
             }
+
+            if($formData->build && empty($formData->execution))
+            {
+                $build = $this->loadModel('build')->getById($this->post->build);
+                $formData->project = $build->project;
+            }
+
+            $formData->members = trim($formData->members, ',');
 
             /* 创建测试单。*/
             /* Create a testtask. */
@@ -1130,5 +1147,18 @@ class testtask extends control
     {
         $result = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('id')->eq($resultID)->fetch();
         return $this->send(array('result' => 'success', 'data' => $result));
+    }
+
+    /**
+     * AJAX: Get executionID by buildID. 
+     * 
+     * @param  int    $buildID 
+     * @access public
+     * @return int
+     */
+    public function ajaxGetExecutionByBuild(int $buildID)
+    {
+        $execution = $this->loadModel('execution')->getByBuild($buildID);
+        return print($execution ? $execution->id : 0);
     }
 }

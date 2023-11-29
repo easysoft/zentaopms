@@ -135,8 +135,18 @@ class testtaskZen extends testtask
             ->get();
 
         /* Fix bug #35419. */
-        $execution     = $this->loadModel('execution')->getByID($task->execution);
-        $task->project = $execution->project;
+        $execution = $this->loadModel('execution')->getByID($task->execution);
+        if(!$execution)
+        {
+            $build         = $this->loadModel('build')->getById($task->build);
+            $task->project = $build->project;
+        }
+        else
+        {
+            $task->project = $execution->project;
+        }
+
+        $task->members = trim($task->members, ',');
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
         return $task;

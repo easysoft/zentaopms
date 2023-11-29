@@ -55,6 +55,7 @@ formPanel
             picker
             (
                 setID('build'),
+                on::change('setExecutionByBuild'),
                 set::name('build'),
                 set::items($builds),
                 set::required(true),
@@ -101,6 +102,18 @@ formPanel
         set::name('owner'),
         set::control('picker'),
         set::items($users)
+    ),
+    formgroup
+    (
+        set::width('1/2'),
+        set::label($lang->testtask->members),
+        picker
+        (
+            setid('members'),
+            set::name('members[]'),
+            set::items($users),
+            set::multiple(true)
+        )
     ),
     formGroup
     (
