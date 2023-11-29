@@ -603,20 +603,22 @@ class docModel extends model
     }
 
     /**
-     * Get docs.
+     * 获取当前文档库下的文档列表数据。
+     * Get doc list by libID.
      *
-     * @param  int|string $libID
-     * @param  int        $module
-     * @param  string     $orderBy
-     * @param  object     $pager
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  string $browseType all|draft
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getDocs($libID, $module, $browseType, $orderBy, $pager = null)
+    public function getDocs(int $libID, int $moduleID, string $browseType, string $orderBy, object $pager = null): array
     {
-        if(empty($libID) and $browseType != 'all') return array();
+        if(empty($libID) && $browseType != 'all') return array();
 
-        $docIdList = $this->getPrivDocs($libID, $module, 'children');
+        $docIdList = $this->getPrivDocs(array($libID), $moduleID, 'children');
         $docs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
@@ -626,8 +628,8 @@ class docModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        $docs = $this->processCollector($docs);
-        return $docs;
+
+        return $this->processCollector($docs);
     }
 
     /**
@@ -744,7 +746,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getPrivDocs(array $libIdList = array(), int $moduleID = 0, string $mode = 'normal'): aray
+    public function getPrivDocs(array $libIdList = array(), int $moduleID = 0, string $mode = 'normal'): array
     {
         $modules = $moduleID && $mode == 'children' ? $this->loadModel('tree')->getAllChildID($moduleID) : $moduleID;
 
