@@ -1120,27 +1120,19 @@ class user extends control
     }
 
     /**
-     * Ajax get group by vision.
+     * AJAX: 根据界面类型获取权限组。
+     * AJAX: Get groups by vision.
      *
-     * @param  string  $visions rnd|lite
-     * @param  int     $i
-     * @param  string  $selected
+     * @param  string  $visions rnd|lite|rnd,lite
      * @access public
      * @return string
      */
-    public function ajaxGetGroup($visions, $i = 0, $selected = '')
+    public function ajaxGetGroups(string $visions)
     {
-        if(!$visions) $visions = $this->config->vision;
-        $visions   = explode(',', $visions);
-        $groupList = $this->user->getGroupsByVisions($visions);
-        if($i)
-        {
-            if($i > 1) $groupList = $groupList + array('ditto' => $this->lang->user->ditto);
-            return print(html::select("group[$i][]", $groupList, $selected, 'size=3 multiple=multiple class="form-control chosen"'));
-        }
-        $items = array();
-        foreach($groupList as $groupID => $groupName) $items[] = array('text' => $groupName, 'value' => $groupID, 'keys' => $groupName);
-        return print(json_encode($items));
+        if(!$visions) $visions = array($this->config->vision);
+        $groups = $this->user->getGroupsByVisions($visions);
+        $items  = array_map(function($groupID, $groupName){return array('text' => $groupName, 'value' => $groupID);}, array_keys($groups), $groups);
+        return $this->send($items);
     }
 
     /**

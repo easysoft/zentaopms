@@ -95,7 +95,7 @@ function changeVision(event)
         visions.push($(this).val());
     });
 
-    const link = $.createLink('user', 'ajaxGetGroup', 'visions=' + visions);
+    const link = $.createLink('user', 'ajaxGetGroups', 'visions=' + visions);
     $.get(link, function(response)
     {
         const data   = JSON.parse(response);
