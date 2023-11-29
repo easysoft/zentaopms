@@ -1026,22 +1026,21 @@ class user extends control
         $users = $this->user->getListByAccounts($accountList);
         $items = array_map(function($user){return array('text' => $user->realname, 'value' => $user->account);}, $users);
         return $this->send(array_values($items));
+
     }
 
     /**
-     * Ajax: 获取联系人列表。
-     * Ajax get contact list.
+     * Ajax: 获取当前用户可以查看的联系人列表。
+     * Ajax: Get contact lists that current user can view.
      *
      * @access public
-     * @return string
+     * @return void
      */
     public function ajaxGetContactList()
     {
-        $contactList = $this->user->getContactLists();
-
-        $items = array();
-        foreach($contactList as $contactID => $contactName) $items[] = array('text' => $contactName, 'value' => $contactID);
-        return print(json_encode($items));
+        $lists = $this->user->getContactLists();
+        $items = array_map(function($id, $name){return array('text' => $name, 'value' => $id);}, array_keys($lists), $lists);
+        return $this->send($items);
     }
 
     /**
