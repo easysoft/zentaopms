@@ -735,17 +735,19 @@ class docModel extends model
     }
 
     /**
-     * Get priv docs.
+     * 获取有权限查看的文档ID列表。
+     * Get grant doc id list.
      *
-     * @param  int    $libID
-     * @param  int    $module
-     * @param  string $mode normal|all
+     * @param  array  $libIdList
+     * @param  int    $moduleID
+     * @param  string $mode normal|all|chidren
      * @access public
      * @return array
      */
-    public function getPrivDocs($libIdList = array(), $module = 0, $mode = 'normal')
+    public function getPrivDocs(array $libIdList = array(), int $moduleID = 0, string $mode = 'normal'): aray
     {
-        $modules = $module && $mode == 'children' ? $this->loadModel('tree')->getAllChildID($module) : $module;
+        $modules = $moduleID && $mode == 'children' ? $this->loadModel('tree')->getAllChildID($moduleID) : $moduleID;
+
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
             ->where('vision')->eq($this->config->vision)
             ->beginIF(!empty($modules))->andWhere('module')->in($modules)->fi()
