@@ -12,6 +12,7 @@
 class report extends control
 {
     /**
+     * 项目ID。
      * The projectID.
      *
      * @var float
@@ -20,6 +21,7 @@ class report extends control
     public $projectID = 0;
 
     /**
+     * 构造函数。
      * Construct.
      *
      * @access public
