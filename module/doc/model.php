@@ -155,12 +155,13 @@ class docModel extends model
     }
 
     /**
+     * 获取有权限访问的文档库。
      * Get grant libs by doc.
      *
      * @access public
      * @return array
      */
-    public function getPrivLibsByDoc()
+    public function getPrivLibsByDoc(): array
     {
         static $libs;
         if($libs === null)
