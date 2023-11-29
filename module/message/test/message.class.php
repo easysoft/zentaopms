@@ -137,17 +137,20 @@ class messageTest
     }
 
     /**
-     * Get notice todos.
+     * 测试获取要提示的待办信息。
+     * Test get notice todos.
      *
+     * @param  string       $account
      * @access public
-     * @return void
+     * @return string|array
      */
-    public function getNoticeTodosTest()
+    public function getNoticeTodosTest(string $account): string|array
     {
+        su($account);
         $objects = $this->objectModel->getNoticeTodos();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', array_keys($objects));
     }
 }
