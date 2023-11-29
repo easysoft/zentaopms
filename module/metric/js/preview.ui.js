@@ -647,6 +647,11 @@ window.messagerWarning = function(message)
     });
 }
 
+window.getTableHeight = function(actual)
+{
+    return $('.table-side').height();
+}
+
 window.setMultiTableHeight = function(contentHeight)
 {
     $('.table-and-charts').css('max-height', 'calc(100% - ' + contentHeight + 'px)');
