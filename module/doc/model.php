@@ -3317,18 +3317,19 @@ class docModel extends model
     }
 
     /**
+     * 处理文档的收藏者信息。
      * Process collector to account.
      *
      * @param  array    $docs
      * @access public
      * @return array
      */
-    public function processCollector($docs)
+    public function processCollector($docs): array
     {
         $actionGroup = $this->dao->select('*')->from(TABLE_DOCACTION)->where('doc')->in(array_keys($docs))->andWhere('action')->eq('collect')->fetchGroup('doc', 'actor');
         foreach($docs as $docID => $doc)
         {
-            $doc->collector   = '';
+            $doc->collector = '';
             if(isset($actionGroup[$docID])) $doc->collector = ',' . implode(',', array_keys($actionGroup[$docID])) . ',';
         }
         return $docs;
