@@ -372,7 +372,7 @@ class cron extends control
     {
         /* Other executor may execute the task at the same time，so we mark execId and wait 500ms to check whether we own it. */
         $this->dao->update(TABLE_QUEUE)->set('status')->eq('doing')->set('execId')->eq($execId)->where('id')->eq($task->id)->exec();
-        usleep(500);
+        sleep(1);
 
         $task = $this->dao->select('*')->from(TABLE_QUEUE)->where('id')->eq($task->id)->fetch();
         if($task->execId != $execId) return;
