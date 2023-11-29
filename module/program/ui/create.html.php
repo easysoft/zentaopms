@@ -110,6 +110,16 @@ formPanel
                     set::required(true),
                     set::value(''),
                     on::change('computeWorkDays')
+                ),
+                inputControl
+                (
+                    setClass('has-suffix-icon w-full hidden'),
+                    to::suffix(icon('calendar')),
+                    input
+                    (
+                        set::value($lang->project->longTime),
+                        set::disabled(true)
+                    )
                 )
             )
         ),

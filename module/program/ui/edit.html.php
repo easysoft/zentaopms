@@ -113,8 +113,18 @@ formPanel
                     set::value($program->end),
                     set::placeholder($lang->project->end),
                     set::required(true),
-                    $program->end == LONG_TIME ? set::disabled(true) : null,
+                    $program->end == LONG_TIME ? setClass('hidden') : null,
                     on::change('computeWorkDays')
+                ),
+                inputControl
+                (
+                    setClass('has-suffix-icon w-full' . ($program->end != LONG_TIME ? ' hidden' : '')),
+                    to::suffix(icon('calendar')),
+                    input
+                    (
+                        set::value($lang->project->longTime),
+                        set::disabled(true)
+                    )
                 )
             )
         ),
