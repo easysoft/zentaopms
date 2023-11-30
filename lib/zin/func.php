@@ -1823,3 +1823,11 @@ function contactList(): contactList
 {
     return createWg('contactList', func_get_args());
 }
+
+/**
+ * Users widget.
+ */
+function users(): users
+{
+    return createWg('users', func_get_args());
+}
