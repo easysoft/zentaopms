@@ -253,8 +253,8 @@ class upgradeModel extends model
         foreach(array_filter(explode(',', $functions)) as $function) $this->executeUpgradeMethod($function, zget($params, $function, array()));
 
         $needExecXX = !$executedXuanxuan;
-        if($openVersion == '10_1') $needExecXX = true;
-        if($openVersion == '16_4' && !empty($this->config->isINT)) $needExecXX = true;
+        if($version == '10_1') $needExecXX = true;
+        if($version == '16_4' && !empty($this->config->isINT)) $needExecXX = true;
 
         if($needExecXX)
         {
