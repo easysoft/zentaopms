@@ -254,7 +254,7 @@ class chartModel extends model
         }
 
         $indicator  = array();
-        $optionList = $this->chartTao->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+        $optionList = $this->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $xLabel)
         {
             $labelName = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
@@ -293,7 +293,7 @@ class chartModel extends model
         if(empty($date)) arsort($stat);
 
         $seriesData = array();
-        $optionList = $this->chartTao->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+        $optionList = $this->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($stat as $name => $value)
         {
             if(empty($value)) continue;
@@ -345,7 +345,7 @@ class chartModel extends model
             }
         }
 
-        $optionList = $this->chartTao->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+        $optionList = $this->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $index => $xLabel) $xLabels[$index] = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
 
         $series = array();
@@ -388,7 +388,7 @@ class chartModel extends model
             $yDatas[] = $data;
         }
 
-        $optionList = $this->chartTao->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+        $optionList = $this->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $index => $xLabel) $xLabels[$index] = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
 
         $series = array();
@@ -458,6 +458,71 @@ class chartModel extends model
         }
 
         return array($group, $metrics, $aggs, $xLabels, $yStats);
+    }
+
+    /**
+     * 根据用户设置的字段展示对应的下拉菜单。
+     * Get field options.
+     *
+     * @param  string $type user|product|project|execution|dept|option|object|string
+     * @param  string $object
+     * @param  string $field
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
+    public function getFieldOptions(string $type, string $object = '', string $field = '', string $sql = ''): array
+    {
+        $options = array();
+        switch($type)
+        {
+            case 'user':
+                $options = $this->loadModel('user')->getPairs();
+                break;
+            case 'product':
+                $options = $this->loadModel('product')->getPairs();
+                break;
+            case 'project':
+                $options = $this->loadModel('project')->getPairsByProgram();
+                break;
+            case 'execution':
+                $options = $this->loadModel('execution')->getPairs();
+                break;
+            case 'dept':
+                $options = $this->loadModel('dept')->getOptionMenu(0);
+                break;
+            case 'option':
+                if($field)
+                {
+                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
+                    if(is_file($path))
+                    {
+                        include $path;
+                        $options = $schema->fields[$field]['options'];
+                    }
+                }
+                break;
+            case 'object':
+                if($field)
+                {
+                    $table = zget($this->config->objectTables, $object, '');
+                    if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
+                }
+                break;
+            case 'string':
+                if($field and $sql)
+                {
+                    $cols = $this->dbh->query($sql)->fetchAll();
+                    foreach($cols as $col)
+                    {
+                        $data = $col->$field;
+                        $options[$data] = $data;
+                    }
+                }
+                break;
+        }
+
+        return $options;
     }
 
     /**

@@ -116,7 +116,7 @@ class chartZen extends chart
             $options       = array();
             $fieldSettings = $this->post->fieldSettings;
             $fieldSetting  = $fieldSettings[$field];
-            $options       = $this->chart->getSysOptions(zget($fieldSetting, 'type', ''), zget($fieldSetting, 'object', ''), zget($fieldSetting, 'field', ''), $this->post->sql);
+            $options       = $this->chart->getFieldOptions(zget($fieldSetting, 'type', ''), zget($fieldSetting, 'object', ''), zget($fieldSetting, 'field', ''), $this->post->sql);
             $onChange      = $key == 'default' ? "onchange='changeDefault(this, this.value)'" : '';
 
             $html = html::select('default[]', $options, $default, "class='form-control picker-select' $onChange multiple");
