@@ -491,13 +491,14 @@ class api extends control
     }
 
     /**
+     * 编辑一个接口文档。
      * Edit library.
      *
-     * @param  int     $apiID
+     * @param  int    $apiID
      * @access public
      * @return void
      */
-    public function edit($apiID)
+    public function edit(int $apiID)
     {
         $api = $this->api->getLibById($apiID);
         if(!empty($_POST))
@@ -521,26 +522,20 @@ class api extends control
     }
 
     /**
+     * 删除一个接口文档。
      * Delete an api.
      *
      * @param  int    $apiID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function delete($apiID)
+    public function delete(int $apiID)
     {
-        $api = $this->api->getLibById($apiID);
+        $api = $this->api->getLibById($apiID)
         $this->api->delete(TABLE_API, $apiID);
 
-        if(dao::isError())
-        {
-            $this->sendError(dao::getError());
-        }
-        else
-        {
-            return $this->sendSuccess(array('load' => inlink('index', "libID=$api->lib&module=$api->module")));
-        }
+        if(dao::isError()) $this->sendError(dao::getError());
+        return $this->sendSuccess(array('load' => inlink('index', "libID=$api->lib&module=$api->module")));
     }
 
     /**
