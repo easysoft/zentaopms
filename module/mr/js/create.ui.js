@@ -90,16 +90,18 @@ function onBranchChange()
 function onNeedCiChange(event)
 {
     const $needCi = $(event.target) ;
-
+    const picker  = zui.Picker.query("[name='jobID']");
     if($needCi.prop('checked') == false)
     {
-        $("#jobID").prop("disabled", true);
-        $("#jobID").parent().parent().addClass('hidden');
+        picker.render({"disabled": true, "items": []});
+        $("#jobID").addClass('hidden');
     }
-    if($needCi.prop('checked') == true)
+    else
     {
-        $("#jobID").prop("disabled", false);
-        $("#jobID").parent().parent().removeClass('hidden');
+        const items = [];
+        for(const jobID in jobPairs) items.push({"value": jobID, "text": jobPairs[jobID]});
+        picker.render({"disabled": false, "items": items});
+        $("#jobID").removeClass('hidden');
     }
 }
 

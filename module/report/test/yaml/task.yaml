@@ -5,3 +5,5 @@ version: "1.0"
 fields:
   - field: execution
     range: 101-110
+  - field: assignedTo
+    range: admin,user1,user2

@@ -172,31 +172,33 @@ class searchTest
 
 
     /**
+     * 测试删除搜索查询。
      * Test delete query.
      *
      * @param  int    $queryID
      * @access public
-     * @return int
+     * @return int|array
      */
-    public function deleteQueryTest($queryID)
+    public function deleteQueryTest(int $queryID): int|array
     {
-        global $tester;
         $this->objectModel->deleteQuery($queryID);
         if(dao::isError()) return dao::getError();
 
-        $count = $tester->dao->select('count(*) as count')->from(TABLE_USERQUERY)->fetch('count');
+        global $tester;
+        $count = $tester->dao->select('count(*) AS count')->from(TABLE_USERQUERY)->fetch('count');
         if(dao::isError()) return dao::getError();
         return $count;
     }
 
     /**
+     * 测试获取查询键值对。
      * Test get query pairs.
      *
      * @param  string $module
      * @access public
      * @return array
      */
-    public function getQueryPairsTest($module)
+    public function getQueryPairsTest(string $module): array
     {
         $objects = $this->objectModel->getQueryPairs($module);
 

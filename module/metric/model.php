@@ -264,6 +264,7 @@ class metricModel extends model
         $record = $this->dao->select("year, month, week, day")
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
+            ->limit(1)
             ->fetch();
 
         if(!$record) return array();
@@ -455,7 +456,7 @@ class metricModel extends model
      */
     public function isFirstGenerate(): bool
     {
-        $record = $this->dao->select('id')->from(TABLE_METRICLIB)->fetch();
+        $record = $this->dao->select('id')->from(TABLE_METRICLIB)->limit(1)->fetch();
 
         return !$record;
     }
@@ -1284,6 +1285,8 @@ class metricModel extends model
         {
             return $this->getObjectOptions($data, $type, $chartType);
         }
+
+        return array();
     }
 
     /**

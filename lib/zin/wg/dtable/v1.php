@@ -17,7 +17,8 @@ class dtable extends wg
         'createAttr?:string',                    // 表格数据源为空时的创建链接属性。
         'sortLink?:array|string',                // 排序链接。
         'orderBy?:string',                       // 排序字段。
-        'loadPartial?: bool'                     // 启用部分加载，不更新浏览器地址栏 URL。
+        'loadPartial?: bool',                    // 启用部分加载，不更新浏览器地址栏 URL。
+        'loadOptions?: array'                    // 分页和排序加载选项。
     );
 
     static $dtableID = 0;
@@ -40,7 +41,6 @@ class dtable extends wg
         $this->initCustomCols();
         $this->initCols($module);
         $this->initSortLink();
-        $this->initPager();
         $this->initFooterBar();
 
         $tableData = $this->prop('data', array());
@@ -61,44 +61,6 @@ class dtable extends wg
         {
             list($orderByName, $orderByType) = explode('_', strpos($orderBy, '_') === false ? $orderBy . '_desc' : $orderBy);
             $this->setProp('orderBy', array($orderByName => $orderByType));
-        }
-
-        $sortLink = $this->prop('sortLink');
-        if(is_string($sortLink) && !str_contains($sortLink, 'RAWJS')) $this->setProp('sortLink', array('url' => $sortLink, 'data-app' => 'current', 'data-load' => 'table', 'data-selector' => 'dtable', 'data-partial' => $this->prop('loadPartial')));
-    }
-
-    /**
-     * 格式化表格分页属性。
-     * Format table pagination properties.
-     *
-     * @access public
-     * @return void
-     */
-    public function initPager()
-    {
-        $pager = $this->prop('footPager');
-        if(!empty($pager) && isset($pager['items']))
-        {
-            $loadOptions = array();
-            $loadOptions['data-load']     = 'table';
-            $loadOptions['data-target']   = $this->prop('id');
-            $loadOptions['data-selector'] = 'dtable';
-            if($this->prop('loadPartial')) $loadOptions['data-partial'] = $this->prop('loadPartial');
-
-            if(!isset($pager['btnProps'])) $pager['btnProps'] = array_merge(array('type' => 'ghost', 'size' => 'sm'), $loadOptions);
-            foreach($pager['items'] as $index => $item)
-            {
-                if($item['type'] != 'size-menu') continue;
-                if(isset($item['itemProps']))
-                {
-                    $pager['items'][$index]['itemProps'] = array_merge($pager['items'][$index]['itemProps'], $loadOptions);
-                }
-                else
-                {
-                    $pager['items'][$index]['itemProps'] = $loadOptions;
-                }
-            }
-            $this->setProp('footPager', $pager);
         }
     }
 

@@ -116,7 +116,7 @@ class backup extends control
         $result = $this->backupZen->restoreFile($fileName);
         if($result['result'] == 'fail') return $this->send($result);
 
-        return $this->send(array('result' => 'success', 'callback' => "zui.Modal.alert('{$this->lang->backup->success->restore}')"));
+        return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "zui.Modal.alert('{$this->lang->backup->success->restore}').then(() => {loadCurrentPage()})"));
     }
 
     /**
@@ -156,23 +156,17 @@ class backup extends control
      */
     public function delete(string $fileName)
     {
-        foreach(array('sql', 'file', 'code') as $type)
+        foreach(glob($this->backupPath . "{$fileName}*") as $backupFile)
         {
-            while(true)
+            if(is_dir($backupFile))
             {
-                $backupFile = $this->backup->getBackupFile($fileName, 'sql');
-                if(!$backupFile) break;
-
-                if(is_dir($backupFile))
-                {
-                    $zfile = $this->app->loadClass('zfile');
-                    $zfile->removeDir($this->backupPath . $fileName . '.file');
-                    $this->backup->processSummary($this->backupPath . $fileName . '.file', 0, 0, array(), 0, 'delete');
-                }
-                elseif(!unlink($backupFile))
-                {
-                    return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $backupFile)));
-                }
+                $zfile = $this->app->loadClass('zfile');
+                $zfile->removeDir($backupFile);
+                $this->backup->processSummary($backupFile, 0, 0, array(), 0, 'delete');
+            }
+            elseif(!unlink($backupFile))
+            {
+                return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $backupFile)));
             }
         }
 

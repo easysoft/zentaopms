@@ -10,9 +10,10 @@
 declare(strict_types=1);
 namespace zin;
 
-jsvar('backup', $lang->backup->common);
-jsvar('rmPHPHeader', $lang->backup->rmPHPHeader);
-jsvar('restore', $lang->backup->restore);
+jsvar('backupLang', $lang->backup->common);
+jsvar('rmPHPHeaderLang', $lang->backup->rmPHPHeader);
+jsvar('restoreLang', $lang->backup->restore);
+jsvar('confirmDeleteLang', $lang->backup->confirmDelete);
 
 featureBar
 (

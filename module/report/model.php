@@ -156,12 +156,13 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户的任务。
      * Get user tasks.
      *
      * @access public
      * @return void
      */
-    public function getUserTasks()
+    public function getUserTasks(): array
     {
         return $this->dao->select('t1.id, t1.name, t2.account as user, t1.deadline')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.assignedTo = t2.account')
@@ -181,12 +182,13 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户的待办。
      * Get user todos.
      *
      * @access public
      * @return array
      */
-    public function getUserTodos()
+    public function getUserTodos(): array
     {
         $stmt = $this->dao->select('t1.*, t2.account as user')
             ->from(TABLE_TODO)->alias('t1')
@@ -208,12 +210,13 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户的测试单。
      * Get user testTasks.
      *
      * @access public
      * @return array
      */
-    public function getUserTestTasks()
+    public function getUserTestTasks(): array
     {
         return $this->dao->select('t1.*, t2.account as user')->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.owner = t2.account')
