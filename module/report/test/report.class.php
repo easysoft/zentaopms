@@ -29,13 +29,14 @@ class reportTest
     }
 
     /**
+     * 测试为单个图表创建json数据。
      * Test create json data of single charts.
      *
-     * @param  int    $executionID
+     * @param  int          $executionID
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function createSingleJSONTest($executionID)
+    public function createSingleJSONTest(int $executionID): string|array
     {
         global $tester;
         $this->execution = $tester->loadModel('execution');
@@ -48,7 +49,7 @@ class reportTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', $objects);
     }
 
     /**

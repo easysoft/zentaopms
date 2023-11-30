@@ -52,22 +52,25 @@ class reportModel extends model
     }
 
     /**
+     * 创建单个图表的 json 数据。
      * Create json data of single charts
+     *
      * @param  array $sets
      * @param  array $dateList
-     * @return string the json string
+     * @return array
      */
-    public function createSingleJSON($sets, $dateList)
+    public function createSingleJSON(array $sets, array $dateList): array
     {
-        $data = array();
-        $now  = date('Y-m-d');
         $preValue = 0;
+        $data     = array();
+        $now      = date('Y-m-d');
         $setsDate = array_keys($sets);
-        foreach($dateList as $i => $date)
+        foreach($dateList as $date)
         {
-            $date  = date('Y-m-d', strtotime($date));
+            $date = date('Y-m-d', strtotime($date));
             if($date > $now) break;
-            if(!isset($sets[$date]) and $sets)
+
+            if(!isset($sets[$date]) && $sets)
             {
                 $tmpDate = $setsDate;
                 $tmpDate[] = $date;
@@ -83,7 +86,7 @@ class reportModel extends model
                 }
             }
 
-            $data[] = isset($sets[$date]) ? "{$sets[$date]->value}" : "{$preValue}";
+            $data[] = isset($sets[$date]) ? $sets[$date]->value : $preValue;
         }
 
         return $data;
