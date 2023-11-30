@@ -1839,3 +1839,11 @@ function mailto(): mailto
 {
     return createWg('mailto', func_get_args());
 }
+
+/**
+ * whitelist widget.
+ */
+function whitelist(): whitelist
+{
+    return createWg('whitelist', func_get_args());
+}
