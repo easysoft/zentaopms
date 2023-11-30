@@ -1485,13 +1485,13 @@ class testcaseZen extends testcase
 
         /* 构建用例。 */
         /* Build cases. */
-        $imported  = '';
-        $cases     = array();
-        $steps     = array();
-        $files     = array();
-        $fromCases = $this->testcase->getByList($caseIdList);
-        $fromSteps = $this->testcase->getRelatedSteps($caseIdList);
-        $fromFiles = $this->testcase->getRelatedFiles($caseIdList);
+        $hasImported = '';
+        $cases       = array();
+        $steps       = array();
+        $files       = array();
+        $fromCases   = $this->testcase->getByList($caseIdList);
+        $fromSteps   = $this->testcase->getRelatedSteps($caseIdList);
+        $fromFiles   = $this->testcase->getRelatedFiles($caseIdList);
         foreach($caseIdList as $caseID)
         {
             if(!isset($fromCases[$caseID])) continue;
@@ -1509,7 +1509,7 @@ class testcaseZen extends testcase
 
             if(empty($caseModules[$branch][$case->fromCaseID][$case->module]))
             {
-                $imported .= "$case->fromCaseID,";
+                $hasImported .= "$case->fromCaseID,";
             }
             else
             {
@@ -1519,7 +1519,7 @@ class testcaseZen extends testcase
             }
         }
 
-        return array($cases, $steps, $files, $imported);
+        return array($cases, $steps, $files, $hasImported);
     }
 
     /**

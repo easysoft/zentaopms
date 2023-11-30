@@ -1110,10 +1110,11 @@ class testcase extends control
 
         if($_POST)
         {
-            list($cases, $steps, $files, $imported) = $this->testcaseZen->buildDataForImportFromLib($productID, $branch, $libID);
+            list($cases, $steps, $files, $hasImported) = $this->testcaseZen->buildDataForImportFromLib($productID, $branch, $libID);
 
             $this->loadModel('action');
-            $errors = '';
+            $errors        = '';
+            $importedCases = array();
             foreach($cases as $oldCaseID => $case)
             {
                 $this->config->testcase->create->requiredFields = strpos(",{$this->config->testcase->create->requiredFields},", ',module,') !== false ? ',module,' : '';
@@ -1122,6 +1123,7 @@ class testcase extends control
                 {
                     $errors .= "{$oldCaseID}:";
                     foreach(dao::getError() as $fieldErrors) $errors .= implode(',', $fieldErrors);
+                    continue;
                 }
                 $caseID = $this->dao->lastInsertID();
                 $this->executeHooks($caseID);
@@ -1129,11 +1131,14 @@ class testcase extends control
                 $this->testcase->importSteps($caseID, zget($steps, $oldCaseID, array()));
                 $this->testcase->importFiles($caseID, zget($files, $oldCaseID, array()));
 
+                $importedCases[] = $libCaseID;
+
                 $this->action->create('case', $caseID, 'fromlib', '', $case->lib);
             }
 
             if(!empty($errors)) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$errors}');"));
-            if(!empty($imported) && is_string($imported)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->testcase->importedCases, trim($imported, ','))));
+            if(!empty($importedCases)) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->testcase->importedFromLib, count($importedCases), implode(',', $importedCases))));
+            if(!empty($hasImported) && is_string($hasImported)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->testcase->importedCases, trim($hasImported, ','))));
             return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'load' => true));
         }
 

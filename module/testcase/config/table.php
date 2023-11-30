@@ -125,7 +125,7 @@ $config->testcase->dtable->fieldList['stepNumber']['sortType'] = true;
 $config->testcase->dtable->fieldList['version']['title']    = $lang->testcase->version;
 $config->testcase->dtable->fieldList['version']['type']     = 'text';
 $config->testcase->dtable->fieldList['version']['group']    = 5;
-$config->testcase->dtable->fieldList['version']['sortType'] = true;
+$config->testcase->dtable->fieldList['version']['sortType'] = false;
 
 $config->testcase->dtable->fieldList['lastEditedBy']['title']    = $lang->testcase->lastEditedBy;
 $config->testcase->dtable->fieldList['lastEditedBy']['type']     = 'user';
