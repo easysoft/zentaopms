@@ -68,5 +68,101 @@ class jobZen extends job
 
         return $jobList;
     }
+
+    /**
+     * 返回创建或者编辑的响应。
+     * Return reponse after create or edit.
+     *
+     * @param  int       $repoID
+     * @access protected
+     * @return array
+     */
+    protected function reponseAfterCreateEdit(int $repoID = 0): array
+    {
+        if(dao::isError())
+        {
+            $errors = dao::getError();
+            if($this->post->engine == 'gitlab' and isset($errors['server']))
+            {
+                if(!isset($errors['repo'])) $errors['repo'][] = sprintf($this->lang->error->notempty, $this->lang->job->repoServer);
+                unset($errors['server']);
+                unset($errors['pipeline']);
+            }
+            elseif($this->post->engine == 'jenkins')
+            {
+                if(isset($errors['server']))
+                {
+                    $errors['jkServer'] = $errors['server'];
+                    unset($errors['server']);
+                }
+                if(isset($errors['pipeline']))
+                {
+                    $errors['jkTask'] = $errors['pipeline'];
+                    unset($errors['pipeline']);
+                }
+            }
+            return array('result' => 'fail', 'message' => $errors);
+        }
+
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('browse', 'repoID=' . ($repoID ? $repoID : $this->post->repo)));
+    }
+
+    /**
+     * 获取版本库列表。
+     * Get repo list.
+     *
+     * @param  int       $projectID
+     * @param  object    $repo
+     * @access protected
+     * @return array
+     */
+    protected function getRepoList(int $projectID, object $repo = null): array
+    {
+        $repoList    = $this->loadModel('repo')->getList($projectID);
+        $repoPairs   = $repo ? array($repo->id => $repo->name) : array();
+        $gitlabRepos = array();
+        $repoTypes   = $repo ? array($repo->id => $repo->SCM) : array();
+
+        foreach($repoList as $repo)
+        {
+            if(empty($repo->synced)) continue;
+
+            $repoPairs[$repo->id] = "[{$repo->SCM}] " . $repo->name;
+            $repoTypes[$repo->id] = $repo->SCM;
+            if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = "[{$repo->SCM}] " . $repo->name;
+        }
+
+        return array($repoPairs, $gitlabRepos, $repoTypes);
+    }
+
+    /**
+     * 获取svn目录。
+     * Get subversion dir.
+     *
+     * @param  object    $repo
+     * @param  string    $triggerType
+     * @access protected
+     * @return void
+     */
+    protected function getSubversionDir(object $repo, string $triggerType): void
+    {
+        if($repo->SCM == 'Subversion' && $triggerType == 'tag')
+        {
+            $dirs = array();
+            $path = empty($repo->prefix) ? '/' : $this->repo->decodePath('');
+            $tags = $this->loadModel('svn')->getRepoTags($repo, $path);
+            if($tags)
+            {
+                $dirs['/'] = $path;
+                foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $dirPath;
+            }
+            $this->view->dirs = $dirs;
+
+            foreach($this->lang->job->triggerTypeList as $type => $name)
+            {
+                if($type == 'tag') $this->lang->job->triggerTypeList[$type] = $this->lang->job->dirChange;
+            }
+        }
+    }
 }
 
