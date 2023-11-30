@@ -130,19 +130,20 @@ class searchTest
     }
 
     /**
+     * 测试根据 ID 获取查询。
      * Test get by ID.
      *
      * @param  int    $queryID
      * @access public
-     * @return array
+     * @return array|object
      */
-    public function getByIDTest($queryID)
+    public function getByIDTest(int $queryID): array|object
     {
-        $objects = $this->objectModel->getByID($queryID);
+        $query = $this->objectModel->getByID($queryID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $query;
     }
 
     /**
