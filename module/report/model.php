@@ -317,14 +317,15 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户某年的待办统计。
      * Get user todo stat in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return object
      */
-    public function getUserYearTodos($accounts, $year)
+    public function getUserYearTodos(array $accounts, string $year): object
     {
         return $this->dao->select("count(*) as count, sum(if((`status` != 'done'), 1, 0)) AS `undone`, sum(if((`status` = 'done'), 1, 0)) AS `done`")->from(TABLE_TODO)
             ->where('LEFT(date, 4)')->eq($year)

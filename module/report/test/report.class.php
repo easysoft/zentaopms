@@ -350,29 +350,29 @@ class reportTest
         $contributions = '';
         foreach($objects as $type => $contributionTypes)
         {
-            $contributions .= "$type:";
-            foreach($contributionTypes as $contributionType => $count) $contributions .= "$contributionType:$count,";
+            $contributions .= "{$type}:";
+            foreach($contributionTypes as $contributionType => $count) $contributions .= "{$contributionType}:{$count},";
             $contributions = trim($contributions, ',') . ';';
         }
         return $contributions;
     }
 
     /**
+     * 测试获取本年度用户的待办统计。
      * Test get user todo stat in this year.
      *
-     * @param  array  $accounts
+     * @param  array        $accounts
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getUserYearTodosTest($accounts)
+    public function getUserYearTodosTest(array $accounts): string|array
     {
-        $year = date('Y');
-        $objects = $this->objectModel->getUserYearTodos($accounts, $year);
+        $objects = $this->objectModel->getUserYearTodos($accounts, date('Y'));
 
         if(dao::isError()) return dao::getError();
 
         $count = '';
-        foreach($objects as $type => $value) $count .= "$type:$value;";
+        foreach($objects as $type => $value) $count .= "{$type}:{$value};";
         return $count;
     }
 
