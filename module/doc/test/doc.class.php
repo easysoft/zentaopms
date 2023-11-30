@@ -843,6 +843,31 @@ class docTest
         $lib = $this->objectModel->getLibByID($id);
 
         $item = $this->objectModel->buildLibItem($libID, $lib, $type, $moduleID, $objectID);
+
+        if(dao::isError()) return dao::getError();
         return $item;
+    }
+
+    /**
+     * 获取产品、项目、执行文档库的树形结构。
+     * Get a tree structure of the product, project, and execution document library.
+     *
+     * @param  int    $libID
+     * @param  array  $libIdList
+     * @param  string $type
+     * @param  int    $moduleID
+     * @param  int    $objectID
+     * @param  string $browseType
+     * @param  int    $param
+     * @access public
+     * @return array
+     */
+    public function getObjectTreeTest(int $libID, array $libIdList, string $type, int $moduleID = 0, int $objectID = 0, string $browseType = '', int $param = 0): array
+    {
+        $libs = $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($libIdList)->fetchAll('id');
+        $data = $this->objectModel->getObjectTree($libID, $libs, $type, $moduleID, $objectID, $browseType, $param);
+
+        if(dao::isError()) return dao::getError();
+        return isset($data[0][$type]) ? $data[0][$type] : array();
     }
 }
