@@ -748,10 +748,11 @@ class commonModel extends model
         $changes = array();
         foreach($new as $key => $value)
         {
-            $key = strtolower($key);
             if(is_object($value) || is_array($value) || is_null($value)) continue;
-            if(in_array($key, array('lastediteddate', 'lasteditedby', 'assigneddate', 'editedby', 'editeddate', 'editingdate', 'uid'))) continue;
-            if(in_array($key, array('finisheddate', 'canceleddate', 'hangupeddate', 'lastcheckeddate', 'activateddate', 'closeddate', 'actualcloseddate')) and $value == '') continue;
+
+            $check = strtolower($key);
+            if(in_array($check, array('lastediteddate', 'lasteditedby', 'assigneddate', 'editedby', 'editeddate', 'editingdate', 'uid'))) continue;
+            if(in_array($check, array('finisheddate', 'canceleddate', 'hangupeddate', 'lastcheckeddate', 'activateddate', 'closeddate', 'actualcloseddate')) and $value == '') continue;
 
             if(isset($old->$key))
             {
