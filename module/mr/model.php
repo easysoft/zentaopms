@@ -133,7 +133,7 @@ class mrModel extends model
     public function getGitlabProjects(int $hostID = 0, array $projectIds = array()): array
     {
         $gitlabUsers = $this->loadModel('gitlab')->getListByAccount();
-        if(!$this->app->user->admin and !isset($gitlabUsers[$hostID])) return array();
+        if(!$this->app->user->admin && !isset($gitlabUsers[$hostID])) return array();
 
         $allProjects = $allGroups  = array();
         $minProject  = $maxProject = 0;
@@ -430,7 +430,6 @@ class mrModel extends model
      */
     public function createMRLinkedAction(int $MRID, string $action, string $actionDate = ''): bool
     {
-        $this->loadModel('action');
         if(empty($actionDate)) $actionDate = helper::now();
 
         $MRAction = $actionDate . '::' . $this->app->user->account . '::' . helper::createLink('mr', 'view', "mr={$MRID}");
@@ -439,6 +438,7 @@ class mrModel extends model
         $linkedTasks   = $this->mrTao->getLinkedObjectPairs($MRID, 'task');
         $linkedBugs    = $this->mrTao->getLinkedObjectPairs($MRID, 'bug');
 
+        $this->loadModel('action');
         foreach($linkedStories as $storyID) $this->action->create('story', $storyID, $action, '', $MRAction);
         foreach($linkedTasks as $taskID)    $this->action->create('task', $taskID, $action, '', $MRAction);
         foreach($linkedBugs as $bugID)      $this->action->create('bug', $bugID, $action, '', $MRAction);
@@ -722,7 +722,7 @@ class mrModel extends model
         $host = $this->loadModel('pipeline')->getByID($hostID);
         if($host->type == 'gitlab')
         {
-            $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/commits");
+            $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/commits");
         }
         else
         {

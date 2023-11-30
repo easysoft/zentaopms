@@ -226,7 +226,6 @@ class api extends control
      */
     public function struct(int $libID = 0, int $releaseID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
-        common::setMenuVars('doc', $libID);
         $this->setMenu($libID);
 
         /* Append id for second sort. */
@@ -264,7 +263,6 @@ class api extends control
      */
     public function createStruct(int $libID = 0)
     {
-        common::setMenuVars('doc', $libID);
         $this->setMenu($libID);
 
         if(!empty($_POST))
@@ -300,7 +298,6 @@ class api extends control
      */
     public function editStruct(int $libID, int $structID)
     {
-        common::setMenuVars('doc', $libID);
         $this->setMenu($libID);
 
         $struct = $this->api->getStructByID($structID);
@@ -559,8 +556,8 @@ class api extends control
      * Ajax获取指定目录的数据结构。
      * AJAX: Get ref options.
      *
-     * @param  int     $libID
-     * @param  int     $structID
+     * @param  int    $libID
+     * @param  int    $structID
      * @access public
      * @return void
      */
@@ -597,8 +594,8 @@ class api extends control
      * Ajax获取当前接口库的子目录结构。
      * AJAX: Get all child module.
      *
-     * @param  int     $libID
-     * @param  string  $type
+     * @param  int    $libID
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -611,17 +608,18 @@ class api extends control
     }
 
     /**
+     * 设置接口文档页面的导航菜单。
      * Set api menu by method name.
      *
-     * @param  int     $libID
-     * @param  string  $space |null|api|project|product
+     * @param  int    $libID
+     * @param  string $space |null|api|project|product
      * @access public
      * @return void
      */
-    private function setMenu($libID = 0, $space = '')
+    private function setMenu(int $libID = 0, string $space = '')
     {
-        if($space and strpos('|api|project|product|', "|{$space}|") === false) $space = '';
-        common::setMenuVars('doc', '');
+        common::setMenuVars('doc', $libID);
+        if($space && strpos('|api|project|product|', "|{$space}|") === false) $space = '';
 
         $lib = $this->loadModel('doc')->getLibByID($libID);
         if($this->app->tab == 'product')
@@ -633,12 +631,14 @@ class api extends control
             $this->loadModel('project')->setMenu($lib->project);
         }
 
-        $spaceType = $this->session->spaceType;
-        if(empty($spaceType)) $spaceType = 'api';
         if($space)
         {
             $spaceType = $space;
             $this->session->set('spaceType', $space, 'doc');
+        }
+        else
+        {
+            $spaceType = $this->session->spaceType ? $this->session->spaceType : 'api';
         }
 
         if(in_array($spaceType, array('product', 'project')))
@@ -652,9 +652,8 @@ class api extends control
         }
     }
 
-
-
     /**
+     * 返回当前客户端的session信息。
      * Return session to the client.
      *
      * @access public
@@ -670,6 +669,7 @@ class api extends control
     }
 
     /**
+     * 调用指定模型下的指定函数，并返回结果。
      * Execute a module's model's method, return the result.
      *
      * @param  string $moduleName
@@ -678,7 +678,7 @@ class api extends control
      * @access public
      * @return string
      */
-    public function getModel($moduleName, $methodName, $params = '')
+    public function getModel(string $moduleName, string $methodName, string $params = '')
     {
         if(!$this->config->features->apiGetModel) return printf($this->lang->api->error->disabled, '$config->features->apiGetModel');
 
@@ -694,6 +694,7 @@ class api extends control
         $module = $this->loadModel($moduleName);
         $result = call_user_func_array(array(&$module, $methodName), $params);
         if(dao::isError()) return print(json_encode(dao::getError()));
+
         $output['status'] = $result ? 'success' : 'fail';
         $output['data']   = json_encode($result);
         $output['md5']    = md5($output['data']);
@@ -702,14 +703,15 @@ class api extends control
     }
 
     /**
+     * 请求某个接口并返回测试结果。
      * The interface of api.
      *
-     * @param  int $filePath
-     * @param  int $action
+     * @param  string $filePath
+     * @param  string $action
      * @access public
      * @return void
      */
-    public function debug($filePath, $action)
+    public function debug(string $filePath, string $action)
     {
         $filePath    = helper::safe64Decode($filePath);
         $fileDirPath = realpath(dirname($filePath));
@@ -744,13 +746,14 @@ class api extends control
     }
 
     /**
+     * 通过接口进行sql查询并返回结果。
      * Query sql.
      *
      * @param  string $keyField
      * @access public
-     * @return void
+     * @return string
      */
-    public function sql($keyField = '')
+    public function sql(string $keyField = '')
     {
         if(!$this->config->features->apiSQL) return printf($this->lang->api->error->disabled, '$config->features->apiSQL');
 
@@ -763,15 +766,17 @@ class api extends control
     }
 
     /**
+     * 获取接口类型和数据结构组成的数组。
      * Get options of type.
      *
-     * @param  int   $libID
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    private function getTypeOptions($libID)
+    private function getTypeOptions(int $libID)
     {
         $options = array();
+        /* 获取接口类型。 */
         foreach($this->lang->api->paramsTypeOptions as $key => $item)
         {
             $options[] = array('label' => $item, 'value' => $key);
@@ -787,6 +792,7 @@ class api extends control
     }
 
     /**
+     * Ajax获取库所属产品或者项目的下拉菜单。
      * Ajax get objectType drop menu.
      *
      * @param  string $objectType
@@ -796,7 +802,7 @@ class api extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($objectType, $objectID, $module, $method)
+    public function ajaxGetDropMenu(string $objectType, int $objectID, string $module, string $method)
     {
         list($normalObjects, $closedObjects) = $this->api->getOrderedObjects();
 
@@ -814,11 +820,11 @@ class api extends control
         $this->view->closedObjects = $closedObjects;
         $this->view->nolinkLibs    = $this->doc->getApiLibs(0, 'nolink');
         $this->view->objectsPinYin = common::convert2Pinyin($titleList);
-
         $this->display();
     }
 
     /**
+     * 编辑接口库下的子目录。
      * Edit a catalog.
      *
      * @param  int    $moduleID
@@ -826,24 +832,26 @@ class api extends control
      * @access public
      * @return void
      */
-    public function editCatalog($moduleID, $type)
+    public function editCatalog(int $moduleID, string $type)
     {
         echo $this->fetch('tree', 'edit', "moduleID=$moduleID&type=$type");
     }
 
     /**
+     * 删除接口库下的子目录。
      * Delete a catalog.
      *
      * @param  int    $moduleID
      * @access public
      * @return void
      */
-    public function deleteCatalog($moduleID)
+    public function deleteCatalog(int $moduleID)
     {
         echo $this->fetch('tree', 'delete', "moduleID=$moduleID&confirm=yes");
     }
 
     /**
+     * 排序接口库下的子目录。
      * Catalog sort.
      *
      * @access public
@@ -851,20 +859,20 @@ class api extends control
      */
     public function sortCatalog()
     {
-        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        if(!empty($_POST['orders']))
         {
             foreach($_POST['orders'] as $id => $order)
             {
                 $this->dao->update(TABLE_MODULE)->set('`order`')->eq($order)->where('id')->eq($id)->andWhere('type')->eq('api')->exec();
             }
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success'));
         }
 
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success'));
     }
 
     /**
+     * 点击dropMenu后的页面跳转。
      * Get api list.
      *
      * @param  int    $objectID

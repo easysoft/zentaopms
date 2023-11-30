@@ -1,0 +1,12 @@
+title: action.
+desc: action data.
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: action
+    range: login,productplan,release,project
+  - field: date
+    note: "日期"
+    range: "(-1m)-(0m):1s"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"

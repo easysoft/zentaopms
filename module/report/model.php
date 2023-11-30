@@ -227,27 +227,29 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户今年的登录次数。
      * Get user login count in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return int
      */
-    public function getUserYearLogins($accounts, $year)
+    public function getUserYearLogins(array $accounts, string $year): int
     {
         return $this->dao->select('count(*) as count')->from(TABLE_ACTION)->where('actor')->in($accounts)->andWhere('LEFT(date, 4)')->eq($year)->andWhere('action')->eq('login')->fetch('count');
     }
 
     /**
+     * 获取用户本年的操作数。
      * Get user action count in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return int
      */
-    public function getUserYearActions($accounts, $year)
+    public function getUserYearActions(array $accounts, string $year): int
     {
         return $this->dao->select('count(*) as count')->from(TABLE_ACTION)
             ->where('LEFT(date, 4)')->eq($year)
@@ -256,83 +258,74 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户某年的动态数。
      * Get user contributions in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return array
      */
-    public function getUserYearContributions($accounts, $year)
+    public function getUserYearContributions(array $accounts, string $year): array
     {
-        $stmt = $this->dao->select('*')->from(TABLE_ACTION)
+        /* Get required actions for annual report. */
+        $filterActions = array();
+        $stmt          = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('LEFT(date, 4)')->eq($year)
             ->andWhere('objectType')->in(array_keys($this->config->report->annualData['contributions']))
             ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
             ->orderBy('objectType,objectID,id')
             ->query();
-
-        $filterActions = array();
-        $objectIdList  = array();
         while($action = $stmt->fetch())
         {
-            $objectType  = $action->objectType;
-            $objectID    = $action->objectID;
-            $lowerAction = strtolower($action->action);
-            if(!isset($this->config->report->annualData['contributions'][$objectType][$lowerAction])) continue;
-
-            $objectIdList[$objectType][$objectID] = $objectID;
-            $filterActions[$objectType][$objectID][$action->id] = $action;
+            if(isset($this->config->report->annualData['contributions'][$action->objectType][strtolower($action->action)])) $filterActions[$action->objectType][$action->objectID][$action->id] = $action;
         }
 
-        foreach($objectIdList as $objectType => $idList)
-        {
-            $deletedIdList = $this->dao->select('id')->from($this->config->objectTables[$objectType])->where('deleted')->eq(1)->andWhere('id')->in($idList)->fetchPairs('id', 'id');
-            foreach($deletedIdList as $id) unset($filterActions[$objectType][$id]);
-        }
-
+        /* Only get undeleted actions. */
         $actionGroups = array();
         foreach($filterActions as $objectType => $objectActions)
         {
-            foreach($objectActions as $objectID => $actions)
+            $deletedIdList = $this->dao->select('id,id')->from($this->config->objectTables[$objectType])->where('deleted')->eq(1)->andWhere('id')->in(array_keys($objectActions))->fetchPairs();
+            foreach($objectActions as $actions)
             {
-                foreach($actions as $action) $actionGroups[$objectType][$action->id] = $action;
+                foreach($actions as $action)
+                {
+                    if(!isset($deletedIdList[$action->id])) $actionGroups[$objectType][$action->id] = $action;
+                }
             }
         }
 
+        /* Calculate the number of actions . */
         $contributions = array();
         foreach($actionGroups as $objectType => $actions)
         {
             foreach($actions as $action)
             {
-                $lowerAction = strtolower($action->action);
-                $actionName  = $this->config->report->annualData['contributions'][$objectType][$lowerAction];
-
-                $type = ($actionName == 'svnCommit' or $actionName == 'gitCommit') ? 'repo' : $objectType;
+                $actionName  = $this->config->report->annualData['contributions'][$objectType][strtolower($action->action)];
+                $type        = $actionName == 'svnCommit' || $actionName == 'gitCommit' ? 'repo' : $objectType;
                 if(!isset($contributions[$type][$actionName])) $contributions[$type][$actionName] = 0;
                 $contributions[$type][$actionName] += 1;
             }
         }
-
         $contributions['case']['run'] = $this->dao->select('count(*) as count')->from(TABLE_TESTRESULT)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('LEFT(t1.date, 4)')->eq($year)
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF($accounts)->andWhere('t1.lastRunner')->in($accounts)->fi()
             ->fetch('count');
-
         return $contributions;
     }
 
     /**
+     * 获取用户某年的待办统计。
      * Get user todo stat in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return object
      */
-    public function getUserYearTodos($accounts, $year)
+    public function getUserYearTodos(array $accounts, string $year): object
     {
         return $this->dao->select("count(*) as count, sum(if((`status` != 'done'), 1, 0)) AS `undone`, sum(if((`status` = 'done'), 1, 0)) AS `done`")->from(TABLE_TODO)
             ->where('LEFT(date, 4)')->eq($year)
@@ -343,14 +336,15 @@ class reportModel extends model
     }
 
     /**
-     * Get user effort stat in this error.
+     * 获取用户某年的工时统计。
+     * Get user effort stat in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return object
      */
-    public function getUserYearEfforts($accounts, $year)
+    public function getUserYearEfforts(array $accounts, string $year): object
     {
         $effort = $this->dao->select('count(*) as count, sum(consumed) as consumed')->from(TABLE_EFFORT)
             ->where('LEFT(date, 4)')->eq($year)

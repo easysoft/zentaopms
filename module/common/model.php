@@ -2045,7 +2045,7 @@ class commonModel extends model
      * @access public
      * @return string
      */
-    public static function processMarkdown($markdown)
+    public static function processMarkdown(string $markdown): string
     {
         if(empty($markdown)) return false;
 
@@ -2060,6 +2060,7 @@ class commonModel extends model
     }
 
     /**
+     * 排序FeatureBar。
      * Sort featureBar.
      *
      * @param  string $module
@@ -2068,7 +2069,7 @@ class commonModel extends model
      * @access public
      * @return bool
      */
-    public static function sortFeatureMenu($module = '', $method = '')
+    public static function sortFeatureMenu(string $module = '', string $method = ''): bool
     {
         global $lang, $config, $app;
 
@@ -2099,109 +2100,6 @@ class commonModel extends model
     }
 
     /**
-     * Replace menu lang.
-     *
-     * @static
-     * @access public
-     * @return void
-     */
-    public static function replaceMenuLang()
-    {
-        global $lang;
-        if(empty($lang->db->custom)) return;
-
-        foreach($lang->db->custom as $moduleName => $sectionMenus)
-        {
-            if(strpos($moduleName, 'Menu') === false) continue;
-
-            $isSecondMenu = strpos($moduleName, 'SubMenu') === false;
-            $moduleName   = str_replace($isSecondMenu ? 'Menu' : 'SubMenu', '', $moduleName);
-
-            foreach($sectionMenus as $section => $menus)
-            {
-                foreach($menus as $key => $value)
-                {
-                    static::replaceSubMenuLang($isSecondMenu, $moduleName, $section, $key, $value);
-                }
-            }
-        }
-    }
-
-    /**
-     * Replace submenu lang.
-     *
-     * @param  bool   $isSecondMenu
-     * @param  string $moduleName
-     * @param  string $section
-     * @param  string $key
-     * @param  string $value
-     * @static
-     * @access public
-     * @return void
-     */
-    public static function replaceSubMenuLang($isSecondMenu, $moduleName, $section, $key, $value)
-    {
-        global $lang;
-
-        /* Get second menu. */
-        if($isSecondMenu)
-        {
-            $isDropMenu = strpos($section, 'DropMenu') !== false;
-            if(!$isDropMenu)
-            {
-                if(!isset($lang->{$moduleName}->{$section})) return;
-                if(is_object($lang->{$moduleName}->{$section}) and isset($lang->{$moduleName}->{$section}->{$key})) $settingMenu = &$lang->{$moduleName}->{$section}->{$key};
-                if(is_array($lang->{$moduleName}->{$section})  and isset($lang->{$moduleName}->{$section}[$key]))   $settingMenu = &$lang->{$moduleName}->{$section}[$key];
-            }
-            else
-            {
-                /* Get drop menu in second menu. */
-                $dropMenuKey = str_replace('DropMenu', '', $section);
-                if(!isset($lang->{$moduleName}->menu->{$dropMenuKey}['dropMenu']->{$key})) return;
-                $settingMenu = &$lang->{$moduleName}->menu->{$dropMenuKey}['dropMenu']->{$key};
-            }
-        }
-        /* Get third menu. */
-        elseif(isset($lang->{$moduleName}->menu->{$section}['subMenu']))
-        {
-            $subMenu = $lang->{$moduleName}->menu->{$section}['subMenu'];
-            if(is_object($subMenu) and isset($subMenu->{$key})) $settingMenu = &$lang->{$moduleName}->menu->{$section}['subMenu']->{$key};
-            if(is_array($subMenu)  and isset($subMenu[$key]))   $settingMenu = &$lang->{$moduleName}->menu->{$section}['subMenu'][$key];
-        }
-
-        /* Set custom menu lang. */
-        if(!empty($settingMenu))
-        {
-            if(is_string($settingMenu)) $settingMenu = $value . substr($settingMenu, strpos($settingMenu, '|'));
-            if(is_array($settingMenu) and isset($settingMenu['link'])) $settingMenu['link'] = $value . substr($settingMenu['link'], strpos($settingMenu['link'], '|'));
-            unset($settingMenu);
-        }
-    }
-
-    /**
-     * Check valid row.
-     *
-     * @param  string $objectType
-     * @param  array  $postData
-     * @param  int    $index
-     * @access public
-     * @return bool
-     */
-    public function checkValidRow($objectType, $postData = array(), $index = 0)
-    {
-        if(empty($postData)) return false;
-
-        foreach($postData as $key => $value)
-        {
-            if(!is_array($value) or strpos($this->config->$objectType->excludeCheckFields, ",$key,") !== false) continue;
-            if(isset($value[$index]) and !empty($value[$index]) and $value[$index] != 'ditto') return true;
-        }
-
-        return false;
-    }
-
-
-    /**
      * Get method of API.
      *
      * @param  string       $url
@@ -2210,7 +2108,7 @@ class commonModel extends model
      * @access public
      * @return object
      */
-    public static function apiGet($url, $data = array(), $headers = array())
+    public static function apiGet(string $url, array|object $data = array(), array $headers = array())
     {
         $url .= (strpos($url, '?') !== false ? '&' : '?') . http_build_query($data, '', '&', PHP_QUERY_RFC3986);
 
@@ -2230,7 +2128,7 @@ class commonModel extends model
      * @access public
      * @return object
      */
-    public static function apiPost($url, $data, $headers = array())
+    public static function apiPost(string $url, array|object $data, array $headers = array()): object
     {
         $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'POST'), $headers, 'json'));
         if($result && $result->code == 200) return $result;
@@ -2247,7 +2145,7 @@ class commonModel extends model
      * @access public
      * @return object
      */
-    public static function apiPut($url, $data, $headers = array())
+    public static function apiPut(string $url, array|object $data, array $headers = array()): object
     {
         $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'PUT'), $headers, 'json'));
         if($result && $result->code == 200) return $result;
@@ -2264,7 +2162,7 @@ class commonModel extends model
      * @access public
      * @return object
      */
-    public static function apiDelete($url, $data, $headers = array())
+    public static function apiDelete(string $url, array|object $data, array $headers = array()): object
     {
         $result     = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $headers, 'json'));
         if($result && $result->code == 200) return $result;
@@ -2279,7 +2177,7 @@ class commonModel extends model
      * @access protected
      * @return object
      */
-    protected static function apiError($result)
+    protected static function apiError(object|null $result): object
     {
         global $lang;
 
@@ -2289,81 +2187,6 @@ class commonModel extends model
         $error->code    = 600;
         $error->message = $lang->error->httpServerError;
         return $error;
-    }
-
-    /**
-     * Print progress bar.
-     *
-     * @param  int    $percent percent 0-100
-     * @param  string $color color theme: gray, red, orange, green
-     * @param  string $tip
-     * @param  string $showValue possible values: '', 'percent', 'tip'
-     * @static
-     * @access public
-     * @return void
-     */
-    public static function printProgressBar($percent, $color = '', $tip = '', $showValue = '')
-    {
-        if(empty($color) && $percent == 0)                  $color = 'gray';
-        if(empty($color) && $percent > 0 && $percent < 60)  $color = 'green';
-        if(empty($color) && $percent >= 0 && $percent < 80) $color = 'orange';
-        if(empty($color) && $percent >= 80)                 $color = 'red';
-
-        $title     = $tip ? $tip : $percent . '%';
-        $valueHtml = '';
-        if($showValue == 'tip')     $valueHtml = "<div style='position: absolute; width:100%; text-align: center; line-height: 20px;'>{$title}</div>";
-        if($showValue == 'percent') $valueHtml = "<div style='position: absolute; width:100%; text-align: center; line-height: 20px;'>{$percent}%</div>";
-
-        echo <<<EOT
-            <div class='progress-group'>
-              <div title='{$title}' data-toggle='tooltip' style='height: 20px;' class='progress bg-light-{$color}'>
-                <div class='progress-bar bg-{$color}' role='progressbar' aria-valuenow='82' aria-valuemin='0' aria-valuemax='100' style='width: {$percent}%;'></div>
-                {$valueHtml}
-              </div>
-            </div>
-EOT;
-    }
-
-    /**
-     * Print progress pie.
-     *
-     * @param  float  $percent
-     * @param  string $color  HEX value of color
-     * @param  string $tip
-     * @param  string $tipPosition   available values: left, right, top, bottom
-     * @static
-     * @access public
-     * @return void
-     */
-    public static function printProgressPie($percent, $color = '', $tip = '', $tipPosition = 'bottom')
-    {
-        if(empty($color)) $color = static::getColorByLevel($percent);
-
-        $title = $tip ? $tip : $percent . '%';
-
-        echo <<<EOT
-            <div   title='{$title}' data-toggle='tooltip' data-placement='{$tipPosition}' class='progress-pie' data-doughnut-size='85' data-color='{$color}' data-value='{$percent}' data-width='120' data-height='120' data-back-color='#e8edf3'>
-              <div class='progress-info' style='line-height: 120px; padding-top: 0; font-size:25px;'>{$percent}%</div>
-            </div>
-EOT;
-    }
-
-    /**
-     * Get color by level for percent that is in level range.
-     *
-     * @param  float $percent
-     * @static
-     * @access public
-     * @return string HEX value of color
-     */
-    public static function getColorByLevel($percent)
-    {
-        if($percent == 0)                    $color = '#999999'; // gray
-        if($percent > 0 and $percent < 60)   $color = '#009e0f'; // green
-        if($percent >= 60 and $percent < 80) $color = '#ff9900'; // orange
-        if($percent >= 80)                   $color = '#cf2a27'; // red
-
-        return $color;
     }
 
     /**

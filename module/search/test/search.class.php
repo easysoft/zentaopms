@@ -208,6 +208,23 @@ class searchTest
     }
 
     /**
+     * 测试获取查询列表。
+     * Test get query list.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
+    public function getQueryListTest(string $module): array
+    {
+        $queryList = $this->objectModel->getQueryList($module);
+
+        if(dao::isError()) return dao::getError();
+
+        return $queryList;
+    }
+
+    /**
      * Test get list.
      *
      * @param  string $keywords

@@ -190,15 +190,9 @@ window.renderCheckList = function(metrics)
 
     var ids     = metrics.map(obj => obj.id).join(',');
     var checked = window.checkedList.map(obj => obj.id).join(',');
-    $.post($.createLink('metric', 'ajaxGetMetricSideTree'),
-    {
-        'metricIDList': ids,
-        'checkedList' : checked
-    },
-    function(resp)
-    {
-        $('.side .metric-tree').html(resp);
-    });
+    var url     = $.createLink('metric', 'ajaxGetMetricSideTree', 'metricIDList=' + ids + '&checkedList=' + checked);
+
+    loadTarget(url, '.side .metric-tree');
 }
 
 window.updateCheckList = function(id, name, isChecked)
@@ -384,10 +378,16 @@ window.updateMetricBoxs = function(id, isChecked)
  */
 window.appendMetricBox = function(id, mode = 'add')
 {
-    $.get($.createLink('metric', 'ajaxGetMultipleMetricBox', 'metricID=' + id), function(resp)
-    {
-        $('.table-and-charts').append(resp);
-    });
+    var url = $.createLink('metric', 'ajaxGetMultipleMetricBox', 'metricID=' + id);
+
+    var metricDom = $('<div>');
+    var metricID  = 'metricBox' + id;
+    metricDom.attr('id', metricID);
+    metricDom.attr('metric-id', id);
+    metricDom.addClass('metricBox');
+
+    $('.table-and-charts').append(metricDom);
+    loadTarget(url, metricID);
 }
 
 window.handleQueryClick = function(id, viewType = 'single')

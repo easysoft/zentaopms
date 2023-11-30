@@ -51,4 +51,38 @@ class screenTest
         $sqlFile = $appPath . 'data/screen.sql';
         $tester->dbh->exec(file_get_contents($sqlFile));
     }
+
+    public function getAllComponent()
+    {
+        global $tester;
+        $sql = "SELECT * FROM `zt_screen`";
+        $screenList = $tester->dbh->query($sql)->fetchAll();
+        $componentList = [];
+        foreach($screenList as $screen)
+        {
+            if(!in_array($screen->id, array(5, 6, 8)))
+            {
+                $componentList = array_merge($componentList, json_encode($screen->scheme));
+            }
+            else
+            {
+                $componentList = array_merge($componentList, json_encode($screen->scheme->componentList));
+            }
+        }
+
+        return $componentList;
+    }
+
+    public function completeComponent($component)
+    {
+        if(isset($component->key) && $component->key === 'Select') return array(null, $component);
+        $chartID = zget($component->chartConfig, 'sourceID', '');
+        if(!$chartID) return array(null, $component);
+
+        global $tester;
+        $type  = $component->chartConfig->package == 'Tables' ? 'pivot' : 'chart';
+        $table = $type == 'chart' ? TABLE_CHART : TABLE_PIVOT;
+        $chart = $tester->dao->select('*')->from($table)->where('id')->eq($chartID)->fetch();
+        return array($chart, $component);
+    }
 }

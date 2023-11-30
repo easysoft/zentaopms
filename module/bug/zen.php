@@ -147,9 +147,6 @@ class bugZen extends bug
                 unset($bugs[$index]);
                 continue;
             }
-
-            /* If the bug is not valid data, unset it.*/
-            if($this->common->checkValidRow('bug', $bug, $index)) unset($bugs[$index]);
         }
 
         /* Check required fields. */

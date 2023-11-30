@@ -121,13 +121,13 @@ div
                         (
                             set::label($lang->user->account),
                             set::strong(true),
-                            set::control(array('type' => 'text', 'name' => 'account'))
+                            set::control(array('type' => 'text', 'name' => 'account', 'id' => 'account'))
                         ),
                         formGroup
                         (
                             set::label($lang->user->password),
                             set::strong(true),
-                            set::control(array('type' => 'password', 'name' => 'password'))
+                            set::control(array('type' => 'password', 'name' => 'password', 'id' => 'password'))
                         ),
                         !empty($this->config->safe->loginCaptcha) ? formGroup
                         (
