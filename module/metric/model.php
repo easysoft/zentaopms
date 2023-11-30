@@ -1399,10 +1399,6 @@ class metricModel extends model
         });
 
         $xTime = array_column($data, $x);
-        foreach($xTime as $key => $time)
-        {
-            $xTime[$key] = substr($time, 0, 10);
-        }
         $xAxis = array('type' => 'category', 'data' => $xTime);
         $yAxis = array('type' => 'value');
 
