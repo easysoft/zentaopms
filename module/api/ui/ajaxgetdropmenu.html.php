@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $data = array('normal' => array(), 'closed' => array());
-$data['normal'][] = array('id' => 0, 'text' => $lang->api->noLinked, 'active' => $objectID == 0, 'type' => 'unlink');
+$data['normal'][] = array('id' => 0, 'text' => $lang->api->noLinked, 'active' => $objectID == 0, 'type' => 'nolink');
 
 /* 处理分组数据。Process grouped data. */
 foreach(array('product', 'project') as $moduleType)

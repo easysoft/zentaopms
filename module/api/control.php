@@ -448,6 +448,43 @@ class api extends control
     }
 
     /**
+     * 创建一个接口文档。
+     * Create an api doc.
+     *
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  string $space     api|project|product
+     * @access public
+     * @return void
+     */
+    public function create(int $libID, int $moduleID = 0, string $space = '')
+    {
+        if(!empty($_POST))
+        {
+            $formData = form::data($this->config->api->form->create)->add('product', 0)->add('version', 1)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
+
+            $apiID = $this->api->create($formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID={$formData->lib}&moduleID={$formData->module}&apiID={$apiID}")));
+        }
+
+        $this->setMenu($libID, $space);
+
+        $lib     = $this->doc->getLibByID($libID);
+        $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
+
+        $this->view->title            = $libName . $this->lang->api->create;
+        $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');
+        $this->view->libID            = $libID;
+        $this->view->libName          = $lib->name;
+        $this->view->moduleID         = $moduleID;
+        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'api', $startModuleID = 0);
+        $this->display();
+    }
+
+    /**
      * Edit library.
      *
      * @param  int     $apiID
@@ -457,7 +494,7 @@ class api extends control
     public function edit($apiID)
     {
         $api = $this->api->getLibById($apiID);
-        if(helper::isAjaxRequest() && !empty($_POST))
+        if(!empty($_POST))
         {
             $changes = $this->api->update($apiID);
             if(dao::isError()) return $this->sendError(dao::getError());
@@ -487,51 +524,6 @@ class api extends control
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);
         $this->view->moduleID         = $api->module ? (int)$api->module : (int)$this->cookie->lastDocModule;
-
-        $this->display();
-    }
-
-    /**
-     * Create an api doc.
-     *
-     * @param  int $libID
-     * @param  int $moduleID
-     * @param  string $space     api|project|product
-     * @access public
-     * @return void
-     */
-    public function create($libID, $moduleID = 0, $space = '')
-    {
-        if(!empty($_POST))
-        {
-            $api = $this->api->create();
-            if($api === false) return $this->sendError(dao::getError());
-
-            $this->action->create('api', $api->id, 'Created', '', '', '', false);
-
-            if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}&apiID={$api->id}")));
-        }
-
-        $libs = $this->doc->getLibs('api', '', $libID);
-        if(!$libID and !empty($libs)) $libID = key($libs);
-
-        $this->setMenu($libID, $space);
-
-        $lib     = $this->doc->getLibByID($libID);
-        $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
-
-        $this->getTypeOptions($libID);
-        $this->view->user             = $this->app->user->account;
-        $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');
-        $this->view->libID            = $libID;
-        $this->view->libName          = $lib->name;
-        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'api', $startModuleID = 0);
-        $this->view->moduleID         = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
-        $this->view->libs             = $libs;
-        $this->view->title            = $libName . $this->lang->api->create;
-        $this->view->users            = $this->user->getPairs('nocode');
-
         $this->display();
     }
 
