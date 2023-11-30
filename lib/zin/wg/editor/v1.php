@@ -65,7 +65,7 @@ class editor extends wg
 
         return div
         (
-            setClass('editor-container p-px mt-px rounded ring -ring-offset-1'),
+            setClass('editor-container p-px mt-px rounded'),
             $props['size'] === 'full' ? setStyle('height', '100%') : setClass('h-auto'),
             $editor,
             textarea

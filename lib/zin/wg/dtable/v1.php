@@ -6,17 +6,18 @@ class dtable extends wg
 {
     protected static array $defineProps = array(
         'className?:string="shadow-sm rounded"', // 表格样式。
-        'id?:string',                         // ID。
-        'customCols?: bool|array',            // 是否支持自定义列。
-        'cols?:array',                        // 表格列配置
-        'data?:array',                        // 表格数据源
-        'module?:string',                     // 模块信息，主要是获取语言项
-        'emptyTip?:string',                   // 表格数据源为空时显示的文本
-        'createTip?:string',                  // 表格数据源为空时的创建文本
-        'createLink?:array|string',           // 表格数据源为空时的创建链接
-        'createAttr?:string',                 // 表格数据源为空时的创建链接属性
-        'sortLink?:array|string',             // 排序链接
-        'orderBy?:string'                     // 排序字段
+        'id?:string',                            // ID。
+        'customCols?: bool|array',               // 是否支持自定义列。
+        'cols?:array',                           // 表格列配置。
+        'data?:array',                           // 表格数据源。
+        'module?:string',                        // 模块信息，主要是获取语言项。
+        'emptyTip?:string',                      // 表格数据源为空时显示的文本。
+        'createTip?:string',                     // 表格数据源为空时的创建文本。
+        'createLink?:array|string',              // 表格数据源为空时的创建链接。
+        'createAttr?:string',                    // 表格数据源为空时的创建链接属性。
+        'sortLink?:array|string',                // 排序链接。
+        'orderBy?:string',                       // 排序字段。
+        'loadPartial?: bool'                     // 启用部分加载，不更新浏览器地址栏 URL。
     );
 
     static $dtableID = 0;
@@ -62,9 +63,8 @@ class dtable extends wg
             $this->setProp('orderBy', array($orderByName => $orderByType));
         }
 
-        global $app;
         $sortLink = $this->prop('sortLink');
-        if(is_string($sortLink) && !str_contains($sortLink, 'RAWJS')) $this->setProp('sortLink', array('url' => $sortLink, 'data-app' => $app->tab));
+        if(is_string($sortLink) && !str_contains($sortLink, 'RAWJS')) $this->setProp('sortLink', array('url' => $sortLink, 'data-app' => 'current', 'data-load' => 'table', 'data-selector' => 'dtable', 'data-partial' => $this->prop('loadPartial')));
     }
 
     /**
@@ -79,18 +79,23 @@ class dtable extends wg
         $pager = $this->prop('footPager');
         if(!empty($pager) && isset($pager['items']))
         {
-            if(!isset($pager['btnProps'])) $pager['btnProps'] = array('data-load' => 'table', 'type' => 'ghost', 'size' => 'sm');
+            $loadOptions = array();
+            $loadOptions['data-load']     = 'table';
+            $loadOptions['data-target']   = $this->prop('id');
+            $loadOptions['data-selector'] = 'dtable';
+            if($this->prop('loadPartial')) $loadOptions['data-partial'] = $this->prop('loadPartial');
+
+            if(!isset($pager['btnProps'])) $pager['btnProps'] = array_merge(array('type' => 'ghost', 'size' => 'sm'), $loadOptions);
             foreach($pager['items'] as $index => $item)
             {
-                if($item['type'] !== 'size-menu') continue;
+                if($item['type'] != 'size-menu') continue;
                 if(isset($item['itemProps']))
                 {
-                    $pager['items'][$index]['itemProps']['data-load']   = 'table';
-                    $pager['items'][$index]['itemProps']['data-target'] = $this->prop('id');
+                    $pager['items'][$index]['itemProps'] = array_merge($pager['items'][$index]['itemProps'], $loadOptions);
                 }
                 else
                 {
-                    $pager['items'][$index]['itemProps'] = array('data-load' => 'table', 'data-target' => $this->prop('id'));
+                    $pager['items'][$index]['itemProps'] = $loadOptions;
                 }
             }
             $this->setProp('footPager', $pager);

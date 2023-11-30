@@ -1815,3 +1815,11 @@ function resultFilter(): resultFilter
 {
     return createWg('resultFilter', func_get_args());
 }
+
+/**
+ * Contact list widget.
+ */
+function contactList(): contactList
+{
+    return createWg('contactList', func_get_args());
+}

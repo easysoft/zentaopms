@@ -10,6 +10,8 @@ class treeEditor extends wg
         'id?: string',
         'icon?: string',
         'class?: string',
+        'sortable?: array',
+        'onSort?: function',
         'canUpdateOrder?: bool=false',
         'canEdit?: bool=false',
         'canDelete?: bool=false',
@@ -24,7 +26,7 @@ class treeEditor extends wg
     protected function build(): zui
     {
         $this->setProp('items', $this->buildTree($this->prop('items')));
-        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'itemActions', 'hover', 'onClick'));
+        $treeProps = $this->props->pick(array('items', 'activeClass', 'activeIcon', 'activeKey', 'onClickItem', 'defaultNestedShow', 'changeActiveKey', 'isDropdownMenu', 'collapsedIcon', 'expandedIcon', 'normalIcon', 'itemActions', 'hover', 'onClick', 'sortable', 'onSort'));
         return zui::tree
         (
             set::_id($this->prop('id')),

@@ -18,11 +18,6 @@ class header extends wg
         'toolbar'         => array('map' => 'btn')
     );
 
-    public static function getPageJS(): string|false
-    {
-        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-    }
-
     protected function buildHeading()
     {
         if($this->hasBlock('heading')) return $this->block('heading');
@@ -295,7 +290,8 @@ class header extends wg
 
         /* Initialize the default values. */
         $showCreateList = $needPrintDivider = false;
-        $modalClass     = (isset($config->zin->mode) && $config->zin->mode == 'compatible') ? 'open-in-parent' : null;
+        $isCompatible   = isset($config->zin->mode) && $config->zin->mode == 'compatible';
+        $modalClass     = $isCompatible ? 'open-in-parent' : null;
 
         /* Get default product id. */
         $productID = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
@@ -366,8 +362,9 @@ class header extends wg
                         $params              = "programID=0&from=global";
                         $createMethod        = 'createGuide';
                         $item['innerClass']  = $modalClass;
-                        $item['data-type']   = 'ajax';
                         $item['data-toggle'] = 'modal';
+
+                        if($isCompatible) $item['data-type'] = 'ajax';
                     }
                     else
                     {
