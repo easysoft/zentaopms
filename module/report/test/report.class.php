@@ -317,21 +317,20 @@ class reportTest
     }
 
     /**
+     * 测试获取当前年的用户操作数。
      * Test get user action count in this year.
      *
-     * @param  array $accounts
+     * @param  string    $accounts
      * @access public
-     * @return void
+     * @return int|array
      */
-    public function getUserYearActionsTest($accounts)
+    public function getUserYearActionsTest(array $accounts): int|array
     {
-        $year = date('Y');
-
-        $objects = $this->objectModel->getUserYearActions($accounts, $year);
+        $count = $this->objectModel->getUserYearActions($accounts, date('Y'));
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $count;
     }
 
     /**

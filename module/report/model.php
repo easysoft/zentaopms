@@ -241,14 +241,15 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户本年的操作数。
      * Get user action count in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return int
      */
-    public function getUserYearActions($accounts, $year)
+    public function getUserYearActions(array $accounts, string $year): int
     {
         return $this->dao->select('count(*) as count')->from(TABLE_ACTION)
             ->where('LEFT(date, 4)')->eq($year)
