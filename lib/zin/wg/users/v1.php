@@ -14,6 +14,8 @@ namespace zin;
 class users extends wg
 {
     protected static array $defineProps = array(
+        'label?: string',                   // 控件标签。
+        'id?: string',                      // 控件 ID。
         'name?: string="users[]"',          // 控件名称。
         'value?: string',                   // 控件默认值。
         'items?: array',                    // picker 列表项或表项获取方法。
@@ -42,7 +44,8 @@ class users extends wg
     {
         return inputGroup
         (
-            picker(set($this->getDefinedProps())),
+            $this->prop('label', null),
+            picker(set($this->props->pick(array('id', 'name', 'value', 'items', 'menu', 'multiple')))),
             $this->prop('contactList') ? contactList() : null
         );
     }
