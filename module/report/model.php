@@ -133,12 +133,13 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户的 bugs。
      * Get user bugs.
      *
      * @access public
-     * @return void
+     * @return array
      */
-    public function getUserBugs()
+    public function getUserBugs(): array
     {
         return $this->dao->select('t1.id, t1.title, t2.account as user, t1.deadline')
             ->from(TABLE_BUG)->alias('t1')

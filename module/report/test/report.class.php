@@ -224,19 +224,20 @@ class reportTest
     }
 
     /**
+     * 测试获取用户的 bugs。
      * Test get user bugs.
      *
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getUserBugsTest()
+    public function getUserBugsTest(): string|array
     {
         $objects = $this->objectModel->getUserBugs();
 
         if(dao::isError()) return dao::getError();
 
         $counts = '';
-        foreach($objects as $user => $bugs) $counts .= "$user:" . count($bugs) . ';';
+        foreach($objects as $user => $bugs) $counts .= "{$user}:" . count($bugs) . ';';
         return $counts;
     }
 
