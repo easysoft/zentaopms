@@ -260,12 +260,14 @@ class reportTest
     }
 
     /**
+     * 测试获取用户的待办。
      * Test get user todos.
      *
+     * @param  string       $userType
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getUserTodosTest($userType)
+    public function getUserTodosTest(string $userType): string|array
     {
         $objects = $this->objectModel->getUserTodos();
 
@@ -274,7 +276,7 @@ class reportTest
         $counts = '';
         foreach($objects as $user => $todos)
         {
-            if(strpos($user, $userType) !== false and str_replace($userType, '', $user) < 11) $counts .= "$user:" . count($todos) . ';';
+            if(strpos($user, $userType) !== false) $counts .= "$user:" . count($todos) . ';';
         }
         return $counts;
     }
