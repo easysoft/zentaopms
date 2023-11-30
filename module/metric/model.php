@@ -1598,12 +1598,11 @@ class metricModel extends model
             list($year, $month, $day) = explode('-', $query[$key]);
 
             $timestamp = strtotime($query[$key]);
-            $week      = date('W', $timestamp);
 
             $dateParse = new stdClass();
             $dateParse->year  = $year;
             $dateParse->month = "{$year}{$month}";
-            $dateParse->week  = "{$year}{$week}";
+            $dateParse->week  = date('oW', $timestamp);
             $dateParse->day   = "{$year}{$month}{$day}";
 
             return $dateParse;
