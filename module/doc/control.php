@@ -112,7 +112,7 @@ class doc extends control
         }
         elseif(in_array($type, array('view', 'collect', 'createdby', 'editedby')))
         {
-            $docs = $this->doc->getMineList($type, $browseType, $orderBy, $pager, $queryID);
+            $docs = $this->doc->getMineList($type, $browseType, $queryID, $orderBy, $pager);
         }
 
         $this->docZen->assignVarsForMySpace($type, $objectID, $libID, $moduleID, $browseType, $param, $orderBy, $docs, $pager, $libs, $objectDropdown);

@@ -84,40 +84,29 @@ class apiModel extends model
     /**
      * Create an api doc.
      *
+     * @param  object   $formData
      * @access public
-     * @return object | bool
+     * @return int|bool
      */
-    public function create()
+    public function create(object $formData)
     {
-        $now  = helper::now();
-        $data = fixer::input('post')
-            ->trim('title,path')
-            ->remove('type,undefined')
-            ->skipSpecial('params,response')
-            ->add('addedBy', $this->app->user->account)
-            ->add('addedDate', $now)
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', $now)
-            ->add('version', 1)
-            ->setDefault('product,module', 0)
-            ->stripTags($this->config->api->editor->create['id'], $this->config->allowedTags)
-            ->get();
-
-        $this->dao->insert(TABLE_API)->data($data)
+        $this->dao->insert(TABLE_API)->data($formData)
             ->autoCheck()
             ->batchCheck($this->config->api->create->requiredFields, 'notempty')
-            ->check('title', 'unique', "lib = $data->lib AND module = $data->module")
-            ->check('path', 'unique', "lib = $data->lib AND module = $data->module AND method = '$data->method'")
+            ->check('title', 'unique', "lib = $formData->lib AND module = $formData->module")
+            ->check('path',  'unique', "lib = $formData->lib AND module = $formData->module AND method = '$formData->method'")
             ->exec();
 
         if(dao::isError()) return false;
 
-        $data->id = $this->dao->lastInsertID();
+        $apiID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('api', $apiID, 'Created', '', '', '', false);
 
-        $apiSpec = $this->getApiSpecByData($data);
+        $formData->id = $apiID;
+        $apiSpec      = $this->getApiSpecByData($formData);
         $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
 
-        return $data;
+        return $apiID;
     }
 
     /**

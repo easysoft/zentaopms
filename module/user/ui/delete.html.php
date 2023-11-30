@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+h::jsCall('$.getLib', 'md5.js', array('root' => $this->app->getWebRoot() . 'js/'));
+
 modalHeader
 (
     set::title(''),
@@ -19,6 +21,7 @@ modalHeader
 
 formPanel
 (
+    on::click('button[type=submit]', 'encryptPassword'),
     formGroup
     (
         set::label($lang->user->verifyPassword),

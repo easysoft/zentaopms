@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 class reportTest
 {
     public function __construct()
@@ -9,13 +10,14 @@ class reportTest
     }
 
     /**
+     * 测试计算每项数据的百分比。
      * Test compute percent of every item.
      *
-     * @param  array  $datas
+     * @param  array       $datas
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function computePercentTest($datas)
+    public function computePercentTest(array $datas): string|array
     {
         $objects = $this->objectModel->computePercent($datas);
 
@@ -27,13 +29,14 @@ class reportTest
     }
 
     /**
+     * 测试为单个图表创建json数据。
      * Test create json data of single charts.
      *
-     * @param  int    $executionID
+     * @param  int          $executionID
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function createSingleJSONTest($executionID)
+    public function createSingleJSONTest(int $executionID): string|array
     {
         global $tester;
         $this->execution = $tester->loadModel('execution');
@@ -46,20 +49,21 @@ class reportTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', $objects);
     }
 
     /**
+     * 测试转换日期格式。
      * Test convert date format.
      *
-     * @param  array  $dateList
-     * @param  string $format
+     * @param  array        $dateList
+     * @param  string       $format
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function convertFormatTest($dateList, $format = 'Y-m-d')
+    public function convertFormatTest(array $dateList, string $format = 'Y-m-d'): string|array
     {
-        $objects = $this->objectModel->convertFormat($dateList, $format = 'Y-m-d');
+        $objects = $this->objectModel->convertFormat($dateList, $format);
 
         if(dao::isError()) return dao::getError();
 

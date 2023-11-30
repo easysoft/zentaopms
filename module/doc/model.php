@@ -288,22 +288,26 @@ class docModel extends model
     /**
      * Update api lib.
      *
-     * @param  int   $id
+     * @param  int       $id
+     * @param  object    $formData
      * @access public
      * @return array|int
      */
-    public function updateApiLib($id)
+    public function updateApiLib($id, $formData = null)
     {
         $oldLib = $this->getLibByID($id);
 
-        $data = fixer::input('post')
-            ->trim('name')
-            ->add('product', $oldLib->product)
-            ->add('project', $oldLib->project)
-            ->join('groups', ',')
-            ->join('users', ',')
-            ->remove('uid,contactListMenu,type')
-            ->get();
+        if(!$formData)
+        {
+            $formData = fixer::input('post')
+                ->trim('name')
+                ->add('product', $oldLib->product)
+                ->add('project', $oldLib->project)
+                ->join('groups', ',')
+                ->join('users', ',')
+                ->remove('uid,contactListMenu')
+                ->get();
+        }
 
         $this->app->loadLang('api');
 
@@ -313,22 +317,22 @@ class docModel extends model
         $this->lang->doclib->project = $this->lang->api->project;
         $this->lang->doclib->product = $this->lang->api->product;
 
-        $this->checkApiLibName($data, $this->post->type, $id);
+        $this->checkApiLibName($formData, $formData->type, $id);
 
         if(dao::isError()) return false;
 
-        $data->type = static::DOC_TYPE_API;
-        $this->dao->update(TABLE_DOCLIB)->data($data)->autoCheck()
+        $formData->type = static::DOC_TYPE_API;
+        $this->dao->update(TABLE_DOCLIB)->data($formData, 'type')->autoCheck()
             ->batchCheck($this->config->api->editlib->requiredFields, 'notempty')
             ->where('id')->eq($id)
             ->exec();
 
-        $changes = array();
-        if(!dao::isError())
+        if(dao::isError()) return false;
+
+        $changes  = common::createChanges($oldLib, $formData);
+        if($changes)
         {
-            $this->loadModel('action');
-            $changes  = common::createChanges($oldLib, $data);
-            $actionID = $this->action->create('docLib', $id, 'Edited');
+            $actionID = $this->loadModel('action')->create('docLib', $id, 'Edited');
             $this->action->logHistory($actionID, $changes);
         }
         return $changes;
@@ -639,16 +643,18 @@ class docModel extends model
     }
 
     /**
+     * 获取我的空间下的文档列表数据。
      * Get mine list.
      *
-     * @param  string    $type            view|collect|createdBy
-     * @param  string    $browseType      all|draft
-     * @param  string    $orderBy
-     * @param  object    $pager
+     * @param  string $type       view|collect|createdby|editedby
+     * @param  string $browseType all|draft|bysearch
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getMineList($type, $browseType, $orderBy, $pager = null, $queryID = 0)
+    public function getMineList(string $type, string $browseType, int $queryID = 0, string $orderBy = 'id_desc', object $pager = null): array
     {
         $query = '';
         if($browseType == 'bysearch')
@@ -656,64 +662,7 @@ class docModel extends model
             $query = $this->buildQuery($type, $queryID);
             $query = preg_replace('/(`\w+`)/', 't1.$1', $query);
         }
-
-        $allLibs          = $this->getLibs('all');
-        $allLibIDList     = array_keys($allLibs);
-        $hasPrivDocIdList = $this->getPrivDocs($allLibIDList);
-        if($type == 'view' or $type == 'collect')
-        {
-            $docs = $this->dao->select('t1.*,t3.name as libName,t3.type as objectType,max(t2.`date`) as date')->from(TABLE_DOC)->alias('t1')
-                ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc")
-                ->leftJoin(TABLE_DOCLIB)->alias('t3')->on("t1.lib=t3.id")
-                ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.lib')->ne('')
-                ->andWhere('t1.type')->in('text,word,ppt,excel,url,article')
-                ->andWhere('t1.vision')->eq($this->config->vision)
-                ->andWhere('t2.action')->eq($type)
-                ->andWhere('t2.actor')->eq($this->app->user->account)
-                ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t3.type')->ne('product')->fi()
-                ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t3.type')->notIN('project,execution')->fi()
-                ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t3.type')->ne('custom')->fi()
-                ->beginIF($browseType == 'all' or $browseType == 'bysearch')->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
-                ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
-                ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
-                ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
-                ->groupBy('t1.id')
-                ->orderBy($orderBy)
-                ->page($pager, 't1.id')
-                ->fetchAll('id');
-        }
-        elseif($type == 'createdby' || $type == 'editedby')
-        {
-            $docIdList = array();
-            if($type == 'editedby')
-            {
-                $docIdList = $this->dao->select('objectID')->from(TABLE_ACTION)
-                    ->where('objectType')->eq('doc')
-                    ->andWhere('action')->in('edited')
-                    ->andWhere('actor')->eq($this->app->user->account)
-                    ->andWhere('vision')->eq($this->config->vision)
-                    ->fetchPairs();
-            }
-
-            $docs = $this->dao->select('t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')
-                ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
-                ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.lib')->ne('')
-                ->andWhere('t1.vision')->eq($this->config->vision)
-                ->andWhere('t1.type')->in('text,word,ppt,excel,url,article')
-                ->beginIF($type == 'createdby')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
-                ->beginIF($type == 'editedby')->andWhere('t1.id')->in($docIdList)->fi()
-                ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
-                ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t2.type')->notIN('project,execution')->fi()
-                ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t2.type')->ne('custom')->fi()
-                ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
-                ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
-                ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
-                ->orderBy($orderBy)
-                ->page($pager)
-                ->fetchAll('id');
-        }
+        if(in_array($type, array('view', 'collect', 'createdby', 'editedby'))) $docs = $this->getMySpaceDocs($type, $browseType, $query, $orderBy, $pager);
 
         $this->loadModel('tree');
         $objects = array();
@@ -738,7 +687,70 @@ class docModel extends model
             }
         }
 
-        $docs = $this->processCollector($docs);
+        return $this->processCollector($docs);
+    }
+
+    /**
+     * 获取我的空间下的文档列表数据。
+     * Get doc list under the my space.
+     *
+     * @param  string $type       view|collect|createdby|editedby
+     * @param  string $browseType all|draft|bysearch
+     * @param  string $orderBy
+     * @param  string $query
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getMySpaceDocs(string $type, string $browseType, string $query = '', string $orderBy = 'id_desc', object $pager = null): array
+    {
+        if(!in_array($type, array('view', 'collect', 'createdby', 'editedby'))) return array();
+
+        $allLibs          = $this->getLibs('all');
+        $allLibIDList     = array_keys($allLibs);
+        $hasPrivDocIdList = $this->getPrivDocs($allLibIDList);
+        if(in_array($type, array('view', 'collect')))
+        {
+            $docs = $this->dao->select('t1.*,t3.name as libName,t3.type as objectType,max(t2.`date`) as date')->from(TABLE_DOC)->alias('t1')->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc")->leftJoin(TABLE_DOCLIB)->alias('t3')->on("t1.lib=t3.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.lib')->ne('')
+                ->andWhere('t1.type')->in('text,word,ppt,excel,url,article')
+                ->andWhere('t1.vision')->eq($this->config->vision)
+                ->andWhere('t2.action')->eq($type)
+                ->andWhere('t2.actor')->eq($this->app->user->account)
+                ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t3.type')->ne('product')->fi()
+                ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t3.type')->notIN('project,execution')->fi()
+                ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t3.type')->ne('custom')->fi()
+                ->beginIF(in_array($browseType, array('all', 'bysearch')))->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
+                ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+                ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
+                ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
+                ->groupBy('t1.id')
+                ->orderBy($orderBy)
+                ->page($pager, 't1.id')
+                ->fetchAll('id');
+        }
+        else
+        {
+            $docIdList = $type == 'editedby' ? $this->docTao->getEditedDocIdList() : array();
+            $docs = $this->dao->select('t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.lib')->ne('')
+                ->andWhere('t1.vision')->eq($this->config->vision)
+                ->andWhere('t1.type')->in('text,word,ppt,excel,url,article')
+                ->beginIF($type == 'createdby')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'editedby')->andWhere('t1.id')->in($docIdList)->fi()
+                ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
+                ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t2.type')->notIN('project,execution')->fi()
+                ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t2.type')->ne('custom')->fi()
+                ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+                ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
+                ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+
         return $docs;
     }
 

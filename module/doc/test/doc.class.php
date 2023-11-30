@@ -5,6 +5,7 @@ class docTest
     {
          global $tester, $app;
          $this->objectModel = $tester->loadModel('doc');
+        $this->objectModel->config->global->syncProduct = '';
 
          $app->rawModule = 'doc';
          $app->rawMethod = 'index';
@@ -767,6 +768,57 @@ class docTest
     public function getDocsTest(int $libID, int $moduleID, string $browseType): array
     {
         $docs = $this->objectModel->getDocs($libID, $moduleID, $browseType, 'id_desc');
+
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
+
+    /**
+     * 获取编辑过的文档ID列表。
+     * Get the list of doc id list that have been edited.
+     *
+     * @access public
+     * @return string|array
+     */
+    public function getEditedDocIdListTest(): string|array
+    {
+        $docIdList = $this->objectModel->getEditedDocIdList();
+
+        if(dao::isError()) return dao::getError();
+        return implode(';', $docIdList);
+    }
+
+    /**
+     * 获取我的空间下的文档列表数据。
+     * Get doc list under the my space.
+     *
+     * @param  string $type       view|collect|createdby|editedby
+     * @param  string $browseType all|draft|bysearch
+     * @param  string $query
+     * @access public
+     * @return array
+     */
+    public function getMySpaceDocsTest(string $type, string $browseType, string $query = ''): array
+    {
+        $docs = $this->objectModel->getMySpaceDocs($type, $browseType, $query);
+
+        if(dao::isError()) return dao::getError();
+        return $docs;
+    }
+
+    /**
+     * 获取我的空间下的文档列表数据。
+     * Get doc list under the my space.
+     *
+     * @param  string $type       view|collect|createdby|editedby
+     * @param  string $browseType all|draft|bysearch
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function getMineListTest(string $type, string $browseType, int $queryID = 0): array
+    {
+        $docs = $this->objectModel->getMineList($type, $browseType, $queryID);
 
         if(dao::isError()) return dao::getError();
         return $docs;

@@ -1,0 +1,19 @@
+title: table zt_burn
+desc: "燃尽图"
+author: Mengyi Liu
+version: "1.0"
+fields:
+    - field: execution
+      range: 101-400{15}
+    - field: date
+      range: "(-12M)-(+3M):-1M"
+      type: timestamp
+      format: "YY/MM/DD"
+    - field: estimate
+      range: 1
+    - field: left
+      range: 2
+    - field: consumed
+      range: 3
+    - field: storyPoint
+      range: 0

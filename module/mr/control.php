@@ -56,7 +56,7 @@ class mr extends control
             $this->session->set('execution', $objectID);
             $execution = $this->loadModel('execution')->getByID($objectID);
             $features = $this->execution->getExecutionFeatures($execution);
-            if(!$features['devops']) return $this->locate($this->createLink('execution', 'task', "objectID=$executionID"));
+            if(!$features['devops']) return $this->locate($this->createLink('execution', 'task', "objectID=$objectID"));
 
             $this->loadModel('execution')->setMenu($objectID);
         }
@@ -82,7 +82,7 @@ class mr extends control
 
         $filterProjects = empty($repo->serviceProject) ? array() : array($repo->serviceHost => array($repo->serviceProject => $repo->serviceProject));
         $MRList         = $this->mr->getList($mode, $param, $orderBy, $filterProjects, $repoID, 0, $pager);
-        $MRList         = $this->mr->batchSyncMR($MRList, array($repoID => $repo));
+        $MRList         = $this->mr->batchSyncMR($MRList);
         $projects       = $this->mrZen->getAllProjects($repo, $MRList);
 
         /* Check whether Mr is linked with the product. */
@@ -134,7 +134,7 @@ class mr extends control
 
         $MRList   = $this->mr->getList($mode, $param, $orderBy, array(), $repoID, $executionID, $pager);
         $repoList = $this->loadModel('repo')->getList($executionID);
-        $MRList   = $this->mr->batchSyncMR($MRList, $repoList);
+        $MRList   = $this->mr->batchSyncMR($MRList);
 
         $projects  = array();
         $repoPairs = array();
@@ -235,7 +235,10 @@ class mr extends control
     {
         if($_POST)
         {
-            $result = $this->mr->update($MRID);
+            $MR = form::data($this->config->mr->form->edit)
+                ->setIF($this->post->needCI == 0, 'jobID', 0)
+                ->get();
+            $result = $this->mr->update($MRID, $MR);
             return $this->send($result);
         }
 
@@ -249,7 +252,7 @@ class mr extends control
         /* Fetch user list both in Zentao and current GitLab project. */
         $host     = $this->loadModel('pipeline')->getByID($MR->hostID);
         $scm      = $host->type;
-        $gitUsers = $this->$scm->getUserAccountIdPairs($MR->hostID);
+        $gitUsers = $this->loadModel($scm)->getUserAccountIdPairs($MR->hostID);
 
         /* Check permissions. */
         if(!$this->app->user->admin and $scm == 'gitlab')
@@ -265,7 +268,7 @@ class mr extends control
         }
 
         $this->view->host = $host;
-        $this->meZen->assignEditData($MR, $scm);
+        $this->mrZen->assignEditData($MR, $scm);
     }
 
     /**

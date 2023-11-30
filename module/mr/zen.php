@@ -33,7 +33,8 @@ class mrZen extends mr
                 $projectIds[$MR->sourceProject] = $MR->sourceProject;
                 $projectIds[$MR->targetProject] = $MR->targetProject;
             }
-            $projects += $this->mr->getGitlabProjects($repo->serviceHost, $projectIds);
+
+            $projects += $this->mr->getGitlabProjects((int)$repo->serviceHost, $projectIds);
         }
         else
         {
@@ -177,7 +178,7 @@ class mrZen extends mr
      * @access protected
      * @return void
      */
-    protected function buildLinkTaskSearchForm(int $MRID, object $product, string $orderBy, int $queryID = 0, array $productExecutions)
+    protected function buildLinkTaskSearchForm(int $MRID, object $product, string $orderBy, int $queryID, array $productExecutions)
     {
         $modules = $this->loadModel('tree')->getOptionMenu($product->id, 'task');
 

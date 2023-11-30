@@ -13,7 +13,7 @@ jsVar('updateTimeTip', $lang->metric->updateTimeTip);
 
 div
 (
-    setClass("table-and-chart table-and-chart-{$viewType}"),
+    setClass("table-and-chart TAble-and-chart-{$viewType}"),
     div
     (
         setClass('table-side'),

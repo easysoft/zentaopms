@@ -14,6 +14,7 @@
 class reportModel extends model
 {
     /**
+     * 构造函数。
      * Construct.
      *
      * @access public
@@ -26,17 +27,20 @@ class reportModel extends model
     }
 
     /**
+     * 计算每项数据的百分比。
      * Compute percent of every item.
      *
-     * @param  array    $datas
+     * @param  array  $datas
      * @access public
      * @return array
      */
-    public function computePercent($datas)
+    public function computePercent(array $datas): array
     {
+        /* Get data total. */
         $sum = 0;
         foreach($datas as $data) $sum += $data->value;
 
+        /* Compute percent, and get total percent. */
         $totalPercent = 0;
         foreach($datas as $i => $data)
         {
@@ -48,22 +52,25 @@ class reportModel extends model
     }
 
     /**
+     * 创建单个图表的 json 数据。
      * Create json data of single charts
+     *
      * @param  array $sets
      * @param  array $dateList
-     * @return string the json string
+     * @return array
      */
-    public function createSingleJSON($sets, $dateList)
+    public function createSingleJSON(array $sets, array $dateList): array
     {
-        $data = array();
-        $now  = date('Y-m-d');
         $preValue = 0;
+        $data     = array();
+        $now      = date('Y-m-d');
         $setsDate = array_keys($sets);
-        foreach($dateList as $i => $date)
+        foreach($dateList as $date)
         {
-            $date  = date('Y-m-d', strtotime($date));
+            $date = date('Y-m-d', strtotime($date));
             if($date > $now) break;
-            if(!isset($sets[$date]) and $sets)
+
+            if(!isset($sets[$date]) && $sets)
             {
                 $tmpDate = $setsDate;
                 $tmpDate[] = $date;
@@ -79,13 +86,14 @@ class reportModel extends model
                 }
             }
 
-            $data[] = isset($sets[$date]) ? "{$sets[$date]->value}" : "{$preValue}";
+            $data[] = isset($sets[$date]) ? $sets[$date]->value : $preValue;
         }
 
         return $data;
     }
 
     /**
+     * 转换日期格式。
      * Convert date format.
      *
      * @param  array  $dateList
@@ -93,7 +101,7 @@ class reportModel extends model
      * @access public
      * @return array
      */
-    public function convertFormat($dateList, $format = 'Y-m-d')
+    public function convertFormat(array $dateList, string $format = 'Y-m-d'): array
     {
         foreach($dateList as $i => $date) $dateList[$i] = date($format, strtotime($date));
         return $dateList;

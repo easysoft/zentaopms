@@ -97,6 +97,7 @@ class report extends control
     }
 
     /**
+     * 展示年度数据。
      * Show annual data.
      *
      * @param  string $year
@@ -105,132 +106,17 @@ class report extends control
      * @access public
      * @return void
      */
-    public function annualData($year = '', $dept = '', $account = '')
+    public function annualData(string $year = '', string $dept = '', string $account = '')
     {
         $this->app->loadLang('story');
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
         $this->app->loadLang('testcase');
-        $this->loadModel('dept');
-        $this->loadModel('user');
 
-        $super = common::hasPriv('screen', 'allAnnualData');
+        /* Assign annual data. */
+        $this->reportZen->assignAnnualReport($year, $dept, $account);
 
-        $firstAction = $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id')->limit(1)->fetch();
-        $currentYear = date('Y');
-        $firstYear   = empty($firstAction) ? $currentYear : substr($firstAction->date, 0, 4);
-
-        /* Get years for use zentao. */
-        $years = array();
-        for($thisYear = $firstYear; $thisYear <= $currentYear; $thisYear ++) $years[$thisYear] = $thisYear;
-
-        /* Init year when year is empty. */
-        if(empty($year))
-        {
-            $year  = date('Y');
-            $month = date('n');
-            if($month <= $this->config->report->annualData['minMonth'])
-            {
-                $year -= 1;
-                if(!isset($years[$year])) $year += 1;
-            }
-        }
-
-        /* Get users and depts. */
-        if($account)
-        {
-            $user = $this->user->getByID($account);
-            $dept = $user->dept;
-        }
-
-        $userPairs = $this->dept->getDeptUserPairs($dept);
-        $accounts  = !empty($user) ? array($user->account) : array_keys($userPairs);
-        $users     = array('' => $this->lang->report->annualData->allUser) + $userPairs;
-
-        $noDepartment = array('0' => '/' . $this->lang->dept->noDepartment);
-        $depts        = $this->dept->getOptionMenu();
-        if(!$super)
-        {
-            $depts = ($dept and isset($depts[$dept])) ? array($dept => $depts[$dept]) : $noDepartment;
-        }
-        else
-        {
-            $depts = array('' => $this->lang->report->annualData->allDept) + $depts;
-
-            unset($depts[0]);
-            $depts += $noDepartment;
-        }
-
-        /* Get annual data. */
-        $data = array();
-        if(!$account)
-        {
-            $data['users'] = $dept ? count($accounts) :  (count($users) - 1);
-        }
-        else
-        {
-            $data['logins'] = $this->report->getUserYearLogins($accounts, $year);
-        }
-
-        $data['actions']       = $this->report->getUserYearActions($accounts, $year);
-        $data['todos']         = $this->report->getUserYearTodos($accounts, $year);
-        $data['contributions'] = $this->report->getUserYearContributions($accounts, $year);
-        $data['executionStat'] = $this->report->getUserYearExecutions($accounts, $year);
-        $data['productStat']   = $this->report->getUserYearProducts($accounts, $year);
-        $data['storyStat']     = $this->report->getYearObjectStat($accounts, $year, 'story');
-        $data['taskStat']      = $this->report->getYearObjectStat($accounts, $year, 'task');
-        $data['bugStat']       = $this->report->getYearObjectStat($accounts, $year, 'bug');
-        $data['caseStat']      = $this->report->getYearCaseStat($accounts, $year);
-
-        $yearEfforts = $this->report->getUserYearEfforts($accounts, $year);
-        $data['consumed'] = $yearEfforts->consumed;
-
-        if(empty($dept) and empty($account)) $data['statusStat'] = $this->report->getAllTimeStatusStat();
-
-        $contributionGroups = array();
-        $maxCount           = 0;
-        $contributions      = 0;
-        foreach($years as $yearValue)
-        {
-            $contributionList  = $this->report->getUserYearContributions($accounts, $yearValue);
-            $contributionCount = 0;
-            $max               = 0;
-            $radarData         = array('product' => 0, 'execution' => 0, 'devel' => 0, 'qa' => 0, 'other' => 0);
-            foreach($contributionList as $objectType => $objectContributions)
-            {
-                $sum = array_sum($objectContributions);
-                if($sum > $max) $max = $sum;
-                $contributionCount += $sum;
-
-                foreach($objectContributions as $actionName => $count)
-                {
-                    $radarTypes = isset($this->config->report->annualData['radar'][$objectType][$actionName]) ? $this->config->report->annualData['radar'][$objectType][$actionName] : array('other');
-                    foreach($radarTypes as $radarType) $radarData[$radarType] += $count;
-                }
-                $contributionGroups[$yearValue] = $radarData;
-            }
-
-            if($yearValue == $year)
-            {
-                $maxCount      = $max;
-                $contributions = $contributionCount;
-            }
-        }
-
-        $this->view->title  = sprintf($this->lang->report->annualData->title, ($account ? zget($users, $account, '') : (($dept !== '') ? substr($depts[$dept], strrpos($depts[$dept], '/') + 1) : '')), $year);
-        $this->view->data               = $data;
-        $this->view->year               = $year;
-        $this->view->users              = $users;
-        $this->view->depts              = $depts;
-        $this->view->years              = $years;
-        $this->view->dept               = $dept;
-        $this->view->account            = $account;
-        $this->view->months             = $this->report->getYearMonths($year);
-        $this->view->contributionGroups = $contributionGroups;
-        $this->view->radarData          = $contributionGroups[$year];
-        $this->view->maxCount           = $maxCount;
-        $this->view->contributions      = $contributions;
-
+        $this->view->account = $account;
         $this->display();
     }
 }

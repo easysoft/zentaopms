@@ -59,6 +59,7 @@ featureBar
     set::linkParams("repoID={$repo->id}&mode=status&param={key}")
 );
 
+$linkParams = $app->tab == 'devops' ? "repoID={$repo->id}" : '';
 toolBar
 (
     hasPriv('mr', 'create') ? item(set(array
@@ -66,7 +67,7 @@ toolBar
         'text'  => $lang->mr->create,
         'icon'  => 'plus',
         'class' => 'btn primary',
-        'url'   => createLink('mr', 'create', $app->tab == 'devops' ? "repoID={$repo->id}" : '')
+        'url'   => createLink('mr', 'create', $linkParams)
     ))) : null
 );
 

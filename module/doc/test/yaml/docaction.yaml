@@ -7,7 +7,7 @@ fields:
   - field: doc
     range: 1-10
   - field: action
-    range: collect
+    range: 'collect{10},view{10}'
   - field: actor
     range: admin,user1,user2
   - field: date
