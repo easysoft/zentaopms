@@ -190,15 +190,9 @@ window.renderCheckList = function(metrics)
 
     var ids     = metrics.map(obj => obj.id).join(',');
     var checked = window.checkedList.map(obj => obj.id).join(',');
-    $.post($.createLink('metric', 'ajaxGetMetricSideTree'),
-    {
-        'metricIDList': ids,
-        'checkedList' : checked
-    },
-    function(resp)
-    {
-        $('.side .metric-tree').html(resp);
-    });
+    var url     = $.createLink('metric', 'ajaxGetMetricSideTree', 'metricIDList=' + ids + '&checkedList=' + checked);
+
+    loadTarget(url, '.side .metric-tree');
 }
 
 window.updateCheckList = function(id, name, isChecked)

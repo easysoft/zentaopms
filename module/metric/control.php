@@ -258,10 +258,10 @@ class metric extends control
         return $this->send($optionList);
     }
 
-    public function ajaxGetMetricSideTree()
+    public function ajaxGetMetricSideTree($metricIDList, $checkedList)
     {
-        $metricIDList = explode(',', $_POST['metricIDList']);
-        $checkedList  = explode(',', $_POST['checkedList']);
+        $metricIDList = explode(',', $metricIDList);
+        $checkedList  = explode(',', $checkedList);
         $metrics = $this->metric->getMetricsByIDList($metricIDList);
 
         $this->view->groupMetrics = $this->metric->groupMetricByObject($metrics);
