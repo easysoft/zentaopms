@@ -823,4 +823,26 @@ class docTest
         if(dao::isError()) return dao::getError();
         return $docs;
     }
+
+    /**
+     * 构建文档库树形结构的节点。
+     * Build a node of the tree structure of the document library.
+     *
+     * @param  int    $libID
+     * @param  int    $id
+     * @param  string $type
+     * @param  int    $moduleID
+     * @param  int    $objectID
+     * @param  int    $showDoc
+     * @access public
+     * @return object
+     */
+    public function buildLibItemTest(int $libID, int $id, string $type, int $moduleID, int $objectID, int $showDoc): object
+    {
+        $this->objectModel->loadModel('setting')->setItem('admin.doc.showDoc', $showDoc);
+        $lib = $this->objectModel->getLibByID($id);
+
+        $item = $this->objectModel->buildLibItem($libID, $lib, $type, $moduleID, $objectID);
+        return $item;
+    }
 }
