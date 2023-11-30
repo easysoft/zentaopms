@@ -802,7 +802,7 @@ $.get($.createLink('index', 'app'), html =>
     if(!code && defaultOpen)
     {
         const lastOpenApp = zui.store.session.get('lastOpenApp');
-        if(lastOpenApp) code = lastOpenApp.code;
+        if(lastOpenApp && lastOpenApp.url === url) code = lastOpenApp.code;
     }
     openApp(url, code);
 });
