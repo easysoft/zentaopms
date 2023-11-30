@@ -377,17 +377,16 @@ class reportTest
     }
 
     /**
+     * 测试获取本年度用户的工时统计。
      * Test get user effort stat in this error.
      *
      * @param  string $accounts
      * @access public
      * @return object
      */
-    public function getUserYearEffortsTest($accounts)
+    public function getUserYearEffortsTest(array $accounts): object|array
     {
-        $year = date('Y');
-
-        $object = $this->objectModel->getUserYearEfforts($accounts, $year);
+        $object = $this->objectModel->getUserYearEfforts($accounts, date('Y'));
 
         if(dao::isError()) return dao::getError();
 

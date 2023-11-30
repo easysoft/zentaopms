@@ -336,14 +336,15 @@ class reportModel extends model
     }
 
     /**
-     * Get user effort stat in this error.
+     * 获取用户某年的工时统计。
+     * Get user effort stat in this year.
      *
      * @param  array  $accounts
-     * @param  int    $year
+     * @param  string $year
      * @access public
      * @return object
      */
-    public function getUserYearEfforts($accounts, $year)
+    public function getUserYearEfforts(array $accounts, string $year): object
     {
         $effort = $this->dao->select('count(*) as count, sum(consumed) as consumed')->from(TABLE_EFFORT)
             ->where('LEFT(date, 4)')->eq($year)
