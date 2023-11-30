@@ -195,46 +195,33 @@ class apiModel extends model
      *
      * @param  int $apiID
      * @access public
-     * @return bool|array
+     * @return bool
      */
-    public function update($apiID)
+    public function update(object $formData): bool
     {
-        $oldApi = $this->dao->findByID($apiID)->from(TABLE_API)->fetch();
-
-        if(!empty($_POST['editedDate']) and $oldApi->editedDate != $this->post->editedDate)
-        {
-            dao::$errors[] = $this->lang->error->editedByOther;
-            return false;
-        }
-
-        $now  = helper::now();
-        $data = fixer::input('post')
-            ->skipSpecial('params,response')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', $now)
-            ->add('version', $oldApi->version)
-            ->setDefault('product,module', 0)
-            ->stripTags($this->config->api->editor->edit['id'], $this->config->allowedTags)
-            ->remove('type,undefined')
-            ->get();
-
-        $changes = common::createChanges($oldApi, $data);
-        if(!empty($changes)) $data->version = $oldApi->version + 1;
+        $oldApi  = $this->dao->findByID($formData->id)->from(TABLE_API)->fetch();
+        $changes = common::createChanges($oldApi, $formData);
+        if(!empty($changes)) $formData->version = $formData->version + 1;
 
         $this->dao->update(TABLE_API)
-            ->data($data)
+            ->data($formData)
             ->autoCheck()
             ->batchCheck($this->config->api->edit->requiredFields, 'notempty')
-            ->where('id')->eq($apiID)
+            ->where('id')->eq($formData->id)
             ->exec();
 
         if(dao::isError()) return false;
 
-        $data->id = $apiID;
-        $apiSpec  = $this->getApiSpecByData($data);
+        if($changes)
+        {
+            $actionID = $this->loadModel('action')->create('api', $formData->id, 'edited', '', '', '', false);
+            $this->action->logHistory($actionID, $changes);
+        }
+
+        $apiSpec = $this->getApiSpecByData($formData);
         $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
 
-        return $changes;
+        return !dao::isError();
     }
 
     /**

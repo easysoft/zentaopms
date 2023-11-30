@@ -61,7 +61,7 @@ if(!empty($api->params['header']))
             ),
             h::td
             (
-                $param['required'] ? html("<input type='checkbox' />") : html("<input type='checkbox' checked/>")
+                $param['required'] ? html("<input type='checkbox' checked/>") : html("<input type='checkbox'/>")
             ),
             h::td
             (
@@ -113,7 +113,7 @@ if(!empty($api->params['query']))
             ),
             h::td
             (
-                $query['required'] ? html("<input type='checkbox' />") : html("<input type='checkbox' checked/>")
+                $query['required'] ? html("<input type='checkbox' checked/>") : html("<input type='checkbox'/>")
             ),
             h::td
             (
@@ -178,7 +178,7 @@ $parseTree = function($data, $typeList, $level = 0) use (&$parseTree)
         ),
         h::td
         (
-            $data['required'] ? html("<input type='checkbox' />") : html("<input type='checkbox' checked/>")
+            $data['required'] ? html("<input type='checkbox' checked/>") : html("<input type='checkbox'/>")
         ),
         h::td
         (
@@ -354,7 +354,7 @@ formPanel
         div
         (
             setClass('panel-title text-lg'),
-            $lang->api->edit
+            $title
         )
     ),
     formGroup
@@ -569,7 +569,8 @@ formPanel
         set::label($lang->api->paramsExample),
         textarea
         (
-            set::name('paramsExample')
+            set::name('paramsExample'),
+            set::value($api->paramsExample)
         )
     ),
     formGroup
@@ -616,7 +617,8 @@ formPanel
         set::label($lang->api->responseExample),
         textarea
         (
-            set::name('responseExample')
+            set::name('responseExample'),
+            set::value($api->responseExample)
         )
     ),
     formGroup

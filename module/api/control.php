@@ -496,34 +496,21 @@ class api extends control
         $api = $this->api->getLibById($apiID);
         if(!empty($_POST))
         {
-            $changes = $this->api->update($apiID);
+            $formData = form::data($this->config->api->form->edit)->add('id', $apiID)->add('version', $api->version)->add('editedBy', $this->app->user->account)->add('editedDate', helper::now())->get();
+
+            $this->api->update($formData);
+
             if(dao::isError()) return $this->sendError(dao::getError());
-
-            if($changes)
-            {
-                $actionID = $this->action->create('api', $apiID, 'edited', '', '', '', false);
-                $this->action->logHistory($actionID, $changes);
-            }
-
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID=$api->lib&moduleID=0&apiID=$apiID")));
         }
 
-        if($api)
-        {
-            $this->view->api  = $api;
-            $this->view->edit = true;
-        }
-
         $this->setMenu($api->lib);
-
         $this->getTypeOptions($api->lib);
 
-        $this->view->title            = $api->title . $this->lang->api->edit;
-        $this->view->gobackLink       = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}&apiID=$apiID");
-        $this->view->user             = $this->app->user->account;
+        $this->view->title            = $api->title . $this->lang->colon . $this->lang->api->edit;
+        $this->view->api              = $api;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);
-        $this->view->moduleID         = $api->module ? (int)$api->module : (int)$this->cookie->lastDocModule;
         $this->display();
     }
 
