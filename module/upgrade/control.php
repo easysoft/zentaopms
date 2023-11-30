@@ -167,7 +167,7 @@ class upgrade extends control
         if(!$this->upgrade->isError())
         {
             $this->loadModel('setting')->updateVersion($this->config->version);
-            $this->dao->commit();
+            if($this->dao->inTransaction()) $this->dao->commit();
 
             $systemMode = $this->setting->getItem('owner=system&module=common&section=global&key=mode');
 
