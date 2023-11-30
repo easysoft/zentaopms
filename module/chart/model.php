@@ -212,17 +212,18 @@ class chartModel extends model
     }
 
     /**
+     * 雷达图。
      * Gen radar.
      *
-     * @param  int    $fields
-     * @param  int    $settings
-     * @param  int    $defaultSql
-     * @param  int    $filters
+     * @param  array  $fields
+     * @param  array  $settings
+     * @param  string $defaultSql
+     * @param  array  $filters
      * @param  array  $langs
      * @access public
-     * @return void
+     * @return array
      */
-    public function genRadar($fields, $settings, $defaultSql, $filters, $langs = array())
+    public function genRadar(array $fields, array $settings, string $defaultSql, array $filters, array $langs = array()): array
     {
         list($group, $metrics, $aggs, $xLabels, $yStats) = $this->getMultiData($settings, $defaultSql, $filters);
 
@@ -244,176 +245,90 @@ class chartModel extends model
         }
 
         $series = array();
-        $legend = new stdclass();
         $series['type'] = 'radar';
-
-        $clientLang = $this->app->getClientLang();
         foreach($yDatas as $index => $yData)
         {
-            $fieldName = $fields[$metrics[$index]]['name'];
-
-            if(!empty($fields[$metrics[$index]]['object']) and !empty($fields[$metrics[$index]]['field']))
-            {
-                $relatedObject = $fields[$metrics[$index]]['object'];
-                $relatedField  = $fields[$metrics[$index]]['field'];
-
-                $this->app->loadLang($relatedObject);
-                $fieldName = isset($this->lang->$relatedObject->$relatedField) ? $this->lang->$relatedObject->$relatedField : $fieldName;
-            }
-
-            if(isset($langs[$metrics[$index]]) and !empty($langs[$metrics[$index]][$clientLang])) $fieldName = $langs[$metrics[$index]][$clientLang];
-
-            $seriesName       = $fieldName . '(' . $this->lang->chart->aggList[$aggs[$index]] . ')';
+            $fieldName  = $this->chartTao->switchFieldName($fields, $langs, $metrics, $index);
+            $seriesName = $fieldName . '(' . $this->lang->chart->aggList[$aggs[$index]] . ')';
             $series['data'][] = array('name' => $seriesName, 'value' => $yData);
         }
 
         $indicator  = array();
-        $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+        $optionList = $this->chartTao->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $xLabel)
         {
             $labelName = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
             $indicator[] = array('name' => $labelName, 'max' => $max);
         }
 
-        $options = array('series' => $series, 'legend' => $legend, 'radar' => array('indicator' => $indicator), 'tooltip' => array('trigger' => 'item'));
-        return $options;
+        return array('series' => $series, 'radar' => array('indicator' => $indicator), 'tooltip' => array('trigger' => 'item'));
     }
 
     /**
+     * 饼图。
      * Gen pie.
      *
-     * @param  string $schema
-     * @param  object $settings
+     * @param  array  $fields
+     * @param  array  $settings
      * @param  string $sql
      * @param  array  $filters
      * @access public
      * @return array
      */
-    public function genPie($fields, $settings, $sql, $filters)
+    public function genPie(array $fields, array $settings, string $sql, array $filters): array
     {
         $group  = isset($settings['group'][0]['field']) ? $settings['group'][0]['field'] : '';
         $date   = isset($settings['group'][0]['group']) ? zget($this->config->chart->dateConvert, $settings['group'][0]['group']) : '';
         $metric = isset($settings['metric'][0]['field']) ? $settings['metric'][0]['field'] : '';
         $agg    = isset($settings['metric'][0]['valOrAgg']) ? $settings['metric'][0]['valOrAgg'] : '';
 
-        $defaultSql = str_replace(';', '', $sql);
-        $groupSql   = $groupBySql = "tt.`$group`";
-        if(!empty($date))
-        {
-            $groupSql   = $date == 'MONTH' ? "YEAR(tt.`$group`) as ttyear, $date(tt.`$group`) as ttgroup" : "$date(tt.`$group`) as $group";
-            $groupBySql = $date == 'MONTH' ? "YEAR(tt.`$group`), $date(tt.`$group`)" : "$date(tt.`$group`)";
-        }
-
-        if($agg == 'distinct')
-        {
-            $aggSQL = "count($agg tt.`$metric`) as `$metric`";
-        }
-        else
-        {
-            $aggSQL = "$agg(tt.`$metric`) as `$metric`";
-        }
-
-        $sql = "select $groupSql,$aggSQL from ($defaultSql) tt";
-        if(!empty($filters))
-        {
-            $wheres = array();
-            foreach($filters as $field => $filter)
-            {
-                $wheres[] = "$field {$filter['operator']} {$filter['value']}";
-            }
-
-            $whereStr = implode(' and ', $wheres);
-            $sql .= " where $whereStr";
-        }
-        $sql .= " group by $groupBySql";
-        $rows = $this->dao->query($sql)->fetchAll();
-        $stat = $this->processRows($rows, $date, $group, $metric);
-
-        $maxCount = 50;
+        $rows = $this->chartTao->getRows(str_replace(';', '', $sql), $filters, $date, $group, $metric, $agg);
+        $stat = $this->chartTao->processRows($rows, $date, $group, $metric);
         if(empty($date)) arsort($stat);
 
-        $copyStat = $stat;
-        $other = array_sum(array_splice($copyStat, $maxCount));
-        $stat[$this->lang->chart->other] = $other;
+        /* 若查询结果大于50条，将50条之后的结果归于其他。*/
+        /* If the query results are greater than 50, the results after 50 will be classified as other. */
+        $otherSum = array_sum(array_splice($stat, 50));
+        $stat[$this->lang->chart->other] = $otherSum;
         if(empty($date)) arsort($stat);
 
-        $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
-
-        $data = array();
+        $seriesData = array();
+        $optionList = $this->chartTao->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($stat as $name => $value)
         {
-            if($value == 0) continue;
+            if(empty($value)) continue;
 
-            $value     = round($value, 2);
             $labelName = isset($optionList[$name]) ? $optionList[$name] : $name;
+            $value     = round($value, 2);
 
-            $data[] = array('name' => $labelName, 'value' => $value);
+            $seriesData[] = array('name' => $labelName, 'value' => $value);
         }
 
-        $label  = array('show' => true, 'position' => 'outside', 'formatter' => '{b} {d}%');
+        $label    = array('show' => true, 'position' => 'outside', 'formatter' => '{b} {d}%');
+        $series[] = array('data' => $seriesData, 'type' => 'pie', 'label' => $label);
+
         $legend = new stdclass();
-        $legend->type = 'scroll';
+        $legend->type   = 'scroll';
         $legend->orient = 'vertical';
         $legend->right  = 0;
 
-        $series[] = array('data' => $data, 'type' => 'pie', 'label' => $label);
-        $options = array('series' => $series, 'legend' => $legend, 'tooltip' => array('trigger' => 'item', 'formatter' => "{b}<br/> {c} ({d}%)"));
-        return $options;
+        return array('series' => $series, 'legend' => $legend, 'tooltip' => array('trigger' => 'item', 'formatter' => "{b}<br/> {c} ({d}%)"));
     }
 
-    /**
-     * Process rows.
-     *
-     * @param  array  $rows
-     * @param  string $date
-     * @param  string $group
-     * @param  string $metric
-     * @access public
-     * @return array
-     */
-    public function processRows($rows, $date, $group, $metric)
-    {
-        $stat = array();
-        foreach($rows as $row)
-        {
-            if(!empty($date) and $date == 'MONTH')
-            {
-                $stat[sprintf("%04d", $row->ttyear) . '-' . sprintf("%02d", $row->ttgroup)] = $row->$metric;
-            }
-            elseif(!empty($date) and $date == 'YEARWEEK')
-            {
-                $yearweek  = sprintf("%06d", $row->$group);
-                $year = substr($yearweek, 0, strlen($yearweek) - 2);
-                $week = substr($yearweek, -2);
-
-                $weekIndex = in_array($this->app->getClientLang(), array('zh-cn', 'zh-tw')) ? sprintf($this->lang->chart->groupWeek, $year, $week) : sprintf($this->lang->chart->groupWeek, $week, $year);
-                $stat[$weekIndex] = $row->$metric;
-            }
-            elseif(!empty($date) and $date == 'YEAR')
-            {
-                $stat[sprintf("%04d", $row->$group)] = $row->$metric;
-            }
-            else
-            {
-                $stat[$row->$group] = $row->$metric;
-            }
-        }
-
-        return $stat;
-    }
 
     /**
+     * 折线图。
      * Gen line.
      *
-     * @param  string $schema
-     * @param  object $settings
-     * @param  string $sql
+     * @param  array  $fields
+     * @param  array  $settings
+     * @param  string $defaultSql
      * @param  array  $filters
      * @param  array  $langs
      * @access public
      * @return array
      */
-    public function genLineChart($fields, $settings, $defaultSql, $filters, $langs = array())
+    public function genLineChart(array $fields, array $settings, string $defaultSql, array $filters, array $langs = array()): array
     {
         list($group, $metrics, $aggs, $xLabels, $yStats) = $this->getMultiData($settings, $defaultSql, $filters);
 
@@ -430,52 +345,38 @@ class chartModel extends model
             }
         }
 
-        $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+        $optionList = $this->chartTao->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $index => $xLabel) $xLabels[$index] = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
 
-        $xaxis      = array('type' => 'category', 'data' => $xLabels, 'axisTick' => array('alignWithLabel' => true));
-        $yaxis      = array('type' => 'value');
-        $legend     = new stdclass();
-        $series     = array();
-        $clientLang = $this->app->getClientLang();
+        $series = array();
         foreach($yDatas as $index => $yData)
         {
-            $fieldName = $fields[$metrics[$index]]['name'];
-
-            if(!empty($fields[$metrics[$index]]['object']) and !empty($fields[$metrics[$index]]['field']))
-            {
-                $relatedObject = $fields[$metrics[$index]]['object'];
-                $relatedField  = $fields[$metrics[$index]]['field'];
-
-                $this->app->loadLang($relatedObject);
-                $fieldName = isset($this->lang->$relatedObject->$relatedField) ? $this->lang->$relatedObject->$relatedField : $fieldName;
-            }
-
-            if(isset($langs[$metrics[$index]]) and !empty($langs[$metrics[$index]][$clientLang])) $fieldName = $langs[$metrics[$index]][$clientLang];
-
+            $fieldName  = $this->chartTao->switchFieldName($fields, $langs, $metrics, $index);
             $seriesName = $fieldName . '(' . $this->lang->chart->aggList[$aggs[$index]] . ')';
             $series[]   = array('name' => $seriesName, 'data' => $yData, 'type' => 'line');
         }
 
-        $grid = array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true);
+        $grid  = array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true);
+        $xaxis = array('type' => 'category', 'data' => $xLabels, 'axisTick' => array('alignWithLabel' => true));
+        $yaxis = array('type' => 'value');
 
-        $options = array('series' => $series, 'grid' => $grid, 'legend' => $legend, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'));
-        return $options;
+        return array('series' => $series, 'grid' => $grid, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'));
     }
 
     /**
+     * 簇状条形图、堆积条形图。
      * Gen cluBar.
      *
-     * @param  int    $fields
-     * @param  int    $settings
-     * @param  int    $defaultSql
-     * @param  int    $filters
-     * @param  int    $stack
+     * @param  array  $fields
+     * @param  array  $settings
+     * @param  string $defaultSql
+     * @param  array  $filters
+     * @param  string $stack
      * @param  array  $langs
      * @access public
-     * @return void
+     * @return array
      */
-    public function genCluBar($fields, $settings, $defaultSql, $filters, $stack = '', $langs = array())
+    public function genCluBar(array $fields, array $settings, string $defaultSql, array $filters, string $stack = '', array $langs = array()): array
     {
         list($group, $metrics, $aggs, $xLabels, $yStats) = $this->getMultiData($settings, $defaultSql, $filters);
 
@@ -483,69 +384,53 @@ class chartModel extends model
         foreach($yStats as $yStat)
         {
             $data = array();
-            foreach($xLabels as $xLabel)
-            {
-                $data[] = isset($yStat[$xLabel]) ? $yStat[$xLabel] : 0;
-            }
+            foreach($xLabels as $xLabel) $data[] = isset($yStat[$xLabel]) ? $yStat[$xLabel] : 0;
             $yDatas[] = $data;
         }
 
-        $optionList = $this->getSysOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
+        $optionList = $this->chartTao->getFieldOptions($fields[$group]['type'], $fields[$group]['object'], $fields[$group]['field']);
         foreach($xLabels as $index => $xLabel) $xLabels[$index] = isset($optionList[$xLabel]) ? $optionList[$xLabel] : $xLabel;
 
-        $xaxis  = array('type' => 'category', 'data' => $xLabels, 'axisLabel' => array('interval' => 0), 'axisTick' => array('alignWithLabel' => true));
-        $yaxis  = array('type' => 'value');
-        $legend = new stdclass();
-
-        /* Cluster bar X graphs and cluster bar Y graphs are really just x and y axes switched, so cluster bar Y $xaixs and $yaxis are swapped so that the method can be reused. */
-        /* 簇状柱形图和簇状条形图其实只是x轴和y轴换了换，所以交换一下簇状条形图 xAxis和yAxis即可，这样方法就可以复用了。*/
-        if(in_array($settings['type'], array('cluBarY', 'stackedBarY'))) list($xaxis, $yaxis) = array($yaxis, $xaxis);
-
-        $series     = array();
-        $clientLang = $this->app->getClientLang();
+        $series = array();
         foreach($yDatas as $index => $yData)
         {
-            $fieldName = $fields[$metrics[$index]]['name'];
-
-            if(!empty($fields[$metrics[$index]]['object']) and !empty($fields[$metrics[$index]]['field']))
-            {
-                $relatedObject = $fields[$metrics[$index]]['object'];
-                $relatedField  = $fields[$metrics[$index]]['field'];
-
-                $this->app->loadLang($relatedObject);
-                $fieldName = isset($this->lang->$relatedObject->$relatedField) ? $this->lang->$relatedObject->$relatedField : $fieldName;
-            }
-
-            if(isset($langs[$metrics[$index]]) and !empty($langs[$metrics[$index]][$clientLang])) $fieldName = $langs[$metrics[$index]][$clientLang];
-
+            $fieldName  = $this->chartTao->switchFieldName($fields, $langs, $metrics, $index);
             $seriesName = $fieldName . '(' . $this->lang->chart->aggList[$aggs[$index]] . ')';
             $series[]   = array('name' => $seriesName, 'data' => $yData, 'type' => 'bar', 'stack' => $stack);
         }
 
-        $dataZoomX = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"xAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":"80%","height":"5","xAxisIndex":[0],"fillerColor":"#ccc","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"bottom":"0","left":"10%"}]';
-        $dataZoomY = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"yAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":5,"height":"80%","yAxisIndex":[0],"fillerColor":"#ccc","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"top":"10%","right":0}]';
-        $isY = in_array($settings['type'], array('cluBarY', 'stackedBarY'));
-        $dataZoom = $isY ? json_decode($dataZoomY, true) : json_decode($dataZoomX, true);
-
         $grid = array('left' => '3%', 'right' => '4%', 'bottom' => '3%', 'containLabel' => true);
 
-        $options = array('series' => $series, 'grid' => $grid, 'legend' => $legend, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'tooltip' => array('trigger' => 'axis'), 'dataZoom' => $dataZoom);
-        return $options;
+        /* Cluster bar X graphs and cluster bar Y graphs are really just x and y axes switched, so cluster bar Y $xaixs and $yaxis are swapped so that the method can be reused. */
+        /* 簇状柱形图和簇状条形图其实只是x轴和y轴换了换，所以交换一下簇状条形图 xAxis和yAxis即可，这样方法就可以复用了。*/
+        $isY   = in_array($settings['type'], array('cluBarY', 'stackedBarY'));
+        $xaxis = array('type' => 'category', 'data' => $xLabels, 'axisLabel' => array('interval' => 0), 'axisTick' => array('alignWithLabel' => true));
+        $yaxis = array('type' => 'value');
+        if($isY) list($xaxis, $yaxis) = array($yaxis, $xaxis);
+
+        $dataZoomX = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"xAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":"80%","height":"5","xAxisIndex":[0],"fillerColor":"#ccc","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"bottom":"0","left":"10%"}]';
+        $dataZoomY = '[{"type":"inside","startValue":0,"endValue":5,"minValueSpan":10,"maxValueSpan":10,"yAxisIndex":[0],"zoomOnMouseWheel":false,"moveOnMouseWheel":true,"moveOnMouseMove":true},{"type":"slider","realtime":true,"startValue":0,"endValue":5,"zoomLock":true,"brushSelect":false,"width":5,"height":"80%","yAxisIndex":[0],"fillerColor":"#ccc","borderColor":"#33aaff00","backgroundColor":"#cfcfcf00","handleSize":0,"showDataShadow":false,"showDetail":false,"top":"10%","right":0}]';
+        $dataZoom  = $isY ? json_decode($dataZoomY, true) : json_decode($dataZoomX, true);
+
+        return array('series' => $series, 'grid' => $grid, 'xAxis' => $xaxis, 'yAxis' => $yaxis, 'dataZoom' => $dataZoom, 'tooltip' => array('trigger' => 'axis'));
     }
 
     /**
+     * 获取图表所需的数据：X轴、Y轴、计数方式
      * Get multi data.
      *
-     * @param  int    $settings
-     * @param  int    $defaultSql
-     * @param  int    $filters
+     * @param  array   $settings
+     * @param  string  $defaultSql
+     * @param  array   $filters
+     * @param  bool    $sort
      * @access public
-     * @return void
+     * @return array
      */
-    public function getMultiData($settings, $defaultSql, $filters, $sort = false)
+    public function getMultiData(array $settings, string $defaultSql, array $filters, bool $sort = false): array
     {
-        $group   = isset($settings['xaxis'][0]['field']) ? $settings['xaxis'][0]['field'] : '';
-        $date    = isset($settings['xaxis'][0]['group']) ? zget($this->config->chart->dateConvert, $settings['xaxis'][0]['group']) : '';
+        $group = isset($settings['xaxis'][0]['field']) ? $settings['xaxis'][0]['field'] : '';
+        $date  = isset($settings['xaxis'][0]['group']) ? zget($this->config->chart->dateConvert, $settings['xaxis'][0]['group']) : '';
+
         $metrics = array();
         $aggs    = array();
         foreach($settings['yaxis'] as $yaxis)
@@ -553,49 +438,18 @@ class chartModel extends model
             $metrics[] = $yaxis['field'];
             $aggs[]    = $yaxis['valOrAgg'];
         }
-        $yCount  = count($metrics);
+        $yCount = count($metrics);
 
         $xLabels = array();
         $yStats  = array();
-
         for($i = 0; $i < $yCount; $i ++)
         {
-            $metric   = $metrics[$i];
-            $agg      = $aggs[$i];
+            $metric = $metrics[$i];
+            $agg    = $aggs[$i];
 
-            $groupSql   = $groupBySql = "tt.`$group`";
-            if(!empty($date))
-            {
-                $groupSql   = $date == 'MONTH' ? "YEAR(tt.`$group`) as ttyear, $date(tt.`$group`) as ttgroup" : "$date(tt.`$group`) as $group";
-                $groupBySql = $date == 'MONTH' ? "YEAR(tt.`$group`), $date(tt.`$group`)" : "$date(tt.`$group`)";
-            }
+            $rows = $this->chartTao->getRows($defaultSql, $filters, $date, $group, $metric, $agg);
+            $stat = $this->chartTao->processRows($rows, $date, $group, $metric);
 
-            if($agg == 'distinct')
-            {
-                $aggSQL = "count($agg tt.`$metric`) as `$metric`";
-            }
-            else
-            {
-                $aggSQL = "$agg(tt.`$metric`) as `$metric`";
-            }
-
-            $sql = "select $groupSql,$aggSQL from ($defaultSql) tt";
-            if(!empty($filters))
-            {
-                $wheres = array();
-                foreach($filters as $field => $filter)
-                {
-                    $wheres[] = "`$field` {$filter['operator']} {$filter['value']}";
-                }
-
-                $whereStr = implode(' and ', $wheres);
-                $sql .= " where $whereStr";
-            }
-            $sql .= " group by $groupBySql";
-            $rows = $this->dao->query($sql)->fetchAll();
-            $stat = $this->processRows($rows, $date, $group, $metric);
-
-            $maxCount = 50;
             if($sort) arsort($stat);
             $yStats[] = $stat;
 
@@ -607,79 +461,17 @@ class chartModel extends model
     }
 
     /**
+     * 判断操作按钮是否可点击。
      * Adjust the action is clickable.
      *
      * @param  object $chart
-     * @param  string $action
-     * @static
      * @access public
      * @return bool
      */
-    public static function isClickable($chart, $action)
+    public static function isClickable(object $chart): bool
     {
         if($chart->builtin) return false;
         return true;
-    }
-
-    /**
-     * Get sys options.
-     *
-     * @param  string $type
-     * @access public
-     * @return array
-     */
-    public function getSysOptions($type, $object = '', $field = '', $sql = '')
-    {
-        $options = array();
-        switch($type)
-        {
-            case 'user':
-                $options = $this->loadModel('user')->getPairs();
-                break;
-            case 'product':
-                $options = $this->loadModel('product')->getPairs();
-                break;
-            case 'project':
-                $options = $this->loadModel('project')->getPairsByProgram();
-                break;
-            case 'execution':
-                $options = $this->loadModel('execution')->getPairs();
-                break;
-            case 'dept':
-                $options = $this->loadModel('dept')->getOptionMenu(0);
-                break;
-            case 'option':
-                if($field)
-                {
-                    $path = $this->app->getModuleRoot() . 'dataview' . DS . 'table' . DS . "$object.php";
-                    if(is_file($path))
-                    {
-                        include $path;
-                        $options = $schema->fields[$field]['options'];
-                    }
-                }
-                break;
-            case 'object':
-                if($field)
-                {
-                    $table = zget($this->config->objectTables, $object, '');
-                    if($table) $options = $this->dao->select("id, {$field}")->from($table)->fetchPairs();
-                }
-                break;
-            case 'string':
-                if($field and $sql)
-                {
-                    $cols = $this->dbh->query($sql)->fetchAll();
-                    foreach($cols as $col)
-                    {
-                        $data = $col->$field;
-                        $options[$data] = $data;
-                    }
-                }
-                break;
-        }
-
-        return $options;
     }
 
     public function getFilterFormat($filters)
