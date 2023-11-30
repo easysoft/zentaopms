@@ -1628,12 +1628,12 @@ class commonModel extends model
      * Check the object can be changed.
      *
      * @param  string $module
-     * @param  object $object
+     * @param  mixed  $object
      * @static
      * @access public
      * @return bool
      */
-    public static function canBeChanged(string $module, object $object = null): bool
+    public static function canBeChanged(string $module, mixed $object = null): bool
     {
         if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
 
@@ -1900,27 +1900,29 @@ class commonModel extends model
     }
 
     /**
+     * 获取两种对象的关联关系。
      * Get relations for two object.
      *
-     * @param  string  $aType
-     * @param  int     $aID
-     * @param  string  $bType
-     * @param  int     $bID
+     * @param  string  $AType
+     * @param  int     $AID
+     * @param  string  $BType
+     * @param  int     $BID
      *
      * @access public
      * @return array
      */
-    public function getRelations($aType = '', $aID = 0, $bType = '', $bID = 0)
+    public function getRelations(string $AType = '', int $AID = 0, string $BType = '', int $BID = 0): array
     {
         return $this->dao->select('*')->from(TABLE_RELATION)
-            ->where('AType')->eq($aType)
-            ->andWhere('AID')->eq($aID)
-            ->andwhere('BType')->eq($bType)
-            ->beginIF($bID)->andwhere('BID')->eq($bID)->fi()
+            ->where('AType')->eq($AType)
+            ->andWhere('AID')->eq($AID)
+            ->andwhere('BType')->eq($BType)
+            ->beginIF($BID)->andwhere('BID')->eq($BID)->fi()
             ->fetchAll();
     }
 
     /**
+     * 将导航中的占位符替换为实际的值。
      * Replace the %s of one key of a menu by objectID or $params.
      *
      * All the menus are defined in the common's language file. But there're many dynamic params, so in the defination,
@@ -1933,7 +1935,7 @@ class commonModel extends model
      * @access public
      * @return void
      */
-    public static function setMenuVars($moduleName, $objectID, $params = array())
+    public static function setMenuVars(string $moduleName, int $objectID, array $params = array())
     {
         global $app, $lang;
 
@@ -1971,7 +1973,8 @@ class commonModel extends model
     }
 
     /**
-     * Check menuVars replaced.
+     * 检查菜单中的占位符是否已经替换，如果没有，则替换。
+     * Check if the menu vars replaced, if not, replace them.
      *
      * @static
      * @access public
@@ -1990,7 +1993,7 @@ class commonModel extends model
             if(!$varsReplaced) break;
         }
 
-        if(!$varsReplaced and strpos("|program|product|project|execution|qa|", "|{$tab}|") !== false)
+        if(!$varsReplaced and strpos("|program|product|project|execution|qa|safe|", "|{$tab}|") !== false)
         {
             $isTutorialMode = common::isTutorialMode();
             $currentModule  = $isTutorialMode ? $app->moduleName : $app->rawModule;
@@ -2009,13 +2012,14 @@ class commonModel extends model
     }
 
     /**
+     * 将导航中的占位符替换为实际的值。
      * Replace the %s of one key of a menu by objectID or $params.
      *
-     * @param  object|string  $menu
-     * @param  int            $objectID
-     * @param  array          $params
+     * @param  array|string $menu
+     * @param  int          $objectID
+     * @param  array|string $params
      */
-    public static function setMenuVarsEx($menu, $objectID, $params = array())
+    public static function setMenuVarsEx(array|string $menu, int $objectID, array $params = array()): array|string
     {
         if(is_array($menu))
         {
