@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * The control file of api of ZenTaoPMS.
  *
@@ -14,7 +15,7 @@ class api extends control
     public $objectType = 'nolink';
     public $objectID   = 0;
 
-    public function __construct($moduleName = '', $methodName = '', $appName = '')
+    public function __construct(string $moduleName = '', string $methodName = '', string $appName = '')
     {
         parent::__construct($moduleName, $methodName, $appName);
         $this->user   = $this->loadModel('user');
@@ -62,9 +63,9 @@ class api extends control
         /* 获取文档目录列表和当前选中的文档目录. */
         $libs       = $this->doc->getApiLibs($libID, $objectType, $objectID);
         $lib        = $libID ? zget($libs, $libID) : current($libs);
-        $libID      = $lib->id;
+        $libID      = $lib ? $lib->id : 0;
         $objectType = $lib->product ? 'product' : ($lib->project ? 'project' : 'nolink');
-        $objectID   = $lib->product ? $lib->product : $lib->project;
+        $objectID   = $lib->product ? $lib->product : ($lib->project ? $lib->project : 0);
 
         /* Build the search form. */
         $browseType = $release ? 'byrelease' : $browseType;
@@ -199,7 +200,7 @@ class api extends control
             $formData = form::data($this->config->api->form->createRelease)->add('lib', $libID)->add('addedBy', $this->app->user->account)->add('addedDate', helper::now())->get();
 
             /* Check version is exist. */
-            if(!empty($formData->version) and $this->api->getRelease($libID, 'byVersion', $formData->version)) return $this->sendError($this->lang->api->noUniqueVersion);
+            if(!empty($formData->version) && $this->api->getRelease($libID, 'byVersion', $formData->version)) return $this->sendError($this->lang->api->noUniqueVersion);
 
             $this->api->publishLib($formData);
 
@@ -715,7 +716,7 @@ class api extends control
     {
         $filePath    = helper::safe64Decode($filePath);
         $fileDirPath = realpath(dirname($filePath));
-        if(strpos($fileDirPath, $this->app->getModuleRoot()) !== 0 and strpos($fileDirPath, $this->app->getExtensionRoot()) !== 0) return;
+        if(strpos($fileDirPath, $this->app->getModuleRoot()) !== 0 && strpos($fileDirPath, $this->app->getExtensionRoot()) !== 0) return;
         if($action == 'extendModel')
         {
             $method = $this->api->getMethod($filePath, 'Model');
