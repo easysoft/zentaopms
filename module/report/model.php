@@ -93,6 +93,7 @@ class reportModel extends model
     }
 
     /**
+     * 转换日期格式。
      * Convert date format.
      *
      * @param  array  $dateList
@@ -100,7 +101,7 @@ class reportModel extends model
      * @access public
      * @return array
      */
-    public function convertFormat($dateList, $format = 'Y-m-d')
+    public function convertFormat(array $dateList, string $format = 'Y-m-d'): array
     {
         foreach($dateList as $i => $date) $dateList[$i] = date($format, strtotime($date));
         return $dateList;

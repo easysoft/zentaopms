@@ -53,16 +53,17 @@ class reportTest
     }
 
     /**
+     * 测试转换日期格式。
      * Test convert date format.
      *
-     * @param  array  $dateList
-     * @param  string $format
+     * @param  array        $dateList
+     * @param  string       $format
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function convertFormatTest($dateList, $format = 'Y-m-d')
+    public function convertFormatTest(array $dateList, string $format = 'Y-m-d'): string|array
     {
-        $objects = $this->objectModel->convertFormat($dateList, $format = 'Y-m-d');
+        $objects = $this->objectModel->convertFormat($dateList, $format);
 
         if(dao::isError()) return dao::getError();
 
