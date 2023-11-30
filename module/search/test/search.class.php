@@ -191,13 +191,14 @@ class searchTest
     }
 
     /**
+     * 测试获取查询键值对。
      * Test get query pairs.
      *
      * @param  string $module
      * @access public
      * @return array
      */
-    public function getQueryPairsTest($module)
+    public function getQueryPairsTest(string $module): array
     {
         $objects = $this->objectModel->getQueryPairs($module);
 
