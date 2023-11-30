@@ -2300,7 +2300,7 @@ class pivotModel extends model
         $table .= "<tbody>";
         $rowCount = 0;
 
-        $useColumnTotal = !empty($data->columnTotal) and $data->columnTotal === 'sum';
+        $useColumnTotal = (!empty($data->columnTotal) and $data->columnTotal === 'sum');
         if($page) list($start, $end, $itemCount, $pageTotal) = $this->pagePivot($configs, $page, $useColumnTotal);
 
         for($i = 0; $i < count($data->array); $i ++)
