@@ -597,6 +597,17 @@ class dbh
     }
 
     /**
+     * Check in transaction or not.
+     *
+     * @access public
+     * @return bool
+     */
+    public function inTransaction()
+    {
+        return $this->pdo->inTransaction();
+    }
+
+    /**
      * Roll back if transaction failed.
      *
      * @access public
