@@ -55,3 +55,31 @@ $config->metric->oldObjectMap['stage']       = 'execution';
 $config->metric->oldObjectMap['program']     = 'project';
 $config->metric->oldObjectMap['softRequest'] = 'story';
 $config->metric->oldObjectMap['userRequest'] = 'requirement';
+
+$config->metric->chartConfig = new stdclass();
+$config->metric->chartConfig->dataZoom = array();
+$config->metric->chartConfig->dataZoom['type']            = 'slider';
+$config->metric->chartConfig->dataZoom['backgroundColor'] = '#fff';
+$config->metric->chartConfig->dataZoom['borderColor']     = '#0000004c';
+$config->metric->chartConfig->dataZoom['fillerColor']     = '#0000004c';
+$config->metric->chartConfig->dataZoom['bottom']          = '0';
+$config->metric->chartConfig->dataZoom['brushSelect']     = false;
+$config->metric->chartConfig->dataZoom['showDetail']      = false;
+$config->metric->chartConfig->dataZoom['showDataShadow']  = false;
+$config->metric->chartConfig->dataZoom['height']          = 10;
+$config->metric->chartConfig->dataZoom['zoomLock']        = true;
+$config->metric->chartConfig->dataZoom['handleSize']      = 0;
+$config->metric->chartConfig->dataZoom['realtime']        = true;
+
+$config->metric->chartConfig->grid = array();
+$config->metric->chartConfig->grid['left']         = '10%';
+$config->metric->chartConfig->grid['right']        = '10%';
+$config->metric->chartConfig->grid['bottom']       = '5%';
+$config->metric->chartConfig->grid['containLabel'] = true;
+
+$config->metric->chartConfig->tooltip = array();
+$config->metric->chartConfig->tooltip['trigger']      = 'axis';
+$config->metric->chartConfig->tooltip['confine']      = true;
+$config->metric->chartConfig->tooltip['extraCssText'] = 'max-height: 60%;overflow-y:scroll';
+$config->metric->chartConfig->tooltip['enterable']    = true;
+$config->metric->chartConfig->tooltip['axisPointer']  = array('type' => 'cross', 'label' => array('backgroundColor' => '#6a7985'));
