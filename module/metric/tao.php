@@ -43,6 +43,31 @@ class metricTao extends metricModel
         return $metrics;
     }
 
+    /**
+     * 根据编号获取度项。
+     * Fetch metric by id.
+     *
+     * @param  string       $code
+     * @param  array|string $fields
+     * @access protected
+     * @return mixed
+     */
+    protected function fetchMetricByID($code, $fields = '*')
+    {
+        if(is_array($fields)) $fields = implode(',', $fields);
+
+        $metric = $this->dao->select($fields)->from(TABLE_METRIC)->where('code')->eq($code)->fetch();
+        return $metric->scope;
+    }
+
+    /**
+     * 根据编号列表获取度项。
+     * Fetch metric list by id list.
+     *
+     * @param  array     $metricIDList
+     * @access protected
+     * @return array
+     */
     protected function fetchMetricsByIDList($metricIDList)
     {
         return $this->dao->select('*')->from(TABLE_METRIC)
@@ -135,6 +160,60 @@ class metricTao extends metricModel
     }
 
     /**
+     * 获取范围对象类型以构建分页对象。
+     * Get object list with page.
+     *
+     * @param string  $code
+     * @param string  $scope
+     * @param object  $pager
+     * @access protected
+     * @return array|false
+     */
+    protected function getObjectsWithPager($code, $scope, $pager)
+    {
+        if($scope == 'system') return false;
+
+        $scopeObjects = $this->dao->select($scope)->from(TABLE_METRICLIB)->where('metricCode')->eq($code)->fetchPairs();
+        if($scope == 'product')
+        {
+            $objects = $this->dao->select('id')->from(TABLE_PRODUCT)
+                ->where('deleted')->eq(0)
+                ->andWhere('shadow')->eq(0)
+                ->andWhere('id')->in($scopeObjects)
+                ->page($pager)
+                ->fetchPairs();
+        }
+        elseif($scope == 'project')
+        {
+            $objects = $this->dao->select('id')->from(TABLE_PROJECT)
+                ->where('deleted')->eq(0)
+                ->andWhere('type')->eq('project')
+                ->andWhere('id')->in($scopeObjects)
+                ->page($pager)
+                ->fetchPairs();
+        }
+        elseif($scope == 'execution')
+        {
+            $objects = $this->dao->select('id')->from(TABLE_EXECUTION)
+                ->where('deleted')->eq(0)
+                ->andWhere('type')->in('sprint,stage,kanban')
+                ->andWhere('id')->in($scopeObjects)
+                ->page($pager)
+                ->fetchPairs();
+        }
+        elseif($scope == 'user')
+        {
+            $objects = $this->dao->select('account')->from(TABLE_USER)
+                ->where('deleted')->eq('0')
+                ->andWhere('account')->in($scopeObjects)
+                ->page($pager)
+                ->fetchPairs();
+        }
+
+        return $objects;
+    }
+
+    /**
      * 请求度量数据。
      * Fetch metric data.
      *
@@ -147,6 +226,9 @@ class metricTao extends metricModel
      */
     protected function fetchMetricRecords(string $code, array $fieldList, array $query = array(), object|null $pager = null): array
     {
+        $metricScope = $this->fetchMetricByID($code, 'scope');
+        $objectList  = $this->getObjectsWithPager($code, $metricScope, $pager);
+
         $dataFieldStr = implode(', ', $fieldList);
         if(!empty($dataFieldStr)) $dataFieldStr .= ', ';
 
@@ -194,6 +276,7 @@ class metricTao extends metricModel
         $records =  $this->dao->select("id, {$dataFieldStr} value, date")
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($code)
+            ->beginIF($metricScope != 'system')->andWhere($metricScope)->in($objectList)->fi()
             ->beginIF(!empty($scope))->andWhere($scopeKey)->in($scopeValue)->fi()
             ->beginIF(!empty($dateBegin) and $dateType == 'year')->andWhere('`year`')->ge($yearBegin)->fi()
             ->beginIF(!empty($dateEnd)   and $dateType == 'year')->andWhere('`year`')->le($yearEnd)->fi()
@@ -209,7 +292,6 @@ class metricTao extends metricModel
             ->beginIF(empty($query))->andWhere('date')->gt($date)->fi()
             ->beginIF(!empty($scopeList))->orderBy("date desc, $scopeKey, year desc, month desc, week desc, day desc")->fi()
             ->beginIF(empty($scopeList))->orderBy("date desc, year desc, month desc, week desc, day desc")->fi()
-            ->page($pager)
             ->fetchAll();
 
         return $records;
