@@ -178,7 +178,7 @@ class mrZen extends mr
      * @access protected
      * @return void
      */
-    protected function buildLinkTaskSearchForm(int $MRID, object $product, string $orderBy, int $queryID = 0, array $productExecutions)
+    protected function buildLinkTaskSearchForm(int $MRID, object $product, string $orderBy, int $queryID, array $productExecutions)
     {
         $modules = $this->loadModel('tree')->getOptionMenu($product->id, 'task');
 

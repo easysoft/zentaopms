@@ -56,7 +56,7 @@ class mr extends control
             $this->session->set('execution', $objectID);
             $execution = $this->loadModel('execution')->getByID($objectID);
             $features = $this->execution->getExecutionFeatures($execution);
-            if(!$features['devops']) return $this->locate($this->createLink('execution', 'task', "objectID=$executionID"));
+            if(!$features['devops']) return $this->locate($this->createLink('execution', 'task', "objectID=$objectID"));
 
             $this->loadModel('execution')->setMenu($objectID);
         }
