@@ -4247,12 +4247,15 @@ class taskModel extends model
     {
         if($task->deleted) return '';
 
-        $isPLMMode = $this->config->systemMode == 'PLM';
+        $plmCanStart = true;
+        $isPLMMode   = $this->config->systemMode == 'PLM';
 
         if($isPLMMode)
         {
-            $execution = $this->loadModel('execution')->getByID($task->execution);
-            $execution = $this->loadModel('execution')->canStageStart($execution);
+            $execution           = $this->loadModel('execution')->getByID($task->execution);
+            $execution->ipdStage = $this->loadModel('execution')->canStageStart($execution);
+            $plmCanStart = $execution->status == 'wait' ? $execution->ipdStage['canStart'] : 1;
+            if($execution->status == 'close') $plmCanStart = false;
         }
 
         $menu   = '';
@@ -4264,7 +4267,6 @@ class taskModel extends model
 
         $menu .= $this->buildMenu('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', $this->lang->task->assignTo);
 
-        $plmCanStart = !($isPLMMode and empty($execution['canStart']));
         if($plmCanStart) $menu .= $this->buildMenu('task', 'start',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
         if($plmCanStart) $menu .= $this->buildMenu('task', 'restart',        $params, $task, 'view', '', '', 'iframe showinonlybody', true);
         //if(empty($task->linkedBranch))
