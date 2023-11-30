@@ -156,12 +156,13 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户的任务。
      * Get user tasks.
      *
      * @access public
      * @return void
      */
-    public function getUserTasks()
+    public function getUserTasks(): array
     {
         return $this->dao->select('t1.id, t1.name, t2.account as user, t1.deadline')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.assignedTo = t2.account')
