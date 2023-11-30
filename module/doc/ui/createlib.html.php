@@ -131,16 +131,7 @@ formPanel
                 ),
                 div
                 (
-                    inputGroup
-                    (
-                        $lang->doclib->user,
-                        picker
-                        (
-                            set::name('users[]'),
-                            set::items($users),
-                            set::multiple(true)
-                        )
-                    )
+                    users(set::label($lang->doclib->user), set::items($users))
                 )
             )
         )
