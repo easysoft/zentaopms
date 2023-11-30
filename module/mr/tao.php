@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @package     mr
  * @link        https://www.zentao.net
  */
-class mrTao extends mr
+class mrTao extends mrModel
 {
     /**
      * 创建合并请求。
