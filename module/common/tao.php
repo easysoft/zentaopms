@@ -201,6 +201,37 @@ class commonTao extends commonModel
     }
 
     /**
+     * 根据后台维护分组的视图设置，判断用户是否有权限。
+     * According to the view maintained by the background, determine whether the user has permission.
+     *
+     * @param  string    $module
+     * @param  string    $method
+     * @param  array     $acls
+     * @param  mixed     $object
+     * @access protected
+     * @return bool
+     */
+    protected static function checkPrivByRights(string $module, string $method, array $acls, mixed $object): bool
+    {
+        global $lang;
+        if(!commonModel::hasDBPriv($object, $module, $method)) return false;
+
+        if(empty($acls['views'])) return true;
+        $menu = isset($lang->navGroup->$module) ? $lang->navGroup->$module : $module;
+        if($module == 'my' and $method == 'team') $menu = 'system'; // Fix bug #18642.
+        $menu = strtolower($menu);
+        if($menu != 'qa' and !isset($lang->$menu->menu)) return true;
+        if(($menu == 'my' and $method != 'team') or $menu == 'index' or $module == 'tree') return true;
+        if($module == 'company' and $method == 'dynamic') return true;
+        if($module == 'action' and $method == 'editcomment') return true;
+        if($module == 'action' and $method == 'comment') return true;
+        if($module == 'report' and $method == 'export') return true;
+        if(!isset($acls['views'][$menu])) return false;
+
+        return true;
+    }
+
+    /**
      * 查看当前用户是否有其他个性化设置导航的权限。
      * Check if current user has other methods permissions under the preference menu.
      *

@@ -1169,7 +1169,7 @@ class commonModel extends model
      */
     public static function hasPriv(string $module, string $method, mixed $object = null, string $vars = '')
     {
-        global $app, $lang;
+        global $app;
         $module = strtolower($module);
         $method = strtolower($method);
         parse_str($vars, $params);
@@ -1198,10 +1198,7 @@ class commonModel extends model
         if(in_array("$module.$method", $app->config->openMethods)) return true;
 
         /* If is the program/project/product/execution admin, have all program privileges. */
-        if($app->config->vision != 'lite')
-        {
-            if(commonTao::isProjectAdmin($module)) return true;
-        }
+        if($app->config->vision != 'lite' && commonTao::isProjectAdmin($module)) return true;
 
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];
@@ -1211,24 +1208,7 @@ class commonModel extends model
         $canImport = isset($rights[$module]['import']) && commonModel::hasDBPriv($object, $module, 'import');
         if(in_array($module, $app->config->importWhiteList) && $method == 'showimport' && $canImport) return true;
 
-        if(isset($rights[$module][$method]))
-        {
-            if(!commonModel::hasDBPriv($object, $module, $method)) return false;
-
-            if(empty($acls['views'])) return true;
-            $menu = isset($lang->navGroup->$module) ? $lang->navGroup->$module : $module;
-            if($module == 'my' and $method == 'team') $menu = 'system'; // Fix bug #18642.
-            $menu = strtolower($menu);
-            if($menu != 'qa' and !isset($lang->$menu->menu)) return true;
-            if(($menu == 'my' and $method != 'team') or $menu == 'index' or $module == 'tree') return true;
-            if($module == 'company' and $method == 'dynamic') return true;
-            if($module == 'action' and $method == 'editcomment') return true;
-            if($module == 'action' and $method == 'comment') return true;
-            if($module == 'report' and $method == 'export') return true;
-            if(!isset($acls['views'][$menu])) return false;
-
-            return true;
-        }
+        if(isset($rights[$module][$method])) return commonTao::checkPrivByRights($module, $method, $acls, $object);
 
         return false;
     }
