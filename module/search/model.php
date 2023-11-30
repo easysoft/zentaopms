@@ -57,8 +57,6 @@ class searchModel extends model
         $groupAndOr   = strtoupper($this->post->groupAndOr);
         if($groupAndOr != 'AND' && $groupAndOr != 'OR') $groupAndOr = 'AND';
 
-        a($searchFields);
-        a($fieldParams);exit;
         $queryForm = $this->initSession($module, $searchFields, $fieldParams);
 
         $scoreNum = 0;
