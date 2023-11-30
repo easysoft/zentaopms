@@ -1684,7 +1684,7 @@ class commonModel extends model
      * @access public
      * @return bool
      */
-    public static function canModify($type, $object)
+    public static function canModify(string $type, object $object): bool
     {
         global $config;
 
