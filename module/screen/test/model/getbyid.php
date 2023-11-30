@@ -74,3 +74,15 @@ r($chart  && $chart->option->value  == 1       && strpos($chart->option->onChang
 r($chart1 && $chart1->option->value == 'admin' && strpos($chart1->option->onChange, 'location') !== false) && p() && e(1);  //测试screen存在测试account值为admin的情况
 r($maxHeight + 50 == $res->chartData->editCanvasConfig->height) && p('') && e(1);                                           //测试生成的图表高度是否正确
 r($res->chartData->requestGlobalConfig->requestInterval == 30) && p('') && e(1);                                            //测试生成的图表请求间隔是否正确
+
+$res = $screen->getByIDTest($screenIDList[6], $yearList[0], $deptList[0], $accountList[0]);
+$chart2 = null;
+foreach($res->chartData->componentList as $component)
+{
+    if(isset($component->chartConfig->package) && $component->chartConfig->package == 'Tables')
+    {
+        $chart2 = $component;
+    }
+}
+
+r($chart2 && $chart2->chartConfig->dataset == $chart2->option->dataset) && p('') && e(1);  //测试screenID为6的情况
