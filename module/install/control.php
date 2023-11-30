@@ -21,7 +21,7 @@ class install extends control
     {
         parent::__construct();
 
-        if(!$this->app->installing && $this->app->tab != 'devops') helper::end();
+        if(!$this->app->installing && $this->app->tab != 'devops' && !isInModal()) helper::end();
 
         $this->app->loadLang('user');
         $this->app->loadLang('admin');
