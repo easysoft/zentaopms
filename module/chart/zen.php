@@ -115,6 +115,7 @@ class chartZen extends chart
         {
             $options       = array();
             $fieldSettings = $this->post->fieldSettings;
+            $field         = $filter['field'];
             $fieldSetting  = $fieldSettings[$field];
             $options       = $this->chart->getFieldOptions(zget($fieldSetting, 'type', ''), zget($fieldSetting, 'object', ''), zget($fieldSetting, 'field', ''), $this->post->sql);
             $onChange      = $key == 'default' ? "onchange='changeDefault(this, this.value)'" : '';
