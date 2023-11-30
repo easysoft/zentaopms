@@ -116,6 +116,20 @@ class searchTest
     }
 
     /**
+     * 测试设置查询语句。
+     * Set query test.
+     *
+     * @param  string $module
+     * @param  int    $queryID
+     * @access public
+     * @return string
+     */
+    public function setQueryTest(string $module, int $queryID): string
+    {
+        return $this->objectModel->setQuery($module, $queryID);
+    }
+
+    /**
      * Test get by ID.
      *
      * @param  int    $queryID
