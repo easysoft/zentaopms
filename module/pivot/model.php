@@ -2210,6 +2210,7 @@ class pivotModel extends model
      */
     public function pagePivot($configs, $page, $useColumnTotal)
     {
+        $configs = array_values($configs);
         // 当前在第几页
         $nowPage   = 1;
         // 一共多少行
