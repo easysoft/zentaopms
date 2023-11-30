@@ -531,27 +531,11 @@ class api extends control
      */
     public function delete(int $apiID)
     {
-        $api = $this->api->getLibById($apiID)
+        $api = $this->api->getLibById($apiID);
         $this->api->delete(TABLE_API, $apiID);
 
         if(dao::isError()) $this->sendError(dao::getError());
         return $this->sendSuccess(array('load' => inlink('index', "libID=$api->lib&module=$api->module")));
-    }
-
-    /**
-     * AJAX: Get params type options by scope.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxGetParamsTypeOptions()
-    {
-        $options = array();
-        foreach($this->lang->api->paramsTypeOptions as $key => $item)
-        {
-            $options[] = array('label' => $item, 'value' => $key);
-        }
-        $this->sendSuccess(array('data' => $options));
     }
 
     /**
