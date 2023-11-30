@@ -384,10 +384,16 @@ window.updateMetricBoxs = function(id, isChecked)
  */
 window.appendMetricBox = function(id, mode = 'add')
 {
-    $.get($.createLink('metric', 'ajaxGetMultipleMetricBox', 'metricID=' + id), function(resp)
-    {
-        $('.table-and-charts').append(resp);
-    });
+    var url = $.createLink('metric', 'ajaxGetMultipleMetricBox', 'metricID=' + id);
+
+    var metricDom = $('<div>');
+    var metricID  = 'metricBox' + id;
+    metricDom.attr('id', metricID);
+    metricDom.attr('metric-id', id);
+    metricDom.addClass('metricBox');
+
+    $('.table-and-charts').append(metricDom);
+    loadTarget(url, metricID);
 }
 
 window.handleQueryClick = function(id, viewType = 'single')
