@@ -71,6 +71,39 @@ class reportTest
     }
 
     /**
+     * 测试获取系统的 URL。
+     * Test get system URL.
+     *
+     * @param  string       $domain
+     * @param  stringi      $argv1
+     * @access public
+     * @return string|array
+     */
+    public function getSysURLTest(string $domain = '', string $argv1 = ''): string|array
+    {
+        global $tester;
+        if(!empty($domain))
+        {
+            if(!isset($tester->config->mail)) $tester->config->mail = new stdclass();
+            $tester->config->mail->domain = $domain;
+        }
+        else
+        {
+            unset($tester->config->mail->domain);
+        }
+        $_SERVER['argv'] = array('argv0', $argv1);
+
+        $url = $this->objectModel->getSysURL();
+
+        unset($tester->config->mail->domain);
+        unset($_SERVER['argv']);
+
+        if(dao::isError()) return dao::getError();
+
+        return $url;
+    }
+
+    /**
      * Test get executions.
      *
      * @param int $begin

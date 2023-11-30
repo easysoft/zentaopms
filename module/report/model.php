@@ -108,20 +108,21 @@ class reportModel extends model
     }
 
     /**
+     * 获取系统的 URL。
      * Get System URL.
      *
      * @access public
-     * @return void
+     * @return string
      */
-    public function getSysURL()
+    public function getSysURL(): string
     {
         if(isset($this->config->mail->domain)) return $this->config->mail->domain;
 
         /* Ger URL when run in shell. */
         if(PHP_SAPI == 'cli')
         {
-            $url = parse_url(trim($this->server->argv[1]));
-            $port = (empty($url['port']) or $url['port'] == 80) ? '' : $url['port'];
+            $url  = parse_url(trim($this->server->argv[1]));
+            $port = empty($url['port']) || $url['port'] == 80 ? '' : $url['port'];
             $host = empty($port) ? $url['host'] : $url['host'] . ':' . $port;
             return $url['scheme'] . '://' . $host;
         }
