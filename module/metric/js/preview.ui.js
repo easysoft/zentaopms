@@ -398,14 +398,17 @@ window.handleQueryClick = function(id, viewType = 'single')
 
     var formData = window.getFormData($form);
 
-    if(viewType == 'multiple')
+    $.post($.createLink('metric', 'ajaxGetTableAndCharts', 'metricID=' + id + '&viewType=' + viewType), formData, function(resp)
     {
-        //$('#metricBox' + id).find('.table-and-chart').replaceWith(resp);
-    }
-    else
-    {
-        postAndLoadPage(previewUrl, formData, '#metricBox');
-    }
+        if(viewType == 'multiple')
+        {
+            $('#metricBox' + id).find('.table-and-chart').replaceWith(resp);
+        }
+        else
+        {
+            $('.table-and-chart-single').replaceWith(resp);
+        }
+    });
 }
 
 window.validateForm = function($form)

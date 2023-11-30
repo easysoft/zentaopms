@@ -10,7 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('previewUrl',         inlink('preview', "scope=$scope&viewType=$viewType&metricID=$current->id&filtersBase64=$filtersBase64&recTotal=$dtablePager->recTotal&recPerPage=$dtablePager->recPerPage&pageID=$dtablePager->pageID"));
 jsVar('updateTimeTip',      $lang->metric->updateTimeTip);
 jsVar('objectList',         $lang->metric->objectList);
 jsVar('current',            $current);

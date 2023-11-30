@@ -350,7 +350,6 @@ div
         $fnGenerateQueryForm(),
         div
         (
-            setID('metricBox'),
             setClass('table-and-chart table-and-chart-single'),
             div
             (
