@@ -251,14 +251,15 @@ $(function()
     function initTree(ele, treeData)
     {
         var imgObj = {
-            'annex'     : 'annex',
-            'api'       : 'interface',
-            'lib'       : 'wiki',
-            'execution' : 'wiki-file-lib',
-            'text'      : 'wiki-file',
-            'word'      : 'word',
-            'ppt'       : 'ppt',
-            'excel'     : 'excel'
+            'annex'      : 'annex',
+            'api'        : 'interface',
+            'lib'        : 'wiki',
+            'execution'  : 'wiki-file-lib',
+            'text'       : 'wiki-file',
+            'word'       : 'word',
+            'ppt'        : 'ppt',
+            'excel'      : 'excel',
+            'attachment' : 'attachment'
         };
 
         ele.tree(
@@ -269,8 +270,8 @@ $(function()
             {
                 if(item.type == 'apiDoc' && release) item.hasAction = false;
                 if(typeof item.hasAction == 'undefined') item.hasAction = true;
-                if(typeof item.active == 'undefined') item.active = 0;
-                if(typeof docID != 'undefined' && item.id == docID) item.active = 1;
+                if(typeof docID != 'undefined' && item.id == docID && item.type != 'lib') item.active = 1;
+                if(['text', 'word', 'ppt', 'excel', 'attachment'].indexOf(item.type) !== -1) item.hasAction = false;
                 if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) item.hasAction = false;
 
                 var objectType  = config.currentModule == 'api' && ['project', 'product', 'execution'].indexOf(item.objectType) === false ? item.objectType : item.type;
@@ -285,7 +286,7 @@ $(function()
 
                 $item += '<div class="text h-full w-full flex-start overflow-hidden">';
                 if((libClass == 'lib' && item.type != 'execution') || (item.type == 'execution' && item.hasAction)) $item += '<i class="before-tree-item icon icon-' + imgObj[item.type] +'-lib"></i>';
-                if(['text', 'word', 'ppt', 'excel'].indexOf(item.type) !== -1) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type] + '.svg)"></div>';
+                if(['text', 'word', 'ppt', 'excel', 'attachment'].indexOf(item.type) !== -1) $item += '<div class="img-lib" style="background-image:url(static/svg/' + imgObj[item.type] + '.svg)"></div>';
                 $item += '<div class="tree-text">';
                 $item += item.name;
                 $item += '</div>';
@@ -489,7 +490,7 @@ $(function()
             methodName = 'showFiles';
             linkParams = 'type=' + objectType + '&objectID=' + objectID;
         }
-        else if(['text', 'word', 'ppt', 'excel'].indexOf(type) !== -1)
+        else if(['text', 'word', 'ppt', 'excel', 'attachment'].indexOf(type) !== -1)
         {
             methodName = 'view';
             linkParams = 'docID=' + moduleID;
