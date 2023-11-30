@@ -334,17 +334,16 @@ class reportTest
     }
 
     /**
+     * 测试获取用户某年的动态数。
      * Test get user contributions in this year.
      *
-     * @param  array  $accounts
+     * @param  array        $accounts
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getUserYearContributionsTest($accounts)
+    public function getUserYearContributionsTest(array $accounts): string|array
     {
-        $year = date('Y');
-
-        $objects = $this->objectModel->getUserYearContributions($accounts, $year);
+        $objects = $this->objectModel->getUserYearContributions($accounts, date('Y'));
 
         if(dao::isError()) return dao::getError();
 

@@ -258,6 +258,7 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户某年的动态数。
      * Get user contributions in this year.
      *
      * @param  array  $accounts
