@@ -309,7 +309,7 @@ class screenModel extends model
         /* 设置图表的title信息。 */
         /* Set chart title info. */
         $component->option->title = new stdclass();
-        $component->option->title->text = sprintf($this->lang->screen->noChartData, $chart->name);
+        $component->option->title->text = sprintf($this->lang->screen->noData, $chart->name);
         $component->option->title->left = 'center';
         $component->option->title->top  = '50%';
 
@@ -342,7 +342,7 @@ class screenModel extends model
         $component->option->rowspan     = array();
         $component->option->colspan     = array();
         $component->option->rowNum      = 1;
-        $component->option->dataset     = array(array(sprintf($this->lang->screen->noPivotData, $chart->name)));
+        $component->option->dataset     = array(array(sprintf($this->lang->screen->noData, $chart->name)));
     }
 
     /**
