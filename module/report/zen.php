@@ -123,7 +123,7 @@ class reportZen extends report
 
         /* Get years for use zentao. */
         $years = array();
-        for($thisYear = $firstYear; $thisYear <= $currentYear; $thisYear ++) $years[$thisYear] = $thisYear;
+        for($thisYear = $firstYear; $thisYear <= $currentYear; $thisYear ++) $years[$thisYear] = (string)$thisYear;
 
         /* Init year when year is empty. */
         if(empty($year))
