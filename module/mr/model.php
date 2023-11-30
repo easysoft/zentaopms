@@ -975,7 +975,7 @@ class mrModel extends model
             $lines = explode("\n", $diffs);
         }
 
-        $scm = app->loadClass('scm');
+        $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
         return $scm->engine->parseDiff($lines);
     }
