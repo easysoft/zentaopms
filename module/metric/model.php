@@ -1308,7 +1308,7 @@ class metricModel extends model
 
             if($keyA == $keyB) return 0;
 
-            return $keyA > $keyB ? -1 : 1;
+            return $keyA < $keyB ? -1 : 1;
         });
 
         $times   = array();
@@ -1374,7 +1374,7 @@ class metricModel extends model
 
             if($keyA == $keyB) return 0;
 
-            return $keyA > $keyB ? -1 : 1;
+            return $keyA < $keyB ? -1 : 1;
         });
 
         $xTime = array_column($data, $x);
