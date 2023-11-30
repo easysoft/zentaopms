@@ -388,6 +388,7 @@ class metricZen extends metric
         $result = $this->dao->select("id, {$dataFieldStr} value, date")
             ->from(TABLE_METRICLIB)
             ->where('metricCode')->eq($metric->code)
+            ->limit(1)
             ->fetch();
 
         if(!$result) return array
