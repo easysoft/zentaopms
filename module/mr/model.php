@@ -492,7 +492,7 @@ class mrModel extends model
 
             /* For compatibility with PHP 5.4 . */
             $condition = (array)$newMR;
-            if(empty($condition)) continue;
+            if(empty($condition)) return false;
 
             /* Update compile status of current MR object */
             if(isset($MR->needCI) && $MR->needCI == '1') $newMR->compileStatus = empty($MR->compileID) ? 'failed' : $this->loadModel('compile')->getByID($MR->compileID)->status;
