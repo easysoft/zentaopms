@@ -378,16 +378,16 @@ class caselib extends control
 
             list($header, $columns) = $this->caselibZen->getImportHeaderAndColumns($fileName, $fields);
 
-            if(count($columns) != count($header) || $this->post->encode != 'utf-8')
+            if(count($columns) <= 3 || $this->post->encode != 'utf-8')
             {
-                $fc     = file_get_contents($fileName);
                 $encode = $this->post->encode != 'utf-8' ? $this->post->encode : 'gbk';
+                $fc     = file_get_contents($fileName);
                 $fc     = helper::convertEncoding($fc, $encode, 'utf-8');
                 file_put_contents($fileName, $fc);
 
                 list($header, $columns) = $this->caselibZen->getImportHeaderAndColumns($fileName, $fields);
 
-                if(count($columns) != count($header)) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorEncode));
+                if(count($columns) == 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->testcase->errorEncode));
             }
 
             $this->session->set('fileImport', $fileName);
