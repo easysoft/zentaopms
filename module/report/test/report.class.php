@@ -282,12 +282,13 @@ class reportTest
     }
 
     /**
+     * 测试获取用户的测试单。
      * Test get user test tasks.
      *
      * @access public
-     * @return string
+     * @return string|array
      */
-    public function getUserTestTasksTest()
+    public function getUserTestTasksTest(): string|array
     {
         $objects = $this->objectModel->getUserTestTasks();
 

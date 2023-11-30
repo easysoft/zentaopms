@@ -210,12 +210,13 @@ class reportModel extends model
     }
 
     /**
+     * 获取用户的测试单。
      * Get user testTasks.
      *
      * @access public
      * @return array
      */
-    public function getUserTestTasks()
+    public function getUserTestTasks(): array
     {
         return $this->dao->select('t1.*, t2.account as user')->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.owner = t2.account')
