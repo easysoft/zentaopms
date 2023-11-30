@@ -830,7 +830,7 @@ class docTest
      *
      * @param  int    $libID
      * @param  int    $id
-     * @param  string $type
+     * @param  string $type     mine|product|project|execution|api|custom
      * @param  int    $moduleID
      * @param  int    $objectID
      * @param  int    $showDoc
@@ -854,10 +854,10 @@ class docTest
      *
      * @param  int    $libID
      * @param  array  $libIdList
-     * @param  string $type
+     * @param  string $type       mine|product|project|execution|api|custom
      * @param  int    $moduleID
      * @param  int    $objectID
-     * @param  string $browseType
+     * @param  string $browseType bysearch|byrelease
      * @param  int    $param
      * @access public
      * @return array
@@ -869,5 +869,23 @@ class docTest
 
         if(dao::isError()) return dao::getError();
         return isset($data[0][$type]) ? $data[0][$type] : array();
+    }
+
+    /**
+     * 处理产品、项目、执行的文档库树形结构。
+     * Process the tree structure of the document library of product, project, and execution.
+     *
+     * @param  int          $libID
+     * @param  string       $type     mine|product|project|execution|api|custom
+     * @param  int          $objectID
+     * @access public
+     * @return array|object
+     */
+    public function processObjectTree(int $libID, string $type, int $objectID): array|object
+    {
+        $libTree = array($type => array());
+        $data    =  $this->objectModel->processObjectTree($libTree, $type, $libID, $objectID);
+
+        return empty($data[$type]) ? array() : current($data[$type]);
     }
 }
