@@ -680,13 +680,22 @@
      */
     function loadTable(url, target, options)
     {
+        if(!url) url = currentAppUrl;
         if(!target)
         {
             const urlInfo = $.parseLink(url);
             target = urlInfo.moduleName ? `table-${urlInfo.moduleName}-${urlInfo.methodName}` : ($('.dtable').attr('id') || 'dtable');
         }
         if(target[0] !== '#' && target[0] !== '.') target = `#${target}`;
-        return loadComponent(target, $.extend({component: 'dtable', url: url, selector: `dtable/${target}:component` + ($(target).closest('.modal').length ? '' : ',#featureBar>*')}, options));
+        let selector = `dtable/${target}:component`;
+        if(options.selector && options.selector !== 'dtable') selector = options.selector;
+        if(!$(target).closest('.modal').length && !options.selector)
+        {
+            selector += ',#featureBar>*';
+            if($('#moduleMenu').length) selector += ',#moduleMenu';
+        }
+        delete options.selector;
+        return loadComponent(target, $.extend({component: 'dtable', url: url, selector: selector}, options));
     }
 
     /**
@@ -865,6 +874,7 @@
 
         if(DEBUG) console.log('[APP] open url', url, options);
 
+        if(options.app === 'current') options.app = currentCode;
         if(options.confirm)
         {
             return zui.Modal.confirm(options.confirm).then(confirmed =>
