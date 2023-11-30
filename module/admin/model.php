@@ -213,6 +213,7 @@ class adminModel extends model
         /* Reorder secondary navigation. */
         $subMenuList   = array();
         $subMenuOrders = $menu['menuOrder'];
+        if(empty($subMenuOrders)) return array();
         ksort($subMenuOrders);
         foreach($subMenuOrders as $value)
         {

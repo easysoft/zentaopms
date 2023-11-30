@@ -54,13 +54,26 @@ class backupZen extends backup
      * @access protected
      * @return array
      */
-    protected function backupSQL(string $fileName): array
+    protected function backupSQL(string $fileName, string $reload = 'no'): array
     {
         $backFileName = "{$this->backupPath}{$fileName}.sql";
-        if(!str_contains($this->config->backup->setting, 'nosafe')) $backFileName .= '.php';
+        $nosafe       = str_contains($this->config->backup->setting, 'nosafe');
+        if(!$nosafe) $backFileName .= '.php';
 
         $result = $this->backup->backSQL($backFileName);
         if(!$result->result) return array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noWritable, $this->backupPath));
+        if(!$result->result)
+        {
+            if($reload == 'yes')
+            {
+                return array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->backupFile, $this->backupPath));
+            }
+            else
+            {
+                printf($this->lang->backup->error->noWritable, $this->backupPath);
+            }
+        }
+        
 
         if(!$nosafe) $this->backup->addFileHeader($backFileName);
         return array('result' => 'success');
@@ -74,12 +87,22 @@ class backupZen extends backup
      * @access protected
      * @return array
      */
-    protected function backupFile(string $fileName): array
+    protected function backupFile(string $fileName, string $reload = 'no'): array
     {
         if(str_contains($this->config->backup->setting, 'nofile')) return array('result' => 'success');
 
         $result = $this->backup->backFile("{$this->backupPath}{$fileName}.file");
-        if(!$result->result) return array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->backupFile, $result->error));
+        if(!$result->result)
+        {
+            if($reload == 'yes')
+            {
+                return array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->backupFile, $result->error));
+            }
+            else
+            {
+                printf($this->lang->backup->error->backupFile, $result->error);
+            }
+        }
         return array('result' => 'success');
     }
 
@@ -91,12 +114,23 @@ class backupZen extends backup
      * @access protected
      * @return array
      */
-    protected function backupCode(string $fileName): array
+    protected function backupCode(string $fileName, string $reload = 'no'): array
     {
         if(str_contains($this->config->backup->setting, 'nofile')) return array('result' => 'success');
 
         $result = $this->backup->backCode("{$this->backupPath}{$fileName}.code");
         if(!$result->result) return array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->backupCode, $result->error));
+        if(!$result->result)
+        {
+            if($reload == 'yes')
+            {
+                return array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->backupCode, $result->error));
+            }
+            else
+            {
+                printf($this->lang->backup->error->backupCode, $result->error);
+            }
+        }
         return array('result' => 'success');
     }
 

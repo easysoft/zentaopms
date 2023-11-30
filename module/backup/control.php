@@ -26,15 +26,19 @@ class backup extends control
         parent::__construct($moduleName, $methodName);
 
         $this->backupPath = $this->backup->getBackupPath();
-        if(!is_dir($this->backupPath))
+
+        if($this->app->methodName != 'setting')
         {
-            if(!mkdir($this->backupPath, 0777, true)) $this->view->error = sprintf($this->lang->backup->error->noWritable, dirname($this->backupPath));
+            if(!is_dir($this->backupPath))
+            {
+                if(!mkdir($this->backupPath, 0777, true)) $this->view->error = sprintf($this->lang->backup->error->noWritable, dirname($this->backupPath));
+            }
+            else
+            {
+                if(!is_writable($this->backupPath)) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->backupPath);
+            }
+            if(!is_writable($this->app->getTmpRoot())) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->app->getTmpRoot());
         }
-        else
-        {
-            if(!is_writable($this->backupPath)) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->backupPath);
-        }
-        if(!is_writable($this->app->getTmpRoot())) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->app->getTmpRoot());
     }
 
     /**
@@ -52,7 +56,30 @@ class backup extends control
 
         $this->view->title   = $this->lang->backup->common;
         $this->view->backups = $backups;
+
+        if(!is_writable($this->backupPath))        $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->backupPath);
+        if(!is_writable($this->app->getTmpRoot())) $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->app->getTmpRoot());
         $this->display();
+    }
+
+    /**
+     * Ajax get disk space.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDiskSpace()
+    {
+        set_time_limit(0);
+        session_write_close();
+        $diskSapce = $this->backup->getDiskSpace($this->backupPath);
+        $diskSapce = explode(',', $diskSapce);
+
+        $space = new stdclass();
+        $space->freeSpace = intval($diskSapce[0]);
+        $space->needSpace = intval($diskSapce[1]);
+
+        echo json_encode($space);
     }
 
     /**
@@ -69,26 +96,31 @@ class backup extends control
         set_time_limit(0);
 
         $fileName = date('YmdHis') . mt_rand(0, 9);
-        $result   = $this->backupZen->backupSQL($fileName);
+        $result   = $this->backupZen->backupSQL($fileName, $reload);
         if($result['result'] == 'fail')
         {
             if($reload == 'yes') return print($result['message']);
             printf($result['message']);
         }
 
-        $result = $this->backupZen->backupFile($fileName);
-        if($result['result'] == 'fail')
+        $nofile = str_contains($this->config->backup->setting, 'nofile');
+        if(!$nofile)
         {
-            if($reload == 'yes') return print($result['message']);
-            printf($result['message']);
-        }
+            $result = $this->backupZen->backupFile($fileName, $reload);
+            if($result['result'] == 'fail')
+            {
+                if($reload == 'yes') return print($result['message']);
+                printf($result['message']);
+            }
 
-        $result = $this->backupZen->backupCode($fileName);
-        if($result['result'] == 'fail')
-        {
-            if($reload == 'yes') return print($result['message']);
-            printf($result['message']);
+            $result = $this->backupZen->backupCode($fileName, $reload);
+            if($result['result'] == 'fail')
+            {
+                if($reload == 'yes') return print($result['message']);
+                printf($result['message']);
+            }
         }
+        
 
         /* Delete expired backup. */
         $this->backupZen->removeExpiredFiles();
