@@ -32,9 +32,6 @@ class ciModel extends model
         {
             $repo = $this->loadModel('repo')->getByID($this->session->repoID);
             if(!empty($repo) and !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
-
-            $tab   = $this->app->tab;
-            $repos = $this->repo->getRepoPairs($tab);
         }
     }
 
@@ -318,7 +315,7 @@ class ciModel extends model
     public function sendRequest($url, $data, $userPWD = '')
     {
         if(!empty($data->PARAM_TAG)) $data->PARAM_REVISION = '';
-        $response = common::http($url, $data, array(CURLOPT_HEADER => true, CURLOPT_USERPWD => $userPWD));
+        $response = common::http($url, (array)$data, array(CURLOPT_HEADER => true, CURLOPT_USERPWD => $userPWD));
         if(preg_match("!Location: .*item/(.*)/!", $response, $matches)) return $matches[1];
         return 0;
     }

@@ -337,6 +337,7 @@ class mr extends control
         $this->app->loadLang('productplan');
         $this->view->title         = $this->lang->mr->view;
         $this->view->MR            = $MR;
+        $this->view->repoID        = $MR->repoID;
         $this->view->rawMR         = isset($rawMR) ? $rawMR : false;
         $this->view->actions       = $this->loadModel('action')->getList('mr', $MRID);
         $this->view->compile       = $this->loadModel('compile')->getById($MR->compileID);
@@ -814,7 +815,7 @@ class mr extends control
        $targetProject = $this->post->targetProject;
        $targetBranch  = $this->post->targetBranch;
 
-       $result = $this->mr->checkSameOpened($hostID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
+       $result = $this->mr->checkSameOpened($hostID, (string)$sourceProject, $sourceBranch, (string)$targetProject, $targetBranch);
        echo json_encode($result);
    }
 

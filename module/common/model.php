@@ -1724,20 +1724,20 @@ class commonModel extends model
     /**
      * Http.
      *
-     * @param  string       $url
-     * @param  string|array $data
-     * @param  array        $options   This is option and value pair, like CURLOPT_HEADER => true. Use curl_setopt function to set options.
-     * @param  array        $headers   Set request headers.
-     * @param  string       $dataType
-     * @param  string       $method    POST|PATCH|PUT
-     * @param  int          $timeout
-     * @param  bool         $httpCode  Return a array contains response, http code, body, header. such as [response, http_code, 'body' => body, 'header' => header].
-     * @param  bool         $log       Save to log or not
+     * @param  string              $url
+     * @param  string|array|object $data
+     * @param  array               $options   This is option and value pair, like CURLOPT_HEADER => true. Use curl_setopt function to set options.
+     * @param  array               $headers   Set request headers.
+     * @param  string              $dataType
+     * @param  string              $method    POST|PATCH|PUT
+     * @param  int                 $timeout
+     * @param  bool                $httpCode  Return a array contains response, http code, body, header. such as [response, http_code, 'body' => body, 'header' => header].
+     * @param  bool                $log       Save to log or not
      * @static
      * @access public
      * @return string|array
      */
-    public static function http(string $url, string|array|null $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true): string|array
+    public static function http(string $url, string|array|object|null $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true): string|array
     {
         global $lang, $app;
         if(!extension_loaded('curl'))

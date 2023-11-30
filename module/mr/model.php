@@ -216,7 +216,7 @@ class mrModel extends model
      */
     public function create(object $MR): array
     {
-        $result = $this->checkSameOpened($MR->hostID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
+        $result = $this->checkSameOpened($MR->hostID, (string)$MR->sourceProject, $MR->sourceBranch, (string)$MR->targetProject, $MR->targetBranch);
         if($result['result'] == 'fail') return $result;
 
         $this->createMR($MR);
@@ -225,7 +225,7 @@ class mrModel extends model
         $MRID = $this->dao->lastInsertId();
         $this->loadModel('action')->create('mr', $MRID, 'opened');
 
-        $rawMR = $this->apiCreateMR($this->post->hostID, $this->post->sourceProject, $MR);
+        $rawMR = $this->apiCreateMR($MR->hostID, (string)$MR->sourceProject, $MR);
 
         /**
          * Another open merge request already exists for this source branch.
@@ -345,7 +345,7 @@ class mrModel extends model
             return false;
         }
 
-        $result = $this->checkSameOpened($MR->hostID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
+        $result = $this->checkSameOpened($MR->hostID, (string)$MR->sourceProject, $MR->sourceBranch, (string)$MR->targetProject, $MR->targetBranch);
         if($result['result'] == 'fail')
         {
             dao::$errors[] = $result['message'];
@@ -532,12 +532,12 @@ class mrModel extends model
      *
      * @link   https://docs.gitlab.com/ee/api/merge_requests.html#create-mr
      * @param  int    $hostID
-     * @param  int    $projectID
+     * @param  string $projectID
      * @param  object $MR
      * @access public
      * @return object
      */
-    public function apiCreateMR(int $hostID, int $projectID, object $MR): object
+    public function apiCreateMR(int $hostID, string $projectID, object $MR): object
     {
         $host = $this->loadModel('pipeline')->getByID($hostID);
 
@@ -715,9 +715,9 @@ class mrModel extends model
      * @param  string $projectID  targetProject
      * @param  int    $MRID
      * @access public
-     * @return object
+     * @return array
      */
-    public function apiGetMRCommits(int $hostID, string $projectID, int $MRID): object
+    public function apiGetMRCommits(int $hostID, string $projectID, int $MRID): array
     {
         $host = $this->loadModel('pipeline')->getByID($hostID);
         if($host->type == 'gitlab')
@@ -926,9 +926,9 @@ class mrModel extends model
      * @param  object $MR
      * @param  string $encoding
      * @access public
-     * @return object
+     * @return array
      */
-    public function getDiffs(object $MR, string $encoding = ''): object
+    public function getDiffs(object $MR, string $encoding = ''): array
     {
         $repo = $this->loadModel('repo')->getByID($MR->repoID);
         if(!$repo) return array();
@@ -1004,9 +1004,9 @@ class mrModel extends model
      * @param  string $projectID
      * @param  int    $MRID
      * @access public
-     * @return object
+     * @return array
      */
-    public function apiGetDiffVersions(int $hostID, string $projectID, int $MRID): object
+    public function apiGetDiffVersions(int $hostID, string $projectID, int $MRID): array
     {
         $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/versions");
         return json_decode(commonModel::http($url));
@@ -1019,11 +1019,11 @@ class mrModel extends model
      * @param  int    $hostID
      * @param  string $projectID
      * @param  int    $MRID
-     * @param  string $versionID
+     * @param  int    $versionID
      * @access public
      * @return object
      */
-    public function apiGetSingleDiffVersion(int $hostID, string $projectID, int $MRID, string $versionID): object
+    public function apiGetSingleDiffVersion(int $hostID, string $projectID, int $MRID, int $versionID): object
     {
         $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/versions/$versionID");
         return json_decode(commonModel::http($url));
@@ -1277,7 +1277,7 @@ class mrModel extends model
     public function linkObjects(object $MR): bool
     {
         /* Get commits by MR. */
-        $commits = $this->apiGetMRCommits($MR->hostID, $MR->targetProject, $MR->mriid);
+        $commits = $this->apiGetMRCommits($MR->hostID, (string)$MR->targetProject, $MR->mriid);
         if(empty($commits)) return true;
 
         /* Init objects. */
@@ -1435,7 +1435,7 @@ class mrModel extends model
             ->fetch('id');
         if(!empty($dbOpenedID)) return array('result' => 'fail', 'message' => sprintf($this->lang->mr->hasSameOpenedMR, $dbOpenedID));
 
-        $MR = $this->apiGetSameOpened($hostID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
+        $MR = $this->apiGetSameOpened($hostID, (string)$sourceProject, $sourceBranch, (string)$targetProject, $targetBranch);
         if($MR) return array('result' => 'fail', 'message' => sprintf($this->lang->mr->errorLang[2], $MR->iid));
         return array('result' => 'success');
     }
