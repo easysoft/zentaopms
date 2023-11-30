@@ -2447,7 +2447,18 @@ class pivotModel extends model
             $connectSQL .= " where $whereStr";
         }
 
-        $columnSQL = "select * from ($sql limit 9999999) tt" . $connectSQL;
+        $this->app->loadClass('sqlparser', true);
+        $parser    = new sqlparser($sql);
+        $statement = $parser->statements[0];
+        if(!$statement->limit)
+        {
+            $statement->limit = new stdclass();
+            $statement->limit->offset   = 0;
+            $statement->limit->rowCount = 99999999;
+        }
+        $sql = $statement->build();
+
+        $columnSQL = "select * from ($sql) tt" . $connectSQL;
         $rows = $this->dao->query($columnSQL)->fetchAll();
 
         $cols = array();
