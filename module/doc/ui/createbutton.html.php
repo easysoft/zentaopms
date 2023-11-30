@@ -17,14 +17,16 @@ $templateParam = $this->config->edition == 'max' ? '&from=template' : '';
 $buttonItems   = array();
 foreach($lang->doc->createList as $typeKey => $typeName)
 {
+    $method  = 'create';
     $docType = zget($config->doc->iconList, $typeKey);
     $params  = "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type={$typeKey}";
     if($typeKey == 'template' and $config->edition == 'max') $params = "objectType={$createType}&objectID={$typeID}&libID={$libID}&moduleID={$moduleID}&type=html&from=template";
+    if($typeKey == 'attachment') $method = 'uploadDocs';
 
     $buttonItems[] = array
         (
             'content'     => array('html' => "<img class='mr-2' src='static/svg/{$docType}.svg'/>{$typeName}", 'class' => 'flex w-full'),
-            'url'         => createLink('doc', 'create', $params),
+            'url'         => createLink('doc', $method, $params),
             'data-app'    => $app->tab,
             'data-toggle' => strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'modal' : ''
         );
